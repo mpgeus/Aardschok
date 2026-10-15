@@ -191,7 +191,7 @@
   }
 
   // Alle tegels die binnen `max` stappen te halen zijn, met het aantal stappen erbij.
-  // Voor het gekleurde bereik tijdens de eigen beurt. `wereld`: de kaart, voor de hoogte (zoals bij T.zoekPad).
+  // Voor de keuring van een kaart (gereedschap/keuring.js). `wereld`: de kaart, voor de hoogte (zoals bij T.zoekPad).
   T.bereik = function (start, max, magBetreden, isVast, wereld) {
     const hoog = wereld && wereld.hoogte ? wereld : null;
     const resultaat = new Map();

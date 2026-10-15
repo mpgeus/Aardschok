@@ -95,11 +95,6 @@
     e.ty = y;
     e.pad = [];
     e.onderweg = false;
-    if (e.opKlaar) {
-      const k = e.opKlaar;
-      e.opKlaar = null;
-      k();
-    }
   }
 
   // Waar land je als je uit `vanaf` in `w` aankomt? Bij de overgang die terugwijst naar waar je
@@ -162,20 +157,12 @@
     S.netGeland = { x: plek.x, y: plek.y };
 
     S.wereld = nieuw;
-    // Alles wat bij de vorige plek hoorde, blijft daar: effecten, het bereik en een gevecht dat
-    // nog liep.
-    S.gevecht = null;
+    // Alles wat bij de vorige plek hoorde, blijft daar: de effecten en wat de muis aanwees.
     S.modus = 'verkennen';
-    S.bezig = false;
     S.effecten = [];
-    S.wachters = [];
-    S.bereik = null;
     S.hover = null;
     S.handeling = null;
     S.naLopen = null;
-    S.rasterTegels = [];
-    S.rasterAlpha = 0;
-    S.rasterVan = null;
 
     const k = T.kamerVan(nieuw, plek.x, plek.y);
     if (k) {

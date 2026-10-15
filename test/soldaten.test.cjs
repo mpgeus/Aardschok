@@ -191,14 +191,13 @@ test('in het gevecht reiken speer en piek twee tegels, de hooivork en het zwaard
   const rover = T.maakWezen('rover', r.x + 2, r.y);
   w.wezens.push(rover);
   zet(rover, r.x + 2, r.y);
-  S.gevecht = { monsters: [rover], volgorde: [] };
   const speer = soldaat(D, huis, 'speerman', r.x, r.y);
-  assert.equal(T.kanRaken(S, speer, rover), true, 'de speer reikt twee tegels');
+  assert.equal(T.kanRaken(D, speer, rover), true, 'de speer reikt twee tegels');
   zet(speer, r.x, r.y + 1);
   const hooivork = soldaat(D, huis, 'militie', r.x, r.y);
-  assert.equal(T.kanRaken(S, hooivork, rover), false, 'de hooivork niet');
+  assert.equal(T.kanRaken(D, hooivork, rover), false, 'de hooivork niet');
   zet(hooivork, r.x + 1, r.y);
-  assert.equal(T.kanRaken(S, hooivork, rover), true, 'van ernaast wel');
+  assert.equal(T.kanRaken(D, hooivork, rover), true, 'van ernaast wel');
   assert.ok(T.slagVan({ kant: 'speler', bewoner: { soldaat: { soort: 'piekenier' } } }).schade[0] > T.slagVan(speer).schade[0], 'de piek slaat harder');
   assert.deepEqual(T.slagVan(S.schout).schade, T.SLAAN.schade, 'de schout slaat zoals altijd');
 });
@@ -210,15 +209,13 @@ test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', ()
   const rover = T.maakWezen('rover', r.x + 6, r.y);
   w.wezens.push(rover);
   zet(rover, r.x + 6, r.y);
-  S.gevecht = { monsters: [rover], volgorde: [] };
   const boog = soldaat(D, huis, 'boogschutter', r.x, r.y);
-  assert.equal(T.kanRaken(S, boog, rover), true, 'zes tegels ver');
+  assert.equal(T.kanRaken(D, boog, rover), true, 'zes tegels ver');
   const tweede = T.maakWezen('rover', r.x + 1, r.y + 1);
   w.wezens.push(tweede);
   zet(tweede, r.x + 1, r.y + 1);
-  S.gevecht.monsters.push(tweede);
-  assert.equal(T.kanRaken(S, boog, rover), false, 'met een rover naast zich schiet hij niet');
-  assert.equal(T.kanRaken(S, boog, tweede), false, 'ook niet op die rover');
+  assert.equal(T.kanRaken(D, boog, rover), false, 'met een rover naast zich schiet hij niet');
+  assert.equal(T.kanRaken(D, boog, tweede), false, 'ook niet op die rover');
 });
 
 test('schild en harnas vangen een deel van elke klap af, maar niets van een bout uit een kruisboog', () => {

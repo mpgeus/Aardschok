@@ -947,8 +947,9 @@
   // vraagt; zonder bewoners (een toets met een eigen, kleine wereld) null.
   // Wie thuis blijft (p.thuisTot, een dag met uur; js/beesten.js): wie de wolven zag rennen, tot het eind van het werk, en
   // wie ze beten, een paar dagen in bed (p.gewond). Hij werkt niet (T.werkUrenVan, en het veldwerk), maar houdt zijn werk,
-  // en T.dagAnker houdt hem binnen.
-  T.blijftThuis = (p, dag) => !!p && p.thuisTot != null && dag < p.thuisTot;
+  // en T.dagAnker houdt hem binnen. Net zo wie voor rovers in het town hall schuilt (p.schuilt, js/gevecht.js), tot het
+  // rustig is.
+  T.blijftThuis = (p, dag) => !!p && (!!p.schuilt || (p.thuisTot != null && dag < p.thuisTot));
 
   T.werkUrenVan = function (D, g, dag) {
     const B = D.bewoners;

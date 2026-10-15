@@ -40,23 +40,16 @@ dagen) of een voorval (twee dagen, en ben je weg, dan beslist de raadsman). De p
 geen regel. Wat er later nog
 bij moet (de regels in vaste tikken, geen `Math.random`), staat in `ontwerp/spel.md`, "De heer als tegenstander".
 
-Over het raster, het gevecht in beurten en de overgang ernaartoe.
+Over het raster en het gevecht.
 
 - Eén raster voor rondlopen én vechten. Een wezen heeft een vloeiende positie (`x`, `y`) en
-  een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Bij het begin van een
-  gevecht maakt iedereen zijn lopende stap af (`modus: 'overgang'`), en pas als niemand meer
-  onderweg is begint het gevecht. Dat is wat de overgang naadloos maakt.
-- Scherm en klik stellen dezelfde vraag: `handelingVerkennen`/`handelingGevecht` geven
-  `{ tekst, kosten, kan, doe }` terug. De tekst bij de muis, het pad op de vloer, de
-  actiepunten en de klik komen uit hetzelfde antwoord.
-- Een klik op een deur is altijd erheen lopen. Dichtgooien is in een gevecht een eigen knop
-  (`D`), die alleen verschijnt naast een open deur. Eerst ging een open deur dicht als je er
+  een tegel (`tx`, `ty`); bezetting vraag je altijd aan `tx`/`ty`. Het gevecht is in real time, in de tik van de wereld
+  (`js/gevecht.js`; vraag 170, stap 2): er is geen overgang, geen raster op de vloer en geen beurt meer.
+- Scherm en klik stellen dezelfde vraag: `handelingVerkennen` (links) en `handelingSturen` (rechts) geven
+  `{ tekst, kan, doe }` terug. De tekst bij de muis en de klik komen uit hetzelfde antwoord.
+- Een klik op een deur is altijd erheen lopen. Eerst ging een open deur dicht als je er
   naast stond en erop klikte, en dat is precies wat je niet wilt.
-- Toetsen in een gevecht: klik op een vijand om te slaan (de knop Slaan zegt wat het kost),
-  `D` deur dicht, `spatie` einde beurt; bij het rondlopen `S` sluipen. De actiepunten en de knoppen
-  schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
-- Monsters openen geen deuren. Kan geen enkel monster de schout nog zien of bereiken, dan eindigt
-  het gevecht ('kwijt').
+- Monsters openen geen deuren.
 - Twee klokken (26 sep): wat in de wereld gebeurt (lopen, maaien, dwalen, het geduld van wie op een ander wacht),
   loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
   opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
@@ -385,10 +378,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/anim.js: beweging en effecten
 
-- `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
-  code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt in de tik van de
-  wereld (js/tik.js) op een kaart (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent
-  (`js/dorp.js`). De zwevende teksten en wie op een animatie wacht, werkt `T.werkEffectenBij` elk beeld bij (alleen scherm).
+- `js/anim.js`: beweging en effecten. Wie loopt, loopt in de tik van de wereld (js/tik.js) op een kaart
+  (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`); daar loopt ook de uitval van
+  een slag (`e.uitval`, gegevens zonder functie). Wat alleen scherm is, staat in `S.effecten`: de zwevende schade
+  (`T.anim.tekst`) en een pijl die vliegt (`T.anim.pijl`); `T.werkEffectenBij` werkt ze elk beeld bij. Tot 15 okt gaf
+  `T.anim` beloftes, zodat een beurt in het gevecht als code met `await` las (vraag 170, stap 2: weg).
 
 ### js/verkennen.js: rondlopen en dwalen
 
@@ -1172,8 +1166,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
   wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`); wie sluipt, komt dichterbij. Een groep is een ding dat de dieren delen
   (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
-  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
-  (`T.zoekOntdekking`), de schout kan hem aanvallen; 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
+  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht;
+  je mannen kunnen hem aanvallen, en dan vecht zijn roedel terug (`T.wolvenVechten`, `G.vecht`; js/gevecht.js); 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
   met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. **Het
   leven in het bos** (stap 2a; elke nacht `T.tikBeestenDag`, vanuit `T.tikGebouwenDag` na het bos): eerst de herten, en
   een roedel alleen waar hij herten kan halen; in de winter krijgt een roedel honger (`G.honger`) en jaagt hij op de
@@ -1197,9 +1191,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   elke roedel heeft er een op de kaart, naast zijn thuis, dat meegaat als hij verhuist (`gereedschap/pixelart/hol.cjs`).
   **De jacht te voet** (stap 3b): "Een jacht" in het voorval (`doe.jacht`, `T.beginJacht`, `D.beesten.jacht`) roept de
   militie op (`T.roepOp`, `T.laatGaan`, `T.militieVan` in `js/rovers.js`), het hol ligt in goud (`T.holVanDeJacht`), bij
-  de roedel is het een gevecht (`T.naJacht` vanuit `T.eindeGevecht`), en na twee dagen gaan de mannen zonder je. **Om hulp
-  roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen (`moetNaar`
-  met `hulp`), een buur jaagt ze weg, de schout vecht, en na een kwartier bijten ze. **Het hek** (3d,
+  de roedel vecht hij (`T.wolvenVechten`; `T.naJacht` vanuit `T.gevechtVoorbij`), en na twee dagen gaan de mannen zonder
+  je. **Om hulp roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen
+  (`moetNaar` met `hulp`), een buur jaagt ze weg, een man van je (`hulp.man`) vecht met ze, en na een kwartier bijten ze.
+  Na een gevecht gaat een roedel terug naar zijn hol (`T.wolvenNaHetGevecht`). **Het hek** (3d,
   `T.hekOmDeSchapen`): latten om de meent, met hekjes.
 
 ### js/weer.js: het weer
@@ -1530,11 +1525,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   komt terug als rover (`D.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
   (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
   (`T.roverIngang`) naar een akker, twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
-  `js/akkers.js`), en weer weg. De soldaten van het wachthuis lopen dan met de schout mee (`opgeroepen`, zodat
-  `T.dagAnker` en het dwalen ze met rust laten) en vechten mee (`T.militieInGevecht`). Wie valt, is dood: een rover
-  is uit de bende (`T.roverVerslagen`), een soldaat een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
-  het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
-  Ook de veteranen van de heervaart vechten mee (`p.veteraan`, met het leven van `T.WEZENS.veteraan`).
+  `js/akkers.js`), en weer weg. Er komt niemand vanzelf (vraag 170, stap 2): het bericht zegt hoe je je soldaten stuurt,
+  en het gevecht is in real time (`js/gevecht.js`); wie vecht (`e.doelwit`), laat `T.werkRoversBij` met rust. Wie valt,
+  is dood: een rover is uit de bende (`T.roverVerslagen`), een soldaat of een dorpeling een mond minder (`T.sneuvelt`,
+  via `T.wijzigBevolking` met wie het is, en waartegen), en wie het overleeft, geneest na een nacht (`genees`); de doden
+  (ook een wolf) begraaft `begraaf` de volgende dag. De laatste rover die valt, maakt de aanval af (`T.naGevecht`). De
+  getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). `T.roepOp` en `T.laatGaan` zijn er nog voor de jacht op de
+  wolven (`js/beesten.js`): wie meegaat, loopt met de held mee en vecht aan jouw kant (`e.opgeroepen`).
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
@@ -1555,16 +1552,35 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ## Het gevecht
 
-### js/gevecht.js: het gevecht in beurten
+### js/gevecht.js: het gevecht in real time
 
-- `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
-  (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
-  'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
-  vijand zoekt de man van jouw kant die het dichtst bij staat. Sinds vraag 159 (15 okt) slaat elk met zijn wapen
-  (`T.slagVan`, `js/soldaten.js`): `T.kanRaken(S, v, m, van)` is de ene vraag of het raakt (ernaast met `T.raakt`, verder
-  tot het bereik als `T.zichtTussen` het ziet, en wie schiet, niet met een vijand naast zich), voor de muis
-  (`T.handelingGevecht`: slaan, steken of schieten, en anders erheen lopen, naar de dichtste tegel in `S.bereik` vanwaar
-  het raakt) en voor de klap zelf; een vijand slaat minder hard op schild en harnas (`T.vangtAf`).
+- `js/gevecht.js` (werklijst vraag 170, stap 2; Marcel, 15 okt: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen,
+  wie kan vlucht", en het town hall): **het gevecht loopt in de tik**, in elk dorp (`T.werkGevechtBij` vanuit
+  `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
+  (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
+  getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **Wie vecht:** jouw kant (`T.vechtVoor`: `T.isMan`, en wie opgeroepen is voor de jacht), en de vijand
+  (`T.isVijandig`: een rover of een ander monster; een wolf als zijn roedel vecht of iemand aanvalt, `G.vecht`,
+  `G.aanval`; zelf vecht een wolf pas als `G.vecht` staat). Het doel is `e.volgt` (jouw bevel, zonder leiband,
+  `js/kiezen.js`) of `e.doelwit` (zelf gekozen: de dichtste die hij ziet, binnen `zicht`, en binnen `leiband` van zijn
+  anker, `e.vanaf`: de post, of `T.dagAnker`, of waar hij stond). Jouw kant kijkt alleen naar de vijanden; een rover ook
+  naar een dorpeling die buiten is (niet wie aangehouden is: de hinderlaag); een wolf alleen naar jouw kant. Wie geen
+  doel heeft, kijkt elke `kijkElke` seconden; wie het laat gaan (dood, binnen, te ver, buiten de leiband), wacht
+  `rustNaLoslaten`, en zijn dag neemt het over (`T.dwaal` en `T.werkRoversBij` laten wie vecht met rust).
+- **Een slag:** `T.kanRaken(D, e, d, van)` is de ene vraag (ernaast met `T.raakt`, verder tot het bereik van
+  `T.slagVan` als `T.zichtTussen` het ziet, en wie schiet, niet met een vijand naast zich; die stapt opzij). Raakt hij,
+  dan blijft hij staan en slaat als `e.slagKlaar` om is: de kosten maal `secondenPerPunt`. `T.raak(S, D, doel, n, van)`
+  is de ene plek waar een klap landt (de flits, de zwevende schade, en wie niets deed, slaat terug; een wolf haalt zijn
+  roedel erbij, `T.wolvenVechten`; een dorpeling vlucht), `T.valt` wie op nul komt.
+- **Vluchten en schuilen:** een dorpeling die een rover ziet (`vluchtZicht`), of die geraakt wordt, vlucht naar het town
+  hall (`T.schuil`, `p.schuilt`, `D.schuilen`; zonder town hall naar zijn eigen huis): `T.dagAnker` zet hem daar binnen, en
+  `T.blijftThuis` houdt hem van het werk. Is er geen rover meer op de kaart, dan komt iedereen weer naar buiten.
+- **Het gevecht als status:** `D.gevecht = { sinds, laatst, plek }` zolang iemand een doel heeft, en `rustNa` seconden
+  erna (`T.OORZAKEN.gevecht`, js/voorvallen.js); een bericht met de plek als het begint en ophoudt (`T.gevechtVoorbij`:
+  ook `T.naJacht` en `T.wolvenNaHetGevecht`), de tijd hooguit op 1× (`T.erWordtGevochten` in `T.snelheidNu`, js/tijd.js),
+  en de randen van het beeld kleuren rood (`S.gevechtGloed`). Opslaan mag ook in een gevecht.
+- Valt de held, dan is het spel uit (`T.schoutGevallen`), tot stap 5. Tot 15 okt was dit het gevecht in beurten: de
+  overgang, het raster, de actiepunten, de beurtvolgorde, de deur dichtgooien en `planMonsterBeurt` (git bewaart het).
 
 ### js/soldaten.js: de soldaten en hun wapens
 
@@ -1584,8 +1600,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bestaat alleen heel** (`T.isStuk`): wat half af is, blijft in `g.half` tot het heel is, en de kar laadt een stuk alleen
   heel (`js/kar.js`). Tot dan lag er 0,8 speer in de opslag en 0,2 op zijn stapel: samen een, dus hij maakte niets meer,
   maar de kar liet het stapeltje liggen (onder `minstens`), en met 0,8 speer kon niemand speerman worden.
-- **In het gevecht** (D1): `T.slagVan(e)` (de schout `T.SLAAN`; wie zonder soort meevecht, een veteraan of wie met de
-  bode meegaat, een hooivork), `T.vangtAf(doel, van)` (schild en harnas, niet tegen een kruisboog). De getallen in
+- **In het gevecht** (D1): `T.slagVan(e)` (een vijand zijn aanval uit `T.WEZENS`; de schout `T.SLAAN`; een soldaat zijn
+  wapen, een veteraan of wie meegaat op de jacht een hooivork; `T.stukkenVan`), `T.vangtAf(doel, van)` (schild en harnas,
+  niet tegen een kruisboog). De getallen in
   `T.SOLDATEN_INSTELLINGEN` (de werkbank: "Soldiers"); getoetst in `test/soldaten.test.cjs`.
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
@@ -1607,9 +1624,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   geen nummer, dus zijn soort en plek), en `terug` (`T.roepTerug`). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
   eerst `T.bevelAnker` vraagt: de vijand die hij volgt (straal 1), of zijn post (straal 0), niet 's nachts, tenzij hij
   die nacht zijn bevel kreeg (`post.wakker`). Het dwalen (`T.dwaal`, `js/verkennen.js`) brengt hem er, zoals iedereen naar
-  zijn anker; het bevel geeft hem meteen een weg. `T.werkSturenBij` (elke tik, in elk dorp, `T.werkDorpBij`) loopt de
-  vijand na als die verder liep (hooguit `zoekPerTik` wegen per tik), en wie geen man meer is, verliest zijn bevel. Wie
-  bij een aanval met de schout meeliep (`e.opgeroepen`, `js/rovers.js`), volgt na een bevel jouw bevel.
+  zijn anker; het bevel geeft hem meteen een weg. Een vijand achterna lopen en slaan doet het gevecht (`js/gevecht.js`;
+  wie vecht, dwaalt niet); `T.werkSturenBij` (elke tik, in elk dorp) geeft wie zijn vijand zag vallen een post waar hij
+  staat, en wie geen man meer is, verliest zijn bevel. Wie op de jacht meeloopt (`e.opgeroepen`), volgt na een bevel jouw
+  bevel. Een bevel erheen laat ook zijn doel gaan (`e.doelwit`).
 - **Het briefje** (`T.gekozenBriefje(S)` → `{ D, briefje, wie }`, in de vorm van `T.gebouwBriefje`): `T.manBriefje`,
   `T.mannenBriefje` en `T.dorpelingBriefje`, met een knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
   opent (`gesprek: { id }`, *Talk*; `T.gesprekBij`). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`), dat

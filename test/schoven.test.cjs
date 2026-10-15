@@ -18,6 +18,10 @@ function dorpOp(dag) {
   T.werkDeBoerenBij(D);
   S.kalender.dag = dag;
   D.gebouwenDag = Math.floor(dag);
+  // Geen wilde rovers: deze toetsen gaan over de oogst, en sinds het gevecht in real time (vraag 170, stap 2) vlucht wie
+  // een rover ziet naar het town hall, en maait dan niet.
+  D.rovers = D.rovers || T.nieuweRovers();
+  D.rovers.wildeOp = Infinity;
   return S;
 }
 

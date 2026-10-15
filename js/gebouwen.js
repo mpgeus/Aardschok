@@ -144,10 +144,13 @@
     // huifkar de ossenkar, en is het de eerste opslag: daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
     // van de schout in het gehucht dat er al was (een `huis` met `huis: 'schout'`, met plaats voor zijn gezin), en zijn
     // tekening in de stijl van het land (`schout` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
+    // Sinds 15 okt is het het town hall (werklijst vraag 170, stap 2; Marcel: "We hebben dan een 'town hall' nodig. Daar
+    // kunnen mensen schuilen", en "Huis schout wordt town hall", "Iedereen"): wie rovers ziet, vlucht erheen en schuilt
+    // er tot het rustig is (T.schuil, js/gevecht.js), en iedereen past erin. In de code heet het nog `schout`.
     schout: {
-      naam: T.t('reeve\'s house'), trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
+      naam: T.t('town hall'), trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, maakt: null, menu: true, leeg: true, eenmalig: true, opslag: true,
-      tekening: 'huizen/schoutshuis', beschrijving: T.t('your house and the first store: you can build around it'), opmerking: '', // geen tekst
+      tekening: 'huizen/schoutshuis', beschrijving: T.t('the heart of your village and the first store, where everyone shelters from robbers: you can build around it'), opmerking: '', // geen tekst
     },
     boerderij: {
       naam: T.t('farm'), meervoud: T.t('farms'), trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
@@ -468,12 +471,6 @@
       handen: 0, woonruimte: 0, tijdelijk: true, maakt: null, menu: false,
       tekening: null, beschrijving: T.t('a tent or a lean-to in the camp, until there is a hut'),
       opmerking: 'Uit gereedschap/pixelart/kamp.cjs (het vel kamp): de tent van linnen, de bruine tent en het afdak, elk met zijn opening naar vier kanten.', // geen tekst
-    },
-    raadhuis: {
-      naam: T.t('town hall'), trede: 'stad', voet: { b: 8, h: 6 }, kosten: { steen: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
-      handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('where the aldermen vote; the reeve becomes mayor'), // geen tekst
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. De schepenen zelf komen met de politiek (werklijst.md, punt 6).', // geen tekst
     },
     stadsmuur: {
       naam: T.t('town wall and gate'), trede: 'stad', voet: null, kosten: { hout: 60, goud: 80 }, heer: { goud: 30 }, bouwtijd: 20,
@@ -1221,7 +1218,7 @@
   // de voorraad toereikend is, trekt de kosten er dan in één keer af en zet hem neer — nog in
   // aanbouw, T.tikGebouwenDag zet hem na zijn bouwtijd op "klaar". Geeft altijd
   // { gelukt, reden } terug (reden alleen als het niet lukte), zodat de aanroeper kan zeggen
-  // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingGevecht
+  // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingSturen
   // (CLAUDE.md, "Scherm en klik stellen dezelfde vraag").
   T.plaatsGebouw = function (D, soort, x, y) {
     const g = T.GEBOUWEN[soort];

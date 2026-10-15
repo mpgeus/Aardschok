@@ -71,7 +71,7 @@
   T.gebouwBriefje = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort) return null;
-    const kop = g.soort === 'schout' ? T.t('Your house') : T.hoofdletter(soort.naam);
+    const kop = T.hoofdletter(soort.naam); // ook het town hall, waar de schout woont (vraag 170, stap 2)
     const doet = zin(soort.beschrijving);
     const delen = [];
     const deel = (titel, regels) => {

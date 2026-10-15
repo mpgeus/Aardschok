@@ -22,7 +22,6 @@ test('T.maakDier: een neutraal wezen dat niet vecht en rond zijn plek dwaalt', (
     assert.equal(e.naam, v.naam);
     assert.equal(e.kant, 'neutraal', 'het begint nooit een gevecht');
     assert.equal(e.maxLeven, 0, 'geen levensbalk');
-    assert.equal(e.ap, 0);
     assert.equal(e.gesprek, null);
     assert.deepEqual([e.x, e.y, e.tx, e.ty], [10, 12, 10, 12]);
     assert.deepEqual(e.thuis, { x: 10, y: 12 });
@@ -178,10 +177,8 @@ test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => 
     assert.equal(h.tekst, soort === 'koe' ? 'A cow' : 'A sheep');
     assert.equal(h.doe, undefined, 'een klik doet niets');
   }
-  // en in een gevecht telt het niet mee
-  const koe = T.maakDier('koe', 3, 3, 1);
-  w.wezens.push(koe);
-  assert.deepEqual(T.deelnemers(w, schout, koe), []);
+  // en in een gevecht is het geen vijand (js/gevecht.js)
+  assert.equal(T.isVijandig(T.maakDier('koe', 3, 3, 1)), false);
 });
 
 test('de loopsnelheid in het spel is die van de kunst, anders glijden de voeten', () => {

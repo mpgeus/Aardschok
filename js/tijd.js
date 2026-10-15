@@ -110,11 +110,10 @@
     return (dag - Math.floor(dag)) * 24;
   };
 
-  // Hoe snel de wereld loopt tegenover de klok van het scherm: de snelheid van de kalender. Zonder
-  // kalender (de proefkaarten) en in een gevecht in beurten gewoon 1, want een gevecht loopt op
-  // zijn eigen maat. Op pauze 0: dan staat alles stil, ook wie loopt.
+  // Hoe snel de wereld loopt tegenover de klok van het scherm: de snelheid van de kalender (in een gevecht hooguit 1×,
+  // T.snelheidNu). Zonder kalender (de proefkaarten) gewoon 1. Op pauze 0: dan staat alles stil, ook wie loopt.
   T.wereldFactor = function (S) {
-    if (!S || !S.kalender || S.gevecht || S.modus === 'gevecht' || S.modus === 'overgang') return 1;
+    if (!S || !S.kalender) return 1;
     return T.snelheidNu(S);
   };
 
@@ -172,10 +171,13 @@
   };
 
   // Hoe snel de kalender nu echt loopt: wat de speler koos, of 0 zolang iets de tijd stilzet.
+  // Wordt er ergens gevochten (js/gevecht.js), dan hooguit 1× (werklijst vraag 170, E1; Marcel, 15 okt: "een gevecht
+  // ergens zet iedereen op 1×"), tot het voorbij is; pauze kan wel. De snelheid die je koos, blijft staan.
   T.snelheidNu = function (S) {
     const k = S && S.kalender;
     if (!k) return 0;
-    return k.stil && k.stil.length ? 0 : k.snelheid || 0;
+    const s = k.stil && k.stil.length ? 0 : k.snelheid || 0;
+    return s > 1 && T.erWordtGevochten(S) ? 1 : s;
   };
 
   // Voor wie ertoe doet als hij in een dorp komt (de heer, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×

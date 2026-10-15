@@ -247,25 +247,29 @@
   // In het gevecht
   // ---------------------------------------------------------------------------------------------
 
-  // De stukken van wezen e: een soldaat die van zijn soort, wie anders aan jouw kant meevecht een hooivork, en de schout
-  // en een vijand geen (de schout slaat zoals T.SLAAN, een vijand zoals zijn aanval in T.WEZENS, js/wereld.js).
+  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan en wie meegaat op de jacht (js/beesten.js) een
+  // hooivork, en de schout, een dorpeling en een vijand geen (de schout slaat zoals T.SLAAN, een vijand zoals zijn aanval in
+  // T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie opgeroepen was (kant 'speler'); sinds het gevecht in
+  // real time (vraag 170, stap 2) vecht een soldaat ook zonder.
   T.stukkenVan = function (e) {
-    if (!e || e.kant !== 'speler') return [];
-    const p = e.bewoner;
+    const p = e && e.bewoner;
     if (!p || p.schout) return [];
-    return stukkenVan(p.soldaat ? p.soldaat.soort : 'militie');
+    if (p.soldaat) return stukkenVan(p.soldaat.soort);
+    return p.veteraan || e.opgeroepen ? stukkenVan('militie') : [];
   };
 
-  // Hoe wezen e van jouw kant slaat: { wapen, kosten, schade, bereik, schiet, doorHarnas }. De schout met T.SLAAN, ernaast.
+  // Hoe wezen e slaat (js/gevecht.js): { wapen, kosten, schade, bereik, schiet, doorHarnas }. Een vijand (een rover, een
+  // wolf) met zijn aanval (T.WEZENS), ernaast; de schout met T.SLAAN, ernaast; een man met zijn wapen.
   T.slagVan = function (e) {
+    if (e.aanval) return { wapen: null, kosten: e.aanval.kosten, schade: e.aanval.schade, bereik: 1, schiet: false, doorHarnas: false };
     const wapen = T.stukkenVan(e).find((stuk) => STUKKEN[stuk].wapen);
     if (!wapen) return { wapen: null, kosten: T.SLAAN.kosten, schade: T.SLAAN.schade, bereik: 1, schiet: false, doorHarnas: false };
     const s = STUKKEN[wapen];
     return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas };
   };
 
-  // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (een wezen, of null: een vijand). Van een
-  // bout uit een kruisboog niets.
+  // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat). Van een bout uit een kruisboog
+  // niets.
   T.vangtAf = function (doel, van) {
     if (van && T.slagVan(van).doorHarnas) return 0;
     let n = 0;

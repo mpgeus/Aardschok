@@ -182,14 +182,15 @@ test('de schout loopt door een groepje heen: wie maar wat staat, gaat opzij', ()
   assert.ok(groep.some((e) => e.tx !== 4 || e.ty !== 1));
 });
 
-test('in een gevecht ontwijkt niemand: wie zijn tegel bezet vindt, stopt, zoals vroeger', () => {
+// Sinds het gevecht in real time (js/gevecht.js; vraag 170, stap 2) ontwijkt iedereen ook in een gevecht; alleen wie vecht,
+// gaat niet opzij. Tot dan stopte in een gevecht in beurten wie zijn tegel bezet vond.
+test('wie vecht, gaat niet opzij voor wie langs wil', () => {
   const w = kaart(GANG);
-  const S = { wereld: w, spreektMet: null, gevecht: {} };
-  const a = mens(w, 1, 1);
-  mens(w, 4, 1);
-  stuur(w, a, { x: 10, y: 1 });
-  loop(S, w, 5);
-  assert.deepEqual([a.tx, a.ty, a.pad.length], [3, 1, 0]);
+  const S = { wereld: w, spreektMet: null };
+  const b = mens(w, 4, 1);
+  assert.equal(T.magOpzij(S, b), true);
+  b.doelwit = mens(w, 5, 1);
+  assert.equal(T.magOpzij(S, b), false);
 });
 
 test('een stap van het dwalen heeft geen doel: staat er iemand, dan blijft hij staan', () => {

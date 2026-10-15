@@ -5,7 +5,6 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  let vorigeAp = '';
   let vorigeTip = '';
   let keuzes = [];
 
@@ -23,11 +22,8 @@
   T.ui = {
     reset(S) {
       $('berichten').innerHTML = '';
-      vorigeAp = '';
       this.toonInventaris(S);
       this.toonGoud();
-      this.toonGevecht(false);
-      this.zetKnoppen(false);
       this.sluitDialoog();
       this.verbergOverlay();
       this.verbergTooltip();
@@ -76,59 +72,6 @@
       if (!el || !S.dorp) return;
       el.classList.toggle('verborgen', !S.dorp.goudGehad);
       $('goud-aantal').textContent = S.dorp.goud || 0;
-    },
-
-    // De gevechtsbalken schuiven in en uit beeld via één klasse op body, zodat de overgang
-    // net zo glijdt als het raster op de vloer.
-    toonGevecht(aan) {
-      document.body.classList.toggle('in-gevecht', aan);
-      vorigeAp = '';
-    },
-
-    toonVolgorde(S) {
-      const g = S.gevecht;
-      if (!g) return;
-      $('volgorde').innerHTML =
-        g.volgorde
-          .map((e, i) => {
-            // Het leven dat nog over is, bij de schout net als bij een monster.
-            const stand = e.leven;
-            return `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${stand}</small></div>`;
-          })
-          .join('') + `<div class="ronde">${T.t('Round {n}', { n: g.ronde })}</div>`;
-    },
-
-    // kosten: wat de handeling onder de muis zou kosten; die punten lichten op.
-    // kan = false: dat past niet meer in deze beurt, dan kleuren ze rood.
-    toonAp(ap, max, kosten, kan) {
-      const sleutel = [ap, max, kosten, kan].join('|');
-      if (sleutel === vorigeAp) return;
-      vorigeAp = sleutel;
-      let html = `<span class="ap-label">${T.t('AP')}</span>`;
-      for (let i = 0; i < max; i++) {
-        let c = 'pip';
-        if (i < ap) {
-          c += ' vol';
-          if (kosten > 0 && !kan) c += ' tekort';
-          else if (kosten > 0 && i >= ap - kosten) c += ' kost';
-        }
-        html += `<span class="${c}"></span>`;
-      }
-      $('ap').innerHTML = html;
-    },
-
-    zetKnoppen(aan, actie) {
-      for (const b of document.querySelectorAll('#knoppen button')) { // geen tekst
-        b.disabled = !aan;
-        b.classList.toggle('gekozen', !!aan && b.dataset.actie === actie);
-      }
-    },
-
-    // De deurknop staat er alleen als wie aan de beurt is (de schout of een man van de militie) naast een open deur staat.
-    toonDeurKnop(zichtbaar, kan) {
-      const b = document.querySelector('#knoppen button[data-actie="deur"]'); // geen tekst
-      b.classList.toggle('verborgen', !zichtbaar);
-      b.disabled = !kan;
     },
 
     // `plek` ({ x, y }, een tegel; T.zeg in js/dorp.js): een klik op het bericht, of Spatie, brengt de camera erheen
@@ -363,13 +306,7 @@
     menu: T.t('Menu'),
     opgeslagen: T.t('Saved'),
     goud: T.t('Gold. It buys goods and favours.'),
-    slaan: T.t('Strike'),
-    slaanUitleg: T.t('You strike by clicking on an enemy'),
-    deurDicht: T.t('Close door'),
-    eindeBeurt: T.t('End turn'),
-    spatie: T.t('Space'),
-    hulp: T.t('Click to walk, talk or use something. {toets}: sneak', { toets: kbd('S') }) + '<br>' +
-      T.t('In a fight: {slaan}: strike · {deur}: close door · {spatie}: end turn', { slaan: kbd('1'), deur: kbd('D'), spatie: kbd(T.t('Space')) }),
+    hulp: T.t('Click to walk, talk or use something. {toets}: sneak', { toets: kbd('S') }),
   };
   document.documentElement.lang = T.taalNu();
   document.title = T.t('{naam} · prototype', { naam: T.NAAM });

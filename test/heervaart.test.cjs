@@ -198,7 +198,7 @@ test('op 1 herfstmaand komen ze terug als veteraan, over de weg; wie sneuvelde, 
   });
 });
 
-test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer leven dan een soldaat, en met een hooivork', () => {
+test('een veteraan vecht aan jouw kant als er rovers komen, ook zonder wachthuis, met meer leven dan een soldaat, en met een hooivork', () => {
   const S = met({ kansNietTerug: 0 }, () => {
     const spel = dorpMetBrief();
     T.stuurHeervaart(spel.dorp, 'gestuurd');
@@ -220,15 +220,16 @@ test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer
   S.dorp.rovers.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: 2, meteen: true };
   berichten.length = 0;
   T.werkRoversBij(S, S.dorp);
-  const opgeroepen = S.wereld.wezens.filter((e) => e.opgeroepen);
-  assert.equal(opgeroepen.length, veteranen.length);
-  for (const e of opgeroepen) {
-    assert.equal(e.kant, 'speler');
-    assert.equal(e.maxLeven, T.WEZENS.veteraan.leven);
+  // Er komt niemand vanzelf (js/gevecht.js; vraag 170, stap 2): een veteraan is een man van je, en jij stuurt hem.
+  assert.ok(!S.wereld.wezens.some((e) => e.opgeroepen), 'niemand wordt opgeroepen');
+  for (const p of veteranen) {
+    const e = p.wezen;
+    assert.ok(T.isMan(S.dorp, e) && T.vechtVoor(S.dorp, e), `${p.naam} vecht aan jouw kant`);
+    assert.equal(T.levenAlsMan(e).max, T.WEZENS.veteraan.leven);
     assert.ok(T.WEZENS.veteraan.leven > T.WEZENS.soldaat.leven);
     assert.equal(T.slagVan(e).wapen, 'hooivork', 'zonder soort vecht hij met een hooivork (js/soldaten.js)');
   }
-  assert.ok(berichten.some((b) => /The (veteran comes|veterans come) to your side/.test(b)));
+  assert.ok(berichten.some((b) => /Choose your soldiers, and right-click a robber/.test(b)), berichten.join(' | '));
 });
 
 test('met de spelregel uit vraagt de heer geen mannen, en wie al weg was, komt toch terug', () => {

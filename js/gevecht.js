@@ -1,536 +1,400 @@
-// Het gevecht in beurten. Het begint op de plek waar iedereen staat: wie onderweg is, maakt
-// zijn stap af, daarna verschijnt het raster op dezelfde vloer en gaat de wereld verder in
-// beurten. Er is geen apart gevechtsscherm, en dat is de kern van het idee: de kamer waarin
-// je rondliep, is het slagveld, met dezelfde deuren en kisten.
+// Het gevecht in real time (werklijst vraag 170, stap 2; Marcel, 15 okt: "Het concept gaan om naar RTS", en op het plan:
+// "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen
+// mensen schuilen").
 //
-// Aan jouw kant (kant 'speler') vecht de schout, en sinds de rovers (werklijst vraag 55, 29 sep) ook de
-// militie die met hem meeliep (T.militieInGevecht, js/rovers.js): de soldaten van het wachthuis en de veteranen. Elk
-// heeft zijn eigen beurt en actiepunten, en jij bestuurt wie aan de beurt is (T.aanDeBeurt), zoals in Jagged Alliance
-// 2. Elk slaat met zijn eigen wapen (T.slagVan, js/soldaten.js; vraag 159): de speer en de piek reiken twee tegels, de
-// boog en de kruisboog schieten ver, en schild en harnas vangen een deel van een klap af (T.vangtAf). Een vijand zoekt
-// de man van jouw kant die het dichtst bij staat. Wie valt, is dood (Marcel, 29 sep: "mensen kunnen sterven"): een
-// vijand is verslagen, een soldaat is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit.
+// Er zijn geen beurten en geen raster meer: het gevecht loopt in de tik van de wereld (T.wereldTik, js/tik.js), in elk dorp
+// (T.werkGevechtBij vanuit T.werkDorpBij, js/dorp.js), met het toeval van het dorp (T.toeval), en dus op elke computer
+// gelijk, zoals lockstep vraagt. Tot 15 okt was het een gevecht in beurten, met actiepunten, een raster op de vloer en een
+// deur die je dichtgooide (git bewaart het).
+//
+// Wie vecht:
+//   - jouw kant (T.vechtVoor): de held, de soldaten en de veteranen (T.isMan, js/kiezen.js), en wie meegaat op de jacht op
+//     de wolven (e.opgeroepen, js/beesten.js). Wie geen doel heeft, kijkt om zich heen en valt de dichtste vijandige vijand
+//     aan die hij ziet (zicht), maar alleen binnen de leiband van zijn post (of van waar hij hoort, T.dagAnker); loopt die
+//     verder weg, dan laat hij hem gaan en keert terug. Een vijand die je zelf aanwijst (e.volgt, js/kiezen.js), zit hij na
+//     zonder leiband. De held kiest zelf niets: hij vecht als je hem stuurt, of terug als hij geraakt wordt. Bij een aanval
+//     komt niemand vanzelf: jij stuurt je mannen (Marcel: "Niemand vanzelf").
+//   - de vijand (T.isVijandig): een rover slaat wie hij tegenkomt, ook een dorpeling (Marcel: "Iedereen"); een wolf alleen
+//     als zijn roedel vecht of iemand aanvalt (js/beesten.js), en dan alleen jouw kant. Ook hij heeft een leiband, van waar
+//     hij begon; daarna gaat hij verder met wat hij deed (roven, terug naar het hol).
+// Een slag: wie raakt (T.kanRaken, met het wapen van T.slagVan in js/soldaten.js: de speer en de piek twee tegels, de boog
+// en de kruisboog ver waar ze zien, maar niet met een vijand naast zich), blijft staan en slaat; de kosten van zijn slag
+// (de actiepunten van vroeger) maal secondenPerPunt is de tijd tot de volgende. Schild en harnas vangen een deel af
+// (T.vangtAf). Wie geraakt wordt en niets doet, slaat terug; een dorpeling vlucht.
+//
+// Een dorpeling die een rover ziet, vlucht naar het town hall (het huis van de schout: de eerste opslag, het midden van
+// je bereik), en zit daar binnen tot er geen rover meer op de kaart is (p.schuilt, en T.blijftThuis in js/bewoners.js: wie
+// schuilt, werkt niet). Is er nog geen town hall, dan naar zijn eigen huis.
+//
+// Het gevecht is een status (D.gevecht, T.OORZAKEN.gevecht in js/voorvallen.js; de richtlijn van 1 okt): het begint als
+// iemand een doel kiest, met een bericht met de plek, en houdt op als er rustNa seconden niemand meer vecht. Zolang het
+// duurt, loopt de tijd hooguit op 1× (T.snelheidNu, js/tijd.js; Marcel, 15 okt: "een gevecht ergens zet iedereen op 1×").
+// Wie valt, is dood (Marcel, 29 sep: "mensen kunnen sterven"): een rover is uit zijn bende, een soldaat of een dorpeling is
+// een mond minder (T.sneuvelt, js/rovers.js), en valt de held, dan is het spel uit (tot stap 5: dan staat er een veteraan op).
+//
+// Zonder scherm, en dus getoetst (test/gevecht.test.cjs); wat alleen scherm is (de zwevende schade, de pijl), gaat via
+// T.anim (js/anim.js), alleen waar je kijkt.
 (function (T) {
   'use strict';
 
-  // Eén potje actiepunten per beurt voor lopen (1 per stap), slaan en een deur dichtgooien. Een
-  // klap kost levenspunten, bij een monster net als bij de schout (js/wereld.js, T.WEZENS). Tot
-  // 25 sep speelde je een tovenaar die ook kon toveren, met zijn leeftijd als levensbalk; dat ging
-  // eruit met het oude spel (ontwerp/werklijst.md, punt 7b). Zo slaat de schout; de militie slaat met haar wapen
-  // (T.slagVan, js/soldaten.js).
+  T.GEVECHT_INSTELLINGEN = {
+    // De kosten van een slag (in de punten van T.slagVan: een zwaard 3, een boog 4) maal dit is de tijd tot de volgende
+    // slag, in seconden op 1×: een zwaard slaat zo elke 1,2 seconde, een boog schiet elke 1,6.
+    secondenPerPunt: 0.4,
+    // Zo ver (tegels) ziet een man van jou een vijand; een rover of een wolf ziet zo ver als T.WEZENS zegt.
+    zicht: 8,
+    // Zo ver van zijn post (of van waar hij hoort, of van waar hij begon) zit iemand een vijand na; dan laat hij hem gaan.
+    leiband: 10,
+    // Wie geen doel heeft, kijkt zo vaak om zich heen (seconden van de wereld), en na een doel dat hij liet gaan zo lang
+    // niet.
+    kijkElke: 0.25,
+    rustNaLoslaten: 2,
+    // Zoveel vechters zoeken per tik een nieuwe weg (hun doel liep verder).
+    zoekPerTik: 6,
+    // Zoveel seconden zonder dat iemand vecht, en het gevecht is voorbij.
+    rustNa: 6,
+    // Een dorpeling die een rover zo dichtbij ziet (tegels), vlucht naar het town hall.
+    vluchtZicht: 6,
+    // Het leven van een dorpeling (een soldaat heeft dat van T.WEZENS.soldaat, T.levenAlsMan in js/rovers.js).
+    leven: 10,
+  };
+  const IN = () => T.GEVECHT_INSTELLINGEN;
+
+  // Zo slaat de held (T.slagVan, js/soldaten.js): ernaast, met wat hij bij zich heeft.
   T.SLAAN = { kosten: 3, schade: [3, 5] };
-  T.DEUR_SLUITEN = 1;
 
-  // Een worp met het toeval van de wereld (T.toeval, js/dorp.js), niet Math.random (werklijst vraag 170, stap 0).
-  const worp = (S, b) => b[0] + Math.floor(T.toeval(T.dorpHier(S) || S.wereld) * (b[1] - b[0] + 1));
+  const plek = (e) => T.tegelVan(e);
+  const worp = (D, b) => b[0] + Math.floor(T.toeval(D) * (b[1] - b[0] + 1));
 
-  // Wie er nu aan de beurt is, en of jij hem bestuurt: de schout of een man van de militie.
-  T.aanDeBeurt = (S) => (S.gevecht ? S.gevecht.volgorde[S.gevecht.beurt] || null : null);
-  T.spelerAanDeBeurt = function (S) {
-    const e = T.aanDeBeurt(S);
-    return !!e && e.kant === 'speler' && !e.dood;
-  };
-  // Wie er aan jouw kant nog meevecht.
-  T.spelers = (S) => (S.gevecht ? S.gevecht.volgorde.filter((e) => e.kant === 'speler' && !e.dood) : [S.schout]);
-  // Stap 1 van de overgang: de wereld bevriest. De spellus roept beginGevecht aan zodra
-  // niemand meer onderweg is.
-  T.startGevecht = function (S, aanleiding, schoutBegint) {
-    if (S.modus !== 'verkennen') return;
-    S.modus = 'overgang';
-    S.naLopen = null;
-    S.overgang = { aanleiding };
-    // Wie onderweg is, maakt zijn stap af en blijft dan staan.
-    for (const e of S.wereld.wezens) e.pad = e.onderweg ? [e.pad[0]] : [];
-    if (!schoutBegint) aanleiding.alarm = 1.3;
-    T.ui.verbergTooltip();
-    T.ui.bericht(schoutBegint ? T.t('You attack the {wezen}.', { wezen: aanleiding.naam }) : T.t('The {wezen} sees you.', { wezen: aanleiding.naam }), 'gevaar');
-  };
+  // ── Wie vecht, en tegen wie ──
 
-  // Stap 2: iedereen staat op een tegel. Wie doet mee, in welke volgorde, op welke vloer. Eerst jouw kant
-  // (de schout, dan de militie), dan de vijanden, de snelste eerst.
-  T.beginGevecht = function (S) {
-    const w = S.wereld;
-    const schout = S.schout;
-    const monsters = T.deelnemers(w, schout, S.overgang.aanleiding);
-    // De militie van het dorp waar gevochten wordt (js/rovers.js, js/dorp.js); buiten een dorp is er geen.
-    const D = T.dorpHier(S);
-    const militie = D ? T.militieInGevecht(D) : [];
-    S.overgang = null;
-    const kamers = new Set();
-    for (const e of [schout, ...militie, ...monsters]) {
-      const k = T.kamerVan(w, e.tx, e.ty);
-      if (k) {
-        kamers.add(k.id);
-        w.bekend.add(k.id);
-      }
+  // Vecht hij voor dorp D: de held, een soldaat of een veteraan, of wie meegaat op de jacht (js/beesten.js)?
+  T.vechtVoor = (D, e) => !!e && !e.dood && (T.isMan(D, e) || !!e.opgeroepen);
+  // Een vijand die vecht: een rover (of een ander monster), en een wolf als zijn roedel vecht of iemand aanvalt.
+  T.isVijandig = (e) => !!e && !e.dood && e.kant === 'monster' && (!e.beest || !!(e.groep && (e.groep.vecht || e.groep.aanval)));
+  // Wie een vijand m aanvalt: jouw kant, en een rover ook een dorpeling die buiten is (een wolf niet). Wie rovers op de weg
+  // aanhouden (js/rovers.js, de hinderlaag), houden ze vast; die slaan ze niet.
+  function doelVoorVijand(D, m, x) {
+    if (x === m || x.dood || x.binnen || x.aangehouden) return false;
+    if (T.vechtVoor(D, x)) return true;
+    return !m.beest && !!x.bewoner && !x.dier && !x.beest;
+  }
+  const zichtVan = (D, e) => (T.vechtVoor(D, e) ? IN().zicht : e.zicht || IN().zicht);
+
+  // Waar hij hoort, van waar de leiband gaat: zijn post, of waar zijn dag hem zet (T.dagAnker, js/dag.js: het wachthuis);
+  // anders waar hij staat.
+  function ankerVan(D, e) {
+    if (e.post) return { x: e.post.x, y: e.post.y };
+    if (T.vechtVoor(D, e)) {
+      const a = T.dagAnker(D, e);
+      if (a) return { x: a.x, y: a.y };
     }
-    if (!kamers.size) kamers.add(w.huidigeKamer);
-    monsters.sort((a, b) => b.initiatief - a.initiatief);
-    S.gevecht = { monsters, volgorde: [schout, ...militie, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
-    // Wie van de militie nog ver weg is, rent erheen, en vecht mee als hij er is (js/rovers.js; zie ook volgendeBeurt).
-    const nog = D ? T.militieKomtErbij(S, D).onderweg : [];
-    if (nog.length) T.ui.bericht(T.t('{n|{wie} is still on the way.|{wie} are still on the way.}', { n: nog.length, wie: T.opsomming(nog.map((e) => e.naam)) }));
-    S.rasterTegels = rasterVoor(w, kamers, S.gevecht.volgorde);
-    S.rasterStart = S.tijd;
-    S.rasterVan = T.tegelVan(schout);
-    S.modus = 'gevecht';
-    T.ui.toonGevecht(true);
-    beginBeurt(S);
-  };
-
-  // Wie doet er mee: het monster dat het begon, elk monster in dezelfde kamer als de schout,
-  // en elk monster dat hem van dichtbij kan zien. Rovers komen met hun hele bende (js/rovers.js): begint
-  // er een, dan doen ze allemaal mee.
-  T.deelnemers = function (w, schout, aanleiding) {
-    const h = T.tegelVan(schout);
-    const kamerSchout = T.kamerVan(w, h.x, h.y);
-    return w.wezens.filter((m) => {
-      if (m.dood || m.kant !== 'monster') return false;
-      if (m === aanleiding) return true;
-      if (aanleiding && aanleiding.rover && m.rover) return true;
-      const p = T.tegelVan(m);
-      const k = T.kamerVan(w, p.x, p.y);
-      // Buiten is de hele kaart één kamer; dan zou elk monster op het erf meedoen. Daar telt
-      // alleen wie de schout echt kan zien.
-      if (!w.buiten && k && kamerSchout && k === kamerSchout) return true;
-      return T.afstand(p, h) <= 8 && T.zichtTussen(w, p, h);
-    });
-  };
-
-  // Het raster ligt op elke vloertegel van de kamers waarin gevochten wordt, en op de
-  // deuropeningen ertussen.
-  // Hoe ver het raster buiten om de vechters heen reikt. Binnen bakent de kamer het slagveld af;
-  // buiten is er maar één kamer, de hele kaart, en een raster over het hele erf zegt niets meer.
-  const RASTER_BUITEN = 9;
-
-  function rasterVoor(w, kamers, vechters) {
-    const lijst = [];
-    const vak = T.kaartVak(w);
-    if (w.buiten) {
-      const wie = (vechters || []).filter((e) => !e.dood).map((e) => T.tegelVan(e));
-      if (!wie.length) return lijst;
-      for (let y = vak.y; y < vak.y + vak.h; y++) {
-        for (let x = vak.x; x < vak.x + vak.b; x++) {
-          if (T.tegel(w, x, y) !== 'vloer') continue;
-          if (wie.some((p) => T.afstand(p, { x, y }) <= RASTER_BUITEN)) lijst.push({ x, y });
-        }
-      }
-      return lijst;
-    }
-    for (let y = vak.y; y < vak.y + vak.h; y++) {
-      for (let x = vak.x; x < vak.x + vak.b; x++) {
-        const t = T.tegel(w, x, y);
-        if (t === 'vloer' && kamers.has(T.kamerVan(w, x, y).id)) lijst.push({ x, y });
-        else if (t === 'deur' && T.burenKamersOp(w, x, y).some((id) => kamers.has(id))) lijst.push({ x, y });
-      }
-    }
-    return lijst;
+    return plek(e);
   }
 
-  // Loopt iemand tijdens het gevecht een nieuwe kamer in, dan groeit het raster mee; buiten
-  // schuift het gewoon met de vechters mee. Wie aan jouw kant een stap zet, betaalt er een punt voor.
-  T.gevechtBijAankomst = function (S, e, t) {
-    const g = S.gevecht;
-    const speler = e.kant === 'speler' && e === T.aanDeBeurt(S);
-    if (speler) {
-      e.ap = Math.max(0, e.ap - 1);
-      T.ui.toonAp(e.ap, e.maxAp, 0, true);
+  // Het leven van wie vecht of geraakt wordt: een man dat van een soldaat of veteraan (T.levenAlsMan), een ander het zijne,
+  // of dat van een dorpeling.
+  function zorgLeven(D, e) {
+    if (e !== D.schout && T.isMan(D, e)) {
+      const l = T.levenAlsMan(e);
+      e.leven = l.leven;
+      e.maxLeven = l.max;
+    } else if (!(e.maxLeven > 0)) e.leven = e.maxLeven = IN().leven;
+  }
+
+  // De dichtste die hij ziet en mag aanvallen, binnen de leiband van waar hij hoort. Jouw kant kijkt alleen naar de
+  // vijanden (een korte lijst), een vijand naar iedereen.
+  function kiesDoel(D, e, vijanden) {
+    const w = D.wereld;
+    const hier = plek(e);
+    const man = T.vechtVoor(D, e);
+    const zicht = zichtVan(D, e);
+    const anker = man ? ankerVan(D, e) : hier;
+    let beste = null;
+    let bij = Infinity;
+    for (const x of man ? vijanden : w.wezens) {
+      if (!man && !doelVoorVijand(D, e, x)) continue;
+      const p = plek(x);
+      const a = T.afstand(p, hier);
+      if (a > zicht || a >= bij || T.afstand(p, anker) > IN().leiband) continue;
+      if (!T.zichtTussen(w, hier, p)) continue;
+      beste = x;
+      bij = a;
     }
-    if (S.wereld.buiten) {
-      if (speler) S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
+    return beste ? { doel: beste, anker } : null;
+  }
+
+  // Staat er een vijand van e naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1).
+  function vijandNaast(D, e, t) {
+    const man = T.vechtVoor(D, e);
+    return D.wereld.wezens.some((x) => (man ? T.isVijandig(x) : doelVoorVijand(D, e, x)) && T.afstand(plek(x), t) === 1);
+  }
+
+  // Kan e doel d raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast zoals altijd
+  // (T.raakt); verder weg tot zijn bereik, als hij ziet waar hij heen steekt of schiet (T.zichtTussen: een ander wezen
+  // ertussen houdt het niet tegen, dus een speer steekt langs een zwaard); en wie schiet, niet met een vijand naast zich.
+  T.kanRaken = function (D, e, d, van = plek(e)) {
+    const slag = T.slagVan(e);
+    if (slag.schiet && vijandNaast(D, e, van)) return false;
+    const p = plek(d);
+    if (T.raakt(D.wereld, van, p)) return true;
+    const a = T.afstand(van, p);
+    return a >= 2 && a <= slag.bereik && T.zichtTussen(D.wereld, van, p);
+  };
+
+  // ── Elke tik ──
+
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat; wie een rover ziet, vlucht; en
+  // het gevecht begint of houdt op.
+  T.werkGevechtBij = function (S, D) {
+    const w = D.wereld;
+    if (!w || !w.wezens || S.modus === 'dood') return;
+    const nu = S.wereldTijd || 0;
+    const vijanden = w.wezens.filter(T.isVijandig);
+    const budget = { zoek: IN().zoekPerTik };
+    let vecht = null;
+    for (const e of w.wezens) {
+      if (e.dood || e.binnen) continue;
+      // Een wolf vecht zelf pas als zijn roedel vecht; valt hij iemand aan, dan roept die om hulp (js/beesten.js).
+      if (!T.vechtVoor(D, e) && !(T.isVijandig(e) && (!e.beest || e.groep.vecht))) continue;
+      const d = doelVan(S, D, e, nu, vijanden);
+      if (!d) continue;
+      vecht = vecht || plek(e);
+      doeMet(S, D, e, d, nu, budget);
+    }
+    vlucht(D, vijanden.filter((m) => !m.beest));
+    if (vecht) {
+      if (!D.gevecht) gevechtBegint(S, D, vecht, nu);
+      D.gevecht.laatst = nu;
+    } else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
+    // Een roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen): dan gaat hij terug.
+    else if (!D.gevecht && vijanden.some((v) => v.beest && v.groep.vecht)) T.wolvenNaHetGevecht(D);
+  };
+
+  // Het doel van e nu: wie hij volgt op jouw bevel (e.volgt, js/kiezen.js), of wie hij zelf koos (e.doelwit). Is dat er
+  // niet meer, binnen, of te ver (de leiband, of uit zicht), dan laat hij het gaan; heeft hij niets, en is het tijd, dan
+  // kijkt hij om zich heen.
+  function doelVan(S, D, e, nu, vijanden) {
+    let d = e.volgt || e.doelwit;
+    if (d && !e.volgt) {
+      const weg = d.dood || d.binnen || d.aangehouden || !D.wereld.wezens.includes(d);
+      const ver = T.afstand(plek(d), plek(e)) > zichtVan(D, e) + 2 || (e.vanaf && T.afstand(plek(e), e.vanaf) > IN().leiband);
+      const geenVijand = T.vechtVoor(D, e) ? !T.isVijandig(d) : !doelVoorVijand(D, e, d);
+      if (weg || ver || geenVijand) {
+        laatGaan(e, nu);
+        d = null;
+      }
+    }
+    if (d && e.volgt && (d.dood || !D.wereld.wezens.includes(d))) return null; // js/kiezen.js geeft hem een post
+    // De held kiest zelf niets: hij blijft waar je hem neerzet (js/kiezen.js), en vecht als je hem stuurt of als hij
+    // geraakt wordt (T.raak). Zo loopt hij niet vanzelf een gevecht in dat het spel kan beëindigen.
+    if (d || nu < (e.kijkt || 0) || e === D.schout) return d;
+    e.kijkt = nu + IN().kijkElke;
+    const keus = kiesDoel(D, e, vijanden);
+    if (!keus) return null;
+    e.doelwit = keus.doel;
+    e.vanaf = keus.anker;
+    zorgLeven(D, e);
+    zorgLeven(D, keus.doel);
+    return keus.doel;
+  }
+
+  // Hij laat zijn doel gaan: hij maakt zijn stap af, en dan neemt zijn dag het over (zijn post of het wachthuis, T.dwaal),
+  // of wat een rover deed (js/rovers.js).
+  function laatGaan(e, nu) {
+    delete e.doelwit;
+    delete e.vanaf;
+    e.pad = e.onderweg && e.pad.length ? [e.pad[0]] : [];
+    e.kijkt = nu + IN().rustNaLoslaten;
+  }
+
+  // Wat e doet met doel d: raakt hij het, dan blijft hij staan en slaat als zijn vorige slag lang genoeg geleden is; wie
+  // schiet en een vijand naast zich heeft, stapt opzij; anders loopt hij erheen.
+  function doeMet(S, D, e, d, nu, budget) {
+    // Wie vecht, heeft zijn leven (een man die je stuurde, kreeg het nog niet bij het kiezen): voor de levensbalk.
+    if (!(e.maxLeven > 0)) zorgLeven(D, e);
+    if (!(d.maxLeven > 0)) zorgLeven(D, d);
+    if (T.kanRaken(D, e, d)) {
+      if (e.pad.length) e.pad = e.onderweg ? [e.pad[0]] : [];
+      if (!e.onderweg && nu >= (e.slagKlaar || 0)) slaan(S, D, e, d, nu);
       return;
     }
-    const k = T.kamerVan(S.wereld, t.x, t.y);
-    if (k && !g.kamers.has(k.id)) {
-      g.kamers.add(k.id);
-      S.wereld.bekend.add(k.id);
-      S.rasterTegels = rasterVoor(S.wereld, g.kamers);
-    }
-  };
-
-  function beginBeurt(S) {
-    const g = S.gevecht;
-    if (!g) return;
-    g.teller++;
-    const v = g.volgorde[g.beurt];
-    T.ui.toonVolgorde(S);
-    if (v.kant === 'speler') {
-      // Kan geen enkel monster nog iemand van jouw kant zien of bereiken (een deur dichtgegooid),
-      // dan zijn jullie ontsnapt.
-      const spelers = T.spelers(S);
-      if (!g.monsters.some((m) => !m.dood && spelers.some((s) => kanBij(S, m, s)))) {
-        T.eindeGevecht(S, 'kwijt');
-        return;
-      }
-      v.ap = v.maxAp;
-      S.bezig = false;
-      T.ververBereik(S);
-      knoppenAan(S);
-      T.ui.toonAp(v.ap, v.maxAp, 0, true);
-    } else {
-      S.bezig = true;
-      S.bereik = null;
-      T.ui.zetKnoppen(false);
-      monsterBeurt(S, v);
-    }
-  }
-
-  function volgendeBeurt(S) {
-    const g = S.gevecht;
-    if (!g) return;
-    if (!g.monsters.some((m) => !m.dood)) {
-      T.eindeGevecht(S, 'gewonnen');
+    const slag = T.slagVan(e);
+    if (slag.schiet && vijandNaast(D, e, plek(e))) {
+      if (!e.onderweg) stapOpzij(D, e);
       return;
     }
-    g.beurt = (g.beurt + 1) % g.volgorde.length;
-    if (g.beurt === 0) {
-      g.ronde++;
-      // Een nieuwe ronde: wie van de militie onderweg was, komt dichterbij, en wie er nu is, vecht mee (js/rovers.js).
-      const D = T.dorpHier(S);
-      const { erbij } = D ? T.militieKomtErbij(S, D) : { erbij: [] };
-      if (erbij.length) {
-        T.ui.bericht(T.t('{n|{wie} joins the fight.|{wie} join the fight.}', { n: erbij.length, wie: T.opsomming(erbij.map((e) => e.naam)) }), 'goed');
-        S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
-      }
-    }
-    beginBeurt(S);
-  }
-
-  T.eindeBeurt = function (S) {
-    const g = S.gevecht;
-    if (!g || S.bezig || !T.spelerAanDeBeurt(S)) return;
-    S.bezig = true;
-    S.bereik = null;
-    T.ui.zetKnoppen(false);
-    volgendeBeurt(S);
-  };
-
-  T.eindeGevecht = function (S, reden) {
-    S.gevecht = null;
-    S.modus = 'verkennen';
-    S.bezig = false;
-    S.bereik = null;
-    T.ui.toonGevecht(false);
-    T.ui.zetKnoppen(false);
-    T.ui.bericht(reden === 'kwijt' ? T.t('They have lost you. It goes quiet again.') : T.t('It is quiet again.'), 'rust');
-    for (const m of S.wereld.wezens) {
-      if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
-    }
-    // Waren het rovers, dan zegt js/rovers.js wat er van hun aanval overblijft; was het de jacht op de wolven, dan is die
-    // voorbij (js/beesten.js).
-    const D = T.dorpHier(S);
-    if (D) T.naGevecht(D, reden);
-    if (D) T.naJacht(D);
-  };
-
-  // Waar wie aan de beurt is heen kan met zijn punten.
-  T.ververBereik = function (S) {
-    const w = S.wereld;
-    const v = T.aanDeBeurt(S) || S.schout;
-    S.bereik = T.bereik(
-      T.tegelVan(v),
-      v.ap,
-      (x, y) => T.isZichtbaar(w, x, y) && T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
-      (x, y) => T.isVast(w, x, y),
-      w,
-    );
-  };
-
-  // Staat er een vijand naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1).
-  function vijandNaast(S, t) {
-    return S.gevecht.monsters.some((m) => !m.dood && T.afstand(T.tegelVan(m), t) === 1);
-  }
-
-  // Kan v (van jouw kant) monster m raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast
-  // zoals altijd (T.raakt); verder weg tot zijn bereik, als hij ziet waar hij heen steekt of schiet (T.zichtTussen: een
-  // ander wezen ertussen houdt het niet tegen, dus een speer steekt langs een zwaard); en wie schiet, niet met een vijand
-  // naast zich.
-  function kanRaken(S, v, m, van = T.tegelVan(v)) {
-    const slag = T.slagVan(v);
-    if (slag.schiet && vijandNaast(S, van)) return false;
-    const p = T.tegelVan(m);
-    if (T.raakt(S.wereld, van, p)) return true;
-    const d = T.afstand(van, p);
-    return d >= 2 && d <= slag.bereik && T.zichtTussen(S.wereld, van, p);
-  }
-  T.kanRaken = kanRaken;
-
-  // Hoe een slag heet, bij de muis en in het bericht: slaan, steken (van verder dan ernaast) of schieten.
-  function soortSlag(S, v, m) {
-    if (T.slagVan(v).schiet) return 'schiet';
-    return T.afstand(T.tegelVan(v), T.tegelVan(m)) >= 2 ? 'steek' : 'sla';
-  }
-
-  function padVoor(S, v, doel, naast) {
-    const w = S.wereld;
-    return T.zoekPad(
-      T.tegelVan(v),
-      doel,
-      (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
-      (x, y) => T.isVast(w, x, y),
-      { naast, wereld: w },
-    );
-  }
-
-  // Wat gebeurt er als je in je beurt hierop klikt, en wat kost het? Geeft
-  // { tekst, kosten, kan, doe, pad } terug. kan = false: wel tonen, niet doen.
-  // kosten staat alleen op 0 als het niet aan de punten ligt (te ver, geen zicht).
-  // Het gaat om wie van jouw kant aan de beurt is: de schout, of een man van de militie.
-  T.handelingGevecht = function (S, doel) {
-    if (!doel) return null;
-    const w = S.wereld;
-    const v = T.aanDeBeurt(S) || S.schout;
-    if (v.kant !== 'speler') return null;
-    const ap = v.ap;
-    const h = T.tegelVan(v);
-
-    if (doel.wezen && doel.wezen.kant === 'monster' && !doel.wezen.dood) {
-      const m = doel.wezen;
-      const p = T.tegelVan(m);
-      const slag = T.slagVan(v);
-      const k = slag.kosten;
-      const schade = slag.schade.join('–');
-      if (kanRaken(S, v, m)) {
-        const soort = soortSlag(S, v, m);
-        const tekst = soort === 'schiet' ? T.t('Shoot ({schade} damage)', { schade }) : soort === 'steek' ? T.t('Thrust ({schade} damage)', { schade }) : T.t('Hit ({schade} damage)', { schade });
-        return { tekst, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
-      }
-      if (slag.schiet && vijandNaast(S, h)) return { tekst: T.t('Too close to shoot: step away first'), kosten: 0, kan: false };
-      // Wie verder reikt dan ernaast, loopt naar de dichtste tegel vanwaar hij raakt (in wat hij deze beurt haalt); anders,
-      // of als die er niet is, naast hem.
-      let pad = null;
-      if (slag.bereik > 1) {
-        const bereik = S.bereik || new Map();
-        let beste = null;
-        for (const [sleutel, stappen] of bereik) {
-          if (beste && stappen >= beste.stappen) continue;
-          const [x, y] = sleutel.split(',').map(Number);
-          if (kanRaken(S, v, m, { x, y })) beste = { x, y, stappen };
-        }
-        if (beste) pad = padVoor(S, v, { x: beste.x, y: beste.y }, false);
-      }
-      if (!pad && slag.schiet) return { tekst: T.t('Too far to shoot this turn'), kosten: 0, kan: false };
-      if (!pad) pad = padVoor(S, v, p, true);
-      if (!pad) return { tekst: T.t('You cannot reach it'), kosten: 0, kan: false };
-      const totaal = pad.length + k;
-      return { tekst: slag.schiet ? T.t('Walk there and shoot') : T.t('Walk there and hit'), kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
-    }
-
-    if (doel.x === h.x && doel.y === h.y) return null;
-    if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: v })) return null;
-    const pad = padVoor(S, v, { x: doel.x, y: doel.y }, false);
-    if (!pad) return null;
-    return { tekst: T.t('Walk'), kosten: pad.length, kan: ap >= pad.length, doe: () => lopen(S, v, pad), pad };
-  };
-
-  function bezigMet(S) {
-    S.bezig = true;
-    T.ui.zetKnoppen(false);
-    T.ui.verbergTooltip();
-  }
-
-  async function lopen(S, v, pad) {
-    bezigMet(S);
-    await T.anim.loop(v, pad);
-    naHandeling(S);
-  }
-
-  async function slaan(S, v, m, pad) {
-    bezigMet(S);
-    if (pad.length) await T.anim.loop(v, pad);
-    if (m.dood || !kanRaken(S, v, m)) {
-      naHandeling(S);
+    const doel = plek(d);
+    if (e.pad.length && e.padDoel && T.afstand(e.padDoel, doel) <= 1) return;
+    if (budget.zoek-- <= 0) return;
+    const pad = T.zoekRoute(D.wereld, plek(e), doel, { naast: true });
+    if (pad === null) {
+      if (!e.volgt) laatGaan(e, nu); // hij kan er niet komen
       return;
     }
-    const slag = T.slagVan(v);
-    const soort = soortSlag(S, v, m);
-    v.ap -= slag.kosten;
-    T.ui.toonAp(v.ap, v.maxAp, 0, true);
-    await T.anim.uitval(v, T.tegelVan(m));
-    const n = Math.max(0, worp(S, slag.schade) - T.vangtAf(m, v));
-    const woorden = { naam: v.naam, wezen: m.naam, n };
-    T.ui.bericht(v === S.schout ? T.t('You hit the {wezen}: {n} damage.', woorden)
-      : soort === 'schiet' ? T.t('{naam} shoots at the {wezen}: {n} damage.', woorden)
-        : soort === 'steek' ? T.t('{naam} thrusts at the {wezen}: {n} damage.', woorden)
-          : T.t('{naam} hits the {wezen}: {n} damage.', woorden));
-    raak(S, m, n);
-    await T.anim.wacht(S, 320);
-    naHandeling(S);
+    T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, { x: doel.x, y: doel.y, naast: true });
   }
 
-  // Een open deur naast wie aan de beurt is, waar niemand in staat. Die kan hij dichtgooien: een
-  // monster opent geen deuren, dus zo snijd je een achtervolger af.
-  T.deurNaast = function (S, v) {
-    const w = S.wereld;
-    const h = T.tegelVan(v || S.schout);
-    for (const d of w.deuren.values()) {
-      if (d.staat === 'open' && T.raakt(w, h, d) && !T.wezenOp(w, d.x, d.y)) return d;
+  // Wie schiet en een vijand naast zich heeft, zet een stap naar een tegel waar er geen naast hem staat, zo ver mogelijk
+  // van ze vandaan.
+  function stapOpzij(D, e) {
+    const w = D.wereld;
+    const h = plek(e);
+    let beste = null;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
+      const t = { x: h.x + dx, y: h.y + dy };
+      if (!T.isBegaanbaar(w, t.x, t.y, { wezensBlokkeren: true }) || vijandNaast(D, e, t)) continue;
+      beste = t;
+      break;
     }
-    return null;
-  };
-
-  T.deurDicht = function (S) {
-    const g = S.gevecht;
-    if (!g || S.bezig || !T.spelerAanDeBeurt(S)) return;
-    const v = T.aanDeBeurt(S);
-    const d = T.deurNaast(S, v);
-    if (!d || v.ap < T.DEUR_SLUITEN) return;
-    v.ap -= T.DEUR_SLUITEN;
-    d.staat = 'dicht';
-    T.ui.bericht(v === S.schout ? T.t('You slam the door shut.') : T.t('{naam} slams the door shut.', { naam: v.naam }));
-    naHandeling(S);
-  };
-
-  // De knoppen staan aan in de eigen beurt; de deurknop verschijnt alleen naast een open deur.
-  function knoppenAan(S) {
-    const v = T.aanDeBeurt(S);
-    T.ui.zetKnoppen(true, 'slaan');
-    T.ui.toonDeurKnop(!!T.deurNaast(S, v), v.ap >= T.DEUR_SLUITEN);
+    if (beste) T.geefRoute(e, [beste], beste);
   }
 
-  function naHandeling(S) {
-    const g = S.gevecht;
-    if (!g || S.modus !== 'gevecht') return;
-    if (!g.monsters.some((m) => !m.dood)) {
-      T.eindeGevecht(S, 'gewonnen');
-      return;
+  // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende.
+  function slaan(S, D, e, d, nu) {
+    const slag = T.slagVan(e);
+    e.slagKlaar = nu + slag.kosten * IN().secondenPerPunt;
+    const doel = plek(d);
+    if (S.wereld === D.wereld) {
+      if (slag.schiet) T.anim.pijl(S, plek(e), doel);
+      else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
-    const v = T.aanDeBeurt(S);
-    S.bezig = false;
-    T.ververBereik(S);
-    knoppenAan(S);
-    T.ui.toonAp(v.ap, v.maxAp, 0, true);
-    // Zijn de punten op, dan gaat de beurt vanzelf over. De teller voorkomt dat deze
-    // vertraagde aanroep een latere beurt afbreekt.
-    if (v.ap <= 0) {
-      const teller = g.teller;
-      T.anim.wacht(S, 450).then(() => {
-        if (S.gevecht === g && g.teller === teller) T.eindeBeurt(S);
-      });
-    }
+    raak(S, D, d, Math.max(0, worp(D, slag.schade) - T.vangtAf(d, e)), e);
   }
 
-  // Een klap kost levenspunten, een monster net zo goed als de schout. Wie op nul komt, valt, en is dood
-  // (Marcel, 29 sep: "mensen kunnen sterven"): een monster is verslagen, een man van de militie sneuvelt
-  // (T.sneuvelt, js/rovers.js: een mond minder), en voor de schout is het het einde (T.schoutGevallen).
-  function raak(S, doel, n) {
+  // Een klap kost levenspunten. Wie op nul komt, valt (T.valt); wie het overleeft en niets doet, slaat terug, en een
+  // dorpeling vlucht. Ook voor de toetsen (test/gevecht.test.cjs) en Spel.debug.
+  function raak(S, D, doel, n, van) {
+    zorgLeven(D, doel);
     doel.leven = Math.max(0, doel.leven - n);
     doel.flits = 0.3;
-    T.anim.tekst(S, doel, '-' + n, doel.kant === 'speler' ? '#f3b1a5' : '#ffd36b');
-    if (doel.leven > 0) T.ui.toonVolgorde(S);
-    else if (doel === S.schout) T.schoutGevallen(S);
-    else if (doel.kant === 'speler') {
-      sterf(S, doel, false); // het bericht zegt wie hij was (T.sneuvelt)
-      const D = T.dorpHier(S);
-      if (D) T.sneuvelt(D, doel);
-    } else sterf(S, doel);
+    const onze = T.vechtVoor(D, doel) || !!doel.bewoner;
+    if (S.wereld === D.wereld) T.anim.tekst(S, doel, '-' + n, onze ? '#f3b1a5' : '#ffd36b');
+    if (doel.leven <= 0) {
+      T.valt(S, D, doel, van);
+      return;
+    }
+    if (!van) return;
+    if (doel.beest && doel.groep) T.wolvenVechten(D, doel.groep, van);
+    else if (doel.bewoner && !T.vechtVoor(D, doel)) T.schuil(D, doel);
+    else if (!doel.doelwit && !doel.volgt) {
+      doel.doelwit = van;
+      doel.vanaf = ankerVan(D, doel);
+    }
   }
-  // De ene plek waar een klap landt, ook voor de toetsen (test/regels.test.cjs).
   T.raak = raak;
 
-  // Werkt ook zonder gevecht: dan is er geen beurtvolgorde om het uit te halen. Een rover die valt, is
-  // uit zijn bende (js/rovers.js). `bericht` false: iemand anders zegt het.
-  function sterf(S, e, bericht) {
+  // Wie valt, is dood. De held: het spel is uit (T.schoutGevallen). Een man of een dorpeling: een mond minder (T.sneuvelt,
+  // js/rovers.js), en hij ligt er tot de volgende dag. Een vijand is verslagen; een rover is uit zijn bende, en was hij
+  // de laatste van zijn aanval, dan is die voorbij (T.naGevecht).
+  T.valt = function (S, D, e, van) {
+    const held = e === D.schout;
+    const onze = !held && (T.vechtVoor(D, e) || !!e.bewoner);
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
-    if (bericht !== false) T.ui.bericht(T.t('The {wezen} is defeated.', { wezen: e.naam }), 'goed');
-    const D = T.dorpHier(S);
-    if (e.rover && D) T.roverVerslagen(D, e);
-    const g = S.gevecht;
-    if (!g) return;
-    const i = g.volgorde.indexOf(e);
-    if (i >= 0) {
-      g.volgorde.splice(i, 1);
-      if (i < g.beurt) g.beurt--;
+    delete e.doelwit;
+    delete e.volgt;
+    if (held) {
+      if (D === S.dorp) T.schoutGevallen(S);
+      return;
     }
-    T.ui.toonVolgorde(S);
+    if (onze) {
+      T.sneuvelt(D, e, van);
+      return;
+    }
+    T.zeg(D, T.t('The {wezen} is defeated.', { wezen: e.naam }), 'goed');
+    if (e.rover) {
+      T.roverVerslagen(D, e);
+      const A = D.rovers && D.rovers.aanval;
+      if (A && A.rovers && A.rovers.includes(e) && A.rovers.every((r) => r.dood)) T.naGevecht(D);
+    }
+  };
+
+  // ── Vluchten en schuilen ──
+
+  // Waar een dorpeling schuilt: in het town hall (het huis van de schout, als het af is), en anders in zijn eigen huis.
+  // Geeft de tegel voor de deur, of null.
+  function schuilDeur(D, p) {
+    const hal = (D.gebouwen || []).find((g) => g.soort === 'schout' && g.klaar);
+    const g = hal || (p && p.huis && p.huis.klaar !== false ? p.huis : null);
+    return g ? T.deurVan(D.wereld, g) : null;
   }
 
-  // De schout valt, en dat is het einde van het spel.
+  // Een dorpeling vlucht: hij houdt op met wat hij deed, en rent naar de deur van het town hall; daar gaat hij naar binnen
+  // (T.dagAnker, js/dag.js) en blijft hij tot het rustig is. Geeft of hij vlucht.
+  T.schuil = function (D, e) {
+    const p = e.bewoner;
+    if (!p || p.schuilt) return !!(p && p.schuilt);
+    const deur = schuilDeur(D, p);
+    if (!deur) return false;
+    p.schuilt = { x: deur.x, y: deur.y };
+    D.schuilen = true;
+    T.stopWerk(e);
+    e.maait = null;
+    e.oogstDoel = null;
+    e.dwaalTijd = 0;
+    const pad = T.zoekRoute(D.wereld, plek(e), deur, {});
+    if (pad && pad.length) T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, deur);
+    return true;
+  };
+
+  // Elke tik: wie buiten een rover ziet, vlucht; is er geen rover meer op de kaart, dan komt iedereen weer naar buiten.
+  function vlucht(D, rovers) {
+    if (!rovers.length) {
+      if (D.schuilen) {
+        D.schuilen = false;
+        for (const p of D.bewoners ? D.bewoners.mensen : []) delete p.schuilt;
+      }
+      return;
+    }
+    const w = D.wereld;
+    for (const e of w.wezens) {
+      const p = e.bewoner;
+      if (!p || p.schuilt || e.dood || e.binnen || e.aangehouden || T.vechtVoor(D, e)) continue;
+      const hier = plek(e);
+      if (rovers.some((m) => T.afstand(plek(m), hier) <= IN().vluchtZicht && T.zichtTussen(w, plek(m), hier))) T.schuil(D, e);
+    }
+  }
+
+  // ── Het gevecht als status ──
+
+  // Het gevecht begint: een bericht met de plek (een klik erop, of Spatie, brengt je erheen; js/ui.js), de status in de
+  // balk, en de tijd op hooguit 1×.
+  function gevechtBegint(S, D, waar, nu) {
+    D.gevecht = { sinds: nu, laatst: nu, plek: { x: waar.x, y: waar.y } };
+    T.zeg(D, T.t('Fighting breaks out.'), 'gevaar', D.gevecht.plek);
+    toonInDeBalk(S, D);
+  }
+  function toonInDeBalk(S, D) {
+    if (T.ui && T.ui.toonStatussen) T.ui.toonStatussen(D);
+    if (T.ui && T.ui.werkBalkBij && D === S.dorp) T.ui.werkBalkBij(S);
+  }
+
+  // Het gevecht is voorbij: de jacht op de wolven is af (js/beesten.js), een roedel die vocht gaat terug naar zijn hol.
+  T.gevechtVoorbij = function (S, D) {
+    D.gevecht = null;
+    T.zeg(D, T.t('The fighting is over.'), 'rust');
+    T.naJacht(D);
+    T.wolvenNaHetGevecht(D);
+    toonInDeBalk(S, D);
+  };
+
+  // Wordt er ergens gevochten, in een van de dorpen? Dan loopt de tijd hooguit op 1× (T.snelheidNu, js/tijd.js).
+  T.erWordtGevochten = (S) => !!(S && S.dorpen && S.dorpen.some((D) => D.gevecht));
+
+  // ── De held valt ──
+
+  // De held valt, en dat is het einde van het spel (tot stap 5 van vraag 170: dan staat er een veteraan op).
   T.schoutGevallen = function (S) {
-    const schout = S.schout;
-    schout.dood = true;
-    schout.sterfTijd = 0;
-    schout.pad = [];
     S.modus = 'dood';
-    S.bezig = true;
-    S.gevecht = null;
-    T.ui.toonGevecht(false);
     T.ui.bericht(T.t('You fall, and you do not get up again.'), 'gevaar');
-    T.anim.wacht(S, 1100).then(() => {
-      T.ui.toonOverlay(
-        T.t('Fallen'),
-        `<p>${T.t('You fall, and you do not get up again.')}</p>` +
-          `<p>${T.t('The lord writes to the new reeve that he had better take care: a funeral costs money too.')}</p>`,
-        T.t('To the title screen'), // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
-        () => T.naarTitelscherm(),
-      );
-    });
+    T.ui.toonOverlay(
+      T.t('Fallen'),
+      `<p>${T.t('You fall, and you do not get up again.')}</p>` +
+        `<p>${T.t('The lord writes to the new reeve that he had better take care: a funeral costs money too.')}</p>`,
+      T.t('To the title screen'), // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
+      () => T.naarTitelscherm(),
+    );
   };
-
-  // Met hoeveel punten begint een monster zijn beurt? Met al zijn punten.
-  T.monsterAp = (m) => m.maxAp;
-
-  // Wat doet een monster in zijn beurt? Het loopt zo kort mogelijk naar wie van jouw kant het dichtst bij
-  // staat (`doel`: één wezen, of een lijst), en slaat toe zo vaak als de overgebleven punten toelaten. Haalt
-  // het hem niet, dan komt het zo dichtbij als het kan. Los van het scherm, zodat het te toetsen is.
-  // Geeft { pad, aanvallen, kanNiet, doel }.
-  T.planMonsterBeurt = function (w, m, doel) {
-    const ap = T.monsterAp(m);
-    const doelen = (Array.isArray(doel) ? doel : [doel]).filter((d) => d && !d.dood);
-    let beste = null;
-    for (const d of doelen) {
-      const pad = T.zoekPad(
-        T.tegelVan(m),
-        T.tegelVan(d),
-        (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m }),
-        (x, y) => T.isVast(w, x, y),
-        { naast: true, wereld: w },
-      );
-      if (pad !== null && (!beste || pad.length < beste.pad.length)) beste = { pad, doel: d };
-    }
-    if (!beste) return { pad: [], aanvallen: 0, kanNiet: true, doel: null };
-    const stappen = Math.min(beste.pad.length, ap);
-    const aanvallen = stappen === beste.pad.length ? Math.floor((ap - stappen) / m.aanval.kosten) : 0;
-    return { pad: beste.pad.slice(0, stappen), aanvallen, kanNiet: false, doel: beste.doel };
-  };
-
-  async function monsterBeurt(S, m) {
-    const w = S.wereld;
-    await T.anim.wacht(S, 260);
-    if (!S.gevecht) return;
-    const plan = T.planMonsterBeurt(w, m, T.spelers(S));
-    const doel = plan.doel;
-    if (plan.pad.length) await T.anim.loop(m, plan.pad);
-    for (let i = 0; i < plan.aanvallen; i++) {
-      if (!doel || doel.dood || !S.gevecht) break;
-      if (!T.raakt(w, T.tegelVan(m), T.tegelVan(doel))) break;
-      await T.anim.uitval(m, T.tegelVan(doel));
-      // Schild en harnas vangen een deel af (js/soldaten.js).
-      const ruw = worp(S, m.aanval.schade);
-      const af = Math.min(ruw, T.vangtAf(doel, null));
-      const n = ruw - af;
-      const wat = T.vulTekst(m.aanval.zin, { doel: doel === S.schout ? T.t('you') : doel.naam }, T.taalLocale());
-      T.ui.bericht(af > 0
-        ? T.t('The {wezen} {wat}: {n} damage ({af} stopped by shield and armour).', { wezen: m.naam, wat, n, af })
-        : T.t('The {wezen} {wat}: {n} damage.', { wezen: m.naam, wat, n }), 'gevaar');
-      raak(S, doel, n);
-      await T.anim.wacht(S, 380);
-    }
-    if (S.schout.dood || !S.gevecht) return;
-    await T.anim.wacht(S, 160);
-    volgendeBeurt(S);
-  }
-
-  // Kan dit monster dit wezen van jouw kant nog zien of bereiken? Andere wezens tellen hier niet als
-  // obstakel: die gaan nog opzij.
-  function kanBij(S, m, doel) {
-    const w = S.wereld;
-    const a = T.tegelVan(m);
-    const h = T.tegelVan(doel);
-    if (T.zichtTussen(w, a, h)) return true;
-    const pad = T.zoekPad(a, h, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false }), (x, y) => T.isVast(w, x, y), { naast: true, wereld: w });
-    return pad !== null;
-  }
 })(globalThis.Spel = globalThis.Spel || {});

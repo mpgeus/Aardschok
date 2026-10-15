@@ -55,8 +55,7 @@
     if (e === S.schout) return 'alles';
     if (e.dood || !T.zieJeWezen(S, S.wereld, e)) return null; // wie in de mist loopt, zie je niet (js/mist.js)
     if (e.alarm > 0) return 'alles';
-    if (S.gevecht && S.gevecht.volgorde.includes(e)) return 'alles';
-    if (S.overgang && S.overgang.aanleiding === e) return 'alles';
+    if (e.doelwit || e.volgt) return 'alles'; // wie vecht (js/gevecht.js)
     if (S.spreektMet === e) return 'alles';
     if (e.zoektSchout) return 'alles';
     const mens = e.wie && T.MENSEN && T.MENSEN[e.wie];

@@ -100,12 +100,15 @@ test('een dag duurt bij 1× vijf minuten, en een jaar bij 30× een uur (Marcel, 
   assert.equal((T.DAGEN_PER_JAAR * T.DAG_LENGTE) / 30, 60 * 60);
 });
 
-test('de wereld loopt met de kalender mee: op pauze staat ze stil, zonder kalender of in een gevecht op 1×', () => {
+test('de wereld loopt met de kalender mee: op pauze staat ze stil, zonder kalender op 1×, en in een gevecht hooguit op 1×', () => {
   assert.equal(T.wereldFactor({ kalender: { snelheid: 10 } }), 10);
   assert.equal(T.wereldFactor({ kalender: { snelheid: 0 } }), 0);
   assert.equal(T.wereldFactor({}), 1, 'de proefkaarten hebben geen kalender');
-  assert.equal(T.wereldFactor({ kalender: { snelheid: 30 }, gevecht: {} }), 1, 'een gevecht loopt op zijn eigen maat');
-  assert.equal(T.wereldFactor({ kalender: { snelheid: 30 }, modus: 'overgang' }), 1);
+  // Een gevecht in een van de dorpen (js/gevecht.js; vraag 170, E1: "een gevecht ergens zet iedereen op 1×").
+  const gevecht = [{}, { gevecht: { sinds: 0, laatst: 0 } }];
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 30 }, dorpen: gevecht }), 1);
+  assert.equal(T.wereldFactor({ kalender: { snelheid: 0 }, dorpen: gevecht }), 0, 'pauze kan wel');
+  assert.equal(T.snelheidNu({ kalender: { snelheid: 30 }, dorpen: gevecht }), 1);
 });
 
 test('tikKalender raakt nooit S.tijd aan: de kalender loopt op haar eigen klok', () => {

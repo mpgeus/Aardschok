@@ -176,9 +176,13 @@ test('een wolf begint geen gevecht, en wie je mannen op hem afstuurt, valt hem a
   T.zetBeesten(S.dorp);
   const wolf = leiderVan(groepVan(S, 'wolf'));
   const hert = leiderVan(groepVan(S, 'hert'));
-  // De schout naast de wolf: een monster dat hem ziet, begint een gevecht, een wolf niet.
-  Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty });
-  assert.equal(T.zoekOntdekking(S), null);
+  // De schout naast de wolf: een rover die hem ziet, valt hem aan, een wolf niet; en een wolf die niets doet, is geen vijand
+  // die de held vanzelf aanvalt (js/gevecht.js).
+  Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty, binnen: false });
+  assert.equal(T.isVijandig(wolf), false);
+  T.werkGevechtBij(S, S.dorp);
+  assert.equal(wolf.doelwit, undefined);
+  assert.equal(S.schout.doelwit, undefined);
   // Links zegt wat het is; rechts, met de held gekozen, valt hem aan (js/kiezen.js; vraag 170, stap 1).
   assert.equal(T.handelingVerkennen(S, { wezen: wolf }).tekst, 'A wolf');
   assert.match(T.handelingSturen(S, { wezen: wolf }, [S.schout]).tekst, /Attack the wolf/);
@@ -544,7 +548,8 @@ test('bij de schout met zijn lantaarn blijft de roedel aan de rand van het licht
   S.sluipen = true;
   S.schout.lantaarnUit = true;
   uren(S, 1);
-  assert.equal(S.modus, 'overgang', 'zonder licht valt hij aan: een gevecht');
+  assert.equal(leider.groep.vecht, true, 'zonder licht valt hij aan: de roedel vecht (js/gevecht.js)');
+  assert.ok(leden.every((e) => e.dood || e.doelwit === S.schout), 'met de schout');
 });
 
 test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {
@@ -816,26 +821,26 @@ function jacht() {
   return { S, D, J, roedel };
 }
 
-test('een jacht te voet: de mannen lopen met de schout mee, en bij de roedel begint een gevecht in beurten', () => {
+test('een jacht te voet: de mannen lopen met de schout mee, en bij de roedel vecht hij', () => {
   const { S, D, J, roedel } = jacht();
   assert.equal(J.roedel, roedel.G);
   assert.equal(J.mannen.length, T.BEESTEN_INSTELLINGEN.jacht.mannen, 'twee weerbare mannen');
   for (const e of J.mannen) assert.ok(e.opgeroepen && e.kant === 'speler', `${e.naam} gaat mee`);
   assert.deepEqual(T.holVanDeJacht(D), roedel.G.thuis, 'het hol ligt in goud op de grond');
-  // De schout loopt naar het hol, de mannen naast hem; binnen negen tegels van een wolf begint het gevecht.
+  // De schout loopt naar het hol, de mannen naast hem; binnen negen tegels van een wolf vecht de roedel (js/gevecht.js).
   const leider = leiderVan(roedel);
   const plek = zetOpAfstand(D.wereld, S.schout, leider, T.BEESTEN_INSTELLINGEN.jacht.bij);
   assert.ok(plek, 'een plek voor de schout');
   for (const e of J.mannen) zetBij(D.wereld, e, plek);
   T.werkBeestenBij(S, D);
-  assert.equal(S.modus, 'overgang', 'het gevecht begint');
-  T.beginGevecht(S);
-  for (const e of J.mannen) assert.ok(S.gevecht.volgorde.includes(e), `${e.naam} vecht mee`);
-  assert.ok(S.gevecht.monsters.some((m) => m.groep === roedel.G), 'tegen de roedel');
+  assert.equal(J.gevecht, true, 'het gevecht begint');
+  assert.equal(roedel.G.vecht, true, 'de roedel vecht');
+  for (const e of J.mannen) assert.ok(T.vechtVoor(D, e), `${e.naam} vecht mee`);
+  assert.ok(roedel.leden.some((m) => T.isVijandig(m)), 'tegen de roedel');
   // Een wolf valt, de rest is gevlucht: de jacht is voorbij, en de mannen gaan naar huis.
-  S.gevecht.monsters.find((m) => m.groep === roedel.G).dood = true;
+  leiderVan(roedel).dood = true;
   luister((gezegd) => {
-    T.eindeGevecht(S, 'kwijt');
+    T.gevechtVoorbij(S, D);
     assert.ok(gezegd.some((z) => /one wolf fewer, and the rest have fled/.test(z)), gezegd.join(' / '));
   });
   assert.ok(roedel.G.weg > S.kalender.dag, 'de rest vlucht naar het hol');
@@ -906,7 +911,7 @@ test('wie de wolven aanvallen, roept om hulp: het dorp zegt het, hij blijft staa
   assert.ok(!e.roeptOmHulp && !e.moetNaar);
 });
 
-test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een gevecht in beurten', () => {
+test('komt er een buur, dan vluchten de wolven; komt de schout, dan vecht de roedel met hem', () => {
   {
     const { S, D, G, p, e } = aanval();
     const buur = D.bewoners.mensen.find((q) => q !== p && q.wezen && !q.schout && q.leeftijd === 'volwassen').wezen;
@@ -923,9 +928,9 @@ test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een g
   {
     const { S, D, G, e } = aanval();
     S.schout.binnen = false;
-    zetBij(D.wereld, S.schout, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.schout, y: e.ty });
+    zetBij(D.wereld, S.schout, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.man, y: e.ty });
     uren(S, 0.05);
-    assert.equal(S.modus, 'overgang', 'het gevecht begint');
+    assert.equal(G.vecht, true, 'de roedel vecht (js/gevecht.js)');
     assert.equal(G.aanval, null);
   }
 });

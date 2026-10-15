@@ -160,7 +160,6 @@
 
   function grondSleutel(S) {
     const w = S.wereld;
-    const g = S.gevecht ? S.gevecht.kamers.size : -1;
     // De droge beekjes (js/weer.js) liggen in de grond: vallen ze droog of komen ze terug, dan opnieuw.
     const D = T.dorpHier(S);
     const beek = D && D.weer && D.weer.beekDroog ? 1 : 0;
@@ -170,7 +169,7 @@
     // Wat er op de kaart veranderde (een gevelde boom, een gebouw) en waar het zand van de paadjes anders werd, tekent
     // werkGrondBij alleen daar opnieuw (vergeetVeranderdeKaart); de keuze voor de paadjes zelf tekent alles opnieuw.
     const paadjes = T.PADEN_INSTELLINGEN ? T.PADEN_INSTELLINGEN.paadjes : '';
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -495,8 +494,8 @@
     // Pixel art wordt vergroot, nooit uitgesmeerd.
     ctx.imageSmoothingEnabled = false;
 
-    const inBeeld = (id) => id === w.huidigeKamer || (!!S.gevecht && S.gevecht.kamers.has(id));
-    // Opengewerkt: de kamer van de schout, en in een gevecht elke kamer waarin gevochten wordt.
+    const inBeeld = (id) => id === w.huidigeKamer;
+    // Opengewerkt: de kamer van de schout.
     const open = w.kamers.filter((k) => inBeeld(k.id));
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsIn(w, zicht);
@@ -607,12 +606,11 @@
     // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
     // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
     tekenMist(ctx, w, vak);
-    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
+    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): de tegel onder de
     // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
     // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
     // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
     if (!S.foto) {
-      tekenRaster(ctx, S);
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
       tekenMarktPlek(ctx, S);
@@ -1853,27 +1851,6 @@
     return c;
   }
 
-  // Het raster rolt uit vanaf de plek van de schout, als een rimpeling over de vloer, en
-  // vervaagt weer als het gevecht voorbij is.
-  function tekenRaster(ctx, S) {
-    if (S.rasterAlpha < 0.01 || !S.rasterTegels.length) return;
-    const van = S.rasterVan || T.tegelVan(S.schout);
-    const verstreken = S.tijd - S.rasterStart;
-    ctx.save();
-    ctx.strokeStyle = 'rgba(245, 230, 190, 0.42)';
-    ctx.lineWidth = 1;
-    for (const t of S.rasterTegels) {
-      if (!T.isZichtbaar(S.wereld, t.x, t.y)) continue;
-      const golf = S.modus === 'gevecht' ? Math.min(1, Math.max(0, verstreken * 16 - Math.hypot(t.x - van.x, t.y - van.y))) : 1;
-      if (golf <= 0) continue;
-      ctx.globalAlpha = S.rasterAlpha * golf;
-      const p = opGrond(t.x, t.y);
-      T.ruit(ctx, p.x, p.y, 0.9);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
   // Het bouwbereik van het lege begin (js/begin.js; vraag 152, 1d), zolang het bouwmenu open is of je bouwt: een zachte
   // gloed op de grond waar je kunt bouwen, die in de laatste twee tegels uitdooft. Geen lijn (Marcel, 11 okt: "Ik wil geen
   // 'grens'"). Per sterkte één pad, zodat het duizenden tegels in drie keer vult.
@@ -2057,17 +2034,6 @@
     const licht = 'rgba(250, 240, 210, 0.9)';
     const rood = 'rgba(224, 96, 79, 0.9)';
 
-    // Bereik: waar de schout deze beurt nog kan komen.
-    if (S.bereik && S.modus === 'gevecht' && !S.bezig) {
-      ctx.fillStyle = 'rgba(111, 160, 230, 0.17)';
-      for (const k of S.bereik.keys()) {
-        const [x, y] = k.split(',').map(Number);
-        const p = opGrond(x, y);
-        T.ruit(ctx, p.x, p.y, 0.86);
-        ctx.fill();
-      }
-    }
-
     // Het pad dat een klik zou lopen.
     if (h && h.pad && h.pad.length) {
       const kleur = h.kan === false ? rood : licht;
@@ -2088,7 +2054,7 @@
 
     // Wat er onder de muis ligt.
     const doel = S.hover;
-    if (!doel || !(S.modus === 'verkennen' || S.modus === 'gevecht')) return;
+    if (!doel || S.modus !== 'verkennen') return;
     if (doel.wezen || doel.voorwerp) {
       const e = doel.wezen || doel.voorwerp;
       const p = opGrond(e.x, e.y);
@@ -3097,7 +3063,7 @@
     let top;
     if (deel) {
       // Sluipen heeft nog geen eigen houding: de schout doet het in het halfdonker.
-      if (e === S.schout && S.sluipen && !S.gevecht) ctx.globalAlpha *= 0.8;
+      if (e === S.schout && S.sluipen) ctx.globalAlpha *= 0.8;
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
       // een klap: een rood dambord over de figuur
@@ -3116,9 +3082,9 @@
     }
     ctx.restore();
     if (S.foto) return; // de levensbalk en het uitroepteken zijn ui (tekenScene)
-    // Een vijand draagt zijn levensbalk in een gevecht, of als hij geraakt is; een rover altijd (js/rovers.js): hij
-    // draagt het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
-    if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);
+    // Wie vecht, draagt zijn levensbalk (js/gevecht.js), en wie geraakt is; een rover altijd (js/rovers.js): hij draagt
+    // het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
+    if (!e.dood && e.maxLeven > 0 && (e.doelwit || e.volgt || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
     else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
@@ -3187,7 +3153,8 @@
   }
 
   function tekenWolkjes(ctx, S) {
-    if (!T.praatjesOp || S.gevecht) return;
+    const D = T.dorpHier(S);
+    if (!T.praatjesOp || (D && D.gevecht)) return;
     const w = S.wereld;
     for (const [g, leden] of T.praatjesOp(w)) {
       // Met wie jij praat, praat niet met hen.
@@ -3271,10 +3238,15 @@
     ctx.fillRect(cx - b / 2, y, b * f, 4);
   }
 
-  // De zwevende getallen: de schade van een klap, boven het hoofd van wie hem kreeg.
+  // De zwevende getallen: de schade van een klap, boven het hoofd van wie hem kreeg. En een pijl of een bout die vliegt
+  // (T.anim.pijl, js/anim.js): een korte streep van de schutter naar zijn doel, op borsthoogte.
   function tekenEffecten(ctx, S) {
     for (const fx of S.effecten) {
       const f = fx.t / fx.duur;
+      if (fx.soort === 'pijl') {
+        tekenPijl(ctx, fx, f);
+        continue;
+      }
       if (fx.t < 0 || fx.soort !== 'tekst') continue; // een tekst die nog even wacht
       const p = opGrond(fx.x, fx.y);
       const y = p.y - 64 - f * 30;
@@ -3289,6 +3261,23 @@
       ctx.fillText(fx.tekst, p.x, y);
       ctx.restore();
     }
+  }
+
+  function tekenPijl(ctx, fx, f) {
+    const a = opGrond(fx.van.x, fx.van.y);
+    const b = opGrond(fx.naar.x, fx.naar.y);
+    const lang = 10; // pixels
+    const d = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    const x = a.x + (b.x - a.x) * f;
+    const y = a.y + (b.y - a.y) * f - 22 - Math.sin(f * Math.PI) * 8; // op borsthoogte, met een kleine boog
+    ctx.save();
+    ctx.strokeStyle = 'rgba(60, 40, 22, 0.95)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x - ((b.x - a.x) / d) * lang, y - ((b.y - a.y) / d) * lang);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.restore();
   }
 
   // ---------------------------------------------------------------- een laag over een figuur
@@ -3354,10 +3343,10 @@
     ctx.drawImage(laag.canvas, 0, 0, deel.b, deel.h, ox, oy, deel.b, deel.h);
   }
 
-  // Donkere randen; in een gevecht kleuren ze een fractie rood mee.
+  // Donkere randen; in een gevecht (js/gevecht.js) kleuren ze een fractie rood mee (S.gevechtGloed, js/main.js).
   function tekenVignet(ctx, S, bw, bh) {
     const g = ctx.createRadialGradient(bw / 2, bh / 2, Math.min(bw, bh) * 0.32, bw / 2, bh / 2, Math.max(bw, bh) * 0.75);
-    const r = Math.round(45 * S.rasterAlpha);
+    const r = Math.round(45 * S.gevechtGloed);
     g.addColorStop(0, 'rgba(0,0,0,0)');
     g.addColorStop(1, `rgba(${r},0,0,0.6)`);
     ctx.fillStyle = g;

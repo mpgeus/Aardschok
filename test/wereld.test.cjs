@@ -219,19 +219,6 @@ test('een gebied blijft staan zoals je het achterliet', () => {
   assert.equal(S.wereld.wezens.find((e) => e.soort === 'reuzenspin').dood, true, 'een gedode spin blijft dood');
 });
 
-test('buiten bakent de kamer het slagveld niet af: alleen wie de schout echt ziet, doet mee', () => {
-  const S = nieuwSpel();
-  T.gaNaarGebied(S, 'proefbos');
-  const w = S.wereld;
-  assert.equal(w.buiten, true);
-  const spin = w.wezens.find((e) => e.soort === 'reuzenspin');
-  // de spin ver weg zetten: hij staat in dezelfde (enige) kamer, maar hoort niet mee te doen
-  spin.x = spin.tx = 1;
-  spin.y = spin.ty = w.h - 2;
-  const mee = T.deelnemers(w, S.schout, null);
-  assert.equal(mee.includes(spin), false, 'een spin aan de andere kant van het bos doet niet mee');
-});
-
 // ------------------------------------------------- elke kaart is vanzelf een gebied (js/gebied.js)
 
 test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregistreerd is', () => {

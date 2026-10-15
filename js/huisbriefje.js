@@ -20,10 +20,10 @@
   function inhoud(D, g, t) {
     const soort = T.GEBOUWEN[g.soort];
     const wie = t.wie.length ? t.wie[0] : null;
-    // Het huis waar de schout woont, is het jouwe ("Your house", niet "the reeve's reeve's house").
-    const kop = g.huis === 'schout'
-      ? (g.soort === 'schout' ? T.t('Your house') : T.t('Your {gebouw}', { gebouw: soort.naam }))
-      : T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
+    // Het town hall heet zo (vraag 170, stap 2); een ander huis waar de schout woont, is het jouwe ("Your hut").
+    const kop = g.soort === 'schout' ? T.hoofdletter(soort.naam)
+      : g.huis === 'schout' ? T.t('Your {gebouw}', { gebouw: soort.naam })
+        : T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
     const stand = T.t('{stand}, {n|# person|# people}, {procent}% content', {
       stand: T.hoofdletter(T.STANDEN[t.stand].naam),
       n: t.mensen,

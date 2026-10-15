@@ -42,9 +42,6 @@
       tijd: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
       modus: 'verkennen',
-      gevecht: null,
-      overgang: null,
-      bezig: false,
       inventaris: new Set(),
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js), voor het spel en al zijn dorpen
       // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpKaart hieronder (js/dorp.js).
@@ -57,7 +54,7 @@
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de schout zojuist is neergezet (js/gebied.js)
-    }, T.schermVelden()); // wat alleen scherm is (de muis, het raster, het bouwmenu): js/opslaan.js
+    }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
@@ -209,8 +206,8 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      // De schout is in het rondlopen te kiezen (js/kiezen.js); in een gevecht in beurten wijs je hem niet aan.
-      if (e.dood || e.binnen || (e === S.schout && S.modus !== 'verkennen') || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
+      // De schout is te kiezen, zoals je mannen (js/kiezen.js).
+      if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -415,31 +412,21 @@
       werkBouwHoverBij();
       return;
     }
-    // In een gevecht bestuur je wie van jouw kant aan de beurt is: de schout, of een man van de militie.
-    const actief = S.modus === 'verkennen' || (S.modus === 'gevecht' && !S.bezig && T.spelerAanDeBeurt(S));
-    if (!S.muis || !actief) {
+    if (!S.muis || S.modus !== 'verkennen') {
       S.hover = null;
       S.handeling = null;
       T.ui.verbergTooltip();
       T.ui.verbergHuisbriefje();
       canvas.style.cursor = 'default';
-      if (S.modus === 'gevecht' && T.spelerAanDeBeurt(S)) {
-        const v = T.aanDeBeurt(S);
-        T.ui.toonAp(v.ap, v.maxAp, 0, true);
-      }
       return;
     }
     S.hover = zoekDoel(S.muis.x, S.muis.y);
-    const h = S.modus === 'verkennen' ? T.handelingVerkennen(S, S.hover) : T.handelingGevecht(S, S.hover);
+    const h = T.handelingVerkennen(S, S.hover);
     S.handeling = h;
     // Met je mannen gekozen: wat rechts doet (js/kiezen.js). Bij de muis staat dat, behalve boven wat links te kiezen
     // is (een man, een dorpeling, een gebouw): daar zegt de muis wie of wat het is.
-    const r = S.modus === 'verkennen' ? T.handelingSturen(S, S.hover, T.gekozenMannen(S)) : null;
+    const r = T.handelingSturen(S, S.hover, T.gekozenMannen(S));
     S.sturen = r;
-    if (S.modus === 'gevecht') {
-      const v = T.aanDeBeurt(S);
-      T.ui.toonAp(v.ap, v.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
-    }
     const tip = r && !(h && (h.kies || h.doe)) ? r : h;
     if (tip && tip.tekst) T.ui.tooltip(tipTekst(tip), S.muis.x, S.muis.y, !!tip.fout || tip.kan === false);
     else T.ui.verbergTooltip();
@@ -451,8 +438,8 @@
   // schout niet meer, maar kijkt waar jij kijkt (S.kijk, alleen scherm: T.schermVelden in js/opslaan.js). De pijltjes
   // en de muis tegen de rand van het scherm schuiven hem (Marcel: "Muis tegen de zijkant van het scherm bewegen, beweegt
   // het beeld in die richting"; T.KIEZEN_INSTELLINGEN.camera in js/kiezen.js), de minikaart zet hem ergens neer
-  // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Alleen een gevecht in beurten kijkt nog zelf mee
-  // (cameraDoel), tot stap 2. Tot 15 okt volgde hij de schout, en tilde Tab hem eraf in het overzicht (vraag 108, a).
+  // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Tot 15 okt volgde hij de schout, en tilde Tab hem eraf in het
+  // overzicht (vraag 108, a); tot stap 2 keek het gevecht in beurten nog zelf mee.
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
   // minuten, op de klok van het scherm, want de wereld staat daar stil.
   function titelCamera() {
@@ -469,24 +456,9 @@
   }
   T.titelCamera = titelCamera;
 
-  // Waar de camera heen glijdt: waar jij kijkt (S.kijk). In een gevecht in beurten kijkt hij naar wie van jouw kant aan
-  // de beurt is (de schout, of een man van de militie) en de vijanden die nog staan, en dat al bij de overgang, vóór het
-  // gevecht: het monster komt meteen in beeld, tegelijk met de melding. Na het gevecht blijft hij daar.
-  function cameraDoel() {
-    const aanleiding = S.overgang && S.overgang.aanleiding;
-    if (!S.gevecht && !(aanleiding && !aanleiding.dood)) return S.kijk || S.camera;
-    const wie = T.spelerAanDeBeurt(S) ? T.aanDeBeurt(S) : S.schout;
-    const lijst = S.gevecht ? [wie, ...S.gevecht.monsters.filter((m) => !m.dood)] : [S.schout, aanleiding];
-    let x = 0;
-    let y = 0;
-    for (const e of lijst) {
-      const p = T.naarSchermOp(S.wereld, e.x, e.y);
-      x += p.x;
-      y += p.y;
-    }
-    S.kijk = { x: x / lijst.length, y: y / lijst.length - 24 };
-    return S.kijk;
-  }
+  // Waar de camera heen glijdt: waar jij kijkt (S.kijk). Een gevecht trekt hem niet mee: het bericht brengt je erheen
+  // (js/ui.js, en Spatie).
+  const cameraDoel = () => S.kijk || S.camera;
 
   const CAMERA = {
     zoom: [0.5, 0.35], // verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
@@ -496,7 +468,7 @@
   // regel in het menu, `Enter` bewaart een plaatje, en zoomen tot twee keer dichterbij). H haalt alles van het beeld: de
   // html erover (body.foto in stijl.css) en wat op het doek ui is (S.foto in js/tekenen.js). De camera schuift zoals
   // altijd, en ook met slepen, want een klik doet hier niets; het wiel zoomt tot twee keer dichterbij. Het spel loopt
-  // door (P zet het stil), en wat je nodig hebt (een venster, een brief, een gesprek, een gevecht) haalt je eruit. H of Esc
+  // door (P zet het stil), en wat je nodig hebt (een venster, een brief, een gesprek) haalt je eruit. H of Esc
   // brengt je terug, op de zoom van daarvoor. Alleen scherm: S.foto staat in T.schermVelden (js/opslaan.js).
   const FOTO = {
     zoom: [2, 1.5, 1, 0.75, 0.5], // maal de zoom van het venster; verder uit tot de standen van het wiel (CAMERA.zoom)
@@ -759,12 +731,11 @@
       raadOp = S.tijd;
     }
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst, doelNu && doelNu.deel);
-    const doelAlpha = S.modus === 'gevecht' ? 1 : 0;
-    S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
-    // Wat je nodig hebt (een venster, een brief, een gesprek, een gevecht), haalt je uit de fotomodus.
+    // In een gevecht (js/gevecht.js) kleuren de randen van het beeld een fractie rood (js/tekenen.js).
+    const hier = T.dorpHier(S);
+    S.gevechtGloed += ((hier && hier.gevecht ? 1 : 0) - S.gevechtGloed) * Math.min(1, dt * 5);
+    // Wat je nodig hebt (een venster, een brief, een gesprek), haalt je uit de fotomodus.
     if (S.foto && !fotoKan()) zetFoto(false);
-    // Een gevecht begint: dan dichtbij genoeg om het te zien (de camera kijkt er zelf heen, cameraDoel).
-    if ((S.modus === 'overgang' || S.modus === 'gevecht') && S.zoom < zoomVenster) S.zoom = zoomVenster;
     schuifBij(dt);
     const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
     const k = 1 - Math.exp(-dt * 5);
@@ -977,15 +948,15 @@
       if (ev.key === 'Escape') T.sluitDialoog(S);
       return;
     }
-    if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
-    // Tab: kies de held (de schout) en kijk naar hem, bij het rondlopen. Tot 15 okt was het het overzicht (vraag 108, a).
+    if (S.modus !== 'verkennen') return;
+    // Tab: kies de held (de schout) en kijk naar hem. Tot 15 okt was het het overzicht (vraag 108, a).
     if (ev.key === 'Tab') {
       ev.preventDefault();
-      if (S.modus === 'verkennen') naarDeHeld();
+      naarDeHeld();
       return;
     }
-    // H: de fotomodus (hierboven), alleen bij het rondlopen.
-    if ((ev.key === 'h' || ev.key === 'H') && S.modus === 'verkennen') {
+    // H: de fotomodus (hierboven).
+    if (ev.key === 'h' || ev.key === 'H') {
       zetFoto(true);
       return;
     }
@@ -995,15 +966,15 @@
       return;
     }
     // O, V, W en R: de spelregels, de velden, de wetten en je raadsman (de toets staat bij het venster, js/ui.js),
-    // alleen in het nieuwe spel en alleen bij het rondlopen.
-    const venster = T.NIEUWE_HUD && S.modus === 'verkennen' && T.ui.vensterMetToets(ev.key);
+    // alleen in het nieuwe spel.
+    const venster = T.NIEUWE_HUD && T.ui.vensterMetToets(ev.key);
     if (venster) {
       T.ui.wisselVenster(S, venster);
       return;
     }
     // B: het bouwmenu (js/hud.js), net zo — botst nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik
     // legt een gebouw weer weg.
-    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
+    if (T.NIEUWE_HUD && (ev.key === 'b' || ev.key === 'B')) {
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
@@ -1025,35 +996,20 @@
       }
       return;
     }
-    if (S.modus === 'verkennen') {
-      // 1 tot 9: de groepen (hierboven); Ctrl of Shift erbij maakt er een (in de browser neemt Chrome Ctrl+1 zelf).
-      const cijfer = /^Digit([1-9])$/.exec(ev.code || '');
-      if (cijfer) {
-        ev.preventDefault();
-        groep(Number(cijfer[1]), ev.ctrlKey || ev.metaKey || ev.shiftKey);
-        return;
-      }
-      // Spatie: kijk naar het laatste bericht met een plek (js/ui.js).
-      if (ev.key === ' ') {
-        ev.preventDefault();
-        T.ui.naarBericht(S);
-        return;
-      }
-      if (ev.key === 's' || ev.key === 'S') T.wisselSluipen(S);
+    // 1 tot 9: de groepen (hierboven); Ctrl of Shift erbij maakt er een (in de browser neemt Chrome Ctrl+1 zelf).
+    const cijfer = /^Digit([1-9])$/.exec(ev.code || '');
+    if (cijfer) {
+      ev.preventDefault();
+      groep(Number(cijfer[1]), ev.ctrlKey || ev.metaKey || ev.shiftKey);
       return;
     }
-    if (ev.key === 'd' || ev.key === 'D') T.deurDicht(S);
-    else if (ev.key === ' ' || ev.key === 'Enter') {
+    // Spatie: kijk naar het laatste bericht met een plek (js/ui.js).
+    if (ev.key === ' ') {
       ev.preventDefault();
-      T.eindeBeurt(S);
+      T.ui.naarBericht(S);
+      return;
     }
-  });
-  document.getElementById('knoppen').addEventListener('click', (ev) => {
-    const b = ev.target.closest('button');
-    if (!b || b.disabled) return;
-    b.blur(); // anders drukt de spatiebalk straks ook deze knop nog eens in
-    if (b.dataset.actie === 'einde') T.eindeBeurt(S);
-    else if (b.dataset.actie === 'deur') T.deurDicht(S);
+    if (ev.key === 's' || ev.key === 'S') T.wisselSluipen(S);
   });
   window.addEventListener('resize', formaat);
 
@@ -1491,7 +1447,13 @@
       return {
         bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
-        militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven, ${T.slagVan(e).wapen || 'vuist'})`),
+        // Je mannen in het gevecht (js/gevecht.js): hun leven, hun wapen, en tegen wie ze vechten; en wie er schuilt.
+        mannen: T.mannenVan(S.dorp).map((e) => {
+          const d = e.volgt || e.doelwit;
+          return `${e.naam} (${e.leven}/${e.maxLeven} leven, ${T.slagVan(e).wapen || 'vuist'}${d ? `, tegen de ${d.naam}` : ''})`; // geen tekst
+        }),
+        gevecht: S.dorp.gevecht,
+        schuilen: S.dorp.bewoners.mensen.filter((p) => p.schuilt).map((p) => p.naam),
         soldaten: T.soldatenVan(S.dorp).map((p) => `${p.naam} (${p.soldaat.soort})`),
         wapens: T.wapensInHetDorp(S.dorp),
       };

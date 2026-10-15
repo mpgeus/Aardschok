@@ -8,12 +8,12 @@
 //
 // Een aanval (S.rovers.aanval) gaat zo: tegen de avond komen ze van de rand van de kaart die het dichtst bij een
 // akker ligt, lopen erheen, roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker
-// kapot (wat erop staat, groeit dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, en de tijd
-// gaat naar 1× (T.bezoekerKomtAan, js/dag.js). De soldaten van het wachthuis (js/soldaten.js) lopen dan met de schout mee
-// (T.loopNaastDeSchout), en ziet een rover de schout, dan begint het gevecht in beurten (js/gevecht.js), met de hele
-// bende en de militie die bij hem is. Wie valt, is dood: een rover is uit zijn bende, een soldaat is een mond minder
-// (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het overleeft, staat de volgende ochtend weer met al zijn
-// leven op (werklijst vraag 11).
+// kapot (wat erop staat, groeit dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, met de plek, en
+// de tijd gaat naar 1× (T.bezoekerKomtAan, js/dag.js). Er komt niemand vanzelf (werklijst vraag 170, stap 2; Marcel, 15
+// okt: "Niemand vanzelf"): jij stuurt je soldaten (js/kiezen.js), en het gevecht is in real time (js/gevecht.js): een
+// rover slaat wie hij tegenkomt, en een dorpeling die hem ziet, vlucht naar het town hall. Wie valt, is dood: een rover
+// is uit zijn bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit.
+// Wie het overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
 (function (T) {
@@ -41,8 +41,6 @@
     // Wat ieder meeneemt, en de kans dat ze de akker kapotmaken.
     graanPerRover: 10,
     kansAkkerKapot: 0.3,
-    // Hoe dicht een man van de militie bij de schout moet staan om mee te vechten.
-    militieBij: 12,
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -96,12 +94,12 @@
     }
   };
 
-  // Wie in een gevecht viel, ligt er tot de volgende dag.
+  // Wie in een gevecht viel, ligt er tot de volgende dag: een rover, een man of een dorpeling, en een wolf.
   function begraaf(D) {
     const w = D.wereld;
     for (let i = w.wezens.length - 1; i >= 0; i--) {
       const e = w.wezens[i];
-      if (e.dood && (e.rover || e.gesneuveld)) w.wezens.splice(i, 1);
+      if (e.dood && (e.rover || e.gesneuveld || e.beest)) w.wezens.splice(i, 1);
     }
   }
 
@@ -124,21 +122,17 @@
       .map((p) => p.wezen);
   const opgeroepen = (D) => (D.wereld ? D.wereld.wezens.filter((e) => e.opgeroepen && !e.dood) : []);
 
-  // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een soldaat kan (T.WEZENS.soldaat) of een
-  // veteraan (T.WEZENS.veteraan), en met het leven dat hij nog heeft. Ook voor de jacht op de wolven (js/beesten.js).
-  T.roepOp = roepOp;
-  function roepOp(e) {
-    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
+  // Op de jacht op de wolven (js/beesten.js) loopt hij met de held mee: hij vecht aan jouw kant (T.vechtVoor,
+  // js/gevecht.js), met het leven van een soldaat (T.WEZENS.soldaat) of een veteraan (T.WEZENS.veteraan), en met wat hij
+  // nog heeft.
+  T.roepOp = function (e) {
     e.opgeroepen = true;
     e.binnen = false;
     e.kant = 'speler';
     const l = T.levenAlsMan(e);
     e.leven = l.leven;
     e.maxLeven = l.max;
-    e.ap = s.ap;
-    e.maxAp = s.ap;
-    e.initiatief = s.initiatief;
-  }
+  };
 
   // Zijn leven als man van de militie: { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt,
   // krijgt hij ook. Ook voor zijn briefje (js/kiezen.js), vóór hij ooit opgeroepen werd.
@@ -148,7 +142,7 @@
     return { leven: (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0), max: s.leven };
   };
 
-  // Na de aanval gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js). Ook na de jacht (js/beesten.js).
+  // Na de jacht gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js).
   T.laatGaan = function (e) {
     e.opgeroepen = false;
     e.kant = 'neutraal';
@@ -158,42 +152,16 @@
     for (const e of opgeroepen(D)) T.laatGaan(e);
   }
 
-  // Wie er meevecht als het gevecht begint (T.beginGevecht, js/gevecht.js): de mannen die met de schout meeliepen
-  // en dicht genoeg bij hem staan.
-  T.militieInGevecht = function (D) {
-    const h = D.schout;
-    return opgeroepen(D).filter((e) => T.afstand({ x: e.tx, y: e.ty }, { x: h.tx, y: h.ty }) <= IN().militieBij);
-  };
-
-  // Wie van de militie ver weg was toen het gevecht begon, rent erheen: bij het begin en bij elke nieuwe ronde (js/gevecht.js)
-  // zo ver als zijn punten reiken, en is hij dichtbij genoeg, dan vecht hij mee, na de rest van jouw kant. Tot 5 okt deed
-  // hij helemaal niet mee, en viel een schout in de speeltest alleen tegen drie wilde rovers terwijl zijn wachters onderweg
-  // waren (werklijst, 0c, punt 4). Geeft { erbij, onderweg }: wie er nu bij kwam, en wie nog onderweg is.
-  T.militieKomtErbij = function (S, D) {
-    const g = S.gevecht;
-    if (!g) return { erbij: [], onderweg: [] };
-    const erbij = T.militieInGevecht(D).filter((e) => !g.volgorde.includes(e));
-    if (erbij.length) {
-      const plek = g.volgorde.findIndex((e) => e.kant !== 'speler');
-      g.volgorde.splice(plek < 0 ? g.volgorde.length : plek, 0, ...erbij);
-      for (const e of erbij) e.pad = e.onderweg ? [e.pad[0]] : [];
-    }
-    const h = D.schout;
-    const onderweg = opgeroepen(D).filter((e) => !g.volgorde.includes(e));
-    for (const e of onderweg) {
-      if (e.pad.length) continue;
-      const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, { x: h.tx, y: h.ty }, { naast: true });
-      if (pad && pad.length) e.pad = pad.slice(0, e.maxAp || T.WEZENS.soldaat.ap);
-    }
-    return { erbij, onderweg };
-  };
-
-  // Een man van de militie valt (js/gevecht.js, raak): hij is dood, en een mond minder. Het bericht zegt wie het
-  // was (T.wijzigBevolking, js/gebouwen.js, met wie het is).
-  T.sneuvelt = function (D, e) {
+  // Een man of een dorpeling valt (T.valt, js/gevecht.js): hij is dood, en een mond minder. Het bericht zegt wie het
+  // was (T.wijzigBevolking, js/gebouwen.js, met wie het is), en waartegen (`van`: wie de laatste klap gaf).
+  T.sneuvelt = function (D, e, van) {
     e.opgeroepen = false;
     e.gesneuveld = true;
-    if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', T.t('The fight with the robbers was hard'), [e.bewoner]);
+    const p = e.bewoner;
+    const man = !!p && !!(p.soldaat || p.veteraan || p.schout);
+    const waarom = van && van.beest ? T.t('The fight with the wolves was hard')
+      : man ? T.t('The fight with the robbers was hard') : T.t('The robbers struck in the village');
+    if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [e.bewoner]);
   };
 
   // Een rover valt (js/gevecht.js, sterf): kwam hij uit het gehucht, dan is hij uit de bende.
@@ -244,7 +212,7 @@
     return e;
   }
 
-  // Het begin: de rovers komen de kaart op, het dorp ziet ze, en de militie komt naar de schout.
+  // Het begin: de rovers komen de kaart op, en het dorp ziet ze. Wie soldaten heeft, hoort hoe hij ze stuurt.
   function begin(D, A) {
     const w = D.wereld;
     const R = D.rovers;
@@ -267,19 +235,13 @@
     A.fase = 'komen';
     A.sinds = uurNu(D);
     R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
-    // Is de schout weg (op reis, js/land.js), dan roept niemand de militie bij hem: de rovers hebben vrij spel.
-    const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D);
-    for (const e of militie) roepOp(e);
     const boer = T.boerVanVeld(D, w.akkers[A.veld]);
     const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
     const wie = A.soort === 'bende'
       ? T.t('{n|{namen}, who left, comes back as a robber|{namen}, who left, come back as robbers}', { n: leden.length, namen: T.opsomming(leden.map((l) => l.naam)) })
       : T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: leden.length, aantal: T.hoofdletter(T.telwoord(leden.length)) });
-    // Wie er komt: de soldaten, de veteranen van de heervaart, of allebei.
-    const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan && !e.bewoner.soldaat).length;
-    const soldaten = militie.length - veteranen;
-    const hulpWie = soldaten && veteranen ? T.t('The soldiers and the veterans come') : soldaten ? T.t('The soldiers come') : veteranen === 1 ? T.t('The veteran comes') : T.t('The veterans come');
-    const hulp = !militie.length ? '' : ` ${T.t('{wie} to your side.', { wie: hulpWie })}`;
+    // Er komt niemand vanzelf (vraag 170, stap 2): wie soldaten heeft, hoort hoe hij ze stuurt (js/kiezen.js).
+    const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click a robber.')}` : '';
     const veld = w.akkers[A.veld];
     const plek = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
     T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true, plek } });
@@ -287,9 +249,9 @@
 
   // De hinderlaag (de bode naar de marskramer, js/bode.js; werklijst vraag 143; Marcel, 9 okt: "De bode moet "onderschept"
   // kunnen worden. dat maakt het spannend"): komt de bode dicht bij de uitgang, dan staan de rovers er, en houden ze hem en
-  // wie meegaat aan (e.aangehouden: ze staan stil, T.dagAnker). Wie meegaat, vecht aan jouw kant, en de militie komt naar
-  // de schout. Komt de schout erbij, dan is het een gevecht in beurten; anders loopt het na een tijd af zoals onderweg
-  // (T.bodeAangehouden). Is de bode niet meer op de kaart, dan gebeurt het buiten beeld.
+  // wie meegaat aan (e.aangehouden: ze staan stil, T.dagAnker; de rovers slaan ze niet, js/gevecht.js). Stuur je je mannen
+  // erheen, dan vechten ze (js/gevecht.js); anders loopt het na een tijd af zoals onderweg (T.bodeAangehouden). Is de bode
+  // niet meer op de kaart, dan gebeurt het buiten beeld.
   const bodeWezens = (D) => (D.bode ? D.bode.wie.map((p) => p.wezen).filter((e) => e && !e.dood && D.wereld.wezens.includes(e)) : []);
   function laatDeBodeGaan(D, wezens = bodeWezens(D)) {
     for (const e of wezens) {
@@ -329,15 +291,9 @@
       e.aangehouden = { x: e.tx, y: e.ty };
       if (!e.onderweg) e.pad = [];
     }
-    // Wie meegaat, vecht aan jouw kant (de bode zelf niet), en blijft bij hem.
-    const mee = wezens.filter((e) => e !== bode);
-    for (const e of mee) roepOp(e);
-    const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D).filter((e) => !mee.includes(e));
-    for (const e of militie) roepOp(e);
     const naam = T.naamVanBewoner(B.wie[0]);
     const wie = R.bende.length ? T.t('{namen}, who left,', { namen: T.opsomming(leden.map((l) => l.naam)) }) : T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(leden.length)) });
-    const hulp = militie.length ? ` ${T.t('The militia comes to your side.')}` : '';
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Go there, or they will take everything.{hulp}', { wie, n: leden.length, naam, hulp }), soort: 'gevaar', naarGewoon: true, plek: uitgang } });
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Send your men there, or they will take everything.', { wie, n: leden.length, naam }), soort: 'gevaar', naarGewoon: true, plek: uitgang } });
   }
   function werkHinderlaagBij(D, A, levend) {
     const B = D.bode;
@@ -393,18 +349,19 @@
     A.buit = { graan, kapot };
   }
 
-  // Het eind van een aanval: wie nog leeft, is de kaart af, en de militie gaat weer naar huis.
+  // Het eind van een aanval: wie nog leeft, is de kaart af. Wie in een spel van vóór 15 okt nog met de schout meeliep,
+  // gaat weer naar huis (behalve op de jacht op de wolven, js/beesten.js).
   function eind(D) {
-    laatGaan(D);
+    if (!(D.beesten && D.beesten.jacht)) laatGaan(D);
     D.rovers.aanval = null;
   }
 
-  // Elk beeld (js/main.js, werkBij): de aanval loopt, van komen tot weggaan. In een gevecht staat hij stil: dan
-  // beweegt het gevecht in beurten iedereen (js/gevecht.js).
+  // Elke tik (T.werkDorpBij, js/dorp.js): de aanval loopt, van komen tot weggaan. Wie vecht (e.doelwit), laat het gevecht
+  // lopen (js/gevecht.js); laat hij zijn doel gaan, dan gaat hij verder met wat hij deed.
   T.werkRoversBij = function (S, D) {
     const A = D.rovers && D.rovers.aanval;
     if (!A || !heeftRovers(D)) return;
-    if (S.modus === 'gevecht' || S.modus === 'overgang' || S.modus === 'dood') return;
+    if (S.modus === 'dood') return;
     const w = D.wereld;
     if (A.fase === 'wacht') {
       if (S.modus !== 'verkennen') return;
@@ -413,9 +370,8 @@
       begin(D, A);
       return;
     }
-    // De militie loopt met de schout mee (T.loopNaastDeSchout, js/lopen.js); wie bij de bode is, blijft daar.
-    for (const e of opgeroepen(D)) if (!e.onderweg && !e.aangehouden) T.loopNaastDeSchout(D, e);
     const levend = A.rovers.filter((e) => !e.dood && w.wezens.includes(e));
+    const vrij = levend.filter((e) => !e.doelwit);
     if (!levend.length) {
       if (A.soort === 'hinderlaag') laatDeBodeGaan(D);
       eind(D);
@@ -424,7 +380,7 @@
     if (A.soort === 'hinderlaag' && A.fase === 'roven') return werkHinderlaagBij(D, A, levend);
     const veld = w.akkers[A.veld];
     if (A.fase === 'komen') {
-      for (const e of levend) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
+      for (const e of vrij) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
       if (levend.some((e) => opVeld(veld, e))) {
         A.fase = 'roven';
         A.roofTot = uurNu(D) + IN().roofUren;
@@ -432,7 +388,7 @@
         // Ze halen de akker niet: dan gaan ze met lege handen terug.
         A.fase = 'weg';
         A.sinds = uurNu(D);
-        for (const e of levend) e.pad = [];
+        for (const e of vrij) e.pad = [];
       }
       return;
     }
@@ -441,21 +397,21 @@
       roof(D, A, levend);
       A.fase = 'weg';
       A.sinds = uurNu(D);
-      for (const e of levend) e.pad = [];
+      for (const e of vrij) e.pad = [];
       return;
     }
     // Weg: naar waar ze kwamen, en daar zijn ze de kaart af. Halen ze het niet op tijd, dan zijn ze toch weg.
     const opgegeven = uurNu(D) >= A.sinds + IN().opUren;
     for (const e of levend) {
-      if (e.onderweg && !opgegeven) continue;
+      if ((e.onderweg || e.doelwit) && !opgegeven) continue;
       if (opgegeven || (e.tx === A.ingang.x && e.ty === A.ingang.y)) w.wezens.splice(w.wezens.indexOf(e), 1);
       else if (!e.pad.length) stuur(D, e, A.ingang);
     }
     if (!A.rovers.some((e) => !e.dood && w.wezens.includes(e))) eind(D);
   };
 
-  // Na een gevecht (T.eindeGevecht, js/gevecht.js): zijn alle rovers van de aanval verslagen, dan is hij voorbij.
-  // Zijn ze je kwijt, dan gaan ze verder met wat ze deden.
+  // De laatste rover van de aanval valt (T.valt, js/gevecht.js): dan is hij voorbij, en een bode die ze aanhielden, gaat
+  // verder.
   T.naGevecht = function (D) {
     const A = D.rovers && D.rovers.aanval;
     if (!A || !A.rovers) return;

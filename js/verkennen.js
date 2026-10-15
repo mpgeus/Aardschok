@@ -1,6 +1,5 @@
-// Rondlopen buiten een gevecht: wat een klik kiest (T.handelingVerkennen), oprapen en deuren. De monsters
-// dwalen intussen door hun eigen kamer, en zodra er één de schout ziet, begint het gevecht op
-// de plek waar iedereen op dat moment staat.
+// Rondlopen: wat een klik kiest (T.handelingVerkennen), oprapen en deuren, en het dwalen van wie geen doel heeft. Het
+// gevecht loopt in real time in de tik (js/gevecht.js; werklijst vraag 170, stap 2).
 (function (T) {
   'use strict';
 
@@ -223,7 +222,7 @@
   // Wie dwaalt, zet af en toe een stap binnen zijn eigen stukje wereld en staat er daarna weer
   // even bij stil — dan doet hij wat bij hem past (een boer maait). Een dorpeling gebruikt hetzelfde
   // loopwerk als een dwalend monster; het verschil is dat hij nooit een gevecht begint (hij is
-  // `neutraal`, en T.zoekOntdekking en T.deelnemers kijken alleen naar monsters).
+  // `neutraal`, en het gevecht kijkt alleen naar monsters, js/gevecht.js).
   //
   // Wie een gesprek voert, staat stil tot het uit is. En wie aan het maaien is
   // (T.werkOogstBij, js/akkers.js — roep die vóór T.laatDwalen aan) staat ook stil: hij heeft
@@ -247,10 +246,10 @@
     if (deel && T.werkPraatjesBij) T.werkPraatjesBij(S, D);
     let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
-      // Een man van de militie bij een aanval dwaalt niet: hij loopt met de schout mee (js/rovers.js). Wie de schout
-      // zoekt met een voorval, ook niet (js/voorvallen.js), wie een praatje maakt evenmin (js/praatje.js), en een boer
-      // die op zijn land werkt ook niet (js/veldwerk.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.zoektSchout || m.praatje) continue;
+      // Wie op de jacht met de held meeloopt, dwaalt niet (js/beesten.js), en wie vecht ook niet: die loopt en slaat in
+      // het gevecht (js/gevecht.js). Wie de schout zoekt met een voorval, ook niet (js/voorvallen.js), wie een praatje
+      // maakt evenmin (js/praatje.js), en een boer die op zijn land werkt ook niet (js/veldwerk.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.doelwit || m.volgt || m.zoektSchout || m.praatje) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie
@@ -353,23 +352,8 @@
     m.padDoel = null;
   }
 
-  // Wie sluipt, loopt half zo snel, maar wordt pas van twee tegels dichterbij opgemerkt.
-  // Een gevecht dat je zo ontloopt, kost je geen enkel jaar.
+  // Wie sluipt, loopt half zo snel, maar de wolven merken hem pas van twee tegels dichterbij op (js/beesten.js).
   T.SLUIP_ZICHT = 2;
-
-  // Ziet een monster de schout? Dan geeft dit het monster terug.
-  T.zoekOntdekking = function (S) {
-    const w = S.wereld;
-    const h = T.tegelVan(S.schout);
-    const minder = S.sluipen ? T.SLUIP_ZICHT : 0;
-    for (const m of w.wezens) {
-      // Een wolf (js/beesten.js) begint nooit zelf een gevecht: hij gaat je uit de weg (werklijst vraag 116, a).
-      if (m.dood || m.kant !== 'monster' || m.beest) continue;
-      const p = T.tegelVan(m);
-      if (T.afstand(p, h) <= m.zicht - minder && T.zichtTussen(w, p, h)) return m;
-    }
-    return null;
-  };
 
   T.wisselSluipen = function (S) {
     if (S.modus !== 'verkennen') return;
@@ -432,14 +416,13 @@
       // echt weg wil, klikt op de overgang (en het scherm zegt erbij waarheen).
       const zojuist = S.netGeland && S.netGeland.x === t.x && S.netGeland.y === t.y;
       if (!zojuist) S.netGeland = null;
-      const o = !zojuist && !e.pad.length && S.modus === 'verkennen' && !S.gevecht ? T.overgangOp(w, t.x, t.y) : null;
+      const o = !zojuist && !e.pad.length && S.modus === 'verkennen' ? T.overgangOp(w, t.x, t.y) : null;
       if (o) {
         e.pad = [];
         S.naLopen = null;
         S.naarGebied = o.naar;
       }
     }
-    if (S.gevecht) T.gevechtBijAankomst(S, e, t);
     if (e === S.schout && S.modus === 'verkennen' && !e.pad.length && S.naLopen) {
       const n = S.naLopen;
       S.naLopen = null;
