@@ -50,7 +50,8 @@ gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170*
 meevechten, en het gevecht is in real time, zodat er later live samen gespeeld kan worden. Op de vragen van stap 2 koos
 hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). Op het plan voor 170 koos hij op 15 okt
 een held die opnieuw opstaat, het praten geparkeerd, en **live samen spelen al in de demo** (bij I); **het bijgestelde
-plan staat bij I, en wacht op Marcel. Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan.
+plan staat bij I, en Marcel koos het zoals voorgesteld ("A1, B1, C1, D1, E1, F1"). Bezig in sessie
+`claude/sleepy-fermat-wrxjuc`** (15 okt): stap 0, de grond voor samen spelen.
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -496,7 +497,7 @@ vind ik ook moeilijk passen in dit spel het voegt voor nu weinig toe"; **3b** li
 stuurt de soldaten en de held, een dorpeling werkt vanzelf (en heeft een briefje); **5a** twee diensten per soldaat, dag
 en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beurten, gaat eruit.
 
-**Het plan** (Claude, 15 okt, bijgesteld op die antwoorden; **wacht op Marcel**):
+**Het plan** (Claude, 15 okt, bijgesteld op die antwoorden; **besloten**, hieronder):
 - **0, de grond voor samen spelen:** de wereld loopt in vaste stappen (los van de beelden per seconde), het lot van de
   wereld komt uit het zaad (los van wat alleen scherm is: nu trekt het scherm soms uit hetzelfde lot), en elke opdracht
   van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
@@ -518,7 +519,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   Steam; meedoen is het opgeslagen spel krijgen (alles staat al in `S`), en een controle dat de werelden gelijk blijven.
 Daarna de muren (158) en de tekeningen van de soldaten.
 
-**De vragen** (voorstel van Claude steeds de eerste): **A** de naam: A1 *Commander* (in de code `aanvoerder`): een
+**Besloten** (Marcel, 15 okt: "A1, B1, C1, D1, E1, F1"): de held heet *Commander* (in de code `aanvoerder`); valt hij
+zonder veteraan, dan de soldaat die het langst dient; ieder een eigen dorp op hetzelfde eiland, met z'n tweeën in de demo;
+*lockstep*; één snelheid voor iedereen, een gevecht zet iedereen op 1×; en stap 0 eerst. De vragen waren: **A** de naam: A1 *Commander* (in de code `aanvoerder`): een
 generaal voert een leger aan, een commander past bij een dorp met een paar troepen en kan meegroeien; A2 *General*
 (`generaal`); in beide gevallen ook in de code (zo'n 590 plaatsen), in stap 5, met het opslaan een versie omhoog; **B**
 valt de held en is er geen veteraan: B1 dan de soldaat die het langst dient, en is er niemand, dan staat er een op

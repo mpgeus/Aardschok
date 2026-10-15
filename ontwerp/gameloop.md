@@ -24,7 +24,11 @@ niet. Het concept gaan om naar RTS. We houden wel vast aan het isometrische."** 
   ander opstaan. Deze uit veteranen gekozen. De naam wordt ook veranderd naar general, of commander").
 - **Het praten is geparkeerd** ("we focussen ons nu als richting op RTS en minder op de RPG elementen het praten vind ik
   ook moeilijk passen in dit spel het voegt voor nu weinig toe").
-- **Live samen spelen zit al in de demo** (3b). Je stuurt alleen de soldaten en de held; een dorpeling werkt vanzelf, zoals
+- **Live samen spelen zit al in de demo** (3b; en op de volgende vragen, "A1, B1, C1, D1, E1, F1"): ieder een eigen dorp
+  op hetzelfde eiland, vrij om elkaar aan te vallen, de heer tegen iedereen, met z'n tweeën in de demo; in *lockstep*,
+  zoals Age of Empires (elke computer rekent de hele wereld, alleen de opdrachten gaan over de lijn); één snelheid voor
+  iedereen, en een gevecht zet iedereen op 1×. De held heet *Commander*; valt hij, dan een veteraan, en anders de
+  soldaat die het langst dient. Je stuurt alleen de soldaten en de held; een dorpeling werkt vanzelf, zoals
   in The Settlers (4a). Een soldaat heeft een dienst, dag of nacht (5a).
 - Het isometrische beeld blijft. Wat hieronder over de beurten, Jagged Alliance 2 en de schout als held staat, is de
   richting van 11 okt; wat ervan in de code staat, gaat eruit (vraag 170, 6a; het plan in de werklijst, bij I).
