@@ -96,8 +96,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, het rekenboek met `T.ui.toonVoorraad(D)`), komt alleen voor je
   eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.schoutIsWeg(D)` zegt of zijn
   schout niet op de kaart van het dorp staat. Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
-  **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elk beeld alles van een dorp (js/main.js,
-  voor elk dorp in `S.dorpen`), en ligt het niet waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op
+  **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elke tik alles van een dorp (`T.wereldTik`,
+  js/tik.js, voor elk dorp in `S.dorpen`), en ligt het niet waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op
   zijn eigen kaart, niet getekend (`T.beweegWezens` in js/anim.js, `T.dwaal` in js/verkennen.js). Een ander dorp dan het
   jouwe (`D.ander`, het buurdorp) spreekt niet tegen jou: **een regel over een dorp zegt iets met `T.zeg(D, tekst,
   soort)`, nooit rechtstreeks met `T.ui.bericht`** (`test/dorpen.test.cjs` kijkt het na); een ander dorp bewaart wat
@@ -105,6 +105,31 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   geen zelf: dat komt met het buurdorp, vraag 72), tot zijn schout in code kiest (stap 1b).
   `test/dorpen.test.cjs` zet twee dorpen naast elkaar (jouw gehucht en een van de maker): een jaar van het ene laat het
   andere letter voor letter ongemoeid.
+- **Het toeval van de wereld** (vraag 170, stap 0): `T.dobbelsteen(zaad)` geeft een dobbelsteen met een zaad
+  (mulberry32), `T.vastLot(D, a, b)` (js/weer.js) een vaste worp uit het zaad van een dorp, en `T.toeval(D)` een
+  dobbelsteen die doorrolt, met zijn stand in het dorp (`D.lot.stand`, of `w.lot` op een kaart zonder dorp), zodat hij
+  meegaat in wat bewaard wordt. **Wat de wereld kiest, komt daaruit, nooit uit `Math.random`**: dat is op elke computer
+  anders, en in lockstep (live samen spelen) moet de wereld op elke computer precies zo lopen. `Math.random` is alleen
+  voor wat het scherm doet, en voor het zaad van een nieuw spel (dat gaat in lockstep mee met het begin). Een keuze die
+  ook het scherm vraagt (de tekening van het volgende huis, voor het spookbeeld van het bouwmenu), is een vaste worp
+  (`T.vastLot`): wie het ook eerst vraagt, het antwoord is hetzelfde, en vragen verandert niets. Een toets die een
+  kans wil laten slagen, zet `T.toeval` even op een vaste worp (`metWorp` in test/praatje.test.cjs).
+
+### js/tik.js: de wereld in vaste tikken
+
+- `js/tik.js` (werklijst vraag 170, stap 0; Marcel, 15 okt: live samen spelen al in de demo, in lockstep): **de wereld
+  loopt in vaste tikken**, zestig per seconde echte tijd (`T.TIK`), los van hoeveel beelden een computer tekent; per tik
+  schuift ze de tik maal de snelheid op (`T.wereldFactor`, js/tijd.js). `T.wereldTik(S)` is de ene tik: de kalender, de
+  klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`),
+  en waar de schout is het maaien, het veldwerk, het wild, het dwalen en wie hem ziet; `S.tik` telt ze. js/main.js tikt
+  zo vaak als er tijd verstreek (`T.tikBij`: een tik gaat al als er een halve klaarligt, zodat bij zestig beelden per
+  seconde elke tik in een eigen beeld valt, en hooguit drie per beeld: een trage computer laat de wereld dan langzamer
+  lopen, zoals tot nu). **Spel.debug.stap, de speeltest, de toetsen en `npm run grootte` tikken dezelfde tik**: geen eigen
+  lijstje meer (tot 15 okt bouwden negen toetsen en het harnas van de meting de spellus van js/main.js elk na, en
+  het harnas miste al het veldwerk en het wild). Een toets met maar een deel van de wereld (alleen de bewoners, alleen
+  het lopen) roept die delen zelf. Wat alleen scherm is (de camera, de muis, de briefjes, de zwevende teksten en wie in
+  een beurt op een animatie wacht: `T.werkEffectenBij`, js/anim.js), werkt js/main.js elk beeld bij; ook het vanzelf
+  opslaan, want wat een computer bewaart en wanneer, is van hem alleen.
 
 
 ### js/opslaan.js en js/menu.js: opslaan en laden, het titelscherm
@@ -350,8 +375,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/anim.js: beweging en effecten
 
 - `js/anim.js`: beweging en effecten. `T.anim.*` geeft beloftes, zodat een beurt als gewone
-  code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt op een kaart
-  (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent (`js/dorp.js`).
+  code met `await` leest. Wachten gaat in speltijd (`S.tijd`), niet met `setTimeout`. Wie loopt, loopt in de tik van de
+  wereld (js/tik.js) op een kaart (`T.beweegWezens(S, w, ...)`): waar je bent, of een dorp waar je niet bent
+  (`js/dorp.js`). De zwevende teksten en wie op een animatie wacht, werkt `T.werkEffectenBij` elk beeld bij (alleen scherm).
 
 ### js/verkennen.js: rondlopen en dwalen
 

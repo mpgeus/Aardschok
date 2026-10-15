@@ -1,7 +1,7 @@
 'use strict';
 // Het harnas van de meting "hoe groot kan een dorp worden" (npm run grootte; werklijst, vraag 74). Laadt het spel zoals
 // de toetsen (test/laad.cjs), zet er N bewoners in (bouw.cjs), en speelt beelden zoals js/main.js (werkBij) dat doet,
-// zonder scherm. Verandert werkBij, kijk dan of beeld() hieronder nog hetzelfde doet.
+// zonder scherm: de wereld met dezelfde tik als het spel (T.wereldTik, js/tik.js).
 // Het meet het spel in deze map. Wil je een oudere stand meten, maak dan een losse kopie (git worktree add) en wijs die
 // aan met SPEL_WORTEL; zo verandert een sessie die in de werkmap verder bouwt de meting niet.
 const WORTEL = process.env.SPEL_WORTEL || require('node:path').join(__dirname, '..', '..');
@@ -48,46 +48,25 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
 
 const nu = () => Number(process.hrtime.bigint()) / 1e6; // ms
 
-// Eén beeld, zoals werkBij in js/main.js, zonder wat alleen scherm is (formaat, camera, muis). `delen`, als het er
-// is, krijgt per deel de tijd in ms.
+// Eén beeld, zoals werkBij in js/main.js, zonder wat alleen scherm is (formaat, camera, muis): een tik van de wereld
+// (T.wereldTik, js/tik.js; dezelfde als het spel), het vanzelf opslaan en de raad. `delen`, als het er is, krijgt per
+// deel de tijd in ms.
 const RAAD_ELKE = 0.5;
 const toestand = { raadNu: null, raadOp: -Infinity };
 function beeld(S, dt, delen) {
   const tm = delen ? (naam, f) => { const t0 = nu(); f(); delen[naam] = (delen[naam] || 0) + nu() - t0; } : (naam, f) => f();
-  S.tijd += dt;
+  T.wereldTik(S, dt, tm);
   S.wind = T.windWaarde(S.tijd);
-  const dtWereld = dt * T.wereldFactor(S);
-  S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
-  T.tikKalender(S, dt);
-  T.werkDagBij(S);
   tm('opslaan', () => {
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
   });
-  tm('dorpen', () => { for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld); });
-  T.werkLandBij(S);
-  T.ui.werkLandkaartBij(S);
-  tm('animaties', () => T.werkAnimatiesBij(S, dt, dtWereld));
-  if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
-  T.werkQuestsBij(S);
-  const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp);
   tm('raad', () => {
     if (!(S.tijd - toestand.raadOp < RAAD_ELKE) || S.tijd < toestand.raadOp) {
       toestand.raadNu = T.raadNu(S.dorp);
       toestand.raadOp = S.tijd;
     }
   });
-  T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, toestand.raadNu && toestand.raadNu.tekst);
-  if (S.modus === 'verkennen' || S.modus === 'land') {
-    tm('oogst', () => {
-      const hier = T.dorpHier(S);
-      if (hier) T.werkOogstBij(S, hier, dtWereld);
-    });
-    tm('dwalen', () => T.laatDwalen(S, dtWereld));
-    const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
-    if (m) T.startGevecht(S, m, false);
-  }
-  if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
 }
 
 // Zet de kalender op dag `dag` (met uur) zoals Spel.debug.kalender dat doet: de dagen ertussen worden niet meer

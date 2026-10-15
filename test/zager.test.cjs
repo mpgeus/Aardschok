@@ -33,17 +33,8 @@ function zo(f) {
 function totUur(S, dag, tot, elk) {
   S.kalender.snelheid = 30;
   while (S.kalender.dag < dag + tot / 24) {
-    const dt = 1 / 60;
-    S.tijd += dt;
-    const dtW = dt * T.wereldFactor(S);
-    S.wereldTijd += dtW;
-    T.tikKalender(S, dt);
     if (S.kalender.stil && S.kalender.stil.length) S.kalender.stil = [];
-    for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtW);
-    T.werkAnimatiesBij(S, dt, dtW);
-    T.werkOogstBij(S, S.dorp, dtW);
-    T.werkVeldwerkBij(S, S.dorp);
-    T.laatDwalen(S, dtW);
+    T.wereldTik(S); // een tik van de wereld, zoals het spel (js/tik.js)
     if (elk) elk();
   }
 }

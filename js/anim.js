@@ -38,11 +38,10 @@
     },
   };
 
-  // `dtLopen` is de tijd van de wereld (js/main.js): de schermtijd maal de snelheid van de kalender
-  // (T.wereldFactor, js/tijd.js). Lopen gaat daarop, zodat een tocht op elke snelheid even veel uren
-  // kost; een uitval, een flits en de zwevende teksten blijven op de klok van het scherm.
-  // Wie loopt, loopt verder op de kaart w: waar je bent (T.werkAnimatiesBij hieronder), of in een dorp waar je niet
-  // bent en dat niet getekend wordt (js/dorp.js, T.werkDorpBij; werklijst, vraag 71, A).
+  // `dtLopen` is de tijd van de wereld (js/tik.js): de tik maal de snelheid van de kalender (T.wereldFactor,
+  // js/tijd.js). Lopen gaat daarop, zodat een tocht op elke snelheid even veel uren kost; een uitval en een flits lopen
+  // op de tik zelf (`dt`). Wie loopt, loopt verder op de kaart w: waar je bent (T.wereldTik), of in een dorp waar je
+  // niet bent en dat niet getekend wordt (js/dorp.js, T.werkDorpBij; werklijst, vraag 71, A).
   T.beweegWezens = function (S, w, dt, dtLopen) {
     const lopen = dtLopen == null ? dt : dtLopen;
     for (const e of w.wezens) {
@@ -62,8 +61,9 @@
     }
   };
 
-  T.werkAnimatiesBij = function (S, dt, dtLopen) {
-    T.beweegWezens(S, S.wereld, dt, dtLopen);
+  // Elk beeld (js/main.js): wie in een beurt op een animatie wacht (T.anim.wacht, op de klok van het scherm), en de
+  // zwevende teksten. Alleen scherm; wie loopt, loopt in de tik van de wereld (T.beweegWezens in T.wereldTik, js/tik.js).
+  T.werkEffectenBij = function (S, dt) {
     if (S.wachters.length) {
       const nogNiet = [];
       for (const w of S.wachters) {

@@ -188,7 +188,7 @@
       met = b;
       if (b.praatje) break; // liever aansluiten dan een tweede groepje ernaast
     }
-    if (!met || Math.random() >= kansBij(D, w, tegel(e))) return false;
+    if (!met || T.toeval(D) >= kansBij(D, w, tegel(e))) return false;
     if (!met.praatje) return T.beginPraatje(D, e, met);
     const g = met.praatje;
     if (!naarHetGroepje(w, g, e, groepen.get(g))) return false;
@@ -201,7 +201,7 @@
   T.beginPraatje = function (D, e, b) {
     const I = IN();
     const dag = D.kalender.dag;
-    const g = { plek: tegel(b), tot: dag + (I.duurMin + Math.random() * (I.duurMax - I.duurMin)) / 24, zaad: Math.floor(dag * 977) % 1000 };
+    const g = { plek: tegel(b), tot: dag + (I.duurMin + T.toeval(D) * (I.duurMax - I.duurMin)) / 24, zaad: Math.floor(dag * 977) % 1000 };
     if (!naarHetGroepje(D.wereld, g, e, [b])) return false;
     e.praatje = g;
     b.praatje = g;
@@ -223,7 +223,7 @@
     const deel = T.dagdeelVan(dag, T.isOogstDag(dag));
     if (!T.kanPraten(S, D, e, deel) || !T.kanPraten(S, D, ander, deel)) return false;
     if (!T.kentElkaar(D, T.bewonerVan(D, e), T.bewonerVan(D, ander))) return false;
-    if (Math.random() >= kansBij(D, w, tegel(e))) {
+    if (T.toeval(D) >= kansBij(D, w, tegel(e))) {
       e.praatRust = dag + I.doorlopen / 24;
       return false;
     }
@@ -250,7 +250,7 @@
       if (rust(D, b) || !T.kanPraten(S, D, b, deel)) continue;
       const q = T.bewonerVan(D, b);
       if (!leden.some((e) => T.kentElkaar(D, T.bewonerVan(D, e), q))) continue;
-      if (Math.random() >= kansBij(D, w, g.plek)) {
+      if (T.toeval(D) >= kansBij(D, w, g.plek)) {
         b.praatRust = dag + I.doorlopen / 24;
         continue;
       }

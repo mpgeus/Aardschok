@@ -41,7 +41,7 @@ function stap(S, dt) {
   S.wereldTijd += dtW;
   T.tikKalender(S, dt);
   T.werkDagBij(S);
-  T.werkAnimatiesBij(S, dt, dtW);
+  T.beweegWezens(S, S.wereld, dt, dtW);
   T.werkOogstBij(S, S.dorp, dtW);
   T.laatDwalen(S, dtW);
 }

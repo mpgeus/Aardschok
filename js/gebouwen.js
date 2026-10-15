@@ -584,7 +584,7 @@
   // Welke tekening krijgt het volgende gebouw van deze soort? Een soort met `tekeningen` (de hut, het
   // huis) krijgt er steeds een, nooit twee keer achter elkaar dezelfde, zodat een rij hutten niet uit
   // één stempel komt (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten"). De
-  // keuze ligt vast tot hij gebouwd is (S.volgendeTekening), zodat het spookbeeld van het bouwmenu de
+  // keuze ligt vast tot hij gebouwd is, zodat het spookbeeld van het bouwmenu de
   // voet laat zien die er echt komt. T.neemTekening zegt dat hij gebouwd is: de volgende wordt een
   // andere. In een land met een bouwstijl (js/bouwstijl.js) is het een vorm van die stijl, met het dak
   // van nu; de keuze mag zijn deur naar een andere kant hebben (T.keerNaarDeWeg keert hem naar de weg, js/bouwstijl.js).
@@ -593,13 +593,15 @@
     if (!g) return null;
     const lijst = T.tekeningenVan(D, soort);
     if (!lijst) return g.tekening || null;
-    const volgende = D.volgendeTekening || (D.volgendeTekening = {});
-    if (!lijst.includes(T.metDeurNaar(volgende[soort], 'z'))) {
-      const vorige = D.vorigeTekening && D.vorigeTekening[soort];
-      const kan = lijst.length > 1 ? lijst.filter((t) => T.vormVan(t) !== T.vormVan(vorige)) : lijst;
-      volgende[soort] = kan[Math.floor(Math.random() * kan.length)];
-    }
-    return volgende[soort];
+    const vast = D.volgendeTekening && D.volgendeTekening[soort];
+    if (lijst.includes(T.metDeurNaar(vast, 'z'))) return vast;
+    const vorige = D.vorigeTekening && D.vorigeTekening[soort];
+    const kan = lijst.length > 1 ? lijst.filter((t) => T.vormVan(t) !== T.vormVan(vorige)) : lijst;
+    // Uit het zaad van het dorp en hoeveel van deze soort er al genomen zijn (T.vastLot, js/weer.js), niet uit een
+    // dobbelsteen die doorrolt: wie het ook eerst vraagt (het spookbeeld van het bouwmenu op deze computer, of een regel),
+    // het is dezelfde, en vragen verandert niets aan de wereld (werklijst vraag 170, stap 0: live samen spelen).
+    const genomen = (D.tekeningenGenomen && D.tekeningenGenomen[soort]) || 0;
+    return kan[Math.floor(T.vastLot(D, genomen * 131 + Object.keys(T.GEBOUWEN).indexOf(soort), 59) * kan.length)];
   };
   // De tekeningen die een nieuw gebouw van deze soort kan krijgen: die van de bouwstijl van het land
   // (T.stijlTekeningen, js/bouwstijl.js), of anders `tekeningen` hierboven. Null bij één vaste tekening.
@@ -611,6 +613,8 @@
     const t = T.volgendeTekening(D, soort);
     (D.vorigeTekening || (D.vorigeTekening = {}))[soort] = t;
     if (D.volgendeTekening) delete D.volgendeTekening[soort];
+    const genomen = D.tekeningenGenomen || (D.tekeningenGenomen = {});
+    genomen[soort] = (genomen[soort] || 0) + 1;
     return t;
   };
 

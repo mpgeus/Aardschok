@@ -545,9 +545,6 @@
       T.verdeelHanden(D);
       // De boeren krijgen hun akkers op hun poppetje, zoals elke nacht (js/boerderij.js): die poppetjes kwamen pas na de nacht.
       T.werkDeBoerenBij(D);
-      // Welke tekening het volgende gebouw van elke soort krijgt (T.volgendeTekening), en dus hoe groot zijn voet is: hier
-      // al gekozen, zodat een toets die iets neerzet, elke keer dezelfde plek vindt.
-      for (const soort of Object.keys(T.GEBOUWEN)) T.volgendeTekening(D, soort);
       return S;
     });
   }

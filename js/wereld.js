@@ -260,6 +260,8 @@
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.
   function maakWezen(soort, x, y) {
+    // Uit de plek, niet uit Math.random, zodat het op elke computer hetzelfde wezen is (werklijst vraag 170, stap 0).
+    const lot = T.dobbelsteen((Math.floor(x) * 4099 + Math.floor(y) * 7) >>> 0);
     const s = WEZENS[soort];
     return {
       soort, naam: s.naam, kant: s.kant,
@@ -272,7 +274,7 @@
       aanval: s.aanval || null,
       // Een geleend vel, zolang dit figuur nog niet getekend is (js/sprites.js, S.houding).
       vel: s.vel || null,
-      dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
+      dwaalTijd: 1 + lot() * 2, fase: lot() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
     };
   }

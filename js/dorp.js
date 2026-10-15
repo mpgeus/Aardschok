@@ -25,15 +25,29 @@
 
   // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot. Eén dobbelsteen voor het
   // hele spel: het eiland, de maker, de bewoners, de voorvallen, de rovers, het weer.
+  const worp = (a) => {
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
   T.dobbelsteen = function (zaad) {
     let a = zaad >>> 0;
     return function () {
       a = (a + 0x6d2b79f5) >>> 0;
-      let t = a;
-      t = Math.imul(t ^ (t >>> 15), t | 1);
-      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      return worp(a);
     };
+  };
+
+  // Het toeval van de wereld (werklijst vraag 170, stap 0): dezelfde dobbelsteen, maar hij rolt door, en waar hij staat
+  // (`lot.stand`) gaat mee in wat bewaard wordt. Voor wat de wereld onderweg kiest: hoe lang een praatje duurt, waar
+  // een dwaler heen stapt, de tekening van het volgende huis. Nooit Math.random: dat is op elke computer anders, en in
+  // lockstep (live samen spelen) moet de wereld op elke computer precies zo lopen; Math.random is alleen voor wat het
+  // scherm doet. `bron` is een dorp (D.lot, met het zaad van het dorp), of een kaart zonder dorp (w.lot).
+  T.toeval = function (bron) {
+    const L = bron.lot || (bron.lot = { zaad: 1 });
+    L.stand = (((L.stand != null ? L.stand : L.zaad) >>> 0) + 0x6d2b79f5) >>> 0;
+    return worp(L.stand);
   };
 
   // Een nieuw dorp op kaart w, met zijn schout: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er

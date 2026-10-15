@@ -105,6 +105,9 @@
   // tabel gaat over wat een wezen ís, en er komen er honderd van deze. Het zaad bepaalt zijn
   // uiterlijk (S.dorpelingVariant in js/sprites.js), en `gesprek` welke tekst hij voert.
   T.maakDorpeling = function (zaad, x, y, straal, gesprek) {
+    // Wanneer hij voor het eerst wegdwaalt, en de stand van zijn armen bij het maaien: uit zijn zaad, niet uit
+    // Math.random, zodat hij op elke computer hetzelfde is (werklijst vraag 170, stap 0; T.toeval in js/dorp.js).
+    const lot = T.dobbelsteen(Math.floor(zaad || 0) * 31 + 7);
     return {
       soort: 'dorpeling', naam: T.t('villager'), kant: 'neutraal', zaad, gesprek: gesprek || null,
       x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
@@ -114,7 +117,7 @@
       // neutraal) en telt niet mee in de beurtvolgorde.
       thuis: { x, y }, straal: straal || 0, dwaalt: straal > 0, aanval: null,
       vel: null,
-      dwaalTijd: 1 + Math.random() * 2, fase: Math.random() * 6.28,
+      dwaalTijd: 1 + lot() * 2, fase: lot() * 6.28,
       dood: false, sterfTijd: 0, uitval: null, flits: 0, alarm: 0,
     };
   };

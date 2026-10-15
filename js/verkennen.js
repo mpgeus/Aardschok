@@ -356,7 +356,7 @@
       // niet zijn hele pauze uit maar stapt meteen door.
       if (m.dwaalTijd > 0 && !T.bijDeur(w, m.tx, m.ty)) continue;
       // Wie een eigen pauze heeft (vee: dat staat lang te grazen voor het een stap zet), neemt die.
-      m.dwaalTijd = m.pauze ? m.pauze[0] + Math.random() * (m.pauze[1] - m.pauze[0]) : 1.5 + Math.random() * 2.5;
+      m.dwaalTijd = m.pauze ? m.pauze[0] + T.toeval(D || w) * (m.pauze[1] - m.pauze[0]) : 1.5 + T.toeval(D || w) * 2.5;
       // Vee op een weide: binnen die rechthoek, of eerst ernaartoe (T.dwaalTegelsOpWeide hierboven).
       if (m.weide) {
         const weg = T.wegNaarWeide(w, m);
@@ -366,7 +366,7 @@
           // Onderweg naar zijn weide staat het niet te grazen: loopt het vast op een ander dier,
           // dan zoekt het na een tel een nieuwe weg, niet pas na een hele graaspauze.
           m.dwaalTijd = Math.min(m.dwaalTijd, 1);
-        } else if (opties.length) stap(m, opties[Math.floor(Math.random() * opties.length)]);
+        } else if (opties.length) stap(m, opties[Math.floor(T.toeval(D || w) * opties.length)]);
         continue;
       }
       // Kijkt hij om zich heen en staat er een bekende die ook vrij is, dan blijven ze staan voor een praatje (js/praatje.js;
@@ -415,7 +415,7 @@
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
         if (magDwalenNaar(w, m, m.tx + dx, m.ty + dy, thuisNu)) opties.push({ x: m.tx + dx, y: m.ty + dy });
       }
-      if (opties.length) stap(m, opties[Math.floor(Math.random() * opties.length)]);
+      if (opties.length) stap(m, opties[Math.floor(T.toeval(D || w) * opties.length)]);
     }
   };
 

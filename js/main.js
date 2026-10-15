@@ -622,64 +622,31 @@
   const RAAD_ELKE = 0.5;
   let raadNu = null;
   let raadOp = -Infinity;
+  // Wat er nog niet getikt is (js/tik.js, T.tikBij): alleen scherm, want elke computer heeft zijn eigen beelden.
+  const klok = { rest: 0 };
 
   function werkBij(dt) {
     // Een resize-gebeurtenis komt niet altijd (een tabblad dat verborgen opstartte, heeft
     // eerst geen maat), dus kijkt de lus zelf of het venster veranderd is.
     if (window.innerWidth !== cssB || window.innerHeight !== cssH) formaat();
-    S.tijd += dt;
+    // De wereld tikt in vaste stappen (js/tik.js; werklijst vraag 170, stap 0): zo vaak als er tijd verstreek, los van
+    // hoeveel beelden deze computer tekent. Wat hieronder staat, is alleen scherm, en volgt elk beeld.
+    T.tikBij(S, klok, dt);
     S.wind = T.windWaarde(S.tijd);
-    // De tijd van de wereld: de schermtijd maal de snelheid van de kalender (T.wereldFactor,
-    // js/tijd.js). Lopen, maaien en dwalen gaan daarop, zodat een tocht of een tegel graan op elke
-    // snelheid even veel uren kost; op pauze staat alles stil. S.wereldTijd telt hem op, voor wie
-    // een duur moet afwachten (het maaien, het geduld van wie wacht op een ander).
-    const dtWereld = dt * T.wereldFactor(S);
-    S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
-    // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
-    // zo laat pauzeren of versnellen nooit een animatie stilvallen of doorschieten.
-    T.tikKalender(S, dt);
-    T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
-    // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek.
+    // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek. Niet in de tik: wat deze
+    // computer bewaart, en wanneer (er staat misschien een venster open), is van hem alleen.
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
-    // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
-    // voorvallen. Waar je bent, lopen, maaien en dwalen ze hieronder en worden ze getekend; een dorp waar je niet bent,
-    // doet dat in T.werkDorpBij zelf.
-    for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
-    T.werkLandBij(S); // op reis de volgende provincie, en over de weg het gehucht uit de kaart van het land (js/land.js)
-    T.ui.werkLandkaartBij(S); // en die kaart op het scherm (js/landkaart.js)
-    T.werkAnimatiesBij(S, dt, dtWereld);
-    // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat
-    // (T.bijAankomst): de lijst wezens van de wereld verandert erdoor, en daar loopt de animatie
-    // net doorheen.
-    if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
-    // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de
-    // fase op, nog vóór er iets dwaalt of iemand je ziet. Het vak linksboven is van de quest die
-    // je het eerst aannam; zonder quest staat er het doel van het gehucht: een dorp worden
-    // (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
-    T.werkQuestsBij(S);
+    T.ui.werkLandkaartBij(S); // de kaart van het land op het scherm (js/landkaart.js)
+    T.werkEffectenBij(S, dt); // de zwevende teksten, en wie in een beurt op een animatie wacht (js/anim.js)
+    // Het vak linksboven is van de quest die je het eerst aannam; zonder quest staat er het doel van het gehucht: een
+    // dorp worden (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
     const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp);
     if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
       raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;
     }
     T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst, doelNu && doelNu.deel);
-    // Ook op reis (js/land.js, de kaart van het land) gaat het dorp zijn gang: er wordt gemaaid en gedwaald.
-    if (S.modus === 'verkennen' || S.modus === 'land') {
-      // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land
-      // werkt (T.werkVeldwerkBij, js/veldwerk.js; alleen het nieuwe spel: S.wereld.akkers is er anders niet), staat voor
-      // T.laatDwalen al "bezig" (m.pad.length, m.maait of m.werkt) en dwaalt deze beurt niet ook nog weg.
-      const hier = T.dorpHier(S); // het dorp waar je bent; de andere werken in T.werkDorpBij (js/dorp.js)
-      if (hier) {
-        T.werkOogstBij(S, hier, dtWereld);
-        T.werkVeldwerkBij(S, hier);
-        T.werkBeestenBij(S, hier); // de wolven en de herten in het bos (js/beesten.js)
-      }
-      T.laatDwalen(S, dtWereld);
-      const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
-      if (m) T.startGevecht(S, m, false);
-    }
-    if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
     const doelAlpha = S.modus === 'gevecht' ? 1 : 0;
     S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
     // Wat je nodig hebt (een venster, een brief, een gesprek, een gevecht), haalt je uit de fotomodus.

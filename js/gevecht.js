@@ -21,7 +21,8 @@
   T.SLAAN = { kosten: 3, schade: [3, 5] };
   T.DEUR_SLUITEN = 1;
 
-  const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
+  // Een worp met het toeval van de wereld (T.toeval, js/dorp.js), niet Math.random (werklijst vraag 170, stap 0).
+  const worp = (S, b) => b[0] + Math.floor(T.toeval(T.dorpHier(S) || S.wereld) * (b[1] - b[0] + 1));
 
   // Wie er nu aan de beurt is, en of jij hem bestuurt: de schout of een man van de militie.
   T.aanDeBeurt = (S) => (S.gevecht ? S.gevecht.volgorde[S.gevecht.beurt] || null : null);
@@ -346,7 +347,7 @@
     v.ap -= slag.kosten;
     T.ui.toonAp(v.ap, v.maxAp, 0, true);
     await T.anim.uitval(v, T.tegelVan(m));
-    const n = Math.max(0, worp(slag.schade) - T.vangtAf(m, v));
+    const n = Math.max(0, worp(S, slag.schade) - T.vangtAf(m, v));
     const woorden = { naam: v.naam, wezen: m.naam, n };
     T.ui.bericht(v === S.schout ? T.t('You hit the {wezen}: {n} damage.', woorden)
       : soort === 'schiet' ? T.t('{naam} shoots at the {wezen}: {n} damage.', woorden)
@@ -507,7 +508,7 @@
       if (!T.raakt(w, T.tegelVan(m), T.tegelVan(doel))) break;
       await T.anim.uitval(m, T.tegelVan(doel));
       // Schild en harnas vangen een deel af (js/soldaten.js).
-      const ruw = worp(m.aanval.schade);
+      const ruw = worp(S, m.aanval.schade);
       const af = Math.min(ruw, T.vangtAf(doel, null));
       const n = ruw - af;
       const wat = T.vulTekst(m.aanval.zin, { doel: doel === S.schout ? T.t('you') : doel.naam }, T.taalLocale());

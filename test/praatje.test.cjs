@@ -19,14 +19,14 @@ function proef(uur = 20, opties = {}) {
   return S;
 }
 
-// Met een vaste worp: 0 laat elke kans slagen, 0,99 geen.
+// Met een vaste worp van het toeval van de wereld (T.toeval, js/dorp.js): 0 laat elke kans slagen, 0,99 geen.
 function metWorp(worp, f) {
-  const toeval = Math.random;
-  Math.random = () => worp;
+  const toeval = T.toeval;
+  T.toeval = () => worp;
   try {
     return f();
   } finally {
-    Math.random = toeval;
+    T.toeval = toeval;
   }
 }
 
@@ -87,16 +87,8 @@ function gewonePlek(S) {
 function beelden(S, n, snel = 3) {
   S.kalender.snelheid = snel;
   for (let i = 0; i < n; i++) {
-    const dt = 1 / 60;
-    S.tijd += dt;
-    const dtW = dt * T.wereldFactor(S);
-    S.wereldTijd += dtW;
-    T.tikKalender(S, dt);
     if (S.kalender.stil && S.kalender.stil.length) S.kalender.stil = [];
-    for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtW);
-    T.werkAnimatiesBij(S, dt, dtW);
-    T.werkOogstBij(S, S.dorp, dtW);
-    T.laatDwalen(S, dtW);
+    T.wereldTik(S); // een tik van de wereld, zoals het spel (js/tik.js)
   }
 }
 
@@ -382,13 +374,7 @@ test('een dag in het proefdorp: er wordt gepraat, nooit twee op één tegel, wie
   const S = proef(5);
   const D = S.dorp;
   const w = S.wereld;
-  // Met een vast toeval, zodat de dag elke keer dezelfde is.
-  const toeval = Math.random;
-  let n = 7;
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  t.after(() => {
-    Math.random = toeval;
-  });
+  // De dag is elke keer dezelfde: het toeval van de wereld komt uit het zaad van het dorp (T.toeval, js/dorp.js).
   const groepjes = new Set();
   let dubbel = 0;
   let onderWerk = 0;

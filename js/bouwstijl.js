@@ -260,7 +260,7 @@
     for (const kant of T.zijdenNaarDeWeg(D.wereld, { x, y, b: v.b, h: v.h })) {
       const s = T.metDeurNaar(t, kant);
       if (s !== t && !T.gebouwPast(D, soort, x, y, s)) continue;
-      D.volgendeTekening[soort] = s;
+      (D.volgendeTekening || (D.volgendeTekening = {}))[soort] = s;
       return s;
     }
     return t;
