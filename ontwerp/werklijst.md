@@ -63,7 +63,7 @@ afspraak bij moet.
 **stap 1 tot 5 zijn af** (15 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
-zijn het rantsoen en de belasting. Zo'n 4500 regels minder. **Stap 6, de wensen en de groei, wacht op Marcel** (hieronder).
+zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6, de wensen en de groei, wacht op Marcel** (hieronder).
 
 **Wacht op Marcel:**
 - **Ronde 3 van het snoeien bekijken** (15 okt, op de branch `ccr-74384ea2-mxeou7`): Nieuw spel. Er komt niemand meer
