@@ -281,7 +281,10 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    rapport; het gevecht en de koorts zeggen het al zelf); het dagboek voedt alleen het jaarboek, en het jaarverslag
    tekent "Entered in the yearbook"; de grillen van de heer hebben hun eigen prijs onder een knop. Opslaan blijft
    versie 14 (die kwam in stap 2, en ging nog niet naar `main`). De speeltest boekt geen voorvallen en rapporten meer.
-4. **Het werk alleen op de afwisseling.**
+4. **Het werk alleen op de afwisseling.** **Af** (15 okt): `T.werkTempo` en `werkBasis` zijn weg; de werkplaatsen volgen
+   `T.werkVanAfwisseling`, net als het bouwen en het veldwerk al deden (de tevredenheid woog alleen in de werkplaatsen).
+   Erbij, omdat het anders scheef ging: **een leeg bord telt als één soort** (60%). Tot nu toe trok de tevredenheid een
+   dorp zonder eten omlaag; zonder haar werkte zo'n dorp op 100%.
 5. **De wetten:** rantsoen en belasting.
 6. **De wensen en de groei**, als Marcel gekozen heeft.
 

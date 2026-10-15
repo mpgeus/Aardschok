@@ -229,13 +229,10 @@ test('T.tikGebouwenDag: een werkplaats zonder genoeg handen maakt naar rato mind
   assert.equal(S.voorraad.hout, 0); // geen bezetting, dus geen productie
 });
 
-// Hoe hard er vandaag gewerkt wordt, naar de tevredenheid (js/behoeften.js; stap 6 van
-// T.tikGebouwenDag). Een dorp zonder eten is niet tevreden, dus in deze toetsen werkt het niet op volle
-// kracht: ze draaien met de behoeften, zoals het spel.
-const werkFactor = (S) => {
-  const IN = T.BEHOEFTEN_INSTELLINGEN;
-  return IN.werkBasis + (1 - IN.werkBasis) * S.behoeften.tevredenheid;
-};
+// Hoe hard er vandaag gewerkt wordt, naar de afwisseling van de maaltijd (js/behoeften.js; stap 6 van
+// T.tikGebouwenDag; sinds 15 okt niet meer naar de tevredenheid, ronde 3 van het snoeien). De toetsen draaien met de
+// behoeften, zoals het spel.
+const werkFactor = (S) => T.werkVanAfwisseling(S);
 const ongeveer = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `verwachtte ${b}, kreeg ${a}`);
 
 test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard er gewerkt wordt', () => alsJijHetSeizoenDoet(() => {

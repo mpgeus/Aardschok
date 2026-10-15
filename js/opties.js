@@ -1005,7 +1005,6 @@
     gewichtBrandhout: T.t('weight of firewood'),
     gewichtKerk: T.t('weight of the chapel'),
     kerkBasis: T.t('contentment without a chapel'),
-    werkBasis: T.t('output at 0% contentment'),
     groeiDrempel: T.t('growth threshold'),
     vertrekDrempel: T.t('leaving threshold'),
     winterVerliesFactor: T.t('winter loss factor'),

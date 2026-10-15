@@ -95,7 +95,7 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
   A1: elk eten is een eigen soort (graan, brood, vlees, vis, wijn, kaas met de melk, groente, eieren); groente en
   eieren vullen een kleine maag (een moestuin voedt zo'n 5 mensen). B1: het geldt voor al het werk: de werkplaatsen, het
   bouwen en het veldwerk. C1: de tevredenheid op het werk blijft voorlopig, en de twee vermenigvuldigen; ronde 3 beslist
-  over de wensen. D1: de kar brengt ook kaas en gezouten vlees voor een paar weken, zodat het dorp op 90% begint en het
+  over de wensen. (Ronde 3, 15 okt; Marcel: "Alleen de afwisseling": het werk volgt alleen nog de afwisseling.) D1: de kar brengt ook kaas en gezouten vlees voor een paar weken, zodat het dorp op 90% begint en het
   werk zakt als die op zijn: vóór die tijd een jager en een moestuin.
 
 Daarmee gaan om: "geen hand van bovenaf" (30 sep, `concept.md`) en "de mensen bouwen zelf" (3 okt, vraag 103). Ook

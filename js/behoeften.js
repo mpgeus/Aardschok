@@ -56,11 +56,9 @@
     gewichtBrandhout: 0.3,
     gewichtKerk: 0.2,
     kerkBasis: 0.6,
-    // Wat tevredenheid doet. werkBasis is hoeveel productie er nog overblijft bij 0% tevreden
-    // (1 = geen effect; js/gebouwen.js, T.tikGebouwenDag stap 6). groeiDrempel: minstens dit, anders
-    // komt er geen nieuw gezin bij op een groeidag (js/gebouwen.js stap 4). vertrekDrempel:
-    // hoogstens dit, dan trekt op diezelfde soort dag juist een gezin weg (hieronder).
-    werkBasis: 0.5,
+    // Wat tevredenheid doet (sinds 15 okt niet meer op het werk: dat volgt alleen de afwisseling, ronde 3 van het
+    // snoeien). groeiDrempel: minstens dit, anders komt er geen nieuw gezin bij op een groeidag (js/gebouwen.js stap 4).
+    // vertrekDrempel: hoogstens dit, dan trekt op diezelfde soort dag juist een gezin weg (hieronder).
     groeiDrempel: 0.55,
     vertrekDrempel: 0.25,
     // De winter: fractie van de bevolking die een volledig tekortdag kost (brandhout én eten op,
@@ -846,13 +844,15 @@
   }
 
   // Hoe hard er gewerkt wordt naar de afwisseling van de laatste maaltijd (vraag 154, B1: al het werk): met één soort
-  // werkBijEenSoort, met elke soort erbij werkPerSoortErbij meer, tot 1. Zonder maaltijd (nog geen dag gegeten, of niemand
-  // die eet) volle kracht; wat honger doet, regelt de tevredenheid en de winter.
+  // werkBijEenSoort, met elke soort erbij werkPerSoortErbij meer, tot 1. Nog geen dag gegeten: volle kracht. Niets te
+  // eten (een lege maaltijd in een dorp met mensen): zo traag als met één soort. Sinds 15 okt volgt het werk alleen dit
+  // (ronde 3 van het snoeien, Marcel: "Alleen de afwisseling"); tot dan trok ook de tevredenheid het omlaag, en daarmee
+  // de honger.
   T.werkVanAfwisseling = function (D) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const soorten = D.behoeften && D.behoeften.afwisseling;
-    if (!soorten || !soorten.length) return 1;
-    return Math.min(1, IN.werkBijEenSoort + (soorten.length - 1) * IN.werkPerSoortErbij);
+    if (!soorten || (!soorten.length && !(D.bevolking > 0))) return 1;
+    return Math.min(1, IN.werkBijEenSoort + Math.max(0, soorten.length - 1) * IN.werkPerSoortErbij);
   };
 
   // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter. Wordt er niets achtergehouden (na het zaaien), dan mag het de volgende keer weer.

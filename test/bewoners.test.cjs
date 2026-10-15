@@ -491,8 +491,8 @@ test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en ze
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   T.zetVoorraad(D, 'gereedschap', 0); // het proefdorp heeft gereedschap, en dat versnelt het werk: hier telt alleen de weg
   T.tikGebouwenDag(D, dag);
-  // Hoe hard het dorp werkt, naar de tevredenheid en de afwisseling (js/behoeften.js): dat is wat een hele dag zou geven.
-  const heleDag = (IN.werkBasis + (1 - IN.werkBasis) * D.behoeften.tevredenheid) * T.werkVanAfwisseling(D);
+  // Hoe hard het dorp werkt, naar de afwisseling (js/behoeften.js): dat is wat een hele dag zou geven.
+  const heleDag = T.werkVanAfwisseling(D);
   const u = ver.g.uren;
   assert.ok(u && u.onderweg > 0.5, 'zijn hand is een tijd onderweg');
   assert.ok(ver.g.werkte > 0 && ver.g.werkte < heleDag, 'en dus werkt het minder dan een hele dag');

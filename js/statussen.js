@@ -70,7 +70,8 @@
       kop: T.t('The food is plain'),
       nog: T.t('The food is still plain'),
       voorbij: T.t('The food is varied again'),
-      speelt: (D) => (T.werkVanAfwisseling(D) < 1 ? T.t('the village eats only {soorten}, and works at {werk}%', afwisselingWoorden(D)) : null),
+      // Niets te eten is honger, geen eentonig eten: dan speelt alleen die status.
+      speelt: (D) => (T.werkVanAfwisseling(D) < 1 && D.behoeften.afwisseling.length ? T.t('the village eats only {soorten}, and works at {werk}%', afwisselingWoorden(D)) : null),
       erger: {
         naam: T.t('One dish'),
         kop: T.t('The village eats one dish'),

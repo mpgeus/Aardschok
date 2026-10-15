@@ -220,7 +220,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ligt, binnen een soort eerst wat bederft, het zaaigraan pas bij nood, en zet in `D.behoeften.afwisseling` de soorten die
   minstens `afwisselingDeel` van de maaltijd waren, met wat de huizen voor hun wensen aten erbij (`T.gebruikGoederen` in
   `js/wensen.js` geeft dat per soort); `T.werkVanAfwisseling` maakt er het werk van, en dat geldt voor de werkplaatsen
-  (maal de tevredenheid, `js/gebouwen.js` stap 6), de bouwers (`werkdagenVan` in `js/bouwen.js`) en de duur van het
+  (`js/gebouwen.js` stap 6; tot 15 okt maal de tevredenheid), de bouwers (`werkdagenVan` in `js/bouwen.js`) en de duur van het
   veldwerk (`werkUur` in `js/veldwerk.js`, `begin` in `js/akkers.js`); `T.voedtAlsGraan` zegt wat een stuk vult, ook
   voor de huizen, `T.etenNaastGraan` wat de andere soorten voeden, en `T.maaltijdDeel` wat het dorp per dag van één soort
   eet, voor de wijn na de pluk; de status `eentonig` staat in `js/statussen.js`, en wat een soort erbij brengt,
@@ -1015,8 +1015,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bij met `T.GEBOUW_DELEN[soort](D, g)`, en een regel kan knoppen hebben (`{ tekst, knoppen: [{ tekst, uitleg, kan, doe
   }] }`, zoals een handeling): het wachthuis (`js/soldaten.js`). Op het scherm draagt een knop waar hij staat (deel,
   regel, knop), en een klik doet de `doe` uit het briefje dat er ligt (`js/huisbriefje.js`).
-- **Wat het rekent, komt uit de regels zelf, met één weg:** het werktempo (tevredenheid maal afwisseling) is
-  `T.werkTempo(D)` in `js/gebouwen.js`, dat de nachtlus ook gebruikt; wat een gebouw maakte, telt `T.telGemaakt` (in
+- **Wat het rekent, komt uit de regels zelf, met één weg:** het werktempo is `T.werkVanAfwisseling(D)` in
+  `js/behoeften.js`, dat de nachtlus ook gebruikt (een leeg bord telt als één soort); wat een gebouw maakte, telt `T.telGemaakt` (in
   `g.gemaakt`, bewaard: `{ dagen: [{ dag, waren }], jaar, ditJaar }`), en dat roept `T.opStapel` (`js/kar.js`) aan, waar
   alles langs gaat wat een gebouw maakt (de nachtlus, de oogst, de wijn). Wat de bouwers rooien, telt niet:
   `T.hakBoom` (`js/bos.js`) geeft `{ gerooid: true }` mee.

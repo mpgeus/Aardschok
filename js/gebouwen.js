@@ -674,19 +674,6 @@
     return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
   };
 
-  // Hoe hard het dorp vandaag werkt, voor al het werk met handen: naar de tevredenheid (js/behoeften.js: "hoe hard er
-  // gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de ondergrens bij 0% tevreden) en naar de afwisseling van de
-  // maaltijd (T.werkVanAfwisseling; vraag 154, C1: de twee vermenigvuldigen). Zonder D.behoeften (nog geen dag getikt)
-  // op volle kracht. Geeft de twee los en hun product (`factor`): de nachtlus hieronder werkt ermee, en het briefje van
-  // een gebouw (js/gebouwbriefje.js) zegt welke van de twee hem tegenhoudt.
-  T.werkTempo = function (D) {
-    if (!D.behoeften) return { tevreden: 1, afwisseling: 1, factor: 1 };
-    const basis = T.BEHOEFTEN_INSTELLINGEN.werkBasis;
-    const tevreden = basis + (1 - basis) * D.behoeften.tevredenheid;
-    const afwisseling = T.werkVanAfwisseling(D);
-    return { tevreden, afwisseling, factor: tevreden * afwisseling };
-  };
-
   // Wat gebouw g maakte, voor zijn briefje (js/gebouwbriefje.js; vraag 156): per dag, de laatste gemaaktDagen, en dit
   // jaar alles samen. T.opStapel (js/kar.js) telt het, want alles wat een gebouw maakt, gaat daarlangs: de nachtlus
   // hieronder, de oogst bij de boerderij, de wijn bij de wijnboerderij. Gewone gegevens in g, dus bewaard:
@@ -1537,8 +1524,9 @@
     T.kiesBouwers(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van het werktempo van het dorp: de
-    // tevredenheid en de afwisseling van de maaltijd van vandaag (T.werkTempo hieronder).
-    const werkFactor = T.werkTempo(D).factor;
+    // afwisseling van de maaltijd van vandaag (T.werkVanAfwisseling, js/behoeften.js; vraag 154). Tot 15 okt telde de
+    // tevredenheid ook mee; Marcel koos in ronde 3 van het snoeien: "Alleen de afwisseling" (ontwerp/snoeien.md).
+    const werkFactor = T.werkVanAfwisseling(D);
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
     // Wie vandaag stilligt (T.stilOp: de visser als de beek dichtligt, de wijnboerderij buiten de pluk), maakt vandaag

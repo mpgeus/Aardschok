@@ -1923,8 +1923,10 @@ worden anders minder productief", en "A1, B1, C1, D1"; `js/behoeften.js`):
 - **De afwisseling** is hoeveel soorten er vandaag minstens een tiende van de maaltijd waren (met wat de huizen voor hun
   wensen aten). Groeit het dorp, dan moet een soort meegroeien om te blijven tellen.
 - **Het werk:** met één soort 60%, met twee 75%, met drie 90%, met vier of meer 100% (de werkbank, "Needs and the
-  winter"). Dat geldt voor al het werk: wat een werkplaats maakt (en daar ook nog de tevredenheid, zoals het was), wat de
-  bouwers per dag doen, en hoe lang het veldwerk duurt (maaien, binden, plukken, rooien).
+  winter"). Dat geldt voor al het werk: wat een werkplaats maakt, wat de bouwers per dag doen, en hoe lang het veldwerk
+  duurt (maaien, binden, plukken, rooien). Sinds 15 okt telt de tevredenheid niet meer mee (ronde 3 van het snoeien;
+  Marcel: "Alleen de afwisseling"); de tevredenheid beslist of gezinnen komen of gaan, en is het vertrouwen van het dorp.
+  Is er niets te eten, dan werkt het dorp zoals met één soort (60%).
 - **Zien:** de status **Plain fare** in de balk zolang het minder dan vier soorten zijn, en erger **One dish** met één;
   bij de muis wat een soort erbij brengt (een jager, een moestuin, een kippenhok, een visser bij water, een wijnboerderij,
   een molen en een bakkerij). De raad zegt het pas bij twee soorten of minder, zodat het doel en de groei aan het woord

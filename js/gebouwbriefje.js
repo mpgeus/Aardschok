@@ -10,7 +10,7 @@
 // een klik geeft de opdracht, als gegevens, en die gaat in bij de volgende tik; js/tik.js, vraag 170): het wachthuis, waar
 // je soldaten zet (js/soldaten.js; vraag 159). Een ander bestand geeft zijn
 // eigen delen in T.GEBOUW_DELEN[soort](D, g). Alles wat erop staat, rekent het spel al: de nachtlus van de gebouwen (g.werkte,
-// g.tekort, g.vol, g.stilWant, g.uren; js/gebouwen.js), het werktempo (T.werkTempo), en wat het maakte (T.telGemaakt, via
+// g.tekort, g.vol, g.stilWant, g.uren; js/gebouwen.js), het werktempo (T.werkVanAfwisseling), en wat het maakte (T.telGemaakt, via
 // T.opStapel in js/kar.js). T.kiesGebouw zet S.gekozen (alleen scherm, T.schermVelden in js/opslaan.js), een klik op een
 // gebouw (T.handelingVerkennen, js/verkennen.js); het briefje op het scherm legt T.ui.werkGebouwbriefjeBij (js/huisbriefje.js,
 // bij het briefje van een huis, want dat bestand is alleen scherm en laadt niet in de toetsen).
@@ -45,13 +45,10 @@
       if (u && u.onderweg >= 0.5) uit.push(T.t('{n|# hour|# hours} a day on the road, between home and work.', { n: Math.round(u.onderweg) }));
     }
     if (g.stilWant) return uit;
-    const tempo = T.werkTempo(D);
-    if (tempo.afwisseling < 0.995) {
+    const afwisseling = T.werkVanAfwisseling(D);
+    if (afwisseling < 0.995) {
       const n = ((D.behoeften && D.behoeften.afwisseling) || []).length;
-      uit.push(T.t('Little variety at table ({n|# kind|# kinds} of food): the village works at {p}%.', { n, p: procent(tempo.afwisseling) }));
-    }
-    if (tempo.tevreden < 0.995) {
-      uit.push(T.t('The village is {c}% content, and works at {p}%.', { c: procent(D.behoeften.tevredenheid), p: procent(tempo.tevreden) }));
+      uit.push(T.t('Little variety at table ({n|# kind|# kinds} of food): the village works at {p}%.', { n, p: procent(afwisseling) }));
     }
     const water = T.visserWater(D, g);
     if (water < 0.995) uit.push(T.t('The water is low: the catch is {p}% of a good day.', { p: procent(water) }));

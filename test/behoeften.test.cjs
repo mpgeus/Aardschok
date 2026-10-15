@@ -291,21 +291,7 @@ test('T.tikGebouwenDag: geen nieuw gezin op een groeidag als de tevredenheid ond
   assert.equal(S.bevolking, 1);
 });
 
-test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_INSTELLINGEN.werkBasis)', () => alsJijHetSeizoenDoet(() => {
-  const S = maakS();
-  const IN = T.BEHOEFTEN_INSTELLINGEN;
-  S.bevolking = T.GEBOUWEN.kleiput.handen;
-  S.gebouwen.push({ soort: 'kleiput', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
-  T.zetVoorraad(S, 'klei', 0);
-  const dag = 1;
-  const verwachteTevredenheid = T.berekenTevredenheid(S, dag).tevredenheid;
-  const werkFactor = IN.werkBasis + (1 - IN.werkBasis) * verwachteTevredenheid;
-  T.tikGebouwenDag(S, dag);
-  const verwacht = T.GEBOUWEN.kleiput.maakt.uit.klei * werkFactor;
-  assert.ok(Math.abs(S.voorraad.klei - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.klei}`);
-}));
-
-test('T.tikGebouwenDag: productie schaalt ook mee met de afwisseling, maal de tevredenheid (vraag 154, C1)', () => alsJijHetSeizoenDoet(() => {
+test('T.tikGebouwenDag: productie schaalt mee met de afwisseling, niet met de tevredenheid (vraag 154; ronde 3 van het snoeien)', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   S.bevolking = T.GEBOUWEN.kleiput.handen;
@@ -314,7 +300,8 @@ test('T.tikGebouwenDag: productie schaalt ook mee met de afwisseling, maal de te
   const dag = 1;
   T.tikGebouwenDag(S, dag);
   assert.deepEqual(S.behoeften.afwisseling, ['graan']);
-  const werkFactor = (IN.werkBasis + (1 - IN.werkBasis) * S.behoeften.tevredenheid) * IN.werkBijEenSoort;
+  assert.ok(S.behoeften.tevredenheid < 1, 'ook als het dorp niet helemaal tevreden is');
+  const werkFactor = IN.werkBijEenSoort;
   const verwacht = T.GEBOUWEN.kleiput.maakt.uit.klei * werkFactor;
   assert.ok(Math.abs(S.voorraad.klei - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.klei}`);
 }));
