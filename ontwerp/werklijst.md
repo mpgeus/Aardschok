@@ -48,7 +48,7 @@ is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten 
 gehucht met zeven stukken, en elk wapen een eigen slag. **Het volgende is stap 2, en meer dan een briefje** (Marcel, 15
 okt: "bij stap 2 gelijk meer. Soldaten moeten te sturen zijn. Ook wil ik basis formaties. Dit doen we in een nieuwe
 sessie"): soldaten aanklikken, sturen, en eenvoudige formaties; begin met een plan voor Marcel (bij H, "Het plan voor
-159 met 158"). **Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan voor stap 2.
+159 met 158"). **Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan voor stap 2 staat bij H, en wacht op Marcel.
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -376,6 +376,33 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   de schade verschilt; **E** rovers voor een dichte muur: E1 ze nemen wat erbuiten ligt, en anders komen ze niet, E2 ze
   hakken op de poort tot hij open is (een poort met leven); **F** het tuighuis en het schuttershof eruit (ze doen niets),
   de kazerne blijft voor later; **G** de volgorde: G1 stap 1 tot 4 zo, G2 de proefplaat van de soldaten al na stap 1. Marcel erbij (15 okt): "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor komen": de wapenmaker is een werkplaats in het gehucht waar een dorpeling wapensmid is; hij leent nu het beeld van de smidse, en zijn eigen tekening komt met de werkplaatsen in de bouwstijl (167). **De wapens** (Marcel, 15 okt: "kwa wapens wil ik: sword, spear, shield, pike, bow, crossbow, armor", en op vier vragen: vaste soorten, "Piek reikt 2, slaat harder", "Kruisboog door het harnas", "Allebei, later"): zes vaste soorten soldaten, zoals in Knights and Merchants, en een soort wacht tot al zijn stukken er zijn: militie (hooivork), speerman (speer en schild), piekenier (piek en harnas), zwaardvechter (zwaard, schild en harnas), boogschutter (boog), kruisboogschutter (kruisboog en harnas). De speer en de piek reiken twee tegels, de piek slaat harder en kost ijzer; de kruisboog schiet zo ver en zo vaak als de boog, maar schild en harnas vangen van een bout niets af; het harnas is nu van huiden (de jager), een ijzeren harnas komt later, als het dorp ijzer heeft. De wapenmaker maakt ze alle zeven. **Stap 1 is af** (15 okt, in `main`; `js/soldaten.js`, `spel.md`, "Zo werken de soldaten nu"): het tuighuis en het schuttershof zijn weg, en de kolonist van de speeltest zet een wachthuis en een wapenmaker en vraagt twee speermannen (regel 7c).
+- **Het plan voor stap 2: kiezen, sturen en formaties** (Claude, 15 okt; **wacht op Marcel**). Nu: een soldaat staat
+  overdag bij zijn wachthuis en slaapt thuis; bij een aanval rent hij naar de schout (`T.loopNaastDeSchout`); het
+  gevecht begint alleen als een rover de schout ziet (`T.zoekOntdekking`), en alleen wie binnen 12 tegels van de schout
+  staat, vecht mee (`T.militieInGevecht`). Een klik op een soldaat zegt alleen wie hij is. Wat Claude erin ziet:
+  **1** sturen en formaties horen bij het rondlopen, zoals in Jagged Alliance 2: in het gevecht heeft elk al zijn eigen
+  beurt, dus een formatie is de plek waar het gevecht begint; **2** zolang het gevecht om de schout draait, zegt sturen
+  niets: een troep bij de akker vecht pas als de schout erbij is; **3** de formatie geeft de zes soorten van stap 1 hun
+  zin: een speer en een piek steken langs wie ervoor staat, en een boog schiet niet met een vijand naast zich, dus zwaard
+  en schild voor, speer en piek erachter, de bogen achteraan; **4** in de winter stopt het werk rond vier uur en komen
+  de rovers om vijf: een post die alleen onder het werk geldt, is dan leeg. De vragen (voorstel van Claude steeds de
+  eerste): **A** wie kies je: A1 een troep per wachthuis, een klik op een soldaat kiest ze allemaal (Knights and
+  Merchants), A2 elke soldaat los, meer met een kader slepen (Age of Empires), A3 allebei; **B** de muis: B1 zoals een
+  gebouw in de hand: met de troep gekozen stuurt een klik op de grond ze erheen (hun plekken in groen bij de muis, zoals
+  de weg), een klik op een rover valt hem aan, rechtsklik of Esc laat los, en de schout blijft staan, B2 links kiezen,
+  rechts sturen (Age of Empires); **C** de formaties: C1 twee, *Line* (twee rijen: wie slaat voor, wie steekt erachter,
+  wie schiet een rij verder) en *Ring* (in een kring om de plek, de schutters in het midden: een akker of de bode van
+  alle kanten), C2 drie (*Line*, *Block* en *Ring*), C3 alleen de breedte (rijen erbij en eraf, Knights and Merchants);
+  **D** de richting: D1 ze kijken de kant op waar ze heen liepen, D2 klikken en slepen, waar je loslaat kijken ze heen;
+  **E** hoe lang: E1 een post houden ze van het opstaan tot het slapen, 's nachts slapen ze thuis en 's ochtends gaan ze
+  terug, tot je ze terugroept (*Back to the guardhouse*), E2 ook 's nachts (de wacht), E3 alleen tot het eind van de dag;
+  **F** bij een aanval: F1 wie een post heeft, houdt hem, en de rest komt naar de schout zoals nu; het gevecht begint ook
+  als een rover een soldaat ziet, en wie van jouw kant dicht bij een vechter staat, doet mee, ook zonder de schout (dan
+  speel je alleen je soldaten), F2 alles blijft om de schout, en de post geldt alleen in vrede; **G** het briefje: G1 van
+  de troep (wie erin zitten met soort en leven, wat ze doen, de formatie, *Back to the guardhouse*), G2 van één man.
+  Geen nieuwe tekeningen: een gekozen troep krijgt een ring onder de voeten, en de plekken liggen in groen op de grond,
+  zoals de weg. De volgorde: **2a** kiezen en het briefje, **2b** sturen en de post, **2c** de formaties, **2d** het
+  gevecht zonder de schout (F1); elke stap met toetsen, en de speeltest speelt zonder fouten.
 - **162** (7): de provincies op het eiland, zo'n vijf, elk met een hoofdstad en een paar dorpen; iets eigens per
   provincie hoeft niet. Op de rest van het voorstel (op het eiland zelf, `js/land.js` eruit, wat ver weg is leeft als
   getallen tot je er bent) zei Marcel niets: bevestigen als we er zijn.
