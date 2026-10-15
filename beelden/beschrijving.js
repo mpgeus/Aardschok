@@ -1861,6 +1861,142 @@
       }
      }
     },
+    "zager": {
+     "naam": "zager",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
+    "zaagster": {
+     "naam": "zaagster",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "plukker": {
      "naam": "plukker",
      "cel": [
