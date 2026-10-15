@@ -254,7 +254,11 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    verspreidt zich zoals bij "bidden" (zonder middel); bij het zaaigraan valt de vraag weg, "Only in need" wordt de
    standaard en "Guard it" gaat eruit; de wolven nemen een schaap, met een bericht met een plek, en jij stuurt je
    soldaten (de jacht en het hek uit het voorval vervallen; een hek kan terugkomen met de muren, 158). De wolven raken
-   `js/beesten.js`, waar stap 2 van vraag 170 ook werkt: dat deel zo klein mogelijk.
+   `js/beesten.js`, waar stap 2 van vraag 170 ook werkt: dat deel na die stap, als hij in `main` is. En Marcel (15 okt),
+   op twee vragen: **de graanschuur blijft in het bouwmenu, zonder werk**, tot we hem een taak geven; **brand en koorts
+   komen alleen bij hun eigen status** (de brand bij brandgevaar, de koorts bij kou of een vol dorp, in de winter vaker),
+   en **het vuur slaat over als de emmers het niet redden**, bij groot brandgevaar (zo blijft zijn keuze van 10 okt).
+   De spelregels "Fire" en "Fever" vervallen: hun "uit" was het voorval zonder vuur of zieken.
 3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman
    met zijn venster (R, de spelregel "Advisor", het trager maaien), het rapport (de knop, de spelregel), de feesten (de
    meiboom, de kerstboom, de vrije dag, de spelregel), en de raden die eraan hingen; het opslaan een versie omhoog; de
