@@ -46,18 +46,17 @@ een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch
 `code.md`, bij `js/debugvenster.js`). **159 met 158 loopt** (het plan bij H, besloten 15 okt): **stap 1, de soldaten,
 is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten in het wachthuis, de wapenmaker in het
 gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170** (Marcel, 15 okt: "de schout verdwijnt", "Het concept gaan om naar RTS"; `gameloop.md`,
-"Bijgesteld op 15 okt"): je stuurt en bouwt van bovenaf als een god, de schout is een poppetje in het dorp dat kan
-meevechten, en het gevecht is in real time, zodat er later live samen gespeeld kan worden. Op de vragen van stap 2 koos
-hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). Op het plan voor 170 koos hij op 15 okt
-een held die opnieuw opstaat, het praten geparkeerd, en **live samen spelen al in de demo** (bij I); **het bijgestelde
-plan staat bij I, en Marcel koos het zoals voorgesteld ("A1, B1, C1, D1, E1, F1"). Bezig in sessie
-`claude/sleepy-fermat-wrxjuc`** (15 okt). **Stap 0 is af** (15 okt, op die branch; `code.md` bij `js/tik.js`): de
-wereld tikt zestig keer per seconde, los van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen,
-wegen, velden, afbreken en de soldaten zijn opdrachten die op een tik ingaan; `test/tik.test.cjs` houdt twee werelden
-letter voor letter gelijk, en de speeltest speelt drie eilanden zonder fouten. Het volgende is stap 1, kijken en kiezen
-als een god (bij I).
+"Bijgesteld op 15 okt"): je stuurt en bouwt van bovenaf als een god, de schout wordt een held (*Commander*) die kan
+meevechten, het gevecht is in real time, en live samen spelen zit al in de demo, in lockstep. Het plan staat bij I,
+besloten. **Stap 0 is af** (15 okt, in `main`; `code.md` bij `js/tik.js`): de wereld tikt zestig keer per seconde, los
+van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen, wegen, velden, afbreken en de soldaten
+zijn opdrachten die op een tik ingaan. **Het volgende is stap 1, kijken en kiezen als een god** (bij I). Let op:
+CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Wacht op Marcel:**
+- **Spelen na stap 0** (vraag 170, 15 okt): het spel moet er precies zo uitzien en zo spelen als ervoor; de wereld rekent
+  nu in vaste tikken van een zestigste seconde. Let op of het lopen hortend oogt, vooral op een scherm van meer dan 60 Hz:
+  het beeld schuift tussen twee tikken nog niet mee (dat kan erbij, als je het ziet).
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
   briefje zes soorten met − en +. Druk + bij Militia: wie geen werk heeft, pakt een hooivork en staat overdag bij het
   wachthuis. Zet dan een wapenmaker (in het gehucht, 12 stammen en 14 goud), geef jezelf planken (D, +50), en druk +
