@@ -506,10 +506,25 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
   een stap ingaat. Een toets: twee werelden met hetzelfde zaad en dezelfde opdrachten blijven letter voor letter gelijk
   (de speeltest doet dat al met opslaan: "de proef met opslaan", `--opslaan`).
-- **1, kijken en kiezen als een god:** **Bezig in sessie `ccr-7ce505f3-doz7xr`** (15 okt): het plan voor stap 1. De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
+- **1, kijken en kiezen als een god:** **Bezig in sessie `ccr-7ce505f3-doz7xr`** (15 okt): bouwen. De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
   de held); links kiest, een kader kiest je soldaten, rechts stuurt (de grond: erheen, een vijand: aanvallen); Ctrl+1 tot
   9 maakt een groep (in de browser neemt Chrome Ctrl+1 zelf, daar ook Shift+1), 1 tot 9 kiest hem; het briefje van één
   man, en met meer gekozen een lijstje; een klik op een dorpeling geeft zijn briefje.
+  **Het plan** (Claude, 15 okt; **besloten**, Marcel: "Een post, tot je terugroept", "Muis tegen de zijkant van het scherm
+  bewegen, beweegt het beeld in die richting", en erbij "Een bericht brengt je erheen" en "Dubbelklik kiest zijn soort"):
+  **1a** de camera volgt de schout niet meer (alleen het gevecht in beurten kijkt nog mee, tot stap 2): de pijltjes, de
+  muis tegen de rand van het scherm en de minikaart schuiven, het wiel zoomt altijd (het overzicht van Tab is weg), en
+  **Tab** kiest de held en kijkt naar hem; slepen met de muis schuift niet meer. **1b** links kiest een soldaat, een
+  veteraan of de held (Shift erbij), een kader met links kiest je mannen, een dubbelklik alle van zijn soort in beeld; een
+  ring onder de voeten (in code); links op een dorpeling zijn briefje, op een gebouw zoals nu; het briefje van één man en
+  een lijstje van meer, op de plek van het briefje van een gebouw. Wie een gesprek heeft (een voorval, de waard, de
+  marskramer), krijgt op zijn briefje *Talk*: het gesprek gaat meteen open, zonder lopen, tot stap 5. **1c** rechts op de
+  grond: erheen, en die plek is zijn **post**: daar staat hij van het opstaan tot het slapen, 's nachts thuis, tot je hem
+  terugroept (*Back to the guardhouse* op zijn briefje; in stap 4 wordt het zijn dienst); rechts op een vijand: ze lopen
+  hem achterna (slaan doen ze pas in stap 2; tot dan begint het gevecht in beurten als een vijand de held ziet). Een bevel
+  is een opdracht (js/tik.js). **1d** Ctrl+1 tot 9 (en Shift+1 tot 9) maakt een groep, 1 tot 9 kiest hem, twee keer en de
+  camera gaat erheen; een groep is alleen scherm. **Erbij:** een bericht met een plek (rovers, een brand) brengt de camera
+  erheen met een klik of Spatie, en de plek knippert op de minikaart.
 - **2, het gevecht in real time:** elk kiest de dichtste vijand die hij ziet, loopt tot hij raakt en slaat, met de regels
   van 159; de actiepunten van een slag worden de tijd tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
 - **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
