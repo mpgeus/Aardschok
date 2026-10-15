@@ -48,8 +48,9 @@ is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten 
 gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170** (Marcel, 15 okt: "de schout verdwijnt", "Het concept gaan om naar RTS"; `gameloop.md`,
 "Bijgesteld op 15 okt"): je stuurt en bouwt van bovenaf als een god, de schout is een poppetje in het dorp dat kan
 meevechten, en het gevecht is in real time, zodat er later live samen gespeeld kan worden. Op de vragen van stap 2 koos
-hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). **Het plan voor 170 staat bij I,
-en wacht op Marcel. Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan.
+hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). Op het plan voor 170 koos hij op 15 okt
+een held die opnieuw opstaat, het praten geparkeerd, en **live samen spelen al in de demo** (bij I); **het bijgestelde
+plan staat bij I, en wacht op Marcel. Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan.
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -488,32 +489,50 @@ een deur dicht), en het begint alleen als een vijand de schout ziet; de soldaten
 van 159 (de wapens, het bereik, de schade, schild en harnas) gaan mee: de actiepunten van een slag worden de tijd tussen
 twee slagen.
 
-**Het plan** (Claude, 15 okt; **wacht op Marcel**), in vijf stappen:
-- **1, kijken en kiezen als een god:** de camera los van de schout (de pijltjes, de rand van het scherm, de minikaart, en
-  een toets naar de schout); links kiest (een man, een gebouw), een kader slepen kiest je soldaten, rechts stuurt (de
-  grond: erheen, een vijand: aanvallen); Ctrl+1 tot 9 maakt een groep, 1 tot 9 kiest hem, twee keer kijkt erheen; de
-  schout kies je zoals een soldaat; het briefje van één man (G2), en met meer gekozen een lijstje van wie het zijn.
-- **2, het gevecht in real time:** elk ziet, kiest de dichtste vijand, loopt tot hij raakt en slaat, met de regels van
-  159 (de speer reikt twee tegels, een boog schiet niet met een vijand naast zich, schild en harnas); rovers en wolven
-  vallen aan wie ze tegenkomen; bij een aanval gaat de tijd naar 1×, zoals nu. Het gevecht in beurten gaat eruit.
-- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd (wie slaat voor, wie steekt erachter, wie
-  schiet achteraan), kijkend waar ze heen liepen (D1); een post houden ze tot je ze terugroept.
-- **4, de diensten** (E): per soldaat een dienst, en vijanden kunnen op elk uur komen, ook 's nachts.
-- **5, opruimen:** wat de schout als held was (sluipen, de lantaarn, sleutel en kist, oprapen, de camera die hem volgt,
-  reizen over de landkaart met hem) en het gevecht in beurten (`handelingGevecht`, de actiepunten, het raster, de
-  knoppen).
-Daarna de muren (158, stap 3 van het plan bij H) en de tekeningen van de soldaten (stap 4).
+**Besloten** (Marcel, 15 okt, op de vragen van Claude): **1** "de schout wordt een 'held' een 'general' of 'commander'
+wanneer hij valt kan er een ander opstaan. Deze uit veteranen gekozen. De naam wordt ook veranderd naar general, of
+commander"; **2** "praten parkeren we even we focussen ons nu als richting op RTS en minder op de RPG elementen het praten
+vind ik ook moeilijk passen in dit spel het voegt voor nu weinig toe"; **3b** live samen spelen al in de demo; **4a** je
+stuurt de soldaten en de held, een dorpeling werkt vanzelf (en heeft een briefje); **5a** twee diensten per soldaat, dag
+en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beurten, gaat eruit.
 
-**De vragen** (voorstel van Claude steeds de eerste): **1** valt de schout: 1a het spel is uit, zoals nu (vraag 55), 1b
-er komt een nieuwe schout uit het dorp, en het vertrouwen zakt; **2** praten (met een boer, de heer, de marskramer, wie
-je zoekt met een voorval): 2a een klik op iemand opent het gesprek meteen, 2b de schout loopt erheen, zoals nu; **3** live
-samen spelen: 3a na de demo, maar we bouwen nu zo dat het kan (elke opdracht van een speler is een handeling met
-gegevens, en de wereld loopt in vaste stappen), en de pauze en de snelheden blijven voor wie alleen speelt, 3b al in de
-demo (dan geen pauze bij een venster, één snelheid voor iedereen, en op elke computer dezelfde wereld: groot werk);
-**4** wie stuur je: 4a de soldaten en de schout; een dorpeling werkt vanzelf, zoals in The Settlers, en heeft wel een
-briefje, 4b ook de dorpelingen, zoals in Age of Empires; **5** de diensten: 5a twee, dag (van het opstaan tot het
-slapen) en nacht, per soldaat, standaard dag (wie nacht heeft, slaapt overdag), 5b drie van acht uur; **6** het opruimen
-van stap 5: 6a alles in die lijst eruit, 6b eerst zeggen wat je wilt houden.
+**Het plan** (Claude, 15 okt, bijgesteld op die antwoorden; **wacht op Marcel**):
+- **0, de grond voor samen spelen:** de wereld loopt in vaste stappen (los van de beelden per seconde), het lot van de
+  wereld komt uit het zaad (los van wat alleen scherm is: nu trekt het scherm soms uit hetzelfde lot), en elke opdracht
+  van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
+  een stap ingaat. Een toets: twee werelden met hetzelfde zaad en dezelfde opdrachten blijven letter voor letter gelijk
+  (de speeltest doet dat al met opslaan: "de proef met opslaan", `--opslaan`).
+- **1, kijken en kiezen als een god:** de camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
+  de held); links kiest, een kader kiest je soldaten, rechts stuurt (de grond: erheen, een vijand: aanvallen); Ctrl+1 tot
+  9 maakt een groep (in de browser neemt Chrome Ctrl+1 zelf, daar ook Shift+1), 1 tot 9 kiest hem; het briefje van één
+  man, en met meer gekozen een lijstje; een klik op een dorpeling geeft zijn briefje.
+- **2, het gevecht in real time:** elk kiest de dichtste vijand die hij ziet, loopt tot hij raakt en slaat, met de regels
+  van 159; de actiepunten van een slag worden de tijd tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
+- **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
+- **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
+  praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
+  de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
+  die hem volgt, reizen met hem over de landkaart, en het gevecht in beurten.
+- **6, samen spelen:** twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
+  Steam; meedoen is het opgeslagen spel krijgen (alles staat al in `S`), en een controle dat de werelden gelijk blijven.
+Daarna de muren (158) en de tekeningen van de soldaten.
+
+**De vragen** (voorstel van Claude steeds de eerste): **A** de naam: A1 *Commander* (in de code `aanvoerder`): een
+generaal voert een leger aan, een commander past bij een dorp met een paar troepen en kan meegroeien; A2 *General*
+(`generaal`); in beide gevallen ook in de code (zo'n 590 plaatsen), in stap 5, met het opslaan een versie omhoog; **B**
+valt de held en is er geen veteraan: B1 dan de soldaat die het langst dient, en is er niemand, dan staat er een op
+zodra er weer een soldaat is (het spel gaat door), B2 dan is het spel uit; **C** samen spelen, met wie: C1 elk een eigen
+dorp op hetzelfde eiland, vrij om elkaar aan te vallen, en de heer tegen iedereen; in de demo met z'n tweeën, C2 elk een
+dorp, samen tegen de heer, C3 samen één dorp; **D** hoe: D1 *lockstep*, zoals Age of Empires en The Settlers: elke
+computer rekent de hele wereld, en alleen de opdrachten gaan over de lijn (weinig, ook over Steam); dat kan omdat de
+wereld al letter voor letter gelijk speelt met hetzelfde lot, en het risico is een klein verschil ergens (dan lopen de
+werelden uiteen), dus een controle om de zoveel stappen; D2 één computer rekent, en de ander krijgt wat er verandert
+(eenvoudiger gelijk, maar veel verkeer met honderden lopende mensen, en de ander loopt achter); **E** de klok samen (een
+jaar is 30 uur op 1×, en een gevecht loopt op 1×): E1 één snelheid voor iedereen, de laagste die iemand kiest, een gevecht
+ergens zet iedereen op 1× tot het voorbij is, pauze kan ieder, en een venster zet de tijd niet stil (alleen bij wie
+alleen speelt), E2 beslissen bij stap 6, met een proef; **F** de volgorde: F1 stap 0 eerst, dan 1 tot 6 (de grond
+achteraf leggen onder code die zonder gebouwd is, kost meer), F2 eerst de RTS (1 tot 5), dan 0 en 6.
 
 ## Af (sinds 11 okt)
 

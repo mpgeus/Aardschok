@@ -1,8 +1,8 @@
 # CLAUDE.md
 
 Tithebreaker (de werknaam sinds 11 okt, `ontwerp/commercieel.md`; de map en de opslag heten nog Aardschok): een spel dat Marcel en Claude samen bouwen, om het te verkopen (Steam eerst, als
-los programma verpakt; `ontwerp/commercieel.md`). **Sinds 11 okt de economie van The Settlers, sinds 15 okt met gevechten in
-real time** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
+los programma verpakt; `ontwerp/commercieel.md`). **De economie van The Settlers (11 okt), met gevechten in real time (15
+okt)** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
 eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht
 (RTS, als Age of Empires): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
 als een god van bovenaf; de schout (de speler in het spel) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
@@ -158,21 +158,20 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
   zijn"); een ossenkar haalt de grondstoffen op, en een waar telt pas als hij binnen is. C, vechten is allebei: je dorp
   verdedigen, en erop uit over het eiland tot het kasteel van de heer. En: **"We moeten ook zelf alles vanaf de start gaan
   bouwen"**, dus geen gehucht dat er al was. Het plan is vraag 152 in de werklijst.
-- **Wat sinds 11 okt om is:** "geen hand van bovenaf" (30 sep), "de mensen bouwen zelf" (3 okt), en heel "rijk worden en
-  arm lijken": de inner, de argwaan, het verstoppen en de getuigen zijn eruit (optie 1). Wat er nog van in de code staat,
-  gaat eruit in de snoeironde (vraag 153, stap 3).
+- **Wat om is:** "geen hand van bovenaf" (30 sep), "de mensen bouwen zelf" (3 okt), heel "rijk worden en arm lijken" (11
+  okt), en sinds 15 okt (vraag 170) de schout als wie je speelt en het gevecht in beurten; het praten is geparkeerd. Wat ervan in de code staat, gaat eruit (vraag 153 en 170).
 - **De heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij, en hij straft wat je tegen hem
   doet, niet wat je hebt (wapens mogen, 7 okt). Hij is ook de tegenstander (vraag 126): een kasteel, bondgenoten en per
   spel een ander karakter. Drie wegen naar het eind: de opstand, de koning achter zijn rug om, of trouw (dan word jij de
   nieuwe heer). Toon: zwarte satire; de heer is lachwekkend, zijn straffen niet.
 - **Twee bazen** (vraag 106): de gunst van de heer en het vertrouwen van het dorp kunnen je allebei wegsturen; onder een
   grens een waarschuwing, op 0 ben je weg.
-- **Het doel van de demo is open** (werklijst, "Wacht op Marcel"): het oude doel, een stad waar iedereen een jaar lang
-  super gelukkig is (vraag 78, 79 en 101), is op 11 okt weggehaald (snoeironde, vraag 153).
+- **Het doel van de demo is open** (werklijst, "Wacht op Marcel"); het oude doel is op 11 okt weggehaald (vraag 153).
 - **Geld verdienen** (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee verdienen"; `commercieel.md`): in januari 2027 de
   naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld ("Ik gebruik jou ☺️"):
   wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
-- **Wie valt, is dood** (vraag 55): valt de schout, dan is het spel uit; wie het overleeft, geneest na een nacht.
+- **Wie valt, is dood** (vraag 55); valt de held (de schout), dan staat een veteraan op (vraag 170). Wie het overleeft,
+  geneest na een nacht.
 
 Hoe we kiezen:
 
@@ -207,7 +206,7 @@ Hoe we kiezen:
   of betekent iets anders), verhoog dan `T.OPSLAAN_INSTELLINGEN.versie`.
 - **Geen bewakers voor regels:** een toets laadt het hele spel, dus geen `T.x && T.x(...)` of `if (T.x)` voor een regel
   uit `js/`; alleen op `T.ui`, op gegevens, en waar een bladzijde een deel van het spel laadt.
-- **Zo dat samen spelen later kan** (vraag 126, f): wat de heer of een ander dorp beslist, kiest hij uit dezelfde
+- **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170): wat de heer of een ander dorp beslist, kiest hij uit dezelfde
   handelingen als een mens in zijn plaats (zoals `T.raadsmanKeuze`), en een keuze die op de speler wacht, heeft een
   termijn en een uitkomst als die om is.
 - **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` en `handelingGevecht` geven `{ tekst, kosten, kan, doe }`,

@@ -20,8 +20,14 @@ niet. Het concept gaan om naar RTS. We houden wel vast aan het isometrische."** 
   1", "B2" (links kiezen, rechts sturen), "C1 voor nu" (twee formaties, *Line* en *Ring*; "Later kijken we verder wat er
   nodig is"), "D1" (ze kijken de kant op waar ze heen liepen), "Je kunt shifts instellen. Anders zou een vijand
   standaard in de nacht kunnen aanvallen", en "G2" (het briefje van één man).
+- **De schout wordt een held** (Marcel, 15 okt: "een 'held' een 'general' of 'commander' wanneer hij valt kan er een
+  ander opstaan. Deze uit veteranen gekozen. De naam wordt ook veranderd naar general, of commander").
+- **Het praten is geparkeerd** ("we focussen ons nu als richting op RTS en minder op de RPG elementen het praten vind ik
+  ook moeilijk passen in dit spel het voegt voor nu weinig toe").
+- **Live samen spelen zit al in de demo** (3b). Je stuurt alleen de soldaten en de held; een dorpeling werkt vanzelf, zoals
+  in The Settlers (4a). Een soldaat heeft een dienst, dag of nacht (5a).
 - Het isometrische beeld blijft. Wat hieronder over de beurten, Jagged Alliance 2 en de schout als held staat, is de
-  richting van 11 okt; wat ervan in de code staat, gaat eruit (vraag 170).
+  richting van 11 okt; wat ervan in de code staat, gaat eruit (vraag 170, 6a; het plan in de werklijst, bij I).
 
 ## De richting: de economie van The Settlers, met gevechten in beurten (Marcel, 11 okt) (bijgesteld 15 okt, hierboven)
 
