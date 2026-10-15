@@ -434,9 +434,12 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   het verpakken voor Steam uit met één schakelaar. **Af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
   `js/debugvenster.js`, en `T.komtKlaar` in `js/gebouwen.js`: de nacht en het venster maken een gebouw op dezelfde
   manier af).
-- **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
-  heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
-  is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.
+- **Nog open** (als we er zijn): **paarden, voor ruiters en ridders** (Marcel, 15 okt, bij de soldaten van 159: "noteer
+  ook even dat ik uiteindelijk paarden wil. voor ruiters en ridders"): uiteindelijk, na de zes soorten van stap 1; een
+  stal en een stalmeester stonden al als idee in `spel.md` ("Paarden: de stal en de stalmeester"). **161**, het nieuws
+  echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de heer zijn, welk dorp morrt), en met een herberg
+  blijven ze langer; **160**, eerst losse ritten (een kar met wat over is naar een stad, dagen onderweg, een escorte
+  helpt), vaste routes later.
 
 ## Af (sinds 11 okt)
 
