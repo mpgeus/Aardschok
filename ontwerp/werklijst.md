@@ -506,7 +506,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
   een stap ingaat. Een toets: twee werelden met hetzelfde zaad en dezelfde opdrachten blijven letter voor letter gelijk
   (de speeltest doet dat al met opslaan: "de proef met opslaan", `--opslaan`).
-- **1, kijken en kiezen als een god:** de camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
+- **1, kijken en kiezen als een god:** **Bezig in sessie `ccr-7ce505f3-doz7xr`** (15 okt): het plan voor stap 1. De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
   de held); links kiest, een kader kiest je soldaten, rechts stuurt (de grond: erheen, een vijand: aanvallen); Ctrl+1 tot
   9 maakt een groep (in de browser neemt Chrome Ctrl+1 zelf, daar ook Shift+1), 1 tot 9 kiest hem; het briefje van één
   man, en met meer gekozen een lijstje; een klik op een dorpeling geeft zijn briefje.
