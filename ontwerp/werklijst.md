@@ -344,6 +344,25 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
   weer inleveren. Eerst drie wapens: de speer (planken), de boog (planken), zwaard en schild (ijzer en planken); zonder
   wapen een hooivork.
+- **Het plan voor 159 met 158** (Claude, 15 okt, wacht op Marcel; wat er is, zochten twee agents uit). Nu: de militie is
+  wie in het wachthuis werkt (2 handen) plus de veteranen; `wapens` is één waar (+2 schade); het gevecht kent alleen
+  slaan op de tegel ernaast; het tuighuis, het schuttershof en de kazerne staan in het bouwmenu maar doen niets; een
+  muur is alleen gegevens, `js/wegen.js` kent alleen de weg, begaanbaar is voor iedereen gelijk (alleen de schout opent
+  deuren), en vinden rovers geen weg, dan komen ze stil niet. Wat Claude erin ziet: 158 en 159 versterken elkaar (de
+  speer reikt twee tegels en de boog schiet ver, dus achter de palissade tellen ze; zwaard en schild houden de poort).
+  Vier stappen: **1** soldaten zonder nieuwe tekeningen (drie waren, de wapenmaker, voltijds, inleveren, elk wapen een
+  eigen slag in het gevecht); **2** een soldaat aanklikken (D): zijn briefje; **3** muren: de weg wordt een lijn met een
+  soort (weg, palissade, stenen muur), een poort waar een weg kruist, open voor je mensen en de kar, dicht voor rovers en
+  wolven; een palissade 1 stam per tegel, een stenen muur 2 steen, en steen over een palissade bouwt hem om; **4** de
+  tekeningen, eerst in woorden, dan één proefplaat. De vragen (voorstel van Claude steeds de eerste): **A** waar wordt
+  iemand soldaat: A1 in het wachthuis (knoppen op zijn briefje, 6 plaatsen; het werk van wachter vervalt), A2 een eigen
+  kazerne in het gehucht, A3 je geeft een dorpeling zelf een wapen; **B** wie: B1 alleen wie geen werk heeft, B2 ook
+  iemand uit een werkplaats; **C** de wapenmaker: C1 naar het gehucht (speren in het eerste jaar), C2 blijft in het dorp;
+  **D** het gevecht: D1 elk wapen een eigen slag (de hooivork zwak, de speer reikt twee tegels, de boog schiet tot 8
+  tegels waar hij ziet maar niet met een vijand naast zich, zwaard en schild slaan hard en vangen 2 schade af), D2 alleen
+  de schade verschilt; **E** rovers voor een dichte muur: E1 ze nemen wat erbuiten ligt, en anders komen ze niet, E2 ze
+  hakken op de poort tot hij open is (een poort met leven); **F** het tuighuis en het schuttershof eruit (ze doen niets),
+  de kazerne blijft voor later; **G** de volgorde: G1 stap 1 tot 4 zo, G2 de proefplaat van de soldaten al na stap 1.
 - **162** (7): de provincies op het eiland, zo'n vijf, elk met een hoofdstad en een paar dorpen; iets eigens per
   provincie hoeft niet. Op de rest van het voorstel (op het eiland zelf, `js/land.js` eruit, wat ver weg is leeft als
   getallen tot je er bent) zei Marcel niets: bevestigen als we er zijn.
