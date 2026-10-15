@@ -27,8 +27,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een veld breek je niet los af** (14 okt, C stap 5; Marcel koos "wegen en gebouwen", de velden gaan mee met hun
   boerderij): ook een veld dat je net verkeerd legde en dat nog niet geploegd is, blijft. Als dat stoort: afbreken voor
   een veld in aanleg.
-- **De kolonist bouwt geen schuur** (14 okt, C stap 5, f): de afspraak was een weg "van elke schuur naar het huis van de
-  schout"; omdat hij nooit een schuur zet, legt hij een weg van de opslag naar elk gebouw waar de kar heen rijdt.
+- **De kolonist laat het dorp niet groeien** (15 okt, C stap 6): hij bouwt hutten alleen voor de gezinnen uit het kamp,
+  ook als het spel zegt dat er een gezin wil komen, en nooit een put, die een keuter wil voor zijn hut tot een huis groeit.
+  Zo blijft het dorp twee jaar 17 mensen, wordt het nooit een dorp, en meet de speeltest de planken niet.
+- **In het gehucht zijn planken nergens voor** (15 okt, C stap 6): de zagerij maakt er 60 (`T.maaktTot`) en staat dan stil,
+  en de marskramer koopt ze niet. Ze tellen pas als het dorp er is.
+- **De kar haalt al een stapel van 1** (15 okt, C stap 6): gemiddeld 2 van de 8 per rit, en de helft van zijn rijden is
+  leeg. Nu kan dat (hij is 45 tot 60% bezig); krijgt hij het druk als het dorp groeit, dan is `minstens` het getal (met 4:
+  de helft van de ritten, maar een waar ligt twee dagen op de stapel in plaats van een).
+- **De vergelijking ziet een `--getal` niet** (15 okt; `gereedschap/speeltest/vergelijk.cjs`): met `--getal ... --tegen`
+  zegt `vergelijking.md` "Geen waarde was anders" en dat het verschil "van de code" komt, want de waarden komen uit de
+  code en de stand draagt het getal in zijn naam. De tabel per spel klopt wel.
 - **Een huis dat wilde groeien en dat je afbreekt** (14 okt, C stap 5): de appelbomen die het gezin ervoor zou kappen,
   houden hun teken (`v.teKappen`, `js/bos.js`), en worden door een houthakker of bouwer als boom gehakt. Klein.
 

@@ -153,6 +153,44 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 15 okt: de ossenkar gemeten, met de keten erin (werklijst C, stap 6)
+
+`npm run speeltest -- --zaden 1-5 --tegelijk 3 --naam c6`, en twee jaar op eiland 3 en 4 (`--zaden 3-4 --jaren 2 --naam
+c6-jaren`), op het spel van `7dd96083` (branch `claude/wizardly-sagan-qw7f8f`). Nieuw in de speeltest (Marcel, 15 okt):
+de tabel "De ossenkar" (`gereedschap.md`), en de kolonist zet een schuur richting de rotsen met een steengroeve erbij, en
+verkoopt de marskramer hout en graan als hij op goud wacht. (Eiland 1 en 2 haalden het tweede jaar niet: de schout valt
+daar, dus speelden 3 en 4 twee jaar.)
+
+- **Geen fout in de console**, op alle zeven. Geen dag honger of kou, en geen doden in de winter.
+- **De kar van het huis van de schout is 45 tot 60% van de werktijd bezig**, in de winter meer (66 tot 79%: de dag is
+  korter), in het tweede jaar even veel (het dorp groeit niet, zie hieronder). Hij rijdt de helft daarvan leeg (heen naar
+  een stapel, terug vol), en laadt 11%. Zo'n 700 tot 1100 ritten per jaar, 2 tot 3 per dag, met **gemiddeld 2 van de 8**
+  op de kar: hij haalt al een stapel van 1 (`minstens`). Wat hij vervoert: 5 à 6 per dag, het meest hout, groente,
+  eieren en vlees. Een rit loopt soms na de werktijd door (8 tot 47 uur per jaar). Eén kar is ruim genoeg voor een
+  gehucht, zoals op 14 okt voorzien.
+- **De kar van de schuur is 11 tot 38% bezig**, met steen van de steengroeve en groente van een moestuin die dichter bij
+  de schuur staat. De schuur kwam op dag 45 tot 135: hij wachtte 32 tot 117 dagen op goud.
+- **Een waar ligt gemiddeld 15 tot 20 uur op een stapel**, met de nacht erbij: wat 's nachts gemaakt is, is de volgende
+  werkdag binnen. Op alle stapels samen gemiddeld 4 tot 6. **De oogst** is de grote stapel: bij de boerderij 20 tot 114,
+  in het tweede jaar 225 tot 263, en dan is de stapel van de boerderij 3 tot 16 ochtenden vol.
+- **Wat op de kar wacht, is weinig:** een bouwplaats wachtte 0 tot 8 dagen op hout, en de zagerij miste 1 tot 10 dagen
+  stammen, maar op eiland 2 lag het hout er dan ook niet (0 dagen met de opslag vol).
+- **De keten zaagt maar even:** de zagerij maakt tot er 60 planken liggen (`T.maaktTot`), rond dag 40, en staat dan de
+  rest van het jaar stil. In het gehucht gebruikt niemand planken, en de marskramer koopt ze niet.
+- **Het dorp komt er niet, ook niet in twee jaar:** 17 mensen aan het begin, 17 en 18 na twee jaar. De kolonist bouwt
+  alleen hutten voor de gezinnen uit het kamp, ook als het spel zegt "A family wants to come, but there is no room", en
+  nooit een put; een keuter wil eten, brandhout en een put (`T.STANDEN`, `js/wensen.js`), en pas dan groeit zijn hut
+  tot een huis en is hij dorpeling. Zo meet de speeltest de planken en een groeiend dorp niet.
+- **Het goud:** de 20 uit de kar zijn na de zagerij op (rond dag 15 tot 30), en daarna komt er alleen goud van de
+  marskramer. Hout brengt 1 goud per 20 (de schuur kost 6 goud: 120 hout), graan 2 tot 4 per 10. Hij komt rond dag 34,
+  124 en 214.
+- **De schout valt op eiland 1 en 2** (wolven op 11 februari, een rover op 12 december): hij vecht alleen, zoals op 12 en
+  14 okt. Dat hoort bij F.
+- **Eiland 5:** de rotsen liggen zo ver dat ook vanaf de schuur geen steengroeve past.
+- **Met `minstens` 4 in plaats van 1** (`--getal KAR_INSTELLINGEN.minstens=4 --naam c6-minstens4`): de kar is maar 21 tot
+  38% bezig, met de helft van de ritten, maar een waar ligt dan 48 tot 62 uur op een stapel (twee dagen), en het dorp eet
+  wat vaker minder soorten (het eten telt pas als het binnen is). Hetzelfde vervoerd per dag.
+
 ## De speeltest van 14 okt, avond: de zagerij en de planken (werklijst vraag 157)
 
 `npm run speeltest -- --zaden 1-5 --tegelijk 3`, op `0361e685` (branch `claude/village-economy-gameplay-lmsnyg`): de

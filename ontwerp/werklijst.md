@@ -37,9 +37,17 @@ bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **1
 (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt de keten van stammen tot planken
 nu"): een kapschuur in de stijl van het land, na vijf proefplaten. **168, de zager aan het werk, is af** (15 okt, op
 dezelfde branch; `spel.md`, bij de keten): de eerste hand staat voor de deur en zaagt aan de zaagbok, in zijn eigen
-uiterlijk. **Het volgende is C6**, meten en spelen, met de keten erin.
+uiterlijk. **C6 is gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt"): één kar is ruim genoeg voor een gehucht
+(45 tot 60% bezig), een waar ligt minder dan een dag op een stapel, en weinig wacht op de kar; maar het dorp groeit niet
+(de kolonist bouwt geen put en geen hut voor wie erbij wil), dus de planken meet het nog niet. **Het volgende wacht op
+Marcel** (hieronder).
 
 **Wacht op Marcel:**
+- **Na C6 kiezen** (15 okt): **a** de kolonist laat het dorp groeien zoals een speler die naar de raad luistert (een put
+  als de hutten hem missen, een hut als er een gezin wil komen), en dan nog eens twee jaar op eiland 3 en 4: haalt het
+  het dorp, gebruikt het de planken, en hoe druk wordt de kar dan; of **b** C6 is af zoals het is, en door naar ronde 3
+  van A. Voorstel van Claude: **a**, want zonder groei meet geen speeltest de keten, het dorp of een volle kar. En
+  `minstens` (de kleinste stapel die de kar haalt) blijft 1: met 4 ligt een waar twee dagen op de stapel.
 - **De zager bekijken** (168, 15 okt): zet een zagerij, en kijk overdag (niet in de schaft): de eerste hand staat op de
   tegel voor de deur en zaagt met de spanzaag aan de stam op de bok. Heeft de zagerij geen stammen, of is zijn stapel
   vol, dan staat er niemand.
@@ -209,8 +217,15 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    de velden van een boerderij gaan mee; niet af te breken zijn het huis van de schout en het plein; **f** de kolonist legt ook wegen, van elke schuur naar het huis van de schout, zodat stap 6 meet wat een
    weg doet.
 6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
-   stapels worden. Dan ronde 3 van A. **Bezig in sessie `claude/wizardly-sagan-qw7f8f`** (15 okt): het plan voor het
-   meten, wacht op Marcel.
+   stapels worden. Dan ronde 3 van A. **Bezig in sessie `claude/wizardly-sagan-qw7f8f`** (15 okt). **Besloten**
+   (Marcel, 15 okt, op twee vragen van Claude): **de kolonist zet een schuur richting de rotsen**, zodat de speeltest ook
+   een tweede kar meet en de steengroeve binnen bereik komt; en **vijf eilanden spelen een jaar, twee spelen door tot
+   het tweede jaar**, zodat het dorp er komt en de planken ook gebruikt worden. Na de zagerij bleek het goud op (de 20
+   uit de kar), en de speeltest verkocht nooit iets, dus de schuur (6 goud) kwam er pas na een jaar; **de kolonist
+   verkoopt nu aan de marskramer** wat de winter niet nodig heeft als hij op goud wacht (Marcel, 15 okt). Het meten zit in de speeltest, niet in
+   het spel: wat elke kar doet (rijden, vol of leeg, laden, stil), de ritten, hoe groot de stapels worden en hoe lang
+   een waar erop ligt, en wat er op de kar wacht (een bouwplaats, een werkplaats zonder stammen, een volle stapel).
+   **Gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt"); wat nu, staat bij "Wacht op Marcel".
 
 Wat Claude erbij zag (14 okt): met de getallen van nu is één kar ruim genoeg voor een gehucht (hij rijdt binnen 16
 tegels drie tot vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
