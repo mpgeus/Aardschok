@@ -50,13 +50,13 @@ gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170*
 meevechten, het gevecht is in real time, en live samen spelen zit al in de demo, in lockstep. Het plan staat bij I,
 besloten. **Stap 0 is af** (15 okt, in `main`; `code.md` bij `js/tik.js`): de wereld tikt zestig keer per seconde, los
 van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen, wegen, velden, afbreken en de soldaten
-zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, op de branch `ccr-7ce505f3-doz7xr`, nog niet in `main`;
+zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, in `main`;
 `spel.md`, "Zo werkt kijken, kiezen en sturen nu"): de camera los, links kiezen, rechts sturen (de post), groepen onder
 een cijfer, en een bericht brengt je erheen. **Het volgende is stap 2, het gevecht in real time** (bij I). Let op:
 CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Wacht op Marcel:**
-- **Kijken, kiezen en sturen bekijken** (vraag 170, stap 1, 15 okt, op de branch `ccr-7ce505f3-doz7xr`): Nieuw spel. De
+- **Kijken, kiezen en sturen bekijken** (vraag 170, stap 1, 15 okt): Nieuw spel. De
   camera volgt de schout niet meer: de pijltjes of de muis tegen de rand van het scherm schuiven het beeld, het wiel zoomt,
   een klik op de minikaart kijkt daar, en Tab kiest de held en kijkt naar hem. Zet een wachthuis (B) en op zijn briefje
   twee man militie (+). Klik op een soldaat (een gouden ring om zijn voeten, rechts zijn briefje), trek een kader om
@@ -519,7 +519,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
   een stap ingaat. Een toets: twee werelden met hetzelfde zaad en dezelfde opdrachten blijven letter voor letter gelijk
   (de speeltest doet dat al met opslaan: "de proef met opslaan", `--opslaan`).
-- **1, kijken en kiezen als een god:** **af** (15 okt, op de branch `ccr-7ce505f3-doz7xr`, nog niet in `main`; `spel.md`,
+- **1, kijken en kiezen als een god:** **af** (15 okt, in `main`; `spel.md`,
   "Zo werkt kijken, kiezen en sturen nu"). De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
   de held); links kiest, een kader kiest je soldaten, rechts stuurt (de grond: erheen, een vijand: aanvallen); Ctrl+1 tot
   9 maakt een groep (in de browser neemt Chrome Ctrl+1 zelf, daar ook Shift+1), 1 tot 9 kiest hem; het briefje van één
