@@ -43,7 +43,8 @@ uiterlijk. **C6 is gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt")
 okt: "Uiteindelijke balancing wordt later gedaan", "Ikzelf test het echte spel wel", "jij hoeft alleen te testen of het
 werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balans**, en het groeien test Marcel zelf, met
 een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
-`code.md`, bij `js/debugvenster.js`). **Het volgende is 159 met 158** (H).
+`code.md`, bij `js/debugvenster.js`). **Het volgende is 159 met 158** (H). **Bezig in sessie
+`claude/werklijst-doorzetten-4m1kji`** (15 okt): het plan voor 159 met 158, voor Marcel.
 
 **Wacht op Marcel:**
 - **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
