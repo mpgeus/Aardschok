@@ -900,13 +900,15 @@
     binden: { figuur: 'binder', houding: 'binden' },
     dragen: { figuur: 'binder', houding: 'lopen' },
     dorsen: { figuur: 'dorser', houding: 'dorsen' },
+    // Aan de zaagbok van de zagerij (js/veldwerk.js, vraag 168): de spanzaag heen en weer.
+    zagen: { figuur: 'zager', houding: 'zagen' },
   };
   // Wat hij draagt, en welk vel daarbij hoort als hij niet aan het werk is (onderweg naar huis of de schuur).
   const DRAAGT = { bundel: 'sprokkelaar', mand: 'plukker', schoof: 'drager' };
-  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser'];
+  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser', 'zager'];
   const VAN_EEN_VROUW = {
     maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster', hakker: 'hakster',
-    plukker: 'plukster', binder: 'binster', drager: 'draagster', dorser: 'dorster',
+    plukker: 'plukster', binder: 'binster', drager: 'draagster', dorser: 'dorster', zager: 'zaagster',
   };
   // Een vrouw: een boerin (vel `boerin`), of een bewoner die een vrouw is (js/bewoners.js, e.bewoner).
   const isVrouw = (e) => e.vel === 'boerin' || !!(e.bewoner && e.bewoner.geslacht === 'vrouw');

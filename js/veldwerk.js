@@ -466,6 +466,38 @@
     } else stop(e);
   }
 
+  // De zager (werklijst vraag 168; Marcel, 14 okt: "Ik wil wel dat je iemand ziet werken"): de eerste hand van een
+  // zagerij die vandaag zaagt (g.werkte, js/gebouwen.js), staat op de tegel voor haar deur en zaagt aan de stam op de
+  // zaagbok, die daar binnen ligt (gereedschap/pixelart/huizen.cjs, grootGebouw 'zagerij'). Zaagt de zagerij niet (geen
+  // stammen, de stapel vol), dan staat hij er ook niet; de tweede hand werkt zoals elke werkplaats, bij de deur.
+  function zagerijWaarHijZaagt(D, e) {
+    const p = bewonerVan(D, e);
+    const g = p && p.werk;
+    if (!g || !g.klaar || g.soort !== 'zagerij' || !(g.werkte > 0)) return null;
+    const eerste = ((D.bewoners && D.bewoners.mensen) || []).find((q) => q.werk === g);
+    return eerste === p ? g : null;
+  }
+  function zaag(D, e, g) {
+    const w = D.wereld;
+    const deur = T.deurVan(w, g);
+    const r = T.voetVanGebouw(g);
+    // de tegel binnen de voet, naast de deur: daar ligt de zaagbok, en daar kijkt hij naar
+    const op = { x: Math.max(r.x, Math.min(r.x + r.b - 1, deur.x)), y: Math.max(r.y, Math.min(r.y + r.h - 1, deur.y)) };
+    // aan de zaagbok zaagt hij door tot de werkdag om is (tot: zolang, maar niet null, anders staat hij stil; js/sprites.js;
+    // een gewoon getal, want Infinity wordt bij het opslaan null)
+    const zagen = { soort: 'zagen', x: deur.x, y: deur.y, op, tot: Number.MAX_VALUE, rust: false };
+    if (e.pad.length) return;
+    if (e.tx === deur.x && e.ty === deur.y) {
+      if (!e.werkt || e.werkt.soort !== 'zagen' || e.werkt.tot !== Number.MAX_VALUE) e.werkt = zagen;
+      return;
+    }
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, deur, {});
+    if (pad && pad.length) {
+      T.geefRoute(e, pad, deur);
+      e.werkt = { ...zagen, tot: null };
+    } else stop(e);
+  }
+
   // De jager waar dit poppetje werkt, als die wild heeft om op te jagen (js/beesten.js, g.wild); of null.
   function hutWaarHijJaagt(D, e) {
     const p = T.bewonerVan(D, e);
@@ -804,10 +836,11 @@
       if (e.dood) continue;
       const kavel = kavelDieHijRooit(D, e);
       const schuur = kavel ? null : schuurWaarHijHakt(D, e);
-      const hut = kavel || schuur ? null : hutWaarHijJaagt(D, e);
-      const wijn = kavel || schuur || hut ? null : wijngaardWaarHijPlukt(D, e, dag);
-      const oogst = kavel || schuur || hut || wijn ? null : oogstVan(D, e);
-      if (!kavel && !schuur && !hut && !wijn && !oogst && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const zagerij = kavel || schuur ? null : zagerijWaarHijZaagt(D, e);
+      const hut = kavel || schuur || zagerij ? null : hutWaarHijJaagt(D, e);
+      const wijn = kavel || schuur || zagerij || hut ? null : wijngaardWaarHijPlukt(D, e, dag);
+      const oogst = kavel || schuur || zagerij || hut || wijn ? null : oogstVan(D, e);
+      if (!kavel && !schuur && !zagerij && !hut && !wijn && !oogst && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -824,7 +857,7 @@
         if (e.werkt.tot != null) e.werkt.tot = Math.min(e.werkt.tot, nu);
         else e.werkt.rust = false;
       }
-      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : zagerij ? 'zagen' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudHalfWerk(D, e, nu);
         stop(e);
@@ -838,6 +871,7 @@
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
       else if (soort === 'rooien') rooiTegels(D, e, vw, nu, T.teRooienOp(D, kavel));
       else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
+      else if (soort === 'zagen') zaag(D, e, zagerij);
       else if (soort === 'jagen') jaag(S, D, e, nu, hut);
       else if (soort === 'plukken') pluk(S, D, e, nu, wijn);
       else if (soort === 'binnenhalen') haalBinnen(S, D, e, nu, oogst);

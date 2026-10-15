@@ -196,8 +196,9 @@ stonden, blijven. Wat een werkplaats van hout maakt (de wapenmaker, de kuiper), 
 bij 159. De kolonist van de speeltest bouwt een zagerij vóór het dorp. **De tekening** (na vijf proefplaten; Marcel: "Het
 moet er 1 zijn als werkplaats. De persoon heeft een eigen huis ernaast", en "Kapschuur in de stijl"): een kapschuur van de
 huizenbouwer in de stijl van het land, onderaan open tussen palen, met de gevels en het dak van de stijl, en eronder de
-stammen, de planken en aan de rand de zaagbok; de zager woont in zijn eigen huis. Wie aan de zaagbok zaagt, komt bij
-vraag 168.
+stammen, de planken en aan de rand de zaagbok; de zager woont in zijn eigen huis. **De zager** (vraag 168; Marcel: "Ik
+wil wel dat je iemand ziet werken"): zolang de zagerij zaagt, staat de eerste hand op de tegel voor de deur en zaagt met
+de spanzaag aan de stam op de zaagbok; staat de zagerij stil (geen stammen, de stapel vol), dan zaagt niemand.
 
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en

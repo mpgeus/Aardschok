@@ -132,12 +132,15 @@ HOUDINGEN.wiedster = HOUDINGEN.wieder;
 HOUDINGEN.sprokkelaarster = HOUDINGEN.sprokkelaar;
 HOUDINGEN.maaister = { maaien: { beelden: MAAIER_BEELDEN, fps: MAAIER_FPS } };
 HOUDINGEN.hakster = HOUDINGEN.hakker;
+HOUDINGEN.zager = { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: LOOP_FPS }, zagen: { beelden: 12, fps: 8 } };
+HOUDINGEN.zaagster = HOUDINGEN.zager;
 // welk lijf elke figuur heeft, en dus hoe snel hij loopt
 const LIJF_VAN = {
   zaaier: 'boer', wieder: 'boer', sprokkelaar: 'boer', hakker: 'boer',
   zaaister: 'boerin', wiedster: 'boerin', sprokkelaarster: 'boerin', maaister: 'boerin', hakster: 'boerin',
   plukker: 'boer', binder: 'boer', drager: 'boer', dorser: 'boer',
   plukster: 'boerin', binster: 'boerin', draagster: 'boerin', dorster: 'boerin',
+  zager: 'boer', zaagster: 'boerin',
 };
 const snelheidVan = (naam) => LIJVEN[LIJF_VAN[naam]].snelheid;
 
@@ -1325,6 +1328,123 @@ function hakker(stand, lijf = 'boer') {
   });
 }
 
+// ---------------------------------------------------------------- de zager en de zaagster
+
+// De spanzaag (werklijst vraag 168; Marcel, 14 okt: "Ik wil wel dat je iemand ziet werken"): een raam van twee armen van
+// essenhout met een kruishout halverwege, en onderin, tussen de armen, het blad: dun ijzer, met een licht randje van tandjes
+// aan de onderkant. Gebouwd vanuit de onderkant van de achterste arm A (bij de zager), langs het blad naar voren (voor) en
+// langs de armen omhoog (op). Geeft de greep (onderaan de achterste arm, boven het blad) en het kruishout terug.
+const SPANZAAG = { breed: 30, hoog: 21, arm: [1.05, 0.8], kruis: 0.75, blad: { hoog: 2.6, dik: 0.3 }, greep: 5.5 };
+function spanzaag(ctx, A, voor, op) {
+  const { M, delen } = ctx;
+  const dHout = KAR.deel(ctx, 'zaag');
+  const dBlad = KAR.deel(ctx, 'zaagblad');
+  const mBlad = KAR.materiaal(ctx, 'zaagblad', { ramp: 'ijzer', lo: 1.6, hi: 5.6, glans: 1.4, detail: true });
+  const mTand = KAR.materiaal(ctx, 'tandjes', { ramp: 'ijzer', lo: 4, hi: 7, glans: 2, detail: true });
+  const Z = SPANZAAG;
+  const B = HH.plus(A, HH.keer(voor, Z.breed));
+  const hoogte = (P, t) => HH.plus(P, HH.keer(op, Z.hoog * t));
+  // de armen, iets boven het blad beginnend, en het kruishout halverwege
+  delen.push(kegel(hoogte(A, -0.08), hoogte(A, 1), Z.arm[0], Z.arm[1], M.hout, dHout));
+  delen.push(kegel(hoogte(B, -0.08), hoogte(B, 1), Z.arm[0], Z.arm[1], M.hout, dHout));
+  delen.push(kegel(hoogte(A, 0.55), hoogte(B, 0.55), Z.kruis, Z.kruis, M.hout, dHout));
+  // het touw dat het raam spant, tussen de toppen
+  delen.push(kegel(hoogte(A, 0.94), hoogte(B, 0.94), 0.35, 0.35, M.hout, dHout));
+  // het blad: een dunne plaat langs voor, net onder de onderkant van de armen
+  const n = HH.eenheid(HH.kruis(voor, op));
+  const M0 = HH.plus(HH.tussen(A, B, 0.5), HH.keer(op, -Z.blad.hoog * 0.3));
+  const lokaal = (x, y, z) => {
+    const q = [x - M0[0], y - M0[1], z - M0[2]];
+    return [HH.inwendig(q, voor), HH.inwendig(q, op), HH.inwendig(q, n)];
+  };
+  delen.push({
+    f: (x, y, z) => {
+      const [a, b, c] = lokaal(x, y, z);
+      return Math.max(Math.abs(a) - Z.breed / 2 - 0.6, Math.abs(b) - Z.blad.hoog / 2, Math.abs(c) - Z.blad.dik);
+    },
+    g: [...M0, Z.breed / 2 + 2],
+    m: (x, y, z) => (lokaal(x, y, z)[1] < -Z.blad.hoog / 2 + 0.8 ? mTand : mBlad),
+    deel: dBlad,
+  });
+  return { greep: hoogte(A, Z.greep / Z.hoog), kruis: (t) => HH.plus(hoogte(A, 0.55), HH.keer(voor, Z.breed * t)) };
+}
+
+// Het zagen, fase 0..1, een lus van twaalf beelden. Hij staat voor de zaagbok en kijkt ernaar: de stam ligt dwars voor
+// hem, op heuphoogte, en hij zaagt er een stuk af. De zaag staat rechtop in de snede, het blad langs zijn kijkrichting;
+// zijn rechterhand houdt de greep onderaan de achterste arm, zijn linkerhand het kruishout. Hij duwt de zaag naar voren
+// (0 tot 6) en trekt hem terug (6 tot 12), en zijn lijf gaat mee: bij het duwen leunt hij verder voorover en schuift hij
+// naar voren, bij het trekken komt hij terug, en de rechterschouder draait mee. ZAGEN: waar de zaag in de snede staat
+// (de onderkant van de achterste arm, bij het begin van de slag), hoe ver een slag gaat, en het lijf.
+const ZAGEN = { A: [4, 13.5, 40.5], slag: 9, buig: [15, 7], voor: [0.4, 1.4], zak: 1.8, draai: [-6, 7], kruis: 0.32 };
+const ZAAG_LIJF = {
+  boer: { buig: 0, staan: { hand: [15.5, 1.2, 33] }, lopen: { hand: [15, 2, 34] } },
+  boerin: { buig: 4, staan: { hand: [14.2, 1.4, 31.5] }, lopen: { hand: [13.8, 2.2, 32.5] } },
+};
+const slagVan = (fase) => Math.sin(2 * Math.PI * fase); // 1 vooruit, -1 terug
+function houdingZagen(fase, lijf = 'boer') {
+  const h = rustDorpeling();
+  const s = slagVan(fase);
+  h.romp.buig = ZAGEN.buig[0] + ZAGEN.buig[1] * s + ZAAG_LIJF[lijf].buig;
+  h.romp.draai = ZAGEN.draai[0] + ZAGEN.draai[1] * s;
+  h.zak = ZAGEN.zak;
+  h.voor = ZAGEN.voor[0] + ZAGEN.voor[1] * s;
+  h.nek.knik = -0.4 * h.romp.buig;
+  h.nek.draai = -0.6 * h.romp.draai;
+  return h;
+}
+
+// De zager (lijf 'boer') of de zaagster ('boerin'), met de spanzaag: aan de zaagbok van de zagerij (vraag 168). stand:
+// { houding: 'staan' | 'lopen' | 'zagen', fase, stam }. stam: alleen voor de proefplaat, een stam op de plek waar die van
+// de zaagbok ligt.
+//   staan: de zaag hangt aan zijn rechterhand naast hem, aan het kruishout; de linkerarm hangt.
+//   lopen: zo, en de zaag gaat met de romp mee.
+function zager(stand, lijf = 'boer') {
+  const L = LIJVEN[lijf];
+  const B = ZAAG_LIJF[lijf];
+  const naam = stand.houding;
+  const fase = stand.fase || 0;
+  const hg = naam === 'zagen' ? houdingZagen(fase, lijf) : gewoon(stand, L);
+  const voor = [0, 1, 0];
+  const op = [0, 0, 1];
+  return L.bouw(hg, (ctx) => {
+    const { Bn, bot, M, delen } = ctx;
+    const schouder = (i) => HH.opPunt(Bn.Bromp, L.SCHOUDERS[i]);
+    if (stand.stam) {
+      // de stam van de zaagbok, dwars voor hem, alleen op de proefplaat
+      const mStam = KAR.materiaal(ctx, 'stam', { ramp: 'schors', lo: 1.2, hi: 5.2 });
+      const c = HH.plus(ZAGEN.A, HH.keer(voor, Z_STAM.y));
+      delen.push(kegel([c[0] - 30, c[1], Z_STAM.z], [c[0] + 30, c[1], Z_STAM.z], Z_STAM.r, Z_STAM.r, mStam, KAR.deel(ctx, 'stam')));
+      bot(null);
+    }
+    if (naam !== 'zagen') {
+      // de zaag hangt aan het kruishout, met het midden in de hand
+      const hand = B[naam === 'lopen' ? 'lopen' : 'staan'].hand;
+      const A = HH.af(HH.af(hand, HH.keer(voor, SPANZAAG.breed / 2)), HH.keer(op, SPANZAAG.hoog * 0.55));
+      spanzaag(ctx, A, voor, op);
+      if (naam === 'lopen') {
+        bot(Bn.Bromp);
+        arm(ctx, 1, schouder(1), HH.opPunt(Bn.Bromp, hand));
+      } else {
+        bot(null);
+        arm(ctx, 1, schouder(1), hand);
+      }
+      bot(null);
+      hangendeArm(ctx, 0);
+      return;
+    }
+    const A = HH.plus(ZAGEN.A, HH.keer(voor, ZAGEN.slag * slagVan(fase)));
+    const z = spanzaag(ctx, A, voor, op);
+    bot(null);
+    arm(ctx, 1, schouder(1), z.greep);
+    bot(null);
+    arm(ctx, 0, schouder(0), naarLijf(L, 0, z.kruis(ZAGEN.kruis)));
+    bot(null);
+  });
+}
+// waar de stam ligt, vanaf de achterste arm van de zaag bij het begin van de slag (alleen de proefplaat)
+const Z_STAM = { y: 17, z: 38.5, r: 9.5 };
+const zaagster = (stand) => zager(stand, 'boerin');
+
 // ---------------------------------------------------------------- de maaister
 
 // De maaister: de boerin met de zeis van de maaier en zijn maaislag (maaier.cjs: zeisInDeHanden, houdingMaaier), zodat
@@ -1796,10 +1916,10 @@ BOERIN.bouw = werkBoerin;
 
 module.exports = {
   HOUDINGEN, SNELHEID, LOOP_FPS, LIJVEN, LIJF_VAN, snelheidVan,
-  zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister, hakker, hakster,
+  zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister, hakker, hakster, zager, zaagster,
   plukker, binder, drager, dorser, plukster, binster, draagster, dorster,
   houdingPlukken, houdingBinden, houdingDorsen, vlegelInDeHanden, schoof, vlegel, PLUKKEN, BINDEN, DORSEN, VLEGEL, SCHOOF,
   werkBoer, werkBoerin, metUiterlijk, maaierWerk, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos, bijl,
-  houdingZaaien, houdingWieden, houdingRapen, houdingHakken, bijlInDeHanden, rapenHand, rapenSchouder, naarLijf,
-  ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, HAKKEN, BIJL, GREEP_BOVEN, GREEP_ONDER, GREEP_LINKS, SCHOUDERS, HANGT,
+  houdingZaaien, houdingWieden, houdingRapen, houdingHakken, houdingZagen, spanzaag, bijlInDeHanden, rapenHand, rapenSchouder, naarLijf,
+  ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, HAKKEN, BIJL, ZAGEN, SPANZAAG, GREEP_BOVEN, GREEP_ONDER, GREEP_LINKS, SCHOUDERS, HANGT,
 };

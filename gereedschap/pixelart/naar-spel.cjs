@@ -341,6 +341,10 @@ const FIGUURLIJST = {
   sprokkelaarster: { map: ['sprokkelaarster', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaarster' }, // de sprokkelaar als boerin
   maaister: { map: ['maaister', 'animaties'], houdingen: ['maaien'], bron: 'werkfiguren-anim.cjs maaister' }, // de maaier als boerin
   hakster: { map: ['hakster', 'animaties'], houdingen: ['staan', 'lopen', 'hakken'], bron: 'werkfiguren-anim.cjs hakster' }, // de hakker als boerin
+  // De zager en de zaagster (werkfiguren.cjs, werklijst vraag 168; Marcel, 15 okt: "Ja, zo"): met de spanzaag aan de
+  // zaagbok van de zagerij.
+  zager: { map: ['zager', 'animaties'], houdingen: ['staan', 'lopen', 'zagen'], bron: 'werkfiguren-anim.cjs zager' },
+  zaagster: { map: ['zaagster', 'animaties'], houdingen: ['staan', 'lopen', 'zagen'], bron: 'werkfiguren-anim.cjs zaagster' }, // de zager als boerin
   // De oogst (werkfiguren.cjs, werklijst vraag 136 en 140; Marcel, 8 okt: "Dat je de boeren ziet plukken"): de plukker met zijn
   // tenen mand (de wijnoogst), de binder die een schoof bindt, de drager met een schoof op zijn schouder en de dorser met
   // zijn vlegel (de graanoogst), elk met zijn vrouw, met dezelfde houdingen, beelden en fps als de man ernaast. De drager

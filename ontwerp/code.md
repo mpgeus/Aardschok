@@ -1092,7 +1092,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
   (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 129, e). Hij komt
   alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 129, b). Zijn poppetje hakt aan zijn
-  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een bouwplaats van het lege begin op een stuk
+  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **De zager** (vraag 168, 15 okt;
+  Marcel: "Ik wil wel dat je iemand ziet werken"): de eerste hand van een zagerij die vandaag zaagt (`g.werkte`), staat
+  op de tegel voor haar deur en zaagt aan de zaagbok, die daar binnen ligt (`zagerijWaarHijZaagt` en `zaag`;
+  `e.werkt.soort` 'zagen', met `op` de tegel binnen, naast de deur, en `tot` een groot getal zolang hij zaagt); het vel is
+  de zager of de zaagster (`WERKFIGUREN` in `js/sprites.js`; `werkfiguren.cjs`, `zager`, met de spanzaag). De tweede
+  hand werkt zoals elke werkplaats, bij de deur. **Rooien:** een bouwplaats van het lege begin op een stuk
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
   (`g.wachtOpRooien`, met `g.kavel`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met `T.zetOpDeKaart` op); dat
   rooien de bouwers (`js/bouwen.js`). Een huis dat wil doorgroeien (`g.groeitNaRooien`, vraag 130) rooit het gezin zelf:

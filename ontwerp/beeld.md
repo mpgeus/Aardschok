@@ -838,7 +838,12 @@ proefplaat `uit/werkfiguren-proef.png`):
   wieden, gebukt, met een plat blad schuin op de steel; ook voor spitten en mest uitrijden;
 - **de sprokkelaar en de sprokkelaarster:** met een bundel takken op de rug staan, lopen (de bundel deint mee) en rapen:
   door de knieën, de tak van de grond via de hand naar de bundel;
-- **de maaister,** naast de maaier, met dezelfde zeis en slag.
+- **de maaister,** naast de maaier, met dezelfde zeis en slag;
+- **de zager en de zaagster** (vraag 168, 15 okt; Marcel: "Ja, zo"): staan en lopen met de spanzaag aan het kruishout,
+  en zagen aan de zaagbok van de zagerij: de rechterhand aan de greep, de linker op het kruishout, de zaag heen en weer
+  en het lijf leunt mee. De zaagbok in de tekening heeft geen zaag meer ("Ja, eruit"): die heeft de zager bij zich, en de
+  snede ligt waar zijn zaag komt als hij op de tegel voor de deur staat (`ZAGEN` in `werkfiguren.cjs`, de zaagbok in
+  `huizen.cjs`).
 
 Zolang hij aan dit werk is, ook op weg naar de volgende tegel of even rustend, houdt hij het vel, zodat hij niet bij elke
 tegel van kleren wisselt. De lopen-houding is de loopcyclus van de boer of de boerin zelf. Eerst kwamen de drie van de

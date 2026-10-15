@@ -210,7 +210,8 @@ function grootGebouw(stijl, soort, o = {}) {
         { spec: schuur },
         stuk('stammen-y', 71, [1.75, -0.35]),
         stuk('planken-x', 72, [-1.35, -0.75]),
-        stuk('zaagbok-x', 73, [-0.2, 1.3]),
+        // de snede in de stam ligt waar de zaag van de zager komt, als hij op de tegel voor de deur staat (vraag 168)
+        stuk('zaagbok-x', 73, [1.0, 1.83]),
         stuk('stammen-y', 76, [3.95, 0.15]),
       ],
       deurVan: 0,

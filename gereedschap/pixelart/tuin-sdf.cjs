@@ -25,7 +25,7 @@
 // gebouw (huizen.cjs, grootGebouw), zodat ze met het huis meedraaien:
 //   stammen-x, -y             lange stammen op twee dwarsliggers, drie, twee en één, de kopse kanten naar voren
 //   planken-x, -y             gezaagde planken in lagen, met latjes ertussen zodat het hout droogt
-//   zaagbok-x, -y             twee schragen met een stam erop, en een spanzaag in de snede
+//   zaagbok-x, -y             twee schragen met een stam erop (de zaag heeft de zager bij zich)
 //   zaaghal-x, -y             een open hal op vier palen onder een zadeldak van ruwe planken, met het kapgebint in de
 //                             kopse kanten; x of y: waar de nok langs loopt
 //
@@ -697,31 +697,22 @@ function planken(W, H, langs) {
   }
 }
 
-// De zaagbok: twee schragen van gekruiste palen, een stam erop, en een spanzaag in de snede: een houten raam met het
-// blad onderin, half in de stam.
+// De zaagbok: twee schragen van gekruiste palen en een stam erop. Zijn zaag heeft de zager bij zich (vraag 168; Marcel,
+// 15 okt: "Ja, eruit"): hij staat op de tegel voor de deur van de zagerij, en zaagt waar de snede in de stam komt
+// (werkfiguren.cjs, ZAGEN). De benen staan dicht genoeg bij elkaar dat de bok binnen de voet blijft.
 function zaagbok(W, H, langs) {
   const g = W.groep('zaagbok');
   const P = (l, d, z) => (langs === 'x' ? [l, d, z] : [d, l, z]);
-  const zt = 40; // waar de palen kruisen, zo'n driekwart meter
+  const zt = 30; // waar de palen kruisen: de stam ligt op heuphoogte van de zager
   let deel = 1;
   for (const [i, lx] of [-30, 30].entries()) {
     const s = H.rs(5400 + i) * 2;
-    voeg(g, { ...stok(P(lx + s, -16, 0), P(lx - s * 0.5, 12, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 7 + i, toon: -0.2 });
-    voeg(g, { ...stok(P(lx - s, 16, 0), P(lx + s * 0.5, -12, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 8 + i, toon: -0.2 });
+    voeg(g, { ...stok(P(lx + s, -13, 0), P(lx - s * 0.5, 10, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 7 + i, toon: -0.2 });
+    voeg(g, { ...stok(P(lx - s, 13, 0), P(lx + s * 0.5, -10, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 8 + i, toon: -0.2 });
   }
   // de stam tussen de benen van de schragen
   const r = 9.5;
   voeg(g, { ...stamDeel(H, P, -56, 54, 0, zt + r - 1, r, 90), deel: deel++ });
-  // de spanzaag: twee armen, een kruishout, en het blad onderin, in de stam
-  const ls = 8;
-  const zb = zt + r + 4;
-  const hoog = 34;
-  voeg(g, { ...stok(P(ls - 21, 1, zb - 3), P(ls - 23, 1, zb + hoog), 1.5), m: 'hout', deel: deel++, zaad: 11, toon: 0.2 });
-  voeg(g, { ...stok(P(ls + 21, 1, zb - 3), P(ls + 23, 1, zb + hoog), 1.5), m: 'hout', deel: deel++, zaad: 12, toon: 0.2 });
-  voeg(g, { ...stok(P(ls - 21.8, 1, zb + hoog * 0.55), P(ls + 21.8, 1, zb + hoog * 0.55), 1.3), m: 'hout', deel: deel++, zaad: 13, toon: 0.2 });
-  voeg(g, { ...balk(P(ls - 21, 1, zb - 5), P(ls + 21, 1, zb - 5), 0.45, 3, [0, 0, 1], 0.1), m: 'ijzer', deel: deel++ });
-  // een touw dat het raam spant, tussen de toppen
-  voeg(g, { ...stok(P(ls - 22.7, 1, zb + hoog - 2), P(ls + 22.7, 1, zb + hoog - 2), 0.6), m: 'houtOud', deel: deel++, zaad: 14, toon: -0.6 });
 }
 
 // De zaaghal van de zagerij (Marcel, 14 okt: "Het moet zagerij zijn en minder huis", en "Open zaaghal"): vier palen,

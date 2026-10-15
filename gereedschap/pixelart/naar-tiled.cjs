@@ -966,13 +966,16 @@ async function bouwHuizenVel() {
 // Wat er al staat, houdt zijn bestand in tegels/huizen/ en zijn gegevens uit tegels.json, en zijn sneeuw; de nieuwe
 // komen achteraan in de vaste volgorde. Zonder --erbij gaan alle huizen opnieuw, want de cache in uit/huizen-cache
 // vervalt bij elke verandering aan de huizenbouwer: dat is ruim twee uur op vier kernen, voor een paar nieuwe huizen.
-// Verandert de huizenbouwer iets aan de huizen die er al staan, dan moet het toch zonder.
+// Verandert de huizenbouwer iets aan de huizen die er al staan, dan moet het toch zonder; of, als het alleen sommige
+// raakt, met --opnieuw=<woord> erbij: die gaan opnieuw.
 async function bouwHuizenErbij() {
   const { capaciteit, kolommen } = VELCONFIG.huizen;
   const nodig = nodigeCapaciteit(TEGELS, 'huizen', Object.keys(HZ.HUIZEN), kolommen);
   if (nodig > capaciteit) throw new Error(`huizen: ${nodig} vakken nodig, maar de vaste capaciteit is ${capaciteit} — verhoog VELCONFIG.huizen.capaciteit`);
   const oud = JSON.parse(fs.readFileSync(path.join(TEGELS, 'tegels.json'), 'utf8')).huizen;
-  const er = new Map(oud.tiles.filter((t) => t && t.naam).map((t) => [t.naam, t]));
+  // --opnieuw=<woord>: ook de huizen met dat woord in hun naam opnieuw (de zagerij zonder zaag in de bok, vraag 168)
+  const woord = (process.argv.find((a) => a.startsWith('--opnieuw=')) || '').slice('--opnieuw='.length);
+  const er = new Map(oud.tiles.filter((t) => t && t.naam && !(woord && t.naam.includes(woord))).map((t) => [t.naam, t]));
   for (const naam of er.keys()) if (!HZ.HUIZEN[naam]) console.warn(`  huizen: ${naam} staat op het vel maar heeft geen opgave meer: hij gaat eraf`);
   const nieuw = Object.keys(HZ.HUIZEN).filter((n) => !er.has(n));
   const t0 = Date.now();
