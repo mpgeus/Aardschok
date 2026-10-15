@@ -45,10 +45,11 @@ werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balan
 een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
 `code.md`, bij `js/debugvenster.js`). **159 met 158 loopt** (het plan bij H, besloten 15 okt): **stap 1, de soldaten,
 is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten in het wachthuis, de wapenmaker in het
-gehucht met zeven stukken, en elk wapen een eigen slag. **Het volgende is stap 2, en meer dan een briefje** (Marcel, 15
-okt: "bij stap 2 gelijk meer. Soldaten moeten te sturen zijn. Ook wil ik basis formaties. Dit doen we in een nieuwe
-sessie"): soldaten aanklikken, sturen, en eenvoudige formaties; begin met een plan voor Marcel (bij H, "Het plan voor
-159 met 158"). **Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan voor stap 2 staat bij H, en wacht op Marcel.
+gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170** (Marcel, 15 okt: "de schout verdwijnt", "Het concept gaan om naar RTS"; `gameloop.md`,
+"Bijgesteld op 15 okt"): je stuurt en bouwt van bovenaf als een god, de schout is een poppetje in het dorp dat kan
+meevechten, en het gevecht is in real time, zodat er later live samen gespeeld kan worden. Op de vragen van stap 2 koos
+hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). **Het plan voor 170 staat bij I,
+en wacht op Marcel. Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan.
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -152,7 +153,8 @@ sessie"): soldaten aanklikken, sturen, en eenvoudige formaties; begin met een pl
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** C, D, E, F (ronde 3 van A na C); G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** I (vraag 170, met D en F erin), C, E (ronde 3 van A na C); G loopt ernaast op het tijdpad van
+`commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -250,8 +252,8 @@ en de groei. Wil je hem eerder voelen, dan is de lading per rit het getal (de we
 
 ## D. De besturing en de klok
 
-De camera los, en de schout een held die je aanklikt (A van vraag 151). De klok: een jaar is nu 30 uur op 1×; de proef
-laat zien op welke snelheid het goed oogt.
+De camera los, en de schout een held die je aanklikt (A van vraag 151): sinds 15 okt deel van vraag 170 (bij I). De
+klok: een jaar is nu 30 uur op 1×; de proef laat zien op welke snelheid het goed oogt.
 
 ## E. De heer als klok en tegenstander
 
@@ -376,7 +378,11 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   de schade verschilt; **E** rovers voor een dichte muur: E1 ze nemen wat erbuiten ligt, en anders komen ze niet, E2 ze
   hakken op de poort tot hij open is (een poort met leven); **F** het tuighuis en het schuttershof eruit (ze doen niets),
   de kazerne blijft voor later; **G** de volgorde: G1 stap 1 tot 4 zo, G2 de proefplaat van de soldaten al na stap 1. Marcel erbij (15 okt): "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor komen": de wapenmaker is een werkplaats in het gehucht waar een dorpeling wapensmid is; hij leent nu het beeld van de smidse, en zijn eigen tekening komt met de werkplaatsen in de bouwstijl (167). **De wapens** (Marcel, 15 okt: "kwa wapens wil ik: sword, spear, shield, pike, bow, crossbow, armor", en op vier vragen: vaste soorten, "Piek reikt 2, slaat harder", "Kruisboog door het harnas", "Allebei, later"): zes vaste soorten soldaten, zoals in Knights and Merchants, en een soort wacht tot al zijn stukken er zijn: militie (hooivork), speerman (speer en schild), piekenier (piek en harnas), zwaardvechter (zwaard, schild en harnas), boogschutter (boog), kruisboogschutter (kruisboog en harnas). De speer en de piek reiken twee tegels, de piek slaat harder en kost ijzer; de kruisboog schiet zo ver en zo vaak als de boog, maar schild en harnas vangen van een bout niets af; het harnas is nu van huiden (de jager), een ijzeren harnas komt later, als het dorp ijzer heeft. De wapenmaker maakt ze alle zeven. **Stap 1 is af** (15 okt, in `main`; `js/soldaten.js`, `spel.md`, "Zo werken de soldaten nu"): het tuighuis en het schuttershof zijn weg, en de kolonist van de speeltest zet een wachthuis en een wapenmaker en vraagt twee speermannen (regel 7c).
-- **Het plan voor stap 2: kiezen, sturen en formaties** (Claude, 15 okt; **wacht op Marcel**). Nu: een soldaat staat
+- **Het plan voor stap 2: kiezen, sturen en formaties** (Claude, 15 okt). **Besloten** (Marcel, 15 okt: "A. Age of
+  Empires stijl. Maar groepen maken met control + 1. B. B2. C. C1 voor nu. Later kijken we verder wat er nodig is. D. D1.
+  E. Je kunt shifts instellen. Anders zou een vijand standaard in de nacht kunnen aanvallen. F. Zie mijn eerdere punt
+  over RTS. G. G2"), en daarmee werd stap 2 vraag 170 (bij I): het vechten in real time, zonder de schout als held. Het
+  plan zoals het was: Nu: een soldaat staat
   overdag bij zijn wachthuis en slaapt thuis; bij een aanval rent hij naar de schout (`T.loopNaastDeSchout`); het
   gevecht begint alleen als een rover de schout ziet (`T.zoekOntdekking`), en alleen wie binnen 12 tegels van de schout
   staat, vecht mee (`T.militieInGevecht`). Een klik op een soldaat zegt alleen wie hij is. Wat Claude erin ziet:
@@ -467,6 +473,47 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de heer zijn, welk dorp morrt), en met een herberg
   blijven ze langer; **160**, eerst losse ritten (een kar met wat over is naar een stad, dagen onderweg, een escorte
   helpt), vaste routes later.
+
+## I. Van bovenaf en in real time (vraag 170, 15 okt)
+
+Marcel, 15 okt: "de schout verdwijnt. Hij of zij is de embodiment van de speler, en kan meevechten en leeft in het dorp.
+Maar we gaan toch als 'god' sturen en bouwen. Je speelt dus niet meer de schout zelf", en "het vechten moeten we
+herzien, ik dacht dat turn based een optie was, maar als je met meerdere live spelers wil spelen gaat dat niet. Het
+concept gaan om naar RTS. We houden wel vast aan het isometrische" (`gameloop.md`, "Bijgesteld op 15 okt").
+
+**Wat er nu is:** de schout is wie je speelt: een klik laat hem lopen (`T.handelingVerkennen`), de camera loopt met hem
+mee, je praat met iemand door erheen te lopen, en hij sluipt (S), draagt een lantaarn, slaapt (Z), raapt op en opent
+deuren met een sleutel; het gevecht is in beurten (`js/gevecht.js`: de overgang, de actiepunten, het raster, einde beurt,
+een deur dicht), en het begint alleen als een vijand de schout ziet; de soldaten rennen naar hem toe. De zes soorten
+van 159 (de wapens, het bereik, de schade, schild en harnas) gaan mee: de actiepunten van een slag worden de tijd tussen
+twee slagen.
+
+**Het plan** (Claude, 15 okt; **wacht op Marcel**), in vijf stappen:
+- **1, kijken en kiezen als een god:** de camera los van de schout (de pijltjes, de rand van het scherm, de minikaart, en
+  een toets naar de schout); links kiest (een man, een gebouw), een kader slepen kiest je soldaten, rechts stuurt (de
+  grond: erheen, een vijand: aanvallen); Ctrl+1 tot 9 maakt een groep, 1 tot 9 kiest hem, twee keer kijkt erheen; de
+  schout kies je zoals een soldaat; het briefje van één man (G2), en met meer gekozen een lijstje van wie het zijn.
+- **2, het gevecht in real time:** elk ziet, kiest de dichtste vijand, loopt tot hij raakt en slaat, met de regels van
+  159 (de speer reikt twee tegels, een boog schiet niet met een vijand naast zich, schild en harnas); rovers en wolven
+  vallen aan wie ze tegenkomen; bij een aanval gaat de tijd naar 1×, zoals nu. Het gevecht in beurten gaat eruit.
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd (wie slaat voor, wie steekt erachter, wie
+  schiet achteraan), kijkend waar ze heen liepen (D1); een post houden ze tot je ze terugroept.
+- **4, de diensten** (E): per soldaat een dienst, en vijanden kunnen op elk uur komen, ook 's nachts.
+- **5, opruimen:** wat de schout als held was (sluipen, de lantaarn, sleutel en kist, oprapen, de camera die hem volgt,
+  reizen over de landkaart met hem) en het gevecht in beurten (`handelingGevecht`, de actiepunten, het raster, de
+  knoppen).
+Daarna de muren (158, stap 3 van het plan bij H) en de tekeningen van de soldaten (stap 4).
+
+**De vragen** (voorstel van Claude steeds de eerste): **1** valt de schout: 1a het spel is uit, zoals nu (vraag 55), 1b
+er komt een nieuwe schout uit het dorp, en het vertrouwen zakt; **2** praten (met een boer, de heer, de marskramer, wie
+je zoekt met een voorval): 2a een klik op iemand opent het gesprek meteen, 2b de schout loopt erheen, zoals nu; **3** live
+samen spelen: 3a na de demo, maar we bouwen nu zo dat het kan (elke opdracht van een speler is een handeling met
+gegevens, en de wereld loopt in vaste stappen), en de pauze en de snelheden blijven voor wie alleen speelt, 3b al in de
+demo (dan geen pauze bij een venster, één snelheid voor iedereen, en op elke computer dezelfde wereld: groot werk);
+**4** wie stuur je: 4a de soldaten en de schout; een dorpeling werkt vanzelf, zoals in The Settlers, en heeft wel een
+briefje, 4b ook de dorpelingen, zoals in Age of Empires; **5** de diensten: 5a twee, dag (van het opstaan tot het
+slapen) en nacht, per soldaat, standaard dag (wie nacht heeft, slaapt overdag), 5b drie van acht uur; **6** het opruimen
+van stap 5: 6a alles in die lijst eruit, 6b eerst zeggen wat je wilt houden.
 
 ## Af (sinds 11 okt)
 

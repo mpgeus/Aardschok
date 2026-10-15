@@ -1,11 +1,11 @@
 # CLAUDE.md
 
 Tithebreaker (de werknaam sinds 11 okt, `ontwerp/commercieel.md`; de map en de opslag heten nog Aardschok): een spel dat Marcel en Claude samen bouwen, om het te verkopen (Steam eerst, als
-los programma verpakt; `ontwerp/commercieel.md`). **Sinds 11 okt de economie van The Settlers, met gevechten in beurten**
-(vraag 151, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een eiland, je bouwt
-alles zelf, van bovenaf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht in
-beurten op dezelfde tegels (Jagged Alliance 2): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de
-heer. Je held is de schout: hij vecht en hij praat. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
+los programma verpakt; `ontwerp/commercieel.md`). **Sinds 11 okt de economie van The Settlers, sinds 15 okt met gevechten in
+real time** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
+eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht
+(RTS, als Age of Empires): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
+als een god van bovenaf; de schout (de speler in het spel) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
 isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
 
 Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten zijn Engels, zonder Nederlands** (vraag 147;
@@ -153,7 +153,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 
 Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat elke sessie moet weten.
 
-- **De richting** (Marcel, 11 okt, vraag 151: "A ja, B ja, C allebei"): A, jij bouwt van bovenaf, en de schout is je held.
+- **De richting** (Marcel, 11 okt, vraag 151: "A ja, B ja, C allebei"): A, jij bouwt van bovenaf (zonder held: vraag 170).
   B, je bouwt binnen een aantal tegels van je plein en van elke opslag, zonder grens en zonder vlaggen ("alles moet open
   zijn"); een ossenkar haalt de grondstoffen op, en een waar telt pas als hij binnen is. C, vechten is allebei: je dorp
   verdedigen, en erop uit over het eiland tot het kasteel van de heer. En: **"We moeten ook zelf alles vanaf de start gaan

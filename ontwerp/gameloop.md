@@ -5,7 +5,25 @@ en: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een g
 die spellen doen, wat een goede loop gemeen heeft, en wat dat voor ons betekent. Bovenaan staat wat besloten is, onderaan
 wat open is.
 
-## De richting: de economie van The Settlers, met gevechten in beurten (Marcel, 11 okt)
+## Bijgesteld op 15 okt: van bovenaf als een god, en vechten in real time (Marcel; werklijst vraag 170)
+
+**Marcel, 15 okt: "de schout verdwijnt. Hij of zij is de embodiment van de speler, en kan meevechten en leeft in het
+dorp. Maar we gaan toch als 'god' sturen en bouwen. Je speelt dus niet meer de schout zelf"**, en: **"het vechten
+moeten we herzien, ik dacht dat turn based een optie was, maar als je met meerdere live spelers wil spelen gaat dat
+niet. Het concept gaan om naar RTS. We houden wel vast aan het isometrische."** Dus:
+- **Je bent geen held meer die rondloopt.** Je kijkt en stuurt van bovenaf, zoals in Age of Empires. De schout blijft
+  als poppetje in het dorp: hij is de speler in het spel, woont er, en kan meevechten, maar je loopt niet met hem rond.
+- **Het gevecht is in real time (RTS)**, niet meer in beurten: je kunt altijd aangevallen worden en zelf aanvallen, en
+  het draait niet meer om de schout (Marcel: "De schout telt niet meer als waar het allemaal om draait"). De reden is
+  samen spelen, live: beurten gaan niet als meer spelers tegelijk spelen.
+- **Op het plan van stap 2 van de soldaten** (werklijst, H): "A. Age of Empires stijl. Maar groepen maken met control +
+  1", "B2" (links kiezen, rechts sturen), "C1 voor nu" (twee formaties, *Line* en *Ring*; "Later kijken we verder wat er
+  nodig is"), "D1" (ze kijken de kant op waar ze heen liepen), "Je kunt shifts instellen. Anders zou een vijand
+  standaard in de nacht kunnen aanvallen", en "G2" (het briefje van één man).
+- Het isometrische beeld blijft. Wat hieronder over de beurten, Jagged Alliance 2 en de schout als held staat, is de
+  richting van 11 okt; wat ervan in de code staat, gaat eruit (vraag 170).
+
+## De richting: de economie van The Settlers, met gevechten in beurten (Marcel, 11 okt) (bijgesteld 15 okt, hierboven)
 
 **Marcel, 11 okt: "Ik ben eigenlijk op zoek naar de economie van the settlers met een soort turn based isometric combat.
 Rijke gfx met details."** Een richting, nog geen besluit over de uitwerking (de vragen staan onder "Open").
