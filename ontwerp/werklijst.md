@@ -36,7 +36,8 @@ van een gebouw nu"), en **164, een minimale balk onderaan, 165, een minimap van 
 bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **157, de zagerij en de planken, is af**
 (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt de keten van stammen tot planken
 nu"): een kapschuur in de stijl van het land, na vijf proefplaten. **Het volgende is 168**, de zager aan het werk (Marcel:
-"direct erna"), en dan C6 met de keten erin.
+"direct erna"; **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**, 15 okt: een werkfiguur die zaagt, eerst één
+proefplaat), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
 - **De zagerij bekijken** (157, 14 okt): Nieuw spel, zet een houthakker en een zagerij (in het bouwmenu, *Sawmill*). Hij
