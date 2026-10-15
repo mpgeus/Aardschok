@@ -334,6 +334,8 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 .bericht.gevaar { color: #f3b1a5; }
 .bericht.goed { color: #bfe3ab; }
 .bericht.rust { color: #c9d6ea; }
+/* Een bericht met een plek (js/ui.js): een klik brengt de camera erheen. */
+.bericht.met-plek { pointer-events: auto; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 @keyframes vervaag {
   0% { opacity: 0; transform: translateY(4px); }
   4% { opacity: 1; transform: none; }

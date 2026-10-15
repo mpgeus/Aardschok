@@ -280,7 +280,9 @@
     const soldaten = militie.length - veteranen;
     const hulpWie = soldaten && veteranen ? T.t('The soldiers and the veterans come') : soldaten ? T.t('The soldiers come') : veteranen === 1 ? T.t('The veteran comes') : T.t('The veterans come');
     const hulp = !militie.length ? '' : ` ${T.t('{wie} to your side.', { wie: hulpWie })}`;
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true } });
+    const veld = w.akkers[A.veld];
+    const plek = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true, plek } });
   }
 
   // De hinderlaag (de bode naar de marskramer, js/bode.js; werklijst vraag 143; Marcel, 9 okt: "De bode moet "onderschept"
@@ -335,7 +337,7 @@
     const naam = T.naamVanBewoner(B.wie[0]);
     const wie = R.bende.length ? T.t('{namen}, who left,', { namen: T.opsomming(leden.map((l) => l.naam)) }) : T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(leden.length)) });
     const hulp = militie.length ? ` ${T.t('The militia comes to your side.')}` : '';
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Go there, or they will take everything.{hulp}', { wie, n: leden.length, naam, hulp }), soort: 'gevaar', naarGewoon: true } });
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Go there, or they will take everything.{hulp}', { wie, n: leden.length, naam, hulp }), soort: 'gevaar', naarGewoon: true, plek: uitgang } });
   }
   function werkHinderlaagBij(D, A, levend) {
     const B = D.bode;

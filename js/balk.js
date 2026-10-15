@@ -548,7 +548,14 @@
   };
   // De breedte van de ruit in pixels van de kunst: die van het kaartje (--kaart, stijl.css), want er is geen rand omheen.
   const miniBreed = () => $('minikaart').querySelector('canvas').clientWidth || 380;
-  const mini = { E: null, w: null, beeld: null, mist: null, omtrek: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
+  const mini = { E: null, w: null, beeld: null, mist: null, omtrek: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false, pings: [] };
+  // Een bericht met een plek (T.ui.bericht, js/ui.js; vraag 170, stap 1d): die plek knippert zo lang op de minikaart als
+  // het bericht te lezen is.
+  const PING = { duur: 10000, knipper: 400 }; // ms
+  T.ui.ping = function (plek) {
+    mini.pings.push({ x: plek.x, y: plek.y, tot: performance.now() + PING.duur });
+    mini.getekend = -Infinity;
+  };
   const nieuwDoek = (n) => Object.assign(document.createElement('canvas'), { width: n, height: n });
 
   T.ui.werkMinikaartBij = function (S) {
@@ -628,6 +635,19 @@
       stip(r.x + r.b / 2, r.y + r.h / 2, 2, '#f3e3b8');
     }
     if (S.schout) stip(S.schout.x, S.schout.y, 3, '#c0392b');
+    const nu = performance.now();
+    mini.pings = mini.pings.filter((q) => q.tot > nu);
+    // Een ring om de plek, die klein wordt als hij aangaat, zodat je oog erheen gaat.
+    if (Math.floor(nu / PING.knipper) % 2 === 0) {
+      c.strokeStyle = '#f3b1a5';
+      c.lineWidth = 1.5;
+      for (const q of mini.pings) {
+        const p = T.minikaartPunt(q.x, q.y, B);
+        c.beginPath();
+        c.arc(p.x, p.y, 4 + 6 * (1 - (nu % PING.knipper) / PING.knipper), 0, Math.PI * 2);
+        c.stroke();
+      }
+    }
     // Het kader: wat de camera nu ziet (T.tekenMaat, gedeeld door de zoom van het beeld), in pixels van de wereld.
     const maat = T.tekenMaat();
     const midden = T.naarWereld(S.camera.x, S.camera.y);

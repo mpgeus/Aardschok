@@ -274,7 +274,7 @@
   // Een bezoeker komt aan: de marskramer (S.marskramer) of de heer
   // (S.heer.bezoek). Eén manier voor beide; tot 26 sep had elk zijn eigen variant. Elk bezoek
   // draagt zijn eigen aankomst mee:
-  //   bezoek.aankomst = { tekst, soort, naarGewoon }  // het bericht, en of de tijd naar 1× gaat
+  //   bezoek.aankomst = { tekst, soort, naarGewoon, plek }  // het bericht, of de tijd naar 1× gaat, en waar (T.zeg)
   //   bezoek.meteen = true                            // niet op het bezoekuur wachten: Spel.debug
   //                                                   // riep hem, of er is geen wereld om in te lopen
   // Hij komt overdag, vanaf het bezoekuur. De eerste keer dat hij er mag zijn, zegt het bericht dat
@@ -286,7 +286,7 @@
     if (!bezoek.meteen && !T.isBezoektijd(D)) return false;
     bezoek.aangekomen = true;
     const a = bezoek.aankomst || {};
-    if (a.tekst) T.zeg(D, a.tekst, a.soort);
+    if (a.tekst) T.zeg(D, a.tekst, a.soort, a.plek);
     if (a.naarGewoon) T.naarGewoneSnelheid(D);
     return true;
   };

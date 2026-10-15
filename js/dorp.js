@@ -96,9 +96,12 @@
   // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
   // bewaart het, de laatste twintig (D.gezegd), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er
   // staat. Zo zegt een regel over een dorp het altijd: T.zeg(D, tekst, soort), en nooit rechtstreeks T.ui.bericht.
-  T.zeg = function (D, tekst, soort) {
+  // `plek` ({ x, y }, een tegel in D): waar het gebeurt, voor wat ver weg gebeurt (rovers, een brand, wie je zoekt). Een
+  // klik op het bericht, of Spatie, brengt de camera erheen, en de plek knippert op de minikaart (js/ui.js, js/balk.js;
+  // werklijst vraag 170, stap 1d; Marcel: "Een bericht brengt je erheen").
+  T.zeg = function (D, tekst, soort, plek) {
     if (!D.ander) {
-      if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort);
+      if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort, plek);
       return;
     }
     const g = D.gezegd || (D.gezegd = []);

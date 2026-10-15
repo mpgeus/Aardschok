@@ -94,6 +94,8 @@
     foto: null, // de fotomodus (js/main.js, H): { zoom } van daarvoor, of null
     gekozen: null, // wat je koos, met zijn briefje rechts: een gebouw (js/gebouwbriefje.js), een wezen, of een lijst van je
     // mannen (js/kiezen.js); of null
+    groepen: {}, // je groepen onder een cijfer (js/main.js; vraag 170, stap 1d): { 1: [wezen, ...] }, van elke speler zelf
+    berichtPlek: null, // de plek van het laatste bericht dat er een had (js/ui.js): Spatie kijkt erheen
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);
   // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat

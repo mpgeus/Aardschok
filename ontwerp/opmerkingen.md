@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat stap 1 van vraag 170 liet zien** (15 okt, kijken, kiezen en sturen): (a) een post is één tegel per man; staat
+  er iemand op (een dorpeling die langsloopt), dan wacht hij ernaast tot de tegel vrij is, zoals iedereen bij zijn anker.
+  (b) Rechts op een gebouw stuurt je mannen naar de vrije tegels eromheen; erin gaan ze niet (een toren of een muur om op
+  te staan komt met 158). (c) Wie je op een vijand afstuurt, loopt hem na zolang hij leeft, ook het bos in en ver van het
+  dorp: in stap 2 hoort daar een grens bij (hoe ver een soldaat achtervolgt). (d) De muis tegen de bovenrand schuift het
+  beeld ook als je naar Menu of de snelheden wilt: de rand is 8 pixels, binnen de knoppen; voelt het toch onhandig, dan is
+  het één getal in de werkbank. (e) Het briefje van één man zegt nog niet tot welke groep hij hoort.
 - **Beter gereedschap als upgrade voor de arbeiders** (Marcel, 14 okt, als notitie bij 156: "arbeiders kunnen upgrades
   krijgen in de vorm van beter gereedschap wat hun werk makkelijker maakt. We blijven wel in de geest van de tijd"). Wat
   er al is: de smidse maakt van ijzer gereedschap, en wie het heeft, werkt 25% harder (`gereedschapBonus`,

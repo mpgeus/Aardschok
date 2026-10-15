@@ -577,7 +577,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (alleen scherm), en volgt de schout niet meer; de pijltjes en de muis tegen de rand van het venster schuiven hem
   (`schuifBij`, elk beeld, met `T.KIEZEN_INSTELLINGEN.camera`), de minikaart zet hem neer (`T.kijkNaar`), `T.glijNaar`
   laat hem naar een tegel glijden (Tab naar de held), het wiel zoomt altijd (`zoomStanden`), en `begrens` houdt hem boven
-  `T.kaartGrens`. Alleen een gevecht in beurten kijkt zelf mee (`cameraDoel`), tot stap 2. Tot 15 okt volgde hij de
+  `T.kaartGrens`. Alleen een gevecht in beurten kijkt zelf mee (`cameraDoel`), tot stap 2. **Kiezen** (stap 1b; de regels in
+  `js/kiezen.js`): links kiest (`kiesWezen`, `kiesMannen`; `ev.detail` 2 is een dubbelklik), slepen trekt het kader
+  (`kader`, de div `#kader`), rechts geeft `S.sturen` (`T.handelingSturen`), Tab kiest de held, en de groepen (stap 1d)
+  staan in `S.groepen` (alleen scherm: elke speler zijn eigen). **Een bericht met een plek** (`T.zeg(D, tekst, soort,
+  plek)`, en `aankomst.plek` bij `T.bezoekerKomtAan`): `T.ui.bericht` maakt het aanklikbaar (`T.glijNaar`), Spatie kijkt
+  naar `S.berichtPlek`, en `T.ui.ping` (`js/balk.js`) laat de plek op de minikaart knipperen. Tot 15 okt volgde hij de
   schout, en tilde Tab hem eraf in het overzicht (vraag 108, a; `S.overzicht`, weg). **De fotomodus** (vraag 146,
   e): `H` (of Fotomodus in het menu) haalt alles van het beeld (`body.foto` in `stijl.css`, en wat ui is op het doek,
   `S.foto` in `js/tekenen.js`); de camera schuift ook met slepen, tot twee keer dichterbij; een klik doet niets,

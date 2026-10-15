@@ -748,7 +748,7 @@
         L.gemeld = true;
         const roep = T.VOORVALLEN[L.id].roep || T.t('{wie} is looking for you.');
         const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : '';
-        T.zeg(D, T.hoofdletter(T.vulWoordenIn(D, roep)) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
+        T.zeg(D, T.hoofdletter(T.vulWoordenIn(D, roep)) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined, T.tegelVan(e));
       }
     }
     if (S.modus !== 'verkennen' || S.slaap) return;

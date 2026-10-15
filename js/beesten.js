@@ -970,7 +970,7 @@
     G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
     leider.pad = leider.onderweg ? [leider.pad[0]] : [];
     D.beesten.gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
-    T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.naamVanBewoner(p), g: p.geslacht }), 'gevaar');
+    T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.naamVanBewoner(p), g: p.geslacht }), 'gevaar', T.tegelVan(e));
     T.naarGewoneSnelheid(D);
   }
 
@@ -1174,7 +1174,7 @@
     for (const e of mannen) T.roepOp(e);
     D.beesten.jacht = { roedel: doel.G, tot: dag + IN().jacht.dagen, mannen };
     const wie = mannen.length ? T.t('{mannen} {n|goes|go} with you', { mannen: T.opsomming(mannen.map((e) => e.naam)), n: mannen.length }) : T.t('nobody is going with you');
-    T.zeg(D, T.t('The hunt for the wolves: {wie}. Their den lies in the forest, marked in gold on the ground. If you do not go within {n|# day|# days}, they go without you.', { wie, n: IN().jacht.dagen }));
+    T.zeg(D, T.t('The hunt for the wolves: {wie}. Their den lies in the forest, marked in gold on the ground. If you do not go within {n|# day|# days}, they go without you.', { wie, n: IN().jacht.dagen }), '', doel.G.thuis);
     return D.beesten.jacht;
   };
 

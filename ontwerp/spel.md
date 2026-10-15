@@ -1032,8 +1032,13 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   ze naast hem staan, en is hij weg, dan blijven ze waar ze zijn. Slaan doen ze pas in stap 2: tot dan begint het
   gevecht in beurten zoals altijd, als een vijand de held ziet. De held heeft geen post: hij blijft waar je hem
   neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
-- **Nog niet:** groepen onder een cijfer en een bericht dat je erheen brengt (1d, hieronder zodra het er is), het
-  gevecht in real time (stap 2), formaties (stap 3), en de diensten (stap 4).
+- **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
+  Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
+  ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat
+  afbrandt, iemand die de wolven aanvallen, het hol van de wolven bij de jacht, wie je zoekt met een voorval) is
+  gestippeld onderstreept: een klik erop, of Spatie, brengt de camera erheen, en zolang het te lezen is, knippert de plek
+  met een ring op de minikaart.
+- **Nog niet:** het gevecht in real time (stap 2), formaties (stap 3), en de diensten (stap 4).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

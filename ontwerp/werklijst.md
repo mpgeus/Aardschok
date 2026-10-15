@@ -50,10 +50,23 @@ gehucht met zeven stukken, en elk wapen een eigen slag. **Stap 2 werd vraag 170*
 meevechten, het gevecht is in real time, en live samen spelen zit al in de demo, in lockstep. Het plan staat bij I,
 besloten. **Stap 0 is af** (15 okt, in `main`; `code.md` bij `js/tik.js`): de wereld tikt zestig keer per seconde, los
 van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen, wegen, velden, afbreken en de soldaten
-zijn opdrachten die op een tik ingaan. **Het volgende is stap 1, kijken en kiezen als een god** (bij I). Let op:
+zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, op de branch `ccr-7ce505f3-doz7xr`, nog niet in `main`;
+`spel.md`, "Zo werkt kijken, kiezen en sturen nu"): de camera los, links kiezen, rechts sturen (de post), groepen onder
+een cijfer, en een bericht brengt je erheen. **Het volgende is stap 2, het gevecht in real time** (bij I). Let op:
 CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Wacht op Marcel:**
+- **Kijken, kiezen en sturen bekijken** (vraag 170, stap 1, 15 okt, op de branch `ccr-7ce505f3-doz7xr`): Nieuw spel. De
+  camera volgt de schout niet meer: de pijltjes of de muis tegen de rand van het scherm schuiven het beeld, het wiel zoomt,
+  een klik op de minikaart kijkt daar, en Tab kiest de held en kijkt naar hem. Zet een wachthuis (B) en op zijn briefje
+  twee man militie (+). Klik op een soldaat (een gouden ring om zijn voeten, rechts zijn briefje), trek een kader om
+  allebei, of dubbelklik op een van hen (alle militie in beeld). Klik rechts op de grond (*Send 2 men here*): daar staan
+  ze voortaan van het opstaan tot het slapen, tot je *Back to the guardhouse* drukt op hun briefje. Shift+1 maakt er groep
+  1 van (Ctrl+1 neemt Chrome zelf), 1 kiest hem, en 1 twee keer kijkt ernaar. Klik op een dorpeling: zijn briefje; de
+  waard heeft *Talk*. Laat rovers komen (`Spel.debug.rovers(3)`): het bericht is onderstreept, een klik erop of Spatie
+  brengt je erheen, en de plek knippert op de minikaart; rechts op een rover stuurt je mannen erop af. Slaan doen ze pas in
+  stap 2: tot dan begint het gevecht in beurten als een rover de held ziet. Te kiezen in de werkbank ("Choosing and
+  sending"): hoe dicht bij de rand de muis schuift (8 pixels; 0 zet het uit) en hoe snel (900).
 - **Spelen na stap 0** (vraag 170, 15 okt): het spel moet er precies zo uitzien en zo spelen als ervoor; de wereld rekent
   nu in vaste tikken van een zestigste seconde. Let op of het lopen hortend oogt, vooral op een scherm van meer dan 60 Hz:
   het beeld schuift tussen twee tikken nog niet mee (dat kan erbij, als je het ziet).
@@ -506,7 +519,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   van een speler (bouwen, een weg, afbreken, soldaten in het wachthuis, sturen) is een handeling met gegevens, die op
   een stap ingaat. Een toets: twee werelden met hetzelfde zaad en dezelfde opdrachten blijven letter voor letter gelijk
   (de speeltest doet dat al met opslaan: "de proef met opslaan", `--opslaan`).
-- **1, kijken en kiezen als een god:** **Bezig in sessie `ccr-7ce505f3-doz7xr`** (15 okt): bouwen. De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
+- **1, kijken en kiezen als een god:** **af** (15 okt, op de branch `ccr-7ce505f3-doz7xr`, nog niet in `main`; `spel.md`,
+  "Zo werkt kijken, kiezen en sturen nu"). De camera los (de pijltjes, de rand van het scherm, de minikaart, een toets naar
   de held); links kiest, een kader kiest je soldaten, rechts stuurt (de grond: erheen, een vijand: aanvallen); Ctrl+1 tot
   9 maakt een groep (in de browser neemt Chrome Ctrl+1 zelf, daar ook Shift+1), 1 tot 9 kiest hem; het briefje van één
   man, en met meer gekozen een lijstje; een klik op een dorpeling geeft zijn briefje.
@@ -532,7 +546,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
-  die hem volgt, reizen met hem over de landkaart, en het gevecht in beurten.
+  die hem volgt, reizen met hem over de landkaart, en het gevecht in beurten; en wat sinds stap 1 niets meer doet: het
+  lopen na een klik (`S.naLopen` en zijn afloop in `T.bijAankomst`), de tekst *Pick up the key* en de uitleg `hulp` in
+  `js/ui.js` ("Click to walk, talk or use something").
 - **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
   slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
   zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over

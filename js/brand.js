@@ -120,12 +120,12 @@
         g.brand = { fase: 'puin', sinds: nu };
         g.voorwerp.brand = 'puin';
         const tekst = T.t('The house of {naam} has burned down. They live with the neighbours until it stands again.', { naam });
-        T.zeg(D, tekst, 'gevaar');
+        T.zeg(D, tekst, 'gevaar', T.deurVan(D.wereld, g));
         T.schrijfOp(D, 'brand', { tekst });
         if (buur) {
           steekAan(buur, nu, { antwoord: B.antwoord, overgeslagen: true });
           const over = T.t('The fire spreads to the house of {naam}.', { naam: naamVan(D, buur) });
-          T.zeg(D, over, 'gevaar');
+          T.zeg(D, over, 'gevaar', T.deurVan(D.wereld, buur));
           T.schrijfOp(D, 'brand', { tekst: over });
         }
       }

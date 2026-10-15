@@ -131,11 +131,17 @@
       b.disabled = !kan;
     },
 
-    bericht(tekst, soort) {
+    // `plek` ({ x, y }, een tegel; T.zeg in js/dorp.js): een klik op het bericht, of Spatie, brengt de camera erheen
+    // (T.glijNaar, js/main.js), en de plek knippert op de minikaart (js/balk.js). Werklijst vraag 170, stap 1d.
+    bericht(tekst, soort, plek) {
       // Is de schout op reis (js/land.js), dan hoort hij het als hij terug is: het bericht wacht in S.land.
       if (T.S && T.opReis(T.S)) {
         T.bewaarVoorLater(T.S, tekst, soort);
         return;
+      }
+      if (plek && T.S) {
+        T.S.berichtPlek = { x: plek.x, y: plek.y };
+        if (this.ping) this.ping(plek);
       }
       const box = $('berichten');
       // Dezelfde melding vlak achter elkaar ("Daar kun je niet komen.", vier keer geklikt) wordt
@@ -153,12 +159,21 @@
         return;
       }
       const el = document.createElement('div');
-      el.className = 'bericht' + (soort ? ' ' + soort : '');
+      el.className = 'bericht' + (soort ? ' ' + soort : '') + (plek ? ' met-plek' : '');
       el.textContent = tekst;
       el.dataset.tekst = tekst;
       el.dataset.soort = soort || '';
+      if (plek) {
+        el.title = T.t('Click, or press Space, to look there');
+        el.addEventListener('click', () => T.glijNaar(plek.x, plek.y));
+      }
       box.appendChild(el);
       while (box.children.length > 5) box.removeChild(box.firstChild);
+    },
+
+    // Spatie (js/main.js): kijk naar de plek van het laatste bericht dat er een had.
+    naarBericht(S) {
+      if (S.berichtPlek) T.glijNaar(S.berichtPlek.x, S.berichtPlek.y);
     },
 
     // De naam van een kamer, groot in beeld, als je er voor het eerst binnenloopt.

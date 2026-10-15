@@ -702,6 +702,27 @@
       height: Math.abs(k.y - k.y0) + 'px',
     });
   }
+  // De groepen (stap 1d): Ctrl of Shift met een cijfer maakt een groep van wie je koos, een cijfer kiest hem, en twee keer
+  // vlak na elkaar kijkt de camera naar hem. Alleen scherm: elke speler zijn eigen groepen (S.groepen, T.schermVelden).
+  const GROEP = { dubbel: 400 }; // ms tussen twee keer hetzelfde cijfer, om ernaar te kijken
+  let vorigeGroep = { n: 0, op: -Infinity };
+  function groep(n, maak) {
+    if (maak) {
+      const m = T.gekozenMannen(S);
+      if (m.length) S.groepen[n] = m.slice();
+      else delete S.groepen[n];
+      if (m.length) T.ui.bericht(T.t('Group {n}: {aantal|one man|# men}', { n, aantal: m.length }), 'rust');
+      return;
+    }
+    const m = (S.groepen[n] || []).filter((e) => T.isMan(S.dorp, e));
+    if (!m.length) return;
+    kiesMannen(m, false, false);
+    const nu = performance.now();
+    if (vorigeGroep.n === n && nu - vorigeGroep.op < GROEP.dubbel) {
+      glijNaar(m.reduce((s, e) => s + e.x, 0) / m.length, m.reduce((s, e) => s + e.y, 0) / m.length);
+    }
+    vorigeGroep = { n, op: nu };
+  }
   // Tab: de held kiezen en naar hem kijken.
   function naarDeHeld() {
     if (T.isMan(S.dorp, S.schout)) S.gekozen = S.schout;
@@ -1005,6 +1026,19 @@
       return;
     }
     if (S.modus === 'verkennen') {
+      // 1 tot 9: de groepen (hierboven); Ctrl of Shift erbij maakt er een (in de browser neemt Chrome Ctrl+1 zelf).
+      const cijfer = /^Digit([1-9])$/.exec(ev.code || '');
+      if (cijfer) {
+        ev.preventDefault();
+        groep(Number(cijfer[1]), ev.ctrlKey || ev.metaKey || ev.shiftKey);
+        return;
+      }
+      // Spatie: kijk naar het laatste bericht met een plek (js/ui.js).
+      if (ev.key === ' ') {
+        ev.preventDefault();
+        T.ui.naarBericht(S);
+        return;
+      }
       if (ev.key === 's' || ev.key === 'S') T.wisselSluipen(S);
       return;
     }
