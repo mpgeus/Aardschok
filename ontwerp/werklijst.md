@@ -65,7 +65,7 @@ regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed*
 voor nu"). **Het lantaarntje in de hand is af** (16 okt, op de branch `claude/ecstatic-ride-yam3i6`; Marcel: "A1, B1"; `beeld.md`,
 "De lantaarn van de groepsleider"), en zijn licht is op het scherm kleiner (Marcel: "het ligt vóór het poppetje", en
 koos L3). Daarna **stap 6, samen spelen** (bij
-I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+I). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
