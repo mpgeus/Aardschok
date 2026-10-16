@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wild dat zijn bos kwijtraakt, trekt naar de buren** (Claude, 16 okt, bij stuk b van 6a2; Marcel koos voor nu E1, "is
+  weg"): E2 was dat een groep die zijn bos kwijtraakt, naar het dichtste open bos met plaats trekt, ook als dat bij een
+  ander dorp ligt. Kap je je bos, dan stuur je je wolven naar je buurman: met twee spelers een reden om het bos te sparen,
+  of juist niet. Meer werk dan E1 (een nieuw thuis zoeken buiten het eigen stuk).
 - **Wat stuk a van 6a2 liet zien** (16 okt, het wild van de wereld; buiten de stap gehouden): (a) een wolf vlucht voor
   wie hem achterna zit (2,2 tegels per seconde), sneller dan de aanvoerder: stuur je hem op een wolf af (rechts klikken),
   dan staat *Fighting breaks out* in de balk en loopt de tijd op 1×, maar valt er geen klap, tot hij het opgeeft (dat was

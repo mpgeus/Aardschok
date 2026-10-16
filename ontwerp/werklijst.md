@@ -73,7 +73,7 @@ wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles
 in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
 eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). **Bezig in sessie
-`ccr-53565789-zrmyk0`** (16 okt): stuk b, het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+`ccr-53565789-zrmyk0`** (16 okt): stuk b (besloten: "D1 e1"). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -866,6 +866,16 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   jouw dorp gebeurt niet door een gevecht ver weg. Erbij (zeg het als het anders moet): licht is licht (ook de lantaarn
   van het andere dorp), wie iemand naast zich heeft is niet alleen (van welk dorp ook), de status "Wolves" gaat over de
   roedels in het land van het dorp, en een oud bewaard spel laadt niet meer (de versie omhoog).
+  **Stuk b in detail** (Claude, 16 okt; **besloten**, Marcel: "D1 e1"): gaat een stuk land (64 bij 64 tegels) open, dan
+  krijgt het zijn wild, zoals zijn bomen: hoeveel en welke uit het nummer van het eiland en van het stuk, waar uit het land
+  zoals het dan is. Zoveel als nu per tegel bos (een roedel per 700, een groepje herten per 400), per stuk hooguit twee
+  roedels en drie groepjes; het thuis diep in het bos van zijn stuk, de wolven aan de rand met het dichtste dorp in zicht
+  (als er een in de buurt is), anders bij hun hol. `T.zetBeesten(D)` gaat eruit; de kaart onthoudt welke stukken hun wild
+  kregen. Wild ver van iedereen (zo'n 80 tegels) blijft thuis, zijn nacht loopt door. **D1:** overal even dicht, alleen naar
+  het bos (D2 een rustiger begin, D3 wilder naar het binnenland). **E1:** wordt het bos van een groep te klein, dan trekt
+  hij weg en is weg, zoals nu (E2, naar het dichtste open bos met plaats, ook bij een ander dorp, staat in
+  `opmerkingen.md`). Erbij: een thuis 18 tegels van elk ander, ook over de grens van een stuk; de jager schiet wat in zijn
+  bereik is; het opslaan een versie omhoog.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
