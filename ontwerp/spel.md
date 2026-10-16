@@ -25,7 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is op 11 okt weggehaald (snoeironde, vraag 153), de rest is niet gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
-| Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
+| Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post, in een *Line* of een *Ring*: stap 3, 16 okt) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -1031,8 +1031,8 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   wat hij draagt; van meer mannen een lijstje; van een dorpeling wat hij doet en waar hij woont. Wie iets te zeggen
   heeft (de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
   de held erheen loopt. De heer en de marskramer spreek je aan met een klik.
-- **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze verdelen
-  zich over de dichtste vrije tegels, en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
+- **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze gaan in
+  hun formatie staan (hieronder), en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
   's nachts slapen ze thuis, en 's ochtends gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
   briefje. Een bevel in de nacht houdt hen die nacht op hun post. Op een vijand: *Attack the wolf*; ze lopen hem na tot
   ze hem raken, en slaan (hieronder); is hij gevallen of weg, dan blijven ze waar ze zijn. De held heeft geen post: hij
@@ -1043,7 +1043,20 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   afbrandt, iemand die de wolven aanvallen, het hol van de wolven bij de jacht) is
   gestippeld onderstreept: een klik erop, of Spatie, brengt de camera erheen, en zolang het te lezen is, knippert de plek
   met een ring op de minikaart.
-- **Nog niet:** formaties (stap 3), en de diensten (stap 4).
+- **Formaties** (16 okt, stap 3; Marcel: "A1, B1, C1, D1, E1"). Wie je samen stuurt, gaat in een formatie staan, op
+  wapen gesorteerd. Een *Line*: rijen dwars op de looprichting, met het midden op de plek waar je klikte; voor wie slaat
+  (hooivork, zwaard, de held), erachter wie steekt (een speer of een piek reikt langs de voorste), een rij verder wie
+  schiet; hooguit 8 naast elkaar, en wie er meer is, staat een rij erachter bij zijn soort. Een *Ring*: wie slaat en
+  steekt in een kring om de plek, naar buiten kijkend, en de schutters binnenin. Een soort die er niet is, valt weg;
+  een plek op een boom, een huis of water schuift naar de dichtste vrije tegel. Ze kijken allemaal één kant op: van hun
+  midden naar waar je klikte, afgerond op de acht kanten van de figuren (in een *Ring* naar buiten); dat is alleen
+  beeld, een slag van opzij doet niet meer. Op het briefje van meer mannen staan *Line* en *Ring*: een druk zet wie een
+  post heeft meteen zo, rond hun post, en elke volgende rechtsklik houdt die formatie. Hij hoort bij de mannen, dus elke
+  troep heeft de zijne; wie je samen stuurt, krijgt die van de meesten (bij gelijk een *Line*). Na de rechtsklik liggen
+  hun plekken een halve seconde in groen op de grond. In een gevecht gaat wie een vijand ziet erop af, zoals voor stap
+  3, en komt daarna terug naar zijn plek (een formatie die houdt, D2, staat in `opmerkingen.md`). Te kiezen in de
+  werkbank ("Choosing and sending"): hoeveel naast elkaar (8) en hoe lang het groen blijft (0,5 seconde).
+- **Nog niet:** de diensten (stap 4).
 
 **Zo werkt het gevecht nu** (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie
 kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen", "Huis schout wordt town hall",
@@ -1073,7 +1086,7 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   op je eigen snelheid. Opslaan mag ook midden in een gevecht. De getallen in de werkbank ("Fighting").
 - **Gemeten** (15 okt, in de browser en in de toetsen): twee man militie tegen twee wilde rovers wint, tegen drie verliest
   hij; twee wilde rovers in de oogst zonder soldaten doodden drie dorpelingen. De balans komt later (Marcel, 15 okt).
-- **Nog niet:** formaties (stap 3), de diensten en vijanden op elk uur (stap 4), de held die als veteraan opstaat (stap 5),
+- **Nog niet:** de diensten en vijanden op elk uur (stap 4), de held die als veteraan opstaat (stap 5),
   en de mannen van een andere speler als vijand (stap 6).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen

@@ -904,6 +904,11 @@
       if (r && r.kan && r.doe) {
         if (S.slaap && T.wordWakker) T.wordWakker(S);
         r.doe();
+        // Erheen: hun plekken in hun vorm, even in groen op de grond (vraag 170, stap 3, E1; js/tekenen.js).
+        if (r.opdracht.soort === 'stuur') {
+          const { plekken } = T.formatiePlekken(S.dorp, T.gekozenMannen(S), r.opdracht.naar);
+          S.stuurPlekken = { plekken: plekken.map((p) => ({ x: p.x, y: p.y })), tot: S.tijd + T.KIEZEN_INSTELLINGEN.formatie.groen };
+        }
       } else if (r && r.tekst) T.ui.bericht(r.tekst, 'gevaar');
     }
   });

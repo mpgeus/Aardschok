@@ -104,10 +104,12 @@
       if (g) T.zetSoldaten(D, g, o.soldaat, o.verschil);
     },
     // Je mannen sturen (js/kiezen.js; vraag 170, stap 1), met de nummers van hun bewoners in `wie`: erheen, en daar is
-    // hun post ({ wie, naar: { x, y } }); een vijand achterna ({ wie, doel: { x, y, soort } }); en terug ({ wie }).
+    // hun post ({ wie, naar: { x, y } }); een vijand achterna ({ wie, doel: { x, y, soort } }); terug ({ wie }); en een
+    // formatie (stap 3: { wie, formatie: 'lijn' of 'ring' }).
     stuur: (S, D, o) => T.stuurMannen(D, o.wie, o.naar),
     volg: (S, D, o) => T.volgVijand(D, o.wie, o.doel),
     terug: (S, D, o) => T.roepTerug(D, o.wie),
+    formatie: (S, D, o) => T.zetFormatie(D, o.wie, o.formatie),
   };
 
   // Een speler geeft een opdracht (een klik, een knop). `opdracht.dorp`: het nummer van het dorp in S.dorpen (zonder: je

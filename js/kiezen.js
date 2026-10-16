@@ -14,6 +14,7 @@
 //   - een vijand aanvallen (`volg`): hij zit hem na tot hij hem raakt, en slaat (e.volgt; het gevecht, js/gevecht.js,
 //     zonder leiband). Is de vijand gevallen of weg, dan is waar hij staat zijn post.
 //   - terug (`terug`): de post is weg, en hij gaat weer naar zijn wachthuis (of aan het werk).
+//   - een formatie (`formatie`, stap 3): *Line* of *Ring*; wie een post heeft, gaat er meteen zo staan ("De formatie").
 // De held heeft geen dag om naar terug te gaan: hij blijft waar je hem neerzet.
 (function (T) {
   'use strict';
@@ -25,6 +26,10 @@
     },
     vijandBij: 3, // een vijand die je aanwijst, zoekt het bevel binnen zoveel tegels van waar je klikte
     briefjeRegels: 8, // zoveel mannen staan er bij naam op het briefje van meer gekozen mannen
+    formatie: {
+      breedte: 8, // zoveel mannen staan er hooguit naast elkaar in een Line; wie er meer is, staat een rij erachter
+      groen: 0.5, // zoveel seconden liggen hun plekken in groen op de grond na een rechtsklik (alleen scherm)
+    },
   };
   const IN = () => T.KIEZEN_INSTELLINGEN;
 
@@ -85,29 +90,173 @@
     return { tekst, kan: true, opdracht, doe: geef(opdracht) };
   };
 
-  // ── De bevelen (T.OPDRACHTEN in js/tik.js) ──
+  // ── De formatie (vraag 170, stap 3; Marcel, 16 okt: "A1, B1, C1, D1, E1") ──
+  //
+  // Wie je samen stuurt, gaat in een formatie staan, op wapen gesorteerd. Een *Line* (`lijn`): rijen dwars op de
+  // looprichting, met het midden op de plek waar je klikte; voor wie slaat (hooivork, zwaard, de held), erachter wie
+  // steekt (een speer of een piek reikt langs de voorste), een rij verder wie schiet; hooguit `breedte` naast elkaar, en
+  // wie er meer is, staat een rij erachter bij zijn soort. Een *Ring* (`ring`): wie slaat en steekt in een kring om de
+  // plek, naar buiten kijkend, en wie schiet binnenin. Een soort die er niet is, valt weg; een plek op een boom, een huis
+  // of water schuift naar de dichtste vrije tegel.
+  //
+  // De formatie hoort bij de man (e.formatie; zonder is het een Line): elke troep zijn eigen, en wie je samen stuurt,
+  // krijgt die van de meesten. Zijn kijkrichting hoort bij zijn post (post.kijk, een stap van de acht: js/sprites.js
+  // draait hem zo als hij op zijn post staat en niet vecht), en de richting van de troep ook (post.richting): van hun
+  // midden naar de klik, afgerond op de acht kanten van de figuren. Zo kijkt een rij één kant op (elk naar zijn eigen
+  // laatste stap gaf een rij die alle kanten op keek). De held heeft geen post: hij kijkt naar een plek voor zich
+  // (e.kijkt).
+  // Alleen gewone rekensommen, geen atan2, sin of cos: die kunnen op een andere computer een haar anders uitkomen, en
+  // samen spelen (lockstep, js/tik.js) vraagt werelden die letter voor letter gelijk blijven.
 
-  // De vrije tegels rond `naar`, het dichtst eerst, waar `n` mannen kunnen staan: begaanbaar, en niet in een gebouw.
-  // Kan er op `naar` zelf niemand staan (een huis, water), dan de dichtste tegels eromheen.
-  function plekkenRond(w, naar, n) {
-    const uit = [];
-    const gezien = new Set([naar.x + ',' + naar.y]);
-    let rand = [naar];
-    for (let ring = 0; uit.length < n && rand.length && ring < 12; ring++) {
+  T.FORMATIES = ['lijn', 'ring'];
+  const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+  const TAN_22_5 = 0.41421356; // de grens tussen twee van de acht kanten
+  const NAAR_DE_CAMERA = { x: 1, y: 1 }; // de richting van wie nog geen richting had (Z in js/sprites.js)
+
+  // In welke rij hij hoort: 0 wie slaat, 1 wie steekt (verder dan ernaast), 2 wie schiet.
+  T.rijVan = function (e) {
+    const s = T.slagVan(e);
+    return s.schiet ? 2 : s.bereik > 1 ? 1 : 0;
+  };
+
+  // De formatie van wie je samen stuurt: die van de meesten; bij gelijk de eerste van T.FORMATIES.
+  T.formatieVan = function (mannen) {
+    let beste = T.FORMATIES[0];
+    let meest = 0;
+    for (const v of T.FORMATIES) {
+      const n = mannen.filter((e) => (e.formatie || 'lijn') === v).length;
+      if (n > meest) [beste, meest] = [v, n];
+    }
+    return beste;
+  };
+
+  // Een richting afgerond op de acht stappen van het raster ({ x, y }, elk -1, 0 of 1), of null zonder richting.
+  function achtVan(dx, dy) {
+    if (!dx && !dy) return null;
+    const ax = Math.abs(dx);
+    const ay = Math.abs(dy);
+    return { x: ax >= ay * TAN_22_5 ? Math.sign(dx) : 0, y: ay >= ax * TAN_22_5 ? Math.sign(dy) : 0 };
+  }
+  // Een hoek rond, van 0 tot 4, zonder atan2 (de ruithoek): hij stijgt zoals de echte hoek, en dat is genoeg om op te
+  // sorteren.
+  function ruitHoek(dx, dy) {
+    if (dy >= 0) return dx >= 0 ? dy / (dx + dy || 1) : 1 - dx / (dy - dx);
+    return dx < 0 ? 2 - dy / (-dx - dy) : 3 + dx / (dx - dy);
+  }
+  const midden = (tegels) => ({
+    x: tegels.reduce((som, t) => som + t.x, 0) / tegels.length,
+    y: tegels.reduce((som, t) => som + t.y, 0) / tegels.length,
+  });
+  // De richting die de troep had (staan ze al waar je ze heen stuurt, of kies je een andere formatie).
+  function vorigeRichting(mannen) {
+    const met = mannen.find((e) => e.post && e.post.richting);
+    return met ? met.post.richting : NAAR_DE_CAMERA;
+  }
+
+  // De dichtste vrije tegel bij t (t zelf eerst) waar nog niemand van de formatie staat: begaanbaar, en niet in een
+  // gebouw.
+  function vrijBij(w, t, bezet) {
+    const gezien = new Set([t.x + ',' + t.y]);
+    let rand = [t];
+    for (let ring = 0; rand.length && ring < 12; ring++) {
       const volgende = [];
-      for (const t of rand) {
-        if (T.opKaart(w, t.x, t.y) && T.isBegaanbaar(w, t.x, t.y)) uit.push(t);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
-          const k = t.x + dx + ',' + (t.y + dy);
+      for (const p of rand) {
+        if (T.opKaart(w, p.x, p.y) && T.isBegaanbaar(w, p.x, p.y) && !bezet.has(p.x + ',' + p.y)) return p;
+        for (const [dx, dy] of BUREN) {
+          const k = p.x + dx + ',' + (p.y + dy);
           if (gezien.has(k)) continue;
           gezien.add(k);
-          volgende.push({ x: t.x + dx, y: t.y + dy });
+          volgende.push({ x: p.x + dx, y: p.y + dy });
         }
       }
       rand = volgende;
     }
-    return uit.slice(0, n);
+    return t;
   }
+
+  // Een Line: per soort (wie slaat, wie steekt, wie schiet) zoveel rijen als nodig, met de middelste rij op `naar`. In
+  // een rij staat wie links liep links, zodat niemand kruist.
+  function lijnPlekken(mannen, naar, f) {
+    const z = { x: -f.y, y: f.x }; // opzij
+    const opzij = (e) => (T.tegelVan(e).x - naar.x) * z.x + (T.tegelVan(e).y - naar.y) * z.y;
+    const vooruit = (e) => (T.tegelVan(e).x - naar.x) * f.x + (T.tegelVan(e).y - naar.y) * f.y;
+    const breedte = Math.max(1, Math.round(IN().formatie.breedte));
+    const rijen = [];
+    for (const soort of [0, 1, 2]) {
+      const wie = mannen.filter((e) => T.rijVan(e) === soort).sort((a, b) => vooruit(b) - vooruit(a));
+      for (let i = 0; i < wie.length; i += breedte) rijen.push(wie.slice(i, i + breedte));
+    }
+    const voor = Math.floor((rijen.length - 1) / 2); // zoveel rijen staan er voor de plek
+    const uit = [];
+    rijen.forEach((rij, r) => {
+      rij.sort((a, b) => opzij(a) - opzij(b)).forEach((e, j) => {
+        const k = j - Math.floor((rij.length - 1) / 2);
+        const terug = r - voor;
+        uit.push({ e, x: naar.x - terug * f.x + k * z.x, y: naar.y - terug * f.y + k * z.y, kijk: { x: f.x, y: f.y } });
+      });
+    });
+    return uit;
+  }
+
+  // Een Ring om `naar`: wie slaat en steekt op de kleinste kring waar ze allemaal op passen (met binnenin plaats voor wie
+  // schiet), gelijk verdeeld en de eerste in de looprichting, elk naar buiten kijkend; wie schiet binnenin, het midden
+  // eerst. Is er niemand die slaat of steekt, dan staan de schutters zelf in de kring.
+  function ringPlekken(mannen, naar, f) {
+    let buiten = mannen.filter((e) => T.rijVan(e) < 2);
+    let binnen = mannen.filter((e) => T.rijVan(e) === 2);
+    if (!buiten.length) [buiten, binnen] = [binnen, []];
+    if (buiten.length === 1 && !binnen.length) return [{ e: buiten[0], x: naar.x, y: naar.y, kijk: { x: f.x, y: f.y } }];
+    const start = ruitHoek(f.x, f.y);
+    const hoek = (dx, dy) => (ruitHoek(dx, dy) - start + 4) % 4;
+    const hoekVan = (e) => hoek(T.tegelVan(e).x - naar.x, T.tegelVan(e).y - naar.y);
+    let kring;
+    let kern;
+    for (let r = 1; ; r++) {
+      kring = [];
+      kern = [];
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          const d2 = dx * dx + dy * dy;
+          if (d2 < (r - 0.5) ** 2) kern.push({ dx, dy, d2 });
+          else if (d2 < (r + 0.5) ** 2) kring.push({ dx, dy });
+        }
+      }
+      if (kring.length >= buiten.length && kern.length >= binnen.length) break;
+    }
+    kring.sort((a, b) => hoek(a.dx, a.dy) - hoek(b.dx, b.dy));
+    kern.sort((a, b) => a.d2 - b.d2 || hoek(a.dx, a.dy) - hoek(b.dx, b.dy));
+    const uit = [];
+    buiten.sort((a, b) => hoekVan(a) - hoekVan(b)).forEach((e, i) => {
+      const p = kring[Math.floor((i * kring.length) / buiten.length)];
+      uit.push({ e, x: naar.x + p.dx, y: naar.y + p.dy, kijk: achtVan(p.dx, p.dy) });
+    });
+    binnen.sort((a, b) => hoekVan(a) - hoekVan(b)).forEach((e, i) => {
+      const p = kern[i];
+      uit.push({ e, x: naar.x + p.dx, y: naar.y + p.dy, kijk: achtVan(p.dx, p.dy) || { x: f.x, y: f.y } });
+    });
+    return uit;
+  }
+
+  // Waar elk van `mannen` komt te staan in hun formatie bij `naar`: { plekken: [{ e, x, y, kijk }], richting }. Zonder
+  // `richting` die van hun midden naar `naar`; staan ze er al, dan die ze hadden. Ook voor het scherm (de plekken in groen
+  // na een rechtsklik, js/main.js): het verandert niets.
+  T.formatiePlekken = function (D, mannen, naar, richting) {
+    const m = midden(mannen.map((e) => T.tegelVan(e)));
+    const dx = naar.x - m.x;
+    const dy = naar.y - m.y;
+    const f = richting || (Math.abs(dx) + Math.abs(dy) >= 1 && achtVan(dx, dy)) || vorigeRichting(mannen);
+    const plekken = T.formatieVan(mannen) === 'ring' ? ringPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
+    const bezet = new Set();
+    for (const p of plekken) {
+      const t = vrijBij(D.wereld, p, bezet);
+      bezet.add(t.x + ',' + t.y);
+      p.x = t.x;
+      p.y = t.y;
+    }
+    return { plekken, richting: f };
+  };
+
+  // ── De bevelen (T.OPDRACHTEN in js/tik.js) ──
 
   // Loop naar `doel` (een tegel, of met `naast` ernaast). Wie binnen is, komt eerst naar buiten (het dwalen, js/verkennen.js,
   // dat hij nu meteen doet); wie midden in een stap is, maakt die af. Geeft of er een weg is.
@@ -129,22 +278,41 @@
     delete e.volgt;
   }
 
-  // Erheen (`stuur`): de dichtste man naar de dichtste plek, en dat is zijn post. Wie vocht, laat zijn doel gaan: een bevel
-  // erheen is lopen (en daar valt hij aan wat hij ziet, js/gevecht.js).
-  T.stuurMannen = function (D, wie, naar) {
+  // Erheen (`stuur`): elk naar zijn plek in hun formatie (hierboven), en dat is zijn post. Wie je samen stuurt, krijgt
+  // de formatie van de meesten. Wie vocht, laat zijn doel gaan: een bevel erheen is lopen (en daar valt hij aan wat hij
+  // ziet, js/gevecht.js). `richting` alleen als de formatie verandert waar ze staan (T.zetFormatie).
+  T.stuurMannen = function (D, wie, naar, richting) {
     const mannen = mannenMet(D, wie);
     if (!mannen.length) return;
-    const plekken = plekkenRond(D.wereld, naar, mannen.length);
-    const opAfstand = mannen.slice().sort((a, b) => T.afstand(T.tegelVan(a), naar) - T.afstand(T.tegelVan(b), naar));
+    const formatie = T.formatieVan(mannen);
+    const uit = T.formatiePlekken(D, mannen, naar, richting);
     const nacht = D.kalender && T.dagdeelVan(D.kalender.dag) === 'nacht';
-    opAfstand.forEach((e, i) => {
-      const plek = plekken[i] || plekken[plekken.length - 1] || naar;
+    for (const { e, x, y, kijk } of uit.plekken) {
       neemBevel(e);
       delete e.doelwit;
       delete e.vanaf;
-      if (e !== D.schout) e.post = nacht ? { x: plek.x, y: plek.y, wakker: true } : { x: plek.x, y: plek.y };
-      if (!loop(D, e, plek, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
-    });
+      if (formatie === 'lijn') delete e.formatie;
+      else e.formatie = formatie;
+      if (e === D.schout) e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
+      else e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y }, ...(nacht ? { wakker: true } : {}) };
+      if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
+    }
+  };
+
+  // Een formatie kiezen (`formatie`, de knoppen Line en Ring op het briefje): hij hoort voortaan bij hen, en wie een post
+  // heeft, gaat er meteen zo staan, rond het midden van hun posten en in de richting die ze hadden (de held, zonder post,
+  // staat dan mee).
+  T.zetFormatie = function (D, wie, formatie) {
+    if (!T.FORMATIES.includes(formatie)) return;
+    const mannen = mannenMet(D, wie);
+    for (const e of mannen) {
+      if (formatie === 'lijn') delete e.formatie;
+      else e.formatie = formatie;
+    }
+    if (!mannen.some((e) => e.post)) return;
+    const staan = mannen.filter((e) => e.post || e === D.schout);
+    const m = midden(staan.map((e) => e.post || T.tegelVan(e)));
+    T.stuurMannen(D, T.nummersVan(D, staan), { x: Math.round(m.x), y: Math.round(m.y) }, vorigeRichting(staan));
   };
 
   // Een vijand aanvallen (`volg`): de vijand van die soort het dichtst bij waar je klikte. Het gevecht (js/gevecht.js)
@@ -166,6 +334,7 @@
       neemBevel(e);
       delete e.post;
       delete e.doelwit;
+      if (e === D.schout) delete e.kijkt;
       e.volgt = vijand;
       loop(D, e, T.tegelVan(vijand), true);
     }
@@ -260,11 +429,22 @@
     };
   };
 
-  // Het briefje van meer mannen: hoeveel, wie (bij naam, de eerste briefjeRegels), en terugroepen.
+  // De knoppen voor hun formatie (stap 3): Line en Ring; die ze nu hebben, is niet te kiezen.
+  const formatieKnoppen = (D, mannen) => {
+    const nu = T.formatieVan(mannen);
+    const wie = T.nummersVan(D, mannen);
+    return [
+      { tekst: T.t('Line'), uitleg: T.t('In rows: who strikes in front, spears behind them, bows at the back'), formatie: 'lijn' },
+      { tekst: T.t('Ring'), uitleg: T.t('In a ring around the spot, facing out, bows in the middle'), formatie: 'ring' },
+    ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: k.formatie !== nu, opdracht: { soort: 'formatie', wie, formatie: k.formatie } }));
+  };
+
+  // Het briefje van meer mannen: hoeveel, wie (bij naam, de eerste briefjeRegels), hun formatie, en terugroepen.
   T.mannenBriefje = function (D, mannen) {
     const n = IN().briefjeRegels;
     const regels = mannen.slice(0, n).map((e) => `${naamVan(D, e)} · ${soortTekst(D, e)} · ${leven(e, D)}`);
     if (mannen.length > n) regels.push(T.t('and {n} more', { n: mannen.length - n }));
+    regels.push({ tekst: T.t('Formation'), knoppen: formatieKnoppen(D, mannen) });
     const knop = terugKnop(D, mannen);
     if (knop) regels.push({ tekst: T.t('Their post'), knoppen: [knop] });
     return { kop: T.t('{n} men', { n: mannen.length }), doet: '', delen: [{ titel: T.t('Chosen'), regels }] };

@@ -1336,6 +1336,9 @@
     huisSterkte: T.t('house brightness'),
   };
   const NAAM_VAN_PAD = {
+    'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
+    'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
+    'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
     'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst
