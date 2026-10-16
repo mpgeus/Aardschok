@@ -591,7 +591,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   boven wie vecht, de schade als getal, de uitval, en een pijl of bout als korte streep (in code). **2e** het gevecht in
   beurten gaat er nu al uit (het raster, de actiepunten, einde beurt, de deur), niet pas in stap 5; de held die valt,
   blijft tot stap 5 het eind. De speeltest vecht niet meer zelf. De getallen in de werkbank ("Fighting").
-- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Bezig in sessie `claude/werklijst-doorgaan-vnked4`** (16 okt): het plan ligt bij Marcel.
 - **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
