@@ -70,8 +70,9 @@ afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
-spelregels vast bij het begin, en een woordmerk in pixel art. **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt): het
-plan voor Marcel.
+spelregels vast bij het begin, en een woordmerk in pixel art. **Stap 1 tot 6 zijn af** (16 okt, op de branch
+`ccr-907f9459-i3k9fd`; `code.md` bij `js/menu.js`, `spel.md` bij "Instelbaar"), en **de proefplaat van het woordmerk wacht
+op Marcel** (`beeld.md`, "Het woordmerk"). **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt).
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
@@ -83,6 +84,18 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Het menu bekijken** (vraag 172, 16 okt, op de branch `ccr-907f9459-i3k9fd`): open het spel. Links het woord en de
+  keuzes als tekst, rechts het land; de muis of de pijltjes zetten het vaantje, Enter neemt. *Credits* en (met een spel
+  bewaard) *Load* liggen op papier ernaast; *Settings* heeft het beeld, het hele scherm, de taal en de toetsen. *New game*:
+  de naam, het land met het eiland, *Game rules* (*Standard*, of kies er zelf; dan maakt *Begin* het land opnieuw), en
+  *Begin*. In het spel Esc: het menu op papier, *Game rules* lees je daar alleen; in D zit *Game rules and the workbench*
+  om te proberen. **De proefplaat van het woordmerk** (gebroken goud, `beeld.md`, "Het woordmerk"): goed zo, of wat
+  anders? **Wat Claude erbij koos** (zeg het als het anders moet): (1) onder *Settings* staan *Drawing*, *Shadows*, de
+  twee keuzes voor de doorkijk, *Trees through the year*, *Small life*, *Clothes* en *Advice*: die raken de wereld niet;
+  (2) een nieuw spel krijgt de spelregels die je het laatst koos, en een spel van vóór vandaag speelt met wat de browser
+  had; (3) de werkbank staat alleen nog in D, niet bij *New game* of in het menu; (4) *Continue* heeft één regel eronder
+  (het dorp, de dag, de mensen), en verder heeft alleen *Game rules* en *Photo mode* een regel; (5) Credits zegt "A game by
+  Marcel, made with Claude", en de letters met hun licentie; (6) *Quit* staat er alleen in de Electron-versie.
 - **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt; de regel en het licht in `main`, het lantaarntje op
   de branch `claude/ecstatic-ride-yam3i6`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
   *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
@@ -791,6 +804,9 @@ geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat
   werkt het ook samen (6d). Ze gaan dus mee in het bewaarde spel (`S`), en niet meer in de browser.
 - **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
   (`commercieel.md`, "De capsule en het logo").
+
+**Stap 1 tot 6 zijn af** (16 okt, op de branch `ccr-907f9459-i3k9fd`); stap 7, de proefplaat van het woordmerk, wacht op
+Marcel (`beeld.md`, "Het woordmerk").
 
 **Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
 1. **Het titelscherm:** links een donker verloop met het woordmerk, de keuzes als tekst in Grenze (*Continue* met het

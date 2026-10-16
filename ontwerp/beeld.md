@@ -1072,6 +1072,25 @@ bode); de tekening is het lantaarntje met een klein waasje eromheen.
   zoals bij de ramen: het vel heeft een tweede laag met alleen wat gloeit (het hoorn en de vlam), daarmee gaat er een gat
   in het doek, daar valt de nacht niet in, en na de nacht komt dezelfde laag erin terug.
 
+## Het woordmerk: gebroken goud (16 okt 2026, werklijst vraag 172, 7)
+
+Marcel, 16 okt: het woordmerk "Pixel art uit code", en voor de richting **"Gebroken goud"**. In woorden, vooraf:
+*TITHEBREAKER* in eigen kapitalen van pixels, geen letter van de computer, zo'n 20 hoog en op 3×; het goud van de heer
+(oker, licht van linksboven, een donkere rand, zoals alles uit de renderer); en het woord is zelf gebroken: tussen TITHE
+en BREAKER een barst, BREAKER zakt en kantelt iets, met splinters goud.
+
+**Hoe het gemaakt wordt** (`gereedschap/pixelart/woordmerk.cjs`): elke letter uit balken en schuine streken op een raster
+van 16 hoog, met een staande streek van 3 en schreven van een pixel, zodat ze even dik en even hoog zijn. Het licht: de
+linker- en bovenrand glanst (`#fbe8a3`), de rechter- en onderrand ligt in de schaduw (`#6e3a16`), en de letter loopt van
+licht boven naar donker onder (`#e5b94c`, `#c98d2c`, `#a5641d`), met hier en daar een putje, als gegoten en gesleten; een
+rand van een pixel in `#24120a` en een halve schaduw rechtsonder. De breuk: E en B raken elkaar, een gekartelde barst loopt
+erdoor (de rand maakt er een donkere lijn van), BREAKER schuift twee pixels op en zakt twee (B, R, E) en drie (A, K, E, R)
+pixels, en drie kruimels goud vallen onder de breuk weg. 179 bij 27 pixels.
+
+**De proefplaat** (16 okt): het titelscherm op 1920 bij 1080, met het woordmerk op 3× in plaats van de letter. Wacht op
+Marcel. Daarna: `node gereedschap/pixelart/woordmerk.cjs --spel` schrijft `beelden/woordmerk.png`, en het titelscherm
+toont het op 3× (op een smal scherm 2×), op ware pixels.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
