@@ -56,8 +56,7 @@ een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, in `main`
 nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
 niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
 gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
-*Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4 is af** (16 okt, op de
-branch `ccr-6d85b700-hg7aex`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten): een dag- of
+*Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten): een dag- of
 nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Het
 volgende is stap 5, de held en het opruimen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
@@ -72,7 +71,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De diensten bekijken** (vraag 170, stap 4, 16 okt, op de branch `ccr-6d85b700-hg7aex`; daarna naar `main`): Nieuw
+- **De diensten bekijken** (vraag 170, stap 4, 16 okt, in `main`): Nieuw
   spel, zet een wachthuis (B) met drie man militie (+). Kies er een, en druk op zijn briefje bij *Watch* op *Night*: hij
   gaat naar huis en slaapt overdag, en vanaf het slapen (`Spel.debug.uur(22)`) staat hij bij het wachthuis terwijl de
   twee anderen slapen. Op het briefje van het wachthuis: *On watch by day 2, by night 1*, met *To arms*. Laat 's nachts
@@ -638,8 +637,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   en komt terug naar zijn plek (de vorm die houdt, D2, naar `opmerkingen.md`); **E1** na de rechtsklik een halve seconde
   de plekken in groen op de grond. Erbij: `js/gevecht.js` gebruikte `e.kijkt` als klok, en `js/sprites.js` als
   kijkrichting, zodat wie gevochten had naar het zuiden keek als hij stilstond.
-- **4, de diensten** (5a), en vijanden kunnen op elk uur komen. **Af** (16 okt, op de branch `ccr-6d85b700-hg7aex`;
-  `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten; `code.md` bij `js/kiezen.js`).
+- **4, de diensten** (5a), en vijanden kunnen op elk uur komen. **Af** (16 okt, in `main`; `spel.md`, "Zo werkt
+  kijken, kiezen en sturen nu", bij De diensten; `code.md` bij `js/kiezen.js`).
   **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C2, D2"): **4a** de dienst hoort bij de soldaat (een
   veteraan en de held hebben er geen): in zijn dienst staat hij op zijn post of bij het wachthuis, daarbuiten slaapt hij
   thuis; **A1** de dagdienst is van opstaan tot slapen, de nachtdienst van slapen tot opstaan (geen gat; een soldaat gaat
