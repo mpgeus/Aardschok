@@ -737,10 +737,10 @@ ergens zet iedereen op 1× tot het voorbij is, pauze kan ieder, en een venster z
 alleen speelt), E2 beslissen bij stap 6, met een proef; **F** de volgorde: F1 stap 0 eerst, dan 1 tot 6 (de grond
 achteraf leggen onder code die zonder gebouwd is, kost meer), F2 eerst de RTS (1 tot 5), dan 0 en 6.
 
-**6d, de menu's voor samen spelen: besloten** (Marcel, 16 okt: "1. A 2. A 3. A 4. B 5. A"; het voorstel van Claude in
-sessie `ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c, op de branch `ccr-055aff40-lz2bwx`) gaat over de
-techniek; dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het opslaan gaat anders dan daar
-voorgesteld (4b).
+**6d, de menu's voor samen spelen: besloten** (Marcel, 16 okt: "1. A 2. A 3. A 4. B 5. A", en daarna bij 4: "Ik wil
+ook dat degene die het spel opstart het spel opslaat", dus 4a; het voorstel van Claude in sessie
+`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c, op de branch `ccr-055aff40-lz2bwx`) gaat over de techniek;
+dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het opslaan gaat zoals daar voorgesteld.
 - **Het titelscherm** krijgt *Play together*: dezelfde kaart als *New game* (de naam van je dorp, het land), uitgebreid
   tot de lobby. Wie opent, kiest het land en de spelregels (vast zodra je begint); ieder typt de naam van het eigen dorp
   en zegt *Ready*, en wie opende, drukt *Begin*. Is de stand van de code anders (`T.STAND`), dan zegt de lobby dat
@@ -751,10 +751,11 @@ voorgesteld (4b).
 - **3a gaat de ander weg**, dan pauzeert het spel, met *Wait* of *Play on* bij wie overblijft. Het andere dorp leeft
   vanzelf door (de dorpelingen werken vanzelf, de soldaten blijven op hun post), en wie wegging, komt terug met een
   uitnodiging: de wereld en het eigen dorp.
-- **4b ieder slaat op**: elke computer heeft de hele wereld, dus ieder bewaart allebei de dorpen, en wie het andere dorp
-  speelde. Wie zo'n spel laadt, opent de lobby en nodigt de ander uit, die het eigen dorp terugkrijgt.
-- **Het menu onder Esc, samen:** *Resume*, *Pause for both* (bij allebei staat wie pauzeerde; E1), *Save*, *Game rules*
-  (alleen lezen), *Photo mode*, en *Leave game* in plaats van *To the title screen*; *Load* is grijs, met de reden.
+- **4a alleen wie het spel opstartte, slaat op**: allebei de dorpen, en wie het andere dorp speelde, ook het vanzelf
+  opslaan. Wie zo'n spel laadt, opent de lobby en nodigt de ander uit, die het eigen dorp terugkrijgt.
+- **Het menu onder Esc, samen:** *Resume*, *Pause for both* (bij allebei staat wie pauzeerde; E1), *Save* (bij de ander
+  grijs: *The host saves this game*), *Game rules* (alleen lezen), *Photo mode*, en *Leave game* in plaats van *To the
+  title screen*; *Load* is grijs, met de reden.
 - **5a eerst onze eigen lijn** (6c: `npm start`, twee browsers), Steam in januari, met het eigen App ID en de
   Steam-pagina (G). Het menu weet niet welke lijn er is: *Invite a friend* geeft bij onze server een code, op Steam de
   overlay. Op Steam: een lobby voor vrienden, voor twee, met het zaad, de stand en de spelregels erin; uitnodigen met de
