@@ -70,7 +70,7 @@ eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand.
 iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
 N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens
 bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Bezig in
-sessie `ccr-53565789-zrmyk0`** (16 okt): 6a2, eerst het plan voor stuk a voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+sessie `ccr-53565789-zrmyk0`** (16 okt): 6a2, stuk a (besloten: "A1"). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -820,6 +820,16 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   K2 de buit is weg. **L** hoe ze leren: L1 zoals hierboven, per dorp een getal dat stijgt na een makkelijke tocht en
   daalt na een slechte, en terugzakt naar het midden; L2 alleen onthouden waar het misging (een dorp met soldaten mijden ze
   een seizoen). Gekozen: K1, L1.
+  **Stuk a in detail** (Claude, 16 okt; **besloten**, Marcel: "A1"): het wild is van niemand; de wereld werkt het één
+  keer per tik bij (na de dorpen) en één keer per nacht (honger, jagen, jongen, splitsen, verhuizen). Wat het van een
+  dorp wil weten, vraagt het aan het dorp van wie het aangaat: wie schrikt, verliest werk voor zijn eigen dorp; een prooi
+  is een schaap of wie alleen in het donker is, van welk dorp ook; wie om hulp roept, krijgt de mannen van zijn eigen dorp,
+  en het bericht, het gevecht en de 1× zijn van dat dorp; een jager schiet elk hert in zijn bereik. Waar het wild woont,
+  blijft tot b (om elk dorp gezet), de rovers blijven tot c bezoekers van het dorp dat ze beroven. **A1**: elke roedel en
+  kudde gooit met een eigen dobbelsteen uit zijn zaad, `w.lot` is voor wat de wereld zelf kiest (c); zo verandert wat bij
+  jouw dorp gebeurt niet door een gevecht ver weg. Erbij (zeg het als het anders moet): licht is licht (ook de lantaarn
+  van het andere dorp), wie iemand naast zich heeft is niet alleen (van welk dorp ook), de status "Wolves" gaat over de
+  roedels in het land van het dorp, en een oud bewaard spel laadt niet meer (de versie omhoog).
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
