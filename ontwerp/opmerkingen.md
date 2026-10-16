@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Ronde 4 van het snoeien** (16 okt, bij vraag 170, stap 5; buiten de stap gehouden): de overgang tussen de kaarten van
+  Tiled (`js/gebied.js`, `S.naarGebied`, zo'n 240 regels en 165 regels toetsen in `test/wereld.test.cjs`) en de kamers met
+  deuren (`T.maakProefkamers`, `T.ontdekBijDeur`, `w.bekend`, `deurenOpenen`) bestaan alleen nog op de proefkaarten, voor
+  een held die van kaart naar kaart liep. Veel toetsen leunen op de proefkamers (regels, vee, dorpelingen, voetafdruk),
+  dus het is een eigen ronde.
 - **Wat stap 1 van vraag 170 liet zien** (15 okt, kijken, kiezen en sturen): (a) een post is één tegel per man; staat
   er iemand op (een dorpeling die langsloopt), dan wacht hij ernaast tot de tegel vrij is, zoals iedereen bij zijn anker.
   (b) Rechts op een gebouw stuurt je mannen naar de vrije tegels eromheen; erin gaan ze niet (een toren of een muur om op
@@ -992,6 +997,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
+- **Een vaandel boven de aanvoerder** (16 okt, vraag 170, stap 5): in een RTS zoek je je held snel, en nu vindt alleen
+  Tab hem (hij draagt het vel van een dorpeling, en een nieuwe aanvoerder zijn eigen). Een klein vaandel boven hem, in
+  code; eerst in woorden en een proefplaat (`beeld.md`). Niet gekozen.
+- **Ontslag en sneuvelen** (16 okt, vraag 170, stap 5): de aanvoerder kan vallen en een ander neemt het over, maar de
+  twee bazen (de heer en het dorp) sturen "je" weg, en dan is het spel uit. Voorstel: ontslag gaat over het dorp (jij als
+  speler), sneuvelen over de man; zo past het. En de schandpaal wordt sterker: zet de heer de aanvoerder aan de paal, dan
+  mist je troep een tijd zijn held. Niet gekozen.
 - **Bij de diensten** (16 okt, vraag 170, stap 4; buiten de stap gehouden): **een fakkel bij de nachtwacht**, zodat je
   wie waakt in het donker ziet staan (een tekening: eerst in woorden, `beeld.md`); **'s nachts minder ver zien**, voor
   iedereen (nu ziet een man 8 tegels ver, dag en nacht), zodat de nacht tactisch wordt en een overval in het donker

@@ -650,14 +650,24 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   's nachts (van slapen tot opstaan), het uur uit het zaad; de werkbank. Op het briefje van een soldaat zijn dienst, en
   op dat van het wachthuis hoeveel er overdag en 's nachts waken. Wat erbuiten bleef (`opmerkingen.md`): een fakkel bij
   de nachtwacht, 's nachts minder ver zien, en een patrouille.
-- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt): het plan voor Marcel. De schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
-  praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
-  de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
-  die hem volgt, en reizen met hem over de landkaart (het gevecht in beurten ging er al in stap 2 uit); in de code heet het
-  town hall nog `schout` (`T.GEBOUWEN.schout`), en de jacht op de wolven roept nog mannen op die met de held meelopen
-  (`T.roepOp`); en wat sinds stap 1 niets meer doet: het
-  lopen na een klik (`S.naLopen` en zijn afloop in `T.bijAankomst`), de tekst *Pick up the key* en de uitleg `hulp` in
-  `js/ui.js` ("Click to walk, talk or use something").
+- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt). De schout heet voortaan
+  anders (vraag A), en valt hij, dan staat er een veteraan op; het praten is geparkeerd; eruit wat alleen voor een lopende
+  schout was.
+  **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C2"), in vier commits: **5a weg** wat alleen voor een
+  lopende schout was: de reis over de landkaart (de spelregel "Land", zo'n 850 regels), sluipen (S), de lantaarn van de
+  held (de wolven zien hem als ieder ander; de lantaarns van de bode blijven), sleutel, kist en oprapen (met
+  `T.questGrendel` en wat het gereedschap van de quests daarvan las), `T.roepOp` en `opgeroepen`, `S.naLopen`, de uitleg
+  `hulp`, de dode code in `js/lopen.js`, en **A1** slapen met Z (de snelheid in de balk spoelt de nacht ook door, en
+  samen spelen heeft één klok). **5b het praten geparkeerd:** een klik op de marskramer opent zijn handel, een klik op de
+  heer zijn venster om te betalen, de waard heeft geen *Talk* meer; de code van de gesprekken blijft. **5c de naam:** de
+  held heet `aanvoerder` (*commander*, ook in de brieven, voor *reeve*), `S.schout` gaat op in `S.dorp.aanvoerder` (één
+  weg), het town hall heet `raadhuis` (en de 85 tekeningen `schoutshuis` ook, hernoemd, niet opnieuw gerenderd), wie velden
+  plant heet `speler`, en het opslaan gaat naar versie 16. **5d de held valt, een ander staat op**, in elk dorp: een
+  veteraan, anders wie het langst soldaat is (een soldaat onthoudt sinds wanneer), anders de eerste die soldaat wordt; een
+  bericht met de plek; "Fallen" is weg en het spel gaat door. **B1** hij houdt zijn uiterlijk en zijn wapen, en telt niet
+  meer mee in het wachthuis (geen dienst). **C2** zijn gezin trekt in het town hall, en het gezin van wie viel, trekt in
+  zijn huis (ze ruilen; had hij geen huis, dan is het oude gezin dakloos, zoals na afbreken). Blijft staan: de overgang
+  tussen de kaarten van Tiled en de kamers met deuren (alleen op de proefkaarten; `opmerkingen.md`, ronde 4).
 - **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
   slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
   zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
