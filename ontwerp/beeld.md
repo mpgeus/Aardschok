@@ -1039,6 +1039,21 @@ twee of drie naast elkaar, naar hoe vol de stapel is (`S.stapelDelen` in `js/spr
 ladingen erbij uit `LADINGEN` in `ossenkar.cjs`: `ossenkar-stenen`, `ossenkar-zakken` en `ossenkar-spullen`
 (`ossenkar-anim.cjs`, dan `naar-spel.cjs --alleen ossenkar-stenen,ossenkar-zakken,ossenkar-spullen`).
 
+## De lantaarn van de groepsleider (16 okt 2026, werklijst vraag 171, D2)
+
+In woorden (Marcel koos de manier en wanneer: "M2, E1"; nog geen proefplaat): een lantaarn zoals een man te voet hem in
+de veertiende eeuw droeg. Een vierkant kooitje van zwart ijzer, smaller dan hoog (zo'n 6 bij 9 pixels met het hengsel,
+tegen 60 voor de man), met vier ruitjes van hoorn, melkig en warm oranjegeel als hij brandt; een spits ijzeren dakje met
+een rij gaatjes, een ring bovenop en een hengsel; binnenin één vlammetje dat flakkert (twee beelden). Hij draagt hem aan
+het hengsel, in de hand aan de kant van de kijker, langs het lijf op heuphoogte: lopend gaat hij met de hand mee en
+schommelt hij een paar graden, staand hangt hij stil. De gloed op de grond doet het spel al (de lichtkaart, zoals bij de
+bode); de tekening is het lantaarntje met een klein waasje eromheen.
+
+- **M2:** een eigen laag over elk figuur (zoals het halsijzer van de schandpaal, en de ogen van de wolf: een plek per
+  beeld), niet een vel per uiterlijk zoals de zager: één klein vel, voor elk figuur, elk uiterlijk en alle kleren. De
+  arm zelf verandert niet.
+- **E1:** alleen in beeld als hij brandt (buiten in het donker, `T.draagtLicht` in `js/zien.js`); overdag niet.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
