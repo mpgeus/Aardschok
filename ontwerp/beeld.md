@@ -1057,7 +1057,7 @@ bode); de tekening is het lantaarntje met een klein waasje eromheen.
   kwartslag gedraaid (een ruit recht, de volgende schuin), met dunne stijlen, zodat het hoorn het meest te zien is: zo'n
   6 bij 11 pixels; de hand komt uit het model, en welke hand per richting vast is (de dichtste in het eerste beeld van
   staan, recht van voren en van achteren de rechter), zodat hij bij het lopen niet van hand wisselt. Op de boer, de
-  boerin en de jongen, 's nachts. Wacht op Marcel.
+  boerin en de jongen, 's nachts. **Marcel: "goed zo voor nu".**
 
 ## De heide (25 sep 2026)
 

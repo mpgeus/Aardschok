@@ -60,9 +60,10 @@ gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Sta
 nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Stap 5
 is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het
 over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
-171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"; **Bezig
-in sessie `claude/clever-brown-vz07hg`**, 16 okt). Daarna
-**stap 6, samen spelen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"). **De
+regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed** (16 okt, in `main`; Marcel: "goed zo
+voor nu"). **Het volgende is 171 afmaken:** de lantaarn in het spel tekenen (bij I). Daarna **stap 6, samen spelen** (bij
+I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -75,13 +76,11 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De lantaarn in woorden** (vraag 171, D2, 16 okt): de beschrijving en de keuze tussen een eigen vel per uiterlijk
-  (zoals de zager) of een laag over elk figuur (zoals het halsijzer) staan in het gesprek van 16 okt en hier: een
-  vierkant kooitje van zwart ijzer, zo'n 6 bij 9 pixels, met vier ruitjes van hoorn (warm oranjegeel als hij brandt), een
-  spits dakje met gaatjes, een ring en een hengsel, en één flakkerend vlammetje; aan het hengsel in de hand aan de kant
-  van de kijker, op heuphoogte, schommelend met de pas. **Gekozen** (Marcel: "M2, E1"): de laag, en alleen in beeld als
-  hij brandt (`beeld.md`, "De lantaarn van de groepsleider"). De proefplaat is er (16 okt, `node
-  gereedschap/pixelart/lantaarn.cjs`), en wacht op zijn oordeel; daarna het vel, de handen per figuur en het tekenen.
+- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met
+  twee man militie (+), en kijk 's avonds (`Spel.debug.uur(21)`): om de aanvoerder en de leider van wie dienst heeft,
+  staat een warm licht, en de wolven vallen wie in dat licht staat niet aan. Het lantaarntje in de hand komt in de
+  volgende stap. **Wat Claude erbij koos** (zeg het als het anders moet): de leider is, van wie *nu* dienst heeft, wie
+  het langst dient, zodat de nachtwacht 's nachts haar eigen leider heeft.
 - **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
   wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
   bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
@@ -694,12 +693,15 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   zijn huis (ze ruilen; had hij geen huis, dan is het oude gezin dakloos, zoals na afbreken). Blijft staan: de overgang
   tussen de kaarten van Tiled en de kamers met deuren (alleen op de proefkaarten; `opmerkingen.md`, ronde 4).
 - **171, de groepsleider met de lantaarn** (Marcel, 16 okt, na stap 5, waar de held zonder lantaarn 's nachts prooi werd
-  voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **Bezig in sessie
-  `claude/clever-brown-vz07hg`** (16 okt): **de regel en het licht zijn af** (op de branch; `spel.md`, "Zo werkt de held
-  nu"; `code.md` bij `js/soldaten.js`); de tekening (D2) wacht op Marcels oordeel over de woorden. Wat er al is: de lantaarns
-  van de bode (`T.bodeLicht`, soort 'drager' in `T.lichtBronnen`, alleen licht, geen tekening), en de wolven vallen
-  niemand in het licht aan (`kiesProoi`); een voorstel van Claude uit stap 4, "een fakkel bij de nachtwacht", staat in
-  `opmerkingen.md`. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
+  voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **De regel en het licht
+  zijn af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"; `code.md` bij `js/soldaten.js`), en **de proefplaat van
+  de lantaarn in de hand is goed** (Marcel: "goed zo voor nu"; `beeld.md`, "De lantaarn van de groepsleider";
+  `gereedschap/pixelart/lantaarn.cjs`). **Nog te doen:** het vel naar `beelden/` (het lantaarntje, twee beelden van de
+  vlam), de handen per figuur als gegevens (zoals `beelden/ogen.js`: per vel, houding, richting en beeld; voor alle
+  uiterlijken van de boer, de boerin, de jongen en het meisje, in hun kleren, en de oude vellen dorpeling0 en dorpeling1
+  van de eerste aanvoerder), en het tekenen in `js/tekenen.js` na het figuur, als `T.draagtLicht` (zoals `tekenOgen`, met
+  `e.beeldStand.laatste`). Open: twee boeren hebben een hand in de zij (uiterlijk 5 en 23), en dan hangt de lantaarn aan
+  die hand op de heup. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
   wachthuis, en de leider is wie het langst dient; **B1** de lantaarn is licht, zoals bij de bode (de wolven vallen
   niemand in het licht aan); **C1** de aanvoerder draagt er ook een; **D2** een lantaarn in zijn hand op het figuur (eerst
   in woorden, dan één proefplaat, `beeld.md`).
