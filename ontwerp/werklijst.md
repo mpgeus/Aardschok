@@ -55,10 +55,9 @@ zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, in `main`;
 een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, in `main`; `spel.md`, "Zo werkt het gevecht
 nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
 niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
-gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, op de branch
-`claude/werklijst-doorgaan-vnked4`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
-*Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Het volgende is stap
-4, de diensten** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
+*Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4, de diensten,
+loopt** (bij I, besloten 16 okt). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -71,7 +70,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De formaties bekijken** (vraag 170, stap 3, 16 okt, op de branch `claude/werklijst-doorgaan-vnked4`): Nieuw spel,
+- **De formaties bekijken** (vraag 170, stap 3, 16 okt, in `main`): Nieuw spel,
   zet een wachthuis (B) met drie man militie (+), en maak er in de console een speerman en een boogschutter van
   (`m = Spel.militieVan(Spel.S.dorp); m[1].bewoner.soldaat.soort = 'speerman'; m[2].bewoner.soldaat.soort =
   'boogschutter'`). Kies ze (een kader), en klik rechts op open grond: hun plekken liggen een halve seconde in groen, en
@@ -611,7 +610,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   boven wie vecht, de schade als getal, de uitval, en een pijl of bout als korte streep (in code). **2e** het gevecht in
   beurten gaat er nu al uit (het raster, de actiepunten, einde beurt, de deur), niet pas in stap 5; de held die valt,
   blijft tot stap 5 het eind. De speeltest vecht niet meer zelf. De getallen in de werkbank ("Fighting").
-- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Af** (16 okt, op de branch `claude/werklijst-doorgaan-vnked4`; `spel.md`, "Zo
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Af** (16 okt, in `main`; `spel.md`, "Zo
   werkt kijken, kiezen en sturen nu", bij Formaties; `code.md` bij `js/kiezen.js`).
   **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C1, D1, E1"): **3a** de plekken: een *Line* is rijen dwars
   op de looprichting, voor wie slaat (hooivork, zwaard, de held), erachter wie steekt (speer en piek reiken 2 tegels),
@@ -626,7 +625,18 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   en komt terug naar zijn plek (de vorm die houdt, D2, naar `opmerkingen.md`); **E1** na de rechtsklik een halve seconde
   de plekken in groen op de grond. Erbij: `js/gevecht.js` gebruikte `e.kijkt` als klok, en `js/sprites.js` als
   kijkrichting, zodat wie gevochten had naar het zuiden keek als hij stilstond.
-- **4, de diensten** (5a), en vijanden kunnen op elk uur komen. **Bezig in sessie `ccr-6d85b700-hg7aex`** (16 okt): het plan ligt bij Marcel.
+- **4, de diensten** (5a), en vijanden kunnen op elk uur komen. **Bezig in sessie `ccr-6d85b700-hg7aex`** (16 okt).
+  **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C2, D2"): **4a** de dienst hoort bij de soldaat (een
+  veteraan en de held hebben er geen): in zijn dienst staat hij op zijn post of bij het wachthuis, daarbuiten slaapt hij
+  thuis; **A1** de dagdienst is van opstaan tot slapen, de nachtdienst van slapen tot opstaan (geen gat; een soldaat gaat
+  niet meer naar de herberg); **B1** per man, met *Day* en *Night* op het briefje van wie je koos, zoals *Line* en
+  *Ring*; een opdracht. **4b** wie een bevel krijgt terwijl hij rust, staat op en blijft in dienst tot zijn eigen dienst
+  begint (tot nu toe alleen 's nachts, `post.wakker`). **C2** *To arms* op het briefje van het wachthuis: wie van zijn
+  soldaten slaapt, staat op en gaat in dienst (zijn post, of het wachthuis), tot zijn eigen dienst begint, zoals na een
+  bevel (een keuze van Claude). **D2** de rovers komen op elk uur, vaker in het donker: de helft van de overvallen valt
+  's nachts (van slapen tot opstaan), het uur uit het zaad; de werkbank. Op het briefje van een soldaat zijn dienst, en
+  op dat van het wachthuis hoeveel er overdag en 's nachts waken. Wat erbuiten bleef (`opmerkingen.md`): een fakkel bij
+  de nachtwacht, 's nachts minder ver zien, en een patrouille.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
