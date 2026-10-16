@@ -58,7 +58,7 @@ niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town h
 gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
 *Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten): een dag- of
 nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Het
-volgende is stap 5, de held en het opruimen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+volgende is stap 5, de held en het opruimen** (bij I; **Bezig in sessie `claude/clever-brown-vz07hg`**, 16 okt). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -650,7 +650,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   's nachts (van slapen tot opstaan), het uur uit het zaad; de werkbank. Op het briefje van een soldaat zijn dienst, en
   op dat van het wachthuis hoeveel er overdag en 's nachts waken. Wat erbuiten bleef (`opmerkingen.md`): een fakkel bij
   de nachtwacht, 's nachts minder ver zien, en een patrouille.
-- **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
+- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt): het plan voor Marcel. De schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
   die hem volgt, en reizen met hem over de landkaart (het gevecht in beurten ging er al in stap 2 uit); in de code heet het
