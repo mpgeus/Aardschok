@@ -69,7 +69,8 @@ I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dor
 `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
 eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Marcel kwam erna met "de wereld van
 iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
-N1, V1"): **het volgende is 6a2** (het plan bij I, met de vragen K en L), dan 6b, alles een opdracht. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens
+bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -82,9 +83,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **6a2, de wereld van iedereen** (vraag 170, 16 okt; bij I; besloten: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1"):
-  het plan in vier stukken staat bij I; nog te kiezen: de buit van een kamp (K) en hoe de rovers leren (L); voorstel van
-  Claude: K1, L1.
 - **De lobby kiezen** (vraag 170, stap 6c, 16 okt; bij I): ons eigen lobbyscherm in het menu met Steam eronder, of alleen
   het overlay van Steam (L), en alleen vrienden of ook een openbare lijst (M); voorstel van Claude: L1, M1.
 - **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, op de branch `ccr-055aff40-lz2bwx`): Nieuw spel, en
@@ -807,7 +805,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   tegenkomen; Rb het dorp met het meeste graan en de minste soldaten. **N** hoeveel spelers: N1 twee in de demo, en later
   zoveel als er dorpsplekken zijn (acht per eiland); N2 al acht in de demo. **V** de volgorde: V1 de wereld van iedereen
   eerst (6a2), dan 6b en 6c; V2 eerst samen spelen (6b, 6c), dan de wereld. Gekozen: W1, R1, Rb (en ze leren), N1, V1.
-  **Het plan voor 6a2** (Claude, 16 okt, op die keuzes; **wacht op Marcel** voor de vragen K en L), in vier stukken, elk
+  **Het plan voor 6a2** (Claude, 16 okt, op die keuzes; **besloten**, Marcel: "K1 en L1"), in vier stukken, elk
   met toetsen: **a, de wereld werkt haar eigen wezens bij**: een wezen zonder dorp is van de wereld, en de wereld werkt het
   één keer per tik bij, met haar eigen dobbelsteen (`w.lot`, uit het nummer van het eiland); een dorp alleen nog zijn eigen
   mensen, kar en vee (`T.hoortBij` wordt streng); wat de wereld van de dorpen wil weten (hun licht voor de wolven, hun
@@ -826,7 +824,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   naar hun kamp. Te kiezen: **K** de buit: K1 wie een kamp opruimt, vindt wat er nog ligt (het geroofde graan en goud);
   K2 de buit is weg. **L** hoe ze leren: L1 zoals hierboven, per dorp een getal dat stijgt na een makkelijke tocht en
   daalt na een slechte, en terugzakt naar het midden; L2 alleen onthouden waar het misging (een dorp met soldaten mijden ze
-  een seizoen). Voorstel: K1, L1.
+  een seizoen). Gekozen: K1, L1.
   **6a is af** (16 okt, op de branch `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
