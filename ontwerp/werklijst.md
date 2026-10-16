@@ -68,6 +68,11 @@ koos L3). Daarna **stap 6, samen spelen** (bij
 I). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
+**Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
+en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
+spelregels vast bij het begin, en een woordmerk in pixel art. **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt): het
+plan voor Marcel.
+
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
@@ -766,6 +771,26 @@ dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het op
 - **Voor 6c, nog open** (Claude): een opdracht die zes tikken later ingaat (een tiende seconde), kan over internet te
   kort zijn (Age of Empires nam 200 tot 500 ms), en dan hapert het spel. Beter een getal in de werkbank, of een
   vertraging die meegroeit met wat de lijn meet.
+
+## J. Een volledig menu (vraag 172, 16 okt)
+
+Marcel, 16 okt: **"We hebben een volledig menu nodig geen a.i slop"**. Wat Claude zag: het titelscherm is een stapel
+gelijke, donkere, doorzichtige kaders met ronde hoeken, een gouden rand en kleine grijze bijschriften, met koppen in
+kleine hoofdletters met spatie ertussen; zo ziet elke webapp eruit, en niets komt uit het spel. Het menu onder Esc is zes
+even grote kaders. Er mist wat een spel op Steam heeft (instellingen, credits, afsluiten), en onder *Game rules* staan
+echte spelregels door elkaar met keuzes voor het beeld (*Drawing*, *Shadows*, *Seeing through a house*). Er is nog geen
+geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat Marcel niet wil.
+
+**Besloten** (Marcel, 16 okt, op vier vragen van Claude):
+- **De stijl: tekst over de wereld.** Geen kaders: links het woordmerk en de keuzes als tekst, over een donker verloop,
+  en rechts glijdt de camera over het land; bij de muis een vaantje. De vensters erachter (laden, instellingen, het menu
+  onder Esc) op het papier van de balk en de briefjes: één taal.
+- **Erin:** *Settings* (het beeld en de toetsen), *New game* als eigen scherm (de naam, het land, de spelregels), en
+  *Credits* en *Quit* (*Quit* alleen in de Steam-versie). Laden blijft een lijst, zonder kaarten en verwijderen.
+- **De spelregels liggen vast bij het begin:** je kiest ze bij *New game*, en in het spel kun je ze alleen lezen; zo
+  werkt het ook samen (6d). Ze gaan dus mee in het bewaarde spel (`S`), en niet meer in de browser.
+- **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
+  (`commercieel.md`, "De capsule en het logo").
 
 ## Af (sinds 11 okt)
 
