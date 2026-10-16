@@ -6,14 +6,15 @@
 // uiterlijk (S.rovers.bende). Na een tijd komen ze terug, en daarna om de zoveel dagen weer, zolang er een van hen
 // leeft. Daarnaast komen er wilde rovers van buiten, op een dag die je niet ziet aankomen.
 //
-// Een aanval (S.rovers.aanval) gaat zo: tegen de avond komen ze van de rand van de kaart die het dichtst bij een
-// akker ligt, lopen erheen, roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker
-// kapot (wat erop staat, groeit dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, met de plek, en
-// de tijd gaat naar 1× (T.bezoekerKomtAan, js/dag.js). Er komt niemand vanzelf (werklijst vraag 170, stap 2; Marcel, 15
-// okt: "Niemand vanzelf"): jij stuurt je soldaten (js/kiezen.js), en het gevecht is in real time (js/gevecht.js): een
-// rover slaat wie hij tegenkomt, en een dorpeling die hem ziet, vlucht naar het town hall. Wie valt, is dood: een rover
-// is uit zijn bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit.
-// Wie het overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
+// Een aanval (S.rovers.aanval) gaat zo: op een uur dat je niet ziet aankomen, vaker in het donker (werklijst vraag 170,
+// stap 4; Marcel, 16 okt: D2), komen ze van de rand van de kaart die het dichtst bij een akker ligt, lopen erheen,
+// roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker kapot (wat erop staat, groeit
+// dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, met de plek, en de tijd gaat naar 1×
+// (T.bezoekerKomtAan, js/dag.js). Er komt niemand vanzelf (werklijst vraag 170, stap 2; Marcel, 15 okt: "Niemand
+// vanzelf"): jij stuurt je soldaten (js/kiezen.js), en het gevecht is in real time (js/gevecht.js): een rover slaat wie
+// hij tegenkomt, en een dorpeling die hem ziet, vlucht naar het town hall. Wie valt, is dood: een rover is uit zijn
+// bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het
+// overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
 (function (T) {
@@ -33,9 +34,12 @@
     wildeEerst: 2,
     wildeErbijPerJaar: 1,
     wildeMeest: 4,
-    // Tegen de avond komen ze (het uur), en zo lang roven ze op de akker voor ze weer gaan. Halen ze hun akker of de
-    // weg terug niet binnen opUren (ingesloten, of steeds iemand in de weg), dan geven ze het op.
-    uur: 17,
+    // Op welk uur ze komen (vraag 170, stap 4, D2): met deze kans 's nachts (van het slapen tot het opstaan, als de
+    // nachtdienst), anders tussen het opstaan en het slapen, en daarbinnen op elk uur even vaak; zo komen ze per uur
+    // zo'n drie keer vaker in het donker. Het uur komt uit het zaad (aanvalsUur).
+    nachtKans: 0.5,
+    // Zo lang roven ze op de akker voor ze weer gaan. Halen ze hun akker of de weg terug niet binnen opUren
+    // (ingesloten, of steeds iemand in de weg), dan geven ze het op.
     roofUren: 2,
     opUren: 6,
     // Wat ieder meeneemt, en de kans dat ze de akker kapotmaken.
@@ -72,6 +76,15 @@
   const gemiddeldTussen = () => (IN().wildePerJaar > 0 ? T.DAGEN_PER_JAAR / IN().wildePerJaar : Infinity);
   const wildeTussen = (D, dag) => Math.max(1, Math.round(gemiddeldTussen() * (0.5 + lot(D, dag, 5))));
   const eersteWilde = (D, dag) => dag + IN().eersteWildeNa + Math.round(gemiddeldTussen() * lot(D, dag, 6));
+  // Op welk uur van deze dag ze komen (D2): met nachtKans 's nachts, van middernacht tot het opstaan of van het slapen
+  // tot middernacht (T.dagindeling, js/dag.js), anders tussen het opstaan en het slapen.
+  function aanvalsUur(D, dag) {
+    const d = T.dagindeling(dag);
+    const r = lot(D, dag, 7);
+    if (lot(D, dag, 8) >= IN().nachtKans) return d.opstaan + r * (d.slapen - d.opstaan);
+    const u = r * (d.opstaan + 24 - d.slapen);
+    return u < d.opstaan ? u : d.slapen + (u - d.opstaan);
+  }
   // Met hoeveel man ze komen: elk jaar van je ambt met een man meer (dag 0 is de dag van je benoeming).
   const wildeAantal = (dag) =>
     Math.min(IN().wildeMeest, IN().wildeEerst + Math.floor(dag / T.DAGEN_PER_JAAR) * IN().wildeErbijPerJaar);
@@ -86,10 +99,10 @@
     if (R.wildeOp == null) R.wildeOp = eersteWilde(D, dag);
     if (R.aanval) return;
     if (R.bende.length && R.bendeOp != null && dag >= R.bendeOp) {
-      R.aanval = { soort: 'bende', dag, fase: 'wacht' };
+      R.aanval = { soort: 'bende', dag, fase: 'wacht', uur: aanvalsUur(D, dag) };
       R.bendeOp = dag + IN().opnieuwNaDagen;
     } else if (dag >= R.wildeOp) {
-      R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: wildeAantal(dag) };
+      R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: wildeAantal(dag), uur: aanvalsUur(D, dag) };
       R.wildeOp = dag + wildeTussen(D, dag);
     }
   };
@@ -366,7 +379,8 @@
     if (A.fase === 'wacht') {
       if (S.modus !== 'verkennen') return;
       if (A.soort === 'hinderlaag') return beginHinderlaag(D, A);
-      if (!A.meteen && T.uurVanDag(D.kalender.dag) < IN().uur) return;
+      // Een aanval uit een spel van voor 16 okt heeft nog geen uur.
+      if (!A.meteen && uurNu(D) < A.dag * 24 + (A.uur != null ? A.uur : aanvalsUur(D, A.dag))) return;
       begin(D, A);
       return;
     }

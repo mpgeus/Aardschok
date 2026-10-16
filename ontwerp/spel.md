@@ -25,7 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is op 11 okt weggehaald (snoeironde, vraag 153), de rest is niet gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
-| Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post, in een *Line* of een *Ring*: stap 3, 16 okt) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
+| Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post, in een *Line* of een *Ring*: stap 3, 16 okt) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen; een dag- of nachtdienst per soldaat, *To arms* op het wachthuis, en rovers op elk uur (stap 4, 16 okt) ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -1023,7 +1023,8 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, en de
   kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
-  meer, eet mee zoals iedereen, staat overdag bij het wachthuis en slaapt thuis. Anders zegt het briefje waarop hij
+  meer, eet mee zoals iedereen, staat in zijn dienst bij het wachthuis en slaapt daarbuiten thuis (de diensten,
+  hieronder bij kijken, kiezen en sturen). Anders zegt het briefje waarop hij
   wacht ("waiting for shields from the weaponsmith", of "nobody without work"). Met − levert hij alles weer in en is
   hij vrij; wordt het wachthuis afgebroken, dan ook. Valt hij, dan zijn zijn stukken weg. Het wachthuis heeft geen
   wachters meer (geen handen).
@@ -1056,9 +1057,9 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   heeft (de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
   de held erheen loopt. De heer en de marskramer spreek je aan met een klik.
 - **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze gaan in
-  hun formatie staan (hieronder), en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
-  's nachts slapen ze thuis, en 's ochtends gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
-  briefje. Een bevel in de nacht houdt hen die nacht op hun post. Op een vijand: *Attack the wolf*; ze lopen hem na tot
+  hun formatie staan (hieronder), en die plek is hun **post**: daar staan ze in hun dienst (hieronder), daarbuiten
+  slapen ze thuis, en als hun dienst begint, gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
+  briefje. Een bevel terwijl ze rusten, wekt hen. Op een vijand: *Attack the wolf*; ze lopen hem na tot
   ze hem raken, en slaan (hieronder); is hij gevallen of weg, dan blijven ze waar ze zijn. De held heeft geen post: hij
   blijft waar je hem neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
@@ -1080,7 +1081,22 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   hun plekken een halve seconde in groen op de grond. In een gevecht gaat wie een vijand ziet erop af, zoals voor stap
   3, en komt daarna terug naar zijn plek (een formatie die houdt, D2, staat in `opmerkingen.md`). Te kiezen in de
   werkbank ("Choosing and sending"): hoeveel naast elkaar (8) en hoe lang het groen blijft (0,5 seconde).
-- **Nog niet:** de diensten (stap 4).
+- **De diensten** (16 okt, stap 4; Marcel: "A1, B1, C2, D2"). Een soldaat heeft de dagdienst of de nachtdienst: de dag
+  van het opstaan tot het slapen, de nacht van het slapen tot het opstaan, zodat er altijd iemand kan waken. In zijn
+  dienst staat hij op zijn post of bij het wachthuis (ook 's ochtends en 's avonds: naar de put of de herberg gaat een
+  soldaat niet meer); daarbuiten slaapt hij thuis, binnen, waar niemand hem slaat en hij niemand. Een nieuwe soldaat
+  heeft de dagdienst. Op zijn briefje, en op dat van meer gekozen mannen, staan *Day* en *Night* (*Watch*); de dienst die
+  ze allemaal hebben, is niet te kiezen. Een veteraan heeft geen dienst (hij werkt overdag, en zijn post geldt als een
+  dagdienst), de held ook niet. Wie een bevel krijgt terwijl hij rust, staat op en blijft in dienst tot zijn eigen dienst
+  begint; dan rust hij de keer daarna weer. Op het briefje van het wachthuis staat hoeveel er overdag en 's nachts waken
+  (*On watch by day 4, by night 2*), met **To arms**: wie van zijn soldaten slaapt, staat op en gaat in dienst (naar
+  zijn post, of het wachthuis), tot zijn eigen dienst begint, zoals na een bevel. Wie slaapt, zegt op zijn briefje
+  *asleep at home*.
+- **De rovers komen op elk uur, vaker in het donker** (D2): de helft van de overvallen valt 's nachts, van het slapen
+  tot het opstaan, en de rest op een uur van de dag; zo komen ze per uur zo'n drie keer vaker in het donker. Het uur
+  komt uit het zaad. 's Nachts zijn de dorpelingen binnen en veilig, en roven de rovers de akker, tenzij de nachtwacht
+  (of wie je wekt) ze tegenhoudt. Te kiezen in de werkbank ("The robbers": `nachtKans`, 0,5). Tot 16 okt kwamen ze
+  altijd om vijf uur 's middags.
 
 **Zo werkt het gevecht nu** (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie
 kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen", "Huis schout wordt town hall",

@@ -209,6 +209,7 @@
   //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
+  // Een soldaat volgt zijn dienst: daarin bij het wachthuis of op zijn post, daarbuiten thuis (vraag 170, stap 4).
   // Een boer volgt hetzelfde. Overdag werkt hij op zijn land (T.werkVeldwerkBij, js/veldwerk.js) en maait hij in de
   // oogst (T.werkOogstBij, js/akkers.js), en zolang hij dat doet, dwaalt hij niet; is er niets te doen, dan is hij bij
   // zijn boerderij (zijn werk). Zijn boerin en grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
@@ -234,10 +235,17 @@
     const deel = T.dagdeelVan(D.kalender.dag, oogst);
     // Wie geen huis heeft (js/afbreken.js, T.wordtDakloos), slaapt buiten op het plein en hangt er 's ochtends en 's avonds
     // rond; overdag werkt hij zoals iedereen.
-    if (p && !p.huis && !p.schout && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+    if (p && !p.huis && !p.schout && !p.soldaat && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
     // laadt de bewoners niet.
     if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
+    // Een soldaat (js/soldaten.js) is in dienst of rust (vraag 170, stap 4; T.inDienst in js/kiezen.js): in zijn dienst
+    // staat hij bij het wachthuis (zijn post gaf T.bevelAnker al), daarbuiten slaapt hij thuis (wie geen huis heeft, op
+    // het plein). Naar de put of de herberg gaat hij niet.
+    if (p && p.soldaat && !p.komt && !e.vertrekt) {
+      if (T.inDienst(D, e)) return (p.plek && p.plek.werk) || { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+      return p.huis ? { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true } : { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+    }
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).

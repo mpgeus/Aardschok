@@ -99,7 +99,7 @@ test('erheen: elk een eigen plek, en daar is zijn post, van het opstaan tot het 
   assert.notDeepEqual(T.dagAnker(D, a), { x: a.post.x, y: a.post.y, straal: 0 });
   zetUur(S, 10);
   // Terug: de post is weg, en overdag hoort hij weer bij het wachthuis.
-  const terug = T.manBriefje(D, a).delen[0].regels.find((r) => typeof r === 'object').knoppen[0];
+  const terug = T.manBriefje(D, a).delen[0].regels.find((r) => r.tekst === 'His post').knoppen[0];
   assert.equal(terug.tekst, 'Back to the guardhouse');
   T.geefOpdracht(S, terug.opdracht);
   T.wereldTik(S);
@@ -110,17 +110,18 @@ test('erheen: elk een eigen plek, en daar is zijn post, van het opstaan tot het 
   assert.deepEqual([anker.x, anker.y], [deur.x, deur.y], 'weer bij het wachthuis');
 });
 
-test("een bevel in de nacht: hij blijft die nacht op zijn post, en de nacht erna slaapt hij weer thuis", () => {
+test("een bevel terwijl hij rust: hij staat op en blijft in dienst tot zijn eigen dienst begint; de nacht erna slaapt hij weer thuis", () => {
   const { S, D, huis, a } = metMilitie();
   zetUur(S, 2);
+  assert.equal(T.inDienst(D, a), false, "'s nachts rust de dagdienst");
   const doel = vrijeTegel(D, T.deurVan(D.wereld, huis), 6, 2);
   T.geefOpdracht(S, T.handelingSturen(S, doel, [a]).opdracht);
   T.wereldTik(S);
-  assert.equal(a.post.wakker, true);
+  assert.equal(a.wakker, true);
   assert.equal(T.dagAnker(D, a).straal, 0, 'deze nacht op zijn post');
   zetUur(S, 10);
   T.wereldTik(S);
-  assert.equal(a.post.wakker, undefined, 'de ochtend: het is weer een gewone post');
+  assert.equal(a.wakker, undefined, 'de ochtend: het is weer zijn gewone dienst');
   zetUur(S, 2);
   const nacht = T.dagAnker(D, a);
   assert.ok(nacht.binnen, `de nacht erna slaapt hij thuis: ${JSON.stringify(nacht)}`);
@@ -165,10 +166,13 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   S.gekozen = [a, b];
   const meer = T.gekozenBriefje(S).briefje;
   assert.equal(meer.kop, '2 men');
-  assert.equal(meer.delen[0].regels.length, 3, 'twee namen en hun formatie; nog geen post: geen knop terug');
+  assert.equal(meer.delen[0].regels.length, 4, 'twee namen, hun formatie en hun dienst; nog geen post: geen knop terug');
   const formatie = meer.delen[0].regels[2];
   assert.equal(formatie.tekst, 'Formation');
   assert.deepEqual(formatie.knoppen.map((k) => [k.tekst, k.kan]), [['Line', false], ['Ring', true]], 'een Line hebben ze al');
+  const dienst = meer.delen[0].regels[3];
+  assert.equal(dienst.tekst, 'Watch');
+  assert.deepEqual(dienst.knoppen.map((k) => [k.tekst, k.kan]), [['Day', false], ['Night', true]], 'de dagdienst hebben ze al');
   const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout && p.huis);
   S.gekozen = dorpeling.wezen;
   const d = T.gekozenBriefje(S).briefje;
@@ -362,4 +366,81 @@ test('de klok van het gevecht is niet de kijkrichting: wie om zich heen keek, he
   for (let i = 0; i < 30; i++) T.wereldTik(S);
   assert.notEqual(typeof a.kijkt, 'number');
   assert.equal(typeof a.omkijken, 'number', 'hij keek om zich heen');
+});
+
+// ── De diensten (vraag 170, stap 4; Marcel, 16 okt: "A1, B1, C2, D2") ──
+
+test("de diensten: de dag van het opstaan tot het slapen bij het wachthuis, de nacht andersom; Night zet je op het briefje", () => {
+  const { S, D, huis, a, b } = metMilitie();
+  const deur = T.deurVan(D.wereld, huis);
+  const bijWachthuis = (e) => {
+    const r = T.dagAnker(D, e);
+    return !!r && r.x === deur.x && r.y === deur.y && !r.binnen;
+  };
+  const d = T.dagindeling(S.kalender.dag);
+  // De dagdienst: ook 's ochtends en 's avonds bij het wachthuis (A1: geen gat, geen put of herberg), 's nachts thuis.
+  for (const uur of [d.opstaan + 0.1, 10, d.slapen - 0.1]) {
+    zetUur(S, uur);
+    assert.ok(bijWachthuis(a), `om ${uur.toFixed(1)} uur bij het wachthuis`);
+  }
+  zetUur(S, 2);
+  assert.ok(T.dagAnker(D, a).binnen, "'s nachts slaapt hij thuis");
+  // Night voor a, op zijn briefje: een opdracht, en dan alleen b nog in de dagdienst.
+  zetUur(S, 10);
+  const knop = T.manBriefje(D, a).delen[0].regels.find((r) => r.tekst === 'Watch').knoppen.find((k) => k.tekst === 'Night');
+  assert.deepEqual(knop.opdracht, { soort: 'dienst', wie: [a.bewoner.id], dienst: 'nacht' });
+  T.geefOpdracht(S, knop.opdracht);
+  T.wereldTik(S);
+  assert.equal(a.bewoner.soldaat.dienst, 'nacht');
+  assert.equal(T.dienstVan(b), 'dag');
+  assert.ok(T.dagAnker(D, a).binnen, 'de nachtwacht slaapt overdag');
+  assert.match(T.manBriefje(D, a).doet, /Militia/);
+  zetUur(S, 2);
+  assert.ok(bijWachthuis(a), "'s nachts staat de nachtwacht bij het wachthuis");
+  assert.ok(T.dagAnker(D, b).binnen, 'en de dagdienst slaapt');
+  // Met een post: de nachtwacht staat er 's nachts, en overdag niet.
+  const doel = vrijeTegel(D, deur, 6, 2);
+  zetUur(S, 22.5);
+  T.stuurMannen(D, [a.bewoner.id], doel);
+  assert.equal(a.wakker, undefined, 'in zijn dienst: niemand hoeft op te staan');
+  assert.deepEqual(T.dagAnker(D, a), { x: a.post.x, y: a.post.y, straal: 0 });
+  zetUur(S, 10);
+  assert.ok(T.dagAnker(D, a).binnen, 'overdag rust hij, ook met een post');
+  // Day zet hem terug.
+  T.zetDienst(D, [a.bewoner.id], 'dag');
+  assert.equal(a.bewoner.soldaat.dienst, undefined);
+  assert.deepEqual(T.dagAnker(D, a), { x: a.post.x, y: a.post.y, straal: 0 });
+});
+
+test("te wapen: wie van het wachthuis rust, staat op en gaat in dienst tot zijn eigen dienst begint; het briefje telt dag en nacht", () => {
+  const { S, D, huis, a, b } = metMilitie();
+  T.zetDienst(D, [b.bewoner.id], 'nacht');
+  zetUur(S, 2);
+  const regel = () => T.GEBOUW_DELEN.wachthuis(D, huis)[0].regels.find((r) => typeof r === 'object' && r.tekst.startsWith('On watch'));
+  const r = regel();
+  assert.equal(r.tekst, 'On watch by day 1, by night 1.');
+  const knop = r.knoppen[0];
+  assert.equal(knop.tekst, 'To arms');
+  assert.equal(knop.kan, true, 'a slaapt');
+  T.geefOpdracht(S, knop.opdracht);
+  T.wereldTik(S);
+  assert.equal(a.wakker, true, 'a staat op');
+  assert.equal(b.wakker, undefined, 'b was al in dienst');
+  assert.equal(T.dagAnker(D, a).binnen, undefined, 'a gaat naar het wachthuis');
+  assert.equal(regel().knoppen[0].kan, false, 'iedereen is in dienst');
+  // De ochtend: a is weer gewoon in zijn dienst, en b gaat slapen.
+  zetUur(S, 10);
+  T.wereldTik(S);
+  assert.equal(a.wakker, undefined);
+  assert.ok(T.dagAnker(D, b).binnen);
+  assert.equal(T.manBriefje(D, b).doet.includes('asleep at home'), b.binnen === true);
+});
+
+test("de held heeft geen dienst: een bevel in de nacht wekt hem niet, hij gaat gewoon", () => {
+  const { S, D, huis } = metMilitie();
+  zetUur(S, 2);
+  const naar = vrijeTegel(D, T.deurVan(D.wereld, huis), 6, 2);
+  T.stuurMannen(D, T.nummersVan(D, [D.schout]), naar);
+  assert.equal(D.schout.wakker, undefined);
+  assert.equal(T.manBriefje(D, D.schout).delen[0].regels.some((r) => r.tekst === 'Watch'), false, 'geen Day en Night');
 });

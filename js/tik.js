@@ -104,12 +104,18 @@
       if (g) T.zetSoldaten(D, g, o.soldaat, o.verschil);
     },
     // Je mannen sturen (js/kiezen.js; vraag 170, stap 1), met de nummers van hun bewoners in `wie`: erheen, en daar is
-    // hun post ({ wie, naar: { x, y } }); een vijand achterna ({ wie, doel: { x, y, soort } }); terug ({ wie }); en een
-    // formatie (stap 3: { wie, formatie: 'lijn' of 'ring' }).
+    // hun post ({ wie, naar: { x, y } }); een vijand achterna ({ wie, doel: { x, y, soort } }); terug ({ wie }); hun
+    // formatie (stap 3: { wie, formatie: 'lijn' of 'ring' }); en hun dienst (stap 4: { wie, dienst: 'dag' of 'nacht' }).
     stuur: (S, D, o) => T.stuurMannen(D, o.wie, o.naar),
     volg: (S, D, o) => T.volgVijand(D, o.wie, o.doel),
     terug: (S, D, o) => T.roepTerug(D, o.wie),
     formatie: (S, D, o) => T.zetFormatie(D, o.wie, o.formatie),
+    dienst: (S, D, o) => T.zetDienst(D, o.wie, o.dienst),
+    // Een wachthuis roept zijn soldaten te wapen (stap 4, To arms): { x, y }, de plek van het wachthuis.
+    teWapen: (S, D, o) => {
+      const g = D.gebouwen.find((x) => x.soort === 'wachthuis' && x.x === o.x && x.y === o.y);
+      if (g) T.roepTeWapen(D, g);
+    },
   };
 
   // Een speler geeft een opdracht (een klik, een knop). `opdracht.dorp`: het nummer van het dorp in S.dorpen (zonder: je

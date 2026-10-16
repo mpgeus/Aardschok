@@ -1462,7 +1462,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat het bos in en
   komt terug als rover (`D.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
   (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
-  (`T.roverIngang`) naar een akker, twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
+  (`T.roverIngang`) naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
+  vraag 170, stap 4), twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
   `js/akkers.js`), en weer weg. Er komt niemand vanzelf (vraag 170, stap 2): het bericht zegt hoe je je soldaten stuurt,
   en het gevecht is in real time (`js/gevecht.js`); wie vecht (`e.doelwit`), laat `T.werkRoversBij` met rust. Wie valt,
   is dood: een rover is uit de bende (`T.roverVerslagen`), een soldaat of een dorpeling een mond minder (`T.sneuvelt`,
@@ -1561,9 +1562,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Een bevel is een opdracht** (`T.OPDRACHTEN` in `js/tik.js`), met de nummers van de mannen (`p.id` van hun bewoner,
   `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, en daar is `e.post`), `formatie`
   (`T.zetFormatie`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
-  geen nummer, dus zijn soort en plek), en `terug` (`T.roepTerug`). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
-  eerst `T.bevelAnker` vraagt: de vijand die hij volgt (straal 1), of zijn post (straal 0), niet 's nachts, tenzij hij
-  die nacht zijn bevel kreeg (`post.wakker`). Het dwalen (`T.dwaal`, `js/verkennen.js`) brengt hem er, zoals iedereen naar
+  geen nummer, dus zijn soort en plek), `terug` (`T.roepTerug`), `dienst` (`T.zetDienst`) en `teWapen` (`T.roepTeWapen`, met
+  de plek van het wachthuis). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
+  eerst `T.bevelAnker` vraagt: de vijand die hij volgt (straal 1), of zijn post (straal 0), alleen in zijn dienst
+  (`T.inDienst`, hieronder). Het dwalen (`T.dwaal`, `js/verkennen.js`) brengt hem er, zoals iedereen naar
   zijn anker; het bevel geeft hem meteen een weg. Een vijand achterna lopen en slaan doet het gevecht (`js/gevecht.js`;
   wie vecht, dwaalt niet); `T.werkSturenBij` (elke tik, in elk dorp) geeft wie zijn vijand zag vallen een post waar hij
   staat, en wie geen man meer is, verliest zijn bevel. Wie op de jacht meeloopt (`e.opgeroepen`), volgt na een bevel jouw
@@ -1585,8 +1587,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en dat vraagt samen spelen in lockstep. Tot 16 okt gebruikte `js/gevecht.js` `e.kijkt` ook als klok (wanneer hij weer
   om zich heen kijkt); die heet nu `e.omkijken`, want `js/sprites.js` las het getal als een plek, en wie gevochten had,
   keek dan naar het zuiden.
+- **De diensten** (stap 4; Marcel, 16 okt: "A1, B1, C2, D2"): de dienst hoort bij de soldaat (`p.soldaat.dienst`, alleen
+  `'nacht'`; zonder is het de dag), `T.dienstVan(e)`. `T.inDienst(D, e)` is `e.wakker` of zijn eigen dienst nu (de nacht
+  is `T.dagdeelVan` 'nacht', van het slapen tot het opstaan; zonder kalender altijd). `T.dagAnker` zet een soldaat in
+  zijn dienst bij het wachthuis (`p.plek.werk`), daarbuiten thuis en binnen; een veteraan heeft `T.dienstVan` 'dag', dus
+  zijn post geldt als een dagdienst. Wie rust en een bevel krijgt (`stuur`, `volg`), of te wapen wordt geroepen, krijgt
+  `e.wakker` (`wek`, met `dwaalTijd` 0, zodat hij meteen naar buiten komt); `T.werkSturenBij` haalt het weg zodra zijn
+  eigen dienst begint. Tot 16 okt was dat `post.wakker`, alleen 's nachts; een oud spel verliest het hooguit voor één
+  nacht. De regel op het briefje van het wachthuis (dag en nacht, *To arms*) staat in `T.GEBOUW_DELEN.wachthuis`
+  (`js/soldaten.js`).
 - **Het briefje** (`T.gekozenBriefje(S)` → `{ D, briefje, wie }`, in de vorm van `T.gebouwBriefje`): `T.manBriefje`,
-  `T.mannenBriefje` (met *Line* en *Ring*: de formatie die ze hebben, is niet te kiezen) en `T.dorpelingBriefje`, met een
+  `T.mannenBriefje` (met *Line* en *Ring*: de formatie die ze hebben, is niet te kiezen; en *Day* en *Night* voor de
+  soldaten onder hen, `dienstKnoppen`) en `T.dorpelingBriefje`, met een
   knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
   opent (`gesprek: { id }`, *Talk*; `T.gesprekBij`). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`), dat
   ook het oproepen gebruikt.

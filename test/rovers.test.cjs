@@ -61,7 +61,7 @@ test('wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, me
   assert.equal(S.dorp.rovers.bendeOp, 30 + T.ROVERS_INSTELLINGEN.terugNaDagen);
 });
 
-test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand van de kaart, en het dorp ziet ze', () => {
+test('de bende komt terug op de dag die het zegt, op het uur van het zaad, van de rand van de kaart, en het dorp ziet ze', () => {
   const S = gehucht();
   opUur(S, 30, 10);
   T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
@@ -70,10 +70,12 @@ test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand va
   assert.equal(S.dorp.rovers.aanval, null, 'nog niet');
   T.tikRoversDag(S.dorp, 40);
   assert.equal(S.dorp.rovers.aanval.soort, 'bende');
-  opUur(S, 40, 16);
+  const uur = S.dorp.rovers.aanval.uur;
+  assert.ok(uur >= 0 && uur < 24, `het uur: ${uur}`);
+  opUur(S, 40, Math.max(0, uur - 0.5));
   T.werkRoversBij(S, S.dorp);
   assert.equal(S.dorp.rovers.aanval.fase, 'wacht', 'niet voor het uur');
-  opUur(S, 40, 17.5);
+  opUur(S, 40, Math.min(23.99, uur + 0.5));
   berichten.length = 0;
   T.werkRoversBij(S, S.dorp);
   const A = S.dorp.rovers.aanval;
@@ -111,6 +113,28 @@ test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zes
   assert.ok(op < T.DAGEN_PER_JAAR, `dag ${op} ligt in het eerste jaar`);
   assert.equal(A.aantal, 2, 'het eerste jaar met twee man');
   assert.ok(S.dorp.rovers.wildeOp > op, 'en daarna komen ze weer');
+});
+
+test('ze komen op elk uur, vaker in het donker: de helft van de overvallen valt in de nacht, het uur uit het zaad (vraag 170, stap 4, D2)', () => {
+  const urenVan = () => {
+    const S = gehucht();
+    const uit = [];
+    for (let dag = 100; dag < 400; dag++) {
+      S.dorp.rovers = T.nieuweRovers();
+      S.dorp.rovers.wildeOp = dag;
+      T.tikRoversDag(S.dorp, dag);
+      uit.push([dag, S.dorp.rovers.aanval.uur]);
+    }
+    return uit;
+  };
+  const uren = urenVan();
+  assert.deepEqual(urenVan(), uren, 'hetzelfde zaad, dezelfde uren');
+  assert.ok(uren.every(([, u]) => u >= 0 && u < 24));
+  const nacht = uren.filter(([dag, u]) => T.dagdeelVan(dag + u / 24) === 'nacht').length / uren.length;
+  assert.ok(nacht > 0.4 && nacht < 0.6, `zoveel in de nacht: ${nacht}`);
+  const vroeg = uren.filter(([, u]) => u < 5).length;
+  const avond = uren.filter(([, u]) => u >= 12 && u < 20).length;
+  assert.ok(vroeg > 0 && avond > 0, `ook na middernacht (${vroeg}) en overdag (${avond})`);
 });
 
 test('de wilde rovers bouwen langzaam op: elk jaar van je ambt een man meer, tot vier (vraag 57)', () => {

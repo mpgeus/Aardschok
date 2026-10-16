@@ -8,13 +8,14 @@
 // (S.gekozen, T.schermVelden in js/opslaan.js): een gebouw (js/gebouwbriefje.js), één wezen, of een lijst van je mannen.
 //
 // Een bevel is een opdracht (js/tik.js), met de nummers van de mannen (p.id van hun bewoner) en een plek:
-//   - erheen (`stuur`): de plek is zijn post (Marcel: "Een post, tot je terugroept"). Daar staat hij van het opstaan tot
-//     het slapen; 's nachts slaapt hij thuis, en 's ochtends gaat hij terug (e.post, en T.bevelAnker in js/dag.js). Krijgt
-//     hij het bevel 's nachts, dan blijft hij die nacht op zijn post (post.wakker). In stap 4 wordt het zijn dienst.
+//   - erheen (`stuur`): de plek is zijn post (Marcel: "Een post, tot je terugroept"). Daar staat hij in zijn dienst;
+//     daarbuiten slaapt hij thuis, en als zijn dienst begint, gaat hij terug (e.post, en T.bevelAnker in js/dag.js).
+//     Krijgt hij het bevel terwijl hij rust, dan blijft hij in dienst tot zijn eigen dienst begint ("De diensten").
 //   - een vijand aanvallen (`volg`): hij zit hem na tot hij hem raakt, en slaat (e.volgt; het gevecht, js/gevecht.js,
 //     zonder leiband). Is de vijand gevallen of weg, dan is waar hij staat zijn post.
 //   - terug (`terug`): de post is weg, en hij gaat weer naar zijn wachthuis (of aan het werk).
 //   - een formatie (`formatie`, stap 3): *Line* of *Ring*; wie een post heeft, gaat er meteen zo staan ("De formatie").
+//   - een dienst (`dienst`, stap 4): *Day* of *Night* ("De diensten"); en *To arms* op het wachthuis (`teWapen`).
 // De held heeft geen dag om naar terug te gaan: hij blijft waar je hem neerzet.
 (function (T) {
   'use strict';
@@ -286,15 +287,15 @@
     if (!mannen.length) return;
     const formatie = T.formatieVan(mannen);
     const uit = T.formatiePlekken(D, mannen, naar, richting);
-    const nacht = D.kalender && T.dagdeelVan(D.kalender.dag) === 'nacht';
     for (const { e, x, y, kijk } of uit.plekken) {
       neemBevel(e);
+      wek(D, e);
       delete e.doelwit;
       delete e.vanaf;
       if (formatie === 'lijn') delete e.formatie;
       else e.formatie = formatie;
       if (e === D.schout) e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
-      else e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y }, ...(nacht ? { wakker: true } : {}) };
+      else e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y } };
       if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
     }
   };
@@ -332,6 +333,7 @@
     if (!vijand) return;
     for (const e of mannen) {
       neemBevel(e);
+      wek(D, e);
       delete e.post;
       delete e.doelwit;
       if (e === D.schout) delete e.kijkt;
@@ -352,9 +354,56 @@
     }
   };
 
-  // Waar een man met een bevel hoort, voor T.dagAnker (js/dag.js): naast de vijand die hij volgt, of op zijn post (niet
-  // 's nachts, tenzij hij die nacht zijn bevel kreeg). Wie geen man meer is (hij legde zijn wapens neer), verliest zijn
-  // bevel.
+  // ── De diensten (vraag 170, stap 4; Marcel, 16 okt: "A1, B1, C2, D2") ──
+  //
+  // Een soldaat heeft een dienst (p.soldaat.dienst: 'nacht', of zonder: de dag, 5a): de dagdienst van het opstaan tot
+  // het slapen, de nachtdienst van het slapen tot het opstaan (A1: zo sluiten ze op elkaar aan, en is er altijd
+  // iemand). In zijn dienst staat hij op zijn post of bij het wachthuis (T.dagAnker, js/dag.js); daarbuiten slaapt hij
+  // thuis, binnen, waar niemand hem slaat en hij niemand. Je kiest het per man (B1), met *Day* en *Night* op het
+  // briefje van wie je koos. Een veteraan heeft geen dienst: hij werkt overdag, en zijn post geldt als een dagdienst.
+  // De held heeft geen dag. Wie een bevel krijgt terwijl hij rust, of wie zijn wachthuis te wapen roept (*To arms*,
+  // C2), staat op en blijft in dienst tot zijn eigen dienst begint (e.wakker); dan is het weer zijn gewone dienst, en
+  // rust hij de keer daarna.
+  T.DIENSTEN = ['dag', 'nacht'];
+  T.dienstVan = (e) => (e.bewoner && e.bewoner.soldaat && e.bewoner.soldaat.dienst) || 'dag';
+  // Is het nu zijn eigen dienst? Zonder kalender (een toets) altijd.
+  function zijnDienstNu(D, e) {
+    if (!D.kalender) return true;
+    return (T.dagdeelVan(D.kalender.dag) === 'nacht') === (T.dienstVan(e) === 'nacht');
+  }
+  // Is hij in dienst: in zijn eigen dienst, of opgestaan voor een bevel of te wapen.
+  T.inDienst = (D, e) => !!e.wakker || zijnDienstNu(D, e);
+  // Wie rust, staat op (de held rust nooit); wie binnen is, komt meteen naar buiten (het dwalen, js/verkennen.js).
+  function wek(D, e) {
+    if (e === D.schout || T.inDienst(D, e)) return false;
+    e.wakker = true;
+    e.dwaalTijd = 0;
+    return true;
+  }
+
+  // Een dienst kiezen (`dienst`, de knoppen Day en Night): voor de soldaten onder wie je koos. Wie nu buiten zijn
+  // dienst valt, gaat naar huis; wie erin valt, naar zijn post of het wachthuis.
+  T.zetDienst = function (D, wie, dienst) {
+    if (!T.DIENSTEN.includes(dienst)) return;
+    for (const e of mannenMet(D, wie)) {
+      const s = e.bewoner && e.bewoner.soldaat;
+      if (!s) continue;
+      if (dienst === 'dag') delete s.dienst;
+      else s.dienst = dienst;
+      e.dwaalTijd = 0;
+    }
+  };
+
+  // Te wapen (`teWapen`, de knop To arms op het briefje van wachthuis g): wie van zijn soldaten rust, staat op. Geeft
+  // hoeveel.
+  T.roepTeWapen = function (D, g) {
+    let n = 0;
+    for (const p of T.soldatenVan(D, g)) if (T.isMan(D, p.wezen) && wek(D, p.wezen)) n++;
+    return n;
+  };
+
+  // Waar een man met een bevel hoort, voor T.dagAnker (js/dag.js): naast de vijand die hij volgt, of op zijn post
+  // (alleen in zijn dienst, T.inDienst). Wie geen man meer is (hij legde zijn wapens neer), verliest zijn bevel.
   T.bevelAnker = function (D, e) {
     if (!e.post && !e.volgt) return null;
     if (!T.isMan(D, e)) {
@@ -363,18 +412,17 @@
       return null;
     }
     if (e.volgt) return { x: e.volgt.tx, y: e.volgt.ty, straal: 1 };
-    if (!e.post.wakker && D.kalender && T.dagdeelVan(D.kalender.dag) === 'nacht') return null;
+    if (!T.inDienst(D, e)) return null;
     return { x: e.post.x, y: e.post.y, straal: 0 };
   };
 
-  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): is de vijand die hij aanviel gevallen of weg, dan blijft hij staan
-  // (zijn post); wie 's nachts een bevel kreeg, slaapt de volgende nacht weer thuis. Erheen lopen en slaan doet het gevecht
-  // (js/gevecht.js).
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): is de vijand die hij aanviel gevallen of weg, dan blijft hij
+  // staan (zijn post); wie buiten zijn dienst opstond, is weer gewoon in dienst als die begint (en rust de keer
+  // daarna). Erheen lopen en slaan doet het gevecht (js/gevecht.js).
   T.werkSturenBij = function (S, D) {
     if (!D.wereld) return;
-    const nacht = D.kalender && T.dagdeelVan(D.kalender.dag) === 'nacht';
     for (const e of T.mannenVan(D)) {
-      if (e.post && e.post.wakker && !nacht) delete e.post.wakker;
+      if (e.wakker && zijnDienstNu(D, e)) delete e.wakker;
       const v = e.volgt;
       if (!v || !(v.dood || !D.wereld.wezens.includes(v))) continue;
       delete e.volgt;
@@ -393,7 +441,7 @@
     if (e.volgt) return T.t('after the {wie}', { wie: e.volgt.naam });
     if (e.doelwit) return T.t('fighting the {wie}', { wie: e.doelwit.naam });
     if (e.opgeroepen) return T.t('with the reeve');
-    if (e.binnen) return T.t('at home');
+    if (e.binnen) return e.bewoner && e.bewoner.soldaat && !T.inDienst(D, e) ? T.t('asleep at home') : T.t('at home');
     if (e.post) return e.onderweg || e.pad.length ? T.t('on his way to his post') : T.t('at his post');
     if (e.onderweg || e.pad.length) return T.t('on his way');
     const p = e.bewoner;
@@ -413,12 +461,26 @@
     };
   };
 
-  // Het briefje van één man: wie hij is, wat hij draagt, zijn leven, en wat hij doet.
+  // De knoppen voor hun dienst (stap 4): Day en Night, voor de soldaten onder hen; die ze allemaal hebben, is niet te
+  // kiezen. Zonder soldaten (de held, een veteraan) geen.
+  const dienstKnoppen = (D, mannen) => {
+    const soldaten = mannen.filter((e) => e.bewoner && e.bewoner.soldaat);
+    if (!soldaten.length) return null;
+    const wie = T.nummersVan(D, soldaten);
+    return [
+      { tekst: T.t('Day'), uitleg: T.t('On watch from rising to bedtime, asleep at night'), dienst: 'dag' },
+      { tekst: T.t('Night'), uitleg: T.t('On watch from bedtime to rising, asleep by day'), dienst: 'nacht' },
+    ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: !soldaten.every((e) => T.dienstVan(e) === k.dienst), opdracht: { soort: 'dienst', wie, dienst: k.dienst } }));
+  };
+
+  // Het briefje van één man: wie hij is, wat hij draagt, zijn leven, zijn dienst, en wat hij doet.
   T.manBriefje = function (D, e) {
     const p = T.bewonerVan(D, e);
     const regels = [T.t('Life: {leven}', { leven: leven(e, D) })];
     const soort = p && p.soldaat ? T.SOLDAAT_SOORTEN[p.soldaat.soort] : null;
     if (soort) regels.push(T.t('Carries: {wat}', { wat: T.opsomming(soort.stukken.map(T.stukNaam)) }));
+    const dienst = dienstKnoppen(D, [e]);
+    if (dienst) regels.push({ tekst: T.t('Watch'), knoppen: dienst });
     const knop = terugKnop(D, [e]);
     const doet = doetNu(D, e);
     return {
@@ -439,12 +501,15 @@
     ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: k.formatie !== nu, opdracht: { soort: 'formatie', wie, formatie: k.formatie } }));
   };
 
-  // Het briefje van meer mannen: hoeveel, wie (bij naam, de eerste briefjeRegels), hun formatie, en terugroepen.
+  // Het briefje van meer mannen: hoeveel, wie (bij naam, de eerste briefjeRegels), hun formatie, hun dienst, en
+  // terugroepen.
   T.mannenBriefje = function (D, mannen) {
     const n = IN().briefjeRegels;
     const regels = mannen.slice(0, n).map((e) => `${naamVan(D, e)} · ${soortTekst(D, e)} · ${leven(e, D)}`);
     if (mannen.length > n) regels.push(T.t('and {n} more', { n: mannen.length - n }));
     regels.push({ tekst: T.t('Formation'), knoppen: formatieKnoppen(D, mannen) });
+    const dienst = dienstKnoppen(D, mannen);
+    if (dienst) regels.push({ tekst: T.t('Watch'), knoppen: dienst });
     const knop = terugKnop(D, mannen);
     if (knop) regels.push({ tekst: T.t('Their post'), knoppen: [knop] });
     return { kop: T.t('{n} men', { n: mannen.length }), doet: '', delen: [{ titel: T.t('Chosen'), regels }] };

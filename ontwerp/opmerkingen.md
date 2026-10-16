@@ -992,6 +992,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
+- **Bij de diensten** (16 okt, vraag 170, stap 4; buiten de stap gehouden): **een fakkel bij de nachtwacht**, zodat je
+  wie waakt in het donker ziet staan (een tekening: eerst in woorden, `beeld.md`); **'s nachts minder ver zien**, voor
+  iedereen (nu ziet een man 8 tegels ver, dag en nacht), zodat de nacht tactisch wordt en een overval in het donker
+  dichterbij komt voor iemand hem ziet; en **een patrouille**: een bevel om tussen twee plekken heen en weer te lopen,
+  zoals in de meeste RTS. Elk een regel erbij; niet gekozen.
 - **Een formatie die houdt** (16 okt, vraag 170, stap 3, D2): nu gaat wie in een *Line* of *Ring* een vijand ziet,
   erop af (de leiband van 10 tegels), en komt daarna terug naar zijn plek. Een vorm die houdt: alleen wie vanaf zijn
   plek raakt, slaat (de schutters schieten, wie voor staat wacht tot de vijand er is). Sterker voor een *Line* voor een

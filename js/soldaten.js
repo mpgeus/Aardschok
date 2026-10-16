@@ -3,14 +3,15 @@
 // "A1, B1, C1, D1", en over de wapens: "sword, spear, shield, pike, bow, crossbow, armor", met vaste soorten).
 //
 // Soldaat word je in het wachthuis (A1): op zijn briefje zet je per soort hoeveel soldaten je wilt, samen hooguit
-// `plaatsen`. Elke soort heeft vaste stukken (T.SOLDAAT_SOORTEN, zoals in Knights and Merchants): de militie een hooivork,
-// de speerman speer en schild, de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een
-// boog, en de kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan pakt wie geen werk heeft (B1:
-// geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het gezin van de schout, ze
-// op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat overdag bij het wachthuis en slaapt
-// thuis. Zet je er een minder, dan levert hij zijn stukken weer in en is hij vrij. Valt hij, dan zijn ze weg. Een
-// hooivork heeft elke boer: daarvoor hoeft er niets in de opslag te liggen, en wie zonder soort meevecht (een veteraan,
-// wie met de bode meegaat, de jacht op de wolven), vecht ermee.
+// `plaatsen`. Elke soort heeft vaste stukken (T.SOLDAAT_SOORTEN, zoals in Knights and Merchants): de militie een
+// hooivork, de speerman speer en schild, de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
+// boogschutter een boog, en de kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan pakt wie
+// geen werk heeft (B1: geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het
+// gezin van de schout, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
+// dienst bij het wachthuis en slaapt daarbuiten thuis (de dag- of de nachtdienst, js/kiezen.js; vraag 170, stap 4). Zet
+// je er een minder, dan levert hij zijn stukken weer in en is hij vrij. Valt hij, dan zijn ze weg. Een hooivork heeft
+// elke boer: daarvoor hoeft er niets in de opslag te liggen, en wie zonder soort meevecht (een veteraan, wie met de
+// bode meegaat, de jacht op de wolven), vecht ermee.
 //
 // De stukken maakt de wapenmaker (T.GEBOUWEN.wapenmaker, in het gehucht; C1, en Marcel erbij: "iemand kan gewoon
 // wapensmid worden"): elke dag één, het stuk dat het meest gevraagd wordt (T.wapensGevraagd: wat de wachthuizen willen en
@@ -228,7 +229,21 @@
         ],
       });
     }
-    if (hier.length) regels.push(T.t('On guard: {wie}.', { wie: T.opsomming(hier.map((p) => `${T.naamVanBewoner(p)} (${T.soortNaam(p.soldaat.soort)})`)) }));
+    if (hier.length) {
+      regels.push(T.t('On guard: {wie}.', { wie: T.opsomming(hier.map((p) => `${T.naamVanBewoner(p)} (${T.soortNaam(p.soldaat.soort)})`)) }));
+      // Hoeveel er overdag en 's nachts waken (vraag 170, stap 4), en te wapen: wie rust, staat op (js/kiezen.js).
+      const nacht = hier.filter((p) => p.soldaat.dienst === 'nacht').length;
+      const rusten = hier.filter((p) => T.isMan(D, p.wezen) && !T.inDienst(D, p.wezen)).length;
+      regels.push({
+        tekst: T.t('On watch by day {dag}, by night {nacht}.', { dag: hier.length - nacht, nacht }),
+        knoppen: [{
+          tekst: T.t('To arms'),
+          uitleg: rusten ? T.t('Who sleeps, gets up and goes on watch until his own watch begins') : T.t('Everyone is on watch'),
+          kan: rusten > 0,
+          opdracht: { soort: 'teWapen', x: g.x, y: g.y },
+        }],
+      });
+    }
     return [{ titel: T.t('Soldiers'), regels }];
   };
 

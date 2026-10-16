@@ -938,6 +938,7 @@
     wildeErbijPerJaar: T.t('wild robbers added per year'),
     wildeMeest: T.t('wild robbers at most'),
     uur: T.t('arrival hour'),
+    nachtKans: T.t('chance at night'),
     roofUren: T.t('raiding hours'),
     opUren: T.t('give up after hours'),
     graanPerRover: T.t('grain per robber'),
