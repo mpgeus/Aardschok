@@ -72,6 +72,11 @@ N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukke
 bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
+**Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
+en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
+spelregels vast bij het begin, en een woordmerk in pixel art. **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt): het
+plan voor Marcel.
+
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
@@ -849,6 +854,56 @@ jaar is 30 uur op 1×, en een gevecht loopt op 1×): E1 één snelheid voor iede
 ergens zet iedereen op 1× tot het voorbij is, pauze kan ieder, en een venster zet de tijd niet stil (alleen bij wie
 alleen speelt), E2 beslissen bij stap 6, met een proef; **F** de volgorde: F1 stap 0 eerst, dan 1 tot 6 (de grond
 achteraf leggen onder code die zonder gebouwd is, kost meer), F2 eerst de RTS (1 tot 5), dan 0 en 6.
+
+**6d, de menu's voor samen spelen: besloten** (Marcel, 16 okt: "1. A 2. A 3. A 4. B 5. A", en daarna bij 4: "Ik wil
+ook dat degene die het spel opstart het spel opslaat", dus 4a; het voorstel van Claude in sessie
+`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c, op de branch `ccr-055aff40-lz2bwx`) gaat over de techniek;
+dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het opslaan gaat zoals daar voorgesteld.
+- **Het titelscherm** krijgt *Play together*: dezelfde kaart als *New game* (de naam van je dorp, het land), uitgebreid
+  tot de lobby. Wie opent, kiest het land en de spelregels (vast zodra je begint); ieder typt de naam van het eigen dorp
+  en zegt *Ready*, en wie opende, drukt *Begin*. Is de stand van de code anders (`T.STAND`), dan zegt de lobby dat
+  meteen. Wie meedoet, ziet het ontvangen van de wereld, met een balk.
+- **1a de startplek vanzelf** (A1), te zien op de minikaart in de lobby.
+- **2a een kleur per speler**, te kiezen in de lobby: een vaantje bij de soldaten, en die kleur op de minikaart. Eerst in
+  woorden, dan één proefplaat (`beeld.md`).
+- **3a gaat de ander weg**, dan pauzeert het spel, met *Wait* of *Play on* bij wie overblijft. Het andere dorp leeft
+  vanzelf door (de dorpelingen werken vanzelf, de soldaten blijven op hun post), en wie wegging, komt terug met een
+  uitnodiging: de wereld en het eigen dorp.
+- **4a alleen wie het spel opstartte, slaat op**: allebei de dorpen, en wie het andere dorp speelde, ook het vanzelf
+  opslaan. Wie zo'n spel laadt, opent de lobby en nodigt de ander uit, die het eigen dorp terugkrijgt.
+- **Het menu onder Esc, samen:** *Resume*, *Pause for both* (bij allebei staat wie pauzeerde; E1), *Save* (bij de ander
+  grijs: *The host saves this game*), *Game rules* (alleen lezen), *Photo mode*, en *Leave game* in plaats van *To the
+  title screen*; *Load* is grijs, met de reden.
+- **5a eerst onze eigen lijn** (6c: `npm start`, twee browsers), Steam in januari, met het eigen App ID en de
+  Steam-pagina (G). Het menu weet niet welke lijn er is: *Invite a friend* geeft bij onze server een code, op Steam de
+  overlay. Op Steam: een lobby voor vrienden, voor twee, met het zaad, de stand en de spelregels erin; uitnodigen met de
+  overlay of *Join game* in de vriendenlijst (draait het spel niet, dan start Steam het, met de lobby); wat je doet, in de
+  vriendenlijst (*rich presence*); de verbinding via de relays van Steam, zonder eigen server. In Electron met
+  `steamworks.js`, in het hoofdproces met een smalle brug naar het spel, niet met `nodeIntegration` (`verpakken.md`).
+  Testen vraagt twee pc's met Steam en twee accounts; vanuit de cloud kan Claude dat niet.
+- **Voor 6c, nog open** (Claude): een opdracht die zes tikken later ingaat (een tiende seconde), kan over internet te
+  kort zijn (Age of Empires nam 200 tot 500 ms), en dan hapert het spel. Beter een getal in de werkbank, of een
+  vertraging die meegroeit met wat de lijn meet.
+
+## J. Een volledig menu (vraag 172, 16 okt)
+
+Marcel, 16 okt: **"We hebben een volledig menu nodig geen a.i slop"**. Wat Claude zag: het titelscherm is een stapel
+gelijke, donkere, doorzichtige kaders met ronde hoeken, een gouden rand en kleine grijze bijschriften, met koppen in
+kleine hoofdletters met spatie ertussen; zo ziet elke webapp eruit, en niets komt uit het spel. Het menu onder Esc is zes
+even grote kaders. Er mist wat een spel op Steam heeft (instellingen, credits, afsluiten), en onder *Game rules* staan
+echte spelregels door elkaar met keuzes voor het beeld (*Drawing*, *Shadows*, *Seeing through a house*). Er is nog geen
+geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat Marcel niet wil.
+
+**Besloten** (Marcel, 16 okt, op vier vragen van Claude):
+- **De stijl: tekst over de wereld.** Geen kaders: links het woordmerk en de keuzes als tekst, over een donker verloop,
+  en rechts glijdt de camera over het land; bij de muis een vaantje. De vensters erachter (laden, instellingen, het menu
+  onder Esc) op het papier van de balk en de briefjes: één taal.
+- **Erin:** *Settings* (het beeld en de toetsen), *New game* als eigen scherm (de naam, het land, de spelregels), en
+  *Credits* en *Quit* (*Quit* alleen in de Steam-versie). Laden blijft een lijst, zonder kaarten en verwijderen.
+- **De spelregels liggen vast bij het begin:** je kiest ze bij *New game*, en in het spel kun je ze alleen lezen; zo
+  werkt het ook samen (6d). Ze gaan dus mee in het bewaarde spel (`S`), en niet meer in de browser.
+- **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
+  (`commercieel.md`, "De capsule en het logo").
 
 ## Af (sinds 11 okt)
 
