@@ -792,6 +792,25 @@ geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat
 - **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
   (`commercieel.md`, "De capsule en het logo").
 
+**Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
+1. **Het titelscherm:** links een donker verloop met het woordmerk, de keuzes als tekst in Grenze (*Continue* met het
+   dorp, de dag en de mensen eronder, *New game*, *Load*, *Settings*, *Credits*, *Quit*), een vaantje bij de muis, en
+   kiezen met de pijltjes en Enter; de camera legt het land rechts naast de tekst. *Play together* komt erbij met 6d.
+2. **De vensters op papier:** het menu onder Esc, *Load*, *Settings* en *Credits*, met regels in plaats van kaders. Onder
+   Esc: *Resume*, *Save*, *Load*, *Settings*, *Game rules* (lezen), *Photo mode*, *To the title screen*, *Quit*.
+3. ***Settings*, met één regel:** wat de wereld raakt (de tik), is een spelregel; wat alleen het beeld is, een instelling
+   (lockstep: samen dezelfde regels, ieder zijn eigen beeld). Naar *Settings*: *Drawing*, *Shadows*, *Seeing through a
+   house*, *Who you see through a house*, *Trees through the year*, *Small life*, *Clothes* en *Advice*; erbij
+   *Fullscreen*, *Language* (van het titelscherm) en de toetsen.
+4. ***New game*:** de naam van je dorp, het land (het nummer, *Other land*, het eiland op een kaartje), de spelregels
+   (*Standard*, of *Custom*), en *Begin*.
+5. **De spelregels in het bewaarde spel** (`S.spelregels`); een oud spel krijgt wat de browser had. De werkbank blijft
+   van de browser, en in het debugvenster (D) kun je de spelregels midden in een spel omzetten, om te proberen.
+6. ***Credits*** ("A game by Marcel, made with Claude", de letters, OFL) en ***Quit*** (alleen in Electron).
+7. **Het woordmerk:** *TITHEBREAKER* in eigen kapitalen van pixels, zo'n 20 hoog, op 3×; het goud van de heer (oker,
+   licht van linksboven, donkere rand), en tussen TITHE en BREAKER een barst: BREAKER zakt een pixel en kantelt iets,
+   met twee splinters goud in de kier. Eén proefplaat; tot hij goed is, staat er de letter.
+
 ## Af (sinds 11 okt)
 
 - 169, het debugvenster onder D (15 okt; `code.md`, bij `js/debugvenster.js`): +50 bouwmateriaal en goud, een gezin, de
