@@ -59,14 +59,13 @@ gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Het
 post** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
-**Ronde 3 van het snoeien loopt** (A, naast I; sessie `ccr-74384ea2-mxeou7`, op zijn branch, met stap 2 van I erin):
-**stap 1 tot 5 zijn af** (15 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
+**Ronde 3 van het snoeien loopt** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
 zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6, de wensen en de groei, wacht op Marcel** (hieronder).
 
 **Wacht op Marcel:**
-- **Ronde 3 van het snoeien bekijken** (15 okt, op de branch `ccr-74384ea2-mxeou7`): Nieuw spel. Er komt niemand meer
+- **Ronde 3 van het snoeien bekijken** (15 okt, in `main`): Nieuw spel. Er komt niemand meer
   met een uitroepteken naar je toe, R en de knop Rapport zijn weg, en de wetten (W) zijn het rantsoen en de belasting.
   Een status zegt het nu zelf in een bericht ("It is cold in the houses, for ..."; en als hij over is). In de droogte
   kan er een huis gaan branden: een bericht brengt je erheen, de buren blussen (`Spel.debug.brand('nu')`); de koorts
@@ -222,9 +221,9 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
    geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
    plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
-3. **Ronde 3, na C:** **Bezig in sessie `ccr-74384ea2-mxeou7`** (15 okt). Het plan en wat Marcel koos staan in
-   `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk alleen op de
-   afwisseling; van de wetten rantsoen en belasting; de wensen en de groei nog te kiezen.
+3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei, wacht op Marcel. Het plan en wat
+   Marcel koos staan in `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk
+   alleen op de afwisseling; van de wetten rantsoen en belasting; de wensen en de groei nog te kiezen.
 
 Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk of twintig) wijst naar `code.md` of
 `gereedschap.md`, en `code.md` krimpt mee met de code.
