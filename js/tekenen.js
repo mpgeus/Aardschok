@@ -26,10 +26,18 @@
   // grootste hele deling van het scherm die nog minstens zo groot is, en vergroot de browser het (formaat in
   // js/main.js); op 4K is dat 1920 bij 1080 maal twee.
   // `videokaart`: tekenen met WebGL (js/gl.js), of met het 2D-doek van de browser; de spelregel "Tekenen".
+  // De rest is van de speler, onder Settings (vraag 172b; js/instellingen.js, de opties in js/opties.js): het venster in
+  // Electron (`venster` 'vol' of 'venster', met `vensterMaat`), hoeveel beelden per seconde (0 is zo snel als het scherm;
+  // de spellus in js/main.js), de meter (F2), en de helderheid van de wereld (een filter op het doek, js/main.js).
   T.TEKENEN_INSTELLINGEN = {
     tussenbuffer: { b: 1920, h: 1080 },
     videokaart: true,
     ookOpDeProcessor: false, // alleen voor de proeven zonder videokaart (js/gl.js)
+    venster: 'vol',
+    vensterMaat: [1600, 900],
+    beeldenPerSeconde: 0,
+    meter: false,
+    helderheid: 1,
   };
 
   // Het licht met de videokaart (werklijst vraag 125, A; tekenNacht hieronder, js/gl.js): de kleur van het uur

@@ -12,8 +12,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Wat vraag 172 (het menu) liet zien** (16 okt): (a) de raad onder het doel zegt aan het begin nog "A day is long: [+]
   speeds up time, and [Z] sleeps until morning" (`js/raad.js`), maar Z doet sinds stap 5 van vraag 170 niets meer. (b) De
   stand van de proefversie staat nu ook in Credits; voor Steam wil Marcel er misschien zijn achternaam of een studio bij
-  ("A game by Marcel, made with Claude" was de keuze). (c) Settings onthoudt het hele scherm niet: een browser laat dat
-  alleen na een klik toe. In Electron kan de schil het venster meteen op het hele scherm openen, als Marcel dat wil.
+  ("A game by Marcel, made with Claude" was de keuze). (c) in de browser onthoudt Settings het hele scherm niet: dat mag
+  pas na een klik (in Electron wel, sinds 172b). (d) Pauze als je wegklikt pauzeert bij samen spelen het spel voor
+  allebei (E1): bij 6c moet hij daar uit, of alleen gelden voor wie alleen speelt.
 - **Ronde 4 van het snoeien** (16 okt, bij vraag 170, stap 5; buiten de stap gehouden): de overgang tussen de kaarten van
   Tiled (`js/gebied.js`, `S.naarGebied`, zo'n 240 regels en 165 regels toetsen in `test/wereld.test.cjs`) en de kamers met
   deuren (`T.maakProefkamers`, `T.ontdekBijDeur`, `w.bekend`, `deurenOpenen`) bestaan alleen nog op de proefkaarten, voor

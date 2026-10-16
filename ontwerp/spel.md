@@ -2576,9 +2576,11 @@ een galg misschien later. Dat is werk aan de kaart (`gereedschap/tiled/maak-gehu
 - **De spelregels horen bij een spel:** je kiest ze bij New game (*Standard*, of *Custom*), ze gaan mee als je opslaat,
   en in het spel lees je ze alleen (het menu, of `O`). Een nieuw spel begint met wat je het laatst koos. Om te proberen
   kun je ze midden in een spel omzetten in het debugvenster (D), met de werkbank erbij; dat is er tot de Steam-versie.
-- **Wat alleen het beeld raakt, is een instelling, onder Settings:** de tekening, de schaduwen, de doorkijk (twee), de
-  bomen door het jaar, het kleine leven, de kleren en de raad, met het hele scherm, de taal en de toetsen. Altijd te
-  veranderen, ook samen; de browser onthoudt het. De toets: raakt het de wereld, dan is het een spelregel.
+- **Wat alleen het beeld raakt, is een instelling, onder Settings**, in vier tabbladen (vraag 172b): *Display* (het
+  hele scherm of een venster met zijn formaat, hoeveel beelden per seconde, de meter, de helderheid), *Graphics* (de
+  tekening, de schaduwen, de doorkijk, de bomen door het jaar, het kleine leven, de kleren), *Game* (pauze als je wegklikt,
+  hoe vaak het vanzelf opslaat, de raad, de taal) en *Controls* (de toetsen). Altijd te veranderen, ook samen; de browser
+  onthoudt het. De toets: raakt het de wereld, dan is het een spelregel.
 - Zolang een venster open is, staat de tijd stil.
 - *Hieronder wat er op 25 sep stond; de lijst van keuzes is sindsdien veranderd (`js/opties.js` heeft de stand).*
 - 17 keuzes, met wat Marcel koos als standaard: het graan, waarin de heer betaald wil worden, hoe

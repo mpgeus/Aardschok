@@ -174,6 +174,7 @@
       if (doek) {
         if (!doek.parentNode) canvas.parentNode.insertBefore(doek, canvas);
         doek.classList.toggle('verborgen', !gl);
+        doek.style.filter = canvas.style.filter; // de helderheid (T.ui.pasBeeldToe, hieronder)
       }
       if (gl) {
         T.gl.zetMaat(canvas.width, canvas.height, tekenRatio);
@@ -753,7 +754,20 @@
   }
 
   let vorige = 0;
+  let getekend = 0; // het laatste beeld dat de grens van Settings toeliet (hieronder)
   function lus(nu) {
+    // Frame rate (Settings, vraag 172b): staat er een grens, dan slaat de lus een beeld van het scherm over tot het zijn
+    // beurt is, in de maat van de grens (ook op een scherm van 144 Hz). De wereld loopt hetzelfde: dt telt vanaf het
+    // vorige beeld dat er wel was.
+    const per = T.TEKENEN_INSTELLINGEN.beeldenPerSeconde;
+    if (per) {
+      const tussen = 1000 / per;
+      if (nu - getekend < tussen - 1) {
+        requestAnimationFrame(lus);
+        return;
+      }
+      getekend = nu - ((nu - getekend) % tussen);
+    }
     const dt = vorige ? Math.min(0.05, (nu - vorige) / 1000) : 0;
     vorige = nu;
     const t0 = performance.now();
@@ -780,6 +794,26 @@
     el.classList.toggle('verborgen', !aan);
     return aan;
   }
+
+  // Wat van Settings hier woont (vraag 172b; js/instellingen.js): de meter, en de helderheid van de wereld, als filter op
+  // het doek en dat van de videokaart (tekenBeeld, hierboven), niet op de vensters erboven. Bij het begin, en na elke
+  // keuze in Settings.
+  T.ui.pasBeeldToe = function () {
+    const I = T.TEKENEN_INSTELLINGEN;
+    if (!!meter !== I.meter) wisselMeter(I.meter);
+    canvas.style.filter = I.helderheid === 1 ? '' : `brightness(${I.helderheid})`;
+    const doek = glZichtbaar ? T.gl.doek() : null; // niet de videokaart opstarten als hij uit staat
+    if (doek) doek.style.filter = canvas.style.filter;
+  };
+
+  // Pauze als je wegklikt (vraag 172b; T.TIJD_INSTELLINGEN.pauzeAlsWeg, Settings): zolang je in een ander venster bent,
+  // staat de tijd stil, onder de reden 'weg' (js/tijd.js); terug is verder.
+  window.addEventListener('blur', () => {
+    if (T.TIJD_INSTELLINGEN.pauzeAlsWeg && S.kalender) T.houdTijdStil(S, 'weg');
+  });
+  window.addEventListener('focus', () => {
+    if (S.kalender) T.laatTijdGaan(S, 'weg');
+  });
   function meetBeeld(nu, regels, tekenen) {
     const m = meter;
     if (m.vorig != null) m.traagst = Math.max(m.traagst, nu - m.vorig);
@@ -916,10 +950,11 @@
     }
   });
   window.addEventListener('keydown', (ev) => {
-    // F2: de meter (hierboven), altijd, ook als er een venster openstaat.
+    // F2: de meter (hierboven), altijd, ook als er een venster openstaat; hij is ook een instelling (Settings, The meter).
     if (ev.key === 'F2') {
       ev.preventDefault();
-      wisselMeter();
+      T.zetOptie('meter', meter ? 'uit' : 'aan', S);
+      T.ui.pasBeeldToe();
       return;
     }
     // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
@@ -1908,6 +1943,7 @@
   };
 
   formaat();
+  T.ui.pasBeeldToe();
   // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken, achter het titelscherm.
   // Een proefje (?kaart=) slaat het titelscherm over.
   T.sprites.laad();

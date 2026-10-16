@@ -403,3 +403,25 @@ test('de spelregels gaan mee in het spel, en een geladen spel speelt weer met de
   assert.equal(T.GRAAN_PER_TEGEL, 5);
   T.optiesTerug();
 });
+
+test('de instelling Autosave: om de drie dagen, of uit (vraag 172b)', (t) => {
+  const opslag = nepOpslag();
+  T.gebruikOpslagPlek(opslag);
+  t.after(() => {
+    T.gebruikOpslagPlek(null);
+    T.optiesTerug();
+  });
+  const S = gehucht();
+  const opstaan = (dag) => Math.floor(dag) + T.dagindeling(Math.floor(dag)).opstaan / 24 + 0.001;
+  S.kalender.snelheid = 1;
+  T.zetOptie('vanzelfOpslaan', 'drieDagen');
+  S.kalender.dag = opstaan(3);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true);
+  S.kalender.dag = opstaan(4);
+  assert.equal(T.werkOpslaanBij(S), null, 'op 1× toch om de drie dagen');
+  S.kalender.dag = opstaan(6);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true);
+  T.zetOptie('vanzelfOpslaan', 'uit');
+  S.kalender.dag = opstaan(9);
+  assert.equal(T.werkOpslaanBij(S), null, 'uit is uit');
+});

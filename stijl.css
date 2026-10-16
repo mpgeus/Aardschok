@@ -660,6 +660,23 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #instellingen .toets-rij { display: contents; }
 #instellingen .toets { white-space: nowrap; color: var(--inkt); font-size: 12.5px; }
 #instellingen kbd { color: var(--inkt); border-color: color-mix(in srgb, var(--papier-inkt) 40%, transparent); border-bottom-width: 2px; }
+/* De tabbladen van Settings (vraag 172b): een vaste hoogte, zodat het venster niet verspringt; alleen wat onder de
+   tabbladen staat, schuift. Het gekozen tabblad staat in rood met een streep eronder. */
+#instellingen { display: flex; flex-direction: column; height: min(680px, calc(100vh - 120px)); overflow: hidden; }
+#instellingen .tabs { display: flex; gap: 24px; margin: 10px 0 0; border-bottom: 1px solid var(--rand); }
+#instellingen .tab {
+  margin-bottom: -1px;
+  padding: 4px 0 6px;
+  font: 18px var(--kop);
+  color: var(--gedempt);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+#instellingen .tab:hover { color: var(--inkt); }
+#instellingen .tab.gekozen { color: var(--goud); border-bottom-color: var(--goud); }
+#instellingen .tab-inhoud { flex: 1; min-height: 0; overflow-y: auto; padding-right: 6px; }
 #spelregels .namen { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
 #spelregels .naam-rij { display: flex; flex-direction: column; gap: 2px; font-size: 11.5px; color: var(--gedempt); }
 #spelregels input[type='text'],

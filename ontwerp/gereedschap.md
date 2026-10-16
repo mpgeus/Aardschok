@@ -212,7 +212,7 @@ nu beginnen.
 hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
-en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.vellen()` zegt welke plaatjes de browser nu vasthoudt, samen en per map, in MB (`('alles')` noemt elk vel). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
+en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`, dat ook de instelling *The meter* onder Settings omzet) zet de meter in beeld. `Spel.debug.vellen()` zegt welke plaatjes de browser nu vasthoudt, samen en per map, in MB (`('alles')` noemt elk vel). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;
 `('nacht')` doet nu wat de nacht doet. `Spel.debug.lopen()` zegt wie er met een doel onderweg is, wie daarvan staat te
 wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar

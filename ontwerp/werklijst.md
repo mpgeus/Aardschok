@@ -84,6 +84,12 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Settings bekijken** (vraag 172b, 16 okt, op de branch `ccr-907f9459-i3k9fd`): het menu, *Settings*, en de vier
+  tabbladen. Het venster en zijn formaat zie je alleen in de verpakte versie: `npm run proefversie -- --windows`, en
+  *Display*. **Wat Claude erbij koos** (zeg het als het anders moet): (1) de Steam-versie opent op het hele scherm (tot nu
+  gemaximaliseerd); (2) pauze als je wegklikt staat standaard aan; (3) de helderheid in vijf stappen (80 tot 120%), alleen
+  op de wereld, niet op de vensters; (4) F2 en *The meter* zijn hetzelfde; (5) de formaten tellen in de pixels van
+  Windows: met een schaal van 150% past 1920×1080 niet op een scherm van 1080, en 1280×720 vult het dan.
 - **Het menu bekijken** (vraag 172, 16 okt, op de branch `ccr-907f9459-i3k9fd`): open het spel. Links het woord en de
   keuzes als tekst, rechts het land; de muis of de pijltjes zetten het vaantje, Enter neemt. *Credits* en (met een spel
   bewaard) *Load* liggen op papier ernaast; *Settings* heeft het beeld, het hele scherm, de taal en de toetsen. *New game*:
@@ -820,6 +826,8 @@ gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrolle
   3840×2160, alleen wat past). Een smalle brug in de schil (`gereedschap/proefversie/maak.cjs`, een preload), zoals
   `verpakken.md` vraagt. In de browser alleen het hele scherm aan of uit.
 - Alles zijn opties met `instelling` (`js/opties.js`), zodat de browser ze op één manier onthoudt.
+- **Af** (16 okt, op de branch `ccr-907f9459-i3k9fd`; `code.md` bij `js/instellingen.js`, `verpakken.md`, "Het venster en
+  de brug"), en in Electron 44 voor Linux getest (het hele scherm, een venster van 1280×720, terug, en Quit).
 
 **Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
 1. **Het titelscherm:** links een donker verloop met het woordmerk, de keuzes als tekst in Grenze (*Continue* met het

@@ -1,9 +1,17 @@
-// Settings (vraag 172; Marcel, 16 okt: "We hebben een volledig menu nodig geen a.i slop"): wat van jou is en niet van het
-// spel. Het beeld (de opties met `instelling: true` in js/opties.js: ze raken de wereld niet, dus mag ieder ze anders
-// hebben, ook samen), het hele scherm, de taal (tot 16 okt op het titelscherm), en welke toets wat doet. Altijd te
-// veranderen, en de browser onthoudt het (T.zetOptie). Een venster zoals elk ander (js/ui.js), dat opent vanuit het
-// titelscherm en het menu onder Esc (js/menu.js); dicht is weer het menu. Een rij ziet eruit als in de spelregels
-// (T.ui.optieRij, js/hud.js). Geen schuif voor het geluid: er is nog geen geluid, en een knop die niets doet, komt er niet.
+// Settings (vraag 172; Marcel, 16 okt: "We hebben een volledig menu nodig geen a.i slop", en daarna, 172b: "Zaken als
+// resolutie etc hebben we nodig"): wat van jou is en niet van het spel. Vier tabbladen: Display (het venster en zijn
+// formaat, hoeveel beelden per seconde, de meter, de helderheid), Graphics (hoe de wereld getekend wordt), Game (pauze als
+// je wegklikt, vanzelf opslaan, de raad, de taal) en Controls (welke toets wat doet). Wat er te kiezen is, zijn de opties
+// met `instelling` in js/opties.js (die noemt het tabblad): ze raken de wereld niet, dus mag ieder ze anders hebben, ook
+// samen, en de browser onthoudt ze (T.zetOptie). Een venster zoals elk ander (js/ui.js), dat opent vanuit het titelscherm
+// en het menu onder Esc (js/menu.js); dicht is weer het menu. Een rij ziet eruit als in de spelregels (T.ui.optieRij,
+// js/hud.js). Geen schuif voor het geluid: er is nog geen geluid, en een knop die niets doet, komt er niet.
+//
+// Het venster: in de verpakte versie (Electron) is er een smalle brug, `window.schil` (de preload in
+// gereedschap/proefversie/maak.cjs): het hele scherm, of een venster van het formaat dat je koos. Electron kan de
+// resolutie van de monitor niet omzetten; het hele scherm is altijd zonder rand, op de resolutie van je scherm. In de
+// browser is er alleen het hele scherm aan of uit (requestFullscreen), en dat onthoudt de browser niet: dat mag pas na
+// een klik.
 (function (T) {
   'use strict';
 
@@ -11,6 +19,10 @@
   const kbd = (toets) => `<kbd>${toets}</kbd>`;
   const ESC = kbd('Esc'); // geen tekst
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  // Het tabblad dat open is (alleen scherm: het volgende venster opent weer daar).
+  const TABS = () => [['beeld', T.t('Display')], ['tekening', T.t('Graphics')], ['spel', T.t('Game')], ['toetsen', T.t('Controls')]];
+  let tab = 'beeld';
 
   // Welke toets wat doet, zoals js/main.js, js/hud.js en de vensters ze kennen (js/ui.js, `toets`). Alleen om te lezen.
   function toetsen() {
@@ -32,21 +44,38 @@
       [kbd('P'), T.t('Pause, and on again')],
       [`${kbd('−')} ${kbd('+')}`, T.t('Slower, faster')],
       [kbd('H'), T.t('Photo mode; there Enter saves a picture')],
+      [kbd('F2'), T.t('The meter')],
       [ESC, T.t('Close, put away, or the menu')],
     ];
     if (T.DEBUG_INSTELLINGEN.aan) rijen.push([kbd('D'), T.t('Debug, until the Steam version')]);
     return rijen.map(([toets, wat]) => `<div class="toets-rij"><span class="toets">${toets}</span><span>${wat}</span></div>`).join('');
   }
 
-  // Het hele scherm: in de browser en in Electron dezelfde vraag aan het document (in Electron doet F11 het ook, js/main.js
-  // van de schil in gereedschap/proefversie/maak.cjs).
+  // ── Het venster ──
+
+  const schil = () => window.schil || null;
+  const optie = (id) => T.OPTIES.find((o) => o.id === id);
+  const VENSTER = ['venster', 'vensterMaat'];
+
+  // In Electron: het venster zoals je het koos. Bij het begin (zodra alle scripts er zijn, ook js/opties.js), en na een
+  // keuze; de schil laat het venster pas zien als het zijn stand kent.
+  function pasVensterToe() {
+    const s = schil();
+    if (!s) return;
+    const I = T.TEKENEN_INSTELLINGEN;
+    s.venster(I.venster, I.vensterMaat[0], I.vensterMaat[1]);
+  }
+  document.addEventListener('DOMContentLoaded', pasVensterToe); // geen tekst
+
+  // In de browser: het hele scherm, gevraagd aan het document (in Electron doet F11 het ook).
   const heelScherm = () => !!document.fullscreenElement;
   function zetHeelScherm(aan) {
     if (aan && !heelScherm()) document.documentElement.requestFullscreen().catch(() => {});
     if (!aan && heelScherm()) document.exitFullscreen().catch(() => {});
   }
 
-  // Een rij zoals T.ui.optieRij, voor wat geen optie is (het scherm, de taal): `keuzes` is [{ id, naam, gekozen }].
+  // Een rij zoals T.ui.optieRij, voor wat geen optie is (het scherm in de browser, de taal): `keuzes` is
+  // [{ id, naam, gekozen }].
   function rij(naam, uitleg, soort, keuzes) {
     const knoppen = keuzes
       .map((k) => `<button class="regel-keuze${k.gekozen ? ' gekozen' : ''}" data-${soort}="${k.id}">${veilig(k.naam)}</button>`)
@@ -54,36 +83,61 @@
     return `<div class="regel"><div class="regel-naam">${naam}<small>${uitleg}</small></div><div class="regel-keuzes">${knoppen}</div></div>`;
   }
 
+  function vensterRijen() {
+    if (!schil()) {
+      const o = optie('venster');
+      return rij(o.naam, o.uitleg, 'scherm', [
+        { id: 'aan', naam: T.t('Fullscreen'), gekozen: heelScherm() },
+        { id: 'uit', naam: T.t('Window'), gekozen: !heelScherm() },
+      ]);
+    }
+    // Een formaat dat groter is dan je scherm, kan niet (in de pixels van Windows: met een schaal van 150% is een scherm
+    // van 1920 bij 1080 er 1280 bij 720).
+    const past = (k) => {
+      const [b, h] = k.zet['TEKENEN_INSTELLINGEN.vensterMaat']; // geen tekst
+      return b <= screen.width && h <= screen.height;
+    };
+    return T.ui.optieRij(optie('venster')) + T.ui.optieRij(optie('vensterMaat'), true, past);
+  }
+
+  // ── Wat er te zien is ──
+
+  const rijenVan = (soort) => T.OPTIES.filter((o) => o.instelling === soort && !VENSTER.includes(o.id)).map((o) => T.ui.optieRij(o)).join('');
+
+  function tabInhoud() {
+    if (tab === 'beeld') return vensterRijen() + rijenVan('beeld');
+    if (tab === 'tekening') return rijenVan('tekening');
+    if (tab === 'spel') {
+      // Elke taal in zijn eigen naam, want wie de taal van nu niet leest, moet de zijne toch vinden.
+      const taal = rij(T.t('Language'), T.t('The game reloads in the language you choose.'), 'taal',
+        T.talen().map((t) => ({ id: t.code, naam: t.eigen ? `${t.naam} (${T.t('your own translation')})` : t.naam, gekozen: t.code === T.taalNu() })));
+      return rijenVan('spel') + taal;
+    }
+    return `<div class="toetsen">${toetsen()}</div>`;
+  }
+
   function inhoud() {
-    const beeld = T.OPTIES.filter((o) => o.instelling).map((o) => T.ui.optieRij(o)).join('');
-    const scherm = rij(T.t('Fullscreen'), T.t('The game on the whole screen, without the browser around it.'), 'scherm', [
-      { id: 'aan', naam: T.t('On'), gekozen: heelScherm() },
-      { id: 'uit', naam: T.t('Off'), gekozen: !heelScherm() },
-    ]);
-    // Elke taal in zijn eigen naam, want wie de taal van nu niet leest, moet de zijne toch vinden.
-    const taal = rij(T.t('Language'), T.t('The game reloads in the language you choose.'), 'taal',
-      T.talen().map((t) => ({ id: t.code, naam: t.eigen ? `${t.naam} (${T.t('your own translation')})` : t.naam, gekozen: t.code === T.taalNu() })));
+    const tabs = TABS().map(([id, naam]) => `<button class="tab${id === tab ? ' gekozen' : ''}" data-tab="${id}">${naam}</button>`).join('');
     return (
       `<div class="venster-kop"><span class="venster-titel">${T.t('Settings')}</span><span class="venster-wanneer">${T.t("yours, not the game's")}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
-      `<p class="venster-staat">${T.t('How you see the game. It changes nothing in the world, so you can change it at any time, also when playing together; the browser remembers it.')}</p>` +
-      `<div class="kop">${T.t('The picture')}</div>${scherm}${beeld}` +
-      `<div class="kop">${T.t('Language')}</div>${taal}` +
-      `<div class="kop">${T.t('Keys and mouse')}</div><div class="toetsen">${toetsen()}</div>` +
-      `<div class="regels-voet"><span>${T.t('{esc} closes.', { esc: ESC })}</span></div>`
+      `<div class="tabs">${tabs}</div>` +
+      `<div class="tab-inhoud">${tabInhoud()}</div>` +
+      `<div class="regels-voet"><span>${T.t('It changes nothing in the world, so you can change it at any time; the browser remembers it. {esc} closes.', { esc: ESC })}</span></div>`
     );
   }
 
-  // Opnieuw tekenen, op de plek waar je was.
-  function toon() {
+  // Opnieuw tekenen, op de plek waar je was (een ander tabblad begint bovenaan).
+  function toon(zelfdeTab = true) {
     const box = $('instellingen');
-    const waar = box.scrollTop;
+    const vak = box.querySelector('.tab-inhoud');
+    const waar = zelfdeTab && vak ? vak.scrollTop : 0;
     box.innerHTML = inhoud();
-    box.scrollTop = waar;
+    box.querySelector('.tab-inhoud').scrollTop = waar;
   }
 
   T.ui.openInstellingen = function (S) {
-    if (T.ui.openVenster(S, 'instellingen')) toon();
+    if (T.ui.openVenster(S, 'instellingen')) toon(false);
   };
   T.ui.sluitInstellingen = function (S) {
     T.ui.sluitVenster(S, 'instellingen');
@@ -95,11 +149,18 @@
   $('instellingen').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     const S = T.S;
-    if (!b || !S) return;
+    if (!b || b.disabled || !S) return;
     b.blur();
     if (b.dataset.actie === 'sluit') return T.ui.sluitInstellingen(S);
-    if (b.dataset.optie) T.zetOptie(b.dataset.optie, b.dataset.keuze, S);
-    else if (b.dataset.scherm) zetHeelScherm(b.dataset.scherm === 'aan');
+    if (b.dataset.tab) {
+      tab = b.dataset.tab;
+      return toon(false);
+    }
+    if (b.dataset.optie) {
+      T.zetOptie(b.dataset.optie, b.dataset.keuze, S);
+      T.ui.pasBeeldToe(); // de meter, de helderheid (js/main.js)
+      if (VENSTER.includes(b.dataset.optie)) pasVensterToe();
+    } else if (b.dataset.scherm) zetHeelScherm(b.dataset.scherm === 'aan');
     else if (b.dataset.taal && b.dataset.taal !== T.taalNu()) return T.kiesTaal(b.dataset.taal); // de bladzijde herlaadt
     toon();
   });

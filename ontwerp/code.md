@@ -158,11 +158,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **Het menu onder `Esc`** is papier in het midden, met een regel per keuze: Resume, Save, Load, Settings, Game rules (de
   stand `'lezen'`), Photo mode, To the title screen, en Quit. Een venster erbovenop (Settings, de spelregels) heeft de
   toetsen; als het dichtgaat, tekent `T.ui.werkMenuBij` het menu opnieuw.
-- `js/instellingen.js`: **Settings** (vraag 172): wat van jou is en niet van het spel, als venster (`T.ui.meldVenster`,
-  zonder toets): het hele scherm (`requestFullscreen`), de opties met `instelling: true` (in dezelfde rij als de
-  spelregels, `T.ui.optieRij` in `js/hud.js`), de taal (tot 16 okt op het titelscherm; `T.kiesTaal` herlaadt), en de
+- `js/instellingen.js`: **Settings** (vraag 172 en 172b): wat van jou is en niet van het spel, als venster
+  (`T.ui.meldVenster`, zonder toets), in vier tabbladen: *Display*, *Graphics*, *Game* en *Controls*. Wat er te kiezen
+  is, zijn de opties met `instelling` in `js/opties.js`, en die noemt zijn tabblad ('beeld', 'tekening', 'spel'); een rij
+  is `T.ui.optieRij` (`js/hud.js`, met `kan` voor een keuze die nu niet kan). Erbij: de taal (`T.kiesTaal` herlaadt) en de
   toetsen (`toetsen()`, alleen om te lezen: komt er een toets bij in `js/main.js` of een venster, zet hem hier erbij).
-  Geen schuif voor het geluid zolang er geen geluid is. Alleen scherm (`ALLEEN_SCHERM` in `test/laad.cjs`).
+  **Het venster:** in Electron over de brug `window.schil` (`verpakken.md`, "Het venster en de brug"; `pasVensterToe`,
+  bij `DOMContentLoaded` en na een keuze), in de browser alleen het hele scherm (`requestFullscreen`, niet te onthouden).
+  **Wat de keuzes doen:** de waarden staan in `T.TEKENEN_INSTELLINGEN` (`venster`, `vensterMaat`, `beeldenPerSeconde`,
+  `meter`, `helderheid`), `T.TIJD_INSTELLINGEN.pauzeAlsWeg` en `T.OPSLAAN_INSTELLINGEN.vanzelf`; `js/main.js` past ze
+  toe: de lus slaat beelden over tot de grens (`lus`, in de maat van de grens, ook op 144 Hz; de wereld loopt hetzelfde),
+  `T.ui.pasBeeldToe` zet de meter (F2 is dezelfde instelling) en de helderheid (een filter op de doeken, niet op de
+  vensters), en `blur` en `focus` zetten de tijd stil onder de reden `'weg'`. `T.werkOpslaanBij` (`js/opslaan.js`) kent
+  `vanzelf`. Geen schuif voor het geluid zolang er geen geluid is. Alleen scherm (`ALLEEN_SCHERM` in `test/laad.cjs`).
 
 
 ### js/taal.js: de taal

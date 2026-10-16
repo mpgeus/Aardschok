@@ -876,12 +876,13 @@
   const magKiezen = () => regelsStand !== 'lezen';
 
   // Eén optie als rij: zijn naam en uitleg, de keuzes, en de uitleg van wat gekozen is. Ook voor Settings
-  // (js/instellingen.js), zodat een rij er overal hetzelfde uitziet. `mag`: false toont alleen wat er gekozen is.
-  T.ui.optieRij = function (o, mag = true) {
+  // (js/instellingen.js), zodat een rij er overal hetzelfde uitziet. `mag`: false toont alleen wat er gekozen is; `kan(keuze)`
+  // zegt per keuze of hij er nu kan zijn (een formaat van het venster dat niet op je scherm past).
+  T.ui.optieRij = function (o, mag = true, kan = null) {
     const nu = T.optieKeuze(o.id);
     const gekozen = o.keuzes.find((k) => k.id === nu);
     const knoppen = o.keuzes
-      .map((k) => `<button class="regel-keuze${k.id === nu ? ' gekozen' : ''}" data-optie="${o.id}" data-keuze="${k.id}" title="${veilig(k.uitleg)}"${mag ? '' : ' disabled'}>${k.naam}${k.id === o.standaard ? `<small>${T.t('default')}</small>` : ''}</button>`)
+      .map((k) => `<button class="regel-keuze${k.id === nu ? ' gekozen' : ''}" data-optie="${o.id}" data-keuze="${k.id}" title="${veilig(k.uitleg || '')}"${mag && (!kan || kan(k)) ? '' : ' disabled'}>${k.naam}${k.id === o.standaard ? `<small>${T.t('default')}</small>` : ''}</button>`)
       .join('');
     return (
       `<div class="regel"><div class="regel-naam">${o.naam}<small>${o.uitleg}</small></div>` +
