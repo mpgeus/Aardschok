@@ -67,8 +67,9 @@ voor nu"). **Het lantaarntje in de hand is af** (16 okt, in `main`; Marcel: "A1,
 koos L3). Daarna **stap 6, samen spelen** (bij
 I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dorpen, is af** (16 okt, op de branch
 `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
-eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Het volgende is 6b, alles een
-opdracht** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Marcel kwam erna met "de wereld van
+iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers): het voorstel 6a2 wacht op zijn keuze, en dan
+6b, alles een opdracht. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -81,6 +82,8 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De wereld van iedereen kiezen** (vraag 170, 16 okt; bij I, na 6a): het wild en de rovers van het eiland, niet van een
+  dorp (W, R), hoeveel spelers (N), en de volgorde (V); voorstel van Claude: W1, R1, Rb, N1, V1.
 - **De lobby kiezen** (vraag 170, stap 6c, 16 okt; bij I): ons eigen lobbyscherm in het menu met Steam eronder, of alleen
   het overlay van Steam (L), en alleen vrienden of ook een openbare lijst (M); voorstel van Claude: L1, M1.
 - **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, op de branch `ccr-055aff40-lz2bwx`): Nieuw spel, en
@@ -784,6 +787,25 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   zonder eigen scherm (het spel begint dan zodra de ander erbij komt, zonder eiland of "klaar"); **M** M1 alleen wie je
   uitnodigt (vrienden; het voorstel uit `commercieel.md`, want een klein spel heeft lege lobby's); M2 ook een openbare
   lijst. Voorstel: L1, M1.
+  **De wereld van iedereen** (Marcel, 16 okt, na 6a: "Maar het moet echt full multiplayer worden. Niet 2 spelers op 1
+  map. Het wild is van iedereen. Wolven etc. Rovers trekken rond en hebben kampen. Echt losse spelers met hun eigen dorp";
+  **wacht op Marcel**). Wat Claude in 6a koos, gaat om: daar hoorden de wolven, de herten en de rovers bij een dorp (rond
+  zijn plein gezet, door zijn tik bewogen, met zijn dobbelsteen). **Het voorstel** (Claude, 16 okt), een stap 6a2 vóór 6b:
+  het eiland krijgt **wezens van de wereld**, zonder dorp, die de wereld één keer per tik bijwerkt met haar eigen
+  dobbelsteen (uit het nummer van het eiland); een dorp werkt alleen nog zijn eigen mensen, kar en vee bij. **Het wild**:
+  de roedels en de kuddes wonen in het bos van het eiland, niet om een dorp; ieder jaagt erop, en een wolf valt aan wie in
+  zijn buurt komt, van welk dorp ook (de mannen van dat dorp komen helpen). **De rovers**: het eiland heeft roverskampen
+  (een nieuwe soort plek, ver van de dorpen en de wegen), elk met een bende die over de wegen trekt, een dorp beloert,
+  rooft, en met de buit terug naar haar kamp gaat; een kamp kun je aanvallen en opruimen; wie uit een dorp wegtrekt, kan
+  bij een kamp gaan. De heer is er al één, met zijn kasteel, tegen iedereen; de marskramer komt nog bij elk dorp apart.
+  **Losse spelers**: elk zijn eigen computer en zijn eigen dorp, en hij ziet alleen het zijne (6c; `Spel.debug.wissel()`
+  is alleen gereedschap om het te proberen). Te kiezen: **W** het wild: W1 over het hele eiland, gezet waar het land open
+  gaat (zoals het land zelf); W2 alleen in de bossen rond de dorpen, maar van iedereen. **R** de rovers: R1 een vast aantal
+  kampen uit het nummer van het eiland, en een kamp dat je opruimt, blijft leeg (het eiland wordt veiliger door te
+  spelen); R2 een opgeruimd kamp komt na een tijd ergens anders terug; en wie ze beroven: Ra het dorp dat ze het eerst
+  tegenkomen; Rb het dorp met het meeste graan en de minste soldaten. **N** hoeveel spelers: N1 twee in de demo, en later
+  zoveel als er dorpsplekken zijn (acht per eiland); N2 al acht in de demo. **V** de volgorde: V1 de wereld van iedereen
+  eerst (6a2), dan 6b en 6c; V2 eerst samen spelen (6b, 6c), dan de wereld. Voorstel: W1, R1, Rb, N1, V1.
   **6a is af** (16 okt, op de branch `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
