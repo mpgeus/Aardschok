@@ -797,7 +797,7 @@ test('vlees vult een maag, ook in de winter: wie alleen vlees heeft, sterft niet
 test('het zaaigraan is niet voor de molen: een werkplaats neemt alleen het graan dat de boeren niet achterhouden', () => {
   // In de speeltest van 2 okt (vraag 92) maalde de molen het zaaigraan op, en bleven de akkers in de lente ongezaaid.
   const S = maakS();
-  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4 }];
+  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4, dorp: S }]; // een veld is van een dorp (T.hoortBij is streng sinds stap 6a2)
   S.wereld.wezens = []; // met akkers komen er rovers kijken (js/rovers.js), en die zoeken de wezens van de kaart
   const zaai = 20 * T.ZAAIGRAAN_PER_TEGEL;
   S.gebouwen.push({ soort: 'molen', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
@@ -817,7 +817,7 @@ test('het zaaigraan is niet voor de molen: een werkplaats neemt alleen het graan
 
 test('het zaaigraan: van de oogst tot het zaaien achtergehouden, en pas bij nood gegeten (vraag 81)', () => {
   const S = maakS();
-  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4 }, { x: 10, y: 0, b: 2, h: 5, plan: 'weide' }];
+  S.wereld.akkers = [{ x: 0, y: 0, b: 5, h: 4, dorp: S }, { x: 10, y: 0, b: 2, h: 5, plan: 'weide', dorp: S }];
   const zaai = 20 * T.ZAAIGRAAN_PER_TEGEL; // de akker van 20 tegels; het veld dat weide wordt, telt niet
   // Van het zaaien tot de oogst houden de boeren niets achter; van de oogst tot het zaaien zoveel als volgend jaar vraagt.
   assert.equal(T.zaaigraanApart(S, ZOMERDAG), 0);

@@ -9,12 +9,22 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat stuk a van 6a2 liet zien** (16 okt, het wild van de wereld; buiten de stap gehouden): (a) een wolf vlucht voor
+  wie hem achterna zit (2,2 tegels per seconde), sneller dan de aanvoerder: stuur je hem op een wolf af (rechts klikken),
+  dan staat *Fighting breaks out* in de balk en loopt de tijd op 1×, maar valt er geen klap, tot hij het opgeeft (dat was
+  al zo vóór 6a2). Een gevecht zou pas moeten beginnen als er een klap valt, of de roedel zou moeten blijven staan als
+  iemand op hem afkomt. (b) Sinds vraag 171 draagt de aanvoerder 's nachts een lantaarn, en licht houdt de wolven weg:
+  een roedel met honger valt hem nooit meer aan, alleen een dorpeling die alleen in het donker is (of een schaap).
+  (c) `w.lot`, de dobbelsteen van de wereld, begint nog op zaad 1, niet op het nummer van het eiland: alleen een monster
+  van een toets gooit er nu mee; stuk c (de roverskampen) zet hem goed.
+
 - **Wat 6a van vraag 170 liet zien** (16 okt, meer dorpen op één eiland; buiten de stap gehouden): (a) het licht, de rook,
   de sneeuw, het kampvuur en de paadjes tekent het scherm voor het dorp waar de camera het dichtst bij is (`T.dorpHier`);
   met twee dorpen tegelijk in beeld (alleen ver uitgezoomd, ze liggen 430 tegels of meer uit elkaar) mist het andere dat.
   (b) De spelregel "Hoogte" legt alleen heuvels onder het eerste dorp, en de bouwstijl van de kaart (`w.stijl`) is die van
-  het eerste. (c) Een roedel die iemand van een ander dorp aanvalt, roept de mannen van zijn eigen dorp om hulp
-  (`js/beesten.js`, `hulp`), niet die van het slachtoffer. (d) De paadjes en de lijsten van de kaart (`T.kaartVak`) lopen
+  het eerste. (c) Een roedel die iemand van een ander dorp aanvalt, riep de mannen van zijn eigen dorp om hulp
+  (`js/beesten.js`, `hulp`), niet die van het slachtoffer (opgelost in 6a2, stuk a: het wild is van de wereld, en wie
+  aangevallen wordt, krijgt de mannen van zijn eigen dorp). (d) De paadjes en de lijsten van de kaart (`T.kaartVak`) lopen
   over het vak om alle dorpen: met dorpen ver uit elkaar is dat groot (bij 600 tegels 644 bij 396), en duurder bij een
   verandering. Per stuk rekenen (zoals het land) is de echte oplossing. (e) Gebouwen van de ander aanvallen of in brand
   steken kan nog niet (vraag 170, het plan bij 6). (f) `A.veld` van een overval is het nummer onder de velden van het dorp:

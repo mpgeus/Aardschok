@@ -100,11 +100,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   andere letter voor letter ongemoeid.
 - **Meer dorpen op één kaart** (vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op hetzelfde eiland", 16 okt: "A1
   b1 c2 d1"; getoetst in `test/meer-dorpen.test.cjs`): **een wezen draagt zijn dorp mee** (`e.dorp`, gezet waar het
-  ontstaat: `T.nieuwDorp` voor de aanvoerder, het poppetje van een bewoner, `T.maakKar`, het vee, de roedels en kuddes van
-  zijn bos (`G.dorp`), de rovers van een overval, en de marskramer, de heer en zijn soldaten), en een veld ook (`a.dorp`).
-  **Elk dorp werkt alleen zijn eigen wezens en velden bij** (`T.hoortBij(D, e)`, js/wereld.js: een wezen zonder dorp, van een
-  kaart uit Tiled of een toets, hoort bij elk; `T.veldenVan(D)`, js/boerderij.js), met zijn eigen dobbelsteen: het dwalen,
-  de praatjes, de oogst, het veldwerk, het vee, de wolven en hun hollen, het gevecht. Zo raakt het ene dorp het andere niet:
+  ontstaat: `T.nieuwDorp` voor de aanvoerder, het poppetje van een bewoner, `T.maakKar`, het vee, de rovers van een
+  overval, en de marskramer, de heer en zijn soldaten), en een veld ook (`a.dorp`). **Elk dorp werkt alleen zijn eigen
+  wezens en velden bij** (`T.hoortBij(D, e)`, js/wereld.js, streng sinds stap 6a2: een wezen of veld zonder dorp is van de
+  wereld, en hoort alleen bij `null`, een kaart zonder dorp zoals het gereedschap; een toets die zelf een kaartje bouwt,
+  geeft zijn wezens en velden dus hun dorp; `T.veldenVan(D)`, js/boerderij.js), met zijn eigen dobbelsteen: het dwalen,
+  de praatjes, de oogst, het veldwerk, het vee, het gevecht. **Wat van geen dorp is, werkt de wereld bij** (stap 6a2, a;
+  Marcel, 16 okt: "Het wild is van iedereen"): het wild (js/beesten.js), één keer per kaart in `T.wereldTik`. Zo raakt het ene dorp het andere niet:
   de toets speelt het proefdorp twintig dagen met en zonder een tweede op de kaart, letter voor letter gelijk (gemeten op 16
   okt ook een half jaar). Wat een mens van het dorp is (`T.isVanDorp`: zijn aanvoerder, een bewoner, een kar; geen dier of
   bezoeker), kijkt door de mist en maakt het land open. **De plek van een dorp** staat in het dorp (`D.plek`, `T.legePlek` in
@@ -136,7 +138,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   schuift ze de tik maal de snelheid op (`T.wereldFactor`, js/tijd.js). `T.wereldTik(S)` is de ene tik: de kalender, de
   klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`,
   één keer per kaart: op één kaart kunnen meer dorpen leven, vraag 170, stap 6a), en waar je kijkt het maaien, het veldwerk,
-  het wild en het dwalen van elk dorp dat er ligt, elk met zijn eigen wezens; `S.tik` telt ze. js/main.js tikt
+  het wild en het dwalen van elk dorp dat er ligt, elk met zijn eigen wezens; `S.tik` telt ze. Na de dorpen, één keer per
+  kaart, **wat van geen dorp is** (vraag 170, stap 6a2): de nacht van het wild (`T.werkBeestenDagBij`, na de nacht en het
+  bos van de dorpen), wie van de wereld vecht (`T.werkGevechtVanDeWereldBij`), en waar je niet kijkt het wild in het bos
+  (`T.werkBeestenBij`; waar je kijkt na het veldwerk, als er rondgelopen wordt). js/main.js tikt
   zo vaak als er tijd verstreek (`T.tikBij`: een tik gaat al als er een halve klaarligt, zodat bij zestig beelden per
   seconde elke tik in een eigen beeld valt, en hooguit drie per beeld: een trage computer laat de wereld dan langzamer
   lopen, zoals tot nu). **Spel.debug.stap, de speeltest, de toetsen en `npm run grootte` tikken dezelfde tik**: geen eigen
@@ -1173,8 +1178,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/beesten.js: het wild
 
 - `js/beesten.js`: **het wild in het bos** (vraag 116, stap 1, 7 okt; Marcel: "Rode ogen uit het duister", en "a ja, b
-  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het land (`T.zetBeesten`,
-  de eerste keer dat het dorp leeft: `T.werkBeestenBij`, elk beeld vanuit js/main.js en `T.werkDorpBij`), elk met een plek
+  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het land (`T.zetBeesten(S,
+  D)`, in het bos van het land van een dorp, de eerste keer dat het leeft: `T.werkBeestenBij`), elk met een plek
   diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
   wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`). Een groep is een ding dat de dieren delen
@@ -1206,6 +1211,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`moetNaar` met `hulp`), een buur jaagt ze weg, een man van je (`hulp.man`) vecht met ze, en na een kwartier bijten ze.
   Na een gevecht gaat een roedel terug naar zijn hol (`T.wolvenNaHetGevecht`). De jacht te voet (3b) en het hek om de
   meent (3d, `zetHek`) zijn weg sinds 15 okt (ronde 3 van het snoeien): je stuurt je soldaten op de wolven af.
+- **Het wild is van de wereld** (vraag 170, stap 6a2, a; Marcel, 16 okt: "Het wild is van iedereen", en "A1"; getoetst in
+  `test/meer-dorpen.test.cjs`): een groep en zijn dieren hebben geen dorp (geen `G.dorp`, geen `e.dorp`; `T.hoortBij` is
+  streng). De wereld werkt ze bij, één keer per kaart (js/tik.js): elke tik `T.werkBeestenBij(S, w)` (wie er nog geen wild
+  heeft, krijgt het: `T.zetBeesten(S, D)` voor elk dorp op de kaart), en elke nacht `T.tikBeestenDag(S, w, dag)` via
+  `T.werkBeestenDagBij` (`w.beestenDag`), per land: de groepen die er wonen delen hun bos (`G.bos = { vak, midden, zaad }`,
+  bij het zetten overgenomen van het dorp, zodat het bos, wat er gebouwd is (`bebouwd`, van elk dorp op de kaart) en het
+  zaad van het land hetzelfde blijven als toen ze nog van het dorp waren). Wat het wild van een dorp wil weten, vraagt het
+  aan het dorp van wie het aangaat: `schrik` aan het dorp van wie schrikt (`mens.dorp`), `slaToe`, `roeptOmHulp`,
+  `werkAanvalBij` en `bijt` aan dat van de prooi, `T.wolvenVechten(D, G, tegen)` zet `G.tegen = D` (het gevecht is van dat
+  dorp; `T.wolvenNaHetGevecht(D)` stuurt de roedels die tegen D vochten naar huis), en `kiesProoi` kijkt naar het licht en
+  de mensen van elk dorp op de kaart. Het genezen van wie gebeten werd, blijft in het dorp (`T.geneesVanDeWolven`, vanuit
+  `T.tikGebouwenDag`). `T.beestenOp(w)` zijn alle groepen op een kaart (de jager, het hol), `T.beestenVan(D)` die in het
+  land van D (de status, de raad, `Spel.debug.beesten`). **A1:** een groep heeft een eigen dobbelsteen (`G.lot`, uit zijn
+  zaad), waarmee zijn wolven in een gevecht slaan (js/gevecht.js); de rest kwam al uit vaste worpen van zijn zaad
+  (`T.lotVanDier`). Zo verandert het wild bij het ene dorp niet door een gevecht bij het andere. Nog niet (stuk b): het
+  wild over het hele eiland, gezet waar het land opengaat.
 
 ### js/weer.js: het weer
 
@@ -1521,6 +1542,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
   (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
   getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **Wie van de wereld is** (vraag 170, stap 6a2, a; Marcel: "A1"): een wezen zonder dorp (de wolven van een roedel die
+  vecht, een monster van een toets) vecht niet in de tik van een dorp, maar één keer per kaart in
+  `T.werkGevechtVanDeWereldBij` (js/tik.js, na de dorpen). Het gevecht is van het dorp van zijn doel (`d.dorp`): daar
+  begint het en houdt het aan (`aanHetVechten`). Een roedel die ging vechten (`G.tegen`), maar geen wolf vond een doel,
+  gaat terug zodra dat dorp niet meer vecht (`T.wolvenNaHetGevecht`). Een worp gaat met de dobbelsteen van wie slaat: zijn
+  dorp (`e.dorp`), of zijn roedel (`G.lot`), of de kaart (`w.lot`); `kiesDoel` en `doelVan` krijgen de kaart mee, en het
+  dorp mag daar `null` zijn.
 - **Wie vecht:** jouw kant (`T.vechtVoor`: `T.isMan`, en wie opgeroepen is voor de jacht), en de vijand
   (`T.isVijandig`: een rover of een ander monster; een wolf als zijn roedel vecht of iemand aanvalt, `G.vecht`,
   `G.aanval`; zelf vecht een wolf pas als `G.vecht` staat). Het doel is `e.volgt` (jouw bevel, zonder leiband,

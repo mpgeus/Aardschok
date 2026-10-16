@@ -94,14 +94,17 @@ test('een dorp waar je niet bent, leeft met poppetjes: ze lopen, alleen niet get
   S.kalender.dag = 40 + 9 / 24;
   S.kalender.snelheid = 30;
   assert.equal(S.wereld, jij.wereld);
+  // De tik van de wereld (js/tik.js): elk dorp, en het lopen op elke kaart. Wie onderweg ergens anders stond dan bij
+  // het begin (na een dag staat een dorpeling weer op zijn werk); alleen de mensen van het dorp, want het wild is van de
+  // wereld (vraag 170, stap 6a2). Tot 16 okt tikte deze toets alleen de dorpen, en telde hij de wolven en herten die het
+  // dorp de eerste keer neerzette, als mensen die liepen.
   const waar = new Map(buur.wereld.wezens.map((e) => [e, `${e.x},${e.y}`]));
+  const verplaatst = new Set();
   for (let i = 0; i < 600; i++) {
-    S.tijd += 1 / 60;
-    S.wereldTijd += 30 / 60;
-    for (const D of S.dorpen) T.werkDorpBij(S, D, 1 / 60, 30 / 60);
+    T.wereldTik(S);
+    for (const e of buur.wereld.wezens) if (T.hoortBij(buur, e) && waar.has(e) && waar.get(e) !== `${e.x},${e.y}`) verplaatst.add(e);
   }
-  const verplaatst = buur.wereld.wezens.filter((e) => waar.get(e) !== `${e.x},${e.y}`);
-  assert.ok(verplaatst.length >= 5, `in het buurdorp lopen mensen rond (${verplaatst.length} verplaatst)`);
+  assert.ok(verplaatst.size >= 5, `in het buurdorp lopen mensen rond (${verplaatst.size} verplaatst)`);
   for (const e of verplaatst) assert.ok(T.isBegaanbaar(buur.wereld, Math.round(e.tx), Math.round(e.ty)) || e === buur.aanvoerder, 'op zijn eigen kaart');
 });
 

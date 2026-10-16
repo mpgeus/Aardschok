@@ -55,11 +55,12 @@ function ruimePlek(w, bij, r = 6) {
   throw new Error(`geen open plek bij ${bij.x},${bij.y}`);
 }
 
-// Een rover op tegel t, zoals js/rovers.js er een maakt.
-function rover(w, t) {
+// Een rover op tegel t, zoals js/rovers.js er een maakt: van de overval op dorp D (e.dorp), dus hij vecht in zijn tik.
+function rover(D, t) {
   const e = T.maakWezen('rover', t.x, t.y);
   e.rover = true;
-  w.wezens.push(e);
+  e.dorp = D;
+  D.wereld.wezens.push(e);
   return e;
 }
 
@@ -72,7 +73,7 @@ test('wie raakt, slaat; de kosten van zijn slag maal secondenPerPunt is de tijd 
   const hier = ruimePlek(w, T.tegelVan(een));
   zet(een, hier);
   een.post = { x: hier.x, y: hier.y };
-  const r = rover(w, plekOp(w, hier, 1));
+  const r = rover(D, plekOp(w, hier, 1));
   T.werkGevechtBij(S, D);
   assert.equal(een.doelwit, r, 'hij koos de rover die naast hem staat');
   assert.ok(r.leven >= 12 - 3 && r.leven <= 12 - 2, `een hooivork slaat 2 tot 3 (${r.leven})`);
@@ -95,7 +96,7 @@ test('aanvallen, dan terug: een man valt aan wat hij ziet, maar niet verder dan 
   een.post = { x: post.x, y: post.y };
   const L = T.GEVECHT_INSTELLINGEN.leiband;
   // Een rover die hij ziet, binnen de leiband: die valt hij aan.
-  const r = rover(w, plekOp(w, post, 5));
+  const r = rover(D, plekOp(w, post, 5));
   T.werkGevechtBij(S, D);
   assert.equal(een.doelwit, r);
   assert.ok(een.pad.length > 0, 'hij loopt erheen');
@@ -121,7 +122,7 @@ test('een vijand die je aanwijst, valt hij aan zonder leiband; de boog schiet va
   assert.equal(T.slagVan(een).schiet, true);
   const hier = ruimePlek(w, T.tegelVan(een));
   zet(een, hier);
-  const r = rover(w, plekOp(w, hier, 6));
+  const r = rover(D, plekOp(w, hier, 6));
   T.geefOpdracht(S, { soort: 'volg', wie: T.nummersVan(D, [een]), doel: { x: r.tx, y: r.ty, soort: 'rover' } });
   T.wereldTik(S);
   assert.equal(een.volgt, r);
@@ -147,7 +148,7 @@ test('een rover slaat ook een dorpeling; die vlucht naar het town hall, werkt ni
   const e = dorpeling(D);
   const p = e.bewoner;
   zet(e, ruimePlek(w, T.tegelVan(e)));
-  const r = rover(w, plekOp(w, T.tegelVan(e), 4));
+  const r = rover(D, plekOp(w, T.tegelVan(e), 4));
   T.werkGevechtBij(S, D);
   const deur = T.deurVan(w, hal);
   assert.deepEqual(p.schuilt, deur, 'hij vlucht naar de deur van het town hall');
@@ -166,7 +167,7 @@ test('een rover slaat ook een dorpeling; die vlucht naar het town hall, werkt ni
 test('wie valt, is dood: een dorpeling of een soldaat is een mond minder; de laatste rover van een aanval maakt hem af', () => {
   const { S, D, w, een } = dorp();
   const e = dorpeling(D);
-  const r = rover(w, plekOp(w, T.tegelVan(e), 1));
+  const r = rover(D, plekOp(w, T.tegelVan(e), 1));
   const voor = D.bevolking;
   T.raak(S, D, e, 100, r);
   assert.equal(e.dood, true);
@@ -190,7 +191,7 @@ test('het gevecht is een status: een bericht met de plek, de tijd hooguit op 1×
   const hier = ruimePlek(w, T.tegelVan(een));
   zet(een, hier);
   een.post = { x: hier.x, y: hier.y };
-  const r = rover(w, plekOp(w, hier, 1));
+  const r = rover(D, plekOp(w, hier, 1));
   T.werkGevechtBij(S, D);
   assert.ok(D.gevecht, 'er wordt gevochten');
   assert.ok(berichten.includes('Fighting breaks out.'), berichten.join(' | '));
@@ -210,7 +211,7 @@ test('het gevecht is een status: een bericht met de plek, de tijd hooguit op 1×
 
 test('een wolf die je raakt: zijn roedel vecht terug, en na het gevecht gaat hij naar zijn hol', () => {
   const { S, D, w, een } = dorp();
-  T.werkBeestenBij(S, D);
+  T.werkBeestenBij(S, w);
   const wolf = w.wezens.find((e) => e.beest === 'wolf' && !e.dood);
   assert.ok(wolf, 'er zijn wolven in het bos');
   const G = wolf.groep;
@@ -230,8 +231,8 @@ test('twee werelden met dezelfde opdrachten vechten letter voor letter gelijk (l
   const speel = () => {
     const { S, D, w, een, twee } = dorp();
     const hier = ruimePlek(w, T.tegelVan(een));
-    const r1 = rover(w, plekOp(w, hier, 3));
-    rover(w, plekOp(w, hier, 4, [T.tegelVan(r1)]));
+    const r1 = rover(D, plekOp(w, hier, 3));
+    rover(D, plekOp(w, hier, 4, [T.tegelVan(r1)]));
     T.geefOpdracht(S, { soort: 'volg', wie: T.nummersVan(D, [een, twee]), doel: { x: r1.tx, y: r1.ty, soort: 'rover' } });
     for (let i = 0; i < 900; i++) T.wereldTik(S);
     return S;
@@ -257,7 +258,7 @@ test('valt de aanvoerder, dan neemt de soldaat die het langst dient het over: me
   const vorig = p.huis;
   const zijnGezin = D.bewoners.mensen.filter((x) => x.gezin === p.gezin);
   const voor = D.bevolking;
-  T.raak(S, D, oud, 100, rover(w, plekOp(w, T.tegelVan(oud), 1)));
+  T.raak(S, D, oud, 100, rover(D, plekOp(w, T.tegelVan(oud), 1)));
   assert.equal(oud.dood, true);
   assert.equal(D.bevolking, voor - 1, 'de aanvoerder is een mond minder');
   assert.equal(S.modus, 'verkennen', 'het spel gaat door');
@@ -276,7 +277,7 @@ test('een veteraan gaat voor; is er niemand, dan is er even geen aanvoerder, en 
   const { S, D, w } = dorp();
   const vet = dorpeling(D);
   vet.bewoner.veteraan = true;
-  T.raak(S, D, D.aanvoerder, 100, rover(w, plekOp(w, T.tegelVan(D.aanvoerder), 1)));
+  T.raak(S, D, D.aanvoerder, 100, rover(D, plekOp(w, T.tegelVan(D.aanvoerder), 1)));
   assert.equal(D.aanvoerder, vet, 'de veteraan');
   assert.equal(T.slagVan(vet).wapen, 'hooivork', 'met de hooivork van een veteraan');
   assert.ok(berichten.some((t) => /a veteran, takes command/.test(t)), berichten.join(' | '));
@@ -284,7 +285,7 @@ test('een veteraan gaat voor; is er niemand, dan is er even geen aanvoerder, en 
   T.zetSoldaten(D, huis, 'militie', -2);
   assert.equal(T.soldatenVan(D).length, 0);
   berichten.length = 0;
-  T.raak(S, D, vet, 100, rover(w, plekOp(w, T.tegelVan(vet), 1)));
+  T.raak(S, D, vet, 100, rover(D, plekOp(w, T.tegelVan(vet), 1)));
   assert.equal(D.aanvoerder, null, 'niemand om het over te nemen');
   assert.ok(berichten.some((t) => /no one to take command/.test(t)), berichten.join(' | '));
   assert.ok(!T.mannenVan(D).length, 'geen held en geen mannen');

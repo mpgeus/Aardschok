@@ -473,9 +473,11 @@
   // eiland"): een wezen draagt zijn dorp mee (`e.dorp`, gezet waar het ontstaat: T.nieuwDorp, het poppetje van een
   // bewoner in js/bewoners.js, T.maakKar, het vee, de wolven en de herten van zijn bos, de rovers van een overval, en wie
   // op bezoek komt: de marskramer, de heer en zijn soldaten). Elk dorp werkt alleen zijn eigen wezens bij (zijn
-  // dobbelsteen, zijn dag, zijn gevecht), zodat er meer dorpen op één kaart kunnen leven zonder elkaar te raken; een
-  // wezen zonder dorp (een kaart uit Tiled, een toets) hoort bij elk.
-  T.hoortBij = (D, e) => !e.dorp || e.dorp === D;
+  // dobbelsteen, zijn dag, zijn gevecht), zodat er meer dorpen op één kaart kunnen leven zonder elkaar te raken. Een
+  // wezen zonder dorp is van de wereld (stap 6a2, a; Marcel, 16 okt: "Het wild is van iedereen"): het wild, en wat een
+  // kaart uit Tiled of een toets neerzet. Dat werkt de wereld bij, één keer per kaart (T.wereldTik, js/tik.js), en geen
+  // dorp; `T.hoortBij(null, e)` is zo'n wezen (een kaart zonder dorp, het gereedschap).
+  T.hoortBij = (D, e) => (e.dorp || null) === (D || null);
   // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren (geen dier en geen bezoeker). Zij
   // maken het land open (hieronder) en kijken door de mist van hun dorp (js/mist.js).
   T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen && (!!e.bewoner || !!e.kar || e === D.aanvoerder);

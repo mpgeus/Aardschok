@@ -44,6 +44,17 @@
 //   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/statussen.js), zolang ze het laatst
 //            iets deden niet lang geleden is; en de raad zegt het.
 //
+// Sinds 16 okt is het wild van de wereld (werklijst vraag 170, stap 6a2, a; Marcel: "Het wild is van iedereen. Wolven
+// etc.", en "A1"): een roedel of een kudde hoort bij geen dorp. De wereld werkt hem bij, één keer per kaart: elke tik
+// (T.werkBeestenBij, vanuit T.wereldTik in js/tik.js) en elke nacht (T.tikBeestenDag, T.werkBeestenDagBij). Wat hij van
+// een dorp wil weten, vraagt hij aan het dorp van wie het aangaat: wie schrikt of gebeten wordt, is van zijn eigen dorp,
+// wie om hulp roept krijgt de mannen van zijn dorp, en zijn dorp zegt het en vecht (T.wolvenVechten); een prooi is een
+// schaap of wie alleen in het donker is, van welk dorp ook, en licht is licht, van elk dorp op de kaart. Een jager
+// schiet elk hert in zijn bereik. Waar het wild woont, is nog het bos om een dorp (T.zetBeesten; tot stuk b, het wild
+// over het hele eiland): de groep onthoudt dat land (G.bos), niet het dorp. Wat een wolf in een gevecht gooit, komt uit de
+// dobbelsteen van zijn roedel (G.lot; Marcel koos A1): zo verandert wat bij het ene dorp gebeurt niet door een gevecht
+// bij het andere.
+//
 // Een groep is een ding dat de dieren delen (e.groep, zoals e.praatje in js/praatje.js), zonder lijst ernaast:
 //   G = { soort ('wolf' of 'hert'), zaad, thuis {x, y} (het hol of de legerplek), rand [{x, y}] (plekken aan de
 //         bosrand), bij (bij welke plek van de rand), doel ('thuis' of 'rand'), spoor [{x, y}] (de weg van de leider),
@@ -54,13 +65,16 @@
 //         geteld (hoeveel dieren de groep ooit had: het zaad van een jong), jongenJaar (het jaar van de laatste jongen),
 //         trektWeg (de groep gaat weg: T.werkBeestenBij haalt hem van de kaart), prooi { e, soort } en prooiDoel (een
 //         roedel met honger: wie of wat hij zoekt, en waar zijn leider heen loopt), kiest (S.wereldTijd: wanneer hij weer
-//         een prooi kiest) }
+//         een prooi kiest), bos { vak, midden, zaad } (het land waar hij woont: het vak, het plein van het dorp daar, en
+//         het zaad van het land; gedeeld door de groepen van dat land), lot (zijn dobbelsteen, T.toeval), aanval (wie hij
+//         aanvalt, hieronder), vecht en tegen (hij vecht, met de mannen van dat dorp: T.wolvenVechten) }
 // Het hol van een roedel is een voorwerp op de kaart naast zijn thuis, { soort: 'hol', x, y, groep: G } (T.holVan, stap 3b).
-// In het dorp: D.beesten = { gezet, gezien { dag, wat ('gezien', 'schaap' of 'aanval'), wie } (het laatste wat de wolven
-// bij het dorp deden: de status) }. Op een bewoner: p.thuisTot en p.gewond.
+// In het dorp: D.beesten = { gezet (het wild in het bos van zijn land is gezet), gezien { dag, wat ('gezien', 'schaap' of
+// 'aanval'), wie } (het laatste wat de wolven bij het dorp deden: de status) }. Op een bewoner: p.thuisTot en p.gewond.
+// Op de kaart: w.beestenDag, de laatste nacht van het wild.
 // Op een dier: e.beest (zijn soort), e.groep, e.leider, e.rust (wat het doet als het stilstaat: 'staan', 'grazen',
 // 'liggen'; js/sprites.js), e.rent (een hert dat vlucht: dan 'rennen'), e.zoektWeg (S.wereldTijd waarna een volger weer
-// een weg mag zoeken). In het dorp: D.beesten = { gezet }.
+// een weg mag zoeken); geen e.dorp.
 // Alles komt uit het zaad van het land en van de groep, niet uit Math.random.
 (function (T) {
   'use strict';
@@ -174,10 +188,8 @@
   // rand van de kaart telt niet als open grond: daar loopt het bos door (js/tekenen.js tekent het erachter). Met `ookJong`
   // telt wat de houthakker kapt en inplant ook als bos (js/bos.js, vraag 129, f): 's nachts, als een groep kijkt of zijn
   // thuis nog goed is. Het bos komt in één keer voor het hele vak (T.bosInVak), want per tegel was het de zwaarste regel
-  // van de nacht.
-  function bosKaart(D, ookJong = false) {
-    const w = D.wereld;
-    const vak = T.dorpVak(D);
+  // van de nacht. Het vak is het land van een dorp (T.dorpVak; voor een groep G.bos.vak).
+  function bosKaart(w, vak, ookJong = false) {
     const bos = T.bosInVak(w, vak, ookJong);
     const diep = new Int16Array(vak.b * vak.h).fill(-1);
     const rij = [];
@@ -213,43 +225,51 @@
   // Een tegel waar een dier kan staan: begaanbaar, en niemand erop.
   const vrij = (w, x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
 
-  // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein, en niet bij een gebouw.
-  function bebouwd(D) {
-    const w = D.wereld;
-    const vak = T.dorpVak(D);
+  // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein, en niet bij een gebouw, van welk
+  // dorp op de kaart ook.
+  function bebouwd(S, w, vak) {
     const uit = new Uint8Array(vak.b * vak.h);
     const zet = (x0, y0, b, h, rand) => {
       for (let y = Math.max(vak.y, y0 - rand); y < Math.min(vak.y + vak.h, y0 + h + rand); y++) {
         for (let x = Math.max(vak.x, x0 - rand); x < Math.min(vak.x + vak.b, x0 + b + rand); x++) uit[plekInVak(vak, x, y)] = 1;
       }
     };
-    for (const g of D.gebouwen || []) {
-      const v = T.voetVanGebouw(g);
-      if (v) zet(v.x, v.y, v.b, v.h, 3);
+    for (const D of dorpenOp(S, w)) {
+      for (const g of D.gebouwen || []) {
+        const v = T.voetVanGebouw(g);
+        if (v) zet(v.x, v.y, v.b, v.h, 3);
+      }
     }
     for (const v of w.akkers || []) zet(v.x, v.y, v.b, v.h, 0);
     return uit;
   }
 
+  // De dorpen op kaart w; en het dorp in wiens land plek p ligt (T.dorpVak), of null: dat zegt wat zijn wild doet.
+  const dorpenOp = (S, w) => ((S && S.dorpen) || []).filter((D) => D.wereld === w);
+  const dorpVanLand = (S, w, p) => dorpenOp(S, w).find((D) => D.plek && T.inVak(T.dorpVak(D), p.x, p.y)) || null;
+
   // ---------------------------------------------------------------------------------------------
   // De groepen neerzetten
   // ---------------------------------------------------------------------------------------------
 
-  // Zet de roedels en de herten in het bos van dit dorp, uit het zaad van het land. Geeft de groepen. Eén keer per dorp
-  // (D.beesten.gezet); T.werkBeestenBij vraagt het zelf.
-  T.zetBeesten = function (D) {
+  // Zet de roedels en de herten in het bos van het land van dit dorp, uit het zaad van het land. Ze zijn van de wereld,
+  // niet van het dorp; ze onthouden alleen het land (G.bos), tot stuk b ze over het hele eiland zet. Geeft de groepen.
+  // Eén keer per dorp (D.beesten.gezet); T.werkBeestenBij vraagt het zelf.
+  T.zetBeesten = function (S, D) {
     const w = D.wereld;
     const B = D.beesten || (D.beesten = {});
     B.gezet = true;
     if (!T.heeftTegels(w)) return [];
-    const kaart = bosKaart(D);
-    const zaad = landZaad(D);
+    const vak = T.dorpVak(D);
+    const bos = { vak: { x: vak.x, y: vak.y, b: vak.b, h: vak.h }, midden: T.pleinVan(D), zaad: landZaad(D) };
+    const kaart = bosKaart(w, bos.vak);
+    const zaad = bos.zaad;
     const r = T.dobbelsteen(zaad * 7919 + 116);
     const aantal = (per, max) => (kaart.n < IN().minstensBos ? 0 : Math.max(1, Math.min(max, Math.floor(kaart.n / per))));
     const roedels = aantal(IN().bosPerRoedel, IN().maxRoedels);
     const kuddes = aantal(IN().bosPerKudde, IN().maxKuddes);
-    const midden = T.pleinVan(D);
-    const open = bebouwd(D);
+    const midden = bos.midden;
+    const open = bebouwd(S, w, bos.vak);
     const kandidaten = thuisKandidaten(w, kaart, midden, zaad);
     const thuizen = [];
     const groepen = [];
@@ -261,11 +281,10 @@
       const plek = nieuwThuis(w, kaart, open, midden, soort, soort === 'wolf' ? kandidaten.filter(prooi) : kandidaten, thuizen);
       if (!plek) continue;
       thuizen.push(plek.thuis);
-      const G = nieuweGroep(soort, Math.floor(r() * 1e9), plek);
-      G.dorp = D; // de roedel of de kudde leeft in het bos van dit dorp (T.hoortBij, js/wereld.js)
+      const G = nieuweGroep(soort, Math.floor(r() * 1e9), plek, bos);
       const [van, tot] = soort === 'wolf' ? IN().roedel : IN().kudde;
       plekkenBij(w, G.thuis, van + Math.floor(r() * (tot - van + 1))).forEach((p) => w.wezens.push(maakBeest(G, p, G.geteld++)));
-      if (soort === 'wolf') zetHol(D, G);
+      if (soort === 'wolf') zetHol(w, G);
       groepen.push(G);
     }
     return groepen;
@@ -274,9 +293,10 @@
   // Het nummer van het land, waar het lot van de beesten uit komt.
   const landZaad = (D) => (D.wereld.maker && D.wereld.maker.zaad) || (D.lot && D.lot.zaad) || 1;
 
-  // Een nieuwe groep, met zijn thuis en zijn plekken aan de rand ({ thuis, rand }, uit nieuwThuis).
-  const nieuweGroep = (soort, zaad, plek) => ({
-    soort, zaad, thuis: { x: plek.thuis.x, y: plek.thuis.y }, rand: plek.rand.map((q) => ({ x: q.x, y: q.y })),
+  // Een nieuwe groep, met zijn thuis en zijn plekken aan de rand ({ thuis, rand }, uit nieuwThuis), in het land `bos`, en
+  // met een eigen dobbelsteen uit zijn zaad (A1).
+  const nieuweGroep = (soort, zaad, plek, bos) => ({
+    soort, zaad, thuis: { x: plek.thuis.x, y: plek.thuis.y }, rand: plek.rand.map((q) => ({ x: q.x, y: q.y })), bos, lot: { zaad },
     bij: 0, doel: 'thuis', spoor: [], wacht: 0, weg: 0, vluchtNaar: null, keek: 0, zoekt: 0, honger: 0, geteld: 0,
   });
 
@@ -286,12 +306,11 @@
   // rand. Het is vast: je loopt eromheen. Blijft de roedel dan nog overal te bereiken (de plekken aan de rand), anders de
   // volgende tegel. Een groep heeft er één; waar het thuis verandert, gaat het hol mee (blijfOfVerhuis, splits), en wie
   // weggaat of doodgaat, neemt het mee (onderhoudHollen).
-  T.holVan = (D, G) => ((D.wereld && D.wereld.voorwerpen) || []).find((v) => v.soort === 'hol' && v.groep === G) || null;
+  T.holVan = (w, G) => ((w && w.voorwerpen) || []).find((v) => v.soort === 'hol' && v.groep === G) || null;
 
-  function zetHol(D, G) {
-    const w = D.wereld;
-    haalHolWeg(D, G);
-    const vak = T.dorpVak(D);
+  function zetHol(w, G) {
+    haalHolWeg(w, G);
+    const vak = G.bos.vak;
     const kandidaten = [];
     for (let ring = 1; ring <= 3; ring++) {
       for (let dy = -ring; dy <= ring; dy++) {
@@ -314,19 +333,16 @@
     return null;
   }
 
-  function haalHolWeg(D, G) {
-    const v = T.holVan(D, G);
-    if (v) T.haalVoorwerpWeg(D.wereld, v);
+  function haalHolWeg(w, G) {
+    const v = T.holVan(w, G);
+    if (v) T.haalVoorwerpWeg(w, v);
   }
 
-  // Elke nacht: een roedel zonder hol (een spel van vóór het hol) krijgt er een, en een hol zonder roedel (hij trok weg of
-  // is verslagen) gaat weg.
-  function onderhoudHollen(D) {
-    const w = D.wereld;
-    const levend = new Set(T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg).map(({ G }) => G));
-    // alleen de hollen van dit dorp (een hol hoort bij zijn roedel, en die bij een dorp: T.hoortBij, js/wereld.js)
-    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && T.hoortBij(D, x.groep) && !levend.has(x.groep))) T.haalVoorwerpWeg(w, v);
-    for (const G of levend) if (!T.holVan(D, G)) zetHol(D, G);
+  // Elke nacht: een roedel zonder hol krijgt er een, en een hol zonder roedel (hij trok weg of is verslagen) gaat weg.
+  function onderhoudHollen(w) {
+    const levend = new Set(T.beestenOp(w).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg).map(({ G }) => G));
+    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && !levend.has(x.groep))) T.haalVoorwerpWeg(w, v);
+    for (const G of levend) if (!T.holVan(w, G)) zetHol(w, G);
   }
 
   // Een thuis voor een groep van deze soort: de eerste plek uit de kandidaten (thuisKandidaten) die ver genoeg van de
@@ -433,7 +449,7 @@
       e.vel = i === 0 ? soort.leider : soort.vellen[Math.floor(lot(zaad, 1, 116) * soort.vellen.length)];
     }
     Object.assign(e, {
-      beest: G.soort, groep: G, dorp: G.dorp, leider: i === 0, dwaalt: false, thuis: null, straal: 0, zaad,
+      beest: G.soort, groep: G, leider: i === 0, dwaalt: false, thuis: null, straal: 0, zaad,
       snelheid: soort.snelheid, rust: G.soort === 'hert' ? 'liggen' : 'staan', rent: false,
       fase: lot(zaad, 2, 116) * 2 * Math.PI,
       beginRichting: RICHTINGEN[Math.floor(lot(zaad, 3, 116) * RICHTINGEN.length)],
@@ -441,35 +457,32 @@
     return e;
   }
 
-  // De spelregel ging uit: de dieren gaan weg, het bos in.
-  function haalWeg(D) {
-    const w = D.wereld;
-    if (w) {
-      w.wezens = w.wezens.filter((e) => !(e.beest && T.hoortBij(D, e)));
-      for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && T.hoortBij(D, x.groep))) T.haalVoorwerpWeg(w, v);
-    }
-    D.beesten.gezet = false;
+  // De spelregel ging uit: de dieren op kaart w gaan weg, het bos in.
+  function haalWeg(S, w) {
+    w.wezens = w.wezens.filter((e) => !e.beest);
+    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol')) T.haalVoorwerpWeg(w, v);
+    for (const D of dorpenOp(S, w)) if (D.beesten) D.beesten.gezet = false;
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Elk beeld
+  // Elke tik
   // ---------------------------------------------------------------------------------------------
 
-  // Elk beeld, als er rondgelopen wordt (js/main.js voor waar je bent, T.werkDorpBij in js/dorp.js voor een ander dorp):
-  // de groepen kijken of er een mens komt, kiezen waar ze heen gaan naar het uur, en lopen.
-  T.werkBeestenBij = function (S, D) {
-    const w = D && D.wereld;
-    if (!w || !D.kalender) return;
-    const B = D.beesten || (D.beesten = {});
+  // Elke tik, één keer per kaart (T.wereldTik, js/tik.js; waar je kijkt alleen als er rondgelopen wordt): een dorp dat
+  // er nog geen wild bij heeft, krijgt het in het bos van zijn land (T.zetBeesten); de groepen kijken of er een mens komt,
+  // kiezen waar ze heen gaan naar het uur, en lopen.
+  T.werkBeestenBij = function (S, w) {
+    if (!w || !w.wezens || !S.kalender) return;
+    const dorpen = dorpenOp(S, w);
     if (!IN().aan) {
-      if (B.gezet) haalWeg(D);
+      if (dorpen.some((D) => D.beesten && D.beesten.gezet)) haalWeg(S, w);
       return;
     }
-    if (!B.gezet) T.zetBeesten(D);
+    for (const D of dorpen) if (D.kalender && !(D.beesten && D.beesten.gezet)) T.zetBeesten(S, D);
     const groepen = new Map();
     let weg = false;
     for (const e of w.wezens) {
-      if (!e.groep || e.dood || !T.hoortBij(D, e)) continue; // alleen de roedels en kuddes van dit dorp (js/wereld.js)
+      if (!e.groep || e.dood || e.dorp) continue;
       if (e.groep.trektWeg) {
         weg = true;
         continue;
@@ -479,13 +492,14 @@
       else groepen.set(e.groep, [e]);
     }
     // Een groep die wegtrekt (T.tikBeestenDag), gaat van de kaart; niet midden in een gevecht, waar een wolf meevecht.
-    if (weg && !D.gevecht) w.wezens = w.wezens.filter((e) => !(e.groep && e.groep.trektWeg && T.hoortBij(D, e)));
-    for (const [G, leden] of groepen) werkGroepBij(S, D, G, leden);
+    const gaat = (G) => G && G.trektWeg && !G.vecht && !G.aanval;
+    if (weg) w.wezens = w.wezens.filter((e) => !gaat(e.groep));
+    for (const [G, leden] of groepen) werkGroepBij(S, w, G, leden);
   };
 
   // Wat een groep nu wil, naar het uur: aan de rand ('rand') of thuis ('thuis').
-  T.beestenWillen = function (D, G) {
-    const dag = D.kalender.dag;
+  T.beestenWillen = function (S, G) {
+    const dag = S.kalender.dag;
     const u = T.uurVanDag(dag);
     const zon = T.zonVan(dag);
     if (G.soort === 'wolf') return u >= zon.onder - IN().wolvenVoorDonker || u < zon.op ? 'rand' : 'thuis';
@@ -512,9 +526,8 @@
     return beste;
   }
 
-  function werkGroepBij(S, D, G, leden) {
-    const w = D.wereld;
-    const dag = D.kalender.dag;
+  function werkGroepBij(S, w, G, leden) {
+    const dag = S.kalender.dag;
     const t = S.wereldTijd || 0;
     const soort = T.BEESTEN[G.soort];
     let leider = leden.find((e) => e.leider);
@@ -524,19 +537,19 @@
     }
     // Valt de roedel iemand aan, en roept die om hulp (stap 3c), dan blijft hij bij hem tot er hulp komt of zijn tijd om is.
     if (G.aanval) {
-      werkAanvalBij(S, D, G, leider);
+      werkAanvalBij(S, w, G, leider);
       return;
     }
     // Vecht de roedel (T.wolvenVechten), dan beweegt het gevecht hem (js/gevecht.js), tot het voorbij is.
     if (G.vecht) return;
     // 0. Een roedel met honger, in het donker (stap 2b): niet schuw, maar op zoek naar prooi.
-    const stout = G.soort === 'wolf' && T.wolvenStout(D, G);
+    const stout = G.soort === 'wolf' && T.wolvenStout(S, G);
     // 1. Komt er een mens? Dan weg van hem: naar de plek (zijn thuis of een plek aan de rand) die het verst van hem ligt.
     // Was hij aan het werk, en ziet hij de wolven, dan rent hij naar huis (schrik).
     if (!stout && t >= (G.keek || 0)) {
       G.keek = t + 0.5;
       const mens = mensBij(S, w, leden, IN().schuw[G.soort]);
-      if (mens && G.soort === 'wolf') schrik(D, G, mens, leden);
+      if (mens && G.soort === 'wolf') schrik(S, w, G, mens, leden);
       if (mens) {
         const m = T.tegelVan(mens);
         const naar = [G.thuis, ...G.rand].reduce((a, b) => (T.afstand(b, m) > T.afstand(a, m) ? b : a));
@@ -562,8 +575,8 @@
       }
     }
     // 2. Waar de groep heen wil: met honger in het donker naar zijn prooi, anders naar het uur.
-    const prooi = stout && !weg ? prooiVan(S, D, G, leider, t) : null;
-    const wil = weg ? 'weg' : prooi ? 'prooi' : T.beestenWillen(D, G);
+    const prooi = stout && !weg ? prooiVan(S, w, G, leider, t) : null;
+    const wil = weg ? 'weg' : prooi ? 'prooi' : T.beestenWillen(S, G);
     if (wil !== G.doel) {
       G.doel = wil;
       G.wacht = 0;
@@ -612,7 +625,7 @@
     // Een hert rent tot de groep er is; wie dan stilstaat, rent niet meer.
     if (weg && G.soort === 'hert' && daar) for (const e of leden) if (!e.pad.length) e.rent = false;
     // Is de roedel bij zijn prooi, dan slaat hij toe (stap 2b).
-    if (wil === 'prooi' && prooi.slaat && T.afstand(T.tegelVan(leider), T.tegelVan(prooi.e)) <= 1) slaToe(S, D, G, leider, prooi);
+    if (wil === 'prooi' && prooi.slaat && T.afstand(T.tegelVan(leider), T.tegelVan(prooi.e)) <= 1) slaToe(S, G, leider, prooi);
     // 4. De anderen: in het spoor van de leider zolang hij loopt, en om hem heen als hij staat.
     let i = 0;
     for (const e of leden) {
@@ -682,42 +695,66 @@
   // Elke nacht: het leven in het bos (stap 2a)
   // ---------------------------------------------------------------------------------------------
 
-  // Elke nacht (T.tikGebouwenDag in js/gebouwen.js, na het bos): wie zijn thuis kwijt is, zoekt een nieuw of trekt weg
-  // (d); in de winter krijgen de roedels honger en jagen ze op de herten (g); en in de lente komen er jongen (e). `nu` is
-  // voor Spel.debug.beesten: { jongen: true } geeft de jongen vandaag, { jacht: true } laat elke roedel nu jagen, alsof
-  // het winter is en hij honger heeft.
-  T.tikBeestenDag = function (D, dag, nu = {}) {
-    const w = D.wereld;
-    // Wie de wolven beten, is na zijn dagen in bed weer beter (T.blijftThuis, js/bewoners.js).
+  // Wie de wolven beten of lieten schrikken, is na zijn dagen weer beter (T.blijftThuis, js/bewoners.js): elke nacht in
+  // zijn dorp (T.tikGebouwenDag in js/gebouwen.js, na het bos).
+  T.geneesVanDeWolven = function (D, dag) {
     for (const p of (D.bewoners && D.bewoners.mensen) || []) {
       if (p.thuisTot != null && dag >= p.thuisTot) {
         delete p.thuisTot;
         delete p.gewond;
       }
     }
-    if (!IN().aan || !D.beesten || !D.beesten.gezet || !T.heeftTegels(w)) return;
+  };
+
+  // Elke tik, één keer per kaart (T.wereldTik, js/tik.js): is er een nieuwe dag, dan de nacht van het wild. Na de dorpen,
+  // dus na hun nacht en het bos (T.tikGebouwenDag).
+  T.werkBeestenDagBij = function (S, w) {
+    if (!w || !S.kalender) return;
+    const dag = Math.floor(S.kalender.dag);
+    if (w.beestenDag == null) {
+      w.beestenDag = dag; // eerste keer: alleen onthouden waar we beginnen
+      return;
+    }
+    while (w.beestenDag < dag) T.tikBeestenDag(S, w, ++w.beestenDag);
+  };
+
+  // Elke nacht, voor het wild op kaart w, per land (G.bos: het bos waarin het woont): wie zijn thuis kwijt is, zoekt een
+  // nieuw of trekt weg (d); in de winter krijgen de roedels honger en jagen ze op de herten (g); en in de lente komen er
+  // jongen (e). `nu` is voor Spel.debug.beesten: { jongen: true } geeft de jongen vandaag, { jacht: true } laat elke
+  // roedel nu jagen, alsof het winter is en hij honger heeft.
+  T.tikBeestenDag = function (S, w, dag, nu = {}) {
+    if (!IN().aan || !w || !w.wezens || !T.heeftTegels(w)) return;
     // Een wolf die in een gevecht viel, ligt er niet meer.
-    const dood = (e) => e.beest && e.dood && T.hoortBij(D, e);
+    const dood = (e) => e.beest && e.dood;
     if (w.wezens.some(dood)) w.wezens = w.wezens.filter((e) => !dood(e));
-    onderhoudHollen(D);
-    let groepen = T.beestenVan(D).filter(({ G }) => !G.trektWeg);
-    if (!groepen.length) return;
-    const kaart = bosKaart(D, true);
-    const open = bebouwd(D);
-    const midden = T.pleinVan(D);
+    onderhoudHollen(w);
     const datum = T.datumVanDag(dag);
-    for (const g of groepen) blijfOfVerhuis(D, kaart, open, midden, g, groepen);
-    groepen = groepen.filter(({ G }) => !G.trektWeg);
-    for (const g of groepen) if (g.G.soort === 'wolf') jaag(D, g, groepen, datum, dag, nu.jacht);
-    groepen = groepen.filter(({ leden }) => leden.length);
-    for (const g of [...groepen]) jongen(D, kaart, open, midden, g, groepen, datum, dag, nu.jongen);
+    // Per land: de groepen die er wonen, het bos en wat er gebouwd is, één keer voor allemaal.
+    const landen = new Map();
+    for (const g of T.beestenOp(w)) {
+      if (g.G.trektWeg) continue;
+      const v = g.G.bos.vak;
+      const sleutel = `${v.x},${v.y},${v.b},${v.h}`;
+      if (!landen.has(sleutel)) landen.set(sleutel, { bos: g.G.bos, groepen: [] });
+      landen.get(sleutel).groepen.push(g);
+    }
+    for (const { bos, groepen: alle } of landen.values()) {
+      let groepen = alle;
+      const land = { w, bos, kaart: bosKaart(w, bos.vak, true), open: bebouwd(S, w, bos.vak) };
+      for (const g of groepen) blijfOfVerhuis(S, land, g, groepen);
+      groepen = groepen.filter(({ G }) => !G.trektWeg);
+      for (const g of groepen) if (g.G.soort === 'wolf') jaag(w, g, groepen, datum, dag, nu.jacht);
+      groepen = groepen.filter(({ leden }) => leden.length);
+      for (const g of [...groepen]) jongen(land, g, groepen, datum, dag, nu.jongen);
+    }
   };
 
   // Ligt het thuis van een groep nog diep genoeg in het bos (diepBlijven), en zijn zijn plekken aan de rand nog goed?
   // Kan alleen de rand niet meer, dan zoekt hij een nieuwe rand; ligt zijn thuis niet meer in het bos, dan een nieuw thuis,
-  // zo dicht bij het oude als het kan (d). Vindt hij er geen, dan trekt hij weg, en zegt het dorp het.
-  function blijfOfVerhuis(D, kaart, open, midden, { G }, groepen) {
-    const w = D.wereld;
+  // zo dicht bij het oude als het kan (d). Vindt hij er geen, dan trekt hij weg, en zegt het dorp van dat land het.
+  // `land` = { w, bos, kaart, open }: de kaart, het land van de groepen, zijn bos (bosKaart) en wat er gebouwd is.
+  function blijfOfVerhuis(S, { w, bos, kaart, open }, { G }, groepen) {
+    const midden = bos.midden;
     const i = plekInVak(kaart.vak, G.thuis.x, G.thuis.y);
     const thuisGoed = kaart.bos[i] === 1 && kaart.diep[i] >= IN().diepBlijven;
     if (thuisGoed && G.rand.length && G.rand.every((p) => randGoed(w, kaart, open, p.x, p.y, G.soort))) return;
@@ -727,7 +764,7 @@
       if (rand.length) plek = { thuis: G.thuis, rand };
     }
     if (!plek) {
-      const kandidaten = thuisKandidaten(w, kaart, midden, landZaad(D)).sort((a, b) => T.afstand(a, G.thuis) - T.afstand(b, G.thuis));
+      const kandidaten = thuisKandidaten(w, kaart, midden, bos.zaad).sort((a, b) => T.afstand(a, G.thuis) - T.afstand(b, G.thuis));
       const thuizen = groepen.filter((g) => g.G !== G && !g.G.trektWeg).map((g) => g.G.thuis);
       plek = nieuwThuis(w, kaart, open, midden, G.soort, kandidaten, thuizen, 15);
     }
@@ -736,20 +773,21 @@
       Object.assign(G, { thuis: { x: plek.thuis.x, y: plek.thuis.y }, rand: plek.rand, bij: 0, wacht: 0, doel: null });
       // Het hol gaat mee naar het nieuwe thuis; blijft het thuis, dan staat het nog goed (een nieuwe rand kan wel op de tegel van
       // het hol liggen).
-      const hol = T.holVan(D, G);
-      if (G.soort === 'wolf' && (verhuisd || !hol || plek.rand.some((p) => p.x === hol.x && p.y === hol.y))) zetHol(D, G);
+      const hol = T.holVan(w, G);
+      if (G.soort === 'wolf' && (verhuisd || !hol || plek.rand.some((p) => p.x === hol.x && p.y === hol.y))) zetHol(w, G);
       return;
     }
     G.trektWeg = true;
-    haalHolWeg(D, G);
-    T.zeg(D, T.t('The {dieren} have moved away: their forest has become too small.', { dieren: T.BEESTEN[G.soort].meervoud }), G.soort === 'wolf' ? 'goed' : '');
+    haalHolWeg(w, G);
+    const D = dorpVanLand(S, w, G.thuis);
+    if (D) T.zeg(D, T.t('The {dieren} have moved away: their forest has become too small.', { dieren: T.BEESTEN[G.soort].meervoud }), G.soort === 'wolf' ? 'goed' : '');
   }
 
   // De honger van een roedel en zijn jacht (g): in de winter komt er elke nacht een dag honger bij, voor een roedel van
   // vier (een grotere roedel heeft sneller honger); buiten de winter vindt hij genoeg. Met genoeg honger jaagt hij op de
   // herten in zijn bos: de dichtste groep binnen jaagStraal van zijn hol waar hij kan komen. Vangt hij er een (vangKans),
   // dan is zijn honger weg. Hij vangt het laatste dier van de groep, en het hert dat leidt pas als het alleen is.
-  function jaag(D, { G, leden }, groepen, datum, dag, nu) {
+  function jaag(w, { G, leden }, groepen, datum, dag, nu) {
     const h = IN().honger;
     if (!nu && datum.seizoen !== 'winter') {
       G.honger = 0;
@@ -758,7 +796,6 @@
     G.honger = nu ? Math.max(G.honger || 0, h.jagenVanaf) : (G.honger || 0) + leden.length / 4;
     if (G.honger >= IN().zonderJongen) G.leedOp = Math.floor(dag); // honger geleden: deze lente geen jongen
     if (G.honger < h.jagenVanaf) return;
-    const w = D.wereld;
     const herten = groepen
       .filter((g) => g.G.soort === 'hert' && g.leden.length && T.afstand(g.G.thuis, G.thuis) <= h.jaagStraal && T.kanErKomen(w, G.thuis, g.G.thuis))
       .sort((a, b) => T.afstand(a.G.thuis, G.thuis) - T.afstand(b.G.thuis, G.thuis));
@@ -772,8 +809,8 @@
   }
 
   // De jongen (e): op de eerste dag van hun maand krijgt elke groep er een of twee bij, bij zijn thuis, en niet meer dan
-  // tot hij groot is; is hij dat, dan splitst hij.
-  function jongen(D, kaart, open, midden, g, groepen, datum, dag, nu) {
+  // tot hij groot is; is hij dat, dan splitst hij. `land` als bij blijfOfVerhuis.
+  function jongen(land, g, groepen, datum, dag, nu) {
     const { G, leden } = g;
     const j = IN().jongen[G.soort];
     if (!nu && (datum.dagVanMaand !== 1 || T.MAANDEN[datum.maand].naam !== j.maand || G.jongenJaar === datum.jaar)) return;
@@ -783,33 +820,33 @@
     G.geteld = Math.max(G.geteld || 0, leden.length);
     const [van, tot] = j.aantal;
     const n = Math.min(van + Math.floor(lot(G.zaad, Math.floor(dag), 41) * (tot - van + 1)), Math.max(0, IN().groot - leden.length));
-    for (const p of plekkenBij(D.wereld, G.thuis, n)) {
+    for (const p of plekkenBij(land.w, G.thuis, n)) {
       const e = maakBeest(G, p, G.geteld++);
-      D.wereld.wezens.push(e);
+      land.w.wezens.push(e);
       leden.push(e);
     }
-    if (leden.length >= IN().groot) splits(D, kaart, open, midden, g, groepen);
+    if (leden.length >= IN().groot) splits(land, g, groepen);
   }
 
   // Een groep die groot is, splitst (e): de tweede helft gaat met een eigen leider een eigen thuis zoeken, als het bos
   // plaats heeft (niet meer roedels dan een per plaatsPerRoedel tegels bos, en groepjes herten een per plaatsPerKudde, en
   // ver genoeg van de andere thuizen); anders trekt die helft weg. Wie een groepje herten gaat leiden, krijgt een gewei.
-  function splits(D, kaart, open, midden, g, groepen) {
+  function splits({ w, bos, kaart, open }, g, groepen) {
     const { G, leden } = g;
     const helft = leden.filter((e) => !e.leider).slice(-Math.floor(leden.length / 2));
     const zelfde = groepen.filter((x) => x.G.soort === G.soort && !x.G.trektWeg).length;
     const plaats = Math.floor(kaart.n / (G.soort === 'wolf' ? IN().plaatsPerRoedel : IN().plaatsPerKudde));
     const thuizen = groepen.filter((x) => !x.G.trektWeg).map((x) => x.G.thuis);
-    const plek = zelfde < plaats ? nieuwThuis(D.wereld, kaart, open, midden, G.soort, thuisKandidaten(D.wereld, kaart, midden, landZaad(D)), thuizen, 15) : null;
-    const G2 = nieuweGroep(G.soort, Math.floor(lot(G.zaad, G.geteld, 43) * 1e9), plek || G);
-    Object.assign(G2, { dorp: G.dorp, honger: G.honger, jongenJaar: G.jongenJaar, geteld: helft.length, trektWeg: !plek });
+    const plek = zelfde < plaats ? nieuwThuis(w, kaart, open, bos.midden, G.soort, thuisKandidaten(w, kaart, bos.midden, bos.zaad), thuizen, 15) : null;
+    const G2 = nieuweGroep(G.soort, Math.floor(lot(G.zaad, G.geteld, 43) * 1e9), plek || G, G.bos);
+    Object.assign(G2, { honger: G.honger, jongenJaar: G.jongenJaar, geteld: helft.length, trektWeg: !plek });
     helft.forEach((e, i) => {
       e.groep = G2;
       e.leider = i === 0;
       leden.splice(leden.indexOf(e), 1);
     });
     if (G.soort === 'hert') helft[0].vel = T.BEESTEN.hert.leider;
-    if (plek && G.soort === 'wolf') zetHol(D, G2);
+    if (plek && G.soort === 'wolf') zetHol(w, G2);
     groepen.push({ G: G2, leden: helft });
   }
 
@@ -819,8 +856,8 @@
 
   // Is deze roedel nu stout: met zoveel honger (dreiging.stout; honger komt alleen in de winter, js/beesten.js hierboven)
   // en in het donker. Dan is hij niet schuw meer, maar zoekt hij prooi.
-  T.wolvenStout = function (D, G) {
-    return G.soort === 'wolf' && (G.honger || 0) >= IN().dreiging.stout && T.lichtVan(D.kalender.dag).nacht >= IN().dreiging.donker;
+  T.wolvenStout = function (S, G) {
+    return G.soort === 'wolf' && (G.honger || 0) >= IN().dreiging.stout && T.lichtVan(S.kalender.dag).nacht >= IN().dreiging.donker;
   };
 
   // Werk aan of in het bos (e.werkt.soort, js/veldwerk.js): de houthakker aan zijn boom, wie sprokkelt of rooit.
@@ -830,11 +867,11 @@
   // js/bewoners.js), en wat zijn werkplaats die dag maakte (T.tikGebouwenDag schreef het bij het begin van de dag bij),
   // gaat voor zijn deel voor de helft weer af. Alleen een roedel met honger laat zich zo zien (vanaf honger.jagenVanaf;
   // anders blijft hij uit het zicht), en per uur met schrikKans. Het dorp zegt het als de status "Wolven" begint, niet
-  // elke keer (Marcel, 1 okt: een toestand is een status).
-  function schrik(D, G, mens, leden) {
-    const w = D.wereld;
-    const dag = D.kalender.dag;
-    if (!mens.werkt || !BOSWERK.has(mens.werkt.soort) || mens === D.aanvoerder || (G.honger || 0) < IN().honger.jagenVanaf) return;
+  // elke keer (Marcel, 1 okt: een toestand is een status). Het werk en het bericht zijn van zijn eigen dorp.
+  function schrik(S, w, G, mens, leden) {
+    const D = mens.dorp;
+    const dag = S.kalender.dag;
+    if (!D || !mens.werkt || !BOSWERK.has(mens.werkt.soort) || mens === D.aanvoerder || (G.honger || 0) < IN().honger.jagenVanaf) return;
     if (lot(G.zaad, Math.floor(dag * 24), 61) >= IN().dreiging.schrikKans) return;
     const p = T.bewonerVan(D, mens);
     if (!p || T.blijftThuis(p, dag)) return;
@@ -851,19 +888,18 @@
       }
     }
     const nieuw = T.wolvenBijHetDorp(D, dag) == null;
-    D.beesten.gezien = { dag, wat: 'gezien', wie: T.naamVanBewoner(p) };
+    (D.beesten || (D.beesten = {})).gezien = { dag, wat: 'gezien', wie: T.naamVanBewoner(p) };
     if (nieuw) T.zeg(D, T.t('{wie} saw wolves at the edge of the forest, and ran home.', { wie: T.naamVanBewoner(p) }));
   }
 
   // Wat een roedel met honger zoekt: elke halve seconde kiest hij opnieuw (kiesProoi), en daartussen houdt hij wat hij
   // had, zolang dat er nog is. Geeft { e, soort, doel (waar de leider heen loopt), slaat (of hij er toeslaat) }, of null.
   // Bij de aanvoerder met zijn lantaarn blijft hij aan de rand van het licht, en slaat hij niet toe.
-  function prooiVan(S, D, G, leider, t) {
-    const w = D.wereld;
+  function prooiVan(S, w, G, leider, t) {
     const oud = G.prooi;
     if (t >= (G.kiest || 0) || !oud || oud.e.dood || oud.e.binnen || !w.wezens.includes(oud.e)) {
       G.kiest = t + 0.5;
-      G.prooi = kiesProoi(D, leider);
+      G.prooi = kiesProoi(S, w, leider);
     }
     const P = G.prooi;
     if (!P) return null;
@@ -871,15 +907,16 @@
   }
 
   // De prooi: eerst een schaap (het dichtste, waar het ook staat); anders de dichtste binnen
-  // zoekStraal van de leider: wie van het dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, en
-  // geen licht om hem heen); de aanvoerder ook, sinds 16 okt zonder lantaarn. Geeft { e, soort ('schaap' of 'mens') } of null.
-  function kiesProoi(D, leider) {
-    const w = D.wereld;
+  // zoekStraal van de leider: wie van een dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, van
+  // welk dorp ook, en geen licht om hem heen, van welk dorp op de kaart ook: licht is licht); de aanvoerder ook, als hij
+  // niet in het licht staat (sinds vraag 171 draagt hij 's nachts een lantaarn). Geeft { e, soort ('schaap' of 'mens') } of
+  // null.
+  function kiesProoi(S, w, leider) {
     const lt = T.tegelVan(leider);
     const R = IN().dreiging.zoekStraal;
-    const bronnen = T.lichtBronnen(D);
+    const bronnen = dorpenOp(S, w).flatMap((D) => T.lichtBronnen(D));
     const inLicht = (q) => bronnen.some((b) => Math.hypot(b.x - q.x, b.y - q.y) <= b.straal);
-    const mensen = w.wezens.filter((e) => (e.bewoner || e.werkAkkers || e === D.aanvoerder) && !e.binnen && !e.dood && !e.beest);
+    const mensen = w.wezens.filter((e) => (e.bewoner || e.werkAkkers || (e.dorp && e === e.dorp.aanvoerder)) && !e.binnen && !e.dood && !e.beest);
     let beste = null;
     let d = Infinity;
     const neem = (e, soort) => {
@@ -902,11 +939,17 @@
 
   // De roedel slaat toe: een schaap neemt hij mee, en een bericht brengt je erheen; wie hij aanvalt, is gewond
   // of dood (bijt), en vecht een man met hem, in real time (T.wolvenVechten). Daarna is zijn honger weg,
-  // en gaat hij terug naar zijn hol. Ook voor Spel.debug.beesten('schaap').
-  T.wolvenSlaanToe = (S, D, G, leider, prooi) => slaToe(S, D, G, leider, prooi);
-  function slaToe(S, D, G, leider, prooi) {
-    const dag = D.kalender.dag;
-    const B = D.beesten;
+  // en gaat hij terug naar zijn hol. Het verlies, het bericht en de hulp zijn van het dorp van de prooi. Ook voor
+  // Spel.debug.beesten('schaap').
+  T.wolvenSlaanToe = (S, G, leider, prooi) => slaToe(S, G, leider, prooi);
+  function slaToe(S, G, leider, prooi) {
+    const D = prooi.e.dorp;
+    if (!D) {
+      G.prooi = null; // van geen dorp: een andere prooi
+      return;
+    }
+    const dag = S.kalender.dag;
+    const B = D.beesten || (D.beesten = {});
     if (prooi.soort === 'schaap') {
       const plek = T.tegelVan(prooi.e);
       T.verliesDier(D, prooi.e);
@@ -945,41 +988,43 @@
     for (const m of helpers) m.moetNaar = { x: plek.x, y: plek.y, straal: 1, hulp: true };
     G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
     leider.pad = leider.onderweg ? [leider.pad[0]] : [];
-    D.beesten.gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
+    (D.beesten || (D.beesten = {})).gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
     T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.hoofdletter(T.naamVanBewoner(p)), g: p.geslacht }), 'gevaar', T.tegelVan(e));
     T.naarGewoneSnelheid(D);
   }
 
-  // Elk beeld zolang de roedel iemand aanvalt: komt een man van je binnen hulp.man tegels, dan vecht de roedel met hem;
-  // staat er een ander binnen dreiging.alleen tegels, dan vlucht de roedel; is de tijd om, dan bijt hij (bijt).
-  function werkAanvalBij(S, D, G, leider) {
+  // Elke tik zolang de roedel iemand aanvalt: komt een man van zijn dorp binnen hulp.man tegels, dan vecht de roedel met
+  // hem; staat er een ander binnen dreiging.alleen tegels (van welk dorp ook), dan vlucht de roedel; is de tijd om, dan
+  // bijt hij (bijt). Het bericht is van het dorp van wie aangevallen wordt.
+  function werkAanvalBij(S, w, G, leider) {
     const A = G.aanval;
     const e = A.e;
+    const D = e.dorp;
     const p = T.bewonerVan(D, e);
     const plek = T.tegelVan(e);
     const t = S.wereldTijd || 0;
-    if (!p || e.dood || !D.wereld.wezens.includes(e)) {
-      eindAanval(D, G);
+    if (!D || !p || e.dood || !w.wezens.includes(e)) {
+      eindAanval(G);
       return;
     }
     const aanvoerder = D.aanvoerder;
-    const man = D.wereld.wezens.find((m) => T.vechtVoor(D, m) && !m.binnen && T.afstand(T.tegelVan(m), plek) <= IN().hulp.man);
+    const man = w.wezens.find((m) => T.vechtVoor(D, m) && !m.binnen && T.afstand(T.tegelVan(m), plek) <= IN().hulp.man);
     if (man) {
       T.wolvenVechten(D, G, man);
       return;
     }
-    const mensen = D.wereld.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
+    const mensen = w.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
     const helper = mensen.find((m) => T.afstand(T.tegelVan(m), plek) <= IN().dreiging.alleen);
     if (helper) {
       const wie = helper === aanvoerder ? T.t('The commander') : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
-      eindAanval(D, G);
+      eindAanval(G);
       G.weg = D.kalender.dag + IN().wegUren / 24;
       G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
       T.zeg(D, T.t('{wie} came to help {naam}, and the wolves have fled.', { wie, naam: T.naamVanBewoner(p) }), 'goed');
       return;
     }
     if (t < A.tot) return;
-    eindAanval(D, G);
+    eindAanval(G);
     bijt(D, G, p, D.kalender.dag);
     G.honger = 0;
     G.weg = D.kalender.dag + IN().wegUren / 24;
@@ -989,11 +1034,13 @@
   // ── Vechten (werklijst vraag 170, stap 2) ──
   // De roedel vecht in real time (js/gevecht.js) met wie hem aanvalt (een man die een wolf raakt), met de held zonder licht
   // die hij aanvalt, en met een man die bij wie om hulp roept komt (hulp.man). Elke wolf neemt de dichtste van
-  // jouw kant die hij ziet (T.vechtVoor), of `tegen`; zolang G.vecht staat, beweegt het gevecht de roedel. Is het voorbij,
-  // dan gaat hij terug naar zijn hol (T.wolvenNaHetGevecht).
+  // de kant van dorp D die hij ziet (T.vechtVoor), of `tegen`; zolang G.vecht staat, beweegt het gevecht de roedel
+  // (T.werkGevechtVanDeWereldBij, js/gevecht.js), tegen dat dorp (G.tegen). Is het voorbij, dan gaat hij terug naar zijn
+  // hol (T.wolvenNaHetGevecht).
   T.wolvenVechten = function (D, G, tegen) {
-    if (G.aanval) eindAanval(D, G);
+    if (G.aanval) eindAanval(G);
     G.vecht = true;
+    G.tegen = D;
     const w = D.wereld;
     const onze = w.wezens.filter((x) => T.vechtVoor(D, x) && !x.binnen);
     for (const e of w.wezens) {
@@ -1010,19 +1057,20 @@
     }
   };
 
-  // Het gevecht is voorbij (T.gevechtVoorbij, js/gevecht.js): elke roedel die vocht, gaat terug naar zijn hol, en zijn
-  // honger is weg.
+  // Het gevecht van dorp D is voorbij (T.gevechtVoorbij, js/gevecht.js), of een roedel die met hem ging vechten, vond geen
+  // doel: elke roedel die met hem vocht, gaat terug naar zijn hol, en zijn honger is weg.
   T.wolvenNaHetGevecht = function (D) {
     const w = D.wereld;
     if (!w || !D.kalender) return;
+    const tegenD = (G) => !!G && !!G.vecht && G.tegen === D;
     for (const e of w.wezens) {
-      const G = e.groep;
-      if (!G || !G.vecht || !T.hoortBij(D, e)) continue;
+      if (!tegenD(e.groep)) continue;
       delete e.doelwit;
       delete e.vanaf;
     }
-    for (const G of new Set(w.wezens.filter((e) => e.groep && e.groep.vecht && T.hoortBij(D, e)).map((e) => e.groep))) {
+    for (const G of new Set(w.wezens.filter((e) => tegenD(e.groep)).map((e) => e.groep))) {
       G.vecht = false;
+      G.tegen = null;
       G.honger = 0;
       G.prooi = null;
       G.weg = D.kalender.dag + IN().wegUren / 24;
@@ -1031,7 +1079,7 @@
   };
 
   // De aanval is voorbij: wie riep en wie hielp, gaan weer hun gang.
-  function eindAanval(D, G) {
+  function eindAanval(G) {
     const A = G.aanval;
     G.aanval = null;
     G.prooi = null;
@@ -1044,7 +1092,7 @@
   // Wie de wolven aanvallen: met de spelregel een enkele keer dood (doodKans), anders gewond, een paar dagen in bed.
   function bijt(D, G, p, dag) {
     const naam = T.naamVanBewoner(p);
-    D.beesten.gezien = { dag, wat: 'aanval', wie: naam };
+    (D.beesten || (D.beesten = {})).gezien = { dag, wat: 'aanval', wie: naam };
     if (IN().doden && lot(G.zaad, Math.floor(dag * 24), 53) < IN().dreiging.doodKans) {
       T.wijzigBevolking(D, -1, 'wolven', T.t('Wolves attacked in the dark'), [p]);
       return;
@@ -1076,7 +1124,7 @@
     const w = D.wereld;
     const deur = T.deurVan(w, g);
     const J = IN().jager;
-    const groepen = deur ? T.beestenVan(D).filter(({ G }) => !G.trektWeg && T.afstand(deur, G.thuis) <= J.straal && T.kanErKomen(w, deur, G.thuis)) : [];
+    const groepen = deur ? T.beestenOp(w).filter(({ G }) => !G.trektWeg && T.afstand(deur, G.thuis) <= J.straal && T.kanErKomen(w, deur, G.thuis)) : [];
     groepen.sort((a, b) => T.afstand(deur, a.G.thuis) - T.afstand(deur, b.G.thuis));
     const wild = {
       hert: groepen.find(({ G, leden }) => G.soort === 'hert' && leden.length > J.laatStaan) || null,
@@ -1133,7 +1181,7 @@
   // de raad en de status: zonder is "geen jager" de oorzaak die je had kunnen zien.
   T.jagerBijDeWolven = function (D) {
     const J = IN().jager;
-    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
+    const roedels = T.beestenOp(D.wereld).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
     return (D.gebouwen || []).some((g) => g.klaar && jaagtEcht(D, g) && roedels.some(({ G }) => {
       const deur = T.deurVan(D.wereld, g);
       return deur && T.afstand(deur, G.thuis) <= J.straal;
@@ -1153,14 +1201,17 @@
   // Voor het scherm en de muis
   // ---------------------------------------------------------------------------------------------
 
-  // De groepen van een dorp, met hun dieren: [{ G, leden }].
-  T.beestenVan = function (D) {
+  // De groepen op kaart w, met hun dieren: [{ G, leden }]. Het wild is van niemand: een jager schiet elk hert in zijn
+  // bereik, ook van het bos van een ander dorp.
+  T.beestenOp = function (w) {
     const uit = new Map();
-    for (const e of (D && D.wereld && D.wereld.wezens) || []) {
-      if (!e.groep || e.dood || !T.hoortBij(D, e)) continue;
+    for (const e of (w && w.wezens) || []) {
+      if (!e.groep || e.dood || e.dorp) continue;
       if (!uit.has(e.groep)) uit.set(e.groep, []);
       uit.get(e.groep).push(e);
     }
     return [...uit].map(([G, leden]) => ({ G, leden }));
   };
+  // De groepen in het land van dorp D (hun thuis ligt erin, T.dorpVak): voor de status, de raad en Spel.debug.beesten.
+  T.beestenVan = (D) => (D && D.plek ? T.beestenOp(D.wereld).filter(({ G }) => T.inVak(T.dorpVak(D), G.thuis.x, G.thuis.y)) : []);
 })(globalThis.Spel = globalThis.Spel || {});

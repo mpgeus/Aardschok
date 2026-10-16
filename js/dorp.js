@@ -138,7 +138,6 @@
     // Waar je kijkt, maaien en dwalen ze in T.wereldTik (js/tik.js), en worden ze getekend; het lopen doet de tik voor
     // elke kaart één keer, ook voor deze.
     if (D.wereld === S.wereld) return;
-    T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
     T.werkOogstBij(S, D, dtWereld); // maaien (js/akkers.js)
     T.werkVeldwerkBij(S, D); // de boeren op hun land (js/veldwerk.js)
     T.dwaal(S, D.wereld, D, dtWereld); // en dwalen, naar het ritme van de dag (js/verkennen.js)

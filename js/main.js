@@ -1139,10 +1139,12 @@
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.'; // geen tekst
       if (wat === 'opnieuw') {
+        // het wild is van de wereld: opnieuw voor elk dorp op de kaart (js/beesten.js)
         S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
-        T.zetBeesten(D);
+        for (const v of S.wereld.voorwerpen.filter((x) => x.soort === 'hol')) T.haalVoorwerpWeg(S.wereld, v);
+        for (const V of S.dorpen) if (V.wereld === S.wereld) T.zetBeesten(S, V);
       }
-      if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(D, Math.floor(D.kalender.dag), { [wat]: true });
+      if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(S, D.wereld, Math.floor(D.kalender.dag), { [wat]: true });
       const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf');
       if (wat === 'honger') for (const { G } of roedels) G.honger = T.BEESTEN_INSTELLINGEN.dreiging.stout;
       if (wat === 'schaap' && roedels.length) {
@@ -1150,7 +1152,7 @@
         const l = leden.find((e) => e.leider) || leden[0];
         const schapen = S.wereld.wezens.filter((e) => e.dier === 'schaap' && !e.dood);
         const schaap = schapen.sort((a, b) => T.afstand(T.tegelVan(a), T.tegelVan(l)) - T.afstand(T.tegelVan(b), T.tegelVan(l)))[0];
-        if (schaap) T.wolvenSlaanToe(S, D, G, l, { e: schaap, soort: 'schaap' });
+        if (schaap) T.wolvenSlaanToe(S, G, l, { e: schaap, soort: 'schaap' });
       }
       const h = T.tegelVan(S.dorp.aanvoerder);
       const groepen = T.beestenVan(D);
@@ -1177,15 +1179,15 @@
           return {
             soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
             leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.dorp.aanvoerder))} tegels van de aanvoerder`, // geen tekst
-            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G), // geen tekst
+            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(S, G), // geen tekst
             thuis: `${G.thuis.x},${G.thuis.y}`,
             rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
             rent: leden.some((e) => e.rent),
             ...(G.soort === 'wolf' ? {
               honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`, // geen tekst
               gevangen: G.gevangen || 0,
-              stout: T.wolvenStout(D, G),
-              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'aanvoerder' ? 'de aanvoerder' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}), // geen tekst
+              stout: T.wolvenStout(S, G),
+              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'aanvoerder' ? 'de aanvoerder' : T.naamVanBewoner(T.bewonerVan(G.prooi.e.dorp, G.prooi.e))}` } : {}), // geen tekst
             } : {}),
             jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet', // geen tekst
             ...(G.trektWeg ? { trektWeg: true } : {}),

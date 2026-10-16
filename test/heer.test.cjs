@@ -33,6 +33,7 @@ function maakS() {
     },
     plek: { marskramer: { x: 5, y: 5 } }, // de plek van het dorp (D.plek, js/wereld.js)
   };
+  for (const a of S.wereld.akkers) a.dorp = S; // een veld is van een dorp (T.hoortBij is streng sinds stap 6a2)
   return S;
 }
 
@@ -51,7 +52,7 @@ function boerOp(S, naam, x, y) {
   const B = S.bewoners || (S.bewoners = { mensen: [], volgende: 1 });
   const hoeve = S.gebouwen.find((g) => g.soort === 'boerderij' && !B.mensen.some((q) => q.huis === g));
   const p = { id: B.volgende++, naam, geslacht: 'vrouw', leeftijd: 'volwassen', hoofd: null, gezin: B.mensen.length + 1, huis: hoeve };
-  const e = Object.assign(T.maakDorpeling(p.id, x, y), { naam, bewoner: p });
+  const e = Object.assign(T.maakDorpeling(p.id, x, y), { naam, bewoner: p, dorp: S });
   p.wezen = e;
   B.mensen.push(p);
   S.wereld.wezens.push(e);
@@ -122,7 +123,7 @@ test('elke soort gebouw heeft een prijs voor de heer, al is het niets', () => {
 
 test('hij rondt naar boven af, en wat je schuldig bleef, komt erbij', () => {
   const S = maakS();
-  S.wereld.akkers = [{ x: 0, y: 0, b: 1, h: 7 }]; // 7 × 0,5 = 3,5
+  S.wereld.akkers = [{ x: 0, y: 0, b: 1, h: 7, dorp: S }]; // 7 × 0,5 = 3,5
   S.heer = T.nieuweHeer();
   S.heer.schuld = 9;
   const eis = T.eisVanDeHeer(S);
@@ -449,7 +450,7 @@ test('het vooruitzicht: zaaien kost alleen wat volgend jaar akker wordt, en de m
   // Staat er nu een koe op een weide, dan drinkt het dorp van grasmaand tot de oogst haar melk: 90
   // dagen, elke dag melk voor vijf mensen. Dat graan eet het niet, en kaas telt apart.
   veld.bestemming = 'weide';
-  S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', 0, 0, 1), veld));
+  S.wereld.wezens.push(T.zetOpWeide(Object.assign(T.maakDier('koe', 0, 0, 1), { dorp: S }), veld)); // een koe van dit dorp (T.hoortBij)
   T.zetVoorraad(S, 'kaas', 7);
   const v = T.heerVooruitzicht(S, null);
   const melk = 90 * T.VEE_INSTELLINGEN.melkVoorMensen * perMens;

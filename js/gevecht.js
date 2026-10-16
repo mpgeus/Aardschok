@@ -4,7 +4,9 @@
 //
 // Er zijn geen beurten en geen raster meer: het gevecht loopt in de tik van de wereld (T.wereldTik, js/tik.js), in elk dorp
 // (T.werkGevechtBij vanuit T.werkDorpBij, js/dorp.js), met het toeval van het dorp (T.toeval), en dus op elke computer
-// gelijk, zoals lockstep vraagt. Tot 15 okt was het een gevecht in beurten, met actiepunten, een raster op de vloer en een
+// gelijk, zoals lockstep vraagt. Wie van geen dorp is (de wolven van de wereld; werklijst vraag 170, stap 6a2), vecht in
+// een eigen pas, één keer per kaart (T.werkGevechtVanDeWereldBij), met de dobbelsteen van zijn roedel (Marcel: "A1"), en
+// het gevecht is dan van het dorp waartegen hij vecht. Tot 15 okt was het een gevecht in beurten, met actiepunten, een raster op de vloer en een
 // deur die je dichtgooide (git bewaart het).
 //
 // Wie vecht:
@@ -65,7 +67,9 @@
   T.SLAAN = { kosten: 3, schade: [3, 5] };
 
   const plek = (e) => T.tegelVan(e);
-  const worp = (D, b) => b[0] + Math.floor(T.toeval(D) * (b[1] - b[0] + 1));
+  // Een worp van wie slaat: met de dobbelsteen van zijn dorp, of (van geen dorp) die van zijn roedel, of van de kaart (A1:
+  // zo verandert wat bij het ene dorp gebeurt niet door een gevecht bij het andere).
+  const worp = (D, e, b) => b[0] + Math.floor(T.toeval(e.dorp || e.groep || D.wereld) * (b[1] - b[0] + 1));
 
   // ── Wie vecht, en tegen wie ──
 
@@ -100,20 +104,19 @@
   }
 
   // Het leven van wie vecht of geraakt wordt: een man dat van een soldaat of veteraan (T.levenAlsMan), een ander het zijne,
-  // of dat van een dorpeling.
+  // of dat van een dorpeling. D is het dorp dat vecht, of null (een wezen van de wereld zonder doel).
   function zorgLeven(D, e) {
     const V = dorpVan(D, e);
-    if (e !== V.aanvoerder && T.isMan(V, e)) {
+    if (V && e !== V.aanvoerder && T.isMan(V, e)) {
       const l = T.levenAlsMan(e);
       e.leven = l.leven;
       e.maxLeven = l.max;
     } else if (!(e.maxLeven > 0)) e.leven = e.maxLeven = IN().leven;
   }
 
-  // De dichtste die hij ziet en mag aanvallen, binnen de leiband van waar hij hoort. Jouw kant kijkt alleen naar de
-  // vijanden (een korte lijst), een vijand naar iedereen.
-  function kiesDoel(D, e, vijanden) {
-    const w = D.wereld;
+  // De dichtste die hij ziet op kaart w en mag aanvallen, binnen de leiband van waar hij hoort. Jouw kant kijkt alleen
+  // naar de vijanden (een korte lijst), een vijand naar iedereen (D mag dan null zijn: een wezen van de wereld).
+  function kiesDoel(w, D, e, vijanden) {
     const hier = plek(e);
     const man = T.vechtVoor(D, e);
     const zicht = zichtVan(D, e);
@@ -152,9 +155,9 @@
 
   // ── Elke tik ──
 
-  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat (zijn mannen, en de rovers en
-  // wolven die bij het dorp horen, T.hoortBij in js/wereld.js: zo vecht elk wezen één keer per tik, ook met meer dorpen
-  // op één kaart); wie een rover of de mannen van een ander dorp ziet, vlucht; en het gevecht begint of houdt op.
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat (zijn mannen, en de rovers die bij
+  // het dorp horen, T.hoortBij in js/wereld.js: zo vecht elk wezen één keer per tik, ook met meer dorpen op één kaart);
+  // wie een rover of de mannen van een ander dorp ziet, vlucht; en het gevecht begint of houdt op.
   T.werkGevechtBij = function (S, D) {
     const w = D.wereld;
     if (!w || !w.wezens) return;
@@ -163,10 +166,8 @@
     const budget = { zoek: IN().zoekPerTik };
     let vecht = null;
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || !T.hoortBij(D, e)) continue;
-      // Een wolf vecht zelf pas als zijn roedel vecht; valt hij iemand aan, dan roept die om hulp (js/beesten.js).
-      if (!T.vechtVoor(D, e) && !(T.isVijandig(e) && (!e.beest || e.groep.vecht))) continue;
-      const d = doelVan(S, D, e, nu, vijanden);
+      if (e.dood || e.binnen || !T.hoortBij(D, e) || !vechtNu(D, e)) continue;
+      const d = doelVan(S, w, D, e, nu, vijanden);
       if (!d) continue;
       vecht = vecht || plek(e);
       doeMet(S, D, e, d, nu, budget);
@@ -175,17 +176,42 @@
     vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m))));
     if (vecht) aanHetVechten(S, D, vecht, nu);
     else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
-    // Een roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen): dan gaat hij terug.
-    else if (!D.gevecht && vijanden.some((v) => v.beest && v.groep.vecht)) T.wolvenNaHetGevecht(D);
+  };
+  // Of e nu vecht: een man van D, of een vijand; een wolf pas als zijn roedel vecht (valt hij iemand aan, dan roept die om
+  // hulp, js/beesten.js).
+  const vechtNu = (D, e) => T.vechtVoor(D, e) || (T.isVijandig(e) && (!e.beest || !!e.groep.vecht));
+
+  // Elke tik, één keer per kaart (T.wereldTik, js/tik.js): wie van geen dorp is en vecht (de wolven van een roedel die
+  // vecht; werklijst vraag 170, stap 6a2), kiest, loopt en slaat, met de dobbelsteen van zijn roedel (A1). Het gevecht is
+  // van het dorp van zijn doel: daar begint het (met het bericht en de 1×), en zolang hij slaat, houdt het niet op. Een
+  // roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen), gaat terug zodra dat dorp niet
+  // meer vecht.
+  T.werkGevechtVanDeWereldBij = function (S, w) {
+    if (!w || !w.wezens) return;
+    const nu = S.wereldTijd || 0;
+    const budget = { zoek: IN().zoekPerTik };
+    const roedels = new Map(); // roedel → of een van zijn wolven een doel had
+    for (const e of w.wezens) {
+      if (e.dorp || e.dood || e.binnen || !vechtNu(null, e)) continue;
+      const tegen = (e.groep && e.groep.tegen) || null;
+      if (e.groep && !roedels.has(e.groep)) roedels.set(e.groep, false);
+      const d = doelVan(S, w, tegen, e, nu, []);
+      const D = (d && d.dorp) || null;
+      if (!D) continue;
+      if (e.groep) roedels.set(e.groep, true);
+      doeMet(S, D, e, d, nu, budget);
+      aanHetVechten(S, D, plek(e), nu);
+    }
+    for (const [G, had] of roedels) if (!had && G.tegen && !G.tegen.gevecht) T.wolvenNaHetGevecht(G.tegen);
   };
 
-  // Het doel van e nu: wie hij volgt op jouw bevel (e.volgt, js/kiezen.js), of wie hij zelf koos (e.doelwit). Is dat er
-  // niet meer, binnen, of te ver (de leiband, of uit zicht), dan laat hij het gaan; heeft hij niets, en is het tijd, dan
-  // kijkt hij om zich heen.
-  function doelVan(S, D, e, nu, vijanden) {
+  // Het doel van e nu (op kaart w, voor dorp D, of null als hij van de wereld is): wie hij volgt op jouw bevel (e.volgt,
+  // js/kiezen.js), of wie hij zelf koos (e.doelwit). Is dat er niet meer, binnen, of te ver (de leiband, of uit zicht),
+  // dan laat hij het gaan; heeft hij niets, en is het tijd, dan kijkt hij om zich heen.
+  function doelVan(S, w, D, e, nu, vijanden) {
     let d = e.volgt || e.doelwit;
     if (d && !e.volgt) {
-      const weg = d.dood || d.binnen || d.aangehouden || !D.wereld.wezens.includes(d);
+      const weg = d.dood || d.binnen || d.aangehouden || !w.wezens.includes(d);
       const ver = T.afstand(plek(d), plek(e)) > zichtVan(D, e) + 2 || (e.vanaf && T.afstand(plek(e), e.vanaf) > IN().leiband);
       const geenVijand = T.vechtVoor(D, e) ? !T.isVijandVan(D, d) : !doelVoorVijand(D, e, d);
       if (weg || ver || geenVijand) {
@@ -193,12 +219,12 @@
         d = null;
       }
     }
-    if (d && e.volgt && (d.dood || !D.wereld.wezens.includes(d))) return null; // js/kiezen.js geeft hem een post
+    if (d && e.volgt && (d.dood || !w.wezens.includes(d))) return null; // js/kiezen.js geeft hem een post
     // De held kiest zelf niets: hij blijft waar je hem neerzet (js/kiezen.js), en vecht als je hem stuurt of als hij
     // geraakt wordt (T.raak). Zo loopt hij niet vanzelf een gevecht in dat het spel kan beëindigen.
-    if (d || nu < (e.omkijken || 0) || e === D.aanvoerder) return d;
+    if (d || nu < (e.omkijken || 0) || (D && e === D.aanvoerder)) return d;
     e.omkijken = nu + IN().kijkElke;
-    const keus = kiesDoel(D, e, vijanden);
+    const keus = kiesDoel(w, D, e, vijanden);
     if (!keus) return null;
     e.doelwit = keus.doel;
     e.vanaf = keus.anker;
@@ -267,7 +293,7 @@
       if (slag.schiet) T.anim.pijl(S, plek(e), doel);
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
-    raak(S, D, d, Math.max(0, worp(D, slag.schade) - T.vangtAf(d, e)), e);
+    raak(S, D, d, Math.max(0, worp(D, e, slag.schade) - T.vangtAf(d, e)), e);
   }
 
   // Een klap kost levenspunten. Wie op nul komt, valt (T.valt); wie het overleeft en niets doet, slaat terug, en een

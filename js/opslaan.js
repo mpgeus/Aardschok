@@ -69,7 +69,10 @@
     // dorp mee (e.dorp; een wezen van daarvoor hoorde bij niemand), de plek van een dorp staat in het dorp (D.plek: het
     // plein, het kamp, de markt, de plek van de marskramer; tot nu op de kaart, w.plein, w.kamp, w.markt, w.marskramer),
     // de kaart heeft haar pleinen (w.pleinen), en wat je kent, staat in het dorp (D.gekend; tot nu w.gekend).
-    versie: 17,
+    // 18 (16 okt): vraag 170, stap 6a2, a: het wild is van de wereld. Een roedel of een kudde van daarvoor hoort bij een dorp
+    // (G.dorp, e.dorp), en dan werkte zijn dorp hem bij in plaats van de wereld; hij mist zijn land (G.bos) en zijn
+    // dobbelsteen (G.lot), en een roedel die vecht het dorp waartegen (G.tegen).
+    versie: 18,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

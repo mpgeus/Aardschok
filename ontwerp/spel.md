@@ -29,6 +29,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De held en het opruimen | gebouwd (16 okt, vraag 170, stap 5; Marcel: "A1, B1, C2"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het over, met zijn eigen wapen, en zijn gezin ruilt van huis; weg: de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten ("Zo werkt de held nu", bij Rovers en de militie) | vraag 170 |
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Meer dorpen op één eiland | gebouwd (16 okt, vraag 170, stap 6a; Marcel: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van hetzelfde eiland, met zijn eigen plek, mensen, velden en mist; wie van een ander dorp is, is een vijand, ook een dorpeling; je bouwt niet in zijn bereik; te spelen in één browser met `Spel.debug.tweedeDorp()` en `Spel.debug.wissel()` ("Zo werken meer dorpen op één eiland nu", bij Rovers en de militie) | vraag 170 |
+| De wereld van iedereen | stuk a gebouwd (16 okt, vraag 170, stap 6a2; Marcel: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1", "K1 en L1", "A1"): het wild is van de wereld, niet van een dorp; wie het aangaat, zijn dorp zegt het en vecht; elke roedel een eigen dobbelsteen. Nog niet: het wild over het hele eiland (b), de roverskampen (c) en de rooftocht die leert (d) ("Zo werken meer dorpen op één eiland nu") | vraag 170 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -944,6 +945,10 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
 
 ## Beesten in het bos (Marcel, 4 okt 2026; werklijst vraag 116, stap 1, 2a en 2b gebouwd op 7 okt)
 
+**Sinds 16 okt is het wild van de wereld**, niet van een dorp (vraag 170, stap 6a2, stuk a: "Het wild is van iedereen";
+hoe dat werkt, staat bij Rovers en de militie, "Het wild is van de wereld"). Wat hieronder "het dorp" heet, is het dorp
+van wie het aangaat.
+
 **Zo werkt het nu** (stap 1, het beeld; Marcel, 7 okt: "a ja, b ja, c ja"; `js/beesten.js`): op elk land van de maker
 leven roedels wolven (twee tot vier) en groepjes herten (een hert met een gewei voorop, en een tot drie hindes in twee
 kleuren; hun tekening komt uit `gereedschap/pixelart/wild.cjs`), zoveel als het bos groot is: op de landen van nu een of twee roedels en een tot vier groepjes. Elke groep heeft een plek diep in het bos (het hol,
@@ -1164,9 +1169,10 @@ en `js/maker.js`): de grond voor samen spelen (stap 6). Een tweede dorp (`T.dorp
 `Spel.debug.tweedeDorp()`) komt op de dichtste andere dorpsplek van hetzelfde eiland die minstens 200 tegels weg ligt (de
 werkbank, "The maker": *another village at least*; op een eiland liggen ze 430 tot 2100 tegels uit elkaar), op dezelfde
 kaart, met het lege begin: zijn huifkar, zijn gezinnen, zijn plein, zijn marktplek en zijn weg de wereld in. Elk dorp
-heeft zijn eigen mensen, vee, wolven, rovers en bezoekers (een wezen draagt zijn dorp mee), zijn eigen velden, en zijn
+heeft zijn eigen mensen, vee, rovers en bezoekers (een wezen draagt zijn dorp mee), zijn eigen velden, en zijn
 eigen mist (wat het kent); elk dorp werkt alleen zijn eigen wezens bij, met zijn eigen dobbelsteen, zodat het ene het
-andere niet raakt: het eerste dorp speelt een half jaar letter voor letter hetzelfde, met of zonder het tweede. **C2:** wie
+andere niet raakt: het eerste dorp speelt een half jaar letter voor letter hetzelfde, met of zonder het tweede (ook het
+wild in het bos van zijn land). **C2:** wie
 van een ander dorp is, is een vijand, zijn aanvoerder, zijn soldaten en zijn dorpelingen (zijn ossenkar niet): een soldaat
 valt hem aan als hij hem ziet, een dorpeling vlucht voor zijn mannen naar zijn eigen town hall, en wie aangevallen wordt,
 vecht ook (de status, het bericht). Je bouwt niet in het bereik van een ander dorp ("This land belongs to ..."). Met
@@ -1175,6 +1181,20 @@ hem; berichten en brieven van het andere dorp komen niet bij jou. De muis op een
 andere dorp zegt alleen wat het is, en van wie. Wat (nog) niet per dorp is: het licht, de rook en de paadjes tekent het
 scherm voor het dorp waar de camera het dichtst bij is, de spelregel "Hoogte" legt alleen heuvels onder het eerste dorp,
 en de bouwstijl is die van het eerste (`opmerkingen.md`).
+
+**Het wild is van de wereld** (16 okt, vraag 170, stap 6a2, stuk a; Marcel: "Het wild is van iedereen. Wolven etc.", en
+"A1"; `code.md` bij `js/beesten.js`): een roedel wolven of een groepje herten hoort bij geen dorp. De wereld werkt het één
+keer per tik bij, na de dorpen, en één keer per nacht (honger, jagen op de herten, jongen, splitsen, verhuizen). Wat het
+wild van een dorp wil weten, vraagt het aan het dorp van wie het aangaat: ziet een houthakker een roedel, dan rent hij
+naar huis en mist zijn eigen dorp het werk; een prooi is een schaap of wie alleen in het donker buiten is, van welk dorp
+ook; wie om hulp roept, krijgt de mannen van zijn eigen dorp, en dat dorp zegt het, vecht (de status, de 1×) en draagt de
+schade. Licht is licht (ook de lantaarn van een ander dorp houdt de wolven weg), en wie iemand naast zich heeft, van welk
+dorp ook, is niet alleen. Een jager schiet elk hert in zijn bereik. **A1:** wat een wolf in een gevecht gooit, komt uit de
+dobbelsteen van zijn roedel, niet uit die van een dorp of van de wereld: zo verandert wat bij jouw dorp gebeurt niet door
+een gevecht ver weg. **Nog zoals in 6a:** het wild wordt gezet in het bos van het land van elk dorp, de eerste keer dat
+het dorp leeft (dat wordt stuk b: het wild over het hele eiland, gezet waar het land opengaat), en de rovers zijn
+bezoekers van het dorp dat ze beroven (stuk c en d: de roverskampen en de rooftocht die leert). De status "Wolves" van
+een dorp gaat over de roedels in zijn land. Een spel van vóór 16 okt laadt niet meer (het opslaan, versie 18).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

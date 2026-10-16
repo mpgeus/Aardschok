@@ -178,6 +178,7 @@ function maaiDagen(snelheid, dagen) {
   const akker = { x: 0, y: 0, b: 3, h: 3, boerderij: {}, geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 0), snelheid }, voorraad: { graan: 0 } };
+  boer.dorp = akker.dorp = S; // van dit dorp (T.hoortBij is streng sinds stap 6a2: zonder dorp is een wezen van de wereld)
   const echtPad = T.zoekRoute;
   T.zoekRoute = (w, van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]);
   try {
@@ -210,6 +211,7 @@ test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft ligg
   const akker = { x: 0, y: 0, b: 2, h: 2, boerderij: {}, geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 15) }, voorraad: { graan: 0 } };
+  boer.dorp = akker.dorp = S; // van dit dorp (zie maaiDagen)
   T.werkOogstBij(S, S, 0.1);
   assert.ok(boer.maait, 'midden op de dag maait hij');
   const duur = boer.maait.tot - boer.maait.sinds;

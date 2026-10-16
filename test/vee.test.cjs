@@ -272,12 +272,13 @@ function wereldMet(...velden) {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
     kalender: { dag: 0, snelheid: 1 }, lot: { zaad: 42 }, wereld: { wezens: [], akkers }, plek: {},
   };
+  for (const v of akkers) v.dorp = S; // een veld is van een dorp (T.hoortBij is streng sinds stap 6a2: zonder dorp is het van de wereld)
   return { S, velden: akkers };
 }
 
 // Zet n dieren van één soort op een weide, in de hoek (waar precies doet hier niet ter zake).
 function zet(S, veld, soort, n) {
-  for (let i = 0; i < n; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier(soort, veld.x, veld.y, 100 + S.wereld.wezens.length), veld));
+  for (let i = 0; i < n; i++) S.wereld.wezens.push(T.zetOpWeide(Object.assign(T.maakDier(soort, veld.x, veld.y, 100 + S.wereld.wezens.length), { dorp: S }), veld));
 }
 
 // Wat de spelregels zeggen, even anders, en daarna weer terug.
@@ -358,14 +359,14 @@ test('melk: van grasmaand tot en met wijnmaand, elke koe voor vijf mensen, en mi
   assert.equal(stand.vol, 12 / 16);
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 1)), 3 * MELK * (12 / 16)));
   // Een koe die bij geen weide hoort (Spel.debug.vee zet ze los neer), geeft niets.
-  S.wereld.wezens.push(T.maakDier('koe', 20, 20, 5));
+  S.wereld.wezens.push(Object.assign(T.maakDier('koe', 20, 20, 5), { dorp: S })); // wel van het dorp, maar niet van een weide
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 1)), 3 * MELK * (12 / 16)));
 });
 
 test('een kalf is nog geen koe: het geeft pas melk als het een jaar oud is', () => {
   const { S, velden: [weide] } = wereldMet({ x: 0, y: 0, b: 4, h: 4, bestemming: 'weide' });
   zet(S, weide, 'koe', 1);
-  const kalf = T.zetOpWeide(T.maakDier('koe', 1, 1, 9), weide);
+  const kalf = T.zetOpWeide(Object.assign(T.maakDier('koe', 1, 1, 9), { dorp: S }), weide);
   kalf.geboren = dagVan('grasmaand', 1);
   S.wereld.wezens.push(kalf);
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 2)), MELK));

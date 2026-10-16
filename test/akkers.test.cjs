@@ -122,6 +122,13 @@ T.zoekRoute = (w, van, doel) => [{ x: doel.x, y: doel.y }];
 T.isBegaanbaar = () => true;
 T.isVast = () => false;
 
+// Alles op dit kaartje is van dit dorp (T.hoortBij is streng sinds stap 6a2: een wezen of veld zonder dorp is van de wereld).
+function vanDorp(S) {
+  for (const e of S.wereld.wezens || []) e.dorp = S;
+  for (const a of S.wereld.akkers || []) a.dorp = S;
+  return S;
+}
+
 function nieuweBoerWereld() {
   const akker = { x: 0, y: 0, b: 2, h: 2, huis: 'boer1', geoogst: new Set() };
   const boer = { tx: 5, ty: 5, x: 5, y: 5, dood: false, pad: [], werkAkkers: [akker] };
@@ -138,7 +145,7 @@ const RIJP_DAG = (() => {
 
 test('T.werkOogstBij: buiten het oogstseizoen gebeurt er niets', () => {
   const { w, boer } = nieuweBoerWereld();
-  const S = { wereld: w, tijd: 0, kalender: { dag: 0 } }; // dag 0 = geploegd
+  const S = vanDorp({ wereld: w, tijd: 0, kalender: { dag: 0 } }); // dag 0 = geploegd
   T.werkOogstBij(S, S, 0.1);
   assert.equal(boer.pad.length, 0);
   assert.equal(boer.maait, null);
@@ -146,7 +153,7 @@ test('T.werkOogstBij: buiten het oogstseizoen gebeurt er niets', () => {
 
 test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele akker klaar is', () => {
   const { w, akker, boer } = nieuweBoerWereld();
-  const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
+  const S = vanDorp({ wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } });
 
   let veiligheid = 0;
   while (akker.geoogst.size < 4 && veiligheid++ < 200) {
@@ -172,7 +179,7 @@ test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele 
 test('T.werkOogstBij: een nieuw jaar (geploegd) veegt de oogst van vorig jaar weg', () => {
   const { w, akker, boer } = nieuweBoerWereld();
   akker.geoogst = new Set(['0,0', '1,0', '0,1', '1,1']);
-  const S = { wereld: w, tijd: 0, kalender: { dag: 0 } }; // dag 0 = geploegd
+  const S = vanDorp({ wereld: w, tijd: 0, kalender: { dag: 0 } }); // dag 0 = geploegd
   T.werkOogstBij(S, S, 0.1);
   assert.equal(akker.geoogst.size, 0);
 });
@@ -197,7 +204,7 @@ test('T.werkOogstBij: een boer met twee akkers maait ze allebei (tot 24 sep blee
   const eerste = { x: 0, y: 0, b: 2, h: 1, huis: 'boer1', geoogst: new Set() };
   const tweede = { x: 10, y: 10, b: 1, h: 2, huis: 'boer1', geoogst: new Set() };
   const boer = { tx: 5, ty: 5, x: 5, y: 5, dood: false, pad: [], werkAkkers: [eerste, tweede] };
-  const S = { wereld: { wezens: [boer], akkers: [eerste, tweede] }, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
+  const S = vanDorp({ wereld: { wezens: [boer], akkers: [eerste, tweede] }, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } });
   maaiTotKlaar(S, boer, () => eerste.geoogst.size + tweede.geoogst.size === 4);
   assert.equal(eerste.geoogst.size, 2);
   assert.equal(tweede.geoogst.size, 2, 'de tweede akker is niet gemaaid');
@@ -215,7 +222,7 @@ function tweeAkkers() {
   const metBoer = { x: 0, y: 0, b: 2, h: 3, huis: 'boer1', geoogst: new Set() };
   const zonder = { x: 10, y: 0, b: 1, h: 4, huis: 'niemand', geoogst: new Set() };
   const boer = { tx: 5, ty: 5, dood: false, pad: [], werkAkkers: [metBoer] };
-  const S = { wereld: { wezens: [boer], akkers: [metBoer, zonder] }, tijd: 0, kalender: { dag: 0 }, voorraad: T.nieuweVoorraad() };
+  const S = vanDorp({ wereld: { wezens: [boer], akkers: [metBoer, zonder] }, tijd: 0, kalender: { dag: 0 }, voorraad: T.nieuweVoorraad() });
   return { S, metBoer, zonder, boer };
 }
 
@@ -341,7 +348,7 @@ function drieVelden() {
   const weide = veld('weide', 3, 'weide');
   const braak = veld('braak', 6, 'braak');
   const boer = { tx: 5, ty: 5, x: 5, y: 5, dood: false, pad: [], werkAkkers: [akker, weide, braak] };
-  const S = { wereld: { wezens: [boer], akkers: [akker, weide, braak] }, tijd: 0, kalender: { dag: 0 }, voorraad: T.nieuweVoorraad() };
+  const S = vanDorp({ wereld: { wezens: [boer], akkers: [akker, weide, braak] }, tijd: 0, kalender: { dag: 0 }, voorraad: T.nieuweVoorraad() });
   return { S, akker, weide, braak, boer };
 }
 
@@ -423,7 +430,7 @@ test('akker, akker, weide houdt het land vruchtbaar; akker, akker, braak nét ni
   // Een veld dat elk jaar het volgende uit de rij wordt, zoveel jaarwissels lang.
   const draai = (rij, wissels) => {
     const veld = { x: 0, y: 0, b: 1, h: 1, bestemming: rij[0], vruchtbaarheid: 1 };
-    const S = { wereld: { wezens: [], akkers: [veld] } };
+    const S = vanDorp({ wereld: { wezens: [], akkers: [veld] } });
     for (let j = 1; j <= wissels; j++) {
       veld.plan = rij[j % rij.length];
       T.wisselVelden(S);
@@ -506,7 +513,7 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
   const echtPad = T.zoekRoute;
   T.zoekRoute = (w, van, doel) => (van.x === doel.x && van.y === doel.y ? [] : [{ x: doel.x, y: doel.y }]); // zoals js/lopen.js
   try {
-    const S = { wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } };
+    const S = vanDorp({ wereld: w, tijd: 0, kalender: { dag: RIJP_DAG }, voorraad: { graan: 0 } });
     T.werkOogstBij(S, S, 0.1);
     assert.ok(boer.maait, 'hij maait meteen de tegel waar hij staat');
     assert.deepEqual([boer.maait.x, boer.maait.y], [1, 1]);

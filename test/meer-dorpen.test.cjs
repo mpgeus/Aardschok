@@ -38,7 +38,8 @@ function tik(S, seconden) {
 }
 
 // Een dorp in getallen, zonder de kaart die ze delen: zijn voorraad, zijn gebouwen, waar zijn mensen staan, wat het kent,
-// en hoe ver zijn dobbelsteen rolde (elke worp te veel of te weinig is een verschil).
+// en hoe ver zijn dobbelsteen rolde (elke worp te veel of te weinig is een verschil); en het wild in het bos van zijn land,
+// dat van de wereld is (vraag 170, stap 6a2), met hoe ver de dobbelsteen van elke groep rolde (A1).
 function foto(D) {
   const w = D.wereld;
   return JSON.stringify({
@@ -48,6 +49,7 @@ function foto(D) {
     wezens: w.wezens.filter((e) => e.dorp === D).map((e) => [e.soort, e.naam, e.tx, e.ty, !!e.binnen, !!e.dood]),
     gekend: [...D.gekend.keys()].sort((a, b) => a - b),
     lot: D.lot.stand,
+    wild: T.beestenVan(D).map(({ G, leden }) => [G.soort, G.thuis, G.lot.stand, G.honger, leden.map((e) => [e.tx, e.ty])]),
   });
 }
 
@@ -81,6 +83,60 @@ test('het eerste dorp speelt letter voor letter hetzelfde, met of zonder een twe
   assert.equal(foto(samen.dorpen[0]), foto(alleen.dorpen[0]), 'na twintig dagen');
   const D2 = samen.dorpen[1];
   assert.ok(D2.begin.kamp !== 'onderweg', 'en het tweede leefde ook: zijn kamp staat');
+});
+
+test('het wild is van de wereld (stap 6a2, a): van geen dorp, in het bos van het land van elk dorp, elke groep een eigen dobbelsteen', () => {
+  const S = spel(true);
+  tik(S, 0.5);
+  const [A, B] = S.dorpen;
+  const w = S.wereld;
+  const wild = w.wezens.filter((e) => e.beest);
+  assert.ok(wild.length, 'er is wild');
+  assert.ok(wild.every((e) => !e.dorp && !e.groep.dorp), 'van geen dorp');
+  assert.ok(wild.every((e) => !T.hoortBij(A, e) && !T.hoortBij(B, e) && T.hoortBij(null, e)), 'van de wereld');
+  for (const D of [A, B]) assert.ok(D.beesten.gezet && T.beestenVan(D).length, `in het bos van het land van ${D.plek.naam}`);
+  const groepen = T.beestenOp(w);
+  assert.equal(groepen.length, T.beestenVan(A).length + T.beestenVan(B).length, 'elke groep woont in een van de twee landen');
+  assert.ok(groepen.every(({ G }) => G.lot && G.lot.zaad === G.zaad), 'elke groep een eigen dobbelsteen, uit zijn zaad (A1)');
+});
+
+test('de wereld werkt elke groep één keer per tik bij, ook met twee dorpen op de kaart', () => {
+  const S = spel(true);
+  tik(S, 0.5);
+  S.kalender.dag = Math.floor(S.kalender.dag) + 12 / 24; // midden op de dag: elke groep vraagt wat hij wil
+  const keer = new Map();
+  const wil = T.beestenWillen;
+  T.beestenWillen = (S2, G) => (keer.set(G, (keer.get(G) || 0) + 1), wil(S2, G));
+  try {
+    T.wereldTik(S);
+  } finally {
+    T.beestenWillen = wil;
+  }
+  const groepen = T.beestenOp(S.wereld).filter(({ G }) => !(G.weg > S.kalender.dag));
+  assert.ok(groepen.length >= 2, 'er zijn groepen');
+  for (const { G } of groepen) assert.equal(keer.get(G), 1, `${G.soort} bij ${G.thuis.x},${G.thuis.y}`);
+});
+
+test('een roedel van de wereld valt de aanvoerder van het tweede dorp aan: dat dorp zegt het, en het gevecht is van dat dorp', () => {
+  const S = spel(true);
+  const [A, B] = S.dorpen;
+  const w = S.wereld;
+  tik(S, 0.5); // het wild staat in het bos; de gezinnen van het tweede dorp zijn nog onderweg, de aanvoerder is er
+  const { G, leden } = T.beestenOp(w).find((g) => g.G.soort === 'wolf');
+  const leider = leden.find((e) => e.leider);
+  delete B.begin.volgt; // hij loopt niet meer met zijn kar mee
+  zet(B.aanvoerder, naast(w, T.tegelVan(leider), 1));
+  gezegd.length = 0;
+  T.wolvenSlaanToe(S, G, leider, { e: B.aanvoerder, soort: 'mens' });
+  assert.ok(G.aanval && G.aanval.e === B.aanvoerder, 'de roedel valt hem aan');
+  assert.ok(gezegd.some(([t, , , D]) => /calls for help/.test(t) && D === B), 'zijn eigen dorp zegt het');
+  assert.ok(!gezegd.some(([, , , D]) => D === A), 'het eerste dorp niet');
+  // Hij is een man van zijn dorp: de roedel vecht met hem, met de dobbelsteen van de roedel.
+  const lot = G.lot.stand;
+  tik(S, 3);
+  assert.equal(G.tegen, B, 'de roedel vecht tegen het tweede dorp');
+  assert.ok(B.gevecht && !A.gevecht, 'het gevecht is van dat dorp, niet van het eerste');
+  assert.notEqual(G.lot.stand, lot, 'een wolf slaat met de dobbelsteen van zijn roedel (A1)');
 });
 
 test('wie van een ander dorp is, is een vijand (C2): een soldaat valt zijn aanvoerder aan, en dat dorp vecht dan ook', () => {

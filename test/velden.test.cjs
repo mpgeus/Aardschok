@@ -101,7 +101,7 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
   assert.match(T.veldTekst(S.dorp, akker), /^.*'s field · fertility 90% · becomes fallow on 1 March$/);
 
   // Te veel vee op te weinig weide, en een weide zonder vee of zonder boer.
-  for (let i = 0; i < 5; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', weide.x, weide.y, 50 + i), weide));
+  for (let i = 0; i < 5; i++) S.wereld.wezens.push(T.zetOpWeide(Object.assign(T.maakDier('koe', weide.x, weide.y, 50 + i), { dorp: S.dorp }), weide)); // vee van het dorp (T.hoortBij)
   assert.equal(T.veldTekst(S.dorp, weide), `${boer}'s meadow · 8 cows (too full) · fertility 100%`);
   const leeg = { naam: 'proef', x: 0, y: 0, b: 2, h: 2, huis: null, bestemming: 'weide', plan: 'weide', vruchtbaarheid: 1 };
   assert.equal(T.veldTekst(S.dorp, leeg), 'Meadow · no livestock yet · fertility 100%');

@@ -1441,9 +1441,9 @@
     T.tikBouwenDag(D, dag);
     // Het bos (js/bos.js): een boompje wordt een jonge boom, een jonge boom een boom, en een oude stronk vergaat.
     T.tikBosDag(D);
-    // En wat erin leeft (js/beesten.js): een groep die zijn thuis kwijt is, zoekt een nieuw of trekt weg; in de winter
-    // jagen de wolven met honger op de herten; in de lente komen er jongen.
-    T.tikBeestenDag(D, dag);
+    // Wie de wolven beten of lieten schrikken, is na zijn dagen weer beter (js/beesten.js). Het wild zelf is van de wereld,
+    // en heeft zijn nacht na de dorpen (T.tikBeestenDag, vanuit T.wereldTik in js/tik.js).
+    T.geneesVanDeWolven(D, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
     // van het lege begin (klaarOp null, js/bouwen.js) komt klaar als het werk af is, niet op een dag.

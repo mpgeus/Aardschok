@@ -543,7 +543,7 @@
       return;
     }
     if (e.pad.length) return; // onderweg naar zijn groep
-    const groep = T.beestenVan(D).find(({ G }) => G.thuis.x === g.wild.x && G.thuis.y === g.wild.y);
+    const groep = T.beestenOp(D.wereld).find(({ G }) => G.thuis.x === g.wild.x && G.thuis.y === g.wild.y);
     const leider = groep && (groep.leden.find((x) => x.leider) || groep.leden[0]);
     if (!leider) {
       stop(e);

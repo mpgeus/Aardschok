@@ -27,8 +27,8 @@
   // Hoe lang een tik duurt, in seconden echte tijd.
   T.TIK = 1 / T.TIK_INSTELLINGEN.perSeconde;
 
-  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wie er loopt, en waar de aanvoerder is het
-  // maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
+  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wat van geen dorp is (het wild), wie er
+  // loopt, en waar de aanvoerder is het maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
   // dt maal de snelheid op (`dtWereld`). `meet(naam, f)`, als het er is, doet f en meet hoe lang een deel duurt (de
   // meting van `npm run grootte`, gereedschap/grootte/harnas.cjs).
   const zonderMeten = (naam, f) => f();
@@ -48,6 +48,16 @@
     meet('dorpen', () => {
       for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     });
+    // Wat van geen dorp is, werkt de wereld bij, één keer per kaart (werklijst vraag 170, stap 6a2; Marcel, 16 okt: "Het
+    // wild is van iedereen"): het wild (js/beesten.js), met zijn nacht na die van de dorpen en hun bos, en wie van de wereld
+    // vecht (js/gevecht.js); waar je niet kijkt ook het wild in het bos (waar je kijkt hieronder, als er rondgelopen wordt).
+    meet('wereld', () => {
+      for (const w of kaartenVan(S)) {
+        T.werkBeestenDagBij(S, w);
+        T.werkGevechtVanDeWereldBij(S, w);
+        if (w !== S.wereld) T.werkBeestenBij(S, w);
+      }
+    });
     // Wie loopt, één keer per kaart (js/anim.js): waar je kijkt, en elke kaart met een dorp erop (op één kaart kunnen
     // meer dorpen leven; werklijst vraag 170, stap 6a).
     meet('lopen', () => {
@@ -66,8 +76,8 @@
       for (const hier of S.dorpen.filter((D) => D.wereld === S.wereld)) {
         meet('oogst', () => T.werkOogstBij(S, hier, dtWereld));
         meet('veldwerk', () => T.werkVeldwerkBij(S, hier));
-        meet('beesten', () => T.werkBeestenBij(S, hier)); // de wolven en de herten in het bos (js/beesten.js)
       }
+      meet('beesten', () => T.werkBeestenBij(S, S.wereld)); // de wolven en de herten in het bos, van de wereld (js/beesten.js)
       meet('dwalen', () => T.laatDwalen(S, dtWereld));
     }
   };

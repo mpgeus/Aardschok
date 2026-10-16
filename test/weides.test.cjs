@@ -32,6 +32,7 @@ function wereldMet(velden, meent) {
       voorwerpen: [], deuren: new Map(), buiten: true,
     },
   };
+  for (const v of akkers) v.dorp = S; // een veld is van een dorp (T.hoortBij is streng sinds stap 6a2: zonder dorp is het van de wereld)
   return { S, velden: akkers, meent: S.wereld.meenten[0] || null };
 }
 
@@ -40,6 +41,7 @@ function zet(S, veld, soort, n) {
   const dieren = [];
   for (let i = 0; i < n; i++) {
     const e = T.zetOpWeide(T.maakDier(soort, veld.x + (i % veld.b), veld.y + Math.floor(i / veld.b), 100 + S.wereld.wezens.length), veld);
+    e.dorp = S; // het vee van dit dorp (T.hoortBij)
     S.wereld.wezens.push(e);
     dieren.push(e);
   }
