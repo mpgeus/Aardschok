@@ -81,6 +81,8 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De lobby kiezen** (vraag 170, stap 6c, 16 okt; bij I): ons eigen lobbyscherm in het menu met Steam eronder, of alleen
+  het overlay van Steam (L), en alleen vrienden of ook een openbare lijst (M); voorstel van Claude: L1, M1.
 - **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, op de branch `ccr-055aff40-lz2bwx`): Nieuw spel, en
   in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
   tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
@@ -771,6 +773,17 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   met per dorp zijn gunst en zijn brieven (zoals nu al); de marskramer komt bij elk dorp op zijn eigen plek; je bouwt niet
   in het bereik van de ander; wie het spel opende, bewaart het (allebei de dorpen); en gebouwen van de ander aanvallen of
   in brand steken komt er nu niet bij (`opmerkingen.md`).
+  **De lobby** (Marcel, 16 okt, na 6a: "We hebben ook een menu nodig met een lobby etc. Of gebruiken we dat van steam";
+  **wacht op Marcel**): Steam geeft de lobby als dienst (Steamworks: een lobby met gegevens en een chat, uitnodigen via het
+  overlay en "Join game" in de vriendenlijst, de verbinding zonder poorten open te zetten), maar niet het scherm: dat
+  tekent elk spel zelf (in Electron met een koppeling als `steamworks.js`, `verpakken.md`). Voorstel van Claude: één
+  lobbyscherm van ons in het titelmenu (*Play together*): de een kiest *Host*, het eiland en de spelregels, nodigt uit
+  (op onze server met een code of link, op Steam met het overlay), wie meedoet staat in de lijst, en als iedereen klaar
+  is, drukt de opener *Start* en rijden ze allebei op dag 1 binnen (B1); Steam vervangt later alleen de lijn, niet het
+  scherm. Het hoort bij 6c. Te kiezen: **L** L1 ons eigen lobbyscherm met Steam eronder; L2 alleen het overlay van Steam,
+  zonder eigen scherm (het spel begint dan zodra de ander erbij komt, zonder eiland of "klaar"); **M** M1 alleen wie je
+  uitnodigt (vrienden; het voorstel uit `commercieel.md`, want een klein spel heeft lege lobby's); M2 ook een openbare
+  lijst. Voorstel: L1, M1.
   **6a is af** (16 okt, op de branch `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
