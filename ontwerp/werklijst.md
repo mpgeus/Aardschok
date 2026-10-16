@@ -75,6 +75,12 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De lantaarn in woorden** (vraag 171, D2, 16 okt): de beschrijving en de keuze tussen een eigen vel per uiterlijk
+  (zoals de zager) of een laag over elk figuur (zoals het halsijzer) staan in het gesprek van 16 okt en hier: een
+  vierkant kooitje van zwart ijzer, zo'n 6 bij 9 pixels, met vier ruitjes van hoorn (warm oranjegeel als hij brandt), een
+  spits dakje met gaatjes, een ring en een hengsel, en één flakkerend vlammetje; aan het hengsel in de hand aan de kant
+  van de kijker, op heuphoogte, schommelend met de pas. Voorstel van Claude: de laag, en alleen in beeld als hij brandt.
+  Na zijn ja één proefplaat.
 - **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
   wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
   bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
@@ -688,7 +694,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   tussen de kaarten van Tiled en de kamers met deuren (alleen op de proefkaarten; `opmerkingen.md`, ronde 4).
 - **171, de groepsleider met de lantaarn** (Marcel, 16 okt, na stap 5, waar de held zonder lantaarn 's nachts prooi werd
   voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **Bezig in sessie
-  `claude/clever-brown-vz07hg`** (16 okt): de regel en het licht, en de tekening in woorden. Wat er al is: de lantaarns
+  `claude/clever-brown-vz07hg`** (16 okt): **de regel en het licht zijn af** (op de branch; `spel.md`, "Zo werkt de held
+  nu"; `code.md` bij `js/soldaten.js`); de tekening (D2) wacht op Marcels oordeel over de woorden. Wat er al is: de lantaarns
   van de bode (`T.bodeLicht`, soort 'drager' in `T.lichtBronnen`, alleen licht, geen tekening), en de wolven vallen
   niemand in het licht aan (`kiesProoi`); een voorstel van Claude uit stap 4, "een fakkel bij de nachtwacht", staat in
   `opmerkingen.md`. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
