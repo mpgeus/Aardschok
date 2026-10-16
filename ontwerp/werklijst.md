@@ -65,7 +65,7 @@ regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed*
 voor nu"). **Het lantaarntje in de hand is af** (16 okt, in `main`; Marcel: "A1, B1"; `beeld.md`,
 "De lantaarn van de groepsleider"), en zijn licht is op het scherm kleiner (Marcel: "het ligt vóór het poppetje", en
 koos L3). Daarna **stap 6, samen spelen** (bij
-I). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): het plan staat bij I, en wacht op Marcel (A tot D). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): 6a, één kaart met meer dorpen. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -78,8 +78,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het plan voor samen spelen kiezen** (vraag 170, stap 6, 16 okt; bij I): in drie delen (één kaart met meer dorpen,
-  alles een opdracht, de lijn), en de vragen A tot D; voorstel van Claude: A1, B1, C1, D1.
 - **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
   *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
   licht, een kleine plas om hem heen (L3), en de wolven vallen niemand binnen 3 tegels van hem aan. In zijn hand hangt een lantaarntje met een gloeiend hoorn,
@@ -725,7 +723,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   wie het land openmaakt), `S.wereld` (wie loopt) en `S.modus === 'verkennen'` (de oogst, het veldwerk, de wolven en het
   dwalen lopen in `T.wereldTik` alleen als er geen venster open is); **de spelregels** onthoudt elke browser zelf, en ze
   gaan niet mee in een bewaard spel; en **de server** luistert alleen op deze pc, en schrijft bestanden voor het gereedschap.
-  **Het plan** (Claude, 16 okt; **wacht op Marcel**, de vragen A tot D), in drie delen, elk met toetsen en elk ook los te
+  **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1 b1 c2 d1"), in drie delen, elk met toetsen en elk ook los te
   spelen: **6a één kaart, meer dorpen**: elk wezen weet van welk dorp het is, `T.isVanJou` en `T.isMan` vragen het dorp,
   en een vijand is ook wie van een ander dorp is; wat nu één keer op de kaart ligt en van één dorp is (het plein, het
   kamp, de markt, het bouwbereik, de mist), gaat naar het dorp; elke tik werkt elk dorp (de oogst, het veldwerk, het
@@ -749,10 +747,10 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   ander komt erbij, en allebei rijden jullie op dag 1 met de huifkar binnen), en wie wegvalt, komt terug met het bewaarde
   spel; B2 meedoen kan altijd, en het tweede dorp begint als hij erbij komt. **C** wie vanzelf vecht: C1 een soldaat valt
   de soldaten en de aanvoerder van de ander aan die hij ziet (zoals een rover), een dorpeling van de ander alleen als je
-  hem aanklikt, en een dorpeling vlucht voor de soldaten van de ander naar zijn town hall; C2 alles van de ander vanzelf,
-  ook zijn dorpelingen; C3 niets vanzelf, alleen op bevel. **D** als de werelden toch uiteenlopen: D1 het spel staat even
+  hem aanklikt, en een dorpeling vlucht voor de soldaten van de ander naar zijn town hall; **C2** (gekozen) alles van de
+  ander vanzelf, ook zijn dorpelingen: een soldaat valt elk mens van een ander dorp aan dat hij ziet; C3 niets vanzelf, alleen op bevel. **D** als de werelden toch uiteenlopen: D1 het spel staat even
   stil, schrijft op waar het verschil zat (voor ons), en de eerste stuurt zijn wereld opnieuw, zoals bij meedoen; D2 het
-  spel stopt. **Voorstel van Claude: A1, B1, C1, D1**, met erbij (zeg het als het anders moet): één heer voor allebei,
+  spel stopt. Het voorstel van Claude was A1, B1, C1, D1, met erbij (zeg het als het anders moet): één heer voor allebei,
   met per dorp zijn gunst en zijn brieven (zoals nu al); de marskramer komt bij elk dorp op zijn eigen plek; je bouwt niet
   in het bereik van de ander; wie het spel opende, bewaart het (allebei de dorpen); en gebouwen van de ander aanvallen of
   in brand steken komt er nu niet bij (`opmerkingen.md`).
