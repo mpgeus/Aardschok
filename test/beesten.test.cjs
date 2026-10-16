@@ -522,13 +522,16 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
   }
 });
 
-test('de aanvoerder alleen in het donker: de roedel valt hem aan, en vecht met hem (sinds 16 okt zonder lantaarn)', () => {
+test('de aanvoerder draagt in het donker een lantaarn (vraag 171): de roedel valt hem niet aan', () => {
   const { S, D, leden, leider } = stouteRoedel();
-  S.dorp.aanvoerder.binnen = false;
-  assert.ok(zetOpAfstand(D.wereld, S.dorp.aanvoerder, leider, 12), 'een plek voor de aanvoerder');
+  const h = S.dorp.aanvoerder;
+  h.binnen = false;
+  assert.ok(zetOpAfstand(D.wereld, h, leider, 12), 'een plek voor de aanvoerder');
+  assert.ok(T.draagtLicht(D, h), 'buiten in het donker brandt zijn lantaarn');
+  assert.ok(T.lichtBronnen(D).some((b) => b.soort === 'drager' && b.x === h.x && b.y === h.y), 'en zijn licht gaat met hem mee');
   uren(S, 1);
-  assert.equal(leider.groep.vecht, true, 'de roedel vecht (js/gevecht.js)');
-  assert.ok(leden.every((e) => e.dood || e.doelwit === S.dorp.aanvoerder), 'met de aanvoerder');
+  assert.ok(!leider.groep.vecht, 'de roedel vecht niet');
+  assert.ok(!leden.some((e) => e.doelwit === h), 'en valt hem niet aan');
 });
 
 test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {

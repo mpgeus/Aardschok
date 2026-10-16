@@ -974,7 +974,8 @@ roedel van vier, als er geen hert te vangen is) is hij in het donker niet schuw 
 meent, en een bericht brengt je erheen: stuur je soldaten op hem af (sinds 15 okt; tot dan kwam de herder het je zeggen,
 het voorval "wolven", met een jacht of een hek). Zonder schapen zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen licht): die is gewond en ligt drie dagen in
 bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: wie in het
-licht staat, valt hij niet aan. Een man van je (de aanvoerder alleen in het donker, of een soldaat) vecht met de roedel.
+licht staat, valt hij niet aan (ook niet wie een lantaarn draagt: de aanvoerder en de groepsleiders, vraag 171). Een man
+van je die hij aanvalt, of die erbij komt, vecht met de roedel.
 (Tot 16 okt bleef de roedel aan de rand van de lantaarn van de schout, en viel hij aan wie sloop.) Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven bij het
 dorp", en namen ze een schaap of een mens, dan zegt de raad het.
 
@@ -1116,8 +1117,8 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
 - **Iedereen, wie kan vlucht.** Een rover slaat wie hij tegenkomt, ook een dorpeling. Een dorpeling die een rover ziet (6
   tegels), of die geraakt wordt, laat zijn werk vallen en rent naar het **town hall**, en zit daar binnen tot er geen
   rover meer op de kaart is; wie ze inhalen, kan vallen. Een wolf valt alleen je mannen aan, en zijn roedel vecht als je
-  hem aanvalt, als hij een man van je aanvalt (de held ook, alleen in het donker: sinds stap 5 zonder lantaarn), of als een
-  man van je komt bij wie om hulp roept; daarna gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
+  hem aanvalt, als hij een man van je aanvalt (wie alleen in het donker staat, zonder lantaarn), of als een man van je
+  komt bij wie om hulp roept; daarna gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
 - **Het town hall** (in de code `raadhuis`, sinds stap 5) is het huis van de aanvoerder: het eerste gebouw, de eerste
   opslag, het midden van je bereik, en sinds 15 okt de plek waar iedereen schuilt (iedereen past erin). Het oude raadhuis
   (de stad, de schepenen) ging op 15 okt weg.
@@ -1144,9 +1145,14 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   de held, de sleutel en oprapen, slapen tot de ochtend (Z; de snelheid in de balk spoelt de nacht door), en het praten:
   een klik op de marskramer opent zijn handel, een klik op de heer het venster om hem te betalen, en de waard heeft geen
   *Talk* meer (de gesprekken zelf blijven in de code, tot we weten wat ermee gebeurt).
-- **Wat opviel:** zonder lantaarn is de held 's nachts buiten prooi voor de wolven als hij alleen staat. In de speeltest
-  (zaad 1, 16 okt) viel hij zo op 7 februari, en nam Reginald, de soldaat die het langst diende, het over; het jaar liep
-  uit zonder fouten.
+- **Wat opviel:** zonder lantaarn was de held 's nachts buiten prooi voor de wolven als hij alleen stond. In de speeltest
+  (zaad 1, 16 okt) viel hij zo op 7 februari, en nam Reginald, de soldaat die het langst diende, het over. Marcel
+  antwoordde met de groepsleider met een lantaarn (hieronder).
+- **De groepsleider met zijn lantaarn** (vraag 171; Marcel, 16 okt: "elke groep soldaten heeft een groepsleider die een
+  lantaarn draagt", en "A1, B1, C1, D2"): de soldaten van een wachthuis zijn een groep, en hun leider is, van wie nu
+  dienst heeft, wie het langst dient (zo heeft de nachtwacht haar eigen leider); de aanvoerder draagt er ook een. Buiten
+  in het donker brandt zijn lantaarn, als licht zoals bij de bode: de wolven vallen niemand in dat licht aan. De
+  lantaarn in zijn hand (D2) is nog een tekening: eerst in woorden, dan een proefplaat.
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

@@ -228,3 +228,26 @@ test('schild en harnas vangen een deel van elke klap af, maar niets van een bout
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('kruisboogschutter')), 0, 'een bout gaat erdoor');
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('boogschutter')), B.schild + B.harnas, 'een pijl niet');
 });
+
+// Vraag 171 (Marcel, 16 okt: "elke groep soldaten heeft een groepsleider die een lantaarn draagt", en "A1, B1, C1, D2").
+test('elk wachthuis heeft een groepsleider: van wie dienst heeft, wie het langst dient; hij draagt een lantaarn, die in het donker brandt', () => {
+  const { S, D, huis } = gehucht();
+  T.zetSoldaten(D, huis, 'militie', 3);
+  const [a, b, c] = T.soldatenVan(D, huis);
+  Object.assign(a.soldaat, { sinds: 3 });
+  Object.assign(b.soldaat, { sinds: 1, dienst: 'nacht' });
+  Object.assign(c.soldaat, { sinds: 2 });
+  const opUur = (u) => (S.kalender.dag = Math.floor(S.kalender.dag) + u / 24);
+  opUur(10);
+  assert.equal(T.groepsleiderVan(D, huis), c, 'overdag: wie van de dagdienst het langst dient');
+  assert.deepEqual(T.lantaarnDragers(D), [D.aanvoerder, c.wezen], 'de aanvoerder draagt er ook een (C1)');
+  assert.ok(!T.draagtLicht(D, c.wezen), 'overdag brandt hij niet');
+  opUur(23);
+  assert.equal(T.groepsleiderVan(D, huis), b, "'s nachts de nachtwacht");
+  b.wezen.binnen = false;
+  assert.ok(T.draagtLicht(D, b.wezen), 'buiten in het donker brandt hij');
+  assert.ok(T.lichtBronnen(D).some((l) => l.soort === 'drager' && l.x === b.wezen.x && l.y === b.wezen.y));
+  b.wezen.dood = true;
+  c.wezen.wakker = true; // opgestaan (te wapen, js/kiezen.js): nu in dienst
+  assert.equal(T.groepsleiderVan(D, huis), c, 'valt de leider, dan draagt de volgende de lantaarn');
+});

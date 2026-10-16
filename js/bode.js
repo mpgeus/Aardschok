@@ -18,7 +18,7 @@
 // veteraan telt dubbel en wapens helpen, en wie vecht, kan gewond raken of sneuvelen, de bode ook. Wie hem onderschept,
 // valt vast bij het vertrekken (T.stuurBode, `D.bode.onderschept`); hoe het afloopt, als de dag van terugkomen er is
 // (T.bodeOnderweg), op je eigen kaart bij de uitgang (de hinderlaag, js/rovers.js), of, als dat niet kan, buiten beeld. In
-// het donker dragen ze lantaarns (T.bodeLicht, voor js/zien.js). Wat er onderweg is, staat in `D.bode`; elke nacht kijkt T.tikBodeDag of ze er zijn. De spelregel
+// het donker dragen ze lantaarns (T.bodeDragers, voor js/zien.js). Wat er onderweg is, staat in `D.bode`; elke nacht kijkt T.tikBodeDag of ze er zijn. De spelregel
 // "De bode"; de getallen in T.BODE_INSTELLINGEN.
 (function (T) {
   'use strict';
@@ -203,17 +203,8 @@
   };
 
   // In het donker dragen de bode en wie meegaat een lantaarn (Marcel, 9 okt: "De groep neemt in het donker ook lantaarns mee
-  // natuurlijk"): T.ZIEN_INSTELLINGEN.lantaarn (js/zien.js).
-  T.bodeLicht = function (D) {
-    const B = D.bode;
-    if (!B || !D.kalender || !D.wereld) return [];
-    const L = T.ZIEN_INSTELLINGEN.lantaarn;
-    if (T.lichtVan(D.kalender.dag).nacht < L.vanaf) return [];
-    return B.wie
-      .map((p) => p.wezen)
-      .filter((e) => e && !e.dood && !e.binnen && D.wereld.wezens.includes(e))
-      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
-  };
+  // natuurlijk"): hun poppetjes, voor het licht in js/zien.js (T.draagtLicht).
+  T.bodeDragers = (D) => (D.bode ? D.bode.wie.map((p) => p.wezen).filter(Boolean) : []);
 
   // Gewond: een paar dagen in bed (de wolven doen het net zo, js/beesten.js, dat ze ook weer beter maakt).
   function gewond(p, dag) {

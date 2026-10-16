@@ -372,4 +372,31 @@
     T.zeg(D, huis ? `${tekst} ${T.t('His household moves into the {huis}.', { huis })}` : tekst, 'goed', T.tegelVan(p.wezen));
     return p;
   };
+
+  // ---------------------------------------------------------------------------------------------
+  // De groepsleider en zijn lantaarn
+  // ---------------------------------------------------------------------------------------------
+
+  // Elke groep soldaten heeft een groepsleider die een lantaarn draagt (vraag 171; Marcel, 16 okt: "elke groep soldaten
+  // heeft een groepsleider die een lantaarn draagt", en "A1, B1, C1, D2"). Een groep zijn de soldaten van één wachthuis
+  // (A1), en de leider is, van wie er nu dienst heeft, wie het langst dient (p.soldaat.sinds, zoals bij het overnemen van de
+  // aanvoerder): zo heeft de nachtwacht 's nachts haar eigen leider. De aanvoerder draagt er ook een (C1). Zijn lantaarn is
+  // licht, zoals die van de bode (B1, T.draagtLicht in js/zien.js): de wolven vallen niemand in het licht aan.
+
+  // De leider van de soldaten van wachthuis g die nu dienst hebben, of null.
+  T.groepsleiderVan = function (D, g) {
+    const kan = (p) => !p.weg && !p.komt && p.wezen && !p.wezen.dood && T.inDienst(D, p.wezen);
+    const langst = (a, b) => (a.soldaat.sinds || 0) - (b.soldaat.sinds || 0) || a.id - b.id;
+    return T.soldatenVan(D, g).filter(kan).sort(langst)[0] || null;
+  };
+
+  // Wie een lantaarn draagt (brandend of niet, dat zegt T.draagtLicht): de aanvoerder, en de leider van elk wachthuis.
+  T.lantaarnDragers = function (D) {
+    const uit = D.aanvoerder && !D.aanvoerder.dood ? [D.aanvoerder] : [];
+    for (const g of wachthuizen(D)) {
+      const p = T.groepsleiderVan(D, g);
+      if (p) uit.push(p.wezen);
+    }
+    return uit;
+  };
 })(globalThis.Spel = globalThis.Spel || {});

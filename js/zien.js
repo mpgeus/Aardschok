@@ -18,8 +18,8 @@
     // klein licht bij de deur, zo ver en zo fel.
     huisStraal: 1.5,
     huisSterkte: 0.22,
-    // De lantaarn die de bode en wie meegaat dragen (js/bode.js; tot 16 okt ook de aanvoerder, vraag 125, C): buiten, vanaf
-    // zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel.
+    // De lantaarn die iemand draagt (T.draagtLicht, hieronder: de bode en wie meegaat, de aanvoerder en de groepsleiders;
+    // vraag 125, C, en 171): buiten, vanaf zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel.
     lantaarn: { vanaf: 0.4, straal: 3, sterkte: 0.5 },
   };
   const IN = () => T.ZIEN_INSTELLINGEN;
@@ -27,14 +27,14 @@
   // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), elke
   // andere lantaarn op de kaart, die 's avonds brandt, en de kaarsjes van de kerstboom (T.versieringLicht,
   // js/versiering.js). Wie ze aansteekt, komt later (de koster; spel.md,
-  // "lichtbronnen in het dorp"). En de lantaarns van de bode (T.bodeLicht).
+  // "lichtbronnen in het dorp"). En de lantaarns die iemand draagt (T.draagtLicht).
   // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'kaars', 'huis'
   // of 'drager', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
   T.lichtBronnen = function (D) {
     const w = D.wereld;
     const herberg = T.herbergLicht(D).map((b) => ({ ...b, soort: 'herberg' }));
-    // In het donker de bode en wie meegaat (js/bode.js), met een lantaarn.
-    const dragers = T.bodeLicht(D);
+    // In het donker wie een lantaarn draagt (hieronder).
+    const dragers = dragersLicht(D);
     if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(dragers);
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);
@@ -50,6 +50,19 @@
     const kaarsen = T.versieringLicht(D).map((b) => ({ ...b, soort: 'kaars' }));
     return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, dragers);
   };
+
+  // Wie een lantaarn draagt, en hij brandt nu: de bode en wie meegaat (T.bodeDragers, js/bode.js), de aanvoerder en de
+  // leider van elke groep soldaten (T.lantaarnDragers, js/soldaten.js; vraag 171). Buiten, op de kaart van zijn dorp, als het
+  // donker genoeg is. Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'drager'.
+  T.draagtLicht = (D, e) => !!e && !e.dood && !e.binnen && !!D.kalender && !!D.wereld && D.wereld.wezens.includes(e) &&
+    T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf && (T.bodeDragers(D).includes(e) || T.lantaarnDragers(D).includes(e));
+  function dragersLicht(D) {
+    if (!D.kalender || !D.wereld || T.lichtVan(D.kalender.dag).nacht < IN().lantaarn.vanaf) return [];
+    const L = IN().lantaarn;
+    return [...new Set([...T.bodeDragers(D), ...T.lantaarnDragers(D)])]
+      .filter((e) => T.draagtLicht(D, e))
+      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
+  }
 
   // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's
   // morgens vroeg brandt er licht in een huis waar iemand thuis is, binnen of op zijn erf, en niet als ze allemaal in de

@@ -684,8 +684,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/zien.js`: **het licht in het dorp** (werklijst vraag 108, d, en 125, C; tot 11 okt ook het zichtveld en de
   getuigen, vraag 151): het licht staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die
-  's avonds branden, de ramen van de huizen waar iemand thuis is, de kaarsjes van de kerstboom, een brand, en de lantaarns van de bode,
-  soort 'drager'; tot vraag 170, stap 5 ook de lantaarn van de schout), voor het licht in `js/tekenen.js` en voor de
+  's avonds branden, de ramen van de huizen waar iemand thuis is, de kaarsjes van de kerstboom, een brand, en wie een lantaarn draagt,
+  soort 'drager': `T.draagtLicht(D, e)`, buiten in het donker, voor de bode en wie meegaat (`T.bodeDragers`, `js/bode.js`)
+  en de aanvoerder en de groepsleiders (`T.lantaarnDragers`, `js/soldaten.js`; vraag 171; tot vraag 170, stap 5 had
+  alleen de schout er een, `T.draagtLantaarn`), voor het licht in `js/tekenen.js` en voor de
   wolven, die niemand in het licht aanvallen (`js/beesten.js`); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 
@@ -1308,7 +1310,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zijn): de aanval met soort 'hinderlaag' in js/rovers.js
   (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), stuur je mannen erheen,
   dan vechten ze (`T.naGevecht`: `T.bodeWegVrij`), anders loopt het na `hinderlaag.uren` af (`T.bodeAangehouden`). Elke nacht (`T.tikBodeDag`, na
-  `T.tikHandelDag`): in het donker dragen ze een lantaarn (`T.bodeLicht`, in `T.lichtBronnen`). Zijn ze er, dan komt de
+  `T.tikHandelDag`): in het donker dragen ze een lantaarn (`T.bodeDragers`, met `T.draagtLicht` in `T.lichtBronnen`). Zijn ze er, dan komt de
   marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js:
   `m.bestelling` met de prijzen, maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek;
   valt zijn vaste ronde ertussen, dan komt die erna, `m.daarna`), en de bode is terug (`T.komtTerug`). Het handelsvenster
@@ -1543,6 +1545,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   leven dat van `T.WEZENS.aanvoerder`; zijn gezin trekt in het huis met `huis: 'aanvoerder'` (`T.verhuis`), en wie daar
   woonde in het zijne, of is dakloos (`T.wordtDakloos`). De eerste aanvoerder draagt zijn bewoner niet mee (`e.bewoner`):
   `T.sneuvelt` zoekt hem op met `T.bewonerVan`. Getoetst in `test/gevecht.test.cjs`.
+- **De groepsleider en zijn lantaarn** (vraag 171; Marcel: "A1, B1, C1, D2"): `T.groepsleiderVan(D, g)` is, van de
+  soldaten van wachthuis g die nu dienst hebben (`T.inDienst`, `js/kiezen.js`), wie het langst dient; zo heeft de
+  nachtwacht 's nachts haar eigen leider, en valt hij, dan is het de volgende. `T.lantaarnDragers(D)`: de aanvoerder
+  (C1) en de leider van elk wachthuis. Of zijn lantaarn brandt, en zijn licht, zegt `js/zien.js` (`T.draagtLicht`).
+  Getoetst in `test/soldaten.test.cjs`.
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
 
