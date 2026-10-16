@@ -58,10 +58,10 @@ niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town h
 gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
 *Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten): een dag- of
 nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Stap 5
-is af** (16 okt, op de branch `claude/clever-brown-vz07hg`, wacht op Marcel voor `main`; `spel.md`, "Zo werkt de held
-nu"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het
-over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Het volgende is stap 6,
-samen spelen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het
+over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
+171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt; het plan wacht op zijn keuzes. Daarna
+**stap 6, samen spelen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -74,8 +74,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, op de branch `claude/clever-brown-vz07hg`; zeg "push
-  it" voor `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
+- **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
   wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
   bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
   van wie viel in zijn huis, C2); Tab kiest nu hem, en hij vecht met zijn eigen wapen (B1). Zonder soldaat zegt het dorp
@@ -87,7 +86,7 @@ stenen huizen. **Ronde 3 is af.**
   niemand anders is; (3) de brief aan de marskramer schrijf je nu overal (het was "bij je huis"); (4) in de code heet
   het town hall `raadhuis`, en zijn 85 tekeningen ook (hernoemd, niet opnieuw gerenderd). **Om naar te kijken:**
   zonder lantaarn is de held 's nachts buiten prooi voor de wolven als hij alleen staat. In de speeltest (zaad 1) viel hij
-  zo op 7 februari, en nam Reginald het over. Wil je dat de wolven hem met rust laten, dan is dat een regel erbij.
+  zo op 7 februari, en nam Reginald het over. (Marcel antwoordde met vraag 171, de groepsleider met een lantaarn.)
 - **De diensten bekijken** (vraag 170, stap 4, 16 okt, in `main`): Nieuw
   spel, zet een wachthuis (B) met drie man militie (+). Kies er een, en druk op zijn briefje bij *Watch* op *Night*: hij
   gaat naar huis en slaapt overdag, en vanaf het slapen (`Spel.debug.uur(22)`) staat hij bij het wachthuis terwijl de
@@ -667,8 +666,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   's nachts (van slapen tot opstaan), het uur uit het zaad; de werkbank. Op het briefje van een soldaat zijn dienst, en
   op dat van het wachthuis hoeveel er overdag en 's nachts waken. Wat erbuiten bleef (`opmerkingen.md`): een fakkel bij
   de nachtwacht, 's nachts minder ver zien, en een patrouille.
-- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt): **af op de branch**, wacht
-  op Marcel voor `main` (`spel.md`, "Zo werkt de held nu"; `code.md` bij `js/soldaten.js`). De schout heet voortaan
+- **5, de held en het opruimen:** **af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"; `code.md` bij
+  `js/soldaten.js`). De schout heet voortaan
   anders (vraag A), en valt hij, dan staat er een veteraan op; het praten is geparkeerd; eruit wat alleen voor een lopende
   schout was.
   **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C2"), in vier commits: **5a weg** wat alleen voor een
@@ -686,6 +685,12 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   meer mee in het wachthuis (geen dienst). **C2** zijn gezin trekt in het town hall, en het gezin van wie viel, trekt in
   zijn huis (ze ruilen; had hij geen huis, dan is het oude gezin dakloos, zoals na afbreken). Blijft staan: de overgang
   tussen de kaarten van Tiled en de kamers met deuren (alleen op de proefkaarten; `opmerkingen.md`, ronde 4).
+- **171, de groepsleider met de lantaarn** (Marcel, 16 okt, na stap 5, waar de held zonder lantaarn 's nachts prooi werd
+  voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). Wat er al is: de lantaarns
+  van de bode (`T.bodeLicht`, soort 'drager' in `T.lichtBronnen`, alleen licht, geen tekening), en de wolven vallen
+  niemand in het licht aan (`kiesProoi`); een voorstel van Claude uit stap 4, "een fakkel bij de nachtwacht", staat in
+  `opmerkingen.md`. Het plan wacht op Marcels keuzes (wat een groep is, wie de leider is, wat de lantaarn doet, en de
+  tekening).
 - **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
   slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
   zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
