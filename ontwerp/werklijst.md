@@ -221,7 +221,7 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
    geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
    plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
-3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei, wacht op Marcel. Het plan en wat
+3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei: **Bezig in sessie `ccr-74384ea2-mxeou7`** (16 okt; Marcel: "Groei op afwisseling"). Het plan en wat
    Marcel koos staan in `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk
    alleen op de afwisseling; van de wetten rantsoen en belasting; de wensen en de groei nog te kiezen.
 

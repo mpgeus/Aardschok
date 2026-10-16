@@ -288,7 +288,8 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
 5. **De wetten:** rantsoen en belasting. **Af** (15 okt): vreemden welkom en houtkap in het bos van de heer zijn weg,
    met de boete op de rekening van de heer en het meer hakken (`T.maaktUit` geeft nu gewoon wat een gebouw maakt). Dat
    een klik in het wettenmenu een opdracht wordt en het venster de tijd niet stilzet, komt in stap 6 van vraag 170.
-6. **De wensen en de groei**, als Marcel gekozen heeft.
+6. **De wensen en de groei.** Marcel (16 okt): **"Groei op afwisseling, doe maar"**: de wensen per huis gaan weg, en de
+   huizen groeien als het dorp een tijd genoeg soorten eet en warm is; de trede blijft zoals nu.
 
 ## Later
 
