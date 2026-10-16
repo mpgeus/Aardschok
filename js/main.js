@@ -207,7 +207,7 @@
     const kandidaten = [];
     for (const e of w.wezens) {
       // De aanvoerder is te kiezen, zoals je mannen (js/kiezen.js).
-      if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
+      if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -218,7 +218,7 @@
     const onder = T.naarWereld(sx, sy);
     for (const v of T.voorwerpenIn(w, { x: Math.floor(onder.x) - 12, y: Math.floor(onder.y) - 12, b: 28, h: 28 })) {
       const hoog = voorwerpHoogte(v);
-      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(w, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
+      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(S.dorp, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
       const p = T.naarSchermOp(S.wereld, v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
@@ -436,7 +436,7 @@
   // overzicht (vraag 108, a); tot stap 2 keek het gevecht in beurten nog zelf mee.
   // Het midden van het plein, in tegels; zonder plein (een proefkaart) de aanvoerder, of de hoek van de kaart.
   function pleinMidden() {
-    const rand = S.wereld.plein;
+    const rand = S.dorp && S.dorp.plek ? S.dorp.plek.plein : null;
     if (rand && rand.length) return { x: rand.reduce((n, [x]) => n + x, 0) / rand.length, y: rand.reduce((n, [, y]) => n + y, 0) / rand.length };
     const h = S.dorp.aanvoerder;
     return h ? { x: h.x, y: h.y } : { x: 0, y: 0 };
@@ -1335,10 +1335,10 @@
       const w = S.gebieden && S.gebieden.gehucht;
       if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (een proefje, of een oud spel).'; // geen tekst
       const E = T.eilandVan(w.eiland.zaad);
-      const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
+      const dorp = E.plekken.find((p) => p.naam === S.dorp.plek.naam);
       return {
         eiland: w.eiland.zaad,
-        dorp: w.eiland.dorp,
+        dorp: S.dorp.plek.naam,
         plek: dorp ? dorp.aard : null,
         hoek: [w.eiland.x0, w.eiland.y0],
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
@@ -1378,7 +1378,7 @@
       if (!B) return 'Dit spel begon niet leeg (een proefje, of een oud spel van vóór 12 okt).'; // geen tekst
       return {
         kamp: B.kamp,
-        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
+        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.plek.kamp.kar.x, D.plek.kamp.kar.y], nogTegels: B.kar.pad.length },
         aanvoerderLooptMee: B.volgt,
         gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar', // geen tekst
         tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
@@ -1415,7 +1415,7 @@
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
-      if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
+      if (!(S.dorp && S.dorp.plek.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
       const nu = T.raadNu(S.dorp);
       return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },

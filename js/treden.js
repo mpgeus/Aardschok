@@ -79,7 +79,7 @@
 
   // Is hier een trede te halen? Alleen in het gehucht zelf: een wereld met een plein (waar de heer komt). Een
   // proefkaart (?kaart=proef) heeft er geen.
-  const heeftTreden = (D) => !!(D.wereld && D.wereld.plein);
+  const heeftTreden = (D) => !!(D.wereld && D.plek.plein);
 
   // De treden in hun volgorde staan bij de gebouwen (T.GEBOUW_TREDEN, js/gebouwen.js: gehucht, dorp, marktrecht, stad),
   // want daar hoort elk gebouw bij een trede. Een trede is te halen als hij een eis heeft (hierboven); de stad nog niet.

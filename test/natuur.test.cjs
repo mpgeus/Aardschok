@@ -47,7 +47,7 @@ test('T.natuurBij telt de rotsen, de bomen en het water rond een plek', () => {
   assert.equal(T.natuurBij(w, 'rotsen', { x: rots.x, y: rots.y, b: 1, h: 1 }, 0), 1);
   const rond = rotsenVan(w).filter((r) => verVan(r, rots) <= 2).length;
   assert.equal(T.natuurBij(w, 'rotsen', { x: rots.x, y: rots.y, b: 1, h: 1 }, 2), rond, 'met een straal telt hij wat eromheen ligt');
-  assert.equal(T.natuurBij(w, 'rotsen', { x: w.marskramer.x, y: w.marskramer.y, b: 1, h: 1 }, 2), 0, 'op het plein liggen geen rotsen');
+  assert.equal(T.natuurBij(w, 'rotsen', { x: S.dorp.plek.marskramer.x, y: S.dorp.plek.marskramer.y, b: 1, h: 1 }, 2), 0, 'op het plein liggen geen rotsen');
   const boom = alles(w).find((v) => T.isBosBoom(v.soort));
   assert.ok(T.natuurBij(w, 'bos', { x: boom.x, y: boom.y, b: 1, h: 1 }, 0) === 1, 'een boom van het bos');
   assert.ok(T.natuurBij(w, 'water', T.kaartVak(w), 0) > 50, 'het water');

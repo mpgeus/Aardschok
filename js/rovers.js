@@ -253,7 +253,7 @@
     const B = D.bode;
     const wezens = bodeWezens(D);
     const bode = B && B.hinderlaag && B.wie[0] && B.wie[0].wezen;
-    const uitgang = T.wegInEnUit(w);
+    const uitgang = T.wegInEnUit(D);
     if (!bode || !wezens.includes(bode) || !uitgang) {
       // Hij is de kaart al af: dan gebeurt het onderweg.
       if (B) B.hinderlaag = false;

@@ -175,8 +175,9 @@
   // telt wat de houthakker kapt en inplant ook als bos (js/bos.js, vraag 129, f): 's nachts, als een groep kijkt of zijn
   // thuis nog goed is. Het bos komt in één keer voor het hele vak (T.bosInVak), want per tegel was het de zwaarste regel
   // van de nacht.
-  function bosKaart(w, ookJong = false) {
-    const vak = T.kaartVak(w);
+  function bosKaart(D, ookJong = false) {
+    const w = D.wereld;
+    const vak = T.dorpVak(D);
     const bos = T.bosInVak(w, vak, ookJong);
     const diep = new Int16Array(vak.b * vak.h).fill(-1);
     const rij = [];
@@ -215,7 +216,7 @@
   // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein, en niet bij een gebouw.
   function bebouwd(D) {
     const w = D.wereld;
-    const vak = T.kaartVak(w);
+    const vak = T.dorpVak(D);
     const uit = new Uint8Array(vak.b * vak.h);
     const zet = (x0, y0, b, h, rand) => {
       for (let y = Math.max(vak.y, y0 - rand); y < Math.min(vak.y + vak.h, y0 + h + rand); y++) {
@@ -241,13 +242,13 @@
     const B = D.beesten || (D.beesten = {});
     B.gezet = true;
     if (!T.heeftTegels(w)) return [];
-    const kaart = bosKaart(w);
+    const kaart = bosKaart(D);
     const zaad = landZaad(D);
     const r = T.dobbelsteen(zaad * 7919 + 116);
     const aantal = (per, max) => (kaart.n < IN().minstensBos ? 0 : Math.max(1, Math.min(max, Math.floor(kaart.n / per))));
     const roedels = aantal(IN().bosPerRoedel, IN().maxRoedels);
     const kuddes = aantal(IN().bosPerKudde, IN().maxKuddes);
-    const midden = T.pleinVan(w);
+    const midden = T.pleinVan(D);
     const open = bebouwd(D);
     const kandidaten = thuisKandidaten(w, kaart, midden, zaad);
     const thuizen = [];
@@ -289,7 +290,7 @@
   function zetHol(D, G) {
     const w = D.wereld;
     haalHolWeg(D, G);
-    const vak = T.kaartVak(w);
+    const vak = T.dorpVak(D);
     const kandidaten = [];
     for (let ring = 1; ring <= 3; ring++) {
       for (let dy = -ring; dy <= ring; dy++) {
@@ -698,9 +699,9 @@
     onderhoudHollen(D);
     let groepen = T.beestenVan(D).filter(({ G }) => !G.trektWeg);
     if (!groepen.length) return;
-    const kaart = bosKaart(w, true);
+    const kaart = bosKaart(D, true);
     const open = bebouwd(D);
-    const midden = T.pleinVan(w);
+    const midden = T.pleinVan(D);
     const datum = T.datumVanDag(dag);
     for (const g of groepen) blijfOfVerhuis(D, kaart, open, midden, g, groepen);
     groepen = groepen.filter(({ G }) => !G.trektWeg);

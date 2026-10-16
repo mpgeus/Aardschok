@@ -299,7 +299,8 @@
     if (e.thuis && e.thuis.klaar && D.gebouwen.includes(e.thuis)) return { ...T.deurVan(w, e.thuis), naast: true };
     const huis = D.gebouwen.find((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag && !T.GEBOUWEN[g.soort].kar);
     if (huis) return { ...T.deurVan(w, huis), naast: true };
-    return w.kamp && w.kamp.kar ? { x: w.kamp.kar.x, y: w.kamp.kar.y, naast: false } : null;
+    const k = D.plek.kamp;
+    return k && k.kar ? { x: k.kar.x, y: k.kar.y, naast: false } : null;
   }
 
   // Welke kar dit gebouw bedient: die met zijn opslag het dichtst bij zijn deur (Marcel: "c ja").

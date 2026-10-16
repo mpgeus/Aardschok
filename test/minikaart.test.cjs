@@ -37,8 +37,8 @@ test('het beeld van het eiland in stukjes is hetzelfde als in één keer', () =>
 });
 
 test('wat je kent, per vak: elk vak met een tegel die je kent, en geen ander', () => {
-  const { w, S } = leegBegin(T);
-  const gekend = T.minikaartGekend(w);
+  const { w, S, D } = leegBegin(T);
+  const gekend = T.minikaartGekend(D);
   const stap = T.MINIKAART_INSTELLINGEN.stap;
   const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / stap);
   assert.ok(gekend.reduce((a, b) => a + b, 0) > 50, 'de kring van het begin');
@@ -48,13 +48,13 @@ test('wat je kent, per vak: elk vak met een tegel die je kent, en geen ander', (
   for (let vy = sy - 12; vy <= sy + 12; vy++) {
     for (let vx = sx - 12; vx <= sx + 12; vx++) {
       let echt = false;
-      for (let y = vy * stap; y < (vy + 1) * stap && !echt; y++) for (let x = vx * stap; x < (vx + 1) * stap && !echt; x++) echt = T.kentTegel(w, x, y);
+      for (let y = vy * stap; y < (vy + 1) * stap && !echt; y++) for (let x = vx * stap; x < (vx + 1) * stap && !echt; x++) echt = T.kentTegel(D, x, y);
       assert.equal(gekend[vy * n + vx] === 1, echt, `vak ${vx},${vy}`);
     }
   }
   // Een heel stuk dat je kent (true), telt helemaal mee.
-  w.gekend.set(T.stukNummer(1, 1), true);
-  const meer = T.minikaartGekend(w);
+  D.gekend.set(T.stukNummer(1, 1), true);
+  const meer = T.minikaartGekend(D);
   const per = 64 / stap;
   for (let i = 0; i < per; i++) assert.equal(meer[(per + i) * n + per + i], 1);
 });

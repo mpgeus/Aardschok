@@ -104,7 +104,7 @@ const zet = (page, { uur, zoom, op }) => page.evaluate(([uur, zoom, op]) => {
 
 // Het midden van het plein.
 const plein = (page) => page.evaluate(() => {
-  const tegels = Spel.pleinTegels(Spel.S.wereld);
+  const tegels = Spel.pleinTegels(Spel.S.dorp);
   let x = 0;
   let y = 0;
   for (const t of tegels) { x += t.x; y += t.y; }

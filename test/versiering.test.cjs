@@ -22,7 +22,7 @@ test('de meiboom staat in bloeimaand op het plein, en daarna niet meer', () => {
   const D = S.dorp;
   T.tikVersieringDag(D, dagVan('grasmaand', 30));
   assert.equal(boomOpDeKaart(D).length, 0, 'nog niet');
-  const midden = T.openMidden(D.wereld, true);
+  const midden = T.openMidden(D, true);
   T.tikVersieringDag(D, dagVan('bloeimaand', 1));
   const [boom] = boomOpDeKaart(D);
   assert.ok(boom && boom.soort === 'meiboom', 'op 1 bloeimaand');

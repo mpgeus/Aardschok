@@ -47,7 +47,7 @@ const wonenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
 
 // `n` gebouwen van deze soort, zo dicht mogelijk bij het kampvuur, met een vaste reeks toeval (de tekening).
 function zetGebouwen(D, n, soort) {
-  const v = D.wereld.kamp.vuur;
+  const v = D.plek.kamp.vuur;
   const uit = [];
   const toeval = Math.random;
   let z = 7;
@@ -144,7 +144,7 @@ test('velden: pas met een boerderij; groot genoeg, niet te groot, dichtbij', () 
   assert.match(T.waaromPastVeldNiet(D, 'akker', { x: r.x, y: r.y, b: I.veldMax, h: 1 }), /wide|breed/);
   const ver = { x: g.x + 60, y: g.y, b: 6, h: 5 };
   assert.ok(T.waaromPastVeldNiet(D, 'akker', ver), 'ver weg niet');
-  const plein = T.pleinTegels(D.wereld)[0];
+  const plein = T.pleinTegels(D)[0];
   assert.ok(T.waaromPastVeldNiet(D, 'akker', { x: plein.x, y: plein.y, b: 4, h: 4 }), 'niet op het plein');
   const uit = T.legVeld(D, 'akker', r);
   assert.ok(uit.gelukt, uit.reden);

@@ -86,7 +86,7 @@
     }
     const x = doel.wezen ? doel.wezen.tx : doel.x;
     const y = doel.wezen ? doel.wezen.ty : doel.y;
-    if (!T.kentTegel(S.wereld, x, y)) return { tekst: T.t('You do not know that land'), kan: false, fout: true };
+    if (!T.kentTegel(S.dorp, x, y)) return { tekst: T.t('You do not know that land'), kan: false, fout: true };
     const opdracht = { soort: 'stuur', wie, naar: { x, y } };
     const tekst = mannen.length === 1 ? T.t('Send {wie} here', { wie: naamVan(D, mannen[0]) }) : T.t('Send {n} men here', { n: mannen.length });
     return { tekst, kan: true, opdracht, doe: geef(opdracht) };

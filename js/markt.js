@@ -101,8 +101,9 @@
 
   // Het midden van het plein: de tegel van het plein het dichtst bij zijn zwaartepunt waar je kunt staan. Daar is de
   // markt als gebouw (zijn "deur", T.deurVan), en daarvandaan rekent een kring (de spelregel "De herberg en de markt").
-  T.marktMidden = function (w) {
-    const tegels = T.pleinTegels(w);
+  T.marktMidden = function (D) {
+    const w = D.wereld;
+    const tegels = T.pleinTegels(D);
     if (!tegels.length) return null;
     const m = zwaartepunt(tegels);
     let beste = null;
@@ -118,11 +119,12 @@
   // begaanbaar, geen voorwerp, en niet de plek van de marskramer (T.pleinVan, js/bewoners.js). Null als de kaart geen
   // plein heeft. Met `wezens` ook waar nu niemand staat; zonder (de kramen hieronder) blijft het vast. Anders dan
   // T.marktMidden (de markt als gebouw) slaat het een voorwerp over, zoals een bank.
-  T.openMidden = function (w, wezens = false) {
-    const tegels = T.pleinTegels(w);
+  T.openMidden = function (D, wezens = false) {
+    const w = D.wereld;
+    const tegels = T.pleinTegels(D);
     if (!tegels.length) return null;
     const m = zwaartepunt(tegels);
-    const kraam = T.pleinVan(w);
+    const kraam = T.pleinVan(D);
     let beste = null;
     let afstand = Infinity;
     for (const t of tegels) {
@@ -169,8 +171,8 @@
 
   // De tegels van het kamp van het lege begin (js/maker.js, kampOpHetPlein): het vuur, elke tent met de tegel erachter en
   // zijn opening, en de kar met een tegel eromheen.
-  function kampTegels(w) {
-    const k = w.kamp;
+  function kampTegels(D) {
+    const k = D.plek.kamp;
     if (!k) return [];
     const tegels = [k.vuur];
     for (const p of k.plekken) {
@@ -183,21 +185,22 @@
 
   // Wat een kraam in de weg zou staan: een deur, de heer en zijn schandpaal, het open midden, het kamp van het lege begin (zijn
   // tenten staan er nog niet als de maker de marktplek kiest; js/begin.js). `gebouwen`: die van het dorp, voor hun deuren
-  // (bij de marktstraat; op het lege land zijn er nog geen).
-  function regels(w, gebouwen = []) {
-    const tegels = T.pleinTegels(w);
-    const midden = T.openMidden(w) || zwaartepunt(tegels);
-    const heer = w.heer || w.marskramer || null;
-    const paal = (w.voorwerpen || []).find((v) => v.soort === 'schandpaal');
+  // (bij de marktstraat; op het lege land zijn er nog geen). `D`: het dorp, of zijn plek met de kaart ({ wereld, plek }).
+  function regels(D, gebouwen = []) {
+    const w = D.wereld;
+    const tegels = T.pleinTegels(D);
+    const midden = T.openMidden(D) || zwaartepunt(tegels);
+    const heer = D.plek.heer || D.plek.marskramer || null;
+    const paal = D.heer && D.heer.paal; // de schandpaal van dit dorp (js/heer.js), als hij er al staat
     const weg = new Set(paal ? [sleutel(paal.x, paal.y), sleutel(paal.x + 1, paal.y + 1)] : []);
     const deuren = gebouwen.filter((g) => !g.opHetPlein).map((g) => T.deurVan(w, g));
-    const kamp = new Set(kampTegels(w).map((t) => sleutel(t.x, t.y)));
+    const kamp = new Set(kampTegels(D).map((t) => sleutel(t.x, t.y)));
     const inKamp = (x, y) => kamp.has(sleutel(x, y));
     const open = (x, y) => T.isBegaanbaar(w, x, y) && !T.voorwerpOp(w, x, y) && !T.bijDeur(w, x, y)
       && !weg.has(sleutel(x, y)) && !inKamp(x, y) && !deuren.some((d) => cheb({ x, y }, d) <= 1);
     const vrijMidden = IN().vanHetMidden;
     // de bomen bij het plein (verder weg dekken ze er niets van af)
-    const pt = T.pleinTegels(w);
+    const pt = T.pleinTegels(D);
     const [px0, px1, py0, py1] = [Math.min(...pt.map((t) => t.x)) - 6, Math.max(...pt.map((t) => t.x)) + 6, Math.min(...pt.map((t) => t.y)) - 6, Math.max(...pt.map((t) => t.y)) + 6];
     const bomen = T.voorwerpenIn(w, { x: px0, y: py0, b: px1 - px0 + 1, h: py1 - py0 + 1 }).filter((v) => T.NATUUR.bos.telt(w, v.x, v.y, v));
     const bijEenBoom = (x, y) => bomen.some((b) => cheb(b, { x, y }) <= IN().vanBomen);
@@ -227,9 +230,11 @@
   // begin, de as (+x of +y), waarheen de kramen kijken, hoe lang hij is en hoeveel er al vol is (in tegels). Het blok dat
   // niemand tegenhoudt en waarvan je de meeste tegels ziet (niet achter een dak of een kruin), dan het langste, tot
   // `rijLengte`; bij gelijkspel het verst van het open midden. Op het land zoals de maker het legt, nog zonder
-  // gebouwen (T.laadGemaaktGehucht, js/maker.js), en wat hij vindt, staat in de kaart (`w.markt`). Puur: zet niets neer.
-  T.zoekMarktPlek = function (w) {
-    const R = regels(w);
+  // gebouwen (T.laadGemaaktGehucht, js/maker.js), en wat hij vindt, staat in de plek van het dorp (`D.plek.markt`). Puur:
+  // zet niets neer. `D`: het dorp, of zijn plek met de kaart ({ wereld, plek }).
+  T.zoekMarktPlek = function (D) {
+    const w = D.wereld;
+    const R = regels(D);
     const opPlein = (x, y) => T.opHetPlein(w, x, y);
     const open = (x, y) => opPlein(x, y) && R.open(x, y);
     const kraam = (x, y) => opPlein(x, y) && R.kraamMag(x, y);
@@ -238,7 +243,7 @@
     for (const [ax, ay] of [[1, 0], [0, 1]]) {
       for (const kant of [1, -1]) {
         const [px, py] = ax ? [0, kant] : [kant, 0];
-        for (const t of T.pleinTegels(w)) {
+        for (const t of T.pleinTegels(D)) {
           let lengte = 0;
           for (let k = 0; k < IN().rijLengte; k++) {
             const a = { x: t.x + ax * k, y: t.y + ay * k };
@@ -272,33 +277,33 @@
     return { rijen: [] };
   };
 
-  // Het marktblok van dit dorp: de marktplek uit de kaart, met lege rijen (een kaart zonder plein heeft er geen).
-  T.marktBlok = (D) => ({ rijen: ((D.wereld.markt && D.wereld.markt.rijen) || []).map((r) => ({ ...r, vol: 0 })) });
+  // Het marktblok van dit dorp: de marktplek van zijn plek, met lege rijen (een kaart zonder plein heeft er geen).
+  T.marktBlok = (D) => ({ rijen: ((D.plek.markt && D.plek.markt.rijen) || []).map((r) => ({ ...r, vol: 0 })) });
 
   // De tegels van de marktplek: de twee rijen en het looppad ertussen. Eén keer per kaart uitgerekend, want de plek
   // verandert niet (zoals T.pleinTegels, js/wereld.js); het volgt uit de kaart, dus het staat niet in S.
   const PLEK = new WeakMap();
-  T.marktTegels = function (w) {
-    const m = w && w.markt;
+  T.marktTegels = function (D) {
+    const m = D && D.plek && D.plek.markt;
     if (!m || m.rijen.length < 2) return [];
-    const was = PLEK.get(w);
-    if (was && was.markt === m) return was.tegels;
+    const was = PLEK.get(m);
+    if (was) return was;
     const [a, b] = m.rijen;
     const n = IN().tussenRijen;
     const [px, py] = [(b.x - a.x) / n, (b.y - a.y) / n];
     const tegels = [];
     for (let k = 0; k < a.lengte; k++) for (let i = 0; i <= n; i++) tegels.push({ x: a.x + a.ax * k + px * i, y: a.y + a.ay * k + py * i });
-    PLEK.set(w, { markt: m, tegels });
+    PLEK.set(m, tegels);
     return tegels;
   };
-  T.opDeMarktPlek = (w, x, y) => T.marktTegels(w).some((t) => t.x === x && t.y === y);
+  T.opDeMarktPlek = (D, x, y) => T.marktTegels(D).some((t) => t.x === x && t.y === y);
 
   // Waarom er op het vak r (een voet, { x, y, b, h }) niet gebouwd kan worden omdat het te dicht bij de marktplek ligt, of
   // null (T.waaromPastHetNiet, js/gebouwen.js). Staat de markt er al, dan zijn de kramen zelf de muur.
   T.waaromNietBijDeMarkt = function (D, r) {
     if ((D.gebouwen || []).some((g) => g.soort === 'markt')) return null;
     const v = IN().vrij;
-    const bij = T.marktTegels(D.wereld).some((t) => t.x >= r.x - v && t.x < r.x + r.b + v && t.y >= r.y - v && t.y < r.y + r.h + v);
+    const bij = T.marktTegels(D).some((t) => t.x >= r.x - v && t.x < r.x + r.b + v && t.y >= r.y - v && t.y < r.y + r.h + v);
     return bij ? T.t('The market stalls go there.') : null;
   };
 
@@ -307,11 +312,11 @@
   // kraam. `bezet`: de tegels die al dicht zijn (de kramen en manden die er staan, of nog komen). { x, y, richting,
   // lengte, tegels, mand } of null.
   T.straatPlek = function (D, bezet = new Set(), lengte = 1) {
-    const R = regels(D.wereld, D.gebouwen);
+    const R = regels(D, D.gebouwen);
     const w = R.w;
     const naast = [[1, 0], [-1, 0], [0, 1], [0, -1]];
     const start = [];
-    for (const t of T.pleinTegels(w)) {
+    for (const t of T.pleinTegels(D)) {
       for (const [dx, dy] of naast) if (T.opPad(w, t.x + dx, t.y + dy) && !T.opHetPlein(w, t.x + dx, t.y + dy)) start.push({ x: t.x + dx, y: t.y + dy, d: 1 });
     }
     const gezien = new Set(start.map((t) => sleutel(t.x, t.y)));
@@ -434,7 +439,7 @@
   // niet kan komen.
   T.marktPlek = function (D) {
     if (T.waaromGeenMarktOpHetPlein(D)) return null;
-    return { ...T.marktMidden(D.wereld), kramen: T.kraamPlekken(D) };
+    return { ...T.marktMidden(D), kramen: T.kraamPlekken(D) };
   };
 
   // Een kraam neerzetten op zijn plek, met zijn mand ernaast: vol of leeg naar de voorraad. Een lange kraam beslaat zijn
@@ -476,7 +481,7 @@
     const blok = T.marktBlok(D);
     T.betaalKosten(D, g.kosten);
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
-    const midden = T.marktMidden(D.wereld);
+    const midden = T.marktMidden(D);
     const klaar = g.bouwtijd <= 0;
     const instantie = { soort: 'markt', x: midden.x, y: midden.y, voet: { b: 1, h: 1 }, tekening: null, klaar, klaarOp: dag + g.bouwtijd, handen: 0, voorwerp: null, opHetPlein: true, kramen: [], manden: [], blok };
     const bezet = new Set();

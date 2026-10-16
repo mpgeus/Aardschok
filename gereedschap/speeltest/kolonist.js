@@ -59,7 +59,7 @@
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
   const boerderijen = (D) => D.gebouwen.filter((g) => g.soort === 'boerderij');
   // Het hart van zijn dorp: het kampvuur op het plein (het blijft een plek, ook als het uit is).
-  const hart = (D) => D.wereld.kamp.vuur;
+  const hart = (D) => D.plek.kamp.vuur;
 
   // Een gebouw neerzetten zoals de speler het met het bouwmenu doet: waar het past, zo dicht mogelijk bij `bij`, op open
   // grond of anders waar het minst te rooien is (T.plekVoor, js/bouwen.js; zo zocht de bouwer van de speeltest ook).

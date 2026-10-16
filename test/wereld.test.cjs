@@ -348,12 +348,14 @@ test('wie een voorwerp op de kaart zet of weghaalt, doet dat met T.zetVoorwerp e
   assert.deepEqual(fout, [], `Zet en haal voorwerpen met T.zetVoorwerp en T.haalVoorwerpWeg (js/wereld.js): ${fout.join(', ')}`);
 });
 
-test('de tegels van het plein komen één keer per kaart, en een plek op het plein is dezelfde als vroeger', () => {
-  // Zoals T.plekOpHetPlein het tot 30 sep deed, voor elk kind elke dag opnieuw.
-  const vroeger = (w, n) => {
-    if (!w || !w.plein || w.plein.length < 3) return null;
-    const xs = w.plein.map((p) => p[0]);
-    const ys = w.plein.map((p) => p[1]);
+test('de tegels van het plein komen één keer per plein, en een plek op het plein is dezelfde als vroeger', () => {
+  // Zoals T.plekOpHetPlein het tot 30 sep deed, voor elk kind elke dag opnieuw (het plein van het dorp, D.plek).
+  const vroeger = (D, n) => {
+    const w = D.wereld;
+    const rand = D.plek.plein;
+    if (!rand || rand.length < 3) return null;
+    const xs = rand.map((p) => p[0]);
+    const ys = rand.map((p) => p[1]);
     const tegels = [];
     for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
       for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
@@ -363,17 +365,18 @@ test('de tegels van het plein komen één keer per kaart, en een plek op het ple
     return tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
   };
   for (const zaad of [2, 3]) {
-    const w = gehuchtOm(zaad).wereld;
-    assert.ok(T.pleinTegels(w).length > 50, 'het plein heeft tegels');
-    assert.equal(T.pleinTegels(w), T.pleinTegels(w), 'één keer uitgerekend');
-    for (let n = 0; n < 80; n++) assert.deepEqual(T.plekOpHetPlein(w, n), vroeger(w, n), `plek ${n}`);
+    const D = gehuchtOm(zaad).dorp;
+    assert.ok(T.pleinTegels(D).length > 50, 'het plein heeft tegels');
+    assert.equal(T.pleinTegels(D), T.pleinTegels(D), 'één keer uitgerekend');
+    for (let n = 0; n < 80; n++) assert.deepEqual(T.plekOpHetPlein(D, n), vroeger(D, n), `plek ${n}`);
     // Wie de plek krijgt, kan er niets aan veranderen voor een ander.
-    const p = T.plekOpHetPlein(w, 3);
+    const p = T.plekOpHetPlein(D, 3);
     p.x += 100;
-    assert.deepEqual(T.plekOpHetPlein(w, 3), vroeger(w, 3));
+    assert.deepEqual(T.plekOpHetPlein(D, 3), vroeger(D, 3));
   }
-  assert.deepEqual(T.pleinTegels({ plein: null }), [], 'een kaart zonder plein heeft geen tegels op het plein');
-  assert.equal(T.plekOpHetPlein(T.gebied({}, 'proef'), 1), null);
+  assert.deepEqual(T.pleinTegels({ plek: { plein: null } }), [], 'een plek zonder plein heeft geen tegels op het plein');
+  const proef = T.gebied({}, 'proef');
+  assert.equal(T.plekOpHetPlein({ wereld: proef, plek: proef.plekken[0] }, 1), null);
 });
 
 // ---------------------------------------------------------------------------------------------

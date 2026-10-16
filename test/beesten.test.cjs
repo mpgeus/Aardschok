@@ -544,7 +544,7 @@ test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij w
   I.dreiging.schrikKans = 1; // per uur een kans: hier altijd
   const leider = leiderVan({ leden });
   opUur(S, 17);
-  const plein = T.pleinVan(D.wereld);
+  const plein = T.pleinVan(D);
   zetBij(D.wereld, leider, { x: plein.x + 3, y: plein.y });
   for (const e of leden) if (e !== leider) zetBij(D.wereld, e, { x: plein.x + 6, y: plein.y });
   for (const q of D.bewoners.mensen) if (q.wezen) q.wezen.binnen = true;

@@ -66,14 +66,15 @@ test('een gemaakt land leest het spel in als het lege begin: alleen de aanvoerde
   // elke tegel heeft grond, en het plein en de plek van de marskramer liggen erop
   const K = T.kaartVak(w);
   for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) assert.ok(T.grondOp(w, x, y), `geen grond op (${x}, ${y})`);
-  assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y));
+  const plek = w.plekken[0];
+  assert.ok(T.opHetPlein(w, plek.marskramer.x, plek.marskramer.y));
   // en je loopt van de aanvoerder naar de uitgang, de marskramer, het kampvuur en de deur van elke tent van het kamp
   const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
   const loop = (doel) => T.zoekPad({ x: aanvoerder.tx, y: aanvoerder.ty }, doel, (x, y) => T.isBegaanbaar(w, x, y, {}), (x, y) => T.isVast(w, x, y), { naast: true });
   assert.ok(loop(w.overgangen[0]), 'de uitgang is niet te bereiken');
-  assert.ok(loop(w.marskramer), 'de marskramer is niet te bereiken');
-  assert.ok(loop(w.kamp.vuur), 'het kampvuur is niet te bereiken');
-  for (const p of w.kamp.plekken) assert.ok(loop(p.deur), `de tent op (${p.deur.x}, ${p.deur.y}) is niet te bereiken`);
+  assert.ok(loop(plek.marskramer), 'de marskramer is niet te bereiken');
+  assert.ok(loop(plek.kamp.vuur), 'het kampvuur is niet te bereiken');
+  for (const p of plek.kamp.plekken) assert.ok(loop(p.deur), `de tent op (${p.deur.x}, ${p.deur.y}) is niet te bereiken`);
 });
 
 test('een nieuw spel op het land van de maker: het zaad van het dorp is het zaad van het land, en hetzelfde zaad geeft hetzelfde dorp', () => {
@@ -97,7 +98,7 @@ test('elk nieuw spel het eiland (vraag 117), leeg (ronde 2 van het snoeien, stap
   assert.equal(S.wereld.maker.zaad, 7);
   assert.equal(S.wereld.eiland.zaad, 7);
   assert.equal(S.dorp.lot.zaad, 7);
-  assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin: het kamp op een open plek');
+  assert.ok(S.dorp.begin && S.dorp.plek.kamp, 'het lege begin: het kamp op een open plek');
 });
 
 test('een spel op het land van de maker bewaren en weer laden geeft precies hetzelfde spel', () => {

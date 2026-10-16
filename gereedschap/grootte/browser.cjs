@@ -109,7 +109,7 @@ async function meetN(browser, N) {
     s.vanzelfBewaard = 104;
     if (s.grond) s.grond.sleutel = '';
     Meet.zetPlekken(12.5);
-    const v = s.dorp.wereld.kamp.vuur; // het plein, waar het kamp stond
+    const v = s.dorp.plek.kamp.vuur; // het plein, waar het kamp stond
     Meet.cameraOp(v.x, v.y);
   });
   // Tekenen: gewone zoom van dit venster en uitgezoomd; overdag, 's nachts (de donkere laag over het hele beeld) en 's avonds;

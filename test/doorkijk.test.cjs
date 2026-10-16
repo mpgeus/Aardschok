@@ -25,7 +25,7 @@ function gehucht() {
   T.werkMistBij(S, S.dorp); // wie in de mist loopt, zie je ook niet door een boom heen (js/mist.js): de aanvoerder kijkt hier
   return S;
 }
-const hart = (S) => S.wereld.kamp.vuur;
+const hart = (S) => S.dorp.plek.kamp.vuur;
 const naast = (S, dx, dy) => ({ x: hart(S).x + dx, y: hart(S).y + dy });
 const erbij = (S, e) => {
   S.wereld.wezens.push(e);

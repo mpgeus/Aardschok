@@ -744,7 +744,7 @@
         plan.eiland.dorp = p.naam;
         plan.stuk = land.stuk; // het land van het eiland zelf, voor het verschil (wereldVanPlan)
         const w = wereldVanPlan(plan);
-        const rij = w.markt.rijen[0];
+        const rij = w.plekken[0].markt.rijen[0];
         if (!rij || rij.lengte < IN().marktRij) return `de marktplek heeft rijen van ${rij ? rij.lengte : 0}`; // geen tekst
         WERELD.set(plan, w);
         return null;
@@ -1042,7 +1042,6 @@
     const H = plan.h;
     const st = plan.stuk;
     const w = T.eilandKaart(plan.eiland.zaad, { x: x0, y: y0, b: B, h: H });
-    w.eiland.dorp = plan.eiland.dorp;
     // de grond: waar de vier hoekpunten van een tegel anders zijn dan die van het eiland (een bruggetje blijft)
     const nr = (x, y) => T.tegelNummer(x0 + x, y0 + y);
     for (let y = 0; y < H; y++) {
@@ -1055,31 +1054,31 @@
     for (const d of plan.gerooid) w.gerooid.add(nr(d.x, d.y));
     const D = IN().zicht;
     T.openVak(w, { x: x0 - D, y: y0 - D, b: B + 2 * D, h: H + 2 * D });
-    T.kenHetBegin(w, { x: x0, y: y0, b: B, h: H }); // wat je bij het begin kent (B2c, js/mist.js); de rest is mist
     for (const d of plan.gelegd) {
       const t = T.opzoekTegelNaam(opNaam(d.naam));
       T.zetVoorwerp(w, T.maakVoorwerp(t, x0 + d.x, y0 + d.y));
       if (t.eig.vast) T.zetTegel(w, x0 + d.x, y0 + d.y, 'muur');
     }
-    // het plein, de aanvoerder bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), de weg de wereld in,
-    // en de plek van de marskramer
+    // de plek van het dorp (D.plek, T.legePlek in js/wereld.js): zijn land, het plein, de plek van de marskramer en het
+    // kamp; de aanvoerder bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), en de weg de wereld in
     const op = (p) => ({ ...p, x: x0 + p.x, y: y0 + p.y });
     w.naam = T.t('The hamlet');
     w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
-    w.plein = plan.plein.map(([x, y]) => [x0 + x, y0 + y]);
-    w.marskramer = op(plan.marskramer);
+    const k = plan.kamp;
+    const plek = {
+      naam: plan.eiland.dorp || null, vak: { x: x0, y: y0, b: B, h: H },
+      plein: plan.plein.map(([x, y]) => [x0 + x, y0 + y]), marskramer: op(plan.marskramer), heer: null,
+      kamp: { vuur: op(k.vuur), kar: op(k.kar), straal: k.straal, plekken: k.plekken.map((p) => ({ ...op(p), voet: op(p.voet), deur: op(p.deur) })) },
+      markt: null,
+    };
+    w.plekken.push(plek);
+    w.pleinen.push(plek.plein);
     w.wezens.push(T.maakWezen('aanvoerder', x0 + plan.aanvoerder.x, y0 + plan.aanvoerder.y));
     w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.stijl) w.stijl = plan.stijl;
-    // waar het kamp komt (js/begin.js)
-    const k = plan.kamp;
-    w.kamp = {
-      vuur: op(k.vuur), kar: op(k.kar), straal: k.straal,
-      plekken: k.plekken.map((p) => ({ ...op(p), voet: op(p.voet), deur: op(p.deur) })),
-    };
     if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
-    w.markt = T.zoekMarktPlek(w); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
+    plek.markt = T.zoekMarktPlek({ wereld: w, plek }); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
     return w;
   }
 })(globalThis.Spel = globalThis.Spel || {});

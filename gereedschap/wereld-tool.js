@@ -185,6 +185,7 @@
     const camera = { x: S.camera.x, y: S.camera.y };
     S.wereld = uitslag.wereld;
     S.wereld.gebied = kaartNaam;
+    S.plek = S.wereld.plekken[0] || T.legePlek(S.wereld); // de staat is zijn eigen dorp (hierboven), met de plek die de kaart noemt
     S.camera = camera;
     S.grond = null;
     objecten = T.kaartObjecten(T.KAARTEN[kaartNaam], b && b.inhoud);

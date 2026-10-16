@@ -334,6 +334,11 @@
   // om het dorp (w.vak), want het eiland is te groot voor één lijst: in B2b, stap 4, krijgt wat niet om het dorp gaat
   // zijn eigen vak.
   T.kaartVak = (w) => (opEiland(w) ? w.vak : { x: 0, y: 0, b: w.b, h: w.h });
+  // Het land van een dorp (D.plek.vak): op het eiland zijn 100 bij 100 tegels, op een kaart uit Tiled de kaart. Wat over
+  // het land van één dorp zoekt (waar de wolven en de herten wonen, een plek om te bouwen, het water voor een visser),
+  // neemt dit vak; wat van de kaart is (het tekenen, het lopen, de paadjes), neemt T.kaartVak: op het eiland het vak om
+  // alle dorpen op de kaart (werklijst vraag 170, stap 6a).
+  T.dorpVak = (D) => D.plek.vak;
   // Waar de kaart tegels kan hebben, { x, y, b, h }: om het tekenen af te knippen, en om te zoeken in wat er in beeld is.
   // Op het eiland het hele eiland, dus maak er nooit een lijst over (daarvoor is T.kaartVak).
   T.kaartGrens = (w) => (opEiland(w) ? { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() } : { x: 0, y: 0, b: w.b, h: w.h });
@@ -385,7 +390,7 @@
   // (js/maker.js). Wat in het spel bewaard wordt (in S), is alleen wat er anders werd: per tegelnummer het woord
   // (w.tegelsAnders, T.zetTegel), de grond (w.grondAnders: de maker legt het plein en zijn grond), en wat er van het eiland
   // weg is (w.gerooid, T.haalVoorwerpWeg); wat iemand neerzette staat in w.voorwerpen, zoals op elke kaart. En welke
-  // stukken open zijn (w.open, stuknummers): waar je mensen kwamen; en wat je kent (w.gekend, js/mist.js). Een stuk dat
+  // stukken open zijn (w.open, stuknummers): waar je mensen kwamen (wat een dorp kent, staat in het dorp: D.gekend, js/mist.js). Een stuk dat
   // niet open is, is 'buiten', zodat A* nooit een stuk laat maken en wat er gebeurt niet van het scherm afhangt. De
   // stukken zelf zijn geen spelstaat: ze staan per kaart in STUKKEN (niet in S), en een geladen spel maakt ze opnieuw,
   // met wat er anders werd erover.
@@ -402,10 +407,10 @@
     const kamer = { id: 'buiten', naam: T.t('Outside'), x1: 0, y1: 0, x2: EILAND_MAAT() - 1, y2: EILAND_MAAT() - 1, vloer: ['#3c5e1e', '#355f22'] };
     return {
       eiland: { zaad }, vak: { ...vak },
-      open: new Set(), gekend: new Map(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
+      open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], questVoorwerpen: [], wezens: [],
       bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
-      buiten: true, naam: null, proef: false, plein: null, marskramer: null, heer: null,
+      buiten: true, naam: null, proef: false, pleinen: [], plekken: [],
     };
   };
   function stukkenVan(w) {
@@ -993,31 +998,42 @@
     return binnen;
   };
 
-  // Ligt deze tegel op het plein? Een kaart kan een plein hebben (kaarten/<naam>.betekenis.json,
-  // "plein": zijn rand, in tegels, via js/kaart.js in w.plein); een tegel ligt erop als zijn midden
-  // binnen die rand valt. Op het plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), en daar
-  // spelen de kinderen (js/bewoners.js, T.pleinVan).
+  // Ligt deze tegel op een plein? Een kaart heeft de pleinen die erop liggen (w.pleinen: hun randen, in tegels; van de
+  // maker, of uit kaarten/<naam>.betekenis.json, "plein", via js/kaart.js), een voor elk dorp; een tegel ligt erop als
+  // zijn midden binnen een rand valt. Op een plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), van welk dorp ook.
+  const opRand = (rand, x, y) => !!rand && rand.length >= 3 && T.binnenRand(rand, x + 0.5, y + 0.5);
   T.opHetPlein = function (w, x, y) {
-    return !!(w && w.plein && w.plein.length >= 3 && T.binnenRand(w.plein, x + 0.5, y + 0.5));
+    return !!w && (w.pleinen || []).some((rand) => opRand(rand, x, y));
   };
 
-  // De tegels van het plein, rij voor rij van boven naar onder, en in een rij van links naar rechts. Eén keer per kaart
-  // uitgerekend, want de rand van het plein verandert niet (werklijst, vraag 71: dit werd elke dag voor elk kind
-  // opnieuw gedaan). Net als de lijst per tegel hierboven volgt het uit de kaart, en staat het niet in S.
+  // Een dorp heeft zijn plek op de kaart (D.plek; werklijst vraag 170, stap 6a, zodat er meer dorpen op één kaart kunnen
+  // leven): wat de maker voor dat dorp legde, of wat een kaart uit Tiled noemt (js/kaart.js). { naam (de dorpsplek op
+  // het eiland, E.plekken, of null), vak (zijn land, { x, y, b, h }), plein (de rand van zijn plein, of null),
+  // marskramer (waar de marskramer uitstalt, { x, y, komt? }, of null), heer (waar de heer staat, alleen op een kaart uit
+  // Tiled), kamp (het kamp van het lege begin, js/begin.js), markt (de marktplek op het plein, js/markt.js) }. Wat het
+  // dorp met zijn plek doet, vraagt het dorp (T.pleinTegels(D), T.pleinVan(D)); een kaart geeft haar plekken door in
+  // w.plekken, en T.nieuwDorp neemt er een (js/dorp.js). Het gereedschap, dat zijn eigen dorp is, neemt de eerste.
+  T.legePlek = (w) => ({ naam: null, vak: T.kaartVak(w), plein: null, marskramer: null, heer: null, kamp: null, markt: null });
+
+  // De tegels van het plein van een dorp, rij voor rij van boven naar onder, en in een rij van links naar rechts. Eén keer
+  // per plein uitgerekend, want de rand van een plein verandert niet (werklijst, vraag 71: dit werd elke dag voor elk
+  // kind opnieuw gedaan). Het volgt uit de kaart, en staat niet in S. `D`: een dorp, of wat er zo uitziet ({ wereld, plek },
+  // de maker voordat er een dorp is).
   const PLEIN = new WeakMap();
-  T.pleinTegels = function (w) {
-    if (!w || !w.plein || w.plein.length < 3) return [];
-    const p = PLEIN.get(w);
-    if (p && p.rand === w.plein) return p.tegels;
-    const xs = w.plein.map((q) => q[0]);
-    const ys = w.plein.map((q) => q[1]);
+  T.pleinTegels = function (D) {
+    const rand = D && D.plek && D.plek.plein;
+    if (!rand || rand.length < 3) return [];
+    const was = PLEIN.get(rand);
+    if (was) return was;
+    const xs = rand.map((q) => q[0]);
+    const ys = rand.map((q) => q[1]);
     const tegels = [];
     for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
       for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
-        if (T.opHetPlein(w, x, y)) tegels.push({ x, y });
+        if (opRand(rand, x, y)) tegels.push({ x, y });
       }
     }
-    PLEIN.set(w, { rand: w.plein, tegels });
+    PLEIN.set(rand, tegels);
     return tegels;
   };
 

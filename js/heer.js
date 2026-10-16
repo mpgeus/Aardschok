@@ -108,11 +108,11 @@
   };
 
   // Waar hij kan komen: een wereld met een plein (zie bovenaan), en een uitgang om binnen te komen.
-  function pleinVan(w) {
-    return (w && (w.heer || w.marskramer)) || null;
+  function pleinVan(D) {
+    return (D && D.plek && (D.plek.heer || D.plek.marskramer)) || null;
   }
   function magKomen(D) {
-    return !!pleinVan(D.wereld);
+    return !!pleinVan(D);
   }
 
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
@@ -422,7 +422,7 @@
     if (b && b.wezens) {
       h.soldaten.wezens = b.wezens.filter((e) => e.wie === 'soldaat');
       b.wezens = b.wezens.filter((e) => e.wie !== 'soldaat');
-      const plek = pleinVan(D.wereld);
+      const plek = pleinVan(D);
       for (const e of h.soldaten.wezens) {
         e.thuis = { x: plek.x, y: plek.y };
         e.straal = 5;
@@ -476,9 +476,10 @@
   const VOOR_DE_PAAL = { dx: 1, dy: 1 };
 
   // Mag hier de paal, of iemand die eraan staat? Begaanbaar, niet in een akker, en niet op de marktplek (js/markt.js).
-  function vrijOpHetPlein(w, x, y) {
+  function vrijOpHetPlein(D, x, y) {
+    const w = D.wereld;
     if (!T.heeftTegels(w) || !T.isBegaanbaar) return true;
-    if (!T.isBegaanbaar(w, x, y) || T.opDeMarktPlek(w, x, y)) return false;
+    if (!T.isBegaanbaar(w, x, y) || T.opDeMarktPlek(D, x, y)) return false;
     return !(w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
   }
 
@@ -498,10 +499,10 @@
   // tegel ervoor vrij zijn. Puur: zet nog niets neer.
   T.plekVoorDeSchandpaal = function (D) {
     const w = D.wereld;
-    const plek = pleinVan(w);
+    const plek = pleinVan(D);
     const doel = { x: plek.x + 2, y: plek.y };
     return eersteRond(doel, 4, (x, y) => !(x === plek.x && y === plek.y)
-      && vrijOpHetPlein(w, x, y) && vrijOpHetPlein(w, x + VOOR_DE_PAAL.dx, y + VOOR_DE_PAAL.dy)) || doel;
+      && vrijOpHetPlein(D, x, y) && vrijOpHetPlein(D, x + VOOR_DE_PAAL.dx, y + VOOR_DE_PAAL.dy)) || doel;
   };
 
   // De paal neerzetten, als hij er nog niet staat: een voorwerp dat zijn tegel beslaat
@@ -520,7 +521,7 @@
   function voorDePaal(D) {
     const paal = T.zetSchandpaalNeer(D);
     const doel = { x: paal.x + VOOR_DE_PAAL.dx, y: paal.y + VOOR_DE_PAAL.dy };
-    return eersteRond(doel, 3, (x, y) => vrijOpHetPlein(D.wereld, x, y)) || doel;
+    return eersteRond(doel, 3, (x, y) => vrijOpHetPlein(D, x, y)) || doel;
   }
 
   // Wie staat er nu aan de paal? Wie voor zijn straf op de tegel ervóór moet (h.wrok, moetNaar),
@@ -731,11 +732,11 @@
   // ---------------------------------------------------------------------------------------------
 
   function kanLopen(D) {
-    return !!(D.wereld && T.maakMens && T.wegInEnUit(D.wereld) && D.wereld.wezens);
+    return !!(D.wereld && T.maakMens && T.wegInEnUit(D) && D.wereld.wezens);
   }
 
   function naarDeWeg(D, e) {
-    const uitgang = T.wegInEnUit(D.wereld);
+    const uitgang = T.wegInEnUit(D);
     e.moetNaar = null;
     e.thuis = { x: uitgang.x, y: uitgang.y };
     e.straal = 1;
@@ -744,7 +745,7 @@
 
   // Staat hij op de weg de kaart uit (of er vlak naast, want zijn straal is één), dan is hij weg.
   function isBijDeUitgang(D, e) {
-    const uitgang = T.wegInEnUit(D.wereld);
+    const uitgang = T.wegInEnUit(D);
     return e.tx === uitgang.x && e.ty === uitgang.y && !(e.pad && e.pad.length) && !e.onderweg;
   }
 
@@ -752,8 +753,8 @@
     const h = D.heer;
     if (!h || !magKomen(D) || !kanLopen(D)) return;
     const w = D.wereld;
-    const uitgang = T.wegInEnUit(w);
-    const plek = pleinVan(w);
+    const uitgang = T.wegInEnUit(D);
+    const plek = pleinVan(D);
     const b = h.bezoek;
     if (b && !b.wezens && !b.weg) {
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).

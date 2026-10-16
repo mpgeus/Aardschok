@@ -59,7 +59,7 @@ function bekenden(S, aantal) {
 function pleinPlek(S) {
   const w = S.wereld;
   const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) && !T.bijDeur(w, x, y);
-  const t = T.pleinTegels(w).find((q) => {
+  const t = T.pleinTegels(S.dorp).find((q) => {
     for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) if (!vrij(q.x + dx, q.y + dy)) return false;
     return true;
   });

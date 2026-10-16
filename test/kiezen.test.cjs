@@ -34,7 +34,7 @@ function tikTot(S, klaar, meest = 4000) {
 function vrijeTegel(D, van, dx, dy) {
   for (let r = 0; r < 10; r++) {
     const t = { x: van.x + dx + r, y: van.y + dy };
-    if (T.isBegaanbaar(D.wereld, t.x, t.y) && T.kentTegel(D.wereld, t.x, t.y) && !T.gebouwOp(D, t.x, t.y)) return t;
+    if (T.isBegaanbaar(D.wereld, t.x, t.y) && T.kentTegel(D, t.x, t.y) && !T.gebouwOp(D, t.x, t.y)) return t;
   }
   throw new Error('geen vrije tegel');
 }
@@ -76,7 +76,7 @@ test('rechts met je mannen gekozen: erheen, of een vijand achterna; op land dat 
   assert.equal(v.opdracht.soort, 'volg');
   const g = T.kaartGrens(D.wereld);
   const ver = { x: g.x + 2, y: g.y + 2 };
-  assert.equal(T.kentTegel(D.wereld, ver.x, ver.y), false, 'de hoek van het eiland ken je niet');
+  assert.equal(T.kentTegel(D, ver.x, ver.y), false, 'de hoek van het eiland ken je niet');
   assert.equal(T.handelingSturen(S, ver, [a]).kan, false);
 });
 
@@ -226,7 +226,7 @@ test('twee werelden met dezelfde bevelen blijven gelijk (lockstep)', () => {
 
 // Een tegel met een vrij vierkant van `r` tegels eromheen, een eind van `van`, op land dat je kent: daar schuift niemand.
 function vrijVeld(D, van, dx, dy, r = 3) {
-  const vrij = (x, y) => T.isBegaanbaar(D.wereld, x, y) && T.kentTegel(D.wereld, x, y) && !T.gebouwOp(D, x, y);
+  const vrij = (x, y) => T.isBegaanbaar(D.wereld, x, y) && T.kentTegel(D, x, y) && !T.gebouwOp(D, x, y);
   for (let i = 0; i < 30; i++) {
     const t = { x: van.x + dx + i, y: van.y + dy };
     let ok = true;

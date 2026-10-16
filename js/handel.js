@@ -80,7 +80,7 @@
   // Waar hij kan komen: een wereld met een plek voor hem (js/kaart.js leest "marskramer" uit het
   // betekenisbestand). Zonder die plek (het oude spel, of een toets zonder wereld) gebeurt er niets.
   function magKomen(D) {
-    return !!(D.wereld && D.wereld.marskramer);
+    return !!(D.wereld && D.plek.marskramer);
   }
 
   // De dag in het jaar (0..359) waarop een bezoek begint, in dezelfde telling als T.datumVanDag.
@@ -204,7 +204,7 @@
 
   // Kan hij over de weg de kaart op? Dan heeft hij een poppetje (T.werkMarskramerBij).
   function kanLopen(D) {
-    return !!(magKomen(D) && T.maakMens && deWeg(D.wereld));
+    return !!(magKomen(D) && T.maakMens && deWeg(D));
   }
 
   // Hij gaat, op deze dag: vanaf nu handelt hij niet meer. Heeft hij een poppetje, dan loopt dat
@@ -342,19 +342,19 @@
   // Waar hij het gehucht in komt, en waar hij het weer uit gaat: "komt" bij de plek in het
   // betekenisbestand, anders de eerste uitgang van de kaart (de weg de wereld in). De heer komt
   // over dezelfde weg (js/heer.js), dus die vraagt het hier ook.
-  function deWeg(w) {
-    const p = w.marskramer;
+  function deWeg(D) {
+    const p = D.plek.marskramer;
     if (p && p.komt) return p.komt;
-    const o = (w.overgangen || [])[0];
+    const o = (D.wereld.overgangen || [])[0];
     return o ? { x: o.x, y: o.y } : null;
   }
-  T.wegInEnUit = (w) => (w ? deWeg(w) : null);
+  T.wegInEnUit = (D) => (D && D.wereld ? deWeg(D) : null);
 
   T.werkMarskramerBij = function (D) {
     const m = D.marskramer;
     const w = D.wereld;
     if (!m || !magKomen(D) || !T.maakMens) return;
-    const uitgang = deWeg(w);
+    const uitgang = deWeg(D);
     if (!m.wezen) {
       if (m.weg || !uitgang) return;
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
@@ -362,7 +362,7 @@
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
       // Zijn thuis is zijn plek op het plein, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.
-      e.thuis = { x: w.marskramer.x, y: w.marskramer.y, straal: 1 };
+      e.thuis = { x: D.plek.marskramer.x, y: D.plek.marskramer.y, straal: 1 };
       w.wezens.push(e);
       m.wezen = e;
       return;

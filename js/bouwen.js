@@ -330,7 +330,7 @@
     }
   };
   function zoekPlek(D, soort, bij) {
-    const vak = T.kaartVak(D.wereld);
+    const vak = T.dorpVak(D);
     // De markt op het plein (js/markt.js): het midden van het plein, met de kramen.
     if (soort === 'markt') return T.marktPlek(D);
     // Wat bij de natuur hoort (een jager bij het bos, een visser aan het water; `bij` in js/gebouwen.js), zoekt over de
@@ -359,7 +359,7 @@
   // Eerst wat er op elke plek te rooien staat (één stap per plek, T.watTeRooien), dan van de beste plek af of hij past.
   // Geeft { x, y, rooien: het stuk dat eerst vrij moet }, of null.
   function zoekPlekOmTeRooien(D, soort, bij) {
-    const vak = T.kaartVak(D.wereld);
+    const vak = T.dorpVak(D);
     const g = T.GEBOUWEN[soort];
     if (!g || soort === 'markt') return null;
     const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;

@@ -28,9 +28,10 @@ function maakS() {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
     kalender: { dag: 0, snelheid: 1 }, inventaris: new Set(),
     wereld: {
-      marskramer: { x: 5, y: 5 }, overgangen: [], wezens: [],
+      overgangen: [], wezens: [],
       akkers: [{ x: 0, y: 0, b: 2, h: 3 }, { x: 10, y: 0, b: 1, h: 4 }],
     },
+    plek: { marskramer: { x: 5, y: 5 } }, // de plek van het dorp (D.plek, js/wereld.js)
   };
   return S;
 }
@@ -428,7 +429,7 @@ test('komt hij zelf halen en moet er iemand aan de schandpaal, dan wijst hij zel
 
 test('waar geen plein is (het oude spel), komt hij nooit', () => {
   const S = gehucht();
-  S.wereld.marskramer = null;
+  S.plek.marskramer = null;
   for (let dag = 0; dag < T.DAGEN_PER_JAAR; dag++) T.tikHeerDag(S, dag);
   assert.ok(!S.heer);
 });

@@ -270,7 +270,7 @@ function wereldMet(...velden) {
   const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: null, plan: v.bestemming, vruchtbaarheid: 1, ...v }));
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
-    kalender: { dag: 0, snelheid: 1 }, lot: { zaad: 42 }, wereld: { wezens: [], akkers },
+    kalender: { dag: 0, snelheid: 1 }, lot: { zaad: 42 }, wereld: { wezens: [], akkers }, plek: {},
   };
   return { S, velden: akkers };
 }

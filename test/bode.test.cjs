@@ -276,7 +276,7 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.ok(bode, 'de bode loopt op de kaart');
     // Ver van de uitgang wachten ze nog.
     T.werkRoversBij(S, D);
-    const uitgang = T.wegInEnUit(D.wereld);
+    const uitgang = T.wegInEnUit(D);
     if (T.afstand(uitgang, { x: bode.tx, y: bode.ty }) > B.hinderlaag.afstand) assert.equal(D.rovers.aanval.fase, 'wacht');
     // Bij de uitgang staan ze er.
     for (const e of [bode, r.begeleiders[0].wezen]) {
@@ -310,7 +310,7 @@ test('je mannen verslaan de rovers van de hinderlaag: de bode gaat verder', () =
     T.zetWet(D, 'rantsoen', 'krap');
     const r = T.stuurBode(D, { graan: 2 });
     const bode = r.bode.wezen;
-    const uitgang = T.wegInEnUit(D.wereld);
+    const uitgang = T.wegInEnUit(D);
     bode.pad = [];
     bode.onderweg = null;
     bode.tx = bode.x = uitgang.x;

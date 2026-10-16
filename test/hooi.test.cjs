@@ -37,6 +37,7 @@ function boerMet(velden, opties) {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, tijd: 0,
     // 1 hooimaand om tien uur 's ochtends: in de werkuren, want 's nachts maait niemand (js/dag.js).
     kalender: { dag: (opties && opties.dag) || dagVan('hooimaand', 1) + 10 / 24 }, lot: { zaad: 42 },
+    plek: { vak: { x: 0, y: 0, b: 30, h: 30 } }, // de plek van het dorp (D.plek, js/wereld.js)
     wereld: {
       b: 30, h: 30, wezens: [boer], akkers, meenten: [],
       tegels: Array.from({ length: 30 }, () => Array(30).fill('gras')),

@@ -64,14 +64,14 @@
   // Het begin
   // ---------------------------------------------------------------------------------------------
 
-  // Een nieuw dorp op een lege plek (T.nieuwDorp, js/dorp.js, als de kaart een kamp heeft, w.kamp, van de maker): een
+  // Een nieuw dorp op een lege plek (T.nieuwDorp, js/dorp.js, als zijn plek een kamp heeft, D.plek.kamp, van de maker): een
   // tent per gezin (nog niet opgezet: dat doen ze als de kar er is, T.zetKampOp), de kar aan de rand op de weg, met de
   // aanvoerder ernaast, en de kar op weg naar het plein. Wat de kar meebrengt, telt pas als hij er is (werklijst C, stap 1).
   // Wie er woont, zet T.zetBeginBewoners (js/bewoners.js) erna: een gezin per tent, dat nog over de weg moet komen.
   T.zetKamp = function (S, D) {
     const w = D.wereld;
     const I = IN();
-    w.kamp.plekken.slice(0, 1 + I.gezinnen).forEach((p, i) => {
+    D.plek.kamp.plekken.slice(0, 1 + I.gezinnen).forEach((p, i) => {
       D.gebouwen.push({
         soort: 'tent', x: p.voet.x, y: p.voet.y, voet: { b: p.voet.b, h: p.voet.h }, deur: { x: p.deur.x, y: p.deur.y },
         tent: { x: p.x, y: p.y, vorm: p.vorm, open: p.open }, tekening: null, klaar: true, klaarOp: 0, handen: 0,
@@ -79,7 +79,7 @@
       });
     });
     // de kar aan de rand, waar de weg het land in komt, en de aanvoerder ernaast
-    const van = T.wegInEnUit(w) || { x: w.kamp.kar.x, y: w.kamp.kar.y };
+    const van = T.wegInEnUit(D) || { x: D.plek.kamp.kar.x, y: D.plek.kamp.kar.y };
     const kar = T.maakKar(D, van.x, van.y, T.t('covered wagon'), 'huifkar');
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
     D.begin = { kamp: 'onderweg', kar, van: { x: van.x, y: van.y }, gezinnen: false, volgt: !D.ander, heerVrijTot: dag + I.heerVrij * T.DAGEN_PER_JAAR };
@@ -103,11 +103,11 @@
     Object.assign(e, { x: t.x, y: t.y, tx: t.x, ty: t.y, pad: [], onderweg: false });
     e.padDoel = null;
   }
-  // De kar op weg naar zijn plek in het kamp (de maker koos hem, w.kamp.kar); is er geen weg, dan staat hij er meteen.
+  // De kar op weg naar zijn plek in het kamp (de maker koos hem, D.plek.kamp.kar); is er geen weg, dan staat hij er meteen.
   function stuurKar(D) {
     const w = D.wereld;
     const kar = D.begin.kar;
-    const doel = w.kamp.kar;
+    const doel = D.plek.kamp.kar;
     const pad = T.zoekRoute(w, { x: kar.tx, y: kar.ty }, doel, { kar: true }); // over de weg van de kaart, die hij opzoekt (js/wegen.js)
     if (pad && pad.length) T.geefRoute(kar, pad, doel);
     else zetNeer(w, kar, doel);
@@ -128,7 +128,7 @@
     if (!B.gezinnen && (T.afstand(karTegel, B.van) >= IN().voorsprong || !kar.pad.length)) laatGezinnenKomen(D, true);
     volgDeKar(S, D);
     if (kar.pad.length || kar.onderweg) return;
-    if (T.afstand(karTegel, D.wereld.kamp.kar) > 1) {
+    if (T.afstand(karTegel, D.plek.kamp.kar) > 1) {
       // hij gaf het op (iemand stond in de weg): opnieuw
       stuurKar(D);
       return;
@@ -169,7 +169,7 @@
     const B = D.begin;
     if (!B || B.kamp !== 'onderweg') return;
     const w = D.wereld;
-    const k = w.kamp;
+    const k = D.plek.kamp;
     if (B.kar.tx !== k.kar.x || B.kar.ty !== k.kar.y) {
       if (w.wezens.includes(B.kar)) T.stapEraf(D, { x: k.kar.x, y: k.kar.y, b: 1, h: 1 });
       zetNeer(w, B.kar, k.kar);
@@ -282,9 +282,9 @@
     const straal = IN().bouwBereik;
     const opslagen = D.gebouwen.filter((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag);
     const sleutel = [straal, ...opslagen.map((g) => `${g.x},${g.y}`)].join(';');
-    const was = BEREIK.get(w);
+    const was = BEREIK.get(D);
     if (was && was.sleutel === sleutel) return was;
-    const bronnen = T.pleinTegels(w).map((t) => ({ x: t.x, y: t.y }));
+    const bronnen = T.pleinTegels(D).map((t) => ({ x: t.x, y: t.y }));
     for (const g of opslagen) {
       const r = T.voetVanGebouw(g);
       for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) bronnen.push({ x, y });
@@ -311,7 +311,7 @@
       }
     }
     const uit = { sleutel, straal, x0, y0, b, h, afstand };
-    BEREIK.set(w, uit);
+    BEREIK.set(D, uit);
     return uit;
   }
   // Voor het tekenen (js/tekenen.js): { straal, x0, y0, b, h, afstand } (per tegel van het vak vanaf x0, y0; Infinity
@@ -358,7 +358,7 @@
   T.kampLicht = function (D) {
     const stand = T.kampvuurStand(D);
     if (!stand || T.lichtVan(D.kalender.dag).nacht <= 0) return [];
-    const v = D.wereld.kamp.vuur;
+    const v = D.plek.kamp.vuur;
     const L = IN().vuur;
     return [{ x: v.x, y: v.y, straal: L.straal, sterkte: stand === 'brandt' ? L.sterkte : L.smeult, soort: 'kampvuur' }];
   };
@@ -433,7 +433,7 @@
   // kavel rooit bouwAf). Met `ruimte` blijft er zoveel tegels om zijn voet vrij van andere gebouwen, zoals een speler die
   // wil dat zijn hut kan doorgroeien tot een huis. Geeft het gebouw.
   function zetBijHetVuur(D, soort, ruimte = 0) {
-    const v = D.wereld.kamp.vuur;
+    const v = D.plek.kamp.vuur;
     const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || { b: 1, h: 1 };
     const raakt = (a, b) => a.x < b.x + b.b && b.x < a.x + a.b && a.y < b.y + b.h && b.y < a.y + a.h;
     const tekrap = (x, y) => {
