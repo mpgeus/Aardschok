@@ -62,11 +62,11 @@ afspraak bij moet.
 **Ronde 3 van het snoeien loopt** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
-zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6 is af** (16 okt, op
-de branch `ccr-74384ea2-mxeou7`; Marcel: "Groei op afwisseling, doe maar"; `spel.md`, "De groei van de huizen"): de
+zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6 is af** (16 okt, in
+`main`; Marcel: "Groei op afwisseling, doe maar"; `spel.md`, "De groei van de huizen"): de
 wensen per huis zijn weg, en een huis groeit door als het dorp een maand tevreden is en genoeg soorten eet (een hut 3,
 een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland in het eerste jaar een dorp, met drie
-stenen huizen. **Ronde 3 is af** als stap 6 in `main` staat.
+stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
 - **Ronde 3 van het snoeien bekijken** (15 okt, in `main`): Nieuw spel. Er komt niemand meer
@@ -76,7 +76,7 @@ stenen huizen. **Ronde 3 is af** als stap 6 in `main` staat.
   begint zelf in de kou of een vol dorp (`Spel.debug.koorts('nu')`). In bloeimaand staat de meiboom op het plein, en
   vanaf 20 wintermaand de kerstboom met kaarsjes (`Spel.debug.versiering()`). Erbij gedaan, zeg het als het anders
   moet: **een leeg bord telt als één soort** (60% werk), want zonder de tevredenheid werkte een dorp zonder eten op 100%.
-- **De groei op de afwisseling bekijken** (ronde 3, stap 6, 16 okt, op de branch `ccr-74384ea2-mxeou7`): Nieuw spel.
+- **De groei op de afwisseling bekijken** (ronde 3, stap 6, 16 okt, in `main`): Nieuw spel.
   Een moestuin, een kippenhok en een jager naast het graan: dan worden de hutten na een maand huizen (voor 8 stammen), en
   met een vierde soort en een steengroeve stenen huizen. De muis op een huis zegt hoe ver het is ("It grows into a stone
   house after 30 days in which the village eats 4 kinds of food; now it eats 3"); `Spel.debug.groei()` zegt het voor
@@ -228,10 +228,10 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
    geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
    plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
-3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei, af op de branch
-   `ccr-74384ea2-mxeou7` (16 okt; Marcel: "Groei op afwisseling, doe maar"). Het plan en wat Marcel koos staan in
-   `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk alleen op de
-   afwisseling; van de wetten rantsoen en belasting; de huizen groeien op de afwisseling, de wensen per huis zijn weg.
+3. **Ronde 3, na C: af** (16 okt, in `main`). Het plan en wat Marcel koos staan in `snoeien.md`, "Ronde 3": de
+   voorvallen, de raadsman, het rapport en de feesten weg; het werk alleen op de afwisseling; van de wetten rantsoen en
+   belasting; de huizen groeien op de afwisseling, de wensen per huis zijn weg (stap 6; Marcel: "Groei op afwisseling,
+   doe maar").
 
 Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk of twintig) wijst naar `code.md` of
 `gereedschap.md`, en `code.md` krimpt mee met de code.
@@ -599,7 +599,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   boven wie vecht, de schade als getal, de uitval, en een pijl of bout als korte streep (in code). **2e** het gevecht in
   beurten gaat er nu al uit (het raster, de actiepunten, einde beurt, de deur), niet pas in stap 5; de held die valt,
   blijft tot stap 5 het eind. De speeltest vecht niet meer zelf. De getallen in de werkbank ("Fighting").
-- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Bezig in sessie `claude/werklijst-doorgaan-vnked4`** (16 okt): het plan ligt bij Marcel.
 - **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van

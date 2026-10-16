@@ -289,8 +289,8 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    met de boete op de rekening van de heer en het meer hakken (`T.maaktUit` geeft nu gewoon wat een gebouw maakt). Dat
    een klik in het wettenmenu een opdracht wordt en het venster de tijd niet stilzet, komt in stap 6 van vraag 170.
 6. **De wensen en de groei.** Marcel (16 okt): **"Groei op afwisseling, doe maar"**: de wensen per huis gaan weg, en de
-   huizen groeien als het dorp een tijd genoeg soorten eet en warm is; de trede blijft zoals nu. **Af** (16 okt, op de
-   branch `ccr-74384ea2-mxeou7`; `spel.md`, "De groei van de huizen"): `js/wensen.js` is weg (zo'n 740 regels, en 700
+   huizen groeien als het dorp een tijd genoeg soorten eet en warm is; de trede blijft zoals nu. **Af** (16 okt, in `main`;
+   `spel.md`, "De groei van de huizen"): `js/wensen.js` is weg (zo'n 740 regels, en 700
    regels toetsen). Een huis met mensen telt een dag als het dorp tevreden genoeg is (70%: eten, en in de winter
    brandhout) en genoeg soorten at voor wat het wordt; na 30 dagen groeit het, voor bouwstof. De tevredenheid is weer
    één getal voor het dorp (eten, brandhout, een kapel), en een gezin trekt weg als dat onder de drempel zakt. De
