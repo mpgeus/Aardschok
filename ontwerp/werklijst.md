@@ -70,10 +70,9 @@ eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand.
 iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
 N1, V1", en "K1 en L1"): **6a2 loopt** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens bij, b het
 wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Stuk a is af** (16 okt,
-op de branch `ccr-53565789-zrmyk0`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
+in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
-eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). **Bezig in
-sessie `ccr-53565789-zrmyk0`** (16 okt): 6a2. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -93,7 +92,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het wild van de wereld bekijken** (vraag 170, stap 6a2, stuk a, 16 okt, op de branch `ccr-53565789-zrmyk0`): Nieuw
+- **Het wild van de wereld bekijken** (vraag 170, stap 6a2, stuk a, 16 okt, in `main`): Nieuw
   spel (een bewaard spel van vóór vandaag laadt niet meer: het opslaan is versie 18). Het spel speelt zoals het speelde;
   het verschil zit onder de motorkap, met twee dorpen. `Spel.debug.tweedeDorp()`, dan `Spel.debug.wissel()`, en
   `Spel.debug.beesten()`: in het bos van het tweede dorp leeft zijn eigen wild, van niemand. Dat een roedel de mensen van
