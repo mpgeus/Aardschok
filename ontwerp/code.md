@@ -1505,8 +1505,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/kiezen.js`) of `e.doelwit` (zelf gekozen: de dichtste die hij ziet, binnen `zicht`, en binnen `leiband` van zijn
   anker, `e.vanaf`: de post, of `T.dagAnker`, of waar hij stond). Jouw kant kijkt alleen naar de vijanden; een rover ook
   naar een dorpeling die buiten is (niet wie aangehouden is: de hinderlaag); een wolf alleen naar jouw kant. Wie geen
-  doel heeft, kijkt elke `kijkElke` seconden; wie het laat gaan (dood, binnen, te ver, buiten de leiband), wacht
-  `rustNaLoslaten`, en zijn dag neemt het over (`T.dwaal` en `T.werkRoversBij` laten wie vecht met rust).
+  doel heeft, kijkt elke `kijkElke` seconden (`e.omkijken`: wanneer weer); wie het laat gaan (dood, binnen, te ver,
+  buiten de leiband), wacht `rustNaLoslaten`, en zijn dag neemt het over (`T.dwaal` en `T.werkRoversBij` laten wie vecht met rust).
 - **Een slag:** `T.kanRaken(D, e, d, van)` is de ene vraag (ernaast met `T.raakt`, verder tot het bereik van
   `T.slagVan` als `T.zichtTussen` het ziet, en wie schiet, niet met een vijand naast zich; die stapt opzij). Raakt hij,
   dan blijft hij staan en slaat als `e.slagKlaar` om is: de kosten maal `secondenPerPunt`. `T.raak(S, D, doel, n, van)`
@@ -1559,8 +1559,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rechts is `T.handelingSturen(S, doel, mannen)`: `{ tekst, kan, opdracht, doe }`. Bij de muis staat wat rechts doet,
   behalve boven wat links te kiezen is.
 - **Een bevel is een opdracht** (`T.OPDRACHTEN` in `js/tik.js`), met de nummers van de mannen (`p.id` van hun bewoner,
-  `T.nummersVan`): `stuur` (`T.stuurMannen`: de dichtste man naar de dichtste vrije tegel rond de plek, en daar is
-  `e.post`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
+  `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, en daar is `e.post`), `formatie`
+  (`T.zetFormatie`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
   geen nummer, dus zijn soort en plek), en `terug` (`T.roepTerug`). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
   eerst `T.bevelAnker` vraagt: de vijand die hij volgt (straal 1), of zijn post (straal 0), niet 's nachts, tenzij hij
   die nacht zijn bevel kreeg (`post.wakker`). Het dwalen (`T.dwaal`, `js/verkennen.js`) brengt hem er, zoals iedereen naar
@@ -1568,7 +1568,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wie vecht, dwaalt niet); `T.werkSturenBij` (elke tik, in elk dorp) geeft wie zijn vijand zag vallen een post waar hij
   staat, en wie geen man meer is, verliest zijn bevel. Wie op de jacht meeloopt (`e.opgeroepen`), volgt na een bevel jouw
   bevel. Een bevel erheen laat ook zijn doel gaan (`e.doelwit`).
+- **De formatie** (stap 3; Marcel, 16 okt: "A1, B1, C1, D1, E1"): `T.formatiePlekken(D, mannen, naar, richting)` geeft
+  `{ plekken: [{ e, x, y, kijk }], richting }` zonder iets te veranderen (ook voor het groen na een rechtsklik:
+  `S.stuurPlekken`, alleen scherm, getekend in `tekenStuurPlekken`, `js/tekenen.js`). De rij van een man is `T.rijVan(e)`
+  (0 wie slaat, 1 wie steekt, 2 wie schiet, uit `T.slagVan`); een *Line* (`lijnPlekken`) zet de rijen dwars op de
+  richting met de middelste op de plek, hooguit `formatie.breedte` naast elkaar, en in een rij opzij gesorteerd zoals ze
+  stonden, zodat niemand kruist; een *Ring* (`ringPlekken`) zoekt de kleinste kring van tegels waar wie slaat en steekt op
+  past, met binnenin plaats voor de schutters. Een bezette of onbegaanbare plek schuift naar de dichtste vrije tegel
+  (`vrijBij`, de voorste rij eerst). De formatie hoort bij de man (`e.formatie`, alleen `'ring'`; zonder is het een *Line*),
+  zodat elke troep de zijne houdt; `T.formatieVan(mannen)` is die van de meesten. De richting (`achtVan`: een stap van de
+  acht, `{ x, y }` van -1 tot 1) is die van hun midden naar de klik; staan ze er al, of kies je een andere formatie
+  (`T.zetFormatie`: rond het midden van hun posten), dan `post.richting`. De kijkrichting van een man staat in
+  `post.kijk`: `js/sprites.js` draait hem zo als hij op zijn post staat en niet vecht (`e.doelwit`); de held heeft geen
+  post en kijkt naar een plek voor zich (`e.kijkt`, zoals een praatje). **Alleen gewone rekensommen** (de ruithoek in
+  plaats van atan2, een kring van tegels in plaats van sin en cos): die zijn op elke computer letter voor letter gelijk,
+  en dat vraagt samen spelen in lockstep. Tot 16 okt gebruikte `js/gevecht.js` `e.kijkt` ook als klok (wanneer hij weer
+  om zich heen kijkt); die heet nu `e.omkijken`, want `js/sprites.js` las het getal als een plek, en wie gevochten had,
+  keek dan naar het zuiden.
 - **Het briefje** (`T.gekozenBriefje(S)` → `{ D, briefje, wie }`, in de vorm van `T.gebouwBriefje`): `T.manBriefje`,
-  `T.mannenBriefje` en `T.dorpelingBriefje`, met een knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
+  `T.mannenBriefje` (met *Line* en *Ring*: de formatie die ze hebben, is niet te kiezen) en `T.dorpelingBriefje`, met een
+  knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
   opent (`gesprek: { id }`, *Talk*; `T.gesprekBij`). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`), dat
   ook het oproepen gebruikt.

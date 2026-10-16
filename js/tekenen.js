@@ -616,6 +616,7 @@
       tekenMarktPlek(ctx, S);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
+      tekenStuurPlekken(ctx, S);
     }
     const volgorde = tekenVolgorde(lijst);
     voorsteKijkgaten(volgorde, kijkgaten);
@@ -1959,6 +1960,24 @@
         T.ruit(ctx, p.x, p.y, 0.94);
         ctx.fill();
       }
+    }
+  }
+
+  // Waar je mannen gaan staan, na een rechtsklik (S.stuurPlekken, js/main.js; vraag 170, stap 3, E1): hun plekken in hun
+  // vorm in groen op de grond, zoals een weg in de hand, en in een halve seconde vervagen ze.
+  function tekenStuurPlekken(ctx, S) {
+    const s = S.stuurPlekken;
+    if (!s) return;
+    const over = s.tot - S.tijd;
+    if (over <= 0) {
+      S.stuurPlekken = null;
+      return;
+    }
+    ctx.fillStyle = `rgba(134, 196, 111, ${(0.5 * Math.min(1, over / T.KIEZEN_INSTELLINGEN.formatie.groen)).toFixed(3)})`;
+    for (const t of s.plekken) {
+      const p = opGrond(t.x, t.y);
+      T.ruit(ctx, p.x, p.y, 0.94);
+      ctx.fill();
     }
   }
 

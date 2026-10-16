@@ -188,8 +188,8 @@
     if (d && e.volgt && (d.dood || !D.wereld.wezens.includes(d))) return null; // js/kiezen.js geeft hem een post
     // De held kiest zelf niets: hij blijft waar je hem neerzet (js/kiezen.js), en vecht als je hem stuurt of als hij
     // geraakt wordt (T.raak). Zo loopt hij niet vanzelf een gevecht in dat het spel kan beëindigen.
-    if (d || nu < (e.kijkt || 0) || e === D.schout) return d;
-    e.kijkt = nu + IN().kijkElke;
+    if (d || nu < (e.omkijken || 0) || e === D.schout) return d;
+    e.omkijken = nu + IN().kijkElke;
     const keus = kiesDoel(D, e, vijanden);
     if (!keus) return null;
     e.doelwit = keus.doel;
@@ -205,7 +205,7 @@
     delete e.doelwit;
     delete e.vanaf;
     e.pad = e.onderweg && e.pad.length ? [e.pad[0]] : [];
-    e.kijkt = nu + IN().rustNaLoslaten;
+    e.omkijken = nu + IN().rustNaLoslaten;
   }
 
   // Wat e doet met doel d: raakt hij het, dan blijft hij staan en slaat als zijn vorige slag lang genoeg geleden is; wie

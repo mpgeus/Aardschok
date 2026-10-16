@@ -55,11 +55,13 @@ zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, in `main`;
 een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, in `main`; `spel.md`, "Zo werkt het gevecht
 nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
 niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
-gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Het volgende is stap 3, formaties en de
-post** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, op de branch
+`claude/werklijst-doorgaan-vnked4`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
+*Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Het volgende is stap
+4, de diensten** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
-**Ronde 3 van het snoeien loopt** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
+**Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
 zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6 is af** (16 okt, in
@@ -69,6 +71,16 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De formaties bekijken** (vraag 170, stap 3, 16 okt, op de branch `claude/werklijst-doorgaan-vnked4`): Nieuw spel,
+  zet een wachthuis (B) met drie man militie (+), en maak er in de console een speerman en een boogschutter van
+  (`m = Spel.militieVan(Spel.S.dorp); m[1].bewoner.soldaat.soort = 'speerman'; m[2].bewoner.soldaat.soort =
+  'boogschutter'`). Kies ze (een kader), en klik rechts op open grond: hun plekken liggen een halve seconde in groen, en
+  ze gaan in een *Line* staan, de militie voor, de speer erachter, de boog achteraan, allemaal de kant op waar ze heen
+  liepen. Op hun briefje *Formation*: druk *Ring*, en ze staan in een kring om hun plek, naar buiten kijkend, de boog in
+  het midden; de volgende rechtsklik houdt de *Ring*. Te kiezen in de werkbank ("Choosing and sending"): hoeveel naast
+  elkaar (8) en hoe lang het groen blijft (0,5). **Om naar te kijken:** (1) het midden van de *Line* komt op de plek
+  waar je klikt, niet de voorste rij (zo kun je wisselen tussen *Line* en *Ring* zonder dat de troep verschuift); (2)
+  wie gevochten had, keek tot nu toe altijd naar het zuiden als hij stilstond (een fout, nu weg).
 - **Ronde 3 van het snoeien bekijken** (15 okt, in `main`): Nieuw spel. Er komt niemand meer
   met een uitroepteken naar je toe, R en de knop Rapport zijn weg, en de wetten (W) zijn het rantsoen en de belasting.
   Een status zegt het nu zelf in een bericht ("It is cold in the houses, for ..."; en als hij over is). In de droogte
@@ -599,7 +611,21 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   boven wie vecht, de schade als getal, de uitval, en een pijl of bout als korte streep (in code). **2e** het gevecht in
   beurten gaat er nu al uit (het raster, de actiepunten, einde beurt, de deur), niet pas in stap 5; de held die valt,
   blijft tot stap 5 het eind. De speeltest vecht niet meer zelf. De getallen in de werkbank ("Fighting").
-- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Bezig in sessie `claude/werklijst-doorgaan-vnked4`** (16 okt): het plan ligt bij Marcel.
+- **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1). **Af** (16 okt, op de branch `claude/werklijst-doorgaan-vnked4`; `spel.md`, "Zo
+  werkt kijken, kiezen en sturen nu", bij Formaties; `code.md` bij `js/kiezen.js`).
+  **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C1, D1, E1"): **3a** de plekken: een *Line* is rijen dwars
+  op de looprichting, voor wie slaat (hooivork, zwaard, de held), erachter wie steekt (speer en piek reiken 2 tegels),
+  een rij verder de schutters; een soort die er niet is, valt weg; een *Ring* zet wie slaat en steekt in een kring om de
+  plek, de schutters binnenin; een plek op een boom, huis of water schuift naar de dichtste vrije tegel. **3b** de
+  richting: de hele groep kijkt één kant op, van hun midden naar de klik, afgerond op de 8 kanten van de figuren (elk naar
+  zijn eigen laatste stap gaf een rij die alle kanten op keek); de richting hoort bij de post; alleen beeld, geen schade
+  van opzij. **3c** op het briefje van meer mannen *Line* en *Ring*: een druk zet ze meteen zo, rond hun post, en elke
+  volgende rechtsklik houdt die vorm; zonder keuze *Line*; een opdracht. De keuzes: **A1** de vorm hoort bij de mannen
+  (elke troep zijn eigen); **B1** hooguit 8 naast elkaar, wie er meer is, staat een rij erachter bij zijn soort (de
+  werkbank); **C1** in de *Ring* kijken ze naar buiten; **D1** in een gevecht zoals nu: wie een vijand ziet, gaat erop af
+  en komt terug naar zijn plek (de vorm die houdt, D2, naar `opmerkingen.md`); **E1** na de rechtsklik een halve seconde
+  de plekken in groen op de grond. Erbij: `js/gevecht.js` gebruikte `e.kijkt` als klok, en `js/sprites.js` als
+  kijkrichting, zodat wie gevochten had naar het zuiden keek als hij stilstond.
 - **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van

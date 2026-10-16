@@ -165,7 +165,10 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   S.gekozen = [a, b];
   const meer = T.gekozenBriefje(S).briefje;
   assert.equal(meer.kop, '2 men');
-  assert.equal(meer.delen[0].regels.length, 2, 'nog geen post: geen knop');
+  assert.equal(meer.delen[0].regels.length, 3, 'twee namen en hun formatie; nog geen post: geen knop terug');
+  const formatie = meer.delen[0].regels[2];
+  assert.equal(formatie.tekst, 'Formation');
+  assert.deepEqual(formatie.knoppen.map((k) => [k.tekst, k.kan]), [['Line', false], ['Ring', true]], 'een Line hebben ze al');
   const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout && p.huis);
   S.gekozen = dorpeling.wezen;
   const d = T.gekozenBriefje(S).briefje;
@@ -194,4 +197,169 @@ test('twee werelden met dezelfde bevelen blijven gelijk (lockstep)', () => {
     return JSON.stringify(T.bewaarSpel(S, { nu: 0 }));
   };
   assert.ok(speel() === speel());
+});
+
+// ── De formaties (vraag 170, stap 3; Marcel, 16 okt: "A1, B1, C1, D1, E1") ──
+
+// Een tegel met een vrij vierkant van `r` tegels eromheen, een eind van `van`, op land dat je kent: daar schuift niemand.
+function vrijVeld(D, van, dx, dy, r = 3) {
+  const vrij = (x, y) => T.isBegaanbaar(D.wereld, x, y) && T.kentTegel(D.wereld, x, y) && !T.gebouwOp(D, x, y);
+  for (let i = 0; i < 30; i++) {
+    const t = { x: van.x + dx + i, y: van.y + dy };
+    let ok = true;
+    for (let y = -r; y <= r && ok; y++) for (let x = -r; x <= r && ok; x++) ok = vrij(t.x + x, t.y + y);
+    if (ok) return t;
+  }
+  throw new Error('geen vrij veld');
+}
+// Zet wezen e op tegel (x, y), buiten en stil.
+function zetOp(e, x, y) {
+  Object.assign(e, { tx: x, ty: y, x, y, pad: [] });
+  delete e.binnen;
+}
+// Hoe ver een plek vooruit ligt in richting f, en hoe ver opzij.
+const vooruit = (p, naar, f) => (p.x - naar.x) * f.x + (p.y - naar.y) * f.y;
+const opzij = (p, naar, f) => (p.x - naar.x) * -f.y + (p.y - naar.y) * f.x;
+// Drie soldaten: militie, een speerman en een boogschutter (het wachthuis geeft ze hun wapens).
+function drieSoorten() {
+  const m = metMilitie();
+  const { D, huis } = m;
+  assert.equal(T.zetSoldaten(D, huis, 'militie', 1), true);
+  const [, b, c] = T.militieVan(D);
+  b.bewoner.soldaat.soort = 'speerman';
+  c.bewoner.soldaat.soort = 'boogschutter';
+  return { ...m, b, c };
+}
+
+test('de rij van een man: wie slaat voor, wie steekt erachter, wie schiet een rij verder', () => {
+  const { D, a, b, c } = drieSoorten();
+  assert.deepEqual([T.rijVan(a), T.rijVan(b), T.rijVan(c), T.rijVan(D.schout)], [0, 1, 2, 0]);
+});
+
+test('een Line: rijen dwars op de looprichting, op wapen gesorteerd, en ze kijken allemaal de kant op waar ze heen liepen', () => {
+  const { S, D, a, b, c } = drieSoorten();
+  const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
+  [a, b, c].forEach((e, i) => zetOp(e, naar.x - 6, naar.y + i - 1));
+  const { plekken, richting: f } = T.formatiePlekken(D, [c, b, a], naar);
+  assert.deepEqual(f, { x: 1, y: 0 }, 'ze lopen naar rechtsonder in beeld');
+  const van = (e) => plekken.find((p) => p.e === e);
+  assert.deepEqual([vooruit(van(a), naar, f), vooruit(van(b), naar, f), vooruit(van(c), naar, f)], [1, 0, -1], 'de middelste rij op de plek');
+  for (const p of plekken) assert.deepEqual(p.kijk, f);
+  // Als bevel: dat zijn hun posten, met hun kijkrichting.
+  T.geefOpdracht(S, T.handelingSturen(S, naar, [a, b, c]).opdracht);
+  T.wereldTik(S);
+  for (const e of [a, b, c]) assert.deepEqual([e.post.x, e.post.y, e.post.kijk, e.post.richting], [van(e).x, van(e).y, f, f]);
+});
+
+test('een Line: hooguit `breedte` naast elkaar, wie er meer is, staat een rij erachter; in een rij wie links liep links', () => {
+  const { D, huis, a, b } = metMilitie();
+  T.zetSoldaten(D, huis, 'militie', 1);
+  const c = T.militieVan(D)[2];
+  const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
+  const f = { x: 1, y: 0 };
+  const rij = T.formatiePlekken(D, [a, b, c], naar, f).plekken;
+  assert.ok(rij.every((p) => vooruit(p, naar, f) === 0), 'drie naast elkaar, op de plek');
+  assert.deepEqual(rij.map((p) => opzij(p, naar, f)).sort(), [-1, 0, 1]);
+  const IN = T.KIEZEN_INSTELLINGEN.formatie;
+  const was = IN.breedte;
+  IN.breedte = 2;
+  try {
+    const twee = T.formatiePlekken(D, [a, b, c], naar, f).plekken;
+    assert.deepEqual(twee.map((p) => vooruit(p, naar, f)).sort(), [-1, 0, 0], 'twee voor, een erachter');
+  } finally {
+    IN.breedte = was;
+  }
+  // Wie links staat, komt links: opzij gesorteerd zoals ze stonden.
+  zetOp(a, naar.x - 6, naar.y - 2);
+  zetOp(b, naar.x - 6, naar.y + 2);
+  const [pa, pb] = [a, b].map((e) => T.formatiePlekken(D, [a, b], naar, f).plekken.find((p) => p.e === e));
+  assert.ok(opzij(pa, naar, f) < opzij(pb, naar, f), 'niemand kruist');
+});
+
+test('een Ring: wie slaat en steekt in een kring om de plek, naar buiten kijkend; de schutters binnenin', () => {
+  const { S, D, a, b, c } = drieSoorten();
+  const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
+  T.zetFormatie(D, T.nummersVan(D, [a, b, c]), 'ring');
+  assert.deepEqual([a.formatie, b.formatie, c.formatie], ['ring', 'ring', 'ring'], 'zonder post: alleen de keuze');
+  assert.equal(a.post, undefined, 'en wie geen post heeft, blijft waar hij is');
+  const { plekken, richting: f } = T.formatiePlekken(D, [a, b, c], naar);
+  const van = (e) => plekken.find((p) => p.e === e);
+  assert.deepEqual([van(c).x, van(c).y], [naar.x, naar.y], 'de boogschutter in het midden');
+  assert.deepEqual(van(c).kijk, f);
+  for (const e of [a, b]) {
+    const p = van(e);
+    assert.equal(Math.max(Math.abs(p.x - naar.x), Math.abs(p.y - naar.y)), 1, `${e.naam} op de kring`);
+    assert.ok((p.x - naar.x) * p.kijk.x + (p.y - naar.y) * p.kijk.y > 0, `${e.naam} kijkt naar buiten`);
+  }
+  assert.notDeepEqual([van(a).x, van(a).y], [van(b).x, van(b).y]);
+  assert.equal(Math.abs(van(a).x - van(b).x) + Math.abs(van(a).y - van(b).y) >= 2, true, 'tegenover elkaar, niet naast elkaar');
+  // Alleen schutters: dan staan zij in de kring.
+  const alleen = T.formatiePlekken(D, [c], naar).plekken;
+  assert.deepEqual([alleen[0].x, alleen[0].y], [naar.x, naar.y], 'een man alleen staat op de plek');
+  S.kalender.snelheid = 10;
+});
+
+test('een plek op een boom, een huis of water schuift naar de dichtste vrije tegel', () => {
+  const { D, a, b, huis } = metMilitie();
+  const naar = { x: huis.x, y: huis.y };
+  assert.ok(!T.isBegaanbaar(D.wereld, naar.x, naar.y) || T.gebouwOp(D, naar.x, naar.y), 'op het wachthuis kan niemand staan');
+  const { plekken } = T.formatiePlekken(D, [a, b], naar);
+  for (const p of plekken) assert.ok(T.isBegaanbaar(D.wereld, p.x, p.y), `${p.e.naam} staat op een vrije tegel`);
+  assert.notDeepEqual([plekken[0].x, plekken[0].y], [plekken[1].x, plekken[1].y], 'elk een eigen tegel');
+});
+
+test('de formatie hoort bij de mannen: de knop zet wie een post heeft meteen zo, en de volgende rechtsklik houdt hem', () => {
+  const { S, D, a, b } = metMilitie();
+  const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
+  T.geefOpdracht(S, T.handelingSturen(S, naar, [a, b]).opdracht);
+  T.wereldTik(S);
+  const lijn = [a, b].map((e) => [e.post.x, e.post.y]);
+  // De knop Ring op hun briefje.
+  S.gekozen = [a, b];
+  const ring = T.gekozenBriefje(S).briefje.delen[0].regels.find((r) => r.tekst === 'Formation').knoppen[1];
+  assert.deepEqual(ring.opdracht, { soort: 'formatie', wie: [a.bewoner.id, b.bewoner.id], formatie: 'ring' });
+  T.geefOpdracht(S, ring.opdracht);
+  T.wereldTik(S);
+  assert.deepEqual([a.formatie, b.formatie], ['ring', 'ring']);
+  assert.notDeepEqual([a, b].map((e) => [e.post.x, e.post.y]), lijn, 'ze gaan meteen anders staan');
+  assert.deepEqual(a.post.richting, { x: 1, y: 0 }, 'de richting van de troep blijft');
+  assert.deepEqual(T.gekozenBriefje(S).briefje.delen[0].regels.find((r) => r.tekst === 'Formation').knoppen.map((k) => k.kan), [true, false]);
+  // De volgende rechtsklik houdt de Ring: twee man staan tegenover elkaar om de plek.
+  const verder = vrijVeld(D, naar, 0, 8);
+  T.geefOpdracht(S, T.handelingSturen(S, verder, [a, b]).opdracht);
+  T.wereldTik(S);
+  assert.deepEqual([a.formatie, b.formatie], ['ring', 'ring']);
+  for (const e of [a, b]) assert.equal(Math.max(Math.abs(e.post.x - verder.x), Math.abs(e.post.y - verder.y)), 1, 'om de plek');
+  // Samen met een man in een Line: de formatie van de meesten, bij gelijk een Line, en dan hebben ze die allemaal.
+  delete b.formatie;
+  T.stuurMannen(D, T.nummersVan(D, [a, b]), naar);
+  assert.deepEqual([a.formatie, b.formatie], [undefined, undefined]);
+  // Terug: de post en zijn richting zijn weg.
+  T.roepTerug(D, T.nummersVan(D, [a, b]));
+  assert.equal(a.post, undefined);
+});
+
+test('de held kijkt de kant op waar hij heen liep (hij heeft geen post), tot je hem op een vijand afstuurt', () => {
+  const { S, D, a } = metMilitie();
+  const held = D.schout;
+  const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
+  [held, a].forEach((e, i) => zetOp(e, naar.x - 6, naar.y + i));
+  T.stuurMannen(D, T.nummersVan(D, [held, a]), naar);
+  assert.equal(held.post, undefined);
+  const plek = T.formatiePlekken(D, [held, a], naar).plekken.find((p) => p.e === held);
+  assert.deepEqual(held.kijkt, { x: plek.x + 4, y: plek.y }, 'hij kijkt naar een plek voor zich, de kant op waar hij heen liep');
+  const wolf = T.maakWezen('wolf', naar.x + 2, naar.y);
+  D.wereld.wezens.push(wolf);
+  T.volgVijand(D, T.nummersVan(D, [held]), { x: wolf.tx, y: wolf.ty, soort: 'wolf' });
+  assert.equal(held.kijkt, undefined, 'op een vijand af: hij kijkt naar zijn vijand');
+  S.kalender.snelheid = 10;
+});
+
+test('de klok van het gevecht is niet de kijkrichting: wie om zich heen keek, heeft geen getal in e.kijkt', () => {
+  const { S, D, a } = metMilitie();
+  const wolf = T.maakWezen('wolf', a.tx + 3, a.ty);
+  D.wereld.wezens.push(wolf);
+  for (let i = 0; i < 30; i++) T.wereldTik(S);
+  assert.notEqual(typeof a.kijkt, 'number');
+  assert.equal(typeof a.omkijken, 'number', 'hij keek om zich heen');
 });

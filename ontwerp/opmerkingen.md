@@ -992,6 +992,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
+- **Een formatie die houdt** (16 okt, vraag 170, stap 3, D2): nu gaat wie in een *Line* of *Ring* een vijand ziet,
+  erop af (de leiband van 10 tegels), en komt daarna terug naar zijn plek. Een vorm die houdt: alleen wie vanaf zijn
+  plek raakt, slaat (de schutters schieten, wie voor staat wacht tot de vijand er is). Sterker voor een *Line* voor een
+  poort, maar een regel erbij; misschien als knop per troep (*Hold* en *Charge*). Niet gekozen (Marcel koos D1).
 - **Verweren per stand** (10 okt, bij het voorbeeldhuis, vraag 144): een hut van keuters verweerder dan het stenen huis
   van ambachtslieden, zodat het huis zelf zegt wie er woont, zonder briefje. Kan met de knop `verweer` als getal in plaats
   van aan of uit. Niet gekozen.

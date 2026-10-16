@@ -943,12 +943,14 @@
     // of, wie een vaste kant op moet kijken zolang hij stilstaat (`e.kijkt`: aan de schandpaal met
     // zijn rug naar de paal, js/heer.js), die kant op. `e.kijkt` kan ook een plek zijn: wie een praatje
     // maakt, kijkt naar de anderen (js/praatje.js). Wie naast zijn werk staat (een boom die hij omhakt,
-    // e.werkt.op, js/veldwerk.js), kijkt ernaar.
+    // e.werkt.op, js/veldwerk.js), kijkt ernaar. Een soldaat op zijn post kijkt de kant van zijn formatie op
+    // (post.kijk, js/kiezen.js), behalve als hij vecht: dan houdt hij de kant van zijn laatste slag.
     if (e.pad && e.pad.length) st.richting = S.richtingVan(e.pad[0].x - e.x, e.pad[0].y - e.y);
     else if (dx || dy) st.richting = S.richtingVan(dx, dy);
     else if (e.werkt && e.werkt.op) st.richting = S.richtingVan(e.werkt.op.x - e.x, e.werkt.op.y - e.y);
+    else if (e.post && e.post.kijk && !e.doelwit && e.tx === e.post.x && e.ty === e.post.y) st.richting = S.richtingVan(e.post.kijk.x, e.post.kijk.y);
     else if (typeof e.kijkt === 'string') st.richting = e.kijkt;
-    else if (e.kijkt && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
+    else if (e.kijkt && typeof e.kijkt === 'object' && !e.doelwit && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);
 
     // Eenmalige houdingen: uithalen en geraakt worden. Ze worden vastgehouden tot ze zijn
