@@ -87,8 +87,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De lobby kiezen** (vraag 170, stap 6c, 16 okt; bij I): ons eigen lobbyscherm in het menu met Steam eronder, of alleen
-  het overlay van Steam (L), en alleen vrienden of ook een openbare lijst (M); voorstel van Claude: L1, M1.
 - **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, in `main`): Nieuw spel, en
   in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
   tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
@@ -779,17 +777,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   met per dorp zijn gunst en zijn brieven (zoals nu al); de marskramer komt bij elk dorp op zijn eigen plek; je bouwt niet
   in het bereik van de ander; wie het spel opende, bewaart het (allebei de dorpen); en gebouwen van de ander aanvallen of
   in brand steken komt er nu niet bij (`opmerkingen.md`).
-  **De lobby** (Marcel, 16 okt, na 6a: "We hebben ook een menu nodig met een lobby etc. Of gebruiken we dat van steam";
-  **wacht op Marcel**): Steam geeft de lobby als dienst (Steamworks: een lobby met gegevens en een chat, uitnodigen via het
-  overlay en "Join game" in de vriendenlijst, de verbinding zonder poorten open te zetten), maar niet het scherm: dat
-  tekent elk spel zelf (in Electron met een koppeling als `steamworks.js`, `verpakken.md`). Voorstel van Claude: één
-  lobbyscherm van ons in het titelmenu (*Play together*): de een kiest *Host*, het eiland en de spelregels, nodigt uit
-  (op onze server met een code of link, op Steam met het overlay), wie meedoet staat in de lijst, en als iedereen klaar
-  is, drukt de opener *Start* en rijden ze allebei op dag 1 binnen (B1); Steam vervangt later alleen de lijn, niet het
-  scherm. Het hoort bij 6c. Te kiezen: **L** L1 ons eigen lobbyscherm met Steam eronder; L2 alleen het overlay van Steam,
-  zonder eigen scherm (het spel begint dan zodra de ander erbij komt, zonder eiland of "klaar"); **M** M1 alleen wie je
-  uitnodigt (vrienden; het voorstel uit `commercieel.md`, want een klein spel heeft lege lobby's); M2 ook een openbare
-  lijst. Voorstel: L1, M1.
+  **De lobby** (Marcel, 16 okt, na 6a: "We hebben ook een menu nodig met een lobby etc. Of gebruiken we dat van steam"):
+  Steam geeft de lobby als dienst, niet het scherm; besloten in 6d (hieronder, in een andere sessie): ons eigen scherm
+  onder *Play together*, met Steam eronder, voor vrienden.
   **De wereld van iedereen** (Marcel, 16 okt, na 6a: "Maar het moet echt full multiplayer worden. Niet 2 spelers op 1
   map. Het wild is van iedereen. Wolven etc. Rovers trekken rond en hebben kampen. Echt losse spelers met hun eigen dorp";
   **besloten**, Marcel: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1"). Wat Claude in 6a koos, gaat om: daar hoorden de wolven, de herten en de rovers bij een dorp (rond
@@ -857,7 +847,7 @@ achteraf leggen onder code die zonder gebouwd is, kost meer), F2 eerst de RTS (1
 
 **6d, de menu's voor samen spelen: besloten** (Marcel, 16 okt: "1. A 2. A 3. A 4. B 5. A", en daarna bij 4: "Ik wil
 ook dat degene die het spel opstart het spel opslaat", dus 4a; het voorstel van Claude in sessie
-`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c, op de branch `ccr-055aff40-lz2bwx`) gaat over de techniek;
+`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c; 6a is in `main`, en 6a2, de wereld van iedereen, komt ervoor) gaat over de techniek;
 dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het opslaan gaat zoals daar voorgesteld.
 - **Het titelscherm** krijgt *Play together*: dezelfde kaart als *New game* (de naam van je dorp, het land), uitgebreid
   tot de lobby. Wie opent, kiest het land en de spelregels (vast zodra je begint); ieder typt de naam van het eigen dorp
