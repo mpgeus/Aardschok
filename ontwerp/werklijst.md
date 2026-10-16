@@ -65,8 +65,7 @@ regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed*
 voor nu"). **Het lantaarntje in de hand is af** (16 okt, in `main`; Marcel: "A1, B1"; `beeld.md`,
 "De lantaarn van de groepsleider"), en zijn licht is op het scherm kleiner (Marcel: "het ligt vóór het poppetje", en
 koos L3). Daarna **stap 6, samen spelen** (bij
-I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dorpen, is af** (16 okt, op de branch
-`ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
+I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dorpen, is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
 eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Marcel kwam erna met "de wereld van
 iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
 N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens
@@ -85,7 +84,7 @@ stenen huizen. **Ronde 3 is af.**
 **Wacht op Marcel:**
 - **De lobby kiezen** (vraag 170, stap 6c, 16 okt; bij I): ons eigen lobbyscherm in het menu met Steam eronder, of alleen
   het overlay van Steam (L), en alleen vrienden of ook een openbare lijst (M); voorstel van Claude: L1, M1.
-- **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, op de branch `ccr-055aff40-lz2bwx`): Nieuw spel, en
+- **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, in `main`): Nieuw spel, en
   in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
   tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
   balk, de mist, de minikaart en de berichten zijn van hem; nog eens `wissel()` en je bent terug. Zet in het ene dorp een
@@ -825,7 +824,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   K2 de buit is weg. **L** hoe ze leren: L1 zoals hierboven, per dorp een getal dat stijgt na een makkelijke tocht en
   daalt na een slechte, en terugzakt naar het midden; L2 alleen onthouden waar het misging (een dorp met soldaten mijden ze
   een seizoen). Gekozen: K1, L1.
-  **6a is af** (16 okt, op de branch `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
+  **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
   (`D.plek`, `D.gekend`), het lopen gaat één keer per kaart, de maker legt een tweede plan op dezelfde kaart
