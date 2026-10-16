@@ -404,6 +404,7 @@
       pleinen: plein ? [plein] : [],
       plekken: [{
         naam: null, vak: { x: 0, y: 0, b, h }, plein, kamp: null, markt: null,
+        uitgang: overgangen[0] ? { x: overgangen[0].x, y: overgangen[0].y } : null,
         marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,
         heer: betekenis && betekenis.heer ? { ...betekenis.heer } : null,
       }],

@@ -152,8 +152,9 @@
 
   // ── Elke tik ──
 
-  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat; wie een rover ziet, vlucht; en
-  // het gevecht begint of houdt op.
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat (zijn mannen, en de rovers en
+  // wolven die bij het dorp horen, T.hoortBij in js/wereld.js: zo vecht elk wezen één keer per tik, ook met meer dorpen
+  // op één kaart); wie een rover of de mannen van een ander dorp ziet, vlucht; en het gevecht begint of houdt op.
   T.werkGevechtBij = function (S, D) {
     const w = D.wereld;
     if (!w || !w.wezens) return;
@@ -162,7 +163,7 @@
     const budget = { zoek: IN().zoekPerTik };
     let vecht = null;
     for (const e of w.wezens) {
-      if (e.dood || e.binnen) continue;
+      if (e.dood || e.binnen || !T.hoortBij(D, e)) continue;
       // Een wolf vecht zelf pas als zijn roedel vecht; valt hij iemand aan, dan roept die om hulp (js/beesten.js).
       if (!T.vechtVoor(D, e) && !(T.isVijandig(e) && (!e.beest || e.groep.vecht))) continue;
       const d = doelVan(S, D, e, nu, vijanden);
@@ -170,11 +171,10 @@
       vecht = vecht || plek(e);
       doeMet(S, D, e, d, nu, budget);
     }
-    vlucht(D, vijanden.filter((m) => !m.beest));
-    if (vecht) {
-      if (!D.gevecht) gevechtBegint(S, D, vecht, nu);
-      D.gevecht.laatst = nu;
-    } else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
+    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), en voor wie vecht voor een ander dorp.
+    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m))));
+    if (vecht) aanHetVechten(S, D, vecht, nu);
+    else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
     // Een roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen): dan gaat hij terug.
     else if (!D.gevecht && vijanden.some((v) => v.beest && v.groep.vecht)) T.wolvenNaHetGevecht(D);
   };
@@ -279,6 +279,7 @@
     const V = dorpVan(D, doel);
     const onze = T.vechtVoor(V, doel) || !!doel.bewoner;
     if (S.wereld === D.wereld) T.anim.tekst(S, doel, '-' + n, onze ? '#f3b1a5' : '#ffd36b');
+    if (V !== D) aanHetVechten(S, V, plek(doel), S.wereldTijd || 0); // wie aangevallen wordt, vecht ook
     if (doel.leven <= 0) {
       T.valt(S, D, doel, van);
       return;
@@ -358,13 +359,20 @@
     const w = D.wereld;
     for (const e of w.wezens) {
       const p = e.bewoner;
-      if (!p || p.schuilt || e.dood || e.binnen || e.aangehouden || T.vechtVoor(D, e)) continue;
+      if (!p || p.schuilt || e.dood || e.binnen || e.aangehouden || !T.hoortBij(D, e) || T.vechtVoor(D, e)) continue;
       const hier = plek(e);
       if (rovers.some((m) => T.afstand(plek(m), hier) <= IN().vluchtZicht && T.zichtTussen(w, plek(m), hier))) T.schuil(D, e);
     }
   }
 
   // ── Het gevecht als status ──
+
+  // Dorp D vecht nu, op `waar`: begint het gevecht, dan zegt het dat; hoe lang het nog duurt, telt vanaf nu. Ook als een
+  // ander dorp het aanvalt (raak, hierboven).
+  function aanHetVechten(S, D, waar, nu) {
+    if (!D.gevecht) gevechtBegint(S, D, waar, nu);
+    D.gevecht.laatst = nu;
+  }
 
   // Het gevecht begint: een bericht met de plek (een klik erop, of Spatie, brengt je erheen; js/ui.js), de status in de
   // balk, en de tijd op hooguit 1×.

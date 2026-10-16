@@ -644,7 +644,7 @@
     } else kiesMannen([e], erbij, erbij);
   }
   function kiesInKader(k, erbij) {
-    if (T.dorpHier(S) !== S.dorp) return;
+    if (!S.dorp || S.dorp.wereld !== S.wereld) return; // je eigen mannen, ook bij een ander dorp op de kaart
     const [x0, x1] = [Math.min(k.x0, k.x), Math.max(k.x0, k.x)];
     const [y0, y1] = [Math.min(k.y0, k.y), Math.max(k.y0, k.y)];
     const binnen = mannenInBeeld().filter((e) => {
@@ -1428,6 +1428,26 @@
       const p = T.opvolgerVan(D);
       return { aanvoerder: naam(D.aanvoerder), opvolger: p ? T.naamVanBewoner(p) : null, wapen: D.aanvoerder ? T.slagVan(D.aanvoerder).wapen : null };
     },
+    // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/gebied.js): op de dichtste andere
+    // dorpsplek, met het lege begin. Spel.debug.wissel() maakt jou het volgende dorp, zodat je ze in één browser speelt:
+    // wat je ziet, hoort, bouwt en stuurt, is dan van dat dorp (S.dorp; alleen scherm).
+    tweedeDorp() {
+      if (!S.dorp.plek.naam) return 'Een tweede dorp kan alleen op het eiland.'; // geen tekst
+      const D = T.dorpErbij(S);
+      const v = (P) => ({ x: P.plek.vak.x + P.plek.vak.b / 2, y: P.plek.vak.y + P.plek.vak.h / 2 });
+      return `Een tweede dorp in ${D.plek.naam}, ${Math.round(T.afstand(v(S.dorpen[0]), v(D)))} tegels verder. Spel.debug.wissel() maakt het van jou.`; // geen tekst
+    },
+    wissel() {
+      if (S.dorpen.length < 2) return 'Er is maar één dorp: Spel.debug.tweedeDorp() maakt er een bij.'; // geen tekst
+      S.dorp = S.dorpen[(S.dorpen.indexOf(S.dorp) + 1) % S.dorpen.length];
+      S.gekozen = null;
+      S.groepen = {};
+      const m = T.pleinVan(S.dorp) || { x: S.dorp.plek.vak.x + S.dorp.plek.vak.b / 2, y: S.dorp.plek.vak.y + S.dorp.plek.vak.h / 2 };
+      const p = T.naarSchermOp(S.wereld, m.x, m.y);
+      T.kijkNaar(p.x, p.y);
+      T.ui.werkBalkBij(S);
+      return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
+    },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
     rovers(wat) {
@@ -1747,6 +1767,7 @@
         }
         S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
         const e = T.zetOpWeide(T.maakDier(soort, plek.x, plek.y, S.dorp.veeZaad), v);
+        e.dorp = S.dorp;
         w.wezens.push(e);
         opWeide.push(e);
       }
@@ -1782,6 +1803,7 @@
             if (dieren.some((d) => T.afstand({ x: d.tx, y: d.ty }, { x, y }) < 2)) continue;
             S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
             const e = T.maakDier(soort, x, y, S.dorp.veeZaad);
+            e.dorp = S.dorp;
             w.wezens.push(e);
             dieren.push(e);
             geplaatst.push(e);

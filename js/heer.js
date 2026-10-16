@@ -147,7 +147,7 @@
       if (n > 0) regels.push({ wat, aantal: n, waarom });
     };
     // Hij rekent op wat het dorp heeft: elke akker, elke ziel, het goud in de kist en elk gebouw.
-    const akkers = (D.wereld && D.wereld.akkers) || [];
+    const akkers = T.veldenVan(D);
     const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
     if (IN().graan === 'deel') {
       const graan = (D.voorraad && D.voorraad.graan) || 0;
@@ -343,7 +343,7 @@
     const eten = Math.max(0, (D.bevolking || 0) * perMens * (oogst - dag) - melk);
     const soldaten = g && g.soldaten ? soldatenPerDag() * (lente - dag) : 0;
     const wordtAkker = (a) => T.planVan(a) === 'akker';
-    const tegels = ((D.wereld && D.wereld.akkers) || []).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
+    const tegels = T.veldenVan(D).filter(wordtAkker).reduce((n, a) => n + a.b * a.h, 0);
     const zaaien = tegels * (T.ZAAIGRAAN_PER_TEGEL || 0);
     const na = ((D.voorraad && D.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
     const kaas = (D.voorraad && D.voorraad.kaas) || 0;
@@ -761,10 +761,12 @@
       if (!T.bezoekerKomtAan(D, b)) return;
       // Hij komt de kaart op, met zijn twee soldaten vlak achter zich.
       const heer = T.maakMens('heer', uitgang.x, uitgang.y, 1);
+      heer.dorp = D; // op bezoek in dit dorp (T.hoortBij, js/wereld.js)
       heer.thuis = { x: plek.x, y: plek.y };
       const soldaten = [];
       for (let i = 0; i < IN().soldaten; i++) {
         const s = T.maakMens('soldaat', uitgang.x, uitgang.y, 2);
+        s.dorp = D;
         s.thuis = { x: plek.x + (i ? 1 : -1), y: plek.y + 1 };
         soldaten.push(s);
       }

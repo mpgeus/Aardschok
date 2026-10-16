@@ -1118,6 +1118,7 @@
     pleinTegels: T.t('square tiles'),
     eikenTot: T.t('oaks up to'),
     marktRij: T.t('market row at least'),
+    anderDorp: T.t('another village at least'),
     openRond: T.t('land opens within'),
     vooruit: T.t('land made ahead within'),
     vooruitDeel: T.t('land made in parts of'),

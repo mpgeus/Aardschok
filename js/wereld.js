@@ -469,11 +469,16 @@
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
   };
-  // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren. Een wezen van een dorp draagt zijn
-  // dorp mee (`e.dorp`, gezet waar het ontstaat: T.nieuwDorp, het poppetje van een bewoner in js/bewoners.js, T.maakKar),
-  // zodat er meer dorpen op één kaart kunnen leven (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op
-  // hetzelfde eiland"). Zij maken het land open (hieronder) en kijken door de mist van hun dorp (js/mist.js).
-  T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen;
+  // Bij welk dorp een wezen hoort (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op hetzelfde
+  // eiland"): een wezen draagt zijn dorp mee (`e.dorp`, gezet waar het ontstaat: T.nieuwDorp, het poppetje van een
+  // bewoner in js/bewoners.js, T.maakKar, het vee, de wolven en de herten van zijn bos, de rovers van een overval, en wie
+  // op bezoek komt: de marskramer, de heer en zijn soldaten). Elk dorp werkt alleen zijn eigen wezens bij (zijn
+  // dobbelsteen, zijn dag, zijn gevecht), zodat er meer dorpen op één kaart kunnen leven zonder elkaar te raken; een
+  // wezen zonder dorp (een kaart uit Tiled, een toets) hoort bij elk.
+  T.hoortBij = (D, e) => !e.dorp || e.dorp === D;
+  // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren (geen dier en geen bezoeker). Zij
+  // maken het land open (hieronder) en kijken door de mist van hun dorp (js/mist.js).
+  T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen && (!!e.bewoner || !!e.kar || e === D.aanvoerder);
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
   // van de aanvoerder, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.
@@ -1010,10 +1015,14 @@
   // leven): wat de maker voor dat dorp legde, of wat een kaart uit Tiled noemt (js/kaart.js). { naam (de dorpsplek op
   // het eiland, E.plekken, of null), vak (zijn land, { x, y, b, h }), plein (de rand van zijn plein, of null),
   // marskramer (waar de marskramer uitstalt, { x, y, komt? }, of null), heer (waar de heer staat, alleen op een kaart uit
-  // Tiled), kamp (het kamp van het lege begin, js/begin.js), markt (de marktplek op het plein, js/markt.js) }. Wat het
+  // Tiled), kamp (het kamp van het lege begin, js/begin.js), markt (de marktplek op het plein, js/markt.js), uitgang (waar
+  // zijn weg de wereld in gaat, { x, y }, of null; T.wegInEnUit in js/handel.js) }. Wat het
   // dorp met zijn plek doet, vraagt het dorp (T.pleinTegels(D), T.pleinVan(D)); een kaart geeft haar plekken door in
   // w.plekken, en T.nieuwDorp neemt er een (js/dorp.js). Het gereedschap, dat zijn eigen dorp is, neemt de eerste.
-  T.legePlek = (w) => ({ naam: null, vak: T.kaartVak(w), plein: null, marskramer: null, heer: null, kamp: null, markt: null });
+  T.legePlek = (w) => {
+    const o = (w.overgangen || [])[0];
+    return { naam: null, vak: T.kaartVak(w), plein: null, marskramer: null, heer: null, kamp: null, markt: null, uitgang: o ? { x: o.x, y: o.y } : null };
+  };
 
   // De tegels van het plein van een dorp, rij voor rij van boven naar onder, en in een rij van links naar rechts. Eén keer
   // per plein uitgerekend, want de rand van een plein verandert niet (werklijst, vraag 71: dit werd elke dag voor elk

@@ -28,6 +28,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post, in een *Line* of een *Ring*: stap 3, 16 okt) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen; een dag- of nachtdienst per soldaat, *To arms* op het wachthuis, en rovers op elk uur (stap 4, 16 okt) ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
 | De held en het opruimen | gebouwd (16 okt, vraag 170, stap 5; Marcel: "A1, B1, C2"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het over, met zijn eigen wapen, en zijn gezin ruilt van huis; weg: de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten ("Zo werkt de held nu", bij Rovers en de militie) | vraag 170 |
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
+| Meer dorpen op één eiland | gebouwd (16 okt, vraag 170, stap 6a; Marcel: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van hetzelfde eiland, met zijn eigen plek, mensen, velden en mist; wie van een ander dorp is, is een vijand, ook een dorpeling; je bouwt niet in zijn bereik; te spelen in één browser met `Spel.debug.tweedeDorp()` en `Spel.debug.wissel()` ("Zo werken meer dorpen op één eiland nu", bij Rovers en de militie) | vraag 170 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -1157,6 +1158,23 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   schommelt hij mee met de arm, en wie een hand in de zij heeft, draagt hem op de heup. Een dak of een boom ervoor
   bedekt hem met zijn drager. Zijn licht is op het scherm een kleine plas (1,5 tegel; Marcel koos L3, want de plas van 3
   tegels lag als een waas over wie hem droeg), maar de wolven vallen niemand binnen 3 tegels aan. De bode en wie meegaat krijgen er ook een, als ze een vel met handen hebben.
+
+**Zo werken meer dorpen op één eiland nu** (16 okt, vraag 170, stap 6a; Marcel: "A1 b1 c2 d1"; `code.md` bij `js/dorp.js`
+en `js/maker.js`): de grond voor samen spelen (stap 6). Een tweede dorp (`T.dorpErbij`; in de browser
+`Spel.debug.tweedeDorp()`) komt op de dichtste andere dorpsplek van hetzelfde eiland die minstens 200 tegels weg ligt (de
+werkbank, "The maker": *another village at least*; op een eiland liggen ze 430 tot 2100 tegels uit elkaar), op dezelfde
+kaart, met het lege begin: zijn huifkar, zijn gezinnen, zijn plein, zijn marktplek en zijn weg de wereld in. Elk dorp
+heeft zijn eigen mensen, vee, wolven, rovers en bezoekers (een wezen draagt zijn dorp mee), zijn eigen velden, en zijn
+eigen mist (wat het kent); elk dorp werkt alleen zijn eigen wezens bij, met zijn eigen dobbelsteen, zodat het ene het
+andere niet raakt: het eerste dorp speelt een half jaar letter voor letter hetzelfde, met of zonder het tweede. **C2:** wie
+van een ander dorp is, is een vijand, zijn aanvoerder, zijn soldaten en zijn dorpelingen (zijn ossenkar niet): een soldaat
+valt hem aan als hij hem ziet, een dorpeling vlucht voor zijn mannen naar zijn eigen town hall, en wie aangevallen wordt,
+vecht ook (de status, het bericht). Je bouwt niet in het bereik van een ander dorp ("This land belongs to ..."). Met
+`Spel.debug.wissel()` ben jij het andere dorp: de camera gaat erheen, en wat je ziet, hoort, bouwt en stuurt, is van
+hem; berichten en brieven van het andere dorp komen niet bij jou. De muis op een mens, een gebouw of een veld van het
+andere dorp zegt alleen wat het is, en van wie. Wat (nog) niet per dorp is: het licht, de rook en de paadjes tekent het
+scherm voor het dorp waar de camera het dichtst bij is, de spelregel "Hoogte" legt alleen heuvels onder het eerste dorp,
+en de bouwstijl is die van het eerste (`opmerkingen.md`).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

@@ -331,10 +331,15 @@
   };
   // Waarom er op het vak r niet gebouwd kan worden, omdat het (deels) buiten het bereik ligt, of null
   // (T.waaromPastHetNiet, js/gebouwen.js).
+  // Ook niet in het bereik van een ander dorp op de kaart (werklijst vraag 170, stap 6a): de kaart weet wie waar woont
+  // (de plekken die ze doorgaf, w.plekken, met hun dorp: T.nieuwDorp, js/dorp.js).
   T.waaromBuitenBouwBereik = function (D, r) {
+    const anderen = ((D.wereld && D.wereld.plekken) || []).map((p) => p.dorp).filter((A) => A && A !== D && A.begin);
     for (let y = r.y; y < r.y + r.h; y++) {
       for (let x = r.x; x < r.x + r.b; x++) {
         if (!T.inBouwBereik(D, x, y)) return T.t('Too far away: you build within {n} tiles of the square or of a store.', { n: IN().bouwBereik });
+        const A = anderen.find((a) => T.inBouwBereik(a, x, y));
+        if (A) return T.t('This land belongs to {dorp}: you do not build there.', { dorp: T.dorpsnaam(A) || A.plek.naam || T.t('another village') });
       }
     }
     return null;

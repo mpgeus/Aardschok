@@ -73,6 +73,7 @@
     if (aanvoerder) aanvoerder.dorp = D; // hij is van dit dorp (T.isVanDorp, js/wereld.js)
     // Zijn plek op de kaart (T.legePlek, js/wereld.js): wat `plek` meegeeft, anders de eerste die de kaart noemt.
     D.plek = o.plek || (w.plekken && w.plekken[0]) || T.legePlek(w);
+    D.plek.dorp = D; // de kaart weet zo wie waar woont (w.plekken; T.waaromBuitenBouwBereik, js/begin.js)
     // Wat het dorp kent (de mist, js/mist.js): op het eiland bij het begin een kring om het midden van zijn land.
     D.gekend = new Map();
     if (T.opEiland(w)) T.kenHetBegin(D, D.plek.vak);
@@ -108,7 +109,7 @@
   // werklijst vraag 170, stap 1d; Marcel: "Een bericht brengt je erheen").
   T.zeg = function (D, tekst, soort, plek) {
     if (!D.ander) {
-      if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort, plek);
+      if (T.ui && T.ui.bericht) T.ui.bericht(tekst, soort, plek, D); // het scherm toont alleen wat je eigen dorp zegt (js/ui.js)
       return;
     }
     const g = D.gezegd || (D.gezegd = []);
@@ -134,14 +135,23 @@
     T.werkBrandBij(S, D); // de brand: het huis brandt, tot de buren hem geblust hebben of het afgebrand is (js/brand.js)
     T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
     T.werkMistBij(S, D); // wat je mensen en je gebouwen zien, ken je voortaan (js/mist.js)
-    if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
+    // Waar je kijkt, maaien en dwalen ze in T.wereldTik (js/tik.js), en worden ze getekend; het lopen doet de tik voor
+    // elke kaart één keer, ook voor deze.
+    if (D.wereld === S.wereld) return;
     T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
-    T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)
     T.werkOogstBij(S, D, dtWereld); // maaien (js/akkers.js)
     T.werkVeldwerkBij(S, D); // de boeren op hun land (js/veldwerk.js)
     T.dwaal(S, D.wereld, D, dtWereld); // en dwalen, naar het ritme van de dag (js/verkennen.js)
   };
 
-  // Het dorp met de kaart die op het scherm is, of null (een ander gebied, js/gebied.js).
-  T.dorpHier = (S) => (S.dorpen || []).find((D) => D.wereld === S.wereld) || null;
+  // Het dorp waar je kijkt, voor het scherm (het tekenen, de muis, een klik): van de dorpen op de kaart die op het scherm
+  // is, dat waarvan het land het dichtst bij het midden van het beeld ligt; of null (een ander gebied, js/gebied.js). Op
+  // één kaart kunnen meer dorpen liggen (werklijst vraag 170, stap 6a). De wereld vraagt het niet: die werkt elk dorp bij.
+  T.dorpHier = function (S) {
+    const hier = (S.dorpen || []).filter((D) => D.wereld === S.wereld);
+    if (hier.length < 2 || !S.camera) return hier[0] || null;
+    const c = T.naarWereld(S.camera.x, S.camera.y);
+    const af = (D) => Math.hypot(D.plek.vak.x + D.plek.vak.b / 2 - c.x, D.plek.vak.y + D.plek.vak.h / 2 - c.y);
+    return hier.reduce((a, b) => (af(b) < af(a) ? b : a));
+  };
 })(globalThis.Spel = globalThis.Spel || {});

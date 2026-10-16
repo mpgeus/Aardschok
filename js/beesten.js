@@ -262,6 +262,7 @@
       if (!plek) continue;
       thuizen.push(plek.thuis);
       const G = nieuweGroep(soort, Math.floor(r() * 1e9), plek);
+      G.dorp = D; // de roedel of de kudde leeft in het bos van dit dorp (T.hoortBij, js/wereld.js)
       const [van, tot] = soort === 'wolf' ? IN().roedel : IN().kudde;
       plekkenBij(w, G.thuis, van + Math.floor(r() * (tot - van + 1))).forEach((p) => w.wezens.push(maakBeest(G, p, G.geteld++)));
       if (soort === 'wolf') zetHol(D, G);
@@ -323,7 +324,8 @@
   function onderhoudHollen(D) {
     const w = D.wereld;
     const levend = new Set(T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg).map(({ G }) => G));
-    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && !levend.has(x.groep))) T.haalVoorwerpWeg(w, v);
+    // alleen de hollen van dit dorp (een hol hoort bij zijn roedel, en die bij een dorp: T.hoortBij, js/wereld.js)
+    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && T.hoortBij(D, x.groep) && !levend.has(x.groep))) T.haalVoorwerpWeg(w, v);
     for (const G of levend) if (!T.holVan(D, G)) zetHol(D, G);
   }
 
@@ -431,7 +433,7 @@
       e.vel = i === 0 ? soort.leider : soort.vellen[Math.floor(lot(zaad, 1, 116) * soort.vellen.length)];
     }
     Object.assign(e, {
-      beest: G.soort, groep: G, leider: i === 0, dwaalt: false, thuis: null, straal: 0, zaad,
+      beest: G.soort, groep: G, dorp: G.dorp, leider: i === 0, dwaalt: false, thuis: null, straal: 0, zaad,
       snelheid: soort.snelheid, rust: G.soort === 'hert' ? 'liggen' : 'staan', rent: false,
       fase: lot(zaad, 2, 116) * 2 * Math.PI,
       beginRichting: RICHTINGEN[Math.floor(lot(zaad, 3, 116) * RICHTINGEN.length)],
@@ -443,8 +445,8 @@
   function haalWeg(D) {
     const w = D.wereld;
     if (w) {
-      w.wezens = w.wezens.filter((e) => !e.beest);
-      for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol')) T.haalVoorwerpWeg(w, v);
+      w.wezens = w.wezens.filter((e) => !(e.beest && T.hoortBij(D, e)));
+      for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && T.hoortBij(D, x.groep))) T.haalVoorwerpWeg(w, v);
     }
     D.beesten.gezet = false;
   }
@@ -467,7 +469,7 @@
     const groepen = new Map();
     let weg = false;
     for (const e of w.wezens) {
-      if (!e.groep || e.dood) continue;
+      if (!e.groep || e.dood || !T.hoortBij(D, e)) continue; // alleen de roedels en kuddes van dit dorp (js/wereld.js)
       if (e.groep.trektWeg) {
         weg = true;
         continue;
@@ -477,7 +479,7 @@
       else groepen.set(e.groep, [e]);
     }
     // Een groep die wegtrekt (T.tikBeestenDag), gaat van de kaart; niet midden in een gevecht, waar een wolf meevecht.
-    if (weg && !D.gevecht) w.wezens = w.wezens.filter((e) => !(e.groep && e.groep.trektWeg));
+    if (weg && !D.gevecht) w.wezens = w.wezens.filter((e) => !(e.groep && e.groep.trektWeg && T.hoortBij(D, e)));
     for (const [G, leden] of groepen) werkGroepBij(S, D, G, leden);
   };
 
@@ -695,7 +697,8 @@
     }
     if (!IN().aan || !D.beesten || !D.beesten.gezet || !T.heeftTegels(w)) return;
     // Een wolf die in een gevecht viel, ligt er niet meer.
-    if (w.wezens.some((e) => e.beest && e.dood)) w.wezens = w.wezens.filter((e) => !(e.beest && e.dood));
+    const dood = (e) => e.beest && e.dood && T.hoortBij(D, e);
+    if (w.wezens.some(dood)) w.wezens = w.wezens.filter((e) => !dood(e));
     onderhoudHollen(D);
     let groepen = T.beestenVan(D).filter(({ G }) => !G.trektWeg);
     if (!groepen.length) return;
@@ -799,7 +802,7 @@
     const thuizen = groepen.filter((x) => !x.G.trektWeg).map((x) => x.G.thuis);
     const plek = zelfde < plaats ? nieuwThuis(D.wereld, kaart, open, midden, G.soort, thuisKandidaten(D.wereld, kaart, midden, landZaad(D)), thuizen, 15) : null;
     const G2 = nieuweGroep(G.soort, Math.floor(lot(G.zaad, G.geteld, 43) * 1e9), plek || G);
-    Object.assign(G2, { honger: G.honger, jongenJaar: G.jongenJaar, geteld: helft.length, trektWeg: !plek });
+    Object.assign(G2, { dorp: G.dorp, honger: G.honger, jongenJaar: G.jongenJaar, geteld: helft.length, trektWeg: !plek });
     helft.forEach((e, i) => {
       e.groep = G2;
       e.leider = i === 0;
@@ -1014,11 +1017,11 @@
     if (!w || !D.kalender) return;
     for (const e of w.wezens) {
       const G = e.groep;
-      if (!G || !G.vecht) continue;
+      if (!G || !G.vecht || !T.hoortBij(D, e)) continue;
       delete e.doelwit;
       delete e.vanaf;
     }
-    for (const G of new Set(w.wezens.filter((e) => e.groep && e.groep.vecht).map((e) => e.groep))) {
+    for (const G of new Set(w.wezens.filter((e) => e.groep && e.groep.vecht && T.hoortBij(D, e)).map((e) => e.groep))) {
       G.vecht = false;
       G.honger = 0;
       G.prooi = null;
@@ -1154,7 +1157,7 @@
   T.beestenVan = function (D) {
     const uit = new Map();
     for (const e of (D && D.wereld && D.wereld.wezens) || []) {
-      if (!e.groep || e.dood) continue;
+      if (!e.groep || e.dood || !T.hoortBij(D, e)) continue;
       if (!uit.has(e.groep)) uit.set(e.groep, []);
       uit.get(e.groep).push(e);
     }

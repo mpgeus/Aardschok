@@ -75,8 +75,8 @@
   // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null.
   T.handelingSturen = function (S, doel, mannen) {
     if (!doel || !mannen || !mannen.length) return null;
-    const D = T.dorpHier(S);
-    if (!D || D !== S.dorp) return null;
+    const D = S.dorp; // je stuurt je eigen mannen, ook bij een ander dorp op dezelfde kaart
+    if (!D || D.wereld !== S.wereld) return null;
     const wie = T.nummersVan(D, mannen);
     const geef = (o) => () => T.geefOpdracht(S, o);
     if (doel.wezen && isVijand(D, doel.wezen)) {

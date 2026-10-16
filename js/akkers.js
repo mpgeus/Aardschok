@@ -213,7 +213,8 @@
   // volgend jaar), en wat dat samen kost. { velden, nodig }.
   T.mestPlan = function (D) {
     const w = D && D.wereld;
-    const akkers = ((w && w.akkers) || []).filter((v) => T.planVan(v) === 'akker');
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    const akkers = ((w && eigenVelden) || []).filter((v) => T.planVan(v) === 'akker');
     const velden = !VIN().vruchtbaarheid ? [] : VIN().mestVanzelf ? akkers : akkers.filter((v) => v.mest);
     return { velden, nodig: velden.reduce((n, v) => n + T.mestVoorVeld(v), 0) };
   };
@@ -265,17 +266,18 @@
   // verdwijnt niet omdat een plan niet klopte. Geeft [{ veld, was, wordt, vruchtbaarheid }].
   T.wisselVelden = function (D) {
     const w = D.wereld;
-    if (!w || !w.akkers) return [];
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden) return [];
     const IN = VIN();
     const vee = T.weideVee ? T.weideVee(D) : []; // de schapen op de meent hebben geen weide nodig
-    if (vee.length && !w.akkers.some((v) => T.planVan(v) === 'weide')) {
-      for (const v of w.akkers) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
+    if (vee.length && !eigenVelden.some((v) => T.planVan(v) === 'weide')) {
+      for (const v of eigenVelden) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
       T.zeg(D, T.t('There would be no meadow left, but the cattle must graze somewhere: the meadow stays a meadow.'), 'gevaar');
     }
     const verslag = [];
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
     const mest = IN.vruchtbaarheid ? strooiMest(D) : new Map();
-    for (const v of w.akkers) {
+    for (const v of eigenVelden) {
       const was = T.bestemmingVan(v);
       if (IN.vruchtbaarheid) {
         const erbij = (was === 'akker' ? -IN.akkerPutUit : was === 'braak' ? IN.braakRust : IN.weideMest) + (mest.get(v) || 0) * IN.mestErbij;
@@ -303,13 +305,14 @@
   // waarom }].
   T.boerenKiezenVelden = function (D) {
     const w = D.wereld;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
     const IN = VIN();
-    if (!IN.boerenKiezen || !w || !w.akkers) return [];
+    if (!IN.boerenKiezen || !w || !eigenVelden) return [];
     // De mest die er is, min wat jij al op een veld legde.
     let mest = (D.voorraad && D.voorraad.mest) || 0;
-    for (const v of w.akkers) if (v.planDoor === 'speler' && v.mest) mest -= T.mestVoorVeld(v);
+    for (const v of eigenVelden) if (v.planDoor === 'speler' && v.mest) mest -= T.mestVoorVeld(v);
     const anders = [];
-    for (const v of w.akkers) {
+    for (const v of eigenVelden) {
       if (v.planDoor === 'speler') continue;
       const nu = T.bestemmingVan(v);
       let plan = nu === 'braak' ? 'akker' : nu;
@@ -354,9 +357,9 @@
 
   // Hoeveel koeien de weides de winter door brengen: hun hooi (T.VEE_INSTELLINGEN.hooiPerTegel per tegel) gedeeld door
   // wat een koe in een winter eet.
-  function koeienVoorHetHooi(w) {
+  function koeienVoorHetHooi(D) {
     const V = T.VEE_INSTELLINGEN;
-    const tegels = w.akkers.filter((v) => T.planVan(v) === 'weide').reduce((n, v) => n + v.b * v.h, 0);
+    const tegels = T.veldenVan(D).filter((v) => T.planVan(v) === 'weide').reduce((n, v) => n + v.b * v.h, 0);
     return (tegels * V.hooiPerTegel) / (150 * V.hooiPerDag.koe);
   }
 
@@ -365,12 +368,13 @@
   // heeft. Eén per jaar; wat jij koos, laten ze staan. Geeft { veld, plan, mest, weide, waarom } of null.
   function weideErbij(D, anders) {
     const w = D.wereld;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
     const honger = (D.behoeften && D.behoeften.voorjaarsHonger) || 0;
     if (!VIN().weideNaHonger || honger < VIN().weideNaHonger) return null;
     const koeien = T.veeVan(D).filter((e) => e.dier === 'koe').length;
-    if (koeien + 1 <= koeienVoorHetHooi(w)) return null;
-    const vrij = w.akkers.filter((v) => v.planDoor !== 'speler' && T.planVan(v) !== 'weide');
-    const vanBoer = (v) => w.akkers.filter((x) => x.huis === v.huis && T.planVan(x) === 'akker').length;
+    if (koeien + 1 <= koeienVoorHetHooi(D)) return null;
+    const vrij = eigenVelden.filter((v) => v.planDoor !== 'speler' && T.planVan(v) !== 'weide');
+    const vanBoer = (v) => eigenVelden.filter((x) => x.huis === v.huis && T.planVan(x) === 'akker').length;
     const kies = vrij.find((v) => T.planVan(v) === 'braak') ||
       vrij.filter((v) => T.planVan(v) === 'akker' && vanBoer(v) > 1).sort((a, b) => T.vruchtbaarheidVan(a) - T.vruchtbaarheidVan(b))[0];
     if (!kies) return null;
@@ -646,7 +650,7 @@
     const werktijd = T.isWerktijd(D.kalender.dag, true);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
-      if (e.dood) continue;
+      if (e.dood || !T.hoortBij(D, e)) continue;
       // De boer maait zijn eigen akkers en weides; een dagloner het graan van de boerderij die hem nam.
       const isBoer = !!(e.werkAkkers && e.werkAkkers.length);
       const akkers = isBoer ? e.werkAkkers : akkersVanDagloner(D, e);
@@ -766,13 +770,14 @@
   // boer rot nog wel: er is niemand om hem binnen te halen. Geeft het aantal tegels terug.
   T.haalOogstBinnen = function (D) {
     const w = D.wereld;
-    if (!w || !w.akkers) return 0;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden) return 0;
     let tegels = 0;
     let graan = 0;
     // Per boerderij, want daar ligt het tot de ossenkar het haalt (js/kar.js; werklijst C, stap 3).
     const perBoerderij = new Map();
     const bij = (g, n) => perBoerderij.set(g, (perBoerderij.get(g) || 0) + n);
-    for (const akker of w.akkers) {
+    for (const akker of eigenVelden) {
       const boer = boerVan(w, akker);
       if (!boer) continue;
       if (!akker.geoogst) akker.geoogst = new Set();
@@ -794,7 +799,7 @@
     }
     // Wat ze nog droegen, is ook binnen.
     for (const e of w.wezens || []) {
-      if (!(e.vracht > 0)) continue;
+      if (!(e.vracht > 0) || !T.hoortBij(D, e)) continue;
       graan += e.vracht;
       bij(e.vrachtVoor || null, e.vracht);
       e.vracht = 0;
@@ -845,15 +850,16 @@
   // rekent ermee als het kijkt of het eten de winter haalt (T.etenVoorDeWinter, js/behoeften.js).
   T.graanOpHetVeld = function (D) {
     const w = D.wereld;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
     let graan = 0;
-    for (const a of (w && w.akkers) || []) for (const s of (a.schoven && a.schoven.values()) || []) graan += s.graan;
-    for (const e of (w && w.wezens) || []) graan += e.vracht || 0;
+    for (const a of (w && eigenVelden) || []) for (const s of (a.schoven && a.schoven.values()) || []) graan += s.graan;
+    for (const e of (w && w.wezens) || []) if (T.hoortBij(D, e)) graan += e.vracht || 0;
     return graan;
   };
   // Elke nacht (T.tikAkkersDag): wat iemand nog droeg, is mee de schuur in.
   T.tikSchovenDag = function (D) {
     for (const e of (D.wereld && D.wereld.wezens) || []) {
-      if (!(e.vracht > 0)) continue;
+      if (!(e.vracht > 0) || !T.hoortBij(D, e)) continue;
       T.haalSchovenBinnen(D, e.vracht, e.vrachtVoor);
       e.vracht = 0;
       e.vrachtVoor = null;
@@ -866,11 +872,12 @@
   // wánneer het hooi binnenkomt, niet hoeveel. Geeft het aantal tegels terug.
   T.haalHooiBinnen = function (D) {
     const w = D.wereld;
-    if (!w || !w.akkers) return 0;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden) return 0;
     let tegels = 0;
     let hooi = 0;
     const perBoerderij = new Map(); // daar ligt het tot de ossenkar het haalt (js/kar.js)
-    for (const veld of w.akkers) {
+    for (const veld of eigenVelden) {
       const boer = boerVan(w, veld);
       if (!boer) continue;
       if (!veld.gehooid) veld.gehooid = new Set();
@@ -883,7 +890,7 @@
       const g = veld.boerderij || null;
       perBoerderij.set(g, (perBoerderij.get(g) || 0) + hooi - voor);
     }
-    for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
+    for (const e of w.wezens || []) if (e.maait && e.maait.hooi && T.hoortBij(D, e)) e.maait = e.oogstDoel = null;
     if (tegels && D.voorraad) {
       for (const [g, n] of perBoerderij) T.opStapel(D, g, 'hooi', n);
       T.zeg(D, T.t('The farmers bring in the rest of the hay: {hooi}.', { hooi: T.hoeveel(Math.round(hooi), 'hooi') }), 'goed');
@@ -897,14 +904,15 @@
   // boer geeft niets.
   T.verwachtHooi = function (D, dag) {
     const w = D.wereld;
-    if (!w || !w.akkers || !hooien()) return 0;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden || !hooien()) return 0;
     const d = T.datumVanDag(dag != null ? dag : (D.kalender && D.kalender.dag) || 0);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
     const begin = stadiumBegin('geploegd');
     const eind = dagInJaar(hooiMaand(), T.DAGEN_PER_MAAND);
     if (begin <= eind ? nu < begin || nu > eind : nu < begin && nu > eind) return 0;
     let hooi = 0;
-    for (const veld of w.akkers) {
+    for (const veld of eigenVelden) {
       const boer = boerVan(w, veld);
       if (boer) hooi += hooiTegels(veld).length * T.hooiPerTegel(veld);
     }
@@ -917,13 +925,14 @@
   // het eten zonder (T.etenVoorDeWinter). Buiten die tijd, of met de spelregel uit, 0. Wat er nodig is, niet wat er ligt.
   T.zaaigraanApart = function (D, dag) {
     const w = D.wereld;
-    if (!T.VELDEN_INSTELLINGEN.zaaigraanApart || !w || !w.akkers) return 0;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!T.VELDEN_INSTELLINGEN.zaaigraanApart || !w || !eigenVelden) return 0;
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
     // Van het zaaien tot de oogst niet, behalve als het zaaien op een droge dag wacht.
     if (!w.zaaienNaRegen && nu < stadiumBegin('gemaaid') && nu >= stadiumBegin('geploegd')) return 0;
     let nodig = 0;
-    for (const veld of w.akkers) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * T.ZAAIGRAAN_PER_TEGEL;
+    for (const veld of eigenVelden) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * T.ZAAIGRAAN_PER_TEGEL;
     return nodig;
   };
 
@@ -952,10 +961,11 @@
   // gaat het dichtste stuk eerst. Geeft hoeveel tegels er gezaaid werden.
   T.zaaiNa = function (D) {
     const w = D.wereld;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
     const heb = (D.voorraad && D.voorraad.graan) || 0;
-    if (!w || !w.akkers || heb <= 0) return 0;
+    if (!w || !eigenVelden || heb <= 0) return 0;
     const open = new Map();
-    for (const a of w.akkers) {
+    for (const a of eigenVelden) {
       if (!isAkker(a) || !a.ongezaaid || !a.ongezaaid.size) continue;
       const tegels = T.akkerTegels(a).filter((t) => ongezaaidOp(a, t.x, t.y) && !(a.vertrapt && a.vertrapt.has(sleutel(t.x, t.y))));
       if (tegels.length) open.set(a, tegels);
@@ -984,9 +994,10 @@
   // (w.zaaienNaRegen; T.tikAkkersDag zaait dan met T.zaaiAkkers(D, false, true)).
   T.zaaiAkkers = function (D, nat = false, naRegen = false) {
     const w = D.wereld;
-    if (!w || !w.akkers || !w.akkers.length) return null;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden || !eigenVelden.length) return null;
     // Een nieuw jaar, voor elk veld: de oogst, het hooi en wat de rovers vertrapten zijn vergeten.
-    for (const a of w.akkers) {
+    for (const a of eigenVelden) {
       a.ongezaaid = new Set();
       if (naRegen) continue;
       if (a.geoogst) a.geoogst.clear();
@@ -994,7 +1005,7 @@
       if (a.vertrapt) a.vertrapt.clear();
     }
     delete w.zaaienNaRegen;
-    const akkers = w.akkers.filter(isAkker);
+    const akkers = eigenVelden.filter(isAkker);
     if (nat) {
       for (const a of akkers) for (const t of T.akkerTegels(a)) a.ongezaaid.add(sleutel(t.x, t.y));
       w.zaaienNaRegen = true;
@@ -1043,7 +1054,8 @@
   // kon worden (T.zaaiNa).
   T.tikAkkersDag = function (D, dag) {
     const w = D.wereld;
-    if (!w || !w.akkers || !w.akkers.length) return;
+    const eigenVelden = w ? T.veldenVan(D) : null; // de velden van dit dorp (T.veldenVan, js/boerderij.js)
+    if (!w || !eigenVelden || !eigenVelden.length) return;
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
     const nat = T.VELDEN_INSTELLINGEN.nietInDeRegen && T.isNat(D); // het weer van vandaag (js/weer.js)
@@ -1067,7 +1079,7 @@
     }
     // Het hooi: op de eerste dag van hooitijd een woord vooraf, en op de eerste dag erna het vangnet.
     if (hooien() && d.dagVanMaand === 1) {
-      const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');
+      const weides = eigenVelden.some((v) => T.bestemmingVan(v) === 'weide');
       if (d.maand === hooiMaand() && weides && T.ui && T.ui.bericht) {
         T.zeg(D, T.t('It is {maand}: the farmers cut the hay of the meadows first, and then reap the grain.', { maand: T.MAANDEN[d.maand].toon }));
       }

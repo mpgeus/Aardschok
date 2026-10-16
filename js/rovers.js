@@ -58,7 +58,7 @@
   T.nieuweRovers = () => ({ bende: [], bendeOp: null, wildeOp: null, aanval: null });
 
   // Alleen in het gehucht zelf: een wereld met akkers. Een proefkaart (?kaart=proef) heeft geen rovers.
-  const heeftRovers = (D) => !!(D.wereld && D.wereld.akkers && D.wereld.akkers.length);
+  const heeftRovers = (D) => !!(D.wereld && T.veldenVan(D).length);
 
   // ---------------------------------------------------------------------------------------------
   // Wie rover wordt, en wanneer ze komen
@@ -166,12 +166,13 @@
   // Een aanval
   // ---------------------------------------------------------------------------------------------
 
-  // Waar ze de kaart op komen: de begaanbare tegel aan de rand die het dichtst bij de akker ligt, en vanwaar ze er
-  // ook echt heen kunnen. Of null.
-  T.roverIngang = function (w, veld) {
+  // Waar ze het land van dorp D op komen: de begaanbare tegel aan de rand van zijn land (T.dorpVak) die het dichtst bij
+  // de akker ligt, en vanwaar ze er ook echt heen kunnen. Of null.
+  T.roverIngang = function (D, veld) {
+    const w = D.wereld;
     const midden = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
     const rand = [];
-    const vak = T.kaartVak(w);
+    const vak = T.dorpVak(D);
     for (let x = vak.x; x < vak.x + vak.b; x++) rand.push({ x, y: vak.y }, { x, y: vak.y + vak.h - 1 });
     for (let y = vak.y + 1; y < vak.y + vak.h - 1; y++) rand.push({ x: vak.x, y }, { x: vak.x + vak.b - 1, y });
     const kan = rand.filter((t) => T.isBegaanbaar(w, t.x, t.y, {})).sort((a, b) => T.afstand(a, midden) - T.afstand(b, midden));
@@ -197,6 +198,7 @@
   function maakRover(D, lid, plek) {
     const e = T.maakWezen('rover', plek.x, plek.y);
     e.rover = true;
+    e.dorp = D; // de rovers van een overval op dit dorp (T.hoortBij, js/wereld.js)
     e.lid = lid.id != null ? lid.id : null;
     e.vel = lid.vel || T.LEEFTIJDEN.volwassen.man;
     return e;
@@ -207,9 +209,11 @@
     const w = D.wereld;
     const R = D.rovers;
     // Een akker om te roven (geen weide of braak), en waar ze de kaart op komen. Is er geen, dan komen ze niet.
-    const akkers = w.akkers.map((a, i) => i).filter((i) => T.bestemmingVan(w.akkers[i]) === 'akker');
+    // A.veld is het nummer van het veld onder de velden van het dorp (T.veldenVan, js/boerderij.js).
+    const velden = T.veldenVan(D);
+    const akkers = velden.map((a, i) => i).filter((i) => T.bestemmingVan(velden[i]) === 'akker');
     A.veld = akkers.length ? akkers[Math.floor(lot(D, A.dag, 1) * akkers.length)] : null;
-    const ingang = A.veld != null ? T.roverIngang(w, w.akkers[A.veld]) : null;
+    const ingang = A.veld != null ? T.roverIngang(D, velden[A.veld]) : null;
     if (!ingang) {
       R.aanval = null;
       return;
@@ -225,14 +229,14 @@
     A.fase = 'komen';
     A.sinds = uurNu(D);
     R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
-    const boer = T.boerVanVeld(D, w.akkers[A.veld]);
+    const boer = T.boerVanVeld(D, velden[A.veld]);
     const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
     const wie = A.soort === 'bende'
       ? T.t('{n|{namen}, who left, comes back as a robber|{namen}, who left, come back as robbers}', { n: leden.length, namen: T.opsomming(leden.map((l) => l.naam)) })
       : T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: leden.length, aantal: T.hoofdletter(T.telwoord(leden.length)) });
     // Er komt niemand vanzelf (vraag 170, stap 2): wie soldaten heeft, hoort hoe hij ze stuurt (js/kiezen.js).
     const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click a robber.')}` : '';
-    const veld = w.akkers[A.veld];
+    const veld = velden[A.veld];
     const plek = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
     T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true, plek } });
   }
@@ -324,8 +328,7 @@
 
   // Het roven zelf: graan uit de voorraad, en soms is de akker kapot.
   function roof(D, A, levend) {
-    const w = D.wereld;
-    const veld = w.akkers[A.veld];
+    const veld = T.veldenVan(D)[A.veld];
     const graan = Math.min((D.voorraad && D.voorraad.graan) || 0, levend.length * IN().graanPerRover);
     if (graan > 0) T.wijzigVoorraad(D, 'graan', -graan);
     const kapot = lot(D, A.dag, 3) < IN().kansAkkerKapot ? T.vertrapAkker(veld) : 0;
@@ -363,7 +366,7 @@
       return;
     }
     if (A.soort === 'hinderlaag' && A.fase === 'roven') return werkHinderlaagBij(D, A, levend);
-    const veld = w.akkers[A.veld];
+    const veld = T.veldenVan(D)[A.veld];
     if (A.fase === 'komen') {
       for (const e of vrij) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
       if (levend.some((e) => opVeld(veld, e))) {

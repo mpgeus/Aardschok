@@ -831,7 +831,7 @@
     const werktijd = deel === 'werk';
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
-      if (e.dood) continue;
+      if (e.dood || !T.hoortBij(D, e)) continue; // wie van een ander dorp is, werkt daar (js/wereld.js)
       const kavel = kavelDieHijRooit(D, e);
       const schuur = kavel ? null : schuurWaarHijHakt(D, e);
       const zagerij = kavel || schuur ? null : zagerijWaarHijZaagt(D, e);

@@ -9,6 +9,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat 6a van vraag 170 liet zien** (16 okt, meer dorpen op één eiland; buiten de stap gehouden): (a) het licht, de rook,
+  de sneeuw, het kampvuur en de paadjes tekent het scherm voor het dorp waar de camera het dichtst bij is (`T.dorpHier`);
+  met twee dorpen tegelijk in beeld (alleen ver uitgezoomd, ze liggen 430 tegels of meer uit elkaar) mist het andere dat.
+  (b) De spelregel "Hoogte" legt alleen heuvels onder het eerste dorp, en de bouwstijl van de kaart (`w.stijl`) is die van
+  het eerste. (c) Een roedel die iemand van een ander dorp aanvalt, roept de mannen van zijn eigen dorp om hulp
+  (`js/beesten.js`, `hulp`), niet die van het slachtoffer. (d) De paadjes en de lijsten van de kaart (`T.kaartVak`) lopen
+  over het vak om alle dorpen: met dorpen ver uit elkaar is dat groot (bij 600 tegels 644 bij 396), en duurder bij een
+  verandering. Per stuk rekenen (zoals het land) is de echte oplossing. (e) Gebouwen van de ander aanvallen of in brand
+  steken kan nog niet (vraag 170, het plan bij 6). (f) `A.veld` van een overval is het nummer onder de velden van het dorp:
+  breek je een veld af terwijl de rovers komen, dan schuift het nummer (dat kon al met één dorp).
+
 - **Ronde 4 van het snoeien** (16 okt, bij vraag 170, stap 5; buiten de stap gehouden): de overgang tussen de kaarten van
   Tiled (`js/gebied.js`, `S.naarGebied`, zo'n 240 regels en 165 regels toetsen in `test/wereld.test.cjs`) en de kamers met
   deuren (`T.maakProefkamers`, `T.ontdekBijDeur`, `w.bekend`, `deurenOpenen`) bestaan alleen nog op de proefkaarten, voor

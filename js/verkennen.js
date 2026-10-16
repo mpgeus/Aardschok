@@ -93,12 +93,18 @@
   T.handelingVerkennen = function (S, doel) {
     if (!doel) return null;
     const w = S.wereld;
-    const D = T.dorpHier(S); // het dorp dat hier ligt (js/dorp.js), of geen
+    // Je eigen dorp, als het hier ligt; een ander dorp op dezelfde kaart (werklijst vraag 170, stap 6a) laat bij de muis
+    // alleen zien wat iets is, en van wie (hieronder).
+    const D = S.dorp && S.dorp.wereld === w ? S.dorp : T.dorpHier(S);
+    const anderDorp = (A) => !!A && A !== S.dorp && S.dorpen.includes(A);
+    const naamVan = (A) => T.dorpsnaam(A) || A.plek.naam || T.t('another village');
 
     if (doel.wezen) {
       const e = doel.wezen;
       // Een vijand, een dier (js/vee.js) of het wild (js/beesten.js): bij de muis staat alleen wat het is.
       if (e.kant === 'monster' || e.dier || e.beest) return { tekst: T.hoofdletter(T.eenNaam(e.naam)) };
+      // Een mens van een ander dorp: wie hij is, en van welk dorp.
+      if (anderDorp(e.dorp)) return { tekst: T.t('{wie}, of {dorp}', { wie: T.hoofdletter(e.naam), dorp: naamVan(e.dorp) }) };
       // De kar van het lege begin (js/begin.js) net zo: wat hij doet (js/kar.js).
       if (e.kar) return { tekst: T.karTekst(D, e) };
       // Je mannen: de held, een soldaat, een veteraan (js/kiezen.js).
@@ -121,6 +127,12 @@
     // ijzer staat stil, en zegt dat). Een klik legt zijn briefje rechts neer (js/gebouwbriefje.js; vraag 156).
     const gebouw = D && T.gebouwOp(D, doel.x, doel.y);
     if (gebouw) return { tekst: T.gebouwToestand(D, gebouw), doe: () => T.kiesGebouw(S, gebouw) };
+    // Een gebouw van een ander dorp: wat het is, en van welk dorp.
+    const ander = (S.dorpen || []).find((A) => anderDorp(A) && A.wereld === w && T.gebouwOp(A, doel.x, doel.y));
+    if (ander) {
+      const g = T.gebouwOp(ander, doel.x, doel.y);
+      return { tekst: T.t('{gebouw}, of {dorp}', { gebouw: T.hoofdletter(T.GEBOUWEN[g.soort].naam), dorp: naamVan(ander) }) };
+    }
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') return { tekst: T.t('Locked'), fout: true };
     if (!T.isZichtbaar(w, doel.x, doel.y)) return null;
@@ -132,6 +144,7 @@
     }
     // Een veld: de muis zegt wat het is. Wat het volgend jaar wordt, kies je in het veldenvenster (js/hud.js, V).
     const veld = T.veldOp(w, doel.x, doel.y);
+    if (veld && anderDorp(veld.dorp)) return { tekst: T.t('A field of {dorp}', { dorp: naamVan(veld.dorp) }) };
     if (veld && D) return { tekst: T.veldTekst(D, veld) };
     // De heide, de meent (js/vee.js): wie er graast, en hoeveel de kooi bergt.
     const meent = T.meentOp && T.meentOp(w, doel.x, doel.y);
@@ -222,8 +235,15 @@
   // net zijn doel bereikt en zwaait daar de zeis, dat is geen moment om weg te dwalen.
   // Waar je bent (js/main.js), met het dorp dat er ligt (js/dorp.js): zijn bewoners hebben een ritme. Een dorp waar je
   // niet bent, dwaalt ook, op zijn eigen kaart (T.dwaal vanuit T.werkDorpBij).
-  T.laatDwalen = (S, dt) => T.dwaal(S, S.wereld, T.dorpHier(S), dt);
+  // Waar je kijkt (S.wereld) dwaalt elk dorp dat er ligt, met zijn eigen wezens (T.hoortBij, js/wereld.js); een kaart
+  // zonder dorp (het gereedschap) dwaalt zonder.
+  T.laatDwalen = function (S, dt) {
+    const hier = (S.dorpen || []).filter((D) => D.wereld === S.wereld);
+    if (!hier.length) T.dwaal(S, S.wereld, null, dt);
+    for (const D of hier) T.dwaal(S, S.wereld, D, dt);
+  };
 
+  // Het dwalen van dorp D op kaart w: alleen zijn eigen wezens (T.hoortBij), met zijn dobbelsteen en zijn dag.
   T.dwaal = function (S, w, D, dt) {
     // Eén keer per beurt de datum omrekenen, niet per wezen: T.wandelAnker heeft alleen het
     // stadium nodig (kiemend/groen/rijp), niet de datum zelf.
@@ -239,6 +259,7 @@
     if (deel && T.werkPraatjesBij) T.werkPraatjesBij(S, D);
     let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
+      if (!T.hoortBij(D, m)) continue; // een wezen van een ander dorp dwaalt in zijn eigen dorp
       // Wie op de jacht met de held meeloopt, dwaalt niet (js/beesten.js), en wie vecht ook niet: die loopt en slaat in
       // het gevecht (js/gevecht.js). Wie een praatje maakt evenmin (js/praatje.js), en een boer die op zijn land werkt
       // ook niet (js/veldwerk.js).

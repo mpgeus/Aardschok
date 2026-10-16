@@ -54,6 +54,10 @@
 
   // De akkers van een boerderij die jij legde (T.legVeld).
   T.akkersVanBoerderij = (D, g) => ((D.wereld && D.wereld.akkers) || []).filter((a) => a.boerderij === g);
+  // De velden (akkers en weides) van dorp D op zijn kaart: een veld draagt zijn dorp mee (`a.dorp`, als het af is,
+  // hieronder), zoals een wezen (T.hoortBij, js/wereld.js), want op één kaart kunnen meer dorpen leven (werklijst vraag
+  // 170, stap 6a).
+  T.veldenVan = (D) => ((D.wereld && D.wereld.akkers) || []).filter((a) => T.hoortBij(D, a));
 
   // Wil deze boerderij geen handen, omdat ze geen akker heeft (T.verdeelHanden, js/gebouwen.js)? Alleen in het lege
   // begin: de boer van een boerderij die nog geen akker heeft, werkt elders of bouwt mee. (Een wijnboerderij vraagt zelf
@@ -77,6 +81,7 @@
       if (boer && boer.wezen) akkersVan.set(boer.wezen, T.akkersVanBoerderij(D, g));
     }
     for (const e of w.wezens || []) {
+      if (!T.hoortBij(D, e)) continue; // de boeren van een ander dorp
       const akkers = akkersVan.get(e);
       if (!akkers) {
         if (e.werkAkkers) delete e.werkAkkers;
@@ -221,7 +226,7 @@
     const r = { x: v.x, y: v.y, b: v.voet.b, h: v.voet.h };
     T.ruimLaagOp(w, r); // wat er nog laag groeide, is omgeploegd
     if (v.soort === 'wijngaard') {
-      (w.wijngaarden || (w.wijngaarden = [])).push({ ...r, boerderij: v.boerderij });
+      (w.wijngaarden || (w.wijngaarden = [])).push({ ...r, boerderij: v.boerderij, dorp: D });
       T.zetRanken(D, v.boerderij, r);
       T.zeg(D, T.t('The vineyard is planted: the grapes are picked in wine month.'), 'goed');
       return;
@@ -229,7 +234,7 @@
     if (!w.akkers) w.akkers = [];
     const akker = {
       naam: `akker${w.akkers.length + 1}`, ...r, huis: null, bestemming: 'akker', plan: 'akker',
-      vruchtbaarheid: T.VELDEN_INSTELLINGEN.beginVruchtbaarheid, boerderij: v.boerderij,
+      vruchtbaarheid: T.VELDEN_INSTELLINGEN.beginVruchtbaarheid, boerderij: v.boerderij, dorp: D,
       ongezaaid: new Set(T.akkerTegels(r).map((t) => `${t.x},${t.y}`)),
     };
     w.akkers.push(akker);

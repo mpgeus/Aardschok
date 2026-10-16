@@ -340,12 +340,12 @@
   // ---------------------------------------------------------------------------------------------
 
   // Waar hij het gehucht in komt, en waar hij het weer uit gaat: "komt" bij de plek in het
-  // betekenisbestand, anders de eerste uitgang van de kaart (de weg de wereld in). De heer komt
-  // over dezelfde weg (js/heer.js), dus die vraagt het hier ook.
+  // betekenisbestand, anders de weg de wereld in van het dorp (D.plek.uitgang: van de maker, of op een kaart uit Tiled
+  // de eerste uitgang). De heer komt over dezelfde weg (js/heer.js), dus die vraagt het hier ook.
   function deWeg(D) {
     const p = D.plek.marskramer;
     if (p && p.komt) return p.komt;
-    const o = (D.wereld.overgangen || [])[0];
+    const o = D.plek.uitgang;
     return o ? { x: o.x, y: o.y } : null;
   }
   T.wegInEnUit = (D) => (D && D.wereld ? deWeg(D) : null);
@@ -360,6 +360,7 @@
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
       if (!T.bezoekerKomtAan(D, m)) return;
       const e = T.maakMens('marskramer', uitgang.x, uitgang.y, 1);
+      e.dorp = D; // op bezoek in dit dorp (T.hoortBij, js/wereld.js)
       // Zijn thuis is zijn plek op het plein, met een straal van één: daar scharrelt hij bij zijn
       // uitgestalde waar.
       e.thuis = { x: D.plek.marskramer.x, y: D.plek.marskramer.y, straal: 1 };

@@ -98,6 +98,27 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het zei (`D.gezegd`).
   `test/dorpen.test.cjs` zet twee dorpen naast elkaar (jouw gehucht en een van de maker): een jaar van het ene laat het
   andere letter voor letter ongemoeid.
+- **Meer dorpen op één kaart** (vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op hetzelfde eiland", 16 okt: "A1
+  b1 c2 d1"; getoetst in `test/meer-dorpen.test.cjs`): **een wezen draagt zijn dorp mee** (`e.dorp`, gezet waar het
+  ontstaat: `T.nieuwDorp` voor de aanvoerder, het poppetje van een bewoner, `T.maakKar`, het vee, de roedels en kuddes van
+  zijn bos (`G.dorp`), de rovers van een overval, en de marskramer, de heer en zijn soldaten), en een veld ook (`a.dorp`).
+  **Elk dorp werkt alleen zijn eigen wezens en velden bij** (`T.hoortBij(D, e)`, js/wereld.js: een wezen zonder dorp, van een
+  kaart uit Tiled of een toets, hoort bij elk; `T.veldenVan(D)`, js/boerderij.js), met zijn eigen dobbelsteen: het dwalen,
+  de praatjes, de oogst, het veldwerk, het vee, de wolven en hun hollen, het gevecht. Zo raakt het ene dorp het andere niet:
+  de toets speelt het proefdorp twintig dagen met en zonder een tweede op de kaart, letter voor letter gelijk (gemeten op 16
+  okt ook een half jaar). Wat een mens van het dorp is (`T.isVanDorp`: zijn aanvoerder, een bewoner, een kar; geen dier of
+  bezoeker), kijkt door de mist en maakt het land open. **De plek van een dorp** staat in het dorp (`D.plek`, `T.legePlek` in
+  js/wereld.js: zijn land `vak`, zijn `plein`, `kamp`, `markt`, de plek van de `marskramer` en de `heer`, zijn `uitgang`,
+  en de `naam` van de dorpsplek op het eiland); de kaart geeft haar plekken door (`w.plekken`, met `p.dorp` als er een dorp
+  op woont) en houdt haar pleinen (`w.pleinen`: op geen enkel plein wordt gebouwd, `T.opHetPlein(w, x, y)`). Wat over het
+  land van één dorp zoekt, neemt `T.dorpVak(D)`; wat van de kaart is (het tekenen, het lopen, de paadjes), `T.kaartVak(w)`,
+  het vak om alle dorpen. **De tik** werkt elk dorp bij (`T.werkDorpBij`), en het lopen één keer per kaart (js/tik.js).
+  `T.dorpErbij(S)` (js/gebied.js) zet een tweede dorp op het eiland van het eerste (`T.legDorpOpKaart`, js/maker.js), met
+  een zaad uit dat van het eiland en zijn nummer. **`S.dorp` is alleen scherm**: wat de balk, de mist, de minikaart, de
+  berichten (`T.ui.bericht` krijgt het dorp mee, en toont alleen wat `S.dorp` zegt) en wie je stuurt, laten zien; de
+  wereld leest het nergens (nog wel `S.modus` in `T.wereldTik`, tot stap 6b). `T.dorpHier(S)` is het dorp waar de camera
+  het dichtst bij is, voor het tekenen en de muis. Een vijand van een dorp is ook elk mens van een ander dorp
+  (`T.isVijandVan`, js/gevecht.js; C2), en je bouwt niet in het bereik van een ander dorp (`T.waaromBuitenBouwBereik`).
 - **Het toeval van de wereld** (vraag 170, stap 0): `T.dobbelsteen(zaad)` geeft een dobbelsteen met een zaad
   (mulberry32), `T.vastLot(D, a, b)` (js/weer.js) een vaste worp uit het zaad van een dorp, en `T.toeval(D)` een
   dobbelsteen die doorrolt, met zijn stand in het dorp (`D.lot.stand`, of `w.lot` op een kaart zonder dorp), zodat hij
@@ -113,8 +134,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/tik.js` (werklijst vraag 170, stap 0; Marcel, 15 okt: live samen spelen al in de demo, in lockstep): **de wereld
   loopt in vaste tikken**, zestig per seconde echte tijd (`T.TIK`), los van hoeveel beelden een computer tekent; per tik
   schuift ze de tik maal de snelheid op (`T.wereldFactor`, js/tijd.js). `T.wereldTik(S)` is de ene tik: de kalender, de
-  klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`),
-  en waar de aanvoerder is het maaien, het veldwerk, het wild, het dwalen en wie hem ziet; `S.tik` telt ze. js/main.js tikt
+  klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`,
+  één keer per kaart: op één kaart kunnen meer dorpen leven, vraag 170, stap 6a), en waar je kijkt het maaien, het veldwerk,
+  het wild en het dwalen van elk dorp dat er ligt, elk met zijn eigen wezens; `S.tik` telt ze. js/main.js tikt
   zo vaak als er tijd verstreek (`T.tikBij`: een tik gaat al als er een halve klaarligt, zodat bij zestig beelden per
   seconde elke tik in een eigen beeld valt, en hooguit drie per beeld: een trage computer laat de wereld dan langzamer
   lopen, zoals tot nu). **Spel.debug.stap, de speeltest, de toetsen en `npm run grootte` tikken dezelfde tik**: geen eigen
@@ -277,7 +299,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kaart uit Tiled. In S staat alleen wat er
   anders werd, per tegelnummer: `w.tegelsAnders` (`T.zetTegel`), `w.grondAnders` (de maker), `w.gerooid` (een ding van het
   eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, welke stukken open zijn (`w.open`,
-  `T.openVak`), en wat je kent (`w.gekend`, `js/mist.js`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
+  `T.openVak`); wat een dorp kent, staat in het dorp (`D.gekend`, `js/mist.js`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
   beeld in `T.werkDorpBij`; stap 5, Marcel: "Al je mensen"): een stuk binnen `openRond` tegels (16,
   `T.WERELD_INSTELLINGEN`) van de aanvoerder, een dorpeling of de ossenkar, hooguit één per beeld. **Alles per stuk**
   (Marcel, 13 okt): een stuk dat open gaat, is geen kaartverandering (geen `T.kaartVeranderd`); wat het land beslaat,
@@ -315,12 +337,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/mist.js`: **de mist** (B2c, 13 okt; Marcel: "A2, B1, C ok"; het plan in `kaarten.md`, "Het hele eiland"). Zwart wat
   niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken. **Wat je kent, is spelstaat**:
-  `w.gekend` op de kaart van het eiland, per stuk (`T.stukNummer`) een lijst van 128 getallen van 32 bits (64 rijen van
+  per dorp (`D.gekend`, want elke speler heeft zijn eigen mist; vraag 170, stap 6a), per stuk (`T.stukNummer`) een lijst van 128 getallen van 32 bits (64 rijen van
   twee), of `true` als je het hele stuk kent, zodat het bewaarde spel klein blijft (een leeg begin 23 kB, was 15 kB; versie
   11). `T.kentTegel(w, x, y)`, `T.kenKring(w, x, y, r)` (geeft true als er iets bij kwam, en hoogt `T.mistVersie(w)` op,
   voor wie het bijhoudt), en `T.kenHetBegin(w, vak)`: de kring van `beginKring` (50) om het midden van je land, vanuit
   `js/maker.js`. **Wat je nu ziet, is het niet**: `T.werkMistBij(S, D)` (elk beeld in `T.werkDorpBij`, na het openen van het
-  land) zet wie er kijkt in een WeakMap (`T.wieKijken(w)`): je mensen (`T.isVanJou`, in `js/wereld.js`, dezelfde als wie het
+  land) zet wie er kijkt in een WeakMap (`T.wieKijken(D)`): de mensen van het dorp (`T.isVanDorp`, in `js/wereld.js`, dezelfde als wie het
   land open maakt), de gebouwen die af zijn (vanaf de rand van hun voet) en het plein; wie van tegel veranderde, maakt
   zijn kring bekend. `T.zietNu(w, x, y)`, en `T.zieJeWezen(S, w, e)`: je eigen mensen altijd, een ander (een beest, een
   rover, een bezoeker) alleen waar je nu kijkt; het tekenen, de muis (`zoekDoel` in `js/main.js`), de doorkijk
@@ -439,7 +461,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.maakGehucht(zaad, land, pogingen, ookKeuren)` legt het plan op een stuk van het eiland (`plan.voorwerpen` alles wat er staat,
   `plan.gelegd` wat hij erbij legde, `plan.gerooid` wat er van het eiland weg moest), `T.planOpEiland(zaad)` kiest het stuk
   (jouw plek, anders die van een ander dorp), en `T.laadGemaaktGehucht(zaad)` maakt er een kaart van het eiland van, die
-  alleen het verschil met het eiland overneemt, met de marktplek erbij (`w.markt`, `T.zoekMarktPlek` in `js/markt.js`).
+  alleen het verschil met het eiland overneemt, met de plek van het dorp in `w.plekken` (zijn land, plein, kamp, marskramer, uitgang en marktplek: `T.zoekMarktPlek` in `js/markt.js`; `T.nieuwDorp` neemt hem als `D.plek`). Het leggen zelf (`legPlanOp`) legt een plan op een kaart die er al is: zo legt `T.legDorpOpKaart(w, { bij, niet })` een tweede dorp op de dichtste andere dorpsplek die minstens `anderDorp` (200) tegels weg ligt (`T.planOpEiland(zaad, { bij, niet })`), en groeit het vak van de kaart om beide (vraag 170, stap 6a).
   Open zijn de stukken om het land, tot `zicht` tegels erbuiten. Welk land een
   nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
   spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
@@ -503,7 +525,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de kleuren van `T.MINIKAART_INSTELLINGEN` (die ook `gereedschap/pixelart/eiland-plaat.cjs` gebruikt), het licht uit
   `T.helderheidVanVlak`, de wegen en de bomen (`T.minikaartKleur`); het wordt in stukjes gemaakt (`T.maakMinikaart(E,
   rijen)`, een rij zo'n 1 ms, het hele eiland 0,3 s), en hoort bij het eiland, niet bij het spel (niet bewaard). Wat je
-  kent per vak, uit de bits van de mist (`T.minikaartGekend(w)`; `w.gekend`, `js/mist.js`). Het tekenen staat in
+  kent per vak, uit de bits van de mist van je eigen dorp (`T.minikaartGekend(S.dorp)`; `D.gekend`, `js/mist.js`). Het tekenen staat in
   `js/balk.js` (alleen scherm), zonder papier eromheen en wat doorschijnend (Marcel: "zonder 'rand' dus de kaart licht
   transparant"; `#minikaart` in `stijl.css`): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
   verandert, en tien keer per seconde de ruit: het eiland, levendig (`verzadiging`, `helderheid`; Marcel: "Ik bedoelde
@@ -832,7 +854,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/begin.js`: **het lege begin** (vraag 152, stap 1b, 11 okt; Marcel: "We moeten ook zelf alles vanaf de start gaan
   bouwen", en "Rijdt nu binnen"): elk nieuw spel (sinds ronde 2 van het snoeien, stap 3, het enige begin; alleen op het
   eiland) legt de maker geen gehucht maar alleen het land (`leeg` in `js/maker.js`): het plein met `leegRand` tegels open eromheen en verder het bos van het eiland, een paar eiken, de plek
-  van de marskramer waar de weg het plein raakt, en de plek van het kamp (`w.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
+  van de marskramer waar de weg het plein raakt, en de plek van het kamp (`D.plek.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
   de voorraad uit de kar (`T.BEGIN_INSTELLINGEN.kar`), een tent per gezin (`T.GEBOUWEN.tent`, `tijdelijk`: zo groot als
   zijn gezin, `T.woonruimteVan` in `js/gebouwen.js`, dus geen plaats voor een nieuw gezin; zijn deur zegt hij zelf,
   `g.deur`), die van de aanvoerder met `huis: 'aanvoerder'`, en de huifkar als wezen (`e.kar`, het
@@ -1036,7 +1058,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ertussen en een mand naast elke kraam. De maker kiest die plek als hij het land legt (`T.zoekMarktPlek(w)`, vanuit
   `T.laadGemaaktGehucht` in `js/maker.js`: het grootste open stuk buiten het open midden, `T.openMidden` met
   `vanHetMidden`, tot 15 okt de kring van het feest, het kamp, de eiken en
-  weg van de heer, dat niemand tegenhoudt), en zet hem in de kaart (`w.markt`, `{ rijen }`; bewaard met de wereld).
+  weg van de heer, dat niemand tegenhoudt), en zet hem in de plek van het dorp (`D.plek.markt`, `{ rijen }`; bewaard met het dorp).
   `T.marktBlok(D)` geeft die rijen leeg terug, `T.marktTegels(w)` en `T.opDeMarktPlek(w, x, y)` de tegels (de rijen en het
   looppad). Een gebouw blijft er `vrij` tegels vandaan (`T.waaromNietBijDeMarkt`, vanuit `T.waaromPastHetNiet` in
   `js/gebouwen.js`), de schandpaal komt er niet op (`vrijOpHetPlein` in `js/heer.js`), en `js/tekenen.js` laat hem
