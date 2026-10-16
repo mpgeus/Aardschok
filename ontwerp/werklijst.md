@@ -65,7 +65,10 @@ regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed*
 voor nu"). **Het lantaarntje in de hand is af** (16 okt, in `main`; Marcel: "A1, B1"; `beeld.md`,
 "De lantaarn van de groepsleider"), en zijn licht is op het scherm kleiner (Marcel: "het ligt vóór het poppetje", en
 koos L3). Daarna **stap 6, samen spelen** (bij
-I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): 6a, één kaart met meer dorpen. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dorpen, is af** (16 okt, op de branch
+`ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
+eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Het volgende is 6b, alles een
+opdracht** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -78,6 +81,20 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, op de branch `ccr-055aff40-lz2bwx`): Nieuw spel, en
+  in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
+  tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
+  balk, de mist, de minikaart en de berichten zijn van hem; nog eens `wissel()` en je bent terug. Zet in het ene dorp een
+  wachthuis met militie, stuur ze naar het andere (rechts klikken, op de minikaart kijken): ze vallen de aanvoerder en de
+  dorpelingen van de ander aan (C2), die vluchten naar hun eigen town hall, en allebei de dorpen vechten. **Wat Claude
+  erbij koos** (zeg het als het anders moet): (1) elk wezen hoort bij één dorp, ook het vee, de wolven, de rovers en de
+  bezoekers, en elk dorp werkt alleen zijn eigen bij, met zijn eigen dobbelsteen: zo speelt het eerste dorp een half jaar
+  letter voor letter hetzelfde, met of zonder het tweede; (2) elk dorp heeft zijn eigen mist; (3) de muis op een mens, een
+  gebouw of een veld van de ander zegt alleen wat het is en van wie ("Gilbert, of Oldland"); (4) je bouwt niet in het
+  bereik van de ander; (5) wie aangevallen wordt, krijgt ook de status en het bericht van het gevecht; (6) de werkbank
+  heeft er één getal bij: *another village at least* (200 tegels, "The maker"). **Om naar te kijken:** het licht, de rook
+  en de paadjes tekent het scherm alleen voor het dorp waar je kijkt, en "Hoogte" en de bouwstijl volgen het eerste dorp
+  (`opmerkingen.md`).
 - **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
   *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
   licht, een kleine plas om hem heen (L3), en de wolven vallen niemand binnen 3 tegels van hem aan. In zijn hand hangt een lantaarntje met een gloeiend hoorn,
@@ -754,6 +771,12 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   met per dorp zijn gunst en zijn brieven (zoals nu al); de marskramer komt bij elk dorp op zijn eigen plek; je bouwt niet
   in het bereik van de ander; wie het spel opende, bewaart het (allebei de dorpen); en gebouwen van de ander aanvallen of
   in brand steken komt er nu niet bij (`opmerkingen.md`).
+  **6a is af** (16 okt, op de branch `ccr-055aff40-lz2bwx`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
+  bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
+  hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
+  (`D.plek`, `D.gekend`), het lopen gaat één keer per kaart, de maker legt een tweede plan op dezelfde kaart
+  (`T.legDorpOpKaart`, `T.dorpErbij`), en `S.dorp` is alleen scherm; een vijand is ook wie van een ander dorp is (C2). Wat
+  nog op `S.modus` leunt (`T.wereldTik`), gaat in 6b weg.
 Daarna de muren (158) en de tekeningen van de soldaten.
 
 **Besloten** (Marcel, 15 okt: "A1, B1, C1, D1, E1, F1"): de held heet *Commander* (in de code `aanvoerder`); valt hij
