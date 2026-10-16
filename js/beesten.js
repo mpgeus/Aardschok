@@ -942,7 +942,7 @@
     G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
     leider.pad = leider.onderweg ? [leider.pad[0]] : [];
     D.beesten.gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
-    T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.naamVanBewoner(p), g: p.geslacht }), 'gevaar', T.tegelVan(e));
+    T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.hoofdletter(T.naamVanBewoner(p)), g: p.geslacht }), 'gevaar', T.tegelVan(e));
     T.naarGewoneSnelheid(D);
   }
 

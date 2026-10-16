@@ -91,7 +91,6 @@
     gevechtGloed: 0, // de rode rand van het beeld in een gevecht, die in- en uitfaadt (js/main.js, js/tekenen.js)
     bouwSoort: null, // het bouwmenu (js/hud.js)
     bouwMenuOpen: false,
-    naLopen: null, // wat er gebeurt als de aanvoerder er is, zoals een venster dat opengaat
     spreektMet: null, // een gesprek dat openstaat
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
     kijk: null, // waar de camera heen kijkt (js/main.js; vraag 170, stap 1): { x, y } in pixels van de wereld

@@ -241,3 +241,57 @@ test('twee werelden met dezelfde opdrachten vechten letter voor letter gelijk (l
   assert.ok(a.dorp.wereld.wezens.some((e) => e.rover && (e.dood || e.leven < e.maxLeven)), 'er werd gevochten');
   assert.equal(JSON.stringify(T.bewaarSpel(a, { nu: 0 })), JSON.stringify(T.bewaarSpel(b, { nu: 0 })));
 });
+
+// Vraag 170, stap 5 (Marcel, 15 okt: "wanneer hij valt kan er een ander opstaan. Deze uit veteranen gekozen", en op 16 okt
+// B1 en C2): valt de aanvoerder, dan gaat het spel door.
+test('valt de aanvoerder, dan neemt de soldaat die het langst dient het over: met zijn wapen, buiten het wachthuis, en zijn gezin ruilt van huis', () => {
+  const { S, D, w, een, twee } = dorp();
+  const oud = D.aanvoerder;
+  const thuis = D.gebouwen.find((g) => g.huis === 'aanvoerder');
+  const p0 = T.bewonerVan(D, oud);
+  const oudGezin = D.bewoners.mensen.filter((p) => p.gezin === p0.gezin && p !== p0);
+  assert.ok(thuis && oudGezin.length, 'de aanvoerder woont met zijn gezin in het raadhuis');
+  Object.assign(een.bewoner.soldaat, { soort: 'speerman', sinds: 1 });
+  twee.bewoner.soldaat.sinds = 4;
+  const p = een.bewoner;
+  const vorig = p.huis;
+  const zijnGezin = D.bewoners.mensen.filter((x) => x.gezin === p.gezin);
+  const voor = D.bevolking;
+  T.raak(S, D, oud, 100, rover(w, plekOp(w, T.tegelVan(oud), 1)));
+  assert.equal(oud.dood, true);
+  assert.equal(D.bevolking, voor - 1, 'de aanvoerder is een mond minder');
+  assert.equal(S.modus, 'verkennen', 'het spel gaat door');
+  assert.equal(D.aanvoerder, een, 'wie het langst soldaat is');
+  assert.ok(p.aanvoerder && !p.soldaat && T.isMan(D, een));
+  assert.deepEqual(T.soldatenVan(D).map((x) => x.wezen), [twee], 'hij telt niet meer mee in het wachthuis');
+  assert.equal(T.slagVan(een).wapen, 'speer', 'hij houdt zijn wapen (B1)');
+  assert.equal(een.maxLeven, T.WEZENS.aanvoerder.leven);
+  assert.ok(zijnGezin.every((x) => x.huis === thuis), 'zijn gezin trekt in het raadhuis (C2)');
+  assert.ok(oudGezin.every((x) => x.huis === vorig), 'en het gezin van wie viel in zijn huis');
+  assert.ok(berichten.some((t) => /the commander, .*died/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => t.startsWith(`${T.hoofdletter(p.naam)}, the soldier who has served longest, takes command.`)), berichten.join(' | '));
+});
+
+test('een veteraan gaat voor; is er niemand, dan is er even geen aanvoerder, en de eerste die soldaat wordt, neemt het over', () => {
+  const { S, D, w } = dorp();
+  const vet = dorpeling(D);
+  vet.bewoner.veteraan = true;
+  T.raak(S, D, D.aanvoerder, 100, rover(w, plekOp(w, T.tegelVan(D.aanvoerder), 1)));
+  assert.equal(D.aanvoerder, vet, 'de veteraan');
+  assert.equal(T.slagVan(vet).wapen, 'hooivork', 'met de hooivork van een veteraan');
+  assert.ok(berichten.some((t) => /a veteran, takes command/.test(t)), berichten.join(' | '));
+  const huis = D.gebouwen.find((g) => g.soort === 'wachthuis');
+  T.zetSoldaten(D, huis, 'militie', -2);
+  assert.equal(T.soldatenVan(D).length, 0);
+  berichten.length = 0;
+  T.raak(S, D, vet, 100, rover(w, plekOp(w, T.tegelVan(vet), 1)));
+  assert.equal(D.aanvoerder, null, 'niemand om het over te nemen');
+  assert.ok(berichten.some((t) => /no one to take command/.test(t)), berichten.join(' | '));
+  assert.ok(!T.mannenVan(D).length, 'geen held en geen mannen');
+  T.wereldTik(S);
+  assert.equal(D.aanvoerder, null, 'het spel gaat door, zonder aanvoerder');
+  T.zetSoldaten(D, huis, 'militie', 1);
+  T.wereldTik(S);
+  const [nieuw] = T.mannenVan(D);
+  assert.ok(nieuw && D.aanvoerder === nieuw, 'de eerste die soldaat wordt, neemt het over');
+});

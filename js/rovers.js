@@ -147,11 +147,11 @@
   // was (T.wijzigBevolking, js/gebouwen.js, met wie het is), en waartegen (`van`: wie de laatste klap gaf).
   T.sneuvelt = function (D, e, van) {
     e.gesneuveld = true;
-    const p = e.bewoner;
+    const p = T.bewonerVan(D, e); // de eerste aanvoerder draagt zijn bewoner niet mee (js/bewoners.js)
     const man = !!p && !!(p.soldaat || p.veteraan || p.aanvoerder);
     const waarom = van && van.beest ? T.t('The fight with the wolves was hard')
       : man ? T.t('The fight with the robbers was hard') : T.t('The robbers struck in the village');
-    if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [e.bewoner]);
+    if (p) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [p]);
   };
 
   // Een rover valt (js/gevecht.js, sterf): kwam hij uit het gehucht, dan is hij uit de bende.
@@ -346,7 +346,6 @@
   T.werkRoversBij = function (S, D) {
     const A = D.rovers && D.rovers.aanval;
     if (!A || !heeftRovers(D)) return;
-    if (S.modus === 'dood') return;
     const w = D.wereld;
     if (A.fase === 'wacht') {
       if (S.modus !== 'verkennen') return;

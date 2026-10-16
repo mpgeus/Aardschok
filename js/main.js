@@ -62,8 +62,11 @@
     T.ui.reset(S);
   };
 
+  // Bij het begin en na het laden kijkt de camera naar de aanvoerder, of, als die viel en er nog geen ander is, naar het
+  // plein.
   function zetCameraOpAanvoerder() {
-    const p = T.naarSchermOp(S.wereld, S.dorp.aanvoerder.x, S.dorp.aanvoerder.y);
+    const h = S.dorp.aanvoerder || pleinMidden();
+    const p = T.naarSchermOp(S.wereld, h.x, h.y);
     S.camera = { x: p.x, y: p.y - 24 };
     S.kijk = { x: S.camera.x, y: S.camera.y };
   }
@@ -431,18 +434,19 @@
   // het beeld in die richting"; T.KIEZEN_INSTELLINGEN.camera in js/kiezen.js), de minikaart zet hem ergens neer
   // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Tot 15 okt volgde hij de aanvoerder, en tilde Tab hem eraf in het
   // overzicht (vraag 108, a); tot stap 2 keek het gevecht in beurten nog zelf mee.
+  // Het midden van het plein, in tegels; zonder plein (een proefkaart) de aanvoerder, of de hoek van de kaart.
+  function pleinMidden() {
+    const rand = S.wereld.plein;
+    if (rand && rand.length) return { x: rand.reduce((n, [x]) => n + x, 0) / rand.length, y: rand.reduce((n, [, y]) => n + y, 0) / rand.length };
+    const h = S.dorp.aanvoerder;
+    return h ? { x: h.x, y: h.y } : { x: 0, y: 0 };
+  }
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
   // minuten, op de klok van het scherm, want de wereld staat daar stil.
   function titelCamera() {
-    const rand = S.wereld.plein;
-    let mx = S.dorp.aanvoerder.x;
-    let my = S.dorp.aanvoerder.y;
-    if (rand && rand.length) {
-      mx = rand.reduce((n, [x]) => n + x, 0) / rand.length;
-      my = rand.reduce((n, [, y]) => n + y, 0) / rand.length;
-    }
+    const m = pleinMidden();
     const hoek = (S.tijd / 120) * 2 * Math.PI;
-    const p = T.naarSchermOp(S.wereld, mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
+    const p = T.naarSchermOp(S.wereld, m.x + 4 * Math.cos(hoek), m.y + 4 * Math.sin(hoek));
     return { x: p.x, y: p.y - 24 };
   }
   T.titelCamera = titelCamera;
@@ -469,7 +473,7 @@
       ? [...new Set([...FOTO.zoom.map((z) => z * zoomVenster), ...CAMERA.zoom])].sort((a, b) => b - a)
       : [zoomVenster, ...CAMERA.zoom];
   const fotoKan = () =>
-    S.modus === 'verkennen' && !T.ui.vensterOpen() && !T.ui.briefOpen() && !T.ui.titelOpen() && !T.ui.menuOpen() && !T.ui.terugOpen();
+    S.modus === 'verkennen' && !T.ui.vensterOpen() && !T.ui.briefOpen() && !T.ui.titelOpen() && !T.ui.menuOpen();
   function zetFoto(aan = !S.foto) {
     if (aan === !!S.foto || (aan && !fotoKan())) return false;
     if (aan) {
@@ -686,10 +690,12 @@
     }
     vorigeGroep = { n, op: nu };
   }
-  // Tab: de held kiezen en naar hem kijken.
+  // Tab: de held kiezen en naar hem kijken (is er geen, omdat hij viel, dan niets).
   function naarDeHeld() {
-    if (T.isMan(S.dorp, S.dorp.aanvoerder)) S.gekozen = S.dorp.aanvoerder;
-    glijNaar(S.dorp.aanvoerder.x, S.dorp.aanvoerder.y);
+    const h = S.dorp.aanvoerder;
+    if (!T.isMan(S.dorp, h)) return;
+    S.gekozen = h;
+    glijNaar(h.x, h.y);
   }
 
   // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve

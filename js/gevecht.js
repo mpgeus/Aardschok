@@ -30,7 +30,8 @@
 // iemand een doel kiest, met een bericht met de plek, en houdt op als er rustNa seconden niemand meer vecht. Zolang het
 // duurt, loopt de tijd hooguit op 1× (T.snelheidNu, js/tijd.js; Marcel, 15 okt: "een gevecht ergens zet iedereen op 1×").
 // Wie valt, is dood (Marcel, 29 sep: "mensen kunnen sterven"): een rover is uit zijn bende, een soldaat of een dorpeling is
-// een mond minder (T.sneuvelt, js/rovers.js), en valt de held, dan is het spel uit (tot stap 5: dan staat er een veteraan op).
+// een mond minder (T.sneuvelt, js/rovers.js), en valt de held, dan neemt een ander het over (T.aanvoerderValt, js/soldaten.js;
+// vraag 170, stap 5): het spel gaat door.
 //
 // Zonder scherm, en dus getoetst (test/gevecht.test.cjs); wat alleen scherm is (de zwevende schade, de pijl), gaat via
 // T.anim (js/anim.js), alleen waar je kijkt.
@@ -148,7 +149,7 @@
   // het gevecht begint of houdt op.
   T.werkGevechtBij = function (S, D) {
     const w = D.wereld;
-    if (!w || !w.wezens || S.modus === 'dood') return;
+    if (!w || !w.wezens) return;
     const nu = S.wereldTijd || 0;
     const vijanden = w.wezens.filter(T.isVijandig);
     const budget = { zoek: IN().zoekPerTik };
@@ -284,23 +285,20 @@
   }
   T.raak = raak;
 
-  // Wie valt, is dood. De held: het spel is uit (T.aanvoerderGevallen). Een man of een dorpeling: een mond minder (T.sneuvelt,
-  // js/rovers.js), en hij ligt er tot de volgende dag. Een vijand is verslagen; een rover is uit zijn bende, en was hij
-  // de laatste van zijn aanval, dan is die voorbij (T.naGevecht).
+  // Wie valt, is dood. Een man of een dorpeling: een mond minder (T.sneuvelt, js/rovers.js), en hij ligt er tot de volgende
+  // dag; was het de held, dan neemt een ander het over (T.aanvoerderValt, js/soldaten.js). Een vijand is verslagen; een
+  // rover is uit zijn bende, en was hij de laatste van zijn aanval, dan is die voorbij (T.naGevecht).
   T.valt = function (S, D, e, van) {
     const held = e === D.aanvoerder;
-    const onze = !held && (T.vechtVoor(D, e) || !!e.bewoner);
+    const onze = held || T.vechtVoor(D, e) || !!e.bewoner;
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
     delete e.doelwit;
     delete e.volgt;
-    if (held) {
-      if (D === S.dorp) T.aanvoerderGevallen(S);
-      return;
-    }
     if (onze) {
       T.sneuvelt(D, e, van);
+      if (held) T.aanvoerderValt(D);
       return;
     }
     T.zeg(D, T.t('The {wezen} is defeated.', { wezen: e.naam }), 'goed');
@@ -381,19 +379,4 @@
 
   // Wordt er ergens gevochten, in een van de dorpen? Dan loopt de tijd hooguit op 1× (T.snelheidNu, js/tijd.js).
   T.erWordtGevochten = (S) => !!(S && S.dorpen && S.dorpen.some((D) => D.gevecht));
-
-  // ── De held valt ──
-
-  // De held valt, en dat is het einde van het spel (tot stap 5 van vraag 170: dan staat er een veteraan op).
-  T.aanvoerderGevallen = function (S) {
-    S.modus = 'dood';
-    T.ui.bericht(T.t('You fall, and you do not get up again.'), 'gevaar');
-    T.ui.toonOverlay(
-      T.t('Fallen'),
-      `<p>${T.t('You fall, and you do not get up again.')}</p>` +
-        `<p>${T.t('The lord writes to the new commander that he had better take care: a funeral costs money too.')}</p>`,
-      T.t('To the title screen'), // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
-      () => T.naarTitelscherm(),
-    );
-  };
 })(globalThis.Spel = globalThis.Spel || {});

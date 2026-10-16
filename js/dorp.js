@@ -123,6 +123,7 @@
     T.werkBewonersBij(D); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer (js/rovers.js)
     T.werkSturenBij(S, D); // je mannen met een bevel: hun post, en wie een vijand volgt die viel (js/kiezen.js)
+    T.werkAanvoerderBij(D); // geen aanvoerder (hij viel)? dan een veteraan, of de soldaat die het langst dient (js/soldaten.js)
     T.werkGevechtBij(S, D); // wie vecht, kiest, loopt en slaat; wie een rover ziet, vlucht (js/gevecht.js)
     T.werkBrandBij(S, D); // de brand: het huis brandt, tot de buren hem geblust hebben of het afgebrand is (js/brand.js)
     T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)

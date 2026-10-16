@@ -71,7 +71,7 @@
     const tot = dagNu() + maxUren / 24;
     for (let i = 0; i < 20000; i++) {
       if (voorwaarde()) return true;
-      if (dagNu() >= tot || D().einde || S().modus === 'dood') return false;
+      if (dagNu() >= tot || D().einde) return false;
       await stap(sec);
     }
     return false;
@@ -613,7 +613,7 @@
       ongezaaid += a.ongezaaid ? a.ongezaaid.size : 0;
     }
     return Object.assign(tel(), {
-      tekst: s.dorp.einde ? `${{ leeg: 'het dorp leeg', verjaagd: 'weggejaagd door het dorp' }[s.dorp.einde.reden] || 'het ambt kwijt'} op ${datum()}` : s.modus === 'dood' ? `gevallen op ${datum()}` : `het jaar uit, tot ${datum()}`,
+      tekst: s.dorp.einde ? `${{ leeg: 'het dorp leeg', verjaagd: 'weggejaagd door het dorp' }[s.dorp.einde.reden] || 'het ambt kwijt'} op ${datum()}` : `het jaar uit, tot ${datum()}`,
       ambtKwijt: !!s.dorp.einde && s.dorp.einde.reden === 'ambt',
       dorpLeeg: !!s.dorp.einde && s.dorp.einde.reden === 'leeg',
       // De twee bazen (js/bazen.js; vraag 106): waar ze eindigden, hoe laag ze kwamen, de waarschuwingen, waarom je weg
@@ -631,7 +631,6 @@
         laatst: { gunst: s.dorp.bazen.waarom.gunst.slice(), vertrouwen: s.dorp.bazen.waarom.vertrouwen.slice() },
       } : null,
       jaarverslagen: boek.jaarverslagen || [],
-      gevallen: s.modus === 'dood',
       // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
       rovers: {
         kwamen: boek.berichten.filter((b) => /^Robbers are coming\./.test(b.tekst)).length,

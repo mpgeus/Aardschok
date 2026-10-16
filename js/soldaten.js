@@ -23,7 +23,10 @@
 // kruisboog. De getallen staan in T.SOLDATEN_INSTELLINGEN (in de werkbank).
 //
 // In het dorp: g.soldaten = { militie, speerman, ... } op een wachthuis (hoeveel je er wilt), en p.soldaat =
-// { soort, wachthuis } op een bewoner. Zonder scherm, en dus getoetst (test/soldaten.test.cjs).
+// { soort, wachthuis, sinds } op een bewoner (sinds: de dag dat hij soldaat werd). Zonder scherm, en dus getoetst
+// (test/soldaten.test.cjs).
+//
+// Valt de aanvoerder, dan neemt een veteraan het over, anders de soldaat die het langst dient (onderaan; vraag 170, stap 5).
 (function (T) {
   'use strict';
 
@@ -126,7 +129,7 @@
 
   function maakSoldaat(D, p, g, soort) {
     for (const stuk of stukkenVan(soort)) if (STUKKEN[stuk].waar) T.wijzigVoorraad(D, STUKKEN[stuk].waar, -1);
-    p.soldaat = { soort, wachthuis: g };
+    p.soldaat = { soort, wachthuis: g, sinds: D.kalender ? D.kalender.dag : 0 };
     p.bouwt = null;
     T.zetPlekken(D, p);
   }
@@ -262,13 +265,14 @@
   // In het gevecht
   // ---------------------------------------------------------------------------------------------
 
-  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan een hooivork, en de aanvoerder, een dorpeling en een
-  // vijand geen (de aanvoerder slaat zoals T.SLAAN, een vijand zoals zijn aanval in
-  // T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie opgeroepen was (kant 'speler'); sinds het gevecht in
-  // real time (vraag 170, stap 2) vecht een soldaat ook zonder.
+  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan een hooivork, een aanvoerder die het overnam die
+  // van wat hij was (p.wapen, onderaan), en de eerste aanvoerder, een dorpeling en een vijand geen (de aanvoerder slaat
+  // zoals T.SLAAN, een vijand zoals zijn aanval in T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie
+  // opgeroepen was (kant 'speler'); sinds het gevecht in real time (vraag 170, stap 2) vecht een soldaat ook zonder.
   T.stukkenVan = function (e) {
     const p = e && e.bewoner;
-    if (!p || p.aanvoerder) return [];
+    if (!p) return [];
+    if (p.aanvoerder) return p.wapen ? stukkenVan(p.wapen) : [];
     if (p.soldaat) return stukkenVan(p.soldaat.soort);
     return p.veteraan ? stukkenVan('militie') : [];
   };
@@ -290,5 +294,82 @@
     let n = 0;
     for (const stuk of T.stukkenVan(doel)) n += IN().bescherming[stuk] || 0;
     return n;
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // De aanvoerder: wie het bevel overneemt
+  // ---------------------------------------------------------------------------------------------
+
+  // Valt de aanvoerder (T.valt, js/gevecht.js), dan neemt een ander het over (vraag 170, stap 5; Marcel, 15 okt: "wanneer hij
+  // valt kan er een ander opstaan. Deze uit veteranen gekozen", en B1 en C2 van 16 okt): een veteraan, anders de soldaat
+  // die het langst dient (p.soldaat.sinds), en is er niemand, dan de eerste die soldaat wordt of van de heervaart
+  // terugkomt (T.werkAanvoerderBij, elke tik). Het spel gaat door. Hij houdt zijn uiterlijk en zijn wapen (B1, p.wapen),
+  // telt niet meer mee in het wachthuis, heeft geen dienst, en staat waar je hem zet, zoals de eerste. Zijn gezin trekt
+  // in het huis van de aanvoerder (huis: 'aanvoerder': het town hall, of in het begin zijn tent), en wie daar woonde, in
+  // het zijne (C2: ze ruilen; had hij geen huis, dan is dat gezin dakloos, zoals na afbreken).
+
+  // Wie het overneemt, of null: een veteraan (de eerste in het dorp), anders de soldaat die het langst dient.
+  T.opvolgerVan = function (D) {
+    const kan = (p) => !p.weg && !p.komt && !p.aanvoerder && p.wezen && !p.wezen.dood;
+    const veteraan = mensen(D).find((p) => p.veteraan && kan(p));
+    if (veteraan) return veteraan;
+    const langst = (a, b) => (a.soldaat.sinds || 0) - (b.soldaat.sinds || 0) || a.id - b.id;
+    return T.soldatenVan(D).filter(kan).sort(langst)[0] || null;
+  };
+
+  // Bewoner p wordt de aanvoerder van D. Geeft wat hij was: 'veteraan' of de soort soldaat.
+  T.wordtAanvoerder = function (D, p) {
+    const e = p.wezen;
+    const l = T.levenAlsMan(e);
+    const was = p.soldaat ? p.soldaat.soort : 'veteraan';
+    p.wapen = p.soldaat ? p.soldaat.soort : 'militie';
+    delete p.soldaat;
+    delete p.veteraan;
+    p.aanvoerder = true;
+    p.werk = null;
+    p.bouwt = null;
+    // Hij staat waar je hem zet (geen dagritme, zoals de eerste), en wie sliep, komt naar buiten.
+    e.kant = 'speler';
+    e.dwaalt = false;
+    delete e.post;
+    e.binnen = false;
+    e.pad = e.onderweg && e.pad[0] ? [e.pad[0]] : [];
+    // Het leven van een aanvoerder (T.WEZENS.aanvoerder), met wat hij nu mist.
+    const max = T.WEZENS.aanvoerder.leven;
+    e.maxLeven = max;
+    e.leven = Math.min(max, l.leven + max - l.max);
+    D.aanvoerder = e;
+    // C2: zijn gezin naar het huis van de aanvoerder, en wie daar woonde naar het zijne.
+    const thuis = (D.gebouwen || []).find((g) => g.huis === 'aanvoerder');
+    const vorig = p.huis;
+    if (thuis && thuis !== vorig) {
+      const oud = mensen(D).filter((x) => x.huis === thuis && x.gezin !== p.gezin);
+      T.verhuis(D, mensen(D).filter((x) => x.gezin === p.gezin), thuis);
+      if (oud.length && vorig) T.verhuis(D, oud, vorig);
+      else if (oud.length) T.wordtDakloos(D, oud);
+    } else T.zetPlekken(D, p);
+    return was;
+  };
+
+  // De aanvoerder van D viel (T.valt, js/gevecht.js; T.sneuvelt zei het al): een ander neemt het over, of het dorp zegt
+  // dat er niemand is.
+  T.aanvoerderValt = function (D) {
+    D.aanvoerder = null;
+    if (!T.werkAanvoerderBij(D)) T.zeg(D, T.t('There is no one to take command. The first who becomes a soldier, will.'), 'gevaar');
+  };
+
+  // Elke tik (T.werkDorpBij, js/dorp.js): heeft D geen aanvoerder, en is er een veteraan of een soldaat, dan neemt die het
+  // over. Geeft wie, of null.
+  T.werkAanvoerderBij = function (D) {
+    if (D.aanvoerder || !D.bewoners) return null;
+    const p = T.opvolgerVan(D);
+    if (!p) return null;
+    const wie = T.hoofdletter(T.naamVanBewoner(p));
+    const was = T.wordtAanvoerder(D, p);
+    const thuis = (D.gebouwen || []).find((g) => g.huis === 'aanvoerder');
+    const huis = thuis ? (T.GEBOUWEN[thuis.soort] || {}).naam || thuis.soort : null;
+    const tekst = was === 'veteraan' ? T.t('{wie}, a veteran, takes command.', { wie }) : T.t('{wie}, the soldier who has served longest, takes command.', { wie });
+    T.zeg(D, huis ? `${tekst} ${T.t('His household moves into the {huis}.', { huis })}` : tekst, 'goed', T.tegelVan(p.wezen));
+    return p;
   };
 })(globalThis.Spel = globalThis.Spel || {});
