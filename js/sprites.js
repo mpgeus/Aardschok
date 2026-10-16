@@ -958,7 +958,7 @@
     else if (dx || dy) st.richting = S.richtingVan(dx, dy);
     else if (e.werkt && e.werkt.op) st.richting = S.richtingVan(e.werkt.op.x - e.x, e.werkt.op.y - e.y);
     else if (typeof e.kijkt === 'string') st.richting = e.kijkt;
-    else if (e.kijkt && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
+    else if (e.kijkt && typeof e.kijkt === 'object' && (e.kijkt.x !== e.x || e.kijkt.y !== e.y)) st.richting = S.richtingVan(e.kijkt.x - e.x, e.kijkt.y - e.y);
     if (e.uitval) st.richting = S.richtingVan(e.uitval.doel.x - e.x, e.uitval.doel.y - e.y);
 
     // Eenmalige houdingen: uithalen en geraakt worden. Ze worden vastgehouden tot ze zijn
