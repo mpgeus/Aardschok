@@ -75,9 +75,10 @@ afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
-spelregels vast bij het begin, en een woordmerk in pixel art. **Stap 1 tot 6 zijn af** (16 okt, op de branch
-`ccr-907f9459-i3k9fd`; `code.md` bij `js/menu.js`, `spel.md` bij "Instelbaar"), en **de proefplaat van het woordmerk wacht
-op Marcel** (`beeld.md`, "Het woordmerk"). **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt).
+spelregels vast bij het begin, en een woordmerk in pixel art. **Stap 1 tot 6 zijn af** (16 okt, in `main`; `code.md` bij
+`js/menu.js`, `spel.md` bij "Instelbaar"), en **172b, Settings in tabbladen met het venster en de beelden per seconde,
+ook** (Marcel: "Zaken als resolutie etc hebben we nodig"; `code.md` bij `js/instellingen.js`). **De proefplaat van het
+woordmerk wacht op Marcel** (`beeld.md`, "Het woordmerk").
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
@@ -89,13 +90,13 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Settings bekijken** (vraag 172b, 16 okt, op de branch `ccr-907f9459-i3k9fd`): het menu, *Settings*, en de vier
+- **Settings bekijken** (vraag 172b, 16 okt, in `main`): het menu, *Settings*, en de vier
   tabbladen. Het venster en zijn formaat zie je alleen in de verpakte versie: `npm run proefversie -- --windows`, en
   *Display*. **Wat Claude erbij koos** (zeg het als het anders moet): (1) de Steam-versie opent op het hele scherm (tot nu
   gemaximaliseerd); (2) pauze als je wegklikt staat standaard aan; (3) de helderheid in vijf stappen (80 tot 120%), alleen
   op de wereld, niet op de vensters; (4) F2 en *The meter* zijn hetzelfde; (5) de formaten tellen in de pixels van
   Windows: met een schaal van 150% past 1920×1080 niet op een scherm van 1080, en 1280×720 vult het dan.
-- **Het menu bekijken** (vraag 172, 16 okt, op de branch `ccr-907f9459-i3k9fd`): open het spel. Links het woord en de
+- **Het menu bekijken** (vraag 172, 16 okt, in `main`): open het spel. Links het woord en de
   keuzes als tekst, rechts het land; de muis of de pijltjes zetten het vaantje, Enter neemt. *Credits* en (met een spel
   bewaard) *Load* liggen op papier ernaast; *Settings* heeft het beeld, het hele scherm, de taal en de toetsen. *New game*:
   de naam, het land met het eiland, *Game rules* (*Standard*, of kies er zelf; dan maakt *Begin* het land opnieuw), en
@@ -915,7 +916,7 @@ geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat
 - **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
   (`commercieel.md`, "De capsule en het logo").
 
-**Stap 1 tot 6 zijn af** (16 okt, op de branch `ccr-907f9459-i3k9fd`); stap 7, de proefplaat van het woordmerk, wacht op
+**Stap 1 tot 6 zijn af** (16 okt, in `main`); stap 7, de proefplaat van het woordmerk, wacht op
 Marcel (`beeld.md`, "Het woordmerk").
 
 **172b, instellingen zoals in een echt spel** (Marcel, 16 okt, na stap 1 tot 6: **"Zaken als resolutie etc hebben we
@@ -930,7 +931,7 @@ gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrolle
   3840×2160, alleen wat past). Een smalle brug in de schil (`gereedschap/proefversie/maak.cjs`, een preload), zoals
   `verpakken.md` vraagt. In de browser alleen het hele scherm aan of uit.
 - Alles zijn opties met `instelling` (`js/opties.js`), zodat de browser ze op één manier onthoudt.
-- **Af** (16 okt, op de branch `ccr-907f9459-i3k9fd`; `code.md` bij `js/instellingen.js`, `verpakken.md`, "Het venster en
+- **Af** (16 okt, in `main`; `code.md` bij `js/instellingen.js`, `verpakken.md`, "Het venster en
   de brug"), en in Electron 44 voor Linux getest (het hele scherm, een venster van 1280×720, terug, en Quit).
 
 **Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
