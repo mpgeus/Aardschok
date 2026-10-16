@@ -921,6 +921,10 @@ dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het op
 - **Voor 6c, nog open** (Claude): een opdracht die zes tikken later ingaat (een tiende seconde), kan over internet te
   kort zijn (Age of Empires nam 200 tot 500 ms), en dan hapert het spel. Beter een getal in de werkbank, of een
   vertraging die meegroeit met wat de lijn meet.
+- **Voor 6c, valsspel en mods** (Marcel, 16 okt: mods zijn welkom, en "Ja" op het controlegetal; `verpakken.md`, "Open
+  voor mods"): het controlegetal is ook de vangst voor wie zijn wereld in de console verandert; met D1 wint de wereld van
+  wie opende. Bij meedoen een getal over de geladen bestanden, niet alleen `T.STAND` (een gemodde `js/` houdt dezelfde
+  commit). De mist is in lockstep alleen beeld: de hele kaart is met de console te zien; dat nemen we voor lief.
 
 ## J. Een volledig menu (vraag 172, 16 okt)
 

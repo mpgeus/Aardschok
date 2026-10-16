@@ -1020,6 +1020,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
+- **Mods als haak** (16 okt, `verpakken.md`, "Open voor mods"; Marcel: mods zijn welkom): de werkbank is al half een
+  ingang voor mods (alle getallen per onderwerp in een blok). Later een map `mods/` die de schil na het spel laadt, en
+  Steam Workshop om ze te delen; voor een spel als Settlers een echte haak. Niet gekozen; na de demo.
+
 - **Een vaandel boven de aanvoerder** (16 okt, vraag 170, stap 5): in een RTS zoek je je held snel, en nu vindt alleen
   Tab hem (hij draagt het vel van een dorpeling, en een nieuwe aanvoerder zijn eigen). Een klein vaandel boven hem, in
   code; eerst in woorden en een proefplaat (`beeld.md`). Niet gekozen.
