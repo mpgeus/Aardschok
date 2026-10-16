@@ -105,11 +105,14 @@
   <div id="debug" class="paneel verborgen"></div>
 
   <!-- De spelregels (js/hud.js, T.ui.openSpelregels; de lijst in js/opties.js): de keuzes, de
-       namen, en de werkbank met alle getallen. -->
+       namen, en de werkbank met alle getallen. Ze horen bij een spel en liggen vast als het begint (vraag 172). -->
   <div id="spelregels" class="paneel verborgen"></div>
+  <!-- Settings (js/instellingen.js; vraag 172): wat van jou is en niet van het spel: het beeld, het hele scherm, de
+       taal en de toetsen. -->
+  <div id="instellingen" class="paneel verborgen"></div>
 
   <!-- Het titelscherm en het menu (js/menu.js; de regels in js/opslaan.js): het spel opent op het
-       titelscherm, en in het spel opent Esc het menu. Opslaan, laden, de spelregels, en terug. -->
+       titelscherm, tekst over de wereld, en in het spel opent Esc het menu op papier (vraag 172). -->
   <div id="menu" class="verborgen"></div>
   <div id="opgeslagen" aria-live="polite" data-t="opgeslagen"></div>
 
@@ -217,6 +220,7 @@
   <script src="js/brieven.js"></script>
   <script src="js/wettenmenu.js"></script>
   <script src="js/debugvenster.js"></script>
+  <script src="js/instellingen.js"></script>
   <script src="js/gesprekken.js"></script>
   <script src="js/gesprek.js"></script>
   <script src="js/quests.js"></script>

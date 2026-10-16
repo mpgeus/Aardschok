@@ -51,7 +51,11 @@
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de aanvoerder zojuist is neergezet (js/gebied.js)
+      // De spelregels van dit spel (vraag 172, js/opties.js): wat je het laatst koos. Ze gelden meteen, ook voor het land
+      // dat hieronder komt (de hoogte), en liggen vast zodra het spel begint (New game, js/menu.js).
+      spelregels: T.nieuweSpelregels(),
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
+    T.pasSpelregelsToe(S);
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
@@ -81,9 +85,13 @@
     return { gelukt: true, kop: gelezen.kop };
   };
   // Een gelezen spel (T.leesSpel, js/opslaan.js) spelen: een nieuw spel, en het gelezene erover.
+  // De spelregels van het bewaarde spel (vraag 172, js/opties.js) gelden dan weer, vóór er een stuk land opengaat; een spel
+  // van vóór 16 okt heeft er geen, en speelt met wat de browser het laatst koos. (Niet in T.zetSpel: de toetsen herstellen
+  // daarmee hun proefdorp, en zetten soms vooraf zelf een getal.)
   function speelGelezen(gelezen) {
     T.nieuwSpel();
     T.zetSpel(S, gelezen);
+    T.pasSpelregelsToe(S);
     zetCameraOpAanvoerder();
     T.ui.reset(S);
   }
@@ -442,12 +450,13 @@
     return h ? { x: h.x, y: h.y } : { x: 0, y: 0 };
   }
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
-  // minuten, op de klok van het scherm, want de wereld staat daar stil.
+  // minuten, op de klok van het scherm, want de wereld staat daar stil. Sinds vraag 172 staat links de tekst van het
+  // titelscherm (js/menu.js), dus ligt het plein een stuk rechts van het midden (CAMERA.titelOpzij, een deel van de breedte).
   function titelCamera() {
     const m = pleinMidden();
     const hoek = (S.tijd / 120) * 2 * Math.PI;
     const p = T.naarSchermOp(S.wereld, m.x + 4 * Math.cos(hoek), m.y + 4 * Math.sin(hoek));
-    return { x: p.x, y: p.y - 24 };
+    return { x: p.x - (CAMERA.titelOpzij * bw) / S.zoom, y: p.y - 24 };
   }
   T.titelCamera = titelCamera;
 
@@ -458,6 +467,7 @@
   const CAMERA = {
     zoom: [0.5, 0.35], // verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
     sleepVanaf: 6, // in de fotomodus: zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
+    titelOpzij: 0.16, // achter het titelscherm ligt het plein zoveel van de breedte rechts van het midden (js/menu.js)
   };
   // De fotomodus (werklijst vraag 146, e; Marcel, 1 okt: een "goed idee voor de Steam pagina", en 10 okt: `H`, met een
   // regel in het menu, `Enter` bewaart een plaatje, en zoomen tot twee keer dichterbij). H haalt alles van het beeld: de

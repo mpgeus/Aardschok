@@ -3,8 +3,9 @@
 // gevecht sluit D een deur, js/gevecht.js). Vier knoppen, elk met een regel die er al is: +50 stammen, planken, steen en
 // goud (T.wijzigVoorraad), een gezin (T.gezinKomt, zoals op een groeidag: zonder plaats zegt het spel dat), de
 // bouwplaatsen meteen af (T.proefdorp.bouwAf en T.komtKlaar, js/begin.js en js/gebouwen.js; wie erin trekt, volgt de
-// nacht erna, zoals bij elk gebouw), en de marskramer nu (Spel.debug.marskramer, js/main.js). Zolang het open is, staat
-// de tijd stil, zoals bij elk venster.
+// nacht erna, zoals bij elk gebouw), en de marskramer nu (Spel.debug.marskramer, js/main.js). Sinds vraag 172 (16 okt)
+// ook de spelregels en de werkbank, om midden in een spel te proberen: in het menu lees je ze alleen. Zolang het open is,
+// staat de tijd stil, zoals bij elk venster.
 //
 // Aan tot de Steam-versie (Marcel, 15 okt), ook in de proefversie voor een tester; voor Steam zet het verpakken `aan` op
 // false (ontwerp/verpakken.md), en dan doet D bij het rondlopen niets.
@@ -35,6 +36,7 @@
       knop('gezin', T.t('A family comes')) +
       knop('af', T.t('Finish all building sites')) +
       knop('marskramer', T.t('The merchant comes now')) +
+      knop('regels', T.t('Game rules and the workbench')) +
       '</div>' +
       (gedaan ? `<p class="venster-staat">${gedaan}</p>` : '') +
       `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>D</kbd> closes it.')}</p>`
@@ -94,6 +96,11 @@
     b.blur();
     if (b.dataset.actie === 'sluit') {
       T.ui.sluitDebug(S);
+      return;
+    }
+    // De spelregels om te proberen, midden in het spel, met de werkbank (vraag 172, js/hud.js): een eigen venster.
+    if (b.dataset.actie === 'regels') {
+      T.ui.openSpelregels(S, 'debug');
       return;
     }
     gedaan = doe(S, b.dataset.actie);

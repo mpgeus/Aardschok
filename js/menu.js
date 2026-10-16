@@ -1,28 +1,40 @@
 // Het titelscherm en het menu (werklijst punt 3, vraag 48; Marcel, 28 sep: "Auto opslaan, maar ook zelf kunnen
-// kiezen. Er moet ook een menu komen titel scherm etc", en op het plan: "A ja B ja C ja D ja").
+// kiezen. Er moet ook een menu komen titel scherm etc", en op het plan: "A ja B ja C ja D ja"). Sinds vraag 172 (Marcel,
+// 16 okt: "We hebben een volledig menu nodig geen a.i slop") een volledig menu, en geen stapel kaders meer.
 //
-// Het spel opent op het titelscherm: de naam, en Verder, Nieuw spel, Laden, Spelregels en Taal (vraag 147). Achter het scherm
-// wacht een nieuw spel, stil, en de camera glijdt langzaam rond het plein (js/main.js, T.titelCamera). In
-// het spel opent Esc, of de knop Menu, het menu: Verder spelen, Opslaan, Laden, Spelregels en Naar het
-// titelscherm. Allebei zetten ze de tijd stil ('titel' en 'menu'). De regels van opslaan en laden staan in
-// js/opslaan.js; dit bestand is alleen scherm.
+// Het titelscherm is tekst over de wereld: links het woordmerk en de keuzes (Continue, New game, Load, Settings, Credits,
+// en Quit in de Steam-versie), over een donker verloop, en rechts glijdt de camera over het land dat achter het scherm
+// wacht (js/main.js, T.titelCamera). Een vaantje staat bij de keuze die je hebt: de muis en de pijltjes kiezen hetzelfde,
+// Enter neemt hem. New game is een eigen scherm op die plek: de naam van je dorp, het land (zijn nummer en het eiland),
+// en de spelregels, die daar vastliggen voor het hele spel (js/opties.js). Load en Credits openen ernaast op papier.
+// In het spel opent Esc, of de knop Menu, het menu op papier: Resume, Save, Load, Settings, Game rules (alleen lezen),
+// Photo mode, To the title screen, en Quit. Settings (js/instellingen.js) en de spelregels (js/hud.js) zijn vensters die
+// erbovenop opengaan; dicht is weer het menu. Het titelscherm en het menu zetten de tijd stil ('titel' en 'menu'). De
+// regels van opslaan en laden staan in js/opslaan.js; dit bestand is alleen scherm.
 (function (T) {
   'use strict';
 
   const $ = (id) => document.getElementById(id);
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
-  // Wat er open is: het titelscherm of het menu, of niets. Daarin misschien de lijst met plekken ('opslaan'
-  // of 'laden'), een vraag die eerst beantwoord moet worden, en wat er net gebeurde.
+  // Wat er open is: het titelscherm of het menu, of niets. Daarin misschien een lijst op papier ('opslaan', 'laden' of
+  // 'credits'), een vraag die eerst beantwoord moet worden, en wat er net gebeurde.
   let scherm = null;
   let lijst = null;
   let vraag = null; // { tekst, ja, doe }
   let melding = null;
-  // Bij Nieuw spel eerst de naam van je dorp (Marcel, 29 sep, werklijst vraag 60): het voorstel dat in het veld staat.
+  // Bij New game eerst de naam van je dorp (Marcel, 29 sep, werklijst vraag 60): het voorstel dat in het veld staat.
   let naamVoorstel = null;
+  // Met welke spelregels het land achter het scherm gemaakt is: kies je bij New game andere, dan maakt Begin het opnieuw
+  // (de hoogte maakt een ander land).
+  let landRegels = null;
 
   T.ui.titelOpen = () => scherm === 'titel';
   T.ui.menuOpen = () => scherm === 'menu';
+
+  // Afsluiten kan alleen in de verpakte versie (Electron, ontwerp/verpakken.md): daar sluit het venster, en dan het spel
+  // (de schil in gereedschap/proefversie/maak.cjs). In de browser doet het niets, dus staat het er daar niet.
+  const kanAfsluiten = () => typeof navigator !== 'undefined' && /Electron/.test(navigator.userAgent);
 
   // ── Hoe een bewaard spel heet ──
 
@@ -51,40 +63,52 @@
       wanneer: wanneer(kop.bewaardOm),
     });
 
+  // De spelregels in een paar woorden: Standard, of hoeveel er anders zijn (T.spelregelsAnders, js/opties.js).
+  const regelsKort = (S) => {
+    const n = T.spelregelsAnders(S);
+    return n ? T.t('Custom: {n|# rule differs|# rules differ} from the default', { n }) : T.t('Standard');
+  };
+
   // ── Wat er te zien is ──
 
-  function knop(actie, tekst, { uitleg = '', hoofd = false, uit = null, plek = null } = {}) {
+  // Eén keuze: op het titelscherm tekst over de wereld, in het menu een regel op papier (stijl.css, .menu-keuze). `uit`
+  // zegt waarom het niet kan; `open` als zijn lijst ernaast openstaat.
+  function knop(actie, tekst, { uitleg = '', hoofd = false, uit = null, plek = null, open = false } = {}) {
+    const klas = `menu-keuze${hoofd ? ' hoofd' : ''}${open ? ' open' : ''}`;
     return (
-      `<button class="menu-knop${hoofd ? ' hoofd' : ''}" data-actie="${actie}"${plek ? ` data-plek="${plek}"` : ''}${uit ? ' disabled' : ''}>` +
+      `<button class="${klas}" data-actie="${actie}"${plek ? ` data-plek="${plek}"` : ''}${uit ? ' disabled' : ''}>` +
       `<span>${tekst}</span>${uit || uitleg ? `<small>${veilig(uit || uitleg)}</small>` : ''}</button>`
     );
   }
 
-  function hoofdKnoppen(S) {
+  function hoofdKeuzes(S) {
     const spellen = T.opgeslagenSpellen();
     if (scherm === 'titel') {
       const nieuwste = spellen.find((s) => !s.reden);
       return (
         (nieuwste ? knop('verder', T.t('Continue'), { uitleg: beschrijf(nieuwste.kop), hoofd: true }) : '') +
         knop('nieuw', T.t('New game'), { hoofd: !nieuwste }) +
-        (spellen.length ? knop('laden', T.t('Load')) : '') +
-        knop('spelregels', T.t('Game rules')) +
-        knop('taal', T.t('Language'), { uitleg: T.TALEN[T.taalNu()].naam })
+        (spellen.length ? knop('laden', T.t('Load'), { open: lijst === 'laden' }) : '') +
+        knop('instellingen', T.t('Settings')) +
+        knop('credits', T.t('Credits'), { open: lijst === 'credits' }) +
+        (kanAfsluiten() ? knop('afsluiten', T.t('Quit')) : '')
       );
     }
     return (
       knop('verder', T.t('Resume'), { hoofd: true }) +
       knop('opslaan', T.t('Save'), { uit: T.waaromNietOpslaan(S) }) +
       knop('laden', T.t('Load'), { uit: spellen.length ? null : T.t('Nothing has been saved yet.') }) +
-      knop('spelregels', T.t('Game rules')) +
+      knop('instellingen', T.t('Settings')) +
+      knop('spelregels', T.t('Game rules'), { uitleg: regelsKort(S) }) +
       knop('foto', T.t('Photo mode'), { uitleg: T.t('Everything off the screen, for a picture. H in the game.') }) +
-      knop('titel', T.t('To the title screen'))
+      knop('titel', T.t('To the title screen')) +
+      (kanAfsluiten() ? knop('afsluiten', T.t('Quit')) : '')
     );
   }
 
-  // De plekken: om op te slaan de vijf eigen, leeg of niet; om te laden alles wat er staat, het nieuwste
-  // bovenaan (T.opgeslagenSpellen).
-  function plekKnoppen() {
+  // De plekken: om op te slaan de vijf eigen, leeg of niet; om te laden alles wat er staat, het nieuwste bovenaan
+  // (T.opgeslagenSpellen).
+  function plekKeuzes() {
     const spellen = T.opgeslagenSpellen();
     if (lijst === 'opslaan') {
       return T.opslagPlekken()
@@ -95,59 +119,134 @@
         })
         .join('');
     }
-    if (lijst === 'taal') {
-      // Elke taal in zijn eigen naam, want wie de taal van nu niet leest, moet de zijne toch vinden.
-      return T.talen()
-        .map((t) => knop('kiestaal', veilig(t.naam), { plek: t.code, hoofd: t.code === T.taalNu(), uitleg: t.eigen ? T.t('your own translation') : '' }))
-        .join('');
-    }
     return spellen.map((s) => knop('laad', naamVanPlek(s.plek), { plek: s.plek, uitleg: beschrijf(s.kop), uit: s.reden })).join('');
   }
 
+  // Wie het spel maakte, en de letters (hun licentie, de OFL, staat in letters/).
+  function credits() {
+    return (
+      `<div class="credits"><p class="credits-naam">${veilig(T.NAAM)}</p>` +
+      `<p>${T.t('A game by Marcel, made with Claude.')}</p>` +
+      `<p class="credits-kop">${T.t('Letters')}</p>` +
+      `<p>${T.t('Grenze, by Omnibus-Type, and Alegreya, by Huerta Tipográfica; both under the SIL Open Font License.')}</p>` +
+      (T.STAND ? `<p class="credits-stand">${veilig(T.STAND)}</p>` : '') +
+      '</div>'
+    );
+  }
+
+  // New game (vraag 172, 4): de naam van je dorp, het land (zijn nummer, een ander, en het eiland), de spelregels, Begin.
+  function nieuwSpelScherm(S) {
+    const land = landNu(S);
+    return (
+      `<p class="titel-kop">${T.t('New game')}</p>` +
+      `<label class="menu-veld"><span>${T.t('Your village')}</span>` +
+      `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamNu != null ? naamNu : naamVoorstel)}"></label>` +
+      (land != null
+        ? `<div class="menu-veld"><label for="landzaad">${T.t('The land')}</label>` +
+          `<div class="menu-land"><input id="landzaad" class="menu-invoer" type="text" inputmode="numeric" maxlength="5" autocomplete="off" spellcheck="false" value="${land}">` +
+          `<button class="menu-keuze klein" data-actie="anderland" title="${T.t('Another land, from a new number')}"><span>${T.t('Other land')}</span></button></div>` +
+          `<canvas id="eilandje" class="menu-eiland" width="1" height="1"></canvas></div>`
+        : '') +
+      knop('regels', T.t('Game rules'), { uitleg: regelsKort(S) }) +
+      knop('begin', T.t('Begin'), { hoofd: true }) +
+      knop('terug', T.t('Back'))
+    );
+  }
+
   function inhoud(S) {
-    let midden;
-    if (vraag) midden = `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
-    else if (naamVoorstel != null) {
-      // Het land (vraag 112, a): zijn nummer, om een land dat je mooi vond opnieuw te spelen, en een ander land.
-      const land = landNu(S);
-      midden =
-        `<label class="menu-kop" for="dorpsnaam">${T.t('What is your village called?')}</label>` +
-        `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamNu != null ? naamNu : naamVoorstel)}">` +
-        (land != null
-          ? `<label class="menu-kop" for="landzaad">${T.t('The land')}</label>` +
-            `<div class="menu-land"><input id="landzaad" class="menu-invoer" type="text" inputmode="numeric" maxlength="5" autocomplete="off" spellcheck="false" value="${land}">` +
-            `<button class="menu-knop" data-actie="anderland" title="${T.t('Another land, from a new number')}"><span>${T.t('Other land')}</span></button></div>`
-          : '') +
-        knop('begin', T.t('Begin'), { hoofd: true }) + knop('terug', T.t('Back'));
-    }
-    else if (lijst) {
-      const kop = { opslaan: T.t('Save to'), laden: T.t('Load from'), taal: T.t('Language') }[lijst];
-      midden = `<p class="menu-kop">${kop}</p>` + plekKnoppen() + knop('terug', T.t('Back'));
-    }
-    else midden = hoofdKnoppen(S);
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
+    const vraagje = () => `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
     if (scherm === 'titel') {
+      let links;
+      if (vraag) links = vraagje();
+      else if (naamVoorstel != null) links = nieuwSpelScherm(S);
+      else links = hoofdKeuzes(S);
+      // Load en Credits liggen op papier naast de keuzes.
+      const naast = lijst
+        ? `<div class="paneel menu-venster naast">` +
+          `<div class="venster-kop"><span class="venster-titel">${lijst === 'credits' ? T.t('Credits') : T.t('Load')}</span>` +
+          `<button class="venster-sluit" data-actie="terug" title="${T.t('Close (Esc)')}">✕</button></div>` +
+          `<div class="menu-regels">${lijst === 'credits' ? credits() : plekKeuzes()}</div></div>`
+        : '';
       const stand = T.STAND ? `<p class="menu-stand">${veilig(T.STAND)}</p>` : '';
-      return `<div class="menu-titel"><h1 class="menu-naam">${veilig(T.NAAM)}</h1><div class="menu-knoppen">${bericht}${midden}</div></div>${stand}`;
+      return (
+        `<div class="titel-links"><h1 class="titel-naam">${veilig(T.NAAM)}</h1>` +
+        `<div class="titel-keuzes${lijst ? ' achter' : ''}">${bericht}${links}</div></div>${naast}${stand}`
+      );
     }
+    let midden;
+    if (vraag) midden = vraagje();
+    else if (lijst) midden = `<p class="menu-kop">${lijst === 'opslaan' ? T.t('Save to') : T.t('Load from')}</p>` + plekKeuzes() + knop('terug', T.t('Back'));
+    else midden = hoofdKeuzes(S);
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
     return (
       `<div class="paneel menu-venster">` +
       `<div class="venster-kop"><span class="venster-titel">${T.t('Menu')}</span><span class="venster-wanneer">${dag}</span>` +
       `<button class="venster-sluit" data-actie="verder" title="${T.t('Close (Esc)')}">✕</button></div>` +
-      `<div class="menu-knoppen">${bericht}${midden}</div></div>`
+      `<div class="menu-regels">${bericht}${midden}</div></div>`
     );
   }
 
+  // Waar de pijltjes kiezen: op het papier als dat ernaast openstaat, anders alles.
+  const keuzeVak = () => $('menu').querySelector('.menu-venster.naast') || $('menu');
+  const keuzesIn = (vak) => [...vak.querySelectorAll('.menu-keuze:not(:disabled), .menu-invoer')]; // geen tekst
+  const sleutelVan = (el) => el && (el.id || `${el.dataset.actie}|${el.dataset.plek || ''}`);
+
+  // Opnieuw tekenen. Wat gekozen was, blijft gekozen (het vaantje); anders het veld van de naam, of de eerste keuze.
   function toon(S) {
     const doos = $('menu');
+    const was = doos.contains(document.activeElement) ? sleutelVan(document.activeElement) : null;
     doos.className = scherm || 'verborgen';
-    if (scherm) doos.innerHTML = inhoud(S);
+    doos.innerHTML = scherm ? inhoud(S) : '';
+    document.body.classList.toggle('nieuw-spel', scherm === 'titel' && naamVoorstel != null && !vraag);
+    if (!scherm) return;
+    const keuzes = keuzesIn(keuzeVak());
+    const terug = was && keuzes.find((el) => sleutelVan(el) === was);
     const veld = $('dorpsnaam');
-    if (veld) {
+    if (terug) terug.focus({ preventScroll: true });
+    else if (veld) {
       veld.focus();
       veld.select();
+    } else if (keuzes.length) keuzes[0].focus({ preventScroll: true });
+    if ($('eilandje')) tekenEiland(S);
+  }
+
+  // Na een venster erbovenop (de spelregels): het menu zegt weer wat er nu is (js/hud.js).
+  T.ui.werkMenuBij = (S) => {
+    if (scherm) toon(S);
+  };
+
+  // ── Het eiland bij New game ──
+
+  // Het land achter het scherm, als ruit zoals de minikaart in het spel (js/balk.js, js/minikaart.js), met een gouden
+  // stip waar je begint. Het beeld maakt de minikaart elk beeld een stukje verder (T.ui.werkMinikaartBij); zolang het niet
+  // af is, tekent dit het opnieuw.
+  function tekenEiland(S) {
+    const doek = $('eilandje');
+    const w = S.wereld;
+    if (!doek || !w || !T.opEiland(w)) return;
+    const E = T.eilandVan(w.eiland.zaad);
+    const m = T.minikaartBeeld(E);
+    const B = doek.clientWidth;
+    const k = window.devicePixelRatio || 1;
+    Object.assign(doek, { width: Math.round(B * k), height: Math.round((B / 2) * k) });
+    const beeld = Object.assign(document.createElement('canvas'), { width: m.n, height: m.n });
+    beeld.getContext('2d').putImageData(new ImageData(m.rgba, m.n, m.n), 0, 0);
+    const c = doek.getContext('2d');
+    c.imageSmoothingEnabled = false;
+    const s = (B / (2 * T.EILAND_INSTELLINGEN.maat)) * T.MINIKAART_INSTELLINGEN.stap * k;
+    c.setTransform(s, s / 2, -s, s / 2, (B / 2) * k, 0);
+    c.drawImage(beeld, 0, 0);
+    c.setTransform(k, 0, 0, k, 0, 0);
+    const h = S.dorp.aanvoerder || S.dorp;
+    if (h && h.x != null) {
+      const p = T.minikaartPunt(h.x, h.y, B);
+      c.fillStyle = '#1b1510';
+      c.fillRect(Math.round(p.x) - 3, Math.round(p.y) - 3, 6, 6);
+      c.fillStyle = '#e2b64a';
+      c.fillRect(Math.round(p.x) - 2, Math.round(p.y) - 2, 4, 4);
     }
+    if (m.klaar < m.n) requestAnimationFrame(() => tekenEiland(S));
   }
 
   // ── Open en dicht ──
@@ -198,12 +297,13 @@
     if (was) T.laatTijdGaan(S, was);
   }
 
-  // ── Wat een knop doet ──
+  // ── Wat een keuze doet ──
 
-  // Nieuw spel: eerst de naam van je dorp, met een voorstel (T.voorgesteldeDorpsnaam, js/treden.js). Het spel zelf
+  // New game: eerst de naam van je dorp, met een voorstel (T.voorgesteldeDorpsnaam, js/treden.js). Het spel zelf
   // wacht al achter het titelscherm.
   function kiesNaam(S) {
     naamVoorstel = T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad);
+    landRegels = JSON.stringify(S.spelregels);
     toon(S);
   }
 
@@ -212,8 +312,8 @@
   // Wat er in het veld van de naam staat, als je het land verandert: dat blijft staan (tenzij het het voorstel was).
   let naamNu = null;
 
-  // Een ander land achter het menu, uit dit nummer: een vers spel (js/main.js), dat net zo stil wacht. Het voorstel voor
-  // de naam hoort bij het land; wie zelf een naam typte, houdt die.
+  // Een ander land achter het menu, uit dit nummer: een vers spel (js/main.js), dat net zo stil wacht, met de spelregels
+  // die je nu koos. Het voorstel voor de naam hoort bij het land; wie zelf een naam typte, houdt die.
   function naarLand(S, zaad) {
     const veld = $('dorpsnaam');
     const getypt = veld && veld.value.trim();
@@ -222,6 +322,7 @@
     T.houdTijdStil(S, 'titel');
     S.camera = T.titelCamera();
     naamVoorstel = T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad);
+    landRegels = JSON.stringify(S.spelregels);
   }
 
   // Het nummer in het veld van het land, als het een land is (1 tot T.MAKER_INSTELLINGEN.zaden), anders null.
@@ -231,10 +332,12 @@
     return n != null && n >= 1 && n <= T.MAKER_INSTELLINGEN.zaden ? n : null;
   }
 
-  // Begin: de naam die er staat (leeg is het voorstel), op het land dat er staat, en dan de brief van de heer.
+  // Begin: de naam die er staat (leeg is het voorstel), op het land dat er staat, met de spelregels die er staan, en dan
+  // de brief van de heer.
   function begin(S) {
     const land = gekozenLand();
-    if (land != null && land !== landNu(S)) naarLand(S, land);
+    const zaad = land != null ? land : landNu(S);
+    if (zaad != null && (zaad !== landNu(S) || JSON.stringify(S.spelregels) !== landRegels)) naarLand(S, zaad);
     const veld = $('dorpsnaam');
     T.zetDorpsnaam(S.dorp, (veld && veld.value.trim()) || naamVoorstel);
     naamNu = null;
@@ -271,13 +374,14 @@
     }
     if (actie === 'terug') {
       if (vraag) vraag = null;
+      else if (lijst) lijst = null;
       else if (naamVoorstel != null) naamVoorstel = naamNu = null;
-      else lijst = null;
     } else if (actie === 'verder') {
       if (scherm === 'menu') return sluit(S);
       const nieuwste = T.nieuwsteSpel();
       if (nieuwste) return laad(S, nieuwste.plek);
     } else if (actie === 'nieuw') {
+      lijst = null;
       // Wie een nieuw spel begint, overschrijft straks wat er vanzelf bewaard is; zijn eigen plekken niet.
       if (T.opgeslagenSpellen().some((s) => s.plek === 'auto')) {
         vraag = {
@@ -292,13 +396,16 @@
       return begin(S);
     } else if (actie === 'anderland') {
       naarLand(S, T.nieuwLandZaad());
-    } else if (actie === 'opslaan' || actie === 'laden' || actie === 'taal') {
-      lijst = actie;
-    } else if (actie === 'kiestaal') {
-      if (plek !== T.taalNu()) return T.kiesTaal(plek); // de bladzijde herlaadt (js/taal.js)
+    } else if (actie === 'opslaan' || actie === 'laden' || actie === 'credits') {
+      lijst = lijst === actie && scherm === 'titel' ? null : actie; // op het titelscherm: nog eens is dicht
+    } else if (actie === 'instellingen') {
       lijst = null;
+      toon(S);
+      return T.ui.openInstellingen(S); // over het menu heen; dicht is weer het menu (js/instellingen.js)
     } else if (actie === 'spelregels') {
-      return T.ui.openSpelregels(S); // over het menu heen; dicht is weer het menu
+      return T.ui.openSpelregels(S, 'lezen'); // in het spel liggen ze vast (js/hud.js)
+    } else if (actie === 'regels') {
+      return T.ui.openSpelregels(S, 'nieuw'); // bij New game: de regels van het spel dat gaat beginnen
     } else if (actie === 'foto') {
       sluit(S);
       return T.zetFoto(true); // de fotomodus (js/main.js, werklijst vraag 146, e)
@@ -311,6 +418,9 @@
           T.naarTitelscherm();
         },
       };
+    } else if (actie === 'afsluiten') {
+      if (scherm === 'titel') return window.close();
+      vraag = { tekst: T.t('Quit the game? Anything since your last save will be lost.'), ja: T.t('Quit'), doe: () => window.close() };
     } else if (actie === 'bewaar') {
       const s = T.opgeslagenSpellen().find((x) => x.plek === plek);
       if (!s) return bewaar(S, plek);
@@ -330,8 +440,15 @@
   $('menu').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     if (!b || b.disabled || !T.S) return;
-    b.blur();
     doe(T.S, b.dataset.actie, b.dataset.plek);
+  });
+  // De muis kiest wat de pijltjes kiezen: de keuze eronder krijgt het vaantje. Niet zolang je een naam typt.
+  $('menu').addEventListener('mouseover', (ev) => {
+    const b = ev.target.closest('.menu-keuze');
+    const nu = document.activeElement;
+    if (!b || b.disabled || b === nu || (nu && nu.tagName === 'INPUT' && $('menu').contains(nu))) return; // geen tekst
+    if (!keuzeVak().contains(b)) return; // achter het papier ernaast
+    b.focus({ preventScroll: true });
   });
   $('menu-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
@@ -340,17 +457,33 @@
     else T.ui.openMenu(T.S);
   });
 
-  // Zolang het titelscherm of het menu open is, zijn de toetsen van hier: vóór die van het spel (js/main.js)
-  // en de kalender (js/hud.js), die ze dus niet meer zien. Esc gaat een stap terug, of sluit het menu. Liggen
-  // de spelregels erbovenop, dan zijn de toetsen van hen.
+  // Een stap omhoog of omlaag door de keuzes, rond.
+  function stapKeuze(richting) {
+    const keuzes = keuzesIn(keuzeVak());
+    if (!keuzes.length) return;
+    const i = keuzes.indexOf(document.activeElement);
+    const volgende = keuzes[(i + richting + keuzes.length) % keuzes.length];
+    volgende.focus({ preventScroll: true });
+    if (volgende.tagName === 'INPUT') volgende.select(); // geen tekst
+  }
+
+  // Zolang het titelscherm of het menu open is, zijn de toetsen van hier: vóór die van het spel (js/main.js) en de
+  // kalender (js/hud.js), die ze dus niet meer zien. De pijltjes kiezen, Enter neemt (in het veld van de naam: Begin), Esc
+  // gaat een stap terug, of sluit het menu. Ligt er een venster bovenop (Settings, de spelregels), dan zijn de toetsen van
+  // dat venster.
   window.addEventListener(
     'keydown',
     (ev) => {
-      if (!scherm || !T.S || T.ui.vensterOpen() === 'spelregels') return;
+      if (!scherm || !T.S || T.ui.vensterOpen()) return;
       ev.stopImmediatePropagation();
-      if (ev.key === 'Enter' && naamVoorstel != null) {
+      const inVeld = ev.target && ev.target.tagName === 'INPUT'; // geen tekst
+      if (ev.key === 'Enter' && inVeld && naamVoorstel != null) {
         ev.preventDefault();
         return doe(T.S, 'begin');
+      }
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        return stapKeuze(ev.key === 'ArrowDown' ? 1 : -1);
       }
       if (ev.key !== 'Escape') return;
       if (vraag || lijst || naamVoorstel != null) doe(T.S, 'terug');

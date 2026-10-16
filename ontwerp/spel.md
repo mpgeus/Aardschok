@@ -2572,9 +2572,15 @@ een galg misschien later. Dat is werk aan de kaart (`gereedschap/tiled/maak-gehu
 
 ## Instelbaar: opties in plaats van één keuze (Marcel, 24 sep 2026)
 
-**Zo werkt het nu** (25 sep; `js/opties.js`, het venster in `js/hud.js`):
-- Eén venster Spelregels (`O`, of de knop naast Bouwen), ook midden in een spel. Zolang het open is,
-  staat de tijd stil. De browser onthoudt wat je instelt.
+**Zo werkt het nu** (16 okt, vraag 172; `js/opties.js`, het venster in `js/hud.js`, Settings in `js/instellingen.js`):
+- **De spelregels horen bij een spel:** je kiest ze bij New game (*Standard*, of *Custom*), ze gaan mee als je opslaat,
+  en in het spel lees je ze alleen (het menu, of `O`). Een nieuw spel begint met wat je het laatst koos. Om te proberen
+  kun je ze midden in een spel omzetten in het debugvenster (D), met de werkbank erbij; dat is er tot de Steam-versie.
+- **Wat alleen het beeld raakt, is een instelling, onder Settings:** de tekening, de schaduwen, de doorkijk (twee), de
+  bomen door het jaar, het kleine leven, de kleren en de raad, met het hele scherm, de taal en de toetsen. Altijd te
+  veranderen, ook samen; de browser onthoudt het. De toets: raakt het de wereld, dan is het een spelregel.
+- Zolang een venster open is, staat de tijd stil.
+- *Hieronder wat er op 25 sep stond; de lijst van keuzes is sindsdien veranderd (`js/opties.js` heeft de stand).*
 - 17 keuzes, met wat Marcel koos als standaard: het graan, waarin de heer betaald wil worden, hoe
   hij telt, de schout aan de schandpaal, wie de boeren zijn, waar de heer de rekening op maakt, wat
   hij van het graan vraagt, honger buiten de winter, de vruchtbaarheid, of het vee groeit, het vee in
