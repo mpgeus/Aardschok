@@ -72,7 +72,8 @@ N1, V1", en "K1 en L1"): **6a2 loopt** (het plan bij I, in vier stukken: a de we
 wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Stuk a is af** (16 okt,
 in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
-eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). **Bezig in sessie
+`ccr-53565789-zrmyk0`** (16 okt): stuk b, het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
