@@ -626,7 +626,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   en komt terug naar zijn plek (de vorm die houdt, D2, naar `opmerkingen.md`); **E1** na de rechtsklik een halve seconde
   de plekken in groen op de grond. Erbij: `js/gevecht.js` gebruikte `e.kijkt` als klok, en `js/sprites.js` als
   kijkrichting, zodat wie gevochten had naar het zuiden keek als hij stilstond.
-- **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
+- **4, de diensten** (5a), en vijanden kunnen op elk uur komen. **Bezig in sessie `ccr-6d85b700-hg7aex`** (16 okt): het plan ligt bij Marcel.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
