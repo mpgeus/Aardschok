@@ -117,6 +117,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,hakker,zaaister,wiedster,sprokkelaarster,maaister,hakster`. Na elkaar zo'n
   twintig minuten; met een figuur per proces tegelijk (`node werkfiguren-anim.cjs sprokkelaarster` enzovoort, vier
   tegelijk) zo lang als de sprokkelaarster, en daarna `--proef`.
+- `lantaarn.cjs`: de lantaarn van de groepsleider (werklijst vraag 171, D2; `ontwerp/beeld.md`): het lantaarntje als
+  eigen laag over elk figuur, met het anker waar de hand het hengsel houdt, en per lijf, houding, richting en beeld waar
+  die hand zit, uit het model zelf (de delen handL en handR in de houding, omgerekend zoals `kern.cjs` tekent).
+  `node lantaarn.cjs` maakt de proefplaat `uit/lantaarn-proef.png` ('s nachts, ware grootte en drie keer vergroot) en
+  `uit/lantaarn-los.png`.
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

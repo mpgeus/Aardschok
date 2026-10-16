@@ -80,7 +80,8 @@ stenen huizen. **Ronde 3 is af.**
   vierkant kooitje van zwart ijzer, zo'n 6 bij 9 pixels, met vier ruitjes van hoorn (warm oranjegeel als hij brandt), een
   spits dakje met gaatjes, een ring en een hengsel, en één flakkerend vlammetje; aan het hengsel in de hand aan de kant
   van de kijker, op heuphoogte, schommelend met de pas. **Gekozen** (Marcel: "M2, E1"): de laag, en alleen in beeld als
-  hij brandt (`beeld.md`, "De lantaarn van de groepsleider"). Nu de proefplaat.
+  hij brandt (`beeld.md`, "De lantaarn van de groepsleider"). De proefplaat is er (16 okt, `node
+  gereedschap/pixelart/lantaarn.cjs`), en wacht op zijn oordeel; daarna het vel, de handen per figuur en het tekenen.
 - **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
   wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
   bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin

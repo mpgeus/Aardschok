@@ -1053,6 +1053,11 @@ bode); de tekening is het lantaarntje met een klein waasje eromheen.
   beeld), niet een vel per uiterlijk zoals de zager: één klein vel, voor elk figuur, elk uiterlijk en alle kleren. De
   arm zelf verandert niet.
 - **E1:** alleen in beeld als hij brandt (buiten in het donker, `T.draagtLicht` in `js/zien.js`); overdag niet.
+- **De proefplaat** (16 okt; `node gereedschap/pixelart/lantaarn.cjs`, `uit/lantaarn-proef.png`): het kooitje een
+  kwartslag gedraaid (een ruit recht, de volgende schuin), met dunne stijlen, zodat het hoorn het meest te zien is: zo'n
+  6 bij 11 pixels; de hand komt uit het model, en welke hand per richting vast is (de dichtste in het eerste beeld van
+  staan, recht van voren en van achteren de rechter), zodat hij bij het lopen niet van hand wisselt. Op de boer, de
+  boerin en de jongen, 's nachts. Wacht op Marcel.
 
 ## De heide (25 sep 2026)
 
