@@ -69,7 +69,8 @@ I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dor
 eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Marcel kwam erna met "de wereld van
 iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
 N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens
-bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Bezig in
+sessie `ccr-53565789-zrmyk0`** (16 okt): 6a2, eerst het plan voor stuk a voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
