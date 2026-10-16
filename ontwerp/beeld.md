@@ -1058,6 +1058,19 @@ bode); de tekening is het lantaarntje met een klein waasje eromheen.
   6 bij 11 pixels; de hand komt uit het model, en welke hand per richting vast is (de dichtste in het eerste beeld van
   staan, recht van voren en van achteren de rechter), zodat hij bij het lopen niet van hand wisselt. Op de boer, de
   boerin en de jongen, 's nachts. **Marcel: "goed zo voor nu".**
+- **In het spel** (Marcel, 16 okt: "A1, B1"): **A1** wie een hand in de zij heeft (boer 5 en 23, boerin 3), draagt hem
+  aan die hand, op de heup (drie van de 72 volwassen uiterlijken, en op 6 bij 11 pixels zie je het nauwelijks); **B1**
+  lopend schommelt hij in drie standen die vooraf gerenderd zijn (de onderkant naar links, recht, naar rechts; 9 graden),
+  want een pixeltekening draaien in het spel rafelt de randen. Hij draait om de kijkrichting, zodat zijn vlakken even ver
+  naar de camera kijken en het hoorn schuin net zo gloeit als recht (om een liggende as werd het een zigzag). Hij zwaait
+  mee met de arm, een beeld later, zoals een lantaarn die doorzwaait: is de hand op het scherm naar rechts uitgezwaaid,
+  dan hangt de onderkant daarna naar rechts. Recht van voren of van achteren gaat de hand vooral op en neer, en hangt hij
+  recht.
+- **Hoe het spel hem tekent** (`js/tekenen.js`, `tekenLantaarn`): direct na zijn figuur, zodat een dak of een boom
+  ervoor hem met zijn drager bedekt. Eerst stond hij ná de nacht, zoals de ogen van de wolf: dan zweefde hij boven een dak
+  als zijn drager erachter liep. Maar in de diepte valt de nacht erover, en dan gloeit het hoorn niet. Daarom gaat het
+  zoals bij de ramen: het vel heeft een tweede laag met alleen wat gloeit (het hoorn en de vlam), daarmee gaat er een gat
+  in het doek, daar valt de nacht niet in, en na de nacht komt dezelfde laag erin terug.
 
 ## De heide (25 sep 2026)
 

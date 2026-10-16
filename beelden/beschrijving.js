@@ -47352,6 +47352,27 @@
      "half",
      "vol"
     ]
+   },
+   "lantaarn": {
+    "bestand": "lantaarn.png",
+    "cel": [
+     22,
+     30
+    ],
+    "anker": [
+     10,
+     3
+    ],
+    "vlammen": 2,
+    "standen": [
+     -1,
+     0,
+     1
+    ],
+    "lagen": [
+     "heel",
+     "gloed"
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

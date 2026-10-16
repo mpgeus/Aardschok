@@ -74,6 +74,7 @@
       if (gegevens.pestbos) vellen.push(gegevens.pestbos.bestand);
       if (gegevens.stapels) vellen.push(gegevens.stapels.bestand);
       if (gegevens.hol) vellen.push(gegevens.hol.bestand);
+      if (gegevens.lantaarn) vellen.push(gegevens.lantaarn.bestand);
       if (gegevens.wijnrank) vellen.push(gegevens.wijnrank.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
@@ -587,6 +588,28 @@
     if (!gegevens || !gegevens.hol) return null;
     const t = gegevens.hol;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // De lantaarn in de hand van een groepsleider of de aanvoerder (js/tekenen.js, tekenLantaarn;
+  // gereedschap/pixelart/lantaarn.cjs; werklijst vraag 171): een rij per stand van het schommelen (`scheef`: -1 de
+  // onderkant naar links, 0 recht, 1 naar rechts), een kolom per beeld van de vlam, met het anker waar de hand het hengsel
+  // vasthoudt; `laag` is 'heel' (de lantaarn) of 'gloed' (alleen het hoorn en de vlam). Null als het vel er niet is.
+  S.lantaarn = function (vlam, scheef, laag = 'heel') {
+    const t = gegevens && gegevens.lantaarn;
+    if (!t) return null;
+    const rij = Math.max(0, t.lagen.indexOf(laag)) * t.standen.length + Math.max(0, t.standen.indexOf(scheef));
+    return stuk(MAP + t.bestand, (vlam % t.vlammen) * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+  // Waar de hand zit die de lantaarn draagt, in het beeld dat dit wezen het laatst kreeg (e.beeldStand.laatste, S.wezen):
+  // [dx, dy, scheef] tegen het anker van zijn vel (beelden/handen.js, T.HANDEN, van lantaarn.cjs --handen), of null als
+  // zijn vel of zijn houding er geen heeft.
+  S.handVan = function (e) {
+    const l = e.beeldStand && e.beeldStand.laatste;
+    const H = T.HANDEN;
+    if (!l || !H || H.vellen[l.naam] == null) return null;
+    const rij = H.sets[H.vellen[l.naam]][l.houding];
+    const beelden = rij && rij[H.richtingen.indexOf(l.richting)];
+    return (beelden && beelden[l.beeld]) || null;
   };
 
   // Een wijnrank (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs; vraag 136): een rij per stand ('kaal', 'blad', 'vol',

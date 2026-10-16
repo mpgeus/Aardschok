@@ -185,6 +185,7 @@
     bx.fillRect(0, 0, maat, maat);
     bx.globalCompositeOperation = 'source-over';
     ctx.drawImage(kijkgatCv, 0, 0, maat, maat, ox, oy, maat, maat);
+    T.ponsLantaarns(ctx); // de lantaarns erin gloeien (js/tekenen.js, tekenLantaarn)
   };
 
   // ---------------------------------------------------------------- het raster

@@ -637,6 +637,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.sprites.houding`), wie van figuur wisselt, houdt zijn oude beeld tot het nieuwe er is, en wie net komt, staat er
   pas als zijn figuur er is (`T.sprites.laadtWezen`, in `tekenWezen`). Bij het begin zo'n 80 MB aan plaatjes; wat de
   browser vasthoudt, zegt `Spel.debug.vellen()` (`T.sprites.geladen`).
+- **De lantaarn in de hand** (vraag 171, D2): `T.sprites.lantaarn(vlam, scheef, laag)` geeft een cel van
+  `beelden/lantaarn.png` (`naar-spel.cjs --alleen lantaarn`, uit `gereedschap/pixelart/lantaarn.cjs`): een rij per stand
+  van het schommelen (-1, 0, 1), een kolom per beeld van de vlam, en twee lagen, 'heel' en 'gloed' (alleen het hoorn en de
+  vlam). `T.sprites.handVan(e)` zegt waar de hand zit in het beeld dat het wezen het laatst kreeg
+  (`e.beeldStand.laatste`): `[dx, dy, scheef]` uit `beelden/handen.js` (`T.HANDEN`, van `lantaarn.cjs --handen`: elke set
+  handen één keer, en per vel het nummer van zijn set, want de kleren en de meeste uiterlijken veranderen de hand niet).
+  Een nieuw lijf of uiterlijk: draai `--handen` opnieuw (`test/lantaarn.test.cjs` kijkt of elk vel van een drager handen
+  heeft). Getekend in `js/tekenen.js` (`tekenLantaarn`, in `tekenWezen` na het figuur): het hoorn gloeit zoals de ramen,
+  met een gat in het doek dat na de nacht wordt gevuld (`vulLantaarns`); in een kijkgat komt het gat erna
+  (`T.ponsLantaarns`, `js/doorkijk.js`).
 
 ### js/doorkijk.js: de doorkijk
 
@@ -688,7 +698,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   soort 'drager': `T.draagtLicht(D, e)`, buiten in het donker, voor de bode en wie meegaat (`T.bodeDragers`, `js/bode.js`)
   en de aanvoerder en de groepsleiders (`T.lantaarnDragers`, `js/soldaten.js`; vraag 171; tot vraag 170, stap 5 had
   alleen de schout er een, `T.draagtLantaarn`), voor het licht in `js/tekenen.js` en voor de
-  wolven, die niemand in het licht aanvallen (`js/beesten.js`); `T.huizenMetIemandThuis` zegt welke huizen
+  wolven, die niemand in het licht aanvallen (`js/beesten.js`); wie er nu een brandende draagt, geeft `T.lichtDragers(D)`
+  (voor zijn licht, en voor het lantaarntje in zijn hand); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 
 ### gereedschap/pixelart/: de beelden uit code

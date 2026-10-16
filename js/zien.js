@@ -56,12 +56,15 @@
   // donker genoeg is. Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'drager'.
   T.draagtLicht = (D, e) => !!e && !e.dood && !e.binnen && !!D.kalender && !!D.wereld && D.wereld.wezens.includes(e) &&
     T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf && (T.bodeDragers(D).includes(e) || T.lantaarnDragers(D).includes(e));
-  function dragersLicht(D) {
+  // Wie er nu een brandende lantaarn draagt: voor zijn licht (hieronder) en voor het lantaarntje in zijn hand
+  // (js/tekenen.js, tekenLantaarn).
+  T.lichtDragers = function (D) {
     if (!D.kalender || !D.wereld || T.lichtVan(D.kalender.dag).nacht < IN().lantaarn.vanaf) return [];
+    return [...new Set([...T.bodeDragers(D), ...T.lantaarnDragers(D)])].filter((e) => T.draagtLicht(D, e));
+  };
+  function dragersLicht(D) {
     const L = IN().lantaarn;
-    return [...new Set([...T.bodeDragers(D), ...T.lantaarnDragers(D)])]
-      .filter((e) => T.draagtLicht(D, e))
-      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
+    return T.lichtDragers(D).map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
   }
 
   // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's

@@ -1151,8 +1151,11 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
 - **De groepsleider met zijn lantaarn** (vraag 171; Marcel, 16 okt: "elke groep soldaten heeft een groepsleider die een
   lantaarn draagt", en "A1, B1, C1, D2"): de soldaten van een wachthuis zijn een groep, en hun leider is, van wie nu
   dienst heeft, wie het langst dient (zo heeft de nachtwacht haar eigen leider); de aanvoerder draagt er ook een. Buiten
-  in het donker brandt zijn lantaarn, als licht zoals bij de bode: de wolven vallen niemand in dat licht aan. De
-  lantaarn in zijn hand (D2) is nog een tekening: eerst in woorden, dan een proefplaat.
+  in het donker brandt zijn lantaarn, als licht zoals bij de bode: de wolven vallen niemand in dat licht aan. **De
+  lantaarn in zijn hand** (D2, 16 okt; Marcel: "M2, E1" en "A1, B1"; `beeld.md`, "De lantaarn van de groepsleider"):
+  zolang hij brandt, hangt er een lantaarntje aan de hand aan de kant van de kijker, met een gloeiend hoorn; lopend
+  schommelt hij mee met de arm, en wie een hand in de zij heeft, draagt hem op de heup. Een dak of een boom ervoor
+  bedekt hem met zijn drager. De bode en wie meegaat krijgen er ook een, als ze een vel met handen hebben.
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

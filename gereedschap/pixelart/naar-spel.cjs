@@ -12,6 +12,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kamp
 //   node gereedschap/pixelart/naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
+//   node gereedschap/pixelart/naar-spel.cjs --alleen lantaarn
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
 //   node gereedschap/pixelart/naar-spel.cjs --uiterlijken      (de uiterlijken die klaarstaan, vraag 145)
@@ -23,7 +24,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -46,6 +47,7 @@ const Pestbos = require('./pestbos.cjs');
 const Stapels = require('./stapels.cjs');
 const Kamp = require('./kamp.cjs');
 const Hol = require('./hol.cjs');
+const Lantaarn = require('./lantaarn.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
@@ -235,6 +237,16 @@ function hol() {
   return Hol.beschrijving('hol.png');
 }
 
+// ---------------------------------------------------------------- de lantaarn van de groepsleider
+//
+// Het lantaarntje in de hand (lantaarn.cjs; werklijst vraag 171): een rij per stand van het schommelen, een kolom per beeld
+// van de vlam. js/sprites.js zoekt het op met S.lantaarn(vlam, scheef), en js/tekenen.js legt zijn anker op de hand
+// (beelden/handen.js, van lantaarn.cjs --handen).
+function lantaarn() {
+  schrijf('lantaarn.png', Lantaarn.vel());
+  return Lantaarn.beschrijving('lantaarn.png');
+}
+
 // ---------------------------------------------------------------- de marktkraam
 //
 // De kramen van de markt (marktkraam.cjs, ontwerp/werklijst.md, vraag 110, d en vraag 127): per waar vol en leeg, van elke
@@ -272,7 +284,7 @@ function uiterlijken() {
   return Object.fromEntries(Object.entries(UI.UITERLIJKEN).map(([lijf, lijst]) => [lijf, lijst.map((o) => o.kleur)]));
 }
 
-const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, wijnrank, marktkraam, tekens, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, lantaarn, wijnrank, marktkraam, tekens, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

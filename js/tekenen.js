@@ -585,6 +585,8 @@
     // Wie aan de schandpaal staat, krijgt het halsijzer om: een eigen laag ná zijn beeld (l 2,5,
     // zoals de voorlaag van het graan), zodat de band vóór zijn nek komt.
     const aanDePaal = metSprites() && D && T.aanDePaal ? T.aanDePaal(D) : null;
+    // Wie er nu een brandende lantaarn draagt, voor tekenWezen (tekenLantaarn), één keer per beeld.
+    lantaarnsNu = new Set(metSprites() && D && !(T.debug && T.debug.geenNacht) ? T.lichtDragers(D) : []);
     for (const e of w.wezens) {
       // Met sprites blijft het laatste beeld van het sterven liggen; met vlakken vervaagt het.
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
@@ -618,6 +620,8 @@
     }
     const volgorde = tekenVolgorde(lijst);
     voorsteKijkgaten(volgorde, kijkgaten);
+    // De lantaarns die hierna een gat krijgen (tekenLantaarn): pas nu, na de schaduwen, die de lijst ook tekenen.
+    lantaarnGaten = { doek: ctx, gaten: [], wacht: [] };
     for (const item of volgorde) {
       item.f();
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
@@ -635,6 +639,7 @@
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     for (const r of ramen) vulRamen(ctx, S, r);
+    vulLantaarns(ctx);
     tekenOgen(ctx, S);
     tekenVuur(ctx, S);
     tekenWolkjes(ctx, S);
@@ -2980,6 +2985,7 @@
     let top;
     if (deel) {
       T.sprites.teken(ctx, deel, cx, cy);
+      if (lantaarnsNu.has(e)) tekenLantaarn(ctx, S, e, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
       // een klap: een rood dambord over de figuur
       if (e.flits > 0) overlaag(ctx, deel, cx, cy, KLAP_KLEUR, e.flits > 0.18 ? 0.5 : 0.25);
@@ -3047,6 +3053,63 @@
         ctx.fillRect(x - 0.9 * k, y - 0.9 * k, 1.8 * k, 1.8 * k);
       }
     }
+  }
+
+  // De lantaarn van een groepsleider en de aanvoerder (js/soldaten.js, T.lantaarnDragers; werklijst vraag 171): het
+  // lantaarntje in zijn hand, alleen als hij brandt (T.lichtDragers, js/zien.js: buiten in het donker; Marcel, 16 okt, E1).
+  // Direct na zijn figuur, in tekenWezen, zodat een dak of een boom ervoor hem met zijn drager bedekt, en het kijkgat
+  // (js/doorkijk.js) hem met zijn drager terugtekent. Het hoorn en de vlam gloeien, zoals de ramen: meteen gaat er een gat
+  // in het doek waar ze zitten (wat er later voor komt, vult het weer), daar valt de nacht niet in, en na de nacht komen ze
+  // erin terug (vulLantaarns). Een kijkgat tekent op een eigen doek: dan komt het gat erna (T.ponsLantaarns). Met een klein
+  // waasje eromheen. Waar de hand zit en hoe scheef hij bij het lopen hangt (B1), staat per vel in beelden/handen.js
+  // (T.sprites.handVan; gereedschap/pixelart/lantaarn.cjs --handen), en de vlam flakkert op de klok van het scherm. Een vel
+  // zonder handen (een werkvel, of nog niet gerenderd) krijgt geen lantaarntje: zijn licht blijft.
+  // Alleen scherm, elk beeld opnieuw (tekenScene): wie een lantaarn draagt, en de gaten in het doek.
+  let lantaarnsNu = new Set();
+  let lantaarnGaten = { doek: null, gaten: [], wacht: [] };
+  const LANTAARN_WAAS = { onder: 8, straal: 10, sterkte: 0.32 }; // pixels onder de hand, pixels, 0 tot 1
+  function vulLantaarns(ctx) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over'; // alleen in wat er van de gaten over is
+    for (const g of lantaarnGaten.gaten) T.sprites.teken(ctx, g.deel, g.x, g.y);
+    ctx.restore();
+    lantaarnGaten = { doek: null, gaten: [], wacht: [] };
+  }
+  function ponsLantaarn(ctx, gat) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    T.sprites.teken(ctx, gat.deel, gat.x, gat.y);
+    ctx.restore();
+    lantaarnGaten.gaten.push(gat);
+  }
+  // Na een kijkgat (js/doorkijk.js, T.tekenKijkgat): de lantaarns die erin kwamen, krijgen nu hun gat in het doek.
+  T.ponsLantaarns = function (ctx) {
+    if (ctx === lantaarnGaten.doek) for (const gat of lantaarnGaten.wacht) ponsLantaarn(ctx, gat);
+    lantaarnGaten.wacht = [];
+  };
+  function tekenLantaarn(ctx, S, e, cx, cy) {
+    const hand = T.sprites.handVan(e);
+    if (!hand) return;
+    const vlam = Math.sin(S.tijd * 9 + e.fase * 5) + Math.sin(S.tijd * 23 + e.fase) > 0 ? 1 : 0;
+    const deel = T.sprites.lantaarn(vlam, hand[2]);
+    if (!deel) return;
+    // zoals het figuur (T.sprites.teken rondt zijn hoek af): de hand op de pixel van zijn vel
+    const hx = Math.round(cx) + hand[0];
+    const hy = Math.round(cy) + hand[1];
+    const W = LANTAARN_WAAS;
+    const gloed = ctx.createRadialGradient(hx, hy + W.onder, 0, hx, hy + W.onder, W.straal);
+    gloed.addColorStop(0, `rgba(255,200,120,${W.sterkte})`);
+    gloed.addColorStop(1, 'rgba(255,170,80,0)');
+    ctx.fillStyle = gloed;
+    ctx.beginPath();
+    ctx.arc(hx, hy + W.onder, W.straal, 0, Math.PI * 2);
+    ctx.fill();
+    T.sprites.teken(ctx, deel, hx, hy);
+    const hoorn = lantaarnGaten.doek && T.sprites.lantaarn(vlam, hand[2], 'gloed');
+    if (!hoorn) return;
+    const gat = { deel: hoorn, x: hx, y: hy };
+    if (ctx === lantaarnGaten.doek) ponsLantaarn(ctx, gat);
+    else lantaarnGaten.wacht.push(gat); // in een kijkgat
   }
 
   function tekenWolkjes(ctx, S) {

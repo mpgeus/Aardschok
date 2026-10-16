@@ -121,7 +121,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   eigen laag over elk figuur, met het anker waar de hand het hengsel houdt, en per lijf, houding, richting en beeld waar
   die hand zit, uit het model zelf (de delen handL en handR in de houding, omgerekend zoals `kern.cjs` tekent).
   `node lantaarn.cjs` maakt de proefplaat `uit/lantaarn-proef.png` ('s nachts, ware grootte en drie keer vergroot) en
-  `uit/lantaarn-los.png`.
+  `uit/lantaarn-los.png`; `node lantaarn.cjs --handen` schrijft `beelden/handen.js` (de hand en de stand van het
+  schommelen per vel, houding, richting en beeld, voor elk vel dat een drager kan hebben; opnieuw als een lijf, een houding
+  of een uiterlijk verandert), en `node naar-spel.cjs --alleen lantaarn` het vel `beelden/lantaarn.png` (drie standen
+  van het schommelen, twee beelden van de vlam, en een laag met alleen wat gloeit).
 - `schandpaal.cjs`: de schandpaal, leeg en bezet, en het halsijzer als eigen laag over wie eraan
   staat (`node schandpaal.cjs` maakt de proefplaat `uit/schandpaal-proef.png`, daarna
   `node naar-spel.cjs --alleen schandpaal`). De hoogte van de nek wordt gemeten op de boer en de

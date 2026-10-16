@@ -62,7 +62,8 @@ is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aa
 over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
 171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"). **De
 regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed** (16 okt, in `main`; Marcel: "goed zo
-voor nu"). **Het volgende is 171 afmaken:** de lantaarn in het spel tekenen (bij I). **Bezig in sessie `claude/ecstatic-ride-yam3i6`** (16 okt): het plan voor Marcel, dan het tekenen. Daarna **stap 6, samen spelen** (bij
+voor nu"). **Het lantaarntje in de hand is af** (16 okt, op de branch `claude/ecstatic-ride-yam3i6`; Marcel: "A1, B1"; `beeld.md`,
+"De lantaarn van de groepsleider"); **het licht om de drager wacht op Marcel** (hieronder). Daarna **stap 6, samen spelen** (bij
 I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
@@ -76,11 +77,23 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met
-  twee man militie (+), en kijk 's avonds (`Spel.debug.uur(21)`): om de aanvoerder en de leider van wie dienst heeft,
-  staat een warm licht, en de wolven vallen wie in dat licht staat niet aan. Het lantaarntje in de hand komt in de
-  volgende stap. **Wat Claude erbij koos** (zeg het als het anders moet): de leider is, van wie *nu* dienst heeft, wie
-  het langst dient, zodat de nachtwacht 's nachts haar eigen leider heeft.
+- **Het licht om de drager kiezen** (vraag 171, 16 okt; Marcel: "het licht is beetje lelijk, het ligt vóór het
+  poppetje"): de plas licht ligt om zijn voeten, 3 tegels breed en in het midden 1,2 keer zo fel als overdag, en hij
+  staat altijd in dat felste midden, dus het ligt als een waas over hem. De proef (Marcel kreeg
+  het beeld in het gesprek; `uit/` staat niet in git; alleen getallen, de 3 tegels van de regel voor de wolven blijven):
+  **L0** zoals nu; **L1** geen plas, alleen het gloeiende lantaarntje (`sterkte` 0); **L2** dezelfde plas, zachter
+  (`sterkte` 0,2): hij is niet meer overbelicht; **L3** een kleinere plas op het scherm (1,5 tegel, 0,35), wat een eigen
+  getal voor het beeld vraagt, los van de straal van de regel. Voorstel van Claude: **L2**, want het is alleen een getal
+  in de werkbank ("Light in the village", `lantaarn.sterkte`). (Beoordeel het met de videokaart: zonder valt de plas als een waas over alles.)
+- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt; de regel en het licht in `main`, het lantaarntje op
+  de branch `claude/ecstatic-ride-yam3i6`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
+  *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
+  licht, en de wolven vallen wie in dat licht staat niet aan. In zijn hand hangt een lantaarntje met een gloeiend hoorn,
+  dat bij het lopen meeschommelt; loopt hij achter een huis, dan is het mee weg. **Wat Claude erbij koos** (zeg het als
+  het anders moet): (1) de leider is, van wie *nu* dienst heeft, wie het langst dient, zodat de nachtwacht 's nachts
+  haar eigen leider heeft; (2) het lantaarntje komt in de diepte, direct na zijn figuur, en het hoorn gloeit zoals de
+  ramen (`beeld.md`): zo zweeft het niet boven een dak; (3) de bode en wie meegaat krijgen er ook een, als ze een vel
+  met handen hebben (wie in een werkvel loopt, krijgt er geen: zijn licht blijft).
 - **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
   wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
   bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
@@ -696,12 +709,12 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **De regel en het licht
   zijn af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"; `code.md` bij `js/soldaten.js`), en **de proefplaat van
   de lantaarn in de hand is goed** (Marcel: "goed zo voor nu"; `beeld.md`, "De lantaarn van de groepsleider";
-  `gereedschap/pixelart/lantaarn.cjs`). **Nog te doen:** het vel naar `beelden/` (het lantaarntje, twee beelden van de
-  vlam), de handen per figuur als gegevens (zoals `beelden/ogen.js`: per vel, houding, richting en beeld; voor alle
-  uiterlijken van de boer, de boerin, de jongen en het meisje, in hun kleren, en de oude vellen dorpeling0 en dorpeling1
-  van de eerste aanvoerder), en het tekenen in `js/tekenen.js` na het figuur, als `T.draagtLicht` (zoals `tekenOgen`, met
-  `e.beeldStand.laatste`). Open: twee boeren hebben een hand in de zij (uiterlijk 5 en 23), en dan hangt de lantaarn aan
-  die hand op de heup. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
+  `gereedschap/pixelart/lantaarn.cjs`), en **het lantaarntje in de hand is af** (16 okt, op de branch
+  `claude/ecstatic-ride-yam3i6`; `beeld.md`, "Hoe het spel hem tekent"; `code.md` bij `js/sprites.js`): het vel in
+  `beelden/lantaarn.png`, de handen in `beelden/handen.js`, en het tekenen in `js/tekenen.js` (`tekenLantaarn`). Open: het
+  licht om de drager ("Wacht op Marcel"). Gekozen voor het tekenen (Marcel, 16 okt: "A1, B1"): **A1** wie een hand in de zij heeft (boer 5
+  en 23, boerin 3), draagt de lantaarn aan die hand, op de heup; **B1** het schommelen bij het lopen in drie standen die
+  vooraf gerenderd zijn (scheef naar links, recht, scheef naar rechts), naar de stap, zodat het scherp blijft. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
   wachthuis, en de leider is wie het langst dient; **B1** de lantaarn is licht, zoals bij de bode (de wolven vallen
   niemand in het licht aan); **C1** de aanvoerder draagt er ook een; **D2** een lantaarn in zijn hand op het figuur (eerst
   in woorden, dan één proefplaat, `beeld.md`).
