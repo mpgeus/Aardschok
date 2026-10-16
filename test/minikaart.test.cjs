@@ -42,9 +42,9 @@ test('wat je kent, per vak: elk vak met een tegel die je kent, en geen ander', (
   const stap = T.MINIKAART_INSTELLINGEN.stap;
   const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / stap);
   assert.ok(gekend.reduce((a, b) => a + b, 0) > 50, 'de kring van het begin');
-  // Rond de schout: elk vak dat de minikaart kent, heeft een tegel die je kent, en andersom.
-  const sx = Math.floor(S.schout.x / stap);
-  const sy = Math.floor(S.schout.y / stap);
+  // Rond de aanvoerder: elk vak dat de minikaart kent, heeft een tegel die je kent, en andersom.
+  const sx = Math.floor(S.dorp.aanvoerder.x / stap);
+  const sy = Math.floor(S.dorp.aanvoerder.y / stap);
   for (let vy = sy - 12; vy <= sy + 12; vy++) {
     for (let vx = sx - 12; vx <= sx + 12; vx++) {
       let echt = false;

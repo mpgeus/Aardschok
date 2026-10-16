@@ -41,7 +41,7 @@ const NAMEN = {
   broek: 'het broek',
   rots: 'rots',
 };
-const DAG = 2.2 * 300; // tegels die de schout op een dag loopt: 2,2 per seconde, een dag van vijf minuten op 1×
+const DAG = 2.2 * 300; // tegels die de aanvoerder op een dag loopt: 2,2 per seconde, een dag van vijf minuten op 1×
 
 // Het eiland, of een stuk ervan, als beeld: de streek in zijn kleur, met het licht van de zon zoals in het spel
 // (T.helderheidVanVlak), de wegen, en de bomen wat donkerder.

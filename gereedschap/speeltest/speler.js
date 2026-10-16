@@ -163,7 +163,7 @@
     const s = S();
     if (s.modus !== 'verkennen') return;
     const D = s.dorp;
-    const mannen = T.mannenVan(D).filter((e) => e !== D.schout && !e.binnen);
+    const mannen = T.mannenVan(D).filter((e) => e !== D.aanvoerder && !e.binnen);
     if (!mannen.length) return;
     const vijanden = D.wereld.wezens.filter(T.isVijandig);
     if (!vijanden.length) {
@@ -193,9 +193,9 @@
       return;
     }
     if (!klik('#heer [data-actie="betaal"]')) daad('kan niet betalen: de knop staat uit');
-    // De schandpaal: de schout zelf, als dat mag (het dorp neemt het hem niet kwalijk).
+    // De schandpaal: de aanvoerder zelf, als dat mag (het dorp neemt het hem niet kwalijk).
     if (s.dorp.heer.bezoek && s.dorp.heer.bezoek.schandpaal) {
-      if (!klik('#heer .paal-keuze[data-wie="schout"]')) klik('#heer .paal-keuze');
+      if (!klik('#heer .paal-keuze[data-wie="aanvoerder"]')) klik('#heer .paal-keuze');
     }
     if (s.modus === 'heer') T.ui.sluitHeer(s);
     bezig.heer = false;
@@ -339,7 +339,7 @@
     const K = boek.kar;
     const t = d.kalender.dag;
     T.karrenVan(d).forEach((e, i) => {
-      const k = K.karren[i] || (K.karren[i] = { thuis: d.gebouwen.includes(e.thuis) ? e.thuis.soort : 'schout', vanaf: Math.floor(t), werktijd: 0, vol: 0, leeg: 0, laden: 0, overwerk: 0, halen: 0, brengen: 0, opgehaald: 0, vervoerd: {}, maanden: {} });
+      const k = K.karren[i] || (K.karren[i] = { thuis: d.gebouwen.includes(e.thuis) ? e.thuis.soort : 'raadhuis', vanaf: Math.floor(t), werktijd: 0, vol: 0, leeg: 0, laden: 0, overwerk: 0, halen: 0, brengen: 0, opgehaald: 0, vervoerd: {}, maanden: {} });
       const R = e.rit;
       if (R && R !== laatsteRit.get(e)) {
         // een nieuw stuk van een rit (js/kar.js begint elk stuk met een nieuw e.rit)
@@ -424,7 +424,7 @@
       // Wat het dorp at (de afwisseling, js/behoeften.js), en hoeveel woningen er van elke soort staan (wat er doorgroeide:
       // op de afwisseling, ronde 3 van het snoeien, stap 6).
       afwisseling: (s.dorp.behoeften.afwisseling || []).slice(),
-      woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis', 'woontoren'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
+      woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis', 'woontoren'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'aanvoerder').length])),
       // Welke huizen op bouwstof wachten, zoals de raad het zegt (T.bouwstofRaad, js/raad.js).
       bouwstof: T.bouwstofRaad(s.dorp),
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),

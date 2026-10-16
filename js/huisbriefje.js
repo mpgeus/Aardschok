@@ -19,9 +19,9 @@
   function inhoud(D, g, t) {
     const soort = T.GEBOUWEN[g.soort];
     const wie = t.wie.length ? t.wie[0] : null;
-    // Het town hall heet zo (vraag 170, stap 2); een ander huis waar de schout woont, is het jouwe ("Your hut").
-    const kop = g.soort === 'schout' ? T.hoofdletter(soort.naam)
-      : g.huis === 'schout' ? T.t('Your {gebouw}', { gebouw: soort.naam })
+    // Het town hall heet zo (vraag 170, stap 2); een ander huis waar de aanvoerder woont, is het jouwe ("Your hut").
+    const kop = g.soort === 'raadhuis' ? T.hoofdletter(soort.naam)
+      : g.huis === 'aanvoerder' ? T.t('Your {gebouw}', { gebouw: soort.naam })
         : T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
     const stand = T.standVan(g);
     const mensen = T.t('{n|# person|# people}', { n: t.mensen });

@@ -30,7 +30,7 @@ function oudeUit(D) {
 }
 const begin = (fase) => ['kleuter', 'kind', 'jong', 'volwassen', 'oud'].slice(0, ['kleuter', 'kind', 'jong', 'volwassen', 'oud'].indexOf(fase)).reduce((n, f) => n + IN.fasen[f], 0) * JAAR;
 
-test('wie er al was, krijgt een geboortedag in zijn fase; de schout niet', () => {
+test('wie er al was, krijgt een geboortedag in zijn fase; de aanvoerder niet', () => {
   const S = proef();
   const D = S.dorp;
   T.tikLevenDag(D, 0);
@@ -42,7 +42,7 @@ test('wie er al was, krijgt een geboortedag in zijn fase; de schout niet', () =>
     const dagen = 0 - p.geboren;
     assert.ok(dagen >= begin(p.leeftijd) && dagen <= begin(p.leeftijd) + IN.fasen[p.leeftijd] * JAAR, `${p.naam} is ${p.leeftijd}`);
   }
-  assert.ok(D.bewoners.mensen.some((p) => p.schout));
+  assert.ok(D.bewoners.mensen.some((p) => p.aanvoerder));
 });
 
 test('een kleuter wordt een kind, met het vel en de snelheid van een kind, en de handen gaan mee', () => {

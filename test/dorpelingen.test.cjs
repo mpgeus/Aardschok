@@ -1,6 +1,6 @@
 // Dorpelingen die rondlopen (ontwerp/wereld.md, "Dorpelingen lopen rond"): ze gebruiken hetzelfde
 // dwalen als een monster (T.laatDwalen, js/verkennen.js). Deze toetsen gaan over wat een
-// dorpeling juist anders maakt: hij ontdekt de schout nooit en telt nooit mee als deelnemer, hij
+// dorpeling juist anders maakt: hij ontdekt de aanvoerder nooit en telt nooit mee als deelnemer, hij
 // blijft niet op een tegel naast een deur staan, hij houdt zich aan zijn straal, en een gesprek
 // onderbreekt het dwalen. Een losse dorpeling in de vorm die js/kaart.js voor een "zaad" op de
 // kaart maakt, en elke mens uit T.MENSEN, laten zien dat dat de gewone regel is voor elk neutraal

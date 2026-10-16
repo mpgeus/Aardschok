@@ -24,7 +24,7 @@ test('de maker: elk land deugt, en het is leeg: een plein, een plek voor het kam
     assert.ok(!(g.akkers && g.akkers.length), `zaad ${zaad}: geen akkers`);
     assert.ok(!g.meent, `zaad ${zaad}: geen meent`);
     assert.ok(!g.voorwerpen.some((v) => ['put', 'bank'].includes(v.naam)), `zaad ${zaad}: geen put of bank`);
-    // het plein is open grond, met de plek van het kamp erop: een tent per gezin en de schout, en de kar
+    // het plein is open grond, met de plek van het kamp erop: een tent per gezin en de aanvoerder, en de kar
     assert.ok(g.maat.pleinTegels > 100, `zaad ${zaad}: een plein van ${g.maat.pleinTegels} tegels`);
     assert.ok(g.kamp.plekken.length >= 1 + T.BEGIN_INSTELLINGEN.gezinnen, `zaad ${zaad}: plek voor het kamp`);
     assert.ok(T.binnenRand(g.plein, g.kamp.vuur.x + 0.5, g.kamp.vuur.y + 0.5), `zaad ${zaad}: het vuur brandt op het plein`);
@@ -53,13 +53,13 @@ function nieuwSpel(zaad) {
   return S;
 }
 
-test('een gemaakt land leest het spel in als het lege begin: alleen de schout, geen akkers of gebouwen, en alles is te bereiken', () => {
+test('een gemaakt land leest het spel in als het lege begin: alleen de aanvoerder, geen akkers of gebouwen, en alles is te bereiken', () => {
   const echt = console.warn;
   console.warn = () => {};
   const w = T.laadGemaaktGehucht(3);
   console.warn = echt;
   assert.deepEqual(w.maker.zaad, 3);
-  assert.deepEqual(w.wezens.map((e) => e.wie || e.soort), ['schout'], 'de schout is de enige; de gezinnen komen met de kar');
+  assert.deepEqual(w.wezens.map((e) => e.wie || e.soort), ['aanvoerder'], 'de aanvoerder is de enige; de gezinnen komen met de kar');
   assert.equal((w.akkers || []).length, 0);
   assert.equal(w.meenten.length, 0);
   assert.deepEqual(w.overgangen.map((o) => o.naar), ['wereld']);
@@ -67,9 +67,9 @@ test('een gemaakt land leest het spel in als het lege begin: alleen de schout, g
   const K = T.kaartVak(w);
   for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) assert.ok(T.grondOp(w, x, y), `geen grond op (${x}, ${y})`);
   assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y));
-  // en je loopt van de schout naar de uitgang, de marskramer, het kampvuur en de deur van elke tent van het kamp
-  const schout = w.wezens.find((e) => e.soort === 'schout');
-  const loop = (doel) => T.zoekPad({ x: schout.tx, y: schout.ty }, doel, (x, y) => T.isBegaanbaar(w, x, y, {}), (x, y) => T.isVast(w, x, y), { naast: true });
+  // en je loopt van de aanvoerder naar de uitgang, de marskramer, het kampvuur en de deur van elke tent van het kamp
+  const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
+  const loop = (doel) => T.zoekPad({ x: aanvoerder.tx, y: aanvoerder.ty }, doel, (x, y) => T.isBegaanbaar(w, x, y, {}), (x, y) => T.isVast(w, x, y), { naast: true });
   assert.ok(loop(w.overgangen[0]), 'de uitgang is niet te bereiken');
   assert.ok(loop(w.marskramer), 'de marskramer is niet te bereiken');
   assert.ok(loop(w.kamp.vuur), 'het kampvuur is niet te bereiken');

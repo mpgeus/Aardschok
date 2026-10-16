@@ -82,14 +82,14 @@ test('in een gehucht vraagt de heer geen mannen, in een dorp wel: op 1 hooimaand
   assert.equal(D.heervaart.vraag, v);
 });
 
-test('wie gaat: mannen, jong of volwassen, nooit een boer of het gezin van de schout, wie geen werk heeft het eerst', () => {
+test('wie gaat: mannen, jong of volwassen, nooit een boer of het gezin van de aanvoerder, wie geen werk heeft het eerst', () => {
   const S = gehucht();
   const alle = T.weerbareMannen(S.dorp);
   assert.ok(alle.length >= 2, 'het gehucht heeft weerbare mannen');
   for (const p of alle) {
     assert.equal(p.geslacht, 'man');
     assert.ok(p.leeftijd === 'jong' || p.leeftijd === 'volwassen', p.leeftijd);
-    assert.ok(!p.schout && !(p.hoofd && p.hoofd.schout), `${p.naam} is van het gezin van de schout`);
+    assert.ok(!p.aanvoerder && !(p.hoofd && p.hoofd.aanvoerder), `${p.naam} is van het gezin van de aanvoerder`);
   }
   assert.ok(alle.some((p) => T.isBoer(S.dorp, p)), 'een boer is weerbaar: hij helpt tegen de wolven en vecht mee');
   const eersteMetWerk = alle.findIndex((p) => p.werk);

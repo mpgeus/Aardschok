@@ -241,7 +241,7 @@
   // het spel, de vlaggen en het goud van het dorp), dus een regel krijgt hem twee keer.
   function staatVanSituatie(als, persoonId) {
     const S = {
-      schout: {},
+      aanvoerder: {},
       inventaris: new Set(), vlaggen: new Set(),
       quests: {}, questWeg: {}, questBeloond: new Set(), goud: 0,
     };

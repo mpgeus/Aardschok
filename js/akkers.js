@@ -43,7 +43,7 @@
   //   plan            wat het volgend jaar wordt. De boer kiest het na de oogst (T.boerenKiezenVelden),
   //                   en jij kunt het veranderen (T.zetPlan); op 1 lentemaand wordt het de bestemming
   //                   (T.wisselVelden), vóór het zaaien. Staand graan vertrappen of midden in de zomer
-  //                   zaaien kan dus niet. planDoor: wie het koos ('boer' of 'schout'), planWaarom: waarom
+  //                   zaaien kan dus niet. planDoor: wie het koos ('boer' of 'speler'), planWaarom: waarom
   //                   de boer het koos.
   //   vruchtbaarheid  0..1: een akker geeft zijn graan maal dit getal (T.oogstPerTegel).
   // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst en de heer kennen hem onder
@@ -170,7 +170,7 @@
     if (r.kan) {
       veld.plan = bestemming;
       if (bestemming !== 'akker') veld.mest = false;
-      veld.planDoor = 'schout';
+      veld.planDoor = 'speler';
       delete veld.planWaarom;
     }
     return r;
@@ -203,7 +203,7 @@
     const r = T.kanMest(D, veld);
     if (r.kan) {
       veld.mest = true;
-      veld.planDoor = 'schout';
+      veld.planDoor = 'speler';
       delete veld.planWaarom;
     }
     return r;
@@ -297,7 +297,7 @@
   //
   // Na de oogst, op 1 herfstmaand, kiest elke boer wat zijn velden volgend jaar worden, met één regel: een akker die
   // volgend voorjaar onder rustOnder zou zakken, krijgt mest als die er is, en rust anders een jaar; een braak die
-  // rustte, wordt weer akker; een weide blijft weide, want het vee graast erop. Wat jij koos (planDoor 'schout', met
+  // rustte, wordt weer akker; een weide blijft weide, want het vee graast erop. Wat jij koos (planDoor 'speler', met
   // T.zetPlan of T.zetMest), laat hij staan. Het plan gaat in op 1 lentemaand (T.wisselVelden), en tot dan kun jij het
   // in het veldenvenster veranderen: dat is je oogje in het zeil. Geeft wat er anders wordt: [{ veld, plan, mest,
   // waarom }].
@@ -307,10 +307,10 @@
     if (!IN.boerenKiezen || !w || !w.akkers) return [];
     // De mest die er is, min wat jij al op een veld legde.
     let mest = (D.voorraad && D.voorraad.mest) || 0;
-    for (const v of w.akkers) if (v.planDoor === 'schout' && v.mest) mest -= T.mestVoorVeld(v);
+    for (const v of w.akkers) if (v.planDoor === 'speler' && v.mest) mest -= T.mestVoorVeld(v);
     const anders = [];
     for (const v of w.akkers) {
-      if (v.planDoor === 'schout') continue;
+      if (v.planDoor === 'speler') continue;
       const nu = T.bestemmingVan(v);
       let plan = nu === 'braak' ? 'akker' : nu;
       let metMest = false;
@@ -369,7 +369,7 @@
     if (!VIN().weideNaHonger || honger < VIN().weideNaHonger) return null;
     const koeien = T.veeVan(D).filter((e) => e.dier === 'koe').length;
     if (koeien + 1 <= koeienVoorHetHooi(w)) return null;
-    const vrij = w.akkers.filter((v) => v.planDoor !== 'schout' && T.planVan(v) !== 'weide');
+    const vrij = w.akkers.filter((v) => v.planDoor !== 'speler' && T.planVan(v) !== 'weide');
     const vanBoer = (v) => w.akkers.filter((x) => x.huis === v.huis && T.planVan(x) === 'akker').length;
     const kies = vrij.find((v) => T.planVan(v) === 'braak') ||
       vrij.filter((v) => T.planVan(v) === 'akker' && vanBoer(v) > 1).sort((a, b) => T.vruchtbaarheidVan(a) - T.vruchtbaarheidVan(b))[0];
@@ -386,7 +386,7 @@
   // "Jij koos het", of '' als niemand iets koos.
   T.planTekst = function (D, veld) {
     if (!veld || !veld.planDoor) return '';
-    if (veld.planDoor === 'schout') return T.t('You chose it');
+    if (veld.planDoor === 'speler') return T.t('You chose it');
     const boer = T.boerVanVeld(D, veld);
     const wie = boer ? boer.naam : T.t('The farmer');
     return veld.planWaarom ? T.t('{wie} chose it: {waarom}', { wie, waarom: veld.planWaarom }) : T.t('{wie} chose it', { wie });

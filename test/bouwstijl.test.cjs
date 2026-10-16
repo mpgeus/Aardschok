@@ -43,7 +43,7 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   const per = {};
   for (const tg of tegels) per[tg.stijl.stijl] = (per[tg.stijl.stijl] || 0) + 1;
   // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b);
-  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het huis van de schout (stap 3);
+  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het raadhuis (stap 3);
   // en elk 12 zagerijen, onder elk dak in vier standen (vraag 157)
   assert.deepEqual(per, { wit: 152, oker: 140, planken: 152, roze: 140 });
   for (const t of tegels) {
@@ -61,8 +61,8 @@ test('een eiland bouwt in zijn stijl: de hutten, het huis en de boerderijen die 
   const woningen = S.dorp.gebouwen.filter((g) => ['hut', 'huis', 'boerderij'].includes(g.soort));
   assert.ok(woningen.length >= 4, `${woningen.length} woningen`);
   for (const g of woningen) assert.ok(T.deurKantVan(g.tekening), `${g.soort} (${g.tekening}) is van de stijl`);
-  const schout = S.dorp.gebouwen.find((g) => g.huis === 'schout');
-  assert.ok(T.deurKantVan(schout.tekening), 'het huis van de schout ook');
+  const raadhuis = S.dorp.gebouwen.find((g) => g.huis === 'aanvoerder');
+  assert.ok(T.deurKantVan(raadhuis.tekening), 'het raadhuis ook');
   // en hij blijft het na bewaren en laden
   const terug = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
   assert.ok(terug.gelukt, terug.reden);
@@ -159,7 +159,7 @@ test('T.plekVoor keert een deur naar de weg, en de plek en het gebouw hebben dez
 });
 
 // De grote gebouwen (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee / B: Ja"): de kapel en de woontoren
-// van steen, de herberg die meegroeit met het dorp, en het huis van de schout en de herberg van de maker in de stijl.
+// van steen, de herberg die meegroeit met het dorp, en het raadhuis en de herberg van de maker in de stijl.
 test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen met een steenbakkerij', () => {
   const D = leeg();
   assert.deepEqual(T.stijlTekeningen(D, 'kapel'), ['huizen/wit-kapel-leien-z']);
@@ -185,15 +185,15 @@ test('de zagerij is een kapschuur in de stijl, onder het dak van de trede', () =
   assert.deepEqual(T.stijlTekeningen(D, 'zagerij'), ['huizen/wit-zagerij-pannen-z']);
 });
 
-test('het huis van de schout en de herberg die de speler zet, zijn in de stijl van het land, met een deur', () => {
+test('het raadhuis en de herberg die de speler zet, zijn in de stijl van het land, met een deur', () => {
   for (const zaad of [5, 3]) {
     const S = nieuwSpel(zaad, { gebouwen: ['herberg'] });
     const D = S.dorp;
-    const schout = D.gebouwen.find((g) => g.huis === 'schout');
+    const raadhuis = D.gebouwen.find((g) => g.huis === 'aanvoerder');
     const herberg = D.gebouwen.find((g) => g.soort === 'herberg');
-    assert.equal(T.vormVan(schout.tekening), 'schoutshuis');
+    assert.equal(T.vormVan(raadhuis.tekening), 'raadhuis');
     assert.equal(T.vormVan(herberg.tekening), 'herberg1');
-    assert.ok(T.deurKantVan(schout.tekening) && T.deurKantVan(herberg.tekening), 'allebei van de stijl');
+    assert.ok(T.deurKantVan(raadhuis.tekening) && T.deurKantVan(herberg.tekening), 'allebei van de stijl');
     assert.equal(T.stijlVan(D), T.stijlVoorLand(zaad));
   }
 });

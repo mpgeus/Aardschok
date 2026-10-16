@@ -246,7 +246,7 @@
     const g = T.GRILLEN[G.vraag.id];
     G.vraag = null;
     G.stil++;
-    T.zeg(D, T.t('"We heard nothing from you, reeve." You did not answer the lord about {titel}.', { titel: g.titel }), 'gevaar');
+    T.zeg(D, T.t('"We heard nothing from you, commander." You did not answer the lord about {titel}.', { titel: g.titel }), 'gevaar');
     pasToe(D, g.stil, T.t('you did not answer him about {titel}', { titel: g.titel }));
   }
 

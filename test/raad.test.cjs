@@ -8,7 +8,7 @@ const { proefDorp } = require('./grond.cjs');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
-// Het proefdorp (test/grond.cjs), op dag 2: wat de speler speelt, met het lege begin, zijn schout en twee boerderijen.
+// Het proefdorp (test/grond.cjs), op dag 2: wat de speler speelt, met het lege begin, zijn aanvoerder en twee boerderijen.
 function dorp(opties = {}) {
   const S = proefDorp(T, opties).S;
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });

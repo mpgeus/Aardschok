@@ -7,7 +7,7 @@
 //   const { S, D, w } = leegBegin(T);       // de kar, het kamp en vier gezinnen, op dag 1
 //   const { S, D, w, ... } = proefDorp(T);  // en het dorp erop, op dag 2, iedereen thuis
 //   proefDorp(T, { gebouwen: ['herberg'], weide: true, boerderijen: 3 })   // met meer erbij (zie T.proefdorp.maak, js/begin.js)
-// proefDorp geeft ook: schout (zijn huis), boerderijen, hutten, akkers, weide, gebouw(soort) en boer(boerderij).
+// proefDorp geeft ook: raadhuis (het town hall, waar de aanvoerder woont), boerderijen, hutten, akkers, weide, gebouw(soort) en boer(boerderij).
 //
 // Het bouwen zelf staat in het spel (T.proefdorp, js/begin.js), zodat het gereedschap in de browser hetzelfde dorp ziet
 // (Spel.debug.proefdorp); hier staan de toegang voor de toetsen en het bewaren. Met een vaste reeks toeval, zodat elke
@@ -50,7 +50,7 @@ function proefDorp(T, opties = {}) {
   const akkers = (w.akkers || []).filter((a) => boerderijen.includes(a.boerderij));
   return {
     S, D, w, boerderijen,
-    schout: D.gebouwen.find((g) => g.soort === 'schout'),
+    raadhuis: D.gebouwen.find((g) => g.soort === 'raadhuis'),
     hutten: D.gebouwen.filter((g) => g.soort === 'hut'),
     // De akkers van de boerderijen (de weide niet), en de weide als die er is.
     akkers: akkers.filter((a) => T.bestemmingVan(a) !== 'weide'),
@@ -68,9 +68,9 @@ if (require.main === module) {
   const T = require('./laad.cjs').spel();
   T.ui = new Proxy({}, { get: () => () => undefined });
 
-  test('het proefdorp: het huis van de schout, twee boerderijen met hun boer en akker, en hutten; het kamp is leeg', () => {
-    const { D, w, schout, boerderijen, akkers, hutten } = proefDorp(T);
-    assert.ok(schout.klaar && schout.huis === 'schout', 'de schout woont in zijn huis');
+  test('het proefdorp: het raadhuis, twee boerderijen met hun boer en akker, en hutten; het kamp is leeg', () => {
+    const { D, w, raadhuis, boerderijen, akkers, hutten } = proefDorp(T);
+    assert.ok(raadhuis.klaar && raadhuis.huis === 'aanvoerder', 'de aanvoerder woont in zijn huis');
     assert.equal(boerderijen.length, 2);
     for (const g of boerderijen) {
       assert.ok(g.klaar, 'de boerderij is af');

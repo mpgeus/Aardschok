@@ -9,7 +9,7 @@
 //   werkte, is vrij. Wat erbij lag (zijn stapel, het hout dat de kar al naar de bouwplaats bracht, wat een werkplaats nog
 //   moest verwerken, en de lading van de kar van een schuur) blijft als losse stapel liggen tot de ossenkar hem haalt
 //   (`stapel` in T.GEBOUWEN, js/kar.js). De velden van een boerderij gaan mee, met wat erop groeit.
-// - Niet af te breken: het huis van de schout, de tenten van het kamp (die gaan vanzelf), en een veld op zichzelf (dat gaat
+// - Niet af te breken: het raadhuis, de tenten van het kamp (die gaan vanzelf), en een veld op zichzelf (dat gaat
 //   met zijn boerderij).
 // Regels zonder scherm, dus te toetsen (test/afbreken.test.cjs).
 (function (T) {
@@ -39,7 +39,7 @@
   function gebouwAfbreken(D, g) {
     const soort = T.GEBOUWEN[g.soort];
     const naam = soort ? soort.naam : g.soort;
-    if (g.huis === 'schout' || g.soort === 'schout') return { tekst: T.t('Your own house stays.'), kan: false };
+    if (g.huis === 'aanvoerder' || g.soort === 'raadhuis') return { tekst: T.t('Your own house stays.'), kan: false };
     if (g.soort === 'tent') return { tekst: T.t('The camp goes by itself, when its families have a home.'), kan: false };
     if (g.soort === 'stapel') return { tekst: T.t('The ox cart fetches this pile.'), kan: false };
     if (T.isVeldSoort(g.soort)) return { tekst: T.t('A field goes with its farm: demolish the farm.'), kan: false };

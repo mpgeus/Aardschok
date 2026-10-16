@@ -10,7 +10,7 @@ const { proefDorp, bouwAf, dagen } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het proefdorp (test/grond.cjs), stil en met een vaste worp: het huis van de schout, twee boerderijen met hun akker, en
+// Het proefdorp (test/grond.cjs), stil en met een vaste worp: het raadhuis, twee boerderijen met hun akker, en
 // hutten, op de eerste dag van het lege begin. In het lege begin bouwen de mensen zelf: wat een toets neerzet met
 // T.plaatsGebouw is een bouwplaats, die metHouthakker afmaakt.
 function dorp() {
@@ -47,7 +47,7 @@ function nacht(S, dag) {
 // Een houthakker bij het bos, klaar en met zijn hand, en genoeg te eten zodat er gewerkt wordt. Geeft de schuur.
 function metHouthakker(S) {
   const D = S.dorp;
-  const huis = D.gebouwen.find((g) => g.huis === 'schout');
+  const huis = D.gebouwen.find((g) => g.huis === 'aanvoerder');
   const plek = T.plekVoor(D, 'houthakker', T.deurVan(D.wereld, huis));
   assert.ok(plek, 'er is een plek bij het bos');
   const u = T.plaatsGebouw(D, 'houthakker', plek.x, plek.y);

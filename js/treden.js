@@ -42,9 +42,9 @@
   };
   const ladder = () => Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los);
 
-  // De stand van een gebouw, of null: het huis van de schout heeft er geen (dat is van jou), en een werkplaats ook niet.
+  // De stand van een gebouw, of null: het raadhuis heeft er geen (dat is van jou), en een werkplaats ook niet.
   T.standVan = function (g) {
-    if (!g || g.huis === 'schout') return null;
+    if (!g || g.huis === 'aanvoerder') return null;
     for (const s of Object.keys(T.STANDEN)) if (T.STANDEN[s].huis === g.soort || (T.STANDEN[s].ook || []).includes(g.soort)) return s;
     return null;
   };

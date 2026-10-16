@@ -59,11 +59,11 @@
   // De herberg van het dorp: de eerste die klaar is, of null. Daar logeert de marskramer.
   T.herbergVan = (D) => T.herbergenVan(D)[0] || null;
 
-  // Kan hij vanavond gaan? Een volwassene, niet de schout (die loop jij), niet wie net komt of
+  // Kan hij vanavond gaan? Een volwassene, niet de aanvoerder (die loop jij), niet wie net komt of
   // wegtrekt, en niet wie in een herberg woont: die is er al.
   function kanGaan(p, herbergen) {
     const e = p.wezen;
-    return p.leeftijd === 'volwassen' && !p.schout && !p.komt && !herbergen.includes(p.huis) && !!e && !e.dood && !e.vertrekt;
+    return p.leeftijd === 'volwassen' && !p.aanvoerder && !p.komt && !herbergen.includes(p.huis) && !!e && !e.dood && !e.vertrekt;
   }
 
   // Een vast lot per mens per dag, tussen 0 en 1: uit het zaad van het spel (js/bewoners.js), met de

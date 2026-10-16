@@ -1,6 +1,6 @@
 // Het lege begin (js/begin.js; werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan
 // bouwen"): de maker legt op het eiland geen gehucht, maar alleen het land met een open plek (sinds ronde 2 van het snoeien
-// het enige begin, en geen spelregel meer); een kar rijdt het land in, met de schout, zijn gezin en vier gezinnen, en op het
+// het enige begin, en geen spelregel meer); een kar rijdt het land in, met de aanvoerder, zijn gezin en vier gezinnen, en op het
 // plein zetten ze hun kamp op.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -37,11 +37,11 @@ test('het lege land: geen huizen, geen boeren, geen akkers; wel het plein, de pl
   assert.ok(w.kamp && w.kamp.plekken.length >= 1 + T.BEGIN_INSTELLINGEN.gezinnen, 'de maker koos een plek voor het kamp');
 });
 
-test('het kamp: een tent per gezin, die van de schout is zijn huis, en er is geen plaats voor een nieuw gezin', () => {
+test('het kamp: een tent per gezin, die van de aanvoerder is zijn huis, en er is geen plaats voor een nieuw gezin', () => {
   const { D } = leegBegin();
   const tenten = D.gebouwen.filter((g) => g.soort === 'tent');
   assert.equal(tenten.length, 1 + T.BEGIN_INSTELLINGEN.gezinnen);
-  assert.equal(tenten.filter((g) => g.huis === 'schout').length, 1);
+  assert.equal(tenten.filter((g) => g.huis === 'aanvoerder').length, 1);
   for (const g of tenten) assert.ok(D.bewoners.mensen.some((p) => p.huis === g), 'in elke tent woont een gezin');
   const gezinnen = new Set(D.bewoners.mensen.map((p) => p.gezin));
   assert.equal(gezinnen.size, tenten.length, 'een gezin per tent');
@@ -65,15 +65,15 @@ test('de voorraad is wat de kar meebrengt, als hij er is (werklijst C, stap 1)',
   assert.equal(D.voorraad.gereedschap, K.gereedschap);
 });
 
-test('de aankomst: de kar begint aan de rand op de weg, met de schout ernaast, en de gezinnen komen erachter', () => {
+test('de aankomst: de kar begint aan de rand op de weg, met de aanvoerder ernaast, en de gezinnen komen erachter', () => {
   const { D, w } = leegBegin();
   const B = D.begin;
   assert.equal(B.kamp, 'onderweg');
   assert.ok(w.wezens.includes(B.kar) && B.kar.kar, 'de kar is een wezen op de kaart');
   assert.deepEqual([B.kar.tx, B.kar.ty], [B.van.x, B.van.y], 'hij begint waar de weg het land in komt');
   assert.ok(B.kar.pad.length > 0, 'en hij heeft een weg naar het plein');
-  assert.ok(T.afstand({ x: D.schout.tx, y: D.schout.ty }, B.van) <= 2, 'de schout staat bij de kar');
-  assert.ok(D.bewoners.mensen.filter((p) => !p.schout).every((p) => p.komt && !p.wezen), 'de gezinnen komen nog');
+  assert.ok(T.afstand({ x: D.aanvoerder.tx, y: D.aanvoerder.ty }, B.van) <= 2, 'de aanvoerder staat bij de kar');
+  assert.ok(D.bewoners.mensen.filter((p) => !p.aanvoerder).every((p) => p.komt && !p.wezen), 'de gezinnen komen nog');
   assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent').length, 0, 'de tenten staan nog niet');
 });
 
@@ -86,7 +86,7 @@ test('staat het kamp er in de nacht nog niet (geen beelden, of de kar zat vast),
   assert.deepEqual([D.begin.kar.tx, D.begin.kar.ty], [w.kamp.kar.x, w.kamp.kar.y], 'de kar staat op zijn plek');
   for (const g of D.gebouwen) assert.ok(g.voorwerp && w.voorwerpen.includes(g.voorwerp), 'elke tent staat op de kaart');
   assert.ok(!T.magOpzij(S, D.begin.kar), 'wie de kar op zijn weg vindt, laat hem niet opzij gaan');
-  assert.ok(D.bewoners.komen.length || D.bewoners.mensen.every((p) => p.schout || p.wezen), 'de gezinnen zijn onderweg');
+  assert.ok(D.bewoners.komen.length || D.bewoners.mensen.every((p) => p.aanvoerder || p.wezen), 'de gezinnen zijn onderweg');
 });
 
 test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer vraagt niets', () => {
@@ -148,7 +148,7 @@ test('het lege begin: de hut en het huis staan in het bouwmenu', () => {
   assert.ok(T.inBouwmenu(D, 'hut') && T.inBouwmenu(D, 'huis') && T.inBouwmenu(D, 'houthakker'));
 });
 
-test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat zijn tent weg; die van de schout blijft', () => {
+test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat zijn tent weg; die van de aanvoerder blijft', () => {
   const { S, D, w } = leegBegin();
   dagen(S, 1, 1);
   const begin = D.bevolking;
@@ -167,7 +167,7 @@ test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat 
   assert.equal(gezegd.filter((t) => /leave the camp|verlaten het kamp/.test(t)).length, tenten, 'het dorp zegt wie er verhuist');
   assert.equal(D.bevolking, begin, 'niemand erbij en niemand weg');
   assert.equal(T.kampTenten(D).length, 0, 'de tenten van de gezinnen zijn weg');
-  assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent').length, 1, 'alleen die van de schout staat er nog');
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent').length, 1, 'alleen die van de aanvoerder staat er nog');
   assert.equal(w.voorwerpen.filter((v) => v.soort === 'kampvuur').length, 1, 'en het kampvuur brandt');
   assert.ok(w.wezens.includes(D.begin.kar), 'de kar blijft');
   assert.ok(!T.waaromGeenGezin(D).includes('kamp'), 'nu kan er weer een gezin komen');
@@ -243,29 +243,29 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   assert.ok(T.isBegaanbaar(w, ver.x, ver.y) || T.isVast(w, ver.x, ver.y), 'buiten het bereik is gewoon land');
 });
 
-test('het huis van de schout: één keer in het bouwmenu; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
-  huisVanDeSchout();
+test('het raadhuis: één keer in het bouwmenu; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
+  huisVanDeAanvoerder();
 });
-function huisVanDeSchout() {
+function huisVanDeAanvoerder() {
   const { S, D, w } = leegBegin();
   dagen(S, 1, 1);
-  assert.ok(T.inBouwmenu(D, 'schout'), 'het staat in het bouwmenu');
-  const schoutTent = D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'schout');
-  const gezin = wonenIn(D, schoutTent);
+  assert.ok(T.inBouwmenu(D, 'raadhuis'), 'het staat in het bouwmenu');
+  const aanvoerderTent = D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'aanvoerder');
+  const gezin = wonenIn(D, aanvoerderTent);
   const kampGezinnen = T.kampTenten(D).length;
-  const [huis] = zetHutten(D, 1, 'schout');
-  assert.ok(!T.inBouwmenu(D, 'schout'), 'staat het er (ook in aanbouw), dan niet meer');
-  assert.equal(T.plaatsGebouw(D, 'schout', huis.x + 20, huis.y).gelukt, false, 'en een tweede kan niet');
-  assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), schoutTent, 'tot het af is, woont hij in zijn tent');
+  const [huis] = zetHutten(D, 1, 'raadhuis');
+  assert.ok(!T.inBouwmenu(D, 'raadhuis'), 'staat het er (ook in aanbouw), dan niet meer');
+  assert.equal(T.plaatsGebouw(D, 'raadhuis', huis.x + 20, huis.y).gelukt, false, 'en een tweede kan niet');
+  assert.equal(D.gebouwen.find((g) => g.huis === 'aanvoerder'), aanvoerderTent, 'tot het af is, woont hij in zijn tent');
   gezegd.length = 0;
   totAf(S, [huis]);
   assert.ok(huis.klaar);
-  assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), huis, 'nu is het zijn huis');
+  assert.equal(D.gebouwen.find((g) => g.huis === 'aanvoerder'), huis, 'nu is het zijn huis');
   assert.deepEqual(wonenIn(D, huis), gezin, 'met zijn hele gezin, en verder niemand');
-  assert.ok(!D.gebouwen.includes(schoutTent) && !w.voorwerpen.includes(schoutTent.voorwerp), 'zijn tent is weg');
+  assert.ok(!D.gebouwen.includes(aanvoerderTent) && !w.voorwerpen.includes(aanvoerderTent.voorwerp), 'zijn tent is weg');
   assert.equal(T.kampTenten(D).length, kampGezinnen, 'de gezinnen wonen nog in het kamp');
   const deur = T.deurVan(w, huis);
-  assert.deepEqual([D.schout.thuis.x, D.schout.thuis.y], [deur.x, deur.y], 'zijn thuis is de deur van zijn huis');
+  assert.deepEqual([D.aanvoerder.thuis.x, D.aanvoerder.thuis.y], [deur.x, deur.y], 'zijn thuis is de deur van zijn huis');
   assert.equal(D.begin.kar.vel, 'ossenkar-leeg', 'de huifkar is de ossenkar');
   assert.ok(gezegd.some((t) => /ossenkar|ox cart/.test(t)), 'en het dorp zegt het');
   // het is de eerste opslag: rond het huis bouw je ook, waar het plein te ver is
@@ -306,7 +306,7 @@ test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, e
   const vrij = D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong')).length;
   assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij - 2 * I.perPlaats), 'de derde wat er over is');
   assert.ok(D.bewoners.mensen.every((p) => !p.bouwt || p.leeftijd === 'volwassen' || p.leeftijd === 'jong'), 'een kind bouwt niet');
-  assert.ok(!D.bewoners.mensen.some((p) => p.schout && p.bouwt), 'de schout bouwt niet mee');
+  assert.ok(!D.bewoners.mensen.some((p) => p.aanvoerder && p.bouwt), 'de aanvoerder bouwt niet mee');
   assert.ok(!D.bewoners.mensen.some((p) => p.werk && p.bouwt), 'wie werk heeft, bouwt niet');
   const opC = bouwers(c).length;
   dagen(S, 3, 3);
@@ -457,11 +457,11 @@ test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg
     assert.deepEqual(D.gebouwen.filter((g) => g.bouw && !g.klaar).map((g) => g.soort), [], 'geen bouwplaats over');
     assert.equal(D.begin.kamp, 'weg', 'het kamp is leeg');
     assert.ok(D.bewoners.mensen.every((p) => p.huis && p.huis.soort !== 'tent'), 'iedereen woont in een huis');
-    assert.ok(D.bewoners.mensen.find((p) => p.schout).huis.soort === 'schout', 'de schout woont in zijn huis');
+    assert.ok(D.bewoners.mensen.find((p) => p.aanvoerder).huis.soort === 'raadhuis', 'de aanvoerder woont in zijn huis');
   });
   const mislukt = gedaan.filter((d) => !d.gelukt && !d.wacht);
   assert.deepEqual(mislukt.map((d) => d.tekst), [], 'wat hij kan betalen, lukt');
-  for (const soort of ['schout', 'boerderij', 'akker', 'houthakker', 'hut']) {
+  for (const soort of ['raadhuis', 'boerderij', 'akker', 'houthakker', 'hut']) {
     assert.ok(gedaan.some((d) => d.soort === soort), `hij bouwt een ${soort}`);
   }
   // (werklijst C, stap 5, f: als er niets anders gebouwd wordt, een weg voor de ossenkar)

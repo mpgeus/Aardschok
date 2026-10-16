@@ -48,7 +48,7 @@
 //                                    // deur die 's avonds brandt (js/paden.js, T.zetLantaarns)
 //     woning:      true,             // een huis om in te wonen (hut, huis, stenen huis): in het lege begin
 //                                    // trekt er een gezin uit het kamp in (js/begin.js)
-//     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout,
+//     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het raadhuis,
 //                                    // de akker en de wijngaard
 //     veld:        'boerderij',      // een veld dat je bij een boerderij legt, als rechthoek (js/boerderij.js): de
 //                                    // akker en de wijngaard; de bouwers maken hem, en dan is het land. De soort zegt
@@ -139,18 +139,18 @@
       // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
       tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'], // geen tekst
     },
-    // Het huis van de schout in het lege begin (vraag 152, 1d; Marcel, 11 okt: "c ja"): je zet het één keer neer, en tot
+    // Het raadhuis in het lege begin (vraag 152, 1d; Marcel, 11 okt: "c ja"): je zet het één keer neer, en tot
     // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), wordt de
     // huifkar de ossenkar, en is het de eerste opslag: daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
-    // van de schout in het gehucht dat er al was (een `huis` met `huis: 'schout'`, met plaats voor zijn gezin), en zijn
-    // tekening in de stijl van het land (`schout` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
+    // van de aanvoerder in het gehucht dat er al was (een `huis` met `huis: 'aanvoerder'`, met plaats voor zijn gezin), en zijn
+    // tekening in de stijl van het land (`aanvoerder` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
     // Sinds 15 okt is het het town hall (werklijst vraag 170, stap 2; Marcel: "We hebben dan een 'town hall' nodig. Daar
     // kunnen mensen schuilen", en "Huis schout wordt town hall", "Iedereen"): wie rovers ziet, vlucht erheen en schuilt
-    // er tot het rustig is (T.schuil, js/gevecht.js), en iedereen past erin. In de code heet het nog `schout`.
-    schout: {
+    // er tot het rustig is (T.schuil, js/gevecht.js), en iedereen past erin. In de code heet het nog `aanvoerder`.
+    raadhuis: {
       naam: T.t('town hall'), trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, maakt: null, menu: true, leeg: true, eenmalig: true, opslag: true,
-      tekening: 'huizen/schoutshuis', beschrijving: T.t('the heart of your village and the first store, where everyone shelters from robbers: you can build around it'), opmerking: '', // geen tekst
+      tekening: 'huizen/raadhuis', beschrijving: T.t('the heart of your village and the first store, where everyone shelters from robbers: you can build around it'), opmerking: '', // geen tekst
     },
     boerderij: {
       naam: T.t('farm'), meervoud: T.t('farms'), trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
@@ -233,7 +233,7 @@
     },
     // De schuur (werklijst C, stap 4; Marcel, 14 okt: "D2", en "a ja, b ja, c ja"): een opslag verder van het plein, met
     // zijn eigen bouwbereik (T.inBouwBereik, js/begin.js) en zijn eigen ossenkar (js/kar.js), die haalt en brengt wat het
-    // dichtst bij hem ligt. De voorraad is één: wat hier ligt, telt in de balk zoals wat in het huis van de schout ligt.
+    // dichtst bij hem ligt. De voorraad is één: wat hier ligt, telt in de balk zoals wat in het raadhuis ligt.
     schuur: {
       naam: T.t('barn'), meervoud: T.t('barns'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15, goud: 6 }, heer: {}, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, opslag: true, kar: true,
@@ -534,7 +534,7 @@
     gevang: {
       naam: T.t('gaol'), trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { planken: 8, steen: 10, goud: 6 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('whoever the reeve convicts, sits here'), // geen tekst
+      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('whoever the commander convicts, sits here'), // geen tekst
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Hoort bij de rechtspraak (werklijst 10).', // geen tekst
     },
   };
@@ -912,7 +912,7 @@
   // ---------------------------------------------------------------------------------------------
   // Tot 2 okt keek bouwen alleen of een tegel vast was (een muur, een boom), niet of er iemand stond of een deur was. In
   // de nulmeting van de speeltest stonden twee mensen vanaf dag 50 tot het eind ingemetseld in een hut die over hen heen
-  // doorgroeide, en de bouwer die de wensen volgt, zette een put op de deur van de schout. Nu komt een gebouw niet op
+  // doorgroeide, en de bouwer die de wensen volgt, zette een put op de deur van de aanvoerder. Nu komt een gebouw niet op
   // iemand en niet op een deur (hierboven), groeit een huis niet over iemand of een deur heen (js/behoeften.js), en wie
   // toch op een bouwplaats staat, stapt eraf.
 
@@ -1041,7 +1041,7 @@
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
     return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
   };
-  // Het huis van de schout (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
+  // Het raadhuis (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
   // aanbouw), dan niet meer. Een veld (de akker, de wijngaard) pas als er een boerderij is die hem kan nemen: de akker
   // een boerderij, de wijngaard een wijnboerderij (`veld`; js/boerderij.js).
   function nogTeBouwen(D, soort) {
@@ -1266,14 +1266,14 @@
     if (!echt || reden === 'begin') return echt;
     const wieTekst = T.bewonersVolgen ? T.bewonersVolgen(D, echt, reden, waarom, wie) : '';
     T.schrijfOp(D, 'mensen', { verschil: echt, reden, waarom: waarom || null, wie: wieTekst || null });
-    // Wie verhongerde, bevroor of sneuvelde, rekent het dorp de schout aan (js/bazen.js).
+    // Wie verhongerde, bevroor of sneuvelde, rekent het dorp de aanvoerder aan (js/bazen.js).
     T.vertrouwenNaBevolking(D, echt, reden);
     return echt;
   };
 
   // De handen verdelen over de werkplaatsen, op volgorde van S.gebouwen: eerst de gebouwen die er al
   // stonden, dan wie het eerst gebouwd is ("op volgorde", ontwerp/werklijst.md punt 2). Hoeveel
-  // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de schout
+  // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de aanvoerder
   // niet). Wíé er werkt, zegt daarna T.wijsWerkToe.
   T.verdeelHanden = function (D) {
     let vrij = T.werkendeHanden(D);

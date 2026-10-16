@@ -281,7 +281,7 @@
   const opsomming = (delen) => (delen.length ? T.opsomming(delen) : T.t('nothing'));
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => T.hoeveel(eis.per[wat], wat)));
 
-  // Wat de schout de heer geeft, per goed, zoals het in het venster staat. Het begint op alles wat
+  // Wat de aanvoerder de heer geeft, per goed, zoals het in het venster staat. Het begint op alles wat
   // hij vraagt, voor zover je het hebt; wie minder wil geven, schuift naar beneden.
   let geef = null;
 
@@ -346,7 +346,7 @@
 
   function schandpaalInhoud(S) {
     const rijen = T.schandpaalKeuzes(S.dorp).map((k) => {
-      const prijs = k.wie === 'schout'
+      const prijs = k.wie === 'aanvoerder'
         ? T.t('The village does not blame you. The lord laughs, and adds {boete} to the fine.', { boete: T.hoeveel(k.boete, 'goud') })
         : T.t('The village is {pct}% less content, and forgets only after months.', { pct: Math.round(k.kost * 100) });
       return (
@@ -356,7 +356,7 @@
     }).join('');
     return (
       `<div class="venster-kop"><span class="venster-titel">${T.t('The pillory')}</span><span class="venster-wanneer">${T.t('Martinmas')}</span></div>` +
-      `<p class="venster-staat">${T.t('"Someone must feel this, reeve. You may choose who." Who stands in the pillory on the square for three days?')}</p>` +
+      `<p class="venster-staat">${T.t('"Someone must feel this, commander. You may choose who." Who stands in the pillory on the square for three days?')}</p>` +
       rijen
     );
   }
@@ -467,7 +467,7 @@
       T.ui.toonOverlay(
         T.t('Driven out'),
         `<p>${T.t('The village no longer trusted you. One evening they stood at your door, with torches.')}${waarom}</p>` +
-          `<p>${T.t('The lord appoints a new reeve. Whether the village trusts that one, you will never hear: you are already over the hill.')}</p>` + heer,
+          `<p>${T.t('The lord appoints a new commander. Whether the village trusts that one, you will never hear: you are already over the hill.')}</p>` + heer,
         T.t('To the title screen'),
         () => T.naarTitelscherm(),
       );
@@ -475,8 +475,8 @@
     }
     // Je ambt kwijt: met twee bazen omdat zijn gunst op is (D.einde.waarom), anders na twee keer veel te weinig.
     const ontslag = D.einde && D.einde.waarom
-      ? `<p>${veilig(D.einde.waarom)} ${T.t('He has appointed a new reeve: his nephew, who cannot count either.')}</p>`
-      : `<p>${T.t('Twice in a row you gave the lord far too little.')} ${T.t('He has appointed a new reeve: his nephew, who cannot count either.')}</p>`;
+      ? `<p>${veilig(D.einde.waarom)} ${T.t('He has appointed a new commander: his nephew, who cannot count either.')}</p>`
+      : `<p>${T.t('Twice in a row you gave the lord far too little.')} ${T.t('He has appointed a new commander: his nephew, who cannot count either.')}</p>`;
     T.ui.toonOverlay(
       T.t('You lost your office'),
       ontslag +

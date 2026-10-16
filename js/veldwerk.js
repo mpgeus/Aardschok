@@ -187,7 +187,7 @@
   // ---------------------------------------------------------------------------------------------
 
   // Kan hij nu op zijn land werken? Niet als hij maait (T.werkOogstBij), binnen is, of ergens anders moet zijn: met de
-  // schout praten, met de militie mee (js/rovers.js), naar de schandpaal (js/heer.js), wegtrekken of een tijd weg zijn
+  // aanvoerder praten, met de militie mee (js/rovers.js), naar de schandpaal (js/heer.js), wegtrekken of een tijd weg zijn
   // (js/bewoners.js, js/heervaart.js), of midden in een praatje (dat houdt na de schaft vanzelf op, js/praatje.js).
   function magWerken(S, D, e) {
     if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.moetNaar || e.vertrekt || e.praatje) return false;
@@ -269,7 +269,7 @@
       e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: nu + IN()[vw.soort] * werkUur(D), rust: false };
       return;
     }
-    // Een weg om wat vaststaat (js/lopen.js). Staat er al iemand op die tegel (wie helpt, een koe, de schout), of komt
+    // Een weg om wat vaststaat (js/lopen.js). Staat er al iemand op die tegel (wie helpt, een koe, de aanvoerder), of komt
     // hij er niet, dan slaat hij hem over.
     const pad = T.wezenOp(w, doel.x, doel.y, e) ? null : T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, {});
     if (pad && pad.length) {

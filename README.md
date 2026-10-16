@@ -3,7 +3,7 @@
 Een spel van Marcel en Claude, in de maak: een bouw- en beheerspel in isometrisch beeld, met
 politiek en avontuur erin.
 
-Je bent de schout van een gehucht onder een heer die alleen geld ziet. Je laat het gehucht groeien
+Je bent de aanvoerder van een gehucht onder een heer die alleen geld ziet. Je laat het gehucht groeien
 (akkers, weides met vee, huizen, een smidse), je handelt met de marskramer, en elk jaar komt de heer
 op Sint-Maarten halen wat hem toekomt, naar wat er dan is. Later groeit het gehucht tot een stad,
 en maak je je van de heer los, met stadsrechten of met een opstand.

@@ -1,12 +1,12 @@
 // Het lege begin (werklijst, vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen", en
 // "Een kar met wat spullen en 'settlers'"): met de spelregel "Het begin" op "Leeg" legt de maker geen gehucht, maar alleen
 // het land van het eiland om jouw plek, met een open plek die het plein wordt (js/maker.js, `leeg`). Een kar met wat
-// spullen rijdt over de weg het land in, met de schout, zijn gezin en vier gezinnen erachter, en op het plein zetten ze
+// spullen rijdt over de weg het land in, met de aanvoerder, zijn gezin en vier gezinnen erachter, en op het plein zetten ze
 // hun kamp op: een tent of een afdak per gezin, en het kampvuur. Daar wonen ze tot er hutten zijn: is een hut of huis af,
 // dan trekt er een gezin uit het kamp in, en gaat zijn tent weg (stap 1c; T.verhuisUitHetKamp hieronder).
 //
 // Een tent is een gebouw met één gezin erin (`T.GEBOUWEN.tent`), zo groot als zijn gezin: hij telt niet als plaats voor
-// een nieuw gezin (T.woonruimteVan, js/gebouwen.js). De tent van de schout is zijn huis (`huis: 'schout'`): daar slaapt
+// een nieuw gezin (T.woonruimteVan, js/gebouwen.js). De tent van de aanvoerder is zijn huis (`huis: 'aanvoerder'`): daar slaapt
 // hij, en daar vertrekt de bode, tot zijn huis er staat.
 //
 // Wat het dorp van het lege begin weet, staat in D.begin (vanaf T.nieuwDorp, js/dorp.js): { kar: <het wezen>, kamp:
@@ -14,13 +14,13 @@
 (function (T) {
   'use strict';
   T.BEGIN_INSTELLINGEN = {
-    // Wat de kar meebrengt (Marcel, 11 okt: "Akkoord", en de schout met zijn gezin: 140 graan in plaats van 120). Het
+    // Wat de kar meebrengt (Marcel, 11 okt: "Akkoord", en de aanvoerder met zijn gezin: 140 graan in plaats van 120). Het
     // zaaigraan is graan dat de boeren apart houden als er akkers zijn (T.zaaigraanApart, js/akkers.js); in de voorraad is
     // het graan. De kaas en het gezouten vlees (Marcel, 13 okt, vraag 154: "D1"): met het graan drie soorten, dus het dorp
     // begint op 90% werk (T.werkVanAfwisseling, js/behoeften.js), en met 15 mensen zijn ze na zo'n maand op: vóór die tijd
     // een jager en een moestuin. Het zout houdt het vlees goed (10 per zout).
     kar: { hout: 50, graan: 140, zaaigraan: 60, goud: 20, gereedschap: 5, kaas: 8, vlees: 8, zout: 1 },
-    // Hoeveel gezinnen er met de schout meekomen, en hoe groot: een man, een vrouw en `kinderen` kinderen (van tot), en
+    // Hoeveel gezinnen er met de aanvoerder meekomen, en hoe groot: een man, een vrouw en `kinderen` kinderen (van tot), en
     // bij `grootvader` gezinnen een grootvader erbij. Een man, een vrouw en een kind, zodat een gezin in een hut past (plaats
     // voor 3; Marcel, 11 okt: "Kleinere gezinnen", vraag 152, 1c; tot dan 1 tot 3 kinderen en een grootvader, 3 tot 6 mensen).
     gezinnen: 4,
@@ -28,7 +28,7 @@
     grootvader: 0,
     // Het kamp (gereedschap/pixelart/kamp.cjs, "het kamp zoals het op het plein kan staan"): waar alles staat, vanaf het
     // vuur, in tegels. Een tent of een afdak per gezin, met zijn opening naar het vuur (ZO, ZW, NW of NO), de eerste voor de
-    // schout; en waar de kar stopt. Er zijn meer plekken dan gezinnen, voor als het er meer worden.
+    // aanvoerder; en waar de kar stopt. Er zijn meer plekken dan gezinnen, voor als het er meer worden.
     kamp: {
       plekken: [
         { dx: -4, dy: 0, open: 'ZO', vorm: 'tent' }, // geen tekst
@@ -44,7 +44,7 @@
     // de gezinnen lopen erachter, zodra de kar zoveel tegels voor is.
     karSnelheid: 0.9,
     voorsprong: 4,
-    // De schout loopt naast de kar, en haalt hem in als hij verder dan zoveel tegels achter is; klik je zelf ergens heen,
+    // De aanvoerder loopt naast de kar, en haalt hem in als hij verder dan zoveel tegels achter is; klik je zelf ergens heen,
     // dan loopt hij niet meer mee.
     naastDeKar: 3,
     // Het kampvuur geeft licht, en minder als het smeult (tegels, en van 0 tot 1, zoals de lantaarns in js/zien.js).
@@ -53,7 +53,7 @@
     // schrijft hij in wijnmaand dat hij je spaart (Marcel, 11 okt: "het eerste jaar vraagt de heer niets").
     heerVrij: 1,
     // Het bouwbereik (vraag 152, 1d; Marcel, 11 okt: "b ja"): je bouwt binnen zoveel tegels van het plein en van elke
-    // opslag die af is (het huis van de schout; in C ook een schuur), gemeten van het midden van een tegel. Sinds 12 okt 16
+    // opslag die af is (het raadhuis; in C ook een schuur), gemeten van het midden van een tegel. Sinds 12 okt 16
     // (1f; Marcel: "Ja prima, 16 tegels is goed"): met 12 paste er op een van de vijf eilanden na de zomer geen tweede
     // boerderij meer (ontwerp/speelbaar.md).
     bouwBereik: 16,
@@ -66,7 +66,7 @@
 
   // Een nieuw dorp op een lege plek (T.nieuwDorp, js/dorp.js, als de kaart een kamp heeft, w.kamp, van de maker): een
   // tent per gezin (nog niet opgezet: dat doen ze als de kar er is, T.zetKampOp), de kar aan de rand op de weg, met de
-  // schout ernaast, en de kar op weg naar het plein. Wat de kar meebrengt, telt pas als hij er is (werklijst C, stap 1).
+  // aanvoerder ernaast, en de kar op weg naar het plein. Wat de kar meebrengt, telt pas als hij er is (werklijst C, stap 1).
   // Wie er woont, zet T.zetBeginBewoners (js/bewoners.js) erna: een gezin per tent, dat nog over de weg moet komen.
   T.zetKamp = function (S, D) {
     const w = D.wereld;
@@ -75,15 +75,15 @@
       D.gebouwen.push({
         soort: 'tent', x: p.voet.x, y: p.voet.y, voet: { b: p.voet.b, h: p.voet.h }, deur: { x: p.deur.x, y: p.deur.y },
         tent: { x: p.x, y: p.y, vorm: p.vorm, open: p.open }, tekening: null, klaar: true, klaarOp: 0, handen: 0,
-        voorwerp: null, huis: i === 0 ? 'schout' : null, bewoners: i === 0 ? null : 'kamp',
+        voorwerp: null, huis: i === 0 ? 'aanvoerder' : null, bewoners: i === 0 ? null : 'kamp',
       });
     });
-    // de kar aan de rand, waar de weg het land in komt, en de schout ernaast
+    // de kar aan de rand, waar de weg het land in komt, en de aanvoerder ernaast
     const van = T.wegInEnUit(w) || { x: w.kamp.kar.x, y: w.kamp.kar.y };
     const kar = T.maakKar(D, van.x, van.y, T.t('covered wagon'), 'huifkar');
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
     D.begin = { kamp: 'onderweg', kar, van: { x: van.x, y: van.y }, gezinnen: false, volgt: !D.ander, heerVrijTot: dag + I.heerVrij * T.DAGEN_PER_JAAR };
-    if (D.schout && !D.ander) zetNeer(w, D.schout, vrijNaast(w, van, D.schout) || van);
+    if (D.aanvoerder && !D.ander) zetNeer(w, D.aanvoerder, vrijNaast(w, van, D.aanvoerder) || van);
     stuurKar(D);
   };
 
@@ -118,7 +118,7 @@
   // ---------------------------------------------------------------------------------------------
 
   // Elk beeld (T.werkDorpBij, js/dorp.js): de kar rijdt naar het plein; is hij `voorsprong` tegels voor, dan komen de
-  // gezinnen over de weg (T.werkBewonersBij, js/bewoners.js; ze lopen naar hun tent, p.komt); de schout loopt naast de kar
+  // gezinnen over de weg (T.werkBewonersBij, js/bewoners.js; ze lopen naar hun tent, p.komt); de aanvoerder loopt naast de kar
   // tot je zelf ergens heen klikt; en staat de kar op zijn plek, dan zetten ze het kamp op.
   T.werkBeginBij = function (S, D) {
     const B = D.begin;
@@ -143,11 +143,11 @@
     if (mensen.length) D.bewoners.komen.push({ mensen, meteen });
   }
 
-  // De schout loopt naast de kar, tot je zelf ergens heen klikt (zijn weg is dan niet die naar de kar).
+  // De aanvoerder loopt naast de kar, tot je zelf ergens heen klikt (zijn weg is dan niet die naar de kar).
   function volgDeKar(S, D) {
     const B = D.begin;
-    const h = D.schout;
-    if (!B.volgt || !h || T.schoutIsWeg(D) || S.modus !== 'verkennen') return;
+    const h = D.aanvoerder;
+    if (!B.volgt || !h || T.aanvoerderIsWeg(D) || S.modus !== 'verkennen') return;
     if (h.pad.length && !(h.padDoel && h.padDoel.metDeKar)) {
       B.volgt = false;
       return;
@@ -163,7 +163,7 @@
 
   // Het kamp opzetten: de tenten en de afdakken op hun plek, met wie er staat opzij, en het vuur in het midden; de kar
   // staat op zijn plek (ook als hij er nog niet was: het vangnet van de nacht, T.tikBeginDag). Wat hij bracht, is
-  // uitgeladen en telt in de voorraad (de plek van de kar is de opslag tot het huis van de schout er is), en de kar gaat
+  // uitgeladen en telt in de voorraad (de plek van de kar is de opslag tot het raadhuis er is), en de kar gaat
   // aan het werk: hij haalt de stapels (js/kar.js; werklijst C, stap 1).
   T.zetKampOp = function (D) {
     const B = D.begin;
@@ -199,9 +199,9 @@
   // Verhuizen uit het kamp (vraag 152, 1c)
   // ---------------------------------------------------------------------------------------------
 
-  // De tenten van de gezinnen in het kamp; niet die van de schout, want die is zijn huis tot zijn eigen huis af is (1d).
+  // De tenten van de gezinnen in het kamp; niet die van de aanvoerder, want die is zijn huis tot zijn eigen huis af is (1d).
   // Zolang er een is, komt er geen nieuw gezin over de weg (T.waaromGeenGezin, js/gebouwen.js): eerst je eigen mensen.
-  T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'schout');
+  T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'aanvoerder');
 
   // Elke nacht, als de gebouwen van vandaag af zijn en vóór er een nieuw gezin kan komen (T.tikGebouwenDag, js/gebouwen.js):
   // in een woning die af is en plaats heeft (een hut, een huis), trekt een gezin uit het kamp, het eerste dat er past; past
@@ -210,7 +210,7 @@
   // een wijnboerderij is ook een thuis voor een gezin, en de man wordt er de boer (vraag 152, 1e; js/boerderij.js).
   T.verhuisUitHetKamp = function (D) {
     if (!D.begin || D.begin.kamp === 'onderweg') return;
-    if (D.begin.kamp === 'op') verhuisDeSchout(D);
+    if (D.begin.kamp === 'op') verhuisDeAanvoerder(D);
     for (const g of D.gebouwen.slice()) {
       const soort = T.GEBOUWEN[g.soort];
       const boerderij = T.isBoerderij(g);
@@ -237,17 +237,17 @@
   };
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
 
-  // Het huis van de schout (1d; `schout` in T.GEBOUWEN): is het af, dan trekt de schout er met zijn gezin in. Het is
-  // voortaan zijn huis (`huis: 'schout'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
+  // Het raadhuis (1d; `aanvoerder` in T.GEBOUWEN): is het af, dan trekt de aanvoerder er met zijn gezin in. Het is
+  // voortaan zijn huis (`huis: 'aanvoerder'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
   // kampvuur), en de huifkar wordt de ossenkar (Marcel, 11 okt: "Huifkar wordt ossenkar"): het huis is voortaan de opslag
   // waar hij lost (js/kar.js). Geen gezin uit het kamp trekt erin: het is geen woning.
-  function verhuisDeSchout(D) {
-    const huis = D.gebouwen.find((g) => g.soort === 'schout' && g.klaar && g.huis !== 'schout');
-    const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'schout');
+  function verhuisDeAanvoerder(D) {
+    const huis = D.gebouwen.find((g) => g.soort === 'raadhuis' && g.klaar && g.huis !== 'aanvoerder');
+    const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'aanvoerder');
     if (!tent) return;
     T.verhuis(D, inHuis(D, tent), huis);
     tent.huis = null;
-    huis.huis = 'schout';
+    huis.huis = 'aanvoerder';
     Object.assign(D.begin.kar, { naam: T.t('ox cart'), vel: 'ossenkar-leeg' });
     T.zetKarVel(D.begin.kar);
     T.zeg(D, T.t('The town hall is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
@@ -479,7 +479,7 @@
     const w = D.wereld;
     for (const p of D.bewoners.mensen) {
       const e = p.wezen;
-      if (!e || p.schout) continue;
+      if (!e || p.aanvoerder) continue;
       delete p.komt;
       const deur = T.deurVanBewoner(D, p);
       let plek = null;
@@ -496,7 +496,7 @@
     }
   }
 
-  // Het proefdorp bouwen: het lege begin, en op dag 1 neergezet en meteen af het huis van de schout, twee boerderijen met
+  // Het proefdorp bouwen: het lege begin, en op dag 1 neergezet en meteen af het raadhuis, twee boerderijen met
   // elk een akker, en hutten voor wie er dan nog in het kamp woont. Op dag 2 trekken de gezinnen erin, wordt de man op een
   // boerderij boer, en worden de akkers land; het kamp is dan leeg, en iedereen staat thuis. Rond het vuur is het krap, dus
   // bouwt het met een ruimer bereik (`bereik` tegels; in het spel `bouwBereik` hierboven), alleen zolang het neerzet.
@@ -519,9 +519,9 @@
       try {
         // Wat het kost, komt eerst in de voorraad, zodat die daarna is wat de kar bracht.
         const n = hutten != null ? hutten : Math.max(0, T.kampTenten(D).length - boerderijen);
-        const soorten = ['schout', ...Array(boerderijen).fill('boerderij'), ...Array(n).fill('hut'), ...gebouwen];
+        const soorten = ['raadhuis', ...Array(boerderijen).fill('boerderij'), ...Array(n).fill('hut'), ...gebouwen];
         for (const soort of soorten) for (const [wat, k] of Object.entries(T.GEBOUWEN[soort].kosten || {})) T.wijzigVoorraad(D, wat, k);
-        const schout = zetBijHetVuur(D, 'schout');
+        const raadhuis = zetBijHetVuur(D, 'raadhuis');
         const hoeven = [];
         for (let i = 0; i < boerderijen; i++) hoeven.push(zetBijHetVuur(D, 'boerderij'));
         const velden = hoeven.map((g) => legVeldBij(D, 'akker', g));
@@ -530,7 +530,7 @@
         // Drie tegels om elke hut, zodat hij kan doorgroeien (B2b, 13 okt: tegen elkaar stond de ene de andere in de weg).
         for (let i = 0; i < n; i++) rest.push(zetBijHetVuur(D, 'hut', 3));
         for (const soort of gebouwen) rest.push(zetBijHetVuur(D, soort));
-        for (const g of [schout, ...hoeven, ...velden, ...rest]) bouwAf(D, g, 1);
+        for (const g of [raadhuis, ...hoeven, ...velden, ...rest]) bouwAf(D, g, 1);
       } finally {
         IN().bouwBereik = echt;
       }

@@ -8,12 +8,12 @@ const { leegBegin, proefDorp, bouwAf, dagen } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het proefdorp (test/grond.cjs), stil: het huis van de schout (de opslag), twee boerderijen en hutten.
+// Het proefdorp (test/grond.cjs), stil: het raadhuis (de opslag), twee boerderijen en hutten.
 function dorp() {
-  const { S, D, w, schout, boerderijen } = proefDorp(T);
+  const { S, D, w, raadhuis, boerderijen } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
   T.S = S;
-  return { S, D, w, schout, boerderijen, kar: D.begin.kar, dag: Math.floor(S.kalender.dag) };
+  return { S, D, w, raadhuis, boerderijen, kar: D.begin.kar, dag: Math.floor(S.kalender.dag) };
 }
 
 // Een houthakker bij het vuur, meteen af; geeft het gebouw en de dag erna.
@@ -33,7 +33,7 @@ test('de kar gaat aan het werk als het kamp op is; tot dan gaat wat er gemaakt w
   assert.equal(D.voorraad.hout, 3, 'zonder kar telt het meteen');
   dagen(T, S, 1);
   assert.deepEqual(D.karren, [D.begin.kar]);
-  assert.equal(D.begin.kar.vel, 'huifkar', 'tot het huis van de schout er is, blijft het de huifkar');
+  assert.equal(D.begin.kar.vel, 'huifkar', 'tot het raadhuis er is, blijft het de huifkar');
 });
 
 test('het hout van de houthakker ligt op zijn stapel, en telt pas als de kar het in de opslag heeft', () => {
@@ -51,7 +51,7 @@ test('het hout van de houthakker ligt op zijn stapel, en telt pas als de kar het
 });
 
 test('de kar rijdt in de werktijd: naar de stapel, laden, terug, lossen, met de weg van de os', () => {
-  const { S, D, kar, schout, dag } = dorp();
+  const { S, D, kar, raadhuis, dag } = dorp();
   const g = metHouthakker(S, D, dag);
   // De nacht van dag + 1 hakte hij; de dag zelf rijdt de kar.
   const d = dag + 1;
@@ -68,7 +68,7 @@ test('de kar rijdt in de werktijd: naar de stapel, laden, terug, lossen, met de 
   assert.ok(fasen[0].u >= werk.werkBegin - 0.06 && fasen[0].u < werk.werkBegin + 0.1, `hij vertrekt als het werk begint (${fasen[0].u})`);
   // de weg: zo lang als de os erover doet, heen en terug
   const deur = T.deurVan(D.wereld, g);
-  const opslag = T.deurVan(D.wereld, schout);
+  const opslag = T.deurVan(D.wereld, raadhuis);
   const uren = (fasen[1].u - fasen[0].u);
   const minstens = ((T.afstand(van, deur) - 2) / T.BEGIN_INSTELLINGEN.karSnelheid / T.DAG_LENGTE) * 24;
   assert.ok(uren >= minstens, `heen ${uren} uur, minstens ${minstens}`);
@@ -241,16 +241,16 @@ test('de zagerij neemt zijn stammen uit wat de kar bij hem bracht, niet uit de o
 // ---------------------------------------------------------------------------------------------
 
 test('eten op een stapel eet het dorp niet, maar het telt wel voor de winter; pas in de opslag eten ze het', () => {
-  const { S, D, schout, dag } = dorp();
+  const { S, D, raadhuis, dag } = dorp();
   T.zetVoorraad(D, 'vlees', 0);
   const winterVoor = T.etenVoorDeWinter(D, dag).dagen;
-  schout.stapel = { vlees: 12 }; // (een stapel bij het huis van de schout, alsof een jager hem maakte)
-  schout.karKanNietTot = dag + 2; // de kar komt er nog niet bij
+  raadhuis.stapel = { vlees: 12 }; // (een stapel bij het raadhuis, alsof een jager hem maakte)
+  raadhuis.karKanNietTot = dag + 2; // de kar komt er nog niet bij
   assert.ok(T.etenVoorDeWinter(D, dag).dagen >= winterVoor, 'het vlees komt nog binnen');
   dagen(T, S, dag + 1);
   assert.equal(D.voorraad.vlees || 0, 0, 'niet in de opslag');
   assert.ok(!D.behoeften.afwisseling.includes('vlees'), 'en niet gegeten');
-  schout.karKanNietTot = 0;
+  raadhuis.karKanNietTot = 0;
   dagen(T, S, dag + 2);
   assert.ok((D.voorraad.vlees || 0) + T.opDeStapels(D, 'vlees') > 0);
   assert.ok(T.opDeStapels(D, 'vlees') < 12, 'de kar haalde het');
@@ -275,11 +275,11 @@ test('de oogst ligt bij de boerderij tot de kar hem haalt; wat van het vee komt,
 // Stap 4: de schuur (Marcel, 14 okt: "a ja, b ja, c ja")
 // ---------------------------------------------------------------------------------------------
 
-// Een schuur zo ver mogelijk van het huis van de schout, maar nog binnen het bereik, meteen af (de nacht erop).
-function zetSchuur(S, D, schout, dag) {
+// Een schuur zo ver mogelijk van het raadhuis, maar nog binnen het bereik, meteen af (de nacht erop).
+function zetSchuur(S, D, raadhuis, dag) {
   T.wijzigVoorraad(D, 'hout', 30);
   T.wijzigVoorraad(D, 'goud', 10);
-  const huis = T.deurVan(D.wereld, schout);
+  const huis = T.deurVan(D.wereld, raadhuis);
   const plekken = [];
   const K = T.kaartVak(D.wereld);
   for (let y = K.y; y < K.y + K.h; y++) {
@@ -304,9 +304,9 @@ test('de schuur: 15 hout en 6 goud, alleen in het lege begin, een opslag met een
   assert.deepEqual(s.kosten, { hout: 15, goud: 6 });
   assert.equal(s.trede, 'gehucht');
   assert.ok(s.opslag && s.kar && s.leeg);
-  const { S, D, schout, dag } = dorp();
+  const { S, D, raadhuis, dag } = dorp();
   assert.ok(T.inBouwmenu(D, 'schuur'));
-  const g = zetSchuur(S, D, schout, dag);
+  const g = zetSchuur(S, D, raadhuis, dag);
   assert.ok(g.klaar);
   assert.equal(D.karren.length, 2, 'de schuur kreeg zijn kar');
   const kar = D.karren[1];
@@ -318,10 +318,10 @@ test('de schuur: 15 hout en 6 goud, alleen in het lege begin, een opslag met een
 });
 
 test('om de schuur heen kun je bouwen, ook waar het plein en het huis te ver zijn', () => {
-  const { S, D, schout, dag } = dorp();
-  const g = zetSchuur(S, D, schout, dag);
+  const { S, D, raadhuis, dag } = dorp();
+  const g = zetSchuur(S, D, raadhuis, dag);
   const deur = T.deurVan(D.wereld, g);
-  const huis = T.deurVan(D.wereld, schout);
+  const huis = T.deurVan(D.wereld, raadhuis);
   // een tegel aan de andere kant van de schuur, 14 tegels van zijn deur
   const r = Math.hypot(deur.x - huis.x, deur.y - huis.y);
   const t = { x: Math.round(deur.x + ((deur.x - huis.x) / r) * 14), y: Math.round(deur.y + ((deur.y - huis.y) / r) * 14) };
@@ -329,8 +329,8 @@ test('om de schuur heen kun je bouwen, ook waar het plein en het huis te ver zij
 });
 
 test('elke kar haalt wat het dichtst bij zijn eigen opslag ligt, en lost daar', () => {
-  const { S, D, schout, dag } = dorp();
-  const g = zetSchuur(S, D, schout, dag);
+  const { S, D, raadhuis, dag } = dorp();
+  const g = zetSchuur(S, D, raadhuis, dag);
   const eerste = D.karren[0];
   const tweede = D.karren[1];
   // een stapel bij de schuur zelf: die is van de kar van de schuur
@@ -341,6 +341,6 @@ test('elke kar haalt wat het dichtst bij zijn eigen opslag ligt, en lost daar', 
   assert.ok(D.voorraad.steen >= hout + 10 - 1e-9, 'één voorraad: hij telt in de balk');
   const bijSchuur = T.afstand({ x: tweede.tx, y: tweede.ty }, T.deurVan(D.wereld, g));
   assert.ok(bijSchuur <= 2, `de kar van de schuur staat bij zijn schuur (${bijSchuur})`);
-  const bijHuis = T.afstand({ x: eerste.tx, y: eerste.ty }, T.deurVan(D.wereld, schout));
-  assert.ok(bijHuis <= 2, `de eerste kar wacht bij het huis van de schout (${bijHuis})`);
+  const bijHuis = T.afstand({ x: eerste.tx, y: eerste.ty }, T.deurVan(D.wereld, raadhuis));
+  assert.ok(bijHuis <= 2, `de eerste kar wacht bij het raadhuis (${bijHuis})`);
 });

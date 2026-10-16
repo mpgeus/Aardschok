@@ -38,9 +38,9 @@ function zet(e, x, y) {
   Object.assign(e, { x, y, tx: x, ty: y, pad: [], padDoel: null, onderweg: false, binnen: false });
 }
 
-// Bewoners met een poppetje die vrij kunnen zijn: geen kleuter, en niet de schout.
+// Bewoners met een poppetje die vrij kunnen zijn: geen kleuter, en niet de aanvoerder.
 function vrijeMensen(S) {
-  return S.dorp.bewoners.mensen.filter((p) => p.wezen && !p.schout && p.leeftijd !== 'kleuter');
+  return S.dorp.bewoners.mensen.filter((p) => p.wezen && !p.aanvoerder && p.leeftijd !== 'kleuter');
 }
 
 // `aantal` poppetjes: de eerste is wie de meeste mensen kent, en de rest kent hem (uit een ander huis). Om aan te
@@ -100,18 +100,18 @@ function stappen(S, seconden) {
   }
 }
 
-test('wie vrij is: de ochtend, de schaft en de avond; overdag alleen wie geen werk heeft; nooit een kleuter of de schout', () => {
+test('wie vrij is: de ochtend, de schaft en de avond; overdag alleen wie geen werk heeft; nooit een kleuter of de aanvoerder', () => {
   const S = proef();
   const D = S.dorp;
-  const werker = D.bewoners.mensen.find((p) => p.wezen && p.werk && !p.schout).wezen;
-  const zonder = D.bewoners.mensen.find((p) => p.wezen && !p.werk && !p.schout && p.leeftijd !== 'kleuter').wezen;
+  const werker = D.bewoners.mensen.find((p) => p.wezen && p.werk && !p.aanvoerder).wezen;
+  const zonder = D.bewoners.mensen.find((p) => p.wezen && !p.werk && !p.aanvoerder && p.leeftijd !== 'kleuter').wezen;
   const kleuter = D.bewoners.mensen.find((p) => p.wezen && p.leeftijd === 'kleuter');
   for (const deel of ['ochtend', 'schaft', 'avond']) assert.ok(T.kanPraten(S, D, werker, deel), `wie werkt, is vrij in de ${deel}`);
   assert.ok(!T.kanPraten(S, D, werker, 'werk'), 'wie werkt, praat niet onder het werk');
   assert.ok(T.kanPraten(S, D, zonder, 'werk'), 'wie geen werk heeft, wel');
   assert.ok(!T.kanPraten(S, D, werker, 'nacht'), "'s nachts niet");
   if (kleuter) assert.ok(!T.kanPraten(S, D, kleuter.wezen, 'ochtend'), 'een kleuter niet');
-  assert.ok(!T.kanPraten(S, D, S.schout, 'avond'), 'de schout niet: dat ben jij');
+  assert.ok(!T.kanPraten(S, D, S.dorp.aanvoerder, 'avond'), 'de aanvoerder niet');
   for (const bezig of ['maait', 'moetNaar', 'binnen']) {
     werker[bezig] = true;
     assert.ok(!T.kanPraten(S, D, werker, 'avond'), `wie ${bezig}, niet`);
@@ -384,7 +384,7 @@ test('een dag in het proefdorp: er wordt gepraat, nooit twee op één tegel, wie
     // Om twee uur 's nachts is iedereen binnen, ook wie 's avonds praatte.
     if (!nachtGezien && S.kalender.dag >= 41 + 2 / 24) {
       nachtGezien = true;
-      const buiten = D.bewoners.mensen.filter((p) => p.wezen && !p.schout && !p.wezen.binnen);
+      const buiten = D.bewoners.mensen.filter((p) => p.wezen && !p.aanvoerder && !p.wezen.binnen);
       assert.deepEqual(buiten.map(T.naamVanBewoner), [], "'s nachts is iedereen binnen");
       assert.equal(T.praatjesOp(w).size, 0, "'s nachts praat niemand");
     }

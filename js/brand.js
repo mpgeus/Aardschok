@@ -58,7 +58,7 @@
     return droog >= 2 || (D.woonruimte != null && D.bevolking >= D.woonruimte) ? 2 : 1;
   };
 
-  // Het huis dat brandt: een woonhuis dat klaar is, met een tekening, en niet de herberg of het huis van de schout;
+  // Het huis dat brandt: een woonhuis dat klaar is, met een tekening, en niet de herberg of het raadhuis;
   // geloot met een vast lot op het uur, zodat de speeltest hetzelfde jaar speelt. Null als er geen is.
   function huisVanDeBrand(D, nu) {
     const huizen = (D.gebouwen || []).filter(kanBranden);

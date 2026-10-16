@@ -14,9 +14,9 @@
   'use strict';
 
   T.MIST_INSTELLINGEN = {
-    // Hoe ver ze kijken, in tegels, hemelsbreed (een kring, zonder iets ertussen): de schout, wie in het dorp woont, de
+    // Hoe ver ze kijken, in tegels, hemelsbreed (een kring, zonder iets ertussen): de aanvoerder, wie in het dorp woont, de
     // ossenkar, en een gebouw dat af is (gerekend vanaf de rand van zijn voet; het plein ook). Marcel, 13 okt: "C ok".
-    zicht: { schout: 12, dorpeling: 7, kar: 7, gebouw: 6 },
+    zicht: { aanvoerder: 12, dorpeling: 7, kar: 7, gebouw: 6 },
     // Wat je bij het begin kent: een kring van zoveel tegels om het midden van je land (C2), ongeveer je land van vóór
     // B2.
     beginKring: 50,
@@ -100,7 +100,7 @@
     const uit = [];
     for (const e of D.wereld.wezens) {
       if (!T.isVanJou(S, e)) continue;
-      uit.push({ x: e.x, y: e.y, r: e === S.schout ? Z.schout : e.kar ? Z.kar : Z.dorpeling, van: e });
+      uit.push({ x: e.x, y: e.y, r: T.isAanvoerder(S, e) ? Z.aanvoerder : e.kar ? Z.kar : Z.dorpeling, van: e });
     }
     for (const g of D.gebouwen || []) {
       if (!g.klaar) continue;

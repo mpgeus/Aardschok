@@ -471,7 +471,7 @@
   // (T.weideGroepen): worden twee velden naast elkaar allebei weide, dan telt hun plaats samen.
   // T.kanBestemming (js/akkers.js) vraagt het vooraf, met het plan voor volgend jaar; T.verhuisVee
   // doet op 1 lentemaand dezelfde verdeling echt. Een dier zonder weide (Spel.debug.vee zet ze los
-  // bij de schout) en een schaap op de meent tellen niet mee.
+  // bij de aanvoerder) en een schaap op de meent tellen niet mee.
   // { past, reden, moeten: [dier], plek: Map(dier → weide), vrij: Map(weide → vrij) }.
   T.plaatsVoorVee = function (D, plan) {
     const weides = T.weideGroepen(D.wereld, (v) => plan(v) === 'weide');

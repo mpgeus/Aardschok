@@ -1,6 +1,6 @@
 // De ossenkar van het lege begin (ontwerp/werklijst.md, vraag 152; Marcel, 11 okt: "Een kar met wat spullen en
 // 'settlers'", en "Huifkar wordt ossenkar"): een kar op twee hoge wielen, met een os tussen de disselbomen. Hij komt
-// aan als huifkar, met een zeil van linnen over wat vier gezinnen meebrengen, en zolang het huis van de schout er niet
+// aan als huifkar, met een zeil van linnen over wat vier gezinnen meebrengen, en zolang het raadhuis er niet
 // staat, is hij de opslag. Daarna gaat het zeil eraf en haalt hij als ossenkar de grondstoffen op (stap 2): leeg, met
 // spullen, met stammen, met stenen of met zakken.
 //

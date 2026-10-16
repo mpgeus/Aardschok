@@ -72,7 +72,7 @@ test('een tik gaat al als er een halve klaarligt, en hooguit drie per beeld', ()
 // ── De opdrachten van de spelers ──
 
 // Een plek voor een hut, zoals de kolonist hem zoekt (T.plekVoor, js/bouwen.js).
-const plekVoorHut = (D) => T.plekVoor(D, 'hut', D.schout ? { x: D.schout.tx, y: D.schout.ty } : { x: 0, y: 0 });
+const plekVoorHut = (D) => T.plekVoor(D, 'hut', D.aanvoerder ? { x: D.aanvoerder.tx, y: D.aanvoerder.ty } : { x: 0, y: 0 });
 
 test('een opdracht gaat in bij de volgende tik, en zegt wat er gebeurde', () => {
   const { S, D } = proefDorp(T);

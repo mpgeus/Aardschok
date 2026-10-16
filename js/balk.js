@@ -1,6 +1,6 @@
 // De balk onderaan (werklijst vraag 164; Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg. En we hebben een
 // minimale nodig", en op drie vragen: kaartjes in de hoeken, de voorraad toont wat je hebt, en de velden, het wetboek, de
-// raadsman, de lantaarn, de kaars en de tekeningen van de tafel eraf). Tot dan lag hier de tafel van de schout (vraag
+// raadsman, de lantaarn, de kaars en de tekeningen van de tafel eraf). Tot dan lag hier de tafel van de aanvoerder (vraag
 // 146, c), met het rekenboek en de dingen erop; git bewaart haar.
 //
 // Onderaan kaartjes in de hoeken, even breed (--kaart in stijl.css): linksonder de voorraad (elke waar waarvan er iets
@@ -530,7 +530,7 @@
   // ── De minikaart, in de hoek rechtsonder (js/minikaart.js; vraag 165) ──
   // Het hele eiland als een ruit die ligt zoals het beeld: het beeld van het eiland (T.maakMinikaart, in stukjes van een
   // paar ms per beeld; de zee vervaagt naar doorzichtig, dus er blijft een eiland over en geen ruit), daarover een donkere
-  // tint over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert, T.mistVersie), je gebouwen, de schout,
+  // tint over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert, T.mistVersie), je gebouwen, de aanvoerder,
   // de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js).
   const MINI = {
     alle: 0.1, // zo vaak (seconden) wordt de ruit opnieuw getekend
@@ -617,13 +617,13 @@
       c.fillStyle = kleur;
       c.fillRect(Math.round(p.x * k - (maat * k) / 2) / k, Math.round(p.y * k - (maat * k) / 2) / k, maat, maat);
     };
-    // De plekken die je kent (het kasteel, de stad, de dorpen), dan je gebouwen, en de schout.
+    // De plekken die je kent (het kasteel, de stad, de dorpen), dan je gebouwen, en de aanvoerder.
     for (const p of E.plekken || []) if (T.kentTegel(w, p.x, p.y)) stip(p.x, p.y, 4, '#2c1d12');
     for (const g of S.dorp.gebouwen) {
       const r = T.voetVanGebouw(g);
       stip(r.x + r.b / 2, r.y + r.h / 2, 2, '#f3e3b8');
     }
-    if (S.schout) stip(S.schout.x, S.schout.y, 3, '#c0392b');
+    if (S.dorp.aanvoerder) stip(S.dorp.aanvoerder.x, S.dorp.aanvoerder.y, 3, '#c0392b');
     const nu = performance.now();
     mini.pings = mini.pings.filter((q) => q.tot > nu);
     // Een ring om de plek, die klein wordt als hij aangaat, zodat je oog erheen gaat.

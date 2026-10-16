@@ -22,7 +22,7 @@
 // (de actiepunten van vroeger) maal secondenPerPunt is de tijd tot de volgende. Schild en harnas vangen een deel af
 // (T.vangtAf). Wie geraakt wordt en niets doet, slaat terug; een dorpeling vlucht.
 //
-// Een dorpeling die een rover ziet, vlucht naar het town hall (het huis van de schout: de eerste opslag, het midden van
+// Een dorpeling die een rover ziet, vlucht naar het town hall (het raadhuis: de eerste opslag, het midden van
 // je bereik), en zit daar binnen tot er geen rover meer op de kaart is (p.schuilt, en T.blijftThuis in js/bewoners.js: wie
 // schuilt, werkt niet). Is er nog geen town hall, dan naar zijn eigen huis.
 //
@@ -95,7 +95,7 @@
   // Het leven van wie vecht of geraakt wordt: een man dat van een soldaat of veteraan (T.levenAlsMan), een ander het zijne,
   // of dat van een dorpeling.
   function zorgLeven(D, e) {
-    if (e !== D.schout && T.isMan(D, e)) {
+    if (e !== D.aanvoerder && T.isMan(D, e)) {
       const l = T.levenAlsMan(e);
       e.leven = l.leven;
       e.maxLeven = l.max;
@@ -188,7 +188,7 @@
     if (d && e.volgt && (d.dood || !D.wereld.wezens.includes(d))) return null; // js/kiezen.js geeft hem een post
     // De held kiest zelf niets: hij blijft waar je hem neerzet (js/kiezen.js), en vecht als je hem stuurt of als hij
     // geraakt wordt (T.raak). Zo loopt hij niet vanzelf een gevecht in dat het spel kan beëindigen.
-    if (d || nu < (e.omkijken || 0) || e === D.schout) return d;
+    if (d || nu < (e.omkijken || 0) || e === D.aanvoerder) return d;
     e.omkijken = nu + IN().kijkElke;
     const keus = kiesDoel(D, e, vijanden);
     if (!keus) return null;
@@ -284,11 +284,11 @@
   }
   T.raak = raak;
 
-  // Wie valt, is dood. De held: het spel is uit (T.schoutGevallen). Een man of een dorpeling: een mond minder (T.sneuvelt,
+  // Wie valt, is dood. De held: het spel is uit (T.aanvoerderGevallen). Een man of een dorpeling: een mond minder (T.sneuvelt,
   // js/rovers.js), en hij ligt er tot de volgende dag. Een vijand is verslagen; een rover is uit zijn bende, en was hij
   // de laatste van zijn aanval, dan is die voorbij (T.naGevecht).
   T.valt = function (S, D, e, van) {
-    const held = e === D.schout;
+    const held = e === D.aanvoerder;
     const onze = !held && (T.vechtVoor(D, e) || !!e.bewoner);
     e.dood = true;
     e.sterfTijd = 0;
@@ -296,7 +296,7 @@
     delete e.doelwit;
     delete e.volgt;
     if (held) {
-      if (D === S.dorp) T.schoutGevallen(S);
+      if (D === S.dorp) T.aanvoerderGevallen(S);
       return;
     }
     if (onze) {
@@ -313,10 +313,10 @@
 
   // ── Vluchten en schuilen ──
 
-  // Waar een dorpeling schuilt: in het town hall (het huis van de schout, als het af is), en anders in zijn eigen huis.
+  // Waar een dorpeling schuilt: in het town hall (het raadhuis, als het af is), en anders in zijn eigen huis.
   // Geeft de tegel voor de deur, of null.
   function schuilDeur(D, p) {
-    const hal = (D.gebouwen || []).find((g) => g.soort === 'schout' && g.klaar);
+    const hal = (D.gebouwen || []).find((g) => g.soort === 'raadhuis' && g.klaar);
     const g = hal || (p && p.huis && p.huis.klaar !== false ? p.huis : null);
     return g ? T.deurVan(D.wereld, g) : null;
   }
@@ -385,13 +385,13 @@
   // ── De held valt ──
 
   // De held valt, en dat is het einde van het spel (tot stap 5 van vraag 170: dan staat er een veteraan op).
-  T.schoutGevallen = function (S) {
+  T.aanvoerderGevallen = function (S) {
     S.modus = 'dood';
     T.ui.bericht(T.t('You fall, and you do not get up again.'), 'gevaar');
     T.ui.toonOverlay(
       T.t('Fallen'),
       `<p>${T.t('You fall, and you do not get up again.')}</p>` +
-        `<p>${T.t('The lord writes to the new reeve that he had better take care: a funeral costs money too.')}</p>`,
+        `<p>${T.t('The lord writes to the new commander that he had better take care: a funeral costs money too.')}</p>`,
       T.t('To the title screen'), // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
       () => T.naarTitelscherm(),
     );

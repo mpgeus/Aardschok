@@ -152,7 +152,7 @@ const BUILDINGEN = [
   { id: 'wijnhuis', tekening: 'wijnhuis', maak: () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true }) },
   // ── de huizen van de huizenbouwer (huizen.cjs, ronde 4b): die snijden hun fases uit het huis zelf
   // (renderHuisFasen), niet uit de vormen van dorp.cjs. Niet voor een huis dat niemand bouwt (fasen:
-  // false, het huis van de schout) ──
+  // false, het raadhuis) ──
   ...Object.keys(HZ.HUIZEN).filter((n) => HZ.HUIZEN[n].fasen !== false).map((n) => ({ id: HZ.HUIZEN[n].gebouw, tekening: n, huis: n })),
 ];
 

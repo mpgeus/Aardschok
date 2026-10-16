@@ -99,7 +99,7 @@ function pluktInWijnmaand(zonderAkker) {
     }
     assert.equal(!!(D.wereld.akkers && D.wereld.akkers.length), !zonderAkker);
     // Twee volwassenen van het dorp gaan bij het gezin van de boer wonen, op de wijnboerderij.
-    const erbij = D.bewoners.mensen.filter((p) => p.wezen && !p.schout && p.huis !== g && !T.isBoer(D, p) && T.LEEFTIJDEN[p.leeftijd].werkt != null).slice(0, 2);
+    const erbij = D.bewoners.mensen.filter((p) => p.wezen && !p.aanvoerder && p.huis !== g && !T.isBoer(D, p) && T.LEEFTIJDEN[p.leeftijd].werkt != null).slice(0, 2);
     assert.equal(erbij.length, 2);
     for (const p of erbij) p.huis = g;
     const wie = D.bewoners.mensen.filter((p) => p.huis === g && p.wezen);

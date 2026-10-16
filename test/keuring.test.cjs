@@ -124,9 +124,9 @@ test('twee mensen op dezelfde tegel, en een straal die geen getal is', () => {
   assert.match(teksten(klachten), /dat is geen getal boven nul/);
 });
 
-test('twee keer de schout: het spel weet dan niet waar je begint', () => {
-  const klachten = keur([UITGANG, { x: 2, y: 1, wezen: 'schout' }, { x: 3, y: 1, wezen: 'schout' }]);
-  assert.match(teksten(klachten), /2 objecten met wezen="schout"/);
+test('twee keer de aanvoerder: het spel weet dan niet waar je begint', () => {
+  const klachten = keur([UITGANG, { x: 2, y: 1, wezen: 'aanvoerder' }, { x: 3, y: 1, wezen: 'aanvoerder' }]);
+  assert.match(teksten(klachten), /2 objecten met wezen="aanvoerder"/);
 });
 
 test('een dorpeling in een boom komt daar niet meer vandaan', () => {

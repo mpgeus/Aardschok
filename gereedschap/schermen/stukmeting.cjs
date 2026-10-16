@@ -1,5 +1,5 @@
 'use strict';
-// Wat een nieuw stuk land kost (npm run stukmeting; B2b, stap 5, kaarten.md "Het hele eiland"): het proefdorp, de schout
+// Wat een nieuw stuk land kost (npm run stukmeting; B2b, stap 5, kaarten.md "Het hele eiland"): het proefdorp, de aanvoerder
 // op 30× steeds naar de verste tegel die hij lopend haalt, in een richting, tot hij niet verder komt, en dan de volgende
 // richting. Per beeld de regels en het tekenen apart, en hoeveel daarvan het maken van land was (T.landStuk); per stuk
 // dat opengaat, dat beeld en de drie erna; en de zwaarste beelden, met wat erin gebeurde (een nieuwe dag, een stuk).
@@ -110,7 +110,7 @@ async function meet(page) {
       const T = Spel;
       const S = T.S;
       const w = S.wereld;
-      const s = S.schout;
+      const s = S.dorp.aanvoerder;
       if (S.kalender.snelheid !== 30) T.zetSnelheid(S, 30); // een bezoeker zet hem op 1× (T.naarGewoneSnelheid)
       if (s.pad.length) return { loopt: true };
       // alles wat hij lopend haalt, en daarvan de verste tegel in deze richting
@@ -151,10 +151,10 @@ async function meet(page) {
   }
   if (STIL) {
     // eerst uitlopen, dan stilstaan; een bezoeker zet de snelheid op 1× (T.naarGewoneSnelheid)
-    await page.waitForFunction(() => !Spel.S.schout.pad.length, null, { timeout: 60000 });
+    await page.waitForFunction(() => !Spel.S.dorp.aanvoerder.pad.length, null, { timeout: 60000 });
     await page.waitForTimeout(1000);
     await page.evaluate(() => { window.__stil = true; });
-    log.push(`stil op ${await page.evaluate(() => [Spel.S.schout.tx, Spel.S.schout.ty])}, ${STIL / 1000} s`);
+    log.push(`stil op ${await page.evaluate(() => [Spel.S.dorp.aanvoerder.tx, Spel.S.dorp.aanvoerder.ty])}, ${STIL / 1000} s`);
     for (const eind = Date.now() + STIL; Date.now() < eind;) {
       await page.waitForTimeout(250);
       await page.evaluate(() => { if (Spel.S.kalender.snelheid !== 30) Spel.zetSnelheid(Spel.S, 30); });

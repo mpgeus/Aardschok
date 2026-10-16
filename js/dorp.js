@@ -1,9 +1,9 @@
 // Een dorp: alles wat bij een dorp hoort, bij elkaar (werklijst, vraag 71; Marcel, 30 sep: "A ja B ja C ja").
 //
-// Het spel (S, in de browser Spel.S) is: de kalender, het land, jij (de schout, S.schout), waar je bent (S.wereld),
+// Het spel (S, in de browser Spel.S) is: de kalender, het land, waar je kijkt (S.wereld),
 // wat er op het scherm is, en de dorpen (S.dorpen). Een dorp (D) heeft alles van zichzelf: zijn kaart (D.wereld), zijn
-// voorraad, gebouwen en mensen, zijn wetten, hoe de heer ertegenover staat, zijn rovers, zijn trede en zijn vee, en zijn eigen schout (D.schout; in jouw dorp ben jij dat, in een buurdorp later
-// een schout in code). De kalender is voor alle dorpen dezelfde: D.kalender is S.kalender.
+// voorraad, gebouwen en mensen, zijn wetten, hoe de heer ertegenover staat, zijn rovers, zijn trede en zijn vee, en zijn eigen aanvoerder (D.aanvoerder: de held van het dorp, die
+// jij stuurt; vraag 170, stap 5). De kalender is voor alle dorpen dezelfde: D.kalender is S.kalender.
 //
 // Een regel over een dorp krijgt het dorp mee (D). Heeft hij ook het spel nodig (of je vecht, praat of slaapt, de
 // klok van het scherm), dan krijgt hij allebei: (S, D). Je eigen dorp is S.dorp: daarover gaat de balk, ook als je
@@ -49,17 +49,17 @@
     return worp(L.stand);
   };
 
-  // Een nieuw dorp op kaart w, met zijn schout: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
+  // Een nieuw dorp op kaart w, met zijn aanvoerder: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
   // verder woont. `zaad` is het zaad van het dorp (D.lot.zaad; zonder: een willekeurig): hetzelfde zaad geeft hetzelfde
   // dorp, want de bewoners, de voorvallen, het vee, de rovers en het weer gooien er hun dobbelsteen mee. `ander`: het is
   // niet jouw dorp (het buurdorp): het spreekt niet tegen jou.
-  T.nieuwDorp = function (S, w, schout, opties) {
+  T.nieuwDorp = function (S, w, aanvoerder, opties) {
     const o = opties || {};
     const D = {
       ander: !!o.ander,
       wereld: w,
       kalender: S.kalender,
-      schout,
+      aanvoerder,
       voorraad: T.nieuweVoorraad(), // goud, graan, wol, hout (js/voorraad.js)
       gebouwen: [], // wat er staat of in aanbouw is (js/gebouwen.js), en hoe ver D.gebouwenDag is
       bevolking: 0, woonruimte: 0, // aantal mensen, en hoeveel er als woonruimte gegeven is
@@ -68,7 +68,7 @@
       wetten: T.nieuweWetten(), // welke wetten het dorp aannam (js/wetten.js)
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
-      einde: null, // de heer ontsloeg de schout (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
+      einde: null, // de heer ontsloeg de aanvoerder (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
     };
     // Er staat nog niets (vraag 152; sinds ronde 2 van het snoeien legt een kaart geen gebouwen, velden of voorraad meer):
     // de kar brengt wat er is, en het kamp (js/begin.js).
@@ -87,8 +87,12 @@
     return D;
   };
 
-  // Is de schout van dit dorp weg: in een ander gebied (js/gebied.js), of is er geen?
-  T.schoutIsWeg = (D) => !D.schout || !D.wereld.wezens.includes(D.schout);
+  // Is e de aanvoerder van je eigen dorp (S.dorp)? Ook waar een bladzijde een wereld zonder dorp laadt (het gereedschap,
+  // een toets van het lopen): dan is niemand het.
+  T.isAanvoerder = (S, e) => !!e && !!S.dorp && S.dorp.aanvoerder === e;
+
+  // Is de aanvoerder van dit dorp weg: in een ander gebied (js/gebied.js), of is er geen?
+  T.aanvoerderIsWeg = (D) => !D.aanvoerder || !D.wereld.wezens.includes(D.aanvoerder);
 
   // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
   // bewaart het, de laatste twintig (D.gezegd), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er

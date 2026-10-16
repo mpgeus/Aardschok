@@ -207,7 +207,7 @@
     if (!IN().aan || !D || !D.bewoners || !w) return [];
     const gezinnen = new Map();
     for (const p of D.bewoners.mensen) {
-      if (!p.wezen || p.weg || p.schout || !w.wezens.includes(p.wezen)) continue;
+      if (!p.wezen || p.weg || p.aanvoerder || !w.wezens.includes(p.wezen)) continue;
       const nu = gezinnen.get(p.gezin);
       const rang = !p.hoofd ? 0 : p.leeftijd === 'volwassen' ? 1 : p.leeftijd === 'jong' ? 2 : 9;
       if (rang < 9 && (!nu || rang < nu.rang)) gezinnen.set(p.gezin, { p, rang });

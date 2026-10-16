@@ -552,7 +552,7 @@
       voorwerpen: [...natuur.values(), ...gelegd], gelegd, gerooid,
       // js/hoogte.js legt een vlak stuk onder elk huis van het plan: er staan er geen meer, het zijn de huizen van de speler
       huizen: [],
-      schout: { ...kamp.plekken[0].deur }, kamp, eiland: { zaad: land.zaad, x0: land.x0, y0: land.y0 },
+      aanvoerder: { ...kamp.plekken[0].deur }, kamp, eiland: { zaad: land.zaad, x0: land.x0, y0: land.y0 },
     };
     const fout = keur(plan);
     if (fout) return mis(fout);
@@ -580,10 +580,10 @@
         if (nat && !brug.has(y * B + x)) zetVast(x, y);
       }
     }
-    // Hoe ver elke tegel te voet ligt van de tent van de schout.
+    // Hoe ver elke tegel te voet ligt van de tent van de aanvoerder.
     const afstand = new Int32Array(B * H).fill(-1);
-    const start = plan.schout.y * B + plan.schout.x;
-    if (vast[start]) return 'de tent van de schout is vast'; // geen tekst
+    const start = plan.aanvoerder.y * B + plan.aanvoerder.x;
+    if (vast[start]) return 'de tent van de aanvoerder is vast'; // geen tekst
     afstand[start] = 0;
     const rij = [start];
     for (let i = 0; i < rij.length; i++) {
@@ -1061,14 +1061,14 @@
       T.zetVoorwerp(w, T.maakVoorwerp(t, x0 + d.x, y0 + d.y));
       if (t.eig.vast) T.zetTegel(w, x0 + d.x, y0 + d.y, 'muur');
     }
-    // het plein, de schout bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), de weg de wereld in,
+    // het plein, de aanvoerder bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), de weg de wereld in,
     // en de plek van de marskramer
     const op = (p) => ({ ...p, x: x0 + p.x, y: y0 + p.y });
     w.naam = T.t('The hamlet');
     w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
     w.plein = plan.plein.map(([x, y]) => [x0 + x, y0 + y]);
     w.marskramer = op(plan.marskramer);
-    w.wezens.push(T.maakWezen('schout', x0 + plan.schout.x, y0 + plan.schout.y));
+    w.wezens.push(T.maakWezen('aanvoerder', x0 + plan.aanvoerder.x, y0 + plan.aanvoerder.y));
     w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.stijl) w.stijl = plan.stijl;

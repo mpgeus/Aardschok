@@ -15718,7 +15718,7 @@
       ]
      },
      {
-      "naam": "schoutshuis",
+      "naam": "raadhuis",
       "vast": true,
       "beslaat": [
        8,
@@ -16138,7 +16138,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/schoutshuis.png",
+      "bestand": "tegels/huizen/raadhuis.png",
       "cel": [
        0,
        0,
@@ -155353,7 +155353,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-z",
+      "naam": "wit-raadhuis-riet-z",
       "vast": true,
       "beslaat": [
        8,
@@ -155787,8 +155787,8 @@
       ],
       "stijl": {
        "stijl": "wit",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "veldsteen",
        "stand": "z"
@@ -155797,7 +155797,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-z.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-z.png",
       "cel": [
        0,
        0,
@@ -155810,7 +155810,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-o",
+      "naam": "wit-raadhuis-riet-o",
       "vast": true,
       "beslaat": [
        6,
@@ -156210,8 +156210,8 @@
       ],
       "stijl": {
        "stijl": "wit",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "veldsteen",
        "stand": "o"
@@ -156220,7 +156220,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-o.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-o.png",
       "cel": [
        0,
        0,
@@ -156233,7 +156233,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-n",
+      "naam": "wit-raadhuis-riet-n",
       "vast": true,
       "beslaat": [
        8,
@@ -156717,8 +156717,8 @@
       ],
       "stijl": {
        "stijl": "wit",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "veldsteen",
        "stand": "n"
@@ -156727,7 +156727,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-n.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-n.png",
       "cel": [
        0,
        0,
@@ -156740,7 +156740,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-w",
+      "naam": "wit-raadhuis-riet-w",
       "vast": true,
       "beslaat": [
        6,
@@ -157262,8 +157262,8 @@
       ],
       "stijl": {
        "stijl": "wit",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "veldsteen",
        "stand": "w"
@@ -157272,7 +157272,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-w.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-w.png",
       "cel": [
        0,
        0,
@@ -169597,7 +169597,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-z",
+      "naam": "oker-raadhuis-riet-z",
       "vast": true,
       "beslaat": [
        8,
@@ -170031,8 +170031,8 @@
       ],
       "stijl": {
        "stijl": "oker",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "z"
@@ -170041,7 +170041,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-z.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-z.png",
       "cel": [
        0,
        0,
@@ -170054,7 +170054,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-o",
+      "naam": "oker-raadhuis-riet-o",
       "vast": true,
       "beslaat": [
        6,
@@ -170454,8 +170454,8 @@
       ],
       "stijl": {
        "stijl": "oker",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "o"
@@ -170464,7 +170464,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-o.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-o.png",
       "cel": [
        0,
        0,
@@ -170477,7 +170477,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-n",
+      "naam": "oker-raadhuis-riet-n",
       "vast": true,
       "beslaat": [
        8,
@@ -170961,8 +170961,8 @@
       ],
       "stijl": {
        "stijl": "oker",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "n"
@@ -170971,7 +170971,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-n.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-n.png",
       "cel": [
        0,
        0,
@@ -170984,7 +170984,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-w",
+      "naam": "oker-raadhuis-riet-w",
       "vast": true,
       "beslaat": [
        6,
@@ -171506,8 +171506,8 @@
       ],
       "stijl": {
        "stijl": "oker",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "w"
@@ -171516,7 +171516,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-w.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-w.png",
       "cel": [
        0,
        0,
@@ -182309,7 +182309,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-z",
+      "naam": "planken-raadhuis-spanen-z",
       "vast": true,
       "beslaat": [
        8,
@@ -182735,8 +182735,8 @@
       ],
       "stijl": {
        "stijl": "planken",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "spanen",
        "steen": "veldsteen",
        "stand": "z"
@@ -182745,7 +182745,7 @@
        69,
        -438
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-z.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-z.png",
       "cel": [
        0,
        0,
@@ -182758,7 +182758,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-o",
+      "naam": "planken-raadhuis-spanen-o",
       "vast": true,
       "beslaat": [
        6,
@@ -183154,8 +183154,8 @@
       ],
       "stijl": {
        "stijl": "planken",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "spanen",
        "steen": "veldsteen",
        "stand": "o"
@@ -183164,7 +183164,7 @@
        31,
        -488
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-o.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-o.png",
       "cel": [
        0,
        0,
@@ -183177,7 +183177,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-n",
+      "naam": "planken-raadhuis-spanen-n",
       "vast": true,
       "beslaat": [
        8,
@@ -183675,8 +183675,8 @@
       ],
       "stijl": {
        "stijl": "planken",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "spanen",
        "steen": "veldsteen",
        "stand": "n"
@@ -183685,7 +183685,7 @@
        -5,
        -501
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-n.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-n.png",
       "cel": [
        0,
        0,
@@ -183698,7 +183698,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-w",
+      "naam": "planken-raadhuis-spanen-w",
       "vast": true,
       "beslaat": [
        6,
@@ -184206,8 +184206,8 @@
       ],
       "stijl": {
        "stijl": "planken",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "spanen",
        "steen": "veldsteen",
        "stand": "w"
@@ -184216,7 +184216,7 @@
        -95,
        -451
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-w.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-w.png",
       "cel": [
        0,
        0,
@@ -196541,7 +196541,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-z",
+      "naam": "roze-raadhuis-riet-z",
       "vast": true,
       "beslaat": [
        8,
@@ -196975,8 +196975,8 @@
       ],
       "stijl": {
        "stijl": "roze",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "z"
@@ -196985,7 +196985,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-z.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-z.png",
       "cel": [
        0,
        0,
@@ -196998,7 +196998,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-o",
+      "naam": "roze-raadhuis-riet-o",
       "vast": true,
       "beslaat": [
        6,
@@ -197398,8 +197398,8 @@
       ],
       "stijl": {
        "stijl": "roze",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "o"
@@ -197408,7 +197408,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-o.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-o.png",
       "cel": [
        0,
        0,
@@ -197421,7 +197421,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-n",
+      "naam": "roze-raadhuis-riet-n",
       "vast": true,
       "beslaat": [
        8,
@@ -197905,8 +197905,8 @@
       ],
       "stijl": {
        "stijl": "roze",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "n"
@@ -197915,7 +197915,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-n.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-n.png",
       "cel": [
        0,
        0,
@@ -197928,7 +197928,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-w",
+      "naam": "roze-raadhuis-riet-w",
       "vast": true,
       "beslaat": [
        6,
@@ -198450,8 +198450,8 @@
       ],
       "stijl": {
        "stijl": "roze",
-       "vorm": "schoutshuis",
-       "soort": "schout",
+       "vorm": "raadhuis",
+       "soort": "raadhuis",
        "dak": "riet",
        "steen": "zandsteen",
        "stand": "w"
@@ -198460,7 +198460,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-w.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-w.png",
       "cel": [
        0,
        0,
@@ -203922,7 +203922,7 @@
       ]
      },
      {
-      "naam": "schoutshuis-oud",
+      "naam": "raadhuis-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -204342,7 +204342,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/schoutshuis-oud.png",
+      "bestand": "tegels/huizen/raadhuis-oud.png",
       "cel": [
        0,
        0,
@@ -241742,7 +241742,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-z-oud",
+      "naam": "wit-raadhuis-riet-z-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -242178,7 +242178,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-z-oud.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-z-oud.png",
       "cel": [
        0,
        0,
@@ -242191,7 +242191,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-o-oud",
+      "naam": "wit-raadhuis-riet-o-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -242593,7 +242593,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-o-oud.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-o-oud.png",
       "cel": [
        0,
        0,
@@ -242606,7 +242606,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-n-oud",
+      "naam": "wit-raadhuis-riet-n-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -243092,7 +243092,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-n-oud.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-n-oud.png",
       "cel": [
        0,
        0,
@@ -243105,7 +243105,7 @@
       ]
      },
      {
-      "naam": "wit-schoutshuis-riet-w-oud",
+      "naam": "wit-raadhuis-riet-w-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -243629,7 +243629,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/wit-schoutshuis-riet-w-oud.png",
+      "bestand": "tegels/huizen/wit-raadhuis-riet-w-oud.png",
       "cel": [
        0,
        0,
@@ -284704,7 +284704,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-z-oud",
+      "naam": "oker-raadhuis-riet-z-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -285140,7 +285140,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-z-oud.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-z-oud.png",
       "cel": [
        0,
        0,
@@ -285153,7 +285153,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-o-oud",
+      "naam": "oker-raadhuis-riet-o-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -285555,7 +285555,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-o-oud.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-o-oud.png",
       "cel": [
        0,
        0,
@@ -285568,7 +285568,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-n-oud",
+      "naam": "oker-raadhuis-riet-n-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -286054,7 +286054,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-n-oud.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-n-oud.png",
       "cel": [
        0,
        0,
@@ -286067,7 +286067,7 @@
       ]
      },
      {
-      "naam": "oker-schoutshuis-riet-w-oud",
+      "naam": "oker-raadhuis-riet-w-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -286591,7 +286591,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/oker-schoutshuis-riet-w-oud.png",
+      "bestand": "tegels/huizen/oker-raadhuis-riet-w-oud.png",
       "cel": [
        0,
        0,
@@ -329976,7 +329976,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-z-oud",
+      "naam": "planken-raadhuis-spanen-z-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -330404,7 +330404,7 @@
        69,
        -438
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-z-oud.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-z-oud.png",
       "cel": [
        0,
        0,
@@ -330417,7 +330417,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-o-oud",
+      "naam": "planken-raadhuis-spanen-o-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -330815,7 +330815,7 @@
        31,
        -488
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-o-oud.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-o-oud.png",
       "cel": [
        0,
        0,
@@ -330828,7 +330828,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-n-oud",
+      "naam": "planken-raadhuis-spanen-n-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -331328,7 +331328,7 @@
        -5,
        -501
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-n-oud.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-n-oud.png",
       "cel": [
        0,
        0,
@@ -331341,7 +331341,7 @@
       ]
      },
      {
-      "naam": "planken-schoutshuis-spanen-w-oud",
+      "naam": "planken-raadhuis-spanen-w-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -331851,7 +331851,7 @@
        -95,
        -451
       ],
-      "bestand": "tegels/huizen/planken-schoutshuis-spanen-w-oud.png",
+      "bestand": "tegels/huizen/planken-raadhuis-spanen-w-oud.png",
       "cel": [
        0,
        0,
@@ -380002,7 +380002,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-z-oud",
+      "naam": "roze-raadhuis-riet-z-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -380438,7 +380438,7 @@
        69,
        -470
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-z-oud.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-z-oud.png",
       "cel": [
        0,
        0,
@@ -380451,7 +380451,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-o-oud",
+      "naam": "roze-raadhuis-riet-o-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -380853,7 +380853,7 @@
        31,
        -520
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-o-oud.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-o-oud.png",
       "cel": [
        0,
        0,
@@ -380866,7 +380866,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-n-oud",
+      "naam": "roze-raadhuis-riet-n-oud",
       "vast": true,
       "beslaat": [
        8,
@@ -381352,7 +381352,7 @@
        -5,
        -533
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-n-oud.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-n-oud.png",
       "cel": [
        0,
        0,
@@ -381365,7 +381365,7 @@
       ]
      },
      {
-      "naam": "roze-schoutshuis-riet-w-oud",
+      "naam": "roze-raadhuis-riet-w-oud",
       "vast": true,
       "beslaat": [
        6,
@@ -381889,7 +381889,7 @@
        -95,
        -483
       ],
-      "bestand": "tegels/huizen/roze-schoutshuis-riet-w-oud.png",
+      "bestand": "tegels/huizen/roze-raadhuis-riet-w-oud.png",
       "cel": [
        0,
        0,

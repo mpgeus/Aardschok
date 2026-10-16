@@ -7,7 +7,7 @@
 // hooivork, de speerman speer en schild, de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
 // boogschutter een boog, en de kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan pakt wie
 // geen werk heeft (B1: geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het
-// gezin van de schout, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
+// gezin van de aanvoerder, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
 // dienst bij het wachthuis en slaapt daarbuiten thuis (de dag- of de nachtdienst, js/kiezen.js; vraag 170, stap 4). Zet
 // je er een minder, dan levert hij zijn stukken weer in en is hij vrij. Valt hij, dan zijn ze weg. Een hooivork heeft
 // elke boer: daarvoor hoeft er niets in de opslag te liggen, en wie zonder soort meevecht (een veteraan, wie met de
@@ -114,13 +114,13 @@
   const ontbreekt = (D, soort) => stukkenVan(soort).filter((stuk) => STUKKEN[stuk].waar && !(ligt(D, STUKKEN[stuk].waar) >= 1 - 1e-9));
 
   // Wie bij wachthuis g soldaat kan worden (B1): wie kan werken (T.kanWerken) en geen werk heeft, volwassen of jong, niet
-  // van het gezin van de schout, en al hier. Eerst de volwassenen, en wie het dichtst bij het wachthuis woont.
+  // van het gezin van de aanvoerder, en al hier. Eerst de volwassenen, en wie het dichtst bij het wachthuis woont.
   const LEEFTIJD = { volwassen: 0, jong: 1 };
   function vrijVoor(D, g) {
     const deur = T.deurVan(D.wereld, g) || { x: g.x, y: g.y };
     const score = (p) => LEEFTIJD[p.leeftijd] * 100 + T.afstand(T.deurVanBewoner(D, p), deur);
     return mensen(D)
-      .filter((p) => T.kanWerken(p) && !p.werk && LEEFTIJD[p.leeftijd] != null && !T.vanSchout(p) && !p.komt && !(p.wezen && p.wezen.dood))
+      .filter((p) => T.kanWerken(p) && !p.werk && LEEFTIJD[p.leeftijd] != null && !T.vanAanvoerder(p) && !p.komt && !(p.wezen && p.wezen.dood))
       .sort((a, b) => score(a) - score(b) || a.id - b.id);
   }
 
@@ -262,19 +262,19 @@
   // In het gevecht
   // ---------------------------------------------------------------------------------------------
 
-  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan een hooivork, en de schout, een dorpeling en een
-  // vijand geen (de schout slaat zoals T.SLAAN, een vijand zoals zijn aanval in
+  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan een hooivork, en de aanvoerder, een dorpeling en een
+  // vijand geen (de aanvoerder slaat zoals T.SLAAN, een vijand zoals zijn aanval in
   // T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie opgeroepen was (kant 'speler'); sinds het gevecht in
   // real time (vraag 170, stap 2) vecht een soldaat ook zonder.
   T.stukkenVan = function (e) {
     const p = e && e.bewoner;
-    if (!p || p.schout) return [];
+    if (!p || p.aanvoerder) return [];
     if (p.soldaat) return stukkenVan(p.soldaat.soort);
     return p.veteraan ? stukkenVan('militie') : [];
   };
 
   // Hoe wezen e slaat (js/gevecht.js): { wapen, kosten, schade, bereik, schiet, doorHarnas }. Een vijand (een rover, een
-  // wolf) met zijn aanval (T.WEZENS), ernaast; de schout met T.SLAAN, ernaast; een man met zijn wapen.
+  // wolf) met zijn aanval (T.WEZENS), ernaast; de aanvoerder met T.SLAAN, ernaast; een man met zijn wapen.
   T.slagVan = function (e) {
     if (e.aanval) return { wapen: null, kosten: e.aanval.kosten, schade: e.aanval.schade, bereik: 1, schiet: false, doorHarnas: false };
     const wapen = T.stukkenVan(e).find((stuk) => STUKKEN[stuk].wapen);

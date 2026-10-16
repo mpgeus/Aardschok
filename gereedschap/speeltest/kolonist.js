@@ -3,7 +3,7 @@
 // (de twee klikken, js/main.js). De speeltest (speler.js, de speler `kolonist`) en de toets (test/begin.test.cjs) laden
 // allebei dit bestand, zodat ze dezelfde keuzes maken (a1). Elke dag één keer T.kolonistDag(D, dag): hij loopt zijn
 // regels af, op volgorde, en doet wat er nu kan (d ja):
-//   1. het huis van de schout, bij het kampvuur;
+//   1. het raadhuis, bij het kampvuur;
 //   2. een boerderij, en zolang de akkers nog gezaaid worden (T.isNazaaitijd) akkers erbij, tot al het zaaigraan uit de
 //      kar erop past;
 //   3. een houthakker, als het hout laag wordt (onder `houtLaag`, of het haalt de winter niet);
@@ -26,7 +26,7 @@
 //      rotsen zijn), een wachthuis en een wapenmaker, en zijn die af, `speermannen` speermannen in het wachthuis (speer en
 //      schild, van planken): zo toetst de speeltest de hele keten, van de zagerij via de kar en de wapenmaker tot de soldaat;
 //   8. wordt er niets anders gebouwd (geen bouwplaats en geen weg in aanleg), dan een weg (werklijst C, stap 5, f; Marcel,
-//      14 okt: "f ja"): van de opslag (het huis van de schout of een schuur) naar een gebouw waar de ossenkar heen rijdt
+//      14 okt: "f ja"): van de opslag (het raadhuis of een schuur) naar een gebouw waar de ossenkar heen rijdt
 //      (een werkplaats, een boerderij, een schuur), het dichtste eerst, één per dag, zodat de speeltest meet wat een weg
 //      doet. Hij neemt een weg die er al ligt mee (T.planWeg, js/wegen.js), dus het wordt een net.
 //   9. wacht hij op goud en is de marskramer er, dan verkoopt hij hem wat de winter niet nodig heeft, tot hij het goud heeft
@@ -249,8 +249,8 @@
     const doe = (u) => daden.push(u);
     const heeft = (soort) => D.gebouwen.some((g) => g.soort === soort);
 
-    // 1. Het huis van de schout: de eerste opslag, met zijn eigen bouwbereik.
-    if (!heeft('schout')) doe(bouw(D, 'schout', hart(D), 'je huis en de eerste opslag'));
+    // 1. Het raadhuis: de eerste opslag, met zijn eigen bouwbereik.
+    if (!heeft('raadhuis')) doe(bouw(D, 'raadhuis', hart(D), 'je huis en de eerste opslag'));
 
     // 2. Een boerderij, en akkers tot al het zaaigraan uit de kar erop past, zolang ze dit voorjaar nog gezaaid worden.
     if (!boerderijen(D).length) doe(bouw(D, 'boerderij', hart(D), 'het eten'));

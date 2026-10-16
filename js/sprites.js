@@ -830,7 +830,7 @@
     return e.beeldStand;
   }
 
-  // Welke figuur een wezen draagt. De schout draagt het vel van een gewone dorpeling, net als de
+  // Welke figuur een wezen draagt. De aanvoerder draagt het vel van een gewone dorpeling, net als de
   // menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.) Wie nog geen
   // eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf boeren van het
   // gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md, fase B2b. (Tot ronde 2
@@ -839,7 +839,7 @@
   // Een bewoner met een uiterlijk (vraag 145; T.kiesUiterlijk in js/bewoners.js) draagt het vel van dat uiterlijk
   // (boer-u7, meisje-u3), als het er is; anders het vel van zijn leeftijd.
   function eigenFiguur(e) {
-    const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'schout';
+    const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'aanvoerder';
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     if (S.figuurGegevens(naam) || !e.vel) return naam;
     // Alleen een bewoner heeft een uiterlijk; het gereedschap (gereedschap/wereld.html) laadt js/bewoners.js niet.

@@ -52,7 +52,7 @@
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
 // {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js).
 //
-// De zinnen zijn Engels (vraag 147; de woorden en de toon: ontwerp/engels.md; de speler is "reeve"), als gewone tekst
+// De zinnen zijn Engels (vraag 147; de woorden en de toon: ontwerp/engels.md; de speler is "commander"), als gewone tekst
 // en niet in T.t, want de gespreksschrijver schrijft dit blok terug. Het spel vertaalt ze bij het tonen
 // (T.vulWoordenIn in js/gesprek.js, met T.tGegevens uit js/taal.js), en npm run teksten leest ze hier voor een
 // vertaler. De situaties zijn alleen voor de schrijver, en blijven Nederlands.
@@ -77,9 +77,9 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'marskramerVertrekt' }, zeg: 'My donkey is already facing the road, reeve. Until next time.' },
+            { als: { vlag: 'marskramerVertrekt' }, zeg: 'My donkey is already facing the road, commander. Until next time.' },
             // Hij kwam op je brief (de bode, js/bode.js; werklijst vraag 143).
-            { als: { vlag: 'marskramerBode' }, zeg: 'You sent for me, reeve, and here I am. The road was long and my donkey is tired: you will see that in the price. But what you asked for, I have with me, or as much of it as could be had.' },
+            { als: { vlag: 'marskramerBode' }, zeg: 'You sent for me, commander, and here I am. The road was long and my donkey is tired: you will see that in the price. But what you asked for, I have with me, or as much of it as could be had.' },
             { als: { vlag: 'marskramerLente' }, zeg: 'April, and the roads are passable again. Anyone who still has grain is rich: everywhere else it has run out. I pay well for it.' },
             { als: { vlag: 'marskramerZomer' }, zeg: 'July. Everything is growing and nobody has a penny. And I have seen enough wool this week: everyone has just finished shearing.' },
             { als: { vlag: 'marskramerHerfst' }, zeg: 'October, my last round before winter. After Martinmas the roads are mud, soon the brook freezes over, and then you will not see me again until April. Salt for the fish, iron for the smith: now, or not until spring.' },
@@ -98,7 +98,7 @@
             { als: { vlag: 'marskramerLente' }, zeg: 'Your lord bought a mirror from me. He wanted to see how rich he looks. Now he wants another, for the back.' },
             { als: { vlag: 'marskramerZomer' }, zeg: 'At the castle they are counting the days to Martinmas. I heard the lord say your hamlet looks prosperous. He did not mean it as a compliment.' },
             { als: { vlag: 'marskramerHerfst' }, zeg: 'They say the lord wants more this year. They say that every year. And every year they are right.' },
-            { zeg: "Nothing you don't already know, reeve. And what you don't know, I don't know either. It's healthier that way." },
+            { zeg: "Nothing you don't already know, commander. And what you don't know, I don't know either. It's healthier that way." },
           ],
           keuzes: [
             { zeg: 'Show me what you have.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
@@ -121,9 +121,9 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'heerBetaald' }, zeg: 'We have counted it all. Twice, in fact, and it came out different both times, so it must be right. Until next year, reeve. Keep the hamlet tidy. And poor. No, rich. Rich is better for Us.' },
-            { als: { vlag: 'heerSchuld' }, zeg: 'Reeve! We never forget anything. Except what We forget, but not this: you still owe Us from last year. With the fine on top. The fine is the best part.' },
-            { zeg: 'Reeve! What a... hamlet. Small. Muddy. It smells of cow. But on the way We saw a new roof, and a new roof costs money. Let Us see what you have for Us.' },
+            { als: { vlag: 'heerBetaald' }, zeg: 'We have counted it all. Twice, in fact, and it came out different both times, so it must be right. Until next year, commander. Keep the hamlet tidy. And poor. No, rich. Rich is better for Us.' },
+            { als: { vlag: 'heerSchuld' }, zeg: 'Commander! We never forget anything. Except what We forget, but not this: you still owe Us from last year. With the fine on top. The fine is the best part.' },
+            { zeg: 'Commander! What a... hamlet. Small. Muddy. It smells of cow. But on the way We saw a new roof, and a new roof costs money. Let Us see what you have for Us.' },
           ],
           keuzes: [
             { zeg: 'Here is what the hamlet owes you, my lord.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
@@ -155,7 +155,7 @@
         welkom: {
           tekst: [
             { als: { vlag: 'soldatenInHuis' }, zeg: 'We stay until spring, the lord says. What are we eating tonight? And tomorrow? And the day after?' },
-            { zeg: 'We are only here to count, reeve. And to help anyone who counts wrong to count better.' },
+            { zeg: 'We are only here to count, commander. And to help anyone who counts wrong to count better.' },
           ],
           keuzes: [
             { zeg: 'Good day.', sluit: true },
@@ -180,7 +180,7 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'herbergDroog' }, zeg: 'Not a drop to pour, reeve. Without grain I brew nothing, and what I have left is for the houses. An empty inn hears everything and knows nothing.' },
+            { als: { vlag: 'herbergDroog' }, zeg: 'Not a drop to pour, commander. Without grain I brew nothing, and what I have left is for the houses. An empty inn hears everything and knows nothing.' },
             { als: { vlag: 'herbergGasten' }, zeg: 'At my tables last night: {gisteravond}. The weather, the rent, and who is walking out with whom. Nothing you need to know, and everything I like to know.' },
             { zeg: "Quiet last night. Nobody came. Then I pour for myself, and I'm a poor customer." },
           ],

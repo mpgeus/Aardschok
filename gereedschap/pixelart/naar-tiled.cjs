@@ -940,7 +940,7 @@ function bouwLosVel(veldNaam, items, notitie) {
 // minuut, dus ze gaan in draden tegelijk; daarom is dit het enige vel dat op zich laat wachten.
 // Elk huis beslaat een rechthoek (die js/kaart.js helemaal vastzet) en draagt `deur`: de tegel voor
 // zijn deur, vanaf de achterste tegel van de voet. Daar gaan de bewoners heen (T.deurVan).
-const HUIZEN_NOTITIE = 'De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het huis van de schout, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.';
+const HUIZEN_NOTITIE = 'De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het raadhuis, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.';
 // Een huis van een bouwstijl moet zijn deur hebben aan de kant die zijn stand zegt (huizen.cjs, STANDEN): het spel kiest er
 // de stand mee die zijn deur naar de weg keert.
 const kantVanDeur = ([b, d], [dx, dy]) => (dy === d ? 'z' : dx === b ? 'o' : dy === -1 ? 'n' : dx === -1 ? 'w' : '?');

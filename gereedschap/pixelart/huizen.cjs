@@ -16,7 +16,7 @@
 //   gebouw   welk gebouw van het spel hem gebruikt (T.GEBOUWEN in js/gebouwen.js), om te lezen;
 //   trede    de stap op de ladder van beter bouwen (ontwerp/spel.md, "Beter bouwen"): 1 vlechtwerk
 //            onder riet, 2 vakwerk onder riet, 3 half steen. In het spel nu alleen 1 en 2, en de
-//            schout in 3 (Marcel, 26 sep).
+//            aanvoerder in 3 (Marcel, 26 sep).
 //
 // renderHuis(opgave) geeft { plaat, anker, voet, deur, ramen }:
 //   plaat  de tekening, strak gesneden, zonder gras en zonder schaduw op de grond: het spel legt
@@ -47,10 +47,10 @@ const { TEGEL, EX, EY, sdf } = K;
 // ---------------------------------------------------------------- de huizen
 
 // Het gehucht (Marcel, 26 sep): echte hutten van vlechtwerk en leem onder riet, huizen van vakwerk
-// onder riet, vijf boerderijen die elk anders zijn, en het huis van de schout: steen beneden,
+// onder riet, vijf boerderijen die elk anders zijn, en het raadhuis: steen beneden,
 // vakwerk erboven, het enige huis dat half steen is. Maten in tegels, b langs de nok. In het gehucht
 // is geen steen: een lage plint, en een schoorsteen van leem (een hut heeft er geen: de rook trekt
-// door het riet). Een stenen schoorsteen hoort bij trede 3, zoals bij de schout.
+// door het riet). Een stenen schoorsteen hoort bij trede 3, zoals bij de aanvoerder.
 const HUIZEN = {
   // ── hutten: trede 1, vlechtwerk met leem onder riet, klein en laag, het hout grijs verweerd ──
   hut1: { gebouw: 'hut', trede: 1, zaad: 11, vorm: 'rechthoek', b: 5, d: 4, lagen: 1, nok: 'x', dak: 'riet', wand: 'vlecht', hout: 'schors', laag: true, plint: 30, schoorsteen: false, schoor: true, uit: false },
@@ -85,9 +85,9 @@ const HUIZEN = {
   boerderij3: { gebouw: 'boerderij', trede: 2, zaad: 33, vorm: 'rechthoek', b: 9, d: 6, lagen: 1.5, nok: 'y', deur: 'achter', dak: 'riet', wand: 'vlecht', plint: 40, schoorsteen: 'leem', schoor: false, uit: { kapellen: 2 } },
   boerderij4: { gebouw: 'boerderij', trede: 2, zaad: 34, vorm: 'rechthoek', b: 8, d: 6, lagen: 1, nok: 'y', deur: 'achter', dak: 'riet', wand: 'vakwerk', plint: 40, schoorsteen: 'leem', schoor: false, uit: { luiken: true, bakken: 2 } },
   boerderij5: { gebouw: 'boerderij', trede: 2, zaad: 35, vorm: 'rechthoek', b: 9, d: 5, lagen: 1, nok: 'y', dak: 'spanen', wand: 'blokhut', plint: 40, schoorsteen: 'leem', schoor: false, uit: false },
-  // ── de schout: trede 3, steen beneden en vakwerk erboven (Marcel: "Vakwerk op stenen voet") ──
-  // niemand bouwt het huis van de schout, dus geen bouwfases (bouwfasen.cjs)
-  schoutshuis: { gebouw: 'huis', trede: 3, fasen: false, zaad: 41, vorm: 'rechthoek', b: 8, d: 6, lagen: 2, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', schoor: false, uit: { luiken: true, bakken: 2 } },
+  // ── de aanvoerder: trede 3, steen beneden en vakwerk erboven (Marcel: "Vakwerk op stenen voet") ──
+  // niemand bouwt het raadhuis, dus geen bouwfases (bouwfasen.cjs)
+  raadhuis: { gebouw: 'huis', trede: 3, fasen: false, zaad: 41, vorm: 'rechthoek', b: 8, d: 6, lagen: 2, nok: 'x', dak: 'riet', wand: 'veldsteen', boven: 'vakwerk', schoor: false, uit: { luiken: true, bakken: 2 } },
   // ── de herberg van het gehucht (27 sep, werklijst punt 2): trede 2, vakwerk onder riet zoals de
   // huizen, maar groter en hoger, met een zolder en dakkapellen. Een T, zodat hij groter is dan een
   // boerderij (vraag 39; Marcel: "Prima"), met een topgevel naar voren en de dwarsvleugel naar achteren
@@ -137,7 +137,7 @@ const TORENS = {
 // De grote gebouwen van een stijl (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee, B: Ja, C: Ja graag"):
 // de kleine herberg (het gehucht), de grote met een stal aan een binnenplaats met een muur en een poort (een dorp: hij
 // groeit door), de kapel met de toren van de stijl, de woontoren (vanaf marktrecht, drie gezinnen) en het huis van de
-// schout. Elk rondom, met de deur naar zuid; draai geeft een andere stand. Een gebouw uit delen is { delen: [{ spec,
+// aanvoerder. Elk rondom, met de deur naar zuid; draai geeft een andere stand. Een gebouw uit delen is { delen: [{ spec,
 // plek }], deurVan }, anders { spec }. dak: het dak van de trede (zonder: dat van het gehucht, of leien in een dorp);
 // steen: de natuursteen van de stijl, of 'baksteen' (met een steenbakkerij).
 function grootGebouw(stijl, soort, o = {}) {
@@ -217,8 +217,8 @@ function grootGebouw(stijl, soort, o = {}) {
       deurVan: 0,
     };
   }
-  if (soort === 'schout') {
-    const h = HUIZEN.schoutshuis;
+  if (soort === 'raadhuis') {
+    const h = HUIZEN.raadhuis;
     return { spec: { ...h, ...rond, dak: o.dak || S.dak, steen, boven: S.boven || 'vakwerk', uit: { ...h.uit, luiken: S.luiken } } };
   }
   throw new Error(`geen groot gebouw "${soort}"`);
@@ -297,8 +297,8 @@ function stijlHuizen() {
     for (const vorm of S.boerderij) zet('boerderij', vorm, vormVan(vorm), daken, { uit: metLuiken(vormVan(vorm)) });
     // de grote gebouwen (vraag 114, stap 3; grootGebouw hieronder): de kleine herberg van het gehucht, de grote waar
     // hij in een dorp toe doorgroeit (leien, pannen), de kapel en de woontoren in de steen van de stijl of in baksteen
-    // (met een steenbakkerij), en het huis van de schout. Alle met bouwfasen (de kapel per deel, fasenVanDelen), behalve
-    // het huis van de schout: dat bouwt niemand.
+    // (met een steenbakkerij), en het raadhuis. Alle met bouwfasen (de kapel per deel, fasenVanDelen), behalve
+    // het raadhuis: dat bouwt niemand.
     const groot = (soort, vorm, welk, daken, fasen) => {
       for (const [dak, steen] of daken) {
         for (const [stand, st] of Object.entries(STANDEN)) {
@@ -317,7 +317,7 @@ function stijlHuizen() {
     const kapelDak = stijl === 'planken' ? 'spanen' : 'leien';
     groot('kapel', 'kapel', 'kapel', [[kapelDak, S.steen], [kapelDak, 'baksteen']], true);
     groot('woontoren', 'woontoren', 'woontoren', [['pannen', S.steen], ['pannen', 'baksteen']], true);
-    groot('schout', 'schoutshuis', 'schout', [[S.dak, S.steen]], false);
+    groot('raadhuis', 'raadhuis', 'raadhuis', [[S.dak, S.steen]], false);
     // de zagerij (vraag 157) onder het dak van elke trede; bouwfasen eerst alleen onder dat van het gehucht (Marcel, 14
     // okt: "Eerst alleen het gehucht"), leien en pannen later
     groot('zagerij', 'zagerij', 'zagerij', [[S.dak]], true);
@@ -334,7 +334,7 @@ Object.assign(HUIZEN, stijlHuizen());
 // plan: meteen jong en oud, de vorm C, en alles in één ronde). Overal B diepte en E grover met contrast; op riet F ruig
 // (het gehucht ruig en praktisch, een dorp netter); G ronde veldsteen en H ronde pannen (die knoppen doen niets op een
 // andere steen of een ander dak). Hoe verweerd: naar de trede van het dak, jong of oud (VERWEERD), en een oude hut
-// helemaal. Een huis, een boerderij, een stenen huis en het huis van de schout krijgen het steilere dak en een afdakje
+// helemaal. Een huis, een boerderij, een stenen huis en het raadhuis krijgen het steilere dak en een afdakje
 // boven de voordeur (C); een huis met een muur van steen een rondboogdeur (I) en klimop (J). De hutten blijven laag.
 //
 // Elke tekening heeft een oude naast zich, "<naam>-oud" (OUD): dezelfde vorm, voet en deur, alleen verweerd. Het spel
@@ -344,7 +344,7 @@ const OUD = '-oud';
 // [jong, oud] per dak: riet en spanen in het gehucht, leien in een dorp, pannen met marktrecht (ook baksteen)
 const VERWEERD = { riet: [0.3, 0.9], spanen: [0.3, 0.9], leien: [0.15, 0.6], pannen: [0.1, 0.5] };
 // wie de vorm C krijgt, en hoe steil dan het dak is (het voorbeeldhuis: het dak de helft van het huis)
-const MET_VORM = new Set(['huis', 'stenenHuis', 'boerderij', 'schout']);
+const MET_VORM = new Set(['huis', 'stenenHuis', 'boerderij', 'raadhuis']);
 const HELLING_C = 58;
 function knoppenVoor(spec, gebouw, oud) {
   const dak = spec.dak === 'plat' ? spec.dekking || 'leien' : spec.dak;

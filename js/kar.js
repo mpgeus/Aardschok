@@ -1,6 +1,6 @@
 // De ossenkar (werklijst C; Marcel, 11 okt: "Misschien dat grondstoffen worden opgehaald met een kar?", en op het plan van
 // 14 okt: "A2, B2, C1, D2, E2"): wat een gebouw maakt, ligt op een stapel bij zijn deur tot de kar het haalt, en telt pas
-// in de voorraad als het in de opslag is (het huis van de schout; tot dat er is, de plek van de kar in het kamp); en wat
+// in de voorraad als het in de opslag is (het raadhuis; tot dat er is, de plek van de kar in het kamp); en wat
 // een bouwplaats of een werkplaats nodig heeft, brengt de kar uit de opslag. Dat geldt voor alles behalve het goud
 // (`nietMetDeKar` hieronder; stap 3, A2). Wat niet van een gebouw komt, gaat meteen de voorraad in: wat het vee geeft (de
 // wol, de melk en de kaas, het vlees van het slachten, de mest; Marcel, 14 okt: "c ja"), het sprokkelhout, en wat de
@@ -28,7 +28,7 @@
 //
 //   D.karren   de karren van het dorp, wezens in w.wezens (de ossenkar, D.begin.kar, zodra het kamp op is; en die van
 //              elke schuur, als hij af is)
-//   e.thuis    de schuur van de kar (null: het huis van de schout, en tot dat er is de plek van de kar in het kamp);
+//   e.thuis    de schuur van de kar (null: het raadhuis, en tot dat er is de plek van de kar in het kamp);
 //              g.kar is de kar van schuur g
 //   e.lading   { wat: hoeveel } wat de kar nu draagt
 //   e.rit      null, of { plan, fase, naar, wat, n, tot, doel }: `plan` 'halen' (fasen heen, laden, terug, lossen) of
@@ -41,7 +41,7 @@
 
   // Alle getallen in één blok (ook in de werkbank van de spelregels, js/opties.js).
   T.KAR_INSTELLINGEN = {
-    // Wat niet met de kar gaat: het goud, dat de schout zelf betaalt. De rest van wat een gebouw maakt of vraagt, gaat
+    // Wat niet met de kar gaat: het goud, dat de aanvoerder zelf betaalt. De rest van wat een gebouw maakt of vraagt, gaat
     // met de kar (stap 3, A2; tot dan alleen het hout).
     nietMetDeKar: ['goud'],
     // Zoveel neemt de kar per rit mee. Met de getallen van 14 okt rijdt hij binnen het bouwbereik drie tot vier ritten
@@ -292,7 +292,7 @@
     }
   };
 
-  // Waar de kar laadt en lost: zijn schuur, of (de eerste kar) het huis van de schout, en tot dat er is de plek van de kar
+  // Waar de kar laadt en lost: zijn schuur, of (de eerste kar) het raadhuis, en tot dat er is de plek van de kar
   // in het kamp. Als tegel, met `naast` als hij naast de deur stopt.
   function thuisVan(D, e) {
     const w = D.wereld;
@@ -372,7 +372,7 @@
     e.padDoel = null;
   }
 
-  // Zijn vel: de huifkar blijft de huifkar tot het huis van de schout er is (js/begin.js); de ossenkar is leeg, of geladen
+  // Zijn vel: de huifkar blijft de huifkar tot het raadhuis er is (js/begin.js); de ossenkar is leeg, of geladen
   // met wat hij het meest draagt: stammen, stenen, spullen, of anders zakken (gereedschap/pixelart/ossenkar.cjs).
   const LADING_VEL = {
     hout: 'ossenkar-hout', planken: 'ossenkar-hout', steen: 'ossenkar-stenen', klei: 'ossenkar-stenen', kalk: 'ossenkar-stenen',
@@ -581,7 +581,7 @@
         rit.naar.karKanNietTot = t + 1;
         continue;
       }
-      // Niets te doen: dan wacht hij bij zijn opslag (de eerste kar rijdt zo van het kamp naar het huis van de schout).
+      // Niets te doen: dan wacht hij bij zijn opslag (de eerste kar rijdt zo van het kamp naar het raadhuis).
       const thuis = thuisVan(D, e);
       if (thuis && T.afstand({ x: e.tx, y: e.ty }, thuis) > 2 && begin(D, e, { plan: 'halen', naar: null }, 'terug', thuis, t, metBeeld)) continue;
       e.klok = Math.min(tot, t + IN().rust);

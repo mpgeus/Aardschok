@@ -2,7 +2,7 @@
 <tileset version="1.10" tiledversion="1.11.0" name="huizen" tilewidth="771" tileheight="1295" tilecount="1280" columns="0" objectalignment="bottom">
  <grid orientation="orthogonal" width="1" height="1"/>
  <properties>
-  <property name="notitie" value="De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het huis van de schout, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet (&quot;beslaat&quot;); &quot;deur&quot; is de tegel voor de deur, gerekend vanaf die tegel. Een plaatje per tekening (tegels/huizen/): het spel laadt een tekening pas als hij op de kaart staat. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
+  <property name="notitie" value="De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het raadhuis, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet (&quot;beslaat&quot;); &quot;deur&quot; is de tegel voor de deur, gerekend vanaf die tegel. Een plaatje per tekening (tegels/huizen/): het spel laadt een tekening pas als hij op de kaart staat. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
  </properties>
  <tile id="0">
   <properties>
@@ -141,12 +141,12 @@
  </tile>
  <tile id="15">
   <properties>
-    <property name="naam" value="schoutshuis"/>
+    <property name="naam" value="raadhuis"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/schoutshuis.png" width="585" height="765"/>
+  <image source="huizen/raadhuis.png" width="585" height="765"/>
  </tile>
  <tile id="16">
   <properties>
@@ -4239,39 +4239,39 @@
  </tile>
  <tile id="476">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-z"/>
+    <property name="naam" value="wit-raadhuis-riet-z"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-z.png" width="585" height="780"/>
+  <image source="huizen/wit-raadhuis-riet-z.png" width="585" height="780"/>
  </tile>
  <tile id="477">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-o"/>
+    <property name="naam" value="wit-raadhuis-riet-o"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-o.png" width="585" height="770"/>
+  <image source="huizen/wit-raadhuis-riet-o.png" width="585" height="770"/>
  </tile>
  <tile id="478">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-n"/>
+    <property name="naam" value="wit-raadhuis-riet-n"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-n.png" width="585" height="770"/>
+  <image source="huizen/wit-raadhuis-riet-n.png" width="585" height="770"/>
  </tile>
  <tile id="479">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-w"/>
+    <property name="naam" value="wit-raadhuis-riet-w"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-w.png" width="585" height="780"/>
+  <image source="huizen/wit-raadhuis-riet-w.png" width="585" height="780"/>
  </tile>
  <tile id="480">
   <properties>
@@ -4527,39 +4527,39 @@
  </tile>
  <tile id="508">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-z"/>
+    <property name="naam" value="oker-raadhuis-riet-z"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-z.png" width="585" height="780"/>
+  <image source="huizen/oker-raadhuis-riet-z.png" width="585" height="780"/>
  </tile>
  <tile id="509">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-o"/>
+    <property name="naam" value="oker-raadhuis-riet-o"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-o.png" width="585" height="770"/>
+  <image source="huizen/oker-raadhuis-riet-o.png" width="585" height="770"/>
  </tile>
  <tile id="510">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-n"/>
+    <property name="naam" value="oker-raadhuis-riet-n"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-n.png" width="585" height="770"/>
+  <image source="huizen/oker-raadhuis-riet-n.png" width="585" height="770"/>
  </tile>
  <tile id="511">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-w"/>
+    <property name="naam" value="oker-raadhuis-riet-w"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-w.png" width="585" height="780"/>
+  <image source="huizen/oker-raadhuis-riet-w.png" width="585" height="780"/>
  </tile>
  <tile id="512">
   <properties>
@@ -4803,39 +4803,39 @@
  </tile>
  <tile id="540">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-z"/>
+    <property name="naam" value="planken-raadhuis-spanen-z"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-z.png" width="551" height="733"/>
+  <image source="huizen/planken-raadhuis-spanen-z.png" width="551" height="733"/>
  </tile>
  <tile id="541">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-o"/>
+    <property name="naam" value="planken-raadhuis-spanen-o"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-o.png" width="552" height="724"/>
+  <image source="huizen/planken-raadhuis-spanen-o.png" width="552" height="724"/>
  </tile>
  <tile id="542">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-n"/>
+    <property name="naam" value="planken-raadhuis-spanen-n"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-n.png" width="552" height="724"/>
+  <image source="huizen/planken-raadhuis-spanen-n.png" width="552" height="724"/>
  </tile>
  <tile id="543">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-w"/>
+    <property name="naam" value="planken-raadhuis-spanen-w"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-w.png" width="551" height="733"/>
+  <image source="huizen/planken-raadhuis-spanen-w.png" width="551" height="733"/>
  </tile>
  <tile id="544">
   <properties>
@@ -5091,39 +5091,39 @@
  </tile>
  <tile id="572">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-z"/>
+    <property name="naam" value="roze-raadhuis-riet-z"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-z.png" width="585" height="780"/>
+  <image source="huizen/roze-raadhuis-riet-z.png" width="585" height="780"/>
  </tile>
  <tile id="573">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-o"/>
+    <property name="naam" value="roze-raadhuis-riet-o"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-o.png" width="585" height="770"/>
+  <image source="huizen/roze-raadhuis-riet-o.png" width="585" height="770"/>
  </tile>
  <tile id="574">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-n"/>
+    <property name="naam" value="roze-raadhuis-riet-n"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-n.png" width="585" height="770"/>
+  <image source="huizen/roze-raadhuis-riet-n.png" width="585" height="770"/>
  </tile>
  <tile id="575">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-w"/>
+    <property name="naam" value="roze-raadhuis-riet-w"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-w.png" width="585" height="780"/>
+  <image source="huizen/roze-raadhuis-riet-w.png" width="585" height="780"/>
  </tile>
  <tile id="576">
   <properties>
@@ -5376,12 +5376,12 @@
  </tile>
  <tile id="605">
   <properties>
-    <property name="naam" value="schoutshuis-oud"/>
+    <property name="naam" value="raadhuis-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/schoutshuis-oud.png" width="585" height="765"/>
+  <image source="huizen/raadhuis-oud.png" width="585" height="765"/>
  </tile>
  <tile id="606">
   <properties>
@@ -6618,39 +6618,39 @@
  </tile>
  <tile id="743">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-z-oud"/>
+    <property name="naam" value="wit-raadhuis-riet-z-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-z-oud.png" width="585" height="780"/>
+  <image source="huizen/wit-raadhuis-riet-z-oud.png" width="585" height="780"/>
  </tile>
  <tile id="744">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-o-oud"/>
+    <property name="naam" value="wit-raadhuis-riet-o-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-o-oud.png" width="585" height="770"/>
+  <image source="huizen/wit-raadhuis-riet-o-oud.png" width="585" height="770"/>
  </tile>
  <tile id="745">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-n-oud"/>
+    <property name="naam" value="wit-raadhuis-riet-n-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-n-oud.png" width="585" height="770"/>
+  <image source="huizen/wit-raadhuis-riet-n-oud.png" width="585" height="770"/>
  </tile>
  <tile id="746">
   <properties>
-    <property name="naam" value="wit-schoutshuis-riet-w-oud"/>
+    <property name="naam" value="wit-raadhuis-riet-w-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/wit-schoutshuis-riet-w-oud.png" width="585" height="780"/>
+  <image source="huizen/wit-raadhuis-riet-w-oud.png" width="585" height="780"/>
  </tile>
  <tile id="747">
   <properties>
@@ -7770,39 +7770,39 @@
  </tile>
  <tile id="871">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-z-oud"/>
+    <property name="naam" value="oker-raadhuis-riet-z-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-z-oud.png" width="585" height="780"/>
+  <image source="huizen/oker-raadhuis-riet-z-oud.png" width="585" height="780"/>
  </tile>
  <tile id="872">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-o-oud"/>
+    <property name="naam" value="oker-raadhuis-riet-o-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-o-oud.png" width="585" height="770"/>
+  <image source="huizen/oker-raadhuis-riet-o-oud.png" width="585" height="770"/>
  </tile>
  <tile id="873">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-n-oud"/>
+    <property name="naam" value="oker-raadhuis-riet-n-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-n-oud.png" width="585" height="770"/>
+  <image source="huizen/oker-raadhuis-riet-n-oud.png" width="585" height="770"/>
  </tile>
  <tile id="874">
   <properties>
-    <property name="naam" value="oker-schoutshuis-riet-w-oud"/>
+    <property name="naam" value="oker-raadhuis-riet-w-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/oker-schoutshuis-riet-w-oud.png" width="585" height="780"/>
+  <image source="huizen/oker-raadhuis-riet-w-oud.png" width="585" height="780"/>
  </tile>
  <tile id="875">
   <properties>
@@ -9030,39 +9030,39 @@
  </tile>
  <tile id="1011">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-z-oud"/>
+    <property name="naam" value="planken-raadhuis-spanen-z-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-z-oud.png" width="551" height="733"/>
+  <image source="huizen/planken-raadhuis-spanen-z-oud.png" width="551" height="733"/>
  </tile>
  <tile id="1012">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-o-oud"/>
+    <property name="naam" value="planken-raadhuis-spanen-o-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-o-oud.png" width="552" height="724"/>
+  <image source="huizen/planken-raadhuis-spanen-o-oud.png" width="552" height="724"/>
  </tile>
  <tile id="1013">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-n-oud"/>
+    <property name="naam" value="planken-raadhuis-spanen-n-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-n-oud.png" width="552" height="724"/>
+  <image source="huizen/planken-raadhuis-spanen-n-oud.png" width="552" height="724"/>
  </tile>
  <tile id="1014">
   <properties>
-    <property name="naam" value="planken-schoutshuis-spanen-w-oud"/>
+    <property name="naam" value="planken-raadhuis-spanen-w-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/planken-schoutshuis-spanen-w-oud.png" width="551" height="733"/>
+  <image source="huizen/planken-raadhuis-spanen-w-oud.png" width="551" height="733"/>
  </tile>
  <tile id="1015">
   <properties>
@@ -10182,39 +10182,39 @@
  </tile>
  <tile id="1139">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-z-oud"/>
+    <property name="naam" value="roze-raadhuis-riet-z-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="4,6"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-z-oud.png" width="585" height="780"/>
+  <image source="huizen/roze-raadhuis-riet-z-oud.png" width="585" height="780"/>
  </tile>
  <tile id="1140">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-o-oud"/>
+    <property name="naam" value="roze-raadhuis-riet-o-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="6,3"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-o-oud.png" width="585" height="770"/>
+  <image source="huizen/roze-raadhuis-riet-o-oud.png" width="585" height="770"/>
  </tile>
  <tile id="1141">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-n-oud"/>
+    <property name="naam" value="roze-raadhuis-riet-n-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="8x6"/>
     <property name="deur" value="3,-1"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-n-oud.png" width="585" height="770"/>
+  <image source="huizen/roze-raadhuis-riet-n-oud.png" width="585" height="770"/>
  </tile>
  <tile id="1142">
   <properties>
-    <property name="naam" value="roze-schoutshuis-riet-w-oud"/>
+    <property name="naam" value="roze-raadhuis-riet-w-oud"/>
     <property name="vast" type="bool" value="true"/>
     <property name="beslaat" value="6x8"/>
     <property name="deur" value="-1,4"/>
   </properties>
-  <image source="huizen/roze-schoutshuis-riet-w-oud.png" width="585" height="780"/>
+  <image source="huizen/roze-raadhuis-riet-w-oud.png" width="585" height="780"/>
  </tile>
  <tile id="1143">
   <properties>

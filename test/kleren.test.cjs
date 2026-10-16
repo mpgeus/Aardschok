@@ -48,9 +48,9 @@ test('een hut is arm, een huis en een boerderij gewoon, een stenen huis of woont
   assert.equal(T.klerenVan(mens('woontoren')), 'deftig');
 });
 
-test('alleen de volwassenen, en het huis van de schout heeft geen stand', () => {
+test('alleen de volwassenen, en het raadhuis heeft geen stand', () => {
   for (const leeftijd of ['kleuter', 'kind', 'jong', 'oud']) assert.equal(T.klerenVan(mens('hut', { p: { leeftijd } })), 'gewoon', leeftijd);
-  assert.equal(T.klerenVan({ leeftijd: 'volwassen', huis: { soort: 'huis', huis: 'schout' } }), 'gewoon');
+  assert.equal(T.klerenVan({ leeftijd: 'volwassen', huis: { soort: 'huis', huis: 'aanvoerder' } }), 'gewoon');
   assert.equal(T.klerenVan({ leeftijd: 'volwassen' }), 'gewoon');
   assert.equal(T.klerenVan(null), 'gewoon');
 });

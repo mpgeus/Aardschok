@@ -215,11 +215,11 @@ async function hetProefdorp(context, beelden, meting) {
   await page.evaluate(() => Spel.debug.proefdorp(5));
   await page.evaluate(() => Spel.debug.stap(0.5));
   const zoom = await page.evaluate(() => Spel.S.zoom);
-  const schout = await page.evaluate(() => [Spel.S.schout.tx, Spel.S.schout.ty]);
-  await zet(page, { uur: 12, zoom, op: schout });
+  const aanvoerder = await page.evaluate(() => [Spel.S.dorp.aanvoerder.tx, Spel.S.dorp.aanvoerder.ty]);
+  await zet(page, { uur: 12, zoom, op: aanvoerder });
   beelden.proefdorp5 = await afdruk(page);
   meting.proefdorp5 = await page.evaluate(() => Spel.debug.vellen());
-  await zet(page, { uur: 12, zoom: 0.5, op: schout });
+  await zet(page, { uur: 12, zoom: 0.5, op: aanvoerder });
   beelden['proefdorp5-zoom-0.5'] = await afdruk(page);
   meting.proefdorpFouten = fouten;
   await page.close();

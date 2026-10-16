@@ -7,7 +7,7 @@
   'use strict';
 
   T.WERELD_INSTELLINGEN = {
-    // Op de kaart van het eiland gaat een stuk land open als een van je mensen binnen zoveel tegels komt (de schout, wie
+    // Op de kaart van het eiland gaat een stuk land open als een van je mensen binnen zoveel tegels komt (de aanvoerder, wie
     // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). Verder dan ze kijken (T.MIST_INSTELLINGEN,
     // js/mist.js), zodat wat je ziet al klaar ligt.
     openRond: 16,
@@ -116,24 +116,24 @@
   // Een boom van het bos (geen struik, niet van iemand), op zijn soort.
   T.isBosBoom = (soort) => !!T.BOMEN[soort] && !T.BOMEN[soort].struik && !T.BOMEN[soort].eigen;
 
-  // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
+  // Hoe snel de aanvoerder loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
   // zodat rondlopen niet sleept. Zijn loopbeeld telt de afgelegde weg (js/sprites.js), dus zijn
   // voeten glijden bij geen enkele snelheid.
-  T.SCHOUT_SNELHEID = 2.2;
+  T.AANVOERDER_SNELHEID = 2.2;
 
   // leven: levenspunten; wie op nul komt, valt. snelheid: tegels per
   // seconde tijdens het rondlopen. zicht: vanaf hoe ver een monster je opmerkt. aanval.schade:
   // wat een klap kost aan levenspunten. Namen staan met een kleine letter, omdat ze bijna altijd
   // midden in een zin staan.
   //
-  // De schout heeft sinds 25 sep levenspunten, net als een monster (Marcel koos het, voorlopig:
+  // De aanvoerder heeft sinds 25 sep levenspunten, net als een monster (Marcel koos het, voorlopig:
   // ontwerp/spel.md, onder Open). Daarvoor was de leeftijd van de tovenaar zijn levensbalk, en
   // kostte een klap maanden; die maanden zijn hieronder gedeeld door twee, zodat de monsters
   // onderling even sterk bleven. Wat vallen echt betekent, komt bij punt 13 van de werklijst.
-  // Zijn kant heet 'speler' en niet 'schout' (Marcel, 26 sep): soort en kant zijn twee dingen, en
-  // een man van de militie (punt 13) vecht straks aan jouw kant zonder de schout te zijn.
+  // Zijn kant heet 'speler' en niet 'aanvoerder' (Marcel, 26 sep): soort en kant zijn twee dingen, en
+  // een man van de militie (punt 13) vecht straks aan jouw kant zonder de aanvoerder te zijn.
   const WEZENS = {
-    schout: { naam: T.t('you'), kant: 'speler', leven: 20, snelheid: T.SCHOUT_SNELHEID },
+    aanvoerder: { naam: T.t('commander'), kant: 'speler', leven: 20, snelheid: T.AANVOERDER_SNELHEID },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
@@ -146,7 +146,7 @@
       naam: T.t('skeleton guard'), kant: 'monster', leven: 18, snelheid: 2.2, zicht: 5, dwaalt: false,
       aanval: { kosten: 3, schade: [3, 5], zin: T.t('hits {doel} with his sword') },
     },
-    // Buiten, in het bos. Hij loopt harder dan de schout en ziet verder dan wat er
+    // Buiten, in het bos. Hij loopt harder dan de aanvoerder en ziet verder dan wat er
     // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
     // slijmkruiper in een kelder.
     wolf: {
@@ -175,7 +175,7 @@
       naam: T.t('robber'), kant: 'monster', leven: 12, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('hits {doel} with a club') },
     },
-    // Een soldaat van het wachthuis (js/soldaten.js; vraag 159): wat hij kan als hij bij een aanval naast de schout vecht
+    // Een soldaat van het wachthuis (js/soldaten.js; vraag 159): wat hij kan als hij bij een aanval naast de aanvoerder vecht
     // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten, en hoe hij slaat
     // zegt zijn wapen (T.slagVan).
     soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, snelheid: 2.4, vel: 'boer' },
@@ -246,7 +246,7 @@
       { soort: 'pilaar', x: 6, y: 11 },
     );
     w.wezens.push(
-      maakWezen('schout', 3, 5),
+      maakWezen('aanvoerder', 3, 5),
       maakWezen('slijm', 16, 4),
       maakWezen('skelet', 5, 13),
     );
@@ -464,11 +464,11 @@
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
   };
-  // Wie van jou is en buiten staat: de schout, wie in het dorp woont, de ossenkar. Zij maken het land open (hieronder) en
+  // Wie van jou is en buiten staat: de aanvoerder, wie in het dorp woont, de ossenkar. Zij maken het land open (hieronder) en
   // kijken door de mist (js/mist.js).
-  T.isVanJou = (S, e) => !e.dood && !e.binnen && (e === S.schout || !!e.bewoner || !!e.kar);
+  T.isVanJou = (S, e) => !e.dood && !e.binnen && (T.isAanvoerder(S, e) || !!e.bewoner || !!e.kar);
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
-  // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
+  // van de aanvoerder, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.
   T.werkStukkenBij = function (S, D, dt) {
     const w = D.wereld;
@@ -545,7 +545,7 @@
   // Over hoeveel stappen stuk (sx, sy) nodig is voor wezen e: het gaat open als e binnen openRond tegels komt. Wie loopt,
   // volgt zijn pad (e.pad[0] is de volgende stap), dus het stuk waar zijn pad het eerst langs komt, eerst; een stuk achter
   // hem is pas nodig als hij terugkomt. Wie stilstaat, komt er misschien nooit: zijn stukken komen na wat een loper
-  // binnen `vooruit` tegels nodig heeft. Tot 13 okt telde alleen hoe dichtbij een stuk lag, ook achter de schout, en
+  // binnen `vooruit` tegels nodig heeft. Tot 13 okt telde alleen hoe dichtbij een stuk lag, ook achter de aanvoerder, en
   // lag 8 van de 18 stukken van de stukmeting niet klaar als het open ging (21 tot 57 ms land maken in dat beeld).
   const PAD_STAP = 4; // zo om de zoveel stappen kijkt het langs het pad
   function nodigOver(e, sx, sy) {
@@ -888,7 +888,7 @@
     return bezet;
   }
 
-  // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de schout duwt
+  // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de aanvoerder duwt
   // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.
   T.isBegaanbaar = function (w, x, y, opties) {
     const o = opties || {};

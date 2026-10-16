@@ -11,7 +11,7 @@ const KENT_VERS = new Set(Object.keys(T.VOORWERPEN));
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
-// Het proefdorp (test/grond.cjs): het lege begin met een huis voor de schout, twee boerderijen en hutten, stil en zonder
+// Het proefdorp (test/grond.cjs): het lege begin met een huis voor de aanvoerder, twee boerderijen en hutten, stil en zonder
 // venster.
 function gehucht() {
   const { S } = proefDorp(T);
@@ -98,16 +98,16 @@ test('wat elkaar aanwijst, wijst na het laden nog steeds naar hetzelfde', () => 
   // Een paar die ertoe doen, met naam: ze gelden vóór het bewaren, en daarna nog.
   for (const [wie, s] of [['vóór', S], ['na', S2]]) {
     assert.ok(s.gebieden[s.wereld.gebied] === s.wereld, `${wie}: S.wereld is het gebied in S.gebieden, geen kopie`);
-    assert.ok(s.wereld.wezens.includes(s.schout), `${wie}: de schout is een wezen in de wereld, geen kopie`);
+    assert.ok(s.wereld.wezens.includes(s.dorp.aanvoerder), `${wie}: de aanvoerder is een wezen in de wereld, geen kopie`);
     assert.ok(s.dorp.bewoners.mensen.every((p) => !p.wezen || s.wereld.wezens.includes(p.wezen)), `${wie}: elk poppetje staat in de wereld`);
-    // Het dorp (js/dorp.js) is een dorp in S.dorpen, en wijst naar de kaart, de schout en de kalender van het spel.
+    // Het dorp (js/dorp.js) is een dorp in S.dorpen, en wijst naar de kaart, de aanvoerder en de kalender van het spel.
     assert.ok(s.dorpen.includes(s.dorp), `${wie}: S.dorp is een van de dorpen in S.dorpen, geen kopie`);
-    assert.ok(s.dorp.wereld === s.wereld && s.dorp.schout === s.schout, `${wie}: het dorp heeft de kaart en de schout van het spel, geen kopie`);
+    assert.ok(s.dorp.wereld === s.wereld && s.dorp.aanvoerder === s.dorp.aanvoerder, `${wie}: het dorp heeft de kaart en de aanvoerder van het spel, geen kopie`);
     assert.ok(s.dorp.kalender === s.kalender, `${wie}: het dorp deelt de kalender van het spel, geen kopie`);
   }
   // En wat nu verandert, verandert overal: één ding, geen twee.
-  S2.schout.tx = -99;
-  assert.equal(S2.gebieden[S2.wereld.gebied].wezens.find((e) => e === S2.schout).tx, -99);
+  S2.dorp.aanvoerder.tx = -99;
+  assert.equal(S2.gebieden[S2.wereld.gebied].wezens.find((e) => e === S2.dorp.aanvoerder).tx, -99);
   S2.kalender.dag = 99.5;
   assert.equal(S2.dorp.kalender.dag, 99.5);
 });
@@ -142,11 +142,11 @@ test('verzamelingen blijven verzamelingen, en het scherm begint opnieuw', () => 
 
 test('hoe de tekening van een wezen erbij staat, gaat niet mee: die maakt de tekening zelf weer aan', () => {
   const S = gehucht();
-  S.schout.beeldStand = { afgelegd: 3, x: 1, y: 2, richting: 'N', laatste: { naam: 'dorpeling1', beeld: 2 } };
+  S.dorp.aanvoerder.beeldStand = { afgelegd: 3, x: 1, y: 2, richting: 'N', laatste: { naam: 'dorpeling1', beeld: 2 } };
   const S2 = gehucht();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: NU })).gelukt, true);
-  assert.equal('beeldStand' in S2.schout, false);
-  assert.equal(S2.schout.tx, S.schout.tx, 'de rest van de schout gaat wel mee');
+  assert.equal('beeldStand' in S2.dorp.aanvoerder, false);
+  assert.equal(S2.dorp.aanvoerder.tx, S.dorp.aanvoerder.tx, 'de rest van de aanvoerder gaat wel mee');
 });
 
 test('ook wat JSON zelf niet kent, komt terug', () => {

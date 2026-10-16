@@ -50,7 +50,7 @@ function uren(S, n, stap = 0.5) {
   }
 }
 
-// Op dit uur van een zomerdag, en de schout ver weg (in het lege begin staat hij bij de kar, midden op het plein).
+// Op dit uur van een zomerdag, en de aanvoerder ver weg (in het lege begin staat hij bij de kar, midden op het plein).
 function opUur(S, uur, dag = 60) {
   S.kalender.dag = dag + uur / 24;
 }
@@ -91,7 +91,7 @@ test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () =
 
 test('overdag rust de roedel bij zijn hol; vanaf zonsondergang loopt hij langs de bosrand, en na zonsopgang terug', () => {
   const S = leegLand();
-  // De huifkar blijft waar hij aankwam, bij de schout, ver weg: in het kamp staat hij op dit eiland tien tegels van het
+  // De huifkar blijft waar hij aankwam, bij de aanvoerder, ver weg: in het kamp staat hij op dit eiland tien tegels van het
   // hol, en de roedel schuwt hem zoals een mens (B2b, 13 okt; ontwerp/opmerkingen.md).
   S.dorp.wereld.wezens.find((m) => m.kar).pad = [];
   opUur(S, 12);
@@ -141,7 +141,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen', () => {
   const g = groepVan(S, 'hert');
   const l = leiderVan(g);
   const lt = T.tegelVan(l);
-  // De schout op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven). Aan
+  // De aanvoerder op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven). Aan
   // de kant waar de herten van hem weg kunnen: hun thuis of een plek aan de bosrand ligt dan ver van hem (B2b: op het land
   // van eiland 7 ligt hun thuis vlak bij waar ze grazen).
   let plek = null;
@@ -154,8 +154,8 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen', () => {
       if (!plek || vluchtVan(p) > vluchtVan(plek)) plek = p;
     }
   }
-  assert.ok(plek, 'een plek voor de schout');
-  Object.assign(S.schout, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
+  assert.ok(plek, 'een plek voor de aanvoerder');
+  Object.assign(S.dorp.aanvoerder, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
   g.G.keek = 0;
   uren(S, 0.05);
   assert.ok(g.G.weg > S.kalender.dag, 'ze gaan weg');
@@ -163,7 +163,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen', () => {
   assert.equal(l.snelheid, T.BEESTEN.hert.vlucht);
   const voor = T.afstand(T.tegelVan(l), plek);
   uren(S, 0.5);
-  assert.ok(T.afstand(T.tegelVan(l), plek) > voor, 'verder van de schout');
+  assert.ok(T.afstand(T.tegelVan(l), plek) > voor, 'verder van de aanvoerder');
 });
 
 test('een wolf begint geen gevecht, en wie je mannen op hem afstuurt, valt hem aan', () => {
@@ -171,16 +171,16 @@ test('een wolf begint geen gevecht, en wie je mannen op hem afstuurt, valt hem a
   T.zetBeesten(S.dorp);
   const wolf = leiderVan(groepVan(S, 'wolf'));
   const hert = leiderVan(groepVan(S, 'hert'));
-  // De schout naast de wolf: een rover die hem ziet, valt hem aan, een wolf niet; en een wolf die niets doet, is geen vijand
+  // De aanvoerder naast de wolf: een rover die hem ziet, valt hem aan, een wolf niet; en een wolf die niets doet, is geen vijand
   // die de held vanzelf aanvalt (js/gevecht.js).
-  Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty, binnen: false });
+  Object.assign(S.dorp.aanvoerder, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty, binnen: false });
   assert.equal(T.isVijandig(wolf), false);
   T.werkGevechtBij(S, S.dorp);
   assert.equal(wolf.doelwit, undefined);
-  assert.equal(S.schout.doelwit, undefined);
+  assert.equal(S.dorp.aanvoerder.doelwit, undefined);
   // Links zegt wat het is; rechts, met de held gekozen, valt hem aan (js/kiezen.js; vraag 170, stap 1).
   assert.equal(T.handelingVerkennen(S, { wezen: wolf }).tekst, 'A wolf');
-  assert.match(T.handelingSturen(S, { wezen: wolf }, [S.schout]).tekst, /Attack the wolf/);
+  assert.match(T.handelingSturen(S, { wezen: wolf }, [S.dorp.aanvoerder]).tekst, /Attack the wolf/);
   assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'A deer');
 });
 
@@ -431,7 +431,7 @@ function luister(f) {
   }
 }
 
-// Een roedel met honger, op een avond in grasmaand om tien uur; de schout en het dorp binnen, en zonder schapen tenzij
+// Een roedel met honger, op een avond in grasmaand om tien uur; de aanvoerder en het dorp binnen, en zonder schapen tenzij
 // de toets ze vraagt (een toets zet weg wat hij nodig heeft).
 function stouteRoedel(schapen = false) {
   const S = dorp();
@@ -441,7 +441,7 @@ function stouteRoedel(schapen = false) {
   G.honger = T.BEESTEN_INSTELLINGEN.dreiging.stout;
   opUur(S, 22);
   for (const p of D.bewoners.mensen) if (p.wezen) p.wezen.binnen = true;
-  S.schout.binnen = true;
+  S.dorp.aanvoerder.binnen = true;
   if (!schapen) T.verliesVee(D, 'schaap', T.veeVan(D).filter((e) => e.dier === 'schaap').length);
   return { S, D, G, leden, leider: leiderVan({ leden }) };
 }
@@ -476,7 +476,7 @@ test('zonder schapen zoekt hij wie alleen in het donker loopt: gewond, in bed, z
   T.zetOptie('beesten', 'zonderDoden');
   try {
     const { S, D, leider } = stouteRoedel();
-    const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+    const p = D.bewoners.mensen.find((q) => q.wezen && !q.aanvoerder && q.leeftijd === 'volwassen');
     const e = p.wezen;
     e.binnen = false;
     assert.ok(zetOpAfstand(D.wereld, e, leider, 10), 'een plek voor hem');
@@ -507,7 +507,7 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
   I.doodKans = 1;
   try {
     const { S, D, leider } = stouteRoedel();
-    const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+    const p = D.bewoners.mensen.find((q) => q.wezen && !q.aanvoerder && q.leeftijd === 'volwassen');
     p.wezen.binnen = false;
     assert.ok(zetOpAfstand(D.wereld, p.wezen, leider, 10), 'een plek voor hem');
     const bevolking = D.bevolking;
@@ -522,13 +522,13 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
   }
 });
 
-test('de schout alleen in het donker: de roedel valt hem aan, en vecht met hem (sinds 16 okt zonder lantaarn)', () => {
+test('de aanvoerder alleen in het donker: de roedel valt hem aan, en vecht met hem (sinds 16 okt zonder lantaarn)', () => {
   const { S, D, leden, leider } = stouteRoedel();
-  S.schout.binnen = false;
-  assert.ok(zetOpAfstand(D.wereld, S.schout, leider, 12), 'een plek voor de schout');
+  S.dorp.aanvoerder.binnen = false;
+  assert.ok(zetOpAfstand(D.wereld, S.dorp.aanvoerder, leider, 12), 'een plek voor de aanvoerder');
   uren(S, 1);
   assert.equal(leider.groep.vecht, true, 'de roedel vecht (js/gevecht.js)');
-  assert.ok(leden.every((e) => e.dood || e.doelwit === S.schout), 'met de schout');
+  assert.ok(leden.every((e) => e.dood || e.doelwit === S.dorp.aanvoerder), 'met de aanvoerder');
 });
 
 test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {
@@ -545,10 +545,10 @@ test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij w
   zetBij(D.wereld, leider, { x: plein.x + 3, y: plein.y });
   for (const e of leden) if (e !== leider) zetBij(D.wereld, e, { x: plein.x + 6, y: plein.y });
   for (const q of D.bewoners.mensen) if (q.wezen) q.wezen.binnen = true;
-  S.schout.binnen = true;
+  S.dorp.aanvoerder.binnen = true;
   // de ossenkar ook: die staat op het plein, en de roedel kijkt naar wie het dichtst bij een wolf is
   for (const m of D.wereld.wezens) if (!m.dier && !m.beest) m.binnen = true;
-  const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+  const p = D.bewoners.mensen.find((q) => q.wezen && !q.aanvoerder && q.leeftijd === 'volwassen');
   const e = p.wezen;
   e.binnen = false;
   zetBij(D.wereld, e, { x: plein.x - 2, y: plein.y });
@@ -772,7 +772,7 @@ test('overdag loert de jager in het bos op zijn groep, net buiten waar ze schuw 
 // hulp roept.
 function aanval() {
   const { S, D, G, leider } = stouteRoedel();
-  const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+  const p = D.bewoners.mensen.find((q) => q.wezen && !q.aanvoerder && q.leeftijd === 'volwassen');
   const e = p.wezen;
   e.binnen = false;
   assert.ok(zetOpAfstand(D.wereld, e, leider, 10), 'een plek voor hem');
@@ -798,10 +798,10 @@ test('wie de wolven aanvallen, roept om hulp: het dorp zegt het, hij blijft staa
   assert.ok(!e.roeptOmHulp && !e.moetNaar);
 });
 
-test('komt er een buur, dan vluchten de wolven; komt de schout, dan vecht de roedel met hem', () => {
+test('komt er een buur, dan vluchten de wolven; komt de aanvoerder, dan vecht de roedel met hem', () => {
   {
     const { S, D, G, p, e } = aanval();
-    const buur = D.bewoners.mensen.find((q) => q !== p && q.wezen && !q.schout && q.leeftijd === 'volwassen').wezen;
+    const buur = D.bewoners.mensen.find((q) => q !== p && q.wezen && !q.aanvoerder && q.leeftijd === 'volwassen').wezen;
     buur.binnen = false;
     zetBij(D.wereld, buur, T.tegelVan(e));
     luister((z) => {
@@ -814,8 +814,8 @@ test('komt er een buur, dan vluchten de wolven; komt de schout, dan vecht de roe
   }
   {
     const { S, D, G, e } = aanval();
-    S.schout.binnen = false;
-    zetBij(D.wereld, S.schout, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.man, y: e.ty });
+    S.dorp.aanvoerder.binnen = false;
+    zetBij(D.wereld, S.dorp.aanvoerder, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.man, y: e.ty });
     uren(S, 0.05);
     assert.equal(G.vecht, true, 'de roedel vecht (js/gevecht.js)');
     assert.equal(G.aanval, null);

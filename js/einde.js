@@ -6,7 +6,7 @@
 // (snoeironde, vraag 153; Marcel koos "Weg": het hoort bij het oude spel). Het nieuwe doel van de demo komt er nog, en
 // wacht op Marcel (werklijst, "Wacht op Marcel"); het komt dan hier, of in een eigen bestand.
 //
-// Verliezen: je ambt kwijt (js/heer.js), de schout gevallen (js/gevecht.js), en sinds 3 okt ook een dorp met minder
+// Verliezen: je ambt kwijt (js/heer.js), de aanvoerder gevallen (js/gevecht.js), en sinds 3 okt ook een dorp met minder
 // dan `minstensOver` mensen (10): de heer streept het door (T.tikEindeDag, met het eindscherm in js/hud.js).
 //
 // Het jaar in het kort: wat er gebeurde, telt het dorp elke nacht op in zijn jaarboek (uit het dagboek, T.schrijfOp

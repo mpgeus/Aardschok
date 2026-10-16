@@ -27,9 +27,9 @@
   const zin = (tekst) => (tekst ? T.hoofdletter(tekst) + (/[.!?]$/.test(tekst) ? '' : '.') : '');
   const namen = (mensen) => T.opsomming(mensen.map((p) => T.naamVanBewoner(p)));
 
-  // De kar van opslag g: een schuur heeft de zijne (g.kar, en e.thuis is de schuur), het huis van de schout de ossenkar,
+  // De kar van opslag g: een schuur heeft de zijne (g.kar, en e.thuis is de schuur), het raadhuis de ossenkar,
   // de kar zonder schuur (js/kar.js).
-  const karVan = (D, g) => g.kar || (g.soort === 'schout' ? T.karrenVan(D).find((e) => !D.gebouwen.includes(e.thuis)) || null : null);
+  const karVan = (D, g) => g.kar || (g.soort === 'raadhuis' ? T.karrenVan(D).find((e) => !D.gebouwen.includes(e.thuis)) || null : null);
 
   // Wat g tegenhoudt, als zinnen; leeg als hij op volle kracht werkt. Dezelfde getallen als de nachtlus
   // (T.tikGebouwenDag, js/gebouwen.js), en in die volgorde: stil, handen, onderweg, het werktempo, het water, en dan
@@ -68,7 +68,7 @@
   T.gebouwBriefje = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort) return null;
-    const kop = T.hoofdletter(soort.naam); // ook het town hall, waar de schout woont (vraag 170, stap 2)
+    const kop = T.hoofdletter(soort.naam); // ook het town hall, waar de aanvoerder woont (vraag 170, stap 2)
     const doet = zin(soort.beschrijving);
     const delen = [];
     const deel = (titel, regels) => {

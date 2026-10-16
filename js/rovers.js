@@ -13,7 +13,7 @@
 // (T.bezoekerKomtAan, js/dag.js). Er komt niemand vanzelf (werklijst vraag 170, stap 2; Marcel, 15 okt: "Niemand
 // vanzelf"): jij stuurt je soldaten (js/kiezen.js), en het gevecht is in real time (js/gevecht.js): een rover slaat wie
 // hij tegenkomt, en een dorpeling die hem ziet, vlucht naar het town hall. Wie valt, is dood: een rover is uit zijn
-// bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het
+// bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de aanvoerder, dan is het spel uit. Wie het
 // overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
@@ -116,9 +116,9 @@
     }
   }
 
-  // Na een nacht heeft wie het overleefde weer al zijn leven: de schout, en de soldaten.
+  // Na een nacht heeft wie het overleefde weer al zijn leven: de aanvoerder, en de soldaten.
   function genees(D) {
-    const wie = [D.schout, ...(D.bewoners ? D.bewoners.mensen.map((p) => p.wezen) : [])];
+    const wie = [D.aanvoerder, ...(D.bewoners ? D.bewoners.mensen.map((p) => p.wezen) : [])];
     for (const e of wie) if (e && !e.dood && e.maxLeven > 0) e.leven = e.maxLeven;
   }
 
@@ -148,7 +148,7 @@
   T.sneuvelt = function (D, e, van) {
     e.gesneuveld = true;
     const p = e.bewoner;
-    const man = !!p && !!(p.soldaat || p.veteraan || p.schout);
+    const man = !!p && !!(p.soldaat || p.veteraan || p.aanvoerder);
     const waarom = van && van.beest ? T.t('The fight with the wolves was hard')
       : man ? T.t('The fight with the robbers was hard') : T.t('The robbers struck in the village');
     if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [e.bewoner]);

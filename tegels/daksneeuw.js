@@ -613,9 +613,9 @@
       ]
      }
     ],
-    "schoutshuis": [
+    "raadhuis": [
      {
-      "bestand": "daksneeuw/schoutshuis-0.png",
+      "bestand": "daksneeuw/raadhuis-0.png",
       "b": 579,
       "h": 632,
       "anker": [
@@ -624,7 +624,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/schoutshuis-1.png",
+      "bestand": "daksneeuw/raadhuis-1.png",
       "b": 581,
       "h": 632,
       "anker": [
@@ -633,7 +633,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/schoutshuis-2.png",
+      "bestand": "daksneeuw/raadhuis-2.png",
       "b": 584,
       "h": 632,
       "anker": [
@@ -4615,9 +4615,9 @@
       ]
      }
     ],
-    "wit-schoutshuis-riet-z": [
+    "wit-raadhuis-riet-z": [
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-z-0.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-z-0.png",
       "b": 571,
       "h": 639,
       "anker": [
@@ -4626,7 +4626,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-z-1.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-z-1.png",
       "b": 582,
       "h": 639,
       "anker": [
@@ -4635,7 +4635,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-z-2.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-z-2.png",
       "b": 585,
       "h": 639,
       "anker": [
@@ -4644,9 +4644,9 @@
       ]
      }
     ],
-    "wit-schoutshuis-riet-o": [
+    "wit-raadhuis-riet-o": [
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-o-0.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-o-0.png",
       "b": 569,
       "h": 628,
       "anker": [
@@ -4655,7 +4655,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-o-1.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-o-1.png",
       "b": 578,
       "h": 628,
       "anker": [
@@ -4664,7 +4664,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-o-2.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-o-2.png",
       "b": 585,
       "h": 628,
       "anker": [
@@ -4673,9 +4673,9 @@
       ]
      }
     ],
-    "wit-schoutshuis-riet-n": [
+    "wit-raadhuis-riet-n": [
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-n-0.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-n-0.png",
       "b": 571,
       "h": 502,
       "anker": [
@@ -4684,7 +4684,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-n-1.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-n-1.png",
       "b": 582,
       "h": 502,
       "anker": [
@@ -4693,7 +4693,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-n-2.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-n-2.png",
       "b": 585,
       "h": 509,
       "anker": [
@@ -4702,9 +4702,9 @@
       ]
      }
     ],
-    "wit-schoutshuis-riet-w": [
+    "wit-raadhuis-riet-w": [
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-w-0.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-w-0.png",
       "b": 571,
       "h": 515,
       "anker": [
@@ -4713,7 +4713,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-w-1.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-w-1.png",
       "b": 583,
       "h": 519,
       "anker": [
@@ -4722,7 +4722,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/wit-schoutshuis-riet-w-2.png",
+      "bestand": "daksneeuw/wit-raadhuis-riet-w-2.png",
       "b": 585,
       "h": 520,
       "anker": [
@@ -8327,9 +8327,9 @@
       ]
      }
     ],
-    "oker-schoutshuis-riet-z": [
+    "oker-raadhuis-riet-z": [
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-z-0.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-z-0.png",
       "b": 571,
       "h": 639,
       "anker": [
@@ -8338,7 +8338,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-z-1.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-z-1.png",
       "b": 582,
       "h": 639,
       "anker": [
@@ -8347,7 +8347,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-z-2.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-z-2.png",
       "b": 585,
       "h": 639,
       "anker": [
@@ -8356,9 +8356,9 @@
       ]
      }
     ],
-    "oker-schoutshuis-riet-o": [
+    "oker-raadhuis-riet-o": [
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-o-0.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-o-0.png",
       "b": 569,
       "h": 628,
       "anker": [
@@ -8367,7 +8367,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-o-1.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-o-1.png",
       "b": 578,
       "h": 628,
       "anker": [
@@ -8376,7 +8376,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-o-2.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-o-2.png",
       "b": 585,
       "h": 628,
       "anker": [
@@ -8385,9 +8385,9 @@
       ]
      }
     ],
-    "oker-schoutshuis-riet-n": [
+    "oker-raadhuis-riet-n": [
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-n-0.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-n-0.png",
       "b": 571,
       "h": 502,
       "anker": [
@@ -8396,7 +8396,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-n-1.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-n-1.png",
       "b": 582,
       "h": 502,
       "anker": [
@@ -8405,7 +8405,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-n-2.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-n-2.png",
       "b": 585,
       "h": 509,
       "anker": [
@@ -8414,9 +8414,9 @@
       ]
      }
     ],
-    "oker-schoutshuis-riet-w": [
+    "oker-raadhuis-riet-w": [
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-w-0.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-w-0.png",
       "b": 571,
       "h": 515,
       "anker": [
@@ -8425,7 +8425,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-w-1.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-w-1.png",
       "b": 583,
       "h": 519,
       "anker": [
@@ -8434,7 +8434,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/oker-schoutshuis-riet-w-2.png",
+      "bestand": "daksneeuw/oker-raadhuis-riet-w-2.png",
       "b": 585,
       "h": 520,
       "anker": [
@@ -12387,9 +12387,9 @@
       ]
      }
     ],
-    "planken-schoutshuis-spanen-z": [
+    "planken-raadhuis-spanen-z": [
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-0.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-z-0.png",
       "b": 433,
       "h": 593,
       "anker": [
@@ -12398,7 +12398,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-1.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-z-1.png",
       "b": 526,
       "h": 593,
       "anker": [
@@ -12407,7 +12407,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-2.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-z-2.png",
       "b": 548,
       "h": 593,
       "anker": [
@@ -12416,9 +12416,9 @@
       ]
      }
     ],
-    "planken-schoutshuis-spanen-o": [
+    "planken-raadhuis-spanen-o": [
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-0.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-o-0.png",
       "b": 428,
       "h": 582,
       "anker": [
@@ -12427,7 +12427,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-1.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-o-1.png",
       "b": 528,
       "h": 582,
       "anker": [
@@ -12436,7 +12436,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-2.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-o-2.png",
       "b": 533,
       "h": 582,
       "anker": [
@@ -12445,9 +12445,9 @@
       ]
      }
     ],
-    "planken-schoutshuis-spanen-n": [
+    "planken-raadhuis-spanen-n": [
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-0.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-n-0.png",
       "b": 430,
       "h": 458,
       "anker": [
@@ -12456,7 +12456,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-1.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-n-1.png",
       "b": 533,
       "h": 465,
       "anker": [
@@ -12465,7 +12465,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-2.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-n-2.png",
       "b": 533,
       "h": 466,
       "anker": [
@@ -12474,9 +12474,9 @@
       ]
      }
     ],
-    "planken-schoutshuis-spanen-w": [
+    "planken-raadhuis-spanen-w": [
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-0.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-w-0.png",
       "b": 426,
       "h": 467,
       "anker": [
@@ -12485,7 +12485,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-1.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-w-1.png",
       "b": 530,
       "h": 474,
       "anker": [
@@ -12494,7 +12494,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-2.png",
+      "bestand": "daksneeuw/planken-raadhuis-spanen-w-2.png",
       "b": 530,
       "h": 474,
       "anker": [
@@ -16099,9 +16099,9 @@
       ]
      }
     ],
-    "roze-schoutshuis-riet-z": [
+    "roze-raadhuis-riet-z": [
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-z-0.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-z-0.png",
       "b": 571,
       "h": 639,
       "anker": [
@@ -16110,7 +16110,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-z-1.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-z-1.png",
       "b": 582,
       "h": 639,
       "anker": [
@@ -16119,7 +16119,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-z-2.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-z-2.png",
       "b": 585,
       "h": 639,
       "anker": [
@@ -16128,9 +16128,9 @@
       ]
      }
     ],
-    "roze-schoutshuis-riet-o": [
+    "roze-raadhuis-riet-o": [
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-o-0.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-o-0.png",
       "b": 569,
       "h": 628,
       "anker": [
@@ -16139,7 +16139,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-o-1.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-o-1.png",
       "b": 578,
       "h": 628,
       "anker": [
@@ -16148,7 +16148,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-o-2.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-o-2.png",
       "b": 585,
       "h": 628,
       "anker": [
@@ -16157,9 +16157,9 @@
       ]
      }
     ],
-    "roze-schoutshuis-riet-n": [
+    "roze-raadhuis-riet-n": [
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-n-0.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-n-0.png",
       "b": 571,
       "h": 502,
       "anker": [
@@ -16168,7 +16168,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-n-1.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-n-1.png",
       "b": 582,
       "h": 502,
       "anker": [
@@ -16177,7 +16177,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-n-2.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-n-2.png",
       "b": 585,
       "h": 509,
       "anker": [
@@ -16186,9 +16186,9 @@
       ]
      }
     ],
-    "roze-schoutshuis-riet-w": [
+    "roze-raadhuis-riet-w": [
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-w-0.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-w-0.png",
       "b": 571,
       "h": 515,
       "anker": [
@@ -16197,7 +16197,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-w-1.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-w-1.png",
       "b": 583,
       "h": 519,
       "anker": [
@@ -16206,7 +16206,7 @@
       ]
      },
      {
-      "bestand": "daksneeuw/roze-schoutshuis-riet-w-2.png",
+      "bestand": "daksneeuw/roze-raadhuis-riet-w-2.png",
       "b": 585,
       "h": 520,
       "anker": [

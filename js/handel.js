@@ -8,7 +8,7 @@
 //   - zijn komen en gaan als poppetje (T.werkMarskramerBij): over de weg binnen, naar zijn plek op
 //     het plein, tien dagen daar, en dan weer de weg op.
 // Het venster waarin je handelt, staat in js/hud.js (T.ui.openHandel). Je opent het vanuit zijn
-// gesprek (js/gesprekken.js, een antwoord met doe: { handel: true }), want je bent de schout, een
+// gesprek (js/gesprekken.js, een antwoord met doe: { handel: true }), want je bent de aanvoerder, een
 // poppetje in het dorp: je loopt naar hem toe.
 //
 // Alleen waar hij een plek heeft: "marskramer" in kaarten/<naam>.betekenis.json (js/kaart.js).

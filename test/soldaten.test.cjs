@@ -18,8 +18,8 @@ function gehucht(gebouwen = []) {
   const D = S.dorp;
   return { S, D, huis: D.gebouwen.find((g) => g.soort === 'wachthuis') };
 }
-// Wie soldaat kan worden: wie kan werken en geen werk heeft, volwassen of jong, niet van het gezin van de schout.
-const vrij = (D) => D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && ['volwassen', 'jong'].includes(p.leeftijd) && !T.vanSchout(p));
+// Wie soldaat kan worden: wie kan werken en geen werk heeft, volwassen of jong, niet van het gezin van de aanvoerder.
+const vrij = (D) => D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && ['volwassen', 'jong'].includes(p.leeftijd) && !T.vanAanvoerder(p));
 // De regel van een soort op het briefje van het wachthuis.
 const regelVan = (D, huis, begin) => T.gebouwBriefje(D, huis).delen.find((d) => d.titel === 'Soldiers').regels.find((r) => typeof r === 'object' && r.tekst.startsWith(begin));
 
@@ -186,8 +186,8 @@ function soldaat(D, huis, soort, x, y) {
 test('in het gevecht reiken speer en piek twee tegels, de hooivork en het zwaard één; de piek slaat harder', () => {
   const { S, D, huis } = gehucht();
   const w = S.wereld;
-  const r = vrijeRij(w, { x: S.schout.tx, y: S.schout.ty }, 8);
-  assert.ok(r, 'een open rij bij de schout');
+  const r = vrijeRij(w, { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, 8);
+  assert.ok(r, 'een open rij bij de aanvoerder');
   const rover = T.maakWezen('rover', r.x + 2, r.y);
   w.wezens.push(rover);
   zet(rover, r.x + 2, r.y);
@@ -199,13 +199,13 @@ test('in het gevecht reiken speer en piek twee tegels, de hooivork en het zwaard
   zet(hooivork, r.x + 1, r.y);
   assert.equal(T.kanRaken(D, hooivork, rover), true, 'van ernaast wel');
   assert.ok(T.slagVan({ kant: 'speler', bewoner: { soldaat: { soort: 'piekenier' } } }).schade[0] > T.slagVan(speer).schade[0], 'de piek slaat harder');
-  assert.deepEqual(T.slagVan(S.schout).schade, T.SLAAN.schade, 'de schout slaat zoals altijd');
+  assert.deepEqual(T.slagVan(S.dorp.aanvoerder).schade, T.SLAAN.schade, 'de aanvoerder slaat zoals altijd');
 });
 
 test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', () => {
   const { S, D, huis } = gehucht();
   const w = S.wereld;
-  const r = vrijeRij(w, { x: S.schout.tx, y: S.schout.ty }, 8);
+  const r = vrijeRij(w, { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, 8);
   const rover = T.maakWezen('rover', r.x + 6, r.y);
   w.wezens.push(rover);
   zet(rover, r.x + 6, r.y);

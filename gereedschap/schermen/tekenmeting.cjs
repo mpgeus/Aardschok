@@ -86,7 +86,7 @@ async function meet(browser, scherm) {
   const uit = { scherm, zoomStd, gpu: await page.evaluate(() => { const c = document.createElement('canvas').getContext('webgl'); if (!c) return 'geen webgl'; const e = c.getExtension('WEBGL_debug_renderer_info'); return e ? c.getParameter(e.UNMASKED_RENDERER_WEBGL) : 'webgl'; }), scènes: [] };
   for (const sc of scènes) {
     await page.evaluate(([uur, zoom]) => {
-      Meet.zetPlekken(uur); const s = Spel.S; if (s.grond) s.grond.sleutel = ''; s.zoom = zoom; Meet.cameraOp(s.schout.tx, s.schout.ty);
+      Meet.zetPlekken(uur); const s = Spel.S; if (s.grond) s.grond.sleutel = ''; s.zoom = zoom; Meet.cameraOp(s.dorp.aanvoerder.tx, s.dorp.aanvoerder.ty);
     }, [sc.uur, sc.zoom]);
     for (let i = 0; i < 100; i++) {
       await page.evaluate(() => Spel.tekenBeeld());

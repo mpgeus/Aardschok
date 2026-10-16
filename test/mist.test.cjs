@@ -30,21 +30,21 @@ test('een kaart uit Tiled heeft geen mist', () => {
   assert.ok(T.kentTegel(tiled, 2, 2) && T.zietNu(tiled, 2, 2));
 });
 
-test('de schout ziet zijn kring; wat hij zag, ken je voortaan, en waar hij wegging, wordt het grijs', () => {
+test('de aanvoerder ziet zijn kring; wat hij zag, ken je voortaan, en waar hij wegging, wordt het grijs', () => {
   const { S, D, w } = leegBegin(T);
   const m = midden(w);
   const x = Math.round(m.x + M.beginKring + 30);
   const y = Math.round(m.y);
   assert.ok(!T.kentTegel(w, x, y), 'daar is het nog zwart');
-  zet(S.schout, x, y);
+  zet(S.dorp.aanvoerder, x, y);
   T.werkMistBij(S, D);
-  const Z = M.zicht.schout;
+  const Z = M.zicht.aanvoerder;
   assert.ok(T.zietNu(w, x + Z, y) && T.kentTegel(w, x + Z, y), 'zo ver ziet hij');
   assert.ok(!T.zietNu(w, x + Z + 1, y) && !T.kentTegel(w, x + Z + 1, y), 'een tegel verder niet');
   const versie = T.mistVersie(w);
   T.werkMistBij(S, D);
   assert.equal(T.mistVersie(w), versie, 'wie stilstaat, maakt niets nieuws bekend');
-  zet(S.schout, Math.round(m.x), Math.round(m.y));
+  zet(S.dorp.aanvoerder, Math.round(m.x), Math.round(m.y));
   T.werkMistBij(S, D);
   assert.ok(!T.zietNu(w, x, y) && T.kentTegel(w, x, y), 'waar hij was, is grijs: bekend, maar hij ziet het niet meer');
 });
@@ -52,19 +52,19 @@ test('de schout ziet zijn kring; wat hij zag, ken je voortaan, en waar hij weggi
 test('wie in het grijs loopt, zie je niet; je eigen mensen altijd', () => {
   const { S, D, w } = leegBegin(T);
   T.werkMistBij(S, D);
-  const ver = { tx: S.schout.tx + M.zicht.schout + 5, ty: S.schout.ty };
-  const dichtbij = { tx: S.schout.tx + 2, ty: S.schout.ty };
+  const ver = { tx: S.dorp.aanvoerder.tx + M.zicht.aanvoerder + 5, ty: S.dorp.aanvoerder.ty };
+  const dichtbij = { tx: S.dorp.aanvoerder.tx + 2, ty: S.dorp.aanvoerder.ty };
   assert.ok(!T.zieJeWezen(S, w, ver), 'een beest buiten zijn kring');
   assert.ok(T.zieJeWezen(S, w, dichtbij), 'een beest vlakbij');
-  assert.ok(T.zieJeWezen(S, w, S.schout), 'de schout zelf');
+  assert.ok(T.zieJeWezen(S, w, S.dorp.aanvoerder), 'de aanvoerder zelf');
   const kar = w.wezens.find((e) => e.kar);
   if (kar) assert.ok(T.zieJeWezen(S, w, kar), 'de kar is van jou');
 });
 
 test('het plein en een gebouw dat af is kijken ook', () => {
   const { S, D, w } = proefDorp(T);
-  for (const e of w.wezens) if (e !== S.schout) e.binnen = true; // iedereen binnen: alleen de gebouwen en het plein kijken
-  zet(S.schout, Math.round(midden(w).x + 300), Math.round(midden(w).y));
+  for (const e of w.wezens) if (e !== S.dorp.aanvoerder) e.binnen = true; // iedereen binnen: alleen de gebouwen en het plein kijken
+  zet(S.dorp.aanvoerder, Math.round(midden(w).x + 300), Math.round(midden(w).y));
   T.werkMistBij(S, D);
   const { x: px, y: py } = w.kamp.vuur;
   assert.ok(T.zietNu(w, px, py), 'het plein');

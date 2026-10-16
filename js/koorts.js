@@ -75,7 +75,7 @@
   // Het begin (T.tikKoortsDag, en Spel.debug.koorts('nu')): iemand die hier woont, geloot met een vast lot, en zijn
   // gezin, tot `begin` mensen. Een bericht brengt je naar zijn huis.
   T.beginKoorts = function (D, dag) {
-    const kan = D.bewoners.mensen.filter((p) => !p.weg && !p.komt && !p.schout && !(p.hoofd && p.hoofd.schout) && p.wezen && !p.wezen.dood);
+    const kan = D.bewoners.mensen.filter((p) => !p.weg && !p.komt && !p.aanvoerder && !(p.hoofd && p.hoofd.aanvoerder) && p.wezen && !p.wezen.dood);
     if (!kan.length) return;
     const wie = kan[Math.floor(T.vastLot(D, dag, 3001) * kan.length)];
     D.koorts = { gehad: [], sinds: Math.floor(dag) };

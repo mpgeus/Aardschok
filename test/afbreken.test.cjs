@@ -115,9 +115,9 @@ test('een schuur afbreken: zijn kar gaat mee', () => {
   assert.ok(!D.karren.includes(kar) && !w.wezens.includes(kar), 'de kar is weg');
 });
 
-test('niet af te breken: het huis van de schout, en de weg van de kaart', () => {
-  const { D, w, schout } = dorp();
-  const r = T.voetVanGebouw(schout);
+test('niet af te breken: het raadhuis, en de weg van de kaart', () => {
+  const { D, w, raadhuis } = dorp();
+  const r = T.voetVanGebouw(raadhuis);
   const h = T.handelingAfbreken(D, r.x, r.y);
   assert.equal(h.kan, false, h.tekst);
   const vak = T.kaartVak(w);

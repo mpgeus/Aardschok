@@ -26,9 +26,9 @@ test('elke opgave ligt vast, ook de uitbouwen', () => {
   // ander huis op het vel (werklijst, "Tegelijk: de huizenbouwer", ronde 4).
   // De grote gebouwen (vraag 114, stap 3) zijn een toren (de woontoren) of een gebouw uit delen (de kapel met haar
   // toren, de zagerij met haar stammen; vraag 157): daar ligt elk deel vast met zijn zaad, en een los stuk van
-  // tuin-sdf.cjs (`tuin`) heeft geen lagen. Het huis van de schout heeft geen soort in T.GEBOUWEN: de maker zet het neer
+  // tuin-sdf.cjs (`tuin`) heeft geen lagen. Het raadhuis heeft geen soort in T.GEBOUWEN: de maker zet het neer
   // als een huis (js/maker.js).
-  const groot = ['kapel', 'woontoren', 'schout', 'zagerij'];
+  const groot = ['kapel', 'woontoren', 'raadhuis', 'zagerij'];
   for (const [naam, o] of Object.entries(HUIZEN)) {
     // een oude tekening (vraag 144) is zijn jonge, met andere knoppen (test/verweren.test.cjs)
     if (o.jong) {
@@ -101,7 +101,7 @@ test('T.deurVan neemt de deur van de tekening, en anders het midden van de zuidk
 test('de huizen van het proefdorp komen van de huizenbouwer, en voor elke deur kun je staan', () => {
   const { S, w, hutten } = proefDorp(T, { gebouwen: ['herberg', 'huis'] });
   const huizen = S.dorp.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
-  assert.equal(huizen.length, 1 + 2 + hutten.length + 2, 'de schout, twee boerderijen, de hutten, de herberg en een huis');
+  assert.equal(huizen.length, 1 + 2 + hutten.length + 2, 'de aanvoerder, twee boerderijen, de hutten, de herberg en een huis');
   for (const g of huizen) {
     const eig = T.opzoekTegelNaam(g.tekening).eig;
     assert.deepEqual([g.voet.b, g.voet.h], eig.beslaat, `${g.tekening}: de voet van de tekening`);

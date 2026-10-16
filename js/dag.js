@@ -47,7 +47,7 @@
     // De marskramer en de heer komen overdag, vanaf dit uur.
     bezoekUur: 9,
     // Het licht: hoe donker de nacht is (0 is licht, 1 is zwart), hoe lang de schemering duurt, en
-    // hoe ver het rond de schout 's nachts minder donker is, in tegels.
+    // hoe ver het rond de aanvoerder 's nachts minder donker is, in tegels.
     nachtDonker: 0.68,
     schemerUren: 1,
     lichtStraal: 5,
@@ -211,7 +211,7 @@
   // oogst (T.werkOogstBij, js/akkers.js), en zolang hij dat doet, dwaalt hij niet; is er niets te doen, dan is hij bij
   // zijn boerderij (zijn werk). Zijn boerin en grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
   //
-  // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
+  // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de aanvoerder, het
   // vee en een bezoeker volgen hun eigen weg. Wie ergens anders moet zijn (moetNaar: de schandpaal,
   // js/heer.js), volgt dat en niet de dag.
   T.dagAnker = function (D, e, oogst) {
@@ -231,7 +231,7 @@
     const deel = T.dagdeelVan(D.kalender.dag, oogst);
     // Wie geen huis heeft (js/afbreken.js, T.wordtDakloos), slaapt buiten op het plein en hangt er 's ochtends en 's avonds
     // rond; overdag werkt hij zoals iedereen.
-    if (p && !p.huis && !p.schout && !p.soldaat && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
+    if (p && !p.huis && !p.aanvoerder && !p.soldaat && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
     // laadt de bewoners niet.
     if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };

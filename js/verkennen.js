@@ -88,7 +88,7 @@
   // zelf"): kiezen. De muis zegt wat iets is, en een klik kiest het (`kies`, js/main.js): een van je mannen of een
   // dorpeling, met zijn briefje (js/kiezen.js), of een gebouw (`doe`, js/gebouwbriefje.js). Wie een gesprek heeft en
   // geen dorpeling is, opent wat hij komt doen: de marskramer zijn handel, de heer zijn venster. Rechts stuurt je
-  // mannen (T.handelingSturen, js/kiezen.js). Tot 15 okt liep de schout erheen: praten, oprapen, een deur van het slot,
+  // mannen (T.handelingSturen, js/kiezen.js). Tot 15 okt liep de aanvoerder erheen: praten, oprapen, een deur van het slot,
   // een vijand aanvallen.
   T.handelingVerkennen = function (S, doel) {
     if (!doel) return null;
@@ -249,7 +249,7 @@
       // voor zijn deur staat als het nacht is, gaat naar binnen; 's ochtends komt hij weer naar
       // buiten, zodra er niemand voor de deur staat. Overdag geeft T.dagAnker niets, en geldt het
       // gewone anker hieronder.
-      // Staat er iemand anders in zijn deur (de schout voor zijn eigen huis, terwijl zijn gezin naar
+      // Staat er iemand anders in zijn deur (de aanvoerder voor zijn eigen huis, terwijl zijn gezin naar
       // binnen wil), dan gaat hij naar binnen vanaf de tegel ernaast. Wanneer hij binnen of buiten
       // kwam, en waar zijn deur is, onthoudt hij voor het scherm: js/tekenen.js laat hem de deur in
       // stappen en vervagen, of eruit komen, in plaats van in één klap te verdwijnen (Marcel, 26 sep:
@@ -347,13 +347,13 @@
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
   T.magStappen = function (S, e, t, w = S.wereld) {
-    return T.isBegaanbaar(w, t.x, t.y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
+    return T.isBegaanbaar(w, t.x, t.y, { deurenOpenen: T.isAanvoerder(S, e), wezensBlokkeren: true, wie: e });
   };
 
-  // Een dichte deur gaat open op het moment dat de schout erdoor stapt, niet pas als hij er
+  // Een dichte deur gaat open op het moment dat de aanvoerder erdoor stapt, niet pas als hij er
   // al half doorheen is.
   T.bijStapBegin = function (S, e, t) {
-    if (e !== S.schout) return;
+    if (!T.isAanvoerder(S, e)) return;
     const d = T.deurOp(S.wereld, t.x, t.y);
     if (d && d.staat === 'dicht') {
       d.staat = 'open';
@@ -363,7 +363,7 @@
 
   T.bijAankomst = function (S, e, t) {
     const w = S.wereld;
-    if (e === S.schout) {
+    if (T.isAanvoerder(S, e)) {
       const k = T.kamerVan(w, t.x, t.y);
       if (k) {
         w.bekend.add(k.id);

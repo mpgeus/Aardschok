@@ -85,12 +85,12 @@
       ],
     },
     {
-      id: 'schoutAanDePaal', naam: T.t('The reeve in the pillory'), standaard: 'mag',
+      id: 'aanvoerderAanDePaal', naam: T.t('The commander in the pillory'), standaard: 'mag',
       uitleg: T.t('Whether you may name yourself when somebody has to go in the pillory.'),
       keuzes: [
-        { id: 'mag', naam: T.t('Allowed'), zet: { 'HEER_INSTELLINGEN.schoutMagZelf': true }, // geen tekst
+        { id: 'mag', naam: T.t('Allowed'), zet: { 'HEER_INSTELLINGEN.aanvoerderMagZelf': true }, // geen tekst
           uitleg: T.t('The village does not hold it against you, but the lord finds it laughable and raises the fine.') },
-        { id: 'magNiet', naam: T.t('Not allowed'), zet: { 'HEER_INSTELLINGEN.schoutMagZelf': false }, // geen tekst
+        { id: 'magNiet', naam: T.t('Not allowed'), zet: { 'HEER_INSTELLINGEN.aanvoerderMagZelf': false }, // geen tekst
           uitleg: T.t('You always name somebody else. It stays dirty work.') },
       ],
     },
@@ -306,7 +306,7 @@
     },
     {
       id: 'doorkijkPlein', naam: T.t('Who you see through a house'), standaard: 'ookHetPlein',
-      uitleg: T.t('Always the reeve, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the merchant and the soldiers.'),
+      uitleg: T.t('Always the commander, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the merchant and the soldiers.'),
       keuzes: [
         { id: 'ookHetPlein', naam: T.t('The square too'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true }, // geen tekst
           uitleg: T.t('Everyone standing on the square as well, so that you can see the square. Not through a tree, or the oaks would be full of holes as long as the children play.') },
@@ -852,7 +852,7 @@
     huis: T.t('house'),
     kaars: T.t('candles'),
     drager: T.t('carried lanterns'),
-    schout: T.t('reeve'),
+    aanvoerder: T.t('commander'),
     brand: T.t('fire'),
     flakkeren: T.t('flicker'),
     flakkerSnelheid: T.t('flicker speed'),

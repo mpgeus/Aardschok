@@ -31,7 +31,7 @@
     },
     belasting: { aangenomen: { goud: 0.05, tevreden: -0.1 } },
     // Hoeveel keer zoveel belasting een mens van elke stand opbrengt (T.STANDEN, js/treden.js; werklijst vraag 80, C):
-    // wie hoger woont, betaalt meer. Wie in geen huis met een stand woont (de schout en zijn huis), telt als 1.
+    // wie hoger woont, betaalt meer. Wie in geen huis met een stand woont (de aanvoerder en zijn huis), telt als 1.
     belastingNaarStand: { keuters: 1, dorpelingen: 2, ambachtslieden: 3, boeren: 1 },
   };
   const IN = () => T.WETTEN_INSTELLINGEN;

@@ -72,7 +72,7 @@ test('wat je bouwt, is jong en na twee jaar oud', () => {
   const S = gehucht(dag);
   const D = S.dorp;
   const huizen = D.gebouwen.filter((g) => g.voorwerp && g.voorwerp.vel === 'huizen');
-  assert.ok(huizen.length >= 3, 'het huis van de schout, twee boerderijen en hutten');
+  assert.ok(huizen.length >= 3, 'het raadhuis, twee boerderijen en hutten');
   for (const g of huizen) assert.ok(!T.isOudHuis(g.voorwerp), `${g.tekening} is al oud`);
   // de tekening van het gebouw blijft de jonge: de stijl, de deur en het doorgroeien merken niets
   for (const g of huizen) assert.ok(!g.tekening.endsWith(HZ.OUD));

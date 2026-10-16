@@ -223,9 +223,9 @@ test('wie valt, is dood: een soldaat is een mond minder, en ligt er tot de volge
 
 test('na een nacht heeft wie het overleefde weer al zijn leven', () => {
   const S = gehucht();
-  S.schout.leven = 5;
+  S.dorp.aanvoerder.leven = 5;
   T.tikRoversDag(S.dorp, 3);
-  assert.equal(S.schout.leven, S.schout.maxLeven);
+  assert.equal(S.dorp.aanvoerder.leven, S.dorp.aanvoerder.maxLeven);
 });
 
 test('zijn alle rovers verslagen, dan is de aanval voorbij', () => {

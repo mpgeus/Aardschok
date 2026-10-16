@@ -7,7 +7,7 @@ const T = require('./laad.cjs').spel();
 const { proefDorp, leegBegin } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten voor de rest, en het huis van de schout.
+// Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten voor de rest, en het raadhuis.
 function gehucht() {
   const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
@@ -145,11 +145,11 @@ test('een hond hier en daar: bij een gezin met een baas op de kaart, uit het lot
   T.KLEIN_LEVEN_INSTELLINGEN.honden.kans = 1;
   try {
     const alle = T.hondenVan(D, w);
-    const gezinnen = new Set(D.bewoners.mensen.filter((p) => p.wezen && !p.schout).map((p) => p.gezin));
+    const gezinnen = new Set(D.bewoners.mensen.filter((p) => p.wezen && !p.aanvoerder).map((p) => p.gezin));
     assert.ok(alle.length > 0 && alle.length <= gezinnen.size);
     for (const h of alle) {
       assert.ok(/^hond[0-2]$/.test(h.naam) && w.wezens.includes(h.baas));
-      assert.ok(!h.baas.schout && h.baas !== S.schout);
+      assert.ok(!h.baas.aanvoerder && h.baas !== S.dorp.aanvoerder);
     }
   } finally {
     T.KLEIN_LEVEN_INSTELLINGEN.honden.kans = kans;

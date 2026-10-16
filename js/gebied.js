@@ -6,7 +6,7 @@
 // Welke gebieden er zijn, staat nergens opgeschreven: elke kaart is er een (zie T.maakGebieden
 // hieronder). Marcel tekent in Tiled, draait npm run kaarten, en de wereld is groter geworden.
 //
-// De schout verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
+// De aanvoerder verhuist mee — met zijn levenspunten en wat hij bij zich heeft — en de
 // wereld die hij achterlaat blijft staan: een gedode wolf blijft dood, en een deur die je liet
 // openstaan staat er nog open als je terugkomt.
 (function (T) {
@@ -137,21 +137,21 @@
     if (!nieuw) {
       // Op een proefkaart leidt een overgang bewust nergens heen (de weg het gehucht uit, zolang de spelregel "Land" uit
       // staat; hierboven klaagt het daar bij het inlezen ook niet over): dan alleen de mist, en geen fout in de console.
-      // De speeltest telde die fout, als zijn schout de weg af liep.
+      // De speeltest telde die fout, als zijn aanvoerder de weg af liep.
       const bewust = !!(oud && oud.proef && (oud.overgangen || []).some((o) => o.naar === naar));
       if (!bewust) ontbreekt(naar, 'je stapte er net op'); // geen tekst
       if (T.ui && T.ui.bericht) T.ui.bericht(T.t('There is nothing that way yet, only mist.'));
       return;
     }
 
-    // De schout verhuist: uit de ene lijst wezens, in de andere.
+    // De aanvoerder verhuist: uit de ene lijst wezens, in de andere.
     if (oud) {
-      const i = oud.wezens.indexOf(S.schout);
+      const i = oud.wezens.indexOf(S.dorp.aanvoerder);
       if (i >= 0) oud.wezens.splice(i, 1);
     }
-    if (!nieuw.wezens.includes(S.schout)) nieuw.wezens.push(S.schout);
+    if (!nieuw.wezens.includes(S.dorp.aanvoerder)) nieuw.wezens.push(S.dorp.aanvoerder);
     const plek = T.landingIn(nieuw, vanaf);
-    zetNeer(S.schout, plek.x, plek.y);
+    zetNeer(S.dorp.aanvoerder, plek.x, plek.y);
     // Hij is hier neergezet, niet naartoe gelopen. Een overgang gaat pas weer af als hij er een
     // keer af is geweest; dat is het tweede slot op de lus (het eerste is landingIn hierboven).
     S.netGeland = { x: plek.x, y: plek.y };
@@ -171,9 +171,9 @@
     const d = T.deurOp(nieuw, plek.x, plek.y);
     if (d) T.ontdekBijDeur(nieuw, d);
 
-    // De camera springt mee: hij glijdt normaal achter de schout aan, maar over een gebied heen
+    // De camera springt mee: hij glijdt normaal achter de aanvoerder aan, maar over een gebied heen
     // glijden zou een reis door het niets zijn.
-    const p = T.naarSchermOp(nieuw, S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(nieuw, S.dorp.aanvoerder.x, S.dorp.aanvoerder.y);
     S.camera = { x: p.x, y: p.y - 24 };
     S.kijk = { x: S.camera.x, y: S.camera.y };
     if (S.grond) S.grond.sleutel = ''; // de grondbuffer opnieuw tekenen (js/tekenen.js)
@@ -194,8 +194,8 @@
 
   // Een nieuw spel beginnen op een kaart: je dorp ('gehucht'), of een andere voor een proefje
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
-  // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
-  // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
+  // S.dorp.aanvoerder staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
+  // gehucht. Staat er geen "aanvoerder" op, dan zet het er zelf een neer.
   //
   // Voor je dorp legt de maker je land (js/maker.js) uit `makerZaad` (zonder: een nieuw), op het eiland en met het lege
   // begin erop: het land met een open plek voor het plein en het kamp (het enige begin sinds ronde 2 van het snoeien, stap 3,
@@ -210,26 +210,26 @@
       return false;
     }
     S.wereld = w;
-    let schout = w.wezens.find((e) => e.soort === 'schout');
-    if (!schout) {
-      console.warn(`Spel.beginOpKaart: geen "schout" op kaart "${naam}", hij begint op (0, 0)`); // geen tekst
-      schout = T.maakWezen('schout', 0, 0);
-      w.wezens.push(schout);
+    let aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
+    if (!aanvoerder) {
+      console.warn(`Spel.beginOpKaart: geen "aanvoerder" op kaart "${naam}", hij begint op (0, 0)`); // geen tekst
+      aanvoerder = T.maakWezen('aanvoerder', 0, 0);
+      w.wezens.push(aanvoerder);
     }
-    // Zijn soort is 'schout' en zijn kant 'speler' (T.WEZENS, js/wereld.js). Hij draagt het vel van
+    // Zijn soort is 'aanvoerder' en zijn kant 'speler' (T.WEZENS, js/wereld.js). Hij draagt het vel van
     // een gewone dorpeling, en welk, kiest zijn zaad hieronder; dat regelt T.sprites.houding
     // (js/sprites.js). Tot 26 sep kreeg hij hier de soort 'dorpeling' om aan dat vel te komen: een
     // overblijfsel van de tovenaar, die een eigen vel had (ontwerp/werklijst.md, punt 1b en 7e).
-    // Zijn loopmaat (T.SCHOUT_SNELHEID, js/wereld.js) had hij al: die staat bij de schout in
+    // Zijn loopmaat (T.AANVOERDER_SNELHEID, js/wereld.js) had hij al: die staat bij de aanvoerder in
     // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat de held (toen nog een tovenaar) op
     // zijn leeftijd liep en zelf snelheid 0 had; dit blijft staan als vangnet voor een oude kaart.
-    schout.snelheid = T.SCHOUT_SNELHEID;
-    if (schout.zaad == null) schout.zaad = 1;
-    S.schout = schout;
-    zetNeer(schout, schout.x, schout.y);
-    // Het dorp op deze kaart, met jou als zijn schout (js/dorp.js): wat er staat, de boeren, het vee en wie er
-    // woont. Het is je eigen dorp (S.dorp), en voorlopig het enige.
-    S.dorp = T.nieuwDorp(S, w, schout, { zaad });
+    aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
+    if (aanvoerder.zaad == null) aanvoerder.zaad = 1;
+    zetNeer(aanvoerder, aanvoerder.x, aanvoerder.y);
+    // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
+    // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp), en voorlopig
+    // het enige.
+    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad });
     S.dorpen = [S.dorp];
     return true;
   };

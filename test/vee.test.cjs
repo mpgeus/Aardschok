@@ -136,15 +136,15 @@ test('niet de hele kudde tegelijk: ze liggen nooit allemaal, en slaan niet op he
 
 test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een stap', () => {
   const w = T.maakProefkamers();
-  for (const e of w.wezens) if (e.soort !== 'schout') e.dood = true;
-  const schout = w.wezens.find((e) => e.soort === 'schout');
-  schout.x = schout.tx = 2;
-  schout.y = schout.ty = 2;
+  for (const e of w.wezens) if (e.soort !== 'aanvoerder') e.dood = true;
+  const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
+  aanvoerder.x = aanvoerder.tx = 2;
+  aanvoerder.y = aanvoerder.ty = 2;
   const koe = T.maakDier('koe', 6, 4, 5);
   koe.straal = 2;
   koe.thuis = { x: 6, y: 4 };
   w.wezens.push(koe);
-  const S = { wereld: w, schout, tijd: 0 };
+  const S = { wereld: w, aanvoerder, tijd: 0 };
   const tijdVan = (houding) => {
     for (let t = 0; t < 3600; t += 1) if (T.rustVanDier(koe, t) === houding) return t;
     return null;
@@ -168,8 +168,8 @@ test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een s
 
 test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => {
   const w = T.maakProefkamers();
-  const schout = w.wezens.find((e) => e.soort === 'schout');
-  const S = { wereld: w, schout, spreuk: null, inventaris: new Set() };
+  const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
+  const S = { wereld: w, aanvoerder, spreuk: null, inventaris: new Set() };
   for (const soort of Object.keys(T.VEE)) {
     const e = T.maakDier(soort, 5, 5, 3);
     assert.equal(T.gesprekVan(e), null, 'er is geen gesprek "koe" of "schaap"');

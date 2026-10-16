@@ -230,10 +230,10 @@ test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft ligg
 // ---------------------------------------------------------------------------------------------
 
 test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer zet de tijd op 1×', () => {
-  // Een los object dat als dorp dient: het is jouw dorp (geen ander dorp), en de schout staat op zijn kaart (T.naarGewoneSnelheid).
+  // Een los object dat als dorp dient: het is jouw dorp (geen ander dorp), en de aanvoerder staat op zijn kaart (T.naarGewoneSnelheid).
   const losDorp = (dag) => {
-    const schout = {};
-    return { schout, wereld: { wezens: [schout] }, kalender: { dag, snelheid: 10 } };
+    const aanvoerder = {};
+    return { aanvoerder, wereld: { wezens: [aanvoerder] }, kalender: { dag, snelheid: 10 } };
   };
   const D = losDorp(bijUur(GROEI, 3));
   berichten.length = 0;

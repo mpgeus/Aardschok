@@ -9,7 +9,7 @@ const { proefDorp } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het proefdorp (test/grond.cjs), stil en met een vaste worp: het huis van de schout, twee boerderijen met hun akker, en
+// Het proefdorp (test/grond.cjs), stil en met een vaste worp: het raadhuis, twee boerderijen met hun akker, en
 // hutten. In het lege begin bouwen de mensen zelf: wat een toets neerzet met T.plaatsGebouw is een bouwplaats.
 function dorp(dag, opties) {
   const { S, D } = proefDorp(T, opties);

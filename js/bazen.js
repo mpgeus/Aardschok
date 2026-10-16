@@ -124,7 +124,7 @@
     if (welk === 'gunst') {
       b.brief = { waarom: waaromZin(tekst), dag: dagNu(D) };
       if (T.ui && T.ui.toonBrief && !D.ander) T.ui.toonBrief(D, 'waarschuwing');
-      else T.zeg(D, T.t('The lord writes to you: "Once more, reeve."'), 'gevaar');
+      else T.zeg(D, T.t('The lord writes to you: "Once more, commander."'), 'gevaar');
     } else {
       T.zeg(D, T.t('The village grumbles. On the square they talk about you, and when you come, they fall silent. One more setback, and they will drive you out.'), 'gevaar');
     }
@@ -143,7 +143,7 @@
       return;
     }
     D.einde = { reden: 'verjaagd', dag: dagNu(D), waarom: tekst || null };
-    T.zeg(D, T.t('The village stands at your door, with torches. "Go, reeve." You go.'), 'gevaar');
+    T.zeg(D, T.t('The village stands at your door, with torches. "Go, commander." You go.'), 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   }

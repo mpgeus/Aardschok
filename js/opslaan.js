@@ -7,7 +7,7 @@
 // Wat er bewaard wordt: heel Spel.S, behalve wat alleen scherm is (T.schermVelden hieronder). Gemeten op
 // 28 sep: alles wat het spel onthoudt, zit in S, en er zit geen functie in. Wel verzamelingen (Set, Map) en
 // zo'n 140 plekken waar het ene het andere aanwijst: een bewoner zijn poppetje, zijn huis en zijn werk,
-// S.wereld het gebied in S.gebieden, S.schout een wezen in die wereld. Gewone JSON verliest dat allemaal:
+// S.wereld het gebied in S.gebieden, S.dorp.aanvoerder een wezen in die wereld. Gewone JSON verliest dat allemaal:
 // een Set wordt {}, en wat twee keer wordt aangewezen, komt terug als twee losse kopieën. Daarom schrijft
 // T.bewaarSpel alles wat vaker wordt aangewezen één keer uit, met een nummer, en daarna alleen dat nummer;
 // T.herstelSpel legt de draden terug. Zo hoeft geen regel te zeggen wat hij bewaart, en vergeet niemand iets
@@ -62,7 +62,10 @@
     // blijven wachten, een brand op je antwoord, en wachters bij de graanschuur (p.wacht) bleven er staan.
     // 15 (16 okt): ronde 3, stap 6: de wensen per huis zijn weg (g.wensen, g.missenDagen, D.behoeften.standen), en een huis
     // groeit op de afwisseling; het jaarboek telt wat het dorp miste in zinnen, niet in wensen.
-    versie: 15,
+    // 16 (16 okt): vraag 170, stap 5: de schout heet aanvoerder (D.aanvoerder, p.aanvoerder, het wezen 'aanvoerder'; S.schout
+    // is weg), het town hall heet raadhuis, wie een veld koos heet 'speler', en de reis over het land, sluipen en slapen zijn
+    // weg (S.land, S.sluipen, S.slaap).
+    versie: 16,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
@@ -88,7 +91,7 @@
     gevechtGloed: 0, // de rode rand van het beeld in een gevecht, die in- en uitfaadt (js/main.js, js/tekenen.js)
     bouwSoort: null, // het bouwmenu (js/hud.js)
     bouwMenuOpen: false,
-    naLopen: null, // wat er gebeurt als de schout er is, zoals een venster dat opengaat
+    naLopen: null, // wat er gebeurt als de aanvoerder er is, zoals een venster dat opengaat
     spreektMet: null, // een gesprek dat openstaat
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
     kijk: null, // waar de camera heen kijkt (js/main.js; vraag 170, stap 1): { x, y } in pixels van de wereld

@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 
 function nieuweS() {
-  return { schout: {}, inventaris: new Set() };
+  return { aanvoerder: {}, inventaris: new Set() };
 }
 
 test('de eerste passende regel wint; een regel zonder voorwaarde is het vangnet', () => {
@@ -63,8 +63,8 @@ function metProefGesprek() {
     knopen: {
       welkom: {
         tekst: [
-          { als: { vlag: 'geholpen' }, zeg: 'Dank je nog, schout.' },
-          { zeg: 'Goedendag, schout.' },
+          { als: { vlag: 'geholpen' }, zeg: 'Dank je nog, aanvoerder.' },
+          { zeg: 'Goedendag, aanvoerder.' },
         ],
         keuzes: [
           { zeg: 'Kan ik helpen?', naar: 'hulp', als: { nietVlag: 'geholpen' } },
@@ -84,7 +84,7 @@ test('een gesprek loopt van knoop naar knoop, en een antwoord verandert wat er d
   try {
     const S = nieuweS();
     let welkom = T.gesprekKnoop(S, S, 'proef', 'welkom');
-    assert.equal(welkom.tekst, 'Goedendag, schout.');
+    assert.equal(welkom.tekst, 'Goedendag, aanvoerder.');
     const helpen = welkom.keuzes.find((k) => k.naar === 'hulp');
     assert.ok(helpen, 'wie nog niet hielp, kan het aanbieden');
     const hulp = T.gesprekKnoop(S, S, 'proef', helpen.naar);
@@ -93,7 +93,7 @@ test('een gesprek loopt van knoop naar knoop, en een antwoord verandert wat er d
     assert.ok(T.heeftVlag(S, 'geholpen'));
     assert.ok(S.inventaris.has('pakje'));
     welkom = T.gesprekKnoop(S, S, 'proef', geven.naar);
-    assert.equal(welkom.tekst, 'Dank je nog, schout.');
+    assert.equal(welkom.tekst, 'Dank je nog, aanvoerder.');
     assert.ok(!welkom.keuzes.some((k) => k.naar === 'hulp'), 'en daarna niet meer');
   } finally {
     delete T.GESPREKKEN.proef;

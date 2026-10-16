@@ -18,7 +18,7 @@
     // klein licht bij de deur, zo ver en zo fel.
     huisStraal: 1.5,
     huisSterkte: 0.22,
-    // De lantaarn die de bode en wie meegaat dragen (js/bode.js; tot 16 okt ook de schout, vraag 125, C): buiten, vanaf
+    // De lantaarn die de bode en wie meegaat dragen (js/bode.js; tot 16 okt ook de aanvoerder, vraag 125, C): buiten, vanaf
     // zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel.
     lantaarn: { vanaf: 0.4, straal: 3, sterkte: 0.5 },
   };

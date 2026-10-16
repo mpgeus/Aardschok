@@ -64,11 +64,11 @@ test('wat hij maakte, telt per dag: zeven dagen terug, en het jaar samen', () =>
 });
 
 test('wat er gerooid wordt, is niet gemaakt: alleen wat een gebouw maakt, telt in zijn briefje', () => {
-  const { D, schout } = dorp();
-  T.opStapel(D, schout, 'hout', 2, { gerooid: true });
-  assert.equal(schout.gemaakt, undefined);
-  T.opStapel(D, schout, 'hout', 2);
-  assert.equal(T.gemaaktDoor(D, schout).hout, 2);
+  const { D, raadhuis } = dorp();
+  T.opStapel(D, raadhuis, 'hout', 2, { gerooid: true });
+  assert.equal(raadhuis.gemaakt, undefined);
+  T.opStapel(D, raadhuis, 'hout', 2);
+  assert.equal(T.gemaaktDoor(D, raadhuis).hout, 2);
 });
 
 test('wat hem tegenhoudt: geen handen, te weinig om te bewerken, weinig afwisseling', () => {
@@ -95,17 +95,17 @@ test('de boerderij: haar velden, en de oogst in het jaar', () => {
 });
 
 test('in aanbouw zegt het briefje hoe ver het is; een opslag zegt wat zijn kar doet', () => {
-  const { D, schout } = dorp();
+  const { D, raadhuis } = dorp();
   T.wijzigVoorraad(D, 'hout', 20);
   T.wijzigVoorraad(D, 'goud', 10);
   const hut = T.proefdorp.zetBijHetVuur(D, 'hut');
   const b = T.gebouwBriefje(D, hut);
   assert.ok(deel(b, 'Under construction'), JSON.stringify(b));
   assert.equal(b.delen.length, 1);
-  const s = T.gebouwBriefje(D, schout);
+  const s = T.gebouwBriefje(D, raadhuis);
   assert.equal(s.kop, 'Town hall');
   assert.match(regels(s, 'Its ox cart'), /ox cart/i);
-  assert.ok(deel(s, 'Lives here'), 'de schout woont er');
+  assert.ok(deel(s, 'Lives here'), 'de aanvoerder woont er');
 });
 
 test('een klik op een gebouw kiest het; de muis zegt hoe het ermee staat', () => {

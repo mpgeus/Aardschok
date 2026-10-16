@@ -29,7 +29,7 @@
 
   // Alle getallen in één blok (ook in de werkbank van de spelregels, js/opties.js).
   T.BOUWEN_INSTELLINGEN = {
-    // Een gebouw vraagt zijn bouwtijd keer zoveel werkdagen: een hut (bouwtijd 2) 4, het huis van de schout (4) 8.
+    // Een gebouw vraagt zijn bouwtijd keer zoveel werkdagen: een hut (bouwtijd 2) 4, het raadhuis (4) 8.
     werkPerBouwdag: 2,
     // Zoveel bouwers werken hooguit op één bouwplaats.
     perPlaats: 4,

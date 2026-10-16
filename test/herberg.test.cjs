@@ -95,13 +95,13 @@ test('in het proefdorp staat een herberg, groter dan een boerderij, en wie er we
 // Wie er 's avonds gaat
 // ---------------------------------------------------------------------------------------------
 
-test('wie er vanavond gaat: volwassenen, niet de schout, en niet meer dan er bier is', () => {
+test('wie er vanavond gaat: volwassenen, niet de aanvoerder, en niet meer dan er bier is', () => {
   const S = proef();
   metKans(1, () => {
     for (let d = HERFST; d < HERFST + 20; d++) {
       const gasten = T.herbergGasten(S.dorp, d);
       assert.ok(gasten.length > 0, `bij kans 1 gaat er iemand (dag ${d})`);
-      assert.ok(gasten.every((p) => p.leeftijd === 'volwassen' && !p.schout), 'alleen volwassenen, en de schout loop jij');
+      assert.ok(gasten.every((p) => p.leeftijd === 'volwassen' && !p.aanvoerder), 'alleen volwassenen, en de aanvoerder loop jij');
       assert.ok(gasten.every((p) => p.huis !== T.herbergVan(S.dorp)), 'wie er woont, is er al');
     }
     // Met bier voor twee gaan er twee: wie het dichtst bij woont.
@@ -133,7 +133,7 @@ test('het lot ligt vast: dezelfde avond geeft dezelfde gasten, ook als niets bew
 
 test('wie ver woont, gaat minder vaak, en in de winter gaan ze vaker', () => {
   const S = proef();
-  const wie = mensen(S).filter((p) => p.leeftijd === 'volwassen' && !p.schout && p.huis !== T.herbergVan(S.dorp));
+  const wie = mensen(S).filter((p) => p.leeftijd === 'volwassen' && !p.aanvoerder && p.huis !== T.herbergVan(S.dorp));
   const tel = (van, dagen) => {
     const n = new Map(wie.map((p) => [p, 0]));
     for (let d = van; d < van + dagen; d++) for (const p of T.herbergGasten(S.dorp, d)) n.set(p, n.get(p) + 1);

@@ -54,17 +54,17 @@ test('staatVoorGebouw beslist per tegel welke ervóór liggen en welke erachter,
 });
 
 test('T.tekenVolgorde: wie achter een huis loopt, komt ervóór; wie ervoor loopt, erna; ook in een drukke straat', () => {
-  // Twee huizen zoals in het gehucht tot 26 sep (toen het een plein kreeg): dat van de schout (x 21..26,
+  // Twee huizen zoals in het gehucht tot 26 sep (toen het een plein kreeg): dat van de aanvoerder (x 21..26,
   // y 21..28) en daarachter, aan de overkant van een steegje van één tegel, een boerderij (x 20..25,
   // y 30..37). Een krappe plek, en daarom een goede proef voor de volgorde.
-  const schout = { x: 21, y: 21, beslaat: [6, 8] };
+  const aanvoerder = { x: 21, y: 21, beslaat: [6, 8] };
   const boerderij = { x: 20, y: 30, beslaat: [6, 8] };
   const item = (v) => ({ d: T.diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: v, naam: 'huis' + v.x });
   const los = (x, y, l, naam) => ({ d: x + y, l, punt: { x, y }, naam });
   // Veel dingen door elkaar: tot 26 sep zette een vergelijking per paar hier iemand op het dak. Niets
   // staat in een huis: daar kan in het spel ook niets staan.
-  const binnen = (x, y) => [schout, boerderij].some((v) => x >= v.x && x < v.x + v.beslaat[0] && y >= v.y && y < v.y + v.beslaat[1]);
-  const lijst = [item(boerderij), item(schout)];
+  const binnen = (x, y) => [aanvoerder, boerderij].some((v) => x >= v.x && x < v.x + v.beslaat[0] && y >= v.y && y < v.y + v.beslaat[1]);
+  const lijst = [item(boerderij), item(aanvoerder)];
   for (let x = 14; x <= 34; x++) for (const y of [18, 29, 38]) lijst.push(los(x, y, 2, `wezen ${x},${y}`));
   for (let i = 0; i < 60; i++) {
     const x = 10 + (i * 7) % 30;
@@ -75,16 +75,16 @@ test('T.tekenVolgorde: wie achter een huis loopt, komt ervóór; wie ervoor loop
   const plek = (naam) => volgorde.findIndex((it) => it.naam === naam);
   // Wat op dezelfde schuine rijen staat als het huis, en het dus op het scherm kan overlappen.
   const rij = (it, v) => it.punt.x - it.punt.y >= v.x - (v.y + v.beslaat[1] - 1) && it.punt.x - it.punt.y <= v.x + v.beslaat[0] - 1 - v.y;
-  for (const v of [schout, boerderij]) {
+  for (const v of [aanvoerder, boerderij]) {
     for (const it of volgorde) {
       if (it.gebouw || !rij(it, v)) continue;
       const voor = T.staatVoorGebouw(it.punt.x, it.punt.y, v);
       assert.equal(plek(it.naam) > plek('huis' + v.x), voor, `${it.naam} ${voor ? 'na' : 'vóór'} het huis op ${v.x},${v.y}`);
     }
   }
-  assert.ok(plek('huis21') < plek('huis20'), 'het huis van de schout ligt achter de boerderij');
+  assert.ok(plek('huis21') < plek('huis20'), 'het raadhuis ligt achter de boerderij');
   assert.ok(plek('wezen 24,29') < plek('huis20'), 'wie in het steegje staat, verdwijnt achter de boerderij');
-  assert.ok(plek('wezen 24,29') > plek('huis21'), 'en staat vóór het huis van de schout');
+  assert.ok(plek('wezen 24,29') > plek('huis21'), 'en staat vóór het raadhuis');
 });
 
 test('T.tekenVolgorde: twee gebouwen gaan op hun hele voet, ook een lang gebouw met een grotere som', () => {
@@ -108,13 +108,13 @@ test('T.tekenVolgorde: twee gebouwen gaan op hun hele voet, ook een lang gebouw 
 
 // ---------------------------------------------------------------- de overgang
 
-// Een spel op de proefkaart, met de schout naast de uitgang naar het proefbos.
+// Een spel op de proefkaart, met de aanvoerder naast de uitgang naar het proefbos.
 function nieuwSpel() {
-  const S = { tijd: 0, effecten: [], wachters: [], inventaris: new Set(), bezocht: new Set(), gebieden: {} };
+  const S = { tijd: 0, effecten: [], wachters: [], inventaris: new Set(), bezocht: new Set(), gebieden: {}, dorp: {} };
   S.wereld = T.gebied(S, 'proef');
   const o = S.wereld.overgangen[0];
-  S.schout = T.maakWezen('schout', o.komt.x, o.komt.y);
-  S.wereld.wezens.push(S.schout);
+  S.dorp.aanvoerder = T.maakWezen('aanvoerder', o.komt.x, o.komt.y);
+  S.wereld.wezens.push(S.dorp.aanvoerder);
   S.modus = 'verkennen';
   return S;
 }
@@ -124,34 +124,34 @@ test('een overgang brengt je naar de andere kaart, naast de uitgang daar', () =>
   const o = S.wereld.overgangen[0];
   assert.equal(o.naar, 'proefbos');
   // erop stappen zet de overgang klaar; de spellus voert hem uit (js/main.js)
-  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
+  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proefbos');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'proefbos');
   // hij staat náást de uitgang, niet erop, en kan daar staan
   const terug = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  assert.notDeepEqual([S.schout.tx, S.schout.ty], [terug.x, terug.y]);
-  assert.equal(T.afstand({ x: S.schout.tx, y: S.schout.ty }, terug), 1);
-  assert.equal(T.isBegaanbaar(S.wereld, S.schout.tx, S.schout.ty), true);
-  assert.ok(S.wereld.wezens.includes(S.schout), 'de schout hoort nu bij het proefbos');
-  assert.ok(!T.gebied(S, 'proef').wezens.includes(S.schout), 'en niet meer bij de proefkaart');
+  assert.notDeepEqual([S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty], [terug.x, terug.y]);
+  assert.equal(T.afstand({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, terug), 1);
+  assert.equal(T.isBegaanbaar(S.wereld, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty), true);
+  assert.ok(S.wereld.wezens.includes(S.dorp.aanvoerder), 'de aanvoerder hoort nu bij het proefbos');
+  assert.ok(!T.gebied(S, 'proef').wezens.includes(S.dorp.aanvoerder), 'en niet meer bij de proefkaart');
 });
 
-test('en weer terug: dezelfde weg, de andere kant op, met dezelfde schout', () => {
+test('en weer terug: dezelfde weg, de andere kant op, met dezelfde aanvoerder', () => {
   const S = nieuwSpel();
-  S.schout.leven -= 7; // een klap onderweg
+  S.dorp.aanvoerder.leven -= 7; // een klap onderweg
   S.inventaris.add('sleutel');
   T.gaNaarGebied(S, 'proefbos');
-  const leven = S.schout.leven;
+  const leven = S.dorp.aanvoerder.leven;
   const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
+  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proef');
   T.gaNaarGebied(S, S.naarGebied);
   assert.equal(S.wereld.gebied, 'proef');
-  assert.equal(S.schout.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
+  assert.equal(S.dorp.aanvoerder.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
   assert.ok(S.inventaris.has('sleutel'), 'wat je bij je hebt, neem je mee');
   const uitgang = S.wereld.overgangen[0];
-  assert.equal(T.afstand({ x: S.schout.tx, y: S.schout.ty }, uitgang), 1);
+  assert.equal(T.afstand({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, uitgang), 1);
 });
 
 test('heen en terug kaatst niet: je landt nooit op een overgangstegel', () => {
@@ -164,11 +164,11 @@ test('heen en terug kaatst niet: je landt nooit op een overgangstegel', () => {
       T.gaNaarGebied(S, naar);
       const w = S.wereld;
       assert.equal(w.gebied, naar);
-      assert.equal(T.overgangOp(w, S.schout.tx, S.schout.ty), null, `je landt in ${naar} niet op een overgangstegel`);
-      assert.equal(T.isBegaanbaar(w, S.schout.tx, S.schout.ty, { deurenOpenen: true }), true);
+      assert.equal(T.overgangOp(w, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty), null, `je landt in ${naar} niet op een overgangstegel`);
+      assert.equal(T.isBegaanbaar(w, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty, { deurenOpenen: true }), true);
       assert.equal(S.naarGebied, null, 'er staat geen tweede overgang klaar');
       // en de spellus laten draaien verandert daar niets aan
-      T.bijAankomst(S, S.schout, { x: S.schout.tx, y: S.schout.ty });
+      T.bijAankomst(S, S.dorp.aanvoerder, { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty });
       assert.equal(S.naarGebied, null, 'stilstaan op de landingstegel vuurt niets af');
     }
   }
@@ -181,12 +181,12 @@ test('een overgang gaat pas af als je er je pas beëindigt, niet als je erlangs 
   const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
   S.netGeland = null;
   // er doorheen lopen: er staat nog een stap in het pad
-  S.schout.pad = [{ x: o.x - 1, y: o.y }];
-  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
+  S.dorp.aanvoerder.pad = [{ x: o.x - 1, y: o.y }];
+  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, null, 'erlangs lopen brengt je niet weg');
   // er je pas beëindigen: dan wel
-  S.schout.pad = [];
-  T.bijAankomst(S, S.schout, { x: o.x, y: o.y });
+  S.dorp.aanvoerder.pad = [];
+  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
   assert.equal(S.naarGebied, 'proef');
 });
 
@@ -237,7 +237,7 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
   // Marcel typt "dorp" in Tiled en tekent kaarten/dorp.tmj pas morgen. Dan hoort het spel te
   // klagen op de console, maar gewoon door te spelen: je blijft staan waar je staat.
   const S = nieuwSpel();
-  const waar = { x: S.schout.tx, y: S.schout.ty };
+  const waar = { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty };
   const wereld = S.wereld;
   const fouten = [];
   const oud = console.error;
@@ -248,14 +248,14 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
     console.error = oud;
   }
   assert.equal(S.wereld, wereld, 'je blijft in hetzelfde gebied');
-  assert.deepEqual({ x: S.schout.tx, y: S.schout.ty }, waar, 'en op dezelfde tegel');
+  assert.deepEqual({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, waar, 'en op dezelfde tegel');
   assert.equal(S.naarGebied, null, 'de overgang wordt niet elke tel opnieuw geprobeerd');
-  assert.equal(S.wereld.wezens.includes(S.schout), true, 'de schout staat nog in zijn eigen wereld');
+  assert.equal(S.wereld.wezens.includes(S.dorp.aanvoerder), true, 'de aanvoerder staat nog in zijn eigen wereld');
   assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
 });
 
 test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
-  // Achter de weg is nog niets; de speeltest telde die fout als zijn schout de weg af liep (3 okt).
+  // Achter de weg is nog niets; de speeltest telde die fout als zijn aanvoerder de weg af liep (3 okt).
   const { S } = proefDorp(T);
   const uit = S.wereld.overgangen[0];
   assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het dorp is een proefkaart met een weg naar nergens');

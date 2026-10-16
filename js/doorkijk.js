@@ -39,7 +39,7 @@
 
   // Wie je door een hoog voorwerp heen hoort te zien: 'alles' (door een boom en door een huis heen),
   // 'huis' (alleen door een huis heen) of null (dan verdwijnt hij erachter, zoals je verwacht).
-  // De schout altijd. Verder wie ertoe doet: wat meevecht, wat je net ontdekt heeft (het
+  // De aanvoerder altijd. Verder wie ertoe doet: wat meevecht, wat je net ontdekt heeft (het
   // uitroepteken), wie je aanspreekt, en de bezoekers, die voor jou komen (de heer, de marskramer, de
   // soldaten: `bezoeker` in js/mensen.js).
   // En door een huis ook iedereen op het plein, want het plein is het hart van het dorp (Marcel, 26 sep, vraag 34; een
@@ -49,7 +49,7 @@
   // en zie je hem wegvallen zonder te weten waarom.
   T.zichtbaarDoor = function (S, e) {
     if (e.binnen) return null; // wie slaapt of binnen is, zie je niet door een dak heen
-    if (e === S.schout) return 'alles';
+    if (T.isAanvoerder(S, e)) return 'alles';
     if (e.dood || !T.zieJeWezen(S, S.wereld, e)) return null; // wie in de mist loopt, zie je niet (js/mist.js)
     if (e.alarm > 0) return 'alles';
     if (e.doelwit || e.volgt) return 'alles'; // wie vecht (js/gevecht.js)

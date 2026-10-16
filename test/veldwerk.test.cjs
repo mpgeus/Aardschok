@@ -11,7 +11,7 @@ const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 // Het proefdorp (test/grond.cjs), op `dag` (0 is 1 lentemaand, zeven uur 's ochtends is 7/24 erbij). Niemand komt de
-// schout zoeken met een voorval: dat haalt een boer van zijn land, en dat hoort niet bij deze toetsen. De akkers zijn
+// aanvoerder zoeken met een voorval: dat haalt een boer van zijn land, en dat hoort niet bij deze toetsen. De akkers zijn
 // bezaaid (het proefdorp is van dag 2, wat de boeren dan nog zaaien staat in `ongezaaid`; het veldwerk loopt over de
 // tegels waar gezaaid is, T.veldwerkTegels), en de boeren hebben hun akkers (T.werkDeBoerenBij, anders pas na de eerste
 // nacht).
@@ -194,7 +194,7 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
   });
 });
 
-test('wie werkt, dwaalt niet weg; wie met de schout praat of met de militie mee moet, houdt op', () => {
+test('wie werkt, dwaalt niet weg; wie met de aanvoerder praat of met de militie mee moet, houdt op', () => {
   zonderVoorvallen(() => {
     const S = dorpOp(45 + 7 / 24); // 16 grasmaand: wieden
     const D = S.dorp;
@@ -204,7 +204,7 @@ test('wie werkt, dwaalt niet weg; wie met de schout praat of met de militie mee 
     S.spreektMet = a;
     b.moetNaar = { x: b.tx, y: b.ty, straal: 0 };
     T.werkVeldwerkBij(S, D);
-    assert.equal(a.werkt, null, 'wie met de schout praat, werkt niet');
+    assert.equal(a.werkt, null, 'wie met de aanvoerder praat, werkt niet');
     assert.equal(b.werkt, null, 'wie ergens heen moet, ook niet');
     S.spreektMet = null;
     delete b.moetNaar;

@@ -114,7 +114,7 @@
 
   // De vormen van een soort in een stijl, voor de maker (js/maker.js): per vorm de namen met de deur naar elke kant,
   // onder het dak van het gehucht, zonder "huizen/" (zoals de maker ze opzoekt). Een stenen gebouw (het huis van de
-  // schout) in de natuursteen van zijn stijl; de grote herberg, met een dak van een dorp, komt er dus niet bij.
+  // aanvoerder) in de natuursteen van zijn stijl; de grote herberg, met een dak van een dorp, komt er dus niet bij.
   T.vormenVanStijl = function (stijl, soort) {
     const lijst = (index().stijlen[stijl] || {})[soort] || [];
     const dak = gehuchtDak(stijl);

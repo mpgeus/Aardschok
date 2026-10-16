@@ -98,7 +98,7 @@ function kleineKaart(naam1, naam2) {
   });
 }
 
-test('een vast tuinstuk (het hek) houdt de schout tegen', () => {
+test('een vast tuinstuk (het hek) houdt de aanvoerder tegen', () => {
   const w = kleineKaart('hek-lat-x', 'kool');
   assert.equal(T.tegel(w, 2, 2), 'muur');
   assert.equal(T.isVast(w, 2, 2), true);
@@ -107,7 +107,7 @@ test('een vast tuinstuk (het hek) houdt de schout tegen', () => {
   assert.equal(v && v.soort, 'hek-lat-x');
 });
 
-test('een los tuinstuk (het hekje, of een bed) houdt de schout niet tegen', () => {
+test('een los tuinstuk (het hekje, of een bed) houdt de aanvoerder niet tegen', () => {
   const w = kleineKaart('hekje-tenen-x', 'kruidenbed');
   assert.equal(T.isVast(w, 2, 2), false);
   assert.equal(T.isBegaanbaar(w, 2, 2), true);

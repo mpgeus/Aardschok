@@ -1,6 +1,6 @@
 // Het beeld. Eerst alle vloeren, dan het gevechtsraster en de markeringen daarop, dan muren,
 // deuren, voorwerpen en wezens van achter naar voor, en als laatste de effecten. De muren aan
-// de voorkant van de kamer waar de schout staat, worden laag getekend: zo kijk je de kamer in,
+// de voorkant van de kamer waar de aanvoerder staat, worden laag getekend: zo kijk je de kamer in,
 // zoals bij een poppenhuis. Kamers waar je niet bent, staan gedimd; kamers waar je nooit
 // geweest bent, blijven donker.
 //
@@ -493,7 +493,7 @@
     ctx.imageSmoothingEnabled = false;
 
     const inBeeld = (id) => id === w.huidigeKamer;
-    // Opengewerkt: de kamer van de schout.
+    // Opengewerkt: de kamer van de aanvoerder.
     const open = w.kamers.filter((k) => inBeeld(k.id));
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsIn(w, zicht);
@@ -577,7 +577,7 @@
         }
       }
     }
-    // Doorkijk: wat de schout of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
+    // Doorkijk: wat de aanvoerder of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
     // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
     const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
     S.doorkijkTijd = S.tijd;
@@ -646,7 +646,7 @@
   // Het kijkgat (js/doorkijk.js) om wie achter hoge voorwerpen staat, één per wezen: na het voorste voorwerp dat hem
   // bedekt, zo ver open als het verst openstaande (v.doorkijk). Zo'n gat tekent alles erachter opnieuw, dus wat een
   // voorwerp ervoor tekende, valt er toch onder weg. Tot 13 okt tekende elk voorwerp zijn eigen gat: in een bos stonden
-  // er 20 tot 30 bomen voor de schout, elk beeld hetzelfde gat, en zonder videokaart kostte dat zo'n 16 ms per beeld
+  // er 20 tot 30 bomen voor de aanvoerder, elk beeld hetzelfde gat, en zonder videokaart kostte dat zo'n 16 ms per beeld
   // (Marcel: "Dat is prima"; alleen de zachte rand gaat iets minder open door de bomen erachter). Vult kijkgaten:
   // voorwerp → [{ e, sterkte }], in de volgorde van tekenen.
   T.voorsteKijkgaten = voorsteKijkgaten; // ook voor test/doorkijk.test.cjs
@@ -670,7 +670,7 @@
   // buffer onder alles (werkGrondBij), dus wie achter de rand van een richel staat, stond er bovenop. Een tegel die
   // afdekt (T.dektAf, js/hoogte.js) komt daarom nog een keer in de tekenlijst, op zijn eigen diepte en vóór wat er op hem
   // staat: zijn stuk van de grondbuffer, uitgeknipt op zijn vlak en zijn wanden. Alleen als er achter hem iets staat. Wie
-  // je hoort te zien (T.zichtbaarDoor, js/doorkijk.js, zoals de schout), krijgt er het kijkgat van de doorkijk bij, na de
+  // je hoort te zien (T.zichtbaarDoor, js/doorkijk.js, zoals de aanvoerder), krijgt er het kijkgat van de doorkijk bij, na de
   // voorste tegel die hem afdekt, net als achter een huis.
   const ACHTER = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]];
   function heuvelsErvoor(ctx, S, vak, lijst, g) {
@@ -941,7 +941,7 @@
   }
 
   // De nacht en de schemering (js/dag.js, T.lichtVan): een donkerblauwe laag over de wereld, lichter
-  // rond de schout. Zo zie je 's nachts wat vlak bij je is, en niet wat verder weg gebeurt (Marcel,
+  // rond de aanvoerder. Zo zie je 's nachts wat vlak bij je is, en niet wat verder weg gebeurt (Marcel,
   // 26 sep: "Omdat de camera de schout volgt, 'zie' je ook niet alles"). Rond zonsopgang en
   // zonsondergang een warme gloed. Alleen waar een kalender is (het gehucht). Spel.debug.geenNacht =
   // true zet hem uit, om te vergelijken.
@@ -1029,9 +1029,9 @@
       ctx.fillRect(0, 0, bw, bh);
     }
     if (l.donker < 0.01) return;
-    // De schout op het scherm, met dezelfde omrekening als de camera in T.tekenScene; het licht
+    // De aanvoerder op het scherm, met dezelfde omrekening als de camera in T.tekenScene; het licht
     // valt om zijn lijf, niet om zijn voeten.
-    const h = S.schout;
+    const h = S.dorp.aanvoerder;
     const p = h ? opGrond(h.x, h.y) : null;
     const sx = p ? Math.round(bw / 2) + (p.x - Math.round(S.camera.x)) * S.zoom : bw / 2;
     const sy = p ? Math.round(bh / 2) + (p.y - 20 - Math.round(S.camera.y)) * S.zoom : bh / 2;
@@ -2647,7 +2647,7 @@
   }
 
   const TEKENAARS = {
-    // Een mens: iedereen die geen eigen vlaktekening heeft (de schout, een boer, een dorpeling).
+    // Een mens: iedereen die geen eigen vlaktekening heeft (de aanvoerder, een boer, een dorpeling).
     // Het was tot 25 sep Wim, de knecht uit het oude spel, zonder zijn bezem.
     mens(ctx, cx, cy, bob) {
       T.blok(ctx, cx, cy, 0.19, 0.19, 22 + bob, '#7a5a3a'); // jas
@@ -2752,7 +2752,7 @@
 
   // Naar binnen en naar buiten (js/verkennen.js zet e.deurSinds en e.deur): in DEUR_TIJD seconden
   // stapt hij de deur in en vervaagt hij, of komt hij eruit en wordt hij weer helder. De deur zelf
-  // ligt een halve tegel achter de tegel ervoor, in de gevel. Zonder deur (de schout die gaat slapen)
+  // ligt een halve tegel achter de tegel ervoor, in de gevel. Zonder deur (de aanvoerder die gaat slapen)
   // vervaagt hij waar hij staat. Alleen voor het scherm: in de regels is hij meteen binnen.
   const DEUR_TIJD = 0.6;
   T.deurStap = deurStap; // ook voor het kijkgat (js/doorkijk.js)

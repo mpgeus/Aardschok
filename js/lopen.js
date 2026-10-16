@@ -10,7 +10,7 @@
 // - komen ze recht op elkaar af, dan schuiven ze langs elkaar (ze ruilen van tegel);
 // - loopt de ander door, dan wacht hij even;
 // - staat de ander maar wat (hij dwaalt), dan gaat die een stap opzij;
-// - is de ander bezig (hij maait, hij praat met de schout of in een praatje, het is een koe), dan loopt hij er even
+// - is de ander bezig (hij maait, hij praat met de aanvoerder of in een praatje, het is een koe), dan loopt hij er even
 //   omheen, en staat er in een smalle doorgang een praatje, dan gaat er een even opzij;
 // - en lukt dat niet, dan wacht hij, tot zijn geduld op is: dan geeft hij het op, en zoekt het later opnieuw.
 // Zijn ze allebei vrij en kennen ze elkaar, dan blijven ze soms staan voor een praatje (js/praatje.js).
@@ -60,7 +60,7 @@
   const WEGEN = new WeakMap(); // kaart → { versie, wegen: Map(sleutel → Int16Array of null) }
 
   // De weg van `van` naar `doel` over wat vaststaat, zonder de starttegel, of null als er geen is. opties: `tot` en
-  // `naast` zoals T.zoekPad (js/pad.js), `deurenOpenen` (de schout duwt een dichte deur open), `veld`: het doel is een
+  // `naast` zoals T.zoekPad (js/pad.js), `deurenOpenen` (de aanvoerder duwt een dichte deur open), `veld`: het doel is een
   // plek waar velen heen gaan (hieronder, "Naar hetzelfde doel"), en `kar`: de ossenkar, die een weg opzoekt omdat hij er
   // sneller rijdt (T.karKostOp, js/wegen.js; werklijst C, stap 5).
   T.zoekRoute = function (w, van, doel, opties) {
@@ -305,12 +305,12 @@
 
   // ── Onderweg: wie er in de weg staat ──
 
-  // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
+  // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de aanvoerder (hij gaat waar jij hem stuurt), niet wie
   // bezig is (maaien, op zijn land werken, een gesprek), geen dier, geen kar
   // (js/begin.js) en geen monster, en niet wie vecht (js/gevecht.js). Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
   // in een smalle doorgang toch even opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
-    !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
+    !b.dood && !b.binnen && !T.isAanvoerder(S, b) && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
     !b.doelwit && !b.volgt && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
@@ -320,7 +320,7 @@
     // Is de tegel zelf dicht (een deur, iets wat er sinds het zoeken kwam), of heeft hij geen doel (een stap van het
     // dwalen), dan stopt hij: wie hem stuurde, kiest opnieuw.
     if (!e.padDoel) return 'klaar';
-    if (!T.isBegaanbaar(w, volgende.x, volgende.y, { deurenOpenen: e === S.schout })) return 'klaar';
+    if (!T.isBegaanbaar(w, volgende.x, volgende.y, { deurenOpenen: T.isAanvoerder(S, e) })) return 'klaar';
     const ander = T.wezenOp(w, volgende.x, volgende.y, e);
     if (!ander) return 'verder';
     // Zijn ze allebei vrij en kennen ze elkaar, dan blijven ze staan voor een praatje (js/praatje.js; vraag 120, d).
@@ -397,7 +397,7 @@
   // mogen staan.
   function magRuilen(S, w, e, ander) {
     if (ander.dood || ander.maait || (ander.werkt && !ander.pad.length) || ander.kant === 'monster' || e.kant === 'monster') return false;
-    return T.isBegaanbaar(w, e.tx, e.ty, { deurenOpenen: ander === S.schout });
+    return T.isBegaanbaar(w, e.tx, e.ty, { deurenOpenen: T.isAanvoerder(S, ander) });
   }
   // Ze ruilen van tegel. Wilde de ander niet recht naar e's tegel maar ernaast, dan gaat hij eerst naar e's tegel en dan
   // verder: zijn volgende tegel ligt daar altijd naast (tegenOver). Stond hij maar wat, dan staat hij daarna op e's tegel.
@@ -447,7 +447,7 @@
   // zijn doel een plek met een straal of naast iemand, naar een andere vrije tegel daar. Met de anderen als muur, zoals
   // vroeger, maar alleen hier, kort (omwegTegels).
   function omweg(S, w, e) {
-    const vrij = (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
+    const vrij = (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: T.isAanvoerder(S, e), wezensBlokkeren: true, wie: e });
     const vast = (x, y) => T.isVast(w, x, y);
     const van = { x: e.tx, y: e.ty };
     const max = IN().omwegTegels;

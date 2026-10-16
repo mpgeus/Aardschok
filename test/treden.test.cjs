@@ -11,7 +11,7 @@ const { proefDorp } = require('./grond.cjs');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
-// Het proefdorp (test/grond.cjs): het huis van de schout, twee boerderijen en hutten, zoals een nieuw spel na een dag
+// Het proefdorp (test/grond.cjs): het raadhuis, twee boerderijen en hutten, zoals een nieuw spel na een dag
 // bouwen is; het dorp heeft de trede "gehucht". Stil, en met de velden die een toets van S verwacht.
 function gehucht() {
   const S = proefDorp(T).S;
@@ -58,13 +58,13 @@ test('het doel bij het begin: hoeveel dorpelingen er zijn, van de twintig', () =
   assert.equal(doel.kop, 'Towards a village');
   assert.equal(doel.klaar, false);
   const n = T.mensenVanStand(S.dorp, 'dorpelingen');
-  // Het proefdorp heeft alleen hutten en boerderijen (en het huis van de schout): niemand woont in een huis, dus nog geen dorpeling.
+  // Het proefdorp heeft alleen hutten en boerderijen (en het raadhuis): niemand woont in een huis, dus nog geen dorpeling.
   assert.equal(n, 0, 'het dorp begint met niemand in een huis');
   assert.equal(doel.tekst, `${n} of 20 villagers`);
   assert.equal(T.tredeMensenNodig(S.dorp), 20 - n);
 });
 
-test('wie telt als dorpeling: wie in een huis woont, of in een stenen huis; een hut, een boerderij en de schout niet', () => {
+test('wie telt als dorpeling: wie in een huis woont, of in een stenen huis; een hut, een boerderij en de aanvoerder niet', () => {
   const S = gehucht();
   const n = T.mensenVanStand(S.dorp, 'dorpelingen');
   const boeren = T.mensenVanStand(S.dorp, 'boeren'); // geloot per spel

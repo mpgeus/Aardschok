@@ -41,18 +41,18 @@ function vrijeTegel(D, van, dx, dy) {
 
 test('je mannen zijn de held, de soldaten en de veteranen; een dorpeling niet', () => {
   const { D, a, b } = metMilitie();
-  assert.deepEqual(T.mannenVan(D), [D.schout, a, b]);
-  assert.ok(T.isMan(D, D.schout));
-  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout).wezen;
+  assert.deepEqual(T.mannenVan(D), [D.aanvoerder, a, b]);
+  assert.ok(T.isMan(D, D.aanvoerder));
+  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder).wezen;
   assert.equal(T.isMan(D, dorpeling), false);
   assert.equal(T.manTekst(D, a), `${a.bewoner.naam} · militia`);
-  assert.equal(T.manTekst(D, D.schout), 'The reeve');
+  assert.equal(T.manTekst(D, D.aanvoerder), 'The commander');
 });
 
 test('links kiest: een man of een dorpeling geeft zichzelf, een gebouw zijn briefje, de heer zijn gesprek', () => {
   const { S, D, a, huis } = metMilitie();
   assert.equal(T.handelingVerkennen(S, { wezen: a }).kies, a);
-  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout).wezen;
+  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder).wezen;
   assert.equal(T.handelingVerkennen(S, { wezen: dorpeling }).kies, dorpeling);
   const h = T.handelingVerkennen(S, { x: huis.x, y: huis.y });
   h.doe();
@@ -173,7 +173,7 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   const dienst = meer.delen[0].regels[3];
   assert.equal(dienst.tekst, 'Watch');
   assert.deepEqual(dienst.knoppen.map((k) => [k.tekst, k.kan]), [['Day', false], ['Night', true]], 'de dagdienst hebben ze al');
-  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout && p.huis);
+  const dorpeling = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder && p.huis);
   S.gekozen = dorpeling.wezen;
   const d = T.gekozenBriefje(S).briefje;
   assert.equal(d.kop, T.overBewonerTekst(D, dorpeling.wezen).split(' · ')[0]);
@@ -256,7 +256,7 @@ function drieSoorten() {
 
 test('de rij van een man: wie slaat voor, wie steekt erachter, wie schiet een rij verder', () => {
   const { D, a, b, c } = drieSoorten();
-  assert.deepEqual([T.rijVan(a), T.rijVan(b), T.rijVan(c), T.rijVan(D.schout)], [0, 1, 2, 0]);
+  assert.deepEqual([T.rijVan(a), T.rijVan(b), T.rijVan(c), T.rijVan(D.aanvoerder)], [0, 1, 2, 0]);
 });
 
 test('een Line: rijen dwars op de looprichting, op wapen gesorteerd, en ze kijken allemaal de kant op waar ze heen liepen', () => {
@@ -364,7 +364,7 @@ test('de formatie hoort bij de mannen: de knop zet wie een post heeft meteen zo,
 
 test('de held kijkt de kant op waar hij heen liep (hij heeft geen post), tot je hem op een vijand afstuurt', () => {
   const { S, D, a } = metMilitie();
-  const held = D.schout;
+  const held = D.aanvoerder;
   const naar = vrijVeld(D, T.tegelVan(a), 8, 0);
   [held, a].forEach((e, i) => zetOp(e, naar.x - 6, naar.y + i));
   T.stuurMannen(D, T.nummersVan(D, [held, a]), naar);
@@ -459,7 +459,7 @@ test("de held heeft geen dienst: een bevel in de nacht wekt hem niet, hij gaat g
   const { S, D, huis } = metMilitie();
   zetUur(S, 2);
   const naar = vrijeTegel(D, T.deurVan(D.wereld, huis), 6, 2);
-  T.stuurMannen(D, T.nummersVan(D, [D.schout]), naar);
-  assert.equal(D.schout.wakker, undefined);
-  assert.equal(T.manBriefje(D, D.schout).delen[0].regels.some((r) => r.tekst === 'Watch'), false, 'geen Day en Night');
+  T.stuurMannen(D, T.nummersVan(D, [D.aanvoerder]), naar);
+  assert.equal(D.aanvoerder.wakker, undefined);
+  assert.equal(T.manBriefje(D, D.aanvoerder).delen[0].regels.some((r) => r.tekst === 'Watch'), false, 'geen Day en Night');
 });

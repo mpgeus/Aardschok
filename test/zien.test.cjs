@@ -1,5 +1,5 @@
 // Het licht in het dorp (js/zien.js; werklijst vraag 108, d, en 125, C): de lantaarns die 's avonds branden en de lantaarn
-// van de schout. Het zichtveld en de getuigen (wie de schout zag verstoppen, 27 sep) zijn er sinds 11 okt uit (vraag 151).
+// van de aanvoerder. Het zichtveld en de getuigen (wie de aanvoerder zag verstoppen, 27 sep) zijn er sinds 11 okt uit (vraag 151).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -45,7 +45,7 @@ test('\'s avonds branden de lantaarns; overdag en na bedtijd niet', () => {
   assert.ok(lantaarns.length >= 2, 'een bij de deur van elk gebouw dat een lantaarn krijgt (ook die van de herberg)');
   // De ramen van een huis waar iemand thuis is, branden ook (werklijst vraag 108, d); hier gaat het om de lantaarns.
   const herbergen = T.herbergenVan(S.dorp);
-  const bronnen = T.lichtBronnen(S.dorp).filter((b) => b.soort !== 'schout' && (!b.ramenVan || herbergen.includes(b.ramenVan)));
+  const bronnen = T.lichtBronnen(S.dorp).filter((b) => b.soort !== 'raadhuis' && (!b.ramenVan || herbergen.includes(b.ramenVan)));
   for (const v of lantaarns) {
     const hier = bronnen.filter((b) => T.afstand(b, v) <= 1);
     assert.equal(hier.length, 1, `de lantaarn op ${v.x},${v.y} brandt, en één keer (die van de herberg is het licht van de herberg)`);

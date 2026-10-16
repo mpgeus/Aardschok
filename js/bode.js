@@ -24,7 +24,7 @@
   'use strict';
 
   T.BODE_INSTELLINGEN = {
-    // Kan de schout een bode sturen (de spelregel "De bode")?
+    // Kan de aanvoerder een bode sturen (de spelregel "De bode")?
     aan: true,
     // Bij welke statussen (T.OORZAKEN): alleen als er iets speelt waar kopen bij helpt.
     statussen: ['honger', 'kou', 'droogte'],
@@ -44,7 +44,7 @@
     rovers: { basis: 0.06, perRover: 0.05, winter: 1.6, donker: 1.6, hooguit: 0.8, aanvallers: 2 },
     // De rovers houden hem aan op je eigen kaart, bij de uitgang (de hinderlaag, js/rovers.js; Marcel, 9 okt: "Vergeet niet
     // dat alles onze eigen kaart is. Het wordt 1 aaneengesloten stuk"): vanaf `afstand` tegels van de uitgang komen ze, en
-    // na `uren` uur, als de schout niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
+    // na `uren` uur, als de aanvoerder niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
     // rovers op de kaart), gebeurt het buiten beeld, en hoor je het als hij terug is.
     hinderlaag: { afstand: 10, uren: 1.5 },
     // De mannen van de heer: de kans is `basis` (tot 11 okt kwam er een deel van de argwaan bij). Ze nemen de
@@ -73,13 +73,13 @@
 
   const dagNu = (D) => (D.kalender ? Math.floor(D.kalender.dag) : 0);
   const inWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
-  const vanSchout = (p) => !!(p.huis && p.huis.huis === 'schout');
+  const vanAanvoerder = (p) => !!(p.huis && p.huis.huis === 'aanvoerder');
 
-  // Wie de brief kan brengen: een volwassene of jongere, geen boer (T.isBoer) en niet van het huis van de schout, die er nu is; wie geen
+  // Wie de brief kan brengen: een volwassene of jongere, geen boer (T.isBoer) en niet van het raadhuis, die er nu is; wie geen
   // werk heeft eerst.
   function wieBrengtHem(D, behalve = []) {
     if (!D.bewoners) return null;
-    const kan = D.bewoners.mensen.filter((p) => (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && !p.wie && !T.isBoer(D, p) && !vanSchout(p) && !p.weg && !p.komt && !behalve.includes(p));
+    const kan = D.bewoners.mensen.filter((p) => (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && !p.wie && !T.isBoer(D, p) && !vanAanvoerder(p) && !p.weg && !p.komt && !behalve.includes(p));
     kan.sort((a, b) => (!!a.werk - !!b.werk) || (a.id - b.id));
     return kan[0] || null;
   }
@@ -89,7 +89,7 @@
     return T.oorzakenNu(D, dag).find((o) => IN().statussen.includes(o.id)) || null;
   };
 
-  // Kan de schout nu een bode sturen? { kan, reden, status, winter, dagen, maal, loon }. `zichtbaar`: of de knop er moet
+  // Kan de aanvoerder nu een bode sturen? { kan, reden, status, winter, dagen, maal, loon }. `zichtbaar`: of de knop er moet
   // staan (er speelt een status, en er is niemand onderweg).
   T.kanBodeSturen = function (D) {
     const dag = dagNu(D);
@@ -293,7 +293,7 @@
     T.schrijfOp(D, 'bode', { tekst });
   }
 
-  // De hinderlaag op je eigen kaart (js/rovers.js, de aanval met soort 'hinderlaag'): het uur is om, en de schout kwam
+  // De hinderlaag op je eigen kaart (js/rovers.js, de aanval met soort 'hinderlaag'): het uur is om, en de aanvoerder kwam
   // niet. Hoe het afloopt, zegt het lot zoals onderweg (T.bodeOnderweg). Geeft of ze de rovers afsloegen.
   T.bodeAangehouden = function (D, rovers) {
     const B = D.bode;
@@ -312,14 +312,14 @@
     return true;
   };
 
-  // De schout versloeg de rovers van de hinderlaag (T.naGevecht, js/rovers.js): de weg is vrij. Wie in het gevecht viel,
+  // De aanvoerder versloeg de rovers van de hinderlaag (T.naGevecht, js/rovers.js): de weg is vrij. Wie in het gevecht viel,
   // is al geteld (T.sneuvelt).
   T.bodeWegVrij = function (D) {
     const B = D.bode;
     if (!B) return;
     B.onderschept = null;
     B.wie = B.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p));
-    B.aanval = ` ${T.t('At the village exit robbers stopped them, and the reeve drove them off.')}`;
+    B.aanval = ` ${T.t('At the village exit robbers stopped them, and the commander drove them off.')}`;
     if (!B.wie.length) D.bode = null;
   };
 

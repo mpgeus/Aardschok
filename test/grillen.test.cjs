@@ -122,7 +122,7 @@ test('wie niet antwoordt, ergert hem', () => {
   tik(S, g.uiterlijk);
   assert.equal(T.grilNu(D), null);
   assert.equal(T.bazenNu(D).gunst, 50 + T.GRILLEN[g.id].stil.gunst);
-  assert.ok(berichten.some((t) => /We heard nothing from you, reeve/.test(t)));
+  assert.ok(berichten.some((t) => /We heard nothing from you, commander/.test(t)));
   assert.equal(D.grillen.stil, 1);
 });
 

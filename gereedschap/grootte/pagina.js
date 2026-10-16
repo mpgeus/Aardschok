@@ -65,7 +65,7 @@
     return { wezens, voorwerpen, gebouwen };
   }
 
-  // Camera op een tegel (zoals zetCameraOpSchout in js/main.js).
+  // Camera op een tegel (zoals zetCameraOpAanvoerder in js/main.js).
   function cameraOp(x, y) {
     const p = T.naarScherm(x, y);
     S().camera = { x: p.x, y: p.y - 24 };

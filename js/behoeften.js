@@ -656,7 +656,7 @@
     const bewoond = new Set(((D.bewoners && D.bewoners.mensen) || []).map((p) => p.huis).filter(Boolean));
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!bewoond.has(g) || g.huis === 'schout') {
+      if (!bewoond.has(g) || g.huis === 'aanvoerder') {
         delete g.groeiDagen;
         delete g.wachtOpBouwstof;
         continue;
@@ -706,7 +706,7 @@
   // balk het zegt.
   T.huisToestand = function (D, g) {
     const wie = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
-    if (!g || !wie.length || g.huis === 'schout') return null;
+    if (!g || !wie.length || g.huis === 'aanvoerder') return null;
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const soort = T.GEBOUWEN[g.soort];
     const wordt = soort && soort.wordt && T.GEBOUWEN[soort.wordt];

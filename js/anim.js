@@ -58,7 +58,7 @@
   // legt iemand zo'n 45 tegels per seconde af, en tot 26 sep bleef er na elke aankomst de rest van
   // het beeld liggen, zodat snel lopen vanzelf werd afgeremd.
   function beweeg(S, w, e, dt) {
-    const hier = w === S.wereld; // alleen waar je bent, is er een schout die een deur opent, of een gevecht
+    const hier = w === S.wereld; // alleen waar je bent, is er een aanvoerder die een deur opent, of een gevecht
     let rest = dt;
     for (let veilig = 0; rest > 0 && e.pad.length && veilig < 64; veilig++) {
       const volgende = e.pad[0];

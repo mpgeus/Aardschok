@@ -33,7 +33,7 @@ const T = require('./laad.cjs').spel();
 T.ui = new Proxy({}, { get: () => () => {} });
 
 // Een dorp om te tekenen: het proefdorp (test/grond.cjs) op het eiland van `zaad` (zonder zaad eiland 5; tot ronde 2 van
-// het snoeien, stap 6, het gehucht dat er al was), met het huis van de schout, boerderijen met hun boer en hutten met
+// het snoeien, stap 6, het gehucht dat er al was), met het raadhuis, boerderijen met hun boer en hutten met
 // hun gezinnen.
 const grond = require('./grond.cjs');
 function nieuwSpel(zaad = 5, opties = {}) {
@@ -95,12 +95,12 @@ test('een figuur die er nog niet was: eerst niets, en hij laadt; wie hem draagt,
   assert.ok(!gevraagd.some((p) => p.startsWith('beelden/figuren/wolf')), 'de wolf staat niet in het dorp');
   assert.equal(T.sprites.figuur('wolf', 'staan', 'Z', 0), null);
   assert.ok(gevraagd.some((p) => p.startsWith('beelden/figuren/wolf')), 'de vraag zette het laden in gang');
-  const wolf = T.maakWezen('wolf', S.schout.x + 2, S.schout.y);
+  const wolf = T.maakWezen('wolf', S.dorp.aanvoerder.x + 2, S.dorp.aanvoerder.y);
   assert.equal(T.sprites.laadtWezen(wolf), true);
   await laadAlles();
   assert.equal(T.sprites.laadtWezen(wolf), false);
   assert.ok(T.sprites.wezen(S, wolf), 'nu staat hij er');
-  assert.equal(T.sprites.laadtWezen(S.schout), false, 'de schout stond er al');
+  assert.equal(T.sprites.laadtWezen(S.dorp.aanvoerder), false, 'de aanvoerder stond er al');
 });
 
 test('een tekening die nog niet geladen is: eerst niets, en hij laadt; daarna het plaatje', async () => {

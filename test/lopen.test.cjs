@@ -97,7 +97,7 @@ test('wie maar wat staat, gaat een stap opzij; wie bezig is, daar loopt hij omhe
     const S = { wereld: w, spreektMet: null };
     const a = mens(w, 1, 1);
     const b = mens(w, 6, 1);
-    if (bezig) S.spreektMet = b; // in gesprek met de schout: die gaat niet opzij
+    if (bezig) S.spreektMet = b; // in gesprek met de aanvoerder: die gaat niet opzij
     stuur(w, a, { x: 10, y: 1 });
     loop(S, w, 20);
     assert.ok(isEr(a, { x: 10, y: 1 }), `${bezig ? 'bezig' : 'staat'}: a op ${a.tx},${a.ty}`);
@@ -171,14 +171,14 @@ test('twintig mensen door een doorgang van één breed, van beide kanten: iedere
   assert.deepEqual(niet, []);
 });
 
-test('de schout loopt door een groepje heen: wie maar wat staat, gaat opzij', () => {
+test('de aanvoerder loopt door een groepje heen: wie maar wat staat, gaat opzij', () => {
   const w = kaart(BREED);
-  const schout = mens(w, 1, 1, { soort: 'schout', kant: 'speler', snelheid: 2 });
-  const S = { wereld: w, schout, spreektMet: null };
+  const aanvoerder = mens(w, 1, 1, { soort: 'aanvoerder', kant: 'speler', snelheid: 2 });
+  const S = { wereld: w, aanvoerder, spreektMet: null };
   const groep = [mens(w, 4, 1), mens(w, 5, 1), mens(w, 5, 2), mens(w, 7, 1)];
-  stuur(w, schout, { x: 10, y: 1 });
+  stuur(w, aanvoerder, { x: 10, y: 1 });
   loop(S, w, 15);
-  assert.ok(isEr(schout, { x: 10, y: 1 }), `de schout op ${schout.tx},${schout.ty}`);
+  assert.ok(isEr(aanvoerder, { x: 10, y: 1 }), `de aanvoerder op ${aanvoerder.tx},${aanvoerder.ty}`);
   assert.ok(groep.some((e) => e.tx !== 4 || e.ty !== 1));
 });
 

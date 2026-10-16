@@ -1,9 +1,9 @@
 // Kijken, kiezen en sturen als een god (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en
-// bouwen. Je speelt dus niet meer de schout zelf"). De camera volgt de schout niet meer (js/main.js), links kies je een
+// bouwen. Je speelt dus niet meer de schout zelf"). De camera volgt de aanvoerder niet meer (js/main.js), links kies je een
 // man, rechts stuur je hem, en een groep onthoud je onder een cijfer. Hier staan de regels zonder scherm, getoetst in
 // test/kiezen.test.cjs; het scherm (de muis, het kader, de ring onder de voeten) staat in js/main.js en js/tekenen.js.
 //
-// Je stuurt alleen je mannen (4a): de held (de schout van je dorp), de soldaten van het wachthuis en de veteranen van de
+// Je stuurt alleen je mannen (4a): de held (de aanvoerder van je dorp), de soldaten van het wachthuis en de veteranen van de
 // heervaart. Een dorpeling werkt vanzelf; een klik op hem geeft zijn briefje. Wat je kiest, is alleen scherm
 // (S.gekozen, T.schermVelden in js/opslaan.js): een gebouw (js/gebouwbriefje.js), één wezen, of een lijst van je mannen.
 //
@@ -36,15 +36,15 @@
 
   // ── Wie je kiest ──
 
-  // Is dit een van je mannen in dorp D: de held (de schout), een soldaat of een veteraan die er is en leeft?
+  // Is dit een van je mannen in dorp D: de held (de aanvoerder), een soldaat of een veteraan die er is en leeft?
   T.isMan = function (D, e) {
     if (!D || !e || e.dood) return false;
-    if (e === D.schout) return true;
+    if (e === D.aanvoerder) return true;
     const p = e.bewoner;
     return !!p && !!(p.soldaat || p.veteraan) && !p.weg && !p.komt && p.wezen === e;
   };
   // Al je mannen in D, de held eerst.
-  T.mannenVan = (D) => [D.schout, ...T.militieVan(D)].filter((e) => T.isMan(D, e));
+  T.mannenVan = (D) => [D.aanvoerder, ...T.militieVan(D)].filter((e) => T.isMan(D, e));
   // Wie van je mannen nu gekozen is (S.gekozen: één wezen of een lijst; een gebouw telt niet).
   T.gekozenMannen = function (S, D = S.dorp) {
     const g = S.gekozen;
@@ -53,14 +53,14 @@
   };
   // Van welke soort hij is, voor een dubbelklik (alle van zijn soort) en het briefje: de soort soldaat, een veteraan, of
   // de held.
-  T.soortVanMan = (D, e) => (e === D.schout ? 'held' : e.bewoner.soldaat ? e.bewoner.soldaat.soort : 'veteraan');
+  T.soortVanMan = (D, e) => (e === D.aanvoerder ? 'held' : e.bewoner.soldaat ? e.bewoner.soldaat.soort : 'veteraan');
   const soortTekst = (D, e) => {
     const s = T.soortVanMan(D, e);
-    return s === 'held' ? T.t('the reeve') : s === 'veteraan' ? T.t('veteran') : T.soortNaam(s);
+    return s === 'held' ? T.t('the commander') : s === 'veteraan' ? T.t('veteran') : T.soortNaam(s);
   };
   const naamVan = (D, e) => T.hoofdletter(T.naamVanBewoner(T.bewonerVan(D, e)));
-  // Wat er bij de muis staat: "Walter · spearman", of "The reeve".
-  T.manTekst = (D, e) => (e === D.schout ? naamVan(D, e) : `${naamVan(D, e)} · ${soortTekst(D, e)}`);
+  // Wat er bij de muis staat: "Walter · spearman", of "The commander".
+  T.manTekst = (D, e) => (e === D.aanvoerder ? naamVan(D, e) : `${naamVan(D, e)} · ${soortTekst(D, e)}`);
 
   // De nummers van de mannen, voor een opdracht (p.id van hun bewoner), en terug.
   T.nummersVan = (D, mannen) => mannen.map((e) => T.bewonerVan(D, e)).filter(Boolean).map((p) => p.id);
@@ -267,7 +267,7 @@
       e.dwaalTijd = 0;
       return true;
     }
-    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, deurenOpenen: e === D.schout });
+    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, deurenOpenen: e === D.aanvoerder });
     if (pad === null) return false;
     T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, { x: doel.x, y: doel.y, naast });
     return true;
@@ -293,7 +293,7 @@
       delete e.vanaf;
       if (formatie === 'lijn') delete e.formatie;
       else e.formatie = formatie;
-      if (e === D.schout) e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
+      if (e === D.aanvoerder) e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
       else e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y } };
       if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
     }
@@ -310,7 +310,7 @@
       else e.formatie = formatie;
     }
     if (!mannen.some((e) => e.post)) return;
-    const staan = mannen.filter((e) => e.post || e === D.schout);
+    const staan = mannen.filter((e) => e.post || e === D.aanvoerder);
     const m = midden(staan.map((e) => e.post || T.tegelVan(e)));
     T.stuurMannen(D, T.nummersVan(D, staan), { x: Math.round(m.x), y: Math.round(m.y) }, vorigeRichting(staan));
   };
@@ -335,7 +335,7 @@
       wek(D, e);
       delete e.post;
       delete e.doelwit;
-      if (e === D.schout) delete e.kijkt;
+      if (e === D.aanvoerder) delete e.kijkt;
       e.volgt = vijand;
       loop(D, e, T.tegelVan(vijand), true);
     }
@@ -374,7 +374,7 @@
   T.inDienst = (D, e) => !!e.wakker || zijnDienstNu(D, e);
   // Wie rust, staat op (de held rust nooit); wie binnen is, komt meteen naar buiten (het dwalen, js/verkennen.js).
   function wek(D, e) {
-    if (e === D.schout || T.inDienst(D, e)) return false;
+    if (e === D.aanvoerder || T.inDienst(D, e)) return false;
     e.wakker = true;
     e.dwaalTijd = 0;
     return true;
@@ -425,14 +425,14 @@
       const v = e.volgt;
       if (!v || !(v.dood || !D.wereld.wezens.includes(v))) continue;
       delete e.volgt;
-      if (e !== D.schout) e.post = { x: e.tx, y: e.ty };
+      if (e !== D.aanvoerder) e.post = { x: e.tx, y: e.ty };
     }
   };
 
   // ── Het briefje van wie je koos (js/huisbriefje.js legt het neer, zoals dat van een gebouw) ──
 
   const leven = (e, D) => {
-    const l = e === D.schout ? { leven: e.leven, max: e.maxLeven } : T.levenAlsMan(e);
+    const l = e === D.aanvoerder ? { leven: e.leven, max: e.maxLeven } : T.levenAlsMan(e);
     return T.t('{leven} of {max}', { leven: Math.max(0, Math.ceil(l.leven)), max: l.max });
   };
   // Wat hij nu doet, in een paar woorden.
@@ -484,7 +484,7 @@
     return {
       kop: naamVan(D, e),
       // De held heet al zo; van een ander zegt het zijn soort.
-      doet: T.hoofdletter(e === D.schout ? doet : doet ? `${soortTekst(D, e)} · ${doet}` : soortTekst(D, e)),
+      doet: T.hoofdletter(e === D.aanvoerder ? doet : doet ? `${soortTekst(D, e)} · ${doet}` : soortTekst(D, e)),
       delen: [{ titel: T.t('The man'), regels: knop ? [...regels, { tekst: T.t('His post'), knoppen: [knop] }] : regels }],
     };
   };

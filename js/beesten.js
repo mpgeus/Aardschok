@@ -9,7 +9,7 @@
 //   ritme    overdag rusten de wolven bij hun hol; vanaf een uur voor zonsondergang lopen ze naar de bosrand, en 's nachts
 //            erlangs, van plek naar plek; na zonsopgang terug. De herten grazen rond zonsopgang en zonsondergang op
 //            open grond aan de bosrand, en liggen de rest van de tijd op hun legerplek.
-//   schuw    komt er een mens dichtbij (de schout, een bewoner, een bezoeker), dan gaat de groep van hem weg, terug het
+//   schuw    komt er een mens dichtbij (de aanvoerder, een bewoner, een bezoeker), dan gaat de groep van hem weg, terug het
 //            bos in: de wolven sluipen weg, de herten rennen. Een wolf
 //            begint nooit zelf een gevecht; je mannen kunnen hem wel aanvallen (Marcel: "a ja"; js/gevecht.js), en dan
 //            vecht zijn roedel terug (T.wolvenVechten). Dat ze in de winter met honger toch komen, is stap 2.
@@ -38,9 +38,9 @@
 //            erheen, zodat je je soldaten op hem af kunt sturen (sinds 15 okt; tot dan kwam de herder het zeggen, het
 //            voorval "wolven", met een jacht of een hek); wie hij aanvalt, is gewond en ligt een paar dagen in
 //            bed, of is een enkele keer dood (de spelregel "Beesten": "Zonder doden" maakt het alleen gewond).
-//   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan. Een man die hij aanvalt (de schout, een
+//   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan. Een man die hij aanvalt (de aanvoerder, een
 //            soldaat), vecht met de roedel, in real time (T.wolvenVechten; js/gevecht.js). Tot 16 okt bleef de roedel
-//            aan de rand van de lantaarn van de schout.
+//            aan de rand van de lantaarn van de aanvoerder.
 //   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/statussen.js), zolang ze het laatst
 //            iets deden niet lang geleden is; en de raad zegt het.
 //
@@ -830,7 +830,7 @@
   function schrik(D, G, mens, leden) {
     const w = D.wereld;
     const dag = D.kalender.dag;
-    if (!mens.werkt || !BOSWERK.has(mens.werkt.soort) || mens === D.schout || (G.honger || 0) < IN().honger.jagenVanaf) return;
+    if (!mens.werkt || !BOSWERK.has(mens.werkt.soort) || mens === D.aanvoerder || (G.honger || 0) < IN().honger.jagenVanaf) return;
     if (lot(G.zaad, Math.floor(dag * 24), 61) >= IN().dreiging.schrikKans) return;
     const p = T.bewonerVan(D, mens);
     if (!p || T.blijftThuis(p, dag)) return;
@@ -853,7 +853,7 @@
 
   // Wat een roedel met honger zoekt: elke halve seconde kiest hij opnieuw (kiesProoi), en daartussen houdt hij wat hij
   // had, zolang dat er nog is. Geeft { e, soort, doel (waar de leider heen loopt), slaat (of hij er toeslaat) }, of null.
-  // Bij de schout met zijn lantaarn blijft hij aan de rand van het licht, en slaat hij niet toe.
+  // Bij de aanvoerder met zijn lantaarn blijft hij aan de rand van het licht, en slaat hij niet toe.
   function prooiVan(S, D, G, leider, t) {
     const w = D.wereld;
     const oud = G.prooi;
@@ -868,14 +868,14 @@
 
   // De prooi: eerst een schaap (het dichtste, waar het ook staat); anders de dichtste binnen
   // zoekStraal van de leider: wie van het dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, en
-  // geen licht om hem heen); de schout ook, sinds 16 okt zonder lantaarn. Geeft { e, soort ('schaap' of 'mens') } of null.
+  // geen licht om hem heen); de aanvoerder ook, sinds 16 okt zonder lantaarn. Geeft { e, soort ('schaap' of 'mens') } of null.
   function kiesProoi(D, leider) {
     const w = D.wereld;
     const lt = T.tegelVan(leider);
     const R = IN().dreiging.zoekStraal;
     const bronnen = T.lichtBronnen(D);
     const inLicht = (q) => bronnen.some((b) => Math.hypot(b.x - q.x, b.y - q.y) <= b.straal);
-    const mensen = w.wezens.filter((e) => (e.bewoner || e.werkAkkers || e === D.schout) && !e.binnen && !e.dood && !e.beest);
+    const mensen = w.wezens.filter((e) => (e.bewoner || e.werkAkkers || e === D.aanvoerder) && !e.binnen && !e.dood && !e.beest);
     let beste = null;
     let d = Infinity;
     const neem = (e, soort) => {
@@ -958,7 +958,7 @@
       eindAanval(D, G);
       return;
     }
-    const schout = D.schout;
+    const aanvoerder = D.aanvoerder;
     const man = D.wereld.wezens.find((m) => T.vechtVoor(D, m) && !m.binnen && T.afstand(T.tegelVan(m), plek) <= IN().hulp.man);
     if (man) {
       T.wolvenVechten(D, G, man);
@@ -967,7 +967,7 @@
     const mensen = D.wereld.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
     const helper = mensen.find((m) => T.afstand(T.tegelVan(m), plek) <= IN().dreiging.alleen);
     if (helper) {
-      const wie = helper === schout ? T.t('The reeve') : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
+      const wie = helper === aanvoerder ? T.t('The commander') : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
       eindAanval(D, G);
       G.weg = D.kalender.dag + IN().wegUren / 24;
       G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };

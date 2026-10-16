@@ -122,7 +122,7 @@
       if (!gezinnen.has(p.gezin)) gezinnen.set(p.gezin, []);
       gezinnen.get(p.gezin).push(p);
     }
-    const kan = [...gezinnen.values()].filter((l) => !l.some((p) => p.schout || p.weg || (p.hoofd && p.hoofd.schout)));
+    const kan = [...gezinnen.values()].filter((l) => !l.some((p) => p.aanvoerder || p.weg || (p.hoofd && p.hoofd.aanvoerder)));
     const werk = (l) => l.filter((p) => p.werk).length;
     kan.sort((a, b) => werk(a) - werk(b) || a[0].gezin - b[0].gezin);
     return kan[0] || null;

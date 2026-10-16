@@ -122,7 +122,7 @@ const SEIZOENEN = ['lente', 'zomer', 'herfst', 'winter'];
 function deOssenkar(goed) {
   if (!goed.length) return [];
   const uur = (dagen) => `${Math.round(dagen * 24)} u`;
-  const uit = ['## De ossenkar', '', 'Per kar (het huis van de schout of een schuur, en vanaf welke dag): hoeveel van de werktijd hij bezig was, en waarmee (rijden met lading, rijden leeg, laden en lossen); per seizoen hoeveel hij bezig was (het tweede jaar erachter); hoe lang een rit na de werktijd nog doorliep; de ritten (halen van een stapel, brengen naar een bouwplaats of werkplaats); en wat hij vervoerde, per dag en het meest per waar.', ''];
+  const uit = ['## De ossenkar', '', 'Per kar (het raadhuis of een schuur, en vanaf welke dag): hoeveel van de werktijd hij bezig was, en waarmee (rijden met lading, rijden leeg, laden en lossen); per seizoen hoeveel hij bezig was (het tweede jaar erachter); hoe lang een rit na de werktijd nog doorliep; de ritten (halen van een stapel, brengen naar een bouwplaats of werkplaats); en wat hij vervoerde, per dag en het meest per waar.', ''];
   const kop = ['speler', 'zaad', 'kar', 'bezig', 'vol / leeg / laden', 'per seizoen', 'overwerk', 'ritten (halen, brengen)', 'per dag', 'vervoerd'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {

@@ -278,7 +278,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   assert.ok(g.schandpaal);
   assert.ok(S.heer.bezoek && S.heer.bezoek.schandpaal, 'hij wacht op jouw keuze');
   const keuzes = T.schandpaalKeuzes(S);
-  assert.deepEqual(keuzes.map((k) => k.wie), ['bewoner1', 'bewoner2', 'schout']);
+  assert.deepEqual(keuzes.map((k) => k.wie), ['bewoner1', 'bewoner2', 'aanvoerder']);
   assert.equal(keuzes[0].naam, 'Alice');
   assert.match(keuzes[0].eigenschap, /farmer/);
   const r = T.zetAanDeSchandpaal(S, 'bewoner1');
@@ -309,21 +309,21 @@ test('de schandpaal kost het dorp evenveel voor elke boer, en wie geen boer is, 
   const knecht = boerOp(S, 'Walter', 5, 5);
   knecht.bewoner.hoofd = S.bewoners.mensen[1]; // hij woont bij Gerard in: niet het hoofd, dus geen boer
   knecht.bewoner.huis = S.bewoners.mensen[1].huis;
-  const boeren = T.schandpaalKeuzes(S).filter((k) => k.wie !== 'schout');
+  const boeren = T.schandpaalKeuzes(S).filter((k) => k.wie !== 'aanvoerder');
   assert.deepEqual(boeren.map((k) => k.naam), ['Alice', 'Gerard']);
   assert.ok(boeren.every((k) => k.kost === IN.schandpaalKost));
 });
 
-test('de schout mag zichzelf aanwijzen: het dorp neemt het niet kwalijk, maar de boete gaat omhoog', () => {
+test('de aanvoerder mag zichzelf aanwijzen: het dorp neemt het niet kwalijk, maar de boete gaat omhoog', () => {
   const S = metHeer();
   T.betaalHeer(S, geefDeel(S, 0.3));
   const schuldVoor = S.heer.schuld;
-  const zelf = T.schandpaalKeuzes(S).find((k) => k.wie === 'schout');
+  const zelf = T.schandpaalKeuzes(S).find((k) => k.wie === 'aanvoerder');
   assert.ok(zelf.boete > 0);
   assert.equal(zelf.kost, 0);
-  T.zetAanDeSchandpaal(S, 'schout');
+  T.zetAanDeSchandpaal(S, 'aanvoerder');
   assert.equal(S.heer.schuld, schuldVoor + zelf.boete);
-  assert.ok(T.heeftVlag(S, 'schoutAanDeSchandpaal'));
+  assert.ok(T.heeftVlag(S, 'aanvoerderAanDeSchandpaal'));
   assert.ok(!T.heerOntevredenheid(S, SINT_MAARTEN).waarom.includes('the pillory'));
 });
 
@@ -331,7 +331,7 @@ test('twee keer achter elkaar veel te weinig, en je bent je ambt kwijt', () => {
   const S = metHeer();
   const eerste = T.betaalHeer(S, geefDeel(S, 0.3));
   assert.ok(!eerste.ambtKwijt);
-  T.zetAanDeSchandpaal(S, 'schout');
+  T.zetAanDeSchandpaal(S, 'aanvoerder');
   assert.equal(S.heer.veelTeWeinig, 1);
   S.kalender.dag = dagVan('slachtmaand', 11, 1);
   T.heerKomt(S, S.kalender.dag);
@@ -342,7 +342,7 @@ test('twee keer achter elkaar veel te weinig, en je bent je ambt kwijt', () => {
   // Een jaar ertussen dat wel goed ging, telt opnieuw.
   const S2 = metHeer();
   T.betaalHeer(S2, geefDeel(S2, 0.3));
-  T.zetAanDeSchandpaal(S2, 'schout');
+  T.zetAanDeSchandpaal(S2, 'aanvoerder');
   S2.kalender.dag = dagVan('slachtmaand', 11, 1);
   T.heerKomt(S2, S2.kalender.dag);
   T.betaalHeer(S2, geefDeel(S2, 1));
@@ -378,9 +378,7 @@ test('op Sint-Maarten komt hij zelf, en wacht hij op je terwijl de tijd op 1× d
   const S = gehucht();
   S.kalender.snelheid = 30;
   S.kalender.dag = SINT_MAARTEN;
-  // Je eigen dorp, en je bent er (js/dorp.js): dan zie je hem op 1× komen.
-  S.schout = T.maakWezen('schout', 20, 20);
-  S.wereld.wezens.push(S.schout);
+  // Je eigen dorp (js/dorp.js): dan zie je hem op 1× komen.
   T.tikHeerDag(S, SINT_MAARTEN);
   assert.ok(T.heerWacht(S));
   assert.ok(T.heeftVlag(S, 'heerOpBezoek'));
@@ -424,7 +422,7 @@ test('komt hij zelf halen en moet er iemand aan de schandpaal, dan wijst hij zel
   T.tikHeerDag(S, SINT_MAARTEN + IN.wachtDagen); // niets in de voorraad
   assert.ok(T.heerOntevredenheid(S, S.kalender.dag).waarom.includes('the pillory'), 'een boer staat aan de paal');
   assert.equal(S.heer.wrok.length, 1);
-  assert.notEqual(S.heer.wrok[0].wie, 'schout');
+  assert.notEqual(S.heer.wrok[0].wie, 'aanvoerder');
   assert.equal(S.heer.bezoek, null);
 });
 
@@ -558,7 +556,7 @@ test('de schandpaal komt er de eerste keer, blijft staan, en wie gestraft wordt,
 test('wie zichzelf aan de schandpaal zet, zet hem er ook neer', () => {
   const S = metHeer();
   T.betaalHeer(S, geefDeel(S, 0.3));
-  T.zetAanDeSchandpaal(S, 'schout');
+  T.zetAanDeSchandpaal(S, 'aanvoerder');
   assert.deepEqual(S.heer.paal, { x: 7, y: 5 });
 });
 
@@ -749,12 +747,12 @@ test('steeds zwaarder: niet hoeveel telt, maar hoe vaak achter elkaar, tot je am
   });
 });
 
-test('mag de schout zichzelf niet aanwijzen, dan staat hij niet in het lijstje', () => {
-  metHeerInstelling({ schoutMagZelf: false }, () => {
+test('mag de aanvoerder zichzelf niet aanwijzen, dan staat hij niet in het lijstje', () => {
+  metHeerInstelling({ aanvoerderMagZelf: false }, () => {
     const S = metHeer();
     boerOp(S, 'Alice', 3, 3);
     T.betaalHeer(S, geefDeel(S, 0.3));
     assert.deepEqual(T.schandpaalKeuzes(S).map((k) => k.wie), ['bewoner1']);
-    assert.equal(T.zetAanDeSchandpaal(S, 'schout').kan, false);
+    assert.equal(T.zetAanDeSchandpaal(S, 'aanvoerder').kan, false);
   });
 });

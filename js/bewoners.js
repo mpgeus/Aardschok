@@ -5,7 +5,7 @@
 // Het getal in de balk (S.bevolking) blijft de waarheid: eten, groei, de winter en het hoofdgeld
 // rekenen ermee, en het verandert alleen via T.wijzigBevolking (js/gebouwen.js). De bewoners zijn wie
 // het zijn: één per mond, elk met een naam, een leeftijd, een huis en een poppetje. Wat hier staat:
-//   - wie er bij een nieuw spel woont (T.zetBeginBewoners): op elke boerderij een gezin van drie, bij de schout zijn vrouw en drie kinderen (Marcel koos het,
+//   - wie er bij een nieuw spel woont (T.zetBeginBewoners): op elke boerderij een gezin van drie, bij de aanvoerder zijn vrouw en drie kinderen (Marcel koos het,
 //     26 sep, vraag 27), en in een gewoon huis wie de kaart zegt: een oud stel, of een jong gezin
 //     (Marcel koos het, 26 sep, vraag 31);
 //   - wie erbij komt of weggaat als het getal verandert (T.bewonersVolgen, vanuit T.wijzigBevolking):
@@ -19,7 +19,7 @@
 //     hij vrij is. Wannéér hij waar is, zegt de dag: T.dagAnker in js/dag.js, voor iedereen;
 //   - wie het is, bij de muis (T.overBewonerTekst).
 //
-// De schout en de vijf boeren stonden er al (de kaart zet ze neer): zij zijn ook bewoners, en hun
+// De aanvoerder en de vijf boeren stonden er al (de kaart zet ze neer): zij zijn ook bewoners, en hun
 // poppetje is het wezen dat er al was. Voor de rest maakt dit bestand een poppetje.
 (function (T) {
   'use strict';
@@ -74,11 +74,11 @@
   };
 
   // Wie er in een gezin woont naast het hoofd, als [band, leeftijd, geslacht]; de band is wat hij van
-  // het hoofd is ("zoon van Klaas"). Het hoofd is de schout, of bij een nieuw gezin een man. (Tot ronde 2 van het snoeien,
+  // het hoofd is ("zoon van Klaas"). Het hoofd is de aanvoerder, of bij een nieuw gezin een man. (Tot ronde 2 van het snoeien,
   // stap 6, woonden er ook boerengezinnen, een oud stel en een jong gezin die de kaart in een huis zette: het dorp dat er
   // al was.)
-  // Het gezin van de schout: zijn vrouw en drie kinderen (Marcel, 26 sep, vraag 27).
-  const SCHOUTSGEZIN = [['vrouw', 'volwassen', 'vrouw'], ['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man']];
+  // Het gezin van de aanvoerder: zijn vrouw en drie kinderen (Marcel, 26 sep, vraag 27).
+  const AANVOERDERSGEZIN = [['vrouw', 'volwassen', 'vrouw'], ['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man']];
   // Een nieuw gezin (js/gebouwen.js, T.GEBOUWEN_INSTELLINGEN.gezinGrootte): een man, een vrouw, en de
   // rest kinderen, geloot uit deze.
   const NIEUWE_KINDEREN = [['zoon', 'kind', 'man'], ['dochter', 'kind', 'vrouw'], ['zoon', 'kleuter', 'man'], ['dochter', 'kleuter', 'vrouw']];
@@ -97,29 +97,29 @@
   //     plek: { put, werk, vrij,   // waar hij heen gaat (zetPlekken hieronder); T.dagAnker kiest
   //             heen },            // en hoeveel uur hij onderweg is naar zijn werk (T.werkUrenVan)
   //     komt: true,                // hij is nieuw en nog niet bij zijn huis (T.werkBewonersBij)
-  //     schout: true,              // alleen de schout zelf
+  //     aanvoerder: true,              // alleen de aanvoerder zelf
   //     weg: { waarom: 'heervaart' },  // hij is een tijd weg (T.stuurWeg): hij telt mee, maar werkt nergens
   //     veteraan: true,            // hij kwam terug van de heervaart, en vecht mee als er rovers komen
   //     soldaat: { wapen, wachthuis } } // hij is soldaat (js/soldaten.js): hij werkt nergens, en staat overdag bij het wachthuis
   // Wie wegtrekt, staat niet meer in S.bewoners.mensen; zijn poppetje loopt nog tot de uitgang
   // (e.vertrekt, S.bewoners.vertrekken).
 
-  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout". Ook
+  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de aanvoerder "the commander". Ook
   // voor de herberg (js/herberg.js).
-  const naamVan = (p) => (p.schout ? T.t('the reeve') : p.naam);
+  const naamVan = (p) => (p.aanvoerder ? T.t('the commander') : p.naam);
   T.naamVanBewoner = naamVan;
-  // Hoort hij bij het gezin van de schout?
-  const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
-  T.vanSchout = vanSchout;
-  // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
-  // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
+  // Hoort hij bij het gezin van de aanvoerder?
+  const vanAanvoerder = (p) => !!(p.aanvoerder || (p.hoofd && p.hoofd.aanvoerder));
+  T.vanAanvoerder = vanAanvoerder;
+  // Kan hij werken? Iedereen, behalve de aanvoerder zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
+  // js/heervaart.js). Het gezin van de aanvoerder werkt alleen als er niemand anders meer is (T.wijsWerkToe).
   // Wie rooit wat er staat waar zijn huis groter wordt, werkt nog nergens (js/bos.js; vraag 130).
   // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders. En een
   // soldaat werkt nergens (p.soldaat, js/soldaten.js; vraag 159: "een soldaat is voltijds").
-  const kanWerken = (p) => !p.schout && !p.weg && !p.soldaat && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  const kanWerken = (p) => !p.aanvoerder && !p.weg && !p.soldaat && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
   T.kanWerken = kanWerken;
 
-  // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout heeft zijn wezen al van de
+  // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de aanvoerder heeft zijn wezen al van de
   // kaart, en die zoeken we op.
   T.bewonerVan = function (D, e) {
     if (!e) return null;
@@ -198,7 +198,7 @@
 
   // Het plein, als één plek: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
   // (kaarten/<naam>.betekenis.json, "marskramer"; in het gehucht op het zand voor de deur van de
-  // schout).
+  // aanvoerder).
   T.pleinVan = function (w) {
     const b = w && w.marskramer;
     return b ? { x: b.x, y: b.y } : null;
@@ -248,11 +248,11 @@
 
   // Waar iemand is als hij vrij is, overdag: een kind of een jongere speelt op het plein, en daar hangt
   // ook rond wie volwassen is en geen werk heeft (zo zie je dat er een werkplaats bij moet). Een oude
-  // en een kleuter blijven bij huis, en de vrouw van de schout doet zijn huishouden.
+  // en een kleuter blijven bij huis, en de vrouw van de aanvoerder doet zijn huishouden.
   function vrijePlekVan(D, w, p, deur) {
     const bijHuis = { x: deur.x, y: deur.y, straal: IN().straalBijHuis };
     if (p.leeftijd === 'oud' || p.leeftijd === 'kleuter') return bijHuis;
-    if (p.leeftijd === 'volwassen' && vanSchout(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
+    if (p.leeftijd === 'volwassen' && vanAanvoerder(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
     const plein = T.plekOpHetPlein(w, p.id) || T.pleinVan(w);
     const t = plein && tegelBij(w, plein);
     return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
@@ -294,7 +294,7 @@
   // (zijn werk kan veranderd zijn). T.dagAnker (js/dag.js) kiest er per deel van de dag een uit.
   function zetPlekken(D, p) {
     const w = D.bewoners && D.bewoners.wereld;
-    if (!w || p.schout) return;
+    if (!w || p.aanvoerder) return;
     const deur = T.deurVanBewoner(D, p);
     p.plek = { put: putBij(D, w, deur), werk: werkplekVan(D, w, p), vrij: vrijePlekVan(D, w, p, deur) };
     p.plek.heen = looptijd(w, p, deur);
@@ -444,7 +444,7 @@
   T.plaatsInHuis = (D, g) => T.woonruimteVan(D, g) - inHetHuis(D, g);
 
   // Het poppetje van een bewoner, bij zijn deur, of waar hij het gehucht in komt (`bij`: de weg); wie
-  // er al staat, schuift een tegel op. De schout en de boeren hebben er al een.
+  // er al staat, schuift een tegel op. De aanvoerder en de boeren hebben er al een.
   function maakPoppetje(D, p, bij) {
     const w = D.bewoners.wereld;
     if (p.wezen || !w) return p.wezen;
@@ -527,7 +527,7 @@
     return gezinnen.flat();
   }
 
-  // Wie het eerst gaat als er `n` minder zijn. Nooit de schout, zijn gezin of een boer zelf (T.isBoer, js/boerderij.js:
+  // Wie het eerst gaat als er `n` minder zijn. Nooit de aanvoerder, zijn gezin of een boer zelf (T.isBoer, js/boerderij.js:
   // zonder hem ligt zijn boerderij stil). Wie sterft (de winter, de
   // honger): de ouden eerst, dan de kleinsten. Wie wegtrekt: eerst een heel gezin dat later kwam (het
   // laatste het eerst), en dan de jongeren van de boerderijen; een man of vrouw laat zijn gezin het
@@ -538,7 +538,7 @@
   // achteruitgaan per huis, werklijst vraag 85, c).
   T.wieGaatEerst = (D, reden) => wieGaat(D, reden);
   function wieGaat(D, reden) {
-    const kan = D.bewoners.mensen.filter((p) => !T.isBoer(D, p) && !vanSchout(p) && !p.weg);
+    const kan = D.bewoners.mensen.filter((p) => !T.isBoer(D, p) && !vanAanvoerder(p) && !p.weg);
     if (reden === 'vertrek') {
       const later = (p) => !T.isBoer(D, p.hoofd || p); // een gezin dat later kwam: zijn hoofd is geen boer
       const partner = (p) => p.band === 'vrouw' || p.band === 'man';
@@ -677,13 +677,13 @@
   // ---------------------------------------------------------------------------------------------
 
   // Wie weerbaar is: mannen, jong of volwassen, die hier zijn: wie te hulp schiet tegen de wolven, in de militie gaat, op
-  // jacht of mee met de bode. Nooit de schout of zijn gezin; een boer wel (alleen naar de heervaart gaat hij niet, js/heervaart.js), en niet wie nog onderweg hierheen is of al weg is. Wie geen
+  // jacht of mee met de bode. Nooit de aanvoerder of zijn gezin; een boer wel (alleen naar de heervaart gaat hij niet, js/heervaart.js), en niet wie nog onderweg hierheen is of al weg is. Wie geen
   // werk heeft, het eerst; dan de volwassenen, en de jongens pas als er niet genoeg mannen zijn.
   const WEERBAAR = { volwassen: 0, jong: 1 };
   T.weerbareMannen = function (D) {
     if (!D.bewoners) return [];
     return D.bewoners.mensen
-      .filter((p) => p.geslacht === 'man' && WEERBAAR[p.leeftijd] != null && !vanSchout(p) && !p.komt && !p.weg)
+      .filter((p) => p.geslacht === 'man' && WEERBAAR[p.leeftijd] != null && !vanAanvoerder(p) && !p.komt && !p.weg)
       .sort((a, b) => (!!a.werk - !!b.werk) || (WEERBAAR[a.leeftijd] - WEERBAAR[b.leeftijd]) || (a.id - b.id));
   };
 
@@ -743,12 +743,12 @@
     // komen: wie onderweg is hierheen, per gezin; vertrekken: de poppetjes van wie wegtrekt.
     D.bewoners = { wereld: w, mensen: [], volgende: 1, gezinnen: 1, zaad, worpen: 0, komen: [], vertrekken: [] };
     const r = worp(D);
-    // De schout en zijn gezin, in zijn huis: in het lege begin zijn tent in het kamp (js/begin.js).
+    // De aanvoerder en zijn gezin, in zijn huis: in het lege begin zijn tent in het kamp (js/begin.js).
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !(soort && (soort.woonruimte > 0 || soort.tijdelijk)) || g.huis !== 'schout' || !D.schout) continue;
-      const schout = nieuweBewoner(D, { schout: true, geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: g, wezen: D.schout });
-      zetGezin(D, schout, SCHOUTSGEZIN, r);
+      if (!g.klaar || !(soort && (soort.woonruimte > 0 || soort.tijdelijk)) || g.huis !== 'aanvoerder' || !D.aanvoerder) continue;
+      const aanvoerder = nieuweBewoner(D, { aanvoerder: true, geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: g, wezen: D.aanvoerder });
+      zetGezin(D, aanvoerder, AANVOERDERSGEZIN, r);
     }
     // Het lege begin (vraag 152, js/begin.js): in elke tent van het kamp een gezin dat met de kar meekwam, en het getal is
     // zoveel als er zijn. Ze komen over de weg, achter de kar aan (T.werkBeginBij), dus nog zonder poppetje.
@@ -820,7 +820,7 @@
   T.daklozeGezinnen = function (D) {
     const per = new Map();
     for (const p of (D.bewoners && D.bewoners.mensen) || []) {
-      if (p.huis || p.schout || p.weg) continue;
+      if (p.huis || p.aanvoerder || p.weg) continue;
       if (!per.has(p.gezin)) per.set(p.gezin, []);
       per.get(p.gezin).push(p);
     }
@@ -876,12 +876,12 @@
 
   // Hoe goed iemand past op een plek bij gebouw g: hoe lager, hoe liever. Naar leeftijd
   // (T.LEEFTIJDEN: eerst de volwassenen) en wie het dichtstbij woont; wie de werkplaats het liefst heeft
-  // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de schout het laatst.
+  // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de aanvoerder het laatst.
   function voorkeur(D, p, g, deur) {
     let s = T.LEEFTIJDEN[p.leeftijd].werkt * 100 + T.afstand(p.huis ? deur(p.huis) : T.deurVanBewoner(D, p), deur(g));
     const soort = T.GEBOUWEN[g.soort];
     if (soort && soort.liefst === p.leeftijd) s -= 500;
-    if (vanSchout(p)) s += 10000;
+    if (vanAanvoerder(p)) s += 10000;
     return s;
   }
 
@@ -966,7 +966,7 @@
 
   function werkTekst(D, p) {
     const g = p.werk;
-    if (!g) return p.leeftijd === 'volwassen' && !vanSchout(p) ? T.t('no work') : '';
+    if (!g) return p.leeftijd === 'volwassen' && !vanAanvoerder(p) ? T.t('no work') : '';
     if (g === p.huis) return ''; // wie op zijn eigen boerderij werkt: dat spreekt vanzelf
     if (g.soort === 'schaapskooi') return T.t('shepherd');
     if (g.soort === 'boerderij') {
@@ -976,10 +976,10 @@
     return T.t('works at the {gebouw}', { gebouw: T.GEBOUWEN[g.soort] ? T.GEBOUWEN[g.soort].naam : g.soort });
   }
 
-  // "Gerard, son of Nicholas · shepherd", "Hilje, wife of the reeve", "Albert · no work",
+  // "Gerard, son of Nicholas · shepherd", "Hilje, wife of the commander", "Albert · no work",
   // "Albert · leaving". Zonder poppetje (hij is nog onderweg hierheen) met de bewoner zelf als `p`.
   T.overBewonerTekst = function (D, e, p = T.bewonerVan(D, e)) {
-    if (!p || p.schout) return '';
+    if (!p || p.aanvoerder) return '';
     let wie = naamVan(p);
     if (p.hoofd) wie = T.t('{naam}, {band} of {van}', { naam: wie, band: BAND[p.band], van: naamVan(p.hoofd) });
     const werk = e && e.vertrekt ? T.t('leaving')

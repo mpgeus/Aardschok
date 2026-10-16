@@ -30,7 +30,7 @@
     const I = T.BEGIN_INSTELLINGEN;
     return {
       wanneer: vandaag(S),
-      aan: T.t('To Our new reeve,'),
+      aan: T.t('To Our new commander,'),
       tekst:
         `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
         `<p>${T.t('The cart carries what We could spare: some logs, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
@@ -67,9 +67,9 @@
     // In het lege begin (vraag 152, js/begin.js) een andere: hij stuurt je met de gezinnen naar zijn wildernis.
     benoeming: (S) => (S.dorp.begin ? benoemingInDeWildernis(S) : {
       wanneer: vandaag(S),
-      aan: T.t('To Our new reeve,'),
+      aan: T.t('To Our new commander,'),
       tekst:
-        `<p>${T.t('It has pleased Us to appoint you reeve of {dorp}. Your predecessor could not count, or counted too well; We no longer quite remember which. He is elsewhere now.', { dorp: onsGehucht(S) })}</p>` +
+        `<p>${T.t('It has pleased Us to appoint you commander of {dorp}. Your predecessor could not count, or counted too well; We no longer quite remember which. He is elsewhere now.', { dorp: onsGehucht(S) })}</p>` +
         `<p>${T.t('At Martinmas We shall come in person to collect what is Ours. What that is, We shall see for Ourselves.')}</p>` +
         `<p>${T.t('We trust you completely. We shall count it again all the same.')}</p>` +
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
@@ -82,7 +82,7 @@
     // In wijnmaand van het eerste jaar van het lege begin (T.heerLaatMetRust, js/begin.js): geen schatting, hij spaart je.
     gespaard: (S) => ({
       wanneer: vandaag(S),
-      aan: T.t('To Our reeve,'),
+      aan: T.t('To Our commander,'),
       tekst:
         `<p>${T.t('Martinmas is coming, and We have decided to spare you this year. Do not thank Us.')}</p>` +
         `<p>${T.t('Next year We shall count all the more carefully.')}</p>`,
@@ -99,7 +99,7 @@
       const nu = T.opsomming(brief.eis.volgorde.map((wat) => T.hoeveel(hebNu(S, wat), wat))) || T.t('nothing');
       return {
         wanneer: T.datumVanDag(brief.dag).tekst,
-        aan: T.t('To Our faithful reeve,'),
+        aan: T.t('To Our faithful commander,'),
         tekst:
           `<p>${T.t('It has come to Our ears that you are doing well. That pleases Us greatly, for We too like to do well. At Martinmas We shall come in person to collect what is Ours. From what We see now, that is:')}</p>` +
           `<ul class="brief-lijst">${regels || `<li>${T.t('nothing. That cannot be right.')}</li>`}</ul>${samen}` +
@@ -120,7 +120,7 @@
       const telwoord = T.telwoord(v.mannen);
       return {
         wanneer: T.datumVanDag(v.dag).tekst,
-        aan: T.t('To Our reeve,'),
+        aan: T.t('To Our commander,'),
         tekst:
           `<p>${T.t('We go to war {oorlog}.', { oorlog: veilig(v.oorlog) })}</p>` +
           `<p>${T.t('Send Us {n|one able-bodied man|{telwoord} able-bodied men}. You shall have them back after the harvest, on {datum}. Most of them.', { n: v.mannen, telwoord, datum: datumZonderJaar(T.HEERVAART_INSTELLINGEN.terug) })}</p>` +
@@ -138,7 +138,7 @@
     // (vraag 60, A).
     dorp: (S) => ({
       wanneer: vandaag(S),
-      aan: T.t('To Our reeve,'),
+      aan: T.t('To Our commander,'),
       tekst:
         `<p>${T.t('We hear that {dorp} has become a village. Congratulations. From now on that will cost you more.', { dorp: onsGehucht(S) })}</p>` +
         (T.HEERVAART_INSTELLINGEN.aan ? `<p>${T.t('When We go to war, you shall henceforth send Us men as well. It is an honour. For them.')}</p>` : ''),
@@ -159,7 +159,7 @@
       }));
       return {
         wanneer: T.datumVanDag(g.dag).tekst,
-        aan: T.t('To Our reeve,'),
+        aan: T.t('To Our commander,'),
         tekst: g.tekst.map((p) => `<p>${veilig(p)}</p>`).join(''),
         knoppen,
         voet: `<p class="venster-voet">${T.t('If you have not answered before {datum}, he will hold it against you. <kbd>Esc</kbd> closes it; the letter on the table opens it again.', { datum: T.datumVanDag(g.uiterlijk).tekst })}</p>`,
@@ -172,10 +172,10 @@
       const w = S.dorp.bazen && S.dorp.bazen.brief;
       return {
         wanneer: w ? T.datumVanDag(w.dag).tekst : vandaag(S),
-        aan: T.t('To Our reeve,'),
+        aan: T.t('To Our commander,'),
         tekst:
           `<p>${veilig((w && w.waarom) || T.t('We are not pleased with you.'))}</p>` +
-          `<p>${T.t('Once more, reeve. We have a nephew who would like to be reeve too. He cannot count, but evidently neither can you.')}</p>`,
+          `<p>${T.t('Once more, commander. We have a nephew who would like to be commander too. He cannot count, but evidently neither can you.')}</p>`,
         staat: `<p class="venster-staat">${T.t("The lord's favour is {n}. At 0 you lose your office.", { n: Math.round(S.dorp.bazen ? S.dorp.bazen.gunst : 0) })}</p>`,
         knoppen: [{ actie: 'sluit', tekst: T.t('Understood'), hoofd: true }],
       };
@@ -185,7 +185,7 @@
     // dorp voorlopig alleen woorden.
     marktrecht: (S) => ({
       wanneer: vandaag(S),
-      aan: T.t('To Our reeve,'),
+      aan: T.t('To Our commander,'),
       tekst: `<p>${T.t('We hear that there is trade in {dorp}. We grant you a market charter. From now on that will cost you more.', { dorp: onsDorp(S) })}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
@@ -220,7 +220,7 @@
         wanneer: vandaag(S),
         aan: T.t('To the merchant, wherever he may be,'),
         tekst: `<p>${veilig(k.status ? k.status.zin : '')} ${T.t('Come to {dorp}, and bring:', { dorp: veilig(T.dorpsnaam(D) || T.t('our village')) })}</p>${rijen.join('')}${mee}${gevaar}`,
-        groet: T.t('Your reeve'),
+        groet: T.t('Your commander'),
         staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} ${T.t('The messenger gets {zilver} silver from the chest.', { zilver: Math.round(B.loon * 10) })}`}</p>`,
         knoppen: [
           { actie: 'bode', tekst: T.t('Give the messenger the letter'), hoofd: true, kan: k.kan },
@@ -237,7 +237,7 @@
       return {
         titel: T.t('The year in brief'),
         wanneer: T.datumVanDag(J.dag).tekst,
-        aan: T.t('Master reeve,'),
+        aan: T.t('Master commander,'),
         tekst: J.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
         groet: T.t('Entered in the yearbook'),
         knoppen: [{ actie: 'sluit', tekst: T.t('A new year'), hoofd: true }],

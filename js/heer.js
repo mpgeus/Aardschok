@@ -49,8 +49,8 @@
     // 'hoeVaak' (niet hoeveel, maar hoeveel jaar achter elkaar je tekortschoot: de eerste keer een
     // boete, de tweede ook soldaten, de derde ook de schandpaal, en na ambtKwijtNa keer je ambt).
     telWijze: 'hoeveel',
-    // Mag de schout zichzelf aan de schandpaal zetten?
-    schoutMagZelf: true,
+    // Mag de aanvoerder zichzelf aan de schandpaal zetten?
+    aanvoerderMagZelf: true,
     // Hij telt slecht (Marcel, 24 sep): wie in waarde minstens zoveel geeft, merkt hij niet.
     // Daaronder van licht naar zwaar; elke straf neemt de lichtere mee.
     straffen: [
@@ -63,7 +63,7 @@
     veelTeWeinig: 0.5,
     ambtKwijtNa: 2,
     // De boete: wat je tekortkwam (in goud, naar zijn waarde) komt volgend jaar terug, met dit deel
-    // erbij. Zet de schout zichzelf aan de schandpaal, dan lacht de heer, en wordt het deel groter.
+    // erbij. Zet de aanvoerder zichzelf aan de schandpaal, dan lacht de heer, en wordt het deel groter.
     boete: 0.5,
     boeteZelf: 1.5,
     // De soldaten: zoveel, ze eten elk voor zoveel mensen, en zolang ze er zijn is het dorp zoveel
@@ -78,7 +78,7 @@
     schandpaalDagen: 3,
     schandpaalKost: 0.15,
     wrokDagen: 120,
-    // Komt de schout niet naar hem toe, dan neemt hij het na zoveel dagen zelf. Die dagen tellen
+    // Komt de aanvoerder niet naar hem toe, dan neemt hij het na zoveel dagen zelf. Die dagen tellen
     // pas als hij op het plein staat en de tijd weer loopt: bij zijn komst staat hij stil.
     wachtDagen: 3,
     // Wat iets voor hem waard is, in goud per stuk. Wat de marskramer koopt, is waard wat die er
@@ -96,7 +96,7 @@
     return {
       schuld: 0, // goud dat hij er volgend jaar bij vraagt: een tekort, met de boete
       veelTeWeinig: 0, // hoe vaak achter elkaar je hem veel te weinig gaf
-      tekort: 0, // het tekort van het laatste Sint-Maarten, in goud (voor de boete van de schout)
+      tekort: 0, // het tekort van het laatste Sint-Maarten, in goud (voor de boete van de aanvoerder)
       tekortJaren: 0, // hoeveel jaar achter elkaar je hem iets tekortdeed (telWijze 'hoeVaak')
       brief: null, // { dag, eis }: zijn brief van dit jaar, tot hij geweest is
       bezoek: null, // zijn bezoek op Sint-Maarten, zie T.heerKomt
@@ -214,7 +214,7 @@
     return !!(b && !b.betaald && !b.weg && !D.einde);
   };
 
-  // Wat gebeurt er als de schout hem dit geeft? `geef` is { graan: 80, goud: 12, … }. Het antwoord
+  // Wat gebeurt er als de aanvoerder hem dit geeft? `geef` is { graan: 80, goud: 12, … }. Het antwoord
   // is waar het venster en de knop allebei op lezen (CLAUDE.md, "Scherm en klik stellen dezelfde
   // vraag"): wat hij echt neemt, welk deel dat is in waarde, welke straf erbij hoort, en in één
   // zin wat dat betekent.
@@ -318,9 +318,9 @@
 
   // Wat de heer zegt als hij geteld heeft. Hij is de grap; zijn soldaten niet (spel.md).
   function heerZegt(g) {
-    if (g.schandpaal) return T.t('"Far too little." The lord looks round the hamlet. "Someone must feel this, reeve. You may choose who."');
+    if (g.schandpaal) return T.t('"Far too little." The lord looks round the hamlet. "Someone must feel this, commander. You may choose who."');
     if (g.soldaten) return T.t('"Too little." The lord points to two soldiers. "They stay here until spring. They eat what you eat. Or what you no longer eat."');
-    if (g.boete) return T.t('The lord counts, frowns, and writes something down. "That is added next year, reeve. With the fine. The fine is the best part."');
+    if (g.boete) return T.t('The lord counts, frowns, and writes something down. "That is added next year, commander. With the fine. The fine is the best part."');
     if (g.deel < 1 - 1e-9) return T.t('The lord counts, counts again, and arrives at two different sums. "It tallies," he says.');
     return T.t('The lord counts twice, and gets a different sum each time. "It tallies," he says. "Until next year."');
   }
@@ -386,7 +386,7 @@
     return g;
   };
 
-  // Komt de schout niet, dan neemt de heer het zelf: van alles wat hij vraagt zoveel als er is, en
+  // Komt de aanvoerder niet, dan neemt de heer het zelf: van alles wat hij vraagt zoveel als er is, en
   // wat er dan nog ontbreekt in goud. Moet er iemand aan de schandpaal, dan wijst hij zelf aan:
   // wie het dorp het meest raakt. "Het dorp denkt dat jij het zo wilde."
   T.heerNeemtZelf = function (D) {
@@ -397,7 +397,7 @@
     T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.nietGekomen, T.t('you did not come to the square'));
     const g = T.betaalHeer(D, geef);
     if (g.schandpaal && !D.einde) {
-      const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'schout');
+      const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'aanvoerder');
       const zijn = keuzes.sort((a, b) => b.kost - a.kost)[0];
       if (zijn) {
         T.zeg(D, T.t('The lord chose for himself who would go in the pillory: {naam}. The village thinks you wanted it so.', { naam: zijn.naam }), 'gevaar');
@@ -446,26 +446,26 @@
   }
 
   // Wie aan de schandpaal kan staan, heet zo (`wie` in h.wrok en in het lijstje): een bewoner naar zijn nummer
-  // ('bewoner7'); de schout heet 'schout'. Zijn poppetje, of null.
+  // ('bewoner7'); de aanvoerder heet 'aanvoerder'. Zijn poppetje, of null.
   const wieVan = (p) => `bewoner${p.id}`;
   function poppetjeVan(D, wie) {
     const p = ((D.bewoners && D.bewoners.mensen) || []).find((q) => wieVan(q) === wie);
     return (p && p.wezen) || null;
   }
 
-  // Wie er aan de schandpaal kan: de boeren (T.isBoer, js/boerderij.js), en de schout zelf.
+  // Wie er aan de schandpaal kan: de boeren (T.isBoer, js/boerderij.js), en de aanvoerder zelf.
   // [{ wie, naam, eigenschap, kost, boete }]: kost is de tevredenheid (schandpaalKost), boete het goud
-  // dat de heer erbij zet (alleen bij de schout).
+  // dat de heer erbij zet (alleen bij de aanvoerder).
   T.schandpaalKeuzes = function (D) {
     const lijst = [];
     for (const p of (D.bewoners && D.bewoners.mensen) || []) {
       if (!p.wezen || p.wezen.dood || !T.isBoer(D, p)) continue;
       lijst.push({ wie: wieVan(p), naam: T.naamVanBewoner(p), eigenschap: T.t('farmer'), kost: IN().schandpaalKost, boete: 0 });
     }
-    if (!IN().schoutMagZelf) return lijst;
+    if (!IN().aanvoerderMagZelf) return lijst;
     const h = D.heer;
     const extra = h ? Math.ceil(h.tekort * (IN().boeteZelf - IN().boete) - 1e-9) : 0;
-    lijst.push({ wie: 'schout', naam: T.t('Yourself'), eigenschap: T.t('the reeve'), kost: 0, boete: Math.max(0, extra) });
+    lijst.push({ wie: 'aanvoerder', naam: T.t('Yourself'), eigenschap: T.t('the commander'), kost: 0, boete: Math.max(0, extra) });
     return lijst;
   };
 
@@ -554,10 +554,10 @@
     if (!keuze) return { kan: false, reden: T.t('That person is not here.') };
     // De eerste keer komt de paal er, en die blijft staan.
     T.zetSchandpaalNeer(D);
-    if (wie === 'schout') {
+    if (wie === 'aanvoerder') {
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
-      T.zetVlag(D, 'schoutAanDeSchandpaal');
+      T.zetVlag(D, 'aanvoerderAanDeSchandpaal');
       T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.schandpaalZelf, T.t('you put yourself in the pillory'));
       T.zeg(D, T.t('You put yourself in the pillory. The village watches in silence. The lord laughs until he hiccups, and adds {goud} to your debt.', { goud: T.hoeveel(keuze.boete, 'goud') }), 'gevaar');
     } else {
@@ -598,13 +598,13 @@
     return uit;
   };
 
-  // Je ambt kwijt: de heer ontslaat de schout van dit dorp (D.einde). In jouw dorp is het spel dan uit: js/hud.js
+  // Je ambt kwijt: de heer ontslaat de aanvoerder van dit dorp (D.einde). In jouw dorp is het spel dan uit: js/hud.js
   // toont het einde, en zet het spel stil.
   // Met twee bazen (js/bazen.js) omdat zijn gunst op is (`waarom`), anders na twee keer veel te weinig.
   T.ambtKwijt = function (D, waarom) {
     if (D.einde) return;
     D.einde = { reden: 'ambt', dag: dagNu(D), waarom: waarom || null };
-    T.zeg(D, waarom ? T.t('"Enough, reeve." The lord shakes his head. "You are dismissed."') : T.t('"Twice, reeve." The lord shakes his head. "You are dismissed."'), 'gevaar');
+    T.zeg(D, waarom ? T.t('"Enough, commander." The lord shakes his head. "You are dismissed."') : T.t('"Twice, commander." The lord shakes his head. "You are dismissed."'), 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   };
@@ -720,7 +720,7 @@
       else T.zeg(D, T.t('Martinmas is coming, and the lord spares you this year.'));
     }
     if (d.sintMaarten && !h.bezoek && !vrij) T.heerKomt(D, dag);
-    // Hij wacht; komt de schout niet, dan neemt hij het zelf.
+    // Hij wacht; komt de aanvoerder niet, dan neemt hij het zelf.
     const b = h.bezoek;
     if (b && b.staat && !b.betaald && b.wachtTot != null && dag >= b.wachtTot) T.heerNeemtZelf(D);
   };

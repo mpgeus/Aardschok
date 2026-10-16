@@ -949,7 +949,7 @@ function knoppen() {
 
 // ladder.png (ronde 4b): twee huizen, elk in de vijf treden van beter bouwen (ontwerp/spel.md,
 // "Beter bouwen"): hetzelfde huis, met dezelfde vorm op dezelfde plek, in steeds duurder materiaal.
-// In het spel komen nu alleen de eerste twee (en de schout in de derde; Marcel, 26 sep: "1 en 2 in
+// In het spel komen nu alleen de eerste twee (en de aanvoerder in de derde; Marcel, 26 sep: "1 en 2 in
 // spel, rest op plaat"); de rest is om te zien waar het heen gaat. Baksteen kent de bouwer nog niet:
 // de vijfde trede is hier veldsteen.
 const LADDER = [
@@ -1132,7 +1132,7 @@ const STEEN_PLAAT = [
 // groot.png (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee, B: Ja, C: Ja graag"): de grote gebouwen van
 // elke stijl op een rij (huizen.cjs, grootGebouw): de kleine herberg van het gehucht, de grote waar hij in een dorp toe
 // doorgroeit (twee lagen, met een stal aan een binnenplaats, een muur en een poort), de kapel met de toren van de stijl,
-// de woontoren (vanaf marktrecht) en het huis van de schout; een huis van de stijl ernaast voor de maat. Daaronder de
+// de woontoren (vanaf marktrecht) en het raadhuis; een huis van de stijl ernaast voor de maat. Daaronder de
 // grote herberg van wit in zijn vier standen: hetzelfde gebouw, een kwartslag gedraaid.
 function grootRijen() {
   const { STIJLEN, grootGebouw, stijlNaam } = require('./huizen.cjs');
@@ -1144,7 +1144,7 @@ function grootRijen() {
       ['herberg, dorp', grootGebouw(stijl, 'herberg')],
       ['kapel', grootGebouw(stijl, 'kapel')],
       ['woontoren', grootGebouw(stijl, 'woontoren')],
-      ['huis van de schout', grootGebouw(stijl, 'schout')],
+      ['raadhuis', grootGebouw(stijl, 'raadhuis')],
     ],
   }));
   return rijen.concat(standenRij(grootGebouw));
@@ -1256,7 +1256,7 @@ function rondeRijen(stijl, welk) {
   const kapelDak = stijl === 'planken' ? 'spanen' : 'leien';
   const lijst = welk === 'dorp'
     ? [['huis, leien', N(h1, 'leien')], ['huis, pannen', N(h1, 'pannen')], ['stenen huis, leien', N(s1, 'leien')], ['stenen huis, pannen', N(s1, 'pannen')], ['stenen huis, baksteen', N(s1, 'baksteen')], ['herberg van een dorp', N('herberg2', 'leien')], ['kapel', N('kapel', kapelDak)], ['woontoren', N('woontoren', 'pannen')]]
-    : [['hut', HZ.stijlNaam(H.stijl, H.hut[0], HZ.STIJLEN[H.stijl].dak, 'z')], ['huis', N(h1, S.dak)], ['boerderij', N(b1, S.dak)], ['herberg van het gehucht', N('herberg1', S.dak)], ['huis van de schout', N('schoutshuis', S.dak)]];
+    : [['hut', HZ.stijlNaam(H.stijl, H.hut[0], HZ.STIJLEN[H.stijl].dak, 'z')], ['huis', N(h1, S.dak)], ['boerderij', N(b1, S.dak)], ['herberg van het gehucht', N('herberg1', S.dak)], ['raadhuis', N('raadhuis', S.dak)]];
   const paneel = ({ gebouw, trede, fasen, jong, stijl: _, ...o }) => (o.delen ? { delen: o.delen, deurVan: o.deurVan } : { spec: o });
   return lijst.map(([naam, n]) => ({
     naam,

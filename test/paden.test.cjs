@@ -104,8 +104,8 @@ test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan',
   const D = S.dorp;
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
-  const schout = D.gebouwen.find((g) => g.soort === 'schout');
-  const plek = T.plekVoor(D, 'houthakker', T.deurVan(D.wereld, schout));
+  const raadhuis = D.gebouwen.find((g) => g.soort === 'raadhuis');
+  const plek = T.plekVoor(D, 'houthakker', T.deurVan(D.wereld, raadhuis));
   const r = T.plaatsGebouw(D, 'houthakker', plek.x, plek.y);
   assert.ok(r.gelukt, r.reden);
   const deur = T.deurVan(D.wereld, r.instantie);
@@ -171,7 +171,7 @@ test('op een veld slijt geen paadje, en een dier telt niet', () => {
     T.tikPadenDag(D);
   }
   assert.equal(T.isPaadje(D, akker.x, akker.y), false, 'de boer maait en ploegt daar');
-  // Een koe en de schout lopen elk een stap naar los gras.
+  // Een koe en de aanvoerder lopen elk een stap naar los gras.
   const t = losGras(D);
   const koe = T.maakDier('koe', t.x, t.y, 1);
   zet(koe, t.x, t.y);
@@ -180,8 +180,8 @@ test('op een veld slijt geen paadje, en een dier telt niet', () => {
   T.beweegWezens(S, w, 10);
   assert.equal(koe.x, t.x + 1, 'de koe liep');
   assert.equal(w.paden.vandaag[T.tegelNummer(t.x + 1, t.y)], undefined, 'een koe slijt geen paadje');
-  zet(D.schout, t.x, t.y + 1);
-  D.schout.pad = [{ x: t.x + 1, y: t.y + 1 }];
+  zet(D.aanvoerder, t.x, t.y + 1);
+  D.aanvoerder.pad = [{ x: t.x + 1, y: t.y + 1 }];
   T.beweegWezens(S, w, 10);
   assert.equal(w.paden.vandaag[T.tegelNummer(t.x + 1, t.y + 1)], 1, 'een mens wel');
 });
@@ -240,8 +240,8 @@ test('een lantaarn bij de deur van de kapel als hij klaar is, en niet twee keer'
   const w = D.wereld;
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
-  const schout = D.gebouwen.find((g) => g.soort === 'schout');
-  const plek = T.plekVoor(D, 'kapel', T.deurVan(w, schout));
+  const raadhuis = D.gebouwen.find((g) => g.soort === 'raadhuis');
+  const plek = T.plekVoor(D, 'kapel', T.deurVan(w, raadhuis));
   const r = T.plaatsGebouw(D, 'kapel', plek.x, plek.y);
   assert.ok(r.gelukt, r.reden);
   const deur = T.deurVan(w, r.instantie);

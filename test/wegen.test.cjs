@@ -18,7 +18,7 @@ function dorp() {
 // Een vrij stuk van b bij h tegels in het bouwbereik, zonder weg, gebouw, veld of iets vasts: waar een toets een weg legt.
 function vrijStuk(D, b, h) {
   const w = D.wereld;
-  const m = T.deurVan(w, D.gebouwen.find((g) => g.soort === 'schout'));
+  const m = T.deurVan(w, D.gebouwen.find((g) => g.soort === 'raadhuis'));
   for (let r = 2; r < 16; r++) {
     for (let y = m.y - r; y <= m.y + r; y++) {
       for (let x = m.x - r; x <= m.x + r; x++) {
@@ -34,7 +34,7 @@ function vrijStuk(D, b, h) {
       }
     }
   }
-  throw new Error('geen vrij stuk bij het huis van de schout');
+  throw new Error('geen vrij stuk bij het raadhuis');
 }
 
 test('een weg tussen twee klikken loopt recht en haaks, en kost alleen werk', () => {
@@ -56,9 +56,9 @@ test('een weg tussen twee klikken loopt recht en haaks, en kost alleen werk', ()
 });
 
 test('waar geen weg kan: buiten het bouwbereik, op een gebouw, en een weg die er al ligt', () => {
-  const { D, schout } = dorp();
-  const r = T.voetVanGebouw(schout);
-  assert.ok(T.planWeg(D, { x: r.x, y: r.y }, { x: r.x + 1, y: r.y }).reden, 'niet op het huis van de schout');
+  const { D, raadhuis } = dorp();
+  const r = T.voetVanGebouw(raadhuis);
+  assert.ok(T.planWeg(D, { x: r.x, y: r.y }, { x: r.x + 1, y: r.y }).reden, 'niet op het raadhuis');
   const ver = T.planWeg(D, { x: r.x + 200, y: r.y }, { x: r.x + 202, y: r.y }).reden;
   assert.ok(ver && /Too far away|do not know/.test(ver), ver);
   const a = vrijStuk(D, 5, 1);

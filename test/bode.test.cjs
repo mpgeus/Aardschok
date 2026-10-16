@@ -176,7 +176,7 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
     D.rovers.bende = [{ id: 999, naam: 'Gijs' }, { id: 998, naam: 'Kobus' }];
     // Een boer brengt de brief niet en gaat niet mee (T.weerbareMannen): buiten de boerderijen heeft het proefdorp twee mannen.
     // De bode en twee begeleiders zijn er drie, dus een jongen van een boer is opgegroeid.
-    const zoon = D.bewoners.mensen.find((p) => p.geslacht === 'man' && p.leeftijd === 'kind' && !(p.hoofd && p.hoofd.schout));
+    const zoon = D.bewoners.mensen.find((p) => p.geslacht === 'man' && p.leeftijd === 'kind' && !(p.hoofd && p.hoofd.aanvoerder));
     zoon.leeftijd = 'jong';
     try {
       const weerbaar = T.weerbareMannen(D).length;
@@ -262,7 +262,7 @@ test('valt de vaste ronde op een dag dat hij op bestelling er nog is, dan komt d
   }
 });
 
-test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en komt de schout niet, dan loopt het af', () => {
+test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en komt de aanvoerder niet, dan loopt het af', () => {
   metGevaar(1, 0, () => {
     const dag = dagVan('zomermaand', 5);
     const S = gehucht(dag + 0.5);
@@ -292,7 +292,7 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.ok(bode.aangehouden, 'de bode staat stil');
     assert.ok(r.begeleiders[0].wezen.aangehouden, 'wie meegaat, staat ook stil: de rovers houden hem vast, en slaan hem niet');
     assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
-    // De tijd is om, en de schout kwam niet: het lot beslist.
+    // De tijd is om, en de aanvoerder kwam niet: het lot beslist.
     S.kalender.dag += (B.hinderlaag.uren + 0.1) / 24;
     T.werkRoversBij(S, D);
     assert.equal(D.rovers.aanval && D.rovers.aanval.fase, 'weg', 'ze gaan weg');

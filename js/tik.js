@@ -27,7 +27,7 @@
   // Hoe lang een tik duurt, in seconden echte tijd.
   T.TIK = 1 / T.TIK_INSTELLINGEN.perSeconde;
 
-  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wie er loopt, en waar de schout is het
+  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wie er loopt, en waar de aanvoerder is het
   // maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
   // dt maal de snelheid op (`dtWereld`). `meet(naam, f)`, als het er is, doet f en meet hoe lang een deel duurt (de
   // meting van `npm run grootte`, gereedschap/grootte/harnas.cjs).
@@ -43,12 +43,12 @@
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     T.tikKalender(S, dt);
     // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
-    // voorvallen. Waar de schout is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
+    // voorvallen. Waar de aanvoerder is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
     // T.werkDorpBij zelf.
     meet('dorpen', () => {
       for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     });
-    meet('lopen', () => T.beweegWezens(S, S.wereld, dt, dtWereld)); // wie loopt, waar de schout is (js/anim.js)
+    meet('lopen', () => T.beweegWezens(S, S.wereld, dt, dtWereld)); // wie loopt, waar de aanvoerder is (js/anim.js)
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat (T.bijAankomst): de lijst
     // wezens van de wereld verandert erdoor, en daar loopt het lopen net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);

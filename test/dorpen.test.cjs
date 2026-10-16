@@ -36,13 +36,13 @@ function dagen(S, dorpen, van, tot) {
   }
 }
 
-test('twee dorpen: elk zijn eigen kaart, voorraad, mensen en schout, en dezelfde kalender', () => {
+test('twee dorpen: elk zijn eigen kaart, voorraad, mensen en aanvoerder, en dezelfde kalender', () => {
   const { S, jij, buur } = tweeDorpen();
   assert.equal(S.dorpen.length, 2);
   assert.notEqual(jij.wereld, buur.wereld);
   assert.notEqual(jij.voorraad, buur.voorraad);
   assert.notEqual(jij.bewoners, buur.bewoners);
-  assert.notEqual(jij.schout, buur.schout);
+  assert.notEqual(jij.aanvoerder, buur.aanvoerder);
   assert.equal(jij.kalender, S.kalender);
   assert.equal(buur.kalender, S.kalender, 'de kalender is voor alle dorpen dezelfde');
   assert.ok(!jij.ander, 'jouw dorp spreekt tegen jou');
@@ -93,7 +93,7 @@ test('een dorp waar je niet bent, leeft met poppetjes: ze lopen, alleen niet get
   }
   const verplaatst = buur.wereld.wezens.filter((e) => waar.get(e) !== `${e.x},${e.y}`);
   assert.ok(verplaatst.length >= 5, `in het buurdorp lopen mensen rond (${verplaatst.length} verplaatst)`);
-  for (const e of verplaatst) assert.ok(T.isBegaanbaar(buur.wereld, Math.round(e.tx), Math.round(e.ty)) || e === buur.schout, 'op zijn eigen kaart');
+  for (const e of verplaatst) assert.ok(T.isBegaanbaar(buur.wereld, Math.round(e.tx), Math.round(e.ty)) || e === buur.aanvoerder, 'op zijn eigen kaart');
 });
 
 test('een regel over een dorp zegt het met T.zeg, nooit rechtstreeks tegen het scherm', () => {

@@ -11,14 +11,14 @@ const berichten = [];
 T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
 
 function dorp() {
-  const { S, D, w, schout } = proefDorp(T, { gebouwen: ['wachthuis'] });
+  const { S, D, w, raadhuis } = proefDorp(T, { gebouwen: ['wachthuis'] });
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
   S.kalender.dag = 5 + 10 / 24; // overdag
   const huis = D.gebouwen.find((g) => g.soort === 'wachthuis');
   T.zetSoldaten(D, huis, 'militie', 2);
   const [een, twee] = T.soldatenVan(D, huis).map((p) => p.wezen);
   berichten.length = 0;
-  return { S, D, w, een, twee, hal: schout };
+  return { S, D, w, een, twee, hal: raadhuis };
 }
 
 function zet(e, t) {
@@ -63,8 +63,8 @@ function rover(w, t) {
   return e;
 }
 
-// Een dorpeling die geen man is (geen soldaat, niet de schout), buiten.
-const dorpeling = (D) => D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.schout && !T.isMan(D, p.wezen)).wezen;
+// Een dorpeling die geen man is (geen soldaat, niet de aanvoerder), buiten.
+const dorpeling = (D) => D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder && !T.isMan(D, p.wezen)).wezen;
 
 test('wie raakt, slaat; de kosten van zijn slag maal secondenPerPunt is de tijd tot de volgende', () => {
   const { S, D, w, een, twee } = dorp();

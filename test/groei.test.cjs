@@ -12,7 +12,7 @@ T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevo
 const ZOMERDAG = 30;
 const WINTERDAG = 280;
 
-// Het proefdorp (test/grond.cjs), op dag 2: het lege begin, het huis van de schout, twee boerderijen met een akker, en hutten
+// Het proefdorp (test/grond.cjs), op dag 2: het lege begin, het raadhuis, twee boerderijen met een akker, en hutten
 // voor wie nog in het kamp woonde; iedereen woont en staat thuis.
 function dorp(opties = {}) {
   const S = proefDorp(T, opties).S;
@@ -61,7 +61,7 @@ function at(D, n) {
 const isTekeningVan = (D, soort, tekening) => (T.stijlTekeningen(D, soort) || T.GEBOUWEN[soort].tekeningen).includes(T.metDeurNaar(tekening, 'z'));
 const mensenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
 const eenHut = (D) => D.gebouwen.find((g) => g.soort === 'hut' && mensenIn(D, g).length);
-const eenHuis = (D) => D.gebouwen.find((g) => g.soort === 'huis' && g.huis !== 'schout');
+const eenHuis = (D) => D.gebouwen.find((g) => g.soort === 'huis' && g.huis !== 'aanvoerder');
 // Wie in dit huis woont, is binnen, zoals 's nachts als een huis doorgroeit: in een toets loopt niemand, en het oude
 // stel staat bij het begin voor zijn deur, waar het huis overheen groeit (werklijst vraag 88: niet over iemand heen).
 function binnen(D, g) {
@@ -77,10 +77,10 @@ function dagen(D, van, n) {
 // De standen
 // ---------------------------------------------------------------------------------------------
 
-test('in het proefdorp: de boerderijen zijn van boeren, het huis van dorpelingen, de hutten van keuters; het huis van de schout heeft geen stand', () => {
+test('in het proefdorp: de boerderijen zijn van boeren, het huis van dorpelingen, de hutten van keuters; het raadhuis heeft geen stand', () => {
   const D = dorpMetHuis().dorp;
   for (const g of D.gebouwen) {
-    const verwacht = g.huis === 'schout' ? null : { boerderij: 'boeren', huis: 'dorpelingen', hut: 'keuters' }[g.soort] || null;
+    const verwacht = g.huis === 'aanvoerder' ? null : { boerderij: 'boeren', huis: 'dorpelingen', hut: 'keuters' }[g.soort] || null;
     assert.equal(T.standVan(g), verwacht, `${g.soort} op ${g.x},${g.y}`);
   }
   assert.equal(T.standVan({ soort: 'woontoren' }), 'ambachtslieden');
@@ -300,8 +300,8 @@ test('2c: een huis zegt wie er woont en hoe ver het is met doorgroeien', () => {
     dagen: 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: 'stone house', kosten: { steen: 12 },
     soorten: 4, nu: 2, tevreden: true, later: null, wacht: false, waarom: null,
   });
-  // Het huis van de schout en een huis zonder mensen laten niets zien.
-  assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.huis === 'schout')), null);
+  // Het raadhuis en een huis zonder mensen laten niets zien.
+  assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.huis === 'aanvoerder')), null);
   assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.soort === 'hut' && !mensenIn(D, g).length)), null);
   // Een boerderij groeit niet door.
   assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.soort === 'boerderij')).groei, null);

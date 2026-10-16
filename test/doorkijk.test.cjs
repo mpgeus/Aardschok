@@ -14,15 +14,15 @@ T.ui = new Proxy({}, { get: () => () => {} });
 const standaard = { ...T.DOORKIJK_INSTELLINGEN };
 test.afterEach(() => Object.assign(T.DOORKIJK_INSTELLINGEN, standaard));
 
-// Het proefdorp (test/grond.cjs), met alleen de schout erin (ver weg van het plein); wie er verder nodig is, zet de toets
+// Het proefdorp (test/grond.cjs), met alleen de aanvoerder erin (ver weg van het plein); wie er verder nodig is, zet de toets
 // er zelf bij. Het plein ligt rond het oude kampvuur: `hart(S)` is een tegel in het midden ervan, en de proef zet de rest
 // ten opzichte daarvan neer.
 function gehucht() {
   const { S, w } = proefDorp(T);
   S.spreektMet = null;
-  S.schout = T.maakWezen('schout', 20, 20);
-  w.wezens = [S.schout];
-  T.werkMistBij(S, S.dorp); // wie in de mist loopt, zie je ook niet door een boom heen (js/mist.js): de schout kijkt hier
+  S.dorp.aanvoerder = T.maakWezen('aanvoerder', 20, 20);
+  w.wezens = [S.dorp.aanvoerder];
+  T.werkMistBij(S, S.dorp); // wie in de mist loopt, zie je ook niet door een boom heen (js/mist.js): de aanvoerder kijkt hier
   return S;
 }
 const hart = (S) => S.wereld.kamp.vuur;
@@ -53,7 +53,7 @@ test('wie je door een boom of een huis heen ziet: wie ertoe doet overal, het ple
   const buiten = erbij(S, T.maakDorpeling(4, 20, 21));
   assert.ok(T.opHetPlein(w, kind.tx, kind.ty) && !T.opHetPlein(w, buiten.tx, buiten.ty), 'de proef staat op en naast het plein');
   const kramer = erbij(S, T.maakMens('marskramer', 21, 20));
-  assert.equal(T.zichtbaarDoor(S, S.schout), 'alles', 'de schout altijd');
+  assert.equal(T.zichtbaarDoor(S, S.dorp.aanvoerder), 'alles', 'de aanvoerder altijd');
   assert.equal(T.zichtbaarDoor(S, kramer), 'alles', 'een bezoeker ook, waar hij ook staat');
   assert.equal(T.zichtbaarDoor(S, kind), 'huis', 'wie op het plein staat: alleen door een huis heen');
   assert.equal(T.zichtbaarDoor(S, buiten), null, 'wie ergens anders loopt, verdwijnt erachter');
@@ -126,19 +126,19 @@ test('wie op het plein staat, zie je door een huis heen; met de spelregel niet',
 
 // Staan er meer hoge voorwerpen voor iemand, dan komt zijn kijkgat één keer, na het voorste in de volgorde van tekenen,
 // en zo ver open als het verst openstaande (js/tekenen.js, voorsteKijkgaten; 13 okt: in een bos tekenden 20 tot 30 bomen
-// elk beeld hetzelfde gat om de schout).
+// elk beeld hetzelfde gat om de aanvoerder).
 test('één kijkgat per wezen, na het voorste voorwerp dat hem bedekt', () => {
-  const schout = { soort: 'schout' };
+  const aanvoerder = { soort: 'aanvoerder' };
   const kind = { soort: 'dorpeling' };
-  const achter = { kijkgat: [schout], doorkijk: 1 };
-  const midden = { kijkgat: [schout, kind], doorkijk: 1 };
-  const voor = { kijkgat: [schout], doorkijk: 0.4 }; // gaat net open
+  const achter = { kijkgat: [aanvoerder], doorkijk: 1 };
+  const midden = { kijkgat: [aanvoerder, kind], doorkijk: 1 };
+  const voor = { kijkgat: [aanvoerder], doorkijk: 0.4 }; // gaat net open
   const dicht = { kijkgat: [kind], doorkijk: 0 }; // was dicht: telt niet
   const volgorde = [achter, midden, dicht, voor].map((v) => ({ voorwerp: v }));
   volgorde.splice(1, 0, { f: () => {} }); // een wezen of iets anders zonder voorwerp
   const gaten = new Map();
   T.voorsteKijkgaten(volgorde, gaten);
   assert.deepEqual([...gaten.keys()], [voor, midden], 'alleen het voorste voor elk wezen');
-  assert.deepEqual(gaten.get(voor), [{ e: schout, sterkte: 1 }], 'zo open als het verst openstaande');
+  assert.deepEqual(gaten.get(voor), [{ e: aanvoerder, sterkte: 1 }], 'zo open als het verst openstaande');
   assert.deepEqual(gaten.get(midden), [{ e: kind, sterkte: 1 }]);
 });

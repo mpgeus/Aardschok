@@ -129,7 +129,7 @@ const BEELD = {
     await wachtOpPlaatjes(page);
     return { scale: 'css' };
   },
-  // (Tot 15 okt stond hier iemand die de schout zocht met een vraag, het voorval 'lening': de voorvallen gingen weg in
+  // (Tot 15 okt stond hier iemand die de aanvoerder zocht met een vraag, het voorval 'lening': de voorvallen gingen weg in
   // ronde 3 van het snoeien. beelden/vraag.jpg blijft tot de tekst opnieuw geschreven is, werklijst G.)
   // De heer met zijn twee soldaten (js/heer.js, T.werkHeerBij), op de weg het dorp in, zo'n 22 tegels van het plein.
   async heer(page) {

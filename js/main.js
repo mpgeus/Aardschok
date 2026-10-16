@@ -50,27 +50,27 @@
       questBeloond: new Set(),
       bezocht: new Set(['hal']),
       naarGebied: null,
-      netGeland: null, // de tegel waar de schout zojuist is neergezet (js/gebied.js)
+      netGeland: null, // de tegel waar de aanvoerder zojuist is neergezet (js/gebied.js)
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
     const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
-    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.schout
+    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.dorp.aanvoerder
     if (proefje) S.proefje = true;
-    zetCameraOpSchout();
+    zetCameraOpAanvoerder();
     T.ui.reset(S);
   };
 
-  function zetCameraOpSchout() {
-    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
+  function zetCameraOpAanvoerder() {
+    const p = T.naarSchermOp(S.wereld, S.dorp.aanvoerder.x, S.dorp.aanvoerder.y);
     S.camera = { x: p.x, y: p.y - 24 };
     S.kijk = { x: S.camera.x, y: S.camera.y };
   }
 
   // Een bewaard spel laden (js/opslaan.js). Eerst lezen: lukt dat niet, dan blijft het spel zoals het was.
   // Dan een nieuw spel, zodat wat er sinds het bewaren in het spel bij kwam, zijn beginwaarde heeft; het
-  // bewaarde erover; en het scherm opnieuw op de schout. Geeft { gelukt, kop } of { gelukt: false, reden }.
+  // bewaarde erover; en het scherm opnieuw op de aanvoerder. Geeft { gelukt, kop } of { gelukt: false, reden }.
   T.laadSpel = function (plek) {
     const gelezen = T.leesVanPlek(plek);
     if (!gelezen.gelukt) return gelezen;
@@ -81,7 +81,7 @@
   function speelGelezen(gelezen) {
     T.nieuwSpel();
     T.zetSpel(S, gelezen);
-    zetCameraOpSchout();
+    zetCameraOpAanvoerder();
     T.ui.reset(S);
   }
 
@@ -203,7 +203,7 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      // De schout is te kiezen, zoals je mannen (js/kiezen.js).
+      // De aanvoerder is te kiezen, zoals je mannen (js/kiezen.js).
       if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
@@ -426,17 +426,17 @@
   }
 
   // De camera (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en bouwen"): hij volgt de
-  // schout niet meer, maar kijkt waar jij kijkt (S.kijk, alleen scherm: T.schermVelden in js/opslaan.js). De pijltjes
+  // aanvoerder niet meer, maar kijkt waar jij kijkt (S.kijk, alleen scherm: T.schermVelden in js/opslaan.js). De pijltjes
   // en de muis tegen de rand van het scherm schuiven hem (Marcel: "Muis tegen de zijkant van het scherm bewegen, beweegt
   // het beeld in die richting"; T.KIEZEN_INSTELLINGEN.camera in js/kiezen.js), de minikaart zet hem ergens neer
-  // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Tot 15 okt volgde hij de schout, en tilde Tab hem eraf in het
+  // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Tot 15 okt volgde hij de aanvoerder, en tilde Tab hem eraf in het
   // overzicht (vraag 108, a); tot stap 2 keek het gevecht in beurten nog zelf mee.
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
   // minuten, op de klok van het scherm, want de wereld staat daar stil.
   function titelCamera() {
     const rand = S.wereld.plein;
-    let mx = S.schout.x;
-    let my = S.schout.y;
+    let mx = S.dorp.aanvoerder.x;
+    let my = S.dorp.aanvoerder.y;
     if (rand && rand.length) {
       mx = rand.reduce((n, [x]) => n + x, 0) / rand.length;
       my = rand.reduce((n, [, y]) => n + y, 0) / rand.length;
@@ -522,7 +522,7 @@
       fotoWenk(T.t('Picture saved: {naam}', { naam }));
     }, 'image/png'); // geen tekst
   }
-  // Houd de camera boven de kaart: het punt waar hij naar kijkt (24 pixels boven een tegel, zoals zetCameraOpSchout),
+  // Houd de camera boven de kaart: het punt waar hij naar kijkt (24 pixels boven een tegel, zoals zetCameraOpAanvoerder),
   // op een tegel binnen T.kaartGrens (op het eiland het hele eiland).
   function begrens(k) {
     if (!S.wereld) return k;
@@ -688,8 +688,8 @@
   }
   // Tab: de held kiezen en naar hem kijken.
   function naarDeHeld() {
-    if (T.isMan(S.dorp, S.schout)) S.gekozen = S.schout;
-    glijNaar(S.schout.x, S.schout.y);
+    if (T.isMan(S.dorp, S.dorp.aanvoerder)) S.gekozen = S.dorp.aanvoerder;
+    glijNaar(S.dorp.aanvoerder.x, S.dorp.aanvoerder.y);
   }
 
   // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
@@ -929,7 +929,7 @@
       return;
     }
     if (S.modus !== 'verkennen') return;
-    // Tab: kies de held (de schout) en kijk naar hem. Tot 15 okt was het het overzicht (vraag 108, a).
+    // Tab: kies de held (de aanvoerder) en kijk naar hem. Tot 15 okt was het het overzicht (vraag 108, a).
     if (ev.key === 'Tab') {
       ev.preventDefault();
       naarDeHeld();
@@ -1124,7 +1124,7 @@
     },
     // De beesten in het bos (js/beesten.js; werklijst vraag 116): per groep de soort, hoeveel dieren, waar de leider is en
     // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
-    // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
+    // ('hier'): de aanvoerder staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
     // ('opnieuw'): de groepen opnieuw, uit het zaad van het land. ('jongen'): elke groep krijgt nu jongen, en wie groot
     // wordt, splitst. ('jacht'): elke roedel jaagt nu op de herten, alsof het winter is en hij honger heeft. ('honger'):
     // elke roedel heeft nu zoveel honger dat hij in het donker naar het dorp komt (zet er de avond bij met
@@ -1146,7 +1146,7 @@
         const schaap = schapen.sort((a, b) => T.afstand(T.tegelVan(a), T.tegelVan(l)) - T.afstand(T.tegelVan(b), T.tegelVan(l)))[0];
         if (schaap) T.wolvenSlaanToe(S, D, G, l, { e: schaap, soort: 'schaap' });
       }
-      const h = T.tegelVan(S.schout);
+      const h = T.tegelVan(S.dorp.aanvoerder);
       const groepen = T.beestenVan(D);
       if (wat === 'hier' && groepen.length) {
         const dichtst = groepen.reduce((a, b) => (T.afstand(T.tegelVan(b.leden[0]), h) < T.afstand(T.tegelVan(a.leden[0]), h) ? b : a));
@@ -1159,7 +1159,7 @@
             }
           }
         }
-        if (plek) Object.assign(S.schout, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
+        if (plek) Object.assign(S.dorp.aanvoerder, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
       }
       const nu = T.uurTekst(D.kalender.dag);
       return {
@@ -1170,7 +1170,7 @@
           const lt = T.tegelVan(l);
           return {
             soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
-            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`, // geen tekst
+            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.dorp.aanvoerder))} tegels van de aanvoerder`, // geen tekst
             wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G), // geen tekst
             thuis: `${G.thuis.x},${G.thuis.y}`,
             rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
@@ -1179,7 +1179,7 @@
               honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`, // geen tekst
               gevangen: G.gevangen || 0,
               stout: T.wolvenStout(D, G),
-              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'schout' ? 'de schout' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}), // geen tekst
+              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'aanvoerder' ? 'de aanvoerder' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}), // geen tekst
             } : {}),
             jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet', // geen tekst
             ...(G.trektWeg ? { trektWeg: true } : {}),
@@ -1294,7 +1294,7 @@
         const e = p.wezen;
         const a = e && T.dagAnker(S.dorp, e);
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.isBoer(S.dorp, p) ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p), // geen tekst
+          wie: p.aanvoerder ? 'de aanvoerder' : p.wie ? `${T.naamVanMens(p.wie)}${T.isBoer(S.dorp, p) ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p), // geen tekst
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
           staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-', // geen tekst
@@ -1373,19 +1373,19 @@
       return {
         kamp: B.kamp,
         kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
-        schoutLooptMee: B.volgt,
+        aanvoerderLooptMee: B.volgt,
         gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar', // geen tekst
         tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
           const wie = D.bewoners.mensen.filter((p) => p.huis === g);
-          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'schout' ? 'de schout en zijn gezin' : wie.map((p) => p.naam).join(', ')}`; // geen tekst
+          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'aanvoerder' ? 'de aanvoerder en zijn gezin' : wie.map((p) => p.naam).join(', ')}`; // geen tekst
         }),
         vuur: T.kampvuurStand(D),
         heerVraagtNiets: `tot ${T.datumVanDag(B.heerVrijTot).tekst}`,
       };
     },
     // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
-    // waar, de richel en zijn helling, en de hoogte waar de schout staat. Spel.debug.hoogte(5) begint een nieuw spel op
-    // land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), Spel.debug.hoogte('top') zet de schout op de hoogste plek.
+    // waar, de richel en zijn helling, en de hoogte waar de aanvoerder staat. Spel.debug.hoogte(5) begint een nieuw spel op
+    // land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), Spel.debug.hoogte('top') zet de aanvoerder op de hoogste plek.
     hoogte(wat) {
       if (typeof wat === 'number') {
         T.zetOptie('hoogte', 'heuvels');
@@ -1399,12 +1399,12 @@
         const h = T.hoogteOp(w, x, y);
         if (!top || h > top.h) top = { x, y, h: Math.round(h) };
       }
-      if (wat === 'top') Object.assign(S.schout, { x: top.x, y: top.y, tx: top.x, ty: top.y, pad: [], onderweg: false });
+      if (wat === 'top') Object.assign(S.dorp.aanvoerder, { x: top.x, y: top.y, tx: top.x, ty: top.y, pad: [], onderweg: false });
       return {
         hoogste: top,
         richel: Object.keys(w.hoogte.niveau).length + ' tegels',
         helling: Object.keys(w.hoogte.hellingen),
-        schout: Math.round(T.hoogteOp(w, S.schout.x, S.schout.y)),
+        aanvoerder: Math.round(T.hoogteOp(w, S.dorp.aanvoerder.x, S.dorp.aanvoerder.y)),
       };
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
@@ -1699,11 +1699,11 @@
     // Daar horen ze bij de kudde: ze blijven binnen de weide, geven melk en werpen jongen, en
     // verhuizen mee bij een wissel. Is die weide vol, dan de volgende; te vol mag, dat is ook iets
     // om naar te kijken (minder melk). Zonder weide, of zonder vrije tegel erop, rond een open plek
-    // bij de schout, zoals vóór de weides.
+    // bij de aanvoerder, zoals vóór de weides.
     vee(soort = 'koe', aantal = 1) {
       if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`; // geen tekst
       const w = S.wereld;
-      const h = S.schout;
+      const h = S.dorp.aanvoerder;
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
       const opWeide = [];
       // Een schaap gaat naar de heide als het gehucht er een heeft (js/vee.js, T.graastOp).
@@ -1739,7 +1739,7 @@
       if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S.dorp); // de melk bij de kaas in de balk
       if (opWeide.length === aantal) return opWeideTekst;
       aantal -= opWeide.length;
-      // Het midden van de kudde: de dichtstbijzijnde tegel, drie of meer stappen van de schout, met
+      // Het midden van de kudde: de dichtstbijzijnde tegel, drie of meer stappen van de aanvoerder, met
       // vijf bij vijf vrije tegels eromheen.
       const open = (x, y) => {
         for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (!vrij(x + dx, y + dy)) return false;
@@ -1753,7 +1753,7 @@
           }
         }
       }
-      if (!midden) return opWeide.length ? opWeideTekst : 'Er is geen open stuk grond bij de schout.'; // geen tekst
+      if (!midden) return opWeide.length ? opWeideTekst : 'Er is geen open stuk grond bij de aanvoerder.'; // geen tekst
       // De dieren eromheen, van binnen naar buiten, met een tegel ruimte tussen elk dier (ook tussen
       // dieren die er al stonden): een koe is ruim twee tegels lang.
       const dieren = w.wezens.filter((e) => e.dier && !e.dood);
