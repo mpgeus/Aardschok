@@ -60,7 +60,8 @@ gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Sta
 nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Stap 5
 is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het
 over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
-171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt; het plan wacht op zijn keuzes. Daarna
+171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"; **Bezig
+in sessie `claude/clever-brown-vz07hg`**, 16 okt). Daarna
 **stap 6, samen spelen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
@@ -686,11 +687,14 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   zijn huis (ze ruilen; had hij geen huis, dan is het oude gezin dakloos, zoals na afbreken). Blijft staan: de overgang
   tussen de kaarten van Tiled en de kamers met deuren (alleen op de proefkaarten; `opmerkingen.md`, ronde 4).
 - **171, de groepsleider met de lantaarn** (Marcel, 16 okt, na stap 5, waar de held zonder lantaarn 's nachts prooi werd
-  voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). Wat er al is: de lantaarns
+  voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **Bezig in sessie
+  `claude/clever-brown-vz07hg`** (16 okt): de regel en het licht, en de tekening in woorden. Wat er al is: de lantaarns
   van de bode (`T.bodeLicht`, soort 'drager' in `T.lichtBronnen`, alleen licht, geen tekening), en de wolven vallen
   niemand in het licht aan (`kiesProoi`); een voorstel van Claude uit stap 4, "een fakkel bij de nachtwacht", staat in
-  `opmerkingen.md`. Het plan wacht op Marcels keuzes (wat een groep is, wie de leider is, wat de lantaarn doet, en de
-  tekening).
+  `opmerkingen.md`. **Besloten** (Marcel, 16 okt: "A1, B1, C1, D2"): **A1** een groep zijn de soldaten van één
+  wachthuis, en de leider is wie het langst dient; **B1** de lantaarn is licht, zoals bij de bode (de wolven vallen
+  niemand in het licht aan); **C1** de aanvoerder draagt er ook een; **D2** een lantaarn in zijn hand op het figuur (eerst
+  in woorden, dan één proefplaat, `beeld.md`).
 - **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
   slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
   zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
