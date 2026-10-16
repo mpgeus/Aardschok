@@ -62,7 +62,7 @@ is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aa
 over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
 171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"). **De
 regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed** (16 okt, in `main`; Marcel: "goed zo
-voor nu"). **Het volgende is 171 afmaken:** de lantaarn in het spel tekenen (bij I). Daarna **stap 6, samen spelen** (bij
+voor nu"). **Het volgende is 171 afmaken:** de lantaarn in het spel tekenen (bij I). **Bezig in sessie `claude/ecstatic-ride-yam3i6`** (16 okt): het plan voor Marcel, dan het tekenen. Daarna **stap 6, samen spelen** (bij
 I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
