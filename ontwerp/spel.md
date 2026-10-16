@@ -1155,7 +1155,8 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   lantaarn in zijn hand** (D2, 16 okt; Marcel: "M2, E1" en "A1, B1"; `beeld.md`, "De lantaarn van de groepsleider"):
   zolang hij brandt, hangt er een lantaarntje aan de hand aan de kant van de kijker, met een gloeiend hoorn; lopend
   schommelt hij mee met de arm, en wie een hand in de zij heeft, draagt hem op de heup. Een dak of een boom ervoor
-  bedekt hem met zijn drager. De bode en wie meegaat krijgen er ook een, als ze een vel met handen hebben.
+  bedekt hem met zijn drager. Zijn licht is op het scherm een kleine plas (1,5 tegel; Marcel koos L3, want de plas van 3
+  tegels lag als een waas over wie hem droeg), maar de wolven vallen niemand binnen 3 tegels aan. De bode en wie meegaat krijgen er ook een, als ze een vel met handen hebben.
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

@@ -699,7 +699,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de aanvoerder en de groepsleiders (`T.lantaarnDragers`, `js/soldaten.js`; vraag 171; tot vraag 170, stap 5 had
   alleen de schout er een, `T.draagtLantaarn`), voor het licht in `js/tekenen.js` en voor de
   wolven, die niemand in het licht aanvallen (`js/beesten.js`); wie er nu een brandende draagt, geeft `T.lichtDragers(D)`
-  (voor zijn licht, en voor het lantaarntje in zijn hand); `T.huizenMetIemandThuis` zegt welke huizen
+  (voor zijn licht, en voor het lantaarntje in zijn hand), en zijn licht ziet er kleiner uit dan het voor de wolven is
+  (`beeldStraal`, vraag 171, L3; `js/tekenen.js` tekent elke bron met `getekendeStraal`); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 
 ### gereedschap/pixelart/: de beelden uit code

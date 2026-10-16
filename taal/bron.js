@@ -2345,6 +2345,7 @@ Spel.TAAL_BRON = [
   {"t":"lantern brightness","waar":["js/opties.js"]},
   {"t":"house radius","waar":["js/opties.js"]},
   {"t":"house brightness","waar":["js/opties.js"]},
+  {"t":"radius on screen","waar":["js/opties.js"]},
   {"t":"formations","waar":["js/opties.js"]},
   {"t":"men side by side in a line","waar":["js/opties.js"]},
   {"t":"their spots stay green, seconds","waar":["js/opties.js"]},

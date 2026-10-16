@@ -1002,6 +1002,9 @@
 
   // De lampen die nu branden, als plassen licht op het scherm: { x, y, rx, ry, k: [r, g, b] }, met k wat de lamp in het
   // midden erbij doet (vraag 125, A). Een vlam flakkert, elk in zijn eigen ritme uit zijn plek, op de klok van het scherm.
+  // Hoe ver een lichtbron er op het scherm uitziet (tegels): zijn beeldStraal als hij er een heeft (de lantaarn die iemand
+  // draagt, js/zien.js), anders zijn straal.
+  const getekendeStraal = (b) => (b.beeldStraal != null ? b.beeldStraal : b.straal);
   function lichtenInBeeld(S, bw, bh) {
     const D = T.dorpHier(S);
     const nacht = nachtVan(S);
@@ -1013,7 +1016,7 @@
       const q = opGrond(b.x, b.y);
       const x = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const y = Math.round(bh / 2) + (q.y - L.boven - Math.round(S.camera.y)) * S.zoom;
-      const rx = Math.max(1, b.straal * L.breedte * S.zoom);
+      const rx = Math.max(1, getekendeStraal(b) * L.breedte * S.zoom);
       const ry = rx * L.hoogte;
       if (x + rx < 0 || y + ry < 0 || x - rx > bw || y - ry > bh) continue;
       const kleur = L.kleuren[b.soort] || { r: 255, g: 255, b: 255 };
@@ -1057,7 +1060,7 @@
       const q = opGrond(b.x, b.y);
       const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
-      const r = Math.max(1, b.straal * 32 * S.zoom);
+      const r = Math.max(1, getekendeStraal(b) * 32 * S.zoom);
       const gloed = ctx.createRadialGradient(lx, ly, 0, lx, ly, r);
       gloed.addColorStop(0, `rgba(255, 186, 104, ${(b.sterkte * nacht).toFixed(3)})`);
       gloed.addColorStop(1, 'rgba(255, 186, 104, 0)');

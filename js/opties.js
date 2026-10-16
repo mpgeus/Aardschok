@@ -1274,6 +1274,7 @@
     lantaarnSterkte: T.t('lantern brightness'),
     huisStraal: T.t('house radius'),
     huisSterkte: T.t('house brightness'),
+    beeldStraal: T.t('radius on screen'),
   };
   const NAAM_VAN_PAD = {
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst

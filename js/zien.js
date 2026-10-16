@@ -19,8 +19,10 @@
     huisStraal: 1.5,
     huisSterkte: 0.22,
     // De lantaarn die iemand draagt (T.draagtLicht, hieronder: de bode en wie meegaat, de aanvoerder en de groepsleiders;
-    // vraag 125, C, en 171): buiten, vanaf zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel.
-    lantaarn: { vanaf: 0.4, straal: 3, sterkte: 0.5 },
+    // vraag 125, C, en 171): buiten, vanaf zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver (tegels: de wolven vallen
+    // niemand daarbinnen aan) en zo fel. Op het scherm is zijn plas kleiner, `beeldStraal` (Marcel, 16 okt, L3: met de
+    // straal van 3 lag het licht als een waas over wie hem draagt, want die staat altijd in het felste midden).
+    lantaarn: { vanaf: 0.4, straal: 3, beeldStraal: 1.5, sterkte: 0.35 },
   };
   const IN = () => T.ZIEN_INSTELLINGEN;
 
@@ -29,7 +31,8 @@
   // js/versiering.js). Wie ze aansteekt, komt later (de koster; spel.md,
   // "lichtbronnen in het dorp"). En de lantaarns die iemand draagt (T.draagtLicht).
   // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'kaars', 'huis'
-  // of 'drager', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
+  // of 'drager', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen, en bij een
+  // drager met beeldStraal: zo ver ziet zijn licht eruit (js/tekenen.js), kleiner dan zijn straal.
   T.lichtBronnen = function (D) {
     const w = D.wereld;
     const herberg = T.herbergLicht(D).map((b) => ({ ...b, soort: 'herberg' }));
@@ -64,7 +67,7 @@
   };
   function dragersLicht(D) {
     const L = IN().lantaarn;
-    return T.lichtDragers(D).map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
+    return T.lichtDragers(D).map((e) => ({ x: e.x, y: e.y, straal: L.straal, beeldStraal: L.beeldStraal, sterkte: L.sterkte, soort: 'drager' }));
   }
 
   // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's
