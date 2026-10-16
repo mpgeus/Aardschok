@@ -106,11 +106,8 @@
     const [i, j, n] = knop.dataset.knop.split('.').map(Number);
     const r = huidig.delen[i] && huidig.delen[i].regels[j];
     const k = r && r.knoppen && r.knoppen[n];
-    // Een knop geeft een opdracht (js/tik.js): hij gaat in bij de volgende tik, en het briefje laat het dan zien. Talk op
-    // het briefje van een dorpeling (js/kiezen.js) opent zijn gesprek, meteen (tot stap 6 van vraag 170 is een gesprek
-    // geen opdracht).
-    if (k && k.kan && k.gesprek) T.openDialoog(briefjeVan.S, briefjeVan.wie, k.gesprek.id);
-    else if (k && k.kan) T.geefOpdracht(briefjeVan.S, Object.assign({ dorp: briefjeVan.S.dorpen.indexOf(briefjeVan.D) }, k.opdracht));
+    // Een knop geeft een opdracht (js/tik.js): hij gaat in bij de volgende tik, en het briefje laat het dan zien.
+    if (k && k.kan) T.geefOpdracht(briefjeVan.S, Object.assign({ dorp: briefjeVan.S.dorpen.indexOf(briefjeVan.D) }, k.opdracht));
     laatsteGebouw = ''; // meteen opnieuw opmaken
     bijgewerkt = -Infinity;
   }

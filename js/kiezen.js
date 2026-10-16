@@ -513,8 +513,8 @@
     return { kop: T.t('{n} men', { n: mannen.length }), doet: '', delen: [{ titel: T.t('Chosen'), regels }] };
   };
 
-  // Het briefje van een dorpeling: wie hij is, wat hij doet, waar hij woont, en praten als hij iets te zeggen heeft (een
-  // voorval, of de waard); het gesprek gaat dan meteen open, zonder dat de held erheen loopt (tot stap 5).
+  // Het briefje van een dorpeling: wie hij is, wat hij doet, en waar hij woont. (Tot vraag 170, stap 5 had de waard er
+  // Talk op; het praten is geparkeerd.)
   T.dorpelingBriefje = function (D, e) {
     const p = T.bewonerVan(D, e);
     if (!p) return null;
@@ -522,16 +522,7 @@
     const regels = [];
     if (p.huis) regels.push(T.t('Lives in the {huis}', { huis: (T.GEBOUWEN[p.huis.soort] || {}).naam || p.huis.soort }));
     else regels.push(T.t('No home'));
-    const gesprek = T.gesprekBij(D, e);
-    if (gesprek) regels.push({ tekst: gesprek.tekst, knoppen: [{ tekst: T.t('Talk'), uitleg: gesprek.tekst, kan: true, gesprek: { id: gesprek.id } }] });
     return { kop: over[0], doet: over[1] ? T.hoofdletter(over[1]) : '', delen: [{ titel: T.t('The villager'), regels }] };
-  };
-
-  // Heeft hij iets te zeggen: de waard (js/herberg.js). Geeft { id, tekst }.
-  T.gesprekBij = function (D, e) {
-    const p = T.bewonerVan(D, e);
-    if (p && p.werk && p.werk.soort === 'herberg') return { id: 'waard', tekst: T.t('About last night at the inn') };
-    return null;
   };
 
   // Het briefje van wat je koos (S.gekozen), als het een wezen is of een lijst: { D, briefje, wie }, of null.

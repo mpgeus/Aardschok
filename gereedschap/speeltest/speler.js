@@ -33,7 +33,7 @@
   const STAP = 0.25; // schermseconden per stap; op 30× ruim een half uur
 
   let boek = null; // wat er gebeurde, voor speeltest.cjs
-  const bezig = {}; // welk venster de speler zelf openhoudt (de heer, een gesprek): dat sluit beantwoord() niet
+  const bezig = {}; // welk venster de speler zelf openhoudt (de heer): dat sluit beantwoord() niet
 
   const S = () => T.S;
   const D = () => T.S.dorp; // je eigen dorp (js/dorp.js)
@@ -148,7 +148,7 @@
     }
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s.dorp);
     if (s.modus === 'heer' && !bezig.heer) T.ui.sluitHeer(s);
-    if (s.modus === 'dialoog' && !bezig.praten) T.sluitDialoog(s);
+    if (s.modus === 'dialoog') T.sluitDialoog(s);
     if (s.modus === 'velden') T.ui.sluitVelden(s);
     if (s.modus === 'wetten') T.ui.sluitWetten(s);
     if (s.modus === 'spelregels') T.ui.sluitSpelregels(s);
@@ -179,45 +179,14 @@
     if (r && r.kan && r.doe) r.doe();
   }
 
-  // ── Lopen en klikken ────────────────────────────────────────────────────────────────────────────
-  // Een klik op `doel` ({x, y} of {wezen}), en wachten tot de schout er is. Staat er iemand op de
-  // volgende tegel, dan blijft hij staan en is de klik weg (js/anim.js); dan klikt hij opnieuw, zoals
-  // een speler doet. `gelukt` zegt wanneer het goed ging (het venster is open, het gesprek loopt);
-  // anders: hij staat erop of ernaast. Geeft of het lukte.
-  async function klikOp(doel, maxUren = 6, gelukt = null) {
-    const tot = dagNu() + maxUren / 24;
-    let klaar = false;
-    for (let poging = 0; poging < 8 && !klaar; poging++) {
-      // Staat er iets open (een venster, een gesprek), dan eerst dat uit.
-      if (S().modus !== 'verkennen') await wachtTot(() => S().modus === 'verkennen', 24);
-      if (S().modus !== 'verkennen') return false;
-      const h = T.handelingVerkennen(S(), doel);
-      if (!h || !h.doe) return false;
-      h.doe();
-      await wachtTot(() => !S().schout.pad.length && !S().schout.onderweg, Math.max(0.1, (tot - dagNu()) * 24));
-      klaar = gelukt ? gelukt() : T.afstand(schoutTegel(), doel.wezen ? T.tegelVan(doel.wezen) : doel) <= 1;
-      if (dagNu() >= tot) break;
-      if (!klaar) await stap(0.05); // even wachten tot wie in de weg stond, doorloopt
-    }
-    return klaar;
-  }
-
-  const schoutTegel = () => T.tegelVan(S().schout);
-
   // ── De heer betalen ───────────────────────────────────────────────────────────────────────────
-  // Naar hem toe (zijn gesprek), en dan het venster, zoals de keuze in zijn gesprek het opent, met de knop "Alles wat hij
-  // vraagt".
+  // Een klik op hem opent het venster (vraag 170, stap 5: het praten is geparkeerd), met de knop "Alles wat hij vraagt".
   async function betaal() {
     const s = S();
     const heer = s.dorp.heer.bezoek.wezens && s.dorp.heer.bezoek.wezens[0];
-    if (heer) {
-      bezig.praten = true;
-      await klikOp({ wezen: heer }, 3, () => S().modus === 'dialoog');
-      bezig.praten = false;
-    }
-    T.sluitDialoog(s);
+    const h = heer && T.handelingVerkennen(s, { wezen: heer, x: heer.x, y: heer.y });
     bezig.heer = true;
-    T.doeGevolg(s, s.dorp, { heer: true });
+    if (h && h.doe) h.doe();
     if (s.modus !== 'heer') {
       bezig.heer = false;
       daad('kan de heer niet betalen: het venster ging niet open');

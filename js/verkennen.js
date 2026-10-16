@@ -87,7 +87,7 @@
   // Wat links doet bij het rondlopen (werklijst vraag 170, stap 1; Marcel, 15 okt: "Je speelt dus niet meer de schout
   // zelf"): kiezen. De muis zegt wat iets is, en een klik kiest het (`kies`, js/main.js): een van je mannen of een
   // dorpeling, met zijn briefje (js/kiezen.js), of een gebouw (`doe`, js/gebouwbriefje.js). Wie een gesprek heeft en
-  // geen dorpeling is (de heer, de marskramer), spreekt je meteen aan, zonder dat de held erheen loopt. Rechts stuurt je
+  // geen dorpeling is, opent wat hij komt doen: de marskramer zijn handel, de heer zijn venster. Rechts stuurt je
   // mannen (T.handelingSturen, js/kiezen.js). Tot 15 okt liep de schout erheen: praten, oprapen, een deur van het slot,
   // een vijand aanvallen.
   T.handelingVerkennen = function (S, doel) {
@@ -103,14 +103,18 @@
       if (e.kar) return { tekst: T.karTekst(D, e) };
       // Je mannen: de held, een soldaat, een veteraan (js/kiezen.js).
       if (D && T.isMan(D, e)) return { tekst: T.manTekst(D, e), kies: e };
-      // De waard (js/herberg.js): op zijn briefje staat Talk (T.gesprekBij, js/kiezen.js).
+      // De waard (js/herberg.js): wie hij is.
       const p = e.bewoner && D ? T.bewonerVan(D, e) : null;
       if (p && p.werk && p.werk.soort === 'herberg') return { tekst: T.t('{wie}, the innkeeper', { wie: T.naamVanBewoner(p) }), kies: e };
       // Een andere bewoner (js/bewoners.js): wie hij is.
       if (e.bewoner && D && T.overBewonerTekst) return { tekst: T.overBewonerTekst(D, e), kies: e };
-      // Wie een gesprek heeft (js/gesprekken.js): de heer, de marskramer. Welk gesprek dat is, zegt T.gesprekIdVan.
-      if (T.gesprekVan(e)) return { tekst: T.t('Talk to {wie}', { wie: e.naam }), doe: () => T.openDialoog(S, e) };
-      return null;
+      // Het praten is geparkeerd (vraag 170, stap 5; de gesprekken in js/gesprekken.js blijven staan): een klik op de
+      // marskramer opent zijn handel (js/handel.js), een klik op de heer het venster om hem te betalen (js/heer.js).
+      if (D && e.soort === 'marskramer' && T.kanHandelen(D)) return { tekst: T.t('Trade with {wie}', { wie: e.naam }), doe: () => T.ui.openHandel(D) };
+      if (D && e.soort === 'heer' && (T.heerWacht(D) || (D.heer.bezoek && D.heer.bezoek.schandpaal))) {
+        return { tekst: T.t('Pay {wie}', { wie: e.naam }), doe: () => T.ui.openHeer(S) };
+      }
+      return e.naam ? { tekst: T.hoofdletter(e.naam) } : null;
     }
     // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
     // staat — in aanbouw, aan het werk, of stil en waarom (spel.md, "Handel": een smidse zonder

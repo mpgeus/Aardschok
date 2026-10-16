@@ -180,16 +180,35 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   assert.ok(d.delen[0].regels.every((r) => typeof r === 'string'), 'niets te zeggen: geen Talk');
 });
 
-test('de waard heeft Talk op zijn briefje: het gesprek over gisteravond', () => {
+test('het praten is geparkeerd (stap 5): de waard heeft geen Talk, een klik op de marskramer opent zijn handel, op de heer zijn venster', () => {
   const { S } = proefDorp(T, { gebouwen: ['herberg'] });
   const D = S.dorp;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
   const waard = D.bewoners.mensen.find((p) => p.werk === g);
   assert.ok(waard && waard.wezen, 'de herberg heeft een waard');
-  assert.equal(T.gesprekBij(D, waard.wezen).id, 'waard');
   S.gekozen = waard.wezen;
-  const knop = T.gekozenBriefje(S).briefje.delen[0].regels.find((r) => typeof r === 'object').knoppen[0];
-  assert.deepEqual([knop.tekst, knop.gesprek], ['Talk', { id: 'waard' }]);
+  assert.ok(T.gekozenBriefje(S).briefje.delen[0].regels.every((r) => typeof r === 'string'), 'geen knop op zijn briefje');
+  const geopend = [];
+  const oud = T.ui;
+  T.ui = new Proxy({}, { get: (_, naam) => (...a) => geopend.push(naam) });
+  try {
+    const kramer = T.maakMens('marskramer', waard.wezen.tx, waard.wezen.ty, 1);
+    T.marskramerKomt(D, 0, S.kalender.dag);
+    const h = T.handelingVerkennen(S, { wezen: kramer, x: kramer.x, y: kramer.y });
+    assert.equal(h.tekst, 'Trade with the merchant');
+    h.doe();
+    assert.deepEqual(geopend, ['openHandel']);
+    D.marskramer.weg = true;
+    assert.equal(T.handelingVerkennen(S, { wezen: kramer, x: kramer.x, y: kramer.y }).doe, undefined, 'wie vertrekt, handelt niet meer');
+    const heer = T.maakMens('heer', waard.wezen.tx, waard.wezen.ty, 1);
+    T.heerKomt(D, S.kalender.dag);
+    const k = T.handelingVerkennen(S, { wezen: heer, x: heer.x, y: heer.y });
+    assert.equal(k.tekst, 'Pay the lord');
+    k.doe();
+    assert.deepEqual(geopend, ['openHandel', 'openHeer']);
+  } finally {
+    T.ui = oud;
+  }
 });
 
 test('twee werelden met dezelfde bevelen blijven gelijk (lockstep)', () => {
