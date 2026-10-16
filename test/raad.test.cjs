@@ -58,7 +58,7 @@ test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig gr
   assert.equal(raad(S).tekst, 'No family is coming: the village is full. Build a hut or a house: [B].');
   // Met een hut die af is, is er plaats (tot ronde 2 van het snoeien: een vrij erf).
   T.zetVoorraad(S.dorp, 'hout', 100);
-  const plek = T.plekVoor(S.dorp, 'hut', T.pleinVan(S.wereld));
+  const plek = T.plekVoor(S.dorp, 'hut', T.pleinVan(S.dorp));
   const u = T.plaatsGebouw(S.dorp, 'hut', plek.x, plek.y);
   assert.ok(u.gelukt, u.reden);
   u.instantie.klaar = true;
@@ -159,7 +159,7 @@ test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => 
     T.RAAD_INSTELLINGEN.aan = aan;
   }
   assert.ok(T.OPTIES.find((o) => o.id === 'raad'), 'de spelregel "Raad" bestaat');
-  S.dorp.wereld = Object.assign({}, S.dorp.wereld, { plein: null }); // het dorp heeft zijn eigen kaart (D.wereld)
+  S.dorp.plek = Object.assign({}, S.dorp.plek, { plein: null }); // het dorp heeft zijn eigen plek (D.plek, js/wereld.js)
   assert.equal(raad(S), null);
 });
 

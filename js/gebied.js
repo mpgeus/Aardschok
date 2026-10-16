@@ -223,14 +223,34 @@
     // Zijn loopmaat (T.AANVOERDER_SNELHEID, js/wereld.js) had hij al: die staat bij de aanvoerder in
     // T.WEZENS. Van 23 tot 24 sep stond hij hier stil, omdat de held (toen nog een tovenaar) op
     // zijn leeftijd liep en zelf snelheid 0 had; dit blijft staan als vangnet voor een oude kaart.
-    aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
-    if (aanvoerder.zaad == null) aanvoerder.zaad = 1;
-    zetNeer(aanvoerder, aanvoerder.x, aanvoerder.y);
+    zetAanvoerderKlaar(aanvoerder, 1);
     // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
-    // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp), en voorlopig
-    // het enige.
+    // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp); een tweede
+    // komt erbij met T.dorpErbij (hieronder).
     S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad });
     S.dorpen = [S.dorp];
     return true;
+  };
+  function zetAanvoerderKlaar(aanvoerder, zaad) {
+    aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
+    if (aanvoerder.zaad == null) aanvoerder.zaad = zaad; // zijn zaad kiest zijn vel (T.sprites.houding, js/sprites.js)
+    zetNeer(aanvoerder, aanvoerder.x, aanvoerder.y);
+  }
+
+  // Nog een dorp op het eiland van het eerste (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op
+  // hetzelfde eiland", en 16 okt: "A1"): op de dichtste andere dorpsplek die ver genoeg weg ligt (T.legDorpOpKaart,
+  // js/maker.js), op dezelfde kaart, met het lege begin erop. Zijn zaad komt uit dat van het eiland en zijn nummer, zodat
+  // hetzelfde spel hetzelfde tweede dorp krijgt. Het dorp komt achteraan in S.dorpen; geeft het dorp.
+  T.dorpErbij = function (S) {
+    const eerste = S.dorpen[0];
+    const w = eerste.wereld;
+    const E = T.eilandVan(w.eiland.zaad);
+    const bij = E.plekken.find((p) => p.naam === eerste.plek.naam);
+    const nummer = S.dorpen.length;
+    const { plek, aanvoerder } = T.legDorpOpKaart(w, { bij, niet: S.dorpen.map((D) => D.plek.naam) });
+    zetAanvoerderKlaar(aanvoerder, 1 + nummer);
+    const D = T.nieuwDorp(S, w, aanvoerder, { zaad: w.eiland.zaad + 7919 * nummer, plek });
+    S.dorpen.push(D);
+    return D;
   };
 })(globalThis.Spel = globalThis.Spel || {});

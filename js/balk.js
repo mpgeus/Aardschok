@@ -565,10 +565,11 @@
       mini.klaar = m.klaar;
     }
     // Wat je niet kent, donker; alleen als de mist veranderde (of de kaart).
-    if (mini.w !== w || mini.versie !== T.mistVersie(w)) {
+    if (mini.w !== w || mini.dorp !== S.dorp || mini.versie !== T.mistVersie(S.dorp)) {
       mini.w = w;
-      mini.versie = T.mistVersie(w);
-      const gekend = T.minikaartGekend(w);
+      mini.dorp = S.dorp;
+      mini.versie = T.mistVersie(S.dorp);
+      const gekend = T.minikaartGekend(S.dorp);
       const rgba = new Uint8ClampedArray(m.n * m.n * 4);
       const a = Math.round(255 * IN.onbekend);
       for (let i = 0; i < gekend.length; i++) {
@@ -618,7 +619,7 @@
       c.fillRect(Math.round(p.x * k - (maat * k) / 2) / k, Math.round(p.y * k - (maat * k) / 2) / k, maat, maat);
     };
     // De plekken die je kent (het kasteel, de stad, de dorpen), dan je gebouwen, en de aanvoerder.
-    for (const p of E.plekken || []) if (T.kentTegel(w, p.x, p.y)) stip(p.x, p.y, 4, '#2c1d12');
+    for (const p of E.plekken || []) if (T.kentTegel(S.dorp, p.x, p.y)) stip(p.x, p.y, 4, '#2c1d12');
     for (const g of S.dorp.gebouwen) {
       const r = T.voetVanGebouw(g);
       stip(r.x + r.b / 2, r.y + r.h / 2, 2, '#f3e3b8');

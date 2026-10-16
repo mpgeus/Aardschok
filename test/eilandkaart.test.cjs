@@ -95,8 +95,9 @@ test('eilandkaart: T.voorwerpenIn geeft wat er gezet is en wat er groeit, alleen
 test('eilandkaart: wie van jou bij de rand komt, maakt het stuk ernaast open, één per beeld', () => {
   const w = nieuweKaart();
   const R = T.WERELD_INSTELLINGEN.openRond;
-  const S = { dorp: { aanvoerder: T.maakWezen('aanvoerder', vak.x + 50, vak.y + 50) } };
   const D = { wereld: w };
+  D.aanvoerder = Object.assign(T.maakWezen('aanvoerder', vak.x + 50, vak.y + 50), { dorp: D }); // van het dorp (T.isVanDorp)
+  const S = { dorp: D };
   w.wezens.push(S.dorp.aanvoerder);
   const open = w.open.size;
   assert.equal(T.werkStukkenBij(S, D), null, 'midden in het land is alles om hem open');
@@ -118,7 +119,7 @@ test('eilandkaart: wie van jou bij de rand komt, maakt het stuk ernaast open, é
   const wolf = Object.assign(T.maakWezen('aanvoerder', verder.x, verder.y), { beest: 'wolf' });
   w.wezens.push(wolf);
   assert.equal(T.werkStukkenBij(S, D), null, 'een wolf maakt niets open');
-  const kar = Object.assign(T.maakWezen('aanvoerder', verder.x, verder.y), { kar: true });
+  const kar = Object.assign(T.maakWezen('aanvoerder', verder.x, verder.y), { kar: true, dorp: D });
   w.wezens.push(kar);
   assert.ok(T.werkStukkenBij(S, D) != null, 'de ossenkar maakt open');
   assert.ok(T.inVak(T.loopVak(w), verder.x - R, verder.y), 'en het lopen beslaat het nieuwe stuk');
@@ -133,14 +134,16 @@ test('eilandkaart: op een kaart uit Tiled gaat er niets open', () => {
 // het nieuwe stuk erbij. Dat moet hetzelfde geven als alles opnieuw, op een kaart zonder iets onthouden.
 test('eilandkaart: een nieuw stuk erbij geeft hetzelfde raster en dezelfde eilanden als alles opnieuw', () => {
   const w = nieuweKaart();
-  const S = { dorp: { aanvoerder: T.maakWezen('aanvoerder', vak.x + 50, vak.y + 50) } };
+  const D = { wereld: w };
+  D.aanvoerder = Object.assign(T.maakWezen('aanvoerder', vak.x + 50, vak.y + 50), { dorp: D });
+  const S = { dorp: D };
   w.wezens.push(S.dorp.aanvoerder);
   T.vastRaster(w);
   T.eilandOp(w, vak.x + 50, vak.y + 50);
   const versie = T.kaartVersie(w);
   const rand = T.loopVak(w);
   Object.assign(S.dorp.aanvoerder, { x: rand.x + rand.b - 2, y: rand.y + rand.h - 2 });
-  for (let i = 0; i < 3; i++) T.werkStukkenBij(S, { wereld: w });
+  for (let i = 0; i < 3; i++) T.werkStukkenBij(S, D);
   assert.equal(T.kaartVersie(w), versie, 'land erbij is geen verandering van de kaart');
   const nieuw = geladen(w);
   const lv = T.loopVak(w);
@@ -184,15 +187,17 @@ test('eilandkaart: een stuk dat vooruit gemaakt is, in delen, is hetzelfde als i
   const w = nieuweKaart();
   const I = T.WERELD_INSTELLINGEN;
   const rand = T.loopVak(w);
-  const S = { dorp: { aanvoerder: T.maakWezen('aanvoerder', rand.x + rand.b - I.openRond - 4, vak.y + 50) } };
+  const D = { wereld: w };
+  D.aanvoerder = Object.assign(T.maakWezen('aanvoerder', rand.x + rand.b - I.openRond - 4, vak.y + 50), { dorp: D });
+  const S = { dorp: D };
   w.wezens.push(S.dorp.aanvoerder);
   const delen = (T.STUK / I.vooruitDeel) ** 2;
-  for (let i = 0; i <= delen; i++) assert.equal(T.werkStukkenBij(S, { wereld: w }), null, 'binnen openRond is alles open');
+  for (let i = 0; i <= delen; i++) assert.equal(T.werkStukkenBij(S, D), null, 'binnen openRond is alles open');
   const n = T.stukVan(rand.x + rand.b, vak.y + 50);
   assert.ok(!w.open.has(n), 'het stuk is nog niet open');
   assert.equal(T.tegel(w, rand.x + rand.b, vak.y + 50), 'buiten');
   S.dorp.aanvoerder.x = rand.x + rand.b - 2;
-  assert.equal(T.werkStukkenBij(S, { wereld: w }), n);
+  assert.equal(T.werkStukkenBij(S, D), n);
   const land = T.landStuk;
   let heel = 0;
   T.landStuk = (...a) => {

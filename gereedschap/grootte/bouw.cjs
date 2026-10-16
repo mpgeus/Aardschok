@@ -66,7 +66,7 @@ function pastMetLucht(r, x, y, b, h, lucht) {
 // Alle plekken op volgorde van afstand tot het plein: het dorp groeit vanuit het midden.
 function kandidaten(D) {
   const w = D.wereld;
-  const c = w.marskramer || { x: w.b / 2, y: w.h / 2 };
+  const c = D.plek.marskramer || { x: w.b / 2, y: w.h / 2 };
   const lijst = [];
   for (let y = 1; y < w.h - 1; y++) for (let x = 1; x < w.b - 1; x++) lijst.push({ x, y, d: Math.hypot(x - c.x, y - c.y) });
   lijst.sort((a, b) => a.d - b.d || a.y - b.y || a.x - b.x);

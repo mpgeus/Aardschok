@@ -76,7 +76,7 @@
 
   // Tellen ze hier? Met de spelregel aan, en waar de heer kan komen (een wereld met een plein, js/heer.js): een
   // proefkaart heeft geen heer en geen dorp dat je kan wegsturen.
-  T.bazenTellen = (D) => IN().aan && !!(D && D.wereld && (D.wereld.heer || D.wereld.marskramer));
+  T.bazenTellen = (D) => IN().aan && !!(D && D.wereld && (D.plek.heer || D.plek.marskramer));
 
   // ---------------------------------------------------------------------------------------------
   // De meters

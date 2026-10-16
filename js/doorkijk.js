@@ -50,7 +50,7 @@
   T.zichtbaarDoor = function (S, e) {
     if (e.binnen) return null; // wie slaapt of binnen is, zie je niet door een dak heen
     if (T.isAanvoerder(S, e)) return 'alles';
-    if (e.dood || !T.zieJeWezen(S, S.wereld, e)) return null; // wie in de mist loopt, zie je niet (js/mist.js)
+    if (e.dood || !T.zieJeWezen(S, e)) return null; // wie in de mist loopt, zie je niet (js/mist.js)
     if (e.alarm > 0) return 'alles';
     if (e.doelwit || e.volgt) return 'alles'; // wie vecht (js/gevecht.js)
     if (S.spreektMet === e) return 'alles';

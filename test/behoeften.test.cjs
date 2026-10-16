@@ -15,8 +15,10 @@ function maakLegeWereld(b, h) {
 }
 
 function maakS(b, h) {
+  const wereld = maakLegeWereld(b || 20, h || 20);
   return {
-    wereld: maakLegeWereld(b || 20, h || 20),
+    wereld,
+    plek: T.legePlek(wereld), // de plek van het dorp op de kaart (js/wereld.js): hier zonder plein
     voorraad: T.nieuweVoorraad(),
     gebouwen: [],
     bevolking: 0,

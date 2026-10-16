@@ -61,14 +61,14 @@ test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () =>
   for (const zaad of [3, 5, 7]) {
     const w = land(zaad, true);
     const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
-    for (const k of w.kamp.plekken) {
+    for (const k of w.plekken[0].kamp.plekken) {
       const hoogten = new Set();
       for (let y = k.voet.y - lp; y < k.voet.y + k.voet.h + lp; y++) {
         for (let x = k.voet.x - lp; x < k.voet.x + k.voet.b + lp; x++) for (const v of T.hoekHoogten(w, x, y)) hoogten.add(Math.round(v * 100));
       }
       assert.equal(hoogten.size, 1, `land ${zaad}: de tent op (${k.voet.x}, ${k.voet.y}) ligt niet vlak`);
     }
-    for (const [px, py] of w.plein) {
+    for (const [px, py] of w.plekken[0].plein) {
       const hoeken = T.hoekHoogten(w, Math.round(px), Math.round(py));
       assert.ok(Math.max(...hoeken) - Math.min(...hoeken) < 1, `land ${zaad}: het plein op (${Math.round(px)}, ${Math.round(py)})`);
     }
@@ -158,7 +158,7 @@ test('hoogte, lopen: niet door een wand, wel over een helling; op "Vlak" verande
     }
     assert.ok(wanden > 0);
     // de richel: elke tegel waar je kunt staan, is te halen vanaf het plein, en de weg erheen gaat over de helling
-    const plein = T.pleinTegels(w).find((t) => T.isBegaanbaar(w, t.x, t.y));
+    const plein = T.pleinTegels({ wereld: w, plek: w.plekken[0] }).find((t) => T.isBegaanbaar(w, t.x, t.y));
     const richel = Object.keys(w.hoogte.niveau).map((s) => s.split(',').map(Number));
     const [rx, ry] = richel.find(([x, y]) => T.isBegaanbaar(w, x, y) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([a, b]) => w.hoogte.niveau[x + a + ',' + (y + b)]));
     const pad = T.zoekRoute(w, plein, { x: rx, y: ry }, {});

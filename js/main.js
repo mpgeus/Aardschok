@@ -216,7 +216,7 @@
     const kandidaten = [];
     for (const e of w.wezens) {
       // De aanvoerder is te kiezen, zoals je mannen (js/kiezen.js).
-      if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
+      if (e.dood || e.binnen || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -227,7 +227,7 @@
     const onder = T.naarWereld(sx, sy);
     for (const v of T.voorwerpenIn(w, { x: Math.floor(onder.x) - 12, y: Math.floor(onder.y) - 12, b: 28, h: 28 })) {
       const hoog = voorwerpHoogte(v);
-      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(w, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
+      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(S.dorp, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
       const p = T.naarSchermOp(S.wereld, v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
@@ -445,7 +445,7 @@
   // overzicht (vraag 108, a); tot stap 2 keek het gevecht in beurten nog zelf mee.
   // Het midden van het plein, in tegels; zonder plein (een proefkaart) de aanvoerder, of de hoek van de kaart.
   function pleinMidden() {
-    const rand = S.wereld.plein;
+    const rand = S.dorp && S.dorp.plek ? S.dorp.plek.plein : null;
     if (rand && rand.length) return { x: rand.reduce((n, [x]) => n + x, 0) / rand.length, y: rand.reduce((n, [, y]) => n + y, 0) / rand.length };
     const h = S.dorp.aanvoerder;
     return h ? { x: h.x, y: h.y } : { x: 0, y: 0 };
@@ -655,7 +655,7 @@
     } else kiesMannen([e], erbij, erbij);
   }
   function kiesInKader(k, erbij) {
-    if (T.dorpHier(S) !== S.dorp) return;
+    if (!S.dorp || S.dorp.wereld !== S.wereld) return; // je eigen mannen, ook bij een ander dorp op de kaart
     const [x0, x1] = [Math.min(k.x0, k.x), Math.max(k.x0, k.x)];
     const [y0, y1] = [Math.min(k.y0, k.y), Math.max(k.y0, k.y)];
     const binnen = mannenInBeeld().filter((e) => {
@@ -1380,10 +1380,10 @@
       const w = S.gebieden && S.gebieden.gehucht;
       if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (een proefje, of een oud spel).'; // geen tekst
       const E = T.eilandVan(w.eiland.zaad);
-      const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
+      const dorp = E.plekken.find((p) => p.naam === S.dorp.plek.naam);
       return {
         eiland: w.eiland.zaad,
-        dorp: w.eiland.dorp,
+        dorp: S.dorp.plek.naam,
         plek: dorp ? dorp.aard : null,
         hoek: [w.eiland.x0, w.eiland.y0],
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
@@ -1423,7 +1423,7 @@
       if (!B) return 'Dit spel begon niet leeg (een proefje, of een oud spel van vóór 12 okt).'; // geen tekst
       return {
         kamp: B.kamp,
-        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
+        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.plek.kamp.kar.x, D.plek.kamp.kar.y], nogTegels: B.kar.pad.length },
         aanvoerderLooptMee: B.volgt,
         gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar', // geen tekst
         tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
@@ -1460,7 +1460,7 @@
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
-      if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
+      if (!(S.dorp && S.dorp.plek.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
       const nu = T.raadNu(S.dorp);
       return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },
@@ -1472,6 +1472,26 @@
       if (wat === 'val' && D.aanvoerder) T.valt(S, D, D.aanvoerder, null);
       const p = T.opvolgerVan(D);
       return { aanvoerder: naam(D.aanvoerder), opvolger: p ? T.naamVanBewoner(p) : null, wapen: D.aanvoerder ? T.slagVan(D.aanvoerder).wapen : null };
+    },
+    // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/gebied.js): op de dichtste andere
+    // dorpsplek, met het lege begin. Spel.debug.wissel() maakt jou het volgende dorp, zodat je ze in één browser speelt:
+    // wat je ziet, hoort, bouwt en stuurt, is dan van dat dorp (S.dorp; alleen scherm).
+    tweedeDorp() {
+      if (!S.dorp.plek.naam) return 'Een tweede dorp kan alleen op het eiland.'; // geen tekst
+      const D = T.dorpErbij(S);
+      const v = (P) => ({ x: P.plek.vak.x + P.plek.vak.b / 2, y: P.plek.vak.y + P.plek.vak.h / 2 });
+      return `Een tweede dorp in ${D.plek.naam}, ${Math.round(T.afstand(v(S.dorpen[0]), v(D)))} tegels verder. Spel.debug.wissel() maakt het van jou.`; // geen tekst
+    },
+    wissel() {
+      if (S.dorpen.length < 2) return 'Er is maar één dorp: Spel.debug.tweedeDorp() maakt er een bij.'; // geen tekst
+      S.dorp = S.dorpen[(S.dorpen.indexOf(S.dorp) + 1) % S.dorpen.length];
+      S.gekozen = null;
+      S.groepen = {};
+      const m = T.pleinVan(S.dorp) || { x: S.dorp.plek.vak.x + S.dorp.plek.vak.b / 2, y: S.dorp.plek.vak.y + S.dorp.plek.vak.h / 2 };
+      const p = T.naarSchermOp(S.wereld, m.x, m.y);
+      T.kijkNaar(p.x, p.y);
+      T.ui.werkBalkBij(S);
+      return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
     },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
@@ -1792,6 +1812,7 @@
         }
         S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
         const e = T.zetOpWeide(T.maakDier(soort, plek.x, plek.y, S.dorp.veeZaad), v);
+        e.dorp = S.dorp;
         w.wezens.push(e);
         opWeide.push(e);
       }
@@ -1827,6 +1848,7 @@
             if (dieren.some((d) => T.afstand({ x: d.tx, y: d.ty }, { x, y }) < 2)) continue;
             S.dorp.veeZaad = (S.dorp.veeZaad || 0) + 1;
             const e = T.maakDier(soort, x, y, S.dorp.veeZaad);
+            e.dorp = S.dorp;
             w.wezens.push(e);
             dieren.push(e);
             geplaatst.push(e);

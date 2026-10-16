@@ -383,6 +383,7 @@
 
     // Eigenschappen van de kaart zelf (in Tiled: de eigenschappen van de map).
     const eig = eigenschappenVan(kaart);
+    const plein = betekenis && Array.isArray(betekenis.plein) ? betekenis.plein.map(([x, y]) => [x, y]) : null;
 
     return {
       b, h, tegels, grond, deuren, geheimen, kamers: [kamerBuiten],
@@ -395,15 +396,18 @@
       // en in het spel niet meetelt. De keuring laat zo'n kaart met rust waar het om het spel als
       // geheel gaat (een aansluiting die maar één kant heeft, bijvoorbeeld).
       proef: !!(betekenis && betekenis.proef),
-      // De rand van het plein, in tegels (T.opHetPlein, js/wereld.js); zonder "plein" heeft de kaart
-      // er geen, en is de plek van de marskramer het plein (T.pleinVan, js/bewoners.js).
-      plein: betekenis && Array.isArray(betekenis.plein) ? betekenis.plein.map(([x, y]) => [x, y]) : null,
-      // Waar de marskramer zijn waar uitstalt (js/handel.js), en eventueel waar hij de kaart op
-      // komt ("komt"; anders de eerste uitgang). Zonder "marskramer" komt hij hier nooit.
-      marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,
-      // Waar de heer op Sint-Maarten staat (js/heer.js); zonder "heer" staat hij waar de
-      // marskramer staat, op het plein.
-      heer: betekenis && betekenis.heer ? { ...betekenis.heer } : null,
+      // De pleinen op de kaart (T.opHetPlein, js/wereld.js), en de ene dorpsplek die de kaart noemt (w.plekken,
+      // T.legePlek): de rand van het plein, in tegels (zonder "plein" heeft de kaart er geen, en is de plek van de
+      // marskramer het plein, T.pleinVan in js/bewoners.js); waar de marskramer zijn waar uitstalt (js/handel.js), en
+      // eventueel waar hij de kaart op komt ("komt"; anders de eerste uitgang; zonder "marskramer" komt hij hier nooit);
+      // en waar de heer op Sint-Maarten staat (js/heer.js; zonder "heer" staat hij waar de marskramer staat).
+      pleinen: plein ? [plein] : [],
+      plekken: [{
+        naam: null, vak: { x: 0, y: 0, b, h }, plein, kamp: null, markt: null,
+        uitgang: overgangen[0] ? { x: overgangen[0].x, y: overgangen[0].y } : null,
+        marskramer: betekenis && betekenis.marskramer ? { ...betekenis.marskramer } : null,
+        heer: betekenis && betekenis.heer ? { ...betekenis.heer } : null,
+      }],
     };
   };
 

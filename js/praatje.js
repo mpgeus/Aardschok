@@ -61,8 +61,8 @@
   // weg, aan zijn eigen hut bouwen, en de waard 's avonds.
   // `deel` is het deel van de dag (T.dagdeelVan, js/dag.js).
   T.kanPraten = function (S, D, e, deel) {
-    if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.moetNaar || e.vertrekt) return false;
-    if (T.isAanvoerder(S, e) || e === D.aanvoerder || e === S.spreektMet || e.kant === 'monster') return false;
+    if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.moetNaar || e.vertrekt || !T.hoortBij(D, e)) return false;
+    if (e === D.aanvoerder || e === S.spreektMet || e.kant === 'monster') return false;
     if (D.gevecht) return false; // niet midden in een gevecht (js/gevecht.js)
     if (deel === 'nacht') return false;
     const p = T.bewonerVan(D, e);
@@ -104,12 +104,13 @@
 
   // ── De groepjes ──
 
-  // De praatjes op een kaart: elk groepje met wie erin staat, in de volgorde van de kaart.
-  T.praatjesOp = function (w) {
+  // De praatjes op een kaart: elk groepje met wie erin staat, in de volgorde van de kaart. Met `D` alleen die van dat dorp
+  // (T.hoortBij, js/wereld.js): een praatje is altijd binnen één dorp.
+  T.praatjesOp = function (w, D) {
     const groepen = new Map();
     for (const e of w.wezens) {
       const g = e.praatje;
-      if (!g) continue;
+      if (!g || (D && !T.hoortBij(D, e))) continue;
       const l = groepen.get(g);
       if (l) l.push(e);
       else groepen.set(g, [e]);
@@ -180,7 +181,7 @@
     for (const b of w.wezens) {
       if (b === e || Math.abs(b.tx - e.tx) > I.afstand || Math.abs(b.ty - e.ty) > I.afstand) continue;
       if (b.praatje) {
-        groepen = groepen || T.praatjesOp(w);
+        groepen = groepen || T.praatjesOp(w, D);
         if ((groepen.get(b.praatje) || []).length >= I.groep) continue;
       } else if (loopt(b) || rust(D, b)) continue;
       if (!T.kanPraten(S, D, b, deel) || !T.kentElkaar(D, p, T.bewonerVan(D, b))) continue;
@@ -268,7 +269,7 @@
   T.werkPraatjesBij = function (S, D) {
     const w = D.wereld;
     if (!w || !D.kalender) return;
-    const groepen = T.praatjesOp(w);
+    const groepen = T.praatjesOp(w, D);
     if (!groepen.size) return;
     const I = IN();
     const dag = D.kalender.dag;

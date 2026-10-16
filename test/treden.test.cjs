@@ -189,7 +189,8 @@ test('het hoofdgeld in een dorp: alleen woorden, tenzij de werkbank het hoger ze
 });
 
 test('op een kaart zonder plein is er geen trede te halen', () => {
-  const D = { trede: 'gehucht', wereld: { tegels: [['vloer']], voorwerpen: [] }, gebouwen: [], bevolking: 80 }; // een los dorp
+  const wereld = { tegels: [['vloer']], voorwerpen: [] };
+  const D = { trede: 'gehucht', wereld, plek: T.legePlek(wereld), gebouwen: [], bevolking: 80 }; // een los dorp, zonder plein
   assert.equal(T.tredeDoel(D), null);
   T.tikTredeDag(D);
   assert.equal(D.trede, 'gehucht');

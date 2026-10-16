@@ -31,10 +31,10 @@ test('het lege land: geen huizen, geen boeren, geen akkers; wel het plein, de pl
   assert.deepEqual([...new Set(D.gebouwen.map((g) => g.soort))], ['tent'], 'er staan alleen de tenten van het kamp');
   assert.equal(w.akkers ? w.akkers.length : 0, 0);
   assert.ok(!w.wezens.some((e) => e.wie), 'er is nog geen boer of herbergierster');
-  assert.ok(w.marskramer, 'de marskramer heeft zijn plek');
-  assert.ok(T.wegInEnUit(w), 'de weg komt het land in');
-  assert.ok(T.pleinTegels(w).length > 100, 'er is een plein');
-  assert.ok(w.kamp && w.kamp.plekken.length >= 1 + T.BEGIN_INSTELLINGEN.gezinnen, 'de maker koos een plek voor het kamp');
+  assert.ok(D.plek.marskramer, 'de marskramer heeft zijn plek');
+  assert.ok(T.wegInEnUit(D), 'de weg komt het land in');
+  assert.ok(T.pleinTegels(D).length > 100, 'er is een plein');
+  assert.ok(D.plek.kamp && D.plek.kamp.plekken.length >= 1 + T.BEGIN_INSTELLINGEN.gezinnen, 'de maker koos een plek voor het kamp');
 });
 
 test('het kamp: een tent per gezin, die van de aanvoerder is zijn huis, en er is geen plaats voor een nieuw gezin', () => {
@@ -83,7 +83,7 @@ test('staat het kamp er in de nacht nog niet (geen beelden, of de kar zat vast),
   assert.equal(D.begin.kamp, 'op');
   assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent').length, 1 + T.BEGIN_INSTELLINGEN.gezinnen);
   assert.equal(w.voorwerpen.filter((v) => v.soort === 'kampvuur').length, 1);
-  assert.deepEqual([D.begin.kar.tx, D.begin.kar.ty], [w.kamp.kar.x, w.kamp.kar.y], 'de kar staat op zijn plek');
+  assert.deepEqual([D.begin.kar.tx, D.begin.kar.ty], [D.plek.kamp.kar.x, D.plek.kamp.kar.y], 'de kar staat op zijn plek');
   for (const g of D.gebouwen) assert.ok(g.voorwerp && w.voorwerpen.includes(g.voorwerp), 'elke tent staat op de kaart');
   assert.ok(!T.magOpzij(S, D.begin.kar), 'wie de kar op zijn weg vindt, laat hem niet opzij gaan');
   assert.ok(D.bewoners.komen.length || D.bewoners.mensen.every((p) => p.aanvoerder || p.wezen), 'de gezinnen zijn onderweg');
@@ -110,7 +110,7 @@ test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer v
 // op open grond (met `rooien` ook in het bos). Met een vaste reeks toeval, want welke tekening een hut krijgt (en dus hoe
 // groot hij is), kiest T.volgendeTekening.
 function zetHutten(D, n, soort = 'hut', rooien = false) {
-  const v = D.wereld.kamp.vuur;
+  const v = D.plek.kamp.vuur;
   const hutten = [];
   const toeval = Math.random;
   let z = 7;
@@ -221,7 +221,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   const { S, D, w } = leegBegin();
   dagen(S, 1, 1);
   const R = T.BEGIN_INSTELLINGEN.bouwBereik;
-  const plein = T.pleinTegels(w);
+  const plein = T.pleinTegels(D);
   const verst = (t) => Math.min(...plein.map((p) => Math.hypot(p.x - t.x, p.y - t.y)));
   for (const p of plein) assert.ok(T.inBouwBereik(D, p.x, p.y), 'het plein ligt erin');
   const B = T.bouwBereikVan(D);
@@ -270,7 +270,7 @@ function huisVanDeAanvoerder() {
   assert.ok(gezegd.some((t) => /ossenkar|ox cart/.test(t)), 'en het dorp zegt het');
   // het is de eerste opslag: rond het huis bouw je ook, waar het plein te ver is
   const R = T.BEGIN_INSTELLINGEN.bouwBereik;
-  const plein = T.pleinTegels(w);
+  const plein = T.pleinTegels(D);
   const vanPlein = (x, y) => Math.min(...plein.map((p) => Math.hypot(p.x - x, p.y - y)));
   const voet = T.voetVanGebouw(huis);
   const rond = [];

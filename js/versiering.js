@@ -40,7 +40,7 @@
     if (V.boom && !staatOp(V.boom.soort, dag)) haalBoomWeg(D);
     if (V.boom) return;
     const soort = BOMEN.find((s) => staatOp(s, dag));
-    const midden = soort && T.openMidden(w, true);
+    const midden = soort && T.openMidden(D, true);
     if (!midden) return;
     T.zetVoorwerp(w, { soort, x: midden.x, y: midden.y });
     V.boom = { soort, x: midden.x, y: midden.y };

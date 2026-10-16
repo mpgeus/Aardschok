@@ -100,7 +100,7 @@
     for (const g of D.gebouwen || []) {
       if (!T.isWijnboerderij(g)) continue;
       for (const e of (D.wereld && D.wereld.wezens) || []) {
-        if (!(e.mand > 0)) continue;
+        if (!(e.mand > 0) || !T.hoortBij(D, e)) continue;
         const p = T.bewonerVan(D, e);
         if (!p || p.huis !== g) continue;
         T.wijnBinnen(D, e.mand, g);

@@ -48,7 +48,11 @@
     meet('dorpen', () => {
       for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     });
-    meet('lopen', () => T.beweegWezens(S, S.wereld, dt, dtWereld)); // wie loopt, waar de aanvoerder is (js/anim.js)
+    // Wie loopt, één keer per kaart (js/anim.js): waar je kijkt, en elke kaart met een dorp erop (op één kaart kunnen
+    // meer dorpen leven; werklijst vraag 170, stap 6a).
+    meet('lopen', () => {
+      for (const w of kaartenVan(S)) T.beweegWezens(S, w, dt, dtWereld);
+    });
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat (T.bijAankomst): de lijst
     // wezens van de wereld verandert erdoor, en daar loopt het lopen net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
@@ -59,8 +63,7 @@
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land
       // werkt (T.werkVeldwerkBij, js/veldwerk.js), staat voor T.laatDwalen al "bezig" (m.pad.length, m.maait of m.werkt)
       // en dwaalt deze tik niet ook nog weg.
-      const hier = T.dorpHier(S);
-      if (hier) {
+      for (const hier of S.dorpen.filter((D) => D.wereld === S.wereld)) {
         meet('oogst', () => T.werkOogstBij(S, hier, dtWereld));
         meet('veldwerk', () => T.werkVeldwerkBij(S, hier));
         meet('beesten', () => T.werkBeestenBij(S, hier)); // de wolven en de herten in het bos (js/beesten.js)
@@ -68,6 +71,12 @@
       meet('dwalen', () => T.laatDwalen(S, dtWereld));
     }
   };
+  // De kaarten waar iets leeft: waar je kijkt, en die van de dorpen, elk één keer.
+  function kaartenVan(S) {
+    const uit = S.wereld ? [S.wereld] : [];
+    for (const D of S.dorpen) if (!uit.includes(D.wereld)) uit.push(D.wereld);
+    return uit;
+  }
 
   // ── De opdrachten van de spelers ──
   //

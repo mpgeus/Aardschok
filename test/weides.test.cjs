@@ -25,6 +25,7 @@ function wereldMet(velden, meent) {
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, tijd: 0,
     kalender: { dag: 0, snelheid: 1 }, lot: { zaad: 42 },
+    plek: { vak: { x: 0, y: 0, b: 40, h: 40 } }, // de plek van het dorp (D.plek, js/wereld.js)
     wereld: {
       b: 40, h: 40, wezens: [], akkers, meenten: meent ? [{ naam: 'heide', meent: true, ...meent }] : [],
       tegels: Array.from({ length: 40 }, () => Array(40).fill('gras')),

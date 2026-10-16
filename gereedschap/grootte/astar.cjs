@@ -75,7 +75,7 @@ const uit = {};
   uit.gehucht.onbereikbaar = { zonderWezens: tijd(w, a, nietBereikbaar, gewoon(w), 50), metWezens: tijd(w, a, nietBereikbaar, metWezens(w, null), 30) };
   for (const [x, y, t] of oud) kaart[y][x] = t;
   // Vanuit het midden naar de rand van het plein en naar de put: zoals een bewoner
-  const plein = w.marskramer;
+  const plein = w.plekken[0].marskramer;
   const dorp = dichtbij(w, 20, 20);
   uit.gehucht.dorpsloop = { van: dorp, naar: plein, zonderWezens: tijd(w, dorp, plein, gewoon(w), 300), metWezens: tijd(w, dorp, plein, metWezens(w, null), 300) };
 }

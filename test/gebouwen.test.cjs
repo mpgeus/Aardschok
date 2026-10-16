@@ -29,7 +29,8 @@ function maakLegeWereld(b, h) {
 }
 
 function maakS(b, h) {
-  return { wereld: maakLegeWereld(b || 20, h || 20), voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 } };
+  const wereld = maakLegeWereld(b || 20, h || 20);
+  return { wereld, plek: T.legePlek(wereld), voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 } };
 }
 
 test('elke soort in T.GEBOUWEN heeft naam, trede, kosten en bouwtijd', () => {
@@ -84,7 +85,8 @@ test('T.gebouwPast: de hele voet moet vrij zijn, niet alleen de linkerbovenhoek'
 // zegt waarom, bij de muis en na een klik (T.waaromPastHetNiet, js/main.js).
 test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
   const S = maakS();
-  S.wereld.plein = [[8, 8], [14, 8], [14, 14], [8, 14]];
+  S.plek.plein = [[8, 8], [14, 8], [14, 14], [8, 14]];
+  S.wereld.pleinen = [S.plek.plein];
   T.zetVoorraad(S, 'hout', 50);
   assert.equal(T.waaromPastHetNiet(S, 'put', 10, 10), 'Nothing is built on the square.');
   assert.equal(T.gebouwPast(S, 'put', 10, 10), false);

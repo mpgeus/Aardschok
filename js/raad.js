@@ -113,7 +113,7 @@
     const w = D.wereld;
     const tB = ' [B]';
     // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
-    const water = waterBij(w);
+    const water = waterBij(D);
     const visser = T.GEBOUWEN.visser;
     const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
     const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));
@@ -146,7 +146,7 @@
   };
 
   // Hoeveel tegels water er in het vak om het dorp liggen (voor een visser).
-  const waterBij = (w) => (T.heeftTegels(w) ? T.natuurBij(w, 'water', T.kaartVak(w), 0) : 0);
+  const waterBij = (D) => (T.heeftTegels(D.wereld) ? T.natuurBij(D.wereld, 'water', T.dorpVak(D), 0) : 0);
 
   // Wat een soort eten op tafel brengt die er nu niet bij is (vraag 154, de afwisseling; Marcel, 13 okt: "A1"): per
   // soort het gebouw dat hem maakt, als het nu mag. Staat er al een, dan is wat hij maakt nog geen tiende van de
@@ -158,7 +158,7 @@
     const uit = [];
     for (const [soort, bouw] of Object.entries(MAAKT_SOORT)) {
       if (op.includes(soort) || T.voedtAlsGraan(soort) <= 0 || !T.magGebouwd(D, bouw)) continue;
-      if ((bouw === 'visser' && !waterBij(D.wereld)) || (bouw === 'wijnboerderij' && heeft(D, bouw))) continue;
+      if ((bouw === 'visser' && !waterBij(D)) || (bouw === 'wijnboerderij' && heeft(D, bouw))) continue;
       const namen = bouw === 'bakkerij' && !heeft(D, 'molen') ? [eenNaam('molen'), eenNaam(bouw)]
         : [heeft(D, bouw) ? T.t('another {gebouw}', { gebouw: naamVan(bouw) }) : eenNaam(bouw)];
       uit.push({ soort, bouw, zin: T.t('{gebouwen} [B] ({soort})', { gebouwen: T.opsomming(namen), soort: T.waarNaam(soort) }) });
@@ -368,7 +368,7 @@
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.
   T.raadNu = function (D) {
-    if (!IN().aan || !(D.wereld && D.wereld.plein) || !D.kalender || !D.voorraad) return null;
+    if (!IN().aan || !(D.wereld && D.plek.plein) || !D.kalender || !D.voorraad) return null;
     for (const r of T.RADEN) if (r.als(D)) return { id: r.id, tekst: r.tekst(D) };
     return null;
   };

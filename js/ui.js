@@ -61,7 +61,9 @@
 
     // `plek` ({ x, y }, een tegel; T.zeg in js/dorp.js): een klik op het bericht, of Spatie, brengt de camera erheen
     // (T.glijNaar, js/main.js), en de plek knippert op de minikaart (js/balk.js). Werklijst vraag 170, stap 1d.
-    bericht(tekst, soort, plek) {
+    // `D`: het dorp dat het zegt (T.zeg); wat een ander dorp zegt dan je eigen (S.dorp), toont het scherm niet.
+    bericht(tekst, soort, plek, D) {
+      if (D && T.S && T.S.dorp && D !== T.S.dorp) return;
       if (plek && T.S) {
         T.S.berichtPlek = { x: plek.x, y: plek.y };
         if (this.ping) this.ping(plek);

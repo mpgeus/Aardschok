@@ -62,10 +62,15 @@ is af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"): de schout heet aa
 over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Marcel kwam erna met vraag
 171** (bij I): elke groep soldaten heeft een groepsleider die een lantaarn draagt (besloten: "A1, B1, C1, D2"). **De
 regel en het licht zijn af, en de proefplaat van de lantaarn in de hand is goed** (16 okt, in `main`; Marcel: "goed zo
-voor nu"). **Het lantaarntje in de hand is af** (16 okt, op de branch `claude/ecstatic-ride-yam3i6`; Marcel: "A1, B1"; `beeld.md`,
+voor nu"). **Het lantaarntje in de hand is af** (16 okt, in `main`; Marcel: "A1, B1"; `beeld.md`,
 "De lantaarn van de groepsleider"), en zijn licht is op het scherm kleiner (Marcel: "het ligt vóór het poppetje", en
 koos L3). Daarna **stap 6, samen spelen** (bij
-I). **Bezig in sessie `ccr-055aff40-lz2bwx`** (16 okt): het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+I). Het plan is besloten (Marcel: "A1 b1 c2 d1"). **6a, één kaart met meer dorpen, is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"): een tweede dorp op het eiland, elk met zijn
+eigen wezens, velden, plek en mist, en wie van een ander dorp is, is een vijand. **Marcel kwam erna met "de wereld van
+iedereen"** (bij I: het wild en de rovers van het eiland, losse spelers; besloten: "W1, R1, Rb, maar dit wisselt ze leren,
+N1, V1", en "K1 en L1"): **het volgende is 6a2** (het plan bij I, in vier stukken: a de wereld werkt haar eigen wezens
+bij, b het wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Bezig in
+sessie `ccr-53565789-zrmyk0`** (16 okt): 6a2, eerst het plan voor stuk a voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -102,8 +107,21 @@ stenen huizen. **Ronde 3 is af.**
   had; (3) de werkbank staat alleen nog in D, niet bij *New game* of in het menu; (4) *Continue* heeft één regel eronder
   (het dorp, de dag, de mensen), en verder heeft alleen *Game rules* en *Photo mode* een regel; (5) Credits zegt "A game by
   Marcel, made with Claude", en de letters met hun licentie; (6) *Quit* staat er alleen in de Electron-versie.
-- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt; de regel en het licht in `main`, het lantaarntje op
-  de branch `claude/ecstatic-ride-yam3i6`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
+- **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, in `main`): Nieuw spel, en
+  in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
+  tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
+  balk, de mist, de minikaart en de berichten zijn van hem; nog eens `wissel()` en je bent terug. Zet in het ene dorp een
+  wachthuis met militie, stuur ze naar het andere (rechts klikken, op de minikaart kijken): ze vallen de aanvoerder en de
+  dorpelingen van de ander aan (C2), die vluchten naar hun eigen town hall, en allebei de dorpen vechten. **Wat Claude
+  erbij koos** (zeg het als het anders moet): (1) elk wezen hoort bij één dorp, ook het vee, de wolven, de rovers en de
+  bezoekers, en elk dorp werkt alleen zijn eigen bij, met zijn eigen dobbelsteen: zo speelt het eerste dorp een half jaar
+  letter voor letter hetzelfde, met of zonder het tweede; (2) elk dorp heeft zijn eigen mist; (3) de muis op een mens, een
+  gebouw of een veld van de ander zegt alleen wat het is en van wie ("Gilbert, of Oldland"); (4) je bouwt niet in het
+  bereik van de ander; (5) wie aangevallen wordt, krijgt ook de status en het bericht van het gevecht; (6) de werkbank
+  heeft er één getal bij: *another village at least* (200 tegels, "The maker"). **Om naar te kijken:** het licht, de rook
+  en de paadjes tekent het scherm alleen voor het dorp waar je kijkt, en "Hoogte" en de bouwstijl volgen het eerste dorp
+  (`opmerkingen.md`).
+- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
   *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
   licht, een kleine plas om hem heen (L3), en de wolven vallen niemand binnen 3 tegels van hem aan. In zijn hand hangt een lantaarntje met een gloeiend hoorn,
   dat bij het lopen meeschommelt; loopt hij achter een huis, dan is het mee weg. **Wat Claude erbij koos** (zeg het als
@@ -726,8 +744,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   voor de wolven: **"elke groep soldaten heeft een groepsleider die een lantaarn draagt"**). **De regel en het licht
   zijn af** (16 okt, in `main`; `spel.md`, "Zo werkt de held nu"; `code.md` bij `js/soldaten.js`), en **de proefplaat van
   de lantaarn in de hand is goed** (Marcel: "goed zo voor nu"; `beeld.md`, "De lantaarn van de groepsleider";
-  `gereedschap/pixelart/lantaarn.cjs`), en **het lantaarntje in de hand is af** (16 okt, op de branch
-  `claude/ecstatic-ride-yam3i6`; `beeld.md`, "Hoe het spel hem tekent"; `code.md` bij `js/sprites.js`): het vel in
+  `gereedschap/pixelart/lantaarn.cjs`), en **het lantaarntje in de hand is af** (16 okt, in `main`; `beeld.md`, "Hoe het spel hem tekent"; `code.md` bij `js/sprites.js`): het vel in
   `beelden/lantaarn.png`, de handen in `beelden/handen.js`, en het tekenen in `js/tekenen.js` (`tekenLantaarn`). Het licht
   om de drager is op het scherm kleiner dan voor de regel (Marcel: "het licht is beetje lelijk, het ligt vóór het
   poppetje", en koos **L3** uit vier proeven: een plas van 1,5 tegel en 0,35 fel, `beeldStraal` in
@@ -741,6 +758,93 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
   zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
   Steam; meedoen is het opgeslagen spel krijgen (alles staat al in `S`), en een controle dat de werelden gelijk blijven.
+  **Wat de code nu aanneemt** (16 okt, gezocht): **één dorp per kaart**, op zo'n twintig plekken: `T.dorpHier` vindt
+  hét dorp van een kaart, `T.isVanJou` en `T.isMan` tellen elke bewoner op de kaart als de jouwe, een vijand is alleen een
+  monster (`T.isVijandig`), en het plein, het kamp, de markt, de plek van de marskramer, het bouwbereik en de mist
+  (`w.gekend`) liggen één keer op de kaart; de maker maakt voor elk dorp een eigen kaart (`wereldVanPlan`), al kent het
+  eiland meer dorpsplekken (`E.plekken`). Verder **leest de wereld wat per computer verschilt**: `S.dorp` (de quests,
+  wie het land openmaakt), `S.wereld` (wie loopt) en `S.modus === 'verkennen'` (de oogst, het veldwerk, de wolven en het
+  dwalen lopen in `T.wereldTik` alleen als er geen venster open is); **de spelregels** onthoudt elke browser zelf, en ze
+  gaan niet mee in een bewaard spel; en **de server** luistert alleen op deze pc, en schrijft bestanden voor het gereedschap.
+  **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1 b1 c2 d1"), in drie delen, elk met toetsen en elk ook los te
+  spelen: **6a één kaart, meer dorpen**: elk wezen weet van welk dorp het is, `T.isVanJou` en `T.isMan` vragen het dorp,
+  en een vijand is ook wie van een ander dorp is; wat nu één keer op de kaart ligt en van één dorp is (het plein, het
+  kamp, de markt, het bouwbereik, de mist), gaat naar het dorp; elke tik werkt elk dorp (de oogst, het veldwerk, het
+  dwalen), en wat van de kaart is (de wolven, het lopen) één keer; de maker legt een tweede dorpsplek op dezelfde kaart.
+  `S.dorp` is dan alleen nog scherm (wat jij ziet, jouw mist, jouw berichten), en de wereld leest het nergens meer. Te
+  proberen in één browser: `Spel.debug.wissel()` maakt jou het andere dorp. Het is ook de grond voor het kasteel van de
+  heer (vraag 126), als dorp op het eiland. **6b alles een opdracht**: wat in een venster de wereld verandert (de handel,
+  het slachten, de heer betalen, de wetten, de velden, de knoppen van een brief en een gril, de bode), de snelheid en het
+  debugvenster; de wereld leest `S.modus` niet meer. Wie alleen speelt: een venster zet de tijd nog stil (E1); samen niet.
+  De snelheid is een wens per dorp, de laagste geldt, pauze kan ieder, en een gevecht ergens zet iedereen op 1×. **6c de
+  lijn**: de server geeft de opdrachten door (zonder nieuw pakket: `EventSource` en `POST`); een opdracht gaat in op een
+  vaste tik even later (zo'n zes tikken, een tiende seconde), en een computer die de ander voor die tik nog niet hoorde,
+  wacht; elke seconde een controlegetal van de wereld. Meedoen is het bewaarde spel krijgen, met de spelregels en de
+  stand van de code erbij (die moeten gelijk zijn), en zolang je samen speelt, staan de spelregels vast. Eerst twee
+  browsers op één pc (de server blijft op deze pc); voor een tweede pc in huis een schakelaar die alleen het spel en de
+  lijn openzet, nooit het schrijven van het gereedschap. Samen in dezelfde browser (Chrome met Chrome): een sinus mag per
+  browser in het laatste cijfer verschillen, en dan lopen de werelden uiteen; Steam heeft er één. Steam vervangt later
+  alleen de lijn. **Te kiezen:** **A** waar de tweede begint: A1 op een andere dorpsplek van hetzelfde eiland, de
+  dichtste die minstens zoveel tegels weg is (de werkbank, voorstel 200); A2 dichtbij (binnen 100 tegels: je ziet elkaar
+  meteen); A3 de eerste kiest op de minikaart. **B** meedoen: B1 het spel begint als je er allebei bent (de een opent, de
+  ander komt erbij, en allebei rijden jullie op dag 1 met de huifkar binnen), en wie wegvalt, komt terug met het bewaarde
+  spel; B2 meedoen kan altijd, en het tweede dorp begint als hij erbij komt. **C** wie vanzelf vecht: C1 een soldaat valt
+  de soldaten en de aanvoerder van de ander aan die hij ziet (zoals een rover), een dorpeling van de ander alleen als je
+  hem aanklikt, en een dorpeling vlucht voor de soldaten van de ander naar zijn town hall; **C2** (gekozen) alles van de
+  ander vanzelf, ook zijn dorpelingen: een soldaat valt elk mens van een ander dorp aan dat hij ziet; C3 niets vanzelf, alleen op bevel. **D** als de werelden toch uiteenlopen: D1 het spel staat even
+  stil, schrijft op waar het verschil zat (voor ons), en de eerste stuurt zijn wereld opnieuw, zoals bij meedoen; D2 het
+  spel stopt. Het voorstel van Claude was A1, B1, C1, D1, met erbij (zeg het als het anders moet): één heer voor allebei,
+  met per dorp zijn gunst en zijn brieven (zoals nu al); de marskramer komt bij elk dorp op zijn eigen plek; je bouwt niet
+  in het bereik van de ander; wie het spel opende, bewaart het (allebei de dorpen); en gebouwen van de ander aanvallen of
+  in brand steken komt er nu niet bij (`opmerkingen.md`).
+  **De lobby** (Marcel, 16 okt, na 6a: "We hebben ook een menu nodig met een lobby etc. Of gebruiken we dat van steam"):
+  Steam geeft de lobby als dienst, niet het scherm; besloten in 6d (hieronder, in een andere sessie): ons eigen scherm
+  onder *Play together*, met Steam eronder, voor vrienden.
+  **De wereld van iedereen** (Marcel, 16 okt, na 6a: "Maar het moet echt full multiplayer worden. Niet 2 spelers op 1
+  map. Het wild is van iedereen. Wolven etc. Rovers trekken rond en hebben kampen. Echt losse spelers met hun eigen dorp";
+  **besloten**, Marcel: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1"). Wat Claude in 6a koos, gaat om: daar hoorden de wolven, de herten en de rovers bij een dorp (rond
+  zijn plein gezet, door zijn tik bewogen, met zijn dobbelsteen). **Het voorstel** (Claude, 16 okt), een stap 6a2 vóór 6b:
+  het eiland krijgt **wezens van de wereld**, zonder dorp, die de wereld één keer per tik bijwerkt met haar eigen
+  dobbelsteen (uit het nummer van het eiland); een dorp werkt alleen nog zijn eigen mensen, kar en vee bij. **Het wild**:
+  de roedels en de kuddes wonen in het bos van het eiland, niet om een dorp; ieder jaagt erop, en een wolf valt aan wie in
+  zijn buurt komt, van welk dorp ook (de mannen van dat dorp komen helpen). **De rovers**: het eiland heeft roverskampen
+  (een nieuwe soort plek, ver van de dorpen en de wegen), elk met een bende die over de wegen trekt, een dorp beloert,
+  rooft, en met de buit terug naar haar kamp gaat; een kamp kun je aanvallen en opruimen; wie uit een dorp wegtrekt, kan
+  bij een kamp gaan. De heer is er al één, met zijn kasteel, tegen iedereen; de marskramer komt nog bij elk dorp apart.
+  **Losse spelers**: elk zijn eigen computer en zijn eigen dorp, en hij ziet alleen het zijne (6c; `Spel.debug.wissel()`
+  is alleen gereedschap om het te proberen). Te kiezen: **W** het wild: W1 over het hele eiland, gezet waar het land open
+  gaat (zoals het land zelf); W2 alleen in de bossen rond de dorpen, maar van iedereen. **R** de rovers: R1 een vast aantal
+  kampen uit het nummer van het eiland, en een kamp dat je opruimt, blijft leeg (het eiland wordt veiliger door te
+  spelen); R2 een opgeruimd kamp komt na een tijd ergens anders terug; en wie ze beroven: Ra het dorp dat ze het eerst
+  tegenkomen; Rb het dorp met het meeste graan en de minste soldaten. **N** hoeveel spelers: N1 twee in de demo, en later
+  zoveel als er dorpsplekken zijn (acht per eiland); N2 al acht in de demo. **V** de volgorde: V1 de wereld van iedereen
+  eerst (6a2), dan 6b en 6c; V2 eerst samen spelen (6b, 6c), dan de wereld. Gekozen: W1, R1, Rb (en ze leren), N1, V1.
+  **Het plan voor 6a2** (Claude, 16 okt, op die keuzes; **besloten**, Marcel: "K1 en L1"), in vier stukken, elk
+  met toetsen: **a, de wereld werkt haar eigen wezens bij**: een wezen zonder dorp is van de wereld, en de wereld werkt het
+  één keer per tik bij, met haar eigen dobbelsteen (`w.lot`, uit het nummer van het eiland); een dorp alleen nog zijn eigen
+  mensen, kar en vee (`T.hoortBij` wordt streng); wat de wereld van de dorpen wil weten (hun licht voor de wolven, hun
+  mannen die komen helpen, of ze vechten), vraagt ze aan het dorp van wie het aangaat. **b, het wild van het eiland**
+  (W1): roedels en kuddes uit het nummer van het eiland, per stuk gezet als het land daar opengaat (zoals de bomen), in het
+  bos; ieder jaagt erop, een wolf valt aan wie in zijn buurt komt, en de mannen van dat dorp komen helpen; het zetten om
+  een dorp (`T.zetBeesten(D)`) gaat eruit. **c, de roverskampen** (R1): het eiland krijgt een nieuwe soort plek, het
+  roverskamp, ver van de dorpen en de wegen maar te bereiken; zoveel per eiland als de werkbank zegt (voorstel 3), elk
+  met een bende van een paar rovers en tenten met een vuur (de tent en het kampvuur van het lege begin, in een andere
+  kleur: geen nieuwe tekening, wel eerst een proefplaat); een kamp waarvan de bende verslagen is, verdwijnt en komt niet
+  terug, en wie uit een dorp wegtrekt, gaat naar het dichtste kamp (de bende van nu); de wilde rovers die aan de rand van
+  je land opdoken, gaan eruit. **d, de rooftocht** (Rb, en ze leren): om de zoveel tijd (de getallen van nu: twee keer per
+  jaar per kamp, de helft 's nachts) kiest een kamp een dorp: het dorp met het meeste graan en de minste mannen, gewogen
+  met wat het kamp onthoudt: wie hen afsloeg (verliezen, geen buit), slaan ze een tijd over, waar het makkelijk was, komen
+  ze eerder terug; het geheugen vervaagt. Ze trekken over de wegen, roven een akker (zoals nu), en gaan met de buit terug
+  naar hun kamp. Te kiezen: **K** de buit: K1 wie een kamp opruimt, vindt wat er nog ligt (het geroofde graan en goud);
+  K2 de buit is weg. **L** hoe ze leren: L1 zoals hierboven, per dorp een getal dat stijgt na een makkelijke tocht en
+  daalt na een slechte, en terugzakt naar het midden; L2 alleen onthouden waar het misging (een dorp met soldaten mijden ze
+  een seizoen). Gekozen: K1, L1.
+  **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
+  bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
+  hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
+  (`D.plek`, `D.gekend`), het lopen gaat één keer per kaart, de maker legt een tweede plan op dezelfde kaart
+  (`T.legDorpOpKaart`, `T.dorpErbij`), en `S.dorp` is alleen scherm; een vijand is ook wie van een ander dorp is (C2). Wat
+  nog op `S.modus` leunt (`T.wereldTik`), gaat in 6b weg.
 Daarna de muren (158) en de tekeningen van de soldaten.
 
 **Besloten** (Marcel, 15 okt: "A1, B1, C1, D1, E1, F1"): de held heet *Commander* (in de code `aanvoerder`); valt hij
@@ -763,7 +867,7 @@ achteraf leggen onder code die zonder gebouwd is, kost meer), F2 eerst de RTS (1
 
 **6d, de menu's voor samen spelen: besloten** (Marcel, 16 okt: "1. A 2. A 3. A 4. B 5. A", en daarna bij 4: "Ik wil
 ook dat degene die het spel opstart het spel opslaat", dus 4a; het voorstel van Claude in sessie
-`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c, op de branch `ccr-055aff40-lz2bwx`) gaat over de techniek;
+`ccr-85982f04-49h797`). Het plan voor stap 6 (6a tot 6c; 6a is in `main`, en 6a2, de wereld van iedereen, komt ervoor) gaat over de techniek;
 dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het opslaan gaat zoals daar voorgesteld.
 - **Het titelscherm** krijgt *Play together*: dezelfde kaart als *New game* (de naam van je dorp, het land), uitgebreid
   tot de lobby. Wie opent, kiest het land en de spelregels (vast zodra je begint); ieder typt de naam van het eigen dorp

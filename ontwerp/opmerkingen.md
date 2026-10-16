@@ -9,12 +9,26 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+<<<<<<< HEAD
 - **Wat vraag 172 (het menu) liet zien** (16 okt): (a) de raad onder het doel zegt aan het begin nog "A day is long: [+]
   speeds up time, and [Z] sleeps until morning" (`js/raad.js`), maar Z doet sinds stap 5 van vraag 170 niets meer. (b) De
   stand van de proefversie staat nu ook in Credits; voor Steam wil Marcel er misschien zijn achternaam of een studio bij
   ("A game by Marcel, made with Claude" was de keuze). (c) in de browser onthoudt Settings het hele scherm niet: dat mag
   pas na een klik (in Electron wel, sinds 172b). (d) Pauze als je wegklikt pauzeert bij samen spelen het spel voor
   allebei (E1): bij 6c moet hij daar uit, of alleen gelden voor wie alleen speelt.
+=======
+- **Wat 6a van vraag 170 liet zien** (16 okt, meer dorpen op één eiland; buiten de stap gehouden): (a) het licht, de rook,
+  de sneeuw, het kampvuur en de paadjes tekent het scherm voor het dorp waar de camera het dichtst bij is (`T.dorpHier`);
+  met twee dorpen tegelijk in beeld (alleen ver uitgezoomd, ze liggen 430 tegels of meer uit elkaar) mist het andere dat.
+  (b) De spelregel "Hoogte" legt alleen heuvels onder het eerste dorp, en de bouwstijl van de kaart (`w.stijl`) is die van
+  het eerste. (c) Een roedel die iemand van een ander dorp aanvalt, roept de mannen van zijn eigen dorp om hulp
+  (`js/beesten.js`, `hulp`), niet die van het slachtoffer. (d) De paadjes en de lijsten van de kaart (`T.kaartVak`) lopen
+  over het vak om alle dorpen: met dorpen ver uit elkaar is dat groot (bij 600 tegels 644 bij 396), en duurder bij een
+  verandering. Per stuk rekenen (zoals het land) is de echte oplossing. (e) Gebouwen van de ander aanvallen of in brand
+  steken kan nog niet (vraag 170, het plan bij 6). (f) `A.veld` van een overval is het nummer onder de velden van het dorp:
+  breek je een veld af terwijl de rovers komen, dan schuift het nummer (dat kon al met één dorp).
+
+>>>>>>> origin/main
 - **Ronde 4 van het snoeien** (16 okt, bij vraag 170, stap 5; buiten de stap gehouden): de overgang tussen de kaarten van
   Tiled (`js/gebied.js`, `S.naarGebied`, zo'n 240 regels en 165 regels toetsen in `test/wereld.test.cjs`) en de kamers met
   deuren (`T.maakProefkamers`, `T.ontdekBijDeur`, `w.bekend`, `deurenOpenen`) bestaan alleen nog op de proefkaarten, voor

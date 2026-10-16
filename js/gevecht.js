@@ -73,11 +73,17 @@
   T.vechtVoor = (D, e) => !!e && !e.dood && T.isMan(D, e);
   // Een vijand die vecht: een rover (of een ander monster), en een wolf als zijn roedel vecht of iemand aanvalt.
   T.isVijandig = (e) => !!e && !e.dood && e.kant === 'monster' && (!e.beest || !!(e.groep && (e.groep.vecht || e.groep.aanval)));
-  // Wie een vijand m aanvalt: jouw kant, en een rover ook een dorpeling die buiten is (een wolf niet). Wie rovers op de weg
-  // aanhouden (js/rovers.js, de hinderlaag), houden ze vast; die slaan ze niet.
+  // Een vijand van dorp D: wie vijandig is (hierboven), en elk mens van een ander dorp op de kaart, zijn aanvoerder, zijn
+  // soldaten en zijn dorpelingen (werklijst vraag 170, stap 6; Marcel, 16 okt: C2, "alles van de ander vanzelf, ook zijn
+  // dorpelingen"); zijn ossenkar niet.
+  T.isVijandVan = (D, e) => T.isVijandig(e) || (!!e && !e.dood && !e.binnen && !!e.dorp && e.dorp !== D && !e.kar && (!!e.bewoner || e === e.dorp.aanvoerder));
+  // Het dorp van wie geraakt wordt: zijn eigen, of (een rover, een wolf) het dorp dat vecht.
+  const dorpVan = (D, e) => e.dorp || D;
+  // Wie een vijand m aanvalt: de mannen van elk dorp, en een rover ook een dorpeling die buiten is (een wolf niet). Wie
+  // rovers op de weg aanhouden (js/rovers.js, de hinderlaag), houden ze vast; die slaan ze niet.
   function doelVoorVijand(D, m, x) {
     if (x === m || x.dood || x.binnen || x.aangehouden) return false;
-    if (T.vechtVoor(D, x)) return true;
+    if (T.vechtVoor(x.dorp, x)) return true;
     return !m.beest && !!x.bewoner && !x.dier && !x.beest;
   }
   const zichtVan = (D, e) => (T.vechtVoor(D, e) ? IN().zicht : e.zicht || IN().zicht);
@@ -96,7 +102,8 @@
   // Het leven van wie vecht of geraakt wordt: een man dat van een soldaat of veteraan (T.levenAlsMan), een ander het zijne,
   // of dat van een dorpeling.
   function zorgLeven(D, e) {
-    if (e !== D.aanvoerder && T.isMan(D, e)) {
+    const V = dorpVan(D, e);
+    if (e !== V.aanvoerder && T.isMan(V, e)) {
       const l = T.levenAlsMan(e);
       e.leven = l.leven;
       e.maxLeven = l.max;
@@ -128,7 +135,7 @@
   // Staat er een vijand van e naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1).
   function vijandNaast(D, e, t) {
     const man = T.vechtVoor(D, e);
-    return D.wereld.wezens.some((x) => (man ? T.isVijandig(x) : doelVoorVijand(D, e, x)) && T.afstand(plek(x), t) === 1);
+    return D.wereld.wezens.some((x) => (man ? T.isVijandVan(D, x) : doelVoorVijand(D, e, x)) && T.afstand(plek(x), t) === 1);
   }
 
   // Kan e doel d raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast zoals altijd
@@ -145,17 +152,18 @@
 
   // ── Elke tik ──
 
-  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat; wie een rover ziet, vlucht; en
-  // het gevecht begint of houdt op.
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie vecht, kiest, loopt en slaat (zijn mannen, en de rovers en
+  // wolven die bij het dorp horen, T.hoortBij in js/wereld.js: zo vecht elk wezen één keer per tik, ook met meer dorpen
+  // op één kaart); wie een rover of de mannen van een ander dorp ziet, vlucht; en het gevecht begint of houdt op.
   T.werkGevechtBij = function (S, D) {
     const w = D.wereld;
     if (!w || !w.wezens) return;
     const nu = S.wereldTijd || 0;
-    const vijanden = w.wezens.filter(T.isVijandig);
+    const vijanden = w.wezens.filter((x) => T.isVijandVan(D, x));
     const budget = { zoek: IN().zoekPerTik };
     let vecht = null;
     for (const e of w.wezens) {
-      if (e.dood || e.binnen) continue;
+      if (e.dood || e.binnen || !T.hoortBij(D, e)) continue;
       // Een wolf vecht zelf pas als zijn roedel vecht; valt hij iemand aan, dan roept die om hulp (js/beesten.js).
       if (!T.vechtVoor(D, e) && !(T.isVijandig(e) && (!e.beest || e.groep.vecht))) continue;
       const d = doelVan(S, D, e, nu, vijanden);
@@ -163,11 +171,10 @@
       vecht = vecht || plek(e);
       doeMet(S, D, e, d, nu, budget);
     }
-    vlucht(D, vijanden.filter((m) => !m.beest));
-    if (vecht) {
-      if (!D.gevecht) gevechtBegint(S, D, vecht, nu);
-      D.gevecht.laatst = nu;
-    } else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
+    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), en voor wie vecht voor een ander dorp.
+    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m))));
+    if (vecht) aanHetVechten(S, D, vecht, nu);
+    else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
     // Een roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen): dan gaat hij terug.
     else if (!D.gevecht && vijanden.some((v) => v.beest && v.groep.vecht)) T.wolvenNaHetGevecht(D);
   };
@@ -180,7 +187,7 @@
     if (d && !e.volgt) {
       const weg = d.dood || d.binnen || d.aangehouden || !D.wereld.wezens.includes(d);
       const ver = T.afstand(plek(d), plek(e)) > zichtVan(D, e) + 2 || (e.vanaf && T.afstand(plek(e), e.vanaf) > IN().leiband);
-      const geenVijand = T.vechtVoor(D, e) ? !T.isVijandig(d) : !doelVoorVijand(D, e, d);
+      const geenVijand = T.vechtVoor(D, e) ? !T.isVijandVan(D, d) : !doelVoorVijand(D, e, d);
       if (weg || ver || geenVijand) {
         laatGaan(e, nu);
         d = null;
@@ -269,18 +276,20 @@
     zorgLeven(D, doel);
     doel.leven = Math.max(0, doel.leven - n);
     doel.flits = 0.3;
-    const onze = T.vechtVoor(D, doel) || !!doel.bewoner;
+    const V = dorpVan(D, doel);
+    const onze = T.vechtVoor(V, doel) || !!doel.bewoner;
     if (S.wereld === D.wereld) T.anim.tekst(S, doel, '-' + n, onze ? '#f3b1a5' : '#ffd36b');
+    if (V !== D) aanHetVechten(S, V, plek(doel), S.wereldTijd || 0); // wie aangevallen wordt, vecht ook
     if (doel.leven <= 0) {
       T.valt(S, D, doel, van);
       return;
     }
     if (!van) return;
     if (doel.beest && doel.groep) T.wolvenVechten(D, doel.groep, van);
-    else if (doel.bewoner && !T.vechtVoor(D, doel)) T.schuil(D, doel);
+    else if (doel.bewoner && !T.vechtVoor(V, doel)) T.schuil(V, doel);
     else if (!doel.doelwit && !doel.volgt) {
       doel.doelwit = van;
-      doel.vanaf = ankerVan(D, doel);
+      doel.vanaf = ankerVan(V, doel);
     }
   }
   T.raak = raak;
@@ -289,16 +298,17 @@
   // dag; was het de held, dan neemt een ander het over (T.aanvoerderValt, js/soldaten.js). Een vijand is verslagen; een
   // rover is uit zijn bende, en was hij de laatste van zijn aanval, dan is die voorbij (T.naGevecht).
   T.valt = function (S, D, e, van) {
-    const held = e === D.aanvoerder;
-    const onze = held || T.vechtVoor(D, e) || !!e.bewoner;
+    const V = dorpVan(D, e); // wie valt, valt in zijn eigen dorp (een man van een ander dorp in het zijne)
+    const held = e === V.aanvoerder;
+    const onze = held || T.vechtVoor(V, e) || !!e.bewoner;
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
     delete e.doelwit;
     delete e.volgt;
     if (onze) {
-      T.sneuvelt(D, e, van);
-      if (held) T.aanvoerderValt(D);
+      T.sneuvelt(V, e, van);
+      if (held) T.aanvoerderValt(V);
       return;
     }
     T.zeg(D, T.t('The {wezen} is defeated.', { wezen: e.naam }), 'goed');
@@ -349,13 +359,20 @@
     const w = D.wereld;
     for (const e of w.wezens) {
       const p = e.bewoner;
-      if (!p || p.schuilt || e.dood || e.binnen || e.aangehouden || T.vechtVoor(D, e)) continue;
+      if (!p || p.schuilt || e.dood || e.binnen || e.aangehouden || !T.hoortBij(D, e) || T.vechtVoor(D, e)) continue;
       const hier = plek(e);
       if (rovers.some((m) => T.afstand(plek(m), hier) <= IN().vluchtZicht && T.zichtTussen(w, plek(m), hier))) T.schuil(D, e);
     }
   }
 
   // ── Het gevecht als status ──
+
+  // Dorp D vecht nu, op `waar`: begint het gevecht, dan zegt het dat; hoe lang het nog duurt, telt vanaf nu. Ook als een
+  // ander dorp het aanvalt (raak, hierboven).
+  function aanHetVechten(S, D, waar, nu) {
+    if (!D.gevecht) gevechtBegint(S, D, waar, nu);
+    D.gevecht.laatst = nu;
+  }
 
   // Het gevecht begint: een bericht met de plek (een klik erop, of Spatie, brengt je erheen; js/ui.js), de status in de
   // balk, en de tijd op hooguit 1×.

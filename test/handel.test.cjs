@@ -20,7 +20,8 @@ function maakS() {
   return {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
     kalender: { dag: 0 }, inventaris: new Set(),
-    wereld: { marskramer: { x: 5, y: 5 }, overgangen: [{ x: 9, y: 5, naar: 'wereld' }], wezens: [] },
+    wereld: { overgangen: [{ x: 9, y: 5, naar: 'wereld' }], wezens: [] },
+    plek: { marskramer: { x: 5, y: 5 }, uitgang: { x: 9, y: 5 } }, // de plek van het dorp (D.plek, js/wereld.js)
   };
 }
 

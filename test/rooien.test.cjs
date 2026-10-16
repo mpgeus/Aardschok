@@ -40,7 +40,7 @@ function zo(f) {
 // stuk (de voet met het looppad, T.kavelVan) als `wil` vraagt.
 function werkplaatsPlek(S, soort, wil) {
   const D = S.dorp;
-  const plein = T.pleinVan(S.wereld);
+  const plein = T.pleinVan(S.dorp);
   const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
   const plekken = [];
   const K = T.kaartVak(S.wereld);

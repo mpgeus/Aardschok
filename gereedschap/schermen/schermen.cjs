@@ -138,7 +138,7 @@ async function hetLegeBegin(context, beelden, meting) {
   const { page, fouten } = await openSpel(context, URL + '?kaart=gehucht');
   await page.evaluate(() => Spel.debug.stap(0.5)); // het dorp komt op gang: wie er woont, staat er
   const zoom = await page.evaluate(() => Spel.S.zoom);
-  const plein = await page.evaluate(() => [Spel.S.dorp.wereld.kamp.vuur.x, Spel.S.dorp.wereld.kamp.vuur.y]);
+  const plein = await page.evaluate(() => [Spel.S.dorp.plek.kamp.vuur.x, Spel.S.dorp.plek.kamp.vuur.y]);
   await zet(page, { uur: 12, zoom, op: plein });
   beelden.plein = await afdruk(page);
   meting.bijHetBegin = await page.evaluate(() => Spel.debug.vellen('alles'));

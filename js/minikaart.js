@@ -203,15 +203,15 @@
     return m.klaar >= m.n;
   };
 
-  // Wat je kent, per vak: een Uint8Array van n bij n, 1 waar je minstens één tegel van het vak kent (js/mist.js, w.gekend:
+  // Wat je kent, per vak: een Uint8Array van n bij n, 1 waar je minstens één tegel van het vak kent (js/mist.js, D.gekend:
   // per stuk van 64 bij 64 een rij bits, twee getallen van 32 per rij, of true als je het hele stuk kent).
-  T.minikaartGekend = function (w) {
+  T.minikaartGekend = function (D) {
     const stap = IN().stap;
     const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / stap);
     const uit = new Uint8Array(n * n);
     const STUK = 64;
     const per = STUK / stap; // vakken per stuk, in elke richting
-    for (const [nummer, rij] of w.gekend || []) {
+    for (const [nummer, rij] of D.gekend || []) {
       const sx = nummer % 64;
       const sy = Math.floor(nummer / 64);
       for (let by = 0; by < per; by++) {

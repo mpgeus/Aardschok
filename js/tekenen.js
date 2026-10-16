@@ -613,7 +613,7 @@
     tekenZonneschaduw(ctx, S, lijst);
     // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
     // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
-    tekenMist(ctx, w, vak);
+    tekenMist(ctx, S.dorp, w, vak);
     // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): de tegel onder de
     // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
     // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
@@ -782,19 +782,20 @@
     const a = 1 - (1 - o) * (1 - d);
     return [[...Z.map((z) => Math.round((128 * o * (1 - d) + z * d) / a)), Math.round(a * 255)]];
   }
-  function mistMasker(w, vak, kaart) {
+  // De mist van dorp D (je eigen, S.dorp) over kaart w.
+  function mistMasker(D, w, vak, kaart) {
     const M = T.MIST_INSTELLINGEN;
     const x0 = Math.floor(vak.x0 / MIST_STAP) * MIST_STAP;
     const y0 = Math.floor(vak.y0 / MIST_STAP) * MIST_STAP;
     const b = Math.ceil((vak.x1 + 1) / MIST_STAP) * MIST_STAP - x0;
     const h = Math.ceil((vak.y1 + 1) / MIST_STAP) * MIST_STAP - y0;
-    let m = mistMaskers.get(w);
+    let m = mistMaskers.get(D);
     // wat je kent: alleen opnieuw als er land bij kwam, het vak verschoof of een getal in de werkbank veranderde
-    const sleutel = [x0, y0, b, h, T.mistVersie(w), M.ontkleurd, M.donker, M.zwart.join(), kaart].join('|');
+    const sleutel = [x0, y0, b, h, T.mistVersie(D), M.ontkleurd, M.donker, M.zwart.join(), kaart].join('|');
     if (!m || m.sleutel !== sleutel) {
       const n = kaart ? 2 : 1; // zoveel helften naast elkaar
       const B = n * b + (n - 1) * MIST_KIER;
-      if (!m) mistMaskers.set(w, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
+      if (!m) mistMaskers.set(D, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
       for (const c of [m.basis, m.werk]) {
         if (c.width !== B) c.width = B;
         if (c.height !== h) c.height = h;
@@ -805,7 +806,7 @@
       const kleuren = [mistKleuren(kaart, false), mistKleuren(kaart, true)];
       for (let j = 0; j < h; j++) {
         for (let i = 0; i < b; i++) {
-          const kl = kleuren[T.kentTegel(w, x0 + i, y0 + j) ? 1 : 0];
+          const kl = kleuren[T.kentTegel(D, x0 + i, y0 + j) ? 1 : 0];
           for (let helft = 0; helft < n; helft++) d.set(kl[helft], (j * B + helft * (b + MIST_KIER) + i) * 4);
         }
       }
@@ -817,7 +818,7 @@
     k.globalCompositeOperation = 'copy';
     k.drawImage(m.basis, 0, 0);
     k.globalCompositeOperation = 'destination-out';
-    for (const z of T.wieKijken(w)) {
+    for (const z of T.wieKijken(D)) {
       const r0 = Math.max(0, z.r - M.rand / 2);
       const r1 = z.r + M.rand / 2;
       const cx = z.x - x0 + 0.5;
@@ -841,10 +842,10 @@
     return m;
   }
   let mistKlein = null; // het kleine doek zonder videokaart
-  function tekenMist(ctx, w, vak) {
+  function tekenMist(ctx, D, w, vak) {
     if (!metMist(w)) return;
     const kaart = !!ctx.tekenMist;
-    const m = mistMasker(w, vak, kaart);
+    const m = mistMasker(D, w, vak, kaart);
     const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
     if (kaart) {
       ctx.save();
@@ -910,8 +911,8 @@
       const v = item.gebouw;
       const b = v && v.beslaat ? v.beslaat : [1, 1];
       const p = v ? { x: Math.round(v.x + (b[0] - 1) / 2), y: Math.round(v.y + (b[1] - 1) / 2) } : item.punt;
-      if (p && !T.zietNu(w, p.x, p.y)) {
-        if (!T.kentTegel(w, p.x, p.y) || (item.wezen && !T.isVanJou(S, item.wezen))) continue;
+      if (p && !T.zietNu(S.dorp, p.x, p.y)) {
+        if (!T.kentTegel(S.dorp, p.x, p.y) || (item.wezen && !T.isVanDorp(S.dorp, item.wezen))) continue;
         const f = item.f;
         item.f = () => grijs(f);
       }
@@ -1897,7 +1898,7 @@
     const D = S.dorp;
     if (!(S.bouwSoort || S.bouwMenuOpen) || S.bouwSoort === 'markt' || !D || D.gebouwen.some((g) => g.soort === 'markt')) return;
     ctx.fillStyle = 'rgba(226, 182, 74, 0.38)';
-    for (const t of T.marktTegels(D.wereld)) {
+    for (const t of T.marktTegels(D)) {
       const p = opGrond(t.x, t.y);
       T.ruit(ctx, p.x, p.y, 0.94);
       ctx.fill();
@@ -1954,7 +1955,7 @@
     }
     // De markt komt op zijn plek op het plein, waar je ook wijst (js/markt.js): die plek licht op.
     if (S.bouwSoort === 'markt') {
-      for (const t of T.marktTegels(S.dorp.wereld)) {
+      for (const t of T.marktTegels(S.dorp)) {
         const p = opGrond(t.x, t.y);
         T.ruit(ctx, p.x, p.y, 0.94);
         ctx.fill();
@@ -3041,7 +3042,7 @@
     if (sterk <= 0) return;
     const k = 1 / Math.min(1, Math.max(0.3, S.zoom));
     for (const e of S.wereld.wezens) {
-      if (!e.beest || e.dood || !e.beeldStand || !e.beeldStand.laatste || !T.zieJeWezen(S, S.wereld, e)) continue;
+      if (!e.beest || e.dood || !e.beeldStand || !e.beeldStand.laatste || !T.zieJeWezen(S, e)) continue;
       const l = e.beeldStand.laatste;
       const rij = T.OGEN[l.naam] && T.OGEN[l.naam][l.houding] && T.OGEN[l.naam][l.houding][OOG_RICHTINGEN.indexOf(l.richting)];
       const ogen = rij && rij[l.beeld];
@@ -3129,7 +3130,7 @@
     const w = S.wereld;
     for (const [g, leden] of T.praatjesOp(w)) {
       // Met wie jij praat, praat niet met hen.
-      const erbij = leden.filter((e) => T.staatErbij(e) && e !== S.spreektMet && T.isZichtbaar(w, e.tx, e.ty) && T.zieJeWezen(S, w, e));
+      const erbij = leden.filter((e) => T.staatErbij(e) && e !== S.spreektMet && T.isZichtbaar(w, e.tx, e.ty) && T.zieJeWezen(S, e));
       const n = erbij.length;
       if (n < 2) continue;
       const t = S.tijd / BEURT + (g.zaad % 10) / 10;

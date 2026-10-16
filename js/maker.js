@@ -37,6 +37,10 @@
     h: 100,
     // Zo vaak probeert hij het met hetzelfde zaad, tot een plan deugt.
     pogingen: 120,
+    // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; Marcel, 16 okt: "A1"): op de dichtste andere dorpsplek
+    // die minstens zoveel tegels van het eerste ligt (T.legDorpOpKaart). De plekken op een eiland liggen 430 tot 2100
+    // tegels uit elkaar, dus dit is de ondergrens voor een eiland waar ze dichter liggen.
+    anderDorp: 200,
     // Een plein waar de twee rijen van de marktplek (js/markt.js) korter zijn dan dit, deugt niet: tussen het kamp, het
     // feest en de eiken blijft er dan bijna geen markt over (B2b, 13 okt: op het land van het eiland kregen eiland 8 en 9
     // rijen van twee). Alleen op het eiland (T.planOpEiland), want de marktplek vraagt de kaart.
@@ -733,18 +737,23 @@
   // op de plek van een ander dorp, in een vaste volgorde, zodat hetzelfde nummer hetzelfde spel geeft. Per plek minder
   // pogingen dan op een land van de maker, want een andere plek is er wel. Een plan deugt hier pas als zijn plein een
   // marktplek heeft met rijen van `marktRij` (daarvoor maakt hij de kaart al, en die bewaart hij voor
-  // T.laadGemaaktGehucht).
-  T.planOpEiland = function (zaad) {
+  // T.laadGemaaktGehucht). Met `bij` (een dorpsplek, { x, y }) een plan voor een dorp naast een ander (vraag 170, stap
+  // 6a): op de dichtste andere plek die minstens `anderDorp` tegels weg ligt, niet op een plek uit `niet` (hun namen).
+  T.planOpEiland = function (zaad, { bij = null, niet = [] } = {}) {
     const E = T.eilandVan(zaad);
     const dorpen = E.plekken.filter((p) => p.soort === 'dorp');
+    const af = (p) => Math.hypot(p.x - bij.x, p.y - bij.y);
+    const volgorde = bij
+      ? dorpen.filter((p) => !niet.includes(p.naam) && af(p) >= IN().anderDorp).sort((a, b) => af(a) - af(b))
+      : [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)];
     const waarom = [];
-    for (const p of [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)]) {
+    for (const p of volgorde) {
       const land = T.landVanEiland(E, p, IN().b, IN().h);
       const metMarkt = (plan) => {
         plan.eiland.dorp = p.naam;
         plan.stuk = land.stuk; // het land van het eiland zelf, voor het verschil (wereldVanPlan)
         const w = wereldVanPlan(plan);
-        const rij = w.markt.rijen[0];
+        const rij = w.plekken[0].markt.rijen[0];
         if (!rij || rij.lengte < IN().marktRij) return `de marktplek heeft rijen van ${rij ? rij.lengte : 0}`; // geen tekst
         WERELD.set(plan, w);
         return null;
@@ -1033,16 +1042,45 @@
     WERELD.delete(plan);
     return w;
   };
+
+  // Nog een dorp op kaart w van het eiland (werklijst vraag 170, stap 6a; Marcel, 16 okt: "A1"): op de dichtste andere
+  // dorpsplek bij `bij` die minstens `anderDorp` tegels weg ligt, en niet op een plek uit `niet`. Het plan komt op de
+  // kaart zoals bij het eerste dorp (legPlanOp, hieronder), met zijn marktplek; de keuring deed dat op een eigen kaart
+  // (T.planOpEiland), en die gaat weg. Geeft { plek, aanvoerder }: de plek voor T.nieuwDorp (js/dorp.js), en zijn
+  // aanvoerder, die al op de kaart staat.
+  T.legDorpOpKaart = function (w, { bij, niet = [] }) {
+    const plan = T.planOpEiland(w.eiland.zaad, { bij, niet });
+    WERELD.delete(plan);
+    const uit = legPlanOp(w, plan);
+    uit.plek.markt = T.zoekMarktPlek({ wereld: w, plek: uit.plek });
+    return uit;
+  };
   // De kaart die T.planOpEiland voor zijn keuring maakte, bij het plan: een spel krijgt hem, zonder hem opnieuw te maken.
   const WERELD = new WeakMap();
   function wereldVanPlan(plan) {
+    const { x0, y0 } = plan.eiland;
+    const w = T.eilandKaart(plan.eiland.zaad, { x: x0, y: y0, b: plan.b, h: plan.h });
+    w.naam = T.t('The hamlet');
+    w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
+    const { plek } = legPlanOp(w, plan);
+    w.maker = { zaad: plan.zaad, poging: plan.poging };
+    if (plan.stijl) w.stijl = plan.stijl;
+    if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
+    plek.markt = T.zoekMarktPlek({ wereld: w, plek }); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
+    return w;
+  }
+
+  // Een plan op kaart w van het eiland: wat de maker anders legde dan het eiland (de grond, wat er weg moest, wat hij
+  // erbij legde), de stukken eromheen open, de plek van het dorp (D.plek, T.legePlek in js/wereld.js: zijn land, het
+  // plein, de plek van de marskramer, het kamp en de weg de wereld in), en de aanvoerder bij zijn tent in het kamp
+  // (js/begin.js zet hem bij de kar aan de rand). Het vak van de kaart (T.kaartVak) groeit om het land van het dorp.
+  // Geeft { plek, aanvoerder }; de marktplek zoekt de aanroeper.
+  function legPlanOp(w, plan) {
     const E = T.eilandVan(plan.eiland.zaad);
     const { x0, y0 } = plan.eiland;
     const B = plan.b;
     const H = plan.h;
     const st = plan.stuk;
-    const w = T.eilandKaart(plan.eiland.zaad, { x: x0, y: y0, b: B, h: H });
-    w.eiland.dorp = plan.eiland.dorp;
     // de grond: waar de vier hoekpunten van een tegel anders zijn dan die van het eiland (een bruggetje blijft)
     const nr = (x, y) => T.tegelNummer(x0 + x, y0 + y);
     for (let y = 0; y < H; y++) {
@@ -1055,31 +1093,27 @@
     for (const d of plan.gerooid) w.gerooid.add(nr(d.x, d.y));
     const D = IN().zicht;
     T.openVak(w, { x: x0 - D, y: y0 - D, b: B + 2 * D, h: H + 2 * D });
-    T.kenHetBegin(w, { x: x0, y: y0, b: B, h: H }); // wat je bij het begin kent (B2c, js/mist.js); de rest is mist
     for (const d of plan.gelegd) {
       const t = T.opzoekTegelNaam(opNaam(d.naam));
       T.zetVoorwerp(w, T.maakVoorwerp(t, x0 + d.x, y0 + d.y));
       if (t.eig.vast) T.zetTegel(w, x0 + d.x, y0 + d.y, 'muur');
     }
-    // het plein, de aanvoerder bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), de weg de wereld in,
-    // en de plek van de marskramer
     const op = (p) => ({ ...p, x: x0 + p.x, y: y0 + p.y });
-    w.naam = T.t('The hamlet');
-    w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
-    w.plein = plan.plein.map(([x, y]) => [x0 + x, y0 + y]);
-    w.marskramer = op(plan.marskramer);
-    w.wezens.push(T.maakWezen('aanvoerder', x0 + plan.aanvoerder.x, y0 + plan.aanvoerder.y));
-    w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
-    w.maker = { zaad: plan.zaad, poging: plan.poging };
-    if (plan.stijl) w.stijl = plan.stijl;
-    // waar het kamp komt (js/begin.js)
     const k = plan.kamp;
-    w.kamp = {
-      vuur: op(k.vuur), kar: op(k.kar), straal: k.straal,
-      plekken: k.plekken.map((p) => ({ ...op(p), voet: op(p.voet), deur: op(p.deur) })),
+    const plek = {
+      naam: plan.eiland.dorp || null, vak: { x: x0, y: y0, b: B, h: H },
+      plein: plan.plein.map(([x, y]) => [x0 + x, y0 + y]), marskramer: op(plan.marskramer), heer: null,
+      kamp: { vuur: op(k.vuur), kar: op(k.kar), straal: k.straal, plekken: k.plekken.map((p) => ({ ...op(p), voet: op(p.voet), deur: op(p.deur) })) },
+      markt: null, uitgang: { x: x0 + plan.uitgang.x, y: y0 + plan.uitgang.y },
     };
-    if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
-    w.markt = T.zoekMarktPlek(w); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
-    return w;
+    w.plekken.push(plek);
+    w.pleinen.push(plek.plein);
+    const aanvoerder = T.maakWezen('aanvoerder', x0 + plan.aanvoerder.x, y0 + plan.aanvoerder.y);
+    w.wezens.push(aanvoerder);
+    w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
+    const v = w.vak;
+    const [vx0, vy0] = [Math.min(v.x, x0), Math.min(v.y, y0)];
+    w.vak = { x: vx0, y: vy0, b: Math.max(v.x + v.b, x0 + B) - vx0, h: Math.max(v.y + v.h, y0 + H) - vy0 };
+    return { plek, aanvoerder };
   }
 })(globalThis.Spel = globalThis.Spel || {});

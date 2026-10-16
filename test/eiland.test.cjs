@@ -225,9 +225,9 @@ test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en h
 test('een nieuw spel op het eiland: je kamp op jouw plek, de gezinnen van de kar, en bewaren en laden geeft hetzelfde spel', () => {
   const S = nieuwSpel(5);
   assert.equal(S.wereld.eiland.zaad, 5);
-  assert.equal(S.wereld.eiland.dorp, eiland(5).plekken.find((p) => p.jij).naam);
+  assert.equal(S.dorp.plek.naam, eiland(5).plekken.find((p) => p.jij).naam);
   assert.equal(S.wereld.maker.zaad, 5);
-  assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin');
+  assert.ok(S.dorp.begin && S.dorp.plek.kamp, 'het lege begin');
   assert.equal(S.dorp.bevolking, S.dorp.bewoners.mensen.length);
   const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
   const S2 = nieuwSpel(3);
@@ -339,7 +339,7 @@ test('de grond van het eiland: wat naast elkaar kan liggen, niet bouwen op zand,
   assert.ok(strand && zee, 'land 1 heeft strand en zee');
   assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Nothing is built on sand.');
   // het kamp staat niet op het zand
-  for (const k of w.kamp.plekken) {
+  for (const k of D.plek.kamp.plekken) {
     for (let y = k.voet.y; y < k.voet.y + k.voet.h; y++) for (let x = k.voet.x; x < k.voet.x + k.voet.b; x++) assert.notEqual(naam(x, y), 'strand', `de tent op (${x}, ${y}) staat op zand`);
   }
   // de zee is water: een visser vist er

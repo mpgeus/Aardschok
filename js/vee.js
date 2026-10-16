@@ -257,8 +257,8 @@
   // bij hoort, is de groep van dat veld. Zo hoeft er niets om te zetten als twee velden samen weide
   // worden, of weer uit elkaar gaan.
 
-  // Alle levende dieren in de wereld.
-  T.veeVan = (D) => ((D && D.wereld && D.wereld.wezens) || []).filter((e) => e.dier && !e.dood);
+  // Alle levende dieren van het dorp (T.hoortBij, js/wereld.js).
+  T.veeVan = (D) => ((D && D.wereld && D.wereld.wezens) || []).filter((e) => e.dier && !e.dood && T.hoortBij(D, e));
   // Het vee dat op een weide graast, niet op de meent: daar gaan de plaats op de velden en de wissel
   // over (T.plaatsVoorVee, T.verhuisVee, en T.wisselVelden in js/akkers.js).
   T.weideVee = (D) => T.veeVan(D).filter((e) => e.weide && !e.weide.meent);
@@ -534,6 +534,7 @@
       const veld = velden.find((v) => opVeld(v, bij.x, bij.y)) || dichtstbij(velden, { tx: bij.x, ty: bij.y });
       const t = vrijeTegel(D, veld, bij);
       const e = T.zetOpWeide(T.maakDier(soort, t.x, t.y, nieuwZaad(D)), veld);
+      e.dorp = D; // het vee van dit dorp (T.hoortBij, js/wereld.js)
       D.wereld.wezens.push(e);
       return e;
     });
@@ -634,6 +635,7 @@
         }
         const t = vrijeTegel(D, e.weide, { x: e.tx, y: e.ty });
         const jong = T.zetOpWeide(T.maakDier(e.dier, t.x, t.y, nieuwZaad(D)), e.weide);
+        jong.dorp = D;
         jong.geboren = dag;
         w.wezens.push(jong);
         vrij -= plaatsVan(e);

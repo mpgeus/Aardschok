@@ -30,8 +30,9 @@ function leeg({ b = 50, h = 50, wegY = null, wegX = null } = {}) {
     tegels.push(new Array(b).fill('vloer'));
     grond.push(Array.from({ length: b }, (_, x) => ({ naam: y === wegY || x === wegX ? 'zandpad' : 'gras' })));
   }
+  const wereld = { b, h, tegels, grond, voorwerpen: [], wezens: [], stijl: 'wit' };
   return {
-    wereld: { b, h, tegels, grond, voorwerpen: [], wezens: [], stijl: 'wit' },
+    wereld, plek: T.legePlek(wereld),
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 }, behoeften: T.nieuweBehoeften(),
   };
 }
@@ -102,7 +103,7 @@ test('een huis kan ook vóór het plein staan, met zijn deur ernaartoe (vraag 11
   for (const zaad of [1, 2, 3, 4, 5, 6]) {
     const { D, w } = grond.leegBegin(T, zaad);
     for (const soort of ['hut', 'boerderij', 'huis']) {
-      if (T.plekVoor(D, soort, T.pleinVan(w))) standen.add(T.deurKantVan(D.volgendeTekening[soort]));
+      if (T.plekVoor(D, soort, T.pleinVan(D))) standen.add(T.deurKantVan(D.volgendeTekening[soort]));
     }
   }
   assert.ok(standen.has('n') || standen.has('w'), `standen: ${[...standen].join(', ')}`);

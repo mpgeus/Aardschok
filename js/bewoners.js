@@ -199,16 +199,17 @@
   // Het plein, als één plek: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
   // (kaarten/<naam>.betekenis.json, "marskramer"; in het gehucht op het zand voor de deur van de
   // aanvoerder).
-  T.pleinVan = function (w) {
-    const b = w && w.marskramer;
+  T.pleinVan = function (D) {
+    const b = D && D.plek && D.plek.marskramer;
     return b ? { x: b.x, y: b.y } : null;
   };
 
   // Een plek óp het plein, voor wie daar speelt of rondhangt: de kinderen, en wie geen werk heeft. Elk
   // krijgt zijn eigen plek (n: zijn nummer), zodat ze over het hele plein verspreid zijn en niet
   // allemaal bij de marskramer staan. Heeft de kaart geen plein (T.opHetPlein, js/wereld.js), dan null.
-  T.plekOpHetPlein = function (w, n) {
-    const tegels = T.pleinTegels(w).filter((t) => T.isBegaanbaar(w, t.x, t.y));
+  T.plekOpHetPlein = function (D, n) {
+    const w = D.wereld;
+    const tegels = T.pleinTegels(D).filter((t) => T.isBegaanbaar(w, t.x, t.y));
     const t = tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
     return t ? { x: t.x, y: t.y } : null;
   };
@@ -253,7 +254,7 @@
     const bijHuis = { x: deur.x, y: deur.y, straal: IN().straalBijHuis };
     if (p.leeftijd === 'oud' || p.leeftijd === 'kleuter') return bijHuis;
     if (p.leeftijd === 'volwassen' && vanAanvoerder(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
-    const plein = T.plekOpHetPlein(w, p.id) || T.pleinVan(w);
+    const plein = T.plekOpHetPlein(D, p.id) || T.pleinVan(D);
     const t = plein && tegelBij(w, plein);
     return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
   }
@@ -474,6 +475,7 @@
     e.snelheid = IN()[L.snelheid];
     e.thuis = { x: deur.x, y: deur.y };
     e.bewoner = p;
+    e.dorp = D;
     p.wezen = e;
     w.wezens.push(e);
     if (p.uiterlijk == null) p.uiterlijk = T.kiesUiterlijk(D, p);
@@ -513,7 +515,7 @@
       gezinnen.push(nieuwGezin(D, g, k, r));
       n -= k;
     }
-    const weg = overDeWeg && T.wegInEnUit(B.wereld);
+    const weg = overDeWeg && T.wegInEnUit(D);
     for (const leden of gezinnen) {
       for (const p of leden) zetPlekken(D, p);
       if (!weg) {
@@ -555,7 +557,7 @@
   function gaanWeg(D, weg, reden) {
     const B = D.bewoners;
     const w = B.wereld;
-    const uitgang = reden === 'vertrek' && T.wegInEnUit(w);
+    const uitgang = reden === 'vertrek' && T.wegInEnUit(D);
     for (const p of weg) {
       B.mensen.splice(B.mensen.indexOf(p), 1);
       p.werk = null;
@@ -654,7 +656,7 @@
     for (const a of B.komen.slice()) {
       if (!T.bezoekerKomtAan(D, a)) continue;
       B.komen.splice(B.komen.indexOf(a), 1);
-      const weg = T.wegInEnUit(w);
+      const weg = T.wegInEnUit(D);
       for (const p of a.mensen) maakPoppetje(D, p, weg);
     }
     for (const p of B.mensen) {
@@ -692,7 +694,7 @@
   // Bij de uitgang gaat zijn poppetje van de kaart (T.werkBewonersBij).
   T.stuurWeg = function (D, wie, waarom) {
     const B = D.bewoners;
-    const uitgang = T.wegInEnUit(B.wereld);
+    const uitgang = T.wegInEnUit(D);
     for (const p of wie) {
       p.weg = { waarom };
       p.werk = null;
@@ -796,8 +798,9 @@
   // plein, een kaart van de toetsen: de plek van de kar in het kamp, of de hoek van de kaart).
   T.dakloosPlek = function (D) {
     const w = D.wereld;
-    const tegels = T.pleinTegels(w);
-    if (!tegels.length) return w.kamp && w.kamp.kar ? { x: w.kamp.kar.x, y: w.kamp.kar.y } : { x: T.kaartVak(w).x, y: T.kaartVak(w).y };
+    const tegels = T.pleinTegels(D);
+    const k = D.plek.kamp;
+    if (!tegels.length) return k && k.kar ? { x: k.kar.x, y: k.kar.y } : { x: D.plek.vak.x, y: D.plek.vak.y };
     const m = { x: tegels.reduce((s, t) => s + t.x, 0) / tegels.length, y: tegels.reduce((s, t) => s + t.y, 0) / tegels.length };
     let beste = tegels[0];
     for (const t of tegels) if (T.afstand(t, m) < T.afstand(beste, m)) beste = t;

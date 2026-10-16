@@ -111,7 +111,7 @@
     }
     if (!sp) {
       if (e.speeldTot > dag || !T.kanSpelen(S, D, e, deel)) return false;
-      const ander = w.wezens.find((x) => x !== e && x.bewoner && T.afstand({ x: x.tx, y: x.ty }, { x: e.tx, y: e.ty }) <= P.afstand && (x.spel ? x.spel.wie < P.groep : !(x.speeldTot > dag) && T.kanSpelen(S, D, x, deel)));
+      const ander = w.wezens.find((x) => x !== e && x.bewoner && T.hoortBij(D, x) && T.afstand({ x: x.tx, y: x.ty }, { x: e.tx, y: e.ty }) <= P.afstand && (x.spel ? x.spel.wie < P.groep : !(x.speeldTot > dag) && T.kanSpelen(S, D, x, deel)));
       // niet op een akker of een weide: daar groeit wat, en daar wordt gewerkt
       if (!ander || T.veldOp(w, e.tx, e.ty) || lot(5101) >= P.kans) return false;
       if (ander.spel) {

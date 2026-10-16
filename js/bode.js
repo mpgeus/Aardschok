@@ -95,7 +95,7 @@
     const dag = dagNu(D);
     const winter = inWinter(dag);
     const uit = { kan: false, zichtbaar: false, winter, dagen: IN().dagen[winter ? 'winter' : 'gewoon'], maal: IN().prijsMaal[winter ? 'winter' : 'gewoon'], loon: IN().loon };
-    if (!IN().aan || !D.wereld || !D.wereld.marskramer) return { ...uit, reden: T.t('No merchant comes here.') };
+    if (!IN().aan || !D.wereld || !D.plek.marskramer) return { ...uit, reden: T.t('No merchant comes here.') };
     const status = T.statusVoorDeBode(D, dag);
     uit.status = status;
     if (D.bode) return { ...uit, reden: T.t('The messenger is on his way; the merchant will come around {datum}.', { datum: T.datumVanDag(D.bode.komt).tekst }) };
@@ -180,7 +180,7 @@
     D.bode = { verstuurd: D.kalender.dag, komt: dag + k.dagen, winter: k.winter, wie, bestelling: vraag, onderschept };
     // Op je eigen kaart: de rovers wachten hem op bij de uitgang (js/rovers.js), als er niet al rovers op de kaart zijn.
     const R = D.rovers || (D.rovers = T.nieuweRovers());
-    if (onderschept === 'rovers' && bode.wezen && T.wegInEnUit(D.wereld) && !R.aanval) {
+    if (onderschept === 'rovers' && bode.wezen && T.wegInEnUit(D) && !R.aanval) {
       D.bode.hinderlaag = true;
       R.aanval = { soort: 'hinderlaag', dag, fase: 'wacht' };
     }

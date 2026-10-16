@@ -33,7 +33,7 @@ function proef(opties = {}) {
 // Wie al werk heeft, krijgt zijn plek opnieuw (T.verdeelHanden).
 function zetMeent(S) {
   const w = S.wereld;
-  const plek = vrijePlek(S, { b: 5, h: 5 }, T.pleinVan(w));
+  const plek = vrijePlek(S, { b: 5, h: 5 }, T.pleinVan(S.dorp));
   (w.meenten || (w.meenten = [])).push({ naam: 'heide', x: plek.x, y: plek.y, b: 5, h: 5, meent: true });
   T.verdeelHanden(S.dorp);
   return w.meenten[0];
@@ -90,7 +90,7 @@ function vrijePlek(S, voet, bij) {
 // Een huis erbij, op een vrije plek bij het plein, klaar om in te wonen.
 function bouwHuis(S) {
   const voet = T.gebouwVoet('huis');
-  const plek = vrijePlek(S, voet, T.pleinVan(S.wereld));
+  const plek = vrijePlek(S, voet, T.pleinVan(S.dorp));
   const huis = { soort: 'huis', x: plek.x, y: plek.y, voet, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.dorp.gebouwen.push(huis);
   return huis;
@@ -253,7 +253,7 @@ test('komen: een nieuw gezin komt overdag over de weg binnen, met een bericht op
   assert.equal(berichten.length, 0);
   S.kalender.dag = bijUur(GROEI, T.DAG_INSTELLINGEN.bezoekUur + 0.1);
   T.werkBewonersBij(S.dorp);
-  const weg = T.wegInEnUit(S.wereld);
+  const weg = T.wegInEnUit(S.dorp);
   for (const p of gezin) {
     assert.ok(p.wezen && S.wereld.wezens.includes(p.wezen), 'nu met een poppetje');
     assert.ok(T.afstand(weg, opTegel(p.wezen)) <= 3, 'op de weg, aan de rand van de kaart');
@@ -294,7 +294,7 @@ test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt d
     assert.ok(T.dagAnker(S.dorp, p.wezen).binnen, "'s nachts nog binnen");
   }
   S.kalender.dag = bijUur(GROEI + 2, 10);
-  const uitgang = T.wegInEnUit(S.wereld);
+  const uitgang = T.wegInEnUit(S.dorp);
   for (const p of gezin) assert.deepEqual(T.dagAnker(S.dorp, p.wezen), { x: uitgang.x, y: uitgang.y, straal: 1 }, 'overdag naar de uitgang');
   assert.match(T.overBewonerTekst(S.dorp, gezin[0].wezen), /leaving$/);
   loopTotDat(S, () => !S.dorp.bewoners.vertrekken.length, 5);

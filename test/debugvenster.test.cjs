@@ -11,7 +11,7 @@ test('het debugvenster: een bouwplaats meteen af, en de nacht erna trekt er een 
   const { S, D } = grond.leegBegin(T);
   // eerst de knop +50, met de waren van T.DEBUG_INSTELLINGEN (op dag 1 staat de lading van de huifkar nog niet in de opslag)
   for (const wat of ['hout', 'planken', 'steen', 'goud']) T.wijzigVoorraad(D, wat, 50);
-  const plek = T.plekVoor(D, 'hut', D.wereld.kamp.vuur);
+  const plek = T.plekVoor(D, 'hut', D.plek.kamp.vuur);
   const u = T.plaatsGebouw(D, 'hut', plek.x, plek.y);
   assert.ok(u.gelukt, u.reden);
   const hut = u.instantie;
