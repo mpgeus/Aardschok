@@ -228,7 +228,7 @@ test('na een nacht heeft wie het overleefde weer al zijn leven', () => {
   assert.equal(S.schout.leven, S.schout.maxLeven);
 });
 
-test('zijn alle rovers verslagen, dan is de aanval voorbij; niemand werd opgeroepen', () => {
+test('zijn alle rovers verslagen, dan is de aanval voorbij', () => {
   const S = gehucht(WACHTHUIS);
   const mannen = metWachthuis(S);
   opUur(S, 5, 17);
@@ -239,10 +239,7 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij; niemand werd opgeroe
   T.raak(S, S.dorp, A.rovers[1], 100, mannen[0]);
   assert.equal(S.dorp.rovers.aanval, null);
   assert.ok(berichten.includes('The robbers are defeated.'), berichten.join(' | '));
-  for (const e of mannen) {
-    assert.ok(!e.opgeroepen);
-    assert.notEqual(e.kant, 'speler');
-  }
+  for (const e of mannen) assert.notEqual(e.kant, 'speler');
 });
 
 test('de bende en een aanval gaan mee in een bewaard spel', () => {

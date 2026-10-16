@@ -749,7 +749,7 @@
       const P = SPELERS[speler];
       if (P.begin && !verder) await P.begin();
       for (let i = 0; i < 800000 && dagNu() < EIND && !s.dorp.einde && s.modus !== 'dood'; i++) {
-        if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s) && !s.slaap) {
+        if (opslaan && !opslaan.gedaan && dagNu() >= opslaan.dag && !T.waaromNietOpslaan(s)) {
           opslaan.gedaan = true;
           if (opslaan.bewaar) {
             // Zoals een speler: het menu, Opslaan, plek 1, en weer spelen. Dan stopt dit deel van het jaar.

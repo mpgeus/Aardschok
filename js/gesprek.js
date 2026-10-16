@@ -95,7 +95,6 @@
     if (S) for (const soort of lijst(doe.neem)) S.inventaris.delete(soort);
     // Wat je in een gesprek krijgt of afgeeft, hoort meteen in beeld te staan; rondlopen doet
     // dat zelf (js/verkennen.js), maar een gesprek kwam daar niet langs.
-    if (tas.length && T.ui && T.ui.toonInventaris) T.ui.toonInventaris(S);
     T.questGevolg(S, D, doe);
     // Handelen met de marskramer (js/handel.js): het venster staat in js/hud.js. Het gesprek sluit
     // daarna gewoon (sluit: true op hetzelfde antwoord); het venster blijft open.

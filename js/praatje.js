@@ -61,7 +61,7 @@
   // weg, aan zijn eigen hut bouwen, en de waard 's avonds.
   // `deel` is het deel van de dag (T.dagdeelVan, js/dag.js).
   T.kanPraten = function (S, D, e, deel) {
-    if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.opgeroepen || e.moetNaar || e.vertrekt) return false;
+    if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.moetNaar || e.vertrekt) return false;
     if (e === S.schout || e === D.schout || e === S.spreektMet || e.kant === 'monster') return false;
     if (D.gevecht) return false; // niet midden in een gevecht (js/gevecht.js)
     if (deel === 'nacht') return false;

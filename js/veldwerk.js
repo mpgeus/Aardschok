@@ -190,7 +190,7 @@
   // schout praten, met de militie mee (js/rovers.js), naar de schandpaal (js/heer.js), wegtrekken of een tijd weg zijn
   // (js/bewoners.js, js/heervaart.js), of midden in een praatje (dat houdt na de schaft vanzelf op, js/praatje.js).
   function magWerken(S, D, e) {
-    if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
+    if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.moetNaar || e.vertrekt || e.praatje) return false;
     const p = T.bewonerVan(D, e);
     return !(p && (p.weg || p.komt || T.blijftThuis(p, D.kalender.dag)));
   }

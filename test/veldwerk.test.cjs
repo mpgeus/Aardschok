@@ -202,12 +202,12 @@ test('wie werkt, dwaalt niet weg; wie met de schout praat of met de militie mee 
     const [a, b] = boerenVan(S);
     assert.ok(a.werkt && b.werkt, 'ze wieden');
     S.spreektMet = a;
-    b.opgeroepen = true;
+    b.moetNaar = { x: b.tx, y: b.ty, straal: 0 };
     T.werkVeldwerkBij(S, D);
     assert.equal(a.werkt, null, 'wie met de schout praat, werkt niet');
-    assert.equal(b.werkt, null, 'wie met de militie mee moet, ook niet');
+    assert.equal(b.werkt, null, 'wie ergens heen moet, ook niet');
     S.spreektMet = null;
-    delete b.opgeroepen;
+    delete b.moetNaar;
     totUur(S, 45, 11);
     assert.ok(a.werkt && b.werkt, 'daarna gaan ze weer aan het werk');
   });

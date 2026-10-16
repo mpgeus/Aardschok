@@ -191,13 +191,12 @@
     }),
 
     // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
-    // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; tot
+    // jouw papier, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; tot
     // drie weerbare mannen kunnen mee, tegen de rovers onderweg (het gevaar staat eronder, T.bodeGevaarTekst).
     bode: (S) => {
       const D = S.dorp;
       const k = T.kanBodeSturen(D);
       const B = T.BODE_INSTELLINGEN;
-      const bijHuis = T.afstandTotHuis(D) <= T.DAG_INSTELLINGEN.slaapAfstand;
       const rijen = Object.keys(B.waren).map((wat) => {
         const W = B.waren[wat];
         const prijs = Math.ceil(W.prijs * k.maal);
@@ -211,7 +210,7 @@
           `<small>${T.t('(up to {n}, {zilver} silver each)', { n: kunnen, zilver: Math.round(B.loon * 10) })}</small></p>`
         : '';
       const gevaar = k.kan ? `<p class="bode-gevaar"><small>${veilig(T.bodeGevaarTekst(D, 0))}</small></p>` : '';
-      const waarom = !k.kan ? k.reden : !bijHuis ? T.t('You write the letter at your house.') : '';
+      const waarom = !k.kan ? k.reden : '';
       const dagen = { n: k.dagen, dagen: T.telwoord(k.dagen), maal: k.maal };
       const tijd = k.winter ? T.t('He can be here in {n|a day|{dagen} days}, for it is winter: the roads are bad, and he asks double.', dagen)
         : k.maal === 1.5 ? T.t('He can be here in {n|a day|{dagen} days}, and he asks half as much again as usual.', dagen)
@@ -224,7 +223,7 @@
         groet: T.t('Your reeve'),
         staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} ${T.t('The messenger gets {zilver} silver from the chest.', { zilver: Math.round(B.loon * 10) })}`}</p>`,
         knoppen: [
-          { actie: 'bode', tekst: T.t('Give the messenger the letter'), hoofd: true, kan: k.kan && bijHuis },
+          { actie: 'bode', tekst: T.t('Give the messenger the letter'), hoofd: true, kan: k.kan },
           { actie: 'sluit', tekst: T.t('Never mind') },
         ],
         voet: `<p class="venster-voet">${T.t('While you write, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
@@ -272,11 +271,6 @@
   T.ui.toonBrief = function (D, soort) {
     const S = T.S;
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    // Een brief die komt terwijl de schout op reis is (js/land.js), wacht tot hij thuis is.
-    if (soort && T.opReis(S)) {
-      T.briefVoorLater(S, soort);
-      return;
-    }
     soort = soort || briefVanDeHeer(S);
     const brief = soort && BRIEVEN[soort] && BRIEVEN[soort](S);
     if (!brief) return;
@@ -294,14 +288,6 @@
     open = null;
     T.laatTijdGaan(S, 'brief');
     T.ui.werkBriefKnopBij(S);
-    T.ui.toonBriefVanLater(S);
-  };
-
-  // De brieven die kwamen terwijl je op reis was (js/land.js), een voor een, nu je thuis bent.
-  T.ui.toonBriefVanLater = function (S) {
-    const L = S.land;
-    if (!L || !L.brieven.length || T.opReis(S) || T.ui.briefOpen()) return;
-    T.ui.toonBrief(S.dorp, L.brieven.shift());
   };
 
   T.ui.briefOpen = () => !$('brief').classList.contains('verborgen');

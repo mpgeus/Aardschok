@@ -9,7 +9,7 @@ const { proefDorp } = require('./grond.cjs');
 const T = require('./laad.cjs').spel();
 const IN = T.BEWONERS_INSTELLINGEN;
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);
@@ -43,7 +43,6 @@ function stap(S, dt) {
   const dtW = dt * T.wereldFactor(S);
   S.wereldTijd += dtW;
   T.tikKalender(S, dt);
-  T.werkDagBij(S);
   T.werkBewonersBij(S.dorp);
   T.beweegWezens(S, S.wereld, dt, dtW);
   T.werkOogstBij(S, S.dorp, dtW);

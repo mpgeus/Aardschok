@@ -291,7 +291,6 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.ok(A.rovers.length >= B.rovers.aanvallers, 'de rovers staan op de kaart');
     assert.ok(bode.aangehouden, 'de bode staat stil');
     assert.ok(r.begeleiders[0].wezen.aangehouden, 'wie meegaat, staat ook stil: de rovers houden hem vast, en slaan hem niet');
-    assert.ok(!r.begeleiders[0].wezen.opgeroepen, 'niemand komt vanzelf (vraag 170, stap 2)');
     assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
     // De tijd is om, en de schout kwam niet: het lot beslist.
     S.kalender.dag += (B.hinderlaag.uren + 0.1) / 24;

@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 const ZOMERDAG = 30;
 const WINTERDAG = 280;

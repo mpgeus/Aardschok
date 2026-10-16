@@ -58,9 +58,8 @@
 
   // De standen van de versneller, van pauze tot 30× (voorstel van Claude, 26 sep; vraag 22 in de
   // werklijst). Een jaar duurt dan 30 uur, 10 uur, 3 uur of 1 uur. Het dagritme zie je bij 1× tot
-  // 3×; daarboven is het doorspoelen. Slapen tot de ochtend (js/dag.js) gaat nog sneller.
+  // 3×; daarboven is het doorspoelen.
   T.SNELHEDEN = [0, 1, 3, 10, 30];
-  T.SLAAP_SNELHEID = 60;
 
   // Dag → { jaar, maand, dagVanMaand, seizoen, sintMaarten, tekst }. Dag 0 is 1 lentemaand, dus
   // eerst omgerekend naar een telling vanaf 1 louwmaand (T.TIJD_START_MAAND maanden erbij), zodat
@@ -181,10 +180,9 @@
   };
 
   // Voor wie ertoe doet als hij in een dorp komt (de heer, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
-  // speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Alleen in je eigen dorp (js/dorp.js), en alleen als je er
-  // bent: wie op reis is (js/land.js), ziet hem toch niet; die hoort het als hij terug is, en de reis gaat op zijn
-  // snelheid door. De kalender van het dorp is die van het spel.
+  // speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Alleen in je eigen dorp (js/dorp.js). De kalender van
+  // het dorp is die van het spel.
   T.naarGewoneSnelheid = function (D) {
-    if (!D.ander && !T.schoutIsWeg(D) && D.kalender.snelheid > 1) T.zetSnelheid(D, 1);
+    if (!D.ander && D.kalender.snelheid > 1) T.zetSnelheid(D, 1);
   };
 })(globalThis.Spel = globalThis.Spel || {});

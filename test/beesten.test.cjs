@@ -133,7 +133,7 @@ test('de herten grazen in de schemering aan de bosrand, en liggen de rest van de
   assert.ok(g.leden.every((e) => e.rust === 'grazen' || e.rust === 'staan'), 'ze grazen, of kijken om zich heen');
 });
 
-test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, komt dichterbij', () => {
+test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen', () => {
   const S = leegLand();
   const zon = T.zonVan(60);
   opUur(S, zon.onder - 0.5);
@@ -141,7 +141,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
   const g = groepVan(S, 'hert');
   const l = leiderVan(g);
   const lt = T.tegelVan(l);
-  // De schout op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven), maar sluipend niet. Aan
+  // De schout op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven). Aan
   // de kant waar de herten van hem weg kunnen: hun thuis of een plek aan de bosrand ligt dan ver van hem (B2b: op het land
   // van eiland 7 ligt hun thuis vlak bij waar ze grazen).
   let plek = null;
@@ -156,14 +156,9 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
   }
   assert.ok(plek, 'een plek voor de schout');
   Object.assign(S.schout, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
-  S.sluipen = true;
   g.G.keek = 0;
   uren(S, 0.05);
-  assert.ok(!(g.G.weg > S.kalender.dag), 'wie sluipt, zien ze niet zo snel');
-  S.sluipen = false;
-  g.G.keek = 0;
-  uren(S, 0.05);
-  assert.ok(g.G.weg > S.kalender.dag, 'nu wel: ze gaan weg');
+  assert.ok(g.G.weg > S.kalender.dag, 'ze gaan weg');
   assert.ok(g.leden.some((e) => e.rent), 'en ze rennen');
   assert.equal(l.snelheid, T.BEESTEN.hert.vlucht);
   const voor = T.afstand(T.tegelVan(l), plek);
@@ -527,24 +522,12 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
   }
 });
 
-test('bij de schout met zijn lantaarn blijft de roedel aan de rand van het licht; wie sluipt, valt hij aan', () => {
+test('de schout alleen in het donker: de roedel valt hem aan, en vecht met hem (sinds 16 okt zonder lantaarn)', () => {
   const { S, D, leden, leider } = stouteRoedel();
   S.schout.binnen = false;
   assert.ok(zetOpAfstand(D.wereld, S.schout, leider, 12), 'een plek voor de schout');
-  assert.ok(T.draagtLantaarn(D));
-  const r = T.ZIEN_INSTELLINGEN.lantaarn.straal;
-  let dichtst = Infinity;
-  for (let k = 0; k < 20; k++) {
-    uren(S, 0.1);
-    for (const e of leden) dichtst = Math.min(dichtst, Math.hypot(e.x - S.schout.x, e.y - S.schout.y));
-  }
-  assert.ok(dichtst > r, `niet in het licht (${dichtst.toFixed(1)} tegels)`);
-  assert.ok(dichtst < r + 4, `maar aan de rand ervan (${dichtst.toFixed(1)} tegels)`);
-  assert.equal(S.modus, 'verkennen');
-  S.sluipen = true;
-  S.schout.lantaarnUit = true;
   uren(S, 1);
-  assert.equal(leider.groep.vecht, true, 'zonder licht valt hij aan: de roedel vecht (js/gevecht.js)');
+  assert.equal(leider.groep.vecht, true, 'de roedel vecht (js/gevecht.js)');
   assert.ok(leden.every((e) => e.dood || e.doelwit === S.schout), 'met de schout');
 });
 

@@ -162,7 +162,6 @@
     S.effecten = [];
     S.hover = null;
     S.handeling = null;
-    S.naLopen = null;
 
     const k = T.kamerVan(nieuw, plek.x, plek.y);
     if (k) {

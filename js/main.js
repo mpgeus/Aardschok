@@ -48,9 +48,6 @@
       quests: {}, // per quest de fase waarin hij staat (js/quest.js)
       questWeg: {}, // en hoe je hem oploste, zodat het dorp erop kan reageren
       questBeloond: new Set(),
-      sleutelGebruikt: false,
-      fonteinLeeg: false,
-      sluipen: false,
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de schout zojuist is neergezet (js/gebied.js)
@@ -715,7 +712,6 @@
     // computer bewaart, en wanneer (er staat misschien een venster open), is van hem alleen.
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
-    T.ui.werkLandkaartBij(S); // de kaart van het land op het scherm (js/landkaart.js)
     T.werkEffectenBij(S, dt); // de zwevende teksten, en wie in een beurt op een animatie wacht (js/anim.js)
     // Het vak linksboven is van de quest die je het eerst aannam; zonder quest staat er het doel van het gehucht: een
     // dorp worden (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
@@ -846,8 +842,6 @@
     netGekaderd = false;
     if (gesleept) return;
     if (S.foto) return; // in de fotomodus doet een klik niets
-    // Wie slaapt en ergens heen wil, is wakker (js/dag.js).
-    if (S.slaap && T.wordWakker) T.wordWakker(S);
     werkHoverBij();
     if (S.bouwSoort) {
       const soort = S.bouwSoort;
@@ -896,7 +890,6 @@
       werkHoverBij();
       const r = S.sturen;
       if (r && r.kan && r.doe) {
-        if (S.slaap && T.wordWakker) T.wordWakker(S);
         r.doe();
         // Erheen: hun plekken in hun vorm, even in groen op de grond (vraag 170, stap 3, E1; js/tekenen.js).
         if (r.opdracht.soort === 'stuur') {
@@ -923,17 +916,6 @@
       if (ev.key === 'h' || ev.key === 'H' || ev.key === 'Escape') zetFoto(false);
       else if (ev.key === 'Enter') bewaarFoto();
       if (ev.key === 'Tab' || ev.key === 'Enter' || SCHUIF[ev.key]) ev.preventDefault();
-      return;
-    }
-    // De kaart van het land (js/landkaart.js): Esc is terug het gehucht in, als je nog thuis bent; op reis of in een
-    // andere provincie kies je op de kaart waar je heen gaat.
-    if (S.modus === 'land') {
-      if (ev.key === 'Escape') T.ui.sluitLand(S);
-      return;
-    }
-    // Thuis na een reis (js/landkaart.js): wat er gebeurde; Esc is verder.
-    if (ev.key === 'Escape' && T.ui.terugOpen()) {
-      T.ui.sluitTerug(S);
       return;
     }
     if (ev.key === 'Escape' && T.ui.briefOpen && T.ui.briefOpen()) {
@@ -1007,7 +989,6 @@
       T.ui.naarBericht(S);
       return;
     }
-    if (ev.key === 's' || ev.key === 'S') T.wisselSluipen(S);
   });
   window.addEventListener('resize', formaat);
 
@@ -1471,37 +1452,6 @@
         weg: H.tocht ? { wie: H.tocht.wie.map(naam), terug: T.datumVanDag(H.tocht.terugOp).tekst } : null,
         laatste: H.laatste,
         veteranen: (S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
-      };
-    },
-    // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de
-    // kaart, ('reis', 'De heide') of ('reis', 'p3') reist erheen, ('alles') laat het hele land zien, ('nieuw') maakt
-    // het land opnieuw uit het zaad. Staat de spelregel Land uit, dan zet hij hem eerst aan.
-    land(wat, waar) {
-      if (!T.LAND_INSTELLINGEN.aan) T.zetOptie('land', 'aan');
-      if (!S.land) S.land = T.nieuwLand(S);
-      const L = S.land;
-      const naam = (p) => T.provincieNaam(S, p);
-      const zoek = (x) => L.provincies.find((p) => p.id === x || naam(p).toLowerCase() === String(x).toLowerCase());
-      if (wat === 'nieuw') S.land = T.nieuwLand(S);
-      if (wat === 'alles') for (const p of L.provincies) L.gezien.add(p.id);
-      if (wat === 'open') T.openLand(S);
-      if (wat === 'reis') {
-        const p = zoek(waar);
-        if (!p) return `Er is geen provincie "${waar}".`; // geen tekst
-        if (S.modus !== 'land') T.openLand(S);
-        const r = T.beginReis(S, p.id);
-        if (!r.kan) return r.reden;
-      }
-      const M = S.land;
-      const R = M.reis;
-      return {
-        waar: naam(T.provincie(M, M.waar)),
-        reis: R ? { naar: naam(T.provincie(M, R.route[R.route.length - 1])), nogDagen: Math.round((R.aankomst - S.kalender.dag) * 10) / 10 } : null,
-        gezien: M.provincies.filter((p) => M.gezien.has(p.id)).map(naam),
-        provincies: M.provincies.map((p) => `${p.id}: ${naam(p)}${M.gezien.has(p.id) ? '' : ' (donker)'}`),
-        wegen: M.wegen.map((w) => `${naam(T.provincie(M, w.van))} — ${naam(T.provincie(M, w.naar))}: ${w.dagen} ${w.dagen === 1 ? 'dag' : 'dagen'}`),
-        gemist: M.gemist.length,
-        brieven: M.brieven.slice(),
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')

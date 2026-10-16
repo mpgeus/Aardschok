@@ -42,14 +42,12 @@
     S.tijd += dt;
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     T.tikKalender(S, dt);
-    T.werkDagBij(S); // wakker worden na het slapen (js/dag.js)
     // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
     // voorvallen. Waar de schout is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
     // T.werkDorpBij zelf.
     meet('dorpen', () => {
       for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     });
-    T.werkLandBij(S); // op reis de volgende provincie, en over de weg het gehucht uit (js/land.js)
     meet('lopen', () => T.beweegWezens(S, S.wereld, dt, dtWereld)); // wie loopt, waar de schout is (js/anim.js)
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat (T.bijAankomst): de lijst
     // wezens van de wereld verandert erdoor, en daar loopt het lopen net doorheen.
@@ -57,8 +55,7 @@
     // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de fase op, nog vóór er iets
     // dwaalt of iemand je ziet.
     T.werkQuestsBij(S);
-    // Ook op reis (js/land.js, de kaart van het land) gaat het dorp zijn gang: er wordt gemaaid en gedwaald.
-    if (S.modus === 'verkennen' || S.modus === 'land') {
+    if (S.modus === 'verkennen') {
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land
       // werkt (T.werkVeldwerkBij, js/veldwerk.js), staat voor T.laatDwalen al "bezig" (m.pad.length, m.maait of m.werkt)
       // en dwaalt deze tik niet ook nog weg.

@@ -10,7 +10,7 @@ const T = require('./laad.cjs').spel();
 const IN = T.DAG_INSTELLINGEN;
 
 const berichten = [];
-T.ui = { bericht: (t) => berichten.push(t), plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht: (t) => berichten.push(t), plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);
@@ -40,7 +40,6 @@ function stap(S, dt) {
   const dtW = dt * T.wereldFactor(S);
   S.wereldTijd += dtW;
   T.tikKalender(S, dt);
-  T.werkDagBij(S);
   T.beweegWezens(S, S.wereld, dt, dtW);
   T.werkOogstBij(S, S.dorp, dtW);
   T.laatDwalen(S, dtW);
@@ -227,32 +226,8 @@ test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft ligg
 });
 
 // ---------------------------------------------------------------------------------------------
-// Slapen, en bezoekers overdag
+// Bezoekers overdag
 // ---------------------------------------------------------------------------------------------
-
-test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je wakker, op de snelheid van ervoor', () => {
-  const S = proef(bijUur(GROEI, 12), 3);
-  // In het proefdorp staat de schout nog op de weg waar de kar hem bracht: zet hem voor zijn eigen deur.
-  const deur = T.deurVan(S.wereld, S.dorp.gebouwen.find((g) => g.soort === 'schout'));
-  Object.assign(S.schout, { x: deur.x, y: deur.y, tx: deur.x, ty: deur.y, pad: [], onderweg: false });
-  assert.ok(!T.magSlapen(S), 'niet midden op de dag');
-  S.kalender.dag = bijUur(GROEI, 22);
-  assert.ok(T.magSlapen(S), 'wel om tien uur, voor je deur');
-  const echt = { tx: S.schout.tx, ty: S.schout.ty };
-  S.schout.tx = 2;
-  S.schout.ty = 2;
-  assert.ok(!T.magSlapen(S), 'niet ver van huis');
-  S.schout.tx = echt.tx;
-  S.schout.ty = echt.ty;
-  assert.ok(T.gaSlapen(S));
-  assert.equal(S.kalender.snelheid, T.SLAAP_SNELHEID);
-  assert.ok(S.schout.binnen);
-  loopTot(S, bijUur(GROEI + 1, 12));
-  assert.equal(S.slaap, null, 'wakker');
-  assert.ok(!S.schout.binnen);
-  assert.equal(S.kalender.snelheid, 3, 'op de snelheid van vóór het slapen');
-  assert.ok(berichten.includes('It is morning.'));
-});
 
 test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer zet de tijd op 1×', () => {
   // Een los object dat als dorp dient: het is jouw dorp (geen ander dorp), en de schout staat op zijn kaart (T.naarGewoneSnelheid).

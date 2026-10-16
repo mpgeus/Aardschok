@@ -339,15 +339,11 @@
     // Het gaat om gesprek-ids, niet om soorten: negentien dorpelingen delen één soort maar kunnen
     // elk hun eigen gesprek voeren (T.gesprekIdVan in js/gesprek.js).
     const wezens = new Map();
-    const questVoorwerpen = [];
     for (const [naam, w] of Object.entries(werelden)) {
       for (const e of w.wezens) {
         const id = (T.gesprekIdVan && T.gesprekIdVan(e)) || e.soort;
         if (!wezens.has(id)) wezens.set(id, naam);
         if (!wezens.has(e.soort)) wezens.set(e.soort, naam);
-      }
-      for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) {
-        if (v.grendel) questVoorwerpen.push({ v, kaart: naam });
       }
     }
     const bronnen = bronnenVanVoorwerpen(werelden);
@@ -393,16 +389,6 @@
         }
       }
     }
-    // Een voorwerp dat aan een quest hangt maar niet op te rapen is (T.OPRAPEN in
-    // js/verkennen.js), ligt er wel en doet niets: de quest loopt dood.
-    if (T.OPRAPEN) {
-      for (const { v, kaart } of questVoorwerpen) {
-        if (!T.OPRAPEN[v.soort]) {
-          letOp(`"${v.soort}" op ${kaart} (${v.x}, ${v.y}) hangt aan quest "${v.grendel.quest}", maar staat niet in T.OPRAPEN (js/verkennen.js), dus je kunt het niet oppakken`);
-        }
-      }
-    }
-
     return klachten;
   };
 })(globalThis.Spel = globalThis.Spel || {});

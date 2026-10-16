@@ -49,14 +49,12 @@
       herberg: { r: 255, g: 166, b: 80 },
       huis: { r: 255, g: 192, b: 112 },
       kaars: { r: 255, g: 158, b: 76 },
-      schout: { r: 255, g: 196, b: 120 },
+      drager: { r: 255, g: 196, b: 120 },
       brand: { r: 255, g: 128, b: 48 },
     },
     // Een vlam flakkert: zoveel van zijn sterkte op en neer, zo snel; een raam half zo veel.
     flakkeren: 0.14,
     flakkerSnelheid: 1,
-    // Zonder lantaarn (wie sluipt) zie je 's nachts nog net om je heen: een zwak licht zonder kleur (tegels, 0 tot 1).
-    ogen: { straal: 2.5, sterkte: 0.2 },
     // De schaduwen van de zon (vraag 125, B; de spelregel "Schaduwen"): hoe donker, en de kleur ervan.
     zonneschaduw: true,
     schaduw: { sterkte: 0.42, r: 18, g: 22, b: 44 },
@@ -951,7 +949,7 @@
   // Met de videokaart (werklijst vraag 125, A) is het licht een lichtkaart: de kleur van het uur over het hele beeld,
   // met per lamp een warme plas erbij, en daarmee wordt de wereld vermenigvuldigd (js/gl.js, tekenLichtkaart). Zonder
   // videokaart blijft het de donkere laag van hiervoor (Marcel, 4 okt: "zonder videokaart wordt er bijna niet meer
-  // gespeeld"), met de lantaarn van de schout als gloed erbij.
+  // gespeeld"), met de lampen als gloed erbij.
   function tekenNacht(ctx, S, bw, bh) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
     // Het weer (js/weer.js; vraag 82, c, en Marcel, 4 okt: "A"): de kleur van het uur maal die van het weer, grijzer als
@@ -999,17 +997,12 @@
 
   // De lampen die nu branden, als plassen licht op het scherm: { x, y, rx, ry, k: [r, g, b] }, met k wat de lamp in het
   // midden erbij doet (vraag 125, A). Een vlam flakkert, elk in zijn eigen ritme uit zijn plek, op de klok van het scherm.
-  // Zonder lantaarn krijgt de schout 's nachts een zwak licht zonder kleur, zodat je nog net ziet waar je loopt.
   function lichtenInBeeld(S, bw, bh) {
     const D = T.dorpHier(S);
     const nacht = nachtVan(S);
     if (!D || nacht <= 0.01) return [];
     const L = T.LICHT_INSTELLINGEN;
-    const bronnen = T.lichtBronnen(D).slice();
-    const h = S.schout;
-    if (h && D.schout === h && !h.binnen && !h.dood && !T.draagtLantaarn(D) && !T.schoutIsWeg(D)) {
-      bronnen.push({ x: h.x, y: h.y, straal: L.ogen.straal, sterkte: L.ogen.sterkte, soort: 'ogen' });
-    }
+    const bronnen = T.lichtBronnen(D);
     const uit = [];
     for (const b of bronnen) {
       const q = opGrond(b.x, b.y);
@@ -1023,7 +1016,7 @@
       const fase = ((Math.sin(b.x * 12.9898 + b.y * 78.233) * 43758.5453) % 1) * Math.PI * 2;
       const t = S.tijd * L.flakkerSnelheid;
       const golf = 0.6 * Math.sin(t * 7.1 + fase) + 0.4 * Math.sin(t * 12.7 + fase * 2.3);
-      const flakker = b.soort === 'ogen' ? 0 : b.soort === 'huis' ? L.flakkeren / 2 : b.soort === 'brand' ? L.flakkeren * 3 : L.flakkeren;
+      const flakker = b.soort === 'huis' ? L.flakkeren / 2 : b.soort === 'brand' ? L.flakkeren * 3 : L.flakkeren;
       const n = b.sterkte * L.kracht * nacht * (1 + flakker * golf);
       uit.push({ x, y, rx, ry, k: [(kleur.r / 255) * n, (kleur.g / 255) * n, (kleur.b / 255) * n] });
     }
@@ -2505,16 +2498,9 @@
     // De pilaar staat nog niet in de kunst; die blijft vlakken.
     const deel = metSprites() && T.sprites.voorwerp(v.soort);
     if (deel) {
-      if (v.soort === 'sleutel') {
-        // De sleutel zweeft en glimt, anders zie je hem niet liggen.
-        gloed(ctx, p.x, p.y - 6, 16, 'rgba(226, 182, 74,', 0.3);
-        T.sprites.teken(ctx, deel, p.x, p.y - 8 - Math.sin(S.tijd * 3) * 3, helder);
-        return;
-      }
       T.sprites.teken(ctx, deel, p.x, p.y, helder);
-      if (v.soort === 'fontein' && !S.fonteinLeeg) {
-        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal. Een lege
-        // fontein (je nam zelf de laatste slok) staat stil.
+      if (v.soort === 'fontein') {
+        // Het water blijft bewegen: een rimpel over de kom en een druppel in de straal.
         const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
         ctx.strokeStyle = `rgba(200, 230, 255, ${0.18 + golf * 0.22})`;
         ctx.lineWidth = 1;
@@ -2646,12 +2632,8 @@
     if (v.soort === 'fontein') {
       T.blok(ctx, p.x, p.y, 0.42, 0.42, 16, '#8a8478', { helder });
       T.ruit(ctx, p.x, p.y - 16, 0.64);
-      ctx.fillStyle = T.rgb(T.kleur(S.fonteinLeeg ? '#5d574d' : '#3f7fc2'), helder);
+      ctx.fillStyle = T.rgb(T.kleur('#3f7fc2'), helder);
       ctx.fill();
-      if (S.fonteinLeeg) {
-        T.blok(ctx, p.x, p.y, 0.07, 0.07, 14, '#9c968a', { helder, basis: 16 });
-        return;
-      }
       const golf = (Math.sin(S.tijd * 2.2) + 1) / 2;
       ctx.strokeStyle = `rgba(200, 230, 255, ${0.25 + golf * 0.3})`;
       ctx.lineWidth = 1;
@@ -2661,23 +2643,6 @@
       T.blok(ctx, p.x, p.y, 0.07, 0.07, 14, '#9c968a', { helder, basis: 16 });
       rondje(ctx, p.x, p.y - 32 + Math.sin(S.tijd * 5) * 1.5, 2.2, 'rgba(190, 225, 255, 0.9)');
       return;
-    }
-    if (v.soort === 'sleutel') {
-      const z = 13 + Math.sin(S.tijd * 3) * 3;
-      gloed(ctx, p.x, p.y, 16, 'rgba(226, 182, 74,', 0.3);
-      const kx = p.x - 5;
-      const ky = p.y - z;
-      ctx.strokeStyle = '#e8c04e';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(kx, ky, 4.5, 0, Math.PI * 2);
-      ctx.moveTo(kx + 4.5, ky);
-      ctx.lineTo(kx + 15, ky);
-      ctx.moveTo(kx + 11, ky);
-      ctx.lineTo(kx + 11, ky + 4);
-      ctx.moveTo(kx + 14.5, ky);
-      ctx.lineTo(kx + 14.5, ky + 3);
-      ctx.stroke();
     }
   }
 
@@ -3014,8 +2979,6 @@
     const huppel = !deel && e.onderweg ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
     let top;
     if (deel) {
-      // Sluipen heeft nog geen eigen houding: de schout doet het in het halfdonker.
-      if (e === S.schout && S.sluipen) ctx.globalAlpha *= 0.8;
       T.sprites.teken(ctx, deel, cx, cy);
       top = cy - T.sprites.hoogte(e.soort);
       // een klap: een rood dambord over de figuur
@@ -3289,17 +3252,6 @@
 
   function rondje(ctx, x, y, r, kleur) {
     ctx.fillStyle = kleur;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // prefix is bijvoorbeeld 'rgba(255, 214, 110,' — de dekking komt erachter.
-  function gloed(ctx, x, y, r, prefix, dekking) {
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, prefix + dekking + ')');
-    g.addColorStop(1, prefix + '0)');
-    ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();

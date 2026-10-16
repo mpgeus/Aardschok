@@ -87,8 +87,7 @@
     return D;
   };
 
-  // Is de schout van dit dorp weg: op reis over het land (js/land.js haalt hem dan van de kaart), in een andere
-  // provincie, of in een ander gebied (js/gebied.js)? Dan roept niemand de militie bij hem (js/rovers.js). Een dorp zonder schout heeft er ook geen die er is.
+  // Is de schout van dit dorp weg: in een ander gebied (js/gebied.js), of is er geen?
   T.schoutIsWeg = (D) => !D.schout || !D.wereld.wezens.includes(D.schout);
 
   // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
@@ -132,7 +131,6 @@
     T.dwaal(S, D.wereld, D, dtWereld); // en dwalen, naar het ritme van de dag (js/verkennen.js)
   };
 
-  // Het dorp waar de schout nu is: het dorp met de kaart waarop hij staat, of null (een ander gebied, of op reis
-  // over het land; dan blijft S.wereld de kaart van zijn dorp, js/land.js, en is dat het dorp hier).
+  // Het dorp met de kaart die op het scherm is, of null (een ander gebied, js/gebied.js).
   T.dorpHier = (S) => (S.dorpen || []).find((D) => D.wereld === S.wereld) || null;
 })(globalThis.Spel = globalThis.Spel || {});

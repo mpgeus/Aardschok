@@ -147,9 +147,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een plek die gerooid wordt, ligt nog open** (11 okt, vraag 152, 1d): de voet staat pas op de kaart als de plek vrij
   is, dus de mensen lopen er nog overheen en er kan een paadje ontstaan; er komt geen gebouw en geen lantaarn op
   (`T.bouwplaatsOp`).
-- **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
-  tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
-  papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
 - **Het label van het overzicht** (10 okt, na vraag 146; Marcel: "rest in opmerkingen"): `#overzicht-label` (`Tab`) is
   nog donker glas met een Nederlandse zin in `index.html`, het enige wat er van de ui nog zo bij ligt. Wordt een briefje
   zoals `#foto-wenk` (een zin uit `T.t`), of papier zoals de briefjes bovenaan.

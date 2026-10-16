@@ -10,7 +10,7 @@
 //            erlangs, van plek naar plek; na zonsopgang terug. De herten grazen rond zonsopgang en zonsondergang op
 //            open grond aan de bosrand, en liggen de rest van de tijd op hun legerplek.
 //   schuw    komt er een mens dichtbij (de schout, een bewoner, een bezoeker), dan gaat de groep van hem weg, terug het
-//            bos in: de wolven sluipen weg, de herten rennen. Wie sluipt (S), komt dichterbij (T.SLUIP_ZICHT). Een wolf
+//            bos in: de wolven sluipen weg, de herten rennen. Een wolf
 //            begint nooit zelf een gevecht; je mannen kunnen hem wel aanvallen (Marcel: "a ja"; js/gevecht.js), en dan
 //            vecht zijn roedel terug (T.wolvenVechten). Dat ze in de winter met honger toch komen, is stap 2.
 //   groep    alleen de leider zoekt een weg (T.zoekRoute, js/lopen.js); de anderen lopen in zijn spoor (G.spoor), en
@@ -38,9 +38,9 @@
 //            erheen, zodat je je soldaten op hem af kunt sturen (sinds 15 okt; tot dan kwam de herder het zeggen, het
 //            voorval "wolven", met een jacht of een hek); wie hij aanvalt, is gewond en ligt een paar dagen in
 //            bed, of is een enkele keer dood (de spelregel "Beesten": "Zonder doden" maakt het alleen gewond).
-//   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan, en bij de schout met zijn lantaarn blijft hij
-//            aan de rand van het licht, met zijn ogen. Wie sluipt, heeft geen licht: die valt hij aan, en dan vecht de
-//            roedel met hem, in real time (T.wolvenVechten; js/gevecht.js).
+//   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan. Een man die hij aanvalt (de schout, een
+//            soldaat), vecht met de roedel, in real time (T.wolvenVechten; js/gevecht.js). Tot 16 okt bleef de roedel
+//            aan de rand van de lantaarn van de schout.
 //   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/statussen.js), zolang ze het laatst
 //            iets deden niet lang geleden is; en de raad zegt het.
 //
@@ -491,17 +491,16 @@
   };
 
   // De dichtste mens bij een van de dieren, binnen hoe schuw ze zijn: een wezen dat geen dier is, niet dood en niet
-  // binnen. Wie sluipt, komt dichterbij. Herten gaan ook voor een wolf weg. Geeft hem, of null.
+  // binnen. Herten gaan ook voor een wolf weg. Geeft hem, of null.
   function mensBij(S, w, leden, schuw) {
     let beste = null;
     let d = Infinity;
     const hert = leden[0].beest === 'hert';
     for (const m of w.wezens) {
       if (m.dier || m.dood || m.binnen || (m.beest && !(hert && m.beest === 'wolf'))) continue;
-      const ver = schuw - (m === S.schout && S.sluipen ? T.SLUIP_ZICHT : 0);
       for (const e of leden) {
         const a = T.afstand(T.tegelVan(m), T.tegelVan(e));
-        if (a <= ver && a < d) {
+        if (a <= schuw && a < d) {
           d = a;
           beste = m;
         }
@@ -864,13 +863,12 @@
     }
     const P = G.prooi;
     if (!P) return null;
-    if (P.soort === 'schout' && T.draagtLantaarn(D)) return { ...P, doel: randVanHetLicht(w, P.e, T.tegelVan(leider)), slaat: false };
     return { ...P, doel: T.tegelVan(P.e), slaat: true };
   }
 
   // De prooi: eerst een schaap (het dichtste, waar het ook staat); anders de dichtste binnen
   // zoekStraal van de leider: wie van het dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, en
-  // geen licht om hem heen), of de schout. Geeft { e, soort ('schaap', 'mens' of 'schout') } of null.
+  // geen licht om hem heen); de schout ook, sinds 16 okt zonder lantaarn. Geeft { e, soort ('schaap' of 'mens') } of null.
   function kiesProoi(D, leider) {
     const w = D.wereld;
     const lt = T.tegelVan(leider);
@@ -891,10 +889,6 @@
     for (const e of w.wezens) if (e.dier === 'schaap' && !e.dood && (!schaap || T.afstand(lt, T.tegelVan(e)) < T.afstand(lt, T.tegelVan(schaap)))) schaap = e;
     if (schaap && T.kanErKomen(w, lt, T.tegelVan(schaap))) return { e: schaap, soort: 'schaap' };
     for (const e of mensen) {
-      if (e === D.schout) {
-        if (!T.schoutIsWeg(D)) neem(e, 'schout');
-        continue;
-      }
       const q = T.tegelVan(e);
       if (inLicht(q) || mensen.some((m) => m !== e && T.afstand(T.tegelVan(m), q) <= IN().dreiging.alleen)) continue;
       neem(e, 'mens');
@@ -902,29 +896,14 @@
     return beste;
   }
 
-  // Waar een roedel blijft staan bij de schout met zijn lantaarn: net buiten zijn licht (T.ZIEN_INSTELLINGEN.lantaarn),
-  // aan de kant waar de leider staat.
-  function randVanHetLicht(w, s, lt) {
-    const r = T.ZIEN_INSTELLINGEN.lantaarn.straal + 1.5;
-    const dx = lt.x - s.x;
-    const dy = lt.y - s.y;
-    const d = Math.hypot(dx, dy) || 1;
-    if (d >= r - 0.5 && d <= r + 1) return { x: lt.x, y: lt.y };
-    const p = { x: Math.round(s.x + (dx / d) * r), y: Math.round(s.y + (dy / d) * r) };
-    return T.isBegaanbaar(w, p.x, p.y) ? p : plekkenBij(w, p, 1)[0] || { x: lt.x, y: lt.y };
-  }
-
   // De roedel slaat toe: een schaap neemt hij mee, en een bericht brengt je erheen; wie hij aanvalt, is gewond
-  // of dood (bijt); met de schout zonder licht vecht hij, in real time (T.wolvenVechten). Daarna is zijn honger weg (een gevecht beslist zelf),
+  // of dood (bijt), en vecht een man met hem, in real time (T.wolvenVechten). Daarna is zijn honger weg,
   // en gaat hij terug naar zijn hol. Ook voor Spel.debug.beesten('schaap').
   T.wolvenSlaanToe = (S, D, G, leider, prooi) => slaToe(S, D, G, leider, prooi);
   function slaToe(S, D, G, leider, prooi) {
     const dag = D.kalender.dag;
     const B = D.beesten;
-    if (prooi.soort === 'schout') {
-      T.wolvenVechten(D, G, prooi.e);
-      return;
-    } else if (prooi.soort === 'schaap') {
+    if (prooi.soort === 'schaap') {
       const plek = T.tegelVan(prooi.e);
       T.verliesDier(D, prooi.e);
       B.gezien = { dag, wat: 'schaap', wie: null };
@@ -938,7 +917,7 @@
       roeptOmHulp(S, D, G, leider, p);
       return;
     }
-    if (prooi.soort !== 'schout') G.honger = 0;
+    G.honger = 0;
     G.prooi = null;
     G.weg = dag + IN().wegUren / 24;
     G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
@@ -958,7 +937,7 @@
     const plek = T.tegelVan(e);
     const helpers = T.weerbareMannen(D)
       .map((m) => m.wezen)
-      .filter((m) => m && m !== e && !m.dood && !m.moetNaar && !m.opgeroepen && T.afstand(T.tegelVan(m), plek) <= H.hoort);
+      .filter((m) => m && m !== e && !m.dood && !m.moetNaar && T.afstand(T.tegelVan(m), plek) <= H.hoort);
     for (const m of helpers) m.moetNaar = { x: plek.x, y: plek.y, straal: 1, hulp: true };
     G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
     leider.pad = leider.onderweg ? [leider.pad[0]] : [];

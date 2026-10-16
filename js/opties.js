@@ -449,18 +449,6 @@
           uitleg: T.t('He asks only for gold and grain, at Martinmas.') },
       ],
     },
-    // Het land (werklijst vraag 63 en 69; js/land.js): tot het buurdorp er is, staat het uit, en speelt de proef zoals
-    // nu. Dan wordt het een keuze bij Nieuw spel: 0 of 1 tegenspeler.
-    {
-      id: 'land', naam: T.t('Land'), standaard: 'uit',
-      uitleg: T.t('Whether you can leave your hamlet along the road, into the land.'),
-      keuzes: [
-        { id: 'uit', naam: T.t('Off'), zet: { 'LAND_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('Your hamlet is the whole world, as in the try-out.') },
-        { id: 'aan', naam: T.t('On'), zet: { 'LAND_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('Walk out of your hamlet along the road and the map of the land opens: provinces where you travel for days, and what you have not seen is dark. At home everything goes on without you; you hear what happened when you are back. The next village is still to come.') },
-      ],
-    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -511,7 +499,6 @@
     { naam: T.t('The ending'), blok: 'EINDE_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The two masters'), blok: 'BAZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t("The lord's whims"), blok: 'GRILLEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The land'), blok: 'LAND_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The maker'), blok: 'MAKER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The empty start'), blok: 'BEGIN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Helping build'), blok: 'BOUWEN_INSTELLINGEN' }, // geen tekst
@@ -680,7 +667,6 @@
     zonHoogte: T.t('sun height'),
     schaduwLangst: T.t('longest shadow'),
     zonLaag: T.t('low sun'),
-    slaapAfstand: T.t('sleeping distance'),
     regenKans: T.t('chance of rain'),
     lente: T.t('spring'),
     zomer: T.t('summer'),
@@ -865,6 +851,7 @@
     herberg: T.t('inn'),
     huis: T.t('house'),
     kaars: T.t('candles'),
+    drager: T.t('carried lanterns'),
     schout: T.t('reeve'),
     brand: T.t('fire'),
     flakkeren: T.t('flicker'),

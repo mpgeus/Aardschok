@@ -273,9 +273,8 @@
     return true;
   }
 
-  // Wie meeliep met de schout bij een aanval (js/rovers.js), volgt nu jouw bevel.
+  // Een bevel gaat voor: wie een vijand achterna zat (e.volgt), laat hem gaan.
   function neemBevel(e) {
-    if (e.opgeroepen) T.laatGaan(e);
     delete e.volgt;
   }
 
@@ -440,7 +439,6 @@
   function doetNu(D, e) {
     if (e.volgt) return T.t('after the {wie}', { wie: e.volgt.naam });
     if (e.doelwit) return T.t('fighting the {wie}', { wie: e.doelwit.naam });
-    if (e.opgeroepen) return T.t('with the reeve');
     if (e.binnen) return e.bewoner && e.bewoner.soldaat && !T.inDienst(D, e) ? T.t('asleep at home') : T.t('at home');
     if (e.post) return e.onderweg || e.pad.length ? T.t('on his way to his post') : T.t('at his post');
     if (e.onderweg || e.pad.length) return T.t('on his way');

@@ -989,12 +989,10 @@
   });
 
   // Eén stand trager of sneller, langs T.SNELHEDEN (js/tijd.js: pauze, 1×, 3×, 10×, 30×).
-  // T.zetSnelheid onthoudt de laatste snelheid, zodat P na een stapje terug weer daar hervat. Wie
-  // slaapt en zelf aan de tijd komt, is wakker (js/dag.js).
+  // T.zetSnelheid onthoudt de laatste snelheid, zodat P na een stapje terug weer daar hervat.
   function stapSnelheid(delta) {
     const S = T.S;
     if (!S || !S.kalender) return;
-    if (S.slaap && T.wordWakker) T.wordWakker(S);
     const standen = T.SNELHEDEN || [0, 1, 3];
     let i = standen.indexOf(S.kalender.snelheid);
     if (i < 0) i = standen.findIndex((v) => v > S.kalender.snelheid) - 1;
@@ -1006,25 +1004,16 @@
     const b = ev.target.closest('button');
     if (!b || !T.S) return;
     b.blur();
-    if (T.S.slaap && T.wordWakker) T.wordWakker(T.S);
     T.zetSnelheid(T.S, Number(b.dataset.snelheid));
   });
 
   // De tijd stil, of weer op de snelheid van ervoor: P, en pause op de klok (js/balk.js).
   T.ui.wisselPauze = function (S) {
     const k = S.kalender;
-    if (S.slaap) T.wordWakker(S);
     T.zetSnelheid(S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);
   };
 
-  // Slapen tot de ochtend, of wakker worden: Z.
-  T.ui.wisselSlapen = function (S) {
-    if (S.slaap) T.wordWakker(S);
-    else T.gaSlapen(S);
-  };
-
-  // P, Z, - en = botsen nergens mee: de spatie en 1-4 zijn van het gevecht (CLAUDE.md). Z is slapen
-  // tot de ochtend, of wakker worden (js/dag.js).
+  // P, - en = botsen nergens mee (tot 16 okt was Z slapen tot de ochtend).
   window.addEventListener('keydown', (ev) => {
     if (!T.NIEUWE_HUD || !T.S || !T.S.kalender) return;
     // Niet terwijl je een naam typt, en niet in de spelregels of de velden (daar staat de tijd
@@ -1033,8 +1022,6 @@
     if (T.S.modus === 'spelregels' || T.S.modus === 'velden') return;
     if (ev.key === 'p' || ev.key === 'P') {
       T.ui.wisselPauze(T.S);
-    } else if (ev.key === 'z' || ev.key === 'Z') {
-      T.ui.wisselSlapen(T.S);
     } else if (ev.key === '-' || ev.key === '_') {
       stapSnelheid(-1);
     } else if (ev.key === '=' || ev.key === '+') {

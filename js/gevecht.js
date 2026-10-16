@@ -8,8 +8,8 @@
 // deur die je dichtgooide (git bewaart het).
 //
 // Wie vecht:
-//   - jouw kant (T.vechtVoor): de held, de soldaten en de veteranen (T.isMan, js/kiezen.js), en wie meegaat op de jacht op
-//     de wolven (e.opgeroepen, js/beesten.js). Wie geen doel heeft, kijkt om zich heen en valt de dichtste vijandige vijand
+//   - jouw kant (T.vechtVoor): de held, de soldaten en de veteranen (T.isMan, js/kiezen.js). Wie geen doel heeft, kijkt om
+//     zich heen en valt de dichtste vijandige vijand
 //     aan die hij ziet (zicht), maar alleen binnen de leiband van zijn post (of van waar hij hoort, T.dagAnker); loopt die
 //     verder weg, dan laat hij hem gaan en keert terug. Een vijand die je zelf aanwijst (e.volgt, js/kiezen.js), zit hij na
 //     zonder leiband. De held kiest zelf niets: hij vecht als je hem stuurt, of terug als hij geraakt wordt. Bij een aanval
@@ -69,7 +69,7 @@
   // ── Wie vecht, en tegen wie ──
 
   // Vecht hij voor dorp D: de held, een soldaat of een veteraan, of wie meegaat op de jacht (js/beesten.js)?
-  T.vechtVoor = (D, e) => !!e && !e.dood && (T.isMan(D, e) || !!e.opgeroepen);
+  T.vechtVoor = (D, e) => !!e && !e.dood && T.isMan(D, e);
   // Een vijand die vecht: een rover (of een ander monster), en een wolf als zijn roedel vecht of iemand aanvalt.
   T.isVijandig = (e) => !!e && !e.dood && e.kant === 'monster' && (!e.beest || !!(e.groep && (e.groep.vecht || e.groep.aanval)));
   // Wie een vijand m aanvalt: jouw kant, en een rover ook een dorpeling die buiten is (een wolf niet). Wie rovers op de weg

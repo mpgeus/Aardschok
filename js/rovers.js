@@ -133,42 +133,19 @@
     (D.bewoners ? D.bewoners.mensen : [])
       .filter((p) => (p.soldaat || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
       .map((p) => p.wezen);
-  const opgeroepen = (D) => (D.wereld ? D.wereld.wezens.filter((e) => e.opgeroepen && !e.dood) : []);
 
-  // Op de jacht op de wolven (js/beesten.js) loopt hij met de held mee: hij vecht aan jouw kant (T.vechtVoor,
-  // js/gevecht.js), met het leven van een soldaat (T.WEZENS.soldaat) of een veteraan (T.WEZENS.veteraan), en met wat hij
-  // nog heeft.
-  T.roepOp = function (e) {
-    e.opgeroepen = true;
-    e.binnen = false;
-    e.kant = 'speler';
-    const l = T.levenAlsMan(e);
-    e.leven = l.leven;
-    e.maxLeven = l.max;
-  };
-
-  // Zijn leven als man van de militie: { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt,
-  // krijgt hij ook. Ook voor zijn briefje (js/kiezen.js), vóór hij ooit opgeroepen werd.
+  // Zijn leven als man van de militie (het leven van een soldaat, T.WEZENS.soldaat, of een veteraan, T.WEZENS.veteraan):
+  // { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt, krijgt hij ook. Ook voor zijn
+  // briefje (js/kiezen.js), vóór hij ooit vocht.
   T.levenAlsMan = function (e) {
     const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
     if (e.maxLeven === s.leven) return { leven: e.leven, max: s.leven };
     return { leven: (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0), max: s.leven };
   };
 
-  // Na de jacht gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js).
-  T.laatGaan = function (e) {
-    e.opgeroepen = false;
-    e.kant = 'neutraal';
-    if (!e.onderweg) e.pad = [];
-  };
-  function laatGaan(D) {
-    for (const e of opgeroepen(D)) T.laatGaan(e);
-  }
-
   // Een man of een dorpeling valt (T.valt, js/gevecht.js): hij is dood, en een mond minder. Het bericht zegt wie het
   // was (T.wijzigBevolking, js/gebouwen.js, met wie het is), en waartegen (`van`: wie de laatste klap gaf).
   T.sneuvelt = function (D, e, van) {
-    e.opgeroepen = false;
     e.gesneuveld = true;
     const p = e.bewoner;
     const man = !!p && !!(p.soldaat || p.veteraan || p.schout);
@@ -267,10 +244,7 @@
   // niet meer op de kaart, dan gebeurt het buiten beeld.
   const bodeWezens = (D) => (D.bode ? D.bode.wie.map((p) => p.wezen).filter((e) => e && !e.dood && D.wereld.wezens.includes(e)) : []);
   function laatDeBodeGaan(D, wezens = bodeWezens(D)) {
-    for (const e of wezens) {
-      delete e.aangehouden;
-      if (e.opgeroepen) T.laatGaan(e);
-    }
+    for (const e of wezens) delete e.aangehouden;
     if (D.bode) D.bode.hinderlaag = false;
   }
   function beginHinderlaag(D, A) {
@@ -362,10 +336,8 @@
     A.buit = { graan, kapot };
   }
 
-  // Het eind van een aanval: wie nog leeft, is de kaart af. Wie in een spel van vóór 15 okt nog met de schout meeliep,
-  // gaat weer naar huis.
+  // Het eind van een aanval: wie nog leeft, is de kaart af.
   function eind(D) {
-    laatGaan(D);
     D.rovers.aanval = null;
   }
 

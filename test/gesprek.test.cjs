@@ -47,10 +47,10 @@ test('een vlag blijft staan tot hij gewist wordt, en werkt ook via een bestaand 
   T.wisVlag(S, 'geholpen');
   assert.equal(T.heeftVlag(S, 'geholpen'), false);
 
-  // S.sleutelGebruikt bestaat al als los veld op de spelstaat (js/verkennen.js); een gesprek moet
-  // daar ook naar kunnen vragen zonder dat het spel hetzelfde feit dubbel bijhoudt.
-  S.sleutelGebruikt = true;
-  assert.equal(T.heeftVlag(S, 'sleutelGebruikt'), true);
+  // Een los veld op de spelstaat (tot 16 okt S.sleutelGebruikt); een gesprek moet daar ook naar kunnen vragen zonder
+  // dat het spel hetzelfde feit dubbel bijhoudt.
+  S.proefVeld = true;
+  assert.equal(T.heeftVlag(S, 'proefVeld'), true);
 });
 
 // Een gesprek in de vorm van js/gesprekken.js, alleen voor deze toets: een begroeting die op een

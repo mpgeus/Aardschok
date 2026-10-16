@@ -171,14 +171,14 @@ function zet(e, x, y) {
   e.pad = [];
   e.onderweg = false;
 }
-// Een soldaat van deze soort, met zijn stukken uit de opslag, opgeroepen (aan jouw kant), op (x, y).
+// Een soldaat van deze soort, met zijn stukken uit de opslag, buiten, op (x, y).
 function soldaat(D, huis, soort, x, y) {
   for (const stuk of T.SOLDAAT_SOORTEN[soort].stukken) if (T.STUKKEN[stuk].waar) T.zetVoorraad(D, T.STUKKEN[stuk].waar, 1);
   const voor = new Set(T.soldatenVan(D));
   T.zetSoldaten(D, huis, soort, 1);
   const p = T.soldatenVan(D).find((q) => !voor.has(q));
   assert.ok(p, `een ${soort}`);
-  T.roepOp(p.wezen);
+  p.wezen.binnen = false;
   zet(p.wezen, x, y);
   return p.wezen;
 }

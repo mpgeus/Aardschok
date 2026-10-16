@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 // Het proefdorp (test/grond.cjs): het huis van de schout, twee boerderijen en hutten, zoals een nieuw spel na een dag
 // bouwen is; het dorp heeft de trede "gehucht". Stil, en met de velden die een toets van S verwacht.

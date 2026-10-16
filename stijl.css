@@ -92,7 +92,7 @@ kbd {
 /* Goud en spullen, linksboven (het scherm van het oude spel; het gehucht heeft er zijn eigen
    balk, #hud-gehucht, en de hoeken onderaan, .hoek-onder). */
 #hud { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
-/* Goud: naast sluipen, in dezelfde maat als een vakje van de inventaris. Het komt pas in
+/* Goud. Het komt pas in
    beeld als je ooit goud had (js/ui.js, toonGoud). */
 #goud {
   display: flex;
@@ -105,19 +105,8 @@ kbd {
 }
 #goud .munt { color: var(--goud); font-size: 13px; }
 
-#inventaris .item {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: var(--paneel);
-  border: 1px solid color-mix(in srgb, var(--goud) 50%, transparent);
-  border-radius: 10px;
-}
-
 /* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan (T.NIEUWE_HUD zet de klasse
-   .nieuwe-hud op body). De panelen van het oude spel (sluipen, goud en spullen linksboven, en de
-   oude uitleg rechtsboven) gaan dan weg. De actiebalk onderaan blijft: die schuift in beeld als er gevochten wordt, ook in
+   .nieuwe-hud op body). Het paneel van het oude spel (het goud linksboven) gaat dan weg. De actiebalk onderaan blijft: die schuift in beeld als er gevochten wordt, ook in
    het gehucht.
    Bovenaan een dunne balk over de hele breedte (vraag 166), en daaronder alleen briefjes (vraag 146, d): linksboven het
    doel met de raad (#opdracht, js/ui.js) en de statussen eronder, rechts het briefje van een gebouw. Ze schalen mee
@@ -211,8 +200,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #menu-knop:hover,
 #menu-knop:focus-visible,
 #menu-knop.actief { color: var(--papier-rood); }
-.nieuwe-hud #hud,
-.nieuwe-hud #hulp { display: none; }
+.nieuwe-hud #hud { display: none; }
 
 /* De naam van een kamer als je hem voor het eerst binnenloopt */
 #plek {
@@ -426,21 +414,6 @@ body.foto #kader { display: none; }
   cursor: pointer;
 }
 #overlay-knop:hover { filter: brightness(1.08); }
-
-/* De uitleg rechtsboven (het oude spel) */
-#hulp {
-  position: fixed;
-  right: 16px;
-  top: 16px;
-  max-width: 320px;
-  padding: 8px 12px;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--gedempt);
-  background: rgba(22, 18, 14, 0.6);
-  border-radius: 8px;
-  text-align: right;
-}
 
 /* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, linksboven op de plek van
    het doel; de knop Build onderaan opent het (js/balk.js). */
@@ -972,75 +945,6 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
   100% { opacity: 0; }
 }
 
-/* Het land (js/landkaart.js; js/land.js): de kaart met de provincies, in een groot venster in het midden, zoals de schets
-   "Het land met provincies". Wat je nog niet zag, is gearceerd donker; de wegen zijn licht, met de dagen erbij. En het
-   venster na een reis, met wat er thuis gebeurde. */
-#land {
-  --land-gehucht: #b6a45f;
-  --land-kasteel: #8d887d;
-  --land-stad: #b58a5e;
-  --land-woud: #4d6c42;
-  --land-heide: #86699a;
-  --land-bloei: #d8b3e6;
-  --land-veen: #5f5b3b;
-  --land-broek: #4a6862;
-  --land-zand: #c1af7c;
-  --land-kampen: #8c9d5b;
-  --land-steen: #a39d90;
-  --land-dak: #8a5a33;
-  --land-muur: #efe6d2;
-  --land-mist: #16130f;
-  --land-mistlijn: #2c261e;
-  --land-grens: #140f0b;
-  --land-weg: #d9ba78;
-  position: fixed;
-  left: 50%;
-  top: 52%;
-  transform: translate(-50%, -50%);
-  width: min(900px, calc(100vw - 32px));
-  max-height: calc(100vh - 110px);
-  overflow-y: auto;
-  padding: 12px 16px 12px;
-  z-index: 6;
-  background: rgba(22, 18, 14, 0.97); /* dicht: de uitleg en het doel erachter lezen er anders doorheen */
-}
-#land .venster-staat b { color: var(--inkt); font-weight: normal; }
-#land-kaart { display: block; width: 100%; height: auto; max-height: calc(100vh - 290px); margin: 2px 0 6px; }
-#land .land-klik { cursor: pointer; }
-#land .land-klik:hover { fill: color-mix(in srgb, var(--goud) 8%, transparent); }
-#land .land-naam { font: bold 20px var(--kop); fill: var(--inkt); stroke: #140f0b; stroke-width: 4.5px; paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
-#land .land-dagen { font: bold 13px var(--boek); fill: var(--inkt); stroke: #140f0b; stroke-width: 4px; paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
-#land .land-vraag { font: 40px var(--kop); fill: #4a4236; pointer-events: none; }
-#land .land-keuze { margin: 0; min-height: 30px; font-size: 13.5px; color: var(--inkt); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-#land .land-keuze b { font: 15px var(--kop); font-weight: normal; }
-#land .land-zacht { color: var(--gedempt); }
-.land-knop {
-  padding: 4px 12px;
-  font: 13px var(--kop);
-  color: var(--op-goud);
-  background: var(--goud);
-  border: 1px solid var(--goud);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.land-knop:hover { background: #efc55e; }
-#terug {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(560px, calc(100vw - 32px));
-  max-height: calc(100vh - 140px);
-  overflow-y: auto;
-  padding: 12px 16px 12px;
-  z-index: 7;
-  background: rgba(22, 18, 14, 0.97);
-}
-#terug .terug-lijst { margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.5; }
-#terug .terug-lijst li { padding: 3px 0; border-top: 1px solid var(--rand); }
-#terug .terug-lijst li span { color: var(--gedempt); font: italic 12px var(--boek); margin-right: 4px; }
-#terug .terug-lijst li.gevaar { color: #f0a594; }
-
 /* Het briefje bij een huis (js/huisbriefje.js; werklijst vraag 100, 2c, in de stijl van vraag 98, C): een papiertje aan
    een spijker, met wie er woont, wat het huis wil en wat helpt. Het papier en de spijker zijn pixel art
    (gereedschap/pixelart/papieren.cjs), op ware pixels, zoals elk venster (vraag 146). */
@@ -1126,8 +1030,7 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 
 /* Elk venster is papier (vraag 146, b1; Marcel, 9 okt: "wat meer HD de UI", en de schrijftafel van vraag 98): het vel van
    het spel (beelden/papier.png) op ware pixels, met inkt in plaats van licht. In een venster staan de kleurnamen op inkt,
-   dus zijn eigen opmaak gaat vanzelf mee; een nieuw venster komt erbij in deze rij. De kaart van het land (#land) nog
-   niet: die tekent in licht op donker (ontwerp/opmerkingen.md). */
+   dus zijn eigen opmaak gaat vanzelf mee; een nieuw venster komt erbij in deze rij. */
 #bouwmenu,
 #handel,
 #brief,
@@ -1136,7 +1039,6 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #velden,
 #wetten,
 #raadsman,
-#terug,
 #spelregels,
 #dialoog,
 #overlay .kaart,
@@ -1165,4 +1067,3 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #velden .veld-balk { background: color-mix(in srgb, var(--papier-inkt) 12%, transparent); }
 #velden .veld-balk i { background: var(--papier-groen); }
 #velden .veld-mest.gekozen { color: var(--op-goud); }
-#terug .terug-lijst li.gevaar { color: var(--rood); }

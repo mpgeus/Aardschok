@@ -8,13 +8,6 @@
   let vorigeTip = '';
   let keuzes = [];
 
-  const SLEUTEL_ICOON =
-    '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' +
-    '<circle cx="7" cy="12" r="4.2" fill="none" stroke="#e2b64a" stroke-width="2.4"/>' +
-    '<path d="M11 12h10M17 12v4M20.5 12v3" stroke="#e2b64a" stroke-width="2.4" stroke-linecap="round" fill="none"/>' +
-    '</svg>';
-  const ICONEN = [['sleutel', T.t('Iron key'), SLEUTEL_ICOON]];
-
   // Het doel van dit moment (een quest, of de volgende trede), linksboven, als briefje (#opdracht; vraag 146, d). Alleen
   // als de tekst verandert, wordt het aangeraakt.
   let vorigeOpdracht = null;
@@ -22,13 +15,11 @@
   T.ui = {
     reset(S) {
       $('berichten').innerHTML = '';
-      this.toonInventaris(S);
       this.toonGoud();
       this.sluitDialoog();
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
-      $('terug').classList.add('verborgen'); // wat er gebeurde toen je op reis was (js/landkaart.js)
       // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
       if (this.toonKalender) this.toonKalender(S);
@@ -37,12 +28,6 @@
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
       if (this.toonTevredenheid && S.dorp) this.toonTevredenheid(S.dorp); // en de tevredenheid ernaast (js/balk.js)
       if (this.toonStatussen && S.dorp && S.dorp.kalender) this.toonStatussen(S.dorp); // honger, droogte, ... (js/hud.js)
-    },
-
-    toonInventaris(S) {
-      $('inventaris').innerHTML = ICONEN.filter(([id]) => S.inventaris.has(id))
-        .map(([, titel, icoon]) => `<div class="item" title="${titel}">${icoon}</div>`)
-        .join('');
     },
 
     // Wat er nu van je gevraagd wordt; null laat het briefje verdwijnen. `tekst` mag <kbd> bevatten.
@@ -64,7 +49,7 @@
       }
     },
 
-    // Goud, naast sluipen. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
+    // Goud. Het vakje komt pas als je ooit goud had: een leeg vakje dat nul
     // zegt is alleen maar ruis.
     toonGoud() {
       const S = T.S;
@@ -77,11 +62,6 @@
     // `plek` ({ x, y }, een tegel; T.zeg in js/dorp.js): een klik op het bericht, of Spatie, brengt de camera erheen
     // (T.glijNaar, js/main.js), en de plek knippert op de minikaart (js/balk.js). Werklijst vraag 170, stap 1d.
     bericht(tekst, soort, plek) {
-      // Is de schout op reis (js/land.js), dan hoort hij het als hij terug is: het bericht wacht in S.land.
-      if (T.S && T.opReis(T.S)) {
-        T.bewaarVoorLater(T.S, tekst, soort);
-        return;
-      }
       if (plek && T.S) {
         T.S.berichtPlek = { x: plek.x, y: plek.y };
         if (this.ping) this.ping(plek);
@@ -289,12 +269,10 @@
   // De bladzijde zelf heeft geen tekst voor de speler: een element zegt met data-t (de tekst), data-t-html (tekst met
   // toetsen erin) of data-t-title (de uitleg bij de muis) welke zin erin hoort, en die staat hier, zodat een vertaling
   // erbij kan. De balk onderaan vult haar eigen stukken (js/balk.js: de knoppen, de bazen, de snelheden).
-  const kbd = (toets) => `<kbd>${toets}</kbd>`;
   const PAGINA = {
     menu: T.t('Menu'),
     opgeslagen: T.t('Saved'),
     goud: T.t('Gold. It buys goods and favours.'),
-    hulp: T.t('Click to walk, talk or use something. {toets}: sneak', { toets: kbd('S') }),
   };
   document.documentElement.lang = T.taalNu();
   document.title = T.t('{naam} · prototype', { naam: T.NAAM });

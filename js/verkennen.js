@@ -1,15 +1,7 @@
-// Rondlopen: wat een klik kiest (T.handelingVerkennen), oprapen en deuren, en het dwalen van wie geen doel heeft. Het
+// Rondlopen: wat een klik kiest (T.handelingVerkennen), deuren, en het dwalen van wie geen doel heeft. Het
 // gevecht loopt in real time in de tik (js/gevecht.js; werklijst vraag 170, stap 2).
 (function (T) {
   'use strict';
-
-  // Wat je opraapt door erop te stappen: een sleutel, die een deur op slot opent. De tekst bij de
-  // muis, en wat er gemeld wordt.
-  // Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
-  // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
-  const OPRAPEN = (T.OPRAPEN = {
-    sleutel: { tekst: T.t('Pick up the key'), vind: T.t('You find the iron key.') },
-  });
 
   // ── Wat een veld is (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
   //
@@ -246,7 +238,7 @@
       // Wie op de jacht met de held meeloopt, dwaalt niet (js/beesten.js), en wie vecht ook niet: die loopt en slaat in
       // het gevecht (js/gevecht.js). Wie een praatje maakt evenmin (js/praatje.js), en een boer die op zijn land werkt
       // ook niet (js/veldwerk.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.doelwit || m.volgt || m.praatje) continue;
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.doelwit || m.volgt || m.praatje) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie
@@ -349,20 +341,6 @@
     m.padDoel = null;
   }
 
-  // Wie sluipt, loopt half zo snel, maar de wolven merken hem pas van twee tegels dichterbij op (js/beesten.js).
-  T.SLUIP_ZICHT = 2;
-
-  T.wisselSluipen = function (S) {
-    if (S.modus !== 'verkennen') return;
-    S.sluipen = !S.sluipen;
-    // Wie sluipt, dooft zijn lantaarn (js/zien.js, T.draagtLantaarn; vraag 125, C): in het donker zien ze je dan
-    // niet van ver, maar je ziet zelf ook minder. Wie weer gewoon loopt, steekt hem weer aan.
-    if (S.schout) S.schout.lantaarnUit = S.sluipen;
-    const donker = S.kalender && T.lichtVan(S.kalender.dag).nacht >= T.ZIEN_INSTELLINGEN.lantaarn.vanaf;
-    if (S.sluipen) T.ui.bericht(donker ? T.t('You sneak and put out your lantern: slower, and in the dark they cannot see you.') : T.t('You sneak: slower, but less likely to be noticed.'));
-    else T.ui.bericht(donker ? T.t('You walk normally again, with your lantern lit.') : T.t('You walk normally again.'));
-  };
-
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
   T.magStappen = function (S, e, t, w = S.wereld) {
     return T.isBegaanbaar(w, t.x, t.y, { deurenOpenen: e === S.schout, wezensBlokkeren: true, wie: e });
@@ -393,13 +371,6 @@
       }
       const d = T.deurOp(w, t.x, t.y);
       if (d) T.ontdekBijDeur(w, d);
-      const v = T.voorwerpOp(w, t.x, t.y);
-      if (v && OPRAPEN[v.soort]) {
-        T.haalVoorwerpWeg(w, v);
-        S.inventaris.add(v.soort);
-        T.ui.toonInventaris(S);
-        T.ui.bericht(OPRAPEN[v.soort].vind, 'goed');
-      }
       // Stap je op een tegel die naar een ander gebied leidt, dan gaan we daarheen — maar niet
       // hier, midden in de beweging: de spellus loopt nu door de lijst wezens van deze wereld
       // heen, en die lijst verandert bij een overgang. main.js pakt het zo op.
@@ -416,14 +387,8 @@
       const o = !zojuist && !e.pad.length && S.modus === 'verkennen' ? T.overgangOp(w, t.x, t.y) : null;
       if (o) {
         e.pad = [];
-        S.naLopen = null;
         S.naarGebied = o.naar;
       }
-    }
-    if (e === S.schout && S.modus === 'verkennen' && !e.pad.length && S.naLopen) {
-      const n = S.naLopen;
-      S.naLopen = null;
-      if (T.raakt(w, t, n.doel)) n.actie();
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

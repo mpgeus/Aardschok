@@ -8,7 +8,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 // Het proefdorp (test/grond.cjs): twee boerderijen en hutten, zoals een nieuw spel na een dag bouwen is; stil (zoals in
 // test/treden.test.cjs).

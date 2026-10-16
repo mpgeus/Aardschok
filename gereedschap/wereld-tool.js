@@ -24,7 +24,7 @@
     effecten: [], grond: null, doorkijkTijd: 0, gevechtGloed: 0,
     inventaris: new Set(), vlaggen: new Set(), bezocht: new Set(),
     quests: {}, questWeg: {}, questBeloond: new Set(),
-    goud: 0, goudGehad: false, sluipen: false, fonteinLeeg: false, spreektMet: null,
+    goud: 0, goudGehad: false, spreektMet: null,
     gebieden: {},
   });
   // Hier wordt niet gespeeld, dus er is geen dorp (js/dorp.js): de staat is zijn eigen dorp, voor de vlaggen en de
@@ -1150,7 +1150,6 @@
       rij(doel, 'vel', `${v.vel} #${v.id}`);
       if (v.beslaat && (v.beslaat[0] > 1 || v.beslaat[1] > 1)) rij(doel, 'beslaat', `${v.beslaat[0]}×${v.beslaat[1]} tegels`);
       if (v.grendel) rij(doel, 'quest', `${v.grendel.quest}${v.grendel.fase ? ':' + v.grendel.fase.join(',') : ''}`);
-      if (T.OPRAPEN && T.OPRAPEN[v.soort]) rij(doel, 'oprapen', T.OPRAPEN[v.soort].tekst);
     }
     // Wat aan een quest hangt maar er in deze fase niet ligt, hoort er ook bij te staan: dan zie
     // je waarom je het niet ziet.

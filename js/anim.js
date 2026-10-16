@@ -83,9 +83,7 @@
       const dx = volgende.x - e.x;
       const dy = volgende.y - e.y;
       const afstand = Math.hypot(dx, dy);
-      // Wie sluipt, gaat half zo snel.
       let snelheid = T.snelheidVan(e);
-      if (e === S.schout && S.sluipen) snelheid *= 0.5;
       // De ossenkar rijdt sneller over een weg (js/wegen.js), net zo snel als de regel van zijn rit rekent (js/kar.js).
       if (e.kar) snelheid /= T.karKostOp(w, volgende.x, volgende.y);
       if (!(snelheid > 0)) return;

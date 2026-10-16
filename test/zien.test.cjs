@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);
@@ -53,26 +53,6 @@ test('\'s avonds branden de lantaarns; overdag en na bedtijd niet', () => {
   S.kalender.dag = bijUur(WINTER, 12);
   assert.equal(T.lichtBronnen(S.dorp).length, 0, 'overdag brandt er niets');
   S.kalender.dag = bijUur(WINTER + 1, 2);
-  // Behalve de lantaarn van de schout, als hij buiten is (vraag 125, C; de toets hieronder).
-  assert.ok(T.lichtBronnen(S.dorp).every((b) => b.ramenVan || b.soort === 'schout'), 'na bedtijd alleen nog de herberg, als er iemand binnen zit');
-});
-
-test('de schout draagt in het donker buiten een lantaarn; sluipen dooft hem', () => {
-  const S = gehucht(bijUur(WINTER, 19));
-  T.ui.toonSluipen = () => {};
-  zet(S.schout, S.wereld.kamp.vuur.x, S.wereld.kamp.vuur.y + 2); // buiten, bij het oude kampvuur
-  assert.ok(T.draagtLantaarn(S.dorp), 'het is donker en hij is buiten');
-  const eigen = T.lichtBronnen(S.dorp).filter((b) => b.soort === 'schout');
-  assert.equal(eigen.length, 1, 'zijn lantaarn is een lichtbron');
-  T.wisselSluipen(S);
-  assert.ok(S.sluipen && !T.draagtLantaarn(S.dorp), 'sluipen dooft hem');
-  assert.equal(T.lichtBronnen(S.dorp).filter((b) => b.soort === 'schout').length, 0, 'en zijn licht gaat uit');
-  T.wisselSluipen(S);
-  assert.ok(T.draagtLantaarn(S.dorp), 'gewoon lopen steekt hem weer aan');
-  // Overdag, of binnen, brandt hij niet.
-  S.schout.binnen = true;
-  assert.ok(!T.draagtLantaarn(S.dorp), 'binnen niet');
-  zet(S.schout, S.wereld.kamp.vuur.x, S.wereld.kamp.vuur.y + 2);
-  S.kalender.dag = bijUur(WINTER, 12);
-  assert.ok(!T.draagtLantaarn(S.dorp), 'overdag niet');
+  // Behalve de lantaarns van de bode, als hij onderweg is (js/bode.js).
+  assert.ok(T.lichtBronnen(S.dorp).every((b) => b.ramenVan || b.soort === 'drager'), 'na bedtijd alleen nog de herberg, als er iemand binnen zit');
 });

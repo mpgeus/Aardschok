@@ -68,7 +68,6 @@
   let BRON_GELEZEN = false;
   let VERLOREN_OPMERKINGEN = [];
   let VOORWAARDEN = []; // afgeleid uit het kop-commentaar van gesprekken.js
-  let OPRAAPBAAR = []; // wat je in de wereld kunt oprapen (uit verkennen.js)
 
   // Het proefdorp: welke fase, welke weg, en wat de speler toevallig bij zich heeft.
   const proef = { fase: null, weg: null, goud: 0, tas: new Set(), vlaggen: new Set() };
@@ -143,12 +142,6 @@
     // maar in een voorwaarde zijn het gewone velden.
     for (const naam of ['fase', 'weg']) if (!uit.some((v) => v.naam === naam)) uit.push({ naam, soort: 'tekst' });
     VOORWAARDEN = uit;
-  }
-  // Wat er in de wereld op te rapen valt (OPRAPEN in verkennen.js). Daarmee kan de controle
-  // zeggen: "je wacht op iets wat niemand je kan geven".
-  function leidOpraapbaarAf(bron) {
-    const blok = bron.match(/const OPRAPEN = \{([\s\S]*?)\n  \};/);
-    OPRAAPBAAR = blok ? [...blok[1].matchAll(/^\s{4}(\w+):/gm)].map((m) => m[1]) : [];
   }
 
   // ---------- kop-commentaar en losse opmerkingen bewaren ----------
@@ -267,7 +260,6 @@
       }
     }
     if (soort !== 'vlag') {
-      OPRAAPBAAR.forEach((n) => uit.add(n));
       for (const h of wereldHaakjes()) uit.add(h.naam);
     }
     return uit;
@@ -784,15 +776,13 @@
 
   // ---------- opstarten ----------
   async function init() {
-    const [questsBron, gesprekkenBron, verkennenBron] = await Promise.all([
+    const [questsBron, gesprekkenBron] = await Promise.all([
       fetch('../js/quests.js').then((r) => r.text()),
       fetch('../js/gesprekken.js').then((r) => r.text()),
-      fetch('../js/verkennen.js').then((r) => r.text()),
     ]);
     verwerkRuweBron(questsBron);
     renderOpmerkingMelding();
     leidVoorwaardenAf(gesprekkenBron);
-    leidOpraapbaarAf(verkennenBron);
 
     questId = Object.keys(T.QUESTS)[0] || null;
     proef.fase = questId ? T.QUESTS[questId].begin : null;

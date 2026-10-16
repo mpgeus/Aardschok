@@ -7,7 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 // Een nieuw spel, stil: het lege begin op het eiland van `zaad` (zonder zaad eiland 5), zoals de speler het begint. (Tot
 // ronde 2 van het snoeien, stap 6, was het een land van de maker zonder het eiland, met het gehucht dat er al was.) Het

@@ -698,7 +698,6 @@
       p.werk = null;
       const e = p.wezen;
       if (!e) continue;
-      e.opgeroepen = false;
       if (uitgang && !e.dood) {
         e.vertrekt = { x: uitgang.x, y: uitgang.y };
         if (!B.vertrekken.includes(e)) B.vertrekken.push(e);

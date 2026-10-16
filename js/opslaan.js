@@ -354,7 +354,7 @@
     if (S.vanzelfBewaard === dag || T.uurVanDag(k.dag) < T.dagindeling(dag).opstaan) return null;
     const tussen = k.snelheid >= 30 ? IN().vanzelfSnelDagen : 1;
     if (S.vanzelfBewaard != null && dag - S.vanzelfBewaard < tussen) return null;
-    if (S.slaap || T.waaromNietOpslaan(S)) return null;
+    if (T.waaromNietOpslaan(S)) return null;
     S.vanzelfBewaard = dag;
     return T.slaOp(S, 'auto');
   };

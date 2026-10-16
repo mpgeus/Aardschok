@@ -177,8 +177,8 @@ test('naar gewone snelheid: wie sneller speelt, gaat naar 1×; 1× en pauze blij
     T.naarGewoneSnelheid(D);
     assert.equal(D.kalender.snelheid, na, `${voor}×`);
   }
-  // Een ander dorp dan het jouwe, of je bent er niet (op reis, js/land.js): dan gaat de tijd door zoals je koos.
-  for (const D of [dorp({ ander: true }), dorp({ wereld: { wezens: [] } })]) {
+  // Een ander dorp dan het jouwe: dan gaat de tijd door zoals je koos.
+  for (const D of [dorp({ ander: true })]) {
     T.zetSnelheid(D, 30);
     T.naarGewoneSnelheid(D);
     assert.equal(D.kalender.snelheid, 30);

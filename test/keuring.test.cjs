@@ -246,17 +246,6 @@ test('een wereld met de sleutel erin haalt die klacht weg', () => metProefQuest(
   assert.doesNotMatch(teksten(T.keurDekking({ werelden })), /nergens te krijgen/);
 }));
 
-test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {
-  const werelden = {
-    proefje: {
-      wezens: [{ soort: 'bakker' }],
-      voorwerpen: [],
-      questVoorwerpen: [{ soort: 'steenhoop', x: 2, y: 2, grendel: { quest: 'bakker', fase: ['zoeken'] } }],
-    },
-  };
-  assert.match(teksten(T.keurDekking({ werelden })), /staat niet in T.OPRAPEN/);
-});
-
 test('één mens kan niet op twee plekken staan', () => {
   const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'smid' }, { x: 4, y: 2, wie: 'smid' }]);
   assert.match(teksten(klachten), /"the smith" staat ook al op \(2, 2\)/);

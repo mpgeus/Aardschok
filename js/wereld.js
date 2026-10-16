@@ -55,7 +55,6 @@
     fontein: { blokkeert: true, zichtDicht: false },
     kist: { blokkeert: true, zichtDicht: true },
     pilaar: { blokkeert: true, zichtDicht: true },
-    sleutel: { blokkeert: false, zichtDicht: false },
     // De schandpaal van de heer op het plein: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
     schandpaal: { blokkeert: true, zichtDicht: false, naam: T.t('the pillory') },
@@ -149,8 +148,7 @@
     },
     // Buiten, in het bos. Hij loopt harder dan de schout en ziet verder dan wat er
     // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
-    // slijmkruiper in een kelder. Sluipen (T.SLUIP_ZICHT) scheelt dan twee tegels, en dat is
-    // precies genoeg om hem te ontlopen als je hem op tijd ziet.
+    // slijmkruiper in een kelder.
     wolf: {
       naam: T.t('wolf'), kant: 'monster', leven: 12, snelheid: 2.6, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('bites {doel}') },
@@ -244,7 +242,6 @@
       { soort: 'kist', x: 12, y: 2 },
       { soort: 'kist', x: 13, y: 5 },
       { soort: 'kist', x: 14, y: 5 },
-      { soort: 'sleutel', x: 17, y: 2 },
       { soort: 'pilaar', x: 3, y: 11 },
       { soort: 'pilaar', x: 6, y: 11 },
     );

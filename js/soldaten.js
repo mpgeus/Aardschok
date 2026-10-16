@@ -262,15 +262,15 @@
   // In het gevecht
   // ---------------------------------------------------------------------------------------------
 
-  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan en wie meegaat op de jacht (js/beesten.js) een
-  // hooivork, en de schout, een dorpeling en een vijand geen (de schout slaat zoals T.SLAAN, een vijand zoals zijn aanval in
+  // De stukken van wezen e: een soldaat die van zijn soort, een veteraan een hooivork, en de schout, een dorpeling en een
+  // vijand geen (de schout slaat zoals T.SLAAN, een vijand zoals zijn aanval in
   // T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie opgeroepen was (kant 'speler'); sinds het gevecht in
   // real time (vraag 170, stap 2) vecht een soldaat ook zonder.
   T.stukkenVan = function (e) {
     const p = e && e.bewoner;
     if (!p || p.schout) return [];
     if (p.soldaat) return stukkenVan(p.soldaat.soort);
-    return p.veteraan || e.opgeroepen ? stukkenVan('militie') : [];
+    return p.veteraan ? stukkenVan('militie') : [];
   };
 
   // Hoe wezen e slaat (js/gevecht.js): { wapen, kosten, schade, bereik, schiet, doorHarnas }. Een vijand (een rover, een

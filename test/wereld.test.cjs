@@ -255,8 +255,7 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
 });
 
 test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
-  // Zolang de spelregel "Land" uit staat (js/land.js), is er achter de weg nog niets; de speeltest telde die fout als
-  // zijn schout de weg af liep (3 okt).
+  // Achter de weg is nog niets; de speeltest telde die fout als zijn schout de weg af liep (3 okt).
   const { S } = proefDorp(T);
   const uit = S.wereld.overgangen[0];
   assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het dorp is een proefkaart met een weg naar nergens');

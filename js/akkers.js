@@ -605,7 +605,7 @@
     if (!IN.dagloners || !IN.daglonersMaaien) return null;
     const p = T.bewonerVan(D, e);
     if (!p || !p.dagloner || p.werk || p.weg || p.komt || !D.gebouwen.includes(p.dagloner)) return null;
-    if (e.werkt || e.draagt || e.vracht > 0 || e.praatje || e.opgeroepen || e.moetNaar || e.vertrekt) return null;
+    if (e.werkt || e.draagt || e.vracht > 0 || e.praatje || e.moetNaar || e.vertrekt) return null;
     if (T.blijftThuis(p, D.kalender.dag)) return null;
     const boer = D.wereld.wezens.find((b) => !b.dood && b.werkAkkers && b.werkAkkers.length && (T.bewonerVan(D, b) || {}).huis === p.dagloner);
     if (!boer) return null;

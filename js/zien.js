@@ -3,8 +3,8 @@
 // arm lijken" uitgegaan (Marcel, 11 okt; vraag 151, optie 1); het licht bleef, want het wordt getekend en de wolven
 // kijken ernaar.
 //   - het licht in het dorp (T.lichtBronnen): de herberg (T.herbergLicht, js/herberg.js), elke lantaarn op de kaart,
-//     die 's avonds brandt, de ramen van de huizen waar iemand thuis is, een feest, een brand, de bode, en de
-//     lantaarn van de schout (T.draagtLantaarn). js/tekenen.js tekent er de gloed van;
+//     die 's avonds brandt, de ramen van de huizen waar iemand thuis is, een feest, een brand en de bode.
+//     js/tekenen.js tekent er de gloed van;
 //   - de huizen waar iemand thuis is (T.huizenMetIemandThuis): voor de ramen en de rook uit de schoorsteen.
 (function (T) {
   'use strict';
@@ -18,9 +18,8 @@
     // klein licht bij de deur, zo ver en zo fel.
     huisStraal: 1.5,
     huisSterkte: 0.22,
-    // De lantaarn van de schout (werklijst vraag 125, C; Marcel, 4 okt: "ook spel. Voegt leuke elementen toe"): buiten,
-    // vanaf zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel. De wolven blijven aan de rand van zijn
-    // licht (js/beesten.js). Sluipen dooft hem (T.wisselSluipen in js/verkennen.js).
+    // De lantaarn die de bode en wie meegaat dragen (js/bode.js; tot 16 okt ook de schout, vraag 125, C): buiten, vanaf
+    // zo donker (T.lichtVan(dag).nacht), brandt hij, zo ver en zo fel.
     lantaarn: { vanaf: 0.4, straal: 3, sterkte: 0.5 },
   };
   const IN = () => T.ZIEN_INSTELLINGEN;
@@ -28,20 +27,20 @@
   // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), elke
   // andere lantaarn op de kaart, die 's avonds brandt, en de kaarsjes van de kerstboom (T.versieringLicht,
   // js/versiering.js). Wie ze aansteekt, komt later (de koster; spel.md,
-  // "lichtbronnen in het dorp"). En de lantaarn van de schout, als hij er een draagt (T.draagtLantaarn, vraag 125, C).
+  // "lichtbronnen in het dorp"). En de lantaarns van de bode (T.bodeLicht).
   // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'kaars', 'huis'
-  // of 'schout', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
+  // of 'drager', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
   T.lichtBronnen = function (D) {
     const w = D.wereld;
     const herberg = T.herbergLicht(D).map((b) => ({ ...b, soort: 'herberg' }));
-    // De schout, en in het donker de bode en wie meegaat (js/bode.js), met een lantaarn.
-    const schout = schoutLicht(D).concat(T.bodeLicht(D));
-    if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(schout);
+    // In het donker de bode en wie meegaat (js/bode.js), met een lantaarn.
+    const dragers = T.bodeLicht(D);
+    if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(dragers);
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);
     const brand = T.brandLicht(D); // wat brandt, geeft ook overdag licht (js/brand.js)
     const kamp = T.kampLicht(D); // het kampvuur van het lege begin (js/begin.js)
-    if (deel !== 'avond') return herberg.concat(huizen, brand, kamp, schout);
+    if (deel !== 'avond') return herberg.concat(huizen, brand, kamp, dragers);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -49,22 +48,8 @@
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
     // En de kaarsjes van de kerstboom (js/versiering.js).
     const kaarsen = T.versieringLicht(D).map((b) => ({ ...b, soort: 'kaars' }));
-    return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, schout);
+    return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, dragers);
   };
-
-  // Draagt de schout van dit dorp nu een brandende lantaarn? Buiten, op de kaart van zijn dorp, als het donker genoeg
-  // is, en niet als hij hem doofde (sluipen, e.lantaarnUit).
-  T.draagtLantaarn = function (D) {
-    const h = D.schout;
-    if (!h || h.dood || h.binnen || h.lantaarnUit || !D.kalender || T.schoutIsWeg(D)) return false;
-    return T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf;
-  };
-  // Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'schout'.
-  function schoutLicht(D) {
-    if (!T.draagtLantaarn(D)) return [];
-    const L = IN().lantaarn;
-    return [{ x: D.schout.x, y: D.schout.y, straal: L.straal, sterkte: L.sterkte, soort: 'schout' }];
-  }
 
   // De ramen van de huizen (werklijst vraag 108, d; Marcel, 3 okt: "Lantaarns voor in de avond etc."): 's avonds en 's
   // morgens vroeg brandt er licht in een huis waar iemand thuis is, binnen of op zijn erf, en niet als ze allemaal in de

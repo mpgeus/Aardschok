@@ -8,7 +8,7 @@
 // rechtsonder de minikaart (js/minikaart.js; vraag 165, "zoals bij age of Empires"). Bovenaan een dunne balk (vraag 166;
 // Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder
 // info te missen"): het dorp (de kas, de inwoners, de tevredenheid), de datum en het uur, de snelheid, de twee bazen
-// (js/bazen.js) en Menu. De velden (V), het wetboek (W), sluipen (S) en slapen (Z) hebben alleen nog hun
+// (js/bazen.js) en Menu. De velden (V) en het wetboek (W) hebben alleen nog hun
 // toets. Wat een ding of getal is, wat het nu zegt en zijn toets, staat op het briefje bij de muis (#wenk), niet op het
 // ding; zo ook het seizoen en het weer, bij de datum.
 //

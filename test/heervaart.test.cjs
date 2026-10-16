@@ -221,7 +221,6 @@ test('een veteraan vecht aan jouw kant als er rovers komen, ook zonder wachthuis
   berichten.length = 0;
   T.werkRoversBij(S, S.dorp);
   // Er komt niemand vanzelf (js/gevecht.js; vraag 170, stap 2): een veteraan is een man van je, en jij stuurt hem.
-  assert.ok(!S.wereld.wezens.some((e) => e.opgeroepen), 'niemand wordt opgeroepen');
   for (const p of veteranen) {
     const e = p.wezen;
     assert.ok(T.isMan(S.dorp, e) && T.vechtVoor(S.dorp, e), `${p.naam} vecht aan jouw kant`);

@@ -37,8 +37,8 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   // De vorm van S zoals T.nieuwSpel in js/main.js hem maakt (plus wat alleen scherm is).
   const S = Object.assign({
     tijd: 0, gebieden: {}, modus: 'verkennen', gevecht: null, overgang: null, bezig: false, inventaris: new Set(),
-    kalender: T.nieuweKalender(), quests: {}, questWeg: {}, questBeloond: new Set(), sleutelGebruikt: false,
-    fonteinLeeg: false, sluipen: false, bezocht: new Set(['hal']), naarGebied: null, netGeland: null, zoom: 1,
+    kalender: T.nieuweKalender(), quests: {}, questWeg: {}, questBeloond: new Set(),
+    bezocht: new Set(['hal']), naarGebied: null, netGeland: null, zoom: 1,
   }, T.schermVelden());
   const uit = T.herstelSpel(S, dorp);
   if (!uit.gelukt) throw new Error(uit.reden);

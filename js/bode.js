@@ -203,7 +203,7 @@
   };
 
   // In het donker dragen de bode en wie meegaat een lantaarn (Marcel, 9 okt: "De groep neemt in het donker ook lantaarns mee
-  // natuurlijk"): zoals de schout (T.draagtLantaarn, js/zien.js), met hetzelfde licht.
+  // natuurlijk"): T.ZIEN_INSTELLINGEN.lantaarn (js/zien.js).
   T.bodeLicht = function (D) {
     const B = D.bode;
     if (!B || !D.kalender || !D.wereld) return [];
@@ -212,7 +212,7 @@
     return B.wie
       .map((p) => p.wezen)
       .filter((e) => e && !e.dood && !e.binnen && D.wereld.wezens.includes(e))
-      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'schout' }));
+      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'drager' }));
   };
 
   // Gewond: een paar dagen in bed (de wolven doen het net zo, js/beesten.js, dat ze ook weer beter maakt).

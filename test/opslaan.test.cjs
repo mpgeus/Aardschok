@@ -9,7 +9,7 @@ const { proefDorp } = require('./grond.cjs');
 // Wat het spel kent voor er een kaart is: zo begint een verse bladzijde (T.VOORWERPEN, js/wereld.js).
 const KENT_VERS = new Set(Object.keys(T.VOORWERPEN));
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 // Het proefdorp (test/grond.cjs): het lege begin met een huis voor de schout, twee boerderijen en hutten, stil en zonder
 // venster.
@@ -329,9 +329,6 @@ test('vanzelf opslaan: elke ochtend één keer, als de mensen opstaan, en niet a
   assert.equal(T.werkOpslaanBij(S2), null);
 
   S.kalender.dag = opstaan(4) + 0.001;
-  S.slaap = { tot: opstaan(4) + 0.01 };
-  assert.equal(T.werkOpslaanBij(S), null, 'wie slaapt, slaat pas op als hij wakker is');
-  S.slaap = null;
   assert.equal(T.werkOpslaanBij(S).gelukt, true, 'de volgende ochtend weer');
 });
 

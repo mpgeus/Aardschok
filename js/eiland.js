@@ -44,7 +44,7 @@
     // Een meer staat niet hoger dan `maxDiepte` boven zijn bodem, en niet breder dan `maxVakken`: anders staat het lager,
     // en slijt de rivier zijn uitloop tot daar.
     meer: { diepte: 3, minDiepte: 24, minVakken: 4, aantal: 7, maxDiepte: 70, maxVakken: 900 },
-    // De streken: de zes wildernissen van de landkaart (js/land.js) en de kust (Marcel, 8 okt: "D Nee voor nu prima").
+    // De streken: de zes wildernissen (tot 16 okt ook de streken van de landkaart) en de kust (Marcel, 8 okt: "D Nee voor nu prima").
     streek: {
       duinen: 70, // tot zoveel tegels van de zee liggen duinen, waar de ruis ze legt
       rots: { helling: 11, vanaf: 420, hoogte: 900 }, // hoger, of steiler (pixels per tegel) boven `vanaf`: rots

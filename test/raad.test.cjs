@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 // Het proefdorp (test/grond.cjs), op dag 2: wat de speler speelt, met het lege begin, zijn schout en twee boerderijen.
 function dorp(opties = {}) {

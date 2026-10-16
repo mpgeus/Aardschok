@@ -139,10 +139,7 @@ test('bij een aanval komt niemand vanzelf: de soldaten blijven bij het wachthuis
   T.werkRoversBij(S, D);
   assert.equal(D.rovers.aanval.fase, 'komen');
   assert.ok(berichten.some((t) => /^Robbers are coming\./.test(t) && /Choose your soldiers/.test(t)), berichten.join(' | '));
-  for (const e of [een, twee]) {
-    assert.ok(!e.opgeroepen, 'niemand wordt opgeroepen');
-    assert.notEqual(T.dagAnker(D, e), null, 'zijn dag gaat door');
-  }
+  for (const e of [een, twee]) assert.notEqual(T.dagAnker(D, e), null, 'niemand komt vanzelf: zijn dag gaat door');
 });
 
 test('een rover slaat ook een dorpeling; die vlucht naar het town hall, werkt niet, en komt eruit als er geen rover meer is', () => {

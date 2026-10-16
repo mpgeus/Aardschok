@@ -9,7 +9,7 @@ const { proefDorp } = require('./grond.cjs');
 const T = require('./laad.cjs').spel();
 const IN = T.PADEN_INSTELLINGEN;
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {} };
 
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);

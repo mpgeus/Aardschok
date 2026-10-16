@@ -11,8 +11,7 @@
 //   - het licht: hoe donker het is (T.lichtVan), voor js/tekenen.js;
 //   - het ritme van de dag, voor de boeren en de bewoners (js/bewoners.js): waar ze 's ochtends,
 //     overdag, 's avonds en 's nachts zijn (T.dagAnker, voor T.laatDwalen in js/verkennen.js), en of
-//     ze nu werken (T.isWerktijd, voor T.werkOogstBij in js/akkers.js);
-//   - slapen tot de ochtend, bij je eigen huis (T.magSlapen, T.gaSlapen, T.wordWakker, T.werkDagBij).
+//     ze nu werken (T.isWerktijd, voor T.werkOogstBij in js/akkers.js).
 //
 // Het uur is het deel achter de komma van de dagteller (T.uurVanDag, js/tijd.js), en de zon staat
 // om twaalf uur het hoogst: zonnetijd, zoals in 1323, zonder zomertijd.
@@ -68,8 +67,6 @@
     zonHoogte: 50,
     schaduwLangst: 2.5,
     zonLaag: 6,
-    // Slapen kan zo dichtbij je eigen huis, in tegels.
-    slaapAfstand: 3,
   };
   const IN = () => T.DAG_INSTELLINGEN;
   const tussen = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -215,11 +212,10 @@
   // zijn boerderij (zijn werk). Zijn boerin en grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
   //
   // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
-  // vee en een bezoeker volgen hun eigen weg, en een man van de militie bij een aanval ook (opgeroepen: hij
-  // loopt met de schout mee, js/rovers.js). Wie ergens anders moet zijn (moetNaar: de schandpaal,
+  // vee en een bezoeker volgen hun eigen weg. Wie ergens anders moet zijn (moetNaar: de schandpaal,
   // js/heer.js), volgt dat en niet de dag.
   T.dagAnker = function (D, e, oogst) {
-    if (!D || !D.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen) return null;
+    if (!D || !D.kalender || !e || !e.thuis || e.moetNaar) return null;
     // Een man met een bevel (js/kiezen.js; vraag 170, stap 1): op zijn post, of achter de vijand aan die hij volgt.
     const bevel = T.bevelAnker(D, e);
     if (bevel) return bevel;
@@ -290,69 +286,5 @@
     if (a.tekst) T.zeg(D, a.tekst, a.soort, a.plek);
     if (a.naarGewoon) T.naarGewoneSnelheid(D);
     return true;
-  };
-
-  // ---------------------------------------------------------------------------------------------
-  // Slapen tot de ochtend
-  // ---------------------------------------------------------------------------------------------
-
-  // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het gebouw met huis: 'schout': zijn tent in het
-  // kamp, en dan zijn huis, js/begin.js). Voor het slapen.
-  T.afstandTotHuis = function (D) {
-    const g = (D.gebouwen || []).find((x) => x.huis === 'schout');
-    const h = D.schout;
-    if (!g || !h) return Infinity;
-    const voet = g.voet || { b: 1, h: 1 };
-    const dx = Math.max(g.x - h.tx, 0, h.tx - (g.x + voet.b - 1));
-    const dy = Math.max(g.y - h.ty, 0, h.ty - (g.y + voet.h - 1));
-    return Math.max(dx, dy);
-  };
-
-  // Slapen kan 's avonds en 's nachts, bij je eigen huis, als je gewoon rondloopt.
-  T.magSlapen = function (S) {
-    if (!S || !S.kalender || S.slaap || (S.dorp && S.dorp.einde) || S.modus !== 'verkennen') return false;
-    const deel = T.dagdeelVan(S.kalender.dag);
-    if (deel !== 'nacht' && deel !== 'avond') return false;
-    return T.afstandTotHuis(S.dorp) <= IN().slaapAfstand;
-  };
-
-  // De schout gaat naar binnen, en de nacht gaat snel voorbij (T.SLAAP_SNELHEID) tot het opstaan.
-  // Een venster dat intussen opengaat, zet de tijd stil en daarna weer op slaapsnelheid.
-  T.gaSlapen = function (S) {
-    if (!T.magSlapen(S)) return false;
-    const nu = S.kalender.dag;
-    const morgen = T.uurVanDag(nu) >= T.dagindeling(nu).opstaan ? Math.floor(nu) + 1 : Math.floor(nu);
-    const tot = morgen + T.dagindeling(morgen).opstaan / 24;
-    S.slaap = { tot, vorige: S.kalender.snelheid || S.kalender.laatsteSnelheid || 1 };
-    const h = S.schout;
-    if (h) {
-      h.pad = h.onderweg && h.pad.length ? [h.pad[0]] : [];
-      h.binnen = true;
-      h.deurSinds = S.tijd; // hij vervaagt, en verdwijnt niet in één klap (js/tekenen.js)
-    }
-    S.naLopen = null;
-    T.zetSnelheid(S, T.SLAAP_SNELHEID);
-    bericht(T.t('You go to sleep. You wake at first light.'));
-    return true;
-  };
-
-  // Wakker: de schout staat weer voor zijn deur, en de tijd loopt zoals vóór het slapen.
-  T.wordWakker = function (S) {
-    if (!S || !S.slaap) return;
-    const vorige = S.slaap.vorige;
-    S.slaap = null;
-    if (S.schout) {
-      S.schout.binnen = false;
-      S.schout.deurSinds = S.tijd;
-    }
-    if (S.kalender && S.kalender.snelheid === T.SLAAP_SNELHEID) T.zetSnelheid(S, vorige || 1);
-  };
-
-  // Elk beeld (js/main.js): is het ochtend, dan wordt de schout wakker.
-  T.werkDagBij = function (S) {
-    if (S && S.slaap && S.kalender && S.kalender.dag >= S.slaap.tot) {
-      T.wordWakker(S);
-      bericht(T.t('It is morning.'));
-    }
   };
 })(globalThis.Spel = globalThis.Spel || {});
