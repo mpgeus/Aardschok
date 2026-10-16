@@ -21,7 +21,8 @@
 // bestaat niet meer (ronde 2 van het snoeien, stap 5).
 //
 // Hij schrijft ook een graanboek (vraag 94, d): per jaar waar het graan bleef (luister, onderaan), en per jaar
-// hoeveel dagen er geen bier of brood was en hoeveel huizen alles hadden (boekhouding). Het jaar erop is alleen de eerste maand.
+// hoeveel dagen er geen bier of brood was, hoeveel soorten het dorp at en hoeveel huizen groeiden (boekhouding). Het jaar
+// erop is alleen de eerste maand.
 (function (T) {
   'use strict';
 
@@ -451,19 +452,18 @@
       vlees: Math.round(s.dorp.voorraad.vlees || 0), kaas: Math.round(s.dorp.voorraad.kaas || 0), hooi: Math.round(s.dorp.voorraad.hooi || 0),
       bevolking: s.dorp.bevolking,
       tevredenheid: heel(s.dorp.behoeften.tevredenheid * 100) / 100,
-      // De wensen per huis (js/wensen.js; werklijst vraag 85): per stand hoe tevreden, met hoeveel mensen en hoeveel
-      // huizen alles hebben, en hoeveel woningen er van elke soort staan (wat er doorgroeide).
-      standen: s.dorp.behoeften.standen ? Object.fromEntries(Object.entries(s.dorp.behoeften.standen).map(([k, x]) => [k, { mensen: x.mensen, huizen: x.huizen, alles: x.alles, tevreden: heel(x.tevredenheid * 100) / 100 }])) : null,
-      woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
-      // Wat de huizen missen, zoals de raad het zegt (T.watDeHuizenMissen, js/wensen.js; vraag 87).
-      missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
+      // Wat het dorp at (de afwisseling, js/behoeften.js), en hoeveel woningen er van elke soort staan (wat er doorgroeide:
+      // op de afwisseling, ronde 3 van het snoeien, stap 6).
+      afwisseling: (s.dorp.behoeften.afwisseling || []).slice(),
+      woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis', 'woontoren'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
+      // Welke huizen op bouwstof wachten, zoals de raad het zegt (T.bouwstofRaad, js/raad.js).
+      bouwstof: T.bouwstofRaad(s.dorp),
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
       bazen: T.bazenNu(s.dorp),
       // De markt (js/markt.js; vraag 127): hoeveel kramen, waarvan leeg en langs de straat, en hoe groot het blok is.
       markt: marktNu(s),
-      // De huizen die alles hebben maar niet doorgroeien, en waarom (T.waaromGroeitHetNiet, js/behoeften.js; vraag 130):
-      // de winst vraagt stenen huizen.
+      // De huizen die door kunnen groeien maar het niet doen, en waarom (T.waaromGroeitHetNiet, js/behoeften.js; vraag 130).
       groeitNiet: s.dorp.gebouwen.map((g) => ({ g, waarom: T.waaromGroeitHetNiet(s.dorp, g) })).filter((x) => x.waarom)
         .map(({ g, waarom }) => ({ soort: g.soort, x: g.x, y: g.y, waarom })),
     };
@@ -475,30 +475,24 @@
     if (d === laatsteDag) return;
     laatsteDag = d;
     if (T.datumVanDag(d).dagVanMaand === 1) boek.maanden.push(tel());
-    // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), en
-    // sinds vraag 99, d geen laken (als er ambachtslieden zijn), hoeveel
-    // huizen alles hadden (gemiddeld over de dagen) en op hoeveel dagen allemaal. En de langste reeks dagen dat alle huizen
-    // alles hadden. En de druk om eten (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"):
-    // op hoeveel dagen er te weinig eten was (wat de balk als honger zegt, D.behoeften.mist), het dorp zei dat het eten de
-    // winter niet haalt (T.watDeWinterNietHaalt), en er geen graan meer lag boven het zaaigraan.
-    const st = D().behoeften && D().behoeften.standen;
-    if (!st) return;
-    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, zonderBier: 0, zonderBrood: 0, zonderLaken: 0, honger: 0, etenWinter: 0, graanOp: 0 });
-    const huizen = Object.values(st).reduce((n, x) => n + x.huizen, 0);
-    const alles = Object.values(st).reduce((n, x) => n + x.alles, 0);
+    // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), hoeveel
+    // soorten het dorp at (gemiddeld over de dagen; de afwisseling, js/behoeften.js), en welk deel van de huizen die door
+    // kunnen groeien, die dag een dag verder kwam (g.groeiDagen; ronde 3 van het snoeien, stap 6). En de druk om eten
+    // (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"): op hoeveel dagen er te weinig eten was (wat de balk
+    // als honger zegt, D.behoeften.mist), het dorp zei dat het eten de winter niet haalt (T.watDeWinterNietHaalt), en er
+    // geen graan meer lag boven het zaaigraan.
+    if (!D().behoeften) return;
+    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, soorten: 0, groei: 0, zonderBier: 0, zonderBrood: 0, honger: 0, etenWinter: 0, graanOp: 0 });
     const staat = (soort) => D().gebouwen.some((x) => x.soort === soort && x.klaar);
-    const allemaal = huizen > 0 && alles === huizen;
+    const groeien = D().gebouwen.map((x) => T.huisToestand(D(), x)).filter((t) => t && t.groei && !t.groei.later);
     g.dagen++;
-    g.alles += huizen ? alles / huizen : 0;
-    if (allemaal) g.allemaal++;
+    g.soorten += (D().behoeften.afwisseling || []).length;
+    g.groei += groeien.length ? groeien.filter((t) => t.groei.dagen > 0).length / groeien.length : 0;
     if (staat('herberg') && (D().voorraad.bier || 0) < 1) g.zonderBier++;
     if (staat('bakkerij') && (D().voorraad.brood || 0) < 1) g.zonderBrood++;
-    if (st.ambachtslieden && st.ambachtslieden.mensen > 0 && (D().voorraad.laken || 0) < 1) g.zonderLaken++;
     if ((D().behoeften.mist || []).includes('food')) g.honger++;
     if (T.watDeWinterNietHaalt(D(), d).includes('eten')) g.etenWinter++;
     if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;
-    boek.reeks.nu = allemaal ? boek.reeks.nu + 1 : 0;
-    boek.reeks.langste = Math.max(boek.reeks.langste, boek.reeks.nu);
   }
 
   // Luisteraars op de regels die iets doen wat telt. Ze roepen de regel zelf aan en schrijven daarna op;
@@ -729,7 +723,7 @@
       boek = {
         speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [],
         heer: null, brief: null, luisterFouten: [], dorp: null, marktrecht: null, graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, bos: [], jaren,
+        bos: [], jaren,
       };
       const s = S();
       luister();

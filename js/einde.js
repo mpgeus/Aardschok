@@ -15,7 +15,7 @@
 // bracht, welke huizen doorgroeiden, wat de heer kreeg, en wat het meest gemist werd. Regels
 // zonder scherm; toetsen in test/einde.test.cjs.
 //
-// D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, geoogst, gemist: { wens: dagen } },
+// D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, geoogst, gemist: { wat het miste: dagen } },
 //                sinds begin
 // D.jaarverslag: het laatste jaarverslag, { dag, regels }
 (function (T) {
@@ -60,7 +60,7 @@
   };
 
   // Wat er vandaag gebeurde, in het jaarboek: uit het dagboek (wie er kwam, stierf of wegtrok, welke huizen doorgroeiden),
-  // en wat er vandaag gemist werd (D.behoeften.gemist, js/wensen.js).
+  // en wat het dorp vandaag miste (D.behoeften.mist, js/behoeften.js: het eten, het brandhout, een kerk, bier).
   function schrijfJaarboek(D, dag) {
     const J = D.jaarboek || (D.jaarboek = nieuwJaarboek(D, dag));
     for (const r of (D.dagboek && D.dagboek.regels) || []) {
@@ -70,7 +70,7 @@
       else if (r.reden === 'vertrek') J.weg -= r.verschil;
       else J.stierven -= r.verschil;
     }
-    for (const g of (D.behoeften && D.behoeften.gemist) || []) J.gemist[g.id] = (J.gemist[g.id] || 0) + 1;
+    for (const wat of (D.behoeften && D.behoeften.mist) || []) J.gemist[wat] = (J.gemist[wat] || 0) + 1;
   }
 
   const jaarVan = (dag) => T.datumVanDag(dag).jaar;
@@ -98,7 +98,7 @@
         : T.t('The lord received {pct}% of what he asked for.', { pct }));
     }
     const meest = Object.entries(J.gemist).sort((a, b) => b[1] - a[1])[0];
-    if (meest) regels.push(T.t('The most missed was {wens}, for {n|# day|# days}.', { wens: T.WENSEN[meest[0]] ? T.WENSEN[meest[0]].naam : meest[0], n: meest[1] }));
+    if (meest) regels.push(T.t('The most missed was {wens}, for {n|# day|# days}.', { wens: meest[0], n: meest[1] }));
     return regels;
   };
 

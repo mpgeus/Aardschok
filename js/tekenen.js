@@ -638,7 +638,6 @@
     for (const r of ramen) vulRamen(ctx, S, r);
     tekenOgen(ctx, S);
     tekenVuur(ctx, S);
-    if (!S.foto) tekenHuisTekens(ctx, S);
     tekenWolkjes(ctx, S);
     if (!S.foto) tekenEffecten(ctx, S);
     ctx.restore();
@@ -1961,51 +1960,6 @@
         ctx.fill();
       }
     }
-    if (!veld) tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
-  }
-
-  // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond.
-  function tekenRand(ctx, r) {
-    const hoeken = [
-      opGrond(r.x - 0.5, r.y - 0.5), opGrond(r.x + r.b - 0.5, r.y - 0.5),
-      opGrond(r.x + r.b - 0.5, r.y + r.h - 0.5), opGrond(r.x - 0.5, r.y + r.h - 0.5),
-    ];
-    ctx.beginPath();
-    hoeken.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  // De kring om een plek die een huis in de buurt wil (js/wensen.js; werklijst vraag 80, B): met een put, een kapel, de
-  // herberg of een markt in de hand zie je hoe ver hij reikt, en welke huizen die hem willen erin vallen (hun voet licht
-  // op) en welke niet (gedempt). Een kring van tegels is op het scherm een platte ellips.
-  function tekenKring(ctx, S, soort, plek) {
-    const straal = T.WENSEN_INSTELLINGEN.kring[soort];
-    const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
-    if (!straal || !wens) return;
-    const m = { x: plek.x + plek.b / 2 - 0.5, y: plek.y + plek.h / 2 - 0.5 };
-    const c = opGrond(m.x, m.y);
-    const d = straal / Math.SQRT2;
-    const ax = Math.abs(T.naarScherm(m.x + d, m.y - d).x - T.naarScherm(m.x, m.y).x);
-    const ay = Math.abs(T.naarScherm(m.x + d, m.y + d).y - T.naarScherm(m.x, m.y).y);
-    ctx.save();
-    ctx.beginPath();
-    ctx.ellipse(c.x, c.y, ax, ay, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(240, 225, 170, 0.07)';
-    ctx.fill();
-    ctx.setLineDash([8, 6]);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(240, 225, 170, 0.75)';
-    ctx.stroke();
-    ctx.setLineDash([]);
-    for (const g of S.dorp.gebouwen) {
-      const stand = T.standVan(g);
-      if (!stand || !T.wensenVanStand(stand).includes(wens)) continue;
-      const r = T.voetVanGebouw(g);
-      ctx.strokeStyle = T.inDeKring(r, plek, straal) ? 'rgba(160, 225, 130, 0.95)' : 'rgba(240, 225, 170, 0.3)';
-      tekenRand(ctx, r);
-    }
-    ctx.restore();
   }
 
   function tekenMarkeringen(ctx, S) {
@@ -3067,22 +3021,6 @@
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de wolven aanvallen, roept om hulp (js/beesten.js): een rood uitroepteken dat sneller springt.
     else if (e.roeptOmHulp) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 8)) * 4, '#ff6a50');
-  }
-
-  // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een
-  // papiertje aan een spijker met wat het als eerste mist. Na de nacht getekend, zodat je het ook in het
-  // donker ziet. Alleen in het dorp dat hier ligt; zonder de kunst niet, en het gereedschap kent de wensen niet.
-  function tekenHuisTekens(ctx, S) {
-    const D = T.dorpHier(S);
-    if (!D || !T.tekenVanHuis || !T.deurVan || !metSprites() || !T.sprites.huisTeken) return;
-    for (const g of D.gebouwen || []) {
-      const naam = T.tekenVanHuis(g);
-      const deel = naam && T.sprites.huisTeken(naam);
-      if (!deel) continue;
-      const deur = T.deurVan(S.wereld, g);
-      const p = opGrond(deur.x, deur.y);
-      T.sprites.teken(ctx, deel, p.x, p.y - 66, 1); // boven hoofdhoogte, zodat het bij het huis hoort en niet bij wie ervoor staat
-    }
   }
 
   // Het wolkje boven wie een praatje maakt (js/praatje.js; werklijst vraag 120, b; Marcel, 4 okt: "120 a b c ja"): leeg,

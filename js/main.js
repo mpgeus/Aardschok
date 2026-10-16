@@ -277,14 +277,8 @@
     const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y, null, kavel);
     S.bouwHover = { x, y, ok: !reden, reden };
     canvas.style.cursor = 'crosshair';
-    // Een plek die een huis in de buurt wil (een put, een kapel, de herberg, een markt): wie hij hier bereikt. De kring is
-    // groter dan het scherm, dus zegt de muis het ook in woorden (js/wensen.js).
-    const voet = !reden && T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
-    const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
-    const kring = voet && T.kringTekst(S.dorp, S.bouwSoort, rechthoek);
-    // En wat de bouwers er eerst rooien (js/bouwen.js).
-    const rooien = voet && kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
-    const tekst = [kring, rooien].filter(Boolean).join(' ');
+    // Wat de bouwers er eerst rooien (js/bouwen.js).
+    const tekst = !reden && kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
     else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
@@ -1518,31 +1512,25 @@
       });
       return { wetten: lijst, belastingRest: S.dorp.wetten ? S.dorp.wetten.belastingRest : 0 };
     },
-    // De wensen per huis (js/wensen.js): per huis met mensen zijn stand, wie er woont, hoe tevreden het is, en wat het
-    // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel), en hoe het met doorgroeien staat (werklijst vraag
-    // 130: wat het gezin rooit, of waarom het niet groeit); daarboven het dorp per stand, en wat er gemist wordt.
-    // Spel.debug.wensen('dorpelingen') laat alleen die stand zien.
-    wensen(stand) {
-      const b = T.berekenTevredenheid(S.dorp, Math.floor(S.kalender.dag));
-      if (!b.wensen) return `Geen wensen per huis: het dorp rekent als geheel (${Math.round(b.tevredenheid * 100)}%).`; // geen tekst
+    // De groei van de huizen (js/behoeften.js, pasHuisGroeiToe; ronde 3 van het snoeien, stap 6): wat het dorp at en hoe
+    // tevreden het is, en per huis met mensen wie er woont en hoe het met doorgroeien staat (werklijst vraag 130: wat het
+    // gezin rooit, of waarom het niet groeit).
+    groei() {
+      const D = S.dorp;
       const pct = (x) => `${Math.round(x * 100)}%`;
-      const wie = (g) => S.dorp.bewoners.mensen.filter((p) => p.huis === g).map((p) => p.naam || T.naamVanMens(p.wie)).join(', ');
-      const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`); // geen tekst
-      const groei = (g) => {
-        if (!T.GEBOUWEN[g.soort].wordt) return null;
-        if (g.groeitNaRooien) return `het gezin rooit ${T.rooiWoordenOp(S.dorp, g.kavel)}, tot uiterlijk dag ${g.rooienTot}`; // geen tekst
-        const waarom = T.waaromGroeitHetNiet(S.dorp, g);
-        if (waarom) return `groeit niet: ${waarom}`; // geen tekst
-        return `${g.groeiDagen || 0} van ${T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen} dagen alles${T.groeiRooiPlan(S.dorp, g, false) ? ', en dan rooit het gezin eerst' : ''}`; // geen tekst
+      const IN = T.BEHOEFTEN_INSTELLINGEN;
+      const groei = (g, t) => {
+        if (!t.groei) return 'groeit niet door'; // geen tekst
+        if (g.groeitNaRooien) return `het gezin rooit ${T.rooiWoordenOp(D, g.kavel)}, tot uiterlijk dag ${g.rooienTot}`; // geen tekst
+        if (t.groei.later) return `wacht op ${t.groei.later}`; // geen tekst
+        if (t.groei.waarom) return `groeit niet: ${t.groei.waarom}`; // geen tekst
+        if (t.groei.wacht) return `wacht op ${Object.entries(t.groei.kosten).map(([w, n]) => `${n} ${w}`).join(', ')}`; // geen tekst
+        return `${t.groei.dagen} van ${t.groei.nodig} dagen, vraagt ${t.groei.soorten} soorten${T.groeiRooiPlan(D, g, false) ? ', en dan rooit het gezin eerst' : ''}`; // geen tekst
       };
       return {
-        dorp: pct(b.tevredenheid),
-        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, alles in ${x.alles} van ${huizen(x.huizen)}`])), // geen tekst
-        gemist: b.wensen.gemist.map((m) => `${m.naam}: ${huizen(m.huizen)}, ${m.mensen} mensen`),
-        huizen: b.wensen.huizen.filter((h) => !stand || h.stand === stand).map((h) => ({
-          huis: `${T.GEBOUWEN[h.g.soort].naam} op ${h.g.x},${h.g.y}`, stand: h.stand, wie: wie(h.g), tevreden: pct(h.tevredenheid),
-          wil: Object.entries(h.heeft).map(([id, x]) => `${T.WENSEN[id].naam} ${x >= 1 - 1e-9 ? '✓' : x > 0 ? `✗ (${pct(x)})` : '✗'}`).join(' · '),
-          groei: groei(h.g),
+        dorp: `${pct(D.behoeften.tevredenheid)} tevreden (groei vanaf ${pct(IN.huisGroeiDrempel)}), at ${(D.behoeften.afwisseling || []).join(', ') || 'niets'}`, // geen tekst
+        huizen: D.gebouwen.map((g) => ({ g, t: T.huisToestand(D, g) })).filter((x) => x.t).map(({ g, t }) => ({
+          huis: `${T.GEBOUWEN[g.soort].naam} op ${g.x},${g.y}`, wie: t.wie.join(', '), groei: groei(g, t),
         })),
       };
     },
@@ -1559,7 +1547,7 @@
         uurLopen: Math.round(T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, 'herberg') * 10) / 10,
         staat: p.wezen ? (p.wezen.binnen ? 'binnen' : `${p.wezen.tx},${p.wezen.ty}`) : '-',
       }));
-      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), apartVoorDeHuizen: T.bierApart(S.dorp), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
+      return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
     // De meiboom en de kerstboom op het plein (js/versiering.js): welke boom er staat, en waar.
     versiering() {
@@ -1659,19 +1647,18 @@
         : 'Er is geen koorts.'; // geen tekst
     },
     // De kleren naar stand (T.klerenVan in js/bewoners.js; werklijst vraag 149): hoeveel volwassenen arm, gewoon en
-    // deftig lopen, en per volwassene wat hij draagt, in welk huis, of dat huis zijn laken krijgt, en welk vel hij draagt.
+    // deftig lopen, en per volwassene wat hij draagt, in welk huis, en welk vel hij draagt.
     kleren() {
       const D = S.dorp;
       const tel = { arm: 0, gewoon: 0, deftig: 0 };
       const mensen = D.bewoners.mensen.filter((p) => p.leeftijd === 'volwassen').map((p) => {
         const kleren = T.klerenVan(p);
         tel[kleren]++;
-        const laken = p.huis && p.huis.wensen && p.huis.wensen.heeft && p.huis.wensen.heeft.laken;
-        const huis = p.huis ? `${p.huis.soort}${laken != null ? `, laken ${Math.round(laken * 100)}%` : ''}` : 'geen huis'; // geen tekst
+        const huis = p.huis ? p.huis.soort : 'geen huis'; // geen tekst
         return `${T.naamVanBewoner(p)}: ${kleren} (${huis})${p.wezen ? `, vel ${T.sprites.houding(S, p.wezen)?.naam}` : ''}`;
       });
       const IN = T.BEWONERS_INSTELLINGEN;
-      const regel = !IN.klerenNaarStand ? 'iedereen gewoon' : IN.lakenVoorDeftig ? 'naar stand, deftig met laken' : 'naar stand'; // geen tekst
+      const regel = IN.klerenNaarStand ? 'naar stand' : 'iedereen gewoon'; // geen tekst
       return { regel, ...tel, mensen };
     },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij

@@ -7,8 +7,8 @@
 //
 // De tekeningen komen van de huizenbouwer (gereedschap/pixelart/huizen.cjs, STIJLEN), en elk zegt in tegels.js zelf wat
 // het is (`stijl`: { stijl, vorm, soort, dak, steen, stand }); dit bestand zoekt ze op. Wat de huizenbouwer een stand
-// noemt, heet hier de kant van de deur (`kant`), want in het spel is een stand die van de mensen (js/wensen.js). Een land
-// zonder stijl (het ontworpen gehucht, een kaart uit Tiled, een spel dat eerder bewaard is) bouwt met de tekeningen in
+// noemt, heet hier de kant van de deur (`kant`), want in het spel is een stand die van de mensen (T.STANDEN,
+// js/treden.js). Een land zonder stijl (het ontworpen gehucht, een kaart uit Tiled, een spel dat eerder bewaard is) bouwt met de tekeningen in
 // T.GEBOUWEN, zoals het altijd deed (T.tekeningenVan, js/gebouwen.js).
 //
 //   w.stijl                         de stijl van een kaart (de maker zet hem, js/maker.js), en dus van zijn dorp

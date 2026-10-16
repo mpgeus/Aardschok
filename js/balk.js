@@ -400,22 +400,12 @@
     const pct = Math.round(B.tevredenheid * 100);
     const last = B.last && B.last.length ? ` ${T.t('It suffers from {last}.', { last: T.opsomming(B.last) })}` : '';
     const blij = B.blij && B.blij.length ? ` ${T.t('It is pleased with {blij}.', { blij: T.opsomming(B.blij) })}` : '';
-    // Met de wensen per huis (js/wensen.js): hoe tevreden elke stand is, en in hoeveel huizen iets gemist wordt.
-    const st = B.standen;
-    const perStand = st
-      ? ` ${T.hoofdletter(T.opsomming(Object.keys(T.STANDEN).filter((s) => st[s])
-        .map((s) => T.t('{stand} {procent}%', { stand: T.STANDEN[s].naam, procent: Math.round(st[s].tevredenheid * 100) }))))}.`
-      : '';
-    const gemist = B.gemist || [];
-    const mist = B.mist.map((m) => {
-      const g = gemist.find((x) => x.naam === m);
-      return g ? T.t('{wat} ({n|# house|# houses})', { wat: m, n: g.huizen }) : m;
-    });
+    const mist = B.mist;
     const kop = T.t('Contentment: {pct}%.', { pct });
     const el = post(dorpPosten(), 'tevredenheid', TEVREDENHEID_ICOON);
     zet(el, `${pct}%`, mist.length
-      ? `${kop}${perStand} ${T.t('The village is short of {mist}.', { mist: T.opsomming(mist) })}${last}${blij}`
-      : `${kop}${perStand} ${T.t('The village has what it needs.')}${last}${blij}`);
+      ? `${kop} ${T.t('The village is short of {mist}.', { mist: T.opsomming(mist) })}${last}${blij}`
+      : `${kop} ${T.t('The village has what it needs.')}${last}${blij}`);
     el.classList.toggle('laag', B.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
   };
 

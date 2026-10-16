@@ -156,35 +156,21 @@ test('de wijnboerderij is een boerenhuis: er woont een gezin van boeren', () => 
   }
 });
 
-// Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding", en "B1, 0,02 is goed".
-test('de ambachtslieden willen wijn naast hun bier, en wijn telt niet als bier', () => {
-  assert.deepEqual(T.WENSEN.bier.goed, ['bier']);
-  assert.deepEqual(T.WENSEN.wijn.goed, ['wijn']);
-  assert.ok(!T.wensenVanStand('dorpelingen').includes('wijn'), 'de dorpelingen willen bier');
-  assert.ok(T.wensenVanStand('ambachtslieden').includes('bier') && T.wensenVanStand('ambachtslieden').includes('wijn'));
-  assert.ok(T.maaktGoed('wijnboerderij', 'wijn'), 'de wijnboerderij maakt hem, dus de raad noemt haar');
-  assert.equal(T.WENSEN_INSTELLINGEN.perMens.wijn, 0.02);
-  const D = { voorraad: T.nieuweVoorraad() };
-  T.zetVoorraad(D, 'bier', 0);
-  T.zetVoorraad(D, 'wijn', 10);
-  T.gebruikGoederen(D, { goederen: { bier: { dorpelingen: { krijgt: 3 } }, wijn: { ambachtslieden: { krijgt: 2 } } } });
-  assert.equal(D.voorraad.wijn, 8, 'twee wijn gedronken, en geen wijn in plaats van bier');
-});
-
-// Marcel, 10 okt: "Laten we vooruitkijken doen". Wat er na de pluk ligt, moet het jaar halen, zoals het hout de winter.
+// Marcel, 10 okt: "Laten we vooruitkijken doen". Wat er na de pluk ligt, moet het jaar halen, zoals het hout de winter. Wat
+// het dorp ervan eet, is zijn deel van de maaltijd (T.maaltijdDeel, js/behoeften.js; vraag 154). (Tot 16 okt dronken de
+// ambachtslieden er ook van, een wens van hun stand, js/wensen.js.)
 test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', () => {
-  const huis = { soort: 'stenenHuis', x: 10, y: 10, voet: { b: 4, h: 4 }, klaar: true };
   const boerderij = { soort: 'wijnboerderij', x: 30, y: 10, voet: { b: 5, h: 4 }, klaar: false };
-  const D = { gebouwen: [huis, boerderij], bewoners: { mensen: [] }, voorraad: T.nieuweVoorraad(), wereld: { voorwerpen: [] } };
-  const mensen = (n) => (D.bewoners.mensen = Array.from({ length: n }, () => ({ huis })));
+  const D = { gebouwen: [boerderij], bewoners: { mensen: [] }, voorraad: T.nieuweVoorraad(), wereld: { voorwerpen: [] }, bevolking: 20 };
+  T.zetVoorraad(D, 'graan', 1000); // de wijn is de helft van de maaltijd
   const IN = T.WIJNGAARD_INSTELLINGEN;
   const dag = dagIn('hooimaand', 1);
   const heer = T.GEBOUWEN.wijnboerderij.heer.wijn;
-  mensen(20);
   let v = T.wijnNaDePluk(D, dag);
   assert.equal(v.tot, 90, 'van 1 hooimaand tot 1 wijnmaand');
   assert.equal(v.pluk, -heer, 'een wijnboerderij zonder wijngaard plukt niets, en de heer wil toch zijn wijn');
-  assert.ok(!v.haalt && v.dagen === 0, 'twintig ambachtslieden drinken, en er komt niets: dat haalt het jaar niet');
+  assert.ok(!v.haalt && v.dagen === 0, 'twintig mensen eten wijn, en er komt niets: dat haalt het jaar niet');
+  assert.ok(Math.abs(v.drinken - T.maaltijdDeel(D, 'wijn')) < 1e-9, 'wat het dorp eet: zijn deel van de maaltijd');
   // Een wijngaard die de bouwers nog planten, telt mee met de ranken die er straks staan (een rij om de rij).
   const aanleg = { soort: 'wijngaard', x: 36, y: 10, voet: { b: 5, h: 6 }, klaar: false, boerderij };
   D.gebouwen.push(aanleg);
@@ -192,20 +178,18 @@ test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', 
   const pluk = ranken * IN.wijnPerRank - heer;
   v = T.wijnNaDePluk(D, dag);
   assert.equal(v.pluk, pluk);
-  assert.ok(v.haalt, `twintig ambachtslieden drinken ${20 * 0.02} per dag, en ${pluk} haalt het jaar`);
+  assert.ok(!v.haalt && v.dagen === Math.floor(pluk / v.drinken), `twintig eten ${v.drinken} per dag: ${pluk} haalt het jaar niet`);
   // Is hij land, dan telt het wat er hangt: de ranken die nog niet geplukt zijn.
   D.gebouwen.pop();
   for (let i = 0; i < ranken; i++) D.wereld.voorwerpen.push({ soort: 'wijnrank', x: 36 + i, y: 10, boerderij, geplukt: null });
   assert.equal(T.wijnNaDePluk(D, dag).pluk, pluk, 'ranken op de kaart tellen zoals ranken in aanleg');
-  mensen(50);
-  v = T.wijnNaDePluk(D, dag);
-  assert.ok(!v.haalt && v.dagen === pluk, 'vijftig drinken een per dag: de pluk haalt het jaar niet');
-  T.zetVoorraad(D, 'wijn', 90);
-  assert.ok(!T.wijnNaDePluk(D, dag).haalt, 'wat ze tot de pluk drinken, komt uit wat er nu ligt');
-  T.zetVoorraad(D, 'wijn', 90 + T.DAGEN_PER_JAAR - pluk);
+  T.zetVoorraad(D, 'wijn', v.drinken * 90);
+  assert.ok(!T.wijnNaDePluk(D, dag).haalt, 'wat ze tot de pluk eten, komt uit wat er nu ligt');
+  T.zetVoorraad(D, 'wijn', v.drinken * (90 + T.DAGEN_PER_JAAR) - pluk + 1);
   assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wat er bij de pluk nog ligt, telt mee');
-  mensen(0);
-  assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wie geen wijn wil, drinkt niets');
+  T.zetVoorraad(D, 'wijn', 0);
+  D.bevolking = 8;
+  assert.ok(T.wijnNaDePluk(D, dag).haalt, `acht mensen eten ${T.maaltijdDeel(D, 'wijn')} per dag: dat haalt het jaar`);
   // Een wijnboerderij is er niet: dan is er niets om te plukken, en niets dat de heer vraagt.
   D.gebouwen.splice(D.gebouwen.indexOf(boerderij), 1);
   assert.equal(T.wijnNaDePluk(D, dag).pluk, 0);

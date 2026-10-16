@@ -14,7 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
-| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt (dat een jaar lang alles hebben iets won, is op 11 okt weggehaald, snoeironde vraag 153); 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: onder 10 mensen verloren, en op 1 lentemaand het jaarverslag (het winnen is op 11 okt weggehaald); sinds 6 okt rooit een huis dat niet past wat in de weg staat (ook zijn eigen appelboom), zeggen het briefje en de raad waarom een huis niet groeit, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130) | vraag 79, 80, 82, 85, 90, 100, 101, 130 |
+| De groei van de huizen | gebouwd (16 okt, ronde 3 van het snoeien, stap 6; Marcel: "Groei op afwisseling, doe maar"): een huis groeit door als het dorp een maand tevreden is (eten, warmte) en genoeg soorten eet (een hut 3, een huis 4, een stenen huis 5), voor bouwstof; de standen tellen voor de treden, de belasting en de kleren. De wensen per huis (1 tot 16 okt: elke stand wilde iets, met kringen, tekens bij de deur en de raad) zijn weg | vraag 79, 80, 85, 90, 100, 130; `snoeien.md` |
 | De economie van The Settlers, met gevechten in beurten | besloten (Marcel, 11 okt: "A ja, B ja, C allebei"), niets gebouwd: jij bouwt van bovenaf, binnen bereik van je stad, een kar haalt de grondstoffen (geen grens, geen vlaggen), en je vecht in beurten, verdedigend en op het eiland tot het kasteel; gooit "geen hand van bovenaf" en "de mensen bouwen zelf" om; eerst een proef met één keten | vraag 151, 152 |
 | De afwisseling | gebouwd (13 okt; Marcel: "A1, B1, C1, D1"): het dorp eet in gelijke delen van elke soort die er ligt, en hoe meer soorten, hoe harder al het werk gaat (60% met één, 100% met vier); de status Plain fare, en de kar brengt kaas en gezouten vlees ("Zo werkt de afwisseling nu") | vraag 154 |
 | Een gebouw aanklikken | gebouwd (14 okt; Marcel: "1a1, 1b ja"): een klik op een gebouw legt rechts een briefje met wat het doet, wie er werkt, wat het maakt (op vol, vandaag, 7 dagen, dit jaar), wat het tegenhoudt en wat erbij ligt; het spel loopt door ("Zo werkt het briefje van een gebouw nu") | vraag 156 |
@@ -524,9 +524,33 @@ het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
 - **Wat blijft zoals het was:** de demo gaat van gehucht tot een stad van 100 tot 200 mensen, met het jaar van geluk als
   eind (Marcel, 1 okt, en vraag 126, b3); het advies van buiten was 30 tot 50 inwoners en één grote politieke keuze.
 
-## De wensen van de mensen, per stand (Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
+## De groei van de huizen, en de standen (tot 16 okt: de wensen van de mensen, per stand; Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
 
-**Zo werkt het nu** (1 en 2 okt, tweeëntwintigste en drieëntwintigste sessie): **2a, 2b en 2d zijn gebouwd**
+**Zo werkt het nu** (16 okt, ronde 3 van het snoeien, stap 6; Marcel: **"Groei op afwisseling, doe maar"**;
+`ontwerp/snoeien.md`):
+- **Een huis groeit door op de afwisseling.** Woont er iemand, en is het dorp een maand op rij tevreden genoeg (70%: eten,
+  en in de winter brandhout) en at het elke dag genoeg soorten eten voor wat het huis wordt, dan groeit het door: een hut
+  tot een huis bij **3 soorten**, een huis tot een stenen huis bij **4** (het volle werk), een stenen huis tot een
+  woontoren bij **5**, en die pas met marktrecht. Het kost bouwstof: een huis 8 stammen, een stenen huis 12 steen, een
+  woontoren 20 steen (zonder wacht het, en zegt het dorp het één keer, en de raad met wie het maakt). Zo heeft elke keten
+  die een soort eten maakt (de moestuin, het kippenhok, de visser, de jager, de koeien, de bakkerij, de wijnboer) een
+  doel. Wat er in de weg staat, rooit het gezin eerst, zoals hieronder.
+- **De tevredenheid is één getal voor het dorp:** eten de helft, brandhout 0,3 (in de winter) en een kapel 0,2, met de
+  herberg, de wetten en de heer erbij of eraf. Zakt het onder de vertrekdrempel, dan trekt er een gezin weg.
+- **De standen blijven, als wie waar woont:** een hut keuters, een huis dorpelingen, een stenen huis of woontoren
+  ambachtslieden, een boerderij boeren. Ze tellen voor de treden (een dorp bij 20 dorpelingen, marktrecht bij 20
+  ambachtslieden), de belasting (dorpelingen betalen het dubbele, ambachtslieden het driedubbele) en de kleren (arm in
+  een hut, deftig in een stenen huis).
+- **Het briefje bij een huis** zegt wie er woont, zijn stand, en hoe ver het is met doorgroeien ("It grows into a stone
+  house after 30 days in which the village eats 4 kinds of food; now it eats 3"). `Spel.debug.groei()` zegt het voor elk
+  huis.
+- **Wat eruit ging** (in git): wat elke stand wilde (een put, bier, vlees of vis, een kapel, de herberg, brood, laken,
+  wijn, een markt), met de hoogste stand eerst, de kringen om een plek, het teken bij de deur, de raad over wat de huizen
+  misten en over vis en vlees voor de winter, het bier apart voor de huizen, en de spelregels "Wensen", "De herberg en de
+  markt" en "Achteruitgaan". Bier is nu voor de herberg, laken voor de heer en de marskramer, en brood, vis, vlees en
+  wijn zijn soorten in de maaltijd.
+
+**Hoe het was, van 1 tot 16 okt** (1 en 2 okt, tweeëntwintigste en drieëntwintigste sessie): **2a, 2b en 2d zijn gebouwd**
 (`js/wensen.js`, het doorgroeien in `js/behoeften.js`, en de treden in `js/treden.js`: een dorp bij 20 dorpelingen,
 marktrecht bij 20 ambachtslieden, en de markt en de weverij al in een dorp; zie "Van dorp tot stad"); **2c sinds 3 okt**
 (vraag 100, hieronder); **2e, het eind, ook sinds 3 okt** (vraag 101, hieronder). Zoals in Anno 1602: elk huis heeft
@@ -1337,8 +1361,9 @@ doel"; de raad blijft, ronde 3 van het snoeien, 15 okt, maar de raden over de ra
   helpt niet. De bouwer van de speeltest volgt het.
 - **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
   `js/gebouwen.js`, dezelfde vraag die de groei stelt), aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`) en
-  aan de wensen (`T.watDeHuizenMissen` in `js/wensen.js`, die de bouwer van de speeltest ook stelt),
-  zodat hij zegt wat het spel doet.
+  aan de huizen die op bouwstof wachten (`T.bouwstofRaad`; tot 16 okt aan de wensen, `T.watDeHuizenMissen`), zodat hij
+  zegt wat het spel doet. (De ketens hierboven zei hij voor de wensen; sinds 16 okt zegt hij alleen wie de bouwstof
+  maakt.)
 - **De eerste weken** (vraag 47, herschreven): geen rij opdrachten die je afwerkt, maar wat nu telt. Zo blijft niemand
   op een stap hangen, komt een toets pas als je hem nodig hebt, en blijft het na de eerste weken nuttig.
 - **Instelbaar:** de spelregel "Raad" zet hem uit, en de dagen staan in de werkbank (`T.RAAD_INSTELLINGEN`).
@@ -3687,8 +3712,9 @@ eigen erf.
   praat je over gisteravond (het gesprek `waard`; `js/verkennen.js`). Er woont niemand. Tot dan woonde de
   herbergierster er, alleen (`js/mensen.js`, met haar eigen vel), in het gehucht dat er al was. Hij brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
   een vijfde graan, tot er dertig liggen (`T.GEBOUWEN.herberg.maakt`, met `tot`). Het gehucht begint met
-  twintig bier. Het bier staat in de balk, naast het graan. **Sinds 3 okt houdt ze bier apart voor de huizen**
-  (werklijst vraag 102, b; Marcel: "102 a b c d e ja"): wat de huizen drinken tot de oogst binnen is, hooguit 150 dagen
+  twintig bier. Het bier staat in de balk, naast het graan. **Van 3 tot 16 okt hield ze bier apart voor de huizen**
+  (werklijst vraag 102, b; Marcel: "102 a b c d e ja"; weg met de wensen, ronde 3 van het snoeien, stap 6: nu drinken de
+  gasten wat er ligt): wat de huizen drinken tot de oogst binnen is, hooguit 150 dagen
   (`T.bierApart`), voor de magere maanden waarin er geen graan over is om te brouwen. De gasten drinken alleen wat
   erboven ligt, en ze brouwt tot er erboven dertig liggen. In de speeltest van 3 okt dronken de gasten alles op, en
   hadden de huizen 70 à 156 dagen per jaar geen bier, bijna precies de dagen zonder graan boven het zaaigraan; en dan

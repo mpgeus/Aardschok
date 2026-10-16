@@ -183,16 +183,6 @@ test('de maaltijd: wie minder heeft dan zijn deel, geeft alles, en telt pas vana
   assert.deepEqual(r.afwisseling, ['graan']);
 });
 
-test('de maaltijd: wat de huizen voor hun wensen aten, eet het dorp minder, en het telt mee in de afwisseling', () => {
-  const S = maakS();
-  S.bevolking = 100;
-  const maaltijd = 100 * T.etenPerMens(S);
-  T.zetVoorraad(S, 'graan', 1000);
-  const r = T.eetVandaag(S, ZOMERDAG, { brood: maaltijd / 2 });
-  assert.ok(bijna(r.graan, maaltijd / 2));
-  assert.deepEqual(r.afwisseling, ['graan', 'brood']);
-});
-
 test('het werk volgt de afwisseling: 60% met één soort, 15% meer per soort, tot het volle werk bij vier', () => {
   const S = maakS();
   assert.equal(T.werkVanAfwisseling(S), 1, 'zonder maaltijd volle kracht');
@@ -307,8 +297,14 @@ test('T.tikGebouwenDag: productie schaalt mee met de afwisseling, niet met de te
 }));
 
 // ── Een huis dat doorgroeit ──
+// Een huis groeit alleen als er iemand woont (js/behoeften.js, pasHuisGroeiToe): het kale dorp hier heeft geen bewoners,
+// dus zet woontIn er een paar in, alleen in de boekhouding (zonder poppetje). En de bouwstof voor wat het wordt.
+function woontIn(S, g, n = 4) {
+  S.bewoners = { mensen: Array.from({ length: n }, () => ({ huis: g })) };
+  T.zetVoorraad(S, 'hout', (S.voorraad.hout || 0) + ((T.BEHOEFTEN_INSTELLINGEN.groeiBouwstof[T.GEBOUWEN[g.soort].wordt] || {}).hout || 0));
+}
 
-test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang genoeg tevreden genoeg is en er ruimte is', () => {
+test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het dorp lang genoeg tevreden is en genoeg soorten eet, en er ruimte is', () => {
   const S = maakS(40, 40);
   T.zetVoorraad(S, 'hout', 8);
   const r = T.plaatsGebouw(S, 'hut', 10, 10); // een huis past ruim in de lege wereld
@@ -317,14 +313,16 @@ test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang
   assert.equal(S.gebouwen[0].klaar, true);
 
   S.bevolking = 4;
+  woontIn(S, S.gebouwen[0]);
   T.zetVoorraad(S, 'graan', 100000);
   T.zetVoorraad(S, 'groente', 1000);
   T.zetVoorraad(S, 'vis', 1000);
   T.zetVoorraad(S, 'vlees', 1000);
   S.gebouwen.push({ soort: 'kapel', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
 
+  // Een dag meer: op de eerste dag heeft het dorp nog niet gegeten, dus weet het zijn afwisseling nog niet.
   let dag = T.GEBOUWEN.hut.bouwtijd;
-  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) {
+  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 1; i++) {
     dag++;
     T.tikGebouwenDag(S, dag);
   }
@@ -351,12 +349,13 @@ function laatEenHutDoorgroeien(S) {
   T.plaatsGebouw(S, 'hut', 10, 10);
   for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) tik();
   S.bevolking = 4;
+  woontIn(S, S.gebouwen[0]);
   T.zetVoorraad(S, 'graan', 100000);
   T.zetVoorraad(S, 'groente', 1000);
   T.zetVoorraad(S, 'vis', 1000);
   T.zetVoorraad(S, 'vlees', 1000);
   S.gebouwen.push({ soort: 'kapel', x: 30, y: 30, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
-  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) tik();
+  for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 1; i++) tik(); // de eerste dag weet het zijn afwisseling nog niet
   return tik;
 }
 
@@ -443,6 +442,7 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
     for (let dy = 0; dy < 7; dy++) for (let dx = 0; dx < 3; dx++) T.zetTegel(S.wereld, 5 + dx, 5 + dy, 'muur');
 
     S.bevolking = 4;
+    woontIn(S, instantie);
     T.zetVoorraad(S, 'graan', 100000);
     T.zetVoorraad(S, 'groente', 1000);
     T.zetVoorraad(S, 'vis', 1000);

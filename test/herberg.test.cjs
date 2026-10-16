@@ -208,7 +208,6 @@ test('\'s avonds lopen de gasten de herberg in, en bij bedtijd in het donker naa
 // ---------------------------------------------------------------------------------------------
 
 test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp tevredener', () => {
-  // Met een huis (een gezin van de stand dorpelingen): alleen zij willen bier, de hutten en boerderijen niet (js/wensen.js).
   const S = proef({ gebouwen: ['herberg', 'huis'], hutten: 1 });
   const gasten = metKans(1, () => T.herbergGasten(S.dorp, HERFST));
   assert.ok(gasten.length > 0);
@@ -222,10 +221,8 @@ test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp 
   for (const p of gasten) delete p.herbergDag;
   const zonder = T.berekenTevredenheid(S.dorp, HERFST + 1);
   assert.equal(zonder.gezelligheid, 0);
-  // Het komt bij elk huis erbij, tot 100% (js/wensen.js): voor het dorp het gemiddelde, naar mensen.
-  const huizen = zonder.wensen.huizen;
-  const erbij = huizen.reduce((n, h) => n + h.mensen * (Math.min(1, h.tevredenheid + g) - h.tevredenheid), 0) / huizen.reduce((n, h) => n + h.mensen, 0);
-  assert.ok(erbij > 0 && Math.abs(b.tevredenheid - zonder.tevredenheid - erbij) < 1e-9, 'het komt erbij');
+  // Het komt bij het dorp erbij, tot 100%.
+  assert.ok(Math.abs(b.tevredenheid - Math.min(1, zonder.tevredenheid + g)) < 1e-9, 'het komt erbij');
   assert.ok(T.herbergGezelligheid(S.dorp, HERFST + 1 + IN.gezelligheidDagen + 1) === 0, 'een week later is het voorbij');
   assert.ok(!zonder.mist.includes('ale'));
   T.zetVoorraad(S.dorp, 'bier', 0);
@@ -251,39 +248,10 @@ test('de herberg brouwt van graan, tot er genoeg bier ligt', () => {
     T.tikGebouwenDag(S.dorp, HERFST + 2);
   });
   assert.ok(Math.abs(bier() - T.maaktTot(soort, S.dorp).bier) < 1e-9, `${bier()}`);
-  assert.equal(T.maaktTot(soort).bier, 60, 'sinds 8 okt (was 30): tot er 60 bier is, boven wat apart ligt voor de huizen');
+  assert.equal(T.maaktTot(soort).bier, 60, 'sinds 8 okt (was 30): tot er 60 bier is');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
   assert.match(T.gebouwToestand(S.dorp, g), /^Inn: there is enough ale in store\./);
-});
-
-// Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): in de speeltest van 3 okt
-// dronken de gasten alles op, en hadden de huizen in de magere maanden geen bier.
-test('bier apart voor de huizen: de gasten drinken wat erboven ligt, en de herberg brouwt tot erboven genoeg ligt', () => {
-  const S = proef({ bier: 0 });
-  const D = S.dorp;
-  // Twee hutten waar dorpelingen wonen, die bier willen (js/wensen.js).
-  for (const g of D.gebouwen.filter((x) => x.soort === 'hut').slice(0, 2)) g.wensen = { stand: 'dorpelingen', mensen: 5, heeft: {} };
-  const perDag = 10 * T.WENSEN_INSTELLINGEN.perMens.bier;
-  assert.ok(Math.abs(T.bierVoorDeHuizen(D) - perDag) < 1e-9);
-  // In wijnmaand is de volgende oogst ver weg: `bierApartDagen` dagen. Tien dagen voor de oogst binnen is: tien dagen.
-  const apart = T.bierApart(D);
-  assert.equal(apart, Math.ceil(perDag * IN.bierApartDagen));
-  const vlakVoor = dagVan('oogstmaand', 21);
-  assert.equal(T.dagenTotDeOogst(vlakVoor), 10);
-  assert.equal(T.bierApart(D, vlakVoor), Math.ceil(perDag * 10));
-  // De gasten drinken niet meer dan er boven het deel voor de huizen ligt.
-  T.zetVoorraad(D, 'bier', apart + 2);
-  assert.ok(T.herbergGasten(D, HERFST).length <= 2);
-  T.zetVoorraad(D, 'bier', apart);
-  assert.equal(T.herbergGasten(D, HERFST + 1).length, 0, 'wat er ligt, is voor de huizen');
-  assert.ok(T.herbergDroog(D));
-  assert.ok(T.herbergTekst(D, T.herbergVan(D)).endsWith(`; ${apart} ale, of which ${apart} set aside for the houses.`));
-  // Wie bier maakt, maakt tot er erboven genoeg ligt.
-  const tot = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
-  assert.deepEqual(T.maaktTot(T.GEBOUWEN.herberg, D), { bier: tot + apart });
-  assert.deepEqual(T.maaktTot(T.GEBOUWEN.brouwerij, D), { bier: tot + apart });
-  assert.deepEqual(T.maaktTot(T.GEBOUWEN.molen, D), { meel: tot });
 });
 
 test('bij de muis op de herberg: hoeveel gasten er vanavond komen, en hoeveel bier er ligt', () => {

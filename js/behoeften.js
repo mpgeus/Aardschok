@@ -16,8 +16,8 @@
 //   3. Een kerk: heeft het dorp een klare kapel (T.GEBOUWEN.kapel.kerk)?
 //   4. Daaruit volgt S.behoeften.tevredenheid (0..1) en S.behoeften.mist (wat het dorp mist, voor
 //      de balk, js/hud.js). Wie deze week in de herberg was, maakt het dorp wat tevredener (js/herberg.js).
-//   5. Wat tevredenheid doet: hoe hard er gewerkt wordt (js/gebouwen.js, stap 6), of er een gezin
-//      bijkomt (js/gebouwen.js, stap 4) of juist wegtrekt (hieronder), en of een huis doorgroeit.
+//   5. Wat tevredenheid doet: of er een gezin bijkomt (js/gebouwen.js, stap 4) of juist wegtrekt (hieronder), en of een
+//      huis doorgroeit, samen met de afwisseling (pasHuisGroeiToe).
 //   6. De winter: een tekort aan brandhout of eten kost mensen — geen apart scherm, alleen een
 //      melding en de bevolking die zakt. De melding zegt waaraan: de kou of de honger.
 //   7. De winter zien aankomen (sinds 28 sep, vraag 44): op 1 herfstmaand en 1 slachtmaand zegt het
@@ -81,10 +81,19 @@
     // een gezin weg zolang er geen eten genoeg is), of 'sterven' (net als in de winter kost een
     // tekort aan eten mensen, met dezelfde winterVerliesFactor, maar dan het hele jaar).
     hongerBuitenWinter: 'tevredenheid',
-    // Een huis groeit door (T.GEBOUWEN[x].wordt) als het dit veel dagen op rij minstens zo
-    // tevreden was; hoger dan groeiDrempel, want een huis groeien is meer dan net rondkomen.
+    // Een huis groeit door (T.GEBOUWEN[x].wordt; ronde 3 van het snoeien, stap 6; Marcel, 16 okt: "Groei op afwisseling,
+    // doe maar") als er iemand woont, en het dorp huisGroeiDagen op rij minstens huisGroeiDrempel tevreden was (eten,
+    // warmte in de winter; hoger dan groeiDrempel, want een huis groeien is meer dan net rondkomen) en minstens zoveel
+    // soorten at als wat het wordt vraagt (groeiSoorten; T.eetVandaag): een hut wordt een huis bij 3, een huis een stenen
+    // huis bij 4 (het volle werk, T.werkVanAfwisseling), en een stenen huis een woontoren bij 5. Zo heeft een keten die
+    // een soort eten maakt (de bakkerij, de wijnboer, de kaas) een doel. Dan kost het bouwstof uit de voorraad, naar wat
+    // het wordt (groeiBouwstof; het materiaal van de trede, vraag 157: een huis van stammen, de herberg van planken);
+    // zonder wacht het, en zegt het dorp het één keer. Van 1 okt tot 16 okt groeide een huis als het een maand alles had
+    // wat zijn stand wilde (js/wensen.js, de wensen per huis).
     huisGroeiDagen: 30,
     huisGroeiDrempel: 0.7,
+    groeiSoorten: { huis: 3, stenenHuis: 4, woontoren: 5 },
+    groeiBouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 }, woontoren: { steen: 20 }, herberg: { planken: 16 } },
     // Wie doorgroeit, rijst op in de laatste bouwfasen van zijn nieuwe tekening, vanaf deze (0 de fundering, 2 de muren
     // met steigers, 4 half gedekt), over de bouwtijd van zijn nieuwe soort, en blijft erin wonen (werklijst vraag 114, G;
     // Marcel, 4 okt: "G ja"). Alleen het beeld: de regels zien het nieuwe huis meteen.
@@ -109,10 +118,9 @@
     // bedierf de vis die de huizen niet aten (in de speeltest vingen vier vissers 8 vis per dag, voor 2,2 die de huizen
     // aten). De spelregel "Vis"; een vis vult zoveel als visAlsGraan hieronder.
     visIsEten: true,
-    // Wat een huis aan brood, vis en vlees krijgt voor zijn wensen (js/wensen.js, T.gebruikGoederen), eet het: zoveel
-    // graan vult één brood of één vis (Marcel, 2 okt, werklijst vraag 92, a: "A ja"), en het vlees zoveel als hierboven.
-    // Daarvoor kwam het brood bovenop wat een ambachtsman at, en maalde de molen er graan voor dat het dorp niet had: in de
-    // speeltest at het dorp in de tweede winter zijn zaaigraan op.
+    // Zoveel graan vult één brood of één vis (Marcel, 2 okt, werklijst vraag 92, a: "A ja"), en het vlees zoveel als
+    // hierboven. Daarvoor kwam het brood bovenop wat een ambachtsman at, en maalde de molen er graan voor dat het dorp niet
+    // had: in de speeltest at het dorp in de tweede winter zijn zaaigraan op.
     broodAlsGraan: 1,
     visAlsGraan: 1,
     // Wijn vult een maag (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de kern"), zodat een
@@ -220,14 +228,9 @@
 
     const erbij = gezelligheid + wetten.erbij - heer.minder;
 
-    // De wensen per huis (js/wensen.js, sinds 1 okt; werklijst vraag 80 en 85): elk huis zijn eigen tevredenheid uit wat
-    // zijn stand wil, en het dorp het gemiddelde, naar mensen. De afwisseling van groente, vis en vlees ging daarin op
-    // (vlees of vis voor de dorpelingen), net als de kerk (een kapel in de buurt). Zonder (de spelregel "Wensen" op het
-    // dorp als geheel, of een dorp zonder bewoners) rekent het zoals vóór 1 okt.
-    const wensen = T.WENSEN_INSTELLINGEN.perHuis ? T.berekenWensen(D, dag, { eten: voedselDekking, brandhout: brandhoutFactor, erbij }) : null;
-    const tevredenheid = wensen
-      ? wensen.tevredenheid
-      : Math.min(1, Math.max(0, IN.gewichtEten * voedselDekking + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
+    // Eén getal voor het hele dorp (ronde 3 van het snoeien, stap 6). Van 1 tot 16 okt had elk huis zijn eigen getal, uit
+    // wat zijn stand wilde (js/wensen.js, de wensen per huis), en was dit het gemiddelde.
+    const tevredenheid = Math.min(1, Math.max(0, IN.gewichtEten * voedselDekking + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
 
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
@@ -235,18 +238,14 @@
     // Wat de speler ziet, en tegelijk waar de statussen (js/statussen.js) en de balk (js/balk.js) op letten: dezelfde zin.
     if (voedselDekking < 1) mist.push(T.t('food'));
     if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push(T.t('firewood for the winter'));
-    if (wensen) {
-      for (const m of wensen.gemist) mist.push(m.naam);
-    } else {
-      if (!heeftKerk) mist.push(T.t('a church'));
-      if (T.herbergDroog(D)) mist.push(T.t('ale'));
-    }
+    if (!heeftKerk) mist.push(T.t('a church'));
+    if (T.herbergDroog(D)) mist.push(T.t('ale'));
 
     return {
       tevredenheid, mist, last: heer.waarom.concat(wetten.last), blij: wetten.blij, inWinter,
       voedselDekking,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
-      huishoudens, heeftKerk, kerkFactor, gezelligheid, wensen,
+      huishoudens, heeftKerk, kerkFactor, gezelligheid,
     };
   };
 
@@ -255,8 +254,6 @@
     if (!D.behoeften || !D.kalender) return;
     const b = T.berekenTevredenheid(D, Math.floor(D.kalender.dag));
     Object.assign(D.behoeften, { tevredenheid: b.tevredenheid, mist: b.mist, last: b.last, blij: b.blij });
-    Object.assign(D.behoeften, { standen: b.wensen ? b.wensen.standen : null, gemist: b.wensen ? b.wensen.gemist : null });
-    T.onthoudWensen(D, b.wensen);
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);
   };
 
@@ -265,17 +262,11 @@
   // een huis laten doorgroeien. Los van elkaar, zodat T.tikBehoeftenDag zelf leest als de lijst
   // hierboven.
 
-  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee, voor zover het gezouten was: eerst is wat ongezouten lag
-  // gegeten (vraag 132, B). Van wat daarna nog ongezouten ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
-  function pasBederfToe(D, gegeten) {
+  // Van wat er ongezouten ligt aan vis en vlees, bederft elke dag een deel, naar rato verdeeld over vis en vlees. Het zout
+  // van wat er gegeten is, gaat op in de maaltijd (T.eetVandaag; vraag 132, B: eerst wat ongezouten is).
+  function pasBederfToe(D) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad;
-    if (gegeten > 0 && (v.zout || 0) > 0) {
-      const ervoor = T.zoutDekking(D).totaal + gegeten;
-      const ongezouten = Math.max(0, ervoor - v.zout * IN.zoutHoudtGoed);
-      const gezouten = Math.max(0, gegeten - ongezouten);
-      if (gezouten > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gezouten / IN.zoutHoudtGoed));
-    }
     const d = T.zoutDekking(D);
     if (d.onbeschermd <= 0) return;
     for (const wat of IN.bederfelijk) {
@@ -323,55 +314,25 @@
   }
 
   // Ver onder de groeidrempel trekt op een groeidag een heel gezin juist weg, in plaats van dat
-  // er (js/gebouwen.js, stap 4) een bij komt. Met de optie hongerBuitenWinter 'wegtrekken' ook als
-  // er buiten de winter geen eten genoeg is.
-  //
-  // Met de wensen per huis (js/wensen.js; werklijst vraag 85, c: zacht, zoals in Anno 1602) komt wie wegtrekt uit een huis
-  // onder de vertrekdrempel, het nieuwste gezin eerst, zoals voor het hele dorp; dat gebeurt alleen als het eten of het
-  // brandhout mist (of de heer of een wet het huis er zo ver onder drukt). Wat een huis verder mist, houdt het alleen
-  // tegen om door te groeien.
+  // er (js/gebouwen.js, stap 4) een bij komt, het nieuwste gezin eerst (T.wieGaatEerst). Met de optie hongerBuitenWinter
+  // 'wegtrekken' ook als er buiten de winter geen eten genoeg is. Onder de drempel zakt het dorp alleen zonder eten of
+  // brandhout (of door de heer of een wet): dat zegt het bericht. (Van 1 tot 16 okt kwam wie wegtrok uit een huis onder
+  // de drempel, met de wensen per huis, en kon een huis dat een maand iets miste, leeglopen: de spelregel
+  // "Achteruitgaan".)
   function pasVertrekToe(D, b, dag) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     if (dag <= 0 || dag % T.GEBOUWEN_INSTELLINGEN.gezinDagen !== 0) return;
     if (D.bevolking <= 0) return;
     const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
-    const ontevreden = b.wensen ? b.wensen.huizen.filter((h) => h.tevredenheid < IN.vertrekDrempel) : null;
-    if (!honger && (ontevreden ? !ontevreden.length : b.tevredenheid >= IN.vertrekDrempel)) return;
-    let verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
-    let waarom = honger ? T.t('there is no food') : T.t('the village is not content enough');
-    let wie;
-    if (ontevreden && !honger) {
-      wie = T.wieGaatEerst(D, 'vertrek').filter((p) => ontevreden.some((h) => h.g === p.huis));
-      verlies = Math.min(verlies, wie.length);
-      if (!verlies) return;
-      // Onder de drempel zakt een huis alleen zonder eten of brandhout (of door de heer of een wet): dat zegt het bericht.
-      const h = ontevreden.find((x) => x.g === wie[0].huis);
-      const geen = ['eten', 'brandhout'].filter((id) => h.heeft[id] < 1 - 1e-9).map((id) => T.t('no {wens}', { wens: T.WENSEN[id].naam }));
-      waarom = geen.length ? T.t('they have {geen}', { geen: T.opsomming(geen) }) : T.t('they are not content enough');
-    }
+    if (!honger && b.tevredenheid >= IN.vertrekDrempel) return;
+    const verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+    const geen = [b.voedselDekking < 1 ? T.t('food') : null, b.brandhoutFactor < 1 ? T.t('firewood') : null].filter(Boolean)
+      .map((wens) => T.t('no {wens}', { wens }));
+    const waarom = honger ? T.t('there is no food')
+      : geen.length ? T.t('they have {geen}', { geen: T.opsomming(geen) }) : T.t('the village is not content enough');
     // Met bewoners zegt het bericht wie het zijn en lopen ze de weg af (js/bewoners.js).
-    T.wijzigBevolking(D, -verlies, 'vertrek', waarom, wie);
+    T.wijzigBevolking(D, -verlies, 'vertrek', waarom);
     if (!D.bewoners && T.ui && T.ui.bericht) T.zeg(D, T.t('A family is leaving: {waarom}. (-{verlies})', { waarom, verlies }), 'gevaar');
-  }
-
-
-  // Achteruitgaan streng (de spelregel "Achteruitgaan", werklijst vraag 80, C): mist een huis missenDagen op rij iets, dan
-  // trekt zijn gezin weg; hooguit één huis per dag, het huis dat het langst mist. Hoelang een huis al iets mist, telt het
-  // altijd (g.missenDagen), ook zacht: dat kan een venster zeggen.
-  function pasStrengToe(D, wensen) {
-    const WI = T.WENSEN_INSTELLINGEN;
-    let langst = null;
-    for (const h of wensen.huizen) {
-      h.g.missenDagen = h.alles ? 0 : (h.g.missenDagen || 0) + 1;
-      if (WI.achteruit !== 'streng' || h.g.missenDagen < WI.missenDagen) continue;
-      if (!langst || h.g.missenDagen > langst.g.missenDagen) langst = h;
-    }
-    if (!langst) return;
-    langst.g.missenDagen = 0;
-    const wie = T.wieGaatEerst(D, 'vertrek').filter((p) => p.huis === langst.g);
-    const verlies = Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, wie.length);
-    const mist = Object.keys(langst.heeft).filter((id) => langst.heeft[id] < 1 - 1e-9).map((id) => T.WENSEN[id].naam);
-    if (verlies) T.wijzigBevolking(D, -verlies, 'vertrek', T.t('their house has lacked {mist} for a month', { mist: T.opsomming(mist) }), wie);
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als
@@ -584,19 +545,6 @@
   // Wat er van de natuur in de weg kan staan en niet te rooien is (een appelboom rooit het gezin zelf: vraag 130, a2).
   const NAMEN = { rots: T.t('a rock'), kleineRots: T.t('a rock') };
 
-  // "the hut of Walter" (het hoofd van het gezin dat er woont), of "a hut" als er niemand woont: voor de raad en de
-  // kring van de wensen (werklijst vraag 130, c2 en d).
-  T.huisVan = function (D, g) {
-    const naam = T.GEBOUWEN[g.soort].naam;
-    // Het town hall is van iedereen (vraag 170, stap 2), ook al woont de schout er; een ander huis waar hij woont, is het
-    // jouwe.
-    if (g.soort === 'schout') return T.t('the {gebouw}', { gebouw: naam });
-    if (g.huis === 'schout') return T.t('your {gebouw}', { gebouw: naam });
-    const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
-    const p = mensen.find((m) => !m.hoofd) || mensen[0];
-    return p ? T.t('the {gebouw} of {wie}', { gebouw: naam, wie: T.naamVanBewoner(p) }) : T.eenNaam(naam);
-  };
-
   // Waar een gebouw dat met het dorp meegroeit (de herberg, `groeitMee`) straks groter wordt: per gebouw dat nog de vorm
   // van het gehucht heeft, de rechthoek van elke vorm van een dorp (T.dorpsVormen, js/bouwstijl.js), met zijn deur waar
   // hij stond (groeiSchuif). Daar komt niets anders: geen gebouw, geen kraam, geen akker (T.waaromNietOpDezeGrond,
@@ -634,22 +582,15 @@
 
   const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => T.hoeveel(kosten[wat], wat)));
 
-  // Het dorp als geheel (de spelregel "Wensen", zoals vóór 1 okt): is het dorp huisGroeiDagen op rij tevreden genoeg,
-  // dan groeit elk huis door, zonder bouwstof.
-  function pasHuisGroeiToe(D, b) {
-    const IN = T.BEHOEFTEN_INSTELLINGEN;
-    if (b.wensen) return pasHuisGroeiPerHuisToe(D, b.wensen);
-    const tevredenGenoeg = b.tevredenheid >= IN.huisGroeiDrempel;
-    for (const instantie of D.gebouwen) {
-      const soort = T.GEBOUWEN[instantie.soort];
-      // Alleen een gebouw met een voorwerp groeit mee: een huis dat de speler of een gezin bouwde.
-      if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt || !magDoorgroeien(D, soort)) continue;
-      instantie.groeiDagen = tevredenGenoeg ? (instantie.groeiDagen || 0) + 1 : 0;
-      if (instantie.groeiDagen >= IN.huisGroeiDagen && groeiGebouw(D, instantie, soort)) {
-        T.zeg(D, T.t('{van} has grown into {naar}.', { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(T.GEBOUWEN[soort.wordt].naam) }), 'goed');
-      }
-    }
-  }
+  // Hoeveel soorten eten een huis vraagt om door te groeien: wat het wordt (groeiSoorten), of 0.
+  T.groeiSoortenVoor = (soort) => (T.GEBOUWEN[soort] && T.BEHOEFTEN_INSTELLINGEN.groeiSoorten[T.GEBOUWEN[soort].wordt]) || 0;
+  // Wat een huis kost om door te groeien: de bouwstof van wat het wordt (groeiBouwstof), of van zichzelf voor wat
+  // meegroeit (de herberg).
+  T.groeiKosten = (wordt) => T.BEHOEFTEN_INSTELLINGEN.groeiBouwstof[wordt] || {};
+  // Telt deze dag voor het doorgroeien van dit huis? Het dorp is tevreden genoeg (eten, warmte: huisGroeiDrempel), en at
+  // vandaag zoveel soorten als het huis vraagt (D.behoeften.afwisseling, de maaltijd van gisteren: T.eetVandaag).
+  const telVoorDeGroei = (D, b, g) => b.tevredenheid >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDrempel
+    && ((D.behoeften && D.behoeften.afwisseling) || []).length >= T.groeiSoortenVoor(g.soort);
 
   // Een stenen huis wordt pas een woontoren met marktrecht (`wordtVanaf` op de soort; vraag 114, stap 3).
   const magDoorgroeien = (D, soort) => !soort.wordtVanaf || T.tredeMinstens(D, soort.wordtVanaf);
@@ -657,7 +598,7 @@
   // Een gebouw dat meegroeit met het dorp (`groeitMee` op de soort: de herberg; werklijst vraag 114, stap 3, Marcel, 7
   // okt, "A; ja goed idee"): is zijn vorm er een die op deze trede niet meer gebouwd wordt (de kleine herberg van het
   // gehucht, in een dorp), dan groeit het door tot de vorm van nu, met zijn deur waar hij stond, als de bouwstof er is
-  // (T.WENSEN_INSTELLINGEN.bouwstof) en er plaats is; anders morgen weer. Alleen in een land met een bouwstijl: daar
+  // (groeiBouwstof) en er plaats is; anders morgen weer. Alleen in een land met een bouwstijl: daar
   // zijn de vormen per trede (js/bouwstijl.js).
   function laatMeegroeien(D) {
     for (const g of D.gebouwen) {
@@ -665,7 +606,7 @@
       if (!soort || !soort.groeitMee || !g.klaar || !g.voorwerp || g.voorwerp.inAanbouw) continue;
       const nu = T.stijlTekeningen(D, g.soort);
       if (!nu || !T.deurKantVan(g.tekening) || nu.some((t) => T.vormVan(t) === T.vormVan(g.tekening))) continue;
-      const kosten = T.WENSEN_INSTELLINGEN.bouwstof[g.soort] || {};
+      const kosten = T.groeiKosten(g.soort);
       if (!T.kanBetalen(D, kosten)) {
         if (!g.wachtOpBouwstof) T.zeg(D, T.t('The {gebouw} can grow with the village, but that takes {kosten}.', { gebouw: soort.naam, kosten: kostenTekst(kosten) }));
         g.wachtOpBouwstof = true;
@@ -705,25 +646,25 @@
     }
   }
 
-  // Per huis (js/wensen.js; werklijst vraag 80, C, en 85): heeft een huis huisGroeiDagen op rij alles wat zijn stand wil,
-  // dan groeit het door naar de volgende stand, als de bouwstof er is (T.WENSEN_INSTELLINGEN.bouwstof: een huis hout, een
-  // stenen huis steen). Zonder bouwstof wacht het, en zegt het dorp het één keer.
-  function pasHuisGroeiPerHuisToe(D, wensen) {
+  // Per huis met mensen (ronde 3 van het snoeien, stap 6): telt een dag voor de groei (telVoorDeGroei), dan telt het huis
+  // hem (g.groeiDagen), anders begint het opnieuw. Na huisGroeiDagen groeit het door, als de bouwstof er is
+  // (groeiBouwstof); zonder wacht het, en zegt het dorp het één keer. Een stenen huis wordt pas een woontoren met
+  // marktrecht (magDoorgroeien).
+  function pasHuisGroeiToe(D, b) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     // Een huis waar niemand meer woont, begint opnieuw te tellen als er weer iemand komt.
-    const bewoond = new Set(wensen.huizen.map((h) => h.g));
+    const bewoond = new Set(((D.bewoners && D.bewoners.mensen) || []).map((p) => p.huis).filter(Boolean));
     for (const g of D.gebouwen) {
-      if (bewoond.has(g)) continue;
-      delete g.groeiDagen;
-      delete g.missenDagen;
-      delete g.wachtOpBouwstof;
-    }
-    for (const h of wensen.huizen) {
-      const g = h.g;
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !g.voorwerp || !soort.wordt || !magDoorgroeien(D, soort)) continue;
-      g.groeiDagen = h.alles ? (g.groeiDagen || 0) + 1 : 0;
-      if (!h.alles) delete g.wachtOpBouwstof;
+      if (!bewoond.has(g) || g.huis === 'schout') {
+        delete g.groeiDagen;
+        delete g.wachtOpBouwstof;
+        continue;
+      }
+      if (!g.klaar || !g.voorwerp || !soort || !soort.wordt || !magDoorgroeien(D, soort)) continue;
+      const telt = telVoorDeGroei(D, b, g);
+      g.groeiDagen = telt ? (g.groeiDagen || 0) + 1 : 0;
+      if (!telt) delete g.wachtOpBouwstof;
       if (g.groeiDagen < IN.huisGroeiDagen) continue;
       if (g.groeitNaRooien) continue; // het gezin rooit nog wat in de weg staat (js/bos.js)
       // Is er geen plaats, ook niet na het rooien, dan wacht het op plaats, niet op bouwstof: het briefje zegt waarom
@@ -735,7 +676,7 @@
         continue;
       }
       const nieuw = T.GEBOUWEN[soort.wordt];
-      const kosten = T.WENSEN_INSTELLINGEN.bouwstof[soort.wordt] || {};
+      const kosten = T.groeiKosten(soort.wordt);
       if (!T.kanBetalen(D, kosten)) {
         if (!g.wachtOpBouwstof) T.zeg(D, T.t('{van} can become {naar}, but that takes {kosten}.', { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten) }));
         g.wachtOpBouwstof = true;
@@ -749,14 +690,39 @@
       }
       if (!groeiGebouw(D, g, soort)) continue; // er stond iemand: morgen weer
       T.betaalKosten(D, kosten);
-      const woorden = { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten), stand: T.STANDEN[T.standVan(g)].naam };
-      T.zeg(D, Object.keys(kosten).length ? T.t('{van} has grown into {naar}, for {kosten}: whoever lives there now belongs with the {stand}.', woorden)
-        : T.t('{van} has grown into {naar}: whoever lives there now belongs with the {stand}.', woorden), 'goed');
+      const woorden = { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten) };
+      T.zeg(D, Object.keys(kosten).length ? T.t('{van} has grown into {naar}, for {kosten}.', woorden) : T.t('{van} has grown into {naar}.', woorden), 'goed');
       // Voor het dagboek (js/einde.js; vraag 87): het jaarboek telt de huizen die doorgroeiden.
-      const p = ((D.bewoners && D.bewoners.mensen) || []).find((m) => m.huis === g);
-      T.schrijfOp(D, 'huis', { wie: p ? p.naam : null, van: soort.naam, naar: nieuw.naam, stand: T.standVan(g) });
+      const p = D.bewoners.mensen.find((m) => m.huis === g);
+      T.schrijfOp(D, 'huis', { wie: p ? p.naam : null, van: soort.naam, naar: nieuw.naam });
     }
   }
+
+  // Hoe het met de groei van een huis staat (het briefje bij een huis, js/huisbriefje.js; 2c, werklijst vraag 100), of
+  // null voor een huis zonder mensen. Geeft { mensen, wie (de namen), groei }, met groei null als het niet doorgroeit (een
+  // woontoren, een boerderij), en anders { dagen, nodig (huisGroeiDagen), wordt (de naam), kosten, soorten (wat het vraagt),
+  // nu (wat het dorp at), tevreden (is het dorp tevreden genoeg), later (de trede die het nog vraagt, of null), wacht (op
+  // bouwstof), waarom (T.waaromGroeitHetNiet) }. Uit wat het dorp op de laatste dag at en hoe tevreden het was, zoals de
+  // balk het zegt.
+  T.huisToestand = function (D, g) {
+    const wie = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
+    if (!g || !wie.length || g.huis === 'schout') return null;
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const soort = T.GEBOUWEN[g.soort];
+    const wordt = soort && soort.wordt && T.GEBOUWEN[soort.wordt];
+    const B = D.behoeften || {};
+    return {
+      mensen: wie.length,
+      wie: wie.map(T.naamVanBewoner),
+      groei: wordt ? {
+        dagen: g.groeiDagen || 0, nodig: IN.huisGroeiDagen, wordt: wordt.naam, kosten: T.groeiKosten(soort.wordt),
+        soorten: T.groeiSoortenVoor(g.soort), nu: (B.afwisseling || []).length,
+        tevreden: (B.tevredenheid != null ? B.tevredenheid : 1) >= IN.huisGroeiDrempel,
+        later: magDoorgroeien(D, soort) ? null : soort.wordtVanaf,
+        wacht: !!g.wachtOpBouwstof, waarom: T.waaromGroeitHetNiet(D, g),
+      } : null,
+    };
+  };
 
   // De maaltijd, één dag (vraag 154; Marcel, 13 okt: "A1, B1, C1, D1"; gameloop.md, "Besloten"). Het dorp eet in gelijke
   // delen van elke soort die er ligt (T.SOORTEN_ETEN): wie minder heeft dan zijn deel, geeft wat hij heeft, en de
@@ -765,15 +731,14 @@
   // niet goed houdt vóór wat gezouten is (vraag 132, B; wie gezouten eet, eet het zout mee op). Het zaaigraan eet het
   // dorp pas als er niets anders meer is (T.zaaigraanApart, js/akkers.js; vraag 81). Tot 13 okt at het in een vaste
   // volgorde (de melk, wat bederft, het graan, de kaas, de wijn, wat gezouten is), en met genoeg graan at het alleen graan.
-  // T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan. Wat de huizen vandaag al aten voor hun wensen (`alGegeten`,
-  // per soort in graan; T.gebruikGoederen in js/wensen.js, vraag 92, a), hoeft het dorp niet meer te eten, en het telt
-  // mee in de afwisseling: de soorten die vandaag minstens afwisselingDeel van de maaltijd waren (D.behoeften.afwisseling,
-  // voor T.werkVanAfwisseling). Geeft wat er van elke soort gegeten is (in stuks; `graan` met het zaaigraan, `kaas`
-  // zonder de melk), en { nodig, melk, zaaigraan, kaasErbij, tekort, afwisseling }.
-  T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0, alGegeten = {}) {
+  // T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan. De afwisseling: de soorten die vandaag minstens
+  // afwisselingDeel van de maaltijd waren (D.behoeften.afwisseling, voor T.werkVanAfwisseling en de groei van de huizen).
+  // (Tot 16 okt aten de huizen eerst wat hun stand wilde, js/wensen.js, en at het dorp de rest.) Geeft wat er van elke
+  // soort gegeten is (in stuks; `graan` met het zaaigraan, `kaas` zonder de melk), en { nodig, melk, zaaigraan,
+  // kaasErbij, tekort, afwisseling }.
+  T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    const maaltijd = (D.bevolking || 0) * T.etenPerMens(D);
-    const nodig = Math.max(0, maaltijd - Object.values(alGegeten).reduce((n, x) => n + x, 0));
+    const nodig = (D.bevolking || 0) * T.etenPerMens(D);
     const v = D.voorraad;
     const melkVandaag = (D.vee && D.vee.melk) || 0;
     // Wat er van elke soort ligt, in graan. Het zaaigraan blijft apart (vraag 132).
@@ -812,10 +777,10 @@
     r.kaasErbij = (melkVandaag - r.melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (r.kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', r.kaasErbij);
     if (D.vee) D.vee.melk = 0;
-    // De afwisseling: wat de huizen aten en wat het dorp at, per soort.
-    const genoeg = maaltijd * IN.afwisselingDeel;
-    const gegeten = (wat) => (alGegeten[wat] || 0) + (deel[wat] || 0) + (wat === 'graan' ? r.zaaigraan : 0);
-    r.afwisseling = Object.keys(T.SOORTEN_ETEN).filter((wat) => maaltijd > 0 && gegeten(wat) >= genoeg - 1e-9);
+    // De afwisseling: wat het dorp at, per soort.
+    const genoeg = nodig * IN.afwisselingDeel;
+    const gegeten = (wat) => (deel[wat] || 0) + (wat === 'graan' ? r.zaaigraan : 0);
+    r.afwisseling = Object.keys(T.SOORTEN_ETEN).filter((wat) => nodig > 0 && gegeten(wat) >= genoeg - 1e-9);
     (D.behoeften || (D.behoeften = T.nieuweBehoeften())).afwisseling = r.afwisseling;
     return r;
   };
@@ -868,8 +833,7 @@
     T.schrijfOp(D, 'boeren', { tekst: T.t('The farmers gave up some of the seed grain, for there was nothing else left to eat.') });
   }
 
-  // Hoeveel graan één stuk van een soort vult (T.SOORTEN_ETEN), of 0 als het geen eten is (bier, laken): voor de maaltijd,
-  // en voor wat een huis eet voor zijn wensen (T.gebruikGoederen, js/wensen.js; vraag 92, a).
+  // Hoeveel graan één stuk van een soort vult (T.SOORTEN_ETEN), of 0 als het geen eten is (bier, laken): voor de maaltijd.
   T.voedtAlsGraan = function (soort) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const s = T.SOORTEN_ETEN[soort];
@@ -982,37 +946,6 @@
     return Object.assign(r, { tot, eet });
   };
 
-  // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 132, B; Marcel, 8 okt: "A en B samen"). In de
-  // winter ligt de beek dicht (T.GEBOUWEN.visser.stilIn), dus wat de huizen dan eten, ligt er al, en gezouten, want
-  // ongezouten bederft het (bederfPerDag). Vanaf `dag`, zolang de winter in zicht is en nog niet begon; null als geen huis
-  // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen), ligt (vis en vlees nu), dan (wat er ligt als de
-  // winter begint: met wat de vissers vangen, min wat de huizen eten), gezouten
-  // (wat het zout nu goed houdt), zout (hoeveel zout er nog bij moet voor wat er dan ligt, tot wat nodig is), tekort (wat
-  // er dan nog mist), tot (dagen tot de winter), winter (zijn duur) }.
-  T.visEnVleesVoorDeWinter = function (D, dag) {
-    const IN = T.BEHOEFTEN_INSTELLINGEN;
-    if (!T.winterInZicht(dag)) return null;
-    const { tot, duur } = T.periodeVanaf(dag, isWinter);
-    if (tot <= 0) return null;
-    const st = D.behoeften && D.behoeften.standen;
-    let perDag = 0;
-    for (const s of Object.keys(st || {})) {
-      if (T.wensenVanStand(s).includes('vleesOfVis')) perDag += st[s].mensen * T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;
-    }
-    if (perDag <= 0) return null;
-    // Wat de vissers op een dag vangen. Wat de jagers schieten, telt niet mee: in de speeltest van 8 okt rekende het dorp
-    // met vijf jagers op genoeg vlees voor de winter, kocht het geen zout, en was de vis na twee weken winter op.
-    let vis = 0;
-    for (const g of D.gebouwen || []) if (g.klaar && g.soort === 'visser') vis += T.GEBOUWEN.visser.maakt.uit.vis;
-    const v = D.voorraad || {};
-    const ligt = IN.bederfelijk.reduce((n, wat) => n + (v[wat] || 0), 0);
-    const nodig = perDag * duur;
-    const dan = Math.max(0, ligt + (vis - perDag) * tot);
-    const gezouten = Math.min(ligt, (v.zout || 0) * IN.zoutHoudtGoed);
-    const zout = Math.max(0, Math.ceil(Math.min(dan, nodig) / IN.zoutHoudtGoed - (v.zout || 0) - 1e-9));
-    return { nodig, ligt, dan, gezouten, zout, tekort: Math.max(0, nodig - dan), tot, winter: duur };
-  };
-
   // Wat de winter niet haalt, nu hij in zicht is (T.winterInZicht): ['hout'], ['eten'], allebei, of niets (ook als de
   // winter nog ver is). De groei vraagt het (T.waaromGeenGezin, js/gebouwen.js): wie de winter niet haalt, krijgt er
   // geen gezin bij.
@@ -1102,30 +1035,19 @@
     D.behoeften.last = b.last;
     D.behoeften.blij = b.blij;
     D.behoeften.gezelligheid = b.gezelligheid;
-    // Per stand en wat er gemist wordt, voor de balk (js/hud.js); wat elk huis wil en heeft, op het huis (js/wensen.js).
-    D.behoeften.standen = b.wensen ? b.wensen.standen : null;
-    D.behoeften.gemist = b.wensen ? b.wensen.gemist : null;
-    T.onthoudWensen(D, b.wensen);
 
     // Of het hout en het eten de winter halen, vóór het stoken en het eten van vandaag.
     zegDeWinter(D, dag);
 
-    // De huizen nemen wat hun stand gebruikt (js/wensen.js), vóór het eten (stap 3 in T.tikGebouwenDag).
-    const goederen = b.wensen ? T.gebruikGoederen(D, b.wensen) : { bederfelijk: 0, gegeten: {} };
-
-    pasBederfToe(D, goederen.bederfelijk);
+    pasBederfToe(D);
     pasBrandhoutToe(D, b);
     const sprokkel = T.sprokkelHout(D); // het dode hout van vandaag, voor de winter
     if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
     pasWinterVerliesToe(D, b);
     pasVertrekToe(D, b, dag);
-    if (b.wensen) pasStrengToe(D, b.wensen);
     pasHuisGroeiToe(D, b);
     laatMeegroeien(D);
 
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);
-    // Wat de huizen aan brood, vis, vlees en wijn aten, per soort in graan: dat eet het dorp vandaag minder, en het telt
-    // mee in de afwisseling (T.eetVandaag; vraag 92, a, en 154).
-    return goederen.gegeten;
   };
 })(globalThis.Spel = globalThis.Spel || {});

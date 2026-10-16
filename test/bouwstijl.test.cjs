@@ -216,7 +216,7 @@ test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfd
   T.tikBehoeftenDag(D, 3);
   assert.equal(T.vormVan(g.tekening), 'herberg2');
   assert.equal(T.deurKantVan(g.tekening), kant);
-  assert.equal(D.voorraad.planken, 100 - T.WENSEN_INSTELLINGEN.bouwstof.herberg.planken, 'voor planken (vraag 157)');
+  assert.equal(D.voorraad.planken, 100 - T.BEHOEFTEN_INSTELLINGEN.groeiBouwstof.herberg.planken, 'voor planken (vraag 157)');
   // de kant van de deur ligt waar hij lag
   const na = T.voetVanGebouw(g);
   const zijde = (r) => ({ z: r.y + r.h, o: r.x + r.b, n: r.y, w: r.x })[kant];

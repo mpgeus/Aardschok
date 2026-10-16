@@ -43,12 +43,6 @@
     groteHerberg: 1.5,
     // Wat een bezoek drinkt, aan bier. De waard brouwt het zelf (T.GEBOUWEN.herberg.maakt).
     bierPerBezoek: 1,
-    // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): de waard houdt
-    // achter wat de huizen drinken tot de volgende oogst, hooguit zoveel dagen, voor de magere maanden waarin er geen
-    // graan over is om te brouwen, zoals de boeren het zaaigraan apart houden. De gasten drinken wat erboven ligt, en
-    // wie bier maakt, maakt tot er erboven genoeg ligt (T.maaktTot, js/gebouwen.js). In de speeltest van 3 okt dronken de
-    // gasten alles op, en hadden de huizen 70 à 156 dagen per jaar geen bier: bijna precies de dagen zonder graan.
-    bierApartDagen: 150,
     // Wie er de laatste zoveel dagen was, is tevredener: zoveel erbij als alle volwassenen er waren
     // (js/behoeften.js, T.berekenTevredenheid).
     gezelligheidDagen: 7,
@@ -56,21 +50,9 @@
   };
   const IN = () => T.HERBERG_INSTELLINGEN;
 
-  // Wat de huizen per dag aan bier drinken: wie in een huis woont waarvan de stand bier wil (js/wensen.js).
-  T.bierVoorDeHuizen = function (D) {
-    let mensen = 0;
-    for (const g of D.gebouwen || []) {
-      if (g.wensen && g.wensen.mensen > 0 && T.wensenVanStand(g.wensen.stand).includes('bier')) mensen += g.wensen.mensen;
-    }
-    return mensen * (T.WENSEN_INSTELLINGEN.perMens.bier || 0);
-  };
-  // Hoeveel bier de waard apart houdt voor de huizen: wat ze drinken tot de oogst binnen is
-  // (T.dagenTotDeOogst, js/akkers.js), hooguit `bierApartDagen` dagen.
-  T.bierApart = function (D, dag = D.kalender ? D.kalender.dag : 0) {
-    return Math.ceil(T.bierVoorDeHuizen(D) * Math.min(IN().bierApartDagen, T.dagenTotDeOogst(dag)));
-  };
-  // Het bier voor de gasten: wat er boven het deel voor de huizen ligt.
-  const bierVoorGasten = (D, dag) => Math.max(0, ((D.voorraad && D.voorraad.bier) || 0) - T.bierApart(D, dag));
+  // Het bier voor de gasten: wat er ligt. (Van 3 tot 16 okt hield de waard bier apart voor de huizen die het wilden,
+  // js/wensen.js; de wensen zijn weg.)
+  const bierVoorGasten = (D) => (D.voorraad && D.voorraad.bier) || 0;
 
   // De herbergen van het dorp die klaar zijn, die van het begin eerst.
   T.herbergenVan = (D) => (D.gebouwen || []).filter((g) => g.soort === 'herberg' && g.klaar);
@@ -135,7 +117,7 @@
     const herbergen = T.herbergenVan(D);
     if (!B || !B.wereld || !herbergen.length) return [];
     const d = Math.floor(dag);
-    const plaats = Math.floor(bierVoorGasten(D, d) / IN().bierPerBezoek + 1e-9);
+    const plaats = Math.floor(bierVoorGasten(D) / IN().bierPerBezoek + 1e-9);
     const sleutel = `${d}:${plaats}:${B.mensen.length}:${herbergen.length}`;
     const H = D.herberg || (D.herberg = {});
     if (H.gasten && H.gasten.sleutel === sleutel) return H.gasten.lijst;
@@ -240,8 +222,7 @@
     return (IN().gezelligheid * waren) / wie.length;
   };
 
-  // Is de herberg droog: geen bier voor de gasten (wat er ligt, is voor de huizen)? Met de spelregel "Wensen" op "Het
-  // dorp als geheel" mist het dorp dan bier (js/behoeften.js).
+  // Is de herberg droog: geen bier voor de gasten? Dan mist het dorp bier (js/behoeften.js).
   T.herbergDroog = function (D) {
     return !!T.herbergVan(D) && bierVoorGasten(D) < IN().bierPerBezoek;
   };
@@ -280,10 +261,7 @@
       : gasten.length ? T.t('{n|# guest|# guests} tonight', { n: gasten.length }) : T.t('no guests tonight');
     const m = D.marskramer;
     const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? T.t('; the merchant is lodging here') : '';
-    const apart = Math.min(bier, T.bierApart(D));
-    const bierTekst = bier
-      ? apart ? T.t('{bier}, of which {apart} set aside for the houses', { bier: T.hoeveel(bier, 'bier'), apart }) : T.hoeveel(bier, 'bier')
-      : T.t('no ale left');
+    const bierTekst = bier ? T.hoeveel(bier, 'bier') : T.t('no ale left');
     return T.t('{vanavond}; {bier}{logeert}.', { vanavond, bier: bierTekst, logeert });
   };
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};

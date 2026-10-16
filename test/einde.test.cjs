@@ -58,18 +58,21 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   T.zetDorpsnaam(D, 'Kleiwerd');
   const begin = Math.floor(S.kalender.dag);
   getoond.length = 0;
-  const nacht = (dag, regels, gemist = []) => {
+  // Wat het dorp die dag miste (D.behoeften.mist, js/behoeften.js).
+  const nacht = (dag, regels, mist = []) => {
     D.dagboek = { regels };
-    D.behoeften.gemist = gemist;
+    D.behoeften.mist = mist;
     T.tikEindeDag(D, dag);
   };
-  nacht(begin + 1, [{ soort: 'mensen', verschil: 4, reden: 'groei' }, { soort: 'huis' }], [{ id: 'bier' }, { id: 'put' }]);
-  nacht(begin + 2, [{ soort: 'mensen', verschil: -1, reden: 'vertrek' }, { soort: 'mensen', verschil: -2, reden: 'winter' }], [{ id: 'bier' }]);
-  nacht(begin + 3, [{ soort: 'mensen', verschil: -1, reden: 'gesneuveld' }]);
+  nacht(begin + 1, [{ soort: 'mensen', verschil: 4, reden: 'groei' }, { soort: 'huis' }], ['ale', 'a well']);
+  nacht(begin + 2, [{ soort: 'mensen', verschil: -1, reden: 'vertrek' }, { soort: 'mensen', verschil: -2, reden: 'winter' }], ['ale']);
+  nacht(begin + 3, [{ soort: 'mensen', verschil: -1, reden: 'gesneuveld' }], ['ale']);
   assert.deepEqual(
-    { kwamen: D.jaarboek.kwamen, stierven: D.jaarboek.stierven, weg: D.jaarboek.weg, doorgegroeid: D.jaarboek.doorgegroeid, gemist: D.jaarboek.gemist },
-    { kwamen: 4, stierven: 3, weg: 1, doorgegroeid: 1, gemist: { bier: 2, put: 1 } },
+    { kwamen: D.jaarboek.kwamen, stierven: D.jaarboek.stierven, weg: D.jaarboek.weg, doorgegroeid: D.jaarboek.doorgegroeid },
+    { kwamen: 4, stierven: 3, weg: 1, doorgegroeid: 1 },
   );
+  // (Het proefdorp miste al een kerk op de dagen ervoor: die telt ook.)
+  assert.deepEqual([D.jaarboek.gemist.ale, D.jaarboek.gemist['a well']], [3, 1]);
   T.telOogstInJaarboek(D, 300.2); // de boeren maaien tegel voor tegel (js/akkers.js)
   T.telOogstInJaarboek(D, 100.1);
   const begonMet = D.jaarboek.mensen; // de mensen van het proefdorp, aan het begin van het jaar
@@ -88,7 +91,7 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   assert.ok(regels.includes('4 people joined, 3 died and 1 left.'), regels.join(' | '));
   assert.ok(regels.includes('The harvest brought 400 grain.'));
   assert.ok(regels.includes('One house grew larger.'));
-  assert.ok(regels.some((r) => /^The most missed was ale, for 2 days\.$/.test(r)), regels.join(' | '));
+  assert.ok(regels.some((r) => /^The most missed was ale, for 3 days\.$/.test(r)), regels.join(' | '));
   assert.ok(!regels.some((r) => /iedereen alles/.test(r)), 'het winnen is weg: ook de regel over de dagen waarop iedereen alles had');
   assert.equal(D.jaarboek.begin, lente, 'en het nieuwe jaar begint een nieuw jaarboek');
   assert.equal(D.jaarboek.kwamen, 0);

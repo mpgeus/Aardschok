@@ -62,7 +62,11 @@ afspraak bij moet.
 **Ronde 3 van het snoeien loopt** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
 ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
-zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6, de wensen en de groei, wacht op Marcel** (hieronder).
+zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toetsen minder. **Stap 6 is af** (16 okt, op
+de branch `ccr-74384ea2-mxeou7`; Marcel: "Groei op afwisseling, doe maar"; `spel.md`, "De groei van de huizen"): de
+wensen per huis zijn weg, en een huis groeit door als het dorp een maand tevreden is en genoeg soorten eet (een hut 3,
+een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland in het eerste jaar een dorp, met drie
+stenen huizen. **Ronde 3 is af** als stap 6 in `main` staat.
 
 **Wacht op Marcel:**
 - **Ronde 3 van het snoeien bekijken** (15 okt, in `main`): Nieuw spel. Er komt niemand meer
@@ -72,10 +76,13 @@ zijn het rantsoen en de belasting. Zo'n 2900 regels spelcode en 2000 regels toet
   begint zelf in de kou of een vol dorp (`Spel.debug.koorts('nu')`). In bloeimaand staat de meiboom op het plein, en
   vanaf 20 wintermaand de kerstboom met kaarsjes (`Spel.debug.versiering()`). Erbij gedaan, zeg het als het anders
   moet: **een leeg bord telt als één soort** (60% werk), want zonder de tevredenheid werkte een dorp zonder eten op 100%.
-- **De wensen en de groei kiezen** (ronde 3, stap 6; `snoeien.md`): de wensen per huis zijn de motor van de groei (hut,
-  huis, dorp, en zo de planken). Voorstel van Claude: de wensen weg, en de huizen groeien als het dorp een maand genoeg
-  soorten eet en warm is (de trede blijft: twintig mensen in huizen); of bouwen wat je wilt (The Settlers: geen groei,
-  de trede op het aantal inwoners); of de wensen houden (Anno).
+- **De groei op de afwisseling bekijken** (ronde 3, stap 6, 16 okt, op de branch `ccr-74384ea2-mxeou7`): Nieuw spel.
+  Een moestuin, een kippenhok en een jager naast het graan: dan worden de hutten na een maand huizen (voor 8 stammen), en
+  met een vierde soort en een steengroeve stenen huizen. De muis op een huis zegt hoe ver het is ("It grows into a stone
+  house after 30 days in which the village eats 4 kinds of food; now it eats 3"); `Spel.debug.groei()` zegt het voor
+  elk huis. **Wat Claude erbij koos** (zeg het als het anders moet; `snoeien.md`, stap 6): een ladder van soorten (3, 4,
+  5) in plaats van één lat; groeien kost bouwstof; de put en de markt hebben geen koper meer, bier is voor de herberg en
+  laken voor de heer; een stenen huis loopt deftig zonder laken; en de raad over zout voor de winter is weg.
 - **Het gevecht in real time bekijken** (vraag 170, stap 2, 15 okt): Nieuw spel, zet een wachthuis (B) met twee man
   militie (+), en laat rovers komen (`Spel.debug.rovers(3)`). Het bericht zegt waar ze heen gaan en hoe je stuurt: kies
   je soldaten en klik rechts op een rover. Ze lopen erheen en slaan (een levensbalk boven wie vecht, de schade zweeft
@@ -221,9 +228,10 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
    geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
    plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
-3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei: **Bezig in sessie `ccr-74384ea2-mxeou7`** (16 okt; Marcel: "Groei op afwisseling"). Het plan en wat
-   Marcel koos staan in `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk
-   alleen op de afwisseling; van de wetten rantsoen en belasting; de wensen en de groei nog te kiezen.
+3. **Ronde 3, na C:** stap 1 tot 5 af (in `main`); stap 6, de wensen en de groei, af op de branch
+   `ccr-74384ea2-mxeou7` (16 okt; Marcel: "Groei op afwisseling, doe maar"). Het plan en wat Marcel koos staan in
+   `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk alleen op de
+   afwisseling; van de wetten rantsoen en belasting; de huizen groeien op de afwisseling, de wensen per huis zijn weg.
 
 Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk of twintig) wijst naar `code.md` of
 `gereedschap.md`, en `code.md` krimpt mee met de code.

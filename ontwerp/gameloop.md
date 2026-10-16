@@ -95,7 +95,9 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
   A1: elk eten is een eigen soort (graan, brood, vlees, vis, wijn, kaas met de melk, groente, eieren); groente en
   eieren vullen een kleine maag (een moestuin voedt zo'n 5 mensen). B1: het geldt voor al het werk: de werkplaatsen, het
   bouwen en het veldwerk. C1: de tevredenheid op het werk blijft voorlopig, en de twee vermenigvuldigen; ronde 3 beslist
-  over de wensen. (Ronde 3, 15 okt; Marcel: "Alleen de afwisseling": het werk volgt alleen nog de afwisseling.) D1: de kar brengt ook kaas en gezouten vlees voor een paar weken, zodat het dorp op 90% begint en het
+  over de wensen. (Ronde 3, 15 okt; Marcel: "Alleen de afwisseling": het werk volgt alleen nog de afwisseling. En 16 okt:
+  "Groei op afwisseling, doe maar": de wensen per stand zijn weg, en een huis groeit door als het dorp een maand genoeg
+  soorten eet, een hut bij 3, een huis bij 4, een stenen huis bij 5; `spel.md`, "De groei van de huizen".) D1: de kar brengt ook kaas en gezouten vlees voor een paar weken, zodat het dorp op 90% begint en het
   werk zakt als die op zijn: vóór die tijd een jager en een moestuin.
 
 Daarmee gaan om: "geen hand van bovenaf" (30 sep, `concept.md`) en "de mensen bouwen zelf" (3 okt, vraag 103). Ook
@@ -236,8 +238,9 @@ ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van T
 
 ## Open
 
-- Wat er van de rest blijft (de raad, de wensen per stand, de wetten): na de proef, als we weten wat de economie zelf
-  vraagt. De voorvallen, de raadsman en het rapport zijn weg sinds 15 okt (ronde 3 van het snoeien, `snoeien.md`).
+- Wat er van de rest blijft (de raad, de wetten): na de proef, als we weten wat de economie zelf vraagt. De voorvallen,
+  de raadsman en het rapport zijn weg sinds 15 okt, de wensen per stand sinds 16 okt (ronde 3 van het snoeien,
+  `snoeien.md`); de wetten zijn het rantsoen en de belasting.
 
 - Welke loop het wordt (vraag 151: A de schout is maar één mens, B rechtspraak, C de heer als klok, of samen), en hoe
   lang een ronde is: een dag, een seizoen, een jaar, of een spel van een paar uur zoals Against the Storm.

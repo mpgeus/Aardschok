@@ -32,7 +32,7 @@ const zet = (S, soort, klaar = true) => {
 };
 
 // Een huis van deze soort met zoveel bewoners erin, zonder te bouwen of een gezin te laten komen: wie er woont, telt
-// voor de stand van het huis (T.mensenVanStand, js/wensen.js).
+// voor de stand van het huis (T.mensenVanStand, js/treden.js).
 function bewoond(S, soort, n) {
   const g = zet(S, soort);
   for (let i = 0; i < n; i++) S.dorp.bewoners.mensen.push({ naam: `${soort} ${i}`, huis: g });

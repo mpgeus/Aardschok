@@ -1,7 +1,8 @@
 // Papier, een spijker en de tekens bij de deur (ontwerp/werklijst.md, vraag 98 en 100; Marcel, 3 okt: "98 C", de
 // schrijftafel, en "100 ja"): wat je weet, komt op papier. Het papier en de spijker zijn die van de schetsen "De ui als
-// papieren"; de tekens hangen aan de deur van een huis dat iets mist (js/tekenen.js), en staan op het briefje dat de muis
-// op een huis laat zien (js/huisbriefje.js).
+// papieren"; de tekens hingen tot 16 okt aan de deur van een huis dat iets miste (js/tekenen.js, de wensen per huis).
+// Sinds ronde 3 van het snoeien, stap 6, tekent het spel ze niet meer; beelden/tekens.png gaat eruit bij de volgende
+// `npm run pixelart:spel` die dit vel ook weglaat (ontwerp/opmerkingen.md).
 //
 // Drie vellen, uit de kleurrampen van het spel (kern.cjs), zonder 3D-model: ze zijn plat.
 //   beelden/papier.png    48×48, oud perkament met gerafelde randen: negen stukken van 8 voor border-image (stijl.css)
@@ -81,7 +82,8 @@ const KLEUR = {
   t: ['steen', 2], // donkere steen
 };
 
-// Wat een huis mist, in dezelfde namen als T.WENSEN (js/wensen.js), en 'bouwstof' als het op hout of steen wacht.
+// Wat een huis miste, in de namen van de wensen van tot 16 okt (js/wensen.js, in git), en 'bouwstof' als het op hout of
+// steen wachtte.
 const TEKENS = {
   eten: [
     '..w..w..w...',

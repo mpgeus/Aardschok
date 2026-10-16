@@ -39,10 +39,8 @@
     straalPlein: 3,
     straalHeide: 4,
     // Kleren naar stand (vraag 149; T.klerenVan): wie in een hut woont, draagt arme kleren, en wie in een stenen huis of
-    // een woontoren woont, deftige, als zijn huis zijn laken krijgt (lakenVoorDeftig). Alleen beeld. Een optie in de
-    // spelregels ("Kleren").
+    // een woontoren woont, deftige. Alleen beeld. Een optie in de spelregels ("Kleren").
     klerenNaarStand: true,
-    lakenVoorDeftig: true,
   };
   const IN = () => T.BEWONERS_INSTELLINGEN;
   const erfStraal = () => (T.DAG_INSTELLINGEN ? T.DAG_INSTELLINGEN.erfStraal : 2);
@@ -422,19 +420,15 @@
   };
 
   // In welke kleren een bewoner loopt (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren
-  // krijgen"): zijn gezicht is zijn uiterlijk, en zijn kleren zijn die van de stand van zijn huis (T.standVan): 'arm' in
-  // een hut, 'deftig' in een stenen huis of een woontoren als het huis zijn laken krijgt (g.wensen, de laatste dag), en
-  // anders 'gewoon'. Het volgt het huis, dus groeit dat door, of komt het laken, dan heeft hij andere kleren aan; zo zie je
-  // op straat wat er mist. Alleen de volwassenen (de kinderen en de ouden komen later), en aan het werk dragen ze hun
-  // gewone kleren (js/sprites.js). Alleen beeld: niets ervan staat in Spel.S.
+  // krijgen"): zijn gezicht is zijn uiterlijk, en zijn kleren zijn die van de stand van zijn huis (T.standVan, js/treden.js):
+  // 'arm' in een hut, 'deftig' in een stenen huis of een woontoren, en anders 'gewoon'. Het volgt het huis, dus groeit dat
+  // door, dan heeft hij andere kleren aan. (Tot 16 okt liep een stenen huis pas deftig als het zijn laken kreeg, een wens
+  // van zijn stand, js/wensen.js.) Alleen de volwassenen (de kinderen en de ouden komen later), en aan het werk dragen ze
+  // hun gewone kleren (js/sprites.js). Alleen beeld: niets ervan staat in Spel.S.
   T.klerenVan = function (p) {
     if (!IN().klerenNaarStand || !p || p.leeftijd !== 'volwassen' || !p.huis) return 'gewoon';
     const stand = T.standVan(p.huis);
-    if (stand === 'keuters') return 'arm';
-    if (stand !== 'ambachtslieden') return 'gewoon';
-    if (!IN().lakenVoorDeftig) return 'deftig';
-    const w = p.huis.wensen;
-    return w && w.heeft && w.heeft.laken >= 1 - 1e-9 ? 'deftig' : 'gewoon';
+    return stand === 'keuters' ? 'arm' : stand === 'ambachtslieden' ? 'deftig' : 'gewoon';
   };
 
   // Wie een fase verder is (js/leven.js): zijn poppetje krijgt het vel en de snelheid van zijn nieuwe leeftijd.

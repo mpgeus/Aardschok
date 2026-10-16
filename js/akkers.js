@@ -1029,14 +1029,6 @@
     return dagInJaar(g.maand, g.dag);
   }
 
-  // Over hoeveel dagen de oogst binnen is (het stadium 'gemaaid', 1 herfstmaand), vanaf dag `dag`; op die dag zelf een
-  // heel jaar. Voor de waard, die tot dan bier apart houdt voor de huizen (T.bierApart, js/herberg.js).
-  T.dagenTotDeOogst = function (dag) {
-    const d = T.datumVanDag(dag);
-    const n = (stadiumBegin('gemaaid') - dagInJaar(d.maand, d.dagVanMaand) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;
-    return n || T.DAGEN_PER_JAAR;
-  };
-
   // Zaaien de boeren op deze dag na wat niet gezaaid is (T.zaaiNa)? Na 1 lentemaand, tot het graan groen wordt.
   T.isNazaaitijd = function (dag) {
     const d = T.datumVanDag(dag);

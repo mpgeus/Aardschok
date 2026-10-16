@@ -23,7 +23,7 @@
 //     liefst:      'jong',           // wie hij het liefst neemt (T.LEEFTIJDEN, js/bewoners.js): de
 //                                    // schaapskooi een knaap. Ontbreekt hij, dan eerst volwassenen.
 //     woonruimte:  5,                // hoeveel mensen erbij kunnen als hij klaar is
-//     meervoud:    'huizen',         // alleen bij een woning met een stand (js/wensen.js): "vijf hutten willen een put"
+//     meervoud:    'huizen',         // alleen bij een woning: "twee hutten" (de raad, de brief van de heer)
 //     wordt:       'huis',           // waar hij in doorgroeit als zijn bewoners lang genoeg
 //                                    // tevreden zijn (js/behoeften.js, T.tikBehoeftenDag); alleen
 //                                    // bij een huis dat de speler zelf neerzette. Ontbreekt hij,
@@ -167,8 +167,7 @@
     // drank, zoals bier. Mensen dronken geen water", en 12 okt: "ik wil tóch een apart wijnboerderij gebouw", "A gehucht,
     // b ja, c ja"): een gewoon huis met een gezin van boeren, zoals de boerderij, maar voor wijn. Zijn velden zijn
     // wijngaarden, die je erbij legt (`veld: 'wijnboerderij'` bij de wijngaard hieronder; js/boerderij.js, js/wijngaard.js).
-    // De ambachtslieden willen wijn naast hun bier (de wens `wijn` in js/wensen.js; Marcel, 10 okt). Hij maakt niets per
-    // dag: in wijnmaand (`alleenIn`, T.stilOp) plukt het gezin de ranken, en de wijn is er pas als de mand in het huis is
+    // Wijn is eten, en een soort in de maaltijd (vraag 154; js/behoeften.js). Hij maakt niets per dag: in wijnmaand (`alleenIn`, T.stilOp) plukt het gezin de ranken, en de wijn is er pas als de mand in het huis is
     // (`oogst`: wat hij binnenhaalt, T.maaktGoed). De heer wil er wijn voor. `gebouwen/wijnhuis` is de enige tekening.
     wijnboerderij: {
       naam: T.t('vineyard farm'), meervoud: T.t('vineyard farms'), trede: 'gehucht', voet: { b: 5, h: 4 }, kosten: { hout: 18, goud: 8 },
@@ -369,8 +368,8 @@
         + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).', // geen tekst
     },
 
-    // De markt en de weverij komen een trede eerder dan het marktrecht (Marcel, 2 okt, vraag 90, B): de ambachtslieden
-    // willen brood, laken en een markt (js/wensen.js), en zo heeft een huis dat versteent meteen wat het wil.
+    // De markt en de weverij komen een trede eerder dan het marktrecht (Marcel, 2 okt, vraag 90, B). (Tot 16 okt wilden de
+    // ambachtslieden brood, laken en een markt, js/wensen.js, en had een huis dat versteende zo meteen wat het wilde.)
     markt: {
       // kramen op de marktplek van het plein, geen huis (js/markt.js): 8 hout en 6 goud; een eigen gebouw kostte 16 en 14
       naam: T.t('market'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { planken: 8, goud: 6 }, heer: { goud: 10 }, bouwtijd: 4,
@@ -568,7 +567,7 @@
 
   // Waar de plekken van een soort staan, als rechthoeken { x, y, b, h }: wat er op de kaart staat (de put op het plein
   // is een voorwerp uit Tiled, geen gebouw), en de gebouwen van die soort die klaar zijn. Voor de put waar de mensen
-  // water halen (js/bewoners.js) en wat een huis in de buurt wil (js/wensen.js).
+  // water halen (js/bewoners.js) en waar ze een praatje maken (js/praatje.js).
   T.plekkenVan = function (D, soort) {
     const plekken = [];
     for (const v of (D.wereld && D.wereld.voorwerpen) || []) {
@@ -635,7 +634,7 @@
   }
 
   // Of een soort dit goed maakt: elke dag (maakt.uit), of wat hij binnenhaalt (`oogst`: de wijnboerderij plukt wijn).
-  // Voor wie vraagt wie iets maakt (js/wensen.js).
+  // Voor de raad, die zegt wie iets maakt (js/raad.js).
   T.maaktGoed = function (soort, wat) {
     const g = T.GEBOUWEN[soort];
     return !!g && !!((g.maakt && g.maakt.uit && g.maakt.uit[wat]) || g.oogst === wat);
@@ -643,7 +642,7 @@
 
   // Of een soort op deze dag stilligt, en waarom (of null): in een seizoen (`stilIn`: de visser als de beek dichtligt), of
   // buiten zijn maanden (`alleenIn`: de wijnboerderij plukt alleen in wijnmaand). Eén vraag voor het werk, het gereedschap,
-  // de raad en wat de huizen missen. `seizoen` mag apart, voor wie zonder dag wil weten of het in een seizoen stilligt.
+  // de raad. `seizoen` mag apart, voor wie zonder dag wil weten of het in een seizoen stilligt.
   T.stilOp = function (soort, dag, seizoen = seizoenVan(dag)) {
     if (!soort) return null;
     if (soort.stilIn && seizoen && soort.stilIn[seizoen]) return soort.stilIn[seizoen];
@@ -782,7 +781,7 @@
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
   // `kavel` ({ x, y, b, h }, of null): een stuk dat eerst gerooid wordt (js/bos.js; werklijst vraag 110, e). Wat daarop te
   // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
-  // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (T.kanHierKomen).
+  // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (de kolonist van de speeltest).
   T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt') return T.waaromGeenMarktOpHetPlein(D);
@@ -813,23 +812,8 @@
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return T.t('There must be a walkway all round it: {n|one tile|# tiles} clear, with no building or tree.', { n });
-    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h });
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat);
   };
-
-  // Een gebouw waar een gezin woont (een wijnboerderij, of een huis dat jij zet) komt alleen waar dat gezin straks zijn
-  // put en kapel haalt, en niet waar het een ander huis de laatste plek ervoor afneemt (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
-  // speeltest kwam een wijnboerderij ver van het dorp, en wilde haar gezin een jaar lang een kapel die nergens kon komen,
-  // zodat het dorp niet won. In het lege begin niet (Marcel, 12 okt: "b uit"): daar
-  // vond de kolonist op drie van de vijf eilanden na de oogst geen plek meer voor een tweede boerderij, want rond het plein
-  // was geen ruimte meer voor een kapel binnen 40 tegels (werklijst B, 1f; ontwerp/speelbaar.md).
-  function zonderKringPlek(D, soort, r) {
-    const G = T.GEBOUWEN[soort];
-    if (D.begin || !G.woonruimte || !T.standVan({ soort })) return null;
-    return T.waaromGeenKringPlek(D, {
-      grond: r, vast: r, huis: r, wil: (wens) => T.huisWil({ soort }, wens),
-      wie: () => T.t('{gebouw} here', { gebouw: T.hoofdletter(T.eenNaam(G.naam)) }), dit: T.t('{gebouw} here', { gebouw: T.eenNaam(G.naam) }),
-    });
-  }
 
   // Een gebouw komt klaar: het spookbeeld wordt de tekening zelf, en de kramen van de markt staan. De nachtlus doet het
   // (T.tikGebouwenDag, stap 1), en het debugvenster (js/debugvenster.js, werklijst 169) meteen; wat er dan nog volgt (wie
@@ -1051,7 +1035,7 @@
 
   // Mag deze soort hier al gebouwd worden, door wie dan ook? Die van de trede van nu en de treden ervoor (in een dorp
   // ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van neerzetten heeft (menu:
-  // false). Ook voor de raad (js/wensen.js, js/raad.js): wat mag, zegt de raad.
+  // false). Ook voor de raad (js/raad.js): wat mag, zegt de raad.
   T.magGebouwd = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
@@ -1352,15 +1336,15 @@
 
   // Tot hoeveel een gebouw maakt van wat het maakt: { wat: zoveel }, of null als het doormaakt. Wie iets omzet (maakt.in),
   // maakt tot er genoeg ligt (T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot; vraag 91, b); wie iets uit het land haalt,
-  // maakt door. Bier maakt hij tot er genoeg ligt boven wat de waard apart houdt voor de huizen (T.bierApart, js/herberg.js;
-  // vraag 102, b), als je het dorp meegeeft.
+  // maakt door. (Van 3 tot 16 okt maakte hij bier tot er genoeg lag boven wat de waard apart hield voor de huizen; de
+  // wensen zijn weg.)
   T.maaktTot = function (soort, D) {
     const m = soort.maakt;
     if (!m || !m.in || !m.uit) return null;
     // De wapenmaker maakt wat de wachthuizen vragen (js/soldaten.js), niet tot er genoeg ligt.
     if (m.keuze) return D ? T.wapensGevraagd(D) : {};
     const tot = {};
-    for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot + (wat === 'bier' && D ? T.bierApart(D) : 0);
+    for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
     return tot;
   };
 
@@ -1432,7 +1416,7 @@
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken.
-    const alGegeten = T.tikBehoeftenDag(D, dag); // wat de huizen aan brood, vis, vlees en wijn aten, per soort (stap 3)
+    T.tikBehoeftenDag(D, dag);
     // Twee bazen (js/bazen.js): het vertrouwen van het dorp volgt langzaam hoe het gaat.
     T.tikBazenDag(D);
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
@@ -1489,9 +1473,8 @@
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
     // js/behoeften.js). De maaltijd, in gelijke delen van elke soort die er ligt, en daaruit de afwisseling; het
-    // zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js; vraag 154). Wat de huizen al aten aan brood, vis, vlees en
-    // wijn van hun wensen, eet het dorp minder (vraag 92, a).
-    const gegeten = T.eetVandaag(D, dag, alGegeten);
+    // zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js; vraag 154).
+    const gegeten = T.eetVandaag(D, dag);
     T.tikWijngaardDag(D, dag); // de wijn die nog in de manden zat, en of het gezin morgen plukt (js/wijngaard.js)
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
     // (T.boerenKiezenVelden, js/akkers.js; vraag 132).
@@ -1534,7 +1517,7 @@
       g.uren = null;
       if (!g.klaar) continue;
       // Wie niets per dag maakt, maar in zijn maanden oogst (de wijnboerderij, `alleenIn`), ligt daarbuiten stil; dan zegt
-      // de raad dat (T.watDeHuizenMissen), en niet dat hij te weinig maakt.
+      // het briefje dat, en niet dat hij te weinig maakt.
       if (!soort.maakt) {
         if (soort.alleenIn) g.stilWant = T.stilOp(soort, dag, seizoen);
         continue;

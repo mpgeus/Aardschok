@@ -386,21 +386,6 @@ test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn ho
   assert.ok(gezegd.some((t) => /gerooid|cleared/.test(t)), 'het dorp zegt dat de plek vrij is');
 });
 
-// "Wijn haalt kapel" (T.waaromGeenKringPlek, js/wensen.js; vraag 136) geldt in het lege begin niet (Marcel, 12 okt: "b
-// uit"): de kolonist vond op drie van de vijf eilanden na de oogst geen plek meer voor een tweede boerderij, omdat er rond
-// het plein geen ruimte meer was voor een kapel binnen 40 tegels. Hier zegt de regel overal nee.
-test('in het lege begin mag een woning ook waar ze later geen kapel haalt ("b uit")', () => {
-  const { D } = leegBegin();
-  const echt = T.waaromGeenKringPlek;
-  T.waaromGeenKringPlek = () => 'geen kapel';
-  try {
-    assert.ok(T.plekVoor(D, 'hut', D.wereld.kamp.vuur), 'een hut vindt een plek');
-    assert.ok(T.plekVoor(D, 'boerderij', D.wereld.kamp.vuur), 'een boerderij ook');
-  } finally {
-    T.waaromGeenKringPlek = echt;
-  }
-});
-
 test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
   // Allebei met dezelfde reeks toeval (welke tekening de hut krijgt, wie er bouwt): sinds het bouwbereik 16 tegels is (12
   // okt), valt de eerste plek in het bos waar dat verschil maakt, en was deze toets zonder zaad de helft van de keren rood.

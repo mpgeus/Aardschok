@@ -62,10 +62,21 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   kon al als de boerderij in het bos stond; nu gebeurt het vaker. Niet erg, maar te zien.
 - **Een nieuwe bouwplaats krijgt pas de volgende ochtend bouwers** (14 okt, C stap 2; dat was al zo): wie bouwt, kiest
   het dorp 's ochtends. Met de kar valt het meer op: hij brengt het hout nog dezelfde dag, en dan staat het een dag.
-- **Vis en vlees voor de winter rekent de maaltijd niet mee** (13 okt, B3): `T.visEnVleesVoorDeWinter` (de raad: "buy
-  salt from the merchant") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
-  het dorp er sinds vraag 154 ook van eet. Dan ligt er in de winter minder dan hij zegt. De wijn na de pluk rekent het
-  wel mee (`T.maaltijdDeel`). Na te lopen als ronde 3 van het snoeien over de wensen beslist.
+- **Zout voor de winter zegt de raad niet meer** (16 okt, ronde 3, stap 6): de raad over vis en vlees voor de winter
+  (vraag 132, B: "buy salt from the merchant") rekende met wat de huizen voor hun wens vlees of vis aten, en ging met de
+  wensen weg. Vis en vlees bederven nog zonder zout, en tellen in de afwisseling: raakt de vis in de winter op, dan eet
+  het dorp een soort minder, werkt het trager en groeien de huizen niet. Kan terugkomen op de maaltijd
+  (`T.maaltijdDeel`), als Marcel dat wil.
+- **De raad zegt niet dat een huis op meer soorten eten wacht** (16 okt, ronde 3, stap 6): de raad over de afwisseling
+  spreekt tot twee soorten (`afwisselingTot`); met drie groeien de hutten, maar een huis vraagt er vier. Het briefje bij
+  een huis zegt het wel ("now it eats 3"). Misschien de raad ook, als een speeltest laat zien dat de speler het mist.
+- **Het teken bij de deur is nog getekend** (16 okt, ronde 3, stap 6): `beelden/tekens.png` en zijn ingang in
+  `beelden/beschrijving.js` komen van `gereedschap/pixelart/papieren.cjs`, maar het spel tekent ze niet meer. Ze gaan eruit
+  bij de volgende `npm run pixelart:spel` waarin `tekens()` in `naar-spel.cjs` is weggelaten (het papier en de spijker
+  blijven: die zijn van het briefje).
+- **Put, kapel en markt hebben minder te doen** (16 okt, ronde 3, stap 6): de put en de markt waren een wens van een
+  stand; de put is nu alleen waar de mensen water halen en praten, de markt alleen zijn kramen. De kapel telt nog in de
+  tevredenheid (20%). Laken gaat naar de heer en de marskramer, bier naar de herberg.
 - **Een moestuin en een kippenhok werken ook trager** (13 okt, B3): ze hebben geen handen, maar wat ze maken, gaat naar
   de tevredenheid en de afwisseling, zoals elke werkplaats (`js/gebouwen.js`, stap 6). Wie eentonig eet, krijgt dus ook
   minder groente; een kleine lus terug. Zo was het al met de tevredenheid.

@@ -153,6 +153,16 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 16 okt: de huizen groeien op de afwisseling (ronde 3 van het snoeien, stap 6)
+
+Op de branch `ccr-74384ea2-mxeou7` (vanaf `0db846dc`, met stap 6 erin), de kolonist op eiland 1, 2 en 3: alle drie het
+jaar uit, zonder fouten in de console. Op elk eiland zijn de drie hutten in mei of juni huizen (de kolonist eet vanaf
+april vier soorten: graan, groente, eieren en vlees), en die worden tussen augustus en november stenen huizen, zodra
+er een steengroeve staat; in de tussentijd zegt de raad "Three houses can become a stone house, but the stores do not
+hold 12 stone: build a quarry [B]". Elk dorp groeit van 17 naar 33 mensen en wordt een dorp (op dag 240, 280 en 300); op
+15 okt groeide het nog niet (hieronder). Voor de balans (later): vier soorten is voor de kolonist makkelijk, dus een
+stenen huis komt al in het eerste jaar; de lat staat in de werkbank (`groeiSoorten`, "Needs and the winter").
+
 ## De speeltest van 15 okt, avond: de wereld in vaste tikken (vraag 170, stap 0)
 
 Op de branch `claude/sleepy-fermat-wrxjuc` (vanaf `9ee639b4`, met de opdrachten erbij), de kolonist op eiland 1, 2 en 3:

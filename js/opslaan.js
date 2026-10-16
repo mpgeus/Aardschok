@@ -60,7 +60,9 @@
     // 14 (15 okt): ronde 3 van het snoeien (ontwerp/snoeien.md): de voorvallen, de raadsman, het rapport en de feesten
     // zijn weg, en de brand, de koorts en het zaaigraan zijn geen voorval meer. Een voorval of een feest van daarvoor zou
     // blijven wachten, een brand op je antwoord, en wachters bij de graanschuur (p.wacht) bleven er staan.
-    versie: 14,
+    // 15 (16 okt): ronde 3, stap 6: de wensen per huis zijn weg (g.wensen, g.missenDagen, D.behoeften.standen), en een huis
+    // groeit op de afwisseling; het jaarboek telt wat het dorp miste in zinnen, niet in wensen.
+    versie: 15,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

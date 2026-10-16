@@ -184,9 +184,9 @@ er een eind aan.
 het gevaar onderweg, wie hem onderschept en hoe het afloopt, en wat hij op bestelling bij zich heeft; `('stuur', { graan:
 3 }, 2)` stuurt hem nu (met twee mannen erbij), `('rovers')` of `('heer')` laat wie onderweg is onderscheppen, `('nu')`
 laat ze nu aankomen, `('open')` opent de brief.
-`Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
-hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
-gemist wordt; `('dorpelingen')` laat alleen die stand zien.
+`Spel.debug.groei()` zegt hoe tevreden het dorp is en wat het at, en per huis met mensen wie er woont en hoe het met
+doorgroeien staat: hoeveel dagen van de dertig, hoeveel soorten eten het vraagt, wat het gezin rooit, of waarom het niet
+groeit (tot 16 okt was dit `Spel.debug.wensen()`, met de wensen per huis).
 `Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
 schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
 schout op het hoogste punt.

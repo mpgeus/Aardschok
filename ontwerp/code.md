@@ -209,20 +209,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.stilOp`: in een seizoen, `stilIn`, of buiten zijn maanden, `alleenIn`, zoals de wijnboerderij, die alleen in wijnmaand
   plukt (vraag 136 en 155: een gewoon huis van 5 bij 4 met een gezin van boeren, vanaf het gehucht, met wijngaarden als
   velden ernaast; `veld` bij de akker en de wijngaard zegt bij welke boerderij hij hoort; de dorpelingen willen bier, de
-  ambachtslieden er wijn bij, de wens `wijn`, en de heer wil er wijn voor)), `js/behoeften.js` (tevredenheid uit eten, brandhout
-  en wat elk huis wil, `js/wensen.js`; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
+  wijn is eten, en de heer wil er wijn voor)), `js/behoeften.js` (de tevredenheid van het dorp uit eten, brandhout en een
+  kapel, met wat de herberg, de wetten en de heer erbij of eraf doen; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
   `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; vanaf 90 dagen ervoor kijkt het dorp
   ernaar, `T.winterInZicht`, voor de raad en de groei: haalt het hem niet, dan komt er geen gezin,
   `T.watDeWinterNietHaalt`, de spelregel "Groei"; het hout dat de mensen elke dag
   sprokkelen, `T.sprokkelHout`, zo'n 40% van wat de winter vraagt, zodat een houthakker nodig blijft; een huis dat
-  doorgroeit; zout dat vis en vlees goed houdt; vis en vlees vullen ook een maag, de spelregels "Vlees" en "Vis"; **de
+  doorgroeit op de afwisseling (hieronder, bij `js/huisbriefje.js`); zout dat vis en vlees goed houdt; vis en vlees vullen ook een maag, de spelregels "Vlees" en "Vis"; **de
   maaltijd en de afwisseling**, vraag 154: `T.eetVandaag` eet in gelijke delen van elke soort in `T.SOORTEN_ETEN` die er
   ligt, binnen een soort eerst wat bederft, het zaaigraan pas bij nood, en zet in `D.behoeften.afwisseling` de soorten die
-  minstens `afwisselingDeel` van de maaltijd waren, met wat de huizen voor hun wensen aten erbij (`T.gebruikGoederen` in
-  `js/wensen.js` geeft dat per soort); `T.werkVanAfwisseling` maakt er het werk van, en dat geldt voor de werkplaatsen
+  minstens `afwisselingDeel` van de maaltijd waren; `T.werkVanAfwisseling` maakt er het werk van, en de groei van de huizen
+  vraagt er genoeg van, en dat geldt voor de werkplaatsen
   (`js/gebouwen.js` stap 6; tot 15 okt maal de tevredenheid), de bouwers (`werkdagenVan` in `js/bouwen.js`) en de duur van het
-  veldwerk (`werkUur` in `js/veldwerk.js`, `begin` in `js/akkers.js`); `T.voedtAlsGraan` zegt wat een stuk vult, ook
-  voor de huizen, `T.etenNaastGraan` wat de andere soorten voeden, en `T.maaltijdDeel` wat het dorp per dag van één soort
+  veldwerk (`werkUur` in `js/veldwerk.js`, `begin` in `js/akkers.js`); `T.voedtAlsGraan` zegt wat een stuk vult,
+  `T.etenNaastGraan` wat de andere soorten voeden, en `T.maaltijdDeel` wat het dorp per dag van één soort
   eet, voor de wijn na de pluk; de status `eentonig` staat in `js/statussen.js`, en wat een soort erbij brengt,
   `T.watHelptAanAfwisseling`, in `js/raad.js`),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
@@ -666,7 +666,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
   de kant van de deur (`T.deurKantVan`, `T.metDeurNaar`), want een stand is in het spel die van de mensen (`T.STANDEN`,
-  `T.standVan` in `js/wensen.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
+  `T.standVan` in `js/treden.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
   pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
   `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
   (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
@@ -887,8 +887,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kaart (geen `T.zetOpDeKaart`).
 - **Waar een gebouw komt** (tot ronde 2 van het snoeien, 12 okt, in `js/verzoeken.js`): `T.plekVoor(D, soort, bij)` geeft
   de plek zo dicht mogelijk bij `bij` waar het past, op open grond of anders waar het minst te rooien is (`rooien`: de
-  kavel; `T.plaatsGebouw` neemt in het lege begin zelf de kavel, `T.bouwKavel`); een plek met een kring (een put, een kapel) waar hij de meeste huizen bereikt die er nog
-  geen hebben. `T.kanHierKomen` vraagt het voor één plek (de kringen van `js/wensen.js`). De kolonist van de speeltest
+  kavel; `T.plaatsGebouw` neemt in het lege begin zelf de kavel, `T.bouwKavel`). (Tot 16 okt kwam een put of een kapel
+  waar hij de meeste huizen bereikte die er een wilden: de kringen van de wensen per huis.) De kolonist van de speeltest
   zoekt zo zijn plek.
 
 ### js/boerderij.js: boeren uit het niets
@@ -949,7 +949,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
   standen, vraag 90): zoals in Anno 1602 wordt het gehucht een dorp bij 20 dorpelingen (wie in een huis of een stenen
-  huis woont, `T.mensenVanStand` in `js/wensen.js`), en krijgt het marktrecht bij 20 ambachtslieden
+  huis woont, `T.mensenVanStand`), en krijgt het marktrecht bij 20 ambachtslieden
   (`T.TREDEN_INSTELLINGEN`, in de werkbank; de eis van de proef van 28 sep, 50 mensen met een kapel en een smidse, was tot
   11 okt een spelregel "Treden" en is weggehaald, snoeironde vraag 153; het eisformaat kan het nog). De volgorde van de treden is `T.GEBOUW_TREDEN` (`js/gebouwen.js`). `T.tredeDoel` geeft het doel voor
   het vak linksboven (js/main.js, als er geen quest is), `T.tredeMensenNodig` hoeveel mensen het nog vraagt (voor de
@@ -959,42 +959,35 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.tredeNaam`. Hoe je dorp heet (`D.dorpsnaam`, `T.dorpsnaam`, `T.zetDorpsnaam`), kies je bij Nieuw spel
   (js/menu.js), met een voorstel uit `T.DORPSNAMEN` (vraag 60).
 
-### js/wensen.js en js/huisbriefje.js: de wensen per stand
+### De groei van de huizen, de standen, en js/huisbriefje.js
 
-- **Het Engels** (vraag 147): `T.WENSEN[x].naam` en `T.STANDEN[x].naam` zijn Engelse zinnen met hun lidwoord waar de naam er een
-  nodig heeft ("a well", "bread"), en `D.behoeften.mist` (js/behoeften.js) bevat die zinnen zelf: de balk (`js/balk.js`) toont ze,
-  en `js/statussen.js` vergelijkt ermee ("firewood for the winter"). `T.raaktOp(wat, ...)` neemt de naam met lidwoord ("the
-  wood", "the hay"). De zinnen met een stuk dat eraan hangt, zijn vol: `{waarom}, and {hulp}`; de toets staat als [B] in de zin.
-
-- `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno
-  1602): elk huis met mensen heeft een stand naar zijn soort (`T.standVan`: een hut keuters, een huis dorpelingen, een
-  stenen huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en elke stand wil wat de
-  stand eronder wil, en meer (`T.STANDEN`, `T.WENSEN`, `T.wensenVanStand`): goederen uit de voorraad (bier, vlees of
-  vis, brood, laken; **de hoogste stand neemt eerst**) en plekken in een kring om het huis (`T.inDeKring`; een put,
-  een kapel; de herberg en een markt zijn één voor het hele dorp, zonder kring, de spelregel "De herberg en de markt";
-  waar ze staan, zegt `T.plekkenVan` in `js/gebouwen.js`). `T.berekenWensen` geeft
-  per huis wat het heeft en zijn tevredenheid (eten, brandhout en de rest, met wat het dorp erbij doet), en
-  `T.berekenTevredenheid` (`js/behoeften.js`) maakt er het gemiddelde van, naar mensen; de huizen nemen hun goederen
-  vóór het eten (`T.gebruikGoederen`), en wat eten is (brood, vis, vlees: `T.voedtAlsGraan`), eet het dorp dan minder
-  aan graan (vraag 92); brood weegt minder in hoe blij een huis is (`blijheid`). Wat een huis wil en heeft, staat op het
-  huis (`g.wensen`); wat een huis laat zien (2c, vraag 100), zegt `T.huisToestand` (het briefje bij de muis,
-  `js/huisbriefje.js`, in de stijl van de schrijftafel, vraag 98, C) en `T.tekenVanHuis` (het teken bij zijn deur,
-  `js/tekenen.js`). Waar nog een put of kapel kan komen, op open grond of na het rooien, zegt `T.kringGrond` (met
-  `T.kanHierKomen` in `js/bouwen.js`), één keer per stand van het dorp; een gebouw met een gezin komt niet waar het een
-  ander huis de laatste plek ervoor afneemt (`T.waaromGeenKringPlek`; vraag 117, 2d, en 136). **Wat de huizen
-  missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad en de bouwer van de speeltest vragen
-  het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen, met de ketens (vraag 90, D: wat
-  een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een
-  kapel, de herberg of een markt in de hand zie je de kring (`js/tekenen.js`) en zegt de muis wie hij bereikt
-  (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
-  groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), en het rijst op in de laatste
-  bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
-  Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
+- **Het Engels** (vraag 147): `T.STANDEN[x].naam` is een Engels woord ("villagers"), en `D.behoeften.mist`
+  (js/behoeften.js) bevat Engelse zinnen met hun lidwoord ("a church", "firewood for the winter"): de balk (`js/balk.js`)
+  toont ze, `js/statussen.js` vergelijkt ermee, en het jaarboek telt ze (`js/einde.js`). `T.raaktOp(wat, ...)` neemt de naam
+  met lidwoord ("the wood", "the hay"). De zinnen met een stuk dat eraan hangt, zijn vol; de toets staat als [B] in de zin.
+- **Doorgroeien** (`pasHuisGroeiToe` in `js/behoeften.js`; ronde 3 van het snoeien, stap 6, 16 okt): een huis waar iemand
+  woont, telt een dag (`g.groeiDagen`) als het dorp tevreden genoeg is (`huisGroeiDrempel`: eten, warmte in de winter) en
+  gisteren genoeg soorten at voor wat het huis wordt (`groeiSoorten`, `T.groeiSoortenVoor`: een hut 3, een huis 4, een
+  stenen huis 5; `D.behoeften.afwisseling`); anders begint het opnieuw. Na `huisGroeiDagen` groeit het door als de
+  bouwstof er is (`groeiBouwstof`, `T.groeiKosten`: een huis hout, een stenen huis en een woontoren steen; zonder wacht het,
+  `g.wachtOpBouwstof`, en zegt het dorp het één keer), een woontoren pas met marktrecht (`wordtVanaf`). Het rijst op in de
+  laatste bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag
+  114). Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
   `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
-  vraag 130; de raad die het zei, hoorde bij het winnen en is op 11 okt weggehaald). Achteruitgaan is zacht (een
-  gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
-  betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
-  getallen in `T.WENSEN_INSTELLINGEN`.
+  vraag 130). De herberg groeit mee met het dorp (`laatMeegroeien`, voor planken). Een gezin trekt weg als het hele dorp
+  onder de vertrekdrempel zakt (`pasVertrekToe`).
+- **De standen** (`T.STANDEN`, `T.standVan`, `T.standOnder`, `T.mensenVanStand`, `T.mensenPerHuis` in `js/treden.js`): wie
+  waar woont (een hut keuters, een huis dorpelingen, een stenen huis of woontoren ambachtslieden, een boerderij boeren;
+  het huis van de schout geen). Ze tellen voor de treden, de belasting (`T.belastbaar` en `belastingNaarStand` in
+  `js/wetten.js`: wie hoger woont, betaalt meer), de kleren (`T.klerenVan`, `js/bewoners.js`) en wat er kan branden
+  (`js/brand.js`).
+- `js/huisbriefje.js`: **het briefje bij een huis** (2c, vraag 100; in de stijl van de schrijftafel, vraag 98, C): staat
+  de muis op een huis met mensen, dan zegt het wie er woont, zijn stand, en hoe ver het is met doorgroeien, uit
+  `T.huisToestand` (`js/behoeften.js`). `Spel.debug.groei()` zegt hetzelfde voor elk huis.
+- **Tot 16 okt** (`js/wensen.js`, in git): elk huis had een stand die iets wilde (goederen als bier, vlees of vis, brood,
+  laken en wijn, de hoogste stand eerst, en plekken in een kring: een put, een kapel, de herberg, een markt), zijn eigen
+  tevredenheid, en groeide door als het een maand alles had; de raad zei wat de huizen misten, een teken hing bij de deur,
+  en de kring stond op de kaart. Dat ging eruit met de keuze voor de afwisseling (`ontwerp/snoeien.md`, ronde 3).
 
 ### js/gebouwbriefje.js: het briefje van een gebouw
 
@@ -1064,8 +1057,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
   en wie er was, maakt het dorp tevredener), en de lantaarn 's avonds (`T.herbergLicht`). Het brouwen is
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`), tot er genoeg ligt, zoals elke werkplaats die iets omzet
-  (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b), boven het bier dat ze apart houdt voor de huizen tot de oogst
-  (`T.bierApart`, `T.dagenTotDeOogst` in `js/akkers.js`; vraag 102, b): de gasten drinken wat erboven ligt. De mensen
+  (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b), en de gasten drinken wat er ligt (van 3 tot 16 okt hield ze bier apart
+  voor de huizen die het wilden, vraag 102, b; de wensen zijn weg). De mensen
   bouwen hem zelf, en wie er werkt, is de waard (sinds ronde 2 van het snoeien, stap 6; tot dan woonde de herbergierster
   erin): hij staat 's avonds achter de tap (`T.herbergAnker`), en met hem
   praat je over wie er zat (het gesprek `waard`, `js/verkennen.js`). De marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
@@ -1232,8 +1225,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ging het alleen met een akker op de kaart: een dorp met alleen een wijnboerderij plukte nooit; gevonden in de browser).
   **Het dorp kijkt vooruit** (`T.wijnNaDePluk`, met `T.haaltDeWinter`): haalt wat er bij de pluk nog ligt plus de pluk het
   jaar niet (de ranken die nog hangen en die van een wijngaard in aanleg, min wat de heer wil)? Is er dan een
-  wijnboerderij, dan zegt de raad dat er een wijngaard bij moet (`wijn` in `T.RADEN`, `js/raad.js`); is er geen, dan zeggen
-  de wensen dat er een wijnboerderij bij moet (`js/wensen.js`). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
+  wijnboerderij, dan zegt de raad dat er een wijngaard bij moet (`wijn` in `T.RADEN`, `js/raad.js`); is er geen, dan noemt
+  de afwisseling haar (`T.watHelptAanAfwisseling`). Wat het dorp ervan eet, is zijn deel van de maaltijd (`T.maaltijdDeel`;
+  tot 16 okt dronken de ambachtslieden er ook van, een wens). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
 
 ## Voorraad en handel
 
@@ -1388,17 +1382,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   herschreven): één regel onder het doel linksboven die zegt wat nu tussen jou en een dorp staat, met de toets erbij
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
-  aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
+  aan de winter, welke huizen op bouwstof wachten om door te groeien (`T.bouwstofRaad`, met wie het maakt, `T.maaktGoed`,
+  vóór het doel; tot 16 okt ook wat de huizen wilden, de wensen), en wat je mist voor
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Is er een wijnboerderij en haalt de wijn
   het jaar na de pluk niet (`T.wijnNaDePluk`, `js/wijngaard.js`), dan zegt hij dat er een wijngaard bij moet (`wijn`: na de
-  wensen, voor het doel; vraag 155). Na de laatste trede is er geen doel
+  huizen, voor het doel; vraag 155). Na de laatste trede is er geen doel
   meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer. Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
   133, b: een visser per dertig mensen, een jager als er herten zijn, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
-  (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
-  winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 132,
-  B): hoeveel zout er bij moet (de marskramer heeft er in de herfst het meest), en een visser of jager als er dan te
-  weinig ligt. Wie eet, eet eerst wat ongezouten is. Uit te zetten in de spelregels ("Raad").
+  (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). (Tot 16 okt zei hij vanaf de herfst ook of
+  vis en vlees de winter haalden voor de huizen die ze wilden, met het zout erbij, vraag 132, B; dat ging met de wensen
+  weg, `ontwerp/opmerkingen.md`.) Uit te zetten in de spelregels ("Raad").
 
 ### js/debugvenster.js: het debugvenster
 

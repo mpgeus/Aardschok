@@ -1073,10 +1073,6 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 }
 #huisbriefje .briefje-kop { font: 26px/1 var(--kop); }
 #huisbriefje .briefje-stand { font-style: italic; color: var(--papier-grijs); font-size: 15px; }
-#huisbriefje .briefje-wensen { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px 12px; margin: 2px 0; }
-#huisbriefje .ja { color: var(--papier-groen); }
-#huisbriefje .nee { color: var(--papier-rood); }
-#huisbriefje .briefje-helpt,
 #huisbriefje .briefje-groei { font-size: 15px; border-top: 1px dotted var(--papier-lijn); padding-top: 4px; }
 #huisbriefje .briefje-groei { font-style: italic; color: var(--papier-grijs); }
 #huisbriefje kbd { color: var(--papier-inkt); border-color: var(--papier-inkt); background: none; }

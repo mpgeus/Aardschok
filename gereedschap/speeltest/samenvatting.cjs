@@ -176,8 +176,8 @@ function deOssenkar(goed) {
 const somVan = (o) => Object.values(o || {}).reduce((n, x) => n + x, 0);
 
 // Het graanboek (vraag 94, d): per jaar waar het graan bleef (de luisteraar op T.wijzigVoorraad in speler.js; erbij is +,
-// eraf is −), en wat dat deed: hoeveel dagen er geen bier of brood was, hoeveel huizen gemiddeld alles hadden, en op
-// hoeveel dagen allemaal. Het tweede jaar is alleen de eerste maand, tot 1 grasmaand. Daaronder de druk om eten (vraag 95):
+// eraf is −), en wat dat deed: hoeveel dagen er geen bier of brood was, hoeveel soorten het dorp gemiddeld at, en welk
+// deel van de huizen die door kunnen groeien, gemiddeld groeide. Het tweede jaar is alleen de eerste maand, tot 1 grasmaand. Daaronder de druk om eten (vraag 95):
 // op hoeveel dagen er honger was, het eten de winter niet haalde, en er geen graan lag boven het zaaigraan, en hoeveel
 // jagers er dat jaar kwamen.
 function hetGraanboek(goed) {
@@ -187,7 +187,7 @@ function hetGraanboek(goed) {
   const samen = (b, ...namen) => namen.reduce((n, k) => n + (b[k] || 0), 0);
   const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten'];
   const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
-  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers en soldaten', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'dagen zonder laken', 'huizen met alles', 'dagen alle huizen alles'];
+  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers en soldaten', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'soorten eten', 'huizen die groeien'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of met) {
     u.graan.forEach((jaar, j) => {
@@ -199,12 +199,12 @@ function hetGraanboek(goed) {
         teken(b.oogst), teken(b.gegeten), teken(b.zaaien), teken(b.heer), teken(b.herberg), teken(b.molen), teken(b.brouwerij),
         teken(samen(b, 'gekocht', 'verkocht')), teken(samen(b, 'rovers', 'soldaten')),
         teken(anders),
-        g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '', g.dagen && g.zonderLaken != null ? String(g.zonderLaken) : '',
-        g.dagen ? pct(g.alles / g.dagen) : '', g.dagen ? `${g.allemaal} van ${g.dagen}` : '',
+        g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '',
+        g.dagen && g.soorten != null ? (g.soorten / g.dagen).toFixed(1).replace('.', ',') : '', g.dagen && g.groei != null ? pct(g.groei / g.dagen) : '',
       ]));
     });
   }
-  uit.push('', ...met.map((u) => `- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: alle huizen hadden alles hooguit ${u.reeks ? u.reeks.langste : 0} dagen achter elkaar.`), '');
+  uit.push('');
   uit.push('### De druk om eten', '', 'Per jaar op hoeveel dagen (vraag 95: "er moet altijd druk zijn om voldoende eten").', '');
   const kop2 = ['speler', 'zaad', 'jaar', 'honger', 'het eten haalt de winter niet', 'geen graan boven het zaaigraan', 'jagers erbij'];
   uit.push(regel(kop2), regel(kop2.map(() => '---')));

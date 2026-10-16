@@ -2,8 +2,9 @@
 // vraag 51 en 53, Marcel, 28 en 29 sep; sinds 2 okt uit de standen, vraag 90: "a ja b ja c ja d ja"; ontwerp/spel.md,
 // "Van dorp tot stad").
 //
-// Zoals in Anno 1602 komt een trede met de mensen van een stand (js/wensen.js): het gehucht wordt een dorp bij 20
-// dorpelingen, en het dorp krijgt marktrecht bij 20 ambachtslieden. (De eis van de proef van 28 sep, een dorp bij 50
+// Zoals in Anno 1602 komt een trede met de mensen van een stand (T.STANDEN hieronder: wie in een huis woont, is dorpeling,
+// en in een stenen huis ambachtsman): het gehucht wordt een dorp bij 20 dorpelingen, en het dorp krijgt marktrecht bij 20
+// ambachtslieden. (De eis van de proef van 28 sep, een dorp bij 50
 // mensen met een kapel en een smidse klaar, was tot 11 okt een spelregel "Treden"; die is weggehaald, snoeironde vraag
 // 153.) Het doel staat vanaf het begin linksboven (T.tredeDoel;
 // js/main.js zet het in het vak als er geen quest is), en de heer noemt het in zijn benoemingsbrief. Is het zover
@@ -17,7 +18,7 @@
 
   T.TREDEN_INSTELLINGEN = {
     // Wanneer een trede komt (Marcel, 2 okt, vraag 90, A): zoveel mensen van een stand, of van een stand erboven
-    // (T.mensenVanStand, js/wensen.js: wie in een huis woont, is dorpeling, en in een stenen huis ambachtsman), en
+    // (T.mensenVanStand hieronder: wie in een huis woont, is dorpeling, en in een stenen huis ambachtsman), en
     // deze gebouwen klaar. Zonder stand telt iedereen: zo was het in de proef van 28 sep (vraag 51), een dorp bij 50
     // mensen met een kapel en een smidse.
     dorp: { stand: 'dorpelingen', mensen: 20, gebouwen: [] },
@@ -27,6 +28,53 @@
     hoofdgeldInDorp: 1,
   };
   const IN = () => T.TREDEN_INSTELLINGEN;
+
+  // De standen, van laag naar hoog (Anno 1602; werklijst vraag 79 en 85): wie waar woont. `huis` is de soort uit
+  // T.GEBOUWEN waar hij woont, `ook` de soorten die er ook bij horen. De boeren staan ernaast (`los`): hun boerderij groeit
+  // niet. Een stand telt voor de treden (hierboven), de belasting (T.belastbaar, js/wetten.js), de kleren
+  // (T.klerenVan, js/bewoners.js) en wat er kan branden (js/brand.js). Tot 16 okt wilde elke stand ook iets (js/wensen.js,
+  // de wensen per huis: een put, bier, een kapel, laken, een markt); dat is weg (ronde 3 van het snoeien, stap 6).
+  T.STANDEN = {
+    keuters: { naam: T.t('cottars'), huis: 'hut' },
+    dorpelingen: { naam: T.t('villagers'), huis: 'huis' },
+    ambachtslieden: { naam: T.t('craftsmen'), huis: 'stenenHuis', ook: ['woontoren'] },
+    boeren: { naam: T.t('farmers'), huis: 'boerderij', ook: ['wijnboerderij'], los: true },
+  };
+  const ladder = () => Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los);
+
+  // De stand van een gebouw, of null: het huis van de schout heeft er geen (dat is van jou), en een werkplaats ook niet.
+  T.standVan = function (g) {
+    if (!g || g.huis === 'schout') return null;
+    for (const s of Object.keys(T.STANDEN)) if (T.STANDEN[s].huis === g.soort || (T.STANDEN[s].ook || []).includes(g.soort)) return s;
+    return null;
+  };
+
+  // De stand onder deze op de ladder (de keuters onder de dorpelingen), of null: de onderste, en de boeren, die ernaast
+  // staan.
+  T.standOnder = function (stand) {
+    const i = ladder().indexOf(stand);
+    return i > 0 ? ladder()[i - 1] : null;
+  };
+
+  // Hoeveel mensen er in elk huis wonen: de bewoners met dat huis (js/bewoners.js). Wie op de heervaart is, telt mee: zijn
+  // huis wacht op hem.
+  T.mensenPerHuis = function (D) {
+    const tel = new Map();
+    for (const p of (D.bewoners && D.bewoners.mensen) || []) if (p.huis) tel.set(p.huis, (tel.get(p.huis) || 0) + 1);
+    return tel;
+  };
+
+  // Hoeveel mensen er nu minstens deze stand hebben: wie in een huis van die stand woont, of van een stand erboven (de
+  // boeren staan ernaast en tellen alleen voor zichzelf). Voor de treden (Marcel, 2 okt, vraag 90, A): een dorp bij 20
+  // dorpelingen. Een huis dat versteent, blijft meetellen: anders werd een gehucht waar de huizen te vroeg versteenden,
+  // nooit een dorp.
+  T.mensenVanStand = function (D, stand) {
+    const vanaf = ladder().indexOf(stand);
+    const telt = (s) => (vanaf < 0 ? s === stand : ladder().indexOf(s) >= vanaf);
+    let n = 0;
+    for (const [g, m] of T.mensenPerHuis(D)) if (telt(T.standVan(g))) n += m;
+    return n;
+  };
 
 
   // Is hier een trede te halen? Alleen in het gehucht zelf: een wereld met een plein (waar de heer komt). Een
@@ -54,6 +102,8 @@
     stad: { doel: T.t('a town'), is: T.t('the town') },
   };
   T.tredeNaam = (D) => NAMEN[D.trede || 'gehucht'].is;
+  // Hoe een trede heet als doel ("a market town"): voor het briefje bij een huis dat pas daar doorgroeit (js/huisbriefje.js).
+  T.tredeDoelNaam = (trede) => NAMEN[trede].doel;
 
   // Hoeveel mensen de eis telt, en hoe ze heten: { n, wie }. Met een stand wie die stand heeft of een erboven, zonder
   // iedereen.
@@ -128,7 +178,7 @@
   T.hoofdgeldFactor = (D) => (T.tredeMinstens(D, 'dorp') ? IN().hoofdgeldInDorp : 1);
 
   // Wat de heer in zijn benoemingsbrief vraagt (js/brieven.js): "twenty souls in houses, not in huts" (de huizen van de
-  // stand, en die van de stand eronder; T.STANDEN in js/wensen.js), of met de oude eis "a chapel, a smithy and fifty
+  // stand, en die van de stand eronder; T.STANDEN hierboven), of met de oude eis "a chapel, a smithy and fifty
   // souls".
   const TIENTALLEN = {
     20: T.t('twenty'), 30: T.t('thirty'), 40: T.t('forty'), 50: T.t('fifty'), 60: T.t('sixty'), 70: T.t('seventy'),

@@ -20,9 +20,8 @@ function gehucht() {
 
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;
 const tevreden = (S, dag = 5) => T.berekenTevredenheid(S.dorp, dag);
-// Wat een wet erbij doet, komt bij elk huis erbij, tot 100% (js/wensen.js): voor het dorp het gemiddelde, naar mensen.
-const erbijPerHuis = (b, x) => b.wensen.huizen.reduce((n, h) => n + h.mensen * (Math.min(1, h.tevredenheid + x) - h.tevredenheid), 0)
-  / b.wensen.huizen.reduce((n, h) => n + h.mensen, 0);
+// Wat een wet erbij doet, komt bij het dorp erbij, tot 100%.
+const wetErbij = (b, x) => Math.min(1, b.tevredenheid + x) - b.tevredenheid;
 
 test('zonder wetten staat elke wet op zijn standaard, en speelt het spel zoals ervoor', () => {
   const S = gehucht();
@@ -64,7 +63,7 @@ test('een ruim rantsoen: anderhalf keer zoveel eten, en 10% tevredener', () => {
   T.zetWet(S.dorp, 'rantsoen', 'ruim');
   assert.ok(bijna(T.etenPerMens(S.dorp), 1.5 * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag));
   const na = tevreden(S);
-  assert.ok(bijna(na.tevredenheid - voor.tevredenheid, erbijPerHuis(voor, 0.1)), `${voor.tevredenheid} → ${na.tevredenheid}`);
+  assert.ok(bijna(na.tevredenheid - voor.tevredenheid, wetErbij(voor, 0.1)), `${voor.tevredenheid} → ${na.tevredenheid}`);
   assert.deepEqual(na.blij, ['the generous rations']);
   // Terug naar gewoon: zoals ervoor.
   T.zetWet(S.dorp, 'rantsoen', 'gewoon');
@@ -78,8 +77,8 @@ test('de belasting: op de eerste van de maand goud in de kist, en wat geen heel 
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
   assert.ok(bijna(voor - tevreden(S).tevredenheid, 0.1));
   assert.ok(tevreden(S).last.includes('the tax'));
-  // Iedereen telt hier als één; dat een hogere stand meer betaalt (T.belastbaar), toetst test/wensen.test.cjs.
-  S.dorp.behoeften.standen = null;
+  // In het proefdorp wonen alleen keuters en boeren: iedereen telt als één. Dat een hogere stand meer betaalt
+  // (T.belastbaar), toetst test/groei.test.cjs.
   const goud = S.dorp.voorraad.goud;
   T.tikWettenDag(S.dorp, 31); // 2 grasmaand: geen eerste van de maand
   assert.equal(S.dorp.voorraad.goud, goud);

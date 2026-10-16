@@ -1,8 +1,8 @@
 // Het briefje bij een huis (2c, werklijst vraag 100; Marcel, 3 okt: "100 ja", in de stijl van vraag 98: "98 C", de
 // schrijftafel): staat de muis op een huis met mensen, dan hangt er naast zijn deur een papiertje aan een spijker, met wie
-// er woont, wat het huis wil (✓ en ✗) en wat helpt, en hoe ver het is met doorgroeien. Alles uit T.huisToestand
-// (js/wensen.js), zodat het zegt wat de raad zegt. Het
-// eerste venster in de stijl van de schrijftafel; de rest van de ui volgt later (vraag 98, c).
+// er woont en hoe ver het is met doorgroeien. Alles uit T.huisToestand (js/behoeften.js), zodat het zegt wat de regel doet.
+// (Tot 16 okt stond er ook wat het huis wilde, met ✓ en ✗, en wat hielp: de wensen per huis, js/wensen.js.) Het eerste
+// venster in de stijl van de schrijftafel; de rest van de ui volgt later (vraag 98, c).
 // Onderaan ook het briefje van een gebouw na een klik (vraag 156): wat erop staat, zegt js/gebouwbriefje.js; hier
 // staat alleen hoe het op het scherm komt, want dit bestand is alleen scherm (het laadt niet in de toetsen).
 (function (T) {
@@ -14,7 +14,6 @@
   const ONDER_DE_BALK = 72; // de balk bovenin (js/hud.js) blijft te lezen
   let laatste = '';
 
-  const toets = (tekst) => tekst.replace(/\[(\w)\]/g, '<kbd>$1</kbd>');
   const kosten = (k) => T.opsomming(Object.keys(k).map((wat) => T.hoeveel(k[wat], wat)));
 
   function inhoud(D, g, t) {
@@ -24,33 +23,28 @@
     const kop = g.soort === 'schout' ? T.hoofdletter(soort.naam)
       : g.huis === 'schout' ? T.t('Your {gebouw}', { gebouw: soort.naam })
         : T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
-    const stand = T.t('{stand}, {n|# person|# people}, {procent}% content', {
-      stand: T.hoofdletter(T.STANDEN[t.stand].naam),
-      n: t.mensen,
-      procent: Math.round(t.tevredenheid * 100),
-    });
-    const wensen = t.wensen.map((w) => `<span class="${w.heeft ? 'ja' : 'nee'}">${w.heeft ? '✓' : '✗'} ${w.naam}</span>`).join('');
-    const eerste = t.wensen.find((w) => !w.heeft && w.helpt);
-    const helpt = eerste ? `<div class="briefje-helpt">${T.t('{wens}: {helpt}.', { wens: T.hoofdletter(eerste.naam), helpt: toets(eerste.helpt) })}</div>` : '';
-    let groei = '';
-    if (t.groei) {
-      const nog = Math.max(0, t.groei.nodig - t.groei.dagen);
-      const wordt = T.eenNaam(t.groei.wordt);
-      if (t.teken === 'bouwstof') groei = T.t('It could become {gebouw}, but that needs {kosten}.', { gebouw: wordt, kosten: kosten(t.groei.kosten) });
-      else if (t.groei.waarom) groei = T.t('It could become {gebouw}, but {waarom}.', { gebouw: wordt, waarom: t.groei.waarom });
-      else if (!t.teken) {
-        groei = Object.keys(t.groei.kosten).length
-          ? T.t('{n|# more day|# more days} with everything, then it grows into {gebouw} ({kosten}).', { n: nog, gebouw: wordt, kosten: kosten(t.groei.kosten) })
-          : T.t('{n|# more day|# more days} with everything, then it grows into {gebouw}.', { n: nog, gebouw: wordt });
-      } else groei = T.t('With everything for {n|# day|# days}, it grows into {gebouw}.', { n: t.groei.nodig, gebouw: wordt });
-    }
+    const stand = T.standVan(g);
+    const mensen = T.t('{n|# person|# people}', { n: t.mensen });
+    const regel = stand ? T.t('{stand}, {mensen}', { stand: T.hoofdletter(T.STANDEN[stand].naam), mensen }) : T.hoofdletter(mensen);
     return (
       `<div class="briefje-kop">${kop}</div>` +
-      `<div class="briefje-stand">${stand}</div>` +
-      `<div class="briefje-wensen">${wensen}</div>` +
-      helpt +
-      (groei ? `<div class="briefje-groei">${groei}</div>` : '')
+      `<div class="briefje-stand">${regel}</div>` +
+      (t.groei ? `<div class="briefje-groei">${groeiTekst(t.groei)}</div>` : '')
     );
+  }
+
+  // Hoe ver het huis is met doorgroeien (js/behoeften.js, pasHuisGroeiToe), in één zin.
+  function groeiTekst(gr) {
+    const gebouw = T.eenNaam(gr.wordt);
+    const woorden = { gebouw, kosten: kosten(gr.kosten), dagen: gr.nodig, soorten: gr.soorten, nu: gr.nu, n: Math.max(0, gr.nodig - gr.dagen) };
+    if (gr.later) return T.t('It can only become {gebouw} in {trede}.', { gebouw, trede: T.tredeDoelNaam(gr.later) });
+    if (gr.wacht) return T.t('It could become {gebouw}, but that needs {kosten}.', woorden);
+    if (gr.waarom) return T.t('It could become {gebouw}, but {waarom}.', { gebouw, waarom: gr.waarom });
+    if (gr.nu < gr.soorten) return T.t('It grows into {gebouw} after {dagen} days in which the village eats {soorten} kinds of food; now it eats {nu}.', woorden);
+    if (!gr.tevreden) return T.t('It grows into {gebouw} after {dagen} days in which the village is content enough.', woorden);
+    return Object.keys(gr.kosten).length
+      ? T.t('{n|# more day|# more days} like this, then it grows into {gebouw} ({kosten}).', woorden)
+      : T.t('{n|# more day|# more days} like this, then it grows into {gebouw}.', woorden);
   }
 
   // Toon het briefje van huis g, met zijn spijker bij (x, y): de deur van het huis, in css-pixels (js/main.js). Het blijft

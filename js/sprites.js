@@ -526,16 +526,6 @@
     return t.nek[naam] != null ? t.nek[naam] : t.nek[lijf] != null ? t.nek[lijf] : t.nek.standaard;
   };
 
-  // Het teken bij de deur van een huis dat iets mist (js/tekenen.js; 2c, vraag 100): een papiertje aan een spijker met
-  // wat het als eerste mist, in dezelfde namen als T.WENSEN (gereedschap/pixelart/papieren.cjs). Null als het er niet is.
-  S.huisTeken = function (naam) {
-    if (!gegevens || !gegevens.tekens) return null;
-    const t = gegevens.tekens;
-    const i = t.namen.indexOf(naam);
-    if (i < 0) return null;
-    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
-  };
-
   // De meiboom op het plein (js/versiering.js, gereedschap/pixelart/meiboom.cjs): één tekening, met het anker op de
   // grond in het midden van de tegel. Null als het vel er niet is.
   S.meiboom = function () {

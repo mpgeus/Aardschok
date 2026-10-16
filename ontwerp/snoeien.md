@@ -289,7 +289,25 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    met de boete op de rekening van de heer en het meer hakken (`T.maaktUit` geeft nu gewoon wat een gebouw maakt). Dat
    een klik in het wettenmenu een opdracht wordt en het venster de tijd niet stilzet, komt in stap 6 van vraag 170.
 6. **De wensen en de groei.** Marcel (16 okt): **"Groei op afwisseling, doe maar"**: de wensen per huis gaan weg, en de
-   huizen groeien als het dorp een tijd genoeg soorten eet en warm is; de trede blijft zoals nu.
+   huizen groeien als het dorp een tijd genoeg soorten eet en warm is; de trede blijft zoals nu. **Af** (16 okt, op de
+   branch `ccr-74384ea2-mxeou7`; `spel.md`, "De groei van de huizen"): `js/wensen.js` is weg (zo'n 740 regels, en 700
+   regels toetsen). Een huis met mensen telt een dag als het dorp tevreden genoeg is (70%: eten, en in de winter
+   brandhout) en genoeg soorten at voor wat het wordt; na 30 dagen groeit het, voor bouwstof. De tevredenheid is weer
+   één getal voor het dorp (eten, brandhout, een kapel), en een gezin trekt weg als dat onder de drempel zakt. De
+   standen blijven als wie waar woont, voor de treden, de belasting en de kleren (`js/treden.js`). In de speeltest zijn
+   op alle drie de eilanden de hutten in juni huizen en in de herfst stenen huizen, en wordt elk een dorp
+   (`speelbaar.md`). **Wat Claude erbij koos** (Marcel zei "doe maar"; zeg het als het anders moet):
+   - **Een ladder van soorten:** een hut wordt een huis bij 3 soorten, een huis een stenen huis bij 4 (het volle werk),
+     een stenen huis een woontoren bij 5; zo heeft elke keten die een soort eten maakt een doel. Eén lat voor allemaal
+     kan ook (in de werkbank: `groeiSoorten`).
+   - **Groeien kost bouwstof,** zoals sinds vraag 157 (8 stammen, 12 steen, 20 steen), en "warm" is de tevredenheid van
+     70%, zoals de groei van het hele dorp al vroeg, zodat de wetten en de heer ook tellen.
+   - **Wat zijn koper verloor:** de put (alleen nog water halen en praten), de markt (zijn kramen), bier (de gasten van
+     de herberg, zonder bier apart voor de huizen), laken (de heer, de marskramer), en de kleren: een stenen huis loopt
+     deftig, ook zonder laken. De kapel telt nog in de tevredenheid.
+   - **Ook weg:** de raad over vis en vlees voor de winter (hij rekende met de wens), het teken bij de deur, de kring
+     bij een put of kapel in de hand, en de spelregels "Wants", "The inn and the market" en "Decline". Wat de raad nog
+     zegt: welke huizen op bouwstof wachten, en wie het maakt (`opmerkingen.md`).
 
 ## Later
 

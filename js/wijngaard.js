@@ -114,16 +114,16 @@
 
   // Haalt de wijn het jaar na de pluk? (werklijst vraag 136; Marcel, 10 okt: "Laten we vooruitkijken doen".) Zoals het
   // hout de winter (T.houtVoorDeWinter, js/behoeften.js), met dezelfde regel (T.haaltDeWinter): wat er bij de eerstvolgende
-  // pluk nog ligt, plus wat de wijnboerderijen dan plukken, min wat de heer ervoor wil, tegen wat de huizen die wijn
-  // willen per dag drinken en wat het dorp ervan eet (zijn deel van de maaltijd, T.maaltijdDeel in js/behoeften.js; vraag
-  // 154), een jaar lang. Wat ze tot de pluk drinken, komt uit wat er nu ligt; dat maakt geen nieuwe
-  // wijngaard meer goed. Een wijngaard die de bouwers nog planten, telt mee met de ranken die er straks staan. De raad
+  // pluk nog ligt, plus wat de wijnboerderijen dan plukken, min wat de heer ervoor wil, tegen wat het dorp ervan eet (zijn
+  // deel van de maaltijd, T.maaltijdDeel in js/behoeften.js; vraag 154; tot 16 okt dronken de ambachtslieden er ook van,
+  // een wens van hun stand, js/wensen.js), een jaar lang. Wat het tot de pluk eet, komt uit wat er nu ligt; dat maakt
+  // geen nieuwe wijngaard meer goed. Een wijngaard die de bouwers nog planten, telt mee met de ranken die er straks staan. De raad
   // (js/raad.js, `wijn`) zegt het als er een wijnboerderij is en de wijn het jaar niet haalt: er moet een wijngaard bij
   // (vraag 155; tot ronde 2 van het snoeien vroeg het dorp dan een wijnboerderij erbij, een verzoek). Geeft wat
   // T.haaltDeWinter geeft, met `tot` (de dagen tot de pluk), `pluk` en `drinken` (per dag).
   T.wijnNaDePluk = function (D, dag) {
     const { tot } = T.periodeVanaf(dag, (d) => IN().pluk.includes(maandNaam(d)));
-    const drinken = wijnDrinkers(D) * (T.WENSEN_INSTELLINGEN.perMens.wijn || 0) + T.maaltijdDeel(D, 'wijn');
+    const drinken = T.maaltijdDeel(D, 'wijn');
     const pluktijd = Math.floor(dag) + tot;
     let pluk = 0;
     for (const g of D.gebouwen || []) {
@@ -137,12 +137,6 @@
     const v = T.haaltDeWinter({ voorraad: over + pluk, perWinterdag: drinken, winter: T.DAGEN_PER_JAAR });
     return Object.assign(v, { tot, pluk, drinken });
   };
-
-  // Wie wijn wil: de mensen van de laagste stand die het wil, en van de standen erboven (T.mensenVanStand, js/wensen.js).
-  function wijnDrinkers(D) {
-    const stand = Object.keys(T.STANDEN).find((s) => !T.STANDEN[s].los && T.wensenVanStand(s).includes('wijn'));
-    return stand ? T.mensenVanStand(D, stand) : 0;
-  }
 
   // Zoveel ranken zet T.zetRanken op een leeg stuk van deze maat { b, h }.
   const rankenOp = (maat) => Math.ceil(maat.h / IN().rijOm) * maat.b;

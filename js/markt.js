@@ -27,8 +27,8 @@
 // - Vol of leeg (127, A): elke kraam heeft zijn waar (KRAAMWAREN in gereedschap/pixelart/dorp.cjs; `volgorde` hieronder),
 //   en ligt vol als het dorp die waar heeft (`waren`: de broodkraam brood, de viskraam vis of vlees), anders staat hij leeg,
 //   met de luifel opgerold. Zo zie je op de markt hoe het dorp ervoor staat.
-// - De markt staat als gebouw in D.gebouwen (`opHetPlein`, met `kramen`, `manden` en `blok`), zodat de wens van de stenen
-//   huizen hem telt (T.plekkenVan, js/wensen.js), maar zonder voet: zijn plek is het midden van het plein.
+// - De markt staat als gebouw in D.gebouwen (`opHetPlein`, met `kramen`, `manden` en `blok`), zoals elk gebouw (tot 16 okt
+//   telde de wens van de stenen huizen hem zo, js/wensen.js), maar zonder voet: zijn plek is het midden van het plein.
 // Nog niet (127, stap 3): de kooplui achter de kramen, de boodschappen (D) en de marktdag (E). En later de handel met de
 // buren (vraag 72): "De markt wordt essentieel voor de handel" (Marcel, 5 okt).
 (function (T) {

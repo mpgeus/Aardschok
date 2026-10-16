@@ -30,6 +30,9 @@
       ruim: { eten: 1.5, tevreden: 0.1 },
     },
     belasting: { aangenomen: { goud: 0.05, tevreden: -0.1 } },
+    // Hoeveel keer zoveel belasting een mens van elke stand opbrengt (T.STANDEN, js/treden.js; werklijst vraag 80, C):
+    // wie hoger woont, betaalt meer. Wie in geen huis met een stand woont (de schout en zijn huis), telt als 1.
+    belastingNaarStand: { keuters: 1, dorpelingen: 2, ambachtslieden: 3, boeren: 1 },
   };
   const IN = () => T.WETTEN_INSTELLINGEN;
 
@@ -120,6 +123,14 @@
     return r;
   };
 
+  // Voor hoeveel mensen het dorp belasting betaalt: een mens van een hogere stand telt voor meer (belastingNaarStand),
+  // naar het huis waar hij nu woont. Zonder bewoners (een toets met een eigen, kleine wereld) telt iedereen als één.
+  T.belastbaar = function (D) {
+    let n = D.bevolking || 0;
+    for (const [g, m] of T.mensenPerHuis(D)) n += m * ((IN().belastingNaarStand[T.standVan(g)] || 1) - 1);
+    return n;
+  };
+
   // Elke dag, na het werk (T.tikGebouwenDag, js/gebouwen.js): op de eerste van de maand brengt de belasting goud op.
   // Wat niet een heel goud is, gaat mee naar de volgende maand.
   T.tikWettenDag = function (D, dag) {
@@ -127,7 +138,7 @@
     const W = D.wetten;
     const perMens = T.wetSom(D, 'goud');
     if (perMens > 0 && T.datumVanDag(dag).dagVanMaand === 1) {
-      // Een hogere stand betaalt meer (js/wensen.js, T.belastbaar; werklijst vraag 80, C).
+      // Een hogere stand betaalt meer (T.belastbaar hierboven; werklijst vraag 80, C).
       W.belastingRest += T.belastbaar(D) * perMens;
       const goud = Math.floor(W.belastingRest + 1e-9);
       if (goud > 0) {

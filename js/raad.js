@@ -6,8 +6,8 @@
 //
 // Of er een gezin komt, vraagt de raad aan de groei zelf (T.waaromGeenGezin en T.volgendeGezinDag, js/gebouwen.js),
 // of het hout en het eten de winter halen aan het dorp (T.houtVoorDeWinter en T.etenVoorDeWinter, js/behoeften.js),
-// en wat de huizen missen aan de wensen (T.watDeHuizenMissen, js/wensen.js; vraag 87): de raad zegt wat het spel doet,
-// en rekent niet naast het spel.
+// en welke huizen op bouwstof wachten om door te groeien (g.wachtOpBouwstof, js/behoeften.js): de raad zegt wat het spel
+// doet, en rekent niet naast het spel.
 //
 // Een toets staat tussen haken, [B]: in het vak wordt dat een toets (<kbd>, js/ui.js).
 //
@@ -23,9 +23,6 @@
     // Wat helpt aan eten (T.watHelptAanEten; vraag 132): een visser per zoveel mensen, en per zoveel tegels water.
     mensenPerVisser: 30,
     waterPerVisser: 60,
-    // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 132, B): de raad zegt het als er meer dan dit deel
-    // van wat de huizen in de winter willen, zal missen, of als er zout bij moet.
-    visEnVleesMarge: 0.1,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
     // De afwisseling (vraag 154): de raad zegt het als het dorp zoveel soorten eet of minder (2: 75% werk). Daarboven
@@ -169,53 +166,46 @@
     return uit;
   };
 
-  // Vis en vlees voor de winter (vraag 132, B; Marcel, 8 okt: "A en B samen"): { v (T.visEnVleesVoorDeWinter), mist (er
-  // mist meer dan visEnVleesMarge), zout (er moet zout bij, en de marskramer komt nog voor de winter), hulp (wat meer
-  // vangt: een visser of een jager, uit T.watHelptAanEten) }, of null als er niets te zeggen is.
-  T.visEnVleesRaad = function (D) {
-    const v = T.visEnVleesVoorDeWinter(D, D.kalender.dag);
-    if (!v) return null;
-    const H = T.HANDEL_INSTELLINGEN;
-    const nogVoorDeWinter = T.kanHandelen(D) || T.volgendeMarskramer(D.kalender.dag) !== H.bezoeken[0].maand;
-    const zout = v.zout >= 1 && nogVoorDeWinter;
-    const mist = v.tekort > v.nodig * IN().visEnVleesMarge;
-    if (!zout && !mist) return null;
-    const hulp = mist ? T.watHelptAanEten(D).filter((h) => h.id === 'visser' || h.id === 'jager') : [];
-    return { v, mist, zout, hulp };
-  };
-  function visEnVleesTekst(D, r) {
-    const { v } = r;
-    const zinnen = [];
-    const n = (x) => Math.round(x);
-    if (r.mist) {
-      const woorden = { nodig: n(v.nodig), dan: n(v.dan), hulp: T.opsomming(r.hulp.map((h) => h.zin)) };
-      zinnen.push(r.hulp.length
-        ? T.t('In winter the houses want {nodig} fish or meat, when the brook is frozen over, and there will then be about {dan}: {hulp}.', woorden)
-        : T.t('In winter the houses want {nodig} fish or meat, when the brook is frozen over, and there will then be about {dan}.', woorden));
-    } else {
-      zinnen.push(T.t('In winter the houses want {nodig} fish or meat, when the brook is frozen over.', { nodig: n(v.nodig) }));
+  // De huizen die door kunnen groeien en op bouwstof wachten (g.wachtOpBouwstof, js/behoeften.js), van de eerste soort
+  // huis waarvoor de voorraad het niet heeft: { soort, n, kosten, mist (wat er niet ligt) }, of null.
+  function huizenOpBouwstof(D) {
+    const per = {};
+    for (const g of D.gebouwen || []) {
+      if (!g.wachtOpBouwstof || !T.GEBOUWEN[g.soort].wordt) continue;
+      const kosten = T.groeiKosten(T.GEBOUWEN[g.soort].wordt);
+      if (T.kanBetalen(D, kosten)) continue; // dan groeit het vannacht
+      (per[g.soort] || (per[g.soort] = { soort: g.soort, n: 0, kosten })).n++;
     }
-    if (r.zout) {
-      const woorden = { zout: T.hoeveel(v.zout, 'zout'), aantal: T.telwoord(T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed), maand: marskramerMaand(D.kalender.dag) };
-      zinnen.push(T.kanHandelen(D)
-        ? T.t('Without salt it spoils: buy {zout} from the merchant, now that he is here; one salt keeps {aantal} fish or meat good.', woorden)
-        : T.t('Without salt it spoils: buy {zout} from the merchant in {maand}; one salt keeps {aantal} fish or meat good.', woorden));
-    }
-    return zinnen.join(' ');
+    const eerste = Object.values(per)[0];
+    if (!eerste) return null;
+    eerste.mist = Object.keys(eerste.kosten).filter((wat) => (D.voorraad[wat] || 0) < eerste.kosten[wat]);
+    return eerste;
   }
-
-  // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
-  // ('bouwstof' of 'wens'), of null.
-  const watNuHelpt = (D, soort) => T.watDeHuizenMissen(D).find((x) => x.soort === soort && x.kan) || null;
-  // Wat erbij komt als je niet kunt betalen wat helpt: wat je mist, en waar het vandaan komt. Anders hoor je het niet
-  // meer, want de wensen gaan voor wat het doel vraagt.
-  function wensTekst(D, x) {
-    const mist = tekortVoor(D, [x.bouw]);
-    if (!mist) return x.tekst;
-    const bronnen = waarVandaan(D, mist, x.bouw);
+  // Wie maakt wat er mist (T.maaktGoed, js/gebouwen.js), als je hem nu mag bouwen: { soort, zin }, met "build a quarry
+  // [B]", of "another quarry [B]" als er al een staat. Null als er niets te bouwen valt.
+  function wieMaakt(D, wat) {
+    const soort = Object.keys(T.GEBOUWEN).find((s) => T.maaktGoed(s, wat) && T.magGebouwd(D, s));
+    if (!soort) return null;
+    return { soort, zin: heeft(D, soort) ? T.t('another {wat} [B]', { wat: naamVan(soort) }) : T.t('build {wat} [B]', { wat: eenNaam(soort) }) };
+  }
+  // "Two huts can become houses, but the stores do not hold 8 logs: another woodcutter [B]." Kun je wat helpt zelf niet
+  // betalen, dan zegt hij erbij wat je mist en waar het vandaan komt (zoals voor het doel). Null als er niets helpt.
+  T.bouwstofRaad = function (D) {
+    const h = huizenOpBouwstof(D);
+    const hulp = h && h.mist.map((wat) => wieMaakt(D, wat)).filter(Boolean);
+    if (!h || !hulp.length) return null;
+    const G = T.GEBOUWEN[h.soort];
+    const wie = h.n === 1 ? T.eenNaam(G.naam) : T.t('{getal} {gebouw}', { getal: T.telwoord(h.n), gebouw: G.meervoud || G.naam });
+    const zin = T.t('{wie} can become {gebouw}, but the stores do not hold {lijst}', {
+      wie: T.hoofdletter(wie), gebouw: T.eenNaam(T.GEBOUWEN[G.wordt].naam), lijst: T.opsomming(h.mist.map((wat) => T.hoeveel(h.kosten[wat], wat))),
+    });
+    const tekst = `${zin}: ${T.opsomming(hulp.map((x) => x.zin))}.`;
+    const mist = tekortVoor(D, hulp.map((x) => x.soort));
+    if (!mist) return tekst;
+    const bronnen = waarVandaan(D, mist, hulp[0].soort);
     const woorden = { lijst: hoeveelTekst(mist), bronnen: T.opsomming(bronnen) };
-    return `${x.tekst} ${bronnen.length ? T.t('For that you are short of {lijst}: {bronnen}.', woorden) : T.t('For that you are short of {lijst}.', woorden)}`;
-  }
+    return `${tekst} ${bronnen.length ? T.t('For that you are short of {lijst}: {bronnen}.', woorden) : T.t('For that you are short of {lijst}.', woorden)}`;
+  };
 
   // De marskramer staat op het plein, op zijn laatste ronde vóór de heer komt (js/handel.js).
   function marskramerInDeHerfst(D) {
@@ -225,7 +215,7 @@
 
   // De raden, van wat het zwaarst weegt naar wat het minst weegt. `als(S)` zegt of hij nu geldt, `tekst(S)` wat er
   // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de afwisseling
-  // (vraag 154); dan de wensen (vraag 87); dan de wijn een jaar vooruit (vraag 155); dan het doel en de groei.
+  // (vraag 154); dan de huizen die op bouwstof wachten; dan de wijn een jaar vooruit (vraag 155); dan het doel en de groei.
   T.RADEN = [
     // Twee bazen (js/bazen.js; werklijst vraag 106): staat een van de twee onder de grens, dan gaat dat voor alles.
     {
@@ -286,12 +276,6 @@
         return `${zin}${geenGezin()}`;
       },
     },
-    // Vis en vlees voor de winter (vraag 132, B): zout, en een voorraad voordat de vissers stilliggen.
-    {
-      id: 'visEnVlees',
-      als: (D) => !!T.visEnVleesRaad(D),
-      tekst: (D) => visEnVleesTekst(D, T.visEnVleesRaad(D)),
-    },
     // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
     // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 129, e). Haalt het hout de
     // winter niet, dan zegt de raad daarboven dat een houthakker zou helpen.
@@ -312,7 +296,8 @@
       tekst: () => T.t('No family is coming: the village is full. Build {hut} or {huis}: [B].', { hut: eenNaam('hut'), huis: eenNaam('huis') }),
     },
     // De afwisseling (vraag 154): eet het dorp weinig soorten (afwisselingTot), dan werkt het trager
-    // (T.werkVanAfwisseling, js/behoeften.js). Na een vol dorp, want eerst moet iedereen een dak hebben; vóór de wensen.
+    // (T.werkVanAfwisseling, js/behoeften.js). Na een vol dorp, want eerst moet iedereen een dak hebben; vóór de huizen die
+    // op bouwstof wachten.
     {
       id: 'afwisseling',
       als: (D) => {
@@ -326,24 +311,19 @@
       }),
     },
     {
-      // De wensen (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja"): wat de huizen missen en wat helpt, zoals
-      // T.watDeHuizenMissen (js/wensen.js) het zegt, en alleen wat je nu kunt doen. Eerst een huis dat een maand alles had
-      // en op bouwstof wacht, dan wat de meeste mensen missen. Vóór wat het doel vraagt, want met de wensen win je (vraag
-      // 80): "Five farms and a house want a chapel within 40 tiles [B]."
+      // De huizen die door kunnen groeien en op bouwstof wachten (js/behoeften.js, groeiBouwstof): wat er mist, en wie het
+      // maakt, als je die nu kunt bouwen. Vóór wat het doel vraagt, want met de huizen groeit het dorp naar zijn trede:
+      // "Two huts can become houses, but the stores do not hold 8 logs: another woodcutter [B]." (Tot 16 okt zei de raad
+      // hier ook wat de huizen wilden, js/wensen.js.)
       id: 'doorgroeien',
-      als: (D) => !!watNuHelpt(D, 'bouwstof'),
-      tekst: (D) => wensTekst(D, watNuHelpt(D, 'bouwstof')),
-    },
-    {
-      id: 'wens',
-      als: (D) => !!watNuHelpt(D, 'wens'),
-      tekst: (D) => wensTekst(D, watNuHelpt(D, 'wens')),
+      als: (D) => !!T.bouwstofRaad(D),
+      tekst: (D) => T.bouwstofRaad(D),
     },
     {
       // De wijn (js/wijngaard.js, T.wijnNaDePluk; werklijst vraag 136 en 155; Marcel, 10 okt: "Laten we vooruitkijken
       // doen"): is er een wijnboerderij en haalt wat er bij de pluk ligt plus de pluk het jaar niet, dan moet er een
-      // wijngaard bij. Is er geen wijnboerderij, dan zeggen de wensen dat er een bij moet (T.watDeHuizenMissen). Na de
-      // wensen: een jaar vooruit kijken, dus het wacht op wat er nu mist.
+      // wijngaard bij. Is er geen wijnboerderij, dan zegt de afwisseling dat er een bij kan (T.watHelptAanAfwisseling). Na
+      // de huizen: een jaar vooruit kijken, dus het wacht op wat er nu mist.
       id: 'wijn',
       als: (D) => heeft(D, 'wijnboerderij') && !T.wijnNaDePluk(D, D.kalender.dag).haalt,
       tekst: (D) => {

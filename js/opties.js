@@ -253,13 +253,11 @@
       ],
     },
     {
-      id: 'kleren', naam: T.t('Clothes'), standaard: 'laken',
+      id: 'kleren', naam: T.t('Clothes'), standaard: 'stand',
       uitleg: T.t('Those of higher standing wear dearer clothes: poor and worn in a hut, smart in a stone house. Looks only.'),
       keuzes: [
-        { id: 'laken', naam: T.t('By standing, smart with cloth'), zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true, 'BEWONERS_INSTELLINGEN.lakenVoorDeftig': true }, // geen tekst
-          uitleg: T.t('A stone house only goes about smartly once it gets its cloth: in the street you can see what is missing.') },
-        { id: 'stand', naam: T.t('By standing'), zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true, 'BEWONERS_INSTELLINGEN.lakenVoorDeftig': false }, // geen tekst
-          uitleg: T.t('Whoever lives in a stone house goes about smartly, with or without cloth.') },
+        { id: 'stand', naam: T.t('By standing'), zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true }, // geen tekst
+          uitleg: T.t('Whoever lives in a stone house or a tower house goes about smartly.') },
         { id: 'uit', naam: T.t('Everyone plain'), zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': false }, // geen tekst
           uitleg: T.t('Everyone in the clothes of a villager, as before 10 October.') },
       ],
@@ -429,41 +427,6 @@
           uitleg: T.t('The village eats the seed grain like any other grain. Whoever eats everything in winter has nothing to sow in spring.') },
       ],
     },
-    // De wensen per stand (werklijst vraag 80 en 85; Marcel, 1 okt; js/wensen.js). Het dorp als geheel is het spel van
-    // vóór 1 okt.
-    {
-      id: 'wensen', naam: T.t('Wants'), standaard: 'huis',
-      uitleg: T.t("Where the village's contentment comes from."),
-      keuzes: [
-        { id: 'huis', naam: T.t('Per house'), zet: { 'WENSEN_INSTELLINGEN.perHuis': true }, // geen tekst
-          uitleg: T.t('Each house wants what its standing wants: cottars in a hut want food, firewood and a well; villagers in a house also ale, meat or fish, a chapel and the inn; craftsmen in a stone house also bread, cloth and a market. The highest standing takes first. The village is the average.') },
-        { id: 'dorp', naam: T.t('The village as a whole'), zet: { 'WENSEN_INSTELLINGEN.perHuis': false }, // geen tekst
-          uitleg: T.t('One number for the whole village: food, with vegetables, fish or meat on top, firewood in winter, and a chapel. If the village is content enough for a month, all the houses grow into the next kind, without building materials.') },
-      ],
-    },
-    // De herberg en de markt (werklijst vraag 96, a; Marcel, 3 okt: "1 markt 1 herberg voor nu"; js/wensen.js). Alleen met
-    // de wensen per huis.
-    {
-      id: 'herbergEnMarkt', naam: T.t('The inn and the market'), standaard: 'heelDorp',
-      uitleg: T.t('Whether one inn and one market are enough for the whole village, or a house wants them nearby.'),
-      keuzes: [
-        { id: 'heelDorp', naam: T.t('One for the whole village'), zet: { 'WENSEN_INSTELLINGEN.kring.herberg': null, 'WENSEN_INSTELLINGEN.kring.markt': null }, // geen tekst
-          uitleg: T.t('If the village has an inn and a market, every house that wants them has them, wherever it stands.') },
-        { id: 'kring', naam: T.t('Within a range'), zet: { 'WENSEN_INSTELLINGEN.kring.herberg': 30, 'WENSEN_INSTELLINGEN.kring.markt': 30 }, // geen tekst
-          uitleg: T.t('A house wants the inn and a market within 30 tiles, like a well and a chapel within their range. A growing village then needs more of them, and there is not always room for that.') },
-      ],
-    },
-    // Achteruitgaan (werklijst vraag 85, c; Marcel, 1 okt: "c zacht"; js/behoeften.js). Alleen met de wensen per huis.
-    {
-      id: 'achteruit', naam: T.t('Decline'), standaard: 'zacht',
-      uitleg: T.t('What happens when a house lacks something its standing wants.'),
-      keuzes: [
-        { id: 'zacht', naam: T.t('Gentle'), zet: { 'WENSEN_INSTELLINGEN.achteruit': 'zacht' }, // geen tekst
-          uitleg: T.t('As in Anno 1602: a house that lacks something stops growing and is less content. A family only leaves when the house falls below the leaving threshold, and that happens only when it lacks food or firewood.') },
-        { id: 'streng', naam: T.t('Strict'), zet: { 'WENSEN_INSTELLINGEN.achteruit': 'streng' }, // geen tekst
-          uitleg: T.t('If a house lacks something for a month, its family leaves, at most one house a day. A house that has just grown wants more at once: make sure it is there.') },
-      ],
-    },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
       id: 'raad', naam: T.t('Advice'), standaard: 'aan',
@@ -540,7 +503,6 @@
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Statuses'), blok: 'STATUSSEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Wants'), blok: 'WENSEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The merchant'), blok: 'HANDEL_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The lord'), blok: 'HEER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The levy'), blok: 'HEERVAART_INSTELLINGEN' }, // geen tekst
@@ -966,6 +928,7 @@
     boete: T.t('fine'),
     belasting: T.t('tax'),
     goud: T.t('gold'),
+    belastingNaarStand: T.t('tax by standing'),
     // De rovers, de raad, de herberg
     terugNaDagen: T.t('return after days'),
     opnieuwNaDagen: T.t('again after days'),
@@ -981,7 +944,6 @@
     kansAkkerKapot: T.t('chance a field is ruined'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
-    visEnVleesMarge: T.t('fish and meat margin'),
     roversNa: T.t('robbers after'),
     afwisselingTot: T.t('advice at this many kinds of food'),
     kansPerAvond: T.t('chance per evening'),
@@ -990,7 +952,6 @@
     minstensUren: T.t('least hours'),
     groteHerberg: T.t('large inn'),
     bierPerBezoek: T.t('ale per visit'),
-    bierApartDagen: T.t('ale set aside days'),
     gezelligheidDagen: T.t('days of company'),
     gezelligheid: T.t('company'),
     // Behoeften en de winter, de wensen
@@ -1011,6 +972,8 @@
     winterVoorafDagen: T.t('days of warning before winter'),
     huisGroeiDagen: T.t('house growth days'),
     huisGroeiDrempel: T.t('house growth threshold'),
+    groeiSoorten: T.t('kinds of food to grow'),
+    groeiBouwstof: T.t('building materials to grow'),
     groeiVanafFase: T.t('growth from stage'),
     zoutHoudtGoed: T.t('salt keeps well'),
     bederfPerDag: T.t('spoilage per day'),
@@ -1020,22 +983,11 @@
     wijnAlsGraan: T.t('wine as grain'),
     groenteAlsGraan: T.t('vegetables as grain'),
     eierenAlsGraan: T.t('eggs as grain'),
-    gewichtRest: T.t('weight of the rest'),
-    perMens: T.t('per person'),
-    bier: T.t('ale'),
-    vleesOfVis: T.t('meat or fish'),
     brood: T.t('bread'),
     laken: T.t('cloth'),
-    wijn: T.t('wine'),
-    blijheid: T.t('delight'),
-    kring: T.t('range'),
-    put: T.t('well'),
-    kapel: T.t('chapel'),
-    bouwstof: T.t('building materials'),
     stenenHuis: T.t('stone house'),
     steen: T.t('stone'),
     woontoren: T.t('tower house'),
-    missenDagen: T.t('days of lacking'),
     keuters: T.t('cottars'),
     dorpelingen: T.t('villagers'),
     ambachtslieden: T.t('craftsmen'),
