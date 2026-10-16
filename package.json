@@ -2,7 +2,7 @@
   "name": "aardschok",
   "version": "0.1.0",
   "private": true,
-  "description": "Tithebreaker (werknaam). Een bouw- en beheerspel in isometrisch beeld: je bent de aanvoerder van een gehucht onder een heer die alleen geld ziet.",
+  "description": "Tithebreaker (werknaam). Een bouw- en beheerspel in isometrisch beeld, met gevechten in real time: je bouwt een dorp onder een heer die alleen geld ziet.",
   "scripts": {
     "start": "node server.cjs",
     "test": "node --test",

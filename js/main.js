@@ -1419,6 +1419,15 @@
       const nu = T.raadNu(S.dorp);
       return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },
+    // De aanvoerder (js/soldaten.js; vraag 170, stap 5): wie het is, en wie het overneemt als hij valt. ('val') laat
+    // hem nu vallen, zoals in een gevecht (T.valt): dan neemt een veteraan of de soldaat die het langst dient het over.
+    aanvoerder(wat) {
+      const D = S.dorp;
+      const naam = (e) => (e ? T.naamVanBewoner(T.bewonerVan(D, e)) || e.naam : null);
+      if (wat === 'val' && D.aanvoerder) T.valt(S, D, D.aanvoerder, null);
+      const p = T.opvolgerVan(D);
+      return { aanvoerder: naam(D.aanvoerder), opvolger: p ? T.naamVanBewoner(p) : null, wapen: D.aanvoerder ? T.slagVan(D.aanvoerder).wapen : null };
+    },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
     rovers(wat) {

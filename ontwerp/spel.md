@@ -1,4 +1,4 @@
-# Het spel: de schout, de heer en het dorp dat een stad wordt
+# Het spel: de aanvoerder, de heer en het dorp dat een stad wordt
 
 Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de tovenaar van 84, de
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
@@ -26,6 +26,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is op 11 okt weggehaald (snoeironde, vraag 153), de rest is niet gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
 | Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post, in een *Line* of een *Ring*: stap 3, 16 okt) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen; een dag- of nachtdienst per soldaat, *To arms* op het wachthuis, en rovers op elk uur (stap 4, 16 okt) ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
+| De held en het opruimen | gebouwd (16 okt, vraag 170, stap 5; Marcel: "A1, B1, C2"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het over, met zijn eigen wapen, en zijn gezin ruilt van huis; weg: de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten ("Zo werkt de held nu", bij Rovers en de militie) | vraag 170 |
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
@@ -769,8 +770,8 @@ huis is, en of de koorts verder een eigen beeld krijgt (iemand die hoest, een zi
 
 ## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)
 
-**Zo werkt het nu** (9 okt; `js/bode.js`): speelt er honger, kou of droogte, dan staat de knop Bode in de balk. Bij je huis
-schrijf je een brief aan de marskramer: hoeveel pakken graan, zout, hout en ijzer hij moet brengen. Een dorpeling zonder
+**Zo werkt het nu** (9 okt; `js/bode.js`): speelt er honger, kou of droogte, dan staat de knop Bode in de balk. Je
+schrijft een brief aan de marskramer (tot 16 okt alleen bij je huis): hoeveel pakken graan, zout, hout en ijzer hij moet brengen. Een dorpeling zonder
 werk brengt hem en krijgt 3 zilver uit de kas; tot drie weerbare mannen kunnen mee, elk ook voor 3 zilver. Na zes dagen
 (in de winter tien) staat de marskramer op het plein, buiten zijn vaste rondes, vijf dagen lang, met wat je vroeg: soms
 heeft hij iets niet, of maar de helft. Hij vraagt anderhalf keer zijn gewone prijs, in de winter het dubbele. Valt zijn
@@ -947,8 +948,7 @@ leven roedels wolven (twee tot vier) en groepjes herten (een hert met een gewei 
 kleuren; hun tekening komt uit `gereedschap/pixelart/wild.cjs`), zoveel als het bos groot is: op de landen van nu een of twee roedels en een tot vier groepjes. Elke groep heeft een plek diep in het bos (het hol,
 de legerplek) en een paar plekken aan de bosrand. Overdag liggen ze thuis; de wolven lopen vanaf een uur voor
 zonsondergang tot zonsopgang langs de rand, van plek naar plek, en de herten grazen rond zonsopgang en zonsondergang op
-open grond aan de rand. Komt er een mens dichtbij (acht tegels voor een wolf, zeven voor een hert; wie sluipt, komt twee
-tegels dichterbij), dan gaat de groep van hem weg, het bos in: de wolven sluipen weg, de herten rennen, ook voor een wolf.
+open grond aan de rand. Komt er een mens dichtbij (acht tegels voor een wolf, zeven voor een hert), dan gaat de groep van hem weg, het bos in: de wolven sluipen weg, de herten rennen, ook voor een wolf.
 Een wolf begint nooit zelf een gevecht (a: "wolven gaan mensen uit de weg"); de schout kan hem wel aanvallen, als
 monster in een gevecht in beurten. 's Nachts lichten hun ogen rood op, ook waar je de wolf zelf niet ziet. Alleen de
 leider zoekt een weg, de anderen lopen in zijn spoor (Marcels "group steering"): een roedel kost het spel bijna niets. De
@@ -973,9 +973,9 @@ is er alleen in de winter. Het dorp zegt het als de status begint, niet elke kee
 roedel van vier, als er geen hert te vangen is) is hij in het donker niet schuw meer: eerst neemt hij een schaap van de
 meent, en een bericht brengt je erheen: stuur je soldaten op hem af (sinds 15 okt; tot dan kwam de herder het je zeggen,
 het voorval "wolven", met een jacht of een hek). Zonder schapen zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen licht): die is gewond en ligt drie dagen in
-bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: bij de
-schout met zijn lantaarn blijft de roedel aan de rand van het licht, met zijn rode ogen; wie sluipt, heeft geen licht, en
-die valt hij aan, in een gevecht. Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven bij het
+bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: wie in het
+licht staat, valt hij niet aan. Een man van je (de aanvoerder alleen in het donker, of een soldaat) vecht met de roedel.
+(Tot 16 okt bleef de roedel aan de rand van de lantaarn van de schout, en viel hij aan wie sloop.) Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven bij het
 dorp", en namen ze een schaap of een mens, dan zegt de raad het.
 
 **De jager** (stap 3a, 7 okt; Marcel: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer",
@@ -1108,26 +1108,45 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
 - **Aanvallen, dan terug.** Een soldaat of een veteraan valt uit zichzelf de dichtste vijand aan die hij ziet (8 tegels),
   maar alleen binnen 10 tegels van zijn post (of van het wachthuis); loopt die verder weg, dan laat hij hem gaan en gaat
   terug. Een vijand die jij aanwijst (rechts), zit hij na zonder die grens. Wie geraakt wordt en niets deed, slaat terug.
-  **De held** kiest zelf niets: hij vecht als je hem stuurt, of terug als hij geraakt wordt (valt hij, dan is het spel
-  nog uit, tot stap 5).
+  **De held** kiest zelf niets: hij vecht als je hem stuurt, of terug als hij geraakt wordt (valt hij, dan neemt een ander
+  het over, "Zo werkt de held nu", hieronder).
 - **Niemand vanzelf.** Bij een aanval van rovers komt er niemand naar je toe: het bericht zegt waar ze heen gaan en hoe je
   je soldaten stuurt (kiezen, en rechts op een rover), en de tijd gaat naar 1×. Wie bij het wachthuis of op zijn post
   staat, vecht alleen als de rovers in zijn buurt komen.
 - **Iedereen, wie kan vlucht.** Een rover slaat wie hij tegenkomt, ook een dorpeling. Een dorpeling die een rover ziet (6
   tegels), of die geraakt wordt, laat zijn werk vallen en rent naar het **town hall**, en zit daar binnen tot er geen
   rover meer op de kaart is; wie ze inhalen, kan vallen. Een wolf valt alleen je mannen aan, en zijn roedel vecht als je
-  hem aanvalt, als hij de held zonder licht aanvalt, als een man van je komt bij wie om hulp roept, of op de jacht; daarna
-  gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
-- **Het town hall** is het huis van de schout: het eerste gebouw, de eerste opslag, het midden van je bereik, en sinds 15
-  okt de plek waar iedereen schuilt (iedereen past erin). Het oude raadhuis (de stad, de schepenen) is weg.
+  hem aanvalt, als hij een man van je aanvalt (de held ook, alleen in het donker: sinds stap 5 zonder lantaarn), of als een
+  man van je komt bij wie om hulp roept; daarna gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
+- **Het town hall** (in de code `raadhuis`, sinds stap 5) is het huis van de aanvoerder: het eerste gebouw, de eerste
+  opslag, het midden van je bereik, en sinds 15 okt de plek waar iedereen schuilt (iedereen past erin). Het oude raadhuis
+  (de stad, de schepenen) ging op 15 okt weg.
 - **Het gevecht is een status.** Zodra iemand vecht, zegt een bericht met de plek het (*Fighting breaks out.*; een klik of
   Spatie brengt je erheen), staat *Fighting* in de balk, kleuren de randen van het beeld rood, en loopt de tijd hooguit op
   1× (pauze kan); zes seconden nadat niemand meer vecht, is het voorbij (*The fighting is over.*) en loopt de tijd weer
   op je eigen snelheid. Opslaan mag ook midden in een gevecht. De getallen in de werkbank ("Fighting").
 - **Gemeten** (15 okt, in de browser en in de toetsen): twee man militie tegen twee wilde rovers wint, tegen drie verliest
   hij; twee wilde rovers in de oogst zonder soldaten doodden drie dorpelingen. De balans komt later (Marcel, 15 okt).
-- **Nog niet:** de diensten en vijanden op elk uur (stap 4), de held die als veteraan opstaat (stap 5),
-  en de mannen van een andere speler als vijand (stap 6).
+- **Nog niet:** de mannen van een andere speler als vijand (stap 6).
+
+**Zo werkt de held nu** (16 okt, vraag 170, stap 5; Marcel, 15 okt: "de schout wordt een 'held' een 'general' of
+'commander' wanneer hij valt kan er een ander opstaan. Deze uit veteranen gekozen", en op 16 okt "A1, B1, C2";
+`js/soldaten.js`, `test/gevecht.test.cjs`):
+- **De aanvoerder** (*commander*; tot 16 okt de schout, *reeve*) is de held van je dorp: hij woont er en vecht mee, en
+  jij stuurt hem, zoals je soldaten. Hij heeft geen dienst en geen dagritme: hij staat waar je hem zet, dag en nacht.
+  In de brieven van de heer en op het scherm heet hij *commander*.
+- **Valt hij, dan neemt een ander het over**, en het spel gaat door: een veteraan, anders de soldaat die het langst
+  dient, en is er niemand, dan de eerste die soldaat wordt of van de heervaart terugkomt (tot dan is er geen held: Tab
+  doet niets). Een bericht zegt wie, met de plek. De nieuwe houdt zijn eigen uiterlijk en zijn wapen (een speerman vecht
+  met zijn speer, B1), telt niet meer mee in het wachthuis (dat zoekt een ander) en heeft geen dienst. Zijn gezin trekt in
+  het town hall, en het gezin van wie viel in zijn huis (C2: ze ruilen; had hij geen huis, dan is dat gezin dakloos).
+- **Weg** sinds stap 5 (wat alleen voor een lopende schout was): de reis over de landkaart, sluipen (S), de lantaarn van
+  de held, de sleutel en oprapen, slapen tot de ochtend (Z; de snelheid in de balk spoelt de nacht door), en het praten:
+  een klik op de marskramer opent zijn handel, een klik op de heer het venster om hem te betalen, en de waard heeft geen
+  *Talk* meer (de gesprekken zelf blijven in de code, tot we weten wat ermee gebeurt).
+- **Wat opviel:** zonder lantaarn is de held 's nachts buiten prooi voor de wolven als hij alleen staat. In de speeltest
+  (zaad 1, 16 okt) viel hij zo op 7 februari, en nam Reginald, de soldaat die het langst diende, het over; het jaar liep
+  uit zonder fouten.
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
@@ -1266,7 +1285,11 @@ van het eiland. **De grond van het eiland** (B van 2a, 8 okt): de zee, het stran
 tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is geen solide basis").
 
 
-**Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
+**Zo werkt het nu** (16 okt, vraag 170, stap 5): **de reis over het land is weg**, met `js/land.js`, `js/landkaart.js`
+en de spelregel "Land" (die stond standaard uit): je reist niet meer met de schout, en de provincies komen op het eiland
+zelf (vraag 162). Git bewaart het. Wat hieronder staat, is hoe het werkte.
+
+**Zo werkte het** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
 `test/land.test.cjs`; Marcel: "Ja, begin aan het land"):
 - **De kaart van het land:** loop je over de weg je gehucht uit (de tegel waar de marskramer binnenkomt), dan opent een
   venster met de kaart: negen provincies, met je gehucht (dat heet naar je dorp), het kasteel van de heer, de stad en zes
@@ -2273,7 +2296,8 @@ ziet de inner, behalve wat verstopt is.
 **Zo werkt het nu** (25 sep; `js/handel.js`, het venster in `js/hud.js`):
 - De marskramer komt drie keer per jaar: op 5 grasmaand, 5 hooimaand en 5 wijnmaand, telkens zo'n
   tien dagen. In de winter niet.
-- Je praat met hem op het plein en handelt in een venster; zolang dat open is, staat de tijd stil.
+- Een klik op hem op het plein opent het venster (sinds 16 okt, vraag 170, stap 5; daarvoor via een gesprek), en je
+  handelt erin; zolang dat open is, staat de tijd stil.
   Hij heeft maar zoveel goud bij zich en zoveel plaats in zijn mars.
 - Hij verkoopt ijzer en zout, en koopt graan, wol, hout, eieren, groente, vis, vlees en huiden. De
   prijzen verschillen per bezoek: voor graan betaalt hij in de lente goed en na de oogst weinig.
@@ -2301,7 +2325,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
   zo'n tien dagen. Hij komt over de weg binnen, staat op het plein en loopt dan weer weg. **In de
   winter komt hij niet,** want dan zijn de wegen slecht. Zout en ijzer voor de winter koop je dus
   in wijnmaand.
-- **Je loopt naar hem toe en praat met hem.** Vanuit het gesprek open je het handelsvenster, en
+- **Je loopt naar hem toe en praat met hem** (zo was het tot 16 okt; nu opent een klik meteen het venster). Vanuit het gesprek open je het handelsvenster, en
   zolang dat open is, staat de kalender stil. Hij heeft maar zoveel geld bij zich en zoveel plaats
   in zijn mars, dus je kunt niet alles in één keer kwijt.
 - **De prijs verschilt per bezoek.** Na de oogst is graan goedkoop, in de lente duur. Wie graan
@@ -2356,7 +2380,8 @@ een markt (vraag 72, het buurdorp). De markt zelf staat sinds 6 okt op het plein
 - Hij vraagt naar wat de inner zag: 15% van het graan, hoofdgeld (0,2 goud per mens), per gebouw
   zijn prijs, 15% van de kist, de schuld van vorig jaar, en een toeslag voor de argwaan. Goud neemt
   hij altijd, ook in de plaats van iets anders.
-- Je betaalt in een venster met schuiven, dat vooruitrekent of je graan het haalt tot de oogst.
+- Je betaalt in een venster met schuiven, dat vooruitrekent of je graan het haalt tot de oogst. Een klik op hem opent
+  het (sinds 16 okt, vraag 170, stap 5; daarvoor via zijn gesprek).
 - Hij telt slecht: vanaf 90% merkt hij niets. Daaronder een boete (het tekort komt volgend jaar
   terug, met de helft erbij); onder twee derde ook twee soldaten, die elk eten voor drie tot 1
   lentemaand; onder de helft ook de schandpaal (jij wijst aan wie, ook jezelf; drie dagen). Twee
@@ -3301,7 +3326,8 @@ Wat het vraagt:
 - **Het licht in het dorp** (`T.lichtBronnen`): de herberg, met zijn lantaarn en zijn ramen, en een
   lantaarn bij de put, voor de deur van de schout, die 's avonds brandt tot bedtijd (D). Een tweede bij de
   bank viel vanuit de camera achter de hut weg. Het spel tekent er de gloed van in de nacht.
-- **De lantaarn van de schout** (4 okt, vraag 125, C; Marcel: "ook spel. Voegt leuke elementen toe"): 's avonds en
+- **De lantaarn van de schout** (4 okt, vraag 125, C; Marcel: "ook spel. Voegt leuke elementen toe"; **weg sinds 16 okt**,
+  vraag 170, stap 5, met sluipen; de lantaarns van de bode bleven): 's avonds en
   's nachts draagt de schout buiten een lantaarn (`T.draagtLantaarn`, `T.ZIEN_INSTELLINGEN.lantaarn`). Hij staat in zijn
   eigen licht, dus ze zien hem van zes tegels in plaats van twee. Sluipen (`S`) dooft hem: dan is hij in het donker,
   trager, en ziet hij zelf ook minder. Wie iets wil verstoppen, sluipt dus. De spelregel "De lantaarn van de schout" op

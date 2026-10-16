@@ -57,8 +57,11 @@ nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
 niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
 gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Stap 3 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij Formaties): *Line* en
 *Ring*, op wapen gesorteerd, één kijkrichting, de knoppen op het briefje en het groen na de klik. **Stap 4 is af** (16 okt, in `main`; `spel.md`, "Zo werkt kijken, kiezen en sturen nu", bij De diensten): een dag- of
-nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Het
-volgende is stap 5, de held en het opruimen** (bij I; **Bezig in sessie `claude/clever-brown-vz07hg`**, 16 okt). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+nachtdienst per soldaat (*Day* en *Night*), *To arms* op het wachthuis, en rovers op elk uur, de helft 's nachts. **Stap 5
+is af** (16 okt, op de branch `claude/clever-brown-vz07hg`, wacht op Marcel voor `main`; `spel.md`, "Zo werkt de held
+nu"): de schout heet aanvoerder (*commander*), en valt hij, dan neemt een veteraan of de soldaat die het langst dient het
+over; de reis over het land, sluipen, de lantaarn, oprapen, slapen en het praten zijn weg. **Het volgende is stap 6,
+samen spelen** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
@@ -71,6 +74,20 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, op de branch `claude/clever-brown-vz07hg`; zeg "push
+  it" voor `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
+  wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
+  bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
+  van wie viel in zijn huis, C2); Tab kiest nu hem, en hij vecht met zijn eigen wapen (B1). Zonder soldaat zegt het dorp
+  dat er niemand is, tot er een soldaat komt. Een klik op de marskramer opent meteen zijn handel, op de heer zijn
+  venster om te betalen; S (sluipen) en Z (slapen) doen niets meer. **Wat Claude erbij koos** (zeg het als het anders
+  moet): (1) onder veteranen gaat de eerste in het dorp voor (wie het langst veteraan is, onthoudt het spel niet); (2)
+  de nieuwe aanvoerder staat waar je hem zet, dag en nacht, zoals de eerste, en heet in de teksten *the commander*
+  (zijn eigen naam valt weg: "Martin, son of the commander"); zijn gezin werkt, zoals dat van de eerste, alleen als er
+  niemand anders is; (3) de brief aan de marskramer schrijf je nu overal (het was "bij je huis"); (4) in de code heet
+  het town hall `raadhuis`, en zijn 85 tekeningen ook (hernoemd, niet opnieuw gerenderd). **Om naar te kijken:**
+  zonder lantaarn is de held 's nachts buiten prooi voor de wolven als hij alleen staat. In de speeltest (zaad 1) viel hij
+  zo op 7 februari, en nam Reginald het over. Wil je dat de wolven hem met rust laten, dan is dat een regel erbij.
 - **De diensten bekijken** (vraag 170, stap 4, 16 okt, in `main`): Nieuw
   spel, zet een wachthuis (B) met drie man militie (+). Kies er een, en druk op zijn briefje bij *Watch* op *Night*: hij
   gaat naar huis en slaapt overdag, en vanaf het slapen (`Spel.debug.uur(22)`) staat hij bij het wachthuis terwijl de
@@ -650,7 +667,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   's nachts (van slapen tot opstaan), het uur uit het zaad; de werkbank. Op het briefje van een soldaat zijn dienst, en
   op dat van het wachthuis hoeveel er overdag en 's nachts waken. Wat erbuiten bleef (`opmerkingen.md`): een fakkel bij
   de nachtwacht, 's nachts minder ver zien, en een patrouille.
-- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt). De schout heet voortaan
+- **5, de held en het opruimen:** **Bezig in sessie `claude/clever-brown-vz07hg`** (16 okt): **af op de branch**, wacht
+  op Marcel voor `main` (`spel.md`, "Zo werkt de held nu"; `code.md` bij `js/soldaten.js`). De schout heet voortaan
   anders (vraag A), en valt hij, dan staat er een veteraan op; het praten is geparkeerd; eruit wat alleen voor een lopende
   schout was.
   **Het plan** (Claude, 16 okt; **besloten**, Marcel: "A1, B1, C2"), in vier commits: **5a weg** wat alleen voor een

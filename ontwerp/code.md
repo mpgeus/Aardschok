@@ -76,19 +76,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/dorp.js: het spel en zijn dorpen
 
-- `js/dorp.js`: **het spel en zijn dorpen** (werklijst vraag 71, 30 sep). `S` is het spel: de kalender, het land, de
-  schout van de speler (`S.schout`), waar hij is (`S.wereld`), het scherm, en de dorpen (`S.dorpen`); je eigen dorp is
-  `S.dorp`. Een dorp (`D`) heeft alles van zichzelf: zijn kaart (`D.wereld`), voorraad, gebouwen, bewoners, wetten, hoe
+- `js/dorp.js`: **het spel en zijn dorpen** (werklijst vraag 71, 30 sep). `S` is het spel: de kalender, het land, waar je
+  kijkt (`S.wereld`), het scherm, en de dorpen (`S.dorpen`); je eigen dorp is `S.dorp`, en je held `S.dorp.aanvoerder`
+  (tot vraag 170, stap 5 ook `S.schout`). Een dorp (`D`) heeft alles van zichzelf: zijn kaart (`D.wereld`), voorraad, gebouwen, bewoners, wetten, hoe
   de heer ertegenover staat, rovers, trede, vee, de vlaggen van wat er speelt
-  (`D.vlaggen`), en zijn eigen schout (`D.schout`; in jouw dorp ben jij dat). `D.kalender` is `S.kalender`.
+  (`D.vlaggen`), en zijn eigen aanvoerder (`D.aanvoerder`, de held; valt hij, dan neemt een ander het over, `js/soldaten.js`). `D.kalender` is `S.kalender`.
   **Een regel over een dorp krijgt het dorp mee** (`T.tikGebouwenDag(D, dag)`, `T.wijzigVoorraad(D, ...)`); wat ook
   het spel nodig heeft (of je vecht, praat of slaapt, de klok van het scherm), krijgt allebei: `T.werkOogstBij(S, D, dt)`,
   en een gesprek `T.doeGevolg(S, D, doe)` (je tas en je quests van het spel, de vlaggen en
   het goud van het dorp). De balk en de vensters gaan over je eigen dorp (`S.dorp`, vraag 71, C); wat getekend,
   aangeklikt of gevochten wordt, over het dorp dat er ligt (`T.dorpHier(S)`, of geen). Een venster dat een dorp zelf
   opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, het rekenboek met `T.ui.toonVoorraad(D)`), komt alleen voor je
-  eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.schoutIsWeg(D)` zegt of zijn
-  schout niet op de kaart van het dorp staat. Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
+  eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.aanvoerderIsWeg(D)` zegt of zijn
+  aanvoerder niet op de kaart van het dorp staat (of er geen is); `T.isAanvoerder(S, e)` of e je eigen held is, ook op een
+  bladzijde zonder dorp (het lopen, het gereedschap). Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
   **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elke tik alles van een dorp (`T.wereldTik`,
   js/tik.js, voor elk dorp in `S.dorpen`), en ligt het niet waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op
   zijn eigen kaart, niet getekend (`T.beweegWezens` in js/anim.js, `T.dwaal` in js/verkennen.js). Een ander dorp dan het
@@ -113,7 +114,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   loopt in vaste tikken**, zestig per seconde echte tijd (`T.TIK`), los van hoeveel beelden een computer tekent; per tik
   schuift ze de tik maal de snelheid op (`T.wereldFactor`, js/tijd.js). `T.wereldTik(S)` is de ene tik: de kalender, de
   klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`),
-  en waar de schout is het maaien, het veldwerk, het wild, het dwalen en wie hem ziet; `S.tik` telt ze. js/main.js tikt
+  en waar de aanvoerder is het maaien, het veldwerk, het wild, het dwalen en wie hem ziet; `S.tik` telt ze. js/main.js tikt
   zo vaak als er tijd verstreek (`T.tikBij`: een tik gaat al als er een halve klaarligt, zodat bij zestig beelden per
   seconde elke tik in een eigen beeld valt, en hooguit drie per beeld: een trage computer laat de wereld dan langzamer
   lopen, zoals tot nu). **Spel.debug.stap, de speeltest, de toetsen en `npm run grootte` tikken dezelfde tik**: geen eigen
@@ -131,8 +132,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   soldaten (de knoppen op het briefje van het wachthuis dragen een `opdracht`, js/huisbriefje.js). `test/tik.test.cjs`
   kijkt na dat het scherm die regels niet zelf aanroept. **Nog niet** (stap 6 van vraag 170, als een venster de tijd niet
   meer stilzet): de vensters (de handel, de velden, het slachten, de heer, de wetten, de brieven, de bode),
-  de snelheid en het slapen, en het debugvenster; het lopen van de schout en het gevecht in beurten gaan eruit (stap 2
-  en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
+  de snelheid, en het debugvenster; het lopen van de schout en het gevecht in beurten zijn eruit (stap 2 en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
 
 
 ### js/opslaan.js en js/menu.js: opslaan en laden, het titelscherm
@@ -164,7 +164,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   delen): `test/taal.test.cjs` kijkt elk bestand na (`OMGEZET` is heel `js/`), dus een tekst buiten `T.t` in een nieuw bestand
   maakt de toets rood; wat alleen wij zien (de console, `Spel.debug`), krijgt `// geen tekst`. In `T.GEBOUWEN` staan de tekeningen en de `opmerking` voor ons, niet de speler: die regels hebben `// geen tekst`.
 - **De tekst van het scherm** (vraag 147, deel 3, 11 okt): `js/hud.js`, `js/balk.js`, `js/ui.js`, `js/huisbriefje.js`,
-  `js/dialoog.js`, `js/verkennen.js`, `js/landkaart.js`, `js/land.js` en `js/main.js` zijn om. **`index.html` heeft zelf geen
+  `js/dialoog.js`, `js/verkennen.js` en `js/main.js` zijn om. **`index.html` heeft zelf geen
   tekst voor de speler meer**: een element zegt met `data-t` (tekst), `data-t-html` (tekst met toetsen) of `data-t-title` (de
   uitleg bij de muis) welke zin erin hoort, en die staat in `PAGINA` onderaan `js/ui.js`; de balk onderaan vult haar eigen
   stukken (de knoppen uit `KNOPPEN`, de namen van de bazen, de lat uit `SNELHEDEN`), en `document.title`
@@ -195,7 +195,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
   versneller `T.SNELHEDEN`; `T.wereldFactor` en `S.wereldTijd`; wie de tijd stilzet,
   `T.houdTijdStil`), `js/dag.js` (de zon per seizoen, de dagindeling, het licht, het ritme van de
-  boeren, slapen tot de ochtend, en bezoekers die overdag komen, `T.bezoekerKomtAan`),
+  boeren, en bezoekers die overdag komen, `T.bezoekerKomtAan`; slapen tot de ochtend met Z is sinds vraag 170, stap 5 weg),
   `js/voorraad.js` (`D.voorraad`; alles verandert via
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; elk huis van de huizenbouwer jong en oud, vraag 144: wat er bij het begin al
@@ -234,7 +234,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
   niet meer op een rapport en kent hij geen argwaan, toeslag of rond kijken meer;
   de inner zelf ging er op 11 okt ook uit; de schandpaal kost het dorp `schandpaalKost`, en er kan alleen een boer met
-  een naam op de kaart aan, `e.wie`, dus in het lege begin alleen de schout), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
+  een naam op de kaart aan, `e.wie`, dus in het lege begin alleen de aanvoerder), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
   koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; velden naast elkaar als één weide,
   `T.weideGroepen`; waar een dier graast, op een weide of op de meent (de heide), `T.graaslandVan`;
   het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`, en op 1 slachtmaand doen de boeren
@@ -279,7 +279,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, welke stukken open zijn (`w.open`,
   `T.openVak`), en wat je kent (`w.gekend`, `js/mist.js`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
   beeld in `T.werkDorpBij`; stap 5, Marcel: "Al je mensen"): een stuk binnen `openRond` tegels (16,
-  `T.WERELD_INSTELLINGEN`) van de schout, een dorpeling of de ossenkar, hooguit één per beeld. **Alles per stuk**
+  `T.WERELD_INSTELLINGEN`) van de aanvoerder, een dorpeling of de ossenkar, hooguit één per beeld. **Alles per stuk**
   (Marcel, 13 okt): een stuk dat open gaat, is geen kaartverandering (geen `T.kaartVeranderd`); wat het land beslaat,
   kijkt naar `T.openGrootte(w)` en neemt alleen de nieuwe stukken erbij (`T.nieuweStukken`): het raster van wat vaststaat
   en de eilanden van A\* (met een unie, `ouder`), de lijst platte dingen en de grondbuffer in `js/tekenen.js` (een
@@ -307,9 +307,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   met een kleine letter ("the wolf" in de zin, `T.t('The {wezen} sees you.')`), en wat een monster doet, is
   `aanval.zin` met `{doel}` erin (`T.t('bites {doel}')`): `js/gevecht.js` vult *you* of de naam van de man van de militie in
   (`T.vulTekst`), zodat een vertaler de hele zin kan bouwen.
-  Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
-  'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
-  'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
+  Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.dorp.aanvoerder`, met soort
+  'aanvoerder' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
+  'speler' zonder de aanvoerder te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
 
 ### js/mist.js: de mist
 
@@ -356,8 +356,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden. Op het eiland beslaat
   een veld het dorp met `veldRand` tegels eromheen (`veldVak`), niet al het land dat je kent; van of naar daarbuiten, of
   als het veld geen weg vindt, zoekt hij hem zelf.
-  **Meelopen met de schout** (`T.loopNaastDeSchout`): wie hem volgt (de militie)
-  loopt naast hem, en staat hij er niet, dan op een vrije tegel dicht erbij.
 
 ### js/praatje.js: een praatje
 
@@ -384,8 +382,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/verkennen.js: rondlopen en dwalen
 
-- `js/verkennen.js`: wat een klik links kiest (`T.handelingVerkennen`; sinds vraag 170, stap 1, loopt de schout er niet
-  meer heen: `js/kiezen.js`), dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
+- `js/verkennen.js`: wat een klik links kiest (`T.handelingVerkennen`; sinds vraag 170, stap 1, loopt de aanvoerder er niet
+  meer heen: `js/kiezen.js`; sinds stap 5 opent een klik op de marskramer zijn handel, en op de heer het venster om hem te
+  betalen, zonder gesprek; oprapen, sluipen en `S.naLopen` zijn weg), dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
   dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
   vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN` in `js/lopen.js`; Marcel, vraag 88), en per
   beeld zoeken hooguit `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
@@ -509,7 +508,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   transparant"; `#minikaart` in `stijl.css`): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
   verandert, en tien keer per seconde de ruit: het eiland, levendig (`verzadiging`, `helderheid`; Marcel: "Ik bedoelde
   meer vibrant"), een donkere tint over wat je niet kent alleen waar het eiland is (`onbekend`, `nevel`, met
-  `source-atop`: je ziet de vorm, niet wat er is), de plekken die je kent, je gebouwen, de schout in rood, en het kader
+  `source-atop`: je ziet de vorm, niet wat er is), de plekken die je kent, je gebouwen, de aanvoerder in rood, en het kader
   van de camera (`T.tekenMaat` gedeeld door `S.zoom`). **Er blijft geen ruit over** (Marcel: "een echte gefeatherde rand
   ... dat je geen ruit meer overhoud"), **met een lijn van 1 pixel erom** ("Het gaat toch wat teveel op in het land"):
   als het beeld af is, rekent `vervaagDeZee` voor de zee de afstand tot het land (rond, in twee gangen met stappen van 1
@@ -517,19 +516,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`m.binnen`, en in `js/balk.js` `omtrekVan`: de rand ervan op de maat van het doek, één keer per maat), en daarbuiten
   vervaagt hij in `zeeVervaagt` vakken, rafelig (`rafel`, `rafelVlek`); vlak bij de rand van het vierkant altijd. Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
   (Tab) aan en de camera erheen.
-
-### js/land.js en js/landkaart.js: het land met provincies
-
-- `js/land.js`: **het land** (vraag 63 en 69, 30 sep; stap 1a, stuk 1): een kaart met provincies uit het zaad van het
-  spel (`T.nieuwLand`, in `S.land`), wegen met hoeveel dagen reizen, en wat je zag (`gezien`; de rest is donker). Reizen:
-  `T.reisNaar` (over wegen die je kent) en `T.beginReis`; `T.werkLandBij` (elk beeld) laat je aankomen of thuiskomen, en
-  opent de kaart als de schout op de weg het dorp uit staat (`T.wegInEnUit`). **Wie reist, verlaat de kaart van het
-  dorp niet:** de schout gaat uit de wezens, en het dorp blijft `S.wereld`, zodat de heer, de marskramer en de
-  rovers thuis hun werk doen. Of de schout weg is, zegt `T.schoutIsWeg(D)` (`js/dorp.js`; ook een ander gebied), of hij op reis is,
-  `T.opReis`; berichten (`js/ui.js`) en brieven (`js/brieven.js`) wachten dan in `S.land` (`T.bewaarVoorLater`,
-  `T.briefVoorLater`), en een bezoeker zet de reis niet op 1× (`T.naarGewoneSnelheid`). Achter de spelregel "Land"
-  (standaard uit, tot het buurdorp er is); de getallen in `T.LAND_INSTELLINGEN`. Het scherm: `js/landkaart.js` (de kaart
-  als SVG, en het venster als je terug bent).
 
 ## Beeld en scherm
 
@@ -556,8 +542,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder info te missen"): links het dorp (de kas,
   de inwoners, de tevredenheid), in het midden de datum en het uur (`T.ui.toonKalender`, `js/hud.js`; het seizoen en het
   weer op het briefje bij de muis), rechts de lat van de snelheden, de twee bazen en Menu; wat eronder begint, rekent
-  met `--boven`. De velden (V), het wetboek
-  (W), sluipen (S) en slapen (Z) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
+  met `--boven`. De velden (V) en het wetboek
+  (W) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
   vraag 146, c, met haar kunst uit `gereedschap/pixelart/tafel.cjs`, en git bewaart haar. Wat een ding of een getal is
   en zijn toets, staan op het briefje bij de muis, `#wenk`, niet op het ding: onderaan erboven, bovenaan eronder. Alles op
   ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één, 4K twee, `pasSchaal`, in `--ui-zoom`; hoe hoog
@@ -566,7 +552,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   146, d: het doel met de raad en de statussen linksboven, onder de balk, en het briefje bij de muis werkt daar ook),
   `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **De camera is los** (vraag 170, stap 1; `js/kiezen.js`): hij glijdt naar `S.kijk`
-  (alleen scherm), en volgt de schout niet meer; de pijltjes en de muis tegen de rand van het venster schuiven hem
+  (alleen scherm), en volgt de aanvoerder niet meer; de pijltjes en de muis tegen de rand van het venster schuiven hem
   (`schuifBij`, elk beeld, met `T.KIEZEN_INSTELLINGEN.camera`), de minikaart zet hem neer (`T.kijkNaar`), `T.glijNaar`
   laat hem naar een tegel glijden (Tab naar de held), het wiel zoomt altijd (`zoomStanden`), en `begrens` houdt hem boven
   `T.kaartGrens`. Alleen een gevecht in beurten kijkt zelf mee (`cameraDoel`), tot stap 2. **Kiezen** (stap 1b; de regels in
@@ -575,7 +561,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staan in `S.groepen` (alleen scherm: elke speler zijn eigen). **Een bericht met een plek** (`T.zeg(D, tekst, soort,
   plek)`, en `aankomst.plek` bij `T.bezoekerKomtAan`): `T.ui.bericht` maakt het aanklikbaar (`T.glijNaar`), Spatie kijkt
   naar `S.berichtPlek`, en `T.ui.ping` (`js/balk.js`) laat de plek op de minikaart knipperen. Tot 15 okt volgde hij de
-  schout, en tilde Tab hem eraf in het overzicht (vraag 108, a; `S.overzicht`, weg). **De fotomodus** (vraag 146,
+  aanvoerder, en tilde Tab hem eraf in het overzicht (vraag 108, a; `S.overzicht`, weg). **De fotomodus** (vraag 146,
   e): `H` (of Fotomodus in het menu) haalt alles van het beeld (`body.foto` in `stijl.css`, en wat ui is op het doek,
   `S.foto` in `js/tekenen.js`); de camera schuift ook met slepen, tot twee keer dichterbij; een klik doet niets,
   en `Enter` bewaart het beeld als PNG op de maat van het scherm (`bewaarFoto`; in de versie voor Windows in Afbeeldingen). Op een groot scherm tekent het spel op een hele deling ervan, minstens
@@ -674,7 +660,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
   `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
   gebouwen** (stap 3, 7 okt): elke stijl heeft ook de kleine en de grote herberg, de kapel, de woontoren en het huis van
-  de schout (`grootGebouw` in `huizen.cjs`); de maker legt het huis van de schout en de herberg in de stijl, een stenen
+  de aanvoerder (`grootGebouw` in `huizen.cjs`); de maker legt het raadhuis en de herberg in de stijl, een stenen
   gebouw krijgt de steen van zijn stijl of baksteen (`nu`), de herberg groeit in een dorp mee tot de grote (`groeitMee`,
   `laatMeegroeien` in `js/behoeften.js`, met zijn deur aan dezelfde kant, `groeiSchuif`; waar hij groot wordt, blijft
   de grond vrij, `T.meegroeiGrond`), en een stenen huis wordt met marktrecht een woontoren voor drie gezinnen
@@ -698,9 +684,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/zien.js`: **het licht in het dorp** (werklijst vraag 108, d, en 125, C; tot 11 okt ook het zichtveld en de
   getuigen, vraag 151): het licht staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die
-  's avonds branden, de ramen van de huizen waar iemand thuis is, de kaarsjes van de kerstboom, een brand, de bode, en de lantaarn van de
-  schout, `T.draagtLantaarn`: buiten in het donker, tot hij sluipt, vraag 125, C), voor het licht in `js/tekenen.js` en
-  voor de wolven, die aan de rand van zijn licht blijven (`js/beesten.js`); `T.huizenMetIemandThuis` zegt welke huizen
+  's avonds branden, de ramen van de huizen waar iemand thuis is, de kaarsjes van de kerstboom, een brand, en de lantaarns van de bode,
+  soort 'drager'; tot vraag 170, stap 5 ook de lantaarn van de schout), voor het licht in `js/tekenen.js` en voor de
+  wolven, die niemand in het licht aanvallen (`js/beesten.js`); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 
 ### gereedschap/pixelart/: de beelden uit code
@@ -763,7 +749,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.maakDorpeling` en `T.maakMens` zijn de vragen eromheen.
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
   **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
-  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen de schout en de monsters.
+  wordt neergezet — en een dorpeling is dat niet. Daar staan alleen de aanvoerder en de monsters.
   Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de molenaar, ...): voor als het gehucht een
   dorp wordt. (Tot ronde 2 van het snoeien, stap 6, ook de vijf boeren en de herbergierster van het gehucht dat er al
   was.) Wie over de weg komt en op geen kaart staat
@@ -775,7 +761,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   stap 2; `ontwerp/spel.md`, "Mensen worden poppetjes"). Het getal in de balk (`D.bevolking`) blijft
   de waarheid; de bewoners (`D.bewoners.mensen`) volgen het, één per mond, elk met een naam, een
   leeftijd (`T.LEEFTIJDEN`, die ook zijn vel kiest), een huis, een gezin en een poppetje
-  (`e.bewoner`). De schout en de boeren zijn ook bewoners, met het wezen dat de kaart al neerzette.
+  (`e.bewoner`). De aanvoerder en de boeren zijn ook bewoners, met het wezen dat de kaart al neerzette.
   Hoeveel handen een gebouw krijgt, zegt `T.verdeelHanden` (`js/gebouwen.js`); wíé dat zijn,
   `T.wijsWerkToe`, en wie werk heeft, houdt het. Waar iemand op welk uur hoort, zegt `T.dagAnker`
   (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
@@ -791,7 +777,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   worden", en "1. C 2. Ja 3. Ja"): elke bewoner heeft een geboortedag (`p.geboren`; wie er al was, krijgt er een in zijn
   fase), elke fase duurt vaste jaren (`fasen`), en elke nacht (`T.tikLevenDag`, na `T.tikKoortsDag`) gaat wie zijn fase
   uit is een verder (`T.poppetjeNaarLeeftijd` in `js/bewoners.js`, met een nieuw uiterlijk), sterft een oude van
-  ouderdom, en krijgt een gezin met plaats soms een kind (`T.plaatsInHuis`). De schout en wie een naam heeft (`p.wie`)
+  ouderdom, en krijgt een gezin met plaats soms een kind (`T.plaatsInHuis`). De aanvoerder en wie een naam heeft (`p.wie`)
   worden niet ouder (`T.wordtOuder`). **Het uiterlijk** (vraag 145, 1): elke bewoner draagt een van de 24 uiterlijken van
   zijn lijf (12 voor een kind of een oude; `p.uiterlijk`, `T.kiesUiterlijk`: het minst gebruikte, niet als de buren, een
   kind met het haar van zijn ouders), ook in zijn werk (`boer-u7`, `zaaier-u7`; `T.UITERLIJK_LIJF`, en in js/sprites.js
@@ -835,9 +821,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van de marskramer waar de weg het plein raakt, en de plek van het kamp (`w.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
   de voorraad uit de kar (`T.BEGIN_INSTELLINGEN.kar`), een tent per gezin (`T.GEBOUWEN.tent`, `tijdelijk`: zo groot als
   zijn gezin, `T.woonruimteVan` in `js/gebouwen.js`, dus geen plaats voor een nieuw gezin; zijn deur zegt hij zelf,
-  `g.deur`), die van de schout met `huis: 'schout'` (slapen, de bode), en de huifkar als wezen (`e.kar`, het
+  `g.deur`), die van de aanvoerder met `huis: 'aanvoerder'`, en de huifkar als wezen (`e.kar`, het
   vel `huifkar`) aan de rand op de weg; in elke andere tent een gezin dat meekwam (`kampGezin` in `js/bewoners.js`). Elk
-  beeld (`T.werkBeginBij`): de kar rijdt naar het plein, de gezinnen komen over de weg erachter (`p.komt`), de schout loopt
+  beeld (`T.werkBeginBij`): de kar rijdt naar het plein, de gezinnen komen over de weg erachter (`p.komt`), de aanvoerder loopt
   naast de kar tot je zelf klikt (`padDoel.metDeKar`), en is de kar er, dan gaan de tenten en het kampvuur op
   (`T.zetKampOp`; het vangnet elke nacht, `T.tikBeginDag`). Het vuur brandt als de mensen op zijn en smeult als ze werken
   of slapen (`T.kampvuurStand`, `T.kampLicht`; `T.sprites.kamp` en `T.sprites.kampvuur`, uit
@@ -849,18 +835,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het kamp: het eerste dat past, of anders het eerste in een woning waar nog niemand woont, krap (`T.verhuisUitHetKamp`;
   het verhuizen zelf is `T.verhuis` in `js/bewoners.js`: zijn thuis en zijn plekken gaan mee, en wie binnen is, komt de
   oude deur uit). Een lege tent gaat uit `D.gebouwen` en van de kaart, met de laatste ook het kampvuur (`D.begin.kamp`
-  wordt `'weg'`); de tent van de schout blijft zijn huis tot zijn eigen huis af is (hieronder). `T.kampTenten` zijn de tenten van de gezinnen: zolang
+  wordt `'weg'`); de tent van de aanvoerder blijft zijn huis tot zijn eigen huis af is (hieronder). `T.kampTenten` zijn de tenten van de gezinnen: zolang
   er een is, zegt `T.waaromGeenGezin` `'kamp'` en komt er geen nieuw gezin. **Het bouwbereik** (1d, 11 okt): je bouwt
   binnen `bouwBereik` tegels van het plein en van elke opslag die af is (`opslag` in `T.GEBOUWEN`); `bouwBereik(D)` rekent
   per tegel de afstand uit, alleen in het vak om het plein en de opslagen (`x0`, `y0`, `b`, `h`; de wereld wordt het hele
   eiland), één keer tot er een opslag bij komt (een WeakMap op de kaart, niet in S, want het volgt uit de kaart en de
   gebouwen), `T.inBouwBereik` en `T.waaromBuitenBouwBereik` (als eerste in `T.waaromPastHetNiet`) vragen
   het, en `tekenBouwBereik` in `js/tekenen.js` tekent het als je bouwt (`T.bouwBereikVan`). Zonder `D.begin` (het oude
-  begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de schout in een gevecht deze beurt kan komen. **Het
-  huis van de schout** (1d): `schout` in `T.GEBOUWEN`, met `leeg` (alleen met `D.begin`), `eenmalig` (één keer, ook in
-  aanbouw telt) en `opslag` (bereik); `nogTeBouwen` in `T.magGebouwd` en `T.plaatsGebouw` vraagt het. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
-  bouwfasen. Is hij af, dan verhuist de schout met zijn gezin erin (`verhuisDeSchout`, als eerste in
-  `T.verhuisUitHetKamp`): het huis krijgt `huis: 'schout'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
+  begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de aanvoerder in een gevecht deze beurt kan komen. **Het
+  raadhuis** (1d): `raadhuis` in `T.GEBOUWEN`, met `leeg` (alleen met `D.begin`), `eenmalig` (één keer, ook in
+  aanbouw telt) en `opslag` (bereik); `nogTeBouwen` in `T.magGebouwd` en `T.plaatsGebouw` vraagt het. Zijn tekening komt uit de bouwstijl (`raadhuis`, net als de maker), nog zonder
+  bouwfasen. Is hij af, dan verhuist de aanvoerder met zijn gezin erin (`verhuisDeAanvoerder`, als eerste in
+  `T.verhuisUitHetKamp`): het huis krijgt `huis: 'aanvoerder'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
   met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder; boeren en velden: `js/boerderij.js`.
   `T.verhuisUitHetKamp` zet een gezin ook in een boerderij of een wijnboerderij die af is (één gezin per boerderij; `T.isBoerderij`), en zegt dat de man de
   boer is.
@@ -925,7 +911,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### gereedschap/speeltest/kolonist.js: de kolonist
 
 - **Een speler in code voor het lege begin** (werklijst B, 1f; Marcel, 12 okt: "a1, b1, c1, d ja"). `T.kolonistDag(D,
-  dag)` loopt elke dag zijn regels af en doet wat er vandaag kan: het huis van de schout, een boerderij met akkers tot al
+  dag)` loopt elke dag zijn regels af en doet wat er vandaag kan: het raadhuis, een boerderij met akkers tot al
   het zaaigraan uit de kar erop past (zolang `T.isNazaaitijd`), een houthakker als het hout laag wordt, hutten tot elk
   gezin in het kamp een woning heeft, een jager als het spel zegt dat het eten niet haalt (`T.watDeWinterNietHaalt`, of
   de status honger; hooguit één per `jagerNa` dagen; Marcel, 12 okt: "a ja"), en na de oogst een wijnboerderij en daarna een
@@ -978,7 +964,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   onder de vertrekdrempel zakt (`pasVertrekToe`).
 - **De standen** (`T.STANDEN`, `T.standVan`, `T.standOnder`, `T.mensenVanStand`, `T.mensenPerHuis` in `js/treden.js`): wie
   waar woont (een hut keuters, een huis dorpelingen, een stenen huis of woontoren ambachtslieden, een boerderij boeren;
-  het huis van de schout geen). Ze tellen voor de treden, de belasting (`T.belastbaar` en `belastingNaarStand` in
+  het raadhuis geen). Ze tellen voor de treden, de belasting (`T.belastbaar` en `belastingNaarStand` in
   `js/wetten.js`: wie hoger woont, betaalt meer), de kleren (`T.klerenVan`, `js/bewoners.js`) en wat er kan branden
   (`js/brand.js`).
 - `js/huisbriefje.js`: **het briefje bij een huis** (2c, vraag 100; in de stijl van de schrijftafel, vraag 98, C): staat
@@ -1155,7 +1141,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de eerste keer dat het dorp leeft: `T.werkBeestenBij`, elk beeld vanuit js/main.js en `T.werkDorpBij`), elk met een plek
   diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
-  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`); wie sluipt, komt dichterbij. Een groep is een ding dat de dieren delen
+  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`). Een groep is een ding dat de dieren delen
   (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
   `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht;
   je mannen kunnen hem aanvallen, en dan vecht zijn roedel terug (`T.wolvenVechten`, `G.vecht`; js/gevecht.js); 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
@@ -1169,11 +1155,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het dorp: `bosKaart`, met `T.bosInVak` uit `js/bos.js`). **De dreiging** (stap 2b): wie aan het werk
   een roedel ziet, rent naar huis (`schrik`; `T.blijftThuis` in js/bewoners.js, `p.thuisTot`: hij werkt niet, en
   `T.dagAnker` houdt hem binnen), en zijn werkplaats maakte die dag de helft; een roedel met honger is in het donker stout
-  (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, wie alleen in het donker loopt, of de schout), en slaat toe
+  (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, of wie alleen in het donker loopt, de aanvoerder ook), en slaat toe
   (`slaToe`): een schaap (`T.verliesDier` in js/vee.js, met een bericht met de plek; tot 15 okt het voorval "wolven",
   met een jacht of een hek, weg in ronde 3 van het snoeien), een mens
-  (`bijt`: gewond, `p.gewond`, of dood), of de schout zonder licht (een gevecht); bij zijn lantaarn blijft hij aan de rand
-  van het licht (`randVanHetLicht`). De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
+  (`bijt`: gewond, `p.gewond`, of dood), en een man (de aanvoerder, een soldaat) vecht met hem (een gevecht). Tot vraag
+  170, stap 5 bleef de roedel aan de rand van de lantaarn van de schout. De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
   "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. **De jager** (stap 3a): de helft van zijn vlees
   is klein wild, de rest komt uit de herten in zijn bereik (`T.wildVanJager`, `g.wild`; `T.watDeJagerSchiet` en
   `T.jagerJaagde` vanuit `T.tikGebouwenDag`), twee per groepje laat hij staan, en een roedel van meer dan drie maakt hij
@@ -1258,7 +1244,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van de markt, `IN_DE_MAND`).
 - **De schuur** (stap 4): `T.GEBOUWEN.schuur` (`opslag`, `kar`, `leeg`). `T.geefSchurenEenKar` (in `T.tikGebouwenDag`, na de
   gebouwen die af kwamen) zet naast zijn deur een kar (`T.maakKar`, ook voor de huifkar van het begin) met `e.thuis` en
-  `g.kar`. `thuisVan(D, e)`: waar een kar laadt en lost (zijn schuur, anders het huis van de schout, anders de plek in
+  `g.kar`. `thuisVan(D, e)`: waar een kar laadt en lost (zijn schuur, anders het raadhuis, anders de plek in
   het kamp); `verantwoordelijk(D, g)`: de kar met zijn opslag het dichtst bij g, en alleen die neemt g in `kiesRit`. Een
   kar zonder werk rijdt naar zijn opslag. Het bereik komt vanzelf uit `opslag` (`T.inBouwBereik`, `js/begin.js`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
 - **Bouwen met de kar** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet met de kar
@@ -1295,7 +1281,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/afbreken.js`: **afbreken** (werklijst C, stap 5, e; Marcel, 14 okt: "Wegen en gebouwen, nu", en "ze lopen los, met
   een melding dat er huizen nodig zijn"). `T.handelingAfbreken(D, x, y)` geeft `{ tekst, kan, doe, plekken }` voor de muis
   en de klik (`js/main.js`, met `S.bouwSoort` 'afbreken'): een gelegde weg (`T.haalWegWeg`), een weg in aanleg
-  (`T.stopWegwerk`), of een gebouw (`T.breekAf`). Niet: het huis van de schout, een tent, een losse stapel, een veld op
+  (`T.stopWegwerk`), of een gebouw (`T.breekAf`). Niet: het raadhuis, een tent, een losse stapel, een veld op
   zichzelf, de weg van de kaart. `T.breekAf`: de bewoners `T.wordtDakloos` (`js/bewoners.js`: `p.huis` null, `e.thuis` op
   `T.dakloosPlek`, het plein; `T.deurVanBewoner` is hun deur; ze slapen buiten, `T.dagAnker` in `js/dag.js`, en trekken in
   de eerste woning met plaats, `T.verhuisUitHetKamp` in `js/begin.js`; de status `dakloos` in `js/statussen.js`), de
@@ -1320,9 +1306,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover van de bende
   die valt). Het gebeurt op je eigen kaart (Marcel: "alles onze eigen kaart"; alleen buiten beeld als er al rovers
   zijn): de aanval met soort 'hinderlaag' in js/rovers.js
-  (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), wie meegaat vecht
-  aan jouw kant (`T.roepOp`), en de militie komt; komt de schout, dan is het een gevecht in beurten (`T.naGevecht`:
-  `T.bodeWegVrij`), anders loopt het na `hinderlaag.uren` af (`T.bodeAangehouden`). Elke nacht (`T.tikBodeDag`, na
+  (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), stuur je mannen erheen,
+  dan vechten ze (`T.naGevecht`: `T.bodeWegVrij`), anders loopt het na `hinderlaag.uren` af (`T.bodeAangehouden`). Elke nacht (`T.tikBodeDag`, na
   `T.tikHandelDag`): in het donker dragen ze een lantaarn (`T.bodeLicht`, in `T.lichtBronnen`). Zijn ze er, dan komt de
   marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js:
   `m.bestelling` met de prijzen, maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek;
@@ -1469,8 +1454,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   is dood: een rover is uit de bende (`T.roverVerslagen`), een soldaat of een dorpeling een mond minder (`T.sneuvelt`,
   via `T.wijzigBevolking` met wie het is, en waartegen), en wie het overleeft, geneest na een nacht (`genees`); de doden
   (ook een wolf) begraaft `begraaf` de volgende dag. De laatste rover die valt, maakt de aanval af (`T.naGevecht`). De
-  getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). `T.roepOp` en `T.laatGaan` zijn er nog voor de jacht op de
-  wolven (`js/beesten.js`): wie meegaat, loopt met de held mee en vecht aan jouw kant (`e.opgeroepen`).
+  getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). (`T.roepOp` en `e.opgeroepen`, wie met de schout meeliep, zijn
+  sinds vraag 170, stap 5 weg.)
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
@@ -1520,7 +1505,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   erna (`T.OORZAKEN.gevecht`, js/statussen.js); een bericht met de plek als het begint en ophoudt (`T.gevechtVoorbij`:
   ook `T.wolvenNaHetGevecht`), de tijd hooguit op 1× (`T.erWordtGevochten` in `T.snelheidNu`, js/tijd.js),
   en de randen van het beeld kleuren rood (`S.gevechtGloed`). Opslaan mag ook in een gevecht.
-- Valt de held, dan is het spel uit (`T.schoutGevallen`), tot stap 5. Tot 15 okt was dit het gevecht in beurten: de
+- Valt de held, dan is hij een mond minder zoals elke man (`T.sneuvelt`), en neemt een ander het over (`T.aanvoerderValt`,
+  `js/soldaten.js`; vraag 170, stap 5); tot dan was het spel uit. Tot 15 okt was dit het gevecht in beurten: de
   overgang, het raster, de actiepunten, de beurtvolgorde, de deur dichtgooien en `planMonsterBeurt` (git bewaart het).
 
 ### js/soldaten.js: de soldaten en hun wapens
@@ -1533,7 +1519,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   harnassen; de hooivork heeft elke boer). `T.werkSoldatenBij` (elke ochtend na `T.verdeelHanden` via `T.tikSoldatenDag`,
   na het afbreken, en meteen na een knop, `T.zetSoldaten`): wie er te veel is, levert zijn stukken in, en wie er te
   weinig is, komt erbij uit wie geen werk heeft (B1: `T.kanWerken` en geen `p.werk`, volwassen of jong, niet van het
-  gezin van de schout), zodra al zijn stukken in de opslag liggen. Een soldaat werkt en bouwt niet (`p.soldaat` in
+  gezin van de aanvoerder), zodra al zijn stukken in de opslag liggen. Een soldaat werkt en bouwt niet (`p.soldaat` in
   `kanWerken`, `js/bewoners.js`), staat overdag bij zijn wachthuis (`werkplekVan`) en vecht bij een aanval mee
   (`T.militieVan`, `js/rovers.js`; wie valt, zijn stukken zijn weg).
 - **De wapenmaker** (in het gehucht, C1) maakt per dag één stuk van wat `T.wapensGevraagd` vraagt (`maakt.keuze` en
@@ -1541,10 +1527,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bestaat alleen heel** (`T.isStuk`): wat half af is, blijft in `g.half` tot het heel is, en de kar laadt een stuk alleen
   heel (`js/kar.js`). Tot dan lag er 0,8 speer in de opslag en 0,2 op zijn stapel: samen een, dus hij maakte niets meer,
   maar de kar liet het stapeltje liggen (onder `minstens`), en met 0,8 speer kon niemand speerman worden.
-- **In het gevecht** (D1): `T.slagVan(e)` (een vijand zijn aanval uit `T.WEZENS`; de schout `T.SLAAN`; een soldaat zijn
-  wapen, een veteraan of wie meegaat op de jacht een hooivork; `T.stukkenVan`), `T.vangtAf(doel, van)` (schild en harnas,
+- **In het gevecht** (D1): `T.slagVan(e)` (een vijand zijn aanval uit `T.WEZENS`; de eerste aanvoerder `T.SLAAN`; een
+  soldaat zijn wapen, een veteraan een hooivork, een aanvoerder die het overnam het wapen dat hij had, `p.wapen`;
+  `T.stukkenVan`), `T.vangtAf(doel, van)` (schild en harnas,
   niet tegen een kruisboog). De getallen in
   `T.SOLDATEN_INSTELLINGEN` (de werkbank: "Soldiers"); getoetst in `test/soldaten.test.cjs`.
+- **De aanvoerder: wie het overneemt** (vraag 170, stap 5; Marcel: "wanneer hij valt kan er een ander opstaan. Deze uit
+  veteranen gekozen", en B1 en C2 van 16 okt): valt de aanvoerder (`T.valt` in `js/gevecht.js`), dan zegt `T.sneuvelt` het,
+  en `T.aanvoerderValt` zet `D.aanvoerder` op null en laat `T.werkAanvoerderBij` (ook elke tik, in `T.werkDorpBij`) een
+  ander kiezen: `T.opvolgerVan` (een veteraan, anders de soldaat met de vroegste `p.soldaat.sinds`, dan `p.id`). Is er
+  niemand, dan zegt het dorp het, en neemt de eerste die soldaat wordt of van de heervaart terugkomt het over; tot dan is
+  er geen held (Tab doet niets, de camera kijkt bij het laden naar het plein). `T.wordtAanvoerder(D, p)`: hij houdt zijn
+  wezen (zijn uiterlijk) en zijn wapen (`p.wapen`), `p.soldaat` en `p.veteraan` gaan weg (hij telt niet in het wachthuis,
+  dat een ander zoekt, en heeft geen dienst), `e.dwaalt` is false (hij staat waar je hem zet, zoals de eerste), zijn
+  leven dat van `T.WEZENS.aanvoerder`; zijn gezin trekt in het huis met `huis: 'aanvoerder'` (`T.verhuis`), en wie daar
+  woonde in het zijne, of is dakloos (`T.wordtDakloos`). De eerste aanvoerder draagt zijn bewoner niet mee (`e.bewoner`):
+  `T.sneuvelt` zoekt hem op met `T.bewonerVan`. Getoetst in `test/gevecht.test.cjs`.
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
 
@@ -1599,6 +1597,5 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Het briefje** (`T.gekozenBriefje(S)` → `{ D, briefje, wie }`, in de vorm van `T.gebouwBriefje`): `T.manBriefje`,
   `T.mannenBriefje` (met *Line* en *Ring*: de formatie die ze hebben, is niet te kiezen; en *Day* en *Night* voor de
   soldaten onder hen, `dienstKnoppen`) en `T.dorpelingBriefje`, met een
-  knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
-  opent (`gesprek: { id }`, *Talk*; `T.gesprekBij`). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`), dat
-  ook het oproepen gebruikt.
+  knop die een opdracht geeft (*Back to the guardhouse*); de waard heeft sinds vraag 170, stap 5 geen *Talk* meer (het
+  praten is geparkeerd). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`).

@@ -3,23 +3,20 @@
 Een spel van Marcel en Claude, in de maak: een bouw- en beheerspel in isometrisch beeld, met
 politiek en avontuur erin.
 
-Je bent de aanvoerder van een gehucht onder een heer die alleen geld ziet. Je laat het gehucht groeien
-(akkers, weides met vee, huizen, een smidse), je handelt met de marskramer, en elk jaar komt de heer
-op Sint-Maarten halen wat hem toekomt, naar wat er dan is. Later groeit het gehucht tot een stad,
-en maak je je van de heer los, met stadsrechten of met een opstand.
-
-Rondlopen en vechten gebeurt op dezelfde tegels. Begint er een gevecht, dan gaat de wereld verder
-in beurten, zonder apart gevechtsscherm.
+Je komt met een huifkar op een lege plek op een eiland, onder een heer die alleen geld ziet. Je bouwt
+alles zelf, van bovenaf, als een god (akkers, huizen, werkplaatsen, wegen), een ossenkar haalt de waren
+op, je handelt met de marskramer, en elk jaar komt de heer op Sint-Maarten halen wat hem toekomt. Je
+vecht in real time: je stuurt je soldaten en je aanvoerder, de held van het dorp. Het doel is de heer
+verstoten en verslaan.
 
 ## Spelen
 
 - Dubbelklik `index.html`, of draai `npm start` en ga naar http://localhost:8123.
 - Een nieuw spel begint met een brief van de heer; "Aan het werk" sluit hem.
-- Klik om te lopen, te praten of iets te gebruiken.
-- `B` bouwen · `V` de velden · `O` de spelregels · `P` pauze · `-` en `+` de snelheid ·
-  `S` sluipen · `Esc` sluit een venster.
-- In een gevecht klik je op een monster om te slaan, gooit `D` een deur dicht en eindigt `spatie`
-  je beurt. Een gevecht proberen kan op http://localhost:8123/?kaart=proef.
+- Links kiest (een gebouw, een dorpeling, je mannen; een kader om meer), rechts stuurt je mannen erheen of op een
+  vijand af. `Tab` kiest de aanvoerder, `1` tot `9` een groep (`Shift` erbij maakt er een).
+- `B` bouwen · `V` de velden · `W` de wetten · `P` pauze · `-` en `+` de snelheid · `Spatie` naar het laatste
+  bericht · `Esc` sluit een venster.
 
 ## Maken
 

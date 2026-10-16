@@ -34,7 +34,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   mee of geen bestand een naam in `Spel` zet die een ander al zette (13 okt: `T.nieuwLand` stond in `js/land.js` en in
   `js/wereld.js`, en het laatste won stil); alleen `js/opties.js` mag de blokken van de werkbank terugzetten. Een toets die een dorp nodig heeft, speelt
   op het proefdorp (`test/grond.cjs`; sinds ronde 2 van het snoeien, stap 3, 12 okt): het lege begin op eiland 2 met het
-  huis van de schout, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
+  raadhuis, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
   toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`; een `'wijnboerderij'` erbij heeft nog geen
   wijngaard: die leg je met `T.legVeld`, zoals `test/wijn.test.cjs`). Het wordt één keer per proces
   gebouwd en elke toets krijgt een vers exemplaar via opslaan en herstellen, dus een getal dat een toets vóór het
@@ -83,7 +83,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): het proefdorp op eiland 5, op
   1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
   `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
-- `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de schout op 30× steeds naar
+- `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de aanvoerder op 30× steeds naar
   de verste tegel die hij lopend haalt, naar het zuiden (de kust) en dan het westen; per beeld de regels, het maken van
   land en het tekenen apart, per stuk dat opengaat dat beeld en de drie erna, de zwaarste beelden (met een nieuwe dag
   of een stuk), en wie de kaart veranderde zonder plek. `-- --zaad 5 --richting oost,noord --duur 90 --afdruk kust.png`;
@@ -92,7 +92,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   tekenen, dus "tekenen" alleen zegt te weinig (`kaarten.md`, "Wat de meting mat"); en het aantal kijkgaten per beeld.
   `-- --tekenen met` meet het pad van de videokaart (hier nagedaan op de processor: dan telt alleen de tijd van de
   code), en `-- --richting zuid --reik 16 --duur 1 --stil 15` loopt hooguit 16 stappen (het bos in, waar 24 bomen een
-  kijkgat om de schout tekenen) en meet dan 15 s stilstaan apart.
+  kijkgat om de aanvoerder tekenen) en meet dan 15 s stilstaan apart.
 - `npm run samenvatting` maakt `ontwerp/het-spel-in-het-kort.pdf` uit `gereedschap/samenvatting/samenvatting.html` en de
   vier beelden in `gereedschap/samenvatting/beelden/` (alle drie in git); `-- --beelden` speelt eerst het spel en maakt
   de beelden opnieuw, elk uit een vers spel op land 5 van de maker (een minuut). Lukt een beeld niet meer, dan zegt het
@@ -137,7 +137,7 @@ haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. De camera naar een plek: sluit na
 `Spel.debug.begin(n)` eerst het titelscherm (`Spel.ui.sluitTitel(Spel.S)`; zolang het open staat, volgt de camera het
-titelscherm), dan `Spel.glijNaar(x, y)` (een tegel; sinds vraag 170, stap 1, volgt de camera de schout niet meer) en
+titelscherm), dan `Spel.glijNaar(x, y)` (een tegel; sinds vraag 170, stap 1, volgt de camera de aanvoerder niet meer) en
 `Spel.S.zoom = 1.8`, en `stap(3)` laat hem erheen glijden (`Spel.kijkNaar(px, py)` springt er meteen heen, in pixels van de
 wereld). Wat je koos, staat in `Spel.S.gekozen`, en je gekozen mannen geeft `Spel.gekozenMannen(Spel.S)` (`js/kiezen.js`). Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een gesprek
 `Spel.sluitDialoog(Spel.S)`. In het gehucht:
@@ -148,7 +148,7 @@ tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.g
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
-een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
+een open plek bij de aanvoerder. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
 waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gezin()` laat nu een
 gezin komen (overdag over de weg; is het dorp vol, dan zegt het dat er geen plaats is), `(-4)` laat er een
 wegtrekken. `Spel.debug.trede()` zegt
@@ -157,7 +157,8 @@ hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, hoe een aanval ervoor
 staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
-drie wilde rovers komen, `('bende')` de bende.
+drie wilde rovers komen, `('bende')` de bende. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
+wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
@@ -166,7 +167,7 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 okt niet meer.)
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
 wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel
-herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te
+herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de aanvoerder tien tegels van de dichtste groep, om ze te
 bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
 `('jacht')` laat elke roedel nu jagen, `('honger')` geeft elke roedel zoveel honger dat hij in het donker naar het dorp
 komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen. Onder `jagers` staat per jager waar hij op jaagt, wat hij
@@ -188,8 +189,8 @@ laat ze nu aankomen, `('open')` opent de brief.
 doorgroeien staat: hoeveel dagen van de dertig, hoeveel soorten eten het vraagt, wat het gezin rooit, of waarom het niet
 groeit (tot 16 okt was dit `Spel.debug.wensen()`, met de wensen per huis).
 `Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
-schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
-schout op het hoogste punt.
+aanvoerder staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
+aanvoerder op het hoogste punt.
 `Spel.debug.bomen = 'herfst'` laat de bomen en het groen eronder zien in een seizoen naar keus (`'lente'`, `'zomer'`, `'winter'`, `'sneeuw'`;
 `null` weer dat van de kalender), zonder door het jaar te springen.
 `Spel.debug.proefdorp(5)` speelt het proefdorp waarop de toetsen spelen (`T.proefdorp.maak`, `js/begin.js`), op het
@@ -202,16 +203,13 @@ eiland ligt, wat voor plek het is en waar de uitgang is.
 wat er op de stapels bij de deuren ligt (`js/kar.js`, werklijst C).
 `Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder
 iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
-schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
+aanvoerder meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
 `Spel.debug.brand()` zegt het brandgevaar, de kans dat de emmers een huis redden, en welke huizen branden, in puin liggen of
 op hout wachten; `('nu')` laat de brand nu beginnen (ook zonder brandgevaar), `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
 nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en hoeveel het hadden; `('nu')` laat de koorts
 nu beginnen.
 `Spel.debug.kleren()` zegt hoeveel volwassenen arm, gewoon en deftig lopen, en per volwassene zijn kleren, zijn huis (met
 hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
-`Spel.debug.land()` zegt waar de schout is in het land, of hij reist, wat hij zag en welke wegen er zijn (en zet de
-spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erheen, `('alles')` laat het hele land
-zien, `('nieuw')` maakt het opnieuw uit het zaad.
 `Spel.debug.wetten()` zegt per wet de stand en wat hij doet, en `('rantsoen', 'krap')` zet er eerst een, zoals
 het menu (`W`). `Spel.debug.herberg()` zegt wie er vanavond naar de herberg gaat, hoe ver ze lopen en waar ze nu zijn,
 en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de meter in beeld. `Spel.debug.vellen()` zegt welke plaatjes de browser nu vasthoudt, samen en per map, in MB (`('alles')` noemt elk vel). `Spel.debug.paden()` zegt hoeveel tegels paadje zijn, waar het meest gelopen wordt en waar de lantaarns staan;

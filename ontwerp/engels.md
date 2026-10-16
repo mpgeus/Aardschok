@@ -37,7 +37,8 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 
 | Nederlands | Engels | |
 |---|---|---|
-| de schout | the reeve | de speler; "you" waar hij wordt aangesproken |
+| de aanvoerder | the commander | de held van het dorp (tot 16 okt de schout, *the reeve*; vraag 170, stap 5, Marcel: A1) |
+| het raadhuis | the town hall | het huis van de aanvoerder en de schuilplaats (in de code `raadhuis`; tot 16 okt `schout`) |
 | de heer | the lord, his lordship | in een brief: *the Lord of ...* |
 | de koning | the king | |
 | het gehucht, het dorp, marktrecht, de stad | the hamlet, the village, the market town, the town | de treden |
@@ -119,7 +120,7 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 ## Erbij in deel 4 (de heer, de wetten, de feesten)
 
 Sint-Maarten is overal *Martinmas* (de eerste brieven zeiden nog *St Martin's Day*). Wie de heer antwoordt (een knop
-onder een gril), zegt *my lord*; de raadsman schrijft de schout aan met *Master reeve*.
+onder een gril), zegt *my lord*; de raadsman schreef de schout aan met *Master reeve* (sinds 16 okt *Master commander*).
 
 | Nederlands | Engels | |
 |---|---|---|
@@ -171,8 +172,8 @@ in de gespreksschrijver staat, is meteen goed. `npm run teksten` leest de zinnen
 met een apostrof tussen dubbele aanhalingstekens (zo schrijft de bewerker hem ook). De situaties zijn voor de schrijver,
 en blijven Nederlands. `T.VOORVALLEN` en `T.OORZAKEN` zijn gewone code: daar staat alles in `T.t`.
 
-De stem: wie de schout aanspreekt, zegt *reeve* ("Reeve, {ander} took two hens from my coop."), de heer zegt *We, Us*
-en de schout zegt hem *my lord*; de soldaten zeggen gewoon *we*. Een uitroepteken alleen waar het Nederlands er een had
+De stem: wie de aanvoerder aanspreekt, zegt *commander* (tot 16 okt *reeve*: "Reeve, {ander} took two hens from my
+coop."), de heer zegt *We, Us* en de aanvoerder zegt hem *my lord*; de soldaten zeggen gewoon *we*. Een uitroepteken alleen waar het Nederlands er een had
 (brand, wolven, de roddelaar). De mensen praten met *don't, I'll*, de heer en de vertelling niet. Een karakter zegt nooit
 *he* of *she* over zichzelf, behalve de weduwe en de vroedvrouw (zij zijn altijd een vrouw).
 
@@ -198,7 +199,8 @@ en de schout zegt hem *my lord*; de soldaten zeggen gewoon *we*. Een uitroepteke
 ## Erbij in deel 6 (het werk en de rest)
 
 Het gevecht schrijft kort en in de tegenwoordige tijd ("You hit the wolf: 3 damage."); geen uitroeptekens, ook niet bij
-"The wolf sees you." De schout is *you* in zijn eigen gevecht en *the reeve* waar iemand anders over hem spreekt.
+"The wolf sees you." De aanvoerder is *the commander* (tot 16 okt was de schout *you* in zijn eigen gevecht en *the reeve* waar iemand anders
+over hem spreekt).
 
 | Nederlands | Engels | |
 |---|---|---|
@@ -215,7 +217,7 @@ Het gevecht schrijft kort en in de tegenwoordige tijd ("You hit the wolf: 3 dama
 | de monsters (`T.WEZENS[x].naam`) | slime crawler, skeleton guard, wolf, giant spider, kobold, robber, guard, veteran | met kleine letter: "The {wezen} sees you." |
 | de klappen (`aanval.zin`) | bites {doel}, hits {doel} with his sword, bites {doel} with her fangs, stabs {doel} with his spear, hits {doel} with a club | `{doel}` is *you* of de naam van wie geraakt wordt |
 | slaan, lopen, de deur dichtgooien | hit, walk, slam the door shut | de knoppen en de berichten van het gevecht |
-| gevallen | fallen | het scherm als de schout valt |
+| gevallen | fallen | het scherm als de schout viel (weg sinds 16 okt: dan neemt een ander het over) |
 | de voorwerpen (`T.VOORWERPEN[x].naam`) | the pillory, the maypole, the Christmas tree, a wolf den, a stall, a basket, a vine, a tent, the campfire | met hun lidwoord |
 | de proefkamers | the hall, the storeroom, the stairwell | |
 | de koorts, van ouderdom | the fever, old age | de reden bij een sterfgeval: "Old age: Henry died." |

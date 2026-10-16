@@ -163,6 +163,17 @@ hold 12 stone: build a quarry [B]". Elk dorp groeit van 17 naar 33 mensen en wor
 15 okt groeide het nog niet (hieronder). Voor de balans (later): vier soorten is voor de kolonist makkelijk, dus een
 stenen huis komt al in het eerste jaar; de lat staat in de werkbank (`groeiSoorten`, "Needs and the winter").
 
+## De speeltest van 16 okt: de held en het opruimen (vraag 170, stap 5)
+
+Op de branch `claude/clever-brown-vz07hg`, de kolonist op eiland 1. Na stap 5a en 5b (`9c6974f1`): geen fouten, maar de
+schout viel op 7 februari, en toen was het spel nog uit: zonder lantaarn is hij 's nachts buiten prooi voor de wolven,
+en hij staat alleen waar hij stond. Na stap 5d (`fe3868d7`): het jaar uit, zonder fouten; op 7 februari viel de
+aanvoerder weer (*The fight with the wolves was hard: the commander, husband of Thomasina, died.*), en nam Reginald, de
+soldaat die het langst diende, het over, met zijn gezin in het town hall. De heer kwam dat jaar niet, dus het betalen
+met een klik op hem speelde de speeltest niet (`test/kiezen.test.cjs` toetst het). In de echte browser (met het
+titelscherm dicht): Tab, de vensters (B, D, V, W, H), het vallen met en zonder opvolger, opslaan zonder aanvoerder, en een
+minuut spelen, zonder fouten.
+
 ## De speeltest van 15 okt, avond: de wereld in vaste tikken (vraag 170, stap 0)
 
 Op de branch `claude/sleepy-fermat-wrxjuc` (vanaf `9ee639b4`, met de opdrachten erbij), de kolonist op eiland 1, 2 en 3:

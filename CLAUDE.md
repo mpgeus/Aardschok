@@ -5,11 +5,11 @@ los programma verpakt; `ontwerp/commercieel.md`). **De economie van The Settlers
 okt)** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
 eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht
 (RTS): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
-als een god van bovenaf; de schout (de speler in het spel) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
+als een god van bovenaf; de aanvoerder (*commander*, de held) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
 isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
 
 Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten zijn Engels, zonder Nederlands** (vraag 147;
-Marcel, 11 okt: "Nederlands mag je mee stoppen"; de schout heet *reeve*): een zin die de speler ziet, is
+Marcel, 11 okt: "Nederlands mag je mee stoppen"): een zin die de speler ziet, is
 `T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`), de haak voor een latere vertaling, en daarna `npm run teksten`;
 een zin uit gegevens die een bewerker terugschrijft (de gesprekken), toont `T.tGegevens`. De woorden: `ontwerp/engels.md`.
 
@@ -115,8 +115,8 @@ De volledige tekst, met de metingen, staat onderaan `ontwerp/spel.md`.
 Alles hangt aan één naamruimte, `globalThis.Spel` (in de code `T`), zodat hetzelfde bestand in
 de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html` telt.
 
-- **Het spel en zijn dorpen** (`js/dorp.js`, vraag 71): `S` is het spel (de kalender, het land, de schout van de speler,
-  `S.schout`, het scherm, de dorpen, `S.dorpen`); je eigen dorp is `S.dorp`. Een dorp (`D`) heeft alles van zichzelf: zijn
+- **Het spel en zijn dorpen** (`js/dorp.js`, vraag 71): `S` is het spel (de kalender, het land, het scherm, de dorpen,
+  `S.dorpen`); je eigen dorp is `S.dorp`, en je held `S.dorp.aanvoerder`. Een dorp (`D`) heeft alles van zichzelf: zijn
   kaart (`D.wereld`), voorraad, gebouwen, bewoners, wetten, vlaggen (`D.vlaggen`). **Een regel over een dorp krijgt het
   dorp mee** (`T.tikGebouwenDag(D, dag)`, `T.wijzigVoorraad(D, ...)`); wat ook het spel nodig heeft, krijgt allebei
   (`T.werkOogstBij(S, D, dt)`). Elk dorp leeft, elk beeld (`T.werkDorpBij`), ook waar je niet bent. **Een regel zegt iets
@@ -134,7 +134,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   spellus, de invoer, de camera).
 - **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
 - **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (uit Tiled),
-  `land` en `landkaart`, `gebied`, `minikaart`.
+  `gebied`, `minikaart`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
   licht), `ui` (één weg voor een venster), `dialoog`, `balk` (onderaan), `hud`, `huisbriefje`,
   `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D).
@@ -158,7 +158,7 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
   verdedigen, en erop uit over het eiland tot het kasteel van de heer. En: **"We moeten ook zelf alles vanaf de start gaan
   bouwen"**, dus geen gehucht dat er al was. Het plan is vraag 152 in de werklijst.
 - **Wat om is:** "geen hand van bovenaf" (30 sep), "de mensen bouwen zelf" (3 okt), heel "rijk worden en arm lijken" (11
-  okt), en sinds 15 okt (vraag 170) de schout als wie je speelt en het gevecht in beurten; het praten is geparkeerd. Wat ervan in de code staat, gaat eruit (vraag 153 en 170).
+  okt), en sinds 15 okt (vraag 170) de schout als wie je speelt en het gevecht in beurten; het praten is geparkeerd. Wat ervan in de code stond, is eruit (vraag 153 en 170, stap 5).
 - **De heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij, en hij straft wat je tegen hem
   doet, niet wat je hebt (wapens mogen, 7 okt). Hij is ook de tegenstander (vraag 126): een kasteel, bondgenoten en per
   spel een ander karakter. Drie wegen naar het eind: de opstand, de koning achter zijn rug om, of trouw (dan word jij de
@@ -168,7 +168,7 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
 - **Het doel van de demo is open** (werklijst, "Wacht op Marcel"); het oude doel is op 11 okt weggehaald (vraag 153).
 - **Geld verdienen** (`commercieel.md`): in januari 2027 de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig
   geld: wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
-- **Wie valt, is dood** (vraag 55); valt de held (de schout), dan staat een veteraan op (vraag 170). Wie het overleeft,
+- **Wie valt, is dood** (vraag 55); valt de held (de aanvoerder), dan neemt een veteraan of de soldaat die het langst dient het over (vraag 170). Wie het overleeft,
   geneest na een nacht.
 
 Hoe we kiezen:
