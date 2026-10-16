@@ -17,7 +17,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   een roedel met honger valt hem nooit meer aan, alleen een dorpeling die alleen in het donker is (of een schaap).
   (c) `w.lot`, de dobbelsteen van de wereld, begint nog op zaad 1, niet op het nummer van het eiland: alleen een monster
   van een toets gooit er nu mee; stuk c (de roverskampen) zet hem goed.
-
+- **Wat vraag 172 (het menu) liet zien** (16 okt): (a) de raad onder het doel zegt aan het begin nog "A day is long: [+]
+  speeds up time, and [Z] sleeps until morning" (`js/raad.js`), maar Z doet sinds stap 5 van vraag 170 niets meer. (b) De
+  stand van de proefversie staat nu ook in Credits; voor Steam wil Marcel er misschien zijn achternaam of een studio bij
+  ("A game by Marcel, made with Claude" was de keuze). (c) in de browser onthoudt Settings het hele scherm niet: dat mag
+  pas na een klik (in Electron wel, sinds 172b). (d) Pauze als je wegklikt pauzeert bij samen spelen het spel voor
+  allebei (E1): bij 6c moet hij daar uit, of alleen gelden voor wie alleen speelt.
 - **Wat 6a van vraag 170 liet zien** (16 okt, meer dorpen op één eiland; buiten de stap gehouden): (a) het licht, de rook,
   de sneeuw, het kampvuur en de paadjes tekent het scherm voor het dorp waar de camera het dichtst bij is (`T.dorpHier`);
   met twee dorpen tegelijk in beeld (alleen ver uitgezoomd, ze liggen 430 tegels of meer uit elkaar) mist het andere dat.

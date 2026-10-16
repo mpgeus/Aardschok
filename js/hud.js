@@ -864,32 +864,44 @@
   });
 
   // ── De spelregels (js/opties.js; spel.md, "Instelbaar") ──
-  // Eén venster in drie delen: de keuzes, de namen, en de werkbank met alle getallen. Wat je
-  // verandert, geldt meteen, en de browser onthoudt het. Zolang het open is, staat de tijd stil.
-  // Namen typt de speler zelf, dus alles wat van hem komt, gaat door veilig() (bij de heer, hierboven).
+  // Eén venster in drie delen: de keuzes, de namen, en de werkbank met alle getallen. Zolang het open is, staat de tijd
+  // stil. Namen typt de speler zelf, dus alles wat van hem komt, gaat door veilig() (bij de heer, hierboven).
+  // Sinds vraag 172 (16 okt) horen de spelregels bij een spel, en liggen ze vast als het begint; het venster opent in een
+  // van drie standen: 'nieuw' bij New game (js/menu.js: de regels van het spel dat gaat beginnen, te kiezen), 'lezen' in
+  // het spel (het menu, of O), en 'debug' uit het debugvenster (te kiezen midden in een spel, om te proberen). De werkbank
+  // staat er alleen bij als je kiest en het debugvenster aan is (tot de Steam-versie). De opties voor het beeld staan hier
+  // niet: die zijn van jou, onder Settings (js/instellingen.js).
   const alsGetal = (x) => (Number.isInteger(x) ? String(x) : String(Math.round(x * 1000) / 1000));
+  let regelsStand = 'lezen';
+  const magKiezen = () => regelsStand !== 'lezen';
+
+  // Eén optie als rij: zijn naam en uitleg, de keuzes, en de uitleg van wat gekozen is. Ook voor Settings
+  // (js/instellingen.js), zodat een rij er overal hetzelfde uitziet. `mag`: false toont alleen wat er gekozen is; `kan(keuze)`
+  // zegt per keuze of hij er nu kan zijn (een formaat van het venster dat niet op je scherm past).
+  T.ui.optieRij = function (o, mag = true, kan = null) {
+    const nu = T.optieKeuze(o.id);
+    const gekozen = o.keuzes.find((k) => k.id === nu);
+    const knoppen = o.keuzes
+      .map((k) => `<button class="regel-keuze${k.id === nu ? ' gekozen' : ''}" data-optie="${o.id}" data-keuze="${k.id}" title="${veilig(k.uitleg || '')}"${mag && (!kan || kan(k)) ? '' : ' disabled'}>${k.naam}${k.id === o.standaard ? `<small>${T.t('default')}</small>` : ''}</button>`)
+      .join('');
+    return (
+      `<div class="regel"><div class="regel-naam">${o.naam}<small>${o.uitleg}</small></div>` +
+      `<div class="regel-keuzes">${knoppen}</div><p class="regel-uitleg">${gekozen ? gekozen.uitleg : ''}</p></div>`
+    );
+  };
 
   function regelsInhoud() {
-    const keuzes = T.OPTIES.map((o) => {
-      const nu = T.optieKeuze(o.id);
-      const gekozen = o.keuzes.find((k) => k.id === nu);
-      const knoppen = o.keuzes
-        .map((k) => `<button class="regel-keuze${k.id === nu ? ' gekozen' : ''}" data-optie="${o.id}" data-keuze="${k.id}" title="${veilig(k.uitleg)}">${k.naam}${k.id === o.standaard ? `<small>${T.t('default')}</small>` : ''}</button>`)
-        .join('');
-      return (
-        `<div class="regel"><div class="regel-naam">${o.naam}<small>${o.uitleg}</small></div>` +
-        `<div class="regel-keuzes">${knoppen}</div><p class="regel-uitleg">${gekozen ? gekozen.uitleg : ''}</p></div>`
-      );
-    }).join('');
+    const mag = magKiezen();
+    const keuzes = T.OPTIES.filter((o) => !o.instelling).map((o) => T.ui.optieRij(o, mag)).join('');
     const namen = T.NAAM_OPTIES.map((id) => {
       const wie = id === 'heer' ? T.t('the lord, who has no name by default') : '';
       const leeg = id === 'heer' ? T.t('the lord') : T.standaardNaam(id);
       return (
-        `<label class="naam-rij"><input type="text" maxlength="30" data-naam="${id}" value="${veilig(T.OPTIES_NU.namen[id] || '')}" placeholder="${veilig(leeg)}">` +
+        `<label class="naam-rij"><input type="text" maxlength="30" data-naam="${id}" value="${veilig(T.OPTIES_NU.namen[id] || '')}" placeholder="${veilig(leeg)}"${mag ? '' : ' disabled'}>` +
         `<span>${veilig(wie)}</span></label>`
       );
     }).join('');
-    const werkbank = T.WERKBANK.map((deel, i) => {
+    const werkbank = !(mag && T.DEBUG_INSTELLINGEN.aan) ? '' : T.WERKBANK.map((deel, i) => {
       const rijen = T.werkbankGetallen(deel).map((g) => {
         const b = T.werkbankBereik(g.standaard);
         const door = g.doorOptie ? `<small>${T.t('via {optie}', { optie: veilig(g.doorOptie) })}</small>` : '';
@@ -902,15 +914,22 @@
       }).join('');
       return `<details class="werk-deel" data-deel="${i}"><summary>${deel.naam}</summary>${rijen}</details>`;
     }).join('');
+    const stand = {
+      nieuw: [T.t('for this game'), T.t('Choose how this game plays. Once it begins, its rules stay the same until the end. The default is the game as it is meant to be played.')],
+      lezen: [T.t('fixed since the start'), T.t('The rules this game began with. They stay the same until the end; you choose them for a new game.')],
+      debug: [T.t('for testing'), T.t('What you change applies at once, in this game. Until the Steam version.')],
+    }[regelsStand];
     return (
-      `<div class="venster-kop"><span class="venster-titel">${T.t('Game rules')}</span><span class="venster-wanneer">${T.t('what you set yourself')}</span>` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Game rules')}</span><span class="venster-wanneer">${stand[0]}</span>` +
       `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
-      `<p class="venster-staat">${T.t('What you change applies at once, even in the middle of a game, and the browser remembers it. The default is what Marcel chose.')}</p>` +
+      `<p class="venster-staat">${stand[1]}</p>` +
       `<div class="kop">${T.t('The rules')}</div>${keuzes}` +
       `<div class="kop">${T.t('Names')}</div><div class="namen">${namen}</div>` +
-      `<div class="kop">${T.t('Workbench: all the numbers')}</div>` +
-      `<p class="venster-staat">${T.t('Every number from the rules. What you set here goes before what a rule above sets; ↺ puts it back.')}</p>${werkbank}` +
-      `<div class="regels-voet"><button data-actie="terug">${T.t('Everything back to the default')}</button>` +
+      (werkbank
+        ? `<div class="kop">${T.t('Workbench: all the numbers')}</div>` +
+          `<p class="venster-staat">${T.t('Every number from the rules. What you set here goes before what a rule above sets; ↺ puts it back.')}</p>${werkbank}`
+        : '') +
+      `<div class="regels-voet">${mag ? `<button data-actie="terug">${T.t('Everything back to the default')}</button>` : ''}` +
       `<span>${T.t('While this is open, time stands still. {esc} closes.', { esc: ESC })}</span></div>`
     );
   }
@@ -925,7 +944,9 @@
     box.scrollTop = waar;
   }
 
-  T.ui.openSpelregels = function (S) {
+  // `stand`: 'lezen' (het menu, O), 'nieuw' (New game) of 'debug' (het debugvenster); hierboven.
+  T.ui.openSpelregels = function (S, stand = 'lezen') {
+    regelsStand = stand;
     if (T.ui.openVenster(S, 'spelregels')) toonSpelregels();
   };
 
@@ -934,6 +955,7 @@
     // Wat een regel verandert, kan de balk raken (de snelheid van een dag, wat de heer vraagt).
     T.ui.toonVoorraad(S.dorp);
     T.ui.toonKalender(S);
+    T.ui.werkMenuBij(S); // bij New game zegt het menu nu Standard of Custom (js/menu.js)
   };
 
   // In de spelregels typ je namen, dus daar sluit alleen Esc (typt). Ze staan in het menu (Esc; vraag 146, d), en de
@@ -964,8 +986,10 @@
     b.blur();
     if (b.dataset.actie === 'sluit') {
       T.ui.sluitSpelregels(S);
+    } else if (!magKiezen()) {
+      return;
     } else if (b.dataset.actie === 'terug') {
-      T.optiesTerug(S);
+      T.spelregelsTerug(S);
       toonSpelregels();
     } else if (b.dataset.optie) {
       T.zetOptie(b.dataset.optie, b.dataset.keuze, S);
@@ -979,7 +1003,7 @@
   $('spelregels').addEventListener('input', (ev) => {
     const el = ev.target;
     const S = T.S;
-    if (!S) return;
+    if (!S || !magKiezen()) return;
     if (el.dataset.naam) {
       T.zetNaam(el.dataset.naam, el.value, S);
     } else if (el.dataset.pad && el.value !== '' && Number.isFinite(Number(el.value))) {
@@ -1019,7 +1043,7 @@
     // Niet terwijl je een naam typt, en niet in de spelregels of de velden (daar staat de tijd
     // bewust stil).
     if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return; // geen tekst
-    if (T.S.modus === 'spelregels' || T.S.modus === 'velden') return;
+    if (T.S.modus === 'spelregels' || T.S.modus === 'velden' || T.S.modus === 'instellingen') return;
     if (ev.key === 'p' || ev.key === 'P') {
       T.ui.wisselPauze(T.S);
     } else if (ev.key === '-' || ev.key === '_') {

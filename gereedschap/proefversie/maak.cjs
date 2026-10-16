@@ -164,19 +164,44 @@ function maakZip(lijst) {
   return Buffer.concat([...delen, opgave, eind]);
 }
 
-// De schil: één venster, groot, zonder menubalk, met het spel erin zoals het vanaf een los bestand draait. F11 is het
-// hele scherm, Ctrl+Shift+I het gereedschap van de browser (om te zien wat er misgaat). Een plaatje uit de fotomodus
-// (Enter, js/main.js) gaat zonder te vragen naar de map Afbeeldingen, in een map met de naam van het spel.
+// De schil: één venster zonder menubalk, met het spel erin zoals het vanaf een los bestand draait. F11 is het hele scherm,
+// Ctrl+Shift+I het gereedschap van de browser (om te zien wat er misgaat). Een plaatje uit de fotomodus (Enter, js/main.js)
+// gaat zonder te vragen naar de map Afbeeldingen, in een map met de naam van het spel.
+// Het venster zoals de speler het koos (vraag 172b, Settings, js/instellingen.js): het spel vraagt het bij het begin en
+// na een keuze over een smalle brug (PRELOAD, `window.schil`; geen nodeIntegration, ontwerp/verpakken.md): het hele scherm
+// (in Electron altijd zonder rand, op de resolutie van het scherm), of een venster van b bij h, in het midden. Het venster
+// verschijnt pas als het zijn stand kent, zodat het niet eerst als venster flitst; zegt het spel niets (een oude versie),
+// dan na drie seconden gemaximaliseerd, zoals tot 16 okt. Quit in het menu sluit het venster, en dan het spel.
 const SCHIL = `'use strict';
 const path = require('path');
 const fs = require('fs');
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, screen } = require('electron');
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
-  const venster = new BrowserWindow({ width: 1600, height: 900, show: false, backgroundColor: '#000000', webPreferences: { backgroundThrottling: false } });
-  venster.maximize();
-  venster.show();
+  const venster = new BrowserWindow({
+    width: 1600, height: 900, show: false, backgroundColor: '#000000',
+    webPreferences: { backgroundThrottling: false, preload: path.join(__dirname, 'preload.js') },
+  });
   venster.loadFile('index.html');
+  const laatZien = () => { if (!venster.isVisible()) venster.show(); };
+  const reserve = setTimeout(() => { venster.maximize(); laatZien(); }, 3000);
+  ipcMain.on('venster', (e, { stand, b, h }) => {
+    clearTimeout(reserve);
+    if (stand === 'vol') {
+      venster.setFullScreen(true);
+      return laatZien();
+    }
+    const zetMaat = () => {
+      const plek = screen.getDisplayMatching(venster.getBounds()).workAreaSize;
+      venster.setContentSize(Math.min(b, plek.width), Math.min(h, plek.height));
+      venster.center();
+      laatZien();
+    };
+    if (venster.isFullScreen()) {
+      venster.once('leave-full-screen', zetMaat);
+      venster.setFullScreen(false);
+    } else zetMaat();
+  });
   venster.webContents.session.on('will-download', (e, item) => {
     const map = path.join(app.getPath('pictures'), app.getName());
     fs.mkdirSync(map, { recursive: true });
@@ -189,6 +214,13 @@ app.whenReady().then(() => {
   });
 });
 app.on('window-all-closed', () => app.quit());
+`;
+// De brug: het spel ziet alleen dit, als window.schil.
+const PRELOAD = `'use strict';
+const { contextBridge, ipcRenderer } = require('electron');
+contextBridge.exposeInMainWorld('schil', {
+  venster: (stand, b, h) => ipcRenderer.send('venster', { stand, b, h }),
+});
 `;
 
 // Electron voor Windows, één keer gehaald en bewaard in uit/.
@@ -221,7 +253,7 @@ function main() {
   if (WINDOWS) {
     // Alles in één map met de naam van het spel; het spel zelf in resources/app, waar Electron het zoekt.
     const map = NAAM;
-    const app = [...lijst, { naam: 'main.js', data: Buffer.from(SCHIL) }, { naam: 'package.json', data: Buffer.from(JSON.stringify({ name: NAAM.toLowerCase(), productName: NAAM, version: '0.1.0', main: 'main.js' }, null, 2)) }];
+    const app = [...lijst, { naam: 'main.js', data: Buffer.from(SCHIL) }, { naam: 'preload.js', data: Buffer.from(PRELOAD) }, { naam: 'package.json', data: Buffer.from(JSON.stringify({ name: NAAM.toLowerCase(), productName: NAAM, version: '0.1.0', main: 'main.js' }, null, 2)) }];
     delen = [
       ...electronVoorWindows().map((d) => ({ ...d, naam: `${map}/${d.naam === 'electron.exe' ? `${NAAM}.exe` : d.naam}` })),
       ...app.map((d) => ({ ...d, naam: `${map}/resources/app/${d.naam}` })),

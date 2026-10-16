@@ -51,7 +51,11 @@
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de aanvoerder zojuist is neergezet (js/gebied.js)
+      // De spelregels van dit spel (vraag 172, js/opties.js): wat je het laatst koos. Ze gelden meteen, ook voor het land
+      // dat hieronder komt (de hoogte), en liggen vast zodra het spel begint (New game, js/menu.js).
+      spelregels: T.nieuweSpelregels(),
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
+    T.pasSpelregelsToe(S);
     // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
     // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
     // spel breken.
@@ -81,9 +85,13 @@
     return { gelukt: true, kop: gelezen.kop };
   };
   // Een gelezen spel (T.leesSpel, js/opslaan.js) spelen: een nieuw spel, en het gelezene erover.
+  // De spelregels van het bewaarde spel (vraag 172, js/opties.js) gelden dan weer, vóór er een stuk land opengaat; een spel
+  // van vóór 16 okt heeft er geen, en speelt met wat de browser het laatst koos. (Niet in T.zetSpel: de toetsen herstellen
+  // daarmee hun proefdorp, en zetten soms vooraf zelf een getal.)
   function speelGelezen(gelezen) {
     T.nieuwSpel();
     T.zetSpel(S, gelezen);
+    T.pasSpelregelsToe(S);
     zetCameraOpAanvoerder();
     T.ui.reset(S);
   }
@@ -166,6 +174,7 @@
       if (doek) {
         if (!doek.parentNode) canvas.parentNode.insertBefore(doek, canvas);
         doek.classList.toggle('verborgen', !gl);
+        doek.style.filter = canvas.style.filter; // de helderheid (T.ui.pasBeeldToe, hieronder)
       }
       if (gl) {
         T.gl.zetMaat(canvas.width, canvas.height, tekenRatio);
@@ -442,12 +451,13 @@
     return h ? { x: h.x, y: h.y } : { x: 0, y: 0 };
   }
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
-  // minuten, op de klok van het scherm, want de wereld staat daar stil.
+  // minuten, op de klok van het scherm, want de wereld staat daar stil. Sinds vraag 172 staat links de tekst van het
+  // titelscherm (js/menu.js), dus ligt het plein een stuk rechts van het midden (CAMERA.titelOpzij, een deel van de breedte).
   function titelCamera() {
     const m = pleinMidden();
     const hoek = (S.tijd / 120) * 2 * Math.PI;
     const p = T.naarSchermOp(S.wereld, m.x + 4 * Math.cos(hoek), m.y + 4 * Math.sin(hoek));
-    return { x: p.x, y: p.y - 24 };
+    return { x: p.x - (CAMERA.titelOpzij * bw) / S.zoom, y: p.y - 24 };
   }
   T.titelCamera = titelCamera;
 
@@ -458,6 +468,7 @@
   const CAMERA = {
     zoom: [0.5, 0.35], // verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
     sleepVanaf: 6, // in de fotomodus: zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
+    titelOpzij: 0.16, // achter het titelscherm ligt het plein zoveel van de breedte rechts van het midden (js/menu.js)
   };
   // De fotomodus (werklijst vraag 146, e; Marcel, 1 okt: een "goed idee voor de Steam pagina", en 10 okt: `H`, met een
   // regel in het menu, `Enter` bewaart een plaatje, en zoomen tot twee keer dichterbij). H haalt alles van het beeld: de
@@ -743,7 +754,20 @@
   }
 
   let vorige = 0;
+  let getekend = 0; // het laatste beeld dat de grens van Settings toeliet (hieronder)
   function lus(nu) {
+    // Frame rate (Settings, vraag 172b): staat er een grens, dan slaat de lus een beeld van het scherm over tot het zijn
+    // beurt is, in de maat van de grens (ook op een scherm van 144 Hz). De wereld loopt hetzelfde: dt telt vanaf het
+    // vorige beeld dat er wel was.
+    const per = T.TEKENEN_INSTELLINGEN.beeldenPerSeconde;
+    if (per) {
+      const tussen = 1000 / per;
+      if (nu - getekend < tussen - 1) {
+        requestAnimationFrame(lus);
+        return;
+      }
+      getekend = nu - ((nu - getekend) % tussen);
+    }
     const dt = vorige ? Math.min(0.05, (nu - vorige) / 1000) : 0;
     vorige = nu;
     const t0 = performance.now();
@@ -770,6 +794,26 @@
     el.classList.toggle('verborgen', !aan);
     return aan;
   }
+
+  // Wat van Settings hier woont (vraag 172b; js/instellingen.js): de meter, en de helderheid van de wereld, als filter op
+  // het doek en dat van de videokaart (tekenBeeld, hierboven), niet op de vensters erboven. Bij het begin, en na elke
+  // keuze in Settings.
+  T.ui.pasBeeldToe = function () {
+    const I = T.TEKENEN_INSTELLINGEN;
+    if (!!meter !== I.meter) wisselMeter(I.meter);
+    canvas.style.filter = I.helderheid === 1 ? '' : `brightness(${I.helderheid})`;
+    const doek = glZichtbaar ? T.gl.doek() : null; // niet de videokaart opstarten als hij uit staat
+    if (doek) doek.style.filter = canvas.style.filter;
+  };
+
+  // Pauze als je wegklikt (vraag 172b; T.TIJD_INSTELLINGEN.pauzeAlsWeg, Settings): zolang je in een ander venster bent,
+  // staat de tijd stil, onder de reden 'weg' (js/tijd.js); terug is verder.
+  window.addEventListener('blur', () => {
+    if (T.TIJD_INSTELLINGEN.pauzeAlsWeg && S.kalender) T.houdTijdStil(S, 'weg');
+  });
+  window.addEventListener('focus', () => {
+    if (S.kalender) T.laatTijdGaan(S, 'weg');
+  });
   function meetBeeld(nu, regels, tekenen) {
     const m = meter;
     if (m.vorig != null) m.traagst = Math.max(m.traagst, nu - m.vorig);
@@ -906,10 +950,11 @@
     }
   });
   window.addEventListener('keydown', (ev) => {
-    // F2: de meter (hierboven), altijd, ook als er een venster openstaat.
+    // F2: de meter (hierboven), altijd, ook als er een venster openstaat; hij is ook een instelling (Settings, The meter).
     if (ev.key === 'F2') {
       ev.preventDefault();
-      wisselMeter();
+      T.zetOptie('meter', meter ? 'uit' : 'aan', S);
+      T.ui.pasBeeldToe();
       return;
     }
     // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
@@ -1922,6 +1967,7 @@
   };
 
   formaat();
+  T.ui.pasBeeldToe();
   // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken, achter het titelscherm.
   // Een proefje (?kaart=) slaat het titelscherm over.
   T.sprites.laad();

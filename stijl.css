@@ -617,8 +617,10 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 }
 
 /* De spelregels (js/hud.js, T.ui.openSpelregels; js/opties.js), in het menu: het venster met de keuzes, de namen en de
-   werkbank. */
-#spelregels {
+   werkbank; en Settings (js/instellingen.js; vraag 172), met dezelfde rijen. Een rij is geen kader maar een regel op het
+   papier, met een fijne lijn eronder (Marcel, 16 okt: "geen a.i slop"). */
+#spelregels,
+#instellingen {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -630,26 +632,51 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   z-index: 5;
   user-select: text;
 }
-#spelregels .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin: 14px 0 6px; text-transform: uppercase; }
-#spelregels .regel { padding: 8px 10px; margin-bottom: 6px; background: color-mix(in srgb, var(--inkt) 3%, transparent); border: 1px solid var(--rand); border-radius: 6px; }
-#spelregels .regel-naam { font: 15px var(--kop); color: var(--inkt); }
-#spelregels .regel-naam small { display: block; font: 12px var(--boek); color: var(--gedempt); }
-#spelregels .regel-keuzes { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 4px; }
-#spelregels .regel-keuze,
-#spelregels .regels-voet button {
-  padding: 5px 10px;
+:is(#spelregels, #instellingen) .kop { margin: 18px 0 2px; padding-bottom: 3px; font: 18px var(--kop); color: var(--inkt); border-bottom: 1px solid var(--rand); }
+:is(#spelregels, #instellingen) .regel { padding: 9px 0 10px; border-bottom: 1px solid color-mix(in srgb, var(--inkt) 10%, transparent); }
+:is(#spelregels, #instellingen) .regel-naam { font: 16px var(--kop); color: var(--inkt); }
+:is(#spelregels, #instellingen) .regel-naam small { display: block; font: italic 12.5px var(--boek); color: var(--gedempt); }
+:is(#spelregels, #instellingen) .regel-keuzes { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 4px; }
+:is(#spelregels, #instellingen) .regel-keuze,
+:is(#spelregels, #instellingen) .regels-voet button {
+  padding: 4px 10px;
   font: 13px var(--boek);
   color: var(--inkt);
-  background: color-mix(in srgb, var(--inkt) 5%, transparent);
+  background: none;
   border: 1px solid var(--rand);
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
 }
-#spelregels .regel-keuze small { margin-left: 6px; font-size: 10.5px; opacity: 0.7; }
-#spelregels .regel-keuze:hover,
-#spelregels .regels-voet button:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
-#spelregels .regel-keuze.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
-#spelregels .regel-uitleg { margin: 2px 0 0; font-size: 12.5px; color: var(--gedempt); }
+:is(#spelregels, #instellingen) .regel-keuze small { margin-left: 6px; font-size: 10.5px; opacity: 0.7; }
+:is(#spelregels, #instellingen) .regel-keuze:hover:not(:disabled),
+:is(#spelregels, #instellingen) .regels-voet button:hover { border-color: var(--goud); color: var(--goud); }
+:is(#spelregels, #instellingen) .regel-keuze.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
+/* In het spel lees je de spelregels alleen: wat niet gekozen is, verbleekt. */
+:is(#spelregels, #instellingen) .regel-keuze:disabled { cursor: default; }
+:is(#spelregels, #instellingen) .regel-keuze:disabled:not(.gekozen) { opacity: 0.45; }
+:is(#spelregels, #instellingen) .regel-uitleg { margin: 2px 0 0; font-size: 12.5px; color: var(--gedempt); }
+/* De toetsen onder Settings: de toets links, wat hij doet rechts. */
+#instellingen .toetsen { display: grid; grid-template-columns: auto 1fr; gap: 5px 16px; margin: 8px 0 2px; font-size: 13px; }
+#instellingen .toets-rij { display: contents; }
+#instellingen .toets { white-space: nowrap; color: var(--inkt); font-size: 12.5px; }
+#instellingen kbd { color: var(--inkt); border-color: color-mix(in srgb, var(--papier-inkt) 40%, transparent); border-bottom-width: 2px; }
+/* De tabbladen van Settings (vraag 172b): een vaste hoogte, zodat het venster niet verspringt; alleen wat onder de
+   tabbladen staat, schuift. Het gekozen tabblad staat in rood met een streep eronder. */
+#instellingen { display: flex; flex-direction: column; height: min(680px, calc(100vh - 120px)); overflow: hidden; }
+#instellingen .tabs { display: flex; gap: 24px; margin: 10px 0 0; border-bottom: 1px solid var(--rand); }
+#instellingen .tab {
+  margin-bottom: -1px;
+  padding: 4px 0 6px;
+  font: 18px var(--kop);
+  color: var(--gedempt);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+#instellingen .tab:hover { color: var(--inkt); }
+#instellingen .tab.gekozen { color: var(--goud); border-bottom-color: var(--goud); }
+#instellingen .tab-inhoud { flex: 1; min-height: 0; overflow-y: auto; padding-right: 6px; }
 #spelregels .namen { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
 #spelregels .naam-rij { display: flex; flex-direction: column; gap: 2px; font-size: 11.5px; color: var(--gedempt); }
 #spelregels input[type='text'],
@@ -680,7 +707,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #spelregels input[type='number'] { width: 100%; }
 #spelregels .werk-terug { background: none; border: 1px solid var(--rand); border-radius: 5px; color: var(--goud); cursor: pointer; padding: 1px 0; }
 #spelregels .werk-terug:disabled { color: var(--gedempt); opacity: 0.35; cursor: default; }
-#spelregels .regels-voet { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 11px; color: var(--gedempt); }
+:is(#spelregels, #instellingen) .regels-voet { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 11px; color: var(--gedempt); }
 @media (max-width: 560px) {
   #spelregels .namen { grid-template-columns: 1fr; }
   #spelregels .werk-rij { grid-template-columns: 1fr 5em 2em; }
@@ -835,67 +862,142 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 }
 #debug .db-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
 
-/* Het titelscherm en het menu (js/menu.js, js/opslaan.js; vraag 48). Het titelscherm ligt over het gehucht,
-   dat erachter blijft staan: donker boven en onder, en in het midden zie je het dorp. Het menu is een venster
-   in het midden, zoals de brief. De vensters die erbovenop kunnen (de spelregels) liggen een laag hoger. */
+/* Het titelscherm en het menu (js/menu.js, js/opslaan.js; vraag 48, en vraag 172: "geen a.i slop"). Het titelscherm is
+   tekst over de wereld: links een donker verloop met het woordmerk en de keuzes, zonder kaders, en rechts het land dat
+   achter het scherm wacht (de camera legt het daar, js/main.js). Het menu onder Esc is een vel papier in het midden, met
+   een regel per keuze. Een vaantje staat bij de keuze die je hebt (de muis of de pijltjes: :focus, js/menu.js). De
+   vensters die erbovenop kunnen (Settings, de spelregels) liggen een laag hoger. */
+:root {
+  /* Het vaantje: zeven bij tien pixels, op twee keer (een stok met een gouden knop, de vlag in drie roden). */
+  --vaantje: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='10' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23e2b64a'/%3E%3Crect x='0' y='1' width='1' height='9' fill='%238a6a44'/%3E%3Crect x='1' y='1' width='2' height='1' fill='%23c24a3c'/%3E%3Crect x='1' y='2' width='4' height='1' fill='%23c24a3c'/%3E%3Crect x='1' y='3' width='6' height='1' fill='%23a8342c'/%3E%3Crect x='1' y='4' width='4' height='1' fill='%237e2220'/%3E%3Crect x='1' y='5' width='2' height='1' fill='%237e2220'/%3E%3C/svg%3E");
+  --titel-rand: clamp(28px, 7vw, 128px); /* van de linkerkant tot de tekst van het titelscherm */
+}
 #menu { position: fixed; inset: 0; z-index: 4; display: grid; place-items: center; }
 #menu.menu { background: rgba(8, 7, 6, 0.45); }
 #menu.titel {
-  place-items: start center;
-  background: linear-gradient(180deg, rgba(8, 7, 6, 0.86) 0%, rgba(8, 7, 6, 0.2) 42%, rgba(8, 7, 6, 0.2) 58%, rgba(8, 7, 6, 0.88) 100%);
+  display: block;
+  background:
+    linear-gradient(90deg, rgba(10, 8, 6, 0.9) 0%, rgba(10, 8, 6, 0.78) 26%, rgba(10, 8, 6, 0.3) 48%, rgba(10, 8, 6, 0) 66%),
+    linear-gradient(0deg, rgba(10, 8, 6, 0.55) 0%, rgba(10, 8, 6, 0) 28%);
   overflow-y: auto;
 }
-.menu-titel { display: flex; flex-direction: column; align-items: center; margin: 14vh 16px 32px; }
-.menu-naam {
-  margin: 0 0 30px;
-  font: 64px var(--kop);
-  color: var(--goud);
-  letter-spacing: 0.04em;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
-}
-.menu-knoppen { display: flex; flex-direction: column; gap: 7px; width: min(340px, calc(100vw - 32px)); }
-/* De stand van een proefversie (T.STAND, js/naam.js): klein, rechtsonder op het titelscherm. */
-.menu-stand { position: fixed; right: 16px; bottom: 12px; margin: 0; font-size: 12px; color: var(--gedempt); }
-.menu-venster { width: min(380px, calc(100vw - 32px)); max-height: calc(100vh - 80px); overflow-y: auto; padding: 12px 16px 14px; }
-.menu-venster .menu-knoppen { width: auto; margin-top: 10px; }
-.menu-knop {
+.titel-links {
+  position: absolute;
+  left: var(--titel-rand);
+  top: 0;
+  min-height: 100%;
+  width: min(440px, calc(100vw - 2 * var(--titel-rand)));
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  padding: 9px 14px;
-  font: 16px var(--kop);
+  justify-content: center;
+  padding: 48px 0;
+}
+/* Het woordmerk; tot de pixel art er is (vraag 172, 7), de kopletter. */
+.titel-naam {
+  margin: 0 0 40px;
+  font: 600 76px/1 var(--kop);
+  color: var(--goud);
+  letter-spacing: 0.01em;
+  text-shadow: 0 3px 0 #1b1510, 0 0 28px rgba(0, 0, 0, 0.55);
+}
+.titel-keuzes { display: flex; flex-direction: column; align-items: flex-start; }
+.titel-kop { margin: 0 0 14px; font: 26px var(--kop); color: var(--goud); }
+/* Een keuze: alleen tekst. Op het titelscherm groot, op papier een regel met een lijn erboven. */
+.menu-keuze {
+  display: block;
+  padding: 5px 0 5px 34px;
+  margin-left: -34px;
+  font: 36px/1.12 var(--kop);
   color: var(--inkt);
   text-align: left;
-  background: var(--paneel);
-  border: 1px solid var(--rand);
-  border-radius: 8px;
+  background: none;
+  border: 0;
   cursor: pointer;
-}
-.menu-knop small { font: 12px var(--boek); color: var(--gedempt); }
-.menu-knop:hover:not(:disabled) { border-color: color-mix(in srgb, var(--goud) 70%, transparent); background: rgba(40, 32, 22, 0.92); }
-.menu-knop.hoofd { border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
-.menu-knop.hoofd span { color: var(--goud); }
-.menu-knop:disabled { opacity: 0.55; cursor: default; }
-.menu-kop { margin: 2px 0 2px; font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; text-transform: uppercase; }
-.menu-vraag { margin: 2px 0 6px; font-size: 14px; line-height: 1.5; }
-/* De naam van je dorp, bij Nieuw spel (js/menu.js; werklijst vraag 60): een veld zoals een knop, met de naam groot. */
-.menu-invoer {
-  padding: 9px 14px;
-  font: 20px var(--kop);
-  color: var(--goud);
-  background: var(--paneel);
-  border: 1px solid color-mix(in srgb, var(--goud) 60%, transparent);
-  border-radius: 8px;
   outline: none;
 }
-.menu-invoer:focus { border-color: var(--goud); }
-/* Het land bij Nieuw spel (vraag 112, a): zijn nummer, en een knop voor een ander. */
-.menu-land { display: flex; gap: 8px; align-items: stretch; }
-.menu-land .menu-invoer { width: 6.5em; text-align: center; }
-.menu-land .menu-knop { flex: 1; }
-.menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
-#menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
+.menu-keuze > span { position: relative; }
+.menu-keuze > span::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 50%;
+  margin-top: -11px;
+  width: 14px;
+  height: 20px;
+  background: var(--vaantje) no-repeat 0 0 / 14px 20px;
+  image-rendering: pixelated;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: opacity 0.12s, transform 0.12s;
+}
+.menu-keuze:focus > span,
+.menu-keuze.open > span { color: var(--goud); }
+.menu-keuze:focus > span::before,
+.menu-keuze.open > span::before { opacity: 1; transform: none; }
+.menu-keuze small { display: block; margin-top: 2px; font: italic 14.5px/1.35 var(--boek); color: var(--gedempt); }
+.menu-keuze:disabled { cursor: default; }
+.menu-keuze:disabled > span { opacity: 0.5; }
+.menu-keuze.klein { font-size: 24px; }
+#menu.titel .menu-keuze { text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55); }
+/* Ligt er papier naast, dan zijn de keuzes links even achter (wel nog te klikken). */
+.titel-keuzes.achter .menu-keuze:not(.open) > span { opacity: 0.6; }
+.titel-keuzes.achter .menu-keuze:hover > span { opacity: 1; }
+/* De stand van een proefversie (T.STAND, js/naam.js): klein, rechtsonder op het titelscherm. */
+.menu-stand { position: fixed; right: 16px; bottom: 12px; margin: 0; font-size: 12px; color: var(--gedempt); }
+.menu-vraag { margin: 2px 0 12px; max-width: 26em; font-size: 16px; line-height: 1.5; }
+.menu-melding { margin: 0 0 10px; font-size: 14px; color: var(--goud); }
+#menu.titel :is(.menu-vraag, .menu-melding, .menu-veld) { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
+/* New game (vraag 172, 4): een veld is een lijn, geen kader; het land met zijn nummer, een ander, en het eiland. */
+.menu-veld { display: block; width: 100%; margin: 0 0 16px; }
+.menu-veld > span,
+.menu-veld > label { display: block; margin-bottom: 1px; font: italic 14.5px var(--boek); color: var(--gedempt); }
+.menu-invoer {
+  width: 100%;
+  padding: 2px 0 3px;
+  font: 30px var(--kop);
+  color: var(--inkt);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid color-mix(in srgb, var(--inkt) 28%, transparent);
+  border-radius: 0;
+  outline: none;
+}
+.menu-invoer:focus { border-bottom-color: var(--goud); }
+.menu-invoer::selection { background: color-mix(in srgb, var(--goud) 45%, transparent); }
+.menu-land { display: flex; align-items: baseline; gap: 44px; }
+.menu-land .menu-invoer { width: 4.2em; }
+.menu-eiland { display: block; width: 300px; height: 150px; margin: 12px 0 4px; image-rendering: pixelated; }
+/* Het menu onder Esc, en Load en Credits naast het titelscherm: papier (de rij onderaan dit bestand), met een regel per
+   keuze. */
+.menu-venster { width: min(400px, calc(100vw - 32px)); max-height: calc(100vh - 80px); overflow-y: auto; padding: 12px 18px 12px; }
+.menu-regels { display: flex; flex-direction: column; margin-top: 8px; }
+.menu-venster .menu-keuze { margin-left: 0; padding: 8px 0 8px 28px; font-size: 21px; border-top: 1px solid color-mix(in srgb, var(--inkt) 14%, transparent); }
+.menu-venster .menu-keuze:first-child,
+.menu-venster :is(.menu-kop, .menu-vraag, .menu-melding) + .menu-keuze { border-top: 0; }
+.menu-venster .menu-keuze > span::before { left: -24px; }
+.menu-venster .menu-keuze small { font-size: 13px; }
+.menu-kop { margin: 2px 0 4px; font: 15px var(--kop); color: var(--gedempt); }
+.menu-venster.naast {
+  position: fixed;
+  left: calc(var(--titel-rand) + 470px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(440px, calc(100vw - var(--titel-rand) - 470px - 24px));
+}
+/* Settings en de spelregels liggen op het titelscherm ook naast de keuzes. */
+body.titelscherm :is(#instellingen, #spelregels) {
+  left: calc(var(--titel-rand) + 470px);
+  transform: translateY(-50%);
+  width: min(720px, calc(100vw - var(--titel-rand) - 470px - 24px));
+}
+@media (max-width: 1000px) {
+  .menu-venster.naast,
+  body.titelscherm :is(#instellingen, #spelregels) { left: 50%; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); }
+}
+.credits p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.5; }
+.credits .credits-naam { margin-bottom: 4px; font: 26px var(--kop); color: var(--goud); }
+.credits .credits-kop { margin: 14px 0 2px; font: 16px var(--kop); }
+.credits .credits-stand { margin-top: 14px; font-size: 12px; color: var(--gedempt); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
 body.titelscherm :is(#hud-gehucht, #berichten, #plek, .hoek-onder) { visibility: hidden; }
 
@@ -1040,6 +1142,7 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #wetten,
 #raadsman,
 #spelregels,
+#instellingen,
 #dialoog,
 #overlay .kaart,
 .menu-venster {

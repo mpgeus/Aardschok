@@ -16,6 +16,11 @@
   // Voorlopig: het jaar waarin het spel begint (ontwerp/spel.md, "Het eerste proefje"). Het jaar
   // begint in de lente, dus dag 0 hieronder is 1 lentemaand van dit jaar.
   T.TIJD_START_JAAR = 1323;
+  // Of de tijd stilstaat zolang je in een ander venster bent (vraag 172b; js/main.js, de reden 'weg'): de instelling
+  // "Pause when you leave" (js/opties.js).
+  T.TIJD_INSTELLINGEN = {
+    pauzeAlsWeg: true,
+  };
 
   // Twaalf maanden van dertig dagen: geen schrikkeljaren, geen wisselende maandlengtes. Dat voegt
   // niets toe aan het gevoel en maakt elke som hieronder een deling door een vast getal.

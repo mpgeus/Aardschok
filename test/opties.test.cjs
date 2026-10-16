@@ -191,14 +191,17 @@ test('de heer heeft standaard geen naam; geef je hem er een, dan draagt hij die'
 test('onthouden en teruglezen, en een kapotte of lege opslag breekt niets', () => {
   const geheugen = {};
   const opslag = { setItem: (k, v) => { geheugen[k] = v; }, getItem: (k) => (k in geheugen ? geheugen[k] : null) };
-  T.pasOptiesToe({ keuzes: { betalenIn: 'alleenGoud' }, namen: { heer: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
+  T.zetOptie('betalenIn', 'alleenGoud');
+  T.zetNaam('heer', 'Joost');
+  T.zetGetal('DAG_LENGTE', 1);
   T.bewaarOpties(opslag);
-  T.pasOptiesToe(null);
+  T.optiesTerug();
   const terug = T.laadOpties(opslag);
   assert.deepEqual(terug, { keuzes: { betalenIn: 'alleenGoud' }, namen: { heer: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
   T.pasOptiesToe(terug);
   assert.equal(T.HEER_INSTELLINGEN.betalenIn, 'alleenGoud');
   assert.equal(T.DAG_LENGTE, 1);
+  T.optiesTerug();
   for (const k in geheugen) geheugen[k] = '{kapot';
   assert.equal(T.laadOpties(opslag), null);
   const stuk = { getItem: () => { throw new Error('geblokkeerd'); }, setItem: () => { throw new Error('vol'); } };
@@ -237,4 +240,23 @@ test('een bereik voor de schuif past bij het getal', () => {
   assert.deepEqual(T.werkbankBereik(0.5), { min: 0, max: 1, stap: 0.01 });
   assert.deepEqual(T.werkbankBereik(2.5), { min: 0, max: 8, stap: 0.1 });
   assert.deepEqual(T.werkbankBereik(0), { min: 0, max: 1, stap: 0.01 });
+});
+
+test('een instelling is van de browser, een spelregel van het spel (vraag 172)', () => {
+  T.optiesTerug();
+  T.zetOptie('graan', 'honger');
+  const S = { spelregels: T.nieuweSpelregels() };
+  assert.deepEqual(S.spelregels.keuzes, { graan: 'honger' }, 'een nieuw spel krijgt wat je het laatst koos');
+  T.zetOptie('schaduwen', 'uit', S);
+  assert.deepEqual(S.spelregels.keuzes, { graan: 'honger' }, 'een instelling komt niet in het spel');
+  T.zetOptie('veeGroeit', 'groeitNiet', S);
+  assert.equal(T.spelregelsAnders(S), 2);
+  T.zetOptie('graan', 'netRond', S);
+  assert.deepEqual(S.spelregels.keuzes, { veeGroeit: 'groeitNiet' }, 'wat de standaard is, valt weg');
+  T.spelregelsTerug(S);
+  assert.equal(T.spelregelsAnders(S), 0);
+  assert.equal(T.LICHT_INSTELLINGEN.zonneschaduw, false, 'de spelregels terug laat de instellingen staan');
+  for (const id of ['tekenen', 'schaduwen', 'doorkijk', 'raad']) assert.ok(T.isInstelling(id), id);
+  for (const id of ['graan', 'hoogte', 'weer', 'beesten']) assert.ok(!T.isInstelling(id), id);
+  T.optiesTerug();
 });

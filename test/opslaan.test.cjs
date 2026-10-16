@@ -378,3 +378,50 @@ test('een verse bladzijde laadt een spel met een gebouw uit het spel', (t) => {
   assert.deepEqual(T.VOORWERPEN['gebouw:huis'], { blokkeert: true, zichtDicht: true }, 'zoals toen het gebouwd werd');
 });
 
+
+test('de spelregels gaan mee in het spel, en een geladen spel speelt weer met de zijne (vraag 172)', () => {
+  T.optiesTerug();
+  const S = gehucht();
+  S.spelregels = { keuzes: { graan: 'honger' }, namen: {} };
+  T.pasSpelregelsToe(S);
+  const tekst = T.bewaarSpel(S, { nu: NU });
+  // Intussen kiest de browser iets anders voor een volgend spel, en een instelling voor het beeld.
+  T.zetOptie('graan', 'ruim');
+  T.zetOptie('schaduwen', 'uit');
+  assert.equal(T.GRAAN_PER_TEGEL, 5);
+  const terug = gehucht();
+  assert.equal(T.herstelSpel(terug, tekst).gelukt, true);
+  T.pasSpelregelsToe(terug); // zoals js/main.js doet als het een geladen spel speelt
+  assert.deepEqual(terug.spelregels.keuzes, { graan: 'honger' }, 'de regels van het spel zelf');
+  assert.equal(T.GRAAN_PER_TEGEL, 3.5, 'en die gelden weer');
+  assert.equal(T.LICHT_INSTELLINGEN.zonneschaduw, false, 'de instelling blijft van de browser');
+  // Een spel van vóór 16 okt heeft geen eigen regels: het speelt met wat de browser het laatst koos.
+  delete S.spelregels;
+  const oud = gehucht();
+  T.herstelSpel(oud, T.bewaarSpel(S, { nu: NU }));
+  T.pasSpelregelsToe(oud);
+  assert.equal(T.GRAAN_PER_TEGEL, 5);
+  T.optiesTerug();
+});
+
+test('de instelling Autosave: om de drie dagen, of uit (vraag 172b)', (t) => {
+  const opslag = nepOpslag();
+  T.gebruikOpslagPlek(opslag);
+  t.after(() => {
+    T.gebruikOpslagPlek(null);
+    T.optiesTerug();
+  });
+  const S = gehucht();
+  const opstaan = (dag) => Math.floor(dag) + T.dagindeling(Math.floor(dag)).opstaan / 24 + 0.001;
+  S.kalender.snelheid = 1;
+  T.zetOptie('vanzelfOpslaan', 'drieDagen');
+  S.kalender.dag = opstaan(3);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true);
+  S.kalender.dag = opstaan(4);
+  assert.equal(T.werkOpslaanBij(S), null, 'op 1× toch om de drie dagen');
+  S.kalender.dag = opstaan(6);
+  assert.equal(T.werkOpslaanBij(S).gelukt, true);
+  T.zetOptie('vanzelfOpslaan', 'uit');
+  S.kalender.dag = opstaan(9);
+  assert.equal(T.werkOpslaanBij(S), null, 'uit is uit');
+});

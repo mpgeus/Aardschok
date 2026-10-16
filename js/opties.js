@@ -10,8 +10,9 @@
 //   - T.WERKBANK: alle getallen uit de instellingenblokken, elk apart te verzetten. Wat je daar
 //     zet, gaat vóór wat een keuze zet.
 // T.pasOptiesToe zet eerst alles terug op de bestanden, dan de keuzes, dan de werkbank, dan de
-// namen. De browser onthoudt wat je instelt (localStorage). Het venster staat in js/hud.js
-// (T.ui.openSpelregels). Dit bestand komt ná alle regels en gesprekken (index.html), want het
+// namen. De spelregels horen bij een spel (S.spelregels), de instellingen en de werkbank bij de browser (localStorage;
+// vraag 172, bij "Spelregels en instellingen"). Het venster van de spelregels staat in js/hud.js (T.ui.openSpelregels),
+// dat van de instellingen in js/instellingen.js. Dit bestand komt ná alle regels en gesprekken (index.html), want het
 // neemt hun waarden als standaard. Het gereedschap laadt het bewust niet: een naam die je in het
 // spel geeft, mag nooit via de gespreksschrijver in js/gesprekken.js terechtkomen.
 (function (T) {
@@ -32,7 +33,10 @@
   ];
 
   // ── Vorm van één optie ──
-  //   { id, naam, uitleg, standaard: '<keuze-id>', keuzes: [{ id, naam, uitleg, zet: { pad: waarde } }] }
+  //   { id, naam, uitleg, standaard: '<keuze-id>', instelling, keuzes: [{ id, naam, uitleg, zet: { pad: waarde } }] }
+  // `instelling` zegt dat de optie alleen het beeld of het scherm raakt, niet de wereld (de tik): dan staat hij onder
+  // Settings, op het tabblad dat hij noemt ('beeld', 'tekening' of 'spel', js/instellingen.js), en is hij van wie speelt;
+  // de rest zijn de spelregels van een spel (vraag 172, hieronder).
   // Een pad wijst in T: 'GRAAN_PER_TEGEL', of 'HEER_INSTELLINGEN.betalenIn'.
   // De naam en de uitleg zijn wat de speler leest, in het Engels (vraag 147, deel 7): `naam: T.t('Grain')`, een gewone tekst
   // zonder woorden erin, want de bladzijde met getallen (gereedschap/instellingen, I.tekstVan) leest ze zo uit de tekst.
@@ -253,7 +257,7 @@
       ],
     },
     {
-      id: 'kleren', naam: T.t('Clothes'), standaard: 'stand',
+      id: 'kleren', naam: T.t('Clothes'), standaard: 'stand', instelling: 'tekening',
       uitleg: T.t('Those of higher standing wear dearer clothes: poor and worn in a hut, smart in a stone house. Looks only.'),
       keuzes: [
         { id: 'stand', naam: T.t('By standing'), zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true }, // geen tekst
@@ -263,7 +267,7 @@
       ],
     },
     {
-      id: 'kleinLeven', naam: T.t('Small life'), standaard: 'aan',
+      id: 'kleinLeven', naam: T.t('Small life'), standaard: 'aan', instelling: 'tekening',
       uitleg: T.t('Smoke from the chimneys, hens, a dog, children playing and washing on the line. Looks only.'),
       keuzes: [
         { id: 'aan', naam: T.t('Yes'), zet: { 'KLEIN_LEVEN_INSTELLINGEN.aan': true }, uitleg: T.t('The village lives: whoever is at home lights a fire, and all manner of creatures potter about.') }, // geen tekst
@@ -283,7 +287,7 @@
     // De doorkijk (Marcel, 26 sep, vraag 34: "Ja dit is een goede optie" en "Raster ook als keuze";
     // ontwerp/beeld.md, "Doorkijk"; js/doorkijk.js).
     {
-      id: 'doorkijk', naam: T.t('Seeing through a house'), standaard: 'venster',
+      id: 'doorkijk', naam: T.t('Seeing through a house'), standaard: 'venster', instelling: 'tekening',
       uitleg: T.t('How you see someone standing behind a house or a tree.'),
       keuzes: [
         { id: 'venster', naam: T.t('Viewing window'), zet: { 'DOORKIJK_INSTELLINGEN.manier': 'venster' }, // geen tekst
@@ -295,7 +299,7 @@
     // Tekenen met de videokaart (werklijst vraag 123; js/gl.js): sneller, vooral op een groot scherm. Zonder is het
     // 2D-doek van de browser, voor een browser zonder WebGL en om te vergelijken.
     {
-      id: 'tekenen', naam: T.t('Drawing'), standaard: 'met',
+      id: 'tekenen', naam: T.t('Drawing'), standaard: 'met', instelling: 'tekening',
       uitleg: T.t('How the game draws the picture. The same picture; with the graphics card it is faster.'),
       keuzes: [
         { id: 'met', naam: T.t('With the graphics card'), zet: { 'TEKENEN_INSTELLINGEN.videokaart': true }, // geen tekst
@@ -305,7 +309,7 @@
       ],
     },
     {
-      id: 'doorkijkPlein', naam: T.t('Who you see through a house'), standaard: 'ookHetPlein',
+      id: 'doorkijkPlein', naam: T.t('Who you see through a house'), standaard: 'ookHetPlein', instelling: 'tekening',
       uitleg: T.t('Always the commander, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the merchant and the soldiers.'),
       keuzes: [
         { id: 'ookHetPlein', naam: T.t('The square too'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true }, // geen tekst
@@ -317,7 +321,7 @@
     // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag", en "A ja, B goed zo"; js/tekenen.js,
     // js/gl.js).
     {
-      id: 'schaduwen', naam: T.t('Shadows'), standaard: 'zon',
+      id: 'schaduwen', naam: T.t('Shadows'), standaard: 'zon', instelling: 'tekening',
       uitleg: T.t('Whether whatever stands casts a shadow over the ground that moves with the sun. Only with the graphics card.'),
       keuzes: [
         { id: 'zon', naam: T.t('With the sun'), zet: { 'LICHT_INSTELLINGEN.zonneschaduw': true }, // geen tekst
@@ -367,7 +371,7 @@
     // De bomen in het jaar (werklijst vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee. Ook
     // vruchten etc."; js/bos.js).
     {
-      id: 'bomenInHetJaar', naam: T.t('Trees through the year'), standaard: 'mee',
+      id: 'bomenInHetJaar', naam: T.t('Trees through the year'), standaard: 'mee', instelling: 'tekening',
       uitleg: T.t('Whether the trees and the greenery beneath them follow the seasons.'),
       keuzes: [
         { id: 'mee', naam: T.t('With the seasons'), zet: { 'BOS_INSTELLINGEN.seizoenen': true }, // geen tekst
@@ -429,7 +433,7 @@
     },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
     {
-      id: 'raad', naam: T.t('Advice'), standaard: 'aan',
+      id: 'raad', naam: T.t('Advice'), standaard: 'aan', instelling: 'spel',
       uitleg: T.t('A line under the goal at the top left.'),
       keuzes: [
         { id: 'aan', naam: T.t('On'), zet: { 'RAAD_INSTELLINGEN.aan': true }, // geen tekst
@@ -447,6 +451,83 @@
           uitleg: T.t('On 1 July he asks for one man per ten souls, or gold. Those who go are back after the harvest, as veterans who fight with you against the robbers; not everyone comes back. Whoever pays makes him suspicious.') },
         { id: 'uit', naam: T.t('Off'), zet: { 'HEERVAART_INSTELLINGEN.aan': false }, // geen tekst
           uitleg: T.t('He asks only for gold and grain, at Martinmas.') },
+      ],
+    },
+    // ── Van de speler, onder Settings (vraag 172b; Marcel, 16 okt: "Zaken als resolutie etc hebben we nodig") ──
+    // Het venster in de verpakte versie (Electron, js/instellingen.js): het hele scherm is daar altijd zonder rand, op de
+    // resolutie van je scherm; een venster heeft het formaat dat je kiest. In de browser staat er alleen het hele scherm.
+    {
+      id: 'venster', naam: T.t('Window'), standaard: 'vol', instelling: 'beeld',
+      uitleg: T.t('Whether the game fills the whole screen.'),
+      keuzes: [
+        { id: 'vol', naam: T.t('Fullscreen'), zet: { 'TEKENEN_INSTELLINGEN.venster': 'vol' }, // geen tekst
+          uitleg: T.t('The game fills the screen, at the resolution of your screen, without a border.') },
+        { id: 'venster', naam: T.t('Window'), zet: { 'TEKENEN_INSTELLINGEN.venster': 'venster' }, // geen tekst
+          uitleg: T.t('The game in a window of the size below.') },
+      ],
+    },
+    {
+      id: 'vensterMaat', naam: T.t('Window size'), standaard: '1600x900', instelling: 'beeld',
+      uitleg: T.t('How big the window is when the game is not fullscreen. Only what fits on your screen.'),
+      keuzes: [
+        { id: '1280x720', naam: '1280 × 720', zet: { 'TEKENEN_INSTELLINGEN.vensterMaat': [1280, 720] }, uitleg: T.t('HD, 720p.') }, // geen tekst
+        { id: '1600x900', naam: '1600 × 900', zet: { 'TEKENEN_INSTELLINGEN.vensterMaat': [1600, 900] }, uitleg: T.t('HD+, 900p.') }, // geen tekst
+        { id: '1920x1080', naam: '1920 × 1080', zet: { 'TEKENEN_INSTELLINGEN.vensterMaat': [1920, 1080] }, uitleg: T.t('Full HD, 1080p.') }, // geen tekst
+        { id: '2560x1440', naam: '2560 × 1440', zet: { 'TEKENEN_INSTELLINGEN.vensterMaat': [2560, 1440] }, uitleg: T.t('QHD, 1440p.') }, // geen tekst
+        { id: '3840x2160', naam: '3840 × 2160', zet: { 'TEKENEN_INSTELLINGEN.vensterMaat': [3840, 2160] }, uitleg: T.t('4K, 2160p.') }, // geen tekst
+      ],
+    },
+    {
+      id: 'beelden', naam: T.t('Frame rate'), standaard: 'scherm', instelling: 'beeld',
+      uitleg: T.t('How many times a second the game draws the picture. The world runs the same.'),
+      keuzes: [
+        { id: '30', naam: T.t('30 a second'), zet: { 'TEKENEN_INSTELLINGEN.beeldenPerSeconde': 30 }, // geen tekst
+          uitleg: T.t('Saves power, on a laptop on its battery.') },
+        { id: '60', naam: T.t('60 a second'), zet: { 'TEKENEN_INSTELLINGEN.beeldenPerSeconde': 60 }, // geen tekst
+          uitleg: T.t('Smooth, also on a screen that could do more.') },
+        { id: 'scherm', naam: T.t('As fast as the screen'), zet: { 'TEKENEN_INSTELLINGEN.beeldenPerSeconde': 0 }, // geen tekst
+          uitleg: T.t('As many as your screen shows: 60, 144, or more.') },
+      ],
+    },
+    {
+      id: 'meter', naam: T.t('The meter'), standaard: 'uit', instelling: 'beeld',
+      uitleg: T.t('A line at the top: the frames a second, and how long a frame takes. F2 too.'),
+      keuzes: [
+        { id: 'uit', naam: T.t('Off'), zet: { 'TEKENEN_INSTELLINGEN.meter': false }, uitleg: T.t('Nothing at the top.') }, // geen tekst
+        { id: 'aan', naam: T.t('On'), zet: { 'TEKENEN_INSTELLINGEN.meter': true }, uitleg: T.t('The meter stays at the top while you play.') }, // geen tekst
+      ],
+    },
+    {
+      id: 'helderheid', naam: T.t('Brightness'), standaard: '100', instelling: 'beeld',
+      uitleg: T.t('For a dark screen or a light room. Only the world, not the windows on it.'),
+      keuzes: [
+        { id: '80', naam: '80%', zet: { 'TEKENEN_INSTELLINGEN.helderheid': 0.8 }, uitleg: T.t('Darker.') }, // geen tekst
+        { id: '90', naam: '90%', zet: { 'TEKENEN_INSTELLINGEN.helderheid': 0.9 }, uitleg: T.t('A little darker.') }, // geen tekst
+        { id: '100', naam: '100%', zet: { 'TEKENEN_INSTELLINGEN.helderheid': 1 }, uitleg: T.t('As it is drawn.') }, // geen tekst
+        { id: '110', naam: '110%', zet: { 'TEKENEN_INSTELLINGEN.helderheid': 1.1 }, uitleg: T.t('A little brighter.') }, // geen tekst
+        { id: '120', naam: '120%', zet: { 'TEKENEN_INSTELLINGEN.helderheid': 1.2 }, uitleg: T.t('Brighter.') }, // geen tekst
+      ],
+    },
+    {
+      id: 'pauzeAlsWeg', naam: T.t('Pause when you leave'), standaard: 'aan', instelling: 'spel',
+      uitleg: T.t('Whether time stands still while you are in another window.'),
+      keuzes: [
+        { id: 'aan', naam: T.t('Yes'), zet: { 'TIJD_INSTELLINGEN.pauzeAlsWeg': true }, // geen tekst
+          uitleg: T.t('When you switch to another window, the village waits until you are back.') },
+        { id: 'uit', naam: T.t('No'), zet: { 'TIJD_INSTELLINGEN.pauzeAlsWeg': false }, // geen tekst
+          uitleg: T.t('The village goes on while you are away.') },
+      ],
+    },
+    {
+      id: 'vanzelfOpslaan', naam: T.t('Autosave'), standaard: 'ochtend', instelling: 'spel',
+      uitleg: T.t('How often the game saves itself, in the autosave slot.'),
+      keuzes: [
+        { id: 'ochtend', naam: T.t('Every morning'), zet: { 'OPSLAAN_INSTELLINGEN.vanzelf': 'ochtend' }, // geen tekst
+          uitleg: T.t('When the people get up; at 30× every three days, or the game would stutter.') },
+        { id: 'drieDagen', naam: T.t('Every three days'), zet: { 'OPSLAAN_INSTELLINGEN.vanzelf': 'drieDagen' }, // geen tekst
+          uitleg: T.t('On every third morning.') },
+        { id: 'uit', naam: T.t('Off'), zet: { 'OPSLAAN_INSTELLINGEN.vanzelf': 'uit' }, // geen tekst
+          uitleg: T.t('Only when you save yourself, in the menu.') },
       ],
     },
   ];
@@ -609,23 +690,81 @@
     return nu;
   };
 
-  // Eén ding veranderen, alles opnieuw toepassen, en onthouden.
+  // ── Spelregels en instellingen (vraag 172; Marcel, 16 okt: de spelregels "vast bij het begin") ──
+  // Een optie met `instelling` raakt alleen het beeld of het scherm: hij is van wie speelt, altijd te veranderen
+  // (Settings, js/instellingen.js), en de browser onthoudt hem. De rest zijn spelregels: je kiest ze bij New game
+  // (js/menu.js), ze gaan mee in het spel (S.spelregels: { keuzes, namen }, bewaard met de rest van S), en in het spel lees
+  // je ze alleen, behalve in het debugvenster. Samen spelen vraagt precies dat: dezelfde regels, ieder zijn eigen beeld.
+  // De browser onthoudt drie dingen (`inBrowser`): de instellingen, de werkbank, en de spelregels die je het laatst koos,
+  // voor het volgende nieuwe spel; een spel van vóór 16 okt, zonder eigen regels, speelt met die laatste.
+  T.isInstelling = (id) => {
+    const o = T.OPTIES.find((x) => x.id === id);
+    return !!(o && o.instelling);
+  };
+  let inBrowser = { keuzes: {}, namen: {}, getallen: {} };
+  const keuzesVan = (keuzes, instelling) => {
+    const uit = {};
+    for (const id in keuzes || {}) if (T.isInstelling(id) === instelling) uit[id] = keuzes[id];
+    return uit;
+  };
+
+  // De spelregels voor een nieuw spel (T.nieuwSpel, js/main.js): wat je het laatst koos.
+  T.nieuweSpelregels = () => ({ keuzes: keuzesVan(inBrowser.keuzes, false), namen: { ...inBrowser.namen } });
+
+  // Wat er geldt met spel S: de instellingen en de werkbank van de browser, en de spelregels van S (zonder S, of in een
+  // spel zonder eigen regels, die van de browser).
+  T.optiesVoor = function (S) {
+    const r = (S && S.spelregels) || T.nieuweSpelregels();
+    return {
+      keuzes: { ...keuzesVan(inBrowser.keuzes, true), ...keuzesVan(r.keuzes, false) },
+      namen: { ...r.namen },
+      getallen: { ...inBrowser.getallen },
+    };
+  };
+  T.pasSpelregelsToe = (S) => T.pasOptiesToe(T.optiesVoor(S), S);
+
+  // Hoeveel spelregels van spel S anders zijn dan de standaard (een naam telt mee): 0 is Standard (js/menu.js).
+  T.spelregelsAnders = function (S) {
+    const r = (S && S.spelregels) || T.nieuweSpelregels();
+    const keuzes = T.OPTIES.filter((o) => !o.instelling && r.keuzes[o.id] && r.keuzes[o.id] !== o.standaard).length;
+    return keuzes + Object.values(r.namen || {}).filter((n) => n && n.trim()).length;
+  };
+
+  // Eén ding veranderen: in de browser, en is het een spelregel, ook in het spel S; dan alles opnieuw toepassen. Een
+  // keuze die de standaard is, valt weg, zodat alleen staat wat anders is.
   function verander(fn, S) {
-    const i = kloon(T.OPTIES_NU);
-    fn(i);
-    T.pasOptiesToe(i, S);
+    fn(inBrowser, (S && S.spelregels) || null);
     T.bewaarOpties();
+    T.pasSpelregelsToe(S);
   }
-  T.zetOptie = (id, keuzeId, S) => verander((i) => { i.keuzes[id] = keuzeId; }, S);
-  T.zetGetal = (pad, waarde, S) => verander((i) => {
-    if (waarde == null || waarde === '') delete i.getallen[pad];
-    else i.getallen[pad] = Number(waarde);
+  function zetKeuze(keuzes, id, keuzeId) {
+    const o = T.OPTIES.find((x) => x.id === id);
+    if (o && keuzeId === o.standaard) delete keuzes[id];
+    else keuzes[id] = keuzeId;
+  }
+  T.zetOptie = (id, keuzeId, S) => verander((b, r) => {
+    zetKeuze(b.keuzes, id, keuzeId);
+    if (r && !T.isInstelling(id)) zetKeuze(r.keuzes, id, keuzeId);
   }, S);
-  T.zetNaam = (id, naam, S) => verander((i) => { i.namen[id] = naam; }, S);
-  T.optiesTerug = (S) => verander((i) => {
-    i.keuzes = {};
-    i.namen = {};
-    i.getallen = {};
+  T.zetGetal = (pad, waarde, S) => verander((b) => {
+    if (waarde == null || waarde === '') delete b.getallen[pad];
+    else b.getallen[pad] = Number(waarde);
+  }, S);
+  T.zetNaam = (id, naam, S) => verander((b, r) => {
+    b.namen[id] = naam;
+    if (r) r.namen[id] = naam;
+  }, S);
+  // De spelregels, de namen en de werkbank terug (in het venster van de spelregels); de instellingen blijven.
+  T.spelregelsTerug = (S) => verander((b, r) => {
+    b.keuzes = keuzesVan(b.keuzes, true);
+    b.namen = {};
+    b.getallen = {};
+    if (r) Object.assign(r, { keuzes: {}, namen: {} });
+  }, S);
+  // Alles terug, ook de instellingen (Spel.optiesTerug, en de toetsen).
+  T.optiesTerug = (S) => verander((b, r) => {
+    Object.assign(b, { keuzes: {}, namen: {}, getallen: {} });
+    if (r) Object.assign(r, { keuzes: {}, namen: {} });
   }, S);
 
   // ---------------------------------------------------------------------------------------------
@@ -1413,7 +1552,7 @@
   T.bewaarOpties = function (waar) {
     const o = waar || opslag();
     try {
-      if (o) o.setItem(SLEUTEL, JSON.stringify(T.OPTIES_NU));
+      if (o) o.setItem(SLEUTEL, JSON.stringify(inBrowser));
     } catch (e) {
       /* vol, of geblokkeerd: dan onthoudt de browser het niet */
     }
@@ -1436,5 +1575,7 @@
   // Bij het laden: de standaard vastleggen, en wat de browser onthield meteen toepassen, zodat de
   // wereld en de poppetjes al met de juiste namen en getallen beginnen.
   neemStandaard();
-  T.pasOptiesToe(T.laadOpties());
+  const gelezen = T.laadOpties() || {};
+  inBrowser = { keuzes: { ...gelezen.keuzes }, namen: { ...gelezen.namen }, getallen: { ...gelezen.getallen } };
+  T.pasSpelregelsToe(null);
 })(globalThis.Spel = globalThis.Spel || {});

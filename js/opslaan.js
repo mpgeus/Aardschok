@@ -77,6 +77,9 @@
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
     vanzelfSnelDagen: 3,
+    // Hoe vaak het vanzelf opslaat (vraag 172b, de instelling "Autosave", js/opties.js): 'ochtend' (elke ochtend, op 30×
+    // om de vanzelfSnelDagen), 'drieDagen' (altijd om de vanzelfSnelDagen), of 'uit'.
+    vanzelf: 'ochtend',
   };
   const IN = () => T.OPSLAAN_INSTELLINGEN;
 
@@ -355,13 +358,13 @@
   // ook wie sliep wakker), op de plek 'auto', die steeds overschreven wordt. Staat er dan een venster open, dan
   // zodra het dicht is. S.vanzelfBewaard onthoudt de dag, en gaat zelf mee in wat bewaard wordt: een geladen
   // spel slaat die ochtend niet nog eens op. Elk beeld (js/main.js). Geeft wat T.slaOp gaf, of null als het
-  // nu niet aan de beurt was.
+  // nu niet aan de beurt was. Hoe vaak, of helemaal niet, zegt de instelling Autosave (`vanzelf`, hierboven).
   T.werkOpslaanBij = function (S) {
     const k = S && S.kalender;
-    if (!k) return null;
+    if (!k || IN().vanzelf === 'uit') return null;
     const dag = Math.floor(k.dag);
     if (S.vanzelfBewaard === dag || T.uurVanDag(k.dag) < T.dagindeling(dag).opstaan) return null;
-    const tussen = k.snelheid >= 30 ? IN().vanzelfSnelDagen : 1;
+    const tussen = k.snelheid >= 30 || IN().vanzelf === 'drieDagen' ? IN().vanzelfSnelDagen : 1;
     if (S.vanzelfBewaard != null && dag - S.vanzelfBewaard < tussen) return null;
     if (T.waaromNietOpslaan(S)) return null;
     S.vanzelfBewaard = dag;

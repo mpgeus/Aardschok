@@ -162,7 +162,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de snelheid, en het debugvenster; het lopen van de schout en het gevecht in beurten zijn eruit (stap 2 en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
 
 
-### js/opslaan.js en js/menu.js: opslaan en laden, het titelscherm
+### js/opslaan.js, js/menu.js en js/instellingen.js: opslaan en laden, het titelscherm, het menu en Settings
 
 - `js/opslaan.js`: **opslaan en laden** (werklijst punt 3, vraag 48): het bewaart heel `Spel.S` behalve wat
   alleen scherm is (`T.schermVelden`), met de verzamelingen en alles wat elkaar aanwijst heel
@@ -170,10 +170,34 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.werkOpslaanBij`; op 30× om de drie dagen, want het kost een hapering), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
   (`T.opslagPlek`: de opslag van de browser, straks een bestand). Na het laden meldt het de soorten aan van wat er op de
   kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
-  uit het spel (gevonden met de proef met opslaan, 4 okt). `js/menu.js` is het scherm erbij: het
-  titelscherm, waarop het spel opent, en het menu onder `Esc`. `js/main.js` begint een nieuw spel
+  uit het spel (gevonden met de proef met opslaan, 4 okt). `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
   titelscherm (`T.naarTitelscherm`).
+- `js/menu.js` is het scherm erbij, sinds vraag 172 (16 okt; Marcel: "We hebben een volledig menu nodig geen a.i slop") een
+  volledig menu. **Het titelscherm is tekst over de wereld**: links het woordmerk en de keuzes (`.titel-links`; Continue,
+  New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
+  `T.titelCamera`, `js/main.js`). Elke keuze is een `.menu-keuze`, tekst zonder kader; wat je hebt, is wat de focus
+  heeft (de muis zet hem, de pijltjes stappen, Enter neemt), en een vaantje (`--vaantje` in `stijl.css`, zeven bij tien
+  pixels op twee keer) staat ervoor. **New game** is een eigen scherm op die plek: de naam, het land (het nummer, *Other
+  land*, en het eiland als ruit, `tekenEiland`, uit het beeld van de minikaart), de spelregels (`T.ui.openSpelregels(S,
+  'nieuw')`; *Standard* of *Custom*, `T.spelregelsAnders`), en Begin, dat het land opnieuw maakt als de regels anders
+  zijn dan waarmee het gemaakt is (`landRegels`). Load en Credits liggen op papier ernaast (`.menu-venster.naast`).
+  **Het menu onder `Esc`** is papier in het midden, met een regel per keuze: Resume, Save, Load, Settings, Game rules (de
+  stand `'lezen'`), Photo mode, To the title screen, en Quit. Een venster erbovenop (Settings, de spelregels) heeft de
+  toetsen; als het dichtgaat, tekent `T.ui.werkMenuBij` het menu opnieuw.
+- `js/instellingen.js`: **Settings** (vraag 172 en 172b): wat van jou is en niet van het spel, als venster
+  (`T.ui.meldVenster`, zonder toets), in vier tabbladen: *Display*, *Graphics*, *Game* en *Controls*. Wat er te kiezen
+  is, zijn de opties met `instelling` in `js/opties.js`, en die noemt zijn tabblad ('beeld', 'tekening', 'spel'); een rij
+  is `T.ui.optieRij` (`js/hud.js`, met `kan` voor een keuze die nu niet kan). Erbij: de taal (`T.kiesTaal` herlaadt) en de
+  toetsen (`toetsen()`, alleen om te lezen: komt er een toets bij in `js/main.js` of een venster, zet hem hier erbij).
+  **Het venster:** in Electron over de brug `window.schil` (`verpakken.md`, "Het venster en de brug"; `pasVensterToe`,
+  bij `DOMContentLoaded` en na een keuze), in de browser alleen het hele scherm (`requestFullscreen`, niet te onthouden).
+  **Wat de keuzes doen:** de waarden staan in `T.TEKENEN_INSTELLINGEN` (`venster`, `vensterMaat`, `beeldenPerSeconde`,
+  `meter`, `helderheid`), `T.TIJD_INSTELLINGEN.pauzeAlsWeg` en `T.OPSLAAN_INSTELLINGEN.vanzelf`; `js/main.js` past ze
+  toe: de lus slaat beelden over tot de grens (`lus`, in de maat van de grens, ook op 144 Hz; de wereld loopt hetzelfde),
+  `T.ui.pasBeeldToe` zet de meter (F2 is dezelfde instelling) en de helderheid (een filter op de doeken, niet op de
+  vensters), en `blur` en `focus` zetten de tijd stil onder de reden `'weg'`. `T.werkOpslaanBij` (`js/opslaan.js`) kent
+  `vanzelf`. Geen schuif voor het geluid zolang er geen geluid is. Alleen scherm (`ALLEEN_SCHERM` in `test/laad.cjs`).
 
 
 ### js/taal.js: de taal
@@ -274,7 +298,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spelregel en van een keuze, de koppen van de werkbank, en de naam van elk getal, uit `NAAM_VAN_SLEUTEL` per sleutel van
   het pad (`NAAM_VAN_PAD` voor een sleutel die in één blok iets anders is; `T.werkbankNaam(pad)`; een getal zonder naam
   laat `test/opties.test.cjs` rood worden). De bladzijde met getallen leest de naam en de uitleg uit de tekst van `T.t('…')`:
-  `I.tekstVan` in `gereedschap/instellingen/bron.js`), `js/hud.js` (de kalender, het bouwmenu onder
+  `I.tekstVan` in `gereedschap/instellingen/bron.js`. **Spelregels en instellingen** (vraag 172, 16 okt): een optie met
+  `instelling: true` raakt alleen het beeld of het scherm (de tekening, de schaduwen, de doorkijk, de bomen door het jaar,
+  het kleine leven, de kleren, de raad), en is van wie speelt: de browser onthoudt hem, en hij staat onder Settings. De rest
+  zijn spelregels, en die horen bij een spel: `S.spelregels` (`{ keuzes, namen }`, bewaard met de rest van `S`), uit
+  `T.nieuweSpelregels()` bij `T.nieuwSpel` (wat je het laatst koos), en na het laden weer toegepast (`speelGelezen` in
+  `js/main.js`; niet in `T.zetSpel`, want daarmee herstellen de toetsen hun proefdorp). Wat geldt, is
+  `T.optiesVoor(S)`: de instellingen en de werkbank van de browser (`inBrowser`), met de spelregels van `S` erover;
+  `T.pasSpelregelsToe(S)` past het toe. `T.zetOptie(id, keuze, S)` en `T.zetNaam` schrijven in de browser, en een
+  spelregel ook in `S.spelregels`; `T.spelregelsTerug(S)` laat de instellingen staan, `T.optiesTerug` niet. De toets is:
+  raakt het de wereld (de tik), dan is het een spelregel; zo spelen twee spelers samen met dezelfde regels, ieder met zijn
+  eigen beeld), `js/hud.js` (de kalender, het bouwmenu onder
   `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
   spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
@@ -1447,6 +1481,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`ALLEEN_SCHERM` in `test/laad.cjs`); de regels die het aanroept, hebben hun eigen toetsen.
 - **Aan tot de Steam-versie** (Marcel, 15 okt), ook in de proefversie: `T.DEBUG_INSTELLINGEN.aan` gaat voor Steam op
   false (`ontwerp/verpakken.md`), en dan meldt het venster zich niet aan.
+- **De spelregels om te proberen** (vraag 172): in het spel lees je de spelregels alleen (ze liggen vast sinds het begin);
+  de knop *Game rules and the workbench* opent ze hier in de stand `'debug'` (`T.ui.openSpelregels(S, 'debug')`, js/hud.js),
+  te kiezen midden in een spel, met de werkbank. Die staat alleen bij een stand waarin je kiest en zolang dit venster aan is.
 
 ### js/statussen.js: de statussen
 

@@ -78,8 +78,10 @@ afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
-spelregels vast bij het begin, en een woordmerk in pixel art. **Bezig in sessie `ccr-907f9459-i3k9fd`** (16 okt): het
-plan voor Marcel.
+spelregels vast bij het begin, en een woordmerk in pixel art. **Stap 1 tot 6 zijn af** (16 okt, in `main`; `code.md` bij
+`js/menu.js`, `spel.md` bij "Instelbaar"), en **172b, Settings in tabbladen met het venster en de beelden per seconde,
+ook** (Marcel: "Zaken als resolutie etc hebben we nodig"; `code.md` bij `js/instellingen.js`). **De proefplaat van het
+woordmerk wacht op Marcel** (`beeld.md`, "Het woordmerk").
 
 **Ronde 3 van het snoeien is af** (A): **stap 1 tot 5 zijn af** (15 okt, in `main` sinds 16 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
 weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
@@ -104,6 +106,24 @@ stenen huizen. **Ronde 3 is af.**
   zonder een tweede, nu met het wild in zijn bos erbij. **Om naar te kijken:** een toets die zei dat de mensen van een
   dorp buiten beeld rondlopen, slaagde tot nu toe bij toeval (hij telde de wolven die het dorp neerzette); hij tikt nu de
   hele wereld, en het klopt.
+- **Settings bekijken** (vraag 172b, 16 okt, in `main`): het menu, *Settings*, en de vier
+  tabbladen. Het venster en zijn formaat zie je alleen in de verpakte versie: `npm run proefversie -- --windows`, en
+  *Display*. **Wat Claude erbij koos** (zeg het als het anders moet): (1) de Steam-versie opent op het hele scherm (tot nu
+  gemaximaliseerd); (2) pauze als je wegklikt staat standaard aan; (3) de helderheid in vijf stappen (80 tot 120%), alleen
+  op de wereld, niet op de vensters; (4) F2 en *The meter* zijn hetzelfde; (5) de formaten tellen in de pixels van
+  Windows: met een schaal van 150% past 1920×1080 niet op een scherm van 1080, en 1280×720 vult het dan.
+- **Het menu bekijken** (vraag 172, 16 okt, in `main`): open het spel. Links het woord en de
+  keuzes als tekst, rechts het land; de muis of de pijltjes zetten het vaantje, Enter neemt. *Credits* en (met een spel
+  bewaard) *Load* liggen op papier ernaast; *Settings* heeft het beeld, het hele scherm, de taal en de toetsen. *New game*:
+  de naam, het land met het eiland, *Game rules* (*Standard*, of kies er zelf; dan maakt *Begin* het land opnieuw), en
+  *Begin*. In het spel Esc: het menu op papier, *Game rules* lees je daar alleen; in D zit *Game rules and the workbench*
+  om te proberen. **De proefplaat van het woordmerk** (gebroken goud, `beeld.md`, "Het woordmerk"): goed zo, of wat
+  anders? **Wat Claude erbij koos** (zeg het als het anders moet): (1) onder *Settings* staan *Drawing*, *Shadows*, de
+  twee keuzes voor de doorkijk, *Trees through the year*, *Small life*, *Clothes* en *Advice*: die raken de wereld niet;
+  (2) een nieuw spel krijgt de spelregels die je het laatst koos, en een spel van vóór vandaag speelt met wat de browser
+  had; (3) de werkbank staat alleen nog in D, niet bij *New game* of in het menu; (4) *Continue* heeft één regel eronder
+  (het dorp, de dag, de mensen), en verder heeft alleen *Game rules* en *Photo mode* een regel; (5) Credits zegt "A game by
+  Marcel, made with Claude", en de letters met hun licentie; (6) *Quit* staat er alleen in de Electron-versie.
 - **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, in `main`): Nieuw spel, en
   in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
   tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
@@ -921,6 +941,43 @@ geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat
   werkt het ook samen (6d). Ze gaan dus mee in het bewaarde spel (`S`), en niet meer in de browser.
 - **Het woordmerk in pixel art uit code:** eerst in woorden, dan één proefplaat (`beeld.md`); ook voor de Steam-pagina
   (`commercieel.md`, "De capsule en het logo").
+
+**Stap 1 tot 6 zijn af** (16 okt, in `main`); stap 7, de proefplaat van het woordmerk, wacht op
+Marcel (`beeld.md`, "Het woordmerk").
+
+**172b, instellingen zoals in een echt spel** (Marcel, 16 okt, na stap 1 tot 6: **"Zaken als resolutie etc hebben we
+nodig"**). **Besloten** (Marcel, 16 okt, uit het voorstel van Claude): de vensterstand en het formaat, de beelden per
+seconde (en de meter), pauze als je wegklikt, hoe vaak het vanzelf opslaat, en de helderheid; Settings in tabbladen. Niet
+gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrollen langs de rand. De uitwerking (Claude):
+- **Tabbladen:** *Display* (het venster, het formaat, de beelden per seconde, de meter, de helderheid), *Graphics* (wat
+  er al was: de tekening, de schaduwen, de doorkijk, de bomen, het kleine leven, de kleren), *Game* (pauze als je
+  wegklikt, vanzelf opslaan, de raad, de taal), en *Controls* (de toetsen).
+- **Resolutie:** in Electron is het hele scherm altijd zonder rand, op de resolutie van je scherm (Electron kan de
+  monitor niet omzetten, en een spel van nu doet dat ook niet meer); in een venster kies je het formaat (1280×720 tot
+  3840×2160, alleen wat past). Een smalle brug in de schil (`gereedschap/proefversie/maak.cjs`, een preload), zoals
+  `verpakken.md` vraagt. In de browser alleen het hele scherm aan of uit.
+- Alles zijn opties met `instelling` (`js/opties.js`), zodat de browser ze op één manier onthoudt.
+- **Af** (16 okt, in `main`; `code.md` bij `js/instellingen.js`, `verpakken.md`, "Het venster en
+  de brug"), en in Electron 44 voor Linux getest (het hele scherm, een venster van 1280×720, terug, en Quit).
+
+**Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
+1. **Het titelscherm:** links een donker verloop met het woordmerk, de keuzes als tekst in Grenze (*Continue* met het
+   dorp, de dag en de mensen eronder, *New game*, *Load*, *Settings*, *Credits*, *Quit*), een vaantje bij de muis, en
+   kiezen met de pijltjes en Enter; de camera legt het land rechts naast de tekst. *Play together* komt erbij met 6d.
+2. **De vensters op papier:** het menu onder Esc, *Load*, *Settings* en *Credits*, met regels in plaats van kaders. Onder
+   Esc: *Resume*, *Save*, *Load*, *Settings*, *Game rules* (lezen), *Photo mode*, *To the title screen*, *Quit*.
+3. ***Settings*, met één regel:** wat de wereld raakt (de tik), is een spelregel; wat alleen het beeld is, een instelling
+   (lockstep: samen dezelfde regels, ieder zijn eigen beeld). Naar *Settings*: *Drawing*, *Shadows*, *Seeing through a
+   house*, *Who you see through a house*, *Trees through the year*, *Small life*, *Clothes* en *Advice*; erbij
+   *Fullscreen*, *Language* (van het titelscherm) en de toetsen.
+4. ***New game*:** de naam van je dorp, het land (het nummer, *Other land*, het eiland op een kaartje), de spelregels
+   (*Standard*, of *Custom*), en *Begin*.
+5. **De spelregels in het bewaarde spel** (`S.spelregels`); een oud spel krijgt wat de browser had. De werkbank blijft
+   van de browser, en in het debugvenster (D) kun je de spelregels midden in een spel omzetten, om te proberen.
+6. ***Credits*** ("A game by Marcel, made with Claude", de letters, OFL) en ***Quit*** (alleen in Electron).
+7. **Het woordmerk:** *TITHEBREAKER* in eigen kapitalen van pixels, zo'n 20 hoog, op 3×; het goud van de heer (oker,
+   licht van linksboven, donkere rand), en tussen TITHE en BREAKER een barst: BREAKER zakt een pixel en kantelt iets,
+   met twee splinters goud in de kier. Eén proefplaat; tot hij goed is, staat er de letter.
 
 ## Af (sinds 11 okt)
 

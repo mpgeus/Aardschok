@@ -205,6 +205,25 @@ JavaScript en Electron voor Steam; op echte machines meten tegen de lat (vraag 1
 WebGL, dan een Worker of WebAssembly voor wat het zwaarst is. Een nieuwe motor alleen als consoles ooit een doel worden.
 Een voorbeeld: Vampire Survivors begon in JavaScript (Phaser) en ging in 2023 naar Unity, ook voor de consoles.
 
+## Het venster en de brug (16 okt 2026, werklijst vraag 172b)
+
+Marcel: "Zaken als resolutie etc hebben we nodig". In de schil (`SCHIL` en `PRELOAD` in
+`gereedschap/proefversie/maak.cjs`, straks die voor Steam) is er nu een **smalle brug**: een preload die het spel alleen
+`window.schil.venster(stand, b, h)` geeft, over IPC naar het hoofdproces, zonder `nodeIntegration` (contextIsolation en
+de sandbox blijven aan). Settings (`js/instellingen.js`) vraagt er bij het begin en na een keuze het venster mee: het
+hele scherm, of een venster van een formaat (1280×720 tot 3840×2160, alleen wat past). Het venster verschijnt pas als het
+zijn stand kent, dus het flitst niet eerst als venster; zegt het spel niets, dan na drie seconden gemaximaliseerd.
+
+**Wat Electron niet kan:** de resolutie van de monitor omzetten. Het hele scherm is in Electron altijd zonder rand, op de
+resolutie van het scherm (wat spellen van nu ook doen, want omschakelen laat het scherm knipperen en breekt alt-tab). Op
+een groot scherm tekent het spel al op een hele deling ervan (de tussenbuffer, `js/main.js`), dus 4K kost niet meer dan
+1080p. Steam (de overlay, de vrienden, de lobby van 6d) gaat later over dezelfde brug, met `steamworks.js` in het
+hoofdproces.
+
+**Getest** (16 okt) in Electron 44.5.1 voor Linux, onder Xvfb, met Playwright: het spel opent op het hele scherm, wordt
+een venster van 1280×720 en weer het hele scherm, en Quit staat in het menu. Op Windows nog niet: dat doet Marcel met
+`npm run proefversie -- --windows`.
+
 ## De naam (vraag 8; voorstel van Claude, 27 sep, tiende sessie)
 
 "Aardschok" past niet meer. Waar een naam aan moet voldoen: kort, uit te spreken, uniek genoeg om te
