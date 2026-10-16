@@ -808,6 +808,19 @@ geluid, dus geen schuif voor het volume: een knop die niets doet, is precies wat
 **Stap 1 tot 6 zijn af** (16 okt, op de branch `ccr-907f9459-i3k9fd`); stap 7, de proefplaat van het woordmerk, wacht op
 Marcel (`beeld.md`, "Het woordmerk").
 
+**172b, instellingen zoals in een echt spel** (Marcel, 16 okt, na stap 1 tot 6: **"Zaken als resolutie etc hebben we
+nodig"**). **Besloten** (Marcel, 16 okt, uit het voorstel van Claude): de vensterstand en het formaat, de beelden per
+seconde (en de meter), pauze als je wegklikt, hoe vaak het vanzelf opslaat, en de helderheid; Settings in tabbladen. Niet
+gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrollen langs de rand. De uitwerking (Claude):
+- **Tabbladen:** *Display* (het venster, het formaat, de beelden per seconde, de meter, de helderheid), *Graphics* (wat
+  er al was: de tekening, de schaduwen, de doorkijk, de bomen, het kleine leven, de kleren), *Game* (pauze als je
+  wegklikt, vanzelf opslaan, de raad, de taal), en *Controls* (de toetsen).
+- **Resolutie:** in Electron is het hele scherm altijd zonder rand, op de resolutie van je scherm (Electron kan de
+  monitor niet omzetten, en een spel van nu doet dat ook niet meer); in een venster kies je het formaat (1280×720 tot
+  3840×2160, alleen wat past). Een smalle brug in de schil (`gereedschap/proefversie/maak.cjs`, een preload), zoals
+  `verpakken.md` vraagt. In de browser alleen het hele scherm aan of uit.
+- Alles zijn opties met `instelling` (`js/opties.js`), zodat de browser ze op één manier onthoudt.
+
 **Het plan: besloten** (Marcel, 16 okt: "Ja, bouw het zo", en voor het woordmerk "Gebroken goud"):
 1. **Het titelscherm:** links een donker verloop met het woordmerk, de keuzes als tekst in Grenze (*Continue* met het
    dorp, de dag en de mensen eronder, *New game*, *Load*, *Settings*, *Credits*, *Quit*), een vaantje bij de muis, en
