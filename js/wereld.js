@@ -464,9 +464,11 @@
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
   };
-  // Wie van jou is en buiten staat: de aanvoerder, wie in het dorp woont, de ossenkar. Zij maken het land open (hieronder) en
-  // kijken door de mist (js/mist.js).
-  T.isVanJou = (S, e) => !e.dood && !e.binnen && (T.isAanvoerder(S, e) || !!e.bewoner || !!e.kar);
+  // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren. Een wezen van een dorp draagt zijn
+  // dorp mee (`e.dorp`, gezet waar het ontstaat: T.nieuwDorp, het poppetje van een bewoner in js/bewoners.js, T.maakKar),
+  // zodat er meer dorpen op één kaart kunnen leven (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op
+  // hetzelfde eiland"). Zij maken het land open (hieronder) en kijken door de mist van hun dorp (js/mist.js).
+  T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen;
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
   // van de aanvoerder, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.
@@ -476,7 +478,7 @@
     const R = IN().openRond;
     const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
     for (const e of w.wezens) {
-      if (!T.isVanJou(S, e)) continue;
+      if (!T.isVanDorp(D, e)) continue;
       const [x, y] = [Math.round(e.x), Math.round(e.y)];
       for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
         for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
@@ -504,7 +506,7 @@
       const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
       let ver = Infinity;
       for (const e of w.wezens) {
-        if (!T.isVanJou(S, e)) continue;
+        if (!T.isVanDorp(e.dorp, e)) continue; // vooruit maken voor wie van een dorp is, van welk dan ook
         const kandidaten = (x, y, r) => {
           [x, y] = [Math.round(x), Math.round(y)];
           for (let sy = Math.max(0, Math.floor((y - r) / STUK)); sy <= Math.min(rand, Math.floor((y + r) / STUK)); sy++) {

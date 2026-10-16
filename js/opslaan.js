@@ -65,7 +65,9 @@
     // 16 (16 okt): vraag 170, stap 5: de schout heet aanvoerder (D.aanvoerder, p.aanvoerder, het wezen 'aanvoerder'; S.schout
     // is weg), het town hall heet raadhuis, wie een veld koos heet 'speler', en de reis over het land, sluipen en slapen zijn
     // weg (S.land, S.sluipen, S.slaap).
-    versie: 16,
+    // 17 (16 okt): vraag 170, stap 6a: een wezen van een dorp draagt zijn dorp mee (e.dorp), zodat er meer dorpen op één
+    // kaart kunnen leven; een wezen van daarvoor hoorde bij niemand.
+    versie: 17,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

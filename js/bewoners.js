@@ -474,6 +474,7 @@
     e.snelheid = IN()[L.snelheid];
     e.thuis = { x: deur.x, y: deur.y };
     e.bewoner = p;
+    e.dorp = D;
     p.wezen = e;
     w.wezens.push(e);
     if (p.uiterlijk == null) p.uiterlijk = T.kiesUiterlijk(D, p);

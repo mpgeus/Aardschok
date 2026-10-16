@@ -38,7 +38,7 @@
 
   // Is dit een van je mannen in dorp D: de held (de aanvoerder), een soldaat of een veteraan die er is en leeft?
   T.isMan = function (D, e) {
-    if (!D || !e || e.dood) return false;
+    if (!D || !e || e.dood || e.dorp !== D) return false;
     if (e === D.aanvoerder) return true;
     const p = e.bewoner;
     return !!p && !!(p.soldaat || p.veteraan) && !p.weg && !p.komt && p.wezen === e;
@@ -69,8 +69,9 @@
 
   // ── Wat rechts doet (de muis en de klik vragen hetzelfde, zoals T.handelingVerkennen) ──
 
-  // Is dit een vijand die je kunt aanvallen: een rover, een wolf, een monster?
-  const isVijand = (e) => !!e && !e.dood && e.kant === 'monster';
+  // Is dit een vijand die de mannen van D kunnen aanvallen: een rover, een wolf, een monster, of een mens van een ander
+  // dorp (T.isVijandVan, js/gevecht.js)?
+  const isVijand = (D, e) => !!e && !e.dood && (e.kant === 'monster' || T.isVijandVan(D, e));
   // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null.
   T.handelingSturen = function (S, doel, mannen) {
     if (!doel || !mannen || !mannen.length) return null;
@@ -78,7 +79,7 @@
     if (!D || D !== S.dorp) return null;
     const wie = T.nummersVan(D, mannen);
     const geef = (o) => () => T.geefOpdracht(S, o);
-    if (doel.wezen && isVijand(doel.wezen)) {
+    if (doel.wezen && isVijand(D, doel.wezen)) {
       const e = doel.wezen;
       const opdracht = { soort: 'volg', wie, doel: { x: e.tx, y: e.ty, soort: e.soort } };
       return { tekst: T.t('Attack the {wie}', { wie: e.naam }), kan: true, opdracht, doe: geef(opdracht) };
@@ -322,7 +323,7 @@
     let vijand = null;
     let bij = Infinity;
     for (const e of D.wereld.wezens) {
-      if (!isVijand(e) || e.soort !== doel.soort) continue;
+      if (!isVijand(D, e) || e.soort !== doel.soort) continue;
       const a = T.afstand(T.tegelVan(e), doel);
       if (a <= IN().vijandBij && a < bij) {
         vijand = e;

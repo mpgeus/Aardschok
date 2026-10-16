@@ -24,8 +24,17 @@ function tweeDorpen(zaad = 3) {
   return { S, jij: S.dorp, buur };
 }
 
-// Het dorp letter voor letter, zoals het opslaan het schrijft (js/opslaan.js), zonder de kalender die ze delen.
-const foto = (D) => T.bewaarSpel({ kalender: { dag: 0 }, dorp: { ...D, kalender: null } }, { nu: 0 });
+// Het dorp letter voor letter, zoals het opslaan het schrijft (js/opslaan.js), zonder de kalender die ze delen. Even op
+// het dorp zelf, want zijn wezens wijzen het aan (e.dorp, js/wereld.js), dus een kopie zou het dorp toch meenemen.
+const foto = (D) => {
+  const k = D.kalender;
+  D.kalender = null;
+  try {
+    return T.bewaarSpel({ kalender: { dag: 0 }, dorp: D }, { nu: 0 });
+  } finally {
+    D.kalender = k;
+  }
+};
 
 // Een dag voor een dorp, zoals het spel hem tikt (js/gebouwen.js).
 function dagen(S, dorpen, van, tot) {

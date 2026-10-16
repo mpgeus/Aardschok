@@ -20,7 +20,7 @@ test.afterEach(() => Object.assign(T.DOORKIJK_INSTELLINGEN, standaard));
 function gehucht() {
   const { S, w } = proefDorp(T);
   S.spreektMet = null;
-  S.dorp.aanvoerder = T.maakWezen('aanvoerder', 20, 20);
+  S.dorp.aanvoerder = Object.assign(T.maakWezen('aanvoerder', 20, 20), { dorp: S.dorp }); // van het dorp (T.isVanDorp)
   w.wezens = [S.dorp.aanvoerder];
   T.werkMistBij(S, S.dorp); // wie in de mist loopt, zie je ook niet door een boom heen (js/mist.js): de aanvoerder kijkt hier
   return S;

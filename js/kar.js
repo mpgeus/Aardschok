@@ -255,7 +255,7 @@
   // en de kar van een schuur).
   T.maakKar = function (D, x, y, naam, vel) {
     const e = T.maakDorpeling(0, x, y, 0, null);
-    Object.assign(e, { soort: 'kar', naam, vel, kar: true, zaad: null, snelheid: T.BEGIN_INSTELLINGEN.karSnelheid });
+    Object.assign(e, { soort: 'kar', naam, vel, kar: true, dorp: D, zaad: null, snelheid: T.BEGIN_INSTELLINGEN.karSnelheid });
     D.wereld.wezens.push(e);
     return e;
   };

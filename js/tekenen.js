@@ -903,7 +903,7 @@
       const b = v && v.beslaat ? v.beslaat : [1, 1];
       const p = v ? { x: Math.round(v.x + (b[0] - 1) / 2), y: Math.round(v.y + (b[1] - 1) / 2) } : item.punt;
       if (p && !T.zietNu(w, p.x, p.y)) {
-        if (!T.kentTegel(w, p.x, p.y) || (item.wezen && !T.isVanJou(S, item.wezen))) continue;
+        if (!T.kentTegel(w, p.x, p.y) || (item.wezen && !T.isVanDorp(S.dorp, item.wezen))) continue;
         const f = item.f;
         item.f = () => grijs(f);
       }

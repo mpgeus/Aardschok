@@ -70,6 +70,7 @@
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       einde: null, // de heer ontsloeg de aanvoerder (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
     };
+    if (aanvoerder) aanvoerder.dorp = D; // hij is van dit dorp (T.isVanDorp, js/wereld.js)
     // Er staat nog niets (vraag 152; sinds ronde 2 van het snoeien legt een kaart geen gebouwen, velden of voorraad meer):
     // de kar brengt wat er is, en het kamp (js/begin.js).
     if (w.kamp) T.zetKamp(S, D);

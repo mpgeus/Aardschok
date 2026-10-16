@@ -92,15 +92,15 @@
     T.kenKring(w, vak.x + (vak.b - 1) / 2, vak.y + (vak.h - 1) / 2, IN().beginKring);
   };
 
-  // Wie er kijkt: je mensen (T.isVanJou, dezelfde als wie het land open maakt), de gebouwen van het dorp die af zijn, en
+  // Wie er kijkt: de mensen van het dorp (T.isVanDorp, dezelfde als wie het land open maakt), de gebouwen van het dorp die af zijn, en
   // het plein (zoals een gebouw: het is van het dorp, ook als er niemand staat), elk met zijn kring, [{ x, y, r, van }]
   // (van: het wezen, het gebouw of het plein; w.plein zijn de hoeken van het plein, hier de rechthoek eromheen).
   function wieKijken(S, D) {
     const Z = IN().zicht;
     const uit = [];
     for (const e of D.wereld.wezens) {
-      if (!T.isVanJou(S, e)) continue;
-      uit.push({ x: e.x, y: e.y, r: T.isAanvoerder(S, e) ? Z.aanvoerder : e.kar ? Z.kar : Z.dorpeling, van: e });
+      if (!T.isVanDorp(D, e)) continue;
+      uit.push({ x: e.x, y: e.y, r: e === D.aanvoerder ? Z.aanvoerder : e.kar ? Z.kar : Z.dorpeling, van: e });
     }
     for (const g of D.gebouwen || []) {
       if (!g.klaar) continue;
@@ -146,7 +146,7 @@
   T.wieKijken = (w) => ZIEN.get(w) || [];
 
   // Zie je dit wezen? Je eigen mensen altijd; een ander (een beest, een rover, een bezoeker) alleen waar je nu kijkt.
-  T.zieJeWezen = (S, w, e) => T.isVanJou(S, e) || T.zietNu(w, e.tx, e.ty);
+  T.zieJeWezen = (S, w, e) => T.isVanDorp(S.dorp, e) || T.zietNu(w, e.tx, e.ty);
 
   // Je bouwt alleen op land dat je kent (een gebouw en een veld): waarom het vak r dat niet is, of null.
   T.waaromOnbekendLand = function (D, r) {
