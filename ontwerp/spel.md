@@ -1191,10 +1191,19 @@ ook; wie om hulp roept, krijgt de mannen van zijn eigen dorp, en dat dorp zegt h
 schade. Licht is licht (ook de lantaarn van een ander dorp houdt de wolven weg), en wie iemand naast zich heeft, van welk
 dorp ook, is niet alleen. Een jager schiet elk hert in zijn bereik. **A1:** wat een wolf in een gevecht gooit, komt uit de
 dobbelsteen van zijn roedel, niet uit die van een dorp of van de wereld: zo verandert wat bij jouw dorp gebeurt niet door
-een gevecht ver weg. **Nog zoals in 6a:** het wild wordt gezet in het bos van het land van elk dorp, de eerste keer dat
-het dorp leeft (dat wordt stuk b: het wild over het hele eiland, gezet waar het land opengaat), en de rovers zijn
-bezoekers van het dorp dat ze beroven (stuk c en d: de roverskampen en de rooftocht die leert). De status "Wolves" van
-een dorp gaat over de roedels in zijn land. Een spel van vóór 16 okt laadt niet meer (het opslaan, versie 18).
+een gevecht ver weg. **Over het hele eiland** (stuk b; Marcel: "D1 e1"): gaat een stuk land (64 bij 64 tegels) open,
+waar je mensen komen, dan krijgt het zijn wild, zoals zijn bomen. Hoeveel en welke komt uit het nummer van het eiland en
+van het stuk, waar uit het land zoals het dan is: hetzelfde stuk van hetzelfde eiland krijgt hetzelfde wild, ook als het
+pas later opengaat. Zoveel als het bos geeft (een roedel per 700 tegels bos, een groepje herten per 400), per stuk hooguit
+twee roedels en drie groepjes (D1: overal even dicht, alleen naar het bos). Het thuis ligt diep in het bos van zijn stuk;
+'s nachts kijken de wolven vanaf de rand naar het dorp in de buurt (het dichtste plein binnen 100 tegels), anders staan
+ze bij hun hol. Wordt het bos te klein, dan trekt een groep weg en is weg (E1), en het dorp in de buurt zegt het. Is er
+niemand van een dorp binnen 80 tegels, dan rust een groep: hij zoekt geen weg, maar zijn nacht loopt door. Bij het begin
+gaat meer land open dan het land van je dorp (een rand van 16 tegels, zo'n negen stukken): daar is nu ook wild, dus er
+leven rond het dorp ongeveer evenveel roedels als vroeger, maar meer herten (gemeten op vijf eilanden: 0 tot 3 roedels en
+4 tot 19 groepjes, waar het 1 tot 3 en 1 tot 4 was). De rovers zijn nog bezoekers van het dorp dat ze beroven (stuk c en
+d: de roverskampen en de rooftocht die leert). De status "Wolves" van een dorp gaat over het wild binnen 100 tegels van
+zijn plein. Een spel van vóór stuk b laadt niet meer (het opslaan, versie 19).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

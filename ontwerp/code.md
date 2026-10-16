@@ -139,8 +139,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   klok van het scherm (`S.tijd`, die ook mee bewaard wordt), elk dorp (`T.werkDorpBij`), wie loopt (`T.beweegWezens`,
   één keer per kaart: op één kaart kunnen meer dorpen leven, vraag 170, stap 6a), en waar je kijkt het maaien, het veldwerk,
   het wild en het dwalen van elk dorp dat er ligt, elk met zijn eigen wezens; `S.tik` telt ze. Na de dorpen, één keer per
-  kaart, **wat van geen dorp is** (vraag 170, stap 6a2): de nacht van het wild (`T.werkBeestenDagBij`, na de nacht en het
-  bos van de dorpen), wie van de wereld vecht (`T.werkGevechtVanDeWereldBij`), en waar je niet kijkt het wild in het bos
+  kaart, **wat van geen dorp is** (vraag 170, stap 6a2): het wild van de stukken land die open gingen (`T.zetWildBij`), de
+  nacht van het wild (`T.werkBeestenDagBij`, na de nacht en het bos van de dorpen), wie van de wereld vecht (`T.werkGevechtVanDeWereldBij`), en waar je niet kijkt het wild in het bos
   (`T.werkBeestenBij`; waar je kijkt na het veldwerk, als er rondgelopen wordt). js/main.js tikt
   zo vaak als er tijd verstreek (`T.tikBij`: een tik gaat al als er een halve klaarligt, zodat bij zestig beelden per
   seconde elke tik in een eigen beeld valt, en hooguit drie per beeld: een trage computer laat de wereld dan langzamer
@@ -1212,8 +1212,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/beesten.js: het wild
 
 - `js/beesten.js`: **het wild in het bos** (vraag 116, stap 1, 7 okt; Marcel: "Rode ogen uit het duister", en "a ja, b
-  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het land (`T.zetBeesten(S,
-  D)`, in het bos van het land van een dorp, de eerste keer dat het leeft: `T.werkBeestenBij`), elk met een plek
+  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het eiland en van het
+  stuk land (`T.zetWildBij`, als het stuk opengaat; hieronder, "Per stuk land"), elk met een plek
   diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
   wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`). Een groep is een ding dat de dieren delen
@@ -1247,20 +1247,33 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   meent (3d, `zetHek`) zijn weg sinds 15 okt (ronde 3 van het snoeien): je stuurt je soldaten op de wolven af.
 - **Het wild is van de wereld** (vraag 170, stap 6a2, a; Marcel, 16 okt: "Het wild is van iedereen", en "A1"; getoetst in
   `test/meer-dorpen.test.cjs`): een groep en zijn dieren hebben geen dorp (geen `G.dorp`, geen `e.dorp`; `T.hoortBij` is
-  streng). De wereld werkt ze bij, één keer per kaart (js/tik.js): elke tik `T.werkBeestenBij(S, w)` (wie er nog geen wild
-  heeft, krijgt het: `T.zetBeesten(S, D)` voor elk dorp op de kaart), en elke nacht `T.tikBeestenDag(S, w, dag)` via
-  `T.werkBeestenDagBij` (`w.beestenDag`), per land: de groepen die er wonen delen hun bos (`G.bos = { vak, midden, zaad }`,
-  bij het zetten overgenomen van het dorp, zodat het bos, wat er gebouwd is (`bebouwd`, van elk dorp op de kaart) en het
-  zaad van het land hetzelfde blijven als toen ze nog van het dorp waren). Wat het wild van een dorp wil weten, vraagt het
+  streng). De wereld werkt ze bij, één keer per kaart (js/tik.js): elke tik `T.werkBeestenBij(S, w)`, en elke nacht
+  `T.tikBeestenDag(S, w, dag)` via `T.werkBeestenDagBij` (`w.beestenDag`), per stuk land: de groepen die er wonen delen hun
+  bos (`G.bos = { vak, midden, zaad }`: het vak van het stuk, het plein van het dorp in de buurt of null, en het nummer van
+  het eiland), en een ander thuis en de herten van een roedel tellen ook over de grens van het stuk.
+  **Per stuk land** (stuk b; Marcel: "D1 e1"; getoetst in `test/beesten.test.cjs`): `T.zetWildBij(S, w)`, elke tik ook als
+  er niet rondgelopen wordt, geeft elk stuk dat open ging (`w.open`) zijn wild, op volgorde van zijn nummer, en onthoudt
+  het (`w.wildStukken`); `zetWildInStuk` neemt hoeveel en welke uit het nummer van het eiland en van het stuk (een
+  dobbelsteen per stuk: zoveel als het bos geeft, `bosPerRoedel` en `bosPerKudde`, afgerond met die dobbelsteen, per stuk
+  hooguit `maxRoedels` en `maxKuddes`), waar uit het land zoals het dan is (het bos per tegel met het jonge bos, want
+  `T.isBos` zonder telt alleen in `T.kaartVak`; wat er gebouwd is, `bebouwd`, van elk dorp; de groepen in de buurt). De
+  wolven kijken 's nachts naar het dorp in de buurt (`dorpBij`, het dichtste plein binnen 100 tegels; `pleinBij`), anders
+  staan ze bij hun hol. Met de spelregel uit gaan het wild en `w.wildStukken` weg, en weer aan krijgt elk open stuk het
+  opnieuw. Een groep zonder iemand van een dorp binnen `rustVerder` tegels rust (`G.ver`, om de twee seconden gevraagd):
+  zijn leider zoekt geen weg. Snel genoeg om een stuk te laten opengaan (gemeten 16 okt: hooguit zo'n 40 ms per stuk):
+  een thuis zoeken probeert `proeven` plekken, wat een plek mag (een weg naar het plein, herten in de buurt) wordt pas
+  gevraagd als hij aan de beurt is (`mag`, `bijHetMidden`), `randGoed` onthoudt zijn antwoord per tegel bij de bosKaart,
+  en `randVan` vraagt de stappen van het thuis één keer (`T.bereik`, js/pad.js) in plaats van een weg per plek: A* telt
+  schuin als recht (1,001), dus het is dezelfde lengte, en dezelfde keuze. Wat het wild van een dorp wil weten, vraagt het
   aan het dorp van wie het aangaat: `schrik` aan het dorp van wie schrikt (`mens.dorp`), `slaToe`, `roeptOmHulp`,
   `werkAanvalBij` en `bijt` aan dat van de prooi, `T.wolvenVechten(D, G, tegen)` zet `G.tegen = D` (het gevecht is van dat
   dorp; `T.wolvenNaHetGevecht(D)` stuurt de roedels die tegen D vochten naar huis), en `kiesProoi` kijkt naar het licht en
   de mensen van elk dorp op de kaart. Het genezen van wie gebeten werd, blijft in het dorp (`T.geneesVanDeWolven`, vanuit
-  `T.tikGebouwenDag`). `T.beestenOp(w)` zijn alle groepen op een kaart (de jager, het hol), `T.beestenVan(D)` die in het
-  land van D (de status, de raad, `Spel.debug.beesten`). **A1:** een groep heeft een eigen dobbelsteen (`G.lot`, uit zijn
+  `T.tikGebouwenDag`). `T.beestenOp(w)` zijn alle groepen op een kaart (de jager, het hol), `T.beestenVan(D)` die bij D
+  (binnen `dorpBij` van zijn plein: de status, de raad, `Spel.debug.beesten`); het dorp in de buurt zegt het ook als zijn
+  wild wegtrekt (`dorpBij`). **A1:** een groep heeft een eigen dobbelsteen (`G.lot`, uit zijn
   zaad), waarmee zijn wolven in een gevecht slaan (js/gevecht.js); de rest kwam al uit vaste worpen van zijn zaad
-  (`T.lotVanDier`). Zo verandert het wild bij het ene dorp niet door een gevecht bij het andere. Nog niet (stuk b): het
-  wild over het hele eiland, gezet waar het land opengaat.
+  (`T.lotVanDier`). Zo verandert het wild bij het ene dorp niet door een gevecht bij het andere.
 
 ### js/weer.js: het weer
 

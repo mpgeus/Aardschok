@@ -171,7 +171,7 @@ in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 o
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
 wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel
 herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de aanvoerder tien tegels van de dichtste groep, om ze te
-bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
+bekijken, `('opnieuw')` legt het wild opnieuw in elk open stuk land (vraag 170, stap 6a2, b), `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
 `('jacht')` laat elke roedel nu jagen, `('honger')` geeft elke roedel zoveel honger dat hij in het donker naar het dorp
 komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen. Onder `jagers` staat per jager waar hij op jaagt, wat hij
 schoot en of hij herten vindt.

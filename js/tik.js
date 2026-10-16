@@ -49,10 +49,12 @@
       for (const D of S.dorpen) T.werkDorpBij(S, D, dt, dtWereld);
     });
     // Wat van geen dorp is, werkt de wereld bij, één keer per kaart (werklijst vraag 170, stap 6a2; Marcel, 16 okt: "Het
-    // wild is van iedereen"): het wild (js/beesten.js), met zijn nacht na die van de dorpen en hun bos, en wie van de wereld
-    // vecht (js/gevecht.js); waar je niet kijkt ook het wild in het bos (waar je kijkt hieronder, als er rondgelopen wordt).
+    // wild is van iedereen"): het wild (js/beesten.js), dat een stuk land krijgt als het opengaat, met zijn nacht na die
+    // van de dorpen en hun bos, en wie van de wereld vecht (js/gevecht.js); waar je niet kijkt ook het wild in het bos
+    // (waar je kijkt hieronder, als er rondgelopen wordt).
     meet('wereld', () => {
       for (const w of kaartenVan(S)) {
+        T.zetWildBij(S, w);
         T.werkBeestenDagBij(S, w);
         T.werkGevechtVanDeWereldBij(S, w);
         if (w !== S.wereld) T.werkBeestenBij(S, w);

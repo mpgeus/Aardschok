@@ -85,7 +85,7 @@ test('het eerste dorp speelt letter voor letter hetzelfde, met of zonder een twe
   assert.ok(D2.begin.kamp !== 'onderweg', 'en het tweede leefde ook: zijn kamp staat');
 });
 
-test('het wild is van de wereld (stap 6a2, a): van geen dorp, in het bos van het land van elk dorp, elke groep een eigen dobbelsteen', () => {
+test('het wild is van de wereld (stap 6a2): van geen dorp, in de stukken land die open zijn, elke groep een eigen dobbelsteen', () => {
   const S = spel(true);
   tik(S, 0.5);
   const [A, B] = S.dorpen;
@@ -94,9 +94,10 @@ test('het wild is van de wereld (stap 6a2, a): van geen dorp, in het bos van het
   assert.ok(wild.length, 'er is wild');
   assert.ok(wild.every((e) => !e.dorp && !e.groep.dorp), 'van geen dorp');
   assert.ok(wild.every((e) => !T.hoortBij(A, e) && !T.hoortBij(B, e) && T.hoortBij(null, e)), 'van de wereld');
-  for (const D of [A, B]) assert.ok(D.beesten.gezet && T.beestenVan(D).length, `in het bos van het land van ${D.plek.naam}`);
+  for (const D of [A, B]) assert.ok(T.beestenVan(D).length, `wild bij ${D.plek.naam}`);
   const groepen = T.beestenOp(w);
-  assert.equal(groepen.length, T.beestenVan(A).length + T.beestenVan(B).length, 'elke groep woont in een van de twee landen');
+  assert.ok(groepen.every(({ G }) => w.open.has(T.stukVan(G.thuis.x, G.thuis.y))), 'elke groep woont in een stuk land dat open is');
+  assert.equal(w.wildStukken.size, w.open.size, 'en elk open stuk kreeg zijn wild');
   assert.ok(groepen.every(({ G }) => G.lot && G.lot.zaad === G.zaad), 'elke groep een eigen dobbelsteen, uit zijn zaad (A1)');
 });
 
@@ -112,7 +113,8 @@ test('de wereld werkt elke groep één keer per tik bij, ook met twee dorpen op 
   } finally {
     T.beestenWillen = wil;
   }
-  const groepen = T.beestenOp(S.wereld).filter(({ G }) => !(G.weg > S.kalender.dag));
+  // wie rust (niemand in de buurt, stap 6a2, b) of van iemand wegloopt, vraagt het niet
+  const groepen = T.beestenOp(S.wereld).filter(({ G }) => !(G.weg > S.kalender.dag) && !G.ver);
   assert.ok(groepen.length >= 2, 'er zijn groepen');
   for (const { G } of groepen) assert.equal(keer.get(G), 1, `${G.soort} bij ${G.thuis.x},${G.thuis.y}`);
 });

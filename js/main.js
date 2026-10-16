@@ -1184,10 +1184,11 @@
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.'; // geen tekst
       if (wat === 'opnieuw') {
-        // het wild is van de wereld: opnieuw voor elk dorp op de kaart (js/beesten.js)
+        // het wild is van de wereld: opnieuw in elk open stuk van de kaart (js/beesten.js)
         S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
         for (const v of S.wereld.voorwerpen.filter((x) => x.soort === 'hol')) T.haalVoorwerpWeg(S.wereld, v);
-        for (const V of S.dorpen) if (V.wereld === S.wereld) T.zetBeesten(S, V);
+        S.wereld.wildStukken = new Set();
+        T.zetWildBij(S, S.wereld);
       }
       if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(S, D.wereld, Math.floor(D.kalender.dag), { [wat]: true });
       const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf');

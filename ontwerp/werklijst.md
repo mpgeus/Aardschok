@@ -72,8 +72,10 @@ N1, V1", en "K1 en L1"): **6a2 loopt** (het plan bij I, in vier stukken: a de we
 wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Stuk a is af** (16 okt,
 in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
-eigen dobbelsteen. **Het volgende is stuk b**, het wild over het hele eiland (eerst een plan voor Marcel). **Bezig in sessie
-`ccr-53565789-zrmyk0`** (16 okt): stuk b (besloten: "D1 e1"). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+eigen dobbelsteen. **Stuk b is af** (16 okt, op de branch `ccr-53565789-zrmyk0`; Marcel: "D1 e1"; `spel.md`, "Het wild is
+van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
+volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). **Bezig in sessie `ccr-53565789-zrmyk0`** (16 okt):
+6a2. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -93,6 +95,17 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Het wild over het hele eiland bekijken** (vraag 170, stap 6a2, stuk b, 16 okt, op de branch `ccr-53565789-zrmyk0`):
+  Nieuw spel (een bewaard spel van vóór stuk b laadt niet meer: versie 19), zoom uit, en loop met mensen het land uit: in
+  het bos dat opengaat, leven herten en wolven, ook ver van je dorp; `Spel.debug.beesten()` zegt wat er bij je dorp leeft.
+  **Om naar te kijken:** (1) rond het begin leven nu meer herten dan vroeger (het bos in de rand die bij het begin opengaat,
+  heeft ook zijn wild; roedels ongeveer evenveel), en in de speeltest had eiland 1 aan het eind geen hout en één dode van
+  honger, en groeide eiland 3 minder (`opmerkingen.md`): als het te veel is, zijn de getallen `bosPerKudde` (400) en
+  `maxKuddes` (3) in de werkbank ("Animals in the forest"); (2) het kost wat meer rekenwerk, zo'n 4% van één kern op 30× in
+  plaats van 2%; zeg het als je haperen ziet. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het aantal per
+  stuk wordt afgerond met de dobbelsteen van het stuk (1.050 tegels bos is anderhalve roedel: de helft van de stukken
+  krijgt er twee); (2) de status "Wolves" telt het wild binnen 100 tegels van het plein, en dat dorp zegt het ook als zijn
+  wild wegtrekt; (3) de toetsen van het wild spelen nu op eiland 14 (en de jager op 2), waar alles slaagt.
 - **Het wild van de wereld bekijken** (vraag 170, stap 6a2, stuk a, 16 okt, in `main`): Nieuw
   spel (een bewaard spel van vóór vandaag laadt niet meer: het opslaan is versie 18). Het spel speelt zoals het speelde;
   het verschil zit onder de motorkap, met twee dorpen. `Spel.debug.tweedeDorp()`, dan `Spel.debug.wissel()`, en
