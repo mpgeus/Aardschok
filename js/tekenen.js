@@ -19,6 +19,8 @@
   let kaartNu = null;
   let zoomNu = 1; // voor wat ver uitgezoomd grover mag (het graan op een helling)
   const opGrond = (x, y) => T.naarSchermOp(kaartNu, x, y);
+  // en de grond zelf, ook onder een brug (de grondtegels, het water)
+  const opMaaiveld = (x, y) => T.naarSchermGrond(kaartNu, x, y);
 
   const GEDIMD = 0.58;
 
@@ -580,6 +582,30 @@
                 tekenGraan(ctx, w, deel, x, y, p);
                 if (sneeuw) tekenSneeuwOp(ctx, w, x, y, sneeuw, null);
               } });
+            }
+          }
+        }
+      }
+    }
+    // De bruggen van het eiland (js/eiland.js, legBruggen; gereedschap/pixelart/bruggen-vel.cjs): per tegel een achterlaag
+    // (l 1: het dek, de overkant, de bogen) en een voorlaag (l 2,5: de borstwering of de leuning aan de kant van de kijker),
+    // zoals het graan, zodat wie erop loopt (l 2) ertussen staat. Een stuk ligt met zijn anker op de grond van zijn tegel
+    // (opMaaiveld), niet op het wegdek (opGrond, T.naarSchermOp).
+    if (metSprites() && T.opEiland(w)) {
+      const steen = steenVanLand(w);
+      for (const brug of T.eilandVan(w.eiland.zaad).bruggen) {
+        const tegel = (i, k) => (brug.as === 'x' ? [brug.ga + i, brug.gc - 1 + k] : [brug.gc - 1 + k, brug.ga + i]);
+        const [ax, ay] = tegel(-1, 0);
+        const [bx, by] = tegel(brug.L, 2);
+        if (Math.max(ax, bx) < vak.x0 || Math.min(ax, bx) > vak.x1 || Math.max(ay, by) < vak.y0 || Math.min(ay, by) > vak.y1) continue;
+        for (let i = -1; i <= brug.L; i++) {
+          for (let k = 0; k < 3; k++) {
+            const [x, y] = tegel(i, k);
+            if (!inVak(vak, x, y) || !T.isZichtbaar(w, x, y)) continue;
+            const p = opMaaiveld(x, y);
+            for (const laag of [0, 1]) {
+              const deel = T.sprites.brugStuk(brug, brug.stad ? 'baksteen' : steen, i, k, laag);
+              if (deel) lijst.push({ d: x + y, l: laag ? 2.5 : 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
             }
           }
         }
@@ -1533,7 +1559,7 @@
         // Buiten ligt er ook gras onder een boom of een huis (die tegel heet "muur"): het
         // plaatje van de boom laat het gras eromheen zien.
         if (t === 'buiten' || (!buiten && t !== 'vloer' && t !== 'deur') || !T.isZichtbaar(w, x, y)) continue;
-        const p = opGrond(x, y);
+        const p = opMaaiveld(x, y);
         const g = buiten ? T.grondOp(w, x, y) : null;
         let hex;
         let helder;
@@ -1589,6 +1615,12 @@
   // rechtop.
   const GRAAN_STROOK = 8; // pixels breed
   const GRAAN_STUK = 20; // pixels hoog: zo ver kan de hoogte langs een strook recht genomen worden
+  // De steen van het land, voor een stenen brug: die van de huizen in zijn stijl (gereedschap/pixelart/huizen.cjs,
+  // STIJLEN): zandsteen bij oker en roze, anders veldsteen.
+  function steenVanLand(w) {
+    return w.stijl === 'oker' || w.stijl === 'roze' ? 'zandsteen' : 'veldsteen';
+  }
+
   function tekenGraan(ctx, w, deel, x, y, p) {
     if (!deel) return;
     if (!T.isSchuin(w, x, y)) return T.sprites.teken(ctx, deel, p.x, p.y, 1);
@@ -2329,7 +2361,7 @@
           for (let i = 0; i < Math.ceil(B.glinster * 2); i++) {
             const fel = Math.max(0, Math.sin(t * B.knipper * 6.283 + beeldLot(k + i, 61) * 40)) ** 6;
             if (fel < 0.05 || beeldLot(k + i, 62) > B.glinster) continue;
-            const p = opGrond(x - 0.5 + beeldLot(k + i, 63), y - 0.5 + beeldLot(k + i, 64));
+            const p = opMaaiveld(x - 0.5 + beeldLot(k + i, 63), y - 0.5 + beeldLot(k + i, 64));
             ctx.fillStyle = `rgba(230, 244, 255, ${(0.75 * fel).toFixed(3)})`;
             ctx.fillRect(Math.round(p.x) - 2, Math.round(p.y), 5, 1);
             ctx.fillRect(Math.round(p.x), Math.round(p.y) - 1, 1, 3);
@@ -2343,7 +2375,7 @@
           const dwars = 0.2 + 0.6 * beeldLot(k + i, 66);
           const u = s.dx ? (s.dx > 0 ? langs : 1 - langs) : dwars;
           const v = s.dy ? (s.dy > 0 ? langs : 1 - langs) : dwars;
-          const p = opGrond(x - 0.5 + u, y - 0.5 + v);
+          const p = opMaaiveld(x - 0.5 + u, y - 0.5 + v);
           const a = 0.5 * Math.sin(langs * Math.PI); // komt op en vervaagt binnen de tegel
           ctx.fillStyle = `rgba(214, 236, 250, ${a.toFixed(3)})`;
           // een streepje dwars op de stroom: op het scherm schuin, zoals de tegel ligt

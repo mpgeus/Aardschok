@@ -808,6 +808,82 @@
     return S.buiten(velNaam, ids[T.akkerVariant(x, y, ids.length)]);
   }
 
+  // ---------------------------------------------------------------- de bruggen (gereedschap/pixelart/bruggen-vel.cjs)
+  //
+  // Een brug van het eiland (js/eiland.js, legBruggen) is drie tegels breed en van elke lengte. Het vel heeft hem in
+  // stukken van één tegel, in twee lagen (0: wat achter wie erop loopt ligt, 1: wat ervóór), geknipt uit een paar hele
+  // bruggen (de monsters); welk stuk waar hoort, zegt S.brugMonster. Het vel laadt pas als er een brug in beeld komt.
+  let brugIndex = null; // 'naam as monster i k laag' → [sx, sy, b, h, ax, ay], uit de regels van de beschrijving
+  // De bogen van een stenen brug over L tegels, zoals de tekening ze legt (bruggen.cjs, bogen): twee tegels per boog, bij
+  // een oneven lengte in het midden één van drie, over één tegel een klein boogje. [van, tot] in tegels.
+  function bogen(L) {
+    if (L <= 1) return [[0, 1]];
+    const uit = [];
+    const drie = L % 2;
+    const paren = (L - 3 * drie) / 2;
+    let a = 0;
+    for (let i = 0; i < Math.floor(paren / 2); i++, a += 2) uit.push([a, a + 2]);
+    if (drie) uit.push([a, (a += 3)]);
+    while (a < L) uit.push([a, (a += 2)]);
+    return uit;
+  }
+  // Welk monster, en welke tegel daarin, op tegel i (van -1, het eerste landhoofd, tot L) van een brug. Een stenen brug van
+  // 1, 2, 3, 5 of 9 tegels is een monster zelf; een andere komt uit eenheden van één boog: het begin (het landhoofd en de
+  // eerste boog), de bogen ertussen en het eind (de laatste boog en het landhoofd), uit L9, en het begin uit L5 als de
+  // eerste boog drie tegels is. Een naad tussen twee eenheden valt midden op een pijler. Een jukbrug komt uit L3 (twee
+  // stukken met een juk om en om, het laatste zonder), een boogbrug is er heel.
+  S.brugMonster = function (soort, L, i) {
+    if (soort === 'juk') return ['L3', i < 0 ? -1 : i === L ? 3 : i === L - 1 ? 2 : i % 2];
+    if (soort === 'boog' || [1, 2, 3, 5, 9].includes(L)) return ['L' + L, i];
+    const bg = bogen(L);
+    if (i === L) return ['L9', 9];
+    const j = i < 0 ? 0 : bg.findIndex(([v, t]) => i >= v && i < t);
+    const [v, t] = bg[j];
+    if (j === 0) return [t - v === 3 ? 'L5' : 'L9', i];
+    if (j === bg.length - 1) return ['L9', 7 + i - v];
+    return ['L9', (t - v === 3 ? 2 : 5) + i - v];
+  };
+  // Een houten boogbrug zonder monster (langer dan de tekening ze heeft) wordt een jukbrug.
+  const brugSoort = (g, brug) => (brug.soort === 'boog' && !g.stukken.boog[brug.as]['L' + brug.L] ? 'juk' : brug.soort);
+  // Het stuk van een brug op tegel i (langs) en k (dwars, 0 tot 2) in laag 0 of 1, met de steen van een stenen brug
+  // ('veldsteen', 'zandsteen' of 'baksteen'); null als het er (nog) niet is, of als die laag daar leeg is.
+  S.brugStuk = function (brug, steen, i, k, laag) {
+    const g = gegevens && gegevens.bruggen;
+    if (!g || !laadAlsNodig(MAP + g.bestand)) return null;
+    if (!brugIndex) {
+      brugIndex = new Map();
+      for (const [naam, perAs] of Object.entries(g.stukken)) {
+        for (const [as, perMonster] of Object.entries(perAs)) {
+          for (const [m, lijst] of Object.entries(perMonster)) {
+            for (const regel of lijst) {
+              const [si, sk, sl, ...r] = regel.split(' ').map(Number);
+              brugIndex.set(`${naam} ${as} ${m} ${si} ${sk} ${sl}`, r);
+            }
+          }
+        }
+      }
+    }
+    const soort = brugSoort(g, brug);
+    const [m, mi] = S.brugMonster(soort, brug.L, i);
+    const sleutel = `${soort === 'steen' ? `steen-${steen}` : soort} ${brug.as} ${m} ${mi} ${k} ${laag}`;
+    const r = brugIndex.get(sleutel);
+    return r ? onthoud(`brug ${sleutel}`, () => stuk(MAP + g.bestand, r[0], r[1], r[2], r[3], [r[4], r[5]])) : null;
+  };
+  // Hoe hoog het wegdek van een brug ligt (pixels boven het maaiveld) op a tegels langs de brug vanaf de rand van zijn
+  // eerste tegel water (van -1 tot L + 1), zoals de tekening het heeft (bruggen.cjs, dekOp): een landhoofd loopt op, een
+  // boogbrug buigt. Zonder de beschrijving 0.
+  S.brugDek = function (brug, a) {
+    const g = gegevens && gegevens.bruggen;
+    if (!g) return 0;
+    const m = g.maten;
+    const soort = brugSoort(g, brug);
+    const dek = m.dek[soort];
+    if (a < 0) return m.aanloop + (dek - m.aanloop) * Math.min(1, Math.max(0, a + 1));
+    if (a > brug.L) return m.aanloop + (dek - m.aanloop) * Math.min(1, Math.max(0, brug.L + 1 - a));
+    if (soort !== 'boog') return dek;
+    return dek + (m.bult[0] + m.bult[1] * brug.L) * Math.sin((Math.PI * a) / brug.L);
+  };
+
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)
   //
   // Een vel met per stadium een eigen band: geploegd/kiemend/gemaaid hebben alleen varianten

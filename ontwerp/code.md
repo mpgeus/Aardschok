@@ -357,6 +357,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
   stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)`. Een voorwerp maak je op één manier
   (`T.maakVoorwerp` in `js/kaart.js`), en de grond van het eiland per nummer met `T.grondVanGid`.
+- **Over een brug van het eiland** (vraag 170, stap 6a2, 17 okt): `T.brugOp(w, x, y)` zegt welk stuk van welke brug er
+  ligt (`E.brugOp`, `js/eiland.js`), of null. Het water eronder blijft water (`T.grondOp`), maar de tegel is vloer
+  (`tegelVanGrond`, in `maakStuk` en als er iets weggaat) en een pad (`T.opPad`): je loopt erover, er wordt niets op
+  gebouwd, en de ossenkar rijdt er als op een weg.
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de bomen en de struiken op één
   plek (`T.BOMEN`, vraag 148: wat een boom van het bos is, `T.isBosBoom`, wat je rooit, wat de houthakker inplant, de
   wind en de bosrand; een nieuwe soort telt zo overal mee), de
@@ -484,7 +488,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   alleen een hoekje water afsneed, alleen die weg. De weg loopt altijd over zijn brug (de punten van `E.wegen` buigen
   erheen, en `E.wegIndex` wordt opnieuw gemaakt): op een weg staan geen bomen, ernaast wel. Tot 17 okt lag een bruggetje
   alleen waar het recht en kort kon, soms naast de weg met bomen op de aanloop, en was een weg op elk eiland twee à drie
-  keer onderbroken; `test/eiland.test.cjs` loopt nu elke weg af, aan de grond. **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  keer onderbroken; `test/eiland.test.cjs` loopt nu elke weg af, aan de grond. Kan de weg om het water heen over droog
+  land, dan gaat hij daarover (eerst `zoekOmweg(van, naar, false)`): zo komt er geen brug langs een oever. Een weg die
+  vlak naast een brug die er al ligt het water kruist, gaat over die brug. **Een brug is drie tegels breed** (Marcel, 17
+  okt: "Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1 persoon"; `wegen.brugBreed`): de weg
+  over de middelste rij, met een landhoofd op elke oever; ligt de oever schuin, dan is hij zo lang als de langste rij
+  (`breed`, aan elke kant hooguit twee tegels langer). `E.bruggen` is { as, ga, gc, L, soort, stad, tegels } (`ga` de
+  eerste tegel van het dek langs, `gc` de middelste rij, `tegels` het dek), en `E.brugOp` per tegel van het dek en de
+  landhoofden { brug, i (-1 tot L), k (0 tot 2) }. **De soort past bij de plek** (`brugSoort`; Marcel: "Wat bij de plek
+  past"): steen binnen `wegen.brugStad` tegels van de stad (`stad`: baksteen) of het kasteel, bij rotsen en op de heide,
+  en vanaf `wegen.brugSteen` tegels; hout in het woud, het veen en het broek; een houten brug tot `wegen.brugBoog`
+  tegels is om de andere een boogbrug ('boog'), anders een jukbrug ('juk'). Het water onder een brug blijft water
+  (`T.landStuk` legt er geen plankentegel meer en zet er niets op); `js/wereld.js` maakt de tegel vloer en een pad, en
+  `js/tekenen.js` tekent de brug erover. **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
@@ -556,7 +572,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dus een bewaard spel onthoudt alleen het nummer en die stukken, en het landschap loopt door als het land groter wordt.
   Voor het tekenen staan de hoeken in een lijst (met een rand van 48 tegels om de kaart), opnieuw als `w.hoogte.versie`
   verandert. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
-  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte), `T.lichtOpHoekpunt` en
+  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte, en op een brug van het eiland het wegdek:
+  `T.dekOp`, zodat wie erop loopt meegaat en de muis op het dek de brug kiest; de grond zelf, ook onder een brug, ligt op
+  `T.naarSchermGrond`, in `js/tekenen.js` `opMaaiveld`), `T.lichtOpHoekpunt` en
   `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,
   vanuit `T.laadGemaaktGehucht`), met een richel met een rotswand en een helling bij de rotsen; op het eiland is het land
   dat van het eiland (`hg.eiland`: de grond, het water op zijn peil, de zee op 0; vraag 117, 2b). Standaard staat hij op
@@ -700,7 +718,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tekent de grond opnieuw als het seizoen er is (`T.sprites.seizoenVanDeBomen`). De maker legt de nieuwe soorten met een
   vaste keus per tegel (`ANDERE_BOMEN` in `js/maker.js`, en het groen eronder langs de akkers, achter de huizen, op de
   heide, aan en op het water en aan de bosrand: `akkerrand` en verder in `T.MAKER_INSTELLINGEN.groei`), zonder zijn lot
-  te raken. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
+  te raken. **De bruggen van het eiland** (vraag 170, stap 6a2; Marcel, 17 okt: "Goed zo, zet ze in het spel";
+  `bruggen-vel.cjs`): het vel `beelden/bruggen.png` heeft een brug in stukken van één tegel in twee lagen (0 achter wie
+  erop loopt, 1 ervóór), geknipt uit een paar hele bruggen (monsters); `T.sprites.brugMonster(soort, L, i)` zegt welk
+  monster en welke tegel daarin op tegel i van een brug van L hoort (een stenen brug uit eenheden van één boog, de naad
+  midden op een pijler; een jukbrug uit L3; een boogbrug heel), `T.sprites.brugStuk(brug, steen, i, k, laag)` geeft het
+  stuk (het vel laadt pas als er een brug in beeld komt), en `T.sprites.brugDek(brug, a)` hoe hoog het wegdek ligt, met de
+  maten uit de beschrijving. `js/tekenen.js` legt de achterlaag op l 1 en de voorlaag op l 2,5, zoals het graan, met de
+  steen van het land (`steenVanLand`: zandsteen bij oker en roze) of baksteen bij de stad. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
   dus een vel mag groeien. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
   (vraag 114, 2a; samen zo'n 210 MB in de browser, was 900): een vel met voorwerpen in `tegels/` zegt per tegel
@@ -785,7 +810,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### gereedschap/pixelart/: de beelden uit code
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
-  3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar.
+  3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
+  (`bruggen.cjs`: de stenen boogbrug van veldsteen, zandsteen of baksteen, de houten jukbrug en de houten boogbrug, oud,
+  drie tegels breed, met de proefplaat; `bruggen-vel.cjs`: het vel voor het spel, `naar-spel.cjs --alleen bruggen`, in
+  vier seconden): een monster is een hele brug, en elke pixel gaat naar de tegel en de laag van de plek die hij toont
+  (`B.pos`), zodat de omlijning geen naad op een tegelrand heeft; wat onder het water ligt, valt weg (in het spel ligt
+  het water op het maaiveld, `BRUG.waterVlak` 0, en daarom ligt het dek 7 pixels hoger dan op de proefplaat: zo houden
+  de bogen en de palen hun maat). `dekOp` is de hoogte van het wegdek; het spel rekent hetzelfde uit met de maten uit
+  de beschrijving.
   `naar-spel.cjs` zet er `beelden/` uit klaar voor het spel. De huizen komen van de huizenbouwer
   (`huis-sdf.cjs`); welke het spel heeft, staat in `huizen.cjs` (elk een eigen bestand in `tegels/huizen/`), elk met
   zijn voet en de tegel voor zijn deur, waar `T.deurVan` (`js/bewoners.js`) de bewoners heen stuurt. De bouwstijlen

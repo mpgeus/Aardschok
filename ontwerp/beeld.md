@@ -1091,6 +1091,31 @@ pixels, en drie kruimels goud vallen onder de breuk weg. 179 bij 27 pixels.
 Marcel. Daarna: `node gereedschap/pixelart/woordmerk.cjs --spel` schrijft `beelden/woordmerk.png`, en het titelscherm
 toont het op 3× (op een smal scherm 2×), op ware pixels.
 
+## De bruggen: oud, drie tegels breed, van steen en van hout (17 okt 2026, werklijst vraag 170, stap 6a2)
+
+Marcel, 17 okt: "bruggen moeten ook oud zijn, en we hebben nieuwe stenen bruggen nodig, met boogje etc", en op de vragen
+"Wat bij de plek past" en **S1** (een brug heeft echte hoogte: een stuk per tegel in twee lagen, zoals het graan, en wie
+erop loopt, gaat mee omhoog). Op de eerste proefplaat: "Ook hout mag met boogje, afwisselend. Gewoon mooie bruggen. Dit
+ziet er te slap uit. Bruggen moeten breder. Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1
+persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
+
+- **Drie soorten, allemaal drie tegels breed** (zo breed als de weg; `gereedschap/pixelart/bruggen.cjs`). *De stenen
+  boogbrug* van veldsteen, zandsteen of baksteen: bogen van twee tegels (bij een oneven lengte in het midden één van
+  drie, over één tegel een klein boogje), pijlers met een spitse kop naar de kijker, een lijst onder een stevige
+  borstwering met een dekzerk, een bol wegdek van kinderkopjes, en een landhoofd op elke oever waar de weg op klimt. *De
+  houten jukbrug* (een lange oversteek): een plankdek op langsliggers, jukken van vier palen met een kesp, een leuning met
+  een middenregel. *De houten boogbrug* (een korte, tot zes tegels): een gebogen dek op twee boogribben met stijltjes, een
+  leuning met andreaskruisen. Oud: mos en varens in de voegen, korstmos, waterstrepen, een steen die eruit is, een natte
+  rand, klimop op een landhoofd; grijs hout, hier en daar nog bruin, mos aan de voet van de palen.
+- **Waar welke** (`js/eiland.js`, `brugSoort`): steen bij de stad (baksteen) en het kasteel, bij rotsen en op de heide, en
+  over een brede oversteek; hout in het woud, het veen en het broek, en over een smalle, om de andere een boogbrug. De
+  steen is die van het land: zandsteen bij de stijlen oker en roze, anders veldsteen.
+- **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
+  bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
+  wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water
+  op het maaiveld, op de proefplaat 7 pixels lager; daarom ligt het dek in het spel 7 hoger (steen 33, hout 22 boven het
+  maaiveld), zodat de bogen hun maat houden en de palen in zicht blijven. Een landhoofd loopt in één tegel op.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,

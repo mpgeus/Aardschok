@@ -154,6 +154,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   of uit is. `node kamp.cjs` maakt de proefplaat `uit/kamp-proef.png` en het bewegende vuur `uit/kampvuur.png`, en
   `node kamp.cjs --plein` het kamp met de huifkar zoals het op het plein kan staan (`uit/kamp-plein.png`). Naar het spel:
   `node naar-spel.cjs --alleen kamp` (`beelden/kamp.png` en `beelden/kampvuur.png`).
+- `bruggen.cjs`: de bruggen van het eiland, drie tegels breed en oud: de stenen boogbrug (veldsteen, zandsteen of
+  baksteen), de houten jukbrug en de houten boogbrug. `node bruggen.cjs` maakt de proefplaat `uit/bruggen-proef.png`
+  (met de rovertent T1 uit `kamp.cjs`); `bruggen-vel.cjs` knipt hele bruggen in stukken van één tegel in twee lagen voor
+  het spel. Naar het spel: `node naar-spel.cjs --alleen bruggen` (`beelden/bruggen.png`, in een paar seconden).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

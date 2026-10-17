@@ -1178,3 +1178,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   deur, die van het town hall; bij veel mensen staat er een rij voor de deur (wie naast de deur staat, mag ook naar
   binnen). (3) `Spel.debug.proefdorp()` laat het titelscherm open staan. (4) Een rover die een dorpeling najaagt,
   laat zijn akker even los; komt hij niet binnen zijn opUren terug, dan geeft de aanval het op (`T.werkRoversBij`).
+- **De bruggen, wat opviel** (17 okt, vraag 170, stap 6a2, toen ze het spel in gingen): (1) een brug over een schuine
+  rivier is lang: langs x of y over een beek die diagonaal loopt, en drie rijen die elk op droog land landen, maakt van
+  een beek van drie tegels een brug van acht, met aan weerszijden een stuk boven het gras. Een schuine brug zou korter
+  zijn, maar is een tekening erbij. (2) Met de spelregel "Hoogte" op heuvels ligt elk stuk op de grond van zijn eigen
+  tegel, dus volgt een brug de glooiing; standaard staat de hoogte uit. (3) In het woud vallen de kruinen vóór de brug
+  (naar de camera) over een groot deel ervan, zoals bij het plein; de doorkijk (`js/doorkijk.js`) maakt alleen een boom
+  doorzichtig die iemand van je bedekt.

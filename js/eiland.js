@@ -1451,7 +1451,7 @@
     // korte zoektocht over de tegels, langs de oever). Snijdt de weg alleen een hoekje water af, en komt hij over droog land
     // ook aan de overkant, dan alleen dat stuk weg. Geeft { brug (of null), weg: de tegels van `van` tot `naar` }, of null.
     const ver = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-    const zoekOmweg = (van, naar) => {
+    const zoekOmweg = (van, naar, metBrug = true) => {
       const r = W.brugZoek;
       const x0 = Math.min(van.x, naar.x) - r;
       const y0 = Math.min(van.y, naar.y) - r;
@@ -1502,6 +1502,7 @@
       const A = zoek(van);
       const B = zoek(naar);
       if (A.d[nr(naar)] >= 0 && A.d[nr(naar)] <= 3 * ver(van, naar) + r) return { brug: null, weg: pad(A, nr(naar)) };
+      if (!metBrug) return null;
       let beste = null;
       for (let k = 0; k < b * h; k++) {
         if (A.d[k] < 0) continue;
@@ -1603,12 +1604,16 @@
       }
       // Van achter naar voor: een weg die naar een brug buigt, verschuift zo de punten van de oversteken ervoor niet.
       for (const [van, naar] of oversteken.reverse()) {
-        // Een recht bruggetje vanaf de ene kant of de andere; de weg loopt erover (anders lag het naast de weg, en stonden er
-        // bomen op de aanloop: op een weg staan geen bomen, ernaast wel).
-        const heen = probeer(van, naar);
-        const terug = heen ? null : probeer(naar, van);
-        let o = heen ? { brug: heen, weg: [van, heen.af, naar] } : terug ? { brug: terug, weg: [van, terug.af, naar] } : null;
-        if (!o || !vrij(o.brug)) o = zoekOmweg(van, naar);
+        // Kan de weg over droog land, dan gaat hij daarover: zo komt er geen brug langs een oever, waar de weg alleen de
+        // tegels raakt met een natte hoek. Anders een recht bruggetje vanaf de ene kant of de andere; de weg loopt erover
+        // (anders lag het naast de weg, en stonden er bomen op de aanloop: op een weg staan geen bomen, ernaast wel).
+        let o = zoekOmweg(van, naar, false);
+        if (!o) {
+          const heen = probeer(van, naar);
+          const terug = heen ? null : probeer(naar, van);
+          o = heen ? { brug: heen, weg: [van, heen.af, naar] } : terug ? { brug: terug, weg: [van, terug.af, naar] } : null;
+        }
+        if (!o || (o.brug && !vrij(o.brug))) o = zoekOmweg(van, naar);
         if (!o || (o.brug && !vrij(o.brug))) continue;
         if (o.brug) legBrug(o.brug);
         // de weg: vanaf waar hij het water in ging, over droog land en de brug tot waar hij eruit kwam; alleen de bochten

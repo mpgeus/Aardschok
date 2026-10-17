@@ -1077,6 +1077,12 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   het kan, en blijven daar. Een plek in land dat nog dicht was, schuift als ze er dichtbij zijn naar de dichtste vrije
   tegel waar ze kunnen komen. Wie een post heeft buiten het land van het dorp, is op tocht: hij blijft in dienst, dag en
   nacht, en loopt 's avonds niet naar huis om te slapen, tot je hem terugroept.
+- **Over de bruggen** (17 okt, stap 6a2, L1 en de bruggen; Marcel: "L1", "Niemand bouwt een brug voor 1 persoon"). Elke
+  weg van het eiland heeft een brug waar hij over water gaat (kan hij om het water heen over droog land, dan gaat hij
+  daarover), drie tegels breed, zodat een peloton drie naast elkaar oversteekt. Steen bij de stad (baksteen), het kasteel,
+  de rotsen en de heide en over brede rivieren; hout in het woud, het veen en het broek. Wie erop loopt, gaat met het
+  wegdek mee omhoog en staat tussen de borstweringen; op een brug wordt niet gebouwd, en de ossenkar rijdt er als op een
+  weg.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

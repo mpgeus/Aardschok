@@ -10,7 +10,7 @@
 // en varens in de voegen, korstmos, waterstrepen, een steen die eruit is, een donkere natte rand, klimop.
 //
 // De houten jukbrug (een lange oversteek): een dek van dikke planken op langsliggers, gedragen door jukken van vier palen
-// met een kesp erop, en een leuning van palen en twee regels. De houten boogbrug (een korte oversteek, tot vier tegels):
+// met een kesp erop, en een leuning van palen en twee regels. De houten boogbrug (een korte oversteek, tot zes tegels):
 // een gebogen dek op twee boogribben met stijltjes ertussen, en een leuning met andreaskruisen. Oud: grijs hout, hier en
 // daar nog bruin, mos aan de voet van de palen.
 //
@@ -31,7 +31,9 @@ const SQ = D.SQ;
 
 // In pixels boven het maaiveld (z = 0), en in tegels dwars op de brug.
 const BRUG = {
-  dek: 26, // de bovenkant van het wegdek boven het maaiveld: zo hoog gaat wie erop loopt mee omhoog
+  dek: 33, // de bovenkant van het wegdek boven het maaiveld: zo hoog gaat wie erop loopt mee omhoog. In het spel ligt het
+  // water op het maaiveld; zo houden de bogen hun maat van de proefplaat (daar lag het dek 26 boven de oever en 33 boven
+  // het water)
   dikte: 8, // het dek onder de kinderkopjes, boven de kruin van een boog
   bol: 2.5, // hoeveel het midden van het wegdek dwars hoger ligt dan de randen
   borst: 12, // de borstwering boven het wegdek (kniehoog)
@@ -40,6 +42,7 @@ const BRUG = {
   inzet: 0.05, // zoveel tegel blijft er aan weerszijden vrij
   pijler: 0.16, // een halve pijler tussen twee bogen, in tegels langs de brug
   water: 7, // zo diep ligt het water onder het maaiveld (de beek van dorp.cjs)
+  waterVlak: -7, // het water onder de brug (px): in de proefplaat de beek, in het spel het maaiveld (bruggen-vel.cjs)
   aanloop: 2, // het wegdek aan de buitenkant van een landhoofd, boven het maaiveld
 };
 // De dwarse maat van een brug met gc als middelste tegel: van c0 tot c1, in eenheden.
@@ -99,8 +102,8 @@ function steenPixel(soort, u, h, basis, zaad) {
 // Wat de jaren doen (o.oud): mos aan de natte voet en in de voegen, korstmos, een donkere natte rand bij het water.
 function verweer(u, h, zaad, o) {
   const voeg = UIT.stap;
-  if (h < -BRUG.water + 3) UIT.stap -= 1.5; // de natte rand
-  if (h < -BRUG.water + 7 && ruis2(u * 0.13, h * 0.35, zaad + 2) > 0.58) {
+  if (h < BRUG.waterVlak + 3) UIT.stap -= 1.5; // de natte rand
+  if (h < BRUG.waterVlak + 7 && ruis2(u * 0.13, h * 0.35, zaad + 2) > 0.58) {
     UIT.ramp = RAMP.mos;
     UIT.stap = 1 + (ruis2(u * 0.4, h * 0.4, zaad + 3) > 0.6 ? 1 : 0);
     return;
@@ -139,7 +142,7 @@ function steenStuk(o) {
   const steen = o.steen || 'veldsteen';
   const E = (px) => px / PXH; // pixels naar eenheden
   const zDek = E(BRUG.dek);
-  const zBodem = E(-BRUG.water - 6);
+  const zBodem = E(BRUG.waterVlak - 6);
   // het wegdek: bij een landhoofd een helling van de aanloop tot het dek, boven het water vlak
   const hoog = (a) => {
     if (o.stuk === 'begin') return BRUG.aanloop + ((a - a0) / T) * (BRUG.dek - BRUG.aanloop);
@@ -152,7 +155,7 @@ function steenStuk(o) {
   // de opening van de boog op deze tegel: langs (in tegels vanaf de eerste tegel water) en hoogte (px)
   const boog = o.boog;
   const kruin = BRUG.dek - BRUG.dikte - 1;
-  const voet = -BRUG.water + 1;
+  const voet = BRUG.waterVlak + 1;
   function inBoog(u, h) {
     if (!boog) return 0;
     const s0 = boog[0] + BRUG.pijler;
@@ -375,7 +378,8 @@ function steenBrug(o) {
 // ---------------------------------------------------------------- de houten bruggen
 
 const HOUT = {
-  dek: 15, // de bovenkant van het dek van de jukbrug, en van de boogbrug aan zijn uiteinden (px boven het maaiveld)
+  dek: 22, // de bovenkant van het dek van de jukbrug, en van de boogbrug aan zijn uiteinden (px boven het maaiveld): in het
+  // spel ligt het water op het maaiveld, en zo blijven de palen in zicht (op de proefplaat lag het dek 15 boven de oever)
   dekD: 3, // de planken
   ligger: 5, // de langsligger eronder
   paal: 7, // een paal van een juk, in het vierkant (eenheden)
@@ -422,7 +426,7 @@ function houtTex(o) {
     if (hash(Math.round(lang), Math.round((o.staand ? u : h) * 2), o.zaad + 5) % 6 === 0) st -= 0.8; // de nerf
     UIT.stap = st;
     // mos aan de voet van een paal, bij het water
-    if (h < -BRUG.water + 6 && ruis2(u * 0.3, h * 0.3, o.zaad + 7) > 0.45) {
+    if (h < BRUG.waterVlak + 6 && ruis2(u * 0.3, h * 0.3, o.zaad + 7) > 0.45) {
       UIT.ramp = RAMP.mos;
       UIT.stap = 1.5;
     }
@@ -543,7 +547,7 @@ function jukStuk(o) {
     vormen.push(blokLangs(langsX, a1 - p - 1, a1 + p + 1, c0 + 1, c1 - 1, kespOnder, onderDek - HOUT.ligger, onderDek - HOUT.ligger, houtTex({ langsX, zaad, zijNaam }), 74));
     for (let i = 0; i < HOUT.palen; i++) {
       const k = c0 + ((i + 0.5) / HOUT.palen) * (c1 - c0);
-      vormen.push(blokLangs(langsX, a1 - p, a1 + p, k - p, k + p, -BRUG.water - 6, kespOnder, kespOnder, houtTex({ langsX, zaad: zaad + i, zijNaam, staand: true }), 75));
+      vormen.push(blokLangs(langsX, a1 - p, a1 + p, k - p, k + p, BRUG.waterVlak - 6, kespOnder, kespOnder, houtTex({ langsX, zaad: zaad + i, zijNaam, staand: true }), 75));
     }
   }
   vormen.push(...leuning(o, a0, a1, HOUT.dek, HOUT.dek, 72));
@@ -558,9 +562,9 @@ function jukBrug(o) {
   return stukken;
 }
 
-// De houten boogbrug (tot vier tegels water): het dek loopt in een boog van HOUT.dek aan de oevers tot bult hoger in het
-// midden, gedragen door twee boogribben met stijltjes ertussen. o: as, ga, gc, L (tegels water), zaad. Elke tegel water in
-// twee helften, zodat de boog niet hoekig wordt.
+// De houten boogbrug (tot zes tegels water, js/eiland.js: brugBoog): het dek loopt in een boog van HOUT.dek aan de
+// oevers tot bult hoger in het midden, gedragen door twee boogribben met stijltjes ertussen. o: as, ga, gc, L (tegels
+// water), zaad. Elke tegel water in twee helften, zodat de boog niet hoekig wordt.
 function houtBoogBrug(o) {
   const langsX = o.as === 'x';
   const T = TEGEL;
@@ -569,7 +573,7 @@ function houtBoogBrug(o) {
   const zijNaam = langsX ? 'y' : 'x';
   const bult = HOUT.bult[0] + HOUT.bult[1] * o.L;
   const dekOp = (u) => HOUT.dek + bult * Math.sin((Math.PI * klem(u, 0, o.L)) / o.L); // u in tegels vanaf de eerste tegel water
-  const voet = -BRUG.water + 1;
+  const voet = BRUG.waterVlak + 1;
   const stukken = [];
   for (const stuk of ['begin', 'eind']) {
     const ga = stuk === 'begin' ? o.ga - 1 : o.ga + o.L;
@@ -611,6 +615,17 @@ function houtBoogBrug(o) {
   return stukken;
 }
 
+// Hoe hoog het wegdek ligt (px boven het maaiveld, zonder de bolling) op a tegels langs de brug vanaf zijn eerste tegel
+// water: van -1 (de buitenkant van het eerste landhoofd) tot L + 1. Zo hoog gaat wie erop loopt mee omhoog; het spel rekent
+// hetzelfde uit met de maten uit de beschrijving (bruggen-vel.cjs, js/sprites.js: S.brugDek).
+function dekOp(soort, L, a) {
+  const dek = soort === 'steen' ? BRUG.dek : HOUT.dek;
+  if (a < 0) return BRUG.aanloop + (dek - BRUG.aanloop) * klem(a + 1, 0, 1);
+  if (a > L) return BRUG.aanloop + (dek - BRUG.aanloop) * klem(L + 1 - a, 0, 1);
+  if (soort !== 'boog') return dek;
+  return dek + (HOUT.bult[0] + HOUT.bult[1] * L) * Math.sin((Math.PI * a) / L);
+}
+
 // Zet een brug neer als één ding: dan tekent de omlijning geen naad tussen twee stukken.
 function zetBrug(B, stukken) {
   const obj = B.volgendObj++;
@@ -620,7 +635,7 @@ function zetBrug(B, stukken) {
   return vormen;
 }
 
-module.exports = { BRUG, HOUT, bogen, dwarsVan, steenStuk, steenBrug, jukStuk, jukBrug, houtBoogBrug, zetBrug };
+module.exports = { BRUG, HOUT, bogen, dwarsVan, steenStuk, steenBrug, jukStuk, jukBrug, houtBoogBrug, dekOp, zetBrug };
 
 // ---------------------------------------------------------------- de proefplaat
 

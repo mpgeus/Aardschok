@@ -10,6 +10,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
 //   node gereedschap/pixelart/naar-spel.cjs --alleen stapels
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kamp
+//   node gereedschap/pixelart/naar-spel.cjs --alleen bruggen
 //   node gereedschap/pixelart/naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen lantaarn
@@ -24,7 +25,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier, de bruggen) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -46,6 +47,7 @@ const Bomen = require('./bomen.cjs');
 const Pestbos = require('./pestbos.cjs');
 const Stapels = require('./stapels.cjs');
 const Kamp = require('./kamp.cjs');
+const Bruggen = require('./bruggen-vel.cjs');
 const Hol = require('./hol.cjs');
 const Lantaarn = require('./lantaarn.cjs');
 const Wijnrank = require('./wijnrank.cjs');
@@ -284,7 +286,14 @@ function uiterlijken() {
   return Object.fromEntries(Object.entries(UI.UITERLIJKEN).map(([lijf, lijst]) => [lijf, lijst.map((o) => o.kleur)]));
 }
 
-const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, lantaarn, wijnrank, marktkraam, tekens, uiterlijken };
+// De bruggen van het eiland in stukken van één tegel, in twee lagen (bruggen-vel.cjs; js/sprites.js: S.brugStuk).
+function bruggen() {
+  const { plaat, stukken } = Bruggen.vel();
+  schrijf('bruggen.png', plaat);
+  return Bruggen.beschrijving('bruggen.png', stukken);
+}
+
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, lantaarn, wijnrank, marktkraam, tekens, bruggen, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

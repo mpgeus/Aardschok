@@ -178,11 +178,27 @@
     return l[i] !== l[i + 1] || l[i + 1] !== l[i + 2] || l[i + 2] !== l[i + 3];
   };
 
-  // Waar een punt op de grond op het scherm komt: zoals T.naarScherm, maar met de hoogte eraf.
+  // Waar een punt op de grond op het scherm komt: zoals T.naarScherm, maar met de hoogte eraf, en op een brug het wegdek
+  // (T.dekOp): daar staat wie er loopt. De grond zelf (het water onder een brug) ligt op T.naarSchermGrond.
   T.naarSchermOp = function (w, x, y) {
+    const p = T.naarSchermGrond(w, x, y);
+    p.y -= T.dekOp(w, x, y);
+    return p;
+  };
+  T.naarSchermGrond = function (w, x, y) {
     const p = T.naarScherm(x, y);
     if (w && w.hoogte) p.y -= T.hoogteOp(w, x, y);
     return p;
+  };
+
+  // Hoe hoog het wegdek van een brug van het eiland ligt op punt (x, y), in pixels boven de grond (js/eiland.js, legBruggen;
+  // de maten van de tekening, js/sprites.js: S.brugDek); naast een brug 0. Alleen voor het scherm: wie erop loopt, gaat
+  // mee omhoog.
+  T.dekOp = function (w, x, y) {
+    const op = T.brugOp(w, Math.round(x), Math.round(y));
+    if (!op) return 0;
+    const brug = T.eilandVan(w.eiland.zaad).bruggen[op.brug];
+    return T.sprites.brugDek(brug, (brug.as === 'x' ? x : y) - (brug.ga - 0.5));
   };
 
   // En terug, voor de muis: welke tegel ligt onder schermpunt (sx, sy)? Een tegel op een heuvel ligt hoger in beeld
@@ -190,6 +206,8 @@
   // voorste waarvan de schuine ruit het punt bevat. Geeft een punt in de wereld, zoals T.naarWereld.
   T.naarWereldOp = function (w, sx, sy) {
     const vlak = T.naarWereld(sx, sy);
+    const brug = opBrug(w, vlak, sx, sy);
+    if (brug) return brug;
     if (!w || !w.hoogte) return vlak;
     const hoogst = IN().groot.hoog + IN().midden.hoog + 4 * w.hoogte.trede;
     const stappen = Math.ceil(hoogst / 32) + 2; // een hoogte van 32 pixels is één tegel naar voren (x en y elk +1)
@@ -205,12 +223,31 @@
     if (!beste) return vlak;
     return { x: beste.x - 0.5 + beste.u, y: beste.y - 0.5 + beste.v };
   };
-  // Ligt schermpunt (sx, sy) in de schuine ruit van tegel (x, y)? Dan waar (u, v tussen 0 en 1), anders null.
-  function inRuit(w, x, y, sx, sy) {
+  // Een brug ligt hoger dan de grond (T.dekOp): wie op het wegdek wijst, bedoelt de brug, ook al ligt de grond onder dat
+  // punt een tegel of twee verder naar achter. Het voorste stuk brug onder het punt, als punt in de wereld, of null.
+  function opBrug(w, vlak, sx, sy) {
+    if (!T.opEiland(w)) return null;
+    let beste = null;
+    for (let s = 0; s <= 2; s++) {
+      for (const [dx, dy] of [[0, 0], [1, 0], [0, 1]]) {
+        const x = Math.round(vlak.x) + s + dx;
+        const y = Math.round(vlak.y) + s + dy;
+        if (!T.brugOp(w, x, y)) continue;
+        // het dek op elke hoek, net binnen de tegel (op de rand van een landhoofd hoort hij bij de brug)
+        const dek = HOEK.map(([hx, hy]) => T.dekOp(w, x + hx * 0.98, y + hy * 0.98));
+        const raak = inRuit(w, x, y, sx, sy, dek);
+        if (raak && (!beste || x + y > beste.x + beste.y)) beste = { x, y, u: raak.u, v: raak.v };
+      }
+    }
+    return beste && { x: beste.x - 0.5 + beste.u, y: beste.y - 0.5 + beste.v };
+  }
+  // Ligt schermpunt (sx, sy) in de schuine ruit van tegel (x, y)? Dan waar (u, v tussen 0 en 1), anders null. `erbij`: per
+  // hoek nog zoveel pixels hoger (het wegdek van een brug).
+  function inRuit(w, x, y, sx, sy, erbij = [0, 0, 0, 0]) {
     const h = T.hoekHoogten(w, x, y);
     const p = HOEK.map(([dx, dy], k) => {
       const q = T.naarScherm(x + dx, y + dy);
-      return [q.x, q.y - h[k]];
+      return [q.x, q.y - h[k] - erbij[k]];
     });
     // twee driehoeken: noord-oost-zuid en noord-zuid-west, met (u, v) per hoek
     const uv = [[0, 0], [1, 0], [1, 1], [0, 1]];
