@@ -83,7 +83,14 @@ dorpsplekken, de stad en het kasteel te voet in één stuk land. **De bruggen zi
 branch; Marcel: "Goed zo, zet ze in het spel"; `beeld.md`, "De bruggen"): drie tegels breed, oud, steen of hout naar de
 plek, en wie erop loopt gaat mee omhoog. Het volgende is c1, de kampen: **de tent is T1** (Marcel, 17 okt: grijsgroen en
 vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; op de proefplaat goedgekeurd met de bruggen).
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0, L1 en de bruggen zijn af, c1 is het volgende. Let op:
+**Vraag R, de bruggen in acht richtingen** (Marcel, 17 okt: "De bruggen moeten in 8 richtingen"; wacht op Marcel): nu
+ligt een brug langs x of y (op het scherm schuin naar rechtsonder of linksonder); erbij komen de twee diagonalen, recht
+omhoog op het scherm (Z–N) en recht opzij (W–O). Een brug is van beide kanten dezelfde, dus acht richtingen zijn vier
+assen. Een brug gaat haaks over het water, langs de as waar de oversteek het kortst is; zo is ook de lange brug over een
+schuine beek weg (`opmerkingen.md`). Op het raster is een schuine brug een trap van tegels: **R1** drie schuine rijen
+(zo'n 2,1 tegel breed), **R2** vier (2,8, even breed als een rechte; voorstel). Eerst in woorden en één proefplaat
+(steen, juk en boog in de twee nieuwe richtingen, met een peloton), dan het eiland, het vel en het spel.
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0, L1 en de bruggen zijn af; vraag R wacht op Marcel. Let op:
 CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
