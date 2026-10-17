@@ -79,8 +79,10 @@ niet kent). **c0 is af** (17 okt, op de branch `ccr-b0684dee-kk0n5b`; `spel.md`,
 niet kent, in beeld of op de minikaart, en je mannen gaan erheen, ook naar de andere kant van het eiland. Het liet zien
 dat het eiland te voet in stukken gebroken is (`opmerkingen.md`). **L1 is af** (17 okt, op dezelfde branch; Marcel:
 "L1"; `code.md` bij `js/eiland.js`): elke weg heeft zijn bruggetje, ook breed en schuin, en loopt erover; nu liggen alle
-dorpsplekken, de stad en het kasteel te voet in één stuk land. Het volgende is c1, de kampen (eerst de tent in woorden).
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af, c1 wacht op de tent in woorden. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+dorpsplekken, de stad en het kasteel te voet in één stuk land. Het volgende is c1, de kampen: **de tent is T1** (Marcel,
+17 okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; nu de proefplaat). Marcel erbij:
+"bruggen moeten ook oud zijn, en we hebben nieuwe stenen bruggen nodig, met boogje etc": eerst de bruggen in woorden.
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af; de bruggen en de tent, eerst in woorden. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -958,6 +960,24 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   dag en nacht in dienst. Het liet zien dat het eiland te voet in stukken gebroken is: vraag L ("Wacht op Marcel"),
   besloten (Marcel, 17 okt: "L1"): elke weg krijgt een bruggetje waar hij over water gaat, ook breed en schuin; het woud
   blijft een muur, met de wegen als passen.
+  **De bruggen, oud en van steen** (Marcel, 17 okt: "bruggen moeten ook oud zijn, en we hebben nieuwe stenen bruggen
+  nodig, met boogje etc"; het voorstel in woorden van Claude, wacht op Marcel; eerst goedkeuring, dan één proefplaat,
+  `beeld.md`). Wat er is: één houten brug als grondtegel (`gereedschap/pixelart/randtegels.cjs`): een vlak plankdek op
+  een landhoofd van veldsteen, zonder leuning, want een grondtegel is precies 64×32 en wat hoger reikt, valt weg. En in
+  `dorp2.cjs` een stenen boogbrug met ezelsrug en leuningen uit de oude platen, die niet op het raster past. **De houten
+  brug, oud:** grijs verweerd hout, een paar gebarsten planken en hier en daar een die weg is (je ziet het water erdoor),
+  een doorgezakte legger, mos langs de randen en op het landhoofd, waar een paar stenen uit liggen; blijft een grondtegel.
+  **De stenen boogbrug:** veldsteen, bogen over het water (twee tegels per boog, en bij een oneven lengte een pijler
+  ertussen), een kniehoge borstwering aan weerszijden, een licht gebold wegdek, en aan beide kanten een landhoofd waar de
+  weg op klimt; oud: mos en varens in de voegen, korstmos op de borstwering, een paar stenen eruit, een donkere natte rand
+  waar het water tegen de pijlers staat, en klimop. Een stenen brug heeft hoogte die een grondtegel niet heeft, dus: **S1**
+  een voorwerp per tegel in twee lagen, zoals het graan (de verre borstwering en het dek achter wie erop loopt, de nabije
+  borstwering en de boog ervóór), en wie erop loopt, gaat met het wegdek mee omhoog (alleen beeld); **S2** plat zoals de
+  houten (een stenen dek met lage randjes; de boog alleen als donkere schaduw aan de zijkant). **Waar welke brug:** **B1**
+  steen vanaf een oversteek van drie tegels, hout korter; **B2** steen op de wegen van het kasteel (de heer bouwde ze, en
+  heft er tol), hout op de wegen tussen de dorpen; **B3** per brug het lot. Voorstel van Claude: **S1** en **B2**, en één
+  proefplaat met de oude houten brug, een stenen brug van drie en van zeven tegels in allebei de richtingen, met een
+  figuur erop voor de maat, en ernaast het kampje met de tent T1 en het paadje.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
