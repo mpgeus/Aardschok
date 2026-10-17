@@ -940,7 +940,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   15:41, toen er twee keer de hele toetsreeks liep (Marcel zag node op 50 à 60%); ook in Chromium kostte een beeld toen
   75 à 90 ms en anders 30. De regels groeien niet: op 30× kost een tik van dag 2 tot dag 13 steeds 0,5 à 0,7 ms
   (het lopen 0,4), met één uitschieter per dag, de tik van middernacht (16 ms, de nacht van het wild); op de dag van
-  aankomst 2,3 ms. Wat overblijft: (a) nameten in Firefox zonder iets ernaast; (b) wat al een tijd draait, heeft zijn
+  aankomst 2,3 ms. Daarna (17 okt, twee profielen van Marcel uit de Firefox Profiler, 16:27 en 16:44): het filter in de
+  mist en het opzoeken van het plaatje van elk voorwerp eruit, en een beeld ging van 30,5 naar 21,6 ms. Wat overblijft:
+  (a) de meter in Firefox zonder profiler, op dezelfde plekken als ervoor; (b) wat al een tijd draait, heeft zijn
   plaatjes anders op de bladen dan een vers geladen spel, en dan verschillen er aan de rand van een plaatje een paar
   honderd pixels (een plaatje op een eigen textuur rekt zijn rand uit, op een blad ligt er een doorzichtige pixel
   naast); (c) de bladen raken nooit leeg: wat eenmaal op een blad staat, houdt zijn plek, ook als het nooit meer in
