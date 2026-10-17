@@ -219,7 +219,9 @@ async function main() {
     fs.writeFileSync(setBestand, JSON.stringify(set, null, 1));
   }
   const { chromium } = laadPlaywright();
-  const browser = await chromium.launch();
+  // De volle Chromium in het nieuwe headless: de kale headless-shell van Playwright laadt het spel sinds 16 okt niet meer
+  // (hij blijft hangen in het begin met het titelscherm; met ?kaart= wel; opmerkingen.md). Is die er niet, dan de shell.
+  const browser = await chromium.launch({ channel: 'chromium' }).catch(() => chromium.launch());
   if (o.opslaan != null) {
     await proefMetOpslaan(browser, o);
     await browser.close();

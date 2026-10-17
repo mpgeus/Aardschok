@@ -82,7 +82,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   verkleinen in een paar honderd pixels de buurpixel kiezen als alleen het vel van een tekening anders is.
 - `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): het proefdorp op eiland 5, op
   1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
-  `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
+  `gereedschap/schermen/uit/tekenmeting*.json` (niet in git). Zonder meer tekent Playwright met SwiftShader, een
+  videokaart in software, en dan tekent het spel zonder kaart; **`--videokaart` meet met de echte** (Chromium in het
+  nieuwe headless, met ANGLE op D3D11; vraag 174, c), en `--edge` hetzelfde in Edge. `--hoogte` speelt met heuvels, en
+  `--dagen 3` eerst drie speeldagen op 30× met elk beeld getekend. Met de videokaart zegt elk beeld ook `Spel.gl.telling`.
+  Meet niet naast een render of een spel: die nemen de processor in beslag.
 - `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de aanvoerder op 30× steeds naar
   de verste tegel die hij lopend haalt, naar het zuiden (de kust) en dan het westen; per beeld de regels, het maken van
   land en het tekenen apart, per stuk dat opengaat dat beeld en de drie erna, de zwaarste beelden (met een nieuwe dag
