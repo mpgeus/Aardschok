@@ -210,6 +210,7 @@
       bouw: { werk: plan.werk, gedaan: 0, tegoed: 0, vandaag: 0, hout: 0 },
     };
     (D.wegwerk || (D.wegwerk = [])).push(weg);
+    T.nieuweBouwplaats(D, weg);
     const n = plan.nieuw.length;
     const rooien = plan.rooien.length ? ' ' + T.t('The builders first clear {wat}.', { wat: T.rooiWoordenVanWeg(D, plan.rooien) }) : '';
     return { gelukt: true, weg, bericht: T.t('A road of {n|one tile|# tiles}: {werk} workdays, for whoever has no other work.', { n, werk: plan.werk }) + rooien };

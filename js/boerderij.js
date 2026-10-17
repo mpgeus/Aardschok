@@ -210,6 +210,7 @@
     const wat = T.teRooienOp(D, kavel).length ? T.rooiWoordenOp(D, kavel) : null;
     T.zetBouwplaats(D, veld, kavel);
     D.gebouwen.push(veld);
+    T.nieuweBouwplaats(D, veld);
     const naam = T.hoofdletter(T.GEBOUWEN[soort].naam);
     const werk = veld.bouw.werk;
     return { gelukt: true, instantie: veld, bericht: wat

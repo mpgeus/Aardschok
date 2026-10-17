@@ -1217,6 +1217,7 @@
     }
     T.bouwGebouw(D, instantie);
     if (instantie.bouw) {
+      T.nieuweBouwplaats(D, instantie);
       const gebouw = T.hoofdletter(g.naam);
       const werk = instantie.bouw.werk;
       return { gelukt: true, instantie, bericht: instantie.wachtOpRooien

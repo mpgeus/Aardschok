@@ -100,7 +100,7 @@ anders paste er na een paar maanden geen tweede boerderij meer (1f; Marcel, 12 o
 van de schout staat één keer in het bouwmenu (16 hout en 4 goud): is het af, dan trekt de schout er met zijn gezin in,
 gaat zijn tent weg, wordt de huifkar de ossenkar, en is het de eerste opslag, met zijn eigen bereik. Een gebouw rijst niet
 vanzelf op: het vraagt zijn bouwtijd keer twee werkdagen, en wie kan werken en geen werk heeft, bouwt mee, hooguit vier
-per bouwplaats, in de volgorde waarin je ze neerzette; elke man in een werkplaats is dus een bouwer minder, en zonder
+per bouwplaats, in de volgorde waarin je ze neerzette, en meteen, ook op de dag van aankomst (17 okt); elke man in een werkplaats is dus een bouwer minder, en zonder
 bouwers staat het stil. Op bomen bouwen mag: de bouwers rooien eerst de voet en het looppad (een kwart werkdag per boom),
 en een gerooide boom geeft 2 hout (`BOS_INSTELLINGEN.rooiHout`; de houthakker 10). Met 10 (a1) gaf rooien in het eerste
 jaar 1.000 tot 2.800 hout (de kolonist, 1f; Marcel, 12 okt: "c ja"). Tot de plek vrij is, ligt zijn voet in goud en komt er niets anders op. Waarom het bos: op negen van de

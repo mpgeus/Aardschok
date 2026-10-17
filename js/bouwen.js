@@ -140,27 +140,47 @@
     }
   };
 
-  // Elke ochtend (T.tikGebouwenDag, na het verdelen van de handen): wie vandaag bouwt. Wie kan werken, groot genoeg is
-  // (volwassen, of een grote zoon of dochter), geen werk heeft en geen dagloner is, gaat naar de eerste bouwplaats met
-  // plaats, de dichtsten bij zijn deur eerst. Net als de handen (T.verdeelHanden) zonder te vragen of zijn poppetje er al
-  // is: wie nog over de weg komt, telt mee (zonder beelden komt hij nooit aan).
+  // Wie kan meebouwen: wie kan werken, groot genoeg is (volwassen, of een grote zoon of dochter), geen werk heeft en geen
+  // dagloner is. Net als de handen (T.verdeelHanden) zonder te vragen of zijn poppetje er al is: wie nog over de weg komt,
+  // telt mee (zonder beelden komt hij nooit aan).
+  const kanBouwen = (p) => T.kanWerken(p) && !p.werk && !p.dagloner && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong');
+
+  // De bouwers van bouwplaats g uit `vrij` (die gaan eruit): hooguit perPlaats, de dichtsten bij zijn deur eerst, en
+  // niemand als g op hout wacht dat vandaag niet komt (`krijgt`, T.krijgtVandaagHout).
+  function stuurBouwers(D, g, vrij, krijgt) {
+    if (T.wachtOpHout(g) && !krijgt.has(g)) return; // daar komt vandaag geen hout: naar de volgende
+    const r = isWeg(g) ? { ...T.wegNogTeDoen(g)[0], b: 1, h: 1 } : g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
+    if (r.x == null) return; // een weg die af is
+    const deur = (p) => (p.wezen && p.wezen.thuis) || (p.huis && T.deurVan(D.wereld, p.huis)) || { x: 0, y: 0 };
+    const midden = { x: r.x + r.b / 2, y: r.y + r.h / 2 };
+    vrij.sort((p, q) => T.afstand(deur(p), midden) - T.afstand(deur(q), midden));
+    for (const p of vrij.splice(0, IN().perPlaats)) p.bouwt = g;
+  }
+
+  // Elke ochtend (T.tikGebouwenDag, na het verdelen van de handen): wie vandaag bouwt. Wie kan meebouwen, gaat naar de
+  // eerste bouwplaats met plaats.
   T.kiesBouwers = function (D) {
     const B = D.bewoners;
     if (!B || !B.mensen) return;
     for (const p of B.mensen) if (p.bouwt) p.bouwt = null;
     if (!T.bouwenMetHanden(D)) return;
-    const vrij = B.mensen.filter((p) => T.kanWerken(p) && !p.werk && !p.dagloner && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong'));
-    const deur = (p) => (p.wezen && p.wezen.thuis) || (p.huis && T.deurVan(D.wereld, p.huis)) || { x: 0, y: 0 };
+    const vrij = B.mensen.filter(kanBouwen);
     const krijgt = T.krijgtVandaagHout(D);
     for (const g of bouwplaatsen(D)) {
-      if (T.wachtOpHout(g) && !krijgt.has(g)) continue; // daar komt vandaag geen hout: naar de volgende
-      const r = isWeg(g) ? { ...T.wegNogTeDoen(g)[0], b: 1, h: 1 } : g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
-      if (r.x == null) continue; // een weg die af is
-      const midden = { x: r.x + r.b / 2, y: r.y + r.h / 2 };
-      vrij.sort((p, q) => T.afstand(deur(p), midden) - T.afstand(deur(q), midden));
-      for (const p of vrij.splice(0, IN().perPlaats)) p.bouwt = g;
+      stuurBouwers(D, g, vrij, krijgt);
       if (!vrij.length) break;
     }
+  };
+
+  // Een nieuwe bouwplaats (T.plaatsGebouw, T.legVeld, T.legWeg): wie vandaag nog nergens bouwt en kan, begint er meteen
+  // aan, niet pas morgenochtend (T.kiesBouwers). Anders rooide op de dag van aankomst niemand (Marcel, 17 okt: "ze
+  // beginnen nu op dag 2"). Wat de werkdag al achter de rug had, telt voor hem als gedaan (`vandaag`): het werk begint
+  // nu, en de nacht (T.tikBouwenDag) rekent alleen wat er na het neerzetten nog over was.
+  T.nieuweBouwplaats = function (D, g) {
+    if (!T.bouwenMetHanden(D) || !D.bewoners || !D.kalender) return;
+    const bezig = new Set(bouwplaatsen(D).filter((x) => x !== g));
+    stuurBouwers(D, g, D.bewoners.mensen.filter((p) => kanBouwen(p) && !bezig.has(p.bouwt)), T.krijgtVandaagHout(D));
+    g.bouw.vandaag = werkdagenVan(D, g) * werkdagGedaan(D);
   };
 
   // ---------------------------------------------------------------------------------------------

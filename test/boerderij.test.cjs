@@ -232,21 +232,30 @@ test('een akker: de bouwers maken hem, dan is hij van de boerderij, de boer werk
   dagen(S, 1, 1);
   T.werkBewonersBij(D); // de gezinnen van het kamp komen aan: ze krijgen een poppetje
   const [g] = zetGebouwen(D, 1, 'boerderij');
-  T.brengMeteen(D, g); // het hout is er al (js/kar.js), zodat de boerderij en de akker samen af zijn
+  T.brengMeteen(D, g); // het hout is er al (js/kar.js), zodat de bouwers niet op de kar wachten
   const veld = T.legVeld(D, 'akker', veldPlek(D, 'akker', g)).instantie;
-  const dag = totAf(S, [g, veld], 2);
-  assert.ok(T.isNazaaitijd(dag), 'nog in de lente');
+  // Het veld is het eerst af (anderhalve werkdag na het rooien), de boerderij later.
+  const land = totAf(S, [veld], 2);
+  assert.ok(T.isNazaaitijd(land), 'nog in de lente');
   assert.ok(!D.gebouwen.includes(veld), 'een veld dat af is, is geen bouwplaats meer');
   const akker = w.akkers.find((a) => a.boerderij === g);
   assert.ok(akker, 'het is een akker van de boerderij');
   assert.deepEqual([akker.x, akker.y, akker.b, akker.h], [veld.x, veld.y, veld.voet.b, veld.voet.h]);
   assert.equal(akker.ongezaaid.size, akker.b * akker.h, 'nog niet gezaaid');
+  // De boeren zaaien hem na op de eerste nacht dat het niet regent (T.zaaiNa, js/akkers.js), ook als de boerderij nog
+  // niet af is.
+  let dag = land;
+  while (akker.ongezaaid.size && T.isNazaaitijd(dag + 1)) {
+    dag++;
+    dagen(S, dag, dag);
+  }
+  assert.equal(akker.ongezaaid.size, 0, 'de boeren zaaien hem na in de lente, van het graan uit de kar');
+  if (!g.klaar) dag = totAf(S, [g], dag + 1);
   const boer = T.boerVan(D, g);
   assert.ok(boer.wezen && boer.wezen.werkAkkers.includes(akker), 'de boer werkt hem');
   assert.equal(T.boerVanVeld(D, akker), boer.wezen);
   assert.equal(T.boerderijZonderAkker(D, g), false);
   dagen(S, dag + 1, dag + 1);
-  assert.equal(akker.ongezaaid.size, 0, 'de boeren zaaien hem na, van het graan uit de kar');
   assert.equal(g.handen, T.GEBOUWEN.boerderij.handen, 'met een akker wil de boerderij haar handen');
   // En in de herfst is de oogst binnen.
   dagen(S, dag + 2, 6 * T.DAGEN_PER_MAAND);

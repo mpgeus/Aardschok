@@ -997,7 +997,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`tekenRooiPlaatsen` in `js/tekenen.js` laat de voet zien; `T.tikRooienDag` in `js/bos.js` laat zo'n plaats aan de
   bouwers, zonder buren). Elke ochtend na `T.verdeelHanden` kiest `T.kiesBouwers` wie bouwt (`p.bouwt`): wie kan werken,
   volwassen of jong, zonder werk en geen dagloner, hooguit `perPlaats` per plaats, in de volgorde van `D.gebouwen`; net
-  als de handen zonder te vragen of het poppetje er al is. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
+  als de handen zonder te vragen of het poppetje er al is. Een nieuwe bouwplaats (`T.nieuweBouwplaats`, vanuit
+  `T.plaatsGebouw`, `T.legVeld` en `T.legWeg`) krijgt meteen wie vandaag nog nergens bouwt, niet pas de volgende ochtend
+  (17 okt: op de dag van aankomst rooide niemand), en telt wat de werkdag al achter de rug had als gedaan (`vandaag`),
+  zodat de bomen van de ochtend niet in één klap vallen. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
   (`werkAan`): eerst het rooien, tegel voor tegel (`rooiBoom`, `rooiStruik`; `T.rooiTegel` in `js/bos.js`, dus een boom
   geeft zijn hout), dan het bouwen (`gedaan` tot `werk`, de bouwtijd keer `werkPerBouwdag`); is het af, dan `klaarOp`, en
   zet `T.tikGebouwenDag` hem op klaar zoals elk gebouw. Overdag doet `T.werkBouwenBij` (vanuit `T.werkDorpBij`) hetzelfde
