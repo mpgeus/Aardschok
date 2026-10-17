@@ -1432,6 +1432,15 @@ grijs loopt niemand) en worden toch elk beeld opnieuw opgebouwd.
 
 Na elke stap meten, om en om tegen de stand ervoor, en Marcel meet in Firefox.
 
+**Het onderzoek** (Marcel, 17 okt: "kun je eens onderzoeken welke optimalisatie technieken we nog zouden kunnen
+toepassen?"): `snelheid.md`, met alles wat er nog kan (A minder werk op de processor, B de videokaart meer laten doen,
+C vooraf tekenen, D rondom), elk met de winst, de prijs en of je het ziet. Wat het erbij vond: het vak dat het spel
+langsloopt, is een rechthoek in tegels om het schuine beeld, dus van de 14.564 dingen erin vallen er 4.815 buiten
+beeld, en 79% krijgt het werk voor niets (A1 neemt ook dat mee). En Steam is Chromium (Electron), dus Chromium is de maat
+voor de Steam-versie. Voorstel van Claude: eerst 1 en 2 hierboven (A1 en A2), dan niet 3a maar 4 (B1 tot B4: een
+dieptebuffer, want de bomen hebben alleen harde randen, en vaste buffers per stuk), en een lagere maat voor de wereld
+als instelling (C3).
+
 ## Af (sinds 11 okt)
 
 - c1, de roverskampen op het eiland (vraag 170, stap 6a2, 17 okt; Marcel: "M1"; `spel.md`, "De roverskampen"): drie per
