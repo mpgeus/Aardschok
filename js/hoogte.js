@@ -47,14 +47,17 @@
   // dorp, en vlak op de vlakke stukken (een huis met zijn looppad, het water), met een overgang van `vrijRond` tegels.
   // Een rekensom en geen lijst: ook buiten de kaart (het bos eromheen, en straks een groter land), en een bewaard spel
   // hoeft alleen het nummer en de vlakke stukken te onthouden.
-  function glooiingOp(hg, vx, vy) {
+  const glooiingOp = (hg, vx, vy) => glooiingVan(hg, vx, vy, landOp(hg, vx, vy), hg.vlakken);
+  // Hetzelfde, met het land op dat hoekpunt al bekend (`land`, landOp), en alleen de vlakke stukken die erbij kunnen
+  // liggen (`vlakken`, in de volgorde van hg.vlakken: vlakkenBij).
+  function glooiingVan(hg, vx, vy, land, vlakken) {
     const I = IN();
-    let h = landOp(hg, vx, vy);
+    let h = land;
     const d = Math.hypot(vx - hg.midden[0], vy - hg.midden[1]);
     h = hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, d);
     // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
     let naast = null;
-    for (const v of hg.vlakken) {
+    for (const v of vlakken) {
       const dx = Math.max(v.x0 - vx, 0, vx - v.x1);
       const dy = Math.max(v.y0 - vy, 0, vy - v.y1);
       if (dx === 0 && dy === 0) return v.h;
@@ -88,57 +91,107 @@
     return hg.eiland ? eilandOp(hg, vx, vy) : landschapOp(hg.zaad, vx, vy, alleenGroot);
   }
 
-  // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels. Uit een lijst die eens per
-  // hoogte wordt uitgerekend (het tekenen vraagt het elk beeld voor duizenden tegels); verandert de hoogte, dan krijgt
-  // ze een nieuwe `versie`, en wordt de lijst opnieuw gemaakt.
-  // De lijst loopt `RAND` tegels buiten het land door, voor het land eromheen dat het spel tekent. Hij beslaat het raster
-  // van het land (hg.b bij hg.h), dat op de kaart bij (hg.ox, hg.oy) begint: op een kaart van het eiland (B2b) ligt alles in
-  // de tegels van het eiland, ook de vlakke stukken, de richel en de helling (T.legHoogte).
-  const RAND = 48;
+  // De hoogte per stuk (vraag 174, stap a; Marcel, 17 okt: "Ja, begin met stap a"). Het tekenen vraagt de hoeken elk
+  // beeld voor duizenden tegels, dus staan ze in lijsten: per stuk van T.STUK bij T.STUK tegels, zoals het land
+  // (js/wereld.js), eens uitgerekend als iemand voor het eerst naar een tegel van dat stuk vraagt, waar op het eiland ook.
+  // Tot 17 okt was het één lijst om het eerste land (48 tegels erbuiten), en daarbuiten vroeg elke hoek het eiland
+  // opnieuw: een scherm vol tegels kostte er 160 ms in plaats van 1 (`kaarten.md`). Een stuk heeft `eiland` (de hoogte van
+  // het eiland op zijn T.STUK + 1 bij T.STUK + 1 hoekpunten, één T.eilandStuk van zo'n 20 ms), `hoeken` (vier per tegel)
+  // en `dekt` (T.dektAf, pas als het gevraagd wordt). Maakt T.egaliseer de grond vlak, dan rekent het alleen opnieuw wat
+  // het nieuwe stuk raakt; krijgt de hoogte op een andere manier een nieuwe `versie`, dan begint alles opnieuw. Het
+  // eiland komt uit zijn nummer en de rest uit w.hoogte, dus de lijsten worden niet bewaard (een WeakMap, niet in S).
+  // De tegels liggen in de coördinaten van de kaart; het land van de maker begint daarop bij (hg.ox, hg.oy), en op het
+  // eiland bij (x0, y0) van hg.eiland (op een kaart van het eiland, B2b, zijn die gelijk).
   const oorsprong = (hg) => [hg.ox || 0, hg.oy || 0];
-  const lijsten = new WeakMap();
-  function hoekenLijst(hg) {
-    let l = lijsten.get(hg);
-    if (l && l.versie === (hg.versie || 0)) return l.hoeken;
-    const [ox, oy] = oorsprong(hg);
-    const b = hg.b + 2 * RAND;
-    const hoeken = new Float64Array(b * (hg.h + 2 * RAND) * 4);
-    for (let y = -RAND; y < hg.h + RAND; y++) {
-      for (let x = -RAND; x < hg.b + RAND; x++) for (let k = 0; k < 4; k++) hoeken[((y + RAND) * b + x + RAND) * 4 + k] = rekenHoek(hg, ox + x, oy + y, k);
-    }
-    lijsten.set(hg, { versie: hg.versie || 0, hoeken });
-    return hoeken;
+  const STUKKEN = new WeakMap();
+  function stukkenVan(hg) {
+    let c = STUKKEN.get(hg);
+    if (!c || c.versie !== (hg.versie || 0)) STUKKEN.set(hg, (c = { versie: hg.versie || 0, stukken: new Map(), laatst: null }));
+    return c;
   }
-  // De hoogte van het eiland op punt (vx, vy) van de kaart (een hoekpunt van tegel (x, y) is (x, y) tot (x + 1, y + 1)):
-  // de grond, een meer of een rivier op zijn peil, en de zee op 0. Voor de hoekpunten van de kaart en `RAND` tegels
-  // eromheen uit één lijst, eens per hoogte uitgerekend (T.eilandStuk); het eiland komt uit zijn nummer, dus de lijst
-  // wordt niet bewaard. Een ander punt (het midden van een huis) vraagt hij het eiland zelf.
-  const eilandLijsten = new WeakMap();
-  function eilandOp(hg, px, py) {
-    const { zaad, x0, y0 } = hg.eiland;
-    const [ox, oy] = oorsprong(hg);
-    const vx = px - ox; // in het raster van het land, waarvan (0, 0) op het eiland op (x0, y0) ligt
-    const vy = py - oy;
-    const n = hg.b + 2 * RAND + 1;
-    const opRooster = Number.isInteger(vx) && Number.isInteger(vy) && vx >= -RAND && vy >= -RAND && vx <= hg.b + RAND && vy <= hg.h + RAND;
-    if (!opRooster) return Math.max(0, T.eilandStuk(T.eilandVan(zaad), x0 + vx - 0.5, y0 + vy - 0.5, 1, 1).hoogte[0]);
-    let lijst = eilandLijsten.get(hg);
-    if (!lijst) {
-      lijst = T.eilandStuk(T.eilandVan(zaad), x0 - RAND - 0.5, y0 - RAND - 0.5, n, hg.h + 2 * RAND + 1).hoogte;
-      eilandLijsten.set(hg, lijst);
+  // Het stuk (sx, sy), nog zonder lijsten als het nieuw is.
+  function stukNr(c, sx, sy) {
+    const k = (sx + 1024) * 4096 + (sy + 1024); // ook een stuk buiten het eiland (de zee eromheen)
+    let s = c.stukken.get(k);
+    if (!s) c.stukken.set(k, (s = { sx, sy, x0: sx * T.STUK, y0: sy * T.STUK, eiland: null, hoeken: null, dekt: null }));
+    return s;
+  }
+  // Het stuk van tegel (x, y), met zijn hoeken. Het laatste stuk staat vooraan: het tekenen en het lopen vragen vaak
+  // tegel na tegel in hetzelfde stuk.
+  function stukOp(hg, x, y) {
+    const c = stukkenVan(hg);
+    const sx = Math.floor(x / T.STUK);
+    const sy = Math.floor(y / T.STUK);
+    let s = c.laatst;
+    if (!s || s.sx !== sx || s.sy !== sy) c.laatst = s = stukNr(c, sx, sy);
+    if (!s.hoeken) rekenStuk(hg, s);
+    return s;
+  }
+  // De hoeken van alle tegels van stuk `s`: de glooiing eens per hoekpunt (vier tegels delen er een), met alleen de
+  // vlakke stukken die erbij liggen, en dan per tegel zijn niveau of zijn helling erbij, net als rekenHoek.
+  function rekenStuk(hg, s) {
+    const Z = T.STUK;
+    const n = Z + 1;
+    const vlakken = vlakkenBij(hg, s.x0, s.y0, s.x0 + Z, s.y0 + Z);
+    const eiland = hg.eiland ? eilandVanStuk(hg, s) : null;
+    const glooi = new Float64Array(n * n);
+    for (let j = 0; j < n; j++) {
+      for (let i = 0; i < n; i++) {
+        const vx = s.x0 + i;
+        const vy = s.y0 + j;
+        const land = eiland ? Math.max(0, eiland[j * n + i]) : landschapOp(hg.zaad, vx, vy);
+        glooi[j * n + i] = glooiingVan(hg, vx, vy, land, vlakken);
+      }
     }
-    return Math.max(0, lijst[(vy + RAND) * n + vx + RAND]);
+    const hoeken = new Float64Array(Z * Z * 4);
+    for (let ty = 0; ty < Z; ty++) {
+      for (let tx = 0; tx < Z; tx++) {
+        const helling = hg.hellingen[sleutel(s.x0 + tx, s.y0 + ty)];
+        const niveau = helling ? 0 : niveauVan(hg, s.x0 + tx, s.y0 + ty);
+        const i = (ty * Z + tx) * 4;
+        const g = ty * n + tx;
+        hoeken[i] = glooi[g] + (helling ? helling[0] : niveau) * hg.trede;
+        hoeken[i + 1] = glooi[g + 1] + (helling ? helling[1] : niveau) * hg.trede;
+        hoeken[i + 2] = glooi[g + n + 1] + (helling ? helling[2] : niveau) * hg.trede;
+        hoeken[i + 3] = glooi[g + n] + (helling ? helling[3] : niveau) * hg.trede;
+      }
+    }
+    s.hoeken = hoeken;
+  }
+  // De vlakke stukken die een hoekpunt tussen (X0, Y0) en (X1, Y1) raken (glooiingOp: erop, of minder dan `vrijRond`
+  // ervan af), in hun volgorde: het eerste gaat voor.
+  function vlakkenBij(hg, X0, Y0, X1, Y1) {
+    const r = IN().vrijRond;
+    return hg.vlakken.filter((v) => Math.max(v.x0 - X1, 0, X0 - v.x1) < r && Math.max(v.y0 - Y1, 0, Y0 - v.y1) < r);
+  }
+  // De hoogte van het eiland op de hoekpunten van stuk `s` (T.eilandStuk, zonder de zee onder 0).
+  function eilandVanStuk(hg, s) {
+    if (!s.eiland) {
+      const [ox, oy] = oorsprong(hg);
+      const { zaad, x0, y0 } = hg.eiland;
+      s.eiland = T.eilandStuk(T.eilandVan(zaad), x0 + s.x0 - ox - 0.5, y0 + s.y0 - oy - 0.5, T.STUK + 1, T.STUK + 1).hoogte;
+    }
+    return s.eiland;
+  }
+  // De hoogte van het eiland op punt (px, py) van de kaart (een hoekpunt van tegel (x, y) is (x, y) tot (x + 1, y + 1)):
+  // de grond, een meer of een rivier op zijn peil, en de zee op 0. Een hoekpunt uit de lijst van zijn stuk; een ander
+  // punt (het midden van een huis) vraagt het eiland zelf.
+  function eilandOp(hg, px, py) {
+    if (Number.isInteger(px) && Number.isInteger(py)) {
+      const s = stukNr(stukkenVan(hg), Math.floor(px / T.STUK), Math.floor(py / T.STUK));
+      return Math.max(0, eilandVanStuk(hg, s)[(py - s.y0) * (T.STUK + 1) + px - s.x0]);
+    }
+    const [ox, oy] = oorsprong(hg);
+    const { zaad, x0, y0 } = hg.eiland;
+    return Math.max(0, T.eilandStuk(T.eilandVan(zaad), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).hoogte[0]);
   }
 
+  // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels, uit de lijst van zijn stuk.
   T.hoekHoogte = function (w, x, y, k) {
     const hg = w && w.hoogte;
     if (!hg) return 0;
-    const [ox, oy] = oorsprong(hg);
-    const lx = x - ox;
-    const ly = y - oy;
-    // het landschap loopt door, ook buiten het land
-    if (lx < -RAND || ly < -RAND || lx >= hg.b + RAND || ly >= hg.h + RAND) return rekenHoek(hg, x, y, k);
-    return hoekenLijst(hg)[((ly + RAND) * (hg.b + 2 * RAND) + lx + RAND) * 4 + k];
+    const s = stukOp(hg, x, y);
+    return s.hoeken[((y - s.y0) * T.STUK + x - s.x0) * 4 + k];
   };
   function rekenHoek(hg, x, y, k) {
     const vx = x + (k === 1 || k === 2 ? 1 : 0);
@@ -165,16 +218,9 @@
   // Is tegel (x, y) schuin (niet alle vier de hoeken even hoog)?
   T.isSchuin = function (w, x, y) {
     if (!w || !w.hoogte) return false;
-    const hg = w.hoogte;
-    const [ox, oy] = oorsprong(hg);
-    const lx = x - ox;
-    const ly = y - oy;
-    if (lx < -RAND || ly < -RAND || lx >= hg.b + RAND || ly >= hg.h + RAND) {
-      const h = T.hoekHoogten(w, x, y);
-      return h[0] !== h[1] || h[1] !== h[2] || h[2] !== h[3];
-    }
-    const l = hoekenLijst(hg);
-    const i = ((ly + RAND) * (hg.b + 2 * RAND) + lx + RAND) * 4;
+    const s = stukOp(w.hoogte, x, y);
+    const l = s.hoeken;
+    const i = ((y - s.y0) * T.STUK + x - s.x0) * 4;
     return l[i] !== l[i + 1] || l[i + 1] !== l[i + 2] || l[i + 2] !== l[i + 3];
   };
 
@@ -391,37 +437,50 @@
   // dekt af als zijn rand op het scherm hoger komt dan de voeten van wie op een tegel achter hem staat (tot twee rijen
   // terug), en wel de hoek die recht onder die voeten ligt: links (west) voor wie links erachter staat, de noordhoek
   // voor wie recht erachter staat, rechts (oost) voor wie rechts erachter staat. Dat is de rand van een richel, en een steile helling; de zachte glooiing
-  // haalt het nooit. js/tekenen.js tekent zo'n tegel nog eens over wat erachter staat. Eén keer per hoogte (`versie`).
-  const dekkerLijsten = new WeakMap();
+  // haalt het nooit. js/tekenen.js tekent zo'n tegel nog eens over wat erachter staat. Per stuk, eens per hoogte (zoals
+  // de hoeken; T.egaliseer gooit weg wat het nieuwe vlakke stuk raakt).
   T.dektAf = function (w, x, y) {
     const hg = w && w.hoogte;
-    const [ox, oy] = hg ? oorsprong(hg) : [0, 0];
-    if (!hg || x < ox || y < oy || x >= ox + hg.b || y >= oy + hg.h) return false;
-    let l = dekkerLijsten.get(hg);
-    if (!l || l.versie !== (hg.versie || 0)) {
-      l = { versie: hg.versie || 0, dekt: new Uint8Array(hg.b * hg.h) };
-      const HH = T.naarScherm(1, 0).y; // een halve tegel hoog op het scherm (16)
-      const voeten = (bx, by) => (bx + by) * HH - T.hoogteOp(w, bx, by);
-      for (let ry = 0; ry < hg.h; ry++) {
-        for (let rx = 0; rx < hg.b; rx++) {
-          const tx = ox + rx;
-          const ty = oy + ry;
-          const h = T.hoekHoogten(w, tx, ty);
-          // op het scherm: de noordhoek een halve rij terug, oost en west op de rij van de tegel
-          const noord = (tx + ty - 1) * HH - h[0];
-          const oost = (tx + ty) * HH - h[1];
-          const west = (tx + ty) * HH - h[3];
-          let dekt = false;
-          for (const [i, j, rand] of [[1, 0, west], [0, 1, oost], [1, 1, noord], [2, 1, west], [1, 2, oost], [2, 2, noord]]) {
-            if (rand < voeten(tx - i, ty - j) - 2) dekt = true;
-          }
-          l.dekt[ry * hg.b + rx] = dekt ? 1 : 0;
-        }
-      }
-      dekkerLijsten.set(hg, l);
-    }
-    return l.dekt[(y - oy) * hg.b + (x - ox)] === 1;
+    if (!hg) return false;
+    const s = stukOp(hg, x, y);
+    if (!s.dekt) s.dekt = dekkersVan(w, s);
+    return s.dekt[(y - s.y0) * T.STUK + x - s.x0] === 1;
   };
+  function dekkersVan(w, s) {
+    const Z = T.STUK;
+    const dekt = new Uint8Array(Z * Z);
+    const HH = T.naarScherm(1, 0).y; // een halve tegel hoog op het scherm (16)
+    // de voeten van wie op een tegel staat, op het scherm: eens per tegel van het stuk en twee rijen ervoor
+    const M = 2;
+    const n = Z + M;
+    const voet = new Float64Array(n * n);
+    for (let j = 0; j < n; j++) {
+      for (let i = 0; i < n; i++) {
+        const bx = s.x0 - M + i;
+        const by = s.y0 - M + j;
+        voet[j * n + i] = (bx + by) * HH - T.hoogteOp(w, bx, by);
+      }
+    }
+    const voeten = (bx, by) => voet[(by - s.y0 + M) * n + bx - s.x0 + M];
+    const h = s.hoeken;
+    for (let ry = 0; ry < Z; ry++) {
+      for (let rx = 0; rx < Z; rx++) {
+        const tx = s.x0 + rx;
+        const ty = s.y0 + ry;
+        const p = (ry * Z + rx) * 4;
+        // op het scherm: de noordhoek een halve rij terug, oost en west op de rij van de tegel
+        const noord = (tx + ty - 1) * HH - h[p];
+        const oost = (tx + ty) * HH - h[p + 1];
+        const west = (tx + ty) * HH - h[p + 3];
+        let ja = false;
+        for (const [i, j, rand] of [[1, 0, west], [0, 1, oost], [1, 1, noord], [2, 1, west], [1, 2, oost], [2, 2, noord]]) {
+          if (rand < voeten(tx - i, ty - j) - 2) ja = true;
+        }
+        dekt[ry * Z + rx] = ja ? 1 : 0;
+      }
+    }
+    return dekt;
+  }
 
   // Bouwen (vraag 121, stap 2): een gebouw komt op vlakke grond. Waar het komt, maakt de bouwer de grond vlak
   // (T.egaliseer): de plek met een looppad eromheen wordt een vlak stuk, zoals de maker de huizen van het begin legt, en
@@ -470,20 +529,25 @@
     });
     const vlak = { ...v, h: zoalsBij ? glooiingOp(hg, zoalsBij.x, zoalsBij.y) : Math.round(som / n) };
     hg.vlakken.unshift(vlak);
-    // de lijst van de hoeken: alleen opnieuw waar het nieuwe stuk iets verandert (de hele lijst kost een seconde)
-    const l = lijsten.get(hg);
+    // de lijsten van de stukken: alleen opnieuw waar het nieuwe stuk iets verandert (een stuk kost zo'n 20 ms), en wat
+    // afdekt tot twee tegels verder (T.dektAf kijkt twee rijen terug) weer als het gevraagd wordt
+    const c = STUKKEN.get(hg);
     const oud = hg.versie || 0;
     hg.versie = oud + 1;
-    if (l && l.versie === oud) {
+    if (c && c.versie === oud) {
+      c.versie = hg.versie;
+      const Z = T.STUK;
       const r = IN().vrijRond + 1;
-      const bl = hg.b + 2 * RAND;
-      const [ox, oy] = oorsprong(hg);
-      for (let y = Math.max(-RAND, vlak.y0 - oy - r); y < Math.min(hg.h + RAND, vlak.y1 - oy + r); y++) {
-        for (let x = Math.max(-RAND, vlak.x0 - ox - r); x < Math.min(hg.b + RAND, vlak.x1 - ox + r); x++) {
-          for (let k = 0; k < 4; k++) l.hoeken[((y + RAND) * bl + x + RAND) * 4 + k] = rekenHoek(hg, ox + x, oy + y, k);
+      const [x0, y0, x1, y1] = [vlak.x0 - r, vlak.y0 - r, vlak.x1 + r, vlak.y1 + r]; // de tegels, tot x1 en y1
+      for (const s of c.stukken.values()) {
+        if (s.dekt && x0 - 2 < s.x0 + Z && x1 + 2 > s.x0 && y0 - 2 < s.y0 + Z && y1 + 2 > s.y0) s.dekt = null;
+        if (!s.hoeken) continue;
+        for (let y = Math.max(y0, s.y0); y < Math.min(y1, s.y0 + Z); y++) {
+          for (let x = Math.max(x0, s.x0); x < Math.min(x1, s.x0 + Z); x++) {
+            for (let k = 0; k < 4; k++) s.hoeken[((y - s.y0) * Z + x - s.x0) * 4 + k] = rekenHoek(hg, x, y, k);
+          }
         }
       }
-      l.versie = hg.versie;
     }
     return vlak;
   };

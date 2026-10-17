@@ -109,8 +109,8 @@ bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het beg
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
-(bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Bezig in sessie
-`main`** (17 okt): stap a, de hoogte per stuk. Let op: CLAUDE.md zit tegen de grens van
+(bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
+hoogte per stuk, is af** (17 okt); het volgende is b, na het tekenwerk dat loopt. Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -1218,13 +1218,18 @@ bouwt een dorp is dat kiest zonder speler.
 Marcel, 17 okt: **"de map maker gebruikt ook nog geen heuvels die we eerder wel hebben gemaakt"**. Hoe het nu is: de
 heuvels van vraag 121 (`js/hoogte.js`, `kaarten.md`) zitten achter de spelregel *Height*, standaard *Flat* ("vlak tot de
 speeltest laat zien dat het spel er net zo goed mee loopt", `js/opties.js`), en ze zijn van vóór het hele eiland in
-stukken (B2). `w.hoogte` is nog één raster: het eerste land van 100 bij 100 met 48 tegels eromheen. Daarbuiten vraagt
-elke hoek het eiland opnieuw (`eilandOp`, een `T.eilandStuk` van één tegel): in Node gemeten (17 okt, proefdorp) kost een
-scherm vol tegels (3600, vier hoeken) daarbinnen 1,2 ms en daarbuiten zo'n 160, ruim honderd keer meer; in het spel
-nog niet bekeken. Ook nog open: de mist ligt plat op de heuvels (B2c), een brug volgt de glooiing (`opmerkingen.md`, bij
+stukken (B2). `w.hoogte` was één raster: het eerste land van 100 bij 100 met 48 tegels eromheen. Daarbuiten vroeg
+elke hoek het eiland opnieuw (`eilandOp`, een `T.eilandStuk` van één tegel): in Node gemeten (17 okt, proefdorp) kostte
+een scherm vol tegels (3600, vier hoeken) daarbinnen 1,2 ms en daarbuiten zo'n 160. Ook nog open: de mist ligt plat op de heuvels (B2c), een brug volgt de glooiing (`opmerkingen.md`, bij
 de bruggen), en alleen het eerste dorp krijgt zijn vlakte (`opmerkingen.md`, bij 6a).
 
-**Bezig in sessie `main`** (17 okt): stap a, alleen in `js/hoogte.js` (Marcel: "Ja, begin met stap a").
+**Stap a is af** (17 okt, in `main`; Marcel: "Ja, begin met stap a"; `code.md` bij `js/hoogte.js`): de hoogte per stuk
+van 64 bij 64. Een scherm vol tegels ver van het dorp kost nu 0,9 ms (was 160), een nieuw stuk eens zo'n 20 ms, en de
+uitkomst is bit voor bit dezelfde (twee eilanden, ook na vier vlakke stukken; `test/hoogte.test.cjs`). In de browser,
+met heuvels en land open 230 tegels van het dorp: het eerste beeld 400 ms (met het land zelf), daarna 8,6 ms (in een
+verborgen paneel, dus alleen een richting). **Wat a liet zien, voor b:** het licht op de hellingen (`lichtKaartVan`)
+en de hoogste en laagste grond (`hoogsteVan`) in `js/tekenen.js` beslaan alleen het dorpsvak (`T.kaartVak`), en het
+licht wordt bij elk nieuw vlak stuk (elk gebouw) helemaal opnieuw gemaakt; dat moet ook per stuk.
 
 **Het plan (Claude; Marcel koos eerst a, b tot d volgen):** **a** de hoogte per stuk van 64 bij 64, zoals het land: de hoeken van een
 stuk eens uitgerekend als het opengaat, en de vlakke stukken per stuk gezocht (alleen `js/hoogte.js`, met een toets dat

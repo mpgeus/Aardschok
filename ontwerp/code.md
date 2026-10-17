@@ -595,8 +595,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.HOOGTE_INSTELLINGEN`, van dal tot top zo'n 300 à 400 pixels), overal te vragen, ook buiten de kaart, platter op de
   vlakte om het dorp, en vlak op de vlakke stukken (`w.hoogte.vlakken`: een huis met zijn looppad, het plein, het water),
   dus een bewaard spel onthoudt alleen het nummer en die stukken, en het landschap loopt door als het land groter wordt.
-  Voor het tekenen staan de hoeken in een lijst (met een rand van 48 tegels om de kaart), opnieuw als `w.hoogte.versie`
-  verandert. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
+  Voor het tekenen staan de hoeken **per stuk** van `T.STUK` (64) in een lijst, zoals het land (vraag 174, stap a, 17
+  okt): eens uitgerekend als iemand voor het eerst naar een tegel van dat stuk vraagt, waar op het eiland ook (één
+  `T.eilandStuk` van zo'n 20 ms voor de hoogte van het eiland op zijn hoekpunten, dan de glooiing eens per hoekpunt met
+  alleen de vlakke stukken die erbij liggen, `vlakkenBij`); wat afdekt (`T.dektAf`) ook per stuk, pas als het gevraagd
+  wordt. `T.egaliseer` rekent alleen opnieuw wat het nieuwe vlakke stuk raakt; een andere nieuwe `w.hoogte.versie` begint
+  alles opnieuw. Tot 17 okt was het één lijst om het eerste land (48 tegels erbuiten), en vroeg daarbuiten elke hoek het
+  eiland opnieuw: een scherm vol tegels 160 ms in plaats van 1 (nu 0,9 ms, overal). De uitkomst is bit voor bit dezelfde,
+  op twee eilanden gemeten, ook na vier vlakke stukken. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
   `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte, en op een brug van het eiland het wegdek:
   `T.dekOp`, zodat wie erop loopt meegaat en de muis op het dek de brug kiest; de grond zelf, ook onder een brug, ligt op
   `T.naarSchermGrond`, in `js/tekenen.js` `opMaaiveld`), `T.lichtOpHoekpunt` en

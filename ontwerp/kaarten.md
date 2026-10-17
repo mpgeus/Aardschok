@@ -64,8 +64,9 @@ blijft het zoals het was. Met "Hoogte" op "Heuvels" is het land dat van het eila
 de grond, een meer of een rivier op zijn peil, en de zee op 0, in plaats van de drie lagen ruis uit het nummer van het
 land; het dorp ligt op zijn vlakte en de vlakke stukken liggen vlak zoals altijd, en de richel bij de rotsen blijft. Om het
 dorp is het eiland zachter dan die ruis: een dorp ligt waar het vlak is (aan de kust 0 tot 80 pixels, landinwaarts zo'n
-150 à 200 van laag tot hoog); de bergrug, tot 1250 pixels, ligt ver weg. De hoogten van het eiland komen voor de kaart en
-48 tegels eromheen uit één lijst (`T.eilandStuk`), eens per hoogte, en ook die staat niet in `Spel.S`.
+150 à 200 van laag tot hoog); de bergrug, tot 1250 pixels, ligt ver weg. De hoogten van het eiland komen per stuk
+van 64 bij 64 uit één `T.eilandStuk` (vraag 174, stap a; tot 17 okt één lijst voor de kaart en 48 tegels eromheen), eens
+per hoogte, en ook die staan niet in `Spel.S`.
 
 **De grond van het eiland (B van 2a, 8 okt; Marcel: "dan gaan we de eigen tegels maken"):** elke streek zijn eigen
 grond, met tegels uit `tegels/kust.png` naast die van `rand.png` (`beeld.md`, "De grond van het eiland"): de zee ('e'),
@@ -218,7 +219,8 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
      rijen: een brug ligt ook schuin, haaks over het water), van steen of hout
      naar de plek, met het water eronder (geen plankentegel meer), en tekent het spel hem in twee lagen (`beeld.md`, "De
      bruggen").
-   - *Nog te doen voor de spelregel Hoogte* (standaard uit): de hoogte per stuk (`w.hoogte` is nu één raster).
+   - *De hoogte per stuk* (de spelregel Hoogte, standaard uit) is af (17 okt, vraag 174, stap a; `code.md` bij
+     `js/hoogte.js`); de rest om de heuvels standaard te maken staat bij 174 in de werklijst.
 3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
    Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een
    stuk wordt gemaakt aan de rand van de mist, en je bouwt alleen op land dat je kent. **Het grijs is het land zoals het

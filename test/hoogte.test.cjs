@@ -47,7 +47,7 @@ test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die door
   assert.ok(hoog - laag >= 200, `van dal tot top ${Math.round(hoog - laag)} pixels`);
   assert.ok(Object.keys(a.hoogte.niveau).length >= 12, 'een richel bij de rotsen');
   assert.ok(Object.keys(a.hoogte.hellingen).length >= 1, 'met een helling erop');
-  // het landschap loopt door buiten het land: geen vlakke rand
+  // het landschap loopt door buiten het land: geen vlakke rand (ver weg: de toets hieronder, per stuk)
   assert.notEqual(T.hoogteOp(a, K.x - 5, K.y + 40), 0);
   assert.equal(T.hoekHoogte(a, K.x - 1, K.y + 40, 1), T.hoekHoogte(a, K.x, K.y + 40, 0), 'de hoek buiten het land past op die erbinnen');
   // wat bewaard wordt, is klein: het nummer en de vlakke stukken, niet een getal per hoekpunt
@@ -55,6 +55,52 @@ test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die door
   // een ander land is anders
   const ander = land(7, true);
   assert.notDeepEqual(T.hoekHoogten(ander, T.kaartVak(ander).x + 20, T.kaartVak(ander).y + 20), T.hoekHoogten(a, K.x + 20, K.y + 20));
+});
+
+// Vraag 174, stap a (Marcel, 17 okt: "Ja, begin met stap a"): de hoogte per stuk van T.STUK, zoals het land. Tot dan
+// was ze één lijst om het eerste land, en vroeg daarbuiten elke hoek het eiland opnieuw (honderd keer duurder).
+test('hoogte per stuk: ver van het eerste land één keer het eiland per stuk, met naadloze stukken', () => {
+  const w = land(5, true);
+  const hg = w.hoogte;
+  const E = T.eilandVan(5);
+  const kasteel = E.plekken.find((p) => p.soort === 'kasteel'); // op een heuvel, ver van het dorp
+  const Z = T.STUK;
+  const x0 = Math.floor(kasteel.x / Z) * Z;
+  const y0 = Math.floor(kasteel.y / Z) * Z;
+  assert.ok(Math.hypot(kasteel.x - hg.ox, kasteel.y - hg.oy) > 300, 'het kasteel ligt ver van het eerste land');
+  // alle hoeken van het stuk van het kasteel: één keer het eiland
+  const echt = T.eilandStuk;
+  let gevraagd = 0;
+  T.eilandStuk = (...a) => (gevraagd++, echt(...a));
+  const hoeken = new Set();
+  try {
+    for (let y = y0; y < y0 + Z; y++) for (let x = x0; x < x0 + Z; x++) for (const h of T.hoekHoogten(w, x, y)) hoeken.add(h);
+  } finally {
+    T.eilandStuk = echt;
+  }
+  assert.equal(gevraagd, 1, 'één T.eilandStuk voor het hele stuk');
+  assert.ok(hoeken.size > 1000, 'het land glooit er');
+  // en het is het eiland zelf: ver van het dorp en van een vlak stuk de hoogte van het eiland op dat hoekpunt
+  const naarEiland = (v, o, e) => e + v - o;
+  for (const [x, y] of [[x0, y0], [x0 + 17, y0 + 40], [x0 + Z - 1, y0 + Z - 1]]) {
+    const eiland = Math.max(0, echt(E, naarEiland(x, hg.ox, hg.eiland.x0) - 0.5, naarEiland(y, hg.oy, hg.eiland.y0) - 0.5, 1, 1).hoogte[0]);
+    assert.ok(Math.abs(T.hoekHoogte(w, x, y, 0) - eiland) < 1e-6, `hoekpunt (${x}, ${y}): ${T.hoekHoogte(w, x, y, 0)} en het eiland ${eiland}`);
+  }
+  // de naad met het stuk ten oosten en ten zuiden: de hoeken die de buren delen, zijn precies gelijk
+  for (let i = 0; i < Z; i++) {
+    assert.equal(T.hoekHoogte(w, x0 + Z - 1, y0 + i, 1), T.hoekHoogte(w, x0 + Z, y0 + i, 0), `de naad in het oosten, rij ${i}`);
+    assert.equal(T.hoekHoogte(w, x0 + i, y0 + Z - 1, 3), T.hoekHoogte(w, x0 + i, y0 + Z, 0), `de naad in het zuiden, kolom ${i}`);
+    assert.equal(T.isSchuin(w, x0 + Z - 1, y0 + i), new Set(T.hoekHoogten(w, x0 + Z - 1, y0 + i)).size > 1);
+  }
+  // een vlak stuk over de naad: in beide stukken vlak, en net als op een kaart die de stukken pas daarna uitrekent
+  const plek = { x: x0 + Z - 2, y: y0 + 20, b: 3, h: 3 };
+  const vlak = T.egaliseer(w, plek);
+  const vers = land(5, true);
+  T.egaliseer(vers, plek);
+  for (let y = plek.y - 9; y < plek.y + plek.h + 9; y++) {
+    for (let x = plek.x - 9; x < plek.x + plek.b + 9; x++) assert.deepEqual(T.hoekHoogten(w, x, y), T.hoekHoogten(vers, x, y), `tegel (${x}, ${y})`);
+  }
+  for (let y = plek.y; y < plek.y + plek.h; y++) for (let x = plek.x; x < plek.x + plek.b; x++) assert.deepEqual(T.hoekHoogten(w, x, y), [vlak.h, vlak.h, vlak.h, vlak.h]);
 });
 
 test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () => {
