@@ -1011,6 +1011,146 @@ function renderHuisFasen(naam) {
   };
 }
 
+// ---------------------------------------------------------------- plat
+//
+// De platte tekening van een huis, voor de weergave plat in het spel (werklijst vraag 176, stap 4; ontwerp/beeld.md,
+// "Zicht in een dicht dorp"): zoals de functionele weergave van Stronghold, zodat je in een dichte straat de wegen, de
+// deuren en de mensen erachter ziet. Gesneden zoals de bouwfasen hierboven (wat bij de muren hoort, BIJ_DE_MUREN, en de
+// romp als een schil), maar als een doorsnede (platHoogte): de muren aan de kant van de camera (zuid en oost op het
+// scherm) tot de heup, met hun hout of steen en de deur, en die aan de achterkant vlak boven de grond. Alle muren tot de
+// heup dekte in de zichtproef (gereedschap/zichtproef/) de rij tegels erachter nog af. Geen dak, geen ramen, geen
+// schoorsteen en geen licht. Erbij komen een vloer en een randje op de muren in het eigen dak, met de rijen van dat dak
+// (vloerPatroon), zodat je het huis van gewoon naar plat herkent (Marcel, 17 okt: de vloer in de kleur van het dak, met
+// rijen zoals een dak).
+const PLAT = {
+  voor: 44, // zo hoog staan de muren aan de kant van de camera nog: tot de heup, onder de ramen (een poppetje is 88)
+  achter: 8, // en zo hoog die aan de achterkant, zodat ze niets verbergen van wat erachter staat
+  overgang: 0.2, // op het laatste stuk van de voet (een deel ervan) loopt de achterste muur op naar de voorste
+  kap: 3, // zo dik is het randje in het dak, bovenop de muur
+  vloer: 2, // en zo dik de vloer
+};
+
+// Hoe hoog de muur staat op punt (x, y) van het huis: achter laag, voor tot de heup. Gerekend zoals het huis in het beeld
+// ligt (m, de voet van meetHuis met de draai): u loopt van de westkant (0) naar de oostkant (1), v van noord (0) naar zuid.
+function platHoogte(m, draai) {
+  const naar = (x, y) => (draai ? Tr.draaiNaar(draai, [x, y]) : [x, y]);
+  const [ux, vx] = naar(1, 0);
+  const [uy, vy] = naar(0, 1);
+  return (x, y) => {
+    const u = ((ux * x + uy * y) / TEGEL - m.hoek[0]) / m.voet[0];
+    const v = ((vx * x + vy * y) / TEGEL - m.hoek[1]) / m.voet[1];
+    const t = Math.min(1, Math.max(0, (Math.max(u, v) - (1 - PLAT.overgang)) / PLAT.overgang));
+    return PLAT.achter + (PLAT.voor - PLAT.achter) * t;
+  };
+}
+
+// Het patroon van de vloer: dat van het dak recht erboven, alsof je van boven op het dak kijkt. Zo liggen de rijen van
+// het riet, de spanen, de leien of de pannen op de vloer zoals op het dak. Het dak rekent met zijn eigen plek (dakPlek in
+// huis-sdf.cjs), dus het patroon krijgt het punt op het dak, met een normaal recht omhoog (anders tekent het daar een
+// onderrand) en het dak als deel. Waar geen dak boven ligt, blijft de vloer effen.
+// zTop: boven het dak (de bovenkant van zijn grens).
+function vloerPatroon(dak, bron, zTop) {
+  const hoogte = new Map();
+  const dakZ = (x, y) => {
+    const k = Math.round(x) * 8192 + Math.round(y);
+    if (hoogte.has(k)) return hoogte.get(k);
+    let z = null;
+    for (let zb = zTop; zb > 0; zb -= 3) {
+      if (dak.f(x, y, zb) >= 0) continue;
+      let [lo, hi] = [zb, zb + 3];
+      for (let i = 0; i < 5; i++) {
+        const mid = (lo + hi) / 2;
+        if (dak.f(x, y, mid) < 0) lo = mid;
+        else hi = mid;
+      }
+      z = lo;
+      break;
+    }
+    hoogte.set(k, z);
+    return z;
+  };
+  return (C) => {
+    const z = dakZ(C.x, C.y);
+    if (z === null) return 0;
+    const was = [C.z, C.nx, C.ny, C.nz, C.deel];
+    [C.z, C.nx, C.ny, C.nz, C.deel] = [z, 0, 0, 1, dak];
+    try {
+      return bron.patroon(C);
+    } finally {
+      [C.z, C.nx, C.ny, C.nz, C.deel] = was;
+    }
+  };
+}
+
+// Een huis plat: wat bij de muren hoort, afgesneden op zc(x, y), de romp als een schil; een vloer en een randje in het dak.
+function platVanHuis(W, zc) {
+  const N = new Tr.Wereld();
+  N.lichten = [];
+  N.H = W.H;
+  const groepen = W.groepen.filter((g) => g.delen.length);
+  const dak = groepen.filter((g) => HET_DAK.has(g.naam)).flatMap((g) => g.delen)[0];
+  const bron = dak && W.mat[typeof dak.m === 'string' ? dak.m : 'dak'];
+  N.mat = { ...W.mat };
+  if (bron) N.mat.platDak = { ...bron, schaduwKracht: 0.3, patroon: bron.patroon && vloerPatroon(dak, bron, dak.grens ? dak.grens[4] + 3 : 600) };
+  for (const g of groepen) {
+    if (!BIJ_DE_MUREN.has(g.naam)) continue;
+    const G = N.groep(g.naam);
+    for (const p of g.delen) {
+      if (g.naam === 'romp' && p.deel === 1) {
+        const schil = (x, y) => -p.f(x, y, FASE.schilZ) - FASE.schil;
+        Tr.voeg(G, { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), schil(x, y), z - zc(x, y)) });
+        if (!bron) continue;
+        Tr.voeg(N.groep('vloer'), { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), z - PLAT.vloer), m: 'platDak', deel: 994 });
+        Tr.voeg(N.groep('kap'), { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), schil(x, y), z - zc(x, y) - PLAT.kap, zc(x, y) - z), m: 'platDak', deel: 995 });
+      } else {
+        Tr.voeg(G, { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), z - zc(x, y)) });
+      }
+    }
+  }
+  return N;
+}
+
+// Een gebouw uit delen (de kapel met haar toren, de zagerij met haar stapels): elk deel plat op zijn plek, met de snede
+// van het geheel (achter laag, voor tot de heup); een los stuk (de stammen bij de zagerij) blijft zoals het is, dat is al laag.
+function platVanDelen(spec, zc) {
+  return HS.samen(spec.delen.map((d) => {
+    const Wd = deelVan(d.spec);
+    if (d.spec.tuin) return { W: Wd, plek: d.plek };
+    const [dx, dy] = (d.plek || [0, 0]).map((v) => v * TEGEL);
+    return { W: platVanHuis(Wd, (x, y) => zc(x + dx, y + dy)), plek: d.plek };
+  }));
+}
+
+// De platte tekening voor het spel: { plaat, anker }, strak gesneden met een eigen anker, zoals de sneeuw op het dak
+// (schrijfDaksneeuw): het punt in de plaat dat op het anker van het huis komt, met de afspraak van tegels.json (de
+// achterste voethoek, 16 pixels lager). Hetzelfde kader en licht als renderHuis, zodat de tekening niet verspringt.
+function renderHuisPlat(naam) {
+  const t0 = Date.now();
+  const spec = HUIZEN[naam];
+  const draai = spec.draai || 0;
+  const W = wereldVan(spec);
+  const m = meetHuis(W, draai, { zonderDeur: true });
+  const zc = platHoogte(m, draai);
+  const N = spec.delen ? platVanDelen(spec, zc) : platVanHuis(W, zc);
+  const kd = W.delen ? HS.kaderSamen(W, draai) : HS.kaderVan(W.H, [], draai);
+  const RAND = 12;
+  const OX = Math.round(RAND - kd.x0);
+  const OY = Math.round(RAND - kd.y0);
+  const B = new K.Beeld(Math.ceil(kd.b + RAND * 2), Math.ceil(kd.h + RAND * 2), OX, OY);
+  Tr.tekenWereld(B, N, { draai });
+  K.belicht(B, { omgeving: () => 0.2 });
+  D.avondlicht(B, { warm: HS.WARM });
+  K.verwarm(B, 1.8);
+  K.omlijn(B);
+  const s = strak(K.Plaat.van(K.kwantiseer(B)));
+  if (!s) throw new Error('niets getekend');
+  const X = m.hoek[0] * TEGEL;
+  const Y = m.hoek[1] * TEGEL;
+  const ax = Math.round(OX + X * EX[0] + Y * EX[1]);
+  const ay = Math.round(OY + X * EY[0] + Y * EY[1]);
+  return { naam, plaat: s.plaat, anker: [ax - s.dx, ay - s.dy + 16], ms: Date.now() - t0 };
+}
+
 // ---------------------------------------------------------------- de ruïne
 //
 // Een afgebrand huis (js/brand.js; werklijst vraag 144, 3; Marcel, 9 okt: "Huis moet afgebrokkeld zijn. Echt kapot.
@@ -1977,7 +2117,7 @@ function schrijfDaksneeuw(lijst, o = {}) {
   return { huizen: Object.keys(lagen).length, mb: Math.round((pixels * 4) / 1e6) };
 }
 
-module.exports = { HUIZEN, OUD, ZONDER_RONDE, SNEEUW_LAGEN, schrijfDaksneeuw, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis, rookVan, wereldVan };
+module.exports = { HUIZEN, OUD, ZONDER_RONDE, SNEEUW_LAGEN, schrijfDaksneeuw, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, PLAT, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, renderHuisPlat, meetHuis, rookVan, wereldVan };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

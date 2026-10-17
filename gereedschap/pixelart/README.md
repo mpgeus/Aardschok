@@ -69,7 +69,14 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   minuten, in vier draden; werklijst vraag 114, stap 1), `node bouwfasen.cjs` maakt hun vijf
   bouwfasen (uit het huis zelf gesneden; een kwartier voor alle gebouwen samen), en
   `node huizen.cjs [namen]` een proefplaat met voet en deur erop (`uit/huizen/proef.png`). Een nieuw
-  huis: een regel in `HUIZEN`, dan die drie stappen, en `T.GEBOUWEN` in `js/gebouwen.js`.
+  huis: een regel in `HUIZEN`, dan die drie stappen, zijn platte tekening (`node plat.cjs spel <naam>`), en
+  `T.GEBOUWEN` in `js/gebouwen.js`.
+- `plat.cjs`: de platte tekeningen van de huizen, voor de weergave plat in het spel (werklijst vraag 176, stap 4a;
+  `ontwerp/beeld.md`, "Zicht in een dicht dorp"): de muren als een doorsnede, geen dak, en een vloer met de rijen van
+  het eigen dak. De snede staat in `huizen.cjs` (`renderHuisPlat`, naast de bouwfasen). `node plat.cjs proef [namen]`
+  zet gewoon en plat naast elkaar op hun anker (`uit/plat/proef.png`; elf huizen in een minuut), en `node plat.cjs spel
+  [naam of stijl] [--erbij]` schrijft per jonge tekening `tegels/plat/<naam>.png`, strak gesneden met een eigen anker,
+  en `tegels/plat.json` + `.js` (een oude deelt de platte van zijn jonge; alle 607 in 67 minuten in acht draden).
 - `inpakken.cjs`: hoe een vel naar het spel gaat (werklijst vraag 114, 2a). `naar-tiled.cjs` pakt elk vel
   behalve de grond in (elke tekening strak gesneden, met zijn eigen rechthoek en anker in `tegels.json`),
   `bouwfasen.cjs` geeft elk gebouw een eigen vel in `tegels/bouwfasen/`, en `naar-spel.cjs` laat de cel van
@@ -127,7 +134,7 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `node stijlproef.cjs huis <namen>` losse huizen.
 - `stijlproef-huis1.cjs`: het tweede doel van de stijlproef (vraag 177; `ontwerp/beeld.md`, "Het tweede doel: huis1"):
   huis1 schoon en verweerd, het spel, de stijl en de nabewerkte plaat (`uit/schermen/huis1-stijl-doel.png`, de webp uit
-  `ontwerp/voorbeelden/` als PNG), en de voorgevel vergroot. Tekent zelf niets (de stijl komt uit `stijlproef.cjs`), en
+  `ontwerp/voorbeelden/` als PNG), en de voorgevel en het verweerde dak vergroot. Tekent zelf niets (de stijl komt uit `stijlproef.cjs`), en
   meet of het silhouet gelijk blijft, jong en oud. `node stijlproef-huis1.cjs`, een minuut, naar
   `uit/stijlproef/huis1/plaat.png` en `meting.json`.
 - `lantaarn.cjs`: de lantaarn van de groepsleider (werklijst vraag 171, D2; `ontwerp/beeld.md`): het lantaarntje als

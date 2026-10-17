@@ -955,6 +955,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   alleen onder het dak van het gehucht (Marcel: "Eerst alleen het gehucht"), leien en pannen hebben `fasen: false`. In
   de bouwfasen staan de palen (`palen`) waar een huis zijn muren heeft (`BIJ_DE_MUREN`), en de fundering is de vloer met
   de stenen onder de palen.
+  **Plat** (vraag 176, stap 4a; `ontwerp/beeld.md`, "Zicht in een dicht dorp"): `renderHuisPlat` in `huizen.cjs`, naast
+  de bouwfasen en met dezelfde snede (`BIJ_DE_MUREN`, de romp als een schil), is het huis voor de weergave plat. De muren
+  als een doorsnede (`platHoogte`: aan de kant van de camera tot de heup, `PLAT.voor`, achter vlak boven de grond; alles
+  tot de heup dekte in de zichtproef de straat erachter nog af), geen dak, ramen, schoorsteen of licht, en een vloer en
+  een randje in het eigen dak. De vloer krijgt het patroon van het dak recht erboven (`vloerPatroon`: hij zoekt het punt
+  op het dak in het veld van het dak, en geeft het patroon dat punt met een normaal omhoog en het dak als deel), zodat
+  riet, spanen, leien en pannen hun eigen rijen houden, ook de goot in de kil. Een gebouw uit delen gaat per deel
+  (`platVanDelen`), met de snede van het geheel; de stukken uit `tuin-sdf.cjs` blijven zoals ze zijn, en een open
+  kapschuur (de zagerij) toont haar eigen vloer van zaagsel. `plat.cjs` rendert ze: `proef` zet gewoon en plat naast
+  elkaar, `spel [--erbij]` schrijft per jonge tekening `tegels/plat/<naam>.png`, strak gesneden met een eigen anker (de
+  afspraak van `tegels.json`, zoals de daksneeuw), en `tegels/plat.json` + `.js` (`T.PLAT.platten`); een oude tekening
+  deelt de platte van zijn jonge. `gereedschap/zichtproef/plat.cjs` gebruikt dezelfde snede.
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 

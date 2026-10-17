@@ -112,7 +112,8 @@ brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bi
 **Marcel kwam op 17 okt met 176** (bij N): zicht in een dicht dorp, de aanpak van Stronghold (gebouwen plat, het
 land lager, draaien, zoomen). **Stap 1, de proef, is af** (17 okt): plat laat in de dichtste straat alle inwoners en 83%
 van de straat zien, gewoon 1 van de 6 en 8%. Plat wordt een weergave in het spel (stap 4, het plan en de keuzes bij N);
-het volgende is 4a, de platte tekeningen van alle huizen, met eerst een proefplaat.
+**4a is af** (17 okt; Marcel keurde de proefplaat goed): de platte tekening van elk huis, in `tegels/plat/`. Het
+volgende is 4b, plat in het spel.
 
 **Marcel kwam op 17 okt met 177** (bij O): de nabewerkte herberg is de nieuwe maat voor alle huizen, zonder ze een
 voor een opnieuw te tekenen. **De eerste proef is af** (17 okt; `beeld.md`, "De nieuwe stijl"; de plaat
@@ -1363,12 +1364,11 @@ alles tot de heup dekte de straat nog af), de vloer in de kleur van het dak.
 wereld, de regels en het opslaan merken er niets van; plat is een veld van het scherm (`T.schermVelden`), geen
 spelregel. De speler bouwt huizen uit de huizenbouwer en werkplaatsen uit `dorp.cjs`, dus twee stukken renderwerk.
 
-- **4a, de platte tekeningen van alle huizen.** **Bezig in sessie `main` (17 okt)**: de snede naar de huizenbouwer,
-  dan de proefplaat voor Marcel. De snede van `gereedschap/zichtproef/plat.cjs` gaat naar de
-  huizenbouwer, naast de bouwfasen (`huizen.cjs`: één manier om een huis te snijden), ook voor de gebouwen uit delen (de
-  kapel, de zagerij). Een eigen vel, `tegels/plat/` met `tegels/plat.js`, strak gesneden met een eigen anker, zoals de
-  daksneeuw; een oud huis deelt de platte tekening met zijn jonge. Eerst één proefplaat met de gekozen muren en vloer,
-  dan alles: zo'n 600 tekeningen, ruwweg een uur in een terminaltab.
+- **4a, de platte tekeningen van alle huizen: af** (17 okt; Marcel keurde de proefplaat goed). De snede staat in de
+  huizenbouwer (`renderHuisPlat` in `huizen.cjs`, ook voor de kapel en de zagerij; de vloer krijgt het patroon van het
+  dak recht erboven), `gereedschap/pixelart/plat.cjs` rendert: 607 jonge tekeningen in 67 minuten, elk
+  `tegels/plat/<naam>.png` met een eigen anker, en `tegels/plat.json` + `.js` (`T.PLAT.platten`); een oude deelt die
+  van zijn jonge (`code.md` bij `gereedschap/pixelart/`, `test/plat.test.cjs`).
 - **4b, in het spel.** Een toets zet plat aan en uit; dan tekent het spel van elk huis de platte tekening (`js/tekenen.js`,
   zoals de daksneeuw en de bouwfasen: `T.sprites.plat`), op dezelfde plek en in dezelfde volgorde. In plat gaan uit: de
   ramen 's nachts, de sneeuw op het dak, de rook en de doorkijk. Een bouwplaats is plat zijn fundering (fase 1). Wat elk
@@ -1383,7 +1383,7 @@ spelregel. De speler bouwt huizen uit de huizenbouwer en werkplaatsen uit `dorp.
 **Besloten** (17 okt; Marcel koos bij alle vier A): (1) de muren als de doorsnede van de proef (voor tot de heup,
 achter laag); (2) de vloer in de kleur van het dak, met rijen zoals een dak in plaats van het dambord; (3) de toets is
 de F (de spatie blijft het laatste bericht); (4) schakelen, zoals Stronghold, met een klein teken zolang plat aan staat.
-**Het volgende is 4a**: eerst de proefplaat van de vloer (CLAUDE.md, eerst goedkeuring, dan renderen).
+**Het volgende is 4b**, plat in het spel.
 
 ## O. De nieuwe stijl: de nabewerkte herberg als maat (vraag 177, 17 okt)
 
