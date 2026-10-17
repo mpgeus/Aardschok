@@ -130,6 +130,22 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
 - **D3, meten waar het telt.** Een vaste meetreeks per stap (de tekenmeting), en ook in de Steam-versie zelf
   (`npm run proefversie -- --windows`) en op een zwakke machine.
 
+### E. Een andere tekenaar: PixiJS v8 (de renderproef, 17 okt)
+
+Marcel vroeg of PixiJS v8 beter is dan `js/gl.js`. De proef (`gereedschap/pixiproef/`, met de uitslag in
+`evaluatie.md`) tekent hetzelfde dorp met beide: 150 gebouwen, 4600 bomen, 300 inwoners, schaduwen, rook en een
+lichtfilter, op 100, 50 en 35%. **Het advies: houden en gedeeltelijk verbeteren, niet overstappen.** Pixi is ver
+uitgezoomd 0,8 ms sneller (3,7 tegen 4,5 ms op 35%; dichtbij 0,4 ms trager), maar alleen met een boom van sprites die
+meeleeft met `S`, dus een herschrijving van `js/tekenen.js`; als tekenaar die elk beeld een lijst krijgt, zoals nu, is
+hij 1,3 à 1,6 keer trager, en op een volle machine was hij 1,2 à 1,9 keer trager. De tijd van het spel zit in
+`js/tekenen.js` per ding, en de grote winst (B1 tot B4) heeft Pixi ook niet. Wat we overnemen: **E1**, `drawImage`
+zonder afval (geen lijst per aanroep, de textuur bij het plaatje onthouden; nu loopt het geheugen tussen twee keer
+opruimen op tot 117 MB tegen 44 bij Pixi, en het opruimen geeft uitschieters van 17 ms); **E2**, bladen die groeien in
+plaats van meteen 64 MB (hier 60 MB minder op de kaart); en twee keuzes die je ziet, eerst met een proefplaat: **E3**,
+mipmaps ver uitgezoomd (rustiger, zachter), en **E4**, op 50% afronden op hele schermpixels. Zonder bouwstap werkt Pixi
+wel (een gewoon script van 840 KB), en vanaf `file://` in Chromium kunnen beide niet met de videokaart (`js/gl.js`
+valt dan terug op het 2D-doek, Pixi alleen met eigen code op zijn `CanvasRenderer`).
+
 ## Voorstel van Claude
 
 Eerst **A1 en A2** (snel, je ziet niets, samen zo'n 40%), dan meten. Daarna niet C1 (je ziet het, en het is een

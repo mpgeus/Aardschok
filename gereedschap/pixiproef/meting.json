@@ -1,0 +1,3732 @@
+{
+ "datum": "2026-10-17T21:22:29.706Z",
+ "stand": "aa2fe18f",
+ "scherm": "1920x1080",
+ "kaart": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "browser": "156.0.8078.4",
+ "kernen": 16,
+ "tijd": {
+  "blokken": {
+   "huidig": {
+    "1": [
+     {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 339,
+      "cpu": {
+       "gem": 0.787,
+       "med": 0.7,
+       "p95": 1.4,
+       "max": 2.4
+      },
+      "alles": {
+       "gem": 1.266,
+       "med": 1.1,
+       "p95": 1.9,
+       "max": 3.1
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 23.2,
+      "gl": "webgl",
+      "belasting": 0.339,
+      "rustVooraf": {
+       "gewachtS": 36,
+       "rust": 0.13
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 342,
+      "cpu": {
+       "gem": 0.677,
+       "med": 0.6,
+       "p95": 1,
+       "max": 1.7
+      },
+      "alles": {
+       "gem": 1.181,
+       "med": 1.1,
+       "p95": 1.7,
+       "max": 2.1
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 48.6,
+      "gl": "webgl",
+      "belasting": 0.211,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.103
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 342,
+      "cpu": {
+       "gem": 0.713,
+       "med": 0.7,
+       "p95": 1.1,
+       "max": 2.2
+      },
+      "alles": {
+       "gem": 1.187,
+       "med": 1.1,
+       "p95": 1.7,
+       "max": 2.6
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 41.7,
+      "gl": "webgl",
+      "belasting": 0.201,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.077
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 344,
+      "cpu": {
+       "gem": 0.592,
+       "med": 0.5,
+       "p95": 0.7,
+       "max": 3.2
+      },
+      "alles": {
+       "gem": 1.028,
+       "med": 1,
+       "p95": 1.2,
+       "max": 3.7
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 63.9,
+      "gl": "webgl",
+      "belasting": 0.124,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.137
+      }
+     }
+    ],
+    "0.5": [
+     {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 1.713,
+       "med": 1.6,
+       "p95": 1.9,
+       "max": 6.6
+      },
+      "alles": {
+       "gem": 2.361,
+       "med": 2.3,
+       "p95": 2.7,
+       "max": 7.6
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 62.4,
+      "gl": "webgl",
+      "belasting": 0.163,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.036
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.793,
+       "med": 1.7,
+       "p95": 2.3,
+       "max": 7.5
+      },
+      "alles": {
+       "gem": 2.461,
+       "med": 2.4,
+       "p95": 2.8,
+       "max": 8.4
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 83.5,
+      "gl": "webgl",
+      "belasting": 0.135,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.094
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 1.9,
+       "med": 1.8,
+       "p95": 2.2,
+       "max": 12.2
+      },
+      "alles": {
+       "gem": 2.609,
+       "med": 2.5,
+       "p95": 3.1,
+       "max": 13.3
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 83.5,
+      "gl": "webgl",
+      "belasting": 0.174,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.069
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1649,
+      "cpu": {
+       "gem": 1.927,
+       "med": 1.9,
+       "p95": 2.6,
+       "max": 3
+      },
+      "alles": {
+       "gem": 2.661,
+       "med": 2.6,
+       "p95": 3.4,
+       "max": 3.8
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 103.2,
+      "gl": "webgl",
+      "belasting": 0.152,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.126
+      }
+     }
+    ],
+    "0.35": [
+     {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3880,
+      "cpu": {
+       "gem": 3.538,
+       "med": 3.4,
+       "p95": 4,
+       "max": 12.3
+      },
+      "alles": {
+       "gem": 4.758,
+       "med": 4.6,
+       "p95": 5.2,
+       "max": 13.7
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 123,
+      "gl": "webgl",
+      "belasting": 0.137,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.04
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3878,
+      "cpu": {
+       "gem": 3.493,
+       "med": 3.3,
+       "p95": 4,
+       "max": 12.1
+      },
+      "alles": {
+       "gem": 4.71,
+       "med": 4.5,
+       "p95": 5.3,
+       "max": 13.7
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 64.4,
+      "gl": "webgl",
+      "belasting": 0.167,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.163
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 3.496,
+       "med": 3.3,
+       "p95": 3.9,
+       "max": 12.6
+      },
+      "alles": {
+       "gem": 4.709,
+       "med": 4.5,
+       "p95": 5.2,
+       "max": 14.2
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 38.4,
+      "gl": "webgl",
+      "belasting": 0.117,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.107
+      }
+     },
+     {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 3.448,
+       "med": 3.3,
+       "p95": 3.8,
+       "max": 12.4
+      },
+      "alles": {
+       "gem": 4.638,
+       "med": 4.4,
+       "p95": 5.2,
+       "max": 13.9
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 42.8,
+      "gl": "webgl",
+      "belasting": 0.124,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.065
+      }
+     }
+    ]
+   },
+   "pixi": {
+    "1": [
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 339,
+      "cpu": {
+       "gem": 1.132,
+       "med": 1.1,
+       "p95": 1.8,
+       "max": 2.9
+      },
+      "alles": {
+       "gem": 1.919,
+       "med": 1.8,
+       "p95": 2.9,
+       "max": 4.3
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 31.6,
+      "gl": "webgl2",
+      "belasting": 0.513,
+      "rustVooraf": {
+       "gewachtS": 36,
+       "rust": 0.13
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.913,
+       "med": 0.9,
+       "p95": 1.4,
+       "max": 1.6
+      },
+      "alles": {
+       "gem": 1.617,
+       "med": 1.5,
+       "p95": 2.4,
+       "max": 2.5
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 31.9,
+      "gl": "webgl2",
+      "belasting": 0.4,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.103
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.692,
+       "med": 0.7,
+       "p95": 0.9,
+       "max": 1
+      },
+      "alles": {
+       "gem": 1.297,
+       "med": 1.3,
+       "p95": 1.5,
+       "max": 1.7
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 33.1,
+      "gl": "webgl2",
+      "belasting": 0.146,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.077
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 344,
+      "cpu": {
+       "gem": 0.616,
+       "med": 0.6,
+       "p95": 0.8,
+       "max": 0.9
+      },
+      "alles": {
+       "gem": 1.203,
+       "med": 1.2,
+       "p95": 1.4,
+       "max": 1.5
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 31.8,
+      "gl": "webgl2",
+      "belasting": 0.151,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.137
+      }
+     }
+    ],
+    "0.5": [
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 1.084,
+       "med": 1.1,
+       "p95": 1.3,
+       "max": 1.4
+      },
+      "alles": {
+       "gem": 2.036,
+       "med": 2,
+       "p95": 2.4,
+       "max": 2.4
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 34.8,
+      "gl": "webgl2",
+      "belasting": 0.131,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.036
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.087,
+       "med": 1.1,
+       "p95": 1.3,
+       "max": 1.6
+      },
+      "alles": {
+       "gem": 2.037,
+       "med": 2,
+       "p95": 2.3,
+       "max": 2.5
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 33.8,
+      "gl": "webgl2",
+      "belasting": 0.102,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.094
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 1.594,
+       "med": 1.5,
+       "p95": 2.6,
+       "max": 3.1
+      },
+      "alles": {
+       "gem": 2.737,
+       "med": 2.7,
+       "p95": 4,
+       "max": 4.7
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 34.2,
+      "gl": "webgl2",
+      "belasting": 0.237,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.069
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1649,
+      "cpu": {
+       "gem": 1.165,
+       "med": 1.1,
+       "p95": 1.7,
+       "max": 3.3
+      },
+      "alles": {
+       "gem": 2.227,
+       "med": 2.1,
+       "p95": 2.8,
+       "max": 4.6
+      },
+      "opdrachten": 32,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 33.3,
+      "gl": "webgl2",
+      "belasting": 0.119,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.126
+      }
+     }
+    ],
+    "0.35": [
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3880,
+      "cpu": {
+       "gem": 2.194,
+       "med": 2.1,
+       "p95": 3.3,
+       "max": 4.4
+      },
+      "alles": {
+       "gem": 3.772,
+       "med": 3.6,
+       "p95": 5.2,
+       "max": 6.2
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 38.7,
+      "gl": "webgl2",
+      "belasting": 0.152,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.04
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3878,
+      "cpu": {
+       "gem": 2.213,
+       "med": 2.2,
+       "p95": 2.9,
+       "max": 3.2
+      },
+      "alles": {
+       "gem": 3.739,
+       "med": 3.7,
+       "p95": 4.4,
+       "max": 5.2
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 35.8,
+      "gl": "webgl2",
+      "belasting": 0.164,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.163
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 1.948,
+       "med": 1.8,
+       "p95": 2.7,
+       "max": 4.3
+      },
+      "alles": {
+       "gem": 3.47,
+       "med": 3.3,
+       "p95": 4.7,
+       "max": 6.2
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 34.7,
+      "gl": "webgl2",
+      "belasting": 0.129,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.107
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 2.458,
+       "med": 2.3,
+       "p95": 3.8,
+       "max": 4.6
+      },
+      "alles": {
+       "gem": 4.084,
+       "med": 3.9,
+       "p95": 5.6,
+       "max": 6.7
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 36,
+      "gl": "webgl2",
+      "belasting": 0.232,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.065
+      }
+     }
+    ]
+   },
+   "pixi-alles": {
+    "1": [
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 339,
+      "cpu": {
+       "gem": 1.431,
+       "med": 1.2,
+       "p95": 2.6,
+       "max": 6.9
+      },
+      "alles": {
+       "gem": 2.132,
+       "med": 1.8,
+       "p95": 3.4,
+       "max": 8.6
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 32.6,
+      "gl": "webgl2",
+      "belasting": 0.266,
+      "rustVooraf": {
+       "gewachtS": 36,
+       "rust": 0.13
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 341,
+      "cpu": {
+       "gem": 1.057,
+       "med": 1,
+       "p95": 1.6,
+       "max": 2.5
+      },
+      "alles": {
+       "gem": 1.685,
+       "med": 1.6,
+       "p95": 2.2,
+       "max": 3.4
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 33.6,
+      "gl": "webgl2",
+      "belasting": 0.167,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.103
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.946,
+       "med": 0.9,
+       "p95": 1.2,
+       "max": 1.5
+      },
+      "alles": {
+       "gem": 1.542,
+       "med": 1.5,
+       "p95": 1.8,
+       "max": 2.2
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 34.8,
+      "gl": "webgl2",
+      "belasting": 0.101,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.077
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 344,
+      "cpu": {
+       "gem": 0.971,
+       "med": 0.9,
+       "p95": 1.4,
+       "max": 1.8
+      },
+      "alles": {
+       "gem": 1.554,
+       "med": 1.5,
+       "p95": 2.1,
+       "max": 2.6
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 33.4,
+      "gl": "webgl2",
+      "belasting": 0.162,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.137
+      }
+     }
+    ],
+    "0.5": [
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 1.321,
+       "med": 1.3,
+       "p95": 1.7,
+       "max": 2.2
+      },
+      "alles": {
+       "gem": 2.359,
+       "med": 2.3,
+       "p95": 2.8,
+       "max": 3.5
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 36.2,
+      "gl": "webgl2",
+      "belasting": 0.12,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.036
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.518,
+       "med": 1.4,
+       "p95": 2.2,
+       "max": 3.8
+      },
+      "alles": {
+       "gem": 2.517,
+       "med": 2.4,
+       "p95": 3.3,
+       "max": 4.8
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 35.5,
+      "gl": "webgl2",
+      "belasting": 0.137,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.094
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 2.054,
+       "med": 1.9,
+       "p95": 3.3,
+       "max": 4.5
+      },
+      "alles": {
+       "gem": 3.242,
+       "med": 3.1,
+       "p95": 4.8,
+       "max": 5.8
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 36.1,
+      "gl": "webgl2",
+      "belasting": 0.196,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.069
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 1649,
+      "cpu": {
+       "gem": 1.757,
+       "med": 1.6,
+       "p95": 2.7,
+       "max": 4.3
+      },
+      "alles": {
+       "gem": 5.559,
+       "med": 6.3,
+       "p95": 7.8,
+       "max": 9.1
+      },
+      "opdrachten": 32,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 34.9,
+      "gl": "webgl2",
+      "belasting": 0.124,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.126
+      }
+     }
+    ],
+    "0.35": [
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 3880,
+      "cpu": {
+       "gem": 2.633,
+       "med": 2.4,
+       "p95": 4.1,
+       "max": 4.7
+      },
+      "alles": {
+       "gem": 4.253,
+       "med": 4,
+       "p95": 6,
+       "max": 6.8
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 38.7,
+      "gl": "webgl2",
+      "belasting": 0.152,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.04
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 3878,
+      "cpu": {
+       "gem": 2.815,
+       "med": 2.7,
+       "p95": 3.8,
+       "max": 7
+      },
+      "alles": {
+       "gem": 4.381,
+       "med": 4.2,
+       "p95": 5.5,
+       "max": 8.8
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 38.1,
+      "gl": "webgl2",
+      "belasting": 0.129,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.163
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 3.946,
+       "med": 3.9,
+       "p95": 6.1,
+       "max": 8.5
+      },
+      "alles": {
+       "gem": 5.663,
+       "med": 5.5,
+       "p95": 8,
+       "max": 10.9
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 36.1,
+      "gl": "webgl2",
+      "belasting": 0.266,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.107
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "alles",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 2.419,
+       "med": 2.3,
+       "p95": 3.3,
+       "max": 3.7
+      },
+      "alles": {
+       "gem": 3.944,
+       "med": 3.9,
+       "p95": 4.9,
+       "max": 5.3
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 38.6,
+      "gl": "webgl2",
+      "belasting": 0.122,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.065
+      }
+     }
+    ]
+   },
+   "pixi-eigen": {
+    "1": [
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 339,
+      "cpu": {
+       "gem": 0.958,
+       "med": 0.9,
+       "p95": 1.3,
+       "max": 1.6
+      },
+      "alles": {
+       "gem": 1.601,
+       "med": 1.5,
+       "p95": 2,
+       "max": 2.7
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 32.5,
+      "gl": "webgl2",
+      "belasting": 0.183,
+      "rustVooraf": {
+       "gewachtS": 36,
+       "rust": 0.13
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.904,
+       "med": 0.9,
+       "p95": 1.2,
+       "max": 1.9
+      },
+      "alles": {
+       "gem": 1.567,
+       "med": 1.5,
+       "p95": 2,
+       "max": 3
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 33.8,
+      "gl": "webgl2",
+      "belasting": 0.201,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.103
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.8,
+       "med": 0.8,
+       "p95": 1,
+       "max": 1.2
+      },
+      "alles": {
+       "gem": 1.388,
+       "med": 1.4,
+       "p95": 1.6,
+       "max": 1.9
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 32.4,
+      "gl": "webgl2",
+      "belasting": 0.153,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.077
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 344,
+      "cpu": {
+       "gem": 0.728,
+       "med": 0.7,
+       "p95": 0.9,
+       "max": 1
+      },
+      "alles": {
+       "gem": 1.281,
+       "med": 1.3,
+       "p95": 1.5,
+       "max": 1.7
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 31.9,
+      "gl": "webgl2",
+      "belasting": 0.082,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.137
+      }
+     }
+    ],
+    "0.5": [
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 2.915,
+       "med": 2.5,
+       "p95": 5.6,
+       "max": 7.4
+      },
+      "alles": {
+       "gem": 4.256,
+       "med": 3.7,
+       "p95": 7.5,
+       "max": 9.5
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 33.7,
+      "gl": "webgl2",
+      "belasting": 0.374,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.036
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.931,
+       "med": 1.9,
+       "p95": 2.4,
+       "max": 4.6
+      },
+      "alles": {
+       "gem": 2.928,
+       "med": 2.9,
+       "p95": 3.4,
+       "max": 5.9
+      },
+      "opdrachten": 32,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 34.6,
+      "gl": "webgl2",
+      "belasting": 0.166,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.094
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 1647,
+      "cpu": {
+       "gem": 2.14,
+       "med": 2.1,
+       "p95": 2.9,
+       "max": 4.8
+      },
+      "alles": {
+       "gem": 3.315,
+       "med": 3.2,
+       "p95": 4.3,
+       "max": 6.3
+      },
+      "opdrachten": 32,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 35.5,
+      "gl": "webgl2",
+      "belasting": 0.211,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.069
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 1649,
+      "cpu": {
+       "gem": 2.821,
+       "med": 2.6,
+       "p95": 5,
+       "max": 7.1
+      },
+      "alles": {
+       "gem": 8.189,
+       "med": 7.9,
+       "p95": 11,
+       "max": 12.1
+      },
+      "opdrachten": 32,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 36.6,
+      "gl": "webgl2",
+      "belasting": 0.152,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.126
+      }
+     }
+    ],
+    "0.35": [
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 3880,
+      "cpu": {
+       "gem": 4.636,
+       "med": 4.5,
+       "p95": 6.5,
+       "max": 10.3
+      },
+      "alles": {
+       "gem": 6.305,
+       "med": 6.1,
+       "p95": 8.1,
+       "max": 13
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 35.3,
+      "gl": "webgl2",
+      "belasting": 0.138,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.04
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 3878,
+      "cpu": {
+       "gem": 4.92,
+       "med": 4.4,
+       "p95": 9.4,
+       "max": 14.7
+      },
+      "alles": {
+       "gem": 6.66,
+       "med": 6.1,
+       "p95": 11.6,
+       "max": 16.7
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 35.3,
+      "gl": "webgl2",
+      "belasting": 0.205,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.163
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 4.773,
+       "med": 4.4,
+       "p95": 7.3,
+       "max": 16.1
+      },
+      "alles": {
+       "gem": 6.484,
+       "med": 6,
+       "p95": 9.2,
+       "max": 18.2
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 37.2,
+      "gl": "webgl2",
+      "belasting": 0.303,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.107
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "eigen",
+      "zicht": 3879,
+      "cpu": {
+       "gem": 3.97,
+       "med": 3.9,
+       "p95": 5.2,
+       "max": 5.8
+      },
+      "alles": {
+       "gem": 5.568,
+       "med": 5.5,
+       "p95": 6.9,
+       "max": 7.4
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 41.3,
+      "gl": "webgl2",
+      "belasting": 0.132,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.065
+      }
+     }
+    ]
+   },
+   "pixi-culler": {
+    "1": [
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 4.768,
+       "med": 4.5,
+       "p95": 6.9,
+       "max": 10.7
+      },
+      "alles": {
+       "gem": 5.511,
+       "med": 5.3,
+       "p95": 7.9,
+       "max": 11.7
+      },
+      "opdrachten": 12,
+      "opgestuurdMB": 0,
+      "textuurMB": 79.9,
+      "aantalTexturen": 65,
+      "heapMB": 35.5,
+      "gl": "webgl2",
+      "belasting": 0.255,
+      "rustVooraf": {
+       "gewachtS": 36,
+       "rust": 0.13
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 3.939,
+       "med": 3.8,
+       "p95": 4.9,
+       "max": 8.7
+      },
+      "alles": {
+       "gem": 4.651,
+       "med": 4.5,
+       "p95": 5.7,
+       "max": 9.8
+      },
+      "opdrachten": 12,
+      "opgestuurdMB": 0,
+      "textuurMB": 79.9,
+      "aantalTexturen": 65,
+      "heapMB": 35.2,
+      "gl": "webgl2",
+      "belasting": 0.115,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.103
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 3.237,
+       "med": 3.2,
+       "p95": 4,
+       "max": 5.1
+      },
+      "alles": {
+       "gem": 3.837,
+       "med": 3.8,
+       "p95": 4.7,
+       "max": 5.8
+      },
+      "opdrachten": 12,
+      "opgestuurdMB": 0,
+      "textuurMB": 79.9,
+      "aantalTexturen": 65,
+      "heapMB": 35.4,
+      "gl": "webgl2",
+      "belasting": 0.098,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.077
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 3.936,
+       "med": 3.9,
+       "p95": 5.2,
+       "max": 6
+      },
+      "alles": {
+       "gem": 4.597,
+       "med": 4.5,
+       "p95": 6.2,
+       "max": 6.8
+      },
+      "opdrachten": 12,
+      "opgestuurdMB": 0,
+      "textuurMB": 79.9,
+      "aantalTexturen": 65,
+      "heapMB": 34.7,
+      "gl": "webgl2",
+      "belasting": 0.171,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.137
+      }
+     }
+    ],
+    "0.5": [
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 4.307,
+       "med": 3.6,
+       "p95": 8.4,
+       "max": 11.8
+      },
+      "alles": {
+       "gem": 5.447,
+       "med": 4.7,
+       "p95": 9.9,
+       "max": 13.3
+      },
+      "opdrachten": 28,
+      "opgestuurdMB": 0,
+      "textuurMB": 109.9,
+      "aantalTexturen": 100,
+      "heapMB": 36.5,
+      "gl": "webgl2",
+      "belasting": 0.207,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.036
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 5.067,
+       "med": 4.5,
+       "p95": 8,
+       "max": 9.9
+      },
+      "alles": {
+       "gem": 6.181,
+       "med": 5.6,
+       "p95": 9.4,
+       "max": 11.2
+      },
+      "opdrachten": 27,
+      "opgestuurdMB": 0,
+      "textuurMB": 109.9,
+      "aantalTexturen": 100,
+      "heapMB": 36.4,
+      "gl": "webgl2",
+      "belasting": 0.24,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.094
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 4.198,
+       "med": 3.7,
+       "p95": 6.7,
+       "max": 12.1
+      },
+      "alles": {
+       "gem": 5.313,
+       "med": 4.7,
+       "p95": 8.4,
+       "max": 13.6
+      },
+      "opdrachten": 27,
+      "opgestuurdMB": 0,
+      "textuurMB": 109.9,
+      "aantalTexturen": 100,
+      "heapMB": 37.5,
+      "gl": "webgl2",
+      "belasting": 0.165,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.069
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 5.05,
+       "med": 5,
+       "p95": 7.4,
+       "max": 9.2
+      },
+      "alles": {
+       "gem": 9.013,
+       "med": 9.8,
+       "p95": 13.1,
+       "max": 15.4
+      },
+      "opdrachten": 27,
+      "opgestuurdMB": 0,
+      "textuurMB": 109.9,
+      "aantalTexturen": 100,
+      "heapMB": 35.8,
+      "gl": "webgl2",
+      "belasting": 0.16,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.126
+      }
+     }
+    ],
+    "0.35": [
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 5.669,
+       "med": 5.3,
+       "p95": 8.3,
+       "max": 12.1
+      },
+      "alles": {
+       "gem": 7.39,
+       "med": 7.1,
+       "p95": 10.1,
+       "max": 14.3
+      },
+      "opdrachten": 38,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 36,
+      "gl": "webgl2",
+      "belasting": 0.156,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.04
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 4.713,
+       "med": 4.5,
+       "p95": 6.1,
+       "max": 8.4
+      },
+      "alles": {
+       "gem": 6.274,
+       "med": 6.1,
+       "p95": 7.7,
+       "max": 10.1
+      },
+      "opdrachten": 37,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 38.9,
+      "gl": "webgl2",
+      "belasting": 0.135,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.163
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 7.102,
+       "med": 6.6,
+       "p95": 13.3,
+       "max": 15.3
+      },
+      "alles": {
+       "gem": 8.868,
+       "med": 8.3,
+       "p95": 15.5,
+       "max": 17.6
+      },
+      "opdrachten": 37,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 36.1,
+      "gl": "webgl2",
+      "belasting": 0.327,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.107
+      }
+     },
+     {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "pixi",
+      "sorteer": "alles",
+      "zicht": 7476,
+      "cpu": {
+       "gem": 5.045,
+       "med": 5,
+       "p95": 6.3,
+       "max": 7.3
+      },
+      "alles": {
+       "gem": 6.637,
+       "med": 6.5,
+       "p95": 7.9,
+       "max": 9.2
+      },
+      "opdrachten": 37,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 35.8,
+      "gl": "webgl2",
+      "belasting": 0.127,
+      "rustVooraf": {
+       "gewachtS": 2,
+       "rust": 0.065
+      }
+     }
+    ]
+   }
+  },
+  "samen": {
+   "huidig": {
+    "1": {
+     "allesMed": 1.1,
+     "cpuMed": 0.7,
+     "p95": 1.7,
+     "maalHuidig": 1,
+     "opdrachten": 8,
+     "zicht": 339,
+     "belasting": 0.211
+    },
+    "0.5": {
+     "allesMed": 2.5,
+     "cpuMed": 1.8,
+     "p95": 3.1,
+     "maalHuidig": 1,
+     "opdrachten": 8,
+     "zicht": 1647,
+     "belasting": 0.163
+    },
+    "0.35": {
+     "allesMed": 4.5,
+     "cpuMed": 3.3,
+     "p95": 5.2,
+     "maalHuidig": 1,
+     "opdrachten": 8,
+     "zicht": 3880,
+     "belasting": 0.137
+    }
+   },
+   "pixi": {
+    "1": {
+     "allesMed": 1.5,
+     "cpuMed": 0.9,
+     "p95": 2.4,
+     "maalHuidig": 1.36,
+     "opdrachten": 16,
+     "zicht": 339,
+     "belasting": 0.4
+    },
+    "0.5": {
+     "allesMed": 2.1,
+     "cpuMed": 1.1,
+     "p95": 2.8,
+     "maalHuidig": 0.87,
+     "opdrachten": 33,
+     "zicht": 1647,
+     "belasting": 0.131
+    },
+    "0.35": {
+     "allesMed": 3.7,
+     "cpuMed": 2.2,
+     "p95": 5.2,
+     "maalHuidig": 0.82,
+     "opdrachten": 40,
+     "zicht": 3880,
+     "belasting": 0.164
+    }
+   },
+   "pixi-alles": {
+    "1": {
+     "allesMed": 1.6,
+     "cpuMed": 1,
+     "p95": 2.2,
+     "maalHuidig": 1.5,
+     "opdrachten": 16,
+     "zicht": 339,
+     "belasting": 0.167
+    },
+    "0.5": {
+     "allesMed": 3.1,
+     "cpuMed": 1.6,
+     "p95": 4.8,
+     "maalHuidig": 1.24,
+     "opdrachten": 33,
+     "zicht": 1647,
+     "belasting": 0.137
+    },
+    "0.35": {
+     "allesMed": 4.2,
+     "cpuMed": 2.7,
+     "p95": 6,
+     "maalHuidig": 0.93,
+     "opdrachten": 40,
+     "zicht": 3880,
+     "belasting": 0.152
+    }
+   },
+   "pixi-eigen": {
+    "1": {
+     "allesMed": 1.5,
+     "cpuMed": 0.9,
+     "p95": 2,
+     "maalHuidig": 1.36,
+     "opdrachten": 16,
+     "zicht": 339,
+     "belasting": 0.183
+    },
+    "0.5": {
+     "allesMed": 3.7,
+     "cpuMed": 2.5,
+     "p95": 7.5,
+     "maalHuidig": 1.61,
+     "opdrachten": 33,
+     "zicht": 1647,
+     "belasting": 0.211
+    },
+    "0.35": {
+     "allesMed": 6.1,
+     "cpuMed": 4.4,
+     "p95": 9.2,
+     "maalHuidig": 1.33,
+     "opdrachten": 40,
+     "zicht": 3880,
+     "belasting": 0.205
+    }
+   },
+   "pixi-culler": {
+    "1": {
+     "allesMed": 4.5,
+     "cpuMed": 3.9,
+     "p95": 6.2,
+     "maalHuidig": 4.5,
+     "opdrachten": 12,
+     "zicht": 7476,
+     "belasting": 0.171
+    },
+    "0.5": {
+     "allesMed": 5.6,
+     "cpuMed": 4.5,
+     "p95": 9.9,
+     "maalHuidig": 2.33,
+     "opdrachten": 28,
+     "zicht": 7476,
+     "belasting": 0.207
+    },
+    "0.35": {
+     "allesMed": 7.1,
+     "cpuMed": 5.3,
+     "p95": 10.1,
+     "maalHuidig": 1.54,
+     "opdrachten": 38,
+     "zicht": 7476,
+     "belasting": 0.156
+    }
+   }
+  }
+ },
+ "perTekenaar": {
+  "huidig": {
+   "variant": "huidig",
+   "zooms": {
+    "1": {
+     "weg": "huidig",
+     "zoom": 1,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 339,
+     "cpu": {
+      "gem": 0.67,
+      "med": 0.6,
+      "p95": 1,
+      "max": 2.2
+     },
+     "alles": {
+      "gem": 1.134,
+      "med": 1.1,
+      "p95": 1.7,
+      "max": 2.6
+     },
+     "opdrachten": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 163.2,
+     "aantalTexturen": 21,
+     "heapMB": 39.2,
+     "gl": "webgl"
+    },
+    "0.5": {
+     "weg": "huidig",
+     "zoom": 0.5,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 1649,
+     "cpu": {
+      "gem": 1.695,
+      "med": 1.6,
+      "p95": 2,
+      "max": 2.7
+     },
+     "alles": {
+      "gem": 2.422,
+      "med": 2.4,
+      "p95": 3,
+      "max": 3.5
+     },
+     "opdrachten": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 178.2,
+     "aantalTexturen": 36,
+     "heapMB": 114.2,
+     "gl": "webgl"
+    },
+    "0.35": {
+     "weg": "huidig",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3881,
+     "cpu": {
+      "gem": 3.334,
+      "med": 3.2,
+      "p95": 3.7,
+      "max": 15.5
+     },
+     "alles": {
+      "gem": 4.52,
+      "med": 4.3,
+      "p95": 5,
+      "max": 17.3
+     },
+     "opdrachten": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "heapMB": 117.3,
+     "gl": "webgl"
+    }
+   },
+   "extra": {
+    "zonderSchaduw": {
+     "weg": "huidig",
+     "zoom": 0.35,
+     "schaduw": false,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3883,
+     "cpu": {
+      "gem": 2.214,
+      "med": 2.1,
+      "p95": 3.4,
+      "max": 3.6
+     },
+     "alles": {
+      "gem": 3.123,
+      "med": 3,
+      "p95": 4.5,
+      "max": 5.1
+     },
+     "opdrachten": 4,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "heapMB": 131,
+     "gl": "webgl"
+    },
+    "zonderLicht": {
+     "weg": "huidig",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": false,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3882,
+     "cpu": {
+      "gem": 3.436,
+      "med": 3.2,
+      "p95": 3.8,
+      "max": 17
+     },
+     "alles": {
+      "gem": 4.592,
+      "med": 4.4,
+      "p95": 5,
+      "max": 18.5
+     },
+     "opdrachten": 7,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "heapMB": 103.8,
+     "gl": "webgl"
+    },
+    "stil": {
+     "weg": "huidig",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3882,
+     "cpu": {
+      "gem": 3.51,
+      "med": 3.3,
+      "p95": 4.1,
+      "max": 17.7
+     },
+     "alles": {
+      "gem": 4.757,
+      "med": 4.5,
+      "p95": 5.9,
+      "max": 20.1
+     },
+     "opdrachten": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "heapMB": 75.4,
+     "gl": "webgl"
+    },
+    "pannen": {
+     "weg": "huidig",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": true,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 4202,
+     "cpu": {
+      "gem": 3.757,
+      "med": 3.5,
+      "p95": 4.5,
+      "max": 17.8
+     },
+     "alles": {
+      "gem": 5.062,
+      "med": 4.7,
+      "p95": 6,
+      "max": 20
+     },
+     "opdrachten": 8,
+     "opgestuurdMB": 3,
+     "textuurMB": 196.2,
+     "aantalTexturen": 54,
+     "heapMB": 82.3,
+     "gl": "webgl"
+    },
+    "fps": {
+     "fps": 60,
+     "tussenMs": {
+      "gem": 16.669,
+      "med": 16.7,
+      "p95": 17.9,
+      "max": 19.6
+     },
+     "boven20ms": 0,
+     "beelden": 180
+    },
+    "wissel": {
+     "plat": {
+      "modus": "plat",
+      "laadMs": 39,
+      "eerste": {
+       "ms": 17.2,
+       "opgestuurdMB": 10.11
+      },
+      "tweede": {
+       "ms": 2.7,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 196.2,
+      "textuurMBna": 196.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "huidig",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "plat",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1642,
+       "cpu": {
+        "gem": 1.837,
+        "med": 1.6,
+        "p95": 2.5,
+        "max": 11.2
+       },
+       "alles": {
+        "gem": 2.454,
+        "med": 2.2,
+        "p95": 3.2,
+        "max": 12
+       },
+       "opdrachten": 8,
+       "opgestuurdMB": 0,
+       "textuurMB": 196.2,
+       "aantalTexturen": 54,
+       "heapMB": 64.4,
+       "gl": "webgl"
+      }
+     },
+     "doorzichtig": {
+      "modus": "doorzichtig",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 3.4,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 2.4,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 196.2,
+      "textuurMBna": 196.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "huidig",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "doorzichtig",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1649,
+       "cpu": {
+        "gem": 1.828,
+        "med": 1.7,
+        "p95": 2.2,
+        "max": 9.7
+       },
+       "alles": {
+        "gem": 2.603,
+        "med": 2.5,
+        "p95": 3.1,
+        "max": 10.8
+       },
+       "opdrachten": 8,
+       "opgestuurdMB": 0,
+       "textuurMB": 196.2,
+       "aantalTexturen": 54,
+       "heapMB": 54.2,
+       "gl": "webgl"
+      }
+     },
+     "verborgen": {
+      "modus": "verborgen",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 2.6,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 2.4,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 196.2,
+      "textuurMBna": 196.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "huidig",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "verborgen",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1531,
+       "cpu": {
+        "gem": 1.606,
+        "med": 1.5,
+        "p95": 1.9,
+        "max": 3.2
+       },
+       "alles": {
+        "gem": 2.186,
+        "med": 2.1,
+        "p95": 2.9,
+        "max": 4
+       },
+       "opdrachten": 8,
+       "opgestuurdMB": 0,
+       "textuurMB": 196.2,
+       "aantalTexturen": 54,
+       "heapMB": 108.6,
+       "gl": "webgl"
+      }
+     },
+     "gewoon": {
+      "modus": "gewoon",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 3.6,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 2.8,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 196.2,
+      "textuurMBna": 196.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "huidig",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "gewoon",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1647,
+       "cpu": {
+        "gem": 1.729,
+        "med": 1.7,
+        "p95": 2.2,
+        "max": 2.4
+       },
+       "alles": {
+        "gem": 2.503,
+        "med": 2.4,
+        "p95": 3.2,
+        "max": 4.1
+       },
+       "opdrachten": 8,
+       "opgestuurdMB": 0,
+       "textuurMB": 196.2,
+       "aantalTexturen": 54,
+       "heapMB": 113.7,
+       "gl": "webgl"
+      }
+     }
+    }
+   },
+   "geheugen": {
+    "heapMB": 20.4,
+    "heapVoorLaden": 16.4,
+    "heapNaLaden": 19.9,
+    "opdrachten": 24,
+    "programmas": 12,
+    "texturen": 66,
+    "framebuffers": 12,
+    "opgestuurdMB": 0,
+    "textuurMB": 196.2,
+    "aantalTexturen": 54,
+    "renderbufferMB": 0,
+    "soort": "webgl",
+    "opbouwMs": {
+     "huidig": 12
+    },
+    "laadMs": 82,
+    "tel": {
+     "gebouw": 150,
+     "rook": 189,
+     "boom": 4593,
+     "begroeiing": 2244,
+     "inwoner": 300
+    },
+    "scriptMs": {
+     "gl": 0.5,
+     "pixi": 21
+    }
+   },
+   "fouten": [],
+   "belasting": 0.148
+  },
+  "pixi": {
+   "variant": "pixi",
+   "zooms": {
+    "1": {
+     "weg": "pixi",
+     "zoom": 1,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 339,
+     "cpu": {
+      "gem": 0.71,
+      "med": 0.7,
+      "p95": 0.9,
+      "max": 1.6
+     },
+     "alles": {
+      "gem": 3.209,
+      "med": 3,
+      "p95": 4.2,
+      "max": 5.1
+     },
+     "opdrachten": 16,
+     "opgestuurdMB": 0,
+     "textuurMB": 85,
+     "aantalTexturen": 73,
+     "heapMB": 34.9,
+     "gl": "webgl2"
+    },
+    "0.5": {
+     "weg": "pixi",
+     "zoom": 0.5,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 1649,
+     "cpu": {
+      "gem": 1.307,
+      "med": 1.2,
+      "p95": 1.9,
+      "max": 2.7
+     },
+     "alles": {
+      "gem": 5.573,
+      "med": 5.7,
+      "p95": 7,
+      "max": 7.6
+     },
+     "opdrachten": 33,
+     "opgestuurdMB": 0,
+     "textuurMB": 112,
+     "aantalTexturen": 104,
+     "heapMB": 43.6,
+     "gl": "webgl2"
+    },
+    "0.35": {
+     "weg": "pixi",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3881,
+     "cpu": {
+      "gem": 2.595,
+      "med": 2.5,
+      "p95": 3.9,
+      "max": 4.2
+     },
+     "alles": {
+      "gem": 4.205,
+      "med": 4,
+      "p95": 5.6,
+      "max": 10
+     },
+     "opdrachten": 40,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "heapMB": 38.7,
+     "gl": "webgl2"
+    }
+   },
+   "extra": {
+    "zonderSchaduw": {
+     "weg": "pixi",
+     "zoom": 0.35,
+     "schaduw": false,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3883,
+     "cpu": {
+      "gem": 1.511,
+      "med": 1.4,
+      "p95": 2.3,
+      "max": 3
+     },
+     "alles": {
+      "gem": 2.594,
+      "med": 2.4,
+      "p95": 3.5,
+      "max": 4.4
+     },
+     "opdrachten": 29,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "heapMB": 42.9,
+     "gl": "webgl2"
+    },
+    "zonderLicht": {
+     "weg": "pixi",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": false,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3882,
+     "cpu": {
+      "gem": 1.95,
+      "med": 1.8,
+      "p95": 2.8,
+      "max": 3.6
+     },
+     "alles": {
+      "gem": 3.332,
+      "med": 3.2,
+      "p95": 4.3,
+      "max": 5.2
+     },
+     "opdrachten": 39,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "heapMB": 40.6,
+     "gl": "webgl2"
+    },
+    "stil": {
+     "weg": "pixi",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": false,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 3882,
+     "cpu": {
+      "gem": 1.862,
+      "med": 1.7,
+      "p95": 2.9,
+      "max": 4.4
+     },
+     "alles": {
+      "gem": 3.294,
+      "med": 3.2,
+      "p95": 4.4,
+      "max": 6.3
+     },
+     "opdrachten": 41,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "heapMB": 40.6,
+     "gl": "webgl2"
+    },
+    "pannen": {
+     "weg": "pixi",
+     "zoom": 0.35,
+     "schaduw": true,
+     "licht": true,
+     "modus": "gewoon",
+     "pannen": true,
+     "mip": false,
+     "culler": "eigen",
+     "sorteer": "pixi",
+     "zicht": 4202,
+     "cpu": {
+      "gem": 2.51,
+      "med": 2.4,
+      "p95": 3.4,
+      "max": 9.2
+     },
+     "alles": {
+      "gem": 3.998,
+      "med": 3.8,
+      "p95": 5,
+      "max": 16.1
+     },
+     "opdrachten": 38,
+     "opgestuurdMB": 3,
+     "textuurMB": 135.1,
+     "aantalTexturen": 128,
+     "heapMB": 39.9,
+     "gl": "webgl2"
+    },
+    "fps": {
+     "fps": 60,
+     "tussenMs": {
+      "gem": 16.674,
+      "med": 16.7,
+      "p95": 17.8,
+      "max": 21.2
+     },
+     "boven20ms": 2,
+     "beelden": 180
+    },
+    "wissel": {
+     "plat": {
+      "modus": "plat",
+      "laadMs": 33,
+      "eerste": {
+       "ms": 27.1,
+       "opgestuurdMB": 10.11
+      },
+      "tweede": {
+       "ms": 6.9,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 135.1,
+      "textuurMBna": 145.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "pixi",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "plat",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1642,
+       "cpu": {
+        "gem": 1.237,
+        "med": 1.1,
+        "p95": 2.2,
+        "max": 5.2
+       },
+       "alles": {
+        "gem": 1.988,
+        "med": 1.8,
+        "p95": 3.2,
+        "max": 6.9
+       },
+       "opdrachten": 26,
+       "opgestuurdMB": 0,
+       "textuurMB": 145.2,
+       "aantalTexturen": 175,
+       "heapMB": 40.8,
+       "gl": "webgl2"
+      }
+     },
+     "doorzichtig": {
+      "modus": "doorzichtig",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 3.8,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 2.2,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 145.2,
+      "textuurMBna": 145.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "pixi",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "doorzichtig",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1649,
+       "cpu": {
+        "gem": 1.064,
+        "med": 1,
+        "p95": 1.2,
+        "max": 1.5
+       },
+       "alles": {
+        "gem": 2.009,
+        "med": 2,
+        "p95": 2.2,
+        "max": 2.6
+       },
+       "opdrachten": 33,
+       "opgestuurdMB": 0,
+       "textuurMB": 145.2,
+       "aantalTexturen": 175,
+       "heapMB": 56.1,
+       "gl": "webgl2"
+      }
+     },
+     "verborgen": {
+      "modus": "verborgen",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 2.1,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 1.4,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 145.2,
+      "textuurMBna": 145.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "pixi",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "verborgen",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1531,
+       "cpu": {
+        "gem": 1.013,
+        "med": 1,
+        "p95": 1.2,
+        "max": 1.5
+       },
+       "alles": {
+        "gem": 1.555,
+        "med": 1.5,
+        "p95": 1.8,
+        "max": 2.1
+       },
+       "opdrachten": 12,
+       "opgestuurdMB": 0,
+       "textuurMB": 145.2,
+       "aantalTexturen": 175,
+       "heapMB": 37.6,
+       "gl": "webgl2"
+      }
+     },
+     "gewoon": {
+      "modus": "gewoon",
+      "laadMs": 0,
+      "eerste": {
+       "ms": 3.7,
+       "opgestuurdMB": 0
+      },
+      "tweede": {
+       "ms": 2.6,
+       "opgestuurdMB": 0
+      },
+      "textuurMBvoor": 145.2,
+      "textuurMBna": 145.2,
+      "platten": 55,
+      "daarna": {
+       "weg": "pixi",
+       "zoom": 0.5,
+       "schaduw": true,
+       "licht": true,
+       "modus": "gewoon",
+       "pannen": false,
+       "mip": false,
+       "culler": "eigen",
+       "sorteer": "pixi",
+       "zicht": 1647,
+       "cpu": {
+        "gem": 1.063,
+        "med": 1.1,
+        "p95": 1.3,
+        "max": 1.3
+       },
+       "alles": {
+        "gem": 2.019,
+        "med": 2,
+        "p95": 2.3,
+        "max": 2.6
+       },
+       "opdrachten": 33,
+       "opgestuurdMB": 0,
+       "textuurMB": 145.2,
+       "aantalTexturen": 175,
+       "heapMB": 52.7,
+       "gl": "webgl2"
+      }
+     }
+    }
+   },
+   "geheugen": {
+    "heapMB": 35.2,
+    "heapVoorLaden": 16.4,
+    "heapNaLaden": 28.1,
+    "opdrachten": 99,
+    "programmas": 12,
+    "texturen": 1419,
+    "framebuffers": 12,
+    "opgestuurdMB": 0,
+    "textuurMB": 145.2,
+    "aantalTexturen": 175,
+    "renderbufferMB": 0,
+    "soort": "webgl2",
+    "opbouwMs": {
+     "pixi": 34
+    },
+    "laadMs": 87,
+    "tel": {
+     "gebouw": 150,
+     "rook": 189,
+     "boom": 4593,
+     "begroeiing": 2244,
+     "inwoner": 300
+    },
+    "scriptMs": {
+     "gl": 0.4,
+     "pixi": 23.2
+    }
+   },
+   "fouten": [],
+   "belasting": 0.15
+  }
+ },
+ "beeld": {
+  "verschil": {
+   "1": {
+    "verschilProcent": 1.593,
+    "gemiddeld": 0.566
+   },
+   "0.5": {
+    "verschilProcent": 26.804,
+    "gemiddeld": 12.731
+   },
+   "0.35": {
+    "verschilProcent": 27.683,
+    "gemiddeld": 12.428
+   }
+  },
+  "platen": [
+   "vergelijking-100.png",
+   "vergelijking-50.png",
+   "vergelijking-35.png"
+  ]
+ },
+ "losBestand": {
+  "glKapot": true,
+  "fout": null,
+  "besmet": 150,
+  "voorbeeld": [
+   "Tekenen zonder de videokaart: Failed to execute 'texImage2D' on 'WebGLRenderingContext': Tainted canvases may not be loaded.",
+   "Tekenen zonder de videokaart: Failed to execute 'texSubImage2D' on 'WebGLRenderingContext': The image element contains cross-origin data, an",
+   "Tekenen zonder de videokaart: Failed to execute 'texImage2D' on 'WebGLRenderingContext': The image element contains cross-origin data, and m"
+  ]
+ },
+ "electron": {
+  "huidig": [
+   {
+    "fout": null,
+    "kaart": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "glKapot": false,
+    "zooms": {
+     "1": {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.617,
+       "med": 0.6,
+       "p95": 0.8,
+       "max": 2.1
+      },
+      "alles": {
+       "gem": 1.077,
+       "med": 1,
+       "p95": 1.3,
+       "max": 3
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     },
+     "0.5": {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.707,
+       "med": 1.6,
+       "p95": 1.9,
+       "max": 13.9
+      },
+      "alles": {
+       "gem": 2.394,
+       "med": 2.3,
+       "p95": 2.7,
+       "max": 14.8
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     },
+     "0.35": {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3883,
+      "cpu": {
+       "gem": 3.432,
+       "med": 3.2,
+       "p95": 3.8,
+       "max": 15.5
+      },
+      "alles": {
+       "gem": 4.551,
+       "med": 4.3,
+       "p95": 4.9,
+       "max": 16.9
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     }
+    },
+    "geheugen": {
+     "heapMB": 17.4,
+     "heapVoorLaden": 17.4,
+     "heapNaLaden": 17.4,
+     "opdrachten": 16,
+     "programmas": 8,
+     "texturen": 44,
+     "framebuffers": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "renderbufferMB": 0,
+     "soort": "webgl",
+     "opbouwMs": {
+      "huidig": 13
+     },
+     "laadMs": 63,
+     "tel": {
+      "gebouw": 150,
+      "rook": 189,
+      "boom": 4593,
+      "begroeiing": 2244,
+      "inwoner": 300
+     },
+     "scriptMs": {
+      "gl": 0.3,
+      "pixi": 122.7
+     }
+    },
+    "glKapotNa": false,
+    "belasting": 0.081
+   },
+   {
+    "fout": null,
+    "kaart": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "glKapot": false,
+    "zooms": {
+     "1": {
+      "weg": "huidig",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.603,
+       "med": 0.6,
+       "p95": 0.8,
+       "max": 2
+      },
+      "alles": {
+       "gem": 1.066,
+       "med": 1,
+       "p95": 1.3,
+       "max": 3
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 163.2,
+      "aantalTexturen": 21,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     },
+     "0.5": {
+      "weg": "huidig",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.821,
+       "med": 1.7,
+       "p95": 2.4,
+       "max": 16
+      },
+      "alles": {
+       "gem": 2.541,
+       "med": 2.4,
+       "p95": 3.2,
+       "max": 16.9
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 178.2,
+      "aantalTexturen": 36,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     },
+     "0.35": {
+      "weg": "huidig",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3883,
+      "cpu": {
+       "gem": 3.641,
+       "med": 3.4,
+       "p95": 4.4,
+       "max": 19.7
+      },
+      "alles": {
+       "gem": 4.914,
+       "med": 4.6,
+       "p95": 5.8,
+       "max": 22.7
+      },
+      "opdrachten": 8,
+      "opgestuurdMB": 0,
+      "textuurMB": 193.2,
+      "aantalTexturen": 51,
+      "heapMB": 17.4,
+      "gl": "webgl"
+     }
+    },
+    "geheugen": {
+     "heapMB": 17.4,
+     "heapVoorLaden": 17.4,
+     "heapNaLaden": 17.4,
+     "opdrachten": 16,
+     "programmas": 8,
+     "texturen": 44,
+     "framebuffers": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 193.2,
+     "aantalTexturen": 51,
+     "renderbufferMB": 0,
+     "soort": "webgl",
+     "opbouwMs": {
+      "huidig": 13
+     },
+     "laadMs": 63,
+     "tel": {
+      "gebouw": 150,
+      "rook": 189,
+      "boom": 4593,
+      "begroeiing": 2244,
+      "inwoner": 300
+     },
+     "scriptMs": {
+      "gl": 0.4,
+      "pixi": 135.7
+     }
+    },
+    "glKapotNa": false,
+    "belasting": 0.08
+   }
+  ],
+  "pixi": [
+   {
+    "fout": null,
+    "kaart": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "glKapot": false,
+    "zooms": {
+     "1": {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.689,
+       "med": 0.7,
+       "p95": 0.8,
+       "max": 2.7
+      },
+      "alles": {
+       "gem": 1.302,
+       "med": 1.3,
+       "p95": 1.6,
+       "max": 3.3
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     },
+     "0.5": {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.198,
+       "med": 1.2,
+       "p95": 1.5,
+       "max": 3
+      },
+      "alles": {
+       "gem": 2.179,
+       "med": 2.1,
+       "p95": 2.5,
+       "max": 4.3
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     },
+     "0.35": {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3883,
+      "cpu": {
+       "gem": 1.997,
+       "med": 1.9,
+       "p95": 2.7,
+       "max": 4.1
+      },
+      "alles": {
+       "gem": 3.447,
+       "med": 3.4,
+       "p95": 4.1,
+       "max": 6.1
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     }
+    },
+    "geheugen": {
+     "heapMB": 17.4,
+     "heapVoorLaden": 17.4,
+     "heapNaLaden": 17.4,
+     "opdrachten": 80,
+     "programmas": 8,
+     "texturen": 1180,
+     "framebuffers": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "renderbufferMB": 0,
+     "soort": "webgl2",
+     "opbouwMs": {
+      "pixi": 35
+     },
+     "laadMs": 63,
+     "tel": {
+      "gebouw": 150,
+      "rook": 189,
+      "boom": 4593,
+      "begroeiing": 2244,
+      "inwoner": 300
+     },
+     "scriptMs": {
+      "gl": 0.3,
+      "pixi": 116.8
+     }
+    },
+    "glKapotNa": false,
+    "belasting": 0.091
+   },
+   {
+    "fout": null,
+    "kaart": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "glKapot": false,
+    "zooms": {
+     "1": {
+      "weg": "pixi",
+      "zoom": 1,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 341,
+      "cpu": {
+       "gem": 0.667,
+       "med": 0.7,
+       "p95": 0.8,
+       "max": 1.6
+      },
+      "alles": {
+       "gem": 1.272,
+       "med": 1.2,
+       "p95": 1.4,
+       "max": 3.1
+      },
+      "opdrachten": 16,
+      "opgestuurdMB": 0,
+      "textuurMB": 85,
+      "aantalTexturen": 73,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     },
+     "0.5": {
+      "weg": "pixi",
+      "zoom": 0.5,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 1646,
+      "cpu": {
+       "gem": 1.333,
+       "med": 1.2,
+       "p95": 2.1,
+       "max": 3.1
+      },
+      "alles": {
+       "gem": 2.377,
+       "med": 2.3,
+       "p95": 3.3,
+       "max": 4.5
+      },
+      "opdrachten": 33,
+      "opgestuurdMB": 0,
+      "textuurMB": 112,
+      "aantalTexturen": 104,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     },
+     "0.35": {
+      "weg": "pixi",
+      "zoom": 0.35,
+      "schaduw": true,
+      "licht": true,
+      "modus": "gewoon",
+      "pannen": false,
+      "mip": false,
+      "culler": "eigen",
+      "sorteer": "pixi",
+      "zicht": 3883,
+      "cpu": {
+       "gem": 2.402,
+       "med": 2.2,
+       "p95": 3.4,
+       "max": 5.2
+      },
+      "alles": {
+       "gem": 4.057,
+       "med": 3.9,
+       "p95": 5.3,
+       "max": 7.9
+      },
+      "opdrachten": 40,
+      "opgestuurdMB": 0,
+      "textuurMB": 130.4,
+      "aantalTexturen": 123,
+      "heapMB": 17.4,
+      "gl": "webgl2"
+     }
+    },
+    "geheugen": {
+     "heapMB": 17.4,
+     "heapVoorLaden": 17.4,
+     "heapNaLaden": 17.4,
+     "opdrachten": 80,
+     "programmas": 8,
+     "texturen": 1180,
+     "framebuffers": 8,
+     "opgestuurdMB": 0,
+     "textuurMB": 130.4,
+     "aantalTexturen": 123,
+     "renderbufferMB": 0,
+     "soort": "webgl2",
+     "opbouwMs": {
+      "pixi": 34
+     },
+     "laadMs": 65,
+     "tel": {
+      "gebouw": 150,
+      "rook": 189,
+      "boom": 4593,
+      "begroeiing": 2244,
+      "inwoner": 300
+     },
+     "scriptMs": {
+      "gl": 0.3,
+      "pixi": 131.4
+     }
+    },
+    "glKapotNa": false,
+    "belasting": 0.093
+   }
+  ]
+ }
+}

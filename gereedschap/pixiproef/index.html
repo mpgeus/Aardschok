@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renderproef</title>
+<link rel="icon" href="data:,">
+<!--
+  De renderproef (ontwerp/snelheid.md, E; gereedschap/pixiproef/evaluatie.md): dezelfde scène met js/gl.js en met
+  PixiJS v8. Opent los (file://) en via npm start op /gereedschap/pixiproef/. Het spel zelf verandert er niet door.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #111; color: #ddd; font: 13px system-ui, sans-serif; overflow: hidden; }
+  #vlak { position: absolute; inset: 0; }
+  #vlak canvas.doek { position: absolute; left: 0; top: 0; image-rendering: pixelated; }
+  #balk { position: absolute; left: 8px; top: 8px; right: 8px; z-index: 2; pointer-events: none; }
+  #knoppen, #meter { pointer-events: auto; display: inline-block; background: rgba(0,0,0,.72); padding: 6px 8px; border-radius: 4px; margin-bottom: 4px; }
+  #meter { display: block; width: max-content; font-variant-numeric: tabular-nums; }
+  .rij { margin-right: 12px; white-space: nowrap; }
+  button { background: #333; color: #ddd; border: 1px solid #555; border-radius: 3px; padding: 2px 7px; margin: 0 2px; cursor: pointer; font: inherit; }
+  button.aan { background: #b8862b; color: #111; border-color: #e0b050; }
+  body.kaal #balk { display: none; }
+</style>
+</head>
+<body>
+<div id="vlak"></div>
+<div id="balk"><div id="knoppen"></div><div id="meter">laden…</div></div>
+<script>globalThis.Spel = { TEKENEN_INSTELLINGEN: { ookOpDeProcessor: false } };</script>
+<script src="teller.js"></script>
+<script src="../../tegels/tegels.js"></script>
+<script src="../../beelden/beschrijving.js"></script>
+<script src="../../tegels/plat.js" onerror="/* de platte tekeningen (vraag 176) zijn er nog niet: dan zonder */"></script>
+<script>Proef.laadStart = performance.now();</script>
+<script src="../../js/gl.js"></script>
+<script>Proef.glLaadMs = performance.now() - Proef.laadStart; Proef.laadStart = performance.now();</script>
+<script src="pixi-8.22.0.min.js"></script>
+<script>Proef.pixiLaadMs = performance.now() - Proef.laadStart;</script>
+<script src="scene.js"></script>
+<script src="huidig.js"></script>
+<script src="pixiweg.js"></script>
+<script src="proef.js"></script>
+</body>
+</html>
