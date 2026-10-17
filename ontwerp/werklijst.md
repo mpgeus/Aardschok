@@ -111,11 +111,8 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het plan voor c2, de bende** (vraag 170, stap 6a2, 17 okt; bij I, "c2 in detail"): elk kamp leeft vanaf het begin,
-  met zijn bende en een eigen dobbelsteen; twee man, een erbij per jaar tot 4, wie wegtrekt gaat naar het dichtste kamp,
-  en ze staan om hun vuur. Drie vragen: **N** de nacht (N1 slapen in de tent met één wacht, N2 dag en nacht om het
-  vuur), **D** de bende van een dorp nu (D1 weg in c2, D2 tot c3), en **H** een vol kamp (H1 hooguit 4, dan het
-  volgende kamp, H2 geen grens). Voorstel: N1, D1, H1.
+- **c2 bouwen** (vraag 170, stap 6a2, 17 okt; bij I, "c2 in detail"): het plan is besloten (Marcel: "N1", "D1", "H2"),
+  en Marcel kwam erbij met het rovershol (vraag 173, bij K). Wacht op "bouw c2".
 - **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
   vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
   kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
@@ -1040,7 +1037,13 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   geeft): hij gaat naar het dichtste kamp met plaats, en zijn ze alle drie vol, dan trekt hij van het eiland, zoals wie
   nu te oud is; H2 wie wegtrekt komt er altijd bij, ook boven de 4 (dan zijn er meer tentplekken nodig, en het eiland
   verandert een beetje). Voorstel: **N1, D1, H1**. Wat ze overdag doen (zitten, eens naar hun tent lopen) en dat je
-  ziet wie er naar welk kamp ging, gaat naar `opmerkingen.md` als je het wilt.
+  ziet wie er naar welk kamp ging, gaat naar `opmerkingen.md` als je het wilt. **Gekozen** (Marcel, 17 okt): "N1",
+  "D1", en "H2; en voldoende rovers bouwen een Rovers Hol, met aparte huizen en eigen infra. allemaal slechte mensen en
+  uitschot wonen er. Een dorp opzich" (dat hol is vraag 173, bij K). Met H2 in c2: van buiten komt er een per jaar bij
+  tot 4, maar wie wegtrekt, gaat altijd naar het dichtste kamp, ook boven de 4. Een tent per twee man, tot de zes
+  plekken om het vuur die het eiland al kent (`kampen.tenten`; `tentenMeest` van 2 naar 6, min wat op het paadje
+  ligt, dus tot zo'n 12 man): de plek en het paadje van een kamp blijven wat ze zijn, alleen zijn lijst tenten wordt
+  langer. Wie geen plek in een tent meer heeft, slaapt bij het vuur, tot het kamp een hol wordt (173).
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
@@ -1163,6 +1166,18 @@ gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrolle
 7. **Het woordmerk:** *TITHEBREAKER* in eigen kapitalen van pixels, zo'n 20 hoog, op 3×; het goud van de heer (oker,
    licht van linksboven, donkere rand), en tussen TITHE en BREAKER een barst: BREAKER zakt een pixel en kantelt iets,
    met twee splinters goud in de kier. Eén proefplaat; tot hij goed is, staat er de letter.
+
+## K. Het rovershol (vraag 173, 17 okt)
+
+Marcel, 17 okt, bij de keuzes voor c2 (bij I, "c2 in detail"): **"voldoende rovers bouwen een Rovers Hol, met aparte
+huizen en eigen infra. allemaal slechte mensen en uitschot wonen er. Een dorp opzich"**. Wat al vaststaat: met H2 groeit
+een kamp door wie uit de dorpen wegtrekt, tot zo'n 12 man in zes tenten; wie dan nog komt, slaapt bij het vuur, tot het
+kamp een hol wordt. Nog geen plan (eerst speelbaar: niet in de stap die loopt). Wat het plan moet zeggen: hoeveel
+"voldoende" is (alle tenten vol?), of het hol op de plek van het kamp komt of een eigen plek op het eiland krijgt, wat
+zijn huizen en zijn infra zijn (eerst in woorden, dan een proefplaat), of het in de code een dorp is (een `D` op de kaart,
+zoals het tweede dorp van 6a, dat zelf kiest uit de handelingen van een mens: 6b), wat het doet (roven, handelen met wie
+wil, wegtrekkers lokken), en hoe je het verslaat. Voorstel voor de volgorde: na stuk c en 6b, omdat een hol dat zelf
+bouwt een dorp is dat kiest zonder speler.
 
 ## Af (sinds 11 okt)
 
