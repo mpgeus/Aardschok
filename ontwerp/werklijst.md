@@ -1242,10 +1242,12 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
 - **b3, een brug ligt vlak op de hoogte van de oevers** (B2): de brug en zijn landhoofden op één hoogte, en de pijlers
   lopen omlaag tot het water. Dat is een nieuwe tekening: **eerst in woorden aan Marcel, dan één proefplaat**
   (`beeld.md`, "De bruggen"; CLAUDE.md, "Eerst goedkeuring, dan renderen").
-- **b4, de mist op de heuvels** (`js/tekenen.js`, `js/gl.js`): het masker als een net van driehoeken over de
-  hoekpunten van de tegels, per stuk onthouden zolang de hoogte gelijk is, en dan de mistlaag van nu. Zonder videokaart
-  ook precies per tegel (M2); dat mag duur zijn, want **zonder videokaart speelt niemand** (Marcel, 17 okt: "Iedere
-  laptop of apparaat, handheld etc. heeft een APU of GPU"; `code.md` bij `js/gl.js`).
+- **b4, de mist op de heuvels, is af** (17 okt; `code.md` bij `js/mist.js`): het masker via een net per stuk, een punt
+  op het midden van elke tegel op zijn hoogte, naar een laag op de halve maat, en dan de mistlaag van nu; met de
+  videokaart bij het dorp niets meetbaars. Zonder videokaart precies per tegel (M2): 28 ms bij het dorp, 140 ver
+  uitgezoomd, en dat mag, want **zonder videokaart speelt niemand** (Marcel, 17 okt: "Iedere laptop of apparaat,
+  handheld etc. heeft een APU of GPU"; `code.md` bij `js/gl.js`). Onderweg: het licht van b1 bleef leeg (een `c` die het
+  doek had moeten zijn); nu getoetst in de browser, met en zonder licht zijn alle stukken grond anders.
 
 ## M. Het licht in de nacht (vraag 175, 17 okt)
 

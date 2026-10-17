@@ -128,25 +128,39 @@
     void main() { gl_FragColor = uKleur * texture2D(uMasker, gl_FragCoord.xy / uDoek).a; }`;
 
   // De mist over de grond (js/tekenen.js, tekenMist; B2c): de wereld zoals hij tot nu toe getekend is (een kopie,
-  // uWereld), ontkleurd en donkerder naar het masker van de mist. Een pixel op het doek wordt een pixel van het masker
-  // met uNaarU en uNaarV (het omgekeerde van de stand van het doek); het masker is uMasker.x bij uMasker.y, de
-  // linkerhelft hoeveel kleur eruit gaat, de rechterhelft (uMasker.w verder, uMasker.z breed in totaal) hoeveel
-  // donkerder, naar uZwart.
+  // uWereld), ontkleurd en donkerder naar de mist op het scherm (uScherm: rood hoeveel kleur eruit gaat, groen hoeveel
+  // donkerder, naar uZwart; het net hieronder legt hem daar). Tot vraag 174, stap b4 rekende dit een pixel van het doek
+  // zelf terug naar een pixel van het masker, plat, en lag de mist op een heuvel tot twintig tegels naast zijn grond.
   const FRAG_MIST = /* // geen tekst */ `
-    precision highp float; uniform sampler2D uWereld; uniform sampler2D uMist; uniform vec2 uDoek;
-    uniform vec3 uNaarU; uniform vec3 uNaarV; uniform vec4 uMasker; uniform vec3 uZwart;
+    precision highp float; uniform sampler2D uWereld; uniform sampler2D uScherm; uniform vec2 uDoek; uniform vec3 uZwart;
     void main() {
       vec4 c = texture2D(uWereld, gl_FragCoord.xy / uDoek);
-      vec3 p = vec3(gl_FragCoord.x, uDoek.y - gl_FragCoord.y, 1.0);
-      float u = dot(uNaarU, p);
-      float v = dot(uNaarV, p);
-      if (u > 0.0 && v > 0.0 && u < uMasker.x && v < uMasker.y) {
-        float o = texture2D(uMist, vec2(u / uMasker.z, v / uMasker.y)).a;
-        float d = texture2D(uMist, vec2((u + uMasker.w) / uMasker.z, v / uMasker.y)).a;
-        c.rgb = mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), o);
-        c.rgb = mix(c.rgb, uZwart * c.a, d);
-      }
+      vec4 m = texture2D(uScherm, gl_FragCoord.xy / uDoek);
+      c.rgb = mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), m.r);
+      c.rgb = mix(c.rgb, uZwart * c.a, m.g);
       gl_FragColor = c;
+    }`;
+  // Het net van de mist (vraag 174, stap b4; Marcel: "M2"): per stuk van het land een punt op het midden van elke tegel,
+  // op zijn hoogte (aPlek, in pixels van de wereld; uStandX en uStandY zijn de stand van het doek), met de tegel zelf
+  // (aUv), en daartussen het masker: uMasker.x bij uMasker.y pixels vanaf tegel uOorsprong, de linkerhelft hoeveel kleur
+  // eruit gaat, de rechterhelft (uMasker.w verder, uMasker.z breed in totaal) hoeveel donkerder. Buiten het masker niets.
+  const VERT_NET = /* // geen tekst */ `
+    attribute vec2 aPlek; attribute vec2 aUv;
+    uniform vec2 uMaat; uniform vec3 uStandX; uniform vec3 uStandY; uniform vec2 uOorsprong; varying vec2 vMasker;
+    void main() {
+      vec3 p = vec3(aPlek, 1.0);
+      vMasker = aUv - uOorsprong + 0.5;
+      gl_Position = vec4(dot(uStandX, p) / uMaat.x * 2.0 - 1.0, 1.0 - dot(uStandY, p) / uMaat.y * 2.0, 0.0, 1.0);
+    }`;
+  const FRAG_NET = /* // geen tekst */ `
+    precision highp float; uniform sampler2D uMist; uniform vec4 uMasker; varying vec2 vMasker;
+    void main() {
+      float u = vMasker.x;
+      float v = vMasker.y;
+      if (u < 0.0 || v < 0.0 || u > uMasker.x || v > uMasker.y) discard;
+      float o = texture2D(uMist, vec2(u / uMasker.z, v / uMasker.y)).a;
+      float d = texture2D(uMist, vec2((u + uMasker.w) / uMasker.z, v / uMasker.y)).a;
+      gl_FragColor = vec4(o, d, 0.0, 1.0);
     }`;
 
   function maakProgramma(vert, frag) {
@@ -180,6 +194,7 @@
   let maalProg = null;
   let schaduwProg = null;
   let mistProg = null;
+  let netProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
   const PER_HOEK = 10; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij)
@@ -242,6 +257,7 @@
       maalProg = maakProgramma(VERT, FRAG_MAAL);
       schaduwProg = maakProgramma(VERT, FRAG_SCHADUW);
       mistProg = maakProgramma(VERT, FRAG_MIST);
+      netProg = maakProgramma(VERT_NET, FRAG_NET);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -684,13 +700,109 @@
   }
 
   // ---------------------------------------------------------------- de mist (B2c)
-  // Wat er tot nu toe getekend is (de grond), gaat als kopie naar een textuur, en komt met FRAG_MIST terug op het doek:
-  // ontkleuren kan de kaart niet met een mengstand, want daarvoor moet ze lezen wat er al staat.
+  // Eerst het net (VERT_NET): het masker op zijn plek op het scherm, op de grond van elke tegel, ook op een heuvel, naar
+  // de mist op het scherm (op de halve maat: de rand van de mist is zacht). Dan wat er tot nu toe getekend is (de grond)
+  // als kopie naar een textuur, en met FRAG_MIST terug op het doek: ontkleuren kan de kaart niet met een mengstand, want
+  // daarvoor moet ze lezen wat er al staat.
   let wereldKopie = null; // { tex, b, h }
   let mistTex = null;
-  function tekenMistOpDeKaart(masker, b, h, kier, zwart, m) {
+  let mistScherm = null; // { fb, tex, b, h }
+  function mistOpHetScherm() {
+    const b = Math.max(1, Math.ceil(doek.width / 2));
+    const h = Math.max(1, Math.ceil(doek.height / 2));
+    if (mistScherm && mistScherm.b === b && mistScherm.h === h) return mistScherm;
+    if (!mistScherm) mistScherm = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
+    bind(mistScherm.tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, mistScherm.fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mistScherm.tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Object.assign(mistScherm, { b, h });
+    return mistScherm;
+  }
+  // De punten van een stuk van het net gaan één keer naar de kaart (zolang js/tekenen.js dezelfde lijst geeft), en wat
+  // een paar beelden niet gebruikt werd, gaat weg. De nummers (twee driehoeken per vierkant tussen vier punten, rij na
+  // rij: wat verder naar voren ligt, komt later, zodat de grond vóór een heuvel zijn eigen mist houdt) zijn voor elk stuk
+  // dezelfde.
+  const netBuffers = new Map(); // punten → { buf, beeld }
+  const NET_HOOGUIT = 48;
+  let netBeeld = 0;
+  let netNummers = null; // { buf, n, aantal }
+  function netNummersVoor(n) {
+    if (netNummers && netNummers.n === n) return netNummers;
+    const p = n + 1;
+    const lijst = new Uint16Array(n * n * 6);
+    let k = 0;
+    for (let j = 0; j < n; j++) {
+      for (let i = 0; i < n; i++) {
+        const a = j * p + i;
+        lijst.set([a, a + 1, a + p, a + 1, a + p + 1, a + p], k);
+        k += 6;
+      }
+    }
+    if (!netNummers) netNummers = { buf: gl.createBuffer() };
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, netNummers.buf);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, lijst, gl.STATIC_DRAW);
+    Object.assign(netNummers, { n, aantal: lijst.length });
+    return netNummers;
+  }
+  function tekenNet(S, net, b, h, kier, m) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, S.fb);
+    gl.viewport(0, 0, S.b, S.h);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gebruik(netProg);
+    const u = netProg.u;
+    gl.uniform1i(u.uMist, 1);
+    gl.uniform2f(u.uMaat, doek.width, doek.height);
+    gl.uniform3f(u.uStandX, m[0], m[2], m[4]);
+    gl.uniform3f(u.uStandY, m[1], m[3], m[5]);
+    gl.uniform2f(u.uOorsprong, net.x0, net.y0);
+    gl.uniform4f(u.uMasker, b, h, 2 * b + kier, b + kier);
+    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
+    nuMeng = null;
+    let nn = null;
+    for (const punten of net.stukken) {
+      const n = Math.round(Math.sqrt(punten.length / 4)) - 1;
+      if (!nn || nn.n !== n) {
+        nn = netNummersVoor(n);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, nn.buf);
+      }
+      let nb = netBuffers.get(punten);
+      if (!nb) {
+        netBuffers.set(punten, (nb = { buf: gl.createBuffer() }));
+        gl.bindBuffer(gl.ARRAY_BUFFER, nb.buf);
+        gl.bufferData(gl.ARRAY_BUFFER, punten, gl.STATIC_DRAW);
+        G.telling.opgestuurd++;
+      } else gl.bindBuffer(gl.ARRAY_BUFFER, nb.buf);
+      nb.beeld = netBeeld;
+      gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 16, 0);
+      gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 16, 8);
+      gl.drawElements(gl.TRIANGLES, nn.aantal, gl.UNSIGNED_SHORT, 0);
+      G.telling.opdrachten++;
+    }
+    // terug naar de rij: zijn buffer, zijn hoeken en zijn nummers
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, PER_HOEK * 4, 0);
+    gl.vertexAttribPointer(1, 2, gl.FLOAT, false, PER_HOEK * 4, 8);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
+    if (netBuffers.size > NET_HOOGUIT) {
+      for (const [p, nb] of netBuffers) {
+        if (netBeeld - nb.beeld < 2) continue;
+        gl.deleteBuffer(nb.buf);
+        netBuffers.delete(p);
+      }
+    }
+    netBeeld++;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, doek.width, doek.height);
+  }
+  function tekenMistOpDeKaart(masker, b, h, kier, zwart, m, net) {
     const W = doek.width;
     const H = doek.height;
+    const S = mistOpHetScherm(); // eerst: een nieuwe textuur komt op plaats 0, en daar moet zo de kopie
     if (!wereldKopie) wereldKopie = { tex: nieuweTextuur(), b: 0, h: 0 };
     bind(wereldKopie.tex);
     if (wereldKopie.b !== W || wereldKopie.h !== H) {
@@ -708,18 +820,18 @@
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     } else gl.bindTexture(gl.TEXTURE_2D, mistTex);
-    nuOp[1] = mistTex; // plaats 1 is ook een plaats van de rij (bindOp)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, masker);
     gl.activeTexture(gl.TEXTURE0);
+    tekenNet(S, net, b, h, kier, m);
+    // de mist op het scherm op plek 1 (plaats 1 is ook een plaats van de rij, bindOp)
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, S.tex);
+    gl.activeTexture(gl.TEXTURE0);
+    nuOp[1] = S.tex;
     gebruik(mistProg);
     const u = mistProg.u;
     gl.uniform1i(u.uWereld, 0);
-    gl.uniform1i(u.uMist, 1);
-    // van een pixel op het doek (van boven geteld) naar een pixel van het masker: het omgekeerde van de stand m
-    const det = m[0] * m[3] - m[1] * m[2];
-    gl.uniform3f(u.uNaarU, m[3] / det, -m[2] / det, (m[2] * m[5] - m[3] * m[4]) / det);
-    gl.uniform3f(u.uNaarV, -m[1] / det, m[0] / det, (m[1] * m[4] - m[0] * m[5]) / det);
-    gl.uniform4f(u.uMasker, b, h, 2 * b + kier, b + kier);
+    gl.uniform1i(u.uScherm, 1);
     gl.uniform3f(u.uZwart, zwart[0] / 255, zwart[1] / 255, zwart[2] / 255);
     gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
     nuMeng = null;
@@ -925,11 +1037,12 @@
       return [Math.min(...xs) - r, Math.min(...ys) - r, Math.max(...xs) + r, Math.max(...ys) + r];
     }
     // ---- de mist (js/tekenen.js, tekenMist; B2c): `masker` is het masker, links hoeveel kleur eruit gaat en rechts (na
-    // `kier` pixels) hoeveel donkerder, elk `b` bij `h` pixels; de stand zet een pixel van het masker op het doek.
-    tekenMist(masker, b, h, kier, zwart) {
+    // `kier` pixels) hoeveel donkerder, elk `b` bij `h` pixels, met pixel (0, 0) op tegel (net.x0, net.y0); net.stukken
+    // de punten van het net (tekenNet), in pixels van de wereld, die de stand op het doek zet.
+    tekenMist(masker, b, h, kier, zwart, net) {
       legKladAf();
       legRijAf();
-      tekenMistOpDeKaart(masker, b, h, kier, zwart, this.st.m);
+      tekenMistOpDeKaart(masker, b, h, kier, zwart, this.st.m, net);
     }
     // ---- plaatjes
     drawImage(bron, ...a) {

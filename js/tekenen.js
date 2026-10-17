@@ -848,7 +848,8 @@
   // klein doek recht op het scherm en dan opgeschaald (MIST_KLEIN; lopend op 30× 30 beelden per seconde, zonder mist 32).
   // Daar is het grijs grijzer in plaats van ontkleurd, zoals de nacht zonder videokaart de eenvoudige laag bleef (Marcel,
   // 4 okt: "zonder videokaart wordt er bijna niet meer gespeeld"). Wat op de grond staat, krijgt het grijs naar de tegel
-  // waar het staat (mistOverLijst), anders werd een hoge boom aan de rand half grijs. Op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker nog plat.
+  // waar het staat (mistOverLijst), anders werd een hoge boom aan de rand half grijs. Op een kaart met hoogte ligt het
+  // masker op de grond, met een net per stuk (mistNetVan; vraag 174, stap b4).
   // Spel.debug.geenMist = true zet de mist in het beeld uit, om te vergelijken (de regels blijven).
   const MIST_STAP = 16; // het masker beslaat een vak op een veelvoud hiervan, zodat het niet bij elke stap nieuw is
   const MIST_KIER = 2; // pixels tussen de twee helften, zodat het uitsmeren de ene niet in de andere trekt
@@ -927,19 +928,41 @@
     return m;
   }
   let mistKlein = null; // het kleine doek zonder videokaart
+  // Het net van de mist (vraag 174, stap b4; Marcel: "M2"): per stuk van T.STUK een punt op het midden van elke tegel
+  // van het stuk en de rij en kolom erna (65 bij 65, zodat de stukken op elkaar aansluiten), op zijn hoogte, als [x, y
+  // op de vlakte van het scherm, x, y van de tegel]. Zo ligt het masker op de grond, ook op een heuvel; zonder hoogte
+  // ligt het net plat, en is het beeld wat het was.
+  const mistNetten = new WeakMap();
+  const mistNetVan = (w, sx, sy) => perStukVanDeHoogte(mistNetten, w, sx, sy, 1, maakMistNet);
+  function maakMistNet(w, x0, y0) {
+    const n = T.STUK + 1;
+    const punten = new Float32Array(n * n * 4);
+    for (let j = 0; j < n; j++) {
+      for (let i = 0; i < n; i++) {
+        const p = T.naarSchermGrond(w, x0 + i, y0 + j);
+        punten.set([p.x, p.y, x0 + i, y0 + j], (j * n + i) * 4);
+      }
+    }
+    return punten;
+  }
+  // De stukken van het net onder vak (tegels), van achter naar voren (js/gl.js tekent wat voor ligt het laatst).
+  function mistNetOnder(w, vak) {
+    const Z = T.STUK;
+    const stukken = [];
+    for (let sy = Math.floor((vak.y0 - 1) / Z); sy <= Math.floor(vak.y1 / Z); sy++) {
+      for (let sx = Math.floor((vak.x0 - 1) / Z); sx <= Math.floor(vak.x1 / Z); sx++) stukken.push(mistNetVan(w, sx, sy));
+    }
+    return stukken;
+  }
   function tekenMist(ctx, D, w, vak) {
     if (!metMist(w)) return;
     const kaart = !!ctx.tekenMist;
     const m = mistMasker(D, w, vak, kaart);
-    const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
     if (kaart) {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.transform(32, 16, -32, 16, 0, 0); // van de tegels (een pixel van het masker is een tegel) naar het scherm
-      ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart);
-      ctx.restore();
+      ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart, { x0: m.x0, y0: m.y0, stukken: mistNetOnder(w, vak) });
       return;
     }
+    const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
     const st = ctx.getTransform();
     const [B, H] = [Math.ceil(ctx.canvas.width / MIST_KLEIN), Math.ceil(ctx.canvas.height / MIST_KLEIN)];
     if (!mistKlein) mistKlein = document.createElement('canvas');
@@ -950,16 +973,44 @@
     k.clearRect(0, 0, B, H);
     const f = 1 / MIST_KLEIN;
     k.setTransform(st.a * f, st.b * f, st.c * f, st.d * f, st.e * f, st.f * f);
-    k.translate(p.x, p.y);
-    k.transform(32, 16, -32, 16, 0, 0);
     k.imageSmoothingEnabled = true;
-    k.drawImage(m.werk, 0, 0, m.b, m.h, 0, 0, m.b, m.h);
+    if (T.heeftHoogte(w)) mistPerVierkant(k, w, m, vak);
+    else {
+      k.translate(p.x, p.y);
+      k.transform(32, 16, -32, 16, 0, 0);
+      k.drawImage(m.werk, 0, 0, m.b, m.h, 0, 0, m.b, m.h);
+    }
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     // zonder uitsmeren: het kleine doek is al zacht, en uitgesmeerd opschalen kostte nog 6 beelden per seconde (13 okt)
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(mistKlein, 0, 0, B, H, 0, 0, B * MIST_KLEIN, H * MIST_KLEIN);
     ctx.restore();
+  }
+  // Zonder videokaart, met hoogte (vraag 174, stap b4; Marcel: "M2", en "Iedere laptop of apparaat, handheld etc. heeft
+  // een APU of GPU"): elk vierkant tussen de middens van vier tegels van het net apart, van het masker op zijn plek
+  // (een tikje ruimer, zodat er geen naad tussen valt). Het klopt, maar kost een plaatje per tegel in beeld.
+  function mistPerVierkant(k, w, m, vak) {
+    const Z = T.STUK;
+    const n = Z + 1;
+    for (const punten of mistNetOnder(w, vak)) {
+      const [x0, y0] = [punten[2], punten[3]];
+      for (let j = 0; j < Z; j++) {
+        const y = y0 + j;
+        if (y < vak.y0 - 1 || y > vak.y1 || y < m.y0 || y >= m.y0 + m.h - 1) continue;
+        for (let i = 0; i < Z; i++) {
+          const x = x0 + i;
+          if (x < vak.x0 - 1 || x > vak.x1 || x < m.x0 || x >= m.x0 + m.b - 1) continue;
+          const a = (j * n + i) * 4;
+          const b = a + 4;
+          const c = a + n * 4;
+          k.save();
+          k.transform(punten[b] - punten[a], punten[b + 1] - punten[a + 1], punten[c] - punten[a], punten[c + 1] - punten[a + 1], punten[a], punten[a + 1]);
+          k.drawImage(m.werk, x - m.x0 + 0.5, y - m.y0 + 0.5, 1, 1, -0.02, -0.02, 1.04, 1.04);
+          k.restore();
+        }
+      }
+    }
   }
   // Wat op de grond staat, naar de tegel waar het staat (een gebouw: het midden van zijn voet): op land dat je niet kent
   // niets, en waar je nu niet kijkt grijs, zonder wie er loopt (een beest, een rover, een bezoeker; je eigen mensen zie
@@ -1755,6 +1806,34 @@
     ctx.transform(1, -(hO - hW) / 64, 0, 1 - (hZ - hN) / 32, 0, -(hN + hO + hZ + hW) / 4);
   }
 
+  // Wat per stuk van T.STUK uit de hoogte volgt (het licht hieronder, het net van de mist): eens gemaakt met `maak(w, x0,
+  // y0)` (het stuk dat op tegel (x0, y0) begint, met zijn punten tot x0 + T.STUK), en kwam er een vlak stuk bij
+  // (T.egaliseer), dan alleen opnieuw waar de glooiing anders werd (T.hoogtePlekkenSinds), tot `rand` tegels verder.
+  // `cache` is een WeakMap per soort; zonder hoogte hoort het bij de kaart.
+  function perStukVanDeHoogte(cache, w, sx, sy, rand, maak) {
+    const Z = T.STUK;
+    const sleutel = w.hoogte || w;
+    const versie = w.hoogte ? w.hoogte.versie || 0 : 0;
+    let c = cache.get(sleutel);
+    if (c && c.versie !== versie) {
+      const plekken = T.hoogtePlekkenSinds(w, c.versie);
+      if (!plekken) c = null;
+      else {
+        for (const p of plekken) {
+          for (const [n, l] of c.stukken) {
+            if (p.x1 - rand <= l.x0 + Z && p.x2 + rand >= l.x0 - 1 && p.y1 - rand <= l.y0 + Z && p.y2 + rand >= l.y0 - 1) c.stukken.delete(n);
+          }
+        }
+        c.versie = versie;
+      }
+    }
+    if (!c) cache.set(sleutel, (c = { versie, stukken: new Map() }));
+    const n = (sx + 1024) * 4096 + (sy + 1024);
+    let uit = c.stukken.get(n);
+    if (!uit) c.stukken.set(n, (uit = maak(w, sx * Z, sy * Z)));
+    return uit;
+  }
+
   // Het licht op de grond (vraag 121): lichter naar de zon, donkerder ervan af, zacht verlopend over elke tegel. Per
   // stuk van T.STUK (64) een klein plaatje met een pixel per hoekpunt (T.lichtOpHoekpunt), 65 bij 65, gemaakt als de grond
   // van dat stuk voor het eerst getekend wordt; per tegel komt het stukje tussen zijn vier hoekpunten vloeiend uitgerekt
@@ -1763,29 +1842,10 @@
   // (T.egaliseer), dan alleen de plaatjes waar de glooiing anders werd, met de twee tegels die het licht verder kijkt
   // (T.hoogtePlekkenSinds). Tot vraag 174, stap b1 was het één plaatje om de kaart, helemaal opnieuw bij elk gebouw, en
   // daarbuiten geen licht.
-  const lichtStukken = new WeakMap(); // hoogte → { versie, stukken: Map(nummer → plaatje) }
-  function lichtStukVan(w, sx, sy) {
-    const hg = w.hoogte;
+  const lichtStukken = new WeakMap();
+  const lichtStukVan = (w, sx, sy) => perStukVanDeHoogte(lichtStukken, w, sx, sy, 2, maakLichtStuk);
+  function maakLichtStuk(w, x0, y0) {
     const Z = T.STUK;
-    let c = lichtStukken.get(hg);
-    const versie = hg.versie || 0;
-    if (c && c.versie !== versie) {
-      const plekken = T.hoogtePlekkenSinds(w, c.versie);
-      if (!plekken) c = null;
-      else {
-        for (const p of plekken) {
-          for (const [n, l] of c.stukken) {
-            if (p.x1 - 2 < l.x0 + Z + 1 && p.x2 + 2 >= l.x0 - 1 && p.y1 - 2 < l.y0 + Z + 1 && p.y2 + 2 >= l.y0 - 1) c.stukken.delete(n);
-          }
-        }
-        c.versie = versie;
-      }
-    }
-    if (!c) lichtStukken.set(hg, (c = { versie, stukken: new Map() }));
-    const n = (sx + 1024) * 4096 + (sy + 1024);
-    const bestaand = c.stukken.get(n);
-    if (bestaand) return bestaand;
-    const [x0, y0] = [sx * Z, sy * Z];
     const canvas = document.createElement('canvas');
     canvas.width = Z + 1;
     canvas.height = Z + 1;
@@ -1794,7 +1854,7 @@
     for (let py = 0; py < canvas.height; py++) {
       for (let px = 0; px < canvas.width; px++) {
         const f = T.lichtOpHoekpunt(w, x0 + px, y0 + py);
-        const o = (py * c.width + px) * 4;
+        const o = (py * canvas.width + px) * 4;
         if (f < 1) {
           beeld.data[o] = 20;
           beeld.data[o + 1] = 16;
@@ -1809,9 +1869,7 @@
       }
     }
     k.putImageData(beeld, 0, 0);
-    const uit = { canvas, x0, y0 };
-    c.stukken.set(n, uit);
-    return uit;
+    return { canvas, x0, y0 };
   }
   // Een grondtegel op een kaart met hoogte: eerst het licht in de tegel zelf (op een kladje: de tegel, en daarop het licht,
   // alleen waar de tegel is), dan de belichte tegel op het vlak van de tegel. Zo valt er tussen twee tegels geen naad

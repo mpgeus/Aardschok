@@ -396,7 +396,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dat je kent (`T.waaromPastHetNiet`, `T.waaromPastVeldNiet`). Een klik in het zwart (B1) loopt erheen als er een weg is:
   het land gaat verder open dan iemand kijkt (`openRond`, 16), dus dat gaat zoals op elke tegel. Een kaart uit Tiled heeft
   geen mist. De getallen in `T.MIST_INSTELLINGEN` (de werkbank, "The fog"); het tekenen in `js/tekenen.js` (`tekenMist`,
-  `mistOverLijst`) en `js/gl.js` (`tekenMist`, grayscale). Getoetst in `test/mist.test.cjs`.
+  `mistOverLijst`) en `js/gl.js` (`tekenMist`, grayscale). **Op de heuvels** (vraag 174, stap b4, 17 okt; Marcel: "M2"):
+  het masker ligt op de grond via een net per stuk van 64, een punt op het midden van elke tegel op zijn hoogte
+  (`mistNetVan`, eens gemaakt en na een vlak stuk alleen opnieuw waar de glooiing veranderde, `perStukVanDeHoogte`);
+  `js/gl.js` tekent het net naar een laag op de halve maat (`tekenNet`, de punten van een stuk één keer naar de kaart)
+  en ontkleurt en verdonkert daarmee de grond (`FRAG_MIST`). Zonder videokaart elk vierkant van het net apart
+  (`mistPerVierkant`): het klopt, maar kost bij het dorp 28 ms per beeld en ver uitgezoomd 140. Een land zonder hoogte
+  gaat met de videokaart langs hetzelfde net, plat. Tot dan lag het masker plat, en op een heuvel van 300 pixels zo'n
+  19 tegels naast zijn grond. Met de videokaart kost de mist bij het dorp niets meetbaars. Getoetst in
+  `test/mist.test.cjs`.
 
 ### js/pad.js: A* en de eilanden
 
