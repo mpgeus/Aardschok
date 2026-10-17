@@ -830,11 +830,14 @@
   // Welk monster, en welke tegel daarin, op tegel i (van -1, het eerste landhoofd, tot L) van een brug. Een stenen brug van
   // 1, 2, 3, 5 of 9 tegels is een monster zelf; een andere komt uit eenheden van één boog: het begin (het landhoofd en de
   // eerste boog), de bogen ertussen en het eind (de laatste boog en het landhoofd), uit L9, en het begin uit L5 als de
-  // eerste boog drie tegels is. Een naad tussen twee eenheden valt midden op een pijler. Een jukbrug komt uit L3 (twee
-  // stukken met een juk om en om, het laatste zonder), een boogbrug is er heel.
-  S.brugMonster = function (soort, L, i) {
+  // eerste boog drie tegels is. Een naad tussen twee eenheden valt midden op een pijler. Een schuine stenen brug heeft een
+  // boog per stap, en komt uit L1 of L3. Een jukbrug komt uit L3 (twee stukken met een juk om en om, het laatste zonder),
+  // een boogbrug is er heel.
+  S.brugMonster = function (soort, L, i, schuin = false) {
     if (soort === 'juk') return ['L3', i < 0 ? -1 : i === L ? 3 : i === L - 1 ? 2 : i % 2];
-    if (soort === 'boog' || [1, 2, 3, 5, 9].includes(L)) return ['L' + L, i];
+    if (soort === 'boog' || L === 1 || (!schuin && [2, 3, 5, 9].includes(L))) return ['L' + L, i];
+    // schuin een boog per stap, met een pijler tussen elke twee: het begin, een stap ertussen en het eind, uit L3
+    if (schuin) return ['L3', i < 0 ? -1 : i === L ? 3 : i === 0 ? 0 : i === L - 1 ? 2 : 1];
     const bg = bogen(L);
     if (i === L) return ['L9', 9];
     const j = i < 0 ? 0 : bg.findIndex(([v, t]) => i >= v && i < t);
@@ -864,7 +867,7 @@
       }
     }
     const soort = brugSoort(g, brug);
-    const [m, mi] = S.brugMonster(soort, brug.L, i);
+    const [m, mi] = S.brugMonster(soort, brug.L, i, T.brugSchuin(brug));
     const sleutel = `${soort === 'steen' ? `steen-${steen}` : soort} ${brug.as} ${m} ${mi} ${k} ${laag}`;
     const r = brugIndex.get(sleutel);
     return r ? onthoud(`brug ${sleutel}`, () => stuk(MAP + g.bestand, r[0], r[1], r[2], r[3], [r[4], r[5]])) : null;

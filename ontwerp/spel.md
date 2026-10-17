@@ -1079,7 +1079,8 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   nacht, en loopt 's avonds niet naar huis om te slapen, tot je hem terugroept.
 - **Over de bruggen** (17 okt, stap 6a2, L1 en de bruggen; Marcel: "L1", "Niemand bouwt een brug voor 1 persoon"). Elke
   weg van het eiland heeft een brug waar hij over water gaat (kan hij om het water heen over droog land, dan gaat hij
-  daarover), drie tegels breed, zodat een peloton drie naast elkaar oversteekt. Steen bij de stad (baksteen), het kasteel,
+  daarover), drie tegels breed, zodat een peloton drie naast elkaar oversteekt, en haaks over het water: langs x of y
+  of schuin, in de richtingen waarin de poppetjes lopen (schuin vier rijen). Steen bij de stad (baksteen), het kasteel,
   de rotsen en de heide en over brede rivieren; hout in het woud, het veen en het broek. Wie erop loopt, gaat met het
   wegdek mee omhoog en staat tussen de borstweringen; op een brug wordt niet gebouwd, en de ossenkar rijdt er als op een
   weg.

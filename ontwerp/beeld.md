@@ -1125,6 +1125,11 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   brug geen paadje (`js/paden.js`). En "je moet altijd het materiaal waarvan de brug gemaakt is zien bij het pad": het
   wegdek is van de steen van de brug (`wegdekVan`): kinderkopjes van veldsteen, gehakte blokken zandsteen in rijen, en
   klinkers in visgraat op een brug van baksteen (een straat, geen dak), elk met een afgeschuinde rand.
+- **In acht richtingen** (Marcel, 17 okt: "De bruggen moeten in 8 richtingen", "Zoals hoe de poppetjes lopen"; op de
+  proefplaat `bruggen.cjs schuin`: "r2, zet maar in het spel"): een brug ligt ook schuin, haaks over het water: recht
+  opzij (je ziet de bogen van de zijkant) of recht omhoog (je kijkt over de brug, met de pijlerkoppen aan beide kanten),
+  vier rijen breed. Schuin heeft de stenen brug een boog per stap (√2 tegel). De tekening werkt in een raam per brug
+  (`raam` in `bruggen.cjs`: langs, dwars en de stappen), zodat alle stukken in elke richting dezelfde blijven.
 - **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
   bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
   wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water

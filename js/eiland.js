@@ -79,6 +79,10 @@
       // het woud, het veen en het broek, steen bij rotsen en op de heide, en verder steen vanaf brugSteen tegels water. Een
       // houten brug over hooguit brugBoog tegels water is om de andere een boogbrug, anders een jukbrug.
       brugBreed: 3,
+      // Een brug ligt langs x of y, of schuin, zoals de poppetjes lopen (Marcel, 17 okt: "De bruggen moeten in 8
+      // richtingen", "Zoals hoe de poppetjes lopen"): haaks over het water, waar de oversteek het kortst is. Schuin is hij
+      // brugSchuin rijen breed (Marcel: "r2"): vier schuine rijen zijn 2,8 tegel, zo breed als een rechte.
+      brugSchuin: 4,
       brugStad: 300,
       brugSteen: 4,
       brugBoog: 6,
@@ -1353,19 +1357,52 @@
     E.wegIndex = indexVan(E, lijnen, () => W.breed + 1);
   }
 
+  // De vorm van een brug: een stap langs de brug is een tegel verder langs zijn as (x, y, of schuin: zn langs x en y samen,
+  // op het scherm recht omhoog; wo langs x en tegen y in, recht opzij), en dwars liggen de rijen naast elkaar; schuin om en
+  // om een halve stap verschoven, zoals de tegels op een schuine lijn (gereedschap/pixelart/bruggen.cjs, raam).
+  const BRUG_ASSEN = {
+    x: { stap: [1, 0], rij: (k) => [0, k] },
+    y: { stap: [0, 1], rij: (k) => [k, 0] },
+    zn: { stap: [1, 1], rij: (k) => [((k % 2) - k) / 2, ((k % 2) + k) / 2] },
+    wo: { stap: [1, -1], rij: (k) => [(k + (k % 2)) / 2, (k - (k % 2)) / 2] },
+  };
+  T.brugSchuin = (b) => b.as === 'zn' || b.as === 'wo';
+  T.brugRijen = (b) => (T.brugSchuin(b) ? IN().wegen.brugSchuin : IN().wegen.brugBreed);
+  // hoe lang een stap is, in tegels
+  const stapLengte = (b) => (T.brugSchuin(b) ? Math.sqrt(2) : 1);
+  // de eerste tegel water van rij 0: langs x en y uit ga (de eerste tegel water langs) en gc (de middelste rij), schuin
+  // (gx, gy)
+  const oorsprong = (b) => (b.as === 'x' ? [b.ga, b.gc - 1] : b.as === 'y' ? [b.gc - 1, b.ga] : [b.gx, b.gy]);
+  // De tegel van stap i (-1 en L zijn de landhoofden) in rij k van brug b, als [x, y].
+  T.brugTegel = function (b, i, k) {
+    const A = BRUG_ASSEN[b.as];
+    const [ox, oy] = oorsprong(b);
+    const [rx, ry] = A.rij(k);
+    return [ox + i * A.stap[0] + rx, oy + i * A.stap[1] + ry];
+  };
+  // Hoe ver punt (x, y) langs brug b ligt, in stappen vanaf de rand van zijn eerste stap water (voor het wegdek, js/hoogte.js:
+  // T.dekOp). Schuin ligt het midden van een tegel op een kwart of driekwart van zijn stap.
+  T.brugStap = function (b, x, y) {
+    const [ox, oy] = oorsprong(b);
+    if (b.as === 'x') return x - ox + 0.5;
+    if (b.as === 'y') return y - oy + 0.5;
+    return (b.as === 'zn' ? x - ox + (y - oy) : x - ox - (y - oy)) / 2 + 0.25;
+  };
+
   // De bruggetjes (B2b; Marcel, 13 okt: de wegen zijn "die van het eiland"): langs elke weg, tegel voor tegel, waar hij
   // tussen twee droge tegels over zoet water gaat (een rivier of een meer; over de zee niet), een recht bruggetje langs x
   // of y, de kant op waar de weg heen gaat, van de ene droge tegel tot de overkant, hooguit `brugLang` tegels water. Een
   // tegel is water als een van zijn hoekpunten nat is, zoals in T.landStuk (js/maker.js). Is de oversteek breder of
   // schuin (de overkant ligt dan niet waar de weg verder gaat), dan de kortste rechte brug vlak bij de oversteek, en de
   // weg buigt erheen (werklijst vraag 170, stap 6a2, L1; Marcel, 17 okt: "L1": elke weg een bruggetje waar hij over water
-  // gaat, zodat je te voet over de wegen overal komt waar een weg komt). Een brug is drie tegels breed (brugBreed), de weg
-  // over de middelste rij, met een landhoofd op elke oever, en van een soort die bij de plek past (brugSoort; Marcel, 17
-  // okt: "Wat bij de plek past", gereedschap/pixelart/bruggen.cjs). `E.bruggen` is een lijst { as, ga, gc, L, soort,
-  // stad, tegels }: langs as, de eerste tegel van het dek ga, de middelste rij gc, L tegels lang, 'steen', 'juk' of 'boog',
-  // of hij bij de stad ligt (dan baksteen), en de tegels van het dek (alle rijen). `E.brugOp` zegt per tegel (y * E.maat
-  // + x) van de brug met zijn landhoofden { brug (het nummer), i (langs, van -1 tot L), k (dwars, van 0 tot 2) }. Het
-  // water eronder blijft water, maar is te belopen (js/wereld.js, maakStuk).
+  // gaat, zodat je te voet over de wegen overal komt waar een weg komt). Een brug ligt langs x of y of schuin, haaks over
+  // het water (de kortste van de richtingen die de weg op gaat; Marcel: "De bruggen moeten in 8 richtingen"), drie tegels
+  // breed (brugBreed) of schuin vier rijen (brugSchuin), de weg over rij 1, met een landhoofd op elke oever, en van een
+  // soort die bij de plek past (brugSoort; Marcel, 17 okt: "Wat bij de plek past", gereedschap/pixelart/bruggen.cjs).
+  // `E.bruggen` is een lijst { as, ga, gc (langs x en y) of gx, gy (schuin), L, soort, stad, tegels }: zie T.brugTegel; L
+  // stappen water, 'steen', 'juk' of 'boog', of hij bij de stad ligt (dan baksteen), en de tegels van het dek (alle rijen).
+  // `E.brugOp` zegt per tegel (y * E.maat + x) van de brug met zijn landhoofden { brug (het nummer), i (langs, van -1 tot
+  // L), k (de rij) }. Het water eronder blijft water, maar is te belopen (js/wereld.js, maakStuk).
   function legBruggen(E) {
     const lang = IN().wegen.brugLang;
     const nat = new Map(); // per tegel: 0 droog, 1 zoet water, 2 de zee
@@ -1401,53 +1438,68 @@
     E.bruggen = [];
     E.brugOp = new Map();
     const W = IN().wegen;
+    // De acht richtingen, en de as van elke richting.
+    const RICHTINGEN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+    const asVan = (dx, dy) => (!dy ? 'x' : !dx ? 'y' : dx === dy ? 'zn' : 'wo');
+    // Recht vanaf `van` over het water, in elke richting die hooguit 45 graden naast `naar` ligt; de kortste brug.
     const probeer = (van, naar) => {
-      // recht vanaf `van`, langs de as waarlangs `naar` het verst weg ligt
-      const as = Math.abs(naar.x - van.x) >= Math.abs(naar.y - van.y) ? 'x' : 'y';
-      const dx = as === 'x' ? Math.sign(naar.x - van.x) : 0;
-      const dy = as === 'y' ? Math.sign(naar.y - van.y) : 0;
-      const tegels = [];
-      let x = van.x + dx;
-      let y = van.y + dy;
-      while (tegels.length <= lang && natOp(x, y) === 1) {
-        tegels.push({ x, y });
-        x += dx;
-        y += dy;
+      const nx = naar.x - van.x;
+      const ny = naar.y - van.y;
+      let beste = null;
+      for (const [dx, dy] of RICHTINGEN) {
+        if ((dx * nx + dy * ny) / Math.sqrt((dx * dx + dy * dy) * (nx * nx + ny * ny)) < 0.7) continue;
+        const stap = dx && dy ? Math.sqrt(2) : 1;
+        const tegels = [];
+        let x = van.x + dx;
+        let y = van.y + dy;
+        while ((tegels.length + 1) * stap <= lang + 1 && natOp(x, y) === 1) {
+          tegels.push({ x, y });
+          x += dx;
+          y += dy;
+        }
+        // de overkant moet droog zijn, en dicht bij waar de weg verder gaat
+        if (!tegels.length || tegels.length * stap > lang || natOp(x, y) !== 0 || Math.max(Math.abs(x - naar.x), Math.abs(y - naar.y)) > 2) continue;
+        const brug = breed({ as: asVan(dx, dy), rij: tegels, af: { x, y } });
+        if (brug && (!beste || brug.L * stapLengte(brug) < beste.L * stapLengte(beste))) beste = brug;
       }
-      // de overkant moet droog zijn, en dicht bij waar de weg verder gaat
-      if (!tegels.length || tegels.length > lang || natOp(x, y) !== 0 || Math.max(Math.abs(x - naar.x), Math.abs(y - naar.y)) > 2) return null;
-      return breed({ as, rij: tegels, af: { x, y } });
+      return beste;
     };
-    // Een brug over de tegels `rij` (de middelste rij) zo breed als de weg: ligt de oever schuin, dan is de brug zo lang
-    // als de langste rij (aan elke kant hooguit brugBreed - 1 langer), zodat elke rij zijn landhoofd op droog land heeft;
-    // en hij gaat niet over de zee, en niet verder dan brugLangst. Geeft de brug met ga, gc, L en zijn tegels, of null.
+    // De brug met de tegels `rij` als rij 1 (waar de weg over gaat), zo breed als de weg: ligt de oever schuin, dan is de
+    // brug zo lang als de langste rij (aan elke kant hooguit brugBreed - 1 stappen langer), zodat elke rij zijn landhoofd op
+    // droog land heeft; en hij gaat niet over de zee, en niet verder dan brugLangst tegels. Geeft de brug (ga en gc, of gx
+    // en gy, L, af en zijn tegels), of null.
     const breed = (brug) => {
-      const langs = brug.as === 'x' ? (t) => t.x : (t) => t.y;
-      const [ga0, L0] = [Math.min(...brug.rij.map(langs)), brug.rij.length];
-      let [ga, L] = [ga0, L0];
-      const gc = brug.as === 'x' ? brug.rij[0].y : brug.rij[0].x;
-      const zij = (W.brugBreed - 1) / 2;
-      const natTegel = (i, c) => (brug.as === 'x' ? natOp(ga + i, c) : natOp(c, ga + i));
+      const A = BRUG_ASSEN[brug.as];
+      const rij = brug.rij.slice().sort((p, q) => p.x * A.stap[0] + p.y * A.stap[1] - (q.x * A.stap[0] + q.y * A.stap[1]));
+      const [w0, L0] = [rij[0], rij.length];
+      const [rx, ry] = A.rij(1);
+      let b = brug.as === 'x' ? { as: 'x', ga: w0.x, gc: w0.y, L: L0 } : brug.as === 'y' ? { as: 'y', ga: w0.y, gc: w0.x, L: L0 } : { as: brug.as, gx: w0.x - rx, gy: w0.y - ry, L: L0 };
+      // een stap eerder beginnen
+      const terug = (b) => (T.brugSchuin(b) ? { ...b, gx: b.gx - A.stap[0], gy: b.gy - A.stap[1], L: b.L + 1 } : { ...b, ga: b.ga - 1, L: b.L + 1 });
+      const R = T.brugRijen(b);
       const meer = W.brugBreed - 1;
+      const natTegel = (b, i, k) => natOp(...T.brugTegel(b, i, k));
+      let voor = 0;
       for (let verder = true; verder; ) {
         verder = false;
-        for (let c = gc - zij; c <= gc + zij; c++) {
-          while (natTegel(-1, c) !== 0 && ga0 - ga <= meer) [ga, L, verder] = [ga - 1, L + 1, true];
-          while (natTegel(L, c) !== 0 && ga + L - (ga0 + L0) <= meer) [L, verder] = [L + 1, true];
+        for (let k = 0; k < R; k++) {
+          while (natTegel(b, -1, k) !== 0 && voor <= meer) [b, voor, verder] = [terug(b), voor + 1, true];
+          while (natTegel(b, b.L, k) !== 0 && b.L - L0 - voor <= meer) [b, verder] = [{ ...b, L: b.L + 1 }, true];
         }
-        if (ga0 - ga > meer || ga + L - (ga0 + L0) > meer || L > W.brugLangst) return null;
+        if (voor > meer || b.L - L0 - voor > meer || b.L * stapLengte(b) > W.brugLangst) return null;
       }
       const tegels = [];
-      for (let c = gc - zij; c <= gc + zij; c++) {
-        for (let i = 0; i < L; i++) {
-          if (natTegel(i, c) === 2) return null;
-          tegels.push(brug.as === 'x' ? { x: ga + i, y: c } : { x: c, y: ga + i });
+      for (let k = 0; k < R; k++) {
+        for (let i = 0; i < b.L; i++) {
+          const [x, y] = T.brugTegel(b, i, k);
+          if (natOp(x, y) === 2) return null;
+          tegels.push({ x, y });
         }
       }
-      return { as: brug.as, af: brug.af, ga, gc, L, tegels };
+      return { ...b, af: brug.af, tegels };
     };
     // Een brede of schuine oversteek (L1): in een vak om de oversteek (brugZoek tegels eromheen) de kortste rechte brug
-    // langs x of y, van de oever waar de weg vandaan komt naar de overkant, met de weg erheen en erna over droog land (een
+    // in een van de acht richtingen, van de oever waar de weg vandaan komt naar de overkant, met de weg erheen en erna over droog land (een
     // korte zoektocht over de tegels, langs de oever). Snijdt de weg alleen een hoekje water af, en komt hij over droog land
     // ook aan de overkant, dan alleen dat stuk weg. Geeft { brug (of null), weg: de tegels van `van` tot `naar` }, of null.
     const ver = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
@@ -1507,29 +1559,33 @@
       for (let k = 0; k < b * h; k++) {
         if (A.d[k] < 0) continue;
         const op = tegel(k);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        for (const [dx, dy] of RICHTINGEN) {
+          const stap = dx && dy ? Math.sqrt(2) : 1;
           const tegels = [];
           let x = op.x + dx;
           let y = op.y + dy;
-          while (tegels.length <= W.brugLangst && x >= x0 && y >= y0 && x < x0 + b && y < y0 + h && nat[nr({ x, y })] === 1) {
+          while (tegels.length * stap <= W.brugLangst && x >= x0 && y >= y0 && x < x0 + b && y < y0 + h && nat[nr({ x, y })] === 1) {
             tegels.push({ x, y });
             x += dx;
             y += dy;
           }
-          if (!tegels.length || tegels.length > W.brugLangst || !(x >= x0 && y >= y0 && x < x0 + b && y < y0 + h)) continue;
+          if (!tegels.length || tegels.length * stap > W.brugLangst || !(x >= x0 && y >= y0 && x < x0 + b && y < y0 + h)) continue;
           const af = nr({ x, y });
           if (nat[af] || B.d[af] < 0) continue;
-          // kort eerst, dan zo weinig omweg als het kan; en zo breed als de weg
-          const maat = tegels.length * 4 + A.d[k] + B.d[af];
+          // kort eerst (haaks over het water), dan zo weinig omweg als het kan; en zo breed als de weg
+          const maat = tegels.length * stap * 4 + A.d[k] + B.d[af];
           if (beste && maat >= beste.maat) continue;
-          const brug = breed({ as: dx ? 'x' : 'y', rij: tegels });
+          const brug = breed({ as: asVan(dx, dy), rij: tegels });
           if (brug && vrij(brug)) beste = { maat, brug, k, af };
         }
       }
       // of over een brug die er al ligt (een andere weg over hetzelfde water), van landhoofd naar landhoofd
       const inVak = (t) => t.x >= x0 && t.y >= y0 && t.x < x0 + b && t.y < y0 + h;
       for (const br of E.bruggen) {
-        const kop = (i) => (br.as === 'x' ? { x: br.ga + i, y: br.gc } : { x: br.gc, y: br.ga + i });
+        const kop = (i) => {
+          const [x, y] = T.brugTegel(br, i, 1);
+          return { x, y };
+        };
         if (!inVak(kop(-1)) || !inVak(kop(br.L))) continue;
         for (const [k, af] of [[nr(kop(-1)), nr(kop(br.L))], [nr(kop(br.L)), nr(kop(-1))]]) {
           if (A.d[k] < 0 || B.d[af] < 0) continue;
@@ -1542,12 +1598,10 @@
     };
     // De tegels van een brug met zijn landhoofden: [tegelnummer, i, k].
     const voet = (brug) => {
-      const zij = (W.brugBreed - 1) / 2;
       const uit = [];
       for (let i = -1; i <= brug.L; i++) {
-        for (let k = 0; k < W.brugBreed; k++) {
-          const c = brug.gc - zij + k;
-          const [x, y] = brug.as === 'x' ? [brug.ga + i, c] : [c, brug.ga + i];
+        for (let k = 0; k < T.brugRijen(brug); k++) {
+          const [x, y] = T.brugTegel(brug, i, k);
           uit.push([y * E.maat + x, i, k]);
         }
       }
@@ -1556,14 +1610,16 @@
     const vrij = (brug) => !voet(brug).some(([n]) => E.brugOp.has(n));
     const legBrug = (brug) => {
       const nr = E.bruggen.length;
-      E.bruggen.push({ as: brug.as, ga: brug.ga, gc: brug.gc, L: brug.L, ...brugSoort(brug), tegels: brug.tegels });
+      const plek = T.brugSchuin(brug) ? { gx: brug.gx, gy: brug.gy } : { ga: brug.ga, gc: brug.gc };
+      E.bruggen.push({ as: brug.as, ...plek, L: brug.L, ...brugSoort(brug), tegels: brug.tegels });
       for (const [n, i, k] of voet(brug)) E.brugOp.set(n, { brug: nr, i, k });
     };
     // Welke brug bij de plek past (Marcel, 17 okt: "Wat bij de plek past"): steen bij het kasteel en de stad (bij de stad
     // van baksteen), hout in het woud, het veen en het broek, steen bij rotsen en op de heide, en verder steen over een
     // brede oversteek en hout over een smalle. Een houten brug over een korte oversteek is om de andere een boogbrug.
     const brugSoort = (brug) => {
-      const midden = brug.as === 'x' ? { x: brug.ga + brug.L / 2, y: brug.gc } : { x: brug.gc, y: brug.ga + brug.L / 2 };
+      const [mx, my] = T.brugTegel(brug, Math.floor(brug.L / 2), 1);
+      const midden = { x: mx, y: my };
       const bij = (soort) => E.plekken.some((p) => p.soort === soort && (p.x - midden.x) * (p.x - midden.x) + (p.y - midden.y) * (p.y - midden.y) < W.brugStad * W.brugStad);
       const stad = bij('stad');
       const streek = T.EILAND_STREKEN[E.streek[Math.floor(midden.y / E.vak) * E.n + Math.floor(midden.x / E.vak)]];
@@ -1571,9 +1627,9 @@
       if (stad || bij('kasteel')) steen = true;
       else if (streek === 'woud' || streek === 'veen' || streek === 'broek') steen = false;
       else if (streek === 'rots' || streek === 'heide') steen = true;
-      else steen = brug.L >= W.brugSteen;
+      else steen = brug.L * stapLengte(brug) >= W.brugSteen;
       if (steen) return { soort: 'steen', stad };
-      const boog = brug.L <= W.brugBoog && lot(Math.round(midden.x), Math.round(midden.y), E.zaad + 1601) < 0.5;
+      const boog = brug.L * stapLengte(brug) <= W.brugBoog && lot(Math.round(midden.x), Math.round(midden.y), E.zaad + 1601) < 0.5;
       return { soort: boog ? 'boog' : 'juk', stad };
     };
     // Waar een weg naar een brug buigt: pas als alle bruggen liggen, want het eiland (T.eilandStuk, voor natOp) leest de

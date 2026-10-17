@@ -491,11 +491,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   keer onderbroken; `test/eiland.test.cjs` loopt nu elke weg af, aan de grond. Kan de weg om het water heen over droog
   land, dan gaat hij daarover (eerst `zoekOmweg(van, naar, false)`): zo komt er geen brug langs een oever. Een weg die
   vlak naast een brug die er al ligt het water kruist, gaat over die brug. **Een brug is drie tegels breed** (Marcel, 17
-  okt: "Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1 persoon"; `wegen.brugBreed`): de weg
-  over de middelste rij, met een landhoofd op elke oever; ligt de oever schuin, dan is hij zo lang als de langste rij
-  (`breed`, aan elke kant hooguit twee tegels langer). `E.bruggen` is { as, ga, gc, L, soort, stad, tegels } (`ga` de
-  eerste tegel van het dek langs, `gc` de middelste rij, `tegels` het dek), en `E.brugOp` per tegel van het dek en de
-  landhoofden { brug, i (-1 tot L), k (0 tot 2) }. **De soort past bij de plek** (`brugSoort`; Marcel: "Wat bij de plek
+  okt: "Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1 persoon"; `wegen.brugBreed`), **en ligt
+  hij in de richting waar de oversteek het kortst is, ook schuin** (Marcel: "De bruggen moeten in 8 richtingen", "Zoals
+  hoe de poppetjes lopen", "r2, zet maar in het spel"): langs x, langs y, of schuin `zn` (langs x en y samen, op het
+  scherm recht omhoog) en `wo` (langs x en tegen y in, recht opzij), schuin vier rijen (`wegen.brugSchuin`, 2,8 tegel).
+  `probeer` kijkt in elke richting tot 45 graden naast de weg en neemt de kortste, `zoekOmweg` in alle acht. De weg gaat
+  over rij 1, met een landhoofd op elke oever; ligt de oever schuin, dan is de brug zo lang als de langste rij (`breed`,
+  aan elke kant hooguit twee stappen langer). Een stap langs de brug is een tegel verder langs zijn as (schuin √2 tegel),
+  en schuin liggen de rijen om en om een halve stap verschoven. **Eén plek voor de vorm**: `T.brugTegel(b, i, k)` (de
+  tegel van stap i in rij k), `T.brugRijen(b)`, `T.brugSchuin(b)` en `T.brugStap(b, x, y)` (hoe ver een punt langs de
+  brug ligt, voor het wegdek), gebruikt door `legBruggen`, `js/tekenen.js`, `js/hoogte.js` en de toetsen.
+  `E.bruggen` is { as, ga, gc (langs x en y: de eerste tegel water en de middelste rij) of gx, gy (schuin: de eerste
+  tegel water van rij 0), L (stappen water), soort, stad, tegels }, en `E.brugOp` per tegel van het dek en de
+  landhoofden { brug, i (-1 tot L), k (de rij) }. **De soort past bij de plek** (`brugSoort`; Marcel: "Wat bij de plek
   past"): steen binnen `wegen.brugStad` tegels van de stad (`stad`: baksteen) of het kasteel, bij rotsen en op de heide,
   en vanaf `wegen.brugSteen` tegels; hout in het woud, het veen en het broek; een houten brug tot `wegen.brugBoog`
   tegels is om de andere een boogbrug ('boog'), anders een jukbrug ('juk'). Het water onder een brug blijft water
@@ -722,7 +730,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `bruggen-vel.cjs`): het vel `beelden/bruggen.png` heeft een brug in stukken van één tegel in twee lagen (0 achter wie
   erop loopt, 1 ervóór), geknipt uit een paar hele bruggen (monsters); `T.sprites.brugMonster(soort, L, i)` zegt welk
   monster en welke tegel daarin op tegel i van een brug van L hoort (een stenen brug uit eenheden van één boog, de naad
-  midden op een pijler; een jukbrug uit L3; een boogbrug heel), `T.sprites.brugStuk(brug, steen, i, k, laag)` geeft het
+  midden op een pijler, schuin een boog per stap uit L1 of L3; een jukbrug uit L3; een boogbrug heel), `T.sprites.brugStuk(brug, steen, i, k, laag)` geeft het
   stuk (het vel laadt pas als er een brug in beeld komt), en `T.sprites.brugDek(brug, a)` hoe hoog het wegdek ligt, met de
   maten uit de beschrijving. `js/tekenen.js` legt de achterlaag op l 1 en de voorlaag op l 2,5, zoals het graan, met de
   steen van het land (`steenVanLand`: zandsteen bij oker en roze) of baksteen bij de stad. Een kaart leest een gid zoals Tiled (`js/kaart.js`),

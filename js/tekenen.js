@@ -594,13 +594,14 @@
     if (metSprites() && T.opEiland(w)) {
       const steen = steenVanLand(w);
       for (const brug of T.eilandVan(w.eiland.zaad).bruggen) {
-        const tegel = (i, k) => (brug.as === 'x' ? [brug.ga + i, brug.gc - 1 + k] : [brug.gc - 1 + k, brug.ga + i]);
-        const [ax, ay] = tegel(-1, 0);
-        const [bx, by] = tegel(brug.L, 2);
-        if (Math.max(ax, bx) < vak.x0 || Math.min(ax, bx) > vak.x1 || Math.max(ay, by) < vak.y0 || Math.min(ay, by) > vak.y1) continue;
+        const R = T.brugRijen(brug);
+        const hoeken = [[-1, 0], [-1, R - 1], [brug.L, 0], [brug.L, R - 1]].map(([i, k]) => T.brugTegel(brug, i, k));
+        const xs = hoeken.map((t) => t[0]);
+        const ys = hoeken.map((t) => t[1]);
+        if (Math.max(...xs) < vak.x0 || Math.min(...xs) > vak.x1 || Math.max(...ys) < vak.y0 || Math.min(...ys) > vak.y1) continue;
         for (let i = -1; i <= brug.L; i++) {
-          for (let k = 0; k < 3; k++) {
-            const [x, y] = tegel(i, k);
+          for (let k = 0; k < R; k++) {
+            const [x, y] = T.brugTegel(brug, i, k);
             if (!inVak(vak, x, y) || !T.isZichtbaar(w, x, y)) continue;
             const p = opMaaiveld(x, y);
             for (const laag of [0, 1]) {

@@ -25,7 +25,10 @@ const Br = require('../gereedschap/pixelart/bruggen.cjs');
 
 const E = T.eilandVan(5);
 const STENEN = ['veldsteen', 'zandsteen', 'baksteen'];
-const tegelVan = (b, i, k) => (b.as === 'x' ? { x: b.ga + i, y: b.gc - 1 + k } : { x: b.gc - 1 + k, y: b.ga + i });
+const tegelVan = (b, i, k) => {
+  const [x, y] = T.brugTegel(b, i, k);
+  return { x, y };
+};
 // een kaart van het eiland met het land om deze brug open
 function kaartBij(b) {
   const m = tegelVan(b, Math.floor(b.L / 2), 1);
@@ -49,9 +52,11 @@ test('het vel van de bruggen laadt pas als er een brug getekend wordt, en heeft 
     for (const b of T.eilandVan(zaad).bruggen) {
       for (const steen of b.soort === 'steen' ? STENEN : [null]) {
         for (let i = -1; i <= b.L; i++) {
-          for (let k = 0; k < 3; k++) {
-            // de achterlaag (het dek) is er altijd; de voorlaag alleen waar een borstwering of leuning vóór je staat
-            assert.ok(T.sprites.brugStuk(b, steen, i, k, 0), `eiland ${zaad}, een brug ${b.soort} van ${b.L} langs ${b.as}: tegel ${i}, rij ${k}`);
+          for (let k = 0; k < T.brugRijen(b); k++) {
+            // de achterlaag (het dek) is er altijd; de voorlaag alleen waar een borstwering of leuning vóór je staat. Een
+            // stenen brug recht omhoog (zn) zie je over zijn lengte: het landhoofd aan de overkant valt achter het dek weg.
+            const verborgen = b.as === 'zn' && b.soort === 'steen' && i === -1;
+            assert.ok(verborgen || T.sprites.brugStuk(b, steen, i, k, 0), `eiland ${zaad}, een brug ${b.soort} van ${b.L} langs ${b.as}: tegel ${i}, rij ${k}`);
             n++;
           }
         }
@@ -61,7 +66,7 @@ test('het vel van de bruggen laadt pas als er een brug getekend wordt, en heeft 
   assert.ok(n > 500, `${n} stukken`);
 });
 
-test('een stenen brug van elke lengte komt uit stukken van een boog van dezelfde maat, op dezelfde plek, met dezelfde pijlers', () => {
+test('een stenen brug van elke lengte, ook schuin, komt uit stukken van een boog van dezelfde maat, op dezelfde plek, met dezelfde pijlers', () => {
   const boogOp = (L, i) => {
     const bg = Br.bogen(L);
     const [v, t] = bg.find(([a, b]) => i >= a && i < b);
@@ -79,26 +84,43 @@ test('een stenen brug van elke lengte komt uit stukken van een boog van dezelfde
       assert.deepEqual(boogOp(Lm, mi), boogOp(L, i), `L ${L}, tegel ${i}: ${m} tegel ${mi}`);
     }
   }
+  // schuin een boog per stap: een pijler op elke grens tussen twee stappen water
+  const schuin = (L, i) => ({ pijlerVoor: i > 0, pijlerNa: i < L - 1 });
+  for (let L = 1; L <= 17; L++) {
+    for (let i = -1; i <= L; i++) {
+      const [m, mi] = T.sprites.brugMonster('steen', L, i, true);
+      const Lm = Number(m.slice(1));
+      if (i === -1 || i === L) assert.equal(mi, i === -1 ? -1 : Lm, `schuin L ${L}: het landhoofd`);
+      else assert.deepEqual(schuin(Lm, mi), schuin(L, i), `schuin L ${L}, stap ${i}: ${m} stap ${mi}`);
+    }
+  }
 });
 
 test('de maten van het wegdek in de beschrijving zijn die van de tekening', () => {
   const m = T.BEELDEN.bruggen.maten;
-  assert.deepEqual(m, { aanloop: Br.BRUG.aanloop, dek: { steen: Br.BRUG.dek, juk: Br.HOUT.dek, boog: Br.HOUT.dek }, bult: Br.HOUT.bult });
+  assert.deepEqual(m, { aanloop: Br.BRUG.aanloop, dek: { steen: Br.BRUG.dek, juk: Br.HOUT.dek, boog: Br.HOUT.dek }, bult: Br.HOUT.bult, schuinRijen: Br.BRUG.schuinBreed });
+  assert.equal(m.schuinRijen, T.EILAND_INSTELLINGEN.wegen.brugSchuin, 'het vel en het eiland hebben schuin evenveel rijen');
   for (const soort of ['steen', 'juk', 'boog']) {
-    const brug = { soort, L: 4, as: 'x' };
-    for (const a of [-1, -0.5, 0, 1.3, 2, 4, 4.5, 5]) assert.ok(Math.abs(T.sprites.brugDek(brug, a) - Br.dekOp(soort, 4, a)) < 1e-9, `${soort} op ${a}`);
+    for (const as of ['x', 'zn']) {
+      const brug = { soort, L: 4, as };
+      const stap = as === 'zn' ? Math.SQRT2 : 1;
+      for (const a of [-1, -0.5, 0, 1.3, 2, 4, 4.5, 5]) assert.ok(Math.abs(T.sprites.brugDek(brug, a) - Br.dekOp(soort, 4, a, stap)) < 1e-9, `${soort} langs ${as} op ${a}`);
+    }
   }
 });
 
 test('wie op een brug staat, gaat met het wegdek mee omhoog; het water eronder niet, en de muis op het wegdek kiest de brug', () => {
-  const b = E.bruggen.find((q) => q.soort === 'steen');
+  for (const b of [E.bruggen.find((q) => q.soort === 'steen' && !T.brugSchuin(q)), E.bruggen.find((q) => q.soort === 'steen' && T.brugSchuin(q))]) welke(b);
+});
+function welke(b) {
   const w = kaartBij(b);
   const dek = T.BEELDEN.bruggen.maten.dek.steen;
-  const t = tegelVan(b, 1, 1);
+  const t = tegelVan(b, Math.min(1, b.L - 1), 1);
   assert.equal(T.naarSchermGrond(w, t.x, t.y).y - T.naarSchermOp(w, t.x, t.y).y, dek, 'boven het water');
   // het landhoofd loopt op, van de aanloop aan de buitenkant tot het dek
   const kop = tegelVan(b, -1, 1);
-  const langs = b.as === 'x' ? [1, 0] : [0, 1];
+  const volgende = tegelVan(b, 0, 1);
+  const langs = [volgende.x - kop.x, volgende.y - kop.y];
   const hoog = (u) => T.dekOp(w, kop.x + langs[0] * u, kop.y + langs[1] * u);
   assert.ok(hoog(-0.45) < hoog(0) && hoog(0) < hoog(0.45), 'het landhoofd loopt op');
   assert.ok(hoog(0.45) <= dek);
@@ -111,17 +133,19 @@ test('wie op een brug staat, gaat met het wegdek mee omhoog; het water eronder n
   assert.deepEqual([Math.round(terug.x), Math.round(terug.y)], [t.x, t.y]);
   const vlak = T.naarWereld(p.x, p.y);
   assert.notDeepEqual([Math.round(vlak.x), Math.round(vlak.y)], [t.x, t.y], 'zonder het wegdek was het een andere tegel');
-});
+}
 
-test('over een brug loop je van het ene landhoofd naar het andere, door elke rij', () => {
-  const b = E.bruggen[0];
-  const w = kaartBij(b);
-  for (let k = 0; k < 3; k++) {
-    const van = tegelVan(b, -1, k);
-    const naar = tegelVan(b, b.L, k);
-    const pad = T.zoekRoute(w, van, naar, {});
-    assert.ok(pad, `rij ${k}`);
-    assert.equal(pad.length, b.L + 1, `rij ${k}: recht over de brug`);
-    for (const s of pad) assert.ok(T.brugOp(w, s.x, s.y), `rij ${k}: (${s.x}, ${s.y}) is brug`);
+test('over een brug loop je van het ene landhoofd naar het andere, door elke rij, ook schuin', () => {
+  for (const b of [E.bruggen.find((q) => !T.brugSchuin(q)), E.bruggen.find((q) => q.as === 'zn'), E.bruggen.find((q) => q.as === 'wo')]) {
+    const w = kaartBij(b);
+    for (let k = 0; k < T.brugRijen(b); k++) {
+      const van = tegelVan(b, -1, k);
+      const naar = tegelVan(b, b.L, k);
+      const pad = T.zoekRoute(w, van, naar, {});
+      assert.ok(pad, `${b.as}, rij ${k}`);
+      // recht over de brug; schuin langs de rand een trapje, want een hoek over het water afsnijden mag niet
+      assert.ok(pad.length <= (T.brugSchuin(b) ? 2 : 1) * (b.L + 1), `${b.as}, rij ${k}: ${pad.length} stappen over ${b.L}`);
+      for (const s of pad) assert.ok(T.brugOp(w, s.x, s.y), `${b.as}, rij ${k}: (${s.x}, ${s.y}) is brug`);
+    }
   }
 });

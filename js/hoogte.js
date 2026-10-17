@@ -198,7 +198,7 @@
     const op = T.brugOp(w, Math.round(x), Math.round(y));
     if (!op) return 0;
     const brug = T.eilandVan(w.eiland.zaad).bruggen[op.brug];
-    return T.sprites.brugDek(brug, (brug.as === 'x' ? x : y) - (brug.ga - 0.5));
+    return T.sprites.brugDek(brug, T.brugStap(brug, x, y));
   };
 
   // En terug, voor de muis: welke tegel ligt onder schermpunt (sx, sy)? Een tegel op een heuvel ligt hoger in beeld

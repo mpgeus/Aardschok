@@ -214,7 +214,8 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
      bruggetje (in de schets, `E.bruggen`), zodat je over de wegen het hele eiland over kunt. Sinds 17 okt (vraag 170,
      stap 6a2, L1; Marcel: "L1") ook waar de oversteek breed of schuin is: dan de kortste rechte brug vlak bij de
      oversteek (hooguit `wegen.brugLangst` tegels water), en de weg buigt erheen; tot dan was een weg op elk eiland twee à
-     drie keer onderbroken (`code.md` bij `js/eiland.js`). Sinds 17 okt is een brug drie tegels breed, van steen of hout
+     drie keer onderbroken (`code.md` bij `js/eiland.js`). Sinds 17 okt is een brug drie tegels breed (schuin vier
+     rijen: een brug ligt ook schuin, haaks over het water), van steen of hout
      naar de plek, met het water eronder (geen plankentegel meer), en tekent het spel hem in twee lagen (`beeld.md`, "De
      bruggen").
    - *Nog te doen voor de spelregel Hoogte* (standaard uit): de hoogte per stuk (`w.hoogte` is nu één raster).

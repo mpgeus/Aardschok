@@ -10,7 +10,9 @@
 // eenheden van één boog: het begin (een landhoofd en de eerste boog), bogen ertussen en het eind; elk komt uit een monster,
 // en een naad tussen twee eenheden valt midden op een pijler. Monsters: L1, L2 en L3 heel, L5 (het begin met een boog van
 // drie) en L9 (begin, een boog van drie, een van twee, eind). De jukbrug: L3 (begin, twee jukken, het laatste stuk zonder
-// juk, eind). De houten boogbrug buigt over zijn hele lengte: L1 tot L6 elk heel.
+// juk, eind). De houten boogbrug buigt over zijn hele lengte: L1 tot L6 elk heel. Schuin (zn en wo, vier rijen; Marcel, 17
+// okt: "De bruggen moeten in 8 richtingen", "r2, zet maar in het spel") heeft de stenen brug een boog per stap: L1 en L3
+// (begin, een stap ertussen, eind); de jukbrug L3, de boogbrug L1 tot L4.
 //
 // Wat onder het water ligt, valt weg: in het spel is het water het maaiveld (BRUG.waterVlak 0), en de grond tekent het.
 //
@@ -26,72 +28,89 @@ const Br = require('./bruggen.cjs');
 const { TEGEL, PXH, klem } = K;
 const T = TEGEL;
 
-// Het monster ligt met zijn eerste tegel water op GA en zijn middelste rij op GC (in tegels van de tekening).
-const GA = 1;
-const GC = 2;
-// Welke monsters er zijn, per soort brug.
+// Waar een monster ligt: langs x en y met zijn eerste tegel water op 1 en zijn middelste rij op 2; schuin zo dat langs en
+// dwars in de tekening positief zijn (de texturen tellen hun stenen vanaf 0; bruggen.cjs, raam).
+const PLEK = { x: { ga: 1, gc: 2 }, y: { ga: 1, gc: 2 }, zn: { gx: 3, gy: 8 }, wo: { gx: 10, gy: 4 } };
+const ASSEN = ['x', 'y', 'zn', 'wo'];
+// Welke monsters er zijn, per soort brug: langs x en y, en schuin (daar een boog per stap, dus L1 en L3 voor steen; de
+// boogbrug tot zes tegels is schuin vier stappen).
 const MONSTERS = {
   steen: [1, 2, 3, 5, 9],
   juk: [3],
   boog: [1, 2, 3, 4, 5, 6],
 };
+const SCHUINE_MONSTERS = { steen: [1, 3], juk: [3], boog: [1, 2, 3, 4] };
 const STENEN = { veldsteen: 41, zandsteen: 45, baksteen: 47 }; // de steen en zijn zaad, zoals op de proefplaat
 const SOORTEN = [...Object.keys(STENEN).map((s) => ['steen', s]), ['juk', null], ['boog', null]];
 const VEL_BREED = 1024;
 
-// Een hele brug van deze soort, als stukken (bruggen.cjs).
-function brug(soort, steen, as, L) {
-  const o = { as, ga: GA, gc: GC, L, steen, zaad: steen ? STENEN[steen] : soort === 'juk' ? 53 : 59 };
+// De opgave van een monster: een hele brug van deze soort langs deze as.
+const opgave = (soort, steen, as, L) => ({ as, ...PLEK[as], L, steen, zaad: steen ? STENEN[steen] : soort === 'juk' ? 53 : 59 });
+function brug(soort, o) {
   return soort === 'steen' ? Br.steenBrug(o) : soort === 'juk' ? Br.jukBrug(o) : Br.houtBoogBrug(o);
 }
 
-// Het vak op het scherm waar de brug in valt, met wat ruimte: langs van het eerste tot het laatste landhoofd, dwars met de
-// pijlerkoppen erbij, en tot boven de leuning.
-function vakVan(as, L) {
-  const hoeken = [];
-  for (const a of [GA - 1, GA + L + 1]) {
-    for (const c of [GC - 1.6, GC + 2]) {
-      for (const z of [-2, 80]) {
-        const [X, Y] = as === 'x' ? [a * T, c * T] : [c * T, a * T];
-        hoeken.push([X * K.EX[0] + Y * K.EX[1], X * K.EY[0] + Y * K.EY[1] + (z / PXH) * K.EY[2]]);
+// Het vak op het scherm waar de brug in valt, met wat ruimte: alle tegels van de brug en een tegel eromheen (de
+// pijlerkoppen), tot boven de leuning.
+function vakVan(F, L) {
+  const punten = [];
+  for (let i = -2; i <= L + 1; i++) {
+    for (let k = -1; k <= F.R; k++) {
+      const [tx, ty] = F.tegel(i, k);
+      for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) {
+        const [X, Y] = [(tx + dx) * T, (ty + dy) * T];
+        for (const z of [-2, 80]) punten.push([X * K.EX[0] + Y * K.EX[1], X * K.EY[0] + Y * K.EY[1] + (z / PXH) * K.EY[2]]);
       }
     }
   }
-  const x0 = Math.floor(Math.min(...hoeken.map((h) => h[0]))) - 3;
-  const y0 = Math.floor(Math.min(...hoeken.map((h) => h[1]))) - 3;
-  const x1 = Math.ceil(Math.max(...hoeken.map((h) => h[0]))) + 3;
-  const y1 = Math.ceil(Math.max(...hoeken.map((h) => h[1]))) + 3;
+  const x0 = Math.floor(Math.min(...punten.map((p) => p[0]))) - 3;
+  const y0 = Math.floor(Math.min(...punten.map((p) => p[1]))) - 3;
+  const x1 = Math.ceil(Math.max(...punten.map((p) => p[0]))) + 3;
+  const y1 = Math.ceil(Math.max(...punten.map((p) => p[1]))) + 3;
   return { b: x1 - x0, h: y1 - y0, OX: -x0, OY: -y0 };
 }
 
 // Een monster renderen en in stukken knippen: { i, k, laag, plaat, anker } per stuk, met i langs (-1 tot L, vanaf de
-// eerste tegel water), k dwars (0 tot 2) en laag 0 (achter) of 1 (voor).
+// eerste stap water), k de rij (0 tot 2, schuin 3) en laag 0 (achter) of 1 (voor).
 function monster(soort, steen, as, L) {
-  const vak = vakVan(as, L);
+  const o = opgave(soort, steen, as, L);
+  const F = Br.raam(o);
+  const vak = vakVan(F, L);
   const B = new K.Beeld(vak.b, vak.h, vak.OX, vak.OY);
-  const vormen = Br.zetBrug(B, brug(soort, steen, as, L));
+  const vormen = Br.zetBrug(B, brug(soort, o));
   D.zonSchaduw(B, vormen, { zon: D.AVONDZON });
   K.belicht(B, { omgeving: () => 0.15 });
   const voor = Int16Array.from(B.ramp); // wat er vóór de omlijning was
   K.omlijn(B);
   const q = K.kwantiseer(B);
   const n = B.b * B.h;
-  // per pixel het stuk: (i + 1) * 6 + k * 2 + laag, of -1
+  // Bij welk stuk een punt hoort: de tegel eronder als die van de brug is, anders het dichtste stuk (langs en dwars in
+  // het raam, met de rij om en om een halve stap verschoven).
+  const plek = new Map();
+  for (let i = -1; i <= L; i++) for (let k = 0; k < F.R; k++) plek.set(F.tegel(i, k).join(','), [i, k]);
+  const [t0x, t0y] = F.tegel(0, 0);
+  const c0 = F.dwars((t0x + 0.5) * T, (t0y + 0.5) * T);
+  const rij = F.schuin ? T * Math.SQRT1_2 : T;
+  const midden = (k) => (F.schuin ? 0.25 + 0.5 * (k % 2) : 0.5); // waar het midden van een tegel in zijn stap ligt
+  const stukVan = (X, Y) => {
+    const p = plek.get(`${Math.floor(X / T)},${Math.floor(Y / T)}`);
+    if (p) return p;
+    const k = klem(Math.round((F.dwars(X, Y) - c0) / rij), 0, F.R - 1);
+    return [klem(Math.round((F.langs(X, Y) - F.aW) / F.S - midden(k)), -1, L), k];
+  };
+  // per pixel het stuk: (i + 1) * 8 + k * 2 + laag, of -1
   const stuk = new Int32Array(n).fill(-1);
   for (let p = 0; p < n; p++) {
     if (voor[p] < 0) continue;
-    const X = B.pos[p * 3] / T;
-    const Y = B.pos[p * 3 + 1] / T;
+    const [X, Y] = [B.pos[p * 3], B.pos[p * 3 + 1]];
     const h = B.pos[p * 3 + 2] * PXH;
     if (h < -0.25) continue; // onder water
-    const langs = as === 'x' ? X : Y;
-    const i = klem(Math.floor(langs) - GA, -1, L);
-    const k = klem(Math.floor(as === 'x' ? Y : X) - (GC - 1), 0, 2);
+    const [i, k] = stukVan(X, Y);
     // vóór wie er staat: boven het wegdek, en dichter bij de kijker dan het midden van zijn tegel
-    const [tx, ty] = as === 'x' ? [GA + i, GC - 1 + k] : [GC - 1 + k, GA + i];
-    const diepte = X - (tx + 0.5) + (Y - (ty + 0.5));
-    const dek = Br.dekOp(soort, L, langs - GA) + (soort === 'steen' ? Br.BRUG.bol : 0);
-    stuk[p] = (i + 1) * 6 + k * 2 + (diepte > 0 && h > dek + 1 ? 1 : 0);
+    const [tx, ty] = F.tegel(i, k);
+    const diepte = X / T - (tx + 0.5) + (Y / T - (ty + 0.5));
+    const dek = Br.dekOp(soort, L, (F.langs(X, Y) - F.aW) / F.S, F.stap) + (soort === 'steen' ? Br.BRUG.bol : 0);
+    stuk[p] = (i + 1) * 8 + k * 2 + (diepte > 0 && h > dek + 1 ? 1 : 0);
   }
   // de omlijning hoort bij het stuk ernaast dat het verst naar voren ligt
   for (let p = 0; p < n; p++) {
@@ -125,11 +144,11 @@ function monster(soort, steen, as, L) {
         if (stuk[p] === s && q.px[p * 2] >= 0) plaat.zet(x - kd.x0, y - kd.y0, q.px[p * 2], q.px[p * 2 + 1]);
       }
     }
-    const i = Math.floor(s / 6) - 1;
-    const k = Math.floor((s % 6) / 2);
+    const i = Math.floor(s / 8) - 1;
+    const k = Math.floor((s % 8) / 2);
     const laag = s % 2;
     // het anker: het midden van de tegel op het maaiveld
-    const [tx, ty] = as === 'x' ? [GA + i, GC - 1 + k] : [GC - 1 + k, GA + i];
+    const [tx, ty] = F.tegel(i, k);
     const [ax, ay] = K.tegelNaarScherm(B, tx + 0.5, ty + 0.5);
     uit.push({ i, k, laag, plaat, anker: [Math.round(ax - kd.x0), Math.round(ay - kd.y0)] });
   }
@@ -143,8 +162,8 @@ function vel() {
   const alle = [];
   for (const [soort, steen] of SOORTEN) {
     const naam = steen ? `${soort}-${steen}` : soort;
-    for (const as of ['x', 'y']) {
-      for (const L of MONSTERS[soort]) {
+    for (const as of ASSEN) {
+      for (const L of (as === 'zn' || as === 'wo' ? SCHUINE_MONSTERS : MONSTERS)[soort]) {
         const t0 = Date.now();
         for (const s of monster(soort, steen, as, L)) alle.push({ naam, as, monster: `L${L}`, ...s });
         if (process.env.PRAAT) console.log(naam, as, `L${L}`, Date.now() - t0, 'ms');
@@ -182,7 +201,7 @@ function beschrijving(bestand, stukken) {
   const { BRUG, HOUT } = Br;
   return {
     bestand,
-    maten: { aanloop: BRUG.aanloop, dek: { steen: BRUG.dek, juk: HOUT.dek, boog: HOUT.dek }, bult: HOUT.bult },
+    maten: { aanloop: BRUG.aanloop, dek: { steen: BRUG.dek, juk: HOUT.dek, boog: HOUT.dek }, bult: HOUT.bult, schuinRijen: BRUG.schuinBreed },
     stukken,
   };
 }
@@ -190,7 +209,7 @@ function beschrijving(bestand, stukken) {
 // In het spel ligt het water op het maaiveld.
 Br.BRUG.waterVlak = 0;
 
-module.exports = { vel, beschrijving, MONSTERS };
+module.exports = { vel, beschrijving, MONSTERS, SCHUINE_MONSTERS };
 
 if (require.main === module) {
   console.time('bruggen-vel');
