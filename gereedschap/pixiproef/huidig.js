@@ -1,6 +1,7 @@
-// De huidige weg (renderproef): js/gl.js, de eigen laag op WebGL1 die zich voordoet als het 2D-doek, gebruikt zoals
-// js/tekenen.js het doet. Per beeld: de grond (stukken), de lijst van wat in beeld is, gesorteerd, eerst als silhouet
-// op het masker van de schaduwen (beginSchaduw ... eindSchaduw), dan alles, dan het licht (tekenLichtkaart).
+// De huidige weg (renderproef): js/gl.js, de eigen laag die zich voordoet als het 2D-doek (tot 18 okt op WebGL1), gebruikt
+// zoals js/tekenen.js het tot vraag 178, B2 deed. Per beeld: de grond (stukken), de lijst van wat in beeld is,
+// gesorteerd, met wat een schaduw werpt (schaduwHier en werptSchaduw: het masker komt uit dezelfde plaatjes; tot 18 okt
+// beginSchaduw en eindSchaduw), dan het licht (tekenLichtkaart). De vaste rijen van het spel (B1 en B2) zitten er niet in.
 (function (P) {
   'use strict';
   const G = globalThis.Spel.gl;
@@ -40,23 +41,17 @@
     zicht.sort((a, b) => a.d - b.d);
     weg.zicht = zicht.length;
 
-    if (inst.schaduw) {
-      ctx.globalAlpha = 1;
-      ctx.beginSchaduw(P.ZON.rx, P.ZON.ry);
-      for (const d of zicht) {
-        const o = d.nu;
-        if (o.schaduw) ctx.drawImage(o.img, o.sx, o.sy, o.sw, o.sh, d.wx - o.ax, d.wy - o.ay, o.sw, o.sh);
-      }
-      ctx.eindSchaduw(P.SCHADUW.sterkte, P.SCHADUW.kleur);
-    }
+    const schaduw = inst.schaduw && ctx.schaduwHier(P.ZON.rx, P.ZON.ry, P.SCHADUW.sterkte, P.SCHADUW.kleur);
     for (const d of zicht) {
       const o = d.nu;
+      ctx.werptSchaduw = schaduw && o.schaduw;
       ctx.globalAlpha = o.alpha;
       const w = o.sw * o.schaal;
       const h = o.sh * o.schaal;
       ctx.drawImage(o.img, o.sx, o.sy, o.sw, o.sh, d.wx - o.ax * o.schaal, d.wy - o.ay * o.schaal, w, h);
     }
     ctx.globalAlpha = 1;
+    ctx.werptSchaduw = false;
     if (inst.licht) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.tekenLichtkaart(P.AVOND, []);
