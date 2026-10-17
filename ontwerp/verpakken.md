@@ -224,6 +224,34 @@ hoofdproces.
 een venster van 1280×720 en weer het hele scherm, en Quit staat in het menu. Op Windows nog niet: dat doet Marcel met
 `npm run proefversie -- --windows`.
 
+## Open voor mods (Marcel, 16 okt 2026: "Ja", op "wil je dat spelers je spel kunnen modden?")
+
+Marcel vroeg hoe makkelijk spelers het spel kunnen uitpluizen. **Heel makkelijk**: de code gaat leesbaar mee, met al het
+commentaar (een `.asar` van Electron is een gewoon archief); in de console van de schil (Ctrl+Shift+I) is
+`Spel.S.dorp` alles; een bewaard spel is JSON; de getallen staan per onderwerp in een blok (`T.WERKBANK`); de beelden zijn
+gewone PNG's. Wat níet meegaat: hoe de kunst ontstaat (`gereedschap/pixelart/`) en het ontwerp (`ontwerp/`).
+
+**Besloten: open laten, mods zijn welkom** (zoals CrossCode, ook JavaScript, met een levendige mod-gemeenschap). Dus
+geen verkleinen of verhullen van de code, en de schil niet dichtzetten: dat houdt een modder tegen, geen valsspeler. Voor
+één speler is uitpluizen geen kwaad (Steam-DRM is toch in minuten weg, en een kloon kopieert het idee, niet de code).
+Het debugvenster gaat wel uit voor Steam (hierboven, punt 0): dat is een keuze voor het scherm, geen slot.
+
+**Waar het wél telt: samen spelen in lockstep** (werklijst vraag 170, stap 6c; lockstep blijft, Marcel, 17 okt: twee
+tot vier vrienden over Steam, "Ik denk A"). Elke computer rekent de hele wereld:
+- **Wie zijn wereld verandert** (in de console, of met een mod die de ander niet heeft), loopt uiteen met de ander. Het
+  controlegetal van 6c vangt dat, net als een fout van ons. Met D1 stuurt wie het spel opende zijn wereld opnieuw: wat
+  de ander veranderde, is dan weg, maar wie opende, kan ongestoord valsspelen. Tussen vrienden is dat goed genoeg.
+- **De mist is alleen beeld**: de wereld kent alles, dus met de console zie je de hele kaart. Dat is in lockstep niet te
+  voorkomen (Age of Empires en StarCraft hebben het ook); we nemen het voor lief.
+- **Meedoen vergelijkt de stand van de code** (6c): een getal over de geladen bestanden, niet alleen `T.STAND`, want
+  een gemodde `js/` houdt dezelfde commit. Zo zegt het spel meteen "jullie spelen een ander spel", in plaats van later
+  uiteen te lopen.
+- Steam-prestaties zijn met de console vrij te spelen; dat kan met losse programma's toch al.
+
+**Nog te kiezen bij het verpakken:** het commentaar gaat mee, met de citaten van Marcel en de data. Wie dat niet wil,
+haalt bij het verpakken alleen het commentaar weg (geen verkleinen, de namen blijven): een stap in het script van de
+verpakking, het spel zelf houdt geen bouwstap. Voor een modder is het commentaar juist goud.
+
 ## De naam (vraag 8; voorstel van Claude, 27 sep, tiende sessie)
 
 "Aardschok" past niet meer. Waar een naam aan moet voldoen: kort, uit te spreken, uniek genoeg om te

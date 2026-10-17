@@ -1023,6 +1023,16 @@ dit is het scherm erbij. Vraag A van dat plan is daarmee gekozen (A1), en het op
 - **Voor 6c, nog open** (Claude): een opdracht die zes tikken later ingaat (een tiende seconde), kan over internet te
   kort zijn (Age of Empires nam 200 tot 500 ms), en dan hapert het spel. Beter een getal in de werkbank, of een
   vertraging die meegroeit met wat de lijn meet.
+- **Voor 6c, valsspel en mods** (Marcel, 16 okt: mods zijn welkom, en "Ja" op het controlegetal; `verpakken.md`, "Open
+  voor mods"): het controlegetal is ook de vangst voor wie zijn wereld in de console verandert; met D1 wint de wereld van
+  wie opende. Bij meedoen een getal over de geladen bestanden, niet alleen `T.STAND` (een gemodde `js/` houdt dezelfde
+  commit). De mist is in lockstep alleen beeld: de hele kaart is met de console te zien; dat nemen we voor lief.
+- **Lockstep blijft** (Marcel, 17 okt, "Ik denk A", op "wie speelt er samen, en met hoeveel?"): twee tot vier vrienden,
+  over Steam. Een server die de wereld rekent (geen mist om doorheen te kijken, geen valsspel), is pas beter bij
+  vreemden met een ranglijst, bij acht of meer spelers, of bij een eiland dat blijft bestaan; ze kost een eigen server.
+  Wat er is, gaat dan niet verloren: een opdracht (`T.geefOpdracht`) gaat net zo goed naar een server. Factorio (een economie,
+  mods, lockstep) als voorbeeld voor het open punt hierboven: wat jij doet, zie je meteen bij jezelf, en het gaat pas
+  een paar tikken later echt in.
 
 ## J. Een volledig menu (vraag 172, 16 okt)
 
