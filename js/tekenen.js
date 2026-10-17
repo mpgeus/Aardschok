@@ -585,14 +585,16 @@
     }
     const zichtbaar = [];
     const kijkgaten = new Map(); // voorwerp → de kijkgaten die erna komen (voorsteKijkgaten, hieronder)
+    Object.assign(beeldNu, { ctx, S, kijkgaten });
+    grijzeItems.clear(); // mistOverLijst vult hem opnieuw
     for (const v of T.voorwerpenIn(w, { x: vak.x0, y: vak.y0, b: vak.x1 - vak.x0 + 1, h: vak.y1 - vak.y0 + 1 })) {
       if (!T.isZichtbaar(w, v.x, v.y) || isGebakken(w, v)) continue;
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
       // Een gebouw (T.isGebouw: breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is
-      // één scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
-      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: T.isGebouw(v) ? v : undefined, voorwerp: v, f: () => tekenVoorwerp(ctx, S, v, helder, kijkgaten.get(v)) });
+      // één scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder). Zijn punt is hijzelf.
+      lijst.push({ d: diepteVan(v), l: 1, punt: v, gebouw: T.isGebouw(v) ? v : undefined, voorwerp: v, helder, f: tekenVoorwerpItem });
     }
     // De akkers (alleen het nieuwe spel, ?kaart=gehucht — ontwerp/werklijst.md punt 1b): welk
     // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium e.a.); hier
@@ -712,7 +714,7 @@
     // De lantaarns die hierna een gat krijgen (tekenLantaarn): pas nu, na de schaduwen, die de lijst ook tekenen.
     lantaarnGaten = { doek: ctx, gaten: [], wacht: [] };
     for (const item of volgorde) {
-      item.f();
+      tekenItem(item);
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
     tekenSchoorsteenRook(ctx, S);
@@ -967,13 +969,13 @@
     if (!metMist(w)) return;
     const M = T.MIST_INSTELLINGEN;
     const filter = `grayscale(${M.ontkleurd}) brightness(${1 - M.donker})`; // geen tekst
-    const grijs = ctx.tekenMist
-      ? (f) => {
+    inHetGrijs = ctx.tekenMist
+      ? (item) => {
         ctx.filter = filter;
-        f();
+        item.f();
         ctx.filter = 'none';
       }
-      : (f) => {
+      : (item) => {
         ctx.drawImage = function (bron, ...a) {
           const [sx, sy, sw, sh, ...rest] = a.length === 8 ? a : [0, 0, bron.naturalWidth || bron.width, bron.naturalHeight || bron.height, ...a];
           const op = rest.length === 2 ? [...rest, sw, sh] : rest;
@@ -982,7 +984,7 @@
             : CanvasRenderingContext2D.prototype.drawImage.call(this, bron, ...a);
         };
         try {
-          f();
+          item.f();
         } finally {
           delete ctx.drawImage;
         }
@@ -990,16 +992,31 @@
     let n = 0;
     for (const item of lijst) {
       const v = item.gebouw;
-      const b = v && v.beslaat ? v.beslaat : [1, 1];
-      const p = v ? { x: Math.round(v.x + (b[0] - 1) / 2), y: Math.round(v.y + (b[1] - 1) / 2) } : item.punt;
+      const p = v ? { x: Math.round(v.x + ((v.beslaat ? v.beslaat[0] : 1) - 1) / 2), y: Math.round(v.y + ((v.beslaat ? v.beslaat[1] : 1) - 1) / 2) } : item.punt;
       if (p && !T.zietNu(S.dorp, p.x, p.y)) {
         if (!T.kentTegel(S.dorp, p.x, p.y) || (item.wezen && !T.isVanDorp(S.dorp, item.wezen))) continue;
-        const f = item.f;
-        item.f = () => grijs(f);
+        grijzeItems.add(item); // tekenItem tekent hem in het grijs
       }
       lijst[n++] = item;
     }
     lijst.length = n;
+  }
+  // Een item van de tekenlijst tekenen: zijn f, in het grijs als mistOverLijst dat zei (grijzeItems en inHetGrijs, elk
+  // beeld opnieuw gezet). Tot 17 okt pakte de mist elk item in een eigen functietje in, elk beeld; ver uitgezoomd
+  // duizenden. Niet met een vlag op het item: een eigenschap die er later bij komt, geeft de items van de lijst zoveel
+  // vormen dat het sorteren (tekenVolgorde) in Chromium twee keer zo traag werd.
+  const grijzeItems = new Set();
+  let inHetGrijs = null;
+  function tekenItem(item) {
+    if (grijzeItems.has(item)) inHetGrijs(item);
+    else item.f();
+  }
+  // Een voorwerp in de tekenlijst tekent zich met één gedeelde functie (this is het item: zijn voorwerp en hoe helder), en
+  // niet met een eigen functietje per voorwerp per beeld. beeldNu: het doek, het spel en de kijkgaten van dit beeld
+  // (T.tekenScene zet ze).
+  const beeldNu = { ctx: null, S: null, kijkgaten: null };
+  function tekenVoorwerpItem() {
+    tekenVoorwerp(beeldNu.ctx, beeldNu.S, this.voorwerp, this.helder, beeldNu.kijkgaten.get(this.voorwerp));
   }
 
   // Een grijze kopie van een stukje van een plaatje (zonder videokaart, mistOverLijst), één keer gemaakt: eerst het stukje
@@ -1085,7 +1102,7 @@
     const sx = ((z.x - z.y) / Math.SQRT2) * z.lengte;
     const sy = ((z.x + z.y) / (2 * Math.SQRT2)) * z.lengte;
     ctx.beginSchaduw(sx, sy);
-    for (const item of lijst) if (!item.zonderSchaduw) item.f();
+    for (const item of lijst) if (!item.zonderSchaduw) tekenItem(item);
     const k = L.schaduw;
     ctx.eindSchaduw(k.sterkte * z.sterkte, [k.r / 255, k.g / 255, k.b / 255]);
   }
