@@ -49,6 +49,10 @@
     // Op het eiland beslaat een veld het vak om het dorp (T.kaartVak) en zoveel tegels eromheen, niet al het land dat je
     // kent: dat groeit met elk stuk dat open gaat (B2b, stap 5). Wie van of naar daarbuiten loopt, zoekt zijn eigen weg.
     veldRand: 32,
+    // Door land dat nog dicht is (hieronder): zoveel grove velden (een doel ver weg) onthoudt een kaart, vier bytes per vak
+    // van de schets (zo'n 400 kB elk), en zoveel vakken van de grove weg kijkt wie erheen loopt vooruit.
+    grofOnthouden: 8,
+    grofVooruit: 24,
   };
   const IN = () => T.LOPEN_INSTELLINGEN;
 
@@ -67,6 +71,9 @@
     const o = opties || {};
     const tot = o.tot >= 1 ? Math.floor(o.tot) : 0;
     const naast = !!o.naast;
+    // Een man op tocht (`tocht`, js/kiezen.js): ligt zijn doel in land dat nog dicht is, of komt hij er over open land niet,
+    // dan de weg van een tocht (hieronder). Een ander komt daar niet.
+    if (o.tocht && T.opEiland(w) && (T.tegel(w, doel.x, doel.y) === 'buiten' || !T.kanErKomen(w, van, doel, { tot, naast }))) return tochtRoute(w, van, doel, o);
     const open = !!o.deurenOpenen;
     const kar = !!o.kar;
     // Een kaart met deuren (de proefkamers) onthoudt niets: een deur gaat open en dicht zonder dat de kaart verandert.
@@ -470,5 +477,256 @@
       }
     }
     return false;
+  }
+
+  // ── Door land dat nog dicht is (werklijst vraag 170, stap 6a2, c0; Marcel, 17 okt: "Stel je stuurt een soldaat maar de
+  // andere kant van de wereld met een klik, dan moet dat kunnen") ──
+  //
+  // Land dat nog dicht is, bestaat nog niet: het is 'buiten', en A* laat nooit een stuk maken (js/wereld.js). Ligt het
+  // doel van een man op tocht daar (of komt hij er over open land niet), dan zoekt hij eerst een grove weg, in de vakken
+  // van de schets van het eiland (js/eiland.js, E.vak tegels), en loopt hij naar het verste vak van die weg dat al open is
+  // en waar hij kan komen. Daar gaat het land verder open (T.werkStukkenBij), en zoekt hij opnieuw: zijn post vraagt het
+  // (T.dagAnker), of zijn tocht (T.werkSturenBij, js/kiezen.js). Zo komt hij over het hele eiland, zonder dat er land
+  // gemaakt wordt waar niemand komt. Kan hij er niet komen (water, dicht bos, een ander eiland), dan gaat hij naar het vak waar hij wel kan
+  // komen dat er het dichtst bij ligt: zo dicht als het kan.
+  //
+  // De grove weg kent het land als een verkenner. Waar het open is, weet hij het precies: een vak is te belopen als er
+  // een tegel in ligt van het stuk land waar hij op staat (T.eilandOp), dus een dicht bosje of een holte tussen de bomen
+  // telt. Waar het nog dicht is, gaat hij af op de schets (grofKost). Gaat er land open, dan weet hij meer, en rekent hij
+  // opnieuw. De weg is een veld vanaf het doel, zoals de velden hierboven: per vak hoe ver het ervan af ligt (een stap 10
+  // recht en 14 schuin, maal wat het vak kost, zonder een hoek af te snijden), uit het nummer van het eiland en het land
+  // dat open is, dus op elke computer hetzelfde. Geen spelstaat: wat opnieuw gerekend wordt, is hetzelfde.
+  const GEEN = 0xffffffff;
+  const BROEK = 3; // zoveel keer kost een vak broek wat open land kost (grofKost)
+  const GROF_KOST = new WeakMap(); // eiland → Uint8Array: wat een stap in het vak kost volgens de schets (0: dicht)
+  // kaart → { versie, open, kost: Map(eiland → { kost: Uint8Array, deel: Int32Array }), velden: Map(sleutel → Uint32Array) }
+  const GROF = new WeakMap();
+
+  // Wat een stap in vak k kost volgens de schets, of 0 als het dicht is. De zee, een meer en een rivier zijn dicht, en het
+  // woud ook: daar staan zoveel bomen (js/eiland.js, I.bomen) dat er geen doorkomen aan is. In het broek staan er minder,
+  // en is er soms een doorgang: BROEK keer zo duur. Een weg van het eiland is open (op een weg staan geen bomen, en over
+  // smal water ligt een bruggetje), ook waar de schets een rivier, een meer of woud zegt; de zee niet. Ligt er toch geen
+  // bruggetje (een brede of schuine oversteek), dan leert hij het als het land daar open is.
+  function grofKost(E) {
+    let kost = GROF_KOST.get(E);
+    if (kost) return kost;
+    const N = E.n * E.n;
+    const woud = T.EILAND_STREKEN.indexOf('woud');
+    const broek = T.EILAND_STREKEN.indexOf('broek');
+    const nat = (k) => E.zee[k] || E.meer[k] >= 0 || E.rivier[k];
+    kost = new Uint8Array(N);
+    for (let k = 0; k < N; k++) kost[k] = nat(k) || E.streek[k] === woud ? 0 : E.streek[k] === broek ? BROEK : 1;
+    const vakVan = (x, y) => Math.floor(y / E.vak) * E.n + Math.floor(x / E.vak);
+    const open = (k) => {
+      if (!E.zee[k]) kost[k] = 1;
+    };
+    // Een weg legt hij vak voor vak, en gaat hij schuin naar het volgende vak, dan ook een vak ernaast: anders sneed hij
+    // een hoek af (grofStap), en was de weg daar door het woud dicht.
+    for (const weg of E.wegen || []) {
+      let vorig = -1;
+      for (let i = 1; i < weg.punten.length; i++) {
+        const [ax, ay] = weg.punten[i - 1];
+        const [bx, by] = weg.punten[i];
+        const stappen = Math.ceil(Math.max(Math.abs(bx - ax), Math.abs(by - ay)) * 2) || 1;
+        for (let j = 0; j <= stappen; j++) {
+          const k = vakVan(ax + ((bx - ax) * j) / stappen, ay + ((by - ay) * j) / stappen);
+          if (k === vorig) continue;
+          if (vorig >= 0 && k % E.n !== vorig % E.n && Math.floor(k / E.n) !== Math.floor(vorig / E.n)) open(Math.floor(vorig / E.n) * E.n + (k % E.n));
+          open(k);
+          vorig = k;
+        }
+      }
+    }
+    for (const b of E.bruggen || []) for (const t of b.tegels) kost[vakVan(t.x, t.y)] = 1;
+    GROF_KOST.set(E, kost);
+    return kost;
+  }
+
+  // Wat de grove weg van kaart w weet, zolang de kaart en het open land niet veranderen.
+  function grofVan(w) {
+    const versie = T.kaartVersie(w);
+    const open = T.openGrootte(w);
+    let g = GROF.get(w);
+    if (!g || g.versie !== versie || g.open !== open) GROF.set(w, (g = { versie, open, kost: new Map(), velden: new Map() }));
+    return g;
+  }
+
+  // Wat een stap in elk vak kost voor wie op eiland `eig` staat: in land dat open is 1 als er een tegel van zijn eiland in
+  // ligt en anders 0, in land dat dicht is wat de schets zegt. Met de delen: per vak het nummer van het stuk vakken dat
+  // samenhangt (-1 als het dicht is), om te weten waar hij kan komen.
+  function kostVoor(w, E, g, eig) {
+    if (g.kost.has(eig)) return g.kost.get(eig);
+    const kost = grofKost(E).slice();
+    const per = T.STUK / E.vak;
+    for (const s of w.open) {
+      for (let ky = Math.floor(s / 64) * per; ky < (Math.floor(s / 64) + 1) * per && ky < E.n; ky++) {
+        for (let kx = (s % 64) * per; kx < ((s % 64) + 1) * per && kx < E.n; kx++) {
+          let ja = 0;
+          for (let y = ky * E.vak; y < (ky + 1) * E.vak && !ja; y++) {
+            for (let x = kx * E.vak; x < (kx + 1) * E.vak; x++) {
+              if (T.eilandOp(w, x, y) !== eig) continue;
+              ja = 1;
+              break;
+            }
+          }
+          kost[ky * E.n + kx] = ja;
+        }
+      }
+    }
+    const uit = { kost, deel: delenVan(kost, E.n) };
+    g.kost.set(eig, uit);
+    return uit;
+  }
+  // De samenhangende stukken vakken van `kost` (zoals grofStap ze belopen), per vak een nummer, -1 waar het dicht is.
+  function delenVan(kost, n) {
+    const deel = new Int32Array(n * n).fill(-1);
+    const rij = [];
+    let nr = 0;
+    for (let b = 0; b < n * n; b++) {
+      if (!kost[b] || deel[b] >= 0) continue;
+      deel[b] = nr;
+      rij.push(b);
+      while (rij.length) {
+        const k = rij.pop();
+        for (const [dx, dy] of RICHTINGEN) {
+          const j = grofStap(kost, n, k, dx, dy);
+          if (j < 0 || deel[j] >= 0) continue;
+          deel[j] = nr;
+          rij.push(j);
+        }
+      }
+      nr++;
+    }
+    return deel;
+  }
+  // Het vak waar hij heen gaat: het doel, of, kan hij daar niet komen (het is dicht, of het hangt niet samen met zijn
+  // vak), het vak van zijn deel dat er het dichtst bij ligt (bij gelijk het eerste).
+  function doelVak(E, deel, van, doel) {
+    if (deel[doel] >= 0 && deel[doel] === deel[van]) return doel;
+    const n = E.n;
+    const [dx, dy] = [doel % n, Math.floor(doel / n)];
+    let beste = -1;
+    let bij = Infinity;
+    for (let k = 0; k < n * n; k++) {
+      if (deel[k] !== deel[van]) continue;
+      const a = ((k % n) - dx) ** 2 + (Math.floor(k / n) - dy) ** 2;
+      if (a < bij) [beste, bij] = [k, a];
+    }
+    return beste;
+  }
+
+  // Mag je van vak k een stap (dx, dy) zetten: het vak ernaast is open, en schuin ook de twee vakken die de hoek maken.
+  function grofStap(kost, n, k, dx, dy) {
+    const x = k % n;
+    const y = (k - x) / n;
+    const nx = x + dx;
+    const ny = y + dy;
+    if (nx < 0 || ny < 0 || nx >= n || ny >= n || !kost[ny * n + nx]) return -1;
+    if (dx && dy && !(kost[y * n + nx] && kost[ny * n + x])) return -1;
+    return ny * n + nx;
+  }
+
+  // Het veld naar vak `doel` over `kost`. Dial: een stap kost hooguit 14 maal BROEK, dus zoveel emmers plus één in de
+  // rondte.
+  function grofVeld(g, kost, E, doel, eig) {
+    const sleutel = `${doel}|${eig}`;
+    if (g.velden.has(sleutel)) return g.velden.get(sleutel);
+    const n = E.n;
+    const d = new Uint32Array(n * n).fill(GEEN);
+    const rond = 14 * BROEK + 1;
+    const emmers = Array.from({ length: rond }, () => []);
+    d[doel] = 0;
+    emmers[0].push(doel);
+    let nog = 1;
+    for (let nu = 0; nog > 0; nu++) {
+      const emmer = emmers[nu % rond];
+      while (emmer.length) {
+        const k = emmer.pop();
+        nog--;
+        if (d[k] !== nu) continue;
+        for (const [dx, dy] of RICHTINGEN) {
+          const j = grofStap(kost, n, k, dx, dy);
+          if (j < 0) continue;
+          const nd = nu + (dx && dy ? 14 : 10) * kost[j];
+          if (nd >= d[j]) continue;
+          d[j] = nd;
+          emmers[nd % rond].push(j);
+          nog++;
+        }
+      }
+    }
+    g.velden.set(sleutel, d);
+    if (g.velden.size > IN().grofOnthouden) g.velden.delete(g.velden.keys().next().value);
+    return d;
+  }
+
+  // Het eiland waar wie op `t` staat op kan stappen (zijn tegel, of een ernaast: wie in een deur staat), of -1.
+  function eilandBij(w, t) {
+    const eigen = T.eilandOp(w, t.x, t.y);
+    if (eigen >= 0) return eigen;
+    for (const [dx, dy] of RICHTINGEN) {
+      const e = T.eilandOp(w, t.x + dx, t.y + dy);
+      if (e >= 0) return e;
+    }
+    return -1;
+  }
+
+  // De tegel van eiland `eig` in vak k die het dichtst bij het midden van het vak ligt (bij gelijk de eerste van boven
+  // naar onder), of null.
+  function tegelInVak(w, E, k, eig) {
+    const x0 = (k % E.n) * E.vak;
+    const y0 = Math.floor(k / E.n) * E.vak;
+    const m = (E.vak - 1) / 2;
+    let beste = null;
+    let bij = Infinity;
+    for (let y = y0; y < y0 + E.vak; y++) {
+      for (let x = x0; x < x0 + E.vak; x++) {
+        const a = Math.max(Math.abs(x - x0 - m), Math.abs(y - y0 - m));
+        if (a < bij && T.isBegaanbaar(w, x, y) && T.eilandOp(w, x, y) === eig) [beste, bij] = [{ x, y }, a];
+      }
+    }
+    return beste;
+  }
+
+  // De weg van een tocht: langs de grove weg naar het verste vak dat open is (hooguit grofVooruit vakken ver), op een
+  // tegel van zijn eiland. Leeg als hij daar al staat en het land voor hem nog dicht is (het gaat zo open), null als er
+  // geen grove weg is of hij niet verder komt.
+  function tochtRoute(w, van, doel, o) {
+    if (!T.opKaart(w, doel.x, doel.y)) return null;
+    const E = T.eilandVan(w.eiland.zaad);
+    const n = E.n;
+    const eig = eilandBij(w, van);
+    if (eig < 0) return null;
+    const g = grofVan(w);
+    const { kost, deel } = kostVoor(w, E, g, eig);
+    let k = Math.floor(van.y / E.vak) * n + Math.floor(van.x / E.vak);
+    if (deel[k] < 0) return null;
+    const naar = doelVak(E, deel, k, Math.floor(doel.y / E.vak) * n + Math.floor(doel.x / E.vak));
+    const d = grofVeld(g, kost, E, naar, eig);
+    const vakken = [k];
+    let wacht = false; // het volgende vak van de grove weg is nog dicht
+    for (let i = 0; i < IN().grofVooruit && d[k] > 0; i++) {
+      let beste = -1;
+      for (const [dx, dy] of RICHTINGEN) {
+        const j = grofStap(kost, n, k, dx, dy);
+        if (j >= 0 && d[j] < (beste < 0 ? d[k] : d[beste])) beste = j;
+      }
+      if (beste < 0) break;
+      if (T.tegel(w, (beste % n) * E.vak, Math.floor(beste / n) * E.vak) === 'buiten') {
+        wacht = true;
+        break;
+      }
+      k = beste;
+      vakken.push(k);
+    }
+    for (let i = vakken.length - 1; i >= 0; i--) {
+      const t = tegelInVak(w, E, vakken[i], eig);
+      if (!t) continue;
+      // Staat hij er al: wacht hij op het land voor hem, dan een lege weg; verder dan hier komt hij niet, dan geen.
+      if (t.x === van.x && t.y === van.y) return wacht ? [] : null;
+      const pad = T.zoekRoute(w, van, t, { deurenOpenen: o.deurenOpenen });
+      if (pad) return pad;
+    }
+    return null;
   }
 })(globalThis.Spel = globalThis.Spel || {});

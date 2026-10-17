@@ -75,7 +75,10 @@ wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en
 eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
 volgende is stuk c**, de roverskampen: het plan bij I is besloten (Marcel: "V2 G2 P1 B1", en sturen naar land dat je
-niet kent). **Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c, eerst c0, sturen naar onbekend land. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+niet kent). **c0 is af** (17 okt, op de branch `ccr-b0684dee-kk0n5b`; `spel.md`, bij "Op tocht"): rechts op land dat je
+niet kent, in beeld of op de minikaart, en je mannen gaan erheen, ook naar de andere kant van het eiland. Het liet zien
+dat het eiland te voet in stukken gebroken is (`opmerkingen.md`): **vraag L wacht op Marcel** (hieronder), dan c1.
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 is af, vraag L wacht op Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -95,6 +98,29 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Vraag L, het land te voet** (vraag 170, stap 6a2, c0, 17 okt; `opmerkingen.md`, "Wat c0 van 6a2 liet zien"): tegel
+  voor tegel is het eiland in stukken gebroken. Op eiland 1 haalt elke dorpsplek 67% van het land, op eiland 5 is het
+  grootste stuk 40% en halen twee dorpsplekken 1% en 3%, en het proefdorp (eiland 2) zit in een stuk van 7%: tussen de
+  zee, het woud, een meer, en een rivier waar de weg overheen gaat zonder bruggetje. Oorzaken: het woud (60% bomen) is
+  een muur, dichte bosjes in de kampen ook, en een weg krijgt geen bruggetje als de rivier breder is dan 7 tegels of
+  schuin ligt (2 à 3 keer per eiland). Zo komt wie je ver stuurt vaak niet verder dan zijn eigen stuk, en kunnen twee
+  dorpen (straks de rovers in d, en de tocht naar het kasteel) elkaar te voet niet halen. **L1** elke weg krijgt een
+  bruggetje waar hij over water gaat, ook breed en schuin (de brug langs de korte kant, de weg buigt erheen): dan hangen
+  alle dorpen, de stad en het kasteel over de wegen samen, en blijft het woud een muur, met de wegen als passen; **L2**
+  als L1, en het woud wordt doorgankelijk (minder bomen, of wildpaden), zodat je overal komt, trager door het bos; **L3**
+  zo laten: het land is wat het is. Voorstel van Claude: **L1**, want de wegen dragen alles (de heer, de marskramer, de
+  rovers in d, de tocht naar het kasteel), en een woud als muur geeft het eiland vorm: passen om te verdedigen. L1 en L2
+  veranderen het land (het opslaan een versie omhoog).
+- **Op tocht bekijken** (vraag 170, stap 6a2, c0, 17 okt, op de branch `ccr-b0684dee-kk0n5b`): Nieuw spel, Tab (de held),
+  en klik rechts op de minikaart, ver weg: hij loopt erheen door land dat je niet kent, het land gaat open waar hij komt,
+  en de plek knippert even. Met een wachthuis en militie net zo: ver van huis blijven ze dag en nacht op hun post. Ligt
+  je dorp in een klein stuk land (vraag L), dan gaat hij zo ver als het kan en blijft daar. **Wat Claude erbij koos**
+  (zeg het als het anders moet): (1) rechts op de minikaart stuurt je gekozen mannen (links kijkt daar, zoals nu); (2) een
+  post buiten het land van je dorp (100 bij 100) houdt hem dag en nacht in dienst, tot je hem terugroept; (3) een plek in
+  land dat nog dicht was, schuift als hij er dichtbij is naar de dichtste tegel waar hij kan komen; (4) de weg zoekt hij
+  als een verkenner: grof over de schets (water en woud dicht, de wegen open), precies over wat open is; een dood eind
+  loopt hij eerst in en dan terug. **Om naar te kijken:** wie snel nieuw land in loopt, laat het spel het land maken
+  (45 ms per stuk), wat op 30× kan haperen; zeg het als je het ziet.
 - **Het wild over het hele eiland bekijken** (vraag 170, stap 6a2, stuk b, 16 okt, in `main`):
   Nieuw spel (een bewaard spel van vóór stuk b laadt niet meer: versie 19), zoom uit, en loop met mensen het land uit: in
   het bos dat opengaat, leven herten en wolven, ook ver van je dorp; `Spel.debug.beesten()` zegt wat er bij je dorp leeft.
@@ -923,7 +949,10 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   moet dat kunnen". Daarmee: je vindt een kamp zelf (geen teken na een overval), en geen eigen bevel voor een kamp; wel
   **c0, sturen naar onbekend land**, als eerste: een rechtsklik in het zwart (in beeld of op de minikaart) stuurt je
   mannen erheen, ook naar de andere kant van het eiland; het land gaat open waar ze komen, en ze zoeken onderweg hun weg
-  (over een brug als er een rivier tussen ligt). Wie de buit draagt en valt, verliest hem (B1).
+  (over een brug als er een rivier tussen ligt). Wie de buit draagt en valt, verliest hem (B1). **c0 is af** (17 okt, op
+  de branch `ccr-b0684dee-kk0n5b`; `spel.md`, bij "Op tocht"; `code.md` bij `js/lopen.js`, "Door land dat nog dicht
+  is"): de weg erheen is een grove weg over de schets en precies over wat open is, en een post ver van huis houdt hem
+  dag en nacht in dienst. Het liet zien dat het eiland te voet in stukken gebroken is: vraag L ("Wacht op Marcel").
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp

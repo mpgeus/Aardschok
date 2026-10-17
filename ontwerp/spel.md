@@ -1069,6 +1069,14 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   briefje. Een bevel terwijl ze rusten, wekt hen. Op een vijand: *Attack the wolf*; ze lopen hem na tot
   ze hem raken, en slaan (hieronder); is hij gevallen of weg, dan blijven ze waar ze zijn. De held heeft geen post: hij
   blijft waar je hem neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
+- **Op tocht** (17 okt, stap 6a2, c0; Marcel: "Stel je stuurt een soldaat maar de andere kant van de wereld met een
+  klik, dan moet dat kunnen"). Rechts mag ook op land dat je niet kent, in beeld of op de minikaart (rechts op de
+  minikaart stuurt je gekozen mannen erheen, en de plek knippert even). Ze zoeken onderweg hun weg: eerst grof over de
+  schets van het eiland (geen water, geen woud, wel de wegen), dan precies over het land dat open gaat waar ze komen
+  (een dicht bosje of een holte tussen de bomen leren ze zo kennen). Kunnen ze er niet komen, dan gaan ze zo dicht als
+  het kan, en blijven daar. Een plek in land dat nog dicht was, schuift als ze er dichtbij zijn naar de dichtste vrije
+  tegel waar ze kunnen komen. Wie een post heeft buiten het land van het dorp, is op tocht: hij blijft in dienst, dag en
+  nacht, en loopt 's avonds niet naar huis om te slapen, tot je hem terugroept.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

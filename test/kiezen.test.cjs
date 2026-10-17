@@ -11,6 +11,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het proefdorp met een wachthuis en twee man militie, om tien uur 's ochtends.
 function metMilitie() {
   const { S } = proefDorp(T, { gebouwen: ['wachthuis'] });
+  S.bezocht = new Set(); // waar de held kwam (js/verkennen.js, T.bijAankomst), zoals js/main.js het spel begint
   const D = S.dorp;
   const huis = D.gebouwen.find((g) => g.soort === 'wachthuis');
   assert.equal(T.zetSoldaten(D, huis, 'militie', 2), true);
@@ -61,7 +62,7 @@ test('links kiest: een man of een dorpeling geeft zichzelf, een gebouw zijn brie
   assert.equal(T.handelingVerkennen(S, leeg), null, 'een lege tegel: er valt niets te kiezen');
 });
 
-test('rechts met je mannen gekozen: erheen, of een vijand achterna; op land dat je niet kent niet', () => {
+test('rechts met je mannen gekozen: erheen, of een vijand achterna; ook naar land dat je niet kent', () => {
   const { S, D, a, b } = metMilitie();
   const doel = vrijeTegel(D, T.tegelVan(a), 5, 0);
   assert.equal(T.handelingSturen(S, doel, []), null, 'zonder mannen doet rechts niets');
@@ -77,7 +78,8 @@ test('rechts met je mannen gekozen: erheen, of een vijand achterna; op land dat 
   const g = T.kaartGrens(D.wereld);
   const ver = { x: g.x + 2, y: g.y + 2 };
   assert.equal(T.kentTegel(D, ver.x, ver.y), false, 'de hoek van het eiland ken je niet');
-  assert.equal(T.handelingSturen(S, ver, [a]).kan, false);
+  assert.equal(T.handelingSturen(S, ver, [a]).kan, true, 'erheen op tocht (vraag 170, stap 6a2, c0)');
+  assert.equal(T.handelingSturen(S, { x: -5, y: 3 }, [a]), null, 'buiten het eiland doet rechts niets');
 });
 
 test('erheen: elk een eigen plek, en daar is zijn post, van het opstaan tot het slapen; tot je hem terugroept', () => {
@@ -462,4 +464,60 @@ test("de held heeft geen dienst: een bevel in de nacht wekt hem niet, hij gaat g
   T.stuurMannen(D, T.nummersVan(D, [D.aanvoerder]), naar);
   assert.equal(D.aanvoerder.wakker, undefined);
   assert.equal(T.manBriefje(D, D.aanvoerder).delen[0].regels.some((r) => r.tekst === 'Watch'), false, 'geen Day en Night');
+});
+
+// ── Op tocht (vraag 170, stap 6a2, c0; Marcel, 17 okt: "Stel je stuurt een soldaat maar de andere kant van de wereld met
+// een klik, dan moet dat kunnen"; js/lopen.js, "Door land dat nog dicht is") ──
+
+test('op tocht: een soldaat en de held naar land dat nog dicht is; het land gaat open waar ze komen, en ze komen er', () => {
+  const { S, D, a } = metMilitie();
+  const w = D.wereld;
+  const van = T.tegelVan(a);
+  const doel = { x: van.x + 200, y: van.y };
+  assert.equal(T.tegel(w, doel.x, doel.y), 'buiten', 'daar is het land nog dicht');
+  T.geefOpdracht(S, T.handelingSturen(S, doel, [a, D.aanvoerder]).opdracht);
+  T.wereldTik(S);
+  assert.equal(a.post.dicht, true, 'zijn post ligt in land dat nog dicht is');
+  assert.ok(D.aanvoerder.tocht, 'de held onthoudt waar hij heen moet');
+  const er = () => !a.post.dicht && !a.onderweg && a.tx === a.post.x && a.ty === a.post.y && !D.aanvoerder.tocht;
+  assert.ok(tikTot(S, er, 8000), 'ze komen er');
+  assert.notEqual(T.tegel(w, doel.x, doel.y), 'buiten', 'het land is er open');
+  // De plek zelf ligt in een holte tussen de bomen: ze staan op de dichtste tegels waar ze kunnen komen.
+  assert.ok(T.afstand(T.tegelVan(D.aanvoerder), doel) <= 12, 'de held staat bij zijn plek');
+  assert.ok(T.afstand(a.post, doel) <= 12, 'de post schoof naar waar hij kan komen');
+  assert.notDeepEqual(T.tegelVan(D.aanvoerder), T.tegelVan(a), 'niet op dezelfde tegel');
+  // Ver van huis blijft hij in dienst, ook 's nachts: hij loopt niet terug om thuis te slapen.
+  zetUur(S, 2);
+  assert.equal(T.inDienst(D, a), true);
+  assert.deepEqual(T.dagAnker(D, a), { x: a.post.x, y: a.post.y, straal: 0, tocht: true });
+});
+
+test('op tocht: kan hij er niet komen (water), dan gaat hij zo dicht als het kan, en blijft daar', () => {
+  const { S, D, a } = metMilitie();
+  const w = D.wereld;
+  const E = T.eilandVan(w.eiland.zaad);
+  // Het dichtste water van de schets dat nog dicht is: de zee of een meer.
+  const van = T.tegelVan(a);
+  let doel = null;
+  for (let r = 1; !doel && r < 60; r++) {
+    for (let k = 0; k < E.n * E.n && !doel; k++) {
+      const t = { x: (k % E.n) * E.vak + 4, y: Math.floor(k / E.n) * E.vak + 4 };
+      if (Math.round(T.afstand(t, van) / E.vak) !== r * 4 || !(E.zee[k] || E.meer[k] >= 0) || T.tegel(w, t.x, t.y) !== 'buiten') continue;
+      doel = t;
+    }
+  }
+  assert.ok(doel, 'er is water in de buurt');
+  T.geefOpdracht(S, T.handelingSturen(S, doel, [a]).opdracht);
+  let stil = 0;
+  let vorig = null;
+  for (let i = 0; i < 9000 && stil < 8; i++) {
+    T.wereldTik(S);
+    if (i % 100) continue;
+    const t = T.tegelVan(a);
+    stil = vorig && t.x === vorig.x && t.y === vorig.y && !a.onderweg ? stil + 1 : 0;
+    vorig = t;
+  }
+  assert.ok(stil >= 8, 'hij staat stil');
+  assert.ok(T.isBegaanbaar(w, a.tx, a.ty), 'op het land');
+  assert.ok(T.afstand(T.tegelVan(a), doel) < T.afstand(van, doel) - 20, 'dichter bij het water dan hij begon');
 });

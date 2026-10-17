@@ -1263,6 +1263,8 @@
     vooruitDeel: T.t('land made in parts of'),
     vooruitMsPerSeconde: T.t('ms per second for land made ahead'),
     veldRand: T.t('walking fields reach beyond the village'),
+    grofOnthouden: T.t('long marches remembered'),
+    grofVooruit: T.t('a long march looks ahead (squares of 8)'),
     // Het lege begin, meebouwen, boeren uit het niets, de boeren
     kar: T.t('cart'),
     zaaigraan: T.t('seed grain'),

@@ -86,7 +86,9 @@
     }
     const x = doel.wezen ? doel.wezen.tx : doel.x;
     const y = doel.wezen ? doel.wezen.ty : doel.y;
-    if (!T.kentTegel(S.dorp, x, y)) return { tekst: T.t('You do not know that land'), kan: false, fout: true };
+    // Ook naar land dat je niet kent (vraag 170, stap 6a2, c0; Marcel, 17 okt: "Stel je stuurt een soldaat maar de andere
+    // kant van de wereld met een klik, dan moet dat kunnen"): ze gaan op tocht (js/lopen.js, "Door land dat nog dicht is").
+    if (!T.opKaart(D.wereld, x, y)) return null;
     const opdracht = { soort: 'stuur', wie, naar: { x, y } };
     const tekst = mannen.length === 1 ? T.t('Send {wie} here', { wie: naamVan(D, mannen[0]) }) : T.t('Send {n} men here', { n: mannen.length });
     return { tekst, kan: true, opdracht, doe: geef(opdracht) };
@@ -156,14 +158,14 @@
   }
 
   // De dichtste vrije tegel bij t (t zelf eerst) waar nog niemand van de formatie staat: begaanbaar, en niet in een
-  // gebouw.
-  function vrijBij(w, t, bezet) {
+  // gebouw; met `mag` ook wat die zegt (op tocht: waar hij kan komen).
+  function vrijBij(w, t, bezet, mag) {
     const gezien = new Set([t.x + ',' + t.y]);
     let rand = [t];
     for (let ring = 0; rand.length && ring < 12; ring++) {
       const volgende = [];
       for (const p of rand) {
-        if (T.opKaart(w, p.x, p.y) && T.isBegaanbaar(w, p.x, p.y) && !bezet.has(p.x + ',' + p.y)) return p;
+        if (T.opKaart(w, p.x, p.y) && T.isBegaanbaar(w, p.x, p.y) && !bezet.has(p.x + ',' + p.y) && (!mag || mag(p))) return p;
         for (const [dx, dy] of BUREN) {
           const k = p.x + dx + ',' + (p.y + dy);
           if (gezien.has(k)) continue;
@@ -268,7 +270,7 @@
       e.dwaalTijd = 0;
       return true;
     }
-    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, deurenOpenen: e === D.aanvoerder });
+    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, deurenOpenen: e === D.aanvoerder, tocht: true });
     if (pad === null) return false;
     T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, { x: doel.x, y: doel.y, naast });
     return true;
@@ -294,8 +296,16 @@
       delete e.vanaf;
       if (formatie === 'lijn') delete e.formatie;
       else e.formatie = formatie;
-      if (e === D.aanvoerder) e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
-      else e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y } };
+      if (e === D.aanvoerder) {
+        e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
+        // Over open land komt hij er in één weg; anders onthoudt hij het, en zoekt hij onderweg verder (T.werkSturenBij).
+        if (verVanHuis(D, { x, y })) e.tocht = T.tegel(D.wereld, x, y) === 'buiten' ? { x, y, dicht: true } : { x, y };
+        else delete e.tocht;
+      } else {
+        e.post = { x, y, kijk, richting: { x: uit.richting.x, y: uit.richting.y } };
+        // Een plek in land dat nog dicht is: wat daar staat, weet niemand; is het open, dan schuift hij (werkTochtBij).
+        if (T.tegel(D.wereld, x, y) === 'buiten') e.post.dicht = true;
+      }
       if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
     }
   };
@@ -371,8 +381,11 @@
     if (!D.kalender) return true;
     return (T.dagdeelVan(D.kalender.dag) === 'nacht') === (T.dienstVan(e) === 'nacht');
   }
-  // Is hij in dienst: in zijn eigen dienst, of opgestaan voor een bevel of te wapen.
-  T.inDienst = (D, e) => !!e.wakker || zijnDienstNu(D, e);
+  // Een plek buiten het land van het dorp (T.dorpVak): wie daar zijn post heeft, is op tocht (vraag 170, stap 6a2, c0).
+  const verVanHuis = (D, t) => !!D.plek && !T.inVak(T.dorpVak(D), t.x, t.y);
+  // Is hij in dienst: in zijn eigen dienst, opgestaan voor een bevel of te wapen, of op tocht: met een post ver van huis
+  // blijft hij in dienst, dag en nacht, en loopt hij 's avonds niet naar huis om te slapen.
+  T.inDienst = (D, e) => !!e.wakker || (!!e.post && verVanHuis(D, e.post)) || zijnDienstNu(D, e);
   // Wie rust, staat op (de held rust nooit); wie binnen is, komt meteen naar buiten (het dwalen, js/verkennen.js).
   function wek(D, e) {
     if (e === D.aanvoerder || T.inDienst(D, e)) return false;
@@ -413,7 +426,8 @@
     }
     if (e.volgt) return { x: e.volgt.tx, y: e.volgt.ty, straal: 1 };
     if (!T.inDienst(D, e)) return null;
-    return { x: e.post.x, y: e.post.y, straal: 0 };
+    // Ver van huis is de weg erheen een tocht (js/lopen.js): over de grove weg, ook waar het land nog dicht is.
+    return verVanHuis(D, e.post) ? { x: e.post.x, y: e.post.y, straal: 0, tocht: true } : { x: e.post.x, y: e.post.y, straal: 0 };
   };
 
   // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): is de vijand die hij aanviel gevallen of weg, dan blijft hij
@@ -423,12 +437,34 @@
     if (!D.wereld) return;
     for (const e of T.mannenVan(D)) {
       if (e.wakker && zijnDienstNu(D, e)) delete e.wakker;
+      werkTochtBij(D, e);
       const v = e.volgt;
       if (!v || !(v.dood || !D.wereld.wezens.includes(v))) continue;
       delete e.volgt;
       if (e !== D.aanvoerder) e.post = { x: e.tx, y: e.ty };
     }
   };
+
+  // Op tocht (vraag 170, stap 6a2, c0): een plek in land dat nog dicht was (een post, of waar de held heen gaat), schuift
+  // als hij er dichtbij is (TOCHT_BIJ tegels) naar de dichtste vrije tegel waar hij kan komen: er kan een boom staan, of
+  // de plek ligt in een holte tussen de bomen. De held heeft geen post: hij zoekt verder als hij stilstaat en er nog niet
+  // is, en komt hij niet dichterbij, dan blijft hij waar hij is.
+  const TOCHT_BIJ = 24;
+  function werkTochtBij(D, e) {
+    const w = D.wereld;
+    for (const plek of [e.post, e.tocht]) {
+      if (!plek || !plek.dicht || T.tegel(w, plek.x, plek.y) === 'buiten' || T.afstand(T.tegelVan(e), plek) > TOCHT_BIJ) continue;
+      // waar de anderen staan of heen gaan
+      const bezet = new Set(T.mannenVan(D).filter((m) => m !== e).map((m) => m.post || m.tocht || T.tegelVan(m)).map((q) => q.x + ',' + q.y));
+      const t = vrijBij(w, plek, bezet, (p) => T.kanErKomen(w, T.tegelVan(e), p));
+      plek.x = t.x;
+      plek.y = t.y;
+      delete plek.dicht;
+    }
+    const doel = e.tocht;
+    if (!doel || e !== D.aanvoerder || e.pad.length || e.onderweg || e.doelwit || e.volgt) return;
+    if ((e.tx === doel.x && e.ty === doel.y) || !loop(D, e, doel, false)) delete e.tocht;
+  }
 
   // ── Het briefje van wie je koos (js/huisbriefje.js legt het neer, zoals dat van een gebouw) ──
 

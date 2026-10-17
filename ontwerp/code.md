@@ -417,6 +417,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden. Op het eiland beslaat
   een veld het dorp met `veldRand` tegels eromheen (`veldVak`), niet al het land dat je kent; van of naar daarbuiten, of
   als het veld geen weg vindt, zoekt hij hem zelf.
+- **Door land dat nog dicht is** (vraag 170, stap 6a2, c0, 17 okt): ligt het doel van `T.zoekRoute` in land dat nog
+  dicht is (`'buiten'`), of komt een man er over open land niet (de optie `tocht`: `loop` in `js/kiezen.js`, en een post
+  ver van huis via `T.bevelAnker`), dan geeft `tochtRoute` de weg naar het verste vak van een grove weg dat al open is.
+  De grove weg is een veld over de vakken van de schets (`E.vak`, `js/eiland.js`; Dial, 10 recht en 14 schuin, geen
+  hoek afsnijden): in land dat dicht is wat de schets zegt (`grofKost`: water en woud dicht, broek drie keer zo duur, een
+  weg van het eiland open, vak voor vak recht aansluitend), in land dat open is alleen een vak met een tegel van het
+  eiland van wie loopt (`kostVoor`, met `T.eilandOp`). Kan hij er niet komen (`delenVan`, `doelVak`), dan naar het vak
+  van zijn deel dat er het dichtst bij ligt. Alles uit het nummer van het eiland en het open land, geen spelstaat; per
+  kaart opnieuw als de kaart of het open land verandert (`grofVan`). Wat het kost, valt weg tegen het maken van het
+  land zelf (`T.landStuk`, een profiel van 17 okt); de getallen `grofOnthouden` en `grofVooruit` in
+  `T.LOPEN_INSTELLINGEN`.
 
 ### js/praatje.js: een praatje
 
@@ -1687,6 +1698,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wie vecht, dwaalt niet); `T.werkSturenBij` (elke tik, in elk dorp) geeft wie zijn vijand zag vallen een post waar hij
   staat, en wie geen man meer is, verliest zijn bevel. Wie op de jacht meeloopt (`e.opgeroepen`), volgt na een bevel jouw
   bevel. Een bevel erheen laat ook zijn doel gaan (`e.doelwit`).
+- **Op tocht** (stap 6a2, c0, 17 okt): `T.handelingSturen` stuurt ook naar land dat je niet kent (alleen buiten het
+  eiland niet), en rechts op de minikaart doet hetzelfde (`js/balk.js`). De weg erheen zoekt `T.zoekRoute` met de optie
+  `tocht` (`js/lopen.js`, "Door land dat nog dicht is"). Een post buiten het land van het dorp (`verVanHuis`, buiten
+  `T.dorpVak`) houdt hem dag en nacht in dienst (`T.inDienst`), en `T.bevelAnker` geeft hem met `tocht: true`, zodat het
+  dwalen de tocht vraagt. De held heeft geen post: ver weg onthoudt hij `e.tocht`, en `werkTochtBij` (vanuit
+  `T.werkSturenBij`) laat hem verder zoeken als hij stilstaat, tot hij er is of niet verder komt. Een plek in land dat
+  nog dicht was (`dicht: true` op `e.post` of `e.tocht`) schuift binnen `TOCHT_BIJ` tegels naar de dichtste vrije tegel
+  waar hij kan komen (`vrijBij` met `T.kanErKomen`), en niet waar een ander staat of heen gaat.
 - **De formatie** (stap 3; Marcel, 16 okt: "A1, B1, C1, D1, E1"): `T.formatiePlekken(D, mannen, naar, richting)` geeft
   `{ plekken: [{ e, x, y, kijk }], richting }` zonder iets te veranderen (ook voor het groen na een rechtsklik:
   `S.stuurPlekken`, alleen scherm, getekend in `tekenStuurPlekken`, `js/tekenen.js`). De rij van een man is `T.rijVan(e)`

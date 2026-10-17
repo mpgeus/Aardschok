@@ -335,7 +335,8 @@
         const doel = { x: Math.round(thuisNu.x), y: Math.round(thuisNu.y), tot: Math.max(straalNu, naastDeur) };
         // Waar hij hoort (zijn deur, zijn werk, de put, de herberg), daar gaan er meer heen: een veld (js/lopen.js). Niet
         // naar een plek die meeloopt (wie helpt, blijft bij zijn boer, js/veldwerk.js): die zoekt niemand anders.
-        const pad = T.zoekRoute(w, { x: m.tx, y: m.ty }, doel, { tot: doel.tot, veld: thuisNu.veld !== false });
+        // Een post ver van huis is een tocht (js/kiezen.js, T.bevelAnker): de weg mag door land dat nog dicht is.
+        const pad = T.zoekRoute(w, { x: m.tx, y: m.ty }, doel, { tot: doel.tot, veld: thuisNu.veld !== false, tocht: !!thuisNu.tocht });
         if (pad && pad.length) {
           T.geefRoute(m, pad, doel);
           delete m.geenWeg;

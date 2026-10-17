@@ -691,11 +691,15 @@
     return lijn;
   }
 
-  // Een klik of slepen op de minikaart: kijk daar (T.kijkNaar, js/main.js).
-  function kijkOpMinikaart(ev) {
+  // De tegel van het eiland onder de muis op de minikaart.
+  function tegelOpMinikaart(ev) {
     const r = ev.currentTarget.getBoundingClientRect();
     const B = miniBreed();
-    const t = T.minikaartTegel(((ev.clientX - r.left) / r.width) * B, ((ev.clientY - r.top) / r.height) * (B / 2), B);
+    return T.minikaartTegel(((ev.clientX - r.left) / r.width) * B, ((ev.clientY - r.top) / r.height) * (B / 2), B);
+  }
+  // Een klik of slepen op de minikaart: kijk daar (T.kijkNaar, js/main.js).
+  function kijkOpMinikaart(ev) {
+    const t = tegelOpMinikaart(ev);
     const p = T.naarScherm(t.x, t.y);
     T.kijkNaar(p.x, p.y);
     mini.getekend = -Infinity;
@@ -705,6 +709,18 @@
     if (ev.button !== 0) return;
     mini.slepen = true;
     kijkOpMinikaart(ev);
+  });
+  // Rechts op de minikaart, met je mannen gekozen: erheen, ook naar land dat je niet kent (js/kiezen.js; vraag 170, stap
+  // 6a2, c0; Marcel, 17 okt: "Stel je stuurt een soldaat maar de andere kant van de wereld met een klik").
+  miniDoek.addEventListener('contextmenu', (ev) => {
+    ev.preventDefault();
+    const S = T.S;
+    if (!S || S.modus !== 'verkennen' || S.foto) return;
+    const t = tegelOpMinikaart(ev);
+    const r = T.handelingSturen(S, { x: Math.round(t.x), y: Math.round(t.y) }, T.gekozenMannen(S));
+    if (!r || !r.kan || !r.doe) return;
+    r.doe();
+    T.ui.ping({ x: Math.round(t.x), y: Math.round(t.y) });
   });
   miniDoek.addEventListener('mousemove', (ev) => {
     if (mini.slepen) kijkOpMinikaart(ev);
