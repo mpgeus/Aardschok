@@ -1,0 +1,2529 @@
+{
+ "commit": "9f7f19a3",
+ "uur": 10,
+ "venster": {
+  "width": 2800,
+  "height": 2400
+ },
+ "dorp": {
+  "gebouwen": [
+   {
+    "naam": "huis aan de noordkant",
+    "soort": "huis",
+    "tekening": "planken-huis7-spanen-z",
+    "x": -26,
+    "y": -7
+   },
+   {
+    "naam": "hut aan de noordkant",
+    "soort": "hut",
+    "tekening": "planken-hut1-spanen-z",
+    "x": -17,
+    "y": -4
+   },
+   {
+    "naam": "woontoren",
+    "soort": "woontoren",
+    "tekening": "planken-woontoren-pannen-z",
+    "x": -11,
+    "y": -5
+   },
+   {
+    "naam": "stenen huis aan de noordkant",
+    "soort": "stenenHuis",
+    "tekening": "planken-steen8-pannen-z",
+    "x": -6,
+    "y": -7
+   },
+   {
+    "naam": "tweede hut aan de noordkant",
+    "soort": "hut",
+    "tekening": "planken-hut3-spanen-z",
+    "x": 3,
+    "y": -4
+   },
+   {
+    "naam": "huis met leien",
+    "soort": "huis",
+    "tekening": "planken-huis9-leien-z",
+    "x": 9,
+    "y": -7
+   },
+   {
+    "naam": "herberg",
+    "soort": "herberg",
+    "tekening": "planken-herberg1-spanen-n",
+    "x": -26,
+    "y": 2
+   },
+   {
+    "naam": "huis aan de zuidkant",
+    "soort": "huis",
+    "tekening": "planken-huis8-spanen-n",
+    "x": -15,
+    "y": 2
+   },
+   {
+    "naam": "stenen huis aan de zuidkant",
+    "soort": "stenenHuis",
+    "tekening": "planken-steen7-leien-n",
+    "x": -5,
+    "y": 2
+   },
+   {
+    "naam": "hut aan de zuidkant",
+    "soort": "hut",
+    "tekening": "planken-hut4-spanen-n",
+    "x": 4,
+    "y": 2
+   },
+   {
+    "naam": "stenen toren",
+    "soort": "woontoren",
+    "tekening": "planken-woontoren-baksteen-n",
+    "x": 10,
+    "y": 2
+   }
+  ],
+  "weg": [
+   {
+    "x": -28,
+    "y": 0
+   },
+   {
+    "x": -27,
+    "y": 0
+   },
+   {
+    "x": -26,
+    "y": 0
+   },
+   {
+    "x": -25,
+    "y": 0
+   },
+   {
+    "x": -24,
+    "y": 0
+   },
+   {
+    "x": -23,
+    "y": 0
+   },
+   {
+    "x": -22,
+    "y": 0
+   },
+   {
+    "x": -21,
+    "y": 0
+   },
+   {
+    "x": -20,
+    "y": 0
+   },
+   {
+    "x": -19,
+    "y": 0
+   },
+   {
+    "x": -18,
+    "y": 0
+   },
+   {
+    "x": -17,
+    "y": 0
+   },
+   {
+    "x": -16,
+    "y": 0
+   },
+   {
+    "x": -15,
+    "y": 0
+   },
+   {
+    "x": -14,
+    "y": 0
+   },
+   {
+    "x": -13,
+    "y": 0
+   },
+   {
+    "x": -12,
+    "y": 0
+   },
+   {
+    "x": -11,
+    "y": 0
+   },
+   {
+    "x": -10,
+    "y": 0
+   },
+   {
+    "x": -9,
+    "y": 0
+   },
+   {
+    "x": -8,
+    "y": 0
+   },
+   {
+    "x": -7,
+    "y": 0
+   },
+   {
+    "x": -6,
+    "y": 0
+   },
+   {
+    "x": -5,
+    "y": 0
+   },
+   {
+    "x": -4,
+    "y": 0
+   },
+   {
+    "x": -3,
+    "y": 0
+   },
+   {
+    "x": -2,
+    "y": 0
+   },
+   {
+    "x": -1,
+    "y": 0
+   },
+   {
+    "x": 0,
+    "y": 0
+   },
+   {
+    "x": 1,
+    "y": 0
+   },
+   {
+    "x": 2,
+    "y": 0
+   },
+   {
+    "x": 3,
+    "y": 0
+   },
+   {
+    "x": 4,
+    "y": 0
+   },
+   {
+    "x": 5,
+    "y": 0
+   },
+   {
+    "x": 6,
+    "y": 0
+   },
+   {
+    "x": 7,
+    "y": 0
+   },
+   {
+    "x": 8,
+    "y": 0
+   },
+   {
+    "x": 9,
+    "y": 0
+   },
+   {
+    "x": 10,
+    "y": 0
+   },
+   {
+    "x": 11,
+    "y": 0
+   },
+   {
+    "x": 12,
+    "y": 0
+   },
+   {
+    "x": 13,
+    "y": 0
+   },
+   {
+    "x": 14,
+    "y": 0
+   },
+   {
+    "x": 15,
+    "y": 0
+   },
+   {
+    "x": 16,
+    "y": 0
+   },
+   {
+    "x": 17,
+    "y": 0
+   },
+   {
+    "x": 18,
+    "y": 0
+   },
+   {
+    "x": 19,
+    "y": 0
+   },
+   {
+    "x": -28,
+    "y": 1
+   },
+   {
+    "x": -27,
+    "y": 1
+   },
+   {
+    "x": -26,
+    "y": 1
+   },
+   {
+    "x": -25,
+    "y": 1
+   },
+   {
+    "x": -24,
+    "y": 1
+   },
+   {
+    "x": -23,
+    "y": 1
+   },
+   {
+    "x": -22,
+    "y": 1
+   },
+   {
+    "x": -21,
+    "y": 1
+   },
+   {
+    "x": -20,
+    "y": 1
+   },
+   {
+    "x": -19,
+    "y": 1
+   },
+   {
+    "x": -18,
+    "y": 1
+   },
+   {
+    "x": -17,
+    "y": 1
+   },
+   {
+    "x": -16,
+    "y": 1
+   },
+   {
+    "x": -15,
+    "y": 1
+   },
+   {
+    "x": -14,
+    "y": 1
+   },
+   {
+    "x": -13,
+    "y": 1
+   },
+   {
+    "x": -12,
+    "y": 1
+   },
+   {
+    "x": -11,
+    "y": 1
+   },
+   {
+    "x": -10,
+    "y": 1
+   },
+   {
+    "x": -9,
+    "y": 1
+   },
+   {
+    "x": -8,
+    "y": 1
+   },
+   {
+    "x": -7,
+    "y": 1
+   },
+   {
+    "x": -6,
+    "y": 1
+   },
+   {
+    "x": -5,
+    "y": 1
+   },
+   {
+    "x": -4,
+    "y": 1
+   },
+   {
+    "x": -3,
+    "y": 1
+   },
+   {
+    "x": -2,
+    "y": 1
+   },
+   {
+    "x": -1,
+    "y": 1
+   },
+   {
+    "x": 0,
+    "y": 1
+   },
+   {
+    "x": 1,
+    "y": 1
+   },
+   {
+    "x": 2,
+    "y": 1
+   },
+   {
+    "x": 3,
+    "y": 1
+   },
+   {
+    "x": 4,
+    "y": 1
+   },
+   {
+    "x": 5,
+    "y": 1
+   },
+   {
+    "x": 6,
+    "y": 1
+   },
+   {
+    "x": 7,
+    "y": 1
+   },
+   {
+    "x": 8,
+    "y": 1
+   },
+   {
+    "x": 9,
+    "y": 1
+   },
+   {
+    "x": 10,
+    "y": 1
+   },
+   {
+    "x": 11,
+    "y": 1
+   },
+   {
+    "x": 12,
+    "y": 1
+   },
+   {
+    "x": 13,
+    "y": 1
+   },
+   {
+    "x": 14,
+    "y": 1
+   },
+   {
+    "x": 15,
+    "y": 1
+   },
+   {
+    "x": 16,
+    "y": 1
+   },
+   {
+    "x": 17,
+    "y": 1
+   },
+   {
+    "x": 18,
+    "y": 1
+   },
+   {
+    "x": 19,
+    "y": 1
+   },
+   {
+    "x": -6,
+    "y": 2
+   },
+   {
+    "x": -6,
+    "y": 3
+   },
+   {
+    "x": -6,
+    "y": 4
+   },
+   {
+    "x": -6,
+    "y": 5
+   },
+   {
+    "x": -6,
+    "y": 6
+   },
+   {
+    "x": -6,
+    "y": 7
+   },
+   {
+    "x": -6,
+    "y": 8
+   },
+   {
+    "x": -6,
+    "y": 9
+   }
+  ],
+  "bomen": [
+   {
+    "soort": "eik",
+    "id": 16,
+    "x": -20,
+    "y": -10
+   },
+   {
+    "soort": "linde",
+    "id": 39,
+    "x": -2,
+    "y": -11
+   },
+   {
+    "soort": "beuk",
+    "id": 35,
+    "x": 13,
+    "y": -10
+   },
+   {
+    "soort": "eik",
+    "id": 17,
+    "x": 22,
+    "y": -3
+   },
+   {
+    "soort": "linde",
+    "id": 39,
+    "x": 23,
+    "y": 8
+   },
+   {
+    "soort": "berk",
+    "id": 24,
+    "x": -10,
+    "y": 11
+   }
+  ],
+  "mensen": [
+   {
+    "naam": "in de straat, voor het stenen huis",
+    "x": -3,
+    "y": 1,
+    "kijkt": {
+     "x": -9,
+     "y": 1
+    }
+   },
+   {
+    "naam": "naast de deur van de woontoren",
+    "x": -8,
+    "y": 0,
+    "kijkt": {
+     "x": -9,
+     "y": -3
+    }
+   },
+   {
+    "naam": "in de steeg",
+    "x": -6,
+    "y": 6,
+    "kijkt": {
+     "x": -6,
+     "y": 0
+    }
+   },
+   {
+    "naam": "achter de hut aan de noordkant",
+    "x": -15,
+    "y": -6,
+    "kijkt": {
+     "x": -15,
+     "y": -12
+    }
+   },
+   {
+    "naam": "op de achterplaats",
+    "x": 5,
+    "y": -7,
+    "kijkt": {
+     "x": 9,
+     "y": -7
+    }
+   },
+   {
+    "naam": "op het pleintje",
+    "x": 19,
+    "y": 1,
+    "kijkt": {
+     "x": 14,
+     "y": 1
+    }
+   }
+  ]
+ },
+ "weergaven": [
+  {
+   "sleutel": "A",
+   "titel": [
+    "A · gewoon",
+    "elk gebouw met zijn dak, zoals het spel nu tekent"
+   ],
+   "plat": [],
+   "samenvatting": {
+    "inwonersGoed": 1,
+    "inwoners": 6,
+    "inwonersGemiddeld": 17,
+    "gebouwenGemiddeld": 56,
+    "deurenVrij": 1,
+    "deuren": 11,
+    "weg": 8,
+    "wegWeg": 94,
+    "wegTegels": 104
+   },
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "gebouwen": [
+    {
+     "naam": "huis aan de noordkant",
+     "tekening": "planken-huis7-spanen-z",
+     "x": 906,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 910,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "tekening": "planken-hut1-spanen-z",
+     "x": 915,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 917,
+      "y": 800
+     }
+    },
+    {
+     "naam": "woontoren",
+     "tekening": "planken-woontoren-pannen-z",
+     "x": 921,
+     "y": 795,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 923,
+      "y": 800
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "tekening": "planken-steen8-pannen-z",
+     "x": 926,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 930,
+      "y": 800
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "tekening": "planken-hut3-spanen-z",
+     "x": 935,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 938,
+      "y": 800
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "tekening": "planken-huis9-leien-z",
+     "x": 941,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 947,
+      "y": 800
+     }
+    },
+    {
+     "naam": "herberg",
+     "tekening": "planken-herberg1-spanen-n",
+     "x": 906,
+     "y": 802,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "deur": {
+      "x": 911,
+      "y": 801
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "tekening": "planken-huis8-spanen-n",
+     "x": 917,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 921,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "tekening": "planken-steen7-leien-n",
+     "x": 927,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 931,
+      "y": 801
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "tekening": "planken-hut4-spanen-n",
+     "x": 936,
+     "y": 802,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "deur": {
+      "x": 936,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "tekening": "planken-woontoren-baksteen-n",
+     "x": 942,
+     "y": 802,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 944,
+      "y": 801
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wie": "Margery",
+     "x": 929,
+     "y": 801
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wie": "Stephen",
+     "x": 924,
+     "y": 800
+    },
+    {
+     "naam": "in de steeg",
+     "wie": "Joan",
+     "x": 926,
+     "y": 806
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wie": "Ralph",
+     "x": 917,
+     "y": 794
+    },
+    {
+     "naam": "op de achterplaats",
+     "wie": "Matilda",
+     "x": 937,
+     "y": 793
+    },
+    {
+     "naam": "op het pleintje",
+     "wie": "Geoffrey",
+     "x": 951,
+     "y": 801
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 0,
+     "pixels": 264093,
+     "zichtbaar": 177761,
+     "procent": 67,
+     "afgedektDoor": {
+      "woontoren": 3,
+      "herberg": 5,
+      "huis aan de zuidkant": 18,
+      "stenen huis aan de zuidkant": 6
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 1,
+     "pixels": 80987,
+     "zichtbaar": 2955,
+     "procent": 4,
+     "afgedektDoor": {
+      "huis aan de zuidkant": 34,
+      "stenen huis aan de zuidkant": 62
+     }
+    },
+    {
+     "naam": "woontoren",
+     "wat": "gebouw",
+     "i": 2,
+     "pixels": 162456,
+     "zichtbaar": 39536,
+     "procent": 24,
+     "afgedektDoor": {
+      "stenen huis aan de noordkant": 19,
+      "stenen huis aan de zuidkant": 56
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 3,
+     "pixels": 244997,
+     "zichtbaar": 136341,
+     "procent": 56,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 25,
+      "hut aan de zuidkant": 4,
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 4,
+     "pixels": 90346,
+     "zichtbaar": 3804,
+     "procent": 4,
+     "afgedektDoor": {
+      "stenen toren": 90
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "wat": "gebouw",
+     "i": 5,
+     "pixels": 170419,
+     "zichtbaar": 143079,
+     "procent": 84,
+     "afgedektDoor": {
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "i": 6,
+     "pixels": 220602,
+     "zichtbaar": 157152,
+     "procent": 71,
+     "afgedektDoor": {
+      "huis aan de zuidkant": 26,
+      "de bomen": 2
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 7,
+     "pixels": 227254,
+     "zichtbaar": 123193,
+     "procent": 54,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 38,
+      "de bomen": 6
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 8,
+     "pixels": 261616,
+     "zichtbaar": 232474,
+     "procent": 89,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 10
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "wat": "gebouw",
+     "i": 9,
+     "pixels": 97943,
+     "zichtbaar": 61733,
+     "procent": 63,
+     "afgedektDoor": {
+      "stenen toren": 35
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "wat": "gebouw",
+     "i": 10,
+     "pixels": 163358,
+     "zichtbaar": 158024,
+     "procent": 97,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wat": "mens",
+     "i": 0,
+     "pixels": 1810,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 100
+     }
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wat": "mens",
+     "i": 1,
+     "pixels": 1598,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 100
+     }
+    },
+    {
+     "naam": "in de steeg",
+     "wat": "mens",
+     "i": 2,
+     "pixels": 1812,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 100
+     }
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wat": "mens",
+     "i": 3,
+     "pixels": 1858,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 100
+     }
+    },
+    {
+     "naam": "op de achterplaats",
+     "wat": "mens",
+     "i": 4,
+     "pixels": 1910,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen toren": 100
+     }
+    },
+    {
+     "naam": "op het pleintje",
+     "wat": "mens",
+     "i": 5,
+     "pixels": 1739,
+     "zichtbaar": 1739,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "i": -1,
+     "pixels": 118106,
+     "zichtbaar": 71468,
+     "procent": 61,
+     "afgedektDoor": {
+      "huis aan de noordkant": 7,
+      "woontoren": 14,
+      "stenen huis aan de noordkant": 7,
+      "huis met leien": 10
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "huis aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "woontoren",
+     "procent": 0
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "huis met leien",
+     "procent": 100
+    },
+    {
+     "naam": "herberg",
+     "procent": 0
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "stenen toren",
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 104,
+    "procent": 8,
+    "helemaalWeg": 94
+   },
+   "doos": [
+    439,
+    263,
+    2403,
+    1795
+   ],
+   "fouten": []
+  },
+  {
+   "sleutel": "B",
+   "titel": [
+    "B · alle gebouwen plat",
+    "zonder dak, de muren tot de heup, de vloer in de kleur van het dak"
+   ],
+   "plat": [
+    "planken-huis7-spanen-z",
+    "planken-hut1-spanen-z",
+    "planken-woontoren-pannen-z",
+    "planken-steen8-pannen-z",
+    "planken-hut3-spanen-z",
+    "planken-huis9-leien-z",
+    "planken-herberg1-spanen-n",
+    "planken-huis8-spanen-n",
+    "planken-steen7-leien-n",
+    "planken-hut4-spanen-n",
+    "planken-woontoren-baksteen-n"
+   ],
+   "samenvatting": {
+    "inwonersGoed": 6,
+    "inwoners": 6,
+    "inwonersGemiddeld": 99,
+    "gebouwenGemiddeld": 95,
+    "deurenVrij": 10,
+    "deuren": 11,
+    "weg": 83,
+    "wegWeg": 12,
+    "wegTegels": 104
+   },
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "gebouwen": [
+    {
+     "naam": "huis aan de noordkant",
+     "tekening": "planken-huis7-spanen-z",
+     "x": 906,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 910,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "tekening": "planken-hut1-spanen-z",
+     "x": 915,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 917,
+      "y": 800
+     }
+    },
+    {
+     "naam": "woontoren",
+     "tekening": "planken-woontoren-pannen-z",
+     "x": 921,
+     "y": 795,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 923,
+      "y": 800
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "tekening": "planken-steen8-pannen-z",
+     "x": 926,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 930,
+      "y": 800
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "tekening": "planken-hut3-spanen-z",
+     "x": 935,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 938,
+      "y": 800
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "tekening": "planken-huis9-leien-z",
+     "x": 941,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 947,
+      "y": 800
+     }
+    },
+    {
+     "naam": "herberg",
+     "tekening": "planken-herberg1-spanen-n",
+     "x": 906,
+     "y": 802,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "deur": {
+      "x": 911,
+      "y": 801
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "tekening": "planken-huis8-spanen-n",
+     "x": 917,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 921,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "tekening": "planken-steen7-leien-n",
+     "x": 927,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 931,
+      "y": 801
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "tekening": "planken-hut4-spanen-n",
+     "x": 936,
+     "y": 802,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "deur": {
+      "x": 936,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "tekening": "planken-woontoren-baksteen-n",
+     "x": 942,
+     "y": 802,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 944,
+      "y": 801
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wie": "Margery",
+     "x": 929,
+     "y": 801
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wie": "Stephen",
+     "x": 924,
+     "y": 800
+    },
+    {
+     "naam": "in de steeg",
+     "wie": "Joan",
+     "x": 926,
+     "y": 806
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wie": "Ralph",
+     "x": 917,
+     "y": 794
+    },
+    {
+     "naam": "op de achterplaats",
+     "wie": "Matilda",
+     "x": 937,
+     "y": 793
+    },
+    {
+     "naam": "op het pleintje",
+     "wie": "Geoffrey",
+     "x": 951,
+     "y": 801
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 0,
+     "pixels": 53828,
+     "zichtbaar": 52746,
+     "procent": 98,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 1,
+     "pixels": 25737,
+     "zichtbaar": 25615,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "woontoren",
+     "wat": "gebouw",
+     "i": 2,
+     "pixels": 31641,
+     "zichtbaar": 27563,
+     "procent": 87,
+     "afgedektDoor": {
+      "stenen huis aan de noordkant": 9,
+      "naast de deur van de woontoren": 4
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 3,
+     "pixels": 61163,
+     "zichtbaar": 60575,
+     "procent": 99,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 4,
+     "pixels": 30955,
+     "zichtbaar": 30083,
+     "procent": 97,
+     "afgedektDoor": {
+      "huis met leien": 3
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "wat": "gebouw",
+     "i": 5,
+     "pixels": 56138,
+     "zichtbaar": 54377,
+     "procent": 97,
+     "afgedektDoor": {
+      "de bomen": 3
+     }
+    },
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "i": 6,
+     "pixels": 79250,
+     "zichtbaar": 74683,
+     "procent": 94,
+     "afgedektDoor": {
+      "de bomen": 6
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 7,
+     "pixels": 61956,
+     "zichtbaar": 54024,
+     "procent": 87,
+     "afgedektDoor": {
+      "de bomen": 11
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 8,
+     "pixels": 54132,
+     "zichtbaar": 51634,
+     "procent": 95,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 5
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "wat": "gebouw",
+     "i": 9,
+     "pixels": 37712,
+     "zichtbaar": 35898,
+     "procent": 95,
+     "afgedektDoor": {
+      "stenen toren": 5
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "wat": "gebouw",
+     "i": 10,
+     "pixels": 31264,
+     "zichtbaar": 31264,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wat": "mens",
+     "i": 0,
+     "pixels": 1810,
+     "zichtbaar": 1810,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wat": "mens",
+     "i": 1,
+     "pixels": 1598,
+     "zichtbaar": 1595,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de steeg",
+     "wat": "mens",
+     "i": 2,
+     "pixels": 1812,
+     "zichtbaar": 1720,
+     "procent": 95,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 5
+     }
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wat": "mens",
+     "i": 3,
+     "pixels": 1858,
+     "zichtbaar": 1858,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "op de achterplaats",
+     "wat": "mens",
+     "i": 4,
+     "pixels": 1910,
+     "zichtbaar": 1910,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "op het pleintje",
+     "wat": "mens",
+     "i": 5,
+     "pixels": 1739,
+     "zichtbaar": 1739,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "i": -1,
+     "pixels": 118106,
+     "zichtbaar": 118106,
+     "procent": 100,
+     "afgedektDoor": {}
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "huis aan de noordkant",
+     "procent": 100
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "procent": 79
+    },
+    {
+     "naam": "woontoren",
+     "procent": 81
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "procent": 82
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "procent": 93
+    },
+    {
+     "naam": "huis met leien",
+     "procent": 100
+    },
+    {
+     "naam": "herberg",
+     "procent": 59
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "procent": 49
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "procent": 100
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "procent": 64
+    },
+    {
+     "naam": "stenen toren",
+     "procent": 52
+    }
+   ],
+   "weg": {
+    "tegels": 104,
+    "procent": 83,
+    "helemaalWeg": 12
+   },
+   "doos": [
+    472,
+    614,
+    2403,
+    1795
+   ],
+   "fouten": []
+  },
+  {
+   "sleutel": "C1",
+   "titel": [
+    "C · plat wat het zicht neemt op een inwoner",
+    "gekozen: de inwoner in de straat, voor het stenen huis; plat: stenen huis aan de zuidkant"
+   ],
+   "plat": [
+    "planken-steen7-leien-n"
+   ],
+   "samenvatting": {
+    "inwonersGoed": 3,
+    "inwoners": 6,
+    "inwonersGemiddeld": 55,
+    "gebouwenGemiddeld": 62,
+    "deurenVrij": 1,
+    "deuren": 11,
+    "weg": 20,
+    "wegWeg": 80,
+    "wegTegels": 104
+   },
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "gebouwen": [
+    {
+     "naam": "huis aan de noordkant",
+     "tekening": "planken-huis7-spanen-z",
+     "x": 906,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 910,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "tekening": "planken-hut1-spanen-z",
+     "x": 915,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 917,
+      "y": 800
+     }
+    },
+    {
+     "naam": "woontoren",
+     "tekening": "planken-woontoren-pannen-z",
+     "x": 921,
+     "y": 795,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 923,
+      "y": 800
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "tekening": "planken-steen8-pannen-z",
+     "x": 926,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 930,
+      "y": 800
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "tekening": "planken-hut3-spanen-z",
+     "x": 935,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 938,
+      "y": 800
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "tekening": "planken-huis9-leien-z",
+     "x": 941,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 947,
+      "y": 800
+     }
+    },
+    {
+     "naam": "herberg",
+     "tekening": "planken-herberg1-spanen-n",
+     "x": 906,
+     "y": 802,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "deur": {
+      "x": 911,
+      "y": 801
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "tekening": "planken-huis8-spanen-n",
+     "x": 917,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 921,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "tekening": "planken-steen7-leien-n",
+     "x": 927,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 931,
+      "y": 801
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "tekening": "planken-hut4-spanen-n",
+     "x": 936,
+     "y": 802,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "deur": {
+      "x": 936,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "tekening": "planken-woontoren-baksteen-n",
+     "x": 942,
+     "y": 802,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 944,
+      "y": 801
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wie": "Margery",
+     "x": 929,
+     "y": 801
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wie": "Stephen",
+     "x": 924,
+     "y": 800
+    },
+    {
+     "naam": "in de steeg",
+     "wie": "Joan",
+     "x": 926,
+     "y": 806
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wie": "Ralph",
+     "x": 917,
+     "y": 794
+    },
+    {
+     "naam": "op de achterplaats",
+     "wie": "Matilda",
+     "x": 937,
+     "y": 793
+    },
+    {
+     "naam": "op het pleintje",
+     "wie": "Geoffrey",
+     "x": 951,
+     "y": 801
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 0,
+     "pixels": 264093,
+     "zichtbaar": 177804,
+     "procent": 67,
+     "afgedektDoor": {
+      "woontoren": 3,
+      "herberg": 5,
+      "huis aan de zuidkant": 23
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 1,
+     "pixels": 80987,
+     "zichtbaar": 3116,
+     "procent": 4,
+     "afgedektDoor": {
+      "woontoren": 6,
+      "huis aan de zuidkant": 89
+     }
+    },
+    {
+     "naam": "woontoren",
+     "wat": "gebouw",
+     "i": 2,
+     "pixels": 162456,
+     "zichtbaar": 60015,
+     "procent": 37,
+     "afgedektDoor": {
+      "stenen huis aan de noordkant": 41,
+      "huis aan de zuidkant": 21
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 3,
+     "pixels": 244997,
+     "zichtbaar": 197044,
+     "procent": 80,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 4,
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 4,
+     "pixels": 90346,
+     "zichtbaar": 3804,
+     "procent": 4,
+     "afgedektDoor": {
+      "stenen toren": 90
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "wat": "gebouw",
+     "i": 5,
+     "pixels": 170419,
+     "zichtbaar": 143079,
+     "procent": 84,
+     "afgedektDoor": {
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "i": 6,
+     "pixels": 220602,
+     "zichtbaar": 157152,
+     "procent": 71,
+     "afgedektDoor": {
+      "huis aan de zuidkant": 26,
+      "de bomen": 2
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 7,
+     "pixels": 227254,
+     "zichtbaar": 210303,
+     "procent": 93,
+     "afgedektDoor": {
+      "de bomen": 6
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 8,
+     "pixels": 54132,
+     "zichtbaar": 42005,
+     "procent": 78,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 22
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "wat": "gebouw",
+     "i": 9,
+     "pixels": 97943,
+     "zichtbaar": 61733,
+     "procent": 63,
+     "afgedektDoor": {
+      "stenen toren": 35
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "wat": "gebouw",
+     "i": 10,
+     "pixels": 163358,
+     "zichtbaar": 158024,
+     "procent": 97,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wat": "mens",
+     "i": 0,
+     "pixels": 1810,
+     "zichtbaar": 1810,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wat": "mens",
+     "i": 1,
+     "pixels": 1598,
+     "zichtbaar": 553,
+     "procent": 35,
+     "afgedektDoor": {
+      "huis aan de zuidkant": 65
+     }
+    },
+    {
+     "naam": "in de steeg",
+     "wat": "mens",
+     "i": 2,
+     "pixels": 1812,
+     "zichtbaar": 1720,
+     "procent": 95,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 5
+     }
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wat": "mens",
+     "i": 3,
+     "pixels": 1858,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "woontoren": 19,
+      "huis aan de zuidkant": 72
+     }
+    },
+    {
+     "naam": "op de achterplaats",
+     "wat": "mens",
+     "i": 4,
+     "pixels": 1910,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen toren": 100
+     }
+    },
+    {
+     "naam": "op het pleintje",
+     "wat": "mens",
+     "i": 5,
+     "pixels": 1739,
+     "zichtbaar": 1739,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "i": -1,
+     "pixels": 118106,
+     "zichtbaar": 71468,
+     "procent": 61,
+     "afgedektDoor": {
+      "huis aan de noordkant": 7,
+      "woontoren": 14,
+      "stenen huis aan de noordkant": 7,
+      "huis met leien": 10
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "huis aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "woontoren",
+     "procent": 0
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "procent": 48
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "huis met leien",
+     "procent": 100
+    },
+    {
+     "naam": "herberg",
+     "procent": 0
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "stenen toren",
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 104,
+    "procent": 20,
+    "helemaalWeg": 80
+   },
+   "doos": [
+    439,
+    263,
+    2403,
+    1795
+   ],
+   "fouten": []
+  },
+  {
+   "sleutel": "C2",
+   "titel": [
+    "C · plat wat het zicht neemt op een gebouw",
+    "gekozen: hut aan de noordkant (in A 4% te zien); plat: woontoren, herberg, huis aan de zuidkant, stenen huis aan de zuidkant"
+   ],
+   "plat": [
+    "planken-woontoren-pannen-z",
+    "planken-herberg1-spanen-n",
+    "planken-huis8-spanen-n",
+    "planken-steen7-leien-n"
+   ],
+   "samenvatting": {
+    "inwonersGoed": 4,
+    "inwoners": 6,
+    "inwonersGemiddeld": 67,
+    "gebouwenGemiddeld": 75,
+    "deurenVrij": 5,
+    "deuren": 11,
+    "weg": 55,
+    "wegWeg": 41,
+    "wegTegels": 104
+   },
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "gebouwen": [
+    {
+     "naam": "huis aan de noordkant",
+     "tekening": "planken-huis7-spanen-z",
+     "x": 906,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 910,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "tekening": "planken-hut1-spanen-z",
+     "x": 915,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 917,
+      "y": 800
+     }
+    },
+    {
+     "naam": "woontoren",
+     "tekening": "planken-woontoren-pannen-z",
+     "x": 921,
+     "y": 795,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 923,
+      "y": 800
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "tekening": "planken-steen8-pannen-z",
+     "x": 926,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 930,
+      "y": 800
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "tekening": "planken-hut3-spanen-z",
+     "x": 935,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "deur": {
+      "x": 938,
+      "y": 800
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "tekening": "planken-huis9-leien-z",
+     "x": 941,
+     "y": 793,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 947,
+      "y": 800
+     }
+    },
+    {
+     "naam": "herberg",
+     "tekening": "planken-herberg1-spanen-n",
+     "x": 906,
+     "y": 802,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "deur": {
+      "x": 911,
+      "y": 801
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "tekening": "planken-huis8-spanen-n",
+     "x": 917,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 921,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "tekening": "planken-steen7-leien-n",
+     "x": 927,
+     "y": 802,
+     "voet": {
+      "b": 9,
+      "h": 7
+     },
+     "deur": {
+      "x": 931,
+      "y": 801
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "tekening": "planken-hut4-spanen-n",
+     "x": 936,
+     "y": 802,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "deur": {
+      "x": 936,
+      "y": 801
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "tekening": "planken-woontoren-baksteen-n",
+     "x": 942,
+     "y": 802,
+     "voet": {
+      "b": 5,
+      "h": 5
+     },
+     "deur": {
+      "x": 944,
+      "y": 801
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wie": "Margery",
+     "x": 929,
+     "y": 801
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wie": "Stephen",
+     "x": 924,
+     "y": 800
+    },
+    {
+     "naam": "in de steeg",
+     "wie": "Joan",
+     "x": 926,
+     "y": 806
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wie": "Ralph",
+     "x": 917,
+     "y": 794
+    },
+    {
+     "naam": "op de achterplaats",
+     "wie": "Matilda",
+     "x": 937,
+     "y": 793
+    },
+    {
+     "naam": "op het pleintje",
+     "wie": "Geoffrey",
+     "x": 951,
+     "y": 801
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 0,
+     "pixels": 264093,
+     "zichtbaar": 223300,
+     "procent": 85,
+     "afgedektDoor": {
+      "hut aan de noordkant": 15
+     }
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 1,
+     "pixels": 80987,
+     "zichtbaar": 80648,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "woontoren",
+     "wat": "gebouw",
+     "i": 2,
+     "pixels": 31641,
+     "zichtbaar": 14970,
+     "procent": 47,
+     "afgedektDoor": {
+      "stenen huis aan de noordkant": 48,
+      "naast de deur van de woontoren": 4
+     }
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "wat": "gebouw",
+     "i": 3,
+     "pixels": 244997,
+     "zichtbaar": 197406,
+     "procent": 81,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 4,
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "wat": "gebouw",
+     "i": 4,
+     "pixels": 90346,
+     "zichtbaar": 3804,
+     "procent": 4,
+     "afgedektDoor": {
+      "stenen toren": 90
+     }
+    },
+    {
+     "naam": "huis met leien",
+     "wat": "gebouw",
+     "i": 5,
+     "pixels": 170419,
+     "zichtbaar": 143079,
+     "procent": 84,
+     "afgedektDoor": {
+      "stenen toren": 14
+     }
+    },
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "i": 6,
+     "pixels": 79250,
+     "zichtbaar": 74683,
+     "procent": 94,
+     "afgedektDoor": {
+      "de bomen": 6
+     }
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 7,
+     "pixels": 61956,
+     "zichtbaar": 54024,
+     "procent": 87,
+     "afgedektDoor": {
+      "de bomen": 11
+     }
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "wat": "gebouw",
+     "i": 8,
+     "pixels": 54132,
+     "zichtbaar": 42005,
+     "procent": 78,
+     "afgedektDoor": {
+      "hut aan de zuidkant": 22
+     }
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "wat": "gebouw",
+     "i": 9,
+     "pixels": 97943,
+     "zichtbaar": 61733,
+     "procent": 63,
+     "afgedektDoor": {
+      "stenen toren": 35
+     }
+    },
+    {
+     "naam": "stenen toren",
+     "wat": "gebouw",
+     "i": 10,
+     "pixels": 163358,
+     "zichtbaar": 158024,
+     "procent": 97,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de straat, voor het stenen huis",
+     "wat": "mens",
+     "i": 0,
+     "pixels": 1810,
+     "zichtbaar": 1810,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "naast de deur van de woontoren",
+     "wat": "mens",
+     "i": 1,
+     "pixels": 1598,
+     "zichtbaar": 1595,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "in de steeg",
+     "wat": "mens",
+     "i": 2,
+     "pixels": 1812,
+     "zichtbaar": 1720,
+     "procent": 95,
+     "afgedektDoor": {
+      "stenen huis aan de zuidkant": 5
+     }
+    },
+    {
+     "naam": "achter de hut aan de noordkant",
+     "wat": "mens",
+     "i": 3,
+     "pixels": 1858,
+     "zichtbaar": 153,
+     "procent": 8,
+     "afgedektDoor": {
+      "hut aan de noordkant": 89
+     }
+    },
+    {
+     "naam": "op de achterplaats",
+     "wat": "mens",
+     "i": 4,
+     "pixels": 1910,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "stenen toren": 100
+     }
+    },
+    {
+     "naam": "op het pleintje",
+     "wat": "mens",
+     "i": 5,
+     "pixels": 1739,
+     "zichtbaar": 1739,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "i": -1,
+     "pixels": 118106,
+     "zichtbaar": 82012,
+     "procent": 69,
+     "afgedektDoor": {
+      "huis aan de noordkant": 12,
+      "stenen huis aan de noordkant": 7,
+      "huis met leien": 10
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "huis aan de noordkant",
+     "procent": 100
+    },
+    {
+     "naam": "hut aan de noordkant",
+     "procent": 79
+    },
+    {
+     "naam": "woontoren",
+     "procent": 81
+    },
+    {
+     "naam": "stenen huis aan de noordkant",
+     "procent": 48
+    },
+    {
+     "naam": "tweede hut aan de noordkant",
+     "procent": 0
+    },
+    {
+     "naam": "huis met leien",
+     "procent": 100
+    },
+    {
+     "naam": "herberg",
+     "procent": 59
+    },
+    {
+     "naam": "huis aan de zuidkant",
+     "procent": 49
+    },
+    {
+     "naam": "stenen huis aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de zuidkant",
+     "procent": 0
+    },
+    {
+     "naam": "stenen toren",
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 104,
+    "procent": 55,
+    "helemaalWeg": 41
+   },
+   "doos": [
+    472,
+    263,
+    2403,
+    1795
+   ],
+   "fouten": []
+  }
+ ],
+ "uitsnede": {
+  "tovMidden": [
+   -1001,
+   -1001,
+   1043,
+   611
+  ],
+  "maat": [
+   2045,
+   1613
+  ]
+ },
+ "gekozen": {
+  "inwoner": "in de straat, voor het stenen huis",
+  "gebouw": "hut aan de noordkant"
+ }
+}

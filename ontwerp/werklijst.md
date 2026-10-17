@@ -104,8 +104,8 @@ stap c, meten (Marcel: "neem 174c over"). Let op: CLAUDE.md zit tegen de grens v
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 17 okt met 176** (bij N): zicht in een dicht dorp, de aanpak van Stronghold (gebouwen plat, het
-land lager, draaien, zoomen). **Bezig in sessie `main`** (17 okt, de sessie "Stronghold-proef"): stap 1, de proef met
-A gewoon, B plat en C alleen plat wat het zicht neemt.
+land lager, draaien, zoomen). **Stap 1, de proef, is af** (17 okt): plat laat in de dichtste straat alle inwoners en 83%
+van de straat zien, gewoon 1 van de 6 en 8%. Wacht op Marcel (hieronder).
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -124,6 +124,9 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De zichtproef bekijken** (vraag 176, stap 1, 17 okt): `gereedschap/zichtproef/zicht_vergelijking.png` en
+  `evaluatie.md`. Dan kiezen of plat een weergave in het spel wordt, en zo ja: de muren (doorsnede of alles laag), de
+  vloer (dakkleur of planken), de toets (de spatie is nu het laatste bericht), en schakelen of vasthouden.
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
   vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
   `Spel.debug.kampen('erheen')` kijk je naar het dichtste, en met `Spel.debug.geenMist = true` zie je de mannen ook als er
@@ -1302,8 +1305,13 @@ helpt; dan een schakelbare weergave in het spel; dan de tekens bij het bouwen en
 de zoom apart; en pas daarna draaien en het land lager. **Stap 1, de proef** (alleen beeld; het spel, de kunst en de
 regels blijven): hetzelfde dichte dorp (minstens 8 gebouwen, bomen, wegen, inwoners) uit dezelfde camera en zoom, als
 A gewoon, B alle gebouwen plat, en C alleen plat wat het zicht neemt op één gekozen inwoner of gebouw, met een
-vergelijkingsplaat en een korte beoordeling. **Bezig in sessie `main`** (17 okt, de sessie "Stronghold-proef"): de proef
-in `gereedschap/zichtproef/`, gebouwd op de cameraproef.
+vergelijkingsplaat en een korte beoordeling. **Stap 1 is af** (17 okt; `gereedschap/zichtproef/evaluatie.md`, de plaat
+`zicht_vergelijking.png`): in een extreem dichte straat van elf huizen is in A 1 van de 6 inwoners te zien, 8% van de
+straat en 1 van de 11 deuren; met alles plat (B) alle 6, 83% en 10 van de 11. C maakt voor een gekozen inwoner één huis
+plat, voor een gekozen hut vier. Plat lost dus op wat draaien niet oploste (de cameraproef). De platte tekening komt uit
+de huizenbouwer (`plat.cjs`): geen dak, de muren aan de kant van de camera tot de heup en achter laag (een doorsnede;
+alles tot de heup dekte de straat nog af), de vloer in de kleur van het dak. **Wacht op Marcel:** de plaat bekijken, en
+kiezen of stap 4 (plat als weergave in het spel) komt, met vier keuzes (`evaluatie.md`, onderaan).
 
 ## Af (sinds 11 okt)
 

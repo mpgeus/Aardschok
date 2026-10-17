@@ -1196,6 +1196,17 @@ het zicht neemt op één gekozen inwoner of één gekozen gebouw. Met een vergel
 beoordeling, met de bestaande pixelartgenerator waar het kan. Het spel, de tekeningen en de regels veranderen niet: de
 vraag is alleen of deze aanpak het zicht genoeg beter maakt om draaien minder nodig te maken.
 
+**De proef** (17 okt; `gereedschap/zichtproef/`, met `evaluatie.md`): een straat van twee tegels met elf huizen
+zonder ruimte ertussen, zes inwoners en zes bomen, door het spel zelf getekend. **De platte tekening** komt uit de
+huizenbouwer (`plat.cjs`, gesneden zoals de bouwfasen): geen dak, geen ramen; de muren aan de kant van de camera (zuid en
+oost op het scherm) tot de heup, met hun hout of steen en de deur, en die aan de achterkant vlak boven de grond, als een
+doorsnede; een vloer en een randje op de muren in de kleur van het eigen dak (pannen oranje, leien grijs, spanen
+bruin); dezelfde voet, maat en anker als het huis. Alle muren tot de heup was niet genoeg: dat dekte de rij tegels
+erachter nog af. **De uitkomst:** gewoon is 1 van de 6 inwoners te zien, 8% van de straat en 1 van de 11 deuren; plat
+alle 6, 83% en 10 van de 11. Alleen plat wat het zicht neemt op wie je kiest: voor een inwoner in de straat één huis,
+voor een hut aan de overkant vier. Plat lost op wat draaien niet oploste (de cameraproef: de inwoner in een smalle
+straat was in alle vier de standen weg). De keuzes voor een weergave in het spel staan onderaan `evaluatie.md`.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
