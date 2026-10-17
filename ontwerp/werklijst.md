@@ -118,7 +118,10 @@ het volgende is 4a, de platte tekeningen van alle huizen, met eerst een proefpla
 voor een opnieuw te tekenen. **De eerste proef is af** (17 okt; `beeld.md`, "De nieuwe stijl"; de plaat
 `gereedschap/pixelart/uit/stijlproef/plaat.png`): het riet zo rustig als het doel, in lagen met punten, de nok in
 bundels, blauwe ramen, een plint met donkere voegen, zachtere schaduw en fijnere kleur, van vier kanten gelijk, even
-duur. Wacht op Marcel (hieronder).
+duur. Wacht op Marcel (hieronder). **Huis1 is het tweede doel** (Marcel, 17 okt: "Neem de plaat als tweede doel");
+de proefplaat is af (`beeld.md`, "Het tweede doel: huis1"; `uit/stijlproef/huis1/plaat.png`): de vorm blijft (het
+silhouet op 284 pixels van de rafelrand van het riet na), maar het riet van huis1 vraagt het omgekeerde van de herberg.
+**Marcel koos het riet van de herberg** (17 okt: "ik laat het dak van de herberg gebruiken"). Wacht op Marcel (hieronder).
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -137,11 +140,14 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De stijlproef bekijken** (vraag 177, 17 okt): `gereedschap/pixelart/uit/stijlproef/plaat.png` (opnieuw met
-  `node gereedschap/pixelart/stijlproef.cjs`, vier minuten) en `beeld.md`, "De nieuwe stijl". Dan kiezen: is dit de
-  richting (het riet, de stenen, het licht), en zo ja, eerst de andere materialen (leien, pannen, spanen, planken,
-  baksteen, leem) elk op een proefplaat, of eerst de haken in de bouwer. **Marcel koos (17 okt): de richting is goed,
-  eerst de andere materialen, een voor een op een proefplaat.**
+- **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
+  andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
+  leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
+  `plaat.png`, en `beeld.md`, "De andere materialen". Dan: welke goed zijn, en wat anders moet; daarna de haken in de
+  bouwer.
+- **Het mos op een verweerd dak** (vraag 177, het tweede doel, 17 okt; Marcel koos het riet van de herberg): moet het
+  mos fijner, langs de lagen, zoals in het doel van huis1 (`gereedschap/pixelart/uit/stijlproef/huis1/plaat.png`,
+  `beeld.md`, "Het tweede doel: huis1")?
 - **De heuvels: d, of eerst ver uitgezoomd sneller** (vraag 174, c, 17 okt): Marcel mat in Firefox (bij L, "Stap c")
   wat Chromium en Edge zeiden, 4 ms per beeld boven vlak. Dan is d de volgende stap: de heuvels altijd aan, de
   spelregel *Height* eruit, en het opslaan een versie omhoog. Maar ver uitgezoomd haalt het spel ook vlak de 60 niet (38
@@ -1390,10 +1396,12 @@ gelijk; geen filter over het plaatje, wel de gegevens van de tekenaar; eerst een
 blijven. De proef: zes gebouwen oud en nieuw, twee van vier kanten, een plaat en een kort verslag.
 
 **De proef is af** (17 okt; het verslag in `beeld.md`, "De nieuwe stijl"; `gereedschap/pixelart/stijlproef.cjs`, los,
-met dertien haken in de bouwer die alleen in het geheugen bestaan): drie lagen op wat de tekenaar per pixel weet (nieuwe
+met haken in de bouwer die alleen in het geheugen bestaan): drie lagen op wat de tekenaar per pixel weet (nieuwe
 patronen, zachte schaduw, fijnere kleur met een tint). Het riet meet zo rustig als het doel (0,038 tegen 0,029; oud
-0,076), even duur om te renderen. Nog niet: een eigen patroon voor leien, pannen, spanen, planken, baksteen en leem
-(daar doen alleen het licht en de kleur iets, en dat is weinig).
+0,076), even duur om te renderen. **De andere materialen zijn af** (17 okt; Marcel: "Do the other materials next, one by
+one on a proof plate"; `beeld.md`, "De andere materialen"): leien, pannen, spanen, planken, baksteen en leem, elk een
+eigen patroon en een plaat (`stijlproef.cjs materialen`, `uit/stijlproef/materiaal-<naam>.png`); negentien haken in
+alles. Nog zonder eigen patroon: zandsteen en het vlechtwerk zelf.
 
 ## P. Ver uitgezoomd sneller (vraag 178, 17 okt)
 

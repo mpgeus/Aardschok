@@ -117,6 +117,19 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `node naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,hakker,zaaister,wiedster,sprokkelaarster,maaister,hakster`. Na elkaar zo'n
   twintig minuten; met een figuur per proces tegelijk (`node werkfiguren-anim.cjs sprokkelaarster` enzovoort, vier
   tegelijk) zo lang als de sprokkelaarster, en daarna `--proef`.
+- `stijlproef.cjs`: de proef van de nieuwe stijl (werklijst vraag 177; `ontwerp/beeld.md`, "De nieuwe stijl"): de
+  huizen naar de nabewerkte herberg, los van de bouwer. Laadt `toren.cjs` en `huis-sdf.cjs` met negentien haken alleen in
+  het geheugen (`HAKEN`), en zet de stijl aan met de knop `stijl`: nieuwe patronen, een zachte schaduw en fijnere kleur.
+  `node stijlproef.cjs` maakt de plaat `uit/stijlproef/plaat.png` (zes gebouwen oud en nieuw, twee van vier kanten; vier
+  minuten), `node stijlproef.cjs materialen [naam]` een plaat per materiaal zonder doel (leien, pannen, spanen,
+  planken, baksteen, leem; `uit/stijlproef/materiaal-<naam>.png`, anderhalve minuut), `node stijlproef.cjs uitsnede
+  [huis] [x,y,b,h] [naam]` een stuk oud, nieuw en (bij de herberg) het doel, drie keer vergroot, in een halve minuut, en
+  `node stijlproef.cjs huis <namen>` losse huizen.
+- `stijlproef-huis1.cjs`: het tweede doel van de stijlproef (vraag 177; `ontwerp/beeld.md`, "Het tweede doel: huis1"):
+  huis1 schoon en verweerd, het spel, de stijl en de nabewerkte plaat (`uit/schermen/huis1-stijl-doel.png`, de webp uit
+  `ontwerp/voorbeelden/` als PNG), en de voorgevel vergroot. Tekent zelf niets (de stijl komt uit `stijlproef.cjs`), en
+  meet of het silhouet gelijk blijft, jong en oud. `node stijlproef-huis1.cjs`, een minuut, naar
+  `uit/stijlproef/huis1/plaat.png` en `meting.json`.
 - `lantaarn.cjs`: de lantaarn van de groepsleider (werklijst vraag 171, D2; `ontwerp/beeld.md`): het lantaarntje als
   eigen laag over elk figuur, met het anker waar de hand het hengsel houdt, en per lijf, houding, richting en beeld waar
   die hand zit, uit het model zelf (de delen handL en handR in de houding, omgerekend zoals `kern.cjs` tekent).

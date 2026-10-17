@@ -32,6 +32,10 @@
   linksonder. De plaatjes zelf hebben geen schaduw op de grond; de spelregel "Schaduwen".
 - **Stijl van Mystic Towers.** De kamer staat als een diorama in het donker, en de voorste muren
   zijn laag weggesneden.
+- **De maat voor de huizen is de nabewerkte herberg** (17 okt 2026, Marcel, vraag 177: "de def is een nabewerkte versie.
+  Dat is de norm die ik wil aan gaan houden"; `voorbeelden/herberg-stijl-doel.webp`): zachter licht, rustiger en rijker
+  materiaal, wel pixel art en scherpe silhouetten, voor alle gebouwen, en niet huis voor huis opnieuw getekend. Hoe:
+  hieronder, "De nieuwe stijl".
 
 ## Alles valt en staat met overtuiging (Marcel, 21 sep 2026)
 
@@ -1210,6 +1214,143 @@ straat was in alle vier de standen weg). De keuzes voor een weergave in het spel
 **Plat in het spel** (besloten 17 okt, werklijst vraag 176, stap 4): de muren als de doorsnede van de proef, de vloer in
 de kleur van het dak met rijen zoals een dak (het dambord van de proef leest op spanen als een tegelvloer), de F zet
 plat aan en uit, met een klein teken zolang het aan staat.
+
+## De nieuwe stijl: de nabewerkte herberg als maat (17 okt 2026, werklijst vraag 177)
+
+Marcel bracht twee plaatjes: de herberg uit onze huizenbouwer (`voorbeelden/herberg-stijl-origineel.png`, byte voor byte
+`tegels/huizen/herberg1.png`) en dezelfde herberg met ChatGPT nabewerkt (`voorbeelden/herberg-stijl-doel.webp`), "de
+norm die ik wil aan gaan houden". De vraag: een manier om alle huizen zo te krijgen zonder ze een voor een opnieuw te
+tekenen, zonder een filter over het plaatje, met de gegevens die de tekenaar al heeft. De proef staat los
+(`gereedschap/pixelart/stijlproef.cjs`); geen bestand van de bouwer en geen tekening van het spel is veranderd. De plaat:
+`node gereedschap/pixelart/stijlproef.cjs` (vier minuten, zes draden), naar `uit/stijlproef/plaat.png`.
+
+**Wat het verschil is, gemeten.** Het doel is anderhalf keer zo groot als ons huis; op de maat van het spel (0,66,
+gemeten aan de schoorsteen en de breedte) heeft zijn riet bijna onze kleuren: dezelfde lichtheid (mediaan 0,52 tegen
+0,54 in OKLab), dezelfde kleurkracht, een tint iets roder (66 tegen 71). Het verschil zit in de rust: de lichtheid
+verschilt van pixel tot pixel 0,029 tegen onze 0,076, bijna drie keer zo rustig. Het doel legt zijn donker in de lijn
+onder elke laag (ronde lichte punten, dan een smalle schaduw), wij strooien het over het hele dak in halmen van één
+pixel. Verder: ramen blauw met de lucht erin in plaats van zwart; de plint ronde grijze stenen met donkere voegen in
+plaats van lichte; het hout warmer; onder de dakrand minder zwart; een nok in bundels.
+
+**De aanpak: drie lagen, op wat de tekenaar per pixel al weet.** De tekenaar (`tekenWereld` in `toren.cjs`) kent per
+pixel het materiaal, de plek in de wereld, de normaal, de zon, de omgevingsschaduw en de diepte, en geeft na het tekenen
+de vorm van het hele huis terug (het afstandsveld). Daar haakt de stijl aan, met de knop `stijl` in de opgave:
+1. **Het materiaal** (de patronen): een nieuw patroon voor riet (bossen van twee pixels en zo'n acht lang, lagen een
+   derde dichter en rechter, de onderrand van elke laag een rij ronde lichte punten met donkere spleten, eronder een
+   smalle schaduw, en een laag die naar zijn punten toe lichter wordt), de nok (bundels met een binding, elke bundel
+   bol), pleister (zachte vlekken in twee maten), hout (een nerf in lange strepen, warmer en wat lichter), veldsteen
+   (kleiner, boller, met donkere voegen) en glas (blauw, bovenin licht, een schuine streep). Alles in de maten van de
+   wereld, dus van vier kanten dezelfde textuur.
+2. **Het licht:** een zachte schaduw van de zon uit het afstandsveld (de rand verloopt, zoals op de grond al), een
+   lichtere diepste hoek (0,42 in plaats van 0,3), en een baan onder de dakrand die korter hard is en langer verloopt.
+3. **De kleur:** elke ramp krijgt drie tussentinten per stap, langs dezelfde lijn door OKLab, zodat licht verloopt in
+   plaats van in banden te springen, zonder dithering; en een tint per steen, per balk en per plek in het riet en het
+   pleister (warmer of koeler, in halve stappen). Een omlijning houdt precies zijn oude tint. Het blijft pixel art: een
+   vast palet per ramp, alleen fijner.
+
+**Hoe het ingehaakt is.** De proef laadt `toren.cjs` en `huis-sdf.cjs` met negentien regels erbij, alleen in het geheugen
+(`HAKEN` bovenaan de proef): elk is een `if (H.kn.stijl)` of `if (W.stijl)` voor een bestaand patroon of een getal.
+Zonder de knop is een tekening byte voor byte de oude (de proef rendert de herberg ook oud, en vergelijkt hem met het
+spel: gelijk). Die negentien regels zijn wat er later in de bouwer komt.
+
+**De eerste proef** (de plaat, 17 okt): zes gebouwen oud en nieuw, de herberg naast het doel, en twee van vier kanten.
+Gekozen op materiaal en dakvorm: de herberg (vakwerk, riet, een T), een hut (vlechtwerk en leem, riet), oker vakwerk onder
+leien met een dakkapel, veldsteen onder pannen (een T), planken onder spanen met een galerij, en de kapel (baksteen en
+kalk, een toren); van vier kanten de witte herberg en het stenen huis onder pannen.
+
+**Wat de proef zegt, op Marcels vragen:**
+- *Lijkt het op de herberg?* Het riet, de nok, de ramen, de plint en het hout wel: het riet van de nieuwe herberg meet
+  0,038 (doel 0,029, oud 0,076), tint 67 (doel 66), dezelfde lichtheid, en het leest als lagen met punten. Niet: de
+  lange schaduw van de schoorsteen over het dak (ons licht staat hoger), de stenen schoorsteen (de herberg heeft er een
+  van leem, dat is de opgave), en wat het doel om het huis zet (uithangbord, tonnen, struiken, grond): dat zijn
+  uitbouwen en tuinstukken (vraag 148), geen stijl. **Kanttekening bij die maat** (de sessie van huis1, 17 okt): het
+  doel is voor het meten verkleind door te middelen, en dat maakt elk plaatje rustiger; op zijn eigen maat meet het
+  0,031, maar daar is een "pixel" van het doel zo'n anderhalve pixel. Het tweede doel, huis1, meet 0,069, zo levendig
+  als ons oude riet: de twee doelen zijn het over de rust van het riet niet eens (hieronder, "Het tweede doel").
+- *Mooier dan het origineel?* Marcels oordeel. Wat Claude ziet: rustiger, warmer, de lagen en de stenen lezen beter;
+  het risico is dat riet zonder ruis "glad" gaat ogen, daarom de spleten tussen de punten en de naden tussen de bossen.
+- *Scherp genoeg voor een RTS?* De vorm, de omlijning en de silhouetten zijn dezelfde tekening; alleen binnenin is het
+  rustiger. Te toetsen in het spel, uitgezoomd, als Marcel de richting goed vindt.
+- *Vier kanten gelijk?* Ja voor alles van de stijl (in de maten van de wereld; het licht komt zoals altijd van
+  linksboven). Wat nog per pixel op het scherm hangt, uit de oude code: de korrels van het mos, de stoppels aan de
+  gevel, het warme glas.
+- *Automatisch op alles?* Ja: de knop gaat door de bestaande weg (`naar-tiled.cjs`, `bouwfasen.cjs`, de brandfasen en
+  de sneeuw), zonder werk per huis. In de eerste proef hadden **alleen riet, nok, pleister, hout, veldsteen en glas een
+  eigen patroon**; de andere materialen kregen alleen het licht en de kleur, en dat zag je nauwelijks. Die ronde is erna
+  gedaan (hieronder, "De andere materialen"); zandsteen en het vlechtwerk zelf hebben nog geen eigen patroon. De
+  werkplaatsen in `tegels/gebouwen/` (29, uit `dorp.cjs`) gaan langs een andere tekenaar en vallen erbuiten.
+- *Wat kost het?* Renderen even lang als nu (de herberg naast elkaar onder dezelfde last: 141 tegen 143 s; de zachte
+  schaduw kost niets dat je meet), de kleurlaag 0,02 s per huis. Voor de hele verzameling dus wat het nu kost: de 1214
+  tekeningen zo'n twee uur, de bouwfasen zes, de brandfasen zes en een half, op acht kernen (in een terminaltab met een
+  ketenscript). Omdat de tekeningen veranderen, kan de huizencache niet hernoemd worden: alles opnieuw.
+
+**Als Marcel ja zegt, de weg naar het spel:** (1) de negentien haken in de bouwer, achter de knop `stijl` in `inDeRonde`
+(`huizen.cjs`); (2) de kleurlaag in `kern.cjs`, zo dat een `Plaat` blijft wat hij is: de fijne en getinte rampen als
+eigen rampen aanmelden, zodat de bouwfasen, de brandfasen, de sneeuw en het inpakken niets merken; (3) de andere
+materialen, een voor een op een proefplaat; (4) eventueel de stap en de tint per pixel in de cache, dan kost het
+bijstellen van alleen de kleur seconden in plaats van uren; (5) de ronde van alle tekeningen.
+
+**Marcel (17 okt), op de plaat:** "Yes, this is the direction. Do the other materials next, one by one on a proof plate:
+slate, tiles, shingles, planks, brick and daub." Dus eerst (3), dan pas de haken in de bouwer. Voor die materialen is er
+geen doel: de regels van de herberg gelden (rust binnen een element, het contrast in de voegen en de randen, een tint
+per element, zacht licht), en elk krijgt een plaat oud en nieuw.
+
+**De andere materialen (17 okt):** een plaat per materiaal, `node gereedschap/pixelart/stijlproef.cjs materialen`
+(anderhalve minuut, naar `uit/stijlproef/materiaal-<naam>.png`): een stuk oud en nieuw, twee keer vergroot, en het hele
+huis oud en nieuw op ware grootte. Zes haken erbij (negentien in alles), elk voor een bestaand patroon; de getallen in
+`STIJL_INSTELLINGEN` (`lei`, `spaan`, `pan`, `plank`, `baksteen`, `leem`).
+- **Leien** (`oker-huis2-leien-z`): elke lei een eigen toon en een koele tint, van blauw- tot paarsgrijs; aan de onderrand
+  licht, naar boven donkerder waar de rij erboven eroverheen ligt; een smalle schaduwlijn onder elke rij, een naad
+  links. Donkerder dan het oude lichte grijs (dat las als bestrating), en het leest nu als lei.
+- **Pannen** (`wit-steen6-pannen-z`): de ronde pannen waren al in de geest van de herberg (rustig per pan, de schaduw
+  onder de staart); erbij een tint per pan. Eerst gaf een koelere tint zalmroze pannen: bij terracotta varieert de toon,
+  niet de kleur, dus de tint is klein en rond nul.
+- **Spanen** (`planken-huis7-spanen-z`, het dak): eerst te vlekkerig (een mozaïek van grijs en bruin); nu rustig binnen
+  een spaan, een smalle nerf langs de helling, en een kleine tint tussen vers en verweerd.
+- **Planken** (hetzelfde huis, de muren): een rustige nerf in lange strepen in plaats van losse streepjes, elke plank
+  een eigen toon en tint, een donkere kier en een lichte rand; de kwasten, de spijkers en een vervangen plank bleven.
+- **Baksteen** (`wit-steen1-baksteen-z`): elke steen een eigen tint van rood tot oranje en een eigen toon, een schuine
+  rand (licht boven en links, donker onder), de kalkvoeg licht maar onder een steen in zijn schaduw. Een kleine stap: de
+  baksteen was al rustig.
+- **Leem** (`wit-hut1-riet-z`, en de schoorsteen van leem op de herberg): zacht gevlekt in twee maten, warm of grauwer,
+  lange vegen van de hand in plaats van streepjes en spikkels; de schoorsteen zwart van het roet in een verloop. Op de
+  hut ligt vooral vlechtwerk bloot, dus het leem is er een klein stuk; het vlechtwerk zelf is nog het oude.
+
+### Het tweede doel: huis1 (17 okt 2026)
+
+Marcel bracht een tweede nabewerkte plaat (`voorbeelden/huis1-stijl-doel.webp`): `huis1` schoon en verweerd, links
+"Origineel", rechts "Verbeterd". Zijn eerste vraag was of de verbeterde twee meteen tekeningen voor het spel konden
+worden. **Nee, gemeten:** de plaat is een webp met verlies en zonder alfa, op zwart (onze tekening heeft 96 kleuren en
+een harde alfa; de plaat 49.000 kleuren, en een rand die met het zwart gemengd is). Het huis is 0,96 zo breed en 0,89 zo
+hoog. En ook het "Origineel" is opnieuw getekend: na de beste pas liggen de deur, de luifel, de schoorsteen en de nok 5
+tot 13 pixels verkeerd, en zijn ze tot 13% groter of kleiner, elk anders (de nabewerking zelf schuift daarbovenop
+gelijkmatig zo'n 3,5 pixel). Schoon en verweerd vallen ook niet samen: tot 8 pixels in het dak. Passend schalen of
+vervormen kan dus niet zonder dat de planken en ramen krom worden. Marcel koos toen: "Neem de plaat als tweede doel voor
+de stijlproef van vraag 177, naast de herberg, en maak eerst een proefplaat van huis1 en huis1-oud."
+
+**De proefplaat:** `node gereedschap/pixelart/stijlproef-huis1.cjs` (een minuut, vier draden), naar
+`uit/stijlproef/huis1/plaat.png`: huis1 schoon en verweerd, het spel, de stijl en het doel, en de voorgevel twee keer
+vergroot. Het script neemt `render()` uit `stijlproef.cjs` en meet de vorm:
+- **De vorm blijft.** De tekening is 478 bij 558, net als in het spel, en schoon en verweerd hebben in de nieuwe stijl
+  precies hetzelfde silhouet (0 pixels verschil). Ten opzichte van het spel verschillen er 284 pixels, allemaal in de
+  rafelrand van het riet, nooit verder dan één pixel. De muren, de deur, de ramen, de plint en de voet verschillen
+  nergens. Moet het helemaal gelijk blijven, dan neemt de stijl het silhouet van de oude render over.
+- **Het riet: het tweede doel vraagt het omgekeerde van de herberg.** Gemeten op het voorste dakvlak, in OKLab, zoals bij
+  de herberg. Van pixel tot pixel: spel 0,071, nieuw 0,038, doel 0,069. Het doel is dus zo levendig als ons riet nu, niet
+  zo rustig als de herberg (0,029). Het is ook lichter (mediaan 0,74 tegen 0,68 in de nieuwe stijl), heeft meer licht in
+  de toppen (p90 0,86 tegen 0,72) en een kwart meer kleurkracht (0,121 tegen 0,097); de tint is gelijk (73 tegen 70). Het
+  leest als dikke gouden lagen met lichte halmen erin, waar de nieuwe stijl vilt laat zien. Let op: de herberg is gemeten
+  na verkleinen tot 0,66 door te middelen, en dat maakt elk plaatje rustiger; huis1 staat op 0,92.
+- **Het verweren:** het doel houdt zijn riet goud (tint 77), met het mos fijn langs de onderrand van elke laag, rode
+  plekken in de kalk en mos aan de voet van de plint. De nieuwe stijl maakt het riet groener (tint 84) en het mos grove
+  vlekken, nog grover dan het spel nu. Dat mos komt uit het verweren in `huis-sdf.cjs`, niet uit de stijl.
+- **Wat al klopt:** de plint van grijze ronde stenen met donkere voegen (die van het doel is wat lichter), de blauwe
+  ramen, het zachte licht. Het hout van het doel is roder en voller (verzadiging 0,55 tegen 0,48), met een licht randje
+  op elke balk.
+
+**Marcel koos het riet van de herberg** (17 okt: "ik laat het dak van de herberg gebruiken"): het rustige riet in lagen
+met lichte punten blijft zoals het in `stijlproef.cjs` staat; het levendige gouden riet van huis1 niet. **Nog open:** moet
+het mos van een verweerd dak fijner, langs de lagen, zoals in het doel van huis1?
 
 ## De heide (25 sep 2026)
 
