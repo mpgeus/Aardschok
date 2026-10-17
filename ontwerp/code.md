@@ -711,8 +711,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   andere mengstand. Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
   voor het eerst in beeld komt: in de lente (een naaldboom houdt zijn zomervel) en met elke nieuwe stand in de wind
   stonden de bomen na een paar speeldagen op twee bladen door elkaar, en werden het 800 opdrachten per beeld in plaats
-  van 60; in Firefox 5 beelden per seconde (Marcel, 17 okt: "performance is belangrijk spelelement. het wordt anders snel
-  vervelend"). Meet een verandering aan het tekenen dus ook na een paar speeldagen (`ontwerp/gereedschap.md`).
+  van 60, wat in Firefox per aanroep meer kost dan in Chrome (Marcel, 17 okt: "performance is belangrijk spelelement.
+  het wordt anders snel vervelend"). Meet een verandering aan het tekenen dus ook na een paar speeldagen
+  (`ontwerp/gereedschap.md`), en meet niet terwijl er toetsen of een render lopen: die nemen de processor in beslag.
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
   vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de

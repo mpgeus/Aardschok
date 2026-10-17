@@ -934,13 +934,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `KARAKTERS.grijsaard`).
 
 - **Het beeld werd trager naarmate het spel liep** (17 okt, Marcel in een nieuw spel in Firefox, op 30×): op 2 maart 34
-  beelden per seconde, op 14 maart 5 (tekenen 169 ms). De oorzaak was het aantal opdrachten aan de videokaart (60 werden
-  er 800), opgelost met de rij die uit acht texturen tegelijk tekent (`code.md` bij `js/gl.js`); nagemeten in Chromium,
-  nog niet in Firefox. Wat overblijft: (a) de regels kostten op 14 maart 10 ms per beeld op 30× (op 2 maart 0,9); (b)
-  wat al een tijd draait, heeft zijn plaatjes anders op de bladen dan een vers geladen spel, en dan verschillen er aan
-  de rand van een plaatje een paar honderd pixels (een plaatje op een eigen textuur rekt zijn rand uit, op een blad
-  ligt er een doorzichtige pixel naast); (c) de bladen raken nooit leeg: wat eenmaal op een blad staat, houdt zijn plek,
-  ook als het nooit meer in beeld komt.
+  beelden per seconde, op 14 maart 5 (tekenen 169 ms, de regels 10 ms). Twee dingen samen. (1) De opdrachten aan de
+  videokaart: 60 werden er 800, opgelost met de rij die uit acht texturen tegelijk tekent (`code.md` bij `js/gl.js`;
+  geteld in Chromium, nog niet nagemeten in Firefox). (2) De schermafdrukken van 15 en 5 beelden per seconde zijn van
+  15:41, toen er twee keer de hele toetsreeks liep (Marcel zag node op 50 à 60%); ook in Chromium kostte een beeld toen
+  75 à 90 ms en anders 30. De regels groeien niet: op 30× kost een tik van dag 2 tot dag 13 steeds 0,5 à 0,7 ms
+  (het lopen 0,4), met één uitschieter per dag, de tik van middernacht (16 ms, de nacht van het wild); op de dag van
+  aankomst 2,3 ms. Wat overblijft: (a) nameten in Firefox zonder iets ernaast; (b) wat al een tijd draait, heeft zijn
+  plaatjes anders op de bladen dan een vers geladen spel, en dan verschillen er aan de rand van een plaatje een paar
+  honderd pixels (een plaatje op een eigen textuur rekt zijn rand uit, op een blad ligt er een doorzichtige pixel
+  naast); (c) de bladen raken nooit leeg: wat eenmaal op een blad staat, houdt zijn plek, ook als het nooit meer in
+  beeld komt.
 
 - **Het beeld is opdrachten aan de videokaart** (9 okt, gemeten op 2560×1440): ver uitgezoomd zijn het zo'n 3200
   opdrachten voor 3600 plaatjes, want bijna elk plaatje heeft een eigen vel (een vel per tekening, vraag 114) en de
