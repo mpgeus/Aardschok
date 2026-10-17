@@ -593,7 +593,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.wandenVan`, alleen aan de zuid- en oostkant, want die zie je). **De glooiing is een rekensom, geen lijst**
   (`glooiingOp`): drie lagen gladde ruis uit het nummer van het land (`groot`, `midden`, `klein` in
   `T.HOOGTE_INSTELLINGEN`, van dal tot top zo'n 300 à 400 pixels), overal te vragen, ook buiten de kaart, platter op de
-  vlakte om het dorp, en vlak op de vlakke stukken (`w.hoogte.vlakken`: een huis met zijn looppad, het plein, het water),
+  vlakte om elk dorp (`w.hoogte.vlaktes`; een dorp dat erbij komt, krijgt de zijne met `T.legDorpVlakte`, vraag 174,
+  stap b2), en vlak op de vlakke stukken (`w.hoogte.vlakken`: een huis met zijn looppad, het plein, het water),
   dus een bewaard spel onthoudt alleen het nummer en die stukken, en het landschap loopt door als het land groter wordt.
   Voor het tekenen staan de hoeken **per stuk** van `T.STUK` (64) in een lijst, zoals het land (vraag 174, stap a, 17
   okt): eens uitgerekend als iemand voor het eerst naar een tegel van dat stuk vraagt, waar op het eiland ook (één

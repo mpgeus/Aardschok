@@ -1051,6 +1051,7 @@
     const plan = T.planOpEiland(w.eiland.zaad, { bij, niet });
     WERELD.delete(plan);
     const uit = legPlanOp(w, plan);
+    T.legDorpVlakte(w, plan); // met heuvels ligt ook dit dorp op een vlakte (js/hoogte.js)
     uit.plek.markt = T.zoekMarktPlek({ wereld: w, plek: uit.plek });
     return uit;
   };

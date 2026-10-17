@@ -346,16 +346,17 @@ test('het eiland om je land: met "Hoogte" op "Heuvels" is het land dat van het e
       const x = K.x + lx;
       const y = K.y + ly;
       const vrij = hg.vlakken.every((v) => Math.max(v.x0 - x, 0, x - v.x1) >= T_.vrijRond || Math.max(v.y0 - y, 0, y - v.y1) >= T_.vrijRond);
-      if (!vrij || Math.hypot(x - hg.midden[0], y - hg.midden[1]) < T_.vlakteTot) continue;
+      if (!vrij || Math.hypot(x - hg.vlaktes[0].x, y - hg.vlaktes[0].y) < T_.vlakteTot) continue;
       gekeken++;
       assert.ok(Math.abs(T.hoekHoogte(w, x, y, 0) - eilandOp(x, y)) < 1e-6, `(${x}, ${y}): ${T.hoekHoogte(w, x, y, 0)} en niet ${eilandOp(x, y)}`);
     }
     assert.ok(gekeken >= 3, `zoveel hoekpunten ver van het dorp: ${gekeken}`);
     // het plein ligt vlak, op de hoogte van het dorp, en dat is die van het eiland op het midden van het plein
     const plein = hg.vlakken[0];
-    assert.equal(plein.h, hg.dorpHoogte);
-    assert.equal(hg.dorpHoogte, Math.round(eilandOp(hg.midden[0], hg.midden[1])));
-    for (let y = Math.ceil(plein.y0); y < plein.y1; y++) for (let x = Math.ceil(plein.x0); x < plein.x1; x++) if (!hg.niveau[`${x},${y}`] && !hg.hellingen[`${x},${y}`]) assert.equal(T.hoekHoogte(w, x, y, 0), hg.dorpHoogte);
+    const [dorp] = hg.vlaktes;
+    assert.equal(plein.h, dorp.h);
+    assert.equal(dorp.h, Math.round(eilandOp(dorp.x, dorp.y)));
+    for (let y = Math.ceil(plein.y0); y < plein.y1; y++) for (let x = Math.ceil(plein.x0); x < plein.x1; x++) if (!hg.niveau[`${x},${y}`] && !hg.hellingen[`${x},${y}`]) assert.equal(T.hoekHoogte(w, x, y, 0), dorp.h);
   } finally {
     T.zetOptie('hoogte', 'vlak');
     console.warn = echt;

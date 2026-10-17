@@ -1236,10 +1236,9 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
   met een ring op de oude hoogte). Wat het liet zien, voor c: met heuvels kost een beeld ver uitgezoomd in Chromium zo'n
   54 ms, met 17 kladjes van samen 6 miljoen pixels per beeld (`Spel.gl.telling`), waarschijnlijk de tegels die iets
   afdekken (`heuvelsErvoor`, `tekenTegelOpnieuw`) of de wanden.
-- **b2, elk dorp en elk kamp een vlakte** (`js/hoogte.js`, `js/maker.js`): een vlakte per dorp in plaats van één
-  `midden`, het plein van elk dorp een vlak stuk, en (K1) de open plek van een roverskamp vlak, zodat de tenten en het
-  vuur niet scheef staan; het kamp komt van het eiland, dus wordt het uitgerekend en niet bewaard. Opslaan een versie
-  hoger.
+- **b2, elk dorp een vlakte, is af** (17 okt): een vlakte per dorp (`w.hoogte.vlaktes`) in plaats van één `midden`,
+  en het plein van een dorp dat erbij komt een vlak stuk (`T.legDorpVlakte`, vanuit `T.legDorpOpKaart`); opslaan versie
+  23. K1 was er al: het eiland legt het plein van een roverskamp vlak, op de hoogte van zijn vuur (`js/eiland.js`, c1).
 - **b3, een brug ligt vlak op de hoogte van de oevers** (B2): de brug en zijn landhoofden op één hoogte, en de pijlers
   lopen omlaag tot het water. Dat is een nieuwe tekening: **eerst in woorden aan Marcel, dan één proefplaat**
   (`beeld.md`, "De bruggen"; CLAUDE.md, "Eerst goedkeuring, dan renderen").

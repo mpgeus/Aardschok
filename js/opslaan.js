@@ -82,7 +82,9 @@
     // bewaard spel hoort bij een eiland zonder.
     // 22 (17 okt): vraag 170, stap 6a2, c2: elk roverskamp leeft vanaf het begin, met zijn bende (w.kampen), en wie
     // wegtrekt, gaat erheen; de bende van een dorp (D.rovers.bende) is weg.
-    versie: 22,
+    // 23 (17 okt): vraag 174, stap b2: met heuvels ligt elk dorp op een eigen vlakte (w.hoogte.vlaktes, in plaats van
+    // midden en dorpHoogte van het eerste).
+    versie: 23,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

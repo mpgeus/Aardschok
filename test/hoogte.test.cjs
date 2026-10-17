@@ -319,6 +319,57 @@ test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vla
   }
 });
 
+// Vraag 174, stap b2: een dorp dat erbij komt (T.dorpErbij, js/gebied.js), ligt ook op een vlakte, met zijn plein vlak.
+test('hoogte, meer dorpen: elk dorp ligt op zijn eigen vlakte, en het eerste blijft zoals het lag', () => {
+  // waar het tweede dorp komt: eerst op een spel dat de hoogte daar nog niet uitrekende
+  const vers = spelMetHeuvels(5);
+  const D2v = T.dorpErbij(vers);
+  const plein = D2v.plek.plein;
+  const cx = plein.reduce((s, p) => s + p[0], 0) / plein.length;
+  const cy = plein.reduce((s, p) => s + p[1], 0) / plein.length;
+  // en op een spel dat het land daar en om het eerste dorp al uitrekende: de lijsten van de stukken worden bijgewerkt
+  const S = spelMetHeuvels(5);
+  const w = S.dorp.wereld;
+  const K = T.kaartVak(w);
+  T.hoogteIn(w, Math.floor(cx) - 50, Math.floor(cy) - 50, Math.floor(cx) + 50, Math.floor(cy) + 50);
+  const eerste = [];
+  for (let y = K.y; y < K.y + K.h; y += 3) for (let x = K.x; x < K.x + K.b; x += 3) eerste.push(T.hoekHoogten(w, x, y).join());
+  const om = (w2, doe) => {
+    for (let y = Math.floor(cy) - 45; y < cy + 45; y++) for (let x = Math.floor(cx) - 45; x < cx + 45; x++) doe(x, y, T.hoekHoogten(w2, x, y));
+  };
+  const was = [];
+  om(w, (x, y, h) => was.push(h.join()));
+  const D2 = T.dorpErbij(S);
+  assert.deepEqual(D2.plek.plein, plein, 'hetzelfde tweede dorp');
+  const hg = w.hoogte;
+  assert.equal(hg.vlaktes.length, 2);
+  const v = hg.vlaktes[1];
+  assert.ok(Math.abs(v.x - cx) < 1e-9 && Math.abs(v.y - cy) < 1e-9, 'de vlakte om het midden van zijn plein');
+  // het plein ligt vlak, op de hoogte van de vlakte, en tot `vlakteVan` tegels ook (behalve bij het water)
+  for (const [x, y] of plein) assert.deepEqual(T.hoekHoogten(w, Math.round(x), Math.round(y)), [v.h, v.h, v.h, v.h], `het plein op (${x}, ${y})`);
+  let vlak = 0;
+  let rond = 0;
+  om(w, (x, y, h) => {
+    if (Math.hypot(x - cx, y - cy) > T.HOOGTE_INSTELLINGEN.vlakteVan - 1) return;
+    rond++;
+    if (h.every((k) => k === v.h)) vlak++;
+  });
+  assert.ok(vlak / rond > 0.8, `vlak om het dorp: ${vlak} van ${rond}`);
+  let anders = 0;
+  let i = 0;
+  om(w, (x, y, h) => {
+    if (h.join() !== was[i++]) anders++;
+  });
+  assert.ok(anders > 1000, `het land om het tweede dorp veranderde: ${anders} tegels`);
+  // bijgewerkt zoals vers uitgerekend, en het eerste dorp ligt zoals het lag
+  om(w, (x, y, h) => assert.deepEqual(h, T.hoekHoogten(D2v.wereld, x, y), `tegel (${x}, ${y})`));
+  i = 0;
+  for (let y = K.y; y < K.y + K.h; y += 3) for (let x = K.x; x < K.x + K.b; x += 3) assert.equal(T.hoekHoogten(w, x, y).join(), eerste[i++]);
+  // het wordt bewaard
+  const terug = T.leesSpel(T.bewaarSpel(S)).staat;
+  assert.deepEqual(terug.dorp.wereld.hoogte.vlaktes, hg.vlaktes);
+});
+
 test('hoogte, zien: een heuvel ertussen houdt het zicht tegen, en wie hoog staat, ziet verder', () => {
   const vlak = land(5, false);
   assert.equal(T.heuvelTussen(vlak, { x: 10, y: 10 }, { x: 30, y: 30 }), false);

@@ -22,7 +22,7 @@
     groot: { hoog: 420, golf: 64 }, // lange heuvelruggen en dalen: hoe hoog van dal tot top (pixels), en hoe breed (tegels)
     midden: { hoog: 110, golf: 20 }, // heuvels daarop
     klein: { hoog: 14, golf: 7 }, // een zachte golving overal
-    vlakteVan: 10, // het dorp ligt op een vlakte: tot zoveel tegels van het midden van het plein glooit het nauwelijks ...
+    vlakteVan: 10, // elk dorp ligt op een vlakte: tot zoveel tegels van het midden van zijn plein glooit het nauwelijks ...
     vlakteTot: 32, // ... en vanaf hier loopt het landschap helemaal door
     vrijRond: 6, // in zoveel tegels loopt het van een vlak stuk (een huis met zijn looppad, het water) naar het landschap
     richel: [4.5, 6.5], // de richel bij de rotsen: hoe ver hij reikt
@@ -43,8 +43,9 @@
   function niveauVan(hg, x, y) {
     return hg.niveau[sleutel(x, y)] || 0;
   }
-  // De glooiing op hoekpunt (vx, vy), in pixels: het landschap uit het nummer van het land, platter op de vlakte om het
-  // dorp, en vlak op de vlakke stukken (een huis met zijn looppad, het water), met een overgang van `vrijRond` tegels.
+  // De glooiing op hoekpunt (vx, vy), in pixels: het landschap uit het nummer van het land, platter op de vlakte om elk
+  // dorp (`hg.vlaktes`, het midden van zijn plein en zijn hoogte; vraag 174, stap b2), en vlak op de vlakke stukken (een
+  // huis met zijn looppad, het water), met een overgang van `vrijRond` tegels.
   // Een rekensom en geen lijst: ook buiten de kaart (het bos eromheen, en straks een groter land), en een bewaard spel
   // hoeft alleen het nummer en de vlakke stukken te onthouden.
   const glooiingOp = (hg, vx, vy) => glooiingVan(hg, vx, vy, landOp(hg, vx, vy), hg.vlakken);
@@ -53,8 +54,10 @@
   function glooiingVan(hg, vx, vy, land, vlakken) {
     const I = IN();
     let h = land;
-    const d = Math.hypot(vx - hg.midden[0], vy - hg.midden[1]);
-    h = hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, d);
+    for (const v of hg.vlaktes) {
+      const d = Math.hypot(vx - v.x, vy - v.y);
+      if (d < I.vlakteTot) h = v.h + (h - v.h) * glad(I.vlakteVan, I.vlakteTot, d);
+    }
     // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
     let naast = null;
     for (const v of vlakken) {
@@ -587,16 +590,20 @@
     });
     const vlak = { ...v, h: zoalsBij ? glooiingOp(hg, zoalsBij.x, zoalsBij.y) : Math.round(som / n) };
     hg.vlakken.unshift(vlak);
-    // de lijsten van de stukken: alleen opnieuw waar het nieuwe stuk iets verandert (een stuk kost zo'n 20 ms), en wat
-    // afdekt tot twee tegels verder (T.dektAf kijkt twee rijen terug) weer als het gevraagd wordt
+    const r = IN().vrijRond + 1;
+    veranderd(hg, vlak.x0 - r, vlak.y0 - r, vlak.x1 + r, vlak.y1 + r);
+    return vlak;
+  };
+  // De glooiing veranderde op de tegels van (x0, y0) tot x1 en y1 (een nieuw vlak stuk, een nieuwe vlakte): een nieuwe
+  // versie, en de lijsten van de stukken alleen daar opnieuw (een heel stuk kost zo'n 20 ms), wat afdekt tot twee tegels
+  // verder (T.dektAf kijkt twee rijen terug) weer als het gevraagd wordt, en het tekenen hoort waar (T.hoogtePlekkenSinds).
+  function veranderd(hg, x0, y0, x1, y1) {
     const c = STUKKEN.get(hg);
     const oud = hg.versie || 0;
     hg.versie = oud + 1;
     if (c && c.versie === oud) {
       c.versie = hg.versie;
       const Z = T.STUK;
-      const r = IN().vrijRond + 1;
-      const [x0, y0, x1, y1] = [vlak.x0 - r, vlak.y0 - r, vlak.x1 + r, vlak.y1 + r]; // de tegels, tot x1 en y1
       for (const s of c.stukken.values()) {
         if (s.dekt && x0 - 2 < s.x0 + Z && x1 + 2 > s.x0 && y0 - 2 < s.y0 + Z && y1 + 2 > s.y0) s.dekt = null;
         if (!s.hoeken) continue;
@@ -610,8 +617,7 @@
       }
       meldVeranderd(hg, oud, { x1: x0, y1: y0, x2: x1 - 1, y2: y1 - 1 });
     } else VERANDERD.delete(hg); // de lijsten beginnen opnieuw: wat erop volgt, weet niet waar het veranderde
-    return vlak;
-  };
+  }
 
   // ---------------------------------------------------------------- de maker legt de hoogte
 
@@ -631,17 +637,18 @@
     const tussen = (a, b) => a + (b - a) * r();
     const cx = plan.plein.reduce((s, p) => s + p[0], 0) / plan.plein.length;
     const cy = plan.plein.reduce((s, p) => s + p[1], 0) / plan.plein.length;
-    const hg = { trede: I.trede, zaad: plan.zaad, b: B, h: H, midden: [cx, cy], dorpHoogte: 0, vlakken: [], niveau: {}, hellingen: {} };
+    const hg = { trede: I.trede, zaad: plan.zaad, b: B, h: H, vlaktes: [], vlakken: [], niveau: {}, hellingen: {} };
     // waar het land op de kaart begint: op een kaart van het eiland (w.vak) waar het plan op het eiland ligt, anders (0, 0)
     const oorsprongOp = w && w.vak && plan.eiland ? [plan.eiland.x0, plan.eiland.y0] : [0, 0];
     // op het eiland is het land dat van het eiland (vraag 117, 2b)
     if (plan.eiland) hg.eiland = { zaad: plan.eiland.zaad, x0: plan.eiland.x0, y0: plan.eiland.y0 };
-    hg.dorpHoogte = Math.round(landOp(hg, cx, cy));
+    const dorpHoogte = Math.round(landOp(hg, cx, cy));
+    hg.vlaktes.push({ x: cx, y: cy, h: dorpHoogte });
     // de hoogte van een plek zonder de vlakke stukken: daarop komt een vlak stuk te liggen
     const vrijOp = (vx, vy, alleenGroot) => {
       const groot = alleenGroot && !hg.eiland;
-      const h = landOp(hg, vx, vy, groot) + (groot ? hg.dorpHoogte - landOp(hg, cx, cy, true) : 0);
-      return hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, Math.hypot(vx - cx, vy - cy));
+      const h = landOp(hg, vx, vy, groot) + (groot ? dorpHoogte - landOp(hg, cx, cy, true) : 0);
+      return dorpHoogte + (h - dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, Math.hypot(vx - cx, vy - cy));
     };
     // de huizen, met hun looppad, op de hoogte van hun midden (de hoekpunten van hun tegels)
     // Huizen waarvan het looppad elkaar raakt, liggen samen op één hoogte, anders lag een van beide scheef.
@@ -664,7 +671,7 @@
     const metPlein = wortel(0);
     huizen.forEach((v, i) => {
       const [t, n] = som.get(wortel(i));
-      v.h = wortel(i) === metPlein ? hg.dorpHoogte : Math.round(t / n);
+      v.h = wortel(i) === metPlein ? dorpHoogte : Math.round(t / n);
       delete v.plein;
       hg.vlakken.push(v);
     });
@@ -720,12 +727,32 @@
       }));
       hg.ox = ox;
       hg.oy = oy;
-      hg.midden = [hg.midden[0] + ox, hg.midden[1] + oy];
+      for (const v of hg.vlaktes) Object.assign(v, { x: v.x + ox, y: v.y + oy });
       for (const v of hg.vlakken) Object.assign(v, { x0: v.x0 + ox, y0: v.y0 + oy, x1: v.x1 + ox, y1: v.y1 + oy });
       hg.niveau = schuif(hg.niveau);
       hg.hellingen = schuif(hg.hellingen);
     }
     return hg;
+  };
+
+  // Nog een dorp op kaart w (T.legDorpOpKaart, js/maker.js; vraag 174, stap b2): ook dat ligt op een vlakte, op de hoogte
+  // van het land op het midden van zijn plein, en zijn plein is een vlak stuk, zoals bij het eerste dorp (T.legHoogte).
+  // Tot dan glooide het land onder het tweede dorp gewoon door. `plan` is het plan van de maker op het eiland.
+  T.legDorpVlakte = function (w, plan) {
+    const hg = w && w.hoogte;
+    if (!hg) return;
+    const I = IN();
+    const [ox, oy] = [plan.eiland.x0, plan.eiland.y0]; // het plan op de kaart van het eiland (B2b)
+    const px = plan.plein.map((p) => p[0] + ox);
+    const py = plan.plein.map((p) => p[1] + oy);
+    const cx = px.reduce((a, b) => a + b, 0) / px.length;
+    const cy = py.reduce((a, b) => a + b, 0) / py.length;
+    const h = Math.round(landOp(hg, cx, cy));
+    hg.vlaktes.push({ x: cx, y: cy, h });
+    const [x0, y0] = [Math.min(...px.map(Math.round)) - 1, Math.min(...py.map(Math.round)) - 1];
+    hg.vlakken.push({ x0, y0, x1: Math.max(...px.map(Math.round)) + 2, y1: Math.max(...py.map(Math.round)) + 2, h });
+    const r = Math.ceil(I.vlakteTot) + I.vrijRond + 2;
+    veranderd(hg, Math.floor(cx) - r, Math.floor(cy) - r, Math.ceil(cx) + r, Math.ceil(cy) + r);
   };
 
   // De helling de richel op: aan de zuid- of oostkant (de kant die je ziet), het dichtst bij het dorp. Een helling
