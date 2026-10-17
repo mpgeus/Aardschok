@@ -100,8 +100,8 @@ volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). 
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
 brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
-40 naar 30 ms per beeld, 2 à 5 ms boven vlak, en de kolonist speelt er een jaar mee. **Het volgende is d**: de heuvels
-altijd aan en de spelregel *Height* eruit (wacht op Marcel, hieronder). Let op: CLAUDE.md zit tegen de grens van
+40 naar 30 ms per beeld, 2 à 5 ms boven vlak (ook in Firefox, Marcel mat het), en de kolonist speelt er een jaar mee.
+**Het volgende is d**: de heuvels altijd aan en de spelregel *Height* eruit (wacht op Marcel, hieronder). Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 17 okt met 176** (bij N): zicht in een dicht dorp, de aanpak van Stronghold (gebouwen plat, het
@@ -137,12 +137,11 @@ stenen huizen. **Ronde 3 is af.**
   richting (het riet, de stenen, het licht), en zo ja, eerst de andere materialen (leien, pannen, spanen, planken,
   baksteen, leem) elk op een proefplaat, of eerst de haken in de bouwer. **Marcel koos (17 okt): de richting is goed,
   eerst de andere materialen, een voor een op een proefplaat.**
-- **De heuvels in Firefox meten, en dan d** (vraag 174, c, 17 okt): `npm start`, het spel in Firefox, Nieuw spel, en in
-  de console `Spel.zetOptie('hoogte', 'heuvels'); Spel.debug.proefdorp(5)`; F2 voor de meter, en zoom met het wiel
-  helemaal uit. Dan `Spel.zetOptie('hoogte', 'vlak'); Spel.debug.proefdorp(5)` en hetzelfde, en tot slot
-  `Spel.optiesTerug()`. In Chromium en Edge kost heuvels 2 à 5 ms per beeld meer (bij L, "Stap c"); zeg het als het in
-  Firefox veel meer is. Is het goed, dan is d de volgende stap: de heuvels altijd aan, de spelregel *Height* eruit, en
-  het opslaan een versie omhoog. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
+- **De heuvels: d, of eerst ver uitgezoomd sneller** (vraag 174, c, 17 okt): Marcel mat in Firefox (bij L, "Stap c")
+  wat Chromium en Edge zeiden, 4 ms per beeld boven vlak. Dan is d de volgende stap: de heuvels altijd aan, de
+  spelregel *Height* eruit, en het opslaan een versie omhoog. Maar ver uitgezoomd haalt het spel ook vlak de 60 niet (38
+  beelden per seconde in Firefox; `opmerkingen.md`), en performance heeft hoge prioriteit: eerst d (klein), of eerst
+  dat. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
   houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest
   draait nu in de volle Chromium, want de kale headless-shell van Playwright laadt het spel niet meer (`opmerkingen.md`).
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
@@ -1292,7 +1291,10 @@ een helling (`opmerkingen.md`). Ver uitgezoomd haalt ook vlak de 60 hier niet: d
 vlak): elk eiland het jaar uit, zonder fouten, en het dorp groeit (17 naar 22 à 33). Op 3 en 5 precies als vlak (het
 dorp ligt op zijn vlakte); op 1 beter (33 tegen 25 mensen, geen doden), op 2 slechter (24 tegen 33, drie doden in de
 winter, kou en geen hout), op 4 iets beter. Dat patroon van kou en geen hout zit vlak op eiland 1: het is het eiland,
-niet de heuvels (de balans test Marcel zelf).
+niet de heuvels (de balans test Marcel zelf). **In Firefox** (Marcel, 17 okt, het proefdorp op eiland 5, de browser op
+120%, regen; de meter, *drawing*): dichtbij 7,9 vlak tegen 11,8 met heuvels, allebei 60 beelden per seconde;
+helemaal uitgezoomd 24,8 tegen 28,9 ms (38 tegen 29 beelden per seconde), en het traagste beeld 33 tegen 50 ms. Dus
+ook daar 4 ms erbij, zoals in Chromium en Edge.
 
 ## M. Het licht in de nacht (vraag 175, 17 okt)
 
