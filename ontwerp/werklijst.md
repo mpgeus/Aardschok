@@ -14,9 +14,12 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Bezig in sessie `main`** (17 okt): het tekenen, op een profiel uit
 Firefox. Af: de opdrachten aan de videokaart (800 werden er 20), het filter in de mist (29% van het tekenen in
 Firefox) en elk voorwerp onthoudt zijn plaatje (9%). In Firefox, met de profiler: een beeld van 30,5 naar 21,6 ms (31
-naar 40 beelden per seconde in de opname); de schaduwen van de zon kosten nog 1,9 ms (hun 28% was ook het filter). Wat
-overblijft, is verspreid (het tekenen zelf, de doorkijk 2,1 ms, het water 1,2 ms): het volgende kiezen we op de meter
-van Marcel. Hoe en wat het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
+naar 40 beelden per seconde in de opname); de schaduwen van de zon kosten nog 1,9 ms (hun 28% was ook het filter). De
+meter in Firefox, ver uitgezoomd: tekenen 55 naar 34 ms, 16 naar 21 beelden per seconde. Wat overblijft, is verspreid
+over zo'n 10.000 plaatjes per beeld. Marcel koos (17 okt: "Eerst 1 ... Daarna kijken we of 2 nog nodig is"): **1, elk
+plaatje goedkoper zonder dat het beeld verandert (bezig)**; daarna misschien 2, het bos in de mist in de grondbuffer
+bakken (dan wuiven de bomen in de mist niet meer). Hoe en wat het mat: `code.md` bij `js/gl.js` en `js/sprites.js`,
+en `opmerkingen.md`.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
