@@ -25,7 +25,8 @@ Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **A1 en A2 zijn af** (bij P; 
 47% minder per beeld, en in beeld dezelfde plaatjes. **B5 met B3 en E1 is af** (18 okt, in `main`; `code.md` bij
 `js/gl.js`): WebGL2, een plaatje als instantie, de bladen als textuurstapel, en de schaduwen uit de plaatjes zelf, zodat
 `js/tekenen.js` de lijst niet meer twee keer tekent; overdag ver uitgezoomd een kwart minder voor de processor (11,0
-naar 8,3 ms op 35%), 's avonds gelijk, hetzelfde beeld. Niet in Firefox gemeten (Marcel). Het volgende is B1 en B2.
+naar 8,3 ms op 35%), 's avonds gelijk, hetzelfde beeld. Niet in Firefox gemeten (Marcel). **Bezig in sessie `main`** (18 okt; Marcel: "dan bouwen we nu b1 en b2"): B1 en
+B2, een dieptebuffer en vaste buffers per stuk land.
 **De renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en
 `gereedschap/pixiproef/evaluatie.md`): advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en
 B2), niet naar Pixi of WebGPU. Marcel koos B5 als volgende stap (18 okt).
