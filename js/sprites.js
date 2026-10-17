@@ -15,6 +15,7 @@
   const MAP = 'beelden/';
   const TEGELMAP = 'tegels/';
   const beelden = new Map(); // pad → Image
+  let geladenNr = 0; // hoeveel beelden er klaar zijn met laden (wat een voorwerp onthoudt, S.tekeningVan, geldt tot er een bij komt)
   let gegevens = null;
   let belofte = null;
 
@@ -37,6 +38,7 @@
       const img = new Image();
       img.onload = () => {
         beelden.set(pad, img);
+        geladenNr++;
         klaar(true);
       };
       img.onerror = () => {
@@ -415,7 +417,7 @@
     }
     return per.get(id) || null;
   }
-  S.tekeningVan = function (v, zomer = false) {
+  function tekeningNu(v, zomer) {
     const vormen = v.vel != null && vormenVan(v.vel, v.id);
     let id = v.id;
     if (vormen) {
@@ -429,7 +431,27 @@
       if (s && beelden.has(s.bestand) && s.tiles[id] && s.tiles[id].cel) return { vel: `${v.vel}-${seizoenNu}`, id };
     }
     return { vel: v.vel, id };
-  };
+  }
+  S.tekeningVan = (v, zomer = false) => (zomer ? tekeningNu(v, true) : onthoudVoorwerp(v).t);
+
+  // Wat een voorwerp tekent, onthouden (alleen scherm, weg met het voorwerp): zijn tekening, het gewicht van de wind op
+  // die tekening, en het stuk stil en per stand in de wind (S.buitenVan). Elk beeld vragen duizenden bomen het opnieuw,
+  // en het opzoeken (de vorm, het seizoen, de cel, de sleutel van onthoud) was in Firefox 9% van het tekenen (17 okt, een
+  // profiel van Marcel). Opnieuw als het voorwerp een andere tekening of plek kreeg, als het seizoen anders is, en als er
+  // een beeld bij kwam: tot het vel van een seizoen er is, staan de bomen in de zomer. Een stuk dat er nog niet is (een
+  // huis waarvan het bestand nog laadt), onthoudt het niet.
+  const perVoorwerp = new WeakMap();
+  function onthoudVoorwerp(v) {
+    let o = perVoorwerp.get(v);
+    if (!o || o.vel !== v.vel || o.id !== v.id || o.x !== v.x || o.y !== v.y || o.seizoen !== seizoenNu || o.geladen !== geladenNr) {
+      const t = tekeningNu(v, false);
+      const vel = T.TEGELS && T.TEGELS[t.vel];
+      const tegel = vel && vel.tiles[t.id];
+      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [] };
+      perVoorwerp.set(v, o);
+    }
+    return o;
+  }
 
   // Het seizoen van de bomen (T.boomSeizoen in js/bos.js; js/tekenen.js zegt het elk beeld). Het vel van een seizoen laadt
   // pas als het seizoen er is, en tot het er is, staan ze in de zomer: zo staat er nooit een gat.
@@ -460,16 +482,21 @@
     const [x, y, b, h] = plek.cel;
     const gewicht = wind != null && windGewicht(v.tiles[id].naam);
     if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(bestand, x, y, b, h, plek.anker));
-    const midden = (WIND_STANDEN - 1) / 2;
-    const w = Math.max(-1, Math.min(1, wind));
-    const stand = Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + w * midden)));
+    const stand = standVan(wind);
     return onthoud(`buitenwind,${velNaam},${id},${stand}`, () => bakWindStand(bestand, x, y, b, h, plek.anker, gewicht, stand));
   };
+  // Een windwaarde (-1..1) als stand: 0 is sterk terug, WIND_STANDEN - 1 sterk mee.
+  function standVan(wind) {
+    const midden = (WIND_STANDEN - 1) / 2;
+    return Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + Math.max(-1, Math.min(1, wind)) * midden)));
+  }
 
-  // Het plaatje van een voorwerp op de kaart, in zijn vorm en zijn seizoen (S.tekeningVan).
+  // Het plaatje van een voorwerp op de kaart, in zijn vorm en zijn seizoen (S.tekeningVan), zoals het onthouden is.
   S.buitenVan = function (v, wind) {
-    const t = S.tekeningVan(v);
-    return S.buiten(t.vel, t.id, wind);
+    const o = onthoudVoorwerp(v);
+    if (wind == null || !o.wind) return o.stil || (o.stil = S.buiten(o.t.vel, o.t.id));
+    const stand = standVan(wind);
+    return o.standen[stand] || (o.standen[stand] = S.buiten(o.t.vel, o.t.id, wind));
   };
 
   // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt

@@ -739,7 +739,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. **Elke boom anders** (vraag 148, a): een soort
   heeft op het vel meer tekeningen met zijn naam en een `vorm` (`BOOM_VORMEN` in `naar-tiled.cjs`), en welke een boom
   krijgt, zegt zijn tegel (`T.sprites.tekeningVan(v)`, een vaste hasj; `v.id` blijft de eerste, dus een bewaard spel past).
-  Wat een voorwerp tekent, vraagt het daaraan (`{ vel, id }`, of `T.sprites.buitenVan(v, wind)`), niet aan `v.id`. **De
+  Wat een voorwerp tekent, vraagt het daaraan (`{ vel, id }`, of `T.sprites.buitenVan(v, wind)`), niet aan `v.id`. Elk
+  voorwerp onthoudt dat (`onthoudVoorwerp`, een WeakMap, alleen scherm): zijn tekening, het gewicht van de wind erop, en
+  het stuk stil en per stand; opnieuw als zijn `vel`, `id` of plek, het seizoen of het aantal geladen beelden
+  (`geladenNr`) anders is. Elk beeld opnieuw opzoeken was in Firefox 9% van het tekenen (17 okt). **De
   bomen in het jaar** (stap 2): per seizoen een vel met dezelfde nummers (`bomen-lente`, `-herfst`, `-winter`, `-sneeuw`,
   met `seizoen` in `tegels.js`), dat pas laadt in zijn seizoen (`T.sprites.zetSeizoen`, elk beeld uit `T.boomSeizoen(S)`
   in `js/bos.js`: per maand `bomenInHetJaar`, en sneeuw op de takken vanaf `sneeuwOpDeBomen`; de spelregel "De bomen in

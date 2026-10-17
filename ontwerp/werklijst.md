@@ -12,9 +12,10 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Bezig in sessie `main`** (17 okt): het tekenen, op een profiel uit
-Firefox. Af: de opdrachten aan de videokaart (800 werden er 20) en het filter in de mist (29% van het tekenen in
-Firefox); bezig: elke boom onthoudt zijn plaatje (9%); daarna, met Marcel te kiezen, de schaduwen van de zon (28%). Hoe
-en wat het mat: `code.md` bij `js/gl.js` en `opmerkingen.md`.
+Firefox. Af: de opdrachten aan de videokaart (800 werden er 20), het filter in de mist (29% van het tekenen in
+Firefox) en elk voorwerp onthoudt zijn plaatje (9%); samen in Chromium van 28 naar 15 ms per beeld op zoom 0,35. Wacht
+op Marcel: nameten in Firefox; daarna, met Marcel te kiezen, de schaduwen van de zon (28%). Hoe en wat het mat:
+`code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
