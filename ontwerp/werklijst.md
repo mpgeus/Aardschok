@@ -83,7 +83,8 @@ en wie erop loopt gaat mee omhoog (`beeld.md`, "De bruggen", met Marcels punten 
 **c1, de kampen op het eiland, is af** (17 okt, in `main`; Marcel: "M1"; `spel.md`, bij "De roverskampen"; `code.md`
 bij `js/eiland.js` en `js/rovers.js`): drie per eiland in het woud, elk met een open plek, een vuur, een tent per twee man
 (de tent T1, nu in het vel) en een paadje naar de dichtste weg; ze staan er als hun land opengaat, en wie ze zag, ziet
-ze rood op de minikaart. **Het volgende is c2, de bende** (het plan bij I, "Stuk c in detail"). Let op: CLAUDE.md zit
+ze rood op de minikaart. **Het volgende is c2, de bende** (het plan bij I, "Stuk c in detail"). **Bezig in sessie
+`main`** (17 okt): het plan voor c2. Let op: CLAUDE.md zit
 tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
