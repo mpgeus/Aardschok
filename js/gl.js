@@ -185,8 +185,15 @@
   const PER_HOEK = 10; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij)
   let grijsNu = 0; // hoeveel kleur eruit gaat (het filter grayscale van het doek); elke nieuwe hoek krijgt het mee
   let bronNu = 0; // de plaats van de textuur van de hoeken die nu in de rij komen (plekVoor)
-  let hoeken = new Float32Array(PER_HOEK * 6 * 2048);
-  let aantal = 0; // hoeken in de rij
+  // Een plaatje heeft vier hoeken (a, b, c, d: linksboven, rechtsboven, linksonder, rechtsonder), en een vaste lijst
+  // nummers (INDEX, één keer naar de kaart) maakt er twee driehoeken van: a b c en b d c. Tot 17 okt stond elk plaatje er
+  // met zes hoeken in, twee dubbel: een derde meer om te schrijven en naar de kaart te sturen. Een losse driehoek (een
+  // vorm, fill) krijgt een vierde hoek gelijk aan zijn derde: de tweede driehoek is dan een streep en tekent niets. Met
+  // nummers van 16 bits gaan er hooguit MAX_HOEKEN hoeken in één opdracht.
+  const MAX_HOEKEN = 65536;
+  let hoeken = new Float32Array(PER_HOEK * 4 * 4096);
+  let aantal = 0; // hoeken in de rij, altijd vier per plaatje
+  let index = null; // de buffer met de nummers op de kaart (start)
   const rij = []; // de texturen van de rij, op hun plaats (hooguit RIJ_TEXTUREN)
   let rijMeng = 'source-over';
   let buffer = null;
@@ -244,6 +251,7 @@
     maxTextuur = gl.getParameter(gl.MAX_TEXTURE_SIZE);
     buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    maakIndex();
     gl.enableVertexAttribArray(0);
     gl.enableVertexAttribArray(1);
     gl.enableVertexAttribArray(2);
@@ -426,7 +434,7 @@
   // RIJ_TEXTUREN, elk op zijn plaats (vBron in FRAG_BEELD). Tot 17 okt brak elke andere textuur de rij, en in de lente
   // stonden de bomen op twee bladen door elkaar (een naaldboom houdt zijn zomervel, en de standen in de wind komen op een
   // blad als ze voor het eerst in beeld komen): zo werden het na een paar dagen 800 opdrachten per beeld in plaats van
-  // 60, en in Firefox 5 beelden per seconde (Marcel, 17 okt: "performance is belangrijk spelelement").
+  // 60, wat in Firefox per aanroep meer kost dan in Chrome (Marcel, 17 okt: "performance is belangrijk spelelement").
   function legRijAf() {
     if (aantal) {
       gebruik(beeldProg);
@@ -436,23 +444,32 @@
       rij.forEach((tex, i) => bindOp(i, tex));
       zetMeng(rijMeng);
       gl.bufferData(gl.ARRAY_BUFFER, hoeken.subarray(0, aantal * PER_HOEK), gl.STREAM_DRAW);
-      gl.drawArrays(gl.TRIANGLES, 0, aantal);
+      gl.drawElements(gl.TRIANGLES, (aantal / 4) * 6, gl.UNSIGNED_SHORT, 0);
       G.telling.opdrachten++;
       aantal = 0;
     }
     rij.length = 0;
   }
-  // Plaats in de rij voor n hoeken uit textuur tex, in mengstand meng: de rij gaat eerst naar de kaart als de mengstand
-  // anders is, als er geen plaats voor nog een textuur is, of als de hoeken er niet meer bij passen.
+  // Plaats in de rij voor n hoeken (vier per plaatje) uit textuur tex, in mengstand meng: de rij gaat eerst naar de kaart
+  // als de mengstand anders is, als er geen plaats voor nog een textuur is, of als de hoeken er niet meer bij passen.
   function plekVoor(tex, meng, n) {
     if ((aantal && meng !== rijMeng) || (rij.length >= RIJ_TEXTUREN && !rij.includes(tex))) legRijAf();
-    if ((aantal + n) * PER_HOEK > hoeken.length) {
+    if ((aantal + n) * PER_HOEK > hoeken.length || aantal + n > MAX_HOEKEN) {
       legRijAf();
-      if (n * PER_HOEK > hoeken.length) hoeken = new Float32Array(n * PER_HOEK * 2);
+      if (n * PER_HOEK > hoeken.length) hoeken = new Float32Array(Math.min(n * 2, MAX_HOEKEN) * PER_HOEK);
     }
     bronNu = rij.indexOf(tex);
     if (bronNu < 0) bronNu = rij.push(tex) - 1;
     rijMeng = meng;
+  }
+  // De nummers op de kaart: per plaatje q de hoeken 4q, 4q+1, 4q+2 en 4q+1, 4q+3, 4q+2 (a b c en b d c).
+  function maakIndex() {
+    const n = MAX_HOEKEN / 4;
+    const lijst = new Uint16Array(n * 6);
+    for (let q = 0; q < n; q++) lijst.set([4 * q, 4 * q + 1, 4 * q + 2, 4 * q + 1, 4 * q + 3, 4 * q + 2], q * 6);
+    index = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index); // blijft gebonden: alleen de rij tekent met nummers
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, lijst, gl.STATIC_DRAW);
   }
   function hoek(x, y, u, v, k) {
     const i = aantal * PER_HOEK;
@@ -468,14 +485,12 @@
     hoeken[i + 9] = bronNu;
     aantal++;
   }
-  // Een vierhoek: vier punten op het doek (in pixels) met hun plek in de textuur (0..1).
+  // Een vierhoek: vier punten op het doek (in pixels: a, b, c, d) met hun plek in de textuur (0..1).
   function vierhoek(p, uv, k) {
     hoek(p[0], p[1], uv[0], uv[1], k);
     hoek(p[2], p[3], uv[2], uv[1], k);
     hoek(p[4], p[5], uv[0], uv[3], k);
-    hoek(p[2], p[3], uv[2], uv[1], k);
     hoek(p[6], p[7], uv[2], uv[3], k);
-    hoek(p[4], p[5], uv[0], uv[3], k);
   }
   // Een plaatje: de rechthoek (x0, y0)-(x1, y1) in stand m, met (u0, v0)-(u1, v1) op de textuur, helder h en
   // doorzichtig al. Hetzelfde als vierhoek, maar zonder lijstjes: het gaat om duizenden per beeld.
@@ -491,9 +506,7 @@
     hoekH(ax, ay, u0, v0, h, al);
     hoekH(bx, by, u1, v0, h, al);
     hoekH(cx, cy, u0, v1, h, al);
-    hoekH(bx, by, u1, v0, h, al);
     hoekH(dx, dy, u1, v1, h, al);
-    hoekH(cx, cy, u0, v1, h, al);
   }
   function hoekH(x, y, u, v, h, al) {
     const i = aantal * PER_HOEK;
@@ -631,15 +644,20 @@
   // opdracht (legSchaduwenAf), niet in de volgorde van de tekenlijst, waarin bijna elk plaatje een andere textuur heeft
   // (een vel per tekening, js/sprites.js). Zo kostten de schaduwen evenveel opdrachten als het hele beeld (Marcel, 9 okt:
   // "performance op fullscreen is ook ondermaats").
-  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, grijs, bron, ...] per hoek
+  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, grijs, bron, ...] per hoek, vier per plaatje
   function schaduwVierhoek(tex, p, uv, al) {
     let hoekjes = schaduwRijen.get(tex);
     if (!hoekjes) schaduwRijen.set(tex, (hoekjes = []));
-    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) hoekjes.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al, 0, 0);
+    hoekjes.push(
+      p[0], p[1], uv[0], uv[1], 0, 0, 0, al, 0, 0,
+      p[2], p[3], uv[2], uv[1], 0, 0, 0, al, 0, 0,
+      p[4], p[5], uv[0], uv[3], 0, 0, 0, al, 0, 0,
+      p[6], p[7], uv[2], uv[3], 0, 0, 0, al, 0, 0,
+    );
   }
   function legSchaduwenAf() {
     legRijAf();
-    const per = Math.floor(hoeken.length / (6 * PER_HOEK)) * 6 * PER_HOEK; // zoveel getallen past er in één keer in de rij
+    const per = Math.floor(Math.min(hoeken.length / PER_HOEK, MAX_HOEKEN) / 4) * 4 * PER_HOEK; // zoveel getallen past er in één keer in de rij
     for (const [tex, hoekjes] of schaduwRijen) {
       for (let i = 0; i < hoekjes.length; i += per) {
         const stuk = hoekjes.slice(i, i + per);
@@ -754,7 +772,7 @@
     plak.versie = (plak.versie || 0) + 1;
     const t = textuurVan(plak);
     if (!t) return;
-    plekVoor(t.tex, MENG[kladMeng] ? kladMeng : 'source-over', 6);
+    plekVoor(t.tex, MENG[kladMeng] ? kladMeng : 'source-over', 4);
     const grijs = grijsNu; // het kladdoek tekende al met het filter
     grijsNu = 0;
     vierhoek([x0, y0, x1, y0, x0, y1, x1, y1], [0, 0, b / t.tb, h / t.th], [1, 1, 1, 1]);
@@ -955,7 +973,7 @@
         const blijft = typeof HTMLCanvasElement === 'undefined' || !(bron instanceof HTMLCanvasElement) || bron.versie !== undefined;
         if (blijft) schaduwVierhoek(t.tex, p, uv, al);
         else {
-          plekVoor(t.tex, 'source-over', 6);
+          plekVoor(t.tex, 'source-over', 4);
           vierhoek(p, uv, [0, 0, 0, al]);
         }
         return;
@@ -971,7 +989,7 @@
           }
           const al = this.st.alpha;
           const h = this.st.helder * al;
-          plekVoor(t.tex, this.st.meng, 6);
+          plekVoor(t.tex, this.st.meng, 4);
           rechthoek(this.st.m, dx, dy, dx + dw, dy + dh, (t.x + sx) / t.tb, (t.y + sy) / t.th, (t.x + sx + sw) / t.tb, (t.y + sy + sh) / t.th, h, al);
           G.telling.plaatjes++;
           return;
@@ -997,7 +1015,7 @@
         } else {
           const k = leesKleur(v);
           const a = k[3] * this.st.alpha;
-          plekVoor(wit, this.st.meng, 6);
+          plekVoor(wit, this.st.meng, 4);
           vierhoek(p, [0, 0, 1, 1], [k[0] * a, k[1] * a, k[2] * a, a]);
           return;
         }
@@ -1011,7 +1029,7 @@
         const m = this.st.m;
         const p = [];
         for (const [px, py] of [[x, y], [x + b, y], [x, y + h], [x + b, y + h]]) p.push(m[0] * px + m[2] * py + m[4], m[1] * px + m[3] * py + m[5]);
-        plekVoor(wit, 'wis', 6);
+        plekVoor(wit, 'wis', 4);
         vierhoek(p, [0, 0, 1, 1], [0, 0, 0, 0]);
         return;
       }
@@ -1119,8 +1137,14 @@
           const k = leesKleur(v);
           const al = k[3] * this.st.alpha;
           const kl = [k[0] * al, k[1] * al, k[2] * al, al];
-          plekVoor(wit, this.st.meng, drie.length / 2);
-          for (let i = 0; i < drie.length; i += 2) hoek(drie[i], drie[i + 1], 0, 0, kl);
+          plekVoor(wit, this.st.meng, (drie.length / 6) * 4);
+          // per driehoek vier hoeken: de derde twee keer, zodat de tweede driehoek van de nummers een streep is
+          for (let i = 0; i < drie.length; i += 6) {
+            hoek(drie[i], drie[i + 1], 0, 0, kl);
+            hoek(drie[i + 2], drie[i + 3], 0, 0, kl);
+            hoek(drie[i + 4], drie[i + 5], 0, 0, kl);
+            hoek(drie[i + 4], drie[i + 5], 0, 0, kl);
+          }
           G.telling.vormen++;
           return;
         }

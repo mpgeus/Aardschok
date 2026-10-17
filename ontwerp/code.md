@@ -720,7 +720,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`plekOpBlad`), zodat een beeld in een paar tientallen opdrachten gaat, niet in een per plaatje (10 okt: Firefox haperde
   ver uitgezoomd). Eén opdracht (de rij, `plekVoor` en `legRijAf`) tekent uit tot `RIJ_TEXTUREN` (8) texturen tegelijk:
   elk hoekpunt zegt op welke plaats zijn textuur staat (`aBron`), en de rij breekt pas bij een negende textuur of een
-  andere mengstand. Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
+  andere mengstand. Een plaatje staat met vier hoeken in de rij, en een vaste lijst nummers op de kaart (`maakIndex`,
+  `drawElements`) maakt er twee driehoeken van; een losse driehoek (een vorm) krijgt zijn derde hoek dubbel, en
+  `MAX_HOEKEN` (65536, nummers van 16 bits) gaan er hooguit in één opdracht (tot 17 okt zes hoeken per plaatje, een derde
+  meer naar de kaart). Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
   voor het eerst in beeld komt: in de lente (een naaldboom houdt zijn zomervel) en met elke nieuwe stand in de wind
   stonden de bomen na een paar speeldagen op twee bladen door elkaar, en werden het 800 opdrachten per beeld in plaats
   van 60, wat in Firefox per aanroep meer kost dan in Chrome (Marcel, 17 okt: "performance is belangrijk spelelement.
