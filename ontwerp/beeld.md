@@ -1115,7 +1115,12 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   de rest"): het wegdek is van grote, ronde kinderkopjes (`wegdekPixel`: rijen van 8 pixels dwars op de brug, stenen van
   8 tot 13, met ronde hoeken en een bredere voeg waar vier stenen samenkomen), grijs op een brug van veldsteen en van
   baksteen (de baksteen zit alleen in de muren), zandkleurig op een brug van zandsteen; en het grijs is dat van de
-  huizen, `veldsteenWarm` (`huis-sdf.cjs`), niet het koele `veldsteen` van `dorp.cjs`.
+  huizen, `veldsteenWarm` (`huis-sdf.cjs`), niet het koele `veldsteen` van `dorp.cjs`. Daarna (Marcel: "de stenen moeten
+  echter. het lijken nu platte platen"): elke kinderkop is bol, met de kant naar het licht lichter en de andere donkerder,
+  een glimlicht, korrel, af en toe een warmere steen, en zand of mos in de voegen. En "de knak in de brug mag er niet
+  zijn", "moet natuurlijk overlopen": het wegdek loopt op een landhoofd in een S-bocht van de oever naar het dek, vlak aan
+  beide uiteinden (`sBocht`, in acht vlakke plakken), en de houten boogbrug buigt als sin², zodat ook hij zonder knik op
+  zijn landhoofd aansluit. Wie erop loopt, volgt dezelfde bocht (`dekOp`, `S.brugDek`).
 - **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
   bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
   wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water

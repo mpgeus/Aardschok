@@ -83,7 +83,8 @@ dorpsplekken, de stad en het kasteel te voet in één stuk land. **De bruggen zi
 branch; Marcel: "Goed zo, zet ze in het spel"; `beeld.md`, "De bruggen"): drie tegels breed, oud, steen of hout naar de
 plek, en wie erop loopt gaat mee omhoog. Het volgende is c1, de kampen: **de tent is T1** (Marcel, 17 okt: grijsgroen en
 vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; op de proefplaat goedgekeurd met de bruggen).
-**Vraag R, de bruggen in acht richtingen** (Marcel, 17 okt: "De bruggen moeten in 8 richtingen"; wacht op Marcel): nu
+**Vraag R, de bruggen in acht richtingen** (Marcel, 17 okt: "De bruggen moeten in 8 richtingen", en "Zoals hoe de
+poppetjes lopen": de vier assen van de acht looprichtingen; de breedte schuin nog open, voorstel R2; nu de proefplaat): nu
 ligt een brug langs x of y (op het scherm schuin naar rechtsonder of linksonder); erbij komen de twee diagonalen, recht
 omhoog op het scherm (Z–N) en recht opzij (W–O). Een brug is van beide kanten dezelfde, dus acht richtingen zijn vier
 assen. Een brug gaat haaks over het water, langs de as waar de oversteek het kortst is; zo is ook de lange brug over een

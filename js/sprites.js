@@ -869,19 +869,21 @@
     const r = brugIndex.get(sleutel);
     return r ? onthoud(`brug ${sleutel}`, () => stuk(MAP + g.bestand, r[0], r[1], r[2], r[3], [r[4], r[5]])) : null;
   };
-  // Hoe hoog het wegdek van een brug ligt (pixels boven het maaiveld) op a tegels langs de brug vanaf de rand van zijn
-  // eerste tegel water (van -1 tot L + 1), zoals de tekening het heeft (bruggen.cjs, dekOp): een landhoofd loopt op, een
-  // boogbrug buigt. Zonder de beschrijving 0.
+  // Hoe hoog het wegdek van een brug ligt (pixels boven het maaiveld) op a stappen langs de brug vanaf de rand van zijn
+  // eerste stap water (van -1 tot L + 1), zoals de tekening het heeft (bruggen.cjs, dekOp): een landhoofd loopt op in een
+  // S-bocht, een boogbrug buigt, zonder knik. Een stap is een tegel, schuin √2. Zonder de beschrijving 0.
+  const sBocht = (t) => t * t * (3 - 2 * t);
   S.brugDek = function (brug, a) {
     const g = gegevens && gegevens.bruggen;
     if (!g) return 0;
     const m = g.maten;
     const soort = brugSoort(g, brug);
     const dek = m.dek[soort];
-    if (a < 0) return m.aanloop + (dek - m.aanloop) * Math.min(1, Math.max(0, a + 1));
-    if (a > brug.L) return m.aanloop + (dek - m.aanloop) * Math.min(1, Math.max(0, brug.L + 1 - a));
+    if (a < 0) return m.aanloop + (dek - m.aanloop) * sBocht(Math.min(1, Math.max(0, a + 1)));
+    if (a > brug.L) return m.aanloop + (dek - m.aanloop) * sBocht(Math.min(1, Math.max(0, brug.L + 1 - a)));
     if (soort !== 'boog') return dek;
-    return dek + (m.bult[0] + m.bult[1] * brug.L) * Math.sin((Math.PI * a) / brug.L);
+    const stap = brug.as === 'zn' || brug.as === 'wo' ? Math.SQRT2 : 1;
+    return dek + (m.bult[0] + m.bult[1] * brug.L * stap) * Math.sin((Math.PI * a) / brug.L) ** 2;
   };
 
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)

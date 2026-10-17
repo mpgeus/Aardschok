@@ -39,6 +39,7 @@ const BRUG = {
   borst: 12, // de borstwering boven het wegdek (kniehoog)
   borstB: 8, // en zo dik (eenheden)
   breed: 3, // de brug dwars, in tegels: de middelste is gc, en één aan elke kant
+  schuinBreed: 4, // een schuine brug, in rijen (Marcel koos tussen 3 en 4): vier rijen zijn 2,8 tegel breed
   inzet: 0.05, // zoveel tegel blijft er aan weerszijden vrij
   pijler: 0.16, // een halve pijler tussen twee bogen, in tegels langs de brug
   water: 7, // zo diep ligt het water onder het maaiveld (de beek van dorp.cjs)
@@ -47,6 +48,64 @@ const BRUG = {
 };
 // De dwarse maat van een brug met gc als middelste tegel: van c0 tot c1, in eenheden.
 const dwarsVan = (gc) => [(gc - (BRUG.breed - 1) / 2 + BRUG.inzet) * TEGEL, (gc + (BRUG.breed + 1) / 2 - BRUG.inzet) * TEGEL];
+
+// De vier assen waarlangs een brug ligt, zoals de poppetjes lopen (Marcel, 17 okt: "De bruggen moeten in 8 richtingen",
+// "Zoals hoe de poppetjes lopen"; een brug is van beide kanten dezelfde): langs x (op het scherm naar rechtsonder), langs
+// y (naar linksonder), en schuin: zn (recht omhoog op het scherm) en wo (recht opzij). U wijst langs de brug, V dwars,
+// naar de kijker toe (bij zn kijkt de kijker over de brug: dan zie je beide kanten).
+const S2 = Math.SQRT1_2;
+const ASSEN = {
+  x: { U: [1, 0], V: [0, 1], schuin: false },
+  y: { U: [0, 1], V: [1, 0], schuin: false },
+  zn: { U: [S2, S2], V: [-S2, S2], schuin: true },
+  wo: { U: [S2, -S2], V: [S2, S2], schuin: true },
+};
+
+// Het raam van een brug, waarin al zijn stukken getekend worden: langs (a) en dwars (c) in eenheden, en de stappen langs
+// de brug. o.as; langs x en y o.ga (de eerste tegel water) en o.gc (de middelste rij), drie rijen; schuin o.gx en o.gy (de
+// eerste tegel water van de eerste rij) en o.rijen rijen (BRUG.schuinBreed). Een stap is een tegel, schuin √2 tegel (een
+// tegel verder langs x en y samen); schuin liggen de rijen om en om een halve stap verschoven, zoals de tegels op een
+// schuine lijn. Geeft { as, schuin, S (een stap, eenheden), aW (waar het water begint, langs), c0, c1, R (rijen), gc (een
+// nummer voor het lot), langs(X, Y), dwars(X, Y), w(na, nc, nz) (een normaal van het raam naar de wereld), doos(aa, ab,
+// ca, cb, z0, z1), tegel(i, k): de tegel van stap i in rij k, en stap: S in tegels }.
+function raam(o) {
+  const A = ASSEN[o.as];
+  const T = TEGEL;
+  const langs = (X, Y) => X * A.U[0] + Y * A.U[1];
+  const dwars = (X, Y) => X * A.V[0] + Y * A.V[1];
+  let S, aW, c0, c1, R, tegel, gc;
+  if (!A.schuin) {
+    S = T;
+    R = BRUG.breed;
+    aW = o.ga * T;
+    [c0, c1] = dwarsVan(o.gc);
+    tegel = o.as === 'x' ? (i, k) => [o.ga + i, o.gc - 1 + k] : (i, k) => [o.gc - 1 + k, o.ga + i];
+    gc = o.gc;
+  } else {
+    S = T * Math.SQRT2;
+    R = o.rijen ?? BRUG.schuinBreed;
+    tegel = o.as === 'zn' ? (i, k) => [o.gx + i + ((k % 2) - k) / 2, o.gy + i + ((k % 2) + k) / 2] : (i, k) => [o.gx + i + (k + (k % 2)) / 2, o.gy - i + (k - (k % 2)) / 2];
+    const [mx, my] = [(o.gx + 0.5) * T, (o.gy + 0.5) * T]; // het midden van de eerste tegel water van rij 0
+    const rij = T * S2; // van rij tot rij, dwars
+    aW = langs(mx, my) - S / 4;
+    c0 = dwars(mx, my) - rij / 2 + BRUG.inzet * T;
+    c1 = dwars(mx, my) + (R - 0.5) * rij - BRUG.inzet * T;
+    gc = o.gx + o.gy;
+  }
+  const w = (na, nc, nz) => [na * A.U[0] + nc * A.V[0], na * A.U[1] + nc * A.V[1], nz];
+  const doos = (aa, ab, ca, cb, z0, z1) => {
+    const xs = [];
+    const ys = [];
+    for (const a of [aa, ab]) {
+      for (const c of [ca, cb]) {
+        xs.push(a * A.U[0] + c * A.V[0]);
+        ys.push(a * A.U[1] + c * A.V[1]);
+      }
+    }
+    return [Math.min(...xs), Math.min(...ys), z0, Math.max(...xs), Math.max(...ys), z1];
+  };
+  return { as: o.as, schuin: A.schuin, S, aW, c0, c1, R, gc, langs, dwars, w, doos, tegel, stap: S / T };
+}
 
 // De bogen over L tegels water: [van, tot] in tegels vanaf de eerste tegel water. Twee tegels per boog; bij een oneven
 // lengte in het midden één van drie; over één tegel een klein boogje.
@@ -61,6 +120,14 @@ function bogen(L) {
   while (a < L) uit.push([a, (a += 2)]);
   return uit;
 }
+
+// Het wegdek op een landhoofd loopt van de aanloop op de oever tot het dek in een S-bocht, vlak aan beide uiteinden
+// (Marcel, 17 okt: "de knak in de brug mag er niet zijn", "moet natuurlijk overlopen"); getekend in PLAKKEN vlakke plakken.
+const sBocht = (t) => t * t * (3 - 2 * t);
+const PLAKKEN = 8;
+
+// De bogen van een brug in dit raam: langs x en y zoals hierboven, schuin één boog per stap (een stap is √2 tegel).
+const bogenVan = (F, L) => (F.schuin ? Array.from({ length: L }, (_, i) => [i, i + 1]) : bogen(L));
 
 // ---------------------------------------------------------------- de steen
 
@@ -100,35 +167,49 @@ function steenPixel(soort, u, h, basis, zaad) {
   }
 }
 
-// Het wegdek: grote kinderkopjes (Marcel, 17 okt: "deze zijn te fijn", en die van baksteen "lijken wel dakpannen"), in
-// rijen dwars op de brug, elk een eigen steen met een donkere voeg en een ronde rug; sleets in het midden, mos in de voegen
-// langs de rand. Van zandsteen op een brug van zandsteen, anders veldsteen, ook op een brug van baksteen. u langs en v
-// dwars in pixels, q dwars van 0 tot 1.
+// Het wegdek: grote kinderkopjes (Marcel, 17 okt: "deze zijn te fijn", die van baksteen "lijken wel dakpannen", en "de
+// stenen moeten echter, het lijken nu platte platen"), in rijen dwars op de brug. Elke steen is bol: de kant naar het
+// licht is lichter, de andere kant donkerder, met een glimlicht en wat korrel; de hoeken zijn rond, en waar vier stenen
+// samenkomen, is de voeg breder, met hier en daar zand of mos. Van zandsteen op een brug van zandsteen, anders veldsteen
+// (met af en toe een warmere), ook op een brug van baksteen. u langs en v dwars in pixels, q dwars van 0 tot 1, licht de
+// richting van het licht langs en dwars (een eenheidsvector).
 const KOP = { rij: 8, lang: [8, 6] }; // een rij langs de brug, en een steen dwars: 8 tot 13 pixels
-function wegdekPixel(u, v, q, steen, zaad) {
+function wegdekPixel(u, v, q, steen, zaad, licht) {
   const r = Math.floor(u / KOP.rij);
   const fr = u - r * KOP.rij;
   const lengte = (k) => KOP.lang[0] + (hash(r, k, zaad + 27) % KOP.lang[1]);
   let a = -(hash(r, 1, zaad + 25) % 9);
   let k = 0;
   while (a + lengte(k) <= v) a += lengte(k++);
-  // een ronde steen in zijn vak, wat scheef: de hoeken zijn rond, en waar vier stenen samenkomen, is de voeg breder
   const hs = hash(r, k, zaad + 29);
   const l = lengte(k);
-  const dv = Math.abs(v - a - l / 2 - ((hs % 3) - 1) * 0.4) / (l / 2 - 0.7);
-  const du = Math.abs(fr - KOP.rij / 2 - (((hs >> 3) % 3) - 1) * 0.4) / (KOP.rij / 2 - 0.7);
-  const e = dv * dv * dv + du * du * du;
-  UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
-  let s = 3.5 + (hs % 3) * 0.4;
-  if (e > 1) s = 1.2; // de voeg
-  else if (e > 0.5) s -= 0.7; // de ronde rand
-  else if (e < 0.15) s += 0.3; // de rug
-  if (e <= 1 && q > 0.3 && q < 0.7) s += 0.5; // het looppad blinkt
-  UIT.stap = s;
-  if (e > 0.8 && (q < 0.15 || q > 0.85) && ruis2(u * 0.1, v * 0.1, zaad + 23) > 0.45) {
-    UIT.ramp = RAMP.mos;
-    UIT.stap = 2.5;
+  // waar in de steen, van -1 tot 1, met het midden wat scheef
+  const nu = (fr - KOP.rij / 2 - (((hs >> 3) % 3) - 1) * 0.4) / (KOP.rij / 2 - 0.7);
+  const nv = (v - a - l / 2 - ((hs % 3) - 1) * 0.4) / (l / 2 - 0.7);
+  const e = Math.abs(nu) ** 3 + Math.abs(nv) ** 3;
+  if (e > 1) {
+    // de voeg
+    const zand = hash(Math.round(u), Math.round(v), zaad + 33) % 4 === 0;
+    UIT.ramp = zand ? RAMP.aarde : GRIJS;
+    UIT.stap = zand ? 2 : 1;
+    if ((q < 0.15 || q > 0.85) && ruis2(u * 0.1, v * 0.1, zaad + 23) > 0.45) {
+      UIT.ramp = RAMP.mos;
+      UIT.stap = 2.5;
+    }
+    return;
   }
+  const warm = steen !== 'zandsteen' && hs % 9 === 0;
+  UIT.ramp = steen === 'zandsteen' || warm ? RAMP.zandsteen : GRIJS;
+  const naarLicht = nu * licht[0] + nv * licht[1];
+  let s = 3.4 + (hs % 3) * 0.45 - (warm ? 0.8 : 0);
+  s += naarLicht * (0.4 + 0.9 * Math.min(1, e)) * 1.2; // bol: aan de rand schuiner
+  if (e > 0.6 && naarLicht < -0.2) s -= 0.5; // de schaduwkant
+  const gu = nu - 0.35 * licht[0];
+  const gv = nv - 0.35 * licht[1];
+  if (gu * gu + gv * gv < 0.07) s += 0.8; // het glimlicht
+  s += ((hash(Math.round(u * 2), Math.round(v * 2), zaad + 31) % 5) - 2) * 0.15; // korrel
+  if (q > 0.3 && q < 0.7) s += 0.4; // het looppad blinkt
+  UIT.stap = s;
 }
 
 // Wat de jaren doen (o.oud): mos aan de natte voet en in de voegen, korstmos, een donkere natte rand bij het water.
@@ -154,22 +235,21 @@ function verweer(u, h, zaad, o) {
 
 // ---------------------------------------------------------------- de stenen boogbrug
 
-// Een stuk van één tegel. o:
-//   as        'x' of 'y': waarlangs de brug loopt
-//   ga, gc    de tegel: langs (ga) en dwars (gc)
+// Een stuk van één stap. o:
+//   raam      het raam van de brug (raam(o))
+//   i         de stap: -1 en L zijn de landhoofden, 0 tot L - 1 boven het water
 //   stuk      'begin' of 'eind' (een landhoofd, op de oever), of 'water'
-//   boog      bij 'water': [van, tot] in tegels langs, de boog waar deze tegel in ligt (relatief aan ga)
+//   boog      bij 'water': [van, tot] in stappen, de boog waar deze stap in ligt
 //   steen     'veldsteen', 'zandsteen' of 'baksteen'
 //   zaad      voor de steen en het verweren
 function steenStuk(o) {
-  const langsX = o.as === 'x';
-  const T = TEGEL;
-  const a0 = o.ga * T;
+  const F = o.raam;
+  const T = F.S; // een stap langs de brug
+  const a0 = F.aW + o.i * T;
   const a1 = a0 + T;
-  const [c0, c1] = dwarsVan(o.gc);
+  const { c0, c1, w } = F;
   const cm = (c0 + c1) / 2;
-  const w = (na, nc, nz) => (langsX ? [na, nc, nz] : [nc, na, nz]);
-  const doosW = (aa, ab, ca, cb, z0, z1) => (langsX ? [aa, ca, z0, ab, cb, z1] : [ca, aa, z0, cb, ab, z1]);
+  const doosW = F.doos;
   const zaad = o.zaad ?? 41;
   const steen = o.steen || 'veldsteen';
   const E = (px) => px / PXH; // pixels naar eenheden
@@ -177,21 +257,20 @@ function steenStuk(o) {
   const zBodem = E(BRUG.waterVlak - 6);
   // het wegdek: bij een landhoofd een helling van de aanloop tot het dek, boven het water vlak
   const hoog = (a) => {
-    if (o.stuk === 'begin') return BRUG.aanloop + ((a - a0) / T) * (BRUG.dek - BRUG.aanloop);
-    if (o.stuk === 'eind') return BRUG.dek - ((a - a0) / T) * (BRUG.dek - BRUG.aanloop);
+    const t = klem((a - a0) / T, 0, 1);
+    if (o.stuk === 'begin') return BRUG.aanloop + sBocht(t) * (BRUG.dek - BRUG.aanloop);
+    if (o.stuk === 'eind') return BRUG.aanloop + sBocht(1 - t) * (BRUG.dek - BRUG.aanloop);
     return BRUG.dek;
   };
-  const helling = o.stuk === 'water' ? 0 : (o.stuk === 'begin' ? 1 : -1) * E(BRUG.dek - BRUG.aanloop) / T;
-  // het bovenvlak door (a0, hoog(a0)): z = hoog(a0) + helling * (a - a0), als vlak n·p = d
-  const bovenVlak = (extra) => ({ n: w(-helling, 0, 1), d: E(hoog(a0) + extra) - helling * a0, naam: 'z' });
   // de opening van de boog op deze tegel: langs (in tegels vanaf de eerste tegel water) en hoogte (px)
   const boog = o.boog;
   const kruin = BRUG.dek - BRUG.dikte - 1;
   const voet = BRUG.waterVlak + 1;
+  const pijler = (BRUG.pijler * TEGEL) / T; // in stappen
   function inBoog(u, h) {
     if (!boog) return 0;
-    const s0 = boog[0] + BRUG.pijler;
-    const s1 = boog[1] - BRUG.pijler;
+    const s0 = boog[0] + pijler;
+    const s1 = boog[1] - pijler;
     const m = (s0 + s1) / 2;
     const hw = (s1 - s0) / 2;
     const t = (u - m) / hw;
@@ -200,24 +279,24 @@ function steenStuk(o) {
     if (h > top + 4.5) return 0;
     if (h > top) {
       // de boogstenen: een ring om de boog, met voegen naar het midden toe
-      const hoek = Math.atan2(h - voet, (u - m) * 40);
+      const hoek = Math.atan2(h - voet, (u - m) * 40 * F.stap);
       return Math.floor(hoek / (Math.PI / (6 + 2 * hw))) % 2 ? 3 : 4;
     }
     return top - h < 2.2 ? 2 : 1; // 2: de rand van het gewelf (donker), 1: open
   }
-  const lokaal = (X, Y) => ((langsX ? X : Y) - o.ga * T) / T + (o.relatief ?? 0); // u in tegels binnen de brug
+  const lokaal = (X, Y) => (F.langs(X, Y) - F.aW) / T; // u in stappen vanaf het water
 
   // de zijkant (en de kop van een landhoofd): steen, met de boog waar je het water doorheen ziet
   const zijTex = (vlak, X, Y, Z) => {
     const h = Z * PXH;
-    const langs = langsX ? X : Y;
+    const langs = F.langs(X, Y);
     const u = langs * SQ;
     if (vlak === 'z') {
-      const dwars = langsX ? Y : X;
-      wegdekPixel(u, dwars * SQ, (dwars - c0) / (c1 - c0), steen, zaad);
+      const dwars = F.dwars(X, Y);
+      wegdekPixel(u, dwars * SQ, (dwars - c0) / (c1 - c0), steen, zaad, zijTex.licht);
       return;
     }
-    const zij = vlak === (langsX ? 'y' : 'x');
+    const zij = vlak === 'zij';
     const g = inBoog(lokaal(X, Y), h);
     if (zij && g === 1) {
       UIT.weg = true;
@@ -244,13 +323,13 @@ function steenStuk(o) {
   // de borstwering: dezelfde steen, met een dekzerk van platte stenen; oud: hier en daar een steen eruit
   const borstTex = (vlak, X, Y, Z) => {
     const h = Z * PXH;
-    const langs = langsX ? X : Y;
+    const langs = F.langs(X, Y);
     const u = langs * SQ;
     const top = hoog(langs) + BRUG.borst;
     // een steen die eruit is: een hapje uit de bovenkant
     if (o.oud !== false) {
       const k = Math.floor(u / 9);
-      if (hash(k, o.gc, zaad + 31) % 9 === 0 && h > top - 4 && (u / 9 - k) > 0.25 && (u / 9 - k) < 0.85) {
+      if (hash(k, F.gc, zaad + 31) % 9 === 0 && h > top - 4 && (u / 9 - k) > 0.25 && (u / 9 - k) < 0.85) {
         UIT.weg = true;
         return;
       }
@@ -271,7 +350,7 @@ function steenStuk(o) {
       UIT.stap = 4.5;
       return;
     }
-    steenPixel(steen, u + 300, h + 60, vlak === (langsX ? 'y' : 'x') ? 4.2 : 3.2, zaad + 3);
+    steenPixel(steen, u + 300, h + 60, vlak === 'zij' ? 4.2 : 3.2, zaad + 3);
     if (o.oud !== false && ruis2(u * 0.2, h * 0.3, zaad + 37) > 0.72 && hash(Math.round(u), Math.round(h), zaad + 39) % 2) {
       UIT.ramp = RAMP.olijf;
       UIT.stap = 4; // korstmos: vaal geelgroen, in vlekjes
@@ -280,17 +359,35 @@ function steenStuk(o) {
 
   const vormen = [];
   const kopA = o.stuk === 'begin' ? -1 : o.stuk === 'eind' ? 1 : 0; // waar de kop van een landhoofd zit
-  const naamLangs = langsX ? 'x' : 'y';
+  const licht = (() => {
+    const lu = F.langs(K.LICHT[0], K.LICHT[1]);
+    const lv = F.dwars(K.LICHT[0], K.LICHT[1]);
+    const n = Math.hypot(lu, lv);
+    return [lu / n, lv / n];
+  })();
+  zijTex.licht = licht;
+  // in plakken: boven het water één, op een landhoofd PLAKKEN, elk met een vlak bovenvlak door de S-bocht
+  const plakken = o.stuk === 'water' ? 1 : PLAKKEN;
+  for (let j = 0; j < plakken; j++) {
+    const p0 = a0 + (j / plakken) * T;
+    const p1 = a0 + ((j + 1) / plakken) * T;
+    const helling = E(hoog(p1) - hoog(p0)) / (p1 - p0);
+    // het bovenvlak door (p0, hoog(p0)): z = hoog(p0) + helling * (a - p0), als vlak n·p = d
+    const bovenVlak = (extra) => ({ n: w(-helling, 0, 1), d: E(hoog(p0) + extra) - helling * p0, naam: 'z' });
+    const kop = kopA === 1 && j === plakken - 1 ? 'kop' : '-'; // de buitenkant van het laatste landhoofd
+    plak(p0, p1, helling, bovenVlak, kop);
+  }
+  function plak(a0, a1, helling, bovenVlak, kop) {
   // het lijf: van onder het water tot het wegdek
   vormen.push(
     D.vorm(
       [
         bovenVlak(0),
         { n: w(0, 0, -1), d: -(o.stuk === 'water' ? zBodem : E(-3)), naam: '-' },
-        { n: w(1, 0, 0), d: a1, naam: kopA === 1 ? naamLangs : '-' },
+        { n: w(1, 0, 0), d: a1, naam: kop },
         { n: w(-1, 0, 0), d: -a0, naam: '-' },
-        { n: w(0, 1, 0), d: c1, naam: langsX ? 'y' : 'x' },
-        { n: w(0, -1, 0), d: -c0, naam: '-' },
+        { n: w(0, 1, 0), d: c1, naam: 'zij' },
+        { n: w(0, -1, 0), d: -c0, naam: 'zij' },
       ],
       zijTex,
       { deel: 60, doos: doosW(a0, a1, c0, c1, o.stuk === 'water' ? zBodem : E(-3), E(Math.max(hoog(a0), hoog(a1)) + 1)) },
@@ -322,74 +419,80 @@ function steenStuk(o) {
         [
           bovenVlak(BRUG.borst),
           { n: w(0, 0, -1), d: -E(hoog(a0) - 1), naam: '-' },
-          { n: w(1, 0, 0), d: a1, naam: kopA === 1 ? naamLangs : '-' },
-          { n: w(-1, 0, 0), d: -a0, naam: kopA === -1 ? '-' : '-' },
-          { n: w(0, 1, 0), d: k1, naam: langsX ? 'y' : 'x' },
-          { n: w(0, -1, 0), d: -k0, naam: '-' },
+          { n: w(1, 0, 0), d: a1, naam: kop },
+          { n: w(-1, 0, 0), d: -a0, naam: '-' },
+          { n: w(0, 1, 0), d: k1, naam: 'zij' },
+          { n: w(0, -1, 0), d: -k0, naam: 'zij' },
         ],
         borstTex,
         { deel: 61 + (zij > 0 ? 1 : 0), doos: doosW(a0, a1, k0, k1, E(Math.min(hoog(a0), hoog(a1)) - 2), E(Math.max(hoog(a0), hoog(a1)) + BRUG.borst + 1)) },
       ),
     );
   }
-  // een pijlerkop: de spitse voet van een pijler tussen twee bogen, aan de kant van de kijker, tot net onder de kruin. Hij
-  // staat op de grens van twee tegels; elke tegel heeft zijn helft (o.kop: 'links' aan zijn begin, 'rechts' aan zijn eind).
+  }
+  // een pijlerkop: de spitse voet van een pijler tussen twee bogen, aan de kant van de kijker (schuin langs zn aan beide
+  // kanten: daar zie je ze allebei), tot net onder de kruin. Hij staat op de grens van twee stappen; elke stap heeft zijn
+  // helft (o.kopBegin aan zijn begin, o.kopEind aan zijn eind). σ is de kant: 1 bij c1, -1 bij c0.
   for (const [kant, grens] of [['begin', o.kopBegin], ['eind', o.kopEind]]) {
     if (!grens) continue;
-    const ab = kant === 'begin' ? a0 : a1;
-    const p = BRUG.pijler * T * 1.25;
-    const neus = 0.3 * T;
-    const zTop = E(kruin - 1);
-    const val = E(4) / neus; // de kap loopt naar de neus toe af
-    const z0 = zBodem;
-    // de twee schuine kanten: door (ab -+ p, c1) en (ab, c1 + neus)
-    const zijL = { n: w(-neus, p, 0), d: -neus * (ab - p) + p * c1, naam: langsX ? 'y' : 'x' };
-    const zijR = { n: w(neus, p, 0), d: neus * (ab + p) + p * c1, naam: langsX ? 'y' : 'x' };
-    vormen.push(
-      D.vorm(
-        [
-          zijL,
-          zijR,
-          { n: w(0, -1, 0), d: -(c1 - 1), naam: '-' },
-          { n: w(0, val, 1), d: zTop + val * c1, naam: 'kap' },
-          { n: w(0, 0, -1), d: -z0, naam: '-' },
-          kant === 'begin' ? { n: w(-1, 0, 0), d: -ab, naam: '-' } : { n: w(1, 0, 0), d: ab, naam: '-' },
-        ],
-        (vlak, X, Y, Z) => {
-          const h = Z * PXH;
-          const u = (langsX ? X : Y) * SQ + (langsX ? Y : X) * SQ;
-          if (vlak === 'kap') {
-            UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
-            UIT.stap = 4.4;
-            if (o.oud !== false && ruis2(u * 0.2, h * 0.2, zaad + 51) > 0.55) {
-              UIT.ramp = RAMP.mos;
-              UIT.stap = 2.5;
+    for (const σ of F.as === 'zn' ? [-1, 1] : [1]) {
+      const ce = σ > 0 ? c1 : c0;
+      const ab = kant === 'begin' ? a0 : a1;
+      const p = BRUG.pijler * TEGEL * 1.25;
+      const neus = 0.3 * TEGEL;
+      const zTop = E(kruin - 1);
+      const val = E(4) / neus; // de kap loopt naar de neus toe af
+      const z0 = zBodem;
+      // de twee schuine kanten: door (ab -+ p, ce) en (ab, ce + σ neus)
+      const zijL = { n: w(-neus, σ * p, 0), d: -neus * (ab - p) + σ * p * ce, naam: 'zij' };
+      const zijR = { n: w(neus, σ * p, 0), d: neus * (ab + p) + σ * p * ce, naam: 'zij' };
+      vormen.push(
+        D.vorm(
+          [
+            zijL,
+            zijR,
+            { n: w(0, -σ, 0), d: -σ * ce + 1, naam: '-' },
+            { n: w(0, σ * val, 1), d: zTop + σ * val * ce, naam: 'kap' },
+            { n: w(0, 0, -1), d: -z0, naam: '-' },
+            kant === 'begin' ? { n: w(-1, 0, 0), d: -ab, naam: '-' } : { n: w(1, 0, 0), d: ab, naam: '-' },
+          ],
+          (vlak, X, Y, Z) => {
+            const h = Z * PXH;
+            const u = (F.langs(X, Y) + F.dwars(X, Y)) * SQ;
+            if (vlak === 'kap') {
+              UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
+              UIT.stap = 4.4;
+              if (o.oud !== false && ruis2(u * 0.2, h * 0.2, zaad + 51) > 0.55) {
+                UIT.ramp = RAMP.mos;
+                UIT.stap = 2.5;
+              }
+              return;
             }
-            return;
-          }
-          steenPixel(steen, u, h, 4, zaad + 9);
-          if (o.oud !== false) verweer(u, h, zaad, {});
-        },
-        { deel: 63, doos: doosW(ab - p, ab + p, c1 - 1, c1 + neus, z0, zTop + 1) },
-      ),
-    );
+            steenPixel(steen, u, h, 4, zaad + 9);
+            if (o.oud !== false) verweer(u, h, zaad, {});
+          },
+          { deel: 63, doos: doosW(ab - p, ab + p, Math.min(ce - σ, ce + σ * neus), Math.max(ce - σ, ce + σ * neus), z0, zTop + 1) },
+        ),
+      );
+    }
   }
-  return { vormen, modellen: [], lichten: [], bloembakken: [], voet: langsX ? [a0, c0, a1, c1] : [c0, a0, c1, a1] };
+  return { vormen, modellen: [], lichten: [], bloembakken: [] };
 }
 
-// Een hele stenen brug over L tegels water, als stukken: de landhoofden op de oevers en de stukken boven het water. o: as,
-// ga (de eerste tegel water langs), gc (de tegel dwars), L, steen, zaad. Geeft de stukken, elk zoals steenStuk.
+// Een hele stenen brug over L stappen water, als stukken: de landhoofden op de oevers en de stukken boven het water. o: as,
+// en waar hij ligt (raam), L, steen, zaad. Geeft de stukken, elk zoals steenStuk.
 function steenBrug(o) {
+  const F = raam(o);
   const stukken = [];
-  const bg = bogen(o.L);
-  stukken.push(steenStuk({ ...o, ga: o.ga - 1, stuk: 'begin' }));
+  const bg = bogenVan(F, o.L);
+  stukken.push(steenStuk({ ...o, raam: F, i: -1, stuk: 'begin' }));
   // de grenzen tussen twee bogen: daar staat een pijler, met zijn kop
   const pijlers = new Set(bg.slice(0, -1).map(([, t]) => t));
   for (let i = 0; i < o.L; i++) {
     const boog = bg.find(([v, t]) => i >= v && i < t);
-    stukken.push(steenStuk({ ...o, ga: o.ga + i, stuk: 'water', boog, relatief: i, kopBegin: pijlers.has(i), kopEind: pijlers.has(i + 1) }));
+    stukken.push(steenStuk({ ...o, raam: F, i, stuk: 'water', boog, kopBegin: pijlers.has(i), kopEind: pijlers.has(i + 1) }));
   }
-  stukken.push(steenStuk({ ...o, ga: o.ga + o.L, stuk: 'eind' }));
+  stukken.push(steenStuk({ ...o, raam: F, i: o.L, stuk: 'eind' }));
   return stukken;
 }
 
@@ -415,8 +518,8 @@ const HOUT = {
 function houtTex(o) {
   return (vlak, X, Y, Z) => {
     const h = Z * PXH;
-    const langs = o.langsX ? X : Y;
-    const dwars = o.langsX ? Y : X;
+    const langs = o.raam.langs(X, Y);
+    const dwars = o.raam.dwars(X, Y);
     const u = langs * SQ;
     const v = dwars * SQ;
     if (o.weg && o.weg(langs / TEGEL, h, vlak)) {
@@ -440,7 +543,7 @@ function houtTex(o) {
     // balken en palen: de nerf in de lengte, donkerder aan de onderkant
     const lang = vlak === 'z' ? v : o.staand ? h : u;
     UIT.ramp = hash(Math.floor(lang / 40), Math.floor((o.staand ? u : h) / 5), o.zaad + 3) % 3 === 0 ? RAMP.houtOud : RAMP.schors;
-    let st = vlak === 'z' ? 4.4 : vlak === o.zijNaam ? 3.4 : 2.6;
+    let st = vlak === 'z' ? 4.4 : vlak === 'zij' ? 3.4 : 2.6;
     if (hash(Math.round(lang), Math.round((o.staand ? u : h) * 2), o.zaad + 5) % 6 === 0) st -= 0.8; // de nerf
     UIT.stap = st;
     // mos aan de voet van een paal, bij het water
@@ -451,68 +554,70 @@ function houtTex(o) {
   };
 }
 
-// Een blok hout langs de brug: van a0 tot a1 (langs), k0 tot k1 (dwars), van z0 (px) tot een bovenkant die van h0 (bij
-// a0) naar h1 (bij a1) loopt. Zijn kanten naar de kijker heten 'x' en 'y', zodat de textuur ze kent.
-function blokLangs(langsX, a0, a1, k0, k1, z0, h0, h1, tex, deel, o = {}) {
+// Een blok hout langs de brug, in raam F: van a0 tot a1 (langs), k0 tot k1 (dwars), van z0 (px) tot een bovenkant die van
+// h0 (bij a0) naar h1 (bij a1) loopt. Zijn kanten heten 'kop' en 'zij', zodat de textuur ze kent.
+function blokLangs(F, a0, a1, k0, k1, z0, h0, h1, tex, deel, o = {}) {
   const E = (px) => px / PXH;
-  const w = (na, nc, nz) => (langsX ? [na, nc, nz] : [nc, na, nz]);
+  const w = F.w;
   const helling = (E(h1) - E(h0)) / (a1 - a0);
-  const doos = langsX ? [a0, k0, E(z0), a1, k1, E(Math.max(h0, h1))] : [k0, a0, E(z0), k1, a1, E(Math.max(h0, h1))];
   return D.vorm(
     [
       { n: w(-helling, 0, 1), d: E(h0) - helling * a0, naam: 'z' },
       { n: w(0, 0, -1), d: -E(z0), naam: '-' },
-      { n: w(1, 0, 0), d: a1, naam: o.kop === false ? '-' : langsX ? 'x' : 'y' },
+      { n: w(1, 0, 0), d: a1, naam: o.kop === false ? '-' : 'kop' },
       { n: w(-1, 0, 0), d: -a0, naam: '-' },
-      { n: w(0, 1, 0), d: k1, naam: langsX ? 'y' : 'x' },
-      { n: w(0, -1, 0), d: -k0, naam: '-' },
+      { n: w(0, 1, 0), d: k1, naam: 'zij' },
+      { n: w(0, -1, 0), d: -k0, naam: 'zij' },
     ],
     tex,
-    { deel, doos },
+    { deel, doos: F.doos(a0, a1, k0, k1, E(z0), E(Math.max(h0, h1))) },
   );
 }
 
-// Het landhoofd van een houten brug: veldsteen, met de helling van de aanloop tot het dek, en daarop de eerste planken.
+// Het landhoofd van een houten brug: veldsteen, met de S-bocht van de aanloop tot het dek, daarop de eerste planken, en
+// de leuning (o.kruis: met andreaskruisen). In PLAKKEN plakken, zoals de stenen brug.
 function houtLandhoofd(o, dek) {
-  const langsX = o.as === 'x';
-  const T = TEGEL;
-  const a0 = o.ga * T;
-  const a1 = a0 + T;
-  const [c0, c1] = dwarsVan(o.gc);
+  const F = o.raam;
+  const a0 = F.aW + o.i * F.S;
+  const { c0, c1 } = F;
   const op = o.stuk === 'begin';
-  const h0 = op ? BRUG.aanloop : dek;
-  const h1 = op ? dek : BRUG.aanloop;
+  const hoog = (a) => BRUG.aanloop + sBocht(op ? (a - a0) / F.S : 1 - (a - a0) / F.S) * (dek - BRUG.aanloop);
   const zaad = o.zaad ?? 53;
   const steenTex = (vlak, X, Y, Z) => {
     const h = Z * PXH;
-    const u = (langsX ? X : Y) * SQ;
+    const u = F.langs(X, Y) * SQ;
     if (vlak === 'z') {
-      houtTex({ langsX, planken: true, zaad })(vlak, X, Y, Z);
+      houtTex({ raam: F, planken: true, zaad })(vlak, X, Y, Z);
       return;
     }
     steenPixel('veldsteen', u, h + 20, 3.8, zaad);
     verweer(u, h, zaad, { klimop: true });
   };
-  return [blokLangs(langsX, a0, a1, c0, c1, -3, h0, h1, steenTex, 70, { kop: !op })];
+  const vormen = [];
+  for (let j = 0; j < PLAKKEN; j++) {
+    const p0 = a0 + (j / PLAKKEN) * F.S;
+    const p1 = a0 + ((j + 1) / PLAKKEN) * F.S;
+    vormen.push(blokLangs(F, p0, p1, c0, c1, -3, hoog(p0), hoog(p1), steenTex, 70, { kop: !op && j === PLAKKEN - 1 }));
+    vormen.push(...leuning(o, p0, p1, hoog(p0), hoog(p1), 72));
+  }
+  return vormen;
 }
 
 // De leuning langs een stuk van één tegel: palen op elke halve tegel en twee regels, aan beide kanten, op een dek dat van
 // h0 naar h1 loopt. o.kruis: andreaskruisen tussen de palen (de boogbrug), anders een middenregel (de jukbrug). Een stuk
 // van de onderregel is soms weg (o.oud).
 function leuning(o, a0, a1, h0, h1, deel) {
-  const langsX = o.as === 'x';
-  const [c0, c1] = dwarsVan(o.gc);
+  const F = o.raam;
+  const { c0, c1 } = F;
   const zaad = o.zaad ?? 53;
   const vormen = [];
   const dekOp = (a) => h0 + ((a - a0) / (a1 - a0)) * (h1 - h0);
   for (const [k0, k1] of [[c0, c0 + HOUT.regel], [c1 - HOUT.regel, c1]]) {
-    const tex = houtTex({ langsX, zaad, zijNaam: langsX ? 'y' : 'x' });
     // de bovenregel en de palen als één paneel: wat er niet is, valt weg
     const T = TEGEL;
     const paneelTex = houtTex({
-      langsX,
+      raam: F,
       zaad,
-      zijNaam: langsX ? 'y' : 'x',
       weg: (u, h) => {
         const a = u * T;
         const top = dekOp(a) + HOUT.leuning;
@@ -531,52 +636,45 @@ function leuning(o, a0, a1, h0, h1, deel) {
         return true;
       },
     });
-    void tex;
-    vormen.push(blokLangs(langsX, a0, a1, k0, k1, Math.min(h0, h1), h0 + HOUT.leuning, h1 + HOUT.leuning, paneelTex, deel, { kop: false }));
+    vormen.push(blokLangs(F, a0, a1, k0, k1, Math.min(h0, h1), h0 + HOUT.leuning, h1 + HOUT.leuning, paneelTex, deel, { kop: false }));
   }
   return vormen;
 }
 
-// De jukbrug: een stuk van één tegel. o: as, ga, gc, stuk ('begin', 'water', 'eind'), en bij 'water' juk: of er aan het
-// eind van deze tegel een juk staat (op de grens met de volgende tegel water).
+// De jukbrug: een stuk van één stap. o: raam, i, stuk ('begin', 'water', 'eind'), en bij 'water' juk: of er aan het eind
+// van deze stap een juk staat (op de grens met de volgende stap water).
 function jukStuk(o) {
-  const langsX = o.as === 'x';
-  const T = TEGEL;
-  const a0 = o.ga * T;
-  const a1 = a0 + T;
-  const [c0, c1] = dwarsVan(o.gc);
+  const F = o.raam;
+  const a0 = F.aW + o.i * F.S;
+  const a1 = a0 + F.S;
+  const { c0, c1 } = F;
   const zaad = o.zaad ?? 53;
-  const zijNaam = langsX ? 'y' : 'x';
   const vormen = [];
-  if (o.stuk !== 'water') {
-    vormen.push(...houtLandhoofd(o, HOUT.dek));
-    const op = o.stuk === 'begin';
-    vormen.push(...leuning(o, a0, a1, op ? BRUG.aanloop : HOUT.dek, op ? HOUT.dek : BRUG.aanloop, 72));
-    return { vormen, modellen: [], lichten: [], bloembakken: [] };
-  }
+  if (o.stuk !== 'water') return { vormen: houtLandhoofd(o, HOUT.dek), modellen: [], lichten: [], bloembakken: [] };
   const onderDek = HOUT.dek - HOUT.dekD;
   // het dek en de langsliggers eronder (de buitenste zie je)
-  vormen.push(blokLangs(langsX, a0, a1, c0, c1, onderDek, HOUT.dek, HOUT.dek, houtTex({ langsX, planken: true, zaad, zijNaam }), 71, { kop: false }));
-  for (const k of [c0 + 4, (c0 + c1) / 2 - 3, c1 - 10]) vormen.push(blokLangs(langsX, a0, a1, k, k + 6, onderDek - HOUT.ligger, onderDek, onderDek, houtTex({ langsX, zaad, zijNaam }), 73, { kop: false }));
+  vormen.push(blokLangs(F, a0, a1, c0, c1, onderDek, HOUT.dek, HOUT.dek, houtTex({ raam: F, planken: true, zaad }), 71, { kop: false }));
+  for (const k of [c0 + 4, (c0 + c1) / 2 - 3, c1 - 10]) vormen.push(blokLangs(F, a0, a1, k, k + 6, onderDek - HOUT.ligger, onderDek, onderDek, houtTex({ raam: F, zaad }), 73, { kop: false }));
   // een juk op de grens met de volgende tegel: vier palen en een kesp
   if (o.juk) {
     const p = HOUT.paal / 2;
     const kespOnder = onderDek - HOUT.ligger - HOUT.kesp;
-    vormen.push(blokLangs(langsX, a1 - p - 1, a1 + p + 1, c0 + 1, c1 - 1, kespOnder, onderDek - HOUT.ligger, onderDek - HOUT.ligger, houtTex({ langsX, zaad, zijNaam }), 74));
+    vormen.push(blokLangs(F, a1 - p - 1, a1 + p + 1, c0 + 1, c1 - 1, kespOnder, onderDek - HOUT.ligger, onderDek - HOUT.ligger, houtTex({ raam: F, zaad }), 74));
     for (let i = 0; i < HOUT.palen; i++) {
       const k = c0 + ((i + 0.5) / HOUT.palen) * (c1 - c0);
-      vormen.push(blokLangs(langsX, a1 - p, a1 + p, k - p, k + p, BRUG.waterVlak - 6, kespOnder, kespOnder, houtTex({ langsX, zaad: zaad + i, zijNaam, staand: true }), 75));
+      vormen.push(blokLangs(F, a1 - p, a1 + p, k - p, k + p, BRUG.waterVlak - 6, kespOnder, kespOnder, houtTex({ raam: F, zaad: zaad + i, staand: true }), 75));
     }
   }
   vormen.push(...leuning(o, a0, a1, HOUT.dek, HOUT.dek, 72));
   return { vormen, modellen: [], lichten: [], bloembakken: [] };
 }
 
-// Een hele jukbrug over L tegels water: een juk op elke grens tussen twee tegels water.
+// Een hele jukbrug over L stappen water: een juk op elke grens tussen twee stappen water.
 function jukBrug(o) {
-  const stukken = [jukStuk({ ...o, ga: o.ga - 1, stuk: 'begin' })];
-  for (let i = 0; i < o.L; i++) stukken.push(jukStuk({ ...o, ga: o.ga + i, stuk: 'water', juk: i < o.L - 1 }));
-  stukken.push(jukStuk({ ...o, ga: o.ga + o.L, stuk: 'eind' }));
+  const F = raam(o);
+  const stukken = [jukStuk({ ...o, raam: F, i: -1, stuk: 'begin' })];
+  for (let i = 0; i < o.L; i++) stukken.push(jukStuk({ ...o, raam: F, i, stuk: 'water', juk: i < o.L - 1 }));
+  stukken.push(jukStuk({ ...o, raam: F, i: o.L, stuk: 'eind' }));
   return stukken;
 }
 
@@ -584,64 +682,58 @@ function jukBrug(o) {
 // oevers tot bult hoger in het midden, gedragen door twee boogribben met stijltjes ertussen. o: as, ga, gc, L (tegels
 // water), zaad. Elke tegel water in twee helften, zodat de boog niet hoekig wordt.
 function houtBoogBrug(o) {
-  const langsX = o.as === 'x';
-  const T = TEGEL;
+  const F = raam(o);
+  const T = F.S;
   const zaad = o.zaad ?? 59;
-  const [c0, c1] = dwarsVan(o.gc);
-  const zijNaam = langsX ? 'y' : 'x';
-  const bult = HOUT.bult[0] + HOUT.bult[1] * o.L;
-  const dekOp = (u) => HOUT.dek + bult * Math.sin((Math.PI * klem(u, 0, o.L)) / o.L); // u in tegels vanaf de eerste tegel water
+  const { c0, c1 } = F;
+  const bult = HOUT.bult[0] + HOUT.bult[1] * o.L * F.stap;
+  const dekOp = (u) => HOUT.dek + bult * Math.sin((Math.PI * klem(u, 0, o.L)) / o.L) ** 2; // u in stappen vanaf het water; zonder knik
   const voet = BRUG.waterVlak + 1;
   const stukken = [];
   for (const stuk of ['begin', 'eind']) {
-    const ga = stuk === 'begin' ? o.ga - 1 : o.ga + o.L;
-    const p = { ...o, ga, stuk };
-    const a0 = ga * T;
-    const op = stuk === 'begin';
-    stukken.push({ vormen: [...houtLandhoofd(p, HOUT.dek), ...leuning({ ...p, kruis: true }, a0, a0 + T, op ? BRUG.aanloop : HOUT.dek, op ? HOUT.dek : BRUG.aanloop, 72)], modellen: [], lichten: [], bloembakken: [] });
+    stukken.push({ vormen: houtLandhoofd({ ...o, raam: F, i: stuk === 'begin' ? -1 : o.L, stuk, kruis: true }, HOUT.dek), modellen: [], lichten: [], bloembakken: [] });
   }
   for (let i = 0; i < o.L; i++) {
     const vormen = [];
     for (const half of [0, 0.5]) {
       const u0 = i + half;
       const u1 = u0 + 0.5;
-      const a0 = (o.ga + u0) * T;
-      const a1 = (o.ga + u1) * T;
+      const a0 = F.aW + u0 * T;
+      const a1 = F.aW + u1 * T;
       const h0 = dekOp(u0);
       const h1 = dekOp(u1);
       // het dek
-      vormen.push(blokLangs(langsX, a0, a1, c0, c1, Math.min(h0, h1) - HOUT.dekD, h0, h1, houtTex({ langsX, planken: true, zaad, zijNaam }), 71, { kop: false }));
+      vormen.push(blokLangs(F, a0, a1, c0, c1, Math.min(h0, h1) - HOUT.dekD, h0, h1, houtTex({ raam: F, planken: true, zaad }), 71, { kop: false }));
       // de twee boogribben met hun stijltjes, als een paneel onder het dek: wat geen rib of stijl is, valt weg
       const kruin = dekOp(o.L / 2) - HOUT.dekD - 2;
       const ribTex = houtTex({
-        langsX,
+        raam: F,
         zaad: zaad + 2,
-        zijNaam,
         weg: (u, h) => {
-          const uu = u - o.ga;
+          const uu = (u * TEGEL - F.aW) / T;
           const top = voet + (kruin - voet) * Math.sin((Math.PI * klem(uu, 0, o.L)) / o.L);
           if (h <= top && h > top - 5) return false; // de rib
           if (h > top && h < dekOp(uu) - HOUT.dekD && ((uu * 4) % 1 + 1) % 1 < 0.12) return false; // een stijltje
           return true;
         },
       });
-      for (const [k0, k1] of [[c0 + 2, c0 + 8], [c1 - 8, c1 - 2]]) vormen.push(blokLangs(langsX, a0, a1, k0, k1, voet - 2, h0 - HOUT.dekD, h1 - HOUT.dekD, ribTex, 76, { kop: false }));
-      vormen.push(...leuning({ ...o, kruis: true }, a0, a1, h0, h1, 72));
+      for (const [k0, k1] of [[c0 + 2, c0 + 8], [c1 - 8, c1 - 2]]) vormen.push(blokLangs(F, a0, a1, k0, k1, voet - 2, h0 - HOUT.dekD, h1 - HOUT.dekD, ribTex, 76, { kop: false }));
+      vormen.push(...leuning({ ...o, raam: F, kruis: true }, a0, a1, h0, h1, 72));
     }
     stukken.push({ vormen, modellen: [], lichten: [], bloembakken: [] });
   }
   return stukken;
 }
 
-// Hoe hoog het wegdek ligt (px boven het maaiveld, zonder de bolling) op a tegels langs de brug vanaf zijn eerste tegel
+// Hoe hoog het wegdek ligt (px boven het maaiveld, zonder de bolling) op a stappen langs de brug vanaf zijn eerste stap
 // water: van -1 (de buitenkant van het eerste landhoofd) tot L + 1. Zo hoog gaat wie erop loopt mee omhoog; het spel rekent
 // hetzelfde uit met de maten uit de beschrijving (bruggen-vel.cjs, js/sprites.js: S.brugDek).
-function dekOp(soort, L, a) {
+function dekOp(soort, L, a, stap = 1) {
   const dek = soort === 'steen' ? BRUG.dek : HOUT.dek;
-  if (a < 0) return BRUG.aanloop + (dek - BRUG.aanloop) * klem(a + 1, 0, 1);
-  if (a > L) return BRUG.aanloop + (dek - BRUG.aanloop) * klem(L + 1 - a, 0, 1);
+  if (a < 0) return BRUG.aanloop + (dek - BRUG.aanloop) * sBocht(klem(a + 1, 0, 1));
+  if (a > L) return BRUG.aanloop + (dek - BRUG.aanloop) * sBocht(klem(L + 1 - a, 0, 1));
   if (soort !== 'boog') return dek;
-  return dek + (HOUT.bult[0] + HOUT.bult[1] * L) * Math.sin((Math.PI * a) / L);
+  return dek + (HOUT.bult[0] + HOUT.bult[1] * L * stap) * Math.sin((Math.PI * a) / L) ** 2;
 }
 
 // Zet een brug neer als één ding: dan tekent de omlijning geen naad tussen twee stukken.
