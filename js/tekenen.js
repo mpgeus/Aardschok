@@ -344,6 +344,7 @@
     for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
     buf.stukken.clear();
     buf.oud = null;
+    buf.vuil = null;
   }
   // Teken stuk (i, j) van de buffer (opnieuw); een oud doek gaat terug in de voorraad.
   function tekenBufferStuk(buf, i, j, teken) {
@@ -358,6 +359,44 @@
     if (!iets) buf.vrij.push(canvas);
     if (oud && oud.canvas) buf.vrij.push(oud.canvas);
     buf.stukken.set(sl, { i, j, canvas: iets ? canvas : null });
+  }
+  // Teken van stuk s alleen het deel `vak` (een rechthoek in de vlakte) opnieuw, op hele pixels van zijn doek: op een los
+  // doek (deelDoek) in precies de stand van het stuk (even groot, hetzelfde begin), en dan één op één op zijn plek. Wat
+  // erbuiten ligt, blijft. Een gevelde boom raakt zo een paar tegels; tot 17 okt tekende hij een heel stuk van 512 bij
+  // 512 opnieuw, en op 30× met de bouwers in het bos haperde dat om de paar beelden. teken tekent alles wat dat deel
+  // raakt, in dezelfde volgorde en op dezelfde pixels als voor het hele stuk, dus komen er dezelfde pixels. Niet met clip
+  // op het doek zelf, en niet op een kleiner of verschoven doek: ver uitgezoomd (k kleiner dan 1, BAK_ZOOM) rondt de
+  // browser een verkleind plaatje dan net anders af, en het licht op de hellingen (een vloeiend vergroot plaatje) ook.
+  let deelDoek = null;
+  function tekenBufferDeel(buf, s, vak, teken) {
+    const { k, fase: f } = buf;
+    const ox = s.i * STUK - f; // het doek begint op pixel ox, oy van de buffer
+    const oy = s.j * STUK - f;
+    const x0 = Math.max(0, Math.floor(vak.x0 * k - ox));
+    const y0 = Math.max(0, Math.floor(vak.y0 * k - oy));
+    const x1 = Math.min(STUK, Math.ceil(vak.x1 * k - ox));
+    const y1 = Math.min(STUK, Math.ceil(vak.y1 * k - oy));
+    const b = x1 - x0;
+    const h = y1 - y0;
+    if (b <= 0 || h <= 0) return;
+    if (!deelDoek) {
+      deelDoek = document.createElement('canvas');
+      deelDoek.width = STUK;
+      deelDoek.height = STUK;
+    }
+    const d = deelDoek.getContext('2d');
+    d.setTransform(1, 0, 0, 1, 0, 0);
+    d.clearRect(x0, y0, b, h);
+    d.setTransform(k, 0, 0, k, -ox, -oy);
+    d.imageSmoothingEnabled = false;
+    teken(d, { x0: (x0 + ox) / k, y0: (y0 + oy) / k, x1: (x1 + ox) / k, y1: (y1 + oy) / k });
+    const c = s.canvas.getContext('2d');
+    c.save();
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.clearRect(x0, y0, b, h);
+    c.drawImage(deelDoek, x0, y0, b, h, x0, y0, b, h);
+    c.restore();
+    s.canvas.versie = (s.canvas.versie || 0) + 1; // js/gl.js stuurt hem opnieuw naar de kaart
   }
   // Een leeg doek voor een stuk, uit de voorraad als er een is. Een doek dat opnieuw beschreven wordt, krijgt een nieuwe
   // versie: dan stuurt js/gl.js het opnieuw naar de kaart.
@@ -398,14 +437,22 @@
     vergeetVeranderdeKaart(S.grond, S);
     const teken = (c, r) => tekenGrondIn(c, S, r, inBeeld);
     werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, teken);
-    // van wat nieuw land raakt, één per beeld opnieuw; tot dan staat er wat er stond
-    const oud = S.grond.oud && S.grond.oud.find((sl) => S.grond.stukken.has(sl));
+    // van wat nieuw land raakt, één per beeld opnieuw; tot dan staat er wat er stond. Van een stuk met een doek alleen
+    // het deel dat veranderde (tekenBufferDeel); een leeg stuk heeft geen doek, en komt heel opnieuw.
+    const buf = S.grond;
+    const oud = buf.oud && buf.oud.find((sl) => buf.stukken.has(sl));
     if (oud) {
-      S.grond.oud = S.grond.oud.filter((sl) => sl !== oud);
-      const { i, j } = S.grond.stukken.get(oud);
-      tekenBufferStuk(S.grond, i, j, teken);
-    } else S.grond.oud = null;
-    return S.grond;
+      buf.oud = buf.oud.filter((sl) => sl !== oud);
+      const s = buf.stukken.get(oud);
+      const vak = buf.vuil && buf.vuil.get(oud);
+      if (buf.vuil) buf.vuil.delete(oud);
+      if (s.canvas && vak) tekenBufferDeel(buf, s, vak, teken);
+      else tekenBufferStuk(buf, s.i, s.j, teken);
+    } else {
+      buf.oud = null;
+      buf.vuil = null;
+    }
+    return buf;
   }
   // Ging er op het eiland land open (js/wereld.js), dan alleen de stukken van de buffer die dat land raken opnieuw, één
   // per beeld (buf.oud); het land eromheen blijft staan.
@@ -455,6 +502,10 @@
       if (sx0 > x1 || sy0 > y1 || sx0 + STUK / buf.k < x0 || sy0 + STUK / buf.k < y0) continue;
       if (!buf.oud) buf.oud = [];
       if (!buf.oud.includes(sl)) buf.oud.push(sl);
+      // en welk deel van dat stuk, samen met wat er al vuil was (tekenBufferDeel)
+      if (!buf.vuil) buf.vuil = new Map();
+      const was = buf.vuil.get(sl);
+      buf.vuil.set(sl, was ? { x0: Math.min(was.x0, x0), y0: Math.min(was.y0, y0), x1: Math.max(was.x1, x1), y1: Math.max(was.y1, y1) } : { x0, y0, x1, y1 });
     }
   }
 

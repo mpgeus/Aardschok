@@ -349,7 +349,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gaan ze op in de eilanden ernaast (`maakVrij`). De kaart onthoudt de laatste 64 plekken (`T.kaartPlekkenSinds(w,
   versie)`, null als het niet bekend is, alleen scherm): de lijst platte dingen en de grondbuffer in `js/tekenen.js`
   werken alleen die plekken bij, een bufferstuk per beeld (`vergeetVeranderdeKaart`, 13 okt; eerst alle grond in beeld,
-  49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
+  49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Van zo'n stuk alleen het deel dat
+  veranderde (`buf.vuil`, `tekenBufferDeel`, 17 okt; eerst het hele stuk van 512 bij 512): op een los doek in precies de
+  stand van het stuk, en dan op zijn plek, want met een clip of op een verschoven doek rondt de browser ver uitgezoomd net
+  anders af. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
   tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMsPerSeconde` (minstens een deel per beeld), eerst wat het eerst nodig is
   (`nodigOver`, 13 okt: wie loopt, langs zijn pad; wie stilstaat, daarna); het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
