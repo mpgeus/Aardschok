@@ -587,10 +587,12 @@
         }
       }
     }
-    // De bruggen van het eiland (js/eiland.js, legBruggen; gereedschap/pixelart/bruggen-vel.cjs): per tegel een achterlaag
-    // (l 1: het dek, de overkant, de bogen) en een voorlaag (l 2,5: de borstwering of de leuning aan de kant van de kijker),
-    // zoals het graan, zodat wie erop loopt (l 2) ertussen staat. Een stuk ligt met zijn anker op de grond van zijn tegel
-    // (opMaaiveld), niet op het wegdek (opGrond, T.naarSchermOp).
+    // De bruggen van het eiland (js/eiland.js, legBruggen; gereedschap/pixelart/bruggen-vel.cjs): per tegel drie lagen. Het
+    // dek (het wegdek, de zijkant, de bogen) is de grond van wie erop staat: het komt zoveel tegels eerder als het hoog ligt
+    // (een pixel hoger ligt op het scherm een zestiende som x + y verder naar achter), zodat een ossenkar die over twee
+    // tegels reikt er niet in zakt (Marcel, 17 okt: "de ossenkar lijkt nog in de brug te zakken"). De borstwering aan de
+    // overkant (l 1) en die aan de kant van de kijker (l 2,5) staan zoals het graan om wie erop loopt (l 2). Een stuk ligt
+    // met zijn anker op de grond van zijn tegel (opMaaiveld), niet op het wegdek (opGrond, T.naarSchermOp).
     if (metSprites() && T.opEiland(w)) {
       const steen = steenVanLand(w);
       for (const brug of T.eilandVan(w.eiland.zaad).bruggen) {
@@ -604,9 +606,10 @@
             const [x, y] = T.brugTegel(brug, i, k);
             if (!inVak(vak, x, y) || !T.isZichtbaar(w, x, y)) continue;
             const p = opMaaiveld(x, y);
-            for (const laag of [0, 1]) {
+            const dek = T.dekOp(w, x, y) / 16;
+            for (const [laag, d, l] of [[0, x + y - dek, 0.5], [1, x + y, 2.5], [2, x + y, 1]]) {
               const deel = T.sprites.brugStuk(brug, brug.stad ? 'baksteen' : steen, i, k, laag);
-              if (deel) lijst.push({ d: x + y, l: laag ? 2.5 : 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+              if (deel) lijst.push({ d, l, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
             }
           }
         }

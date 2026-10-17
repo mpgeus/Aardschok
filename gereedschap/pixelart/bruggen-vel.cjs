@@ -1,8 +1,9 @@
 // De bruggen van het eiland op een vel voor het spel (bruggen.cjs; ontwerp/werklijst.md, vraag 170, stap 6a2; Marcel, 17
 // okt: "Goed zo, zet ze in het spel"). Het spel legt een brug van elke lengte (js/eiland.js, legBruggen), dus komt hij hier
-// in stukken van één tegel, in twee lagen: wat achter wie erop loopt ligt (het dek, de borstwering aan de overkant, de
-// zijkant, de bogen en de pijlers) en wat ervóór (de borstwering of de leuning aan de kant van de kijker). js/tekenen.js legt
-// de achterlaag vóór een wezen op die tegel en de voorlaag erna, zoals het graan.
+// in stukken van één tegel, in drie lagen: het dek (het wegdek, de zijkant, de bogen en de pijlers), wat erachter boven het
+// wegdek uitsteekt (de borstwering aan de overkant), en wat ervóór (de borstwering of de leuning aan de kant van de
+// kijker). js/tekenen.js legt het dek als grond onder wie erop staat (Marcel, 17 okt: "de ossenkar lijkt nog in de brug te
+// zakken"), de overkant vóór hem en de kant van de kijker erna, zoals het graan.
 //
 // Een stuk wordt niet los gerenderd: dan had de omlijning een naad op elke tegelrand. Er wordt een hele brug gerenderd (een
 // monster), en elke pixel gaat naar de tegel en de laag van de plek die hij toont (B.pos). De stenen brug heeft bogen van
@@ -71,7 +72,9 @@ function vakVan(F, L) {
 }
 
 // Een monster renderen en in stukken knippen: { i, k, laag, plaat, anker } per stuk, met i langs (-1 tot L, vanaf de
-// eerste stap water), k de rij (0 tot 2, schuin 3) en laag 0 (achter) of 1 (voor).
+// eerste stap water), k de rij (0 tot 2, schuin 3) en de laag: 0 het dek (het wegdek en alles wat niet boven het wegdek
+// uitsteekt: de zijkant, de bogen, de pijlers), 1 wat boven het wegdek uitsteekt vóór het midden van de tegel (de
+// borstwering of de leuning aan de kant van de kijker), 2 wat erboven uitsteekt erachter (die aan de overkant).
 function monster(soort, steen, as, L) {
   const o = opgave(soort, steen, as, L);
   const F = Br.raam(o);
@@ -98,7 +101,7 @@ function monster(soort, steen, as, L) {
     const k = klem(Math.round((F.dwars(X, Y) - c0) / rij), 0, F.R - 1);
     return [klem(Math.round((F.langs(X, Y) - F.aW) / F.S - midden(k)), -1, L), k];
   };
-  // per pixel het stuk: (i + 1) * 8 + k * 2 + laag, of -1
+  // per pixel het stuk: (i + 1) * 12 + k * 3 + laag, of -1
   const stuk = new Int32Array(n).fill(-1);
   for (let p = 0; p < n; p++) {
     if (voor[p] < 0) continue;
@@ -110,7 +113,7 @@ function monster(soort, steen, as, L) {
     const [tx, ty] = F.tegel(i, k);
     const diepte = X / T - (tx + 0.5) + (Y / T - (ty + 0.5));
     const dek = Br.dekOp(soort, L, (F.langs(X, Y) - F.aW) / F.S, F.stap) + (soort === 'steen' ? Br.BRUG.bol : 0);
-    stuk[p] = (i + 1) * 8 + k * 2 + (diepte > 0 && h > dek + 1 ? 1 : 0);
+    stuk[p] = (i + 1) * 12 + k * 3 + (h <= dek + 1 ? 0 : diepte > 0 ? 1 : 2);
   }
   // de omlijning hoort bij het stuk ernaast dat het verst naar voren ligt
   for (let p = 0; p < n; p++) {
@@ -144,9 +147,9 @@ function monster(soort, steen, as, L) {
         if (stuk[p] === s && q.px[p * 2] >= 0) plaat.zet(x - kd.x0, y - kd.y0, q.px[p * 2], q.px[p * 2 + 1]);
       }
     }
-    const i = Math.floor(s / 8) - 1;
-    const k = Math.floor((s % 8) / 2);
-    const laag = s % 2;
+    const i = Math.floor(s / 12) - 1;
+    const k = Math.floor((s % 12) / 3);
+    const laag = s % 3;
     // het anker: het midden van de tegel op het maaiveld
     const [tx, ty] = F.tegel(i, k);
     const [ax, ay] = K.tegelNaarScherm(B, tx + 0.5, ty + 0.5);

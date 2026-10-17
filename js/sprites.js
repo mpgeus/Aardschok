@@ -811,8 +811,9 @@
   // ---------------------------------------------------------------- de bruggen (gereedschap/pixelart/bruggen-vel.cjs)
   //
   // Een brug van het eiland (js/eiland.js, legBruggen) is drie tegels breed en van elke lengte. Het vel heeft hem in
-  // stukken van één tegel, in twee lagen (0: wat achter wie erop loopt ligt, 1: wat ervóór), geknipt uit een paar hele
-  // bruggen (de monsters); welk stuk waar hoort, zegt S.brugMonster. Het vel laadt pas als er een brug in beeld komt.
+  // stukken van één tegel, in drie lagen (0: het dek, 1: wat ervóór boven het wegdek uitsteekt, 2: wat erachter), geknipt
+  // uit een paar hele bruggen (de monsters); welk stuk waar hoort, zegt S.brugMonster. Het vel laadt pas als er een brug in
+  // beeld komt.
   let brugIndex = null; // 'naam as monster i k laag' → [sx, sy, b, h, ax, ay], uit de regels van de beschrijving
   // De bogen van een stenen brug over L tegels, zoals de tekening ze legt (bruggen.cjs, bogen): twee tegels per boog, bij
   // een oneven lengte in het midden één van drie, over één tegel een klein boogje. [van, tot] in tegels.
@@ -848,7 +849,7 @@
   };
   // Een houten boogbrug zonder monster (langer dan de tekening ze heeft) wordt een jukbrug.
   const brugSoort = (g, brug) => (brug.soort === 'boog' && !g.stukken.boog[brug.as]['L' + brug.L] ? 'juk' : brug.soort);
-  // Het stuk van een brug op tegel i (langs) en k (dwars, 0 tot 2) in laag 0 of 1, met de steen van een stenen brug
+  // Het stuk van een brug op tegel i (langs) en k (de rij) in laag 0, 1 of 2, met de steen van een stenen brug
   // ('veldsteen', 'zandsteen' of 'baksteen'); null als het er (nog) niet is, of als die laag daar leeg is.
   S.brugStuk = function (brug, steen, i, k, laag) {
     const g = gegevens && gegevens.bruggen;

@@ -1130,9 +1130,10 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   opzij (je ziet de bogen van de zijkant) of recht omhoog (je kijkt over de brug, met de pijlerkoppen aan beide kanten),
   vier rijen breed. Schuin heeft de stenen brug een boog per stap (√2 tegel). De tekening werkt in een raam per brug
   (`raam` in `bruggen.cjs`: langs, dwars en de stappen), zodat alle stukken in elke richting dezelfde blijven.
-- **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
-  bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
-  wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water
+- **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in drie lagen, geknipt uit hele
+  bruggen, zodat er geen naad op een tegelrand komt: het dek (met de zijkant en de bogen) als de grond van wie erop staat,
+  zodat een ossenkar er niet in zakt (Marcel: "de ossenkar lijkt nog in de brug te zakken"), de borstwering aan de
+  overkant vóór wie erop loopt, en die aan de kant van de kijker erna. In het spel ligt het water
   op het maaiveld, op de proefplaat 7 pixels lager; daarom ligt het dek in het spel 7 hoger (steen 33, hout 22 boven het
   maaiveld), zodat de bogen hun maat houden en de palen in zicht blijven. Een landhoofd loopt in één tegel op.
 

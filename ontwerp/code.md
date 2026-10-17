@@ -732,8 +732,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   monster en welke tegel daarin op tegel i van een brug van L hoort (een stenen brug uit eenheden van één boog, de naad
   midden op een pijler, schuin een boog per stap uit L1 of L3; een jukbrug uit L3; een boogbrug heel), `T.sprites.brugStuk(brug, steen, i, k, laag)` geeft het
   stuk (het vel laadt pas als er een brug in beeld komt), en `T.sprites.brugDek(brug, a)` hoe hoog het wegdek ligt, met de
-  maten uit de beschrijving. `js/tekenen.js` legt de achterlaag op l 1 en de voorlaag op l 2,5, zoals het graan, met de
-  steen van het land (`steenVanLand`: zandsteen bij oker en roze) of baksteen bij de stad. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
+  maten uit de beschrijving. Drie lagen per tegel: het dek (laag 0: het wegdek, de zijkant, de bogen), wat ervóór boven
+  het wegdek uitsteekt (1) en wat erachter (2). `js/tekenen.js` legt het dek als de grond van wie erop staat: op som
+  x + y min zijn hoogte gedeeld door 16 (een pixel hoger ligt een zestiende som verder naar achter), zodat een ossenkar die
+  over twee tegels reikt er niet in zakt (Marcel, 17 okt: "de ossenkar lijkt nog in de brug te zakken"); de overkant op
+  l 1 en de kant van de kijker op l 2,5, zoals het graan. De steen is die van het land (`steenVanLand`: zandsteen bij oker
+  en roze) of baksteen bij de stad. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
   dus een vel mag groeien. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
   (vraag 114, 2a; samen zo'n 210 MB in de browser, was 900): een vel met voorwerpen in `tegels/` zegt per tegel
