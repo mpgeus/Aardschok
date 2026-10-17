@@ -1259,8 +1259,14 @@ Marcel, 17 okt: **"Het licht in de nacht is nep, ik wil dat het meer wordt zoals
 soldaten. Dat is zachter. Nu heb je 1 felle lichtbol."** Hoe het nu is (`js/tekenen.js`, `lichtenInBeeld`; `js/gl.js`,
 `FRAG_PLAS`): elke lamp (de herberg, de ramen, het kampvuur, de vuren van de kampen, een brand, wie een lantaarn draagt)
 is een plas licht van dezelfde vorm, een ellips die van het midden naar de rand afneemt (`t * t`), opgeteld op de
-lichtkaart; de lantaarn van een groepsleider is alleen kleiner getekend (`beeldStraal`, vraag 171, L3). Open: welk licht
-Marcel bedoelt met de ene felle bol, en of het alle lampen raakt. Na stap b van L, tenzij Marcel het eerder wil.
+lichtkaart; de lantaarn van een groepsleider is alleen kleiner getekend (`beeldStraal`, vraag 171, L3). **Het is het
+kampvuur** (Marcel, 17 okt: "het licht waar ik op doelde was het kampvuur, dat lijkt heel fel in de nacht, maar ook
+onnatuurlijk. Dit onnatuurlijke was ook zo bij de lantaarn, dat hebben we later aangepast"). Wat Claude vond: het
+kampvuur (`T.kampLicht`, `js/begin.js`, en de vuren van de roverskampen, `T.roverskampenLicht`) heeft geen kleur in
+`T.LICHT_INSTELLINGEN.kleuren`, dus is zijn licht wit, en het is een plas van 6 tegels met sterkte 0,9
+(`T.BEGIN_INSTELLINGEN.vuur`); de lantaarn ging met L3 van 3 tegels en 0,5 naar 1,5 tegel en 0,35 op het scherm, met de 3
+tegels nog voor de wolven. Zo ook hier: een warme kleur, en een kleinere en zachtere plas op het scherm, met de 6 tegels
+voor de regel; eerst proeven, Marcel kiest.
 
 ## Af (sinds 11 okt)
 
