@@ -82,7 +82,7 @@ dat het eiland te voet in stukken gebroken is (`opmerkingen.md`). **L1 is af** (
 dorpsplekken, de stad en het kasteel te voet in één stuk land. Het volgende is c1, de kampen: **de tent is T1** (Marcel,
 17 okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; nu de proefplaat). Marcel erbij:
 "bruggen moeten ook oud zijn, en we hebben nieuwe stenen bruggen nodig, met boogje etc": eerst de bruggen in woorden.
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af; de bruggen en de tent, eerst in woorden. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af; de proefplaat van de bruggen en de tent. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -977,7 +977,10 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   steen vanaf een oversteek van drie tegels, hout korter; **B2** steen op de wegen van het kasteel (de heer bouwde ze, en
   heft er tol), hout op de wegen tussen de dorpen; **B3** per brug het lot. Voorstel van Claude: **S1** en **B2**, en één
   proefplaat met de oude houten brug, een stenen brug van drie en van zeven tegels in allebei de richtingen, met een
-  figuur erop voor de maat, en ernaast het kampje met de tent T1 en het paadje.
+  figuur erop voor de maat, en ernaast het kampje met de tent T1 en het paadje. **Besloten** (Marcel, 17 okt: "Meer
+  passend", en op de vraag erna "Wat bij de plek past" en "S1"): **S1**, en elke brug past bij zijn plek: een smalle beek
+  hout, een rivier stenen bogen; in het woud en het veen hout, bij rotsen en heide steen, en de steen uit de bouwstijl van
+  het land (veldsteen, zandsteen of baksteen); bij het kasteel en de stad altijd steen. Nu de proefplaat.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp

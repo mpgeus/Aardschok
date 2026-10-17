@@ -52,11 +52,51 @@ const FIG_ANKER = [56, 110];
 
 const M = { linnen: 0, paal: 1, touw: 2, binnen: 3, stro: 4, deken: 5, huid: 6 };
 
+// De tent van een roverskamp (`rover`; werklijst vraag 170, stap 6a2, c1; Marcel, 17 okt: "T1"): grijsgroen, vuil doek,
+// roet bij de nok, twee lappen gestolen goed (een rode en een blauwe), en rafels aan de flappen. De lappen: waar ze
+// zitten (eenheden, op de zijkant x < 0 of x > 0), hoe groot, en van welk goed.
+// Het grijsgroene doek: een eigen ramp, achteraan in de tabellen van kern.cjs (zoals de veldsteen in dorp.cjs), zodat er
+// geen ramp verschuift.
+if (K.RAMP.grijsgroen === undefined) {
+  const hexen = ['#191b17', '#282c25', '#3a3f35', '#4e5446', '#646b59', '#7c836e', '#959c85'];
+  K.RAMPEN.grijsgroen = hexen;
+  K.RAMP.grijsgroen = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push('grijsgroen');
+  K.RAMP_RGB.push(hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]));
+  K.RAMP_LEN.push(hexen.length);
+}
+const ROVER_LAPPEN = [
+  { x: 1, y: -16, z: 30, r: 10, ramp: 'rood', lo: 2.2, hi: 5.4 },
+  { x: -1, y: 18, z: 22, r: 9, ramp: 'gewaad', lo: 2.0, hi: 4.8 },
+];
 function materialen(o = {}) {
   const mat = [];
+  if (o.rover) {
+    const LO = 1.2;
+    const HI = 4.4;
+    mat[M.linnen] = {
+      ramp: 'grijsgroen',
+      lo: LO,
+      hi: HI,
+      patroon: (x, y, z, nx, ny, nz, stap) => {
+        for (const l of ROVER_LAPPEN) {
+          if (Math.sign(x) !== l.x) continue;
+          const dy = y - l.y;
+          const dz = (z - l.z) * 1.3;
+          // een lap is niet rond: een ruwe rand
+          if (Math.max(Math.abs(dy), Math.abs(dz)) < l.r + (ruis3(x * 0.3, y * 0.3, z * 0.3, 41) - 0.5) * 4) return naarRamp(l.ramp, stap, [LO, HI], [l.lo, l.hi]);
+        }
+        let p = (ruis3(x * 0.15, y * 0.15, z * 0.15, 4) - 0.5) * 0.9;
+        if (ruis3(x * 0.06 + 2, y * 0.06, z * 0.06, 43) > 0.68) p -= 0.8; // vlekken
+        if (z > TENT.nok - 22) p -= 1.8 * klem((z - (TENT.nok - 22)) / 14, 0, 1); // roet bij de nok
+        if (z < 6) p -= 0.8;
+        return p;
+      },
+    };
+  }
   // Hetzelfde linnen als het zeil van de huifkar; een tent van bruin wol (`bruin`) is van een armer gezin.
   const [ramp, LO, HI] = o.bruin ? ['jas', 1.4, 4.8] : ['bot', 1.8, 5.2];
-  mat[M.linnen] = {
+  if (!o.rover) mat[M.linnen] = {
     ramp,
     lo: LO,
     hi: HI,
@@ -119,6 +159,12 @@ function tent(o = {}) {
   for (const s of [-1, 1]) {
     d.push(capsule([s * b * deur * 1.05, l + 0.8, 2.5], [s * 2.2, l + 0.8, deurTop - 1], 2.1, M.linnen, 2));
     d.push(capsule([s * b * deur * 0.62 + s * 0.6, l + 1.4, deurTop * 0.42 - 1], [s * b * deur * 0.62 + s * 0.6, l + 1.4, deurTop * 0.42 + 1], 2.5, M.touw, 3));
+    // rafels: draadjes die van de flap hangen
+    if (o.rover) for (const k of [0.25, 0.5, 0.75]) {
+      const px = s * mix(b * deur * 1.05, 2.2, k);
+      const pz = mix(2.5, deurTop - 1, k);
+      d.push(capsule([px + s * 1.8, l + 2.4, pz], [px + s * 2.6, l + 3, pz - 5 - k * 3], 0.5, M.linnen, 2));
+    }
   }
   // de palen en de nokbalk, die er een eindje boven uitsteken
   for (const s of [-1, 1]) d.push(stok([0, s * (l + 0.6), -1], [0, s * (l + 0.6), nok + 5], 1.4, 4));
