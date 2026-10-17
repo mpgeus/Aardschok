@@ -1120,7 +1120,11 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   een glimlicht, korrel, af en toe een warmere steen, en zand of mos in de voegen. En "de knak in de brug mag er niet
   zijn", "moet natuurlijk overlopen": het wegdek loopt op een landhoofd in een S-bocht van de oever naar het dek, vlak aan
   beide uiteinden (`sBocht`, in acht vlakke plakken), en de houten boogbrug buigt als sin², zodat ook hij zonder knik op
-  zijn landhoofd aansluit. Wie erop loopt, volgt dezelfde bocht (`dekOp`, `S.brugDek`).
+  zijn landhoofd aansluit. Wie erop loopt, volgt dezelfde bocht (`dekOp`, `S.brugDek`). En "op een brug kan geen
+  looppaadje ontstaan": het wegdek is overal even sleets (geen lichte strook in het midden), en in het spel slijt er op een
+  brug geen paadje (`js/paden.js`). En "je moet altijd het materiaal waarvan de brug gemaakt is zien bij het pad": het
+  wegdek is van de steen van de brug (`wegdekVan`): kinderkopjes van veldsteen, gehakte blokken zandsteen in rijen, en
+  klinkers in visgraat op een brug van baksteen (een straat, geen dak), elk met een afgeschuinde rand.
 - **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
   bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
   wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water

@@ -61,6 +61,8 @@ const ASSEN = {
   wo: { U: [S2, -S2], V: [S2, S2], schuin: true },
 };
 
+// Let op: de texturen tellen hun stenen vanaf 0 langs en dwars (wegdekPixel, blokPixel, D.veldsteenPixel), dus een brug
+// ligt in de tekening waar langs en dwars positief zijn (schuin langs zn: gy > gx; langs wo: gx > gy, of genoeg marge).
 // Het raam van een brug, waarin al zijn stukken getekend worden: langs (a) en dwars (c) in eenheden, en de stappen langs
 // de brug. o.as; langs x en y o.ga (de eerste tegel water) en o.gc (de middelste rij), drie rijen; schuin o.gx en o.gy (de
 // eerste tegel water van de eerste rij) en o.rijen rijen (BRUG.schuinBreed). Een stap is een tegel, schuin √2 tegel (een
@@ -170,9 +172,8 @@ function steenPixel(soort, u, h, basis, zaad) {
 // Het wegdek: grote kinderkopjes (Marcel, 17 okt: "deze zijn te fijn", die van baksteen "lijken wel dakpannen", en "de
 // stenen moeten echter, het lijken nu platte platen"), in rijen dwars op de brug. Elke steen is bol: de kant naar het
 // licht is lichter, de andere kant donkerder, met een glimlicht en wat korrel; de hoeken zijn rond, en waar vier stenen
-// samenkomen, is de voeg breder, met hier en daar zand of mos. Van zandsteen op een brug van zandsteen, anders veldsteen
-// (met af en toe een warmere), ook op een brug van baksteen. u langs en v dwars in pixels, q dwars van 0 tot 1, licht de
-// richting van het licht langs en dwars (een eenheidsvector).
+// samenkomen, is de voeg breder, met hier en daar zand of mos. Veldsteen, met af en toe een warmere. u langs en v dwars in
+// pixels, q dwars van 0 tot 1, licht de richting van het licht langs en dwars (een eenheidsvector).
 const KOP = { rij: 8, lang: [8, 6] }; // een rij langs de brug, en een steen dwars: 8 tot 13 pixels
 function wegdekPixel(u, v, q, steen, zaad, licht) {
   const r = Math.floor(u / KOP.rij);
@@ -208,8 +209,55 @@ function wegdekPixel(u, v, q, steen, zaad, licht) {
   const gv = nv - 0.35 * licht[1];
   if (gu * gu + gv * gv < 0.07) s += 0.8; // het glimlicht
   s += ((hash(Math.round(u * 2), Math.round(v * 2), zaad + 31) % 5) - 2) * 0.15; // korrel
-  if (q > 0.3 && q < 0.7) s += 0.4; // het looppad blinkt
+  UIT.stap = s; // geen sleets looppad in het midden (Marcel, 17 okt: "op een brug kan geen looppaadje ontstaan")
+}
+
+// Het wegdek is van de steen van de brug (Marcel, 17 okt: "je moet altijd het materiaal waarvan de brug gemaakt is zien
+// bij het pad"): kinderkopjes van veldsteen (wegdekPixel), gehakte blokken zandsteen in rijen, of klinkers in visgraat.
+// Een blok heeft een afgeschuinde rand: lichter naar het licht, donkerder ervan af, en een donkere voeg.
+function blokRand(fu, fv, bu, bv, licht, hs, ramp) {
+  // fu, fv: waar in het blok (pixels), bu, bv: hoe groot
+  const rand = Math.min(fu, bu - fu, fv, bv - fv);
+  UIT.ramp = ramp;
+  if (rand < 0.8) {
+    UIT.stap = 1.2; // de voeg
+    return;
+  }
+  let s = 3.6 + (hs % 3) * 0.4;
+  if (rand < 1.8) {
+    // de schuine rand: naar welke kant kijkt hij?
+    const nu = fu < 1.8 ? -1 : bu - fu < 1.8 ? 1 : 0;
+    const nv = fv < 1.8 ? -1 : bv - fv < 1.8 ? 1 : 0;
+    s += (nu * licht[0] + nv * licht[1]) * 1.1;
+  }
   UIT.stap = s;
+}
+function wegdekVan(steen, u, v, q, zaad, licht) {
+  if (steen === 'baksteen') {
+    // klinkers in visgraat: liggend om en om staand, in schuine banden (een klinker is 2 bij 1 cel)
+    const S = 4;
+    const a = Math.floor(u / S);
+    const b = Math.floor(v / S);
+    const d = (((a - b) % 4) + 4) % 4;
+    const [ka, kb, lang] = d === 0 ? [a, b, true] : d === 1 ? [a - 1, b, true] : d === 3 ? [a, b, false] : [a, b - 1, false];
+    const hs = hash(ka, kb, zaad + 41);
+    blokRand(u - ka * S, v - kb * S, lang ? 2 * S : S, lang ? S : 2 * S, licht, hs, RAMP.baksteen);
+    if (hs % 11 === 0) UIT.stap -= 0.8; // een donkere klinker
+    return;
+  }
+  if (steen === 'zandsteen') {
+    // gehakte blokken in rijen dwars op de brug, de voegen verspringend
+    const r = Math.floor(u / 9);
+    let a = -(hash(r, 2, zaad + 43) % 11);
+    let k = 0;
+    const lengte = (k) => 11 + (hash(r, k, zaad + 45) % 7);
+    while (a + lengte(k) <= v) a += lengte(k++);
+    const hs = hash(r, k, zaad + 47);
+    blokRand(u - r * 9, v - a, 9, lengte(k), licht, hs, RAMP.zandsteen);
+    if (UIT.stap > 2 && ruis2(u * 0.15, v * 0.15, zaad + 49) > 0.7) UIT.stap -= 0.6; // vlekken
+    return;
+  }
+  wegdekPixel(u, v, q, steen, zaad, licht);
 }
 
 // Wat de jaren doen (o.oud): mos aan de natte voet en in de voegen, korstmos, een donkere natte rand bij het water.
@@ -293,7 +341,7 @@ function steenStuk(o) {
     const u = langs * SQ;
     if (vlak === 'z') {
       const dwars = F.dwars(X, Y);
-      wegdekPixel(u, dwars * SQ, (dwars - c0) / (c1 - c0), steen, zaad, zijTex.licht);
+      wegdekVan(steen, u, dwars * SQ, (dwars - c0) / (c1 - c0), zaad, zijTex.licht);
       return;
     }
     const zij = vlak === 'zij';
@@ -745,7 +793,7 @@ function zetBrug(B, stukken) {
   return vormen;
 }
 
-module.exports = { BRUG, HOUT, bogen, dwarsVan, steenStuk, steenBrug, jukStuk, jukBrug, houtBoogBrug, dekOp, zetBrug };
+module.exports = { BRUG, HOUT, ASSEN, raam, bogen, dwarsVan, steenStuk, steenBrug, jukStuk, jukBrug, houtBoogBrug, dekOp, zetBrug };
 
 // ---------------------------------------------------------------- de proefplaat
 
@@ -765,7 +813,73 @@ function scene(o) {
   return K.Plaat.van(K.kwantiseer(B));
 }
 
-if (require.main === module) {
+// Een punt op een brug, a stappen langs (vanaf het water) en q dwars (0 tot 1), in tegels van de tekening.
+function opBrug(o, a, q) {
+  const F = raam(o);
+  const A = ASSEN[o.as];
+  const la = F.aW + a * F.S;
+  const lc = F.c0 + q * (F.c1 - F.c0);
+  return [(la * A.U[0] + lc * A.V[0]) / TEGEL, (la * A.U[1] + lc * A.V[1]) / TEGEL];
+}
+
+// De proefplaat van de schuine bruggen (vraag R; Marcel, 17 okt: "De bruggen moeten in 8 richtingen", "Zoals hoe de
+// poppetjes lopen"): een rivier recht omlaag op het scherm met twee bruggen recht opzij (wo: veldsteen met een peloton,
+// en de houten boogbrug), en een rivier recht opzij met drie bruggen recht omhoog (zn: zandsteen, de jukbrug, en baksteen
+// in drie rijen in plaats van vier, om te vergelijken). Het water ligt zoals in het spel bijna op het maaiveld.
+function schuinePlaat(UIT_MAP) {
+  const { soldaat } = require('./heer.cjs');
+  const { boer } = require('./dorpelingen.cjs');
+  const E = (px) => px / PXH;
+  BRUG.waterVlak = -1;
+  const dek = E(BRUG.dek + BRUG.bol);
+  const langsUit = (o, verder) => [opBrug(o, -1 - verder, 0.5), opBrug(o, o.L + 1 + verder, 0.5)];
+  // 1. de rivier recht omlaag, de bruggen recht opzij
+  const steen = { as: 'wo', gx: 4, gy: 9, L: 3, steen: 'veldsteen', zaad: 41 };
+  const hout = { as: 'wo', gx: 13, gy: 18, L: 3, zaad: 59 };
+  const m1 = opBrug(steen, 1.5, 0.5);
+  const m2 = opBrug(hout, 1.5, 0.5);
+  const peloton = [];
+  for (let r = 0; r < 4; r++) for (let k = 0; k < 2; k++) peloton.push({ model: soldaat({ houding: 'lopen', fase: (r + k) / 4 }), xy: opBrug(steen, 0.3 + r * 0.75, 0.3 + k * 0.4), richting: 'O', z: dek });
+  const een = scene({
+    b: 1500, h: 900, OX: 860, OY: 60, kader: [-6, -6, 30, 30],
+    beken: [{ punten: [[m1[0] - 14, m1[1] - 14], m1, m2, [m2[0] + 14, m2[1] + 14]], breed: 3.6, diep: 1 }],
+    paden: [steen, hout].flatMap((o) => langsUit(o, 0).map((p, i) => ({ punten: [p, langsUit(o, 6)[i]], breed: 2.8 }))),
+    bruggen: [steenBrug(steen), houtBoogBrug(hout)],
+    dingen: [
+      ...peloton.map((d) => ({ ...d, x: d.xy[0], y: d.xy[1] })),
+      { model: boer({ houding: 'staan', fase: 0 }), x: opBrug(hout, 1.5, 0.4)[0], y: opBrug(hout, 1.5, 0.4)[1], richting: 'W', z: E(dekOp('boog', 3, 1.5, Math.SQRT2)) },
+    ],
+  });
+  // 2. de rivier recht opzij, de bruggen recht omhoog
+  const zand = { as: 'zn', gx: 2, gy: 31, L: 3, steen: 'zandsteen', zaad: 45 };
+  const juk = { as: 'zn', gx: 9, gy: 24, L: 3, zaad: 53 };
+  const bak = { as: 'zn', gx: 16, gy: 17, L: 3, steen: 'baksteen', zaad: 47, rijen: 3 };
+  const ms = [zand, juk, bak].map((o) => opBrug(o, 1.5, 0.5));
+  const twee = scene({
+    b: 1500, h: 700, OX: 1250, OY: -250, kader: [-8, 4, 34, 50],
+    beken: [{ punten: [[ms[0][0] - 12, ms[0][1] + 12], ...ms, [ms[2][0] + 12, ms[2][1] - 12]], breed: 3.6, diep: 1 }],
+    paden: [zand, juk, bak].flatMap((o) => langsUit(o, 0).map((p, i) => ({ punten: [p, langsUit(o, 5)[i]], breed: o.rijen === 3 ? 2.1 : 2.8 }))),
+    bruggen: [steenBrug(zand), jukBrug(juk), steenBrug(bak)],
+    dingen: [
+      { model: boer({ houding: 'staan', fase: 0 }), x: opBrug(zand, 2.4, 0.2)[0], y: opBrug(zand, 2.4, 0.2)[1], richting: 'Z', z: dek },
+      { model: soldaat({ houding: 'staan', fase: 0 }), x: opBrug(juk, 2.4, 0.2)[0], y: opBrug(juk, 2.4, 0.2)[1], richting: 'N', z: E(HOUT.dek) },
+      { model: soldaat({ houding: 'staan', fase: 0 }), x: opBrug(bak, 2.4, 0.25)[0], y: opBrug(bak, 2.4, 0.25)[1], richting: 'Z', z: dek },
+    ],
+  });
+  const plaat = new K.Plaat(1500, een.h + twee.h);
+  plaat.plak(een, 0, 0);
+  plaat.plak(twee, 0, een.h);
+  fs.writeFileSync(path.join(UIT_MAP, 'bruggen-schuin.png'), K.png(plaat, 1));
+  console.log(`uit/bruggen-schuin.png (${plaat.b}×${plaat.h})`);
+}
+
+if (require.main === module && process.argv[2] === 'schuin') {
+  const UIT_MAP = path.join(__dirname, 'uit');
+  fs.mkdirSync(UIT_MAP, { recursive: true });
+  console.time('schuin');
+  schuinePlaat(UIT_MAP);
+  console.timeEnd('schuin');
+} else if (require.main === module) {
   const UIT_MAP = path.join(__dirname, 'uit');
   fs.mkdirSync(UIT_MAP, { recursive: true });
   const { boer } = require('./dorpelingen.cjs');

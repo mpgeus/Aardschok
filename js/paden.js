@@ -217,10 +217,11 @@
     w.paden.vandaag[k] = (w.paden.vandaag[k] || 0) + 1;
   };
 
-  // Mag hier een paadje slijten? Niet op een veld (daar maait en ploegt de boer, en het is al kale grond).
+  // Mag hier een paadje slijten? Niet op een veld (daar maait en ploegt de boer, en het is al kale grond), en niet op een
+  // brug van het eiland of zijn landhoofden (Marcel, 17 okt: "op een brug kan geen looppaadje ontstaan").
   const magSlijten = (w, k) => {
     const t = T.tegelVanNummer(k);
-    return !T.veldOp(w, t.x, t.y);
+    return !T.veldOp(w, t.x, t.y) && !T.brugOp(w, t.x, t.y);
   };
 
   // Elke nacht (vanuit T.tikGebouwenDag, js/gebouwen.js): wat er vandaag gelopen werd, in het gemiddelde; welke tegels

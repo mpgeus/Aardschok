@@ -1131,7 +1131,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
   `T.kaartVersie` in `js/wereld.js`; wat het per tegel nakijkt, de rasters `weg` en `mag`, alleen op de plekken die
   veranderden, `T.kaartPlekkenSinds`, 13 okt: 10 ms naar 2); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
-  niet; elke nacht `T.tikPadenDag`, in S als `w.paden`), en waar niemand meer loopt, groeit het dicht. Hoe het eruitziet:
+  niet; elke nacht `T.tikPadenDag`, in S als `w.paden`), en waar niemand meer loopt, groeit het dicht (niet op een veld,
+  en niet op een brug van het eiland of zijn landhoofden: `magSlijten`; Marcel, 17 okt: "op een brug kan geen looppaadje
+  ontstaan"). Hoe het eruitziet:
   `T.zandHoeken` en `T.hoekenMetPaden` (de hoeken van de grond, zoals `T.sprites.grondHoeken`), in de buffer van de grond
   (`js/tekenen.js`). Een lantaarn bij de deur van wat `lantaarn` heeft in `T.GEBOUWEN` (de kapel, de herberg, de markt,
   het wachthuis) en op de kruisingen (`T.zetLantaarns`; op een lantaarn bouw je niet). De ramen van een huis waar iemand
