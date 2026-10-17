@@ -99,7 +99,8 @@ tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes t
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
-brug op zijn oevers, de mist op de heuvels. Het volgende is c, meten. Let op: CLAUDE.md zit tegen de grens van
+brug op zijn oevers, de mist op de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst voortzetten"):
+stap c, meten (Marcel: "neem 174c over"). Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
