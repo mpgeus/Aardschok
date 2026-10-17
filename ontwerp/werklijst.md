@@ -80,7 +80,8 @@ op de minikaart, en je mannen gaan erheen (`spel.md`, bij "Op tocht"); elke weg 
 alle dorpsplekken, de stad en het kasteel te voet in één stuk land liggen (L1, `code.md` bij `js/eiland.js`); en de
 bruggen zijn in het spel: drie tegels breed (schuin vier rijen, haaks over het water), oud, steen of hout naar de plek,
 en wie erop loopt gaat mee omhoog (`beeld.md`, "De bruggen", met Marcels punten op de stenen, de oprit en het wegdek).
-**Het volgende is c1, de kampen** (het plan bij I, "Stuk c in detail": V2, G2, P1, B1): **de tent is T1** (Marcel, 17
+**Het volgende is c1, de kampen** (het plan bij I, "Stuk c in detail": V2, G2, P1, B1). **Bezig in sessie `main`** (17
+okt): het plan voor c1 en de tent in het vel. **De tent is T1** (Marcel, 17
 okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; goedgekeurd op de proefplaat met de
 bruggen, `gereedschap/pixelart/kamp.cjs`, nog niet in het vel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal
 eerst iets naar een ontwerpbestand als er een afspraak bij moet.
