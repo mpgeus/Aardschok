@@ -23,7 +23,10 @@ voorwerp, de doorkijk en het water, in Chromium 8 tot 15% eraf; de meter in Fire
 Heathside helemaal uitgezoomd, in Firefox 22,5 ms en 32 beelden per seconde, in Edge (Chromium, zoals de exe in
 Electron) 11 à 12 ms en 60)**. Op 30× haperde het door gevelde bomen: elke boom liet een stuk grond van 512×512 opnieuw
 tekenen, en het water alle tegels in beeld opnieuw uitzoeken (het water is opgelost). Marcel koos daarna (17 okt): **eerst
-alleen het veranderde stukje grond opnieuw tekenen (bezig), dan ronde 2 van elk plaatje goedkoper**. Optie 2, het bos in
+alleen het veranderde stukje grond opnieuw tekenen, dan ronde 2 van elk plaatje goedkoper**. Af (17 okt): het stukje grond
+(een verandering kost in Chromium 2 à 4 ms in plaats van 5 à 8) en van ronde 2 de tekenlijst (geen functietje per
+voorwerp per beeld; in Chromium even snel, de winst hoort in Firefox). **Wacht op Marcel: de meter in Firefox en op 30×.**
+Nog open van ronde 2: minder hoekpunten naar de videokaart (4 per plaatje in plaats van 6). Optie 2, het bos in
 de mist in de grondbuffer bakken (dan wuiven de bomen in de mist niet meer), blijft hier staan voor Firefox en zwakkere
 machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat het mat: `code.md` bij
 `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
