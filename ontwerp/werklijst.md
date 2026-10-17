@@ -17,7 +17,8 @@ Firefox) en elk voorwerp onthoudt zijn plaatje (9%). In Firefox, met de profiler
 naar 40 beelden per seconde in de opname); de schaduwen van de zon kosten nog 1,9 ms (hun 28% was ook het filter). De
 meter in Firefox, ver uitgezoomd: tekenen 55 naar 34 ms, 16 naar 21 beelden per seconde. Wat overblijft, is verspreid
 over zo'n 10.000 plaatjes per beeld. Marcel koos (17 okt: "Eerst 1 ... Daarna kijken we of 2 nog nodig is"): **1, elk
-plaatje goedkoper zonder dat het beeld verandert (bezig)**; daarna misschien 2, het bos in de mist in de grondbuffer
+plaatje goedkoper zonder dat het beeld verandert (bezig; een eerste ronde is af, 17 okt: het kladdoek, het geheugen per
+voorwerp, de doorkijk en het water, in Chromium 8 tot 15% eraf; wacht op de meter in Firefox)**; daarna misschien 2, het bos in de mist in de grondbuffer
 bakken (dan wuiven de bomen in de mist niet meer). Hoe en wat het mat: `code.md` bij `js/gl.js` en `js/sprites.js`,
 en `opmerkingen.md`.
 
