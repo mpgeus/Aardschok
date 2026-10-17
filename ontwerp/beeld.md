@@ -1018,6 +1018,12 @@ richting van de opening, en `beelden/kampvuur.png`, acht beelden van het branden
 de beschrijving staat onder `kamp`. Het spel tekent ze nog niet: dat is 1b en 1c van vraag 152 (een `T.sprites` erbij, zoals
 `S.kraam` voor de markt). `test/ossenkar.test.cjs` kijkt na dat het wiel rolt zonder te glijden en dat de vellen kloppen.
 
+**De tent van een roverskamp** (17 okt, werklijst vraag 170, stap 6a2, c1; Marcel: "T1", op de proefplaat met de bruggen):
+de nokentent van het kamp, in grijsgroen en vuil doek (een eigen ramp, `grijsgroen`, achteraan in de tabellen van
+`kern.cjs`), met roet bij de nok, twee lappen gestolen goed (een rode en een blauwe) en rafels aan de flappen
+(`kamp.cjs`, `tent({ rover: true, zaad: 5 })`). In het vel is hij de rij `tent-rover`, tussen `tent-bruin` en `afdak`;
+het vuur is dat van het lege begin. `js/rovers.js` zet hem neer met zijn opening naar het vuur.
+
 ## De stapels bij de deuren (14 okt 2026, werklijst C, stap 1)
 
 Wat een gebouw maakte en de ossenkar nog moet halen, ligt naast zijn deur (`js/kar.js`, `T.stapelsOp`).

@@ -1496,6 +1496,28 @@
       T.ui.werkBalkBij(S);
       return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
     },
+    // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1): waar ze liggen, hoe ver van je plein, en of ze er
+    // al staan (hun land is open). Spel.debug.kampen('erheen'): het land om het dichtste kamp gaat open, het kamp staat er,
+    // je kent het (zijn open plek, en de rode stip op de minikaart), en de camera kijkt erheen.
+    kampen(wat) {
+      const w = S.wereld;
+      if (!T.opEiland(w)) return 'Er zijn alleen roverskampen op het eiland.'; // geen tekst
+      const E = T.eilandVan(w.eiland.zaad);
+      const m = T.pleinVan(S.dorp) || { x: S.dorp.plek.vak.x + S.dorp.plek.vak.b / 2, y: S.dorp.plek.vak.y + S.dorp.plek.vak.h / 2 };
+      const lijst = E.kampen.map((k) => ({ k, ver: Math.round(T.afstand(m, k)), staat: !!(w.kampen || []).some((q) => q.nr === k.nr) }));
+      lijst.sort((a, b) => a.ver - b.ver);
+      if (wat === 'erheen' && lijst.length) {
+        const { k } = lijst[0];
+        const r = T.EILAND_INSTELLINGEN.kampen.open;
+        T.openVak(w, { x: k.x - r, y: k.y - r, b: 2 * r + 1, h: 2 * r + 1 });
+        T.zetRoverskampenBij(S, w);
+        T.kenKring(S.dorp, k.x, k.y, r);
+        lijst[0].staat = true;
+        const p = T.naarSchermOp(w, k.x, k.y);
+        T.kijkNaar(p.x, p.y);
+      }
+      return lijst.map(({ k, ver, staat }) => `kamp ${k.nr} op (${k.x}, ${k.y}), ${ver} tegels van je plein, ${k.tenten.length} plekken voor een tent${staat ? ', staat er' : ''}`).join('; '); // geen tekst
+    },
     // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
     // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
     rovers(wat) {

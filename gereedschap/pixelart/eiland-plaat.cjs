@@ -99,6 +99,8 @@ function bovenop(E, schaal, jij) {
   }
   for (const w of E.wegen) s += `<polyline class="weg-rand" points="${w.punten.map(p).join(' ')}"/>`;
   for (const w of E.wegen) s += `<polyline class="weg" points="${w.punten.map(p).join(' ')}"/>`;
+  // de paadjes naar de roverskampen (js/eiland.js, legKampen)
+  for (const w of E.paden) s += `<polyline class="pad" points="${w.punten.map(p).join(' ')}"/>`;
   // het stuk van je land, dat ernaast staat
   const r = 98 * schaal;
   s += `<rect class="kader" x="${(jij.x * schaal - r).toFixed(1)}" y="${(jij.y * schaal - r).toFixed(1)}" width="${(2 * r).toFixed(1)}" height="${(2 * r).toFixed(1)}"/>`;
@@ -111,6 +113,9 @@ function bovenop(E, schaal, jij) {
     } else if (q.soort === 'stad') {
       s += `<circle class="stad" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8"/><circle class="stad-hart" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;
       s += `<text class="naam" x="${(x + 12).toFixed(1)}" y="${(y + 4).toFixed(1)}">De stad</text>`;
+    } else if (q.soort === 'kamp') {
+      s += `<path class="kamp" transform="translate(${x.toFixed(1)},${y.toFixed(1)})" d="M-6,5 L0,-6 L6,5 Z"/>`;
+      s += `<text class="naam" x="${(x + 9).toFixed(1)}" y="${(y + 4).toFixed(1)}">Roverskamp ${q.nr + 1}</text>`;
     } else {
       if (q.jij) s += `<circle class="jij-ring" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="11"/>`;
       s += `<circle class="${q.jij ? 'jij' : 'dorp'}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${q.jij ? 6 : 5}"/>`;
@@ -149,6 +154,8 @@ function html(E, boven, zoom, cijfers) {
     .weg-rand { fill: none; stroke: rgba(70,46,24,0.75); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
     .weg { fill: none; stroke: rgb(236,204,140); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     .kasteel { fill: #8e1c24; stroke: #2a0a0c; stroke-width: 1.5; }
+    .pad { fill: none; stroke: rgb(236,204,140); stroke-width: 0.9; stroke-dasharray: 2.5 2; stroke-linecap: round; stroke-linejoin: round; }
+    .kamp { fill: #4f5a3c; stroke: #8e2418; stroke-width: 1.5; }
     .stad { fill: #e8b830; stroke: #3a2808; stroke-width: 1.5; }
     .stad-hart { fill: #3a2808; }
     .dorp { fill: #fffaf0; stroke: #2b2620; stroke-width: 1.5; }

@@ -47312,6 +47312,7 @@
     "soorten": [
      "tent",
      "tent-bruin",
+     "tent-rover",
      "afdak"
     ],
     "vuur": {

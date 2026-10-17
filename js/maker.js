@@ -869,10 +869,11 @@
       return uit;
     };
     const wegBij1 = verbreed(isWeg, 1);
+    // de open plek van een roverskamp (js/eiland.js, legKampen) is geen bos: daar groeit alleen wat laag blijft
     for (let y = Y0; y < Y0 + H; y++) {
       for (let x = X0; x < X0 + B; x++) {
         const t = ti(x, y);
-        if (soort[t] !== VRIJ || wegBij1[t]) continue;
+        if (soort[t] !== VRIJ || wegBij1[t] || tegels.kamp[t]) continue;
         const s = streek(x, y);
         if (s === 'woud' || s === 'broek' || tegels.boom[t]) soort[t] = BOS;
       }
@@ -899,7 +900,7 @@
       if (E.brugOp.has(y * E.maat + x)) return;
       ding[ti(x, y)] = KAN_ANDERS.has(naam) ? andereBoom(naam, x, y, plekVoorBoom(x, y), lot(x, y, 821)) : naam;
     };
-    const losOpGras = (x, y) => binnen(x, y) && !ding[ti(x, y)] && soort[ti(x, y)] === VRIJ && opGras(x, y);
+    const losOpGras = (x, y) => binnen(x, y) && !ding[ti(x, y)] && soort[ti(x, y)] === VRIJ && !tegels.kamp[ti(x, y)] && opGras(x, y);
     for (let y = Y0; y < Y0 + H; y++) {
       for (let x = X0; x < X0 + B; x++) {
         const t = ti(x, y);

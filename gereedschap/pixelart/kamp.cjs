@@ -334,6 +334,8 @@ function vergroot(p, n) {
 const SOORTEN = [
   ['tent', () => tent()],
   ['tent-bruin', () => tent({ bruin: true, zaad: 2 })],
+  // de tent van een roverskamp (T1; js/rovers.js), zoals op de proefplaat van de bruggen
+  ['tent-rover', () => tent({ rover: true, zaad: 5 })],
   ['afdak', () => afdak()],
 ];
 // Het vuur op een eigen vel: eerst de beelden van het brandende vuur, dan smeult het, dan is het uit.

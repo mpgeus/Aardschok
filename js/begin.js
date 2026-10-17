@@ -260,7 +260,9 @@
     if (tent.voorwerp) T.haalVoorwerpWeg(w, tent.voorwerp);
     D.gebouwen.splice(D.gebouwen.indexOf(tent), 1);
     if (D.gebouwen.some((g) => g.soort === 'tent')) return;
-    const vuur = w.voorwerpen.find((v) => v.soort === 'kampvuur');
+    // zijn eigen vuur, niet dat van een ander dorp of een roverskamp (js/rovers.js)
+    const k = D.plek.kamp.vuur;
+    const vuur = w.voorwerpen.find((v) => v.soort === 'kampvuur' && v.x === k.x && v.y === k.y);
     if (vuur) T.haalVoorwerpWeg(w, vuur);
     D.begin.kamp = 'weg';
   }

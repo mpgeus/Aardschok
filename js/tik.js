@@ -54,6 +54,7 @@
     // (waar je kijkt hieronder, als er rondgelopen wordt).
     meet('wereld', () => {
       for (const w of kaartenVan(S)) {
+        T.zetRoverskampenBij(S, w); // de roverskampen (js/rovers.js), ook als hun land opengaat, vóór het wild
         T.zetWildBij(S, w);
         T.werkBeestenDagBij(S, w);
         T.werkGevechtVanDeWereldBij(S, w);

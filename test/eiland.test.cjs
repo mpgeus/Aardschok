@@ -107,7 +107,8 @@ test('eiland: het kasteel, de stad en de dorpen, en de wegen brengen je overal',
         assert.ok(d > P.afstand * 0.4, `land ${zaad}: ${dorpen[i].naam} en ${dorpen[j].naam} liggen ${Math.round(d)} tegels uit elkaar`);
       }
     }
-    // de wegen: alles hangt aan elkaar, en elke plek ligt aan een weg
+    // de wegen: alles hangt aan elkaar, en elke plek ligt aan een weg (een roverskamp aan zijn paadje: test/kampen.test.cjs)
+    const aanWeg = E.plekken.filter((p) => p.soort !== 'kamp');
     const sleutel = (q) => Math.round(q[0]) + ',' + Math.round(q[1]);
     const ouder = new Map();
     const wortel = (a) => {
@@ -119,11 +120,11 @@ test('eiland: het kasteel, de stad en de dorpen, en de wegen brengen je overal',
       ouder.set(wortel(a), wortel(b));
     };
     for (const w of E.wegen) voeg(sleutel(w.punten[0]), sleutel(w.punten[w.punten.length - 1]));
-    const aan = E.plekken.map((p) => {
+    const aan = aanWeg.map((p) => {
       const midden = [Math.floor(p.x / E.vak) * E.vak + E.vak / 2, Math.floor(p.y / E.vak) * E.vak + E.vak / 2];
       return sleutel(midden);
     });
-    for (const [i, s] of aan.entries()) assert.ok(ouder.has(s), `land ${zaad}: ${E.plekken[i].soort} ${E.plekken[i].naam || ''} ligt aan een weg`);
+    for (const [i, s] of aan.entries()) assert.ok(ouder.has(s), `land ${zaad}: ${aanWeg[i].soort} ${aanWeg[i].naam || ''} ligt aan een weg`);
     const een = wortel(aan[0]);
     for (const s of aan) assert.equal(wortel(s), een, `land ${zaad}: over de weg kom je overal`);
   }

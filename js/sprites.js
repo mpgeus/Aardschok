@@ -645,7 +645,8 @@
     return stuk(MAP + m.bestand, i * m.cel[0], 0, m.cel[0], m.cel[1], m.anker);
   };
 
-  // Het kamp van het lege begin (gereedschap/pixelart/kamp.cjs; js/begin.js): de tent, de bruine tent of het afdak
+  // Het kamp van het lege begin (gereedschap/pixelart/kamp.cjs; js/begin.js): de tent, de bruine tent, de tent van een
+  // roverskamp (js/rovers.js) of het afdak
   // (`vorm`, de rijen), met zijn opening naar ZO, ZW, NW of NO (de kolommen). Null als het vel er niet is.
   S.kamp = function (vorm, richting) {
     const t = gegevens && gegevens.kamp;

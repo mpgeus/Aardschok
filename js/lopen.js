@@ -505,7 +505,8 @@
   // Wat een stap in vak k kost volgens de schets, of 0 als het dicht is. De zee, een meer en een rivier zijn dicht, en het
   // woud ook: daar staan zoveel bomen (js/eiland.js, I.bomen) dat er geen doorkomen aan is. In het broek staan er minder,
   // en is er soms een doorgang: BROEK keer zo duur. Een weg van het eiland is open (op een weg staan geen bomen, en over
-  // smal water ligt een bruggetje), ook waar de schets een rivier, een meer of woud zegt; de zee niet. Ligt er toch geen
+  // smal water ligt een bruggetje), ook waar de schets een rivier, een meer of woud zegt; de zee niet. Zo ook het paadje naar
+  // een roverskamp, en de open plek om zijn vuur (js/eiland.js, legKampen). Ligt er toch geen
   // bruggetje (een brede of schuine oversteek), dan leert hij het als het land daar open is.
   function grofKost(E) {
     let kost = GROF_KOST.get(E);
@@ -522,7 +523,7 @@
     };
     // Een weg legt hij vak voor vak, en gaat hij schuin naar het volgende vak, dan ook een vak ernaast: anders sneed hij
     // een hoek af (grofStap), en was de weg daar door het woud dicht.
-    for (const weg of E.wegen || []) {
+    for (const weg of [...(E.wegen || []), ...(E.paden || [])]) {
       let vorig = -1;
       for (let i = 1; i < weg.punten.length; i++) {
         const [ax, ay] = weg.punten[i - 1];

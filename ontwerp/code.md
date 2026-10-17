@@ -508,7 +508,21 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en vanaf `wegen.brugSteen` tegels; hout in het woud, het veen en het broek; een houten brug tot `wegen.brugBoog`
   tegels is om de andere een boogbrug ('boog'), anders een jukbrug ('juk'). Het water onder een brug blijft water
   (`T.landStuk` legt er geen plankentegel meer en zet er niets op); `js/wereld.js` maakt de tegel vloer en een pad, en
-  `js/tekenen.js` tekent de brug erover. **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  `js/tekenen.js` tekent de brug erover. **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1"):
+  `legKampen`, na de wegen en vóór de bruggen, legt er `kampen.aantal` (3) in het woud op het hoofdland, als plek in
+  `E.plekken` (soort `kamp`, met `nr`, de hoogte van het vuur `h` en de plekken voor de tenten) en in `E.kampen`: minstens
+  `vanPlek` van een andere plek, `onderling` van elkaar, `vanWeg` tot `totWeg` van een weg (over de vakken gemeten), droog,
+  niet te hoog, vlak in de vakken ernaast en met woud eromheen. Het kiest met een eigen lot (`lot(x, y, E.zaad + 1703)`),
+  niet met de dobbelsteen van de plekken, zodat de dorpsplekken, hun namen en de wegen blijven wat ze waren (een toets
+  kijkt het na). **Het paadje** (P1): één Dijkstra over het hele eiland vanaf de vakken met een weg, met de kosten van
+  een weg (`wegKosten`, ook voor `legWegen`), geeft elk vak het goedkoopste pad naar een weg; het paadje van een kamp volgt
+  dat, eindigt op de weg zelf (`dichtsteLijn` geeft nu ook het punt op de lijn, `px` en `py`), en is een lijn in
+  `E.paden` ({ punten, kamp }, met een eigen index `E.padIndex`, halve breedte `padBreed`). `legBruggen` legt ook over
+  een paadje een brug, en `js/lopen.js` (de grove weg) houdt het open zoals een weg. In `T.eilandStuk` is een tegel van
+  het paadje een weg, en op de open plek (`kampen.open`) staat geen boom (`kamp` per tegel, dat `T.landStuk` gebruikt:
+  daar geen bos, geen losse boom en geen struiken); het plein (`kampen.plein`) is vertrapte grond en ligt vlak op de
+  hoogte van het vuur (`kampBij`). Een kamp is geen uitgang van je land (`uitgangen` kijkt alleen naar `E.wegen`).
+  **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
@@ -692,7 +706,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
   Wat klein is en niet meer verandert (een plaatje, een doek met versie 1), staat op een paar grote texturen, de bladen
   (`plekOpBlad`), zodat een beeld in een paar tientallen opdrachten gaat, niet in een per plaatje (10 okt: Firefox haperde
-  ver uitgezoomd).
+  ver uitgezoomd). Eén opdracht (de rij, `plekVoor` en `legRijAf`) tekent uit tot `RIJ_TEXTUREN` (8) texturen tegelijk:
+  elk hoekpunt zegt op welke plaats zijn textuur staat (`aBron`), en de rij breekt pas bij een negende textuur of een
+  andere mengstand. Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
+  voor het eerst in beeld komt: in de lente (een naaldboom houdt zijn zomervel) en met elke nieuwe stand in de wind
+  stonden de bomen na een paar speeldagen op twee bladen door elkaar, en werden het 800 opdrachten per beeld in plaats
+  van 60; in Firefox 5 beelden per seconde (Marcel, 17 okt: "performance is belangrijk spelelement. het wordt anders snel
+  vervelend"). Meet een verandering aan het tekenen dus ook na een paar speeldagen (`ontwerp/gereedschap.md`).
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
   vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
@@ -1630,6 +1650,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (ook een wolf) begraaft `begraaf` de volgende dag. De laatste rover die valt, maakt de aanval af (`T.naGevecht`). De
   getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). (`T.roepOp` en `e.opgeroepen`, wie met de schout meeliep, zijn
   sinds vraag 170, stap 5 weg.)
+- **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
+  (`E.kampen`, `js/eiland.js`, `legKampen`); wat een kamp in een spel is, staat op de kaart (`w.kampen`: `{ nr, x, y }`,
+  bewaard; in c2 tot c4 de bende, de buit en of het verslagen is). `T.zetRoverskampenBij(S, w)`, elke tik één keer per
+  kaart vóór het wild (`T.wereldTik`, `js/tik.js`): is elk stuk dat de open plek van een kamp raakt open (`w.open`), dan
+  staan de tenten (`soort: 'tent'`, `vorm: 'tent-rover'`, een per `manPerTent` van `kampBende`, op de plekken die het
+  eiland gaf) en het vuur (`soort: 'kampvuur'`); beide dragen `kamp` (het nummer), en zo onderscheidt de rest ze van het
+  kamp van het lege begin (`js/tekenen.js` kiest zo de stand van het vuur, `js/begin.js` haalt alleen het vuur op zijn
+  eigen plek weg). `T.roverskampVuur(dag)` (brandt in het donker, smeult overdag) en `T.roverskampenLicht(w, dag)` (voor
+  `T.lichtBronnen`, `js/zien.js`). Op de minikaart een rode stip zodra je dorp de plek kent (`js/balk.js`, de lus over
+  `E.plekken`). `Spel.debug.kampen()`; `test/kampen.test.cjs`.
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de

@@ -61,6 +61,25 @@
     // niet te hoog, water binnen `water`, minstens een deel `open` land voor akkers, en naar de camera toe niet hoger dan
     // `camera` pixels binnen `cameraVer` tegels.
     plekken: { dorpen: 8, afstand: 430, vlak: 46, vlakStraal: 40, droog: 24, hoogst: 460, water: 80, open: 0.25, camera: 150, cameraVer: 96 },
+    // De roverskampen (werklijst vraag 170, stap 6a2, c1; Marcel, 17 okt: "V2 G2 P1 B1"): zoveel per eiland, in het woud
+    // op het hoofdland, minstens `vanPlek` tegels van een dorpsplek, de stad en het kasteel, `onderling` van elkaar, en
+    // tussen `vanWeg` en `totWeg` van een weg; droog binnen `droog` tegels, niet hoger dan `hoogst`, vlak binnen een vak
+    // erom (`vlak` pixels), en met een deel `bos` woud in de vakken eromheen. Het vuur staat in het midden van een plein
+    // van vertrapte grond (`plein` tegels), op een open plek zonder bomen (`open`); een paadje van `padBreed` (de halve
+    // breedte, zoals `wegen.breed`) loopt naar de dichtste weg. De tenten staan om het vuur met hun opening ernaartoe
+    // (`tenten`, vanaf het vuur, zoals het kamp van het lege begin), niet op het paadje: zoveel als `tentenMeest`.
+    kampen: {
+      aantal: 3, vanPlek: 150, onderling: 300, vanWeg: 40, totWeg: 150, droog: 24, hoogst: 700, vlak: 30, bos: 0.6,
+      plein: 5.5, open: 8, padBreed: 0.75, tentenMeest: 2,
+      tenten: [
+        { dx: -4, dy: 0, open: 'ZO' }, // geen tekst
+        { dx: 4, dy: 1, open: 'NW' }, // geen tekst
+        { dx: 0, dy: -4, open: 'ZW' }, // geen tekst
+        { dx: -1, dy: 4, open: 'NO' }, // geen tekst
+        { dx: -3, dy: -3, open: 'ZO' }, // geen tekst
+        { dx: 3, dy: 3, open: 'NW' }, // geen tekst
+      ],
+    },
     // De wegen: wat een stap kost (een vak = 1), en hoeveel goedkoper een bestaande weg is.
     wegen: {
       helling: [0.5, 0.08], // per pixel per tegel, en in het kwadraat
@@ -782,7 +801,8 @@
     }
     return { begin: tel, stukken, lijnen };
   }
-  // De dichtste lijn bij (x, y) uit een index: de afstand, en de waarden van de lijn daar (breedte, peil), in `uit`.
+  // De dichtste lijn bij (x, y) uit een index: de afstand, het punt op de lijn (px, py), en de waarden van de lijn daar
+  // (breedte, peil), in `uit`.
   function dichtsteLijn(E, index, x, y, uit) {
     const vx = Math.floor(x / E.vak);
     const vy = Math.floor(y / E.vak);
@@ -804,6 +824,8 @@
       const d = Math.sqrt(dx * dx + dy * dy);
       if (d < uit.d) {
         uit.d = d;
+        uit.px = a[0] + u * bx;
+        uit.py = a[1] + u * by;
         uit.breed = a.length > 2 ? a[2] + (b[2] - a[2]) * u : 0;
         uit.peil = a.length > 3 ? a[3] + (b[3] - a[3]) * u : 0;
       }
@@ -859,8 +881,27 @@
 
   // ---- het detail: de tegels ----------------------------------------------------------------------------------------
 
+  // Het roverskamp waarvan de open plek tegel (x, y) raakt, en hoe ver het vuur is ({ kamp, d }, steeds hetzelfde
+  // ding), of null.
+  const KAMP_BIJ = { kamp: null, d: 0 };
+  function kampBij(E, x, y) {
+    const r = IN().kampen.open;
+    for (const k of E.kampen) {
+      const dx = x - k.x;
+      const dy = y - k.y;
+      if (dx > r || dx < -r || dy > r || dy < -r) continue;
+      const d2 = dx * dx + dy * dy;
+      if (d2 >= r * r) continue;
+      KAMP_BIJ.kamp = k;
+      KAMP_BIJ.d = Math.sqrt(d2);
+      return KAMP_BIJ;
+    }
+    return null;
+  }
+
   // Alles wat een tegel is, voor een rechthoek: de hoogte (pixels), de streek (een getal uit T.EILAND_STREKEN), de weg
-  // (1 een weg, 2 een brug), en of er een boom staat. Een stuk krijgt een rand van één tegel extra voor de helling.
+  // (1 een weg of een paadje, 2 een brug), of er een boom staat, en of hij op de open plek van een roverskamp ligt (`kamp`).
+  // Een stuk krijgt een rand van één tegel extra voor de helling.
   T.eilandStuk = function (E, x0, y0, b, h, stap = 1) {
     const I = IN();
     const ST = I.streek;
@@ -937,6 +978,9 @@
         let f = glad(0, I.vrijeKust, c);
         if (nabij[i] > -1e8) f *= glad(0, 30, g - nabij[i]);
         hoog[i] = g + f * fijn(z, x, y, heuveligOp(z, x, y));
+        // het plein van een roverskamp ligt vlak, op de hoogte van zijn vuur, en loopt naar de rand van de open plek bij
+        const kd = kampBij(E, x, y);
+        if (kd) hoog[i] = kd.kamp.h + (hoog[i] - kd.kamp.h) * glad(I.kampen.plein, I.kampen.open, kd.d);
       }
     }
     // de streek, de weg en de bomen
@@ -944,7 +988,9 @@
     const streek = new Uint8Array(b * h);
     const weg = new Uint8Array(b * h);
     const boom = new Uint8Array(b * h);
+    const kamp = new Uint8Array(b * h);
     const wv = { d: 0 };
+    const pv = { d: 0 };
     const BO = I.bomen;
     for (let yy = 0; yy < h; yy++) {
       for (let xx = 0; xx < b; xx++) {
@@ -956,6 +1002,14 @@
         hoogte[o] = hg;
         dichtsteLijn(E, E.wegIndex, x, y, wv);
         if (wv.d < I.wegen.breed * (stap > 1 ? stap * 0.6 : 1)) weg[o] = water[i] !== GEEN ? 2 : 1;
+        // het paadje naar een roverskamp, en het kamp: vertrapte grond op het plein, geen boom op de open plek
+        dichtsteLijn(E, E.padIndex, x, y, pv);
+        if (pv.d < I.kampen.padBreed * (stap > 1 ? stap * 0.6 : 1)) weg[o] = water[i] !== GEEN ? 2 : 1;
+        const kd = kampBij(E, x, y);
+        if (kd) {
+          kamp[o] = 1;
+          if (kd.d < I.kampen.plein) weg[o] = 1;
+        }
         if (water[i] !== GEEN) {
           streek[o] = water[i];
           continue;
@@ -966,7 +1020,7 @@
         const s = streekOp(E, x, y, hg, helling, land[i], nabij[i], ST, z);
         streek[o] = s;
         const kans = BO[T.EILAND_STREKEN[s]] || 0;
-        if (!weg[o] && kans > 0) {
+        if (!weg[o] && !kamp[o] && kans > 0) {
           // in de kampen staan de bomen in bosjes en houtwallen
           let k = kans;
           if (s === S.kampen) k += 0.5 * glad(0.35, 0.6, simplex(x / 14 + 3.3, y / 14 - 1.4, z + 151));
@@ -974,7 +1028,7 @@
         }
       }
     }
-    return { x0, y0, b, h, hoogte, streek, weg, boom };
+    return { x0, y0, b, h, hoogte, streek, weg, boom, kamp };
   };
 
   // De streek van een landtegel, uit hoe hoog, steil, nat en zandig het er is (vraag 117, D: de zes wildernissen van de
@@ -1238,21 +1292,25 @@
   // De wegen: van het kasteel naar de stad en naar elk dorp (zijn wegen; de heer komt erover), en van elk
   // dorp naar zijn buur. Een weg zoekt de dalen en de passen, steekt een rivier over waar hij smal is, en loopt mee met
   // een weg die er al ligt. Wat samen loopt, wordt één weg: de wegen zijn lijnen tussen de kruisingen.
+  // Wat een stap van vak a naar vak b kost voor een weg (een vak = 1): de helling, de streek, een rivier oversteken of
+  // volgen, en hoog in de bergen; over de zee en een meer niet. Voor de wegen en de paadjes naar de kampen.
+  function wegKosten(E, a, b, schuin) {
+    const W = IN().wegen;
+    if (E.zee[b] || E.meer[b] >= 0) return Infinity;
+    const dh = Math.abs(E.hoogte[b] - E.hoogte[a]) / (E.vak * (schuin ? Math.SQRT2 : 1));
+    let c = (schuin ? Math.SQRT2 : 1) * (1 + W.helling[0] * dh + W.helling[1] * dh * dh);
+    c += W.streek[T.EILAND_STREKEN[E.streek[b]]] || 0;
+    if (E.rivier[b]) c += E.rivier[a] ? W.langsRivier : W.brug[0] + W.brug[1] * E.rivierBreed[b];
+    if (E.hoogte[b] > 700) c += (E.hoogte[b] - 700) / 100;
+    return c;
+  }
   function legWegen(E) {
     const W = IN().wegen;
     const n = E.n;
     const N = n * n;
     const opWeg = new Uint8Array(N);
     const stukken = new Set();
-    const kosten = (a, b, schuin) => {
-      if (E.zee[b] || E.meer[b] >= 0) return Infinity;
-      const dh = Math.abs(E.hoogte[b] - E.hoogte[a]) / (E.vak * (schuin ? Math.SQRT2 : 1));
-      let c = (schuin ? Math.SQRT2 : 1) * (1 + W.helling[0] * dh + W.helling[1] * dh * dh);
-      c += W.streek[T.EILAND_STREKEN[E.streek[b]]] || 0;
-      if (E.rivier[b]) c += E.rivier[a] ? W.langsRivier : W.brug[0] + W.brug[1] * E.rivierBreed[b];
-      if (E.hoogte[b] > 700) c += (E.hoogte[b] - 700) / 100;
-      return opWeg[b] ? c * W.bestaand : c;
-    };
+    const kosten = (a, b, schuin) => (opWeg[b] ? wegKosten(E, a, b, schuin) * W.bestaand : wegKosten(E, a, b, schuin));
     const vakVan = (p) => Math.min(n - 1, Math.floor(p.y / E.vak)) * n + Math.min(n - 1, Math.floor(p.x / E.vak));
     const afstand2 = (a, x, y) => (a.x - x) * (a.x - x) + (a.y - y) * (a.y - y);
     const zoek = (van, naar) => {
@@ -1355,6 +1413,167 @@
     for (const a of knopen) for (const b of buren.get(a)) if (!gedaan.has(a < b ? a + ',' + b : b + ',' + a)) loop(a, b);
     E.wegen = lijnen;
     E.wegIndex = indexVan(E, lijnen, () => W.breed + 1);
+  }
+
+  // De roverskampen (werklijst vraag 170, stap 6a2, c1; Marcel, 17 okt: "V2 G2 P1 B1", en "M1"): na de wegen, want een
+  // kamp ligt ver van de wegen maar is te bereiken. Een kamp is een plek (`E.plekken`, soort 'kamp', met `nr`), en
+  // `E.kampen` dezelfde, alleen de kampen. Waar het ligt, komt uit het nummer met een eigen lot (niet de dobbelsteen
+  // van de plekken), zodat de dorpsplekken, hun namen en de wegen van een eiland blijven wat ze waren: in het woud, ver
+  // genoeg van de andere plekken en de wegen, droog en vlak. Elk kamp krijgt een paadje (P1) naar de dichtste weg, met de
+  // kosten van een weg (langs de passen; over water legt legBruggen er een brug), in `E.paden` ({ punten, kamp }); het
+  // vuur staat in het midden van het eerste vak, op zijn hoogte (`h`: T.eilandStuk maakt het plein er vlak omheen), en
+  // de tenten (`tenten`: { x, y, open, voet }) staan om het vuur, niet op het paadje. Wat een kamp in een spel doet, staat
+  // op de kaart (w.kampen, js/rovers.js).
+  function legKampen(E) {
+    const K = IN().kampen;
+    const n = E.n;
+    const N = n * n;
+    const v = E.vak;
+    E.kampen = [];
+    E.paden = [];
+    E.padIndex = indexVan(E, E.paden, () => K.padBreed + 1);
+    const isNat = (k) => E.zee[k] || E.meer[k] >= 0 || E.rivier[k];
+    const binnen = (x, y) => x >= 0 && y >= 0 && x < n && y < n;
+    // Welke vakken een weg hebben (vak voor vak langs de lijnen), en hoe ver elk ander vak ervan ligt.
+    const opWeg = new Uint8Array(N);
+    for (const l of E.wegen) {
+      for (let i = 1; i < l.punten.length; i++) {
+        const [ax, ay] = l.punten[i - 1];
+        const [bx, by] = l.punten[i];
+        const stappen = Math.ceil(Math.max(Math.abs(bx - ax), Math.abs(by - ay)) / 2) || 1;
+        for (let j = 0; j <= stappen; j++) {
+          const x = Math.floor((ax + ((bx - ax) * j) / stappen) / v);
+          const y = Math.floor((ay + ((by - ay) * j) / stappen) / v);
+          if (binnen(x, y)) opWeg[y * n + x] = 1;
+        }
+      }
+    }
+    const bronnen = [];
+    for (let k = 0; k < N; k++) if (opWeg[k]) bronnen.push([k, 0, 0]);
+    const wegAf = afstandVanaf(E, bronnen, K.totWeg + v).d;
+    // Waar een kamp kan liggen: in het woud, met woud eromheen, droog, niet te hoog, en vlak in de vakken ernaast.
+    const kandidaten = [];
+    for (let k = 0; k < N; k++) {
+      if (!E.hoofdland[k] || isNat(k) || E.streek[k] !== S.woud || E.hoogte[k] > K.hoogst) continue;
+      if (wegAf[k] < K.vanWeg || wegAf[k] > K.totWeg) continue;
+      if (Math.min(E.zeeAfstand[k], E.zoetAfstand[k]) < K.droog) continue;
+      const x = k % n;
+      const y = (k - x) / n;
+      let ok = true;
+      let bos = 0;
+      let tel = 0;
+      for (let dy = -2; dy <= 2 && ok; dy++) {
+        for (let dx = -2; dx <= 2; dx++) {
+          if (!binnen(x + dx, y + dy)) {
+            ok = false;
+            break;
+          }
+          const b = (y + dy) * n + x + dx;
+          if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1 && Math.abs(E.hoogte[b] - E.hoogte[k]) > K.vlak) {
+            ok = false;
+            break;
+          }
+          tel++;
+          if (E.streek[b] === S.woud) bos++;
+        }
+      }
+      if (ok && bos / tel >= K.bos) kandidaten.push({ k, lot: lot(x, y, E.zaad + 1703) });
+    }
+    kandidaten.sort((a, b) => a.lot - b.lot || a.k - b.k);
+    // Het paadje: de goedkoopste weg van elk vak naar een vak met een weg, één keer voor het hele eiland (Dijkstra vanaf de
+    // wegen, met de kosten van een stap de andere kant op): `kost` hoeveel, `naar` het volgende vak op weg erheen. Een kamp
+    // waarvoor het meer dan `tot` kost (steil, of over veel water), komt er niet.
+    const kost = new Float64Array(N).fill(Infinity);
+    const naar = new Int32Array(N).fill(-1);
+    const tot = (K.totWeg / v) * 4;
+    {
+      const H = nieuweHoop();
+      for (const [k] of bronnen) {
+        kost[k] = 0;
+        erbij(H, 0, k);
+      }
+      while (H.n) {
+        const k = eraf(H);
+        if (H.laatste > kost[k] || kost[k] > tot) continue;
+        const x = k % n;
+        const y = (k - x) / n;
+        for (const [dx, dy] of BUREN) {
+          if (!binnen(x + dx, y + dy)) continue;
+          const b = (y + dy) * n + x + dx;
+          const nk = kost[k] + wegKosten(E, b, k, dx && dy);
+          if (nk < kost[b]) {
+            kost[b] = nk;
+            naar[b] = k;
+            erbij(H, nk, b);
+          }
+        }
+      }
+    }
+    const zoekPad = (van) => {
+      if (!(kost[van] <= tot)) return null;
+      const pad = [van];
+      while (!opWeg[pad[pad.length - 1]]) pad.push(naar[pad[pad.length - 1]]);
+      return pad;
+    };
+    const afstand2 = (p, x, y) => (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
+    const wv = { d: 0 };
+    for (const { k } of kandidaten) {
+      if (E.kampen.length >= K.aantal) break;
+      const [x, y] = middenVan(E, k);
+      if (E.plekken.some((p) => afstand2(p, x, y) < (p.soort === 'kamp' ? K.onderling * K.onderling : K.vanPlek * K.vanPlek))) continue;
+      const pad = zoekPad(k);
+      if (!pad) continue;
+      // de punten: van het vuur langs de vakken, en het laatste op de weg zelf
+      const punten = pad.slice(0, -1).map((q) => middenVan(E, q));
+      const [wx, wy] = middenVan(E, pad[pad.length - 1]);
+      dichtsteLijn(E, E.wegIndex, wx, wy, wv);
+      punten.push(wv.d < 1e8 ? [wv.px, wv.py] : [wx, wy]);
+      let lijn = punten;
+      for (let i = 0; i < 2; i++) lijn = chaikin(lijn);
+      const nr = E.kampen.length;
+      // de hoogte van het vuur, vóór het kamp erbij is (anders maakt T.eilandStuk het plein vlak naar een hoogte die het
+      // nog niet kent)
+      const h = T.eilandStuk(E, x, y, 1, 1).hoogte[0];
+      const kamp = { soort: 'kamp', nr, x, y, h, tenten: tentenVan(K, x, y, lijn) };
+      E.plekken.push(kamp);
+      E.kampen.push(kamp);
+      E.paden.push({ punten: lijn, kamp: nr });
+    }
+    E.padIndex = indexVan(E, E.paden, () => K.padBreed + 1);
+  }
+  // De tenten van een kamp om zijn vuur (x, y), op de plekken van `kampen.tenten` op volgorde, met hun voet (de tegel
+  // van de tent en die erachter, weg van de opening; zoals de maker het kamp van het lege begin legt), niet waar de voet
+  // of de tegel voor de opening op het paadje `lijn` ligt; zoveel als `tentenMeest`.
+  const OPENING = { ZO: [1, 0], ZW: [0, 1], NW: [-1, 0], NO: [0, -1] };
+  function tentenVan(K, x, y, lijn) {
+    const opPad = (tx, ty) => {
+      for (let i = 0; i + 1 < lijn.length; i++) {
+        const [ax, ay] = lijn[i];
+        const [bx, by] = lijn[i + 1];
+        const lx = bx - ax;
+        const ly = by - ay;
+        const ll = lx * lx + ly * ly;
+        let u = ll > 0 ? ((tx - ax) * lx + (ty - ay) * ly) / ll : 0;
+        u = u < 0 ? 0 : u > 1 ? 1 : u;
+        const dx = tx - ax - u * lx;
+        const dy = ty - ay - u * ly;
+        if (dx * dx + dy * dy < (K.padBreed + 0.5) * (K.padBreed + 0.5)) return true;
+      }
+      return false;
+    };
+    const uit = [];
+    for (const p of K.tenten) {
+      if (uit.length >= K.tentenMeest) break;
+      const [rx, ry] = OPENING[p.open];
+      const tx = x + p.dx;
+      const ty = y + p.dy;
+      const voet = { x: Math.min(tx, tx - rx), y: Math.min(ty, ty - ry), b: rx ? 2 : 1, h: ry ? 2 : 1 };
+      const tegels = [[tx + rx, ty + ry]];
+      for (let yy = voet.y; yy < voet.y + voet.h; yy++) for (let xx = voet.x; xx < voet.x + voet.b; xx++) tegels.push([xx, yy]);
+      if (tegels.some(([a, b]) => opPad(a, b))) continue;
+      uit.push({ x: tx, y: ty, open: p.open, voet });
+    }
+    return uit;
   }
 
   // De vorm van een brug: een stap langs de brug is een tegel verder langs zijn as (x, y, of schuin: zn langs x en y samen,
@@ -1633,9 +1852,9 @@
       return { soort: boog ? 'boog' : 'juk', stad };
     };
     // Waar een weg naar een brug buigt: pas als alle bruggen liggen, want het eiland (T.eilandStuk, voor natOp) leest de
-    // wegen zoals ze waren.
+    // wegen zoals ze waren. De paadjes naar de roverskampen (legKampen) krijgen hun brug zoals een weg (P1).
     const omwegen = [];
-    for (const l of E.wegen) {
+    for (const l of [...E.wegen, ...E.paden]) {
       // de tegels waar de lijn langs gaat, in volgorde, met het stuk lijn (`d`: van punt d naar d + 1) waar ze op liggen
       const rij = [];
       for (let i = 0; i + 1 < l.punten.length; i++) {
@@ -1681,6 +1900,7 @@
     if (!omwegen.length) return;
     for (const leg of omwegen) leg(); // per weg van achter naar voor, zoals ze gevonden zijn
     E.wegIndex = indexVan(E, E.wegen, () => W.breed + 1);
+    E.padIndex = indexVan(E, E.paden, () => IN().kampen.padBreed + 1);
   }
 
   // ---- je land op het eiland (stap 2) --------------------------------------------------------------------------------
@@ -1792,6 +2012,7 @@
     doe('streken', () => legStreken(E));
     doe('plekken', () => legPlekken(E, r));
     doe('wegen', () => legWegen(E));
+    doe('kampen', () => legKampen(E));
     doe('bruggen', () => legBruggen(E));
     E.tijd = Date.now() - begin;
     return E;

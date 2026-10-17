@@ -43,7 +43,8 @@
     const huizen = huizenLicht(D, deel);
     const brand = T.brandLicht(D); // wat brandt, geeft ook overdag licht (js/brand.js)
     const kamp = T.kampLicht(D); // het kampvuur van het lege begin (js/begin.js)
-    if (deel !== 'avond') return herberg.concat(huizen, brand, kamp, dragers);
+    const rovers = T.roverskampenLicht(w, D.kalender.dag); // de vuren van de roverskampen (js/rovers.js)
+    if (deel !== 'avond') return herberg.concat(huizen, brand, kamp, rovers, dragers);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -51,7 +52,7 @@
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
     // En de kaarsjes van de kerstboom (js/versiering.js).
     const kaarsen = T.versieringLicht(D).map((b) => ({ ...b, soort: 'kaars' }));
-    return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, dragers);
+    return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, rovers, dragers);
   };
 
   // Wie een lantaarn draagt, en hij brandt nu: de bode en wie meegaat (T.bodeDragers, js/bode.js), de aanvoerder en de

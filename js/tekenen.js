@@ -2570,8 +2570,8 @@
       return;
     }
     if (v.soort === 'tent') {
-      // Een tent of een afdak in het kamp van het lege begin (js/begin.js; werklijst vraag 152), met zijn opening naar het
-      // vuur. Zonder kunst: een blok linnen, of van takken.
+      // Een tent of een afdak in het kamp van het lege begin (js/begin.js; werklijst vraag 152), of een tent van een
+      // roverskamp (js/rovers.js), met zijn opening naar het vuur. Zonder kunst: een blok linnen, of van takken.
       const tent = metSprites() && T.sprites.kamp(v.vorm, v.richting);
       if (tent) T.sprites.teken(ctx, tent, p.x, p.y, helder);
       else T.blok(ctx, p.x, p.y, 0.4, 0.4, 24, v.vorm === 'afdak' ? '#6b4f33' : '#d8cfae', { helder });
@@ -2579,9 +2579,10 @@
     }
     if (v.soort === 'kampvuur') {
       // Het kampvuur in het midden van het kamp (js/begin.js): het brandt als de mensen op zijn, en smeult als ze werken of
-      // slapen (T.kampvuurStand). Zonder kunst: een kring stenen met een gloed.
+      // slapen (T.kampvuurStand); dat van een roverskamp (js/rovers.js) brandt als het donker is. Zonder kunst: een kring
+      // stenen met een gloed.
       const D = T.dorpHier(S);
-      const stand = (D && T.kampvuurStand(D)) || 'uit';
+      const stand = v.kamp != null ? T.roverskampVuur(S.kalender.dag) : (D && T.kampvuurStand(D)) || 'uit';
       const vuur = metSprites() && T.sprites.kampvuur(stand, S.tijd);
       if (vuur) T.sprites.teken(ctx, vuur, p.x, p.y, helder);
       else T.blok(ctx, p.x, p.y, 0.3, 0.3, 4, stand === 'brandt' ? '#e0782a' : '#6f6a62', { helder });

@@ -45,6 +45,10 @@
     // Wat ieder meeneemt, en de kans dat ze de akker kapotmaken.
     graanPerRover: 10,
     kansAkkerKapot: 0.3,
+    // De roverskampen (werklijst vraag 170, stap 6a2, c1; waar ze liggen: T.EILAND_INSTELLINGEN.kampen): een kamp begint
+    // met zoveel man (zijn bende komt in c2), en heeft een tent per zoveel man.
+    kampBende: 2,
+    manPerTent: 2,
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -411,5 +415,59 @@
       } else T.zeg(D, T.t('The robbers are defeated.'), 'goed');
       eind(D);
     }
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // De roverskampen (werklijst vraag 170, stap 6a2, c1)
+  // ---------------------------------------------------------------------------------------------
+
+  // Waar de kampen liggen, zegt het eiland (E.kampen, js/eiland.js, legKampen: drie per eiland, in het woud, met hun open
+  // plek en een paadje naar de dichtste weg); wat een kamp in dit spel is, onthoudt de kaart (w.kampen, bewaard: { nr, x,
+  // y }, en in c2 tot c4 zijn bende, zijn buit en of het verslagen is). Je vindt een kamp zelf (Marcel, 17 okt: V2): gaat
+  // het land om een kamp open (de stukken die zijn open plek raakt, w.open), dan staat het er, zoals het wild
+  // (js/beesten.js): een tent per `manPerTent` man van zijn bende, met de opening naar het vuur, en het vuur. Elke tik,
+  // één keer per kaart (T.wereldTik, js/tik.js), vóór het wild. Het kijkt alleen als er land open ging (KAMPEN_BIJ): het
+  // eiland opvragen kost niets als het het laatste is, maar leven er dorpen op twee eilanden (de toetsen), dan maakte
+  // elke tik ze allebei opnieuw. Geeft de kampen die erbij kwamen.
+  const KAMPEN_BIJ = new WeakMap(); // kaart → hoeveel stukken er open waren toen het keek (volgt uit de kaart, niet bewaard)
+  T.zetRoverskampenBij = function (S, w) {
+    if (!T.opEiland(w) || !w.open || KAMPEN_BIJ.get(w) === w.open.size) return [];
+    KAMPEN_BIJ.set(w, w.open.size);
+    const E = T.eilandVan(w.eiland.zaad);
+    const kampen = w.kampen || (w.kampen = []);
+    if (kampen.length === E.kampen.length) return [];
+    const uit = [];
+    for (const k of E.kampen) {
+      if (kampen.some((q) => q.nr === k.nr) || !kampLandOpen(w, k)) continue;
+      const kamp = { nr: k.nr, x: k.x, y: k.y };
+      kampen.push(kamp);
+      for (const t of k.tenten.slice(0, Math.ceil(IN().kampBende / IN().manPerTent))) {
+        const voet = { dx: t.voet.x - t.x, dy: t.voet.y - t.y, b: t.voet.b, h: t.voet.h };
+        T.zetVoorwerp(w, { soort: 'tent', x: t.x, y: t.y, vorm: 'tent-rover', richting: t.open, voet, kamp: k.nr });
+      }
+      T.zetVoorwerp(w, { soort: 'kampvuur', x: k.x, y: k.y, kamp: k.nr });
+      uit.push(kamp);
+    }
+    return uit;
+  };
+  // Is het land om kamp k open: elk stuk dat zijn open plek raakt?
+  function kampLandOpen(w, k) {
+    const r = T.EILAND_INSTELLINGEN.kampen.open;
+    for (let sy = Math.floor((k.y - r) / T.STUK); sy <= Math.floor((k.y + r) / T.STUK); sy++) {
+      for (let sx = Math.floor((k.x - r) / T.STUK); sx <= Math.floor((k.x + r) / T.STUK); sx++) {
+        if (!w.open.has(T.stukNummer(sx, sy))) return false;
+      }
+    }
+    return true;
+  }
+  // Het vuur van een roverskamp: het brandt als het donker is, en smeult overdag.
+  T.roverskampVuur = (dag) => (T.lichtVan(dag).nacht > 0 ? 'brandt' : 'smeult');
+  // Het licht van de roverskampen op kaart w, voor T.lichtBronnen (js/zien.js): 's avonds en 's nachts, zoals het
+  // kampvuur van het lege begin (T.BEGIN_INSTELLINGEN.vuur). Zo zie je in het donker een gloed in het bos, waar je het
+  // land kent.
+  T.roverskampenLicht = function (w, dag) {
+    if (!w || !w.kampen || !w.kampen.length || T.roverskampVuur(dag) !== 'brandt') return [];
+    const L = T.BEGIN_INSTELLINGEN.vuur;
+    return w.kampen.map((k) => ({ x: k.x, y: k.y, straal: L.straal, sterkte: L.sterkte, soort: 'kampvuur' }));
   };
 })(globalThis.Spel = globalThis.Spel || {});

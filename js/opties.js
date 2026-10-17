@@ -1069,6 +1069,8 @@
     opUren: T.t('give up after hours'),
     graanPerRover: T.t('grain per robber'),
     kansAkkerKapot: T.t('chance a field is ruined'),
+    kampBende: T.t('men in a new camp'),
+    manPerTent: T.t('men per tent'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),

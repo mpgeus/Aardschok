@@ -2126,6 +2126,8 @@ Spel.TAAL_BRON = [
   {"t":"give up after hours","waar":["js/opties.js"]},
   {"t":"grain per robber","waar":["js/opties.js"]},
   {"t":"chance a field is ruined","waar":["js/opties.js"]},
+  {"t":"men in a new camp","waar":["js/opties.js"]},
+  {"t":"men per tent","waar":["js/opties.js"]},
   {"t":"people per fisherman","waar":["js/opties.js"]},
   {"t":"water per fisherman","waar":["js/opties.js"]},
   {"t":"robbers after","waar":["js/opties.js"]},

@@ -1085,6 +1085,14 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   de rotsen en de heide en over brede rivieren; hout in het woud, het veen en het broek. Wie erop loopt, gaat met het
   wegdek mee omhoog en staat tussen de borstweringen; op een brug wordt niet gebouwd, en de ossenkar rijdt er als op een
   weg.
+- **De roverskampen** (17 okt, stap 6a2, c1; Marcel: "V2 G2 P1 B1", "M1"). Elk eiland heeft er drie, in het woud, ver
+  van de dorpsplekken, de stad, het kasteel en de wegen (minstens 150, 150 en 40 tegels) en van elkaar (300). Een kamp
+  is een open plek in het bos, met een plein van vertrapte grond om een vuur, en een smal paadje naar de dichtste weg
+  (over water met een brug, zoals een weg): volg je het paadje, dan vind je het kamp. Je vindt een kamp zelf: het staat
+  er als je mensen er zo dichtbij komen dat zijn land opengaat, met een tent per twee man (de grijsgroene van de rovers)
+  met de opening naar het vuur; 's avonds en 's nachts brandt het vuur en licht het de open plek op, overdag smeult het.
+  Hebben je mensen het gezien, dan staat het als een rode stip op de minikaart. Er woont nog niemand: de bende komt in
+  c2, de overval uit het kamp in c3, en een kamp opruimen in c4; tot dan komen de rovers zoals voorheen van de rand.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

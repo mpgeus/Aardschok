@@ -80,11 +80,11 @@ op de minikaart, en je mannen gaan erheen (`spel.md`, bij "Op tocht"); elke weg 
 alle dorpsplekken, de stad en het kasteel te voet in één stuk land liggen (L1, `code.md` bij `js/eiland.js`); en de
 bruggen zijn in het spel: drie tegels breed (schuin vier rijen, haaks over het water), oud, steen of hout naar de plek,
 en wie erop loopt gaat mee omhoog (`beeld.md`, "De bruggen", met Marcels punten op de stenen, de oprit en het wegdek).
-**Het volgende is c1, de kampen** (het plan bij I, "Stuk c in detail": V2, G2, P1, B1). **Bezig in sessie `main`** (17
-okt): het plan voor c1 en de tent in het vel. **De tent is T1** (Marcel, 17
-okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; goedgekeurd op de proefplaat met de
-bruggen, `gereedschap/pixelart/kamp.cjs`, nog niet in het vel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal
-eerst iets naar een ontwerpbestand als er een afspraak bij moet.
+**c1, de kampen op het eiland, is af** (17 okt, in `main`; Marcel: "M1"; `spel.md`, bij "De roverskampen"; `code.md`
+bij `js/eiland.js` en `js/rovers.js`): drie per eiland in het woud, elk met een open plek, een vuur, een tent per twee man
+(de tent T1, nu in het vel) en een paadje naar de dichtste weg; ze staan er als hun land opengaat, en wie ze zag, ziet
+ze rood op de minikaart. **Het volgende is c2, de bende** (het plan bij I, "Stuk c in detail"). Let op: CLAUDE.md zit
+tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -103,6 +103,17 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
+  vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
+  kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
+  brandt en licht de plek op. Op de minikaart staat het als een rode stip. Of loop erheen: `Spel.debug.kampen()` zegt waar
+  ze liggen, en het paadje van de weg brengt je er. **Wat Claude erbij koos** (zeg het als het anders moet): (1) er
+  staat nu één tent, voor de bende van twee in c2 (een tent per twee man, zoals besloten), en een tweede komt met de derde
+  man; (2) een kamp ligt hooguit 150 tegels van een weg (`totWeg`), zodat het paadje niet eindeloos wordt (45 tot 160
+  tegels op de eilanden die ik bekeek); (3) het plein om het vuur is vertrapte grond (5,5 tegels) en ligt vlak, de open
+  plek eromheen is 8 tegels, met gras en bloemen maar geen boom of struik; (4) het vuur brandt als het donker is en smeult
+  overdag, en zijn licht is dat van het kampvuur van het lege begin. **Om naar te kijken:** het plein is een ruit van kale grond, zoals een weg; zeg het als het te kaal of te
+  hoekig is.
 - **Vraag L, het land te voet: besloten, L1** (Marcel, 17 okt: "L1"; wordt gebouwd, daarna weg uit dit lijstje). Het
   voorstel was (vraag 170, stap 6a2, c0, 17 okt; `opmerkingen.md`, "Wat c0 van 6a2 liet zien"): tegel
   voor tegel is het eiland in stukken gebroken. Op eiland 1 haalt elke dorpsplek 67% van het land, op eiland 5 is het
@@ -964,13 +975,13 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   **De bruggen zijn in het spel** (17 okt; Marcel: "Goed zo, zet ze in het spel"; `beeld.md`, "De bruggen"; `code.md`
   bij `js/eiland.js` en `js/sprites.js`): drie tegels breed, steen of hout naar de plek, in twee lagen, en wie erop loopt
   gaat mee omhoog.
-  **c1 in detail** (Claude, 17 okt; wacht op Marcel: M). (1) **De plek**: na de wegen legt het eiland zijn kampen
+  **c1 in detail** (Claude, 17 okt; **besloten**, Marcel: "M1, en bouw c1 volgens het plan"). (1) **De plek**: na de wegen legt het eiland zijn kampen
   (`legKampen` in `js/eiland.js`, in `E.plekken` als soort `kamp`), drie per eiland, in het woud op het hoofdland,
   minstens 150 tegels van elke plek (dorp, stad, kasteel), 40 van een weg en 300 van elkaar (`T.EILAND_INSTELLINGEN.kampen`).
   Het kiest met een eigen lot, zodat de dorpsplekken, hun namen en de wegen van elk eiland blijven wat ze zijn. (2) **Het
   paadje** (P1): van het kamp naar de dichtste weg, met de zoektocht van de wegen (langs de passen, waar het goedkoopst
-  is), één tegel breed, als een lijn in `E.wegen` met `pad: true`; gaat het over water, dan krijgt het een brug zoals
-  elke weg (dezelfde code). Op het paadje en op de open plek om het vuur (straal 7) staan geen bomen. (3) **In het
+  is), één tegel breed, als een lijn in `E.paden` (gebouwd: een eigen lijst naast `E.wegen`); gaat het over water, dan krijgt het een brug zoals
+  elke weg (dezelfde code). Op het paadje en op de open plek om het vuur (straal 8) staan geen bomen. (3) **In het
   spel**: gaat het stuk van een kamp open, dan staat het er, zoals het wild (`w.kampen`, bewaard): een tent per twee man
   (de bende begint in c2 met twee: één tent, de tweede komt met de derde man) met de opening naar het vuur, en het vuur
   van het lege begin, dat 's avonds en 's nachts brandt en overdag smeult; zijn licht zie je in het bos. De tent T1 komt
@@ -979,7 +990,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   paadjes op de eilandplaat, het opslaan versie 21, en toetsen: drie kampen per eiland op de afstanden, en het paadje
   aan de grond en te voet te halen vanaf elk dorp. De wilde rovers blijven tot c3. Te kiezen: **M** de minikaart: M1 een
   kamp dat je mensen gezien hebben, krijgt een rood teken op de minikaart, zodat je het terugvindt; M2 geen teken.
-  Voorstel: **M1**.
+  Gekozen: **M1**.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
@@ -1104,6 +1115,10 @@ gekozen: de schaal van de wereld en de balken, de tekenresolutie, en het scrolle
    met twee splinters goud in de kier. Eén proefplaat; tot hij goed is, staat er de letter.
 
 ## Af (sinds 11 okt)
+
+- c1, de roverskampen op het eiland (vraag 170, stap 6a2, 17 okt; Marcel: "M1"; `spel.md`, "De roverskampen"): drie per
+  eiland in het woud, met een open plek, een vuur, de tent T1 en een paadje naar de weg; ze staan er als hun land
+  opengaat, met een rode stip op de minikaart als je ze zag.
 
 - 169, het debugvenster onder D (15 okt; `code.md`, bij `js/debugvenster.js`): +50 bouwmateriaal en goud, een gezin, de
   bouwplaatsen meteen af, en de marskramer nu; aan tot de Steam-versie.
