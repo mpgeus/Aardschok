@@ -89,8 +89,10 @@ async function spelKlaar(page, url) {
   for (const [id, keuze] of OPTIES) await page.evaluate(([id, keuze]) => Spel.zetOptie(id, keuze), [id, keuze]);
   await page.evaluate(() => Spel.debug.proefdorp(5));
   await page.evaluate(() => Spel.debug.stap(0.5));
-  if (DAGEN) await page.evaluate(async (dagen) => { const S = Spel.S; Spel.zetSnelheid(S, 30); const tot = S.kalender.dag + dagen; while (S.kalender.dag < tot) await Spel.debug.stap(1 / 30); Spel.zetSnelheid(S, 1); }, DAGEN);
+  // eerst de spellus stil: liep hij mee met de speeldagen, dan kreeg de bladzijde die sneller tekent meer tikken, en liepen
+  // de twee werelden uiteen (18 okt)
   await page.evaluate(() => { window.__stop = true; });
+  if (DAGEN) await page.evaluate(async (dagen) => { const S = Spel.S; Spel.zetSnelheid(S, 30); const tot = S.kalender.dag + dagen; while (S.kalender.dag < tot) await Spel.debug.stap(1 / 30); Spel.zetSnelheid(S, 1); }, DAGEN);
   await page.addScriptTag({ path: path.join(WORTEL, 'gereedschap', 'grootte', 'pagina.js') });
   page.setDefaultTimeout(180000);
 }
