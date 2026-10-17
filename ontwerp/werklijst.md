@@ -106,8 +106,8 @@ bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het beg
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
-(bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland; het plan wacht op
-Marcel. Let op: CLAUDE.md zit tegen de grens van
+(bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Bezig in sessie
+`main`** (17 okt): stap a, de hoogte per stuk. Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -1221,7 +1221,9 @@ scherm vol tegels (3600, vier hoeken) daarbinnen 1,2 ms en daarbuiten zo'n 160, 
 nog niet bekeken. Ook nog open: de mist ligt plat op de heuvels (B2c), een brug volgt de glooiing (`opmerkingen.md`, bij
 de bruggen), en alleen het eerste dorp krijgt zijn vlakte (`opmerkingen.md`, bij 6a).
 
-**Voorstel van Claude (wacht op Marcel):** **a** de hoogte per stuk van 64 bij 64, zoals het land: de hoeken van een
+**Bezig in sessie `main`** (17 okt): stap a, alleen in `js/hoogte.js` (Marcel: "Ja, begin met stap a").
+
+**Het plan (Claude; Marcel koos eerst a, b tot d volgen):** **a** de hoogte per stuk van 64 bij 64, zoals het land: de hoeken van een
 stuk eens uitgerekend als het opengaat, en de vlakke stukken per stuk gezocht (alleen `js/hoogte.js`, met een toets dat
 een stuk ver weg even snel is als het eerste land); **b** wat erop ligt volgt de heuvels: de mist, een brug vlak, en
 elk dorp zijn eigen vlakte; **c** meten, want performance gaat voor: het zwaarste beeld in Firefox en in Edge, ook na
