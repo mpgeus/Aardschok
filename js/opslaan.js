@@ -122,8 +122,9 @@
   // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat
   // (e.beeldStand, js/sprites.js: hoe ver zijn voeten liepen, en het laatst getekende beeld). Dat maakt de
   // tekening zelf weer aan. Het ging eerst mee, en toen bleek in de proef met opslaan (speeltest --opslaan)
-  // dat het van hoeveel beelden de browser vóór het spel al tekende afhing, en niet van het spel.
-  const SCHERM_SLEUTELS = new Set(['beeldStand']);
+  // dat het van hoeveel beelden de browser vóór het spel al tekende afhing, en niet van het spel. Net zo wat het tekenen
+  // van een voorwerp onthoudt (v.getekend, js/sprites.js: zijn tekening, zijn stukken in de wind, zijn doos).
+  const SCHERM_SLEUTELS = new Set(['beeldStand', 'getekend']);
 
   // ── Van S naar tekst, en terug ──
   //

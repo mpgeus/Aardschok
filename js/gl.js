@@ -713,6 +713,10 @@
   let klad = null; // { canvas, ctx }
   let kladVak = null; // [x0, y0, x1, y1] in pixels waarop getekend werd, of null
   let kladMeng = 'source-over';
+  // Werd er sinds het laatste wissen op het kladdoek getekend (opKlad)? Anders is het nog leeg, en hoeft G.begin het niet
+  // te wissen: ver uitgezoomd tekent het meestal niets, en een doek zo groot als het scherm wissen kostte in Firefox elk
+  // beeld (17 okt).
+  let kladBeschreven = true;
   let plak = null; // een klein doek om een stuk van het kladdoek naar de kaart te sturen
   function kladdoek() {
     if (!klad || klad.canvas.width !== doek.width || klad.canvas.height !== doek.height) {
@@ -885,6 +889,7 @@
       k.globalCompositeOperation = meng === 'destination-over' ? 'destination-over' : 'source-over';
       k.fillStyle = this.st.vul;
       if (k.filter !== this.st.filter) k.filter = this.st.filter;
+      kladBeschreven = true;
       f(k);
       const v = vak || [0, 0, doek.width, doek.height];
       kladVak = kladVak ? [Math.min(kladVak[0], v[0]), Math.min(kladVak[1], v[1]), Math.max(kladVak[2], v[2]), Math.max(kladVak[3], v[3])] : v.slice();
@@ -1245,8 +1250,11 @@
     hetDoek.stapel = [];
     hetDoek.schaduw = null;
     const k = kladdoek().ctx;
-    k.setTransform(1, 0, 0, 1, 0, 0);
-    k.clearRect(0, 0, klad.canvas.width, klad.canvas.height);
+    if (kladBeschreven) {
+      k.setTransform(1, 0, 0, 1, 0, 0);
+      k.clearRect(0, 0, klad.canvas.width, klad.canvas.height);
+      kladBeschreven = false;
+    }
     k.setTransform(ratio, 0, 0, ratio, 0, 0);
     k.globalAlpha = 1;
     k.filter = 'none';

@@ -2354,41 +2354,59 @@
     const B = T.KLEIN_LEVEN_INSTELLINGEN.water;
     const D = T.dorpHier(S);
     const t = S.tijd || 0;
-    const kaartvak = T.kaartGrens(w);
-    for (let y = Math.max(kaartvak.y, vak.y0); y <= Math.min(kaartvak.y + kaartvak.h - 1, vak.y1); y++) {
-      for (let x = Math.max(kaartvak.x, vak.x0); x <= Math.min(kaartvak.x + kaartvak.b - 1, vak.x1); x++) {
-        const s = T.waterOp(w, x, y);
-        if (!s) continue;
-        const k = y * 977 + x;
-        if (s.stil) {
-          // een glinstering die opkomt en weer gaat, op een vaste plek per tegel
-          for (let i = 0; i < Math.ceil(B.glinster * 2); i++) {
-            const fel = Math.max(0, Math.sin(t * B.knipper * 6.283 + beeldLot(k + i, 61) * 40)) ** 6;
-            if (fel < 0.05 || beeldLot(k + i, 62) > B.glinster) continue;
-            const p = opMaaiveld(x - 0.5 + beeldLot(k + i, 63), y - 0.5 + beeldLot(k + i, 64));
-            ctx.fillStyle = `rgba(230, 244, 255, ${(0.75 * fel).toFixed(3)})`;
-            ctx.fillRect(Math.round(p.x) - 2, Math.round(p.y), 5, 1);
-            ctx.fillRect(Math.round(p.x), Math.round(p.y) - 1, 1, 3);
-          }
-          continue;
+    for (const { x, y, s } of waterIn(w, vak)) {
+      const k = y * 977 + x;
+      if (s.stil) {
+        // een glinstering die opkomt en weer gaat, op een vaste plek per tegel
+        for (let i = 0; i < Math.ceil(B.glinster * 2); i++) {
+          const fel = Math.max(0, Math.sin(t * B.knipper * 6.283 + beeldLot(k + i, 61) * 40)) ** 6;
+          if (fel < 0.05 || beeldLot(k + i, 62) > B.glinster) continue;
+          const p = opMaaiveld(x - 0.5 + beeldLot(k + i, 63), y - 0.5 + beeldLot(k + i, 64));
+          ctx.fillStyle = `rgba(230, 244, 255, ${(0.75 * fel).toFixed(3)})`;
+          ctx.fillRect(Math.round(p.x) - 2, Math.round(p.y), 5, 1);
+          ctx.fillRect(Math.round(p.x), Math.round(p.y) - 1, 1, 3);
         }
-        if (D && T.staatDroog(D, x, y)) continue;
-        // rimpels die met de stroom meedrijven: elke rimpel een eigen dwarsplek, en zijn plek langs de stroom schuift
-        for (let i = 0; i < B.rimpels; i++) {
-          const langs = (t * B.snel + beeldLot(k + i, 65)) % 1;
-          const dwars = 0.2 + 0.6 * beeldLot(k + i, 66);
-          const u = s.dx ? (s.dx > 0 ? langs : 1 - langs) : dwars;
-          const v = s.dy ? (s.dy > 0 ? langs : 1 - langs) : dwars;
-          const p = opMaaiveld(x - 0.5 + u, y - 0.5 + v);
-          const a = 0.5 * Math.sin(langs * Math.PI); // komt op en vervaagt binnen de tegel
-          ctx.fillStyle = `rgba(214, 236, 250, ${a.toFixed(3)})`;
-          // een streepje dwars op de stroom: op het scherm schuin, zoals de tegel ligt
-          const lang = 5;
-          const sx = s.dx ? -1 : 1;
-          for (let j = -lang / 2; j < lang / 2; j++) ctx.fillRect(Math.round(p.x + j * 2 * sx * 0.5), Math.round(p.y + j * 0.5), 2, 1);
-        }
+        continue;
+      }
+      if (D && T.staatDroog(D, x, y)) continue;
+      // rimpels die met de stroom meedrijven: elke rimpel een eigen dwarsplek, en zijn plek langs de stroom schuift
+      for (let i = 0; i < B.rimpels; i++) {
+        const langs = (t * B.snel + beeldLot(k + i, 65)) % 1;
+        const dwars = 0.2 + 0.6 * beeldLot(k + i, 66);
+        const u = s.dx ? (s.dx > 0 ? langs : 1 - langs) : dwars;
+        const v = s.dy ? (s.dy > 0 ? langs : 1 - langs) : dwars;
+        const p = opMaaiveld(x - 0.5 + u, y - 0.5 + v);
+        const a = 0.5 * Math.sin(langs * Math.PI); // komt op en vervaagt binnen de tegel
+        ctx.fillStyle = `rgba(214, 236, 250, ${a.toFixed(3)})`;
+        // een streepje dwars op de stroom: op het scherm schuin, zoals de tegel ligt
+        const lang = 5;
+        const sx = s.dx ? -1 : 1;
+        for (let j = -lang / 2; j < lang / 2; j++) ctx.fillRect(Math.round(p.x + j * 2 * sx * 0.5), Math.round(p.y + j * 0.5), 2, 1);
       }
     }
+  }
+  // De tegels met water in vak ({ x, y, s: T.waterOp }), rij voor rij: per kaart onthouden zolang het vak, de kaart en
+  // het open land dezelfde zijn (alleen scherm). Ver uitgezoomd liep het water elk beeld zo'n 10.000 tegels af (17 okt,
+  // een profiel van Marcel); of een beek droog staat, vraagt tekenWaterLeven wel elk beeld.
+  const waterInVak = new WeakMap();
+  function waterIn(w, vak) {
+    const kaartvak = T.kaartGrens(w);
+    const x0 = Math.max(kaartvak.x, vak.x0);
+    const y0 = Math.max(kaartvak.y, vak.y0);
+    const x1 = Math.min(kaartvak.x + kaartvak.b - 1, vak.x1);
+    const y1 = Math.min(kaartvak.y + kaartvak.h - 1, vak.y1);
+    const sleutel = `${x0},${y0},${x1},${y1},${T.kaartVersie(w)},${T.openGrootte(w)}`;
+    const oud = waterInVak.get(w);
+    if (oud && oud.sleutel === sleutel) return oud.tegels;
+    const tegels = [];
+    for (let y = y0; y <= y1; y++) {
+      for (let x = x0; x <= x1; x++) {
+        const s = T.waterOp(w, x, y);
+        if (s) tegels.push({ x, y, s });
+      }
+    }
+    waterInVak.set(w, { sleutel, tegels });
+    return tegels;
   }
 
   // De rook uit de schoorsteen van een huis waar iemand thuis is (T.rookUitHuizen, js/kleinleven.js; vraag 145, 3), vóór

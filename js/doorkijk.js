@@ -71,17 +71,16 @@
   // De doos die het beeld van een voorwerp inneemt, rond het midden van zijn eigen tegel. Elke
   // tegel draagt zijn eigen maat (`doos`: links, boven, rechts, onder vanaf het ankerpunt), want
   // een bank is geen waslijn. Zonder die maat valt het terug op zijn cel op het vel
-  // (T.sprites.celVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
-  // om te weten of er iemand achter kan staan.
-  function voorwerpDoos(w, v) {
-    const t = T.sprites.tekeningVan(v);
-    const vel = T.TEGELS && T.TEGELS[t.vel];
-    const tegel = vel && vel.tiles[t.id];
-    const plek = T.sprites.celVan(t.vel, t.id);
-    if (!plek) return null;
-    const a = plek.anker;
-    const d = (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];
-    if (d[1] < T.DOORKIJK_INSTELLINGEN.hoogGenoeg) return null; // laag spul verbergt niemand
+  // (T.sprites.doosVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
+  // om te weten of er iemand achter kan staan. Null als hij niemand van `kandidaten` (met hun doos) kan bedekken: eerst
+  // alleen opzij, want dat hangt niet af van de hoogte van het land of een brug (T.naarScherm), en meestal staat er
+  // niemand; pas dan de plek met de hoogte erbij. Ver uitgezoomd rekende dit elk beeld de doos van alles in beeld uit
+  // (17 okt, een profiel van Marcel).
+  function voorwerpDoos(w, v, kandidaten) {
+    const d = T.sprites.doosVan(v);
+    if (!d || d[1] < T.DOORKIJK_INSTELLINGEN.hoogGenoeg) return null; // laag spul verbergt niemand
+    const px = T.naarScherm(v.x, v.y).x;
+    if (!kandidaten.some((k) => px - d[0] < k.doos.x1 && px + d[2] > k.doos.x0)) return null;
     const p = T.naarSchermOp(w, v.x, v.y);
     return { x0: p.x - d[0], x1: p.x + d[2], y0: p.y - d[1], y1: p.y + d[3] };
   }
@@ -100,25 +99,28 @@
       const door = T.zichtbaarDoor(S, e);
       if (door) (door === 'alles' ? doorAlles : doorHuis).push({ e, doos: wezenDoos(S.wereld, e) });
     }
+    const allen = doorAlles.concat(doorHuis);
     for (const v of voorwerpen) {
-      const doos = voorwerpDoos(S.wereld, v);
-      const dekkers = [];
+      const gebouw = T.isGebouw(v);
+      const kandidaten = gebouw ? allen : doorAlles;
+      const doos = kandidaten.length ? voorwerpDoos(S.wereld, v, kandidaten) : null;
+      let dekkers = null; // pas een lijst als er iemand bedekt wordt
       if (doos) {
-        const zoek = (kandidaten) => {
-          for (const k of kandidaten) {
+        const zoek = (lijst) => {
+          for (const k of lijst) {
             if (T.staatVoorGebouw(k.e.tx, k.e.ty, v)) continue; // staat ervóór, verdwijnt niet
-            if (raakt(doos, k.doos)) dekkers.push(k.e);
+            if (raakt(doos, k.doos)) (dekkers || (dekkers = [])).push(k.e);
           }
         };
         zoek(doorAlles);
-        if (T.isGebouw(v)) zoek(doorHuis);
+        if (gebouw) zoek(doorHuis);
       }
       // Alleen overschrijven als er nu iemand bedekt wordt: tijdens het wegdoezelen (v.doorkijk
       // loopt terug naar 0) blijft T.tekenKijkgat zo de laatst bekende dekker nog even overtekenen,
       // dezelfde afweging als bosrandOp in js/tekenen.js ("kan alleen vloeiend als het dezelfde
       // blijft").
-      if (dekkers.length) v.kijkgat = dekkers;
-      const doel = dekkers.length ? 1 : 0;
+      if (dekkers) v.kijkgat = dekkers;
+      const doel = dekkers ? 1 : 0;
       const nu = v.doorkijk || 0;
       const stap = I.tijd > 0 ? dt / I.tijd : 1; // tijd 0 (in de werkbank): meteen open en dicht
       v.doorkijk = doel > nu ? Math.min(doel, nu + stap) : Math.max(doel, nu - stap);

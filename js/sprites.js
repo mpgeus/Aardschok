@@ -432,26 +432,43 @@
     }
     return { vel: v.vel, id };
   }
-  S.tekeningVan = (v, zomer = false) => (zomer ? tekeningNu(v, true) : onthoudVoorwerp(v).t);
+  S.tekeningVan = function (v, zomer = false) {
+    const o = onthoudVoorwerp(v);
+    return zomer ? o.zomer || (o.zomer = tekeningNu(v, true)) : o.t;
+  };
 
-  // Wat een voorwerp tekent, onthouden (alleen scherm, weg met het voorwerp): zijn tekening, het gewicht van de wind op
-  // die tekening, en het stuk stil en per stand in de wind (S.buitenVan). Elk beeld vragen duizenden bomen het opnieuw,
+  // Wat een voorwerp tekent, onthouden op het voorwerp zelf (`v.getekend`, alleen scherm: SCHERM_SLEUTELS in
+  // js/opslaan.js): zijn tekening (ook die van de zomer), het gewicht van de wind op die tekening, het stuk stil en per
+  // stand in de wind (S.buitenVan), en de doos van zijn beeld (S.doosVan). Elk beeld vragen duizenden bomen het opnieuw,
   // en het opzoeken (de vorm, het seizoen, de cel, de sleutel van onthoud) was in Firefox 9% van het tekenen (17 okt, een
-  // profiel van Marcel). Opnieuw als het voorwerp een andere tekening of plek kreeg, als het seizoen anders is, en als er
-  // een beeld bij kwam: tot het vel van een seizoen er is, staan de bomen in de zomer. Een stuk dat er nog niet is (een
-  // huis waarvan het bestand nog laadt), onthoudt het niet.
-  const perVoorwerp = new WeakMap();
+  // profiel van Marcel); een WeakMap opzoeken kostte daar zelf nog bijna een ms per beeld. Opnieuw als het voorwerp een
+  // andere tekening of plek kreeg, als het seizoen anders is, en als er een beeld bij kwam: tot het vel van een seizoen er
+  // is, staan de bomen in de zomer. Een stuk dat er nog niet is (een huis waarvan het bestand nog laadt), onthoudt het niet.
   function onthoudVoorwerp(v) {
-    let o = perVoorwerp.get(v);
+    let o = v.getekend;
     if (!o || o.vel !== v.vel || o.id !== v.id || o.x !== v.x || o.y !== v.y || o.seizoen !== seizoenNu || o.geladen !== geladenNr) {
       const t = tekeningNu(v, false);
       const vel = T.TEGELS && T.TEGELS[t.vel];
       const tegel = vel && vel.tiles[t.id];
-      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [] };
-      perVoorwerp.set(v, o);
+      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, zomer: null, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [], doos: undefined };
+      v.getekend = o;
     }
     return o;
   }
+
+  // De doos van het beeld van een voorwerp vanaf zijn anker, [links, boven, rechts, onder] in pixels van de kunst: de maat
+  // van zijn tekening (`doos` in tegels/tegels.js), of anders zijn cel; null als hij geen plek op een vel heeft. Voor de
+  // doorkijk (js/doorkijk.js), die het elk beeld vraagt voor alles in beeld.
+  S.doosVan = function (v) {
+    const o = onthoudVoorwerp(v);
+    if (o.doos !== undefined) return o.doos;
+    const vel = T.TEGELS && T.TEGELS[o.t.vel];
+    const tegel = vel && vel.tiles[o.t.id];
+    const plek = S.celVan(o.t.vel, o.t.id);
+    const a = plek && plek.anker;
+    o.doos = !plek ? null : (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];
+    return o.doos;
+  };
 
   // Het seizoen van de bomen (T.boomSeizoen in js/bos.js; js/tekenen.js zegt het elk beeld). Het vel van een seizoen laadt
   // pas als het seizoen er is, en tot het er is, staan ze in de zomer: zo staat er nooit een gat.

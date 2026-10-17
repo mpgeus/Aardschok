@@ -717,7 +717,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Wat het kladdoek nodig heeft (`fillStyle`, `filter`), krijgt het pas in `opKlad`: de mist zet het filter om elk
   plaatje in het grijs heen en terug, en Firefox leest de tekst van een filter op een 2D-doek elke keer opnieuw; dat was
   29% van het tekenen (17 okt, een profiel van Marcel uit de Firefox Profiler; `filterVan` onthoudt per tekst wat de
-  kaart ervan kent).
+  kaart ervan kent). En `G.begin` wist het kladdoek alleen als er sinds de vorige keer op getekend werd
+  (`kladBeschreven`): ver uitgezoomd is dat meestal niet zo, en een doek zo groot als het scherm wissen kost.
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
   vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
@@ -740,9 +741,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   heeft op het vel meer tekeningen met zijn naam en een `vorm` (`BOOM_VORMEN` in `naar-tiled.cjs`), en welke een boom
   krijgt, zegt zijn tegel (`T.sprites.tekeningVan(v)`, een vaste hasj; `v.id` blijft de eerste, dus een bewaard spel past).
   Wat een voorwerp tekent, vraagt het daaraan (`{ vel, id }`, of `T.sprites.buitenVan(v, wind)`), niet aan `v.id`. Elk
-  voorwerp onthoudt dat (`onthoudVoorwerp`, een WeakMap, alleen scherm): zijn tekening, het gewicht van de wind erop, en
-  het stuk stil en per stand; opnieuw als zijn `vel`, `id` of plek, het seizoen of het aantal geladen beelden
-  (`geladenNr`) anders is. Elk beeld opnieuw opzoeken was in Firefox 9% van het tekenen (17 okt). **De
+  voorwerp onthoudt dat op zichzelf (`v.getekend`, `onthoudVoorwerp`; alleen scherm, in `SCHERM_SLEUTELS` van
+  `js/opslaan.js`): zijn tekening (ook die van de zomer), het gewicht van de wind erop, het stuk stil en per stand, en
+  de doos van zijn beeld (`T.sprites.doosVan`, voor de doorkijk); opnieuw als zijn `vel`, `id` of plek, het seizoen of
+  het aantal geladen beelden (`geladenNr`) anders is. Elk beeld opnieuw opzoeken was in Firefox 9% van het tekenen, en
+  een WeakMap opzoeken kostte daar zelf nog bijna een ms per beeld (17 okt). **De
   bomen in het jaar** (stap 2): per seizoen een vel met dezelfde nummers (`bomen-lente`, `-herfst`, `-winter`, `-sneeuw`,
   met `seizoen` in `tegels.js`), dat pas laadt in zijn seizoen (`T.sprites.zetSeizoen`, elk beeld uit `T.boomSeizoen(S)`
   in `js/bos.js`: per maand `bomenInHetJaar`, en sneeuw op de takken vanaf `sneeuwOpDeBomen`; de spelregel "De bomen in
@@ -798,7 +801,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
   een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan: één kijkgat per wezen, na
   het voorste voorwerp in de volgorde van tekenen dat hem bedekt (`T.voorsteKijkgaten`, 13 okt). Het eerste stuk
-  dat uit `tekenen.js` ging (vraag 25, D, 26 sep).
+  dat uit `tekenen.js` ging (vraag 25, D, 26 sep). Elk beeld kijkt `T.werkDoorkijkBij` voor alles in beeld of het iemand
+  bedekt; eerst alleen opzij (`voorwerpDoos`: de doos uit `T.sprites.doosVan`, en de plek opzij hangt niet af van de
+  hoogte van het land), en pas als dat kan de plek met de hoogte erbij. Ver uitgezoomd rekende het tot 17 okt elk beeld
+  de doos van alles in beeld uit.
 
 ### js/bouwstijl.js: de bouwstijl van een land
 
@@ -831,7 +837,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kinderen die tikkertje spelen (`T.speel`, vanuit `T.dwaal`), kippen op het erf van een boerderij (`T.kippenOp`), een
   hond bij een deel van de gezinnen die zijn baas volgt en blaft naar vreemden (`T.hondenVan`, `T.vreemdeBij`), en de
   was aan de lijn (`T.wasVan`). `js/tekenen.js` tekent het (`kleinLevenInLijst`, `tekenWaterLeven`,
-  `tekenSchoorsteenRook`); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. De spelregel "Klein leven"; de
+  `tekenSchoorsteenRook`; de tegels met water in beeld onthoudt `waterIn` zolang het vak, de kaart en het open land
+  dezelfde zijn, 17 okt); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. De spelregel "Klein leven"; de
   getallen in `T.KLEIN_LEVEN_INSTELLINGEN`.
 
 ### js/zien.js: het licht
