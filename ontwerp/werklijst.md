@@ -72,10 +72,9 @@ N1, V1", en "K1 en L1"): **6a2 loopt** (het plan bij I, in vier stukken: a de we
 wild van het eiland, c de roverskampen, d de rooftocht die leert), dan 6b, alles een opdracht. **Stuk a is af** (16 okt,
 in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is van geen dorp, de
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
-eigen dobbelsteen. **Stuk b is af** (16 okt, op de branch `ccr-53565789-zrmyk0`; Marcel: "D1 e1"; `spel.md`, "Het wild is
+eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
-volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). **Bezig in sessie `ccr-53565789-zrmyk0`** (16 okt):
-6a2. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -95,7 +94,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het wild over het hele eiland bekijken** (vraag 170, stap 6a2, stuk b, 16 okt, op de branch `ccr-53565789-zrmyk0`):
+- **Het wild over het hele eiland bekijken** (vraag 170, stap 6a2, stuk b, 16 okt, in `main`):
   Nieuw spel (een bewaard spel van vóór stuk b laadt niet meer: versie 19), zoom uit, en loop met mensen het land uit: in
   het bos dat opengaat, leven herten en wolven, ook ver van je dorp; `Spel.debug.beesten()` zegt wat er bij je dorp leeft.
   **Om naar te kijken:** (1) rond het begin leven nu meer herten dan vroeger (het bos in de rand die bij het begin opengaat,
