@@ -74,8 +74,8 @@ in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is va
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
 eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
-volgende is stuk c**, de roverskampen: het plan staat bij I en wacht op Marcel (V, G, P, B). **Bezig in sessie
-`ccr-b0684dee-kk0n5b`** (17 okt): stuk c, het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+volgende is stuk c**, de roverskampen: het plan bij I is besloten (Marcel: "V2 G2 P1 B1", en sturen naar land dat je
+niet kent). **Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c, eerst c0, sturen naar onbekend land. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -889,7 +889,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   hij weg en is weg, zoals nu (E2, naar het dichtste open bos met plaats, ook bij een ander dorp, staat in
   `opmerkingen.md`). Erbij: een thuis 18 tegels van elk ander, ook over de grens van een stuk; de jager schiet wat in zijn
   bereik is; het opslaan een versie omhoog.
-  **Stuk c in detail** (Claude, 17 okt; wacht op Marcel). Wat het besluit nog niet dekt: een kamp ver van de dorpen
+  **Stuk c in detail** (Claude, 17 okt; **besloten**, Marcel: "V2 G2 P1 B1", hieronder). Wat het besluit nog niet dekt: een kamp ver van de dorpen
   ligt in land dat nog dicht is (het land bestaat pas waar je mensen komen, B2b), je stuurt alleen naar land dat je kent
   (*You do not know that land*, met een zicht van 7 tegels), en een soldaat met dagdienst loopt 's avonds naar huis om te
   slapen. Het plan, in vier delen. **c1, de kampen op het eiland**: een nieuwe soort plek (`kamp`) uit het nummer van het
@@ -917,7 +917,13 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   buit naar huis: B1 de mannen nemen hem mee (zoveel per man als een rover draagt), en hij telt als ze terug zijn in je
   bereik (een waar telt pas als hij binnen is); wat blijft liggen, haal je een tweede keer; B2 hij gaat meteen in de
   voorraad. Voorstel: V1, G1, P1, B1. Erbij: het opslaan een versie omhoog, en het eiland verandert een beetje (de
-  paadjes door het bos), dus de toetsen die op een vast eiland spelen, kijken we na.
+  paadjes door het bos), dus de toetsen die op een vast eiland spelen, kijken we na. **Gekozen** (Marcel, 17 okt): V2,
+  G2, P1, en "B1, dan kun je het ook nog verliezen tijdens een gevecht", en erbij: "Ook moet je gewoon soldaten maar een
+  onbekend deel van de kaart kunnen sturen. Stel je stuurt een soldaat maar de andere kant van de wereld met een klik, dan
+  moet dat kunnen". Daarmee: je vindt een kamp zelf (geen teken na een overval), en geen eigen bevel voor een kamp; wel
+  **c0, sturen naar onbekend land**, als eerste: een rechtsklik in het zwart (in beeld of op de minikaart) stuurt je
+  mannen erheen, ook naar de andere kant van het eiland; het land gaat open waar ze komen, en ze zoeken onderweg hun weg
+  (over een brug als er een rivier tussen ligt). Wie de buit draagt en valt, verliest hem (B1).
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
