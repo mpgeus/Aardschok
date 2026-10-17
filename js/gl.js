@@ -55,19 +55,27 @@
 
   // ---------------------------------------------------------------- de programma's
   const VERT = /* // geen tekst */ `
-    attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur; attribute float aGrijs;
-    uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek; varying float vGrijs;
+    attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur; attribute float aGrijs; attribute float aBron;
+    uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek; varying float vGrijs; varying float vBron;
     void main() {
-      vUv = aUv; vKleur = aKleur; vPlek = aPlek; vGrijs = aGrijs;
+      vUv = aUv; vKleur = aKleur; vPlek = aPlek; vGrijs = aGrijs; vBron = aBron;
       gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, 0.0, 1.0);
     }`;
+  // Een rij tekent uit zoveel texturen tegelijk (zie de rij hieronder), elk op zijn eigen plaats: vBron zegt welke. WebGL
+  // 1 heeft er minstens acht, en kan een rij samplers niet met een variabele aanwijzen, dus kiest een keten van ifs.
+  const RIJ_TEXTUREN = 8;
+  const uBeelden = Array.from({ length: RIJ_TEXTUREN }, (_, i) => `uBeeld${i}`);
   // Een plaatje maal een kleur (voorvermenigvuldigd): helderheid en doorzichtigheid in één. Een vlak is het witte
   // plaatje van één pixel maal zijn kleur. vGrijs haalt er zoveel kleur uit (het filter grayscale, voor wat in de mist
   // staat; js/mist.js), met de helderheid van 'saturation' op het doek.
   const FRAG_BEELD = /* // geen tekst */ `
-    precision highp float; uniform sampler2D uBeeld; varying vec2 vUv; varying vec4 vKleur; varying float vGrijs;
+    precision highp float; varying vec2 vUv; varying vec4 vKleur; varying float vGrijs; varying float vBron;
+    ${/* // geen tekst */ uBeelden.map((u) => `uniform sampler2D ${u};`).join(' ')}
+    vec4 beeld() {
+      ${/* // geen tekst */ uBeelden.map((u, i) => (i < RIJ_TEXTUREN - 1 ? `if (vBron < ${i}.5) return texture2D(${u}, vUv);` : `return texture2D(${u}, vUv);`)).join('\n      ')}
+    }
     void main() {
-      vec4 c = texture2D(uBeeld, vUv) * vKleur;
+      vec4 c = beeld() * vKleur;
       gl_FragColor = vec4(mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), vGrijs), c.a);
     }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
@@ -141,6 +149,7 @@
     gl.bindAttribLocation(p, 1, 'aUv');
     gl.bindAttribLocation(p, 2, 'aKleur');
     gl.bindAttribLocation(p, 3, 'aGrijs');
+    gl.bindAttribLocation(p, 4, 'aBron');
     gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p)); // geen tekst
     const u = {};
@@ -160,11 +169,12 @@
   let mistProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
-  const PER_HOEK = 9; // x, y, u, v, r, g, b, a, grijs
+  const PER_HOEK = 10; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij)
   let grijsNu = 0; // hoeveel kleur eruit gaat (het filter grayscale van het doek); elke nieuwe hoek krijgt het mee
+  let bronNu = 0; // de plaats van de textuur van de hoeken die nu in de rij komen (plekVoor)
   let hoeken = new Float32Array(PER_HOEK * 6 * 2048);
   let aantal = 0; // hoeken in de rij
-  let rijTextuur = null;
+  const rij = []; // de texturen van de rij, op hun plaats (hooguit RIJ_TEXTUREN)
   let rijMeng = 'source-over';
   let buffer = null;
 
@@ -225,17 +235,22 @@
     gl.enableVertexAttribArray(1);
     gl.enableVertexAttribArray(2);
     gl.enableVertexAttribArray(3);
+    gl.enableVertexAttribArray(4);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, PER_HOEK * 4, 0);
     gl.vertexAttribPointer(1, 2, gl.FLOAT, false, PER_HOEK * 4, 8);
     gl.vertexAttribPointer(2, 4, gl.FLOAT, false, PER_HOEK * 4, 16);
     gl.vertexAttribPointer(3, 1, gl.FLOAT, false, PER_HOEK * 4, 32);
+    gl.vertexAttribPointer(4, 1, gl.FLOAT, false, PER_HOEK * 4, 36);
     gl.enable(gl.BLEND);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    gl.activeTexture(gl.TEXTURE0); // er is maar één textuur tegelijk, altijd op plek 0
+    // Plaats 0 is de werkplaats (bind, hieronder: opsturen, en de programma's met één textuur); de rij gebruikt er tot
+    // RIJ_TEXTUREN (legRijAf), en de mist plaats 1.
+    gl.activeTexture(gl.TEXTURE0);
     vergeetStand();
     bladen = [];
+    rij.length = 0;
     gebruik(beeldProg);
-    gl.uniform1i(beeldProg.u.uBeeld, 0);
+    uBeelden.forEach((u, i) => gl.uniform1i(beeldProg.u[u], i));
     wit = nieuweTextuur();
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
     return true;
@@ -267,12 +282,23 @@
     if (nuTex !== tex) gl.bindTexture(gl.TEXTURE_2D, tex);
     nuTex = tex;
   }
+  // Een textuur op plaats i (de rij, legRijAf); plaats 0 is die van bind.
+  const nuOp = []; // de textuur op plaats 1 en verder
+  function bindOp(i, tex) {
+    if (!i) return bind(tex);
+    if (nuOp[i] === tex) return;
+    gl.activeTexture(gl.TEXTURE0 + i);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.activeTexture(gl.TEXTURE0);
+    nuOp[i] = tex;
+  }
   function zetMeng(naam) {
     if (nuMeng !== naam) MENG[naam](gl);
     nuMeng = naam;
   }
   function vergeetStand() {
     nuProg = nuTex = nuMeng = null;
+    nuOp.length = 0;
     beeldMaat = -1;
   }
 
@@ -362,7 +388,7 @@
       }
       t = { tex: nieuweTextuur(), x: 0, y: 0, b, h, versie };
       texturen.set(bron, t);
-    } else if (aantal && rijTextuur === t.tex) {
+    } else if (aantal && rij.includes(t.tex)) {
       // Staat hij nog in de rij, dan die eerst: anders tekent alles in de rij wat er nu op komt. Een doek dat per beeld
       // vaker opnieuw beschreven wordt (het kijkgat, één per wie achter een huis staat) liet zo op elke plek het laatste
       // zien (Marcel, 9 okt: "art overlapt en klopt niet meer").
@@ -383,26 +409,36 @@
   }
 
   // ---------------------------------------------------------------- de rij met hoeken
+  // Wat na elkaar getekend wordt, gaat in één opdracht naar de kaart, ook als het uit verschillende texturen komt: tot
+  // RIJ_TEXTUREN, elk op zijn plaats (vBron in FRAG_BEELD). Tot 17 okt brak elke andere textuur de rij, en in de lente
+  // stonden de bomen op twee bladen door elkaar (een naaldboom houdt zijn zomervel, en de standen in de wind komen op een
+  // blad als ze voor het eerst in beeld komen): zo werden het na een paar dagen 800 opdrachten per beeld in plaats van
+  // 60, en in Firefox 5 beelden per seconde (Marcel, 17 okt: "performance is belangrijk spelelement").
   function legRijAf() {
-    if (!aantal) return;
-    gebruik(beeldProg);
-    const maat = doek.width * 65536 + doek.height;
-    if (beeldMaat !== maat) gl.uniform2f(beeldProg.u.uMaat, doek.width, doek.height);
-    beeldMaat = maat;
-    bind(rijTextuur);
-    zetMeng(rijMeng);
-    gl.bufferData(gl.ARRAY_BUFFER, hoeken.subarray(0, aantal * PER_HOEK), gl.STREAM_DRAW);
-    gl.drawArrays(gl.TRIANGLES, 0, aantal);
-    G.telling.opdrachten++;
-    aantal = 0;
+    if (aantal) {
+      gebruik(beeldProg);
+      const maat = doek.width * 65536 + doek.height;
+      if (beeldMaat !== maat) gl.uniform2f(beeldProg.u.uMaat, doek.width, doek.height);
+      beeldMaat = maat;
+      rij.forEach((tex, i) => bindOp(i, tex));
+      zetMeng(rijMeng);
+      gl.bufferData(gl.ARRAY_BUFFER, hoeken.subarray(0, aantal * PER_HOEK), gl.STREAM_DRAW);
+      gl.drawArrays(gl.TRIANGLES, 0, aantal);
+      G.telling.opdrachten++;
+      aantal = 0;
+    }
+    rij.length = 0;
   }
+  // Plaats in de rij voor n hoeken uit textuur tex, in mengstand meng: de rij gaat eerst naar de kaart als de mengstand
+  // anders is, als er geen plaats voor nog een textuur is, of als de hoeken er niet meer bij passen.
   function plekVoor(tex, meng, n) {
-    if (aantal && (tex !== rijTextuur || meng !== rijMeng)) legRijAf();
+    if ((aantal && meng !== rijMeng) || (rij.length >= RIJ_TEXTUREN && !rij.includes(tex))) legRijAf();
     if ((aantal + n) * PER_HOEK > hoeken.length) {
       legRijAf();
       if (n * PER_HOEK > hoeken.length) hoeken = new Float32Array(n * PER_HOEK * 2);
     }
-    rijTextuur = tex;
+    bronNu = rij.indexOf(tex);
+    if (bronNu < 0) bronNu = rij.push(tex) - 1;
     rijMeng = meng;
   }
   function hoek(x, y, u, v, k) {
@@ -416,6 +452,7 @@
     hoeken[i + 6] = k[2];
     hoeken[i + 7] = k[3];
     hoeken[i + 8] = grijsNu;
+    hoeken[i + 9] = bronNu;
     aantal++;
   }
   // Een vierhoek: vier punten op het doek (in pixels) met hun plek in de textuur (0..1).
@@ -456,6 +493,7 @@
     hoeken[i + 6] = h;
     hoeken[i + 7] = al;
     hoeken[i + 8] = grijsNu;
+    hoeken[i + 9] = bronNu;
     aantal++;
   }
   // Een stuk dat buiten zijn bron valt, tekent een 2D-doek niet, en op een blad zou het de buren pakken: dus alleen het
@@ -580,21 +618,21 @@
   // opdracht (legSchaduwenAf), niet in de volgorde van de tekenlijst, waarin bijna elk plaatje een andere textuur heeft
   // (een vel per tekening, js/sprites.js). Zo kostten de schaduwen evenveel opdrachten als het hele beeld (Marcel, 9 okt:
   // "performance op fullscreen is ook ondermaats").
-  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, grijs, ...] per hoek
+  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, grijs, bron, ...] per hoek
   function schaduwVierhoek(tex, p, uv, al) {
-    let rij = schaduwRijen.get(tex);
-    if (!rij) schaduwRijen.set(tex, (rij = []));
-    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) rij.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al, 0);
+    let hoekjes = schaduwRijen.get(tex);
+    if (!hoekjes) schaduwRijen.set(tex, (hoekjes = []));
+    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) hoekjes.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al, 0, 0);
   }
   function legSchaduwenAf() {
     legRijAf();
     const per = Math.floor(hoeken.length / (6 * PER_HOEK)) * 6 * PER_HOEK; // zoveel getallen past er in één keer in de rij
-    for (const [tex, rij] of schaduwRijen) {
-      for (let i = 0; i < rij.length; i += per) {
-        const stuk = rij.slice(i, i + per);
+    for (const [tex, hoekjes] of schaduwRijen) {
+      for (let i = 0; i < hoekjes.length; i += per) {
+        const stuk = hoekjes.slice(i, i + per);
         hoeken.set(stuk);
         aantal = stuk.length / PER_HOEK;
-        rijTextuur = tex;
+        rij.push(tex); // op plaats 0, zoals de hoekjes zeggen
         rijMeng = 'source-over';
         legRijAf();
       }
@@ -639,6 +677,7 @@
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     } else gl.bindTexture(gl.TEXTURE_2D, mistTex);
+    nuOp[1] = mistTex; // plaats 1 is ook een plaats van de rij (bindOp)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, masker);
     gl.activeTexture(gl.TEXTURE0);
     gebruik(mistProg);

@@ -933,6 +933,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   volgende ronde van de pixel art (`npm run pixelart:spel`), of houden voor de grijze oudste (`uiterlijk.cjs` leent
   `KARAKTERS.grijsaard`).
 
+- **Het beeld werd trager naarmate het spel liep** (17 okt, Marcel in een nieuw spel in Firefox, op 30×): op 2 maart 34
+  beelden per seconde, op 14 maart 5 (tekenen 169 ms). De oorzaak was het aantal opdrachten aan de videokaart (60 werden
+  er 800), opgelost met de rij die uit acht texturen tegelijk tekent (`code.md` bij `js/gl.js`); nagemeten in Chromium,
+  nog niet in Firefox. Wat overblijft: (a) de regels kostten op 14 maart 10 ms per beeld op 30× (op 2 maart 0,9); (b)
+  wat al een tijd draait, heeft zijn plaatjes anders op de bladen dan een vers geladen spel, en dan verschillen er aan
+  de rand van een plaatje een paar honderd pixels (een plaatje op een eigen textuur rekt zijn rand uit, op een blad
+  ligt er een doorzichtige pixel naast); (c) de bladen raken nooit leeg: wat eenmaal op een blad staat, houdt zijn plek,
+  ook als het nooit meer in beeld komt.
+
 - **Het beeld is opdrachten aan de videokaart** (9 okt, gemeten op 2560×1440): ver uitgezoomd zijn het zo'n 3200
   opdrachten voor 3600 plaatjes, want bijna elk plaatje heeft een eigen vel (een vel per tekening, vraag 114) en de
   tekenlijst gaat van achter naar voor. Dat is nu de grootste post (10 à 15 ms per beeld op 0,5). De schaduwen van de zon
