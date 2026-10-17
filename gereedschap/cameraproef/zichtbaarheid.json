@@ -1,0 +1,1297 @@
+{
+ "commit": "00744e33",
+ "uur": 10,
+ "venster": {
+  "width": 1900,
+  "height": 1400
+ },
+ "dorp": {
+  "gebouwen": [
+   {
+    "naam": "herberg",
+    "soort": "herberg",
+    "tekening": "planken-herberg1-spanen",
+    "kant": "n",
+    "x": -3,
+    "y": 1
+   },
+   {
+    "naam": "hut aan de weg",
+    "soort": "hut",
+    "tekening": "planken-hut1-spanen",
+    "kant": "z",
+    "x": -2,
+    "y": -4
+   },
+   {
+    "naam": "hut in het westen",
+    "soort": "hut",
+    "tekening": "planken-hut4-spanen",
+    "kant": "z",
+    "x": -12,
+    "y": -6
+   },
+   {
+    "naam": "boerderij",
+    "soort": "boerderij",
+    "tekening": "planken-boerderij2-spanen",
+    "kant": "z",
+    "x": 6,
+    "y": -8
+   }
+  ],
+  "weg": [
+   {
+    "x": -13,
+    "y": 0
+   },
+   {
+    "x": -12,
+    "y": 0
+   },
+   {
+    "x": -11,
+    "y": 0
+   },
+   {
+    "x": -10,
+    "y": 0
+   },
+   {
+    "x": -9,
+    "y": 0
+   },
+   {
+    "x": -8,
+    "y": 0
+   },
+   {
+    "x": -7,
+    "y": 0
+   },
+   {
+    "x": -6,
+    "y": 0
+   },
+   {
+    "x": -5,
+    "y": 0
+   },
+   {
+    "x": -4,
+    "y": 0
+   },
+   {
+    "x": -3,
+    "y": 0
+   },
+   {
+    "x": -2,
+    "y": 0
+   },
+   {
+    "x": -1,
+    "y": 0
+   },
+   {
+    "x": 0,
+    "y": 0
+   },
+   {
+    "x": 1,
+    "y": 0
+   },
+   {
+    "x": 2,
+    "y": 0
+   },
+   {
+    "x": 3,
+    "y": 0
+   },
+   {
+    "x": 4,
+    "y": 0
+   },
+   {
+    "x": 5,
+    "y": 0
+   },
+   {
+    "x": 6,
+    "y": 0
+   },
+   {
+    "x": 7,
+    "y": 0
+   },
+   {
+    "x": 8,
+    "y": 0
+   },
+   {
+    "x": 9,
+    "y": 0
+   },
+   {
+    "x": 10,
+    "y": 0
+   },
+   {
+    "x": 11,
+    "y": 0
+   },
+   {
+    "x": 12,
+    "y": 0
+   },
+   {
+    "x": 13,
+    "y": 0
+   },
+   {
+    "x": 14,
+    "y": 0
+   },
+   {
+    "x": 15,
+    "y": 0
+   },
+   {
+    "x": -6,
+    "y": 1
+   },
+   {
+    "x": -6,
+    "y": 2
+   },
+   {
+    "x": -6,
+    "y": 3
+   },
+   {
+    "x": -6,
+    "y": 4
+   },
+   {
+    "x": -6,
+    "y": 5
+   },
+   {
+    "x": -6,
+    "y": 6
+   },
+   {
+    "x": -6,
+    "y": 7
+   }
+  ],
+  "bomen": [
+   {
+    "soort": "eik",
+    "id": 16,
+    "x": -9,
+    "y": -9
+   },
+   {
+    "soort": "beuk",
+    "id": 35,
+    "x": -4,
+    "y": -8
+   },
+   {
+    "soort": "linde",
+    "id": 39,
+    "x": 3,
+    "y": -8
+   },
+   {
+    "soort": "den",
+    "id": 21,
+    "x": 16,
+    "y": -6
+   },
+   {
+    "soort": "berk",
+    "id": 24,
+    "x": 17,
+    "y": -2
+   },
+   {
+    "soort": "eik",
+    "id": 17,
+    "x": 10,
+    "y": 4
+   },
+   {
+    "soort": "els",
+    "id": 42,
+    "x": 13,
+    "y": 6
+   },
+   {
+    "soort": "populier",
+    "id": 45,
+    "x": -10,
+    "y": 4
+   },
+   {
+    "soort": "hazelaar",
+    "id": 57,
+    "x": -9,
+    "y": 8
+   },
+   {
+    "soort": "groveDen",
+    "id": 51,
+    "x": 4,
+    "y": 11
+   },
+   {
+    "soort": "meidoorn",
+    "id": 54,
+    "x": -1,
+    "y": -10
+   }
+  ],
+  "mensen": [
+   {
+    "naam": "op de weg tussen herberg en hut",
+    "x": 1,
+    "y": 0,
+    "kijkt": {
+     "x": -5,
+     "y": 0
+    }
+   },
+   {
+    "naam": "achter de hut",
+    "x": 0,
+    "y": -6,
+    "kijkt": {
+     "x": 0,
+     "y": -12
+    }
+   },
+   {
+    "naam": "bij de deur van de boerderij",
+    "x": 10,
+    "y": 1,
+    "kijkt": {
+     "x": 13,
+     "y": 4
+    }
+   },
+   {
+    "naam": "op de zijweg",
+    "x": -6,
+    "y": 5,
+    "kijkt": {
+     "x": -6,
+     "y": 11
+    }
+   }
+  ]
+ },
+ "standen": [
+  {
+   "stand": 0,
+   "vanuit": "vanuit het zuidoosten (de stand van het spel)",
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "geenGras": 0,
+   "maat": {
+    "b": 1900,
+    "h": 1400
+   },
+   "gebouwen": [
+    {
+     "naam": "herberg",
+     "tekening": "huizen/planken-herberg1-spanen-n",
+     "kant": "n",
+     "x": 923,
+     "y": 801,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "tekening": "huizen/planken-hut1-spanen-z",
+     "kant": "z",
+     "x": 924,
+     "y": 796,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "past": true,
+     "deur": {
+      "x": 926,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "tekening": "huizen/planken-hut4-spanen-z",
+     "kant": "z",
+     "x": 914,
+     "y": 794,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 919,
+      "y": 800
+     }
+    },
+    {
+     "naam": "boerderij",
+     "tekening": "huizen/planken-boerderij2-spanen-z",
+     "kant": "z",
+     "x": 932,
+     "y": 792,
+     "voet": {
+      "b": 9,
+      "h": 8
+     },
+     "past": true,
+     "deur": {
+      "x": 936,
+      "y": 800
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wie": "Margery",
+     "x": 927,
+     "y": 800
+    },
+    {
+     "naam": "achter de hut",
+     "wie": "Stephen",
+     "x": 926,
+     "y": 794
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wie": "Joan",
+     "x": 936,
+     "y": 801
+    },
+    {
+     "naam": "op de zijweg",
+     "wie": "Ralph",
+     "x": 920,
+     "y": 805
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "pixels": 220602,
+     "zichtbaar": 194092,
+     "procent": 88,
+     "afgedektDoor": {
+      "de bomen": 11
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "wat": "gebouw",
+     "pixels": 80987,
+     "zichtbaar": 18320,
+     "procent": 23,
+     "afgedektDoor": {
+      "herberg": 71,
+      "boerderij": 3
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "wat": "gebouw",
+     "pixels": 96457,
+     "zichtbaar": 47250,
+     "procent": 49,
+     "afgedektDoor": {
+      "herberg": 47,
+      "hut aan de weg": 3
+     }
+    },
+    {
+     "naam": "boerderij",
+     "wat": "gebouw",
+     "pixels": 188133,
+     "zichtbaar": 163438,
+     "procent": 87,
+     "afgedektDoor": {
+      "herberg": 4,
+      "de bomen": 9
+     }
+    },
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wat": "mens",
+     "pixels": 1849,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "herberg": 100
+     }
+    },
+    {
+     "naam": "achter de hut",
+     "wat": "mens",
+     "pixels": 1598,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "herberg": 63,
+      "hut aan de weg": 17,
+      "boerderij": 13
+     }
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wat": "mens",
+     "pixels": 1978,
+     "zichtbaar": 1632,
+     "procent": 83,
+     "afgedektDoor": {
+      "de bomen": 17
+     }
+    },
+    {
+     "naam": "op de zijweg",
+     "wat": "mens",
+     "pixels": 1795,
+     "zichtbaar": 1780,
+     "procent": 99,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "pixels": 157082,
+     "zichtbaar": 132221,
+     "procent": 84,
+     "afgedektDoor": {
+      "hut aan de weg": 2,
+      "hut in het westen": 3,
+      "boerderij": 11
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "herberg",
+     "tegel": [
+      928,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de weg",
+     "tegel": [
+      926,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut in het westen",
+     "tegel": [
+      919,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "boerderij",
+     "tegel": [
+      936,
+      800
+     ],
+     "procent": 85
+    }
+   ],
+   "weg": {
+    "tegels": 36,
+    "procent": 33,
+    "helemaalWeg": 21
+   },
+   "doos": [
+    268,
+    174,
+    1652,
+    1007
+   ],
+   "fouten": []
+  },
+  {
+   "stand": 90,
+   "vanuit": "vanuit het zuidwesten",
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "geenGras": 0,
+   "maat": {
+    "b": 1900,
+    "h": 1400
+   },
+   "gebouwen": [
+    {
+     "naam": "herberg",
+     "tekening": "huizen/planken-herberg1-spanen-w",
+     "kant": "w",
+     "x": 929,
+     "y": 795,
+     "voet": {
+      "b": 8,
+      "h": 11
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "tekening": "huizen/planken-hut1-spanen-o",
+     "kant": "o",
+     "x": 924,
+     "y": 799,
+     "voet": {
+      "b": 4,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 802
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "tekening": "huizen/planken-hut4-spanen-o",
+     "kant": "o",
+     "x": 922,
+     "y": 809,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 809
+     }
+    },
+    {
+     "naam": "boerderij",
+     "tekening": "huizen/planken-boerderij2-spanen-o",
+     "kant": "o",
+     "x": 920,
+     "y": 788,
+     "voet": {
+      "b": 8,
+      "h": 9
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 792
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wie": "Margery",
+     "x": 928,
+     "y": 801
+    },
+    {
+     "naam": "achter de hut",
+     "wie": "Stephen",
+     "x": 922,
+     "y": 802
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wie": "Joan",
+     "x": 929,
+     "y": 792
+    },
+    {
+     "naam": "op de zijweg",
+     "wie": "Ralph",
+     "x": 933,
+     "y": 808
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "pixels": 223040,
+     "zichtbaar": 209781,
+     "procent": 94,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "hut aan de weg",
+     "wat": "gebouw",
+     "pixels": 80671,
+     "zichtbaar": 37932,
+     "procent": 47,
+     "afgedektDoor": {
+      "herberg": 46
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "wat": "gebouw",
+     "pixels": 104800,
+     "zichtbaar": 103476,
+     "procent": 99,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "boerderij",
+     "wat": "gebouw",
+     "pixels": 197155,
+     "zichtbaar": 106370,
+     "procent": 54,
+     "afgedektDoor": {
+      "herberg": 37,
+      "hut aan de weg": 2,
+      "de bomen": 2
+     }
+    },
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wat": "mens",
+     "pixels": 1822,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "herberg": 100
+     }
+    },
+    {
+     "naam": "achter de hut",
+     "wat": "mens",
+     "pixels": 1593,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "hut aan de weg": 100
+     }
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wat": "mens",
+     "pixels": 1646,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "herberg": 100
+     }
+    },
+    {
+     "naam": "op de zijweg",
+     "wat": "mens",
+     "pixels": 1797,
+     "zichtbaar": 1276,
+     "procent": 71,
+     "afgedektDoor": {
+      "de bomen": 29
+     }
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "pixels": 162489,
+     "zichtbaar": 122321,
+     "procent": 75,
+     "afgedektDoor": {
+      "herberg": 6,
+      "hut in het westen": 8,
+      "boerderij": 9
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "herberg",
+     "tegel": [
+      928,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de weg",
+     "tegel": [
+      928,
+      802
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut in het westen",
+     "tegel": [
+      928,
+      809
+     ],
+     "procent": 75
+    },
+    {
+     "naam": "boerderij",
+     "tegel": [
+      928,
+      792
+     ],
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 36,
+    "procent": 34,
+    "helemaalWeg": 21
+   },
+   "doos": [
+    206,
+    111,
+    1552,
+    1031
+   ],
+   "fouten": []
+  },
+  {
+   "stand": 180,
+   "vanuit": "vanuit het noordwesten",
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "geenGras": 0,
+   "maat": {
+    "b": 1900,
+    "h": 1400
+   },
+   "gebouwen": [
+    {
+     "naam": "herberg",
+     "tekening": "huizen/planken-herberg1-spanen-z",
+     "kant": "z",
+     "x": 923,
+     "y": 792,
+     "voet": {
+      "b": 11,
+      "h": 8
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "tekening": "huizen/planken-hut1-spanen-n",
+     "kant": "n",
+     "x": 927,
+     "y": 801,
+     "voet": {
+      "b": 6,
+      "h": 4
+     },
+     "past": true,
+     "deur": {
+      "x": 930,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "tekening": "huizen/planken-hut4-spanen-n",
+     "kant": "n",
+     "x": 937,
+     "y": 801,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 937,
+      "y": 800
+     }
+    },
+    {
+     "naam": "boerderij",
+     "tekening": "huizen/planken-boerderij2-spanen-n",
+     "kant": "n",
+     "x": 916,
+     "y": 801,
+     "voet": {
+      "b": 9,
+      "h": 8
+     },
+     "past": true,
+     "deur": {
+      "x": 920,
+      "y": 800
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wie": "Margery",
+     "x": 929,
+     "y": 800
+    },
+    {
+     "naam": "achter de hut",
+     "wie": "Stephen",
+     "x": 930,
+     "y": 806
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wie": "Joan",
+     "x": 920,
+     "y": 799
+    },
+    {
+     "naam": "op de zijweg",
+     "wie": "Ralph",
+     "x": 936,
+     "y": 795
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "pixels": 223777,
+     "zichtbaar": 158419,
+     "procent": 71,
+     "afgedektDoor": {
+      "hut aan de weg": 18,
+      "hut in het westen": 7,
+      "boerderij": 3
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "wat": "gebouw",
+     "pixels": 80094,
+     "zichtbaar": 57367,
+     "procent": 72,
+     "afgedektDoor": {
+      "hut in het westen": 4,
+      "de bomen": 22
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "wat": "gebouw",
+     "pixels": 97943,
+     "zichtbaar": 84858,
+     "procent": 87,
+     "afgedektDoor": {
+      "de bomen": 12
+     }
+    },
+    {
+     "naam": "boerderij",
+     "wat": "gebouw",
+     "pixels": 191399,
+     "zichtbaar": 170341,
+     "procent": 89,
+     "afgedektDoor": {
+      "hut aan de weg": 3,
+      "de bomen": 8
+     }
+    },
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wat": "mens",
+     "pixels": 1825,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "hut aan de weg": 99
+     }
+    },
+    {
+     "naam": "achter de hut",
+     "wat": "mens",
+     "pixels": 1555,
+     "zichtbaar": 402,
+     "procent": 26,
+     "afgedektDoor": {
+      "de bomen": 74
+     }
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wat": "mens",
+     "pixels": 1987,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "boerderij": 100
+     }
+    },
+    {
+     "naam": "op de zijweg",
+     "wat": "mens",
+     "pixels": 1858,
+     "zichtbaar": 1858,
+     "procent": 100,
+     "afgedektDoor": {}
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "pixels": 162741,
+     "zichtbaar": 128688,
+     "procent": 79,
+     "afgedektDoor": {
+      "herberg": 12,
+      "boerderij": 9
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "herberg",
+     "tegel": [
+      928,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de weg",
+     "tegel": [
+      930,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut in het westen",
+     "tegel": [
+      937,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "boerderij",
+     "tegel": [
+      920,
+      800
+     ],
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 36,
+    "procent": 16,
+    "helemaalWeg": 29
+   },
+   "doos": [
+    239,
+    203,
+    1635,
+    1062
+   ],
+   "fouten": []
+  },
+  {
+   "stand": 270,
+   "vanuit": "vanuit het noordoosten",
+   "stuk": [
+    14,
+    12
+   ],
+   "vreemd": 0,
+   "geenGras": 0,
+   "maat": {
+    "b": 1900,
+    "h": 1400
+   },
+   "gebouwen": [
+    {
+     "naam": "herberg",
+     "tekening": "huizen/planken-herberg1-spanen-o",
+     "kant": "o",
+     "x": 920,
+     "y": 795,
+     "voet": {
+      "b": 8,
+      "h": 11
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 800
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "tekening": "huizen/planken-hut1-spanen-w",
+     "kant": "w",
+     "x": 929,
+     "y": 796,
+     "voet": {
+      "b": 4,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 798
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "tekening": "huizen/planken-hut4-spanen-w",
+     "kant": "w",
+     "x": 929,
+     "y": 786,
+     "voet": {
+      "b": 6,
+      "h": 6
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 791
+     }
+    },
+    {
+     "naam": "boerderij",
+     "tekening": "huizen/planken-boerderij2-spanen-w",
+     "kant": "w",
+     "x": 929,
+     "y": 804,
+     "voet": {
+      "b": 8,
+      "h": 9
+     },
+     "past": true,
+     "deur": {
+      "x": 928,
+      "y": 808
+     }
+    }
+   ],
+   "mensen": [
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wie": "Margery",
+     "x": 928,
+     "y": 799
+    },
+    {
+     "naam": "achter de hut",
+     "wie": "Stephen",
+     "x": 934,
+     "y": 798
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wie": "Joan",
+     "x": 927,
+     "y": 808
+    },
+    {
+     "naam": "op de zijweg",
+     "wie": "Ralph",
+     "x": 923,
+     "y": 792
+    }
+   ],
+   "dingen": [
+    {
+     "naam": "herberg",
+     "wat": "gebouw",
+     "pixels": 226241,
+     "zichtbaar": 122125,
+     "procent": 54,
+     "afgedektDoor": {
+      "hut aan de weg": 7,
+      "boerderij": 35
+     }
+    },
+    {
+     "naam": "hut aan de weg",
+     "wat": "gebouw",
+     "pixels": 80344,
+     "zichtbaar": 49302,
+     "procent": 61,
+     "afgedektDoor": {
+      "boerderij": 21,
+      "de bomen": 16
+     }
+    },
+    {
+     "naam": "hut in het westen",
+     "wat": "gebouw",
+     "pixels": 113425,
+     "zichtbaar": 76587,
+     "procent": 68,
+     "afgedektDoor": {
+      "de bomen": 31
+     }
+    },
+    {
+     "naam": "boerderij",
+     "wat": "gebouw",
+     "pixels": 196648,
+     "zichtbaar": 175806,
+     "procent": 89,
+     "afgedektDoor": {
+      "de bomen": 9
+     }
+    },
+    {
+     "naam": "op de weg tussen herberg en hut",
+     "wat": "mens",
+     "pixels": 1841,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "boerderij": 97
+     }
+    },
+    {
+     "naam": "achter de hut",
+     "wat": "mens",
+     "pixels": 1538,
+     "zichtbaar": 291,
+     "procent": 19,
+     "afgedektDoor": {
+      "de bomen": 81
+     }
+    },
+    {
+     "naam": "bij de deur van de boerderij",
+     "wat": "mens",
+     "pixels": 1651,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "boerderij": 100
+     }
+    },
+    {
+     "naam": "op de zijweg",
+     "wat": "mens",
+     "pixels": 1836,
+     "zichtbaar": 0,
+     "procent": 0,
+     "afgedektDoor": {
+      "herberg": 80,
+      "hut aan de weg": 12
+     }
+    },
+    {
+     "naam": "de bomen",
+     "wat": "bomen",
+     "pixels": 167511,
+     "zichtbaar": 154903,
+     "procent": 92,
+     "afgedektDoor": {
+      "herberg": 5
+     }
+    }
+   ],
+   "deuren": [
+    {
+     "naam": "herberg",
+     "tegel": [
+      928,
+      800
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut aan de weg",
+     "tegel": [
+      928,
+      798
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "hut in het westen",
+     "tegel": [
+      928,
+      791
+     ],
+     "procent": 0
+    },
+    {
+     "naam": "boerderij",
+     "tegel": [
+      928,
+      808
+     ],
+     "procent": 0
+    }
+   ],
+   "weg": {
+    "tegels": 36,
+    "procent": 0,
+    "helemaalWeg": 36
+   },
+   "doos": [
+    338,
+    231,
+    1700,
+    1051
+   ],
+   "fouten": []
+  }
+ ],
+ "uitsnede": {
+  "tovMidden": [
+   -784,
+   -653,
+   790,
+   378
+  ],
+  "maat": [
+   1575,
+   1032
+  ]
+ }
+}
