@@ -436,6 +436,9 @@
     const o = onthoudVoorwerp(v);
     return zomer ? o.zomer || (o.zomer = tekeningNu(v, true)) : o.t;
   };
+  // Wat het tekenen verder over een voorwerp onthoudt, staat er ook op (vraag 178, A2): `plat` (isPlat in js/tekenen.js) en
+  // zijn plek op het scherm (`grond`, plekVan), opnieuw zodra de rest van onthoudVoorwerp opnieuw gaat.
+  S.onthouden = (v) => onthoudVoorwerp(v);
 
   // Wat een voorwerp tekent, onthouden op het voorwerp zelf (`v.getekend`, alleen scherm: SCHERM_SLEUTELS in
   // js/opslaan.js): zijn tekening (ook die van de zomer), het gewicht van de wind op die tekening, het stuk stil en per
@@ -450,7 +453,7 @@
       const t = tekeningNu(v, false);
       const vel = T.TEGELS && T.TEGELS[t.vel];
       const tegel = vel && vel.tiles[t.id];
-      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, zomer: null, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [], doos: undefined };
+      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, zomer: null, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [], doos: undefined, plat: undefined, grond: null, grondKaart: null, grondVersie: 0 };
       v.getekend = o;
     }
     return o;

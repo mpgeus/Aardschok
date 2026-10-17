@@ -58,6 +58,24 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
   onthouden bij het voorwerp, zoals `v.getekend` al voor het plaatje doet, met een versie die het opnieuw laat doen.
   Winst: een deel van `tekenVoorwerp` en de schaduwen, 10 à 20%. Middel; het risico is een onthouden waarde die niet
   opnieuw gaat als hij moet (een gekapte boom, het seizoen).
+- **A1 en A2 zijn af** (17 okt; Marcel: "Ja, begin met A1 en A2, en meet daarna"; `code.md` bij `js/tekenen.js` en
+  `js/wereld.js`): wat in het zwart staat of met zijn schaduw buiten beeld valt, gaat niet meer in de lijst; van een
+  stuk land alleen het deel in het vak (`T.voorwerpenIn`); en `isPlat` en de plek op het scherm staan op het voorwerp.
+  In beeld precies dezelfde plaatjes, op dezelfde plek (nagekeken per plaatje, oud tegen nieuw, vlak en met heuvels,
+  dichtbij en ver, middag, ochtend en avond); alleen waar een boom buiten de rijen van een gebouw over zijn dak valt,
+  kan de volgorde anders zijn, zoals eerst ook al bij het schuiven. Om en om gemeten, oud tegen nieuw (ms per beeld,
+  Chromium met de videokaart, 1920×1080):
+
+  | | vlak, oud | vlak, nieuw | heuvels, oud | heuvels, nieuw |
+  | --- | --- | --- | --- | --- |
+  | dichtbij | 16 | 12,4 | 10,6 | 9,1 |
+  | 0,5 | 28,7 | 18,7 | 28,5 | 16,4 |
+  | 0,35 | 30,2 | 19,3 | 29,9 | 19,2 |
+  | 0,35, avond | 20,6 | 13,3 | 27,2 | 14,5 |
+
+  Ver uitgezoomd 35 à 47% minder (de tijden zelf schommelen met wat er naast draait). In het profiel ging het rekenwerk
+  van het tekenen ver uitgezoomd van 34 naar 13 ms; wat blijft, is vooral elke boom tekenen, twee keer (de schaduw en het
+  plaatje), en dat is wat B oplost.
 - **A3, geen nieuwe dingen per beeld.** Nu krijgt elk ding elk beeld een nieuw item met een functie erin, en een punt
   `{ x, y }`; 3.000 tot 14.000 per beeld. Hergebruiken (of getallen in vaste lijsten) scheelt opruimwerk van de browser
   en de post "(program)" in het profiel. Winst onzeker, 5 à 10%. Middel.

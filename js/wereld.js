@@ -605,7 +605,18 @@
       const [x0, y0] = [(n % 64) * STUK, Math.floor(n / 64) * STUK];
       if (x0 >= vak.x + vak.b || y0 >= vak.y + vak.h || x0 + STUK <= vak.x || y0 + STUK <= vak.y) continue;
       const s = stukkenVan(w).get(n) || openStuk(w, x0, y0);
-      for (const v of s.op) if (v && binnen(v)) uit.push(v);
+      // alleen het deel van het stuk in het vak, rij voor rij zoals de lijst ligt (vraag 178: elk stuk helemaal, 4096
+      // tegels, kostte ver uitgezoomd een halve ms per beeld)
+      const ix0 = Math.max(0, Math.floor(vak.x) - x0);
+      const iy0 = Math.max(0, Math.floor(vak.y) - y0);
+      const ix1 = Math.min(STUK, Math.ceil(vak.x + vak.b) - x0);
+      const iy1 = Math.min(STUK, Math.ceil(vak.y + vak.h) - y0);
+      for (let iy = iy0; iy < iy1; iy++) {
+        for (let i = iy * STUK + ix0, eind = iy * STUK + ix1; i < eind; i++) {
+          const v = s.op[i];
+          if (v && binnen(v)) uit.push(v);
+        }
+      }
     }
     return uit;
   };

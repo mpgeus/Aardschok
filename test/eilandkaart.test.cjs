@@ -100,6 +100,16 @@ test('eilandkaart: T.voorwerpenIn geeft wat er gezet is en wat er groeit, alleen
   let geteld = 0;
   for (let y = klein.y; y < klein.y + klein.h; y++) for (let x = klein.x; x < klein.x + klein.b; x++) if (T.voorwerpOp(w, x, y)) geteld++;
   assert.equal(lijst.length, geteld);
+  // een vak over de grens van stukken, met gebroken randen: van elk stuk alleen het deel in het vak (vraag 178)
+  const S0 = Math.ceil((vak.x + 40) / 64) * 64;
+  const schuin = { x: S0 - 7.5, y: vak.y + 30.25, b: 20.5, h: 70.5 };
+  const tegels = [];
+  for (let y = Math.ceil(schuin.y); y < schuin.y + schuin.h; y++) {
+    for (let x = Math.ceil(schuin.x); x < schuin.x + schuin.b; x++) if (T.voorwerpOp(w, x, y)) tegels.push(T.voorwerpOp(w, x, y));
+  }
+  const gevonden = T.voorwerpenIn(w, schuin);
+  assert.ok(gevonden.length > 0);
+  assert.deepEqual(new Set(gevonden), new Set(tegels));
 });
 
 // Stap 5 (Marcel, 13 okt: "Al je mensen", en "Eerst meten"): waar de aanvoerder, een dorpeling of de ossenkar komt, gaat het

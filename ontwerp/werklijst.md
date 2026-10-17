@@ -22,7 +22,8 @@ het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 **Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P):
 helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen, 38 beelden per seconde; Chromium en
 Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst
-voortzetten"): meten waar de tijd zit, en een plan voor Marcel.
+voortzetten"). **A1 en A2 zijn af** (bij P; `snelheid.md`): ver uitgezoomd 35 à 47% minder per beeld, en in beeld
+dezelfde plaatjes. Het volgende is B, de dieptebuffer en vaste buffers per stuk (wacht op Marcel, hieronder).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -148,11 +149,11 @@ stenen huizen. **Ronde 3 is af.**
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
   `plaat.png`, en `beeld.md`, "De andere materialen". Dan: welke goed zijn, en wat anders moet; daarna de haken in de
   bouwer.
-- **De heuvels: d, of eerst ver uitgezoomd sneller** (vraag 174, c, 17 okt): Marcel mat in Firefox (bij L, "Stap c")
-  wat Chromium en Edge zeiden, 4 ms per beeld boven vlak. Dan is d de volgende stap: de heuvels altijd aan, de
-  spelregel *Height* eruit, en het opslaan een versie omhoog. Maar ver uitgezoomd haalt het spel ook vlak de 60 niet (38
-  beelden per seconde in Firefox; `opmerkingen.md`), en performance heeft hoge prioriteit: eerst d (klein), of eerst
-  dat. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
+- **Ver uitgezoomd in Firefox na A1 en A2, en dan B** (vraag 178, 17 okt; bij P): meet zoals bij de heuvels (het
+  proefdorp, F2, helemaal uitgezoomd; eerst 24,8 ms vlak en 28,9 met heuvels), en kies of B de volgende stap is: de
+  dieptebuffer en vaste buffers per stuk (`snelheid.md`, B1 tot B4), groot werk in `js/gl.js`, je ziet niets anders.
+  Marcel koos eerst sneller en dan d van de heuvels ("Maar de perfomance moet echt wel veel beter"). Bij de heuvels
+  (vraag 174, c) **wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
   houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest
   draait nu in de volle Chromium, want de kale headless-shell van Playwright laadt het spel niet meer (`opmerkingen.md`).
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
@@ -1430,6 +1431,12 @@ grijs loopt niemand) en worden toch elk beeld opnieuw opgebouwd.
   bomen geen werk per beeld meer zijn; een verbouwing van `js/gl.js`.
 
 Na elke stap meten, om en om tegen de stand ervoor, en Marcel meet in Firefox.
+
+**A1 en A2 zijn af** (17 okt; Marcel: "Ja, begin met A1 en A2, en meet daarna"; `snelheid.md`, met de tabel; `code.md`
+bij `js/tekenen.js`): ver uitgezoomd van zo'n 30 naar 19 ms per beeld, vlak en met heuvels (om en om tegen de oude
+stand, Chromium), dichtbij een kwart minder. In beeld precies dezelfde plaatjes op dezelfde plek; alleen een boom die
+buiten de rijen van een gebouw over zijn dak valt, kan aan de rand van volgorde wisselen, zoals eerst bij het schuiven.
+Het volgende is B (wacht op Marcel).
 
 **Het onderzoek** (Marcel, 17 okt: "kun je eens onderzoeken welke optimalisatie technieken we nog zouden kunnen
 toepassen?"): `snelheid.md`, met alles wat er nog kan (A minder werk op de processor, B de videokaart meer laten doen,

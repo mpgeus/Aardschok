@@ -358,7 +358,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
-  stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)`. Een voorwerp maak je op één manier
+  stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)` (van elk open stuk alleen het deel in het vak;
+  vraag 178: eerst elk stuk helemaal, 4096 tegels). Een voorwerp maak je op één manier
   (`T.maakVoorwerp` in `js/kaart.js`), en de grond van het eiland per nummer met `T.grondVanGid`.
 - **Over een brug van het eiland** (vraag 170, stap 6a2, 17 okt): `T.brugOp(w, x, y)` zegt welk stuk van welke brug er
   ligt (`E.brugOp`, `js/eiland.js`), of null. Het water eronder blijft water (`T.grondOp`), maar de tegel is vloer
@@ -735,7 +736,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   nadat het gemaakt is, want dan krijgen de items zoveel vormen dat het sorteren in Chromium twee keer zo traag werd, 17
   okt; zonder videokaart een grijze kopie van het stukje, `grijsStuk`, want een filter bewerkt daar het hele vel;
   `Spel.debug.geenMist`), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
-  de kaart, ver uitgezoomd in een eigen buffer (`bosGebakken`). **De
+  de kaart, ver uitgezoomd in een eigen buffer (`bosGebakken`). **Alleen wat telt in de lijst** (vraag 178, A1, 17 okt):
+  het vak is een rechthoek in tegels om het schuine beeld, en ver uitgezoomd lagen er 14.564 dingen in, waarvan 4.815
+  buiten beeld en 6.710 in het zwart; `voorwerpTelt` laat die vóór het werk voor de lijst weg (in het zwart, zoals
+  `mistOverLijst`; buiten beeld op de cel van zijn tekening met zijn schaduw, `T.sprites.celVan`, niet op de krappere
+  doos van de doorkijk), en wat nog half doorkijkbaar is, blijft in de doorkijk tot hij dicht is. In beeld worden precies
+  dezelfde plaatjes getekend als ervoor; alleen waar een boom buiten de schuine rijen van een gebouw over zijn dak valt,
+  kan de volgorde anders zijn (`tekenVolgorde` voegt een gebouw in tussen wat er op zijn rijen staat, en dat was ook
+  eerst al wat er toevallig in het vak lag). **Het vaste werk eens** (A2): `isPlat` en de plek op het scherm (`plekVan`,
+  met de hoogte, opnieuw na `T.egaliseer`) staan op het voorwerp (`T.sprites.onthouden`, in `v.getekend`). Samen ver
+  uitgezoomd 35 à 47% minder per beeld (`ontwerp/snelheid.md`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 
 ### js/gl.js: tekenen met de videokaart

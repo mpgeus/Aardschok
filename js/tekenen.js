@@ -21,6 +21,19 @@
   const opGrond = (x, y) => T.naarSchermOp(kaartNu, x, y);
   // en de grond zelf, ook onder een brug (de grondtegels, het water)
   const opMaaiveld = (x, y) => T.naarSchermGrond(kaartNu, x, y);
+  // De plek van een voorwerp met een tekening, onthouden op het voorwerp (T.sprites.onthouden, vraag 178, A2): het staat
+  // stil, en elk beeld vragen duizenden bomen hem twee keer (de schaduw en het plaatje). Opnieuw als het voorwerp ergens
+  // anders staat (onthoudVoorwerp), op een andere kaart, of als de hoogte een nieuwe versie kreeg (T.egaliseer).
+  function plekVan(v) {
+    if (!v.vel) return opGrond(v.x, v.y);
+    const o = T.sprites.onthouden(v);
+    const versie = kaartNu && kaartNu.hoogte ? kaartNu.hoogte.versie || 0 : -1;
+    if (o.grond && o.grondKaart === kaartNu && o.grondVersie === versie) return o.grond;
+    o.grond = opGrond(v.x, v.y);
+    o.grondKaart = kaartNu;
+    o.grondVersie = versie;
+    return o.grond;
+  }
 
   const GEDIMD = 0.58;
 
@@ -110,6 +123,47 @@
     return { x0: cx - halfB, y0: cy - halfH, x1: cx + halfB, y1: cy + halfH };
   }
 
+  // Hoort voorwerp v in de tekenlijst (vraag 178, A1)? Niet als het in het zwart staat (wat mistOverLijst toch weggooit:
+  // de tegel die het dorp niet kent, van een gebouw het midden), en niet als zijn beeld met zijn schaduw rechthoek r niet
+  // raakt: zijn cel op het vel (T.sprites.celVan; niet de doos van de doorkijk, die is krapper), de schaduw zo ver als de
+  // cel hoog is (zoals js/gl.js hem legt), met de hoogte van het vak en een rand voor de wind en een brug. Het vak is een
+  // rechthoek in tegels om het schuine beeld: ver uitgezoomd lagen er 14.564 dingen in, 4.815 buiten beeld en 6.710 in
+  // het zwart, en die kregen allemaal eerst het werk voor de lijst. Zonder cel (geen tekening), in aanbouw of brandend
+  // (een ander plaatje) telt het altijd.
+  const TEL_RAND = 48;
+  function voorwerpTelt(S, w, r, vak) {
+    const D = metMist(w) ? S.dorp : null;
+    const hb = T.hoogteIn(w, vak.x0, vak.y0, vak.x1, vak.y1);
+    // hoe ver een schaduw reikt per pixel hoogte, zoals tekenZonneschaduw hem legt
+    let sx = 0;
+    let sy = 0;
+    const L = T.LICHT_INSTELLINGEN;
+    if (L.zonneschaduw && S.kalender && w.buiten) {
+      const z = T.zonStand(S.kalender.dag);
+      if (z.sterkte > 0.01) {
+        sx = Math.abs(((z.x - z.y) / Math.SQRT2) * z.lengte);
+        sy = Math.abs(((z.x + z.y) / (2 * Math.SQRT2)) * z.lengte);
+      }
+    }
+    const sprites = metSprites();
+    return (v) => {
+      if (D) {
+        const p = T.isGebouw(v) ? { x: Math.round(v.x + (v.beslaat[0] - 1) / 2), y: Math.round(v.y + (v.beslaat[1] - 1) / 2) } : v;
+        if (!T.kentTegel(D, p.x, p.y)) return false;
+      }
+      if (!sprites || !v.vel || v.inAanbouw || v.brand) return true;
+      const t = T.sprites.tekeningVan(v);
+      const plek = T.sprites.celVan(t.vel, t.id);
+      if (!plek) return true;
+      const [ax, ay] = plek.anker;
+      const h = plek.cel[3];
+      const p = T.naarScherm(v.x, v.y);
+      const ex = sx * h + TEL_RAND;
+      const ey = sy * h + TEL_RAND;
+      return p.x - ax + plek.cel[2] + ex >= r.x0 && p.x - ax - ex <= r.x1 && p.y - hb.laag - ay + h + ey >= r.y0 && p.y - hb.hoog - ay - ey <= r.y1;
+    };
+  }
+
   // Welke tegels kunnen in die rechthoek iets tekenen? De ruit-projectie draait het raster, dus
   // nemen we de vier hoeken van de (opgerekte) rechthoek en het vak daaromheen.
   //
@@ -186,10 +240,16 @@
   // kost; op een land van de maker zijn het er een paar honderd. Wat plat is, zegt de tekening zelf (tegels/tegels.js):
   // niet vast, één tegel, en niet hoger dan PLAT_HOOG pixels boven zijn voet.
   const PLAT_HOOG = 24;
+  // Onthouden op het voorwerp (T.sprites.onthouden, vraag 178, A2): isGebakken vraagt het elk beeld voor alles in beeld.
   function isPlat(v) {
     const vel = v.vel && T.TEGELS && T.TEGELS[v.vel];
-    const t = vel && vel.tiles[T.sprites.tekeningVan(v, true).id];
-    return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
+    if (!vel) return false;
+    const o = T.sprites.onthouden(v);
+    if (o.plat === undefined) {
+      const t = vel.tiles[T.sprites.tekeningVan(v, true).id];
+      o.plat = !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
+    }
+    return o.plat;
   }
   // Per wereld de platte voorwerpen, bijgewerkt als de kaart veranderde (T.kaartVersie, js/wereld.js). Weet de kaart waar
   // (T.kaartPlekkenSinds), dan alleen op die plekken, en blijft `versie` gelijk: werkGrondBij tekent die plekken zelf
@@ -592,7 +652,12 @@
     const kijkgaten = new Map(); // voorwerp → de kijkgaten die erna komen (voorsteKijkgaten, hieronder)
     Object.assign(beeldNu, { ctx, S, kijkgaten });
     grijzeItems.clear(); // mistOverLijst vult hem opnieuw
+    const telt = voorwerpTelt(S, w, zicht, vak);
     for (const v of T.voorwerpenIn(w, { x: vak.x0, y: vak.y0, b: vak.x1 - vak.x0 + 1, h: vak.y1 - vak.y0 + 1 })) {
+      if (!telt(v)) {
+        if (v.doorkijk) zichtbaar.push(v); // half open: de doorkijk sluit hem nog, ook buiten beeld
+        continue;
+      }
       if (!T.isZichtbaar(w, v.x, v.y) || isGebakken(w, v)) continue;
       zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
@@ -2718,7 +2783,7 @@
 
   // gaten: de kijkgaten die na dit voorwerp komen (voorsteKijkgaten), of niets.
   function tekenVoorwerp(ctx, S, v, helder, gaten) {
-    const p = opGrond(v.x, v.y);
+    const p = plekVan(v);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
     // struik, een gebouw. Het anker van de cel is de voet, dus hij valt precies op het
     // midden van zijn eigen tegel.
