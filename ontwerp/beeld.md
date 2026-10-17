@@ -1207,6 +1207,10 @@ alle 6, 83% en 10 van de 11. Alleen plat wat het zicht neemt op wie je kiest: vo
 voor een hut aan de overkant vier. Plat lost op wat draaien niet oploste (de cameraproef: de inwoner in een smalle
 straat was in alle vier de standen weg). De keuzes voor een weergave in het spel staan onderaan `evaluatie.md`.
 
+**Plat in het spel** (besloten 17 okt, werklijst vraag 176, stap 4): de muren als de doorsnede van de proef, de vloer in
+de kleur van het dak met rijen zoals een dak (het dambord van de proef leest op spanen als een tegelvloer), de F zet
+plat aan en uit, met een klein teken zolang het aan staat.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
