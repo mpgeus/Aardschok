@@ -165,7 +165,7 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
   nieuwe heer). Toon: zwarte satire; de heer is lachwekkend, zijn straffen niet.
 - **Twee bazen** (vraag 106): de gunst van de heer en het vertrouwen van het dorp kunnen je allebei wegsturen; onder een
   grens een waarschuwing, op 0 ben je weg.
-- **Het doel van de demo is open** (werklijst, "Wacht op Marcel"); het oude doel is op 11 okt weggehaald (vraag 153).
+- **Het doel van de demo is open** (werklijst, "Wacht op Marcel").
 - **Geld verdienen** (`commercieel.md`): in januari 2027 de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig
   geld: wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Wie valt, is dood** (vraag 55); valt de held (de aanvoerder), dan neemt een veteraan of de soldaat die het langst dient het over (vraag 170). Wie het overleeft,
@@ -191,6 +191,8 @@ Hoe we kiezen:
   speeltest scheef laat zien, los je eerst op met een getal uit de werkbank; iets nieuws (een regel, een gebouw, een
   grondstof) komt er alleen als Marcel het kiest.
 - **Eerst goedkeuring, dan renderen** (Marcel, 14 okt): een tekening eerst in woorden, dan één proefplaat (`beeld.md`).
+- **Performance heeft hoge prioriteit** (Marcel, 17 okt: "spelers haken af als dat niet op orde is"): meet een
+  verandering aan het tekenen of de tik, ook na een paar speeldagen en in Firefox (`code.md` bij `js/gl.js`).
 
 ## Afspraken in de code
 
@@ -228,5 +230,4 @@ zonder op beelden te wachten (een verborgen paneel tekent maar af en toe), `Spel
 schermpositie van een tegel, en `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/`, zodat Marcel het spel ziet zonder dat het beeld door het gesprek gaat. Elk
 onderwerp heeft zijn eigen `Spel.debug`: de lijst staat in `ontwerp/gereedschap.md`. De spelregels die de browser
-onthield, gelden ook voor wie test; `Spel.optiesTerug()` zet alles op de standaard. Wat bij het mikken misgaat (een open
-venster, de camera die glijdt, het lijf van een wezen), staat in `ontwerp/gereedschap.md`.
+onthield, gelden ook voor wie test; `Spel.optiesTerug()` zet alles op de standaard.
