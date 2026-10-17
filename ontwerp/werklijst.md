@@ -1228,6 +1228,31 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
 (CLAUDE.md: een spelregel die het oude alleen houdt tot het nieuwe af is). Na het tekenwerk dat loopt (b en c raken
 `js/tekenen.js`); a kan ernaast.
 
+**Stap b in detail** (17 okt; Marcel: "B. B2, K. K1, M. M2"), elk met toetsen en gemeten:
+- **b1, het licht en de hoogste grond per stuk** (`js/tekenen.js`): een lichtplaatje per stuk van 64 (nu alleen het
+  dorpsvak, en bij elk gebouw helemaal opnieuw), gemaakt als het stuk voor het eerst getekend wordt; een gebouw maakt
+  alleen het stuk opnieuw dat het raakt. Zo ook de hoogste en laagste grond (`hoogsteVan`).
+- **b2, elk dorp en elk kamp een vlakte** (`js/hoogte.js`, `js/maker.js`): een vlakte per dorp in plaats van één
+  `midden`, het plein van elk dorp een vlak stuk, en (K1) de open plek van een roverskamp vlak, zodat de tenten en het
+  vuur niet scheef staan; het kamp komt van het eiland, dus wordt het uitgerekend en niet bewaard. Opslaan een versie
+  hoger.
+- **b3, een brug ligt vlak op de hoogte van de oevers** (B2): de brug en zijn landhoofden op één hoogte, en de pijlers
+  lopen omlaag tot het water. Dat is een nieuwe tekening: **eerst in woorden aan Marcel, dan één proefplaat**
+  (`beeld.md`, "De bruggen"; CLAUDE.md, "Eerst goedkeuring, dan renderen").
+- **b4, de mist op de heuvels** (`js/tekenen.js`, `js/gl.js`): het masker als een net van driehoeken over de
+  hoekpunten van de tegels, per stuk onthouden zolang de hoogte gelijk is, en dan de mistlaag van nu. Zonder videokaart
+  ook precies per tegel (M2); dat mag duur zijn, want **zonder videokaart speelt niemand** (Marcel, 17 okt: "Iedere
+  laptop of apparaat, handheld etc. heeft een APU of GPU"; `code.md` bij `js/gl.js`).
+
+## M. Het licht in de nacht (vraag 175, 17 okt)
+
+Marcel, 17 okt: **"Het licht in de nacht is nep, ik wil dat het meer wordt zoals de lantaarns die we hebben voor de
+soldaten. Dat is zachter. Nu heb je 1 felle lichtbol."** Hoe het nu is (`js/tekenen.js`, `lichtenInBeeld`; `js/gl.js`,
+`FRAG_PLAS`): elke lamp (de herberg, de ramen, het kampvuur, de vuren van de kampen, een brand, wie een lantaarn draagt)
+is een plas licht van dezelfde vorm, een ellips die van het midden naar de rand afneemt (`t * t`), opgeteld op de
+lichtkaart; de lantaarn van een groepsleider is alleen kleiner getekend (`beeldStraal`, vraag 171, L3). Open: welk licht
+Marcel bedoelt met de ene felle bol, en of het alle lampen raakt. Na stap b van L, tenzij Marcel het eerder wil.
+
 ## Af (sinds 11 okt)
 
 - c1, de roverskampen op het eiland (vraag 170, stap 6a2, 17 okt; Marcel: "M1"; `spel.md`, "De roverskampen"): drie per

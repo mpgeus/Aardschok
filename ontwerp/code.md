@@ -712,6 +712,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/gl.js: tekenen met de videokaart
 
+- **Zonder videokaart speelt niemand** (Marcel, 17 okt: "We gaan er vanuit dat software rendering, dus compleet zonder
+  GFX kaart, eigenlijk niet voor gaat komen. Iedere laptop of apparaat, handheld etc. heeft een APU of GPU"): de weg
+  zonder WebGL (het 2D-doek) moet kloppen, maar hoeft niet snel te zijn; meten en sneller maken doen we met de kaart.
 - `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL die zich voordoet als het 2D-doek,
   zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;
   de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
