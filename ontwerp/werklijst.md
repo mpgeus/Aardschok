@@ -11,28 +11,13 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 ## Nu en daarna (14 okt)
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
-niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Bezig in sessie `main`** (17 okt): het tekenen, op een profiel uit
-Firefox. Af: de opdrachten aan de videokaart (800 werden er 20), het filter in de mist (29% van het tekenen in
-Firefox) en elk voorwerp onthoudt zijn plaatje (9%). In Firefox, met de profiler: een beeld van 30,5 naar 21,6 ms (31
-naar 40 beelden per seconde in de opname); de schaduwen van de zon kosten nog 1,9 ms (hun 28% was ook het filter). De
-meter in Firefox, ver uitgezoomd: tekenen 55 naar 34 ms, 16 naar 21 beelden per seconde. Wat overblijft, is verspreid
-over zo'n 10.000 plaatjes per beeld. Marcel koos (17 okt: "Eerst 1 ... Daarna kijken we of 2 nog nodig is"): **1, elk
-plaatje goedkoper zonder dat het beeld verandert (bezig; een eerste ronde is af, 17 okt: het kladdoek, het geheugen per
-voorwerp, de doorkijk en het water, in Chromium 8 tot 15% eraf; de meter in Firefox, ver uitgezoomd 's ochtends: tekenen
-46 ms om 16:25, 29 ms om 16:48, 16 à 19 ms om 17:03, en 19 werden 50 à 59 beelden per seconde; het zwaarste beeld,
-Heathside helemaal uitgezoomd, in Firefox 22,5 ms en 32 beelden per seconde, in Edge (Chromium, zoals de exe in
-Electron) 11 à 12 ms en 60)**. Op 30× haperde het door gevelde bomen: elke boom liet een stuk grond van 512×512 opnieuw
-tekenen, en het water alle tegels in beeld opnieuw uitzoeken (het water is opgelost). Marcel koos daarna (17 okt): **eerst
-alleen het veranderde stukje grond opnieuw tekenen, dan ronde 2 van elk plaatje goedkoper**. Af (17 okt): het stukje grond
-(een verandering kost in Chromium 2 à 4 ms in plaats van 5 à 8) en van ronde 2 de tekenlijst (geen functietje per
-voorwerp per beeld; in Chromium even snel, de winst hoort in Firefox). **Wacht op Marcel: de meter in Firefox en op 30×.**
-Ook van ronde 2 af: vier hoekpunten per plaatje in plaats van zes (in Chromium 5 à 8% sneller); ronde 2 is daarmee
-klaar. De meter in Firefox daarna (17:56, Crowthorpe): ver uitgezoomd vol bos 11,7 ms tekenen en 60 beelden per seconde
-(om 16:25 46 ms en 19); op 30× met bouwers die rooien 58 beelden per seconde, het traagste beeld 33 ms (eerst 100 à 117).
-Optie 2, het bos in
-de mist in de grondbuffer bakken (dan wuiven de bomen in de mist niet meer), blijft hier staan voor Firefox en zwakkere
-machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat het mat: `code.md` bij
-`js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
+niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
+videokaart, het filter in de mist, elk voorwerp onthoudt zijn plaatje, ronde 1 en 2 van elk plaatje goedkoper, en alleen
+het veranderde stukje grond opnieuw. De meter in Firefox (17:56, Crowthorpe): ver uitgezoomd vol bos 11,7 ms tekenen en
+60 beelden per seconde (eerst 55 ms en 16); op 30× met bouwers die rooien 58 beelden per seconde, het traagste beeld 33
+ms (eerst 100 à 117). Optie 2, het bos in de mist in de grondbuffer bakken (dan wuiven de bomen in de mist niet meer),
+blijft staan voor zwakkere machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat
+het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -113,7 +98,8 @@ tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes t
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
-hoogte per stuk, is af** (17 okt); het volgende is b, na het tekenwerk dat loopt. Let op: CLAUDE.md zit tegen de grens van
+hoogte per stuk, is af** (17 okt). **Bezig in sessie `main`** (17 okt): stap b, wat erop ligt volgt de heuvels
+(eerst een plan voor Marcel). Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
