@@ -99,7 +99,8 @@ tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes t
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt). **Bezig in sessie `main`** (17 okt): stap b, wat erop ligt volgt de heuvels;
-b1, b2 en b4 zijn af (het licht per stuk, elk dorp een vlakte, de mist op de heuvels), b3 (de brug) wacht op Marcel. Let op: CLAUDE.md zit tegen de grens van
+b1 tot b4 zijn af (het licht per stuk, elk dorp een vlakte, de brug op zijn oevers, de mist op de heuvels); het volgende
+is c, meten. Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -119,8 +120,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De brug op de heuvels** (vraag 174, b3, bij L): B1 of toch B2, nu de oevers bij een brug meestal maar 2 à 5
-  pixels boven het water liggen (hooguit 34).
 - **Welk licht in de nacht** (vraag 175, bij M): welk licht de ene felle bol is.
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
   vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
@@ -1242,15 +1241,11 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
 - **b2, elk dorp een vlakte, is af** (17 okt): een vlakte per dorp (`w.hoogte.vlaktes`) in plaats van één `midden`,
   en het plein van een dorp dat erbij komt een vlak stuk (`T.legDorpVlakte`, vanuit `T.legDorpOpKaart`); opslaan versie
   23. K1 was er al: het eiland legt het plein van een roverskamp vlak, op de hoogte van zijn vuur (`js/eiland.js`, c1).
-- **b3, een brug ligt vlak op de hoogte van de oevers** (B2): de brug en zijn landhoofden op één hoogte, en de pijlers
-  lopen omlaag tot het water. Dat is een nieuwe tekening: **eerst in woorden aan Marcel, dan één proefplaat**
-  (`beeld.md`, "De bruggen"; CLAUDE.md, "Eerst goedkeuring, dan renderen"). **Gemeten (17 okt)**, op de eilanden 1 tot
-  5 (62 bruggen): de oever ligt bij een brug meestal 2 à 5 pixels boven het water (hooguit 34, een trede is 32), en de
-  twee oevers verschillen meestal 0 à 2 pixels (hooguit 29). In woorden aan Marcel: de brug ligt vlak op het gemiddelde
-  van zijn twee oevers, de grond om elk landhoofd wordt een vlak stuk op die hoogte (zoals onder een gebouw), en onder
-  elke pijler of elk juk komt een stuk muur of paal tot het water, uit een textuur in code zoals de wanden van een
-  richel (geen nieuwe render van de brug). Of B1 (de brug op het water, de oever een paar pixels omlaag), omdat het
-  verschil zo klein is: **wacht op Marcel**.
+- **b3, een brug ligt vlak op de hoogte van de oevers, is af** (17 okt; Marcel: "Toch B2: de brug op de oevers, met de
+  pijlers in code verlengd"; `beeld.md`, "De bruggen", bij Op de heuvels): de brug op het gemiddelde van zijn oevers
+  (nooit onder zijn water), de grond van de landhoofden vlak op die hoogte zonder het water mee te trekken, en de voeten
+  van het dek tot het water verlengd met hun eigen onderste rij steen of hout. Midden op een brug meestal 0 à 4 pixels,
+  hooguit zo'n 9.
 - **b4, de mist op de heuvels, is af** (17 okt; `code.md` bij `js/mist.js`): het masker via een net per stuk, een punt
   op het midden van elke tegel op zijn hoogte, naar een laag op de halve maat, en dan de mistlaag van nu; met de
   videokaart bij het dorp niets meetbaars. Zonder videokaart precies per tegel (M2): 28 ms bij het dorp, 140 ver

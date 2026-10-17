@@ -620,7 +620,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   grond anders dan helemaal opnieuw getekend, nu geen). Tot 17 okt was het één lijst om het eerste land (48 tegels erbuiten), en vroeg daarbuiten elke hoek het
   eiland opnieuw: een scherm vol tegels 160 ms in plaats van 1 (nu 0,9 ms, overal). De uitkomst is bit voor bit dezelfde,
   op twee eilanden gemeten, ook na vier vlakke stukken. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
-  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte, en op een brug van het eiland het wegdek:
+  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte, en op een brug van het eiland het wegdek,
+  op de basis van de brug: `T.brugBasis` en `T.brugOpTil`, vraag 174, stap b3, met de vlakke stukken om de landhoofden die
+  `droog` zijn, zodat het water op zijn peil blijft, `bruggenVan`;
   `T.dekOp`, zodat wie erop loopt meegaat en de muis op het dek de brug kiest; de grond zelf, ook onder een brug, ligt op
   `T.naarSchermGrond`, in `js/tekenen.js` `opMaaiveld`), `T.lichtOpHoekpunt` en
   `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,

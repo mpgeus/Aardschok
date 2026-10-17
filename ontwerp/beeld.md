@@ -1142,6 +1142,14 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   overkant vóór wie erop loopt, en die aan de kant van de kijker erna. In het spel ligt het water
   op het maaiveld, op de proefplaat 7 pixels lager; daarom ligt het dek in het spel 7 hoger (steen 33, hout 22 boven het
   maaiveld), zodat de bogen hun maat houden en de palen in zicht blijven. Een landhoofd loopt in één tegel op.
+- **Op de heuvels** (vraag 174, stap b3, 17 okt; Marcel: "Toch B2: de brug op de oevers, met de pijlers in code
+  verlengd"): een brug ligt vlak, op het gemiddelde van zijn twee oevers (nooit onder zijn water), en de grond van elk
+  landhoofd en de tegel erachter ligt vlak op die hoogte. Boven het water ligt een stuk dan zoveel hoger, en zijn voeten
+  lopen door tot het water: het vel zegt per stuk van het dek welke kolommen het water raken (`bruggen-vel.cjs`,
+  `voetenVan`), en het spel trekt hun onderste rij steen of hout zoveel omlaag (`js/tekenen.js`, `tekenBrugStuk`). Geen
+  render erbij. Gemeten op vijf eilanden: midden op een brug meestal 0 à 4 pixels, hooguit zo'n 9; met 20 pixels erbij
+  (een proef) lopen de pijlers en de zijkant van een landhoofd als kolommen met de strepen van hun steen door
+  (`gereedschap/pixelart/uit/schermen/brug-b3-proef-20px-hoger.png`, en zoals het is: `brug-b3-echt.png`).
 
 ## De heide (25 sep 2026)
 

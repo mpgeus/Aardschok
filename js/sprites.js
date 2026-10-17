@@ -859,7 +859,7 @@
   // stukken van één tegel, in drie lagen (0: het dek, 1: wat ervóór boven het wegdek uitsteekt, 2: wat erachter), geknipt
   // uit een paar hele bruggen (de monsters); welk stuk waar hoort, zegt S.brugMonster. Het vel laadt pas als er een brug in
   // beeld komt.
-  let brugIndex = null; // 'naam as monster i k laag' → [sx, sy, b, h, ax, ay], uit de regels van de beschrijving
+  let brugIndex = null; // 'naam as monster i k laag' → [sx, sy, b, h, ax, ay, voeten], uit de regels van de beschrijving
   // De bogen van een stenen brug over L tegels, zoals de tekening ze legt (bruggen.cjs, bogen): twee tegels per boog, bij
   // een oneven lengte in het midden één van drie, over één tegel een klein boogje. [van, tot] in tegels.
   function bogen(L) {
@@ -905,7 +905,10 @@
         for (const [as, perMonster] of Object.entries(perAs)) {
           for (const [m, lijst] of Object.entries(perMonster)) {
             for (const regel of lijst) {
-              const [si, sk, sl, ...r] = regel.split(' ').map(Number);
+              const delen = regel.split(' ');
+              const [si, sk, sl, ...r] = delen.slice(0, 9).map(Number);
+              // de voeten van de pijlers in het dek (bruggen-vel.cjs, voetenVan): [x, b, ys, yd] binnen het stuk
+              r.push(delen[9] ? delen[9].split(';').map((v) => v.split(',').map(Number)) : null);
               brugIndex.set(`${naam} ${as} ${m} ${si} ${sk} ${sl}`, r);
             }
           }
@@ -916,8 +919,9 @@
     const [m, mi] = S.brugMonster(soort, brug.L, i, T.brugSchuin(brug));
     const sleutel = `${soort === 'steen' ? `steen-${steen}` : soort} ${brug.as} ${m} ${mi} ${k} ${laag}`;
     const r = brugIndex.get(sleutel);
-    return r ? onthoud(`brug ${sleutel}`, () => stuk(MAP + g.bestand, r[0], r[1], r[2], r[3], [r[4], r[5]])) : null;
+    return r ? onthoud(`brug ${sleutel}`, () => brugStukMetVoeten(stuk(MAP + g.bestand, r[0], r[1], r[2], r[3], [r[4], r[5]]), r[6])) : null;
   };
+  const brugStukMetVoeten = (deel, voeten) => deel && Object.assign(deel, { voeten });
   // Hoe hoog het wegdek van een brug ligt (pixels boven het maaiveld) op a stappen langs de brug vanaf de rand van zijn
   // eerste stap water (van -1 tot L + 1), zoals de tekening het heeft (bruggen.cjs, dekOp): een landhoofd loopt op in een
   // S-bocht, een boogbrug buigt, zonder knik. Een stap is een tegel, schuin √2. Zonder de beschrijving 0.

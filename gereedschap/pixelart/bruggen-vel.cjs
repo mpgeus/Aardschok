@@ -153,14 +153,47 @@ function monster(soort, steen, as, L) {
     // het anker: het midden van de tegel op het maaiveld
     const [tx, ty] = F.tegel(i, k);
     const [ax, ay] = K.tegelNaarScherm(B, tx + 0.5, ty + 0.5);
-    uit.push({ i, k, laag, plaat, anker: [Math.round(ax - kd.x0), Math.round(ay - kd.y0)] });
+    const voeten = laag === 0 ? voetenVan(B, stuk, voor, q, s, kd) : '';
+    uit.push({ i, k, laag, plaat, anker: [Math.round(ax - kd.x0), Math.round(ay - kd.y0)], voeten });
   }
   return uit;
 }
 
+// De voeten van stuk s in het dek (vraag 174, stap b3; Marcel, 17 okt: "Toch B2: de brug op de oevers, met de pijlers in
+// code verlengd"): per kolom waarvan de onderste pixel het water raakt (een pixel van de vorm daar, of tot twee rijen
+// erboven en een kolom ernaast, ligt hooguit VOET pixels boven het water), de rij die js/tekenen.js omlaag trekt (ys: de
+// steen of het hout boven de omlijning, of de omlijning zelf aan de zijkant van een pijler) en vanaf waar (yd: de
+// onderste pixel). Zo komt een pijler, een juk of de zijkant van een landhoofd tot het water als de brug op de heuvels
+// hoger ligt dan het water. Kolommen naast elkaar met dezelfde rijen gaan samen: 'x,b,ys,yd' met ';' ertussen, binnen
+// het stuk.
+const VOET = 2;
+function voetenVan(B, stuk, voor, q, s, kd) {
+  const van = (x, y) => x >= 0 && y >= 0 && x < B.b && y < B.h && stuk[y * B.b + x] === s && q.px[(y * B.b + x) * 2] >= 0;
+  const vorm = (x, y) => van(x, y) && voor[y * B.b + x] >= 0;
+  const hoogte = (x, y) => B.pos[(y * B.b + x) * 3 + 2] * PXH;
+  const kolommen = [];
+  for (let x = kd.x0; x <= kd.x1; x++) {
+    let y = kd.y1;
+    while (y >= kd.y0 && !van(x, y)) y--;
+    if (y < kd.y0) continue;
+    let raakt = false;
+    for (let dy = 0; dy <= 2 && !raakt; dy++) for (const dx of [-1, 0, 1]) if (vorm(x + dx, y - dy) && hoogte(x + dx, y - dy) <= VOET) raakt = true;
+    if (!raakt) continue;
+    const ys = !vorm(x, y) && vorm(x, y - 1) ? y - 1 : y;
+    kolommen.push([x - kd.x0, ys - kd.y0, y - kd.y0]);
+  }
+  const runs = [];
+  for (const [x, ys, yd] of kolommen) {
+    const vorige = runs[runs.length - 1];
+    if (vorige && vorige[0] + vorige[1] === x && vorige[2] === ys && vorige[3] === yd) vorige[1]++;
+    else runs.push([x, 1, ys, yd]);
+  }
+  return runs.map((r) => r.join(',')).join(';');
+}
+
 // Alle stukken op één vel, in planken van boven naar beneden (de hoogste eerst), en de beschrijving: per soort ('steen-
-// veldsteen', 'juk', ...), per as en per monster ('L9') een lijst 'i k laag sx sy b h ax ay' (een regel per stuk, zodat
-// de beschrijving niet een regel per getal krijgt).
+// veldsteen', 'juk', ...), per as en per monster ('L9') een lijst 'i k laag sx sy b h ax ay', in het dek met de voeten
+// erachter (voetenVan; een regel per stuk, zodat de beschrijving niet een regel per getal krijgt).
 function vel() {
   const alle = [];
   for (const [soort, steen] of SOORTEN) {
@@ -193,7 +226,9 @@ function vel() {
   const stukken = {};
   for (const s of alle) {
     const per = ((stukken[s.naam] = stukken[s.naam] || {})[s.as] = stukken[s.naam][s.as] || {});
-    (per[s.monster] = per[s.monster] || []).push([s.i, s.k, s.laag, s.sx, s.sy, s.plaat.b, s.plaat.h, s.anker[0], s.anker[1]].join(' '));
+    const regel = [s.i, s.k, s.laag, s.sx, s.sy, s.plaat.b, s.plaat.h, s.anker[0], s.anker[1]];
+    if (s.voeten) regel.push(s.voeten);
+    (per[s.monster] = per[s.monster] || []).push(regel.join(' '));
   }
   return { plaat, stukken };
 }

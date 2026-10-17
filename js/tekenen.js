@@ -647,10 +647,12 @@
     // (een pixel hoger ligt op het scherm een zestiende som x + y verder naar achter), zodat een ossenkar die over twee
     // tegels reikt er niet in zakt (Marcel, 17 okt: "de ossenkar lijkt nog in de brug te zakken"). De borstwering aan de
     // overkant (l 1) en die aan de kant van de kijker (l 2,5) staan zoals het graan om wie erop loopt (l 2). Een stuk ligt
-    // met zijn anker op de grond van zijn tegel (opMaaiveld), niet op het wegdek (opGrond, T.naarSchermOp).
+    // met zijn anker op de grond van zijn tegel (opMaaiveld), niet op het wegdek (opGrond, T.naarSchermOp). Met hoogte ligt
+    // de brug vlak op zijn basis (T.brugBasis, js/hoogte.js; vraag 174, stap b3): een stuk boven het water zoveel hoger
+    // (T.brugOpTil), en zijn pijlers lopen door tot het water (tekenBrugStuk).
     if (metSprites() && T.opEiland(w)) {
       const steen = steenVanLand(w);
-      for (const brug of T.eilandVan(w.eiland.zaad).bruggen) {
+      for (const [n, brug] of T.eilandVan(w.eiland.zaad).bruggen.entries()) {
         const R = T.brugRijen(brug);
         const hoeken = [[-1, 0], [-1, R - 1], [brug.L, 0], [brug.L, R - 1]].map(([i, k]) => T.brugTegel(brug, i, k));
         const xs = hoeken.map((t) => t[0]);
@@ -661,10 +663,11 @@
             const [x, y] = T.brugTegel(brug, i, k);
             if (!inVak(vak, x, y) || !T.isZichtbaar(w, x, y)) continue;
             const p = opMaaiveld(x, y);
+            const til = T.brugOpTil(w, n, x, y);
             const dek = T.dekOp(w, x, y) / 16;
             for (const [laag, d, l] of [[0, x + y - dek, 0.5], [1, x + y, 2.5], [2, x + y, 1]]) {
               const deel = T.sprites.brugStuk(brug, brug.stad ? 'baksteen' : steen, i, k, laag);
-              if (deel) lijst.push({ d, l, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+              if (deel) lijst.push({ d, l, punt: { x, y }, zonderSchaduw: true, f: () => tekenBrugStuk(ctx, deel, p.x, p.y - til, til) });
             }
           }
         }
@@ -762,6 +765,18 @@
       if (!kijkgaten.has(v)) kijkgaten.set(v, []);
       kijkgaten.get(v).push({ e, sterkte });
     }
+  }
+
+  // Een stuk van een brug op (x, y), `til` pixels hoger dan de grond van zijn tegel (T.brugOpTil): in het dek trekt het de
+  // onderste rij van elke voet (js/sprites.js, deel.voeten; gereedschap/pixelart/bruggen-vel.cjs, voetenVan) zoveel omlaag,
+  // zodat een pijler, een juk of de zijkant van een landhoofd weer tot het water reikt. Met de steen of het hout van de
+  // tekening zelf, en zonder render erbij (Marcel, 17 okt: "Toch B2: de brug op de oevers, met de pijlers in code verlengd").
+  function tekenBrugStuk(ctx, deel, x, y, til) {
+    T.sprites.teken(ctx, deel, x, y, 1);
+    if (!deel.voeten || til < 0.5) return;
+    const [x0, y0] = [Math.round(x - deel.ax), Math.round(y - deel.ay)];
+    const h = Math.round(til) + 1;
+    for (const [vx, b, ys, yd] of deel.voeten) ctx.drawImage(deel.beeld, deel.sx + vx, deel.sy + ys, b, 1, x0 + vx, y0 + yd, b, h);
   }
 
   // Een heuvel voor iemand dekt hem af (werklijst vraag 121, stap 2; Marcel, 8 okt: "Akkoord"). De grond ligt als één

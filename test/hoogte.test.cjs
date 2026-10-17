@@ -68,7 +68,9 @@ test('hoogte per stuk: ver van het eerste land één keer het eiland per stuk, m
   const x0 = Math.floor(kasteel.x / Z) * Z;
   const y0 = Math.floor(kasteel.y / Z) * Z;
   assert.ok(Math.hypot(kasteel.x - hg.ox, kasteel.y - hg.oy) > 300, 'het kasteel ligt ver van het eerste land');
-  // alle hoeken van het stuk van het kasteel: één keer het eiland
+  // alle hoeken van het stuk van het kasteel: één keer het eiland (de bruggen van het eiland, vraag 174, b3, één keer
+  // voor het hele eiland, hier vooraf)
+  T.brugBasis(w, 0);
   const echt = T.eilandStuk;
   let gevraagd = 0;
   T.eilandStuk = (...a) => (gevraagd++, echt(...a));
@@ -317,6 +319,63 @@ test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vla
     const terug = T.leesSpel(T.bewaarSpel(S)).staat;
     assert.deepEqual(terug.dorp.wereld.hoogte.vlakken[0], w.hoogte.vlakken[0]);
   }
+});
+
+// Vraag 174, stap b3 (Marcel: "Toch B2: de brug op de oevers, met de pijlers in code verlengd"): een brug ligt vlak, op
+// het gemiddelde van zijn oevers; de grond van een landhoofd ligt op die hoogte, het water eronder blijft op zijn peil.
+test('hoogte, bruggen: vlak op de hoogte van hun oevers, met het water op zijn peil', () => {
+  const w = land(5, true);
+  const hg = w.hoogte;
+  const E = T.eilandVan(5);
+  const eilandOp = (vx, vy) => Math.max(0, T.eilandStuk(E, vx - 0.5, vy - 0.5, 1, 1).hoogte[0]);
+  const ver = (x, y) => hg.vlaktes.every((v) => Math.hypot(x - v.x, y - v.y) > 40) && hg.vlakken.every((v) => Math.max(v.x0 - x, 0, x - v.x1) > 8 || Math.max(v.y0 - y, 0, y - v.y1) > 8);
+  let bekeken = 0;
+  let hoger = 0;
+  let nat = 0;
+  E.bruggen.forEach((brug, n) => {
+    const R = T.brugRijen(brug);
+    const [mx, my] = T.brugTegel(brug, Math.floor(brug.L / 2), 1);
+    if (!ver(mx, my)) return;
+    bekeken++;
+    const basis = T.brugBasis(w, n);
+    // het gemiddelde van het eiland onder de twee landhoofden, en nooit onder het water eronder
+    let som = 0;
+    for (const i of [-1, brug.L]) for (let k = 0; k < R; k++) som += Math.max(0, T.eilandStuk(E, ...T.brugTegel(brug, i, k), 1, 1).hoogte[0]);
+    let water = 0;
+    for (let i = 0; i < brug.L; i++) for (let k = 0; k < R; k++) water = Math.max(water, T.eilandStuk(E, ...T.brugTegel(brug, i, k), 1, 1).hoogte[0]);
+    assert.equal(basis, Math.round(Math.max(som / (2 * R), water)), `brug ${n}`);
+    assert.ok(T.brugOpTil(w, n, mx, my) >= -0.5, `brug ${n} ligt niet onder het water`);
+    // de landhoofden en de tegel erachter liggen vlak op de basis
+    for (const i of [-2, -1, brug.L, brug.L + 1]) {
+      for (let k = 0; k < R; k++) assert.deepEqual(T.hoekHoogten(w, ...T.brugTegel(brug, i, k)), [basis, basis, basis, basis], `brug ${n}, ${i} ${k}`);
+    }
+    // het water eronder ligt op zijn peil: de hoogte van het eiland (waar het eiland water zegt; de rand is oever)
+    for (let i = 0; i < brug.L; i++) {
+      for (let k = 0; k < R; k++) {
+        const [x, y] = T.brugTegel(brug, i, k);
+        for (const [hk, [dx, dy]] of [[0, [0, 0]], [1, [1, 0]], [2, [1, 1]], [3, [0, 1]]]) {
+          const streek = T.EILAND_STREKEN[T.eilandStuk(E, x + dx - 0.5, y + dy - 0.5, 1, 1).streek[0]];
+          if (!['zee', 'meer', 'rivier'].includes(streek)) continue;
+          nat++;
+          const h = T.hoekHoogte(w, x, y, hk);
+          assert.ok(Math.abs(h - eilandOp(x + dx, y + dy)) < 1e-6, `brug ${n}: het water op (${x}, ${y}) ${h} en niet ${eilandOp(x + dx, y + dy)}`);
+        }
+      }
+    }
+    // wie erop loopt, loopt op de basis met het wegdek erboven, ook boven het water
+    const p = T.naarSchermOp(w, mx, my);
+    const dek = T.sprites.brugDek(brug, T.brugStap(brug, mx, my));
+    assert.ok(Math.abs(p.y - (T.naarScherm(mx, my).y - basis - dek)) < 1e-6, `brug ${n}: het wegdek`);
+    if (T.brugOpTil(w, n, mx, my) > 0.5) hoger++;
+  });
+  assert.ok(bekeken >= 5, `zoveel bruggen ver van het dorp: ${bekeken}`);
+  assert.ok(hoger >= 1, 'een brug die boven het water hoger kwam te liggen');
+  assert.ok(nat > 50, `zoveel hoekpunten water onder een brug: ${nat}`);
+  // zonder hoogte niets: het wegdek is dat van de tekening
+  const vlak = land(5, false);
+  assert.equal(T.brugBasis(vlak, 0), 0);
+  const [x, y] = T.brugTegel(E.bruggen[0], 0, 1);
+  assert.equal(T.brugOpTil(vlak, 0, x, y), 0);
 });
 
 // Vraag 174, stap b2: een dorp dat erbij komt (T.dorpErbij, js/gebied.js), ligt ook op een vlakte, met zijn plein vlak.

@@ -48,10 +48,11 @@
   // huis met zijn looppad, het water), met een overgang van `vrijRond` tegels.
   // Een rekensom en geen lijst: ook buiten de kaart (het bos eromheen, en straks een groter land), en een bewaard spel
   // hoeft alleen het nummer en de vlakke stukken te onthouden.
-  const glooiingOp = (hg, vx, vy) => glooiingVan(hg, vx, vy, landOp(hg, vx, vy), hg.vlakken);
-  // Hetzelfde, met het land op dat hoekpunt al bekend (`land`, landOp), en alleen de vlakke stukken die erbij kunnen
-  // liggen (`vlakken`, in de volgorde van hg.vlakken: vlakkenBij).
-  function glooiingVan(hg, vx, vy, land, vlakken) {
+  const glooiingOp = (hg, vx, vy) => glooiingVan(hg, vx, vy, landOp(hg, vx, vy), vlakkenBij(hg, vx, vy, vx, vy), natOp(hg, vx, vy));
+  // Hetzelfde, met het land op dat hoekpunt al bekend (`land`, landOp), alleen de vlakke stukken die erbij kunnen liggen
+  // (`vlakken`, in de volgorde van hg.vlakken: vlakkenBij), en of het hoekpunt water is (`nat`): een vlak stuk dat
+  // `droog` is (om het landhoofd van een brug), trekt het water niet mee.
+  function glooiingVan(hg, vx, vy, land, vlakken, nat) {
     const I = IN();
     let h = land;
     for (const v of hg.vlaktes) {
@@ -61,6 +62,7 @@
     // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
     let naast = null;
     for (const v of vlakken) {
+      if (nat && v.droog) continue;
       const dx = Math.max(v.x0 - vx, 0, vx - v.x1);
       const dy = Math.max(v.y0 - vy, 0, vy - v.y1);
       if (dx === 0 && dy === 0) return v.h;
@@ -143,7 +145,7 @@
         const vx = s.x0 + i;
         const vy = s.y0 + j;
         const land = eiland ? Math.max(0, eiland[j * n + i]) : landschapOp(hg.zaad, vx, vy);
-        glooi[j * n + i] = glooiingVan(hg, vx, vy, land, vlakken);
+        glooi[j * n + i] = glooiingVan(hg, vx, vy, land, vlakken, eiland ? s.nat[j * n + i] : 0);
       }
     }
     const hoeken = new Float64Array(Z * Z * 4);
@@ -177,16 +179,91 @@
   // ervan af), in hun volgorde: het eerste gaat voor.
   function vlakkenBij(hg, X0, Y0, X1, Y1) {
     const r = IN().vrijRond;
-    return hg.vlakken.filter((v) => Math.max(v.x0 - X1, 0, X0 - v.x1) < r && Math.max(v.y0 - Y1, 0, Y0 - v.y1) < r);
+    const bij = (v) => Math.max(v.x0 - X1, 0, X0 - v.x1) < r && Math.max(v.y0 - Y1, 0, Y0 - v.y1) < r;
+    const eigen = hg.vlakken.filter(bij);
+    if (!hg.eiland) return eigen;
+    const Z = T.STUK;
+    const { perStuk } = bruggenVan(hg);
+    const brug = new Set();
+    for (let sy = Math.floor(Y0 / Z); sy <= Math.floor(Y1 / Z); sy++) {
+      for (let sx = Math.floor(X0 / Z); sx <= Math.floor(X1 / Z); sx++) for (const v of perStuk.get(sx * 4096 + sy) || []) if (bij(v)) brug.add(v);
+    }
+    return brug.size ? eigen.concat([...brug]) : eigen;
   }
+
+  // De bruggen van het eiland op de heuvels (vraag 174, stap b3; Marcel: "Toch B2: de brug op de oevers, met de pijlers
+  // in code verlengd"): een brug ligt vlak, op het gemiddelde van het eiland onder zijn twee landhoofden (`basis`, per
+  // nummer in E.bruggen; nooit onder zijn water), en de grond van elk landhoofd en de tegel erachter is een vlak stuk op
+  // die hoogte, zodat de weg er recht op loopt. Die vlakke stukken zijn `droog`: het water eronder blijft op zijn peil, en
+  // js/tekenen.js verlengt de pijlers tot daar. Ze komen uit het eiland, dus worden ze uitgerekend en niet bewaard;
+  // `perStuk` zegt per stuk (sx * 4096 + sy) welke tot `vrijRond` tegels erbij liggen. De tegels van het eiland zijn die
+  // van de kaart (B2b).
+  const BRUGGEN = new WeakMap(); // hoogte → { basis, perStuk }
+  function bruggenVan(hg) {
+    let b = BRUGGEN.get(hg);
+    if (b) return b;
+    const E = T.eilandVan(hg.eiland.zaad);
+    const Z = T.STUK;
+    const r = IN().vrijRond + 1;
+    b = { basis: [], perStuk: new Map() };
+    for (const brug of E.bruggen) {
+      const R = T.brugRijen(brug);
+      let som = 0;
+      for (const i of [-1, brug.L]) {
+        for (let k = 0; k < R; k++) {
+          const [x, y] = T.brugTegel(brug, i, k);
+          som += Math.max(0, T.eilandStuk(E, x, y, 1, 1).hoogte[0]);
+        }
+      }
+      // nooit onder het water eronder (twee oevers kunnen een tikje lager liggen dan het peil van hun rivier)
+      let water = 0;
+      for (let i = 0; i < brug.L; i++) for (let k = 0; k < R; k++) water = Math.max(water, T.eilandStuk(E, ...T.brugTegel(brug, i, k), 1, 1).hoogte[0]);
+      const h = Math.round(Math.max(som / (2 * R), water));
+      b.basis.push(h);
+      for (const i of [-2, -1, brug.L, brug.L + 1]) {
+        for (let k = 0; k < R; k++) {
+          const [x, y] = T.brugTegel(brug, i, k);
+          const v = { x0: x, y0: y, x1: x + 1, y1: y + 1, h, droog: true };
+          for (let sy = Math.floor((y - r) / Z); sy <= Math.floor((y + 1 + r) / Z); sy++) {
+            for (let sx = Math.floor((x - r) / Z); sx <= Math.floor((x + 1 + r) / Z); sx++) {
+              const n = sx * 4096 + sy;
+              if (!b.perStuk.has(n)) b.perStuk.set(n, []);
+              b.perStuk.get(n).push(v);
+            }
+          }
+        }
+      }
+    }
+    BRUGGEN.set(hg, b);
+    return b;
+  }
+  // Op welke hoogte brug `nummer` (in E.bruggen) ligt, in pixels; zonder hoogte 0.
+  T.brugBasis = (w, nummer) => (w && w.hoogte && w.hoogte.eiland ? bruggenVan(w.hoogte).basis[nummer] : 0);
   // De hoogte van het eiland op de hoekpunten van stuk `s` (T.eilandStuk, zonder de zee onder 0).
   function eilandVanStuk(hg, s) {
     if (!s.eiland) {
       const [ox, oy] = oorsprong(hg);
       const { zaad, x0, y0 } = hg.eiland;
-      s.eiland = T.eilandStuk(T.eilandVan(zaad), x0 + s.x0 - ox - 0.5, y0 + s.y0 - oy - 0.5, T.STUK + 1, T.STUK + 1).hoogte;
+      const stuk = T.eilandStuk(T.eilandVan(zaad), x0 + s.x0 - ox - 0.5, y0 + s.y0 - oy - 0.5, T.STUK + 1, T.STUK + 1);
+      s.eiland = stuk.hoogte;
+      s.nat = stuk.streek.map((st) => (NATTE().includes(st) ? 1 : 0));
     }
     return s.eiland;
+  }
+  // De streken van het eiland die water zijn (js/eiland.js, T.EILAND_STREKEN).
+  let natte = null;
+  const NATTE = () => natte || (natte = ['zee', 'meer', 'rivier'].map((n) => T.EILAND_STREKEN.indexOf(n)));
+  // Of punt (px, py) van de kaart water is (zoals eilandOp); zonder eiland nooit.
+  function natOp(hg, px, py) {
+    if (!hg.eiland) return 0;
+    if (Number.isInteger(px) && Number.isInteger(py)) {
+      const s = stukNr(stukkenVan(hg), Math.floor(px / T.STUK), Math.floor(py / T.STUK));
+      eilandVanStuk(hg, s);
+      return s.nat[(py - s.y0) * (T.STUK + 1) + px - s.x0];
+    }
+    const [ox, oy] = oorsprong(hg);
+    const { zaad, x0, y0 } = hg.eiland;
+    return NATTE().includes(T.eilandStuk(T.eilandVan(zaad), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).streek[0]) ? 1 : 0;
   }
   // De hoogte van het eiland op punt (px, py) van de kaart (een hoekpunt van tegel (x, y) is (x, y) tot (x + 1, y + 1)):
   // de grond, een meer of een rivier op zijn peil, en de zee op 0. Een hoekpunt uit de lijst van zijn stuk; een ander
@@ -305,8 +382,11 @@
     const op = T.brugOp(w, Math.round(x), Math.round(y));
     if (!op) return 0;
     const brug = T.eilandVan(w.eiland.zaad).bruggen[op.brug];
-    return T.sprites.brugDek(brug, T.brugStap(brug, x, y));
+    return T.brugOpTil(w, op.brug, x, y) + T.sprites.brugDek(brug, T.brugStap(brug, x, y));
   };
+  // Hoeveel brug `nummer` op punt (x, y) boven de grond ligt, omdat hij vlak op zijn basis ligt (T.brugBasis; vraag 174,
+  // stap b3): boven het water zoveel als de oevers hoger liggen, op een landhoofd 0. Zonder hoogte 0.
+  T.brugOpTil = (w, nummer, x, y) => (w.hoogte ? T.brugBasis(w, nummer) - T.hoogteOp(w, x, y) : 0);
 
   // En terug, voor de muis: welke tegel ligt onder schermpunt (sx, sy)? Een tegel op een heuvel ligt hoger in beeld
   // dan T.naarWereld denkt, dus kijkt het van voor naar achter langs de tegels die daar kunnen liggen, en neemt de
