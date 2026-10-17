@@ -1351,7 +1351,8 @@ alles tot de heup dekte de straat nog af), de vloer in de kleur van het dak.
 wereld, de regels en het opslaan merken er niets van; plat is een veld van het scherm (`T.schermVelden`), geen
 spelregel. De speler bouwt huizen uit de huizenbouwer en werkplaatsen uit `dorp.cjs`, dus twee stukken renderwerk.
 
-- **4a, de platte tekeningen van alle huizen.** De snede van `gereedschap/zichtproef/plat.cjs` gaat naar de
+- **4a, de platte tekeningen van alle huizen.** **Bezig in sessie `main` (17 okt)**: de snede naar de huizenbouwer,
+  dan de proefplaat voor Marcel. De snede van `gereedschap/zichtproef/plat.cjs` gaat naar de
   huizenbouwer, naast de bouwfasen (`huizen.cjs`: één manier om een huis te snijden), ook voor de gebouwen uit delen (de
   kapel, de zagerij). Een eigen vel, `tegels/plat/` met `tegels/plat.js`, strak gesneden met een eigen anker, zoals de
   daksneeuw; een oud huis deelt de platte tekening met zijn jonge. Eerst één proefplaat met de gekozen muren en vloer,
