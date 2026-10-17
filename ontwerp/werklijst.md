@@ -82,7 +82,8 @@ dat het eiland te voet in stukken gebroken is (`opmerkingen.md`). **L1 is af** (
 dorpsplekken, de stad en het kasteel te voet in één stuk land. Het volgende is c1, de kampen: **de tent is T1** (Marcel,
 17 okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; nu de proefplaat). Marcel erbij:
 "bruggen moeten ook oud zijn, en we hebben nieuwe stenen bruggen nodig, met boogje etc": eerst de bruggen in woorden.
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af; de proefplaat van de bruggen en de tent. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af; de tweede proefplaat van de bruggen en
+de tent wacht op Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -985,7 +986,11 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   Bruggen moeten breder. Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1 persoon." Dus: een brug
   is drie tegels breed (zo breed als de weg, en een peloton kan drie naast elkaar over), steviger (dikkere muren en
   borstweringen, grotere bogen), en het hout ook met een boog: een houten boogbrug over een korte oversteek, en een
-  houten jukbrug (een vlak dek op rijen palen, met een leuning) over een lange; welke, kiest de plek en het lot.
+  houten jukbrug (een vlak dek op rijen palen, met een leuning) over een lange; welke, kiest de plek en het lot. **De
+  tweede proefplaat wacht op Marcel** (17 okt; `node gereedschap/pixelart/bruggen.cjs`, `uit/bruggen-proef.png`): de
+  stenen brug van veldsteen over zeven tegels met een peloton van zes erop, de houten boogbrug over drie, het roverskamp
+  met de tent T1, en de zandsteen, de baksteen en de jukbrug over vier. Het wegdek van de stenen brug ligt 26 pixels
+  boven het maaiveld, dat van het hout 15 (de boogbrug 10 tot 13 hoger in het midden).
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
