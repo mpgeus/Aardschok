@@ -122,7 +122,8 @@ schuift het beeld), binnen 8 tegels van die boerderij en binnen bereik, van 12 t
 gebouw. Een boerderij neemt meer dan één veld van haar soort. Een veld kost alleen werk: de
 bouwers rooien het (een boom geeft 2 hout) en ploegen of planten het, een akker 0,05 werkdag per tegel en een wijngaard
 0,1; tot het af is, ligt het in goud. Een akker die vóór 1 bloeimaand af is, zaaien de boeren nog in van het graan uit
-de kar (de eerste lente is 60 dagen, zo'n 5 uur op 1×), anders in de lente erna; een wijngaard krijgt een rij ranken om
+de kar (de eerste lente is 60 dagen, zo'n 5 uur op 1×), anders in de lente erna, ook als zijn boerderij nog niet af is
+(jij legt de akker; Marcel, 17 okt: "de speler bouwt nu akkers"); een wijngaard krijgt een rij ranken om
 de rij, en het gezin van de wijnboerderij plukt hem in wijnmaand.
 De boer ontgint niet zelf (`js/ontginnen.js` slaapt): in een proef kostte een stuk bos hem 41 tot 87 dagen, en dan mis je
 de eerste lente. Een boerderij zonder akker wil geen handen: haar boer werkt elders of bouwt mee. Een wijnboerderij
