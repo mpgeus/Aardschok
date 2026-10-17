@@ -1409,7 +1409,28 @@ Marcel, 17 okt, na zijn meting van de heuvels in Firefox (bij L, "Stap c"): **"M
 beter"**. Hoe het nu is (`opmerkingen.md`, "Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet"): het
 proefdorp op eiland 5, helemaal uitgezoomd (0,35), kost in Firefox 24,8 ms tekenen (38 beelden per seconde; met heuvels
 28,9 en 29), in Chromium en Edge 16 à 24 ms; dichtbij 60 beelden per seconde. Het meeste is rekenwerk van het spel per
-ding in beeld, ver uitgezoomd zo'n 4000 (vooral bomen). Het plan volgt.
+ding in beeld, ver uitgezoomd zo'n 4000 (vooral bomen).
+
+**Wat het meten liet zien** (17 okt, Chromium met de videokaart, vlak, zoom 0,35, een profiel per fase): in het vak dat
+het spel per beeld langsloopt, liggen zo'n 9500 dingen: 6560 in het zwart (land dat je niet kent), 2414 in het grijs
+(bijna alle bomen) en 547 in zicht. Alle 9500 krijgen het hele werk (`T.voorwerpenIn`, `T.isZichtbaar`, `isGebakken`,
+de diepte, een item in de tekenlijst, de doorkijk), en pas `mistOverLijst` gooit de 6560 in het zwart eruit. Van wat
+blijft, tekent de lijst elk ding (`tekenVoorwerp`: het plaatje kiezen, `isPlat`, `onthoudVoorwerp`), en
+`tekenZonneschaduw` loopt de hele lijst nog eens langs voor de schaduwen. De 2400 bomen in het grijs staan stil (in het
+grijs loopt niemand) en worden toch elk beeld opnieuw opgebouwd.
+
+**Het plan (Claude):**
+- **1, wat je niet ziet, niet rekenen** (geen verschil in beeld): de mist vóór de tekenlijst, per tegel één vraag, zodat
+  wat in het zwart ligt niet eerst het hele werk krijgt.
+- **2, per ding het vaste werk eens** (geen verschil in beeld): wat voor een boom niet verandert (welk plaatje, plat,
+  gebakken, de diepte), onthouden in plaats van elk beeld opnieuw, en minder losse dingen per item.
+- **3, keuzes met een verschil in beeld** (na 1 en 2, op de meting): (a) het bos in het grijs in de grondbuffer bakken,
+  dan wuiven de bomen in het grijs niet meer en tellen ze niet meer per stuk (de grootste winst ver uitgezoomd); (b) ver
+  uitgezoomd geen zonneschaduw per boom.
+- **4, later en groot**: de videokaart de diepte zelf laten doen, met vaste buffers per stuk land, zodat duizenden
+  bomen geen werk per beeld meer zijn; een verbouwing van `js/gl.js`.
+
+Na elke stap meten, om en om tegen de stand ervoor, en Marcel meet in Firefox.
 
 ## Af (sinds 11 okt)
 
