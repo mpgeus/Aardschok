@@ -75,20 +75,15 @@ wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en
 eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
 volgende is stuk c**, de roverskampen: het plan bij I is besloten (Marcel: "V2 G2 P1 B1", en sturen naar land dat je
-niet kent). **c0 is af** (17 okt, op de branch `ccr-b0684dee-kk0n5b`; `spel.md`, bij "Op tocht"): rechts op land dat je
-niet kent, in beeld of op de minikaart, en je mannen gaan erheen, ook naar de andere kant van het eiland. Het liet zien
-dat het eiland te voet in stukken gebroken is (`opmerkingen.md`). **L1 is af** (17 okt, op dezelfde branch; Marcel:
-"L1"; `code.md` bij `js/eiland.js`): elke weg heeft zijn bruggetje, ook breed en schuin, en loopt erover; nu liggen alle
-dorpsplekken, de stad en het kasteel te voet in één stuk land. **De bruggen zijn in het spel** (17 okt, op dezelfde
-branch; Marcel: "Goed zo, zet ze in het spel"; `beeld.md`, "De bruggen"): drie tegels breed, oud, steen of hout naar de
-plek, en wie erop loopt gaat mee omhoog. Het volgende is c1, de kampen: **de tent is T1** (Marcel, 17 okt: grijsgroen en
-vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; op de proefplaat goedgekeurd met de bruggen).
-**Vraag R is af** (17 okt, op dezelfde branch; Marcel: "De bruggen moeten in 8 richtingen", "Zoals hoe de poppetjes
-lopen", "r2, zet maar in het spel"; `beeld.md`, "De bruggen"; `code.md` bij `js/eiland.js`): een brug ligt ook schuin,
-haaks over het water, vier rijen breed.
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0, L1 en de bruggen zijn af (met Marcels punten op de
-stenen, de oprit en het wegdek: `beeld.md`), en vraag R ook; het volgende is c1. Let op:
-CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
+niet kent). **c0, L1, de bruggen en vraag R zijn af** (17 okt, in `main`): rechts op land dat je niet kent, in beeld of
+op de minikaart, en je mannen gaan erheen (`spel.md`, bij "Op tocht"); elke weg heeft zijn brug en loopt erover, zodat
+alle dorpsplekken, de stad en het kasteel te voet in één stuk land liggen (L1, `code.md` bij `js/eiland.js`); en de
+bruggen zijn in het spel: drie tegels breed (schuin vier rijen, haaks over het water), oud, steen of hout naar de plek,
+en wie erop loopt gaat mee omhoog (`beeld.md`, "De bruggen", met Marcels punten op de stenen, de oprit en het wegdek).
+**Het volgende is c1, de kampen** (het plan bij I, "Stuk c in detail": V2, G2, P1, B1): **de tent is T1** (Marcel, 17
+okt: grijsgroen en vuil doek, roet bij de nok, twee lappen gestolen goed, rafels; goedgekeurd op de proefplaat met de
+bruggen, `gereedschap/pixelart/kamp.cjs`, nog niet in het vel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal
+eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
