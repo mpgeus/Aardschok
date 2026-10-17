@@ -74,7 +74,8 @@ in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is va
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
 eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
-volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). **Bezig in sessie
+`ccr-b0684dee-kk0n5b`** (17 okt): stuk c, het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
