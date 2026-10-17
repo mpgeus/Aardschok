@@ -766,7 +766,7 @@
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
-    tekenZonneschaduw(ctx, S, lijst);
+    const metSchaduw = tekenZonneschaduw(ctx, S);
     // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
     // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
     tekenMist(ctx, S.dorp, w, vak);
@@ -784,10 +784,12 @@
     }
     const volgorde = tekenVolgorde(lijst);
     voorsteKijkgaten(volgorde, kijkgaten);
-    // De lantaarns die hierna een gat krijgen (tekenLantaarn): pas nu, na de schaduwen, die de lijst ook tekenen.
+    // De lantaarns die hierna een gat krijgen (tekenLantaarn).
     lantaarnGaten = { doek: ctx, gaten: [], wacht: [] };
     for (const item of volgorde) {
+      if (metSchaduw) ctx.werptSchaduw = !item.zonderSchaduw;
       tekenItem(item);
+      if (metSchaduw) ctx.werptSchaduw = false;
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
     tekenSchoorsteenRook(ctx, S);
@@ -1254,23 +1256,24 @@
   }
 
   // De schaduwen van de zon (werklijst vraag 125, B, de proefplaat; Marcel, 4 okt: "B graag"): alles wat in de tekenlijst
-  // staat, nog een keer, als silhouet scheef over de grond vanaf zijn onderrand (js/gl.js, beginSchaduw), in de richting
-  // en de lengte die de zon zegt (T.zonStand in js/dag.js). De silhouetten worden één vlak, zodat twee schaduwen over
-  // elkaar niet donkerder zijn, en dat gaat over de grond, onder alles wat erop staat. Alleen met de videokaart, buiten, en
-  // met de spelregel "Schaduwen" op "Met de zon". De plaatjes van het spel hebben geen schaduw op de grond (de bouwer
-  // snijdt ze zonder); alleen onder een figuur ligt het ovaaltje van tekenWezen, als de plek waar hij staat.
-  function tekenZonneschaduw(ctx, S, lijst) {
+  // staat en een schaduw heeft, als silhouet scheef over de grond vanaf zijn onderrand, in de richting en de lengte die de
+  // zon zegt (T.zonStand in js/dag.js). De silhouetten worden één vlak, zodat twee schaduwen over elkaar niet donkerder
+  // zijn, en dat gaat over de grond, onder alles wat erop staat. Alleen met de videokaart, buiten, en met de spelregel
+  // "Schaduwen" op "Met de zon". De plaatjes van het spel hebben geen schaduw op de grond (de bouwer snijdt ze zonder);
+  // alleen onder een figuur ligt het ovaaltje van tekenWezen, als de plek waar hij staat. Sinds 18 okt (vraag 178, B3)
+  // maakt js/gl.js de silhouetten uit de plaatjes van de lijst zelf (schaduwHier): hier komt het masker, en elk item
+  // zegt bij het tekenen of het een schaduw werpt (ctx.werptSchaduw). Tot dan tekende dit de hele lijst een tweede keer.
+  // Geeft true als er schaduwen zijn.
+  function tekenZonneschaduw(ctx, S) {
     const L = T.LICHT_INSTELLINGEN;
-    if (!L.zonneschaduw || !ctx.beginSchaduw || !S.kalender || !S.wereld.buiten || !metSprites()) return;
+    if (!L.zonneschaduw || !ctx.schaduwHier || !S.kalender || !S.wereld.buiten || !metSprites()) return false;
     const z = T.zonStand(S.kalender.dag);
-    if (z.sterkte <= 0.01) return;
+    if (z.sterkte <= 0.01) return false;
     // Een richting over de grond, op het scherm: een tegel is 64 breed en 32 hoog, dus de y gaat half mee.
     const sx = ((z.x - z.y) / Math.SQRT2) * z.lengte;
     const sy = ((z.x + z.y) / (2 * Math.SQRT2)) * z.lengte;
-    ctx.beginSchaduw(sx, sy);
-    for (const item of lijst) if (!item.zonderSchaduw) tekenItem(item);
     const k = L.schaduw;
-    ctx.eindSchaduw(k.sterkte * z.sterkte, [k.r / 255, k.g / 255, k.b / 255]);
+    return ctx.schaduwHier(sx, sy, k.sterkte * z.sterkte, [k.r / 255, k.g / 255, k.b / 255]);
   }
 
   // De lampen die nu branden, als plassen licht op het scherm: { x, y, rx, ry, k: [r, g, b] }, met k wat de lamp in het
@@ -2822,7 +2825,13 @@
       if (sneeuwStuk && raster) T.tekenGerasterd(ctx, sneeuwStuk, p.x, p.y, helder, doorkijk);
       else if (sneeuwStuk) T.sprites.teken(ctx, sneeuwStuk, p.x, p.y, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
-      if (!raster && gaten) for (const { e, sterkte } of gaten) T.tekenKijkgat(ctx, S, e, sterkte, v);
+      if (!raster && gaten) {
+        // Het kijkgat werpt geen schaduw (js/gl.js, werptSchaduw): wie erachter staat, heeft zijn eigen.
+        const werpt = ctx.werptSchaduw;
+        if (werpt) ctx.werptSchaduw = false;
+        for (const { e, sterkte } of gaten) T.tekenKijkgat(ctx, S, e, sterkte, v);
+        if (werpt) ctx.werptSchaduw = true;
+      }
       return;
     }
     // De pilaar staat nog niet in de kunst; die blijft vlakken.

@@ -755,18 +755,34 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zonder WebGL (het 2D-doek) moet kloppen, maar hoeft niet snel te zijn; meten en sneller maken doen we met de kaart.
   Wat het tekenen nog sneller kan maken (een dieptebuffer, vaste buffers per stuk, en de rest), met waar de tijd nu
   zit: `ontwerp/snelheid.md` (vraag 178).
-- `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL die zich voordoet als het 2D-doek,
-  zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;
-  de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
-  opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
-  Wat klein is en niet meer verandert (een plaatje, een doek met versie 1), staat op een paar grote texturen, de bladen
-  (`plekOpBlad`), zodat een beeld in een paar tientallen opdrachten gaat, niet in een per plaatje (10 okt: Firefox haperde
-  ver uitgezoomd). Eén opdracht (de rij, `plekVoor` en `legRijAf`) tekent uit tot `RIJ_TEXTUREN` (8) texturen tegelijk:
-  elk hoekpunt zegt op welke plaats zijn textuur staat (`aBron`), en de rij breekt pas bij een negende textuur of een
-  andere mengstand. Een plaatje staat met vier hoeken in de rij, en een vaste lijst nummers op de kaart (`maakIndex`,
-  `drawElements`) maakt er twee driehoeken van; een losse driehoek (een vorm) krijgt zijn derde hoek dubbel, en
-  `MAX_HOEKEN` (65536, nummers van 16 bits) gaan er hooguit in één opdracht (tot 17 okt zes hoeken per plaatje, een derde
-  meer naar de kaart). Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
+- `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL2 die zich voordoet als het
+  2D-doek, zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart
+  zelf; de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer
+  die opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
+  **Sinds 18 okt WebGL2** (vraag 178, B5 met B3 en E1, na de renderproef, `gereedschap/pixiproef/evaluatie.md`; zonder
+  WebGL2 het 2D-doek, zoals zonder kaart): **een plaatje is één instantie** (`zetInst`, `VERT_INST`, `PER_INST` = 20:
+  de vier hoeken, de plek op de textuur, een kleur, de plaats van de textuur, een vlag, de verhouding voor de schaduw en
+  het grijs), en ook een vlak en een driehoek van een vorm, zodat ze in dezelfde rij passen; alleen een plaatje binnen
+  vierhoeken (`tekenUitgeknipt`) gaat nog als hoeken (`hoekH`, `VERT_BEELD`). De hoeken rekent JavaScript uit, niet de
+  shader: anders rondt het net anders af. **Wat klein is en niet meer verandert** (een plaatje, een doek met versie 1),
+  staat op de lagen van één textuurstapel (`TEXTURE_2D_ARRAY` van 2048 bij 2048, de bladen, `plekOpBlad`; tot 18 okt
+  losse texturen van 4096, elk meteen 64 MB): wat erop staat, kost geen plaats in de rij; de stapel begint met vier lagen
+  en groeit (`stapelVoor`, de kaart kopieert de lagen zelf). **Een beeld gaat pas in `G.klaar` naar de kaart**: elke rij
+  is een opdracht in een lijst (`legRijAf`, `doe` voor wat zelf tekent: een verloop, de mist, het licht), de hoeken en de
+  plaatjes van het hele beeld gaan in één keer, en elke rij tekent vanaf zijn eigen begin in die buffer (`hoekBron`,
+  `instBron`). Een doek dat in één beeld vaker anders getekend wordt (het kijkgat), krijgt daarom per keer een nieuwe
+  textuur (`opruimen`). Een textuur staat op de bron zelf (`bron.opDeKaart`), niet in een WeakMap (E1), en `drawImage`
+  maakt geen lijstje per aanroep. Gemeten om en om (`npm run tekenmeting -- --tegen HEAD --videokaart`; 18 okt, vlak):
+  de processor ver uitgezoomd overdag een kwart minder (11,0 naar 8,3 ms op 35%), 's avonds gelijk, met heuvels 0,67 à
+  0,92 keer; met op de kaart wachten (een pixel teruggelezen elk beeld) 's avonds 5% meer, omdat de kaart pas in
+  `G.klaar` begint (de spellus wacht niet). Het beeld is gelijk, op 100% en 35% op 0,007% na; op precies 50% valt elke
+  pixel op de grens van twee texels, en daar kiest de textuurstapel op 0,3% van de pixels de buurtexel (de oude weg net
+  zo goed willekeurig, en per videokaart anders; E4, afronden op 50%, maakt het vast). Een opdracht (de rij,
+  `plekVoor`) tekent uit tot `RIJ_TEXTUREN` (8) losse texturen tegelijk naast de stapel: elk plaatje zegt waar zijn
+  textuur staat (`bron`; onder nul een laag van de stapel), en de rij breekt pas bij een negende textuur, een andere
+  mengstand of de wissel tussen hoeken en plaatjes. Een vorm als hoeken staat met vier hoeken in de rij, en een vaste lijst
+  nummers op de kaart (`maakIndex`, `drawElements`) maakt er twee driehoeken van, met `MAX_HOEKEN` (65536, nummers van 16
+  bits) hooguit in één opdracht. Tot 17 okt brak elke andere textuur de rij, en een plaatje komt op het blad waar plaats is als het
   voor het eerst in beeld komt: in de lente (een naaldboom houdt zijn zomervel) en met elke nieuwe stand in de wind
   stonden de bomen na een paar speeldagen op twee bladen door elkaar, en werden het 800 opdrachten per beeld in plaats
   van 60, wat in Firefox per aanroep meer kost dan in Chrome (Marcel, 17 okt: "performance is belangrijk spelelement.
@@ -783,8 +799,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   halve maat (de kleur van het uur, `T.lichtKleurVan` in `js/dag.js`, en per lamp een warme plas die flakkert,
   `lichtenInBeeld` en `T.LICHT_INSTELLINGEN` in `js/tekenen.js`), waarmee de wereld vermenigvuldigd wordt
   (`tekenLichtkaart`); zonder videokaart blijft het de donkere laag van hiervoor. **De schaduwen** (vraag 125, B): wat in
-  de tekenlijst staat, nog een keer als silhouet scheef over de grond (`tekenZonneschaduw`, `T.zonStand` in `js/dag.js`),
-  op een masker dat in één keer over de grond gaat (`beginSchaduw`, `eindSchaduw`); de spelregel "Schaduwen".
+  de tekenlijst staat, als silhouet scheef over de grond (`tekenZonneschaduw`, `T.zonStand` in `js/dag.js`), op een
+  masker dat in één keer over de grond gaat; de spelregel "Schaduwen". Sinds 18 okt (B3) uit de plaatjes van de lijst
+  zelf: `schaduwHier` zet waar het masker komt, en `js/tekenen.js` zet per item `werptSchaduw` (aan, tenzij
+  `zonderSchaduw`; uit voor het kijkgat); `G.klaar` tekent eerst het masker uit de rijen met zo'n plaatje
+  (`maskerRonde`, `VERT_INST` met `uZon`). Tot dan tekende `js/tekenen.js` de hele lijst een tweede keer, tussen
+  `beginSchaduw` en `eindSchaduw`.
   **De mist** (B2c, `js/mist.js`): elk hoekpunt heeft een vijfde getal, hoeveel kleur eruit gaat (`aGrijs`; het filter
   `grayscale(..) brightness(..)` zet het, `grijsNu`), zodat wat in het grijs staat zonder extra opdrachten grijs wordt; en
   `tekenMist` kopieert wat er tot dan getekend is (de grond en de schaduwen) naar een textuur en legt het ontkleurd en

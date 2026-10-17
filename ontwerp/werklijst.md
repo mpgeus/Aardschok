@@ -21,9 +21,11 @@ het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
 **Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P):
 helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen, 38 beelden per seconde; Chromium en
-Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (18 okt, de sessie "PixiJS v8
-evaluatie voor Aardschok"; Marcel: "Neem het over"): B5, `js/gl.js` naar WebGL2 met instanties en een textuurstapel.
-**A1 en A2 zijn af** (bij P; `snelheid.md`): ver uitgezoomd 35 à 47% minder per beeld, en in beeld dezelfde plaatjes.
+Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **A1 en A2 zijn af** (bij P; `snelheid.md`): ver uitgezoomd 35 à
+47% minder per beeld, en in beeld dezelfde plaatjes. **B5 met B3 en E1 is af** (18 okt, in `main`; `code.md` bij
+`js/gl.js`): WebGL2, een plaatje als instantie, de bladen als textuurstapel, en de schaduwen uit de plaatjes zelf, zodat
+`js/tekenen.js` de lijst niet meer twee keer tekent; overdag ver uitgezoomd een kwart minder voor de processor (11,0
+naar 8,3 ms op 35%), 's avonds gelijk, hetzelfde beeld. Niet in Firefox gemeten (Marcel). Het volgende is B1 en B2.
 **De renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en
 `gereedschap/pixiproef/evaluatie.md`): advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en
 B2), niet naar Pixi of WebGPU. Marcel koos B5 als volgende stap (18 okt).
@@ -152,12 +154,12 @@ stenen huizen. **Ronde 3 is af.**
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
   `plaat.png`, en `beeld.md`, "De andere materialen". Dan: welke goed zijn, en wat anders moet; daarna de haken in de
   bouwer.
-- **Ver uitgezoomd in Firefox na A1 en A2, en dan B** (vraag 178, 17 okt; bij P): meet zoals bij de heuvels (het
-  proefdorp, F2, helemaal uitgezoomd; eerst 24,8 ms vlak en 28,9 met heuvels), en kies of B de volgende stap is: de
-  dieptebuffer en vaste buffers per stuk (`snelheid.md`, B1 tot B4), groot werk in `js/gl.js`, je ziet niets anders.
-  De renderproef (`snelheid.md`, E) stelt eerst B5 voor (WebGL2 met instanties en een textuurstapel, met B3 en E1; in de
-  proef ver uitgezoomd 3,5 naar 1,3 ms), dan B1 en B2 (0,6 ms); E3 (mipmaps ver uitgezoomd) en E4 (afronden op 50%) zie
-  je wel: eerst een proefplaat.
+- **Ver uitgezoomd in Firefox na A1, A2 en B5, en dan B1 en B2** (vraag 178, 17 en 18 okt; bij P): meet zoals bij de
+  heuvels (het proefdorp, F2, helemaal uitgezoomd; eerst 24,8 ms vlak en 28,9 met heuvels), ook of het spel in Firefox
+  nog goed tekent (B5 is WebGL2, en hier alleen in Chromium en Electron getoetst), en kies of B1 en B2 de volgende stap
+  zijn: de dieptebuffer en vaste buffers per stuk (`snelheid.md`), groot werk in `js/gl.js`, je ziet niets anders; in de
+  renderproef ver uitgezoomd 1,3 naar 0,6 ms. E3 (mipmaps ver uitgezoomd) en E4 (afronden op 50%) zie je wel: eerst een
+  proefplaat.
   Marcel koos eerst sneller en dan d van de heuvels ("Maar de perfomance moet echt wel veel beter"). Bij de heuvels
   (vraag 174, c) **wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
   houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest

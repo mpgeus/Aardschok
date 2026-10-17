@@ -13,7 +13,14 @@
 //   npm run tekenmeting -- 1920x1080@1 --edge            idem in Edge
 //   ... --hoogte                                         het land met heuvels (de spelregel "Height" op "Hills"; vraag 174, c)
 //   ... --dagen 3                                        eerst drie speeldagen op 30×, met elk beeld getekend
+//   npm run tekenmeting -- --tegen HEAD --videokaart     om en om tegen een oudere stand (hieronder, tegenStand)
+//   ... --optie schaduwen=uit                            een spelregel voor allebei (alleen met --tegen)
 // De uitslag in gereedschap/schermen/uit/tekenmeting*.json (niet in git), met de vlaggetjes in de naam.
+//
+// Om en om (--tegen REF, 18 okt; snelheid.md, "Meten"): de stand REF uit git in een losse werkkopie, met een eigen server
+// op poort 8139, en de werkmap op 8123, in één browser, zodat wat de pc ernaast doet beide even raakt. Per scène
+// --rondes keer (5) elk 20 beelden, de volgorde elke ronde om, en daarna één beeld van elk pixel voor pixel vergeleken
+// (een kanaal meer dan 8 van 255 is anders). Alleen 1920×1080; --hoogte en --dagen gelden voor allebei.
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -28,6 +35,10 @@ const EDGE = args.includes('--edge');
 const VIDEOKAART = EDGE || args.includes('--videokaart');
 const HOOGTE = args.includes('--hoogte');
 const DAGEN = args.includes('--dagen') ? Number(args[args.indexOf('--dagen') + 1]) : 0;
+const TEGEN = args.includes('--tegen') ? args[args.indexOf('--tegen') + 1] : null;
+const RONDES = args.includes('--rondes') ? Number(args[args.indexOf('--rondes') + 1]) : 5;
+// --optie id=keuze: een spelregel (js/opties.js) voor allebei, zoals schaduwen=uit (alleen bij --tegen).
+const OPTIES = args.map((a, i) => (a === '--optie' ? args[i + 1].split('=') : null)).filter(Boolean);
 // Zonder vlaggetjes tekent Playwright met SwiftShader, een videokaart in software: dan tekent het spel zonder (js/gl.js,
 // geenKaart). De echte videokaart krijgt alleen de volle Chromium in het nieuwe headless, met deze vlaggen (17 okt).
 const START = VIDEOKAART ? { channel: EDGE ? 'msedge' : 'chromium', args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=d3d11'] } : {};
@@ -56,6 +67,141 @@ function inclusief(prof) {
   }
   const top = Object.entries(eigen).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([k, v]) => [k, Math.round(v / 1000)]);
   return { totaalMs: totaal / 1000, lagen: Object.fromEntries(Object.entries(uit).map(([k, v]) => [k, Math.round(v / 100) / 10])), topEigen: top };
+}
+
+// Een bladzijde met het spel, klaar om te meten: het proefdorp op eiland 5, de spellus stil, en het gereedschap van het
+// meten erbij (gereedschap/grootte/pagina.js, Meet).
+async function spelKlaar(page, url) {
+  await page.addInitScript(() => {
+    let n = 11;
+    Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
+    const orig = window.requestAnimationFrame.bind(window);
+    window.__stop = false;
+    window.requestAnimationFrame = (cb) => (window.__stop ? 0 : orig(cb));
+  });
+  await page.goto(url);
+  await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
+  await page.click('#menu [data-actie="nieuw"]');
+  if (await page.$('#menu [data-actie="ja"]')) await page.click('#menu [data-actie="ja"]');
+  await page.click('#menu [data-actie="begin"]');
+  await page.keyboard.press('Escape');
+  if (HOOGTE) await page.evaluate(() => Spel.zetOptie('hoogte', 'heuvels'));
+  for (const [id, keuze] of OPTIES) await page.evaluate(([id, keuze]) => Spel.zetOptie(id, keuze), [id, keuze]);
+  await page.evaluate(() => Spel.debug.proefdorp(5));
+  await page.evaluate(() => Spel.debug.stap(0.5));
+  if (DAGEN) await page.evaluate(async (dagen) => { const S = Spel.S; Spel.zetSnelheid(S, 30); const tot = S.kalender.dag + dagen; while (S.kalender.dag < tot) await Spel.debug.stap(1 / 30); Spel.zetSnelheid(S, 1); }, DAGEN);
+  await page.evaluate(() => { window.__stop = true; });
+  await page.addScriptTag({ path: path.join(WORTEL, 'gereedschap', 'grootte', 'pagina.js') });
+  page.setDefaultTimeout(180000);
+}
+
+// Om en om tegen de stand REF (--tegen; zie bovenaan).
+async function tegenStand(browser) {
+  const os = require('node:os');
+  const map = path.join(os.tmpdir(), 'aardschok-tegen-' + TEGEN.replace(/[^\w.-]/g, '_'));
+  try { execSync(`git worktree remove --force "${map}"`, { cwd: WORTEL, stdio: 'ignore' }); } catch { /* er was er geen */ }
+  execSync(`git worktree add --detach "${map}" ${TEGEN}`, { cwd: WORTEL, stdio: 'ignore' });
+  const stand = execSync(`git -C "${map}" log -1 --format=%h`, { encoding: 'utf8' }).trim();
+  const oudServer = spawn(process.execPath, [path.join(map, 'server.cjs')], { cwd: map, env: { ...process.env, PORT: '8139' }, stdio: 'ignore' });
+  try {
+    for (let i = 0; i < 50; i++) {
+      const ok = await new Promise((k) => http.get('http://localhost:8139/', (r) => { r.resume(); k(true); }).on('error', () => k(false)));
+      if (ok) break;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    const pages = {};
+    for (const [naam, url] of [['oud', 'http://localhost:8139/'], ['nieuw', URL]]) {
+      const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
+      pages[naam] = await context.newPage();
+      await spelKlaar(pages[naam], url);
+    }
+    const scènes = [['dichtbij, dag', null, 12], ['dichtbij, avond', null, 21], ['0,5, dag', 0.5, 12], ['0,35, dag', 0.35, 12], ['0,35, avond', 0.35, 21]];
+    const uit = { tegen: TEGEN, stand, werkmap: execSync('git log -1 --format=%h', { cwd: WORTEL, encoding: 'utf8' }).trim(), rondes: RONDES, scènes: [] };
+    const zet = ([zoom, uur]) => async (page) => page.evaluate(async ([zoom, uur]) => {
+      const s = Spel.S; Meet.zetPlekken(uur); if (s.grond) s.grond.sleutel = ''; if (zoom) s.zoom = zoom; Meet.cameraOp(s.dorp.aanvoerder.tx, s.dorp.aanvoerder.ty);
+      for (let i = 0; i < 100; i++) { Spel.tekenBeeld(); if (Spel.sprites.bezig() === 0) break; await new Promise((r) => setTimeout(r, 50)); }
+    }, [zoom, uur]);
+    for (const [naam, zoom, uur] of scènes) {
+      for (const p of Object.values(pages)) await zet([zoom, uur])(p);
+      // Per beeld met de kaart erbij (een pixel teruggelezen, zoals Meet.teken), en de processor alleen (zonder wachten:
+      // zo loopt de spellus, en de kaart werkt dan tegelijk; js/gl.js stuurt een beeld sinds 18 okt pas in G.klaar).
+      const r = { naam, oud: [], nieuw: [], oudCpu: [], nieuwCpu: [] };
+      for (let i = 0; i < RONDES; i++) {
+        for (const kant of i % 2 ? ['nieuw', 'oud'] : ['oud', 'nieuw']) {
+          const x = await pages[kant].evaluate(([zoom, uur]) => {
+            const m = Meet.teken(zoom, 20, true, { uur });
+            const c = Meet.teken(zoom, 20, false, { uur });
+            Spel.debug.wacht();
+            return { p50: m.p50, cpu: c.p50, telling: { ...Spel.gl.telling } };
+          }, [zoom, uur]);
+          r[kant].push(x.p50);
+          r[kant + 'Cpu'].push(x.cpu);
+          r['telling ' + kant] = x.telling;
+        }
+      }
+      // Eén beeld van elk, pixel voor pixel: het doek van de videokaart (of het gewone), twee keer getekend, zodat wat per
+      // beeld bijwerkt (de doorkijk) gelijk staat, en op dezelfde klok van het scherm (de wind, het water, de rook).
+      const beeld = {};
+      for (const kant of ['oud', 'nieuw']) {
+        beeld[kant] = Buffer.from(await pages[kant].evaluate(([zoom, uur]) => {
+          const s = Spel.S; const z0 = s.zoom; const d0 = s.kalender.dag; if (zoom) s.zoom = zoom; s.kalender.dag = Math.floor(d0) + uur / 24;
+          const t = s.tijd; s.tijd = 1000; Spel.tekenBeeld(); s.tijd = 1000; Spel.tekenBeeld(); s.tijd = t;
+          const bron = (Spel.gl.kan() && Spel.gl.doek()) || document.getElementById('scherm');
+          const c = document.createElement('canvas'); c.width = bron.width; c.height = bron.height;
+          const k = c.getContext('2d'); k.drawImage(bron, 0, 0);
+          const d = k.getImageData(0, 0, c.width, c.height).data;
+          s.zoom = z0; s.kalender.dag = d0;
+          let bin = ''; for (let i = 0; i < d.length; i += 32768) bin += String.fromCharCode.apply(null, d.subarray(i, i + 32768));
+          return btoa(bin);
+        }, [zoom, uur]), 'base64');
+      }
+      let anders = 0;
+      const a = beeld.oud;
+      const b = beeld.nieuw;
+      for (let i = 0; i < Math.min(a.length, b.length); i += 4) {
+        if (Math.max(Math.abs(a[i] - b[i]), Math.abs(a[i + 1] - b[i + 1]), Math.abs(a[i + 2] - b[i + 2]), Math.abs(a[i + 3] - b[i + 3])) > 8) anders++;
+      }
+      // Wat anders is, rood op het nieuwe beeld (half zo licht), in uit/ (alleen als er iets anders is), met het oude en
+      // het nieuwe beeld ernaast.
+      if (anders) {
+        const url = await pages.nieuw.evaluate(([a64, b64]) => {
+          const a = Uint8Array.from(atob(a64), (c) => c.charCodeAt(0));
+          const b = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+          const bron = (Spel.gl.kan() && Spel.gl.doek()) || document.getElementById('scherm');
+          const c = document.createElement('canvas'); c.width = bron.width; c.height = bron.height;
+          const k = c.getContext('2d'); const d = k.createImageData(c.width, c.height);
+          for (let i = 0; i < d.data.length; i += 4) {
+            const v = Math.max(Math.abs(a[i] - b[i]), Math.abs(a[i + 1] - b[i + 1]), Math.abs(a[i + 2] - b[i + 2]), Math.abs(a[i + 3] - b[i + 3]));
+            if (v > 8) { d.data[i] = 255; d.data[i + 1] = 0; d.data[i + 2] = 0; } else { d.data[i] = b[i] >> 1; d.data[i + 1] = b[i + 1] >> 1; d.data[i + 2] = b[i + 2] >> 1; }
+            d.data[i + 3] = 255;
+          }
+          k.putImageData(d, 0, 0);
+          const uit = [c.toDataURL('image/png')];
+          for (const x of [a, b]) {
+            const e = k.createImageData(c.width, c.height);
+            e.data.set(x.subarray(0, e.data.length));
+            k.putImageData(e, 0, 0);
+            uit.push(c.toDataURL('image/png'));
+          }
+          return uit;
+        }, [beeld.oud.toString('base64'), beeld.nieuw.toString('base64')]);
+        fs.mkdirSync(path.join(__dirname, 'uit'), { recursive: true });
+        ['verschil', 'oud', 'nieuw'].forEach((soort, i) => fs.writeFileSync(path.join(__dirname, 'uit', `tekenmeting-tegen-${soort}-${naam.replace(/[^\w]+/g, '-')}.png`), Buffer.from(url[i].split(',')[1], 'base64')));
+      }
+      const med = (l) => { const x = [...l].sort((p, q) => p - q); return Math.round(x[x.length >> 1] * 100) / 100; };
+      Object.assign(r, { oudMed: med(r.oud), nieuwMed: med(r.nieuw), oudCpuMed: med(r.oudCpu), nieuwCpuMed: med(r.nieuwCpu), verschilProcent: +((anders / (a.length / 4)) * 100).toFixed(3), zelfdeMaat: a.length === b.length });
+      uit.scènes.push(r);
+      const to = r['telling oud'];
+      const tn = r['telling nieuw'];
+      console.log(`${naam.padEnd(16)} oud ${String(r.oudMed).padStart(6)} ms  nieuw ${String(r.nieuwMed).padStart(6)} ms  (${(r.nieuwMed / r.oudMed).toFixed(2)}×; ` +
+        `zonder wachten ${r.oudCpuMed} → ${r.nieuwCpuMed}, ${(r.nieuwCpuMed / r.oudCpuMed).toFixed(2)}×)  ` +
+        `opdrachten ${to.opdrachten} → ${tn.opdrachten}, kladjes ${to.klad} → ${tn.klad}; anders ${r.verschilProcent}% van de pixels`);
+    }
+    return uit;
+  } finally {
+    oudServer.kill();
+    try { execSync(`git worktree remove --force "${map}"`, { cwd: WORTEL, stdio: 'ignore' }); } catch { /* al weg */ }
+  }
 }
 
 async function meet(browser, scherm) {
@@ -167,6 +313,14 @@ async function meet(browser, scherm) {
     for (let i = 0; i < 50 && !(await serverDraait()); i++) await new Promise((r) => setTimeout(r, 200));
   }
   const browser = await pw.chromium.launch(START);
+  if (TEGEN) {
+    let uit;
+    try { uit = await tegenStand(browser); } finally { await browser.close(); if (server) server.kill(); }
+    fs.mkdirSync(path.join(__dirname, 'uit'), { recursive: true });
+    const naam = ['tekenmeting-tegen', TEGEN.replace(/[^\w.-]/g, '_'), EDGE ? 'edge' : VIDEOKAART ? 'videokaart' : null, HOOGTE ? 'heuvels' : null, DAGEN ? `${DAGEN}dagen` : null].filter(Boolean).join('-');
+    fs.writeFileSync(path.join(__dirname, 'uit', naam + '.json'), JSON.stringify(uit, null, 1) + '\n');
+    return;
+  }
   const alles = [];
   try { for (const s of SCHERMEN) alles.push(await meet(browser, s)); } finally { await browser.close(); if (server) server.kill(); }
   fs.mkdirSync(path.join(__dirname, 'uit'), { recursive: true });

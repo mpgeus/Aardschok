@@ -104,7 +104,10 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
   dan beslist niemand per ding meer.
 - **B5, WebGL 2.** Een stapel texturen in één (geen grens van acht), meer exemplaren van één plaatje in één opdracht
   (instancing: één punt per boom in plaats van vier hoeken), en betere buffers. Electron, Chrome, Edge en Firefox
-  kunnen het al jaren, de Steam Deck ook. Een overstap in `js/gl.js`. **Gemeten in de renderproef** (17 okt, E):
+  kunnen het al jaren, de Steam Deck ook. Een overstap in `js/gl.js`. **Gebouwd op 18 okt, met B3 en E1** (`code.md`
+  bij `js/gl.js`): in het spel overdag ver uitgezoomd een kwart minder voor de processor (11,0 naar 8,3 ms op 35%,
+  vlak; met heuvels 11,7 naar 9,4), 's avonds gelijk, en hetzelfde beeld; de rest van de tijd zit in `js/tekenen.js` per
+  ding, en daar gaat B1 en B2 over. **Gemeten in de renderproef** (17 okt, E):
   met instanties, een textuurstapel en de schaduwen in de shader (B3), en verder de lijst zoals nu, ver uitgezoomd 3,5
   naar 1,3 ms per beeld; met vaste rijen en een dieptebuffer erbij (B1 en B2) 0,6 ms. WebGPU met dezelfde techniek is
   niet sneller (E).

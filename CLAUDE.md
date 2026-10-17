@@ -135,7 +135,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
 - **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (uit Tiled),
   `gebied`, `minikaart`.
-- **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
+- **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL2), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
   licht), `ui` (één weg voor een venster), `dialoog`, `balk` (onderaan), `hud`, `huisbriefje`,
   `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D).
 - **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
