@@ -74,7 +74,7 @@ in `main`; Marcel: "A1"; `spel.md`, "Het wild is van de wereld"): het wild is va
 wereld werkt het één keer per kaart bij, wie het aangaat zijn dorp zegt het en vecht, en elke roedel gooit met zijn
 eigen dobbelsteen. **Stuk b is af** (16 okt, in `main`; Marcel: "D1 e1"; `spel.md`, "Het wild is
 van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als het opengaat, zoals zijn bomen. **Het
-volgende is stuk c**, de roverskampen (eerst een plan voor Marcel). **Bezig in sessie
+volgende is stuk c**, de roverskampen: het plan staat bij I en wacht op Marcel (V, G, P, B). **Bezig in sessie
 `ccr-b0684dee-kk0n5b`** (17 okt): stuk c, het plan voor Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
@@ -889,6 +889,35 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   hij weg en is weg, zoals nu (E2, naar het dichtste open bos met plaats, ook bij een ander dorp, staat in
   `opmerkingen.md`). Erbij: een thuis 18 tegels van elk ander, ook over de grens van een stuk; de jager schiet wat in zijn
   bereik is; het opslaan een versie omhoog.
+  **Stuk c in detail** (Claude, 17 okt; wacht op Marcel). Wat het besluit nog niet dekt: een kamp ver van de dorpen
+  ligt in land dat nog dicht is (het land bestaat pas waar je mensen komen, B2b), je stuurt alleen naar land dat je kent
+  (*You do not know that land*, met een zicht van 7 tegels), en een soldaat met dagdienst loopt 's avonds naar huis om te
+  slapen. Het plan, in vier delen. **c1, de kampen op het eiland**: een nieuwe soort plek (`kamp`) uit het nummer van het
+  eiland, zoals het kasteel en de dorpsplekken: drie per eiland (werkbank), minstens 150 tegels van elke dorpsplek en 40
+  van een weg, in het bos op het hoofdland. Waar het ligt, komt uit het nummer; wat het doet (zijn mannen, zijn buit, of
+  het verslagen is) staat op de kaart (`w.kampen`) en wordt bewaard. Gaat zijn stuk open, dan staat het er: een tent per
+  twee man en een vuur (de tent en het kampvuur van het lege begin, in een roverskleur; eerst in woorden, dan één
+  proefplaat). **c2, de bende**: een kamp begint met 2 man en krijgt er elk jaar een bij, tot 4 (de getallen van de wilde
+  rovers nu), en wie uit een dorp wegtrekt, gaat naar het dichtste kamp. Ze hebben een naam, zijn van de wereld (geen
+  dorp; elk kamp een eigen dobbelsteen, zoals een roedel), en staan thuis rond hun vuur. **c3, de overval komt uit een
+  kamp**: op het rooster van nu (per dorp twee keer per jaar, de eerste na 60 dagen, de helft 's nachts), met de mannen
+  van het dichtste kamp dat er heeft; is dat op pad of leeg, dan niet. Ze lopen over de wegen; door land dat dicht is,
+  reizen ze buiten beeld (zoals de bode), en ze komen je land op waar hun weg het binnenkomt. Met de buit gaan ze terug,
+  en in hun kamp ligt hij (K1). De hinderlaag op de bode komt ook uit het dichtste kamp. De wilde rovers en de bende van
+  het dorp (`D.rovers.bende`) gaan eruit. (In d kiest het kamp zelf zijn dorp en zijn tijd, en leert het.) **c4, een kamp
+  opruimen**: valt de laatste man, thuis of onderweg, dan is het kamp verslagen: de tenten gaan neer, het vuur gaat uit,
+  de buit ligt er, en het komt niet terug (R1). Te kiezen: **V** hoe je een kamp vindt: V1 na de eerste overval ken je
+  het (ze lieten een spoor: het kamp en zijn pad staan op de minikaart), V2 zelf zoeken, V3 je kent ze vanaf het begin.
+  **G** hoe je er komt: G1 rechts op een kamp dat je kent (in beeld of op de minikaart), *Attack the camp*: je mannen gaan
+  op tocht over de wegen, het land gaat open waar ze komen, en op tocht blijven ze in dienst, dag en nacht, tot ze terug
+  zijn (hetzelfde lopen dient later de tocht naar het kasteel, en de rovers in d); G2 alleen naar land dat je kent, zoals
+  nu. **P** de weg naar een kamp: P1 een smal paadje van de dichtste weg naar het kamp, gelegd zoals de wegen (langs de
+  passen, over een brug), zodat elk kamp te bereiken is en je het pad kunt volgen; P2 geen paadje (dan zoekt de tocht
+  dwars door land dat nog niet gemaakt is een weg, langs richels en rivieren: het moeilijkste en minst zekere). **B** de
+  buit naar huis: B1 de mannen nemen hem mee (zoveel per man als een rover draagt), en hij telt als ze terug zijn in je
+  bereik (een waar telt pas als hij binnen is); wat blijft liggen, haal je een tweede keer; B2 hij gaat meteen in de
+  voorraad. Voorstel: V1, G1, P1, B1. Erbij: het opslaan een versie omhoog, en het eiland verandert een beetje (de
+  paadjes door het bos), dus de toetsen die op een vast eiland spelen, kijken we na.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
