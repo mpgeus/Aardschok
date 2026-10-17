@@ -9,6 +9,24 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat stuk b van 6a2 liet zien** (16 okt, het wild per stuk land; buiten de stap gehouden): (a) `T.isBos` zonder het
+  jonge bos telt de bomen alleen binnen het vak om de dorpen (`T.kaartVak`, via `T.natuurBij`): daarbuiten is er volgens
+  hem nergens bos. Het wild telt nu per tegel (met het jonge bos); wie verder T.isBos vraagt (de raad, het bouwen), doet
+  dat bij een dorp, maar een regel die later ver van een dorp naar het bos vraagt, krijgt nee. (b) Er is nu meer wild rond
+  het begin (de rand van 16 tegels die bij het begin opengaat, heeft zijn eigen wild), en dat kost rekenwerk: tien
+  speldagen op 30× vragen in Node 4,1 s, waar het 1,9 s was (de speeltest duurt 7 in plaats van 3 minuten). Het meeste
+  gaat naar de volgers van een groep die in elkaar vastlopen (een omweg die er niet is, `omweg` in `js/lopen.js`: 12.000
+  keer in tien dagen, waarvan 8.600 zonder weg); dat deden ze al, het zijn er nu meer. Een volger die vastloopt, zou kunnen
+  wachten of op de plek van een ander gaan staan, in plaats van elke keer een omweg te zoeken. (c) In de speeltest van
+  16 okt (na stuk b) had eiland 1 aan het eind geen hout (was 1), 90 dagen kou en één dode van honger, en groeide
+  eiland 3 tot 27 in plaats van 33 mensen; of dat het wild is (meer herten voor de jager, meer roedels die een houthakker
+  laten schrikken) of een ander lot, is niet uitgezocht (de balans komt later). (d) Een stuk dat opengaat, kost voor zijn
+  wild hooguit zo'n 40 ms (gemeten in Node, met het land en het raster van het lopen al klaar): op 30× nog geen
+  hapering, maar wel iets. Het wild over meer tikken spreiden kan, als je het ziet.
+- **Wild dat zijn bos kwijtraakt, trekt naar de buren** (Claude, 16 okt, bij stuk b van 6a2; Marcel koos voor nu E1, "is
+  weg"): E2 was dat een groep die zijn bos kwijtraakt, naar het dichtste open bos met plaats trekt, ook als dat bij een
+  ander dorp ligt. Kap je je bos, dan stuur je je wolven naar je buurman: met twee spelers een reden om het bos te sparen,
+  of juist niet. Meer werk dan E1 (een nieuw thuis zoeken buiten het eigen stuk).
 - **Wat stuk a van 6a2 liet zien** (16 okt, het wild van de wereld; buiten de stap gehouden): (a) een wolf vlucht voor
   wie hem achterna zit (2,2 tegels per seconde), sneller dan de aanvoerder: stuur je hem op een wolf af (rechts klikken),
   dan staat *Fighting breaks out* in de balk en loopt de tijd op 1×, maar valt er geen klap, tot hij het opgeeft (dat was

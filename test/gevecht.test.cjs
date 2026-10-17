@@ -211,7 +211,7 @@ test('het gevecht is een status: een bericht met de plek, de tijd hooguit op 1×
 
 test('een wolf die je raakt: zijn roedel vecht terug, en na het gevecht gaat hij naar zijn hol', () => {
   const { S, D, w, een } = dorp();
-  T.werkBeestenBij(S, w);
+  T.zetWildBij(S, w); // het wild in de stukken land die open zijn (js/beesten.js)
   const wolf = w.wezens.find((e) => e.beest === 'wolf' && !e.dood);
   assert.ok(wolf, 'er zijn wolven in het bos');
   const G = wolf.groep;
