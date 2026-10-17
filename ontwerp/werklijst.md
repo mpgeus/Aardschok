@@ -964,6 +964,22 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   **De bruggen zijn in het spel** (17 okt; Marcel: "Goed zo, zet ze in het spel"; `beeld.md`, "De bruggen"; `code.md`
   bij `js/eiland.js` en `js/sprites.js`): drie tegels breed, steen of hout naar de plek, in twee lagen, en wie erop loopt
   gaat mee omhoog.
+  **c1 in detail** (Claude, 17 okt; wacht op Marcel: M). (1) **De plek**: na de wegen legt het eiland zijn kampen
+  (`legKampen` in `js/eiland.js`, in `E.plekken` als soort `kamp`), drie per eiland, in het woud op het hoofdland,
+  minstens 150 tegels van elke plek (dorp, stad, kasteel), 40 van een weg en 300 van elkaar (`T.EILAND_INSTELLINGEN.kampen`).
+  Het kiest met een eigen lot, zodat de dorpsplekken, hun namen en de wegen van elk eiland blijven wat ze zijn. (2) **Het
+  paadje** (P1): van het kamp naar de dichtste weg, met de zoektocht van de wegen (langs de passen, waar het goedkoopst
+  is), één tegel breed, als een lijn in `E.wegen` met `pad: true`; gaat het over water, dan krijgt het een brug zoals
+  elke weg (dezelfde code). Op het paadje en op de open plek om het vuur (straal 7) staan geen bomen. (3) **In het
+  spel**: gaat het stuk van een kamp open, dan staat het er, zoals het wild (`w.kampen`, bewaard): een tent per twee man
+  (de bende begint in c2 met twee: één tent, de tweede komt met de derde man) met de opening naar het vuur, en het vuur
+  van het lege begin, dat 's avonds en 's nachts brandt en overdag smeult; zijn licht zie je in het bos. De tent T1 komt
+  als rij `tent-rover` in het vel (`kamp.cjs`, `naar-spel.cjs --alleen kamp`). (4) **Erbij**: `Spel.debug.kampen()`
+  (waar ze liggen, hoe ver van je dorp; met `'erheen'` gaat het land open en kijkt de camera erheen), de kampen en hun
+  paadjes op de eilandplaat, het opslaan versie 21, en toetsen: drie kampen per eiland op de afstanden, en het paadje
+  aan de grond en te voet te halen vanaf elk dorp. De wilde rovers blijven tot c3. Te kiezen: **M** de minikaart: M1 een
+  kamp dat je mensen gezien hebben, krijgt een rood teken op de minikaart, zodat je het terugvindt; M2 geen teken.
+  Voorstel: **M1**.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
