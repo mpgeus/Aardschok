@@ -260,37 +260,28 @@
   // De pixels per vlakte-pixel van de buffers: 1 van dichtbij, minder ver uitgezoomd.
   const bufferSchaal = (S, dpr) => (S.zoom < BAK_ZOOM ? Math.min(1, S.zoom * dpr) : 1);
 
-  // De grootste en de kleinste hoogte van het land om de kaart (js/hoogte.js), voor wat een stuk van de grond moet
-  // tekenen: een tegel ligt zoveel hoger op het scherm dan zijn plek op de vlakte. Eén keer per hoogte.
-  const HOOGSTE = new WeakMap();
-  function hoogsteVan(w) {
-    if (!T.heeftHoogte(w)) return { hoog: 0, laag: 0 };
-    const hg = w.hoogte;
-    const was = HOOGSTE.get(hg);
-    if (was && was.versie === (hg.versie || 0)) return was;
-    let hoog = 0;
-    let laag = 0;
-    const d = 1;
-    const kaartvak = T.kaartVak(w);
-    for (let y = kaartvak.y - d; y <= kaartvak.y + kaartvak.h + d; y++) {
-      for (let x = kaartvak.x - d; x <= kaartvak.x + kaartvak.b + d; x++) {
-        const h = T.hoekHoogte(w, x, y, 0);
-        hoog = Math.max(hoog, h);
-        laag = Math.min(laag, h);
-      }
+  // De tegels die in rechthoek r van de vlakte iets tekenen, met de hoogte erbij (js/hoogte.js): een tegel ligt zoveel
+  // hoger op het scherm dan zijn plek op de vlakte, dus het vak gaat zo ver omlaag als de hoogste grond die daar ligt, en
+  // begint zo ver lager als de laagste. Die hoogte komt uit het vak zelf (T.hoogteIn), dus het groeit tot het past: een
+  // berg naast het dorp maakt het vak om het dorp niet groter (vraag 174, stap b1; tot dan was het de hoogte om de
+  // kaart, en daarbuiten 0).
+  function tegelsMetHoogte(w, r, rand = MARGE) {
+    let b = null;
+    for (let keer = 0; ; keer++) {
+      const vak = tegelsIn(w, b ? { x0: r.x0, y0: r.y0 + b.laag, x1: r.x1, y1: r.y1 + b.hoog } : r, rand);
+      if (!T.heeftHoogte(w)) return vak;
+      const nb = T.hoogteIn(w, vak.x0, vak.y0, vak.x1, vak.y1);
+      if ((b && nb.hoog <= b.hoog && nb.laag >= b.laag) || keer >= 8) return vak;
+      b = b ? { hoog: Math.max(b.hoog, nb.hoog), laag: Math.min(b.laag, nb.laag) } : nb;
     }
-    const uit = { versie: hg.versie || 0, hoog, laag };
-    HOOGSTE.set(hg, uit);
-    return uit;
   }
 
   // De tegels die in rechthoek r van de vlakte iets tekenen, als wat erop ligt zo ver (`rand`, zoals MARGE) buiten zijn
-  // midden uitsteekt: het vak eromheen (tegelsIn, met de hoogte erbij), en `binnen(x, y)` per tegel, op waar hij echt
+  // midden uitsteekt: het vak eromheen (tegelsMetHoogte), en `binnen(x, y)` per tegel, op waar hij echt
   // getekend wordt. Het vak van een kleine rechthoek staat in de ruit van het raster scheef; zonder `binnen` tekende
   // elk stuk van de grond twee keer zoveel tegels als erin vallen.
   function tegelsVoorStuk(w, r, rand) {
-    const { hoog, laag } = hoogsteVan(w);
-    const vak = tegelsIn(w, { x0: r.x0, y0: r.y0 + laag, x1: r.x1, y1: r.y1 + hoog }, rand);
+    const vak = tegelsMetHoogte(w, r, rand);
     const heuvels = T.heeftHoogte(w);
     vak.binnen = (x, y) => {
       const p = T.naarScherm(x, y);
@@ -475,6 +466,17 @@
       else for (const p of plekken) markeerOud(buf, w, { x: p.x1 - 1, y: p.y1 - 1, b: p.x2 - p.x1 + 3, h: p.y2 - p.y1 + 3 });
     }
     buf.kaart = { w, versie: kaart };
+    // Kwam er een vlak stuk bij (T.egaliseer, js/hoogte.js), dan de grond waar de glooiing anders werd, tot `vrijRond`
+    // tegels om het gebouw, en het licht nog twee tegels verder (T.lichtOpHoekpunt kijkt zo ver); tot vraag 174, stap b1
+    // alleen de voet van het gebouw, en lag er een ring grond op de oude hoogte.
+    const hg = w.hoogte || null;
+    if (buf.hoogte && buf.hoogte.hg !== hg) leegBuffer(buf);
+    else if (hg && buf.hoogte && buf.hoogte.versie !== (hg.versie || 0)) {
+      const plekken = T.hoogtePlekkenSinds(w, buf.hoogte.versie);
+      if (!plekken) leegBuffer(buf);
+      else for (const p of plekken) markeerOud(buf, w, { x: p.x1 - 2, y: p.y1 - 2, b: p.x2 - p.x1 + 5, h: p.y2 - p.y1 + 5 });
+    }
+    buf.hoogte = { hg, versie: hg ? hg.versie || 0 : 0 };
     const paden = zandVan(S);
     const zand = paden ? paden.zand : null;
     if (zand === buf.zand) return;
@@ -490,7 +492,7 @@
   // De stukken van de buffer die rechthoek r van tegels raken, opnieuw, één per beeld (buf.oud). In het vlak van het
   // scherm is r een ruit (T.naarScherm), met de rand van de grond (GRONDRAND), wat erop staat (PLAT_HOOG) en de hoogte erbij.
   function markeerOud(buf, w, r) {
-    const { hoog, laag } = hoogsteVan(w);
+    const { hoog, laag } = T.hoogteIn(w, r.x - 1, r.y - 1, r.x + r.b + 1, r.y + r.h + 1); // met de wanden van de buren
     const hoeken = [[r.x, r.y], [r.x + r.b, r.y], [r.x, r.y + r.h], [r.x + r.b, r.y + r.h]].map(([x, y]) => T.naarScherm(x, y));
     const x0 = Math.min(...hoeken.map((p) => p.x)) - GRONDRAND.rechts;
     const x1 = Math.max(...hoeken.map((p) => p.x)) + GRONDRAND.links;
@@ -557,7 +559,7 @@
     // Opengewerkt: de kamer van de aanvoerder.
     const open = w.kamers.filter((k) => inBeeld(k.id));
     const zicht = zichtVlak(S, bw, bh);
-    const vak = tegelsIn(w, zicht);
+    const vak = tegelsMetHoogte(w, zicht); // met de hoogte: een tegel onder het beeld kan op een heuvel erin liggen
 
     const g = werkGrondBij(S, zicht, inBeeld, dpr);
     tekenStukken(ctx, g, zicht);
@@ -838,7 +840,7 @@
 
   // De mist (B2c, js/mist.js; Marcel, 13 okt: "A2", donkerder en ontkleurd): zwart wat je niet kent, grijs wat je kent
   // maar nu niet ziet, en helder waar je mensen en je gebouwen kijken. Over de grond gaat één masker met een pixel per
-  // tegel, schuin op de grond gelegd zoals het licht van de hellingen (lichtKaartVan): zo loopt de rand vanzelf zacht over
+  // tegel, schuin op de grond gelegd zoals het licht van de hellingen (lichtStukVan): zo loopt de rand vanzelf zacht over
   // een tegel uit. Met de videokaart heeft het masker twee helften naast elkaar, links hoeveel kleur eruit gaat en rechts
   // hoeveel donkerder, en doet ctx.tekenMist (js/gl.js) beide in één keer. Zonder videokaart kostten twee schuine lagen
   // over het hele scherm 50 ms per beeld (13 okt: van 33 naar 16 beelden per seconde, het ontkleuren met 'saturation'
@@ -1754,25 +1756,44 @@
   }
 
   // Het licht op de grond (vraag 121): lichter naar de zon, donkerder ervan af, zacht verlopend over elke tegel. Per
-  // kaart één klein plaatje met een pixel per hoekpunt (T.lichtOpHoekpunt), met een rand erbuiten voor het land om de
-  // kaart; per tegel komt het stukje tussen zijn vier hoekpunten vloeiend uitgerekt over de tegel (zoals de grond zelf
-  // op het vlak van de tegel). Zo verloopt het licht van tegel tot tegel zonder trapjes.
-  const LICHT_RAND = 24;
-  const lichtKaarten = new WeakMap();
-  function lichtKaartVan(w) {
+  // stuk van T.STUK (64) een klein plaatje met een pixel per hoekpunt (T.lichtOpHoekpunt), 65 bij 65, gemaakt als de grond
+  // van dat stuk voor het eerst getekend wordt; per tegel komt het stukje tussen zijn vier hoekpunten vloeiend uitgerekt
+  // over de tegel (zoals de grond zelf op het vlak van de tegel). Zo verloopt het licht van tegel tot tegel zonder
+  // trapjes, ook over de rand van een stuk (de hoekpunten op de rand staan in allebei). Kwam er een vlak stuk bij
+  // (T.egaliseer), dan alleen de plaatjes waar de glooiing anders werd, met de twee tegels die het licht verder kijkt
+  // (T.hoogtePlekkenSinds). Tot vraag 174, stap b1 was het één plaatje om de kaart, helemaal opnieuw bij elk gebouw, en
+  // daarbuiten geen licht.
+  const lichtStukken = new WeakMap(); // hoogte → { versie, stukken: Map(nummer → plaatje) }
+  function lichtStukVan(w, sx, sy) {
     const hg = w.hoogte;
-    const bestaand = lichtKaarten.get(hg);
-    if (bestaand && bestaand.versie === (hg.versie || 0)) return bestaand;
-    const R = LICHT_RAND;
-    const kaartvak = T.kaartVak(w);
-    const c = document.createElement('canvas');
-    c.width = kaartvak.b + 1 + 2 * R;
-    c.height = kaartvak.h + 1 + 2 * R;
-    const k = c.getContext('2d');
-    const beeld = k.createImageData(c.width, c.height);
-    for (let py = 0; py < c.height; py++) {
-      for (let px = 0; px < c.width; px++) {
-        const f = T.lichtOpHoekpunt(w, px - R + kaartvak.x, py - R + kaartvak.y);
+    const Z = T.STUK;
+    let c = lichtStukken.get(hg);
+    const versie = hg.versie || 0;
+    if (c && c.versie !== versie) {
+      const plekken = T.hoogtePlekkenSinds(w, c.versie);
+      if (!plekken) c = null;
+      else {
+        for (const p of plekken) {
+          for (const [n, l] of c.stukken) {
+            if (p.x1 - 2 < l.x0 + Z + 1 && p.x2 + 2 >= l.x0 - 1 && p.y1 - 2 < l.y0 + Z + 1 && p.y2 + 2 >= l.y0 - 1) c.stukken.delete(n);
+          }
+        }
+        c.versie = versie;
+      }
+    }
+    if (!c) lichtStukken.set(hg, (c = { versie, stukken: new Map() }));
+    const n = (sx + 1024) * 4096 + (sy + 1024);
+    const bestaand = c.stukken.get(n);
+    if (bestaand) return bestaand;
+    const [x0, y0] = [sx * Z, sy * Z];
+    const canvas = document.createElement('canvas');
+    canvas.width = Z + 1;
+    canvas.height = Z + 1;
+    const k = canvas.getContext('2d');
+    const beeld = k.createImageData(canvas.width, canvas.height);
+    for (let py = 0; py < canvas.height; py++) {
+      for (let px = 0; px < canvas.width; px++) {
+        const f = T.lichtOpHoekpunt(w, x0 + px, y0 + py);
         const o = (py * c.width + px) * 4;
         if (f < 1) {
           beeld.data[o] = 20;
@@ -1788,8 +1809,8 @@
       }
     }
     k.putImageData(beeld, 0, 0);
-    const uit = { versie: hg.versie || 0, canvas: c, kaartvak };
-    lichtKaarten.set(hg, uit);
+    const uit = { canvas, x0, y0 };
+    c.stukken.set(n, uit);
     return uit;
   }
   // Een grondtegel op een kaart met hoogte: eerst het licht in de tegel zelf (op een kladje: de tegel, en daarop het licht,
@@ -1800,17 +1821,15 @@
   // keer zo duur (gemeten op 7 okt); het licht als laag over de tegel laat een haarfijn naadje, en kost één plaatje.
   const lichtInDeTegel = false;
   function tekenGrondMetLicht(ctx, w, deel, x, y) {
-    const R = LICHT_RAND;
-    const licht = lichtKaartVan(w);
-    const kaartvak = licht.kaartvak;
-    if (x < kaartvak.x - R || y < kaartvak.y - R || x > kaartvak.x + kaartvak.b + R - 1 || y > kaartvak.y + kaartvak.h + R - 1) return tekenSchuineTegel(ctx, w, deel, x, y);
+    const licht = lichtStukVan(w, Math.floor(x / T.STUK), Math.floor(y / T.STUK));
+    const [lx, ly] = [x - licht.x0 + 0.5, y - licht.y0 + 0.5]; // tussen de pixels van zijn vier hoekpunten
     if (!lichtInDeTegel) {
       tekenSchuineTegel(ctx, w, deel, x, y);
       ctx.save();
       opTegelVlak(ctx, w, x, y);
       ctx.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar het scherm
       ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(licht.canvas, x - kaartvak.x + R + 0.5, y - kaartvak.y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+      ctx.drawImage(licht.canvas, lx, ly, 1, 1, -0.5, -0.5, 1, 1);
       ctx.restore();
       return;
     }
@@ -1829,7 +1848,7 @@
     k.translate(deel.ax, deel.ay);
     k.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar de tegel
     k.imageSmoothingEnabled = true;
-    k.drawImage(licht.canvas, x - kaartvak.x + R + 0.5, y - kaartvak.y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+    k.drawImage(licht.canvas, lx, ly, 1, 1, -0.5, -0.5, 1, 1);
     k.restore();
     k.globalCompositeOperation = 'source-over';
     ctx.save();

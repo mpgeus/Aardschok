@@ -103,6 +103,53 @@ test('hoogte per stuk: ver van het eerste land één keer het eiland per stuk, m
   for (let y = plek.y; y < plek.y + plek.h; y++) for (let x = plek.x; x < plek.x + plek.b; x++) assert.deepEqual(T.hoekHoogten(w, x, y), [vlak.h, vlak.h, vlak.h, vlak.h]);
 });
 
+// Vraag 174, stap b1: het tekenen vraagt per vak hoe hoog het land daar ligt (welke tegels in een stuk van het scherm
+// vallen), en waar een nieuw vlak stuk de glooiing veranderde (alleen daar de grond en het licht opnieuw).
+test('hoogte per stuk, voor het tekenen: de hoogste grond van een vak, en waar de hoogte veranderde', () => {
+  assert.deepEqual(T.hoogteIn(land(5, false), 0, 0, 100, 100), { hoog: 0, laag: 0 }, 'zonder hoogte 0');
+  const w = land(5, true);
+  const hg = w.hoogte;
+  const Z = T.STUK;
+  const kasteel = T.eilandVan(5).plekken.find((p) => p.soort === 'kasteel');
+  const x0 = Math.floor(kasteel.x / Z) * Z;
+  const y0 = Math.floor(kasteel.y / Z) * Z;
+  const bereik = (X0, Y0, X1, Y1) => {
+    let hoog = -Infinity;
+    let laag = Infinity;
+    for (let y = Y0; y <= Y1; y++) for (let x = X0; x <= X1; x++) for (const h of T.hoekHoogten(w, x, y)) (hoog = Math.max(hoog, h)), (laag = Math.min(laag, h));
+    return { hoog, laag };
+  };
+  assert.deepEqual(T.hoogteIn(w, x0, y0, x0 + Z - 1, y0 + Z - 1), bereik(x0, y0, x0 + Z - 1, y0 + Z - 1), 'één stuk: precies zijn hoeken');
+  const twee = T.hoogteIn(w, x0 + 10, y0 + 10, x0 + Z + 3, y0 + 20);
+  const echt = bereik(x0 + 10, y0 + 10, x0 + Z + 3, y0 + 20);
+  assert.ok(twee.hoog >= echt.hoog && twee.laag <= echt.laag, 'over twee stukken: ruim genoeg');
+  // een vlak stuk: de plek die het zegt, bevat elke tegel waarvan een hoek veranderde
+  const plek = { x: x0 + 30, y: y0 + Z - 2, b: 3, h: 3 }; // over de naad met het stuk ten zuiden
+  const rond = 14;
+  const was = new Map();
+  for (let y = plek.y - rond; y < plek.y + rond; y++) for (let x = plek.x - rond; x < plek.x + rond; x++) was.set(`${x},${y}`, T.hoekHoogten(w, x, y).join());
+  const versie = hg.versie || 0;
+  T.egaliseer(w, plek);
+  const plekken = T.hoogtePlekkenSinds(w, versie);
+  assert.equal(plekken.length, 1);
+  const [p] = plekken;
+  let veranderd = 0;
+  for (const [k, h] of was) {
+    const [x, y] = k.split(',').map(Number);
+    if (T.hoekHoogten(w, x, y).join() === h) continue;
+    veranderd++;
+    assert.ok(x >= p.x1 && x <= p.x2 && y >= p.y1 && y <= p.y2, `tegel (${x}, ${y}) veranderde buiten de plek`);
+  }
+  assert.ok(veranderd > 9, 'de voet en de overgang eromheen veranderden');
+  // en het bereik van de stukken is bijgewerkt
+  for (const sy of [y0, y0 + Z]) assert.deepEqual(T.hoogteIn(w, x0, sy, x0 + Z - 1, sy + Z - 1), bereik(x0, sy, x0 + Z - 1, sy + Z - 1));
+  assert.deepEqual(T.hoogtePlekkenSinds(w, hg.versie), [], 'sinds nu niets');
+  assert.equal(T.hoogtePlekkenSinds(w, hg.versie + 3), null, 'een versie die nog niet was: onbekend');
+  for (let i = 0; i < 70; i++) T.egaliseer(w, { x: x0 + 2 + (i % 8) * 7, y: y0 + 4, b: 2, h: 2 });
+  assert.equal(T.hoogtePlekkenSinds(w, versie), null, 'te lang geleden: onbekend');
+  assert.equal(T.hoogtePlekkenSinds(w, hg.versie - 2).length, 2);
+});
+
 test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () => {
   for (const zaad of [3, 5, 7]) {
     const w = land(zaad, true);

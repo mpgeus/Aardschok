@@ -600,7 +600,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.eilandStuk` van zo'n 20 ms voor de hoogte van het eiland op zijn hoekpunten, dan de glooiing eens per hoekpunt met
   alleen de vlakke stukken die erbij liggen, `vlakkenBij`); wat afdekt (`T.dektAf`) ook per stuk, pas als het gevraagd
   wordt. `T.egaliseer` rekent alleen opnieuw wat het nieuwe vlakke stuk raakt; een andere nieuwe `w.hoogte.versie` begint
-  alles opnieuw. Tot 17 okt was het één lijst om het eerste land (48 tegels erbuiten), en vroeg daarbuiten elke hoek het
+  alles opnieuw. **Voor het tekenen** (vraag 174, stap b1, 17 okt): `T.hoogteIn(w, x0, y0, x1, y1)` geeft de hoogste en
+  laagste hoek van de stukken die een vak raakt (elk stuk onthoudt ze, `bereikVan`), zodat `js/tekenen.js`
+  (`tegelsMetHoogte`) weet welke tegels in een stuk van het scherm vallen: het vak in beeld gaat zo ver omlaag als de
+  grond daar hoog is (met een plat vak ontbraken onderaan 30 grassen en varens, en lagen er 200 boven het beeld; het kost
+  bij het dorp zo'n 2 ms per beeld, 8,6 werd 10,8 ms, ver uitgezoomd niets te meten). En `T.hoogtePlekkenSinds(w,
+  versie)` zegt waar `T.egaliseer` de glooiing veranderde (het vlakke stuk met `vrijRond` + 1 eromheen), zoals
+  `T.kaartPlekkenSinds`: daar tekent de grond opnieuw, en het licht twee tegels verder; tot dan alleen de voet van het
+  gebouw, en lag er een ring grond op de oude hoogte (in de browser: na een vlak stuk waren 4 tot 6 van de 9 stukken
+  grond anders dan helemaal opnieuw getekend, nu geen). Tot 17 okt was het één lijst om het eerste land (48 tegels erbuiten), en vroeg daarbuiten elke hoek het
   eiland opnieuw: een scherm vol tegels 160 ms in plaats van 1 (nu 0,9 ms, overal). De uitkomst is bit voor bit dezelfde,
   op twee eilanden gemeten, ook na vier vlakke stukken. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
   `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte, en op een brug van het eiland het wegdek:
@@ -611,7 +619,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dat van het eiland (`hg.eiland`: de grond, het water op zijn peil, de zee op 0; vraag 117, 2b). Standaard staat hij op
   "Vlak", en een kaart zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met
   `opGrond` (de hoogte eraf), een grondtegel op het vlak van zijn hoeken (`tekenSchuineTegel`, `opTegelVlak`), het licht
-  zacht verlopend uit een plaatje met een pixel per hoekpunt (`lichtKaartVan`, `tekenGrondMetLicht`), de wanden uit een
+  zacht verlopend uit een plaatje met een pixel per hoekpunt, per stuk van 64 (`lichtStukVan`, `tekenGrondMetLicht`; vraag
+  174, stap b1: eerst één plaatje om de kaart, helemaal opnieuw bij elk gebouw, en daarbuiten geen licht), de wanden uit een
   textuur in code (`tekenWanden`, `wandTextuur`), het land om de kaart ook op de helling, en het graan dat meebuigt
   (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
   met hoogte van achter naar voren. **Wat de hoogte doet** (stap 2, 8 okt; Marcel: "Akkoord"): niemand stapt door een wand

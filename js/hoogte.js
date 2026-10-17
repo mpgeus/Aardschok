@@ -157,6 +157,18 @@
       }
     }
     s.hoeken = hoeken;
+    bereikVan(s);
+  }
+  // De hoogste en de laagste hoek van stuk `s` (T.hoogteIn).
+  function bereikVan(s) {
+    let hoog = -Infinity;
+    let laag = Infinity;
+    for (const h of s.hoeken) {
+      if (h > hoog) hoog = h;
+      if (h < laag) laag = h;
+    }
+    s.hoog = hoog;
+    s.laag = laag;
   }
   // De vlakke stukken die een hoekpunt tussen (X0, Y0) en (X1, Y1) raken (glooiingOp: erop, of minder dan `vrijRond`
   // ervan af), in hun volgorde: het eerste gaat voor.
@@ -201,6 +213,52 @@
     return glooiingOp(hg, vx, vy) + niveau * hg.trede;
   }
   T.hoekHoogten = (w, x, y) => [T.hoekHoogte(w, x, y, 0), T.hoekHoogte(w, x, y, 1), T.hoekHoogte(w, x, y, 2), T.hoekHoogte(w, x, y, 3)];
+
+  // De hoogste en de laagste hoek van de tegels van (x0, y0) tot en met (x1, y1), { hoog, laag } in pixels: van de stukken
+  // die het vak raakt, dus een tikje ruimer (vraag 174, stap b1). Voor het tekenen: een tegel ligt zoveel hoger op het
+  // scherm dan zijn plek op de vlakte, dus zo weet js/tekenen.js welke tegels in een stuk van het scherm kunnen vallen.
+  // Zonder hoogte { hoog: 0, laag: 0 }.
+  T.hoogteIn = function (w, x0, y0, x1, y1) {
+    const hg = w && w.hoogte;
+    if (!hg) return { hoog: 0, laag: 0 };
+    const Z = T.STUK;
+    let hoog = -Infinity;
+    let laag = Infinity;
+    for (let sy = Math.floor(y0 / Z); sy <= Math.floor(y1 / Z); sy++) {
+      for (let sx = Math.floor(x0 / Z); sx <= Math.floor(x1 / Z); sx++) {
+        const s = stukOp(hg, sx * Z, sy * Z);
+        if (s.hoog > hoog) hoog = s.hoog;
+        if (s.laag < laag) laag = s.laag;
+      }
+    }
+    return { hoog, laag };
+  };
+
+  // Waar de hoogte veranderde sinds `versie` (w.hoogte.versie): een lijst plekken van tegels ({ x1, y1, x2, y2 }, tot en
+  // met), of null als dat niet bekend is (meer dan PLEKKEN_MAX geleden, of de lijsten van de stukken begonnen opnieuw).
+  // Zoals T.kaartPlekkenSinds (js/wereld.js): js/tekenen.js tekent zo alleen de grond en het licht opnieuw waar een nieuw
+  // vlak stuk (T.egaliseer) de glooiing veranderde, tot `vrijRond` tegels om het gebouw (vraag 174, stap b1). Geen
+  // spelstaat.
+  const VERANDERD = new WeakMap(); // hoogte → { van, plekken }
+  const PLEKKEN_MAX = 64;
+  T.hoogtePlekkenSinds = function (w, versie) {
+    const hg = w && w.hoogte;
+    if (!hg) return [];
+    const nu = hg.versie || 0;
+    if (versie === nu) return [];
+    const log = VERANDERD.get(hg);
+    if (!log || versie < log.van || versie > nu) return null;
+    return log.plekken.slice(versie - log.van);
+  };
+  function meldVeranderd(hg, oud, plek) {
+    let log = VERANDERD.get(hg);
+    if (!log || log.van + log.plekken.length !== oud) VERANDERD.set(hg, (log = { van: oud, plekken: [] }));
+    log.plekken.push(plek);
+    if (log.plekken.length > PLEKKEN_MAX) {
+      log.plekken.shift();
+      log.van++;
+    }
+  }
 
   // De hoogte op een punt in de wereld (het midden van tegel (x, y) is (x, y)): op een van de twee driehoeken van zijn
   // tegel (noord-oost-zuid of noord-zuid-west), net als de muis ze ziet (T.naarWereldOp).
@@ -542,13 +600,16 @@
       for (const s of c.stukken.values()) {
         if (s.dekt && x0 - 2 < s.x0 + Z && x1 + 2 > s.x0 && y0 - 2 < s.y0 + Z && y1 + 2 > s.y0) s.dekt = null;
         if (!s.hoeken) continue;
+        if (x0 >= s.x0 + Z || x1 <= s.x0 || y0 >= s.y0 + Z || y1 <= s.y0) continue;
         for (let y = Math.max(y0, s.y0); y < Math.min(y1, s.y0 + Z); y++) {
           for (let x = Math.max(x0, s.x0); x < Math.min(x1, s.x0 + Z); x++) {
             for (let k = 0; k < 4; k++) s.hoeken[((y - s.y0) * Z + x - s.x0) * 4 + k] = rekenHoek(hg, x, y, k);
           }
         }
+        bereikVan(s);
       }
-    }
+      meldVeranderd(hg, oud, { x1: x0, y1: y0, x2: x1 - 1, y2: y1 - 1 });
+    } else VERANDERD.delete(hg); // de lijsten beginnen opnieuw: wat erop volgt, weet niet waar het veranderde
     return vlak;
   };
 

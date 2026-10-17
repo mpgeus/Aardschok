@@ -1229,9 +1229,13 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
 `js/tekenen.js`); a kan ernaast.
 
 **Stap b in detail** (17 okt; Marcel: "B. B2, K. K1, M. M2"), elk met toetsen en gemeten:
-- **b1, het licht en de hoogste grond per stuk** (`js/tekenen.js`): een lichtplaatje per stuk van 64 (nu alleen het
-  dorpsvak, en bij elk gebouw helemaal opnieuw), gemaakt als het stuk voor het eerst getekend wordt; een gebouw maakt
-  alleen het stuk opnieuw dat het raakt. Zo ook de hoogste en laagste grond (`hoogsteVan`).
+- **b1, het licht en de hoogste grond per stuk, is af** (17 okt; `code.md` bij `js/hoogte.js`): een lichtplaatje per
+  stuk van 64 (was alleen het dorpsvak, en bij elk gebouw helemaal opnieuw), 2 ms per nieuw stuk; de hoogste en laagste
+  grond per vak, ook voor wat er in beeld komt (een tegel onder het beeld kan op een heuvel erin liggen; bij het dorp 2
+  ms per beeld erbij); en na een nieuw gebouw de grond opnieuw tot waar de glooiing veranderde (eerst alleen de voet,
+  met een ring op de oude hoogte). Wat het liet zien, voor c: met heuvels kost een beeld ver uitgezoomd in Chromium zo'n
+  54 ms, met 17 kladjes van samen 6 miljoen pixels per beeld (`Spel.gl.telling`), waarschijnlijk de tegels die iets
+  afdekken (`heuvelsErvoor`, `tekenTegelOpnieuw`) of de wanden.
 - **b2, elk dorp en elk kamp een vlakte** (`js/hoogte.js`, `js/maker.js`): een vlakte per dorp in plaats van één
   `midden`, het plein van elk dorp een vlak stuk, en (K1) de open plek van een roverskamp vlak, zodat de tenten en het
   vuur niet scheef staan; het kamp komt van het eiland, dus wordt het uitgerekend en niet bewaard. Opslaan een versie
