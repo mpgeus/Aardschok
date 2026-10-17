@@ -1509,9 +1509,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.weerbareMannen`), samen de weg op (`T.stuurWeg`, `waarom` 'bode'; bij de uitgang wachten ze op elkaar,
   `T.wachtOpDeAnderen`), in `D.bode`. **Onderschept** (Marcel: "De bode moet "onderschept" kunnen worden", en "iedereen
   kan dood"): bij het vertrekken valt een vast lot (`T.vastLot` in js/weer.js) of de mannen van de heer hem aanhouden
-  (`heer`: de brief weg en de gunst van de heer omlaag; de kans is `basis`) of de rovers (`T.bodeGevaar`: hun bende, de winter, het donker; `onderschept` in
+  (`heer`: de brief weg en de gunst van de heer omlaag; de kans is `basis`) of de rovers (`T.bodeGevaar`: de winter en het donker; tot c2 van vraag 170 ook de bende van het dorp; `onderschept` in
   `D.bode`). Tegen de rovers vechten wie meegaan (`T.bodeKracht`, `T.bodeSlaatAf`: een veteraan dubbel, wapens), en hoe het
-  afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover van de bende
+  afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover
   die valt). Het gebeurt op je eigen kaart (Marcel: "alles onze eigen kaart"; alleen buiten beeld als er al rovers
   zijn): de aanval met soort 'hinderlaag' in js/rovers.js
   (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), stuur je mannen erheen,
@@ -1655,28 +1655,48 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/rovers.js: de rovers en de militie
 
-- `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat het bos in en
-  komt terug als rover (`D.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
-  (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
+- `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat naar het
+  dichtste roverskamp (`T.wordtRover` vanuit `js/bewoners.js`; hieronder; tot c2 kwam hij met de bende van het dorp,
+  `D.rovers.bende`, terug), en er komen wilde rovers van buiten (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
   (`T.roverIngang`) naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
   vraag 170, stap 4), twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
   `js/akkers.js`), en weer weg. Er komt niemand vanzelf (vraag 170, stap 2): het bericht zegt hoe je je soldaten stuurt,
   en het gevecht is in real time (`js/gevecht.js`); wie vecht (`e.doelwit`), laat `T.werkRoversBij` met rust. Wie valt,
-  is dood: een rover is uit de bende (`T.roverVerslagen`), een soldaat of een dorpeling een mond minder (`T.sneuvelt`,
+  is dood: een rover van een kamp is uit zijn bende (`T.roverVerslagen`), een soldaat of een dorpeling een mond minder (`T.sneuvelt`,
   via `T.wijzigBevolking` met wie het is, en waartegen), en wie het overleeft, geneest na een nacht (`genees`); de doden
   (ook een wolf) begraaft `begraaf` de volgende dag. De laatste rover die valt, maakt de aanval af (`T.naGevecht`). De
   getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). (`T.roepOp` en `e.opgeroepen`, wie met de schout meeliep, zijn
   sinds vraag 170, stap 5 weg.)
 - **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
-  (`E.kampen`, `js/eiland.js`, `legKampen`); wat een kamp in een spel is, staat op de kaart (`w.kampen`: `{ nr, x, y }`,
-  bewaard; in c2 tot c4 de bende, de buit en of het verslagen is). `T.zetRoverskampenBij(S, w)`, elke tik één keer per
+  (`E.kampen`, `js/eiland.js`, `legKampen`, met de tentplekken en hun deur); wat een kamp in een spel is, staat op de
+  kaart (`w.kampen`, bewaard, vanaf de eerste tik alle kampen van het eiland, `kampenVan`; de velden staan bovenaan het
+  stuk in `js/rovers.js`; in c3 en c4 de buit en of het verslagen is). `T.zetRoverskampenBij(S, w)`, elke tik één keer per
   kaart vóór het wild (`T.wereldTik`, `js/tik.js`): is elk stuk dat de open plek van een kamp raakt open (`w.open`), dan
-  staan de tenten (`soort: 'tent'`, `vorm: 'tent-rover'`, een per `manPerTent` van `kampBende`, op de plekken die het
-  eiland gaf) en het vuur (`soort: 'kampvuur'`); beide dragen `kamp` (het nummer), en zo onderscheidt de rest ze van het
+  staat het er (`K.staat`): het vuur (`soort: 'kampvuur'`), de tenten (`soort: 'tent'`, `vorm: 'tent-rover'`, een per
+  `manPerTent` van de bende, op de plekken die het eiland gaf; `K.tenten` telt ze) en de mannen; vuur en tenten dragen
+  `kamp` (het nummer), en zo onderscheidt de rest ze van het
   kamp van het lege begin (`js/tekenen.js` kiest zo de stand van het vuur, `js/begin.js` haalt alleen het vuur op zijn
   eigen plek weg). `T.roverskampVuur(dag)` (brandt in het donker, smeult overdag) en `T.roverskampenLicht(w, dag)` (voor
   `T.lichtBronnen`, `js/zien.js`). Op de minikaart een rode stip zodra je dorp de plek kent (`js/balk.js`, de lus over
   `E.plekken`). `Spel.debug.kampen()`; `test/kampen.test.cjs`.
+- **De bende van een kamp** (vraag 170, stap 6a2, c2, 17 okt; Marcel: "N1", "D1", "H2"): `K.bende` (`{ id, naam, vel,
+  uit, plek }`), twee man van buiten bij het begin (`vanBuiten`: een voornaam uit `T.VOORNAMEN` en een uiterlijk, uit de
+  dobbelsteen van het kamp, `K.lot`), elk jaar van het spel een erbij tot `kampMeest` (`tikKampenDag`, elke nacht via
+  `w.kampenDag`, zoals `w.beestenDag`), en wie wegtrekt, gaat naar het kamp het dichtst bij het plein van zijn dorp, ook
+  boven de vier (H2; `uit` is zijn dorp). De mannen zijn rovers zonder dorp (`e.rover`, `e.kamp`, `e.lid`; `T.kampVan`,
+  `T.lidVan`): `T.werkKampenBij(S, w)`, elke tik één keer per kaart na het zetten (`js/tik.js`), zet wie erbij kwam aan de
+  rand van de open plek op het paadje (`aankomst`), houdt de tenten bij (`zetTenten`), en stuurt ze: overdag naar hun
+  plek om het vuur (`plekVan`, uit de dobbelsteen, niet op een tentplek of het paadje; `e.kijkt` naar het vuur), 's nachts
+  hun tent in (`e.binnen`, `e.deur`, zoals een dorpeling; de tegel voor de opening is `deur` op de tentplek), op de wacht
+  na (N1). Heeft een van hen een doel (`e.doelwit`, js/gevecht.js), dan slaapt niemand tot `wakkerUren` erna (`K.wakker`).
+  Is er niemand van een dorp binnen `rustVerder` (om de twee seconden, `K.keekVer`), dan staat `e.ver`, en kijkt hij in
+  `T.werkGevechtVanDeWereldBij` niet om zich heen: gemeten op 17 okt kosten drie kampen van vier man zo 0,007 ms per tik
+  (de tik 0,108 ms). In een gevecht gooit hij met de dobbelsteen van zijn kamp (`worp` in js/gevecht.js); wie valt, is
+  uit zijn bende (`T.roverVerslagen`); wie het overleeft, heeft na een nacht al zijn leven. Een dorpeling vlucht alleen
+  voor een vijand in het land van zijn dorp (`vlucht` in js/gevecht.js, `T.dorpVak`), zodat een kamp ver weg niemand
+  binnen houdt. Bij de muis zijn naam (`T.handelingVerkennen`, js/verkennen.js). D1: de bende van een dorp
+  (`D.rovers.bende`, `bendeOp`, de overval van soort `'bende'`) is weg, en de bode telt haar niet meer (js/bode.js);
+  tot c3 is een overval wild.
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
@@ -1711,7 +1731,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkGevechtVanDeWereldBij` (js/tik.js, na de dorpen). Het gevecht is van het dorp van zijn doel (`d.dorp`): daar
   begint het en houdt het aan (`aanHetVechten`). Een roedel die ging vechten (`G.tegen`), maar geen wolf vond een doel,
   gaat terug zodra dat dorp niet meer vecht (`T.wolvenNaHetGevecht`). Een worp gaat met de dobbelsteen van wie slaat: zijn
-  dorp (`e.dorp`), of zijn roedel (`G.lot`), of de kaart (`w.lot`); `kiesDoel` en `doelVan` krijgen de kaart mee, en het
+  dorp (`e.dorp`), of zijn roedel (`G.lot`) of zijn roverskamp (`K.lot`, js/rovers.js), of de kaart (`w.lot`); `kiesDoel` en `doelVan` krijgen de kaart mee, en het
   dorp mag daar `null` zijn.
 - **Wie vecht:** jouw kant (`T.vechtVoor`: `T.isMan`, en wie opgeroepen is voor de jacht), en de vijand
   (`T.isVijandig`: een rover of een ander monster; een wolf als zijn roedel vecht of iemand aanvalt, `G.vecht`,
@@ -1728,7 +1748,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   roedel erbij, `T.wolvenVechten`; een dorpeling vlucht), `T.valt` wie op nul komt.
 - **Vluchten en schuilen:** een dorpeling die een rover ziet (`vluchtZicht`), of die geraakt wordt, vlucht naar het town
   hall (`T.schuil`, `p.schuilt`, `D.schuilen`; zonder town hall naar zijn eigen huis): `T.dagAnker` zet hem daar binnen, en
-  `T.blijftThuis` houdt hem van het werk. Is er geen rover meer op de kaart, dan komt iedereen weer naar buiten.
+  `T.blijftThuis` houdt hem van het werk. Is er geen rover meer in het land van het dorp (`T.dorpVak`; een roverskamp ligt erbuiten), dan komt iedereen weer naar buiten.
 - **Het gevecht als status:** `D.gevecht = { sinds, laatst, plek }` zolang iemand een doel heeft, en `rustNa` seconden
   erna (`T.OORZAKEN.gevecht`, js/statussen.js); een bericht met de plek als het begint en ophoudt (`T.gevechtVoorbij`:
   ook `T.wolvenNaHetGevecht`), de tijd hooguit op 1× (`T.erWordtGevochten` in `T.snelheidNu`, js/tijd.js),

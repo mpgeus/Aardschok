@@ -1496,40 +1496,39 @@
       T.ui.werkBalkBij(S);
       return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
     },
-    // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1): waar ze liggen, hoe ver van je plein, en of ze er
-    // al staan (hun land is open). Spel.debug.kampen('erheen'): het land om het dichtste kamp gaat open, het kamp staat er,
-    // je kent het (zijn open plek, en de rode stip op de minikaart), en de camera kijkt erheen.
+    // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1 en c2): waar ze liggen, hoe ver van je plein, of ze
+    // er al staan (hun land is open), en hun bende: wie, en waar hij vandaan kwam. Spel.debug.kampen('erheen'): het land om
+    // het dichtste kamp gaat open, het kamp staat er, je kent het (zijn open plek, en de rode stip op de minikaart), en de
+    // camera kijkt erheen.
     kampen(wat) {
       const w = S.wereld;
       if (!T.opEiland(w)) return 'Er zijn alleen roverskampen op het eiland.'; // geen tekst
+      T.zetRoverskampenBij(S, w);
       const E = T.eilandVan(w.eiland.zaad);
       const m = T.pleinVan(S.dorp) || { x: S.dorp.plek.vak.x + S.dorp.plek.vak.b / 2, y: S.dorp.plek.vak.y + S.dorp.plek.vak.h / 2 };
-      const lijst = E.kampen.map((k) => ({ k, ver: Math.round(T.afstand(m, k)), staat: !!(w.kampen || []).some((q) => q.nr === k.nr) }));
-      lijst.sort((a, b) => a.ver - b.ver);
+      const lijst = w.kampen.map((K) => ({ K, ver: Math.round(T.afstand(m, K)) })).sort((a, b) => a.ver - b.ver);
       if (wat === 'erheen' && lijst.length) {
-        const { k } = lijst[0];
+        const { K } = lijst[0];
         const r = T.EILAND_INSTELLINGEN.kampen.open;
-        T.openVak(w, { x: k.x - r, y: k.y - r, b: 2 * r + 1, h: 2 * r + 1 });
+        T.openVak(w, { x: K.x - r, y: K.y - r, b: 2 * r + 1, h: 2 * r + 1 });
         T.zetRoverskampenBij(S, w);
-        T.kenKring(S.dorp, k.x, k.y, r);
-        lijst[0].staat = true;
-        const p = T.naarSchermOp(w, k.x, k.y);
+        T.kenKring(S.dorp, K.x, K.y, r);
+        const p = T.naarSchermOp(w, K.x, K.y);
         T.kijkNaar(p.x, p.y);
       }
-      return lijst.map(({ k, ver, staat }) => `kamp ${k.nr} op (${k.x}, ${k.y}), ${ver} tegels van je plein, ${k.tenten.length} plekken voor een tent${staat ? ', staat er' : ''}`).join('; '); // geen tekst
+      const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}`).join(', '); // geen tekst
+      return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}`).join('; '); // geen tekst
     },
-    // De rovers (js/rovers.js): de bende (wie wegtrok), wanneer die en de wilde rovers komen, en de aanval die
-    // loopt. Spel.debug.rovers(3) laat nu drie wilde rovers komen, Spel.debug.rovers('bende') de bende.
+    // De rovers (js/rovers.js): wanneer de wilde rovers komen, en de aanval die loopt (wie wegtrok, woont in een roverskamp:
+    // Spel.debug.kampen). Spel.debug.rovers(3) laat nu drie wilde rovers komen.
     rovers(wat) {
       const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
       if (wat != null && !R.aanval) {
-        const bende = wat === 'bende';
-        if (bende && !R.bende.length) return 'Er is geen bende: nog niemand trok weg.'; // geen tekst
-        R.aanval = { soort: bende ? 'bende' : 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: bende ? 0 : Number(wat) || 3, meteen: true };
+        R.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: Number(wat) || 3, meteen: true };
       }
       const A = R.aanval;
       return {
-        bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
+        wildeOp: R.wildeOp,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
         // Je mannen in het gevecht (js/gevecht.js): hun leven, hun wapen, en tegen wie ze vechten; en wie er schuilt.
         mannen: T.mannenVan(S.dorp).map((e) => {

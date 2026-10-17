@@ -67,10 +67,12 @@
     // erom (`vlak` pixels), en met een deel `bos` woud in de vakken eromheen. Het vuur staat in het midden van een plein
     // van vertrapte grond (`plein` tegels), op een open plek zonder bomen (`open`); een paadje van `padBreed` (de halve
     // breedte, zoals `wegen.breed`) loopt naar de dichtste weg. De tenten staan om het vuur met hun opening ernaartoe
-    // (`tenten`, vanaf het vuur, zoals het kamp van het lege begin), niet op het paadje: zoveel als `tentenMeest`.
+    // (`tenten`, vanaf het vuur, zoals het kamp van het lege begin), niet op het paadje: zoveel als `tentenMeest` (c2,
+    // H2: wie wegtrekt, gaat altijd naar het dichtste kamp, dus een kamp heeft plaats voor zes tenten, en staan er zoveel
+    // als zijn bende nodig heeft, js/rovers.js).
     kampen: {
       aantal: 3, vanPlek: 150, onderling: 300, vanWeg: 40, totWeg: 150, droog: 24, hoogst: 700, vlak: 30, bos: 0.6,
-      plein: 5.5, open: 8, padBreed: 0.75, tentenMeest: 2,
+      plein: 5.5, open: 8, padBreed: 0.75, tentenMeest: 6,
       tenten: [
         { dx: -4, dy: 0, open: 'ZO' }, // geen tekst
         { dx: 4, dy: 1, open: 'NW' }, // geen tekst
@@ -1422,7 +1424,7 @@
   // genoeg van de andere plekken en de wegen, droog en vlak. Elk kamp krijgt een paadje (P1) naar de dichtste weg, met de
   // kosten van een weg (langs de passen; over water legt legBruggen er een brug), in `E.paden` ({ punten, kamp }); het
   // vuur staat in het midden van het eerste vak, op zijn hoogte (`h`: T.eilandStuk maakt het plein er vlak omheen), en
-  // de tenten (`tenten`: { x, y, open, voet }) staan om het vuur, niet op het paadje. Wat een kamp in een spel doet, staat
+  // de tenten (`tenten`: { x, y, open, voet, deur }) staan om het vuur, niet op het paadje. Wat een kamp in een spel doet, staat
   // op de kaart (w.kampen, js/rovers.js).
   function legKampen(E) {
     const K = IN().kampen;
@@ -1542,7 +1544,8 @@
     E.padIndex = indexVan(E, E.paden, () => K.padBreed + 1);
   }
   // De tenten van een kamp om zijn vuur (x, y), op de plekken van `kampen.tenten` op volgorde, met hun voet (de tegel
-  // van de tent en die erachter, weg van de opening; zoals de maker het kamp van het lege begin legt), niet waar de voet
+  // van de tent en die erachter, weg van de opening; zoals de maker het kamp van het lege begin legt) en hun deur (de
+  // tegel voor de opening, waar een rover de tent in gaat, js/rovers.js), niet waar de voet
   // of de tegel voor de opening op het paadje `lijn` ligt; zoveel als `tentenMeest`.
   const OPENING = { ZO: [1, 0], ZW: [0, 1], NW: [-1, 0], NO: [0, -1] };
   function tentenVan(K, x, y, lijn) {
@@ -1571,7 +1574,7 @@
       const tegels = [[tx + rx, ty + ry]];
       for (let yy = voet.y; yy < voet.y + voet.h; yy++) for (let xx = voet.x; xx < voet.x + voet.b; xx++) tegels.push([xx, yy]);
       if (tegels.some(([a, b]) => opPad(a, b))) continue;
-      uit.push({ x: tx, y: ty, open: p.open, voet });
+      uit.push({ x: tx, y: ty, open: p.open, voet, deur: { x: tx + rx, y: ty + ry } });
     }
     return uit;
   }

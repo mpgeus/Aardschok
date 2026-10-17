@@ -67,9 +67,9 @@
   T.SLAAN = { kosten: 3, schade: [3, 5] };
 
   const plek = (e) => T.tegelVan(e);
-  // Een worp van wie slaat: met de dobbelsteen van zijn dorp, of (van geen dorp) die van zijn roedel, of van de kaart (A1:
-  // zo verandert wat bij het ene dorp gebeurt niet door een gevecht bij het andere).
-  const worp = (D, e, b) => b[0] + Math.floor(T.toeval(e.dorp || e.groep || D.wereld) * (b[1] - b[0] + 1));
+  // Een worp van wie slaat: met de dobbelsteen van zijn dorp, of (van geen dorp) die van zijn roedel of zijn roverskamp
+  // (js/rovers.js), of van de kaart (A1: zo verandert wat bij het ene dorp gebeurt niet door een gevecht bij het andere).
+  const worp = (D, e, b) => b[0] + Math.floor(T.toeval(e.dorp || e.groep || T.kampVan(D.wereld, e) || D.wereld) * (b[1] - b[0] + 1));
 
   // ── Wie vecht, en tegen wie ──
 
@@ -172,8 +172,11 @@
       vecht = vecht || plek(e);
       doeMet(S, D, e, d, nu, budget);
     }
-    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), en voor wie vecht voor een ander dorp.
-    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m))));
+    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), en voor wie vecht voor een ander dorp; alleen
+    // voor wie in het land van het dorp is (T.dorpVak), zodat een roverskamp ver weg (js/rovers.js) niemand binnen houdt.
+    const land = T.dorpVak(D);
+    const inLand = (m) => m.tx >= land.x && m.ty >= land.y && m.tx < land.x + land.b && m.ty < land.y + land.h;
+    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m)) && inLand(m)));
     if (vecht) aanHetVechten(S, D, vecht, nu);
     else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
   };
@@ -182,17 +185,18 @@
   const vechtNu = (D, e) => T.vechtVoor(D, e) || (T.isVijandig(e) && (!e.beest || !!e.groep.vecht));
 
   // Elke tik, één keer per kaart (T.wereldTik, js/tik.js): wie van geen dorp is en vecht (de wolven van een roedel die
-  // vecht; werklijst vraag 170, stap 6a2), kiest, loopt en slaat, met de dobbelsteen van zijn roedel (A1). Het gevecht is
-  // van het dorp van zijn doel: daar begint het (met het bericht en de 1×), en zolang hij slaat, houdt het niet op. Een
-  // roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen), gaat terug zodra dat dorp niet
-  // meer vecht.
+  // vecht, de mannen van een roverskamp; werklijst vraag 170, stap 6a2), kiest, loopt en slaat, met de dobbelsteen van zijn
+  // roedel of zijn kamp (A1). Een man van een kamp zonder iemand van een dorp in de buurt (e.ver, js/rovers.js) kijkt niet
+  // om zich heen. Het gevecht is van het dorp van zijn doel: daar begint het (met het bericht en de 1×), en zolang hij
+  // slaat, houdt het niet op. Een roedel die ging vechten, maar geen wolf vond een doel (wie hij wilde, was al binnen),
+  // gaat terug zodra dat dorp niet meer vecht.
   T.werkGevechtVanDeWereldBij = function (S, w) {
     if (!w || !w.wezens) return;
     const nu = S.wereldTijd || 0;
     const budget = { zoek: IN().zoekPerTik };
     const roedels = new Map(); // roedel → of een van zijn wolven een doel had
     for (const e of w.wezens) {
-      if (e.dorp || e.dood || e.binnen || !vechtNu(null, e)) continue;
+      if (e.dorp || e.dood || e.binnen || e.ver || !vechtNu(null, e)) continue;
       const tegen = (e.groep && e.groep.tegen) || null;
       if (e.groep && !roedels.has(e.groep)) roedels.set(e.groep, false);
       const d = doelVan(S, w, tegen, e, nu, []);

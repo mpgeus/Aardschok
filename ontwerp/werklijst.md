@@ -101,9 +101,12 @@ en wie erop loopt gaat mee omhoog (`beeld.md`, "De bruggen", met Marcels punten 
 **c1, de kampen op het eiland, is af** (17 okt, in `main`; Marcel: "M1"; `spel.md`, bij "De roverskampen"; `code.md`
 bij `js/eiland.js` en `js/rovers.js`): drie per eiland in het woud, elk met een open plek, een vuur, een tent per twee man
 (de tent T1, nu in het vel) en een paadje naar de dichtste weg; ze staan er als hun land opengaat, en wie ze zag, ziet
-ze rood op de minikaart. **Het volgende is c2, de bende** (het plan bij I, "Stuk c in detail"). **Bezig in sessie
-`main`** (17 okt): het plan voor c2. Let op: CLAUDE.md zit
-tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
+ze rood op de minikaart. **c2, de bende, is af** (17 okt, in `main`; Marcel: "N1", "D1", "H2"; `spel.md`, bij "De
+bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het begin, met twee man en een erbij per jaar
+tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
+'s nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
+volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). Let op: CLAUDE.md zit tegen de grens van
+20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -122,8 +125,20 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **c2 bouwen** (vraag 170, stap 6a2, 17 okt; bij I, "c2 in detail"): het plan is besloten (Marcel: "N1", "D1", "H2"),
-  en Marcel kwam erbij met het rovershol (vraag 173, bij K). Wacht op "bouw c2".
+- **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
+  vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
+  `Spel.debug.kampen('erheen')` kijk je naar het dichtste, en met `Spel.debug.geenMist = true` zie je de mannen ook als er
+  niemand van je dorp is: elk op zijn plek om het vuur, met zijn gezicht ernaartoe, en bij de muis zijn naam ("Sybil, a
+  robber"). `Spel.debug.uur(23)` en `await Spel.debug.stap(10)`: op de wacht na zijn ze hun tent in. **Wat Claude erbij
+  koos** (zeg het als het anders moet): (1) een man van buiten is een jongere of volwassene, meest mannen, met een
+  voornaam van de bewoners, zoals de wilde rovers; (2) wie erbij komt, loopt over het paadje het kamp in, vanaf de rand
+  van de open plek; (3) een tent gaat niet neer als er een man valt (dat is c4); (4) de wacht is elke nacht een ander, en
+  na een gevecht slaapt niemand tot een uur erna; (5) wie geen tent heeft (meer dan twaalf man), slaapt bij het vuur;
+  (6) de kans dat de bode onderweg rovers treft, telt de bende niet meer, dus is ze tot c3 die zonder bende (een op de
+  zeventien, in de winter en het donker meer); (7) een dorpeling vlucht alleen voor een rover in het land van zijn dorp,
+  zodat een kamp ver weg niemand binnen houdt; (8) de rovers in het kamp dragen hun levensbalk, zoals elke rover, zodat je
+  ziet dat het geen dorpelingen zijn. De speeltest (`npm run speeltest`) liep niet: zijn browser kreeg het spel niet
+  binnen 30 seconden geladen; de toetsen zijn groen.
 - **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
   vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
   kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
@@ -1012,7 +1027,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   aan de grond en te voet te halen vanaf elk dorp. De wilde rovers blijven tot c3. Te kiezen: **M** de minikaart: M1 een
   kamp dat je mensen gezien hebben, krijgt een rood teken op de minikaart, zodat je het terugvindt; M2 geen teken.
   Gekozen: **M1**.
-  **c2 in detail** (Claude, 17 okt; wacht op Marcel: N, D en H). (1) **Een kamp leeft vanaf het begin**: de kaart krijgt
+  **c2 in detail** (Claude, 17 okt; **besloten**, Marcel: "N1", "D1", "H2", hieronder). (1) **Een kamp leeft vanaf het begin**: de kaart krijgt
   bij het begin van een spel alle kampen van het eiland (`w.kampen`; in c1 pas als hun land opengaat), want de bende
   groeit ook waar je nog niet kwam, en wie wegtrekt, moet ergens heen. Elk kamp heeft zijn bende en een eigen dobbelsteen
   (`k.lot`, uit het nummer van het eiland en van het kamp, zoals een roedel). Gaat zijn land open, dan staan de tenten,
@@ -1054,7 +1069,10 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   tot 4, maar wie wegtrekt, gaat altijd naar het dichtste kamp, ook boven de 4. Een tent per twee man, tot de zes
   plekken om het vuur die het eiland al kent (`kampen.tenten`; `tentenMeest` van 2 naar 6, min wat op het paadje
   ligt, dus tot zo'n 12 man): de plek en het paadje van een kamp blijven wat ze zijn, alleen zijn lijst tenten wordt
-  langer. Wie geen plek in een tent meer heeft, slaapt bij het vuur, tot het kamp een hol wordt (173).
+  langer. Wie geen plek in een tent meer heeft, slaapt bij het vuur, tot het kamp een hol wordt (173). **c2 is af** (17
+  okt, in `main`; `spel.md`, "De bende van een kamp"; `code.md` bij `js/rovers.js`; `test/kampen.test.cjs`). Voor c3:
+  de kans voor de bode (`T.bodeGevaar`, js/bode.js) telt sinds c2 geen bende meer; de hinderlaag uit het dichtste kamp
+  kan haar weer laten meetellen.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp

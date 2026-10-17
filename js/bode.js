@@ -12,8 +12,8 @@
 // in de winter nog meer.
 //
 // Onderweg kan hij onderschept worden (Marcel, 9 okt: "De bode moet "onderschept" kunnen worden. dat maakt het spannend.
-// Je moet wel bescherming mee kunnen sturen", en "iedereen kan dood"): door de rovers uit het bos, vaker naarmate hun
-// bende groter is, in de winter en in het donker vaker; of door de mannen van de heer, die je brief meenemen (dan weet
+// Je moet wel bescherming mee kunnen sturen", en "iedereen kan dood"): door de rovers uit het bos, in de winter en in
+// het donker vaker; of door de mannen van de heer, die je brief meenemen (dan weet
 // de heer dat je goud hebt om te kopen). Je stuurt tot drie weerbare mannen mee: tegen de rovers vechten ze, een
 // veteraan telt dubbel en wapens helpen, en wie vecht, kan gewond raken of sneuvelen, de bode ook. Wie hem onderschept,
 // valt vast bij het vertrekken (T.stuurBode, `D.bode.onderschept`); hoe het afloopt, als de dag van terugkomen er is
@@ -38,10 +38,11 @@
     // De kans dat hij iets wat je vroeg niet heeft, en dat hij er maar de helft van heeft.
     nietBijZich: 0.15,
     halfBijZich: 0.25,
-    // Onderweg (werklijst vraag 143, het vervolg). De rovers uit het bos: de kans dat ze hem onderscheppen is `basis` plus
-    // `perRover` per man van hun bende, maal `winter` in de winter en `donker` als hij in het donker vertrekt, en hooguit
-    // `hooguit`. Ze zijn dan met `aanvallers` man, of met hun bende als die groter is.
-    rovers: { basis: 0.06, perRover: 0.05, winter: 1.6, donker: 1.6, hooguit: 0.8, aanvallers: 2 },
+    // Onderweg (werklijst vraag 143, het vervolg). De rovers uit het bos: de kans dat ze hem onderscheppen is `basis`, maal
+    // `winter` in de winter en `donker` als hij in het donker vertrekt, en hooguit `hooguit`. Ze zijn dan met
+    // `aanvallers` man. (Tot vraag 170, stap 6a2, c2 telde de bende van het dorp mee, wie wegtrok; die woont nu in een
+    // roverskamp, en in c3 komt de hinderlaag uit het dichtste kamp.)
+    rovers: { basis: 0.06, winter: 1.6, donker: 1.6, hooguit: 0.8, aanvallers: 2 },
     // De rovers houden hem aan op je eigen kaart, bij de uitgang (de hinderlaag, js/rovers.js; Marcel, 9 okt: "Vergeet niet
     // dat alles onze eigen kaart is. Het wordt 1 aaneengesloten stuk"): vanaf `afstand` tegels van de uitgang komen ze, en
     // na `uren` uur, als de aanvoerder niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
@@ -107,15 +108,14 @@
     return { ...uit, kan: true };
   };
 
-  const bende = (D) => (D.rovers && D.rovers.bende ? D.rovers.bende.length : 0);
   const inHetDonker = (D) => T.lichtVan(D.kalender.dag).nacht >= 0.5;
 
   // De kans dat de rovers en de mannen van de heer hem onderscheppen, als hij nu vertrekt.
   T.bodeGevaar = function (D, winter = inWinter(dagNu(D)), donker = inHetDonker(D)) {
     const R = IN().rovers;
     const H = IN().heer;
-    const rovers = Math.min(R.hooguit, (R.basis + R.perRover * bende(D)) * (winter ? R.winter : 1) * (donker ? R.donker : 1));
-    return { rovers, heer: H.basis, bende: bende(D), winter, donker };
+    const rovers = Math.min(R.hooguit, R.basis * (winter ? R.winter : 1) * (donker ? R.donker : 1));
+    return { rovers, heer: H.basis, winter, donker };
   };
 
   // Hoe sterk wie onderweg is, tegen de rovers: de bode, en wie meegaat.
@@ -126,11 +126,10 @@
     if (mee.length && T.wapensInHetDorp(D) >= mee.length) kracht *= K.wapens;
     return kracht;
   };
-  const roversMet = (D) => Math.max(IN().rovers.aanvallers, bende(D));
   // De kans dat ze de rovers afslaan.
   T.bodeSlaatAf = (D, mee) => {
     const k = T.bodeKracht(D, mee);
-    return k / (k + roversMet(D));
+    return k / (k + IN().rovers.aanvallers);
   };
 
   // Wie er mee zou gaan als je `n` mannen meestuurt (de weerbare mannen, niet de bode zelf).
@@ -143,7 +142,7 @@
     const g = T.bodeGevaar(D);
     const mee = T.bodeBegeleiders(D, n);
     const woord = (k) => (k < 0.1 ? T.t('small') : k < 0.25 ? T.t('real') : k < 0.45 ? T.t('great') : T.t('very great'));
-    const waarom = [g.bende ? T.t('a gang of {n} in the forest', { n: T.telwoord(g.bende) }) : T.t('robbers from outside'), g.winter ? T.t('the winter') : '', g.donker ? T.t('the dark') : ''].filter(Boolean);
+    const waarom = [T.t('robbers from outside'), g.winter ? T.t('the winter') : '', g.donker ? T.t('the dark') : ''].filter(Boolean);
     const af = Math.round(T.bodeSlaatAf(D, mee) * 100);
     const met = mee.length
       ? T.t('With {wie} along, they drive the robbers off {af} times in 100.', { wie: T.opsomming(mee.map((p) => T.naamVanBewoner(p))), af })
@@ -237,19 +236,10 @@
     return uit;
   };
 
-  // Een rover van de bende sneuvelt (de bode en zijn mannen sloegen ze af): de bende is er een kleiner.
-  function roverSneuvelt(D) {
-    const R = D.rovers;
-    if (!R || !R.bende.length) return null;
-    const lid = R.bende[R.bende.length - 1];
-    T.roverVerslagen(D, { lid: lid.id });
-    return lid;
-  }
-
   const namen = (lijst) => T.opsomming(lijst.map((p) => T.naamVanBewoner(p)));
 
-  // Wat de rovers deden, op de bewoners: wie sneuvelde, wie gewond is, en een rover van de bende die sneuvelde (of het
-  // poppetje van de rover op de kaart, `rovers`). Geeft de zin erover, en wie er nog leeft van wie onderweg was.
+  // Wat de rovers deden, op de bewoners: wie sneuvelde, wie gewond is, en een rover die sneuvelde (het poppetje van de
+  // rover op de kaart, `rovers`, als het er is). Geeft de zin erover, en wie er nog leeft van wie onderweg was.
   function verliezen(D, B, o, dag, rovers = []) {
     let over = '';
     if (o.dood.length) {
@@ -264,9 +254,7 @@
         e.dood = true;
         e.leven = 0;
       }
-      const lid = e ? D.rovers.bende.find((l) => l.id === e.lid) : roverSneuvelt(D);
-      if (e && lid) T.roverVerslagen(D, e);
-      over += ` ${lid ? T.t('{naam}, who was with the robbers, fell.', { naam: lid.naam }) : T.t('One of the robbers fell.')}`;
+      over += ` ${T.t('One of the robbers fell.')}`;
     }
     const leeft = B.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p));
     return { over, leeft };

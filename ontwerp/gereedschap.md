@@ -154,14 +154,14 @@ gezin komen (overdag over de weg; is het dorp vol, dan zegt het dat er geen plaa
 wegtrekken. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
-`Spel.debug.kampen()` zegt waar de drie roverskampen van het eiland liggen, hoe ver van je plein, en of ze er al staan
-(`js/rovers.js`, werklijst vraag 170, stap 6a2, c1); `('erheen')` maakt het land om het dichtste kamp open, zet het
+`Spel.debug.kampen()` zegt waar de drie roverskampen van het eiland liggen, hoe ver van je plein, of ze er al staan (met
+hoeveel tenten), en wie er woont, met het dorp van wie wegtrok (`js/rovers.js`, werklijst vraag 170, stap 6a2, c1 en c2); `('erheen')` maakt het land om het dichtste kamp open, zet het
 kamp neer, laat je dorp het kennen (de rode stip op de minikaart) en kijkt erheen. In een verborgen paneel tekent de
 minikaart pas opnieuw met `Spel.ui.werkMinikaartBij(Spel.S)`.
-`Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, hoe een aanval ervoor
+`Spel.debug.rovers()` zegt wanneer de wilde rovers komen, hoe een aanval ervoor
 staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
-drie wilde rovers komen, `('bende')` de bende. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
+drie wilde rovers komen. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
 wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).
 `Spel.debug.tweedeDorp()` zet een tweede dorp op het eiland, op de dichtste andere dorpsplek, met het lege begin (vraag
 170, stap 6a), en `Spel.debug.wissel()` maakt jou het volgende dorp: de camera gaat erheen, en de balk, de mist, de

@@ -30,7 +30,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Meer dorpen op één eiland | gebouwd (16 okt, vraag 170, stap 6a; Marcel: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van hetzelfde eiland, met zijn eigen plek, mensen, velden en mist; wie van een ander dorp is, is een vijand, ook een dorpeling; je bouwt niet in zijn bereik; te spelen in één browser met `Spel.debug.tweedeDorp()` en `Spel.debug.wissel()` ("Zo werken meer dorpen op één eiland nu", bij Rovers en de militie) | vraag 170 |
 | De wereld van iedereen | stuk a gebouwd (16 okt, vraag 170, stap 6a2; Marcel: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1", "K1 en L1", "A1"): het wild is van de wereld, niet van een dorp; wie het aangaat, zijn dorp zegt het en vecht; elke roedel een eigen dobbelsteen. Nog niet: het wild over het hele eiland (b), de roverskampen (c) en de rooftocht die leert (d) ("Zo werken meer dorpen op één eiland nu") | vraag 170 |
-| Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
+| Rovers en de militie | gebouwd (29 sep): wie wegtrekt gaat naar een roverskamp (sinds 17 okt, c2), wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
@@ -781,11 +781,12 @@ heeft hij iets niet, of maar de helft. Hij vraagt anderhalf keer zijn gewone pri
 vaste ronde in die dagen, dan komt die meteen erna. Wat je bij hem koopt, vertelt hij de inner, zoals altijd. De spelregel
 "De bode".
 
-Onderweg kan hij onderschept worden. De rovers uit het bos doen het vaker naarmate hun bende groter is (zonder bende een
-op de zeventien keer, met een bende van vier een op de vier), in de winter en in het donker vaker. De brief zegt het gevaar,
+Onderweg kan hij onderschept worden. De rovers uit het bos doen het een op de zeventien keer, in de winter en in het
+donker vaker (tot 17 okt ook vaker naarmate de bende van het dorp groter was; wie wegtrekt, woont nu in een roverskamp, en
+in c3 komt de hinderlaag uit het dichtste kamp). De brief zegt het gevaar,
 en hoe vaak ze de rovers afslaan met de mannen die je meestuurt: de bode telt half, een man een, een veteraan twee, en met
 een wapen voor elke man anderhalf keer zoveel. Slaan ze ze af, dan gaat de bode verder, maar een man kan gewond raken of
-sneuvelen, en soms valt er een rover van de bende. Lukt het niet, dan nemen ze alles: geen marskramer, en wie meeging is
+sneuvelen, en soms valt er een rover. Lukt het niet, dan nemen ze alles: geen marskramer, en wie meeging is
 gewond of dood, de bode ook. Het gebeurt op je eigen kaart (Marcel: "Vergeet niet dat alles onze eigen kaart is. Het
 wordt 1 aaneengesloten stuk"): bij de uitgang van het dorp houden de rovers ze aan, een bericht roept je, en de militie
 komt naar je toe. Kom je erbij, dan is het een gevecht in beurten, met wie meeging aan jouw kant; kom je niet, dan loopt
@@ -1091,8 +1092,18 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   (over water met een brug, zoals een weg): volg je het paadje, dan vind je het kamp. Je vindt een kamp zelf: het staat
   er als je mensen er zo dichtbij komen dat zijn land opengaat, met een tent per twee man (de grijsgroene van de rovers)
   met de opening naar het vuur; 's avonds en 's nachts brandt het vuur en licht het de open plek op, overdag smeult het.
-  Hebben je mensen het gezien, dan staat het als een rode stip op de minikaart. Er woont nog niemand: de bende komt in
-  c2, de overval uit het kamp in c3, en een kamp opruimen in c4; tot dan komen de rovers zoals voorheen van de rand.
+  Hebben je mensen het gezien, dan staat het als een rode stip op de minikaart.
+- **De bende van een kamp** (17 okt, stap 6a2, c2; Marcel: "N1", "D1", "H2"). Elk kamp leeft vanaf het begin van een
+  spel, ook waar je nog niet kwam: twee man van buiten, en elk jaar van het spel komt er een bij, tot vier. Wie uit een
+  dorp wegtrekt (een jongere of volwassene), gaat naar het kamp dat het dichtst bij zijn plein ligt, met zijn naam en zijn
+  uiterlijk, ook als het al vier man heeft; hij loopt het dorp uit en staat dezelfde dag in het kamp. Een tent per twee
+  man, tot de plekken om het vuur (vijf of zes per kamp); wie geen tent meer heeft, slaapt bij het vuur. Overdag staat
+  elke man op zijn eigen plek om het vuur, met zijn gezicht ernaartoe; 's nachts slapen ze in hun tent, op één na, die
+  bij het vuur waakt (elke nacht een ander). Ziet een van hen een vijand, dan komt iedereen naar buiten en vechten ze,
+  zoals een rover nu; wie valt, is uit de bende, en wie het overleeft, geneest na een nacht. Bij de muis staat zijn naam
+  ("Sybil, a robber"). Een kamp is van de wereld, niet van een dorp, en gooit met zijn eigen dobbelsteen, zoals een
+  roedel. Een overval komt tot c3 nog van wilde rovers van de rand; een kamp verslaan is c4, en een kamp dat groot genoeg
+  wordt, bouwt een rovershol (vraag 173).
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat
@@ -1232,9 +1243,9 @@ zijn plein. Een spel van vóór stuk b laadt niet meer (het opslaan, versie 19).
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
 velden kapot. C, Ja. D, mensen kunnen sterven"):
-- **Wie rover wordt.** Wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, met hun naam en hun
-  uiterlijk (de bende). Na tien dagen komen ze terug, en daarna om de twintig dagen, zolang er een van hen leeft.
-  Daarnaast komen er wilde rovers van buiten, gemiddeld twee keer per jaar, op een dag die je niet ziet aankomen,
+- **Wie rover wordt.** Wie wegtrekt, gaat naar het dichtste roverskamp: de jongeren en volwassenen worden rover, met hun
+  naam en hun uiterlijk (sinds 17 okt, c2, bij "De roverskampen"; tot dan kwam de bende van het dorp na tien dagen terug,
+  en daarna om de twintig). Een overval komt van wilde rovers van buiten, gemiddeld twee keer per jaar, op een dag die je niet ziet aankomen,
   en niet in de eerste zestig dagen van een spel. Ze bouwen langzaam op (Marcel, 29 sep, vraag 57): het eerste
   jaar van je ambt komen ze met twee man, het tweede met drie, daarna met vier.
 - **Een aanval.** Tegen de avond (vijf uur) komen ze van de rand van de kaart die het dichtst bij een akker ligt, en
@@ -1245,11 +1256,11 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
 - **De militie is het wachthuis** (sinds 15 okt: zijn soldaten, hierboven), met de veteranen van de heervaart. Het
   gevecht is sinds 15 okt in real time, en er komt niemand vanzelf ("Zo werkt het gevecht nu", hierboven). Tot dan liep
   de militie bij een aanval met de schout mee, en begon een gevecht in beurten als een rover de schout zag.
-- **Wie valt, is dood.** Een rover is uit de bende, een wachter is een mond minder (het bericht zegt wie het was), en
+- **Wie valt, is dood.** Een rover van een kamp is uit zijn bende, een wachter is een mond minder (het bericht zegt wie het was), en
   valt de schout, dan is het spel uit. Wie viel, ligt er tot de volgende dag. Wie het overleeft, staat de volgende
   ochtend weer met al zijn leven op (werklijst vraag 11).
 - **De getallen** staan in de werkbank (`T.ROVERS_INSTELLINGEN`), het leven en de klappen in `T.WEZENS` (`rover`,
-  `wachter`). `Spel.debug.rovers(3)` laat nu drie wilde rovers komen, en `Spel.debug.rovers('bende')` de bende.
+  `wachter`). `Spel.debug.rovers(3)` laat nu drie wilde rovers komen, en `Spel.debug.kampen()` zegt wie er in de kampen woont.
 - **Nog niet:** ze nemen alleen graan mee;
   een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
   schutterij (punt 13); een rivaal (de tegenspelers, werklijst vraag 61). De heervaart is er sinds 29 sep.

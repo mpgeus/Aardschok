@@ -2,6 +2,8 @@
 // in het woud, ver van de dorpsplekken, de stad, het kasteel, de wegen en elkaar (js/eiland.js, legKampen), elk met een
 // open plek om het vuur en een paadje naar de dichtste weg (P1). In het spel staat een kamp er als het land eromheen
 // opengaat (T.zetRoverskampenBij, js/rovers.js): een tent per twee man en het vuur, en de kaart onthoudt het (w.kampen).
+// In c2 heeft elk kamp zijn bende vanaf het begin (twee man, een erbij per jaar tot vier, en wie wegtrekt), en staan de
+// mannen om hun vuur; in de nacht slapen ze in hun tent, op een na (N1).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -176,40 +178,193 @@ test('roverskampen: het paadje loopt aan de grond van het kamp naar een weg (P1)
   }
 });
 
-test('roverskampen: in het spel staat een kamp er als zijn land opengaat, en de kaart onthoudt het', () => {
-  const { S, w } = leegBegin(T);
-  const E = T.eilandVan(w.eiland.zaad);
-  assert.equal((w.kampen || []).length, 0, 'bij het begin is het land van geen kamp open');
-  assert.ok(!w.voorwerpen.some((v) => v.kamp != null));
-  const k = E.kampen[0];
+// Opent het land om kamp k (zoals Spel.debug.kampen('erheen')), en geeft zijn kamp op de kaart.
+function openKamp(S, w, k) {
   const r = K().open;
   T.openVak(w, { x: k.x - r, y: k.y - r, b: 2 * r + 1, h: 2 * r + 1 });
   T.wereldTik(S);
-  assert.deepEqual(w.kampen, [{ nr: k.nr, x: k.x, y: k.y }]);
-  const tenten = w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === k.nr);
+  return w.kampen.find((q) => q.nr === k.nr);
+}
+const mannenVan = (w, nr) => w.wezens.filter((e) => e.kamp === nr && e.rover && !e.dood);
+// Het lege begin, met wat het scherm erbij zet (zwevende tekst, de vlaggen), na de eerste tik: dan kent de kaart zijn
+// kampen.
+function nieuwSpel() {
+  const uit = leegBegin(T);
+  Object.assign(uit.S, { vlaggen: new Set(), bezocht: new Set() }, T.schermVelden());
+  T.wereldTik(uit.S);
+  return uit;
+}
+
+test('roverskampen: in het spel staat een kamp er als zijn land opengaat, en de kaart onthoudt het', () => {
+  const { S, w } = nieuwSpel();
+  const E = T.eilandVan(w.eiland.zaad);
   const R = T.ROVERS_INSTELLINGEN;
+  // c2: de kaart kent alle kampen vanaf het begin, elk met zijn bende, ook waar het land nog dicht is
+  assert.deepEqual(w.kampen.map((q) => [q.nr, q.x, q.y, q.staat]), E.kampen.map((k) => [k.nr, k.x, k.y, false]));
+  for (const q of w.kampen) {
+    assert.equal(q.bende.length, R.kampBende, `kamp ${q.nr} begint met twee man`);
+    assert.ok(q.bende.every((l) => l.naam && l.vel && l.uit === null), 'van buiten, met een naam en een uiterlijk');
+  }
+  assert.ok(!w.voorwerpen.some((v) => v.kamp != null));
+  assert.equal(w.wezens.filter((e) => e.kamp != null).length, 0, 'en geen mannen op de kaart');
+  const k = E.kampen[0];
+  const kamp = openKamp(S, w, k);
+  assert.equal(kamp.staat, true);
+  const tenten = w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === k.nr);
   assert.equal(tenten.length, Math.ceil(R.kampBende / R.manPerTent), 'een tent per twee man');
+  assert.equal(kamp.tenten, tenten.length);
   assert.ok(tenten.every((v) => v.vorm === 'tent-rover'));
   const vuur = w.voorwerpen.filter((v) => v.soort === 'kampvuur' && v.kamp === k.nr);
   assert.equal(vuur.length, 1);
   assert.deepEqual([vuur[0].x, vuur[0].y], [k.x, k.y]);
   assert.ok(!T.isBegaanbaar(w, tenten[0].x, tenten[0].y), 'een tent staat in de weg');
+  // de mannen: rovers van geen dorp, elk op zijn eigen plek om het vuur, met zijn gezicht ernaartoe
+  const mannen = mannenVan(w, k.nr);
+  assert.equal(mannen.length, R.kampBende);
+  for (const e of mannen) {
+    const lid = T.lidVan(w, e);
+    assert.ok(lid, 'hij is van de bende');
+    assert.equal(e.dorp, undefined, 'van geen dorp');
+    assert.equal(e.kant, 'monster');
+    const d = Math.hypot(e.tx - k.x, e.ty - k.y);
+    assert.ok(d >= R.rondHetVuur[0] && d <= R.rondHetVuur[1], `${lid.naam} staat ${d.toFixed(1)} tegels van het vuur`);
+    assert.deepEqual([e.tx, e.ty], [lid.plek.x, lid.plek.y]);
+    assert.deepEqual(e.kijkt, { x: k.x, y: k.y });
+  }
+  assert.ok(mannen[0].tx !== mannen[1].tx || mannen[0].ty !== mannen[1].ty, 'niet op dezelfde plek');
   // nog een tik: er komt niets bij
   T.wereldTik(S);
   assert.equal(w.voorwerpen.filter((v) => v.kamp === k.nr).length, tenten.length + 1);
-  // bewaard en geladen: het kamp staat er nog, één keer
+  assert.equal(mannenVan(w, k.nr).length, R.kampBende);
+  // bewaard en geladen: het kamp staat er nog, één keer, met dezelfde mannen
   const S2 = {};
   const uit = T.herstelSpel(S2, T.bewaarSpel(S, { nu: 0 }));
   assert.ok(uit.gelukt, uit.reden);
   T.wereldTik(S2);
+  T.wereldTik(S);
   assert.deepEqual(S2.wereld.kampen, w.kampen);
   assert.equal(S2.wereld.voorwerpen.filter((v) => v.kamp === k.nr).length, tenten.length + 1);
-  // het vuur brandt in het donker, en geeft dan licht; overdag smeult het
+  assert.deepEqual(mannenVan(S2.wereld, k.nr).map((e) => [e.lid, e.tx, e.ty]), mannenVan(w, k.nr).map((e) => [e.lid, e.tx, e.ty]));
+  // het vuur brandt in het donker, en geeft dan licht; overdag smeult het; alleen een kamp dat er staat
   const dag = Math.floor(S.kalender.dag);
   assert.equal(T.roverskampVuur(dag + 23 / 24), 'brandt');
   assert.equal(T.roverskampVuur(dag + 12 / 24), 'smeult');
   assert.equal(T.roverskampenLicht(w, dag + 23 / 24).length, 1);
   assert.equal(T.roverskampenLicht(w, dag + 12 / 24).length, 0);
+});
+
+// c2 (Marcel, 17 okt: H2): elk jaar van het spel komt er van buiten een bij, tot vier; wie uit een dorp wegtrekt, komt er
+// altijd bij, ook boven de vier; en een tent per twee man, tot de plekken die het eiland geeft.
+test('roverskampen: een man erbij per jaar tot vier, wie wegtrekt ook daarboven, en een tent per twee man (c2)', () => {
+  const { S, D, w } = nieuwSpel();
+  const R = T.ROVERS_INSTELLINGEN;
+  const k = T.eilandVan(w.eiland.zaad).kampen[0];
+  const kamp = openKamp(S, w, k);
+  const jaar = (n) => {
+    S.kalender.dag = n * T.DAGEN_PER_JAAR + 0.5;
+    T.werkKampenBij(S, w);
+  };
+  const ander = w.kampen.find((q) => q !== kamp);
+  jaar(1);
+  assert.equal(kamp.bende.length, R.kampBende + 1, 'na een jaar een erbij');
+  assert.equal(ander.bende.length, R.kampBende + 1, 'ook in een kamp dat nog niemand zag');
+  assert.equal(kamp.tenten, 2, 'de derde man krijgt de tweede tent');
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === k.nr).length, 2);
+  // de nieuwe komt over het paadje het kamp in, aan de rand van de open plek
+  const nieuw = mannenVan(w, k.nr).find((e) => e.lid === kamp.bende[2].id);
+  assert.ok(nieuw, 'hij is op de kaart');
+  assert.ok(Math.hypot(nieuw.tx - k.x, nieuw.ty - k.y) >= K().open - 2.5, 'aan de rand van de open plek');
+  jaar(2);
+  jaar(3);
+  assert.equal(kamp.bende.length, R.kampMeest, 'tot vier');
+  assert.equal(ander.bende.length, R.kampMeest);
+  // wie wegtrekt, gaat naar het dichtste kamp, ook boven de vier
+  const plein = T.pleinVan(D);
+  const dichtst = w.kampen.slice().sort((a, b) => T.afstand(a, plein) - T.afstand(b, plein))[0];
+  const p = { id: 1, naam: 'Wat', leeftijd: 'volwassen', geslacht: 'man', wezen: null };
+  assert.equal(T.wordtRover(D, p), dichtst);
+  assert.equal(dichtst.bende.length, R.kampMeest + 1);
+  assert.deepEqual(dichtst.bende[dichtst.bende.length - 1], { id: R.kampMeest, naam: 'Wat', vel: T.LEEFTIJDEN.volwassen.man, uit: D.plek.naam });
+  assert.equal(T.wordtRover(D, { ...p, leeftijd: 'oud' }), null, 'een oude wordt geen rover');
+  // tot zes tenten, een per twee man
+  for (let i = 0; i < 9; i++) kamp.bende.push({ id: 100 + i, naam: `Rover ${i}`, vel: T.LEEFTIJDEN.jong.man, uit: null });
+  for (let i = 0; i < 3; i++) T.werkKampenBij(S, w);
+  assert.equal(kamp.tenten, Math.min(k.tenten.length, Math.ceil(kamp.bende.length / R.manPerTent)), 'zoveel tenten als er plek is');
+  assert.equal(mannenVan(w, k.nr).length, kamp.bende.length, 'iedereen staat er');
+});
+
+// N1 (Marcel, 17 okt): 's nachts slapen ze in hun tent, op één na, die bij het vuur waakt; heeft een van hen een vijand,
+// dan komt iedereen naar buiten.
+test('roverskampen: in de nacht slapen ze in hun tent, op één na die waakt, en een vijand maakt ze wakker (N1)', () => {
+  const { S, D, w } = nieuwSpel();
+  const k = T.eilandVan(w.eiland.zaad).kampen[0];
+  openKamp(S, w, k);
+  const loop = (seconden) => {
+    for (let i = 0; i < seconden / T.TIK; i++) {
+      S.tijd += T.TIK;
+      S.wereldTijd += T.TIK;
+      T.werkKampenBij(S, w);
+      T.beweegWezens(S, w, T.TIK, T.TIK);
+    }
+  };
+  const dag = Math.floor(S.kalender.dag) + 1;
+  S.kalender.dag = dag + 2 / 24; // twee uur 's nachts
+  loop(15);
+  const mannen = mannenVan(w, k.nr);
+  assert.equal(mannen.filter((e) => e.binnen).length, mannen.length - 1, 'op één na in de tent');
+  const wacht = mannen.find((e) => !e.binnen);
+  assert.deepEqual([wacht.tx, wacht.ty], [T.lidVan(w, wacht).plek.x, T.lidVan(w, wacht).plek.y], 'de wacht staat bij het vuur');
+  for (const e of mannen.filter((x) => x.binnen)) assert.ok(T.afstand(T.tegelVan(e), k.tenten[0].deur) <= 1, 'bij de deur van zijn tent');
+  // een vijand: iedereen naar buiten
+  wacht.doelwit = D.aanvoerder;
+  loop(1);
+  assert.equal(mannen.filter((e) => e.binnen).length, 0, 'iedereen is wakker');
+  delete wacht.doelwit;
+  S.kalender.dag += (T.ROVERS_INSTELLINGEN.wakkerUren + 0.5) / 24;
+  loop(15);
+  assert.equal(mannen.filter((e) => e.binnen).length, mannen.length - 1, 'een uur later slapen ze weer');
+  // overdag staat iedereen op zijn plek, met zijn gezicht naar het vuur
+  S.kalender.dag = dag + 12 / 24;
+  loop(15);
+  for (const e of mannen) {
+    assert.ok(!e.binnen);
+    assert.deepEqual([e.tx, e.ty], [T.lidVan(w, e).plek.x, T.lidVan(w, e).plek.y]);
+  }
+});
+
+test('roverskampen: wie van een kamp valt, is uit zijn bende, en een kamp ver weg houdt niemand binnen', () => {
+  const { S, D, w } = nieuwSpel();
+  const k = T.eilandVan(w.eiland.zaad).kampen[0];
+  const kamp = openKamp(S, w, k);
+  const [e] = mannenVan(w, k.nr);
+  assert.ok(!T.hoortBij(D, e), 'hij hoort bij geen dorp');
+  const id = e.lid;
+  T.raak(S, D, e, 100, null);
+  assert.ok(e.dood);
+  assert.ok(!kamp.bende.some((l) => l.id === id), 'uit de bende');
+  assert.equal(kamp.bende.length, T.ROVERS_INSTELLINGEN.kampBende - 1);
+  // een dorpeling die schuilt, komt naar buiten: er is geen rover in het land van het dorp, alleen in het kamp
+  const p = D.bewoners.mensen.find((x) => x.wezen);
+  p.schuilt = { x: 0, y: 0 };
+  D.schuilen = true;
+  T.werkGevechtBij(S, D);
+  assert.equal(D.schuilen, false);
+  assert.equal(p.schuilt, undefined);
+});
+
+// A1, zoals het wild: een kamp gooit met zijn eigen dobbelsteen, dus wat het doet, verandert niets aan het dorp.
+test('roverskampen: een kamp met zijn mannen verandert niets aan wat het dorp gooit', () => {
+  const spel = (open) => {
+    const { S, D, w } = nieuwSpel();
+    if (open) openKamp(S, w, T.eilandVan(w.eiland.zaad).kampen[0]);
+    else T.wereldTik(S);
+    for (let i = 0; i < 600; i++) T.wereldTik(S);
+    return { lot: JSON.stringify(D.lot), kampen: w.kampen.map((q) => q.bende.map((l) => l.naam)) };
+  };
+  const met = spel(true);
+  const zonder = spel(false);
+  assert.equal(met.lot, zonder.lot, 'de dobbelsteen van het dorp');
+  assert.deepEqual(met.kampen, zonder.kampen, 'dezelfde mannen, met of zonder dat je ze zag');
 });
 
 // Is de laatste tent van het lege begin leeg, dan gaat het kampvuur van het dorp uit (js/begin.js); tot c1 nam het daarvoor

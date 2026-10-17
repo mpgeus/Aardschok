@@ -172,8 +172,6 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
     Object.assign(B.afgeslagen, { dood: 1, gewond: 0, roverDood: 1 });
     const K = { ...B.kracht };
     B.kracht.man = 1000; // ze winnen zeker
-    D.rovers = T.nieuweRovers();
-    D.rovers.bende = [{ id: 999, naam: 'Gijs' }, { id: 998, naam: 'Kobus' }];
     // Een boer brengt de brief niet en gaat niet mee (T.weerbareMannen): buiten de boerderijen heeft het proefdorp twee mannen.
     // De bode en twee begeleiders zijn er drie, dus een jongen van een boer is opgegroeid.
     const zoon = D.bewoners.mensen.find((p) => p.geslacht === 'man' && p.leeftijd === 'kind' && !(p.hoofd && p.hoofd.aanvoerder));
@@ -194,7 +192,6 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
       assert.ok(D.marskramer && D.marskramer.bestelling, 'ze sloegen ze af: de marskramer komt');
       assert.equal(D.bevolking, mensen - 2, 'de twee mannen sneuvelden (dood op 1)');
       assert.ok(D.bewoners.mensen.includes(r.bode), 'de bode zelf vocht niet');
-      assert.equal(D.rovers.bende.length, 1, 'een rover van de bende sneuvelde');
     } finally {
       Object.assign(B.afgeslagen, A);
       Object.assign(B.kracht, K);
@@ -218,15 +215,16 @@ test('de mannen van de heer nemen de brief mee: geen marskramer, en de heer weet
   });
 });
 
-test('het gevaar groeit met de bende, de winter en het donker', () => {
+// Tot vraag 170, stap 6a2, c2 groeide het ook met de bende van het dorp (wie wegtrok); die woont nu in een roverskamp
+// (js/rovers.js), en in c3 komt de hinderlaag uit het dichtste kamp.
+test('het gevaar groeit met de winter en het donker', () => {
   const S = gehucht(dagVan('zomermaand', 5));
   const D = S.dorp;
-  const leeg = T.bodeGevaar(D, false, false).rovers;
-  D.rovers = T.nieuweRovers();
-  D.rovers.bende = [{ id: 1 }, { id: 2 }, { id: 3 }];
-  const bende = T.bodeGevaar(D, false, false).rovers;
-  assert.ok(bende > leeg);
-  assert.ok(T.bodeGevaar(D, true, true).rovers > bende);
+  const zomer = T.bodeGevaar(D, false, false).rovers;
+  assert.equal(zomer, B.rovers.basis);
+  assert.ok(T.bodeGevaar(D, true, false).rovers > zomer);
+  assert.ok(T.bodeGevaar(D, false, true).rovers > zomer);
+  assert.ok(T.bodeGevaar(D, true, true).rovers > T.bodeGevaar(D, true, false).rovers);
   assert.ok(T.bodeGevaar(D, true, true).rovers <= B.rovers.hooguit);
 });
 

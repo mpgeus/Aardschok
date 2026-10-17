@@ -2,9 +2,9 @@
 // en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms velden kapot. C, Ja. D, mensen kunnen
 // sterven").
 //
-// Wie wegtrekt (js/bewoners.js), gaat het bos in en wordt rover: de jongeren en de volwassenen, met hun naam en hun
-// uiterlijk (S.rovers.bende). Na een tijd komen ze terug, en daarna om de zoveel dagen weer, zolang er een van hen
-// leeft. Daarnaast komen er wilde rovers van buiten, op een dag die je niet ziet aankomen.
+// Wie wegtrekt (js/bewoners.js), gaat naar het dichtste roverskamp en wordt rover: de jongeren en de volwassenen, met
+// hun naam en hun uiterlijk (werklijst vraag 170, stap 6a2, c2; hieronder, bij de roverskampen). Een overval komt nog
+// van wilde rovers van buiten, op een dag die je niet ziet aankomen (in c3 komt hij uit een kamp).
 //
 // Een aanval (S.rovers.aanval) gaat zo: op een uur dat je niet ziet aankomen, vaker in het donker (werklijst vraag 170,
 // stap 4; Marcel, 16 okt: D2), komen ze van de rand van de kaart die het dichtst bij een akker ligt, lopen erheen,
@@ -21,10 +21,6 @@
   'use strict';
 
   T.ROVERS_INSTELLINGEN = {
-    // Wie wegtrok, komt na zoveel dagen terug, en daarna, zolang er nog iemand van de bende leeft, om de zoveel
-    // dagen weer.
-    terugNaDagen: 10,
-    opnieuwNaDagen: 20,
     // Wilde rovers, van buiten: gemiddeld zo vaak per jaar, op een dag tussen de helft en anderhalf keer de tijd
     // ertussen, en niet in de eerste zoveel dagen van een spel. Ze bouwen langzaam op (Marcel, 29 sep, vraag 57):
     // het eerste jaar van je ambt komen ze met zoveel man, elk jaar daarna met zoveel meer, en nooit met meer dan
@@ -45,10 +41,21 @@
     // Wat ieder meeneemt, en de kans dat ze de akker kapotmaken.
     graanPerRover: 10,
     kansAkkerKapot: 0.3,
-    // De roverskampen (werklijst vraag 170, stap 6a2, c1; waar ze liggen: T.EILAND_INSTELLINGEN.kampen): een kamp begint
-    // met zoveel man (zijn bende komt in c2), en heeft een tent per zoveel man.
+    // De roverskampen (werklijst vraag 170, stap 6a2, c1 en c2; waar ze liggen: T.EILAND_INSTELLINGEN.kampen): een kamp
+    // begint met zoveel man, en elk jaar van het spel komen er zoveel van buiten bij, tot zoveel (de getallen van de wilde
+    // rovers); wie uit een dorp wegtrekt, komt er altijd bij (Marcel, 17 okt: H2). Een tent per zoveel man, zolang het
+    // eiland plekken heeft (`tentenMeest`); wie er geen meer heeft, slaapt bij het vuur.
     kampBende: 2,
+    kampErbijPerJaar: 1,
+    kampMeest: 4,
     manPerTent: 2,
+    // Om het vuur staat elke man op zijn eigen plek, tussen zoveel tegels ervan. 's Nachts (van het slapen tot het
+    // opstaan, T.dagindeling) slapen ze in hun tent, op één na, die bij het vuur waakt (Marcel, 17 okt: N1); heeft een
+    // van hen een vijand, dan komt iedereen naar buiten, en blijft zoveel uur wakker. Is er niemand van een dorp binnen
+    // zoveel tegels van het vuur, dan kijken ze niet om zich heen (zoals het wild, T.BEESTEN_INSTELLINGEN.rustVerder).
+    rondHetVuur: [2, 3.5],
+    wakkerUren: 1,
+    rustVerder: 20,
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -59,7 +66,7 @@
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 
 
-  T.nieuweRovers = () => ({ bende: [], bendeOp: null, wildeOp: null, aanval: null });
+  T.nieuweRovers = () => ({ wildeOp: null, aanval: null });
 
   // Alleen in het gehucht zelf: een wereld met akkers. Een proefkaart (?kaart=proef) heeft geen rovers.
   const heeftRovers = (D) => !!(D.wereld && T.veldenVan(D).length);
@@ -68,12 +75,18 @@
   // Wie rover wordt, en wanneer ze komen
   // ---------------------------------------------------------------------------------------------
 
-  // Wie wegtrekt (js/bewoners.js, gaanWeg): een jongere of volwassene gaat het bos in, en komt terug als rover.
+  // Wie wegtrekt (js/bewoners.js, gaanWeg): een jongere of volwassene gaat naar het roverskamp dat het dichtst bij het
+  // plein van zijn dorp ligt, met zijn naam en zijn uiterlijk, ook als het al vol is (Marcel, 17 okt: H2). Hij loopt het
+  // dorp uit, en staat dezelfde dag in het kamp (T.werkKampenBij). Geeft het kamp, of null (een kaart zonder kampen).
   T.wordtRover = function (D, p) {
-    if (p.leeftijd !== 'jong' && p.leeftijd !== 'volwassen') return;
-    const R = D.rovers || (D.rovers = T.nieuweRovers());
-    R.bende.push({ id: p.id, naam: p.naam, vel: (p.wezen && p.wezen.vel) || T.LEEFTIJDEN[p.leeftijd][p.geslacht] || null });
-    if (R.bendeOp == null) R.bendeOp = dagNu(D) + IN().terugNaDagen;
+    if (p.leeftijd !== 'jong' && p.leeftijd !== 'volwassen') return null;
+    const kampen = kampenVan(D.wereld, dagNu(D));
+    const plein = T.pleinVan(D);
+    if (!kampen.length || !plein) return null;
+    const K = kampen.reduce((a, b) => (T.afstand(b, plein) < T.afstand(a, plein) ? b : a));
+    const vel = (p.wezen && p.wezen.vel) || T.LEEFTIJDEN[p.leeftijd][p.geslacht] || null;
+    K.bende.push({ id: K.geteld++, naam: p.naam, vel, uit: (D.plek && D.plek.naam) || null });
+    return K;
   };
 
   // Hoeveel dagen er tussen twee keer wilde rovers zitten, en de eerste keer in een spel.
@@ -102,10 +115,7 @@
     if (!R.aanval) genees(D);
     if (R.wildeOp == null) R.wildeOp = eersteWilde(D, dag);
     if (R.aanval) return;
-    if (R.bende.length && R.bendeOp != null && dag >= R.bendeOp) {
-      R.aanval = { soort: 'bende', dag, fase: 'wacht', uur: aanvalsUur(D, dag) };
-      R.bendeOp = dag + IN().opnieuwNaDagen;
-    } else if (dag >= R.wildeOp) {
+    if (dag >= R.wildeOp) {
       R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: wildeAantal(dag), uur: aanvalsUur(D, dag) };
       R.wildeOp = dag + wildeTussen(D, dag);
     }
@@ -158,12 +168,10 @@
     if (p) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [p]);
   };
 
-  // Een rover valt (js/gevecht.js, sterf): kwam hij uit het gehucht, dan is hij uit de bende.
+  // Een rover valt (T.valt, js/gevecht.js): was hij van een roverskamp, dan is hij uit zijn bende.
   T.roverVerslagen = function (D, e) {
-    const R = D.rovers;
-    if (!R || e.lid == null) return;
-    R.bende = R.bende.filter((l) => l.id !== e.lid);
-    if (!R.bende.length) R.bendeOp = null;
+    const K = T.kampVan(D.wereld, e);
+    if (K) K.bende = K.bende.filter((l) => l.id !== e.lid);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -199,12 +207,13 @@
     return bij;
   }
 
-  function maakRover(D, lid, plek) {
+  // Een rover op plek, met het uiterlijk vel; een van een overval hoort bij het dorp dat hij overvalt (D), een van een kamp
+  // bij geen dorp (D null; zetMan, bij de roverskampen).
+  function maakRover(D, vel, plek) {
     const e = T.maakWezen('rover', plek.x, plek.y);
     e.rover = true;
-    e.dorp = D; // de rovers van een overval op dit dorp (T.hoortBij, js/wereld.js)
-    e.lid = lid.id != null ? lid.id : null;
-    e.vel = lid.vel || T.LEEFTIJDEN.volwassen.man;
+    if (D) e.dorp = D; // de rovers van een overval op dit dorp (T.hoortBij, js/wereld.js)
+    e.vel = vel || T.LEEFTIJDEN.volwassen.man;
     return e;
   }
 
@@ -223,10 +232,10 @@
       return;
     }
     A.ingang = ingang;
-    const leden = A.soort === 'bende' ? R.bende.slice() : Array.from({ length: A.aantal || 1 }, (_, i) => ({ vel: wildVel(D, A.dag, i) }));
+    const aantal = A.aantal || 1;
     A.rovers = [];
-    for (const lid of leden) {
-      const e = maakRover(D, lid, plekBij(w, ingang));
+    for (let i = 0; i < aantal; i++) {
+      const e = maakRover(D, wildVel(D, A.dag, i), plekBij(w, ingang));
       w.wezens.push(e);
       A.rovers.push(e);
     }
@@ -235,9 +244,7 @@
     R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
     const boer = T.boerVanVeld(D, velden[A.veld]);
     const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
-    const wie = A.soort === 'bende'
-      ? T.t('{n|{namen}, who left, comes back as a robber|{namen}, who left, come back as robbers}', { n: leden.length, namen: T.opsomming(leden.map((l) => l.naam)) })
-      : T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: leden.length, aantal: T.hoofdletter(T.telwoord(leden.length)) });
+    const wie = T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: aantal, aantal: T.hoofdletter(T.telwoord(aantal)) });
     // Er komt niemand vanzelf (vraag 170, stap 2): wie soldaten heeft, hoort hoe hij ze stuurt (js/kiezen.js).
     const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click a robber.')}` : '';
     const veld = velden[A.veld];
@@ -270,11 +277,10 @@
     }
     if (T.afstand(uitgang, { x: bode.tx, y: bode.ty }) > T.BODE_INSTELLINGEN.hinderlaag.afstand) return;
     A.ingang = uitgang;
-    const aantal = Math.max(T.BODE_INSTELLINGEN.rovers.aanvallers, R.bende.length);
-    const leden = R.bende.length ? R.bende.slice() : Array.from({ length: aantal }, (_, i) => ({ vel: wildVel(D, A.dag, i) }));
+    const aantal = T.BODE_INSTELLINGEN.rovers.aanvallers;
     A.rovers = [];
-    for (const lid of leden) {
-      const e = maakRover(D, lid, plekBij(w, uitgang));
+    for (let i = 0; i < aantal; i++) {
+      const e = maakRover(D, wildVel(D, A.dag, i), plekBij(w, uitgang));
       w.wezens.push(e);
       A.rovers.push(e);
     }
@@ -287,8 +293,8 @@
       if (!e.onderweg) e.pad = [];
     }
     const naam = T.naamVanBewoner(B.wie[0]);
-    const wie = R.bende.length ? T.t('{namen}, who left,', { namen: T.opsomming(leden.map((l) => l.naam)) }) : T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(leden.length)) });
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Send your men there, or they will take everything.', { wie, n: leden.length, naam }), soort: 'gevaar', naarGewoon: true, plek: uitgang } });
+    const wie = T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(aantal)) });
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Send your men there, or they will take everything.', { wie, n: aantal, naam }), soort: 'gevaar', naarGewoon: true, plek: uitgang } });
   }
   function werkHinderlaagBij(D, A, levend) {
     const B = D.bode;
@@ -418,35 +424,84 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // De roverskampen (werklijst vraag 170, stap 6a2, c1)
+  // De roverskampen (werklijst vraag 170, stap 6a2, c1 en c2)
   // ---------------------------------------------------------------------------------------------
 
   // Waar de kampen liggen, zegt het eiland (E.kampen, js/eiland.js, legKampen: drie per eiland, in het woud, met hun open
-  // plek en een paadje naar de dichtste weg); wat een kamp in dit spel is, onthoudt de kaart (w.kampen, bewaard: { nr, x,
-  // y }, en in c2 tot c4 zijn bende, zijn buit en of het verslagen is). Je vindt een kamp zelf (Marcel, 17 okt: V2): gaat
-  // het land om een kamp open (de stukken die zijn open plek raakt, w.open), dan staat het er, zoals het wild
-  // (js/beesten.js): een tent per `manPerTent` man van zijn bende, met de opening naar het vuur, en het vuur. Elke tik,
-  // één keer per kaart (T.wereldTik, js/tik.js), vóór het wild. Het kijkt alleen als er land open ging (KAMPEN_BIJ): het
-  // eiland opvragen kost niets als het het laatste is, maar leven er dorpen op twee eilanden (de toetsen), dan maakte
-  // elke tik ze allebei opnieuw. Geeft de kampen die erbij kwamen.
+  // plek, hun tentplekken en een paadje naar de dichtste weg); wat een kamp in dit spel is, onthoudt de kaart (w.kampen,
+  // bewaard), vanaf het begin van een spel, ook waar je nog niet kwam: de bende groeit ook daar, en wie wegtrekt, moet
+  // ergens heen (c2). Een kamp is van de wereld, niet van een dorp, zoals het wild (js/beesten.js), en gooit met een eigen
+  // dobbelsteen (`lot`, uit het nummer van het eiland en van het kamp; Marcel koos A1 voor het wild):
+  //   K = { nr, x, y (het vuur), staat (zijn land is open: het vuur, de tenten en de mannen staan er), tenten (hoeveel er
+  //         staan), lot, bende [{ id, naam, vel, uit (het dorp waar hij wegtrok, of null: van buiten), plek {x, y} (waar
+  //         hij om het vuur staat) }], geteld (het id van de volgende), jaar (het jaar van het spel dat er het laatst een
+  //         bij kwam), wakker (de dag tot wanneer niemand slaapt: er was een vijand), ver (er is niemand van een dorp in de
+  //         buurt; keekVer: wanneer het weer kijkt) }
+  // Een man van een kamp op de kaart is een rover zonder dorp: e.rover, e.kamp (het nummer van zijn kamp) en e.lid (zijn
+  // id in de bende). De wereld werkt hem bij, één keer per kaart (T.werkKampenBij); vechten doet hij in
+  // T.werkGevechtVanDeWereldBij (js/gevecht.js), met de dobbelsteen van zijn kamp.
+
+  // De kampen van kaart w (vanaf dag `dag`), of een lege lijst: een kaart die niet op het eiland ligt, heeft er geen.
+  function kampenVan(w, dag) {
+    if (w.kampen || !T.opEiland(w)) return w.kampen || [];
+    w.kampen = eilandKampen(w).kampen.map((k) => nieuwKamp(w, k, dag));
+    return w.kampen;
+  }
+  // Wat het eiland van de kampen zegt (de kampen en de paadjes), per kaart onthouden: het eiland opvragen kost niets als
+  // het het laatste is, maar leven er dorpen op twee eilanden (de toetsen), dan maakte elke tik ze allebei opnieuw.
+  const EILAND_KAMPEN = new WeakMap(); // kaart → { kampen, paden } (volgt uit het eiland, niet bewaard)
+  function eilandKampen(w) {
+    let uit = EILAND_KAMPEN.get(w);
+    if (!uit) {
+      const E = T.eilandVan(w.eiland.zaad);
+      uit = { kampen: E.kampen, paden: E.paden };
+      EILAND_KAMPEN.set(w, uit);
+    }
+    return uit;
+  }
+  function nieuwKamp(w, k, dag) {
+    const zaad = (((w.eiland.zaad >>> 0) * 31 + (k.nr + 1) * 7919) ^ 0x5bd1e995) >>> 0;
+    const K = { nr: k.nr, x: k.x, y: k.y, staat: false, tenten: 0, lot: { zaad }, bende: [], geteld: 0, jaar: Math.floor(dag / T.DAGEN_PER_JAAR), wakker: 0 };
+    for (let i = 0; i < IN().kampBende; i++) vanBuiten(K);
+    return K;
+  }
+  // Er komt een man van buiten bij: een jongere of volwassene, meest mannen (zoals de wilde rovers, wildVel), met een
+  // voornaam die nog niet in de bende is; alles uit de dobbelsteen van het kamp.
+  function vanBuiten(K) {
+    const leeftijd = T.toeval(K) < 0.7 ? 'volwassen' : 'jong';
+    const geslacht = T.toeval(K) < 0.75 ? 'man' : 'vrouw';
+    const lijst = T.VOORNAMEN[geslacht];
+    const vrij = lijst.filter((n) => !K.bende.some((l) => l.naam === n));
+    const uit = vrij.length ? vrij : lijst;
+    K.bende.push({ id: K.geteld++, naam: uit[Math.floor(T.toeval(K) * uit.length)], vel: T.LEEFTIJDEN[leeftijd][geslacht], uit: null });
+  }
+  // Het kamp van wezen e op kaart w (een man van een kamp), of null; en zijn plaats in de bende.
+  T.kampVan = (w, e) => (e && e.kamp != null && w && w.kampen ? w.kampen.find((K) => K.nr === e.kamp) || null : null);
+  T.lidVan = function (w, e) {
+    const K = T.kampVan(w, e);
+    return (K && K.bende.find((l) => l.id === e.lid)) || null;
+  };
+
+  // Gaat het land om een kamp open (de stukken die zijn open plek raakt, w.open), dan staat het er (Marcel, 17 okt: V2, je
+  // vindt een kamp zelf), zoals het wild: het vuur, een tent per `manPerTent` man met de opening naar het vuur, en de
+  // mannen, elk op zijn plek. Elke tik, één keer per kaart (T.wereldTik, js/tik.js), vóór het wild; het kijkt alleen als
+  // er land open ging (KAMPEN_BIJ). Geeft de kampen die er nu staan.
   const KAMPEN_BIJ = new WeakMap(); // kaart → hoeveel stukken er open waren toen het keek (volgt uit de kaart, niet bewaard)
   T.zetRoverskampenBij = function (S, w) {
-    if (!T.opEiland(w) || !w.open || KAMPEN_BIJ.get(w) === w.open.size) return [];
+    if (!T.opEiland(w) || !w.open) return [];
+    const kampen = kampenVan(w, Math.floor(S.kalender.dag));
+    if (KAMPEN_BIJ.get(w) === w.open.size || kampen.every((K) => K.staat)) return [];
     KAMPEN_BIJ.set(w, w.open.size);
-    const E = T.eilandVan(w.eiland.zaad);
-    const kampen = w.kampen || (w.kampen = []);
-    if (kampen.length === E.kampen.length) return [];
+    const E = eilandKampen(w);
     const uit = [];
-    for (const k of E.kampen) {
-      if (kampen.some((q) => q.nr === k.nr) || !kampLandOpen(w, k)) continue;
-      const kamp = { nr: k.nr, x: k.x, y: k.y };
-      kampen.push(kamp);
-      for (const t of k.tenten.slice(0, Math.ceil(IN().kampBende / IN().manPerTent))) {
-        const voet = { dx: t.voet.x - t.x, dy: t.voet.y - t.y, b: t.voet.b, h: t.voet.h };
-        T.zetVoorwerp(w, { soort: 'tent', x: t.x, y: t.y, vorm: 'tent-rover', richting: t.open, voet, kamp: k.nr });
-      }
+    for (const K of kampen) {
+      const k = E.kampen[K.nr];
+      if (K.staat || !kampLandOpen(w, k)) continue;
+      K.staat = true;
       T.zetVoorwerp(w, { soort: 'kampvuur', x: k.x, y: k.y, kamp: k.nr });
-      uit.push(kamp);
+      zetTenten(w, K, k);
+      for (const lid of K.bende) zetMan(w, K, lid, plekVan(w, K, lid));
+      uit.push(K);
     }
     return uit;
   };
@@ -460,14 +515,201 @@
     }
     return true;
   }
+  // Een tent per `manPerTent` man, op de plekken die het eiland gaf, op volgorde; ze gaan niet weer neer als er een valt
+  // (dat is c4). Staat er iemand waar een tent komt, dan komt hij een tik later.
+  function zetTenten(w, K, k) {
+    const nodig = Math.min(k.tenten.length, Math.ceil(K.bende.length / IN().manPerTent));
+    while (K.tenten < nodig) {
+      const t = k.tenten[K.tenten];
+      for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) if (T.wezenOp(w, x, y)) return;
+      const voet = { dx: t.voet.x - t.x, dy: t.voet.y - t.y, b: t.voet.b, h: t.voet.h };
+      T.zetVoorwerp(w, { soort: 'tent', x: t.x, y: t.y, vorm: 'tent-rover', richting: t.open, voet, kamp: k.nr });
+      K.tenten++;
+    }
+  }
+  // Waar een man om het vuur staat: zijn eigen plek tussen `rondHetVuur` tegels ervan, op het plein, niet op een tentplek
+  // (ook een die er nog niet staat) of de tegel voor zijn opening, niet op het paadje, en niet die van een ander; met een
+  // vaste worp uit het zaad van het kamp en zijn id (de dobbelsteen van het kamp rolt er niet door: wie er later bijkomt,
+  // is dezelfde, of je het kamp nu zag of niet), en dan onthouden (lid.plek).
+  function plekVan(w, K, lid) {
+    if (lid.plek) return lid.plek;
+    const E = eilandKampen(w);
+    const k = E.kampen[K.nr];
+    const pad = E.paden.find((p) => p.kamp === K.nr);
+    const nee = new Set();
+    for (const t of k.tenten) {
+      nee.add(`${t.deur.x},${t.deur.y}`);
+      for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) nee.add(`${x},${y}`);
+    }
+    for (const l of K.bende) if (l.plek) nee.add(`${l.plek.x},${l.plek.y}`);
+    const [van, tot] = IN().rondHetVuur;
+    const kan = [];
+    for (let y = Math.floor(K.y - tot); y <= K.y + tot; y++) {
+      for (let x = Math.floor(K.x - tot); x <= K.x + tot; x++) {
+        const d = Math.hypot(x - K.x, y - K.y);
+        if (d < van || d > tot || nee.has(`${x},${y}`) || (pad && totPad(pad.punten, x, y) < 1.5) || !T.isBegaanbaar(w, x, y, {})) continue;
+        kan.push({ x, y });
+      }
+    }
+    const worp = T.dobbelsteen((K.lot.zaad ^ Math.imul(lid.id + 1, 0x9e3779b1)) >>> 0)();
+    lid.plek = kan.length ? kan[Math.floor(worp * kan.length)] : plekBij(w, { x: K.x + 1, y: K.y });
+    return lid.plek;
+  }
+  // Hoe ver (x, y) van een lijn ligt (een lijst punten [x, y]): het paadje van een kamp.
+  function totPad(punten, x, y) {
+    let d = Infinity;
+    for (let i = 0; i + 1 < punten.length; i++) {
+      const [ax, ay] = punten[i];
+      const [bx, by] = punten[i + 1];
+      const lx = bx - ax;
+      const ly = by - ay;
+      const ll = lx * lx + ly * ly;
+      const u = ll > 0 ? Math.max(0, Math.min(1, ((x - ax) * lx + (y - ay) * ly) / ll)) : 0;
+      d = Math.min(d, Math.hypot(x - ax - u * lx, y - ay - u * ly));
+    }
+    return d;
+  }
+  // Waar een nieuwe man het kamp in komt: over het paadje, aan de rand van de open plek.
+  function aankomst(w, K) {
+    const E = eilandKampen(w);
+    const pad = E.paden.find((p) => p.kamp === K.nr);
+    const r = T.EILAND_INSTELLINGEN.kampen.open - 1;
+    for (let i = 0; pad && i + 1 < pad.punten.length; i++) {
+      const [ax, ay] = pad.punten[i];
+      const [bx, by] = pad.punten[i + 1];
+      const st = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay)));
+      for (let s = 0; s <= st; s++) {
+        const x = Math.round(ax + ((bx - ax) * s) / st);
+        const y = Math.round(ay + ((by - ay) * s) / st);
+        if (Math.hypot(x - K.x, y - K.y) >= r) return plekBij(w, { x, y });
+      }
+    }
+    return plekBij(w, { x: K.x + r, y: K.y });
+  }
+  // Een man van kamp K op de kaart, op plek (of de vrije tegel ernaast), met zijn gezicht naar het vuur.
+  function zetMan(w, K, lid, plek) {
+    const e = maakRover(null, lid.vel, plekBij(w, plek));
+    e.kamp = K.nr;
+    e.lid = lid.id;
+    e.kijkt = { x: K.x, y: K.y };
+    w.wezens.push(e);
+    return e;
+  }
+
+  // Elke tik, één keer per kaart (T.wereldTik, js/tik.js), na het zetten van de kampen: elke nacht van de kampen (ook waar
+  // je niet bent), en wat de mannen doen in een kamp dat er staat.
+  T.werkKampenBij = function (S, w) {
+    if (!w.kampen || !S.kalender) return;
+    const dag = S.kalender.dag;
+    if (w.kampenDag == null) w.kampenDag = Math.floor(dag);
+    while (w.kampenDag < Math.floor(dag)) tikKampenDag(w, ++w.kampenDag);
+    if (!w.kampen.some((K) => K.staat)) return;
+    const mannen = new Map(); // nummer van het kamp → zijn mannen op de kaart
+    for (const e of w.wezens) {
+      if (e.kamp == null || !e.rover || e.dood) continue;
+      const lijst = mannen.get(e.kamp);
+      if (lijst) lijst.push(e);
+      else mannen.set(e.kamp, [e]);
+    }
+    const E = eilandKampen(w);
+    for (const K of w.kampen) if (K.staat) werkKampBij(S, w, K, E.kampen[K.nr], mannen.get(K.nr) || [], dag);
+  };
+
+  // Elke nacht van de kampen: is er een jaar van het spel om, dan komt er in elk kamp een man van buiten bij, tot
+  // `kampMeest` (de getallen van de wilde rovers); en wie in een gevecht gewond raakte, heeft weer al zijn leven (vraag 11).
+  function tikKampenDag(w, dag) {
+    const jaar = Math.floor(dag / T.DAGEN_PER_JAAR);
+    for (const K of w.kampen) {
+      if (jaar <= K.jaar) continue;
+      K.jaar = jaar;
+      for (let i = 0; i < IN().kampErbijPerJaar && K.bende.length < IN().kampMeest; i++) vanBuiten(K);
+    }
+    for (const e of w.wezens) if (e.kamp != null && e.rover && !e.dood && !e.doelwit && e.maxLeven > 0) e.leven = e.maxLeven;
+  }
+
+  // Wat de mannen van kamp K doen. Wie erbij kwam (van buiten, of uit een dorp), komt over het paadje het kamp in, en de
+  // tenten volgen de bende. Overdag staat iedereen op zijn plek, met zijn gezicht naar het vuur; 's nachts slaapt hij in
+  // zijn tent, behalve de wacht (elke nacht een ander) en wie geen tent heeft (N1). Heeft een van hen een vijand (zijn
+  // gevecht kiest die, js/gevecht.js), dan komt iedereen naar buiten, en slaapt niemand tot `wakkerUren` erna. Is er niemand
+  // van een dorp binnen `rustVerder` (om de twee seconden gevraagd), dan kijken ze niet om zich heen (e.ver; zoals het
+  // wild): dan kost een kamp ver weg bijna niets.
+  function werkKampBij(S, w, K, k, mannen, dag) {
+    zetTenten(w, K, k);
+    if (mannen.length < K.bende.length) {
+      const er = new Set(mannen.map((e) => e.lid));
+      for (const lid of K.bende) if (!er.has(lid.id)) mannen.push(zetMan(w, K, lid, aankomst(w, K)));
+    }
+    const t = S.wereldTijd || 0;
+    if (t >= (K.keekVer || 0)) {
+      K.keekVer = t + 2;
+      K.ver = !w.wezens.some((m) => m.dorp && !m.dood && T.afstand(T.tegelVan(m), K) <= IN().rustVerder);
+    }
+    if (mannen.some((e) => e.doelwit)) K.wakker = dag + IN().wakkerUren / 24;
+    const slapen = dag >= K.wakker && isNacht(dag);
+    const wacht = slapen && K.bende.length ? K.bende[nachtVan(dag) % K.bende.length].id : null;
+    for (const e of mannen) {
+      e.ver = K.ver;
+      if (e.doelwit) continue;
+      const i = K.bende.findIndex((l) => l.id === e.lid);
+      if (i < 0) continue;
+      const tent = Math.floor(i / IN().manPerTent);
+      if (slapen && e.lid !== wacht && tent < K.tenten) naarBinnen(S, w, e, k.tenten[tent].deur);
+      else naarBuiten(S, w, K, e, plekVan(w, K, K.bende[i]));
+    }
+  }
+  // Of het nacht is (van het slapen tot het opstaan, T.dagindeling in js/dag.js), en de nacht waarin het is (de dag van
+  // de avond waarmee hij begon, plus een vast getal, zodat het nooit onder nul komt): de wacht blijft de hele nacht dezelfde.
+  function isNacht(dag) {
+    const d = T.dagindeling(dag);
+    const u = T.uurVanDag(dag);
+    return u >= d.slapen || u < d.opstaan;
+  }
+  const nachtVan = (dag) => Math.floor(dag) - (T.uurVanDag(dag) < 12 ? 1 : 0) + 1000;
+  // Naar zijn tent: bij de deur (of ernaast, als een ander erin staat) gaat hij naar binnen; js/tekenen.js laat hem de deur
+  // in stappen, zoals een dorpeling (js/verkennen.js).
+  function naarBinnen(S, w, e, deur) {
+    if (e.binnen || e.onderweg) return;
+    if (T.afstand(T.tegelVan(e), deur) <= 1) {
+      e.binnen = true;
+      e.deur = { x: deur.x, y: deur.y };
+      e.deurSinds = S.tijd;
+      e.pad = [];
+      return;
+    }
+    if (!e.pad.length) stuurKamp(S, w, e, deur);
+  }
+  // Naar buiten, en naar zijn plek om het vuur; daar kijkt hij naar het vuur. Staat er een ander op zijn plek, dan blijft
+  // hij ernaast staan.
+  function naarBuiten(S, w, K, e, plek) {
+    if (e.binnen) {
+      if (T.wezenOp(w, e.tx, e.ty, e)) return;
+      e.binnen = false;
+      e.deurSinds = S.tijd;
+    }
+    if (e.onderweg || e.pad.length) return;
+    const ver = T.afstand(T.tegelVan(e), plek);
+    if (ver === 0 || (ver === 1 && T.wezenOp(w, plek.x, plek.y, e))) e.kijkt = { x: K.x, y: K.y };
+    else stuurKamp(S, w, e, plek);
+  }
+  // Een pad voor een man van een kamp, zoals een rover van een overval (stuur), maar niet vaker dan om de twee seconden
+  // (e.zoektWeg, zoals het wild): vindt hij geen weg, dan zoekt hij niet elke tik opnieuw.
+  function stuurKamp(S, w, e, doel) {
+    const t = S.wereldTijd || 0;
+    if (t < (e.zoektWeg || 0)) return;
+    e.zoektWeg = t + 2;
+    const naast = T.wezenOp(w, doel.x, doel.y, e) != null;
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, { naast });
+    if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
+  }
+
   // Het vuur van een roverskamp: het brandt als het donker is, en smeult overdag.
   T.roverskampVuur = (dag) => (T.lichtVan(dag).nacht > 0 ? 'brandt' : 'smeult');
-  // Het licht van de roverskampen op kaart w, voor T.lichtBronnen (js/zien.js): 's avonds en 's nachts, zoals het
-  // kampvuur van het lege begin (T.BEGIN_INSTELLINGEN.vuur). Zo zie je in het donker een gloed in het bos, waar je het
+  // Het licht van de roverskampen op kaart w die er staan, voor T.lichtBronnen (js/zien.js): 's avonds en 's nachts, zoals
+  // het kampvuur van het lege begin (T.BEGIN_INSTELLINGEN.vuur). Zo zie je in het donker een gloed in het bos, waar je het
   // land kent.
   T.roverskampenLicht = function (w, dag) {
-    if (!w || !w.kampen || !w.kampen.length || T.roverskampVuur(dag) !== 'brandt') return [];
+    if (!w || !w.kampen || T.roverskampVuur(dag) !== 'brandt') return [];
     const L = T.BEGIN_INSTELLINGEN.vuur;
-    return w.kampen.map((k) => ({ x: k.x, y: k.y, straal: L.straal, sterkte: L.sterkte, soort: 'kampvuur' }));
+    return w.kampen.filter((K) => K.staat).map((K) => ({ x: K.x, y: K.y, straal: L.straal, sterkte: L.sterkte, soort: 'kampvuur' }));
   };
 })(globalThis.Spel = globalThis.Spel || {});

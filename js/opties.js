@@ -771,7 +771,7 @@
   // De werkbank: alle getallen, met een leesbare naam en een bereik voor de schuif
   // ---------------------------------------------------------------------------------------------
 
-  // Elk getal heet naar de sleutels van zijn pad ("pachtPerAkkertegel", "rovers" · "perRover"): hier staat wat een sleutel in
+  // Elk getal heet naar de sleutels van zijn pad ("pachtPerAkkertegel", "rovers" · "aanvallers"): hier staat wat een sleutel in
   // het Engels is, één keer voor alle blokken, want dezelfde sleutel bedoelt overal hetzelfde. Bedoelt hij in één blok iets
   // anders, dan staat hij bij NAAM_VAN_PAD, met het hele pad. Een sleutel die hier niet staat, toont zich in woorden
   // (inWoorden, in het Nederlands van de code): test/opties.test.cjs laat dat niet toe.
@@ -853,7 +853,6 @@
     halfBijZich: T.t('chance he has only half'),
     rovers: T.t('robbers'),
     basis: T.t('base'),
-    perRover: T.t('per robber'),
     donker: T.t('dark'),
     aanvallers: T.t('attackers'),
     hinderlaag: T.t('ambush'),
@@ -1056,8 +1055,6 @@
     goud: T.t('gold'),
     belastingNaarStand: T.t('tax by standing'),
     // De rovers, de raad, de herberg
-    terugNaDagen: T.t('return after days'),
-    opnieuwNaDagen: T.t('again after days'),
     wildePerJaar: T.t('wild attacks per year'),
     eersteWildeNa: T.t('first wild attack after'),
     wildeEerst: T.t('wild robbers in the first year'),
@@ -1070,7 +1067,11 @@
     graanPerRover: T.t('grain per robber'),
     kansAkkerKapot: T.t('chance a field is ruined'),
     kampBende: T.t('men in a new camp'),
+    kampErbijPerJaar: T.t('camp men added per year'),
+    kampMeest: T.t('camp men from outside at most'),
     manPerTent: T.t('men per tent'),
+    rondHetVuur: T.t('distance from the fire'),
+    wakkerUren: T.t('hours awake after a fight'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),

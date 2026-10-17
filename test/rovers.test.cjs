@@ -49,7 +49,9 @@ function metWachthuis(S) {
   return mannen.map((p) => p.wezen);
 }
 
-test('wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, met hun naam', () => {
+// Wie wegtrekt, gaat naar het roverskamp dat het dichtst bij het plein van zijn dorp ligt (werklijst vraag 170, stap 6a2,
+// c2; Marcel, 17 okt: H2, ook als het vol is); de bende van het dorp (D.rovers.bende) is weg (D1).
+test('wie wegtrekt, gaat naar het dichtste roverskamp: de jongeren en volwassenen, met hun naam (c2)', () => {
   const S = gehucht();
   opUur(S, 30, 10);
   const voor = S.dorp.bewoners.mensen.slice();
@@ -57,19 +59,25 @@ test('wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, me
   const weg = voor.filter((p) => !S.dorp.bewoners.mensen.includes(p));
   const groot = weg.filter((p) => p.leeftijd === 'jong' || p.leeftijd === 'volwassen');
   assert.ok(groot.length > 0, 'er trekt iemand weg die rover kan worden');
-  assert.deepEqual(S.dorp.rovers.bende.map((l) => l.naam).sort(), groot.map((p) => p.naam).sort());
-  assert.equal(S.dorp.rovers.bendeOp, 30 + T.ROVERS_INSTELLINGEN.terugNaDagen);
+  const plein = T.pleinVan(S.dorp);
+  const kampen = S.wereld.kampen.slice().sort((a, b) => T.afstand(a, plein) - T.afstand(b, plein));
+  const uitDorp = (K) => K.bende.filter((l) => l.uit);
+  assert.deepEqual(uitDorp(kampen[0]).map((l) => l.naam).sort(), groot.map((p) => p.naam).sort(), 'ze zijn in het dichtste kamp');
+  assert.ok(uitDorp(kampen[0]).every((l) => l.uit === S.dorp.plek.naam), 'met het dorp waar ze vandaan komen');
+  assert.equal(kampen[0].bende.length, T.ROVERS_INSTELLINGEN.kampBende + groot.length, 'bij de twee van het begin');
+  for (const K of kampen.slice(1)) assert.equal(uitDorp(K).length, 0, `in kamp ${K.nr} kwam niemand`);
+  assert.equal(S.dorp.rovers && S.dorp.rovers.bende, undefined, 'het dorp heeft geen bende meer');
 });
 
-test('de bende komt terug op de dag die het zegt, op het uur van het zaad, van de rand van de kaart, en het dorp ziet ze', () => {
+// Een overval komt tot c3 van wilde rovers van de rand (D1): op de dag die het zaad zegt, op het uur van het zaad.
+test('wilde rovers komen op het uur van het zaad, van de rand van de kaart, naar een akker, en het dorp ziet ze', () => {
   const S = gehucht();
-  opUur(S, 30, 10);
-  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
-  const bende = S.dorp.rovers.bende.map((l) => l.naam);
+  S.dorp.rovers = T.nieuweRovers();
+  S.dorp.rovers.wildeOp = 40;
   T.tikRoversDag(S.dorp, 39);
   assert.equal(S.dorp.rovers.aanval, null, 'nog niet');
   T.tikRoversDag(S.dorp, 40);
-  assert.equal(S.dorp.rovers.aanval.soort, 'bende');
+  assert.equal(S.dorp.rovers.aanval.soort, 'wild');
   const uur = S.dorp.rovers.aanval.uur;
   assert.ok(uur >= 0 && uur < 24, `het uur: ${uur}`);
   opUur(S, 40, Math.max(0, uur - 0.5));
@@ -81,20 +89,18 @@ test('de bende komt terug op de dag die het zegt, op het uur van het zaad, van d
   const A = S.dorp.rovers.aanval;
   const w = S.wereld;
   assert.equal(A.fase, 'komen');
-  assert.equal(A.rovers.length, bende.length);
+  assert.equal(A.rovers.length, A.aantal);
   for (const e of A.rovers) {
     assert.ok(w.wezens.includes(e));
     assert.equal(e.kant, 'monster');
     assert.equal(e.rover, true);
+    assert.equal(e.dorp, S.dorp, 'een rover van een overval hoort bij het dorp dat hij overvalt');
   }
   const K = T.kaartVak(w);
   assert.ok(A.ingang.x === K.x || A.ingang.y === K.y || A.ingang.x === K.x + K.b - 1 || A.ingang.y === K.y + K.h - 1, 'aan de rand');
   assert.equal(T.bestemmingVan(w.akkers[A.veld]), 'akker', 'ze gaan naar een akker, niet naar een weide');
-  assert.ok(berichten.some((t) => /^Robbers are coming\./.test(t) && t.includes(bende[0])), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /^Robbers are coming\. Two wild robbers turn up/.test(t)), berichten.join(' | '));
   assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
-  // Een rover die valt, is uit de bende.
-  T.raak(S, S.dorp, A.rovers[0], 100, null);
-  assert.equal(S.dorp.rovers.bende.length, bende.length - 1);
 });
 
 test('wilde rovers komen op een dag die vastligt per spel, niet in de eerste zestig dagen, het eerste jaar met twee man', () => {
@@ -242,7 +248,7 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij', () => {
   for (const e of mannen) assert.notEqual(e.kant, 'speler');
 });
 
-test('de bende en een aanval gaan mee in een bewaard spel', () => {
+test('de roverskampen en een aanval gaan mee in een bewaard spel', () => {
   const S = gehucht();
   opUur(S, 30, 10);
   T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
@@ -250,7 +256,7 @@ test('de bende en een aanval gaan mee in een bewaard spel', () => {
   const A = aanval(S, 2);
   const S2 = gehucht();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
-  assert.deepEqual(S2.dorp.rovers.bende.map((l) => l.naam), S.dorp.rovers.bende.map((l) => l.naam));
+  assert.deepEqual(S2.wereld.kampen, S.wereld.kampen, 'de kampen, met hun bende en hun dobbelsteen');
   assert.equal(S2.dorp.rovers.aanval.fase, A.fase);
   for (const e of S2.dorp.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
 });

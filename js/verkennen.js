@@ -101,7 +101,10 @@
 
     if (doel.wezen) {
       const e = doel.wezen;
-      // Een vijand, een dier (js/vee.js) of het wild (js/beesten.js): bij de muis staat alleen wat het is.
+      // Een vijand, een dier (js/vee.js) of het wild (js/beesten.js): bij de muis staat alleen wat het is; een man van een
+      // roverskamp heeft ook een naam (js/rovers.js).
+      const lid = T.lidVan(w, e);
+      if (lid) return { tekst: T.t('{naam}, a robber', { naam: lid.naam }) };
       if (e.kant === 'monster' || e.dier || e.beest) return { tekst: T.hoofdletter(T.eenNaam(e.naam)) };
       // Een mens van een ander dorp: wie hij is, en van welk dorp.
       if (anderDorp(e.dorp)) return { tekst: T.t('{wie}, of {dorp}', { wie: T.hoofdletter(e.naam), dorp: naamVan(e.dorp) }) };

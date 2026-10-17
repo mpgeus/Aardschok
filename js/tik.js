@@ -27,8 +27,8 @@
   // Hoe lang een tik duurt, in seconden echte tijd.
   T.TIK = 1 / T.TIK_INSTELLINGEN.perSeconde;
 
-  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wat van geen dorp is (het wild), wie er
-  // loopt, en waar de aanvoerder is het maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
+  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wat van geen dorp is (het wild en de
+  // roverskampen), wie er loopt, en waar de aanvoerder is het maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
   // dt maal de snelheid op (`dtWereld`). `meet(naam, f)`, als het er is, doet f en meet hoe lang een deel duurt (de
   // meting van `npm run grootte`, gereedschap/grootte/harnas.cjs).
   const zonderMeten = (naam, f) => f();
@@ -55,6 +55,7 @@
     meet('wereld', () => {
       for (const w of kaartenVan(S)) {
         T.zetRoverskampenBij(S, w); // de roverskampen (js/rovers.js), ook als hun land opengaat, vóór het wild
+        T.werkKampenBij(S, w); // hun bende: elk jaar een erbij, en wat de mannen in een kamp doen (dag en nacht)
         T.zetWildBij(S, w);
         T.werkBeestenDagBij(S, w);
         T.werkGevechtVanDeWereldBij(S, w);
