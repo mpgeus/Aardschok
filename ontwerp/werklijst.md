@@ -21,8 +21,8 @@ het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
 **Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P):
 helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen, 38 beelden per seconde; Chromium en
-Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst
-voortzetten"): meten waar de tijd zit, en een plan voor Marcel.
+Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (18 okt, de sessie "PixiJS v8
+evaluatie voor Aardschok"; Marcel: "Neem het over"): B5, `js/gl.js` naar WebGL2 met instanties en een textuurstapel.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
