@@ -1349,8 +1349,15 @@ vergroot. Het script neemt `render()` uit `stijlproef.cjs` en meet de vorm:
   op elke balk.
 
 **Marcel koos het riet van de herberg** (17 okt: "ik laat het dak van de herberg gebruiken"): het rustige riet in lagen
-met lichte punten blijft zoals het in `stijlproef.cjs` staat; het levendige gouden riet van huis1 niet. **Nog open:** moet
-het mos van een verweerd dak fijner, langs de lagen, zoals in het doel van huis1?
+met lichte punten blijft zoals het in `stijlproef.cjs` staat; het levendige gouden riet van huis1 niet.
+
+**Het mos op verweerd riet: het oude blijft (17 okt).** Marcel vroeg het mos fijner, "langs de onderrand van de lagen
+zoals in het doel van huis1". De proef: een haak op `mosOpRiet` in `huis-sdf.cjs`, die het mos alleen op de rand van een
+laag zette, per punt een rond plukje, in stukken met veel of weinig, lichter dan het oude. Op het voorste dakvlak van
+huis1-oud werd 5,9% groen (het spel 13,4%, de stijl met het oude mos 12,3%, het doel 4,0%), als fijne, gebroken groene
+randen langs de lagen. Marcel, op de plaat: "nee, het oude mos was beter". Dus blijft het mos van het verweren zoals
+het is, in plukken over het dak, en is de haak er weer uit (`stijlproef.cjs` is weer zoals hij gecommit was). Niet
+opnieuw proberen zonder Marcel.
 
 ## De heide (25 sep 2026)
 

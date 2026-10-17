@@ -27,8 +27,10 @@ const DOEL = {
   schoon: { vak: [770 + 185, 0, 480, 511], pas: { sx: 0.959, sy: 0.886, tx: 194.1 - 185, ty: 9.9 } },
   verweerd: { vak: [770 + 185, 513, 480, 511], pas: { sx: 0.956, sy: 0.886, tx: 196.3 - 185, ty: 9.0 } },
 };
-// het stuk dat vergroot naast elkaar komt: de voorgevel met de deur, het raam, de plint en de dakvoet (pixels van huis1)
-const STUK = [20, 300, 290, 258];
+// de stukken die vergroot naast elkaar komen (pixels van huis1): de voorgevel met de deur, het raam, de plint en de
+// dakvoet, en voor het mos van verweerd het voorste dakvlak
+const GEVEL = [20, 300, 290, 258];
+const DAK = [40, 80, 250, 210];
 
 // het zwart rond het huis doorzichtig: alles wat vanaf de rand van het vak donker bereikbaar is
 function uitgesneden(im, drempel = 16) {
@@ -107,10 +109,10 @@ async function main() {
   const plaat = K.leesPng(PLAAT);
   const doel = {};
   for (const [wat, d] of Object.entries(DOEL)) doel[wat] = uitgesneden(P.snij(plaat, ...d.vak));
-  const stukVan = (im) => P.snij(im, ...STUK);
-  const stukDoel = (wat) => {
+  const stukVan = (im, stuk = GEVEL) => P.snij(im, ...stuk);
+  const stukDoel = (wat, stuk = GEVEL) => {
     const { sx, sy, tx, ty } = DOEL[wat].pas;
-    const [x, y, b, h] = STUK;
+    const [x, y, b, h] = stuk;
     return P.snij(doel[wat], Math.round(sx * x + tx), Math.round(sy * y + ty), Math.round(sx * b), Math.round(sy * h));
   };
 
@@ -137,6 +139,7 @@ async function main() {
     [['VERWEERD: SPEL', oudOud], ['VERWEERD: NIEUW', oudNieuw], ['VERWEERD: DOEL', doel.verweerd]],
     [['SPEL X2', stukVan(jongOud), 2], ['NIEUW X2', stukVan(jongNieuw), 2], ['DOEL X2', stukDoel('schoon'), 2]],
     [['SPEL X2', stukVan(oudOud), 2], ['NIEUW X2', stukVan(oudNieuw), 2], ['DOEL X2', stukDoel('verweerd'), 2]],
+    [['DAK VERWEERD: SPEL X2', stukVan(oudOud, DAK), 2], ['NIEUW X2', stukVan(oudNieuw, DAK), 2], ['DOEL X2', stukDoel('verweerd', DAK), 2]],
   ]);
   P.schrijfPng(path.join(UIT, 'plaat.png'), V);
   console.log(JSON.stringify(meting, null, 1));

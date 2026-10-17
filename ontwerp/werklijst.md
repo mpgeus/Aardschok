@@ -121,7 +121,9 @@ bundels, blauwe ramen, een plint met donkere voegen, zachtere schaduw en fijnere
 duur. Wacht op Marcel (hieronder). **Huis1 is het tweede doel** (Marcel, 17 okt: "Neem de plaat als tweede doel");
 de proefplaat is af (`beeld.md`, "Het tweede doel: huis1"; `uit/stijlproef/huis1/plaat.png`): de vorm blijft (het
 silhouet op 284 pixels van de rafelrand van het riet na), maar het riet van huis1 vraagt het omgekeerde van de herberg.
-**Marcel koos het riet van de herberg** (17 okt: "ik laat het dak van de herberg gebruiken"). Wacht op Marcel (hieronder).
+**Marcel koos het riet van de herberg** (17 okt: "ik laat het dak van de herberg gebruiken"), **en het oude mos**: na een
+proef met fijner mos langs de lagen (17 okt: "nee, het oude mos was beter"; `beeld.md`, "Het mos op verweerd riet").
+Van het tweede doel blijft verder niets open.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -145,9 +147,6 @@ stenen huizen. **Ronde 3 is af.**
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
   `plaat.png`, en `beeld.md`, "De andere materialen". Dan: welke goed zijn, en wat anders moet; daarna de haken in de
   bouwer.
-- **Het mos op een verweerd dak** (vraag 177, het tweede doel, 17 okt; Marcel koos het riet van de herberg): moet het
-  mos fijner, langs de lagen, zoals in het doel van huis1 (`gereedschap/pixelart/uit/stijlproef/huis1/plaat.png`,
-  `beeld.md`, "Het tweede doel: huis1")?
 - **De heuvels: d, of eerst ver uitgezoomd sneller** (vraag 174, c, 17 okt): Marcel mat in Firefox (bij L, "Stap c")
   wat Chromium en Edge zeiden, 4 ms per beeld boven vlak. Dan is d de volgende stap: de heuvels altijd aan, de
   spelregel *Height* eruit, en het opslaan een versie omhoog. Maar ver uitgezoomd haalt het spel ook vlak de 60 niet (38
