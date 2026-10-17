@@ -105,7 +105,9 @@ ze rood op de minikaart. **c2, de bende, is af** (17 okt, in `main`; Marcel: "N1
 bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het begin, met twee man en een erbij per jaar
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
-volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). Let op: CLAUDE.md zit tegen de grens van
+volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
+(bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland; het plan wacht op
+Marcel. Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -1207,6 +1209,25 @@ zijn huizen en zijn infra zijn (eerst in woorden, dan een proefplaat), of het in
 zoals het tweede dorp van 6a, dat zelf kiest uit de handelingen van een mens: 6b), wat het doet (roven, handelen met wie
 wil, wegtrekkers lokken), en hoe je het verslaat. Voorstel voor de volgorde: na stuk c en 6b, omdat een hol dat zelf
 bouwt een dorp is dat kiest zonder speler.
+
+## L. De heuvels op het hele eiland (vraag 174, 17 okt)
+
+Marcel, 17 okt: **"de map maker gebruikt ook nog geen heuvels die we eerder wel hebben gemaakt"**. Hoe het nu is: de
+heuvels van vraag 121 (`js/hoogte.js`, `kaarten.md`) zitten achter de spelregel *Height*, standaard *Flat* ("vlak tot de
+speeltest laat zien dat het spel er net zo goed mee loopt", `js/opties.js`), en ze zijn van vóór het hele eiland in
+stukken (B2). `w.hoogte` is nog één raster: het eerste land van 100 bij 100 met 48 tegels eromheen. Daarbuiten vraagt
+elke hoek het eiland opnieuw (`eilandOp`, een `T.eilandStuk` van één tegel): in Node gemeten (17 okt, proefdorp) kost een
+scherm vol tegels (3600, vier hoeken) daarbinnen 1,2 ms en daarbuiten zo'n 160, ruim honderd keer meer; in het spel
+nog niet bekeken. Ook nog open: de mist ligt plat op de heuvels (B2c), een brug volgt de glooiing (`opmerkingen.md`, bij
+de bruggen), en alleen het eerste dorp krijgt zijn vlakte (`opmerkingen.md`, bij 6a).
+
+**Voorstel van Claude (wacht op Marcel):** **a** de hoogte per stuk van 64 bij 64, zoals het land: de hoeken van een
+stuk eens uitgerekend als het opengaat, en de vlakke stukken per stuk gezocht (alleen `js/hoogte.js`, met een toets dat
+een stuk ver weg even snel is als het eerste land); **b** wat erop ligt volgt de heuvels: de mist, een brug vlak, en
+elk dorp zijn eigen vlakte; **c** meten, want performance gaat voor: het zwaarste beeld in Firefox en in Edge, ook na
+een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels altijd aan en gaat de spelregel eruit
+(CLAUDE.md: een spelregel die het oude alleen houdt tot het nieuwe af is). Na het tekenwerk dat loopt (b en c raken
+`js/tekenen.js`); a kan ernaast.
 
 ## Af (sinds 11 okt)
 
