@@ -236,7 +236,8 @@ geen verkleinen of verhullen van de code, en de schil niet dichtzetten: dat houd
 één speler is uitpluizen geen kwaad (Steam-DRM is toch in minuten weg, en een kloon kopieert het idee, niet de code).
 Het debugvenster gaat wel uit voor Steam (hierboven, punt 0): dat is een keuze voor het scherm, geen slot.
 
-**Waar het wél telt: samen spelen in lockstep** (werklijst vraag 170, stap 6c). Elke computer rekent de hele wereld:
+**Waar het wél telt: samen spelen in lockstep** (werklijst vraag 170, stap 6c; lockstep blijft, Marcel, 17 okt: twee
+tot vier vrienden over Steam, "Ik denk A"). Elke computer rekent de hele wereld:
 - **Wie zijn wereld verandert** (in de console, of met een mod die de ander niet heeft), loopt uiteen met de ander. Het
   controlegetal van 6c vangt dat, net als een fout van ons. Met D1 stuurt wie het spel opende zijn wereld opnieuw: wat
   de ander veranderde, is dan weg, maar wie opende, kan ongestoord valsspelen. Tussen vrienden is dat goed genoeg.
