@@ -27,7 +27,9 @@ alleen het veranderde stukje grond opnieuw tekenen, dan ronde 2 van elk plaatje 
 (een verandering kost in Chromium 2 à 4 ms in plaats van 5 à 8) en van ronde 2 de tekenlijst (geen functietje per
 voorwerp per beeld; in Chromium even snel, de winst hoort in Firefox). **Wacht op Marcel: de meter in Firefox en op 30×.**
 Ook van ronde 2 af: vier hoekpunten per plaatje in plaats van zes (in Chromium 5 à 8% sneller); ronde 2 is daarmee
-klaar. Optie 2, het bos in
+klaar. De meter in Firefox daarna (17:56, Crowthorpe): ver uitgezoomd vol bos 11,7 ms tekenen en 60 beelden per seconde
+(om 16:25 46 ms en 19); op 30× met bouwers die rooien 58 beelden per seconde, het traagste beeld 33 ms (eerst 100 à 117).
+Optie 2, het bos in
 de mist in de grondbuffer bakken (dan wuiven de bomen in de mist niet meer), blijft hier staan voor Firefox en zwakkere
 machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat het mat: `code.md` bij
 `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
