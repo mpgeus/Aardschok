@@ -103,6 +103,10 @@ brug op zijn oevers, de mist op de heuvels. **Bezig in sessie `main`** (17 okt, 
 stap c, meten (Marcel: "neem 174c over"). Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
+**Marcel kwam op 17 okt met 176** (bij N): zicht in een dicht dorp, de aanpak van Stronghold (gebouwen plat, het
+land lager, draaien, zoomen). **Bezig in sessie `main`** (17 okt, de sessie "Stronghold-proef"): stap 1, de proef met
+A gewoon, B plat en C alleen plat wat het zicht neemt.
+
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
 spelregels vast bij het begin, en een woordmerk in pixel art. **Stap 1 tot 6 zijn af** (16 okt, in `main`; `code.md` bij
@@ -1268,6 +1272,38 @@ tegels nog voor de wolven. Zo ook hier: een warme kleur, en een kleinere en zach
 voor de regel. **Af** (17 okt; Marcel koos K3 uit vier proeven: "K3: warm, 3 tegels, 0,45. Bouw het zo"): het kampvuur en
 de vuren van de roverskampen zijn warm (255, 150, 64), 3 tegels en 0,45 op het scherm, smeulend 0,2 (was 0,35, naar
 verhouding mee); de wolven blijven op 6 tegels (`code.md` bij `js/zien.js`).
+
+## N. Zicht in een dicht dorp: de aanpak van Stronghold (vraag 176, 17 okt)
+
+Marcel, 17 okt, met een uitgewerkte opdracht ("Aardschok — Stronghold-aanpak voor zichtbaarheid en camerabediening"):
+de speler moet compact kunnen bouwen, huizen naast elkaar en smalle straten, maar hoge gebouwen en grote daken verbergen
+wat erachter staat. Houd het gewone beeld mooi, en geef eenvoudige, directe middelen om het verborgene te zien, zoals
+Stronghold; de camera hoeft niet vrij of 3D te worden. Het hele plan staat in `beeld.md`, "Zicht in een dicht dorp".
+De punten, met Marcels prioriteit:
+
+1. **Gebouwen plat** (Stronghold: spatie): een schakelbare weergave waarin elk gebouw een lage tekening wordt, op zijn
+   eigen voet en plek, herkenbaar en aan te klikken, ook gewoon tijdens het spelen; liefst vooraf gerenderde tekeningen,
+   niet de bestaande samengedrukt. Alleen beeld, geen spelregel.
+2. **Het land lager** (Stronghold: V): de heuvels in beeld afvlakken, de echte hoogte blijft. Laag, zolang heuvels geen
+   zichtprobleem zijn.
+3. **De camera draaien** (X/C): vier vaste standen. Later, niet nu; een extra, geen oplossing voor het zicht (de
+   cameraproef van 17 okt, `gereedschap/cameraproef/evaluatie.md`, zegt hetzelfde).
+4. **Zoomen** (Z): een overzicht waarin een groot dorp leesbaar blijft, scherpe pixels zonder flikkeren of
+   verspringen, en kiezen en plaatsen op elke zoom. **Hoog**: het raakt het spelen elke dag.
+5. **Vrij bouwen blijft**: compact mag zolang de bouwregels het toestaan, niet verbieden omdat het overlapt; bij het
+   plaatsen de hele voet, de ingang en de aansluiting op de weg, en de bestaande gebouwen even plat als dat helpt.
+6. **Wie verborgen staat, kiezen**: een inwoner achter een huis is te vinden en te kiezen (een omtrek, een cirkel), een
+   gekozen gebouw blijft herkenbaar, eventueel de gebouwen ervoor even plat; geen vaste grote tekens boven iedereen.
+7. **De volgorde in het beeld**: de kunst blijft zoals ze is, maar wat je moet zien gaat voor; geen onnodige
+   doorzichtigheid, felle randen of vaste lagen.
+
+De volgorde (Marcel): een proef naast elkaar (gewoon tegenover plat) in een extreem dichte straat; kijken of het genoeg
+helpt; dan een schakelbare weergave in het spel; dan de tekens bij het bouwen en het kiezen van wie verborgen staat; dan
+de zoom apart; en pas daarna draaien en het land lager. **Stap 1, de proef** (alleen beeld; het spel, de kunst en de
+regels blijven): hetzelfde dichte dorp (minstens 8 gebouwen, bomen, wegen, inwoners) uit dezelfde camera en zoom, als
+A gewoon, B alle gebouwen plat, en C alleen plat wat het zicht neemt op één gekozen inwoner of gebouw, met een
+vergelijkingsplaat en een korte beoordeling. **Bezig in sessie `main`** (17 okt, de sessie "Stronghold-proef"): de proef
+in `gereedschap/zichtproef/`, gebouwd op de cameraproef.
 
 ## Af (sinds 11 okt)
 

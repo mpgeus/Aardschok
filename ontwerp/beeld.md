@@ -1151,6 +1151,51 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
   (een proef) lopen de pijlers en de zijkant van een landhoofd als kolommen met de strepen van hun steen door
   (`gereedschap/pixelart/uit/schermen/brug-b3-proef-20px-hoger.png`, en zoals het is: `brug-b3-echt.png`).
 
+## Zicht in een dicht dorp: de aanpak van Stronghold (17 okt 2026, werklijst vraag 176)
+
+Marcels opdracht van 17 okt, in het kort. Het vervolg op "Wat je niet kunt zien, kun je niet spelen" (hierboven), nu de
+speler zelf bouwt: compacte dorpen met huizen direct naast elkaar en smalle straten, waarin hoge gebouwen en grote daken
+de gebouwen, wegen en inwoners erachter verbergen. De weg van de klassieke Stronghold-spellen: **het gewone beeld blijft
+mooi, en er zijn eenvoudige, directe middelen om het verborgene te zien.** De camera hoeft niet vrij of 3D te worden.
+
+- **Gebouwen plat** (Stronghold: spatie). Een weergave die je aan en uit zet, ook gewoon tijdens het spelen, niet alleen
+  bij het bouwen: elk hoog gebouw wordt een lage tekening, met dezelfde voet en plek, zodat wegen, inwoners en wat
+  erachter staat te zien zijn. Herkenbaar en aan te klikken. Liefst vooraf gerenderde tekeningen uit de huizenbouwer, niet
+  de bestaande samengedrukt. Alleen beeld: geen spelregel verandert.
+- **Het land lager** (Stronghold: V). Onderzoeken of heuvels gebouwen of inwoners verbergen; zo ja, een weergave waarin
+  het land in beeld vlak is, met de echte hoogte en de regels zoals ze zijn, en alles op zijn eigen plek. Lage prioriteit
+  zolang heuvels geen zichtprobleem zijn.
+- **De camera draaien** (X en C). Vier vaste standen (0°, 90°, 180°, 270°), met de tekeningen die er al per kant zijn,
+  hetzelfde punt in het midden, en de muis, de grond, de gebouwen, de mensen en de schaduwen die blijven kloppen; de
+  stand van nu blijft de standaard. Een extra, geen oplossing voor slecht zicht in de gewone stand. Later, niet nu (de
+  cameraproef van 17 okt: `gereedschap/cameraproef/evaluatie.md`).
+- **Zoomen** (Z). Een prettig overzicht waarin een groter dorp leesbaar blijft, met scherpe pixel art zonder flikkeren
+  of verlies van wat belangrijk is; eventueel apart gerenderde of voorgefilterde tekeningen voor ver uitgezoomd; geen
+  gebouwen die verspringen; kiezen en plaatsen betrouwbaar op elke zoom. **Hoge prioriteit.**
+- **Vrij bouwen blijft** (een eigen toepassing voor Aardschok). Compact bouwen mag zolang de bouwregels het toestaan,
+  niet verboden omdat gebouwen elkaar in beeld overlappen. Bij het plaatsen: de hele voet, de ingang en de aansluiting op
+  de weg in beeld, de bestaande gebouwen even plat als dat helpt, en geen gebouw per ongeluk op de verkeerde tegel.
+- **Wie verborgen staat, kiezen** (een eigen voorstel, geen sneltoets van Stronghold). Een inwoner achter een gebouw is
+  nog te vinden en te kiezen: een zachte omtrek, een cirkel of een teken waar hij staat. Een gekozen gebouw blijft
+  herkenbaar als er andere voor staan; eventueel worden de gebouwen ervoor even plat. Geen vaste grote tekens boven alle
+  inwoners.
+- **De volgorde in het beeld.** De gebouwen mogen rijk en sfeervol zijn, maar wat je voor het spel moet zien, gaat voor:
+  de kunst blijft zo goed als ze is, wat gekozen is, is duidelijk, de tekens voor ingangen, bouwplaatsen en wat niet
+  loopt zijn overal dezelfde, en versiering verbergt nooit wat je moet doen. Geen onnodige doorzichtigheid, felle randen
+  of vaste lagen over het beeld.
+
+De volgorde: (1) een proef naast elkaar, gewoon tegenover plat; (2) in een extreem dichte middeleeuwse straat; (3)
+kijken of inwoners, wegen en gebouwen echt beter te zien zijn; (4) dan een schakelbare weergave in de renderer; (5) dan
+de tekens bij het plaatsen en het kiezen van wie verborgen staat; (6) de zoom apart; (7) pas daarna draaien en het land
+lager.
+
+**De eerste opdracht: alleen een proef.** Hetzelfde dichte dorp, minstens 8 gebouwen, een paar bomen, wegen en
+inwoners, uit dezelfde camera en zoom in drie varianten: **A** gewoon (elk gebouw met zijn dak en zijn eigen pixel art),
+**B** alle gebouwen plat (laag en herkenbaar, zoals de functionele weergave van Stronghold), en **C** alleen plat wat
+het zicht neemt op één gekozen inwoner of één gekozen gebouw. Met een vergelijkingsplaat en een korte technische
+beoordeling, met de bestaande pixelartgenerator waar het kan. Het spel, de tekeningen en de regels veranderen niet: de
+vraag is alleen of deze aanpak het zicht genoeg beter maakt om draaien minder nodig te maken.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
