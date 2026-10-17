@@ -510,6 +510,10 @@
     const midden = (WIND_STANDEN - 1) / 2;
     return Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + Math.max(-1, Math.min(1, wind)) * midden)));
   }
+  // Voor de vaste rijen in js/tekenen.js (vraag 178, B2): de stand bij een windwaarde, en hoeveel beelden er geladen zijn
+  // (komt er een bij, dan kan de tekening van een boom anders zijn, zie onthoudVoorwerp).
+  S.windStand = standVan;
+  S.geladenNr = () => geladenNr;
 
   // Het plaatje van een voorwerp op de kaart, in zijn vorm en zijn seizoen (S.tekeningVan), zoals het onthouden is.
   S.buitenVan = function (v, wind) {

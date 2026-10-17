@@ -164,6 +164,390 @@
     };
   }
 
+  // ---------------------------------------------------------------- de vaste rijen (vraag 178, B1 en B2)
+  //
+  // Ver uitgezoomd ging zo'n 80% van de tijd van de processor naar de bomen en het groen (18 okt gemeten op 35%: 7,1 ms per
+  // beeld, en zonder hen 1,5): elk beeld elk ding in de lijst, uitzoeken of het telt, sorteren, en per ding een plaatje.
+  // Met de videokaart staan ze nu per stuk land (T.STUK bij T.STUK tegels) één keer op de kaart, een vaste rij (js/gl.js,
+  // tekenVast), en per beeld is het één opdracht per stuk. Wat per beeld anders is, beslist de kaart zelf (Marcel, 18 okt:
+  // "Misschien zoveel mogelijk offloaden naar gpu"): de stand in de wind (de stand per fase van windVoorInstantie, 97
+  // getallen per beeld), of een tegel zwart, grijs of helder is in de mist (vasteMist: een getal per tegel), de schaduw
+  // (dezelfde rij, scheef) en wat ervoor staat: een dieptebuffer (B1), met als diepte de sleutel van het sorteren
+  // (diepteVanItem): de som x + y, en bij een gelijke som de volgorde waarin T.voorwerpenIn ze gaf (het stuk, en daarin de
+  // rij). De kunst heeft alleen helemaal dichte of doorzichtige pixels (gemeten 17 okt), dus de kaart kan het per pixel
+  // beslissen. Wat los blijft (de mensen, de gebouwen, de akkers, wat niet van het eiland is), sorteert zoals altijd en
+  // toetst tegen die diepte, zonder hem te schrijven: onderling houdt het de volgorde van de lijst.
+  // Een boom blijft in de lijst als hij een gebouw kan raken (tekenVolgorde zoekt de plek van een gebouw tussen wat ermee
+  // overlapt, en dat is geen getal), als zijn tekening niet op de stapel van js/gl.js past, en zolang iemand door hem
+  // heen kijkt (v.doorkijk: dan valt hij uit zijn rij, vasteMist). Zonder videokaart blijft alles in de lijst.
+  const DIEPTE_STAP = 0.3; // wat op dezelfde som vóór of na de bomen komt (diepteVanItem)
+  const DIEPTE_STUK = 0.2; // de volgorde van de stukken en hun rijen bij een gelijke som, samen minder dan dit
+  const VAST_PER = 8; // per boom: zijn anker (pixels vanaf het stuk), zijn tegel in het stuk, zijn tekening, zijn fase
+  const WIND_FASEN = 97; // zoals windVoorInstantie
+  const STANDEN = 5; // de standen in de wind (js/sprites.js)
+  const GEBOUW_RAND = 16; // pixels om wat een gebouw beslaat
+  const vasteKaarten = new WeakMap(); // kaart → de vaste rijen (vastVan)
+  let vastLaatst = null; // van de kaart van het vorige beeld: een andere kaart, en die van deze gaan van de kaart
+  let vastWerk = new Float32Array(VAST_PER * 64 * 64); // een rij terwijl hij gemaakt wordt
+  const deurItems = new Set(); // de deuren in de lijst van dit beeld: die komen vóór de bomen (diepteVanItem)
+
+  function vastVan(w) {
+    let V = vasteKaarten.get(w);
+    if (!V) {
+      V = {
+        tabel: { nummers: new Map(), data: new Float32Array(STANDEN * 8 * 64), n: 0, doos: [], maxDoos: [0, 0, 0, 0], vies: false },
+        stukken: new Map(), metDoorkijk: new Set(), basis: null, perTegel: null, wind: new Float32Array(100), kaart: T.kaartVersie(w),
+      };
+      vasteKaarten.set(w, V);
+    }
+    if (vastLaatst && vastLaatst !== V) {
+      for (const e of vastLaatst.stukken.values()) T.gl.weg(e.rij);
+      vastLaatst.stukken.clear();
+    }
+    vastLaatst = V;
+    return V;
+  }
+  // Een stuk als doek van zijn eigen maat met versie 1, zodat het op de stapel van js/gl.js kan: een stand in de wind is
+  // dat al; wat stilstaat, is een stuk van een vel, en een vel is te groot.
+  function losBeeld(stuk) {
+    const c = stuk.beeld;
+    if (c.versie === 1 && !stuk.sx && !stuk.sy && c.width === stuk.b && c.height === stuk.h) return c;
+    if (!stuk.los) {
+      const l = document.createElement('canvas');
+      l.width = stuk.b;
+      l.height = stuk.h;
+      l.getContext('2d').drawImage(c, stuk.sx, stuk.sy, stuk.b, stuk.h, 0, 0, stuk.b, stuk.h);
+      l.versie = 1;
+      stuk.los = l;
+    }
+    return stuk.los;
+  }
+  // Het nummer van de tekening van voorwerp v in de tabel (VERT_VAST in js/gl.js), -1 als hij niet vast kan (een stand
+  // past niet op de stapel), of -2 als het nog niet kan (zijn vel laadt nog). Per stand in de wind acht getallen: zijn plek
+  // op de stapel (u0, v0, u1, v1), zijn laag en zijn anker; zonder wind vijf keer wat stilstaat, zoals T.sprites.buitenVan.
+  // tabel.doos: per tekening hoe ver hij links, boven, rechts en onder zijn anker reikt, in een van zijn standen.
+  function tekeningNr(V, v) {
+    const o = T.sprites.onthouden(v);
+    const sleutel = o.t.vel + ',' + o.t.id;
+    const tab = V.tabel;
+    const al = tab.nummers.get(sleutel);
+    if (al !== undefined) return al;
+    const midden = (STANDEN - 1) / 2;
+    const standen = [];
+    for (let k = 0; k < STANDEN; k++) {
+      const stuk = o.wind ? T.sprites.buiten(o.t.vel, o.t.id, (k - midden) / midden) : T.sprites.buiten(o.t.vel, o.t.id);
+      if (!stuk) return -2;
+      standen.push(stuk);
+    }
+    const plekken = standen.map((stuk) => T.gl.opDeStapel(losBeeld(stuk)));
+    if (plekken.some((q) => !q)) {
+      tab.nummers.set(sleutel, -1);
+      return -1;
+    }
+    const nr = tab.n++;
+    if (tab.data.length < tab.n * STANDEN * 8) {
+      const d = new Float32Array(tab.data.length * 2);
+      d.set(tab.data);
+      tab.data = d;
+    }
+    const doos = [-Infinity, -Infinity, -Infinity, -Infinity];
+    standen.forEach((stuk, k) => {
+      const q = plekken[k];
+      tab.data.set([q.x / q.maat, q.y / q.maat, (q.x + stuk.b) / q.maat, (q.y + stuk.h) / q.maat, q.laag, stuk.ax, stuk.ay, 0], (nr * STANDEN + k) * 8);
+      [stuk.ax, stuk.ay, stuk.b - stuk.ax, stuk.h - stuk.ay].forEach((a, i) => (doos[i] = Math.max(doos[i], a)));
+    });
+    tab.doos[nr] = doos;
+    doos.forEach((a, i) => (tab.maxDoos[i] = Math.max(tab.maxDoos[i], a)));
+    tab.nummers.set(sleutel, nr);
+    tab.vies = true;
+    return nr;
+  }
+  // Mag voorwerp v in een vaste rij? Iets van het eiland met een tekening, dat niet anders getekend wordt dan als zijn
+  // plaatje (geen gebouw, geen eigen bestand per tekening), en zo helder als buiten (de kamer van nu).
+  function magVast(w, v) {
+    if (!v.natuur || !v.vel || v.inAanbouw || v.brand || T.isGebouw(v)) return false;
+    const vel = T.TEGELS && T.TEGELS[v.vel];
+    if (!vel || vel.perTekening || v.vel === 'huizen' || !T.isZichtbaar(w, v.x, v.y)) return false;
+    const k = T.kamerVan(w, v.x, v.y);
+    return !!k && k.id === w.huidigeKamer;
+  }
+  const raaktVak = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
+  // Wat een gebouw op het scherm kan beslaan (pixels van de vlakte, [x0, y0, x1, y1]): zijn tekening (T.sprites.doosVan) en
+  // zijn voet, met een rand.
+  function gebouwVak(v) {
+    const p = plekVan(v);
+    const b = v.beslaat || [1, 1];
+    const til = p.y - T.naarScherm(v.x, v.y).y; // de hoogte van het land, op het scherm
+    const links = T.naarScherm(v.x, v.y + b[1] - 1).x - 32;
+    const rechts = T.naarScherm(v.x + b[0] - 1, v.y).x + 32;
+    const onder = T.naarScherm(v.x + b[0] - 1, v.y + b[1] - 1).y + til + 16;
+    const d = v.vel ? T.sprites.doosVan(v) : null;
+    const R = GEBOUW_RAND;
+    if (!d) return [links - R, p.y - 400 - R, rechts + R, onder + R];
+    return [Math.min(links, p.x - d[0]) - R, Math.min(p.y - 16, p.y - d[1]) - R, Math.max(rechts, p.x + d[2]) + R, Math.max(onder, p.y + d[3]) + R];
+  }
+  // Een getal voor de gebouwen die vak r raken: is het anders, dan moet het stuk opnieuw.
+  function gebouwSleutel(gebouwen, r) {
+    let h = 0;
+    for (const g of gebouwen) if (raaktVak(g, r)) for (let i = 0; i < 4; i++) h = (Math.imul(h, 31) + Math.round(g[i])) | 0;
+    return h;
+  }
+  // De vaste rij van stuk s (T.stukOpen): wat erin kan, in de volgorde van de lijst (rij na rij), en wat in de lijst blijft
+  // (dyn, ook rij na rij). Een boom die een gebouw kan raken, blijft in de lijst.
+  function bouwStuk(V, w, s, gebouwen, sleutel) {
+    const Z = T.STUK;
+    const ref = T.naarScherm(s.x0, s.y0);
+    const soort = new Int32Array(Z * Z); // 0 niets, -1 de lijst, anders 1 + het nummer van zijn tekening
+    const plek = new Float64Array(Z * Z * 2);
+    const vak = [Infinity, Infinity, -Infinity, -Infinity];
+    let laadt = false;
+    for (let i = 0; i < Z * Z; i++) {
+      const v = s.op[i];
+      if (!v || isGebakken(w, v)) continue;
+      const nr = magVast(w, v) ? tekeningNr(V, v) : -1;
+      if (nr === -2) laadt = true;
+      if (nr < 0) {
+        soort[i] = -1;
+        continue;
+      }
+      const p = plekVan(v);
+      const ax = Math.round(p.x);
+      const ay = Math.round(p.y);
+      const d = V.tabel.doos[nr];
+      vak[0] = Math.min(vak[0], ax - d[0]);
+      vak[1] = Math.min(vak[1], ay - d[1]);
+      vak[2] = Math.max(vak[2], ax + d[2]);
+      vak[3] = Math.max(vak[3], ay + d[3]);
+      soort[i] = nr + 1;
+      plek[2 * i] = ax;
+      plek[2 * i + 1] = ay;
+    }
+    const dichtbij = gebouwen.filter((g) => raaktVak(g, vak));
+    const vlag = new Uint8Array(Z * Z);
+    const dyn = [];
+    let n = 0;
+    for (let i = 0; i < Z * Z; i++) {
+      if (!soort[i]) continue;
+      const v = s.op[i];
+      if (soort[i] > 0) {
+        const nr = soort[i] - 1;
+        const d = V.tabel.doos[nr];
+        const ax = plek[2 * i];
+        const ay = plek[2 * i + 1];
+        if (!dichtbij.length || !dichtbij.some((g) => raaktVak(g, [ax - d[0], ay - d[1], ax + d[2], ay + d[3]]))) {
+          const j = n * VAST_PER;
+          vastWerk[j] = ax - ref.x;
+          vastWerk[j + 1] = ay - ref.y;
+          vastWerk[j + 2] = v.x - s.x0;
+          vastWerk[j + 3] = v.y - s.y0;
+          vastWerk[j + 4] = nr;
+          vastWerk[j + 5] = (v.x * 137 + v.y * 251) % WIND_FASEN;
+          n++;
+          vlag[i] = 1;
+          continue;
+        }
+      }
+      dyn.push(v);
+    }
+    return {
+      s, ref, vlag, dyn, n, rij: T.gl.vasteRij(vastWerk, n), vak, gebouwen: gebouwSleutel(gebouwen, vak), sleutel,
+      geladen: T.sprites.geladenNr(), laadt, vies: false,
+    };
+  }
+  // Is v een boom in een vaste rij?
+  function isVast(V, v) {
+    const Z = T.STUK;
+    const e = V.stukken.get(T.stukVan(v.x, v.y));
+    const i = (v.y - (e ? e.s.y0 : 0)) * Z + v.x - (e ? e.s.x0 : 0);
+    return !!e && e.vlag[i] === 1 && e.s.op[i] === v;
+  }
+  // De bomen van de vaste rijen die iemand met doos `doos` (js/doorkijk.js) kunnen bedekken: wiens tekening hem raakt,
+  // met de hoogte van het land erbij.
+  function bomenBij(V, w, doos, hb, uit) {
+    const m = V.tabel.maxDoos;
+    const Z = T.STUK;
+    const hoeken = [[doos.x0 - m[2], doos.y0 - m[3]], [doos.x1 + m[0], doos.y0 - m[3]], [doos.x0 - m[2], doos.y1 + m[1] + hb], [doos.x1 + m[0], doos.y1 + m[1] + hb]];
+    let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+    for (const [sx, sy] of hoeken) {
+      const t = T.naarWereld(sx, sy);
+      x0 = Math.min(x0, t.x);
+      x1 = Math.max(x1, t.x);
+      y0 = Math.min(y0, t.y);
+      y1 = Math.max(y1, t.y);
+    }
+    for (let y = Math.max(0, Math.floor(y0) - 1); y <= Math.ceil(y1) + 1; y++) {
+      for (let x = Math.max(0, Math.floor(x0) - 1); x <= Math.ceil(x1) + 1; x++) {
+        const e = V.stukken.get(T.stukVan(x, y));
+        if (!e) continue;
+        const i = (y - e.s.y0) * Z + x - e.s.x0;
+        if (e.vlag[i]) uit.add(e.s.op[i]);
+      }
+    }
+  }
+  // De mist per tegel voor de vaste rijen (VERT_VAST in js/gl.js): 0 tekent niet (wat het dorp niet kent, buiten het vak,
+  // en wie nu door de lijst gaat: `weg`), 128 in het grijs (gekend, maar niemand kijkt nu), 255 helder; zoals voorwerpTelt
+  // en mistOverLijst het per ding beslissen. Wat het dorp kent, alleen opnieuw als het vak verschoof of er land bij kwam,
+  // zoals mistMasker; wie er nu kijkt (T.wieKijken), elk beeld.
+  function vasteMist(V, S, w, vak, weg) {
+    const D = S.dorp;
+    const mist = metMist(w);
+    const x0 = Math.floor(vak.x0 / MIST_STAP) * MIST_STAP;
+    const y0 = Math.floor(vak.y0 / MIST_STAP) * MIST_STAP;
+    const b = Math.ceil((vak.x1 + 1) / MIST_STAP) * MIST_STAP - x0;
+    const h = Math.ceil((vak.y1 + 1) / MIST_STAP) * MIST_STAP - y0;
+    const sleutel = [x0, y0, b, h, mist ? T.mistVersie(D) : -1].join('|');
+    let B = V.basis;
+    if (!B || B.sleutel !== sleutel) {
+      const data = new Uint8Array(b * h);
+      for (let j = 0; j < h; j++) for (let i = 0; i < b; i++) data[j * b + i] = !mist ? 255 : T.kentTegel(D, x0 + i, y0 + j) ? 128 : 0;
+      B = V.basis = { sleutel, data };
+      V.perTegel = new Uint8Array(b * h);
+    }
+    const t = V.perTegel;
+    t.set(B.data);
+    // buiten het vak niets, zoals T.voorwerpenIn
+    for (let j = 0; j < h; j++) {
+      const y = y0 + j;
+      if (y < vak.y0 || y > vak.y1) t.fill(0, j * b, (j + 1) * b);
+      else {
+        if (vak.x0 > x0) t.fill(0, j * b, j * b + vak.x0 - x0);
+        if (vak.x1 < x0 + b - 1) t.fill(0, j * b + vak.x1 + 1 - x0, (j + 1) * b);
+      }
+    }
+    if (mist) {
+      for (const z of T.wieKijken(D)) {
+        const cx = Math.round(z.x);
+        const cy = Math.round(z.y);
+        const R = Math.floor(z.r);
+        for (let dy = -R; dy <= R; dy++) {
+          const j = cy + dy - y0;
+          if (j < 0 || j >= h) continue;
+          for (let dx = -R; dx <= R; dx++) {
+            const i = cx + dx - x0;
+            if (i < 0 || i >= b || dx * dx + dy * dy > z.r * z.r) continue;
+            if (t[j * b + i]) t[j * b + i] = 255;
+          }
+        }
+      }
+    }
+    for (const v of weg) {
+      const i = v.x - x0;
+      const j = v.y - y0;
+      if (i >= 0 && j >= 0 && i < b && j < h) t[j * b + i] = 0;
+    }
+    return { perTegel: t, x0, y0, b, h };
+  }
+  // De vaste rijen van dit beeld, of null (zonder videokaart, binnen, of niet op het eiland): per stuk in het vak zijn rij
+  // (opnieuw gemaakt als er iets veranderde), de stand voor js/gl.js, en wat er voor de lijst overblijft: `voorwerpen`
+  // (zoals T.voorwerpenIn ze gaf, zonder de bomen van de rijen, en met wie daar nu door de lijst moet), `vroeg` (die
+  // kregen hun doorkijk al), en per voorwerp van het eiland zijn plaats in de volgorde (`sub`, diepteVanItem).
+  function vasteRijenVoor(ctx, S, w, vak, dt) {
+    if (!ctx.tekenVast || !metSprites() || !T.sprites.buitenAan || !w.buiten || !T.opEiland(w)) return null;
+    const V = vastVan(w);
+    const Z = T.STUK;
+    const hoogte = w.hoogte ? w.hoogte.versie || 0 : -1;
+    const sleutel = [T.sprites.seizoenVanDeBomen(), hoogte, w.huidigeKamer, w.bekend.size].join('|');
+    const kaart = T.kaartVersie(w);
+    if (kaart !== V.kaart) {
+      const plekken = T.kaartPlekkenSinds(w, V.kaart);
+      for (const e of V.stukken.values()) {
+        const [x0, y0] = [e.s.x0, e.s.y0];
+        if (!plekken || plekken.some((q) => !q || (q.x2 >= x0 - 1 && q.x1 <= x0 + Z && q.y2 >= y0 - 1 && q.y1 <= y0 + Z))) e.vies = true;
+      }
+      V.kaart = kaart;
+    }
+    const gebouwen = [];
+    for (const v of w.voorwerpen) if (T.isGebouw(v)) gebouwen.push(gebouwVak(v));
+    const geladen = T.sprites.geladenNr();
+    const zicht = []; // { e, nr, rang }
+    let later = 0; // wat alleen opnieuw moet omdat er een beeld bij kwam: één per beeld
+    for (const nr of w.open) {
+      const x0 = (nr % 64) * Z;
+      const y0 = Math.floor(nr / 64) * Z;
+      if (x0 > vak.x1 || y0 > vak.y1 || x0 + Z <= vak.x0 || y0 + Z <= vak.y0) continue;
+      const s = T.stukOpen(w, nr);
+      let e = V.stukken.get(nr);
+      const nodig = !e || e.s !== s || e.vies || e.sleutel !== sleutel || e.gebouwen !== gebouwSleutel(gebouwen, e.vak);
+      if (nodig || (e.geladen !== geladen && !later++)) {
+        if (e) T.gl.weg(e.rij);
+        e = bouwStuk(V, w, s, gebouwen, sleutel);
+        V.stukken.set(nr, e);
+      }
+      zicht.push({ e, nr, rang: zicht.length });
+    }
+    if (V.tabel.vies) {
+      T.gl.vasteTabel(V.tabel.data, V.tabel.n * STANDEN * 2);
+      V.tabel.vies = false;
+    }
+    // de doorkijk van de bomen in de rijen: wie iemand kan bedekken die je hoort te zien, en wie nog openstaat
+    const kandidaten = T.doorkijkKandidaten(S);
+    const vroeg = new Set();
+    for (const v of V.metDoorkijk) if (isVast(V, v)) vroeg.add(v);
+    if (kandidaten.doorAlles.length) {
+      const hb = T.hoogteIn(w, vak.x0, vak.y0, vak.x1, vak.y1).hoog;
+      for (const k of kandidaten.doorAlles) bomenBij(V, w, k.doos, Math.max(0, hb), vroeg);
+    }
+    const metDoorkijk = [...vroeg];
+    if (metDoorkijk.length) T.werkDoorkijkBij(S, dt, metDoorkijk, kandidaten);
+    V.metDoorkijk = new Set(metDoorkijk.filter((v) => v.doorkijk > 0));
+    const door = metDoorkijk.filter((v) => v.doorkijk > 0.02); // die gaan door de lijst (tekenVoorwerp, met het kijkgat)
+    const mist = vasteMist(V, S, w, vak, door);
+    // wat er voor de lijst overblijft, in de volgorde van T.voorwerpenIn: eerst wat iemand zette, dan per stuk rij na rij
+    const voorwerpen = (w.voorwerpen || []).filter((v) => inVak(vak, v.x, v.y));
+    const stap = DIEPTE_STUK / Math.max(1, zicht.length * Z);
+    const sub = new Map();
+    const plekIn = (e, v) => (v.y - e.s.y0) * Z + v.x - e.s.x0;
+    for (const { e, nr, rang } of zicht) {
+      const erbij = door.filter((v) => T.stukVan(v.x, v.y) === nr).sort((a, b) => plekIn(e, a) - plekIn(e, b));
+      let k = 0;
+      const zet = (v) => {
+        if (!inVak(vak, v.x, v.y)) return;
+        voorwerpen.push(v);
+        sub.set(v, (rang * Z + v.y - e.s.y0) * stap);
+      };
+      for (const v of e.dyn) {
+        while (k < erbij.length && plekIn(e, erbij[k]) < plekIn(e, v)) zet(erbij[k++]);
+        zet(v);
+      }
+      while (k < erbij.length) zet(erbij[k++]);
+    }
+    for (let k = 0; k < WIND_FASEN; k++) V.wind[k] = T.sprites.windStand(T.windWaarde(S.tijd + (k / WIND_FASEN) * 23));
+    const M = T.MIST_INSTELLINGEN;
+    const d0 = vak.x0 + vak.y0 - 2;
+    const stukken = [];
+    for (const { e, rang } of zicht) {
+      if (e.rij) stukken.push({ rij: e.rij, px: e.ref.x, py: e.ref.y, tx: e.s.x0 - mist.x0, ty: e.s.y0 - mist.y0, som: e.s.x0 + e.s.y0 - d0, rang });
+    }
+    return {
+      stukken,
+      stand: { wind: V.wind, perTegel: mist.perTegel, b: mist.b, h: mist.h, grijs: [M.ontkleurd, 1 - M.donker], d0, schaal: 2 / (vak.x1 + vak.y1 + 2 - d0), stap },
+      voorwerpen, vroeg, sub, kandidaten,
+      // staat er op tegel (x, y) een boom van een rij die getekend wordt? (heuvelsErvoor)
+      staatOp(x, y) {
+        const e = V.stukken.get(T.stukVan(x, y));
+        const i = x - mist.x0;
+        const j = y - mist.y0;
+        return !!e && e.vlag[(y - e.s.y0) * Z + x - e.s.x0] === 1 && i >= 0 && j >= 0 && i < mist.b && j < mist.h && mist.perTegel[j * mist.b + i] > 0;
+      },
+    };
+  }
+  // De sleutel van het sorteren als diepte (js/gl.js, Doek.diepte), zoals de bomen van de vaste rijen hem hebben: hun som
+  // x + y, plus hun plaats in de volgorde (`sub`, minder dan DIEPTE_STUK). Een ander voorwerp van het eiland net zo; wat
+  // tekenVolgorde op dezelfde som eerder zet (een kleinere laag l, en met l 1 een deur en wat iemand zette: die komen
+  // eerder in de lijst), DIEPTE_STAP ervoor, de rest erna; een som die geen geheel getal is (wie loopt), tussen twee
+  // sommen in, want de bomen staan op hele.
+  function diepteVanItem(item, vast) {
+    const d = item.d;
+    const v = item.voorwerp;
+    if (v) {
+      const sub = vast.sub.get(v);
+      if (sub !== undefined) return d + sub;
+    }
+    if (d !== Math.floor(d)) return Math.floor(d) + 0.5;
+    if (item.l < 1 || (item.l === 1 && (v || deurItems.has(item)))) return d - DIEPTE_STAP;
+    return d + DIEPTE_STAP;
+  }
+
   // Welke tegels kunnen in die rechthoek iets tekenen? De ruit-projectie draait het raster, dus
   // nemen we de vier hoeken van de (opgerekte) rechthoek en het vak daaromheen.
   //
@@ -642,24 +1026,35 @@
         }
       }
     }
+    deurItems.clear();
     for (const deur of w.deuren.values()) {
       if (!inVak(vak, deur.x, deur.y) || !T.isZichtbaar(w, deur.x, deur.y)) continue;
       const laag = isVoorrand(open, deur.x, deur.y);
       const helder = T.burenKamersOp(w, deur.x, deur.y).some(inBeeld) ? 1 : GEDIMD;
-      lijst.push({ d: deur.x + deur.y, l: 1, punt: { x: deur.x, y: deur.y }, f: () => tekenDeur(ctx, deur, laag, helder) });
+      const item = { d: deur.x + deur.y, l: 1, punt: { x: deur.x, y: deur.y }, f: () => tekenDeur(ctx, deur, laag, helder) };
+      lijst.push(item);
+      deurItems.add(item);
     }
     const zichtbaar = [];
     const kijkgaten = new Map(); // voorwerp → de kijkgaten die erna komen (voorsteKijkgaten, hieronder)
     Object.assign(beeldNu, { ctx, S, kijkgaten });
     grijzeItems.clear(); // mistOverLijst vult hem opnieuw
+    // Doorkijk: wat de aanvoerder of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
+    // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
+    const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
+    S.doorkijkTijd = S.tijd;
     const telt = voorwerpTelt(S, w, zicht, vak);
-    for (const v of T.voorwerpenIn(w, { x: vak.x0, y: vak.y0, b: vak.x1 - vak.x0 + 1, h: vak.y1 - vak.y0 + 1 })) {
+    // de bomen en het groen in vaste rijen op de videokaart (vraag 178, B1 en B2), en de rest zoals altijd
+    const vast = vasteRijenVoor(ctx, S, w, vak, dt);
+    const voorwerpen = vast ? vast.voorwerpen : T.voorwerpenIn(w, { x: vak.x0, y: vak.y0, b: vak.x1 - vak.x0 + 1, h: vak.y1 - vak.y0 + 1 });
+    for (const v of voorwerpen) {
+      const vroeg = vast && vast.vroeg.has(v); // zijn doorkijk liep al (vasteRijenVoor)
       if (!telt(v)) {
-        if (v.doorkijk) zichtbaar.push(v); // half open: de doorkijk sluit hem nog, ook buiten beeld
+        if (v.doorkijk && !vroeg) zichtbaar.push(v); // half open: de doorkijk sluit hem nog, ook buiten beeld
         continue;
       }
       if (!T.isZichtbaar(w, v.x, v.y) || isGebakken(w, v)) continue;
-      zichtbaar.push(v);
+      if (!vroeg) zichtbaar.push(v);
       const k = T.kamerVan(w, v.x, v.y);
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
       // Een gebouw (T.isGebouw: breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is
@@ -741,11 +1136,7 @@
         }
       }
     }
-    // Doorkijk: wat de aanvoerder of een wezen bedekt, wordt zolang doorzichtig. De tijd komt uit de
-    // spelklok, zodat het ook klopt als het spel even stilstaat of vooruitgespoeld wordt.
-    const dt = Math.max(0, Math.min(0.1, S.tijd - (S.doorkijkTijd || 0)));
-    S.doorkijkTijd = S.tijd;
-    T.werkDoorkijkBij(S, dt, zichtbaar);
+    T.werkDoorkijkBij(S, dt, zichtbaar, vast ? vast.kandidaten : undefined);
     // Wie aan de schandpaal staat, krijgt het halsijzer om: een eigen laag ná zijn beeld (l 2,5,
     // zoals de voorlaag van het graan), zodat de band vóór zijn nek komt.
     const aanDePaal = metSprites() && D && T.aanDePaal ? T.aanDePaal(D) : null;
@@ -761,7 +1152,7 @@
     }
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     stapelsInLijst(ctx, S, w, D, vak, lijst);
-    heuvelsErvoor(ctx, S, vak, lijst, g); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
+    heuvelsErvoor(ctx, S, vak, lijst, g, vast); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
@@ -786,12 +1177,16 @@
     voorsteKijkgaten(volgorde, kijkgaten);
     // De lantaarns die hierna een gat krijgen (tekenLantaarn).
     lantaarnGaten = { doek: ctx, gaten: [], wacht: [] };
+    // eerst de vaste rijen, met hun diepte; wat de lijst daarna tekent, toetst ertegen (diepteVanItem)
+    if (vast) ctx.tekenVast(vast.stukken, vast.stand);
     for (const item of volgorde) {
+      if (vast) ctx.diepte = diepteVanItem(item, vast);
       if (metSchaduw) ctx.werptSchaduw = !item.zonderSchaduw;
       tekenItem(item);
       if (metSchaduw) ctx.werptSchaduw = false;
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
+    if (vast) ctx.diepte = null;
     tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
     ctx.restore();
@@ -857,7 +1252,7 @@
   // voorste tegel die hem afdekt, net als achter een huis.
   const ACHTER = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]];
   const tegelNr = (x, y) => (y + 32768) * 65536 + x + 32768; // een tegel als getal, voor een Set of een Map
-  function heuvelsErvoor(ctx, S, vak, lijst, g) {
+  function heuvelsErvoor(ctx, S, vak, lijst, g, vast) {
     const w = S.wereld;
     if (!w.hoogte) return;
     const kaartvak = T.kaartGrens(w);
@@ -876,6 +1271,8 @@
       const n = tegelNr(it.punt.x, it.punt.y);
       if (achter.has(n)) staat.add(n);
     }
+    // en de bomen van de vaste rijen (vraag 178, B2), die niet in de lijst staan
+    if (vast) for (const n of achter) if (!staat.has(n) && vast.staatOp((n % 65536) - 32768, Math.floor(n / 65536) - 32768)) staat.add(n);
     let wezensOp = null; // tegel achter een dekker → de wezens die erop staan
     let kijkgaten = null; // wezen → het item van de voorste tegel die hem afdekt
     for (let k = 0; k < dekkers.length; k += 2) {

@@ -9,6 +9,11 @@
 // js/tekenen.js tekent de lijst niet meer een tweede keer. Zonder WebGL2 tekent het spel op het 2D-doek, zoals zonder
 // videokaart.
 //
+// Sinds 18 okt ook vaste rijen met een dieptebuffer (vraag 178, B1 en B2; tekenVast, en js/tekenen.js, "de vaste rijen"):
+// de bomen en het groen van een stuk land staan één keer op de kaart, en per beeld kiest de kaart zelf hun stand in de
+// wind, of ze in de mist staan, hun schaduw en wat ervoor staat. Wat daarna in hetzelfde beeld komt, krijgt een diepte
+// mee (Doek.diepte) en toetst daartegen.
+//
 // Wat de videokaart zelf kan, tekent ze: een plaatje uit een vel (drawImage), een vlak in één kleur (fillRect, en een
 // vorm die bol is, zoals de schaduw onder een figuur of een ruitje van een raam), en een rond verloop (de nacht, het
 // licht van een lantaarn, het vignet). Alle plaatjes van een beeld gaan in een paar opdrachten naar de kaart, en de
@@ -76,10 +81,10 @@
   // ---------------------------------------------------------------- de programma's
   const VERT = /* // geen tekst */ `
     attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur; attribute float aGrijs; attribute float aBron;
-    uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek; varying float vGrijs; varying float vBron;
+    uniform vec2 uMaat; uniform float uZ; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek; varying float vGrijs; varying float vBron;
     void main() {
       vUv = aUv; vKleur = aKleur; vPlek = aPlek; vGrijs = aGrijs; vBron = aBron;
-      gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, 0.0, 1.0);
+      gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, uZ, 1.0);
     }`;
   // Een rij tekent uit zoveel texturen tegelijk (zie de rij hieronder), elk op zijn eigen plaats: vBron zegt welke. WebGL
   // 1 heeft er minstens acht, en kan een rij samplers niet met een variabele aanwijzen, dus kiest een keten van ifs.
@@ -89,11 +94,12 @@
   // plaatje van één pixel maal zijn kleur. vGrijs haalt er zoveel kleur uit (het filter grayscale, voor wat in de mist
   // staat; js/mist.js), met de helderheid van 'saturation' op het doek.
   // Een vBron onder nul is een laag van de textuurstapel (-1 is laag 0; uAtlas, de bladen), die geen plaats in de rij
-  // kost. uMasker: alleen hoe dicht (voor het masker van de schaduwen).
+  // kost. uMasker: alleen hoe dicht (voor het masker van de schaduwen). uHard (de vaste rijen, die de diepte schrijven):
+  // een pixel is dicht of er is niets.
   const FRAG_BEELD = /* // geen tekst */ `#version 300 es
     precision highp float; precision highp sampler2DArray;
     in vec2 vUv; in vec4 vKleur; in float vGrijs; flat in float vBron;
-    uniform sampler2DArray uAtlas; uniform float uMasker;
+    uniform sampler2DArray uAtlas; uniform float uMasker; uniform float uHard;
     ${/* // geen tekst */ uBeelden.map((u) => `uniform sampler2D ${u};`).join(' ')}
     out vec4 kleur;
     vec4 beeld() {
@@ -102,16 +108,18 @@
     }
     void main() {
       vec4 c = beeld() * vKleur;
+      if (uHard > 0.5 && c.a < 0.5) discard;
       if (uMasker > 0.5) { kleur = vec4(0.0, 0.0, 0.0, c.a); return; }
       kleur = vec4(mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), vGrijs), c.a);
     }`;
-  // De hoeken van een vorm (een vlak, een waaier, een plaatje binnen vierhoeken), zoals VERT maar in de taal van FRAG_BEELD.
+  // De hoeken van een vorm (een vlak, een waaier, een plaatje binnen vierhoeken), zoals VERT maar in de taal van FRAG_BEELD,
+  // met hun diepte (aDiepte, Doek.diepte).
   const VERT_BEELD = /* // geen tekst */ `#version 300 es
-    in vec2 aPlek; in vec2 aUv; in vec4 aKleur; in float aGrijs; in float aBron;
+    in vec2 aPlek; in vec2 aUv; in vec4 aKleur; in float aGrijs; in float aBron; in float aDiepte;
     uniform vec2 uMaat; out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
     void main() {
       vUv = aUv; vKleur = aKleur; vGrijs = aGrijs; vBron = aBron;
-      gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, 0.0, 1.0);
+      gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, aDiepte, 1.0);
     }`;
   // Een plaatje als één instantie (zetInst, hieronder): zijn vier hoeken op het doek (linksboven, rechtsboven,
   // linksonder, rechtsonder; de stand van het doek zit er al in), de plek op de textuur, een kleur, en iX: de plaats van
@@ -120,9 +128,10 @@
   // hoek: in de shader opgeteld rondt het net anders af, en op 50% valt elke pixel op de grens van twee texels (17 okt
   // gemeten: 0,3% van de pixels anders). Met uZon.x het masker van de schaduwen (vraag 125, B; schaduwHier): wie een
   // schaduw werpt, scheef over de grond vanaf zijn onderrand, uZon.y en uZon.z per pixel hoogte in de vlakte van het
-  // plaatje, zoals tot 18 okt drawImage tussen beginSchaduw en eindSchaduw; de rest valt buiten beeld.
+  // plaatje, zoals tot 18 okt drawImage tussen beginSchaduw en eindSchaduw; de rest valt buiten beeld. iD is de diepte
+  // (Doek.diepte).
   const VERT_INST = /* // geen tekst */ `#version 300 es
-    in vec4 iP01; in vec4 iP23; in vec4 iUV; in vec4 iK; in vec4 iX;
+    in vec4 iP01; in vec4 iP23; in vec4 iUV; in vec4 iK; in vec4 iX; in float iD;
     uniform vec2 uMaat; uniform vec3 uZon;
     out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
     void main() {
@@ -136,11 +145,53 @@
         vec2 b = iP23.xy - iP01.xy;
         p = iP23.xy + c.x * a + (1.0 - c.y) * (uZon.y * iX.z * a + uZon.z * b);
       }
-      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, 0.0, 1.0);
+      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, iD, 1.0);
       vUv = mix(iUV.xy, iUV.zw, c);
       vKleur = iK;
       vGrijs = iX.w;
       vBron = iX.x;
+    }`;
+  // Een boom van een vaste rij (vraag 178, B1 en B2; tekenVast, hieronder): iA zijn anker (in pixels van de vlakte, vanaf
+  // het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en zijn tegel in het stuk, iB het nummer van zijn
+  // tekening en zijn fase in de wind. De kaart kiest zelf zijn stand (uWind: de stand per fase, die js/tekenen.js elk
+  // beeld zet), en daarmee zijn plek op de stapel en zijn anker (uTabel: per tekening per stand u0, v0, u1, v1 en laag,
+  // ax, ay); en uit uStand (per tegel, vanaf uTegel) of hij in het zwart staat (dan niet; ook wie er nu door de lijst
+  // gaat, de doorkijk), in het grijs (uGrijs: hoeveel kleur eruit en hoe helder) of helder. De diepte is de sleutel van
+  // het sorteren in js/tekenen.js: de som x + y vanaf uDiepte.x, met een stapje (uDiepte.z) per rij van een stuk en
+  // T.STUK rijen per stuk (uDiepte.w is het hoeveelste stuk), naar het doek met uDiepte.y. Met uZon het masker van de
+  // schaduwen, zoals VERT_INST.
+  const VERT_VAST = /* // geen tekst */ `#version 300 es
+    in vec4 iA; in vec4 iB;
+    uniform vec2 uMaat; uniform vec3 uZon; uniform vec2 uZoom; uniform vec2 uStuk; uniform ivec2 uTegel; uniform vec4 uDiepte;
+    uniform vec2 uGrijs; uniform float uLaag; uniform vec4 uWind[25];
+    uniform highp sampler2D uTabel; uniform highp sampler2D uStand;
+    out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
+    void main() {
+      ivec2 t = ivec2(iA.zw) + uTegel;
+      ivec2 m = textureSize(uStand, 0);
+      float st = t.x >= 0 && t.y >= 0 && t.x < m.x && t.y < m.y ? texelFetch(uStand, t, 0).r : 0.0;
+      if (st < 0.25) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vUv = vec2(0.0); vKleur = vec4(0.0); vGrijs = 0.0; vBron = 0.0; return; }
+      int k = int(iB.y);
+      int n = (int(iB.x) * 5 + int(uWind[k >> 2][k & 3])) * 2;
+      int b = textureSize(uTabel, 0).x;
+      vec4 uv = texelFetch(uTabel, ivec2(n % b, n / b), 0);
+      vec4 info = texelFetch(uTabel, ivec2((n + 1) % b, (n + 1) / b), 0);
+      vec2 maat = (uv.zw - uv.xy) * uLaag;
+      vec2 lb = iA.xy - info.yz;
+      vec2 c = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1));
+      vec2 p;
+      if (uZon.x > 0.5) {
+        vec2 a = vec2(uZoom.x * maat.x, 0.0);
+        vec2 z = vec2(0.0, uZoom.y * maat.y);
+        p = uStuk + uZoom * vec2(lb.x, lb.y + maat.y) + c.x * a + (1.0 - c.y) * (uZon.y * (maat.y / maat.x) * a + uZon.z * z);
+      } else p = uStuk + uZoom * (lb + c * maat);
+      float d = iA.z + iA.w + uDiepte.x + (uDiepte.w * 64.0 + iA.w) * uDiepte.z;
+      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, clamp(1.0 - d * uDiepte.y, -0.999999, 0.999999), 1.0);
+      vUv = mix(uv.xy, uv.zw, c);
+      float h = st < 0.75 ? uGrijs.y : 1.0;
+      vKleur = vec4(h, h, h, 1.0);
+      vGrijs = st < 0.75 ? uGrijs.x : 0.0;
+      vBron = -1.0 - info.x;
     }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
   const FRAG_VERLOOP = /* // geen tekst */ `
@@ -233,6 +284,10 @@
     gl.bindAttribLocation(p, 7, 'iUV');
     gl.bindAttribLocation(p, 8, 'iK');
     gl.bindAttribLocation(p, 9, 'iX');
+    gl.bindAttribLocation(p, 10, 'iD');
+    gl.bindAttribLocation(p, 11, 'iA');
+    gl.bindAttribLocation(p, 12, 'iB');
+    gl.bindAttribLocation(p, 13, 'aDiepte');
     gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p)); // geen tekst
     const u = {};
@@ -252,9 +307,10 @@
   let mistProg = null;
   let netProg = null;
   let instProg = null;
+  let vastProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
-  const PER_HOEK = 10; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij)
+  const PER_HOEK = 11; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij), diepte
   let grijsNu = 0; // hoeveel kleur eruit gaat (het filter grayscale van het doek); elke nieuwe hoek krijgt het mee
   let bronNu = 0; // de plaats van de textuur van de hoeken die nu in de rij komen (plekVoor)
   // Een vorm heeft vier hoeken (a, b, c, d: linksboven, rechtsboven, linksonder, rechtsonder), en een vaste lijst
@@ -266,7 +322,7 @@
   const MAX_HOEKEN = 65536;
   let hoeken = new Float32Array(PER_HOEK * 4 * 4096); // de hoeken van dit beeld, rij na rij
   let hoekAantal = 0;
-  const PER_INST = 20; // vier hoeken (8), u0, v0, u1, v1, kleur (4), bron, vlag, r, grijs (VERT_INST)
+  const PER_INST = 21; // vier hoeken (8), u0, v0, u1, v1, kleur (4), bron, vlag, r, grijs, diepte (VERT_INST)
   const WERPT = 1; // de vlag van een instantie
   const DRIEHOEK = 2;
   let inst = new Float32Array(PER_INST * 8192); // de plaatjes van dit beeld, rij na rij
@@ -277,6 +333,7 @@
   const HOEKEN = 0;
   const PLAATJES = 1;
   const DOE = 2;
+  const VAST = 3; // de vaste rijen van een beeld (tekenVast)
   const opdrachten = [];
   const rij = []; // de texturen van de rij die nu groeit, op hun plaats (hooguit RIJ_TEXTUREN; de stapel telt niet mee)
   let rijMeng = 'source-over';
@@ -284,6 +341,9 @@
   let rijStart = 0;
   let aantal = 0; // hoeken of plaatjes in de rij die nu groeit
   let rijWerpt = false; // er staat een plaatje in dat een schaduw werpt
+  let rijDiep = false; // de rij toetst tegen de diepte (Doek.diepte)
+  let diepteNu = null; // de diepte op het doek (-1 tot 1) van wat nu getekend wordt, of null (Doek.diepte)
+  let diepteBasis = null; // { d0, schaal }: van de sleutel van js/tekenen.js naar de diepte op het doek (tekenVast)
   let schaduwOp = null; // { sx, sy } na schaduwHier: wie daarna een schaduw werpt, komt op het masker
   let beeldNr = 0;
   let gewist = false; // het doek van dit beeld is al leeg gemaakt (G.klaar kan in een beeld vaker, getImageData)
@@ -314,7 +374,7 @@
     // Zonder echte videokaart tekent WebGL op de processor (SwiftShader), en dat is vele malen trager dan het 2D-doek:
     // dan liever zonder. Alleen de proeven hier (zonder videokaart) zetten `ookOpDeProcessor`, om te zien of het klopt.
     const opties = {
-      alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, preserveDrawingBuffer: false,
+      alpha: true, premultipliedAlpha: true, antialias: false, depth: true, stencil: false, preserveDrawingBuffer: false,
       failIfMajorPerformanceCaveat: !T.TEKENEN_INSTELLINGEN.ookOpDeProcessor,
     };
     gl = doek.getContext('webgl2', opties);
@@ -333,6 +393,7 @@
     try {
       beeldProg = maakProgramma(VERT_BEELD, FRAG_BEELD);
       instProg = maakProgramma(VERT_INST, FRAG_BEELD);
+      vastProg = maakProgramma(VERT_VAST, FRAG_BEELD);
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
       plasProg = maakProgramma(VERT, FRAG_PLAS);
       maalProg = maakProgramma(VERT, FRAG_MAAL);
@@ -352,14 +413,17 @@
     instBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     maakIndex();
-    // 0 tot 4: de hoeken (VERT, VERT_BEELD); 5 tot 9: een plaatje per instantie (VERT_INST).
-    for (let i = 0; i <= 9; i++) gl.enableVertexAttribArray(i);
-    for (let i = 5; i <= 9; i++) gl.vertexAttribDivisor(i, 1);
+    // 0 tot 4 en 13: de hoeken (VERT, VERT_BEELD); 5 tot 10: een plaatje per instantie (VERT_INST). 11 en 12 zijn van de
+    // vaste rijen, elk met een eigen lijst (G.vasteRij).
+    for (let i = 0; i <= 10; i++) gl.enableVertexAttribArray(i);
+    gl.enableVertexAttribArray(13);
+    for (let i = 5; i <= 10; i++) gl.vertexAttribDivisor(i, 1);
     vergeetStand();
     hoekBron(buffer, 0);
     instBron(0);
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.enable(gl.BLEND);
+    gl.depthFunc(gl.LEQUAL);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     // Plaats 0 is de werkplaats (bind, hieronder: opsturen, en de programma's met één textuur); de rij gebruikt er tot
     // RIJ_TEXTUREN (legRijAf), de mist plaats 1, en de textuurstapel ATLAS_PLAATS.
@@ -368,12 +432,16 @@
     atlas = null;
     rij.length = 0;
     opdrachten.length = 0;
-    for (const prog of [beeldProg, instProg]) {
+    for (const prog of [beeldProg, instProg, vastProg]) {
       gebruik(prog);
       uBeelden.forEach((u, i) => gl.uniform1i(prog.u[u], i));
       gl.uniform1i(prog.u.uAtlas, ATLAS_PLAATS);
       gl.uniform1f(prog.u.uMasker, 0);
+      gl.uniform1f(prog.u.uHard, 0);
     }
+    gl.uniform1i(vastProg.u.uTabel, TABEL_PLAATS);
+    gl.uniform1i(vastProg.u.uStand, STAND_PLAATS);
+    gebruik(instProg);
     gl.uniform3f(instProg.u.uZon, 0, 0, 0);
     wit = nieuweTextuur();
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
@@ -397,6 +465,7 @@
   let nuProg = null;
   let nuTex = null;
   let nuMeng = null;
+  let nuDiep = null; // 'uit', 'toets' (wel toetsen, niet schrijven) of 'schrijf' (de vaste rijen)
   function gebruik(prog) {
     if (nuProg !== prog) gl.useProgram(prog.p);
     nuProg = prog;
@@ -419,11 +488,20 @@
     if (nuMeng !== naam) MENG[naam](gl);
     nuMeng = naam;
   }
+  function zetDiep(stand) {
+    if (nuDiep === stand) return;
+    if (stand === 'uit') gl.disable(gl.DEPTH_TEST);
+    else {
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthMask(stand === 'schrijf');
+    }
+    nuDiep = stand;
+  }
   function vergeetStand() {
-    nuProg = nuTex = nuMeng = null;
+    nuProg = nuTex = nuMeng = nuDiep = null;
     nuOp.length = 0;
     hoekNu = null;
-    for (const prog of [beeldProg, instProg]) if (prog) prog.maat = -1;
+    for (const prog of [beeldProg, instProg, vastProg]) if (prog) prog.maat = -1;
   }
   // De maat van het doek in een programma van de rij, alleen als hij anders is.
   function zetMaat(prog) {
@@ -445,15 +523,17 @@
     gl.vertexAttribPointer(2, 4, gl.FLOAT, false, s, o + 16);
     gl.vertexAttribPointer(3, 1, gl.FLOAT, false, s, o + 32);
     gl.vertexAttribPointer(4, 1, gl.FLOAT, false, s, o + 36);
+    gl.vertexAttribPointer(13, 1, gl.FLOAT, false, s, o + 40);
     hoekNu = buf;
     hoekNuStart = start;
   }
-  // Waar de plaatjes vandaan komen (attributen 5 tot 9, een per instantie): instBuffer vanaf plaatje start.
+  // Waar de plaatjes vandaan komen (attributen 5 tot 10, een per instantie): instBuffer vanaf plaatje start.
   function instBron(start) {
     gl.bindBuffer(gl.ARRAY_BUFFER, instBuffer);
     const s = PER_INST * 4;
     const o = start * s;
     for (let i = 0; i < 5; i++) gl.vertexAttribPointer(5 + i, 4, gl.FLOAT, false, s, o + i * 16);
+    gl.vertexAttribPointer(10, 1, gl.FLOAT, false, s, o + 80);
   }
 
   function nieuweTextuur() {
@@ -480,7 +560,10 @@
   const BLAD_BEELD = 2046; // een plaatje dat breder of hoger is, of groter dan BLAD_PIXELS, krijgt een eigen textuur
   const BLAD_PIXELS = 1 << 21; // (zo past het graan, 1344 bij 936, en de rand van 512 bij 2400 niet)
   const BLAD_DOEK = 512; // een doek vanaf deze maat ook (de grond in stukken van 512, die opnieuw beschreven worden)
-  const BEGIN_LAGEN = 4; // zoveel lagen bij het begin (elk 16 MB op de kaart), en dan steeds twee keer zoveel
+  // Zoveel lagen bij het begin (elk 16 MB op de kaart), en dan steeds zoveel erbij. Tot 18 okt twee keer zoveel, maar met
+  // de bomen in vaste rijen (vraag 178, B2) staan alle standen in de wind er meteen op: ver uitgezoomd 9 bladen, en dat
+  // werden 16 lagen, 256 MB.
+  const BEGIN_LAGEN = 4;
   const MAX_LAGEN = 32; // zoveel bladen hooguit (512 MB); wat daarna komt, krijgt een eigen textuur
   let maxLagen = 256;
   let atlas = null; // { tex, lagen, maat }: de textuurstapel, op plaats ATLAS_PLAATS
@@ -494,7 +577,7 @@
   // Een textuurstapel met minstens n lagen; wat er al op stond, gaat mee (de kaart kopieert het zelf, laag voor laag).
   function stapelVoor(n) {
     if (atlas && atlas.lagen >= n) return true;
-    const lagen = Math.min(MAX_LAGEN, maxLagen, Math.max(n, BEGIN_LAGEN, atlas ? atlas.lagen * 2 : 0));
+    const lagen = Math.min(MAX_LAGEN, maxLagen, Math.max(n, BEGIN_LAGEN, atlas ? atlas.lagen + BEGIN_LAGEN : 0));
     if (lagen < n) return false;
     const maat = Math.min(LAAG, maxTextuur);
     const tex = gl.createTexture();
@@ -614,16 +697,17 @@
   // De rij die nu groeit, af: als opdracht in de lijst van dit beeld (G.klaar tekent hem).
   function legRijAf() {
     if (aantal) {
-      opdrachten.push({ soort: rijSoort, start: rijStart, n: aantal, meng: rijMeng, rij: rij.slice(), werpt: rijWerpt });
+      opdrachten.push({ soort: rijSoort, start: rijStart, n: aantal, meng: rijMeng, rij: rij.slice(), werpt: rijWerpt, diep: rijDiep });
       aantal = 0;
     }
     rij.length = 0;
     rijWerpt = false;
   }
-  // Iets dat zelf tekent (een verloop, de mist, het licht), op zijn plek in de lijst: f doet het in G.klaar.
+  // Iets dat zelf tekent (een verloop, de mist, het licht), op zijn plek in de lijst: f doet het in G.klaar, met de diepte
+  // van nu (een verloop van een lantaarn tussen de bomen).
   function doe(f) {
     legRijAf();
-    opdrachten.push({ soort: DOE, f });
+    opdrachten.push({ soort: DOE, f, diep: diepteNu !== null });
   }
   const groter = (a, n) => {
     const b = new Float32Array(Math.max(n, a.length * 2));
@@ -635,7 +719,8 @@
   // voor nog een textuur is, of als de hoeken er niet meer bij passen.
   function plekVoor(tex, meng, n, laag, soort = HOEKEN) {
     const opStapel = laag >= 0;
-    if (aantal && (meng !== rijMeng || soort !== rijSoort)) legRijAf();
+    const diep = diepteNu !== null;
+    if (aantal && (meng !== rijMeng || soort !== rijSoort || diep !== rijDiep)) legRijAf();
     if (!opStapel && rij.length >= RIJ_TEXTUREN && !rij.includes(tex)) legRijAf();
     if (soort === HOEKEN) {
       if (aantal + n > MAX_HOEKEN) legRijAf();
@@ -649,6 +734,7 @@
     }
     rijMeng = meng;
     rijSoort = soort;
+    rijDiep = diep;
   }
   // Eén instantie (VERT_INST), op het doek: de vier hoeken (in pixels), (u0, v0)-(u1, v1) op de textuur, een kleur
   // (voorvermenigvuldigd: een plaatje is helder, helder, helder, alpha), de vlag (WERPT, DRIEHOEK) en r (de hoogte gedeeld
@@ -675,6 +761,7 @@
     inst[i + 17] = vlag;
     inst[i + 18] = r;
     inst[i + 19] = grijsNu;
+    inst[i + 20] = diepteNu === null ? 0 : diepteNu;
     instAantal++;
     aantal++;
     if (vlag === WERPT) rijWerpt = true;
@@ -705,6 +792,7 @@
     hoeken[i + 7] = al;
     hoeken[i + 8] = grijsNu;
     hoeken[i + 9] = bronNu;
+    hoeken[i + 10] = diepteNu === null ? 0 : diepteNu;
     hoekAantal++;
     aantal++;
   }
@@ -750,11 +838,13 @@
   }
   // Een rond verloop over een vorm (hoeken als driehoeken, in pixels), met een eigen opdracht.
   function tekenVerloop(punten, v, m, alpha, meng) {
-    doe(() => tekenVerloopNu(punten, v, m, alpha, meng));
+    const z = diepteNu === null ? 0 : diepteNu;
+    doe(() => tekenVerloopNu(punten, v, m, alpha, meng, z));
   }
-  function tekenVerloopNu(punten, v, m, alpha, meng) {
+  function tekenVerloopNu(punten, v, m, alpha, meng, z) {
     gebruik(verloopProg);
     gl.uniform2f(verloopProg.u.uMaat, doek.width, doek.height);
+    gl.uniform1f(verloopProg.u.uZ, z);
     const s = Math.hypot(m[0], m[1]); // het verloop staat in de vlakte van de vorm: zijn maten gaan mee
     gl.uniform2f(verloopProg.u.uMidden, m[0] * v.x + m[2] * v.y + m[4], m[1] * v.x + m[3] * v.y + m[5]);
     gl.uniform1f(verloopProg.u.uR0, v.r0 * s);
@@ -869,19 +959,24 @@
     gebruik(instProg);
     gl.uniform3f(instProg.u.uZon, 1, schaduwOp.sx, schaduwOp.sy);
     gl.uniform1f(instProg.u.uMasker, 1);
-    for (const o of opdrachten) if (o.soort === PLAATJES && o.werpt) tekenRij(o, 'source-over');
+    for (const o of opdrachten) {
+      if (o.soort === PLAATJES && o.werpt) tekenRij(o, 'source-over', true);
+      else if (o.soort === VAST && o.werpt) tekenVast(o, true);
+    }
+    gebruik(instProg);
     gl.uniform3f(instProg.u.uZon, 0, 0, 0);
     gl.uniform1f(instProg.u.uMasker, 0);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, doek.width, doek.height);
   }
-  // Een rij van de lijst naar de kaart, in één opdracht.
-  function tekenRij(o, meng) {
+  // Een rij van de lijst naar de kaart, in één opdracht (op het masker zonder diepte).
+  function tekenRij(o, meng, opMasker = false) {
     const prog = o.soort === HOEKEN ? beeldProg : instProg;
     gebruik(prog);
     zetMaat(prog);
     for (let i = 0; i < o.rij.length; i++) bindOp(i, o.rij[i]);
     zetMeng(meng);
+    zetDiep(o.diep && !opMasker ? 'toets' : 'uit');
     if (o.soort === HOEKEN) {
       hoekBron(hoekBuffer, o.start);
       gl.drawElements(gl.TRIANGLES, (o.n / 4) * 6, gl.UNSIGNED_SHORT, 0);
@@ -1044,6 +1139,115 @@
     G.telling.mist = 1;
   }
 
+  // ---------------------------------------------------------------- de vaste rijen (vraag 178, B1 en B2)
+  // Een vaste rij is een lijst bomen van een stuk land, één keer op de kaart (G.vasteRij, VAST_PER getallen per boom, zie
+  // VERT_VAST), met de tabel van hun tekeningen (G.vasteTabel) en hun plaatjes op de stapel (G.opDeStapel). Per beeld
+  // tekent tekenVast ze allemaal: eerst op het masker van de schaduwen (maskerRonde), dan op het doek, waar ze hun diepte
+  // schrijven. js/tekenen.js geeft per beeld de stand per fase in de wind en de mist per tegel mee (Doek.tekenVast).
+  const VAST_PER = 8;
+  const TABEL_PLAATS = 9; // de plaatsen van de tabel en de mist per tegel (de rij gebruikt 0 tot 7, de stapel 8)
+  const STAND_PLAATS = 10;
+  const TABEL_B = 512; // zoveel getallen van vier per rij van de tabel
+  let tabelTex = null;
+  let standTex = null;
+  function vasteTextuur(plaats, tex) {
+    gl.activeTexture(gl.TEXTURE0 + plaats);
+    if (!tex) {
+      tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    } else gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    return tex;
+  }
+  function vasteTextuurKlaar() {
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 4);
+    gl.activeTexture(gl.TEXTURE0);
+  }
+  // Waar een plaatje (of een doek met versie 1) op de stapel staat, { laag, x, y, maat }, of null als het daar niet kan.
+  G.opDeStapel = function (bron) {
+    if (!start()) return null;
+    const t = textuurVan(bron);
+    return t && t.blad ? { laag: t.laag, x: t.x, y: t.y, maat: t.tb } : null;
+  };
+  // De tabel van de tekeningen: n getallen van vier.
+  G.vasteTabel = function (data, n) {
+    if (!start()) return;
+    const h = Math.max(1, Math.ceil(n / TABEL_B));
+    const vol = new Float32Array(TABEL_B * h * 4);
+    vol.set(data.subarray(0, n * 4));
+    tabelTex = vasteTextuur(TABEL_PLAATS, tabelTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, TABEL_B, h, 0, gl.RGBA, gl.FLOAT, vol);
+    vasteTextuurKlaar();
+  };
+  // Een vaste rij van n bomen (data: VAST_PER getallen per boom), met een eigen lijst van attributen (11 en 12).
+  G.vasteRij = function (data, n) {
+    if (!start() || !n) return null;
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, data.subarray(0, n * VAST_PER), gl.STATIC_DRAW);
+    for (const [plek, o] of [[11, 0], [12, 16]]) {
+      gl.enableVertexAttribArray(plek);
+      gl.vertexAttribPointer(plek, 4, gl.FLOAT, false, VAST_PER * 4, o);
+      gl.vertexAttribDivisor(plek, 1);
+    }
+    gl.bindVertexArray(null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    G.telling.opgestuurd++;
+    return { vao, buf, n };
+  };
+  // Hoe vol de stapel is (het meten): zijn lagen, en hoeveel daarvan een blad zijn.
+  G.stapel = () => ({ lagen: atlas ? atlas.lagen : 0, bladen: bladen.length });
+  G.weg = function (r) {
+    if (!gl || !r) return;
+    gl.deleteBuffer(r.buf);
+    gl.deleteVertexArray(r.vao);
+  };
+  // De mist per tegel van een opdracht naar de kaart, één keer (het masker en het doek gebruiken hem allebei).
+  function standVanVast(o) {
+    if (o.opgestuurd) return;
+    o.opgestuurd = true;
+    const s = o.stand;
+    standTex = vasteTextuur(STAND_PLAATS, standTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8, s.b, s.h, 0, gl.RED, gl.UNSIGNED_BYTE, s.perTegel);
+    vasteTextuurKlaar();
+  }
+  function tekenVast(o, opMasker) {
+    standVanVast(o);
+    gebruik(vastProg);
+    zetMaat(vastProg);
+    const u = vastProg.u;
+    const m = o.m;
+    const s = o.stand;
+    gl.uniform2f(u.uZoom, m[0], m[3]);
+    gl.uniform4fv(u.uWind, s.wind);
+    gl.uniform2f(u.uGrijs, s.grijs[0], s.grijs[1]);
+    gl.uniform1f(u.uLaag, atlas ? atlas.maat : LAAG);
+    gl.uniform3f(u.uZon, opMasker ? 1 : 0, opMasker ? schaduwOp.sx : 0, opMasker ? schaduwOp.sy : 0);
+    gl.uniform1f(u.uMasker, opMasker ? 1 : 0);
+    gl.uniform1f(u.uHard, opMasker ? 0 : 1);
+    zetMeng('source-over');
+    zetDiep(opMasker ? 'uit' : 'schrijf');
+    for (const r of o.stukken) {
+      gl.uniform2f(u.uStuk, m[0] * r.px + m[4], m[3] * r.py + m[5]);
+      gl.uniform2i(u.uTegel, r.tx, r.ty);
+      gl.uniform4f(u.uDiepte, r.som, s.schaal, s.stap, r.rang);
+      gl.bindVertexArray(r.rij.vao);
+      gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, r.rij.n);
+      G.telling.opdrachten++;
+      if (!opMasker) G.telling.vast += r.rij.n;
+    }
+    gl.bindVertexArray(null);
+    if (!opMasker) zetDiep('toets');
+  }
+
   // ---------------------------------------------------------------- het kladdoek
   let klad = null; // { canvas, ctx }
   let kladVak = null; // [x0, y0, x1, y1] in pixels waarop getekend werd, of null
@@ -1109,6 +1313,7 @@
       this.pad = []; // deelpaden: { p: [x, y, ...] in pixels, bol: true als het een ellips of cirkel is }
       this.padRond = false; // het pad heeft bochten die het snelle pad niet kent
       this.werptSchaduw = false; // na schaduwHier: wat drawImage nu tekent, werpt een schaduw (js/tekenen.js zet het per item)
+      this.dieptesleutel = null;
     }
     get canvas() {
       return doek;
@@ -1240,6 +1445,33 @@
       }
       const r = (rand || 0) * Math.hypot(m[0], m[1]) + 2;
       return [Math.min(...xs) - r, Math.min(...ys) - r, Math.max(...xs) + r, Math.max(...ys) + r];
+    }
+    // ---- de vaste rijen en de diepte (vraag 178, B1 en B2; js/tekenen.js, "de vaste rijen")
+    // `stukken`: per stuk { rij (G.vasteRij), px, py (waar het stuk begint, in pixels van de vlakte), tx, ty (zijn eerste
+    // tegel min die van de mist per tegel), som (de som x + y van die eerste tegel min d0), rang (het hoeveelste stuk) };
+    // `stand`: { wind (de stand per fase, 100 getallen), perTegel, b, h (de mist per tegel: 0 niet, 128 grijs, 255
+    // helder), grijs ([hoeveel kleur eruit, hoe helder]), d0, schaal (van de sleutel naar het doek), stap (per rij) }.
+    // Wat erna komt met een diepte (Doek.diepte), toetst tegen wat ze schrijven. Geeft false als het niet kan (een doek
+    // dat gedraaid staat).
+    tekenVast(stukken, stand) {
+      const m = this.st.m;
+      if (m[1] || m[2]) return false;
+      legKladAf();
+      legRijAf();
+      diepteBasis = { d0: stand.d0, schaal: stand.schaal };
+      opdrachten.push({ soort: VAST, stukken, stand, m: m.slice(), werpt: schaduwOp !== null, opgestuurd: false });
+      return true;
+    }
+    // De sleutel van het sorteren (js/tekenen.js, diepteVanItem) van wat nu getekend wordt, of null: dan zonder diepte.
+    get diepte() {
+      return this.dieptesleutel;
+    }
+    set diepte(k) {
+      const z = k == null || !diepteBasis ? null : Math.max(-0.999999, Math.min(0.999999, 1 - (k - diepteBasis.d0) * diepteBasis.schaal));
+      this.dieptesleutel = k;
+      if (z === diepteNu) return;
+      if (kladVak) legKladAf();
+      diepteNu = z;
     }
     // ---- de mist (js/tekenen.js, tekenMist; B2c): `masker` is het masker, links hoeveel kleur eruit gaat en rechts (na
     // `kier` pixels) hoeveel donkerder, elk `b` bij `h` pixels, met pixel (0, 0) op tegel (net.x0, net.y0); net.stukken
@@ -1597,7 +1829,7 @@
 
   // ---------------------------------------------------------------- een beeld
   let hetDoek = null;
-  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0, mist: 0 };
+  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0, mist: 0, vast: 0 };
   // Het doek even groot als dat van de browser (formaat in js/main.js), met dezelfde ratio.
   G.zetMaat = function (b, h, r) {
     if (!start()) return;
@@ -1613,6 +1845,10 @@
     grijsNu = 0;
     hetDoek.stapel = [];
     hetDoek.werptSchaduw = false;
+    hetDoek.dieptesleutel = null;
+    diepteNu = null;
+    diepteBasis = null;
+    rijDiep = false;
     const k = kladdoek().ctx;
     if (kladBeschreven) {
       k.setTransform(1, 0, 0, 1, 0, 0);
@@ -1659,17 +1895,22 @@
     gl.viewport(0, 0, doek.width, doek.height);
     if (!gewist) {
       gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.depthMask(true);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      nuDiep = null;
       gewist = true;
     }
     for (const o of opdrachten) {
-      if (o.soort !== DOE) tekenRij(o, o.meng);
+      if (o.soort === VAST) tekenVast(o, false);
+      else if (o.soort !== DOE) tekenRij(o, o.meng);
       else {
+        zetDiep(o.diep ? 'toets' : 'uit');
         hoekBron(buffer, 0);
         o.f();
         hoekNu = null; // wat zelf tekent, kan de hoeken elders laten wijzen (tekenNet)
       }
     }
+    zetDiep('uit');
     hoekBron(buffer, 0);
     opdrachten.length = 0;
     hoekAantal = 0;

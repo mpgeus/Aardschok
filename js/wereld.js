@@ -596,6 +596,9 @@
   }
   // Alles wat in dit vak staat: wat iemand zette (w.voorwerpen), en op het eiland wat er groeit, in de stukken die open
   // zijn. Voor wie zoekt wat er in een stuk land staat (een boom, iets laags dat plaats maakt voor een gebouw).
+  // Het open stuk met nummer n (T.stukNummer), gemaakt als het er nog niet was: { sx, sy, x0, y0, op, ... }, met op wat er
+  // per tegel staat. Voor de vaste rijen in js/tekenen.js (vraag 178, B2), die het per stuk doen, zoals hieronder.
+  T.stukOpen = (w, n) => stukkenVan(w).get(n) || openStuk(w, (n % 64) * STUK, Math.floor(n / 64) * STUK);
   T.voorwerpenIn = function (w, vak) {
     const binnen = (v) => v.x >= vak.x && v.y >= vak.y && v.x < vak.x + vak.b && v.y < vak.y + vak.h;
     const uit = (w.voorwerpen || []).filter(binnen);

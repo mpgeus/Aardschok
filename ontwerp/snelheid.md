@@ -85,6 +85,23 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
 
 ### B. De videokaart meer laten doen (je ziet niets anders)
 
+- **B1 en B2 zijn gebouwd** (18 okt; Marcel: "dan bouwen we nu b1 en b2", en "Misschien zoveel mogelijk offloaden naar
+  gpu"; `code.md` bij `js/tekenen.js` en `js/gl.js`): de bomen en het groen per stuk land in een vaste rij op de kaart,
+  met de wind, de mist en de schaduw in de shader, en de volgorde uit een dieptebuffer; wat in de lijst blijft, toetst
+  ertegen. Om en om gemeten tegen B5 (ms per beeld, de processor zonder wachten, Chromium met de videokaart, 1920×1080):
+
+  | | vlak, oud | vlak, nieuw | heuvels, oud | heuvels, nieuw | na 2 dagen, oud | na 2 dagen, nieuw |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | dichtbij | 1,5 | 0,8 | 3,1 | 2,0 | 1,2 | 0,5 |
+  | 0,5 | 4,6 | 1,6 | 5,9 | 2,7 | 4,4 | 1,5 |
+  | 0,35 | 6,8 | 2,1 | 7,6 | 2,8 | 6,6 | 1,9 |
+  | 0,35, avond | 6,2 | 1,7 | 6,9 | 2,3 | 6,3 | 1,8 |
+
+  Met de kaart erbij (een pixel teruggelezen) op 35% 9,5 naar 5,1 ms. Hetzelfde beeld, op de gelijke gevallen bij 50%
+  na (`code.md`). Wat er op 35% nog per beeld is (2 ms): de mensen en de gebouwen in de lijst (0,5), de regen (0,3), het
+  masker van de mist (0,2) en de vaste rijen zelf (0,15). Een boom kappen tekent zijn stuk opnieuw (dat beeld 7,5 ms,
+  in B5 10 ms, want de grond gaat er ook opnieuw); een ander seizoen of ver verderop kijken kost één beeld van 120 ms,
+  net als eerst (de grond en de standen in de wind; D1). Niet in Firefox gemeten.
 - **B1, een dieptebuffer.** De bomen en de begroeiing hebben alleen helemaal doorzichtige en helemaal dichte pixels
   (gemeten 17 okt: `tegels/bomen.png` en `begroeiing.png`, geen enkele pixel ertussen). Dan kan de kaart zelf bepalen
   wat ervoor staat: elk plaatje krijgt zijn diepte mee, en een doorzichtige pixel schrijft niets. Sorteren hoeft dan
@@ -164,3 +181,9 @@ uit dezelfde rij; `js/tekenen.js` blijft, in de proef 2,8 keer zo snel), en dan 
 grijs op de kaart. Dat is groter, maar het maakt het bos goedkoop, ook op een eiland van 2500 bij 2500. **C3** kan ernaast
 als instelling voor zwakke machines. A3 en A4 alleen als de meting na A1 en A2 erom vraagt, want B maakt ze grotendeels
 overbodig.
+
+**Na B1 en B2** (18 okt): op 35% is de processor nog 2 ms per beeld, en het bos kost hem bijna niets meer. Wat nog kan,
+als Firefox erom vraagt: de regen en het masker van de mist ook op de kaart (samen een halve ms, je ziet niets anders),
+**D1** (de haperingen: een ander seizoen of ver verderop kijken kost één beeld van 120 ms, vooral de grond), en **E4**
+(afronden op 50%, met een proefplaat), waarmee ook de gelijke gevallen tussen twee texels vastliggen. B4 (het grijs per
+pixel) is niet meer nodig: de vaste rijen krijgen de mist per tegel, zoals de lijst.

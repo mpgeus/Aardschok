@@ -91,14 +91,20 @@
   // voorwerp ná hem getekend wordt, dus als hij niet vóór het voorwerp staat: T.staatVoorGebouw
   // (js/tekenen.js), dezelfde vraag als de tekenvolgorde. v.doorkijk loopt dan in `tijd` seconden op
   // naar 1, en weer terug naar 0 als niemand meer bedekt wordt.
-  T.werkDoorkijkBij = function (S, dt, voorwerpen) {
-    const I = T.DOORKIJK_INSTELLINGEN;
+  // Wie je door een hoog voorwerp heen hoort te zien, met zijn doos: { doorAlles, doorHuis } (T.zichtbaarDoor). Ook voor
+  // de vaste rijen in js/tekenen.js (vraag 178, B2), die zo de bomen zoeken waar iemand achter kan staan.
+  T.doorkijkKandidaten = function (S) {
     const doorAlles = [];
     const doorHuis = [];
     for (const e of S.wereld.wezens) {
       const door = T.zichtbaarDoor(S, e);
       if (door) (door === 'alles' ? doorAlles : doorHuis).push({ e, doos: wezenDoos(S.wereld, e) });
     }
+    return { doorAlles, doorHuis };
+  };
+  T.werkDoorkijkBij = function (S, dt, voorwerpen, kandidaten = T.doorkijkKandidaten(S)) {
+    const I = T.DOORKIJK_INSTELLINGEN;
+    const { doorAlles, doorHuis } = kandidaten;
     const allen = doorAlles.concat(doorHuis);
     for (const v of voorwerpen) {
       const gebouw = T.isGebouw(v);

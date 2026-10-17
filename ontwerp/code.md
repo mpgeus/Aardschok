@@ -735,7 +735,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `tekenVoorwerpItem` en zichzelf als `punt`, geen functietje per voorwerp per beeld; zet geen eigenschap op een item
   nadat het gemaakt is, want dan krijgen de items zoveel vormen dat het sorteren in Chromium twee keer zo traag werd, 17
   okt; zonder videokaart een grijze kopie van het stukje, `grijsStuk`, want een filter bewerkt daar het hele vel;
-  `Spel.debug.geenMist`), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
+  `Spel.debug.geenMist`), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit; met de
+  videokaart zonder de vaste rijen, hieronder); tot B2b stond er een bosrand om
   de kaart, ver uitgezoomd in een eigen buffer (`bosGebakken`). **Alleen wat telt in de lijst** (vraag 178, A1, 17 okt):
   het vak is een rechthoek in tegels om het schuine beeld, en ver uitgezoomd lagen er 14.564 dingen in, waarvan 4.815
   buiten beeld en 6.710 in het zwart; `voorwerpTelt` laat die vóór het werk voor de lijst weg (in het zwart, zoals
@@ -745,8 +746,26 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kan de volgorde anders zijn (`tekenVolgorde` voegt een gebouw in tussen wat er op zijn rijen staat, en dat was ook
   eerst al wat er toevallig in het vak lag). **Het vaste werk eens** (A2): `isPlat` en de plek op het scherm (`plekVan`,
   met de hoogte, opnieuw na `T.egaliseer`) staan op het voorwerp (`T.sprites.onthouden`, in `v.getekend`). Samen ver
-  uitgezoomd 35 à 47% minder per beeld (`ontwerp/snelheid.md`). **De
-  meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
+  uitgezoomd 35 à 47% minder per beeld (`ontwerp/snelheid.md`). **De bomen en het groen in vaste rijen** (vraag 178, B1
+  en B2, 18 okt; Marcel: "dan bouwen we nu b1 en b2", en "Misschien zoveel mogelijk offloaden naar gpu"): met de
+  videokaart staat wat op een stuk van het eiland groeit één keer op de kaart, per stuk een rij (`vasteRijenVoor`,
+  `bouwStuk`; `js/gl.js`, `tekenVast`), en gaat het niet meer door de lijst. Ver uitgezoomd was dat 80% van de tijd van
+  de processor. Per beeld zet de processor alleen de stand per fase in de wind (97 getallen, zoals `windVoorInstantie`),
+  de mist per tegel (`vasteMist`: 0 tekent niet, 128 grijs, 255 helder, zoals `voorwerpTelt` en `mistOverLijst` het per
+  ding beslisten) en per stuk waar het ligt; de rest doet de kaart. **De volgorde komt uit een dieptebuffer** (B1): de
+  kunst heeft alleen helemaal dichte of doorzichtige pixels, dus een boom schrijft per pixel zijn diepte, de sleutel van
+  het sorteren (`diepteVanItem`: de som x + y, en bij een gelijke som de volgorde van `T.voorwerpenIn`, het stuk en de
+  rij, minder dan `DIEPTE_STUK`). Wat in de lijst blijft (de mensen, de gebouwen, de akkers, wat iemand zette), sorteert
+  zoals altijd, krijgt die sleutel mee (`ctx.diepte`; op dezelfde som komt wat `tekenVolgorde` eerder zette `DIEPTE_STAP`
+  ervoor, de rest erna, en wie loopt tussen twee sommen in) en toetst ertegen, zonder hem te schrijven. **In de lijst
+  blijft** een boom die een gebouw kan raken (`gebouwVak`, want `tekenVolgorde` zoekt de plek van een gebouw tussen wat
+  ermee overlapt, en dat is geen getal), een tekening die niet op de stapel past, en wie nu doorzichtig is: de doorkijk
+  van de bomen in de rijen loopt vooraf (`bomenBij` zoekt ze om wie je hoort te zien, `T.doorkijkKandidaten` in
+  `js/doorkijk.js`), en wie open is, valt uit zijn rij (0 in de mist per tegel) en gaat op zijn plek in de lijst.
+  `heuvelsErvoor` vraagt de rijen ook (`staatOp`). Een stuk gaat opnieuw als er op de kaart iets veranderde
+  (`T.kaartPlekkenSinds`), een gebouw erbij kwam of verschoof, of het seizoen, de hoogte of de kamer anders is; als er
+  alleen een beeld bij kwam (`T.sprites.geladenNr`), één stuk per beeld. Zonder videokaart blijft alles in de lijst.
+  **De meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 
 ### js/gl.js: tekenen met de videokaart
 
@@ -760,9 +779,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zelf; de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer
   die opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
   **Sinds 18 okt WebGL2** (vraag 178, B5 met B3 en E1, na de renderproef, `gereedschap/pixiproef/evaluatie.md`; zonder
-  WebGL2 het 2D-doek, zoals zonder kaart): **een plaatje is één instantie** (`zetInst`, `VERT_INST`, `PER_INST` = 20:
-  de vier hoeken, de plek op de textuur, een kleur, de plaats van de textuur, een vlag, de verhouding voor de schaduw en
-  het grijs), en ook een vlak en een driehoek van een vorm, zodat ze in dezelfde rij passen; alleen een plaatje binnen
+  WebGL2 het 2D-doek, zoals zonder kaart): **een plaatje is één instantie** (`zetInst`, `VERT_INST`, `PER_INST` = 21:
+  de vier hoeken, de plek op de textuur, een kleur, de plaats van de textuur, een vlag, de verhouding voor de schaduw,
+  het grijs en sinds B1 de diepte), en ook een vlak en een driehoek van een vorm, zodat ze in dezelfde rij passen; alleen een plaatje binnen
   vierhoeken (`tekenUitgeknipt`) gaat nog als hoeken (`hoekH`, `VERT_BEELD`). De hoeken rekent JavaScript uit, niet de
   shader: anders rondt het net anders af. **Wat klein is en niet meer verandert** (een plaatje, een doek met versie 1),
   staat op de lagen van één textuurstapel (`TEXTURE_2D_ARRAY` van 2048 bij 2048, de bladen, `plekOpBlad`; tot 18 okt
@@ -777,7 +796,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   0,92 keer; met op de kaart wachten (een pixel teruggelezen elk beeld) 's avonds 5% meer, omdat de kaart pas in
   `G.klaar` begint (de spellus wacht niet). Het beeld is gelijk, op 100% en 35% op 0,007% na; op precies 50% valt elke
   pixel op de grens van twee texels, en daar kiest de textuurstapel op 0,3% van de pixels de buurtexel (de oude weg net
-  zo goed willekeurig, en per videokaart anders; E4, afronden op 50%, maakt het vast). Een opdracht (de rij,
+  zo goed willekeurig, en per videokaart anders; E4, afronden op 50%, maakt het vast). **Vaste rijen en een
+  dieptebuffer** (vraag 178, B1 en B2, 18 okt; `js/tekenen.js`, "de vaste rijen"): een vaste rij is een lijst bomen van
+  een stuk land, één keer op de kaart (`G.vasteRij`, acht getallen per boom: zijn anker vanaf het stuk, zijn tegel, zijn
+  tekening en zijn fase in de wind, met een eigen lijst van attributen), met de tabel van de tekeningen (`G.vasteTabel`:
+  per stand in de wind de plek op de stapel en het anker, een textuur van getallen) en hun plaatjes op de stapel
+  (`G.opDeStapel`). `Doek.tekenVast` zet ze in de lijst van het beeld (soort `VAST`), en `VERT_VAST` kiest per boom zijn
+  stand (`uWind`), of hij getekend wordt en grijs is (de mist per tegel, `uStand`), zijn schaduw (`uZon`, op het masker
+  in `maskerRonde`) en zijn diepte. Op het doek schrijven ze hun diepte (`uHard`: een pixel is dicht of er is niets);
+  wat daarna komt met `Doek.diepte`, toetst ertegen zonder te schrijven (`zetDiep`; een rij breekt als dat anders
+  wordt, en het kladdoek gaat eerst af). Het doek van WebGL heeft daarvoor een dieptebuffer (`depth: true`, 24 bits),
+  die `G.klaar` met de kleur leeg maakt. De stapel groeit sinds B2 met vier lagen tegelijk in plaats van twee keer zo
+  groot: alle standen van alle bomen staan er meteen op (ver uitgezoomd 9 bladen, door alle seizoenen heen 14), en dat
+  werden 16 lagen, 256 MB (`G.stapel` zegt hoe vol hij is). Gemeten om en om (18 okt, 5 rondes, vlak): de processor ver
+  uitgezoomd een derde van wat het was (6,8 naar 2,1 ms op 35% overdag, 6,2 naar 1,7 's avonds, 4,6 naar 1,6 op 50%),
+  met de kaart erbij de helft (9,5 naar 5,1 ms); met heuvels 7,6 naar 2,8, en na twee speeldagen 6,6 naar 1,9. Het
+  beeld is gelijk, ook met de doorkijk, gekapte bomen, een huis tussen de bomen, de seizoenen, de nacht, op 200% en na
+  twee speeldagen; alleen waar een pixel op de grens van twee texels valt (op precies 50%, en op 75%), kiest de kaart
+  op 0,3 à 0,5% van de pixels de buurtexel, want de shader rekent de hoeken net anders af dan JavaScript (E4 maakt het
+  vast). Een opdracht (de rij,
   `plekVoor`) tekent uit tot `RIJ_TEXTUREN` (8) losse texturen tegelijk naast de stapel: elk plaatje zegt waar zijn
   textuur staat (`bron`; onder nul een laag van de stapel), en de rij breekt pas bij een negende textuur, een andere
   mengstand of de wissel tussen hoeken en plaatjes. Een vorm als hoeken staat met vier hoeken in de rij, en een vaste lijst
