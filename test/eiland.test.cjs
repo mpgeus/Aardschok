@@ -136,7 +136,7 @@ test('eiland: ook aan de grond loop je een weg af, van begin tot eind: over wate
   for (const zaad of [3, 5]) {
     const E = eiland(zaad);
     const S = Object.fromEntries(T.EILAND_STREKEN.map((s, i) => [s, i]));
-    // per stuk van 64: wat er begaanbaar is (geen water, behalve een bruggetje, en geen boom), zoals het land het maakt
+    // per stuk van 64: wat er begaanbaar is (een brug, of geen water en geen boom), zoals het land het maakt
     const stukken = new Map();
     const vrij = (x, y) => {
       const k = Math.floor(y / 64) * 64 + Math.floor(x / 64);
@@ -148,7 +148,7 @@ test('eiland: ook aan de grond loop je een weg af, van begin tot eind: over wate
         for (let j = 0; j < 64; j++) {
           for (let i = 0; i < 64; i++) {
             const nat = [j * 65 + i, j * 65 + i + 1, (j + 1) * 65 + i, (j + 1) * 65 + i + 1].some((h) => hoek[h] <= S.rivier);
-            v[j * 64 + i] = nat ? (E.brugOp.has((y0 + j) * E.maat + x0 + i) ? 1 : 0) : bomen[j * 64 + i] ? 0 : 1;
+            v[j * 64 + i] = E.brugOp.has((y0 + j) * E.maat + x0 + i) ? 1 : nat || bomen[j * 64 + i] ? 0 : 1;
           }
         }
         stukken.set(k, v);

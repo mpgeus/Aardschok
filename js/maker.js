@@ -663,7 +663,6 @@
     if (grondTegels) return grondTegels;
     const vlak = {};
     const overgang = {};
-    const brug = {};
     const leesVel = (vel, eerste) => {
       // wat rand al heeft, neemt kust niet over: zo blijft een land zonder het eiland tegel voor tegel hetzelfde
       const vlakVan = {};
@@ -677,15 +676,13 @@
           const sleutel = HOEKEN.map((h) => (erin.includes(h) ? o[1] : o[2])).join(',');
           (overgangVan[sleutel] = overgangVan[sleutel] || []).push(eerste + id);
         }
-        const b = /^brug ([xy]) (begin|midden|eind)$/.exec(t.groep);
-        if (b) brug[`${b[1]} ${b[2]}`] = eerste + id;
       });
       for (const n of Object.keys(vlakVan)) if (!vlak[n]) vlak[n] = vlakVan[n];
       for (const k of Object.keys(overgangVan)) if (!overgang[k]) overgang[k] = overgangVan[k];
     };
     leesVel('rand', 1);
     if (T.TEGELS.kust) leesVel('kust', T.KUST_GID());
-    return (grondTegels = { vlak, overgang, brug });
+    return (grondTegels = { vlak, overgang });
   }
   // Een vaste keus uit een paar varianten, per tegel (dezelfde als in maak-gehucht.cjs).
   function hash(x, y, zout) {
@@ -897,7 +894,9 @@
     // Wat er staat, één ding per tegel, in de volgorde van de maker (stap 7): de rotsen van het eiland, de bomen van het
     // bos, losse bomen en groepjes struiken in de wei, en dan wat er verder groeit.
     const ding = new Array(B * H).fill(null);
+    // Op een brug van het eiland (js/eiland.js, legBruggen) en zijn landhoofden staat niets: geen boom, geen waterlelie.
     const leg = (naam, x, y) => {
+      if (E.brugOp.has(y * E.maat + x)) return;
       ding[ti(x, y)] = KAN_ANDERS.has(naam) ? andereBoom(naam, x, y, plekVoorBoom(x, y), lot(x, y, 821)) : naam;
     };
     const losOpGras = (x, y) => binnen(x, y) && !ding[ti(x, y)] && soort[ti(x, y)] === VRIJ && opGras(x, y);
@@ -997,12 +996,12 @@
           else if (bijWater(x, y)) naam = trek(G.oeverGroen, lot(x, y, 954));
           else if (o === VRIJ && bosBij1[t]) naam = trek(G.bosrand, lot(x, y, 955));
         }
-        if (naam && !E.brugOp.has(y * E.maat + x)) leg(naam, x, y); // geen waterlelie onder een bruggetje
+        if (naam) leg(naam, x, y);
       }
     }
 
-    // Wat het stuk zelf is: de hoekpunten, de grondtegels (een bruggetje van het eiland, js/eiland.js, ligt over het
-    // water) en de dingen binnen het stuk.
+    // Wat het stuk zelf is: de hoekpunten, de grondtegels en de dingen binnen het stuk. Onder een brug van het eiland
+    // blijft het water water; de brug zelf tekent js/tekenen.js erover.
     const hoek = new Array((b + 1) * (h + 1));
     for (let vy = y0; vy <= y0 + h; vy++) for (let vx = x0; vx <= x0 + b; vx++) hoek[(vy - y0) * (b + 1) + (vx - x0)] = letter[hi(vx, vy)];
     const grond = new Uint16Array(b * h);
@@ -1010,9 +1009,8 @@
     const dingen = [];
     for (let y = y0; y < y0 + h; y++) {
       for (let x = x0; x < x0 + b; x++) {
-        const brug = E.brugOp.get(y * E.maat + x);
         const i = (y - y0) * b + (x - x0);
-        grond[i] = brug ? grondIndex().brug[`${brug.as} ${brug.deel}`] : grondTegel(E, x, y, [letter[hi(x, y)], letter[hi(x + 1, y)], letter[hi(x + 1, y + 1)], letter[hi(x, y + 1)]]);
+        grond[i] = grondTegel(E, x, y, [letter[hi(x, y)], letter[hi(x + 1, y)], letter[hi(x + 1, y + 1)], letter[hi(x, y + 1)]]);
         soorten[i] = soort[ti(x, y)];
         const d = ding[ti(x, y)];
         if (d) dingen.push({ naam: d, x, y });
@@ -1081,7 +1079,8 @@
     const B = plan.b;
     const H = plan.h;
     const st = plan.stuk;
-    // de grond: waar de vier hoekpunten van een tegel anders zijn dan die van het eiland (een bruggetje blijft)
+    // de grond: waar de vier hoekpunten van een tegel anders zijn dan die van het eiland (onder een brug blijft die van het
+    // eiland)
     const nr = (x, y) => T.tegelNummer(x0 + x, y0 + y);
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < B; x++) {

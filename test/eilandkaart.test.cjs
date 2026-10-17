@@ -27,12 +27,24 @@ test('eilandkaart: de tegels, de grond en wat er groeit komen uit het stuk van h
       const d = L.dingen.find((q) => q.x === x && q.y === y);
       const v = T.voorwerpOp(w, x, y);
       assert.equal(v ? v.soort : null, d ? T.opzoekTegelNaam(T.natuurTegel(d.naam)).eig.naam : null, `wat er staat op (${x}, ${y})`);
-      const vast = T.grondVanGid(gid).vast || (v && T.opzoekTegelNaam(T.natuurTegel(d.naam)).eig.vast);
+      const vast = (T.grondVanGid(gid).vast && !E.brugOp.has(y * E.maat + x)) || (v && T.opzoekTegelNaam(T.natuurTegel(d.naam)).eig.vast);
       assert.equal(T.tegel(w, x, y), vast ? 'muur' : 'vloer', `de tegel op (${x}, ${y})`);
     }
   }
   assert.equal(T.kaartVak(w).b, 100);
   assert.ok(T.heeftTegels(w) && T.heeftGrond(w));
+});
+
+test('eilandkaart: over een brug loop je, ook al is het water eronder water, en een brug is een pad', () => {
+  const b = E.bruggen[0];
+  const t = b.tegels.find((q) => T.grondVanGid(T.landStuk(E, q.x, q.y, 1, 1).grond[0]).vast);
+  assert.ok(t, 'onder de brug is water');
+  const w = T.eilandKaart(5, vak);
+  T.openVak(w, { x: t.x - 2, y: t.y - 2, b: 4, h: 4 });
+  assert.ok(T.isWaterGrond(T.grondOp(w, t.x, t.y).naam), 'water onder de brug');
+  assert.equal(T.tegel(w, t.x, t.y), 'vloer');
+  assert.ok(T.opPad(w, t.x, t.y));
+  assert.deepEqual(T.brugOp(w, t.x, t.y), E.brugOp.get(t.y * E.maat + t.x));
 });
 
 test('eilandkaart: een stuk dat niet open is, is buiten', () => {

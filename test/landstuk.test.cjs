@@ -73,22 +73,30 @@ test('landStuk: bomen in het bos, groen in de wei, en niets wat vaststaat in het
 
 // De wegen van het eiland gaan over een rivier of een meer met een recht bruggetje (js/eiland.js, legBruggen; Marcel,
 // 13 okt: "Die van het eiland"), en een stuk legt het over het water.
-test('landStuk: een bruggetje van het eiland ligt recht over het water, van droog naar droog', () => {
+test('landStuk: een brug van het eiland is drie tegels breed, recht over het water, van droog naar droog', () => {
   const E = T.eilandVan(5);
+  const W = T.EILAND_INSTELLINGEN.wegen;
   assert.ok(E.bruggen.length > 0, 'op eiland 5 kruisen de wegen het water');
-  for (const b of E.bruggen) {
-    // hooguit brugLangst: ook een brede of schuine oversteek heeft zijn bruggetje (L1)
-    assert.ok(b.tegels.length <= T.EILAND_INSTELLINGEN.wegen.brugLangst, `een bruggetje van ${b.tegels.length}`);
-    const op = b.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
-    const [dx, dy] = b.as === 'x' ? [1, 0] : [0, 1];
-    op.forEach((t, i) => assert.ok(i === 0 || (t.x === op[i - 1].x + dx && t.y === op[i - 1].y + dy), `recht langs ${b.as}`));
-    const s = T.landStuk(E, op[0].x - 8, op[0].y - 8, 24, 24);
-    const nat = (x, y) => [hoekVan(s, x, y), hoekVan(s, x + 1, y), hoekVan(s, x + 1, y + 1), hoekVan(s, x, y + 1)].some((l) => l === 'w' || l === 'e');
-    for (const t of op) {
-      assert.match(T.TEGELS.rand.tiles[tegelVan(s, t.x, t.y) - 1].groep, new RegExp(`^brug ${b.as} `), `de grondtegel op (${t.x}, ${t.y})`);
-      assert.ok(nat(t.x, t.y), `onder het bruggetje is water op (${t.x}, ${t.y})`);
-      assert.ok(!s.dingen.some((d) => d.x === t.x && d.y === t.y), `er staat niets op het bruggetje op (${t.x}, ${t.y})`);
+  for (const [nr, b] of E.bruggen.entries()) {
+    // hooguit brugLangst: ook een brede of schuine oversteek heeft zijn brug (L1); en zo breed als de weg (Marcel, 17 okt:
+    // "Er moeten ook soldaten pelotons overheen")
+    assert.ok(b.L <= W.brugLangst, `een brug van ${b.L}`);
+    assert.equal(b.tegels.length, W.brugBreed * b.L, 'drie rijen');
+    assert.ok(['steen', 'juk', 'boog'].includes(b.soort), b.soort);
+    const op = (i, k) => (b.as === 'x' ? { x: b.ga + i, y: b.gc - 1 + k } : { x: b.gc - 1 + k, y: b.ga + i });
+    const s = T.landStuk(E, op(0, 0).x - 8, op(0, 0).y - 8, (b.as === 'x' ? b.L : 3) + 16, (b.as === 'x' ? 3 : b.L) + 16);
+    const nat = (t) => [hoekVan(s, t.x, t.y), hoekVan(s, t.x + 1, t.y), hoekVan(s, t.x + 1, t.y + 1), hoekVan(s, t.x, t.y + 1)].some((l) => l === 'w' || l === 'e');
+    let water = 0;
+    for (let k = 0; k < 3; k++) {
+      // elke rij heeft zijn landhoofd op droog land, en wat de brug beslaat, zegt E.brugOp
+      assert.ok(!nat(op(-1, k)) && !nat(op(b.L, k)), `aan beide kanten droog, rij ${k}`);
+      for (let i = -1; i <= b.L; i++) {
+        const t = op(i, k);
+        assert.deepEqual(E.brugOp.get(t.y * E.maat + t.x), { brug: nr, i, k }, `de brug op (${t.x}, ${t.y})`);
+        assert.ok(!s.dingen.some((d) => d.x === t.x && d.y === t.y), `er staat niets op de brug op (${t.x}, ${t.y})`);
+        if (i >= 0 && i < b.L && nat(t)) water++;
+      }
     }
-    assert.ok(!nat(op[0].x - dx, op[0].y - dy) && !nat(op[op.length - 1].x + dx, op[op.length - 1].y + dy), 'aan beide kanten droog');
+    assert.ok(water > 0, 'de brug gaat over water');
   }
 });

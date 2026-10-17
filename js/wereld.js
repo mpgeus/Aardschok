@@ -430,12 +430,23 @@
     if (!s) m.set(n, (s = maakStuk(w, sx, sy)));
     return s;
   }
+  // Wat een tegel van het eiland is naar zijn grond: water en wat verder vast is, is muur, behalve onder een brug (js/eiland.js,
+  // legBruggen): daar loop je over het water.
+  const tegelVanGrond = (E, x, y, gid) => (!E.brugOp.has(y * E.maat + x) && T.grondVanGid(gid) && T.grondVanGid(gid).vast ? CODE.muur : CODE.vloer);
+  // De brug van het eiland op tegel (x, y): { brug (het nummer in E.bruggen), i (langs, -1 en L zijn de landhoofden), k
+  // (dwars, 0 tot 2) }, of null.
+  T.brugOp = function (w, x, y) {
+    if (!opEiland(w)) return null;
+    const E = T.eilandVan(w.eiland.zaad);
+    return E.brugOp.get(y * E.maat + x) || null;
+  };
   // Het land van het eiland (T.landStuk, of `L` als het vooruit gemaakt is), met wat er anders werd erover.
   const NATUUR = new Map(); // naam → { vel, id, eig }: de tekening van wat er op het eiland groeit
   function maakStuk(w, sx, sy, L = null) {
     const x0 = sx * STUK;
     const y0 = sy * STUK;
-    if (!L) L = T.landStuk(T.eilandVan(w.eiland.zaad), x0, y0, STUK, STUK);
+    const E = T.eilandVan(w.eiland.zaad);
+    if (!L) L = T.landStuk(E, x0, y0, STUK, STUK);
     const tegel = new Uint8Array(STUK * STUK);
     const grond = new Uint16Array(STUK * STUK);
     const op = new Array(STUK * STUK).fill(null);
@@ -443,7 +454,7 @@
       const n = T.tegelNummer(x0 + (i % STUK), y0 + Math.floor(i / STUK));
       const anders = w.grondAnders.get(n);
       grond[i] = anders != null ? anders : L.grond[i];
-      tegel[i] = T.grondVanGid(grond[i]) && T.grondVanGid(grond[i]).vast ? CODE.muur : CODE.vloer;
+      tegel[i] = tegelVanGrond(E, x0 + (i % STUK), y0 + Math.floor(i / STUK), grond[i]);
     }
     for (const d of L.dingen) {
       if (w.gerooid.has(T.tegelNummer(d.x, d.y))) continue;
@@ -663,7 +674,7 @@
         s.op[j] = null;
         // de tegel wordt wat de grond is, zoals een geladen spel hem maakt (maakStuk)
         const nr = T.tegelNummer(v.x, v.y);
-        if (!w.tegelsAnders.has(nr)) s.tegel[j] = T.grondVanGid(s.grond[j]) && T.grondVanGid(s.grond[j]).vast ? CODE.muur : CODE.vloer;
+        if (!w.tegelsAnders.has(nr)) s.tegel[j] = tegelVanGrond(T.eilandVan(w.eiland.zaad), v.x, v.y, s.grond[j]);
       }
       w.gerooid.add(T.tegelNummer(v.x, v.y));
     }
@@ -1054,6 +1065,7 @@
   const PADEN = ['zandpad', 'kasseien'];
   T.opPad = function (w, x, y) {
     if (w.wegen && w.wegen.has(T.tegelNummer(x, y))) return true;
+    if (T.brugOp(w, x, y)) return true; // een brug van het eiland, met zijn landhoofden
     const g = T.grondOp(w, x, y);
     return !!(g && PADEN.includes(g.naam));
   };
