@@ -31,7 +31,7 @@ const SQ = D.SQ;
 
 // In pixels boven het maaiveld (z = 0), en in tegels dwars op de brug.
 const BRUG = {
-  dek: 20, // de bovenkant van het wegdek boven het maaiveld: zo hoog gaat wie erop loopt mee omhoog
+  dek: 26, // de bovenkant van het wegdek boven het maaiveld: zo hoog gaat wie erop loopt mee omhoog
   dikte: 8, // het dek onder de kinderkopjes, boven de kruin van een boog
   bol: 2.5, // hoeveel het midden van het wegdek dwars hoger ligt dan de randen
   borst: 12, // de borstwering boven het wegdek (kniehoog)
@@ -375,7 +375,7 @@ function steenBrug(o) {
 // ---------------------------------------------------------------- de houten bruggen
 
 const HOUT = {
-  dek: 10, // de bovenkant van het dek van de jukbrug, en van de boogbrug aan zijn uiteinden (px boven het maaiveld)
+  dek: 15, // de bovenkant van het dek van de jukbrug, en van de boogbrug aan zijn uiteinden (px boven het maaiveld)
   dekD: 3, // de planken
   ligger: 5, // de langsligger eronder
   paal: 7, // een paal van een juk, in het vierkant (eenheden)
