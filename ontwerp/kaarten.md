@@ -211,8 +211,10 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
      scherm en hoeft niet om.
    - *De wegen zijn die van het eiland* (Marcel, 13 okt: "Die van het eiland"): ze komen al op je plek uit, en de maker
      legt geen eigen wegen meer. Waar een weg van het eiland een rivier of een meer kruist, legt het eiland een recht
-     bruggetje (in de schets, `E.bruggen`, hooguit `eilandBrug.lang` tegels water), zodat je over de wegen het hele
-     eiland over kunt.
+     bruggetje (in de schets, `E.bruggen`), zodat je over de wegen het hele eiland over kunt. Sinds 17 okt (vraag 170,
+     stap 6a2, L1; Marcel: "L1") ook waar de oversteek breed of schuin is: dan de kortste rechte brug vlak bij de
+     oversteek (hooguit `wegen.brugLangst` tegels water), en de weg buigt erheen; tot dan was een weg op elk eiland twee à
+     drie keer onderbroken (`code.md` bij `js/eiland.js`).
    - *Nog te doen voor de spelregel Hoogte* (standaard uit): de hoogte per stuk (`w.hoogte` is nu één raster).
 3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
    Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een

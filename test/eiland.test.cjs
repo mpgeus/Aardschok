@@ -129,6 +129,62 @@ test('eiland: het kasteel, de stad en de dorpen, en de wegen brengen je overal',
   }
 });
 
+// Werklijst vraag 170, stap 6a2, L1 (Marcel, 17 okt: "L1"): ook aan de grond. Een weg gaat over water alleen over een
+// bruggetje, ook waar de oversteek breed of schuin is; dan buigt hij erheen. Tot 17 okt lag er een bruggetje alleen
+// waar het recht en kort kon, en was een weg op elk eiland twee à drie keer onderbroken.
+test('eiland: ook aan de grond loop je een weg af, van begin tot eind: over water ligt een bruggetje (L1)', () => {
+  for (const zaad of [3, 5]) {
+    const E = eiland(zaad);
+    const S = Object.fromEntries(T.EILAND_STREKEN.map((s, i) => [s, i]));
+    // per stuk van 64: wat er begaanbaar is (geen water, behalve een bruggetje, en geen boom), zoals het land het maakt
+    const stukken = new Map();
+    const vrij = (x, y) => {
+      const k = Math.floor(y / 64) * 64 + Math.floor(x / 64);
+      if (!stukken.has(k)) {
+        const [x0, y0] = [(k % 64) * 64, Math.floor(k / 64) * 64];
+        const hoek = T.eilandStuk(E, x0 - 0.5, y0 - 0.5, 65, 65).streek;
+        const bomen = T.eilandStuk(E, x0, y0, 64, 64).boom;
+        const v = new Uint8Array(64 * 64);
+        for (let j = 0; j < 64; j++) {
+          for (let i = 0; i < 64; i++) {
+            const nat = [j * 65 + i, j * 65 + i + 1, (j + 1) * 65 + i, (j + 1) * 65 + i + 1].some((h) => hoek[h] <= S.rivier);
+            v[j * 64 + i] = nat ? (E.brugOp.has((y0 + j) * E.maat + x0 + i) ? 1 : 0) : bomen[j * 64 + i] ? 0 : 1;
+          }
+        }
+        stukken.set(k, v);
+      }
+      return stukken.get(k)[(y % 64) * 64 + (x % 64)] === 1;
+    };
+    for (const [li, l] of E.wegen.entries()) {
+      const rij = [];
+      for (let i = 0; i + 1 < l.punten.length; i++) {
+        const [ax, ay] = l.punten[i];
+        const [bx, by] = l.punten[i + 1];
+        const st = Math.max(1, Math.ceil(Math.max(Math.abs(bx - ax), Math.abs(by - ay)) * 2));
+        for (let s = 0; s <= st; s++) rij.push({ x: Math.round(ax + ((bx - ax) * s) / st), y: Math.round(ay + ((by - ay) * s) / st) });
+      }
+      // een strook van twee tegels om de weg; daarover van het eerste begaanbare stuk weg naar het laatste
+      const strook = new Set();
+      for (const t of rij) for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) strook.add((t.y + dy) * E.maat + t.x + dx);
+      const begaanbaar = rij.filter((t) => vrij(t.x, t.y));
+      const [van, naar] = [begaanbaar[0], begaanbaar[begaanbaar.length - 1]];
+      const gezien = new Set([van.y * E.maat + van.x]);
+      const rand = [van];
+      for (let q = 0; q < rand.length; q++) {
+        const t = rand[q];
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+          const [x, y] = [t.x + dx, t.y + dy];
+          const k = y * E.maat + x;
+          if (gezien.has(k) || !strook.has(k) || !vrij(x, y) || (dx && dy && !(vrij(t.x + dx, t.y) && vrij(t.x, t.y + dy)))) continue;
+          gezien.add(k);
+          rand.push({ x, y });
+        }
+      }
+      assert.ok(gezien.has(naar.y * E.maat + naar.x), `land ${zaad}, weg ${li}: van (${van.x}, ${van.y}) kom je langs de weg bij (${naar.x}, ${naar.y})`);
+    }
+  }
+});
+
 test('eiland: jouw dorp ligt waar een dorp kan groeien, en niet achter een berg (vraag 117, C)', () => {
   const P = T.EILAND_INSTELLINGEN.plekken;
   for (const zaad of ZADEN) {

@@ -74,7 +74,9 @@
     // dobbelsteen (G.lot), en een roedel die vecht het dorp waartegen (G.tegen).
     // 19 (16 okt): vraag 170, stap 6a2, b: het wild komt per stuk land als het opengaat (w.wildStukken). Een spel van
     // stuk a heeft dat niet, en kreeg bij het laden in elk open stuk nog eens wild.
-    versie: 19,
+    // 20 (17 okt): vraag 170, stap 6a2, L1: elke weg van het eiland heeft een bruggetje waar hij over water gaat, en buigt
+    // erheen. Het land van een bewaard spel (wat er gerooid of gebouwd is, per tegel) hoort bij de wegen van daarvoor.
+    versie: 20,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

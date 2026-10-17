@@ -475,9 +475,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de plekken (`E.plekken`: het kasteel op een heuvel, de stad aan de grootste monding, acht dorpen met een naam uit
   `T.DORPSNAMEN`, elk waar een dorp kan groeien en zonder berg naar de camera toe, en één met `jij`); en de wegen
   (`E.wegen`, A\* over de vakken, die samen lopen waar het kan), met een recht bruggetje waar een weg een rivier of een
-  meer kruist (`E.bruggen`, `E.brugOp`; B2b, Marcel 13 okt: de wegen zijn "die van het eiland"; hooguit `wegen.brugLang`
-  tegels water, en een tegel is water als een hoekpunt nat is, zoals in `T.landStuk`; een voorselectie per vak houdt het
-  op zo'n 0,1 s). **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  meer kruist (`E.bruggen`, `E.brugOp`; B2b, Marcel 13 okt: de wegen zijn "die van het eiland"; een tegel is water als
+  een hoekpunt nat is, zoals in `T.landStuk`; een voorselectie per vak houdt het op zo'n 0,1 à 0,25 s). **Elke weg heeft
+  zijn bruggetje** (vraag 170, stap 6a2, L1, 17 okt; Marcel: "L1"): eerst recht vanaf de weg (`probeer`, hooguit
+  `wegen.brugLang` tegels water, landend binnen 2 tegels van waar de weg verder gaat); lukt dat niet (breed of schuin),
+  dan zoekt `zoekOmweg` in een vak van `wegen.brugZoek` tegels om de oversteek de kortste rechte brug (hooguit
+  `wegen.brugLangst`), met een weg erheen en erna over droog land (een korte zoektocht over de tegels), of, als de weg
+  alleen een hoekje water afsneed, alleen die weg. De weg loopt altijd over zijn brug (de punten van `E.wegen` buigen
+  erheen, en `E.wegIndex` wordt opnieuw gemaakt): op een weg staan geen bomen, ernaast wel. Tot 17 okt lag een bruggetje
+  alleen waar het recht en kort kon, soms naast de weg met bomen op de aanloop, en was een weg op elk eiland twee à drie
+  keer onderbroken; `test/eiland.test.cjs` loopt nu elke weg af, aan de grond. **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke

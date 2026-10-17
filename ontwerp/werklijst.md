@@ -77,8 +77,10 @@ van de wereld", bij Over het hele eiland): elk stuk land krijgt zijn wild als he
 volgende is stuk c**, de roverskampen: het plan bij I is besloten (Marcel: "V2 G2 P1 B1", en sturen naar land dat je
 niet kent). **c0 is af** (17 okt, op de branch `ccr-b0684dee-kk0n5b`; `spel.md`, bij "Op tocht"): rechts op land dat je
 niet kent, in beeld of op de minikaart, en je mannen gaan erheen, ook naar de andere kant van het eiland. Het liet zien
-dat het eiland te voet in stukken gebroken is (`opmerkingen.md`): **vraag L wacht op Marcel** (hieronder), dan c1.
-**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 is af, vraag L wacht op Marcel. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+dat het eiland te voet in stukken gebroken is (`opmerkingen.md`). **L1 is af** (17 okt, op dezelfde branch; Marcel:
+"L1"; `code.md` bij `js/eiland.js`): elke weg heeft zijn bruggetje, ook breed en schuin, en loopt erover; nu liggen alle
+dorpsplekken, de stad en het kasteel te voet in één stuk land. Het volgende is c1, de kampen (eerst de tent in woorden).
+**Bezig in sessie `ccr-b0684dee-kk0n5b`** (17 okt): stuk c; c0 en L1 zijn af, c1 wacht op de tent in woorden. Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
@@ -98,7 +100,8 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Vraag L, het land te voet** (vraag 170, stap 6a2, c0, 17 okt; `opmerkingen.md`, "Wat c0 van 6a2 liet zien"): tegel
+- **Vraag L, het land te voet: besloten, L1** (Marcel, 17 okt: "L1"; wordt gebouwd, daarna weg uit dit lijstje). Het
+  voorstel was (vraag 170, stap 6a2, c0, 17 okt; `opmerkingen.md`, "Wat c0 van 6a2 liet zien"): tegel
   voor tegel is het eiland in stukken gebroken. Op eiland 1 haalt elke dorpsplek 67% van het land, op eiland 5 is het
   grootste stuk 40% en halen twee dorpsplekken 1% en 3%, en het proefdorp (eiland 2) zit in een stuk van 7%: tussen de
   zee, het woud, een meer, en een rivier waar de weg overheen gaat zonder bruggetje. Oorzaken: het woud (60% bomen) is
@@ -952,7 +955,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   (over een brug als er een rivier tussen ligt). Wie de buit draagt en valt, verliest hem (B1). **c0 is af** (17 okt, op
   de branch `ccr-b0684dee-kk0n5b`; `spel.md`, bij "Op tocht"; `code.md` bij `js/lopen.js`, "Door land dat nog dicht
   is"): de weg erheen is een grove weg over de schets en precies over wat open is, en een post ver van huis houdt hem
-  dag en nacht in dienst. Het liet zien dat het eiland te voet in stukken gebroken is: vraag L ("Wacht op Marcel").
+  dag en nacht in dienst. Het liet zien dat het eiland te voet in stukken gebroken is: vraag L ("Wacht op Marcel"),
+  besloten (Marcel, 17 okt: "L1"): elke weg krijgt een bruggetje waar hij over water gaat, ook breed en schuin; het woud
+  blijft een muur, met de wegen als passen.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp

@@ -77,7 +77,8 @@ test('landStuk: een bruggetje van het eiland ligt recht over het water, van droo
   const E = T.eilandVan(5);
   assert.ok(E.bruggen.length > 0, 'op eiland 5 kruisen de wegen het water');
   for (const b of E.bruggen) {
-    assert.ok(b.tegels.length <= T.EILAND_INSTELLINGEN.wegen.brugLang, `een bruggetje van ${b.tegels.length}`);
+    // hooguit brugLangst: ook een brede of schuine oversteek heeft zijn bruggetje (L1)
+    assert.ok(b.tegels.length <= T.EILAND_INSTELLINGEN.wegen.brugLangst, `een bruggetje van ${b.tegels.length}`);
     const op = b.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
     const [dx, dy] = b.as === 'x' ? [1, 0] : [0, 1];
     op.forEach((t, i) => assert.ok(i === 0 || (t.x === op[i - 1].x + dx && t.y === op[i - 1].y + dy), `recht langs ${b.as}`));
