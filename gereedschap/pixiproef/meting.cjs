@@ -10,10 +10,14 @@
 // alle kernen dat bezig was, deze meting zelf meegerekend). Het geheugen, de wissel naar plat en de echte beelden per
 // seconde daarna per tekenaar in een verse bladzijde, zodat het geheugen van de een niet bij de ander telt.
 //
-//   node gereedschap/pixiproef/meting.cjs            alles (een minuut of acht; npm start moet draaien)
+//   node gereedschap/pixiproef/meting.cjs            alles (een minuut of vijftien; npm start moet draaien)
 //   node gereedschap/pixiproef/meting.cjs --snel     één blok per zoom, zonder Electron
+//   ... --varianten huidig,gl2,gpu-vast              alleen deze (de namen hieronder, bij VARIANTEN)
+//   ... --uit meting-gpu.json                        een andere naam voor de uitslag
 //
-// De uitslag in gereedschap/pixiproef/meting.json, en de vergelijking van het beeld in vergelijking-*.png.
+// De uitslag in gereedschap/pixiproef/meting.json, en de vergelijking van het beeld in vergelijking-*.png (als pixi
+// erbij is). De maat tussen WebGL en WebGPU is de doorvoer (Proef.meet, doorvoer): WebGPU kan alleen met een belofte
+// op de kaart wachten, dus 'alles' telt daar een ronde van de browser per beeld mee.
 // Meet niet terwijl er een render of een spel loopt: die nemen de processor in beslag (code.md bij js/gl.js).
 const fs = require('node:fs');
 const os = require('node:os');
@@ -30,14 +34,25 @@ const B = 1920;
 const H = 1080;
 const ZOOMS = [1, 0.5, 0.35];
 const START = { channel: 'chromium', args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=d3d11', '--enable-precise-memory-info', '--js-flags=--expose-gc'] };
-// De varianten: de huidige weg, en Pixi op drie manieren van sorteren (pixiweg.js) en met Pixi's eigen Culler.
-const VARIANTEN = [
+// De varianten: de huidige weg; Pixi op drie manieren van sorteren (pixiweg.js), met Pixi's eigen Culler en op WebGPU;
+// en de eigen tekenaar op WebGL2 en op WebGPU (gl2weg.js, gpuweg.js), per beeld een lijst of met een vaste rij (vast).
+const ALLE = [
   { naam: 'huidig', q: 'weg=huidig' },
   { naam: 'pixi', q: 'weg=pixi&sorteer=pixi' },
   { naam: 'pixi-alles', q: 'weg=pixi&sorteer=alles' },
   { naam: 'pixi-eigen', q: 'weg=pixi&sorteer=eigen' },
   { naam: 'pixi-culler', q: 'weg=pixi&sorteer=alles&culler=pixi' },
+  { naam: 'pixi-gpu', q: 'weg=pixi&sorteer=pixi&pixigpu' },
+  { naam: 'gl2', q: 'weg=gl2' },
+  { naam: 'gpu', q: 'weg=gpu' },
+  { naam: 'gl2-vast', q: 'weg=gl2&vast' },
+  { naam: 'gpu-vast', q: 'weg=gpu&vast' },
 ];
+const keuze = process.argv.includes('--varianten') ? process.argv[process.argv.indexOf('--varianten') + 1].split(',') : null;
+const VARIANTEN = ALLE.filter((v) => !keuze || v.naam === 'huidig' || keuze.includes(v.naam));
+const UIT = process.argv.includes('--uit') ? process.argv[process.argv.indexOf('--uit') + 1] : 'meting.json';
+// Wie ook geheugen, de wissel en de echte beelden per seconde krijgt, en in Electron komt.
+const UITGEBREID = ['huidig', 'pixi', 'pixi-gpu', 'gl2', 'gpu', 'gl2-vast', 'gpu-vast'];
 
 const BLOKKEN = SNEL ? 1 : 4;
 // Hoe druk de machine was sinds `van` (het deel van alle kernen dat bezig was).
@@ -96,7 +111,7 @@ async function meetOmEnOm(browser) {
         rij[v.naam] = m;
       }
       for (const v of VARIANTEN) ((blokken[v.naam] = blokken[v.naam] || {})[z] = blokken[v.naam][z] || []).push(rij[v.naam]);
-      console.log(`zoom ${z}, blok ${b + 1}: ` + VARIANTEN.map((v) => `${v.naam} ${rij[v.naam].alles.med} ms (${Math.round(rij[v.naam].belasting * 100)}%)`).join(', '));
+      console.log(`zoom ${z}, blok ${b + 1}: ` + VARIANTEN.map((v) => `${v.naam} ${rij[v.naam].doorvoer} ms (${Math.round(rij[v.naam].belasting * 100)}%)`).join(', '));
     }
   }
   for (const p of Object.values(paginas)) await p.close();
@@ -110,6 +125,8 @@ async function meetOmEnOm(browser) {
       samen[v.naam][z] = {
         allesMed: mediaan(l.map((m) => m.alles.med)), cpuMed: mediaan(l.map((m) => m.cpu.med)), p95: mediaan(l.map((m) => m.alles.p95)),
         maalHuidig: +mediaan(l.map((m, i) => m.alles.med / h[i].alles.med)).toFixed(2), opdrachten: l[0].opdrachten, zicht: l[0].zicht,
+        doorvoer: mediaan(l.map((m) => m.doorvoer)), doorvoerMaalHuidig: +mediaan(l.map((m, i) => m.doorvoer / h[i].doorvoer)).toFixed(2),
+        cpuMaalHuidig: +mediaan(l.map((m, i) => m.cpu.med / h[i].cpu.med)).toFixed(2),
         belasting: mediaan(l.map((m) => m.belasting)),
       };
     }
@@ -206,21 +223,41 @@ async function vergelijkBeeld(browser) {
   return uit;
 }
 
+// Het beeld van de eigen tekenaars op WebGL2 en WebGPU (per beeld een lijst, en vast met de dieptebuffer) tegen
+// js/gl.js, pixel voor pixel per zoom.
+async function vergelijkNieuw(browser) {
+  const uit = {};
+  for (const vast of [false, true]) {
+    const { page } = await bladzijde(browser, 'wegen=huidig,gl2,gpu' + (vast ? '&vast' : ''));
+    for (const z of ZOOMS) {
+      await page.evaluate((z) => { Proef.zetZoom(z); Proef.inst.beweging = false; Proef.t = 3; }, z);
+      for (const w of ['gl2', 'gpu']) {
+        const r = await page.evaluate((w) => Proef.vergelijk('huidig', w), w);
+        ((uit[w + (vast ? '-vast' : '')] = uit[w + (vast ? '-vast' : '')] || {})[z] = { verschilProcent: r.verschilProcent, gemiddeld: r.gemiddeld });
+      }
+    }
+    await page.close();
+  }
+  return uit;
+}
+
 // Electron, zoals de Steam-versie: loadFile (file://), met de videokaart; per tekenaar de drie zooms.
 async function meetElectron() {
   const exe = path.join(WORTEL, 'gereedschap', 'proefversie', 'uit', 'electron-v44.5.1-win32-x64', 'electron.exe');
   if (!fs.existsSync(exe)) return { overgeslagen: 'geen electron.exe (npm run proefversie -- --windows haalt hem)' };
   // Om en om, twee keer elk (huidig, pixi, pixi, huidig), elk in een eigen Electron.
-  const uit = { huidig: [], pixi: [] };
-  for (const v of [VARIANTEN[0], VARIANTEN[1], VARIANTEN[1], VARIANTEN[0]]) {
+  const uit = {};
+  const lijst = VARIANTEN.filter((v) => UITGEBREID.includes(v.naam));
+  for (const v of [...lijst, ...[...lijst].reverse()]) {
     await wachtOpRust();
     const van = kernen();
     const r = spawnSync(exe, [path.join(MAP, 'electron'), path.join(MAP, 'index.html'), v.q], { encoding: 'utf8', timeout: 240000 });
     const regel = (r.stdout || '').split('\n').find((l) => l.startsWith('UITSLAG '));
     const m = regel ? JSON.parse(regel.slice(8)) : { fout: (r.stderr || r.error || '').toString().slice(0, 400) };
     m.belasting = belasting(van);
-    uit[v.naam].push(m);
-    if (m.zooms) console.log(v.naam.padEnd(7), ZOOMS.map((z) => `${z}: ${m.zooms[z].alles.med} ms`).join(', '), `(${Math.round(m.belasting * 100)}%)`);
+    (uit[v.naam] = uit[v.naam] || []).push(m);
+    if (m.zooms) console.log(v.naam.padEnd(9), ZOOMS.map((z) => `${z}: ${m.zooms[z].doorvoer} ms (cpu ${m.zooms[z].cpu.med})`).join(', '), `(${Math.round(m.belasting * 100)}%)`);
+    else console.log(v.naam, m.fout);
   }
   return uit;
 }
@@ -258,9 +295,9 @@ async function meetLosBestand(browser) {
   const uit = { datum: new Date().toISOString(), stand, scherm: `${B}x${H}`, kaart, browser: browser.version(), kernen: os.cpus().length };
   console.log(`Kaart: ${kaart}; Chromium ${browser.version()}; stand ${stand}`);
   uit.tijd = await meetOmEnOm(browser);
-  for (const v of VARIANTEN) console.log(v.naam.padEnd(12), ZOOMS.map((z) => { const s = uit.tijd.samen[v.naam][z]; return `${z}: ${s.allesMed} ms (${s.maalHuidig}×)`; }).join(', '));
+  for (const v of VARIANTEN) console.log(v.naam.padEnd(12), ZOOMS.map((z) => { const s = uit.tijd.samen[v.naam][z]; return `${z}: ${s.doorvoer} ms (${s.doorvoerMaalHuidig}×, cpu ${s.cpuMed})`; }).join(', '));
   uit.perTekenaar = {};
-  for (const v of VARIANTEN.slice(0, 2)) {
+  for (const v of VARIANTEN.filter((w) => UITGEBREID.includes(w.naam))) {
     process.stdout.write(`${v.naam}: geheugen, wissel, beelden per seconde ... `);
     await wachtOpRust();
     const van = kernen();
@@ -268,9 +305,15 @@ async function meetLosBestand(browser) {
     uit.perTekenaar[v.naam].belasting = belasting(van);
     console.log(JSON.stringify(uit.perTekenaar[v.naam].geheugen).slice(0, 160));
   }
-  console.log('het beeld ...');
-  uit.beeld = await vergelijkBeeld(browser);
-  console.log(JSON.stringify(uit.beeld.verschil));
+  if (VARIANTEN.some((v) => v.naam === 'pixi')) {
+    console.log('het beeld ...');
+    uit.beeld = await vergelijkBeeld(browser);
+    console.log(JSON.stringify(uit.beeld.verschil));
+  }
+  if (VARIANTEN.some((v) => /^(gl2|gpu)/.test(v.naam))) {
+    uit.beeldNieuw = await vergelijkNieuw(browser);
+    console.log('het beeld van WebGL2 en WebGPU:', JSON.stringify(uit.beeldNieuw));
+  }
   console.log('los bestand ...');
   uit.losBestand = await meetLosBestand(browser);
   console.log(JSON.stringify(uit.losBestand));
@@ -279,6 +322,6 @@ async function meetLosBestand(browser) {
     console.log('Electron ...');
     uit.electron = await meetElectron();
   }
-  fs.writeFileSync(path.join(MAP, 'meting.json'), JSON.stringify(uit, null, 1));
-  console.log('klaar: gereedschap/pixiproef/meting.json');
+  fs.writeFileSync(path.join(MAP, UIT), JSON.stringify(uit, null, 1));
+  console.log('klaar: gereedschap/pixiproef/' + UIT);
 })().catch((e) => { console.error(e); process.exit(1); });

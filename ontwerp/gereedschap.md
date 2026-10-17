@@ -87,8 +87,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   nieuwe headless, met ANGLE op D3D11; vraag 174, c), en `--edge` hetzelfde in Edge. `--hoogte` speelt met heuvels, en
   `--dagen 3` eerst drie speeldagen op 30× met elk beeld getekend. Met de videokaart zegt elk beeld ook `Spel.gl.telling`.
   Meet niet naast een render of een spel: die nemen de processor in beslag.
-- **De renderproef** (`gereedschap/pixiproef/`, 17 okt; `snelheid.md`, E): hetzelfde dorp met `js/gl.js` en met PixiJS
-  v8, los van het spel. Kijken op `/gereedschap/pixiproef/` (knoppen bovenaan, de meter eronder); meten met `node
+- **De renderproef** (`gereedschap/pixiproef/`, 17 okt; `snelheid.md`, E): hetzelfde dorp met `js/gl.js`, met PixiJS
+  v8 (op WebGL2 en WebGPU), en met een eigen tekenaar op WebGL2 en op WebGPU (`?wegen=huidig,gl2,gpu`, en `&vast` voor de
+  vaste rijen met een dieptebuffer), los van het spel. Kijken op `/gereedschap/pixiproef/` (knoppen bovenaan, de meter eronder); meten met `node
   gereedschap/pixiproef/meting.cjs` (met `npm start`; hij wacht per blok tot de machine rustig is, want hier draaien vaak
   renders en toetsen van andere sessies), uitslag en advies in `evaluatie.md`.
 - `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de aanvoerder op 30× steeds naar

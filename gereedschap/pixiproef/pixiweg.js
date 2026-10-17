@@ -4,7 +4,7 @@
 // de schaduwkleur, met een AlphaFilter (anders worden schaduwen die elkaar overlappen donkerder), en het licht een
 // ColorMatrixFilter over de hele wereld.
 //
-// Opties (inst): mip (lineair met mipmaps in plaats van naaste pixel), culler ('eigen': zichtbaar per ding uit
+// Opties (inst): pixigpu (Pixi op WebGPU in plaats van WebGL2), mip (lineair met mipmaps in plaats van naaste pixel), culler ('eigen': zichtbaar per ding uit
 // hetzelfde vak als huidig.js; 'pixi': Culler.shared van Pixi), sorteer ('pixi': wat in beeld is, hangt in de laag
 // (erbij als het in beeld komt, eraf als het eruit gaat), en Pixi sorteert op zIndex met sortableChildren, de gewone
 // manier; 'alles': elk ding hangt er altijd, onzichtbaar als het niet in beeld is; 'eigen': de laag krijgt elk beeld
@@ -34,7 +34,7 @@
   weg.init = async function (b, h, inst) {
     mip = !!inst.mip;
     X.TextureStyle.defaultOptions.scaleMode = mip ? 'linear' : 'nearest';
-    const r = new X.WebGLRenderer();
+    const r = inst.pixigpu ? new X.WebGPURenderer() : new X.WebGLRenderer();
     await r.init({
       width: b, height: h, resolution: 1, antialias: false, backgroundAlpha: 0, roundPixels: !mip && !inst.zonderAfronden,
       powerPreference: 'high-performance', preferWebGLVersion: inst.webgl1 ? 1 : 2, preserveDrawingBuffer: false,
@@ -205,6 +205,7 @@
     weg.renderer.render(stage);
   };
   weg.wacht = function () {
+    if (weg.renderer.gpu) return weg.renderer.gpu.device.queue.onSubmittedWorkDone();
     const gl = weg.renderer.gl;
     gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
   };

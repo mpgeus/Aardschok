@@ -24,8 +24,8 @@ helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen
 Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst
 voortzetten"). **A1 en A2 zijn af** (bij P; `snelheid.md`): ver uitgezoomd 35 à 47% minder per beeld, en in beeld
 dezelfde plaatjes. Het volgende is B, de dieptebuffer en vaste buffers per stuk (wacht op Marcel, hieronder). **De
-renderproef met PixiJS v8 is af** (17 okt; `snelheid.md`, E, en `gereedschap/pixiproef/evaluatie.md`): advies houden en
-gedeeltelijk verbeteren (E1 tot E4), niet overstappen.
+renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en `gereedschap/pixiproef/evaluatie.md`):
+advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en B2), niet naar Pixi of WebGPU.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -154,8 +154,9 @@ stenen huizen. **Ronde 3 is af.**
 - **Ver uitgezoomd in Firefox na A1 en A2, en dan B** (vraag 178, 17 okt; bij P): meet zoals bij de heuvels (het
   proefdorp, F2, helemaal uitgezoomd; eerst 24,8 ms vlak en 28,9 met heuvels), en kies of B de volgende stap is: de
   dieptebuffer en vaste buffers per stuk (`snelheid.md`, B1 tot B4), groot werk in `js/gl.js`, je ziet niets anders.
-  Uit de renderproef met Pixi (`snelheid.md`, E) kunnen E1 en E2 zonder verschil in beeld mee; E3 (mipmaps ver
-  uitgezoomd) en E4 (afronden op 50%) zie je wel: eerst een proefplaat.
+  De renderproef (`snelheid.md`, E) stelt eerst B5 voor (WebGL2 met instanties en een textuurstapel, met B3 en E1; in de
+  proef ver uitgezoomd 3,5 naar 1,3 ms), dan B1 en B2 (0,6 ms); E3 (mipmaps ver uitgezoomd) en E4 (afronden op 50%) zie
+  je wel: eerst een proefplaat.
   Marcel koos eerst sneller en dan d van de heuvels ("Maar de perfomance moet echt wel veel beter"). Bij de heuvels
   (vraag 174, c) **wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
   houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest

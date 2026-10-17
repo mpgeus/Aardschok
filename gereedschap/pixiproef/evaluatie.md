@@ -1,16 +1,18 @@
-# De renderproef: js/gl.js tegen PixiJS v8 (17 okt 2026)
+# De renderproef: js/gl.js tegen PixiJS v8, WebGL2 en WebGPU (17 okt 2026)
 
 Marcel, 17 okt: onderzoek of PixiJS v8 voor het spel een betere keuze is dan onze eigen laag op WebGL1 (`js/gl.js`),
 met een losse proef die dezelfde scène met beide tekent, zonder de code van het spel te veranderen, en een advies:
-houden, deels verbeteren, of overstappen. Nog niets omzetten. Hoort bij vraag 178 (ver uitgezoomd sneller,
-`ontwerp/snelheid.md`, E).
+houden, deels verbeteren, of overstappen. Nog niets omzetten. Daarna: **"ik wil ook dat je kijkt of er winst te behalen
+is in webgl 2 en webGPU"** (sectie 6). Hoort bij vraag 178 (ver uitgezoomd sneller, `ontwerp/snelheid.md`, E).
 
-Gemeten op `main` op `aa2fe18f` (`js/gl.js` zoals in git), 17 okt rond 23:20, op de pc van Marcel (GTX 1080 Ti,
-Ryzen 7 5800X), in Chromium 156 met de videokaart en in de Electron van de proefversie (44.5.1). Opnieuw: `npm start`,
-dan `node gereedschap/pixiproef/meting.cjs` (een minuut of acht; hij wacht zelf tot de machine rustig is; `--snel` voor
-één blok). Kijken: `http://localhost:8123/gereedschap/pixiproef/` (slepen schuift, het wiel zoomt, de knoppen bovenaan
-wisselen tekenaar, zoom, weergave van de gebouwen, schaduw en licht; de meter staat eronder). Ook in Firefox, dat is hier
-niet gemeten.
+Gemeten op de pc van Marcel (GTX 1080 Ti, Ryzen 7 5800X), in Chromium 156 met de videokaart en in de Electron van de
+proefversie (44.5.1, Chrome 152), `js/gl.js` zoals in git: Pixi op `aa2fe18f` (17 okt rond 23:20, `meting.json`),
+WebGL2 en WebGPU op `4e2c6ae3` (rond 23:50, `meting-gpu.json`, met js/gl.js en Pixi opnieuw ernaast). Opnieuw: `npm
+start`, dan `node gereedschap/pixiproef/meting.cjs` (alles, een minuut of twintig; hij wacht zelf tot de machine rustig
+is), of met `--varianten pixi,pixi-gpu,gl2,gpu,gl2-vast,gpu-vast --uit meting-gpu.json` zoals de tweede keer; `--snel`
+voor één blok. Kijken: `http://localhost:8123/gereedschap/pixiproef/` (slepen schuift, het wiel zoomt, de knoppen bovenaan
+wisselen tekenaar, zoom, weergave van de gebouwen, schaduw, licht en 'vast'; de meter staat eronder; `?wegen=huidig,gl2,gpu`
+voor de tekenaars van sectie 6). Ook in Firefox, dat is hier niet gemeten.
 
 ## Wat de proef doet
 
@@ -33,12 +35,16 @@ niet gemeten.
   sorteert op `zIndex`), **alles erin** (elk ding hangt er altijd, onzichtbaar buiten beeld), **eigen lijst** (de laag
   krijgt elk beeld opnieuw alleen wat in beeld is, door ons gesorteerd: zo zou `js/tekenen.js` er het makkelijkst op
   overgaan), en **Culler** (alles erin, Pixi's eigen `Culler` bepaalt wat in beeld is).
-- **De teller** (`teller.js`) telt voor elk WebGL-doek hetzelfde: opdrachten aan de kaart, wat erheen gaat, en hoeveel
+- **Twee eigen tekenaars op WebGL2 en WebGPU** (`gl2weg.js`, `gpuweg.js`, met het gedeelde stuk in `atlas.js`), precies
+  gelijk op de API na, zodat het verschil tussen de API's los staat van het verschil in techniek. Zie sectie 6.
+- **De teller** (`teller.js`) telt voor elk WebGL-doek (en voor WebGPU op de bladzijde) hetzelfde: opdrachten aan de kaart, wat erheen gaat, en hoeveel
   textuurgeheugen er vastligt. **De meting** (`meting.cjs`): 1920×1080, elk beeld met één pixel teruggelezen (dan heeft
   de kaart het werk ook gedaan); alle varianten tegelijk open en per zoom vier blokjes van 120 beelden om en om, met
   vooraf wachten tot de machine rustig is. Dan per tekenaar in een verse bladzijde het geheugen, de wissel naar plat en
   de echte beelden per seconde; het beeld pixel voor pixel; `file://` in Chromium; en Electron met `loadFile`, zoals de
-  Steam-versie (`electron/main.js`). Alles in `meting.json`.
+  Steam-versie (`electron/main.js`). Sinds de tweede meting ook de **doorvoer**: 120 beelden achter elkaar zonder te
+  wachten, en één keer aan het eind, zodat de processor en de kaart tegelijk werken, zoals in het spel (en WebGPU, dat
+  alleen met een belofte op de kaart kan wachten, eerlijk meetelt).
 
 ## 1. Snelheid en geheugen
 
@@ -54,6 +60,8 @@ de tijd van `js/gl.js` in hetzelfde blokje:
 | Pixi, Culler | 4,5 (3,9), 4,5× | 5,6 (4,5), 2,33× | 7,1 (5,3), 1,54× |
 | opdrachten aan de kaart | 8 tegen 16 | 8 tegen 33 | 8 tegen 40 |
 
+- **In doorvoer** (de tweede meting, processor en kaart tegelijk) is het verschil groter: op 35% `js/gl.js` 3,5 ms, Pixi
+  gewoon 1,8 ms, twee keer zo snel; op 100% gelijk (0,65 en 0,66). Bij ons wacht de kaart dus ook op ons pad per plaatje.
 - **In Electron** (zoals Steam) hetzelfde beeld: `js/gl.js` 1,0 / 2,3 à 2,4 / 4,3 à 4,6 ms, Pixi gewoon 1,2 à 1,3 / 2,1 à
   2,3 / 3,4 à 3,9 ms. In Chromium met de echte spellus halen beide op 35% de 60 beelden per seconde (Pixi had in
   drie seconden twee beelden boven de 20 ms, wij geen).
@@ -71,7 +79,8 @@ de tijd van `js/gl.js` in hetzelfde blokje:
   machine vol): toen was Pixi gewoon 1,2 à 1,9 keer trager dan wij, in Electron op 35% 31 tegen 15 ms. Vermoedelijk
   omdat Pixi vijf keer zoveel opdrachten geeft, en die gaan in Chromium door een eigen proces dat dan ook om de
   processor vecht. Op een zwakke machine (een Steam Deck, vier kernen) is dat de gewone toestand; daar is niet gemeten.
-- **Geheugen.** Op de kaart: wij 163 / 178 / 193 MB, Pixi 85 / 112 / 130 MB. Een blad van `js/gl.js` is 4096 bij 4096
+- **Geheugen.** Op de kaart: wij 163 / 178 / 193 MB (op 100, 50 en 35%, met de grond van elke zoom die al langskwam),
+  Pixi 85 / 112 / 130 MB. Een blad van `js/gl.js` is 4096 bij 4096
   en kost meteen 64 MB, ook als het half leeg is; Pixi maakt elk plaatje precies zo groot als het is. In JavaScript: na
   het opruimen wij 20 MB, Pixi 35 MB (17.000 sprites voor 8800 dingen en hun schaduwen); tijdens het tekenen loopt het
   bij ons tussen twee keer opruimen op tot 117 MB, bij Pixi tot 44: `js/gl.js` maakt per beeld veel afval, en het
@@ -132,29 +141,97 @@ een rand of een gloed), maar een filter per ding is een rondgang per ding, en he
   zelf zijn `CanvasRenderer` starten (8.22 heeft er weer een, en die werkt vanaf `file://`: 2000 sprites in 4,6 ms). Dus
   gelijk, met wat extra code voor Pixi.
 
-## Advies: houden, en gedeeltelijk verbeteren
+## 6. WebGL2 en WebGPU
 
-**Niet overstappen.** Pixi wint alleen in de laag die het minst kost, en weinig: ver uitgezoomd 0,8 ms van de 4,5 die
-deze scène hier kost, en alleen als `js/tekenen.js` een boom van sprites wordt die meeleeft met `S`, een herschrijving
-van het grootste bestand van het spel. Waar het spel ver uitgezoomd zijn tijd kwijt is (na A1 en A2 zo'n 19 ms per beeld,
-het meeste in `js/tekenen.js` per ding), doet Pixi niets aan. De grote winst blijft B1 tot B4 uit `snelheid.md` (een
-dieptebuffer en vaste buffers per stuk land), en die heeft Pixi ook niet: zijn sprites kennen geen dieptebuffer, dus dat
-wordt daar ook eigen werk, op een laag die we niet zelf bijhouden. En onder last, de gewone toestand op een zwakke
-machine, was Pixi hier juist trager.
+Wat de twee nieuwere API's kunnen, en wat het hier oplevert. Om de API los te meten van de techniek zijn er twee eigen
+tekenaars, precies gelijk op de API na (`gl2weg.js` en `gpuweg.js`, met het gedeelde stuk in `atlas.js`):
 
-**Wel overnemen wat de proef liet zien**, klein en zonder verschil in beeld tenzij gezegd:
+- **Een atlas als textuurstapel** (*texture array*, WebGL2 en WebGPU; WebGL1 kent het niet): alle plaatjes in één
+  textuur van lagen van 2048 bij 2048, dus geen grens van acht texturen per opdracht.
+- **Een plaatje als één instantie** (*instancing*): 12 getallen per plaatje in plaats van vier hoeken van 10 (zoals nu),
+  en de kaart maakt er zelf de vier hoeken van.
+- **De schaduwen uit dezelfde rij** (`snelheid.md`, B3): de shader legt het silhouet scheef, dus geen tweede rondgang
+  over de lijst op de processor.
+- **Twee manieren**: **lijst** (per beeld wat in beeld is, gesorteerd, zoals `js/tekenen.js` nu werkt), en **vast** (B1
+  en B2: wat stilstaat één keer in een vaste rij op de kaart, met een dieptebuffer, en per beeld alleen wat beweegt of
+  zacht is). Een dieptebuffer mag, want alle kunst heeft alleen helemaal dichte of helemaal doorzichtige pixels (geteld:
+  0 van de 9,9 miljoen ertussen, in gebouwen, bomen, begroeiing en figuren); de rook en wat half doorzichtig is, komt
+  erna, gesorteerd.
 
-1. **`drawImage` zonder afval**: geen lijst per aanroep (`...a`), geen rijtjes per schaduw, de textuur en de plek op het
-   blad bij het plaatje onthouden (zoals `v.getekend`). Dat is het verschil met Pixi ver uitgezoomd, en het haalt de
-   uitschieters van het opruimen weg (17 tegen 10 ms). Klein werk in `js/gl.js`.
-2. **Niet opnieuw wat stilstaat**: Pixi was stil 0,5 à 0,8 ms sneller dan bewegend; bij ons is dat B2 (vaste buffers per
-   stuk), dat al op de lijst staat.
-3. **Bladen die groeien** in plaats van meteen 64 MB: hier 60 MB minder op de kaart, wat telt op een Steam Deck of een
-   laptop met de kaart in de processor.
-4. **Mipmaps ver uitgezoomd** (je ziet het: rustiger, zachter), als keuze onder *Display*, met een randje om elk
-   plaatje op het blad. Eerst een proefplaat voor Marcel.
-5. **Op hele schermpixels afronden** op 50% (je ziet het: een vast beeld bij het schuiven in plaats van wisselende
-   halve pixels). Ook eerst kijken.
+**Hetzelfde beeld:** tegen `js/gl.js`, ook vast met de dieptebuffer, is op 100% 0% van de pixels anders, op 35% 0,15%
+(WebGL2) en 0,19% (WebGPU); op 50% 1,9 en 12,6%, de halve pixels van sectie 2.
 
-De proef blijft staan om later opnieuw te kijken, bijvoorbeeld als WebGPU ooit telt (Pixi 8 heeft het, Electron en de
-Steam Deck nog niet zeker), en hij meet na elke stap in `js/gl.js` hoe ver we van Pixi af zitten.
+Doorvoer in ms per beeld (de mediaan over vier blokjes om en om; tussen haakjes de processor alleen), Chromium:
+
+| | 100% | 50% | 35% |
+| --- | --- | --- | --- |
+| `js/gl.js` (WebGL1) | 0,65 (0,6) | 1,79 (1,6) | 3,53 (3,2) |
+| Pixi op WebGL2 | 0,66 (0,6) | 1,09 (1,1) | 1,77 (1,8) |
+| Pixi op WebGPU | 0,75 (1,0) | 1,27 (1,6) | 2,12 (2,8) |
+| eigen, WebGL2, lijst | 0,44 (0,4) | 0,74 (0,6) | 1,28 (1,1) |
+| eigen, WebGPU, lijst | 0,40 (0,4) | 0,67 (0,8) | 1,18 (1,3) |
+| eigen, WebGL2, vast | 0,27 (0,1) | 0,40 (0,1) | 0,59 (0,1) |
+| eigen, WebGPU, vast | 0,28 (0,1) | 0,39 (0,1) | 0,65 (0,1) |
+
+In Electron (twee keer elk, om en om) hetzelfde: op 35% `js/gl.js` 3,4, Pixi 1,8 à 1,9, Pixi op WebGPU 2,2, WebGL2 en
+WebGPU lijst allebei 1,2, vast allebei 0,54 à 0,68 ms.
+
+- **De winst zit in de techniek, niet in de API.** Met dezelfde aanpak als nu (lijst) is WebGL2 op 35% 2,8 keer zo
+  snel als `js/gl.js` (de processor van 3,2 naar 1,1 ms), en met vaste rijen 6 keer (de processor 0,1 ms: alleen wat
+  beweegt). Ook sneller dan Pixi, en zonder `js/tekenen.js` om te bouwen tot een boom van sprites.
+- **WebGPU levert hier niets extra op**: lijst en vast binnen 10% van WebGL2, en de processor met WebGPU zelfs iets meer
+  (1,3 tegen 1,1 ms). Waar WebGPU goed in is, minder werk per opdracht, telt niet bij twintig opdrachten per beeld. Pixi
+  op WebGPU is trager dan Pixi op WebGL2 (2,1 tegen 1,8 ms).
+- **Waar de tijd nu nog zit**: de schaduwen kosten met WebGL2 de processor bijna niets (lijst 1,28 met, 1,15 zonder;
+  bij `js/gl.js` 3,5 met en 2,1 zonder), het licht ook niet. Het geheugen in JavaScript blijft laag (18 MB na opruimen,
+  tijdens het tekenen 19 à 26; `js/gl.js` 46 à 71), en het traagste beeld op 35% was 2,4 ms (lijst) of 1,5 (vast), bij
+  `js/gl.js` 15,7 (opruimen).
+- **Wisselen naar plat** kost met een vaste rij één keer de rij opnieuw: het eerste beeld 17,6 ms (WebGL2) of 34,5
+  (WebGPU), daarna weer 0,25 ms; doorzichtig en verborgen 2 à 5 ms, één keer.
+- **Op de kaart even groot**: 167 à 205 MB, zoals nu. De textuurstapel heeft een vast aantal lagen (hier negen van 16
+  MB, met twee in reserve voor de platte tekeningen), dus strakker inpakken scheelt daar net zo als bij de bladen (E2).
+- **Opstarten**: WebGL2 8 ms, WebGPU 86 à 90 ms (de pijplijnen).
+- **Waar het draait.** WebGL2 overal waar het spel nu draait: Chromium, Electron, Firefox, Safari, en de Steam Deck.
+  WebGPU hier in Chromium en in Electron (ook vanaf `file://`, met `timestamp-query`), maar in Chrome op Linux staat het
+  alleen standaard aan voor nieuwere Intel- (en volgens één bron NVIDIA-)kaarten; voor AMD, wat de Steam Deck heeft, vond
+  ik geen bron dat het standaard aan staat, alleen vlaggen die "unsafe" heten
+  ([Chrome, WebGPU troubleshooting](https://developer.chrome.com/docs/web-platform/webgpu/troubleshooting-tips),
+  [WebGL 2 of WebGPU, 2026](https://app.cinevva.com/guides/webgl-webgpu-not-supported-fix)). Firefox heeft WebGPU op
+  Windows (141) en op Macs met Apple Silicon (147), nog niet op Linux
+  ([Firefox 147](https://www.firefox.com/firefox/147.0/releasenotes/),
+  [web.dev](https://web.dev/blog/webgpu-supported-major-browsers)). Niet op een Steam Deck zelf nagekeken.
+- **Hoe het in het spel kan komen**: `js/tekenen.js` hoeft niet om. `js/gl.js` kan `drawImage` blijven aannemen, maar
+  per aanroep een instantie schrijven (12 getallen) in plaats van vier hoeken, en pas in `klaar` tekenen: eerst het
+  masker uit de plaatjes die een schaduw hebben, dan alles. Dan valt `tekenZonneschaduw` (de tweede rondgang) weg, en
+  komt de lijst zoals nu. Vast (B1 en B2) is daarna een stap erbij: wat stilstaat per stuk land in een eigen rij, met
+  de diepte; de 2D-weg zonder videokaart blijft zoals hij is.
+
+## Advies: houden en verbouwen naar WebGL2; niet naar Pixi, niet naar WebGPU
+
+**Niet naar Pixi.** In doorvoer is Pixi ver uitgezoomd twee keer zo snel als `js/gl.js` nu (1,8 tegen 3,5 ms), maar
+alleen als `js/tekenen.js` een boom van sprites wordt die meeleeft met `S`, een herschrijving van het grootste bestand
+van het spel; als tekenaar die elk beeld een lijst krijgt, zoals nu, is hij trager, en onder last ook. En een eigen
+tekenaar op WebGL2 met dezelfde lijst als nu haalt 1,3 ms, met vaste rijen 0,6 (sectie 6).
+
+**Niet naar WebGPU.** Met dezelfde techniek is het niet sneller dan WebGL2 (binnen 10%, de processor zelfs iets meer),
+het start trager (90 tegen 8 ms), en het draait niet overal: op Linux met een AMD-kaart, dus op de Steam Deck, staat het
+in Chromium niet standaard aan, en Firefox heeft het op Linux nog niet. Later kan het nog voor rekenwerk op de kaart
+(*compute*), maar voor het tekenen niet.
+
+**Wel: `js/gl.js` naar WebGL2, in stappen**, zonder verschil in beeld (gemeten: hetzelfde beeld, ook met de dieptebuffer):
+
+1. **Instanties en een textuurstapel** (`snelheid.md`, B5 en B3, met E1): `drawImage` blijft, maar schrijft per plaatje
+   12 getallen zonder afval, alle plaatjes staan in één textuurstapel, en `klaar` tekent alles in een paar opdrachten,
+   eerst het masker van de schaduwen uit dezelfde rij. `js/tekenen.js` blijft zoals het is, op de tweede rondgang voor de
+   schaduwen na, die wegvalt. In de proef: ver uitgezoomd 3,5 naar 1,3 ms.
+2. **Vaste rijen met een dieptebuffer** (B1 en B2): wat stilstaat per stuk land één keer, en per beeld alleen wat
+   beweegt of zacht is. In de proef 0,6 ms en 0,1 ms op de processor. In het spel zit hier de grote winst: dan hoeft
+   `js/tekenen.js` de duizenden bomen niet meer elk beeld langs (de lijst, de volgorde, de mist per ding), en daar zat
+   volgens het profiel van 17 okt het meeste van de tijd ver uitgezoomd (`snelheid.md`, "Waar de tijd nu zit").
+3. **Daarna de rest**: de textuurstapel strakker inpakken (E2), en de twee keuzes die je ziet (E3 mipmaps ver
+   uitgezoomd, E4 afronden op 50%), eerst met een proefplaat.
+
+WebGL2 draait overal waar het spel nu draait; zonder WebGL2 (of vanaf `file://` in een browser) blijft de weg over het
+2D-doek. Niet gemeten: Firefox, en een zwakke machine zoals de Steam Deck; de proef kan daar zo open.
+
+De proef blijft staan: hij meet na elke stap in `js/gl.js` hoe ver we van de eigen WebGL2-tekenaar af zitten.

@@ -3,7 +3,9 @@
 //
 // In de adresbalk: ?weg=huidig|pixi (waar je begint), &alleen (alleen die ene tekenaar, voor het meten van geheugen),
 // &zoom=0.35, &mip (Pixi lineair met mipmaps), &culler=pixi (Pixi's eigen Culler), &webgl1 (Pixi op WebGL1),
-// &sorteer=eigen (Pixi krijgt elk beeld alleen wat in beeld is, zelf gesorteerd; zonder: zIndex en sortableChildren), &kaal
+// &sorteer=eigen (Pixi krijgt elk beeld alleen wat in beeld is, zelf gesorteerd; zonder: zIndex en sortableChildren),
+// &pixigpu (Pixi op WebGPU), &vast (WebGL2 en WebGPU met een vaste rij en een dieptebuffer, atlas.js),
+// &wegen=huidig,gl2,gpu (welke tekenaars er zonder &alleen komen; zonder: huidig en pixi), &kaal
 // (zonder balk, voor de schermafdrukken), &b=1920&h=1080 (een vaste maat). Voor de meting: Proef.meet, Proef.fps,
 // Proef.wissel, Proef.vergelijk en Proef.geheugen (meting.cjs roept ze aan).
 (function (P) {
@@ -13,7 +15,7 @@
   P.inst = {
     weg: q.get('weg') || 'huidig', zoom: Number(q.get('zoom')) || 1, schaduw: !q.has('zonderschaduw'), licht: !q.has('zonderlicht'),
     modus: q.get('modus') || 'gewoon', mip: q.has('mip'), culler: q.get('culler') || 'eigen', webgl1: q.has('webgl1'),
-    sorteer: q.get('sorteer') || 'pixi', zonderAfronden: q.has('zonderafronden'),
+    sorteer: q.get('sorteer') || 'pixi', zonderAfronden: q.has('zonderafronden'), vast: q.has('vast'), pixigpu: q.has('pixigpu'),
     beweging: true, pannen: false,
   };
   P.cam = { x: 0, y: 0, zoom: P.inst.zoom };
@@ -42,13 +44,22 @@
     P.cam.x = sc.midden.x;
     P.cam.y = sc.midden.y;
     const { b, h } = maat();
-    const welke = q.has('alleen') ? [P.inst.weg] : ['huidig', 'pixi'];
+    const welke = q.has('alleen') ? [P.inst.weg] : (q.get('wegen') || 'huidig,pixi').split(',');
     P.opbouw = {};
+    P.fouten = {};
     for (const naam of welke) {
       const w = P.wegen[naam];
       const a = performance.now();
-      await w.init(b, h, P.inst);
-      if (w.bouw) w.bouw(sc);
+      try {
+        await w.init(b, h, P.inst);
+        if (w.bouw) w.bouw(sc);
+      } catch (e) {
+        // Een tekenaar die hier niet kan (geen WebGPU, geen WebGL2): zonder hem verder, tenzij hij de enige is.
+        if (welke.length === 1) throw e;
+        P.fouten[naam] = String(e && e.message ? e.message : e);
+        w.canvas = null;
+        continue;
+      }
       P.opbouw[naam] = Math.round(performance.now() - a);
       w.canvas.classList.add('doek');
       vlak.appendChild(w.canvas);
@@ -122,7 +133,8 @@
       if (P.inst.pannen) pan(P.t);
       P.stand(P.scene, P.t);
     };
-    for (let i = 0; i < warm; i++) { stap(); w.teken(P.scene, P.cam, P.inst); w.wacht(); }
+    // WebGPU wacht met een belofte (gpuweg.js), WebGL meteen (een pixel teruglezen).
+    for (let i = 0; i < warm; i++) { stap(); w.teken(P.scene, P.cam, P.inst); const r = w.wacht(); if (r) await r; }
     await wachtBeeld();
     const cpu = [];
     const alles = [];
@@ -134,17 +146,28 @@
       const a = performance.now();
       w.teken(P.scene, P.cam, P.inst);
       const b = performance.now();
-      w.wacht();
+      const r = w.wacht();
+      if (r) await r;
       const c = performance.now();
       cpu.push(b - a);
       alles.push(c - a);
       opdr.push(tel.opdrachten);
       opgestuurd += tel.opgestuurd;
     }
+    // De doorvoer: n beelden achter elkaar zonder te wachten, en één keer aan het eind. Zo werken de processor en de kaart
+    // tegelijk, zoals in het spel, en telt het wachten zelf niet mee (WebGPU kan alleen wachten met een belofte, en die
+    // kost een ronde van de browser per beeld): de eerlijke maat tussen WebGL en WebGPU.
+    tel.nul();
+    const d0 = performance.now();
+    for (let i = 0; i < n; i++) { stap(); w.teken(P.scene, P.cam, P.inst); }
+    const r2 = w.wacht();
+    if (r2) await r2;
+    const doorvoer = (performance.now() - d0) / n;
     const st = tel.stand();
     const uit = {
+      doorvoer: +doorvoer.toFixed(3),
       weg: w.naam, zoom: P.cam.zoom, schaduw: P.inst.schaduw, licht: P.inst.licht, modus: P.inst.modus, pannen: P.inst.pannen,
-      mip: P.inst.mip, culler: P.inst.culler, sorteer: P.inst.sorteer, zicht: w.zicht, cpu: stats(cpu), alles: stats(alles),
+      mip: P.inst.mip, culler: P.inst.culler, sorteer: P.inst.sorteer, vast: P.inst.vast, pixigpu: P.inst.pixigpu, zicht: w.zicht, cpu: stats(cpu), alles: stats(alles),
       opdrachten: stats(opdr).med, opgestuurdMB: +(opgestuurd / 1048576).toFixed(2), textuurMB: st.textuurMB,
       aantalTexturen: st.aantalTexturen, heapMB: heapMB(), gl: st.soort,
     };
@@ -182,24 +205,25 @@
     }
     const voor = tel.stand().textuurMB;
     P.inst.modus = modus;
-    const beeld = () => {
+    const beeld = async () => {
       tel.nul();
       const a = performance.now();
       w.teken(P.scene, P.cam, P.inst);
-      w.wacht();
+      const r = w.wacht();
+      if (r) await r;
       return { ms: +(performance.now() - a).toFixed(2), opgestuurdMB: +(tel.opgestuurd / 1048576).toFixed(2) };
     };
-    const eerste = beeld();
-    const tweede = beeld();
+    const eerste = await beeld();
+    const tweede = await beeld();
     P.loopt = true;
     return { modus, laadMs, eerste, tweede, textuurMBvoor: voor, textuurMBna: tel.stand().textuurMB, platten: P.scene.platPaden.length };
   };
-  // Beide tekenaars hetzelfde beeld, pixel voor pixel vergeleken (alleen zonder &alleen): hoeveel pixels verschillen
-  // (een kanaal meer dan 8 van 255), en het gemiddelde verschil.
-  P.vergelijk = async function () {
+  // Twee tekenaars hetzelfde beeld, pixel voor pixel vergeleken (alleen zonder &alleen, met beide in &wegen): hoeveel
+  // pixels verschillen (een kanaal meer dan 8 van 255), en het gemiddelde verschil.
+  P.vergelijk = async function (eerste = 'huidig', tweede = 'pixi') {
     P.loopt = false;
     await wachtBeeld();
-    const { b, h } = { b: P.wegen.huidig.b, h: P.wegen.huidig.h };
+    const { b, h } = P.wegen[eerste];
     const lees = (naam) => {
       const w = P.wegen[naam];
       w.teken(P.scene, P.cam, P.inst);
@@ -211,8 +235,8 @@
       return { data: c.getImageData(0, 0, b, h).data, url: d.toDataURL('image/png') };
     };
     P.stand(P.scene, P.t);
-    const A = lees('huidig');
-    const B = lees('pixi');
+    const A = lees(eerste);
+    const B = lees(tweede);
     let anders = 0;
     let som = 0;
     for (let i = 0; i < A.data.length; i += 4) {
@@ -222,7 +246,7 @@
     }
     P.loopt = true;
     const n = A.data.length / 4;
-    return { zoom: P.cam.zoom, verschilProcent: +((anders / n) * 100).toFixed(3), gemiddeld: +(som / n).toFixed(3), huidig: A.url, pixi: B.url };
+    return { zoom: P.cam.zoom, verschilProcent: +((anders / n) * 100).toFixed(3), gemiddeld: +(som / n).toFixed(3), [eerste]: A.url, [tweede]: B.url };
   };
   P.geheugen = async function () {
     if (globalThis.gc) { globalThis.gc(); globalThis.gc(); }
@@ -256,8 +280,9 @@
       for (const it of items) { r.append(it.k); knoppen.push(it); }
       balk.append(r);
     };
-    rij('Tekenaar ', ['huidig', 'pixi'].filter((n) => P.wegen[n].canvas).map((n) => ({
-      k: knop(n === 'huidig' ? 'js/gl.js' : 'PixiJS 8.22', () => kiesWeg(n)), aan: () => P.inst.weg === n,
+    const namen = { huidig: 'js/gl.js', pixi: 'PixiJS 8.22', gl2: 'WebGL2', gpu: 'WebGPU' };
+    rij('Tekenaar ', Object.keys(namen).filter((n) => P.wegen[n] && P.wegen[n].canvas).map((n) => ({
+      k: knop(namen[n], () => kiesWeg(n)), aan: () => P.inst.weg === n,
     })));
     rij('Zoom ', ZOOMS.map((z) => ({ k: knop(`${Math.round(z * 100)}%`, () => P.zetZoom(z)), aan: () => P.cam.zoom === z })));
     rij('Gebouwen ', ['gewoon', 'plat', 'doorzichtig', 'verborgen'].map((m) => ({
@@ -268,6 +293,7 @@
       { k: knop('licht', () => (P.inst.licht = !P.inst.licht)), aan: () => P.inst.licht },
       { k: knop('beweging', () => (P.inst.beweging = !P.inst.beweging)), aan: () => P.inst.beweging },
       { k: knop('pannen', () => (P.inst.pannen = !P.inst.pannen)), aan: () => P.inst.pannen },
+      { k: knop('vast (WebGL2, WebGPU)', () => (P.inst.vast = !P.inst.vast)), aan: () => P.inst.vast },
     ]);
     werkBalkBij();
   }

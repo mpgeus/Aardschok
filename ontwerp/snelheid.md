@@ -104,7 +104,10 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
   dan beslist niemand per ding meer.
 - **B5, WebGL 2.** Een stapel texturen in één (geen grens van acht), meer exemplaren van één plaatje in één opdracht
   (instancing: één punt per boom in plaats van vier hoeken), en betere buffers. Electron, Chrome, Edge en Firefox
-  kunnen het al jaren, de Steam Deck ook. Winst vooral samen met B2. Een overstap in `js/gl.js`.
+  kunnen het al jaren, de Steam Deck ook. Een overstap in `js/gl.js`. **Gemeten in de renderproef** (17 okt, E):
+  met instanties, een textuurstapel en de schaduwen in de shader (B3), en verder de lijst zoals nu, ver uitgezoomd 3,5
+  naar 1,3 ms per beeld; met vaste rijen en een dieptebuffer erbij (B1 en B2) 0,6 ms. WebGPU met dezelfde techniek is
+  niet sneller (E).
 
 ### C. Vooraf tekenen (je ziet een verschil; een keuze voor Marcel)
 
@@ -130,15 +133,18 @@ Per techniek: wat het is, wat het hier oplevert (een schatting op het profiel), 
 - **D3, meten waar het telt.** Een vaste meetreeks per stap (de tekenmeting), en ook in de Steam-versie zelf
   (`npm run proefversie -- --windows`) en op een zwakke machine.
 
-### E. Een andere tekenaar: PixiJS v8 (de renderproef, 17 okt)
+### E. Een andere tekenaar: PixiJS v8, WebGL2 en WebGPU (de renderproef, 17 okt)
 
-Marcel vroeg of PixiJS v8 beter is dan `js/gl.js`. De proef (`gereedschap/pixiproef/`, met de uitslag in
-`evaluatie.md`) tekent hetzelfde dorp met beide: 150 gebouwen, 4600 bomen, 300 inwoners, schaduwen, rook en een
-lichtfilter, op 100, 50 en 35%. **Het advies: houden en gedeeltelijk verbeteren, niet overstappen.** Pixi is ver
-uitgezoomd 0,8 ms sneller (3,7 tegen 4,5 ms op 35%; dichtbij 0,4 ms trager), maar alleen met een boom van sprites die
-meeleeft met `S`, dus een herschrijving van `js/tekenen.js`; als tekenaar die elk beeld een lijst krijgt, zoals nu, is
-hij 1,3 à 1,6 keer trager, en op een volle machine was hij 1,2 à 1,9 keer trager. De tijd van het spel zit in
-`js/tekenen.js` per ding, en de grote winst (B1 tot B4) heeft Pixi ook niet. Wat we overnemen: **E1**, `drawImage`
+Marcel vroeg of PixiJS v8 beter is dan `js/gl.js`, en daarna "kijk of er winst te behalen is in webgl 2 en webGPU". De
+proef (`gereedschap/pixiproef/`, met de uitslag in `evaluatie.md`) tekent hetzelfde dorp met allemaal: 150 gebouwen,
+4600 bomen, 300 inwoners, schaduwen, rook en een lichtfilter, op 100, 50 en 35%, met hetzelfde beeld. **Het advies:
+`js/gl.js` houden en naar WebGL2 verbouwen; niet naar Pixi, niet naar WebGPU.** Op 35%, in doorvoer (processor en kaart
+tegelijk): `js/gl.js` 3,5 ms, Pixi 1,8 (op WebGPU 2,1), een eigen tekenaar op WebGL2 met de lijst zoals nu 1,3, en met
+vaste rijen en een dieptebuffer 0,6 (de processor 0,1). Op WebGPU precies dezelfde tekenaar: binnen 10%, dus de winst
+zit in de techniek (B5, B3, dan B1 en B2), niet in de API; en WebGPU staat op Linux met een AMD-kaart (de Steam Deck)
+niet standaard aan. Pixi is alleen sneller met een boom van sprites die meeleeft met `S`, dus een herschrijving van
+`js/tekenen.js`; als tekenaar die elk beeld een lijst krijgt, zoals nu, is hij trager, en op een volle machine ook. De
+dieptebuffer mag: alle kunst heeft alleen helemaal dichte of doorzichtige pixels. Wat we verder overnemen: **E1**, `drawImage`
 zonder afval (geen lijst per aanroep, de textuur bij het plaatje onthouden; nu loopt het geheugen tussen twee keer
 opruimen op tot 117 MB tegen 44 bij Pixi, en het opruimen geeft uitschieters van 17 ms); **E2**, bladen die groeien in
 plaats van meteen 64 MB (hier 60 MB minder op de kaart); en twee keuzes die je ziet, eerst met een proefplaat: **E3**,
@@ -149,7 +155,9 @@ valt dan terug op het 2D-doek, Pixi alleen met eigen code op zijn `CanvasRendere
 ## Voorstel van Claude
 
 Eerst **A1 en A2** (snel, je ziet niets, samen zo'n 40%), dan meten. Daarna niet C1 (je ziet het, en het is een
-lapmiddel), maar **B1 tot B4** als één stuk werk: de dieptebuffer en vaste buffers per stuk, met de schaduwen en het
+lapmiddel), maar B: eerst **B5 met B3 en E1** (`js/gl.js` naar WebGL2 met instanties en een textuurstapel, de schaduwen
+uit dezelfde rij; `js/tekenen.js` blijft, in de proef 2,8 keer zo snel), en dan **B1 en B2** (renderproef, E). Eerst gedacht:
+**B1 tot B4** als één stuk werk: de dieptebuffer en vaste buffers per stuk, met de schaduwen en het
 grijs op de kaart. Dat is groter, maar het maakt het bos goedkoop, ook op een eiland van 2500 bij 2500. **C3** kan ernaast
 als instelling voor zwakke machines. A3 en A4 alleen als de meting na A1 en A2 erom vraagt, want B maakt ze grotendeels
 overbodig.
