@@ -21,7 +21,9 @@ const VERBODEN = [
 test('niets buiten js/wereld.js leest de rechthoek van de kaart zelf', () => {
   const fout = [];
   for (const naam of fs.readdirSync(JS).filter((n) => n.endsWith('.js') && !EIGENAARS.includes(n))) {
-    const regels = fs.readFileSync(path.join(JS, naam), 'utf8').split('\n');
+    // ook met de regeleinden van Windows (\r\n, git met core.autocrlf): anders blijft er een \r staan, past `$` niet, en
+    // telt commentaar als code (17 okt: rood in elke verse kopie op Windows)
+    const regels = fs.readFileSync(path.join(JS, naam), 'utf8').split(/\r?\n/);
     regels.forEach((regel, i) => {
       const code = regel.replace(/\/\/.*$/, '');
       if (VERBODEN.some((re) => re.test(code))) fout.push(`js/${naam}:${i + 1}: ${regel.trim()}`);
