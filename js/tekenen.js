@@ -408,7 +408,8 @@
     return nieuw;
   }
   // De stukken van buffer buf die rechthoek r van de vlakte raken (zonder r: alle), op hun plek, in de stand van ctx.
-  function tekenStukken(ctx, buf, r) {
+  // De stukken die rechthoek r raken (alle zonder r); met `vlakken` alleen binnen die vierhoeken (tekenTegelOpnieuw).
+  function tekenStukken(ctx, buf, r, vlakken) {
     if (!buf) return;
     const m = STUK / buf.k;
     for (const s of buf.stukken.values()) {
@@ -416,7 +417,8 @@
       const x = (s.i * STUK - buf.fase) / buf.k;
       const y = (s.j * STUK - buf.fase) / buf.k;
       if (r && (x > r.x1 || y > r.y1 || x + m < r.x0 || y + m < r.y0)) continue;
-      ctx.drawImage(s.canvas, x, y, m, m);
+      if (vlakken) ctx.tekenUitgeknipt(s.canvas, x, y, m, m, vlakken);
+      else ctx.drawImage(s.canvas, x, y, m, m);
     }
   }
   // Voor het kijkgat (js/doorkijk.js) en het meten: de grond die rechthoek r raakt.
@@ -787,24 +789,46 @@
   // je hoort te zien (T.zichtbaarDoor, js/doorkijk.js, zoals de aanvoerder), krijgt er het kijkgat van de doorkijk bij, na de
   // voorste tegel die hem afdekt, net als achter een huis.
   const ACHTER = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]];
+  const tegelNr = (x, y) => (y + 32768) * 65536 + x + 32768; // een tegel als getal, voor een Set of een Map
   function heuvelsErvoor(ctx, S, vak, lijst, g) {
     const w = S.wereld;
     if (!w.hoogte) return;
     const kaartvak = T.kaartGrens(w);
-    let staat = null; // de tegels waar iets op staat dat getekend wordt
+    const dekkers = []; // x, y, x, y, ...
+    const x0 = Math.max(kaartvak.x, vak.x0);
+    const y0 = Math.max(kaartvak.y, vak.y0);
+    T.dekkersIn(w, x0, y0, Math.min(kaartvak.x + kaartvak.b - 1, vak.x1), Math.min(kaartvak.y + kaartvak.h - 1, vak.y1), (x, y) => dekkers.push(x, y));
+    if (!dekkers.length) return;
+    // Eerst de tegels achter de dekkers (in beeld een paar tientallen), dan van de tekenlijst (duizenden) alleen die: alles
+    // in een Set kostte 0,9 ms per beeld (vraag 174, c).
+    const achter = new Set();
+    for (let k = 0; k < dekkers.length; k += 2) for (const [i, j] of ACHTER) achter.add(tegelNr(dekkers[k] - i, dekkers[k + 1] - j));
+    const staat = new Set(); // de tegels achter een dekker waar iets op staat dat getekend wordt
+    for (const it of lijst) {
+      if (!it.punt) continue;
+      const n = tegelNr(it.punt.x, it.punt.y);
+      if (achter.has(n)) staat.add(n);
+    }
+    let wezensOp = null; // tegel achter een dekker → de wezens die erop staan
     let kijkgaten = null; // wezen → het item van de voorste tegel die hem afdekt
-    for (let y = Math.max(kaartvak.y, vak.y0); y <= Math.min(kaartvak.y + kaartvak.h - 1, vak.y1); y++) {
-      for (let x = Math.max(kaartvak.x, vak.x0); x <= Math.min(kaartvak.x + kaartvak.b - 1, vak.x1); x++) {
-        if (!T.dektAf(w, x, y)) continue;
-        if (!staat) {
-          staat = new Set();
-          for (const it of lijst) if (it.punt) staat.add(it.punt.x + ',' + it.punt.y);
-        }
-        if (!ACHTER.some(([i, j]) => staat.has(x - i + ',' + (y - j)))) continue;
-        const item = { d: x + y, l: 0.5, punt: { x, y }, zonderSchaduw: true, f: () => tekenTegelOpnieuw(ctx, w, x, y, g) };
-        lijst.push(item);
+    for (let k = 0; k < dekkers.length; k += 2) {
+      const x = dekkers[k];
+      const y = dekkers[k + 1];
+      if (!ACHTER.some(([i, j]) => staat.has(tegelNr(x - i, y - j)))) continue;
+      const item = { d: x + y, l: 0.5, punt: { x, y }, zonderSchaduw: true, f: () => tekenTegelOpnieuw(ctx, w, x, y, g) };
+      lijst.push(item);
+      if (!wezensOp) {
+        wezensOp = new Map();
         for (const e of w.wezens) {
-          if (!ACHTER.some(([i, j]) => e.tx === x - i && e.ty === y - j) || T.zichtbaarDoor(S, e) !== 'alles') continue;
+          const n = tegelNr(e.tx, e.ty);
+          if (!achter.has(n)) continue;
+          if (!wezensOp.has(n)) wezensOp.set(n, []);
+          wezensOp.get(n).push(e);
+        }
+      }
+      for (const [i, j] of ACHTER) {
+        for (const e of wezensOp.get(tegelNr(x - i, y - j)) || []) {
+          if (T.zichtbaarDoor(S, e) !== 'alles') continue;
           kijkgaten = kijkgaten || new Map();
           const was = kijkgaten.get(e);
           if (!was || was.d < item.d) kijkgaten.set(e, item);
@@ -821,32 +845,40 @@
       }
     }
   }
-  // Het stuk van de grondbuffer op tegel (x, y): zijn schuine vlak, en zijn wanden aan de zuid- en oostkant.
+  // Het stuk van de grondbuffer op tegel (x, y): zijn schuine vlak, en zijn wanden aan de zuid- en oostkant, elk een
+  // vierhoek. Met de videokaart als driehoeken (js/gl.js, tekenUitgeknipt; vraag 174, c: met een knip ging elke tegel
+  // over het kladdoek, ver uitgezoomd zo'n 3,5 miljoen pixels per beeld), zonder met een knip.
   function tekenTegelOpnieuw(ctx, w, x, y, g) {
     const h = T.hoekHoogten(w, x, y);
-    const r = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity }; // wat de knip beslaat: alleen die stukken
-    const punt = (px, py, eerste) => {
-      if (eerste) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-      r.x0 = Math.min(r.x0, px);
-      r.y0 = Math.min(r.y0, py);
-      r.x1 = Math.max(r.x1, px);
-      r.y1 = Math.max(r.y1, py);
-    };
-    ctx.save();
-    ctx.beginPath();
+    const vlak = [];
     T.HOOGTE_HOEKEN.forEach(([dx, dy], k) => {
       const p = T.naarScherm(x + dx, y + dy);
-      punt(p.x, p.y - h[k], !k);
+      vlak.push(p.x, p.y - h[k]);
     });
-    ctx.closePath();
+    const vlakken = [vlak];
     for (const wand of T.wandenVan(w, x, y)) {
       const s1 = T.naarScherm(wand.van[0], wand.van[1]);
       const s2 = T.naarScherm(wand.tot[0], wand.tot[1]);
-      punt(s1.x, s1.y - wand.boven[0], true);
-      punt(s2.x, s2.y - wand.boven[1]);
-      punt(s2.x, s2.y - wand.onder[1]);
-      punt(s1.x, s1.y - wand.onder[0]);
+      vlakken.push([s1.x, s1.y - wand.boven[0], s2.x, s2.y - wand.boven[1], s2.x, s2.y - wand.onder[1], s1.x, s1.y - wand.onder[0]]);
+    }
+    const r = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity }; // wat de vlakken beslaan: alleen die stukken
+    for (const v of vlakken) {
+      for (let i = 0; i < 8; i += 2) {
+        r.x0 = Math.min(r.x0, v[i]);
+        r.y0 = Math.min(r.y0, v[i + 1]);
+        r.x1 = Math.max(r.x1, v[i]);
+        r.y1 = Math.max(r.y1, v[i + 1]);
+      }
+    }
+    if (ctx.tekenUitgeknipt) {
+      tekenStukken(ctx, g, r, vlakken);
+      return;
+    }
+    ctx.save();
+    ctx.beginPath();
+    for (const v of vlakken) {
+      ctx.moveTo(v[0], v[1]);
+      for (let i = 2; i < 8; i += 2) ctx.lineTo(v[i], v[i + 1]);
       ctx.closePath();
     }
     ctx.clip();

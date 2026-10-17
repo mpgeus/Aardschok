@@ -608,7 +608,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   okt): eens uitgerekend als iemand voor het eerst naar een tegel van dat stuk vraagt, waar op het eiland ook (één
   `T.eilandStuk` van zo'n 20 ms voor de hoogte van het eiland op zijn hoekpunten, dan de glooiing eens per hoekpunt met
   alleen de vlakke stukken die erbij liggen, `vlakkenBij`); wat afdekt (`T.dektAf`) ook per stuk, pas als het gevraagd
-  wordt. `T.egaliseer` rekent alleen opnieuw wat het nieuwe vlakke stuk raakt; een andere nieuwe `w.hoogte.versie` begint
+  wordt, met een lijstje erbij, zodat `T.dekkersIn(w, x0, y0, x1, y1, doe)` alleen die tegels geeft (vraag 174, c:
+  `heuvelsErvoor` vroeg elke tegel in beeld, ver uitgezoomd 4 ms per beeld). **Wat de heuvels bij het tekenen kosten**
+  (vraag 174, c, 17 okt; om en om gemeten met de echte videokaart, proefdorp op eiland 5, 1920×1080): eerst ver
+  uitgezoomd zo'n 40 ms per beeld tegen 30 nu, door drie dingen: de tegels die afdekken over het kladdoek (nu
+  `tekenUitgeknipt`, `code.md` bij `js/gl.js`), `heuvelsErvoor` (nu `T.dekkersIn`, en van de tekenlijst alleen de
+  tegels achter een dekker) en `T.hoogteOp`, die voor alles wat getekend wordt via `T.hoekHoogten` vier keer het stuk
+  zocht en een lijstje maakte (ver uitgezoomd 8000 keer per beeld). Wat met heuvels blijft, 2 à 5 ms boven vlak (dichtbij
+  9 tegen 5), is vooral meer in beeld (wat hoog ligt, komt van onder het beeld erin) en het graan op een helling
+  (`tekenGraan`, in stroken; `opmerkingen.md`). `T.egaliseer` rekent alleen opnieuw wat het nieuwe vlakke stuk raakt; een andere nieuwe `w.hoogte.versie` begint
   alles opnieuw. **Voor het tekenen** (vraag 174, stap b1, 17 okt): `T.hoogteIn(w, x0, y0, x1, y1)` geeft de hoogste en
   laagste hoek van de stukken die een vak raakt (elk stuk onthoudt ze, `bereikVan`), zodat `js/tekenen.js`
   (`tegelsMetHoogte`) weet welke tegels in een stuk van het scherm vallen: het vak in beeld gaat zo ver omlaag als de
@@ -768,7 +776,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **De mist** (B2c, `js/mist.js`): elk hoekpunt heeft een vijfde getal, hoeveel kleur eruit gaat (`aGrijs`; het filter
   `grayscale(..) brightness(..)` zet het, `grijsNu`), zodat wat in het grijs staat zonder extra opdrachten grijs wordt; en
   `tekenMist` kopieert wat er tot dan getekend is (de grond en de schaduwen) naar een textuur en legt het ontkleurd en
-  donkerder terug naar het masker (`FRAG_MIST`), want ontkleuren kan geen mengstand.
+  donkerder terug naar het masker (`FRAG_MIST`), want ontkleuren kan geen mengstand. **Een plaatje binnen vierhoeken**
+  (`tekenUitgeknipt`, vraag 174, c): de grond van een tegel op een heuvel die iets afdekt (`tekenTegelOpnieuw` in
+  `js/tekenen.js`) tekende met een knip, en een knip gaat over het kladdoek: ver uitgezoomd zeven kladjes en 3,5 miljoen
+  pixels per beeld, die de kaart elke keer opnieuw kreeg. Nu elke vierhoek in twee driehoeken (`driehoekenVan`, langs de
+  diagonaal die bij een holle vierhoek klopt), geknipt op het plaatje (`knipOpVak`, Sutherland-Hodgman), als waaier in
+  de rij, met de plek in de textuur per hoek; zonder de kaart toch het kladdoek met een knip. Het sluit aan op de grond
+  eronder op 0,7% van de pixels na, op de grens van twee texels (de knip in 2D week 23% af, een halve pixel).
 
 ### js/sprites.js en js/kaart.js: de pixel art in het spel
 

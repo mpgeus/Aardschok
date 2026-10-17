@@ -99,13 +99,20 @@ tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes t
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
-brug op zijn oevers, de mist op de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst voortzetten"):
-stap c, meten (Marcel: "neem 174c over"). Let op: CLAUDE.md zit tegen de grens van
+brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
+40 naar 30 ms per beeld, 2 à 5 ms boven vlak, en de kolonist speelt er een jaar mee. **Het volgende is d**: de heuvels
+altijd aan en de spelregel *Height* eruit (wacht op Marcel, hieronder). Let op: CLAUDE.md zit tegen de grens van
 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
 
 **Marcel kwam op 17 okt met 176** (bij N): zicht in een dicht dorp, de aanpak van Stronghold (gebouwen plat, het
 land lager, draaien, zoomen). **Stap 1, de proef, is af** (17 okt): plat laat in de dichtste straat alle inwoners en 83%
 van de straat zien, gewoon 1 van de 6 en 8%. Wacht op Marcel (hieronder).
+
+**Marcel kwam op 17 okt met 177** (bij O): de nabewerkte herberg is de nieuwe maat voor alle huizen, zonder ze een
+voor een opnieuw te tekenen. **De eerste proef is af** (17 okt; `beeld.md`, "De nieuwe stijl"; de plaat
+`gereedschap/pixelart/uit/stijlproef/plaat.png`): het riet zo rustig als het doel, in lagen met punten, de nok in
+bundels, blauwe ramen, een plint met donkere voegen, zachtere schaduw en fijnere kleur, van vier kanten gelijk, even
+duur. Wacht op Marcel (hieronder).
 
 **Marcel kwam op 16 okt met vraag 172, een volledig menu** (bij J: "We hebben een volledig menu nodig geen a.i slop"),
 en koos: het titelscherm als tekst over de wereld, *Settings*, *New game* als eigen scherm, *Credits* en *Quit*, de
@@ -124,9 +131,22 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De stijlproef bekijken** (vraag 177, 17 okt): `gereedschap/pixelart/uit/stijlproef/plaat.png` (opnieuw met
+  `node gereedschap/pixelart/stijlproef.cjs`, vier minuten) en `beeld.md`, "De nieuwe stijl". Dan kiezen: is dit de
+  richting (het riet, de stenen, het licht), en zo ja, eerst de andere materialen (leien, pannen, spanen, planken,
+  baksteen, leem) elk op een proefplaat, of eerst de haken in de bouwer. **Marcel koos (17 okt): de richting is goed,
+  eerst de andere materialen, een voor een op een proefplaat.**
 - **De zichtproef bekijken** (vraag 176, stap 1, 17 okt): `gereedschap/zichtproef/zicht_vergelijking.png` en
   `evaluatie.md`. Dan kiezen of plat een weergave in het spel wordt, en zo ja: de muren (doorsnede of alles laag), de
   vloer (dakkleur of planken), de toets (de spatie is nu het laatste bericht), en schakelen of vasthouden.
+- **De heuvels in Firefox meten, en dan d** (vraag 174, c, 17 okt): `npm start`, het spel in Firefox, Nieuw spel, en in
+  de console `Spel.zetOptie('hoogte', 'heuvels'); Spel.debug.proefdorp(5)`; F2 voor de meter, en zoom met het wiel
+  helemaal uit. Dan `Spel.zetOptie('hoogte', 'vlak'); Spel.debug.proefdorp(5)` en hetzelfde, en tot slot
+  `Spel.optiesTerug()`. In Chromium en Edge kost heuvels 2 à 5 ms per beeld meer (bij L, "Stap c"); zeg het als het in
+  Firefox veel meer is. Is het goed, dan is d de volgende stap: de heuvels altijd aan, de spelregel *Height* eruit, en
+  het opslaan een versie omhoog. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
+  houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest
+  draait nu in de volle Chromium, want de kale headless-shell van Playwright laadt het spel niet meer (`opmerkingen.md`).
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
   vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
   `Spel.debug.kampen('erheen')` kijk je naar het dichtste, en met `Spel.debug.geenMist = true` zie je de mannen ook als er
@@ -140,7 +160,7 @@ stenen huizen. **Ronde 3 is af.**
   zeventien, in de winter en het donker meer); (7) een dorpeling vlucht alleen voor een rover in het land van zijn dorp,
   zodat een kamp ver weg niemand binnen houdt; (8) de rovers in het kamp dragen hun levensbalk, zoals elke rover, zodat je
   ziet dat het geen dorpelingen zijn. De speeltest (`npm run speeltest`) liep niet: zijn browser kreeg het spel niet
-  binnen 30 seconden geladen; de toetsen zijn groen.
+  binnen 30 seconden geladen (sinds 174c draait hij in de volle Chromium, en loopt hij weer); de toetsen zijn groen.
 - **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
   vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
   kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
@@ -1259,6 +1279,23 @@ een paar speeldagen, en de kolonist op vijf eilanden; **d** dan staan de heuvels
   handheld etc. heeft een APU of GPU"; `code.md` bij `js/gl.js`). Onderweg: het licht van b1 bleef leeg (een `c` die het
   doek had moeten zijn); nu getoetst in de browser, met en zonder licht zijn alle stukken grond anders.
 
+**Stap c, meten, is af** (17 okt; `code.md` bij `js/hoogte.js` en `js/gl.js`; `opmerkingen.md`). De tekenmeting mat tot
+nu toe zonder echte videokaart (SwiftShader), dus ook de 54 ms van b1; nu kan het met (`--videokaart`, `--edge`,
+`--hoogte`, `--dagen`; `gereedschap.md`). Om en om gemeten in één browser (de losse runs liepen uiteen van 20 tot 52 ms
+vlak, door wat er naast draaide): met heuvels ver uitgezoomd eerst zo'n 40 ms per beeld, nu 30, door drie dingen die
+alleen de heuvels hadden. De tegels die afdekken gingen met een knip over het kladdoek (3,5 miljoen pixels per beeld
+naar de kaart; nu driehoeken, `tekenUitgeknipt`), `heuvelsErvoor` vroeg elke tegel in beeld en zette de hele tekenlijst
+in een Set (nu `T.dekkersIn`), en `T.hoogteOp` zocht voor alles wat getekend wordt vier keer zijn stuk. Wat blijft,
+vlak tegen heuvels (ms per beeld, 1920×1080, proefdorp op eiland 5): in Chromium dichtbij 5 tegen 9, op 0,5 20 tegen 29,
+op 0,35 24 tegen 28; in Edge 5 tegen 9, 16 tegen 21, 18 tegen 20; na drie speeldagen hetzelfde, zonder kladjes en met 13
+tot 41 opdrachten. Het verschil is vooral meer in beeld (wat hoog ligt, komt van onder het beeld erin) en het graan op
+een helling (`opmerkingen.md`). Ver uitgezoomd haalt ook vlak de 60 hier niet: dat is geen zaak van de heuvels
+(`opmerkingen.md`). De kolonist op vijf eilanden met heuvels (`npm run speeltest -- --zaden 1-5 --regel hoogte=heuvels`, naast dezelfde
+vlak): elk eiland het jaar uit, zonder fouten, en het dorp groeit (17 naar 22 à 33). Op 3 en 5 precies als vlak (het
+dorp ligt op zijn vlakte); op 1 beter (33 tegen 25 mensen, geen doden), op 2 slechter (24 tegen 33, drie doden in de
+winter, kou en geen hout), op 4 iets beter. Dat patroon van kou en geen hout zit vlak op eiland 1: het is het eiland,
+niet de heuvels (de balans test Marcel zelf).
+
 ## M. Het licht in de nacht (vraag 175, 17 okt)
 
 Marcel, 17 okt: **"Het licht in de nacht is nep, ik wil dat het meer wordt zoals de lantaarns die we hebben voor de
@@ -1312,6 +1349,21 @@ plat, voor een gekozen hut vier. Plat lost dus op wat draaien niet oploste (de c
 de huizenbouwer (`plat.cjs`): geen dak, de muren aan de kant van de camera tot de heup en achter laag (een doorsnede;
 alles tot de heup dekte de straat nog af), de vloer in de kleur van het dak. **Wacht op Marcel:** de plaat bekijken, en
 kiezen of stap 4 (plat als weergave in het spel) komt, met vier keuzes (`evaluatie.md`, onderaan).
+
+## O. De nieuwe stijl: de nabewerkte herberg als maat (vraag 177, 17 okt)
+
+Marcel, 17 okt, met een uitgewerkte opdracht ("Aardschok — Nieuwe definitieve artstijl") en twee plaatjes: de herberg
+uit de huizenbouwer en dezelfde herberg met ChatGPT nabewerkt (`voorbeelden/herberg-stijl-origineel.png` en
+`-doel.webp`): "Dat is de norm die ik wil aan gaan houden". Gevraagd: zachter licht, natuurlijker kleur binnen een
+materiaal, rijker riet, pannen, hout, steen en pleister, minder harde patronen, de silhouetten scherp, en vier kanten
+gelijk; geen filter over het plaatje, wel de gegevens van de tekenaar; eerst een losse proef, de tekeningen van het spel
+blijven. De proef: zes gebouwen oud en nieuw, twee van vier kanten, een plaat en een kort verslag.
+
+**De proef is af** (17 okt; het verslag in `beeld.md`, "De nieuwe stijl"; `gereedschap/pixelart/stijlproef.cjs`, los,
+met dertien haken in de bouwer die alleen in het geheugen bestaan): drie lagen op wat de tekenaar per pixel weet (nieuwe
+patronen, zachte schaduw, fijnere kleur met een tint). Het riet meet zo rustig als het doel (0,038 tegen 0,029; oud
+0,076), even duur om te renderen. Nog niet: een eigen patroon voor leien, pannen, spanen, planken, baksteen en leem
+(daar doen alleen het licht en de kleur iets, en dat is weinig).
 
 ## Af (sinds 11 okt)
 

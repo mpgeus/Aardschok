@@ -538,6 +538,34 @@
     hoeken[i + 9] = bronNu;
     aantal++;
   }
+  // Een veelhoek [x, y, x, y, ...] geknipt op de rechthoek (x0, y0)-(x1, y1), zoals Sutherland en Hodgman: wat van een
+  // bolle veelhoek overblijft, is weer bol (of minder dan drie punten).
+  function knipOpVak(p, x0, y0, x1, y1) {
+    for (const [as, grens, kant] of [[0, x0, 1], [0, x1, -1], [1, y0, 1], [1, y1, -1]]) {
+      const uit = [];
+      const n = p.length / 2;
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        const a = (p[2 * i + as] - grens) * kant;
+        const b = (p[2 * j + as] - grens) * kant;
+        if (a >= 0) uit.push(p[2 * i], p[2 * i + 1]);
+        if ((a >= 0) !== (b >= 0)) {
+          const f = a / (a - b);
+          uit.push(p[2 * i] + (p[2 * j] - p[2 * i]) * f, p[2 * i + 1] + (p[2 * j + 1] - p[2 * i + 1]) * f);
+        }
+      }
+      p = uit;
+      if (p.length < 6) break;
+    }
+    return p;
+  }
+  // Een vierhoek [x0, y0, ..., x3, y3] in twee driehoeken, langs de diagonaal waarlangs ze allebei dezelfde kant op
+  // draaien: zo klopt het ook als een hoek naar binnen valt (een tegel op een steile helling).
+  function driehoekenVan(v) {
+    const opp = (a, b, c) => (v[2 * b] - v[2 * a]) * (v[2 * c + 1] - v[2 * a + 1]) - (v[2 * b + 1] - v[2 * a + 1]) * (v[2 * c] - v[2 * a]);
+    const delen = opp(0, 1, 2) * opp(0, 2, 3) >= 0 ? [[0, 1, 2], [0, 2, 3]] : [[1, 2, 3], [1, 3, 0]];
+    return delen.map((d) => [v[2 * d[0]], v[2 * d[0] + 1], v[2 * d[1]], v[2 * d[1] + 1], v[2 * d[2]], v[2 * d[2] + 1]]);
+  }
   // Een stuk dat buiten zijn bron valt, tekent een 2D-doek niet, en op een blad zou het de buren pakken: dus alleen het
   // stuk erbinnen, op zijn plek. [sx, sy, sw, sh, dx, dy, dw, dh], of null als er niets overblijft.
   function binnenDeBron(t, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -1109,6 +1137,61 @@
         }
       }
       this.opKlad(this.vakVan(dx, dy, dx + dw, dy + dh), (k) => k.drawImage(bron, ...a));
+    }
+    // Het hele plaatje `bron` op (dx, dy) tot (dx + dw, dy + dh), maar alleen binnen `vlakken`, vierhoeken [x0, y0, ...,
+    // x3, y3] in de vlakte (js/tekenen.js, tekenTegelOpnieuw; vraag 174, c): wat een knip doet, als driehoeken met de
+    // plek in de textuur, zodat het niet over het kladdoek gaat. Kan de kaart het niet, dan het kladdoek met een knip.
+    tekenUitgeknipt(bron, dx, dy, dw, dh, vlakken) {
+      const t = this.snel() ? textuurVan(bron) : null;
+      if (!t) {
+        this.opKlad(this.vakVan(dx, dy, dx + dw, dy + dh), (k) => {
+          k.save();
+          k.beginPath();
+          for (const v of vlakken) {
+            k.moveTo(v[0], v[1]);
+            for (let i = 2; i < v.length; i += 2) k.lineTo(v[i], v[i + 1]);
+            k.closePath();
+          }
+          k.clip();
+          k.drawImage(bron, dx, dy, dw, dh);
+          k.restore();
+        });
+        return;
+      }
+      if (kladVak) legKladAf();
+      const delen = [];
+      let vieren = 0; // twee driehoeken per vier hoeken (maakIndex)
+      for (const v of vlakken) {
+        for (const d of driehoekenVan(v)) {
+          const p = knipOpVak(d, dx, dy, dx + dw, dy + dh);
+          if (p.length < 6) continue;
+          delen.push(p);
+          vieren += Math.ceil((p.length / 2 - 2) / 2);
+        }
+      }
+      if (!vieren) return;
+      const m = this.st.m;
+      const al = this.st.alpha;
+      const h = this.st.helder * al;
+      const fu = (bron.naturalWidth || bron.width) / dw / t.tb;
+      const fv = (bron.naturalHeight || bron.height) / dh / t.th;
+      plekVoor(t.tex, this.st.meng, vieren * 4);
+      const hk = (p, i) => {
+        const x = p[2 * i];
+        const y = p[2 * i + 1];
+        hoekH(m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5], t.x / t.tb + (x - dx) * fu, t.y / t.th + (y - dy) * fv, h, al);
+      };
+      // een waaier uit punt 0, twee driehoeken (0 i i+1) en (0 i+1 i+2) per keer: a = i, b = i+1, c = 0, d = i+2
+      for (const p of delen) {
+        const n = p.length / 2;
+        for (let i = 1; i < n - 1; i += 2) {
+          hk(p, i);
+          hk(p, i + 1);
+          hk(p, 0);
+          hk(p, i + 2 < n ? i + 2 : i + 1); // een driehoek over: de tweede valt weg
+        }
+      }
+      G.telling.plaatjes++;
     }
     // ---- vlakken
     fillRect(x, y, b, h) {

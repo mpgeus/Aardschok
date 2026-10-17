@@ -486,4 +486,16 @@ test('hoogte, afdekken: alleen een tegel die hoog genoeg ligt, dekt af wat erach
     const achter = Math.min(...[[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]].map(([i, j]) => T.hoogteOp(w, x - i, y - j)));
     assert.ok(hoog - achter > 16, `(${x}, ${y})`);
   }
+  // T.dekkersIn (voor het tekenen, vraag 174, c) geeft dezelfde tegels, rij voor rij, ook in een vak dat over stukken
+  // heen loopt; op "Vlak" geen
+  const gevonden = [];
+  T.dekkersIn(w, K.x, K.y, K.x + K.b - 1, K.y + K.h - 1, (x, y) => gevonden.push([x, y]));
+  assert.deepEqual(gevonden, dekkers);
+  const [x0, y0, x1, y1] = [K.x + 30, K.y + 50, K.x + 70, K.y + 81];
+  const binnen = [];
+  T.dekkersIn(w, x0, y0, x1, y1, (x, y) => binnen.push([x, y]));
+  assert.deepEqual(binnen, dekkers.filter(([x, y]) => x >= x0 && x <= x1 && y >= y0 && y <= y1));
+  let opVlak = 0;
+  T.dekkersIn(vlak, K.x, K.y, K.x + K.b - 1, K.y + K.h - 1, () => opVlak++);
+  assert.equal(opVlak, 0);
 });

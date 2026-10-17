@@ -932,6 +932,25 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet, ook vlak** (17 okt, vraag 174, c; de tekenmeting met
+  `--videokaart`, GTX 1080 Ti, proefdorp op eiland 5, 1920×1080): op zoom 0,5 en 0,35 zo'n 16 à 21 ms per beeld, vlak of
+  met heuvels, en het meeste is rekenwerk van het spel zelf (`onthoudVoorwerp`, `mistOverLijst`, `isPlat`,
+  `T.isZichtbaar`, `tekenVoorwerp`, elk 1 à 2,5 ms per beeld). Marcel mat op dezelfde pc in Firefox 11,7 ms ver
+  uitgezoomd vol bos (Crowthorpe), dus wat het verschil maakt (het eiland, het dorp, de browser), is nog open. De
+  metingen lopen hier sterk uiteen als er iets naast draait (een andere sessie, een spel, Firefox): vlak ver uitgezoomd
+  52 ms om 20:45 en 20 ms om 21:00. Vergelijk dus om en om in één browser, niet twee losse runs.
+- **De kale headless-shell van Playwright laadt het spel niet meer** (17 okt, vraag 174, c): `chromium.launch()` zonder
+  meer (`chrome-headless-shell`) blijft hangen in het gewone begin (het eiland en het titelscherm): geen
+  `DOMContentLoaded` na 40 s, geen enkel consolebericht, en de debugger komt er niet tussen, dus het hangt in de browser,
+  niet in een lus van het spel. Met `?kaart=gehucht` laadt het in 2,7 s, en de volle Chromium in het nieuwe headless
+  (`channel: 'chromium'`) in 5 s, ook zonder videokaart. Zo liep de speeltest van c2 niet. De speeltest en de tekenmeting
+  met `--videokaart` nemen nu de volle; `npm run schermen`, `samenvatting`, `grootte` en de proeven starten nog de
+  shell. Wat precies hangt, is niet gezocht.
+- **Met heuvels is het graan het duurste wat overblijft** (17 okt, vraag 174, c): op een schuine akker gaat elke tegel
+  graan in stroken van 8 pixels en stukjes van 20 (`tekenGraan`, `GRAAN_STROOK`, `GRAAN_STUK`), dichtbij bij het
+  proefdorp 924 plaatjes per beeld (van de 2043; vlak 913 in totaal). Bredere stroken scheelt tekenwerk, maar de halmen
+  volgen de grond dan grover: dat is een keuze voor Marcel.
+
 - **De vellen van de karakters hebben geen gebruiker meer** (12 okt, ronde 2 van het snoeien, stap 4): de karakters van
   de boeren zijn weg, dus niemand draagt nog boer-zanger, boerin-weduwe en de rest (gereedschap/pixelart/karakters.cjs,
   dorpelingen-anim.cjs, schandpaal.cjs; de nek per vel in `T.BEELDEN.schandpaal`). Ze staan nog in `beelden/`. Weg bij de

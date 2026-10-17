@@ -292,7 +292,13 @@
     const niveau = helling ? helling[k] : niveauVan(hg, x, y);
     return glooiingOp(hg, vx, vy) + niveau * hg.trede;
   }
-  T.hoekHoogten = (w, x, y) => [T.hoekHoogte(w, x, y, 0), T.hoekHoogte(w, x, y, 1), T.hoekHoogte(w, x, y, 2), T.hoekHoogte(w, x, y, 3)];
+  T.hoekHoogten = function (w, x, y) {
+    const hg = w && w.hoogte;
+    if (!hg) return [0, 0, 0, 0];
+    const s = stukOp(hg, x, y);
+    const i = ((y - s.y0) * T.STUK + x - s.x0) * 4;
+    return [s.hoeken[i], s.hoeken[i + 1], s.hoeken[i + 2], s.hoeken[i + 3]];
+  };
 
   // De hoogste en de laagste hoek van de tegels van (x0, y0) tot en met (x1, y1), { hoog, laag } in pixels: van de stukken
   // die het vak raakt, dus een tikje ruimer (vraag 174, stap b1). Voor het tekenen: een tegel ligt zoveel hoger op het
@@ -341,14 +347,22 @@
   }
 
   // De hoogte op een punt in de wereld (het midden van tegel (x, y) is (x, y)): op een van de twee driehoeken van zijn
-  // tegel (noord-oost-zuid of noord-zuid-west), net als de muis ze ziet (T.naarWereldOp).
+  // tegel (noord-oost-zuid of noord-zuid-west), net als de muis ze ziet (T.naarWereldOp). Voor alles wat getekend wordt
+  // (T.naarSchermGrond), ver uitgezoomd zo'n 8000 keer per beeld: daarom één keer het stuk en geen lijstje (vraag 174, c).
   T.hoogteOp = function (w, px, py) {
-    if (!w || !w.hoogte) return 0;
+    const hg = w && w.hoogte;
+    if (!hg) return 0;
     const x = Math.round(px);
     const y = Math.round(py);
     const u = px - (x - 0.5);
     const v = py - (y - 0.5);
-    const [n, o, z, ws] = T.hoekHoogten(w, x, y);
+    const s = stukOp(hg, x, y);
+    const l = s.hoeken;
+    const i = ((y - s.y0) * T.STUK + x - s.x0) * 4;
+    const n = l[i];
+    const o = l[i + 1];
+    const z = l[i + 2];
+    const ws = l[i + 3];
     // de lijn van noord (0, 0) naar zuid (1, 1) deelt de tegel: rechts ervan (u > v) de oostdriehoek
     return u >= v ? n + (o - n) * u + (z - o) * v : n + (z - ws) * u + (ws - n) * v;
   };
@@ -620,8 +634,32 @@
         dekt[ry * Z + rx] = ja ? 1 : 0;
       }
     }
+    dekt.lijst = []; // en welke, voor T.dekkersIn
+    for (let i = 0; i < Z * Z; i++) if (dekt[i]) dekt.lijst.push(i);
     return dekt;
   }
+  // De tegels die afdekken (T.dektAf) in het vak van (x0, y0) tot en met (x1, y1), rij voor rij: doe(x, y) voor elk. Uit
+  // het lijstje per stuk, zodat niet elke tegel in beeld gevraagd wordt (vraag 174, c: ver uitgezoomd kostte dat in
+  // heuvelsErvoor, js/tekenen.js, zo'n 4 ms per beeld).
+  T.dekkersIn = function (w, x0, y0, x1, y1, doe) {
+    const hg = w && w.hoogte;
+    if (!hg || x1 < x0 || y1 < y0) return;
+    const Z = T.STUK;
+    const gevonden = [];
+    for (let sy = Math.floor(y0 / Z); sy <= Math.floor(y1 / Z); sy++) {
+      for (let sx = Math.floor(x0 / Z); sx <= Math.floor(x1 / Z); sx++) {
+        const s = stukOp(hg, sx * Z, sy * Z);
+        if (!s.dekt) s.dekt = dekkersVan(w, s);
+        for (const i of s.dekt.lijst) {
+          const x = s.x0 + (i % Z);
+          const y = s.y0 + Math.floor(i / Z);
+          if (x >= x0 && x <= x1 && y >= y0 && y <= y1) gevonden.push([x, y]);
+        }
+      }
+    }
+    gevonden.sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+    for (const [x, y] of gevonden) doe(x, y);
+  };
 
   // Bouwen (vraag 121, stap 2): een gebouw komt op vlakke grond. Waar het komt, maakt de bouwer de grond vlak
   // (T.egaliseer): de plek met een looppad eromheen wordt een vlak stuk, zoals de maker de huizen van het begin legt, en
