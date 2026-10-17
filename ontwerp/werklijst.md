@@ -19,6 +19,11 @@ ms (eerst 100 à 117). Optie 2, het bos in de mist in de grondbuffer bakken (dan
 blijft staan voor zwakkere machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat
 het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
+**Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P):
+helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen, 38 beelden per seconde; Chromium en
+Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **Bezig in sessie `main`** (17 okt, de sessie "Werklijst
+voortzetten"): meten waar de tijd zit, en een plan voor Marcel.
+
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
@@ -1389,6 +1394,14 @@ met dertien haken in de bouwer die alleen in het geheugen bestaan): drie lagen o
 patronen, zachte schaduw, fijnere kleur met een tint). Het riet meet zo rustig als het doel (0,038 tegen 0,029; oud
 0,076), even duur om te renderen. Nog niet: een eigen patroon voor leien, pannen, spanen, planken, baksteen en leem
 (daar doen alleen het licht en de kleur iets, en dat is weinig).
+
+## P. Ver uitgezoomd sneller (vraag 178, 17 okt)
+
+Marcel, 17 okt, na zijn meting van de heuvels in Firefox (bij L, "Stap c"): **"Maar de perfomance moet echt wel veel
+beter"**. Hoe het nu is (`opmerkingen.md`, "Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet"): het
+proefdorp op eiland 5, helemaal uitgezoomd (0,35), kost in Firefox 24,8 ms tekenen (38 beelden per seconde; met heuvels
+28,9 en 29), in Chromium en Edge 16 à 24 ms; dichtbij 60 beelden per seconde. Het meeste is rekenwerk van het spel per
+ding in beeld, ver uitgezoomd zo'n 4000 (vooral bomen). Het plan volgt.
 
 ## Af (sinds 11 okt)
 
