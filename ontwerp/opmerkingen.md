@@ -9,19 +9,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): **het eiland is te voet in stukken
-  gebroken.** Tegel voor tegel gemeten (water, behalve een bruggetje, en de bomen die het eiland zet; rotsen en struiken
-  niet meegeteld): op eiland 1 haalt elke dorpsplek 67% van het land, op eiland 2 (het proefdorp) is het grootste stuk 48%
-  en zit het proefdorp in een stuk van 7%, op eiland 5 is het grootste stuk 40% en halen twee dorpsplekken 1% en 3%.
-  Drie oorzaken: (a) **het woud** (60% bomen per tegel) is een muur met holtes, en in de kampen staan bosjes van ruim 50%
-  die dat ook zijn; (b) **een weg gaat over een rivier zonder bruggetje** als de oversteek langer is dan `brugLang` (7) of
-  schuin ligt: een bruggetje ligt alleen recht langs x of y, en de overkant moet binnen 2 tegels van waar de weg verder
-  gaat liggen (`legBruggen`, `js/eiland.js`); per eiland 2 à 3 keer, ook met `brugLang` 20; (c) water en woud samen
-  sluiten soms een dorpsplek in (het proefdorp: de zee, het woud, een meer, en de rivier zonder brug). Gevolg: wie je ver
-  wegstuurt, komt vaak niet verder dan het stuk land waar hij is, en twee dorpen kunnen elkaar te voet niet halen. Wacht
-  op Marcel (werklijst). Ook: een tocht die land in een dood eind open laat gaan, loopt eerst dat eind in en dan terug (hij
-  leert het land pas kennen als het open is); en wie snel nieuw land in loopt, laat het spel het land maken (`T.landStuk`,
-  45 ms per stuk), wat op 30× een hapering kan geven.
+- **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken
+  gebroken: een weg kreeg geen bruggetje waar de oversteek breed of schuin was, en het proefdorp zat opgesloten in 7%
+  van het land. Dat is opgelost met L1 (Marcel: "L1"; `code.md` bij `js/eiland.js`): tegel voor tegel gemeten liggen op
+  eiland 1 tot 20 alle dorpsplekken, de stad en het kasteel nu in één stuk land, 63 tot 80% van het belopen land. Wat
+  overblijft: (a) **het woud** (60% bomen per tegel) is een muur met holtes, en in de kampen staan bosjes van ruim 50%
+  die dat ook zijn; een doel in een open plek midden in het woud haal je niet (de tocht gaat zo dicht als het kan:
+  van zes lange tochten vanuit het proefdorp kwamen er vier aan, twee tot op 37 en 97 tegels); (b) een tocht die land
+  in een dood eind open laat gaan, loopt eerst dat eind in en dan terug (hij leert het land pas kennen als het open is);
+  (c) wie snel nieuw land in loopt, laat het spel het land maken (`T.landStuk`, zo'n 45 ms per stuk; in de proef in
+  Node duurde de traagste tik 160 tot 320 ms), wat op 30× een hapering kan geven. Het land vooruit maken langs de tocht
+  zou helpen, als je het ziet.
 - **Wat stuk b van 6a2 liet zien** (16 okt, het wild per stuk land; buiten de stap gehouden): (a) `T.isBos` zonder het
   jonge bos telt de bomen alleen binnen het vak om de dorpen (`T.kaartVak`, via `T.natuurBij`): daarbuiten is er volgens
   hem nergens bos. Het wild telt nu per tegel (met het jonge bos); wie verder T.isBos vraagt (de raad, het bouwen), doet
