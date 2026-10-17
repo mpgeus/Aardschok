@@ -52,6 +52,19 @@
     kleuren.set(k, c);
     return c;
   }
+  // Een css-filter als { helder, grijs }: wat de kaart ervan kent (grayscale en brightness, samen in die volgorde), of
+  // helder null als alleen het kladdoek het kan. Per tekst één keer gelezen.
+  const filters = new Map();
+  function filterVan(f) {
+    let r = filters.get(f);
+    if (r) return r;
+    const h = /^(?:grayscale\(([\d.]+)\))?\s*(?:brightness\(([\d.]+)\))?$/.exec(f);
+    const kent = f === 'none' || (h && (h[1] || h[2]));
+    r = { helder: !kent ? null : h && h[2] ? Number(h[2]) : 1, grijs: kent && h && h[1] ? Number(h[1]) : 0 };
+    if (filters.size > 100) filters.clear();
+    filters.set(f, r);
+    return r;
+  }
 
   // ---------------------------------------------------------------- de programma's
   const VERT = /* // geen tekst */ `
@@ -815,14 +828,15 @@
       return this.st.filter;
     }
     // De kaart kent helderheid en grijs (grayscale, voor de mist; js/tekenen.js, mistOverLijst), samen in die volgorde.
+    // Het kladdoek krijgt het filter pas als het hem nodig heeft (opKlad), net als fillStyle: de mist zet het om elk
+    // plaatje in het grijs heen en terug, en een 2D-doek leest de tekst van een filter elke keer opnieuw. In Firefox was
+    // dat 29% van het tekenen (17 okt, een profiel van Marcel).
     set filter(f) {
       this.st.filter = f;
-      this.k.filter = f;
-      const h = /^(?:grayscale\(([\d.]+)\))?\s*(?:brightness\(([\d.]+)\))?$/.exec(f);
-      const kent = f === 'none' || (h && (h[1] || h[2]));
-      this.st.helder = !kent ? null : h && h[2] ? Number(h[2]) : 1; // null: een filter dat alleen het kladdoek kent
-      this.st.grijs = kent && h && h[1] ? Number(h[1]) : 0;
-      grijsNu = this.st.grijs;
+      const { helder, grijs } = filterVan(f);
+      this.st.helder = helder;
+      this.st.grijs = grijs;
+      grijsNu = grijs;
     }
     get fillStyle() {
       return this.st.vul;
@@ -870,6 +884,7 @@
       const k = this.k;
       k.globalCompositeOperation = meng === 'destination-over' ? 'destination-over' : 'source-over';
       k.fillStyle = this.st.vul;
+      if (k.filter !== this.st.filter) k.filter = this.st.filter;
       f(k);
       const v = vak || [0, 0, doek.width, doek.height];
       kladVak = kladVak ? [Math.min(kladVak[0], v[0]), Math.min(kladVak[1], v[1]), Math.max(kladVak[2], v[2]), Math.max(kladVak[3], v[3])] : v.slice();

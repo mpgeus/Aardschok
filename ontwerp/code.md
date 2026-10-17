@@ -714,6 +714,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van 60, wat in Firefox per aanroep meer kost dan in Chrome (Marcel, 17 okt: "performance is belangrijk spelelement.
   het wordt anders snel vervelend"). Meet een verandering aan het tekenen dus ook na een paar speeldagen
   (`ontwerp/gereedschap.md`), en meet niet terwijl er toetsen of een render lopen: die nemen de processor in beslag.
+  Wat het kladdoek nodig heeft (`fillStyle`, `filter`), krijgt het pas in `opKlad`: de mist zet het filter om elk
+  plaatje in het grijs heen en terug, en Firefox leest de tekst van een filter op een 2D-doek elke keer opnieuw; dat was
+  29% van het tekenen (17 okt, een profiel van Marcel uit de Firefox Profiler; `filterVan` onthoudt per tekst wat de
+  kaart ervan kent).
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
   vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
