@@ -2387,7 +2387,8 @@
   }
   // De tegels met water in vak ({ x, y, s: T.waterOp }), rij voor rij: per kaart onthouden zolang het vak, de kaart en
   // het open land dezelfde zijn (alleen scherm). Ver uitgezoomd liep het water elk beeld zo'n 10.000 tegels af (17 okt,
-  // een profiel van Marcel); of een beek droog staat, vraagt tekenWaterLeven wel elk beeld.
+  // een profiel van Marcel); of een beek droog staat, vraagt tekenWaterLeven wel elk beeld. Het eiland verandert zijn
+  // water niet als de kaart verandert (T.waterOp, js/kleinleven.js), dus daar telt de kaart niet mee.
   const waterInVak = new WeakMap();
   function waterIn(w, vak) {
     const kaartvak = T.kaartGrens(w);
@@ -2395,7 +2396,7 @@
     const y0 = Math.max(kaartvak.y, vak.y0);
     const x1 = Math.min(kaartvak.x + kaartvak.b - 1, vak.x1);
     const y1 = Math.min(kaartvak.y + kaartvak.h - 1, vak.y1);
-    const sleutel = `${x0},${y0},${x1},${y1},${T.kaartVersie(w)},${T.openGrootte(w)}`;
+    const sleutel = `${x0},${y0},${x1},${y1},${T.opEiland(w) ? '' : T.kaartVersie(w)},${T.openGrootte(w)}`;
     const oud = waterInVak.get(w);
     if (oud && oud.sleutel === sleutel) return oud.tegels;
     const tegels = [];

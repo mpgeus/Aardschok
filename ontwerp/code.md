@@ -837,8 +837,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kinderen die tikkertje spelen (`T.speel`, vanuit `T.dwaal`), kippen op het erf van een boerderij (`T.kippenOp`), een
   hond bij een deel van de gezinnen die zijn baas volgt en blaft naar vreemden (`T.hondenVan`, `T.vreemdeBij`), en de
   was aan de lijn (`T.wasVan`). `js/tekenen.js` tekent het (`kleinLevenInLijst`, `tekenWaterLeven`,
-  `tekenSchoorsteenRook`; de tegels met water in beeld onthoudt `waterIn` zolang het vak, de kaart en het open land
-  dezelfde zijn, 17 okt); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. De spelregel "Klein leven"; de
+  `tekenSchoorsteenRook`; de tegels met water in beeld onthoudt `waterIn` zolang het vak en het open land dezelfde
+  zijn, 17 okt); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. `T.waterOp` onthoudt per kaart; op het
+  eiland tot er land opengaat, want de grond verandert daar niet in het spel (een gevelde boom liet het water tot 17 okt
+  alle tegels in beeld opnieuw uitzoeken). De spelregel "Klein leven"; de
   getallen in `T.KLEIN_LEVEN_INSTELLINGEN`.
 
 ### js/zien.js: het licht

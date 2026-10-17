@@ -40,11 +40,15 @@
 
   // Hoe het water op een tegel beweegt: null (geen water), { stil: true } (een vijver of een meer: het glinstert), of de
   // richting waarin een beek stroomt ({ dx, dy }, een eenheid langs de tegels): langs de kant waarin het water het verst
-  // doorloopt, en bergaf als het land hoogte heeft. Per kaart één keer (niet in Spel.S), opnieuw als de kaart verandert.
+  // doorloopt, en bergaf als het land hoogte heeft. Per kaart één keer (niet in Spel.S). Op het eiland opnieuw als er land
+  // opengaat: de grond ligt daar vast (w.grondAnders legt alleen de maker), dus een gevelde boom of een gebouw verandert het
+  // water niet. Tot 17 okt begon het bij elke verandering van de kaart opnieuw, en dan zocht het eerste beeld daarna alle
+  // tegels in beeld opnieuw uit (ver uitgezoomd zo'n 10.000, 4 ms in Chromium), op 30× met de bouwers in het bos om de paar
+  // beelden. Op een kaart uit Tiled opnieuw als de kaart verandert.
   const stroming = new WeakMap();
   T.waterOp = function (w, x, y) {
     if (!IN().aan || !T.heeftGrond(w)) return null;
-    const versie = T.kaartVersie(w);
+    const versie = T.opEiland(w) ? `land ${T.openGrootte(w)}` : `kaart ${T.kaartVersie(w)}`;
     let k = stroming.get(w);
     if (!k || k.versie !== versie) stroming.set(w, (k = { versie, tegels: new Map() }));
     const sleutel = y * 100000 + x;
