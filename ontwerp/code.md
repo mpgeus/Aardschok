@@ -891,7 +891,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   alleen de schout er een, `T.draagtLantaarn`), voor het licht in `js/tekenen.js` en voor de
   wolven, die niemand in het licht aanvallen (`js/beesten.js`); wie er nu een brandende draagt, geeft `T.lichtDragers(D)`
   (voor zijn licht, en voor het lantaarntje in zijn hand), en zijn licht ziet er kleiner uit dan het voor de wolven is
-  (`beeldStraal`, vraag 171, L3; `js/tekenen.js` tekent elke bron met `getekendeStraal`); `T.huizenMetIemandThuis` zegt welke huizen
+  (`beeldStraal`, vraag 171, L3; `js/tekenen.js` tekent elke bron met `getekendeStraal`), en zo ook het kampvuur en de
+  vuren van de roverskampen (`T.BEGIN_INSTELLINGEN.vuur`: 3 tegels en 0,45 op het scherm, 6 voor de wolven, met een warme
+  kleur in `T.LICHT_INSTELLINGEN.kleuren.kampvuur`; vraag 175, Marcel koos K3; zonder kleur was het wit); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 
 ### gereedschap/pixelart/: de beelden uit code

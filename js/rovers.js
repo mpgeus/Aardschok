@@ -710,6 +710,6 @@
   T.roverskampenLicht = function (w, dag) {
     if (!w || !w.kampen || T.roverskampVuur(dag) !== 'brandt') return [];
     const L = T.BEGIN_INSTELLINGEN.vuur;
-    return w.kampen.filter((K) => K.staat).map((K) => ({ x: K.x, y: K.y, straal: L.straal, sterkte: L.sterkte, soort: 'kampvuur' }));
+    return w.kampen.filter((K) => K.staat).map((K) => ({ x: K.x, y: K.y, straal: L.straal, beeldStraal: L.beeldStraal, sterkte: L.sterkte, soort: 'kampvuur' }));
   };
 })(globalThis.Spel = globalThis.Spel || {});

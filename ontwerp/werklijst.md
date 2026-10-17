@@ -120,7 +120,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Welk licht in de nacht** (vraag 175, bij M): welk licht de ene felle bol is.
 - **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
   vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
   `Spel.debug.kampen('erheen')` kijk je naar het dichtste, en met `Spel.debug.geenMist = true` zie je de mannen ook als er
@@ -1266,7 +1265,9 @@ kampvuur (`T.kampLicht`, `js/begin.js`, en de vuren van de roverskampen, `T.rove
 `T.LICHT_INSTELLINGEN.kleuren`, dus is zijn licht wit, en het is een plas van 6 tegels met sterkte 0,9
 (`T.BEGIN_INSTELLINGEN.vuur`); de lantaarn ging met L3 van 3 tegels en 0,5 naar 1,5 tegel en 0,35 op het scherm, met de 3
 tegels nog voor de wolven. Zo ook hier: een warme kleur, en een kleinere en zachtere plas op het scherm, met de 6 tegels
-voor de regel; eerst proeven, Marcel kiest.
+voor de regel. **Af** (17 okt; Marcel koos K3 uit vier proeven: "K3: warm, 3 tegels, 0,45. Bouw het zo"): het kampvuur en
+de vuren van de roverskampen zijn warm (255, 150, 64), 3 tegels en 0,45 op het scherm, smeulend 0,2 (was 0,35, naar
+verhouding mee); de wolven blijven op 6 tegels (`code.md` bij `js/zien.js`).
 
 ## Af (sinds 11 okt)
 

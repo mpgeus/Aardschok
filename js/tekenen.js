@@ -61,6 +61,7 @@
       kaars: { r: 255, g: 158, b: 76 },
       drager: { r: 255, g: 196, b: 120 },
       brand: { r: 255, g: 128, b: 48 },
+      kampvuur: { r: 255, g: 150, b: 64 }, // vraag 175: zonder kleur was het wit
     },
     // Een vlam flakkert: zoveel van zijn sterkte op en neer, zo snel; een raam half zo veel.
     flakkeren: 0.14,

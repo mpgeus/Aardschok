@@ -992,6 +992,7 @@
     drager: T.t('carried lanterns'),
     aanvoerder: T.t('commander'),
     brand: T.t('fire'),
+    kampvuur: T.t('campfire'),
     flakkeren: T.t('flicker'),
     flakkerSnelheid: T.t('flicker speed'),
     ogen: T.t('eyes'),

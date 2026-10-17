@@ -2055,6 +2055,7 @@ Spel.TAAL_BRON = [
   {"t":"candles","waar":["js/opties.js"]},
   {"t":"carried lanterns","waar":["js/opties.js"]},
   {"t":"fire","waar":["js/opties.js"]},
+  {"t":"campfire","waar":["js/opties.js"]},
   {"t":"flicker","waar":["js/opties.js"]},
   {"t":"flicker speed","waar":["js/opties.js"]},
   {"t":"eyes","waar":["js/opties.js"]},

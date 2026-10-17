@@ -47,8 +47,11 @@
     // De aanvoerder loopt naast de kar, en haalt hem in als hij verder dan zoveel tegels achter is; klik je zelf ergens heen,
     // dan loopt hij niet meer mee.
     naastDeKar: 3,
-    // Het kampvuur geeft licht, en minder als het smeult (tegels, en van 0 tot 1, zoals de lantaarns in js/zien.js).
-    vuur: { straal: 6, sterkte: 0.9, smeult: 0.35 },
+    // Het kampvuur geeft licht, en minder als het smeult (tegels, en van 0 tot 1, zoals de lantaarns in js/zien.js). Op
+    // het scherm is de plas kleiner dan voor de regel (`beeldStraal`; de wolven blijven op `straal`), zoals bij de lantaarn
+    // (vraag 175; Marcel, 17 okt: "dat lijkt heel fel in de nacht, maar ook onnatuurlijk", en koos K3 uit vier proeven:
+    // 3 tegels en 0,45, warm, was 6 tegels, 0,9 en wit). Het smeulen ging naar verhouding mee (0,35 werd 0,2).
+    vuur: { straal: 6, beeldStraal: 3, sterkte: 0.45, smeult: 0.2 },
     // Zoveel jaar vraagt de heer niets (geen schatting op Sint-Maarten en geen grillen; js/heer.js, js/grillen.js), en
     // schrijft hij in wijnmaand dat hij je spaart (Marcel, 11 okt: "het eerste jaar vraagt de heer niets").
     heerVrij: 1,
@@ -367,7 +370,7 @@
     if (!stand || T.lichtVan(D.kalender.dag).nacht <= 0) return [];
     const v = D.plek.kamp.vuur;
     const L = IN().vuur;
-    return [{ x: v.x, y: v.y, straal: L.straal, sterkte: stand === 'brandt' ? L.sterkte : L.smeult, soort: 'kampvuur' }];
+    return [{ x: v.x, y: v.y, straal: L.straal, beeldStraal: L.beeldStraal, sterkte: stand === 'brandt' ? L.sterkte : L.smeult, soort: 'kampvuur' }];
   };
   // ---------------------------------------------------------------------------------------------
   // Het proefdorp (ronde 2 van het snoeien, stap 3 en 6)
