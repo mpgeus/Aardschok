@@ -21,10 +21,12 @@ plaatje goedkoper zonder dat het beeld verandert (bezig; een eerste ronde is af,
 voorwerp, de doorkijk en het water, in Chromium 8 tot 15% eraf; de meter in Firefox, ver uitgezoomd 's ochtends: tekenen
 46 ms om 16:25, 29 ms om 16:48, 16 à 19 ms om 17:03, en 19 werden 50 à 59 beelden per seconde; het zwaarste beeld,
 Heathside helemaal uitgezoomd, in Firefox 22,5 ms en 32 beelden per seconde, in Edge (Chromium, zoals de exe in
-Electron) 11 à 12 ms en 60)**; daarna misschien 2, het bos in de mist in de grondbuffer (vooral voor Firefox en zwakkere
-machines, zoals de Steam Deck)
-bakken (dan wuiven de bomen in de mist niet meer). Hoe en wat het mat: `code.md` bij `js/gl.js` en `js/sprites.js`,
-en `opmerkingen.md`.
+Electron) 11 à 12 ms en 60)**. Op 30× haperde het door gevelde bomen: elke boom liet een stuk grond van 512×512 opnieuw
+tekenen, en het water alle tegels in beeld opnieuw uitzoeken (het water is opgelost). Marcel koos daarna (17 okt): **eerst
+alleen het veranderde stukje grond opnieuw tekenen (bezig), dan ronde 2 van elk plaatje goedkoper**. Optie 2, het bos in
+de mist in de grondbuffer bakken (dan wuiven de bomen in de mist niet meer), blijft hier staan voor Firefox en zwakkere
+machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat het mat: `code.md` bij
+`js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
