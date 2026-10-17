@@ -980,7 +980,12 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   figuur erop voor de maat, en ernaast het kampje met de tent T1 en het paadje. **Besloten** (Marcel, 17 okt: "Meer
   passend", en op de vraag erna "Wat bij de plek past" en "S1"): **S1**, en elke brug past bij zijn plek: een smalle beek
   hout, een rivier stenen bogen; in het woud en het veen hout, bij rotsen en heide steen, en de steen uit de bouwstijl van
-  het land (veldsteen, zandsteen of baksteen); bij het kasteel en de stad altijd steen. Nu de proefplaat.
+  het land (veldsteen, zandsteen of baksteen); bij het kasteel en de stad altijd steen. Nu de proefplaat. **Marcel op de
+  eerste proefplaat** (17 okt): "Ook hout mag met boogje, afwisselend. Gewoon mooie bruggen. Dit ziet er te slap uit.
+  Bruggen moeten breder. Er moeten ook soldaten pelotons overheen. Niemand bouwt een brug voor 1 persoon." Dus: een brug
+  is drie tegels breed (zo breed als de weg, en een peloton kan drie naast elkaar over), steviger (dikkere muren en
+  borstweringen, grotere bogen), en het hout ook met een boog: een houten boogbrug over een korte oversteek, en een
+  houten jukbrug (een vlak dek op rijen palen, met een leuning) over een lange; welke, kiest de plek en het lot.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
