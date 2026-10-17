@@ -1110,6 +1110,12 @@ persoon." Op de tweede: **"Goed zo, zet ze in het spel"**.
 - **Waar welke** (`js/eiland.js`, `brugSoort`): steen bij de stad (baksteen) en het kasteel, bij rotsen en op de heide, en
   over een brede oversteek; hout in het woud, het veen en het broek, en over een smalle, om de andere een boogbrug. De
   steen is die van het land: zandsteen bij de stijlen oker en roze, anders veldsteen.
+- **De stenen in het spel** (Marcel, 17 okt, op de eerste beelden uit het spel: "de stenen van de brug nog niet goed
+  genoeg", "deze zijn te fijn", "die rode lijken wel dakpannen", "de ramp op de grijze stenen is ook te verschillend met
+  de rest"): het wegdek is van grote, ronde kinderkopjes (`wegdekPixel`: rijen van 8 pixels dwars op de brug, stenen van
+  8 tot 13, met ronde hoeken en een bredere voeg waar vier stenen samenkomen), grijs op een brug van veldsteen en van
+  baksteen (de baksteen zit alleen in de muren), zandkleurig op een brug van zandsteen; en het grijs is dat van de
+  huizen, `veldsteenWarm` (`huis-sdf.cjs`), niet het koele `veldsteen` van `dorp.cjs`.
 - **In het spel** (`bruggen-vel.cjs`, `beelden/bruggen.png`): stukken van één tegel in twee lagen, geknipt uit hele
   bruggen, zodat er geen naad op een tegelrand komt; de achterlaag (het dek, de overkant, de zijkant met de bogen) vóór
   wie erop loopt, de voorlaag (de borstwering of de leuning aan de kant van de kijker) erna. In het spel ligt het water

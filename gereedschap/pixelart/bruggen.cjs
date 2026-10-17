@@ -86,16 +86,48 @@ function blokPixel(u, h, basis, zaad) {
   const hs = hash(rij, k, zaad + 65);
   UIT.stap = basis + (hs % 5 === 0 ? -0.8 : hs % 7 === 0 ? 0.6 : 0) + (f > 6 ? 0.4 : 0);
 }
+// Het grijs van de veldsteen: dat van de huizen (huis-sdf.cjs), warm, en niet het koele grijs van dorp.cjs (Marcel, 17 okt:
+// "de ramp op de grijze stenen is ook te verschillend met de rest").
+const GRIJS = RAMP.veldsteenWarm;
 function steenPixel(soort, u, h, basis, zaad) {
   if (soort === 'zandsteen') blokPixel(u, h, basis, zaad);
   else if (soort === 'baksteen') D.baksteenPixel(u, h, basis, 'baksteen');
   else {
     D.veldsteenPixel(u + 700, h + 30, 9999, basis, zaad, false);
     // geen blauwe steen: in de zon leest hij als een ruitje
-    if (UIT.ramp === RAMP.pet) {
-      UIT.ramp = RAMP.veldsteen;
-      UIT.stap -= 1.5;
-    }
+    if (UIT.ramp === RAMP.pet) UIT.stap -= 1.5;
+    if (UIT.ramp === RAMP.veldsteen || UIT.ramp === RAMP.pet) UIT.ramp = GRIJS;
+  }
+}
+
+// Het wegdek: grote kinderkopjes (Marcel, 17 okt: "deze zijn te fijn", en die van baksteen "lijken wel dakpannen"), in
+// rijen dwars op de brug, elk een eigen steen met een donkere voeg en een ronde rug; sleets in het midden, mos in de voegen
+// langs de rand. Van zandsteen op een brug van zandsteen, anders veldsteen, ook op een brug van baksteen. u langs en v
+// dwars in pixels, q dwars van 0 tot 1.
+const KOP = { rij: 8, lang: [8, 6] }; // een rij langs de brug, en een steen dwars: 8 tot 13 pixels
+function wegdekPixel(u, v, q, steen, zaad) {
+  const r = Math.floor(u / KOP.rij);
+  const fr = u - r * KOP.rij;
+  const lengte = (k) => KOP.lang[0] + (hash(r, k, zaad + 27) % KOP.lang[1]);
+  let a = -(hash(r, 1, zaad + 25) % 9);
+  let k = 0;
+  while (a + lengte(k) <= v) a += lengte(k++);
+  // een ronde steen in zijn vak, wat scheef: de hoeken zijn rond, en waar vier stenen samenkomen, is de voeg breder
+  const hs = hash(r, k, zaad + 29);
+  const l = lengte(k);
+  const dv = Math.abs(v - a - l / 2 - ((hs % 3) - 1) * 0.4) / (l / 2 - 0.7);
+  const du = Math.abs(fr - KOP.rij / 2 - (((hs >> 3) % 3) - 1) * 0.4) / (KOP.rij / 2 - 0.7);
+  const e = dv * dv * dv + du * du * du;
+  UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
+  let s = 3.5 + (hs % 3) * 0.4;
+  if (e > 1) s = 1.2; // de voeg
+  else if (e > 0.5) s -= 0.7; // de ronde rand
+  else if (e < 0.15) s += 0.3; // de rug
+  if (e <= 1 && q > 0.3 && q < 0.7) s += 0.5; // het looppad blinkt
+  UIT.stap = s;
+  if (e > 0.8 && (q < 0.15 || q > 0.85) && ruis2(u * 0.1, v * 0.1, zaad + 23) > 0.45) {
+    UIT.ramp = RAMP.mos;
+    UIT.stap = 2.5;
   }
 }
 
@@ -181,22 +213,8 @@ function steenStuk(o) {
     const langs = langsX ? X : Y;
     const u = langs * SQ;
     if (vlak === 'z') {
-      // het wegdek: kinderkopjes, sleets in het midden, mos langs de rand
       const dwars = langsX ? Y : X;
-      const q = (dwars - c0) / (c1 - c0);
-      const i = Math.floor((langs * SQ) / 5);
-      const j = Math.floor((dwars * SQ) / 4 + (i % 2) * 0.5);
-      const fu = (langs * SQ) / 5 - i;
-      const fj = (dwars * SQ) / 4 + (i % 2) * 0.5 - j;
-      UIT.ramp = steen === 'baksteen' ? RAMP.baksteen : steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
-      let s = 4 + (hash(i, j, zaad + 21) % 3) - 1;
-      if (fu < 0.18 || fj < 0.2) s -= 2; // de voeg
-      if (q > 0.3 && q < 0.7) s += 0.6; // het looppad blinkt
-      UIT.stap = s;
-      if ((q < 0.12 || q > 0.88) && ruis2(langs * 0.08, dwars * 0.08, zaad + 23) > 0.55) {
-        UIT.ramp = RAMP.mos;
-        UIT.stap = 3;
-      }
+      wegdekPixel(u, dwars * SQ, (dwars - c0) / (c1 - c0), steen, zaad);
       return;
     }
     const zij = vlak === (langsX ? 'y' : 'x');
@@ -209,7 +227,7 @@ function steenStuk(o) {
     // de lijst: een band van gehakte steen net onder het wegdek, met een schaduwlijn eronder
     const dek = hoog(langs);
     if (zij && h > dek - 4 && h <= dek) {
-      UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
+      UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
       UIT.stap = h < dek - 3 ? 1.8 : 4.6 + (Math.floor(u / 11) % 2) * 0.4;
       return;
     }
@@ -218,7 +236,7 @@ function steenStuk(o) {
     if (g === 2) UIT.stap = Math.min(UIT.stap, 1.6); // het gewelf, in het donker
     else if (zij && g >= 3) {
       // de boogsteen: iets lichter, en een voeg waar de ene in de andere overgaat
-      UIT.ramp = steen === 'baksteen' ? RAMP.baksteen : steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
+      UIT.ramp = steen === 'baksteen' ? RAMP.baksteen : steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
       UIT.stap = g === 3 ? 5.6 : 4.8;
     }
     if (o.oud !== false) verweer(u, h, zaad, { klimop: o.stuk !== 'water' && zij });
@@ -238,7 +256,7 @@ function steenStuk(o) {
       }
     }
     if (vlak === 'z') {
-      UIT.ramp = steen === 'baksteen' ? RAMP.veldsteen : steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
+      UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
       const k = Math.floor(u / 9);
       UIT.stap = (u / 9 - k) < 0.12 ? 3 : 5 + (hash(k, 3, zaad + 33) % 2) * 0.6;
       if (o.oud !== false && ruis2(u * 0.11, k * 0.7, zaad + 35) > 0.7) {
@@ -249,7 +267,7 @@ function steenStuk(o) {
     }
     if (h > top - 2.5) {
       // de dekzerk, kopse kant
-      UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
+      UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
       UIT.stap = 4.5;
       return;
     }
@@ -341,7 +359,7 @@ function steenStuk(o) {
           const h = Z * PXH;
           const u = (langsX ? X : Y) * SQ + (langsX ? Y : X) * SQ;
           if (vlak === 'kap') {
-            UIT.ramp = steen === 'baksteen' ? RAMP.veldsteen : steen === 'zandsteen' ? RAMP.zandsteen : RAMP.veldsteen;
+            UIT.ramp = steen === 'zandsteen' ? RAMP.zandsteen : GRIJS;
             UIT.stap = 4.4;
             if (o.oud !== false && ruis2(u * 0.2, h * 0.2, zaad + 51) > 0.55) {
               UIT.ramp = RAMP.mos;
