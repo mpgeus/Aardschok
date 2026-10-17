@@ -104,6 +104,11 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Het plan voor c2, de bende** (vraag 170, stap 6a2, 17 okt; bij I, "c2 in detail"): elk kamp leeft vanaf het begin,
+  met zijn bende en een eigen dobbelsteen; twee man, een erbij per jaar tot 4, wie wegtrekt gaat naar het dichtste kamp,
+  en ze staan om hun vuur. Drie vragen: **N** de nacht (N1 slapen in de tent met één wacht, N2 dag en nacht om het
+  vuur), **D** de bende van een dorp nu (D1 weg in c2, D2 tot c3), en **H** een vol kamp (H1 hooguit 4, dan het
+  volgende kamp, H2 geen grens). Voorstel: N1, D1, H1.
 - **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
   vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
   kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
@@ -992,6 +997,43 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   aan de grond en te voet te halen vanaf elk dorp. De wilde rovers blijven tot c3. Te kiezen: **M** de minikaart: M1 een
   kamp dat je mensen gezien hebben, krijgt een rood teken op de minikaart, zodat je het terugvindt; M2 geen teken.
   Gekozen: **M1**.
+  **c2 in detail** (Claude, 17 okt; wacht op Marcel: N, D en H). (1) **Een kamp leeft vanaf het begin**: de kaart krijgt
+  bij het begin van een spel alle kampen van het eiland (`w.kampen`; in c1 pas als hun land opengaat), want de bende
+  groeit ook waar je nog niet kwam, en wie wegtrekt, moet ergens heen. Elk kamp heeft zijn bende en een eigen dobbelsteen
+  (`k.lot`, uit het nummer van het eiland en van het kamp, zoals een roedel). Gaat zijn land open, dan staan de tenten,
+  het vuur en de mannen er; het licht van het vuur gaat alleen over die kampen. (2) **De bende** (`k.bende`, een lijst
+  `{ id, naam, vel, uit }`): twee man vanaf het begin, en elk jaar van het spel komt er een bij, tot 4, op de dag dat het
+  jaar om is, zoals het aantal van de wilde rovers nu (`kampBende`, `kampErbijPerJaar`, `kampMeest`, in de werkbank).
+  Wie van buiten komt, krijgt een naam en een uiterlijk uit de dobbelsteen van het kamp: een voornaam van de bewoners
+  (`T.VOORNAMEN`), een jongere of volwassene, meest mannen (zoals de wilde rovers nu, `wildVel`). (3) **Wie wegtrekt**
+  (`T.wordtRover`, vanuit `gaanWeg` in `js/bewoners.js`): een jongere of volwassene gaat naar het kamp dat het dichtst
+  bij het plein van zijn dorp ligt, met zijn naam en zijn uiterlijk (`uit`: zijn dorp). Hij loopt het dorp uit zoals nu,
+  en staat dezelfde dag in het kamp; onderweg zie je hem niet. (4) **Thuis rond hun vuur**: elke man heeft een plek op
+  het plein om het vuur (uit de dobbelsteen van het kamp, niet voor een tent of op het paadje), en staat daar met zijn
+  gezicht naar het vuur. Een tent per twee man: komt de derde, dan staat de tweede tent er (op de plek in
+  `E.kampen[i].tenten`); valt er een, dan blijft zijn tent staan. De mannen zijn rovers zonder dorp (`e.rover`, `e.kamp`
+  het nummer, `e.lid`), en de wereld werkt ze bij, één keer per kaart (`T.werkKampenBij` in `T.wereldTik`, na het
+  zetten van de kampen), zoals het wild; hun jaar en hun nacht lopen ook waar je niet bent (`w.kampenDag`, zoals
+  `w.beestenDag`). (5) **Een gevecht**: komen je mannen in hun zicht, dan vechten ze zoals een rover nu (`js/gevecht.js`,
+  met de leiband vanaf hun vuur), met de dobbelsteen van hun kamp; wie valt, is uit zijn bende, en wie het overleeft,
+  geneest na een nacht (vraag 55). Dat de laatste die valt het kamp verslaat, is c4; tot dan komt er het jaar erop
+  gewoon weer een bij. (6) **Erbij**: `Spel.debug.kampen()` zegt per kamp wie er woont en waar hij vandaan kwam; het
+  opslaan versie 22; toetsen (`test/kampen.test.cjs`): twee man bij het begin en een erbij per jaar tot 4, wie wegtrekt
+  staat in het dichtste kamp, de tweede tent komt met de derde man, de mannen staan om het vuur als het land open is en
+  zijn van geen dorp, en wat bij een dorp gebeurt, blijft letter voor letter gelijk met en zonder een gevecht bij een
+  kamp ver weg (zoals bij het wild). Te kiezen:
+  **N** waar ze 's nachts zijn: N1 ze slapen in hun tent (binnen, niet te zien), en één houdt de wacht bij het vuur; ziet
+  hij een vijand, dan komen de anderen naar buiten (wie 's nachts komt, treft één man wakker; in c3 gaan ze juist 's
+  nachts op pad); N2 ze staan dag en nacht om het vuur (het eenvoudigst).
+  **D** de bende van een dorp nu (`D.rovers.bende`: wie wegtrok, komt na 10 dagen terug als rover, en daarna om de 20):
+  D1 die gaat in c2 al weg, want wie wegtrekt, gaat nu naar een kamp, en een man staat op één plek; tot c3 komen er dan
+  alleen nog wilde rovers van de rand, en ook de hinderlaag op de bode is wild (`js/bode.js`); D2 ze blijft tot c3, en
+  wie wegtrekt, staat zolang op twee plekken (in het kamp, en in de bende van zijn dorp, die hem ook laat aanvallen).
+  **H** als het dichtste kamp vol is: H1 4 is het meeste, ook met wie wegtrok (twee tenten, de plekken die het eiland
+  geeft): hij gaat naar het dichtste kamp met plaats, en zijn ze alle drie vol, dan trekt hij van het eiland, zoals wie
+  nu te oud is; H2 wie wegtrekt komt er altijd bij, ook boven de 4 (dan zijn er meer tentplekken nodig, en het eiland
+  verandert een beetje). Voorstel: **N1, D1, H1**. Wat ze overdag doen (zitten, eens naar hun tent lopen) en dat je
+  ziet wie er naar welk kamp ging, gaat naar `opmerkingen.md` als je het wilt.
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
