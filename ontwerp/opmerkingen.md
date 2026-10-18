@@ -938,14 +938,29 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `T.isZichtbaar`, `tekenVoorwerp`, elk 1 à 2,5 ms per beeld). Marcel mat op dezelfde pc in Firefox 11,7 ms ver
   uitgezoomd vol bos (Crowthorpe), dus wat het verschil maakt (het eiland, het dorp, de browser), is nog open. De
   metingen lopen hier sterk uiteen als er iets naast draait (een andere sessie, een spel, Firefox): vlak ver uitgezoomd
-  52 ms om 20:45 en 20 ms om 21:00. Vergelijk dus om en om in één browser, niet twee losse runs.
+  52 ms om 20:45 en 20 ms om 21:00. Vergelijk dus om en om in één browser, niet twee losse runs. **Stand 18 okt**
+  (vraag 178, A1 tot en met de regen en de mist; `snelheid.md`): in Chromium op 0,35 nu 4,4 ms per beeld met de kaart
+  erbij en 1,7 voor de processor; in Firefox nog niet gemeten.
+- **Op 50% en 75% kiest de kaart soms de buurtexel** (18 okt, vraag 178, B1 en B2): waar een pixel precies op de grens
+  van twee texels valt, beslist de kaart op een haar, en de vaste rijen rekenen hun hoeken in de shader net anders af dan
+  JavaScript. Oud tegen nieuw is daar 0,3 à 0,5% van de pixels anders (de oude weg net zo willekeurig, en per videokaart
+  anders); op het oog gelijk. E4 (afronden op hele pixels, `snelheid.md`) legt het vast.
+- **De textuurstapel vult zich over de seizoenen** (18 okt, vraag 178, B2): alle standen in de wind van alle bomen staan
+  er meteen op, ver uitgezoomd 9 bladen van 16 MB, door de vier seizoenen heen 14, en er gaat niets meer af. Bij
+  `MAX_LAGEN` (32) krijgt wat erbij komt een eigen textuur, en een boom zonder plek op de stapel gaat terug door de lijst
+  (langzamer). Na een lang spel met veel soorten huizen en figuren nakijken (`Spel.gl.stapel()`); zo nodig wat een
+  seizoen niet meer gebruikt eraf halen.
+- **Een gebouw zoekt zijn plek in de lijst zonder de bomen van de vaste rijen** (18 okt, vraag 178, B2): `tekenVolgorde`
+  zet een gebouw na wat er op zijn rijen achter staat. Eerst telden de bomen daar mee, nu niet meer (een boom die het
+  gebouw raakt, blijft wel in de lijst). Iets wat buiten zijn rijen over het gebouw valt (een figuur twee rijen ernaast,
+  over de rand van een dak), kan zo van volgorde wisselen. Niet gezien in de proeven.
 - **De kale headless-shell van Playwright laadt het spel niet meer** (17 okt, vraag 174, c): `chromium.launch()` zonder
   meer (`chrome-headless-shell`) blijft hangen in het gewone begin (het eiland en het titelscherm): geen
   `DOMContentLoaded` na 40 s, geen enkel consolebericht, en de debugger komt er niet tussen, dus het hangt in de browser,
   niet in een lus van het spel. Met `?kaart=gehucht` laadt het in 2,7 s, en de volle Chromium in het nieuwe headless
   (`channel: 'chromium'`) in 5 s, ook zonder videokaart. Zo liep de speeltest van c2 niet. De speeltest en de tekenmeting
-  met `--videokaart` nemen nu de volle; `npm run schermen`, `samenvatting`, `grootte` en de proeven starten nog de
-  shell. Wat precies hangt, is niet gezocht.
+  met `--videokaart` nemen nu de volle; `npm run schermen`, `samenvatting`, `grootte`, de proeven en de tekenmeting
+  zonder `--videokaart` (ook om en om, 18 okt) starten nog de shell. Wat precies hangt, is niet gezocht.
 - **Met heuvels is het graan het duurste wat overblijft** (17 okt, vraag 174, c): op een schuine akker gaat elke tegel
   graan in stroken van 8 pixels en stukjes van 20 (`tekenGraan`, `GRAAN_STROOK`, `GRAAN_STUK`), dichtbij bij het
   proefdorp 924 plaatjes per beeld (van de 2043; vlak 913 in totaal). Bredere stroken scheelt tekenwerk, maar de halmen
