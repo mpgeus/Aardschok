@@ -165,7 +165,7 @@ test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', 
   T.zetVoorraad(D, 'graan', 1000); // de wijn is de helft van de maaltijd
   const IN = T.WIJNGAARD_INSTELLINGEN;
   const dag = dagIn('hooimaand', 1);
-  const heer = T.GEBOUWEN.wijnboerderij.heer.wijn;
+  const heer = T.heerVraagtVoor('wijnboerderij').wijn; // zijn prijs, maal zijn buitensporigheid (js/heer.js)
   let v = T.wijnNaDePluk(D, dag);
   assert.equal(v.tot, 90, 'van 1 hooimaand tot 1 wijnmaand');
   assert.equal(v.pluk, -heer, 'een wijnboerderij zonder wijngaard plukt niets, en de heer wil toch zijn wijn');

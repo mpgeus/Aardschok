@@ -2473,6 +2473,16 @@ een markt (vraag 72, het buurdorp). De markt zelf staat sinds 6 okt op het plein
   je voorganger "is nu elders", en hij zegt dat hij op Sint-Maarten komt halen wat hem toekomt en
   dat de inner in oogstmaand komt tellen. De tijd staat stil tot je hem sluit. (Marcel koos hem op
   25 sep in plaats van een titelscherm; zie onder Open.)
+- **Bijgewerkt op 18 okt** (werklijst, E; Marcel: D2, A1 met drie maanden, B2 "Met exhorbitante eisen", en de knoppen
+  "in de stijl van een zegel"): hij komt al in het eerste jaar (de benoeming zegt het); zijn brief komt op 11 oogstmaand,
+  drie maanden ervoor, en legt uit waarom hij drie keer zoveel vraagt als gewoon (`eisMaal`: een derde zomerverblijf,
+  zijn portret te paard, de bruiloft van zijn neef), en dat een dorp dat hem weigert zijn leger krijgt; vanaf de brief
+  staat in de balk "Martinmas in 90 days". Op het plein opent een klik op hem een venster zonder schuiven: wat hij vraagt
+  en waarvoor, wat hij neemt en wat je overhoudt, en twee zegels van rode lak, **Pay** (heel: hij neemt van alles wat hij
+  vraagt zoveel als er is, en goud voor wat ontbreekt; daaronder de straffen zoals hieronder) en **Refuse** (gebroken:
+  één keer bevestigen, dan gaat hij, en als het donker wordt komt zijn leger: het eind, *Death*). De cinematics en het
+  eind van de demo na betalen komen nog (werklijst, E, stap 4 tot 6). Wat hieronder over de brief in wijnmaand en het
+  venster met schuiven staat, is van daarvoor.
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
   naar het plein, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt
   de tijd dan door, op 1× (daarvoor stond hij stil). Bij argwaan vanaf 50% doorzoeken de soldaten

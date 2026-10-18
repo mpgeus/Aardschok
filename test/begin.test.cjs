@@ -89,18 +89,16 @@ test('staat het kamp er in de nacht nog niet (geen beelden, of de kar zat vast),
   assert.ok(D.bewoners.komen.length || D.bewoners.mensen.every((p) => p.aanvoerder || p.wezen), 'de gezinnen zijn onderweg');
 });
 
-test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer vraagt niets', () => {
+test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer komt het eerste jaar al innen', () => {
   const { S, D } = leegBegin();
   const begin = D.bevolking;
   gezegd.length = 0;
-  let gril = false;
   brieven.length = 0;
-  dagen(S, 1, T.DAGEN_PER_JAAR - 1, () => {
-    if (D.grillen && D.grillen.vraag) gril = true;
-    assert.ok(!(D.heer && (D.heer.brief || D.heer.bezoek)), 'geen schatting en geen bezoek op Sint-Maarten');
-  });
-  assert.ok(!gril, 'geen grillen het eerste jaar');
-  assert.deepEqual(brieven, ['gespaard'], 'in wijnmaand schrijft hij alleen dat hij je spaart');
+  dagen(S, 1, T.DAGEN_PER_JAAR - 1);
+  // Sinds 18 okt (Marcel, D2: de demo eindigt op het eerste Sint-Maarten) spaart hij het eerste jaar niet meer.
+  assert.ok(brieven.includes('schatting'), `zijn brief komt in het eerste jaar: ${brieven.join(', ')}`);
+  // Zijn lopen naar het plein doet de tik van de beelden (T.werkHeerBij), die hier niet draait: hij is op weg.
+  assert.ok(D.heer.bezoek && T.datumVanDag(D.heer.bezoek.komtOp).sintMaarten, 'op Sint-Maarten komt hij');
   // zonder te bouwen haalt het dorp de winter niet
   assert.ok(D.bevolking < begin);
   assert.ok(!gezegd.some((t) => /no room/.test(t)), 'zolang er een gezin in het kamp woont, wil er geen nieuw gezin komen');
@@ -196,10 +194,17 @@ test('verhuizen: past een gezin niet, dan gaat het heel naar een lege woning, oo
   }
 });
 
-test('het tweede jaar vraagt hij wel', () => {
-  const { S, D } = leegBegin();
-  assert.ok(T.heerLaatMetRust(D, 0));
-  assert.ok(!T.heerLaatMetRust(D, T.DAGEN_PER_JAAR));
+test('het eerste jaar vraagt hij al; met heerVrij spaart hij je zoveel jaar', () => {
+  assert.ok(!T.heerLaatMetRust(leegBegin().D, 0), 'sinds 18 okt (D2) komt hij het eerste jaar');
+  const oud = T.BEGIN_INSTELLINGEN.heerVrij;
+  T.BEGIN_INSTELLINGEN.heerVrij = 1;
+  try {
+    const { D } = leegBegin();
+    assert.ok(T.heerLaatMetRust(D, 0));
+    assert.ok(!T.heerLaatMetRust(D, T.DAGEN_PER_JAAR));
+  } finally {
+    T.BEGIN_INSTELLINGEN.heerVrij = oud;
+  }
 });
 
 test('bewaren en laden: het kamp en de kar blijven aan elkaar vast', () => {

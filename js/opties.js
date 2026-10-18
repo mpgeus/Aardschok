@@ -1159,6 +1159,7 @@
     wachtDagen: T.t('waiting days'),
     waarde: T.t('value'),
     waardeAnders: T.t('value of anything else'),
+    eisMaal: T.t('times what he would ask'),
     kiesBinnenDagen: T.t('days to choose'),
     terug: T.t('return'),
     zielenPerMan: T.t('souls per man'),

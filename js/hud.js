@@ -66,7 +66,11 @@
     const uur = T.t('{klok}, {deel}', { klok: T.uurTekst(S.kalender.dag), deel: DAGDELEN[T.dagdeelVan(S.kalender.dag)] });
     // In de balk bovenaan (vraag 166: "zo leeg mogelijk zonder info te missen") alleen het uur, en Sint-Maarten; het
     // seizoen, het weer van vandaag (js/weer.js) en hoe lang het al droog is, zegt het briefje bij de muis (js/balk.js).
-    $('kalender-seizoen').textContent = T.hoofdletter(uur) + (d.sintMaarten ? ` · ${T.t('Martinmas: the lord collects')}` : '');
+    // Vanaf zijn brief de dagen tot hij komt (js/heer.js; Marcel, 18 okt: A1).
+    const tot = T.dagenTotDeHeer(S.dorp);
+    const heer = d.sintMaarten ? T.t('Martinmas: the lord collects')
+      : tot != null ? T.t('{n|Martinmas tomorrow|Martinmas in # days}', { n: tot }) : '';
+    $('kalender-seizoen').textContent = T.hoofdletter(uur) + (heer ? ` · ${heer}` : '');
     T.ui.werkBriefKnopBij(S);
     T.ui.werkBalkBij(S); // de lat van de snelheden (js/balk.js)
   };
@@ -119,7 +123,7 @@
     return {
       naam,
       uitleg: regels(vet([kostenTekst(g.kosten), duur(S.dorp, id, g)].filter(Boolean).join(' · ')), g.beschrijving,
-        g.heer ? `<i>${T.t('At Martinmas the lord wants {heer} for it.', { heer: kostenTekst(g.heer) })}</i>` : '',
+        g.heer ? `<i>${T.t('At Martinmas the lord wants {heer} for it.', { heer: kostenTekst(T.heerVraagtVoor(id)) })}</i>` : '',
         T.kanDraaien(S.dorp, id) ? T.t('Press R to turn it while you place it.') : ''),
     };
   }
@@ -374,31 +378,37 @@
   const opsomming = (delen) => (delen.length ? T.opsomming(delen) : T.t('nothing'));
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => T.hoeveel(eis.per[wat], wat)));
 
-  // Wat de aanvoerder de heer geeft, per goed, zoals het in het venster staat. Het begint op alles wat
-  // hij vraagt, voor zover je het hebt; wie minder wil geven, schuift naar beneden.
-  let geef = null;
+  // Alleen betalen of weigeren (Marcel, 18 okt, B2): wat hij neemt als je betaalt, is T.alWatHijVraagt (js/heer.js),
+  // dezelfde vraag als de knop. Weigeren vraagt één keer of je het zeker weet: daarna is er geen weg terug.
+  let weigerZeker = false;
 
-  function heerRijen(S, eis) {
+  // Per goed: wat hij vraagt en waarvoor, wat je hebt, en wat hij neemt.
+  function heerRijen(S, eis, g) {
     return eis.volgorde.map((wat) => {
-      // Goud mag meer zijn dan hij vraagt: dat neemt hij in de plaats van wat er verder ontbreekt.
-      const max = wat === 'goud' ? hebNu(S, 'goud') : Math.min(eis.per[wat], hebNu(S, wat));
       const waarom = eis.regels.filter((r) => r.wat === wat).map((r) => T.t('{n} for {waarom}', { n: r.aantal, waarom: r.waarom })).join(' · ');
-      const nu = Math.min(geef[wat] || 0, max);
       return (
         `<div class="heer-rij">` +
         `<span class="heer-naam">${T.hoofdletter(T.waarNaam(wat))} <small>${T.t('he asks {n} · you have {heb}', { n: eis.per[wat], heb: hebNu(S, wat) })}</small>` +
         `<small class="heer-waarom">${waarom}</small></span>` +
-        `<input type="range" min="0" max="${max}" step="1" value="${nu}" data-wat="${wat}"${max ? '' : ' disabled'}>` +
-        `<span class="heer-geef" data-geef="${wat}">${nu}</span>` +
+        `<span class="heer-geef" data-geef="${wat}">${g.neemt[wat] || 0}</span>` +
         `</div>`
       );
     }).join('');
   }
 
-  // Het deel dat met de schuiven meeverandert: hoeveel je geeft, wat dat kost, en of je graan het
-  // haalt tot de oogst. Dezelfde vraag als de knop (T.gevolgVanBetaling).
-  function heerSamenvatting(S, eis) {
-    const g = T.gevolgVanBetaling(S.dorp, geef, eis);
+  // De twee keuzes als zegels van rode lak, zoals onder zijn brieven (Marcel, 18 okt: "mooie grote knoppen", "in de stijl
+  // van een zegel, kaarsvet", "middeleeuwen enzo, koning heer"): betalen is zijn zegel heel, weigeren is het gebroken.
+  // Het wapen in de lak is een kroon; de gebroken helften zijn hetzelfde zegel, langs een barst afgesneden (stijl.css).
+  const KROON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L4.5 8 L8.5 12.5 L12 5 L15.5 12.5 L19.5 8 L21 18 Z M3.5 19.5 H20.5 V21 H3.5 Z"/></svg>';
+  function zegel(actie, tekst, { gebroken = false, uit = false, reden = '' } = {}) {
+    const lak = `<span class="zegel-lak">${KROON}</span>`;
+    const was = gebroken ? `<span class="zegel-helft links">${lak}</span><span class="zegel-helft rechts">${lak}</span>` : lak;
+    return `<button class="zegel${gebroken ? ' gebroken' : ''}" data-actie="${actie}"${uit ? ` disabled title="${reden}"` : ''}>` +
+      `<span class="zegel-was">${was}</span><span class="zegel-tekst">${tekst}</span></button>`;
+  }
+
+  // Wat betalen kost: het deel dat hij krijgt, de straf als het te weinig is, en of je graan het haalt tot de oogst.
+  function heerSamenvatting(S, eis, g) {
     const v = T.heerVooruitzicht(S.dorp, g);
     const pct = Math.floor(g.deel * 100 + 1e-9);
     const soort = g.ambtKwijt || g.schandpaal ? 'zwaar' : g.boete ? 'boete' : 'goed';
@@ -429,11 +439,16 @@
     const eet = [T.t('Until the harvest the village eats about {n}.', { n: Math.round(v.eten) })];
     if (melk > 0) eet.push(T.t('The cows give about {n} in milk besides.', { n: melk }));
     if (v.soldaten) eet.push(T.t('His soldiers eat {n}.', { n: Math.round(v.soldaten) }));
+    const knoppen = weigerZeker
+      ? `<p class="heer-deel zwaar">${T.t('Refuse him? There is no going back: when it gets dark, his army comes.')}</p>` +
+        `<div class="heer-knoppen heer-zegels"><button class="heer-terug" data-actie="terug">${T.t('No')}</button>` +
+        zegel('weigerZeker', T.t('Yes, break his seal'), { gebroken: true }) + `</div>`
+      : `<div class="heer-knoppen heer-zegels">${zegel('betaal', T.t('Pay'), { uit: !g.kan, reden: g.reden })}` +
+        `${zegel('weiger', T.t('Refuse'), { gebroken: true })}</div>`;
     return (
-      `<p class="heer-deel ${soort}">${T.t('You give him {pct}% of what he asks.', { pct })} ${g.tekst}${goudExtra}</p>` +
+      `<p class="heer-deel ${soort}">${T.t('He takes {pct}% of what he asks.', { pct })} ${g.tekst}${goudExtra}</p>` +
       `<p class="heer-vooruit">${T.t('After that you have {heb}.', { heb: T.opsomming(heb) })} ${eet.join(' ')} ${uitkomst}</p>` +
-      `<div class="heer-knoppen"><button data-actie="alles">${T.t('Everything he asks')}</button>` +
-      `<button class="heer-geef-knop" data-actie="betaal"${g.kan ? '' : ` disabled title="${g.reden}"`}>${T.t('Give it to him')}</button></div>`
+      knoppen
     );
   }
 
@@ -461,16 +476,13 @@
       box.innerHTML = schandpaalInhoud(S);
     } else {
       const eis = T.eisVanDeHeer(S.dorp);
-      if (!geef) {
-        geef = {};
-        for (const wat of eis.volgorde) geef[wat] = Math.min(eis.per[wat], hebNu(S, wat));
-      }
+      const g = T.gevolgVanBetaling(S.dorp, T.alWatHijVraagt(S.dorp), eis);
       box.innerHTML =
         `<div class="venster-kop"><span class="venster-titel">${T.t('Martinmas')}</span><span class="venster-wanneer">${T.t('the lord is counting')}</span>` +
         `<button class="venster-sluit" data-actie="sluit" title="${T.t('Not yet (Esc)')}">✕</button></div>` +
-        `<p class="venster-staat">${T.t('He asks for {eis}. Slide what you give him below. He always takes gold, also in place of something else.', { eis: eisInTaal(eis) })}</p>` +
-        heerRijen(S, eis) +
-        `<div class="heer-samen">${heerSamenvatting(S, eis)}</div>` +
+        `<p class="venster-staat">${T.t('He asks for {eis}. Pay, and he takes whatever there is of it, and gold in place of what is missing. Or refuse him.', { eis: eisInTaal(eis) })}</p>` +
+        heerRijen(S, eis, g) +
+        `<div class="heer-samen">${heerSamenvatting(S, eis, g)}</div>` +
         `<p class="venster-voet">${T.t('While you stand before him, time stands still. {esc}: not yet (he waits).', { esc: ESC })}</p>`;
     }
     box.classList.remove('verborgen');
@@ -480,7 +492,7 @@
     const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (!T.heerWacht(S.dorp) && !(b && b.schandpaal)) return;
     if (!T.ui.openVenster(S, 'heer')) return;
-    geef = null;
+    weigerZeker = false;
     toonHeer(S);
   };
 
@@ -490,20 +502,11 @@
     const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (b && b.schandpaal) return;
     T.ui.sluitVenster(S, 'heer');
-    geef = null;
+    weigerZeker = false;
     T.ui.werkBriefKnopBij(S);
   };
 
   T.ui.meldVenster('heer', { el: 'heer', open: (S) => T.ui.openHeer(S), sluit: (S) => T.ui.sluitHeer(S) });
-
-  $('heer').addEventListener('input', (ev) => {
-    const r = ev.target.closest('input[type="range"]');
-    const S = T.S;
-    if (!r || !S || !geef) return;
-    geef[r.dataset.wat] = Number(r.value);
-    $('heer').querySelector(`[data-geef="${r.dataset.wat}"]`).textContent = r.value;
-    $('heer').querySelector('.heer-samen').innerHTML = heerSamenvatting(S, T.eisVanDeHeer(S.dorp));
-  });
 
   $('heer').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -512,11 +515,15 @@
     b.blur();
     if (b.dataset.actie === 'sluit') {
       T.ui.sluitHeer(S);
-    } else if (b.dataset.actie === 'alles') {
-      geef = null;
+    } else if (b.dataset.actie === 'weiger' || b.dataset.actie === 'terug') {
+      weigerZeker = b.dataset.actie === 'weiger';
       toonHeer(S);
+    } else if (b.dataset.actie === 'weigerZeker') {
+      const w = T.weigerHeer(S.dorp);
+      if (!w.kan) T.ui.bericht(w.reden);
+      T.ui.sluitHeer(S);
     } else if (b.dataset.actie === 'betaal') {
-      const g = T.betaalHeer(S.dorp, geef);
+      const g = T.betaalHeer(S.dorp, T.alWatHijVraagt(S.dorp));
       if (!g.kan) {
         T.ui.bericht(g.reden);
         return;
@@ -538,11 +545,24 @@
     $('heer').classList.add('verborgen');
     if (T.ui.briefOpen()) $('brief').classList.add('verborgen');
     const jaren = ((S.dorp.heer && S.dorp.heer.jaren) || [])
-      .map((j) => (j.straf
-        ? T.t('{jaar}: {pct}%, {straf}', { jaar: j.jaar, pct: Math.floor(j.deel * 100 + 1e-9), straf: j.straf })
-        : T.t('{jaar}: {pct}%', { jaar: j.jaar, pct: Math.floor(j.deel * 100 + 1e-9) })))
+      .map((j) => (j.geweigerd ? T.t('{jaar}: refused', { jaar: j.jaar })
+        : j.straf
+          ? T.t('{jaar}: {pct}%, {straf}', { jaar: j.jaar, pct: Math.floor(j.deel * 100 + 1e-9), straf: j.straf })
+          : T.t('{jaar}: {pct}%', { jaar: j.jaar, pct: Math.floor(j.deel * 100 + 1e-9) })))
       .join(' · ');
     const heer = jaren ? `<p class="einde-jaren">${T.t('What the lord received: {jaren}', { jaren })}</p>` : '';
+    // Je weigerde hem, en zijn leger kwam (js/heer.js, T.weigerHeer; Marcel, 18 okt: "met death als gevolg"). De
+    // cinematic komt ervoor (werklijst, E, stap 4).
+    if (D.einde && D.einde.reden === 'leger') {
+      T.ui.toonOverlay(
+        T.t('Death'),
+        `<p>${T.t('You refused the lord what he asked. That night his army came up the road, with torches.')}</p>` +
+          `<p>${T.t('By morning there was nothing left of {dorp}.', { dorp: veiligeNaam(D) })}</p>` + heer,
+        T.t('To the title screen'),
+        () => T.naarTitelscherm(),
+      );
+      return;
+    }
     // Minder dan tien mensen over (js/einde.js; werklijst vraag 101, d), of je ambt kwijt (js/heer.js).
     if (D.einde && D.einde.reden === 'leeg') {
       T.ui.toonOverlay(

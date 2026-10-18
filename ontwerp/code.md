@@ -284,9 +284,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; in de lente ook zaaigraan, dat de boeren nazaaien tot 1 bloeimaand, en in een dorp laken (vraag 99), `T.zaaiNa` in `js/akkers.js`, waar
   ook staat hoeveel zaaigraan ze van de oogst tot het zaaien achterhouden, `T.zaaigraanApart`: het dorp eet het pas bij nood; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
-  (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat het dorp op dat moment heeft (het graan in de
-  schuren, de mensen, de kist zoals hij hem telde toen hij kwam, en elk gebouw) via `T.eisVanDeHeer` en
-  `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
+  (Sint-Maarten: zijn brief op 11 oogstmaand, drie maanden ervoor, met de dagen tot hij komt in de balk
+  (`T.dagenTotDeHeer`, js/hud.js; sinds 18 okt, ook in het eerste jaar: `heerVrij` 0 in js/begin.js), wat hij vraagt naar
+  wat het dorp op dat moment heeft (het graan in de schuren, de mensen, de kist zoals hij hem telde toen hij kwam, en elk
+  gebouw) via `T.eisVanDeHeer`, alles maal `eisMaal` (buitensporig, behalve de schuld; per gebouw `T.heerVraagtVoor`),
+  `T.gevolgVanBetaling` voor venster en knop; betalen is alles wat hij vraagt, zoveel als er is, en goud voor de rest
+  (`T.alWatHijVraagt`, ook als hij het zelf neemt), en weigeren (`T.weigerHeer`) laat hem gaan en zijn leger komen als het
+  donker wordt (`h.leger`, in `T.werkHeerBij`; het eind, `D.einde.reden` 'leger'). Het venster heeft sinds 18 okt geen
+  schuiven meer, alleen twee zegels van lak (`zegel` in js/hud.js; Marcel, B2: "mooie grote knoppen", "in de stijl van een
+  zegel"): heel is betalen, gebroken is weigeren, en weigeren vraagt één keer bevestiging; de straffen tot je ambt
   kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
   niet meer op een rapport en kent hij geen argwaan, toeslag of rond kijken meer;
   de inner zelf ging er op 11 okt ook uit; de schandpaal kost het dorp `schandpaalKost`, en er kan alleen een boer met
@@ -316,7 +322,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eigen beeld), `js/hud.js` (de kalender, het bouwmenu onder
   `B`, sinds vraag 179 een raster van plaatjes boven de knop Build, bij "Bouwen en groeien", het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
-  spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
+  spel begint, de schatting op 11 oogstmaand (tot 18 okt 1 wijnmaand), de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
   soort in `BRIEVEN`, getoond met
   `T.ui.toonBrief(D, soort)`, en alleen die aan jouw dorp komt in beeld; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint
   met `T.beginOpKaart` (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief), op het land van de

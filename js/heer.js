@@ -5,7 +5,7 @@
 //     (T.eisVanDeHeer), wat iets voor hem waard is (T.waardeVoorDeHeer), wat een betaling tot gevolg
 //     heeft (T.gevolgVanBetaling: het venster en de knop stellen dezelfde vraag, CLAUDE.md), het
 //     betalen zelf (T.betaalHeer), de schandpaal (T.zetAanDeSchandpaal), en de dagen
-//     (T.tikHeerDag): de brief op 1 wijnmaand, zijn komst op Sint-Maarten, de soldaten die in de
+//     (T.tikHeerDag): de brief op 11 oogstmaand, zijn komst op Sint-Maarten, de soldaten die in de
 //     lente weer gaan.
 //   - zijn komen en gaan als poppetje, met twee soldaten (T.werkHeerBij), net als de marskramer.
 // De vensters (het betalen, de schandpaal en het einde) staan in js/hud.js, zijn brieven in js/brieven.js.
@@ -18,9 +18,10 @@
   // Alle getallen in één blok, om samen met Marcel bij te stellen als hij speelt (net als
   // T.HANDEL_INSTELLINGEN). Een eerste gok, behalve waar Marcel het koos (spel.md).
   T.HEER_INSTELLINGEN = {
-    // Zijn brief komt op 1 wijnmaand, vóór het laatste bezoek van de marskramer (5 wijnmaand):
-    // dan kun je nog verkopen voor zijn goud. Zelf komt hij op Sint-Maarten (T.SINT_MAARTEN).
-    brief: { maand: 'wijnmaand', dag: 1 },
+    // Zijn brief komt drie maanden vóór Sint-Maarten (Marcel, 18 okt: "iets meer speeltijd dan een maand, misschien 3";
+    // tot dan 1 wijnmaand), vóór het laatste bezoek van de marskramer (5 wijnmaand): dan kun je nog verkopen voor zijn
+    // goud. Vanaf de brief telt de balk de dagen af (T.dagenTotDeHeer). Zelf komt hij op Sint-Maarten (T.SINT_MAARTEN).
+    brief: { maand: 'oogstmaand', dag: 11 },
     // Wat hij ziet, en wat hij daarvoor vraagt: per akkertegel de pacht in graan (ook als hij braak
     // lag of weide was: hij telt de akkers, niet wat erop groeide), per mens hoofdgeld in goud, en
     // per gebouw wat bij zijn soort staat (T.GEBOUWEN[soort].heer, js/gebouwen.js). Hij rondt naar
@@ -85,6 +86,9 @@
     // gemiddeld voor betaalt (T.waardeVoorDeHeer); hier alleen wat hij niet koopt.
     waarde: { goud: 1, steen: 0.25 },
     waardeAnders: 0.2,
+    // Zijn eisen zijn buitensporig (Marcel, 18 okt, B2: "Met exhorbitante eisen"): alles hierboven (het deel van het graan
+    // en van de kist, het hoofdgeld, de prijs per gebouw) maal dit; de schuld van vorig jaar niet, die was het al.
+    eisMaal: 3,
   };
 
   const IN = () => T.HEER_INSTELLINGEN;
@@ -104,6 +108,7 @@
       wrok: [], // [{ wie, dag, kost, staat }]: wie jij aan de schandpaal zette
       jaren: [], // [{ jaar, deel, straf }]: hoe elk Sint-Maarten afliep
       paal: null, // { x, y }: waar de schandpaal staat, vanaf de eerste keer (T.zetSchandpaalNeer)
+      leger: null, // { komt }: je weigerde hem, en op die dag (met het uur erin) komt zijn leger (T.weigerHeer)
     };
   };
 
@@ -142,8 +147,9 @@
 
   T.eisVanDeHeer = function (D) {
     const regels = [];
-    const tel = (wat, aantal, waarom) => {
-      const n = Math.ceil(aantal - 1e-9);
+    // Alles wat hij ziet, maal zijn buitensporigheid (eisMaal); de schuld van vorig jaar telt hij zoals ze was.
+    const tel = (wat, aantal, waarom, maal = IN().eisMaal) => {
+      const n = Math.ceil(aantal * maal - 1e-9);
       if (n > 0) regels.push({ wat, aantal: n, waarom });
     };
     // Hij rekent op wat het dorp heeft: elke akker, elke ziel, het goud in de kist en elk gebouw.
@@ -173,7 +179,7 @@
       for (const wat in prijs) tel(wat, prijs[wat] * n, n === 1 ? T.eenNaam(T.GEBOUWEN[id].naam) : T.t('{n} × {gebouw}', { n, gebouw: T.GEBOUWEN[id].naam }));
     }
     const h = D.heer;
-    if (h && h.schuld > 0) tel('goud', h.schuld, T.t('what you still owed from last year, with the fine'));
+    if (h && h.schuld > 0) tel('goud', h.schuld, T.t('what you still owed from last year, with the fine'), 1);
     // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
     const wijze = IN().betalenIn;
     if (wijze === 'graanEnGoud' || wijze === 'alleenGoud') {
@@ -190,6 +196,16 @@
     const volgorde = ['graan', 'goud'].filter((w) => per[w]).concat(Object.keys(per).filter((w) => w !== 'graan' && w !== 'goud'));
     regels.sort((a, b) => volgorde.indexOf(a.wat) - volgorde.indexOf(b.wat));
     return { per, regels, volgorde };
+  };
+
+  // Wat hij op Sint-Maarten voor één gebouw van deze soort vraagt (T.GEBOUWEN[soort].heer, maal eisMaal), of null: voor het
+  // bouwmenu (js/hud.js) en de wijn die hij van een wijnboerderij neemt (js/wijngaard.js).
+  T.heerVraagtVoor = function (soort) {
+    const prijs = T.GEBOUWEN[soort] && T.GEBOUWEN[soort].heer;
+    if (!prijs) return null;
+    const uit = {};
+    for (const wat in prijs) uit[wat] = Math.ceil(prijs[wat] * IN().eisMaal - 1e-9);
+    return uit;
   };
 
   // Wat één stuk van iets voor hem waard is, in goud. Goud is goud; wat de marskramer koopt, is
@@ -386,13 +402,18 @@
     return g;
   };
 
-  // Komt de aanvoerder niet, dan neemt de heer het zelf: van alles wat hij vraagt zoveel als er is, en
-  // wat er dan nog ontbreekt in goud. Moet er iemand aan de schandpaal, dan wijst hij zelf aan:
-  // wie het dorp het meest raakt. "Het dorp denkt dat jij het zo wilde."
+  // Wat hij neemt als je betaalt (Marcel, 18 okt, B2: alleen *Pay* of *Refuse*): van alles wat hij vraagt zoveel als
+  // er is, en wat er dan nog ontbreekt in goud, zolang er goud is. Het venster (js/hud.js) en de knop lezen allebei dit.
+  T.alWatHijVraagt = function (D) {
+    const eis = T.eisVanDeHeer(D);
+    return { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
+  };
+
+  // Komt de aanvoerder niet, dan neemt de heer het zelf, zoals bij betalen (T.alWatHijVraagt). Moet er iemand aan de
+  // schandpaal, dan wijst hij zelf aan: wie het dorp het meest raakt. "Het dorp denkt dat jij het zo wilde."
   T.heerNeemtZelf = function (D) {
     if (!T.heerWacht(D)) return { kan: false, reden: T.t('The lord is not here.') };
-    const eis = T.eisVanDeHeer(D);
-    const geef = { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
+    const geef = T.alWatHijVraagt(D);
     T.zeg(D, T.t('You did not come. The lord helps himself to whatever he wants.'), 'gevaar');
     T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.nietGekomen, T.t('you did not come to the square'));
     const g = T.betaalHeer(D, geef);
@@ -409,6 +430,35 @@
     }
     return g;
   };
+
+  // Je weigert hem (Marcel, 18 okt, B2 en D2: "je kunt dan weigeren, maar dan eindigt het met een korte cinematic waarin
+  // je het leger van de heer ziet aankomen met death als gevolg"). Hij draait zich om en gaat, en als het donker wordt,
+  // komt zijn leger (`h.leger`, T.werkHeerBij): dat is het eind (D.einde, reden 'leger'). Er wordt niet gevochten; tot het
+  // gevecht er is (werklijst, F), ook in het volle spel. Geeft { kan } of { kan: false, reden }.
+  T.weigerHeer = function (D) {
+    if (!T.heerWacht(D)) return { kan: false, reden: T.t('The lord is not here.') };
+    const h = D.heer;
+    const dag = D.kalender.dag;
+    const d = T.dagindeling(dag);
+    const uur = T.uurVanDag(dag);
+    // Vanavond bij het slapen, of meteen als het al donker is.
+    h.leger = { komt: Math.floor(dag) + (uur < d.slapen && uur >= d.opstaan ? d.slapen / 24 : uur / 24) };
+    h.brief = null;
+    h.bezoek.betaald = { geweigerd: true };
+    h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: 0, straf: null, geweigerd: true });
+    T.zeg(D, T.t('"Refuse?" The lord looks at you as if you had spoken in a foreign tongue. Then he turns and leaves without a word.'), 'gevaar');
+    T.heerVertrekt(D);
+    return { kan: true };
+  };
+
+  // Zijn leger is er: het eind (in jouw dorp het scherm over alles heen, js/hud.js).
+  function legerKomt(D) {
+    if (D.einde) return;
+    D.einde = { reden: 'leger', dag: dagNu(D) };
+    T.zeg(D, T.t('Torches come up the road in the dark: the army of the lord.'), 'gevaar');
+    if (!D.ander) T.houdTijdStil(D, 'einde');
+    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+  }
 
   // ---------------------------------------------------------------------------------------------
   // De straffen: soldaten, de schandpaal, en je ambt kwijt
@@ -682,6 +732,15 @@
     }
   }
 
+  // Hoeveel dagen het nog is tot hij komt, vanaf zijn brief (Marcel, 18 okt: A1, de klok in de balk, js/hud.js); null
+  // als er geen brief is, of als hij er al is.
+  T.dagenTotDeHeer = function (D) {
+    const h = D && D.heer;
+    if (!h || !h.brief || h.bezoek || D.einde) return null;
+    const dag = dagNu(D);
+    return volgendeKeer(dag, { maand: T.MAANDEN[T.SINT_MAARTEN.maand].naam, dag: T.SINT_MAARTEN.dag }) - dag;
+  };
+
   // Wat de soldaten vandaag eten, in graan: niets als ze er niet (meer) zijn. Ook voor wat het dorp
   // vooruitziet (js/behoeften.js, T.etenVoorDeWinter).
   T.soldatenEten = function (D, dag) {
@@ -694,6 +753,8 @@
   T.tikHeerDag = function (D, dag) {
     if (!magKomen(D) || D.einde) return;
     const h = D.heer || (D.heer = T.nieuweHeer());
+    // Zonder de tik van de beelden (een toets) komt zijn leger de dag erna (T.werkHeerBij doet het als het donker wordt).
+    if (h.leger && dag >= h.leger.komt) return legerKomt(D);
     const d = T.datumVanDag(dag);
     // De soldaten eten mee zolang ze er zijn, elk voor drie; in de lente gaan ze.
     if (h.soldaten && !h.soldaten.weg) {
@@ -751,6 +812,8 @@
 
   T.werkHeerBij = function (D) {
     const h = D.heer;
+    // Je weigerde hem: als het donker wordt, is zijn leger er (T.weigerHeer).
+    if (h && h.leger && !D.einde && D.kalender.dag >= h.leger.komt) legerKomt(D);
     if (!h || !magKomen(D) || !kanLopen(D)) return;
     const w = D.wereld;
     const uitgang = T.wegInEnUit(D);

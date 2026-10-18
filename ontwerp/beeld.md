@@ -1441,6 +1441,43 @@ in pollen, niet als vlak.
 **In het spel** (Marcel: "Ja, ziet er goed uit zo"): de maker legt ze op het eiland (`kaarten.md`, "Het eiland"); waar
 niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die bewegen, komen later.
 
+## De heer rijdt weg, of zijn leger komt (18 okt 2026, werklijst E, stap 4: C2)
+
+Voor de twee cinematics aan het eind van de demo (Marcel, 18 okt: "een korte cinematic waarin je het leger van de heer
+ziet aankomen met death als gevolg", en bij betalen "de heer en zijn mannen met karren goederen en goud ziet wegrijden";
+C2: met nieuwe tekeningen). **In woorden, wacht op Marcel**; daarna één proefplaat. Alles in de kleuren van zijn huis,
+rood en geel, en in de stijl van de heer en zijn soldaten (`heer.cjs`, hierboven): hij is de grap, zijn mannen niet.
+
+- **De heer te paard.** Het paard is te groot voor hem en te mooi: een appelgrijze schimmel, hoog en slank (een nieuw dier,
+  op de maat van de os, met lange benen, een gebogen hals, manen en een staart die met de wind meegaat), onder een kleed
+  tot op de knieën in rood en geel, in vlakken, met franje. De heer zit er rond en klein op, zijn korte beentjes steken
+  opzij zonder de stijgbeugels te halen, en zijn hoed met veren wipt bij elke pas. Stappen in acht richtingen, een lus van
+  acht beelden, zoals de os; en staan. Het paard loopt in de pas van een man.
+- **De wagens van de heer.** De ossenkar (`ossenkar.cjs`) met een os ervoor, maar met de bak in zijn kleuren: de planken
+  rood geverfd met een gele bies, en voorop een stok met een geel-rood vaantje met zwaluwstaart, dat met de wind wappert. Een
+  nieuwe lading, **buit**: zakken graan tot boven de rand, een ton, een bos stammen, en bovenop een kist met ijzeren
+  banden en het deksel open, waarin het goud blinkt (twee beelden: het blinken verspringt). Twee wagens, en een soldaat
+  loopt naast elke os.
+- **Het vaandel.** Een soldaat (de soldaat van de heer, 70 px) met een vaandel aan een lange stok in plaats van zijn
+  hellebaard: een rechthoekig doek, half rood, half geel, met zijn wapen, **zijn eigen hoed** in goud, met de veren. Het
+  doek waait met de ene wind (hierboven, "Eén wind door alles heen"), drie standen.
+- **De fakkels.** De soldaat met in zijn andere hand een fakkel: een stok met een kop van pek en een vlam die flakkert
+  (drie beelden), als laag over het figuur, zoals de lantaarn van de groepsleider. Het licht op de grond doet het spel
+  (de lichtkaart, `js/zien.js`), zoals bij de lantaarn, maar warmer en wat groter.
+- **Het leger** zijn de soldaten zoals ze er zijn, zo'n twintig, in een rij van drie breed over de weg: voorop twee
+  vaandels, en om de paar man een fakkel. Geen nieuwe figuur.
+
+**De zegels bij de heer** (18 okt; Marcel: "dat moeten mooie grote knoppen worden", "misschien in de stijl van een zegel,
+kaarsvet", "middeleeuwen enzo, koning heer"): de twee keuzes op Sint-Maarten zijn zegels van rode lak, zoals onder zijn
+brieven. **Pay** is zijn zegel heel, **Refuse** hetzelfde zegel in tweeën gebroken: je breekt zijn zegel (de naam van
+het spel). Een ronde klodder die net niet rond is, met een uitgelopen rand, een ingedrukte ring van het stempel en een
+kroon in reliëf; de naam eronder in de letter van de koppen. Nu een proef in CSS (`stijl.css`, bij `#heer`, en `zegel` in
+`js/hud.js`), geen pixel art: goed zo, of later uit code getekend zoals de rest.
+
+**De proefplaat** (als Marcel dit goed vindt): de heer te paard en een wagen met buit, van twee kanten, overdag; en een
+stuk van het leger, 's nachts, met de fakkels en een vaandel. Te kiezen, als iets anders moet: het wapen (zijn hoed, of
+iets anders), en het paard (de schimmel, of een donker paard).
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

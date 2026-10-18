@@ -25,7 +25,7 @@
   const datumZonderJaar = (d) => `${d.dag} ${maandToon(d.maand)}`;
 
   // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
-  // van zijn wildernis, met wat er op de kar ligt, en vraagt het eerste jaar niets (T.heerLaatMetRust).
+  // van zijn wildernis, met wat er op de kar ligt, en zegt wanneer hij komt halen wat hem toekomt (T.heerLaatMetRust).
   function benoemingInDeWildernis(S) {
     const I = T.BEGIN_INSTELLINGEN;
     return {
@@ -34,7 +34,10 @@
       tekst:
         `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
         `<p>${T.t('The cart carries what We could spare: some logs, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
-        `<p>${T.t('This year We ask nothing of you. We are generous. Next year, at Martinmas, We shall come in person to collect what is Ours.')}</p>` +
+        // Spaart hij je het eerste jaar (T.BEGIN_INSTELLINGEN.heerVrij), dan zegt hij het; anders komt hij dit jaar al.
+        `<p>${I.heerVrij > 0
+          ? T.t('This year We ask nothing of you. We are generous. Next year, at Martinmas, We shall come in person to collect what is Ours.')
+          : T.t('At Martinmas We shall come in person to collect what is Ours. In good time We shall write what that is. We are generous: you have until then.')}</p>` +
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     };
@@ -79,7 +82,7 @@
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
 
-    // In wijnmaand van het eerste jaar van het lege begin (T.heerLaatMetRust, js/begin.js): geen schatting, hij spaart je.
+    // In de maand van zijn brief, zolang hij het lege begin spaart (T.heerLaatMetRust, js/begin.js): geen schatting.
     gespaard: (S) => ({
       wanneer: vandaag(S),
       aan: T.t('To Our commander,'),
@@ -89,7 +92,7 @@
       knoppen: [{ actie: 'sluit', tekst: T.t('Thank you, my lord'), hoofd: true }],
     }),
 
-    // De schatting op 1 wijnmaand (js/heer.js, T.stuurBrief): wat hij op Sint-Maarten komt halen. Hij wacht tot je
+    // De schatting op 11 oogstmaand (js/heer.js, T.stuurBrief): wat hij op Sint-Maarten komt halen. Hij wacht tot je
     // betaald hebt; de knop Brief opent hem weer.
     schatting: (S) => {
       const brief = S.dorp.heer && S.dorp.heer.brief;
@@ -103,6 +106,11 @@
         tekst:
           `<p>${T.t('It has come to Our ears that you are doing well. That pleases Us greatly, for We too like to do well. At Martinmas We shall come in person to collect what is Ours. From what We see now, that is:')}</p>` +
           `<ul class="brief-lijst">${regels || `<li>${T.t('nothing. That cannot be right.')}</li>`}</ul>${samen}` +
+          // Buitensporig (js/heer.js, eisMaal; Marcel, 18 okt, B2), en weigeren is zijn leger (D2): hij zegt het allebei.
+          (T.HEER_INSTELLINGEN.eisMaal > 1
+            ? `<p>${T.t('Our costs have risen this year: a third summer residence, Our portrait in oils (life size, on horseback), and the wedding of Our nephew. You will understand that We ask somewhat more than is customary. {maal} times as much, to be precise.', { maal: T.hoofdletter(T.telwoord(T.HEER_INSTELLINGEN.eisMaal)) })}</p>`
+            : '') +
+          `<p>${T.t('We need hardly add that a village which refuses Us, We do not visit a second time. Our army does.')}</p>` +
           `<p>${T.t('Whatever is added before Martinmas, We shall see too. Whoever gives Us short measure will know it, for We count most carefully. Nearly always.')}</p>`,
         staat: `<p class="venster-staat">${T.t('You now have {nu}. Whatever grain you give him, you cannot sow in spring.', { nu })}${marskramerKomtNog(S, 'wijnmaand')}</p>`,
         voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it; the letter on the table opens it again.')}</p>`,
@@ -251,7 +259,9 @@
     const bezoek = T.HANDEL_INSTELLINGEN && T.HANDEL_INSTELLINGEN.bezoeken.find((b) => b.maand === maand);
     if (!bezoek || !S.kalender) return '';
     const nu = T.datumVanDag(S.kalender.dag);
-    const komtNog = T.MAANDEN[nu.maand].naam === bezoek.maand && nu.dagVanMaand < bezoek.dag;
+    // Nog dit jaar: later in de maand, of in een latere maand (zijn brief komt sinds 18 okt in oogstmaand).
+    const m = T.MAANDEN.findIndex((x) => x.naam === bezoek.maand);
+    const komtNog = m > nu.maand || (m === nu.maand && nu.dagVanMaand < bezoek.dag);
     return komtNog ? ` ${T.t('The merchant comes on {datum}: you can still sell to him for gold then.', { datum: datumZonderJaar(bezoek) })}` : '';
   }
 

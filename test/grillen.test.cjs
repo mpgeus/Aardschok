@@ -52,7 +52,7 @@ test('elke gril heeft een titel, een brief, en antwoorden die de heer tegen het 
   }
 });
 
-test('op de twaalfde van de maand komt zijn brief, niet in de eerste maand, niet in wijnmaand of slachtmaand', () => {
+test('op de twaalfde van de maand komt zijn brief, niet in de eerste maand, niet in de maand van de schatting of van Sint-Maarten', () => {
   const S = gehucht();
   const D = S.dorp;
   tik(S, dagVan('lentemaand', 12));
@@ -68,7 +68,7 @@ test('op de twaalfde van de maand komt zijn brief, niet in de eerste maand, niet
   const S2 = gehucht();
   tik(S2, dagVan('grasmaand', IN().dag));
   assert.equal(T.grilNu(S2.dorp).id, g.id);
-  // Niet in wijnmaand en slachtmaand.
+  // Niet in de maand van de schatting (oogstmaand) en van Sint-Maarten (slachtmaand).
   for (const maand of IN().nietIn) {
     const S3 = gehucht();
     tik(S3, dagVan(maand, IN().dag));
@@ -142,7 +142,7 @@ test('dezelfde gril komt niet binnen een pauze terug, en niet als er al een brie
     }
   }
   assert.equal(new Set(gezien).size, gezien.length, `geen herhaling: ${gezien.join(', ')}`);
-  assert.equal(gezien.length, 9, 'elke maand behalve de eerste, wijnmaand en slachtmaand');
+  assert.equal(gezien.length, 9, 'elke maand behalve de eerste, oogstmaand en slachtmaand');
   const S2 = gehucht();
   S2.dorp.heer = T.nieuweHeer();
   S2.dorp.heer.brief = { dag: 0, eis: {} };

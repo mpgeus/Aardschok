@@ -16,8 +16,9 @@
   T.GRILLEN_INSTELLINGEN = {
     // Op deze dag van de maand komt zijn brief.
     dag: 12,
-    // Niet in de maanden waarin hij al schrijft of zelf komt: de schatting (wijnmaand) en Sint-Maarten (slachtmaand).
-    nietIn: ['wijnmaand', 'slachtmaand'],
+    // Niet in de maanden waarin hij al schrijft of zelf komt: de schatting (oogstmaand, sinds 18 okt; daarvoor wijnmaand)
+    // en Sint-Maarten (slachtmaand).
+    nietIn: ['oogstmaand', 'slachtmaand'],
     // Niet in de eerste zoveel dagen van je ambt.
     nietVoor: 30,
     // Zoveel dagen wacht hij op je antwoord.

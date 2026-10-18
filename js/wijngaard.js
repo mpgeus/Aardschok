@@ -130,7 +130,7 @@
       if (!T.isWijnboerderij(g)) continue;
       const inAanleg = D.gebouwen.filter((v) => v.soort === 'wijngaard' && v.boerderij === g);
       const ranken = T.volleRanken(D, g, pluktijd).length + inAanleg.reduce((n, v) => n + rankenOp(v.voet), 0);
-      const heer = T.GEBOUWEN[g.soort].heer;
+      const heer = T.heerVraagtVoor(g.soort); // js/heer.js: zijn prijs, maal zijn buitensporigheid
       pluk += ranken * IN().wijnPerRank - ((heer && heer.wijn) || 0);
     }
     const over = Math.max(0, ((D.voorraad && D.voorraad.wijn) || 0) - drinken * tot);

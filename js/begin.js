@@ -53,8 +53,9 @@
     // 3 tegels en 0,45, warm, was 6 tegels, 0,9 en wit). Het smeulen ging naar verhouding mee (0,35 werd 0,2).
     vuur: { straal: 6, beeldStraal: 3, sterkte: 0.45, smeult: 0.2 },
     // Zoveel jaar vraagt de heer niets (geen schatting op Sint-Maarten en geen grillen; js/heer.js, js/grillen.js), en
-    // schrijft hij in wijnmaand dat hij je spaart (Marcel, 11 okt: "het eerste jaar vraagt de heer niets").
-    heerVrij: 1,
+    // schrijft hij in de maand van zijn brief dat hij je spaart. Tot 18 okt 1 (Marcel, 11 okt: "het eerste jaar vraagt de
+    // heer niets"); sinds het doel van de demo 0 (Marcel, 18 okt, D2: de demo eindigt op het eerste Sint-Maarten).
+    heerVrij: 0,
     // Het bouwbereik (vraag 152, 1d; Marcel, 11 okt: "b ja"): je bouwt binnen zoveel tegels van het plein en van elke
     // opslag die af is (het raadhuis; in C ook een schuur), gemeten van het midden van een tegel. Sinds 12 okt 16
     // (1f; Marcel: "Ja prima, 16 tegels is goed"): met 12 paste er op een van de vijf eilanden na de zomer geen tweede

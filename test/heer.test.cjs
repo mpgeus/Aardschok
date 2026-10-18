@@ -13,6 +13,10 @@ const IN = T.HEER_INSTELLINGEN;
 // Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van het graan
 // in de schuren (de standaard) staat in de toets "een deel van het graan en het goud" verderop.
 IN.graan = 'pacht';
+// En zonder zijn buitensporigheid (eisMaal; Marcel, 18 okt, B2): die maakt alles even veel groter, en staat in de toets
+// "buitensporig" verderop.
+const EIS_MAAL = IN.eisMaal;
+IN.eisMaal = 1;
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
 function dagVan(maand, dagVanMaand, jaar) {
@@ -355,15 +359,16 @@ test('twee keer achter elkaar veel te weinig, en je bent je ambt kwijt', () => {
 // De dagen: brief, komst, wachten
 // ---------------------------------------------------------------------------------------------
 
-test('op 1 wijnmaand komt zijn brief, met wat hij dan zou vragen', () => {
+test('op 11 oogstmaand komt zijn brief, met wat hij dan zou vragen, en de balk telt de dagen af', () => {
   const S = gehucht();
   const oudeUi = T.ui;
   let getoond = 0;
   T.ui = { toonBrief: () => getoond++ };
   try {
-    T.tikHeerDag(S, dagVan('herfstmaand', 30));
+    T.tikHeerDag(S, dagVan('oogstmaand', 10));
     assert.ok(!S.heer.brief);
-    T.tikHeerDag(S, dagVan('wijnmaand', 1));
+    assert.equal(T.dagenTotDeHeer(S), null, 'vóór zijn brief telt de balk niet');
+    T.tikHeerDag(S, dagVan('oogstmaand', 11));
   } finally {
     T.ui = oudeUi;
   }
@@ -373,7 +378,10 @@ test('op 1 wijnmaand komt zijn brief, met wat hij dan zou vragen', () => {
   assert.equal(getoond, 1, 'het venster met de brief gaat open');
   // Ná zijn brief, en vóór het laatste bezoek van de marskramer: dan kun je nog verkopen.
   const marskramer = T.HANDEL_INSTELLINGEN.bezoeken[2];
-  assert.ok(dagVan('wijnmaand', 1) < dagVan(marskramer.maand, marskramer.dag));
+  assert.ok(dagVan('oogstmaand', 11) < dagVan(marskramer.maand, marskramer.dag));
+  // Drie maanden: van 11 oogstmaand tot Sint-Maarten (11 slachtmaand) is 90 dagen.
+  S.kalender.dag = dagVan('oogstmaand', 11);
+  assert.equal(T.dagenTotDeHeer(S), 3 * T.DAGEN_PER_MAAND);
 });
 
 test('op Sint-Maarten komt hij zelf, en wacht hij op je terwijl de tijd op 1× doorloopt (sinds de dag, 26 sep)', () => {
@@ -426,6 +434,70 @@ test('komt hij zelf halen en moet er iemand aan de schandpaal, dan wijst hij zel
   assert.equal(S.heer.wrok.length, 1);
   assert.notEqual(S.heer.wrok[0].wie, 'aanvoerder');
   assert.equal(S.heer.bezoek, null);
+});
+
+// ── Buitensporig, betalen of weigeren (Marcel, 18 okt: B2 "Met exhorbitante eisen", en D2: weigeren is zijn leger) ──
+
+test('buitensporig: hij vraagt eisMaal keer wat hij ziet, maar de schuld van vorig jaar zoals ze was', () => {
+  const S = gehucht();
+  IN.eisMaal = EIS_MAAL;
+  try {
+    const eis = T.eisVanDeHeer(S);
+    // Tien akkertegels pacht, en 25 zielen hoofdgeld, elk maal eisMaal.
+    assert.equal(eis.regels.find((r) => r.wat === 'graan').aantal, Math.ceil(10 * IN.pachtPerAkkertegel * EIS_MAAL));
+    assert.equal(eis.regels.find((r) => /poll tax/.test(r.waarom)).aantal, Math.ceil(25 * IN.hoofdgeldPerMens * EIS_MAAL));
+    // Per gebouw zijn prijs maal eisMaal, zoals het bouwmenu het zegt (T.heerVraagtVoor).
+    for (const id of Object.keys(T.GEBOUWEN)) {
+      const prijs = T.GEBOUWEN[id].heer;
+      if (!prijs) assert.equal(T.heerVraagtVoor(id), null, id);
+      else for (const wat in prijs) assert.equal(T.heerVraagtVoor(id)[wat], Math.ceil(prijs[wat] * EIS_MAAL - 1e-9), id);
+    }
+    S.heer = T.nieuweHeer();
+    S.heer.schuld = 7;
+    assert.equal(T.eisVanDeHeer(S).per.goud, eis.per.goud + 7, 'de schuld telt hij niet nog eens maal eisMaal');
+  } finally {
+    IN.eisMaal = 1;
+  }
+});
+
+test('betalen: hij neemt van alles wat hij vraagt zoveel als er is, en goud in de plaats van wat ontbreekt', () => {
+  const S = metHeer();
+  const eis = T.eisVanDeHeer(S);
+  T.zetVoorraad(S, 'graan', eis.per.graan - 2);
+  T.zetVoorraad(S, 'goud', eis.per.goud + 10);
+  const g = T.betaalHeer(S, T.alWatHijVraagt(S));
+  assert.ok(g.kan && !T.heerWacht(S));
+  assert.equal(S.voorraad.graan, 0);
+  assert.equal(S.voorraad.goud, 10 - 1, 'twee graan in goud: 0,6, naar boven 1');
+});
+
+test('weigeren: hij gaat, en als het donker wordt, komt zijn leger, en dat is het eind', () => {
+  const S = metHeer();
+  assert.equal(T.weigerHeer(maakS()).kan, false, 'wie er niet is, weiger je niet');
+  S.kalender.dag = SINT_MAARTEN + 10 / 24; // tien uur 's ochtends
+  T.zetVoorraad(S, 'graan', 50);
+  assert.ok(T.weigerHeer(S).kan);
+  assert.ok(!T.heerWacht(S), 'hij gaat');
+  assert.equal(S.voorraad.graan, 50, 'hij nam niets');
+  assert.ok(S.heer.jaren[0].geweigerd);
+  const donker = SINT_MAARTEN + T.dagindeling(SINT_MAARTEN).slapen / 24;
+  assert.equal(S.heer.leger.komt, donker, 'zijn leger komt als het donker wordt');
+  S.kalender.dag = donker - 0.01;
+  T.werkHeerBij(S);
+  assert.ok(!S.einde, 'nog niet');
+  S.kalender.dag = donker;
+  T.werkHeerBij(S);
+  assert.equal(S.einde.reden, 'leger');
+  // 's Nachts geweigerd: dan komt het meteen.
+  const S2 = metHeer();
+  S2.kalender.dag = SINT_MAARTEN + 23 / 24;
+  T.weigerHeer(S2);
+  assert.equal(S2.heer.leger.komt, S2.kalender.dag);
+  // Zonder de tik van de beelden (een toets) komt het de dag erna.
+  const S3 = metHeer();
+  T.weigerHeer(S3);
+  T.tikHeerDag(S3, SINT_MAARTEN + 1);
+  assert.equal(S3.einde.reden, 'leger');
 });
 
 test('waar geen plein is (het oude spel), komt hij nooit', () => {
