@@ -77,18 +77,19 @@
 
   // Een bewaard spel laden (js/opslaan.js). Eerst lezen: lukt dat niet, dan blijft het spel zoals het was.
   // Dan een nieuw spel, zodat wat er sinds het bewaren in het spel bij kwam, zijn beginwaarde heeft; het
-  // bewaarde erover; en het scherm opnieuw op de aanvoerder. Daarna maakt de lus eerst het land (`landLaden`, hieronder).
+  // bewaarde erover; en het scherm opnieuw op de aanvoerder. Daarna maakt de lus eerst het land (`laden`, hieronder).
   // Geeft { gelukt, kop } of { gelukt: false, reden }.
   T.laadSpel = function (plek) {
     const gelezen = T.leesVanPlek(plek);
     if (!gelezen.gelukt) return gelezen;
     speelGelezen(gelezen);
-    landLaden = true;
+    laden = { stappen: T.opwarmStappen(S), gedaan: 0 };
     return { gelukt: true, kop: gelezen.kop };
   };
-  // Of de lus na het laden nog het land van de open stukken maakt (T.maakOpenStukken, js/wereld.js; `snelheid.md`, F2).
-  // Alleen scherm: hoe snel het klaar is, verandert niets aan het land.
-  let landLaden = false;
+  // Wat de lus na het laden nog doet voor hij tikt: het land van de open stukken (T.maakOpenStukken, js/wereld.js;
+  // `snelheid.md`, F2), en dan wat de tik anders koud uitrekent (`stappen`, T.opwarmStappen in js/tik.js; H4), één per
+  // beeld. Alleen scherm: hoe snel het klaar is, verandert niets aan de wereld.
+  let laden = null;
   // Een gelezen spel (T.leesSpel, js/opslaan.js) spelen: een nieuw spel, en het gelezene erover.
   // De spelregels van het bewaarde spel (vraag 172, js/opties.js) gelden dan weer, vóór er een stuk land opengaat; een spel
   // van vóór 16 okt heeft er geen, en speelt met wat de browser het laatst koos. (Niet in T.zetSpel: de toetsen herstellen
@@ -761,12 +762,14 @@
   let vorige = 0;
   let getekend = 0; // het laatste beeld dat de grens van Settings toeliet (hieronder)
   function lus(nu) {
-    // Na het laden eerst het land, een paar stukken per beeld, met de voortgang in het menu (js/menu.js): zolang tikt de
-    // wereld niet en tekent het beeld niet, want anders maakte de eerste tik ze allemaal tegelijk.
-    if (landLaden) {
+    // Na het laden eerst het land, een paar stukken per beeld, en dan de stappen, met de voortgang in het menu
+    // (js/menu.js): zolang tikt de wereld niet en tekent het beeld niet, want anders deed de eerste tik het allemaal tegelijk.
+    if (laden) {
       const r = T.maakOpenStukken(S.wereld);
-      landLaden = r.klaar < r.open;
-      T.ui.landLaadt(S, r);
+      if (r.klaar === r.open && laden.gedaan < laden.stappen.length) laden.stappen[laden.gedaan++]();
+      const voortgang = { klaar: r.klaar + laden.gedaan, open: r.open + laden.stappen.length };
+      if (voortgang.klaar >= voortgang.open) laden = null;
+      T.ui.landLaadt(S, voortgang);
       vorige = nu;
       requestAnimationFrame(lus);
       return;

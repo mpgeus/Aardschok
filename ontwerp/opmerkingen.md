@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat na H4 nog uitsteekt in de tik** (18 okt, bij H4; `snelheid.md`, "De tik"): (a) de ossenkar zoekt soms een
+  lange weg in één tik (`werkKar` → `weg` → `T.zoekRoute`, 13 à 16 ms A*, de tik 32 à 45 ms; na het laden tik 10); (b)
+  het net van de paadjes (`T.aangelegdNet`, js/paden.js) legt na elke verandering van de kaart het hele net opnieuw
+  (`legNet`; de rasters gaan al per plek), dus in een levend dorp kost de nacht (de lantaarns) of het eerste beeld na een
+  gevelde boom misschien elke dag een paar ms tot 11; niet gemeten in een dorp dat leeft. Allebei pas als het opvalt.
 - **Waar de tik nog hapert** (18 okt, Marcel: "Waar komen de performance hits vandaan?"): uitgezocht per deelgebied
   in `snelheid.md`, "De tik" (het land en het laden, de kuddes, middernacht), met wat het kost en wat het oplevert; de
   keuze is aan Marcel. Onderweg: `npm run grootte` werkt niet op het eiland (`gereedschap/grootte/bouw.cjs` zoekt alleen

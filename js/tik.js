@@ -92,6 +92,24 @@
     return uit;
   }
 
+  // ── Na het laden: wat de wereld onthoudt maar niet bewaart ──
+  //
+  // Na het laden rekent het spel eerst uit wat de tik anders koud zou uitrekenen (js/main.js, achter de voortgang van het
+  // land; `snelheid.md`, H4): per kaart het raster om te lopen en zijn eilanden, wat er op elke tegel staat en het bos van
+  // het wild, en per dorp het net van de paadjes en de tegels van zijn plein. Anders deed de eerste tik dat (38 ms), een van de tikken erna (24 ms)
+  // en de eerste nacht (61 ms). Elke stap is een vraag die de wereld zelf ook stelt, dus geen spelstaat: het geeft
+  // hetzelfde, alleen eerder. Geeft de stappen, elk een functie zonder iets terug.
+  T.opwarmStappen = function (S) {
+    const stappen = [];
+    for (const w of kaartenVan(S)) {
+      const k = T.kaartVak(w);
+      const [x, y] = [k.x + (k.b >> 1), k.y + (k.h >> 1)];
+      stappen.push(() => T.isBegaanbaar(w, x, y), () => T.eilandOp(w, x, y), () => T.voorwerpOp(w, x, y), () => T.warmBosKaarten(w));
+    }
+    for (const D of S.dorpen) stappen.push(() => (T.aangelegdNet(D), T.pleinTegels(D)));
+    return stappen;
+  };
+
   // ── De opdrachten van de spelers ──
   //
   // Wat een speler doet en de wereld verandert (bouwen, een weg, een veld, afbreken, een soldaat erbij), gaat niet

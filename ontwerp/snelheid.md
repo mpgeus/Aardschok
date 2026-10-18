@@ -327,9 +327,14 @@ stronk die vergaat, een gebouw of een akker.
 - **H3, het plein één keer per dag**: `plekOpHetPlein` filterde voor elke bewoner alle 262 tegels van het plein; nu één
   keer per `T.wijsWerkToe` (`T.pleinVrij`, `js/bewoners.js`). Van 0,9 naar 0,3 ms bij 17 bewoners; bij 100 geschat 3 ms
   minder.
-- **H4, opwarmen bij het laden** (niet geproefd): de eerste nacht na het laden kost met H1 en H2 nog 23 à 28 ms, door
-  het net van de paden (`T.aangelegdNet`, 12 ms) en de eerste bosKaart in koude code. Dat bij het laden doen, met F2.
-  Klein.
+- **H4, opwarmen bij het laden** (gebouwd, 18 okt; Marcel: "dan h4 starten"; `code.md` bij `js/opslaan.js`): na het
+  land van F2 doet de lus nog vijf stappen achter de voortgang (`T.opwarmStappen`, `js/tik.js`): het raster om te lopen,
+  zijn eilanden, wat er op elke tegel staat, het bos van het wild (`T.warmBosKaarten`), en per dorp het net van de
+  paadjes en de tegels van zijn plein; elk hooguit zo'n 20 ms, samen 65 à 73. In een vers proces, met een gespeeld en
+  bewaard proefdorp: de eerste tik van 39 à 52 naar 20 à 21 ms, de eerste middernacht van 60 à 63 naar 18 à 19, en een
+  tik erna (de eilanden) van 24 naar gewoon. Precies hetzelfde spel (een afdruk van `S` per dag, en een toets). Wat in de
+  eerste nacht overblijft, is de dag van de gebouwen die voor het eerst draait; wat na het laden het traagst is, is nu
+  een lange zoektocht van de ossenkar (tik 10, 32 à 45 ms), en dat is werk, niet koud (`opmerkingen.md`).
 - **H1 tot H3 zijn gebouwd** (18 okt; Marcel: "begin met middernacht"; `code.md` bij `js/bos.js`), met een toets dat
   `T.voorwerpOpVak` op elke tegel `T.voorwerpOp` geeft (`test/wereld.test.cjs`). Om en om nagemeten: middernacht van een
   mediaan van 13,6 naar 3,3 ms (het traagste van 23,5 naar 4,4, de eerste nacht na het laden van 33 à 54 naar 22); met

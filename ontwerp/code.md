@@ -172,10 +172,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
   uit het spel (gevonden met de proef met opslaan, 4 okt). `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
-  titelscherm (`T.naarTitelscherm`). Na het laden maakt de lus eerst het land van alle open stukken (`landLaden`,
-  `T.maakOpenStukken`, een paar per beeld), en tikt en tekent pas daarna; het menu zegt zolang hoe ver het is ("Loading
-  the land… 4 of 9", `T.ui.landLaadt`), doet niets op een klik of Esc, en gaat dan dicht (18 okt; `snelheid.md`, F2:
-  anders maakte de eerste tik ze allemaal tegelijk, 0,5 s op het proefdorp en seconden na veel verkennen).
+  titelscherm (`T.naarTitelscherm`). Na het laden maakt de lus eerst het land van alle open stukken (`laden`,
+  `T.maakOpenStukken`, een paar per beeld) en dan wat de tik anders koud uitrekent (`T.opwarmStappen` in `js/tik.js`: het
+  raster om te lopen en zijn eilanden, wat er op elke tegel staat, het bos van het wild, het net van de paadjes; H4), en
+  tikt en tekent pas daarna; het menu zegt zolang hoe ver het is ("Loading the land… 4 of 9", `T.ui.landLaadt`), doet
+  niets op een klik of Esc, en gaat dan dicht (18 okt; `snelheid.md`, F2 en H4: anders deed de eerste tik het allemaal
+  tegelijk, 0,5 s op het proefdorp en seconden na veel verkennen).
 - `js/menu.js` is het scherm erbij, sinds vraag 172 (16 okt; Marcel: "We hebben een volledig menu nodig geen a.i slop") een
   volledig menu. **Het titelscherm is tekst over de wereld**: links het woordmerk en de keuzes (`.titel-links`; Continue,
   New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in

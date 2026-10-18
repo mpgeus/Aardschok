@@ -158,3 +158,19 @@ test('het scherm roept de regels van een opdracht niet zelf aan: het geeft een o
   }
   assert.deepEqual(fout, [], 'geef een opdracht (T.geefOpdracht, js/tik.js), zodat hij in lockstep bij elke computer in dezelfde tik ingaat');
 });
+
+// Na het laden rekent het spel eerst uit wat de tik anders koud uitrekent (T.opwarmStappen; snelheid.md, H4). Dat zijn
+// vragen die de wereld zelf ook stelt: het verandert niets aan wat bewaard wordt, en de wereld loopt daarna precies zo.
+test('de stappen na het laden (T.opwarmStappen) veranderen niets aan de wereld', () => {
+  const { S } = proefDorp(T);
+  const voor = staat(S);
+  const stappen = T.opwarmStappen(S);
+  assert.ok(stappen.length >= 5, `stappen: ${stappen.length}`);
+  for (const f of stappen) f();
+  assert.equal(staat(S), voor, 'de stappen veranderen wat bewaard wordt');
+  const tikken = Math.ceil(T.DAG_LENGTE / (30 * T.TIK)) + 10; // tot over middernacht
+  S.kalender.snelheid = 30;
+  for (let i = 0; i < tikken; i++) T.wereldTik(S);
+  const zonder = speel(tikken);
+  assert.ok(staat(S) === staat(zonder), 'na de stappen loopt de wereld anders');
+});

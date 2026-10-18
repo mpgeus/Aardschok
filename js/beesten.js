@@ -838,6 +838,12 @@
   // nieuw of trekt weg (d); in de winter krijgen de roedels honger en jagen ze op de herten (g); en in de lente komen er
   // jongen (e). `nu` is voor Spel.debug.beesten: { jongen: true } geeft de jongen vandaag, { jacht: true } laat elke
   // roedel nu jagen, alsof het winter is en hij honger heeft.
+  // Na het laden (T.opwarmStappen, js/tik.js): het bos van elk land met wild, zodat de eerste nacht het niet koud
+  // uitrekent (18 okt: 16 ms). Wat de nacht daarna vraagt, is hetzelfde (T.bosInVak onthoudt het tot er iets verandert).
+  T.warmBosKaarten = function (w) {
+    for (const { G } of T.beestenOp(w)) bosKaart(w, G.bos.vak, true);
+  };
+
   T.tikBeestenDag = function (S, w, dag, nu = {}) {
     if (!IN().aan || !w || !w.wezens || !T.heeftTegels(w)) return;
     // Een wolf die in een gevecht viel, ligt er niet meer.

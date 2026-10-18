@@ -31,8 +31,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 **De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
 gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
 het land, met de voortgang in het menu (F2). **H4: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "dan h4
-starten"): het koude werk na het laden ook achter de voortgang (de eerste tik 35 à 39 ms, de eerste middernacht 46 à
-70). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
+starten"): het koude werk na het laden ook achter de voortgang; gebouwd op die branch (de eerste tik 39 à 52 naar 21 ms,
+de eerste middernacht 60 à 63 naar 18 à 19, hetzelfde spel), wacht op "push it". **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
 renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De
