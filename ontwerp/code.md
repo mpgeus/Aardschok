@@ -359,7 +359,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
   stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)` (van elk open stuk alleen het deel in het vak;
-  vraag 178: eerst elk stuk helemaal, 4096 tegels). Een voorwerp maak je op één manier
+  vraag 178: eerst elk stuk helemaal, 4096 tegels); de vaste rijen in `js/tekenen.js` (vraag 178, B2) nemen een stuk
+  in zijn geheel met `T.stukOpen(w, n)`. Een voorwerp maak je op één manier
   (`T.maakVoorwerp` in `js/kaart.js`), en de grond van het eiland per nummer met `T.grondVanGid`.
 - **Over een brug van het eiland** (vraag 170, stap 6a2, 17 okt): `T.brugOp(w, x, y)` zegt welk stuk van welke brug er
   ligt (`E.brugOp`, `js/eiland.js`), of null. Het water eronder blijft water (`T.grondOp`), maar de tegel is vloer
@@ -774,8 +775,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Zonder videokaart speelt niemand** (Marcel, 17 okt: "We gaan er vanuit dat software rendering, dus compleet zonder
   GFX kaart, eigenlijk niet voor gaat komen. Iedere laptop of apparaat, handheld etc. heeft een APU of GPU"): de weg
   zonder WebGL (het 2D-doek) moet kloppen, maar hoeft niet snel te zijn; meten en sneller maken doen we met de kaart.
-  Wat het tekenen nog sneller kan maken (een dieptebuffer, vaste buffers per stuk, en de rest), met waar de tijd nu
-  zit: `ontwerp/snelheid.md` (vraag 178).
+  Wat het tekenen sneller maakte (A1 en A2, B5, B1 en B2, de regen en de mist op de kaart) en wat nog kan, met waar de
+  tijd nu zit: `ontwerp/snelheid.md` (vraag 178).
 - `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL2 die zich voordoet als het
   2D-doek, zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart
   zelf; de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer
@@ -872,7 +873,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   voorwerp onthoudt dat op zichzelf (`v.getekend`, `onthoudVoorwerp`; alleen scherm, in `SCHERM_SLEUTELS` van
   `js/opslaan.js`): zijn tekening (ook die van de zomer), het gewicht van de wind erop, het stuk stil en per stand, en
   de doos van zijn beeld (`T.sprites.doosVan`, voor de doorkijk); opnieuw als zijn `vel`, `id` of plek, het seizoen of
-  het aantal geladen beelden (`geladenNr`) anders is. Elk beeld opnieuw opzoeken was in Firefox 9% van het tekenen, en
+  het aantal geladen beelden (`geladenNr`, ook `T.sprites.geladenNr()`: dan maakt `js/tekenen.js` een vaste rij
+  opnieuw; `T.sprites.windStand` is de stand bij een windwaarde) anders is. Elk beeld opnieuw opzoeken was in Firefox 9%
+  van het tekenen, en
   een WeakMap opzoeken kostte daar zelf nog bijna een ms per beeld (17 okt). **De
   bomen in het jaar** (stap 2): per seizoen een vel met dezelfde nummers (`bomen-lente`, `-herfst`, `-winter`, `-sneeuw`,
   met `seizoen` in `tegels.js`), dat pas laadt in zijn seizoen (`T.sprites.zetSeizoen`, elk beeld uit `T.boomSeizoen(S)`
@@ -932,7 +935,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dat uit `tekenen.js` ging (vraag 25, D, 26 sep). Elk beeld kijkt `T.werkDoorkijkBij` voor alles in beeld of het iemand
   bedekt; eerst alleen opzij (`voorwerpDoos`: de doos uit `T.sprites.doosVan`, en de plek opzij hangt niet af van de
   hoogte van het land), en pas als dat kan de plek met de hoogte erbij. Ver uitgezoomd rekende het tot 17 okt elk beeld
-  de doos van alles in beeld uit.
+  de doos van alles in beeld uit. Met de vaste rijen (vraag 178, B2) loopt de doorkijk van hun bomen vooraf, alleen om
+  wie je hoort te zien (`T.doorkijkKandidaten`, dezelfde kandidaten voor beide keren).
 
 ### js/bouwstijl.js: de bouwstijl van een land
 

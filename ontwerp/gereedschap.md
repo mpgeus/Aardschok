@@ -85,19 +85,24 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/schermen/uit/tekenmeting*.json` (niet in git). Zonder meer tekent Playwright met SwiftShader, een
   videokaart in software, en dan tekent het spel zonder kaart; **`--videokaart` meet met de echte** (Chromium in het
   nieuwe headless, met ANGLE op D3D11; vraag 174, c), en `--edge` hetzelfde in Edge. `--hoogte` speelt met heuvels, en
-  `--dagen 3` eerst drie speeldagen op 30× met elk beeld getekend. Met de videokaart zegt elk beeld ook `Spel.gl.telling`.
+  `--dagen 3` eerst drie speeldagen op 30× met elk beeld getekend. Met de videokaart zegt elk beeld ook `Spel.gl.telling`
+  (`vast`: de bomen in de vaste rijen, vraag 178), en `Spel.gl.stapel()` hoe vol de textuurstapel is.
   Meet niet naast een render of een spel: die nemen de processor in beslag.
   **Om en om tegen een oudere stand** (`-- --tegen HEAD --videokaart`, 18 okt): de stand uit git in een losse werkkopie
   met een eigen server (poort 8139), de werkmap op 8123, in één browser; per scène `--rondes` (5) keer elk 20 beelden,
   met de kaart erbij en de processor alleen (zonder wachten, zoals de spellus), en één beeld van elk pixel voor pixel
   (wat anders is, met het oude en het nieuwe beeld, in `uit/tekenmeting-tegen-*.png`). `--optie schaduwen=uit` zet een
-  spelregel voor allebei; `--hoogte` en `--dagen` gelden ook. Tegen een stand die nog niet gecommit is: maak hem als
-  commit in een losse werkkopie (`git worktree add --detach`), en geef die hash.
+  spelregel voor allebei; `--hoogte` en `--dagen` gelden ook (de spellus staat dan eerst stil: liep hij mee, dan liepen
+  de twee werelden uiteen, 18 okt). Tegen een stand die nog niet gecommit is: maak hem als commit in een losse werkkopie
+  (`git worktree add --detach`), en geef die hash. Alleen met `--videokaart`: zonder start de kale headless-shell, en
+  die laadt het spel niet (`opmerkingen.md`). Het 2D-doek vergelijk je met `--optie tekenen=zonder`, maar het beeld pakt
+  dan nog het doek van de kaart; vergelijk het zelf (18 okt: hetzelfde beeld en even snel).
 - **De renderproef** (`gereedschap/pixiproef/`, 17 okt; `snelheid.md`, E): hetzelfde dorp met `js/gl.js`, met PixiJS
   v8 (op WebGL2 en WebGPU), en met een eigen tekenaar op WebGL2 en op WebGPU (`?wegen=huidig,gl2,gpu`, en `&vast` voor de
   vaste rijen met een dieptebuffer), los van het spel. Kijken op `/gereedschap/pixiproef/` (knoppen bovenaan, de meter eronder); meten met `node
   gereedschap/pixiproef/meting.cjs` (met `npm start`; hij wacht per blok tot de machine rustig is, want hier draaien vaak
-  renders en toetsen van andere sessies), uitslag en advies in `evaluatie.md`.
+  renders en toetsen van andere sessies), uitslag en advies in `evaluatie.md`. De weg `huidig` tekent zoals het spel tot
+  18 okt (de lijst, met de schaduwen uit dezelfde plaatjes), niet met de vaste rijen van B1 en B2.
 - `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de aanvoerder op 30× steeds naar
   de verste tegel die hij lopend haalt, naar het zuiden (de kust) en dan het westen; per beeld de regels, het maken van
   land en het tekenen apart, per stuk dat opengaat dat beeld en de drie erna, de zwaarste beelden (met een nieuwe dag

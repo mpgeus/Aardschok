@@ -235,3 +235,14 @@ WebGL2 draait overal waar het spel nu draait; zonder WebGL2 (of vanaf `file://` 
 2D-doek. Niet gemeten: Firefox, en een zwakke machine zoals de Steam Deck; de proef kan daar zo open.
 
 De proef blijft staan: hij meet na elke stap in `js/gl.js` hoe ver we van de eigen WebGL2-tekenaar af zitten.
+
+## Wat ervan gebouwd is (18 okt)
+
+Stap 1 en 2 zijn in het spel gebouwd, en de regen en het masker van de mist erbij (`ontwerp/snelheid.md`, B; `code.md`
+bij `js/gl.js` en `js/tekenen.js`). Om en om gemeten in het spel (het proefdorp, Chromium met de videokaart, 0,35,
+overdag): de processor na stap 1 6,8 ms per beeld, na stap 2 2,1, en met de regen en de mist 1,7; met de kaart erbij
+na stap 2 5,1 en nu 4,4 ms; steeds hetzelfde beeld. Wat bleef, is vooral de lijst met wat beweegt (de mensen, de
+gebouwen, de bomen bij de huizen). Marcel vroeg daarna nog of WebGPU nu helpt: nee, wat `js/gl.js` per beeld aan de kaart
+vraagt, kost nog 0,1 ms; de rest is eigen JavaScript (`snelheid.md`, "Na B1 en B2"). De weg `huidig` in deze proef is
+`js/gl.js` met de lijst zoals tot B2 (met de schaduwen uit dezelfde plaatjes), niet met de vaste rijen. Firefox en een
+zwakke machine zijn nog niet gemeten.

@@ -19,24 +19,19 @@ ms (eerst 100 à 117). Optie 2, het bos in de mist in de grondbuffer bakken (dan
 blijft staan voor zwakkere machines zoals de Steam Deck, maar zou het haperen bij gevelde bomen erger maken. Hoe en wat
 het mat: `code.md` bij `js/gl.js` en `js/sprites.js`, en `opmerkingen.md`.
 
-**Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P):
-helemaal uitgezoomd haalt het spel de 60 niet, ook vlak (Firefox 24,8 ms tekenen, 38 beelden per seconde; Chromium en
-Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **A1 en A2 zijn af** (bij P; `snelheid.md`): ver uitgezoomd 35 à
-47% minder per beeld, en in beeld dezelfde plaatjes. **B5 met B3 en E1 is af** (18 okt, in `main`; `code.md` bij
-`js/gl.js`): WebGL2, een plaatje als instantie, de bladen als textuurstapel, en de schaduwen uit de plaatjes zelf, zodat
-`js/tekenen.js` de lijst niet meer twee keer tekent; overdag ver uitgezoomd een kwart minder voor de processor (11,0
-naar 8,3 ms op 35%), 's avonds gelijk, hetzelfde beeld. **B1 en B2 zijn af** (18 okt, in `main`; `snelheid.md`, B):
-de bomen en het groen per stuk land in een vaste rij op de kaart, met de wind, de mist en de schaduw in de shader en de
-volgorde uit een dieptebuffer; de processor op 35% van 6,8 naar 2,1 ms per beeld (met heuvels 7,6 naar 2,8), met de
-kaart erbij 9,5 naar 5,1, en hetzelfde beeld. **De regen en de mist op de kaart zijn af** (18 okt, in `main`): nog eens
-2,1 naar 1,7 ms, en hetzelfde beeld. Niet in Firefox gemeten (Marcel).
+**Ver uitgezoomd moet veel sneller** (Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter"; vraag 178, bij P).
+**Stand op 18 okt, alles in `main`** (`snelheid.md`, met de metingen; `code.md` bij `js/gl.js` en `js/tekenen.js`): A1
+en A2, de renderproef (`js/gl.js` houden en naar WebGL2, niet naar Pixi of WebGPU), B5 met B3 en E1 (WebGL2, een plaatje
+als instantie, een textuurstapel, de schaduwen uit dezelfde plaatjes), B1 en B2 (de bomen en het groen per stuk land in
+een vaste rij op de kaart, met de wind, de mist en de schaduw in de shader en de volgorde uit een dieptebuffer), en de
+regen en het masker van de mist op de kaart. Helemaal uitgezoomd (0,35, het proefdorp, Chromium met de videokaart) van
+zo'n 30 ms per beeld vóór A1 naar 4,4 ms met de kaart erbij, waarvan 1,7 ms voor de processor; en steeds hetzelfde beeld.
+WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **Wacht op Marcel**: meten in Firefox
+(hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
 **De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen. Middernacht
 13 naar 3 ms (H1 tot H3), de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1),
 en het laden achter het laadscherm (F2), allemaal geproefd, niet in `main`. **Wacht op Marcel**: welke, en in welke
 volgorde (het voorstel staat onderaan "De tik").
-**De renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en
-`gereedschap/pixiproef/evaluatie.md`): advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en
-B2), niet naar Pixi of WebGPU. Marcel koos B5 als volgende stap (18 okt).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -1462,7 +1457,20 @@ voor de Steam-versie. Voorstel van Claude: eerst 1 en 2 hierboven (A1 en A2), da
 dieptebuffer, want de bomen hebben alleen harde randen, en vaste buffers per stuk), en een lagere maat voor de wereld
 als instelling (C3).
 
+**De renderproef, B5, B1 en B2, en de regen en de mist zijn af** (17 en 18 okt, in `main`; Marcel: "Ja, bouw stap 1",
+"dan bouwen we nu b1 en b2", "Misschien zoveel mogelijk offloaden naar gpu", "Regen en mist doen maar"; `snelheid.md`,
+B en E, en `gereedschap/pixiproef/evaluatie.md`): `js/gl.js` is WebGL2 met instanties en een textuurstapel, de bomen en
+het groen staan per stuk land in vaste rijen op de kaart met een dieptebuffer, en de regen en het masker van de mist gaan
+ook naar de kaart. Om en om gemeten in Chromium, steeds met hetzelfde beeld (op de gelijke gevallen tussen twee texels
+op 50% en 75% na): ver uitgezoomd nu 1,7 ms per beeld voor de processor en 4,4 met de kaart erbij. B4 is niet meer
+nodig, C1 en C4 ook niet. **Het volgende**: Marcel meet in Firefox; daarna D1 (haperingen bij een ander seizoen of ver
+verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
+
 ## Af (sinds 11 okt)
+
+- 178, ver uitgezoomd sneller (17 en 18 okt; bij P, `snelheid.md`): A1 en A2, de renderproef, B5 met B3 en E1, B1 en B2,
+  en de regen en de mist op de kaart; ver uitgezoomd van zo'n 30 naar 4,4 ms per beeld in Chromium. Firefox wacht op
+  Marcel.
 
 - c1, de roverskampen op het eiland (vraag 170, stap 6a2, 17 okt; Marcel: "M1"; `spel.md`, "De roverskampen"): drie per
   eiland in het woud, met een open plek, een vuur, de tent T1 en een paadje naar de weg; ze staan er als hun land
