@@ -39,8 +39,8 @@ opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`
 vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
 "Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
 hetzelfde eindbeeld; Marcel zag de haperingen ("in en uitzoomen zorgt nu wel voor spikes in de fps"). **De
-renderproef van de grond, stap 1 tot 4 zijn gebouwd** (18 okt; 1 tot 3 in `main`, 4 nog lokaal; het plan en de
-metingen in `snelheid.md`,
+renderproef van de grond, stap 1 tot 4 zijn gebouwd** (18 okt, in `main`; **Bezig in sessie `main` (lokaal,
+desktop)** (18 okt): stap 5, de nieuwe grond als standaard; het plan en de metingen in `snelheid.md`,
 "Stap 3 is gebouwd"; Marcel koos A: ver uit mag anders zijn als het er even goed uitziet): de vloer, de droge beek, het
 platte groen en de sneeuw op de kaart. Op zoom 2 en 1 pixel voor pixel hetzelfde, ook met herfst, sneeuw en de beek; op
 0,75 alleen de gelijke gevallen (tot 6%, de oude buffer kiest daar nu eens de ene, dan de andere pixel); ver uit een
