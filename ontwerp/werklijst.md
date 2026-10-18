@@ -265,6 +265,14 @@ stenen huizen. **Ronde 3 is af.**
   96,5% van de vorm, een rode wagen met gouden leeuwen**; SD 1.5 met het meesterbeeld (denoise 0,60) 47 bij 94,8%. De os
   blijft blokkig: ControlNet houdt de vorm van ons model vast. Elke plaat heeft sinds 18 okt opschriften (Marcel: "ik
   weet nu niet welke plaatjes SD1.5 en welke SDXL zijn", "graag even markeren"; `etiket.cjs`).
+  **De hybride pijplijn onderzocht** (18 okt; Marcels opdracht: "onderzoeken of we AI vooral voor materiaaltexturen en
+  visuele afwerking kunnen gebruiken", "Verander voorlopig niets aan de bestaande renderer"; het rapport en het voorstel
+  in `gereedschap/ai/hybride-voorstel.md`, niets veranderd): onze renderer is een eigen raymarcher op afstandsfuncties,
+  zonder meshes of UV's en met kleuren uit een vast palet, maar elk onderdeel kent zijn rusthouding, en dat zijn in feite
+  vaste textuurcoördinaten voor elke kijkrichting en elk loopbeeld. Voorstel: de AI tekent het oppervlak één keer
+  (meesterbeelden teruggeprojecteerd, het licht eruit gedeeld, plus naadloze materiaaltegels en decals zoals de leeuw),
+  en onze renderer belicht en rastert, met één palet per ding: geen flikkeren per definitie. De vorm (de blokkige os)
+  lost het niet op; die moet in de modellen beter. Marcel: "Daarna kijken we naar een ander model."
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
