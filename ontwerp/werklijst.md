@@ -246,8 +246,15 @@ stenen huizen. **Ronde 3 is af.**
   (denoise 0,75, ControlNet los) heeft elk beeld mooi detail, maar wisselen de loopbeelden van lading en tuig
   (`uit/ai/lokaal-proef.png`). Marcel gaf daarna een opdracht voor de werkstroom (`gereedschap/ai/opdracht-comfyui.md`):
   SD 1.5, weinig vrijheid (denoise 0,3 tot 0,5) en een strakke ControlNet (0,75 tot 1,0), een testmatrix, een
-  deterministisch masker voor de achtergrond, kwaliteitscontrole, en een importeerbare werkstroom. Wacht op Marcel: de
-  downloads voor SD 1.5 (zo'n 4 GB).
+  deterministisch masker voor de achtergrond, kwaliteitscontrole, en een importeerbare werkstroom. **Gedaan** (18 okt;
+  `gereedschap/ai/sd15.cjs`, `werkstroom-sd15.json`; Marcel: "maak de lijnen zelf uit ons 3D-model"): SD 1.5
+  (DreamShaper 8) zo'n 23 seconden per beeld; de vorm blijft (95 tot 98% overlap, de achtergrond exact #FF00FF), maar
+  binnen de matrix (denoise 0,30 tot 0,50) komt er weinig bij, en wordt de wagen bruin; ControlNet 0,75 of 1,00 maakt
+  bijna niets uit. Met de wagen van ChatGPT als **meesterbeeld** (IP-Adapter, denoise 0,60) wordt hij rood met gouden
+  tekens, maar wisselen de lading en de kop van de os nog tussen de loopbeelden. Marcel: "ik denk toch sdxl? of is er nog
+  iets beters?" Voorstel van Claude: SDXL (beter detail; zo'n 60 tot 75 seconden per beeld), met het meesterbeeld, onze
+  lijnen, en de loopbeelden samen in één beeld getekend, zodat het één os en één lading wordt; nieuwere modellen (Flux
+  Kontext, Qwen-Image-Edit) zijn te zwaar voor de 1080 Ti, en kunnen later op een gehuurde kaart.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
