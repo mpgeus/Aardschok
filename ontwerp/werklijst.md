@@ -41,7 +41,7 @@ vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het 
 hetzelfde eindbeeld. **Wacht op Marcel**: kijken hoe het eruitziet (uitzoomen bij het dorp: de rand is een paar beelden
 donker; de platen `uit/schermen/spreiden-*.png`), en dan de renderproef van de grond als vaste rijen (een stuk met
 heuvels of sneeuw hapert nog: 40 à 90 ms; Marcel, 18 okt: "we gaan verder"; **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): het plan voor de renderproef). Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+desktop)** (18 okt): stap 1 en 2 gebouwd, nog lokaal; stap 3, de beek, het platte groen en de sneeuw op de kaart). Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
