@@ -256,12 +256,13 @@ Staat de leider stil (91% van de keren, meestal thuis in het bos), dan wil een v
 enige weg door de kudde, dus vindt A* in 80 tegels niets (97% vergeefs), elke seconde opnieuw. In drie dagen 11.600 keer;
 voor mensen 4.
 
-- **G1, wachten of er al zijn** (geproefd): een volger met een dier van zijn eigen kudde voor zich wacht even als dat
-  loopt, en is anders klaar; bij een stilstaande leider is hij er ook naast een dier dat er al bij hoort (`erBij`, een
-  keten vanaf de leider). Winst: omwegen van 11.621 naar 12, de gewone tik over zes dagen van 1,99 naar 0,91 ms. Prijs:
-  klein (`js/lopen.js`, `js/beesten.js`, zo'n 25 regels). Te zien: bij een stilstaande leider staat de kudde iets
-  losser (op twee tegels van 54 naar 45%, op drie van 23 naar 28%); het vluchten is gelijk (107 tegen 104 keer in zes
-  dagen), en geen dier staat langer los dan eerst. Eerst laten zien aan Marcel.
+- **G1, wachten of er al zijn** (gebouwd, 18 okt; Marcel: "daarna G1"; `code.md` bij `js/beesten.js`): een volger met
+  een dier van zijn eigen kudde voor zich wacht even als dat loopt, en is anders klaar; bij een stilstaande leider is hij
+  er ook naast een dier dat er al bij hoort (`erBij`, een keten vanaf de leider). Om en om nagemeten tegen de stand
+  ervoor: omwegen van 11.621 naar 12 in drie dagen, de gewone tik over zes dagen van 1,81 naar 0,81 ms. Te zien: bij een
+  stilstaande leider staat de kudde iets losser (op twee tegels van 54 naar 45%, op drie van 23 naar 28%); het vluchten
+  is gelijk (107 tegen 104 keer in zes dagen), en het langst losse dier staat even lang los als eerst (150 s). Het spel
+  loopt dus iets anders, zonder toeval erbij.
 - **G2, alleen de mensen dichtbij** (gebouwd, 18 okt; Marcel: "daarna G2 en F2"): `mensBij` vraagt op 30× elke tik voor
   elke groep aan alle wezens of er een mens komt; een mens buiten het vak om de groep slaat hij nu over. Precies hetzelfde
   spel (een afdruk van `S` per dag, met en zonder 120 mensen erbij). Om en om: de tik van 2,36 naar 2,08 ms op het

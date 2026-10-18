@@ -31,7 +31,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 **De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen.
 **Middernacht (H1 tot H3), G2 en F2 zijn af** (onder "Af"). **G1, de kuddes: Bezig in sessie `ccr-9ed92339-4ajd9k`**
 (18 okt; Marcel: "daarna G1"): een volger die achter zijn eigen kudde staat, wacht of is er al, in plaats van een omweg
-te zoeken (de proef op `proef/tik-kudde`). F1 (het land in gedeelde blokken, de proef op `proef/tik-land`) en de rest
+te zoeken (de proef op `proef/tik-kudde`); gebouwd op die branch (de gewone tik van 1,81 naar 0,81 ms), wacht op
+"push it". F1 (het land in gedeelde blokken, de proef op `proef/tik-land`) en de rest
 wachten op Marcel (het voorstel staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

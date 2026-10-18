@@ -724,10 +724,11 @@
     if (wil === 'prooi' && prooi.slaat && T.afstand(T.tegelVan(leider), T.tegelVan(prooi.e)) <= 1) slaToe(S, G, leider, prooi);
     // 4. De anderen: in het spoor van de leider zolang hij loopt, en om hem heen als hij staat.
     let i = 0;
+    const bij = leider.pad.length ? null : erBij(leider, leden);
     for (const e of leden) {
       if (e === leider) continue;
       i++;
-      volg(w, G, leider, e, i, t);
+      volg(w, G, leider, e, i, t, bij);
     }
     // 5. Wat ze doen als ze stilstaan: thuis liggen de herten (en de wolven, als hun vel het kan), aan de rand grazen de
     // herten of kijken ze om zich heen, en staan de wolven.
@@ -739,10 +740,29 @@
     }
   }
 
+  // Wie er al bij staat als de leider stilstaat: binnen twee tegels van hem, of naast een dier dat er al bij staat (tussen
+  // de bomen staat een kudde soms in een rij). Wie loopt, telt nog niet. Een groep is hooguit zes dieren.
+  function erBij(leider, leden) {
+    const lt = T.tegelVan(leider);
+    const bij = [leider];
+    for (let meer = true; meer; ) {
+      meer = false;
+      for (const e of leden) {
+        if (bij.includes(e) || e.pad.length || e.onderweg) continue;
+        const et = T.tegelVan(e);
+        if (T.afstand(et, lt) <= 2 || bij.some((b) => T.afstand(T.tegelVan(b), et) <= 1)) {
+          bij.push(e);
+          meer = true;
+        }
+      }
+    }
+    return bij;
+  }
+
   // Eén dier dat volgt (de i-de achter de leider): loopt de leider, dan zijn spoor (zijn weg) af tot 2·i stappen achter
   // hem (staat hij al verder, dan wacht hij); staat de leider, dan komt hij bij hem staan, op zijn eigen plek in de kring
-  // (KRING), als hij er nog niet vlakbij staat.
-  function volg(w, G, leider, e, i, t) {
+  // (KRING), als hij er nog niet bij staat (`bij`, hierboven).
+  function volg(w, G, leider, e, i, t, bij) {
     if (e.pad.length) return;
     const et = T.tegelVan(e);
     const lt = T.tegelVan(leider);
@@ -764,7 +784,7 @@
       else naar(w, e, doel, t);
       return;
     }
-    if (T.afstand(et, lt) <= 2) return;
+    if (bij.includes(e)) return;
     for (let n = 0; n < KRING.length; n++) {
       const [dx, dy] = KRING[(i - 1 + n) % KRING.length];
       if (!vrij(w, lt.x + dx, lt.y + dy)) continue;

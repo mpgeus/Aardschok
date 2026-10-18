@@ -1477,7 +1477,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`; `mensBij` kijkt alleen naar wie in het vak om de groep staat, zo
   groot als hoe schuw ze zijn, want hij loopt op 30× elke tik voor elke groep). Een groep is een ding dat de dieren delen
   (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
-  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht;
+  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat; een volger zoekt om zijn eigen groep geen omweg,
+  maar wacht even of is er (en wie bij een stilstaande leider binnen twee tegels staat, of naast een dier dat er al bij
+  staat, is er: `erBij`; 18 okt, `snelheid.md`, G1: die omweg was er tussen de bomen bijna nooit, en was de helft van
+  de tik). Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht;
   je mannen kunnen hem aanvallen, en dan vecht zijn roedel terug (`T.wolvenVechten`, `G.vecht`; js/gevecht.js); 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
   met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. **Het
   leven in het bos** (stap 2a; elke nacht `T.tikBeestenDag`, vanuit `T.tikGebouwenDag` na het bos): eerst de herten, en
