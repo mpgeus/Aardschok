@@ -210,7 +210,11 @@ stenen huizen. **Ronde 3 is af.**
   modellen, en SDXL volgt een opdracht minder goed dan het model van ChatGPT. Voorstel van Claude: eerst de proef met de
   hand in ChatGPT (de leidraden staan in `gereedschap/pixelart/uit/ai/`, Marcel sleept ze met zijn plaat erin, slaat het
   antwoord op, en `naarPixels` maakt er pixel art van); haalt dat het niveau, dan ComfyUI lokaal voor de honderden beelden.
-  Wacht op Marcel.
+  **De proef met de hand is gedaan** (18 okt; Marcel: "Eerst de proef met de hand in ChatGPT"; `uit/ai/hand-proef.png`,
+  `hand-lopen.png`): de wagen van twee kanten en drie loopbeelden. ChatGPT volgt de vorm en de houding van onze render
+  heel nauw, met het detail van Marcels plaat (leeuwen op de panelen, een haam met koperen beslag, de kist met goud); de
+  lading verschuift tussen de loopbeelden een beetje (een kruik, het deksel), en terug in de maat van het spel is het iets
+  zachter dan onze scherpe pixels. Wacht op Marcel: is dit de weg?
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
