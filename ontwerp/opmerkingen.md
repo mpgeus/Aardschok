@@ -9,15 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Na stap 3 van de renderproef van de grond** (18 okt; `snelheid.md`, "Stap 3 is gebouwd"): (a) bij een ander
-  seizoen maken de bomen hun vaste rijen in één beeld opnieuw (`vasteRijenVoor` → `bouwStuk` in js/tekenen.js, 27 à 37
-  ms op het proefdorp): spreiden zoals het groen, of per seizoen alleen een andere tabel van tekeningen; (b) een stuk
-  grond opnieuw maken kost 4 à 5 ms (`bouwGrondStuk`, 4096 tegels, per tegel een tekst als sleutel in
-  `T.sprites.buiten`), wat ver uitgezoomd bij veel nieuw land optelt; (c) met `'nieuw'` tekent het kijkgat
-  (`T.tekenKijkgat`, js/doorkijk.js, via `T.tekenGrondStukken`) de grond nog uit de buffer van de oude grond, die dan
-  niet meer bijgewerkt wordt: dat moet eerst anders voor de oude grond eruit kan; (d) op zoom 0,75 kiest de oude buffer
-  bij een gelijk geval de ene of de andere pixel van de tekening, de kaart altijd dezelfde, dus daar is het tot 6% van de
-  pixels anders, voor het oog hetzelfde.
+- **Na stap 3 en 4 van de renderproef van de grond** (18 okt; `snelheid.md`, "Stap 3 is gebouwd" en "Stap 4 is
+  gebouwd"): (a) bij een ander seizoen maken de bomen hun vaste rijen in één beeld opnieuw (`vasteRijenVoor` →
+  `bouwStuk` in js/tekenen.js, 27 à 37 ms op het proefdorp): spreiden zoals het groen, of per seizoen alleen een andere
+  tabel van tekeningen; (b) een stuk grond opnieuw maken kost 4 à 5 ms (`bouwGrondStuk`, 4096 tegels, per tegel een
+  tekst als sleutel in `T.sprites.buiten`; met heuvels meer), wat ver uitgezoomd bij veel nieuw land optelt; (c) op zoom
+  0,75 kiest de oude buffer bij een gelijk geval de ene of de andere pixel van de tekening, de kaart altijd dezelfde, dus
+  daar is het tot 6% van de pixels anders, voor het oog hetzelfde; (d) het kijkgat mengt met de grond op de kaart aan
+  zijn zachte rand net anders (de grond en wie erachter staat elk apart doorschijnend), wat alleen opvalt zolang het
+  gat opengaat (0,18 s). Gaat de oude grond eruit, dan valt ook `tekenTegelOpnieuw` weg.
 
 - **Wat na H4 nog uitsteekt in de tik** (18 okt, bij H4; `snelheid.md`, "De tik"): (a) de ossenkar zoekt soms een
   lange weg in één tik (`werkKar` → `weg` → `T.zoekRoute`, 13 à 16 ms A*, de tik 32 à 45 ms; na het laden tik 10); (b)

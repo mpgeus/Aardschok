@@ -744,7 +744,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eerste minder dan 8 ms kostte (`SPREID`): eerst wat het oude beeld niet bedekt, dan van het midden naar buiten. Is het
   af, dan is het beeld pixel voor pixel dat van alles in één keer. Een schermafdruk, een foto en `Spel.debug.stap`
   tekenen alles in één keer (`T.tekenHeel`); `T.grondBezig(S)` zegt of het nog loopt. **De grond op de kaart** (de
-  renderproef, stap 1 tot 3, 18 okt; `snelheid.md`): met `Spel.debug.grondProef = 'nieuw'` tekent de videokaart de grond
+  renderproef, stap 1 tot 4, 18 okt; `snelheid.md`): met `Spel.debug.grondProef = 'nieuw'` tekent de videokaart de grond
   zelf, per stuk land een vaste rij met een instantie per tegel (`tekenGrondOpDeKaart`, `bouwGrondStuk`; in `js/gl.js`
   `VERT_GROND`, `Doek.tekenGrond`), stuk na stuk op volgorde van hun nummer, en wat erop ligt in dezelfde volgorde als
   in de oude grond (`tekenGrondIn`): de sneeuw van een tegel meteen na zijn vloer, dan de droge beek (één rij,
@@ -752,9 +752,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   mag de vloer van het volgende niet bedekken. De sneeuw rekent de kaart zelf: de processor geeft per tegel de ruis mee
   (`sneeuwVanTegel`, want `beeldLot` rekent in 64 bits), de kaart dezelfde som als `sneeuwDek`, en de zestien tegels
   sneeuw staan op de stapel; een andere stand sneeuw maakt zo niets opnieuw. Wat erop ligt, komt van de stapel (een
-  plaatje als doek met versie 1, `losBeeld`, zoals de bomen; de beek in vlakjes van één kleur, `kleurVlak`). Alleen vlak.
-  De keuze van de tekening per tegel is één functie voor beide (`hoekenVanGrond`), de sneeuw ook (`sneeuwVanTegel`), de
-  beek (`beekStukjes`) en de paadjes onder het groen (`opPaadjeVan`) ook. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
+  plaatje als doek met versie 1, `losBeeld`, zoals de bomen; de beek in vlakjes van één kleur, `kleurVlak`). Met heuvels
+  (stap 4) van achter naar voor (`tegelVolgorde`), elke tegel met de hoogte van zijn vier hoeken: de kaart legt hem op
+  zijn vlak zoals `opTegelVlak` (`SCHUIN_GROTER`), met het licht van zijn stuk erin (`maakLichtStuk` als textuur die
+  zacht gelezen wordt, `zachteTextuur` in `js/gl.js`; Marcel koos A: geen naadje), dan zijn wanden (een instantie per
+  wand, `zetWanden`, `wandMaten`, de textuur op de stapel), dan zijn sneeuw. Wat afdekt (`T.dekkersIn`), schrijft in
+  een eigen ronde alleen zijn diepte (`e.dek`: de ruit en de wanden, met de sleutel van `heuvelsErvoor`), en de bomen
+  en de lijst toetsen daartegen, dus `heuvelsErvoor` zet dan alleen nog de kijkgaten in de lijst (`dekt`). Het
+  kijkgat (`T.tekenKijkgat`) vraagt de grond dan aan de kaart (`T.grondInHetGat`, `Doek.tekenGrondGat`: de grond van
+  het beeld nog eens, zacht in de cirkel, met het filter van wat het kijkgat tekent). De keuze van de tekening per tegel
+  is één functie voor beide (`hoekenVanGrond`), de sneeuw ook (`sneeuwVanTegel`), de beek (`beekStukjes`), de paadjes
+  onder het groen (`opPaadjeVan`) en de wanden (`wandMaten`) ook. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
   donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, hoeveel
   kleur eruit gaat en hoeveel donkerder (`tekenMist`; met de videokaart maakt de kaart het masker zelf, `mistOpDeKaart`:
   wat je kent als getallen, alleen als het anders is, en per beeld wie er kijkt, sinds 18 okt, vraag 178; zonder

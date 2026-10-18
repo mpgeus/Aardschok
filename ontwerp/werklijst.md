@@ -39,8 +39,8 @@ opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`
 vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
 "Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
 hetzelfde eindbeeld; Marcel zag de haperingen ("in en uitzoomen zorgt nu wel voor spikes in de fps"). **De
-renderproef van de grond, stap 1 tot 3 zijn gebouwd** (18 okt, in `main`; **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): stap 4, de heuvels, eerst het plan; het plan en de metingen in `snelheid.md`,
+renderproef van de grond, stap 1 tot 4 zijn gebouwd** (18 okt; 1 tot 3 in `main`, 4 nog lokaal; het plan en de
+metingen in `snelheid.md`,
 "Stap 3 is gebouwd"; Marcel koos A: ver uit mag anders zijn als het er even goed uitziet): de vloer, de droge beek, het
 platte groen en de sneeuw op de kaart. Op zoom 2 en 1 pixel voor pixel hetzelfde, ook met herfst, sneeuw en de beek; op
 0,75 alleen de gelijke gevallen (tot 6%, de oude buffer kiest daar nu eens de ene, dan de andere pixel); ver uit een
@@ -48,9 +48,11 @@ andere pixel van het gras (op open grond 12 à 19%, voor het oog hetzelfde: de p
 Een stap met het wiel, een andere stand sneeuw en de beek zijn nu één beeld van 3 à 22 ms in plaats van 8 à 11 beelden
 tot 75 ms; sneeuw die komt 9 beelden tot 27 ms; een ander seizoen 5 beelden, het eerste 36 à 70 ms door de bomen
 (`opmerkingen.md`). Marcel keek in het spel (18 okt, met `Spel.debug.grondProef = 'nieuw'`: "wow, dat is snel, geeft
-geen krimp meer, instant wissel"). **Het volgende is stap 4, de heuvels**: het plan staat in `snelheid.md` ("Het plan
-voor stap 4"; Marcel, 18 okt: "optie A en akkoord": het licht in de tegel, zonder naadje). Daarna kiest Marcel of de
-oude grond eruit gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+geen krimp meer, instant wissel"). **Stap 4, de heuvels, is gebouwd** (Marcel, 18 okt: "optie A en akkoord": het
+licht in de tegel, zonder naadje; `snelheid.md`, "Stap 4 is gebouwd"): een stap met het wiel, een andere stand sneeuw
+en de beek zijn met heuvels één beeld van 4 à 19 ms in plaats van 3 à 15 beelden tot 108 ms; voor het oog hetzelfde,
+pixel voor pixel niet. **Wacht op Marcel**: kijken met heuvels (`Spel.debug.hoogte(5)` en `Spel.debug.grondProef =
+'nieuw'`), meten in Firefox, en dan stap 5: of de oude grond eruit gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Vraag 179, het bouwmenu, de ghost en draaien, is af** (18 okt, in `main`, onder "Af"; `spel.md`, bij "Jij bouwt"):

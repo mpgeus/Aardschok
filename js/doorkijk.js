@@ -153,7 +153,8 @@
 
   // Het "kijkgat": een venster in gebouw v, dat e bedekt (tekenVoorwerp in js/tekenen.js). Binnen een
   // zachte cirkel rond zijn romp komt opnieuw wat achter het gebouw ligt: de grond (de grondbuffer,
-  // werkGrondBij in js/tekenen.js), en wie daar staat, van achter naar voor. Zo kijk je door het dak
+  // werkGrondBij in js/tekenen.js; ligt de grond op de kaart, dan tekent de kaart hem zelf in de cirkel,
+  // T.grondInHetGat), en wie daar staat, van achter naar voor. Zo kijk je door het dak
   // heen de straat in. Tot 26 sep kwam alleen de figuur zelf terug, met het dak eromheen, en dan leek
   // hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op het dak van huizen").
   // sterkte (0..1) is v.doorkijk, zodat het kijkgat vloeiend in- en uitfaadt.
@@ -173,7 +174,7 @@
     bx.clearRect(0, 0, maat, maat);
     bx.imageSmoothingEnabled = false;
     bx.setTransform(1, 0, 0, 1, -ox, -oy);
-    T.tekenGrondStukken(bx, S, { x0: ox, y0: oy, x1: ox + maat, y1: oy + maat });
+    if (!T.grondInHetGat(ctx, mx, my, I.kijkgatStraal, sterkte)) T.tekenGrondStukken(bx, S, { x0: ox, y0: oy, x1: ox + maat, y1: oy + maat });
     const ver = I.kijkgatStraal + 20;
     const erin = S.wereld.wezens.filter((o) => {
       if (o.dood || (o.binnen && !T.deurStap(S, o))) return false;

@@ -429,6 +429,46 @@ Waar het lastig kan worden: de diepte van de grond moet dezelfde maat hebben als
 komt per beeld uit `vasteRijenVoor`, na de grond: de opdracht van de grond krijgt hem dan later mee); en de kust is half
 doorzichtig, dus alleen wat dicht is, schrijft diepte (een dekker is hoog land, geen water).
 
+**Stap 4 is gebouwd** (18 okt; `code.md` bij `js/tekenen.js`, "de grond op de kaart"): met heuvels ligt de grond nu
+ook op de kaart, zoals het plan zei, met twee dingen anders dan gedacht. De diepte van wat afdekt is de ruit van de
+tegel en zijn wanden (zoals de knip van `tekenTegelOpnieuw`), in een eigen ronde zonder kleur, dus de kust komt er niet
+aan te pas. En het kijkgat (iemand achter een huis of een heuvel) tekent zijn grond niet met het 2D-pad: dat kost met
+heuvels zo'n 0,2 ms per tegel, dus 7 à 15 ms per beeld voor wie achter een huis loopt. De kaart tekent de grond van het
+beeld nog eens, alleen de stukken die het gat raken, zacht in de cirkel, met het filter van het huis (in de mist grijs
+en donkerder) en op zijn diepte (`Doek.tekenGrondGat`). Dat lost ook (c) uit `opmerkingen.md` op: met `'nieuw'` las
+het kijkgat de buffer van de oude grond, ook op vlak land. Een instantie is nu 16 getallen (de vier hoeken, het anker,
+de diepte), een stuk 256 kB.
+
+Nagekeken op het proefdorp met heuvels (de spelregel *Height* op *Hills*), oud tegen nieuw zoals bij stap 3, op 1920
+bij 1080: pixel voor pixel wordt het hier niet, zoals het plan zei. Op zoom 2 is 5,3 à 5,5% van het beeld anders, op 1
+3,1 à 4,6%, op 0,75 5,4%, ver uit 13 à 22%. Voor het oog is het hetzelfde (de platen `uit/schermen/heuvels4-*.png`;
+`-kaal` is zonder de bomen van de vaste rijen, om de grond zelf te zien): een schuine tegel pakt net andere pixels van
+de tekening. Drie dingen zie je wel:
+
+- **Geen naadje** tussen twee tegels in het licht: het licht zit in de tegel (A).
+- **Een tegel die afdekt, houdt zijn schaduw.** De oude grond tekent zo'n tegel opnieuw uit zijn buffer, na de
+  schaduwen van de bomen, en dan is die tegel licht en vallen de paddenstoelen erop uit de schaduw (`heuvels4-2-vlek`).
+  De nieuwe dekt af met de diepte en laat de schaduw liggen.
+- **Het kijkgat** mengt aan zijn zachte rand net anders: de oude legt de grond en wie erachter staat eerst op één doekje
+  en maakt dat doorschijnend, de nieuwe elk apart. Midden in het gat is het gelijk; aan de rand, en zolang het gat
+  opengaat (0,18 s), is wie erachter staat iets doorschijnender (`vlak4-kijkgat-open`).
+
+Vlak land is na deze stap weer gelijk, op het kijkgat na. Gemeten met `meetGrond` met heuvels, zoals bij stap 3 (na de
+eerste keer van elk seizoen, die door de bomen nog een beeld van 500 ms kost):
+
+| wat, met heuvels | de oude grond, gespreid | de grond op de kaart |
+| --- | --- | --- |
+| het wiel naar 0,35 | 14 beelden, hooguit 108 ms | 1 beeld van 16 à 19 ms |
+| het wiel naar 0,5 | 9 beelden, hooguit 76 ms | 1 beeld van 15 à 18 ms |
+| het wiel naar 2 | 3 beelden, hooguit 22 ms | 1 beeld van 6 à 14 ms |
+| een ander seizoen | 15 beelden, hooguit 62 à 65 ms | 5 beelden, hooguit 24 à 27 ms |
+| een andere stand sneeuw | 15 beelden, hooguit 92 ms | 1 beeld van 4 à 7 ms |
+| sneeuw komt, of is weg | 14 à 15 beelden, hooguit 67 à 99 ms | 9 beelden, hooguit 15 à 28 ms |
+| de beek valt droog of komt terug | 15 beelden, hooguit 77 à 93 ms | 1 beeld van 12 à 18 ms |
+
+Een gewoon beeld was met allebei 4 à 11 ms. Het volgende is stap 5: Marcel kijkt (met heuvels: `Spel.debug.hoogte(5)`,
+of de spelregel, met `Spel.debug.grondProef = 'nieuw'`), meet in Firefox, en kiest of de oude grond eruit gaat.
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een

@@ -94,18 +94,21 @@
   // plaatje van één pixel maal zijn kleur. vGrijs haalt er zoveel kleur uit (het filter grayscale, voor wat in de mist
   // staat; js/mist.js), met de helderheid van 'saturation' op het doek.
   // Een vBron onder nul is een laag van de textuurstapel (-1 is laag 0; uAtlas, de bladen), die geen plaats in de rij
-  // kost. uMasker: alleen hoe dicht (voor het masker van de schaduwen). uHard (de vaste rijen, die de diepte schrijven):
-  // een pixel is dicht of er is niets.
-  const FRAG_BEELD = /* // geen tekst */ `#version 300 es
-    precision highp float; precision highp sampler2DArray;
-    in vec2 vUv; in vec4 vKleur; in float vGrijs; flat in float vBron;
-    uniform sampler2DArray uAtlas; uniform float uMasker; uniform float uHard;
+  // kost (UIT_DE_BRON, ook voor FRAG_GROND). uMasker: alleen hoe dicht (voor het masker van de schaduwen). uHard (de
+  // vaste rijen, die de diepte schrijven): een pixel is dicht of er is niets.
+  const UIT_DE_BRON = /* // geen tekst */ `
+    uniform sampler2DArray uAtlas;
     ${/* // geen tekst */ uBeelden.map((u) => `uniform sampler2D ${u};`).join(' ')}
-    out vec4 kleur;
     vec4 beeld() {
       if (vBron < -0.5) return texture(uAtlas, vec3(vUv, -vBron - 1.0));
       ${/* // geen tekst */ uBeelden.map((u, i) => (i < RIJ_TEXTUREN - 1 ? `if (vBron < ${i}.5) return texture(${u}, vUv);` : `return texture(${u}, vUv);`)).join('\n      ')}
-    }
+    }`;
+  const FRAG_BEELD = /* // geen tekst */ `#version 300 es
+    precision highp float; precision highp sampler2DArray;
+    in vec2 vUv; in vec4 vKleur; in float vGrijs; flat in float vBron;
+    uniform float uMasker; uniform float uHard;
+    out vec4 kleur;
+    ${UIT_DE_BRON}
     void main() {
       vec4 c = beeld() * vKleur;
       if (uHard > 0.5 && c.a < 0.5) discard;
@@ -193,42 +196,107 @@
       vGrijs = st < 0.75 ? uGrijs.x : 0.0;
       vBron = -1.0 - info.x;
     }`;
-  // Een stukje grond van een vaste rij (de renderproef van de grond, stap 1 tot 3: ontwerp/snelheid.md; tekenGrond,
-  // hieronder, en js/tekenen.js, "de grond op de kaart"): iA waar zijn tekening links boven begint (in pixels van de
-  // vlakte, vanaf het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en waar ze in haar bron staat, iB
-  // haar maat, de bron en de soort. Soort 0 is een vel van de grond (de bron is zijn plaats in de rij: uBeeld0,
-  // uBeeld1, ...; uVel de maten van de vellen), 1 een plaatje op de stapel (de bron is de laag van uAtlas, uLaag zijn
-  // maat), en 2 de sneeuw op een tegel: iA.zw zijn a en f, en hoeveel er ligt is clamp(uSneeuwL + a, 0, 1) maal f (de som
-  // van sneeuwDek in js/tekenen.js, met uSneeuwL de laag maal 1,15), in uSneeuwN standen (hooguit 16), elk een tegel op de
-  // stapel (uSneeuw: x, y en laag). Zonder diepte, in de volgorde van de rij: rij na rij, zoals op het doek van de oude grond.
+  // Een stukje grond van een vaste rij (de renderproef van de grond, stap 1 tot 4: ontwerp/snelheid.md; tekenGrond,
+  // hieronder, en js/tekenen.js, "de grond op de kaart"), GROND_PER getallen. iA waar zijn tekening links boven begint
+  // (in pixels van de vlakte, vanaf het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en waar ze in haar
+  // bron staat, iB haar maat, de bron en de soort (GROND_SOORT), iC de hoogte van de vier hoeken van zijn tegel (noord, oost, zuid,
+  // west; vlak 0), iD het anker (het midden van de tegel, vanaf links boven) en de sleutel van zijn diepte.
+  //  - VEL: een vel van de grond (de bron is zijn plaats in de rij: uBeeld0, uBeeld1, ...; uVel de maten). Met
+  //    heuvels (uHeuvels) op het vlak van de tegel en uSchaal groter, zoals tekenSchuineTegel, met het licht erin
+  //    (uLicht, per stuk, zacht gelezen: maakLichtStuk in js/tekenen.js, vTegel waar de pixel op de tegel ligt).
+  //  - STAPEL: een plaatje op de stapel (de bron is de laag van uAtlas, uLaag zijn maat).
+  //  - SNEEUW: de sneeuw op een tegel, op zijn vlak: iA.zw zijn a en f, en hoeveel er ligt is clamp(uSneeuwL + a,
+  //    0, 1) maal f (de som van sneeuwDek in js/tekenen.js, uSneeuwL de laag maal 1,15), in uSneeuwN standen (hooguit
+  //    16), elk een tegel op de stapel (uSneeuw: x, y en laag).
+  //  - WAND: een wand (tekenWanden): iA zijn begin op de rand en waar de textuur op de stapel staat, iB.x en iB.y
+  //    waar hij in de textuur begint en welke kant (1 zuid, -1 oost), iC zijn hoogten boven en onder aan beide eind,
+  //    iD.xy hoe ver de textuur aan het eind en het begin naar onder loopt. Twee driehoeken, A B C en A C D, zoals
+  //    driehoekUitPlaatje.
+  //  - DEK: de ruit van een tegel die afdekt (iC zijn hoeken), alleen voor de diepte (uDiepte.z): een tegel die
+  //    afdekt en zijn wanden schrijven hun diepte (iD.z plus uDiepte.x, maal uDiepte.y), zoals heuvelsErvoor in
+  //    js/tekenen.js hem in de lijst zette. Anders zonder diepte (uZ: 0, of de diepte van het kijkgat), in de volgorde
+  //    van de rij.
+  const GROND_SOORT = { VEL: 0, STAPEL: 1, SNEEUW: 2, WAND: 3, DEK: 4 };
+  G.GROND_SOORT = GROND_SOORT;
   const VERT_GROND = /* // geen tekst */ `#version 300 es
-    in vec4 iA; in vec4 iB;
+    in vec4 iA; in vec4 iB; in vec4 iC; in vec4 iD;
     uniform vec2 uMaat; uniform vec2 uZoom; uniform vec2 uStuk; uniform vec2 uVel[${RIJ_TEXTUREN}]; uniform float uLaag;
     uniform float uSneeuwL; uniform float uSneeuwN; uniform vec4 uSneeuw[17];
-    out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
+    uniform float uHeuvels; uniform float uSchaal; uniform vec3 uDiepte; uniform float uZ;
+    out vec2 vUv; out vec2 vTegel; flat out vec2 vPlek; flat out float vBron; flat out float vLicht;
+    // een punt q vanaf het midden van een tegel op het vlak door zijn vier hoeken h (opTegelVlak in js/tekenen.js)
+    vec2 opVlak(vec2 q, vec4 h) {
+      return vec2(q.x, -(h.y - h.w) / 64.0 * q.x + (1.0 - (h.z - h.x) / 32.0) * q.y - (h.x + h.y + h.z + h.w) / 4.0);
+    }
     void main() {
-      vec2 c = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1));
+      int k = gl_VertexID;
+      vec2 c = vec2(float(k & 1), float(k >> 1));
       vec2 bron = iA.zw;
       float b = iB.z;
-      float soort = iB.w;
-      vKleur = vec4(1.0);
-      vGrijs = 0.0;
-      if (soort > 1.5) {
-        int stap = int(floor(clamp(uSneeuwL + iA.z, 0.0, 1.0) * iA.w * uSneeuwN + 0.5));
-        if (stap <= 0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vUv = vec2(0.0); vBron = 0.0; return; }
-        bron = uSneeuw[stap].xy;
-        b = uSneeuw[stap].z;
-        soort = 1.0;
-      }
-      vec2 p = uStuk + uZoom * (iA.xy + c * iB.xy);
-      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, 0.0, 1.0);
-      if (soort > 0.5) {
-        vUv = (bron + c * iB.xy) / uLaag;
-        vBron = -1.0 - b;
+      int soort = int(iB.w + 0.5);
+      vTegel = vec2(0.0);
+      vPlek = vec2(0.0);
+      vLicht = 0.0;
+      vec2 p;
+      if (soort == ${GROND_SOORT.WAND}) {
+        vec2 r = vec2(32.0 * iB.y, 16.0);
+        p = (k == 0 || k == 2 ? iA.xy + r : iA.xy) - vec2(0.0, k == 0 ? iC.y : k == 1 ? iC.x : k == 2 ? iC.w : iC.z);
+        bron += vec2(iB.x + (k == 0 || k == 2 ? 32.0 : 0.0), k == 2 ? iD.x : k == 3 ? iD.y : 0.0);
+        soort = ${GROND_SOORT.STAPEL};
+        c = vec2(0.0);
+      } else if (soort == ${GROND_SOORT.DEK}) {
+        p = iA.xy + (k == 0 ? vec2(0.0, -16.0 - iC.x) : k == 1 ? vec2(32.0, -iC.y) : k == 2 ? vec2(-32.0, -iC.w) : vec2(0.0, 16.0 - iC.z));
       } else {
+        if (soort == ${GROND_SOORT.SNEEUW}) {
+          int stap = int(floor(clamp(uSneeuwL + iA.z, 0.0, 1.0) * iA.w * uSneeuwN + 0.5));
+          if (stap <= 0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vUv = vec2(0.0); vBron = 0.0; return; }
+          bron = uSneeuw[stap].xy;
+          b = uSneeuw[stap].z;
+          soort = ${GROND_SOORT.STAPEL};
+        }
+        vec2 q = c * iB.xy - iD.xy;
+        p = iA.xy + iD.xy + opVlak(int(iB.w + 0.5) == ${GROND_SOORT.VEL} ? uSchaal * q : q, iC);
+        if (uHeuvels > 0.5 && int(iB.w + 0.5) == ${GROND_SOORT.VEL}) {
+          vLicht = 1.0;
+          vTegel = vec2(0.5 + q.x / 64.0 + q.y / 32.0, 0.5 + q.y / 32.0 - q.x / 64.0);
+          vec2 m = iA.xy + iD.xy;
+          vPlek = vec2((m.x / 32.0 + m.y / 16.0) / 2.0, (m.y / 16.0 - m.x / 32.0) / 2.0);
+        }
+      }
+      p = uStuk + uZoom * p;
+      float z = uDiepte.z > 0.5 ? clamp(1.0 - (iD.z + uDiepte.x) * uDiepte.y, -0.999999, 0.999999) : uZ;
+      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, z, 1.0);
+      if (soort == ${GROND_SOORT.VEL}) {
         vUv = (bron + c * iB.xy) / uVel[int(b)];
         vBron = b;
+      } else {
+        vUv = (bron + c * iB.xy) / uLaag;
+        vBron = -1.0 - b;
       }
+    }`;
+  // Een pixel van de grond (VERT_GROND): uit zijn bron, met het licht erin zoals 'source-atop' (alleen waar de tegel
+  // is), en in het kijkgat (uGat: het midden en de straal op het doek, en hoe sterk) zacht naar de rand weg, zoals de
+  // cirkel van T.tekenKijkgat in js/doorkijk.js (tot 0,65 van de straal helemaal, dan lineair naar niets), met de kleur
+  // en het grijs van wat het kijkgat tekent (uKleur, uGrijs: een huis in de mist, zoals FRAG_BEELD).
+  const FRAG_GROND = /* // geen tekst */ `#version 300 es
+    precision highp float; precision highp sampler2DArray;
+    in vec2 vUv; in vec2 vTegel; flat in vec2 vPlek; flat in float vBron; flat in float vLicht;
+    uniform sampler2D uLicht; uniform vec4 uGat; uniform vec2 uMaat; uniform vec4 uKleur; uniform float uGrijs;
+    out vec4 kleur;
+    ${UIT_DE_BRON}
+    void main() {
+      vec4 c = beeld();
+      if (vLicht > 0.5) {
+        vec4 l = texture(uLicht, (vPlek + 0.5 + clamp(vTegel, 0.0, 1.0)) / vec2(textureSize(uLicht, 0)));
+        c.rgb = l.rgb * c.a + c.rgb * (1.0 - l.a);
+      }
+      if (uGat.w > 0.0) {
+        c *= uKleur;
+        c.rgb = mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), uGrijs);
+        float d = distance(vec2(gl_FragCoord.x, uMaat.y - gl_FragCoord.y), uGat.xy);
+        c *= uGat.w * (d < 0.65 * uGat.z ? 1.0 : clamp((uGat.z - d) / (0.35 * uGat.z), 0.0, 1.0));
+      }
+      kleur = c;
     }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
   const FRAG_VERLOOP = /* // geen tekst */ `
@@ -343,6 +411,8 @@
     gl.bindAttribLocation(p, 11, 'iA');
     gl.bindAttribLocation(p, 12, 'iB');
     gl.bindAttribLocation(p, 13, 'aDiepte');
+    gl.bindAttribLocation(p, 14, 'iC');
+    gl.bindAttribLocation(p, 15, 'iD');
     gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p)); // geen tekst
     const u = {};
@@ -402,6 +472,7 @@
   let rijDiep = false; // de rij toetst tegen de diepte (Doek.diepte)
   let diepteNu = null; // de diepte op het doek (-1 tot 1) van wat nu getekend wordt, of null (Doek.diepte)
   let diepteBasis = null; // { d0, schaal }: van de sleutel van js/tekenen.js naar de diepte op het doek (tekenVast)
+  let laatsteGrond = null; // de opdracht van de grond van dit beeld (Doek.tekenGrondGat)
   let schaduwOp = null; // { sx, sy } na schaduwHier: wie daarna een schaduw werpt, komt op het masker
   let beeldNr = 0;
   let gewist = false; // het doek van dit beeld is al leeg gemaakt (G.klaar kan in een beeld vaker, getImageData)
@@ -452,7 +523,7 @@
       beeldProg = maakProgramma(VERT_BEELD, FRAG_BEELD);
       instProg = maakProgramma(VERT_INST, FRAG_BEELD);
       vastProg = maakProgramma(VERT_VAST, FRAG_BEELD);
-      grondProg = maakProgramma(VERT_GROND, FRAG_BEELD);
+      grondProg = maakProgramma(VERT_GROND, FRAG_GROND);
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
       plasProg = maakProgramma(VERT, FRAG_PLAS);
       maalProg = maakProgramma(VERT, FRAG_MAAL);
@@ -496,9 +567,12 @@
       gebruik(prog);
       uBeelden.forEach((u, i) => gl.uniform1i(prog.u[u], i));
       gl.uniform1i(prog.u.uAtlas, ATLAS_PLAATS);
+      if (prog === grondProg) continue;
       gl.uniform1f(prog.u.uMasker, 0);
       gl.uniform1f(prog.u.uHard, 0);
     }
+    gebruik(grondProg);
+    gl.uniform1i(grondProg.u.uLicht, LICHT_PLAATS);
     gebruik(vastProg); // een uniform hoort bij het programma dat in gebruik is
     gl.uniform1i(vastProg.u.uTabel, TABEL_PLAATS);
     gl.uniform1i(vastProg.u.uStand, STAND_PLAATS);
@@ -1259,6 +1333,7 @@
   const VAST_PER = 8;
   const TABEL_PLAATS = 9; // de plaatsen van de tabel en de mist per tegel (de rij gebruikt 0 tot 7, de stapel 8)
   const STAND_PLAATS = 10;
+  const LICHT_PLAATS = 11; // het licht op de heuvels (tekenGrond)
   const TABEL_B = 512; // zoveel getallen van vier per rij van de tabel
   let tabelTex = null;
   let standTex = null;
@@ -1297,17 +1372,18 @@
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, TABEL_B, h, 0, gl.RGBA, gl.FLOAT, vol);
     vasteTextuurKlaar();
   };
-  // Een vaste rij van n bomen (data: VAST_PER getallen per boom), met een eigen lijst van attributen (11 en 12).
-  G.vasteRij = function (data, n) {
+  // Een vaste rij van n bomen (data: VAST_PER getallen per boom), met een eigen lijst van attributen (11 en 12); met
+  // `per` 16 (de grond, VERT_GROND) ook 14 en 15.
+  G.vasteRij = function (data, n, per = VAST_PER) {
     if (!start() || !n) return null;
     const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, data.subarray(0, n * VAST_PER), gl.STATIC_DRAW);
-    for (const [plek, o] of [[11, 0], [12, 16]]) {
+    gl.bufferData(gl.ARRAY_BUFFER, data.subarray(0, n * per), gl.STATIC_DRAW);
+    for (const [plek, o] of [[11, 0], [12, 16], [14, 32], [15, 48]].slice(0, per / 4)) {
       gl.enableVertexAttribArray(plek);
-      gl.vertexAttribPointer(plek, 4, gl.FLOAT, false, VAST_PER * 4, o);
+      gl.vertexAttribPointer(plek, 4, gl.FLOAT, false, per * 4, o);
       gl.vertexAttribDivisor(plek, 1);
     }
     gl.bindVertexArray(null);
@@ -1359,30 +1435,79 @@
     gl.bindVertexArray(null);
     if (!opMasker) zetDiep('toets');
   }
-  // De vaste rijen van de grond (VERT_GROND, Doek.tekenGrond), stuk na stuk in de volgorde van de lijst.
+  // De vaste rijen van de grond (VERT_GROND, Doek.tekenGrond), rij na rij in de volgorde van de lijst; met heuvels elk
+  // stuk met zijn licht (r.licht, zacht gelezen). Daarna wat afdekt (o.dekken) alleen in de diepte, met de maat van de
+  // diepte van dit beeld (diepteBasis, die de bomen in hetzelfde beeld zetten: Doek.tekenVast). In het kijkgat (o.gat)
+  // alleen de rijen die het raken, zacht in een cirkel, op de diepte van het kijkgat.
   function tekenGrond(o) {
     gebruik(grondProg);
     zetMaat(grondProg);
     const u = grondProg.u;
     const m = o.m;
+    const gat = o.gat;
     gl.uniform2f(u.uZoom, m[0], m[3]);
     gl.uniform2fv(u.uVel, o.maten);
     gl.uniform1f(u.uLaag, atlas ? atlas.maat : LAAG);
     gl.uniform1f(u.uSneeuwL, o.sneeuw.laag);
     gl.uniform1f(u.uSneeuwN, o.sneeuw.tabel.length / 4 - 1);
     gl.uniform4fv(u.uSneeuw, o.sneeuw.tabel);
+    gl.uniform1f(u.uHeuvels, o.heuvels ? 1 : 0);
+    gl.uniform1f(u.uSchaal, o.schaal);
+    gl.uniform3f(u.uDiepte, 0, 0, 0);
+    gl.uniform4f(u.uGat, gat ? gat.x : 0, gat ? gat.y : 0, gat ? gat.r : 0, gat ? gat.sterkte : 0);
+    gl.uniform1f(u.uZ, gat ? gat.z : 0);
+    if (gat) {
+      gl.uniform4fv(u.uKleur, gat.kleur);
+      gl.uniform1f(u.uGrijs, gat.grijs);
+    }
     for (let i = 0; i < o.vellen.length; i++) bindOp(i, o.vellen[i].tex);
     zetMeng('source-over');
-    zetDiep('uit');
-    for (const r of o.stukken) {
+    zetDiep(gat && gat.diep ? 'toets' : 'uit');
+    const teken = (r) => {
       gl.uniform2f(u.uStuk, m[0] * r.px + m[4], m[3] * r.py + m[5]);
       gl.bindVertexArray(r.rij.vao);
       gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, r.rij.n);
       G.telling.opdrachten++;
       G.telling.grond += r.rij.n;
+    };
+    for (const r of o.stukken) {
+      if (gat && r.vak && (r.vak[0] > gat.vak[2] || r.vak[2] < gat.vak[0] || r.vak[1] > gat.vak[3] || r.vak[3] < gat.vak[1])) continue;
+      if (r.licht) bindOp(LICHT_PLAATS, zachteTextuur(r.licht));
+      teken(r);
+    }
+    if (!gat && o.dekken.length && diepteBasis) {
+      gl.colorMask(false, false, false, false);
+      zetDiep('schrijf');
+      for (const r of o.dekken) {
+        gl.uniform3f(u.uDiepte, r.som - diepteBasis.d0, diepteBasis.schaal, 1);
+        teken(r);
+      }
+      gl.colorMask(true, true, true, true);
+      gl.uniform3f(u.uDiepte, 0, 0, 0);
     }
     gl.bindVertexArray(null);
+    zetDiep('uit');
   }
+  // Een doek als textuur die zacht gelezen wordt (het licht op de heuvels, tekenGrond): één keer naar de kaart, en weg met
+  // G.wegZacht.
+  function zachteTextuur(bron) {
+    if (bron.zachtOpDeKaart) return bron.zachtOpDeKaart;
+    const t = nieuweTextuur();
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bron);
+    bron.zachtOpDeKaart = t;
+    G.telling.opgestuurd++;
+    return t;
+  }
+  G.wegZacht = function (bron) {
+    if (!gl || !bron || !bron.zachtOpDeKaart) return;
+    const t = bron.zachtOpDeKaart;
+    gl.deleteTexture(t);
+    if (nuTex === t) nuTex = null;
+    for (let i = 0; i < nuOp.length; i++) if (nuOp[i] === t) nuOp[i] = null;
+    bron.zachtOpDeKaart = null;
+  };
 
   // ---------------------------------------------------------------- het kladdoek
   let klad = null; // { canvas, ctx }
@@ -1598,12 +1723,14 @@
       opdrachten.push({ soort: VAST, stukken, stand, m: m.slice(), werpt: schaduwOp !== null, opgestuurd: false });
       return true;
     }
-    // De grond als vaste rijen (de renderproef, stap 1 tot 3; js/tekenen.js, "de grond op de kaart"): `stukken` per rij
-    // { rij (G.vasteRij, VERT_GROND), px, py (waar zijn getallen beginnen, in pixels van de vlakte) }, in de volgorde
-    // waarin ze over elkaar gaan; `vellen` de vellen van de grond (hooguit RIJ_TEXTUREN, niet op de stapel; wat erop ligt,
-    // staat op de stapel); `sneeuw` { laag, tabel } voor de sneeuw (VERT_GROND). Geeft false als het niet kan (een doek dat
-    // gedraaid staat, een vel dat nog niet op de kaart kan).
-    tekenGrond(stukken, vellen, sneeuw) {
+    // De grond als vaste rijen (de renderproef, stap 1 tot 4; js/tekenen.js, "de grond op de kaart"): `stukken` per rij
+    // { rij (G.vasteRij, VERT_GROND), px, py (waar zijn getallen beginnen, in pixels van de vlakte), vak (wat hij kan
+    // beslaan, [x0, y0, x1, y1] in pixels van de vlakte, voor het kijkgat), licht (met heuvels: het licht van zijn stuk) },
+    // in de volgorde waarin ze over elkaar gaan; `vellen` de vellen van de grond (hooguit RIJ_TEXTUREN, niet op de stapel;
+    // wat erop ligt, staat op de stapel); `sneeuw` { laag, tabel } voor de sneeuw (VERT_GROND); `heuvels` { schaal (hoeveel
+    // groter een tegel op zijn vlak), dekken (de rijen van wat afdekt, elk met `som`, de som x + y van zijn eerste tegel) }
+    // of null. Geeft false als het niet kan (een doek dat gedraaid staat, een vel dat nog niet op de kaart kan).
+    tekenGrond(stukken, vellen, sneeuw, heuvels) {
       const m = this.st.m;
       if (m[1] || m[2] || vellen.length > RIJ_TEXTUREN) return false;
       const t = vellen.map(textuurVan);
@@ -1612,7 +1739,31 @@
       legRijAf();
       const maten = new Float32Array(RIJ_TEXTUREN * 2);
       t.forEach((x, i) => maten.set([x.tb, x.th], i * 2));
-      opdrachten.push({ soort: GROND, stukken, vellen: t, maten, sneeuw, m: m.slice() });
+      const o = {
+        soort: GROND, stukken, vellen: t, maten, sneeuw, heuvels: !!heuvels, schaal: heuvels ? heuvels.schaal : 1,
+        dekken: heuvels ? heuvels.dekken : [], gat: null, m: m.slice(),
+      };
+      opdrachten.push(o);
+      laatsteGrond = o;
+      return true;
+    }
+    // Het kijkgat (T.tekenKijkgat, js/doorkijk.js): de grond van dit beeld nog eens, zacht in een cirkel rond (x, y) met
+    // straal r (in pixels van de vlakte), zo sterk als `sterkte`, op de diepte van wat nu getekend wordt (een haar ervoor:
+    // een tegel die afdekt, schreef dezelfde), met de helderheid, het grijs en de doorzichtigheid van nu, zoals drawImage.
+    // False als de grond van dit beeld niet op de kaart ligt.
+    tekenGrondGat(x, y, r, sterkte) {
+      const g = laatsteGrond;
+      const m = this.st.m;
+      if (!g || m[1] || m[2] || this.st.helder === null) return false;
+      legKladAf();
+      legRijAf();
+      const al = this.st.alpha;
+      const h = this.st.helder * al;
+      const gat = {
+        x: m[0] * x + m[4], y: m[3] * y + m[5], r: r * m[0], sterkte, vak: [x - r, y - r, x + r, y + r], kleur: [h, h, h, al], grijs: grijsNu,
+        diep: diepteNu !== null, z: diepteNu === null ? 0 : diepteNu - 1e-5,
+      };
+      opdrachten.push({ ...g, dekken: [], m: m.slice(), gat });
       return true;
     }
     // De sleutel van het sorteren (js/tekenen.js, diepteVanItem) van wat nu getekend wordt, of null: dan zonder diepte.
@@ -2029,6 +2180,7 @@
     hetDoek.dieptesleutel = null;
     diepteNu = null;
     diepteBasis = null;
+    laatsteGrond = null;
     rijDiep = false;
     const k = kladdoek().ctx;
     if (kladBeschreven) {
