@@ -2,6 +2,14 @@
 
 ## Besloten
 
+- **De maat voor alles: Marcels plaat van de heerstoet** (18 okt 2026; `voorbeelden/heerstoet-doel.webp`, elders
+  gemaakt). Marcel: "dit is wat ik wil", "ziet er 100x beter uit, het detail, realisme etc.", "DAT is wat ik wil voor
+  alles"; en over onze proefplaat van dezelfde dingen (`uit/heerstoet-proef.png`): het lijkt er in de verste verte niet
+  op. Wat de plaat heeft: dieren en mensen met echte anatomie (gewrichten, spieren, gewicht), stof met plooien, franje en
+  borduursel, heraldiek (een gouden leeuw op rood, op het kleed, de vaandels, de wapenrokken en de wagen), hout met nerf en
+  ijzerbeslag, en veel kleine dingen (een lantaarn aan de wagen, kruiken, balen, een haam met koperen beslag); veel
+  contrast, donkere omlijning, warm licht. De render uit code bijschaven haalt dat niet: de weg erheen is vraag 180 in
+  de werklijst. De ronde "het paard en de os beter" (hieronder) is daarom gestopt.
 - **De maatstaf: "wow, wat een detail"** (9 okt 2026, Marcel, bij de fasen van een afgebrand huis: "Ik wil dat mensen
   denken: wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien", en eerder: "Art
   maakt of breekt een spel", "Moet wel handgetekend lijken", "dit is te ai, ik moet iets natuurlijker hebben iets

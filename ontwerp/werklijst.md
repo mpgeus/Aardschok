@@ -20,8 +20,9 @@ daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aa
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
 dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): het plan staat bij E, besloten (Marcel: A1 met drie
-maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6 zijn gebouwd (lokaal); de proefplaat van de tekeningen van C2
-(Marcel keurde de woorden goed) wordt gemaakt, dan stap 4, de cinematics.
+maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6 zijn gebouwd (lokaal). Voor stap 4, de
+cinematics, kwam er een proefplaat, maar Marcel wil de stijl van zijn eigen plaat, voor alles: **vraag 180** (bovenaan
+"Wacht op Marcel").
 Dan het eerste jaar speelbaar: Marcel
 speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
@@ -180,6 +181,17 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Vraag 180: de weg naar de stijl van Marcels plaat, voor alles** (18 okt; `beeld.md`, bovenaan "Besloten";
+  `voorbeelden/heerstoet-doel.webp`; Marcel: "DAT is wat ik wil voor alles", en onze render "lijkt er in de verste verte
+  niet op"). De render uit code bijschaven haalt het niet. Te kiezen: **W1** beelden van een beeld-AI als bron (zoals de
+  herberg met ChatGPT, vraag 177): elk ding in die stijl laten maken, en wij knippen ze en zetten ze in het spel; snel op
+  dat niveau, maar acht kanten en loopbeelden die precies kloppen zijn het moeilijke deel. **W2** onze 3D-modellen als
+  vorm, en een beeld-AI eroverheen per beeld (img2img met ControlNet, lokaal op Marcels videokaart): de kanten en de
+  beweging kloppen door het model, de AI geeft het detail; het risico is flikkeren tussen de beelden, en het opzetten
+  kost een paar sessies. **W3** een pixelartiest voor de sleutelstukken (de heer, een soldaat, het paard, de os, de wagen):
+  het mooist, maar het kost geld. **W4** een gekocht pakket in die stijl, aangevuld: goedkoop, maar niet van ons, en
+  zelden isometrisch in acht richtingen. Bij W1 en W2: Steam vraagt dat je meldt dat er AI in zit (dat mag). Voorstel van
+  Claude: eerst één proef, de wagen van de heer met de os, langs W1 en W2 naast elkaar, en dan kiezen.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
