@@ -137,6 +137,16 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/pixelart/`). **Eerst goedkeuring, dan renderen** (Marcel, 14 okt): een nieuwe tekening eerst in woorden,
   dan één proefplaat, dan pas alles (`beeld.md`). Een proefplaat van één huis: `HZ.renderHuis(HZ.HUIZEN[naam])` uit
   `gereedschap/pixelart/huizen.cjs`, zo'n halve minuut.
+- `node gereedschap/ai/beeld-ai.cjs` (vraag 180, W2; Marcel, 18 okt: "Via internet (OpenAI)"): het detail van een
+  beeld-AI over onze eigen modellen. Onze render gaat vergroot als leidraad naar OpenAI (`/v1/images/edits`), met
+  Marcels plaat (`ontwerp/voorbeelden/heerstoet-doel.webp`) als stijl; `naarPixels` brengt het antwoord terug naar de maat
+  van het spel (uitsnijden, verkleinen, 48 kleuren met median cut, een donkere omlijning). `modellen` zegt welke
+  beeldmodellen de sleutel mag gebruiken (het script kiest uit `VOORKEUR`, of `BEELD_MODEL` in de omgeving), `droog`
+  doet de proef zonder AI (de leidraden en de weg terug), `proef` doet hem echt: de wagen van de heer van zuidwest en
+  noordoost, en acht loopbeelden naar zuidwest, waarbij elk loopbeeld het eerste van de AI meekrijgt voor dezelfde os.
+  Alles in `gereedschap/pixelart/uit/ai/`. **De sleutel** staat buiten de opslag: `C:\Users\mpgeu\.openai-sleutel`, of
+  `OPENAI_API_KEY` in de omgeving; het script leest hem alleen om hem naar `api.openai.com` te sturen. De proef kost een
+  paar dollar (tien beelden).
 
 
 ## Testen in de browser
