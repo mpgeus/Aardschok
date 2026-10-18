@@ -77,13 +77,18 @@
 
   // Een bewaard spel laden (js/opslaan.js). Eerst lezen: lukt dat niet, dan blijft het spel zoals het was.
   // Dan een nieuw spel, zodat wat er sinds het bewaren in het spel bij kwam, zijn beginwaarde heeft; het
-  // bewaarde erover; en het scherm opnieuw op de aanvoerder. Geeft { gelukt, kop } of { gelukt: false, reden }.
+  // bewaarde erover; en het scherm opnieuw op de aanvoerder. Daarna maakt de lus eerst het land (`landLaden`, hieronder).
+  // Geeft { gelukt, kop } of { gelukt: false, reden }.
   T.laadSpel = function (plek) {
     const gelezen = T.leesVanPlek(plek);
     if (!gelezen.gelukt) return gelezen;
     speelGelezen(gelezen);
+    landLaden = true;
     return { gelukt: true, kop: gelezen.kop };
   };
+  // Of de lus na het laden nog het land van de open stukken maakt (T.maakOpenStukken, js/wereld.js; `snelheid.md`, F2).
+  // Alleen scherm: hoe snel het klaar is, verandert niets aan het land.
+  let landLaden = false;
   // Een gelezen spel (T.leesSpel, js/opslaan.js) spelen: een nieuw spel, en het gelezene erover.
   // De spelregels van het bewaarde spel (vraag 172, js/opties.js) gelden dan weer, vóór er een stuk land opengaat; een spel
   // van vóór 16 okt heeft er geen, en speelt met wat de browser het laatst koos. (Niet in T.zetSpel: de toetsen herstellen
@@ -756,6 +761,16 @@
   let vorige = 0;
   let getekend = 0; // het laatste beeld dat de grens van Settings toeliet (hieronder)
   function lus(nu) {
+    // Na het laden eerst het land, een paar stukken per beeld, met de voortgang in het menu (js/menu.js): zolang tikt de
+    // wereld niet en tekent het beeld niet, want anders maakte de eerste tik ze allemaal tegelijk.
+    if (landLaden) {
+      const r = T.maakOpenStukken(S.wereld);
+      landLaden = r.klaar < r.open;
+      T.ui.landLaadt(S, r);
+      vorige = nu;
+      requestAnimationFrame(lus);
+      return;
+    }
     // Frame rate (Settings, vraag 172b): staat er een grens, dan slaat de lus een beeld van het scherm over tot het zijn
     // beurt is, in de maat van de grens (ook op een scherm van 144 Hz). De wereld loopt hetzelfde: dt telt vanaf het
     // vorige beeld dat er wel was.

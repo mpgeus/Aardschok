@@ -23,6 +23,9 @@
   let lijst = null;
   let vraag = null; // { tekst, ja, doe }
   let melding = null;
+  // Een geladen spel waarvan het land nog gemaakt wordt (js/main.js, T.maakOpenStukken): { plek, kop, klaar, open }. Dan
+  // staat er alleen hoe ver het is, en gaat het menu dicht als het klaar is.
+  let laadt = null;
   // Bij New game eerst de naam van je dorp (Marcel, 29 sep, werklijst vraag 60): het voorstel dat in het veld staat.
   let naamVoorstel = null;
   // Met welke spelregels het land achter het scherm gemaakt is: kies je bij New game andere, dan maakt Begin het opnieuw
@@ -156,9 +159,11 @@
   function inhoud(S) {
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
     const vraagje = () => `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
+    const laden = () => `<p class="menu-melding">${veilig(T.t('Loading the land… {klaar} of {open}', laadt))}</p>`;
     if (scherm === 'titel') {
       let links;
-      if (vraag) links = vraagje();
+      if (laadt) links = laden();
+      else if (vraag) links = vraagje();
       else if (naamVoorstel != null) links = nieuwSpelScherm(S);
       else links = hoofdKeuzes(S);
       // Load en Credits liggen op papier naast de keuzes.
@@ -175,7 +180,8 @@
       );
     }
     let midden;
-    if (vraag) midden = vraagje();
+    if (laadt) midden = laden();
+    else if (vraag) midden = vraagje();
     else if (lijst) midden = `<p class="menu-kop">${lijst === 'opslaan' ? T.t('Save to') : T.t('Load from')}</p>` + plekKeuzes() + knop('terug', T.t('Back'));
     else midden = hoofdKeuzes(S);
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
@@ -347,15 +353,25 @@
 
   function laad(S, plek) {
     const r = T.laadSpel(plek); // js/main.js: een nieuw spel, en het bewaarde erover
+    lijst = null;
     if (!r.gelukt) {
       melding = r.reden;
-      lijst = null;
       toon(S);
       return;
     }
-    sluit(S);
-    T.ui.bericht(T.t('{plek} loaded: {datum}.', { plek: naamVanPlek(plek), datum: T.datumVanDag(r.kop.dag).tekst }), 'goed');
+    laadt = { plek, kop: r.kop, klaar: 0, open: 0 };
+    toon(S);
   }
+  // Hoe ver het land van het geladen spel is (js/main.js, elk beeld tot het klaar is); is het klaar, dan dicht.
+  T.ui.landLaadt = function (S, r) {
+    if (!laadt) return;
+    Object.assign(laadt, r);
+    if (r.klaar < r.open) return toon(S);
+    const { plek, kop } = laadt;
+    laadt = null;
+    sluit(S);
+    T.ui.bericht(T.t('{plek} loaded: {datum}.', { plek: naamVanPlek(plek), datum: T.datumVanDag(kop.dag).tekst }), 'goed');
+  };
 
   function bewaar(S, plek) {
     const r = T.slaOp(S, plek);
@@ -365,6 +381,7 @@
   }
 
   function doe(S, actie, plek) {
+    if (laadt) return; // het land van een geladen spel komt nog (T.ui.landLaadt)
     melding = null;
     if (actie === 'ja') {
       const v = vraag;
@@ -485,7 +502,7 @@
         ev.preventDefault();
         return stapKeuze(ev.key === 'ArrowDown' ? 1 : -1);
       }
-      if (ev.key !== 'Escape') return;
+      if (ev.key !== 'Escape' || laadt) return;
       if (vraag || lijst || naamVoorstel != null) doe(T.S, 'terug');
       else if (scherm === 'menu') sluit(T.S);
     },

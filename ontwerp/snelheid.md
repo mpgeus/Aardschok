@@ -227,8 +227,13 @@ ms, en meer naarmate er meer open is. Na lang verkennen zijn dat seconden.
   ms. Het land blijft precies gelijk (een vingerafdruk op eiland 2 en 5), dus geen nieuwe `versie`. Prijs: middel
   (`js/eiland.js`, `maker.js`, `wereld.js`, `hoogte.js`; `test/eilandkaart.test.cjs` moet langer doorlopen). Je ziet
   niets.
-- **F2, het land achter het laadscherm**: `T.maakOpenStukken(w)` in `speelGelezen` (`js/main.js`), achter "Loading…", in
-  stappen van 1 ms, dus met voortgang. Samen even duur, maar het spel bevriest niet. Prijs: klein. Je ziet een laadbalk.
+- **F2, het land achter het laadscherm** (gebouwd, 18 okt; Marcel: "daarna G2 en F2"; `code.md` bij `js/opslaan.js`):
+  na het laden maakt de lus eerst het land van alle open stukken (`T.maakOpenStukken`, `ladenMsPerBeeld` per beeld, dus
+  een stuk per beeld), en het menu zegt zolang "Loading the land… 4 of 9"; pas daarna tikt de wereld. Samen even duur,
+  maar daarna geen hapering: in Node, met een gespeeld en bewaard proefdorp, met 9 open stukken een eerste tik van 452
+  naar 16 ms (het land in 9 stappen van hooguit 49 ms), met 39 van 1.702 naar 44 ms (39 stappen van hooguit 58 ms). In
+  de browser niet nagekeken: de headless Chromium van deze omgeving loopt vast zodra de spellus draait, ook op de stand
+  ervoor.
 - **F3, het raster per stuk** in plaats van over het hele loopvak (het lopen): de echte oplossing als er veel land open
   is. Groot, later.
 - **F4, het wild bij het opengaan spreiden**: een bosrijk stuk kost zo'n 40 ms aan wild, waarvan 27 het eilandenwerk

@@ -32,7 +32,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1), en het laden achter het
 laadscherm (F2); de proeven op `proef/tik-kudde` en `proef/tik-land`. **Middernacht (H1 tot H3) is af** (onder "Af").
 **G2 en F2: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna G2 en F2"): alleen de mensen dichtbij
-voor het wild, en het land van een geladen spel achter het laadscherm. G1, F1 en de rest wachten op Marcel (het voorstel
+voor het wild, en het land van een geladen spel achter het laadscherm. Allebei gebouwd op die branch; F2 wacht op
+Marcels blik in de browser (een spel laden), dan "push it". G1, F1 en de rest wachten op Marcel (het voorstel
 staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

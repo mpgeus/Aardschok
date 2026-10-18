@@ -460,3 +460,28 @@ test('wie een tegel van de kaart verandert, zegt het met T.kaartVeranderd', () =
   }
   assert.deepEqual(fout, [], `Zeg na het veranderen van een tegel T.kaartVeranderd(w) (js/wereld.js): ${fout.join(', ')}`);
 });
+
+// ------------------------------------------------- het land na het laden (js/wereld.js; snelheid.md, F2)
+
+test('na het laden maakt T.maakOpenStukken het land van alle open stukken, een paar per keer, zonder dat S verandert', () => {
+  const { S, w } = proefDorp(T); // zoals een geladen spel: de stukken zelf worden niet bewaard
+  const voor = T.bewaarSpel(S, { nu: 0 });
+  const was = T.WERELD_INSTELLINGEN.ladenMsPerBeeld;
+  T.WERELD_INSTELLINGEN.ladenMsPerBeeld = 0; // dan precies één stuk per keer
+  let r;
+  let keer = 0;
+  try {
+    do {
+      r = T.maakOpenStukken(w);
+      keer++;
+      assert.equal(r.open, w.open.size);
+      assert.ok(r.klaar >= keer || r.klaar === r.open, `na ${keer} keer ${r.klaar} van ${r.open}`);
+    } while (r.klaar < r.open && keer < 100);
+  } finally {
+    T.WERELD_INSTELLINGEN.ladenMsPerBeeld = was;
+  }
+  assert.equal(r.klaar, r.open, 'alle open stukken zijn er');
+  assert.ok(keer > 1, 'meer dan één keer, want één stuk per keer');
+  assert.deepEqual(T.maakOpenStukken(w), { klaar: w.open.size, open: w.open.size }, 'daarna is er niets meer te maken');
+  assert.equal(T.bewaarSpel(S, { nu: 0 }), voor, 'het land maken verandert niets aan wat bewaard wordt');
+});

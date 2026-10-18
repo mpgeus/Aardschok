@@ -18,7 +18,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   30000ms exceeded` op `file:///.../index.html`, en ook met drie minuten wachten komt er geen "load"; op de stand zonder
   c2 (een losse kopie met `git worktree add`) net zo, dus het ligt niet aan c2. Via de server (`npm start`, in de
   browser van de app) laadt het spel gewoon. Nog niet uitgezocht wat er via `file://` blijft hangen (een plaatje, een
-  lettertype van buiten, of Chromium van Playwright zelf).
+  lettertype van buiten, of Chromium van Playwright zelf). Op 18 okt, in de cloud: ook via de server komt de headless
+  Chromium (`channel: 'chromium'`, zonder videokaart) niet verder dan het laden van de scripts; met `?kaart=gehucht`
+  bestaat `Spel.debug` na 2 s, maar daarna komt geen `page.evaluate` meer terug, ook niet `Spel.debug.opslaan`, op de
+  stand van toen en die ervoor. De spellus lijkt de pagina vast te houden; zo is F2 (`snelheid.md`) niet in de browser
+  nagekeken.
 - **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken
   gebroken: een weg kreeg geen bruggetje waar de oversteek breed of schuin was, en het proefdorp zat opgesloten in 7%
   van het land. Dat is opgelost met L1 (Marcel: "L1"; `code.md` bij `js/eiland.js`): tegel voor tegel gemeten liggen op

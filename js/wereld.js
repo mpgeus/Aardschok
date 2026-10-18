@@ -19,6 +19,9 @@
     vooruit: 48,
     vooruitDeel: 16,
     vooruitMsPerSeconde: 240,
+    // Na het laden maakt het spel eerst het land van alle open stukken (T.maakOpenStukken), zoveel ms per beeld (minstens
+    // één stuk), met de voortgang in het menu (js/menu.js).
+    ladenMsPerBeeld: 30,
   };
   const IN = () => T.WERELD_INSTELLINGEN;
 
@@ -599,6 +602,28 @@
   // Het open stuk met nummer n (T.stukNummer), gemaakt als het er nog niet was: { sx, sy, x0, y0, op, ... }, met op wat er
   // per tegel staat. Voor de vaste rijen in js/tekenen.js (vraag 178, B2), die het per stuk doen, zoals hieronder.
   T.stukOpen = (w, n) => stukkenVan(w).get(n) || openStuk(w, (n % 64) * STUK, Math.floor(n / 64) * STUK);
+  // Het land van de open stukken die er nog niet zijn, zoveel als in ladenMsPerBeeld past, en minstens één. Een stuk wordt
+  // niet bewaard, dus na het laden is er nog geen, en anders maakte de eerste tik ze allemaal tegelijk, als het raster om
+  // het dorp of het tekenen erom vroeg: op het proefdorp 0,5 s, na veel verkennen seconden (18 okt; `snelheid.md`, F2).
+  // Geeft { klaar, open }: hoeveel stukken er nu zijn, van de open stukken. Geen spelstaat: het land is hetzelfde,
+  // wanneer het ook gemaakt wordt.
+  T.maakOpenStukken = function (w) {
+    const open = openGrootte(w);
+    if (!opEiland(w)) return { klaar: open, open };
+    const m = stukkenVan(w);
+    const tot = performance.now() + IN().ladenMsPerBeeld;
+    let klaar = 0;
+    let gemaakt = 0;
+    for (const n of w.open) {
+      if (!m.has(n)) {
+        if (gemaakt && performance.now() >= tot) continue;
+        T.stukOpen(w, n);
+        gemaakt++;
+      }
+      klaar++;
+    }
+    return { klaar, open };
+  };
   T.voorwerpenIn = function (w, vak) {
     const binnen = (v) => v.x >= vak.x && v.y >= vak.y && v.x < vak.x + vak.b && v.y < vak.y + vak.h;
     const uit = (w.voorwerpen || []).filter(binnen);

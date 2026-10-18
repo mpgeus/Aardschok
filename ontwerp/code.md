@@ -172,7 +172,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
   uit het spel (gevonden met de proef met opslaan, 4 okt). `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
-  titelscherm (`T.naarTitelscherm`).
+  titelscherm (`T.naarTitelscherm`). Na het laden maakt de lus eerst het land van alle open stukken (`landLaden`,
+  `T.maakOpenStukken`, een paar per beeld), en tikt en tekent pas daarna; het menu zegt zolang hoe ver het is ("Loading
+  the land… 4 of 9", `T.ui.landLaadt`), doet niets op een klik of Esc, en gaat dan dicht (18 okt; `snelheid.md`, F2:
+  anders maakte de eerste tik ze allemaal tegelijk, 0,5 s op het proefdorp en seconden na veel verkennen).
 - `js/menu.js` is het scherm erbij, sinds vraag 172 (16 okt; Marcel: "We hebben een volledig menu nodig geen a.i slop") een
   volledig menu. **Het titelscherm is tekst over de wereld**: links het woordmerk en de keuzes (`.titel-links`; Continue,
   New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
@@ -357,7 +360,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`nodigOver`, 13 okt: wie loopt, langs zijn pad; wie stilstaat, daarna); het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
-  (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
+  (`test/eilandkaart.test.cjs`), allemaal vóór de eerste tik (`T.maakOpenStukken`, `ladenMsPerBeeld` per beeld). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
   stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)` (van elk open stuk alleen het deel in het vak;
   vraag 178: eerst elk stuk helemaal, 4096 tegels); de vaste rijen in `js/tekenen.js` (vraag 178, B2) nemen een stuk
   in zijn geheel met `T.stukOpen(w, n)`. Een voorwerp maak je op één manier
