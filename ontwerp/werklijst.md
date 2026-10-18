@@ -204,7 +204,13 @@ stenen huizen. **Ronde 3 is af.**
   acht loopbeelden (beweging), naast Marcels plaat. **Gekozen** (Marcel, 18 okt): "Via internet (OpenAI). Ik regel een
   API-sleutel". De sleutel staat buiten de opslag, in `C:\Users\mpgeu\.openai-sleutel` (of in de omgeving als
   `OPENAI_API_KEY`); het gereedschap leest hem daar en stuurt hem alleen naar `api.openai.com`, en hij komt nooit in git
-  of in een gesprek. Wacht op Marcel: de sleutel; dan de proef.
+  of in een gesprek. **De sleutel lukt niet** (Marcel, 18 okt: "sleutel gaat niet, ik heb 11gb ram op gfx kaart, zou
+  dat werken lokaal?"). Lokaal kan het op 11 GB: ComfyUI met Stable Diffusion XL, ControlNet (de vorm van onze render) en
+  IP-Adapter (de stijl van Marcels plaat); Flux alleen verkleind en traag. Een paar sessies opzetten, zo'n 15 GB aan
+  modellen, en SDXL volgt een opdracht minder goed dan het model van ChatGPT. Voorstel van Claude: eerst de proef met de
+  hand in ChatGPT (de leidraden staan in `gereedschap/pixelart/uit/ai/`, Marcel sleept ze met zijn plaat erin, slaat het
+  antwoord op, en `naarPixels` maakt er pixel art van); haalt dat het niveau, dan ComfyUI lokaal voor de honderden beelden.
+  Wacht op Marcel.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
