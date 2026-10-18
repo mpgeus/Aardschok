@@ -28,12 +28,12 @@ regen en het masker van de mist op de kaart. Helemaal uitgezoomd (0,35, het proe
 zo'n 30 ms per beeld vóór A1 naar 4,4 ms met de kaart erbij, waarvan 1,7 ms voor de processor; en steeds hetzelfde beeld.
 WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **Wacht op Marcel**: meten in Firefox
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
-**De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen.
-**Middernacht (H1 tot H3), G1, G2 en F2 zijn af** (onder "Af"). **F1, het land in gedeelde blokken: Bezig in sessie
-`ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna F1"): het eiland in vaste blokken van 16 bij 16, gedeeld tussen de
-delen en de stukken, zodat elke stap van het vooruit maken onder 3 ms blijft (de proef op `proef/tik-land`); gebouwd op
-die branch (een stap van 6,3 naar 0,6 à 1,5 ms, hetzelfde land), wacht op "push it". De rest
-wacht op Marcel (het voorstel staat onderaan "De tik").
+**De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
+gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
+het land, met de voortgang in het menu (F2). **Wacht op Marcel**: H4 (het koude werk na het laden ook achter de
+voortgang: de eerste tik 35 à 39 ms, de eerste middernacht 46 à 70), en later F3, F4 en F6 (het voorstel onderaan "De
+tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+(`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -1470,6 +1470,8 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
 ## Af (sinds 11 okt)
 
+- F1, het land in gedeelde blokken (18 okt; `snelheid.md`, "De tik"): een stap van het vooruit maken van 6,3 naar 0,6 à
+  1,5 ms, met precies hetzelfde land; na het laden de tikken boven 8 ms van zo'n 45 naar 5 à 11.
 - G1, de kuddes (18 okt; `snelheid.md`, "De tik"): een volger zoekt geen omweg om zijn eigen kudde, maar wacht of is er;
   de gewone tik van 1,81 naar 0,81 ms, en de kudde staat iets losser.
 - G2 en F2 (18 okt; `snelheid.md`, "De tik"): het wild kijkt alleen naar mensen in het vak om de groep (hetzelfde spel,
