@@ -38,7 +38,15 @@ zo'n halve minuut), de getallen in `uit/wielproef/metingen.json`.
 | 6 | Op de maat van het spel | De plaat `spelmaat.png`: zie de bevindingen. |
 | 7 | Flikkeren, vervorming, naden, aliasing | Geen naden (rondom een geheel aantal herhalingen), geen zichtbare vervorming in de ruitjes, de mip-niveaus halveren het verspringen op dezelfde plek. |
 | 8 | Tegen de procedurele materialen | De platen naast elkaar, en de meting. |
-| 9 | De oude renderer pixel voor pixel gelijk | Ja: alle 65 beelden van de nulmeting gelijk, na elke wijziging opnieuw gemeten. |
+| 9 | De oude renderer pixel voor pixel gelijk | Ja: alle 65 beelden van de nulmeting gelijk, na elke wijziging opnieuw gemeten. En even snel: zie hieronder. |
+
+**Even snel (na de commit gevonden en hersteld):** de eerste versie hing de afwikkeling als eigenschap `uv` aan elk
+onderdeel van het wiel. Daardoor kregen die onderdelen in V8 een andere vorm, en werd de rekenlus over de onderdelen
+(`bouwSdf`) twee keer zo traag, ook voor elk model dat in hetzelfde proces erna kwam: de ossenkar van 2,0 naar 4,7 s per
+beeld, de heer van 0,7 naar 1,8 s, de nulmeting van 97 naar 260 s, met precies dezelfde pixels. Nu hangt de afwikkeling
+ernaast (`TX.metUv`, een WeakMap in `textuur.cjs`), en is alles weer even snel als vóór de proef (gemeten tegen een losse
+kopie van 82d8d4cc). Les voor alles wat nog komt: **geef een onderdeel geen nieuwe eigenschappen**; wat erbij hoort,
+hangt ernaast.
 
 ## De metingen
 

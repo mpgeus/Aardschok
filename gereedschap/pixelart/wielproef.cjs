@@ -5,7 +5,7 @@
 //   oud      zoals het nu is: het wiel gebouwd op zijn hoek, het hout procedureel (ruis in de ruimte van de kar);
 //   nieuw    de AI-texturen (texturen/hout.png en ijzer.png, uit gereedschap/ai/textuur-ai.cjs), het wiel in rust gebouwd
 //            en gedraaid met houding.cjs, zodat elk punt zijn plek in rust houdt (`terug`); de afwikkeling per onderdeel
-//            staat op het wiel zelf (`uv`), de dichtheid en de belichting in het materiaal (textuur.cjs);
+//            staat naast elk onderdeel van het wiel (`TX.metUv`), de dichtheid en de belichting in het materiaal (textuur.cjs);
 //   ruit     als nieuw, met een controletextuur van gekleurde vakjes: zo zie je vastzitten, uitrekken en naden;
 //   zonderMip als nieuw, zonder mip-niveaus: wat er zonder filtering gebeurt (kartelen, flikkeren);
 //   glijdend dezelfde AI-texturen, maar het wiel gebouwd zoals het oude (op zijn hoek, zonder rusthouding): de tegenproef,
@@ -25,7 +25,7 @@ const K = require('./kern.cjs');
 const O = require('./ossenkar.cjs');
 const TX = require('./textuur.cjs');
 const { model } = require('./figuren.cjs');
-const { beweging, beweegDelen } = require('./houding.cjs');
+const { beweging, } = require('./houding.cjs');
 const { apng } = require('./apng.cjs');
 const E = require('../ai/etiket.cjs');
 
@@ -63,7 +63,7 @@ function materialen(variant) {
 // Het wiel als model. Oud: zoals de kar hem bouwt (de spaken op hun hoek). Nieuw: in rust gebouwd, en gedraaid met
 // houding.cjs om zijn as (dezelfde draairichting als het oude wiel: de spaken staan op dezelfde plek).
 function wielModel(variant, hoek) {
-  const delen = variant === 'oud' || variant === 'glijdend' ? O.wiel(ZIJ, hoek) : beweegDelen(O.wiel(ZIJ, 0), beweging({ as: [1, 0, 0], graden: (-hoek * 180) / Math.PI, om: C }));
+  const delen = variant === 'oud' || variant === 'glijdend' ? O.wiel(ZIJ, hoek) : TX.beweeg(O.wiel(ZIJ, 0), beweging({ as: [1, 0, 0], graden: (-hoek * 180) / Math.PI, om: C }));
   return model(delen, materialen(variant), { midden: C, straal: O.WIEL.r + 6 });
 }
 

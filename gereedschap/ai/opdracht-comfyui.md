@@ -153,3 +153,204 @@ basistechniek bewezen werkt. Lever een visuele vergelijking en technische evalua
 
 Belangrijk: bouw dit als herbruikbaar materiaalsysteem, niet als een speciale oplossing die uitsluitend voor dit
 wagenwiel werkt.
+
+# Vierde opdracht: HD-pixelartkwaliteit, geometrie en resolutie
+
+Van Marcel, 18 okt 2026, letterlijk (na de proef met het wagenwiel, `wielproef-evaluatie.md`); de koppen een niveau lager.
+Het antwoord: `hd-wielproef.md`.
+
+## Doel
+
+We hebben inmiddels aangetoond dat onze eigen JavaScript-raymarchingrenderer AI-texturen kan toepassen op objecten en dat deze texturen tijdens rotaties en vanuit verschillende kijkrichtingen aan de geometrie gekoppeld blijven.
+
+Dit is een belangrijke technische stap, maar de visuele kwaliteitsverbetering is nog onvoldoende.
+
+**Ons uiteindelijke doel is de hoogwaardige HD-pixelartkwaliteit van de goedgekeurde ChatGPT-sprites reproduceren, volledig consistent over alle kijkrichtingen en animatieframes.**
+
+We gaan nu onderzoeken waar de belangrijkste kwaliteitsbeperking zit:
+
+1. De kwaliteit van de gebruikte materialen en texturen.
+2. De detaillering van de procedurele 3D-geometrie.
+3. De interne renderresolutie.
+4. De pixelartverwerking, belichting en sampling.
+
+Voer dit experiment uit met het bestaande wagenwiel. Verander de productieversie van de renderer niet.
+
+## Experiment 1 — Drie kwaliteitsniveaus
+
+Maak drie afzonderlijke varianten van exact hetzelfde wagenwiel.
+
+### Variant A — Origineel
+
+Gebruik de bestaande procedurele geometrie, kleuren en materialen.
+
+Dit is onze referentie waarmee we alle verbeteringen vergelijken.
+
+### Variant B — Hoogwaardige AI-materialen
+
+Behoud exact dezelfde geometrie als variant A.
+
+Verbeter uitsluitend de materiaalafwerking:
+
+- Zichtbare, natuurlijke houtnerven.
+- Subtiele slijtage en beschadigingen.
+- Warme highlights op houten oppervlakken.
+- Donkere naden en materiaalschaduwen.
+- Realistische ijzerstructuur.
+- Metaalreflecties en klinknagelaccenten waar de bestaande geometrie die ondersteunt.
+- Rijkere kleurvariatie zonder visuele ruis.
+
+Gebruik bij voorkeur AI-gegenereerde texturen via ComfyUI, toegepast met de bestaande stabiele rusthoudingcoördinaten.
+
+De texturen moeten tijdens rotaties en vanuit alle kijkrichtingen aan het oppervlak gekoppeld blijven.
+
+### Variant C — Verbeterde geometrie + hoogwaardige materialen
+
+Gebruik dezelfde materiaaltechniek als variant B, maar verbeter daarnaast de geometrie.
+
+Concentreer je op:
+
+- Diepere en overtuigender gevormde houten spaken.
+- Een duidelijk gelaagde wielnaaf.
+- Een stevigere ijzeren wielband.
+- Kleine metalen bevestigingen en klinknagels.
+- Meer diepte in de verbindingen.
+- Subtiele afschuiningen aan houten randen.
+- Sterkere licht-schaduwovergangen.
+- Overtuigende materiaalscheiding.
+
+**Belangrijk:** behoud de oorspronkelijke buitendiameter, dikte, positie, rotatieas en wereldschaal. Kleine interne geometrische verbeteringen zijn toegestaan, maar het wiel moet zonder aanpassingen in de bestaande wagen passen.
+
+## Experiment 2 — Interne renderresolutie
+
+Render alle drie de varianten op:
+
+- 1× huidige interne resolutie.
+- 2× huidige interne resolutie.
+- 4× huidige interne resolutie.
+
+Gebruik voor alle resoluties:
+
+- Identieke geometrie per variant.
+- Identieke materialen.
+- Identieke camerahoek.
+- Identieke belichting.
+- Identieke wereldschaal.
+- Identieke rotatiestand.
+
+Verhoog daadwerkelijk de interne rasterresolutie. Vergroot niet simpelweg een reeds gerenderde afbeelding.
+
+### Verplichte vergelijking
+
+Toon iedere variant op twee manieren:
+
+**A. Native pixelweergave**
+
+Toon de volledige render op zijn eigen interne resolutie, zodat de hoeveelheid beschikbare details duidelijk zichtbaar is.
+
+**B. Werkelijke spelgrootte**
+
+Toon alle resoluties op exact dezelfde fysieke weergavegrootte in het spel.
+
+Gebruik hiervoor een expliciet vastgelegde downsampling- of displaymethode.
+
+We willen vaststellen:
+
+- Hoeveel extra details daadwerkelijk zichtbaar blijven.
+- Of houtnerven, klinknagels en metaalreflecties beter leesbaar worden.
+- Of de pixelart scherper of juist te fijn en rommelig wordt.
+- Of hogere resoluties ongewenste aliasing veroorzaken.
+- Of 2× of 4× een aantoonbare visuele verbetering oplevert.
+- Wat de gevolgen zijn voor rendertijd, spritegeheugen en uiteindelijke atlasgrootte.
+
+Vergelijk ook nearest-neighbor en een geschikte gefilterde downsamplingmethode. Vermijd dat een slechte schaalmethode de resultaten vertekent.
+
+## Experiment 3 — Animatieconsistentie
+
+Render voor iedere variant:
+
+**Acht kijkrichtingen**
+
+N, NO, O, ZO, Z, ZW, W en NW.
+
+**Wielrotatie**
+
+Minimaal acht opeenvolgende rotatiestanden, plus een volledige omwenteling.
+
+Controleer:
+
+1. Of houtnerven met de spaken meedraaien.
+2. Of metalen details op hun oorspronkelijke positie blijven.
+3. Of de texturen niet over oppervlakken schuiven.
+4. Of zichtbare naden ontstaan.
+5. Of er temporele flikkering of aliasing optreedt.
+6. Of het wiel na een volledige omwenteling exact overeenkomt met het beginbeeld.
+
+Gebruik waar mogelijk geautomatiseerde controles en lever daarnaast een geanimeerde preview op.
+
+Let op: vaste textuurcoördinaten garanderen niet automatisch flikkervrije pixelweergave. Sampling, belichting en rasterisatie kunnen nog steeds temporele artefacten veroorzaken.
+
+## Experiment 4 — Beoordeling op artistieke kwaliteit
+
+Vergelijk de resultaten met de goedgekeurde ChatGPT-sprites van de os en wagen.
+
+Beoordeel:
+
+| Criterium | Wat we willen bereiken |
+|---|---|
+| Materiaalrijkdom | Overtuigende hout- en metaalstructuren |
+| Diepte | Duidelijke driedimensionale vorm |
+| Licht | Warme highlights en sterke schaduwen |
+| Pixelartstijl | Fijne, verzorgde HD-pixelart |
+| Leesbaarheid | Details blijven zichtbaar op spelgrootte |
+| Consistentie | Identieke constructie tussen frames |
+| Geometrie | Oorspronkelijke buitenafmetingen behouden |
+| Prestaties | Geschikt voor grootschalige spriteproductie |
+
+Gebruik zowel visuele beoordeling als meetbare technische criteria. Beschouw meer hoogfrequente pixelverschillen niet automatisch als hogere artistieke kwaliteit.
+
+## Technische randvoorwaarden
+
+Onze hardware:
+
+- NVIDIA GTX 1080 Ti met 11 GB VRAM.
+- 24 GB systeem-RAM.
+- Bestaande Pascal-compatibele ComfyUI-installatie.
+
+Onze renderer:
+
+- Eigen JavaScript-raymarchingrenderer in Node.js.
+- Procedurele geometrie via afstandsfuncties.
+- Materialen gekoppeld aan object- en rusthoudingcoördinaten.
+- Bestaande ondersteuning voor meerdere kijkrichtingen en animatiestanden.
+
+Vereisten:
+
+- Behoud de huidige werkende renderer.
+- Maak alle uitbreidingen optioneel.
+- Gebruik geen speciale oplossingen die uitsluitend voor dit wiel werken.
+- Ontwerp verbeteringen als herbruikbare materiaal- en geometriesystemen.
+- Controleer dat de oude renderuitvoer pixel voor pixel identiek blijft wanneer de nieuwe functies uitgeschakeld zijn.
+- Documenteer de technische gevolgen voor toekomstige gebouwen, dieren, personages en voertuigen.
+
+## Gewenste oplevering
+
+Lever op:
+
+1. Een vergelijkingssheet met A, B en C op 1×, 2× en 4× resolutie.
+2. Een tweede vergelijkingssheet waarop alle resultaten dezelfde fysieke spelgrootte hebben.
+3. Een overzicht van acht kijkrichtingen.
+4. Een animatiepreview van het draaiende wiel.
+5. Een overzicht van rendertijden, geheugenverbruik en eventuele artefacten.
+6. Een technische evaluatie van de kwaliteitswinst.
+7. Een concreet advies over de beste combinatie van geometrie, materialen en resolutie.
+
+## Belangrijkste beslisvraag
+
+**Kunnen we met onze eigen renderer, verbeterde geometrie en hoogwaardige AI-texturen daadwerkelijk de visuele kwaliteit van de goedgekeurde ChatGPT-sprites benaderen, zonder de consistentie tussen animatieframes te verliezen?**
+
+Als de resultaten onvoldoende zijn, benoem dan precies welke beperkingen overblijven en welke technische aanpak daarvoor nodig is.
+
+We willen geen cosmetische verbetering van enkele procenten. We zoeken een duidelijke, zichtbare kwaliteitsstap richting professionele HD-pixelart.
+
+Voer het experiment gecontroleerd uit, zodat we achteraf kunnen vaststellen welke wijziging verantwoordelijk is voor iedere verbetering.

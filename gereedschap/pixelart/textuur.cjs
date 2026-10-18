@@ -7,7 +7,7 @@
 // Drie stukken:
 // - een textuur: een PNG met zijn mip-niveaus (elk niveau de helft, het gemiddelde van vier), zodat een fijne textuur op
 //   onze kleine sprites niet gaat flikkeren of kartelen;
-// - een afwikkeling per onderdeel (`deel.uv`): hoe het oppervlak van dát onderdeel plat gaat. `rond` voor wat om een as
+// - een afwikkeling per onderdeel (`metUv(deel, uv)`): hoe het oppervlak van dát onderdeel plat gaat. `rond` voor wat om een as
 //   ligt (een velg, een band, een naaf, een ton), `langs` voor wat langs een as loopt (een spaak, een stok, een poot),
 //   `vlak` voor een plank. Een afwikkeling geeft [u, v, omtrekU, omtrekV] in eenheden; is een richting gesloten (`rond`
 //   om de as, `langs` om de stok heen), dan staat zijn omtrek erbij, en sluit de textuur rondom precies aan, zonder naad.
@@ -17,6 +17,7 @@
 'use strict';
 const fs = require('fs');
 const K = require('./kern.cjs');
+const HH = require('./houding.cjs');
 
 // ---------------------------------------------------------------- de textuur en zijn mip-niveaus
 
@@ -80,7 +81,27 @@ function monster(T, u, v, niveau) {
   return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 }
 
-// ---------------------------------------------------------------- afwikkelingen (op het onderdeel: deel.uv)
+// ---------------------------------------------------------------- afwikkelingen (naast het onderdeel)
+
+// De afwikkeling hangt naast het onderdeel, niet eraan: een eigenschap `uv` op het onderdeel gaf het in V8 een andere vorm,
+// en dan werd de rekenlus over de onderdelen (bouwSdf in kern.cjs) twee keer zo traag, ook voor elk model dat erna kwam
+// (gemeten op 18 okt: de ossenkar van 2,0 naar 4,7 s per beeld, de heer van 0,7 naar 1,8). metUv(deel, uv) zet hem en
+// geeft het deel terug, uvVan(deel) leest hem, en beweeg(delen, B) is beweegDelen uit houding.cjs, met de afwikkeling
+// mee naar het bewogen deel (dat is een nieuw object).
+const UV = new WeakMap();
+function metUv(deel, uv) {
+  UV.set(deel, uv);
+  return deel;
+}
+const uvVan = (deel) => (deel ? UV.get(deel) : undefined);
+function beweeg(delen, B) {
+  const nieuw = HH.beweegDelen(delen, B);
+  nieuw.forEach((d, i) => {
+    const uv = UV.get(delen[i]);
+    if (uv) UV.set(d, uv);
+  });
+  return nieuw;
+}
 
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -155,8 +176,9 @@ function textuurMateriaal(o) {
     textuur: (x, y, z, nx, ny, nz, deel, kijk) => {
       // o.mip === false: altijd het fijnste niveau (alleen om te laten zien wat de mip-niveaus doen tegen kartelen).
       const niveau = o.mip === false ? 0 : Math.max(0, basis + Math.log2(1 / Math.max(0.35, kijk)) * 0.5);
-      if (deel && deel.uv) {
-        const [u, v, omtrekU, omtrekV] = deel.uv(x, y, z, nx, ny, nz);
+      const uv = uvVan(deel);
+      if (uv) {
+        const [u, v, omtrekU, omtrekV] = uv(x, y, z, nx, ny, nz);
         // Een gesloten richting: zoveel hele textuurbreedtes (of -hoogtes) rondom als het dichtst bij de schaal ligt, zodat
         // de naad verdwijnt.
         const su = omtrekU ? (Math.max(1, Math.round((omtrekU * schaal) / T.b)) * T.b) / omtrekU : schaal;
@@ -206,4 +228,4 @@ function palet(kleuren, n) {
   return dozen.filter((d) => d.length).map((d) => [0, 1, 2].map((j) => Math.round(d.reduce((s, k) => s + k[j], 0) / d.length)));
 }
 
-module.exports = { laad, maak, monster, rond, langs, vlak, textuurMateriaal, palet };
+module.exports = { laad, maak, monster, rond, langs, vlak, metUv, uvVan, beweeg, textuurMateriaal, palet };

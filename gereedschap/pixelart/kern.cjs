@@ -409,6 +409,33 @@ const sdf = {
   },
 };
 
+// Een pixel van een materiaal met een textuur (textuur.cjs; werklijst vraag 180, de proef met het wiel): de kleur van
+// het oppervlak op de plek in de rusthouding van het onderdeel (zoals het patroon), met de normaal ook in rust, belicht
+// met het licht dat in `stap` zit (tussen lo en hi). Zo blijft de textuur aan het onderdeel vastzitten in elke
+// kijkrichting en elke stand. Op verzoek (o.rust) per pixel ook de plek in rust en het onderdeel: om te meten of iets
+// vastzit. Geeft de vlag die erbij komt.
+function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o) {
+  const rp = naarDeel(deelI, x, y, z);
+  if (o.rust) {
+    if (!B.rust) B.rust = new Float32Array(B.b * B.h * 4).fill(NaN);
+    B.rust[idx * 4] = rp[0];
+    B.rust[idx * 4 + 1] = rp[1];
+    B.rust[idx * 4 + 2] = rp[2];
+    B.rust[idx * 4 + 3] = deelI;
+  }
+  if (!mat.textuur) return 0;
+  const rq = naarDeel(deelI, x + nx, y + ny, z + nz);
+  const rl = Math.hypot(rq[0] - rp[0], rq[1] - rp[1], rq[2] - rp[2]) || 1;
+  const kl = mat.textuur(rp[0], rp[1], rp[2], (rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl, model.delen[deelI], Math.max(0, kijk));
+  const licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
+  if (!B.kleur) B.kleur = new Float32Array(B.b * B.h * 4);
+  B.kleur[idx * 4] = kl[0] * licht;
+  B.kleur[idx * 4 + 1] = kl[1] * licht;
+  B.kleur[idx * 4 + 2] = kl[2] * licht;
+  B.kleur[idx * 4 + 3] = stap;
+  return VLAG.RGB;
+}
+
 // Een model tekenen in het beeld. o: { gx, gy (tegels), z (eenheden), richting (naam of graden),
 // schaal, omlijn, gloed (extra lichten meenemen) }. Geeft de lichten van het model terug in
 // wereldcoördinaten.
@@ -645,32 +672,10 @@ function tekenModel(B, model, o = {}) {
         }
       }
       if (mat.glad || (o.dither !== true && mat.dither !== true)) vlag |= VLAG.GLAD;
-      // Een materiaal met een textuur (textuur.cjs; werklijst vraag 180, de proef met het wiel): de kleur van het oppervlak
-      // op de plek in de rusthouding van het onderdeel (zoals het patroon hierboven), met de normaal ook in rust, belicht
-      // met het licht dat in `stap` zit (tussen lo en hi). Zo blijft de textuur aan het onderdeel vastzitten in elke
-      // kijkrichting en elke stand. Zonder textuur loopt hier niets: alles blijft zoals het was.
-      if (mat.textuur) {
-        const rp = naarDeel(deelI, x, y, z);
-        const rq = naarDeel(deelI, x + nx, y + ny, z + nz);
-        const rl = Math.hypot(rq[0] - rp[0], rq[1] - rp[1], rq[2] - rp[2]) || 1;
-        const kl = mat.textuur(rp[0], rp[1], rp[2], (rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl, model.delen[deelI], Math.max(0, kijk));
-        const licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
-        if (!B.kleur) B.kleur = new Float32Array(B.b * B.h * 4);
-        B.kleur[idx * 4] = kl[0] * licht;
-        B.kleur[idx * 4 + 1] = kl[1] * licht;
-        B.kleur[idx * 4 + 2] = kl[2] * licht;
-        B.kleur[idx * 4 + 3] = stap;
-        vlag |= VLAG.RGB;
-      }
-      // Op verzoek (o.rust) per pixel de plek in de rusthouding en het onderdeel: om te meten of iets vastzit.
-      if (o.rust) {
-        const rp = naarDeel(deelI, x, y, z);
-        if (!B.rust) B.rust = new Float32Array(B.b * B.h * 4).fill(NaN);
-        B.rust[idx * 4] = rp[0];
-        B.rust[idx * 4 + 1] = rp[1];
-        B.rust[idx * 4 + 2] = rp[2];
-        B.rust[idx * 4 + 3] = deelI;
-      }
+      // Een materiaal met een textuur (textuur.cjs; werklijst vraag 180), of de rusthouding op verzoek: buiten deze lus
+      // (textuurPixel), zodat de lus zelf even klein en snel blijft als zonder (binnen de lus kostte het de helft van de
+      // snelheid, ook zonder textuur). Zonder textuur loopt hier niets: alles blijft zoals het was.
+      if (mat.textuur || o.rust) vlag |= textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o);
       B.ramp[idx] = ramp;
       B.stap[idx] = stap;
       B.diep[idx] = diepte;
