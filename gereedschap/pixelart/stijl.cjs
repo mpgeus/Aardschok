@@ -34,6 +34,8 @@
 //   verdeling(n, o)                   hoe vaak elke toon voorkomt, als standaard
 //   kalibreer(Gs, stijl, doel, st)    de drempels per materiaal, eens per ding (niet per beeld: dat zou flikkeren)
 //   stileer(G, stijl, stappen)        → { b, h, rgba, toon, vast }
+//   passen(G, o), lijnenVan(B), diepteVan(B)   de lagen van een render als beelden (silhouet, materiaal, onderdelen,
+//                                     basis zonder textuur, licht, schaduw, diepte, lijnen), op de maat van de sprite
 'use strict';
 const K = require('./kern.cjs');
 
@@ -492,4 +494,85 @@ function stileer(G, stijl, st = {}) {
   return { b, h, rgba: uit, toon, vast };
 }
 
-module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, lum, lin, srgb };
+// ---------------------------------------------------------------- render passes
+
+// De lagen van een render als beelden, op precies de maat en plek van de sprite (uit G, op de doelmaat), voor een
+// AI-afwerking (Marcels zevende opdracht, gereedschap/ai/ai-afwerking.md) of om te bekijken. o.basis: per materiaal (de
+// naam van de ramp) de kleur zonder textuur (anders het gemiddelde albedo van dat materiaal in dit beeld).
+//   silhouet    wit waar het ding is (G.dek), verder doorzichtig: het exacte alfamasker
+//   materiaal   per materiaal één kleur (hout oranje, ijzer blauw, de rest grijs)
+//   onderdelen  per onderdeel (model.delen-index) een eigen vaste kleur
+//   basis       de kleur van het materiaal maal het licht, zonder de details van de textuur
+//   licht       het licht als grijs (0 tot 1,4 naar 0 tot 255)
+//   schaduw     wit in de zon, donker in een slagschaduw
+//   diepte      dichtbij wit, ver weg donker
+const PASKLEUR = { hout: [205, 125, 45], ijzer: [90, 130, 220] };
+function passen(G, o = {}) {
+  const N = G.b * G.h;
+  const leeg = () => ({ b: G.b, h: G.h, rgba: Buffer.alloc(N * 4) });
+  const uit = { silhouet: leeg(), materiaal: leeg(), onderdelen: leeg(), basis: leeg(), licht: leeg(), schaduw: leeg(), diepte: leeg() };
+  let d0 = Infinity, d1 = -Infinity;
+  const gem = {};
+  for (let i = 0; i < N; i++) {
+    if (!G.dek[i]) continue;
+    d0 = Math.min(d0, G.diep[i]);
+    d1 = Math.max(d1, G.diep[i]);
+    const m = (gem[G.mat[i]] || (gem[G.mat[i]] = [0, 0, 0, 0]));
+    for (let c = 0; c < 3; c++) m[c] += lin(K.klem(G.albedo[i * 3 + c], 0, 255));
+    m[3]++;
+  }
+  for (let i = 0; i < N; i++) {
+    if (!G.dek[i]) continue;
+    const naam = K.RAMP_NAMEN[G.mat[i]];
+    const zet = (beeld, k) => beeld.rgba.set([...k, 255], i * 4);
+    zet(uit.silhouet, [255, 255, 255]);
+    zet(uit.materiaal, PASKLEUR[naam] || [150, 150, 150]);
+    zet(uit.onderdelen, [60 + (K.hash(G.stuk[i], 1) % 196), 60 + (K.hash(G.stuk[i], 2) % 196), 60 + (K.hash(G.stuk[i], 3) % 196)]);
+    const b = o.basis && o.basis[naam] ? o.basis[naam].map(lin) : gem[G.mat[i]].slice(0, 3).map((x) => x / gem[G.mat[i]][3]);
+    const l = Number.isNaN(G.licht[i]) ? 1 : G.licht[i];
+    zet(uit.basis, b.map((x) => srgb(x * l)));
+    const g = Math.round(K.klem(l / 1.4, 0, 1) * 255);
+    zet(uit.licht, [g, g, g]);
+    const z = Math.round(K.klem(Number.isNaN(G.zon[i]) ? 1 : G.zon[i], 0, 1) * 255);
+    zet(uit.schaduw, [z, z, z]);
+    const d = Math.round(40 + 215 * ((G.diep[i] - d0) / Math.max(1e-6, d1 - d0)));
+    zet(uit.diepte, [d, d, d]);
+  }
+  return uit;
+}
+// De lijnen van een render op zijn eigen maat (B uit kern.cjs, of de buffers van hdstijl.cjs render): wit op zwart, waar
+// er aan één kant niets is, waar een ander onderdeel begint, de diepte springt (meer dan `sprong` eenheden) of het vlak
+// knikt (de normalen verschillen meer dan `knik`); zoals doek.cjs lijnenOpDoek, voor een ControlNet.
+function lijnenVan(B, o = {}) {
+  const sprong = o.sprong ?? 1.5;
+  const knik = o.knik ?? 0.8;
+  const uit = { b: B.b, h: B.h, rgba: Buffer.alloc(B.b * B.h * 4) };
+  const stuk = (i) => (B.rust ? B.rust[i * 4 + 3] : B.deel[i]);
+  const leeg = (i) => B.ramp[i] < 0;
+  const scheidt = (i, j) => {
+    if (leeg(i) !== leeg(j)) return true;
+    if (leeg(i)) return false;
+    if (stuk(i) !== stuk(j)) return true;
+    if (Math.abs(B.diep[i] - B.diep[j]) > sprong) return true;
+    return B.nrm[i * 3] * B.nrm[j * 3] + B.nrm[i * 3 + 1] * B.nrm[j * 3 + 1] + B.nrm[i * 3 + 2] * B.nrm[j * 3 + 2] < knik;
+  };
+  for (let y = 0; y < B.h; y++) for (let x = 0; x < B.b; x++) {
+    const i = y * B.b + x;
+    const lijn = (x + 1 < B.b && scheidt(i, i + 1)) || (y + 1 < B.h && scheidt(i, i + B.b)) || (x > 0 && scheidt(i, i - 1)) || (y > 0 && scheidt(i, i - B.b));
+    uit.rgba.set(lijn ? [255, 255, 255, 255] : [0, 0, 0, 255], i * 4);
+  }
+  return uit;
+}
+// De diepte van een render op zijn eigen maat: dichtbij wit, ver weg donker, de achtergrond zwart (voor een ControlNet).
+function diepteVan(B) {
+  let d0 = Infinity, d1 = -Infinity;
+  for (let i = 0; i < B.b * B.h; i++) if (B.ramp[i] >= 0) { d0 = Math.min(d0, B.diep[i]); d1 = Math.max(d1, B.diep[i]); }
+  const uit = { b: B.b, h: B.h, rgba: Buffer.alloc(B.b * B.h * 4) };
+  for (let i = 0; i < B.b * B.h; i++) {
+    const d = B.ramp[i] >= 0 ? Math.round(60 + 195 * ((B.diep[i] - d0) / Math.max(1e-6, d1 - d0))) : 0;
+    uit.rgba.set([d, d, d, 255], i * 4);
+  }
+  return uit;
+}
+
+module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, passen, lijnenVan, diepteVan, lum, lin, srgb };

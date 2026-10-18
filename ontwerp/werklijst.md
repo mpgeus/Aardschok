@@ -307,6 +307,17 @@ stenen huizen. **Ronde 3 is af.**
   volle slag 100%; 94% van de nagels zichtbaar tegen 46%). Wat overblijft is geometrie (een brede velg van planken,
   dikke spaken met beslag, een koperen naaf) en de camera (het doel staat rechter). **Wacht op Marcel:** D als stijl, en
   de volgende proef: het wiel naar de geometrie van het doel met D, of D op de hele ossenkar.
+  **De AI-afwerking** (18 en 19 okt; Marcels zevende opdracht, fase 1 tot 3: een beeldmodel werkt onze sprite bij, met
+  het ChatGPT-wiel als stijl; het verslag in `gereedschap/ai/ai-afwerking.md`, de platen in `uit/ai/afwerking/`): voor
+  Route A (SDXL, ControlNet union met onze eigen lijnen en diepte, IP-Adapter, een latent masker) was alles er al; render
+  passes in `stijl.cjs` (`passen`, `lijnenVan`, `diepteVan`), de werkstroom in `gereedschap/ai/afwerking.cjs`. Uitkomst:
+  de vorm blijft (97 tot 99% overlap, acht spaken, maat binnen 0,4 pixel), byte voor byte reproduceerbaar, zo'n 95 s per
+  sprite. Op het doek van 1024 lijkt het sterk op het ChatGPT-wiel, op spelgrootte maar ten dele (lijnen, koperen naaf),
+  in kleur en contrast is D beter, en **bij draaien flikkert het twee à drie keer zo veel** (0,37 tot 0,41 tegen 0,16):
+  elke stand wordt los beschilderd. Route B (Flux Kontext) is onderzocht, niet geïnstalleerd: hetzelfde probleem, 5 tot
+  15 minuten per beeld op de 1080 Ti, en voor de productie een commerciële licentie. **Wacht op Marcel:** verder met de
+  AI per beeld (de acht standen in één beeld, of een keten), of de AI één keer op het oppervlak (textuur in rust, zoals de
+  stijlproef); en Route B wel of niet.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

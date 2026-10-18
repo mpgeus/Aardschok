@@ -469,3 +469,151 @@ Eindvraag
 Welke combinatie van materiaalbehandeling, belichting, kleurreeksen en pixelartafwerking brengt ons zichtbaar het dichtst bij de goedgekeurde ChatGPT-stijl?
 Geef een onderbouwd advies en laat de resultaten zien.
 Het doel is niet de hoogste technische scherpte, maar de beste artistieke overeenkomst bij de werkelijke spelgrootte.
+
+# Zevende opdracht: een AI-afwerking op onze sprites
+
+Van Marcel, 18 okt 2026, letterlijk (na `hd-stijl.md`; "Graag eerst fase 1 tm 3 uitvoeren"). Het antwoord:
+`ai-afwerking.md`.
+
+Aardschok — Experiment AI Style Transfer Pipeline
+
+Je hebt inmiddels een procedurele renderer gebouwd die reproduceerbare sprites genereert. De geometrie, kleuren, materialen en belichting worden grotendeels door code bepaald.
+
+De resultaten zijn technisch consistent, maar bereiken nog niet de artistieke kwaliteit van de ChatGPT-referentie.
+
+We gaan onderzoeken of een AI-afwerkingsstap dit verschil kan verkleinen.
+
+1. Doelstelling
+
+Bouw een experimentele pipeline waarin:
+
+- Onze bestaande renderer verantwoordelijk blijft voor geometrie, perspectief en afmetingen.
+- Een generatief beeldmodel verantwoordelijk wordt voor de artistieke afwerking.
+- De ChatGPT-referentie dient als visueel stijlvoorbeeld.
+- De uiteindelijke sprite zijn oorspronkelijke afmetingen, positie en silhouet behoudt.
+- Het resultaat reproduceerbaar en geschikt voor batchverwerking is.
+
+We willen uiteindelijk honderden Aardschok-sprites op dezelfde manier kunnen produceren.
+
+2. Gebruik de bestaande infrastructuur
+
+We beschikken al over:
+
+- ComfyUI op "127.0.0.1:8188".
+- SDXL Base 1.0.
+- Een bestaande texture-AI-integratie.
+- Een procedurele renderer.
+- Het oorspronkelijke ChatGPT-wiel als referentie.
+- Wielvariant D als beste huidige benadering.
+
+Behoud deze infrastructuur.
+
+Onderzoek welke aanvullende modellen, nodes en workflows nodig zijn.
+
+3. Bouw twee experimentele routes
+
+Route A: SDXL + ControlNet
+
+Gebruik onze huidige SDXL-installatie.
+
+Onderzoek en implementeer:
+
+- Image-to-image.
+- ControlNet Canny of Lineart voor vormbehoud.
+- Een geschikte referentie-adapter, bijvoorbeeld IP-Adapter, voor stijlsturing.
+- Instelbare denoise strength.
+- Vaste seeds.
+- Transparantieherstel met het oorspronkelijke silhouetmasker.
+
+De referentie moet de stijl sturen. De bestaande render moet de geometrie bepalen.
+
+Route B: FLUX Kontext
+
+Onderzoek of een geschikte FLUX Kontext-variant lokaal kan draaien.
+
+Gebruik de ChatGPT-referentie om de bestaande wielrender artistiek te bewerken.
+
+Controleer eerst:
+
+- Hardwarevereisten en beschikbaar VRAM.
+- Modelcompatibiliteit met onze ComfyUI-versie.
+- Ondersteuning voor referentiebeelden.
+- Geheugengebruik en rendertijd.
+- Licentievoorwaarden voor commercieel gebruik.
+
+Installeer geen grote modellen voordat je de benodigde middelen en verwachte voordelen hebt gerapporteerd.
+
+4. Maak render passes
+
+Breid de procedurele renderer waar praktisch mogelijk uit met:
+
+1. Een exact silhouet-/alfamasker.
+2. Een materiaal-ID-masker voor hout en ijzer.
+3. Een basisrender zonder procedurele textuurdetails.
+4. Een belichtings- of schaduwlaag, indien beschikbaar.
+
+Deze moeten exact dezelfde canvasafmetingen en coördinaten gebruiken.
+
+Gebruik de maskers om AI-wijzigingen buiten de oorspronkelijke geometrie te beperken.
+
+5. Eerste test: uitsluitend wiel D
+
+Maak drie resultaten:
+
+A. De huidige procedurele wielrender.
+
+B. SDXL met AI-afwerking.
+
+C. FLUX Kontext met AI-afwerking, indien technisch haalbaar.
+
+Vergelijk ze allemaal met het oorspronkelijke ChatGPT-wiel.
+
+Gebruik identieke canvasafmetingen en dezelfde zichtbare schaal. Lijn de beelden eerst uit voordat je verschillen meet.
+
+Maak daarnaast een vergelijking op de werkelijke spelresolutie.
+
+6. Kwaliteitscontrole
+
+Meet en rapporteer:
+
+- Silhouetovereenkomst.
+- Afwijkingen in afmetingen en positie.
+- Behoud van het aantal spaken.
+- Materiaalherkenbaarheid.
+- Kleurverschillen.
+- Overeenkomst in contrast en schaduwen.
+- Detailbehoud na terugschalen.
+- Rendertijd per sprite.
+- Reproduceerbaarheid bij identieke instellingen.
+
+Gebruik objectieve metingen waar mogelijk, maar presenteer pixelverschillen niet als volledige maatstaf voor artistieke kwaliteit.
+
+Maak een vergelijkingsvel met de referentie en alle varianten.
+
+7. Belangrijke randvoorwaarden
+
+- Verander de bestaande renderer niet destructief.
+- Maak de AI-afwerking optioneel.
+- Behoud de oorspronkelijke sprites en bronbestanden.
+- Sla prompts, seeds, modelversies en instellingen op.
+- Houd rekening met de commerciële toepassing van Aardschok.
+- Voorkom dat de AI onderdelen toevoegt, verwijdert of vervormt.
+- Gebruik geen automatische goedkeuring uitsluitend op basis van een AI-score.
+
+8. Rapportage
+
+Werk gefaseerd.
+
+Fase 1: Onderzoek de bestaande code, ComfyUI-installatie, hardware en beschikbare modellen. Presenteer een technisch implementatieplan.
+
+Fase 2: Implementeer uitsluitend Route A als eerste proof-of-concept.
+
+Fase 3: Genereer een vergelijkingsvel en meet de resultaten.
+
+Fase 4: Adviseer of Route B nog zinvol is.
+
+Fase 5: Ontwerp pas na een succesvolle proef een schaalbare batchpipeline.
+
+Begin nu met fase 1. Geef aan welke bestanden je hebt onderzocht, wat je daadwerkelijk hebt vastgesteld en welke onderdelen nog geïnstalleerd moeten worden.
+
+Belangrijkste succescriterium: het resultaat moet zichtbaar dichter bij de ChatGPT-referentie komen, zonder de bruikbaarheid en geometrische consistentie van onze huidige sprites te verliezen.

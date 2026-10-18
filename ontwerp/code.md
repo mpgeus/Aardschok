@@ -1068,6 +1068,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **Voeg geen stap toe die per beeld beslist** (eilandjes samenvoegen flikkerde: 0,18 naar 0,25); maak het licht glad
   binnen een onderdeel en kies dan. `stijlmaat.cjs ontleed` haalt een sprite en een voorbeeld op dezelfde manier uit
   elkaar (materiaal op kleur, tonen, licht, middel en donker, clusters, randen). De proef is `hdstijl.cjs`.
+- **De AI-afwerking** (18 okt, vraag 180; `gereedschap/ai/ai-afwerking.md`), optioneel, na de stijl: `stijl.cjs passen(G)`
+  geeft de lagen van een render als beelden op de maat en plek van de sprite (silhouet, materiaal, onderdelen, basis
+  zonder textuur, licht, schaduw, diepte), `lijnenVan(B)` en `diepteVan(B)` op de interne resolutie (voor ControlNet).
+  `gereedschap/ai/afwerking.cjs` zet een sprite maal 8 op een doek van 1024 × 1024 en laat SDXL hem bijwerken
+  (image-to-image binnen een latent masker van ons silhouet, ControlNet union met onze lijnen en diepte, IP-Adapter met
+  het ChatGPT-wiel, een vaste seed), en zet hem terug op 2× met de alfa en de omlijning van de sprite. Alles wat erin ging
+  staat naast het beeld (`instellingen.json`, `werkstroom.json`).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

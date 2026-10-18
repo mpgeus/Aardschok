@@ -172,7 +172,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   stijlproef: variant C op 4× met de G-buffer, A tot D en een ladder op 2×, acht richtingen en negen standen, parallel,
   zo'n twee minuten; `ijk` de ijking op het doel, `proef` zuidwest stand 0 om af te stellen, met de renders in een cache
   van 31 MB per beeld; `platen` alleen de platen). Alles in `gereedschap/pixelart/uit/wielproef/`, `uit/hdproef/`,
-  `uit/hdresolutie/` en `uit/hdstijl/`.
+  `uit/hdresolutie/` en `uit/hdstijl/`. De AI-afwerking op wiel D (ComfyUI moet draaien):
+  `node gereedschap/ai/afwerking.cjs passen` (de render passes als plaat), `matrix` (zuidwest stand 0 met een reeks
+  instellingen, zo'n anderhalve minuut per beeld), `een [kant] [stand]` (DENOISE, IP, IPSOORT, LIJN, DIEPTE, SEED,
+  VOORBEELD in de omgeving), `standen` (acht standen en stand 0 opnieuw na het legen van ComfyUI) en `platen [tag]`
+  (het vergelijkingsvel en de metingen), in `uit/ai/afwerking/`.
 
 
 ## Testen in de browser

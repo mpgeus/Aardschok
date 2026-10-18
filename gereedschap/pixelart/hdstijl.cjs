@@ -777,4 +777,4 @@ else if (wat === 'platen') platen();
 else if (wat === 'alles') alles().catch((e) => { console.error(e.message); process.exit(1); });
 else console.log('node gereedschap/pixelart/hdstijl.cjs ijk | proef | render <kant> | platen | alles');
 
-module.exports = { render, ijk, varianten, doelOpMaat, ontleedWiel, wielMaten, stijlVan, meet, VARIANTEN, LADDER };
+module.exports = { render, ijk, leesIjk, varianten, doelWiel, doelOpMaat, ontleedWiel, wielMaten, stijlVan, meet, nagelKoppen4, VARIANTEN, LADDER, UIT };
