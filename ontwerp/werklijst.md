@@ -31,7 +31,9 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 **De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
 gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
 het land, met de voortgang in het menu (F2). **H4 en de meter met de videokaart zijn af** (onder "Af"; in Edge, 18 okt,
-Marcels pc, 30×, nacht en regen, half uitgezoomd: 60 beelden per seconde, regels 0,7 ms, tekenen 2,6, de kaart 2,8). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
+Marcels pc, 30×, nacht en regen, half uitgezoomd: 60 beelden per seconde, regels 0,7 ms, tekenen 2,6, de kaart 2,8). **Na
+H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten";
+**Bezig in sessie `main` (lokaal, desktop)** (18 okt): het meten in de browser): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
 renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De
