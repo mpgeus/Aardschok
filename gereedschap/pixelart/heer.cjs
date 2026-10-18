@@ -96,7 +96,10 @@ const HEER_SNELHEID = 1.55;
 const HEER_FPS = 20;
 
 // De heer: klein en dik, met een veel te grote hoed. stand: zie smid() (dorpelingen.cjs).
-function heer(stand = null) {
+// o.zit: te paard (heerstoet.cjs, werklijst E, stap 4): de korte beentjes steken opzij over de rug van het paard,
+// de mantel valt korter zodat je ze ziet, en de linkerhand rust op de buik met de teugels. Zonder o.zit is hij
+// pixel voor pixel de heer van het spel.
+function heer(stand = null, o = {}) {
   const M = {
     huid: 0, neus: 1, oog: 2, mond: 3, snor: 4, haar: 5, wambuis: 6, mantel: 7, bont: 8, zoom: 9,
     ketting: 10, steen: 11, hoos: 12, schoen: 13, hoed: 14, veer: 15, band: 16,
@@ -182,6 +185,18 @@ function heer(stand = null) {
   // --- korte beentjes in gele hozen, en spitse schoenen die te lang zijn voor zo'n klein man
   for (const s of [-1, 1]) {
     const i = s < 0 ? 0 : 1;
+    if (o.zit) {
+      // te paard: de dij gaat opzij en een tikje omlaag over de rug, de schoen bungelt ernaast, ver boven de stijgbeugel
+      const heup = [s * 4.6, 0.6, 18.5];
+      const knie = [s * 12.4, 2.8, 15.6];
+      const enkel = [s * 17.2, 4.8, 12.6];
+      delen.push(kegel(heup, knie, 4.3, 3.7, M.hoos, D.benen, 1));
+      delen.push(kegel(knie, enkel, 3.7, 3.1, M.hoos, D.benen, 1));
+      delen.push(ellips(plus(enkel, [s * 0.4, 1.6, -2.3]), [3, 5.4, 2.4], M.schoen, D.schoen, 1));
+      delen.push(kegel(plus(enkel, [s * 0.4, 5.2, -2.7]), plus(enkel, [s * 0.8, 10.6 + (s < 0 ? 0.6 : 0), -1.6]), 1.9, 0.45, M.schoen, D.schoen, 1.2));
+      bot(null);
+      continue;
+    }
     knieBeen(delen, hg, i, [s * 4.6, 0.6, 18.5], [s * 4.4, 1, 4.6], [4.3, 3.1], M.hoos, D.benen);
     bot(null);
     delen.push(ellips([s * 4.4, 2.6, 2.3], [3, 5.4, 2.4], M.schoen, D.schoen, 1));
@@ -219,7 +234,9 @@ function heer(stand = null) {
     const uit = 1 + Math.max(0, hang - z) * 0.07;
     return [buik.rx(zz) + uit, buik.ry(zz) + uit, buik.cy(zz)];
   };
-  const zoomZ = (x, y) => 10.2 + 0.55 * Math.sin(Math.atan2(y - 3, x) * 3 + 0.8);
+  // te paard valt de zoom hoger, boven het zadel, zodat de beentjes eronder uit steken
+  const zoomOnder = o.zit ? 15.2 : 10.2;
+  const zoomZ = (x, y) => zoomOnder + 0.55 * Math.sin(Math.atan2(y - 3, x) * 3 + 0.8);
   delen.push({
     f: (x, y, z) => {
       const zz = klem(z, 9.5, 39.2);
@@ -254,8 +271,11 @@ function heer(stand = null) {
   // --- korte, dikke armen in rode mouwen met een bontje om de pols. Ze staan wat van zijn lijf af,
   // want de buik zit in de weg. De linker zwaait; de rechterhand rust tevreden op zijn buik.
   const mouw = { r: [4.2, 3.8, 3.2], mouw: 2, stof: M.mantel, huid: M.huid, hand: [2.7, 2.9, 3] };
-  const polsL = arm(delen, [-11, 0.8, 36.2], [-16.4, 1.2, 28.8], [-17.6, 3.2, 21.6], { ...mouw, dArm: D.armL, dHand: D.handL });
-  delen.push(ring(polsL, eenheid(min([-16.4, 1.2, 28.8], polsL)), 3.2, 1.35, M.bont, D.armL));
+  // te paard rust ook de linkerhand op zijn buik, met de teugels erin (heerstoet.cjs)
+  const EL = o.zit ? [-16.8, 4.2, 29.4] : [-16.4, 1.2, 28.8];
+  const HL = o.zit ? [-13.4, 12.2, 25.6] : [-17.6, 3.2, 21.6];
+  const polsL = arm(delen, [-11, 0.8, 36.2], EL, HL, { ...mouw, dArm: D.armL, dHand: D.handL });
+  delen.push(ring(polsL, eenheid(min(EL, polsL)), 3.2, 1.35, M.bont, D.armL));
   bot(Bn.Barm[0]);
   const ER = [16.6, 3.4, 29.2];
   const HR = [14.2, 11.6, 24.8];
@@ -332,7 +352,9 @@ const SOLDAAT_FPS = 10;
 // wapenrok van rood en geel over een donker gewatteerd wambuis, laarzen, leren handschoenen, een
 // korte zwarte baard en een ijzeren hoed die zijn ogen in de schaduw zet. De hellebaard draagt hij
 // rechtop in zijn rechterhand; lopend tilt hij hem een eind van de grond. stand: zie smid().
-function soldaat(stand = null) {
+// o.vaandel ({ wind, stand }): in plaats van de hellebaard een vaandel (heerstoet.cjs, werklijst E, stap 4; zie
+// vaandel() hieronder). Zonder o.vaandel is hij pixel voor pixel de soldaat van het spel.
+function soldaat(stand = null, o = {}) {
   const M = {
     huid: 0, oog: 1, mond: 2, baard: 3, wambuis: 4, rood: 5, geel: 6, hoos: 7, laars: 8, riem: 9,
     gesp: 10, helm: 11, hout: 12, ijzer: 13, handschoen: 14, kwastR: 15, kwastG: 16,
@@ -369,6 +391,7 @@ function soldaat(stand = null) {
   mat[M.handschoen] = { ramp: 'leer', lo: 0.8, hi: 4.4 };
   mat[M.kwastR] = { ramp: 'rood', lo: 1.6, hi: 5.8 };
   mat[M.kwastG] = { ramp: 'goud', lo: 2.2, hi: 6 };
+  if (o.vaandel) vaandelMaterialen(M, mat);
 
   const delen = [];
   const bot = botten(delen);
@@ -425,38 +448,8 @@ function soldaat(stand = null) {
   const u = eenheid(min(top, voet));
   const opSchacht = (t) => plus(voet, maal(u, t));
   const lengte = Math.hypot(...min(top, voet));
-  delen.push(kegel(voet, top, 1.2, 1.1, M.hout, D.schacht));
-  delen.push(kegel(opSchacht(lengte - 14), opSchacht(lengte + 1), 1.45, 1.35, M.ijzer, D.blad));
-  delen.push(kegel(opSchacht(lengte), opSchacht(lengte + 10.5), 1.2, 0.15, M.ijzer, D.blad));
-  const bladM = opSchacht(lengte - 4.4);
-  // Het blad: een halve schijf met de snede naar buiten en een tikje naar voren (67,5° van recht
-  // vooruit), zodat hij in geen van de acht richtingen precies op zijn kant staat en dus nergens
-  // tot een streepje wordt. Onder de snede een baard; aan de andere kant van de schacht een haak.
-  const hoek = (67.5 * Math.PI) / 180;
-  const bu = [Math.sin(hoek), Math.cos(hoek), 0];
-  const bn = [Math.cos(hoek), -Math.sin(hoek), 0];
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - bladM[0];
-      const dy = y - bladM[1];
-      const dz = z - bladM[2];
-      const du = dx * bu[0] + dy * bu[1];
-      const dn = dx * bn[0] + dy * bn[1];
-      const ovaal = sdf.ellipsoide(0, du - 1.2, dz + 0.12 * du, 1, 7.4, 6.2);
-      const vlak = Math.max(ovaal, 0.8 - du, dz - 5.2 + 0.25 * du, -dz - 6.4 - 0.5 * du);
-      return Math.max(vlak, Math.abs(dn) - 0.55 - Math.max(0, 3 - du) * 0.12) * 0.85;
-    },
-    g: [bladM[0] + bu[0] * 4, bladM[1] + bu[1] * 4, bladM[2], 9.5],
-    m: M.ijzer,
-    deel: D.blad,
-  });
-  const haak = opSchacht(lengte - 3.4);
-  delen.push(kegel(plus(haak, maal(bu, -0.8)), plus(plus(haak, maal(bu, -6.6)), [0, 0, -2.2]), 1.25, 0.3, M.ijzer, D.blad));
-  const kwast = opSchacht(lengte - 15.2);
-  delen.push(bol(kwast, 1.5, M.kwastR, D.kwast));
-  for (const [dx, dy, m] of [[-1.1, 0.8, M.kwastR], [1.2, 0.4, M.kwastG], [0.2, -1.2, M.kwastR], [-0.6, -0.4, M.kwastG], [0.9, 1.3, M.kwastG]]) {
-    delen.push(kegel(plus(kwast, [dx * 0.6, dy * 0.6, -0.6]), plus(kwast, [dx * 1.6, dy * 1.6, -6.4]), 0.75, 0.55, m, D.kwast));
-  }
+  if (o.vaandel) vaandel(delen, opSchacht, M, D, o.vaandel);
+  else hellebaard(delen, voet, top, opSchacht, lengte, M, D);
   // de rechterhand om de schacht, de elleboog naar achteren
   const grijp = opSchacht(43.2 - voet[2]);
   arm(delen, [13.4, 0.4, 60.6], [18.4, -1.6, 50.6], plus(grijp, [-0.6, -0.4, 0]), { ...mouw, dArm: D.armR, dHand: D.handR });
@@ -511,6 +504,127 @@ function soldaat(stand = null) {
   bot(Bn.Bnek);
 
   return model(delen, mat, HH.omvat(delen, 2));
+}
+
+// De hellebaard van de soldaat, op de schacht van voet tot top (opSchacht(t) is een plek op de schacht).
+function hellebaard(delen, voet, top, opSchacht, lengte, M, D) {
+  delen.push(kegel(voet, top, 1.2, 1.1, M.hout, D.schacht));
+  delen.push(kegel(opSchacht(lengte - 14), opSchacht(lengte + 1), 1.45, 1.35, M.ijzer, D.blad));
+  delen.push(kegel(opSchacht(lengte), opSchacht(lengte + 10.5), 1.2, 0.15, M.ijzer, D.blad));
+  const bladM = opSchacht(lengte - 4.4);
+  // Het blad: een halve schijf met de snede naar buiten en een tikje naar voren (67,5° van recht
+  // vooruit), zodat hij in geen van de acht richtingen precies op zijn kant staat en dus nergens
+  // tot een streepje wordt. Onder de snede een baard; aan de andere kant van de schacht een haak.
+  const hoek = (67.5 * Math.PI) / 180;
+  const bu = [Math.sin(hoek), Math.cos(hoek), 0];
+  const bn = [Math.cos(hoek), -Math.sin(hoek), 0];
+  delen.push({
+    f: (x, y, z) => {
+      const dx = x - bladM[0];
+      const dy = y - bladM[1];
+      const dz = z - bladM[2];
+      const du = dx * bu[0] + dy * bu[1];
+      const dn = dx * bn[0] + dy * bn[1];
+      const ovaal = sdf.ellipsoide(0, du - 1.2, dz + 0.12 * du, 1, 7.4, 6.2);
+      const vlak = Math.max(ovaal, 0.8 - du, dz - 5.2 + 0.25 * du, -dz - 6.4 - 0.5 * du);
+      return Math.max(vlak, Math.abs(dn) - 0.55 - Math.max(0, 3 - du) * 0.12) * 0.85;
+    },
+    g: [bladM[0] + bu[0] * 4, bladM[1] + bu[1] * 4, bladM[2], 9.5],
+    m: M.ijzer,
+    deel: D.blad,
+  });
+  const haak = opSchacht(lengte - 3.4);
+  delen.push(kegel(plus(haak, maal(bu, -0.8)), plus(plus(haak, maal(bu, -6.6)), [0, 0, -2.2]), 1.25, 0.3, M.ijzer, D.blad));
+  const kwast = opSchacht(lengte - 15.2);
+  delen.push(bol(kwast, 1.5, M.kwastR, D.kwast));
+  for (const [dx, dy, m] of [[-1.1, 0.8, M.kwastR], [1.2, 0.4, M.kwastG], [0.2, -1.2, M.kwastR], [-0.6, -0.4, M.kwastG], [0.9, 1.3, M.kwastG]]) {
+    delen.push(kegel(plus(kwast, [dx * 0.6, dy * 0.6, -0.6]), plus(kwast, [dx * 1.6, dy * 1.6, -6.4]), 0.75, 0.55, m, D.kwast));
+  }
+}
+
+// ---------------------------------------------------------------- het vaandel
+
+// Het vaandel (ontwerp/beeld.md, "De heer rijdt weg, of zijn leger komt"): een rechthoekig doek aan een lange stok, half
+// rood (aan de stok) en half geel, met zijn wapen: zijn eigen hoed met veren, in goud, op het geel met een donkere rand. Het doek waait met de ene wind (`wind`: de richting in de maten van de soldaat, zoals
+// heerstoet.cjs die uit de kijkrichting haalt), in drie standen (`stand` 0, 1 of 2).
+const VAANDEL = { stok: 116, lang: 28, hoog: 24, golf: 1.5, golfLengte: 19, zak: 0.1 };
+
+function vaandelMaterialen(M, mat) {
+  Object.assign(M, { doekR: 17, doekG: 18, wapen: 19, wapenRand: 20, knop: 21 });
+  mat[M.doekR] = { ramp: 'rood', lo: 1.4, hi: 5.6 };
+  mat[M.doekG] = { ramp: 'goud', lo: 1.8, hi: 5.2 };
+  mat[M.wapen] = { ramp: 'goud', lo: 3.6, hi: 6.9, glans: 1.2 };
+  mat[M.wapenRand] = { ramp: 'rood', lo: 0.4, hi: 1.8 };
+  mat[M.knop] = { ramp: 'goud', lo: 2.4, hi: 6.6, glans: 1.6 };
+}
+
+// Een plek op een kromme van p0 via p1 naar p2 (in het vlak van het doek), dikker aan het begin: ligt (x, y) erin?
+function opVeer(p0, p1, p2, r0, r1, x, y) {
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12;
+    const px = (1 - t) * (1 - t) * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0];
+    const py = (1 - t) * (1 - t) * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1];
+    const r = r0 + (r1 - r0) * t;
+    if ((x - px) ** 2 + (y - py) ** 2 < r * r) return true;
+  }
+  return false;
+}
+// Het wapen in het vlak van het doek (X naar de punt, Y omhoog, het midden op 0): ligt (X, Y) op de hoed? Een brede
+// rand, een bol, en twee veren die naar de stok zwiepen; vet, want het doek is maar 28 bij 24 pixels.
+function wapenHoed(X, Y) {
+  const x = X / 0.92 - 1.4;
+  const y = Y / 0.92 + 3.6;
+  if ((x / 10.8) ** 2 + ((y + 3.4 + 0.018 * x * x) / 2.3) ** 2 < 1) return true;
+  if (y > -3.6 && ((x - 0.6) / 5.8) ** 2 + ((y + 2.6) / 6.8) ** 2 < 1) return true;
+  if (opVeer([-3, 2.2], [-1.5, 11], [-8.5, 12], 1.9, 1.3, x, y)) return true;
+  return opVeer([-4.4, 1], [-9.5, 8], [-12.6, 3.2], 1.8, 1.2, x, y);
+}
+
+// De stok, de knop en het doek, op de schacht van de hellebaard maar langer.
+function vaandel(delen, opSchacht, M, D, o) {
+  const V = VAANDEL;
+  const DOEK = 17;
+  const w = o.wind || [0, -1];
+  const wl = Math.hypot(w[0], w[1]) || 1;
+  const wx = w[0] / wl;
+  const wy = w[1] / wl;
+  const fase = ((o.stand || 0) * 2 * Math.PI) / 3;
+  delen.push(kegel(opSchacht(0), opSchacht(V.stok), 1.2, 1.05, M.hout, D.schacht));
+  delen.push(bol(opSchacht(V.stok + 1.4), 1.9, M.knop, D.blad));
+  delen.push(kegel(opSchacht(V.stok + 2.8), opSchacht(V.stok + 7.5), 1.1, 0.15, M.knop, D.blad));
+  // het doek: s langs de wind (van de stok af), t dwars, v omlaag vanaf de bovenkant; het zakt naar de punt toe een
+  // beetje door, en de golf wordt groter naar de punt
+  const A = opSchacht(V.stok - 1.5);
+  const naarDoek = (x, y, z) => {
+    const dx = x - A[0];
+    const dy = y - A[1];
+    const s = dx * wx + dy * wy;
+    const t = -dx * wy + dy * wx;
+    const v = A[2] - z - V.zak * Math.max(0, s);
+    return [s, t, v];
+  };
+  const golf = (s, v) => V.golf * Math.min(1, Math.max(0, s) / V.lang + 0.15) * Math.sin((2 * Math.PI * s) / V.golfLengte + fase + 0.08 * v);
+  delen.push({
+    f: (x, y, z) => {
+      const [s, t, v] = naarDoek(x, y, z);
+      const dt = (Math.abs(t - golf(s, v)) - 0.5) * 0.72;
+      return Math.max(dt, Math.max(0.6 - s, s - V.lang), Math.max(-v, v - V.hoog));
+    },
+    g: [A[0] + wx * V.lang * 0.5, A[1] + wy * V.lang * 0.5, A[2] - V.hoog * 0.5 - 2, Math.hypot(V.lang, V.hoog) * 0.5 + 4],
+    m: (x, y, z) => {
+      const [s, , v] = naarDoek(x, y, z);
+      const X = s - V.lang / 2;
+      const Y = V.hoog / 2 - v;
+      if (wapenHoed(X, Y)) return M.wapen;
+      if (s < V.lang / 2) return M.doekR;
+      // op het geel een donkere rand om het goud
+      for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1], [0.7, 0.7], [-0.7, 0.7], [0.7, -0.7], [-0.7, -0.7]]) {
+        if (wapenHoed(X + a, Y + b)) return M.wapenRand;
+      }
+      return M.doekG;
+    },
+    deel: DOEK,
+  });
 }
 
 // ---------------------------------------------------------------- de inner

@@ -14,12 +14,19 @@
 // vooruitgaat (in een rondje een kwartslag, zie WIEL). De vellen voor het spel maakt ossenkar-anim.cjs.
 //
 //   node gereedschap/pixelart/ossenkar.cjs           (de proefplaat: uit/ossenkar-proef.png, en uit/ossenkar-rijden.png)
+//
+// De wagen van de heer (heerstoet.cjs, werklijst E, stap 4) is dezelfde kar met twee opties die standaard uit staan:
+// `bak: 'heer'` (de planken rood geverfd met een gele bies, en voorop een stok met een geel-rood vaantje met
+// zwaluwstaart dat met `wind` waait) en de lading 'buit' (zakken graan, een ton, een bos stammen en bovenop een open kist
+// met goud, dat blinkt in twee beelden: `blink` 0 of 1). Zonder die opties is de kar pixel voor pixel dezelfde.
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const { sdf, ruis3, hash } = K;
-const { model, kegel, capsule, ellips, blok, naarRamp } = require('./figuren.cjs');
+const { model, kegel, capsule, ellips, blok, bol, plus, naarRamp } = require('./figuren.cjs');
+const { ring, schijf } = require('./figuren2.cjs');
+const HH = require('./houding.cjs');
 const { bochtProfiel } = require('./bosvijanden.cjs');
 const V = require('./vee.cjs');
 const { apng } = require('./apng.cjs');
@@ -81,9 +88,10 @@ const VELLEN = [
 
 // ---------------------------------------------------------------- materialen
 
-const M = { hout: 0, wiel: 1, ijzer: 2, linnen: 3, touw: 4, kist: 5, zak: 6, ton: 7, schors: 8, nerf: 9, steen: 10, deken: 11, ketel: 12, binnen: 13 };
+const M = { hout: 0, wiel: 1, ijzer: 2, linnen: 3, touw: 4, kist: 5, zak: 6, ton: 7, schors: 8, nerf: 9, steen: 10, deken: 11, ketel: 12, binnen: 13, verf: 14, bies: 15, goud: 16, vaanG: 17, vaanR: 18 };
 
-function materialen() {
+// blink: het beeld van het blinken van het goud (0 of 1)
+function materialen(blink = 0) {
   const mat = [];
   // Planken: aan de zijkant liggen ze op elkaar, op de vloer naast elkaar.
   mat[M.hout] = {
@@ -141,6 +149,22 @@ function materialen() {
   mat[M.ketel] = { ramp: 'ijzer', lo: 0.2, hi: 2.4, glans: 1.4 };
   // het donker in de kar, achter de opening van het zeil
   mat[M.binnen] = { ramp: 'aarde', lo: 0.2, hi: 1.6 };
+  // de wagen van de heer: de planken rood geverfd, met dezelfde naden, en een gele bies
+  mat[M.verf] = { ...mat[M.hout], ramp: 'rood', lo: 1.2, hi: 5.2 };
+  mat[M.bies] = { ramp: 'goud', lo: 2.2, hi: 6.0 };
+  // goud: munten (een donkere rand om elk), en hier en daar een munt die blinkt; blink verzet waar
+  mat[M.goud] = {
+    ramp: 'goud',
+    lo: 2.6,
+    hi: 6.4,
+    glans: 1.4,
+    patroon: (x, y, z) => {
+      if (hash(Math.floor(x / 1.7), Math.floor(y / 1.7) * 7 + Math.floor(z / 1.7) * 13, 900 + blink) / 4294967296 < 0.07) return 3;
+      return ruis3(x * 0.9, y * 0.9, z * 0.9, 19) > 0.45 ? -1.1 : 0;
+    },
+  };
+  mat[M.vaanG] = { ramp: 'goud', lo: 2, hi: 5.8 };
+  mat[M.vaanR] = { ramp: 'rood', lo: 1.6, hi: 5.6 };
   return mat;
 }
 
@@ -183,19 +207,22 @@ function wiel(s, hoek) {
 }
 
 // De bak: een vloer van planken op twee langbomen, zijplanken tussen rongen, een voorschot en een achterschot.
-function bak() {
+// heer: de planken en de rongen rood geverfd, de bovenrand geel (de wagen van de heer).
+function bak(heer = false) {
   const d = [];
   const { b, l, vloer, rand } = BAK;
   const zijH = (rand - vloer) / 2;
+  const plank = heer ? M.verf : M.hout;
+  const lat = heer ? M.bies : M.hout;
   d.push(blok([0, 0, vloer - 1.2], [b, l, 1.2], 0.3, M.hout, 1));
   for (const s of [-1, 1]) {
-    d.push(blok([s * (b + 0.4), 0, vloer + zijH], [0.9, l, zijH], 0.3, M.hout, 1));
-    for (const y of [-l + 2, -14, 14, l - 2]) d.push(blok([s * (b + 1.5), y, vloer + zijH + 1.2], [1.2, 1.3, zijH + 2.4], 0.4, M.hout, 4));
+    d.push(blok([s * (b + 0.4), 0, vloer + zijH], [0.9, l, zijH], 0.3, plank, 1));
+    for (const y of [-l + 2, -14, 14, l - 2]) d.push(blok([s * (b + 1.5), y, vloer + zijH + 1.2], [1.2, 1.3, zijH + 2.4], 0.4, plank, 4));
     // de bovenrand, een lat over de zijplanken
-    d.push(blok([s * (b + 0.6), 0, rand + 0.4], [1.3, l + 0.6, 0.7], 0.3, M.hout, 4));
+    d.push(blok([s * (b + 0.6), 0, rand + 0.4], [1.3, l + 0.6, 0.7], 0.3, lat, 4));
   }
-  d.push(blok([0, l + 0.2, vloer + zijH], [b + 1.2, 0.9, zijH], 0.3, M.hout, 1));
-  d.push(blok([0, -l - 0.2, vloer + zijH - 1.6], [b + 1.2, 0.9, zijH - 1.6], 0.3, M.hout, 1));
+  d.push(blok([0, l + 0.2, vloer + zijH], [b + 1.2, 0.9, zijH], 0.3, plank, 1));
+  d.push(blok([0, -l - 0.2, vloer + zijH - 1.6], [b + 1.2, 0.9, zijH - 1.6], 0.3, plank, 1));
   // het blok op de as, en de as zelf
   d.push(blok([0, 0, WIEL.r + 2.2], [b - 1, 3.2, 1.6], 0.4, M.hout, 4));
   d.push(capsule([-WIEL.x - 3, 0, WIEL.r], [WIEL.x + 3, 0, WIEL.r], 2.2, M.hout, 4));
@@ -271,6 +298,113 @@ function stam(x, z, r, y0, y1, deel) {
   };
 }
 
+// Voorop rechts, aan de rong gebonden, een stok met een vaantje: geel boven, rood onder, met een zwaluwstaart. Het
+// waait met `wind` (de richting in de maten van de kar); het zakt naar de punt een beetje door. Rechts, zodat het van
+// zuidwest en van noordoost niet voor de kist met goud waait.
+const VAANTJE = { x: BAK.b + 1.5, y: BAK.l - 2, voet: 36, top: 98, lang: 17, hoog: 9, staart: 6 };
+function vaantje(wind = [0, -1]) {
+  const V = VAANTJE;
+  const wl = Math.hypot(wind[0], wind[1]) || 1;
+  const wx = wind[0] / wl;
+  const wy = wind[1] / wl;
+  const d = [];
+  d.push(kegel([V.x, V.y, V.voet], [V.x, V.y, V.top], 0.95, 0.8, M.verf, 22));
+  d.push(bol([V.x, V.y, V.top + 1.2], 1.5, M.bies, 22));
+  for (const z of [BAK.rand - 1, BAK.rand - 7]) d.push(ring([V.x, V.y, z], [0, 0, 1], 1.4, 0.45, M.touw, 22));
+  const A = [V.x, V.y, V.top - 1];
+  const naarVaan = (x, y, z) => {
+    const dx = x - A[0];
+    const dy = y - A[1];
+    const s = dx * wx + dy * wy;
+    return [s, -dx * wy + dy * wx, A[2] - z - 0.1 * Math.max(0, s)];
+  };
+  d.push({
+    f: (x, y, z) => {
+      const [s, t, v] = naarVaan(x, y, z);
+      const golf = 1.3 * Math.min(1, Math.max(0, s) / V.lang + 0.2) * Math.sin((2 * Math.PI * s) / 11 + 0.6);
+      // de zwaluwstaart: een inham vanaf de punt, in het midden het diepst
+      const inham = s - (V.lang - V.staart * (1 - Math.abs(v - V.hoog / 2) / (V.hoog / 2)));
+      return Math.max((Math.abs(t - golf) - 0.45) * 0.75, 0.5 - s, s - V.lang, inham, -v, v - V.hoog);
+    },
+    g: [A[0] + wx * V.lang * 0.5, A[1] + wy * V.lang * 0.5, A[2] - V.hoog * 0.5 - 1, V.lang * 0.5 + V.hoog * 0.5 + 3],
+    m: (x, y, z) => (naarVaan(x, y, z)[2] < V.hoog / 2 ? M.vaanG : M.vaanR),
+    deel: 23,
+  });
+  return d;
+}
+
+// Een zak graan die rechtop staat, dichtgebonden: een buik, een hals met een touw, en de punt van de jute erboven.
+function staandeZak(c, r, h, deel) {
+  const hals = [c[0], c[1], c[2] + h * 0.8];
+  return [
+    ellips(c, [r, r * 0.9, h * 0.62], M.zak, deel),
+    kegel(plus(c, [0, 0, h * 0.35]), hals, r * 0.7, r * 0.36, M.zak, deel, 1.4),
+    ring(hals, [0, 0, 1], r * 0.38, 0.6, M.touw, deel),
+    ellips(plus(hals, [0.3, 0.2, 1.5]), [r * 0.55, r * 0.48, 1.5], M.zak, deel, 0.6),
+  ];
+}
+
+// De kist met ijzeren banden, het deksel open en vol goud, op zijn plek (c: het midden van de bodem) en gedraaid om
+// `draai` graden. Het deksel scharniert aan de achterkant.
+const KIST = { b: 10.5, l: 7, h: 6, open: 106 };
+function buitKist(c, draai) {
+  const { b, l, h } = KIST;
+  const d = [];
+  d.push(blok([0, 0, h], [b, l, h], 0.6, M.kist, 30));
+  // de banden om de kist, en het slot voorop
+  for (const x of [-b + 2.2, b - 2.2]) d.push(blok([x, 0, h], [0.8, l + 0.35, h + 0.25], 0.2, M.ijzer, 31));
+  d.push(blok([0, l + 0.3, 2 * h - 2], [1.6, 0.4, 1.8], 0.2, M.ijzer, 31));
+  // het goud: een berg munten die boven de rand uit komt
+  d.push(ellips([0, 0.3, 2 * h - 0.2], [b - 1.1, l - 1.1, 3.1], M.goud, 32));
+  d.push(ellips([-2.6, 1.2, 2 * h + 1.6], [4, 3, 2], M.goud, 32));
+  // het deksel: een gewelfde plank met twee banden, opengeklapt naar achteren
+  const deksel = [];
+  deksel.push({
+    f: (x, y, z) => Math.max(sdf.cilinder(y, z - (2 * h - 3.4), x, l + 0.2, -b, b) - 0.4, 2 * h - z),
+    g: [0, 0, 2 * h + 2, b + 3],
+    m: M.kist,
+    deel: 33,
+  });
+  for (const xb of [-b + 2.2, b - 2.2]) {
+    deksel.push({
+      f: (x, y, z) => Math.max(sdf.cilinder(y, z - (2 * h - 3.4), x - xb, l + 0.6, -0.8, 0.8), 2 * h - z),
+      g: [xb, 0, 2 * h + 2, l + 2],
+      m: M.ijzer,
+      deel: 34,
+    });
+  }
+  d.push(...HH.beweegDelen(deksel, HH.beweging({ as: [1, 0, 0], graden: KIST.open, om: [0, -l, 2 * h] })));
+  return HH.beweegDelen(d, HH.beweging({ as: [0, 0, 1], graden: draai, om: [0, 0, 0], dp: c }));
+}
+
+// De buit: links een bos stammen die achter uit de bak steekt, rechts zakken en een ton, daarop zakken graan die boven
+// de rand uit komen, en bovenop de kist met goud, met een paar munten die eraf gegleden zijn.
+function buit() {
+  const z = BAK.vloer;
+  const d = [];
+  const r = 5.2;
+  const stammen = [[-15.5, z + r, r, -53, 36], [-5.5, z + r, r - 0.3, -49, 39], [-10.5, z + 2.7 * r, r - 0.5, -55, 33]];
+  stammen.forEach(([x, zz, rr, y0, y1], i) => d.push(stam(x, zz, rr, y0, y1, 8 + i)));
+  for (const y of [-26, 18]) for (const p of bochtProfiel([-21.5, y, z + 6], [-10.5, y, z + 3.9 * r], [0.5, y, z + 6], () => 0.75, 6, M.touw, 11)) d.push(p);
+  d.push(ellips([10.5, 28, z + 6], [9, 12.5, 6], M.zak, 12));
+  d.push(ellips([10.5, 2, z + 6], [9, 12.5, 6], M.zak, 13));
+  // de ton achteraan rechts, met twee hoepels
+  d.push(kegel([12, -32, z], [12, -32, z + 18], 6.2, 6.2, M.ton, 14));
+  d.push(ellips([12, -32, z + 9], [6.9, 6.9, 7.5], M.ton, 14));
+  for (const zz of [z + 3, z + 15]) d.push(ring([12, -32, zz], [0, 0, 1], 6.7, 0.6, M.ijzer, 14));
+  // de tweede laag: zakken die liggen, tot boven de rand, en in twee hoeken een zak die rechtop staat (zo staan ze de
+  // kist van voor links en van achter rechts niet in de weg)
+  d.push(ellips([9, 20, z + 16.5], [8, 11.5, 5], M.zak, 15));
+  d.push(ellips([2, -12, z + 17.5], [8.5, 11.5, 5.2], M.zak, 16));
+  d.push(ellips([-8, 22, z + 21], [7.5, 9.5, 4.5], M.zak, 17));
+  d.push(...staandeZak([12.5, 35, z + 18.5], 6, 9.5, 18));
+  d.push(...staandeZak([-9.5, -36, z + 22.5], 5.6, 8.5, 19));
+  // bovenop de kist, een tikje schuin, met het deksel naar achteren; ernaast een paar munten op de zakken
+  d.push(...buitKist([1, 3, z + 20.5], -15));
+  for (const [x, y, zz] of [[9.5, -6, z + 22.4], [-9, 9, z + 25.4], [5, -15, z + 22.6], [12, 12, z + 21.4]]) d.push(schijf([x, y, zz], [0.1, 0.2, 0.97], 1.5, 0.35, M.goud, 35));
+  return d;
+}
+
 // De lading in de open bak.
 function lading(soort) {
   const z = BAK.vloer;
@@ -306,18 +440,25 @@ function lading(soort) {
     }
     d.push(ellips([0, -14, z + 16], [9, 12, 6], M.zak, 14));
     d.push(ellips([1, 14, z + 16], [9, 12, 6], M.zak, 15));
+  } else if (soort === 'buit') {
+    d.push(...buit());
   }
   return d;
 }
 
-// kar({ lading, hoek }): het model van de kar zonder os, met de as in de oorsprong. `lading` is een van LADINGEN, `hoek`
-// hoe ver de wielen gedraaid zijn.
+// kar({ lading, hoek, bak, wind, blink }): het model van de kar zonder os, met de as in de oorsprong. `lading` is een van
+// LADINGEN, of 'buit' (de wagen van de heer); `hoek` hoe ver de wielen gedraaid zijn; `bak: 'heer'` de bak in zijn
+// kleuren met het vaantje, dat met `wind` waait; `blink` het beeld van het goud (0 of 1).
 function kar(o = {}) {
   const soort = o.lading || 'huif';
-  const d = [...bak(), ...wiel(-1, o.hoek || 0), ...wiel(1, o.hoek || 0), ...achteraan()];
+  const heer = o.bak === 'heer';
+  const d = [...bak(heer), ...wiel(-1, o.hoek || 0), ...wiel(1, o.hoek || 0), ...achteraan()];
   if (soort === 'huif') d.push(...huif());
   else d.push(...lading(soort));
-  return model(d, materialen(), { midden: [0, 10, 40], straal: 82 });
+  if (heer) d.push(...vaantje(o.wind));
+  // de wagen van de heer is hoger: het vaantje en de buit
+  const hoog = heer || soort === 'buit';
+  return model(d, materialen(o.blink || 0), { midden: [0, 10, hoog ? 52 : 40], straal: hoog ? 92 : 82 });
 }
 
 // De os voor de kar, in houding van de kar.
@@ -335,7 +476,7 @@ function tekenOssenkar(B, o, kant) {
   const naar = (ly) => ({ gx: (ly * Math.cos(a)) / TEGEL, gy: (ly * Math.sin(a)) / TEGEL });
   const H = HOUDINGEN[o.houding || 'staan'];
   const hoek = o.houding === 'lopen' ? WIEL.draai * (o.fase || 0) : 0;
-  K.tekenModel(B, kar({ lading: o.lading, hoek }), { richting: kant, ...naar(-MIDDEN) });
+  K.tekenModel(B, kar({ lading: o.lading, hoek, bak: o.bak, wind: o.wind, blink: o.blink }), { richting: kant, ...naar(-MIDDEN) });
   K.tekenModel(B, os({ houding: o.houding, fase: o.fase, kleur: o.kleur }), { richting: kant, ...naar(OS_Y - MIDDEN) });
   return H;
 }

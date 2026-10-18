@@ -169,6 +169,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   `node ossenkar.cjs` maakt de proefplaat `uit/ossenkar-proef.png` en de rijdende huifkar `uit/ossenkar-rijden.png`;
   `node ossenkar-anim.cjs` de vellen voor het spel (`VELLEN`: de huifkar, en de ossenkar leeg en met hout; een vel per
   proces gaat sneller, zo'n tien minuten elk), daarna `node naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout`.
+- `heerstoet.cjs`: de heer rijdt weg, of zijn leger komt (werklijst E, stap 4; `ontwerp/beeld.md`): het paard (een
+  appelgrijze schimmel onder een kleed in rood en geel, op het tuig van het vee), de heer erop (`heer(null, { zit: true })`),
+  de wagen van de heer (`ossenkar.cjs` met `bak: 'heer'` en de lading `buit`), het vaandel (`soldaat(stand, { vaandel })`)
+  en de fakkel als eigen model in de linkerhand. `node heerstoet.cjs` maakt de proefplaat `uit/heerstoet-proef.png`
+  (overdag het paard en de wagens, 's nachts een stuk van het leger, zoals de lantaarn; twee keer vergroot).
 - `kamp.cjs`: het kamp van het lege begin: de tent (linnen of bruin wol) en het afdak van takken en huiden, elk in vier
   richtingen, en het kampvuur (de vuurkuil uit `bosgebied.cjs` met vlammen en een driepoot met een ketel), dat brandt, smeult
   of uit is. `node kamp.cjs` maakt de proefplaat `uit/kamp-proef.png` en het bewegende vuur `uit/kampvuur.png`, en

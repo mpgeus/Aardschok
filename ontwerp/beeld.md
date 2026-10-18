@@ -1476,7 +1476,22 @@ kroon in reliëf; de naam eronder in de letter van de koppen. Nu een proef in CS
 
 **De proefplaat** (als Marcel dit goed vindt): de heer te paard en een wagen met buit, van twee kanten, overdag; en een
 stuk van het leger, 's nachts, met de fakkels en een vaandel. Te kiezen, als iets anders moet: het wapen (zijn hoed, of
-iets anders), en het paard (de schimmel, of een donker paard).
+iets anders), en het paard (de schimmel, of een donker paard). **Marcel: "De tekeningen in woorden zijn goed: maak de
+proefplaat."**
+
+**De proefplaat is er** (18 okt; `node gereedschap/pixelart/heerstoet.cjs`, `uit/heerstoet-proef.png`, twee keer
+vergroot; wacht op Marcel): het paard als eigen model op het tuig van het vee, de heer erop (`heer(null, { zit: true })`
+in `heer.cjs`: de beentjes opzij, de linkerhand met de teugels op zijn buik), de wagen (`ossenkar.cjs`, `bak: 'heer'` en
+de lading `buit`), het vaandel (`soldaat(stand, { vaandel })`) en de fakkel als eigen model in de linkerhand. Alle
+opties staan standaard uit: de heer, de soldaat en de karren zijn pixel voor pixel hetzelfde gebleven. Erbij gekozen:
+het kleed in vieren zoals de wapenrok (voor links rood, voor rechts geel, achter andersom), met een gouden bies boven de
+franje; manen en staart donkergrijs met zilver, een rood hoofdstel met gouden knopjes; het vaandel waait naar rechts op
+het scherm, en de hoed erop heeft op het gele vlak een donkere rand; het vaantje op de voorste rechterstijl van de wagen,
+de kist wat scheef met het deksel naar achteren open. **Nog niet goed** (zegt de plaat zelf): het kleed is een zwaar
+blok met een vlakke voorkant, in het stappen steekt een knie erdoor, en van zuidwest zie je de gele hozen van de heer
+nauwelijks op het gele kleed; het wapen is 28 bij 24 pixels, op het randje; de fakkel zit links, dus van noordoost, oost
+en zuidoost zie je hem niet; 's nachts waait het vaandel over de hellebaarden van de rij erachter; van noordoost dekt het
+deksel het goud half.
 
 ## Open
 
