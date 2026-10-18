@@ -193,23 +193,42 @@
       vGrijs = st < 0.75 ? uGrijs.x : 0.0;
       vBron = -1.0 - info.x;
     }`;
-  // Een grondtegel van een vaste rij (de renderproef van de grond, stap 1 en 2: ontwerp/snelheid.md; tekenGrond,
+  // Een stukje grond van een vaste rij (de renderproef van de grond, stap 1 tot 3: ontwerp/snelheid.md; tekenGrond,
   // hieronder, en js/tekenen.js, "de grond op de kaart"): iA waar zijn tekening links boven begint (in pixels van de
-  // vlakte, vanaf het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en waar ze in haar vel staat, iB
-  // haar maat en welk vel (de plaats in de rij: uBeeld0, uBeeld1, ...; uVel de maten van de vellen). Zonder diepte, in
-  // de volgorde van de rij: rij na rij, zoals op het doek van de oude grond.
+  // vlakte, vanaf het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en waar ze in haar bron staat, iB
+  // haar maat, de bron en de soort. Soort 0 is een vel van de grond (de bron is zijn plaats in de rij: uBeeld0,
+  // uBeeld1, ...; uVel de maten van de vellen), 1 een plaatje op de stapel (de bron is de laag van uAtlas, uLaag zijn
+  // maat), en 2 de sneeuw op een tegel: iA.zw zijn a en f, en hoeveel er ligt is clamp(uSneeuwL + a, 0, 1) maal f (de som
+  // van sneeuwDek in js/tekenen.js, met uSneeuwL de laag maal 1,15), in uSneeuwN standen (hooguit 16), elk een tegel op de
+  // stapel (uSneeuw: x, y en laag). Zonder diepte, in de volgorde van de rij: rij na rij, zoals op het doek van de oude grond.
   const VERT_GROND = /* // geen tekst */ `#version 300 es
     in vec4 iA; in vec4 iB;
-    uniform vec2 uMaat; uniform vec2 uZoom; uniform vec2 uStuk; uniform vec2 uVel[${RIJ_TEXTUREN}];
+    uniform vec2 uMaat; uniform vec2 uZoom; uniform vec2 uStuk; uniform vec2 uVel[${RIJ_TEXTUREN}]; uniform float uLaag;
+    uniform float uSneeuwL; uniform float uSneeuwN; uniform vec4 uSneeuw[17];
     out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
     void main() {
       vec2 c = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1));
-      vec2 p = uStuk + uZoom * (iA.xy + c * iB.xy);
-      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, 0.0, 1.0);
-      vUv = (iA.zw + c * iB.xy) / uVel[int(iB.z)];
+      vec2 bron = iA.zw;
+      float b = iB.z;
+      float soort = iB.w;
       vKleur = vec4(1.0);
       vGrijs = 0.0;
-      vBron = iB.z;
+      if (soort > 1.5) {
+        int stap = int(floor(clamp(uSneeuwL + iA.z, 0.0, 1.0) * iA.w * uSneeuwN + 0.5));
+        if (stap <= 0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vUv = vec2(0.0); vBron = 0.0; return; }
+        bron = uSneeuw[stap].xy;
+        b = uSneeuw[stap].z;
+        soort = 1.0;
+      }
+      vec2 p = uStuk + uZoom * (iA.xy + c * iB.xy);
+      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, 0.0, 1.0);
+      if (soort > 0.5) {
+        vUv = (bron + c * iB.xy) / uLaag;
+        vBron = -1.0 - b;
+      } else {
+        vUv = (bron + c * iB.xy) / uVel[int(b)];
+        vBron = b;
+      }
     }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
   const FRAG_VERLOOP = /* // geen tekst */ `
@@ -1348,6 +1367,10 @@
     const m = o.m;
     gl.uniform2f(u.uZoom, m[0], m[3]);
     gl.uniform2fv(u.uVel, o.maten);
+    gl.uniform1f(u.uLaag, atlas ? atlas.maat : LAAG);
+    gl.uniform1f(u.uSneeuwL, o.sneeuw.laag);
+    gl.uniform1f(u.uSneeuwN, o.sneeuw.tabel.length / 4 - 1);
+    gl.uniform4fv(u.uSneeuw, o.sneeuw.tabel);
     for (let i = 0; i < o.vellen.length; i++) bindOp(i, o.vellen[i].tex);
     zetMeng('source-over');
     zetDiep('uit');
@@ -1575,11 +1598,12 @@
       opdrachten.push({ soort: VAST, stukken, stand, m: m.slice(), werpt: schaduwOp !== null, opgestuurd: false });
       return true;
     }
-    // De grond als vaste rijen (de renderproef, stap 1 en 2; js/tekenen.js, "de grond op de kaart"): `stukken` per stuk
-    // { rij (G.vasteRij, VERT_GROND), px, py (waar het stuk begint, in pixels van de vlakte) }, in de volgorde waarin ze
-    // over elkaar gaan; `vellen` de plaatjes waar de tekeningen uit komen (hooguit RIJ_TEXTUREN). Geeft false als het niet
-    // kan (een doek dat gedraaid staat, een vel dat nog niet op de kaart kan).
-    tekenGrond(stukken, vellen) {
+    // De grond als vaste rijen (de renderproef, stap 1 tot 3; js/tekenen.js, "de grond op de kaart"): `stukken` per rij
+    // { rij (G.vasteRij, VERT_GROND), px, py (waar zijn getallen beginnen, in pixels van de vlakte) }, in de volgorde
+    // waarin ze over elkaar gaan; `vellen` de vellen van de grond (hooguit RIJ_TEXTUREN, niet op de stapel; wat erop ligt,
+    // staat op de stapel); `sneeuw` { laag, tabel } voor de sneeuw (VERT_GROND). Geeft false als het niet kan (een doek dat
+    // gedraaid staat, een vel dat nog niet op de kaart kan).
+    tekenGrond(stukken, vellen, sneeuw) {
       const m = this.st.m;
       if (m[1] || m[2] || vellen.length > RIJ_TEXTUREN) return false;
       const t = vellen.map(textuurVan);
@@ -1588,7 +1612,7 @@
       legRijAf();
       const maten = new Float32Array(RIJ_TEXTUREN * 2);
       t.forEach((x, i) => maten.set([x.tb, x.th], i * 2));
-      opdrachten.push({ soort: GROND, stukken, vellen: t, maten, m: m.slice() });
+      opdrachten.push({ soort: GROND, stukken, vellen: t, maten, sneeuw, m: m.slice() });
       return true;
     }
     // De sleutel van het sorteren (js/tekenen.js, diepteVanItem) van wat nu getekend wordt, of null: dan zonder diepte.

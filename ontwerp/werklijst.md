@@ -39,11 +39,15 @@ opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`
 vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
 "Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
 hetzelfde eindbeeld; Marcel zag de haperingen ("in en uitzoomen zorgt nu wel voor spikes in de fps"). **De
-renderproef van de grond, stap 1 en 2 zijn gebouwd** (18 okt; het plan en de metingen in `snelheid.md`; Marcel koos A:
-ver uit mag anders zijn als het er even goed uitziet): dichtbij pixel voor pixel hetzelfde, ver uit 0,5 à 0,7% van de
-pixels anders, en een stap met het wiel één beeld van 5 à 11 ms in plaats van 6 à 8 beelden van 18 à 44. **Wacht op
-Marcel**: kijken in het spel (`Spel.debug.grondProef = 'nieuw'`, en `'oud'` om te vergelijken; nog zonder de beek, het
-platte groen en de sneeuw), en dan stap 3. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+renderproef van de grond, stap 1 tot 3 zijn gebouwd** (18 okt, nog lokaal; het plan en de metingen in `snelheid.md`,
+"Stap 3 is gebouwd"; Marcel koos A: ver uit mag anders zijn als het er even goed uitziet): de vloer, de droge beek, het
+platte groen en de sneeuw op de kaart. Op zoom 2 en 1 pixel voor pixel hetzelfde, ook met herfst, sneeuw en de beek; op
+0,75 alleen de gelijke gevallen (tot 6%, de oude buffer kiest daar nu eens de ene, dan de andere pixel); ver uit een
+andere pixel van het gras (op open grond 12 à 19%, voor het oog hetzelfde: de platen `uit/schermen/grondproef3-*.png`).
+Een stap met het wiel, een andere stand sneeuw en de beek zijn nu één beeld van 3 à 22 ms in plaats van 8 à 11 beelden
+tot 75 ms; sneeuw die komt 9 beelden tot 27 ms; een ander seizoen 5 beelden, het eerste 36 à 70 ms door de bomen
+(`opmerkingen.md`). **Wacht op Marcel**: kijken in het spel (`Spel.debug.grondProef = 'nieuw'`, zonder is het de oude
+grond), en dan stap 4, de heuvels. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

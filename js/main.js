@@ -1976,8 +1976,11 @@
     // uitgezoomd, en dan per stap met het wiel en per ander seizoen het eerste beeld erna, met de videokaart erbij
     // (T.gl.wacht), naast een gewoon beeld. Zelf gemeten, zodat er geen alt-tab of schermafdruk tussen zit. Daarna staat
     // alles weer zoals het was. Geeft per actie { eerste, traagst, beelden, gewoon } in ms: sinds het spreiden (js/tekenen.js,
-    // werkStukkenBij) komt de grond in een paar beelden, dus ook het traagste tot hij heel is, en in hoeveel beelden.
+    // werkStukkenBij) komt de grond in een paar beelden, dus ook het traagste tot hij heel is, en in hoeveel beelden. Met
+    // een dorp hier ook de sneeuw (die komt, een andere stand, en weg) en de beek (droog, en terug).
     meetGrond() {
+      const D = T.dorpHier(S);
+      const weer = D && D.weer ? { sneeuw: D.weer.sneeuw, beekDroog: D.weer.beekDroog } : null;
       const was = { zoom: S.zoom, camera: { ...S.camera }, kijk: S.kijk && { ...S.kijk }, bomen: T.debug.bomen };
       const beeld = () => {
         const t0 = performance.now();
@@ -2002,9 +2005,14 @@
         for (let i = standen.length - 2; i >= 0; i--) doe(`wiel naar ${Math.round(standen[i] * 100) / 100}`, () => (S.zoom = standen[i])); // geen tekst
         for (let i = 1; i < standen.length; i++) doe(`wiel naar ${Math.round(standen[i] * 100) / 100}`, () => (S.zoom = standen[i])); // geen tekst
         for (const seizoen of ['herfst', 'winter', '']) doe(`seizoen ${seizoen || 'terug'}`, () => (T.debug.bomen = seizoen)); // geen tekst
+        if (weer) {
+          for (const laag of [0.3, 0.35, 0]) doe(`sneeuw ${laag}`, () => (D.weer.sneeuw = laag)); // geen tekst
+          for (const droog of [true, false]) doe(`beek ${droog ? 'droog' : 'terug'}`, () => (D.weer.beekDroog = droog)); // geen tekst
+        }
       } finally {
         Object.assign(S, { zoom: was.zoom, camera: was.camera, kijk: was.kijk });
         T.debug.bomen = was.bomen;
+        if (weer) Object.assign(D.weer, weer);
       }
       return uit;
     },

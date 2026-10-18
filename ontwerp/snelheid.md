@@ -332,8 +332,8 @@ de proef alleen dichtbij, waar het al snel is). Voorstel van Claude: **A**, want
 (vlak): die zeggen of het snel genoeg is en of het er goed uitziet, voor het grootste werk (de heuvels) begint.
 
 **Stap 1 en 2 zijn gebouwd** (18 okt; `code.md` bij `js/tekenen.js`, "de grond op de kaart"; aan met
-`Spel.debug.grondProef = 'nieuw'`, en `'oud'` is de oude grond zonder de beek, het platte groen en de sneeuw, om te
-vergelijken). Op het proefdorp, het hele beeld met de bomen, de schaduw en de mist erbij, na 30 beelden rust:
+`Spel.debug.grondProef = 'nieuw'`, en `'oud'` was tot stap 3 de oude grond zonder de beek, het platte groen en de
+sneeuw, om te vergelijken). Op het proefdorp, het hele beeld met de bomen, de schaduw en de mist erbij, na 30 beelden rust:
 
 - **Dichtbij** (zoom 2, 1 en 0,75): 0 pixels anders. Stuk na stuk land, rij na rij, valt de volgorde op een vlakke
   kaart samen met die van de oude grond, want een tegel overlapt alleen zijn buren in dezelfde rij en kolom.
@@ -347,6 +347,51 @@ vergelijken). Op het proefdorp, het hele beeld met de bomen, de schaduw en de mi
 Een les onderweg: een uniform hoort bij het programma dat in gebruik is (`gebruik`); met het programma van de grond als
 laatste in de lus van `start` kregen de bomen hun tabel en hun mist niet, en lazen ze uit de verkeerde textuur (bomen in
 blokken, die kwamen en gingen). Nu staat er `gebruik(vastProg)` vóór.
+
+**Stap 3 is gebouwd** (18 okt; `code.md` bij `js/tekenen.js`, "de grond op de kaart"): de droge beek, het platte groen
+en de sneeuw liggen nu ook op de kaart, in de volgorde van de oude grond: de sneeuw van een tegel meteen na zijn vloer,
+dan de beek, dan het groen, na de vloer van alle stukken. De sneeuw is een getal voor de kaart: de processor rekent per
+tegel de ruis (64 bits) en de kaart hoeveel er ligt, dus een andere stand sneeuw maakt niets opnieuw. Het groen van een
+ander seizoen komt gespreid (`SPREID`, een of twee stukken per beeld: in één beeld kostte het 17 tot 50 ms voor de 9
+stukken van het proefdorp); een droge beek maakt alleen de stukken om de beek opnieuw (tot dan alles: 34 tot 44 ms).
+`'oud'` is weg: zonder `'nieuw'` is het de oude grond, met alles. Nagekeken in de browser van de Claude-app (Chromium,
+GTX 1080 Ti), het tabblad op 1920 bij 1080 met 1 pixel per css-pixel en het paneel niet in beeld (dus trager dan
+echt), op het proefdorp, op `main` na 6dd28f96 met deze stap. Oud tegen nieuw, na 30 beelden rust, met `S.tijd = 1000`
+en `Spel.debug.beeld()`, bij de start, bij het midden van het dorp en bij de beek; in de zomer, de herfst, de winter met
+sneeuw 0,3 en de beek droog, en met sneeuw 0,65:
+
+- **Zoom 2 en 1**: 0 pixels anders, overal.
+- **Zoom 0,75**: alleen gelijke gevallen. Op 0,75 valt het midden van elke derde rij en kolom schermpixels precies op
+  de grens tussen twee pixels van de tekening; de kaart kiest dan altijd dezelfde kant (zoals bij de bomen en de
+  gebouwen), de oude buffer door de afronding van zijn textuur nu eens de ene, dan de andere, en hoeveel hangt af van
+  waar de camera staat: bij de start 1 tot 52 pixels, bij de beek 3.600 tot 16.000, bij het midden van het dorp 39.000
+  tot 121.000 (6% van het beeld). Dat was in stap 1 en 2 al zo (daar alleen bij de start gemeten). Voor het oog
+  hetzelfde; pixel voor pixel gelijk kan op 0,75 niet, want de oude buffer is het zelf niet van plek tot plek.
+- **Ver uit**: in het bos 1,1 à 1,5% anders, bij het midden van het dorp 12 à 19%: op open grond is het gras ruis, en de
+  sneeuw ook, en er blijft een andere pixel van over, net als bij de vloer in stap 2. De gemiddelde kleur van het beeld
+  is tot op een tiende gelijk, met en zonder sneeuw: er ligt evenveel. De platen (oud, nieuw, de verschillen in rood):
+  `uit/schermen/grondproef3-*.png`.
+
+Gemeten met `Spel.debug.meetGrond()`, dat nu ook de sneeuw en de beek meet, elk beeld tot de videokaart klaar is, drie
+keer oud en vier keer nieuw (na de eerste keer van elk seizoen; die kost door de bomen nog steeds een beeld van 500 à 600
+ms, D1):
+
+| wat | de oude grond, gespreid | de grond op de kaart |
+| --- | --- | --- |
+| het wiel naar 0,35 | 8 à 9 beelden, hooguit 35 à 44 ms | 1 beeld van 13 à 22 ms |
+| het wiel naar 0,5 | 10 beelden, hooguit 28 à 29 ms | 1 beeld van 8 à 15 ms |
+| het wiel naar 2 | 3 beelden, hooguit 8 à 18 ms | 1 beeld van 4 à 6 ms |
+| een ander seizoen | 8 à 10 beelden, hooguit 40 à 64 ms | 5 beelden, het eerste 36 à 70 ms |
+| een andere stand sneeuw (0,3 naar 0,35) | 11 beelden, hooguit 69 à 75 ms | 1 beeld van 3 à 10 ms, een gewoon beeld |
+| sneeuw komt (0 naar 0,3) | 11 à 12 beelden, hooguit 70 à 78 ms | 9 beelden, hooguit 12 à 27 ms |
+| de sneeuw is weg | 8 à 10 beelden, hooguit 35 à 46 ms | 9 beelden, hooguit 9 à 11 ms |
+| de beek valt droog of komt terug | 8 à 9 beelden, hooguit 32 à 45 ms | 1 beeld van 7 à 12 ms |
+
+Een gewoon beeld was in dezelfde meting 2 à 6 ms, met allebei. Wat nog hapert, is niet de grond: bij een ander seizoen
+maken de bomen hun vaste rijen in één beeld opnieuw (27 à 37 ms op het proefdorp, `vasteRijenVoor`), en wat bij het wiel
+naar 0,35 overblijft, zit buiten de grond (de grond doet dan niets). Een stuk grond opnieuw maken kost 4 à 5 ms
+(`bouwGrondStuk`, 4096 tegels); dat gebeurt bij nieuw land, een gevelde boom, een paadje, en één per beeld als de
+sneeuw komt of weg is. In `opmerkingen.md`.
 
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 

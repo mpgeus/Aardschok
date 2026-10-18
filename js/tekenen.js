@@ -670,19 +670,24 @@
     return p;
   }
   const isGebakken = (w, v) => !!w.buiten && isPlat(v);
-  // Het platte spul in het gebied van een buffer, van achter naar voor; niet op een paadje (js/paden.js), want daar
-  // is het weggelopen.
+  // Ligt er op tegel (x, y) een paadje (js/paden.js)? Daar is het platte spul weggelopen.
+  function opPaadjeVan(w, paden) {
+    if (!paden) return () => false;
+    const kaartvak = T.kaartVak(w);
+    const bv = kaartvak.b + 1; // de hoekpunten, zoals T.zandHoeken ze legt
+    return (x, y) => {
+      const k = (y - kaartvak.y) * bv + x - kaartvak.x;
+      return T.inVak(kaartvak, x, y) && !!(paden.zand[k] || paden.zand[k + 1] || paden.zand[k + bv] || paden.zand[k + bv + 1]);
+    };
+  }
+  // De volgorde van het platte spul: van achter naar voor.
+  const platVolgorde = (a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y;
+  // Het platte spul in het gebied van een buffer, van achter naar voor; niet op een paadje.
   function tekenPlatIn(c, S, vak) {
     const w = S.wereld;
-    const paden = zandVan(S);
-    const kaartvak = T.kaartVak(w);
-    const bv = paden ? kaartvak.b + 1 : 0; // de hoekpunten, zoals T.zandHoeken ze legt
-    const opPaadje = (x, y) => {
-      const k = (y - kaartvak.y) * bv + x - kaartvak.x;
-      return paden && T.inVak(kaartvak, x, y) && (paden.zand[k] || paden.zand[k + 1] || paden.zand[k + bv] || paden.zand[k + bv + 1]);
-    };
+    const opPaadje = opPaadjeVan(w, zandVan(S));
     const lijst = platVan(w).lijst.filter((v) => inVak(vak, v.x, v.y) && vak.binnen(v.x, v.y) && !opPaadje(v.x, v.y));
-    lijst.sort((a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y);
+    lijst.sort(platVolgorde);
     for (const v of lijst) {
       const p = opGrond(v.x, v.y);
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buitenVan(v, 0);
@@ -843,7 +848,7 @@
     }
   };
   // Of de grond nog gespreid binnenkomt (Spel.debug.meetGrond).
-  T.grondBezig = (S) => !!(S.grond && S.grond.vorig);
+  T.grondBezig = (S) => (grondOpDeKaartNu ? !!(grondLaatst && grondLaatst.wacht) : !!(S.grond && S.grond.vorig));
   // Alle stukken weg (hun doeken terug in de voorraad), ook wat nog opnieuw moest.
   function leegBuffer(buf) {
     for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
@@ -1071,35 +1076,52 @@
     if (om.x0 > om.x1 || om.y0 > om.y1) return false;
     const vak = tegelsVoorStuk(S.wereld, r, GRONDRAND);
     tekenVloeren(c, S, inBeeld, vak);
-    if (S.wereld.buiten && grondProef() !== 'oud') tekenDrogeBeek(c, S, vak);
-    if (S.wereld.buiten && grondProef() !== 'oud') tekenPlatIn(c, S, vak);
+    if (S.wereld.buiten) tekenDrogeBeek(c, S, vak);
+    if (S.wereld.buiten) tekenPlatIn(c, S, vak);
     return true;
   }
 
-  // ---- de grond op de kaart (de renderproef van de grond, stap 1 en 2: ontwerp/snelheid.md, "Het plan voor de
+  // ---- de grond op de kaart (de renderproef van de grond, stap 1 tot 3: ontwerp/snelheid.md, "Het plan voor de
   // renderproef van de grond"; Marcel, 18 okt: "A: ver uitgezoomd mag anders zijn als het er even goed uitziet. Begin met
   // stap 1 en 2 (vlak)"). Per stuk land (T.STUK bij T.STUK tegels) een vaste rij met een instantie per grondtegel, rij na
-  // rij (GROND_PER getallen: waar de tekening links boven begint, in pixels van de vlakte vanaf het stuk, waar ze in haar
-  // vel staat, haar maat, welk vel), en de kaart tekent ze elk beeld meteen op de zoom (Doek.tekenGrond, js/gl.js). Een
-  // stap met het wiel kost dan niets. Alleen vlak, en alleen de vloer: de droge beek, het platte groen en de sneeuw
-  // komen in stap 3. Aan met Spel.debug.grondProef = 'nieuw'; 'oud' tekent de oude grond zonder die drie, om te
-  // vergelijken. Een stuk opnieuw als het open ging, als de kaart er veranderde, als het zand van de paadjes er anders
-  // werd, als de beek droogviel of terugkwam, of als er een vel bij kwam (één per beeld).
+  // rij, en de kaart tekent ze elk beeld meteen op de zoom (Doek.tekenGrond, js/gl.js): een stap met het wiel kost dan
+  // niets. Een instantie is GROND_PER getallen: waar de tekening links boven begint (in pixels van de vlakte vanaf het
+  // stuk), waar ze in haar bron staat, haar maat, de bron en de soort: GROND_VEL (een vel van de grond, de bron is zijn
+  // plaats in G.vellen), GROND_STAPEL (een plaatje op de stapel van js/gl.js, de bron is de laag) of GROND_SNEEUW (de
+  // sneeuw op die tegel, met a en f van sneeuwVanTegel op de plek van de bron). Wat erop ligt (stap 3) komt zoals in de
+  // oude grond (tekenGrondIn): de sneeuw van een tegel meteen na zijn vloer, als er sneeuw ligt, en hoeveel rekent de
+  // kaart zelf (sneeuwOpDeKaart), zodat een andere stand sneeuw niets opnieuw maakt; dan de droge beek, één rij voor de
+  // hele beek (bouwBeek); dan het platte groen, per stuk een tweede rij, die bij een ander seizoen alleen zelf opnieuw
+  // komt, gespreid (bouwPlat, SPREID). Eerst de vloer van alle stukken, dan de beek, dan het groen: anders tekent de vloer
+  // van een volgend stuk over wat over de rand van een stuk steekt. Alleen vlak. Aan met Spel.debug.grondProef = 'nieuw'.
+  // Een stuk opnieuw als het open ging, als de kaart er veranderde, als het zand van de paadjes of de beek er anders
+  // werd, en één per beeld als er een vel bij kwam, of als de sneeuw kwam of helemaal weg is (dan heeft het de sneeuw wel
+  // of niet in zijn rij); in T.tekenHeel alles meteen.
   const grondProef = () => (T.debug && T.debug.grondProef) || '';
   const GROND_PER = 8;
+  const GROND_VEL = 0;
+  const GROND_STAPEL = 1;
+  const GROND_SNEEUW = 2;
   const GROND_HOOGUIT = 48; // zoveel stukken blijven er hooguit op de kaart
-  const grondKaarten = new WeakMap(); // wereld → { stukken: Map(nr → e), vellen, kaart, zand }; alleen scherm
+  const grondKaarten = new WeakMap(); // wereld → { stukken: Map(nr → e), vellen, kaart, zand, droog, plat, beek, vol, wacht }; alleen scherm
   let grondLaatst = null;
+  let grondOpDeKaartNu = false; // tekende het vorige beeld de grond op de kaart (T.grondBezig)
   let beeldTeller = 0;
+  let grondWerk = new Float32Array(GROND_PER * 64 * 64 * 2); // een rij terwijl hij gemaakt wordt (met sneeuw twee per tegel)
   function grondVan(w) {
     let G = grondKaarten.get(w);
     if (!G) {
-      G = { stukken: new Map(), vellen: [], kaart: T.kaartVersie(w), zand: null };
+      G = { stukken: new Map(), vellen: [], kaart: T.kaartVersie(w), zand: null, droog: null, plat: null, beek: null, vol: false, wacht: 0 };
       grondKaarten.set(w, G);
     }
     if (grondLaatst && grondLaatst !== G) {
-      for (const e of grondLaatst.stukken.values()) T.gl.weg(e.rij);
+      for (const e of grondLaatst.stukken.values()) {
+        T.gl.weg(e.rij);
+        T.gl.weg(e.plat);
+      }
       grondLaatst.stukken.clear();
+      if (grondLaatst.beek) T.gl.weg(grondLaatst.beek.rij);
+      grondLaatst.beek = null;
     }
     grondLaatst = G;
     return G;
@@ -1111,10 +1133,27 @@
       if (!q || (q.x2 >= e.x0 - 1 && q.x1 <= e.x0 + Z && q.y2 >= e.y0 - 1 && q.y1 <= e.y0 + Z)) e.vies = true;
     }
   }
-  function bouwGrondStuk(G, w, s, paden, droog) {
+  // Instantie n van de rij die gemaakt wordt (grondWerk, dat groeit als het vol is).
+  function zetGrond(n, x, y, sx, sy, b, h, bron, soort) {
+    const i = n * GROND_PER;
+    if (i + GROND_PER > grondWerk.length) {
+      const d = new Float32Array(grondWerk.length * 2);
+      d.set(grondWerk);
+      grondWerk = d;
+    }
+    grondWerk[i] = x;
+    grondWerk[i + 1] = y;
+    grondWerk[i + 2] = sx;
+    grondWerk[i + 3] = sy;
+    grondWerk[i + 4] = b;
+    grondWerk[i + 5] = h;
+    grondWerk[i + 6] = bron;
+    grondWerk[i + 7] = soort;
+  }
+  // De vloer van stuk s, met (als `sneeuw`) de sneeuw van elke tegel meteen na zijn vloer, zoals tekenVloeren.
+  function bouwGrondStuk(G, w, s, paden, droog, sneeuw) {
     const Z = T.STUK;
     const o = T.naarScherm(s.x0, s.y0);
-    const data = new Float32Array(Z * Z * GROND_PER);
     let n = 0;
     for (let y = s.y0; y < s.y0 + Z; y++) {
       for (let x = s.x0; x < s.x0 + Z; x++) {
@@ -1127,16 +1166,98 @@
         let vel = G.vellen.indexOf(deel.beeld);
         if (vel < 0) vel = G.vellen.push(deel.beeld) - 1;
         const p = T.naarScherm(x, y);
-        data.set([Math.round(p.x - deel.ax) - o.x, Math.round(p.y - deel.ay) - o.y, deel.sx, deel.sy, deel.b, deel.h, vel, 0], n * GROND_PER);
-        n++;
+        zetGrond(n++, Math.round(p.x - deel.ax) - o.x, Math.round(p.y - deel.ay) - o.y, deel.sx, deel.sy, deel.b, deel.h, vel, GROND_VEL);
+        const t = sneeuw && sneeuwVanTegel(x, y, metPad || T.sprites.grondHoeken(g.vel, g.id) || (g.naam ? [g.naam, g.naam, g.naam, g.naam] : null));
+        if (t) zetGrond(n++, Math.round(p.x) - 32 - o.x, Math.round(p.y) - 16 - o.y, t[0], t[1], 64, 32, 0, GROND_SNEEUW);
       }
     }
-    return { s, x0: s.x0, y0: s.y0, px: o.x, py: o.y, rij: n ? T.gl.vasteRij(data, n) : null, vies: false };
+    return { s, x0: s.x0, y0: s.y0, px: o.x, py: o.y, rij: n ? T.gl.vasteRij(grondWerk, n) : null, plat: null, vies: false };
+  }
+  // Het platte groen per stuk land, van achter naar voor (platVolgorde), opnieuw als platVan een nieuwe lijst gaf.
+  function platPerStuk(G, w) {
+    const p = platVan(w);
+    if (G.plat && G.plat.p === p) return G.plat;
+    const per = new Map();
+    for (const v of p.lijst) {
+      const nr = T.stukVan(v.x, v.y);
+      if (!per.has(nr)) per.set(nr, []);
+      per.get(nr).push(v);
+    }
+    for (const l of per.values()) l.sort(platVolgorde);
+    G.plat = { p, per };
+    return G.plat;
+  }
+  // Het platte groen van stuk e als rij, elk als plaatje op de stapel (losBeeld), niet op een paadje, zoals
+  // tekenPlatIn. Een tekening die nog laadt, komt als er een beeld bij kwam (e.geladen); past er een niet op de stapel,
+  // dan tekent de oude grond (G.vol).
+  function bouwPlat(G, e, lijst, opPaadje) {
+    let n = 0;
+    for (const v of lijst) {
+      if (opPaadje(v.x, v.y)) continue;
+      const stuk = T.sprites.buitenAan && T.sprites.buitenVan(v, 0);
+      if (!stuk) continue;
+      const q = T.gl.opDeStapel(losBeeld(stuk));
+      if (!q) {
+        G.vol = true;
+        return null;
+      }
+      const p = opGrond(v.x, v.y);
+      zetGrond(n++, Math.round(p.x - stuk.ax) - e.px, Math.round(p.y - stuk.ay) - e.py, q.x, q.y, stuk.b, stuk.h, q.laag, GROND_STAPEL);
+    }
+    return n ? T.gl.vasteRij(grondWerk, n) : null;
+  }
+  // De droge beek (beekStukjes) als één rij, vanaf zijn eerste tegel (zo blijven de getallen klein genoeg voor de kaart),
+  // met de vlakjes in een kleur op de stapel (kleurVlak): { rij, px, py }, met rij null als hij niet droog is.
+  function bouwBeek(G, S, w) {
+    const D = T.dorpHier(S);
+    const tegels = D && D.weer && D.weer.beekDroog ? T.beekTegels(w).filter((t) => T.staatDroog(D, t.x, t.y)) : [];
+    if (!tegels.length) return { rij: null, px: 0, py: 0 };
+    const o = T.naarScherm(tegels[0].x, tegels[0].y);
+    let n = 0;
+    const vlak = (kleur, x, y, b, h) => {
+      const q = T.gl.opDeStapel(kleurVlak(kleur));
+      if (q) zetGrond(n++, x - o.x, y - o.y, q.x, q.y, b, h, q.laag, GROND_STAPEL);
+      else G.vol = true;
+    };
+    for (const t of tegels) beekStukjes(t, vlak);
+    return { rij: n ? T.gl.vasteRij(grondWerk, n) : null, px: o.x, py: o.y };
+  }
+  const kleurVlakken = new Map(); // kleur → een doek van 4 bij 4 in die kleur, voor de stapel (bouwBeek); alleen scherm
+  function kleurVlak(kleur) {
+    let c = kleurVlakken.get(kleur);
+    if (!c) {
+      c = document.createElement('canvas');
+      c.width = 4;
+      c.height = 4;
+      const k = c.getContext('2d');
+      k.fillStyle = kleur;
+      k.fillRect(0, 0, 4, 4);
+      c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
+      kleurVlakken.set(kleur, c);
+    }
+    return c;
+  }
+  // Hoeveel sneeuw er ligt, voor de kaart (VERT_GROND in js/gl.js): `laag` de laag maal 1,15 (sneeuwDek; zonder sneeuw zo
+  // laag dat er niets komt), en `tabel` per stand (1 tot SNEEUW_STAPPEN) waar zijn tegel (sneeuwTegel) op de stapel staat:
+  // x, y, laag en een 0. Null als een tegel daar niet kan.
+  let sneeuwStapel = null;
+  function sneeuwOpDeKaart(laag) {
+    if (!sneeuwStapel) {
+      const tabel = new Float32Array((SNEEUW_STAPPEN + 1) * 4);
+      for (let k = 1; k <= SNEEUW_STAPPEN; k++) {
+        const q = T.gl.opDeStapel(sneeuwTegel(k));
+        if (!q) return null;
+        tabel.set([q.x, q.y, q.laag, 0], k * 4);
+      }
+      sneeuwStapel = tabel;
+    }
+    return { laag: laag > 0 ? laag * 1.15 : -1, tabel: sneeuwStapel };
   }
   // Tekent de grond in vak (tegels) als vaste rijen; false als het niet kan (dan de oude grond).
   function tekenGrondOpDeKaart(ctx, S, w, vak) {
     if (!ctx.tekenGrond || !metSprites() || !w.buiten || !T.opEiland(w) || T.heeftHoogte(w)) return false;
     const G = grondVan(w);
+    if (G.vol) return false;
     const Z = T.STUK;
     const kaart = T.kaartVersie(w);
     if (kaart !== G.kaart) {
@@ -1160,38 +1281,76 @@
       } else grondVies(G, null);
       G.zand = zand;
     }
+    // Valt de beek droog of komt hij terug, dan alleen de stukken om de beek: een tegel krijgt een bedding als een
+    // tegel ernaast beek is (T.hoekenDroog, js/weer.js).
     const droog = droogVan(paden);
-    const sleutel = `${droog ? 1 : 0}|${w.huidigeKamer}`;
+    if (!!droog !== G.droog) {
+      for (const t of T.beekTegels(w)) grondVies(G, { x1: t.x - 1, y1: t.y - 1, x2: t.x + 1, y2: t.y + 1 });
+      G.droog = !!droog;
+    }
+    const sneeuw = sneeuwLaag(S);
+    const metSneeuw = sneeuw > 0;
+    const plat = platPerStuk(G, w);
+    const platSleutel = `${T.sprites.seizoenVanDeBomen()}|${plat.p.versie}`;
+    const opPaadje = opPaadjeVan(w, paden);
     const geladen = T.sprites.geladenNr();
     const stukken = [];
-    let later = 0; // wat alleen opnieuw moet omdat er een beeld bij kwam: één per beeld
+    const platten = [];
+    let later = 0; // wat een paar beelden kan wachten: één per beeld, behalve in T.tekenHeel
+    let platGedaan = 0;
+    let platBegin = 0;
+    let platWacht = 0;
     for (const nr of [...w.open].sort((a, b) => a - b)) {
       const x0 = (nr % 64) * Z;
       const y0 = Math.floor(nr / 64) * Z;
       if (x0 > vak.x1 || y0 > vak.y1 || x0 + Z <= vak.x0 || y0 + Z <= vak.y0) continue;
       const s = T.stukOpen(w, nr);
       let e = G.stukken.get(nr);
-      const nodig = !e || e.s !== s || e.vies || e.sleutel !== sleutel;
-      if (nodig || (e.geladen !== geladen && !later++)) {
-        if (e) T.gl.weg(e.rij);
-        e = bouwGrondStuk(G, w, s, paden, droog);
-        e.sleutel = sleutel;
-        e.geladen = geladen;
+      const nodig = !e || e.s !== s || e.vies || e.kamer !== w.huidigeKamer;
+      const zacht = !!e && (e.geladen !== geladen || e.sneeuw !== metSneeuw);
+      if (nodig || (zacht && (heel || !later++))) {
+        if (e) {
+          T.gl.weg(e.rij);
+          T.gl.weg(e.plat);
+        }
+        e = bouwGrondStuk(G, w, s, paden, droog, metSneeuw);
+        Object.assign(e, { kamer: w.huidigeKamer, geladen, sneeuw: metSneeuw, platSleutel: null });
         G.stukken.set(nr, e);
+      }
+      // Het groen van een nieuw stuk meteen; dat van een ander seizoen gespreid, zoals de oude grond (SPREID): een stuk
+      // per beeld, en een tweede als het eerste vlot ging (op het proefdorp kostte het in één beeld 17 tot 50 ms).
+      if (e.platSleutel !== platSleutel) {
+        const nieuw = e.platSleutel === null;
+        if (heel || nieuw || !platGedaan || (platGedaan < SPREID.stukken && performance.now() - platBegin < SPREID.ms)) {
+          if (!nieuw && !platGedaan++) platBegin = performance.now();
+          T.gl.weg(e.plat);
+          e.plat = bouwPlat(G, e, plat.per.get(nr) || [], opPaadje);
+          e.platSleutel = platSleutel;
+        } else platWacht++;
       }
       e.beeld = beeldTeller;
       if (e.rij) stukken.push(e);
+      if (e.plat) platten.push({ rij: e.plat, px: e.px, py: e.py });
     }
-    // wat lang buiten beeld is, gaat van de kaart (een stuk is 128 kB)
+    G.wacht = Math.max(0, later - 1) + platWacht; // T.grondBezig
+    const beekSleutel = `${droog ? 1 : 0}|${kaart}`;
+    if (!G.beek || G.beek.sleutel !== beekSleutel) {
+      if (G.beek) T.gl.weg(G.beek.rij);
+      G.beek = { ...bouwBeek(G, S, w), sleutel: beekSleutel };
+    }
+    // wat lang buiten beeld is, gaat van de kaart (een stuk is 128 kB, met sneeuw 256)
     if (G.stukken.size > GROND_HOOGUIT) {
       for (const [nr, e] of G.stukken) {
         if (e.beeld === beeldTeller) continue;
         T.gl.weg(e.rij);
+        T.gl.weg(e.plat);
         G.stukken.delete(nr);
       }
     }
     beeldTeller++;
-    return ctx.tekenGrond(stukken, G.vellen);
+    const opDeKaart = sneeuwOpDeKaart(sneeuw);
+    if (G.vol || !opDeKaart) return false;
+    return ctx.tekenGrond(stukken.concat(G.beek.rij ? [G.beek] : [], platten), G.vellen, opDeKaart);
   }
 
   // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), en de
@@ -1234,6 +1393,7 @@
     const vak = tegelsMetHoogte(w, zicht); // met de hoogte: een tegel onder het beeld kan op een heuvel erin liggen
 
     const opDeKaart = grondProef() === 'nieuw' && tekenGrondOpDeKaart(ctx, S, w, vak);
+    grondOpDeKaartNu = opDeKaart;
     const g = opDeKaart ? S.grond : werkGrondBij(S, zicht, inBeeld, dpr); // heuvelsErvoor gebruikt hem ook
     if (!opDeKaart) tekenStukken(ctx, g, zicht);
     tekenWaterLeven(ctx, S, w, vak);
@@ -2138,14 +2298,23 @@
     const onder = r(gx, gy + 1) * (1 - fx) + r(gx + 1, gy + 1) * fx;
     return boven * (1 - fy) + onder * fy;
   }
-  // De sneeuw op één tegel (vanuit tekenVloeren): `hoeken` zijn de soorten op zijn vier hoeken.
+  // Hoeveel sneeuw er op tegel (x, y) kan liggen, met `hoeken` de soorten op zijn vier hoeken: [a, f], waarmee er bij
+  // een laag sneeuw van `laag` zoveel ligt als sneeuwDek zegt, of null op water. De ruis rekent de processor (beeldLot
+  // rekent in 64 bits); de grond op de kaart geeft a en f per tegel mee, en de kaart rekent zelf hoeveel (VERT_GROND in
+  // js/gl.js, dezelfde som), zodat een andere stand sneeuw daar niets opnieuw maakt.
+  function sneeuwVanTegel(x, y, hoeken) {
+    const water = hoeken ? hoeken.filter((h) => T.isWaterGrond(h)).length : 0;
+    if (water >= 2) return null;
+    const pad = hoeken ? hoeken.filter((h) => h === 'zandpad').length / 4 : 0;
+    return [(sneeuwRuis(x, y) - 0.5) * 0.6, (1 - 0.45 * pad) * (water ? 0.6 : 1)];
+  }
+  const sneeuwDek = (laag, t) => Math.max(0, Math.min(1, laag * 1.15 + t[0])) * t[1];
+  // De sneeuw op één tegel (vanuit tekenVloeren).
   function tekenSneeuwOp(c, w, x, y, laag, hoeken) {
     if (laag <= 0 || !metSprites()) return;
-    const water = hoeken ? hoeken.filter((h) => T.isWaterGrond(h)).length : 0;
-    if (water >= 2) return;
-    const pad = hoeken ? hoeken.filter((h) => h === 'zandpad').length / 4 : 0;
-    const dek = Math.max(0, Math.min(1, laag * 1.15 + (sneeuwRuis(x, y) - 0.5) * 0.6)) * (1 - 0.45 * pad) * (water ? 0.6 : 1);
-    const stap = Math.round(dek * SNEEUW_STAPPEN);
+    const t = sneeuwVanTegel(x, y, hoeken);
+    if (!t) return;
+    const stap = Math.round(sneeuwDek(laag, t) * SNEEUW_STAPPEN);
     if (stap <= 0) return;
     const tegel = sneeuwTegel(stap);
     if (T.heeftHoogte(w)) {
@@ -2165,27 +2334,32 @@
   function tekenDrogeBeek(c, S, vak) {
     const D = T.dorpHier(S);
     if (!D || !D.weer || !D.weer.beekDroog) return;
-    const B = T.WEER_INSTELLINGEN.beeld;
+    const vlak = (kleur, x, y, b, h) => {
+      c.fillStyle = kleur;
+      c.fillRect(x, y, b, h);
+    };
     for (const t of T.beekTegels(S.wereld)) {
       if (!inVak(vak, t.x, t.y) || !vak.binnen(t.x, t.y) || !T.staatDroog(D, t.x, t.y)) continue;
-      const p = opGrond(t.x, t.y);
-      // Barsten en keien, op vaste plekken in het midden van de tegel (niet op de rand, waar het gras begint).
-      for (let i = 0; i < 9; i++) {
-        const u = (beeldLot(t.x * 7 + i, t.y * 3) - 0.5) * 0.7;
-        const v = (beeldLot(t.x * 5 + i, t.y * 11) - 0.5) * 0.7;
-        const x = p.x + (u - v) * 64;
-        const y = p.y + (u + v) * 32;
-        if (i < 6) {
-          // Een barst: een paar pixels schuin, langs de tegel.
-          c.fillStyle = B.barstKleur;
-          const l = 4 + Math.round(beeldLot(i, t.x) * 6);
-          const op = beeldLot(t.y, i) < 0.5 ? 1 : -1;
-          for (let s = 0; s < l; s += 2) c.fillRect(Math.round(x + s), Math.round(y + (op * s) / 2), 2, 1);
-        } else {
-          c.fillStyle = B.keiKleur;
-          c.fillRect(Math.round(x), Math.round(y), 3, 2);
-        }
-      }
+      beekStukjes(t, vlak);
+    }
+  }
+  // De barsten en keien van de droge beek op tegel t (tekenDrogeBeek, en de grond op de kaart), als vlakjes
+  // vlak(kleur, x, y, b, h) in hele pixels van de vlakte: op vaste plekken in het midden van de tegel (niet op de rand,
+  // waar het gras begint).
+  function beekStukjes(t, vlak) {
+    const B = T.WEER_INSTELLINGEN.beeld;
+    const p = opGrond(t.x, t.y);
+    for (let i = 0; i < 9; i++) {
+      const u = (beeldLot(t.x * 7 + i, t.y * 3) - 0.5) * 0.7;
+      const v = (beeldLot(t.x * 5 + i, t.y * 11) - 0.5) * 0.7;
+      const x = p.x + (u - v) * 64;
+      const y = p.y + (u + v) * 32;
+      if (i < 6) {
+        // Een barst: een paar pixels schuin, langs de tegel.
+        const l = 4 + Math.round(beeldLot(i, t.x) * 6);
+        const op = beeldLot(t.y, i) < 0.5 ? 1 : -1;
+        for (let s = 0; s < l; s += 2) vlak(B.barstKleur, Math.round(x + s), Math.round(y + (op * s) / 2), 2, 1);
+      } else vlak(B.keiKleur, Math.round(x), Math.round(y), 3, 2);
     }
   }
 
@@ -2486,7 +2660,7 @@
     const paden = buiten ? zandVan(S) : null;
     const droog = droogVan(paden);
     const hoog = T.heeftHoogte(w);
-    const sneeuw = buiten && grondProef() !== 'oud' ? sneeuwLaag(S) : 0;
+    const sneeuw = buiten ? sneeuwLaag(S) : 0;
     for (const [x, y] of tegelVolgorde(vak, hoog)) {
       if (!vak.binnen(x, y)) continue; // een stuk van de grond (tegelsVoorStuk)
       {
