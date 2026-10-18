@@ -1366,7 +1366,7 @@
   const MIST_STAP = 16; // het masker beslaat een vak op een veelvoud hiervan, zodat het niet bij elke stap nieuw is
   const MIST_KIER = 2; // pixels tussen de twee helften, zodat het uitsmeren de ene niet in de andere trekt
   const MIST_KLEIN = 4; // zonder videokaart: het kleine doek is zoveel keer kleiner dan het scherm
-  const mistMaskers = new WeakMap(); // kaart → { sleutel, basis, werk, x0, y0, b, h, n }
+  const mistMaskers = new WeakMap(); // dorp → { sleutel, basis, werk, x0, y0, b, h, n }; met de videokaart { sleutel, gekend, versie, kijkers, x0, y0, b, h }
   const metMist = (w) => T.opEiland(w) && !(T.debug && T.debug.geenMist);
   // De kleur van een tegel van het masker, [r, g, b, a] (0..255): met de videokaart de twee helften (ontkleuren, donker),
   // zonder één (zie hierboven): wat het doek eronder c maakt tot c·(1 − a) + kleur·a, zoals eerst een grijs over c met
@@ -1387,13 +1387,14 @@
     const y0 = Math.floor(vak.y0 / MIST_STAP) * MIST_STAP;
     const b = Math.ceil((vak.x1 + 1) / MIST_STAP) * MIST_STAP - x0;
     const h = Math.ceil((vak.y1 + 1) / MIST_STAP) * MIST_STAP - y0;
+    if (kaart) return mistOpDeKaart(D, M, x0, y0, b, h);
     let m = mistMaskers.get(D);
     // wat je kent: alleen opnieuw als er land bij kwam, het vak verschoof of een getal in de werkbank veranderde
     const sleutel = [x0, y0, b, h, T.mistVersie(D), M.ontkleurd, M.donker, M.zwart.join(), kaart].join('|');
     if (!m || m.sleutel !== sleutel) {
       const n = kaart ? 2 : 1; // zoveel helften naast elkaar
       const B = n * b + (n - 1) * MIST_KIER;
-      if (!m) mistMaskers.set(D, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
+      if (!m || !m.basis) mistMaskers.set(D, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
       for (const c of [m.basis, m.werk]) {
         if (c.width !== B) c.width = B;
         if (c.height !== h) c.height = h;
@@ -1439,6 +1440,47 @@
     k.globalCompositeOperation = 'source-over';
     return m;
   }
+  // Met de videokaart (vraag 178, Marcel: "Regen en mist doen maar"): wat je kent als getallen, per tegel twee (hoeveel
+  // kleur eruit gaat, hoeveel donkerder; de alpha van mistKleuren), alleen opnieuw als de sleutel verandert, en per beeld
+  // wie er kijkt: per kijker vier getallen (het midden in pixels van het masker, met de halve tegel, en de twee stralen
+  // van de zachte rand). De kaart maakt er zelf het masker van (js/gl.js, mistWerk), zoals hierboven het doek met een
+  // verloop per kijker: tot 18 okt hier elk beeld, met het doek erna naar de kaart.
+  function mistOpDeKaart(D, M, x0, y0, b, h) {
+    let m = mistMaskers.get(D);
+    const sleutel = [x0, y0, b, h, T.mistVersie(D), M.ontkleurd, M.donker, M.zwart.join(), 'kaart'].join('|');
+    if (!m || m.sleutel !== sleutel) {
+      const gekend = m && m.gekend && m.gekend.length === b * h * 4 ? m.gekend : new Uint8Array(b * h * 4);
+      const kleuren = [mistKleuren(true, false), mistKleuren(true, true)];
+      for (let j = 0; j < h; j++) {
+        for (let i = 0; i < b; i++) {
+          const kl = kleuren[T.kentTegel(D, x0 + i, y0 + j) ? 1 : 0];
+          const p = (j * b + i) * 4;
+          gekend[p] = kl[0][3];
+          gekend[p + 1] = kl[1][3];
+          gekend[p + 3] = 255;
+        }
+      }
+      m = { sleutel, gekend, versie: (m && m.versie ? m.versie : 0) + 1, kijkers: m && m.kijkers ? m.kijkers : new Float32Array(64), x0, y0, b, h, n: 0 };
+      mistMaskers.set(D, m);
+    }
+    let n = 0;
+    for (const z of T.wieKijken(D)) {
+      const r0 = Math.max(0, z.r - M.rand / 2);
+      const r1 = z.r + M.rand / 2;
+      const cx = z.x - x0 + 0.5;
+      const cy = z.y - y0 + 0.5;
+      if (cx + r1 < 0 || cy + r1 < 0 || cx - r1 > b || cy - r1 > h) continue;
+      if (m.kijkers.length < (n + 1) * 4) {
+        const k = new Float32Array(m.kijkers.length * 2);
+        k.set(m.kijkers);
+        m.kijkers = k;
+      }
+      m.kijkers.set([cx, cy, r0, r1], n * 4);
+      n++;
+    }
+    m.n = n;
+    return m;
+  }
   let mistKlein = null; // het kleine doek zonder videokaart
   // Het net van de mist (vraag 174, stap b4; Marcel: "M2"): per stuk van T.STUK een punt op het midden van elke tegel
   // van het stuk en de rij en kolom erna (65 bij 65, zodat de stukken op elkaar aansluiten), op zijn hoogte, als [x, y
@@ -1471,7 +1513,7 @@
     const kaart = !!ctx.tekenMist;
     const m = mistMasker(D, w, vak, kaart);
     if (kaart) {
-      ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart, { x0: m.x0, y0: m.y0, stukken: mistNetOnder(w, vak) });
+      ctx.tekenMist(m, T.MIST_INSTELLINGEN.zwart, { x0: m.x0, y0: m.y0, stukken: mistNetOnder(w, vak) });
       return;
     }
     const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
@@ -1757,7 +1799,18 @@
 
   // Regen en sneeuw (Marcel, 9 okt: "Ook in beeld"): strepen en vlokjes over het hele beeld, op de klok van het scherm
   // (S.tijd), zodat het op 30× niet harder regent. Elke druppel heeft een vaste plek uit zijn nummer, en valt door het
-  // beeld; de wind trekt ze een beetje schuin. Vlakken, geen lijnen: dat tekent de videokaart zelf (js/gl.js).
+  // beeld; de wind trekt ze een beetje schuin. Vlakken, geen lijnen: dat tekent de videokaart zelf (js/gl.js). Wat vaststaat
+  // per druppel (vijf getallen uit beeldLot), één keer uitgerekend (lotjes), en met de videokaart gaan alle vlakjes in één
+  // keer (vlakjes in js/gl.js; vraag 178, Marcel: "Regen en mist doen maar"): tot 18 okt per druppel vijf keer een sinus
+  // en een fillRect, ver uitgezoomd 0,3 ms per beeld. Waar hij nu valt, blijft het beeld uitrekenen: in de shader is de
+  // klok na een uur spelen te grof, en dan haperen de druppels.
+  const lotjes = [[], [], [], [], [], []]; // per k van beeldLot(i, k): de waarde voor druppel i
+  let neerslagVlakken = new Float64Array(4 * 1600); // Float64: dezelfde getallen als fillRect
+  function lotVan(k, i) {
+    const l = lotjes[k];
+    while (l.length <= i) l.push(beeldLot(l.length, k));
+    return l[i];
+  }
   function tekenNeerslag(ctx, S, bw, bh) {
     const weer = weerHier(S);
     if (weer !== 'regen' && weer !== 'sneeuw') return;
@@ -1770,17 +1823,23 @@
     const W = bw + 40;
     ctx.save();
     ctx.fillStyle = regen ? B.regenKleur : B.sneeuwKleur;
+    if (neerslagVlakken.length < n * 4) neerslagVlakken = new Float64Array(n * 4);
+    const v = neerslagVlakken;
+    lotVan(5, n);
+    for (let k = 1; k < 5; k++) lotVan(k, n);
     for (let i = 0; i < n; i++) {
-      const snel = (regen ? B.valRegen : B.valSneeuw) * (0.75 + 0.5 * beeldLot(i, 3));
-      const y = ((beeldLot(i, 2) * H + t * snel) % H) - lengte;
+      const snel = (regen ? B.valRegen : B.valSneeuw) * (0.75 + 0.5 * lotjes[3][i]);
+      const y = ((lotjes[2][i] * H + t * snel) % H) - lengte;
       const opzij = regen ? t * snel * B.wind : t * B.windSneeuw + Math.sin(t * 0.9 + i) * 10;
-      const x = ((((beeldLot(i, 1) * W + opzij) % W) + W) % W) - 20;
-      if (regen) ctx.fillRect(x, y, 1.5, lengte * (0.7 + 0.6 * beeldLot(i, 4)));
-      else {
-        const m = beeldLot(i, 5) < 0.35 ? 4 : 3;
-        ctx.fillRect(x, y, m, m);
-      }
+      const x = ((((lotjes[1][i] * W + opzij) % W) + W) % W) - 20;
+      const m = regen ? 0 : lotjes[5][i] < 0.35 ? 4 : 3;
+      v[4 * i] = x;
+      v[4 * i + 1] = y;
+      v[4 * i + 2] = regen ? 1.5 : m;
+      v[4 * i + 3] = regen ? lengte * (0.7 + 0.6 * lotjes[4][i]) : m;
     }
+    if (ctx.vlakjes) ctx.vlakjes(v, n);
+    else for (let i = 0; i < n; i++) ctx.fillRect(v[4 * i], v[4 * i + 1], v[4 * i + 2], v[4 * i + 3]);
     ctx.restore();
   }
 

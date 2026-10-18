@@ -28,7 +28,8 @@ Edge 16 à 24 ms). Dit gaat voor d van de heuvels. **A1 en A2 zijn af** (bij P; 
 naar 8,3 ms op 35%), 's avonds gelijk, hetzelfde beeld. **B1 en B2 zijn af** (18 okt, in `main`; `snelheid.md`, B):
 de bomen en het groen per stuk land in een vaste rij op de kaart, met de wind, de mist en de schaduw in de shader en de
 volgorde uit een dieptebuffer; de processor op 35% van 6,8 naar 2,1 ms per beeld (met heuvels 7,6 naar 2,8), met de
-kaart erbij 9,5 naar 5,1, en hetzelfde beeld. Niet in Firefox gemeten (Marcel).
+kaart erbij 9,5 naar 5,1, en hetzelfde beeld. **De regen en de mist op de kaart zijn af** (18 okt, in `main`): nog eens
+2,1 naar 1,7 ms, en hetzelfde beeld. Niet in Firefox gemeten (Marcel).
 **De renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en
 `gereedschap/pixiproef/evaluatie.md`): advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en
 B2), niet naar Pixi of WebGPU. Marcel koos B5 als volgende stap (18 okt).
@@ -160,8 +161,8 @@ stenen huizen. **Ronde 3 is af.**
 - **Ver uitgezoomd in Firefox na A1, A2, B5, B1 en B2** (vraag 178, 17 en 18 okt; bij P): meet zoals bij de heuvels
   (het proefdorp, F2, helemaal uitgezoomd; eerst 24,8 ms vlak en 28,9 met heuvels), en kijk of het bos in Firefox nog
   goed staat: de bomen in de wind, in het grijs van de mist, achter een huis, en de aanvoerder tussen de bomen (de
-  doorkijk). Hier alleen in Chromium getoetst. Wat daarna kan (`snelheid.md`, "Na B1 en B2"): de regen en de mist ook op
-  de kaart, D1 (de haperingen), of E3 en E4, die je wel ziet: eerst een proefplaat.
+  doorkijk), en de regen, de sneeuw en de rand van de mist. Hier alleen in Chromium getoetst. Wat daarna kan
+  (`snelheid.md`, "Na B1 en B2"): D1 (de haperingen), of E3 en E4, die je wel ziet: eerst een proefplaat.
   Marcel koos eerst sneller en dan d van de heuvels ("Maar de perfomance moet echt wel veel beter"). Bij de heuvels
   (vraag 174, c) **wat Claude erbij koos** (zeg het als het anders moet): (1) het graan op een helling
   houdt zijn stroken van 8 pixels, al is het met heuvels het duurste wat overblijft (`opmerkingen.md`); (2) de speeltest

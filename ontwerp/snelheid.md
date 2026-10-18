@@ -182,8 +182,15 @@ grijs op de kaart. Dat is groter, maar het maakt het bos goedkoop, ook op een ei
 als instelling voor zwakke machines. A3 en A4 alleen als de meting na A1 en A2 erom vraagt, want B maakt ze grotendeels
 overbodig.
 
-**Na B1 en B2** (18 okt): op 35% is de processor nog 2 ms per beeld, en het bos kost hem bijna niets meer. Wat nog kan,
-als Firefox erom vraagt: de regen en het masker van de mist ook op de kaart (samen een halve ms, je ziet niets anders),
-**D1** (de haperingen: een ander seizoen of ver verderop kijken kost één beeld van 120 ms, vooral de grond), en **E4**
-(afronden op 50%, met een proefplaat), waarmee ook de gelijke gevallen tussen twee texels vastliggen. B4 (het grijs per
-pixel) is niet meer nodig: de vaste rijen krijgen de mist per tegel, zoals de lijst.
+**Na B1 en B2** (18 okt): op 35% was de processor nog 2 ms per beeld, en het bos kost hem bijna niets meer. **De regen
+en het masker van de mist** gaan sinds 18 okt ook naar de kaart (Marcel: "Regen en mist doen maar"; `code.md` bij
+`js/gl.js`): de regen in één keer in plaats van een fillRect per druppel (waar hij valt, blijft het beeld uitrekenen, want
+in de shader is de klok na een uur spelen te grof), en het masker van de mist maakt de kaart zelf uit wat je kent en wie
+er kijkt. Om en om: op 35% overdag 2,1 naar 1,7 ms voor de processor, met de kaart erbij 5,0 naar 4,4; hetzelfde beeld,
+pixel voor pixel. Wat nog overblijft, is vooral de lijst (de gebouwen, de bomen bij de huizen, de mensen: 0,6 ms). WebGPU
+helpt daar niet (Marcel vroeg het, 18 okt): wat `js/gl.js` per beeld aan de kaart vraagt, kost nog 0,1 ms; de rest is ons
+eigen JavaScript, en de renderproef gaf met dezelfde techniek op WebGPU binnen 10% (E). Pas bij duizenden mensen tegelijk
+(grote veldslagen) zou dat anders kunnen, en dan eerst de mensen als instanties op WebGL2, zoals nu de bomen. Wat verder
+kan: **D1** (de haperingen: een ander seizoen of ver verderop kijken kost één beeld van 120 ms, vooral de grond), en
+**E4** (afronden op 50%, met een proefplaat), waarmee ook de gelijke gevallen tussen twee texels vastliggen. B4 (het grijs
+per pixel) is niet meer nodig: de vaste rijen krijgen de mist per tegel, zoals de lijst.

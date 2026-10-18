@@ -244,8 +244,8 @@
     }`;
   // Het net van de mist (vraag 174, stap b4; Marcel: "M2"): per stuk van het land een punt op het midden van elke tegel,
   // op zijn hoogte (aPlek, in pixels van de wereld; uStandX en uStandY zijn de stand van het doek), met de tegel zelf
-  // (aUv), en daartussen het masker: uMasker.x bij uMasker.y pixels vanaf tegel uOorsprong, de linkerhelft hoeveel kleur
-  // eruit gaat, de rechterhelft (uMasker.w verder, uMasker.z breed in totaal) hoeveel donkerder. Buiten het masker niets.
+  // (aUv), en daartussen het masker: uMasker.x bij uMasker.y pixels vanaf tegel uOorsprong, rood hoeveel kleur eruit
+  // gaat, groen hoeveel donkerder (mistWerk; tot 18 okt twee helften naast elkaar). Buiten het masker niets.
   const VERT_NET = /* // geen tekst */ `
     attribute vec2 aPlek; attribute vec2 aUv;
     uniform vec2 uMaat; uniform vec3 uStandX; uniform vec3 uStandY; uniform vec2 uOorsprong; varying vec2 vMasker;
@@ -260,9 +260,27 @@
       float u = vMasker.x;
       float v = vMasker.y;
       if (u < 0.0 || v < 0.0 || u > uMasker.x || v > uMasker.y) discard;
-      float o = texture2D(uMist, vec2(u / uMasker.z, v / uMasker.y)).a;
-      float d = texture2D(uMist, vec2((u + uMasker.w) / uMasker.z, v / uMasker.y)).a;
-      gl_FragColor = vec4(o, d, 0.0, 1.0);
+      vec4 m = texture2D(uMist, vec2(u / uMasker.x, v / uMasker.y));
+      gl_FragColor = vec4(m.r, m.g, 0.0, 1.0);
+    }`;
+
+  // Het masker van de mist zelf (vraag 178; js/tekenen.js, mistOpDeKaart): wat je kent (uBasis, per tegel rood en groen),
+  // en daar in een zachte kring om elke kijker (uKijkers: het midden en de twee stralen, uN stuks) uit weg, zoals tot 18
+  // okt een verloop per kijker met destination-out op een 2D-doek: binnen de kleine straal alles, buiten de grote niets.
+  const VERT_VLAK = /* // geen tekst */ `#version 300 es
+    void main() { vec2 c = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1)); gl_Position = vec4(c * 2.0 - 1.0, 0.0, 1.0); }`;
+  const FRAG_MISTWERK = /* // geen tekst */ `#version 300 es
+    precision highp float;
+    uniform sampler2D uBasis; uniform highp sampler2D uKijkers; uniform int uN;
+    out vec4 kleur;
+    void main() {
+      vec4 c = texelFetch(uBasis, ivec2(gl_FragCoord.xy), 0);
+      float f = 1.0;
+      for (int i = 0; i < uN; i++) {
+        vec4 k = texelFetch(uKijkers, ivec2(i, 0), 0);
+        f *= clamp((distance(gl_FragCoord.xy, k.xy) - k.z) / max(k.w - k.z, 0.0001), 0.0, 1.0);
+      }
+      kleur = c * f;
     }`;
 
   function maakProgramma(vert, frag) {
@@ -306,6 +324,7 @@
   let schaduwProg = null;
   let mistProg = null;
   let netProg = null;
+  let mistWerkProg = null;
   let instProg = null;
   let vastProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
@@ -400,6 +419,7 @@
       schaduwProg = maakProgramma(VERT, FRAG_SCHADUW);
       mistProg = maakProgramma(VERT, FRAG_MIST);
       netProg = maakProgramma(VERT_NET, FRAG_NET);
+      mistWerkProg = maakProgramma(VERT_VLAK, FRAG_MISTWERK);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -1005,8 +1025,10 @@
   // als kopie naar een textuur, en met FRAG_MIST terug op het doek: ontkleuren kan de kaart niet met een mengstand, want
   // daarvoor moet ze lezen wat er al staat.
   let wereldKopie = null; // { tex, b, h }
-  let mistTex = null;
   let mistScherm = null; // { fb, tex, b, h }
+  let mistBasis = null; // { tex, versie, b, h }: wat je kent (js/tekenen.js, mistOpDeKaart)
+  let mistKijkers = null; // de textuur met wie er kijkt
+  let mistWerk = null; // { fb, tex, b, h }: het masker van dit beeld (FRAG_MISTWERK)
   function mistOpHetScherm() {
     const b = Math.max(1, Math.ceil(doek.width / 2));
     const h = Math.max(1, Math.ceil(doek.height / 2));
@@ -1048,7 +1070,67 @@
     Object.assign(netNummers, { n, aantal: lijst.length });
     return netNummers;
   }
-  function tekenNet(S, net, b, h, kier, m) {
+  // Het masker van dit beeld, op de kaart (FRAG_MISTWERK): wat je kent alleen als het anders is, wie er kijkt elk beeld.
+  // Het komt op plaats 1, uitgesmeerd (de zachte rand), voor tekenNet.
+  function maakMistWerk(masker) {
+    const { b, h } = masker;
+    const opPlaats = (plaats, tex, lineair) => {
+      gl.activeTexture(gl.TEXTURE0 + plaats);
+      if (!tex) {
+        tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        const f = lineair ? gl.LINEAR : gl.NEAREST;
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, f);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, f);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      } else gl.bindTexture(gl.TEXTURE_2D, tex);
+      return tex;
+    };
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    if (!mistBasis) mistBasis = { tex: null, versie: -1, b: 0, h: 0 };
+    mistBasis.tex = opPlaats(2, mistBasis.tex, false);
+    if (mistBasis.versie !== masker.versie || mistBasis.b !== b || mistBasis.h !== h) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, masker.gekend);
+      Object.assign(mistBasis, { versie: masker.versie, b, h });
+      G.telling.opgestuurd++;
+    }
+    mistKijkers = opPlaats(3, mistKijkers, false);
+    const n = masker.n;
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, Math.max(1, n), 1, 0, gl.RGBA, gl.FLOAT, n ? masker.kijkers.subarray(0, n * 4) : new Float32Array(4));
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    if (!mistWerk) mistWerk = { fb: gl.createFramebuffer(), tex: null, b: 0, h: 0 };
+    mistWerk.tex = opPlaats(1, mistWerk.tex, true);
+    if (mistWerk.b !== b || mistWerk.h !== h) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, mistWerk.fb);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mistWerk.tex, 0);
+      Object.assign(mistWerk, { b, h });
+    }
+    // het masker mag niet op plaats 1 staan terwijl erop getekend wordt
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, mistWerk.fb);
+    gl.viewport(0, 0, b, h);
+    gebruik(mistWerkProg);
+    gl.uniform1i(mistWerkProg.u.uBasis, 2);
+    gl.uniform1i(mistWerkProg.u.uKijkers, 3);
+    gl.uniform1i(mistWerkProg.u.uN, n);
+    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
+    nuMeng = null;
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    G.telling.opdrachten++;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, doek.width, doek.height);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, mistWerk.tex);
+    gl.activeTexture(gl.TEXTURE0);
+    // plaats 1, 2 en 3 zijn ook plaatsen van de rij (bindOp): wat daar nu staat, weet die niet
+    nuOp[1] = mistWerk.tex;
+    nuOp[2] = mistBasis.tex;
+    nuOp[3] = mistKijkers;
+  }
+  function tekenNet(S, net, b, h, m) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, S.fb);
     gl.viewport(0, 0, S.b, S.h);
     gl.clearColor(0, 0, 0, 0);
@@ -1060,7 +1142,7 @@
     gl.uniform3f(u.uStandX, m[0], m[2], m[4]);
     gl.uniform3f(u.uStandY, m[1], m[3], m[5]);
     gl.uniform2f(u.uOorsprong, net.x0, net.y0);
-    gl.uniform4f(u.uMasker, b, h, 2 * b + kier, b + kier);
+    gl.uniform4f(u.uMasker, b, h, 0, 0);
     gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
     nuMeng = null;
     let nn = null;
@@ -1099,7 +1181,7 @@
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, doek.width, doek.height);
   }
-  function tekenMistOpDeKaart(masker, b, h, kier, zwart, m, net) {
+  function tekenMistOpDeKaart(masker, zwart, m, net) {
     const W = doek.width;
     const H = doek.height;
     const S = mistOpHetScherm(); // eerst: een nieuwe textuur komt op plaats 0, en daar moet zo de kopie
@@ -1110,19 +1192,8 @@
       Object.assign(wereldKopie, { b: W, h: H });
     }
     gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 0, 0, W, H);
-    // het masker op plek 1, uitgesmeerd (de zachte rand)
-    gl.activeTexture(gl.TEXTURE1);
-    if (!mistTex) {
-      mistTex = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, mistTex);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    } else gl.bindTexture(gl.TEXTURE_2D, mistTex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, masker);
-    gl.activeTexture(gl.TEXTURE0);
-    tekenNet(S, net, b, h, kier, m);
+    maakMistWerk(masker); // het masker op plaats 1, uitgesmeerd (de zachte rand)
+    tekenNet(S, net, masker.b, masker.h, m);
     // de mist op het scherm op plek 1 (plaats 1 is ook een plaats van de rij, bindOp)
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, S.tex);
@@ -1473,13 +1544,15 @@
       if (kladVak) legKladAf();
       diepteNu = z;
     }
-    // ---- de mist (js/tekenen.js, tekenMist; B2c): `masker` is het masker, links hoeveel kleur eruit gaat en rechts (na
-    // `kier` pixels) hoeveel donkerder, elk `b` bij `h` pixels, met pixel (0, 0) op tegel (net.x0, net.y0); net.stukken
-    // de punten van het net (tekenNet), in pixels van de wereld, die de stand op het doek zet.
-    tekenMist(masker, b, h, kier, zwart, net) {
+    // ---- de mist (js/tekenen.js, tekenMist en mistOpDeKaart; B2c): `masker` is { gekend, versie, kijkers, n, b, h }, wat
+    // je kent per tegel (rood hoeveel kleur eruit gaat, groen hoeveel donkerder) en wie er kijkt, met pixel (0, 0) op tegel
+    // (net.x0, net.y0); net.stukken de punten van het net (tekenNet), in pixels van de wereld, die de stand op het doek zet.
+    tekenMist(masker, zwart, net) {
       legKladAf();
       const m = this.st.m;
-      doe(() => tekenMistOpDeKaart(masker, b, h, kier, zwart, m, net));
+      const kijkers = masker.kijkers.slice(0, masker.n * 4); // het masker van dit beeld: js/tekenen.js schrijft er het volgende in
+      const M = { gekend: masker.gekend, versie: masker.versie, kijkers, n: masker.n, b: masker.b, h: masker.h };
+      doe(() => tekenMistOpDeKaart(M, zwart, m, net));
     }
     // ---- plaatjes
     // Zonder ...a: geen lijstje per aanroep (17 okt, E1), want het gaat om duizenden per beeld.
@@ -1608,6 +1681,32 @@
         }
       }
       this.opKlad(this.vakVan(x, y, x + b, y + h), (k) => k.fillRect(x, y, b, h));
+    }
+    // Veel rechthoeken in de kleur van fillStyle (r: x, y, b, h per vlak, n stuks), zoals n keer fillRect, maar zonder het
+    // werk per aanroep (de regen; js/tekenen.js, tekenNeerslag).
+    vlakjes(r, n) {
+      const v = this.st.vul;
+      if (!this.snel() || typeof v !== 'string') {
+        for (let i = 0; i < n; i++) this.fillRect(r[4 * i], r[4 * i + 1], r[4 * i + 2], r[4 * i + 3]);
+        return;
+      }
+      if (kladVak) legKladAf();
+      const m = this.st.m;
+      const k = leesKleur(v);
+      const a = k[3] * this.st.alpha;
+      const [k0, k1, k2] = [k[0] * a, k[1] * a, k[2] * a];
+      plekVoor(wit, this.st.meng, n, -1, PLAATJES);
+      for (let i = 0; i < n; i++) {
+        const x = r[4 * i];
+        const y = r[4 * i + 1];
+        const x1 = x + r[4 * i + 2];
+        const y1 = y + r[4 * i + 3];
+        zetInst(
+          m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5], m[0] * x1 + m[2] * y + m[4], m[1] * x1 + m[3] * y + m[5],
+          m[0] * x + m[2] * y1 + m[4], m[1] * x + m[3] * y1 + m[5], m[0] * x1 + m[2] * y1 + m[4], m[1] * x1 + m[3] * y1 + m[5],
+          0, 0, 1, 1, k0, k1, k2, a, 0, 0,
+        );
+      }
     }
     clearRect(x, y, b, h) {
       if (!this.st.clip) {

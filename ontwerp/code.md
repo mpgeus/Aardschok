@@ -727,9 +727,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan
   de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
   scherm. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
-  donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, links
-  hoeveel kleur eruit gaat en rechts hoeveel donkerder (`tekenMist`; zonder videokaart één laag, grijzer en donkerder, op
-  een klein doek en dan opgeschaald, `MIST_KLEIN`, want twee schuine lagen over het scherm kostten daar 50 ms), en
+  donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, hoeveel
+  kleur eruit gaat en hoeveel donkerder (`tekenMist`; met de videokaart maakt de kaart het masker zelf, `mistOpDeKaart`:
+  wat je kent als getallen, alleen als het anders is, en per beeld wie er kijkt, sinds 18 okt, vraag 178; zonder
+  videokaart een doek met een verloop per kijker, één laag, grijzer en donkerder, op een klein doek en dan opgeschaald,
+  `MIST_KLEIN`, want twee schuine lagen over het scherm kostten daar 50 ms), en
   wat erop staat naar zijn tegel (`mistOverLijst`: in het zwart niets, in het grijs grijs en zonder wie er loopt, in
   `grijzeItems`, en `tekenItem` tekent een item met of zonder grijs; een voorwerp is één item met de gedeelde
   `tekenVoorwerpItem` en zichzelf als `punt`, geen functietje per voorwerp per beeld; zet geen eigenschap op een item
@@ -845,7 +847,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **De mist** (B2c, `js/mist.js`): elk hoekpunt heeft een vijfde getal, hoeveel kleur eruit gaat (`aGrijs`; het filter
   `grayscale(..) brightness(..)` zet het, `grijsNu`), zodat wat in het grijs staat zonder extra opdrachten grijs wordt; en
   `tekenMist` kopieert wat er tot dan getekend is (de grond en de schaduwen) naar een textuur en legt het ontkleurd en
-  donkerder terug naar het masker (`FRAG_MIST`), want ontkleuren kan geen mengstand. **Een plaatje binnen vierhoeken**
+  donkerder terug naar het masker (`FRAG_MIST`), want ontkleuren kan geen mengstand. Het masker maakt de kaart sinds 18
+  okt zelf (`maakMistWerk`, `FRAG_MISTWERK`; vraag 178, Marcel: "Regen en mist doen maar"): wat je kent per tegel
+  (rood en groen, alleen opnieuw als `js/tekenen.js` een nieuwe versie geeft), en per beeld de kijkers als een rij
+  getallen, waar de shader een zachte kring om wegneemt. Tot dan tekende `js/tekenen.js` elk beeld een 2D-doek met een
+  verloop per kijker, dat daarna naar de kaart ging (ver uitgezoomd 0,25 ms per beeld). **Veel vlakjes in één kleur**
+  (`vlakjes`, de regen): zoals fillRect, maar zonder het werk per aanroep. **Een plaatje binnen vierhoeken**
   (`tekenUitgeknipt`, vraag 174, c): de grond van een tegel op een heuvel die iets afdekt (`tekenTegelOpnieuw` in
   `js/tekenen.js`) tekende met een knip, en een knip gaat over het kladdoek: ver uitgezoomd zeven kladjes en 3,5 miljoen
   pixels per beeld, die de kaart elke keer opnieuw kreeg. Nu elke vierhoek in twee driehoeken (`driehoekenVan`, langs de
@@ -1526,7 +1533,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vallen droog (`T.isBeek`: water dat nergens `meerBreed` tegels breed is, per kaart één keer; `T.staatDroog`): een visser
   vangt naar wat er van zijn water over is (`T.visserWater`, `T.waaromVistHijNiet` in `T.tikGebouwenDag`). Het beeld in
   `js/tekenen.js`: de kleur van het licht maal die van het weer (`tint` in `tekenNacht`, zonder videokaart een waas), regen
-  en sneeuw als vlakjes over het beeld op de klok van het scherm (`tekenNeerslag`), en de droge beek als zandpad in de
+  en sneeuw als vlakjes over het beeld op de klok van het scherm (`tekenNeerslag`: wat per druppel vaststaat één keer
+  uitgerekend, `lotjes`, en met de videokaart alle vlakjes in één keer, `vlakjes` in `js/gl.js`; 18 okt, vraag 178), en de
+  droge beek als zandpad in de
   grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Op een natte dag zaait niemand
   (`nietInDeRegen` in `T.VELDEN_INSTELLINGEN`, js/akkers.js: `w.zaaienNaRegen`, en het veldwerk), en na een droog jaar
   (`D.weer.vorigJaar`) neemt de marskramer in de lente meer zaaigraan mee (`naDroogte` in js/handel.js). Sneeuw blijft
