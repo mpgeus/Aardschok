@@ -1471,7 +1471,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   stuk land (`T.zetWildBij`, als het stuk opengaat; hieronder, "Per stuk land"), elk met een plek
   diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
-  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`). Een groep is een ding dat de dieren delen
+  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`; `mensBij` kijkt alleen naar wie in het vak om de groep staat, zo
+  groot als hoe schuw ze zijn, want hij loopt op 30× elke tik voor elke groep). Een groep is een ding dat de dieren delen
   (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
   `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht;
   je mannen kunnen hem aanvallen, en dan vecht zijn roedel terug (`T.wolvenVechten`, `G.vecht`; js/gevecht.js); 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,

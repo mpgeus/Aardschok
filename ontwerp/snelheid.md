@@ -257,9 +257,10 @@ voor mensen 4.
   klein (`js/lopen.js`, `js/beesten.js`, zo'n 25 regels). Te zien: bij een stilstaande leider staat de kudde iets
   losser (op twee tegels van 54 naar 45%, op drie van 23 naar 28%); het vluchten is gelijk (107 tegen 104 keer in zes
   dagen), en geen dier staat langer los dan eerst. Eerst laten zien aan Marcel.
-- **G2, alleen de mensen dichtbij** (geproefd): `mensBij` vraagt op 30× elke tik voor elke groep aan alle wezens of er
-  een mens komt; een mens buiten het vak om de groep slaat hij nu over. Precies hetzelfde spel. Winst: 0,2 ms per tik op
-  het proefdorp, 0,7 à 1,1 met 137 mensen. Prijs: klein.
+- **G2, alleen de mensen dichtbij** (gebouwd, 18 okt; Marcel: "daarna G2 en F2"): `mensBij` vraagt op 30× elke tik voor
+  elke groep aan alle wezens of er een mens komt; een mens buiten het vak om de groep slaat hij nu over. Precies hetzelfde
+  spel (een afdruk van `S` per dag, met en zonder 120 mensen erbij). Om en om: de tik van 2,36 naar 2,08 ms op het
+  proefdorp, van 4,03 naar 3,40 met 120 mensen erbij.
 - Niet: boids of een formatie (de kring is er al een, en sturen past niet bij tegels die elk wezen reserveert), vooraf
   zien dat een omweg niet kan (het doel is nooit helemaal omringd), flow fields en RVO/ORCA (die lossen het blokkeren
   niet op). Een omweg die na elke misser langer wacht, alleen als de spits van een groot dorp erom vraagt: met 137 mensen

@@ -588,7 +588,17 @@
     let beste = null;
     let d = Infinity;
     const hert = leden[0].beest === 'hert';
+    // Wie buiten het vak om de groep staat (zo groot als hoe schuw ze zijn), is nooit dichtbij: dat scheelt in een groot
+    // dorp het meeste rekenwerk, want het wordt op 30× elke tik gevraagd, voor elke groep (18 okt; `snelheid.md`, G2).
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const e of leden) {
+      if (e.tx < x0) x0 = e.tx;
+      if (e.tx > x1) x1 = e.tx;
+      if (e.ty < y0) y0 = e.ty;
+      if (e.ty > y1) y1 = e.ty;
+    }
     for (const m of w.wezens) {
+      if (m.tx < x0 - schuw || m.tx > x1 + schuw || m.ty < y0 - schuw || m.ty > y1 + schuw) continue;
       if (m.dier || m.dood || m.binnen || (m.beest && !(hert && m.beest === 'wolf'))) continue;
       for (const e of leden) {
         const a = T.afstand(T.tegelVan(m), T.tegelVan(e));
