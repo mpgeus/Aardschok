@@ -857,7 +857,9 @@
         ? T.t('without the graphics card')
         : m.kaartGem != null
           ? T.t('graphics card {kaart} ms', { kaart: ms(m.kaartGem) })
-          : T.t('with the graphics card'),
+          : m.kaartMeet === false
+            ? T.t('with the graphics card, whose time this browser does not tell')
+            : T.t('with the graphics card'),
     });
     Object.assign(m, { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 });
   }
