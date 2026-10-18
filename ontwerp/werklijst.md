@@ -122,7 +122,8 @@ ze rood op de minikaart. **c2, de bende, is af** (17 okt, in `main`; Marcel: "N1
 bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het begin, met twee man en een erbij per jaar
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
-volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"). **Marcel kwam op 17 okt met 174**
+volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"); **Bezig in sessie `main` (lokaal,
+desktop)** (18 okt): eerst het plan. **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
 brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
