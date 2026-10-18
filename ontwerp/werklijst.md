@@ -610,7 +610,8 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    **Stap 1 tot 3 zijn gebouwd** (18 okt, lokaal; `spel.md`, Sint-Maarten, "Bijgewerkt op 18 okt"); tot de cinematic er
    is, eindigt weigeren met het eindscherm *Death*. **Stap 5 en 6 ook** (18 okt, lokaal): het eindscherm (*Death*, of in de
    demo *Until next year*), met het jaar in een paar regels en de link naar Steam zodra er een adres is, en de vlag
-   `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). Nog niet: de speeltest met de heer in het eerste jaar.
+   `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). De speeltest liep zonder fouten (op `908ddcb0`), met
+   de heer in het eerste jaar; wat opviel, staat in `opmerkingen.md`.
 4. **De twee cinematics** (C2): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
    onderin; een klik of Esc slaat over. **Betaal je**: zijn mannen laden wat hij nam op zijn wagens op het plein, en de
    heer en zijn mannen rijden ermee de weg af; het beeld wordt zwart, en een zin zegt dat hij volgend jaar terugkomt, en

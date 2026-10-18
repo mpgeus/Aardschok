@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De heer in het eerste jaar, met zijn buitensporige eis** (18 okt; werklijst E, stap 1 tot 6; de speeltest op
+  `908ddcb0`, zaad 1 tot 3, zonder fouten): de kolonist betaalt op Sint-Maarten alles wat er is, maar dat is steeds
+  minder dan de helft van de drievoudige eis (`eisMaal` 3), dus "you paid too little" (−40 gunst, de schandpaal). De heer
+  nam 75 tot 113 graan; op zaad 1 stierf het dorp daarna van honger leeg (21 februari, tien doden), op 2 en 3 haalde het
+  de lente. In de demo telt het niet (die eindigt op Sint-Maarten); voor het volle spel is het één getal als het te
+  zwaar is. En de betaling aan de heer en het weigeren zijn nog geen opdracht (`T.geefOpdracht`), zoals de schandpaal:
+  dat hoort bij 6b, "alles een opdracht" (geparkeerd).
 - **Na stap 3 en 4 van de renderproef van de grond** (18 okt; `snelheid.md`, "Stap 3 is gebouwd" en "Stap 4 is
   gebouwd"): (a) bij een ander seizoen maken de bomen hun vaste rijen in één beeld opnieuw (`vasteRijenVoor` →
   `bouwStuk` in js/tekenen.js, 27 à 37 ms op het proefdorp): spreiden zoals het groen, of per seizoen alleen een andere
