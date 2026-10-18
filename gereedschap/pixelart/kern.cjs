@@ -413,8 +413,9 @@ const sdf = {
 // het oppervlak op de plek in de rusthouding van het onderdeel (zoals het patroon), met de normaal ook in rust, belicht
 // met het licht dat in `stap` zit (tussen lo en hi). Zo blijft de textuur aan het onderdeel vastzitten in elke
 // kijkrichting en elke stand. Op verzoek (o.rust) per pixel ook de plek in rust en het onderdeel: om te meten of iets
-// vastzit. Geeft de vlag die erbij komt.
-function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o) {
+// vastzit. Met mat.afwerking (de HD-proef, textuur.cjs) komt er licht bij: zie `afwerken`. tc: het licht en de kijkrichting
+// in het model, de afstandsfunctie, en de interne resolutie. Geeft de vlag die erbij komt.
+function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o, tc) {
   const rp = naarDeel(deelI, x, y, z);
   if (o.rust) {
     if (!B.rust) B.rust = new Float32Array(B.b * B.h * 4).fill(NaN);
@@ -426,21 +427,133 @@ function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, 
   if (!mat.textuur) return 0;
   const rq = naarDeel(deelI, x + nx, y + ny, z + nz);
   const rl = Math.hypot(rq[0] - rp[0], rq[1] - rp[1], rq[2] - rp[2]) || 1;
-  const kl = mat.textuur(rp[0], rp[1], rp[2], (rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl, model.delen[deelI], Math.max(0, kijk));
-  const licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
+  const rn = [(rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl];
+  const deel = model.delen[deelI];
+  let kl = mat.textuur(rp[0], rp[1], rp[2], rn[0], rn[1], rn[2], deel, Math.max(0, kijk), tc.fijn);
+  // Op verzoek (o.rust) ook de kleur van het oppervlak zelf, zonder licht: om schuiven (de textuur beweegt over het
+  // oppervlak) te scheiden van het licht dat op een draaiend reliëf verandert.
+  if (o.rust) {
+    if (!B.albedo) B.albedo = new Float32Array(B.b * B.h * 3).fill(NaN);
+    B.albedo[idx * 3] = kl[0];
+    B.albedo[idx * 3 + 1] = kl[1];
+    B.albedo[idx * 3 + 2] = kl[2];
+  }
+  let licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
+  let glans = 0;
+  if (mat.afwerking && !o.vlakLicht) [kl, licht, glans] = afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, licht);
   if (!B.kleur) B.kleur = new Float32Array(B.b * B.h * 4);
-  B.kleur[idx * 4] = kl[0] * licht;
-  B.kleur[idx * 4 + 1] = kl[1] * licht;
-  B.kleur[idx * 4 + 2] = kl[2] * licht;
+  const gk = mat.afwerking?.glansKleur || [255, 240, 214];
+  B.kleur[idx * 4] = kl[0] * licht + glans * gk[0];
+  B.kleur[idx * 4 + 1] = kl[1] * licht + glans * gk[1];
+  B.kleur[idx * 4 + 2] = kl[2] * licht + glans * gk[2];
   B.kleur[idx * 4 + 3] = stap;
   return VLAG.RGB;
+}
+
+// De afwerking van een materiaal met een textuur (de HD-proef, werklijst vraag 180; gereedschap/ai/hd-wielproef.md). Alles
+// optioneel, per materiaal in mat.afwerking, en alles in eenheden van de wereld (dus gelijk op elke interne resolutie):
+// - reliëf: de normaal gebogen met de hoogte van het materiaal (mat.hoogte, textuur.cjs: de nerf, de hamerslagen, de
+//   bolling van een klinknagel), gemeten op twee punten naast dit punt, elk terug naar de rusthouding (zodat ook het
+//   reliëf vastzit); wat het licht daardoor verandert, komt erbij, alleen waar de zon komt (een eigen schaduwstraal);
+// - holtes: hoe donker een nauwe naad of hoek wordt (de afstandsfunctie vlak boven het oppervlak);
+// - randen: { licht, slijt }: een bolle rand (de kromming uit de afstandsfunctie) vangt licht en is lichter versleten;
+// - warm, koel: [r, g, b] maal de kleur in het licht en in de schaduw;
+// - glans, glansMacht: een glimlicht met de gebogen normaal, dat erbij komt in plaats van de kleur te vermenigvuldigen
+//   (zodat donker ijzer echt blinkt), in glansKleur.
+// Geeft [kleur, licht, glans].
+function afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, licht) {
+  const A = mat.afwerking;
+  const f = tc.f;
+  const L = tc.lL;
+  let mx = nx;
+  let my = ny;
+  let mz = nz;
+  const nL = nx * L[0] + ny * L[1] + nz * L[2];
+  // het licht zoals in tekenModel: met mat.omslag loopt het om (een vlak dat net van de zon af staat, krijgt nog wat)
+  const om = mat.omslag || 0;
+  const omloop = (d) => Math.max(0, om ? (d + om) / (1 + om) : d);
+  // de zon: zoals in tekenModel
+  let zon = nL + om > 0 ? 1 : 0;
+  if (zon && mat.schaduw !== false && (A.reliëf || A.glans)) {
+    let ts = 0.9;
+    for (let s = 0; s < 60 && ts < 70; s++) {
+      const d = f(x + nx * 0.6 + L[0] * ts, y + ny * 0.6 + L[1] * ts, z + nz * 0.6 + L[2] * ts);
+      if (d < 0.05) {
+        zon = mat.schaduwKracht ?? 0.35;
+        break;
+      }
+      ts += Math.max(d * 0.8, 0.25);
+    }
+  }
+  if (A.reliëf && mat.hoogte) {
+    // twee richtingen in het vlak
+    const hulp = Math.abs(nz) < 0.9 ? [0, 0, 1] : [1, 0, 0];
+    let t1 = [hulp[1] * nz - hulp[2] * ny, hulp[2] * nx - hulp[0] * nz, hulp[0] * ny - hulp[1] * nx];
+    const l1 = Math.hypot(t1[0], t1[1], t1[2]) || 1;
+    t1 = [t1[0] / l1, t1[1] / l1, t1[2] / l1];
+    const t2 = [ny * t1[2] - nz * t1[1], nz * t1[0] - nx * t1[2], nx * t1[1] - ny * t1[0]];
+    const eps = 0.35 / tc.fijn;
+    const H = (px, py, pz) => {
+      const r = naarDeel(deelI, px, py, pz);
+      return mat.hoogte(r[0], r[1], r[2], rn[0], rn[1], rn[2], deel, tc.fijn);
+    };
+    const h0 = H(x, y, z);
+    const g1 = ((H(x + t1[0] * eps, y + t1[1] * eps, z + t1[2] * eps) - h0) / eps) * A.reliëf;
+    const g2 = ((H(x + t2[0] * eps, y + t2[1] * eps, z + t2[2] * eps) - h0) / eps) * A.reliëf;
+    mx = nx - g1 * t1[0] - g2 * t2[0];
+    my = ny - g1 * t1[1] - g2 * t2[1];
+    mz = nz - g1 * t1[2] - g2 * t2[2];
+    const ml = Math.hypot(mx, my, mz) || 1;
+    mx /= ml;
+    my /= ml;
+    mz /= ml;
+    const mL = mx * L[0] + my * L[1] + mz * L[2];
+    licht += (omloop(mL) - omloop(nL)) * 0.58 * zon;
+  }
+  if (A.holtes) {
+    let dicht = 0;
+    for (const h of [0.35, 0.7, 1.05]) dicht += Math.max(0, h - f(x + nx * h, y + ny * h, z + nz * h)) / h;
+    licht *= 1 - A.holtes * klem(dicht * 0.6, 0, 1);
+  }
+  if (A.randen) {
+    const e = A.randen.breedte || 0.45;
+    const f0 = f(x, y, z);
+    const lap = f(x + e, y, z) + f(x - e, y, z) + f(x, y + e, z) + f(x, y - e, z) + f(x, y, z + e) + f(x, y, z - e) - 6 * f0;
+    const rand = klem((lap / (e * e) - (A.randen.vanaf ?? 1.2)) / (A.randen.tot ?? 2.5), 0, 1);
+    if (rand > 0) {
+      if (A.randen.slijt) kl = kl.map((c, j) => c * (1 + (A.randen.slijt[j] - 1) * rand));
+      licht += rand * (A.randen.licht ?? 0.3) * (0.35 + 0.65 * Math.max(0, nL));
+    }
+  }
+  if (A.warm || A.koel) {
+    const t = klem((licht - 0.35) / 0.8, 0, 1);
+    const w = A.warm || [1, 1, 1];
+    const k = A.koel || [1, 1, 1];
+    kl = kl.map((c, j) => c * (k[j] + (w[j] - k[j]) * t));
+  }
+  let glans = 0;
+  if (A.glans && zon && nL > 0) {
+    const V = tc.v;
+    const hx = L[0] - V[0];
+    const hy = L[1] - V[1];
+    const hz = L[2] - V[2];
+    const hl = Math.hypot(hx, hy, hz) || 1;
+    glans = Math.pow(Math.max(0, (mx * hx + my * hy + mz * hz) / hl), A.glansMacht || 24) * A.glans * zon;
+  }
+  return [kl, licht, glans];
 }
 
 // Een model tekenen in het beeld. o: { gx, gy (tegels), z (eenheden), richting (naam of graden),
 // schaal, omlijn, gloed (extra lichten meenemen) }. Geeft de lichten van het model terug in
 // wereldcoördinaten.
+//
+// o.fijn (sinds 18 okt, werklijst vraag 180, de HD-proef; gereedschap/ai/hd-wielproef.md): de interne resolutie, zoveel
+// pixels per eenheid in plaats van één. B is dan zoveel keer groter, met OX en OY in die fijne pixels; de camera, het
+// licht, de wereld en de maten blijven gelijk, alleen het raster is fijner (en de normaal wordt op die fijnere maat
+// gemeten). Zonder o.fijn verandert er niets.
 function tekenModel(B, model, o = {}) {
   const obj = B.volgendObj++;
+  const fijn = o.fijn || 1;
   const Ox = (o.gx || 0) * TEGEL;
   const Oy = (o.gy || 0) * TEGEL;
   const Oz = o.z || 0;
@@ -465,19 +578,24 @@ function tekenModel(B, model, o = {}) {
   const Cx = Ox + mx * rx + my * fx;
   const Cy = Oy + mx * ry + my * fy;
   const Cz = Oz + mz;
-  const [csx, csy] = naarScherm(B, Cx, Cy, Cz);
-  const x0 = Math.max(0, Math.floor(csx - R - 1));
-  const x1 = Math.min(B.b - 1, Math.ceil(csx + R + 1));
-  const y0 = Math.max(0, Math.floor(csy - R - 1));
-  const y1 = Math.min(B.h - 1, Math.ceil(csy + R + 1));
+  let [csx, csy] = naarScherm(B, Cx, Cy, Cz);
+  if (fijn !== 1) {
+    csx = B.OX + (csx - B.OX) * fijn;
+    csy = B.OY + (csy - B.OY) * fijn;
+  }
+  const Rp = R * fijn;
+  const x0 = Math.max(0, Math.floor(csx - Rp - 1));
+  const x1 = Math.min(B.b - 1, Math.ceil(csx + Rp + 1));
+  const y0 = Math.max(0, Math.floor(csy - Rp - 1));
+  const y1 = Math.min(B.h - 1, Math.ceil(csy + Rp + 1));
   if (x1 < x0 || y1 < y0) return [];
   const W = x1 - x0 + 1;
   const H = y1 - y0 + 1;
 
   // één straal door (sx, sy); geeft null of [t, x, y, z, deel]
   function straal(sx, sy) {
-    const ax = sx - B.OX;
-    const ay = sy - B.OY;
+    const ax = (sx - B.OX) / fijn;
+    const ay = (sy - B.OY) / fijn;
     const PX = ax * EX[0] + ay * EY[0];
     const PY = ax * EX[1] + ay * EY[1];
     const PZ = ax * EX[2] + ay * EY[2];
@@ -611,7 +729,7 @@ function tekenModel(B, model, o = {}) {
       if (diepte <= B.diep[idx]) continue;
 
       // normaal
-      const e = 0.3;
+      const e = 0.3 / fijn;
       let nx = f(x + e, y, z) - f(x - e, y, z);
       let ny = f(x, y + e, z) - f(x, y - e, z);
       let nz = f(x, y, z + e) - f(x, y, z - e);
@@ -675,7 +793,7 @@ function tekenModel(B, model, o = {}) {
       // Een materiaal met een textuur (textuur.cjs; werklijst vraag 180), of de rusthouding op verzoek: buiten deze lus
       // (textuurPixel), zodat de lus zelf even klein en snel blijft als zonder (binnen de lus kostte het de helft van de
       // snelheid, ook zonder textuur). Zonder textuur loopt hier niets: alles blijft zoals het was.
-      if (mat.textuur || o.rust) vlag |= textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o);
+      if (mat.textuur || o.rust) vlag |= textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, kijk, stap, o, { lL, v: [vx, vy, vz], f, fijn });
       B.ramp[idx] = ramp;
       B.stap[idx] = stap;
       B.diep[idx] = diepte;

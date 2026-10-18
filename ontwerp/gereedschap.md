@@ -160,6 +160,14 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   openen: `werkstroom-sd15.json` en `werkstroom-sdxl.json` (de API-vorm). **De sleutel** staat buiten de opslag: `C:\Users\mpgeu\.openai-sleutel`, of
   `OPENAI_API_KEY` in de omgeving; het script leest hem alleen om hem naar `api.openai.com` te sturen. De proef kost een
   paar dollar (tien beelden).
+- `node gereedschap/ai/textuur-ai.cjs [naam...]`: een naadloze materiaaltextuur uit SDXL in ComfyUI naar
+  `gereedschap/pixelart/texturen/` (hout, ijzer, hout-versleten, hout-grof, ijzer-gesmeed; `--opnieuw` verwerkt het ruwe
+  beeld opnieuw zonder SDXL). `node gereedschap/pixelart/gelijk.cjs bewaar|vergelijk`: 65 bestaande beelden tegen een
+  nulmeting, na elke wijziging aan de renderer (zo'n anderhalve minuut). De proeven met het wagenwiel:
+  `node gereedschap/pixelart/wielproef.cjs` (AI-texturen die vastzitten, een halve minuut) en
+  `node gereedschap/pixelart/hdproef.cjs alles` (de HD-proef: drie varianten en een ladder op 1×, 2× en 4×, parallel, zo'n
+  vier minuten; `proef [fijn] [kant]` één beeld per trede om af te stellen; `platen` alleen de platen). Alles in
+  `gereedschap/pixelart/uit/wielproef/` en `uit/hdproef/`.
 
 
 ## Testen in de browser

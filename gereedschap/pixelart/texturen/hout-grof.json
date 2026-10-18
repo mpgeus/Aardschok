@@ -1,0 +1,11 @@
+{
+  "naam": "hout-grof",
+  "model": "sd_xl_base_1.0.safetensors",
+  "seed": 1823,
+  "positief": "seamless tileable texture, fills the whole frame edge to edge, high resolution macro photograph of the material surface, flat even diffuse lighting, no shadows, orthographic top-down scan, rough weathered oak beam, coarse wide wood grain running horizontally from left to right, bold dark grain streaks, a few large knots, deep drying cracks along the grain, worn and dented surface, dark grime in the cracks, warm brown and honey tones with lighter worn areas",
+  "negatief": "ornament, decoration, pattern, symbols, glyphs, carving, flowers, tiles, bricks, planks with gaps, nails, rivets, object, perspective, horizon, frame, border, vignette, text, watermark, signature, shadow, cartoon, drawing",
+  "maat": 512,
+  "naadloos": "per as een half verschoven kopie, gemengd naar het midden",
+  "gedraaid": true,
+  "seconden": 200
+}

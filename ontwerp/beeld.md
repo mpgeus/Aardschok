@@ -9,7 +9,10 @@
   borduursel, heraldiek (een gouden leeuw op rood, op het kleed, de vaandels, de wapenrokken en de wagen), hout met nerf en
   ijzerbeslag, en veel kleine dingen (een lantaarn aan de wagen, kruiken, balen, een haam met koperen beslag); veel
   contrast, donkere omlijning, warm licht. De render uit code bijschaven haalt dat niet: de weg erheen is vraag 180 in
-  de werklijst. De ronde "het paard en de os beter" (hieronder) is daarom gestopt.
+  de werklijst. De ronde "het paard en de os beter" (hieronder) is daarom gestopt. Wat de HD-proef met het wagenwiel
+  vond (18 okt, `gereedschap/ai/hd-wielproef.md`, nog niet besloten): de plaat is ruwweg twee keer onze pixeldichtheid,
+  overdrijft de maten (onderdelen anderhalf keer zo fors), en heeft het handschrift van een tekenaar (lichte randlijnen,
+  een donkere lijn om elk onderdeel, weinig tinten); toon, licht en materiaal halen we al met AI-texturen in onze renderer.
 - **De maatstaf: "wow, wat een detail"** (9 okt 2026, Marcel, bij de fasen van een afgebrand huis: "Ik wil dat mensen
   denken: wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien", en eerder: "Art
   maakt of breekt een spel", "Moet wel handgetekend lijken", "dit is te ai, ik moet iets natuurlijker hebben iets

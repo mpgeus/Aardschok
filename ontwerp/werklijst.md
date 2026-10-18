@@ -280,7 +280,20 @@ stenen huizen. **Ronde 3 is af.**
   het wiel uit 8 richtingen en 9 standen: de textuur zit vast (1,21 tegen 3,44 voor dezelfde textuur zonder rusthouding,
   en 4,41 voor het oude procedurele hout), een volle slag geeft hetzelfde beeld, geen naden, en de mip-niveaus zijn nodig
   tegen kartelen. Op spelmaat is een wiel klein: een textuur loont vooral op grote vlakken (planken, huid, zeil). Het
-  ijzer is matig. Wacht op Marcel: de volgende stap (normaalkaarten, een beter ijzer, decals, of de os en de wagen).
+  ijzer is matig.
+  **De HD-proef** (18 okt; Marcels vierde opdracht in `opdracht-comfyui.md`: waar zit de grens, in de materialen, de
+  geometrie, de resolutie of de pixelverwerking?; het verslag in `gereedschap/ai/hd-wielproef.md`, de platen in
+  `uit/hdproef/`): A (zoals nu), B (AI-materialen met reliëf, holtes, randen, warm licht, glans), C (een beter wiel uit
+  `onderdelen.cjs`, dezelfde buitenmaat), en een ladder met één verandering per trede, op 1×, 2× en 4× (`o.fijn` in
+  `kern.cjs`). Uitkomst: B en C halen het ChatGPT-wiel in toon, licht en materiaal (contrast, warmte en drukte binnen een
+  paar procent), de textuur zit vast (94% op 2×), een volle slag is het beginbeeld, de buitenmaat gelijk, en de oude
+  renderer pixel voor pixel gelijk en even snel. Wat nog mist: (1) de pixeldichtheid: het doel is ruwweg een sprite van
+  2× onze maat, en het spel tekent nu elke spritepixel als 2×2 schermpixels, dus **een HD-sprite van 2× past op dezelfde
+  grootte** (4× alleen zichtbaar op 4K, vier keer duurder); (2) forsere verhoudingen (zoals ChatGPT: spaken, velg en band
+  anderhalf keer zo fors); (3) het handschrift van pixel art (een lichte lijn op elke rand naar het licht, een donkere om
+  elk onderdeel, weinig tinten); (4) het licht op het vlak vooraan. Op 2× kost het vier keer videogeheugen en twee à drie
+  keer rendertijd. **Wacht op Marcel:** het advies (2× als HD-sprite, materialen B, geometrie C maar forser, 24 tot 32
+  kleuren) en de volgende proef: een pixelart-stap op de doelmaat, of meteen de hele ossenkar op 2×.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

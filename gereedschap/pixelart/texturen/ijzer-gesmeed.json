@@ -1,0 +1,11 @@
+{
+  "naam": "ijzer-gesmeed",
+  "model": "sd_xl_base_1.0.safetensors",
+  "seed": 1822,
+  "positief": "seamless tileable texture, fills the whole frame edge to edge, high resolution macro photograph of the material surface, flat even diffuse lighting, no shadows, orthographic top-down scan, blacksmith hand-forged iron strap, hammered surface with many small hammer facets and dents, horizontal forging direction, dark charcoal grey metal with a faint blue sheen, brighter polished worn spots, fine scratches, a few small spots of brown rust",
+  "negatief": "ornament, decoration, pattern, symbols, glyphs, carving, flowers, tiles, bricks, planks with gaps, nails, rivets, object, perspective, horizon, frame, border, vignette, text, watermark, signature, shadow, cartoon, drawing",
+  "maat": 512,
+  "naadloos": "per as een half verschoven kopie, gemengd naar het midden",
+  "gedraaid": false,
+  "seconden": 111
+}

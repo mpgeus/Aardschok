@@ -63,6 +63,10 @@ per pixel tussen twee opeenvolgende standen (het wiel draait, dus nooit nul; het
 | nieuw zonder mip-niveaus | 4,15 | 100% | 16,3 | 0% anders |
 | controle (ruitjes) | 2,86 | 100% | 27,1 | 0% anders |
 
+**Bijgewerkt in de HD-proef (`hd-wielproef.md`):** om een dunne spaak werd een hele textuur in 7 eenheden geperst (74
+texels per eenheid, en dat ruiste); nu wordt hij daar gespiegeld. Opnieuw gemeten: oud 4,41, glijdend 3,08, nieuw 1,05,
+zonder mip-niveaus 3,76, ruitjes 1,86; de conclusies hieronder blijven gelijk.
+
 - **Vast:** met dezelfde textuur en hetzelfde contrast is "nieuw" bijna drie keer zo vast als "glijdend" (1,21 tegen 3,44):
   dat is het effect van de rusthouding alleen. Wat er overblijft, komt van het monsteren op een iets andere plek binnen
   de pixel en van het palet. De ruitjes laten het met het oog zien: de vakjes draaien met de spaken mee.

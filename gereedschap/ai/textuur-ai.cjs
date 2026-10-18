@@ -27,6 +27,22 @@ const TEXTUREN = {
     tekst: `${GEMEEN}, dark hand-forged wrought iron surface, small hammer dimples, fine horizontal forging streaks, subtle dark scale, a little brown rust in places, matte blue-grey metal`,
     seed: 1812,
   },
+  // De HD-proef (Marcels vierde opdracht, `opdracht-comfyui.md`; `hd-wielproef.md`): hout met slijtage, en gesmeed ijzer
+  // met hamerslagen, zodat ook het reliëf (de hoogte uit de helderheid, textuur.cjs) iets te vangen heeft.
+  'hout-versleten': {
+    tekst: `${GEMEEN}, weathered old oak planks from a farm cart, pronounced natural wood grain running horizontally from left to right, worn and scuffed surface, small dents and scratches, fine cracks along the grain, dark grime settled in the grain lines, lighter sun-bleached worn patches, warm reddish brown and honey tones`,
+    seed: 1821,
+  },
+  // Grover: versleten hout gaf een fijne nerf die op de maat van het spel wegvalt (18 okt); hier brede strepen, knoesten en
+  // scheuren, iets wat ook op één pixel per eenheid nog leesbaar is.
+  'hout-grof': {
+    tekst: `${GEMEEN}, rough weathered oak beam, coarse wide wood grain running horizontally from left to right, bold dark grain streaks, a few large knots, deep drying cracks along the grain, worn and dented surface, dark grime in the cracks, warm brown and honey tones with lighter worn areas`,
+    seed: 1823,
+  },
+  'ijzer-gesmeed': {
+    tekst: `${GEMEEN}, blacksmith hand-forged iron strap, hammered surface with many small hammer facets and dents, horizontal forging direction, dark charcoal grey metal with a faint blue sheen, brighter polished worn spots, fine scratches, a few small spots of brown rust`,
+    seed: 1822,
+  },
 };
 const NEGATIEF = 'ornament, decoration, pattern, symbols, glyphs, carving, flowers, tiles, bricks, planks with gaps, nails, rivets, ' +
   'object, perspective, horizon, frame, border, vignette, text, watermark, signature, shadow, cartoon, drawing';

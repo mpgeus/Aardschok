@@ -1040,12 +1040,21 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `gereedschap/ai/wielproef-evaluatie.md`): `kern.cjs` kan optioneel een materiaal met een textuur aan (`mat.textuur`,
   gemaakt met `textuurMateriaal` in `textuur.cjs`): de kleur op de plek in de rusthouding van het onderdeel (`naarDeel`,
   `terug`), belicht met de `stap` van de renderer, de vlag `VLAG.RGB`, en `kleurBeeld(B, { palet })` voor het beeld
-  (de rest precies als `kwantiseer` en `Plaat`). Een onderdeel geeft zijn afwikkeling op (`deel.uv`: `rond`, `langs`,
-  `vlak` uit `textuur.cjs`; u is de nerf, een gesloten richting geeft zijn omtrek); zonder valt het terug op triplanair.
+  (de rest precies als `kwantiseer` en `Plaat`). Een onderdeel krijgt zijn afwikkeling **ernaast**, niet als eigenschap
+  (`TX.metUv(deel, uv)` met `rond`, `langs`, `vlak`; u is de nerf, een gesloten richting geeft zijn omtrek, en op een
+  dunne stok wordt hij gespiegeld); zonder valt het terug op triplanair. **Geef een onderdeel geen nieuwe eigenschappen**:
+  een `uv` op de onderdelen maakte `bouwSdf` in V8 twee keer zo traag, ook voor elk model erna in hetzelfde proces.
   `o.rust` in `tekenModel` bewaart per pixel de plek in rust (om te meten). Zonder textuur loopt geen van die regels:
   `gelijk.cjs` (`bewaar` vóór een wijziging aan de renderer, `vergelijk` erna) rendert 65 bestaande beelden en
   vergelijkt hun hashes. De texturen staan in `texturen/` (uit `gereedschap/ai/textuur-ai.cjs`), de proef is
   `wielproef.cjs`.
+- **De HD-proef** (18 okt, vraag 180; `gereedschap/ai/hd-wielproef.md`), allemaal optioneel: `tekenModel` met `o.fijn`
+  (de interne resolutie, pixels per eenheid); `mat.afwerking` voor een materiaal met een textuur (`afwerken` in
+  `kern.cjs`: reliëf uit de hoogte, holtes, randen uit de kromming, warm en koel licht, glans die erbij komt);
+  `textuurMateriaal` met `contrast`, `reliëf` (de hoogte uit de helderheid, `hoogteVan`) en versiering op het onderdeel
+  (`TX.metVersiering`: klinknagels langs de afwikkeling); `onderdelen.cjs` (ringstukken, taps toelopende balken en
+  klinknagels, met afgeschuinde randen); `stijlmaat.cjs` (contrast, warmte, schaduw, kleuren en drukte van een sprite,
+  om naast een voorbeeld te leggen). De proef zelf is `hdproef.cjs`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
