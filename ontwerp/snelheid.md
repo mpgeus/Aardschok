@@ -195,6 +195,39 @@ kan: **D1** (de haperingen: een ander seizoen of ver verderop kijken kost één 
 **E4** (afronden op 50%, met een proefplaat), waarmee ook de gelijke gevallen tussen twee texels vastliggen. B4 (het grijs
 per pixel) is niet meer nodig: de vaste rijen krijgen de mist per tegel, zoals de lijst.
 
+### Het advies van buiten (18 okt)
+
+Marcel bracht een advies voor een spel met blokken (zoals Minecraft) op WebGL2: "Kunnen we hier wat mee?" Per punt:
+
+- **Hardware instancing, een vaste vorm met per blok één getal van 32 bits** (x 6, z 6, y 8 en de textuur 10 bits): er
+  al sinds B5 en B1/B2 (elk plaatje één instantie; de bomen en het groen per stuk land in een vaste rij op de kaart).
+  Inpakken in 32 bits scheelt hier weinig: een vaste rij gaat één keer per stuk naar de kaart (8 getallen per boom), en
+  wat per beeld gaat, zijn een paar honderd figuren.
+- **De plek op het scherm in de shader**: de vaste rijen al (de wind, de mist, de schaduw, de diepte); de lijst die
+  overblijft (mensen, gebouwen) rekent zijn hoeken nog in JavaScript, 0,6 ms per beeld.
+- **Geen afval per beeld**: E1 voor het tekenen. In de tik gemeten (Node, proefdorp, drie dagen op 30×): 159 keer
+  opruimen, samen 119 ms (zo'n 7% van de tik), het langste 3,7 ms, nooit boven 5 ms. Nu geen bron van haperingen.
+- **Een textuurstapel (TEXTURE_2D_ARRAY) in plaats van een atlas**: er al sinds B5; zonder mipmaps (pixel art), dus geen
+  randen die overlopen.
+- **Web Workers voor het land**: F6 (bij "De tik"): `file://` weigert een worker uit een bestand, en lockstep vraagt dat
+  wat meteen nodig is synchroon kan; na F1 is elke stap onder 3 ms. Later, eerst voor een nieuw eiland.
+- **Wegstrepen** (hun vraag): wat in beeld en niet in het zwart staat, gaat in de lijst (A1); de vaste rijen per stuk
+  in beeld; wat ervoor staat, zegt de dieptebuffer (B1).
+
+**Wat het wel oplevert: het principe voor de grond.** De grond is het laatste wat de processor nog bakt: in stukken van
+512 bij 512 pixels op het 2D-doek, op de maat van de zoom (`werkGrondBij`, `grondSleutel` in `js/tekenen.js`), en die
+gaan als plaatje naar de kaart. Bij elke stap met het wiel (de zoom van het venster, 0,5, 0,35: de maat van de buffer
+verandert), een ander seizoen, sneeuw of een beek die droogvalt, gaat alle grond in beeld in één beeld opnieuw: de 120 ms
+van D1 (de stap met het wiel is niet gemeten). Met het advies: per stuk land een vaste rij met één getal per tegel (x en
+y in het stuk, 6 bits elk; de tekening op de stapel; een paar vlaggen), de hoogte per hoekpunt uit een textuur in de
+vertex shader (nu knipt de processor een tegel op een helling in driehoeken), en het licht en de mist zoals de vaste
+rijen. Dan zijn de zoom en het seizoen een getal voor de shader, en een gevelde boom een paar getallen
+(`bufferSubData`): B2 voor de grond. De prijs is groot: de overgangen tussen de soorten grond, het zand van de paadjes
+per hoekpunt, wat plat groeit (dat kan bij de vaste rijen), de droge beek, de sneeuw, de wanden op een helling en de
+half doorzichtige rand aan de kust, en het zelfde beeld pixel voor pixel. **Voorstel van Claude:** eerst in de browser
+meten hoe lang een stap met het wiel en een ander seizoen duren (de meter, het traagste beeld, op 0,35 bij het dorp);
+is dat rond de 100 ms, dan een renderproef van de grond (zoals E), en dan kiezen.
+
 ## De tik (18 okt)
 
 Marcel, 18 okt: "Waar komen de performance hits vandaan?", en daarna "zoek het per deelgebied uit". Na B1 en B2 is het
