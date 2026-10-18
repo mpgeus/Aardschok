@@ -192,6 +192,16 @@ stenen huizen. **Ronde 3 is af.**
   het mooist, maar het kost geld. **W4** een gekocht pakket in die stijl, aangevuld: goedkoop, maar niet van ons, en
   zelden isometrisch in acht richtingen. Bij W1 en W2: Steam vraagt dat je meldt dat er AI in zit (dat mag). Voorstel van
   Claude: eerst één proef, de wagen van de heer met de os, langs W1 en W2 naast elkaar, en dan kiezen.
+  **Uitgewerkt** (Claude, 18 okt, op Marcels vraag "Hoe gaan we nu zorgen dat wij dat level van detail en die mooie
+  plaatjes ook kunnen maken?"): W2 als gereedschap in code. (1) Onze 3D-modellen blijven het skelet: de vorm, de kant en
+  de houding, beeld voor beeld; (2) een beeld-AI tekent het detail eroverheen, met per beeld onze render als leidraad
+  (diepte en randen) en Marcels plaat als stijl, zodat het paard in elk beeld hetzelfde paard blijft; (3) daarna onze
+  eigen pixelbewerking (terug naar de maat van het spel, vaste kleuren, een donkere omlijning), zodat het pixel art in één
+  stijl wordt en niet naar AI ruikt (Marcel eerder: "dit is te ai", "geen a.i slop"). De AI: via internet (OpenAI, een
+  API-sleutel, een paar cent per beeld) of lokaal op Marcels videokaart (ComfyUI met Stable Diffusion en ControlNet,
+  gratis, 8 tot 12 GB videogeheugen, een paar sessies opzetten). Risico: wat beweegt kan tussen beelden flikkeren; wat
+  stilstaat (gebouwen, karren, spullen) gaat makkelijker. De proef: de wagen van de heer (stil, twee kanten) en de os in
+  acht loopbeelden (beweging), naast Marcels plaat. Wacht op Marcel: via internet of lokaal.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
