@@ -352,6 +352,12 @@
     }
     // De ander loopt door: even wachten.
     const loopt = ander.onderweg || ander.pad.length > 0;
+    // Een dier dat volgt (js/beesten.js, volg), met een dier van zijn eigen groep voor zich, zoekt er geen weg omheen: hij
+    // staat bij zijn kudde. Loopt de ander, dan wacht hij even; anders, of daarna, is hij er, en kiest de groep de
+    // volgende tik opnieuw. Niet in een gevecht (G.vecht, G.aanval): daar beweegt het gevecht hem.
+    if (e.beest && e.groep && !e.leider && ander.groep === e.groep && !e.groep.vecht && !e.groep.aanval) {
+      return loopt && e.gewacht < IN().wachtOpLoper ? 'wacht' : 'klaar';
+    }
     if (loopt && e.gewacht < IN().wachtOpLoper) return 'wacht';
     // De ander staat maar wat: hij gaat een stap opzij, en kan dat niet (hij staat in een drukte), dan ruilen ze van
     // plaats ("mag ik erlangs?").
