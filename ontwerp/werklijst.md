@@ -13,9 +13,12 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 **Sinds 18 okt eerst de basis** (Marcel: "O1: c3 en de wereld van iedereen parkeren. Eerst het doel van de demo kiezen,
 dan de heer als klok, dan een speelbaar eerste jaar"; zijn vraag: "Het lijkt mij dat bodes en rovers pas later komen
 nadat de basis goed ligt?"). Geparkeerd: de rest van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel; de
-wilde rovers blijven zolang de dreiging. **Het volgende is het doel van de demo** (wacht op Marcel, bovenaan "Wacht op
-Marcel"), dan E (de heer als klok, op dat doel), dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst
-met een getal uit de werkbank.
+wilde rovers blijven zolang de dreiging. **Het doel van de demo is gekozen: D2, met weigeren** (Marcel, 18 okt: "Ik denk
+dat het leuk is om D2 te doen, je kunt dan weigeren, maar dan eindigt het met een korte cinematic waarin je het leger van
+de heer ziet aankomen met death als gevolg"): de heer komt al in het eerste jaar op Sint-Maarten zijn tiende halen, en
+daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aankomen, en het eind is de dood. Nog open:
+wat er gebeurt als je betaalt (bovenaan "Wacht op Marcel"). **Het volgende is E**, de heer als klok, op dat doel (eerst
+een plan), dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -172,17 +175,12 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het doel van de demo** (het eerste van de basis, Marcel, 18 okt: O1): wat een speler in Next Fest in zo'n uur doet,
-  en hoe het afloopt; daaruit volgt wat de heer in E moet kunnen. Nu vraagt de heer het eerste jaar niets, en komt hij
-  pas in het tweede jaar op Sint-Maarten innen (`spel.md`, het lege begin); CLAUDE.md zegt "het doel van de demo is
-  open". Te kiezen: **D1** het eerste jaar halen (het voorstel van 11 okt): je komt met de kar, bouwt, haalt de eerste
-  winter, en de demo eindigt na het eerste gevecht met rovers. **D2** de eerste tiende: de demo eindigt op Sint-Maarten
-  van het eerste jaar, als de heer op je plein staat: betaal je, of niet? Een open eind, met de vraag waar het spel om
-  draait. **D3** de tiende breken: als D2, maar weiger je, dan stuurt hij zijn mannen, en de demo eindigt met dat
-  gevecht; win je, dan zegt het eind dat het spel daar pas begint (zijn kasteel). **D4** een doel op tijd: binnen een
-  jaar een dorp van zoveel mensen (een zandbak met een lat). Voorstel van Claude: **D3**, want het laat de economie, de
-  heer en het gevecht in één boog zien, het eind is de naam van het spel, en het gevecht is er al. Wat erbij moet (dat
-  is E): de heer komt al in het eerste jaar innen, je kunt weigeren, en dan komen zijn mannen.
+- **Het eind van de demo als je betaalt** (bij D2, 18 okt, bovenaan dit blok; de keuzes waren D1 het eerste jaar halen,
+  D2 de eerste tiende, D3 de tiende breken in een gevecht, D4 een doel op tijd). Weigeren eindigt met het leger van de
+  heer en de dood; betalen is nog open. **P1** ook dan eindigt de demo: de heer rijdt tevreden weg, en een laatste zin
+  zegt dat hij volgend jaar meer wil (de vraag blijft hangen); **P2** de demo speelt door, de winter in, zonder eind,
+  tot de speler stopt. Voorstel van Claude: **P1**, want dan is de demo voor iedereen even lang, met een eind dat naar
+  het hele spel wijst.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

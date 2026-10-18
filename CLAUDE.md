@@ -165,7 +165,7 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
   nieuwe heer). Toon: zwarte satire; de heer is lachwekkend, zijn straffen niet.
 - **Twee bazen** (vraag 106): de gunst van de heer en het vertrouwen van het dorp kunnen je allebei wegsturen; onder een
   grens een waarschuwing, op 0 ben je weg.
-- **Het doel van de demo is open** (werklijst, "Wacht op Marcel").
+- **Het doel van de demo** (Marcel, 18 okt, D2): de eerste tiende op Sint-Maarten; weiger je, dan komt zijn leger (werklijst).
 - **Geld verdienen** (`commercieel.md`): in januari 2027 de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig
   geld: wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Wie valt, is dood** (vraag 55); valt de held (de aanvoerder), dan neemt een veteraan of de soldaat die het langst dient het over (vraag 170). Wie het overleeft,

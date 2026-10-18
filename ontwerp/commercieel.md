@@ -186,8 +186,9 @@ zin. Een vijfde kandidaat (voorstel van Claude):
    village wants to live. Serve him, betray him, or overthrow him.") Haak 1, met wat je ermee doet: een premisse die
    een vraag stelt, en die je pas in het spel beantwoordt. Samen spelen, met een speler als heer, komt na de release
    (vraag 126, f); het voorstel is alleen met vrienden via Steam, zonder matchmaking, want een klein spel heeft lege
-   lobby's. De demo eindigt met het jaar van geluk (vraag 126, b3); of het laatste beeld de heer is die je zijn bond
-   aanbiedt, is nog open.
+   lobby's. De demo eindigt op Sint-Maarten van het eerste jaar, als de heer zijn tiende komt halen (Marcel, 18 okt,
+   D2; tot dan: het jaar van geluk, vraag 126, b3): weiger je, dan een korte cinematic, zijn leger komt, en de dood
+   (werklijst).
 
 ## Norland, nagezocht op 3 okt (Marcel: "Kijk eens naar Norland als game")
 
