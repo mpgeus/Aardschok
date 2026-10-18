@@ -31,11 +31,12 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 **De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
 gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
 het land, met de voortgang in het menu (F2). **H4 en de meter met de videokaart zijn af** (onder "Af"); de meter
-wacht nog op Marcels blik in Edge (zegt hij "graphics card … ms"?). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten";
-**Bezig in sessie `main` (lokaal, desktop)** (18 okt): het meten in de browser): de
+wacht nog op Marcels blik in Edge (zegt hij "graphics card … ms"?). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
-opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
-renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De
+opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"): op 0,35 bij het dorp één beeld van 83 tot 100 ms vlak, en
+met heuvels 300 tot 335 ms; een stand sneeuw op de grond (elke middernacht in de winter) 283 ms vlak en 340 met heuvels.
+**Wacht op Marcel**: de renderproef van de grond als vaste rijen op de kaart (het voorstel), of eerst spreiden (de
+nieuwe stukken een of twee per beeld; kleiner, het werk blijft even groot). Later F3, F4 en F6 (het voorstel onderaan "De
 tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 

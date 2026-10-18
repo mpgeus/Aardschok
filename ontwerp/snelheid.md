@@ -228,6 +228,39 @@ half doorzichtige rand aan de kust, en het zelfde beeld pixel voor pixel. **Voor
 meten hoe lang een stap met het wiel en een ander seizoen duren (de meter, het traagste beeld, op 0,35 bij het dorp);
 is dat rond de 100 ms, dan een renderproef van de grond (zoals E), en dan kiezen.
 
+**Gemeten (18 okt, op `main` bij `1346daab`):** in de browser van de Claude-app (Chromium 152, met de videokaart) op
+Marcels pc, 1920 bij 1080 op 1,5 pixel per css-pixel, het proefdorp (eiland 2) bij het dorp. Gemeten is het traagste
+beeld (de tijd tussen twee beelden, zoals de meter) en hoe lang `T.tekenBeeld` erover deed, telkens drie keer of meer.
+Vlak:
+
+| wat | traagste beeld | tekenen | waarvan naar de kaart |
+| --- | --- | --- | --- |
+| het wiel naar 0,35 | 83 tot 100 ms | 87 tot 99 ms | 42 ms: 15 stukken van 512 bij 512, 2,8 ms per stuk (`texImage2D`) |
+| het wiel naar 0,5 | 50 tot 67 ms | 64 tot 75 ms | 29 ms: 20 stukken |
+| het wiel naar de zoom van het venster | 17 ms | 7 ms | 6 stukken op schaal 1 |
+| een ander seizoen (op 0,35) | 83 tot 100 ms | 93 tot 106 ms | 42 ms |
+| de beek valt droog of komt terug | 83 ms | 88 tot 90 ms | |
+| sneeuw op de grond, een stand van de 16 | 283 ms | 296 tot 299 ms | |
+| schuiven over de kaart (op 0,35) | 17 ms | hooguit 8 ms | een stuk per keer |
+| stil (op 0,35) | 17 ms | 1,5 ms | |
+
+Met heuvels (de spelregel *Height* op *Hills*, die straks altijd aan staat: d bij L) is het drie keer zo veel: het wiel
+naar 0,35 300 tot 335 ms, naar 0,5 117 tot 343, een ander seizoen 217 tot 302, en een stand sneeuw 333 tot 347 ms. Het
+doorsturen blijft 42 ms; de rest is het knippen van een tegel op een helling in driehoeken en het licht erop. De sneeuw
+verandert één keer per dag, om middernacht (`js/weer.js`: een sneeuwdag 0,35 erbij, elke winterdag 0,05 eraf), dus in de
+winter hapert elke middernacht. Erbij gezien, niet de grond (D1): de eerste keer winter of sneeuw in een spel kost één
+beeld van 400 tot 500 ms, want dan gaat het blad met die bomen naar de kaart (`bomen-winter.png` 11 MB,
+`bomen-sneeuw.png` 14 MB). Let op bij het meten met de javascript van Claude in de browser: de eerste meting na elke
+aanroep gaf een beeld van een seconde, ook zonder verandering; die telt niet.
+
+**Wat dat zegt:** vlak is het rond de 100 ms, met heuvels en sneeuw 300; dus volgens het voorstel de renderproef van de
+grond als vaste rijen. Die maakt het wiel, het seizoen, de sneeuw en de beek een getal voor de shader, en haalt ook het
+knippen op een helling weg (de hoogte per hoekpunt in de vertex shader). Kleiner en zonder renderproef kan **spreiden**:
+na een stap met het wiel of een ander seizoen blijft de oude grond, geschaald, staan, en komen de nieuwe stukken er een of
+twee per beeld overheen, zoals nu al bij nieuw land. Dan geen beeld van 300 ms, maar een kwart seconde lang beelden van
+zo'n 20 ms (met heuvels), met de grond even onscherp of in het oude seizoen; het werk zelf blijft even groot, wat op een
+zwakke machine (de Steam Deck) telt.
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een
