@@ -19,7 +19,8 @@ de heer ziet aankomen met death als gevolg"): de heer komt al in het eerste jaar
 daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aankomen, en het eind is de dood. **Betaal
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
-dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): eerst het plan. Dan het eerste jaar speelbaar: Marcel
+dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): het plan staat bij E, en wacht op Marcel (A, B, C).
+Dan het eerste jaar speelbaar: Marcel
 speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
@@ -585,6 +586,39 @@ belasting gaat met een kar over de weg (A: de heer stuurt hem naar je plein; B: 
 kasteel, en de opstand rijdt later dezelfde weg), en de heer vraagt wat hij je ziet maken. Hier beslissen we ook de
 spelregels van de heer: "Waarin de heer betaald wil worden", "Hoe de heer telt", "Het goud in de kist", "Wat de heer van
 het graan vraagt", de schandpaal, de heervaart en de twee bazen.
+
+**Het plan voor de demo** (Claude, 18 okt, op D2 en de twee cinematics van Marcel, bij "Nu en daarna"; wacht op
+Marcel). Wat er is: op 1 wijnmaand zijn brief met wat hij vraagt, op Sint-Maarten komt hij met twee soldaten over de weg
+naar het plein en wacht drie dagen, een klik op hem opent het venster om te betalen (je kiest wat je geeft, hij telt
+slecht, en daaronder een boete, soldaten of de schandpaal), en het eindscherm (`T.ui.toonEinde`). Maar het eerste jaar
+spaart hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kan niet. De spelregels van de heer blijven zoals Marcel ze
+koos. In zes stappen:
+1. **Hij komt al in het eerste jaar**: `heerVrij` van 1 naar 0, voor het hele spel (de demo is het begin ervan). De brief
+   bij de aankomst zegt dat hij op Sint-Maarten komt halen wat hem toekomt, en zijn grillen komen dan ook het eerste
+   jaar: zo leer je hem kennen vóór hij komt.
+2. **De klok** (A).
+3. **Op het plein** (B): weigeren erbij, met één klik, en dan is er geen weg terug.
+4. **De twee cinematics** (C): de balken en knoppen weg, zwarte banden boven en onder, de tijd op 1×, de camera rijdt
+   mee, en een zin onderin; een klik of Esc slaat over. **Betaal je**: zijn mannen laden wat hij nam op twee ossenkarren
+   op het plein, en de heer en zijn mannen rijden met de karren de weg af; het beeld wordt zwart, en een zin zegt dat
+   hij volgend jaar terugkomt, en meer wil (gaf je te weinig, dan ook wat hij dan meebrengt). **Weiger je**: hij draait
+   zich om en gaat; de nacht valt, en over de weg komt zijn leger, een rij van zo'n twintig soldaten met fakkels; de
+   dorpelingen vluchten naar het town hall; als ze het plein bereiken, wordt het beeld zwart, en er staat *Death*. Er
+   wordt niet gevochten: het is een scène, geen gevecht.
+5. **Het eindscherm**: wat je bouwde in een paar regels (het jaarboek is er al, `js/einde.js`), wat je koos, *Wishlist
+   Tithebreaker* (zodra de Steam-pagina er is), en terug naar het menu.
+6. **Alleen in de demo** eindigt het spel daar: een vlag bij het verpakken, zoals het debugvenster (`verpakken.md`); in
+   het volle spel loopt Sint-Maarten zoals nu, en weigeren wordt later een gevecht (F). Erbij: toetsen in
+   `test/heer.test.cjs` (hij komt in het eerste jaar; betalen en weigeren zetten het eind, met de vlag), en de speeltest
+   (de kolonist betaalt op Sint-Maarten van het eerste jaar).
+Te kiezen: **A** de klok: A1 vanaf zijn brief op 1 wijnmaand staat bij de datum in de balk hoeveel dagen het nog is
+tot Sint-Maarten ("Martinmas in 23 days"); A2 alleen de brieven. **B** wat je op het plein kunt: B1 het venster van nu,
+met *Refuse* erbij (je kiest wat je geeft, en hij telt slecht: de grap blijft); B2 alleen *Pay* (hij neemt wat hij
+vraagt, of wat er is) en *Refuse*. **C** de beelden: C1 met wat er al is (de ossenkar, de soldaten van de heer, de
+fakkels als lichtjes), en zo snel te zien; C2 met nieuwe tekeningen erbij (de heer te paard, vaandels, een wagen van de
+heer), eerst in woorden, dan een proefplaat. Voorstel van Claude: **A1** (de klok is wat de dagen spanning geeft, en
+het is één regel waar de datum al staat), **B1** (de satire zit in het tellen, en het venster is er al), **C1** (eerst
+het eind van de demo speelbaar; de tekeningen van C2 kunnen later, voor de trailer).
 
 ## F. Vechten
 
