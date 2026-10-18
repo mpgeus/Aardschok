@@ -214,7 +214,10 @@ test('eilandkaart: een stuk dat vooruit gemaakt is, in delen, is hetzelfde als i
   const S = { dorp: D };
   w.wezens.push(S.dorp.aanvoerder);
   const delen = (T.STUK / I.vooruitDeel) ** 2;
-  for (let i = 0; i <= delen; i++) assert.equal(T.werkStukkenBij(S, D), null, 'binnen openRond is alles open');
+  // vooruit maakt eerst de blokken van het eiland onder de delen (een stap per blok, voor de tegels en de hoeken; het stuk
+  // met zijn rand beslaat hooguit zoveel blokken in de breedte), en dan de delen
+  const breed = Math.ceil((T.STUK + 2 * T.STUK_MARGE + 1) / T.EILAND_BLOK) + 1;
+  for (let i = 0; i <= delen + 2 * breed * breed; i++) assert.equal(T.werkStukkenBij(S, D), null, 'binnen openRond is alles open');
   const n = T.stukVan(rand.x + rand.b, vak.y + 50);
   assert.ok(!w.open.has(n), 'het stuk is nog niet open');
   assert.equal(T.tegel(w, rand.x + rand.b, vak.y + 50), 'buiten');
@@ -240,5 +243,29 @@ test('eilandkaart: een stuk dat vooruit gemaakt is, in delen, is hetzelfde als i
       const [a, b] = [T.voorwerpOp(w, x, y), T.voorwerpOp(nieuw, x, y)];
       assert.equal(a && a.soort, b && b.soort, `wat er staat op (${x}, ${y})`);
     }
+  }
+});
+
+// Het eiland uit blokken (T.eilandRaster, js/eiland.js; snelheid.md, F1): de delen van een stuk, de stukken ernaast en de
+// hoogte delen hun rekenwerk, en wat eruit komt, is op elk punt wat T.eilandStuk in één keer geeft; in één keer (als de
+// meeste blokken er nog niet zijn) en uit de blokken, voor de tegels en voor de hoeken.
+test('eilandkaart: het eiland uit blokken (T.eilandRaster) is op elk punt wat T.eilandStuk geeft', () => {
+  const zelfde = (r, x0, y0, b, h, hoek, waar) => {
+    const o = hoek ? 0.5 : 0;
+    const s = T.eilandStuk(E, x0 - o, y0 - o, b, h);
+    for (const veld of ['hoogte', 'streek', 'weg', 'boom', 'kamp']) assert.deepEqual(r[veld], s[veld], `${waar}: ${veld}`);
+  };
+  for (const hoek of [false, true]) {
+    // een vak waar nog geen blok is: in één keer
+    // ver van het dorp, waar de toetsen hierboven nog geen blok maakten
+    const ver = (a) => (a < E.maat / 2 ? a + 500 : a - 500);
+    const [ax, ay] = [ver(vak.x) - 37 + (hoek ? 200 : 0), ver(vak.y) + 3];
+    zelfde(T.eilandRaster(E, ax, ay, 41, 39, hoek), ax, ay, 41, 39, hoek, `in één keer${hoek ? ', de hoeken' : ''}`);
+    // een vak waarvan eerst alle blokken gemaakt zijn, zoals het vooruit maken doet: uit de blokken
+    const [bx, by] = [ver(vak.x) + 105 + (hoek ? 200 : 0), ver(vak.y) + 7];
+    let stappen = 0;
+    while (T.eilandRasterVooruit(E, bx, by, 45, 38, hoek)) stappen++;
+    assert.ok(stappen > 1, 'vooruit maakt een blok per stap');
+    zelfde(T.eilandRaster(E, bx, by, 45, 38, hoek), bx, by, 45, 38, hoek, `uit de blokken${hoek ? ', de hoeken' : ''}`);
   }
 });

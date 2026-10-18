@@ -31,7 +31,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 **De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen.
 **Middernacht (H1 tot H3), G1, G2 en F2 zijn af** (onder "Af"). **F1, het land in gedeelde blokken: Bezig in sessie
 `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna F1"): het eiland in vaste blokken van 16 bij 16, gedeeld tussen de
-delen en de stukken, zodat elke stap van het vooruit maken onder 2 ms blijft (de proef op `proef/tik-land`). De rest
+delen en de stukken, zodat elke stap van het vooruit maken onder 3 ms blijft (de proef op `proef/tik-land`); gebouwd op
+die branch (een stap van 6,3 naar 0,6 à 1,5 ms, hetzelfde land), wacht op "push it". De rest
 wacht op Marcel (het voorstel staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

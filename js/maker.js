@@ -778,6 +778,7 @@
   // en wat hij is (VRIJ, WEG, WATER of BOS, zoals in de maker), tegel (x, y) op plek (y - y0) * b + (x - x0); en wat er
   // staat, als { naam, x, y }.
   const STUK_MARGE = 8;
+  T.STUK_MARGE = STUK_MARGE; // voor het vooruit maken, dat eerst de blokken van het eiland eronder rekent (js/wereld.js)
   // Een getal van 0 tot 1 per tegel, per eiland (z) en per soort lot (zout).
   function lotOp(z, x, y, zout) {
     let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(zout, 2246822519) + Math.imul(z, 3266489917)) | 0;
@@ -794,8 +795,8 @@
     const B = b + 2 * M;
     const H = h + 2 * M;
     const N = B + 1;
-    const tegels = T.eilandStuk(E, X0, Y0, B, H);
-    const punten = T.eilandStuk(E, X0 - 0.5, Y0 - 0.5, N, H + 1);
+    const tegels = T.eilandRaster(E, X0, Y0, B, H);
+    const punten = T.eilandRaster(E, X0, Y0, N, H + 1, true); // de hoekpunten: (vx - 0.5, vy - 0.5)
     const binnen = (x, y) => x >= X0 && y >= Y0 && x < X0 + B && y < Y0 + H;
     const ti = (x, y) => (y - Y0) * B + (x - X0);
     const hoekBinnen = (vx, vy) => vx >= X0 && vy >= Y0 && vx <= X0 + B && vy <= Y0 + H;

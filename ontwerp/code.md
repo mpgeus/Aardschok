@@ -356,7 +356,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   veranderde (`buf.vuil`, `tekenBufferDeel`, 17 okt; eerst het hele stuk van 512 bij 512): op een los doek in precies de
   stand van het stuk, en dan op zijn plek, want met een clip of op een verschoven doek rondt de browser ver uitgezoomd net
   anders af. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
-  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMsPerSeconde` (minstens een deel per beeld), eerst wat het eerst nodig is
+  tegels voorbij `openRond`, in delen van `vooruitDeel` (en daarvoor de blokken van het eiland eronder, een per stap:
+  `T.eilandRasterVooruit`, zodat geen stap meer dan een paar ms kost), `vooruitMsPerSeconde` (minstens een stap per beeld), eerst wat het eerst nodig is
   (`nodigOver`, 13 okt: wie loopt, langs zijn pad; wie stilstaat, daarna); het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
@@ -543,7 +544,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
-  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
+  browser hetzelfde eiland maakt. Elk punt volgt alleen uit het nummer en de plek, dus het spel vraagt het in vaste
+  blokken van 16 bij 16 (`T.eilandRaster`, de laatste 1.024 onthouden, en `T.eilandRasterVooruit` één blok per stap),
+  die de delen van een stuk, de stukken ernaast en de hoogte van een stuk delen (18 okt; `snelheid.md`, F1: een deel
+  rekende met zijn rand ruim negen punten per tegel); in `test/eilandkaart.test.cjs` op elk punt hetzelfde als in één keer. **Je dorp op het eiland** (stap 2a, Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
   een nieuw spel"): elk nieuw spel maakt het eiland, en je land is het stuk ervan om jouw dorp:
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`) legt het lege land erop; de kaart

@@ -303,14 +303,14 @@
 
   // De grove hoogte op tegel (x, y) in pixels, zonder de fijne glooiing en de dalen: het strand, het land dat naar binnen
   // oploopt, de heuvels en de bergen. `c` is de landheid (landheid hierboven), om niet twee keer te rekenen.
-  function grof(E, x, y, c) {
+  function grof(E, x, y, c, heuvelig) {
     const I = IN();
     const K = I.kust;
     if (c <= 0) return c * K.zee;
     const z = E.vorm.z;
     const H = I.heuvels;
     let h = I.laagland * (c < 0.8 ? c : 0.8);
-    h += H.hoog * heuveligOp(z, x, y) * (0.5 + 0.5 * lagen(x / H.golf + 9.1, y / H.golf + 4.4, z + 81, 5));
+    h += H.hoog * (heuvelig === undefined ? heuveligOp(z, x, y) : heuvelig) * (0.5 + 0.5 * lagen(x / H.golf + 9.1, y / H.golf + 4.4, z + 81, 5));
     h += bergen(E, x, y);
     return (c < K.strand ? c : K.strand) * K.helling + h * glad(0, I.vrijeKust, c);
   }
@@ -932,7 +932,8 @@
           c = LAAG; // een kom onder de zee midden in het land (zie legLand)
         }
         land[i] = c;
-        let g = grof(E, x, y, c);
+        const heuvelig = heuveligOp(z, x, y); // één keer, voor grof en fijn
+        let g = grof(E, x, y, c, heuvelig);
         // het dal van de rivier: de grond zakt naar het peil van de rivier, met een vlakke vloer langs het water
         const dr = tussenVak(E, E.rivierAfstand, x, y);
         if (dr < 200) {
@@ -979,7 +980,7 @@
         // de fijne glooiing, die bij het water en de kust wegzakt
         let f = glad(0, I.vrijeKust, c);
         if (nabij[i] > -1e8) f *= glad(0, 30, g - nabij[i]);
-        hoog[i] = g + f * fijn(z, x, y, heuveligOp(z, x, y));
+        hoog[i] = g + f * fijn(z, x, y, heuvelig);
         // het plein van een roverskamp ligt vlak, op de hoogte van zijn vuur, en loopt naar de rand van de open plek bij
         const kd = kampBij(E, x, y);
         if (kd) hoog[i] = kd.kamp.h + (hoog[i] - kd.kamp.h) * glad(I.kampen.plein, I.kampen.open, kd.d);
@@ -1032,6 +1033,106 @@
     }
     return { x0, y0, b, h, hoogte, streek, weg, boom, kamp };
   };
+
+  // T.eilandStuk in vaste blokken van BLOK bij BLOK tegels, eens uitgerekend en onthouden (de laatste BLOKKEN_MAX, zo'n
+  // 2 MB), zodat de delen van een stuk, de stukken ernaast en de hoogte van een stuk (js/hoogte.js) delen wat ze samen
+  // nodig hebben (18 okt; `snelheid.md`, F1): een deel van 16 bij 16 rekende met zijn rand van 8 tegels (STUK_MARGE,
+  // js/maker.js), twee keer (de tegels en de hoeken), ruim negen punten per tegel. Elk punt van T.eilandStuk volgt alleen
+  // uit het nummer en de plek (de helling leest zijn buren in een eigen rand), dus uit blokken komt precies hetzelfde als
+  // in één keer (test/eilandkaart.test.cjs). Geen spelstaat: wat de blokken niet meer hebben, rekent het opnieuw.
+  // `hoek`: de hoekpunten (punt (vx - 0.5, vy - 0.5) voor hoek (vx, vy)), anders de tegels.
+  const BLOK = 16;
+  const BLOKKEN_MAX = 1024;
+  const BLOKKEN = new WeakMap(); // E → Map(sleutel → blok), het laatst gebruikt achteraan
+  const blokSleutel = (bx, by, hoek) => ((by + 64) * 1024 + (bx + 64)) * 2 + (hoek ? 1 : 0);
+  const VELDEN = ['hoogte', 'streek', 'weg', 'boom', 'kamp'];
+  function blokkenVan(E) {
+    let c = BLOKKEN.get(E);
+    if (!c) BLOKKEN.set(E, (c = new Map()));
+    return c;
+  }
+  function bewaarBlok(c, k, blok) {
+    c.set(k, blok);
+    if (c.size > BLOKKEN_MAX) c.delete(c.keys().next().value);
+  }
+  // Het blok (bx, by), of null als het er niet is en `maak` nee zegt.
+  function blokVan(E, bx, by, hoek, maak = true) {
+    const c = blokkenVan(E);
+    const k = blokSleutel(bx, by, hoek);
+    let blok = c.get(k);
+    if (blok) {
+      c.delete(k);
+      c.set(k, blok); // weer achteraan
+      return blok;
+    }
+    if (!maak) return null;
+    const o = hoek ? 0.5 : 0;
+    blok = T.eilandStuk(E, bx * BLOK - o, by * BLOK - o, BLOK, BLOK);
+    bewaarBlok(c, k, blok);
+    return blok;
+  }
+  // Doe `doe(bx, by)` voor elk blok onder het vak, tot hij false geeft; geeft of hij ze allemaal deed.
+  const elkBlok = (x0, y0, b, h, doe) => {
+    for (let by = Math.floor(y0 / BLOK); by * BLOK < y0 + h; by++) {
+      for (let bx = Math.floor(x0 / BLOK); bx * BLOK < x0 + b; bx++) if (doe(bx, by) === false) return false;
+    }
+    return true;
+  };
+  // Wat T.eilandStuk(E, x0 - o, y0 - o, b, h) geeft (o is een halve tegel voor de hoeken), uit de blokken. Mist meer dan
+  // de helft van de blokken (een stuk dat meteen nodig is), dan rekent het in één keer, zonder de randen van de blokken
+  // erbij, en onthoudt het de blokken die er helemaal in liggen.
+  T.eilandRaster = function (E, x0, y0, b, h, hoek = false) {
+    const o = hoek ? 0.5 : 0;
+    if (!Number.isInteger(x0) || !Number.isInteger(y0)) return T.eilandStuk(E, x0 - o, y0 - o, b, h);
+    let mist = 0;
+    let alle = 0;
+    elkBlok(x0, y0, b, h, (bx, by) => {
+      alle++;
+      if (!blokVan(E, bx, by, hoek, false)) mist++;
+    });
+    if (mist * 2 > alle) {
+      const r = T.eilandStuk(E, x0 - o, y0 - o, b, h);
+      const c = blokkenVan(E);
+      for (let by = Math.ceil(y0 / BLOK); (by + 1) * BLOK <= y0 + h; by++) {
+        for (let bx = Math.ceil(x0 / BLOK); (bx + 1) * BLOK <= x0 + b; bx++) {
+          const k = blokSleutel(bx, by, hoek);
+          if (c.has(k)) continue;
+          const blok = { x0: bx * BLOK - o, y0: by * BLOK - o, b: BLOK, h: BLOK };
+          for (const veld of VELDEN) {
+            blok[veld] = new r[veld].constructor(BLOK * BLOK);
+            for (let y = 0; y < BLOK; y++) {
+              const van = (by * BLOK + y - y0) * b + (bx * BLOK - x0);
+              blok[veld].set(r[veld].subarray(van, van + BLOK), y * BLOK);
+            }
+          }
+          bewaarBlok(c, k, blok);
+        }
+      }
+      return r;
+    }
+    const uit = { x0: x0 - o, y0: y0 - o, b, h, hoogte: new Float32Array(b * h), streek: new Uint8Array(b * h), weg: new Uint8Array(b * h), boom: new Uint8Array(b * h), kamp: new Uint8Array(b * h) };
+    elkBlok(x0, y0, b, h, (bx, by) => {
+      const blok = blokVan(E, bx, by, hoek);
+      const xa = Math.max(x0, bx * BLOK);
+      const xb = Math.min(x0 + b, (bx + 1) * BLOK);
+      for (let y = Math.max(y0, by * BLOK); y < Math.min(y0 + h, (by + 1) * BLOK); y++) {
+        const van = (y - by * BLOK) * BLOK + (xa - bx * BLOK);
+        const naar = (y - y0) * b + (xa - x0);
+        for (const veld of VELDEN) uit[veld].set(blok[veld].subarray(van, van + xb - xa), naar);
+      }
+    });
+    return uit;
+  };
+  // Maak één blok dat dit vak nog mist (zo'n halve ms); geeft false als ze er allemaal al zijn. Voor het vooruit maken
+  // (js/wereld.js), dat zo in kleine stappen rekent.
+  T.eilandRasterVooruit = function (E, x0, y0, b, h, hoek = false) {
+    return !elkBlok(x0, y0, b, h, (bx, by) => {
+      if (blokVan(E, bx, by, hoek, false)) return true;
+      blokVan(E, bx, by, hoek);
+      return false;
+    });
+  };
+  T.EILAND_BLOK = BLOK;
 
   // De streek van een landtegel, uit hoe hoog, steil, nat en zandig het er is (vraag 117, D: de zes wildernissen van de
   // landkaart en de kust).

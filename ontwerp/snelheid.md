@@ -219,14 +219,17 @@ rand van 1, en dat twee keer (de tegels en de hoeken): 2.381 punten voor 256 teg
 eerste vraag aan het raster (`vulRaster`) het hele loopvak: alle open stukken in één tik, op het proefdorp 9 × 42 à 50
 ms, en meer naarmate er meer open is. Na lang verkennen zijn dat seconden.
 
-- **F1, gedeelde blokken** (geproefd): `T.eilandStuk` in vaste blokken van 16 bij 16, de laatste 1.024 onthouden (2 à 3
-  MB), en daaruit putten de delen, de stukken ernaast en de hoogte (`js/hoogte.js`); en `heuveligOp` één keer per punt
-  in plaats van twee (8%). Winst: een stuk vooruit 52 à 70 ms in plaats van 107, en elke stap onder 2 ms (was 6,4, tot
-  17), dus het budget wordt gehaald; na het laden de tikken boven 12 ms van 26–39 naar 3–13, het traagste procent van
-  16–19 naar 9–12 ms; de hoogte van een stuk 0,2 in plaats van 10 à 12 ms. Een stuk dat meteen nodig is, blijft 50 à 60
-  ms. Het land blijft precies gelijk (een vingerafdruk op eiland 2 en 5), dus geen nieuwe `versie`. Prijs: middel
-  (`js/eiland.js`, `maker.js`, `wereld.js`, `hoogte.js`; `test/eilandkaart.test.cjs` moet langer doorlopen). Je ziet
-  niets.
+- **F1, gedeelde blokken** (gebouwd, 18 okt; Marcel: "daarna F1"; `code.md` bij `js/eiland.js`): `T.eilandStuk` in
+  vaste blokken van 16 bij 16 (`T.eilandRaster`), de laatste 1.024 onthouden (2 à 3 MB), en daaruit putten de delen, de
+  stukken ernaast en de hoogte (`js/hoogte.js`); het vooruit maken rekent eerst de blokken, een per stap; en
+  `heuveligOp` één keer per punt in plaats van twee (8%). Om en om nagemeten tegen de stand ervoor: een stap van het
+  vooruit maken van een mediaan van 6,3 ms (tot 12,7) naar 0,6 voor een blok en 1,5 voor een deel (allebei hooguit 3);
+  zeven stukken vooruit samen 667 naar 328 ms; na het laden (een gespeeld proefdorp, 900 tikken op 30×) de tikken boven
+  8 ms van 40 à 52 naar 5 à 11, het traagste procent van 11 à 12 naar 7 à 9 ms. Een stuk dat meteen nodig is, blijft
+  50 à 60 ms. Het land blijft precies gelijk (een vingerafdruk van `T.eilandStuk` en `T.landStuk`, en een toets dat de
+  blokken op elk punt `T.eilandStuk` geven), dus geen nieuwe `versie`; en het spel loopt precies hetzelfde (een afdruk
+  van `S` per dag). Je ziet niets. Wat er na het laden nog uitsteekt, is de eerste tik (35 à 39 ms) en de eerste
+  middernacht (46 à 70 ms: het net van de paden en de eerste bosKaart, koud): dat is H4.
 - **F2, het land achter het laadscherm** (gebouwd, 18 okt; Marcel: "daarna G2 en F2"; `code.md` bij `js/opslaan.js`):
   na het laden maakt de lus eerst het land van alle open stukken (`T.maakOpenStukken`, `ladenMsPerBeeld` per beeld, dus
   een stuk per beeld), en het menu zegt zolang "Loading the land… 4 of 9"; pas daarna tikt de wereld. Samen even duur,
