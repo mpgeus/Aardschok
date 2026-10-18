@@ -789,7 +789,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tijd nu zit: `ontwerp/snelheid.md` (vraag 178).
 - `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL2 die zich voordoet als het
   2D-doek, zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart
-  zelf; de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer
+  zelf; de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Hoe lang de
+  kaart zelf over een beeld doet, meet hij met de tijdmeter van de kaart (`G.meetKaart`, `G.kaartTijden`, van `G.begin` tot
+  het eind van `G.klaar`; EXT_disjoint_timer_query_webgl2), alleen voor de meter (18 okt): de tijd in de processor ziet
+  dat niet. Een buffer
   die opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
   **Sinds 18 okt WebGL2** (vraag 178, B5 met B3 en E1, na de renderproef, `gereedschap/pixiproef/evaluatie.md`; zonder
   WebGL2 het 2D-doek, zoals zonder kaart): **een plaatje is één instantie** (`zetInst`, `VERT_INST`, `PER_INST` = 21:

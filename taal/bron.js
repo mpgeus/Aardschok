@@ -2504,6 +2504,7 @@ Spel.TAAL_BRON = [
   {"t":"Picture saved: {naam}","waar":["js/main.js"]},
   {"t":"Group {n}: {aantal|one man|# men}","waar":["js/main.js"]},
   {"t":"{fps} frames/s · rules {regels} ms · drawing {tekenen} ms · slowest frame {traagst} ms · {kaart}","waar":["js/main.js"]},
-  {"t":"with the graphics card","waar":["js/main.js"]},
   {"t":"without the graphics card","waar":["js/main.js"]},
+  {"t":"graphics card {kaart} ms","waar":["js/main.js"]},
+  {"t":"with the graphics card","waar":["js/main.js"]},
 ];

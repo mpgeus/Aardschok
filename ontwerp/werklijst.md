@@ -33,7 +33,8 @@ gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms
 het land, met de voortgang in het menu (F2). **H4 is af** (onder "Af"). **De meter met de
 videokaart: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna de meter met de videokaart"): de meter
 (F2) toont ook hoe lang de videokaart over een beeld doet, waar de browser dat toelaat, om de grond en het tekenen van
-voor naar achter te kunnen meten. **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
+voor naar achter te kunnen meten. Gebouwd op die branch ("graphics card … ms" in de meter, waar de browser het
+zegt); niet in een browser nagekeken, wacht op Marcels blik en "push it". **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
 renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De

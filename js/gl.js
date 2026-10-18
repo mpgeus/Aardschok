@@ -1967,8 +1967,60 @@
     schaduwOp = null;
     gewist = false;
     beeldNr++;
+    begintijd();
     return hetDoek;
   };
+  // ---------------------------------------------------------------- hoe lang de kaart over een beeld doet
+  // Voor de meter (F2, js/main.js; Marcel, 18 okt: "de meter met de videokaart"): de tijd die de kaart zelf aan een beeld
+  // werkt, van G.begin tot het eind van G.klaar, met de tijdmeter van de kaart (EXT_disjoint_timer_query_webgl2). De meter
+  // in de processor ziet die niet: de kaart werkt na, terwijl het spel al verder is (`snelheid.md`, "Het advies van
+  // buiten"). Chromium (en Electron) heeft hem meestal, Firefox niet; dan blijft het onbekend. De uitslag van een beeld
+  // komt een paar beelden later, dus de meter telt wat er binnen is. Alleen zolang de meter aan staat.
+  let tijdmeter = null; // { ext, vrij: [...], wacht: [...], loopt, n, som, max }, of null als hij uit staat
+  G.meetKaart = function (aan) {
+    if (tijdmeter && tijdmeter.loopt) gl.endQuery(tijdmeter.ext.TIME_ELAPSED_EXT); // anders weigert de kaart de volgende
+    if (!aan || !start()) {
+      tijdmeter = null;
+      return false;
+    }
+    const ext = gl.getExtension('EXT_disjoint_timer_query_webgl2'); // geen tekst
+    tijdmeter = ext ? { ext, vrij: [], wacht: [], loopt: null, n: 0, som: 0, max: 0 } : null;
+    return !!tijdmeter;
+  };
+  // Wat er sinds de vorige vraag binnenkwam: { n, gem, max } in ms, of null (geen tijdmeter, of nog niets binnen).
+  G.kaartTijden = function () {
+    const m = tijdmeter;
+    if (!m || !m.n) return null;
+    const uit = { n: m.n, gem: m.som / m.n, max: m.max };
+    Object.assign(m, { n: 0, som: 0, max: 0 });
+    return uit;
+  };
+  function begintijd() {
+    const m = tijdmeter;
+    if (!m || m.loopt) return;
+    m.loopt = m.vrij.pop() || gl.createQuery();
+    gl.beginQuery(m.ext.TIME_ELAPSED_EXT, m.loopt);
+  }
+  function eindtijd() {
+    const m = tijdmeter;
+    if (!m || !m.loopt) return;
+    gl.endQuery(m.ext.TIME_ELAPSED_EXT);
+    m.wacht.push(m.loopt);
+    m.loopt = null;
+    // wat klaar is, van oud naar nieuw; liep er iets mis (de kaart deed iets anders tussendoor), dan telt het niet
+    const mis = gl.getParameter(m.ext.GPU_DISJOINT_EXT);
+    while (m.wacht.length && gl.getQueryParameter(m.wacht[0], gl.QUERY_RESULT_AVAILABLE)) {
+      const q = m.wacht.shift();
+      if (!mis) {
+        const ms = gl.getQueryParameter(q, gl.QUERY_RESULT) / 1e6;
+        m.n++;
+        m.som += ms;
+        if (ms > m.max) m.max = ms;
+      }
+      m.vrij.push(q);
+    }
+  }
+
   // Wachten tot de kaart klaar is met het beeld (het gereedschap van het meten): één pixel teruglezen.
   G.wacht = function () {
     if (!gl) return;
@@ -2017,5 +2069,6 @@
     schaduwOp = null;
     for (const t of opruimen) gl.deleteTexture(t);
     opruimen.length = 0;
+    eindtijd();
   };
 })(globalThis.Spel = globalThis.Spel || {});

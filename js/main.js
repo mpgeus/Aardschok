@@ -809,6 +809,7 @@
       document.body.appendChild(el);
     }
     meter = aan ? { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 } : null;
+    if (!aan) T.gl.meetKaart(false); // de tijdmeter van de kaart (js/gl.js) gaat aan bij het eerste beeld met de kaart
     el.classList.toggle('verborgen', !aan);
     return aan;
   }
@@ -839,15 +840,24 @@
     m.beelden++;
     m.regels += regels;
     m.tekenen += tekenen;
+    // Hoe lang de kaart zelf over een beeld deed (js/gl.js, G.kaartTijden), als de browser dat zegt: "drawing" is alleen
+    // wat de processor eraan doet. Pas als het spel de kaart al gebruikt, zodat de meter hem niet opstart.
+    if (glZichtbaar && m.kaartMeet === undefined) m.kaartMeet = T.gl.meetKaart(true);
     const duur = performance.now() - m.sinds;
     if (duur < 1000) return;
     const ms = (x) => (Math.round(x * 10) / 10).toLocaleString(T.taalLocale());
+    const kaartTijd = m.kaartMeet && T.gl.kaartTijden();
+    if (kaartTijd) m.kaartGem = kaartTijd.gem; // komt er een seconde niets binnen, dan blijft het vorige staan
     document.getElementById('meter').textContent = T.t('{fps} frames/s · rules {regels} ms · drawing {tekenen} ms · slowest frame {traagst} ms · {kaart}', {
       fps: Math.round((m.beelden * 1000) / duur),
       regels: ms(m.regels / m.beelden),
       tekenen: ms(m.tekenen / m.beelden),
       traagst: ms(m.traagst),
-      kaart: glZichtbaar ? T.t('with the graphics card') : T.t('without the graphics card'),
+      kaart: !glZichtbaar
+        ? T.t('without the graphics card')
+        : m.kaartGem != null
+          ? T.t('graphics card {kaart} ms', { kaart: ms(m.kaartGem) })
+          : T.t('with the graphics card'),
     });
     Object.assign(m, { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 });
   }
