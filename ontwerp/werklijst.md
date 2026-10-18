@@ -123,7 +123,7 @@ bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het beg
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"); **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): eerst het plan. **Marcel kwam op 17 okt met 174**
+desktop)** (18 okt): het plan staat bij I ("c3 in detail"), en wacht op Marcel (A, B, C). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
 brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
@@ -1127,6 +1127,30 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   okt, in `main`; `spel.md`, "De bende van een kamp"; `code.md` bij `js/rovers.js`; `test/kampen.test.cjs`). Voor c3:
   de kans voor de bode (`T.bodeGevaar`, js/bode.js) telt sinds c2 geen bende meer; de hinderlaag uit het dichtste kamp
   kan haar weer laten meetellen.
+  **c3 in detail** (Claude, 18 okt; wacht op Marcel). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
+  na 60 dagen, de helft 's nachts (`R.wildeOp`, `aanvalsUur`). De overval komt uit het kamp dat het dichtst bij het plein
+  ligt en mannen thuis heeft; is er geen (alle kampen leeg of op pad), dan komt er deze keer niemand, en loopt het rooster
+  door. (2) **De tocht**: ze vertrekken zo dat ze op het uur van de aanval bij je zijn. Hun weg is de grove weg van c0
+  (`js/lopen.js`: het paadje, de wegen, de bruggen), de reistijd die lengte op hun pas. Staat het kamp er, dan zie je ze
+  het paadje af lopen tot de rand van de open plek; daarna reizen ze buiten beeld, zoals de bode, op de klok. Wie op pad
+  is, staat niet in het kamp (`lid.opPad`); de tenten blijven staan. (3) **Je land op** waar hun weg het binnenkomt (B).
+  (4) **Op de akker zoals nu** (twee uur roven, graan uit de voorraad, soms de akker kapot), en terug langs dezelfde weg:
+  aan de rand gaan ze uit beeld, en na de reistijd staan ze weer in hun kamp. De buit ligt in het kamp (`K.buit`, graan
+  en goud), voor wie het in c4 opruimt (K1). Wie onderweg valt, is uit zijn bende (zoals nu). (5) **De hinderlaag op de
+  bode** komt uit het dichtste kamp met mannen thuis (hooguit `aanvallers`, 2), en anders zijn er geen rovers onderweg;
+  ook buiten beeld is een rover die sneuvelt uit zijn bende, en wat ze de bode afnemen, gaat naar hun kamp. (6)
+  **Eruit**: de wilde rovers (`soort: 'wild'`, `wildVel`, een rover van een dorp zonder kamp). **Erbij**:
+  `Spel.debug.rovers(n)` laat de mannen van het dichtste kamp meteen komen (zonder reis), `Spel.debug.kampen()` zegt wie
+  op pad is en wat er aan buit ligt; het opslaan versie 24; toetsen (`test/rovers.test.cjs`, `kampen`, `bode`): de
+  overval komt uit het dichtste kamp met mannen, het kamp is zolang leeg, de buit ligt erna in het kamp, en geen kamp met
+  mannen is geen overval; en de speeltest. Te kiezen:
+  **A** hoeveel er gaan: A1 zoveel als het rooster nu zegt (2, elk jaar een meer, tot 4), de rest blijft thuis; A2 de
+  hele bende. **B** waar ze je land op komen: B1 langs hun weg, zodra ze 40 tegels van de akker zijn (of later, als het
+  land daar nog dicht is); B2 aan de rand van de 100 bij 100 van je dorp, aan de kant van het kamp. **C** de buit van een
+  rover die valt: C1 hij ligt er als een losse stapel (zoals na het afbreken, `js/afbreken.js`), en de kar haalt hem als
+  hij in je bereik ligt; C2 hij is weg (zoals nu). Voorstel: **A1** (de balans blijft, en een kamp is zelden leeg als je
+  het vindt), **B1** (niets nieuws gaat uit van de 100 bij 100, en ze komen echt over de weg en de brug), **C1** (een
+  waar telt pas als hij binnen is, en zo kun je de buit terugwinnen, zoals je hem met B1 kunt verliezen).
   **6a is af** (16 okt, in `main`; `spel.md`, "Zo werken meer dorpen op één eiland nu"; `code.md`
   bij `js/dorp.js`, "Meer dorpen op één kaart"; `test/meer-dorpen.test.cjs`). Wat erbij kwam: een wezen en een veld dragen
   hun dorp (`e.dorp`, `a.dorp`), elk dorp werkt alleen zijn eigen bij (`T.hoortBij`), de plek en de mist staan in het dorp
