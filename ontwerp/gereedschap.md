@@ -148,7 +148,16 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (`uit/ai/<naam>-leidraad.png`) met zijn plaat in ChatGPT, en zet de antwoorden als PNG in `uit/ai/hand/<naam>.png`;
   `hand` maakt er pixel art van op de plek van onze render, met `uit/ai/hand-proef.png` (onze render, het antwoord, de
   pixels) en de loopbeelden bewegend (`hand-lopen.png`, en ter vergelijking `hand-lopen-onze.png`).
-  Alles in `gereedschap/pixelart/uit/ai/`. **De sleutel** staat buiten de opslag: `C:\Users\mpgeu\.openai-sleutel`, of
+  Alles in `gereedschap/pixelart/uit/ai/`.
+- `node gereedschap/ai/sd15.cjs` en `node gereedschap/ai/sdxl.cjs` (vraag 180, fase 1; Marcels opdrachten in
+  `gereedschap/ai/opdracht-comfyui.md`): de werkstromen in ComfyUI (lokaal, `C:\ComfyUI\`, op `127.0.0.1:8188`; starten
+  met `run_nvidia_gpu.bat`, of zoals in de terminaltab van 18 okt). Beide: onze render en de lijnen uit ons 3D-model op het
+  doek (`doek.cjs`: SD 1.5 op 768 × 576, SDXL op 1024 × 768), het antwoord uitgesneden met ons silhouet (daarbuiten exact
+  #FF00FF), per beeld een map met de render, de lijnen, het antwoord, de sprite, de pixels, de instellingen (seed, tijd,
+  controles) en de werkstroom, en een vergelijkingsplaat met opschriften (`etiket.cjs`). `een [naam]` één beeld (DENOISE,
+  CN, IP, IPSOORT en MEESTER in de omgeving), `sd15.cjs matrix` de testmatrix, `sd15.cjs reeks a,b,c` loopbeelden,
+  `sdxl.cjs vergelijk` SD 1.5 en SDXL naast elkaar met het detail en de vorm gemeten. De werkstromen om in ComfyUI te
+  openen: `werkstroom-sd15.json` en `werkstroom-sdxl.json` (de API-vorm). **De sleutel** staat buiten de opslag: `C:\Users\mpgeu\.openai-sleutel`, of
   `OPENAI_API_KEY` in de omgeving; het script leest hem alleen om hem naar `api.openai.com` te sturen. De proef kost een
   paar dollar (tien beelden).
 

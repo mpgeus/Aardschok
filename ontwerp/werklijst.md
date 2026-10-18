@@ -255,6 +255,16 @@ stenen huizen. **Ronde 3 is af.**
   iets beters?" Voorstel van Claude: SDXL (beter detail; zo'n 60 tot 75 seconden per beeld), met het meesterbeeld, onze
   lijnen, en de loopbeelden samen in één beeld getekend, zodat het één os en één lading wordt; nieuwere modellen (Flux
   Kontext, Qwen-Image-Edit) zijn te zwaar voor de 1080 Ti, en kunnen later op een gehuurde kaart.
+  **De SDXL-werkstroom** (18 okt; Marcels tweede opdracht, in `opdracht-comfyui.md`: "Maak een aparte SDXL-workflow.
+  Behoud de huidige SD 1.5-workflow volledig"; `gereedschap/ai/sdxl.cjs`, `werkstroom-sdxl.json`; wat ze delen staat in
+  `doek.cjs`, en SD 1.5 geeft daarna byte voor byte hetzelfde): SDXL 1.0 base, ControlNet union (lineart, onze lijnen),
+  1024 × 768, 32 stappen, CFG 5,5, de goedgekeurde wagen van ChatGPT als stijl via IP-Adapter Plus SDXL; zo'n 75 seconden
+  per beeld. Gemeten tegen SD 1.5 (`uit/ai/sdxl/wagen-zw-vergelijking.png`; detail is het gemiddelde verschil in
+  helderheid tussen buren, binnen het ding): met "style transfer" op denoise 0,50 de beste vorm (97,2%) maar weinig detail
+  (35 in de maat van het spel, onze render 31); met **"strong style transfer" op denoise 0,55 het meeste detail (48) bij
+  96,5% van de vorm, een rode wagen met gouden leeuwen**; SD 1.5 met het meesterbeeld (denoise 0,60) 47 bij 94,8%. De os
+  blijft blokkig: ControlNet houdt de vorm van ons model vast. Elke plaat heeft sinds 18 okt opschriften (Marcel: "ik
+  weet nu niet welke plaatjes SD1.5 en welke SDXL zijn", "graag even markeren"; `etiket.cjs`).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
