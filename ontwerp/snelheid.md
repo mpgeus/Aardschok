@@ -393,6 +393,8 @@ naar 0,35 overblijft, zit buiten de grond (de grond doet dan niets). Een stuk gr
 (`bouwGrondStuk`, 4096 tegels); dat gebeurt bij nieuw land, een gevelde boom, een paadje, en één per beeld als de
 sneeuw komt of weg is. In `opmerkingen.md`.
 
+Marcel, in het spel (18 okt): "wow, dat is snel, geeft geen krimp meer, instant wissel".
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een
