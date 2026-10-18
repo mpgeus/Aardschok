@@ -159,6 +159,32 @@ test('T.plekVoor keert een deur naar de weg, en de plek en het gebouw hebben dez
   }
 });
 
+// Draaien bij het plaatsen (werklijst vraag 179, B1; Marcel, 18 okt: "B1, maar voor het volgende gebouw staat die weer op
+// standaard"): R kiest de kant van de deur (js/main.js), de opdracht geeft hem mee, en de voet draait mee.
+test('een gebouw met de deur naar een andere kant: de opdracht geeft de kant mee, en de voet draait mee', () => {
+  const D = leeg();
+  T.zetVoorraad(D, 'hout', 1000);
+  T.zetVoorraad(D, 'goud', 1000);
+  const zuid = T.volgendeTekening(D, 'boerderij');
+  assert.equal(T.deurKantVan(zuid), 'z');
+  assert.ok(T.kanDraaien(D, 'boerderij'));
+  assert.ok(!T.kanDraaien(D, 'put'), 'wat één tekening heeft, draait niet');
+  const oost = T.bouwTekening(D, 'boerderij', 'o');
+  assert.equal(oost, T.metDeurNaar(zuid, 'o'));
+  const v = T.gebouwVoet('boerderij', zuid);
+  assert.deepEqual(T.gebouwVoet('boerderij', oost), { b: v.h, h: v.b }, 'de voet draait mee');
+  T.OPDRACHTEN.bouw(null, D, { gebouw: 'boerderij', x: 20, y: 20, kant: 'o' });
+  const g = D.gebouwen.find((x) => x.soort === 'boerderij');
+  assert.ok(g, 'de boerderij staat er');
+  assert.equal(g.tekening, oost);
+  assert.deepEqual({ b: g.voet.b, h: g.voet.h }, { b: v.h, h: v.b });
+  assert.equal(T.deurKantVan(T.volgendeTekening(D, 'boerderij')), 'z', 'de volgende begint weer bij het zuiden');
+  // een kant voor wat niet draait, verandert niets
+  const u = T.plaatsGebouw(D, 'put', 40, 40, 'o');
+  assert.ok(u.gelukt, u.reden);
+  assert.equal(u.instantie.tekening, T.GEBOUWEN.put.tekening);
+});
+
 // De grote gebouwen (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee / B: Ja"): de kapel en de woontoren
 // van steen, de herberg die meegroeit met het dorp, en het raadhuis en de herberg van de maker in de stijl.
 test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen met een steenbakkerij', () => {

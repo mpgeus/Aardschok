@@ -314,7 +314,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spelregel ook in `S.spelregels`; `T.spelregelsTerug(S)` laat de instellingen staan, `T.optiesTerug` niet. De toets is:
   raakt het de wereld (de tik), dan is het een spelregel; zo spelen twee spelers samen met dezelfde regels, ieder met zijn
   eigen beeld), `js/hud.js` (de kalender, het bouwmenu onder
-  `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
+  `B`, sinds vraag 179 een raster van plaatjes boven de knop Build, bij "Bouwen en groeien", het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
   spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
   soort in `BRIEVEN`, getoond met
@@ -1230,6 +1230,31 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kavel; `T.plaatsGebouw` neemt in het lege begin zelf de kavel, `T.bouwKavel`). (Tot 16 okt kwam een put of een kapel
   waar hij de meeste huizen bereikte die er een wilden: de kringen van de wensen per huis.) De kolonist van de speeltest
   zoekt zo zijn plek.
+
+### js/hud.js, js/main.js en js/tekenen.js: het bouwmenu, de ghost en draaien
+
+- **Het bouwmenu, de ghost en draaien** (vraag 179, 18 okt; Marcel: "A. A1 B. B1, maar voor het volgende gebouw staat
+  die weer op standaard. C. C2"). **Het menu** (`bouwmenuInhoud` in `js/hud.js`, `#bouwmenu` in `stijl.css`): boven de
+  knop Build een venster op papier met een raster van plaatjes (zeven breed) en de naam eronder, vooraan de weg en
+  afbreken, dan wat `T.inBouwmenu` toont. Wat iets kost, duurt en doet, en wat de heer wil, staat op het briefje bij de
+  muis (`wenkVanSoort`; `js/balk.js` leest `data-naam` en `data-uitleg`, en zet het briefje boven het venster). Het
+  plaatje van een gebouw is de tekening die je echt krijgt (`T.volgendeTekening`), verkleind door
+  `T.sprites.voorbeeld` (`js/sprites.js`): een eigen `Image`, buiten de vellen om, zodat het spel niet alles vasthoudt wat
+  je kunt bouwen; het doek is zo groot als het op het scherm komt (`PLAATJE` maal `--ui-zoom` en de pixels van het
+  scherm). De weg, de akker en afbreken zijn drie tegels zandpad (`opRij`), de akker omgeploegd en afbreken met een
+  kruis, in code; de wijngaard drie ranken, de markt een kraam. **De ghost** (`tekenBouwGhost` in `js/tekenen.js`, na
+  de lijst, dus boven op alles): de tekening van `S.bouwHover.tekening` op 60%, en past hij niet, in het rood
+  (`T.sprites.inKleur`: een eigen doek per stuk en kleur, want de kaart van `js/gl.js` kent alleen helderheid en grijs);
+  de voet blijft eronder in groen of rood (`tekenBouwSpook`). De muis staat in het midden van de voet
+  (`werkBouwHoverBij` in `js/main.js`); de plek blijft de hoek linksboven. **Draaien:** R (`draai`, Shift terug) zet
+  `S.bouwKant` (alleen scherm), elk nieuw gebouw in de hand begint bij `'z'` (de klik in het menu en het neerzetten
+  zetten hem op null), en de klik geeft de kant mee in de opdracht (`{ soort: 'bouw', ..., kant }`, `js/tik.js`).
+  `T.bouwTekening(D, soort, kant)` (`js/gebouwen.js`) is de tekening met de deur naar die kant (`T.metDeurNaar`), voor de
+  muis, de ghost en `T.plaatsGebouw(D, soort, x, y, kant)`, dat hem de volgende tekening van die soort maakt
+  (`D.volgendeTekening`) voor `T.neemTekening`; `T.bouwKavel` neemt de tekening mee, dus de voet draait mee.
+  `T.kanDraaien`: alleen wat in de bouwstijl is (`js/bouwstijl.js`); de rest zegt bij R twee seconden "This building
+  cannot be turned yet" (`draaiNietTot`). Wie draait, laadt de andere kanten meteen, zodat de volgende kwartslag er
+  meteen is. Toets: `test/bouwstijl.test.cjs`.
 
 ### js/boerderij.js: boeren uit het niets
 

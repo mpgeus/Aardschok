@@ -496,27 +496,32 @@
     box.innerHTML = `<div class="wenk-naam">${w.naam}</div>` + (w.uitleg ? `<div class="wenk-uitleg">${w.uitleg}</div>` : '') +
       (w.toets ? `<div class="wenk-toets">${toetsTekst(w.toets)}</div>` : '');
     box.classList.remove('verborgen');
-    const onder = !!el.closest('.hoek-onder');
+    // Een plaatje van het bouwmenu (js/hud.js; vraag 179, C2): boven het hele venster, zoals bij de voorraad, zodat het
+    // briefje geen plaatjes afdekt.
+    const bouwmenu = el.closest('#bouwmenu');
+    const onder = !!el.closest('.hoek-onder') || !!bouwmenu;
     const r = el.getBoundingClientRect();
-    const boven = (el.closest('#voorraad') ? $('voorraad') : el).getBoundingClientRect().top;
+    const boven = (el.closest('#voorraad') ? $('voorraad') : bouwmenu || el).getBoundingClientRect().top;
     const breed = box.offsetWidth * zoom;
     const hoog = box.offsetHeight * zoom;
     const links = Math.max(8, Math.min(window.innerWidth - breed - 8, (r.left + r.right) / 2 - breed / 2));
     box.style.left = `${links / zoom}px`;
-    box.style.top = `${(onder ? boven - hoog - 10 : r.bottom + 10) / zoom}px`;
+    box.style.top = `${Math.max(8, onder ? boven - hoog - 10 : r.bottom + 10) / zoom}px`;
   }
 
   function verbergWenk() {
     $('wenk').classList.add('verborgen');
   }
+  // Ook voor wie het briefje laat staan als zijn ding weggaat (het bouwmenu dat dichtgaat, js/hud.js).
+  T.ui.verbergWenk = verbergWenk;
 
   // "P, and - and +" wordt "or press P, and - and +", met elke toets in een toetsje.
   function toetsTekst(toets) {
     return T.t('or press {toets}', { toets: toets.replace(/(^|[ ,(])([A-Z]|Esc|-|\+)(?=$|[ ,)])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`) });
   }
 
-  const AANWIJSBAAR = '[data-ding], .post, #kalender-knoppen button, #statussen .status'; // geen tekst
-  for (const plek of document.querySelectorAll('.hoek-onder, #hud-gehucht')) {
+  const AANWIJSBAAR = '[data-ding], .post, #kalender-knoppen button, #statussen .status, #bouwmenu button'; // geen tekst
+  for (const plek of document.querySelectorAll('.hoek-onder, #hud-gehucht, #bouwmenu')) {
     plek.addEventListener('mouseover', (ev) => {
       const el = ev.target.closest(AANWIJSBAAR);
       if (el) toonWenk(el);

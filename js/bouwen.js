@@ -52,10 +52,11 @@
     : T.GEBOUWEN[soort].bouwtijd * IN().werkPerBouwdag);
 
   // Het stuk dat de bouwers eerst rooien als dit gebouw op (x, y) komt: zijn voet met het looppad eromheen (T.kavelVan,
-  // js/bos.js), of null als de mensen niet zelf bouwen. Eén vraag voor de muis (js/main.js) en de klik (T.plaatsGebouw).
-  T.bouwKavel = function (D, soort, x, y) {
+  // js/bos.js), of null als de mensen niet zelf bouwen. Eén vraag voor de muis (js/main.js) en de klik (T.plaatsGebouw);
+  // `tekening` is die van het gebouw in de hand, als je hem draaide (T.bouwTekening, js/gebouwen.js).
+  T.bouwKavel = function (D, soort, x, y, tekening) {
     if (!T.bouwenMetHanden(D) || !T.GEBOUWEN[soort]) return null;
-    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
+    const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     return voet ? T.kavelVan(D, x, y, voet) : null;
   };
 

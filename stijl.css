@@ -188,7 +188,6 @@ kbd {
 #statussen .status { padding: 8px 16px 10px; font-size: 17px; pointer-events: auto; cursor: help; }
 #statussen .status b { display: block; font: 18px/1.2 var(--kop); font-weight: normal; color: var(--papier-rood); }
 #statussen .status.erger { color: var(--papier-rood); }
-body.bouwmenu-open #statussen { visibility: hidden; }
 
 /* De datum, rechtsboven, met het lipje Menu ernaast (Esc; de spelregels staan in het menu). */
 /* De datum in de balk: de dag en het jaar, en het uur; bij de muis het seizoen en het weer (js/balk.js). */
@@ -415,40 +414,39 @@ body.foto #kader { display: none; }
 }
 #overlay-knop:hover { filter: brightness(1.08); }
 
-/* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, linksboven op de plek van
-   het doel; de knop Build onderaan opent het (js/balk.js). */
+/* Het bouwmenu (js/hud.js; vraag 179, C2; Marcel, 18 okt: "ik wil geen lange lijst aan de linkerkant. Ook wil ik plaatjes
+   van gebouwen erbij"): een klein venster boven de knop Build, met een raster van plaatjes en de naam eronder, zoals in
+   The Settlers 2; wat iets kost en doet, staat op het briefje bij de muis (#wenk). In pixels van de kunst, zoals de balk
+   onderaan (--ui-zoom). */
 #bouwmenu {
   position: fixed;
-  left: 16px;
-  top: calc(var(--ui-zoom, 1) * var(--boven));
-  width: 300px;
-  max-height: calc(100vh - 18px - var(--ui-zoom, 1) * (var(--boven) + var(--onder-links))); /* tussen de balk en de voorraad */
+  z-index: 4;
+  zoom: var(--ui-zoom, 1);
+  left: 50%;
+  bottom: var(--onder-midden);
+  transform: translateX(-50%);
+  max-height: calc(100vh / var(--ui-zoom, 1) - var(--boven) - var(--onder-midden) - 12px);
   overflow-y: auto;
-  padding: 10px 12px 12px;
+  padding: 6px 10px 10px;
 }
-#bouwmenu .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin-bottom: 6px; }
+#bouwmenu .kop { font: 20px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin: 0 4px 6px; }
+#bouwmenu .bouw-raster { display: grid; grid-template-columns: repeat(7, 96px); gap: 4px; }
 #bouwmenu button {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  width: 100%;
-  padding: 7px 9px;
-  margin-bottom: 4px;
-  text-align: left;
-  background: color-mix(in srgb, var(--inkt) 3%, transparent);
-  border: 1px solid var(--rand);
-  border-radius: 6px;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 2px 6px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
   cursor: pointer;
 }
-#bouwmenu button:hover { background: color-mix(in srgb, var(--inkt) 9%, transparent); border-color: color-mix(in srgb, var(--goud) 50%, transparent); }
-#bouwmenu button:last-child { margin-bottom: 0; }
-#bouwmenu .bouw-naam { font: 14px var(--kop); color: var(--inkt); }
-#bouwmenu .bouw-kosten { font-size: 11px; color: var(--goud); }
-#bouwmenu .bouw-uitleg { font-size: 12px; color: var(--gedempt); line-height: 1.3; }
-#bouwmenu .bouw-heer { font-size: 11px; color: var(--gedempt); font-style: italic; line-height: 1.3; }
-#bouwmenu .bouw-leeg { font-size: 12px; color: var(--gedempt); }
-/* Het doel linksboven (#opdracht) ligt onder het bouwmenu: zolang dat open is, staat het er niet (js/hud.js). */
-body.bouwmenu-open #opdracht { visibility: hidden; }
+#bouwmenu button:hover,
+#bouwmenu button:focus-visible { background: color-mix(in srgb, var(--inkt) 8%, transparent); border-color: var(--rand); }
+#bouwmenu .bouw-plaatje { width: 84px; height: 62px; image-rendering: auto; }
+#bouwmenu .bouw-naam { font: 15px/1.1 var(--boek); color: var(--inkt); text-align: center; }
+#bouwmenu .bouw-leeg { font-size: 16px; color: var(--gedempt); margin: 8px 4px 0; }
 
 /* Handelen met de marskramer (js/hud.js, T.ui.openHandel): in het midden, zoals je bij zijn
    uitgestalde waar staat. Links wat het is en wat je hebt, midden de prijs, rechts de knoppen. */

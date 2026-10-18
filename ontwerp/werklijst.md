@@ -53,8 +53,8 @@ voor stap 4"; Marcel, 18 okt: "optie A en akkoord": het licht in de tegel, zonde
 oude grond eruit gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
-**Vraag 179, het bouwmenu, de ghost en draaien** (Marcel, 18 okt; bij Q): **Bezig in sessie `main` (lokaal, desktop)**
-(18 okt), het plan ligt bij Marcel.
+**Vraag 179, het bouwmenu, de ghost en draaien, is af** (18 okt, in `main`, onder "Af"; `spel.md`, bij "Jij bouwt"):
+Marcel kijkt (hieronder, "Wacht op Marcel").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -175,6 +175,11 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **Het bouwmenu, de ghost en draaien bekijken** (vraag 179, 18 okt, in `main`): Nieuw spel, en B of Build: boven de knop
+  een raster van plaatjes; wijs er een aan voor wat het kost en doet. Kies het huis of de boerderij: het gebouw zelf
+  volgt de muis, half doorzichtig, en rood waar het niet past; R draait het (Shift+R terug), en het volgende begint weer
+  met zijn deur naar het zuiden. De houthakker en de andere werkplaatsen draaien nog niet (vraag 167). Het venster is
+  zeven plaatjes breed; is het te groot of te klein, dan is dat een getal (`PLAATJE` in `js/hud.js`, `stijl.css`).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
@@ -1489,36 +1494,12 @@ op 50% en 75% na): ver uitgezoomd nu 1,7 ms per beeld voor de processor en 4,4 m
 nodig, C1 en C4 ook niet. **Het volgende**: Marcel meet in Firefox; daarna D1 (haperingen bij een ander seizoen of ver
 verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
-## Q. Het bouwmenu, het spookbeeld en draaien (vraag 179, 18 okt)
-
-Marcel, 18 okt: **"Ik wil een "ghost" zien van het gebouw dat ik wil plaatsen"**, **"en ik wil ook het gebouw kunnen
-roteren bij het plaatsen"**, en **"Het bouwmenu moet ook op de schop, ik wil geen lange lijst aan de linkerkant. Ook wil
-ik plaatjes van gebouwen erbij"**. **Bezig in sessie `main` (lokaal, desktop; de sessie van het bouwmenu, niet die van
-de heuvels)** (18 okt): het plan ligt bij Marcel.
-
-Hoe het nu is: het spookbeeld is alleen de voet in groen of rood (`tekenBouwSpook` in `js/tekenen.js`), met de muis op
-de hoek linksboven; de deur van wat jij neerzet, kijkt altijd naar het zuiden (alleen `T.plekVoor` keert hem naar de
-weg); het bouwmenu is een lijst knoppen met tekst, linksboven (`js/hud.js`, `#bouwmenu`). Acht soorten hebben in de
-bouwstijl een tekening met de deur naar elke kant (de hut, het huis, het stenen huis, de boerderij, de zagerij, het
-raadhuis, de herberg, de kapel), en dan draait de voet mee (7 bij 5 wordt 5 bij 7); de andere werkplaatsen hebben één
-tekening, tot ze in de bouwstijl komen (vraag 167).
-
-Het voorstel (wacht op Marcel):
-
-- **A, de ghost.** A1: de tekening die er echt komt (`T.volgendeTekening`, in de stijl en met het dak van nu), half
-  doorzichtig boven op alles, met de voet in groen of rood eronder, en rood getint als hij niet past. A2: hetzelfde,
-  maar in de volgorde van de wereld (een boom ervoor dekt hem af). En de muis in het midden van de voet, niet op de hoek.
-- **B, draaien.** B1: R draait een kwartslag (de deur naar zuid, oost, noord, west), en de keuze blijft voor het volgende
-  gebouw. B2: de deur kijkt eerst vanzelf naar de weg, en R draait daarvan af. Wat geen andere kant heeft, draait niet
-  (het briefje zegt het; spiegelen kan niet, het licht komt van linksboven). De klik geeft de kant mee in de opdracht.
-- **C, het bouwmenu.** C1: een strook onderaan, boven de balk bij *Build*: tabs per groep (*Homes*, *Food*, *Goods*,
-  *Storage*, *Village*, *Soldiers*), daaronder een rij plaatjes, en de weg en afbreken als twee vaste knoppen links; de
-  naam, de kosten, de duur, de uitleg en wat de heer wil, staan op het briefje bij de muis. C2: een klein venster met
-  alles in één raster van plaatjes (zoals The Settlers 2). C3: zoals C1, zonder tabs, één rij die schuift. De plaatjes
-  komen uit de tekeningen die er al zijn (niets te renderen), de groep als `groep` in `T.GEBOUWEN`.
-
 ## Af (sinds 11 okt)
 
+- Het bouwmenu, de ghost en draaien (vraag 179, 18 okt; Marcel: "A. A1 B. B1, maar voor het volgende gebouw staat die
+  weer op standaard. C. C2"; `spel.md`, bij "Jij bouwt", en `code.md`, "het bouwmenu, de ghost en draaien"): een raster
+  van plaatjes boven Build met de uitleg bij de muis, het gebouw zelf half doorzichtig aan de muis (rood waar het niet
+  past), en R draait wat in de bouwstijl is; het volgende gebouw begint weer met de deur naar het zuiden.
 - De meter met de videokaart (18 okt; `gereedschap.md`, bij de meter): F2 zegt ook hoe lang de videokaart over een beeld
   doet ("graphics card … ms"), of dat de browser het niet zegt; in Edge nagekeken (de kaart 2,8 ms per beeld).
 - H4, het koude werk na het laden (18 okt; `snelheid.md`, "De tik"): na het land nog vijf stappen achter de voortgang;

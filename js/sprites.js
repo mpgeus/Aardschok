@@ -371,6 +371,76 @@
     return { beeld: c, sx: 0, sy: 0, b: b + 2 * rand, h, ax: anker[0] + rand, ay: anker[1] };
   }
 
+  // Een stuk in een kleur gezet, met dezelfde vorm en hetzelfde anker: het spookbeeld van een gebouw dat niet past
+  // (js/tekenen.js, tekenBouwGhost; vraag 179). De kaart kent alleen helderheid en grijs (js/gl.js), dus een eigen doek,
+  // één keer per stuk en kleur. Zonder scherm (de toetsen) het stuk zelf.
+  const inKleur = new WeakMap(); // stuk → { kleur → stuk }
+  S.inKleur = function (deel, kleur) {
+    if (!deel || typeof document === 'undefined') return deel;
+    const per = inKleur.get(deel) || {};
+    inKleur.set(deel, per);
+    if (per[kleur]) return per[kleur];
+    const c = document.createElement('canvas');
+    c.width = deel.b;
+    c.height = deel.h;
+    const cx = c.getContext('2d');
+    cx.imageSmoothingEnabled = false;
+    cx.drawImage(deel.beeld, deel.sx, deel.sy, deel.b, deel.h, 0, 0, deel.b, deel.h);
+    cx.globalCompositeOperation = 'source-atop';
+    cx.fillStyle = kleur;
+    cx.fillRect(0, 0, deel.b, deel.h);
+    c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
+    per[kleur] = { beeld: c, sx: 0, sy: 0, b: deel.b, h: deel.h, ax: deel.ax, ay: deel.ay };
+    return per[kleur];
+  };
+
+  // Een plaatje verkleind in een vak van b bij h op doek cx, nooit groter dan het is, onderaan in het midden: voor de
+  // plaatjes van het bouwmenu (js/hud.js; vraag 179, C2). Verkleinen mag zacht, het is geen pixel van de wereld.
+  S.verkleind = function (cx, beeld, sx, sy, cb, ch, b, h) {
+    const f = Math.min(1, b / cb, h / ch);
+    cx.imageSmoothingEnabled = f < 1;
+    cx.imageSmoothingQuality = 'high';
+    cx.drawImage(beeld, sx, sy, cb, ch, Math.round((b - cb * f) / 2), Math.round(h - ch * f), Math.round(cb * f), Math.round(ch * f));
+  };
+  // Een klein plaatje van een tekening, voor het bouwmenu: zijn hele cel verkleind in een doek van b bij h (S.verkleind),
+  // één keer per tekening en maat. Een tekening met een eigen bestand laadt dat los van de vellen hierboven, en het beeld
+  // gaat daarna weer weg: het spel houdt vast wat op de kaart staat, niet alles wat je kunt bouwen. Null zolang het laadt
+  // (of als het ontbreekt); `klaar(doek)` hoort het als het er is.
+  const voorbeelden = new Map(); // sleutel → { doek, wacht }
+  S.voorbeeld = function (velNaam, id, b, h, klaar) {
+    if (typeof document === 'undefined') return null;
+    const sleutel = `${velNaam},${id},${b},${h}`;
+    const er = voorbeelden.get(sleutel);
+    if (er && er.doek) return er.doek;
+    if (er) {
+      if (klaar && er.wacht) er.wacht.push(klaar);
+      return null;
+    }
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    const plek = S.celVan(velNaam, id);
+    const pad = plek && (eigenBestand(velNaam, id) || (v && v.bestand));
+    if (!pad) return null;
+    const w = { doek: null, wacht: klaar ? [klaar] : [] };
+    voorbeelden.set(sleutel, w);
+    const maak = (beeld) => {
+      const c = document.createElement('canvas');
+      c.width = b;
+      c.height = h;
+      const [sx, sy, cb, ch] = plek.cel;
+      S.verkleind(c.getContext('2d'), beeld, sx, sy, cb, ch, b, h);
+      w.doek = c;
+      for (const k of w.wacht.splice(0)) k(c);
+    };
+    if (beelden.has(pad)) maak(beelden.get(pad));
+    else {
+      const img = new Image();
+      img.onload = () => maak(img);
+      img.onerror = () => (w.wacht = null); // het ontbreekt: niet opnieuw proberen
+      img.src = pad;
+    }
+    return w.doek;
+  };
+
   // Waar tegel `id` op zijn vel staat: { cel: [x, y, b, h], anker: [ax, ay] }, met het anker binnen
   // de cel. Een ingepakt vel (alles behalve de grond; gereedschap/pixelart/inpakken.cjs, vraag 114,
   // 2a) zegt het per tegel; een raster (de grond, waar Tiled mee schildert) heeft één celmaat en

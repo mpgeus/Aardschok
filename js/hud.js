@@ -71,48 +71,57 @@
     T.ui.werkBalkBij(S); // de lat van de snelheden (js/balk.js)
   };
 
-  // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
-  // "Gebouwen"). Welke erin staan, zegt T.inBouwmenu (js/gebouwen.js). Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
-  // een spookbeeld (js/main.js, js/tekenen.js) tot een klik op de kaart hem neerzet.
+  // Het bouwmenu (vraag 179, C2; Marcel, 18 okt: "ik wil geen lange lijst aan de linkerkant. Ook wil ik plaatjes van
+  // gebouwen erbij"): een klein venster boven de knop Build, met een raster van plaatjes en de naam eronder, zoals in The
+  // Settlers 2. Wat iets kost, hoe lang het duurt, wat het doet en wat de heer ervoor wil, staat op het briefje bij de
+  // muis (js/balk.js leest data-naam en data-uitleg), want het scherm blijft zo leeg mogelijk. Vooraan wat je met het
+  // land doet (een weg, afbreken; werklijst C, stap 5), dan de soorten van de huidige trede: welke, zegt T.inBouwmenu
+  // (js/gebouwen.js). Een klik geeft T.S.bouwSoort dat gebouw mee, en dan richt de muis het spookbeeld (js/main.js,
+  // js/tekenen.js) tot een klik op de kaart hem neerzet.
+  const PLAATJE = { b: 84, h: 62 }; // in pixels van de kunst (--ui-zoom, stijl.css)
   function bouwmenuInhoud(S) {
-    const rijen = Object.keys(T.GEBOUWEN)
-      .filter((id) => T.inBouwmenu(S.dorp, id))
-      .map((id) => {
-        const g = T.GEBOUWEN[id];
-        if (g.veld) return veldInBouwmenu(id, g);
-        const kosten = kostenTekst(g.kosten);
-        // Wat de heer er elk jaar voor wil (js/heer.js): zo weet je bij elk gebouw wat het je op
-        // Sint-Maarten kost, want wat je bouwt, is wat hij ziet.
-        const heer = g.heer ? kostenTekst(g.heer) : '';
-        const heerTekst = heer ? T.t('At Martinmas the lord wants {heer} for it.', { heer }) : T.t('The lord asks nothing for it.');
-        return (
-          `<button data-soort="${id}">` +
-          `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
-          `<span class="bouw-kosten">${kosten} · ${duur(S.dorp, id, g)}</span>` +
-          `<span class="bouw-uitleg">${g.beschrijving}</span>` +
-          (g.heer ? `<span class="bouw-heer">${heerTekst}</span>` : '') +
-          `</button>`
-        );
-      })
-      .join('');
-    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>${landInBouwmenu()}${rijen || `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`}`;
+    const soorten = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu(S.dorp, id));
+    const cellen = ['weg', 'afbreken', ...soorten].map((id) => {
+      const w = wenkVanSoort(S, id);
+      return `<button data-soort="${id}" data-naam="${veilig(w.naam)}" data-uitleg="${veilig(w.uitleg)}">` +
+        `<canvas class="bouw-plaatje"></canvas><span class="bouw-naam">${w.naam}</span></button>`;
+    });
+    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>` +
+      `<div class="bouw-raster">${cellen.join('')}</div>` +
+      (soorten.length ? '' : `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`);
   }
 
-  // Bovenaan wat je met het land doet, geen gebouw (werklijst C, stap 5): een weg leggen (js/wegen.js), en afbreken
-  // (js/afbreken.js). Beide blijven in de hand tot een rechtsklik.
-  function landInBouwmenu() {
-    const I = T.WEGEN_INSTELLINGEN;
-    return (
-      `<button data-soort="weg">` +
-      `<span class="bouw-naam">${T.t('Road')}</span>` +
-      `<span class="bouw-kosten">${T.t('{n|# workday|# workdays} per 10 tiles', { n: Math.round(10 * I.werkPerTegel * 100) / 100 })}</span>` +
-      `<span class="bouw-uitleg">${T.t('The ox cart drives {n}× as fast on a road. Click where it begins, then where it ends.', { n: I.karSneller })}</span>` +
-      `</button>` +
-      `<button data-soort="afbreken">` +
-      `<span class="bouw-naam">${T.t('Demolish')}</span>` +
-      `<span class="bouw-uitleg">${T.t('A road or a building. Nothing comes back.')}</span>` +
-      `</button>`
-    );
+  // Het briefje bij de muis van een plaatje: de naam, en wat het kost en hoe lang het duurt, wat het doet, wat de heer er
+  // op Sint-Maarten voor wil (js/heer.js: wat je bouwt, is wat hij ziet), en of je het met R kunt draaien (js/main.js).
+  function wenkVanSoort(S, id) {
+    const regels = (...delen) => delen.filter(Boolean).join('<br>');
+    const vet = (tekst) => (tekst ? `<b>${tekst}</b>` : '');
+    if (id === 'weg') {
+      const I = T.WEGEN_INSTELLINGEN;
+      return {
+        naam: T.t('Road'),
+        uitleg: regels(vet(T.t('{n|# workday|# workdays} per 10 tiles', { n: Math.round(10 * I.werkPerTegel * 100) / 100 })),
+          T.t('The ox cart drives {n}× as fast on a road. Click where it begins, then where it ends.', { n: I.karSneller })),
+      };
+    }
+    if (id === 'afbreken') return { naam: T.t('Demolish'), uitleg: T.t('A road or a building. Nothing comes back.') };
+    const g = T.GEBOUWEN[id];
+    const naam = T.hoofdletter(g.naam);
+    // Een veld (de akker, de wijngaard; js/boerderij.js) kost niets dan werk, en je trekt het bij zijn boerderij.
+    if (g.veld) {
+      const I = T.BOERDERIJ_INSTELLINGEN;
+      return {
+        naam,
+        uitleg: regels(vet(T.t('{min} to {max} tiles · {werk} workdays per 10 tiles', { min: I.veldMin, max: I.veldMax, werk: T.bouwWerkVan(id, { b: 10, h: 1 }) })),
+          `${g.beschrijving}. ${T.t('Click one corner, then the other, within {n} tiles of {boerderij}.', { n: I.veldAfstand, boerderij: T.eenNaam(T.GEBOUWEN[g.veld].naam) })}`),
+      };
+    }
+    return {
+      naam,
+      uitleg: regels(vet([kostenTekst(g.kosten), duur(S.dorp, id, g)].filter(Boolean).join(' · ')), g.beschrijving,
+        g.heer ? `<i>${T.t('At Martinmas the lord wants {heer} for it.', { heer: kostenTekst(g.heer) })}</i>` : '',
+        T.kanDraaien(S.dorp, id) ? T.t('Press R to turn it while you place it.') : ''),
+    };
   }
 
   // Hoe lang het bouwen duurt: zijn bouwtijd, of in het lege begin het werk dat de bouwers eraan hebben (js/bouwen.js).
@@ -121,32 +130,116 @@
     return T.t('{n|# day|# days}', { n: g.bouwtijd });
   }
 
-  // De rij van een veld (de akker, de wijngaard; js/boerderij.js): hij kost niets dan werk, en je trekt hem bij zijn boerderij
-  // (een akker bij een boerderij, een wijngaard bij een wijnboerderij).
-  function veldInBouwmenu(id, g) {
-    const I = T.BOERDERIJ_INSTELLINGEN;
-    return (
-      `<button data-soort="${id}">` +
-      `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
-      `<span class="bouw-kosten">${T.t('{min} to {max} tiles · {werk} workdays per 10 tiles', { min: I.veldMin, max: I.veldMax, werk: T.bouwWerkVan(id, { b: 10, h: 1 }) })}</span>` +
-      `<span class="bouw-uitleg">${g.beschrijving}. ${T.t('Click one corner, then the other, within {n} tiles of {boerderij}.', { n: I.veldAfstand, boerderij: T.eenNaam(T.GEBOUWEN[g.veld].naam) })}</span>` +
-      `</button>`
-    );
+  // De plaatjes in het raster: van een gebouw de tekening die je echt krijgt (T.volgendeTekening, in de stijl en met het
+  // dak van je dorp), verkleind (T.sprites.voorbeeld, js/sprites.js); van de wijngaard drie ranken en van de markt een
+  // kraam; van de weg drie tegels zandpad, van de akker drie tegels omgeploegd land, en bij afbreken een rood kruis over
+  // het zand. Op ware pixels: het doek is zo groot als het op het scherm komt. Wat nog laadt, komt erin als het er is.
+  function vulPlaatjes(box, S) {
+    const zoom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ui-zoom')) || 1;
+    const n = Math.max(1, Math.round(zoom * (window.devicePixelRatio || 1)));
+    const b = PLAATJE.b * n;
+    const h = PLAATJE.h * n;
+    let wacht = false;
+    for (const knop of box.querySelectorAll('button[data-soort]')) {
+      const doek = knop.querySelector('canvas');
+      if (doek.dataset.af) continue;
+      doek.width = b;
+      doek.height = h;
+      if (tekenPlaatje(S, knop.dataset.soort, doek.getContext('2d'), b, h, () => S.bouwMenuOpen && vulPlaatjes(box, S))) doek.dataset.af = '1';
+      else wacht = true;
+    }
+    // een vel van de kaart dat nog laadt (de ranken, de kramen, het zand): even later nog eens
+    if (wacht) setTimeout(() => S.bouwMenuOpen && box.isConnected && vulPlaatjes(box, S), 400);
+  }
+
+  // Of het plaatje van `id` er staat; anders laadt het nog (`opnieuw` hoort het van een tekening, zie T.sprites.voorbeeld).
+  function tekenPlaatje(S, id, cx, b, h, opnieuw) {
+    if (id === 'weg' || id === 'afbreken' || id === 'akker') {
+      const zand = T.sprites.grondMetHoeken('rand', ['zandpad', 'zandpad', 'zandpad', 'zandpad'], 0, 0);
+      if (!zand) return false;
+      const rij = opRij(zand, 3);
+      if (id === 'akker') ploeg(rij);
+      if (id === 'afbreken') kruis(rij);
+      T.sprites.verkleind(cx, rij, 0, 0, rij.width, rij.height, b, h);
+      return true;
+    }
+    if (id === 'wijngaard' || id === 'markt') {
+      const stuk = id === 'wijngaard' ? T.sprites.wijnrank('vol', 0) : T.sprites.kraam('groente', 'luifel', 1, false);
+      if (!stuk) return false;
+      const rij = opRij(stuk, id === 'wijngaard' ? 3 : 1);
+      T.sprites.verkleind(cx, rij, 0, 0, rij.width, rij.height, b, h);
+      return true;
+    }
+    const opz = T.opzoekTegelNaam(T.volgendeTekening(S.dorp, id) || '');
+    const klein = opz && T.sprites.voorbeeld(opz.vel, opz.id, b, h, opnieuw);
+    if (!klein) return !opz; // zonder tekening blijft het leeg
+    cx.drawImage(klein, 0, 0);
+    return true;
+  }
+  // Een stuk een paar keer achter elkaar, steeds een tegel naar rechtsonder (+x op de kaart), op een eigen doek; met
+  // waar elk anker ligt.
+  function opRij(stuk, aantal) {
+    const c = document.createElement('canvas');
+    c.width = stuk.b + (aantal - 1) * T.HB;
+    c.height = stuk.h + (aantal - 1) * T.HH;
+    const cx = c.getContext('2d');
+    for (let i = 0; i < aantal; i++) cx.drawImage(stuk.beeld, stuk.sx, stuk.sy, stuk.b, stuk.h, i * T.HB, i * T.HH, stuk.b, stuk.h);
+    c.ankers = Array.from({ length: aantal }, (_, i) => ({ x: stuk.ax + i * T.HB, y: stuk.ay + i * T.HH }));
+    return c;
+  }
+  // Omgeploegd land over het zand: bruin, met voren in de lengte van de rij en hier en daar wat groen.
+  function ploeg(rij) {
+    const cx = rij.getContext('2d');
+    for (const a of rij.ankers) {
+      T.ruit(cx, a.x, a.y, 0.94);
+      cx.fillStyle = '#6e4a2a';
+      cx.fill();
+      cx.strokeStyle = '#4f3219';
+      cx.lineWidth = 2;
+      for (let i = -2; i <= 2; i++) {
+        // een voor loopt van linksboven naar rechtsonder, zoals de rij
+        const dx = i * T.HB * 0.2;
+        const dy = -i * T.HH * 0.2;
+        cx.beginPath();
+        cx.moveTo(a.x + dx - T.HB * 0.35, a.y + dy - T.HH * 0.35);
+        cx.lineTo(a.x + dx + T.HB * 0.35, a.y + dy + T.HH * 0.35);
+        cx.stroke();
+      }
+      cx.fillStyle = '#7da23f';
+      for (let i = -1; i <= 1; i++) cx.fillRect(Math.round(a.x + i * T.HB * 0.3) - 2, Math.round(a.y - i * T.HH * 0.3) - 2, 4, 3);
+    }
+  }
+  // Een rood kruis over de middelste tegel.
+  function kruis(rij) {
+    const cx = rij.getContext('2d');
+    const a = rij.ankers[Math.floor(rij.ankers.length / 2)];
+    const r = T.HH * 1.1;
+    cx.strokeStyle = '#7a2022';
+    cx.lineWidth = 7;
+    cx.lineCap = 'round';
+    cx.beginPath();
+    cx.moveTo(a.x - r, a.y - r);
+    cx.lineTo(a.x + r, a.y + r);
+    cx.moveTo(a.x + r, a.y - r);
+    cx.lineTo(a.x - r, a.y + r);
+    cx.stroke();
   }
 
   T.ui.toonBouwmenu = function (S) {
     const box = $('bouwmenu');
     box.classList.toggle('verborgen', !S.bouwMenuOpen);
-    // Het doel linksboven ligt op dezelfde plek: zolang het menu open is, staat het er niet (stijl.css).
-    document.body.classList.toggle('bouwmenu-open', !!S.bouwMenuOpen);
-    if (S.bouwMenuOpen) box.innerHTML = bouwmenuInhoud(S);
+    if (S.bouwMenuOpen) {
+      box.innerHTML = bouwmenuInhoud(S);
+      vulPlaatjes(box, S);
+    } else T.ui.verbergWenk(); // het briefje van een plaatje gaat mee weg (js/balk.js)
     $('bouwmenu-knop').classList.toggle('actief', S.bouwMenuOpen || !!S.bouwSoort);
   };
 
   $('bouwmenu').addEventListener('click', (ev) => {
-    const b = ev.target.closest('button');
+    const b = ev.target.closest('button[data-soort]');
     if (!b || !T.S) return;
     T.S.bouwSoort = b.dataset.soort;
+    T.S.bouwKant = null; // een nieuw gebouw in de hand begint met zijn deur naar het zuiden (vraag 179, B1; js/main.js)
     T.S.veldHoek = null; // een veld begint weer bij zijn eerste hoek (js/main.js)
     T.S.bouwMenuOpen = false;
     T.ui.toonBouwmenu(T.S);

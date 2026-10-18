@@ -88,7 +88,15 @@ het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); met de
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
 Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn
-weg sinds 12 okt, dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
+weg sinds 12 okt, dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd).
+**Het bouwmenu** (vraag 179, 18 okt; Marcel: "A1", "B1, maar voor het volgende gebouw staat die weer op standaard",
+"C2"): B of Build opent boven de knop een klein venster met plaatjes, zoals in The Settlers 2: de weg, afbreken en wat je
+nu kunt bouwen, elk met de tekening die je echt krijgt en de naam eronder; wat het kost, hoe lang het duurt, wat het doet
+en wat de heer ervoor wil, staat bij de muis. Met een gebouw in de hand zie je het gebouw zelf half doorzichtig, met de
+muis in het midden van zijn voet, en rood waar het niet past (de muis zegt waarom). R draait het een kwartslag (de deur
+naar zuid, oost, noord, west; Shift+R terug), en de voet draait mee; het volgende gebouw begint weer met zijn deur naar
+het zuiden. Wat in de bouwstijl is, draait: de hut, het huis, het stenen huis, de boerderij, de zagerij, het raadhuis, de
+herberg en de kapel; de andere werkplaatsen pas als ze in de bouwstijl komen (vraag 167). **Verhuizen:** is
 een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
 woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
@@ -2231,8 +2239,8 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
   stonden er in de speeltest mensen ingemetseld in een huis dat over hen heen doorgroeide.
 - **Een hut is niet elke hut** (26 sep; Marcel: "We hebben meer afwisseling nodig in de huizen en
   hutten"): een gebouw krijgt een van zijn tekeningen, en nooit twee keer achter elkaar dezelfde
-  (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het spookbeeld van het bouwmenu toont de voet
-  van het huis dat er echt komt. Een hut die doorgroeit, krijgt een van de huizen.
+  (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het spookbeeld van het bouwmenu toont het huis
+  dat er echt komt, met zijn voet (sinds vraag 179 het huis zelf, en niet alleen de voet). Een hut die doorgroeit, krijgt een van de huizen.
 - **De huizen komen van de huizenbouwer** (26 sep, achtste sessie; ronde 4b, `beeld.md`): vier echte
   hutten van vlechtwerk en leem onder riet (laag, zonder schoorsteen: de rook trekt door het riet),
   zes huizen van vakwerk onder riet (met een schoorsteen van leem), en vijf boerderijen (een L, een T,

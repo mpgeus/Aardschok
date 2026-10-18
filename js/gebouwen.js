@@ -605,6 +605,19 @@
     const g = T.GEBOUWEN[soort];
     return T.stijlTekeningen(D, soort) || (g.tekeningen && g.tekeningen.length ? g.tekeningen : null);
   };
+  // De tekening van het gebouw in de hand, met de deur naar `kant` (R bij het plaatsen, js/main.js; vraag 179, B1): de
+  // volgende tekening met de deur naar die kant (T.metDeurNaar, js/bouwstijl.js), en dan draait de voet mee (7 bij 5 wordt
+  // 5 bij 7). Zonder kant, of voor een soort met één tekening (wat nog niet in de bouwstijl is), de volgende tekening zelf.
+  // Eén vraag voor het spookbeeld, de muis en de klik (T.plaatsGebouw).
+  T.bouwTekening = function (D, soort, kant) {
+    const t = T.volgendeTekening(D, soort);
+    return kant ? T.metDeurNaar(t, kant) : t;
+  };
+  // Of het gebouw in de hand te draaien is: of zijn tekening er een is met de deur naar een andere kant.
+  T.kanDraaien = function (D, soort) {
+    const t = T.volgendeTekening(D, soort);
+    return !!T.deurKantVan(t) && T.DEURKANTEN.some((k) => T.metDeurNaar(t, k) !== t);
+  };
   T.neemTekening = function (D, soort) {
     const t = T.volgendeTekening(D, soort);
     (D.vorigeTekening || (D.vorigeTekening = {}))[soort] = t;
@@ -1191,15 +1204,19 @@
   // { gelukt, reden } terug (reden alleen als het niet lukte), zodat de aanroeper kan zeggen
   // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingSturen
   // (CLAUDE.md, "Scherm en klik stellen dezelfde vraag").
-  T.plaatsGebouw = function (D, soort, x, y) {
+  T.plaatsGebouw = function (D, soort, x, y, kant = null) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: T.t('That cannot be built from the build menu.') };
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
     if (soort === 'markt') return T.zetMarktOpHetPlein(D);
+    // Met de deur naar de kant die je koos (R, js/main.js; vraag 179): de voet draait mee.
+    const gedraaid = T.bouwTekening(D, soort, kant);
     // In het lege begin bouwen de mensen het zelf, en rooien ze eerst wat er op de plek staat (js/bouwen.js; vraag 152, 1d).
-    const kavel = T.bouwKavel(D, soort, x, y);
-    const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);
+    const kavel = T.bouwKavel(D, soort, x, y, gedraaid);
+    const past = T.waaromPastHetNiet(D, soort, x, y, gedraaid, kavel);
     if (past) return { gelukt: false, reden: past };
+    // De gedraaide tekening wordt de volgende van deze soort, en die neemt T.neemTekening hieronder.
+    if (gedraaid !== T.volgendeTekening(D, soort)) (D.volgendeTekening || (D.volgendeTekening = {}))[soort] = gedraaid;
     // Met de ossenkar betaal je nu alleen wat niet met de kar gaat (het goud); het hout brengt de kar naar de bouwplaats
     // (js/kar.js; werklijst C, stap 2, B2).
     const kosten = T.bouwKosten(D, g.kosten);

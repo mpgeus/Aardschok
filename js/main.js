@@ -265,6 +265,25 @@
   // hij richt een voet in plaats van dat er iets van het gewone rondlopen gebeurt. De
   // tegel onder de muis is de linkerbovenhoek van die voet (dezelfde afspraak als "beslaat" op de
   // kaart, js/kaart.js); T.gebouwPast zegt of hij daar past.
+  // R draait het gebouw in de hand een kwartslag (stap 1), met Shift terug (-1): de deur van zuid naar oost, noord en west
+  // (T.DEURKANTEN, js/bouwstijl.js). Alleen scherm (S.bouwKant); de kant gaat mee in de opdracht van de klik. Wat niet
+  // draait, zegt de muis twee seconden lang (draaiNietTot, op de klok van het scherm).
+  let draaiNietTot = 0;
+  function draai(stap) {
+    if (!T.kanDraaien(S.dorp, S.bouwSoort)) {
+      draaiNietTot = S.tijd + 2;
+      return;
+    }
+    const kanten = T.DEURKANTEN;
+    S.bouwKant = kanten[(kanten.indexOf(S.bouwKant || 'z') + stap + kanten.length) % kanten.length];
+    // Elke kant heeft een eigen bestand, dat pas laadt als het gevraagd wordt (js/sprites.js): wie draait, krijgt ze alle
+    // vier, zodat de volgende kwartslag meteen te zien is.
+    for (const k of kanten) {
+      const o = T.opzoekTegelNaam(T.bouwTekening(S.dorp, S.bouwSoort, k));
+      if (o) T.sprites.buiten(o.vel, o.id);
+    }
+  }
+
   function werkBouwHoverBij() {
     if (!S.muis) {
       S.bouwHover = null;
@@ -286,15 +305,25 @@
       werkVeldHoverBij(x, y);
       return;
     }
+    // Met de deur naar de kant die je met R koos (vraag 179, B1), anders naar het zuiden: zo begint elk gebouw in de hand.
+    // Wat één tekening heeft, houdt die (kant null).
+    const kant = T.kanDraaien(S.dorp, S.bouwSoort) ? S.bouwKant || 'z' : null;
+    const tekening = T.bouwTekening(S.dorp, S.bouwSoort, kant);
+    // De muis staat in het midden van de voet (vraag 179, A1), zodat ook een lange kapel om de muis ligt en een gebouw om
+    // de muis draait; de plek is de hoek linksboven, zoals "beslaat" op de kaart.
+    const voet = T.gebouwVoet(S.bouwSoort, tekening) || { b: 1, h: 1 };
+    const vx = Math.round(f.x - (voet.b - 1) / 2);
+    const vy = Math.round(f.y - (voet.h - 1) / 2);
     // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik. In het lege begin rooien
     // de bouwers eerst wat er op de plek staat (js/bouwen.js): dezelfde kavel als bij de klik (T.plaatsGebouw).
-    const kavel = T.bouwKavel(S.dorp, S.bouwSoort, x, y);
-    const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y, null, kavel);
-    S.bouwHover = { x, y, ok: !reden, reden };
+    const kavel = T.bouwKavel(S.dorp, S.bouwSoort, vx, vy, tekening);
+    const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, vx, vy, tekening, kavel);
+    S.bouwHover = { x: vx, y: vy, ok: !reden, reden, kant, tekening };
     canvas.style.cursor = 'crosshair';
     // Wat de bouwers er eerst rooien (js/bouwen.js).
     const tekst = !reden && kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
-    if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
+    if (!kant && S.tijd < draaiNietTot) T.ui.tooltip(T.t('This building cannot be turned yet.'), S.muis.x, S.muis.y, true);
+    else if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
     else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
     S.hover = null;
@@ -943,9 +972,11 @@
         T.ui.bericht((hover && hover.reden) || T.t('It does not fit there.'), 'gevaar');
         return;
       }
-      // De opdracht gaat in bij de volgende tik (js/tik.js); wat er gebeurde, zegt de regel (T.plaatsGebouw).
-      T.geefOpdracht(S, { soort: 'bouw', gebouw: soort, x: hover.x, y: hover.y });
+      // De opdracht gaat in bij de volgende tik (js/tik.js); wat er gebeurde, zegt de regel (T.plaatsGebouw). Met de kant
+      // die je koos; het volgende gebouw begint weer met zijn deur naar het zuiden.
+      T.geefOpdracht(S, { soort: 'bouw', gebouw: soort, x: hover.x, y: hover.y, kant: hover.kant });
       S.bouwSoort = null;
+      S.bouwKant = null;
       return;
     }
     // Links kiest (js/verkennen.js, js/kiezen.js): een man of een dorpeling, met zijn briefje, of een gebouw
@@ -1046,6 +1077,12 @@
       if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
       return;
     }
+    // R: het gebouw in de hand een kwartslag draaien, met Shift terug (vraag 179, B1; Marcel: "B1, maar voor het volgende
+    // gebouw staat die weer op standaard"). Wat één tekening heeft, draait niet, en de muis zegt het.
+    if ((ev.key === 'r' || ev.key === 'R') && S.bouwSoort) {
+      draai(ev.shiftKey ? -1 : 1);
+      return;
+    }
     if (ev.key === 'Escape') {
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
@@ -1101,10 +1138,10 @@
       const dag = S.kalender.dag;
       return { uur: T.uurTekst(dag), deel: T.dagdeelVan(dag), licht: T.lichtVan(dag), dagindeling: T.dagindeling(dag) };
     },
-    // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Spel.debug.bouw('huis', 10, 10).
-    // Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
-    bouw(soort, x, y) {
-      return T.plaatsGebouw(S.dorp, soort, x, y);
+    // Een gebouw rechtstreeks neerzetten, zonder het bouwmenu: Spel.debug.bouw('huis', 10, 10), of met de deur naar een
+    // kant: Spel.debug.bouw('huis', 10, 10, 'o'). Zelfde antwoord als een klik in het bouwmenu (js/gebouwen.js, T.plaatsGebouw).
+    bouw(soort, x, y, kant) {
+      return T.plaatsGebouw(S.dorp, soort, x, y, kant);
     },
     // De marskramer nu laten komen, zonder op grasmaand te wachten: Spel.debug.marskramer() voor
     // het bezoek van de lente, (1) voor de zomer, (2) voor de herfst (js/handel.js). Is hij er al,

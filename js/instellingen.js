@@ -38,6 +38,7 @@
       [`${kbd('Shift')} + ${kbd('1')} … ${kbd('9')}`, T.t('Make a group of whoever you chose')],
       [kbd('Space'), T.t('Look at the last message with a place')],
       [kbd('B'), T.t('Build')],
+      [kbd('R'), T.t('Turn what you build; Shift turns it back')],
       [kbd('V'), T.t('The fields')],
       [kbd('W'), T.t('Laws')],
       [kbd('O'), T.t('Game rules')],

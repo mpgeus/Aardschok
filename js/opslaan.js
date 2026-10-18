@@ -112,6 +112,7 @@
     effecten: [], // wat nu beweegt: zwevende tekst, een pijl (js/anim.js)
     gevechtGloed: 0, // de rode rand van het beeld in een gevecht, die in- en uitfaadt (js/main.js, js/tekenen.js)
     bouwSoort: null, // het bouwmenu (js/hud.js)
+    bouwKant: null, // de kant van de deur van het gebouw in de hand (R, js/main.js); null is het zuiden
     bouwMenuOpen: false,
     spreektMet: null, // een gesprek dat openstaat
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)

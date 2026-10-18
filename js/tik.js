@@ -123,8 +123,9 @@
   // Per soort: wat de opdracht doet in dorp D. `o` heeft wat de klik meegaf.
   const meld = (D, r) => T.zeg(D, r.gelukt ? r.bericht : r.reden, r.gelukt ? 'goed' : 'gevaar');
   T.OPDRACHTEN = {
-    // Een gebouw neerzetten (het bouwmenu, js/hud.js): { gebouw: soort, x, y }.
-    bouw: (S, D, o) => meld(D, T.plaatsGebouw(D, o.gebouw, o.x, o.y)),
+    // Een gebouw neerzetten (het bouwmenu, js/hud.js): { gebouw: soort, x, y, kant }, met de kant van de deur die je met R
+    // koos (js/main.js; null is die van zijn tekening).
+    bouw: (S, D, o) => meld(D, T.plaatsGebouw(D, o.gebouw, o.x, o.y, o.kant)),
     // Een weg leggen (js/wegen.js): { van: { x, y }, tot: { x, y } }.
     weg: (S, D, o) => meld(D, T.legWeg(D, o.van, o.tot)),
     // Een akker of een wijngaard leggen (js/boerderij.js): { veld: soort, rechthoek: { x, y, b, h } }.

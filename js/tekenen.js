@@ -1575,6 +1575,7 @@
     if (vast) ctx.diepte = null;
     tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
+    if (!S.foto) tekenBouwGhost(ctx, S); // het gebouw in de hand, boven op alles
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -3124,7 +3125,8 @@
       }
       return;
     }
-    const voet = veld || T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
+    // met de deur naar de kant die je met R koos (S.bouwHover.tekening, js/main.js): dan draait de voet mee
+    const voet = veld || T.gebouwVoet(S.bouwSoort, S.bouwHover.tekening || T.volgendeTekening(S.dorp, S.bouwSoort));
     if (!voet) return;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
@@ -3133,6 +3135,24 @@
         ctx.fill();
       }
     }
+  }
+
+  // Het gebouw in de hand zelf (vraag 179, A1; Marcel, 18 okt: "Ik wil een "ghost" zien van het gebouw dat ik wil
+  // plaatsen"): de tekening die er echt komt (S.bouwHover.tekening, T.bouwTekening in js/gebouwen.js: in de stijl en met
+  // het dak van nu, en de deur naar de kant van R), half doorzichtig boven op alles, zodat geen boom of huis hem verbergt;
+  // past hij niet, dan in het rood (T.sprites.inKleur). Na de lijst: de voet legt tekenBouwSpook eronder. Zolang zijn
+  // bestand nog laadt (js/sprites.js), alleen de voet; de markt heeft geen tekening aan de muis, wel zijn plek.
+  const GHOST = { alpha: 0.6, rood: 'rgba(224, 96, 79, 0.5)' };
+  function tekenBouwGhost(ctx, S) {
+    const h = S.bouwHover;
+    if (!S.bouwSoort || S.bouwSoort === 'markt' || !h || !h.tekening || !metSprites()) return;
+    const opz = T.opzoekTegelNaam(h.tekening);
+    const stuk = opz && T.sprites.buiten(opz.vel, opz.id);
+    if (!stuk) return;
+    const p = opGrond(h.x, h.y);
+    ctx.globalAlpha = GHOST.alpha;
+    T.sprites.teken(ctx, h.ok ? stuk : T.sprites.inKleur(stuk, GHOST.rood), p.x, p.y);
+    ctx.globalAlpha = 1;
   }
 
   // Waar je mannen gaan staan, na een rechtsklik (S.stuurPlekken, js/main.js; vraag 170, stap 3, E1): hun plekken in hun
