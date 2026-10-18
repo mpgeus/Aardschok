@@ -578,4 +578,4 @@ if (require.main === module) main().catch((e) => {
   process.exit(1);
 });
 
-module.exports = { naarPixels, leidraad, bewerk, kiesModel, beeldModellen };
+module.exports = { naarPixels, naarPixelsMetVorm, leidraad, bewerk, kiesModel, beeldModellen, leesPng, verklein, vergroot, plakOp, leeg, renderVan, comfy, upload, wagen, STIJL, UIT };

@@ -1,0 +1,252 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "DreamShaper_8_pruned.safetensors"
+    },
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "2": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.safetensors"
+    },
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "aardschok-render.png"
+    },
+    "_meta": {
+      "title": "Load Image: ruwe 3D-render (768 x 576, #FF00FF)"
+    }
+  },
+  "4": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "3",
+        0
+      ],
+      "vae": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "heerstoet-doel.webp"
+    },
+    "_meta": {
+      "title": "Load Image: stijlreferentie (heerstoet-doel)"
+    }
+  },
+  "6": {
+    "class_type": "ImageCrop",
+    "inputs": {
+      "image": [
+        "5",
+        0
+      ],
+      "width": 580,
+      "height": 360,
+      "x": 40,
+      "y": 330
+    },
+    "_meta": {
+      "title": "Uitsnede: de wagen"
+    }
+  },
+  "7": {
+    "class_type": "IPAdapterModelLoader",
+    "inputs": {
+      "ipadapter_file": "ip-adapter-plus_sd15.safetensors"
+    },
+    "_meta": {
+      "title": "IP-Adapter Plus SD 1.5"
+    }
+  },
+  "8": {
+    "class_type": "CLIPVisionLoader",
+    "inputs": {
+      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+    },
+    "_meta": {
+      "title": "CLIP Vision ViT-H"
+    }
+  },
+  "9": {
+    "class_type": "IPAdapterAdvanced",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ipadapter": [
+        "7",
+        0
+      ],
+      "image": [
+        "6",
+        0
+      ],
+      "clip_vision": [
+        "8",
+        0
+      ],
+      "weight": 0.65,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "V only"
+    },
+    "_meta": {
+      "title": "IP-Adapter (stijl)"
+    }
+  },
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "aardschok-lijnen.png"
+    },
+    "_meta": {
+      "title": "Load Image: lijnen uit ons 3D-model (de voorbewerking)"
+    }
+  },
+  "11": {
+    "class_type": "ControlNetLoader",
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_lineart_fp16.safetensors"
+    },
+    "_meta": {
+      "title": "Load ControlNet (lineart)"
+    }
+  },
+  "12": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "detailed HD pixel art, isometric medieval game sprite, white ox pulling a red painted wooden cart with gold trim, golden lion emblem, sacks of grain, barrel, logs, open chest of gold coins, leather harness, dark outlines, rich textures, warm light",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "_meta": {
+      "title": "Positief"
+    }
+  },
+  "13": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "blurry, photo, 3d render, text, watermark, signature, ground, grass, shadow, extra objects, extra animals, frame",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "_meta": {
+      "title": "Negatief"
+    }
+  },
+  "14": {
+    "class_type": "ControlNetApplyAdvanced",
+    "inputs": {
+      "positive": [
+        "12",
+        0
+      ],
+      "negative": [
+        "13",
+        0
+      ],
+      "control_net": [
+        "11",
+        0
+      ],
+      "image": [
+        "10",
+        0
+      ],
+      "strength": 0.85,
+      "start_percent": 0,
+      "end_percent": 1,
+      "vae": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "15": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "9",
+        0
+      ],
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "seed": 180,
+      "steps": 30,
+      "cfg": 6.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.4
+    },
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "16": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "15",
+        0
+      ],
+      "vae": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "17": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "16",
+        0
+      ],
+      "filename_prefix": "aardschok-sd15"
+    },
+    "_meta": {
+      "title": "Save Image"
+    }
+  }
+}
