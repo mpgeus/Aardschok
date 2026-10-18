@@ -201,7 +201,10 @@ stenen huizen. **Ronde 3 is af.**
   API-sleutel, een paar cent per beeld) of lokaal op Marcels videokaart (ComfyUI met Stable Diffusion en ControlNet,
   gratis, 8 tot 12 GB videogeheugen, een paar sessies opzetten). Risico: wat beweegt kan tussen beelden flikkeren; wat
   stilstaat (gebouwen, karren, spullen) gaat makkelijker. De proef: de wagen van de heer (stil, twee kanten) en de os in
-  acht loopbeelden (beweging), naast Marcels plaat. Wacht op Marcel: via internet of lokaal.
+  acht loopbeelden (beweging), naast Marcels plaat. **Gekozen** (Marcel, 18 okt): "Via internet (OpenAI). Ik regel een
+  API-sleutel". De sleutel staat buiten de opslag, in `C:\Users\mpgeu\.openai-sleutel` (of in de omgeving als
+  `OPENAI_API_KEY`); het gereedschap leest hem daar en stuurt hem alleen naar `api.openai.com`, en hij komt nooit in git
+  of in een gesprek. Wacht op Marcel: de sleutel; dan de proef.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
