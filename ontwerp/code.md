@@ -737,7 +737,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de muis rekent om in `naarVlak`. De grond ligt in stukken van 512 pixels die aan de wereld vastzitten
   (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan
   de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
-  scherm. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
+  scherm. Moet alles in beeld opnieuw op hetzelfde land (een stap met het wiel, een ander seizoen, de sneeuw, de beek),
+  dan **spreidt** hij (18 okt, Marcel: "de nieuwe stukken een of twee per beeld"; `snelheid.md`, "Spreiden"): het oude
+  beeld (`buf.vorig`) blijft, geschaald, staan in de gaten waar nog geen nieuw stuk ligt (`buf.gaten`, `tekenVorig`,
+  uitgeknipt, zodat de rand aan de kust niet dubbel komt), en per beeld komt er een nieuw stuk bij, en een tweede als het
+  eerste minder dan 8 ms kostte (`SPREID`): eerst wat het oude beeld niet bedekt, dan van het midden naar buiten. Is het
+  af, dan is het beeld pixel voor pixel dat van alles in één keer. Een schermafdruk, een foto en `Spel.debug.stap`
+  tekenen alles in één keer (`T.tekenHeel`); `T.grondBezig(S)` zegt of het nog loopt. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
   donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, hoeveel
   kleur eruit gaat en hoeveel donkerder (`tekenMist`; met de videokaart maakt de kaart het masker zelf, `mistOpDeKaart`:
   wat je kent als getallen, alleen als het anders is, en per beeld wie er kijkt, sinds 18 okt, vraag 178; zonder

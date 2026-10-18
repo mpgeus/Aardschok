@@ -753,9 +753,24 @@
   // meer dan een stuk buiten r ligt, gaat terug in de voorraad doeken. teken zegt of het iets tekende: een leeg stuk
   // houdt geen doek.
   const VOORRAAD = 16; // zoveel lege doeken bewaart een buffer hooguit (elk een megabyte)
-  function werkStukkenBij(buf, sleutel, k, r, teken) {
+  // Spreiden (Marcel, 18 okt: "Doe eerst het spreiden: de nieuwe stukken een of twee per beeld"; snelheid.md,
+  // "Gemeten"): moet alles in beeld opnieuw op hetzelfde land (`spreid`: een stap met het wiel, een ander seizoen, de
+  // sneeuw, de beek), dan blijft het oude beeld (buf.vorig) staan waar nog geen nieuw stuk ligt (buf.gaten,
+  // tekenVorig), en komen de nieuwe er per beeld bij: het eerste altijd, het tweede als het eerste minder dan `ms` kostte.
+  // Tot dan was dat één beeld van 83 à 100 ms (vlak) of 300 (met heuvels) op 0,35. Een schermafdruk, een foto en
+  // Spel.debug.stap tekenen alles in één keer (T.tekenHeel).
+  const SPREID = { stukken: 2, ms: 8 };
+  let heel = false; // alleen scherm
+  function werkStukkenBij(buf, sleutel, k, r, teken, spreid = false) {
     if (buf.sleutel !== sleutel || buf.k !== k) {
-      leegBuffer(buf);
+      // Liep het spreiden nog, dan blijft het oude beeld (dat is heel), en gaat wat er van het nieuwe al lag.
+      if (spreid && !buf.vorig && buf.stukken.size) {
+        buf.vorig = { k: buf.k, fase: buf.fase, stukken: buf.stukken };
+        buf.stukken = new Map();
+        buf.oud = null;
+        buf.vuil = null;
+      } else leegBuffer(buf);
+      if (!spreid) leegVorig(buf);
       buf.sleutel = sleutel;
       buf.k = k;
       buf.fase = faseVan(k);
@@ -770,11 +785,65 @@
       if (s.canvas) buf.vrij.push(s.canvas);
       buf.stukken.delete(sl);
     }
+    const gaten = [];
     for (let j = j0; j <= j1; j++) {
-      for (let i = i0; i <= i1; i++) if (!buf.stukken.has(i + ',' + j)) tekenBufferStuk(buf, i, j, teken);
+      for (let i = i0; i <= i1; i++) if (!buf.stukken.has(i + ',' + j)) gaten.push({ i, j });
     }
+    if (buf.vorig && !heel) {
+      ordenGaten(buf, gaten, r);
+      const t0 = performance.now();
+      for (let n = 0; gaten.length && (n === 0 || (n < SPREID.stukken && performance.now() - t0 < SPREID.ms)); n++) {
+        const g = gaten.shift();
+        tekenBufferStuk(buf, g.i, g.j, teken);
+      }
+    } else {
+      for (const g of gaten.splice(0)) tekenBufferStuk(buf, g.i, g.j, teken);
+    }
+    buf.gaten = gaten;
+    if (!gaten.length) leegVorig(buf);
     if (buf.vrij.length > VOORRAAD) buf.vrij.length = VOORRAAD;
   }
+  // Het oude beeld weg (zijn doeken terug in de voorraad): het nieuwe ligt er helemaal.
+  function leegVorig(buf) {
+    if (!buf.vorig) return;
+    for (const s of buf.vorig.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
+    buf.vorig = null;
+  }
+  // Eerst wat het oude beeld niet bedekt (de rand na een stap uit), dan van het midden van het beeld naar buiten.
+  function ordenGaten(buf, gaten, r) {
+    const m = STUK / buf.k;
+    const cx = (r.x0 + r.x1) / 2;
+    const cy = (r.y0 + r.y1) / 2;
+    for (const g of gaten) {
+      const x = (g.i * STUK - buf.fase) / buf.k;
+      const y = (g.j * STUK - buf.fase) / buf.k;
+      g.open = bedekt(buf.vorig, Math.max(x, r.x0), Math.max(y, r.y0), Math.min(x + m, r.x1), Math.min(y + m, r.y1)) ? 0 : 1;
+      g.d = (x + m / 2 - cx) ** 2 + (y + m / 2 - cy) ** 2;
+    }
+    gaten.sort((a, b) => b.open - a.open || a.d - b.d);
+  }
+  // Of de stukken van buffer v rechthoek x0, y0 tot x1, y1 van de vlakte helemaal bedekken (een leeg stuk ook: daar is
+  // niets).
+  function bedekt(v, x0, y0, x1, y1) {
+    const i1 = Math.ceil((x1 * v.k + v.fase) / STUK) - 1;
+    const j1 = Math.ceil((y1 * v.k + v.fase) / STUK) - 1;
+    for (let j = Math.floor((y0 * v.k + v.fase) / STUK); j <= j1; j++) {
+      for (let i = Math.floor((x0 * v.k + v.fase) / STUK); i <= i1; i++) if (!v.stukken.has(i + ',' + j)) return false;
+    }
+    return true;
+  }
+  // Alles in één beeld, zonder spreiden: voor een schermafdruk, een foto en Spel.debug.stap (js/main.js).
+  T.tekenHeel = function (f) {
+    const was = heel;
+    heel = true;
+    try {
+      return f();
+    } finally {
+      heel = was;
+    }
+  };
+  // Of de grond nog gespreid binnenkomt (Spel.debug.meetGrond).
+  T.grondBezig = (S) => !!(S.grond && S.grond.vorig);
   // Alle stukken weg (hun doeken terug in de voorraad), ook wat nog opnieuw moest.
   function leegBuffer(buf) {
     for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
@@ -855,6 +924,7 @@
   // De stukken die rechthoek r raken (alle zonder r); met `vlakken` alleen binnen die vierhoeken (tekenTegelOpnieuw).
   function tekenStukken(ctx, buf, r, vlakken) {
     if (!buf) return;
+    if (buf.vorig && buf.gaten && buf.gaten.length) tekenVorig(ctx, buf, r, vlakken);
     const m = STUK / buf.k;
     for (const s of buf.stukken.values()) {
       if (!s.canvas) continue;
@@ -865,6 +935,38 @@
       else ctx.drawImage(s.canvas, x, y, m, m);
     }
   }
+  // Het oude beeld (buf.vorig, werkStukkenBij), geschaald, alleen in de gaten waar nog geen nieuw stuk ligt: zo komt de
+  // half doorzichtige rand aan de kust niet dubbel. Met `vlakken` (tekenTegelOpnieuw) binnen die vierhoeken.
+  function tekenVorig(ctx, buf, r, vlakken) {
+    const v = buf.vorig;
+    const m = STUK / buf.k;
+    const knip = vlakken || buf.gaten.map((g) => {
+      const x = (g.i * STUK - buf.fase) / buf.k;
+      const y = (g.j * STUK - buf.fase) / buf.k;
+      return [x, y, x + m, y, x + m, y + m, x, y + m];
+    });
+    const metKaart = !!ctx.tekenUitgeknipt;
+    if (!metKaart) {
+      ctx.save();
+      ctx.beginPath();
+      for (const q of knip) {
+        ctx.moveTo(q[0], q[1]);
+        for (let i = 2; i < q.length; i += 2) ctx.lineTo(q[i], q[i + 1]);
+        ctx.closePath();
+      }
+      ctx.clip();
+    }
+    const vm = STUK / v.k;
+    for (const s of v.stukken.values()) {
+      if (!s.canvas) continue;
+      const x = (s.i * STUK - v.fase) / v.k;
+      const y = (s.j * STUK - v.fase) / v.k;
+      if (r && (x > r.x1 || y > r.y1 || x + vm < r.x0 || y + vm < r.y0)) continue;
+      if (metKaart) ctx.tekenUitgeknipt(s.canvas, x, y, vm, vm, knip);
+      else ctx.drawImage(s.canvas, x, y, vm, vm);
+    }
+    if (!metKaart) ctx.restore();
+  }
   // Voor het kijkgat (js/doorkijk.js) en het meten: de grond die rechthoek r raakt.
   T.tekenGrondStukken = (ctx, S, r) => tekenStukken(ctx, S.grond, r);
 
@@ -874,10 +976,15 @@
     vergeetNieuwLand(S.grond, S.wereld);
     vergeetVeranderdeKaart(S.grond, S);
     const teken = (c, r) => tekenGrondIn(c, S, r, inBeeld);
-    werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, teken);
+    const buf = S.grond;
+    // Hetzelfde land als het vorige beeld: dan komt de nieuwe grond gespreid (werkStukkenBij).
+    const w = S.wereld;
+    const zelfde = buf.w === w && buf.kamer === w.huidigeKamer;
+    buf.w = w;
+    buf.kamer = w.huidigeKamer;
+    werkStukkenBij(buf, grondSleutel(S) + '|' + k, k, zicht, teken, zelfde);
     // van wat nieuw land raakt, één per beeld opnieuw; tot dan staat er wat er stond. Van een stuk met een doek alleen
     // het deel dat veranderde (tekenBufferDeel); een leeg stuk heeft geen doek, en komt heel opnieuw.
-    const buf = S.grond;
     const oud = buf.oud && buf.oud.find((sl) => buf.stukken.has(sl));
     if (oud) {
       buf.oud = buf.oud.filter((sl) => sl !== oud);

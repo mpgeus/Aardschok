@@ -261,6 +261,32 @@ twee per beeld overheen, zoals nu al bij nieuw land. Dan geen beeld van 300 ms, 
 zo'n 20 ms (met heuvels), met de grond even onscherp of in het oude seizoen; het werk zelf blijft even groot, wat op een
 zwakke machine (de Steam Deck) telt.
 
+**Spreiden** (Marcel, 18 okt: "Doe eerst het spreiden: de nieuwe stukken een of twee per beeld"; `code.md` bij
+`js/tekenen.js`, "de grond ligt in stukken"; `werkStukkenBij`): per beeld een nieuw stuk, en een tweede als het
+eerste minder dan 8 ms kostte; tot dan het oude beeld in de gaten. Nagekeken: als het af is, is het beeld pixel voor
+pixel dat van alles in één keer (0 van de 2.073.600 pixels anders, bij het wiel van 2 naar 0,5, van 0,5 naar 0,35 en
+terug naar 2, en de herfst). Gemeten met `Spel.debug.meetGrond()` (dat sinds het spreiden ook het traagste beeld geeft
+tot de grond heel is) en dezelfde tekenlus, elk beeld tot de videokaart klaar is (`T.gl.wacht`), op het proefdorp op
+1920 bij 1080. Het Claude-venster stond daarbij niet in beeld, wat alles trager maakt (alles in één keer met heuvels:
+558 ms, eerder in beeld 300 tot 335); vergelijk dus binnen de tabel:
+
+| wat | vlak, vroeger in één beeld | vlak, gespreid | heuvels, gespreid |
+| --- | --- | --- | --- |
+| het wiel naar 0,35 | 83 tot 100 ms | 8 beelden, hooguit 34 ms | 14 beelden, hooguit 90 ms (meest 40 à 75) |
+| het wiel naar 0,5 | 50 tot 67 ms | 10 beelden, hooguit 35 ms | 10 beelden, hooguit 54 ms |
+| een ander seizoen | 83 tot 100 ms | 8 beelden, hooguit 37 ms | 14 beelden, hooguit 66 à 77 ms |
+| de beek | 83 ms | 8 beelden, hooguit 41 ms | |
+| sneeuw erbij (0,3) | 283 ms | 11 beelden, hooguit 79 ms (meest 40 à 67) | 14 beelden, het eerste 195 ms, dan 30 à 95 |
+
+Een gewoon beeld was in dezelfde meting 3 tot 11 ms. Wat het niet oplost: een stuk zelf. Met heuvels kost één stuk van
+512 bij 512 al 40 à 90 ms (hier, niet in beeld), en een stuk met sneeuw ook vlak 40 à 80; dat is een beeld dat hapert,
+alleen korter. Dat haalt alleen de renderproef weg (de grond als vaste rijen), of de sneeuw zelf goedkoper
+(`tekenSneeuwOp`, `sneeuwRuis` per tegel). Wat je ziet (de schermafdrukken `uit/schermen/spreiden-*.png`): bij een ander
+seizoen, sneeuw of de beek gaat het oude beeld stuk voor stuk weg; bij inzoomen ligt het oude beeld er geschaald onder;
+bij uitzoomen ligt er aan de rand nog niets, en is de grond daar een paar beelden donker tot de stukken er zijn (eerst
+die, dan het midden). Een eerste keer herfst of winter na het laden kost nog steeds een beeld van 440 à 510 ms: het blad
+met de bomen (D1), niet de grond.
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een

@@ -36,9 +36,11 @@ H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het a
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`): op 0,35 bij het dorp één beeld van
 83 tot 100 ms vlak, en met heuvels 300 tot 335 ms; een stand sneeuw op de grond (elke middernacht in de winter) 283 ms
-vlak en 340 met heuvels. **Marcel koos eerst spreiden** (18 okt: "Doe eerst het spreiden: de nieuwe stukken een of twee
-per beeld"; **Bezig in sessie `main` (lokaal, desktop)** (18 okt)); de renderproef van de grond als vaste rijen blijft
-het voorstel daarna. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
+"Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
+hetzelfde eindbeeld. **Wacht op Marcel**: kijken hoe het eruitziet (uitzoomen bij het dorp: de rand is een paar beelden
+donker; de platen `uit/schermen/spreiden-*.png`), en dan de renderproef van de grond als vaste rijen (een stuk met
+heuvels of sneeuw hapert nog: 40 à 90 ms). Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

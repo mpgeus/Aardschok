@@ -201,9 +201,9 @@
 
   // Het beeld zoals het nu op het scherm staat, als één 2D-doek: met de videokaart (js/gl.js) het doek van WebGL met het
   // gewone erover. Het tekent eerst een beeld, want WebGL houdt een beeld niet vast nadat het getoond is. Voor de
-  // fotomodus (bewaarFoto) en Spel.debug.schermafdruk.
+  // fotomodus (bewaarFoto) en Spel.debug.schermafdruk. De grond helemaal, niet gespreid (T.tekenHeel, js/tekenen.js).
   function beeldNu() {
-    T.tekenBeeld();
+    T.tekenHeel(() => T.tekenBeeld());
     if (!glZichtbaar) return canvas;
     const c = document.createElement('canvas');
     c.width = canvas.width;
@@ -1975,7 +1975,8 @@
     // Wat de grond kost als hij helemaal opnieuw moet (`snelheid.md`, "Het advies van buiten"; Marcel, 18 okt): helemaal
     // uitgezoomd, en dan per stap met het wiel en per ander seizoen het eerste beeld erna, met de videokaart erbij
     // (T.gl.wacht), naast een gewoon beeld. Zelf gemeten, zodat er geen alt-tab of schermafdruk tussen zit. Daarna staat
-    // alles weer zoals het was. Geeft per actie { eerste, gewoon } in ms.
+    // alles weer zoals het was. Geeft per actie { eerste, traagst, beelden, gewoon } in ms: sinds het spreiden (js/tekenen.js,
+    // werkStukkenBij) komt de grond in een paar beelden, dus ook het traagste tot hij heel is, en in hoeveel beelden.
     meetGrond() {
       const was = { zoom: S.zoom, camera: { ...S.camera }, kijk: S.kijk && { ...S.kijk }, bomen: T.debug.bomen };
       const beeld = () => {
@@ -1989,7 +1990,11 @@
       const uit = {};
       const doe = (naam, f) => {
         f();
-        uit[naam] = { eerste: beeld(), gewoon: (beeld(), beeld()) };
+        const eerste = beeld();
+        let traagst = eerste;
+        let beelden = 1;
+        for (; T.grondBezig(S) && beelden < 100; beelden++) traagst = Math.max(traagst, beeld());
+        uit[naam] = { eerste, traagst, beelden, gewoon: (beeld(), beeld()) };
       };
       try {
         S.zoom = ver;
@@ -2046,7 +2051,7 @@
         werkBij(1 / 60);
         for (let k = 0; k < 8; k++) await null;
       }
-      T.tekenBeeld();
+      T.tekenHeel(() => T.tekenBeeld()); // een schermafdruk erna ziet de hele grond
     },
   };
 
