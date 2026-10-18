@@ -214,7 +214,32 @@ stenen huizen. **Ronde 3 is af.**
   `hand-lopen.png`): de wagen van twee kanten en drie loopbeelden. ChatGPT volgt de vorm en de houding van onze render
   heel nauw, met het detail van Marcels plaat (leeuwen op de panelen, een haam met koperen beslag, de kist met goud); de
   lading verschuift tussen de loopbeelden een beetje (een kruik, het deksel), en terug in de maat van het spel is het iets
-  zachter dan onze scherpe pixels. Wacht op Marcel: is dit de weg?
+  zachter dan onze scherpe pixels. **Marcel: "Ja, dit is de weg. Maak een plan om het voor alles op te zetten (lokaal
+  met ComfyUI of anders)."**
+  **Het plan voor alles** (Claude, 18 okt; wacht op Marcel). Wat er nu is: 767 figuren, samen zo'n 117.000 beelden (8
+  richtingen maal elke houding; de boer en de boerin alleen al 72 uiterlijken, elk met zijn werk), zo'n 4.700 beelden van
+  huizen (1.214 huizen, en de sneeuw op het dak, de bouwfasen, het afbranden en plat) en zo'n 1.500 tegels (de bomen en
+  het groen per seizoen, de grond, de kust). Elk beeld door een AI is met de hand onmogelijk, via de API duizenden
+  dollars, en lokaal weken rekenen. Dus: eerst minder, dan lokaal en 's nachts. In vijf fasen:
+  1. **De motor**: ComfyUI lokaal op Marcels videokaart (11 GB): Stable Diffusion XL, ControlNet en IP-Adapter, zo'n 15
+     tot 20 GB aan modellen; Claude helpt installeren. Dan dezelfde proef (de wagen en drie loopbeelden) lokaal, naast die
+     van ChatGPT: haalt het het niveau? Zo niet, dan een ander model, of voor wat stilstaat de API.
+  2. **Het gereedschap voor elk vel**: `beeld-ai.cjs` praat met ComfyUI (op de eigen pc, zonder sleutel) en neemt elk vel
+     van de tekenstraat: per beeld onze render als leidraad, en ook de diepte en de randen uit ons eigen 3D-model (exact,
+     niet geschat), per ding een goedgekeurd "meesterbeeld" als ijkpunt voor de rest, een cache (niets twee keer), en
+     `naarPixels` met een vast palet per soort, zodat alles bij elkaar past. Het vel komt terug in dezelfde maat en met
+     dezelfde ankers, dus het spel verandert niet (`naar-spel.cjs` en het inpakken zoals nu).
+  3. **De eerste reeks: de heerstoet** voor de cinematics (E, stap 4): de heer te paard, de wagens, de soldaten met
+     vaandel en fakkel. Eerst een proefplaat, dan het hele vel.
+  4. **Kiezen wat er in de nieuwe stijl komt** (Marcel): minder uiterlijken (bijvoorbeeld twaalf in plaats van 72),
+     minder werkhoudingen, vijf richtingen en de andere drie gespiegeld, minder soorten huizen; en wat het spel niet meer
+     gebruikt (de monsters van het oude spel), gaat eruit. Doel: rond de 10.000 tot 15.000 beelden, een paar nachten
+     rekenen.
+  5. **De demo, in volgorde van wat je ziet**: de ossenkar, de huizen van het eerste jaar, de dorpelingen en de soldaten
+     (staan en lopen eerst), het wild, de bomen; de grond en de kust het laatst. Per soort eerst een proefplaat
+     (CLAUDE.md: eerst goedkeuring, dan renderen). Daarna de rest, en een opruimronde.
+  Erbij: in de winkel van Steam melden dat er AI in de beelden zit; en de vraag of de figuren groter mogen (meer detail in
+  beeld, maar alles moet mee), voor later.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
