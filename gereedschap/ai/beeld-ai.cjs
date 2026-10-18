@@ -428,27 +428,17 @@ function hand(map = process.env.HAND_MAP || path.join(UIT, 'hand'), voor = 'hand
       }
       return vergroot(s, 2);
     };
-    rijen.push([snij(onze), toon, snij(cel)]);
+    rijen.push(Object.assign([snij(onze), toon, snij(cel)], { naam }));
     if (naam.startsWith('lopen')) lopen.push({ cel, onze });
     console.log(`${naam}: ${p.b}×${p.h} (onze render ${kb}×${kh})`);
   }
-  // De plaat: per beeld een rij, op een donkere grond.
-  const GAT = 12;
-  const breed = Math.max(...rijen.map((r) => r.reduce((s, x) => s + x.b + GAT, GAT)));
-  const hoog = rijen.reduce((s, r) => s + Math.max(...r.map((x) => x.h)) + GAT, GAT);
-  const doek = leeg(breed, hoog);
-  for (let i = 0; i < breed * hoog; i++) doek.rgba.set([70, 82, 56, 255], i * 4);
-  let y = GAT;
-  for (const r of rijen) {
-    let x = GAT;
-    const rh = Math.max(...r.map((s) => s.h));
-    for (const s of r) {
-      plakOp(doek, s, x, y + rh - s.h);
-      x += s.b + GAT;
-    }
-    y += rh + GAT;
-  }
-  fs.writeFileSync(path.join(UIT, `${voor}-proef.png`), K.pngVanBeeld(doek));
+  // De plaat: per beeld een rij (onze render, het antwoord, de pixels), met opschriften (Marcel, 18 okt: "graag even
+  // markeren"): wie het maakte, en per vakje wat het is.
+  const MAKER = { hand: 'ChatGPT (met de hand)', lokaal: 'SDXL lokaal (sd_xl_base_1.0, ControlNet union, IP-Adapter Plus)' };
+  const wie = MAKER[voor] || voor;
+  const E = require('./etiket.cjs');
+  E.bewaar(path.join(UIT, `${voor}-proef.png`), rijen.map((r, i) => [E.met(r[0], `${r.naam} · onze render`), E.met(r[1], wie), E.met(r[2], 'in de maat van het spel')]),
+    `${wie}: de wagen van de heer`, 'Per rij: onze render, het antwoord van de AI, en terug in de maat van het spel (twee keer vergroot).');
   // De loopbeelden bewegend, ons en dat van de AI (vier van de acht: op de helft van de snelheid van de os).
   if (lopen.length > 1) {
     const { apng } = require('../pixelart/apng.cjs');
@@ -568,7 +558,7 @@ async function main() {
   if (wat === 'modellen') console.log((await beeldModellen()).join('\n'));
   else if (wat === 'droog') await proef(true);
   else if (wat === 'proef') await proef(false);
-  else if (wat === 'hand') hand();
+  else if (wat === 'hand') hand(...(process.argv[3] === 'lokaal' ? [path.join(UIT, 'lokaal'), 'lokaal', true] : [])); // `hand lokaal`: de plaat van de SDXL-proef opnieuw
   else if (wat === 'lokaal') await lokaal();
   else console.log('node gereedschap/ai/beeld-ai.cjs modellen | droog | proef | hand | lokaal [namen]');
 }

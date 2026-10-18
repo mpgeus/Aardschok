@@ -22,6 +22,8 @@ const K = require('../pixelart/kern.cjs');
 const O = require('../pixelart/ossenkar.cjs');
 const { windVoor } = require('../pixelart/heerstoet.cjs');
 const A = require('./beeld-ai.cjs');
+const E = require('./etiket.cjs');
+const komma = (x) => x.toFixed(2).replace('.', ',');
 
 const W = 768;
 const H = 576;
@@ -236,8 +238,10 @@ async function eenBeeld(naam, o, soort, stijlNaam, bron = 'plaat') {
   const half = (x) => A.verklein(x, W / 2, H / 2);
   const onze = A.leeg(st.plaat.b, st.plaat.h);
   onze.rgba = st.plaat.rgba(null);
-  const rij = [half(doek), half(lijnen), half(v.sprite), A.vergroot(onze, 2), A.vergroot(v.pixels, 2)];
-  fs.writeFileSync(path.join(map, 'vergelijking.png'), K.pngVanBeeld(naastElkaar([rij])));
+  const c = v.controle;
+  E.bewaar(path.join(map, 'vergelijking.png'), [[E.met(half(doek), 'onze render'), E.met(half(lijnen), 'onze lijnen'), E.met(half(v.sprite), 'SD 1.5'), E.met(A.vergroot(onze, 2), 'onze render, maat van het spel'), E.met(A.vergroot(v.pixels, 2), 'SD 1.5, maat van het spel')]],
+    `SD 1.5 (DreamShaper 8) · ${naam} · ${bron === 'meester' ? 'stijl: meesterbeeld (ChatGPT)' : 'stijl: Marcels plaat'} · denoise ${komma(o.denoise)} · ControlNet ${komma(o.cn)} · IP ${komma(o.ip)}`,
+    `${tijd.toFixed(0)} s · overlap met ons silhouet ${c.silhouet.overlap}% · achtergrond ${c.achtergrondExact ? 'exact #FF00FF' : 'NIET exact'}`);
   const instellingen = { naam, tag, stijlbron: bron === 'meester' ? process.env.MEESTER : 'ontwerp/voorbeelden/heerstoet-doel.webp', modellen: { ...MODELLEN, controlnet: MODELLEN.controlnet[soort] }, instellingen: o, soort, resolutie: `${W}×${H}`, uitsnede: UITSNEDE, positief: POSITIEF, negatief: NEGATIEF, seconden: +tijd.toFixed(1), controle: v.controle, wanneer: new Date().toISOString() };
   fs.writeFileSync(path.join(map, 'instellingen.json'), JSON.stringify(instellingen, null, 2));
   console.log(`${naam} ${tag}: ${tijd.toFixed(0)} s, overlap ${v.controle.silhouet.overlap}%, gaten ${v.controle.silhouet.gatenBinnen}%, erbuiten ${v.controle.silhouet.getekendErbuiten}%, doek ${v.controle.doekGoed ? 'goed' : v.controle.doek}, achtergrond ${v.controle.achtergrondExact ? 'exact' : 'NIET exact'}`);
@@ -293,7 +297,7 @@ async function main() {
     const onze = [];
     for (const n of namen) {
       const r = await eenBeeld(n, o, soort, stijl, process.env.MEESTER ? 'meester' : 'plaat');
-      rij.push([A.verklein(r.sprite, W / 2, H / 2), A.vergroot(r.pixels, 2)]);
+      rij.push([E.met(A.verklein(r.sprite, W / 2, H / 2), `SD 1.5 · ${n}`), E.met(A.vergroot(r.pixels, 2), 'maat van het spel')]);
       const st = stukVan(n);
       const cel = A.leeg(st.plaat.b, st.plaat.h);
       A.plakOp(cel, r.pixels, st.k.x0, st.k.y0);
@@ -301,13 +305,39 @@ async function main() {
       onze.push({ b: st.plaat.b, h: st.plaat.h, rgba: st.plaat.rgba(null) });
     }
     const tag = `${soort}-${process.env.MEESTER ? 'meester' : 'plaat'}-d${o.denoise.toFixed(2)}-ip${o.ip.toFixed(2)}`;
-    fs.writeFileSync(path.join(UIT, `reeks-${tag}.png`), K.pngVanBeeld(naastElkaar(rij)));
+    E.bewaar(path.join(UIT, `reeks-${tag}.png`), rij, `SD 1.5 (DreamShaper 8) · loopbeelden · ${process.env.MEESTER ? 'stijl: meesterbeeld (ChatGPT)' : 'stijl: Marcels plaat'} · denoise ${komma(o.denoise)} · IP ${komma(o.ip)}`, 'Per rij een loopbeeld: de sprite, en in de maat van het spel.');
     const { apng } = require('../pixelart/apng.cjs');
     const alsPlaat = (r) => ({ b: r.b, h: r.h, rgba: () => r.rgba });
     const fps = require('../pixelart/vee.cjs').LOOP_FPS.os / 2;
     fs.writeFileSync(path.join(UIT, `reeks-${tag}-lopen.png`), apng(cellen.map(alsPlaat), { fps, schaal: 2 }));
     fs.writeFileSync(path.join(UIT, `reeks-${tag}-lopen-onze.png`), apng(onze.map(alsPlaat), { fps, schaal: 2 }));
     console.log(`Reeks: uit/ai/sd15/reeks-${tag}.png, en bewegend -lopen.png (naast -lopen-onze.png)`);
+    return;
+  }
+  // De platen opnieuw uit wat er al in de mappen staat (zonder de AI), met opschriften: de matrix en de reeks van 18 okt.
+  if (wat === 'platen') {
+    const lees = (n, tag, f) => A.leesPng(fs.readFileSync(path.join(UIT, n, tag, f)));
+    const map = (n, ...tags) => tags.find((t) => fs.existsSync(path.join(UIT, n, t)));
+    const rijen = [];
+    let kop = null;
+    for (const d of [0.3, 0.4, 0.5]) {
+      const rij = [];
+      for (const cn of [0.75, 1.0]) {
+        const tag = map('wagen-zw', `lineart-d${d.toFixed(2)}-c${cn.toFixed(2)}-s180`, `lineart-plaat-d${d.toFixed(2)}-c${cn.toFixed(2)}-ip0.65-s180`);
+        if (!tag) continue;
+        if (!kop) kop = tag;
+        rij.push(E.met(A.verklein(lees('wagen-zw', tag, 'sprite.png'), W / 2, H / 2), `SD 1.5 · denoise ${komma(d)} · ControlNet ${komma(cn)}`), E.met(A.vergroot(lees('wagen-zw', tag, 'pixels.png'), 2), 'maat van het spel'));
+      }
+      if (rij.length) rijen.push(rij);
+    }
+    if (kop) {
+      rijen.unshift([E.met(A.verklein(lees('wagen-zw', kop, 'render.png'), W / 2, H / 2), 'onze render'), E.met(A.verklein(lees('wagen-zw', kop, 'lijnen.png'), W / 2, H / 2), 'onze lijnen (ControlNet)')]);
+      console.log(E.bewaar(path.join(UIT, 'wagen-zw-lineart-matrix.png'), rijen, 'SD 1.5 (DreamShaper 8) · testmatrix · wagen-zw · stijl: Marcels plaat · IP 0,65', 'Per rij een denoise; per rij eerst ControlNet 0,75, dan 1,00, elk de sprite en in de maat van het spel.'));
+    }
+    const tag = 'lineart-meester-d0.60-c0.85-ip1.00-s180';
+    const reeks = ['lopen-zw-0', 'lopen-zw-2', 'lopen-zw-4', 'lopen-zw-6'].filter((n) => fs.existsSync(path.join(UIT, n, tag)))
+      .map((n) => [E.met(A.verklein(lees(n, tag, 'sprite.png'), W / 2, H / 2), `SD 1.5 · ${n}`), E.met(A.vergroot(lees(n, tag, 'pixels.png'), 2), 'maat van het spel')]);
+    if (reeks.length) console.log(E.bewaar(path.join(UIT, 'reeks-lineart-meester-d0.60-ip1.00.png'), reeks, 'SD 1.5 (DreamShaper 8) · loopbeelden · stijl: meesterbeeld (ChatGPT) · denoise 0,60 · IP 1,00', 'Per rij een loopbeeld: de sprite, en in de maat van het spel.'));
     return;
   }
   if (wat === 'matrix') {
@@ -318,13 +348,13 @@ async function main() {
       for (const cn of [0.75, 1.0]) {
         const r = await eenBeeld(naam, { ...START, denoise: d, cn }, soort, stijl);
         if (!eerste) eerste = r;
-        rij.push(A.verklein(r.sprite, W / 2, H / 2), A.vergroot(r.pixels, 2));
+        rij.push(E.met(A.verklein(r.sprite, W / 2, H / 2), `SD 1.5 · denoise ${komma(d)} · ControlNet ${komma(cn)}`), E.met(A.vergroot(r.pixels, 2), 'maat van het spel'));
       }
       rijen.push(rij);
     }
-    rijen.unshift([A.verklein(eerste.render, W / 2, H / 2), A.verklein(eerste.lijnen, W / 2, H / 2)]);
+    rijen.unshift([E.met(A.verklein(eerste.render, W / 2, H / 2), 'onze render'), E.met(A.verklein(eerste.lijnen, W / 2, H / 2), 'onze lijnen (ControlNet)')]);
     const plaat = path.join(UIT, `${naam}-${soort}-matrix.png`);
-    fs.writeFileSync(plaat, K.pngVanBeeld(naastElkaar(rijen)));
+    E.bewaar(plaat, rijen, `SD 1.5 (DreamShaper 8) · testmatrix · ${naam} · stijl: Marcels plaat · IP ${komma(o.ip)}`, 'Per rij een denoise; per rij eerst ControlNet 0,75, dan 1,00, elk de sprite en in de maat van het spel.');
     console.log(`Matrix: ${path.relative(process.cwd(), plaat)} (bovenaan onze render en de lijnen; daarna per rij denoise 0,30, 0,40, 0,50; per rij ControlNet 0,75 en dan 1,00, elk de sprite en de pixels)`);
     return;
   }

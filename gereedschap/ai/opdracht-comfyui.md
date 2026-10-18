@@ -94,3 +94,33 @@ voor meerdere animatieframes met identieke objectconstructie en visuele stijl.
 
 Lever een werkende, importeerbare ComfyUI-workflow in JSON-formaat op. Meld ontbrekende modellen, incompatibele nodes en
 hardwareproblemen expliciet. Test eerst één afbeelding voordat batchverwerking wordt toegevoegd.
+
+# Vervolg: een aparte SDXL-werkstroom
+
+Van Marcel, 18 okt 2026, letterlijk (na de proef met SD 1.5).
+
+Onze huidige SD 1.5-resultaten zijn veelbelovend, maar missen het detailniveau van de gewenste Aardschok-sprites.
+Maak een aparte SDXL-workflow. Behoud de huidige SD 1.5-workflow volledig.
+
+Hardware:
+
+- GTX 1080 Ti, 11 GB VRAM
+- 24 GB systeem-RAM
+
+Doel: hoogwaardige, zeer gedetailleerde isometrische HD-pixelart met rijke houtstructuren, realistische
+dierenanatomie, leren harnassen, metaalreflecties en sterke licht-schaduwcontrasten.
+
+Gebruik:
+
+- Een kwalitatief SDXL-checkpoint
+- SDXL-compatibele ControlNet
+- Img2img met 1024 × 768 als eerste testresolutie
+- 30–35 steps
+- CFG 5–6
+- Denoise 0.40–0.55
+- Vaste seed
+
+Gebruik onze goedgekeurde os-en-wagen-sprite als stijlreferentie met een SDXL-compatibele referentiemethode.
+Controleer alle modellen en nodes op compatibiliteit met de GTX 1080 Ti.
+Maak eerst één resultaat en vergelijk dat rechtstreeks met de bestaande SD 1.5-output. Beoordeel zowel de hoeveelheid
+detail als het behoud van de oorspronkelijke geometrie.
