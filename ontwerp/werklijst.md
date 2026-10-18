@@ -39,24 +39,11 @@ opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`
 vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
 "Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
 hetzelfde eindbeeld; Marcel zag de haperingen ("in en uitzoomen zorgt nu wel voor spikes in de fps"). **De
-renderproef van de grond, stap 1 tot 4 zijn gebouwd** (18 okt, in `main`; **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): stap 5, de nieuwe grond als standaard; het plan en de metingen in `snelheid.md`,
-"Stap 3 is gebouwd"; Marcel koos A: ver uit mag anders zijn als het er even goed uitziet): de vloer, de droge beek, het
-platte groen en de sneeuw op de kaart. Op zoom 2 en 1 pixel voor pixel hetzelfde, ook met herfst, sneeuw en de beek; op
-0,75 alleen de gelijke gevallen (tot 6%, de oude buffer kiest daar nu eens de ene, dan de andere pixel); ver uit een
-andere pixel van het gras (op open grond 12 à 19%, voor het oog hetzelfde: de platen `uit/schermen/grondproef3-*.png`).
-Een stap met het wiel, een andere stand sneeuw en de beek zijn nu één beeld van 3 à 22 ms in plaats van 8 à 11 beelden
-tot 75 ms; sneeuw die komt 9 beelden tot 27 ms; een ander seizoen 5 beelden, het eerste 36 à 70 ms door de bomen
-(`opmerkingen.md`). Marcel keek in het spel (18 okt, met `Spel.debug.grondProef = 'nieuw'`: "wow, dat is snel, geeft
-geen krimp meer, instant wissel"). **Stap 4, de heuvels, is gebouwd** (Marcel, 18 okt: "optie A en akkoord": het
-licht in de tegel, zonder naadje; `snelheid.md`, "Stap 4 is gebouwd"): een stap met het wiel, een andere stand sneeuw
-en de beek zijn met heuvels één beeld van 4 à 19 ms in plaats van 3 à 15 beelden tot 108 ms; voor het oog hetzelfde,
-pixel voor pixel niet. **Wacht op Marcel**: kijken met heuvels (`Spel.debug.hoogte(5)` en `Spel.debug.grondProef =
-'nieuw'`), meten in Firefox, en dan stap 5: of de oude grond eruit gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+renderproef van de grond is af** (18 okt, onder "Af"; `snelheid.md`, vanaf "Het plan voor de renderproef van de
+grond"): de grond ligt op de videokaart, en dat is de standaard (Marcel: "ja dat gaat perfect, dit wordt de nieuwe
+standaard"). **Wacht op Marcel**: meten in Firefox. **Later: de world gen bijstellen** (Marcel, 18 okt: "We moeten
+later nog wel wat tweaken aan de world gen"; wat precies, zegt Marcel). Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
-
-**Vraag 179, het bouwmenu, de ghost en draaien, is af** (18 okt, in `main`, onder "Af"; `spel.md`, bij "Jij bouwt"):
-Marcel kijkt (hieronder, "Wacht op Marcel").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -177,11 +164,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het bouwmenu, de ghost en draaien bekijken** (vraag 179, 18 okt, in `main`): Nieuw spel, en B of Build: boven de knop
-  een raster van plaatjes; wijs er een aan voor wat het kost en doet. Kies het huis of de boerderij: het gebouw zelf
-  volgt de muis, half doorzichtig, en rood waar het niet past; R draait het (Shift+R terug), en het volgende begint weer
-  met zijn deur naar het zuiden. De houthakker en de andere werkplaatsen draaien nog niet (vraag 167). Het venster is
-  zeven plaatjes breed; is het te groot of te klein, dan is dat een getal (`PLAATJE` in `js/hud.js`, `stijl.css`).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
@@ -1498,10 +1480,17 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
 ## Af (sinds 11 okt)
 
+- De renderproef van de grond (vraag 178, 18 okt; `snelheid.md`, vanaf "Het plan voor de renderproef van de grond", en
+  `code.md` bij `js/tekenen.js`, "de grond op de kaart"): de vloer, de droge beek, het platte groen, de sneeuw en de
+  heuvels als vaste rijen op de videokaart, met het licht in de tegel (Marcel koos A) en de dekkers in de diepte; een
+  stap met het wiel, een andere stand sneeuw en de beek zijn één beeld van 3 à 22 ms in plaats van 8 à 15 beelden tot
+  108 ms. Marcel: "wow, dat is snel, geeft geen krimp meer, instant wissel", en "dit wordt de nieuwe standaard": de
+  schakelaar is weg, de oude buffer is er alleen nog zonder videokaart.
 - Het bouwmenu, de ghost en draaien (vraag 179, 18 okt; Marcel: "A. A1 B. B1, maar voor het volgende gebouw staat die
   weer op standaard. C. C2"; `spel.md`, bij "Jij bouwt", en `code.md`, "het bouwmenu, de ghost en draaien"): een raster
   van plaatjes boven Build met de uitleg bij de muis, het gebouw zelf half doorzichtig aan de muis (rood waar het niet
-  past), en R draait wat in de bouwstijl is; het volgende gebouw begint weer met de deur naar het zuiden.
+  past), en R draait wat in de bouwstijl is; het volgende gebouw begint weer met de deur naar het zuiden. Marcel keek in
+  het spel (18 okt): "klopt allemaal".
 - De meter met de videokaart (18 okt; `gereedschap.md`, bij de meter): F2 zegt ook hoe lang de videokaart over een beeld
   doet ("graphics card … ms"), of dat de browser het niet zegt; in Edge nagekeken (de kaart 2,8 ms per beeld).
 - H4, het koude werk na het laden (18 okt; `snelheid.md`, "De tik"): na het land nog vijf stappen achter de voortgang;
