@@ -193,6 +193,24 @@
       vGrijs = st < 0.75 ? uGrijs.x : 0.0;
       vBron = -1.0 - info.x;
     }`;
+  // Een grondtegel van een vaste rij (de renderproef van de grond, stap 1 en 2: ontwerp/snelheid.md; tekenGrond,
+  // hieronder, en js/tekenen.js, "de grond op de kaart"): iA waar zijn tekening links boven begint (in pixels van de
+  // vlakte, vanaf het stuk: uStuk is waar dat op het doek ligt, uZoom de vergroting) en waar ze in haar vel staat, iB
+  // haar maat en welk vel (de plaats in de rij: uBeeld0, uBeeld1, ...; uVel de maten van de vellen). Zonder diepte, in
+  // de volgorde van de rij: rij na rij, zoals op het doek van de oude grond.
+  const VERT_GROND = /* // geen tekst */ `#version 300 es
+    in vec4 iA; in vec4 iB;
+    uniform vec2 uMaat; uniform vec2 uZoom; uniform vec2 uStuk; uniform vec2 uVel[${RIJ_TEXTUREN}];
+    out vec2 vUv; out vec4 vKleur; out float vGrijs; flat out float vBron;
+    void main() {
+      vec2 c = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1));
+      vec2 p = uStuk + uZoom * (iA.xy + c * iB.xy);
+      gl_Position = vec4(p.x / uMaat.x * 2.0 - 1.0, 1.0 - p.y / uMaat.y * 2.0, 0.0, 1.0);
+      vUv = (iA.zw + c * iB.xy) / uVel[int(iB.z)];
+      vKleur = vec4(1.0);
+      vGrijs = 0.0;
+      vBron = iB.z;
+    }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
   const FRAG_VERLOOP = /* // geen tekst */ `
     precision highp float; varying vec2 vPlek; varying vec4 vKleur;
@@ -327,6 +345,7 @@
   let mistWerkProg = null;
   let instProg = null;
   let vastProg = null;
+  let grondProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
   const PER_HOEK = 11; // x, y, u, v, r, g, b, a, grijs, bron (de plaats van zijn textuur in de rij), diepte
@@ -353,6 +372,7 @@
   const PLAATJES = 1;
   const DOE = 2;
   const VAST = 3; // de vaste rijen van een beeld (tekenVast)
+  const GROND = 4; // de vaste rijen van de grond (tekenGrond)
   const opdrachten = [];
   const rij = []; // de texturen van de rij die nu groeit, op hun plaats (hooguit RIJ_TEXTUREN; de stapel telt niet mee)
   let rijMeng = 'source-over';
@@ -413,6 +433,7 @@
       beeldProg = maakProgramma(VERT_BEELD, FRAG_BEELD);
       instProg = maakProgramma(VERT_INST, FRAG_BEELD);
       vastProg = maakProgramma(VERT_VAST, FRAG_BEELD);
+      grondProg = maakProgramma(VERT_GROND, FRAG_BEELD);
       verloopProg = maakProgramma(VERT, FRAG_VERLOOP);
       plasProg = maakProgramma(VERT, FRAG_PLAS);
       maalProg = maakProgramma(VERT, FRAG_MAAL);
@@ -452,13 +473,14 @@
     atlas = null;
     rij.length = 0;
     opdrachten.length = 0;
-    for (const prog of [beeldProg, instProg, vastProg]) {
+    for (const prog of [beeldProg, instProg, vastProg, grondProg]) {
       gebruik(prog);
       uBeelden.forEach((u, i) => gl.uniform1i(prog.u[u], i));
       gl.uniform1i(prog.u.uAtlas, ATLAS_PLAATS);
       gl.uniform1f(prog.u.uMasker, 0);
       gl.uniform1f(prog.u.uHard, 0);
     }
+    gebruik(vastProg); // een uniform hoort bij het programma dat in gebruik is
     gl.uniform1i(vastProg.u.uTabel, TABEL_PLAATS);
     gl.uniform1i(vastProg.u.uStand, STAND_PLAATS);
     gebruik(instProg);
@@ -521,7 +543,7 @@
     nuProg = nuTex = nuMeng = nuDiep = null;
     nuOp.length = 0;
     hoekNu = null;
-    for (const prog of [beeldProg, instProg, vastProg]) if (prog) prog.maat = -1;
+    for (const prog of [beeldProg, instProg, vastProg, grondProg]) if (prog) prog.maat = -1;
   }
   // De maat van het doek in een programma van de rij, alleen als hij anders is.
   function zetMaat(prog) {
@@ -1318,6 +1340,26 @@
     gl.bindVertexArray(null);
     if (!opMasker) zetDiep('toets');
   }
+  // De vaste rijen van de grond (VERT_GROND, Doek.tekenGrond), stuk na stuk in de volgorde van de lijst.
+  function tekenGrond(o) {
+    gebruik(grondProg);
+    zetMaat(grondProg);
+    const u = grondProg.u;
+    const m = o.m;
+    gl.uniform2f(u.uZoom, m[0], m[3]);
+    gl.uniform2fv(u.uVel, o.maten);
+    for (let i = 0; i < o.vellen.length; i++) bindOp(i, o.vellen[i].tex);
+    zetMeng('source-over');
+    zetDiep('uit');
+    for (const r of o.stukken) {
+      gl.uniform2f(u.uStuk, m[0] * r.px + m[4], m[3] * r.py + m[5]);
+      gl.bindVertexArray(r.rij.vao);
+      gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, r.rij.n);
+      G.telling.opdrachten++;
+      G.telling.grond += r.rij.n;
+    }
+    gl.bindVertexArray(null);
+  }
 
   // ---------------------------------------------------------------- het kladdoek
   let klad = null; // { canvas, ctx }
@@ -1531,6 +1573,22 @@
       legRijAf();
       diepteBasis = { d0: stand.d0, schaal: stand.schaal };
       opdrachten.push({ soort: VAST, stukken, stand, m: m.slice(), werpt: schaduwOp !== null, opgestuurd: false });
+      return true;
+    }
+    // De grond als vaste rijen (de renderproef, stap 1 en 2; js/tekenen.js, "de grond op de kaart"): `stukken` per stuk
+    // { rij (G.vasteRij, VERT_GROND), px, py (waar het stuk begint, in pixels van de vlakte) }, in de volgorde waarin ze
+    // over elkaar gaan; `vellen` de plaatjes waar de tekeningen uit komen (hooguit RIJ_TEXTUREN). Geeft false als het niet
+    // kan (een doek dat gedraaid staat, een vel dat nog niet op de kaart kan).
+    tekenGrond(stukken, vellen) {
+      const m = this.st.m;
+      if (m[1] || m[2] || vellen.length > RIJ_TEXTUREN) return false;
+      const t = vellen.map(textuurVan);
+      if (t.some((x) => !x || x.blad)) return false;
+      legKladAf();
+      legRijAf();
+      const maten = new Float32Array(RIJ_TEXTUREN * 2);
+      t.forEach((x, i) => maten.set([x.tb, x.th], i * 2));
+      opdrachten.push({ soort: GROND, stukken, vellen: t, maten, m: m.slice() });
       return true;
     }
     // De sleutel van het sorteren (js/tekenen.js, diepteVanItem) van wat nu getekend wordt, of null: dan zonder diepte.
@@ -1928,7 +1986,7 @@
 
   // ---------------------------------------------------------------- een beeld
   let hetDoek = null;
-  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0, mist: 0, vast: 0 };
+  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0, mist: 0, vast: 0, grond: 0 };
   // Het doek even groot als dat van de browser (formaat in js/main.js), met dezelfde ratio.
   G.zetMaat = function (b, h, r) {
     if (!start()) return;
@@ -2053,6 +2111,7 @@
     }
     for (const o of opdrachten) {
       if (o.soort === VAST) tekenVast(o, false);
+      else if (o.soort === GROND) tekenGrond(o);
       else if (o.soort !== DOE) tekenRij(o, o.meng);
       else {
         zetDiep(o.diep ? 'toets' : 'uit');

@@ -38,10 +38,12 @@ opnieuw. **Gemeten** (18 okt; `snelheid.md`, "Gemeten"; `Spel.debug.meetGrond()`
 83 tot 100 ms vlak, en met heuvels 300 tot 335 ms; een stand sneeuw op de grond (elke middernacht in de winter) 283 ms
 vlak en 340 met heuvels. **Het spreiden is af** (18 okt, Marcel: "Doe eerst het spreiden"; `snelheid.md`,
 "Spreiden"): een stap met het wiel is nu 8 tot 14 beelden van hooguit 34 ms vlak en 90 met heuvels, pixel voor pixel
-hetzelfde eindbeeld. **Wacht op Marcel**: kijken hoe het eruitziet (uitzoomen bij het dorp: de rand is een paar beelden
-donker; de platen `uit/schermen/spreiden-*.png`), en dan de renderproef van de grond als vaste rijen (een stuk met
-heuvels of sneeuw hapert nog: 40 à 90 ms; Marcel, 18 okt: "we gaan verder"; **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): het plan voor de renderproef). Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+hetzelfde eindbeeld; Marcel zag de haperingen ("in en uitzoomen zorgt nu wel voor spikes in de fps"). **De
+renderproef van de grond, stap 1 en 2 zijn gebouwd** (18 okt; het plan en de metingen in `snelheid.md`; Marcel koos A:
+ver uit mag anders zijn als het er even goed uitziet): dichtbij pixel voor pixel hetzelfde, ver uit 0,5 à 0,7% van de
+pixels anders, en een stap met het wiel één beeld van 5 à 11 ms in plaats van 6 à 8 beelden van 18 à 44. **Wacht op
+Marcel**: kijken in het spel (`Spel.debug.grondProef = 'nieuw'`, en `'oud'` om te vergelijken; nog zonder de beek, het
+platte groen en de sneeuw), en dan stap 3. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en

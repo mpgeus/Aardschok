@@ -287,7 +287,8 @@ bij uitzoomen ligt er aan de rand nog niets, en is de grond daar een paar beelde
 die, dan het midden). Een eerste keer herfst of winter na het laden kost nog steeds een beeld van 440 à 510 ms: het blad
 met de bomen (D1), niet de grond.
 
-**Het plan voor de renderproef van de grond** (18 okt, Marcel: "we gaan verder"; wacht op zijn keuze). Eerst twee
+**Het plan voor de renderproef van de grond** (18 okt, Marcel: "we gaan verder"; hij koos **A**, en eerst stap 1 en 2:
+"ver uitgezoomd mag anders zijn als het er even goed uitziet. Begin met stap 1 en 2 (vlak)"). Eerst twee
 dingen die anders zijn dan hierboven staat (de kaart van de code door een zoekagent): een tegel op een helling wordt niet
 in driehoeken geknipt, maar met één schuine stand per tegel getekend, het vlak door zijn vier hoeken, 1,04 groter tegen
 naden (`tekenSchuineTegel`, `opTegelVlak`); alleen de wanden zijn driehoeken met een knip (`tekenWanden`). En de hoogte
@@ -329,6 +330,23 @@ pixel van de tekening blijft over). Pixel voor pixel kan alleen dichtbij. **A**:
 goed uitziet (Marcel kijkt naar de platen naast elkaar en in het spel); **B**: ver uit blijft de gebakken grond (dan helpt
 de proef alleen dichtbij, waar het al snel is). Voorstel van Claude: **A**, want daar zit de winst; en eerst stap 1 en 2
 (vlak): die zeggen of het snel genoeg is en of het er goed uitziet, voor het grootste werk (de heuvels) begint.
+
+**Stap 1 en 2 zijn gebouwd** (18 okt; `code.md` bij `js/tekenen.js`, "de grond op de kaart"; aan met
+`Spel.debug.grondProef = 'nieuw'`, en `'oud'` is de oude grond zonder de beek, het platte groen en de sneeuw, om te
+vergelijken). Op het proefdorp, het hele beeld met de bomen, de schaduw en de mist erbij, na 30 beelden rust:
+
+- **Dichtbij** (zoom 2, 1 en 0,75): 0 pixels anders. Stuk na stuk land, rij na rij, valt de volgorde op een vlakke
+  kaart samen met die van de oude grond, want een tegel overlapt alleen zijn buren in dezelfde rij en kolom.
+- **Ver uit**: 0,7% van het beeld anders op 0,5 en 0,5% op 0,35 (in het bos, waar weinig grond te zien is; op open
+  land meer): losse pixels van de grond, waar een andere pixel van de tekening overblijft. De platen:
+  `uit/schermen/grondproef-*.png`.
+- **Een stap met het wiel** (elk beeld tot de videokaart klaar is, `T.gl.wacht`; het Claude-venster niet in beeld, dus
+  trager dan echt): met de oude grond en het spreiden 6 tot 8 beelden van 18 tot 44 ms; met de grond op de kaart één
+  beeld van 5 tot 11 ms, dan 3 ms. Een gewoon beeld is met de grond op de kaart 3 ms, met de oude 4 à 6.
+
+Een les onderweg: een uniform hoort bij het programma dat in gebruik is (`gebruik`); met het programma van de grond als
+laatste in de lus van `start` kregen de bomen hun tabel en hun mist niet, en lazen ze uit de verkeerde textuur (bomen in
+blokken, die kwamen en gingen). Nu staat er `gebruik(vastProg)` vóór.
 
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 

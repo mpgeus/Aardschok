@@ -616,7 +616,7 @@
     // Wat er op de kaart veranderde (een gevelde boom, een gebouw) en waar het zand van de paadjes anders werd, tekent
     // werkGrondBij alleen daar opnieuw (vergeetVeranderdeKaart); de keuze voor de paadjes zelf tekent alles opnieuw.
     const paadjes = T.PADEN_INSTELLINGEN ? T.PADEN_INSTELLINGEN.paadjes : '';
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}|${grondProef()}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -1071,9 +1071,127 @@
     if (om.x0 > om.x1 || om.y0 > om.y1) return false;
     const vak = tegelsVoorStuk(S.wereld, r, GRONDRAND);
     tekenVloeren(c, S, inBeeld, vak);
-    if (S.wereld.buiten) tekenDrogeBeek(c, S, vak);
-    if (S.wereld.buiten) tekenPlatIn(c, S, vak);
+    if (S.wereld.buiten && grondProef() !== 'oud') tekenDrogeBeek(c, S, vak);
+    if (S.wereld.buiten && grondProef() !== 'oud') tekenPlatIn(c, S, vak);
     return true;
+  }
+
+  // ---- de grond op de kaart (de renderproef van de grond, stap 1 en 2: ontwerp/snelheid.md, "Het plan voor de
+  // renderproef van de grond"; Marcel, 18 okt: "A: ver uitgezoomd mag anders zijn als het er even goed uitziet. Begin met
+  // stap 1 en 2 (vlak)"). Per stuk land (T.STUK bij T.STUK tegels) een vaste rij met een instantie per grondtegel, rij na
+  // rij (GROND_PER getallen: waar de tekening links boven begint, in pixels van de vlakte vanaf het stuk, waar ze in haar
+  // vel staat, haar maat, welk vel), en de kaart tekent ze elk beeld meteen op de zoom (Doek.tekenGrond, js/gl.js). Een
+  // stap met het wiel kost dan niets. Alleen vlak, en alleen de vloer: de droge beek, het platte groen en de sneeuw
+  // komen in stap 3. Aan met Spel.debug.grondProef = 'nieuw'; 'oud' tekent de oude grond zonder die drie, om te
+  // vergelijken. Een stuk opnieuw als het open ging, als de kaart er veranderde, als het zand van de paadjes er anders
+  // werd, als de beek droogviel of terugkwam, of als er een vel bij kwam (één per beeld).
+  const grondProef = () => (T.debug && T.debug.grondProef) || '';
+  const GROND_PER = 8;
+  const GROND_HOOGUIT = 48; // zoveel stukken blijven er hooguit op de kaart
+  const grondKaarten = new WeakMap(); // wereld → { stukken: Map(nr → e), vellen, kaart, zand }; alleen scherm
+  let grondLaatst = null;
+  let beeldTeller = 0;
+  function grondVan(w) {
+    let G = grondKaarten.get(w);
+    if (!G) {
+      G = { stukken: new Map(), vellen: [], kaart: T.kaartVersie(w), zand: null };
+      grondKaarten.set(w, G);
+    }
+    if (grondLaatst && grondLaatst !== G) {
+      for (const e of grondLaatst.stukken.values()) T.gl.weg(e.rij);
+      grondLaatst.stukken.clear();
+    }
+    grondLaatst = G;
+    return G;
+  }
+  // Markeer de stukken die rechthoek q van tegels raken (met een tegel erom) als vies; zonder q alle.
+  function grondVies(G, q) {
+    const Z = T.STUK;
+    for (const e of G.stukken.values()) {
+      if (!q || (q.x2 >= e.x0 - 1 && q.x1 <= e.x0 + Z && q.y2 >= e.y0 - 1 && q.y1 <= e.y0 + Z)) e.vies = true;
+    }
+  }
+  function bouwGrondStuk(G, w, s, paden, droog) {
+    const Z = T.STUK;
+    const o = T.naarScherm(s.x0, s.y0);
+    const data = new Float32Array(Z * Z * GROND_PER);
+    let n = 0;
+    for (let y = s.y0; y < s.y0 + Z; y++) {
+      for (let x = s.x0; x < s.x0 + Z; x++) {
+        if (T.tegel(w, x, y) === 'buiten' || !T.isZichtbaar(w, x, y)) continue;
+        const g = T.grondOp(w, x, y);
+        if (!g) continue;
+        const metPad = hoekenVanGrond(g, x, y, paden, droog);
+        const deel = (metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || T.sprites.buiten(g.vel, g.id);
+        if (!deel) continue;
+        let vel = G.vellen.indexOf(deel.beeld);
+        if (vel < 0) vel = G.vellen.push(deel.beeld) - 1;
+        const p = T.naarScherm(x, y);
+        data.set([Math.round(p.x - deel.ax) - o.x, Math.round(p.y - deel.ay) - o.y, deel.sx, deel.sy, deel.b, deel.h, vel, 0], n * GROND_PER);
+        n++;
+      }
+    }
+    return { s, x0: s.x0, y0: s.y0, px: o.x, py: o.y, rij: n ? T.gl.vasteRij(data, n) : null, vies: false };
+  }
+  // Tekent de grond in vak (tegels) als vaste rijen; false als het niet kan (dan de oude grond).
+  function tekenGrondOpDeKaart(ctx, S, w, vak) {
+    if (!ctx.tekenGrond || !metSprites() || !w.buiten || !T.opEiland(w) || T.heeftHoogte(w)) return false;
+    const G = grondVan(w);
+    const Z = T.STUK;
+    const kaart = T.kaartVersie(w);
+    if (kaart !== G.kaart) {
+      const plekken = T.kaartPlekkenSinds(w, G.kaart);
+      if (!plekken) grondVies(G, null);
+      else for (const q of plekken) grondVies(G, q);
+      G.kaart = kaart;
+    }
+    const paden = zandVan(S);
+    const zand = paden ? paden.zand : null;
+    if (zand !== G.zand) {
+      if (G.zand && zand && G.zand.length === zand.length) {
+        const kv = T.kaartVak(w);
+        const bv = kv.b + 1; // de hoekpunten, zoals T.zandHoeken ze legt
+        for (let k = 0; k < zand.length; k++) {
+          if (zand[k] === G.zand[k]) continue;
+          const x = kv.x + (k % bv);
+          const y = kv.y + Math.floor(k / bv);
+          grondVies(G, { x1: x - 1, y1: y - 1, x2: x, y2: y });
+        }
+      } else grondVies(G, null);
+      G.zand = zand;
+    }
+    const droog = droogVan(paden);
+    const sleutel = `${droog ? 1 : 0}|${w.huidigeKamer}`;
+    const geladen = T.sprites.geladenNr();
+    const stukken = [];
+    let later = 0; // wat alleen opnieuw moet omdat er een beeld bij kwam: één per beeld
+    for (const nr of [...w.open].sort((a, b) => a - b)) {
+      const x0 = (nr % 64) * Z;
+      const y0 = Math.floor(nr / 64) * Z;
+      if (x0 > vak.x1 || y0 > vak.y1 || x0 + Z <= vak.x0 || y0 + Z <= vak.y0) continue;
+      const s = T.stukOpen(w, nr);
+      let e = G.stukken.get(nr);
+      const nodig = !e || e.s !== s || e.vies || e.sleutel !== sleutel;
+      if (nodig || (e.geladen !== geladen && !later++)) {
+        if (e) T.gl.weg(e.rij);
+        e = bouwGrondStuk(G, w, s, paden, droog);
+        e.sleutel = sleutel;
+        e.geladen = geladen;
+        G.stukken.set(nr, e);
+      }
+      e.beeld = beeldTeller;
+      if (e.rij) stukken.push(e);
+    }
+    // wat lang buiten beeld is, gaat van de kaart (een stuk is 128 kB)
+    if (G.stukken.size > GROND_HOOGUIT) {
+      for (const [nr, e] of G.stukken) {
+        if (e.beeld === beeldTeller) continue;
+        T.gl.weg(e.rij);
+        G.stukken.delete(nr);
+      }
+    }
+    beeldTeller++;
+    return ctx.tekenGrond(stukken, G.vellen);
   }
 
   // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), en de
@@ -1115,8 +1233,9 @@
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsMetHoogte(w, zicht); // met de hoogte: een tegel onder het beeld kan op een heuvel erin liggen
 
-    const g = werkGrondBij(S, zicht, inBeeld, dpr);
-    tekenStukken(ctx, g, zicht);
+    const opDeKaart = grondProef() === 'nieuw' && tekenGrondOpDeKaart(ctx, S, w, vak);
+    const g = opDeKaart ? S.grond : werkGrondBij(S, zicht, inBeeld, dpr); // heuvelsErvoor gebruikt hem ook
+    if (!opDeKaart) tekenStukken(ctx, g, zicht);
     tekenWaterLeven(ctx, S, w, vak);
     tekenWeides(ctx, S, vak);
 
@@ -2348,14 +2467,26 @@
     broek: ['#446836', '#3f6232'],
   };
 
+  // De hoeken van grondtegel g op (x, y) als er een paadje of een droge beek over loopt, of null: dan is het de tegel
+  // zelf (tekenVloeren, en de grond op de kaart). Een paadje (js/paden.js) maakt de hoeken die gras waren zand, met de
+  // tegel uit hetzelfde vel die die hoeken heeft; een droge beek (js/weer.js) maakt de hoeken die water waren zandpad:
+  // een bedding, met het gras eromheen.
+  function hoekenVanGrond(g, x, y, paden, droog) {
+    let metPad = paden && g ? T.hoekenMetPaden(paden.D, paden.zand, x, y, T.sprites.grondHoeken(g.vel, g.id)) : null;
+    if (droog && g) metPad = T.hoekenDroog(droog, x, y, metPad || T.sprites.grondHoeken(g.vel, g.id)) || metPad;
+    return metPad;
+  }
+  // De droge beek van het dorp hier, of null (tekenVloeren, de grond op de kaart).
+  const droogVan = (paden) => (paden && paden.D.weer && paden.D.weer.beekDroog ? paden.D : null);
+
   function tekenVloeren(ctx, S, inBeeld, vak) {
     const w = S.wereld;
     const sp = metSprites();
     const buiten = !!w.buiten;
     const paden = buiten ? zandVan(S) : null;
-    const droog = paden && paden.D.weer && paden.D.weer.beekDroog ? paden.D : null;
+    const droog = droogVan(paden);
     const hoog = T.heeftHoogte(w);
-    const sneeuw = buiten ? sneeuwLaag(S) : 0;
+    const sneeuw = buiten && grondProef() !== 'oud' ? sneeuwLaag(S) : 0;
     for (const [x, y] of tegelVolgorde(vak, hoog)) {
       if (!vak.binnen(x, y)) continue; // een stuk van de grond (tegelsVoorStuk)
       {
@@ -2382,10 +2513,7 @@
         // De tegels zijn al klaargeknipt (js/sprites.js snijdt de vloerlappen bij het laden, en
         // de grond van buiten komt per tegel uit de stempel van vier bij vier), dus hier is
         // tekenen niets meer dan één drawImage.
-        // Een paadje (js/paden.js) maakt de hoeken die gras waren zand, met de tegel uit hetzelfde vel die die hoeken heeft.
-        let metPad = paden && g ? T.hoekenMetPaden(paden.D, paden.zand, x, y, T.sprites.grondHoeken(g.vel, g.id)) : null;
-        // Een droge beek (js/weer.js) maakt de hoeken die water waren zandpad: een bedding, met het gras eromheen.
-        if (droog && g) metPad = T.hoekenDroog(droog, x, y, metPad || T.sprites.grondHoeken(g.vel, g.id)) || metPad;
+        const metPad = hoekenVanGrond(g, x, y, paden, droog);
         if (metPad && !sp && metPad.every((soort) => soort === 'zandpad')) hex = BUITENKLEUR.zandpad[(x + y) % 2];
         const deel = sp && ((metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y)));
         if (deel) {
