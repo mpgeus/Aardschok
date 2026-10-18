@@ -30,8 +30,9 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
 **De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen. Middernacht
 13 naar 3 ms (H1 tot H3), de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1),
-en het laden achter het laadscherm (F2), allemaal geproefd, niet in `main`. **Wacht op Marcel**: welke, en in welke
-volgorde (het voorstel staat onderaan "De tik").
+en het laden achter het laadscherm (F2), allemaal geproefd, de proeven op `proef/tik-nacht`, `proef/tik-kudde` en
+`proef/tik-land`. **De tik van middernacht sneller: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "begin met
+middernacht"): H1 tot H3. De rest wacht op Marcel (het voorstel staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
