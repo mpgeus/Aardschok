@@ -1054,7 +1054,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `textuurMateriaal` met `contrast`, `reliëf` (de hoogte uit de helderheid, `hoogteVan`) en versiering op het onderdeel
   (`TX.metVersiering`: klinknagels langs de afwikkeling); `onderdelen.cjs` (ringstukken, taps toelopende balken en
   klinknagels, met afgeschuinde randen); `stijlmaat.cjs` (contrast, warmte, schaduw, kleuren en drukte van een sprite,
-  om naast een voorbeeld te leggen). De proef zelf is `hdproef.cjs`.
+  om naast een voorbeeld te leggen). De proef zelf is `hdproef.cjs`; de resolutieproef (2× tot 16×, vier
+  verkleinfilters: naast, box, Lanczos-3 en meerderheid) `hdresolutie.cjs` (`gereedschap/ai/hd-resolutie.md`).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

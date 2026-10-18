@@ -188,10 +188,11 @@ function wielModel(v, hoek) {
 }
 
 // Eén beeld: met en zonder omlijning (de omlijning op de doelmaat, bij het verkleinen), de buffers voor de metingen.
-function render(v, kant, hoek, fijn) {
+// rust: de plek in rust per pixel bewaren (voor de metingen; op 16× is dat 80 MB per beeld, dus uit te zetten).
+function render(v, kant, hoek, fijn, rust = true) {
   const B = new K.Beeld(CEL[0] * fijn, CEL[1] * fijn, CEL[2] * fijn, CEL[3] * fijn);
   const t0 = process.hrtime.bigint();
-  K.tekenModel(B, wielModel(v, hoek), { richting: kant, rust: true, fijn });
+  K.tekenModel(B, wielModel(v, hoek), { richting: kant, rust, fijn });
   K.belicht(B);
   const zonder = K.kleurBeeld(B);
   K.omlijn(B, v.naad ? { naad: v.naad } : {});
@@ -646,11 +647,15 @@ async function alles() {
   platen();
 }
 
-const [wat, a1, a2] = process.argv.slice(2);
-if (wat === 'proef') proef(Number(a1) || 2);
+const [wat, a1, a2] = require.main === module ? process.argv.slice(2) : ['geladen'];
+if (wat === 'geladen');
+else if (wat === 'proef') proef(Number(a1) || 2);
 else if (wat === 'render') renderVariant(Number(a1), a2);
 else if (wat === 'platen') platen();
 else if (wat === 'alles') alles().catch((e) => { console.error(e.message); process.exit(1); });
 else console.log('node gereedschap/pixelart/hdproef.cjs proef [fijn] | alles | render <fijn> <A|B|C|ladder> | platen');
 
-module.exports = { wielC, materialen, VARIANTEN, LADDER, STANDEN, renderEen: render, snij, uitsnede, vastzitten };
+module.exports = {
+  wielC, materialen, VARIANTEN, LADDER, STANDEN, CEL, renderEen: render, snij, uitsnede, vastzitten,
+  verklein, omlijnBeeld, naarPalet, paletVan, alfaSnij, alfaSnijMetGrond, naastElkaar, referentie, bewaar, lees, lin, srgb,
+};

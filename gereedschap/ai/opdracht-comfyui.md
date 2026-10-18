@@ -354,3 +354,22 @@ Als de resultaten onvoldoende zijn, benoem dan precies welke beperkingen overbli
 We willen geen cosmetische verbetering van enkele procenten. We zoeken een duidelijke, zichtbare kwaliteitsstap richting professionele HD-pixelart.
 
 Voer het experiment gecontroleerd uit, zodat we achteraf kunnen vaststellen welke wijziging verantwoordelijk is voor iedere verbetering.
+
+# Vijfde opdracht: 2×, 4×, 8× en 16×
+
+Van Marcel, 18 okt 2026, letterlijk (na `hd-wielproef.md`). Het antwoord: `hd-resolutie.md`.
+
+Voer nog één resolutie-experiment uit met ons beste wagenwiel: variant C met verbeterde geometrie en hoogwaardige materialen.
+Render hetzelfde wiel op 2×, 4×, 8× en 16× interne resolutie.
+Gebruik exact dezelfde geometrie, texturen, materialen, belichting en camerahoek.
+Toon alle vier de resultaten:
+
+1. Op hun oorspronkelijke interne resolutie.
+2. Op exact dezelfde fysieke grootte bij 1920 × 1080.
+3. Met verschillende geschikte downsamplingfilters.
+4. Met een vergelijking van detailbehoud, scherpte, aliasing en visuele kwaliteit.
+
+Meet ook de rendertijd en het geheugenverbruik.
+Belangrijk: verhoog daadwerkelijk de interne renderresolutie. Vergroot geen bestaande rasterafbeelding.
+Onderzoek of 8× of 16× nog zichtbaar betere pixelart oplevert dan 4×.
+Geef een aanbeveling voor de optimale productieresolutie, rekening houdend met visuele kwaliteit, atlasgrootte en de hoeveelheid sprites die Aardschok uiteindelijk nodig heeft.

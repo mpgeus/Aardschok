@@ -166,8 +166,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   nulmeting, na elke wijziging aan de renderer (zo'n anderhalve minuut). De proeven met het wagenwiel:
   `node gereedschap/pixelart/wielproef.cjs` (AI-texturen die vastzitten, een halve minuut) en
   `node gereedschap/pixelart/hdproef.cjs alles` (de HD-proef: drie varianten en een ladder op 1×, 2× en 4×, parallel, zo'n
-  vier minuten; `proef [fijn] [kant]` één beeld per trede om af te stellen; `platen` alleen de platen). Alles in
-  `gereedschap/pixelart/uit/wielproef/` en `uit/hdproef/`.
+  vier minuten; `proef [fijn] [kant]` één beeld per trede om af te stellen; `platen` alleen de platen), en
+  `node gereedschap/pixelart/hdresolutie.cjs alles` (variant C op 1× tot 16×, verkleind tot de maat van 1080p met vier
+  filters; zo'n zes minuten, 16× vraagt zo'n 470 MB per proces). Alles in `gereedschap/pixelart/uit/wielproef/`,
+  `uit/hdproef/` en `uit/hdresolutie/`.
 
 
 ## Testen in de browser

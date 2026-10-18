@@ -292,8 +292,15 @@ stenen huizen. **Ronde 3 is af.**
   grootte** (4× alleen zichtbaar op 4K, vier keer duurder); (2) forsere verhoudingen (zoals ChatGPT: spaken, velg en band
   anderhalf keer zo fors); (3) het handschrift van pixel art (een lichte lijn op elke rand naar het licht, een donkere om
   elk onderdeel, weinig tinten); (4) het licht op het vlak vooraan. Op 2× kost het vier keer videogeheugen en twee à drie
-  keer rendertijd. **Wacht op Marcel:** het advies (2× als HD-sprite, materialen B, geometrie C maar forser, 24 tot 32
-  kleuren) en de volgende proef: een pixelart-stap op de doelmaat, of meteen de hele ossenkar op 2×.
+  keer rendertijd.
+  **De resolutieproef** (18 okt; Marcels vijfde opdracht: C op 2×, 4×, 8× en 16×, "Onderzoek of 8× of 16× nog zichtbaar
+  betere pixelart oplevert dan 4×"; het verslag in `gereedschap/ai/hd-resolutie.md`, de platen in `uit/hdresolutie/`):
+  nee. Op 1080p wijkt 4× (verkleind met box) 6,7 af van het ideaal (16×), 8× 2,2: met het oog niet te zien; 8× en 16× zijn
+  3,6 en 12 keer zo traag als 4× (16×: 41 s en 470 MB per beeld), en hun detail zit niet in de texturen. Nearest
+  neighbour kartelt, meerderheid verspringt in beweging; box en Lanczos zijn goed. **Wacht op Marcel:** het advies
+  (de sprite op 2×, gerenderd op 4× en gefilterd verkleind; de demo zo'n 14 kern-uren, een nacht; 0,37 GB aan PNG;
+  materialen B, geometrie C maar forser, 24 tot 32 kleuren) en de volgende proef: een pixelart-stap op de doelmaat, of
+  meteen de hele ossenkar op 2×.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
