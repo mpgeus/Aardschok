@@ -744,8 +744,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eerste minder dan 8 ms kostte (`SPREID`): eerst wat het oude beeld niet bedekt, dan van het midden naar buiten. Is het
   af, dan is het beeld pixel voor pixel dat van alles in één keer. Een schermafdruk, een foto en `Spel.debug.stap`
   tekenen alles in één keer (`T.tekenHeel`); `T.grondBezig(S)` zegt of het nog loopt. **De grond op de kaart** (de
-  renderproef, stap 1 tot 4, 18 okt; `snelheid.md`): met `Spel.debug.grondProef = 'nieuw'` tekent de videokaart de grond
-  zelf, per stuk land een vaste rij met een instantie per tegel (`tekenGrondOpDeKaart`, `bouwGrondStuk`; in `js/gl.js`
+  renderproef, 18 okt; `snelheid.md`; Marcel: "dit wordt de nieuwe standaard"): met de videokaart tekent die de grond
+  zelf, en de buffer hierboven is er dan alleen nog zonder videokaart en als het op de kaart niet kan; per stuk land een vaste rij met een instantie per tegel (`tekenGrondOpDeKaart`, `bouwGrondStuk`; in `js/gl.js`
   `VERT_GROND`, `Doek.tekenGrond`), stuk na stuk op volgorde van hun nummer, en wat erop ligt in dezelfde volgorde als
   in de oude grond (`tekenGrondIn`): de sneeuw van een tegel meteen na zijn vloer, dan de droge beek (één rij,
   `bouwBeek`), dan het platte groen (per stuk een tweede rij, `bouwPlat`), want wat over de rand van een stuk steekt,

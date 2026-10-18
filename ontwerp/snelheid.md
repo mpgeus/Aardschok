@@ -469,6 +469,12 @@ eerste keer van elk seizoen, die door de bomen nog een beeld van 500 ms kost):
 Een gewoon beeld was met allebei 4 à 11 ms. Het volgende is stap 5: Marcel kijkt (met heuvels: `Spel.debug.hoogte(5)`,
 of de spelregel, met `Spel.debug.grondProef = 'nieuw'`), meet in Firefox, en kiest of de oude grond eruit gaat.
 
+**Stap 5: de grond op de kaart is de standaard** (Marcel, 18 okt: "ja dat gaat perfect, dit wordt de nieuwe standaard.
+We moeten later nog wel wat tweaken aan de world gen"). De schakelaar `Spel.debug.grondProef` is weg: met de videokaart
+tekent die de grond altijd zelf. De oude buffer (`werkGrondBij`, het spreiden, `tekenTegelOpnieuw`) blijft, maar alleen
+voor zonder videokaart, en voor als het op de kaart niet kan (een vel van de grond op de stapel, de stapel vol, meer dan
+acht vellen). Meten in Firefox doet Marcel nog.
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een

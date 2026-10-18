@@ -616,7 +616,7 @@
     // Wat er op de kaart veranderde (een gevelde boom, een gebouw) en waar het zand van de paadjes anders werd, tekent
     // werkGrondBij alleen daar opnieuw (vergeetVeranderdeKaart); de keuze voor de paadjes zelf tekent alles opnieuw.
     const paadjes = T.PADEN_INSTELLINGEN ? T.PADEN_INSTELLINGEN.paadjes : '';
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}|${grondProef()}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -1081,9 +1081,10 @@
     return true;
   }
 
-  // ---- de grond op de kaart (de renderproef van de grond, stap 1 tot 4: ontwerp/snelheid.md, "Het plan voor de
-  // renderproef van de grond"; Marcel, 18 okt: "A: ver uitgezoomd mag anders zijn als het er even goed uitziet. Begin met
-  // stap 1 en 2 (vlak)"). Per stuk land (T.STUK bij T.STUK tegels) een vaste rij met een instantie per grondtegel, rij na
+  // ---- de grond op de kaart (de renderproef van de grond: ontwerp/snelheid.md, "Het plan voor de renderproef van de
+  // grond"; Marcel, 18 okt: "A: ver uitgezoomd mag anders zijn als het er even goed uitziet", en na stap 4: "dit wordt de
+  // nieuwe standaard"). Met de videokaart tekent die de grond zelf; de buffer hierboven (werkGrondBij) is er dan alleen
+  // nog voor zonder videokaart, en voor als het op de kaart niet kan (een vel op de stapel, de stapel vol). Per stuk land (T.STUK bij T.STUK tegels) een vaste rij met een instantie per grondtegel, rij na
   // rij, en de kaart tekent ze elk beeld meteen op de zoom (Doek.tekenGrond, js/gl.js): een stap met het wiel kost dan
   // niets. Een instantie is GROND_PER getallen (zetGrond): waar de tekening links boven begint (in pixels van de vlakte
   // vanaf het stuk), waar ze in haar bron staat, haar maat, de bron, de soort (T.gl.GROND_SOORT: een vel van de grond,
@@ -1097,11 +1098,9 @@
   // kaart zelf (sneeuwOpDeKaart), zodat een andere stand sneeuw niets opnieuw maakt; dan de droge beek, één rij voor de
   // hele beek (bouwBeek); dan het platte groen, per stuk een tweede rij, die bij een ander seizoen alleen zelf opnieuw
   // komt, gespreid (bouwPlat, SPREID). Eerst de vloer van alle stukken, dan de beek, dan het groen: anders tekent de vloer
-  // van een volgend stuk over wat over de rand van een stuk steekt. Alleen vlak. Aan met Spel.debug.grondProef = 'nieuw'.
-  // Een stuk opnieuw als het open ging, als de kaart er veranderde, als het zand van de paadjes of de beek er anders
+  // van een volgend stuk over wat over de rand van een stuk steekt. Een stuk opnieuw als het open ging, als de kaart er veranderde, als het zand van de paadjes of de beek er anders
   // werd, en één per beeld als er een vel bij kwam, of als de sneeuw kwam of helemaal weg is (dan heeft het de sneeuw wel
   // of niet in zijn rij); in T.tekenHeel alles meteen.
-  const grondProef = () => (T.debug && T.debug.grondProef) || '';
   const GROND_PER = 16;
   const VLAK = [0, 0, 0, 0]; // de hoeken van een tegel zonder hoogte
   const GROND_HOOGUIT = 48; // zoveel stukken blijven er hooguit op de kaart
@@ -1463,7 +1462,7 @@
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsMetHoogte(w, zicht); // met de hoogte: een tegel onder het beeld kan op een heuvel erin liggen
 
-    const opDeKaart = grondProef() === 'nieuw' && tekenGrondOpDeKaart(ctx, S, w, vak);
+    const opDeKaart = tekenGrondOpDeKaart(ctx, S, w, vak);
     grondOpDeKaartNu = opDeKaart;
     const g = opDeKaart ? S.grond : werkGrondBij(S, zicht, inBeeld, dpr); // heuvelsErvoor gebruikt hem ook
     if (!opDeKaart) tekenStukken(ctx, g, zicht);
