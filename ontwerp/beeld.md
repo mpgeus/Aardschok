@@ -13,6 +13,11 @@
   vond (18 okt, `gereedschap/ai/hd-wielproef.md`, nog niet besloten): de plaat is ruwweg twee keer onze pixeldichtheid,
   overdrijft de maten (onderdelen anderhalf keer zo fors), en heeft het handschrift van een tekenaar (lichte randlijnen,
   een donkere lijn om elk onderdeel, weinig tinten); toon, licht en materiaal halen we al met AI-texturen in onze renderer.
+  Marcel koos daarna 4× intern en een sprite van 2× (`hd-resolutie.md`); de stijlproef (`hd-stijl.md`, nog niet
+  besloten) haalt het handschrift met een afwerking op de doelmaat (`stijl.cjs`): per materiaal zes à zeven tonen die van
+  koel naar warm schuiven, het hout vooral donker (75% donker, 3% licht, zoals het doel), de lichtste toon alleen voor
+  lichte randen, glimlichten en nagelkoppen, donkere lijnen waar onderdelen elkaar raken, en een omlijning in de kleur van
+  het materiaal.
 - **De maatstaf: "wow, wat een detail"** (9 okt 2026, Marcel, bij de fasen van een afgebrand huis: "Ik wil dat mensen
   denken: wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien", en eerder: "Art
   maakt of breekt een spel", "Moet wel handgetekend lijken", "dit is te ai, ik moet iets natuurlijker hebben iets

@@ -168,8 +168,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `node gereedschap/pixelart/hdproef.cjs alles` (de HD-proef: drie varianten en een ladder op 1×, 2× en 4×, parallel, zo'n
   vier minuten; `proef [fijn] [kant]` één beeld per trede om af te stellen; `platen` alleen de platen), en
   `node gereedschap/pixelart/hdresolutie.cjs alles` (variant C op 1× tot 16×, verkleind tot de maat van 1080p met vier
-  filters; zo'n zes minuten, 16× vraagt zo'n 470 MB per proces). Alles in `gereedschap/pixelart/uit/wielproef/`,
-  `uit/hdproef/` en `uit/hdresolutie/`.
+  filters; zo'n zes minuten, 16× vraagt zo'n 470 MB per proces), en `node gereedschap/pixelart/hdstijl.cjs alles` (de
+  stijlproef: variant C op 4× met de G-buffer, A tot D en een ladder op 2×, acht richtingen en negen standen, parallel,
+  zo'n twee minuten; `ijk` de ijking op het doel, `proef` zuidwest stand 0 om af te stellen, met de renders in een cache
+  van 31 MB per beeld; `platen` alleen de platen). Alles in `gereedschap/pixelart/uit/wielproef/`, `uit/hdproef/`,
+  `uit/hdresolutie/` en `uit/hdstijl/`.
 
 
 ## Testen in de browser

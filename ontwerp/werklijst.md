@@ -297,10 +297,16 @@ stenen huizen. **Ronde 3 is af.**
   betere pixelart oplevert dan 4×"; het verslag in `gereedschap/ai/hd-resolutie.md`, de platen in `uit/hdresolutie/`):
   nee. Op 1080p wijkt 4× (verkleind met box) 6,7 af van het ideaal (16×), 8× 2,2: met het oog niet te zien; 8× en 16× zijn
   3,6 en 12 keer zo traag als 4× (16×: 41 s en 470 MB per beeld), en hun detail zit niet in de texturen. Nearest
-  neighbour kartelt, meerderheid verspringt in beweging; box en Lanczos zijn goed. **Wacht op Marcel:** het advies
-  (de sprite op 2×, gerenderd op 4× en gefilterd verkleind; de demo zo'n 14 kern-uren, een nacht; 0,37 GB aan PNG;
-  materialen B, geometrie C maar forser, 24 tot 32 kleuren) en de volgende proef: een pixelart-stap op de doelmaat, of
-  meteen de hele ossenkar op 2×.
+  neighbour kartelt, meerderheid verspringt in beweging; box en Lanczos zijn goed. Marcel koos (18 okt): **4× intern,
+  een sprite van 2×, box of Lanczos**; geen resolutieonderzoek meer.
+  **De stijlproef** (18 okt; Marcels zesde opdracht: van een nette 3D-render naar handgemaakte pixel art; het verslag in
+  `gereedschap/ai/hd-stijl.md`, de platen in `uit/hdstijl/`): een G-buffer uit de render (`kern.cjs` `o.gbuffer`) en een
+  stijlafwerking op de doelmaat (`stijl.cjs`: kleurreeksen, nerf, variatie, metaal, clusters, contactschaduw, lichte
+  randen, binnenlijnen, slijtage, omlijning in kleur), alles vast aan het ding. D (alles, met de tonen en de verdeling van
+  het doel) komt het dichtst bij het ChatGPT-wiel, ook op spelgrootte, en flikkert niet meer dan A (0,16 tegen 0,15; een
+  volle slag 100%; 94% van de nagels zichtbaar tegen 46%). Wat overblijft is geometrie (een brede velg van planken,
+  dikke spaken met beslag, een koperen naaf) en de camera (het doel staat rechter). **Wacht op Marcel:** D als stijl, en
+  de volgende proef: het wiel naar de geometrie van het doel met D, of D op de hele ossenkar.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

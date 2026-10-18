@@ -248,6 +248,12 @@ function textuurMateriaal(o) {
       return lijst ? versier(lijst, kleur, null, x, y, z, nx, ny, nz, deel, fijn) : kleur;
     },
   };
+  // De afwikkeling op het punt (u langs de nerf, v erdwars, in eenheden), voor de G-buffer (kern.cjs o.gbuffer): zo kan een
+  // afwerking op de doelmaat (stijl.cjs) een nerf trekken die aan het onderdeel vastzit.
+  mat.uv = (x, y, z, nx, ny, nz, deel) => {
+    const uv = uvVan(deel);
+    return uv ? uv(x, y, z, nx, ny, nz) : null;
+  };
   if (HT) {
     mat.hoogte = (x, y, z, nx, ny, nz, deel, fijn) => {
       const h = bemonster(HT, x, y, z, nx, ny, nz, deel, niveauVan(1, fijn))[0] * o.reliëf;

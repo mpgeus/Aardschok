@@ -373,3 +373,99 @@ Meet ook de rendertijd en het geheugenverbruik.
 Belangrijk: verhoog daadwerkelijk de interne renderresolutie. Vergroot geen bestaande rasterafbeelding.
 Onderzoek of 8× of 16× nog zichtbaar betere pixelart oplevert dan 4×.
 Geef een aanbeveling voor de optimale productieresolutie, rekening houdend met visuele kwaliteit, atlasgrootte en de hoeveelheid sprites die Aardschok uiteindelijk nodig heeft.
+
+# Zesde opdracht: van 3D-render naar handgemaakte pixel art
+
+Van Marcel, 18 okt 2026, letterlijk (na `hd-resolutie.md`). Het antwoord: `hd-stijl.md`.
+
+Aardschok — Van 3D-render naar hoogwaardige handgemaakte pixelart
+Claude, we hebben de resolutieproef afgerond.
+De productiestandaard wordt voorlopig:
+
+* 4× interne renderresolutie.
+* 2× uiteindelijke HD-sprite.
+* Box of Lanczos als downsamplingmethode, afhankelijk van het bewegingsresultaat.
+
+We gaan nu niet verder met resolutieonderzoek.
+Doel
+Het bestaande verbeterde wagenwiel (variant C) moet visueel dichter bij onze goedgekeurde ChatGPT-referentie komen.
+De huidige versie is technisch goed, maar heeft nog te veel de uitstraling van een nette 3D-render.
+We zoeken de rijke, handgemaakte HD-pixelartstijl van onze referentie.
+Opdracht 1 — Analyseer de referentie
+Gebruik het originele ChatGPT-wiel als artistieke referentie.
+Vergelijk beide wielen op dezelfde zichtbare objectgrootte en vergelijkbare oriëntatie.
+Onderzoek:
+
+* Kleurverdeling per materiaal.
+* Verhouding tussen lichte, middellichte en donkere pixels.
+* Contrast binnen de houten spaken.
+* Metaalafwerking en reflecties.
+* Verdeling en grootte van pixelclusters.
+* Randdiktes en interne contouren.
+* Materiaalvariatie.
+* Lichtinval en contactschaduwen.
+
+Leg vast welke verschillen daadwerkelijk zichtbaar zijn en welke alleen ontstaan door schaal, camerahoek of geometrie.
+Opdracht 2 — Bouw een artistieke stylization pass
+Ontwikkel een optionele, herbruikbare artistieke afwerkingsfase.
+Deze moet ondersteunen:
+
+1. Materiaalafhankelijke kleurreeksen.
+2. Warme highlights en koelere schaduwen.
+3. Versterkte contactschaduwen.
+4. Directionele houtnerven.
+5. Onregelmatige, maar stabiele materiaalvariatie.
+6. Pixelclusters met gecontroleerde grootte en vorm.
+7. Selectieve randaccenten en interne contouren.
+8. Subtiele slijtage op uitstekende randen.
+
+Gebruik waar mogelijk bestaande materiaal-ID's, diepte, normalen en objectcoördinaten.
+Vermijd willekeurige ruis per frame.
+Alle details moeten consistent blijven bij rotatie en animatie.
+Opdracht 3 — Maak vier artistieke varianten
+Gebruik exact dezelfde geometrie en camera.
+A — Huidige variant C
+Onze bestaande kwaliteitsreferentie.
+B — Artistieke kleuren en belichting
+Pas uitsluitend kleurreeksen, contrast, schaduwen en highlights aan.
+C — Materiaalgerichte pixelart
+Voeg aan B de gerichte houtnerven, metaalaccenten en stabiele pixelclusters toe.
+D — Volledige stijlbenadering
+Combineer alle verbeteringen en optimaliseer de afwerking op basis van de goedgekeurde ChatGPT-referentie.
+Opdracht 4 — Controleer consistentie
+Render iedere variant vanuit acht richtingen en met acht rotatiestanden.
+Controleer op:
+
+* Flikkerende details.
+* Verschuivende houtnerven.
+* Veranderende highlightpatronen.
+* Ongewenste contourverschillen.
+* Verlies van detail op spelgrootte.
+
+Let op dat lichtafhankelijke highlights wel mogen veranderen wanneer de oriëntatie ten opzichte van de lichtbron verandert.
+Opdracht 5 — Vergelijk de resultaten
+Maak één vergelijkingsplaat met:
+
+* De originele ChatGPT-referentie.
+* Variant A.
+* Variant B.
+* Variant C.
+* Variant D.
+
+Toon alles op dezelfde zichtbare grootte, zonder vervorming.
+Maak daarnaast een vergelijking op daadwerkelijke spelgrootte bij 1920 × 1080.
+Beoordeel niet alleen technische scherpte, maar vooral artistieke overeenkomst.
+Randvoorwaarden
+
+* Behoud de bestaande geometrie.
+* Behoud de huidige textuurmapping.
+* Behoud de bestaande animaties.
+* Verander de wereldschaal niet.
+* Houd de nieuwe afwerking optioneel.
+* Zorg dat het systeem herbruikbaar is voor alle objecten in Aardschok.
+* Verander de bestaande productieversie niet.
+
+Eindvraag
+Welke combinatie van materiaalbehandeling, belichting, kleurreeksen en pixelartafwerking brengt ons zichtbaar het dichtst bij de goedgekeurde ChatGPT-stijl?
+Geef een onderbouwd advies en laat de resultaten zien.
+Het doel is niet de hoogste technische scherpte, maar de beste artistieke overeenkomst bij de werkelijke spelgrootte.

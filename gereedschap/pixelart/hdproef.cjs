@@ -656,6 +656,6 @@ else if (wat === 'alles') alles().catch((e) => { console.error(e.message); proce
 else console.log('node gereedschap/pixelart/hdproef.cjs proef [fijn] | alles | render <fijn> <A|B|C|ladder> | platen');
 
 module.exports = {
-  wielC, materialen, VARIANTEN, LADDER, STANDEN, CEL, renderEen: render, snij, uitsnede, vastzitten,
+  wielC, wielModel, materialen, VARIANTEN, LADDER, STANDEN, CEL, renderEen: render, refWiel, REF_HOOGTE, snij, uitsnede, vastzitten,
   verklein, omlijnBeeld, naarPalet, paletVan, alfaSnij, alfaSnijMetGrond, naastElkaar, referentie, bewaar, lees, lin, srgb,
 };

@@ -1056,6 +1056,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   klinknagels, met afgeschuinde randen); `stijlmaat.cjs` (contrast, warmte, schaduw, kleuren en drukte van een sprite,
   om naast een voorbeeld te leggen). De proef zelf is `hdproef.cjs`; de resolutieproef (2× tot 16×, vier
   verkleinfilters: naast, box, Lanczos-3 en meerderheid) `hdresolutie.cjs` (`gereedschap/ai/hd-resolutie.md`).
+- **De stijlafwerking** (18 okt, vraag 180; `gereedschap/ai/hd-stijl.md`), optioneel, na de render: `tekenModel` met
+  `o.gbuffer` (en `o.rust`) bewaart per pixel in `B.g` (`K.GB` getallen, de volgorde in `K.G`) de afwikkeling (`mat.uv`
+  van `textuurMateriaal`), het licht, de glans, de holte, de bolle rand, de zon en de normaal maal het licht; `afwerken`
+  geeft die er nu bij terug. `stijl.cjs` maakt daar op de doelmaat pixel art van: `gbuffer(B, n, stijl)` (per doelpixel
+  het onderdeel met de meeste subpixels en het gemiddelde daarvan, en de dekking van de nerf), `reeks(basis, n, o)` (een
+  kleurreeks in OKLab: de tint schuift van koel in de schaduw naar warm in het licht), `verdeling`, `kalibreer` (de
+  drempels tussen de tonen, eens per ding, niet per beeld) en `stileer(G, stijl, stappen)` met tien stappen, elk aan of
+  uit (kleurreeksen, nerf, variatie, metaal, clusters, contactschaduw, lichte randen, binnenlijnen, slijtage, omlijning
+  in kleur). Alles hangt aan het ding (de plek in rust, de afwikkeling, het onderdeel), niets aan toeval per beeld.
+  **Voeg geen stap toe die per beeld beslist** (eilandjes samenvoegen flikkerde: 0,18 naar 0,25); maak het licht glad
+  binnen een onderdeel en kies dan. `stijlmaat.cjs ontleed` haalt een sprite en een voorbeeld op dezelfde manier uit
+  elkaar (materiaal op kleur, tonen, licht, middel en donker, clusters, randen). De proef is `hdstijl.cjs`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

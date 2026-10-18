@@ -182,6 +182,9 @@ const tegelNaarScherm = (B, gx, gy, hpx = 0) => [B.OX + (gx - gy) * 32, B.OY + (
 // RGB (sinds 18 okt, textuur.cjs; werklijst vraag 180): de kleur van deze pixel komt uit een textuur (B.kleur), niet uit
 // een ramp. Alleen een materiaal met een textuur zet hem; kleurBeeld leest hem.
 const VLAG = { GLOEI: 1, OMLIJN: 2, GLAD: 4, VAST: 8, VLOER: 16, RGB: 32 };
+// De G-buffer (o.gbuffer, textuurPixel): zoveel getallen per pixel in B.g, in deze volgorde.
+const GB = 8;
+const G = { u: 0, v: 1, licht: 2, glans: 3, holte: 4, bol: 5, zon: 6, nL: 7 };
 
 class Beeld {
   constructor(b, h, OX = 0, OY = 0) {
@@ -440,7 +443,27 @@ function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, 
   }
   let licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
   let glans = 0;
-  if (mat.afwerking && !o.vlakLicht) [kl, licht, glans] = afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, licht);
+  let af = null;
+  if (mat.afwerking && !o.vlakLicht) {
+    af = afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, licht);
+    [kl, licht, glans] = af;
+  }
+  // Op verzoek (o.gbuffer, de stijlproef: stijl.cjs) per pixel wat een afwerking op de doelmaat nodig heeft, GB getallen:
+  // de afwikkeling (u langs de nerf, v erdwars; mat.uv, textuur.cjs), het licht, de glans, de holte, de bolle rand, de zon
+  // (1, of minder in een slagschaduw) en de normaal maal het licht.
+  if (o.gbuffer) {
+    if (!B.g) B.g = new Float32Array(B.b * B.h * GB).fill(NaN);
+    const uv = mat.uv ? mat.uv(rp[0], rp[1], rp[2], rn[0], rn[1], rn[2], deel) : null;
+    const j = idx * GB;
+    B.g[j] = uv ? uv[0] : NaN;
+    B.g[j + 1] = uv ? uv[1] : NaN;
+    B.g[j + 2] = licht;
+    B.g[j + 3] = glans;
+    B.g[j + 4] = af ? af[3] : 0;
+    B.g[j + 5] = af ? af[4] : 0;
+    B.g[j + 6] = af ? af[5] : 1;
+    B.g[j + 7] = nx * tc.lL[0] + ny * tc.lL[1] + nz * tc.lL[2];
+  }
   if (!B.kleur) B.kleur = new Float32Array(B.b * B.h * 4);
   const gk = mat.afwerking?.glansKleur || [255, 240, 214];
   B.kleur[idx * 4] = kl[0] * licht + glans * gk[0];
@@ -460,9 +483,11 @@ function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, 
 // - warm, koel: [r, g, b] maal de kleur in het licht en in de schaduw;
 // - glans, glansMacht: een glimlicht met de gebogen normaal, dat erbij komt in plaats van de kleur te vermenigvuldigen
 //   (zodat donker ijzer echt blinkt), in glansKleur.
-// Geeft [kleur, licht, glans].
+// Geeft [kleur, licht, glans, holte, rand, zon] (de laatste drie voor de G-buffer: 0 tot 1).
 function afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, licht) {
   const A = mat.afwerking;
+  let holte = 0;
+  let bol = 0;
   const f = tc.f;
   const L = tc.lL;
   let mx = nx;
@@ -513,13 +538,15 @@ function afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, l
   if (A.holtes) {
     let dicht = 0;
     for (const h of [0.35, 0.7, 1.05]) dicht += Math.max(0, h - f(x + nx * h, y + ny * h, z + nz * h)) / h;
-    licht *= 1 - A.holtes * klem(dicht * 0.6, 0, 1);
+    holte = klem(dicht * 0.6, 0, 1);
+    licht *= 1 - A.holtes * holte;
   }
   if (A.randen) {
     const e = A.randen.breedte || 0.45;
     const f0 = f(x, y, z);
     const lap = f(x + e, y, z) + f(x - e, y, z) + f(x, y + e, z) + f(x, y - e, z) + f(x, y, z + e) + f(x, y, z - e) - 6 * f0;
     const rand = klem((lap / (e * e) - (A.randen.vanaf ?? 1.2)) / (A.randen.tot ?? 2.5), 0, 1);
+    bol = rand;
     if (rand > 0) {
       if (A.randen.slijt) kl = kl.map((c, j) => c * (1 + (A.randen.slijt[j] - 1) * rand));
       licht += rand * (A.randen.licht ?? 0.3) * (0.35 + 0.65 * Math.max(0, nL));
@@ -540,7 +567,7 @@ function afwerken(mat, tc, naarDeel, deelI, deel, x, y, z, nx, ny, nz, rn, kl, l
     const hl = Math.hypot(hx, hy, hz) || 1;
     glans = Math.pow(Math.max(0, (mx * hx + my * hy + mz * hz) / hl), A.glansMacht || 24) * A.glans * zon;
   }
-  return [kl, licht, glans];
+  return [kl, licht, glans, holte, bol, zon];
 }
 
 // Een model tekenen in het beeld. o: { gx, gy (tegels), z (eenheden), richting (naam of graden),
@@ -1268,6 +1295,8 @@ module.exports = {
   RICHTING,
   KANTEN,
   VLAG,
+  GB,
+  G,
   UIT,
   Beeld,
   Plaat,
