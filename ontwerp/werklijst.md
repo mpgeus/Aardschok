@@ -28,12 +28,12 @@ regen en het masker van de mist op de kaart. Helemaal uitgezoomd (0,35, het proe
 zo'n 30 ms per beeld vóór A1 naar 4,4 ms met de kaart erbij, waarvan 1,7 ms voor de processor; en steeds hetzelfde beeld.
 WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **Wacht op Marcel**: meten in Firefox
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
-**De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen. Middernacht
-13 naar 3 ms (H1 tot H3), de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1),
-en het laden achter het laadscherm (F2), allemaal geproefd, de proeven op `proef/tik-nacht`, `proef/tik-kudde` en
-`proef/tik-land`. **De tik van middernacht sneller: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "begin met
-middernacht"): H1 tot H3 zijn gebouwd op die branch (middernacht 13,6 naar 3,3 ms, hetzelfde spel), en wachten op
-"push it" naar `main`. De rest wacht op Marcel (het voorstel staat onderaan "De tik").
+**De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen. Geproefd:
+de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1), en het laden achter het
+laadscherm (F2); de proeven op `proef/tik-kudde` en `proef/tik-land`. **Middernacht (H1 tot H3) is af** (onder "Af").
+**G2 en F2: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna G2 en F2"): alleen de mensen dichtbij
+voor het wild, en het land van een geladen spel achter het laadscherm. G1, F1 en de rest wachten op Marcel (het voorstel
+staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -1470,6 +1470,8 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
 ## Af (sinds 11 okt)
 
+- De tik van middernacht (18 okt; `snelheid.md`, "De tik", H1 tot H3): van 13,6 naar 3,3 ms, met precies hetzelfde spel;
+  het bos per vak in één keer gelezen en onthouden tot er iets verandert, en het plein één keer per dag.
 - 178, ver uitgezoomd sneller (17 en 18 okt; bij P, `snelheid.md`): A1 en A2, de renderproef, B5 met B3 en E1, B1 en B2,
   en de regen en de mist op de kaart; ver uitgezoomd van zo'n 30 naar 4,4 ms per beeld in Chromium. Firefox wacht op
   Marcel.
