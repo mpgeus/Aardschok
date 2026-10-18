@@ -214,7 +214,8 @@ test('eilandkaart: een stuk dat vooruit gemaakt is, in delen, is hetzelfde als i
   const S = { dorp: D };
   w.wezens.push(S.dorp.aanvoerder);
   const delen = (T.STUK / I.vooruitDeel) ** 2;
-  for (let i = 0; i <= delen; i++) assert.equal(T.werkStukkenBij(S, D), null, 'binnen openRond is alles open');
+  // PROEF (blokken): vooruit maakt eerst de blokken van het eiland (zo'n 1 ms elk), dan pas de delen
+  for (let i = 0; i <= delen + 4 * 72; i++) assert.equal(T.werkStukkenBij(S, D), null, 'binnen openRond is alles open');
   const n = T.stukVan(rand.x + rand.b, vak.y + 50);
   assert.ok(!w.open.has(n), 'het stuk is nog niet open');
   assert.equal(T.tegel(w, rand.x + rand.b, vak.y + 50), 'buiten');

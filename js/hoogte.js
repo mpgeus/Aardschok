@@ -244,7 +244,7 @@
     if (!s.eiland) {
       const [ox, oy] = oorsprong(hg);
       const { zaad, x0, y0 } = hg.eiland;
-      const stuk = T.eilandStuk(T.eilandVan(zaad), x0 + s.x0 - ox - 0.5, y0 + s.y0 - oy - 0.5, T.STUK + 1, T.STUK + 1);
+      const stuk = T.eilandRaster(T.eilandVan(zaad), x0 + s.x0 - ox, y0 + s.y0 - oy, T.STUK + 1, T.STUK + 1, true); // PROEF: uit de blokken
       s.eiland = stuk.hoogte;
       s.nat = stuk.streek.map((st) => (NATTE().includes(st) ? 1 : 0));
     }

@@ -553,7 +553,12 @@
     const per = Math.ceil(STUK / d);
     if (v.delen.length < per * per) {
       const i = v.delen.length;
-      v.delen.push(T.landStuk(T.eilandVan(w.eiland.zaad), v.sx * STUK + (i % per) * d, v.sy * STUK + Math.floor(i / per) * d, d, d));
+      const E = T.eilandVan(w.eiland.zaad);
+      const [x, y] = [v.sx * STUK + (i % per) * d, v.sy * STUK + Math.floor(i / per) * d];
+      // PROEF: eerst de blokken van het eiland onder het rekenvak van dit deel, één per keer (js/eiland.js)
+      const M = T.STUK_MARGE;
+      if ((T.eilandRasterVooruit(E, x - M, y - M, d + 2 * M, d + 2 * M) || T.eilandRasterVooruit(E, x - M, y - M, d + 2 * M + 1, d + 2 * M + 1, true))) return true;
+      v.delen.push(T.landStuk(E, x, y, d, d));
       return true;
     }
     const grond = new Uint16Array(STUK * STUK);
