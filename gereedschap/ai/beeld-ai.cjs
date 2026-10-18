@@ -93,6 +93,62 @@ async function bewerk(model, beelden, opdracht, opties = {}) {
 
 // ---------------------------------------------------------------- terug naar pixels
 
+// Een PNG lezen zoals een beeld-AI of ChatGPT hem geeft: 8 bits per kanaal, grijs, RGB, palet of met alfa, zonder
+// interlace (K.leesPng kent alleen RGBA, wat de tekenstraat zelf schrijft). Geeft { b, h, rgba }.
+function leesPng(buf) {
+  const zlib = require('zlib');
+  if (buf.readUInt32BE(0) !== 0x89504e47) throw new Error('Geen PNG (sla het beeld op als PNG).');
+  let p = 8, b = 0, h = 0, diepte = 0, soort = 0, interlace = 0, palet = null, trns = null;
+  const idat = [];
+  while (p < buf.length) {
+    const len = buf.readUInt32BE(p);
+    const type = buf.toString('ascii', p + 4, p + 8);
+    const d = buf.subarray(p + 8, p + 8 + len);
+    if (type === 'IHDR') {
+      b = d.readUInt32BE(0); h = d.readUInt32BE(4); diepte = d[8]; soort = d[9]; interlace = d[12];
+    } else if (type === 'PLTE') palet = d;
+    else if (type === 'tRNS') trns = d;
+    else if (type === 'IDAT') idat.push(d);
+    else if (type === 'IEND') break;
+    p += 12 + len;
+  }
+  if (diepte !== 8 || interlace) throw new Error(`Deze PNG kan ik niet lezen (${diepte} bits, interlace ${interlace}).`);
+  const kanalen = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 }[soort];
+  const raw = zlib.inflateSync(Buffer.concat(idat));
+  const rij = b * kanalen;
+  const pix = Buffer.alloc(rij * h);
+  for (let y = 0; y < h; y++) {
+    const f = raw[y * (rij + 1)];
+    for (let x = 0; x < rij; x++) {
+      const a = x >= kanalen ? pix[y * rij + x - kanalen] : 0;
+      const c = y > 0 ? pix[(y - 1) * rij + x] : 0;
+      const ac = y > 0 && x >= kanalen ? pix[(y - 1) * rij + x - kanalen] : 0;
+      let v = raw[y * (rij + 1) + 1 + x];
+      if (f === 1) v += a;
+      else if (f === 2) v += c;
+      else if (f === 3) v += (a + c) >> 1;
+      else if (f === 4) {
+        const pp = a + c - ac;
+        const pa = Math.abs(pp - a), pb = Math.abs(pp - c), pc = Math.abs(pp - ac);
+        v += pa <= pb && pa <= pc ? a : pb <= pc ? c : ac;
+      }
+      pix[y * rij + x] = v & 255;
+    }
+  }
+  const rgba = Buffer.alloc(b * h * 4);
+  for (let i = 0; i < b * h; i++) {
+    const s = i * kanalen;
+    let k;
+    if (soort === 6) k = [pix[s], pix[s + 1], pix[s + 2], pix[s + 3]];
+    else if (soort === 2) k = [pix[s], pix[s + 1], pix[s + 2], 255];
+    else if (soort === 4) k = [pix[s], pix[s], pix[s], pix[s + 1]];
+    else if (soort === 0) k = [pix[s], pix[s], pix[s], 255];
+    else k = [palet[pix[s] * 3], palet[pix[s] * 3 + 1], palet[pix[s] * 3 + 2], trns && pix[s] < trns.length ? trns[pix[s]] : 255];
+    rgba.set(k, i * 4);
+  }
+  return { b, h, rgba };
+}
+
 // Van een RGBA-beeld: alles wat geen achtergrond is (doorzichtig, of de vlakke kleur vanaf de hoeken), als masker.
 function vrijstaand(b, h, rgba) {
   const masker = new Uint8Array(b * h);
@@ -150,7 +206,7 @@ function palet(kleuren, n) {
 // Het beeld van de AI terug naar de maat van het spel: uitsnijden, verkleinen tot het in `breed` × `hoog` past (elke pixel
 // het gemiddelde van wat eronder valt), de kleuren tot `kleuren` (median cut), en een donkere omlijning om het geheel.
 function naarPixels(png, { breed, hoog, kleuren = 48 }) {
-  const { b, h, rgba } = K.leesPng(png);
+  const { b, h, rgba } = leesPng(png);
   const masker = vrijstaand(b, h, rgba);
   let x0 = b, y0 = h, x1 = -1, y1 = -1;
   for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) if (masker[y * b + x]) {
@@ -312,7 +368,10 @@ function renderVan(naam) {
 
 function hand() {
   const map = process.env.HAND_MAP || path.join(UIT, 'hand'); // HAND_MAP: om het gereedschap zelf te toetsen
-  const namen = fs.existsSync(map) ? fs.readdirSync(map).filter((f) => /\.png$/i.test(f)).map((f) => f.replace(/\.png$/i, '')).sort() : [];
+  // Windows verbergt de extensie, dus heet een download soms wagen-zw.png.png: de naam is wat ervoor staat.
+  const bestanden = fs.existsSync(map) ? fs.readdirSync(map).filter((f) => /\.png$/i.test(f)) : [];
+  const bestandVan = new Map(bestanden.map((f) => [f.replace(/(\.png)+$/i, ''), f]));
+  const namen = [...bestandVan.keys()].sort();
   if (!namen.length) throw new Error(`Nog niets in ${map}: zet daar de antwoorden van ChatGPT, als wagen-zw.png, lopen-zw-0.png, ...`);
   const rijen = [];
   const lopen = [];
@@ -324,13 +383,13 @@ function hand() {
     }
     const k = O.kader(plaat);
     const kb = k.x1 - k.x0 + 1, kh = k.y1 - k.y0 + 1;
-    const png = fs.readFileSync(path.join(map, `${naam}.png`));
+    const png = fs.readFileSync(path.join(map, bestandVan.get(naam)));
     const p = naarPixels(png, { breed: kb, hoog: kh });
     // Op de plek van onze render: onderaan in het midden van zijn kader, in een cel zo groot als de plaat.
     const cel = leeg(plaat.b, plaat.h);
     plakOp(cel, p, k.x0 + Math.floor((kb - p.b) / 2), k.y1 + 1 - p.h);
     const onze = { b: plaat.b, h: plaat.h, rgba: plaat.rgba(null) };
-    const ai = K.leesPng(png);
+    const ai = leesPng(png);
     const toon = verklein(ai, Math.round((ai.b * 260) / ai.h), 260);
     const snij = (bron) => {
       const s = leeg(kb + 8, kh + 8);
