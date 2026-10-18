@@ -287,6 +287,49 @@ bij uitzoomen ligt er aan de rand nog niets, en is de grond daar een paar beelde
 die, dan het midden). Een eerste keer herfst of winter na het laden kost nog steeds een beeld van 440 à 510 ms: het blad
 met de bomen (D1), niet de grond.
 
+**Het plan voor de renderproef van de grond** (18 okt, Marcel: "we gaan verder"; wacht op zijn keuze). Eerst twee
+dingen die anders zijn dan hierboven staat (de kaart van de code door een zoekagent): een tegel op een helling wordt niet
+in driehoeken geknipt, maar met één schuine stand per tegel getekend, het vlak door zijn vier hoeken, 1,04 groter tegen
+naden (`tekenSchuineTegel`, `opTegelVlak`); alleen de wanden zijn driehoeken met een knip (`tekenWanden`). En de hoogte
+is per tegel vier hoeken (een trede deelt een hoekpunt op twee hoogten, `rekenStuk` in `js/hoogte.js`), dus vier
+getallen per tegel, geen textuur met één hoogte per hoekpunt.
+
+Het idee: per stuk land van 64 bij 64 tegels, zoals de bomen (B1), een vaste rij met een instantie per tegel: welke
+tekening (het nummer in het vel rand of kust, zoals nu op de processor gekozen, met de paadjes, de droge beek en de
+hoeken al verrekend: `S.grondMetHoeken`), zijn plaats, en met heuvels zijn vier hoeken. De videokaart tekent ze in de
+volgorde van nu (x+y, dan x), met menging, zodat de half doorzichtige kust klopt. Een stap met het wiel kost dan niets
+meer, een ander seizoen alleen het platte groen opnieuw, en de sneeuw, de beek of een gevelde boom een paar getallen in
+de rij (`bufferSubData`, nu nog nergens). Het 2D-pad blijft voor kleine stukjes (het kijkgat, `tekenTegelOpnieuw`,
+`tekenVorig`) en voor zonder videokaart.
+
+In stappen, elk naast de oude grond (aan en uit met een `Spel.debug`-schakelaar), met een meting en een vergelijking
+met het beeld van nu (`gereedschap/schermen/tekenmeting.cjs --tegen`, pixel voor pixel, de verschillen in rood; de
+scènes met sneeuw, seizoen en beek komen erbij):
+
+1. **Vlak, dichtbij** (zoom vanaf 0,75): de grondtegels als vaste rij. Doel: pixel voor pixel hetzelfde.
+2. **Vlak, ver uit** (0,5 en 0,35): dezelfde rij, meteen op de zoom. Meten: de tijd, en hoeveel pixels anders (zie de
+   keuze hieronder), met de platen naast elkaar.
+3. **Wat erop ligt:** het platte groen (een tweede rij, per seizoen), de sneeuw (een laag per tegel; de stand en de ruis
+   rekent de processor, want `beeldLot` en `sneeuwRuis` rekenen in 64 bits), de droge beek (de tekening wisselt, de
+   barstjes en steentjes als kleine plaatjes).
+4. **Heuvels:** de vier hoeken per tegel en dezelfde schuine stand in de shader, het licht uit het vel van 65 bij 65 per
+   stuk (bilineair, zoals nu), de wanden als driehoeken. De randen van de wanden worden niet pixel voor pixel hetzelfde
+   (de knip op het doek is zacht).
+5. **Meten** (`meetGrond`, de tekenmeting, Firefox door Marcel), en dan kiest Marcel: over, of niet.
+
+Waar het moeilijk wordt: (a) met heuvels valt een hoge tegel over tegels van een stuk land erachter, en elk stuk is één
+opdracht: de volgorde over de rand van een stuk (voorstel: een diepte per tegel voor wat dicht is, en de doorzichtige
+kust in volgorde); (b) de vellen rand en kust zijn 2400 hoog, te hoog voor de stapel van 2048 (opknippen, of een eigen
+textuur); (c) wat de processor blijft kiezen (de tekening per hoek, de ruis), gaat als getal in de rij.
+
+**De keuze:** ver uitgezoomd (onder 0,75, `BAK_ZOOM`) bakt het spel de grond nu verkleind op een doek, met de pixels
+van de tekening die het verkleinen overhoudt (op een halve pixel verschoven, `faseVan`), en zet dat één op één op het
+scherm. De videokaart tekent elke tegel meteen op de zoom: voor het oog hetzelfde, maar niet elke pixel (een andere
+pixel van de tekening blijft over). Pixel voor pixel kan alleen dichtbij. **A**: ver uit mag anders zijn, als het er even
+goed uitziet (Marcel kijkt naar de platen naast elkaar en in het spel); **B**: ver uit blijft de gebakken grond (dan helpt
+de proef alleen dichtbij, waar het al snel is). Voorstel van Claude: **A**, want daar zit de winst; en eerst stap 1 en 2
+(vlak): die zeggen of het snel genoeg is en of het er goed uitziet, voor het grootste werk (de heuvels) begint.
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een
