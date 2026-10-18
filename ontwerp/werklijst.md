@@ -123,7 +123,8 @@ bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het beg
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
 volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"); **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): het plan staat bij I ("c3 in detail"), en wacht op Marcel (A, B, C). **Marcel kwam op 17 okt met 174**
+desktop)** (18 okt): het plan staat bij I ("c3 in detail"), en wacht op Marcel (A, B, C), en op zijn vraag of het niet later
+moet ("Wacht op Marcel", de volgorde). **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
 brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
@@ -165,6 +166,16 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De volgorde: eerst de basis?** (Marcel, 18 okt, op het plan van c3: "ik vraag me nu af wat de correcte
+  ontwikkelvolgorde is? We hebben niet eens andere spelers om een bode naartoe te sturen. Er is ook nog geen kasteel van
+  de heer. Het lijkt mij dat bodes en rovers pas later komen nadat de basis goed ligt?") Ter verduidelijking: c3 voegt
+  niets toe; de overval van wilde rovers is er sinds 29 sep, de bode (naar de marskramer, bij honger, kou of droogte)
+  sinds 9 okt; c3 laat de overval uit een kamp komen in plaats van de rand. Voorstel van Claude: **O1** c3, c4, d en
+  samen spelen (6b, 6c) parkeren; eerst het doel van de demo kiezen (hieronder), dan E, de heer als klok (de tiende:
+  wat hij vraagt, wanneer, en wat hij doet als je niet betaalt; het gat in `gameloop.md`, "Waar het gat zit"), en dan
+  het eerste jaar spelbaar, met Marcel die speelt en een getal uit de werkbank als iets scheef zit. De wilde rovers
+  blijven zolang de dreiging. **O2** eerst c3 af (het rondt de kampen af), dan O1. **O3** de lijst zoals hij is (I, C,
+  E).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
