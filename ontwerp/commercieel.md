@@ -187,8 +187,8 @@ zin. Een vijfde kandidaat (voorstel van Claude):
    een vraag stelt, en die je pas in het spel beantwoordt. Samen spelen, met een speler als heer, komt na de release
    (vraag 126, f); het voorstel is alleen met vrienden via Steam, zonder matchmaking, want een klein spel heeft lege
    lobby's. De demo eindigt op Sint-Maarten van het eerste jaar, als de heer zijn tiende komt halen (Marcel, 18 okt,
-   D2; tot dan: het jaar van geluk, vraag 126, b3): weiger je, dan een korte cinematic, zijn leger komt, en de dood
-   (werklijst).
+   D2; tot dan: het jaar van geluk, vraag 126, b3): betaal je, dan een korte cinematic waarin de heer en zijn mannen met
+   karren vol waren en goud wegrijden; weiger je, dan komt zijn leger, en de dood (werklijst).
 
 ## Norland, nagezocht op 3 okt (Marcel: "Kijk eens naar Norland als game")
 

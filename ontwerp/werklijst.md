@@ -16,9 +16,11 @@ nadat de basis goed ligt?"). Geparkeerd: de rest van I (c3, c4, d, samen spelen 
 wilde rovers blijven zolang de dreiging. **Het doel van de demo is gekozen: D2, met weigeren** (Marcel, 18 okt: "Ik denk
 dat het leuk is om D2 te doen, je kunt dan weigeren, maar dan eindigt het met een korte cinematic waarin je het leger van
 de heer ziet aankomen met death als gevolg"): de heer komt al in het eerste jaar op Sint-Maarten zijn tiende halen, en
-daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aankomen, en het eind is de dood. Nog open:
-wat er gebeurt als je betaalt (bovenaan "Wacht op Marcel"). **Het volgende is E**, de heer als klok, op dat doel (eerst
-een plan), dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
+daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aankomen, en het eind is de dood. **Betaal
+je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
+en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
+dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): eerst het plan. Dan het eerste jaar speelbaar: Marcel
+speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -175,12 +177,6 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **Het eind van de demo als je betaalt** (bij D2, 18 okt, bovenaan dit blok; de keuzes waren D1 het eerste jaar halen,
-  D2 de eerste tiende, D3 de tiende breken in een gevecht, D4 een doel op tijd). Weigeren eindigt met het leger van de
-  heer en de dood; betalen is nog open. **P1** ook dan eindigt de demo: de heer rijdt tevreden weg, en een laatste zin
-  zegt dat hij volgend jaar meer wil (de vraag blijft hangen); **P2** de demo speelt door, de winter in, zonder eind,
-  tot de speler stopt. Voorstel van Claude: **P1**, want dan is de demo voor iedereen even lang, met een eind dat naar
-  het hele spel wijst.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
