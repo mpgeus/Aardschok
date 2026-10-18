@@ -832,6 +832,7 @@
   });
   window.addEventListener('focus', () => {
     if (S.kalender) T.laatTijdGaan(S, 'weg');
+    if (meter) meter.vorig = null; // het gat terwijl je weg was, is geen traag beeld
   });
   function meetBeeld(nu, regels, tekenen) {
     const m = meter;
@@ -1970,6 +1971,37 @@
         venster: `${cssB}×${cssH}`, getekend: `${bw}×${bh}`, zoom: Math.round(S.zoom * 100) / 100, buffer: `${canvas.width}×${canvas.height}`,
         gemiddeld: af(som / aantal), mediaan: af(tijden[aantal >> 1]), slechtste: af(tijden[aantal - 1]),
       };
+    },
+    // Wat de grond kost als hij helemaal opnieuw moet (`snelheid.md`, "Het advies van buiten"; Marcel, 18 okt): helemaal
+    // uitgezoomd, en dan per stap met het wiel en per ander seizoen het eerste beeld erna, met de videokaart erbij
+    // (T.gl.wacht), naast een gewoon beeld. Zelf gemeten, zodat er geen alt-tab of schermafdruk tussen zit. Daarna staat
+    // alles weer zoals het was. Geeft per actie { eerste, gewoon } in ms.
+    meetGrond() {
+      const was = { zoom: S.zoom, camera: { ...S.camera }, kijk: S.kijk && { ...S.kijk }, bomen: T.debug.bomen };
+      const beeld = () => {
+        const t0 = performance.now();
+        T.tekenBeeld();
+        if (glZichtbaar) T.gl.wacht();
+        return Math.round((performance.now() - t0) * 10) / 10;
+      };
+      const standen = zoomStanden();
+      const ver = standen[standen.length - 1];
+      const uit = {};
+      const doe = (naam, f) => {
+        f();
+        uit[naam] = { eerste: beeld(), gewoon: (beeld(), beeld()) };
+      };
+      try {
+        S.zoom = ver;
+        for (let i = 0; i < 5; i++) beeld(); // alles in beeld eerst klaar
+        for (let i = standen.length - 2; i >= 0; i--) doe(`wiel naar ${Math.round(standen[i] * 100) / 100}`, () => (S.zoom = standen[i])); // geen tekst
+        for (let i = 1; i < standen.length; i++) doe(`wiel naar ${Math.round(standen[i] * 100) / 100}`, () => (S.zoom = standen[i])); // geen tekst
+        for (const seizoen of ['herfst', 'winter', '']) doe(`seizoen ${seizoen || 'terug'}`, () => (T.debug.bomen = seizoen)); // geen tekst
+      } finally {
+        Object.assign(S, { zoom: was.zoom, camera: was.camera, kijk: was.kijk });
+        T.debug.bomen = was.bomen;
+      }
+      return uit;
     },
     // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
     // fase zegt terwijl je de kaart nog tekent (er zijn nog geen quests: js/quests.js is leeg):
