@@ -20,8 +20,8 @@ daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aa
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
 dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): het plan staat bij E, besloten (Marcel: A1 met drie
-maanden, B2 voor het hele spel, C2); stap 1 tot 3 zijn gebouwd (lokaal), en de tekeningen van C2 staan in woorden in
-`beeld.md` (wacht op Marcel).
+maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6 zijn gebouwd (lokaal); de proefplaat van de tekeningen van C2
+(Marcel keurde de woorden goed) wordt gemaakt, dan stap 4, de cinematics.
 Dan het eerste jaar speelbaar: Marcel
 speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
@@ -608,7 +608,9 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    mooie grote knoppen worden", "misschien in de stijl van een zegel, kaarsvet", "middeleeuwen enzo, koning heer"): heel
    is betalen, in tweeën gebroken is weigeren (`beeld.md`, "De zegels bij de heer").
    **Stap 1 tot 3 zijn gebouwd** (18 okt, lokaal; `spel.md`, Sint-Maarten, "Bijgewerkt op 18 okt"); tot de cinematic er
-   is, eindigt weigeren met het eindscherm *Death*.
+   is, eindigt weigeren met het eindscherm *Death*. **Stap 5 en 6 ook** (18 okt, lokaal): het eindscherm (*Death*, of in de
+   demo *Until next year*), met het jaar in een paar regels en de link naar Steam zodra er een adres is, en de vlag
+   `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). Nog niet: de speeltest met de heer in het eerste jaar.
 4. **De twee cinematics** (C2): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
    onderin; een klik of Esc slaat over. **Betaal je**: zijn mannen laden wat hij nam op zijn wagens op het plein, en de
    heer en zijn mannen rijden ermee de weg af; het beeld wordt zwart, en een zin zegt dat hij volgend jaar terugkomt, en

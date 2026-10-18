@@ -28,6 +28,16 @@
   };
   const IN = () => T.EINDE_INSTELLINGEN;
 
+  // De demo (werklijst, E, stap 6; Marcel, 18 okt, D2): de demo eindigt op het eerste Sint-Maarten, ook als je betaalt
+  // (dan rijdt de heer weg met je waren; wie weigert, krijgt zijn leger, ook in het volle spel). Uit in het volle spel en
+  // bij het spelen hier; aan bij het verpakken van de demo voor Next Fest (ontwerp/verpakken.md), zoals het debugvenster.
+  // `steam`: het adres van de Steam-pagina, voor de link om het spel op je verlanglijst te zetten (in januari 2027); zonder
+  // adres staat de link er niet.
+  T.DEMO_INSTELLINGEN = {
+    aan: false,
+    steam: null,
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Het dagboek: wat er vandaag gebeurde
   // ---------------------------------------------------------------------------------------------
@@ -92,13 +102,24 @@
     if (J.geoogst) regels.push(T.t('The harvest brought {graan}.', { graan: T.hoeveel(Math.round(J.geoogst), 'graan') }));
     if (J.doorgegroeid) regels.push(T.t('{n|One house grew larger.|{getal} houses grew larger.}', { n: J.doorgegroeid, getal: T.hoofdletter(T.telwoord(J.doorgegroeid)) }));
     const heer = ((D.heer && D.heer.jaren) || []).find((j) => j.jaar === jaarVan(J.begin));
-    if (heer) {
+    if (heer && heer.geweigerd) regels.push(T.t('You refused the lord what he asked.'));
+    else if (heer) {
       const pct = Math.floor(heer.deel * 100 + 1e-9);
       regels.push(heer.straf ? T.t('The lord received {pct}% of what he asked for, and punished with {straf}.', { pct, straf: T.STRAF_TOON[heer.straf] })
         : T.t('The lord received {pct}% of what he asked for.', { pct }));
     }
     const meest = Object.entries(J.gemist).sort((a, b) => b[1] - a[1])[0];
     if (meest) regels.push(T.t('The most missed was {wens}, for {n|# day|# days}.', { wens: meest[0], n: meest[1] }));
+    return regels;
+  };
+
+  // Het eind van de demo, of zijn leger (js/hud.js, T.ui.toonEinde): het jaar tot nu in het kort (T.jaarverslagRegels),
+  // en wat er staat. Geeft regels.
+  T.eindRegels = function (D) {
+    const dag = dagNu(D);
+    const regels = T.jaarverslagRegels(D, D.jaarboek || nieuwJaarboek(D, dag), dag);
+    const staat = (D.gebouwen || []).filter((g) => g.klaar && !T.isVeldSoort(g.soort) && g.soort !== 'tent').length;
+    if (staat) regels.splice(1, 0, T.t('{n|One building stands|# buildings stand} where there was wilderness.', { n: staat }));
     return regels;
   };
 

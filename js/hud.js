@@ -551,13 +551,28 @@
           : T.t('{jaar}: {pct}%', { jaar: j.jaar, pct: Math.floor(j.deel * 100 + 1e-9) })))
       .join(' · ');
     const heer = jaren ? `<p class="einde-jaren">${T.t('What the lord received: {jaren}', { jaren })}</p>` : '';
-    // Je weigerde hem, en zijn leger kwam (js/heer.js, T.weigerHeer; Marcel, 18 okt: "met death als gevolg"). De
-    // cinematic komt ervoor (werklijst, E, stap 4).
+    // Het eerste Sint-Maarten (werklijst, E, stap 5; Marcel, 18 okt, D2): je weigerde hem en zijn leger kwam (js/heer.js,
+    // T.weigerHeer: "met death als gevolg"), of je betaalde en hij reed weg met je waren (alleen in de demo,
+    // T.DEMO_INSTELLINGEN). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), en in de demo de link naar
+    // de Steam-pagina zodra die er is. De cinematics komen ervoor (werklijst, E, stap 4).
+    const regels = () => `<ul class="einde-regels">${T.eindRegels(D).map((r) => `<li>${veilig(r)}</li>`).join('')}</ul>`;
+    const demo = () => (!T.DEMO_INSTELLINGEN.aan ? '' : `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
+      (T.DEMO_INSTELLINGEN.steam ? `<p><a class="einde-wenslijst" href="${veilig(T.DEMO_INSTELLINGEN.steam)}" target="_blank" rel="noopener">${T.t('Wishlist {naam} on Steam', { naam: T.NAAM })}</a></p>` : ''));
     if (D.einde && D.einde.reden === 'leger') {
       T.ui.toonOverlay(
         T.t('Death'),
         `<p>${T.t('You refused the lord what he asked. That night his army came up the road, with torches.')}</p>` +
-          `<p>${T.t('By morning there was nothing left of {dorp}.', { dorp: veiligeNaam(D) })}</p>` + heer,
+          `<p>${T.t('By morning there was nothing left of {dorp}.', { dorp: veiligeNaam(D) })}</p>` + regels() + demo(),
+        T.t('To the title screen'),
+        () => T.naarTitelscherm(),
+      );
+      return;
+    }
+    if (D.einde && D.einde.reden === 'betaald') {
+      T.ui.toonOverlay(
+        T.t('Until next year'),
+        `<p>${T.t('The lord rides off down the road, with your grain, your gold, and whatever else his men could load onto his wagons.')}</p>` +
+          `<p>${T.t('Next year he will be back. And he will want more.')}</p>` + regels() + demo(),
         T.t('To the title screen'),
         () => T.naarTitelscherm(),
       );

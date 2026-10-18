@@ -2480,8 +2480,9 @@ een markt (vraag 72, het buurdorp). De markt zelf staat sinds 6 okt op het plein
   staat in de balk "Martinmas in 90 days". Op het plein opent een klik op hem een venster zonder schuiven: wat hij vraagt
   en waarvoor, wat hij neemt en wat je overhoudt, en twee zegels van rode lak, **Pay** (heel: hij neemt van alles wat hij
   vraagt zoveel als er is, en goud voor wat ontbreekt; daaronder de straffen zoals hieronder) en **Refuse** (gebroken:
-  één keer bevestigen, dan gaat hij, en als het donker wordt komt zijn leger: het eind, *Death*). De cinematics en het
-  eind van de demo na betalen komen nog (werklijst, E, stap 4 tot 6). Wat hieronder over de brief in wijnmaand en het
+  één keer bevestigen, dan gaat hij, en als het donker wordt komt zijn leger: het eind, *Death*). In de demo
+  (`T.DEMO_INSTELLINGEN.aan`, bij het verpakken) eindigt ook betalen het spel, als hij weg is: *Until next year*, met het
+  jaar in een paar regels en de link naar Steam (sinds 18 okt). De cinematics komen nog (werklijst, E, stap 4). Wat hieronder over de brief in wijnmaand en het
   venster met schuiven staat, is van daarvoor.
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
   naar het plein, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt

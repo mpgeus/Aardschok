@@ -500,6 +500,31 @@ test('weigeren: hij gaat, en als het donker wordt, komt zijn leger, en dat is he
   assert.equal(S3.einde.reden, 'leger');
 });
 
+test('in de demo eindigt het spel ook als je betaalt: als hij weg is, met je waren; in het volle spel speelt het door', () => {
+  const geefAlles = (S) => {
+    const eis = T.eisVanDeHeer(S);
+    for (const wat in eis.per) T.zetVoorraad(S, wat, eis.per[wat]);
+    return T.betaalHeer(S, T.alWatHijVraagt(S));
+  };
+  const S = metHeer();
+  assert.ok(geefAlles(S).kan);
+  assert.ok(!S.einde, 'in het volle spel speelt het door');
+  T.DEMO_INSTELLINGEN.aan = true;
+  try {
+    const S2 = metHeer();
+    geefAlles(S2);
+    assert.equal(S2.einde && S2.einde.reden, 'betaald', 'zonder poppetje is hij meteen weg, en is de demo uit');
+    const S3 = metHeer();
+    T.weigerHeer(S3);
+    assert.ok(!S3.einde, 'wie weigert, wacht op zijn leger');
+    T.tikHeerDag(S3, SINT_MAARTEN + 1);
+    assert.equal(S3.einde.reden, 'leger');
+    assert.ok(T.eindRegels(S3).some((r) => /refused the lord/.test(r)), 'het eindscherm zegt dat je hem weigerde');
+  } finally {
+    T.DEMO_INSTELLINGEN.aan = false;
+  }
+});
+
 test('waar geen plein is (het oude spel), komt hij nooit', () => {
   const S = gehucht();
   S.plek.marskramer = null;

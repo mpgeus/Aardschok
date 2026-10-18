@@ -1939,8 +1939,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een brief, soort `'jaarverslag'`, `D.jaarverslag`). **Het winnen staat er niet meer** (11 okt, snoeironde, vraag 153;
   Marcel koos "Weg"): de teller van dagen op rij (`D.eind`), `T.iedereenGelukkig`, het doel linksboven (`T.eindDoel`),
   het eindscherm (`T.ui.toonGewonnen`), het grote feest (`T.FEESTEN.stad`) en de spelregel "Het eind" zijn weg, en met
-  hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. Het nieuwe doel van de demo
-  wacht op Marcel (werklijst). Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
+  hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. **Het doel van de demo**
+  (18 okt; Marcel, D2): het eerste Sint-Maarten. Weiger je de heer, dan komt zijn leger (`D.einde`, reden `'leger'`,
+  js/heer.js); betaal je, dan eindigt alleen de demo (`T.DEMO_INSTELLINGEN.aan`, hier, aan bij het verpakken van de demo,
+  `verpakken.md`), als hij weg is (`haalHeerWeg`, reden `'betaald'`). Het eindscherm (`T.ui.toonEinde`) zegt het jaar in
+  het kort met `T.eindRegels` (het jaarverslag, met wat er staat), en de link naar Steam als `T.DEMO_INSTELLINGEN.steam`
+  een adres heeft. Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
   leest ze meer (`test/einde.test.cjs`).
 
 ## Het gevecht

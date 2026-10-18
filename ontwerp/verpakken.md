@@ -90,6 +90,9 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
 
 0. **Het debugvenster gaat uit voor Steam** (werklijst 169; Marcel, 15 okt: "Aan tot Steam"): bij het verpakken voor
    Steam `T.DEBUG_INSTELLINGEN.aan` op false (`js/debugvenster.js`). In de proefversie voor een tester blijft het aan.
+   **De demo eindigt op het eerste Sint-Maarten** (werklijst E, stap 6; Marcel, 18 okt, D2): bij het verpakken van de
+   demo voor Next Fest `T.DEMO_INSTELLINGEN.aan` op true, en `steam` het adres van de Steam-pagina (`js/einde.js`); dan
+   eindigt ook betalen het spel, met de link naar de verlanglijst. In het volle spel blijft het uit.
 
 1. **Geen bouwstap, gewone scripts.** Bewust gekozen, en het maakt verpakken bijna niets.
 2. **Geen `fetch` voor spullen.** `beelden/beschrijving.js` is met opzet een gewoon script. Dat

@@ -719,9 +719,17 @@
   function haalHeerWeg(D) {
     const h = D.heer;
     if (!h || !h.bezoek) return;
+    const betaald = h.bezoek.betaald && !h.bezoek.betaald.geweigerd;
     haalUitWereld(D, h.bezoek.wezens);
     if (T.wisVlag) for (const v of ['heerOpBezoek', 'heerBetaald', 'heerVertrekt', 'heerSchuld']) T.wisVlag(D, v);
     h.bezoek = null;
+    // In de demo is dit het eind (js/einde.js, T.DEMO_INSTELLINGEN; Marcel, 18 okt: "Als je betaalt eindigt de demo ook"):
+    // hij rijdt weg met je waren. De cinematic komt ervoor (werklijst, E, stap 4).
+    if (betaald && T.DEMO_INSTELLINGEN.aan && !D.einde) {
+      D.einde = { reden: 'betaald', dag: dagNu(D) };
+      if (!D.ander) T.houdTijdStil(D, 'einde');
+      if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    }
   }
 
   function haalUitWereld(D, wezens) {
