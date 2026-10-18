@@ -30,6 +30,10 @@ de bomen en het groen per stuk land in een vaste rij op de kaart, met de wind, d
 volgorde uit een dieptebuffer; de processor op 35% van 6,8 naar 2,1 ms per beeld (met heuvels 7,6 naar 2,8), met de
 kaart erbij 9,5 naar 5,1, en hetzelfde beeld. **De regen en de mist op de kaart zijn af** (18 okt, in `main`): nog eens
 2,1 naar 1,7 ms, en hetzelfde beeld. Niet in Firefox gemeten (Marcel).
+**De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen. Middernacht
+13 naar 3 ms (H1 tot H3), de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1),
+en het laden achter het laadscherm (F2), allemaal geproefd, niet in `main`. **Wacht op Marcel**: welke, en in welke
+volgorde (het voorstel staat onderaan "De tik").
 **De renderproef met PixiJS v8, WebGL2 en WebGPU is af** (17 okt; `snelheid.md`, E, en
 `gereedschap/pixiproef/evaluatie.md`): advies `js/gl.js` houden en naar WebGL2 verbouwen (B5 met B3 en E1, dan B1 en
 B2), niet naar Pixi of WebGPU. Marcel koos B5 als volgende stap (18 okt).

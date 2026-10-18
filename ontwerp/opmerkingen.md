@@ -9,19 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Waar de tik nog hapert** (18 okt, Marcel: "Waar komen de performance hits vandaan?"; gemeten in Node op het
-  proefdorp, 30×, op 0570d2d, met de harnas van `gereedschap/grootte/`). Gewoon kost een tik 1,8 ms (p95 3,7), maar:
-  (a) **het land vooruit maken** geeft tikken van 14 à 18 ms, na het laden zo'n vijftig achter elkaar (de eerste vier
-  speeluren), en weer als je mensen naar nieuw land gaan: één deel van 16 bij 16 kost al 8 ms
-  (`T.landStuk`, vooral `lagen` in `js/eiland.js`), dus de 4 ms per tik (`vooruitMsPerSeconde`) wordt nooit gehaald;
-  en in delen kost een stuk samen zo'n 125 ms, waar het in één keer 48 ms is (vaste kosten per aanroep). (b)
-  **Middernacht** 15 à 20 ms: twee derde is `bosKaart` van het wild (`js/beesten.js`), de rest de dag van de gebouwen.
-  (c) **De eerste tik na het laden** 0,76 à 0,86 s: de kar vraagt een tegel (`thuisVan`), en dan worden alle stukken
-  rond het dorp en hun wild in die ene tik gemaakt. (d) **Van de gewone tik gaat 40 à 60% naar omwegen die niet
-  bestaan**: de volgers van een kudde herten zoeken in drie dagen 10.400 keer een omweg om hun eigen kudde, 97% vergeefs
-  (de wolven 1.200); mensen 4 keer. Wat helpen kan, als Marcel het kiest: een volger zoekt geen omweg om zijn eigen
-  groep (hij wacht), een worker of grotere delen voor het land, en `bosKaart` zuiniger. Onderweg: `npm run grootte`
-  werkt niet meer (het uitbouwen van het dorp faalt zonder reden; met N onder de bevolking meet hij het proefdorp).
+- **Waar de tik nog hapert** (18 okt, Marcel: "Waar komen de performance hits vandaan?"): uitgezocht per deelgebied
+  in `snelheid.md`, "De tik" (het land en het laden, de kuddes, middernacht), met wat het kost en wat het oplevert; de
+  keuze is aan Marcel. Onderweg: `npm run grootte` werkt niet op het eiland (`gereedschap/grootte/bouw.cjs` zoekt alleen
+  kaarten tot 512 tegels, bouwt niets en meldt een lege reden).
 
 - **De speeltest laadt het spel niet** (17 okt, bij c2 van 6a2): `npm run speeltest` stopt met `page.goto: Timeout
   30000ms exceeded` op `file:///.../index.html`, en ook met drie minuten wachten komt er geen "load"; op de stand zonder

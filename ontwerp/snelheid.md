@@ -1,4 +1,4 @@
-# Sneller tekenen: wat we nog kunnen doen (vraag 178)
+# Sneller: het tekenen en de tik (vraag 178)
 
 Marcel, 17 okt: "Maar de perfomance moet echt wel veel beter", en eerder die dag: "spelers haken af als dat niet op
 orde is" (CLAUDE.md, "Hoe we kiezen"). Dit is het onderzoek van 17 okt: wat er al is, waar de tijd nu zit, en welke
@@ -194,3 +194,117 @@ eigen JavaScript, en de renderproef gaf met dezelfde techniek op WebGPU binnen 1
 kan: **D1** (de haperingen: een ander seizoen of ver verderop kijken kost één beeld van 120 ms, vooral de grond), en
 **E4** (afronden op 50%, met een proefplaat), waarmee ook de gelijke gevallen tussen twee texels vastliggen. B4 (het grijs
 per pixel) is niet meer nodig: de vaste rijen krijgen de mist per tegel, zoals de lijst.
+
+## De tik (18 okt)
+
+Marcel, 18 okt: "Waar komen de performance hits vandaan?", en daarna "zoek het per deelgebied uit". Na B1 en B2 is het
+tekenen klein; wat een speler nog merkt, zijn pieken in de tik (`js/tik.js`): zwaar werk dat in één tik op de
+hoofdthread valt. Gemeten in Node op het proefdorp, op 30×, stand 0570d2d, in de cloud (niet op Marcels pc), om en om
+oud tegen nieuw. Drie agents zochten elk een deelgebied uit en proefden de beste ideeën; die proeven staan niet in `main`.
+
+| | op 0570d2d | hoe vaak |
+| --- | --- | --- |
+| een gewone tik | 1,8 ms (95% onder 3,7) | elke tik |
+| middernacht | 13 à 20 ms | elke speeldag, op 30× elke 10 s |
+| de eerste tik na het laden | 0,8 s op het proefdorp, meer naarmate er meer verkend is | één keer |
+| het land vooruit maken | 14 à 18 ms | zo'n 50 tikken na het laden, en weer bij nieuw land |
+| een stuk land dat meteen nodig is | 45 à 60 ms | per stuk, wie snel op tocht gaat |
+
+### F. Het land maken en laden (procedurele generatie en streaming)
+
+Waarom: een deel van 16 bij 16 (`maakVooruit`, `T.landStuk`) rekent `T.eilandStuk` met een marge van 8 tegels en een
+rand van 1, en dat twee keer (de tegels en de hoeken): 2.381 punten voor 256 tegels, ruim 9 per tegel, waar een stuk van
+64 er 3,3 heeft. Zo kost één deel 8 ms tegen een budget van 4 per tik (`vooruitMsPerSeconde`), en een stuk in delen 107
+à 125 ms tegen 48 in één keer. En na het laden is er geen stuk (ze worden niet bewaard: WeakMaps per kaart), dus vult de
+eerste vraag aan het raster (`vulRaster`) het hele loopvak: alle open stukken in één tik, op het proefdorp 9 × 42 à 50
+ms, en meer naarmate er meer open is. Na lang verkennen zijn dat seconden.
+
+- **F1, gedeelde blokken** (geproefd): `T.eilandStuk` in vaste blokken van 16 bij 16, de laatste 1.024 onthouden (2 à 3
+  MB), en daaruit putten de delen, de stukken ernaast en de hoogte (`js/hoogte.js`); en `heuveligOp` één keer per punt
+  in plaats van twee (8%). Winst: een stuk vooruit 52 à 70 ms in plaats van 107, en elke stap onder 2 ms (was 6,4, tot
+  17), dus het budget wordt gehaald; na het laden de tikken boven 12 ms van 26–39 naar 3–13, het traagste procent van
+  16–19 naar 9–12 ms; de hoogte van een stuk 0,2 in plaats van 10 à 12 ms. Een stuk dat meteen nodig is, blijft 50 à 60
+  ms. Het land blijft precies gelijk (een vingerafdruk op eiland 2 en 5), dus geen nieuwe `versie`. Prijs: middel
+  (`js/eiland.js`, `maker.js`, `wereld.js`, `hoogte.js`; `test/eilandkaart.test.cjs` moet langer doorlopen). Je ziet
+  niets.
+- **F2, het land achter het laadscherm**: `T.maakOpenStukken(w)` in `speelGelezen` (`js/main.js`), achter "Loading…", in
+  stappen van 1 ms, dus met voortgang. Samen even duur, maar het spel bevriest niet. Prijs: klein. Je ziet een laadbalk.
+- **F3, het raster per stuk** in plaats van over het hele loopvak (het lopen): de echte oplossing als er veel land open
+  is. Groot, later.
+- **F4, het wild bij het opengaan spreiden**: een bosrijk stuk kost zo'n 40 ms aan wild, waarvan 27 het eilandenwerk
+  (`eilandenVan`, `kanErKomen`); per groep per tik. Middel. (De 200 ms die eerst gemeten werd, kwam van het meten: een
+  bewaard spel heeft zijn wild al.)
+- **F5, `vooruitMsPerSeconde` hoger**: na F1 zijn de stappen klein, dus mag het vooruit maken meer per tik. Een getal in
+  de werkbank.
+- **F6, een Web Worker**: Chromium weigert vanaf `file://` een worker uit een bestand (een blob uit geladen code
+  waarschijnlijk wel, nog niet geproefd); `T.landStuk` hangt aan veel van `js/maker.js`, de schets (8 MB) moet erheen,
+  en een getal uit de werkbank ook (anders ander land); en er komen twee wegen (vooruit in de worker, wat meteen nodig is
+  synchroon). Lockstep blijft veilig. Winst nu zo'n 4 ms per tik terwijl er vooruit gemaakt wordt. Groot; later, en dan
+  eerst voor `T.maakEiland` (1,45 s bij een nieuw eiland).
+- Niet: de ruis op een grover raster (geschat 25 à 35% sneller), want dat verandert het land, en dus elk spel.
+
+### G. De kuddes (padzoeken en local avoidance)
+
+Waarom: 40 à 60% van een gewone tik ging naar `omweg` (`js/lopen.js`), bijna alles voor herten en wolven die volgen.
+Staat de leider stil (91% van de keren, meestal thuis in het bos), dan wil een volger naar zijn plek in de kring (`volg`,
+`KRING`), 3 à 4 tegels van de leider; op zijn weg staat een dier van zijn eigen kudde (96%), en tussen de bomen gaat de
+enige weg door de kudde, dus vindt A* in 80 tegels niets (97% vergeefs), elke seconde opnieuw. In drie dagen 11.600 keer;
+voor mensen 4.
+
+- **G1, wachten of er al zijn** (geproefd): een volger met een dier van zijn eigen kudde voor zich wacht even als dat
+  loopt, en is anders klaar; bij een stilstaande leider is hij er ook naast een dier dat er al bij hoort (`erBij`, een
+  keten vanaf de leider). Winst: omwegen van 11.621 naar 12, de gewone tik over zes dagen van 1,99 naar 0,91 ms. Prijs:
+  klein (`js/lopen.js`, `js/beesten.js`, zo'n 25 regels). Te zien: bij een stilstaande leider staat de kudde iets
+  losser (op twee tegels van 54 naar 45%, op drie van 23 naar 28%); het vluchten is gelijk (107 tegen 104 keer in zes
+  dagen), en geen dier staat langer los dan eerst. Eerst laten zien aan Marcel.
+- **G2, alleen de mensen dichtbij** (geproefd): `mensBij` vraagt op 30× elke tik voor elke groep aan alle wezens of er
+  een mens komt; een mens buiten het vak om de groep slaat hij nu over. Precies hetzelfde spel. Winst: 0,2 ms per tik op
+  het proefdorp, 0,7 à 1,1 met 137 mensen. Prijs: klein.
+- Niet: boids of een formatie (de kring is er al een, en sturen past niet bij tegels die elk wezen reserveert), vooraf
+  zien dat een omweg niet kan (het doel is nooit helemaal omringd), flow fields en RVO/ORCA (die lossen het blokkeren
+  niet op). Een omweg die na elke misser langer wacht, alleen als de spits van een groot dorp erom vraagt: met 137 mensen
+  is hun padzoeken 7% van de tik, maar de ochtend- en avondspits is nog niet gemeten.
+
+### H. Middernacht (werk dat eens per dag valt)
+
+Waarom: het wild woont in de stukken rond het dorp (op het proefdorp 6, met 17 groepen), en voor elk stuk rekent
+`bosKaart` elke nacht `T.bosInVak` met het jonge bos over 68 bij 68 tegels: zo'n 27.700 keer `T.voorwerpOp`, en dan de
+diepte (een zoektocht met een rij paren). Tussen twee nachten verandert er meestal niets: alleen rooien, planten, een
+stronk die vergaat, een gebouw of een akker.
+
+- **H1, goedkoper rekenen** (geproefd): `T.voorwerpOpVak` leest de rijen van de stukken en `w.voorwerpen` één keer per
+  vak (met dezelfde regel als `lijstPerTegel`), en de diepte rekent in vaste lijsten. Winst: `bosInVak` van 6,0 naar 2,4
+  ms, de nacht van het wild van 9,5 naar 3,8. Prijs: klein (`js/wereld.js`, `bos.js`, `beesten.js`).
+- **H2, alleen opnieuw wat veranderde** (geproefd): `T.bosInVak` onthoudt per vak zijn lijst (in een WeakMap op de kaart,
+  niet in `S`), geldig zolang `T.kaartPlekkenSinds` niets in het vak of op een rand van 2 tegels noemt en `open`,
+  `w.voorwerpen` en `bosBomen` gelijk zijn, zoals `T.aangelegdNet`. Winst: de nacht van het wild van 3,8 naar 0,3 ms;
+  met veel veranderingen 4 à 5,5 tegen 10 à 12,5. Prijs: klein tot middel, met een nieuwe toets in `test/bos.test.cjs`.
+  Risico: een verandering buiten `kaartVeranderd` om (dat bewaakt `test/wereld.test.cjs` al); boven 64 veranderingen
+  per dag (`PLEKKEN_MAX`) gaat alles opnieuw, of dat in een levend dorp te krap is, is nog niet gemeten.
+- **H3, het plein één keer per dag**: `plekOpHetPlein` filterde voor elke bewoner alle 262 tegels van het plein; nu één
+  keer per `T.wijsWerkToe` (`T.pleinVrij`, `js/bewoners.js`). Van 0,9 naar 0,3 ms bij 17 bewoners; bij 100 geschat 3 ms
+  minder.
+- **H4, opwarmen bij het laden** (niet geproefd): de eerste nacht na het laden kost met H1 en H2 nog 23 à 28 ms, door
+  het net van de paden (`T.aangelegdNet`, 12 ms) en de eerste bosKaart in koude code. Dat bij het laden doen, met F2.
+  Klein.
+- H1 tot H3 samen: middernacht van een mediaan van 13,1 naar 3,3 ms (het traagste van 23 naar 4,2), en precies hetzelfde
+  spel: een afdruk van `S` elke nacht, oud tegen nieuw, ook met honderden bomen weg, om of geplant, een stuk dat opengaat,
+  en laden midden in het spel. Niet: het werk spreiden over de tikken vóór middernacht (na H1 en H2 niet nodig, en het
+  verandert wanneer iets gebeurt).
+
+### Wat we nog niet weten
+
+- `npm run grootte` werkt niet op het eiland: `gereedschap/grootte/bouw.cjs` zoekt alleen kaarten tot 512 tegels, bouwt
+  dan niets en meldt een lege reden. Zo is de ochtend- en avondspits van een groot dorp niet te meten.
+- Een zwakke machine (een Steam Deck, een laptop met de videokaart in de processor): niets gemeten.
+- De meter in het spel meet bij *drawing* alleen de processor; wat de videokaart doet, zie je alleen aan de beelden per
+  seconde.
+- De speeltest in de browser liep niet (de time-out op `file://`, `opmerkingen.md`), dus de kolonist speelde de proeven
+  niet.
+
+### Voorstel van Claude (de tik)
+
+Eerst wat klein is en het spel niet verandert: H1, H2 en H3 (middernacht van 13 naar 3 ms), G2, en F2 met H4 (het laden,
+want dat groeit met het spel). Dan G1, na Marcels blik op de kudde (de helft van de gewone tik). Dan F1 met F5 (de pieken
+van het vooruit maken). F3, F4 en F6 later, en eerst `npm run grootte` op het eiland laten werken, zodat de spits van een
+groot dorp te meten is.
