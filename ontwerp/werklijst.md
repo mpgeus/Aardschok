@@ -30,9 +30,10 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
 **De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
 gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
-het land, met de voortgang in het menu (F2). **H4: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "dan h4
-starten"): het koude werk na het laden ook achter de voortgang; gebouwd op die branch (de eerste tik 39 à 52 naar 21 ms,
-de eerste middernacht 60 à 63 naar 18 à 19, hetzelfde spel), wacht op "push it". **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
+het land, met de voortgang in het menu (F2). **H4 is af** (onder "Af"). **De meter met de
+videokaart: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna de meter met de videokaart"): de meter
+(F2) toont ook hoe lang de videokaart over een beeld doet, waar de browser dat toelaat, om de grond en het tekenen van
+voor naar achter te kunnen meten. **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
 renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De
@@ -1474,6 +1475,8 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
 ## Af (sinds 11 okt)
 
+- H4, het koude werk na het laden (18 okt; `snelheid.md`, "De tik"): na het land nog vijf stappen achter de voortgang;
+  de eerste tik na het laden van 39 à 52 naar 21 ms, de eerste middernacht van 60 à 63 naar 18 à 19, hetzelfde spel.
 - F1, het land in gedeelde blokken (18 okt; `snelheid.md`, "De tik"): een stap van het vooruit maken van 6,3 naar 0,6 à
   1,5 ms, met precies hetzelfde land; na het laden de tikken boven 8 ms van zo'n 45 naar 5 à 11.
 - G1, de kuddes (18 okt; `snelheid.md`, "De tik"): een volger zoekt geen omweg om zijn eigen kudde, maar wacht of is er;
