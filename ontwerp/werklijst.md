@@ -30,8 +30,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
 **De tik is sneller** (18 okt; `snelheid.md`, "De tik"; alles onder "Af"): middernacht 13,6 naar 3,3 ms (H1 tot H3), de
 gewone tik 1,8 naar 0,8 ms (G1 en G2), het vooruit maken van het land onder 3 ms per stap (F1), en na het laden eerst
-het land, met de voortgang in het menu (F2). **H4 en de meter met de videokaart zijn af** (onder "Af"); de meter
-wacht nog op Marcels blik in Edge (zegt hij "graphics card … ms"?). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
+het land, met de voortgang in het menu (F2). **H4 en de meter met de videokaart zijn af** (onder "Af"; in Edge, 18 okt,
+Marcels pc, 30×, nacht en regen, half uitgezoomd: 60 beelden per seconde, regels 0,7 ms, tekenen 2,6, de kaart 2,8). **Na H4: de grond** (Marcel, 18 okt: "Maak notitie voor na h4"; `snelheid.md`, "Het advies van buiten"): de
 grond is het laatste wat de processor nog bakt, en elke stap met het wiel en elk ander seizoen tekent hem helemaal
 opnieuw. Eerst meten in de browser (de meter, het traagste beeld, op 0,35 bij het dorp); rond de 100 ms, dan een
 renderproef van de grond als vaste rijen op de kaart, en dan kiest Marcel. Later F3, F4 en F6 (het voorstel onderaan "De
@@ -1474,7 +1474,7 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 ## Af (sinds 11 okt)
 
 - De meter met de videokaart (18 okt; `gereedschap.md`, bij de meter): F2 zegt ook hoe lang de videokaart over een beeld
-  doet ("graphics card … ms"), of dat de browser het niet zegt; nog na te kijken in Edge.
+  doet ("graphics card … ms"), of dat de browser het niet zegt; in Edge nagekeken (de kaart 2,8 ms per beeld).
 - H4, het koude werk na het laden (18 okt; `snelheid.md`, "De tik"): na het land nog vijf stappen achter de voortgang;
   de eerste tik na het laden van 39 à 52 naar 21 ms, de eerste middernacht van 60 à 63 naar 18 à 19, hetzelfde spel.
 - F1, het land in gedeelde blokken (18 okt; `snelheid.md`, "De tik"): een stap van het vooruit maken van 6,3 naar 0,6 à
