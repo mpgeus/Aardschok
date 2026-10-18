@@ -1493,6 +1493,18 @@ nauwelijks op het gele kleed; het wapen is 28 bij 24 pixels, op het randje; de f
 en zuidoost zie je hem niet; 's nachts waait het vaandel over de hellebaarden van de rij erachter; van noordoost dekt het
 deksel het goud half.
 
+**Marcel op de plaat** (18 okt): "ja tof, maar dat paard moet echt beter", "en de os eigenlijk ook wel". In woorden, wat
+beter is (Claude), voor beide dieren: (1) **benen met gewrichten**: een knie voor en een hak achter die je ziet, een koot
+en een hoef (het paard een ronde hoef met wat behang erboven, de os een gespleten klauw), geen rechte stokjes; (2) **een
+lijf met vorm**: een diepe borst, een ronde buik die terugloopt naar de flank, een sterke bil, en schaduw die de spieren
+volgt (de schouder, de dij); (3) **een kop met karakter en op maat**: het paard een lange kop met kaak, neusgat, oog en
+spitse oren op een gebogen, dikke hals; de os een zware, brede kop met een kwab onder de hals, de schoft met zijn bult,
+uitstekende heupknobbels, en de horens; (4) **een stap met gewicht**: in het lopen gaan de benen in de volgorde van een
+stap, de kop knikt mee, en het lijf deint. Het kleed van het paard volgt het lijf: korter (boven de knie), in plooien, met
+een geschulpte rand en de gouden bies, en een apart borststuk, zodat je het paard eronder ziet. De koe en het schaap
+blijven zoals ze zijn. Eerst een nieuwe proefplaat, oud en nieuw naast elkaar; pas als Marcel hem goedkeurt, komt de
+nieuwe os in het spel (de vellen van de ossenkar opnieuw).
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
