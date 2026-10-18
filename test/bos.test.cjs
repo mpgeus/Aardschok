@@ -392,3 +392,39 @@ test('het bos van een heel vak in één keer (T.bosInVak) is op elke tegel wat T
   }
   assert.ok(anders > 0, 'het jonge bos maakt ergens het verschil');
 }));
+
+test('T.bosInVak met het jonge bos onthoudt een vak tot er in het vak of op zijn rand van twee tegels iets verandert', () => zo(() => {
+  const S = dorp();
+  const D = S.dorp;
+  const w = D.wereld;
+  const k = T.kaartVak(w);
+  const vak = { x: k.x + 10, y: k.y + 10, b: 40, h: 40 };
+  const klopt = (uit) => {
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) assert.equal(uit[(y - vak.y) * vak.b + (x - vak.x)], T.isBos(w, x, y, true) ? 1 : 0, `op ${x},${y}`);
+    }
+  };
+  // aan elke kant: iets op drie tegels van het vak geeft dezelfde lijst, op twee tegels (de vijf bij vijf van T.isBos) een nieuwe
+  const midden = { x: vak.x + 20, y: vak.y + 20 };
+  for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+    const op = (d) => ({ x: dx < 0 ? vak.x - d : dx > 0 ? vak.x + vak.b - 1 + d : midden.x, y: dy < 0 ? vak.y - d : dy > 0 ? vak.y + vak.h - 1 + d : midden.y });
+    for (const [d, nieuw] of [[3, false], [2, true]]) {
+      const voor = T.bosInVak(w, vak, true);
+      const p = op(d);
+      const v = T.voorwerpOp(w, p.x, p.y);
+      if (v) T.haalVoorwerpWeg(w, v);
+      else T.zetVoorwerp(w, { soort: 'hol', x: p.x, y: p.y });
+      const na = T.bosInVak(w, vak, true);
+      assert.equal(na !== voor, nieuw, `${d} tegels van het vak, naar ${dx},${dy}`);
+      klopt(na);
+    }
+  }
+  // het bos op de rand en in het vak weg, rij voor rij: na elke rij wat T.isBos zegt
+  for (let y = vak.y - 2; y < vak.y + 6; y++) {
+    for (let x = vak.x - 2; x < vak.x + vak.b + 2; x++) {
+      const v = T.voorwerpOp(w, x, y);
+      if (v) T.haalVoorwerpWeg(w, v);
+    }
+    klopt(T.bosInVak(w, vak, true));
+  }
+}));

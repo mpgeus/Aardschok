@@ -207,12 +207,15 @@
   // Een plek óp het plein, voor wie daar speelt of rondhangt: de kinderen, en wie geen werk heeft. Elk
   // krijgt zijn eigen plek (n: zijn nummer), zodat ze over het hele plein verspreid zijn en niet
   // allemaal bij de marskramer staan. Heeft de kaart geen plein (T.opHetPlein, js/wereld.js), dan null.
-  T.plekOpHetPlein = function (D, n) {
-    const w = D.wereld;
-    const tegels = T.pleinTegels(D).filter((t) => T.isBegaanbaar(w, t.x, t.y));
+  // `tegels`: die van het plein waar je op kunt (T.pleinVrij), als wie voor iedereen een plek zoekt ze al heeft.
+  T.plekOpHetPlein = function (D, n, tegels = T.pleinVrij(D)) {
     const t = tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
     return t ? { x: t.x, y: t.y } : null;
   };
+
+  // De tegels van het plein waar je nu op kunt: één keer voor iedereen die elke dag zijn plek krijgt (T.wijsWerkToe),
+  // niet voor elk kind opnieuw (18 okt: 262 tegels per kind, twee derde van het verdelen van het werk).
+  T.pleinVrij = (D) => T.pleinTegels(D).filter((t) => T.isBegaanbaar(D.wereld, t.x, t.y));
 
   // De put het dichtst bij deze tegel, als plek om te staan: een begaanbare tegel ernaast. Een put
   // staat op de kaart als voorwerp (in het gehucht op het plein), of is gebouwd (T.GEBOUWEN.put).
@@ -250,12 +253,12 @@
   // Waar iemand is als hij vrij is, overdag: een kind of een jongere speelt op het plein, en daar hangt
   // ook rond wie volwassen is en geen werk heeft (zo zie je dat er een werkplaats bij moet). Een oude
   // en een kleuter blijven bij huis, en de vrouw van de aanvoerder doet zijn huishouden.
-  function vrijePlekVan(D, w, p, deur) {
+  function vrijePlekVan(D, w, p, deur, plein) {
     const bijHuis = { x: deur.x, y: deur.y, straal: IN().straalBijHuis };
     if (p.leeftijd === 'oud' || p.leeftijd === 'kleuter') return bijHuis;
     if (p.leeftijd === 'volwassen' && vanAanvoerder(p)) return { x: deur.x, y: deur.y, straal: erfStraal() };
-    const plein = T.plekOpHetPlein(D, p.id) || T.pleinVan(D);
-    const t = plein && tegelBij(w, plein);
+    const hier = T.plekOpHetPlein(D, p.id, plein) || T.pleinVan(D);
+    const t = hier && tegelBij(w, hier);
     return t ? { x: t.x, y: t.y, straal: IN().straalPlein } : bijHuis;
   }
 
@@ -293,11 +296,12 @@
 
   // Zijn plekken opnieuw uitrekenen: bij een nieuw poppetje, en elke dag na het verdelen van het werk
   // (zijn werk kan veranderd zijn). T.dagAnker (js/dag.js) kiest er per deel van de dag een uit.
-  function zetPlekken(D, p) {
+  // `plein`: de vrije tegels van het plein (T.pleinVrij), als de aanroeper ze voor iedereen al heeft.
+  function zetPlekken(D, p, plein) {
     const w = D.bewoners && D.bewoners.wereld;
     if (!w || p.aanvoerder) return;
     const deur = T.deurVanBewoner(D, p);
-    p.plek = { put: putBij(D, w, deur), werk: werkplekVan(D, w, p), vrij: vrijePlekVan(D, w, p, deur) };
+    p.plek = { put: putBij(D, w, deur), werk: werkplekVan(D, w, p), vrij: vrijePlekVan(D, w, p, deur, plein) };
     p.plek.heen = looptijd(w, p, deur);
   }
   T.zetPlekken = zetPlekken; // ook als iemand soldaat wordt of zijn wapen inlevert (js/soldaten.js)
@@ -931,7 +935,8 @@
     // Eerst het eigen gezin: de boer op zijn eigen boerderij, en wie er volwassen of een knaap is.
     for (const g of D.gebouwen) vul(g, (p) => p.huis === g && T.LEEFTIJDEN[p.leeftijd].werkt <= 1);
     for (const g of D.gebouwen) vul(g, () => true);
-    for (const p of B.mensen) zetPlekken(D, p);
+    const plein = T.pleinVrij(D);
+    for (const p of B.mensen) zetPlekken(D, p, plein);
   };
 
   // Hoeveel uur er op dag `dag` gewerkt wordt bij gebouw g (stuk 2; js/gebouwen.js, stap 6 van

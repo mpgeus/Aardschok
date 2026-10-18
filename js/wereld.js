@@ -672,6 +672,37 @@
       return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
     }) || null;
   };
+  // T.voorwerpOp voor elke tegel van het vak { x, y, b, h } (gehele getallen) in één keer: een lijst, tegel (x, y) op plek
+  // (y - vak.y) * vak.b + (x - vak.x), met hetzelfde als T.voorwerpOp (het eerste voorwerp van w.voorwerpen dat de tegel
+  // beslaat, anders wat er op het eiland groeit), of null. Voor wie elke nacht een heel vak afloopt (T.bosInVak): per
+  // tegel vroeg dat vier opzoekingen, hier leest het de rijen van de stukken zoals ze liggen.
+  T.voorwerpOpVak = function (w, vak) {
+    const uit = new Array(vak.b * vak.h).fill(null);
+    for (const v of w.voorwerpen || []) {
+      const f = T.voetVan(v);
+      if (!Number.isInteger(f.x1) || !Number.isInteger(f.y1)) continue; // die vindt T.voorwerpOp ook niet
+      for (let y = Math.max(vak.y, f.y1); y <= Math.min(vak.y + vak.h - 1, f.y2); y++) {
+        for (let x = Math.max(vak.x, f.x1); x <= Math.min(vak.x + vak.b - 1, f.x2); x++) {
+          const i = (y - vak.y) * vak.b + (x - vak.x);
+          if (uit[i] === null) uit[i] = v; // staan er twee op één tegel, dan de eerste, zoals lijstPerTegel
+        }
+      }
+    }
+    if (!opEiland(w)) return uit;
+    for (const n of w.open) {
+      const [x0, y0] = [(n % 64) * STUK, Math.floor(n / 64) * STUK];
+      if (x0 >= vak.x + vak.b || y0 >= vak.y + vak.h || x0 + STUK <= vak.x || y0 + STUK <= vak.y) continue;
+      const s = stukkenVan(w).get(n) || openStuk(w, x0, y0);
+      if (!s) continue;
+      // niet over de rand van het eiland, zoals openStuk
+      const [xa, xb] = [Math.max(vak.x, x0, 0), Math.min(vak.x + vak.b, x0 + STUK, EILAND_MAAT())];
+      for (let y = Math.max(vak.y, y0, 0); y < Math.min(vak.y + vak.h, y0 + STUK, EILAND_MAAT()); y++) {
+        let i = (y - vak.y) * vak.b + (xa - vak.x);
+        for (let j = (y - y0) * STUK + (xa - x0), eind = j + (xb - xa); j < eind; j++, i++) if (uit[i] === null && s.op[j]) uit[i] = s.op[j];
+      }
+    }
+    return uit;
+  };
   T.zetVoorwerp = function (w, v) {
     (w.voorwerpen || (w.voorwerpen = [])).push(v);
     T.kaartVeranderd(w, T.voetVan(v));
