@@ -284,11 +284,16 @@ const langsAlle = (w, x, y) => [...w.voorwerpen, ...(Number.isInteger(x) && Numb
   return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
 }) || null;
 
+// En T.voorwerpOpVak, het hele vak in één keer (voor de nacht van het wild, js/bos.js), geeft op elke tegel hetzelfde.
 function vergelijkElkeTegel(w, waar) {
   const K = T.kaartVak(w);
-  for (let y = K.y - 2; y < K.y + K.h + 2; y++) {
-    for (let x = K.x - 2; x < K.x + K.b + 2; x++) {
-      if (T.voorwerpOp(w, x, y) !== langsAlle(w, x, y)) assert.fail(`${waar}: op ${x},${y} geeft de lijst per tegel iets anders dan alle voorwerpen aflopen`);
+  const vak = { x: K.x - 2, y: K.y - 2, b: K.b + 4, h: K.h + 4 };
+  const inVak = T.voorwerpOpVak(w, vak);
+  for (let y = vak.y; y < vak.y + vak.h; y++) {
+    for (let x = vak.x; x < vak.x + vak.b; x++) {
+      const v = T.voorwerpOp(w, x, y);
+      if (v !== langsAlle(w, x, y)) assert.fail(`${waar}: op ${x},${y} geeft de lijst per tegel iets anders dan alle voorwerpen aflopen`);
+      if (inVak[(y - vak.y) * vak.b + (x - vak.x)] !== v) assert.fail(`${waar}: op ${x},${y} geeft T.voorwerpOpVak iets anders dan T.voorwerpOp`);
     }
   }
 }

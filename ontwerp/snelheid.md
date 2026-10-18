@@ -287,7 +287,10 @@ stronk die vergaat, een gebouw of een akker.
 - **H4, opwarmen bij het laden** (niet geproefd): de eerste nacht na het laden kost met H1 en H2 nog 23 à 28 ms, door
   het net van de paden (`T.aangelegdNet`, 12 ms) en de eerste bosKaart in koude code. Dat bij het laden doen, met F2.
   Klein.
-- H1 tot H3 samen: middernacht van een mediaan van 13,1 naar 3,3 ms (het traagste van 23 naar 4,2), en precies hetzelfde
+- **H1 tot H3 zijn gebouwd** (18 okt; Marcel: "begin met middernacht"; `code.md` bij `js/bos.js`), met een toets dat
+  `T.voorwerpOpVak` op elke tegel `T.voorwerpOp` geeft (`test/wereld.test.cjs`). Om en om nagemeten: middernacht van een
+  mediaan van 13,6 naar 3,3 ms (het traagste van 23,5 naar 4,4, de eerste nacht na het laden van 33 à 54 naar 22); met
+  elke dag veranderingen in elk vak 5 à 7 tegen 10 à 14 ms (het traagste 16 à 18 tegen 21 à 22). En precies hetzelfde
   spel: een afdruk van `S` elke nacht, oud tegen nieuw, ook met honderden bomen weg, om of geplant, een stuk dat opengaat,
   en laden midden in het spel. Niet: het werk spreiden over de tikken vóór middernacht (na H1 en H2 niet nodig, en het
   verandert wanneer iets gebeurt).
@@ -304,7 +307,7 @@ stronk die vergaat, een gebouw of een akker.
 
 ### Voorstel van Claude (de tik)
 
-Eerst wat klein is en het spel niet verandert: H1, H2 en H3 (middernacht van 13 naar 3 ms), G2, en F2 met H4 (het laden,
-want dat groeit met het spel). Dan G1, na Marcels blik op de kudde (de helft van de gewone tik). Dan F1 met F5 (de pieken
+Eerst wat klein is en het spel niet verandert: H1, H2 en H3 (middernacht van 13 naar 3 ms; gebouwd, 18 okt), G2, en F2
+met H4 (het laden, want dat groeit met het spel). Dan G1, na Marcels blik op de kudde (de helft van de gewone tik). Dan F1 met F5 (de pieken
 van het vooruit maken). F3, F4 en F6 later, en eerst `npm run grootte` op het eiland laten werken, zodat de spits van een
 groot dorp te meten is.

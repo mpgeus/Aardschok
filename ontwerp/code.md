@@ -372,7 +372,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vragen over een kaart (`isBegaanbaar`, `isVast`, `raakt`, `zicht`/`zichtTussen`/`zietTegel`, `isZichtbaar`,
   `opHetPlein`: op het plein wordt niet gebouwd, en `T.pleinTegels`: de tegels van het plein, één keer per kaart),
   wat er op een tegel staat (`T.voorwerpOp`, uit een lijst per tegel die de kaart zelf bijhoudt, niet in `S`; een voorwerp
-  zet je erbij en haal je weg met `T.zetVoorwerp` en `T.haalVoorwerpWeg`, vraag 71: dit was 85% van een speeldag),
+  zet je erbij en haal je weg met `T.zetVoorwerp` en `T.haalVoorwerpWeg`, vraag 71: dit was 85% van een speeldag; voor
+  een heel vak in één keer `T.voorwerpOpVak`, met op elke tegel hetzelfde, voor de nacht van het wild),
   en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht. De naam van een wezen staat
   met een kleine letter ("the wolf" in de zin, `T.t('The {wezen} sees you.')`), en wat een monster doet, is
   `aanval.zin` met `{doel}` erin (`T.t('bites {doel}')`): `js/gevecht.js` vult *you* of de naam van de man van de militie in
@@ -1083,7 +1084,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   leeftijd (`T.LEEFTIJDEN`, die ook zijn vel kiest), een huis, een gezin en een poppetje
   (`e.bewoner`). De aanvoerder en de boeren zijn ook bewoners, met het wezen dat de kaart al neerzette.
   Hoeveel handen een gebouw krijgt, zegt `T.verdeelHanden` (`js/gebouwen.js`); wíé dat zijn,
-  `T.wijsWerkToe`, en wie werk heeft, houdt het. Waar iemand op welk uur hoort, zegt `T.dagAnker`
+  `T.wijsWerkToe`, en wie werk heeft, houdt het (en dan de plekken van iedereen, met de vrije tegels van het plein één
+  keer voor allemaal: `T.pleinVrij`). Waar iemand op welk uur hoort, zegt `T.dagAnker`
   (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
   zet dit bestand. Komen en gaan zie je (`T.werkBewonersBij`, elk beeld): een nieuw gezin komt overdag
   over de weg binnen, op dezelfde manier als een bezoeker (`T.bezoekerKomtAan`), en wie wegtrekt,
@@ -1437,7 +1439,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat niet in de weg), en stond hij in het bos, twee boompjes ernaast (`boompjesPerBoom`, `T.plantNaast`, `v.geplant`,
   `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 129, f; voor een heel vak in één keer
   `T.bosInVak`, met een optelsom, want per tegel telt `T.isBos` met het jonge bos de 25 tegels eromheen: zo kijken de
-  wolven en de herten elke nacht, en dat was het zwaarste van de nacht, 13 okt), die in een jaar of twee via een
+  wolven en de herten elke nacht, en dat was het zwaarste van de nacht, 13 okt; sinds 18 okt onthoudt de kaart die lijst
+  per vak tot er in het vak of op zijn rand van twee tegels iets verandert, `T.kaartPlekkenSinds`, in een WeakMap en niet
+  in `S`, en komt wat er op elke tegel staat in één keer uit `T.voorwerpOpVak`: de tik van middernacht van 13 naar 3 ms,
+  `snelheid.md`, H), die in een jaar of twee via een
   jonge boom een boom worden (`T.tikBosDag`; de tekeningen `boompje`, `jongeEik`, `jongeDen`, `jongeBerk` in het vel van
   de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`) en wil hij geen handen
   (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
@@ -1477,7 +1482,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   helft zoekt een eigen thuis of trekt weg (`G.trektWeg`: `T.werkBeestenBij` haalt hem van de kaart, niet midden in een
   gevecht); wie honger leed, krijgt geen jongen (`G.leedOp`); een thuis dat niet meer diep in het bos ligt, verhuist of de
   groep trekt weg (`blijfOfVerhuis`; wat de houthakker inplant, telt als bos; het bos en hoe diep, over het vak om
-  het dorp: `bosKaart`, met `T.bosInVak` uit `js/bos.js`). **De dreiging** (stap 2b): wie aan het werk
+  het dorp: `bosKaart`, met `T.bosInVak` uit `js/bos.js`, en de diepte onthoudt hij zolang dat bos hetzelfde is).
+  **De dreiging** (stap 2b): wie aan het werk
   een roedel ziet, rent naar huis (`schrik`; `T.blijftThuis` in js/bewoners.js, `p.thuisTot`: hij werkt niet, en
   `T.dagAnker` houdt hem binnen), en zijn werkplaats maakte die dag de helft; een roedel met honger is in het donker stout
   (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, of wie alleen in het donker loopt, de aanvoerder ook), en slaat toe

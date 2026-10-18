@@ -32,7 +32,8 @@ WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **
 13 naar 3 ms (H1 tot H3), de gewone tik de helft (G1, de kuddes), het vooruit maken van het land onder 2 ms per stap (F1),
 en het laden achter het laadscherm (F2), allemaal geproefd, de proeven op `proef/tik-nacht`, `proef/tik-kudde` en
 `proef/tik-land`. **De tik van middernacht sneller: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "begin met
-middernacht"): H1 tot H3. De rest wacht op Marcel (het voorstel staat onderaan "De tik").
+middernacht"): H1 tot H3 zijn gebouwd op die branch (middernacht 13,6 naar 3,3 ms, hetzelfde spel), en wachten op
+"push it" naar `main`. De rest wacht op Marcel (het voorstel staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11

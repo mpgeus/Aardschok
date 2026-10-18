@@ -155,7 +155,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
 - **De wolven en de herten kijken elke nacht over het hele vak om het dorp** (13 okt, idee van Claude): of hun thuis
   nog in het bos ligt, rekent `bosKaart` (`js/beesten.js`) het bos en hoe diep het is uit voor alle tegels van
-  `T.kaartVak`, nu 100 bij 100. Sinds `T.bosInVak` kost dat een paar ms (was 50 tot 90, het zwaarste van de nacht).
+  `T.kaartVak`, nu 100 bij 100. Sinds `T.bosInVak` kost dat een paar ms (was 50 tot 90, het zwaarste van de nacht),
+  en sinds 18 okt onthoudt de kaart het per vak: 0,3 ms als er niets veranderde (`snelheid.md`, H).
   Zuiniger kan nog: een groep hoeft alleen rond zijn thuis en zijn plekken aan de bosrand te kijken, en de hele kaart is
   pas nodig als hij verhuist of splitst. Dat hangt dan niet meer af van hoe groot het vak om het dorp wordt. Pas als
   het vak groeit of het weer opvalt.

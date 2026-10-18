@@ -124,10 +124,8 @@
     return n >= IN().bosBomen;
   };
   // Telt deze tegel mee voor T.isBos met het jonge bos: een boom, of het jonge bos.
-  const ookJongBos = (w, x, y) => {
-    const v = T.voorwerpOp(w, x, y);
-    return !!v && (isBoom(w, x, y, v) || JONG_BOS.has(v.soort));
-  };
+  const ookJongBos = (w, x, y) => ookJongBosV(w, x, y, T.voorwerpOp(w, x, y));
+  const ookJongBosV = (w, x, y, v) => !!v && (isBoom(w, x, y, v) || JONG_BOS.has(v.soort));
 
   // T.isBos voor elke tegel van het vak { x, y, b, h } in één keer: een lijst met 1 (bos) of 0, tegel (x, y) op plek
   // (y - vak.y) * vak.b + (x - vak.x). Elke nacht kijken de wolven en de herten of hun thuis nog in het bos ligt, over alle
@@ -135,22 +133,51 @@
   // zwaarste van de nacht (13 okt: 50 ms). Hier kijkt elke tegel één keer, en komen de vijf bij vijf uit een optelsom,
   // over het vak met een rand van twee tegels, zoals T.isBos ook over de rand van het vak kijkt. Zonder het jonge bos telt
   // T.isBos al met een optelsom (T.natuurBij).
+  // Met het jonge bos onthoudt de kaart de lijst per vak, tot er in het vak of op zijn rand iets veranderde (de plekken
+  // van T.kaartPlekkenSinds, js/wereld.js): zo rekent de nacht alleen het land opnieuw waar een boom gekapt, geplant of
+  // gegroeid is, of iets gebouwd. Wat terugkomt, is dan dezelfde lijst als de vorige keer: alleen lezen. Geen spelstaat,
+  // zoals de lijst per tegel: een geladen kaart rekent hem opnieuw uit, en dat geeft hetzelfde.
+  const BOS_PER_VAK = new WeakMap();
+  const BOS_RAND = 2; // de vijf bij vijf van T.isBos
   T.bosInVak = function (w, vak, ookJong = false) {
-    const uit = new Uint8Array(vak.b * vak.h);
     if (!ookJong) {
+      const uit = new Uint8Array(vak.b * vak.h);
       for (let y = vak.y; y < vak.y + vak.h; y++) {
         for (let x = vak.x; x < vak.x + vak.b; x++) uit[(y - vak.y) * vak.b + (x - vak.x)] = T.isBos(w, x, y) ? 1 : 0;
       }
       return uit;
     }
-    const R = 2; // de vijf bij vijf van T.isBos
+    const perVak = BOS_PER_VAK.get(w) || new Map();
+    BOS_PER_VAK.set(w, perVak);
+    const sleutel = `${vak.x},${vak.y},${vak.b},${vak.h}`;
+    const was = perVak.get(sleutel);
+    const nu = { versie: T.kaartVersie(w), open: T.openGrootte(w), voorwerpen: w.voorwerpen, bosBomen: IN().bosBomen };
+    if (was && was.open === nu.open && was.voorwerpen === nu.voorwerpen && was.bosBomen === nu.bosBomen) {
+      const plekken = T.kaartPlekkenSinds(w, was.versie);
+      const R = BOS_RAND;
+      const raakt = (p) => p.x2 >= vak.x - R && p.y2 >= vak.y - R && p.x1 < vak.x + vak.b + R && p.y1 < vak.y + vak.h + R;
+      if (plekken && !plekken.some(raakt)) {
+        was.versie = nu.versie;
+        return was.uit;
+      }
+    }
+    nu.uit = bosInVakNu(w, vak);
+    perVak.set(sleutel, nu);
+    return nu.uit;
+  };
+  function bosInVakNu(w, vak) {
+    const uit = new Uint8Array(vak.b * vak.h);
+    const R = BOS_RAND;
     const b = vak.b + 2 * R;
     const h = vak.h + 2 * R;
     const som = new Int32Array((b + 1) * (h + 1)); // som[j * (b + 1) + i]: hoeveel er in de i kolommen en j rijen ervoor staan
+    // wat er op elke tegel staat in één keer (T.voorwerpOpVak), niet per tegel (18 okt: 1 ms per vak, nu een tiende)
+    const op = T.voorwerpOpVak(w, { x: vak.x - R, y: vak.y - R, b, h });
     for (let j = 0; j < h; j++) {
       let rij = 0;
       for (let i = 0; i < b; i++) {
-        if (ookJongBos(w, vak.x - R + i, vak.y - R + j)) rij++;
+        const v = op[j * b + i];
+        if (v && ookJongBosV(w, vak.x - R + i, vak.y - R + j, v)) rij++;
         som[(j + 1) * (b + 1) + i + 1] = som[j * (b + 1) + i + 1] + rij;
       }
     }
@@ -162,7 +189,7 @@
       }
     }
     return uit;
-  };
+  }
 
   // Weg met wat op deze tegel stond. Van de kaart kwam het met een muur eronder (een vast ding, js/kaart.js), dus de tegel
   // wordt weer vloer; wat er daarna op komt (een stronk, een jonge boom), houdt hem zelf tegen.

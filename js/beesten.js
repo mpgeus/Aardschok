@@ -201,33 +201,40 @@
   // telt wat de houthakker kapt en inplant ook als bos (js/bos.js, vraag 129, f): 's nachts, als een groep kijkt of zijn
   // thuis nog goed is. Het bos komt in één keer voor het hele vak (T.bosInVak), want per tegel was het de zwaarste regel
   // van de nacht. Het vak is het land van een dorp (T.dorpVak; voor een groep G.bos.vak).
+  // Is het bos van het vak hetzelfde als de vorige keer (T.bosInVak onthoudt het met het jonge bos), dan ook zijn diepte.
+  const DIEP = new WeakMap();
   function bosKaart(w, vak, ookJong = false) {
     const bos = T.bosInVak(w, vak, ookJong);
+    const al = DIEP.get(bos);
+    if (al) return { bos, diep: al.diep, n: al.n, vak };
     const diep = new Int16Array(vak.b * vak.h).fill(-1);
-    const rij = [];
+    // in stappen vanaf de tegels die geen bos zijn (breedte eerst), in kolom en rij van het vak: zonder een rij paren per
+    // buur was dit de helft van de nacht van het wild (18 okt)
+    const rij = new Int32Array(vak.b * vak.h);
+    let eind = 0;
     let n = 0;
     for (let i = 0; i < bos.length; i++) {
       if (bos[i]) n++;
       else {
         diep[i] = 0;
-        rij.push(i);
+        rij[eind++] = i;
       }
     }
-    for (let k = 0; k < rij.length; k++) {
+    for (let k = 0; k < eind; k++) {
       const i = rij[k];
       const kol = i % vak.b;
-      const x = vak.x + kol;
-      const y = vak.y + (i - kol) / vak.b;
-      for (const [dx, dy] of BUREN) {
-        const nx = x + dx;
-        const ny = y + dy;
-        if (!T.inVak(vak, nx, ny)) continue;
-        const j = plekInVak(vak, nx, ny);
+      const r = (i - kol) / vak.b;
+      for (let d = 0; d < BUREN.length; d++) {
+        const nk = kol + BUREN[d][0];
+        const nr = r + BUREN[d][1];
+        if (nk < 0 || nr < 0 || nk >= vak.b || nr >= vak.h) continue;
+        const j = nr * vak.b + nk;
         if (diep[j] >= 0) continue;
         diep[j] = diep[i] + 1;
-        rij.push(j);
+        rij[eind++] = j;
       }
     }
+    DIEP.set(bos, { diep, n });
     return { bos, diep, n, vak };
   }
 
