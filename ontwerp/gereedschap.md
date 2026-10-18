@@ -144,6 +144,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   beeldmodellen de sleutel mag gebruiken (het script kiest uit `VOORKEUR`, of `BEELD_MODEL` in de omgeving), `droog`
   doet de proef zonder AI (de leidraden en de weg terug), `proef` doet hem echt: de wagen van de heer van zuidwest en
   noordoost, en acht loopbeelden naar zuidwest, waarbij elk loopbeeld het eerste van de AI meekrijgt voor dezelfde os.
+  **Zonder sleutel, met de hand** (Marcel, 18 okt: de sleutel lukt niet): Marcel sleept de leidraden
+  (`uit/ai/<naam>-leidraad.png`) met zijn plaat in ChatGPT, en zet de antwoorden als PNG in `uit/ai/hand/<naam>.png`;
+  `hand` maakt er pixel art van op de plek van onze render, met `uit/ai/hand-proef.png` (onze render, het antwoord, de
+  pixels) en de loopbeelden bewegend (`hand-lopen.png`, en ter vergelijking `hand-lopen-onze.png`).
   Alles in `gereedschap/pixelart/uit/ai/`. **De sleutel** staat buiten de opslag: `C:\Users\mpgeu\.openai-sleutel`, of
   `OPENAI_API_KEY` in de omgeving; het script leest hem alleen om hem naar `api.openai.com` te sturen. De proef kost een
   paar dollar (tien beelden).

@@ -264,12 +264,121 @@ async function proef(droog) {
   console.log(`Klaar: ${path.relative(process.cwd(), UIT)}`);
 }
 
+// ---------------------------------------------------------------- de proef met de hand (zonder sleutel)
+
+// Marcel sleept de leidraden met zijn plaat in ChatGPT, en zet de antwoorden als PNG in uit/ai/hand/, met de naam van hun
+// leidraad (wagen-zw.png, lopen-zw-0.png, ...; werklijst vraag 180). Dit maakt er pixel art van, op de plek en in de maat
+// van onze render, en zet alles naast elkaar: uit/ai/hand-proef.png (onze render, het antwoord, de pixels), en van de
+// loopbeelden uit/ai/hand-lopen.png en uit/ai/hand-lopen-onze.png (bewegend, om te zien of het flikkert).
+const leeg = (b, h) => ({ b, h, rgba: Buffer.alloc(b * h * 4) });
+function plakOp(doel, bron, ox, oy) {
+  for (let y = 0; y < bron.h; y++) for (let x = 0; x < bron.b; x++) {
+    const s = (y * bron.b + x) * 4;
+    const dx = ox + x, dy = oy + y;
+    if (bron.rgba[s + 3] < 128 || dx < 0 || dy < 0 || dx >= doel.b || dy >= doel.h) continue;
+    bron.rgba.copy(doel.rgba, (dy * doel.b + dx) * 4, s, s + 4);
+  }
+}
+function vergroot(bron, Z) {
+  const uit = leeg(bron.b * Z, bron.h * Z);
+  for (let y = 0; y < uit.h; y++) for (let x = 0; x < uit.b; x++) {
+    const s = (Math.floor(y / Z) * bron.b + Math.floor(x / Z)) * 4;
+    bron.rgba.copy(uit.rgba, (y * uit.b + x) * 4, s, s + 4);
+  }
+  return uit;
+}
+// Verkleinen om te bekijken (het antwoord van de AI is groot): elke pixel het gemiddelde van wat eronder valt.
+function verklein(bron, nb, nh) {
+  const uit = leeg(nb, nh);
+  for (let y = 0; y < nh; y++) for (let x = 0; x < nb; x++) {
+    const s = [0, 0, 0, 0];
+    let n = 0;
+    for (let sy = Math.floor((y * bron.h) / nh); sy < Math.max(Math.floor((y * bron.h) / nh) + 1, Math.floor(((y + 1) * bron.h) / nh)); sy++) {
+      for (let sx = Math.floor((x * bron.b) / nb); sx < Math.max(Math.floor((x * bron.b) / nb) + 1, Math.floor(((x + 1) * bron.b) / nb)); sx++) {
+        for (let j = 0; j < 4; j++) s[j] += bron.rgba[(sy * bron.b + sx) * 4 + j];
+        n++;
+      }
+    }
+    uit.rgba.set(s.map((v) => Math.round(v / n)), (y * nb + x) * 4);
+  }
+  return uit;
+}
+// Onze render van een naam (wagen-zw, lopen-zw-4): dezelfde plaat als zijn leidraad.
+function renderVan(naam) {
+  const m = /^(wagen|lopen)-(zw|no)(?:-(\d))?$/.exec(naam);
+  if (!m) return null;
+  return wagen(m[2].toUpperCase(), m[1] === 'lopen' ? { houding: 'lopen', fase: Number(m[3]) / 8 } : {});
+}
+
+function hand() {
+  const map = process.env.HAND_MAP || path.join(UIT, 'hand'); // HAND_MAP: om het gereedschap zelf te toetsen
+  const namen = fs.existsSync(map) ? fs.readdirSync(map).filter((f) => /\.png$/i.test(f)).map((f) => f.replace(/\.png$/i, '')).sort() : [];
+  if (!namen.length) throw new Error(`Nog niets in ${map}: zet daar de antwoorden van ChatGPT, als wagen-zw.png, lopen-zw-0.png, ...`);
+  const rijen = [];
+  const lopen = [];
+  for (const naam of namen) {
+    const plaat = renderVan(naam);
+    if (!plaat) {
+      console.log(`${naam}: geen leidraad met die naam, overgeslagen`);
+      continue;
+    }
+    const k = O.kader(plaat);
+    const kb = k.x1 - k.x0 + 1, kh = k.y1 - k.y0 + 1;
+    const png = fs.readFileSync(path.join(map, `${naam}.png`));
+    const p = naarPixels(png, { breed: kb, hoog: kh });
+    // Op de plek van onze render: onderaan in het midden van zijn kader, in een cel zo groot als de plaat.
+    const cel = leeg(plaat.b, plaat.h);
+    plakOp(cel, p, k.x0 + Math.floor((kb - p.b) / 2), k.y1 + 1 - p.h);
+    const onze = { b: plaat.b, h: plaat.h, rgba: plaat.rgba(null) };
+    const ai = K.leesPng(png);
+    const toon = verklein(ai, Math.round((ai.b * 260) / ai.h), 260);
+    const snij = (bron) => {
+      const s = leeg(kb + 8, kh + 8);
+      for (let y = 0; y < s.h; y++) for (let x = 0; x < s.b; x++) {
+        const sx = k.x0 - 4 + x, sy = k.y0 - 4 + y;
+        if (sx >= 0 && sy >= 0 && sx < bron.b && sy < bron.h) bron.rgba.copy(s.rgba, (y * s.b + x) * 4, (sy * bron.b + sx) * 4, (sy * bron.b + sx) * 4 + 4);
+      }
+      return vergroot(s, 2);
+    };
+    rijen.push([snij(onze), toon, snij(cel)]);
+    if (naam.startsWith('lopen')) lopen.push({ cel, onze });
+    console.log(`${naam}: ${p.b}×${p.h} (onze render ${kb}×${kh})`);
+  }
+  // De plaat: per beeld een rij, op een donkere grond.
+  const GAT = 12;
+  const breed = Math.max(...rijen.map((r) => r.reduce((s, x) => s + x.b + GAT, GAT)));
+  const hoog = rijen.reduce((s, r) => s + Math.max(...r.map((x) => x.h)) + GAT, GAT);
+  const doek = leeg(breed, hoog);
+  for (let i = 0; i < breed * hoog; i++) doek.rgba.set([70, 82, 56, 255], i * 4);
+  let y = GAT;
+  for (const r of rijen) {
+    let x = GAT;
+    const rh = Math.max(...r.map((s) => s.h));
+    for (const s of r) {
+      plakOp(doek, s, x, y + rh - s.h);
+      x += s.b + GAT;
+    }
+    y += rh + GAT;
+  }
+  fs.writeFileSync(path.join(UIT, 'hand-proef.png'), K.pngVanBeeld(doek));
+  // De loopbeelden bewegend, ons en dat van de AI (vier van de acht: op de helft van de snelheid van de os).
+  if (lopen.length > 1) {
+    const { apng } = require('../pixelart/apng.cjs');
+    const alsPlaat = (r) => ({ b: r.b, h: r.h, rgba: () => r.rgba });
+    const fps = require('../pixelart/vee.cjs').LOOP_FPS.os / 2;
+    fs.writeFileSync(path.join(UIT, 'hand-lopen.png'), apng(lopen.map((l) => alsPlaat(l.cel)), { fps, schaal: 2, achtergrond: '#465238' }));
+    fs.writeFileSync(path.join(UIT, 'hand-lopen-onze.png'), apng(lopen.map((l) => alsPlaat(l.onze)), { fps, schaal: 2, achtergrond: '#465238' }));
+  }
+  console.log(`Klaar: uit/ai/hand-proef.png${lopen.length > 1 ? ', hand-lopen.png en hand-lopen-onze.png' : ''}`);
+}
+
 async function main() {
   const wat = process.argv[2];
   if (wat === 'modellen') console.log((await beeldModellen()).join('\n'));
   else if (wat === 'droog') await proef(true);
   else if (wat === 'proef') await proef(false);
-  else console.log('node gereedschap/ai/beeld-ai.cjs modellen | droog | proef');
+  else if (wat === 'hand') hand();
+  else console.log('node gereedschap/ai/beeld-ai.cjs modellen | droog | proef | hand');
 }
 
 if (require.main === module) main().catch((e) => {
