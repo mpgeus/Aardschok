@@ -412,7 +412,7 @@ kijkgat haalt zijn grond ook uit die buffer. In stappen, elk weer naast de oude 
 - **4b, het licht**: het plaatje per stuk (`maakLichtStuk`, hetzelfde) gaat als textuur naar de kaart, zacht gelezen. De
   keuze: **A** in de tegel zelf (dan is er geen naadje; zo wilde het spel het al, `lichtInDeTegel`, maar op de processor
   was het tien keer zo duur, en op de kaart kost het niets), of **B** als laag erover, zoals nu, met het naadje. Voorstel
-  van Claude: **A**.
+  van Claude: **A**. **Marcel koos A** (18 okt: "optie A en akkoord"), en is akkoord met het plan.
 - **4c, de wanden**: per wand een instantie met zijn vier hoeken en zijn stuk textuur (de vier texturen op de stapel),
   als dezelfde twee driehoeken. De randen worden niet pixel voor pixel hetzelfde: de oude knipt zacht.
 - **4d, wat ervoor ligt**: een tegel die afdekt (`T.dekkersIn`, js/hoogte.js) schrijft zijn diepte op de kaart, met de
