@@ -29,6 +29,7 @@ const { ring, schijf } = require('./figuren2.cjs');
 const HH = require('./houding.cjs');
 const { bochtProfiel } = require('./bosvijanden.cjs');
 const V = require('./vee.cjs');
+const TX = require('./textuur.cjs');
 const { apng } = require('./apng.cjs');
 
 const TEGEL = K.TEGEL;
@@ -171,10 +172,13 @@ function materialen(blink = 0) {
 // ---------------------------------------------------------------- de kar
 
 // Een wiel aan kant s (-1 links, 1 rechts), gedraaid over `hoek` (rijdt de kar vooruit, dan draait de bovenkant mee naar
-// voren): een velg met een ijzeren band, een naaf en acht spaken.
+// voren): een velg met een ijzeren band, een naaf en acht spaken. Elk onderdeel zegt sinds 18 okt hoe zijn oppervlak
+// afgewikkeld wordt (`uv`, textuur.cjs: de velg, de band en de naaf rond om de as, een spaak langs zijn as), voor een
+// materiaal met een textuur; de renderer kijkt daar alleen naar bij zo'n materiaal, dus zonder blijft het wiel gelijk.
 function wiel(s, hoek) {
   const c = [s * WIEL.x, 0, WIEL.r];
   const deel = s < 0 ? 2 : 3;
+  const om = (r) => TX.rond(c, [1, 0, 0], r);
   const d = [];
   d.push({
     f: (x, y, z) => {
@@ -184,6 +188,7 @@ function wiel(s, hoek) {
     g: [c[0], c[1], c[2], WIEL.r + 1],
     m: M.wiel,
     deel,
+    uv: om(WIEL.r - 3),
   });
   d.push({
     f: (x, y, z) => {
@@ -193,15 +198,16 @@ function wiel(s, hoek) {
     g: [c[0], c[1], c[2], WIEL.r + 1],
     m: M.ijzer,
     deel,
+    uv: om(WIEL.r - 0.55),
   });
   // de naaf, een dikke klos om de as, met een ijzeren ring aan de buitenkant
-  d.push({ f: (x, y, z) => sdf.cilinder(y - c[1], z - c[2], x - c[0], 4.6, -3.6, 3.6) - 0.4, g: [c[0], c[1], c[2], 6.5], m: M.wiel, deel });
-  d.push({ f: (x, y, z) => sdf.cilinder(y - c[1], z - c[2], x - c[0], 2.6, s < 0 ? -4.6 : 3.2, s < 0 ? -3.2 : 4.6), g: [c[0] + s * 4, c[1], c[2], 4], m: M.ijzer, deel });
+  d.push({ f: (x, y, z) => sdf.cilinder(y - c[1], z - c[2], x - c[0], 4.6, -3.6, 3.6) - 0.4, g: [c[0], c[1], c[2], 6.5], m: M.wiel, deel, uv: om(4.6) });
+  d.push({ f: (x, y, z) => sdf.cilinder(y - c[1], z - c[2], x - c[0], 2.6, s < 0 ? -4.6 : 3.2, s < 0 ? -3.2 : 4.6), g: [c[0] + s * 4, c[1], c[2], 4], m: M.ijzer, deel, uv: om(2.6) });
   for (let k = 0; k < WIEL.spaken; k++) {
     const a = Math.PI / 2 + (k * 2 * Math.PI) / WIEL.spaken - hoek;
     const binnen = [c[0], c[1] + Math.cos(a) * 4, c[2] + Math.sin(a) * 4];
     const buiten = [c[0], c[1] + Math.cos(a) * (WIEL.r - 4), c[2] + Math.sin(a) * (WIEL.r - 4)];
-    d.push(kegel(binnen, buiten, 1.25, 0.9, M.wiel, deel));
+    d.push({ ...kegel(binnen, buiten, 1.25, 0.9, M.wiel, deel), uv: TX.langs(binnen, buiten, 1.1) });
   }
   return d;
 }
@@ -571,6 +577,6 @@ function proef() {
   console.log(`uit/ossenkar-rijden.png (${H.beelden} beelden, ${H.fps} per seconde)`);
 }
 
-module.exports = { kar, os, tekenOssenkar, beeld, kader, HOUDINGEN, LADINGEN, VELLEN, SNELHEID, WIEL, BAK, HUIF, OS_Y, MIDDEN, CEL, ANKER };
+module.exports = { kar, os, wiel, materialen, M, tekenOssenkar, beeld, kader, HOUDINGEN, LADINGEN, VELLEN, SNELHEID, WIEL, BAK, HUIF, OS_Y, MIDDEN, CEL, ANKER };
 
 if (require.main === module) proef();

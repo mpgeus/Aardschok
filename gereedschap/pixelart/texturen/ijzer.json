@@ -1,0 +1,11 @@
+{
+  "naam": "ijzer",
+  "model": "sd_xl_base_1.0.safetensors",
+  "seed": 1812,
+  "positief": "seamless tileable texture, fills the whole frame edge to edge, high resolution macro photograph of the material surface, flat even diffuse lighting, no shadows, orthographic top-down scan, dark hand-forged wrought iron surface, small hammer dimples, fine horizontal forging streaks, subtle dark scale, a little brown rust in places, matte blue-grey metal",
+  "negatief": "ornament, decoration, pattern, symbols, glyphs, carving, flowers, tiles, bricks, planks with gaps, nails, rivets, object, perspective, horizon, frame, border, vignette, text, watermark, signature, shadow, cartoon, drawing",
+  "maat": 512,
+  "naadloos": "per as een half verschoven kopie, gemengd naar het midden",
+  "gedraaid": false,
+  "seconden": 0
+}

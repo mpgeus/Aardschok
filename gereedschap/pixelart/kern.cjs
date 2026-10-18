@@ -179,7 +179,9 @@ const tegelNaarScherm = (B, gx, gy, hpx = 0) => [B.OX + (gx - gy) * 32, B.OY + (
 
 // ---------------------------------------------------------------- het beeld
 
-const VLAG = { GLOEI: 1, OMLIJN: 2, GLAD: 4, VAST: 8, VLOER: 16 };
+// RGB (sinds 18 okt, textuur.cjs; werklijst vraag 180): de kleur van deze pixel komt uit een textuur (B.kleur), niet uit
+// een ramp. Alleen een materiaal met een textuur zet hem; kleurBeeld leest hem.
+const VLAG = { GLOEI: 1, OMLIJN: 2, GLAD: 4, VAST: 8, VLOER: 16, RGB: 32 };
 
 class Beeld {
   constructor(b, h, OX = 0, OY = 0) {
@@ -643,6 +645,32 @@ function tekenModel(B, model, o = {}) {
         }
       }
       if (mat.glad || (o.dither !== true && mat.dither !== true)) vlag |= VLAG.GLAD;
+      // Een materiaal met een textuur (textuur.cjs; werklijst vraag 180, de proef met het wiel): de kleur van het oppervlak
+      // op de plek in de rusthouding van het onderdeel (zoals het patroon hierboven), met de normaal ook in rust, belicht
+      // met het licht dat in `stap` zit (tussen lo en hi). Zo blijft de textuur aan het onderdeel vastzitten in elke
+      // kijkrichting en elke stand. Zonder textuur loopt hier niets: alles blijft zoals het was.
+      if (mat.textuur) {
+        const rp = naarDeel(deelI, x, y, z);
+        const rq = naarDeel(deelI, x + nx, y + ny, z + nz);
+        const rl = Math.hypot(rq[0] - rp[0], rq[1] - rp[1], rq[2] - rp[2]) || 1;
+        const kl = mat.textuur(rp[0], rp[1], rp[2], (rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl, model.delen[deelI], Math.max(0, kijk));
+        const licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
+        if (!B.kleur) B.kleur = new Float32Array(B.b * B.h * 4);
+        B.kleur[idx * 4] = kl[0] * licht;
+        B.kleur[idx * 4 + 1] = kl[1] * licht;
+        B.kleur[idx * 4 + 2] = kl[2] * licht;
+        B.kleur[idx * 4 + 3] = stap;
+        vlag |= VLAG.RGB;
+      }
+      // Op verzoek (o.rust) per pixel de plek in de rusthouding en het onderdeel: om te meten of iets vastzit.
+      if (o.rust) {
+        const rp = naarDeel(deelI, x, y, z);
+        if (!B.rust) B.rust = new Float32Array(B.b * B.h * 4).fill(NaN);
+        B.rust[idx * 4] = rp[0];
+        B.rust[idx * 4 + 1] = rp[1];
+        B.rust[idx * 4 + 2] = rp[2];
+        B.rust[idx * 4 + 3] = deelI;
+      }
       B.ramp[idx] = ramp;
       B.stap[idx] = stap;
       B.diep[idx] = diepte;
@@ -859,6 +887,39 @@ function kwantiseer(B, o = {}) {
     }
   }
   return { b: B.b, h: B.h, px: uit };
+}
+
+// Het beeld als RGBA, met de pixels die een textuur hebben (VLAG.RGB) in hun eigen kleur (werklijst vraag 180): de rest
+// precies zoals kwantiseer en Plaat het doen. Wat er na het tekenen nog met de stap gebeurde (het licht van een lamp in
+// belicht, een binnennaad in omlijn), gaat als factor over de kleur. o.palet: een lijst [r, g, b] (textuur.cjs, palet):
+// elke textuurpixel wordt de dichtstbijzijnde daarvan, zodat elk beeld van een ding dezelfde kleuren heeft. Geeft
+// { b, h, rgba }.
+function kleurBeeld(B, o = {}) {
+  const rgba = Buffer.from(Plaat.van(kwantiseer(B, o)).rgba(null));
+  if (!B.kleur) return { b: B.b, h: B.h, rgba };
+  const P = o.palet || null;
+  for (let i = 0; i < B.b * B.h; i++) {
+    if (B.ramp[i] < 0 || !(B.vlag[i] & VLAG.RGB)) continue;
+    const f = klem(1 + (B.stap[i] - B.kleur[i * 4 + 3]) * 0.22, 0.45, 1.8);
+    let k = [klem(B.kleur[i * 4] * f, 0, 255), klem(B.kleur[i * 4 + 1] * f, 0, 255), klem(B.kleur[i * 4 + 2] * f, 0, 255)];
+    if (P) {
+      let beste = P[0];
+      let afstand = Infinity;
+      for (const p of P) {
+        const d = (p[0] - k[0]) ** 2 + (p[1] - k[1]) ** 2 + (p[2] - k[2]) ** 2;
+        if (d < afstand) {
+          afstand = d;
+          beste = p;
+        }
+      }
+      k = beste;
+    }
+    rgba[i * 4] = Math.round(k[0]);
+    rgba[i * 4 + 1] = Math.round(k[1]);
+    rgba[i * 4 + 2] = Math.round(k[2]);
+    rgba[i * 4 + 3] = 255;
+  }
+  return { b: B.b, h: B.h, rgba };
 }
 
 // Een plaatje met vaste kleuren: ramp en stap per pixel (of -1).
@@ -1097,6 +1158,7 @@ module.exports = {
   verwarm,
   omlijn,
   kwantiseer,
+  kleurBeeld,
   naarScherm,
   tegelNaarScherm,
   png,

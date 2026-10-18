@@ -273,6 +273,14 @@ stenen huizen. **Ronde 3 is af.**
   (meesterbeelden teruggeprojecteerd, het licht eruit gedeeld, plus naadloze materiaaltegels en decals zoals de leeuw),
   en onze renderer belicht en rastert, met één palet per ding: geen flikkeren per definitie. De vorm (de blokkige os)
   lost het niet op; die moet in de modellen beter. Marcel: "Daarna kijken we naar een ander model."
+  **De proef met één wagenwiel** (18 okt; Marcel: "Ik ga akkoord met de richting van je hybride AI-textuurpipeline", "Gebruik
+  één bestaand wagenwiel als testcase", de eisen in `opdracht-comfyui.md`; de uitkomst in
+  `gereedschap/ai/wielproef-evaluatie.md`): de renderer draagt nu optioneel AI-texturen (`kern.cjs`, `textuur.cjs`), en
+  de oude renderer blijft pixel voor pixel gelijk (65 beelden, `gelijk.cjs`). Het hout en het ijzer uit SDXL, naadloos;
+  het wiel uit 8 richtingen en 9 standen: de textuur zit vast (1,21 tegen 3,44 voor dezelfde textuur zonder rusthouding,
+  en 4,41 voor het oude procedurele hout), een volle slag geeft hetzelfde beeld, geen naden, en de mip-niveaus zijn nodig
+  tegen kartelen. Op spelmaat is een wiel klein: een textuur loont vooral op grote vlakken (planken, huid, zeil). Het
+  ijzer is matig. Wacht op Marcel: de volgende stap (normaalkaarten, een beter ijzer, decals, of de os en de wagen).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

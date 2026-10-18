@@ -1,0 +1,11 @@
+{
+  "naam": "hout",
+  "model": "sd_xl_base_1.0.safetensors",
+  "seed": 1811,
+  "positief": "seamless tileable texture, fills the whole frame edge to edge, high resolution macro photograph of the material surface, flat even diffuse lighting, no shadows, orthographic top-down scan, aged oak wood surface, long straight natural wood grain running horizontally from left to right, fine grain lines, subtle growth rings, a few tiny knots, warm medium brown with honey and dark brown tones, worn matte finish",
+  "negatief": "ornament, decoration, pattern, symbols, glyphs, carving, flowers, tiles, bricks, planks with gaps, nails, rivets, object, perspective, horizon, frame, border, vignette, text, watermark, signature, shadow, cartoon, drawing",
+  "maat": 512,
+  "naadloos": "per as een half verschoven kopie, gemengd naar het midden",
+  "gedraaid": true,
+  "seconden": 0
+}

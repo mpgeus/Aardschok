@@ -124,3 +124,32 @@ Gebruik onze goedgekeurde os-en-wagen-sprite als stijlreferentie met een SDXL-co
 Controleer alle modellen en nodes op compatibiliteit met de GTX 1080 Ti.
 Maak eerst één resultaat en vergelijk dat rechtstreeks met de bestaande SD 1.5-output. Beoordeel zowel de hoeveelheid
 detail als het behoud van de oorspronkelijke geometrie.
+
+# Derde opdracht: een proof of concept met één wagenwiel
+
+Van Marcel, 18 okt 2026, letterlijk (na het rapport `hybride-voorstel.md`).
+
+Ik ga akkoord met de richting van je hybride AI-textuurpipeline. We gaan voorlopig niet verder met het optimaliseren van
+volledige SDXL-animatieframes. Ik wil echter eerst een kleine technische proof of concept voordat we de volledige os en
+wagen aanpakken. Gebruik één bestaand wagenwiel als testcase.
+
+Doel: bewijzen dat we hoogwaardige, AI-gegenereerde materiaaltexturen kunnen toepassen in onze eigen
+raymarchingrenderer, waarbij de textuur volledig consistent blijft over alle kijkrichtingen en rotatiestanden.
+
+Eisen:
+
+1. Behoud de bestaande renderer volledig. Voeg de RGB-textuurondersteuning optioneel toe.
+2. Gebruik de bestaande rusthoudingcoördinaten voor stabiele textuurmapping.
+3. Maak een hoogwaardige houttextuur en een afzonderlijke metaaltextuur.
+4. Render het wiel in acht kijkrichtingen en meerdere rotatiestanden.
+5. Controleer of materiaalpatronen correct aan het oppervlak vast blijven zitten.
+6. Test op de daadwerkelijke spritegrootte in het spel.
+7. Controleer op flikkering, vervorming, naden en aliasing.
+8. Vergelijk de resultaten met de bestaande procedurele materialen.
+9. Zorg dat de oude renderer pixel voor pixel identieke resultaten blijft geven wanneer AI-texturen uitgeschakeld zijn.
+
+Gebruik voorlopig geen automatische terugprojectie vanuit meerdere AI-meesterbeelden. Dat onderzoeken we nadat de
+basistechniek bewezen werkt. Lever een visuele vergelijking en technische evaluatie op.
+
+Belangrijk: bouw dit als herbruikbaar materiaalsysteem, niet als een speciale oplossing die uitsluitend voor dit
+wagenwiel werkt.

@@ -1036,6 +1036,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### gereedschap/pixelart/: de beelden uit code
 
+- **AI-texturen in de renderer** (18 okt, werklijst vraag 180; `gereedschap/ai/hybride-voorstel.md`, de proef in
+  `gereedschap/ai/wielproef-evaluatie.md`): `kern.cjs` kan optioneel een materiaal met een textuur aan (`mat.textuur`,
+  gemaakt met `textuurMateriaal` in `textuur.cjs`): de kleur op de plek in de rusthouding van het onderdeel (`naarDeel`,
+  `terug`), belicht met de `stap` van de renderer, de vlag `VLAG.RGB`, en `kleurBeeld(B, { palet })` voor het beeld
+  (de rest precies als `kwantiseer` en `Plaat`). Een onderdeel geeft zijn afwikkeling op (`deel.uv`: `rond`, `langs`,
+  `vlak` uit `textuur.cjs`; u is de nerf, een gesloten richting geeft zijn omtrek); zonder valt het terug op triplanair.
+  `o.rust` in `tekenModel` bewaart per pixel de plek in rust (om te meten). Zonder textuur loopt geen van die regels:
+  `gelijk.cjs` (`bewaar` vóór een wijziging aan de renderer, `vergelijk` erna) rendert 65 bestaande beelden en
+  vergelijkt hun hashes. De texturen staan in `texturen/` (uit `gereedschap/ai/textuur-ai.cjs`), de proef is
+  `wielproef.cjs`.
+
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
   (`bruggen.cjs`: de stenen boogbrug van veldsteen, zandsteen of baksteen, de houten jukbrug en de houten boogbrug, oud,
