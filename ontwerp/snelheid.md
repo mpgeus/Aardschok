@@ -228,6 +228,26 @@ half doorzichtige rand aan de kust, en het zelfde beeld pixel voor pixel. **Voor
 meten hoe lang een stap met het wiel en een ander seizoen duren (de meter, het traagste beeld, op 0,35 bij het dorp);
 is dat rond de 100 ms, dan een renderproef van de grond (zoals E), en dan kiezen.
 
+Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
+
+- **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een
+  toets van de rechthoek van het stuk tegen het vak in beeld (`vasteRijenVoor`, `js/tekenen.js`); de lijst neemt van elk
+  stuk alleen het deel in het vak (`T.voorwerpenIn`, A1). Klein te halen: het vak is een rechthoek in tegels om het
+  schuine beeld, dus een stuk in een hoek ervan gaat mee terwijl het buiten het scherm valt; de kaart knipt het weg,
+  het kost alleen wat hoeken.
+- **Het zwart wegstrepen met een raster**: voor de lijst er al (A1: wat in het zwart staat, gaat er niet in); de vaste
+  rijen krijgen de mist per tegel in de shader. Een stuk dat helemaal in het zwart ligt (open, want vooruit, maar nog
+  niet gezien), kan in één keer overslaan als de mist per stuk telt wat er bekend is. Klein; winst alleen op de kaart.
+- **Van voor naar achter tekenen, voor early-Z**: nieuw, en goedkoop te proeven. De vaste rijen staan nu in een vaste
+  volgorde op de kaart; die eens per stuk van voor naar achter leggen (en de stukken zo tekenen) kost per beeld niets.
+  Pas op: (a) de bomen gooien hun doorzichtige pixels weg (`discard`), en dan schrijft de kaart de diepte pas na de
+  shader; het vroeg wegstrepen van wat erachter ligt, doen de meeste kaarten dan nog wel, niet allemaal; (b) wat zacht
+  is (schaduwen, het grijs, de gloed, rook), moet van achter naar voor blijven; (c) waar twee plaatjes precies even diep
+  liggen, kan een andere volgorde een andere pixel laten winnen (de "gelijke gevallen" van B1). De winst zit alleen op de
+  kaart, en die meet de meter niet (hij meet de processor): meten in beelden per seconde op een zwakke kaart, of met een
+  tijdmeter van de kaart erbij.
+- **De pijplijn met een worker en Uint32Array per stuk**: zie F6 en het eerste deel hierboven.
+
 ## De tik (18 okt)
 
 Marcel, 18 okt: "Waar komen de performance hits vandaan?", en daarna "zoek het per deelgebied uit". Na B1 en B2 is het
