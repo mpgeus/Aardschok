@@ -29,11 +29,10 @@ zo'n 30 ms per beeld vóór A1 naar 4,4 ms met de kaart erbij, waarvan 1,7 ms vo
 WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **Wacht op Marcel**: meten in Firefox
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
 **De tik is uitgezocht** (18 okt; `snelheid.md`, "De tik"): wat nog hapert, zit in de tik, niet in het tekenen.
-**Middernacht (H1 tot H3), G2 en F2 zijn af** (onder "Af"). **G1, de kuddes: Bezig in sessie `ccr-9ed92339-4ajd9k`**
-(18 okt; Marcel: "daarna G1"): een volger die achter zijn eigen kudde staat, wacht of is er al, in plaats van een omweg
-te zoeken (de proef op `proef/tik-kudde`); gebouwd op die branch (de gewone tik van 1,81 naar 0,81 ms), wacht op
-"push it". F1 (het land in gedeelde blokken, de proef op `proef/tik-land`) en de rest
-wachten op Marcel (het voorstel staat onderaan "De tik").
+**Middernacht (H1 tot H3), G1, G2 en F2 zijn af** (onder "Af"). **F1, het land in gedeelde blokken: Bezig in sessie
+`ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "daarna F1"): het eiland in vaste blokken van 16 bij 16, gedeeld tussen de
+delen en de stukken, zodat elke stap van het vooruit maken onder 2 ms blijft (de proef op `proef/tik-land`). De rest
+wacht op Marcel (het voorstel staat onderaan "De tik").
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -1470,6 +1469,8 @@ verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
 
 ## Af (sinds 11 okt)
 
+- G1, de kuddes (18 okt; `snelheid.md`, "De tik"): een volger zoekt geen omweg om zijn eigen kudde, maar wacht of is er;
+  de gewone tik van 1,81 naar 0,81 ms, en de kudde staat iets losser.
 - G2 en F2 (18 okt; `snelheid.md`, "De tik"): het wild kijkt alleen naar mensen in het vak om de groep (hetzelfde spel,
   0,3 à 0,6 ms per tik minder), en na het laden maakt het spel eerst het land, met de voortgang in het menu (geen
   hapering meer van 0,5 tot seconden in de eerste tik).
