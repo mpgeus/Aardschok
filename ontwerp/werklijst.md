@@ -10,6 +10,13 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 
 ## Nu en daarna (14 okt)
 
+**Sinds 18 okt eerst de basis** (Marcel: "O1: c3 en de wereld van iedereen parkeren. Eerst het doel van de demo kiezen,
+dan de heer als klok, dan een speelbaar eerste jaar"; zijn vraag: "Het lijkt mij dat bodes en rovers pas later komen
+nadat de basis goed ligt?"). Geparkeerd: de rest van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel; de
+wilde rovers blijven zolang de dreiging. **Het volgende is het doel van de demo** (wacht op Marcel, bovenaan "Wacht op
+Marcel"), dan E (de heer als klok, op dat doel), dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst
+met een getal uit de werkbank.
+
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
 videokaart, het filter in de mist, elk voorwerp onthoudt zijn plaatje, ronde 1 en 2 van elk plaatje goedkoper, en alleen
@@ -122,9 +129,8 @@ ze rood op de minikaart. **c2, de bende, is af** (17 okt, in `main`; Marcel: "N1
 bende van een kamp"; `code.md` bij `js/rovers.js`): elk kamp leeft vanaf het begin, met twee man en een erbij per jaar
 tot vier, wie wegtrekt gaat naar het dichtste kamp (ook boven de vier, tot zes tenten), overdag staan ze om hun vuur en
 's nachts slapen ze in hun tent op één wacht na; de bende van een dorp is weg, en een overval is tot c3 wild. **Het
-volgende is c3**, de overval uit een kamp (het plan bij I, "Stuk c in detail"); **Bezig in sessie `main` (lokaal,
-desktop)** (18 okt): het plan staat bij I ("c3 in detail"), en wacht op Marcel (A, B, C), en op zijn vraag of het niet later
-moet ("Wacht op Marcel", de volgorde). **Marcel kwam op 17 okt met 174**
+volgende was c3**, de overval uit een kamp: **geparkeerd** (Marcel, 18 okt: O1, bovenaan dit blok); het plan staat bij
+I ("c3 in detail"), met de keuzes A, B en C nog open. **Marcel kwam op 17 okt met 174**
 (bij L): de heuvels van vraag 121 staan nog standaard uit en zijn niet klaar voor het hele eiland. **Stap a, de
 hoogte per stuk, is af** (17 okt), en **stap b ook** (17 okt, in `main`): het licht per stuk, elk dorp een vlakte, de
 brug op zijn oevers, de mist op de heuvels. **Stap c, meten, is af** (17 okt; bij L): met heuvels ver uitgezoomd van zo'n
@@ -166,16 +172,17 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De volgorde: eerst de basis?** (Marcel, 18 okt, op het plan van c3: "ik vraag me nu af wat de correcte
-  ontwikkelvolgorde is? We hebben niet eens andere spelers om een bode naartoe te sturen. Er is ook nog geen kasteel van
-  de heer. Het lijkt mij dat bodes en rovers pas later komen nadat de basis goed ligt?") Ter verduidelijking: c3 voegt
-  niets toe; de overval van wilde rovers is er sinds 29 sep, de bode (naar de marskramer, bij honger, kou of droogte)
-  sinds 9 okt; c3 laat de overval uit een kamp komen in plaats van de rand. Voorstel van Claude: **O1** c3, c4, d en
-  samen spelen (6b, 6c) parkeren; eerst het doel van de demo kiezen (hieronder), dan E, de heer als klok (de tiende:
-  wat hij vraagt, wanneer, en wat hij doet als je niet betaalt; het gat in `gameloop.md`, "Waar het gat zit"), en dan
-  het eerste jaar spelbaar, met Marcel die speelt en een getal uit de werkbank als iets scheef zit. De wilde rovers
-  blijven zolang de dreiging. **O2** eerst c3 af (het rondt de kampen af), dan O1. **O3** de lijst zoals hij is (I, C,
-  E).
+- **Het doel van de demo** (het eerste van de basis, Marcel, 18 okt: O1): wat een speler in Next Fest in zo'n uur doet,
+  en hoe het afloopt; daaruit volgt wat de heer in E moet kunnen. Nu vraagt de heer het eerste jaar niets, en komt hij
+  pas in het tweede jaar op Sint-Maarten innen (`spel.md`, het lege begin); CLAUDE.md zegt "het doel van de demo is
+  open". Te kiezen: **D1** het eerste jaar halen (het voorstel van 11 okt): je komt met de kar, bouwt, haalt de eerste
+  winter, en de demo eindigt na het eerste gevecht met rovers. **D2** de eerste tiende: de demo eindigt op Sint-Maarten
+  van het eerste jaar, als de heer op je plein staat: betaal je, of niet? Een open eind, met de vraag waar het spel om
+  draait. **D3** de tiende breken: als D2, maar weiger je, dan stuurt hij zijn mannen, en de demo eindigt met dat
+  gevecht; win je, dan zegt het eind dat het spel daar pas begint (zijn kasteel). **D4** een doel op tijd: binnen een
+  jaar een dorp van zoveel mensen (een zandbak met een lat). Voorstel van Claude: **D3**, want het laat de economie, de
+  heer en het gevecht in één boog zien, het eind is de naam van het spel, en het gevecht is er al. Wat erbij moet (dat
+  is E): de heer komt al in het eerste jaar innen, je kunt weigeren, en dan komen zijn mannen.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
@@ -466,10 +473,6 @@ stenen huizen. **Ronde 3 is af.**
   pacht), *the ledger* (het rekenboek), *Martinmas*, *Good day* (het afscheid van een boer), de oorlogsplaatsen Crookwick
   en Eastwold, en de namen (Nicholas, Alice, Gerard, Kate, Walter; Heathside). Een woord veranderen is één regel in
   `engels.md` en een zoekslag.
-- **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
-  Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
-  eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
-  in beurten en de heer alle drie ziet.
 - De spullen bij de huizen (vraag 148, d): mee in een ronde van de huizen, of weg.
 - De ronde van alle huizen bekijken (vraag 144, in `main` sinds 11 okt): de knoppen A tot J op elke tekening, jong en
   oud, sneeuw op de daken, de fasen van het afbranden (`beeld.md`, "De ronde van alle tekeningen"; wat daar nog open is,
@@ -477,8 +480,8 @@ stenen huizen. **Ronde 3 is af.**
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** I (vraag 170, met D en F erin), C, E (ronde 3 van A na C); G loopt ernaast op het tijdpad van
-`commercieel.md`.
+**Daarna, in deze volgorde** (Marcel, 18 okt: O1, bovenaan dit blok): het doel van de demo, E (de heer als klok), en het
+eerste jaar speelbaar; G loopt ernaast op het tijdpad van `commercieel.md`. Geparkeerd: de rest van I (c3, c4, d, 6b en 6c).
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -1138,7 +1141,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   okt, in `main`; `spel.md`, "De bende van een kamp"; `code.md` bij `js/rovers.js`; `test/kampen.test.cjs`). Voor c3:
   de kans voor de bode (`T.bodeGevaar`, js/bode.js) telt sinds c2 geen bende meer; de hinderlaag uit het dichtste kamp
   kan haar weer laten meetellen.
-  **c3 in detail** (Claude, 18 okt; wacht op Marcel). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
+  **c3 in detail** (Claude, 18 okt; **geparkeerd**, Marcel, 18 okt: eerst de basis, O1). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
   na 60 dagen, de helft 's nachts (`R.wildeOp`, `aanvalsUur`). De overval komt uit het kamp dat het dichtst bij het plein
   ligt en mannen thuis heeft; is er geen (alle kampen leeg of op pad), dan komt er deze keer niemand, en loopt het rooster
   door. (2) **De tocht**: ze vertrekken zo dat ze op het uur van de aanval bij je zijn. Hun weg is de grove weg van c0
