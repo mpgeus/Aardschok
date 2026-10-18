@@ -28,6 +28,8 @@ regen en het masker van de mist op de kaart. Helemaal uitgezoomd (0,35, het proe
 zo'n 30 ms per beeld vóór A1 naar 4,4 ms met de kaart erbij, waarvan 1,7 ms voor de processor; en steeds hetzelfde beeld.
 WebGPU helpt hier niet meer (Marcel vroeg het; `snelheid.md`, "Na B1 en B2"). **Wacht op Marcel**: meten in Firefox
 (hieronder, "Wacht op Marcel"); daarna eventueel D1 (de haperingen) of E3 en E4 (die zie je: eerst een proefplaat).
+**De tik van middernacht sneller: Bezig in sessie `ccr-9ed92339-4ajd9k`** (18 okt; Marcel: "begin met middernacht"):
+H1 tot H3 uit `snelheid.md`, "De tik" (nog op die branch), met de proef op `proef/tik-nacht`.
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
