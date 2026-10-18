@@ -395,6 +395,40 @@ sneeuw komt of weg is. In `opmerkingen.md`.
 
 Marcel, in het spel (18 okt): "wow, dat is snel, geeft geen krimp meer, instant wissel".
 
+**Het plan voor stap 4, de heuvels** (18 okt, Marcel: "Ja, begin met stap 4 ... Eerst een plan"; de heuvels staan nog
+standaard uit, de spelregel *Height*, en gaan aan in d van 174). Wat de oude grond met heuvels doet (js/tekenen.js):
+per tegel, van achter naar voor (x + y, dan x), de vloer schuin op het vlak door zijn vier hoeken, 1,04 groter tegen
+naden (`tekenSchuineTegel`, `opTegelVlak`); dan het licht als laag over de tegel, zacht uit een plaatje van 65 bij 65
+per stuk (`tekenGrondMetLicht`, `maakLichtStuk`), wat een haarfijn naadje laat; dan zijn wanden aan de zuid- en oostkant,
+elk twee driehoeken uit een textuur (`tekenWanden`, `wandTextuur`); de sneeuw op hetzelfde vlak. En een hoge tegel die
+iets achter zich afdekt, tekent de lijst opnieuw uit de buffer, uitgeknipt (`heuvelsErvoor`, `tekenTegelOpnieuw`); het
+kijkgat haalt zijn grond ook uit die buffer. In stappen, elk weer naast de oude grond:
+
+- **4a, de vloer op de helling**: per tegel zijn vier hoeken erbij in de rij, en de kaart legt de tekening op het vlak
+  zoals `opTegelVlak` (met de 1,04), de sneeuw ook (zonder). De volgorde binnen een stuk wordt die van de oude grond (x
+  + y, dan x). Stuk na stuk blijft goed: twee tegels die elkaar raken, liggen hooguit twee kolommen (x − y) uit elkaar,
+  en dan valt de volgorde van de stukken samen met die van de oude grond (nagerekend, zoals bij het groen). De beek en
+  het groen staan al op hun hoogte (`opGrond`, de processor).
+- **4b, het licht**: het plaatje per stuk (`maakLichtStuk`, hetzelfde) gaat als textuur naar de kaart, zacht gelezen. De
+  keuze: **A** in de tegel zelf (dan is er geen naadje; zo wilde het spel het al, `lichtInDeTegel`, maar op de processor
+  was het tien keer zo duur, en op de kaart kost het niets), of **B** als laag erover, zoals nu, met het naadje. Voorstel
+  van Claude: **A**.
+- **4c, de wanden**: per wand een instantie met zijn vier hoeken en zijn stuk textuur (de vier texturen op de stapel),
+  als dezelfde twee driehoeken. De randen worden niet pixel voor pixel hetzelfde: de oude knipt zacht.
+- **4d, wat ervoor ligt**: een tegel die afdekt (`T.dekkersIn`, js/hoogte.js) schrijft zijn diepte op de kaart, met de
+  sleutel waarmee `heuvelsErvoor` hem nu in de lijst zet; wat erachter staat (de bomen van de vaste rijen, en de lijst)
+  toetst daar al tegen (B1), dus de kaart dekt het zelf af, per pixel, zonder dat de processor elk beeld de dekkers
+  zoekt (nu tot 0,9 ms). Wat geen dekker is, schrijft geen diepte: anders zou een tegel ook de voeten en de schaduw
+  afdekken van wie op de tegel erachter staat. Het kijkgat (en zo ook (c) in `opmerkingen.md`, op vlak land) tekent zijn
+  stukje grond met het 2D-pad (`tekenGrondIn` op zijn eigen doekje), zoals het plan al zei.
+- **4e, meten en vergelijken**: `meetGrond` met heuvels (nu: een stuk 40 à 90 ms, gespreid 14 beelden tot 90), de platen
+  naast elkaar (pixel voor pixel wordt het hier niet: de oude legt de schuine tegels op een doek, en dat smeert en knipt
+  anders), en Marcel in Firefox. Dan stap 5: kiest Marcel of de oude grond eruit gaat.
+
+Waar het lastig kan worden: de diepte van de grond moet dezelfde maat hebben als die van de bomen en de lijst (die
+komt per beeld uit `vasteRijenVoor`, na de grond: de opdracht van de grond krijgt hem dan later mee); en de kust is half
+doorzichtig, dus alleen wat dicht is, schrijft diepte (een dekker is hoog land, geen water).
+
 Het tweede deel (Marcel, 18 okt: "Dit vond ik nog"):
 
 - **Wegstrepen per stuk, niet per blok**: er al. De vaste rijen gaan per stuk land van 64 bij 64 naar de kaart, met een

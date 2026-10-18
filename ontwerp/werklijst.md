@@ -48,8 +48,9 @@ andere pixel van het gras (op open grond 12 à 19%, voor het oog hetzelfde: de p
 Een stap met het wiel, een andere stand sneeuw en de beek zijn nu één beeld van 3 à 22 ms in plaats van 8 à 11 beelden
 tot 75 ms; sneeuw die komt 9 beelden tot 27 ms; een ander seizoen 5 beelden, het eerste 36 à 70 ms door de bomen
 (`opmerkingen.md`). Marcel keek in het spel (18 okt, met `Spel.debug.grondProef = 'nieuw'`: "wow, dat is snel, geeft
-geen krimp meer, instant wissel"). **Het volgende is stap 4, de heuvels**; daarna kiest Marcel of de oude grond eruit
-gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
+geen krimp meer, instant wissel"). **Het volgende is stap 4, de heuvels**: het plan staat in `snelheid.md` ("Het plan
+voor stap 4"); **wacht op Marcel**: akkoord, en het licht in de tegel (A, zonder naadje) of erover zoals nu (B). Daarna
+kiest Marcel of de oude grond eruit gaat. Later F3, F4 en F6 (het voorstel onderaan "De tik"). Niet in de browser nagekeken: de headless Chromium in de cloud loopt vast zodra de spellus draait
 (`opmerkingen.md`).
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
