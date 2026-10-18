@@ -26,6 +26,7 @@ const STIJL = path.join(__dirname, '..', '..', 'ontwerp', 'voorbeelden', 'heerst
 // (18 okt 2026: gpt-image-2, en in de nieuwste gids van OpenAI gpt-image-2.5-...), dus het script kiest wat er is.
 const VOORKEUR = ['gpt-image-2.5-sunburst', 'gpt-image-2.5-flare', 'gpt-image-2', 'gpt-image-1.5', 'gpt-image-1'];
 const LEIDRAAD_MAAL = 4; // onze render zo vaak vergroot (de AI wil groot, onze beelden zijn klein)
+const LEIDRAAD_RAND = 6; // zoveel pixels ruimte om het ding in de leidraad
 const ACHTERGROND = [255, 0, 255]; // een vlakke kleur om weg te halen, als het model geen doorzichtige achtergrond geeft
 
 // ---------------------------------------------------------------- de sleutel en de aanroep
@@ -235,6 +236,12 @@ function naarPixels(png, { breed, hoog, kleuren = 48 }) {
       kleurLijst.push(k);
     }
   }
+  return kleurEnRand({ b: nb, h: nh, rgba: uit }, kleurLijst, kleuren);
+}
+
+// De kleuren tot `kleuren` (median cut), en een donkere omlijning om het geheel (zoals K.omlijn bij onze eigen modellen).
+function kleurEnRand(beeld, kleurLijst, kleuren) {
+  const { b: nb, h: nh, rgba: uit } = beeld;
   const P = palet(kleurLijst, kleuren);
   for (let i = 0; i < nb * nh; i++) {
     if (!uit[i * 4 + 3]) continue;
@@ -245,7 +252,6 @@ function naarPixels(png, { breed, hoog, kleuren = 48 }) {
     }
     uit.set(beste, i * 4);
   }
-  // De omlijning: elke pixel aan de rand van het ding een stuk donkerder (zoals K.omlijn bij onze eigen modellen).
   const rand = [];
   for (let y = 0; y < nh; y++) for (let x = 0; x < nb; x++) {
     const i = y * nb + x;
@@ -257,13 +263,37 @@ function naarPixels(png, { breed, hoog, kleuren = 48 }) {
   return { b: nb, h: nh, rgba: uit };
 }
 
+// Het beeld van de AI terug naar pixels met de omtrek van onze eigen render (`plaat`, en zijn kader `k`): voor wat precies
+// over de leidraad ligt (ComfyUI tekent op dezelfde verhouding; ChatGPT niet altijd, dat gaat met naarPixels). Verkleind tot
+// de maat van de leidraad (het kader met LEIDRAAD_RAND eromheen), de rand eraf, en alleen waar onze render iets heeft (een
+// pixel ruimer gaf een roze randje van de achtergrond): zo hangt er geen achtergrond aan, ook niet tussen de spaken. Dezelfde kleuren en omlijning als naarPixels.
+function naarPixelsMetVorm(png, plaat, k, { kleuren = 48 } = {}) {
+  const ai = leesPng(png);
+  const kb = k.x1 - k.x0 + 1, kh = k.y1 - k.y0 + 1;
+  const R = LEIDRAAD_RAND;
+  const klein = verklein(ai, kb + 2 * R, kh + 2 * R);
+  const ons = plaat.rgba(null);
+  const heeft = (x, y) => x >= 0 && y >= 0 && x < plaat.b && y < plaat.h && ons[(y * plaat.b + x) * 4 + 3] >= 128;
+  const uit = Buffer.alloc(kb * kh * 4);
+  const kleurLijst = [];
+  for (let y = 0; y < kh; y++) for (let x = 0; x < kb; x++) {
+    const px = k.x0 + x, py = k.y0 + y;
+    if (!heeft(px, py)) continue;
+    const s = ((y + R) * klein.b + x + R) * 4;
+    const kl = [klein.rgba[s], klein.rgba[s + 1], klein.rgba[s + 2]];
+    uit.set([...kl, 255], (y * kb + x) * 4);
+    kleurLijst.push(kl);
+  }
+  return kleurEnRand({ b: kb, h: kh, rgba: uit }, kleurLijst, kleuren);
+}
+
 // ---------------------------------------------------------------- de leidraden: onze eigen renders
 
 // Een plaat van de tekenstraat op een vlakke achtergrond, LEIDRAAD_MAAL keer vergroot (de AI wil groot), als PNG; en de
 // maat van het ding zelf, waar het beeld van de AI straks weer naartoe gaat.
 function leidraad(plaat) {
   const k = O.kader(plaat);
-  const rand = 6;
+  const rand = LEIDRAAD_RAND;
   const b = k.x1 - k.x0 + 1 + 2 * rand;
   const h = k.y1 - k.y0 + 1 + 2 * rand;
   const bron = plaat.rgba(`#${ACHTERGROND.map((v) => v.toString(16).padStart(2, '0')).join('')}`);
@@ -366,8 +396,7 @@ function renderVan(naam) {
   return wagen(m[2].toUpperCase(), m[1] === 'lopen' ? { houding: 'lopen', fase: Number(m[3]) / 8 } : {});
 }
 
-function hand() {
-  const map = process.env.HAND_MAP || path.join(UIT, 'hand'); // HAND_MAP: om het gereedschap zelf te toetsen
+function hand(map = process.env.HAND_MAP || path.join(UIT, 'hand'), voor = 'hand', metVorm = false) { // HAND_MAP: om het gereedschap zelf te toetsen
   // Windows verbergt de extensie, dus heet een download soms wagen-zw.png.png: de naam is wat ervoor staat.
   const bestanden = fs.existsSync(map) ? fs.readdirSync(map).filter((f) => /\.png$/i.test(f)) : [];
   const bestandVan = new Map(bestanden.map((f) => [f.replace(/(\.png)+$/i, ''), f]));
@@ -384,7 +413,7 @@ function hand() {
     const k = O.kader(plaat);
     const kb = k.x1 - k.x0 + 1, kh = k.y1 - k.y0 + 1;
     const png = fs.readFileSync(path.join(map, bestandVan.get(naam)));
-    const p = naarPixels(png, { breed: kb, hoog: kh });
+    const p = metVorm ? naarPixelsMetVorm(png, plaat, k) : naarPixels(png, { breed: kb, hoog: kh });
     // Op de plek van onze render: onderaan in het midden van zijn kader, in een cel zo groot als de plaat.
     const cel = leeg(plaat.b, plaat.h);
     plakOp(cel, p, k.x0 + Math.floor((kb - p.b) / 2), k.y1 + 1 - p.h);
@@ -419,16 +448,119 @@ function hand() {
     }
     y += rh + GAT;
   }
-  fs.writeFileSync(path.join(UIT, 'hand-proef.png'), K.pngVanBeeld(doek));
+  fs.writeFileSync(path.join(UIT, `${voor}-proef.png`), K.pngVanBeeld(doek));
   // De loopbeelden bewegend, ons en dat van de AI (vier van de acht: op de helft van de snelheid van de os).
   if (lopen.length > 1) {
     const { apng } = require('../pixelart/apng.cjs');
     const alsPlaat = (r) => ({ b: r.b, h: r.h, rgba: () => r.rgba });
     const fps = require('../pixelart/vee.cjs').LOOP_FPS.os / 2;
-    fs.writeFileSync(path.join(UIT, 'hand-lopen.png'), apng(lopen.map((l) => alsPlaat(l.cel)), { fps, schaal: 2, achtergrond: '#465238' }));
-    fs.writeFileSync(path.join(UIT, 'hand-lopen-onze.png'), apng(lopen.map((l) => alsPlaat(l.onze)), { fps, schaal: 2, achtergrond: '#465238' }));
+    fs.writeFileSync(path.join(UIT, `${voor}-lopen.png`), apng(lopen.map((l) => alsPlaat(l.cel)), { fps, schaal: 2, achtergrond: '#465238' }));
+    fs.writeFileSync(path.join(UIT, `${voor}-lopen-onze.png`), apng(lopen.map((l) => alsPlaat(l.onze)), { fps, schaal: 2, achtergrond: '#465238' }));
   }
-  console.log(`Klaar: uit/ai/hand-proef.png${lopen.length > 1 ? ', hand-lopen.png en hand-lopen-onze.png' : ''}`);
+  console.log(`Klaar: uit/ai/${voor}-proef.png${lopen.length > 1 ? `, ${voor}-lopen.png en ${voor}-lopen-onze.png` : ''}`);
+}
+
+// ---------------------------------------------------------------- lokaal, met ComfyUI (vraag 180, fase 1)
+
+// ComfyUI draait op Marcels eigen pc (C:\ComfyUI, `run_nvidia_gpu.bat`), op 127.0.0.1:8188: geen sleutel, niets gaat het
+// huis uit. Per beeld: onze render is het begin (img2img, `ruis` bepaalt hoeveel de AI mag veranderen), ControlNet (union,
+// canny) houdt de randen van onze render vast, en IP-Adapter neemt de stijl van Marcels plaat over. De modellen en hun
+// namen staan in C:\ComfyUI\...\models (werklijst vraag 180). Het antwoord gaat door dezelfde weg terug naar pixels als de
+// proef met de hand: uit/ai/lokaal/<naam>.png, en de plaat uit/ai/lokaal-proef.png.
+const COMFY = process.env.COMFY || 'http://127.0.0.1:8188';
+const LOKAAL = {
+  model: 'sd_xl_base_1.0.safetensors',
+  controlnet: 'controlnet-union-sdxl-promax.safetensors',
+  ipadapter: 'ip-adapter-plus_sdxl_vit-h.safetensors',
+  clipVision: 'CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors',
+  breed: 1024, // de kant waarop de AI tekent (SDXL tekent het best rond 1024)
+  stappen: 28,
+  cfg: 6,
+  ruis: 0.75, // img2img: 0 is onze render, 1 is alles opnieuw
+  vorm: 0.55, // hoe sterk ControlNet de randen vasthoudt (te sterk, en de os blijft zo blokkig als ons model)
+  vormTot: 0.6, // tot hoever in het tekenen ControlNet meedoet; daarna mag de AI de vorm verfijnen
+  stijl: 1.0, // hoe sterk IP-Adapter de stijl van de plaat neemt
+  stijlSoort: 'strong style transfer',
+  // Het stuk van Marcels plaat (1211 bij 1299) waar de stijl vandaan komt: de wagen van zuidwest, zonder de paarden en de
+  // soldaten eromheen.
+  uitsnede: { x: 40, y: 330, b: 580, h: 360 },
+  zaad: 180,
+};
+const POSITIEF = 'highly detailed HD pixel art sprite for an isometric medieval strategy game, a white ox pulling a two-wheeled ' +
+  'red painted wooden cart loaded with tan sacks of grain, a barrel, brown logs and an open chest of gold coins, yellow trim and a ' +
+  'golden heraldic lion on the red panels, red and yellow pennant, leather harness with brass fittings, rich texture, wood ' +
+  'grain, iron fittings, realistic anatomy, strong contrast, dark outlines, warm light from the top left, plain magenta background';
+const NEGATIEF = 'blurry, photo, 3d render, smooth plastic, text, watermark, signature, ground, grass, shadow on the ground, ' +
+  'extra animals, extra wheels, cropped, frame, border';
+
+async function comfy(pad, init) {
+  const r = await fetch(`${COMFY}/${pad}`, init);
+  if (!r.ok) throw new Error(`ComfyUI ${r.status} bij ${pad}: ${(await r.text()).slice(0, 400)}`);
+  return r;
+}
+async function upload(naam, data, type) {
+  const fd = new FormData();
+  fd.append('image', new Blob([data], { type }), naam);
+  fd.append('overwrite', 'true');
+  return (await (await comfy('upload/image', { method: 'POST', body: fd })).json()).name;
+}
+
+// De werkstroom (de API-vorm van ComfyUI: knopen met hun invoer). Breed en hoog: veelvouden van 8.
+function werkstroom(leidraad, stijl, b, h, o = LOKAAL) {
+  return {
+    1: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: o.model } },
+    2: { class_type: 'LoadImage', inputs: { image: leidraad } },
+    3: { class_type: 'ImageScale', inputs: { image: ['2', 0], upscale_method: 'nearest-exact', width: b, height: h, crop: 'disabled' } },
+    4: { class_type: 'VAEEncode', inputs: { pixels: ['3', 0], vae: ['1', 2] } },
+    5: { class_type: 'CLIPTextEncode', inputs: { text: POSITIEF, clip: ['1', 1] } },
+    6: { class_type: 'CLIPTextEncode', inputs: { text: NEGATIEF, clip: ['1', 1] } },
+    7: { class_type: 'Canny', inputs: { image: ['3', 0], low_threshold: 0.2, high_threshold: 0.5 } },
+    8: { class_type: 'ControlNetLoader', inputs: { control_net_name: o.controlnet } },
+    9: { class_type: 'SetUnionControlNetType', inputs: { control_net: ['8', 0], type: 'canny/lineart/anime_lineart/mlsd' } },
+    10: { class_type: 'ControlNetApplyAdvanced', inputs: { positive: ['5', 0], negative: ['6', 0], control_net: ['9', 0], image: ['7', 0], strength: o.vorm, start_percent: 0, end_percent: o.vormTot, vae: ['1', 2] } },
+    11: { class_type: 'LoadImage', inputs: { image: stijl } },
+    18: { class_type: 'ImageCrop', inputs: { image: ['11', 0], width: o.uitsnede.b, height: o.uitsnede.h, x: o.uitsnede.x, y: o.uitsnede.y } },
+    12: { class_type: 'IPAdapterModelLoader', inputs: { ipadapter_file: o.ipadapter } },
+    13: { class_type: 'CLIPVisionLoader', inputs: { clip_name: o.clipVision } },
+    14: { class_type: 'IPAdapterAdvanced', inputs: { model: ['1', 0], ipadapter: ['12', 0], image: ['18', 0], clip_vision: ['13', 0], weight: o.stijl, weight_type: o.stijlSoort, combine_embeds: 'concat', start_at: 0, end_at: 1, embeds_scaling: 'V only' } },
+    15: { class_type: 'KSampler', inputs: { model: ['14', 0], positive: ['10', 0], negative: ['10', 1], latent_image: ['4', 0], seed: o.zaad, steps: o.stappen, cfg: o.cfg, sampler_name: 'dpmpp_2m', scheduler: 'karras', denoise: o.ruis } },
+    16: { class_type: 'VAEDecode', inputs: { samples: ['15', 0], vae: ['1', 2] } },
+    17: { class_type: 'SaveImage', inputs: { images: ['16', 0], filename_prefix: 'tithebreaker' } },
+  };
+}
+
+async function tekenLokaal(leidraadPng, stijlNaam, b, h) {
+  const leidraad = await upload('leidraad.png', leidraadPng, 'image/png');
+  const { prompt_id: id } = await (await comfy('prompt', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: werkstroom(leidraad, stijlNaam, b, h) }) })).json();
+  for (;;) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const geschiedenis = await (await comfy(`history/${id}`)).json();
+    const g = geschiedenis[id];
+    if (!g) continue;
+    if (g.status && g.status.status_str === 'error') throw new Error(`ComfyUI: ${JSON.stringify(g.status.messages).slice(0, 600)}`);
+    const beeld = Object.values(g.outputs || {}).flatMap((o) => o.images || [])[0];
+    if (!beeld) continue;
+    const q = new URLSearchParams({ filename: beeld.filename, subfolder: beeld.subfolder || '', type: beeld.type || 'output' });
+    return Buffer.from(await (await comfy(`view?${q}`)).arrayBuffer());
+  }
+}
+
+async function lokaal() {
+  const map = path.join(UIT, 'lokaal');
+  fs.mkdirSync(map, { recursive: true });
+  const stijl = await upload('heerstoet-doel.webp', fs.readFileSync(STIJL), 'image/webp');
+  const namen = (process.argv[3] || 'wagen-zw,wagen-no,lopen-zw-0,lopen-zw-2,lopen-zw-4').split(',');
+  for (const naam of namen) {
+    const l = leidraad(renderVan(naam));
+    const { b, h } = leesPng(l.png);
+    const B = LOKAAL.breed;
+    const H = Math.round((B * h) / b / 8) * 8;
+    const t0 = Date.now();
+    const png = await tekenLokaal(l.png, stijl, B, H);
+    fs.writeFileSync(path.join(map, `${naam}.png`), png);
+    console.log(`${naam}: ${Math.round((Date.now() - t0) / 1000)} s`);
+  }
+  hand(map, 'lokaal', true);
 }
 
 async function main() {
@@ -437,7 +569,8 @@ async function main() {
   else if (wat === 'droog') await proef(true);
   else if (wat === 'proef') await proef(false);
   else if (wat === 'hand') hand();
-  else console.log('node gereedschap/ai/beeld-ai.cjs modellen | droog | proef | hand');
+  else if (wat === 'lokaal') await lokaal();
+  else console.log('node gereedschap/ai/beeld-ai.cjs modellen | droog | proef | hand | lokaal [namen]');
 }
 
 if (require.main === module) main().catch((e) => {

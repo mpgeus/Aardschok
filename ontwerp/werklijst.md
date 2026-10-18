@@ -240,6 +240,14 @@ stenen huizen. **Ronde 3 is af.**
      (CLAUDE.md: eerst goedkeuring, dan renderen). Daarna de rest, en een opruimronde.
   Erbij: in de winkel van Steam melden dat er AI in de beelden zit; en de vraag of de figuren groter mogen (meer detail in
   beeld, maar alles moet mee), voor later.
+  **Fase 1 loopt** (18 okt; Marcel: "Ja, begin met fase 1", en toestemming voor de downloads): ComfyUI v0.41.0 (de versie
+  voor de 10-serie, cu126) staat in `C:\ComfyUI\`, met SDXL, ControlNet union en IP-Adapter Plus (14,7 GB), en draait op
+  `127.0.0.1:8188` (`node gereedschap/ai/beeld-ai.cjs lokaal`). Met SDXL zo'n 60 seconden per beeld; met veel vrijheid
+  (denoise 0,75, ControlNet los) heeft elk beeld mooi detail, maar wisselen de loopbeelden van lading en tuig
+  (`uit/ai/lokaal-proef.png`). Marcel gaf daarna een opdracht voor de werkstroom (`gereedschap/ai/opdracht-comfyui.md`):
+  SD 1.5, weinig vrijheid (denoise 0,3 tot 0,5) en een strakke ControlNet (0,75 tot 1,0), een testmatrix, een
+  deterministisch masker voor de achtergrond, kwaliteitscontrole, en een importeerbare werkstroom. Wacht op Marcel: de
+  downloads voor SD 1.5 (zo'n 4 GB).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
