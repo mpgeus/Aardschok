@@ -37,7 +37,8 @@ const { apng } = require('../pixelart/apng.cjs');
 const W = 1024;
 const DOEK = require('./doek.cjs').maak(W, W);
 const UIT = path.join(A.UIT, 'afwerking');
-const Z = 8; // doekpixels per spritepixel (de sprite is 2×, de render 4×: maal 4)
+const ZWIEL = 8; // doekpixels per spritepixel voor het wiel (de sprite is 2×, de render 4×: maal 4); een bron kan een eigen z hebben
+const Z = ZWIEL;
 const MAGENTA = [255, 0, 255];
 const MODELLEN = {
   checkpoint: 'sd_xl_base_1.0.safetensors',
@@ -84,6 +85,8 @@ function invoer(kant, s, bron = BRON_D) {
   const R = bron.render(kant, s);
   const { G, D } = bron.sprite(R, kant, s);
   const u = bron.uitsnede(kant);
+  // doekpixels per spritepixel: 8 voor een wiel, minder voor wat groter is (de hele ossenkar: 3), zodat het op het doek past
+  const Z = bron.z || ZWIEL;
   if (u.b * Z > W || u.h * Z > W) throw new Error(`het wiel past niet op het doek: ${u.b}×${u.h} maal ${Z}`);
   const ox = Math.floor((W - u.b * Z) / 2);
   const oy = Math.floor((W - u.h * Z) / 2);
@@ -134,7 +137,7 @@ function invoer(kant, s, bron = BRON_D) {
   };
   const lijnen = opDoek(S.lijnenVan(R));
   const diepte = opDoek(S.diepteVan(R));
-  return { kant, s, ij, R, G, D, u, ox, oy, init, masker, binnen, lijnen, diepte };
+  return { kant, s, ij, R, G, D, u, ox, oy, init, masker, binnen, lijnen, diepte, Z };
 }
 
 // Het ChatGPT-wiel, vierkant op #FF00FF (voor IP-Adapter: CLIP knipt anders een vierkant uit het midden).
@@ -167,8 +170,8 @@ function werkstroom(n, o = START) {
     8: { class_type: 'CLIPVisionLoader', inputs: { clip_name: MODELLEN.clipVision } },
     9: { class_type: 'IPAdapterAdvanced', inputs: { model: ['1', 0], ipadapter: ['7', 0], image: ['5', 0], clip_vision: ['8', 0], weight: o.ip, weight_type: o.ipSoort, combine_embeds: 'concat', start_at: 0, end_at: 1, embeds_scaling: 'V only' }, _meta: { title: 'IP-Adapter (stijl)' } },
     11: { class_type: 'ControlNetLoader', inputs: { control_net_name: MODELLEN.controlnet } },
-    12: { class_type: 'CLIPTextEncode', inputs: { text: POSITIEF, clip: ['1', 1] }, _meta: { title: 'Positief' } },
-    13: { class_type: 'CLIPTextEncode', inputs: { text: NEGATIEF, clip: ['1', 1] }, _meta: { title: 'Negatief' } },
+    12: { class_type: 'CLIPTextEncode', inputs: { text: n.positief || POSITIEF, clip: ['1', 1] }, _meta: { title: 'Positief' } },
+    13: { class_type: 'CLIPTextEncode', inputs: { text: n.negatief || NEGATIEF, clip: ['1', 1] }, _meta: { title: 'Negatief' } },
   };
   let pos = ['12', 0];
   let neg = ['13', 0];
@@ -203,7 +206,7 @@ const tagVan = (o) => `d${o.denoise.toFixed(2)}-ip${o.ip.toFixed(2)}${o.ipSoort.
 
 const lijktMagenta = (r, g, b) => r > 140 && b > 140 && g < 120 && Math.abs(r - b) < 100;
 function terug(ai, inv, o = START) {
-  const { D, G, u, ox, oy, binnen } = inv;
+  const { D, G, u, ox, oy, binnen, Z } = inv;
   const sprite = { b: D.b, h: D.h, rgba: Buffer.from(D.rgba) };
   let geenAi = 0;
   for (let y = u.y0; y < u.y0 + u.h; y++) for (let x = u.x0; x < u.x0 + u.b; x++) {
@@ -265,7 +268,7 @@ function terug(ai, inv, o = START) {
 // Hoeveel spaken: op een ellips tussen naaf en velg (de ellips uit de momenten van ons gevulde wiel, op 45 en 55% van de
 // straal) de stukken die getekend zijn, rondom. Op ons doek (ai null) en op wat de AI tekende (vóór het masker).
 function spakenTel(inv, ai) {
-  const { binnen, ox, oy, u } = inv;
+  const { binnen, ox, oy, u, Z } = inv;
   // ons wiel gevuld (de gaten tussen de spaken dicht), en zijn momenten
   const vak = { x0: ox, y0: oy, x1: ox + u.b * Z, y1: oy + u.h * Z };
   const b = vak.x1 - vak.x0, h = vak.y1 - vak.y0;
@@ -334,7 +337,7 @@ async function eenBeeld(kant, s, o, stijlNaam, tag = tagVan(o), bron = BRON_D) {
   fs.mkdirSync(map, { recursive: true });
   const png = (r) => K.pngVanBeeld(r);
   const bestanden = { init: inv.init, masker: inv.masker, lijnen: inv.lijnen, diepte: inv.diepte };
-  const namen = { stijl: stijlNaam };
+  const namen = { stijl: stijlNaam, positief: bron.positief, negatief: bron.negatief };
   for (const [k, r] of Object.entries(bestanden)) {
     const data = png(r);
     fs.writeFileSync(path.join(map, `${k}.png`), data);
@@ -356,7 +359,7 @@ async function eenBeeld(kant, s, o, stijlNaam, tag = tagVan(o), bron = BRON_D) {
   fs.writeFileSync(path.join(map, 'instellingen.json'), JSON.stringify({
     kant, stand: s, tag, stijlbron: `gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png (${o.voorbeeld === 'heel' ? 'het hele beeld, onbewerkt' : 'alleen het voorste wiel: hdstijl.cjs doelWiel, de rest #FF00FF'})`,
     bron: bron.naam, modellen: MODELLEN, instellingen: o,
-    positief: POSITIEF, negatief: NEGATIEF, doek: `${W}×${W}`, maal: Z, uitsnede: inv.u, plek: [inv.ox, inv.oy],
+    positief: bron.positief || POSITIEF, negatief: bron.negatief || NEGATIEF, doek: `${W}×${W}`, maal: inv.Z, uitsnede: inv.u, plek: [inv.ox, inv.oy],
     comfyui: stats.system.comfyui_version, pytorch: stats.system.pytorch_version, gpu: stats.devices[0].name,
     seconden: +tijd.toFixed(1), terugSeconden: +naTijd.toFixed(2), palet, controle, wanneer: new Date().toISOString(),
   }, null, 2));

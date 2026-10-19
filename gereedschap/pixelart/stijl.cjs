@@ -524,6 +524,9 @@ function stileer(G, stijl, st = {}) {
     let k;
     if (!def) k = [0, 1, 2].map((c) => srgb(G.kleur[o * 3 + c]));
     else if (!st.reeksen) k = [0, 1, 2].map((c) => srgb(G.kleur[o * 3 + c]));
+    // def.renderKleur: de kleur van de render zelf in plaats van de reeks (een gebakken beschildering: bakken.cjs; de gouden
+    // leeuwen op de rode bak zouden anders lichtrood worden), met de lijnen van het handschrift erover
+    else if (def.renderKleur && !lijn[o]) k = [0, 1, 2].map((c) => srgb(G.kleur[o * 3 + c]));
     else k = lijn[o] ? def.lijn || def.reeks[0].map((c) => Math.round(c * 0.55)) : def.reeks[toon[o]];
     rgba.set([...k, 255], o * 4);
     if (lijn[o]) toon[o] = -1;

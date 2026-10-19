@@ -343,8 +343,12 @@ stenen huizen. **Ronde 3 is af.**
   Marcel koos daarna (19 okt): het nieuwe wiel en het handschrift op de hele ossenkar, SDXL alleen op wat groot genoeg is
   (de bak). **Tussenstap** (`karhd.cjs proef`, `uit/karhd/proef.png`): de kar met de nieuwe wielen en het handschrift
   (ook op wat geen textuur heeft: `kern.cjs` schrijft dat met `o.gbuffer` nu in de G-buffer, `stijl.cjs rampStijl`); nog
-  zonder leeuwen; 33 s per beeld (de nagels van de wielen moeten één onderdeel per kring worden). **Bezig:** SDXL op de
-  bak (de leeuwen), gebakken.
+  zonder leeuwen; 33 s per beeld (de nagels van de wielen moeten één onderdeel per kring worden). Marcel daarbij: "onze kar
+  lijkt in verhouding echt een kneusje ten opzichte van die van GPT". Gemeten op dezelfde wielmaat: even groot in beeld,
+  maar de ChatGPT-bak heeft bijna twee keer zoveel rood (4073 tegen 2146 pixels): hogere wanden, zware rongen, een brede
+  bovenrand, de lading hoog opgestapeld; de os gedrongen en zwaar. **Wacht op Marcel:** het voorstel in woorden (de bak
+  hoger en zwaarder, de lading hoger, de os forser, de dissel en het juk zwaarder; alleen in de HD-kar), dan een
+  proefplaat, en daarna de leeuwen met SDXL op de grotere wanden.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
