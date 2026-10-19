@@ -406,8 +406,12 @@ stenen huizen. **Ronde 3 is af.**
   letterlijk (blauwe banden en stam), de zakken werden bollen, de os plastic. Daarna Cor Epica (Marcel downloadde hem;
   `karhd.cjs checkpoint`; `ai-afwerking.md`, "Cor Epica naast FaeTastic"): net zo blauw, gladder, niet beter; het checkpoint
   is niet de bottleneck. En twee LoRA's van Marcel ("Twee LoRA's van Marcel"): niet voor SDXL; de ERNIE-LoRA mag
-  commercieel maar vraagt ERNIE-Image-Turbo. **Wacht op Marcel:** de kleurwoorden voor schaduw uit de zinnen en nog één keer
-  met FaeTastic, of ERNIE-Image-Turbo als proef (downloads met toestemming).
+  commercieel maar vraagt ERNIE-Image-Turbo. Daarna (19 okt): de zinnen zonder schaduwkleuren (spec2: het blauw is weg, de
+  stam heeft een eigen gebied), en ERNIE-Image-Turbo (gedownload met toestemming; `karhd.cjs ernie`; "ERNIE-Image-Turbo in
+  de eigen pijplijn"): duidelijk rijker dan SDXL, de grootste stap tot nu toe, zo'n 12 minuten per meesterbeeld. Marcel
+  vroeg ook of het voorstel van ChatGPT (SDXL herschildert de render met de ChatGPT-wagen als referentie en ControlNet) al
+  getest is: ja, op 18 en 19 okt ("Is het voorstel van ChatGPT nieuw?"). **Wacht op Marcel:** hoe verder (ERNIE als
+  schilder van de eigen pijplijn, of eerst iets anders); geen nieuwe proeven tot hij dat zegt.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

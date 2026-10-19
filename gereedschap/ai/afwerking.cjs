@@ -223,6 +223,55 @@ function werkstroom(n, o = START) {
   });
   return st;
 }
+// ERNIE-Image-Turbo (Baidu, 8B, Apache 2.0; Comfy-Org/ERNIE-Image, door ComfyUI zelf ondersteund; Marcel, 19 okt: "download
+// maar alvast"): img2img binnen ons silhouet zoals hierboven, maar zonder ControlNet (die is er voor ERNIE niet) en zonder
+// IP-Adapter; een turbomodel: 8 stappen, cfg 1 (dus zonder negatieve zin). Het model wordt bij het laden fp8 (de 1080 Ti
+// heeft 11 GB, het bestand is 16 GB). o.lora: { naam, kracht } (een LoRA voor ERNIE, alleen op het model). n.gebieden
+// zoals hierboven.
+const ERNIE = {
+  model: 'comfy-ernie\\ernie-image-turbo.safetensors',
+  tekst: 'comfy-ernie\\ministral-3-3b.safetensors',
+  vae: 'comfy-ernie\\flux2-vae.safetensors',
+  start: { steps: 8, cfg: 1, sampler: 'euler', scheduler: 'simple', denoise: 0.65, seed: 180, gewicht: 'fp8_e4m3fn' },
+};
+function werkstroomErnie(n, o = {}) {
+  const v = { ...ERNIE.start, ...o };
+  const st = {
+    1: { class_type: 'UNETLoader', inputs: { unet_name: ERNIE.model, weight_dtype: v.gewicht }, _meta: { title: 'ERNIE-Image-Turbo' } },
+    2: { class_type: 'CLIPLoader', inputs: { clip_name: ERNIE.tekst, type: 'flux2' }, _meta: { title: 'Ministral 3B (de tekstencoder, herkend aan zijn inhoud)' } },
+    3: { class_type: 'VAELoader', inputs: { vae_name: ERNIE.vae } },
+    4: { class_type: 'LoadImage', inputs: { image: n.init }, _meta: { title: 'onze render' } },
+    5: { class_type: 'VAEEncode', inputs: { pixels: ['4', 0], vae: ['3', 0] } },
+    6: { class_type: 'LoadImage', inputs: { image: n.masker } },
+    7: { class_type: 'ImageToMask', inputs: { image: ['6', 0], channel: 'red' } },
+    8: { class_type: 'SetLatentNoiseMask', inputs: { samples: ['5', 0], mask: ['7', 0] } },
+    9: { class_type: 'CLIPTextEncode', inputs: { text: n.positief, clip: ['2', 0] }, _meta: { title: 'Positief' } },
+    10: { class_type: 'ConditioningZeroOut', inputs: { conditioning: ['9', 0] }, _meta: { title: 'Negatief (leeg: cfg 1)' } },
+  };
+  let model = ['1', 0];
+  if (v.lora) {
+    st[11] = { class_type: 'LoraLoaderModelOnly', inputs: { model, lora_name: v.lora.naam, strength_model: v.lora.kracht }, _meta: { title: `LoRA ${v.lora.naam}` } };
+    model = ['11', 0];
+  }
+  let pos = ['9', 0];
+  (n.gebieden || []).forEach((g, k) => {
+    const id = 100 + k * 5;
+    Object.assign(st, {
+      [id]: { class_type: 'LoadImage', inputs: { image: g.masker } },
+      [id + 1]: { class_type: 'ImageToMask', inputs: { image: [String(id), 0], channel: 'red' } },
+      [id + 2]: { class_type: 'CLIPTextEncode', inputs: { text: g.tekst, clip: ['2', 0] } },
+      [id + 3]: { class_type: 'ConditioningSetMask', inputs: { conditioning: [String(id + 2), 0], mask: [String(id + 1), 0], strength: g.kracht ?? 1, set_cond_area: 'default' } },
+      [id + 4]: { class_type: 'ConditioningCombine', inputs: { conditioning_1: pos, conditioning_2: [String(id + 3), 0] } },
+    });
+    pos = [String(id + 4), 0];
+  });
+  Object.assign(st, {
+    15: { class_type: 'KSampler', inputs: { model, positive: pos, negative: ['10', 0], latent_image: ['8', 0], seed: v.seed, steps: v.steps, cfg: v.cfg, sampler_name: v.sampler, scheduler: v.scheduler, denoise: v.denoise } },
+    16: { class_type: 'VAEDecode', inputs: { samples: ['15', 0], vae: ['3', 0] } },
+    17: { class_type: 'SaveImage', inputs: { images: ['16', 0], filename_prefix: 'aardschok-ernie' } },
+  });
+  return st;
+}
 const tagVan = (o) => `d${o.denoise.toFixed(2)}-ip${o.ip.toFixed(2)}${o.ipSoort.replace(/ /g, '')}-l${o.lijn.toFixed(2)}-z${o.diepte.toFixed(2)}-s${o.seed}${o.voorbeeld === 'heel' ? '-heel' : ''}`;
 
 // ---------------------------------------------------------------- terug naar de sprite
@@ -665,7 +714,7 @@ function platen() {
   console.log('uit/ai/afwerking/vergelijking.png, matrix.png, draaien.png, metingen.json');
 }
 
-module.exports = { werkstroom, invoer, terug, spakenTel, eenBeeld, stijlUpload, BRON, uitsnedeVan, gelijkheid, deltaE, spriteMaten, detailVan, START, MODELLEN, POSITIEF, NEGATIEF, UIT, Z, tagVan };
+module.exports = { werkstroom, werkstroomErnie, ERNIE, invoer, terug, spakenTel, eenBeeld, stijlUpload, BRON, uitsnedeVan, gelijkheid, deltaE, spriteMaten, detailVan, START, MODELLEN, POSITIEF, NEGATIEF, UIT, Z, tagVan };
 
 if (require.main === module) main().catch((e) => {
   console.error(e.stack || e.message);

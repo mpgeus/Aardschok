@@ -1142,7 +1142,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   voor elke ramp) en `meesterTerug` (een meesterbeeld van eerder, zonder SDXL opnieuw). Rijker schilderwerk (`karhd.cjs
   rijker`): `huisstijl.cjs SCHILDER` (schilderwoorden, cfg 7), `plaatselijkContrast` (de helderheid verder van haar
   omgeving, op de render van 4×; `handschrift(R, stijl, { contrast })`), `tweedeBeurt` (dubbel formaat in tegels; op deze
-  maat gladder, alleen met `TWEEDE=1`), `meesterOfTerug` en `buurverschil` (de maat voor rijkdom op spelmaat).
+  maat gladder, alleen met `TWEEDE=1`), `meesterOfTerug` en `buurverschil` (de maat voor rijkdom op spelmaat). De
+  stijlspecificatie (`karhd.cjs spec`, `TAG`): H4 (`handschrift` met `o.spec`); `gebiedenVan` kiest het materiaal van een
+  onderdeel dat het per plek kiest (de stam) op de plek in rust. Andere schilders: `karhd.cjs checkpoint` (Cor Epica naast
+  FaeTastic, `huisstijl.cjs CHECKPOINTS`) en ERNIE-Image-Turbo (`afwerking.cjs werkstroomErnie`: fp8 bij het laden, 8
+  stappen, cfg 1, zonder ControlNet; `meester` met `extra.ernie`; `karhd.cjs ernie`).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

@@ -14,15 +14,17 @@
 const HUISSTIJL = {
   checkpoint: 'civitai-faetastic\\SDXLFaetastic_v24.safetensors',
   // uit de stijlspecificatie (ontwerp/stijlspecificatie.md, Marcel, 19 okt): de kern, het licht, de afwerking
+  // geen kleurwoorden voor de schaduw (19 okt: "cooler blue-grey shadows" maakte ijzer en hout blauw; SDXL neemt een kleur
+  // letterlijk): warm en koel doet onze eigen code (spec, H4)
   zin: 'high-definition isometric hand-painted pixel art game sprite, premium medieval strategy game asset, stylized ' +
-    'realism, rich tactile materials, painterly pixel clusters, warm directional key light from the upper left, warm cream ' +
-    'and golden highlights, cooler blue-grey shadows, crisp silhouettes, polished surface details',
+    'realism, rich tactile materials, painterly pixel clusters, warm directional key light from the upper left, warm ' +
+    'sunlit colors, crisp silhouettes, polished surface details',
   // en de negatieve lijst van de specificatie, met wat er al stond
   negatief: 'photorealism, photo, flat vector art, low-detail cartoon shading, generic 3d render, smooth plastic surfaces, ' +
     'random pixel noise, automatic pixelation filter, blurry texture overlay, inconsistent perspective, excessive ' +
     'microdetail, watercolor bleeding, thick uniform black outlines, excessive bloom, chrome reflections, procedural texture ' +
     'repetition, blurry, deformed, text, watermark, signature, ground, grass, shadow on the ground, background objects, ' +
-    'frame, border, bread, loaf, buns, pastry',
+    'frame, border, bread, loaf, buns, pastry, blue wood, blue tint, teal, cyan',
   instellingen: { denoise: 0.65, ip: 0, lijn: 0.8, diepte: 0.6, cnEind: 0.85, steps: 32, cfg: 5.5, sampler: 'dpmpp_2m', scheduler: 'karras', seed: 180 },
   // de gekozen weg (Marcel, 19 okt: "Ok, laten we de w5 gebruiken"; ai-afwerking.md, "Rijker schilderwerk"): het rijke begin
   // (stoffen.cjs), de schilderwoorden met cfg 7 (SCHILDER), ons handschrift H3 erover, met plaatselijk contrast 1,0
@@ -30,7 +32,8 @@ const HUISSTIJL = {
   // de afwerking naar de stijlspecificatie (H4, karhd.cjs handschrift o.spec): minder verscherping (geen overdreven
   // verscherping), warm licht en koelere schaduw uit ons eigen licht (de vermenigvuldiging per kanaal, licht 0,45 tot 1,05),
   // het donkerste opgetild (geen zwarte schaduw), en de binnenlijnen half naar de kleur eronder (dunner en zachter dan buiten)
-  spec: { contrast: 0.6, warm: [1.07, 1.01, 0.88], koel: [0.9, 0.95, 1.08], licht: [0.45, 1.05], vloer: 16, binnenZacht: 0.5 },
+  // (19 okt, tweede ronde: warm en koel zwakker, de eerste maakte de schaduw te blauw)
+  spec: { contrast: 0.6, warm: [1.05, 1.0, 0.92], koel: [0.95, 0.97, 1.03], licht: [0.45, 1.05], vloer: 16, binnenZacht: 0.5 },
 };
 // De pixelart-LoRA (Marcel, 19 okt: "LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"):
 // PixelArtRedmond Lite 64 van artificialguybr (Civitai 144684, versie 160844; beelden verkopen mag: allowCommercialUse
@@ -52,6 +55,9 @@ const CHECKPOINTS = {
   faetastic: 'civitai-faetastic\\SDXLFaetastic_v24.safetensors',
   corepica: 'civitai-corepica\\corEpicaByZovya_v0Beta.safetensors',
 };
+// De pixelart-LoRA voor ERNIE-Image ("Pixel Art Assets - General", svntax_dev, Civitai 2732245; beelden verkopen mag:
+// allowCommercialUse Image, Rent, Sell; Marcel downloadde hem, 19 okt), zonder triggerwoorden
+const LORA_ERNIE = { naam: 'civitai-pixel-assets-ernie\\pixel_assets_general_ernie_v1_000002500.safetensors', kracht: 1.0 };
 const LORA = { naam: 'civitai-pixelartredmond\\PixelArtRedmond-Lite64.safetensors', kracht: 0.8, woorden: 'Pixel Art, PixArFK' };
 
 // Eén zin per materiaal, voor alle dingen. Een vacht krijgt zijn kleur uit het model (kleurWoord), dus een zwarte koe en
@@ -125,16 +131,15 @@ const GROEPZIN = {
   verf: (k) => `warm ${kleurWoord(k)} painted wood, paint worn at the edges showing honey-brown wood, dark seams between the ` +
     'planks, small warm highlights along the edges',
   bies: () => 'golden yellow painted trim with amber midtones, small precise highlights',
-  metaal: () => 'dark charcoal and desaturated blue-grey forged iron, slightly uneven hammered surface, sharp narrow ' +
-    'highlights along exposed edges, small individually shaded rivets, restrained reflectivity, warm brass caps',
-  stof: () => 'woven matte burlap sack in warm earthy beige, subtle directional fiber pattern, soft irregular folds, ' +
-    'shadows inside the folds, restrained highlights on the ridges, lumpy, tied at the neck with twine',
+  metaal: () => 'dark grey forged iron, slightly uneven hammered surface, sharp narrow highlights along exposed edges, ' +
+    'small individually shaded rivets, restrained reflectivity, warm brass caps',
+  stof: () => 'light tan burlap grain sacks, coarse woven jute texture, lumpy sack shape with soft irregular folds, ' +
+    'tied at the neck with twine, matte',
   goud: () => 'heap of small round gold coins, warm saturated golden-yellow highlights, amber midtones, rich orange-brown ' +
     'shadows, small precise specular highlights',
   embleem: () => 'golden heraldic lion rampant emblem painted on red wood, golden-yellow highlights, amber midtones',
   dier: (k, i = {}) => `soft layered ${kleurWoord(k)} ${i.soort || 'animal'} fur in small directional hand-painted strokes ` +
-    'following the anatomy, warm ivory and cream highlights, muted beige and grey-brown shadows, broad shading describing ' +
-    'the musculature' +
+    'following the anatomy, warm ivory and cream highlights, soft warm beige shading describing the musculature' +
     `${i.namen && i.namen.has('hoorn') ? ', pale curved horns' : ''}${i.namen && i.namen.has('hoef') ? ', dark hooves' : ''}` +
     `${i.namen && i.namen.has('riem') ? ', thick warm chestnut leather harness' : ''}`,
 };
@@ -161,4 +166,4 @@ function kleurWoord([r, g, b]) {
   return 'purple';
 }
 
-module.exports = { HUISSTIJL, SCHILDER, CHECKPOINTS, LORA, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };
+module.exports = { HUISSTIJL, SCHILDER, CHECKPOINTS, LORA, LORA_ERNIE, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };

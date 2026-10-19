@@ -29,6 +29,8 @@
 //                                                  op 4× en 2× naast ChatGPT: uit/karhd/meester/spec.png
 //   node gereedschap/pixelart/karhd.cjs checkpoint FaeTastic en Cor Epica naast elkaar, met dezelfde instellingen als spec:
 //                                                  uit/karhd/meester/checkpoints.png
+//   node gereedschap/pixelart/karhd.cjs ernie      ERNIE-Image-Turbo, met en zonder de pixelart-LoRA voor ERNIE (VARIANT):
+//                                                  uit/karhd/meester/ernie.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -442,13 +444,16 @@ function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
     const obj = BR.ding(i);
     if (!obj) continue;
     const d = BR.onderdeel(BR.R.rust[i * 4 + 3]);
-    const naam = (obj === 1 ? NAAM_KAR : NAAM_OS)[d.m];
+    // een onderdeel kan zijn materiaal per plek kiezen (de stam: schors, en nerf aan de kopse kanten; ossenkar.cjs stam):
+    // dan op de plek in rust. (Tot 19 okt viel de stam zo buiten elk gebied, en schilderde SDXL hem blauw.)
+    const mi = typeof d.m === 'function' ? d.m(BR.R.rust[i * 4], BR.R.rust[i * 4 + 1], BR.R.rust[i * 4 + 2]) : d.m;
+    const naam = (obj === 1 ? NAAM_KAR : NAAM_OS)[mi];
     const sleutel = groepen ? HU.groepVoor(naam) : naam;
     if (!sleutel) continue;
     const g = per.get(sleutel) || per.set(sleutel, { pixels: [], tel: new Map(), namen: new Set(), obj }).get(sleutel);
     g.pixels.push(y * b + x);
     g.namen.add(naam);
-    const mat = (obj === 1 ? BR.km : BR.om).mat[d.m];
+    const mat = (obj === 1 ? BR.km : BR.om).mat[mi];
     g.tel.set(mat, (g.tel.get(mat) || 0) + 1);
   }
   const min = b * h * 0.002; // te kleine gebieden (een nagel, een oog) niet: die doet de rest
@@ -505,7 +510,7 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
   }
   const lijnen = knip(S.lijnenVan(R), [0, 0, 0]);
   const diepte = knip(S.diepteVan(R), [0, 0, 0]);
-  if (eigen) checkpoint = extra.checkpoint || HU.HUISSTIJL.checkpoint;
+  if (eigen) checkpoint = extra.ernie ? 'ernie-image-turbo' : extra.checkpoint || HU.HUISSTIJL.checkpoint;
   const tag = (checkpoint || 'sdxl-base').replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-') + (eigen ? '-eigen' : '') + (extra.tag ? `-${extra.tag}` : '');
   const map = path.join(MEESTER_UIT, tag);
   fs.mkdirSync(map, { recursive: true });
@@ -540,7 +545,8 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
     H.bewaar(path.join(map, `${kant}-gebieden.png`), kaart);
   }
   const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora, ...(extra.denoise ? { denoise: extra.denoise } : {}), ...(extra.schilder ? { cfg: HU.SCHILDER.cfg } : {}) } : { ...AF.START, ...MEESTER, checkpoint };
-  const stroom = AF.werkstroom(namen, o);
+  // extra.ernie: ERNIE-Image-Turbo in plaats van SDXL (afwerking.cjs werkstroomErnie: zonder ControlNet, cfg 1)
+  const stroom = extra.ernie ? AF.werkstroomErnie(namen, { lora: extra.lora, ...(extra.denoise ? { denoise: extra.denoise } : {}) }) : AF.werkstroom(namen, o);
   const t0 = Date.now();
   const png = await DK.maak(b, h).voerUit(stroom);
   const tijd = (Date.now() - t0) / 1000;
@@ -1008,12 +1014,16 @@ async function specProef() {
   const stijl = handschriftStijl();
   const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
   const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
-  const m = await meester('ZW', null, true, { rijk: true, schilder: true, tag: 'spec' });
+  // TAG: een eigen map (de tweede ronde: spec2), met de vorige ronde (spec) ernaast
+  const tag = process.env.TAG || 'spec';
+  const m = await meester('ZW', null, true, { rijk: true, schilder: true, tag });
   const { mat, osMat } = projecteer(m.BR, m.beeld);
   const ij = HS.leesIjk();
   const gpt2 = doelWagen(ij.hoogte);
   const gpt4 = doelWagen(ij.hoogte * 2);
-  const w5 = H.lees(path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-schilder', 'w5-ZW.png'));
+  const vorigePad = tag === 'spec' ? path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-schilder', 'w5-ZW.png') : path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-spec', 'h4-ZW.png');
+  const vorigeNaam = tag === 'spec' ? 'W5 van eerder' : 'H4, de eerste ronde';
+  const w5 = H.lees(vorigePad);
   const sprites = {};
   let vier = null;
   for (const k of KANTEN) {
@@ -1024,15 +1034,15 @@ async function specProef() {
     if (k === 'ZW') vier = plaatselijkContrast({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 6, HU.HUISSTIJL.spec.contrast);
   }
   H.bewaar(path.join(MEESTER_UIT, m.tag, 'vier-ZW.png'), vier);
-  const maten = { ChatGPT: buurverschil(gpt2), W5: buurverschil(w5), H4: buurverschil(sprites.ZW) };
-  E.bewaar(path.join(MEESTER_UIT, 'spec.png'), [
+  const maten = { ChatGPT: buurverschil(gpt2), [vorigeNaam]: buurverschil(w5), [tag === 'spec' ? 'H4' : 'H4, deze ronde']: buurverschil(sprites.ZW) };
+  E.bewaar(path.join(MEESTER_UIT, `${tag}.png`), [
     [E.met(knip(gpt4), 'ChatGPT op 4× (de maat van onze render)'), E.met(knip(vier), 'onze render op 4× (zonder het handschrift)')],
-    [E.met(groot(knip(gpt2), 2), 'ChatGPT op spelmaat (2×), maal 2'), E.met(groot(knip(sprites.ZW), 2), 'H4, de specificatie · ZW, maal 2'), E.met(groot(knip(w5), 2), 'W5 van eerder · ZW, maal 2')],
+    [E.met(groot(knip(gpt2), 2), 'ChatGPT op spelmaat (2×), maal 2'), E.met(groot(knip(sprites.ZW), 2), `H4 (${tag}) · ZW, maal 2`), E.met(groot(knip(w5), 2), `${vorigeNaam} · ZW, maal 2`)],
     [E.met(groot(knip(sprites.ZO), 2), 'H4 · ZO, maal 2'), E.met(groot(knip(sprites.NW), 2), 'H4 · NW, maal 2'), E.met(knip(H.verklein(m.beeld, 3, 'naast')), `het meesterbeeld (${m.tijd.toFixed(0)} s)`)],
   ], 'De stijlspecificatie in de eigen pijplijn', `SDXL (FaeTastic, zonder referentie) met de zinnen uit de specificatie, het rijke begin met de vacht als streken, en H4: plaatselijk contrast 0,6, warm licht en koelere schaduw uit ons licht, geen zwart, zachtere binnenlijnen. Rij 1 op 4×, rij 2 en 3 op spelmaat maal 2. Buurverschil (een maat voor dichtheid, niet voor kwaliteit): ${Object.entries(maten).map(([k, v]) => `${k} ${v}`).join(', ')}.`);
-  fs.writeFileSync(path.join(MEESTER_UIT, 'spec.json'), JSON.stringify({ buurverschil: maten, zinnen: m.gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), positief: m.namen.positief }, null, 1));
+  fs.writeFileSync(path.join(MEESTER_UIT, `${tag}.json`), JSON.stringify({ buurverschil: maten, zinnen: m.gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), positief: m.namen.positief, negatief: m.namen.negatief }, null, 1));
   console.log(JSON.stringify(maten));
-  console.log('uit/karhd/meester/spec.png');
+  console.log(`uit/karhd/meester/${tag}.png`);
 }
 
 // Twee checkpoints naast elkaar (Marcel, 19 okt: Cor Epica, "ok, staat erin"): precies de instellingen en zinnen van de
@@ -1074,6 +1084,50 @@ async function checkpointProef() {
   console.log('uit/karhd/meester/checkpoints.png');
 }
 
+// ERNIE-Image-Turbo (Marcel, 19 okt: "Verplaats maar en download maar alvast"): dezelfde gebieden en zinnen, met en zonder
+// de pixelart-LoRA voor ERNIE, naast ChatGPT en de laatste FaeTastic (spec2), met H4 erover.
+async function ernieProef() {
+  const HU = require('../ai/huisstijl.cjs');
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const ij = HS.leesIjk();
+  const gpt2 = doelWagen(ij.hoogte);
+  const maten = { ChatGPT: buurverschil(gpt2) };
+  const rijen = [[E.met(knip(doelWagen(ij.hoogte * 2)), 'ChatGPT op 4×'), E.met(groot(knip(gpt2), 2), 'ChatGPT op spelmaat (2×), maal 2')]];
+  const fae = path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-spec2', 'h4-ZW.png');
+  if (fs.existsSync(fae)) {
+    rijen[0].push(E.met(groot(knip(H.lees(fae)), 2), 'FaeTastic (spec2) · ZW, maal 2'));
+    maten.FaeTastic = buurverschil(H.lees(fae));
+  }
+  const onder = [];
+  const varianten = (process.env.VARIANT || 'zonder,lora').split(',');
+  for (const v of varianten) {
+    const naam = v === 'lora' ? `ERNIE met de pixelart-LoRA (${HU.LORA_ERNIE.kracht})` : 'ERNIE zonder LoRA';
+    const m = await meester('ZW', null, true, { rijk: true, schilder: true, ernie: true, tag: v === 'lora' ? 'lora' : 'zonder', lora: v === 'lora' ? HU.LORA_ERNIE : undefined });
+    const { mat, osMat } = projecteer(m.BR, m.beeld);
+    const rij = [];
+    for (const k of KANTEN) {
+      const R = render({ ...O_KAR, mat, osMat }, k, FIJN);
+      const s = handschrift(R, stijl, { spec: HU.HUISSTIJL.spec }).h4;
+      H.bewaar(path.join(MEESTER_UIT, m.tag, `h4-${k}.png`), s);
+      if (k === 'ZW') {
+        maten[naam] = buurverschil(s);
+        rij.push(E.met(knip(plaatselijkContrast({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 6, HU.HUISSTIJL.spec.contrast)), `${naam} op 4× · ZW`));
+      }
+      rij.push(E.met(groot(knip(s), 2), `${naam} · ${k}, maal 2`));
+    }
+    rijen.push(rij);
+    onder.push(E.met(knip(H.verklein(m.beeld, 3, 'naast')), `${naam}: het meesterbeeld (${m.tijd.toFixed(0)} s)`));
+  }
+  rijen.push(onder);
+  fs.writeFileSync(path.join(MEESTER_UIT, 'ernie.json'), JSON.stringify({ buurverschil: maten }, null, 1));
+  E.bewaar(path.join(MEESTER_UIT, 'ernie.png'), rijen, 'ERNIE-Image-Turbo in de eigen pijplijn', `ERNIE-Image-Turbo (fp8 bij het laden, 8 stappen, cfg 1, denoise 0,65, zonder ControlNet), dezelfde gebieden en zinnen als FaeTastic (spec2), met H4 erover. Op 4× en op spelmaat maal 2. Buurverschil (dichtheid, geen kwaliteit): ${Object.entries(maten).map(([k, w]) => `${k} ${w}`).join(', ')}.`);
+  console.log(JSON.stringify(maten));
+  console.log('uit/karhd/meester/ernie.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
@@ -1084,4 +1138,5 @@ else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack ||
 else if (wat === 'zinnen') zinnenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'spec') specProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'checkpoint') checkpointProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'ernie') ernieProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

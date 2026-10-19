@@ -1082,3 +1082,63 @@ instellingen en zinnen van de proef met de specificatie, alleen het checkpoint a
 - **Conclusie:** het checkpoint is niet de bottleneck. FaeTastic blijft de huisstijl; eerst de kleurwoorden voor schaduw uit
   de zinnen.
 
+### De stijlspecificatie: de tweede ronde (19 okt)
+
+Marcel: "Ok, kunnen we daar dan nog aan sleutelen?" (`TAG=spec2 node gereedschap/pixelart/karhd.cjs spec`,
+`uit/karhd/meester/spec2.png`, `spec2.json`.)
+
+- **Een echte fout gevonden:** de stam kiest zijn materiaal per plek (schors, en nerf aan de kopse kanten; `ossenkar.cjs
+  stam`). `gebiedenVan` las dat niet, dus de stam viel buiten elk gebied en kreeg alleen de algemene zin, met "blue-grey
+  shadows". Nu wordt het materiaal op de plek in rust gekozen, en de stam heeft zijn eigen schorsgebied.
+- **Geen schaduwkleuren meer in de zinnen.** "Warm sunlit colors" in de huisstijl; "blue wood, blue tint, teal, cyan"
+  verboden. IJzer is "dark grey forged iron", de zakken "light tan burlap grain sacks", de vacht met "soft warm beige
+  shading". Warm en koel in H4 zwakker (`HUISSTIJL.spec`).
+- **Vergeleken op 4× en op spelmaat met ChatGPT**, per punt:
+  - **Materiaal:** het blauw is weg. Het hout is warm, de banden zijn grijs ijzer, de stam is bruine schors, de wanden zijn
+    rood. Nog niet goed: de zakken zijn bollen zonder dichtgebonden hals, de kist is lichtbeige in plaats van donker hout
+    met ijzer, en de os is roze-crème en glad.
+  - **Randen:** een donkere omlijning met zachtere binnenlijnen, zoals de specificatie vraagt. ChatGPT is binnenin
+    scherper.
+  - **Licht en schaduw:** warm, zonder zwart en zonder blauw. Het volume van de os is zwak.
+  - **Hiërarchie:** de vorm en de bouw (planken, nagels in de banden) staan. Het fijne detail is zwak.
+  - **Diepte:** weinig contactschaduw in de lading.
+  - **Buurverschil** (dichtheid): 49,4 (eerste ronde 46,5, ChatGPT 73,4).
+- **Conclusie:** beter dan de eerste ronde, en de kleuren kloppen nu met de specificatie. Wat nog ontbreekt is
+  schilderwerk (scherpte, volume, de vorm van de zakken), niet de zinnen.
+
+### ERNIE-Image-Turbo in de eigen pijplijn (19 okt)
+
+Marcel: "Verplaats maar en download maar alvast terwijl de rest nog draait". De twee LoRA's staan nu in
+`ComfyUI/models/loras/` (`civitai-pixelart-zit/`, `civitai-pixel-assets-ernie/`). Gedownload van Hugging Face
+(Comfy-Org/ERNIE-Image; grootte en SHA256 kloppen): `diffusion_models/comfy-ernie/ernie-image-turbo.safetensors` (16,1 GB),
+`text_encoders/comfy-ernie/ministral-3-3b.safetensors` (7,7 GB), `vae/comfy-ernie/flux2-vae.safetensors` (0,3 GB).
+ComfyUI 0.41.0 kent ERNIE-Image zelf; er is geen uitbreiding nodig. (`node gereedschap/pixelart/karhd.cjs ernie`,
+`uit/karhd/meester/ernie.png`; `afwerking.cjs werkstroomErnie`.)
+
+- **De weg:** het model bij het laden fp8 (de 1080 Ti heeft 11 GB), 8 stappen, CFG 1 (dus zonder negatieve zin), denoise
+  0,65, zonder ControlNet (die bestaat niet voor ERNIE), met dezelfde gebieden en zinnen als FaeTastic (spec2), en H4 erover.
+  Zo'n 12 minuten per meesterbeeld (699 s; met de LoRA 725 s).
+- **Wat het laat zien**, op 4× en op spelmaat naast ChatGPT en FaeTastic:
+  - **Materiaal:** duidelijk rijker dan FaeTastic, de grootste stap tot nu toe. De os heeft echte vacht in plaats van
+    plastic. Het hout heeft nerf, de rode bak ijzeren hoeken en nagels, de banden glanzen als metaal, en de kist zit vol
+    goud. Nog niet goed: de zakken zijn platte hopen, en de os is grijswit in plaats van crème.
+  - **Vorm:** zonder ControlNet wijkt ERNIE wat af van ons model; na de projectie stoort dat weinig.
+  - **De pixelart-LoRA voor ERNIE:** de os iets romiger; verder nauwelijks anders.
+  - **Buurverschil** (dichtheid, geen kwaliteit): ERNIE 84, met de LoRA 85; ChatGPT 73, FaeTastic 49.
+- **Conclusie:** een nieuwer model schildert op dezelfde kaart duidelijk rijker. Het model was de bottleneck, niet de
+  zinnen of het checkpoint binnen SDXL.
+
+### Is het voorstel van ChatGPT nieuw? (19 okt, nagezocht)
+
+Marcel vroeg of de aanpak die ChatGPT voorstelt al eerder geprobeerd is: de kale render helemaal door SDXL laten
+herschilderen, met de ChatGPT-ossenwagen als stijlreferentie en ControlNet. **Ja, meerdere keren**, op 18 en 19 okt:
+
+- `beeld-ai.cjs lokaal` (18 okt): SDXL op de hele kar, denoise 0,75, ControlNet canny 0,55, IP-Adapter met Marcels plaat;
+- `sd15.cjs` (18 okt): SD 1.5, ook met de ChatGPT-wagen als meesterbeeld;
+- `sdxl.cjs` (18 okt): SDXL met de ChatGPT-wagen via IP-Adapter, denoise 0,50 en 0,55;
+- `afwerking.cjs` Route A (18 en 19 okt): het wiel, met een matrix van denoise en IP-Adapter;
+- `karhd.cjs meester` (19 okt): de hele kar met de ChatGPT-wagen als stijlplaat, en dan geprojecteerd.
+
+Wat nog niet geprobeerd is, is alleen een combinatie: één vaste stijlplaat voor het hele spel samen met de gebieden en het
+wapen. Wat daarna wel echt nieuw bleek, is een nieuwer model (ERNIE, hierboven).
+
