@@ -171,10 +171,9 @@ function hoogteVan(r) {
 
 // ---------------------------------------------------------------- ontleden: wat is waar op het wiel
 
-// Het wiel als ellips (uit de momenten van wat dekt, met de gaten tussen de spaken dicht): per pixel de straal (0 in het
-// midden, 1 op de rand) en de hoek op het scherm. Daarmee: de spaken (hout tussen 0,28 en 0,6), de velg (hout tussen 0,6
-// en de binnenkant van de band), de band (ijzer daarbuiten).
-function wielMaten(r) {
+// De ellips van een wiel: de momenten van wat dekt, met de gaten tussen de spaken dicht (wat niet van buiten bereikbaar
+// is, telt mee). Het midden (cx, cy) en de covariantie (xx, xy, yy): de rand van de ellips ligt op twee standaardafwijkingen.
+function ellipsVan(r) {
   const { b, h } = r;
   const dekt = (i) => r.rgba[i * 4 + 3] >= 128;
   const buiten = new Uint8Array(b * h);
@@ -200,7 +199,15 @@ function wielMaten(r) {
     const dx = (i % b) - cx, dy = Math.floor(i / b) - cy;
     xx += dx * dx; xy += dx * dy; yy += dy * dy;
   }
-  [xx, xy, yy] = [xx / n, xy / n, yy / n];
+  return { cx, cy, xx: xx / n, xy: xy / n, yy: yy / n };
+}
+
+// Het wiel als ellips (ellipsVan): per pixel de straal (0 in het midden, 1 op de rand) en de hoek op het scherm. Daarmee:
+// de spaken (hout tussen 0,28 en 0,6), de velg (hout tussen 0,6 en de binnenkant van de band), de band (ijzer daarbuiten).
+function wielMaten(r) {
+  const { b, h } = r;
+  const dekt = (i) => r.rgba[i * 4 + 3] >= 128;
+  const { cx, cy, xx, xy, yy } = ellipsVan(r);
   const det = xx * yy - xy * xy;
   const straal = (x, y) => {
     const dx = x - cx, dy = y - cy;
@@ -777,4 +784,4 @@ else if (wat === 'platen') platen();
 else if (wat === 'alles') alles().catch((e) => { console.error(e.message); process.exit(1); });
 else console.log('node gereedschap/pixelart/hdstijl.cjs ijk | proef | render <kant> | platen | alles');
 
-module.exports = { render, ijk, leesIjk, varianten, doelWiel, doelOpMaat, ontleedWiel, wielMaten, stijlVan, meet, nagelKoppen4, VARIANTEN, LADDER, UIT };
+module.exports = { render, ijk, leesIjk, varianten, doelWiel, doelOpMaat, ontleedWiel, ellipsVan, wielMaten, stijlVan, meet, nagelKoppen4, VARIANTEN, LADDER, UIT };

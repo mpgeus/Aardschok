@@ -621,3 +621,48 @@ kopieren toch?", en "de gpt variant heeft zoveel meer detail".
     "Sell images they generate" staat uit ("No commercial use"; nagekeken in `PermissionIndicator.tsx` van Civitai).
     Voor een spel op Steam mogen we de beelden dus niet gebruiken, tenzij de maker het toestaat. Pixel Art XL (CreativeML
     OpenRAIL-M) mag dat wel.
+
+## De pixels van ChatGPT op het wiel (19 okt, proefplaat)
+
+Marcel: "Maak de proefplaat zonder download: zoals nu, en de ChatGPT-pixels gebakken in volle kleur."
+(`node gereedschap/ai/oppervlak.cjs --wiel gpt alles`, `uit/ai/oppervlak-gpt/`: `vergelijking.png`, `richtingen.png`,
+`draaien.png`.)
+
+**De weg:**
+1. Het ChatGPT-wiel (`hdstijl.cjs doelWiel`) gaat op onze render van zuidwest, stand 0, op 8×. De ellips van ons wiel gaat
+   naar een cirkel, en de cirkel naar de ellips van het hare (`ellipsVan`). Ertussen zit de draaiing (4,3°) waarbij wat
+   dekt het best samenvalt: 87 procent.
+2. Bakken via (u, v), zoals bij SDXL, gaf strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een
+   spaak vallen op dezelfde texels. Daarom **projecteren** (`bakken.cjs projectie`). Elk punt van het oppervlak neemt de
+   ChatGPT-pixel waar het naar zuidwest op valt, zonder ons licht. Wat ChatGPT niet laat zien, neemt de pixel van een
+   gedraaide (om de 45°) of gespiegelde kopie.
+3. Onze renderer belicht het opnieuw, in elke richting en stand. Met de naaste pixel van 4× naar 2×: box en
+   detailbehoudend waren even modderig (`verkleinen.png`).
+
+**Wat het laat zien:**
+- **Kopiëren werkt.** Waar ChatGPT het oppervlak laat zien, geeft de render naar zuidwest op 8× zijn pixels terug: gemiddeld
+  3 op 255 verschil. Elders draait het mee en krijgt het ons licht. Naar west, noordwest, oost en zuidoost ziet het wiel er
+  rijk uit, met het hout en de glimlichten van ChatGPT. Met het handschrift erover (de lijnen) vind ik het daar het
+  rijkst van alles tot nu toe.
+- **Naar zuidwest is het minder scherp dan het origineel op dezelfde maat.** Ons wiel is niet tot op de pixel het hare.
+  - Ongeveer één op de vijf pixels van ons wiel heeft naar zuidwest geen eigen ChatGPT-kleur:
+    - de helft zag ChatGPT niet. Dat zijn de randen van de spaken, die net anders liggen, en de binnenkant van de velg aan
+      de overkant: ChatGPT tekent daar de rode bak, wij laten de velg zien;
+    - de andere helft valt door het filter hieronder.
+  - Zo'n pixel leent van een kopie, en dan breken de spaken op 2×.
+  - Een donkerrood randje van de bak werd door ons licht paars. Daarom tellen een verzadigde pixel buiten oranje tot geel
+    niet mee, en wordt niets meer dan ruim twee keer lichter.
+- **De gemeten maten (alle acht richtingen, acht standen en een volle slag):**
+
+  | | flikkeren | nagels (ZW) | lijnen (ZW) |
+  |---|---|---|---|
+  | zoals nu (stijl D met het handschrift) | 0,217 | 66/77 | 14% |
+  | ChatGPT, volle kleur | 0,310 | 25/77 | 21% |
+  | ChatGPT, met het handschrift | 0,208 | 13/77 | 20% |
+
+  - In volle kleur flikkert het meer: de naaste pixel springt bij draaien.
+  - Met het handschrift (de kleur van de render, de lijnen erover) flikkert het zo weinig als nu.
+  - De nagels van ChatGPT zijn op 2× te klein, en onze nagels (losse onderdelen) liggen niet op die van ChatGPT.
+- **Wat het voor de kar betekent:** de pixels van ChatGPT kunnen erop, als ons model dezelfde vorm heeft als het
+  ChatGPT-beeld. Hoe beter de vorm past, hoe minder er geleend wordt. Daarom eerst de vorm (de kar forser), en dan de
+  pixels van de wagen projecteren.

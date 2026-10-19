@@ -353,7 +353,12 @@ stenen huizen. **Ronde 3 is af.**
   "Waarom niet de pixels van ChatGPT zelf"). Voorstel: één proefplaat van het wiel met drie versies: zoals nu, de pixels van
   het ChatGPT-wiel erop gebakken in volle kleur, en SDXL met Pixel Art XL (170,5 MB, wacht op toestemming om te downloaden).
   Marcel noemde ook `Super_PixelArt_XL_M_V2.0` en `PixelArt_Krea2_5X5_V1`: van allebei verbiedt de maker het verkopen
-  van de beelden (Civitai: alleen "Run on Civitai"), en Krea 2 past niet op de 1080 Ti.
+  van de beelden (Civitai: alleen "Run on Civitai"), en Krea 2 past niet op de 1080 Ti. Marcel koos de proef zonder
+  download: **gedaan** (19 okt, `oppervlak.cjs --wiel gpt`, `uit/ai/oppervlak-gpt/`; verslag in `ai-afwerking.md`, "De
+  pixels van ChatGPT op het wiel"). De ChatGPT-pixels worden geprojecteerd: in de bakrichting komen ze bijna precies terug,
+  en in de andere richtingen is het hout rijk. Naar zuidwest is het op spelmaat minder scherp, omdat ons wiel niet tot op
+  de pixel het hare is. **Wacht op Marcel:** wat hij van de plaat vindt, en of de kar zo verder gaat (eerst de vorm naar
+  de ChatGPT-wagen, dan de pixels erop).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

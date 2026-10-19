@@ -369,4 +369,4 @@ else if (wat === 'groter') groter();
 else if (wat === 'hand') hand();
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/doelwiel.cjs proef | filters');
 
-module.exports = { render, stijlVoor, paletPerMateriaal, naarPaletPerMateriaal, paletVast, spriteVan, BRON, UIT };
+module.exports = { render, stijlVoor, gestileerd, paletPerMateriaal, naarPaletPerMateriaal, paletVast, spriteVan, BRON, UIT };

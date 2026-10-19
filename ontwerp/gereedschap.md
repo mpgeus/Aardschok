@@ -179,7 +179,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (het vergelijkingsvel en de metingen), in `uit/ai/afwerking/`. De AI op het oppervlak:
   `node gereedschap/ai/oppervlak.cjs sdxl` (het SDXL-beeld naar noordoost erbij), `bak` (de bak uit de SDXL-beelden),
   `render <kant>`, `platen`, of `alles` (bakken, de acht richtingen tegelijk en de platen: een paar minuten), in
-  `uit/ai/oppervlak/`; met `--wiel doel` voor het wiel naar het doel (in `uit/ai/oppervlak-doel/`). Het wiel naar het doel
+  `uit/ai/oppervlak/`; met `--wiel doel` voor het wiel naar het doel (in `uit/ai/oppervlak-doel/`), en met `--wiel gpt`
+  de pixels van het ChatGPT-wiel zelf, geprojecteerd (`bak` legt het beeld en bewaart `gelegd.png` en `gelegd-half.png`
+  ter controle; in `uit/ai/oppervlak-gpt/`, naast het wiel zoals nu en met het handschrift erover). Het wiel naar het doel
   zelf: `node gereedschap/pixelart/doelwiel.cjs proef` (de proefplaat) en `filters` (van 4× naar 2×: vier filters en drie
   manieren van palet, gemeten), in `uit/doelwiel/`.
 

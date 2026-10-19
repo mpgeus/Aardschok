@@ -1083,6 +1083,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een vlek). `bakMateriaal` leest de bak terug in elke stand en richting; de afwerking die de kleur verandert (reliëf uit
   de oude textuur, warm en koel, slijtage) gaat uit, ook in de render waaruit gebakken wordt. Het nummer van een onderdeel
   staat in een WeakMap (`nummer(model)`), niet op het onderdeel. De proef: `gereedschap/ai/oppervlak.cjs`.
+  **Projecteren** (19 okt; Marcel: "Je kunt de pixels letterlijk kopieren toch?"; `bakken.cjs projectie` en
+  `projectieMateriaal`): zonder (u, v) en zonder groepen. Een rechte projectie maakt de plek op het scherm een lineaire
+  functie van de plek in rust; die wordt uit de render zelf gepast (kleinste kwadraten over elke pixel die dekt, op 8× nul
+  pixels mis). Een punt neemt het albedo van de pixel waar het op valt, als de render daar dat punt zag (`B.rust` binnen
+  een marge) en van hetzelfde materiaal; anders een kopie van het punt (gedraaid om de as, gespiegeld), en anders de eigen
+  textuur. Via (u, v) gaf het ChatGPT-wiel strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een
+  spaak vallen op dezelfde texels. `oppervlak.cjs --wiel gpt` legt het ChatGPT-wiel op onze render (`hdstijl.cjs
+  ellipsVan`: de ellips naar een cirkel en terug, en de draaiing waarbij wat dekt het best samenvalt).
 - **Het wiel naar het doel** (19 okt, vraag 180): `hdproef.cjs wielDoel` (naast `wielC`, dat de eerdere proeven gebruiken)
   bouwt het wiel naar de opgemeten verhoudingen van het ChatGPT-wiel, met koper (`M.goud`, het gesmede ijzer naar koper
   getoond) voor de kap; `DOELWIEL` is de variant voor `wielModel`. De proefplaat: `doelwiel.cjs proef`.
