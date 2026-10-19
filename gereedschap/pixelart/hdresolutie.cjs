@@ -315,8 +315,11 @@ async function alles() {
   platen();
 }
 
-const [wat, a1, a2] = process.argv.slice(2);
-if (wat === 'render') renderEen(Number(a1), Number(a2));
+const [wat, a1, a2] = require.main === module ? process.argv.slice(2) : ['geladen'];
+if (wat === 'geladen');
+else if (wat === 'render') renderEen(Number(a1), Number(a2));
 else if (wat === 'platen') platen();
 else if (wat === 'alles') alles().catch((e) => { console.error(e.message); process.exit(1); });
 else console.log('node gereedschap/pixelart/hdresolutie.cjs alles | render <fijn> <stand> | platen');
+
+module.exports = { lanczos, meerderheid, verkleinMet };

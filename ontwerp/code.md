@@ -1086,6 +1086,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Het wiel naar het doel** (19 okt, vraag 180): `hdproef.cjs wielDoel` (naast `wielC`, dat de eerdere proeven gebruiken)
   bouwt het wiel naar de opgemeten verhoudingen van het ChatGPT-wiel, met koper (`M.goud`, het gesmede ijzer naar koper
   getoond) voor de kap; `DOELWIEL` is de variant voor `wielModel`. De proefplaat: `doelwiel.cjs proef`.
+- **Verkleinen zonder detail te verliezen** (19 okt; Marcel: "i feel like the filter destroys detail when we scale
+  down"; `doelwiel.cjs filters`): **het gedeelde palet van 64 kleuren deed het meeste kwaad**, niet het filter: een
+  mediaansnede geeft de kleuren aan wie veel pixels heeft, en het koper van de kap werd bruin. Daarom een palet per
+  materiaal (`doelwiel.cjs paletPerMateriaal`, vast per ding, uit zuidwest en noordoost) en `stijl.cjs verkleinDetail`: een
+  klein onderdeel (een nagel) wint zijn blok, een duidelijke donkere lijn of een glimlicht wint van het gemiddelde, anders
+  box. Nearest neighbour houdt nog iets meer nagels, maar flikkert veel meer. Wat kleiner is dan een spritepixel (de nagels
+  op de kap) haalt geen filter: dat moet getekend worden, zoals stijl D een nagel tekent. `afwerking.cjs` neemt een bron
+  (welk wiel en welke sprite), en `oppervlak.cjs --wiel doel` bakt het wiel naar het doel.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

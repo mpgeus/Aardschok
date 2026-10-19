@@ -67,12 +67,23 @@ function uitsnedeVan(kant) {
 }
 const dekt = (r, i) => r.rgba[i * 4 + 3] >= 128;
 
-function invoer(kant, s) {
+// De bron: welk wiel, en welke sprite van 2× op het doek gaat. Standaard wiel D van de stijlproef; een andere bron (zoals
+// het wiel naar het doel, doelwiel.cjs BRON) geeft { naam, render(kant, s) → R (met de G-buffer), sprite(R, kant, s) →
+// { G, D }, uitsnede(kant) → u }.
+const BRON_D = {
+  naam: 'wiel D van de stijlproef (hdstijl.cjs, ijk.json), de render op 4×',
+  render: (kant, s) => HS.render(kant, s, true),
+  sprite: (R) => {
+    const { G, beelden } = HS.varianten(R, HS.leesIjk(), { D: HS.VARIANTEN.D });
+    return { G, D: beelden.D };
+  },
+  uitsnede: (kant) => uitsnedeVan(kant),
+};
+function invoer(kant, s, bron = BRON_D) {
   const ij = HS.leesIjk();
-  const R = HS.render(kant, s, true);
-  const { G, beelden } = HS.varianten(R, ij, { D: HS.VARIANTEN.D });
-  const D = beelden.D;
-  const u = uitsnedeVan(kant);
+  const R = bron.render(kant, s);
+  const { G, D } = bron.sprite(R, kant, s);
+  const u = bron.uitsnede(kant);
   if (u.b * Z > W || u.h * Z > W) throw new Error(`het wiel past niet op het doek: ${u.b}×${u.h} maal ${Z}`);
   const ox = Math.floor((W - u.b * Z) / 2);
   const oy = Math.floor((W - u.h * Z) / 2);
@@ -317,8 +328,8 @@ function spakenTel(inv, ai) {
 
 // ---------------------------------------------------------------- één beeld
 
-async function eenBeeld(kant, s, o, stijlNaam, tag = tagVan(o)) {
-  const inv = invoer(kant, s);
+async function eenBeeld(kant, s, o, stijlNaam, tag = tagVan(o), bron = BRON_D) {
+  const inv = invoer(kant, s, bron);
   const map = path.join(UIT, tag, `${kant}-${s}`);
   fs.mkdirSync(map, { recursive: true });
   const png = (r) => K.pngVanBeeld(r);
@@ -344,7 +355,7 @@ async function eenBeeld(kant, s, o, stijlNaam, tag = tagVan(o)) {
   const stats = await (await A.comfy('system_stats')).json();
   fs.writeFileSync(path.join(map, 'instellingen.json'), JSON.stringify({
     kant, stand: s, tag, stijlbron: `gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png (${o.voorbeeld === 'heel' ? 'het hele beeld, onbewerkt' : 'alleen het voorste wiel: hdstijl.cjs doelWiel, de rest #FF00FF'})`,
-    bron: 'wiel D van de stijlproef (hdstijl.cjs, ijk.json), de render op 4×', modellen: MODELLEN, instellingen: o,
+    bron: bron.naam, modellen: MODELLEN, instellingen: o,
     positief: POSITIEF, negatief: NEGATIEF, doek: `${W}×${W}`, maal: Z, uitsnede: inv.u, plek: [inv.ox, inv.oy],
     comfyui: stats.system.comfyui_version, pytorch: stats.system.pytorch_version, gpu: stats.devices[0].name,
     seconden: +tijd.toFixed(1), terugSeconden: +naTijd.toFixed(2), palet, controle, wanneer: new Date().toISOString(),

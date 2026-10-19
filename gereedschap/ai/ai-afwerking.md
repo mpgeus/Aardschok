@@ -362,3 +362,84 @@ script: `gereedschap/pixelart/doelwiel.cjs proef`.
   - een smalle ijzeren ring eromheen.
 
   Van dichtbij: `uit/doelwiel/kap-8x.png`. Op spelgrootte is het een koperen schijf met een paar spikkels.
+
+## Verkleinen zonder detail te verliezen, en het wiel naar het doel gebakken (19 okt)
+
+Marcel bij de bijgestelde proefplaat: "Yea, but i feel like the filter destroys detail when we scale down."
+
+### Wat het detail kost: het filter of het palet?
+
+Gemeten met `doelwiel.cjs filters` (plaat: `uit/doelwiel/filters.png`, getallen: `filters.json`):
+
+- Het wiel naar het doel, naar zuidwest, acht standen.
+- Op 4× gerenderd, en met vier filters naar 2× verkleind:
+  - box;
+  - Lanczos-3;
+  - nearest neighbour;
+  - **detailbehoudend** (`stijl.cjs verkleinDetail`): een klein onderdeel, zoals een nagel, wint zijn blok; een
+    duidelijke donkere lijn of een glimlicht wint van het gemiddelde; anders box.
+- Daarna op drie manieren naar een palet:
+  - 64 kleuren gedeeld, zoals tot nu;
+  - een palet per materiaal: hout 20, ijzer 16, koper 10, elk uit zijn eigen pixels;
+  - geen palet.
+
+| filter · palet | nagels te zien (van 63) | flikkeren | detail |
+|---|---|---|---|
+| box · 64 gedeeld (tot nu) | 12 | 0,166 | 23,8 |
+| box · per materiaal | 10 | 0,158 | 23,7 |
+| Lanczos · per materiaal | 6 | 0,180 | 25,4 |
+| nearest · per materiaal | 19 | 0,255 | 29,5 |
+| **detailbehoudend · per materiaal** | **16** | **0,180** | 24,4 |
+
+- **Het gedeelde palet deed het meeste kwaad**, niet het filter. Een mediaansnede geeft de kleuren aan wie veel pixels
+  heeft: het koper van de kap kreeg geen eigen kleur en werd bruin, met elk filter. Een palet per materiaal houdt het
+  koper.
+- **Van de filters houdt nearest de meeste nagels**, maar het flikkert bij draaien het meest. Detailbehoudend houdt er 16
+  tegen 10 à 12 bij box, bijna even rustig.
+- **Wat kleiner is dan een spritepixel, haalt geen enkel filter.** De zes nagels en de rand op de kap zijn op 2× minder
+  dan één pixel.
+
+Voor het wiel naar het doel nu: detailbehoudend verkleind, met een palet per materiaal uit de acht richtingen.
+
+### Het wiel naar het doel, met SDXL erop en gebakken
+
+- **SDXL.** De beelden naar zuidwest en noordoost (101 s elk, de vorm 98,3 en 98,8%). Op het doek lijkt het sterk op het
+  ChatGPT-wiel: een band vol nagels, een velg van planken met nerf en nagels, dikke spaken, een naaf van rood koper met
+  nagels. Binnen voegde SDXL een paar donkere sleuven in de velg toe.
+
+  De telling van de spaken op het doek werkt bij dit wiel niet meer: door de gaten zie je de brede velg aan de overkant.
+- **Gebakken.** Eerst met de helft van ons licht eruit (zoals bij wiel C). Dan werd de grote velg in de zon geel.
+  Opgelost met een ijking per materiaal (`bakken.cjs o.ijk`):
+  - eerst al het licht eruit;
+  - dan per materiaal de helderheid op de mediaan van ons eigen materiaal: hout maal 0,8, ijzer maal 0,9;
+  - het patroon van SDXL blijft, het licht komt helemaal van onze renderer.
+- **De uitkomst** (`uit/ai/oppervlak-doel/`: `vergelijking.png`, `richtingen.png`, `draaien.png`, `metingen.json`):
+
+| | D (wiel C) | naar het doel, zonder bak | naar het doel, gebakken | doel |
+|---|---|---|---|---|
+| flikkeren (acht richtingen) | 0,156 | 0,167 | 0,179 | — |
+| kleurverschil hout / ijzer | 1,0 / 0,6 | 7,1 / 2,9 | 5,7 / 5,1 | — |
+| contrast | 135 | 102 | 94 | 140 |
+| lijnen | 17% | 25% | 21% | 21% |
+| nagels te zien (zuidwest, van 63) | — | 15 | 5 | — |
+
+### Wat dit laat zien
+
+- **Het bakken werkt.** De stukken velg, de naden en de nagels van SDXL zitten vast in alle acht richtingen, en de kleur
+  is overal hetzelfde bruin.
+- **Op spelgrootte blijft er weinig van het schilderwerk over.** Het contrast is laag (94), en de nerf, de glimlichten en
+  het koper van de naaf verdwijnen. Het wiel zonder bak, met het nieuwe filter en palet, is even goed of beter.
+- **De oorzaak is de maat, niet het filter.** Op 2× is een nagel of een naad kleiner dan één pixel. Het ChatGPT-wiel is
+  op bijna dezelfde maat getekend (het wiel zo'n 89 pixels hoog) en toont toch elke nagel. Het tekent ze bewust als één
+  pixel met veel contrast: licht met een donkere schaduw, en een donkere lijn om elk onderdeel. Dat is het handschrift van
+  pixel art. Geen filter en geen AI op 1024 pixels maakt dat vanzelf; het moet op de doelmaat getekend worden, zoals stijl
+  D nagels en lijnen tekent.
+
+### Advies
+
+De volgende stap is **het handschrift op het wiel naar het doel**: stijl D (kleurreeksen, nagels als lichte en donkere
+pixel, binnenlijnen, lichte randen, contactschaduw) bijgesteld op deze geometrie. Op de proefplaat was D hier te oranje en
+te licht: de verdeling van het doel moet per vlak kloppen, niet over het hele wiel.
+
+Met de nieuwe geometrie en het palet per materiaal brengt dat het wiel waarschijnlijk het dichtst bij het doel. Bakken
+blijft nuttig voor grote vlakken (planken, muren, huiden), waar het schilderwerk groter is dan een pixel.

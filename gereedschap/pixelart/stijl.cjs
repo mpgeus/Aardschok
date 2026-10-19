@@ -36,6 +36,7 @@
 //   stileer(G, stijl, stappen)        → { b, h, rgba, toon, vast }
 //   passen(G, o), lijnenVan(B), diepteVan(B)   de lagen van een render als beelden (silhouet, materiaal, onderdelen,
 //                                     basis zonder textuur, licht, schaduw, diepte, lijnen), op de maat van de sprite
+//   verkleinDetail(R, n, o)           verkleinen met behoud van kleine onderdelen, lijnen en glimlichten (in plaats van box)
 'use strict';
 const K = require('./kern.cjs');
 
@@ -575,4 +576,57 @@ function diepteVan(B) {
   return uit;
 }
 
-module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, passen, lijnenVan, diepteVan, lum, lin, srgb };
+// ---------------------------------------------------------------- detailbehoudend verkleinen
+
+// Verkleinen met behoud van detail (Marcel, 19 okt: "i feel like the filter destroys detail when we scale down"): box
+// middelt elk blok van n × n subpixels, en een nagel, een naad of een geschilderde lijn van één of twee subpixels verdwijnt
+// dan in de kleur ernaast. Hier, per blok (R: de buffers van een render met o.rust, zoals hdstijl.cjs render; R.zl de
+// kleur):
+//   1. dekt minder dan de helft, dan doorzichtig (zoals box: het silhouet blijft gelijk);
+//   2. ligt er een klein onderdeel in (o.details: een Set van onderdeelnummers, zoals de nagels), dan wint dat: zijn kleur
+//      (het gemiddelde van zijn subpixels), ook als het maar één subpixel is;
+//   3. anders: is er een duidelijk donkere subpixel (een lijn, een naad, een voeg: o.donker onder het gemiddelde, of
+//      o.donker2 met twee of meer), dan wint het donker; een duidelijk lichte (een glimlicht: o.licht, of o.licht2 met twee),
+//      dan het licht;
+//   4. anders het gemiddelde in lineair licht (box).
+// Geeft { b, h, rgba } op de doelmaat.
+function verkleinDetail(R, n, o = {}) {
+  const b = Math.floor(R.b / n);
+  const h = Math.floor(R.h / n);
+  const uit = { b, h, rgba: Buffer.alloc(b * h * 4) };
+  const details = o.details || new Set();
+  const donker = o.donker ?? 45, donker2 = o.donker2 ?? 25, licht = o.licht ?? 55, licht2 = o.licht2 ?? 35;
+  const k = R.zl.rgba;
+  const L = (s) => 0.299 * k[s * 4] + 0.587 * k[s * 4 + 1] + 0.114 * k[s * 4 + 2];
+  const gem = (lijst) => {
+    const som = [0, 0, 0];
+    for (const s of lijst) for (let c = 0; c < 3; c++) som[c] += lin(k[s * 4 + c]);
+    return som.map((v) => srgb(v / lijst.length));
+  };
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    const subs = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      const s = (y * n + j) * R.b + x * n + i;
+      if (k[s * 4 + 3] >= 128) subs.push(s);
+    }
+    if (subs.length * 2 < n * n) continue;
+    let kies = subs;
+    const klein = R.rust ? subs.filter((s) => details.has(R.rust[s * 4 + 3])) : [];
+    if (klein.length) kies = klein;
+    else {
+      const m = subs.reduce((t, s) => t + L(s), 0) / subs.length;
+      const d1 = subs.filter((s) => L(s) < m - donker);
+      const d2 = subs.filter((s) => L(s) < m - donker2);
+      const l1 = subs.filter((s) => L(s) > m + licht);
+      const l2 = subs.filter((s) => L(s) > m + licht2);
+      if (d1.length) kies = d1;
+      else if (d2.length >= 2) kies = d2;
+      else if (l1.length) kies = l1;
+      else if (l2.length >= 2) kies = l2;
+    }
+    uit.rgba.set([...gem(kies), 255], (y * b + x) * 4);
+  }
+  return uit;
+}
+
+module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, passen, lijnenVan, diepteVan, verkleinDetail, lum, lin, srgb };

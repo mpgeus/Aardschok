@@ -71,7 +71,8 @@ function texel(gv, uv, dicht) {
 }
 
 // De bak. B: een render met o.rust en o.gbuffer op precies de maat en plek van het AI-beeld (een pixel van B is een pixel
-// van `beeld`, verschoven met o.dx, o.dy); model: het model van die render (genummerd); groepVan: uit `groepen`. o.dicht:
+// van `beeld`, verschoven met o.dx, o.dy); model: het model van die render (genummerd); groepVan: uit `groepen`. o.ijk: de
+// helderheid per materiaal op die van ons materiaal (zie onder). o.dicht:
 // texels per eenheid (8); o.minLicht: niet door minder dan dit delen (anders wordt een schaduw een witte vlek); o.lichtMacht;
 // o.binnen(X, Y): telt deze pixel van het beeld mee (ons silhouet).
 function bak(B, beeld, model, groepVan, o = {}) {
@@ -118,6 +119,32 @@ function bak(B, beeld, model, groepVan, o = {}) {
   }
   const uit = new Map();
   for (const [s, t] of kaart) uit.set(s, t.som.map((v) => v / t.n));
+  // o.ijk: per materiaal de helderheid op die van ons eigen materiaal zetten (de mediaan van het albedo in deze render):
+  // het patroon van de AI blijft (de nerf, de naden, de nagels), het licht komt helemaal van onze renderer. Zonder ijking
+  // wordt een vlak dat in het AI-beeld in de schaduw lag, in de zon te licht (19 okt: de velg van het wiel naar het doel
+  // werd geel).
+  if (o.ijk && B.albedo) {
+    const lum = (k) => 0.299 * k[0] + 0.587 * k[1] + 0.114 * k[2];
+    const eigen = new Map();
+    for (let i = 0; i < B.b * B.h; i++) {
+      if (B.ramp[i] < 0 || Number.isNaN(B.albedo[i * 3])) continue;
+      const m = model.delen[B.rust[i * 4 + 3]].m;
+      (eigen.get(m) || eigen.set(m, []).get(m)).push(lum([B.albedo[i * 3], B.albedo[i * 3 + 1], B.albedo[i * 3 + 2]]));
+    }
+    const ai = new Map();
+    for (const [s, t] of kaart) {
+      const m = model.delen[t.st].m;
+      (ai.get(m) || ai.set(m, []).get(m)).push(lum(uit.get(s)));
+    }
+    const med = (a) => a.sort((p, q) => p - q)[a.length >> 1];
+    const factor = new Map();
+    for (const [m, a] of ai) if (eigen.has(m)) factor.set(m, med(eigen.get(m)) / Math.max(1, med(a)));
+    for (const [s, t] of kaart) {
+      const f = factor.get(model.delen[t.st].m) ?? 1;
+      uit.set(s, uit.get(s).map((v) => K.klem(v * f, 0, 255)));
+    }
+    return { dicht, kaart: uit, factor: Object.fromEntries(factor) };
+  }
   return { dicht, kaart: uit };
 }
 // De omtrek langs u van een onderdeel (rond in textuur.cjs: de derde waarde), voor het vouwen. Eén keer per onderdeel

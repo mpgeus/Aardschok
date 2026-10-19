@@ -324,8 +324,13 @@ stenen huizen. **Ronde 3 is af.**
   naar de opgemeten verhoudingen van het ChatGPT-wiel (een velg van 0,62 tot 0,92 R in acht stukken met naden en nagels,
   acht brede platte spaken, een naaf met een koperen kap, 24 nagels op de band), dun langs de as zodat je van zuidwest
   door de gaten kijkt. Marcel (19 okt): de band breder, en dus het wiel, en details op de naafkap: gedaan (band ±2,4, velg
-  ±2,0, een kap met rand, zes nagels en een knop met kraal). **Wacht op Marcel:** akkoord op deze geometrie; dan SDXL
-  erop, bakken, en de acht richtingen.
+  ±2,0, een kap met rand, zes nagels en een knop met kraal). Marcel: "Yea, but i feel like the filter destroys detail
+  when we scale down". Gemeten (`doelwiel.cjs filters`): **het gedeelde palet van 64 kleuren deed het meeste kwaad** (het
+  koper werd bruin); nu detailbehoudend verkleinen (`stijl.cjs verkleinDetail`) en een palet per materiaal. SDXL op dit
+  wiel en gebakken (`oppervlak.cjs --wiel doel`, met een ijking van de helderheid per materiaal): vast in alle richtingen,
+  maar op spelgrootte vlak (contrast 94 tegen 140); wat kleiner is dan een pixel (nagels, naden) haalt geen filter en geen
+  AI, dat moet getekend worden. **Wacht op Marcel:** het handschrift (stijl D bijgesteld op het nieuwe wiel: nagels als
+  pixels, lijnen, kleurreeksen per vlak).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
