@@ -166,15 +166,15 @@ function wielCGedraaid(hoek, o) {
 // Het wiel naar het doel (19 okt; Marcel: "Ok geometry first", na de AI op het oppervlak; gereedschap/ai/ai-afwerking.md):
 // de verhoudingen van het ChatGPT-wiel, opgemeten langs zestien stralen (R is de straal van het wiel), en wat er op het
 // doel te zien is. Dezelfde buitenmaat, plek en as als C:
-//   - de band: van 0,92 tot 1,0 R, ±1,6 langs de as, met 24 nagels op elk zijvlak;
-//   - de velg: breed, van 0,62 tot 0,92 R (bij C 0,73 tot 0,91), maar dun langs de as (±1,2; zie VELGHALF), vlak (weinig
-//     afgeschuind), in acht stukken met een naad
+//   - de band: van 0,92 tot 1,0 R, breed langs de as (±2,4; zie BANDHALF), met 24 nagels op elk zijvlak;
+//   - de velg: breed, van 0,62 tot 0,92 R (bij C 0,73 tot 0,91), ±2,0 langs de as, vlak (weinig afgeschuind), in acht
+//     stukken met een naad
 //     midden tussen twee spaken (een smalle donkere voeg en een nagel aan elke kant), en een nagel waar een spaak in de
 //     velg zit;
-//   - acht brede, platte spaken, breed bij de naaf (4,6 bij 2,0) en smaller bij de velg (3,3 bij 1,7) (dikker leken ze van
+//   - acht brede, platte spaken, breed bij de naaf (4,6 bij 2,4) en smaller bij de velg (3,3 bij 2,0) (dikker leken ze van
 //     zuidwest te breed: je ziet hun zijkant mee); een nagel waar de spaak in de velg gaat;
-//   - de naaf: een ton van hout tot 0,24 R met twee ijzeren banden erom en acht nagels op elk kopvlak, en buiten een kleine
-//     kap van koper (0,13 R) met een bolle knop, in een smalle ijzeren ring.
+//   - de naaf: een ton van hout tot 0,24 R met twee ijzeren banden erom en acht nagels op elk kopvlak, en buiten een kap van
+//     koper (0,15 R) met een opstaande rand, zes nagels en een bolle knop met een kraal, in een smalle ijzeren ring.
 // (Een eerste opzet met ijzeren plaatjes over de naden, hulzen om de spaken en een ijzeren schijf over de naaf was veel
 // zwaarder dan het doel; een ijzeren ring om de voeten van de spaken werd een zwarte ring.)
 function wielDoel(s) {
@@ -190,10 +190,11 @@ function wielDoel(s) {
   const naafR = 0.24 * R;
   const N = O.WIEL.spaken;
   const spaakHoek = (k) => Math.PI / 2 + (k * 2 * Math.PI) / N;
-  // dun langs de as: van zuidwest kijk je door een gat tussen de spaken tegen de binnenkant van de velg aan de overkant;
-  // met de velg ±1,7 dik (zoals C) vulde die het gat half, het doel is van voren getekend en kijkt erdoorheen
-  const VELGHALF = 1.2;
-  const BANDHALF = 1.6;
+  // de breedte langs de as. Eerst dun (velg ±1,2, band ±1,6): van zuidwest kijk je door een gat tussen de spaken tegen de
+  // binnenkant van de velg aan de overkant. Marcel (19 okt): "make the iron band wider and so also the wheel": de band is
+  // op het doel een brede grijze strook vol nagels (links zie je zijn loopvlak); de velg eronder even breed mee.
+  const VELGHALF = 2.0;
+  const BANDHALF = 2.4;
   // de band, met 24 nagels op elk zijvlak
   d.push(OD.ringStuk({ midden: c, as: AS, r0: bandIn, r1: R, half: BANDHALF, afschuin: 0.4, m: M.ijzer, deel: D.band }));
   for (const kant of [-1, 1]) d.push(OD.nagelKring({ midden: c, as: AS, r: (bandIn + R) / 2, aantal: 24, langsAs: kant * BANDHALF, kant, begin: Math.PI / 24, straal: 0.45, hoogte: 0.3, m: M.ijzer, deel: D.beslag }));
@@ -207,7 +208,7 @@ function wielDoel(s) {
   // de spaken, met een nagel in de velg op de plek van de spaak
   for (let k = 0; k < N; k++) {
     const a = spaakHoek(k);
-    d.push(OD.balk(OD.opKring(c, AS, a, naafR - 0.8), OD.opKring(c, AS, a, velgIn + 0.9), { b0: 4.6, b1: 3.3, d0: 2.0, d1: 1.7, breedteRichting: [0, -Math.sin(a), Math.cos(a)], afschuin: 0.4, m: M.wiel, deel: D.spaak }));
+    d.push(OD.balk(OD.opKring(c, AS, a, naafR - 0.8), OD.opKring(c, AS, a, velgIn + 0.9), { b0: 4.6, b1: 3.3, d0: 2.4, d1: 2.0, breedteRichting: [0, -Math.sin(a), Math.cos(a)], afschuin: 0.4, m: M.wiel, deel: D.spaak }));
     d.push(OD.nagel(OD.opKring(c, AS, a, velgMid, s * (VELGHALF + 0.02)), [s, 0, 0], 0.42, 0.26, M.ijzer, D.beslag));
   }
   // de naaf: een ton van hout, twee ijzeren banden erom
@@ -225,10 +226,17 @@ function wielDoel(s) {
   for (const kant of [-1, 1]) d.push(OD.ringStuk({ midden: c, as: AS, r0: naafR - 0.9, r1: naafR + 0.25, half: 0.4, langsAs: kant * 2.7, afschuin: 0.18, m: M.ijzer, deel: D.beslag }));
   // acht nagels op elk kopvlak van de naaf (op de lijn van de spaken)
   for (const kant of [-1, 1]) d.push(OD.nagelKring({ midden: c, as: AS, r: naafR - 1.3, aantal: N, langsAs: kant * 3.82, kant, begin: Math.PI / 2, straal: 0.4, hoogte: 0.28, m: M.ijzer, deel: D.beslag }));
-  // buiten een kleine kap van koper met een bolle knop, in een ijzeren ring met zes nagels; binnen een ijzeren kap
-  d.push(OD.ringStuk({ midden: c, as: AS, r0: 0, r1: 0.13 * R, half: 0.45, langsAs: s * 3.75, afschuin: 0.3, m: M.goud, deel: D.messing }));
-  d.push(OD.nagel([c[0] + s * 4.2, c[1], c[2]], [s, 0, 0], 1.7, 0.9, M.goud, D.messing));
-  d.push(OD.ringStuk({ midden: c, as: AS, r0: 0.13 * R - 0.1, r1: 0.13 * R + 0.6, half: 0.3, langsAs: s * 3.75, afschuin: 0.15, m: M.ijzer, deel: D.beslag }));
+  // buiten een kap van koper (Marcel, 19 okt: "some details on the hub cap"): een schijf, een opstaande ring aan de rand,
+  // zes koperen nagels in een kring, en in het midden een bolle knop met een kraal erop; in een smalle ijzeren ring.
+  // Binnen een ijzeren kap.
+  const kapR = 0.15 * R;
+  const kapVlak = 3.75 + 0.45; // de voorkant van de schijf, langs de as
+  d.push(OD.ringStuk({ midden: c, as: AS, r0: 0, r1: kapR, half: 0.45, langsAs: s * 3.75, afschuin: 0.3, m: M.goud, deel: D.messing }));
+  d.push(OD.ringStuk({ midden: c, as: AS, r0: kapR - 0.9, r1: kapR - 0.2, half: 0.22, langsAs: s * (kapVlak + 0.15), afschuin: 0.1, m: M.goud, deel: D.messing }));
+  d.push(OD.nagelKring({ midden: c, as: AS, r: kapR - 1.75, aantal: 6, langsAs: s * kapVlak, kant: s, begin: Math.PI / 2, straal: 0.38, hoogte: 0.26, m: M.goud, deel: D.messing }));
+  d.push(OD.nagel([c[0] + s * kapVlak, c[1], c[2]], [s, 0, 0], 1.25, 0.8, M.goud, D.messing));
+  d.push(OD.nagel([c[0] + s * (kapVlak + 0.72), c[1], c[2]], [s, 0, 0], 0.45, 0.32, M.goud, D.messing));
+  d.push(OD.ringStuk({ midden: c, as: AS, r0: kapR - 0.1, r1: kapR + 0.6, half: 0.3, langsAs: s * 3.75, afschuin: 0.15, m: M.ijzer, deel: D.beslag }));
   d.push(OD.ringStuk({ midden: c, as: AS, r0: 0, r1: 4.0, half: 0.3, langsAs: -s * 3.65, afschuin: 0.2, m: M.ijzer, deel: D.beslag }));
   return d;
 }

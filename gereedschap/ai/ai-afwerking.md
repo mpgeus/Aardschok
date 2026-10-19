@@ -348,3 +348,17 @@ script: `gereedschap/pixelart/doelwiel.cjs proef`.
 - De vorm ligt duidelijk dichter bij het doel: de brede velg, de naden, de nagels, de dikke spaken, de koperen kap.
 - De kleur nog niet. Stijl D (opnieuw geijkt op dit wiel) maakt de grote velg te oranje en te licht. Dat is de volgende
   stap: SDXL beschildert dit wiel, en dat wordt gebakken.
+
+**Bijgesteld** (19 okt; Marcel: "make the iron band wider and so also the wheel. And maybe some details on the hub cap"):
+
+- **De band** is breed langs de as (±2,4), en de velg eronder breed mee (±2,0), de spaken iets dikker (2,4 bij 2,0). Op
+  het doel is de band een brede grijze strook vol nagels; links zie je zijn loopvlak.
+
+  De gaten tussen de spaken worden daardoor van zuidwest weer wat kleiner: je kijkt tegen de binnenkant van de velg.
+- **De kap van koper** is iets groter (0,15 R), met:
+  - een opstaande rand;
+  - zes koperen nagels in een kring;
+  - een kleinere bolle knop met een kraal erop;
+  - een smalle ijzeren ring eromheen.
+
+  Van dichtbij: `uit/doelwiel/kap-8x.png`. Op spelgrootte is het een koperen schijf met een paar spikkels.
