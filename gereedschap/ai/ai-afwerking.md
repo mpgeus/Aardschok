@@ -981,3 +981,24 @@ tussen buurpixels op spelmaat naar zuidwest (`karhd.cjs buurverschil`).
 **Wat er nog verschilt met ChatGPT:** niet meer de rijkdom van de textuur, maar de tekening zelf: de vorm van de lading (de
 zakken lijken broden), de kop van de os, en de warmte van de kleuren.
 
+### De betere zinnen per materiaal (19 okt)
+
+Marcel: "Ok, laten we de w5 gebruiken" (`huisstijl.cjs HUISSTIJL.pijplijn`), en: "kunnen we betere zinnen maken voor het
+materiaal?" Daarna: "Ja proberen". (`node gereedschap/pixelart/karhd.cjs zinnen`, `uit/karhd/meester/zinnen.png`,
+`zinnen.json`.)
+
+- **De zinnen van eerder** somden dingen op (in het hout: planken, wielen, duigen en een stam), met bijna geen kleur, en
+  niets over het licht. De zakken werden broden.
+- **De nieuwe zinnen** (`GROEPZIN`) beschrijven een oppervlak, in de volgorde: kleur (uit het model, het hoofdmateriaal van
+  het gebied), oppervlak, hoe het licht vangt, slijtage. Schors en de bies zijn eigen groepen, een dier krijgt zijn soort
+  uit het model ("ox"), en brood mag niet (`HUISSTIJL.negatief`). Bijvoorbeeld de zakken: "rough brown burlap grain sack,
+  coarse woven jute with visible criss-cross threads, lumpy and tied at the neck with twine, soft folds, matte".
+
+**Wat het laat zien:**
+- **De inhoud is beter:** de zakken zijn jute zakken, geen broden.
+- **Alles werd donkerder en kouder:** de wanden bijna zwartrood, de stam zwart, de os grijswit in plaats van romig.
+  "Blackened", "deep red" en "dark grain" trokken het geheel naar het donker. Buurverschil 71,7 (met de zinnen van eerder
+  76,7, ChatGPT 75,8).
+- **Schors kreeg geen eigen gebied:** de stam heeft geen schorsmateriaal (`zinnen.json`).
+- **Les:** een zin stuurt ook de helderheid en de warmte. De zinnen moeten ook zeggen dat het licht en warm is.
+

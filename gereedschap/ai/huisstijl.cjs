@@ -6,7 +6,7 @@
 //   HUISSTIJL                     het checkpoint, de zin, de negatieve zin, de instellingen (afwerking.cjs werkstroom), en
 //                                 de pixelart-LoRA (LORA, met zijn woorden)
 //   zinVoor(naam, kleur)          de zin voor een materiaal; kleur [r, g, b]: voor een vacht het woord voor zijn kleur
-//   groepVoor(naam)               de groep van een materiaal (zes groepen en het wapen), en GROEPZIN de zin per groep: elk
+//   groepVoor(naam)               de groep van een materiaal (acht groepen en het wapen), en GROEPZIN de zin per groep: elk
 //                                 gebied kost SDXL een eigen rekenslag per stap (14 gebieden: 714 s in plaats van 83)
 //   kleurWoord([r, g, b])         een kleur in een woord (cream, brown, black, ...)
 'use strict';
@@ -16,7 +16,7 @@ const HUISSTIJL = {
   zin: 'HD pixel art game sprite, isometric medieval strategy game asset, rich hand-painted detail, warm light from the ' +
     'top left, crisp dark outlines, clean pixel clusters',
   negatief: 'blurry, smooth gradients, photo, 3d render, plastic, deformed, text, watermark, signature, ground, grass, ' +
-    'shadow on the ground, background objects, frame, border',
+    'shadow on the ground, background objects, frame, border, bread, loaf, buns, pastry',
   instellingen: { denoise: 0.65, ip: 0, lijn: 0.8, diepte: 0.6, cnEind: 0.85, steps: 32, cfg: 5.5, sampler: 'dpmpp_2m', scheduler: 'karras', seed: 180 },
   // de gekozen weg (Marcel, 19 okt: "Ok, laten we de w5 gebruiken"; ai-afwerking.md, "Rijker schilderwerk"): het rijke begin
   // (stoffen.cjs), de schilderwoorden met cfg 7 (SCHILDER), ons handschrift H3 erover, met plaatselijk contrast 1,0
@@ -81,8 +81,10 @@ const zinVoor = (naam, kleur) => (MATERIALEN[naam] ? MATERIALEN[naam](kleur) : n
 
 // De groepen: zes en het wapen. Een vacht krijgt de kleur van het lijf.
 const GROEP = {
-  hout: 'hout', wiel: 'hout', kist: 'hout', ton: 'hout', schors: 'hout', nerf: 'hout', juk: 'hout',
-  verf: 'verf', bies: 'verf', vaanG: 'verf', vaanR: 'verf',
+  hout: 'hout', wiel: 'hout', kist: 'hout', ton: 'hout', nerf: 'hout', juk: 'hout',
+  schors: 'schors',
+  verf: 'verf', vaanR: 'verf',
+  bies: 'bies', vaanG: 'bies',
   ijzer: 'metaal', ketel: 'metaal', messing: 'metaal',
   zak: 'stof', linnen: 'stof', deken: 'stof', touw: 'stof', steen: 'stof',
   goud: 'goud',
@@ -90,14 +92,21 @@ const GROEP = {
   lijf: 'dier', kop: 'dier', poot: 'dier', staart: 'dier', oor: 'dier', snuit: 'dier', oog: 'dier', neusgat: 'dier',
   hoorn: 'dier', hoef: 'dier', kwast: 'dier', uier: 'dier', riem: 'dier',
 };
+// De zin per groep (Marcel, 19 okt: "kunnen we betere zinnen maken voor het materiaal?"): een oppervlak, geen lijst van
+// dingen (in het hout stonden planken, wielen, duigen en een stam tegelijk: SDXL weet niet welke pixel wat is); in de
+// volgorde kleur (uit het model: het hoofdmateriaal van het gebied), oppervlak, hoe het licht vangt, slijtage. kleur
+// [r, g, b]; info { soort (wat het dier is, uit het model), namen (de materialen in het gebied) }.
 const GROEPZIN = {
-  hout: () => 'weathered oak wood with visible grain, wooden planks, spoked wheels, barrel staves, a log with rough bark',
-  verf: () => 'red painted wooden planks with worn paint and golden yellow trim, red and yellow cloth banner',
-  metaal: () => 'dark forged iron fittings with rivets, iron tyres, polished brass',
-  stof: () => 'burlap sacks of coarse jute fabric with folds and rope ties',
-  goud: () => 'pile of shiny gold coins',
+  hout: (k) => `warm ${kleurWoord(k)} oak wood, clear dark grain lines and small knots, lighter worn edges, matte`,
+  schors: (k) => `${kleurWoord(k)} tree bark with deep vertical cracks and rough ridges, matte`,
+  verf: (k) => `deep ${kleurWoord(k)} paint on wooden boards, chipped and worn at the edges showing bare wood, dark grooves between the boards`,
+  bies: () => 'bright golden yellow painted trim, smooth paint with soft highlights',
+  metaal: () => 'blackened hammered iron with round rivet heads, bright steel-grey highlights on the edges, polished brass caps',
+  stof: (k) => `rough ${kleurWoord(k)} burlap grain sack, coarse woven jute with visible criss-cross threads, lumpy and tied at the neck with twine, soft folds, matte`,
+  goud: () => 'heap of small round gold coins, bright yellow highlights and warm orange shadows',
   embleem: () => 'golden heraldic lion rampant emblem painted on red wood',
-  dier: (kleur) => `${kleurWoord(kleur)} animal with fine short fur, horns and dark hooves, leather harness with brass studs`,
+  dier: (k, i = {}) => `${kleurWoord(k)} ${i.soort || 'animal'} hide, short coarse fur painted in small strokes along the body, warm grey shadows in the folds, matte` +
+    `${i.namen && i.namen.has('hoorn') ? ', pale curved horns' : ''}${i.namen && i.namen.has('hoef') ? ', dark hooves' : ''}${i.namen && i.namen.has('riem') ? ', leather harness strap' : ''}`,
 };
 const groepVoor = (naam) => GROEP[naam] || null;
 

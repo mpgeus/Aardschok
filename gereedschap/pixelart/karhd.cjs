@@ -23,6 +23,8 @@
 //                                                  zonder SDXL opnieuw): uit/karhd/meester/handschrift.png
 //   node gereedschap/pixelart/karhd.cjs rijker     rijker schilderwerk: schilderwoorden, een tweede beurt in tegels,
 //                                                  plaatselijk contrast: uit/karhd/meester/rijker.png
+//   node gereedschap/pixelart/karhd.cjs zinnen     W5 met de zinnen van eerder en met de betere zinnen per materiaal:
+//                                                  uit/karhd/meester/zinnen.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -424,12 +426,12 @@ const NAAM_KAR = Object.assign(Object.fromEntries(Object.entries(O.M).map(([n, i
 const NAAM_OS = Object.fromEntries(Object.entries(V.koeMaterialen(V.OS_KLEUREN[0], true).M).map(([n, i]) => [i, n]));
 // De gebieden: per zin (huisstijl.cjs zinVoor) de pixels van het doek met een materiaal dat die zin heeft. Een vacht krijgt
 // het woord voor de kleur van zijn materiaal.
-// groepen: de zes groepen en het wapen (huisstijl.cjs groepVoor), anders een gebied per materiaal.
+// groepen: de groepen en het wapen (huisstijl.cjs groepVoor), anders een gebied per materiaal. Een groep krijgt de kleur
+// van zijn hoofdmateriaal (de meeste pixels), en voor een dier zijn soort (de os, uit het model) en de materialen erin.
+const SOORT_OS = 'ox';
 function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
   const HU = require('../ai/huisstijl.cjs');
-  const kleurVan = rampKleur;
-  const lijf = BR.om.mat[Object.entries(NAAM_OS).find(([, n]) => n === 'lijf')[0]];
-  const perZin = new Map();
+  const per = new Map(); // sleutel → { pixels, tel: Map(materiaal → aantal), namen, obj }
   for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
     const i = (y + oy) * BR.R.b + x + ox;
     if (x + ox >= BR.R.b || y + oy >= BR.R.h) continue;
@@ -437,14 +439,24 @@ function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
     if (!obj) continue;
     const d = BR.onderdeel(BR.R.rust[i * 4 + 3]);
     const naam = (obj === 1 ? NAAM_KAR : NAAM_OS)[d.m];
-    const groep = groepen && HU.groepVoor(naam);
-    const zin = groep ? HU.GROEPZIN[groep](kleurVan(lijf)) : HU.zinVoor(naam, kleurVan((obj === 1 ? BR.km : BR.om).mat[d.m]));
-    if (!zin) continue;
-    (perZin.get(zin) || perZin.set(zin, []).get(zin)).push(y * b + x);
+    const sleutel = groepen ? HU.groepVoor(naam) : naam;
+    if (!sleutel) continue;
+    const g = per.get(sleutel) || per.set(sleutel, { pixels: [], tel: new Map(), namen: new Set(), obj }).get(sleutel);
+    g.pixels.push(y * b + x);
+    g.namen.add(naam);
+    const mat = (obj === 1 ? BR.km : BR.om).mat[d.m];
+    g.tel.set(mat, (g.tel.get(mat) || 0) + 1);
   }
-  // te kleine gebieden (een nagel, een oog) niet: die doet de rest
-  const min = b * h * 0.002;
-  return [...perZin].filter(([, p]) => p.length >= min).map(([tekst, pixels]) => ({ tekst, pixels }));
+  const min = b * h * 0.002; // te kleine gebieden (een nagel, een oog) niet: die doet de rest
+  const uit = [];
+  for (const [sleutel, g] of per) {
+    if (g.pixels.length < min) continue;
+    const hoofd = [...g.tel].sort((p, q) => q[1] - p[1])[0][0];
+    const info = { soort: g.obj === 2 ? SOORT_OS : null, namen: g.namen };
+    const tekst = groepen ? HU.GROEPZIN[sleutel](rampKleur(hoofd), info) : HU.zinVoor(sleutel, rampKleur(hoofd));
+    if (tekst) uit.push({ tekst, pixels: g.pixels });
+  }
+  return uit;
 }
 // extra: { lora, tag, rijk, denoise } (de pixelart-LoRA, een achtervoegsel voor de map, de stoffen in het begin, een
 // andere denoise)
@@ -935,6 +947,37 @@ async function rijkerProef() {
   console.log('uit/karhd/meester/rijker.png');
 }
 
+// De betere zinnen (Marcel, 19 okt: "Ja proberen"): W5 met de zinnen van eerder (het meesterbeeld van eerder, zonder SDXL
+// opnieuw) naast W5 met de betere zinnen (huisstijl.cjs GROEPZIN), elk met ons handschrift H3 en plaatselijk contrast 1,0.
+async function zinnenProef() {
+  const HU = require('../ai/huisstijl.cjs');
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const P = HU.HUISSTIJL.pijplijn;
+  const maten = { ChatGPT: buurverschil(H.lees(path.join(UIT, 'gpt-ZW.png'))) };
+  const rijen = [KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `ter vergelijking: de pixels van ChatGPT · ${k}`))];
+  const rij = (naam, m) => {
+    const { mat, osMat } = projecteer(m.BR, m.beeld);
+    rijen.push(KANTEN.map((k) => {
+      const s = handschrift(render({ ...O_KAR, mat, osMat }, k, FIJN), stijl, { contrast: P.contrast })[P.handschrift];
+      H.bewaar(path.join(MEESTER_UIT, m.tag, `w5-${k}.png`), s);
+      if (k === 'ZW') maten[naam] = buurverschil(s);
+      return E.met(groot(knip(s), 2), `${naam} · ${k}`);
+    }));
+  };
+  const m0 = await meesterOfTerug('ZW', { rijk: P.rijk, schilder: P.schilder, tag: 'schilder' });
+  rij('W5, de zinnen van eerder', m0);
+  const m1 = await meester('ZW', null, true, { rijk: P.rijk, schilder: P.schilder, tag: 'zinnen' });
+  rij('W5, de betere zinnen', m1);
+  rijen.push([E.met(knip(H.verklein(m0.beeld, 3, 'naast')), 'het meesterbeeld, de zinnen van eerder'), E.met(knip(H.verklein(m1.beeld, 3, 'naast')), `het meesterbeeld, de betere zinnen (${m1.tijd.toFixed(0)} s)`)]);
+  fs.writeFileSync(path.join(MEESTER_UIT, 'zinnen.json'), JSON.stringify({ buurverschil: maten, zinnen: m1.gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), positief: m1.namen.positief, negatief: m1.namen.negatief }, null, 1));
+  E.bewaar(path.join(MEESTER_UIT, 'zinnen.png'), rijen, 'De betere zinnen per materiaal', `W5 (het rijke begin, de schilderwoorden, ons handschrift H3, plaatselijk contrast 1,0), met de zinnen van eerder en met de betere zinnen (huisstijl.cjs: kleur uit het model, oppervlak, licht, slijtage; schors en de bies apart; geen brood). Buurverschil naar zuidwest: ${Object.entries(maten).map(([k, v]) => `${k} ${v}`).join(', ')}. Maal 2 (spelmaat 2×).`);
+  console.log(JSON.stringify(maten));
+  console.log('uit/karhd/meester/zinnen.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
@@ -942,4 +985,5 @@ else if (wat === 'meester') meesterProef().catch((e) => { console.error(e.stack 
 else if (wat === 'eigen') eigenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'zinnen') zinnenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

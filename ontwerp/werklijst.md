@@ -396,8 +396,10 @@ stenen huizen. **Ronde 3 is af.**
   0,7 en 77 bij 1,0; ChatGPT 76); schilderwoorden helpen een beetje; een tweede beurt in tegels werkt op deze maat tegen.
   Wat nog verschilt is de tekening (de lading, de kop van de os, de warmte). Marcel: "Ok, laten we de w5 gebruiken"
   (`huisstijl.cjs HUISSTIJL.pijplijn`: het rijke begin, de schilderwoorden, H3, contrast 1,0), en: "kunnen we betere zinnen
-  maken voor het materiaal?" **Wacht op Marcel:** het voorstel voor betere zinnen per materiaal (de kleur uit het model,
-  het oppervlak, hoe het licht vangt; geen lijst van dingen), daarna de pijplijn op een tweede ding.
+  maken voor het materiaal?" Geprobeerd (`karhd.cjs zinnen`; `ai-afwerking.md`, "De betere zinnen per materiaal"): de
+  inhoud is beter (jute zakken, geen broden), maar alles werd donkerder en kouder (de woorden "blackened", "deep",
+  "dark"). **Wacht op Marcel:** de zinnen lichter en warmer maken en nog een keer, of hij past ze zelf aan; daarna de
+  pijplijn op een tweede ding.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
