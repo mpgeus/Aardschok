@@ -337,9 +337,10 @@ stenen huizen. **Ronde 3 is af.**
   houden zoals ik wil. Dus groter zou niet moeten hoeven"): **de maat in beeld blijft** (een sprite van 2×); het detail
   moet uit het handschrift komen. **Het handschrift** (19 okt; `stijl.cjs` detailsWinnen, nagelLicht, binnenlijnen.naden;
   `doelwiel.cjs hand`, `uit/doelwiel/hand.png`): elke nagel een lichte stip (64 van 64 te zien, D had er 57), naden in de
-  velg, het koper brons; even rustig bij draaien (0,216 tegen 0,206), in alle acht richtingen hetzelfde wiel. Nog niet:
-  lijnen om de spaken (14% tegen 21%), nerf in de planken, beslag op de spaken. **Wacht op Marcel:** is dit de richting;
-  dan die drie, en daarna het hele ossenkar.
+  velg, het koper brons; in alle acht richtingen hetzelfde wiel. Marcel: "Ja die drie nog toevoegen, we zitten echt heel
+  dicht op waar we willen zijn": gedaan (19 okt): beslag op de spaken (een plaatje met twee nagels aan elke kant), lijnen
+  om de spaken (`binnenlijnen.om`), de nerf dichter en donkerder; 80 van 80 nagels te zien, flikkeren 0,231 (D 0,205).
+  **Wacht op Marcel:** het wiel goed zo; dan het handschrift en het nieuwe wiel op het hele ossenkar.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

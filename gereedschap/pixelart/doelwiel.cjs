@@ -50,7 +50,10 @@ function stijlVoor(Rs, hand = false) {
   if (hand) {
     stijl.detailsWinnen = true;
     stijl.nagelLicht = true;
-    stijl.binnenlijnen = { ...stijl.binnenlijnen, naden: true };
+    // de naden tussen de stukken velg, en een lijn om de spaken (spaak: deel 32, hdproef.cjs wielDoel)
+    stijl.binnenlijnen = { ...stijl.binnenlijnen, naden: true, om: [32] };
+    // de nerf dichter en donkerder (Marcel, 19 okt: "Ja die drie nog toevoegen": de nerf in de planken was te zwak)
+    stijl.materialen.hout.nerf = { ...stijl.materialen.hout.nerf, afstand: 1.3, breedte: 0.5, gat: 0.35, lengte: 4, stap: -3 };
   }
   const met = (R) => ({ ...stijl, details: new Set(R.nagels) });
   const Gs = Rs.map((R) => S.gbuffer(R, FIJN / 2, met(R)));

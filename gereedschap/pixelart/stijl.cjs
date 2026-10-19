@@ -474,7 +474,10 @@ function stileer(G, stijl, st = {}) {
         // stijl.binnenlijnen.naden: ook tussen twee onderdelen van dezelfde soort die naast elkaar liggen (de stukken van
         // een velg, planken): een naad, op het onderdeel met het hogere nummer
         const naad = stijl.binnenlijnen.naden && G.deel[j] === G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.stuk[o] > G.stuk[j] && !(stijl.details && (stijl.details.has(G.stuk[o]) || stijl.details.has(G.stuk[j])));
-        if (naad || G.diep[j] > G.diep[o] + voor || (G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
+        // stijl.binnenlijnen.om: soorten onderdelen (deel.deel) die een lijn om zich heen krijgen, op wat erachter ligt (al
+        // een fractie dieper, omVoor), zoals de spaken van een wiel tegen de velg aan de overkant (19 okt)
+        const om = stijl.binnenlijnen.om && stijl.binnenlijnen.om.includes(G.deel[j]) && G.deel[o] !== G.deel[j] && G.diep[j] > G.diep[o] + (stijl.binnenlijnen.omVoor ?? 0.3);
+        if (naad || om || G.diep[j] > G.diep[o] + voor || (G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
           lijn[o] = 1;
           break;
         }

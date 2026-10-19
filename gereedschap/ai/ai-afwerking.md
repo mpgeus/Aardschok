@@ -528,3 +528,29 @@ standen en een volle slag):
 - nerf in de planken;
 - beslag op de spaken, waar het doel blokjes heeft;
 - de camera. Het doel staat rechter.
+
+**De drie erbij** (19 okt; Marcel: "Ja die drie nog toevoegen, we zitten echt heel dicht op waar we willen zijn"):
+
+1. **Beslag op de spaken** (geometrie, `hdproef.cjs wielDoel`): aan elke kant van elke spaak een dun ijzeren plaatje op het
+   vlak, waar de spaak in de velg gaat, met twee nagels. Een plaatje op het vlak, geen huls om de spaak: een huls maakte het
+   wiel eerder zwaar.
+   - Het wiel heeft nu 103 onderdelen (was 55).
+   - De render op 4× kost 3,4 s per beeld (was 2,7 s).
+2. **Lijnen om de spaken** (`stijl.cjs binnenlijnen.om`): een soort onderdeel (hier de spaken) krijgt een donkere lijn op
+   wat er direct achter ligt, al bij een fractie diepte. Ook tegen de binnenkant van de velg aan de overkant, die je van
+   zuidwest door de gaten ziet.
+3. **De nerf dichter en donkerder** (afstand 1,3 in plaats van 1,6, drie tonen donkerder in plaats van twee), in de velg
+   en in de spaken.
+
+| | stijl D | met het handschrift | doel |
+|---|---|---|---|
+| nagels te zien | 65 van 80 | **80 van 80** | elke |
+| donkere lijnen binnenin | 19% | 28% | 18% |
+| detail | 33,8 | 44,9 | — |
+| kleurverschil hout / ijzer | 0,5 / 0,4 | 1,4 / 0,2 | — |
+| flikkeren | 0,205 | 0,231 | — |
+| volle slag gelijk | 100% | 100% | — |
+
+Op de plaat heeft de velg nerf, naden en nagels, de spaken hebben nerf en een lijn langs hun kanten, en waar ze in de velg
+gaan zit het beslag met nagels. In alle acht richtingen blijft het hetzelfde wiel. Het flikkert iets meer dan D, omdat er
+meer getekende pixels meedraaien, maar het zit vast.

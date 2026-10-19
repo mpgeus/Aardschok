@@ -172,7 +172,8 @@ function wielCGedraaid(hoek, o) {
 //     midden tussen twee spaken (een smalle donkere voeg en een nagel aan elke kant), en een nagel waar een spaak in de
 //     velg zit;
 //   - acht brede, platte spaken, breed bij de naaf (4,6 bij 2,4) en smaller bij de velg (3,3 bij 2,0) (dikker leken ze van
-//     zuidwest te breed: je ziet hun zijkant mee); een nagel waar de spaak in de velg gaat;
+//     zuidwest te breed: je ziet hun zijkant mee); een nagel waar de spaak in de velg gaat, en aan elke kant een ijzeren
+//     plaatje met twee nagels op de spaak, waar hij in de velg gaat;
 //   - de naaf: een ton van hout tot 0,24 R met twee ijzeren banden erom en acht nagels op elk kopvlak, en buiten een kap van
 //     koper (0,15 R) met een opstaande rand, zes nagels en een bolle knop met een kraal, in een smalle ijzeren ring.
 // (Een eerste opzet met ijzeren plaatjes over de naden, hulzen om de spaken en een ijzeren schijf over de naaf was veel
@@ -205,11 +206,18 @@ function wielDoel(s) {
     d.push(OD.ringStuk({ midden: c, as: AS, r0: velgIn, r1: velgUit, half: VELGHALF, van: naad + gat / 2, tot: naad + (2 * Math.PI) / N - gat / 2, afschuin: 0.3, m: M.wiel, deel: D.velg }));
     for (const kant of [-1, 1]) d.push(OD.nagel(OD.opKring(c, AS, naad + kant * (1.3 / velgMid), velgMid, s * (VELGHALF + 0.02)), [s, 0, 0], 0.4, 0.26, M.ijzer, D.beslag));
   }
-  // de spaken, met een nagel in de velg op de plek van de spaak
+  // de spaken, met een nagel in de velg op de plek van de spaak, en aan elke kant een ijzeren plaatje op de spaak waar hij
+  // in de velg gaat, met twee nagels (Marcel, 19 okt: "Ja die drie nog toevoegen": het beslag op de spaken van het doel;
+  // een plaatje op het vlak, geen huls om de spaak: een huls maakte het wiel eerder zwaar)
   for (let k = 0; k < N; k++) {
     const a = spaakHoek(k);
-    d.push(OD.balk(OD.opKring(c, AS, a, naafR - 0.8), OD.opKring(c, AS, a, velgIn + 0.9), { b0: 4.6, b1: 3.3, d0: 2.4, d1: 2.0, breedteRichting: [0, -Math.sin(a), Math.cos(a)], afschuin: 0.4, m: M.wiel, deel: D.spaak }));
+    const dwars = [0, -Math.sin(a), Math.cos(a)];
+    d.push(OD.balk(OD.opKring(c, AS, a, naafR - 0.8), OD.opKring(c, AS, a, velgIn + 0.9), { b0: 4.6, b1: 3.3, d0: 2.4, d1: 2.0, breedteRichting: dwars, afschuin: 0.4, m: M.wiel, deel: D.spaak }));
     d.push(OD.nagel(OD.opKring(c, AS, a, velgMid, s * (VELGHALF + 0.02)), [s, 0, 0], 0.42, 0.26, M.ijzer, D.beslag));
+    for (const kant of [-1, 1]) {
+      d.push(OD.balk(OD.opKring(c, AS, a, velgIn - 2.1, kant * 1.17), OD.opKring(c, AS, a, velgIn - 0.1, kant * 1.17), { b0: 3.3, b1: 3.1, d0: 0.24, breedteRichting: dwars, afschuin: 0.1, m: M.ijzer, deel: D.beslag }));
+      for (const rr of [velgIn - 1.55, velgIn - 0.65]) d.push(OD.nagel(OD.opKring(c, AS, a, rr, kant * 1.29), [kant, 0, 0], 0.32, 0.22, M.ijzer, D.beslag));
+    }
   }
   // de naaf: een ton van hout, twee ijzeren banden erom
   d.push(TX.metUv({
