@@ -312,3 +312,39 @@ Volgende stappen (Marcels keus):
 1. **De helderheid per materiaal ijken.** Het albedo van de bak naar het doel zetten, zodat het in elke richting klopt.
 2. **De nagels mee bakken.** Een afwikkeling voor een nagel, of de kleur op de plek in rust.
 3. **Het wiel naar de geometrie van het doel, en dan pas bakken.**
+
+## Het wiel naar het doel (19 okt, proefplaat)
+
+Marcels keus na het bakken: "Ok geometry first". Volgens de afspraak (CLAUDE.md: eerst in woorden en één proefplaat,
+dan renderen) staat hier alleen de geometrie, nog zonder SDXL en zonder bak. De plaat: `uit/doelwiel/proef.png`; het
+script: `gereedschap/pixelart/doelwiel.cjs proef`.
+
+**Opgemeten op het ChatGPT-wiel**, langs zestien stralen in zijn eigen ellips (R is de straal van het wiel):
+
+| | ChatGPT-wiel | wiel C |
+|---|---|---|
+| band | 0,92 tot 1,0 R, met een rij nagels | 0,93 tot 1,0 R |
+| velg | 0,62 tot 0,92 R, breed, in stukken met naden en nagels | 0,73 tot 0,91 R |
+| gat tussen de spaken begint bij | zo'n 0,38 R | zo'n 0,25 R |
+| spaken | acht, halverwege zo'n 15 tot 20° breed (bijna 4 eenheden) | acht, smaller |
+| naaf | een ring van hout met ijzer, en een koperen kap met knop | klein en ijzer |
+
+**Het wiel naar het doel** (`hdproef.cjs wielDoel`, 52 onderdelen; dezelfde buitenmaat, plek en as als C):
+
+- **De band** van 0,92 tot 1,0 R, met 24 nagels op elk zijvlak.
+- **De velg** van 0,62 tot 0,92 R, in acht stukken met een naad midden tussen twee spaken, een nagel aan elke kant van de
+  naad en een nagel op elke spaak.
+- **Acht brede, platte spaken** (4,6 bij 2,0 bij de naaf, 3,3 bij 1,7 bij de velg).
+- **De naaf**: een ton van hout tot 0,24 R met twee ijzeren banden, acht nagels op elk kopvlak, en een kleine kap van
+  koper met een bolle knop. Koper is een nieuw materiaal: het gesmede ijzer getoond naar koper, op de plek van het goud
+  van de ossenkar.
+- **Dun langs de as** (velg ±1,2, band ±1,6, spaken 2,0). Van zuidwest kijk je door een gat tegen de binnenkant van de
+  velg aan de overkant. Met de dikte van C vulde die het gat half; het doel is van voren getekend en kijkt erdoorheen.
+- **Wat eerst te zwaar was**: ijzeren plaatjes over de naden, hulzen om de spaken, en een ijzeren schijf over de naaf.
+- **Wat niet kan**: het doel staat rechter dan onze camera het wiel laat zien.
+
+**Op de plaat:**
+
+- De vorm ligt duidelijk dichter bij het doel: de brede velg, de naden, de nagels, de dikke spaken, de koperen kap.
+- De kleur nog niet. Stijl D (opnieuw geijkt op dit wiel) maakt de grote velg te oranje en te licht. Dat is de volgende
+  stap: SDXL beschildert dit wiel, en dat wordt gebakken.

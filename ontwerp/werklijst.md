@@ -319,9 +319,11 @@ stenen huizen. **Ronde 3 is af.**
   surface"**. Gedaan (19 okt; `pixelart/bakken.cjs`, `gereedschap/ai/oppervlak.cjs`, de platen in `uit/ai/oppervlak/`):
   de SDXL-beelden (zuidwest en noordoost) op het oppervlak gebakken, per groep gelijke onderdelen, en door onze renderer
   in elke stand opnieuw belicht. **Het flikkeren is weg** (0,157, net als D; per beeld 0,40); de lijnen en het
-  schilderwerk van SDXL blijven deels te zien, D heeft de schonere kleuren en de nagels. **Wacht op Marcel:** verder met
-  de bak (de helderheid per materiaal op het doek ijken, de nagels mee bakken), of eerst het wiel naar de geometrie van
-  het doel en dan bakken.
+  schilderwerk van SDXL blijven deels te zien, D heeft de schonere kleuren en de nagels. Marcel koos (19 okt): **eerst de
+  geometrie**. Proefplaat (19 okt; `hdproef.cjs wielDoel`, `doelwiel.cjs proef`, `uit/doelwiel/proef.png`): het wiel
+  naar de opgemeten verhoudingen van het ChatGPT-wiel (een velg van 0,62 tot 0,92 R in acht stukken met naden en nagels,
+  acht brede platte spaken, een naaf met een koperen kap, 24 nagels op de band), dun langs de as zodat je van zuidwest
+  door de gaten kijkt. **Wacht op Marcel:** akkoord op deze geometrie; dan SDXL erop, bakken, en de acht richtingen.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

@@ -1083,6 +1083,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een vlek). `bakMateriaal` leest de bak terug in elke stand en richting; de afwerking die de kleur verandert (reliëf uit
   de oude textuur, warm en koel, slijtage) gaat uit, ook in de render waaruit gebakken wordt. Het nummer van een onderdeel
   staat in een WeakMap (`nummer(model)`), niet op het onderdeel. De proef: `gereedschap/ai/oppervlak.cjs`.
+- **Het wiel naar het doel** (19 okt, vraag 180): `hdproef.cjs wielDoel` (naast `wielC`, dat de eerdere proeven gebruiken)
+  bouwt het wiel naar de opgemeten verhoudingen van het ChatGPT-wiel, met koper (`M.goud`, het gesmede ijzer naar koper
+  getoond) voor de kap; `DOELWIEL` is de variant voor `wielModel`. De proefplaat: `doelwiel.cjs proef`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
