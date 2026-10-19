@@ -931,3 +931,26 @@ met stap 1".
   Wat ChatGPT op spelmaat vooral heeft: sterke donkere omlijning, veel contrast tussen licht en schaduw, en geschilderde
   streken.
 
+### Ons handschrift over de eigen pijplijn (19 okt)
+
+Marcel: "Handschrift proberen maar". (`node gereedschap/pixelart/karhd.cjs hand`, `uit/karhd/meester/handschrift.png`;
+zonder SDXL opnieuw: het meesterbeeld van "rijk begin, denoise 0,65" wordt teruggelezen, `meesterTerug`.)
+
+- **De stijl:** die van het wiel naar het doel (de naden, de lijnen om de spaken, `detailsWinnen`), met voor elke ramp de
+  kleur van de render (`renderKleur`; `karhd.cjs handschriftStijl`).
+- **Drie manieren** (`handschrift`):
+  - **H1:** ons handschrift zelf (de kleur per spritepixel gemiddeld, met de lijnen);
+  - **H2:** de geschilderde pixels (de naaste) met de lijnen en de omlijning van H1 erover;
+  - **H3:** H2 met 1,3 keer het contrast om de middelste helderheid.
+- **De os werd eerst weer een lappenpop:** lijnen tussen de bollen van zijn lijf. Met de projectie heeft alles een textuur,
+  dus de uitzondering voor wat geen textuur heeft gold niet meer. Nu telt de os als `G.kaal`: alleen een lijn waar iets
+  ervoor ligt.
+
+**Wat het laat zien:** het handschrift geeft de scherpe donkere randen die ChatGPT op spelmaat heeft. De kar leest nu als
+een spelsprite. H2 houdt de textuur van SDXL, H3 is het krachtigst. Het schilderwerk blijft armer dan ChatGPT, vooral op
+de os en de lading (de zakken lijken broden).
+
+**Waar de eigen pijplijn nu staat:** de vorm, de projectie en het handschrift zijn van ons; SDXL voegt het schilderwerk toe.
+Dit is ongeveer wat de 1080 Ti met deze aanpak geeft. Meer rijkdom vraagt een nieuwer model, en daarvoor eigenlijk een
+kaart met 16 GB of meer.
+

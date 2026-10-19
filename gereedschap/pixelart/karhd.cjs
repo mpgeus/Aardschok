@@ -19,6 +19,8 @@
 //                                                  uit/karhd/meester/proef.png
 //   node gereedschap/pixelart/karhd.cjs eigen      de eigen pijplijn: zonder stijlplaat, de huisstijl en een zin per materiaal
 //                                                  per gebied (gereedschap/ai/huisstijl.cjs): uit/karhd/meester/eigen.png
+//   node gereedschap/pixelart/karhd.cjs hand       ons handschrift over de eigen pijplijn (het rijke begin, denoise 0,65,
+//                                                  zonder SDXL opnieuw): uit/karhd/meester/handschrift.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -523,17 +525,97 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
   const tijd = (Date.now() - t0) / 1000;
   fs.writeFileSync(path.join(map, `${kant}-ai.png`), png);
   fs.writeFileSync(path.join(map, `${kant}-instellingen.json`), JSON.stringify({ kant, checkpoint: checkpoint || AF.MODELLEN.checkpoint, fijn: FMEESTER, doek: [b, h], plek: [ox, oy], instellingen: o, positief: namen.positief, negatief: namen.negatief, stijlplaat: eigen ? 'geen' : 'gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png', gebieden: gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), seconden: +tijd.toFixed(1), wanneer: new Date().toISOString() }, null, 1));
-  // terug op de render: het beeld op zijn plek, alleen binnen ons silhouet
   const ai = A.leesPng(png);
-  const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
-  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
-    if (!dekt(x + ox, y + oy) || x >= ai.b || y >= ai.h) continue;
-    const j = (y * ai.b + x) * 4;
-    beeld.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], ((y + oy) * R.b + x + ox) * 4);
-  }
   console.log(`${tag} ${kant}: ${tijd.toFixed(0)} s, doek ${b}×${h}`);
-  return { BR, beeld, ai, tag, tijd };
+  return { BR, beeld: opRender(R, ai, ox, oy), ai, tag, tijd };
 }
+// Het beeld van het doek terug op de render: op zijn plek, alleen binnen ons silhouet.
+function opRender(R, ai, ox, oy) {
+  const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
+  for (let y = 0; y < ai.h; y++) for (let x = 0; x < ai.b; x++) {
+    const X = x + ox, Y = y + oy;
+    if (X >= R.b || Y >= R.h || R.ramp[Y * R.b + X] < 0) continue;
+    const j = (y * ai.b + x) * 4;
+    beeld.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], (Y * R.b + X) * 4);
+  }
+  return beeld;
+}
+// Een meesterbeeld van eerder terug (zonder SDXL opnieuw): de render van toen (dezelfde fijnheid, met of zonder de stoffen)
+// en het beeld op zijn plek (uit instellingen.json).
+function meesterTerug(tag, kant, rijk) {
+  const A = require('../ai/beeld-ai.cjs');
+  const map = path.join(MEESTER_UIT, tag);
+  const inst = JSON.parse(fs.readFileSync(path.join(map, `${kant}-instellingen.json`)));
+  const BR = bakRender(kant, inst.fijn, rijk);
+  const ai = A.leesPng(fs.readFileSync(path.join(map, `${kant}-ai.png`)));
+  return { BR, beeld: opRender(BR.R, ai, inst.plek[0], inst.plek[1]) };
+}
+
+// ---------------------------------------------------------------- ons handschrift over het geschilderde beeld
+
+// Marcel, 19 okt: "Handschrift proberen maar". Wat ChatGPT op spelmaat vooral heeft: een sterke donkere omlijning en veel
+// contrast. Ons handschrift (stijl.cjs stileer, de stijl van het wiel naar het doel met de naden en de lijnen om de spaken)
+// over de geprojecteerde kar, met de kleur van de render in plaats van de reeksen (renderKleur, voor elke ramp).
+function handschriftStijl() {
+  const stijl = JSON.parse(JSON.stringify(HS.leesIjk().stijlen.doel));
+  stijl.materialen = {};
+  for (const naam of K.RAMP_NAMEN) if (naam) stijl.materialen[naam] = stijl.materialen[`~${naam}`] = { ...S.rampStijl(naam), renderKleur: true };
+  stijl.detailsWinnen = true;
+  stijl.binnenlijnen = { ...stijl.binnenlijnen, naden: true, om: [SPAAK] };
+  return stijl;
+}
+// Drie manieren: H1 het handschrift zelf (de kleur van de render per spritepixel gemiddeld, met de lijnen), H2 de
+// geschilderde pixels (de naaste) met de lijnen en de omlijning van H1 erover, H3 dat met meer contrast.
+function handschrift(R, stijl) {
+  const st = { ...stijl, details: new Set(R.nagels) };
+  const G = S.gbuffer(R, FIJN / 2, st);
+  // de os als iets zonder textuur (G.kaal): alleen een lijn waar iets ervoor ligt, geen naden en geen lijnen tussen zijn
+  // delen (de bollen van zijn lijf werden anders een lappenpop, zoals eerder; code.md, "Het handschrift op wat geen textuur
+  // heeft")
+  for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && Math.floor(G.stuk[o] / 1000) === 2) G.kaal[o] = 1;
+  const h1 = S.stileer(G, st, HS.VARIANTEN.D.st);
+  const naast = H.verklein({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 2, 'naast');
+  const h2 = { b: h1.b, h: h1.h, rgba: Buffer.from(h1.rgba) };
+  const h3 = { b: h1.b, h: h1.h, rgba: Buffer.from(h1.rgba) };
+  // contrast: om de middelste helderheid van wat dekt, met de tint gelijk
+  let som = 0, n = 0;
+  for (let o = 0; o < h1.b * h1.h; o++) if (G.dek[o]) { som += S.lum([naast.rgba[o * 4], naast.rgba[o * 4 + 1], naast.rgba[o * 4 + 2]]); n++; }
+  const mid = som / Math.max(1, n);
+  for (let o = 0; o < h1.b * h1.h; o++) {
+    if (!G.dek[o] || h1.toon[o] === -1) continue; // een lijn of de omlijning: die van H1
+    const k = [naast.rgba[o * 4], naast.rgba[o * 4 + 1], naast.rgba[o * 4 + 2]];
+    h2.rgba.set([...k, 255], o * 4);
+    const l = S.lum(k);
+    const f = l > 0 ? Math.max(0, mid + (l - mid) * 1.3) / l : 1;
+    h3.rgba.set([...k.map((c) => Math.max(0, Math.min(255, Math.round(c * f)))), 255], o * 4);
+  }
+  return { naast: H.omlijnBeeld(naast), h1, h2, h3 };
+}
+async function handProef() {
+  const tag = 'civitai-faetastic-SDXLFaetastic-v24-eigen-rijk';
+  const { BR, beeld } = meesterTerug(tag, 'ZW', true);
+  const { mat, osMat } = projecteer(BR, beeld);
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const NAAM = { naast: 'zonder handschrift', h1: 'H1: ons handschrift', h2: 'H2: geschilderd, met onze lijnen', h3: 'H3: H2 met meer contrast' };
+  const rijen = { naast: [], h1: [], h2: [], h3: [] };
+  for (const k of KANTEN) {
+    const v = handschrift(render({ ...O_KAR, mat, osMat }, k, FIJN), stijl);
+    for (const [s, r] of Object.entries(v)) {
+      H.bewaar(path.join(MEESTER_UIT, tag, `hand-${s}-${k}.png`), r);
+      rijen[s].push(E.met(groot(knip(r), 2), `${NAAM[s]} · ${k}`));
+    }
+  }
+  E.bewaar(path.join(MEESTER_UIT, 'handschrift.png'), [
+    KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `ter vergelijking: de pixels van ChatGPT · ${k}`)),
+    rijen.naast, rijen.h1, rijen.h2, rijen.h3,
+  ], 'Ons handschrift over de eigen pijplijn', 'Het rijke begin, denoise 0,65 (FaeTastic, zonder referentie), geprojecteerd. H1: ons handschrift (stijl.cjs, de kleur van de render per spritepixel); H2: de geschilderde pixels met onze lijnen en omlijning; H3: H2 met 1,3 keer het contrast. Maal 2 (spelmaat 2×).');
+  console.log('uit/karhd/meester/handschrift.png');
+}
+
+
 // De proef: per checkpoint het meesterbeeld naar zuidwest, geprojecteerd, in drie beelden op spelmaat, naast de kar met de
 // pixels van ChatGPT (gpt-ZW.png enz., uit `karhd.cjs gpt`).
 const CHECKPOINTS = (process.env.CHECKPOINTS || 'sd_xl_base_1.0.safetensors').split(',');
@@ -639,4 +721,5 @@ if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
 else if (wat === 'meester') meesterProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'eigen') eigenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

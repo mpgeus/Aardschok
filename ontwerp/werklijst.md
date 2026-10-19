@@ -388,9 +388,11 @@ stenen huizen. **Ronde 3 is af.**
   halveren de tijd (406 s); PixelArtRedmond (LoRA, 166 MB, beelden verkopen mag) helpt niet op deze maat (blokken drie
   keer zo grof als onze pixels). Daarna stap 1, een rijker begin (`ai-afwerking.md`, "Stap 1: een rijker begin";
   `stoffen.cjs`: vacht, jute, schors): helpt een beetje (de os krijgt vacht bij denoise 0,65), een hogere denoise laat de
-  inhoud weglopen; geen variant haalt ChatGPT. **Wacht op Marcel:** ons handschrift (omlijning, contrast) over de versie
-  met denoise 0,65, of een nieuwer model proberen (Flux Schnell, Z-Image Turbo; traag of onzeker op de 1080 Ti), of
-  een betere videokaart (een geldkeus).
+  inhoud weglopen; geen variant haalt ChatGPT. Marcel: "Handschrift proberen maar": **gedaan** (`karhd.cjs hand`,
+  `uit/karhd/meester/handschrift.png`; `ai-afwerking.md`, "Ons handschrift over de eigen pijplijn"): de scherpe randen van
+  ChatGPT komen erbij (H2: de geschilderde pixels met onze lijnen; H3: met meer contrast), het schilderwerk blijft armer.
+  **Wacht op Marcel:** of dit (H3) de stijl van de eigen pijplijn wordt en we hem op meer dingen zetten, of eerst een
+  nieuwer model, of een betere videokaart (een geldkeus).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

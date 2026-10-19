@@ -1136,7 +1136,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   standaard in zes groepen en het wapen (`huisstijl.cjs groepVoor`: elk gebied kost SDXL een eigen rekenslag per stap), en
   `werkstroom` neemt `o.lora` ({ naam, kracht }, `LoraLoader` op het model en de tekst; `huisstijl.cjs LORA`). De stoffen in
   code (`gereedschap/pixelart/stoffen.cjs`: vacht, jute, schors uit `kern.cjs ruis3`, op de plek in rust; `verrijk`) gaan
-  met `bakRender(kant, fijn, rijk)` in het begin van SDXL en zijn de eigen kleur waar SDXL niet bij kwam.
+  met `bakRender(kant, fijn, rijk)` in het begin van SDXL en zijn de eigen kleur waar SDXL niet bij kwam. Ons handschrift
+  over de geprojecteerde kar: `karhd.cjs handschrift` (H1, H2 de naaste pixels met de lijnen van `stileer` erover, `toon`
+  -1, H3 met meer contrast; de os telt als `G.kaal`, anders een lappenpop), met `handschriftStijl` (de kleur van de render
+  voor elke ramp) en `meesterTerug` (een meesterbeeld van eerder, zonder SDXL opnieuw).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
