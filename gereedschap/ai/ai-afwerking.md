@@ -233,3 +233,82 @@ Wat het zou kunnen redden (nog niet geprobeerd):
 **Route B (Flux Kontext) heeft hetzelfde probleem van elk beeld los**, zonder ControlNet, op deze kaart 5 tot 15 minuten
 per beeld, en met een licentie die voor de productie geld kost. Daarom vind ik Route B nu niet zinvol om te installeren;
 dat is fase 4, en Marcels keus.
+
+## De AI op het oppervlak (19 okt)
+
+Marcels keus na fase 3: "Ai on surface". SDXL beschildert het wiel één keer, en die beschildering wordt op het oppervlak
+van ons model gebakken. Daarna rendert onze renderer het wiel in elke stand en richting met zijn eigen licht, en draait
+wat SDXL schilderde mee.
+
+- **De bron.** De SDXL-beelden van Route A op denoise 0,65: zuidwest stand 0 (de buitenkant van het wiel) en noordoost
+  stand 0 (de binnenkant, één beeld erbij, 101 s).
+- **Bakken** (`gereedschap/pixelart/bakken.cjs`):
+  - Het wiel wordt opnieuw gerenderd op de maat van het doek (16×, alleen het vak van het wiel, 20 s per kant). Zo is van
+    elke doekpixel bekend welk onderdeel het is en waar op zijn afwikkeling (u, v) hij ligt.
+  - De kleur van SDXL wordt gedeeld door de helft van ons licht (licht tot de macht 0,5). Met al het licht eruit werd een
+    vlak in de zon fel oranje: SDXL schildert een vlak in de schaduw al donkerder dan het is.
+  - Bewaard per groep gelijke onderdelen. De groepen worden zelf gevonden: acht spaken, vier stukken velg, vier plaatjes;
+    de band gevouwen om de 90°, de naaf om de 45°.
+  - Per texel wint de kopie die het meest te zien was, niet het gemiddelde. Zo is het hele wiel bedekt, ook wat in het
+    beeld net niet te zien was.
+  - Samen 50.143 texels (acht per eenheid).
+- **Renderen** (`gereedschap/ai/oppervlak.cjs`): op 4×, met box naar 2×, een vast palet van 48 kleuren en een omlijning.
+  Zo'n 3,4 s per beeld, even snel als zonder bak.
+
+De platen staan in `uit/ai/oppervlak/`: `vergelijking.png`, `richtingen.png` (acht richtingen), `draaien.png` (D, SDXL
+per beeld en gebakken, draaiend) en `metingen.json`.
+
+| | D (procedureel) | SDXL per beeld (Route A) | gebakken, licht eruit 1,0 | gebakken, licht eruit 0,5 |
+|---|---|---|---|---|
+| **flikkeren bij draaien** (acht richtingen) | **0,156** | **0,404** (zuidwest) | **0,157** | **0,157** |
+| glimlicht verspringt | 1,0% | 0,7% | 7,7% | 6,4% |
+| lijn verspringt | 2,5% | 12,2% | 1,6% | 3,3% |
+| volle slag gelijk | 100% | 100% | 100% | 100% |
+| kleurverschil hout / ijzer met het doel | 1,0 / 0,6 | 1,7 / 3,9 | 1,7 / 2,1 | 3,1 / 2,4 |
+| contrast (doel 140) | 135 | 113 | 116 | 130 |
+| lijnen (doel 21%) | 17% | 15% | 21% | 33% |
+| detail op spelgrootte (doel 47) | 33,9 | 33,1 | 29,3 | 27,4 |
+| onze nagels te zien | 29 / 31 | 9 | 1 | 6 |
+
+Het kleurverschil, het contrast, de lijnen, het detail en de nagels zijn gemeten naar zuidwest, in stand 0.
+
+### Wat dit laat zien
+
+- **Het flikkeren is weg.** De beschildering van SDXL zit vast: even rustig als D (0,157 tegen 0,156), in alle acht
+  richtingen en aan beide kanten. Per beeld beschilderd was dat 0,40.
+
+  Recht van voren (noord en zuid) zie je bijna geen zijvlak (10 tot 25 meetplekken); daar zegt het getal niets.
+- **Wat SDXL schilderde, blijft op spelgrootte deels te zien**: donkere lijnen om de onderdelen, planken in de velg, de
+  naaf, en het doel zijn aandeel lijnen (21%).
+- **D ligt in kleur dichter bij het doel**, want D is erop geijkt.
+- **Onze eigen nagels vallen weg.** Ze hebben geen afwikkeling en krijgen dus geen beschildering; SDXL's eigen nagels
+  zitten wel in de bak.
+- **Het licht eruit halen is het moeilijke stuk.**
+  - Alles eruit (1,0): de kleur ligt dichter bij het doel, maar een vlak dat in het bronbeeld in de schaduw lag, wordt in
+    de zon fel oranje.
+  - De helft eruit (0,5): in elke richting bruin, maar in de richting van het bronbeeld zelf te donker (33% lijn).
+
+  Dat valt bij te stellen per materiaal (de helderheid van het albedo op die van het doel zetten), maar dat is nog niet
+  gedaan.
+- **F: de bak met stijl D erop.** Geprobeerd, niet in de platen. Het lijkt op D: de kleurreeksen van D nemen de kleur
+  over, en van de beschildering blijft alleen een vleug.
+
+### Oordeel
+
+Bakken lost het grootste probleem van een AI-afwerking op: wat de AI schildert, zit vast. Het is herbruikbaar voor elk
+ding met een afwikkeling, kost één SDXL-beeld per kant (zo'n anderhalve minuut) en 20 s bakken, en daarna niets extra per
+sprite.
+
+Het wiel ligt nu, naar mijn oog, op spelgrootte even dicht bij het ChatGPT-wiel als D, op een andere manier:
+
+- de bak heeft meer getekende lijnen en schilderwerk;
+- D heeft de schonere kleuren en de nagels.
+
+Wat het echt dichterbij brengt, blijft de geometrie: een brede velg, dikke spaken met beslag, een grote naaf. Daarna
+loont het bakken meer: SDXL schildert dan op de goede vormen.
+
+Volgende stappen (Marcels keus):
+
+1. **De helderheid per materiaal ijken.** Het albedo van de bak naar het doel zetten, zodat het in elke richting klopt.
+2. **De nagels mee bakken.** Een afwikkeling voor een nagel, of de kleur op de plek in rust.
+3. **Het wiel naar de geometrie van het doel, en dan pas bakken.**

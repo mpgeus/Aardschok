@@ -1075,6 +1075,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (image-to-image binnen een latent masker van ons silhouet, ControlNet union met onze lijnen en diepte, IP-Adapter met
   het ChatGPT-wiel, een vaste seed), en zet hem terug op 2× met de alfa en de omlijning van de sprite. Alles wat erin ging
   staat naast het beeld (`instellingen.json`, `werkstroom.json`).
+- **Bakken: de AI op het oppervlak** (19 okt, vraag 180; Marcels keus "Ai on surface"): `pixelart/bakken.cjs` zet een
+  beschildering (een AI-beeld op onze render) op het oppervlak van het ding. Uit een render op de maat van het doek (met de
+  G-buffer) per doekpixel het onderdeel en zijn afwikkeling (u, v), en de kleur gedeeld door ons licht (het albedo); per
+  groep gelijke onderdelen (`groepen`: dezelfde soort, grootte en afstand tot de as, zoals acht spaken), voor een rond
+  onderdeel gevouwen op zijn symmetrie, en per texel de kopie die het meest te zien was (niet het gemiddelde: dat wordt
+  een vlek). `bakMateriaal` leest de bak terug in elke stand en richting; de afwerking die de kleur verandert (reliëf uit
+  de oude textuur, warm en koel, slijtage) gaat uit, ook in de render waaruit gebakken wordt. Het nummer van een onderdeel
+  staat in een WeakMap (`nummer(model)`), niet op het onderdeel. De proef: `gereedschap/ai/oppervlak.cjs`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

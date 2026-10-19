@@ -628,7 +628,7 @@ function platen() {
   console.log('uit/ai/afwerking/vergelijking.png, matrix.png, draaien.png, metingen.json');
 }
 
-module.exports = { werkstroom, invoer, terug, spakenTel, START, MODELLEN, POSITIEF, NEGATIEF, UIT, tagVan };
+module.exports = { werkstroom, invoer, terug, spakenTel, eenBeeld, stijlUpload, uitsnedeVan, gelijkheid, deltaE, spriteMaten, detailVan, START, MODELLEN, POSITIEF, NEGATIEF, UIT, Z, tagVan };
 
 if (require.main === module) main().catch((e) => {
   console.error(e.stack || e.message);

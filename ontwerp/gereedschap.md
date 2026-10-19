@@ -176,7 +176,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `node gereedschap/ai/afwerking.cjs passen` (de render passes als plaat), `matrix` (zuidwest stand 0 met een reeks
   instellingen, zo'n anderhalve minuut per beeld), `een [kant] [stand]` (DENOISE, IP, IPSOORT, LIJN, DIEPTE, SEED,
   VOORBEELD in de omgeving), `standen` (acht standen en stand 0 opnieuw na het legen van ComfyUI) en `platen [tag]`
-  (het vergelijkingsvel en de metingen), in `uit/ai/afwerking/`.
+  (het vergelijkingsvel en de metingen), in `uit/ai/afwerking/`. De AI op het oppervlak:
+  `node gereedschap/ai/oppervlak.cjs sdxl` (het SDXL-beeld naar noordoost erbij), `bak` (de bak uit de SDXL-beelden),
+  `render <kant>`, `platen`, of `alles` (bakken, de acht richtingen tegelijk en de platen: een paar minuten), in
+  `uit/ai/oppervlak/`.
 
 
 ## Testen in de browser
