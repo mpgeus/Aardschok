@@ -1142,3 +1142,20 @@ herschilderen, met de ChatGPT-ossenwagen als stijlreferentie en ControlNet. **Ja
 Wat nog niet geprobeerd is, is alleen een combinatie: één vaste stijlplaat voor het hele spel samen met de gebieden en het
 wapen. Wat daarna wel echt nieuw bleek, is een nieuwer model (ERNIE, hierboven).
 
+### Twee losse proeven: een nieuw beeld, en onze HD-kar gepixeld (19 okt)
+
+- **Een helemaal nieuw beeld** (Marcel: "kun je met sdxl eens 1x een losse kar met os maken? gewoon compleet nieuw beeld?
+  zonder referentie"; `uit/karhd/meester/los/kar-met-os.png`): FaeTastic, txt2img, 1216 bij 832, 77 seconden, seed 180.
+  Er kwam **geen os**: een wagen met vier wielen en een reuzenton, op een tegel met gras. SDXL volgt een lange zin slecht.
+  Daarom komt de vorm bij ons uit het model.
+- **Onze HD-kar uit code, door SDXL gepixeld** (Marcel: "wil jij een HD os met kar maken uit code? En dan SDXL vragen om
+  deze te pixellen?"; `uit/karhd/meester/pixelen/pixelen.png`). De bron is onze render op 6× met de stoffen en de leeuwen
+  (het begin van spec2). FaeTastic, img2img binnen het silhouet, denoise 0,5, ControlNet lijnen 0,8 en diepte 0,6, één zin,
+  geen stijlplaat, zo'n 75 seconden:
+  - **met PixelArtRedmond (1,0):** echte pixelblokken, maar grof en ongelijk. De os wordt blokkig als Minecraft en de zakken
+    gouden blokjes. Niet de fijne HD-pixel art van ChatGPT;
+  - **zonder LoRA:** een schone, geschilderde spelsprite. De os heeft vacht, ogen en een rood tuig, en de kar heeft leeuwen
+    en ijzeren banden. Een van de mooiste losse beelden uit SDXL tot nu toe. Het woord "pixel art" deed weinig.
+  - Eén beeld per richting en stand flikkert bij draaien (fase 3: 0,4 tegen 0,16). Voor het spel moet zo'n beeld daarom door
+    de projectie.
+
