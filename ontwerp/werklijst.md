@@ -373,7 +373,9 @@ stenen huizen. **Ronde 3 is af.**
   okt): "We moeten zelf een betrouwbare pipeline hebben om te bouwen. Ik wil niet steeds gpt moeten gebruiken."
   **Wacht op Marcel:** het voorstel (`ai-afwerking.md`, "Een eigen pijplijn"): SDXL lokaal schildert meesterbeelden op
   onze eigen render (zodat ze er vanzelf op liggen), met één vaste stijlplaat, en die worden geprojecteerd. Eerste proef:
-  de kar.
+  de kar. Marcel vroeg daarna om een beter SDXL-checkpoint: de korte lijst staat in `ai-afwerking.md`, "Een beter
+  SDXL-checkpoint" (AlbedoBase XL, Cor Epica, FaeTastic; allemaal de beelden verkopen toegestaan). **Wacht op Marcel:**
+  toestemming om ze te downloaden (elk zo'n 7 GB, van Civitai), en dan de kar met elk ervan naast elkaar.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

@@ -784,3 +784,37 @@ de kar). Een beeld dat op onze eigen render geschilderd is, ligt er vanzelf goed
 De stijlplaat: de ChatGPT-wagen die er al is (geen nieuwe ChatGPT), en later ons eigen beste resultaat. Eerste proef: de
 kar, naast de kar met de pixels van ChatGPT.
 
+### Een beter SDXL-checkpoint (19 okt)
+
+Marcel: "Kunnen we een beter sdxl checkpoint vinden?" We gebruiken nu het kale `sd_xl_base_1.0`. Dat is het basismodel
+waarop anderen verder trainen; voor geschilderde kunst zijn de afgeleide checkpoints beter. Uitgezocht via de Civitai-API
+(de vlaggen `allowCommercialUse`; `Image` is "Sell images they generate", nagekeken in Civitai's `PermissionIndicator.tsx`).
+Niets gedownload.
+
+**De korte lijst** (allemaal SDXL 1.0, niet gedistilleerd, fp16, met de vlag `Image`; de drie bovenste zelf nagekeken):
+
+| | checkpoint (Civitai model / versie) | bestand | waarom |
+|---|---|---|---|
+| 1 | AlbedoBase XL v3.1-Large (140737 / 1041855) | `albedobaseXL_v31Large.safetensors`, 6,9 GB | brede, neutrale basis (2D, 3D, spel), zonder sterke anime- of fotostijl: de stijlplaat draagt de stijl |
+| 2 | Cor Epica by Zovya V0 beta (552880 / 615266) | `corEpicaByZovya_v0Beta.safetensors`, 7,1 GB | gemaakt voor "RPG and Concept art"; beta, weinig gebruikers |
+| 3 | SDXL FaeTastic v24 (129681 / 291443) | `SDXLFaetastic_v24.safetensors`, 6,9 GB | kleurrijke geschilderde fantasy; de maker staat het verkopen van beelden uitdrukkelijk toe |
+
+Reserve: DreamShaper XL alpha2 (112902), het dichtst bij de base. Ook bekeken: Juggernaut XL, ZavyChromaXL, Unstable
+Diffusers, Jib Mix Artful, Painter's Checkpoint, RealCartoon-XL.
+
+**Niet doen:**
+- **Juggernaut XL.** Civitai zegt `Image`, maar de versie op HuggingFace is CC BY-NC-ND 4.0, niet commercieel. Dat is
+  tegenstrijdig.
+- **ZavyChromaXL.** De beschrijving vraagt een commerciële licentie van bedrijven.
+- **DreamShaper XL Turbo** mag niet commercieel zonder lidmaatschap van Stability.
+- **Lightning-, Turbo- en Hyper-varianten.** Die werken met CFG van ongeveer 1, en dat past slecht bij ControlNet en
+  IP-Adapter.
+- **Zonder `Image`** (de beelden verkopen mag niet): Mythweaver SDXL, WildCardX-XL, Pixel Art Diffusion XL, LEOSAM
+  HelloWorld XL, Book of All Tales.
+
+Op Civitai staat bij geen van alle een naam van een licentie, alleen de vlaggen. Afgeleide modellen erven vermoedelijk
+CreativeML Open RAIL++-M van SDXL. Bewaar per gekozen model een afdruk van de modelpagina met de datum.
+
+**Middelen:** per checkpoint zo'n 7 GB schijf (747 GB vrij), en evenveel videogeheugen als de base (past op de 1080 Ti).
+De rest van de werkstroom (ControlNet Union, IP-Adapter Plus) blijft gelijk.
+
