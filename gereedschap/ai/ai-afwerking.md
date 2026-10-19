@@ -1067,3 +1067,18 @@ SHA256, `model-versions/by-hash`):
   - Een ControlNet voor ERNIE-Image is mij niet bekend. Zonder ControlNet houdt alleen img2img onze vorm vast, en de
     projectie vraagt dat het beeld precies op het model ligt.
 
+### Cor Epica naast FaeTastic (19 okt)
+
+Marcel downloadde Cor Epica zelf ("ok, staat erin"): in `ComfyUI/models/checkpoints/civitai-corepica/`, grootte en SHA256
+kloppen met Civitai. (`node gereedschap/pixelart/karhd.cjs checkpoint`, `uit/karhd/meester/checkpoints.png`; precies de
+instellingen en zinnen van de proef met de specificatie, alleen het checkpoint anders; `huisstijl.cjs CHECKPOINTS`.)
+
+- **Het blauw zit in de zinnen, niet in het checkpoint:** Cor Epica maakt de stam en de banden net zo blauw, de stam nog
+  feller.
+- **Cor Epica is gladder en schoner:** meer een 3D-render (wat de specificatie niet wil), het hout van de wielen lichter.
+  FaeTastic is iets meer geschilderd.
+- **Verder gelijk:** de zakken bollen, de os wit en vlak. Buurverschil (dichtheid): FaeTastic 46,5, Cor Epica 45,9, ChatGPT
+  73,4.
+- **Conclusie:** het checkpoint is niet de bottleneck. FaeTastic blijft de huisstijl; eerst de kleurwoorden voor schaduw uit
+  de zinnen.
+

@@ -45,6 +45,13 @@ const SCHILDER = {
   negatief: 'smooth, plastic, cgi, airbrushed, flat shading, waxy',
   cfg: 7,
 };
+// De checkpoints die er zijn (ComfyUI/models/checkpoints/, SHA256 nagekeken tegen Civitai): FaeTastic (de huisstijl) en
+// Cor Epica by Zovya V0 beta (Civitai 552880, versie 615266, voor "RPG and Concept art"; beelden verkopen mag:
+// allowCommercialUse Image; Marcel downloadde hem zelf, 19 okt).
+const CHECKPOINTS = {
+  faetastic: 'civitai-faetastic\\SDXLFaetastic_v24.safetensors',
+  corepica: 'civitai-corepica\\corEpicaByZovya_v0Beta.safetensors',
+};
 const LORA = { naam: 'civitai-pixelartredmond\\PixelArtRedmond-Lite64.safetensors', kracht: 0.8, woorden: 'Pixel Art, PixArFK' };
 
 // Eén zin per materiaal, voor alle dingen. Een vacht krijgt zijn kleur uit het model (kleurWoord), dus een zwarte koe en
@@ -154,4 +161,4 @@ function kleurWoord([r, g, b]) {
   return 'purple';
 }
 
-module.exports = { HUISSTIJL, SCHILDER, LORA, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };
+module.exports = { HUISSTIJL, SCHILDER, CHECKPOINTS, LORA, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };

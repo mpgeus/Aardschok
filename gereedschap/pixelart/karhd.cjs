@@ -27,6 +27,8 @@
 //                                                  uit/karhd/meester/zinnen.png
 //   node gereedschap/pixelart/karhd.cjs spec       de stijlspecificatie (ontwerp/stijlspecificatie.md): de zinnen eruit, H4,
 //                                                  op 4× en 2× naast ChatGPT: uit/karhd/meester/spec.png
+//   node gereedschap/pixelart/karhd.cjs checkpoint FaeTastic en Cor Epica naast elkaar, met dezelfde instellingen als spec:
+//                                                  uit/karhd/meester/checkpoints.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -460,8 +462,8 @@ function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
   }
   return uit;
 }
-// extra: { lora, tag, rijk, denoise } (de pixelart-LoRA, een achtervoegsel voor de map, de stoffen in het begin, een
-// andere denoise)
+// extra: { lora, tag, rijk, denoise, schilder, checkpoint } (de pixelart-LoRA, een achtervoegsel voor de map, de stoffen in
+// het begin, een andere denoise, de schilderwoorden, een ander checkpoint dan de huisstijl)
 async function meester(kant, checkpoint, eigen = false, extra = {}) {
   const AF = require('../ai/afwerking.cjs');
   const A = require('../ai/beeld-ai.cjs');
@@ -503,7 +505,7 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
   }
   const lijnen = knip(S.lijnenVan(R), [0, 0, 0]);
   const diepte = knip(S.diepteVan(R), [0, 0, 0]);
-  if (eigen) checkpoint = HU.HUISSTIJL.checkpoint;
+  if (eigen) checkpoint = extra.checkpoint || HU.HUISSTIJL.checkpoint;
   const tag = (checkpoint || 'sdxl-base').replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-') + (eigen ? '-eigen' : '') + (extra.tag ? `-${extra.tag}` : '');
   const map = path.join(MEESTER_UIT, tag);
   fs.mkdirSync(map, { recursive: true });
@@ -554,7 +556,7 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
 async function meesterOfTerug(kant, extra) {
   const HU = require('../ai/huisstijl.cjs');
   const A = require('../ai/beeld-ai.cjs');
-  const tag = `${HU.HUISSTIJL.checkpoint.replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-')}-eigen-${extra.tag}`;
+  const tag = `${(extra.checkpoint || HU.HUISSTIJL.checkpoint).replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-')}-eigen-${extra.tag}`;
   const map = path.join(MEESTER_UIT, tag);
   if (process.env.OPNIEUW || !fs.existsSync(path.join(map, `${kant}-ai.png`))) return meester(kant, null, true, extra);
   const inst = JSON.parse(fs.readFileSync(path.join(map, `${kant}-instellingen.json`)));
@@ -1033,6 +1035,45 @@ async function specProef() {
   console.log('uit/karhd/meester/spec.png');
 }
 
+// Twee checkpoints naast elkaar (Marcel, 19 okt: Cor Epica, "ok, staat erin"): precies de instellingen en zinnen van de
+// laatste proef (karhd.cjs spec: de huisstijl, het rijke begin, de schilderwoorden, H4), alleen het checkpoint anders.
+// FaeTastic van eerder (meesterOfTerug), Cor Epica nieuw. Op 4× en op spelmaat naast ChatGPT.
+async function checkpointProef() {
+  const HU = require('../ai/huisstijl.cjs');
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const ij = HS.leesIjk();
+  const gpt2 = doelWagen(ij.hoogte);
+  const gpt4 = doelWagen(ij.hoogte * 2);
+  const maten = { ChatGPT: buurverschil(gpt2) };
+  const rijen = [[E.met(knip(gpt4), 'ChatGPT op 4×'), E.met(groot(knip(gpt2), 2), 'ChatGPT op spelmaat (2×), maal 2')]];
+  const onder = [];
+  for (const [naam, ck] of [['FaeTastic', HU.CHECKPOINTS.faetastic], ['Cor Epica', HU.CHECKPOINTS.corepica]]) {
+    const m = await meesterOfTerug('ZW', { rijk: true, schilder: true, tag: 'spec', checkpoint: ck });
+    const { mat, osMat } = projecteer(m.BR, m.beeld);
+    const rij = [];
+    for (const k of KANTEN) {
+      const R = render({ ...O_KAR, mat, osMat }, k, FIJN);
+      const s = handschrift(R, stijl, { spec: HU.HUISSTIJL.spec }).h4;
+      H.bewaar(path.join(MEESTER_UIT, m.tag, `h4-${k}.png`), s);
+      if (k === 'ZW') {
+        maten[naam] = buurverschil(s);
+        rij.push(E.met(knip(plaatselijkContrast({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 6, HU.HUISSTIJL.spec.contrast)), `${naam} op 4× · ZW`));
+      }
+      rij.push(E.met(groot(knip(s), 2), `${naam} · ${k}, maal 2`));
+    }
+    rijen.push(rij);
+    onder.push(E.met(knip(H.verklein(m.beeld, 3, 'naast')), `${naam}: het meesterbeeld (${(+m.tijd).toFixed(0)} s)`));
+  }
+  rijen.push(onder);
+  fs.writeFileSync(path.join(MEESTER_UIT, 'checkpoints.json'), JSON.stringify({ buurverschil: maten }, null, 1));
+  E.bewaar(path.join(MEESTER_UIT, 'checkpoints.png'), rijen, 'Twee checkpoints: FaeTastic en Cor Epica', `Dezelfde instellingen en zinnen (de stijlspecificatie, karhd.cjs spec: het rijke begin, de schilderwoorden, H4), alleen het checkpoint anders. Op 4× en op spelmaat maal 2. Buurverschil (dichtheid, geen kwaliteit): ${Object.entries(maten).map(([k, v]) => `${k} ${v}`).join(', ')}.`);
+  console.log(JSON.stringify(maten));
+  console.log('uit/karhd/meester/checkpoints.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
@@ -1042,4 +1083,5 @@ else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.m
 else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'zinnen') zinnenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'spec') specProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'checkpoint') checkpointProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');
