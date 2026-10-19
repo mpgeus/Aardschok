@@ -333,8 +333,13 @@ stenen huizen. **Ronde 3 is af.**
   `doelwiel.cjs groter`, `uit/doelwiel/groter.png`): op 1080p zie je meer pixels alleen als alles groter in beeld komt;
   anderhalf keer zo groot laat ruim twee keer zoveel nagels zien (34 tegen 15 van 63), maar dan past er 44% van de wereld
   in beeld (twee keer: 25%), de render kost 2 tot 3,3 keer zo lang; het ChatGPT-wiel op de maat van nu heeft nog altijd
-  meer karakter dan ons wiel op twee keer. **Wacht op Marcel:** de maat in beeld (zoals nu, anderhalf, twee keer) en het
-  handschrift (stijl D bijgesteld op het nieuwe wiel: nagels als pixels, lijnen, kleurreeksen per vlak).
+  meer karakter dan ons wiel op twee keer. **Besloten** (Marcel, 19 okt: "Maar het doel, zoals nu blijft de scherpte
+  houden zoals ik wil. Dus groter zou niet moeten hoeven"): **de maat in beeld blijft** (een sprite van 2×); het detail
+  moet uit het handschrift komen. **Het handschrift** (19 okt; `stijl.cjs` detailsWinnen, nagelLicht, binnenlijnen.naden;
+  `doelwiel.cjs hand`, `uit/doelwiel/hand.png`): elke nagel een lichte stip (64 van 64 te zien, D had er 57), naden in de
+  velg, het koper brons; even rustig bij draaien (0,216 tegen 0,206), in alle acht richtingen hetzelfde wiel. Nog niet:
+  lijnen om de spaken (14% tegen 21%), nerf in de planken, beslag op de spaken. **Wacht op Marcel:** is dit de richting;
+  dan die drie, en daarna het hele ossenkar.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

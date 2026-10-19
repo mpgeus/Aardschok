@@ -1094,6 +1094,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   box. Nearest neighbour houdt nog iets meer nagels, maar flikkert veel meer. Wat kleiner is dan een spritepixel (de nagels
   op de kap) haalt geen filter: dat moet getekend worden, zoals stijl D een nagel tekent. `afwerking.cjs` neemt een bron
   (welk wiel en welke sprite), en `oppervlak.cjs --wiel doel` bakt het wiel naar het doel.
+- **Het handschrift** (19 okt; Marcel: de maat blijft, het detail moet getekend worden): drie opties in `stijl.cjs`,
+  zonder blijft alles als voor de stijlproef. `detailsWinnen` (in `gbuffer`): een klein onderdeel (stijl.details) wint zijn
+  blok al met één subpixel; `nagelLicht` (in `stileer`): elke nagelkop een lichte stip met een donkere pixel ernaast, en
+  nooit een binnenlijn (anders werd een nagel op hout een donkere stip); `binnenlijnen.naden`: een naad tussen twee
+  onderdelen van dezelfde soort die naast elkaar liggen. Op het wiel naar het doel: `doelwiel.cjs hand`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

@@ -7,6 +7,7 @@
 //   node gereedschap/pixelart/doelwiel.cjs proef      de proefplaat
 //   node gereedschap/pixelart/doelwiel.cjs filters    van 4× naar 2×: box, Lanczos, nearest en detailbehoudend
 //   node gereedschap/pixelart/doelwiel.cjs groter     het wiel groter in beeld: sprite 2×, 3× en 4× op 1920×1080
+//   node gereedschap/pixelart/doelwiel.cjs hand       stijl D met het handschrift erbij: standen, richtingen, metingen
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -35,15 +36,31 @@ function render(kant, s, fijn = FIJN) {
 
 // Stijl D voor dit wiel: die van de stijlproef (de tonen en de verdeling van het doel), met koper erbij (de ramp 'goud' van
 // kern.cjs, met de standaardverdeling), opnieuw geijkt op zuidwest in twee standen.
-function stijlVoor(Rs) {
+// hand: het handschrift erbij (19 okt; Marcel: de maat blijft, het detail moet uit het handschrift komen): een nagel wint
+// zijn pixel al in de G-buffer (detailsWinnen), elke nagel een lichte stip met een donkere pixel ernaast (nagelLicht, zoals
+// op het doel; een eerste versie maakte een nagel op een lichte ondergrond donker, het doel doet dat nergens), en een naad
+// tussen twee stukken van dezelfde soort (binnenlijnen.naden), zoals de stukken velg.
+function stijlVoor(Rs, hand = false) {
   const ij = HS.leesIjk();
   const stijl = JSON.parse(JSON.stringify(ij.stijlen.doel));
   const ijzer = stijl.materialen.ijzer;
-  const goud = K.RAMP_RGB[K.RAMP.goud].slice(1);
+  // koper zonder de twee lichtste tonen van de ramp 'goud' (die maakten de kap knalgeel; het doel heeft brons)
+  const goud = K.RAMP_RGB[K.RAMP.goud].slice(0, 6);
   stijl.materialen.goud = { ...ijzer, reeks: goud, verdeling: S.verdeling(goud.length), lijn: [40, 20, 8], textuur: 0.3, glans: 1.0 };
-  const Gs = Rs.map((R) => S.gbuffer(R, FIJN / 2, stijl));
-  S.kalibreer(Gs, { ...stijl, details: new Set(Rs[0].nagels) }, ij.verdeling, HS.VARIANTEN.D.st);
+  if (hand) {
+    stijl.detailsWinnen = true;
+    stijl.nagelLicht = true;
+    stijl.binnenlijnen = { ...stijl.binnenlijnen, naden: true };
+  }
+  const met = (R) => ({ ...stijl, details: new Set(R.nagels) });
+  const Gs = Rs.map((R) => S.gbuffer(R, FIJN / 2, met(R)));
+  S.kalibreer(Gs, met(Rs[0]), ij.verdeling, HS.VARIANTEN.D.st);
   return stijl;
+}
+// Een beeld met een stijl: de G-buffer (met de nagels, voor detailsWinnen) en de stijl erop.
+function gestileerd(R, stijl) {
+  const st = { ...stijl, details: new Set(R.nagels) };
+  return S.stileer(S.gbuffer(R, FIJN / 2, st), st, HS.VARIANTEN.D.st);
 }
 
 function proef() {
@@ -183,6 +200,64 @@ function filters() {
   console.log('uit/doelwiel/filters.png');
 }
 
+// ---------------------------------------------------------------- het handschrift
+
+// Het wiel naar het doel met stijl D, zonder en met het handschrift erbij (stijlVoor hand), naar zuidwest in acht standen en
+// een volle slag, en in acht richtingen; gemeten tegen het doel (de lijnen, de losse pixels, het contrast, de nagels) en
+// in beweging (het flikkeren).
+function hand() {
+  const AF = require('../ai/afwerking.cjs');
+  fs.mkdirSync(path.join(UIT, 'hand'), { recursive: true });
+  const ij = HS.leesIjk();
+  const ijkR = [render('ZW', 0), render('ZW', 4)];
+  const stijlen = { D: stijlVoor(ijkR, false), H: stijlVoor(ijkR, true) };
+  const lijst = [];
+  for (let s = 0; s < H.STANDEN.length; s++) {
+    const R = s === 0 ? ijkR[0] : s === 4 ? ijkR[1] : render('ZW', s);
+    const beelden = { D: gestileerd(R, stijlen.D), H: gestileerd(R, stijlen.H) };
+    for (const [k, r] of Object.entries(beelden)) H.bewaar(path.join(UIT, 'hand', `${k}-ZW-${s}.png`), r);
+    // de metingen op een G-buffer waarin de nagels hun pixel winnen (anders telt een nagel die het handschrift tekent niet)
+    lijst.push({ G: S.gbuffer(R, FIJN / 2, { detailsWinnen: true, details: new Set(R.nagels) }), beelden, nagels4: HS.nagelKoppen4(R), nagels: new Set(R.nagels) });
+  }
+  const richtingen = K.KANTEN.map((kant) => {
+    const r = kant === 'ZW' ? lijst[0].beelden.H : gestileerd(render(kant, 0), stijlen.H);
+    H.bewaar(path.join(UIT, 'hand', `H-${kant}-0.png`), r);
+    return r;
+  });
+  const doel = HS.doelOpMaat(ij.hoogte);
+  const doelK = H.alfaSnij(doel, H.uitsnede([doel], 3));
+  const doel4 = HS.doelOpMaat(ij.hoogte * 4);
+  const doel4K = H.alfaSnij(doel4, H.uitsnede([doel4], 12));
+  const u = H.uitsnede([lijst[0].beelden.D, lijst[0].beelden.H], 3);
+  const knip = (r) => H.alfaSnij(r, u);
+  const opGrond = (r) => H.alfaSnijMetGrond(r);
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const kwart = (r) => H.snij(r, { x0: 0, y0: 0, b: Math.ceil(r.b * 0.6), h: Math.ceil(r.h * 0.6) }, 6);
+  const ont = { doel: HS.ontleedWiel(doel) };
+  const uit = {};
+  for (const k of ['D', 'H']) {
+    const r = lijst[0].beelden[k];
+    ont[k] = HS.ontleedWiel(knip(r));
+    const m = HS.meet(lijst, k, ij, 'ZW');
+    const sm = AF.spriteMaten(r, lijst[0].G, lijst[0].nagels);
+    uit[k] = { lijn: Math.round(ont[k].aandeel.lijn * 100), losse: ont[k].clusters.pixelsIn['1'], contrast: ont[k].stijl.contrast, binnenlijnen: ont[k].randen.lijnenBinnenin, nagels: sm.nagels, detail: sm.detail, flikkeren: m.flikkeren.deel, lijnWissel: m.lijnWissel, volleSlag: m.volleSlag, kleur: Object.fromEntries(['hout', 'ijzer'].map((mm) => [mm, AF.deltaE(ont[k].materiaal[mm].gem, ont.doel.materiaal[mm].gem)])) };
+  }
+  uit.doel = { lijn: Math.round(ont.doel.aandeel.lijn * 100), losse: ont.doel.clusters.pixelsIn['1'], contrast: ont.doel.stijl.contrast, binnenlijnen: ont.doel.randen.lijnenBinnenin };
+  for (const [k, x] of Object.entries(uit)) console.log(k.padEnd(5), JSON.stringify(x));
+  fs.writeFileSync(path.join(UIT, 'hand.json'), JSON.stringify(uit, null, 1));
+  const NAAM = { D: 'stijl D (zoals de proefplaat)', H: 'stijl D met het handschrift' };
+  E.bewaar(path.join(UIT, 'hand.png'), [
+    [E.met(opGrond(doel4K), 'doel: het ChatGPT-wiel'), ...['D', 'H'].map((k) => E.met(groot(opGrond(knip(lijst[0].beelden[k])), 4), `${NAAM[k]} · lijnen ${uit[k].lijn}% · nagels ${uit[k].nagels.zichtbaar}/${uit[k].nagels.koppen}`))],
+    [E.met(kwart(doelK), 'doel, linksboven maal 6'), ...['D', 'H'].map((k) => E.met(kwart(knip(lijst[0].beelden[k])), `${NAAM[k]}, linksboven maal 6`))],
+    [E.met(opGrond(doelK), 'doel'), ...['D', 'H'].map((k) => E.met(opGrond(knip(lijst[0].beelden[k])), k)), E.met(groot(opGrond(doelK), 3), 'doel maal 3'), E.met(groot(opGrond(knip(lijst[0].beelden.H)), 3), 'handschrift maal 3')],
+  ], 'Het handschrift op het wiel naar het doel', `Zuidwest, stand 0. Het handschrift: een nagel wint zijn pixel, steekt af tegen zijn ondergrond, en een naad tussen de stukken velg. Doel: lijnen ${uit.doel.lijn}%, losse pixels ${Math.round(uit.doel.losse * 100)}%; D: ${uit.D.lijn}% en ${Math.round(uit.D.losse * 100)}%; handschrift: ${uit.H.lijn}% en ${Math.round(uit.H.losse * 100)}%. Flikkeren over acht standen: D ${uit.D.flikkeren}, handschrift ${uit.H.flikkeren}.`);
+  E.bewaar(path.join(UIT, 'hand-richtingen.png'), [K.KANTEN.map((kant, i) => E.met(groot(opGrond(H.alfaSnij(richtingen[i], H.uitsnede([richtingen[i]], 3))), 2), kant))], 'Het handschrift in acht richtingen', 'Stand 0, maal 2.');
+  const frames = lijst.slice(0, 8).map((x) => H.naastElkaar([groot(opGrond(knip(x.beelden.D)), 3), groot(opGrond(knip(x.beelden.H)), 3)], 2));
+  const { apng } = require('./apng.cjs');
+  fs.writeFileSync(path.join(UIT, 'hand-draaien.png'), apng(frames.map((r) => ({ b: r.b, h: r.h, rgba: () => r.rgba })), { fps: 6 }));
+  console.log('uit/doelwiel/hand.png, hand-richtingen.png, hand-draaien.png');
+}
+
 // ---------------------------------------------------------------- groter in beeld
 
 // Marcel (19 okt): "Wat als wij onze ingame resolutie voor sprites verhogen?" Op 1920×1080 tekent het spel een sprite van 2×
@@ -288,6 +363,7 @@ const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'filters') filters();
 else if (wat === 'groter') groter();
+else if (wat === 'hand') hand();
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/doelwiel.cjs proef | filters');
 
 module.exports = { render, stijlVoor, paletPerMateriaal, naarPaletPerMateriaal, paletVast, spriteVan, BRON, UIT };

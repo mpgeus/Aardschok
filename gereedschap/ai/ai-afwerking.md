@@ -467,3 +467,64 @@ verkleind met een palet per materiaal:
 - **Het kost ook rendertijd** (2 tot 3,3 keer) en geheugen (2,1 tot 3,6 keer).
 - **Het ChatGPT-wiel op de maat van nu heeft nog altijd meer karakter dan ons wiel op twee keer die maat.** Zijn nagels,
   lijnen en contrast zijn getekend. Groter maken vervangt het handschrift niet; het geeft het alleen meer ruimte.
+
+## Het handschrift op het wiel naar het doel (19 okt)
+
+Marcel besloot bij de proefplaat "groter in beeld": "het doel, zoals nu blijft de scherpte houden zoals ik wil. Dus
+groter zou niet moeten hoeven". **De maat blijft**; het detail moet uit het handschrift komen.
+
+**Ontleed.** Stijl D op het nieuwe wiel zat in kleur en verdeling al op het doel:
+
+| | stijl D op het nieuwe wiel | doel |
+|---|---|---|
+| hout gemiddeld | 108,62,28 | 109,62,28 |
+| hout donker / middel / licht | 79 / 19 / 2% | 75 / 21 / 3% |
+| lijnen | 13% | 21% |
+| losse pixels | 15% | 30% |
+
+Wat ontbrak, was het handschrift. Van dichtbij heeft het doel:
+
+- elke nagel als een lichte stip, op de band en op het hout;
+- naden tussen de planken van de velg;
+- donkere lijnen om de spaken.
+
+Bij ons waren de nagels vaag of weg, en de velg één glad vlak.
+
+**Gebouwd** in `stijl.cjs`, alles als optie. Zonder de opties blijft de stijlproef hetzelfde.
+
+- **`detailsWinnen`**: een klein onderdeel (een nagel) wint zijn blok in de G-buffer al met één subpixel. Anders verliest
+  een nagel die kleiner is dan een spritepixel het van de band.
+- **`nagelLicht`**: elke kop een lichte stip (de lichtste toon van het ijzer) en, vanaf twee pixels, een donkere pixel aan
+  de kant van de schaduw.
+  - Een nagel wordt dan nooit een binnenlijn. Eerst gebeurde dat wel: een nagel is een ander soort onderdeel dan het hout
+    eronder, en werd een donkere stip.
+  - Een eerste versie maakte een nagel op een lichte ondergrond donker; het doel doet dat nergens.
+- **`binnenlijnen.naden`**: een naad tussen twee onderdelen van dezelfde soort die naast elkaar liggen, zoals de stukken
+  velg.
+- **Het koper** zonder de twee lichtste tonen van de ramp `goud`: brons in plaats van knalgeel.
+
+**Gemeten** (`doelwiel.cjs hand`; `uit/doelwiel/hand.png`, `hand-richtingen.png`, `hand-draaien.png`; zuidwest, acht
+standen en een volle slag):
+
+| | stijl D | met het handschrift | doel |
+|---|---|---|---|
+| nagels te zien | 57 van 64 | **64 van 64** | elke |
+| lijnen | 13% | 14% | 21% |
+| losse pixels | 15% | 17% | 30% |
+| detail | 32,3 | 38,5 | — |
+| kleurverschil hout / ijzer | 0,5 / 0,4 | 0,5 / 0,2 | — |
+| flikkeren | 0,206 | 0,216 | — |
+| volle slag gelijk | 100% | 100% | — |
+
+**Op de plaat:**
+
+- Elke nagel is een lichte stip, de velg heeft zijn naden, en de kap is brons.
+- In alle acht richtingen blijft het hetzelfde wiel. Recht van opzij (west) lijkt het al sterk op het doel.
+- Het draait even rustig als D. Een nagel springt van pixel naar pixel, maar zit vast op het wiel.
+
+**Wat nog mist:**
+
+- donkere lijnen om de spaken over hun hele lengte (de lijnen: 14% tegen 21%);
+- nerf in de planken;
+- beslag op de spaken, waar het doel blokjes heeft;
+- de camera. Het doel staat rechter.

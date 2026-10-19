@@ -151,6 +151,12 @@ function gbuffer(B, n, stijl = {}) {
     let stuk = -1;
     let max = 0;
     for (const [st, t] of tel) if (t > max) [stuk, max] = [st, t];
+    // stijl.detailsWinnen: een klein onderdeel (stijl.details, zoals een nagel) wint het blok al met één subpixel; anders
+    // verliest een nagel die kleiner is dan een spritepixel het van de band eromheen, en is hij weg (19 okt)
+    if (stijl.detailsWinnen && stijl.details) {
+      let dmax = 0;
+      for (const [st, t] of tel) if (stijl.details.has(st) && t > dmax) [stuk, dmax] = [st, t];
+    }
     G.stuk[o] = stuk;
     let m = 0;
     const som = new Float64Array(20);
@@ -373,6 +379,13 @@ function stileer(G, stijl, st = {}) {
       kop.sort((p, q) => G.nL[p] - G.nL[q]);
       const def = defVan(s0);
       const d = def.nagel || {};
+      if (stijl.nagelLicht) {
+        // zoals op het ChatGPT-wiel (19 okt): elke kop een lichte stip (de lichtste toon, ijzer dat het licht vangt), en waar
+        // de kop twee pixels of meer heeft, een donkere pixel aan de kant van de schaduw; ook op een vlak in de schaduw
+        zet(kop[kop.length - 1], max(s0));
+        if (kop.length >= 2) zet(kop[0], 0);
+        continue;
+      }
       zet(kop[kop.length - 1], max(s0) - (d.licht ?? 1));
       if (kop.length >= 2) zet(kop[0], d.donker ?? 1);
     }
@@ -451,11 +464,17 @@ function stileer(G, stijl, st = {}) {
     for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
       const o = y * b + x;
       if (toon[o] < 0) continue;
+      // met nagelLicht wordt een nagel nooit een lijn: hij ligt als ander soort onderdeel tegen het hout, en werd anders een
+      // donkere stip in plaats van een lichte (19 okt)
+      if (stijl.nagelLicht && stijl.details && stijl.details.has(G.stuk[o])) continue;
       for (const [dx, dy] of BUREN) {
         if (!dekt(x + dx, y + dy)) continue;
         const j = o + dy * b + dx;
         if (G.stuk[j] === G.stuk[o]) continue;
-        if (G.diep[j] > G.diep[o] + voor || (G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
+        // stijl.binnenlijnen.naden: ook tussen twee onderdelen van dezelfde soort die naast elkaar liggen (de stukken van
+        // een velg, planken): een naad, op het onderdeel met het hogere nummer
+        const naad = stijl.binnenlijnen.naden && G.deel[j] === G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.stuk[o] > G.stuk[j] && !(stijl.details && (stijl.details.has(G.stuk[o]) || stijl.details.has(G.stuk[j])));
+        if (naad || G.diep[j] > G.diep[o] + voor || (G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
           lijn[o] = 1;
           break;
         }

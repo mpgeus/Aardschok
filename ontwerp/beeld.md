@@ -17,7 +17,9 @@
   besloten) haalt het handschrift met een afwerking op de doelmaat (`stijl.cjs`): per materiaal zes à zeven tonen die van
   koel naar warm schuiven, het hout vooral donker (75% donker, 3% licht, zoals het doel), de lichtste toon alleen voor
   lichte randen, glimlichten en nagelkoppen, donkere lijnen waar onderdelen elkaar raken, en een omlijning in de kleur van
-  het materiaal.
+  het materiaal. **De maat in beeld blijft** (Marcel, 19 okt, bij de proefplaat met het wiel anderhalf en twee keer zo
+  groot: "het doel, zoals nu blijft de scherpte houden zoals ik wil. Dus groter zou niet moeten hoeven"): het ChatGPT-wiel
+  is op onze maat getekend en toont toch elke nagel; detail kleiner dan een pixel moet getekend worden, niet verkleind.
 - **De maatstaf: "wow, wat een detail"** (9 okt 2026, Marcel, bij de fasen van een afgebrand huis: "Ik wil dat mensen
   denken: wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien", en eerder: "Art
   maakt of breekt een spel", "Moet wel handgetekend lijken", "dit is te ai, ik moet iets natuurlijker hebben iets
