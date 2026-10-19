@@ -363,8 +363,11 @@ stenen huizen. **Ronde 3 is af.**
   spelmaat op 1920×1080) gaat er een deel verloren (`uit/ai/oppervlak-gpt/maat.png`). Marcel koos 2× scherper ("Prima,
   probeer maar"): **gedaan** (19 okt). De spaken van ChatGPT staan niet om de 45° (tot 12° ernaast): het beeld wordt per
   spaak bijgebogen (`oppervlak.cjs buigSpaken`), en op spelmaat hebben de spaken weer de randen en glimlichten van
-  ChatGPT. **Wacht op Marcel:** wat hij ervan vindt, en dan de kar (eerst de vorm naar de ChatGPT-wagen, dan de pixels
-  van de wagen erop, met dezelfde projectie).
+  ChatGPT. Marcel: "Naar de kar": **gedaan** (19 okt, `karhd.cjs gpt`, `uit/karhd/gpt.png`; verslag in
+  `ai-afwerking.md`, "De pixels van de ChatGPT-wagen op de kar"). Op het voorste wiel uitgelijnd was de vorm van de bak al
+  dichtbij, dus eerst de pixels op de kar zoals hij is: naar zuidwest is het bijna de ChatGPT-wagen, met de leeuwen. Wat
+  nog niet past, is de vorm: de os (romp breder, poten korter en dikker), de dissel en de hoekpalen dikker. **Wacht op
+  Marcel:** die vorm aanpassen (alleen in de HD-kar, de koeien in het spel blijven), dan opnieuw projecteren.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

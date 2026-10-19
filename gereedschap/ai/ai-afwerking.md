@@ -693,3 +693,48 @@ Marcel: "Maak de proefplaat zonder download: zoals nu, en de ChatGPT-pixels geba
 - **Wat het voor de kar betekent:** de pixels van ChatGPT kunnen erop, als ons model dezelfde vorm heeft als het
   ChatGPT-beeld. Hoe beter de vorm past, hoe minder er geleend wordt. Daarom eerst de vorm (de kar forser), en dan de
   pixels van de wagen projecteren.
+
+## De pixels van de ChatGPT-wagen op de kar (19 okt)
+
+Marcel: "Naar de kar" (eerst de vorm naar de ChatGPT-wagen, dan zijn pixels erop, met de projectie van het wiel).
+(`node gereedschap/pixelart/karhd.cjs gpt`, `uit/karhd/gpt.png`; een kleine vier minuten.)
+
+**Eerst gemeten, en de vorm bleek al dichtbij.** Op het voorste wiel uitgelijnd (`uit/karhd/randen.png`, onze randen over
+de ChatGPT-wagen) zijn de bak, de wanden, de hoekpalen, het vaantje en de plek van de os al ongeveer zo groot als bij
+ChatGPT. De "twee keer zoveel rood" van eerder telde kleur, geen vorm: het rood van ChatGPT is feller, en de leeuwen tellen
+mee. Wat wel anders is:
+- dikke hoekpalen met ijzeren banden;
+- een gele onderrand;
+- de dikke vierkante dissel;
+- de lading, die net anders ligt;
+- en vooral de os: zwaarder, met kortere en dikkere poten.
+
+Daarom eerst de pixels op de kar zoals hij is: dan zie je waar de vorm nog niet past.
+
+**De weg:**
+1. Onze render naar zuidwest op 8×. Het ChatGPT-beeld erop, uitgelijnd op het voorste wiel: het midden, en de grootte uit
+   de ellips (schaal 0,987).
+2. Per ding een projectie (de kar, de os). Elk materiaal leest die, ook wat geen textuur heeft (de vacht, de jute).
+3. Wat ChatGPT niet liet zien, leent:
+   - van het spiegelbeeld (de kar en de os zijn links en rechts gelijk);
+   - bij een wiel ook van de gedraaide kopie.
+
+**Twee fouten onderweg:**
+- **Een lineaire functie van rust naar scherm klopt niet voor de kar.** De kist staat schuin en het vaantje waait, elk in
+  zijn eigen rust: gemiddeld 15 pixels ernaast, en bijna alles viel terug op onze eigen textuur. Nu zoekt een punt de
+  pixel die hetzelfde punt zag, in een rooster op de plek in rust, per soort onderdeel (`bakken.cjs projectie`). Op het
+  wiel gaf dat 2,2 op 255 verschil met ChatGPT, was 3,0.
+- **Een materiaal zonder textuur schrijft de stap in zijn ramp als licht** (1 tot 6, niet 0 tot 1). De os en de zakken
+  werden zwart. De render waaruit geprojecteerd wordt, gebruikt nu dezelfde materialen als textuur, zonder beeld.
+
+**Wat het laat zien:**
+- **Naar zuidwest is de kar bijna de ChatGPT-wagen:** de leeuwen, de gouden kist, de ton, de zakken, de rode zak, de stam
+  met schors, de wielen, de os met zijn vacht en het juk.
+- **In de andere richtingen** komen de leeuwen terug (aan de verre kant gespiegeld), en de os loopt met zijn vacht.
+- **Waar de vorm nog niet past:**
+  - de poten van de os zijn langer en dunner dan bij ChatGPT, en worden onderaan zwart (ze lenen de hoeven);
+  - de romp is smaller;
+  - de dissel en de hoekpalen zijn dunner.
+  - Wat ChatGPT niet laat zien, zoals de binnenkant van het deksel naar noordwest, houdt onze eigen kleur.
+- **Rendertijd:** de projectie (de render op 8×) ruim twee minuten, een beeld op 4× zo'n 37 seconden.
+

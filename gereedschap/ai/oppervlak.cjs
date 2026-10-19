@@ -68,7 +68,7 @@ const basis = H.materialen(W.variant.st);
 // De materialen: hout, ijzer en koper lezen de bak (zonder bak: dezelfde afwerking, voor de render waaruit gebakken wordt).
 function materialen(bk) {
   const m = basis.slice();
-  for (const i of [O.M.wiel, O.M.ijzer, O.M.goud]) if (m[i] && m[i].textuur) m[i] = W.gpt && bk ? BK.projectieMateriaal(basis[i], bk, { kopieen: KOPIEEN }) : BK.bakMateriaal(basis[i], bk, groepVan);
+  for (const i of [O.M.wiel, O.M.ijzer, O.M.goud]) if (m[i] && m[i].textuur) m[i] = W.gpt && bk ? BK.projectieMateriaal(basis[i], bk, { kopieen: KOPIEEN, sleutelVan: (d) => d.m }) : BK.bakMateriaal(basis[i], bk, groepVan);
   return m;
 }
 // Een render met de G-buffer, zoals hdstijl.cjs render (de buffers die stijl.cjs gbuffer leest).
@@ -348,7 +348,7 @@ function projectieGpt() {
     lichtMacht: LICHTMACHT,
     binnen: (X, Y) => beeld.rgba[(Y * beeld.b + X) * 4 + 3] >= 128,
     soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !paars(k),
-    matVan: (st) => R.model.delen[st].m,
+    sleutel: (st) => R.model.delen[st].m,
   });
 }
 function bakGpt() {

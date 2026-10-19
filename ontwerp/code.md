@@ -1084,11 +1084,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de oude textuur, warm en koel, slijtage) gaat uit, ook in de render waaruit gebakken wordt. Het nummer van een onderdeel
   staat in een WeakMap (`nummer(model)`), niet op het onderdeel. De proef: `gereedschap/ai/oppervlak.cjs`.
   **Projecteren** (19 okt; Marcel: "Je kunt de pixels letterlijk kopieren toch?"; `bakken.cjs projectie` en
-  `projectieMateriaal`): zonder (u, v) en zonder groepen. Een rechte projectie maakt de plek op het scherm een lineaire
-  functie van de plek in rust; die wordt uit de render zelf gepast (kleinste kwadraten over elke pixel die dekt, op 8× nul
-  pixels mis). Een punt neemt het albedo van de pixel waar het op valt, als de render daar dat punt zag (`B.rust` binnen
-  een marge) en van hetzelfde materiaal; anders een kopie van het punt (gedraaid om de as, gespiegeld), en anders de eigen
-  textuur. Via (u, v) gaf het ChatGPT-wiel strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een
+  `projectieMateriaal`): zonder (u, v) en zonder groepen. Elke pixel van de render waaruit geprojecteerd wordt, weet welk
+  punt in rust hij zag (`B.rust`); een punt zoekt de pixel die hetzelfde punt zag, in een rooster op de plek in rust, per
+  soort onderdeel (`o.sleutel`, `o.sleutelVan`). Een lineaire functie van rust naar scherm klopte voor het wiel, maar niet
+  voor de kar (de kist en het vaantje staan elk in hun eigen rust). Anders een kopie van het punt (gedraaid om de as,
+  gespiegeld), en anders de eigen textuur; een materiaal zonder textuur krijgt er een. De render waaruit geprojecteerd
+  wordt, gebruikt dezelfde materialen zonder beeld (`projectieMateriaal(mat, null)`): een materiaal zonder textuur schrijft
+  anders de stap in zijn ramp als licht. `karhd.cjs gpt` doet het met de hele kar en de os. Via (u, v) gaf het ChatGPT-wiel strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een
   spaak vallen op dezelfde texels. `oppervlak.cjs --wiel gpt` legt het ChatGPT-wiel op onze render (`hdstijl.cjs
   ellipsVan`: de ellips naar een cirkel en terug, en de draaiing waarbij wat dekt het best samenvalt), en buigt het beeld
   per spaak in hoek bij (`buigSpaken`), want ChatGPT tekent zijn spaken niet om de 45°.

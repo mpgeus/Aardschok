@@ -216,53 +216,33 @@ function bakMateriaal(mat, bk, groepVan, model) {
 // Projecteren (19 okt; Marcel: "Je kunt de pixels letterlijk kopieren toch? En daar vandaan gewoon verder werken?"): een
 // punt van het oppervlak rechtstreeks op het beeld, zonder (u, v) en zonder groepen. Bakken via (u, v) maakte van het
 // ChatGPT-wiel strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een spaak vallen op dezelfde
-// texels. De render waaruit geprojecteerd wordt, is een rechte projectie, dus de plek op het scherm is een lineaire functie
-// van de plek in rust; die wordt uit de render zelf gepast (kleinste kwadraten over elke pixel die dekt).
+// texels. Elke pixel van de render waaruit geprojecteerd wordt, weet welk punt in rust hij zag (`B.rust`); een punt zoekt
+// de pixel die hetzelfde punt zag, in een rooster op de plek in rust, per soort onderdeel. (Eerst een lineaire functie van
+// de plek in rust naar het scherm: dat klopt voor het wiel, maar niet voor de kar, waar de kist schuin staat en het vaantje
+// waait, elk in zijn eigen rust; gemiddeld 15 pixels ernaast.)
 //   projectie(B, beeld, o)           → de projectie: per pixel van B het albedo uit `beeld` (zonder ons licht, zoals bak),
-//                                      en hoe een punt in rust op B valt. o.binnen(X, Y), o.lichtMacht, o.minLicht, o.soort
-//                                      (k → false: deze pixel van het beeld telt niet, zoals een randje achtergrond),
-//                                      o.matVan(deelI): het materiaal van een onderdeel van B
-//   projectieMateriaal(mat, pr, o)   een materiaal dat de projectie leest: een punt neemt de kleur van de pixel waar het
-//                                      op valt, als de render daar dat punt zag (anders lag er iets voor) en van hetzelfde
-//                                      materiaal; zo niet, een kopie van het punt (o.kopieen: p → p', zoals een draaiing om
-//                                      de as of een spiegeling), en anders de eigen textuur
+//                                      en het rooster. o.binnen(X, Y), o.lichtMacht, o.minLicht, o.soort (k → false: deze
+//                                      pixel van het beeld telt niet, zoals een randje achtergrond), o.sleutel(deelI): de
+//                                      soort van een onderdeel van B (een punt zoekt alleen bij dezelfde soort), o.welke(i):
+//                                      alleen deze pixels (één ding in een render met meer dingen), o.marge: hoe ver (in
+//                                      eenheden) een punt van de plek van een pixel mag liggen (standaard twee keer de
+//                                      afstand tussen buurpixels)
+//   projectieMateriaal(mat, pr, o)   een materiaal dat de projectie leest: een punt neemt de kleur van de pixel die het zag
+//                                      (o.sleutelVan(deel): zijn soort, zoals o.sleutel); zo niet (er lag iets voor), een
+//                                      kopie van het punt (o.kopieen: (p, deel) → p' of null, zoals een draaiing om de as of
+//                                      een spiegeling), en anders de eigen textuur (of, zonder textuur, de middelste toon van
+//                                      de ramp). Zonder pr (null): alleen de eigen textuur, voor de render waaruit
+//                                      geprojecteerd wordt (een materiaal zonder textuur schrijft anders de stap in zijn ramp
+//                                      als licht in de G-buffer, niet 0 tot 1)
 function projectie(B, beeld, o = {}) {
   const minLicht = o.minLicht ?? 0.3;
   const gk = o.glansKleur || [255, 240, 214];
-  // de normaalvergelijkingen voor X en Y als functie van (x, y, z, 1) in rust
-  const M = Array.from({ length: 4 }, () => [0, 0, 0, 0]);
-  const vX = [0, 0, 0, 0];
-  const vY = [0, 0, 0, 0];
-  for (let y = 0; y < B.h; y++) for (let x = 0; x < B.b; x++) {
-    const i = y * B.b + x;
-    if (B.ramp[i] < 0 || Number.isNaN(B.rust[i * 4])) continue;
-    const q = [B.rust[i * 4], B.rust[i * 4 + 1], B.rust[i * 4 + 2], 1];
-    for (let r = 0; r < 4; r++) {
-      for (let c = 0; c < 4; c++) M[r][c] += q[r] * q[c];
-      vX[r] += q[r] * x;
-      vY[r] += q[r] * y;
-    }
-  }
-  const los = (A, v) => {
-    // Gauss met spilkeuze, op een 4×4
-    const m = A.map((r, k) => [...r, v[k]]);
-    for (let k = 0; k < 4; k++) {
-      let s = k;
-      for (let r = k + 1; r < 4; r++) if (Math.abs(m[r][k]) > Math.abs(m[s][k])) s = r;
-      [m[k], m[s]] = [m[s], m[k]];
-      for (let r = 0; r < 4; r++) if (r !== k) {
-        const f = m[r][k] / m[k][k];
-        for (let c = k; c < 5; c++) m[r][c] -= f * m[k][c];
-      }
-    }
-    return m.map((r, k) => r[4] / r[k]);
-  };
-  const ax = los(M, vX);
-  const ay = los(M, vY);
+  const sleutel = o.sleutel || (() => 0);
+  const telt = (i) => B.ramp[i] >= 0 && !Number.isNaN(B.rust[i * 4]) && (!o.welke || o.welke(i));
   const alb = new Float32Array(B.b * B.h * 3).fill(NaN);
   for (let y = 0; y < B.h; y++) for (let x = 0; x < B.b; x++) {
     const i = y * B.b + x;
-    if (B.ramp[i] < 0 || !B.g || Number.isNaN(B.g[i * K.GB + K.G.licht])) continue;
+    if (!telt(i) || !B.g || Number.isNaN(B.g[i * K.GB + K.G.licht])) continue;
     if (o.binnen && !o.binnen(x, y)) continue;
     const a = i * 4;
     const kb = [beeld.rgba[a], beeld.rgba[a + 1], beeld.rgba[a + 2]];
@@ -272,30 +252,59 @@ function projectie(B, beeld, o = {}) {
     const glans = B.g[i * K.GB + K.G.glans] * f;
     for (let c = 0; c < 3; c++) alb[i * 3 + c] = K.klem((kb[c] - glans * gk[c]) / licht, 0, 255);
   }
-  // hoe ver een punt van wat de render op zijn pixel zag mag liggen (in eenheden): een paar pixels
-  const px = 1 / Math.hypot(ax[0], ax[1], ax[2]);
-  return { b: B.b, h: B.h, ax, ay, alb, rust: B.rust, mat: o.matVan, marge: o.marge ?? Math.max(0.2, 3 * px) };
+  // de marge: twee keer de afstand in rust tussen twee buurpixels van hetzelfde onderdeel (de mediaan)
+  let marge = o.marge;
+  if (!marge) {
+    const af = [];
+    for (let i = 0; i < B.b * B.h - 1; i += 7) {
+      if (!telt(i) || !telt(i + 1) || B.rust[i * 4 + 3] !== B.rust[(i + 1) * 4 + 3]) continue;
+      af.push(Math.hypot(B.rust[i * 4] - B.rust[i * 4 + 4], B.rust[i * 4 + 1] - B.rust[i * 4 + 5], B.rust[i * 4 + 2] - B.rust[i * 4 + 6]));
+    }
+    af.sort((a, b) => a - b);
+    marge = Math.max(0.15, 2 * (af[af.length >> 1] || 0.2));
+  }
+  // het rooster: per soort en per vak van `marge` de pixels met een kleur
+  const rooster = new Map();
+  for (let i = 0; i < B.b * B.h; i++) {
+    if (Number.isNaN(alb[i * 3]) || !telt(i)) continue;
+    const k = `${sleutel(B.rust[i * 4 + 3])}|${Math.floor(B.rust[i * 4] / marge)}|${Math.floor(B.rust[i * 4 + 1] / marge)}|${Math.floor(B.rust[i * 4 + 2] / marge)}`;
+    (rooster.get(k) || rooster.set(k, []).get(k)).push(i);
+  }
+  return { alb, rust: B.rust, rooster, marge };
 }
 function projectieMateriaal(mat, pr, o = {}) {
   const basis = gebakkenAfwerking(mat);
-  const eigen = mat.textuur;
+  // een materiaal zonder textuur (een ramp): zijn middelste toon als eigen kleur
+  const vlak = mat.textuur ? null : K.RAMP_RGB[K.RAMP[mat.ramp]][Math.floor(K.RAMP_RGB[K.RAMP[mat.ramp]].length / 2)];
+  const eigen = mat.textuur || (() => vlak);
   const kopieen = [(p) => p, ...(o.kopieen || [])];
-  const kijk = (p, m) => {
-    const X = Math.round(pr.ax[0] * p[0] + pr.ax[1] * p[1] + pr.ax[2] * p[2] + pr.ax[3]);
-    const Y = Math.round(pr.ay[0] * p[0] + pr.ay[1] * p[1] + pr.ay[2] * p[2] + pr.ay[3]);
-    if (X < 0 || Y < 0 || X >= pr.b || Y >= pr.h) return null;
-    const j = Y * pr.b + X;
-    if (Number.isNaN(pr.alb[j * 3])) return null;
-    const r = pr.rust;
-    if (Math.hypot(r[j * 4] - p[0], r[j * 4 + 1] - p[1], r[j * 4 + 2] - p[2]) > pr.marge) return null;
-    if (pr.mat && pr.mat(r[j * 4 + 3]) !== m) return null;
-    return [pr.alb[j * 3], pr.alb[j * 3 + 1], pr.alb[j * 3 + 2]];
+  const sleutelVan = o.sleutelVan || (() => 0);
+  const kijk = (p, s) => {
+    if (!pr) return null;
+    const m = pr.marge;
+    const [ix, iy, iz] = [Math.floor(p[0] / m), Math.floor(p[1] / m), Math.floor(p[2] / m)];
+    let beste = -1;
+    let bd = m * m;
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (let dz = -1; dz <= 1; dz++) {
+      const lijst = pr.rooster.get(`${s}|${ix + dx}|${iy + dy}|${iz + dz}`);
+      if (!lijst) continue;
+      for (const j of lijst) {
+        const d = (pr.rust[j * 4] - p[0]) ** 2 + (pr.rust[j * 4 + 1] - p[1]) ** 2 + (pr.rust[j * 4 + 2] - p[2]) ** 2;
+        if (d < bd) {
+          bd = d;
+          beste = j;
+        }
+      }
+    }
+    return beste < 0 ? null : [pr.alb[beste * 3], pr.alb[beste * 3 + 1], pr.alb[beste * 3 + 2]];
   };
   return {
     ...basis,
     textuur: (x, y, z, nx, ny, nz, deel, kijkHoek, fijn) => {
+      const s = sleutelVan(deel);
       for (const kop of kopieen) {
-        const k = kijk(kop([x, y, z]), deel.m);
+        const q = kop([x, y, z], deel);
+        const k = q && kijk(q, s);
         if (k) return k;
       }
       return eigen(x, y, z, nx, ny, nz, deel, kijkHoek, fijn);

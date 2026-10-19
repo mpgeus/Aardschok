@@ -181,7 +181,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `render <kant>`, `platen`, of `alles` (bakken, de acht richtingen tegelijk en de platen: een paar minuten), in
   `uit/ai/oppervlak/`; met `--wiel doel` voor het wiel naar het doel (in `uit/ai/oppervlak-doel/`), en met `--wiel gpt`
   de pixels van het ChatGPT-wiel zelf, geprojecteerd (`bak` legt het beeld en bewaart `gelegd.png` en `gelegd-half.png`
-  ter controle; in `uit/ai/oppervlak-gpt/`, naast het wiel zoals nu en met het handschrift erover). Het wiel naar het doel
+  ter controle; in `uit/ai/oppervlak-gpt/`, naast het wiel zoals nu en met het handschrift erover). De pixels van de
+  ChatGPT-wagen op de hele kar: `node gereedschap/pixelart/karhd.cjs gpt` (`uit/karhd/gpt.png`, vier minuten). Het wiel naar het doel
   zelf: `node gereedschap/pixelart/doelwiel.cjs proef` (de proefplaat) en `filters` (van 4× naar 2×: vier filters en drie
   manieren van palet, gemeten), in `uit/doelwiel/`.
 
