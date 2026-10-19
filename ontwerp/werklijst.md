@@ -391,8 +391,11 @@ stenen huizen. **Ronde 3 is af.**
   inhoud weglopen; geen variant haalt ChatGPT. Marcel: "Handschrift proberen maar": **gedaan** (`karhd.cjs hand`,
   `uit/karhd/meester/handschrift.png`; `ai-afwerking.md`, "Ons handschrift over de eigen pijplijn"): de scherpe randen van
   ChatGPT komen erbij (H2: de geschilderde pixels met onze lijnen; H3: met meer contrast), het schilderwerk blijft armer.
-  **Wacht op Marcel:** of dit (H3) de stijl van de eigen pijplijn wordt en we hem op meer dingen zetten, of eerst een
-  nieuwer model, of een betere videokaart (een geldkeus).
+  Marcel daarna: "Kunnen wij aan 'rijker' schilderwerk komen?": **gedaan** (`karhd.cjs rijker`; `ai-afwerking.md`,
+  "Rijker schilderwerk: drie wegen"): plaatselijk contrast in onze eigen code is de sterkste hefboom (buurverschil 70 bij
+  0,7 en 77 bij 1,0; ChatGPT 76); schilderwoorden helpen een beetje; een tweede beurt in tegels werkt op deze maat tegen.
+  Wat nog verschilt is de tekening (de lading, de kop van de os, de warmte). **Wacht op Marcel:** welke sterkte (W4 of W5)
+  de huisstijl wordt, en dan: de pijplijn op een tweede ding (een koe of een huis), of eerst Cor Epica (Marcel downloadt).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

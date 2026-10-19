@@ -21,6 +21,8 @@
 //                                                  per gebied (gereedschap/ai/huisstijl.cjs): uit/karhd/meester/eigen.png
 //   node gereedschap/pixelart/karhd.cjs hand       ons handschrift over de eigen pijplijn (het rijke begin, denoise 0,65,
 //                                                  zonder SDXL opnieuw): uit/karhd/meester/handschrift.png
+//   node gereedschap/pixelart/karhd.cjs rijker     rijker schilderwerk: schilderwoorden, een tweede beurt in tegels,
+//                                                  plaatselijk contrast: uit/karhd/meester/rijker.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -493,7 +495,10 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
   fs.mkdirSync(map, { recursive: true });
   // eigen: de huisstijl, geen stijlplaat, en per gebied de zin van zijn materiaal; anders de ChatGPT-wagen als stijlplaat
   const namen = eigen
-    ? { positief: extra.lora ? `${extra.lora.woorden}, ${HU.HUISSTIJL.zin}` : HU.HUISSTIJL.zin, negatief: HU.HUISSTIJL.negatief }
+    ? {
+      positief: [extra.lora && extra.lora.woorden, HU.HUISSTIJL.zin, extra.schilder && HU.SCHILDER.zin].filter(Boolean).join(', '),
+      negatief: [HU.HUISSTIJL.negatief, extra.schilder && HU.SCHILDER.negatief].filter(Boolean).join(', '),
+    }
     : { positief: PROMPT_KAR, negatief: NEG_KAR, stijl: await A.upload('aardschok-meester-stijl.png', fs.readFileSync(BRON), 'image/png') };
   for (const [k, r] of Object.entries({ init, masker, lijnen, diepte })) {
     const data = K.pngVanBeeld(r);
@@ -518,7 +523,7 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
     }
     H.bewaar(path.join(map, `${kant}-gebieden.png`), kaart);
   }
-  const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora, ...(extra.denoise ? { denoise: extra.denoise } : {}) } : { ...AF.START, ...MEESTER, checkpoint };
+  const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora, ...(extra.denoise ? { denoise: extra.denoise } : {}), ...(extra.schilder ? { cfg: HU.SCHILDER.cfg } : {}) } : { ...AF.START, ...MEESTER, checkpoint };
   const stroom = AF.werkstroom(namen, o);
   const t0 = Date.now();
   const png = await DK.maak(b, h).voerUit(stroom);
@@ -527,7 +532,161 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
   fs.writeFileSync(path.join(map, `${kant}-instellingen.json`), JSON.stringify({ kant, checkpoint: checkpoint || AF.MODELLEN.checkpoint, fijn: FMEESTER, doek: [b, h], plek: [ox, oy], instellingen: o, positief: namen.positief, negatief: namen.negatief, stijlplaat: eigen ? 'geen' : 'gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png', gebieden: gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), seconden: +tijd.toFixed(1), wanneer: new Date().toISOString() }, null, 1));
   const ai = A.leesPng(png);
   console.log(`${tag} ${kant}: ${tijd.toFixed(0)} s, doek ${b}×${h}`);
-  return { BR, beeld: opRender(R, ai, ox, oy), ai, tag, tijd };
+  return { BR, beeld: opRender(R, ai, ox, oy), ai, tag, tijd, ox, oy, b, h, gebieden, namen, o };
+}
+
+// Een meesterbeeld van de eigen pijplijn: van eerder als het er al is (zonder SDXL opnieuw; OPNIEUW=1 om toch te
+// schilderen), anders nieuw.
+async function meesterOfTerug(kant, extra) {
+  const HU = require('../ai/huisstijl.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const tag = `${HU.HUISSTIJL.checkpoint.replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-')}-eigen-${extra.tag}`;
+  const map = path.join(MEESTER_UIT, tag);
+  if (process.env.OPNIEUW || !fs.existsSync(path.join(map, `${kant}-ai.png`))) return meester(kant, null, true, extra);
+  const inst = JSON.parse(fs.readFileSync(path.join(map, `${kant}-instellingen.json`)));
+  const BR = bakRender(kant, inst.fijn, !!extra.rijk);
+  const ai = A.leesPng(fs.readFileSync(path.join(map, `${kant}-ai.png`)));
+  const [ox, oy] = inst.plek;
+  const [b, h] = inst.doek;
+  console.log(`${tag} ${kant}: van eerder`);
+  return { BR, beeld: opRender(BR.R, ai, ox, oy), ai, tag, tijd: inst.seconden, ox, oy, b, h, gebieden: gebiedenVan(BR, ox, oy, b, h), namen: { positief: inst.positief, negatief: inst.negatief }, o: inst.instellingen };
+}
+
+// Een tweede schilderbeurt (Marcel, 19 okt: rijker schilderwerk): het meesterbeeld twee keer zo groot (bilineair), en
+// SDXL schildert het zacht over (denoise 0,4) in tegels van 1024 die elkaar overlappen (zo past het op de 1080 Ti), met
+// dezelfde gebieden, lijnen en diepte (die twee keer zo groot, de naaste). De tegels gaan zacht in elkaar over, en het
+// geheel gaat terug naar de maat van de render (box 2×2): de streken blijven als rijkere textuur.
+async function tweedeBeurt(m, kant) {
+  const AF = require('../ai/afwerking.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const DK = require('../ai/doek.cjs');
+  const { b, h } = m;
+  const B2 = b * 2, H2 = h * 2;
+  const T = 1024, OVER = 256;
+  const map = path.join(MEESTER_UIT, `${m.tag}-tweede`);
+  fs.mkdirSync(map, { recursive: true });
+  const lees = (n) => K.leesPng(fs.readFileSync(path.join(MEESTER_UIT, m.tag, `${kant}-${n}.png`)));
+  const twee = (r, glad) => {
+    const uit = { b: r.b * 2, h: r.h * 2, rgba: Buffer.alloc(r.b * r.h * 16) };
+    for (let y = 0; y < uit.h; y++) for (let x = 0; x < uit.b; x++) {
+      const i = (y * uit.b + x) * 4;
+      if (!glad) { r.rgba.copy(uit.rgba, i, ((y >> 1) * r.b + (x >> 1)) * 4, ((y >> 1) * r.b + (x >> 1)) * 4 + 4); continue; }
+      const fx = Math.max(0, Math.min(r.b - 1.001, (x + 0.5) / 2 - 0.5)), fy = Math.max(0, Math.min(r.h - 1.001, (y + 0.5) / 2 - 0.5));
+      const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
+      for (let c = 0; c < 4; c++) {
+        const p = (xx, yy) => r.rgba[(yy * r.b + xx) * 4 + c];
+        uit.rgba[i + c] = Math.round(p(x0, y0) * (1 - tx) * (1 - ty) + p(x0 + 1, y0) * tx * (1 - ty) + p(x0, y0 + 1) * (1 - tx) * ty + p(x0 + 1, y0 + 1) * tx * ty);
+      }
+    }
+    return uit;
+  };
+  const init = twee(m.ai, true);
+  const [masker, lijnen, diepte] = ['masker', 'lijnen', 'diepte'].map((n) => twee(lees(n), false));
+  // de gebieden twee keer zo groot
+  const gebied = m.gebieden.map((g) => {
+    const vol = new Uint8Array(B2 * H2);
+    for (const p of g.pixels) {
+      const x = p % b, y = (p - x) / b;
+      vol[(2 * y) * B2 + 2 * x] = vol[(2 * y) * B2 + 2 * x + 1] = vol[(2 * y + 1) * B2 + 2 * x] = vol[(2 * y + 1) * B2 + 2 * x + 1] = 1;
+    }
+    return { tekst: g.tekst, vol };
+  });
+  const plekken = (L) => {
+    if (L <= T) return [0];
+    const n = Math.ceil((L - OVER) / (T - OVER));
+    return Array.from({ length: n }, (_, k) => Math.round((k * (L - T)) / (n - 1)));
+  };
+  const som = new Float32Array(B2 * H2 * 3);
+  const gew = new Float32Array(B2 * H2);
+  const knip = (r, x0, y0) => {
+    const uit = { b: T, h: T, rgba: Buffer.alloc(T * T * 4) };
+    for (let y = 0; y < T; y++) r.rgba.copy(uit.rgba, y * T * 4, ((y0 + y) * r.b + x0) * 4, ((y0 + y) * r.b + x0 + T) * 4);
+    return uit;
+  };
+  const o = { ...m.o, denoise: 0.4 };
+  let tijd = 0, nT = 0;
+  for (const y0 of plekken(H2)) for (const x0 of plekken(B2)) {
+    // een tegel zonder iets van de kar of de os: overslaan
+    let iets = false;
+    for (let y = y0; y < y0 + T && !iets; y += 8) for (let x = x0; x < x0 + T && !iets; x += 8) iets = masker.rgba[(y * B2 + x) * 4] > 0;
+    if (!iets) continue;
+    const namen = { positief: m.namen.positief, negatief: m.namen.negatief, gebieden: [] };
+    for (const [k, r] of Object.entries({ init: knip(init, x0, y0), masker: knip(masker, x0, y0), lijnen: knip(lijnen, x0, y0), diepte: knip(diepte, x0, y0) })) {
+      namen[k] = await A.upload(`aardschok-tweede-${k}.png`, K.pngVanBeeld(r), 'image/png');
+    }
+    for (const [k, g] of gebied.entries()) {
+      const mk = { b: T, h: T, rgba: Buffer.alloc(T * T * 4) };
+      let n = 0;
+      for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+        const aan = g.vol[(y0 + y) * B2 + x0 + x];
+        n += aan;
+        mk.rgba.set(aan ? [255, 255, 255, 255] : [0, 0, 0, 255], (y * T + x) * 4);
+      }
+      if (n >= T * T * 0.002) namen.gebieden.push({ masker: await A.upload(`aardschok-tweede-gebied-${k}.png`, K.pngVanBeeld(mk), 'image/png'), tekst: g.tekst });
+    }
+    const t0 = Date.now();
+    const ai = A.leesPng(await DK.maak(T, T).voerUit(AF.werkstroom(namen, o)));
+    tijd += (Date.now() - t0) / 1000;
+    nT++;
+    // zacht in elkaar over: het gewicht loopt op over de overlap, behalve aan de rand van het geheel
+    const R0 = OVER / 2;
+    for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+      const wx = (x0 > 0 ? Math.min(1, (x + 0.5) / R0) : 1) * (x0 + T < B2 ? Math.min(1, (T - x - 0.5) / R0) : 1);
+      const wy = (y0 > 0 ? Math.min(1, (y + 0.5) / R0) : 1) * (y0 + T < H2 ? Math.min(1, (T - y - 0.5) / R0) : 1);
+      const w = wx * wy;
+      const j = (y0 + y) * B2 + x0 + x;
+      for (let c = 0; c < 3; c++) som[j * 3 + c] += ai.rgba[(y * T + x) * 4 + c] * w;
+      gew[j] += w;
+    }
+  }
+  const groot = { b: B2, h: H2, rgba: Buffer.alloc(B2 * H2 * 4) };
+  for (let j = 0; j < B2 * H2; j++) {
+    const k = gew[j] > 0 ? [0, 1, 2].map((c) => Math.round(som[j * 3 + c] / gew[j])) : [init.rgba[j * 4], init.rgba[j * 4 + 1], init.rgba[j * 4 + 2]];
+    groot.rgba.set([...k, 255], j * 4);
+  }
+  fs.writeFileSync(path.join(map, `${kant}-groot.png`), K.pngVanBeeld(groot));
+  // terug naar de maat van de render: box 2×2
+  const terug = { b, h, rgba: Buffer.alloc(b * h * 4) };
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    for (let c = 0; c < 3; c++) {
+      let s = 0;
+      for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) s += groot.rgba[((2 * y + dy) * B2 + 2 * x + dx) * 4 + c];
+      terug.rgba[(y * b + x) * 4 + c] = Math.round(s / 4);
+    }
+    terug.rgba[(y * b + x) * 4 + 3] = 255;
+  }
+  fs.writeFileSync(path.join(map, `${kant}-ai.png`), K.pngVanBeeld(terug));
+  console.log(`tweede beurt ${kant}: ${nT} tegels, ${tijd.toFixed(0)} s`);
+  return { BR: m.BR, beeld: opRender(m.BR.R, terug, m.ox, m.oy), tag: `${m.tag}-tweede`, tijd };
+}
+
+// Plaatselijk contrast (in onze eigen code): de helderheid verder van haar omgeving (een vierkant van 2·straal+1), met de
+// tint gelijk; op de render van 4×, vóór het verkleinen.
+function plaatselijkContrast(r, straal = 6, kracht = 0.7) {
+  const { b, h } = r;
+  const L = new Float32Array(b * h);
+  for (let i = 0; i < b * h; i++) L[i] = S.lum([r.rgba[i * 4], r.rgba[i * 4 + 1], r.rgba[i * 4 + 2]]);
+  const vervaag = (bron, langsX) => {
+    const uit = new Float32Array(b * h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+      let s = 0, n = 0;
+      for (let d = -straal; d <= straal; d++) {
+        const xx = langsX ? x + d : x, yy = langsX ? y : y + d;
+        if (xx < 0 || yy < 0 || xx >= b || yy >= h || r.rgba[(yy * b + xx) * 4 + 3] < 128) continue;
+        s += bron[yy * b + xx]; n++;
+      }
+      uit[y * b + x] = n ? s / n : bron[y * b + x];
+    }
+    return uit;
+  };
+  const om = vervaag(vervaag(L, true), false);
+  const uit = { b, h, rgba: Buffer.from(r.rgba) };
+  for (let i = 0; i < b * h; i++) {
+    if (r.rgba[i * 4 + 3] < 128 || L[i] <= 0) continue;
+    const f = Math.max(0, L[i] + kracht * (L[i] - om[i])) / L[i];
+    for (let c = 0; c < 3; c++) uit.rgba[i * 4 + c] = Math.max(0, Math.min(255, Math.round(r.rgba[i * 4 + c] * f)));
+  }
+  return uit;
 }
 // Het beeld van het doek terug op de render: op zijn plek, alleen binnen ons silhouet.
 function opRender(R, ai, ox, oy) {
@@ -566,7 +725,7 @@ function handschriftStijl() {
 }
 // Drie manieren: H1 het handschrift zelf (de kleur van de render per spritepixel gemiddeld, met de lijnen), H2 de
 // geschilderde pixels (de naaste) met de lijnen en de omlijning van H1 erover, H3 dat met meer contrast.
-function handschrift(R, stijl) {
+function handschrift(R, stijl, o = {}) {
   const st = { ...stijl, details: new Set(R.nagels) };
   const G = S.gbuffer(R, FIJN / 2, st);
   // de os als iets zonder textuur (G.kaal): alleen een lijn waar iets ervoor ligt, geen naden en geen lijnen tussen zijn
@@ -574,7 +733,9 @@ function handschrift(R, stijl) {
   // heeft")
   for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && Math.floor(G.stuk[o] / 1000) === 2) G.kaal[o] = 1;
   const h1 = S.stileer(G, st, HS.VARIANTEN.D.st);
-  const naast = H.verklein({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 2, 'naast');
+  const zl4 = { b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) };
+  // o.contrast: plaatselijk contrast op de render van 4× (true: kracht 0,7; een getal: die kracht)
+  const naast = H.verklein(o.contrast ? plaatselijkContrast(zl4, 6, o.contrast === true ? 0.7 : o.contrast) : zl4, 2, 'naast');
   const h2 = { b: h1.b, h: h1.h, rgba: Buffer.from(h1.rgba) };
   const h3 = { b: h1.b, h: h1.h, rgba: Buffer.from(h1.rgba) };
   // contrast: om de middelste helderheid van wat dekt, met de tint gelijk
@@ -716,10 +877,69 @@ async function eigenProef() {
   console.log('uit/karhd/meester/eigen.png');
 }
 
+// De drie wegen naar rijker schilderwerk, elk met ons handschrift H3 erover, naast de vorige H3 en ChatGPT, met het
+// verschil tussen buurpixels (op spelmaat; ChatGPT 73, wij 45 op 19 okt).
+function buurverschil(r) {
+  let n = 0, d = 0;
+  for (let y = 1; y < r.h; y++) for (let x = 1; x < r.b; x++) {
+    const a = (y * r.b + x) * 4;
+    if (r.rgba[a + 3] < 128) continue;
+    for (const j of [a - 4, a - r.b * 4]) {
+      if (r.rgba[j + 3] < 128) continue;
+      d += Math.abs(r.rgba[a] - r.rgba[j]) + Math.abs(r.rgba[a + 1] - r.rgba[j + 1]) + Math.abs(r.rgba[a + 2] - r.rgba[j + 2]);
+      n++;
+    }
+  }
+  return +(d / Math.max(1, n)).toFixed(1);
+}
+async function rijkerProef() {
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const gpt = H.lees(path.join(UIT, 'gpt-ZW.png'));
+  const vorige = path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-rijk');
+  const maten = { 'ChatGPT': buurverschil(gpt), 'H3 van eerder': buurverschil(H.lees(path.join(vorige, 'hand-h3-ZW.png'))) };
+  const rijen = [
+    KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `ter vergelijking: de pixels van ChatGPT · ${k}`)),
+    KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(vorige, `hand-h3-${k}.png`))), 2), `H3 van eerder · ${k}`)),
+  ];
+  const rij = async (naam, mat, osMat, o = {}) => {
+    const r = [];
+    for (const k of KANTEN) {
+      const s = handschrift(render({ ...O_KAR, mat, osMat }, k, FIJN), stijl, o).h3;
+      if (k === 'ZW') maten[naam] = buurverschil(s);
+      r.push(E.met(groot(knip(s), 2), `${naam} · ${k}`));
+    }
+    rijen.push(r);
+  };
+  const m1 = await meesterOfTerug('ZW', { rijk: true, schilder: true, tag: 'schilder' });
+  const p1 = projecteer(m1.BR, m1.beeld);
+  await rij('W1: schilderwoorden, cfg 7', p1.mat, p1.osMat);
+  // de tweede beurt (W2, W3) maakte het op deze maat gladder (buurverschil 46,6) en kostte 25 minuten: alleen met TWEEDE=1
+  const onder = [E.met(knip(H.verklein(m1.beeld, 3, 'naast')), `W1: het meesterbeeld (${m1.tijd.toFixed(0)} s)`)];
+  if (process.env.TWEEDE) {
+    const m2 = await tweedeBeurt(m1, 'ZW');
+    const p2 = projecteer(m2.BR, m2.beeld);
+    await rij('W2: W1 met een tweede beurt', p2.mat, p2.osMat);
+    await rij('W3: W2 met plaatselijk contrast', p2.mat, p2.osMat, { contrast: true });
+    onder.push(E.met(knip(H.verklein(m2.beeld, 3, 'naast')), `W2: na de tweede beurt (${m2.tijd.toFixed(0)} s)`));
+  }
+  // W1 met plaatselijk contrast, op twee sterktes (zonder de tweede beurt)
+  await rij('W4: W1 met plaatselijk contrast 0,7', p1.mat, p1.osMat, { contrast: 0.7 });
+  await rij('W5: W1 met plaatselijk contrast 1,0', p1.mat, p1.osMat, { contrast: 1.0 });
+  rijen.push(onder);
+  fs.writeFileSync(path.join(MEESTER_UIT, 'rijker.json'), JSON.stringify({ buurverschil: maten }, null, 1));
+  E.bewaar(path.join(MEESTER_UIT, 'rijker.png'), rijen, 'Rijker schilderwerk: drie wegen', `Het rijke begin (FaeTastic, zonder referentie), elk met ons handschrift H3. W1: schilderwoorden en cfg 7; W4 en W5: W1 met plaatselijk contrast in onze code (0,7 en 1,0). (Een tweede beurt op dubbel formaat in tegels maakte het gladder: TWEEDE=1.) Verschil tussen buurpixels naar zuidwest: ${Object.entries(maten).map(([k, v]) => `${k} ${v}`).join(', ')}. Maal 2 (spelmaat 2×).`);
+  console.log(JSON.stringify(maten));
+  console.log('uit/karhd/meester/rijker.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
 else if (wat === 'meester') meesterProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'eigen') eigenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

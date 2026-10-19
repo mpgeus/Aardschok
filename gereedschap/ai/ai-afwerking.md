@@ -954,3 +954,30 @@ de os en de lading (de zakken lijken broden).
 Dit is ongeveer wat de 1080 Ti met deze aanpak geeft. Meer rijkdom vraagt een nieuwer model, en daarvoor eigenlijk een
 kaart met 16 GB of meer.
 
+### Rijker schilderwerk: drie wegen (19 okt)
+
+Marcel: "Kunnen wij aan 'rijker' schilderwerk komen?", en "Ja de proef eerst maar".
+(`node gereedschap/pixelart/karhd.cjs rijker`, `uit/karhd/meester/rijker.png`; de plaat met de tweede beurt:
+`rijker-tweede.png`.) Alles met het rijke begin (FaeTastic, zonder referentie) en ons handschrift H3. Gemeten: het verschil
+tussen buurpixels op spelmaat naar zuidwest (`karhd.cjs buurverschil`).
+
+| | buurverschil |
+|---|---|
+| ChatGPT | 75,8 |
+| H3 van eerder | 52,0 |
+| W1: schilderwoorden en cfg 7 (`huisstijl.cjs SCHILDER`) | 53,2 |
+| W2: W1 met een tweede beurt op dubbel formaat in tegels (`tweedeBeurt`, denoise 0,4, 25 minuten) | 46,6 |
+| W3: W2 met plaatselijk contrast | 60,4 |
+| W4: W1 met plaatselijk contrast 0,7 (`plaatselijkContrast`) | 70,2 |
+| W5: W1 met plaatselijk contrast 1,0 | 76,7 |
+
+- **De schilderwoorden** helpen een beetje: donkerder hout, wat meer vachtstreken.
+- **De tweede beurt werkt op deze maat tegen.** Het extra detail middelt weg bij het terug verkleinen, en zacht overschilderen
+  maakt het gladder. Alleen nog met `TWEEDE=1`.
+- **Plaatselijk contrast is de sterkste hefboom, en zit helemaal in onze eigen code** (de helderheid verder van haar
+  omgeving, op de render van 4×, vóór het verkleinen). Met 1,0 is het buurverschil dat van ChatGPT: de vachtstreken, de
+  nerf en de glimlichten worden zichtbaar. Wel wat hard.
+
+**Wat er nog verschilt met ChatGPT:** niet meer de rijkdom van de textuur, maar de tekening zelf: de vorm van de lading (de
+zakken lijken broden), de kop van de os, en de warmte van de kleuren.
+

@@ -22,6 +22,13 @@ const HUISSTIJL = {
 // De pixelart-LoRA (Marcel, 19 okt: "LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"):
 // PixelArtRedmond Lite 64 van artificialguybr (Civitai 144684, versie 160844; beelden verkopen mag: allowCommercialUse
 // Image), met zijn woorden voor de prompt.
+// Rijker schilderwerk (Marcel, 19 okt: "Kunnen wij aan 'rijker' schilderwerk komen?"): woorden voor geschilderd werk, en
+// wat er niet in mag (glad, plastic), met een sterkere prompt (cfg).
+const SCHILDER = {
+  zin: 'painterly hand-painted game art, visible brush strokes, strong highlights and deep shadows, rich texture detail',
+  negatief: 'smooth, plastic, cgi, airbrushed, flat shading, waxy',
+  cfg: 7,
+};
 const LORA = { naam: 'civitai-pixelartredmond\\PixelArtRedmond-Lite64.safetensors', kracht: 0.8, woorden: 'Pixel Art, PixArFK' };
 
 // Eén zin per materiaal, voor alle dingen. Een vacht krijgt zijn kleur uit het model (kleurWoord), dus een zwarte koe en
@@ -112,4 +119,4 @@ function kleurWoord([r, g, b]) {
   return 'purple';
 }
 
-module.exports = { HUISSTIJL, LORA, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };
+module.exports = { HUISSTIJL, SCHILDER, LORA, MATERIALEN, zinVoor, GROEP, GROEPZIN, groepVoor, kleurWoord };
