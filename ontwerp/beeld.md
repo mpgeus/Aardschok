@@ -562,6 +562,8 @@ kunnen niet voor elk plaatje een referentie maken. Ik wil dat wij onze eigen art
 - **Daarna de projectie:** het geschilderde beeld op het model, alle richtingen en standen door onze renderer
   (`gereedschap/ai/ai-afwerking.md`, "Een eigen pijplijn").
 - **Later kan de stijl helemaal van ons worden:** een eigen LoRA, getraind op onze eigen goedgekeurde resultaten.
+- **De maatstaf** is Marcels stijlspecificatie (19 okt 2026, `ontwerp/stijlspecificatie.md`): warm licht van linksboven,
+  koelere schaduw, materialen met hun eigen kleur, drie lagen detail, zachtere binnenlijnen, geen ruis.
 
 ### Kinderkopjes in plaats van kasseien (Marcel, 21 sep 2026)
 

@@ -1002,3 +1002,20 @@ materiaal?" Daarna: "Ja proberen". (`node gereedschap/pixelart/karhd.cjs zinnen`
 - **Schors kreeg geen eigen gebied:** de stam heeft geen schorsmateriaal (`zinnen.json`).
 - **Les:** een zin stuurt ook de helderheid en de warmte. De zinnen moeten ook zeggen dat het licht en warm is.
 
+## De stijlspecificatie in de pijplijn (19 okt, voorstel)
+
+Marcel gaf de stijlspecificatie (`ontwerp/stijlspecificatie.md`, letterlijk): "Kun je hier wat mee?" Ja. Per deel, wat er
+al is, wat botst, en wat er moet gebeuren:
+
+| deel van de specificatie | wat er al is | wat er moet gebeuren |
+|---|---|---|
+| 1 Vorm, 8 techniek (orthografisch, één schaal, één licht, doorzichtig) | onze renderer en de modellen in code | niets; zo houden |
+| 2 Lijnen: buiten donker, binnen dunner en zachter | het handschrift: binnen even donker als buiten | binnenlijnen zachter (half naar de kleur eronder), alleen op echte bouwgrenzen; buiten donker maar niet zwart en niet dik |
+| 2 Glimlicht op randen, contactschaduw in naden | de renderer heeft randen en holtes, de stijl `contact` en `accent` | die laten doorwerken op de geprojecteerde kleur (nu valt de afwerking weg bij `gebakkenAfwerking`) |
+| 2 Geen ruis, geen overdreven verscherping | **botst:** de vacht van `stoffen.cjs` is ruis; plaatselijk contrast 1,0 (W5) is verscherping | contrast terug naar 0,5 à 0,7; de vacht als streken langs het lijf in plaats van ruis |
+| 3 Warm licht, koelere schaduw, geen zwart | ons licht is één kleur; de geprojecteerde kleur heeft geen warm en koel meer | een kleurverschuiving uit ons eigen licht (de G-buffer): het licht naar crème en goud, de schaduw naar blauwgrijs, het donkerste opgetild |
+| 4 Materialen, 5 palet | `huisstijl.cjs GROEPZIN`, te donker en koud | de zinnen herschrijven uit de specificatie (honey-brown, amber, walnut; charcoal en blue-grey; ivory en cream), en per materiaal een kleurfamilie voor licht, midden en schaduw |
+| 6 Hiërarchie: vorm, dan bouw, dan fijn detail | ons model (vorm), de lijnen en naden (bouw), SDXL (fijn) | het fijne detail ondergeschikt houden: minder contrast op de fijne laag dan op de vorm |
+| Negatieve lijst | `HUISSTIJL.negatief` | aanvullen uit de specificatie |
+| Vergelijken op ware grootte en spelmaat, niet alleen op getallen | **botst:** ik noemde W5 "op ChatGPT-niveau" op het buurverschil alleen, en dat meet dichtheid, geen kwaliteit | voortaan een plaat op 4× en 2× naast de ChatGPT-wagen, met per punt (materiaal, randen, schaduw, hiërarchie, diepte) wat beter of slechter is |
+

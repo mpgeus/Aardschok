@@ -398,8 +398,10 @@ stenen huizen. **Ronde 3 is af.**
   (`huisstijl.cjs HUISSTIJL.pijplijn`: het rijke begin, de schilderwoorden, H3, contrast 1,0), en: "kunnen we betere zinnen
   maken voor het materiaal?" Geprobeerd (`karhd.cjs zinnen`; `ai-afwerking.md`, "De betere zinnen per materiaal"): de
   inhoud is beter (jute zakken, geen broden), maar alles werd donkerder en kouder (de woorden "blackened", "deep",
-  "dark"). **Wacht op Marcel:** de zinnen lichter en warmer maken en nog een keer, of hij past ze zelf aan; daarna de
-  pijplijn op een tweede ding.
+  "dark"). Marcel gaf daarna de stijlspecificatie (`ontwerp/stijlspecificatie.md`, letterlijk). **Wacht op Marcel:** het
+  voorstel (`ai-afwerking.md`, "De stijlspecificatie in de pijplijn"): de zinnen uit de specificatie, zachtere
+  binnenlijnen, warm licht en koele schaduw uit ons eigen licht, minder verscherping, en vergelijken op 4× en 2× met een
+  oordeel per punt; daarna de pijplijn op een tweede ding.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
