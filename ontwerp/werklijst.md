@@ -329,8 +329,12 @@ stenen huizen. **Ronde 3 is af.**
   koper werd bruin); nu detailbehoudend verkleinen (`stijl.cjs verkleinDetail`) en een palet per materiaal. SDXL op dit
   wiel en gebakken (`oppervlak.cjs --wiel doel`, met een ijking van de helderheid per materiaal): vast in alle richtingen,
   maar op spelgrootte vlak (contrast 94 tegen 140); wat kleiner is dan een pixel (nagels, naden) haalt geen filter en geen
-  AI, dat moet getekend worden. **Wacht op Marcel:** het handschrift (stijl D bijgesteld op het nieuwe wiel: nagels als
-  pixels, lijnen, kleurreeksen per vlak).
+  AI, dat moet getekend worden. Marcel: "Wat als wij onze ingame resolutie voor sprites verhogen?" Proefplaat (19 okt;
+  `doelwiel.cjs groter`, `uit/doelwiel/groter.png`): op 1080p zie je meer pixels alleen als alles groter in beeld komt;
+  anderhalf keer zo groot laat ruim twee keer zoveel nagels zien (34 tegen 15 van 63), maar dan past er 44% van de wereld
+  in beeld (twee keer: 25%), de render kost 2 tot 3,3 keer zo lang; het ChatGPT-wiel op de maat van nu heeft nog altijd
+  meer karakter dan ons wiel op twee keer. **Wacht op Marcel:** de maat in beeld (zoals nu, anderhalf, twee keer) en het
+  handschrift (stijl D bijgesteld op het nieuwe wiel: nagels als pixels, lijnen, kleurreeksen per vlak).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

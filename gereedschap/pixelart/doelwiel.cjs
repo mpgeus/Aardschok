@@ -6,6 +6,7 @@
 //
 //   node gereedschap/pixelart/doelwiel.cjs proef      de proefplaat
 //   node gereedschap/pixelart/doelwiel.cjs filters    van 4× naar 2×: box, Lanczos, nearest en detailbehoudend
+//   node gereedschap/pixelart/doelwiel.cjs groter     het wiel groter in beeld: sprite 2×, 3× en 4× op 1920×1080
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -20,11 +21,11 @@ const UIT = path.join(__dirname, 'uit', 'doelwiel');
 const FIJN = 4;
 
 // Een render met de G-buffer (zoals hdstijl.cjs render), van het wiel naar het doel.
-function render(kant, s) {
+function render(kant, s, fijn = FIJN) {
   const m = H.wielModel(H.DOELWIEL, H.STANDEN[s].hoek);
-  const B = new K.Beeld(H.CEL[0] * FIJN, H.CEL[1] * FIJN, H.CEL[2] * FIJN, H.CEL[3] * FIJN);
+  const B = new K.Beeld(H.CEL[0] * fijn, H.CEL[1] * fijn, H.CEL[2] * fijn, H.CEL[3] * fijn);
   const t0 = process.hrtime.bigint();
-  K.tekenModel(B, m, { richting: kant, rust: true, gbuffer: true, fijn: FIJN });
+  K.tekenModel(B, m, { richting: kant, rust: true, gbuffer: true, fijn });
   K.belicht(B);
   const zl = K.kleurBeeld(B);
   const ms = Number(process.hrtime.bigint() - t0) / 1e6;
@@ -182,6 +183,71 @@ function filters() {
   console.log('uit/doelwiel/filters.png');
 }
 
+// ---------------------------------------------------------------- groter in beeld
+
+// Marcel (19 okt): "Wat als wij onze ingame resolutie voor sprites verhogen?" Op 1920×1080 tekent het spel een sprite van 2×
+// één op één; meer pixels laat het scherm alleen zien als alles groter in beeld komt. Het wiel naar het doel op drie
+// maten, elk één op één zoals het scherm hem toont: zoals nu (sprite 2×, uit 4×), anderhalf keer zo groot (3×, uit 6×) en
+// twee keer zo groot (4×, uit 8×), steeds detailbehoudend verkleind met een palet per materiaal; naast het ChatGPT-wiel op
+// dezelfde maat. En op een schermafdruk van het spel (1920×1080) wat er bij die maten nog in beeld past.
+const SCHERM = path.join(__dirname, '..', 'schermen', 'uit', 'tekenmeting-tegen-nieuw-0-35-dag.png');
+function groter() {
+  const AF = require('../ai/afwerking.cjs');
+  fs.mkdirSync(UIT, { recursive: true });
+  const ij = HS.leesIjk();
+  const maten = [2, 3, 4];
+  const uit = [];
+  for (const n of maten) {
+    const R = render('ZW', 0, 2 * n);
+    const G = S.gbuffer(R, 2);
+    const P = paletPerMateriaal([S.verkleinDetail(R, 2, { details: new Set(R.nagels) })], [G], PER);
+    const sprite = spriteVan(R, G, P);
+    const sm = AF.spriteMaten(sprite, G, new Set(R.nagels));
+    const u = H.uitsnede([sprite], 3);
+    const doel = HS.doelOpMaat(ij.hoogte * (n / 2));
+    // een figuur van 320 beelden (acht richtingen, veertig standen) op deze maat, als RGBA
+    const figuurMB = +((320 * u.b * u.h * 4) / 1e6).toFixed(1);
+    uit.push({ n, R, sprite, u, doel, sm, ms: Math.round(R.ms), maat: `${u.b - 6}×${u.h - 6}`, figuurMB });
+    H.bewaar(path.join(UIT, `groter-${n}x.png`), sprite);
+    console.log(`sprite ${n}× (uit ${2 * n}×): wiel ${u.b - 6}×${u.h - 6} px, ${Math.round(R.ms)} ms, nagels ${sm.nagels.zichtbaar}/${sm.nagels.koppen}, detail ${sm.detail}, een figuur van 320 beelden ${figuurMB} MB`);
+  }
+  const opGrond = (r) => H.alfaSnijMetGrond(r);
+  const groot = (r, k) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, k);
+  const NAAM = { 2: 'zoals nu', 3: 'anderhalf keer zo groot', 4: 'twee keer zo groot' };
+  // rij 1: één op één; rij 2: de naaf, zo vergroot dat ze even groot zijn (maal 12 / n)
+  const rij1 = [];
+  const rij2 = [];
+  for (const x of uit) {
+    const dk = H.alfaSnij(x.doel, H.uitsnede([x.doel], 3));
+    rij1.push(E.met(opGrond(dk), `doel, ${NAAM[x.n]}`), E.met(opGrond(H.alfaSnij(x.sprite, x.u)), `wiel ${x.n}× · ${x.maat} · ${x.sm.nagels.zichtbaar}/${x.sm.nagels.koppen} nagels`));
+    const naaf = { x0: x.u.x0 + Math.round(x.u.b * 0.3), y0: x.u.y0 + Math.round(x.u.h * 0.33), b: Math.round(x.u.b * 0.36), h: Math.round(x.u.h * 0.32) };
+    rij2.push(E.met(groot(opGrond(H.alfaSnij(x.sprite, naaf)), 12 / x.n), `de naaf, ${NAAM[x.n]} (maal ${12 / x.n})`));
+  }
+  // rij 3: de schermafdruk met wat er in beeld blijft (gecentreerd op het dorp), op de helft
+  const rijen = [rij1, rij2];
+  if (fs.existsSync(SCHERM)) {
+    const A = require('../ai/beeld-ai.cjs');
+    const sc = A.leesPng(fs.readFileSync(SCHERM));
+    const rgba = Buffer.alloc(sc.b * sc.h * 4);
+    for (let i = 0; i < sc.b * sc.h; i++) rgba.set([sc.rgba[i * 4], sc.rgba[i * 4 + 1], sc.rgba[i * 4 + 2], 255], i * 4);
+    const scherm = { b: sc.b, h: sc.h, rgba };
+    const cx = 1500, cy = 760; // het dorp
+    const kader = (f, kleur) => {
+      const b = Math.round(sc.b / f), h = Math.round(sc.h / f);
+      const x0 = Math.max(0, Math.min(sc.b - b, Math.round(cx - b / 2))), y0 = Math.max(0, Math.min(sc.h - h, Math.round(cy - h / 2)));
+      for (let t = 0; t < 4; t++) for (let x = x0; x < x0 + b; x++) for (const y of [y0 + t, y0 + h - 1 - t]) scherm.rgba.set([...kleur, 255], (y * sc.b + x) * 4);
+      for (let t = 0; t < 4; t++) for (let y = y0; y < y0 + h; y++) for (const x of [x0 + t, x0 + b - 1 - t]) scherm.rgba.set([...kleur, 255], (y * sc.b + x) * 4);
+    };
+    kader(1.5, [250, 200, 60]);
+    kader(2, [230, 70, 60]);
+    rijen.push([E.met(A.verklein(scherm, sc.b / 2, sc.h / 2), 'het spel op 1920×1080 (op de helft): heel = zoals nu; geel = anderhalf keer zo groot; rood = twee keer zo groot')]);
+  }
+  E.bewaar(path.join(UIT, 'groter.png'), rijen, 'Groter in beeld: het wiel op 1920×1080, zoals nu, anderhalf en twee keer zo groot',
+    `Rij 1 één op één, zoals het scherm het toont (de sprite van ${uit.map((x) => `${x.n}× uit ${2 * x.n}×`).join(', ')}; detailbehoudend verkleind, een palet per materiaal), naast het ChatGPT-wiel op dezelfde maat. Rij 2: de naaf, even groot gemaakt. Rij 3: wat er van de wereld in beeld blijft. Rendertijd per beeld: ${uit.map((x) => `${x.n}×: ${(x.ms / 1000).toFixed(1)} s`).join(', ')}; een figuur van 320 beelden: ${uit.map((x) => `${x.figuurMB} MB`).join(', ')}.`);
+  fs.writeFileSync(path.join(UIT, 'groter.json'), JSON.stringify(uit.map((x) => ({ sprite: `${x.n}×`, intern: `${2 * x.n}×`, wiel: x.maat, ms: x.ms, nagels: x.sm.nagels, detail: x.sm.detail, figuurMB: x.figuurMB })), null, 1));
+  console.log('uit/doelwiel/groter.png');
+}
+
 // ---------------------------------------------------------------- de sprite van het wiel naar het doel
 
 // Uit de proef hierboven (19 okt): verkleinen met behoud van detail, en een palet per materiaal (vast per ding: uit de acht
@@ -221,6 +287,7 @@ const BRON = {
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'filters') filters();
+else if (wat === 'groter') groter();
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/doelwiel.cjs proef | filters');
 
 module.exports = { render, stijlVoor, paletPerMateriaal, naarPaletPerMateriaal, paletVast, spriteVan, BRON, UIT };

@@ -443,3 +443,27 @@ te licht: de verdeling van het doel moet per vlak kloppen, niet over het hele wi
 
 Met de nieuwe geometrie en het palet per materiaal brengt dat het wiel waarschijnlijk het dichtst bij het doel. Bakken
 blijft nuttig voor grote vlakken (planken, muren, huiden), waar het schilderwerk groter is dan een pixel.
+
+## Groter in beeld (19 okt, proefplaat)
+
+Marcel: "Wat als wij onze ingame resolutie voor sprites verhogen?" Op 1920×1080 tekent het spel een sprite van 2× al één op
+één. Meer pixels zie je daar dus alleen als alles groter in beeld komt.
+
+Het wiel naar het doel op drie maten, elk één op één (`doelwiel.cjs groter`, `uit/doelwiel/groter.png`), detailbehoudend
+verkleind met een palet per materiaal:
+
+| | zoals nu | anderhalf keer zo groot | twee keer zo groot |
+|---|---|---|---|
+| sprite (interne render) | 2× (4×) | 3× (6×) | 4× (8×) |
+| het wiel op het scherm | 82×103 px | 121×152 px | 161×203 px |
+| nagels te zien | 15 van 63 | 34 van 64 | 44 van 64 |
+| rendertijd per beeld | 2,7 s | 5,4 s | 8,9 s |
+| een figuur van 320 beelden (RGBA) | 12 MB | 26 MB | 45 MB |
+| wat er van de wereld in beeld past | alles | 44% | 25% |
+
+- **Groter helpt het detail.** Anderhalf keer zo groot laat ruim twee keer zoveel nagels zien.
+- **Maar het kost overzicht.** Op een schermafdruk van het spel past bij anderhalf keer nog het dorp met wat bos eromheen,
+  bij twee keer alleen het dorp. Voor een spel waarin je van bovenaf bouwt en vecht is dat een ontwerpkeus.
+- **Het kost ook rendertijd** (2 tot 3,3 keer) en geheugen (2,1 tot 3,6 keer).
+- **Het ChatGPT-wiel op de maat van nu heeft nog altijd meer karakter dan ons wiel op twee keer die maat.** Zijn nagels,
+  lijnen en contrast zijn getekend. Groter maken vervangt het handschrift niet; het geeft het alleen meer ruimte.
