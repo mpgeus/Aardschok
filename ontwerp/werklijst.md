@@ -348,7 +348,10 @@ stenen huizen. **Ronde 3 is af.**
   maar de ChatGPT-bak heeft bijna twee keer zoveel rood (4073 tegen 2146 pixels): hogere wanden, zware rongen, een brede
   bovenrand, de lading hoog opgestapeld; de os gedrongen en zwaar. **Wacht op Marcel:** het voorstel in woorden (de bak
   hoger en zwaarder, de lading hoger, de os forser, de dissel en het juk zwaarder; alleen in de HD-kar), dan een
-  proefplaat, en daarna de leeuwen met SDXL op de grotere wanden.
+  proefplaat, en daarna de leeuwen met SDXL op de grotere wanden. Daarna vroeg Marcel waarom niet de pixels van ChatGPT
+  zelf, en of een pixelart-LoRA kan: op dezelfde maat heeft ChatGPT 25.009 kleuren, wij 95 (`gereedschap/ai/ai-afwerking.md`,
+  "Waarom niet de pixels van ChatGPT zelf"). Voorstel: één proefplaat van het wiel met drie versies: zoals nu, de pixels van
+  het ChatGPT-wiel erop gebakken in volle kleur, en SDXL met Pixel Art XL (170,5 MB, wacht op toestemming om te downloaden).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

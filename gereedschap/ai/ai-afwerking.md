@@ -582,3 +582,31 @@ is. Eerst de kar zonder AI (`gereedschap/pixelart/karhd.cjs proef`, `uit/karhd/p
 - De os is vlak en grijs, waar het doel een romige os met tekening heeft.
 - **De render kost 33 s per beeld op 4×** (358 onderdelen). Het meeste zit in de twee nieuwe wielen (103 onderdelen elk,
   vooral losse nagels). Die moeten één onderdeel per kring worden, zoals de nagels op de band al zijn.
+
+## Waarom niet de pixels van ChatGPT zelf (19 okt)
+
+Marcel: "Waarom is het nou zo dat we dit niet gewoon gelijk kunnen krijgen aan de GPT variant. Je kunt de pixels letterlijk
+kopieren toch?", en "de gpt variant heeft zoveel meer detail".
+
+- **Het ChatGPT-beeld is één schilderij:** één richting, één stand, 1434×1097 pixels, het wiel 420 pixels hoog (bij ons in
+  het spel zo'n 100). Er is geen pixelraster in: 64 procent van de kleurvlakjes op een rij is één pixel breed. Het spel
+  wil acht richtingen, een draaiend wiel, een lopende os en licht dat blijft.
+- **Gemeten op dezelfde maat als in het spel** (`karhd.doelWagen` tegen `uit/karhd/ZW-0.png`):
+
+  | | pixels | kleuren | buurverschil |
+  |---|---|---|---|
+  | ChatGPT, op onze maat | 30.927 | 25.009 | 73 |
+  | onze HD-kar | 32.431 | 95 | 45 |
+
+  Het verschil zit dus niet alleen in de maat, maar in onze stijl. Het zesde verzoek vroeg handgemaakte pixel art: een paar
+  tonen per materiaal, vlakken die rustig worden gemaakt. Dat gooit precies weg wat ChatGPT heeft: bijna elke pixel een
+  eigen kleur, een schilderij op pixelmaat.
+- **Wat wel kan, de pixels kopiëren en vandaar verder:** het ChatGPT-beeld op ons model bakken, zoals SDXL (`bakken.cjs`),
+  en dan de acht richtingen en de standen renderen. De pixels uit het beeld worden dan de kleur op het oppervlak, met de
+  verborgen kant gespiegeld. Daarvoor moet ons model dezelfde vorm hebben als het beeld, en moet het beeld erop passen. Bij
+  het wiel kan dat nu al, want dat is naar het ChatGPT-wiel gebouwd. Bij de kar komt eerst de vorm (de kar forser).
+  Daarna de kleur van het bakken doorlaten (`renderKleur`), zonder hem terug te brengen tot een paar tonen.
+- **Een pixelart-LoRA:** Pixel Art XL (`nerijs/pixel-art-xl` op Hugging Face, `pixel-art-xl.safetensors`, 170,5 MB,
+  CreativeML OpenRAIL-M). Hij schildert in blokken van 8×8, die je met de naaste buur acht keer verkleint, precies onze
+  maat voor het wiel (Z = 8). Zo komt het detail op onze pixels, in plaats van eronder. Maar hij duwt naar weinig kleuren
+  en vlakke pixel art, de andere kant op dan wat ChatGPT doet. Niet gedownload.
