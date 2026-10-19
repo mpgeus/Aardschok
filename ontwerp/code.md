@@ -1134,7 +1134,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `vee.cjs koeMaterialen`). Het wapen van de heer: `gereedschap/pixelart/wapen.cjs` (`leeuw`: een raster als dun onderdeel
   op een wand, de afstand tot de vorm één keer uitgerekend), in de HD-kar met een eigen materiaal (`EMBLEEM`). De gebieden
   standaard in zes groepen en het wapen (`huisstijl.cjs groepVoor`: elk gebied kost SDXL een eigen rekenslag per stap), en
-  `werkstroom` neemt `o.lora` ({ naam, kracht }, `LoraLoader` op het model en de tekst; `huisstijl.cjs LORA`).
+  `werkstroom` neemt `o.lora` ({ naam, kracht }, `LoraLoader` op het model en de tekst; `huisstijl.cjs LORA`). De stoffen in
+  code (`gereedschap/pixelart/stoffen.cjs`: vacht, jute, schors uit `kern.cjs ruis3`, op de plek in rust; `verrijk`) gaan
+  met `bakRender(kant, fijn, rijk)` in het begin van SDXL en zijn de eigen kleur waar SDXL niet bij kwam.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

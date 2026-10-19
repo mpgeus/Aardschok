@@ -386,8 +386,11 @@ stenen huizen. **Ronde 3 is af.**
   daarna: pixelart-modellen ("LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"; de lijst in
   `ai-afwerking.md`, "Pixelart-modellen voor SDXL"). **Gedaan** (19 okt; "Zes groepen, en de pixelart-LoRA"): zes groepen
   halveren de tijd (406 s); PixelArtRedmond (LoRA, 166 MB, beelden verkopen mag) helpt niet op deze maat (blokken drie
-  keer zo grof als onze pixels). **Wacht op Marcel:** de volgende stap om het maximale uit de 1080 Ti te halen: een rijker
-  begin (textuur op de os, een hogere denoise), een groter doek in tegels, of de LoRA zachter.
+  keer zo grof als onze pixels). Daarna stap 1, een rijker begin (`ai-afwerking.md`, "Stap 1: een rijker begin";
+  `stoffen.cjs`: vacht, jute, schors): helpt een beetje (de os krijgt vacht bij denoise 0,65), een hogere denoise laat de
+  inhoud weglopen; geen variant haalt ChatGPT. **Wacht op Marcel:** ons handschrift (omlijning, contrast) over de versie
+  met denoise 0,65, of een nieuwer model proberen (Flux Schnell, Z-Image Turbo; traag of onzeker op de 1080 Ti), of
+  een betere videokaart (een geldkeus).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

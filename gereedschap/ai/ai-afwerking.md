@@ -912,3 +912,22 @@ de os is glad, en SDXL houdt dat vast.
    Fijner detail, maar zo'n 20 tot 30 minuten per richting.
 3. **De LoRA zachter** (0,3 à 0,4): strakkere pixelgroepjes zonder grove blokken.
 
+### Stap 1: een rijker begin (19 okt)
+
+Marcel vroeg of we de grens bereikt hebben. Mijn antwoord: niet van de aanpak (de projectie maakt van één geschilderd beeld
+een kar in acht richtingen, lopend, zonder flikkeren), maar wel bijna van SDXL op een 1080 Ti. Eerst het goedkoopste:
+SDXL neemt bij het overschilderen grotendeels het detail van onze render over, en de os was glad. Marcel: "Beginnen we
+met stap 1".
+
+- **De stoffen in code** (`gereedschap/pixelart/stoffen.cjs`): een vacht (haren in de looprichting, fijne korrel, vlekken),
+  jute (een grof weefsel met plooien) en schors (groeven in de lengte), uit `kern.cjs ruis3` op de plek in rust. Ze gaan in
+  het begin dat SDXL krijgt, en zijn de eigen kleur waar SDXL niet bij kwam (`karhd.cjs bakRender` met `rijk`).
+- **Drie varianten** (`karhd.cjs eigen`, `uit/karhd/meester/eigen.png`, elk zo'n 7 minuten):
+  - **rijk begin, denoise 0,65:** de os krijgt zichtbaar vacht en is minder plastic; de inhoud blijft goed;
+  - **rijk begin, denoise 0,75:** SDXL schildert meer, maar de inhoud loopt weg (de zakken worden goudgeel brood, de kop van
+    de os bruin);
+  - **met PixelArtRedmond op 0,35:** nauwelijks anders, wat geler.
+- **Op spelmaat liggen ze dicht bij elkaar, en geen ervan haalt ChatGPT.** Een rijker begin helpt een beetje, niet genoeg.
+  Wat ChatGPT op spelmaat vooral heeft: sterke donkere omlijning, veel contrast tussen licht en schaduw, en geschilderde
+  streken.
+

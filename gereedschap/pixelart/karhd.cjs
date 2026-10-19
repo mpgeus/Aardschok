@@ -346,10 +346,17 @@ const soortVan = (d) => `${d.m}|${d.deel}`;
 const KOPIEEN_KAR = [spiegelX, ...[1, 2, 3, 4, 5, 6, 7].flatMap((k) => [wielDraai(k), (p, d) => { const q = wielDraai(k)(p, d); return q && spiegelX(q); }])];
 // De render waaruit geprojecteerd wordt: dezelfde materialen zonder beeld (alles met een textuur: anders is het licht van een
 // materiaal zonder textuur de stap in zijn ramp, en werden de os en de zakken zwart), en per pixel het ding en het onderdeel.
-function bakRender(kant, fijn) {
+// rijk: de stoffen in code erop (stoffen.cjs: vacht, jute, schors), voor een rijker begin van SDXL, en ook als eigen kleur
+// waar SDXL niet bij kwam.
+function bakRender(kant, fijn, rijk = false) {
   const BK = require('./bakken.cjs');
   const km = karModel({ ...O_KAR, hoek: 0 });
   const om = osModel({});
+  if (rijk) {
+    const ST = require('./stoffen.cjs');
+    km.mat = ST.verrijk(km.mat, NAAM_KAR, rampKleur);
+    om.mat = ST.verrijk(om.mat, NAAM_OS, rampKleur);
+  }
   const R = render({ ...O_KAR, mat: km.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })), osMat: om.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })) }, kant, fijn);
   const ding = (i) => (R.ramp[i] < 0 || Number.isNaN(R.rust[i * 4]) ? null : Math.floor(R.rust[i * 4 + 3] / 1000));
   const onderdeel = (v) => {
@@ -403,6 +410,11 @@ const PROMPT_KAR = 'HD pixel art game sprite of a medieval lord\'s ox cart, stra
 const NEG_KAR = 'blurry, smooth gradients, photo, 3d render, plastic, deformed, extra wheels, extra legs, text, watermark, signature, ' +
   'ground, grass, shadow on the ground, background objects, frame, border';
 const MEESTER_UIT = path.join(UIT, 'meester');
+// De kleur van een materiaal: een lichte toon van zijn ramp (voor het woord van een vacht, en de stoffen).
+function rampKleur(mat) {
+  const r = mat && K.RAMP_RGB[K.RAMP[mat.ramp]];
+  return r ? r[Math.floor(r.length * 0.6)] : [128, 128, 128];
+}
 // De naam van elk materiaal (voor de zin per materiaal, huisstijl.cjs): de kar uit ossenkar.cjs M, de os uit vee.cjs.
 const NAAM_KAR = Object.assign(Object.fromEntries(Object.entries(O.M).map(([n, i]) => [i, n])), { [MESSING]: 'messing', [EMBLEEM]: 'embleem' });
 const NAAM_OS = Object.fromEntries(Object.entries(V.koeMaterialen(V.OS_KLEUREN[0], true).M).map(([n, i]) => [i, n]));
@@ -411,10 +423,7 @@ const NAAM_OS = Object.fromEntries(Object.entries(V.koeMaterialen(V.OS_KLEUREN[0
 // groepen: de zes groepen en het wapen (huisstijl.cjs groepVoor), anders een gebied per materiaal.
 function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
   const HU = require('../ai/huisstijl.cjs');
-  const kleurVan = (mat) => {
-    const r = mat && K.RAMP_RGB[K.RAMP[mat.ramp]];
-    return r ? r[Math.floor(r.length * 0.6)] : [128, 128, 128];
-  };
+  const kleurVan = rampKleur;
   const lijf = BR.om.mat[Object.entries(NAAM_OS).find(([, n]) => n === 'lijf')[0]];
   const perZin = new Map();
   for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
@@ -433,13 +442,14 @@ function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
   const min = b * h * 0.002;
   return [...perZin].filter(([, p]) => p.length >= min).map(([tekst, pixels]) => ({ tekst, pixels }));
 }
-// extra: { lora, tag } (de pixelart-LoRA, een achtervoegsel voor de map)
+// extra: { lora, tag, rijk, denoise } (de pixelart-LoRA, een achtervoegsel voor de map, de stoffen in het begin, een
+// andere denoise)
 async function meester(kant, checkpoint, eigen = false, extra = {}) {
   const AF = require('../ai/afwerking.cjs');
   const A = require('../ai/beeld-ai.cjs');
   const DK = require('../ai/doek.cjs');
   const HU = require('../ai/huisstijl.cjs');
-  const BR = bakRender(kant, FMEESTER);
+  const BR = bakRender(kant, FMEESTER, !!extra.rijk);
   const R = BR.R;
   // de uitsnede: wat dekt, met een rand, op veelvouden van 64 (SDXL)
   let x0 = R.b, x1 = 0, y0 = R.h, y1 = 0;
@@ -506,7 +516,7 @@ async function meester(kant, checkpoint, eigen = false, extra = {}) {
     }
     H.bewaar(path.join(map, `${kant}-gebieden.png`), kaart);
   }
-  const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora } : { ...AF.START, ...MEESTER, checkpoint };
+  const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora, ...(extra.denoise ? { denoise: extra.denoise } : {}) } : { ...AF.START, ...MEESTER, checkpoint };
   const stroom = AF.werkstroom(namen, o);
   const t0 = Date.now();
   const png = await DK.maak(b, h).voerUit(stroom);
@@ -588,13 +598,21 @@ async function eigenProef() {
   const HU = require('../ai/huisstijl.cjs');
   const KANTEN = ['ZW', 'ZO', 'NW'];
   // de varianten (VARIANT: alleen deze, met komma's): zes groepen zonder en met de pixelart-LoRA
-  const ALLE = { groepen: { naam: 'zes groepen', tag: 'groepen' }, lora: { naam: `zes groepen, PixelArtRedmond ${HU.LORA.kracht}`, tag: 'lora', lora: HU.LORA } };
-  const kies = (process.env.VARIANT || 'groepen,lora').split(',');
+  const ALLE = {
+    groepen: { naam: 'zes groepen', tag: 'groepen' },
+    lora: { naam: `zes groepen, PixelArtRedmond ${HU.LORA.kracht}`, tag: 'lora', lora: HU.LORA },
+    // stap 1 (Marcel, 19 okt: "Beginnen we met stap 1"): een rijker begin, en SDXL meer laten schilderen
+    rijk: { naam: 'rijk begin, denoise 0,65', tag: 'rijk', rijk: true },
+    rijk75: { naam: 'rijk begin, denoise 0,75', tag: 'rijk75', rijk: true, denoise: 0.75 },
+    rijkLora: { naam: 'rijk begin, denoise 0,75, PixelArtRedmond 0,35', tag: 'rijk75-lora35', rijk: true, denoise: 0.75, lora: { ...HU.LORA, kracht: 0.35 } },
+  };
+  const kies = (process.env.VARIANT || 'rijk,rijk75,rijkLora').split(',');
   const rijen = [KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `ter vergelijking: de pixels van ChatGPT · ${k}`))];
-  // de vorige proef (een gebied per materiaal), als hij er is
-  const vorige = path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen');
-  if (fs.existsSync(path.join(vorige, 'sprite-ZW.png'))) rijen.push(KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(vorige, `sprite-${k}.png`))), 2), `een gebied per materiaal (14, 714 s) · ${k}`)));
+  // de vorige proef (zes groepen, een glad begin), als hij er is
+  const vorige = path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-groepen');
+  if (fs.existsSync(path.join(vorige, 'sprite-ZW.png'))) rijen.push(KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(vorige, `sprite-${k}.png`))), 2), `zes groepen, glad begin (vorige proef) · ${k}`)));
   const onder = [];
+  let beginGetoond = false;
   for (const v of kies.map((k) => ALLE[k])) {
     const m = await meester('ZW', null, true, v);
     const { mat, osMat } = projecteer(m.BR, m.beeld);
@@ -604,9 +622,15 @@ async function eigenProef() {
       return E.met(groot(knip(r), 2), `${v.naam} · ${k}`);
     }));
     onder.push(E.met(knip(H.verklein(m.beeld, 3, 'naast')), `${v.naam}: het meesterbeeld (${m.tijd.toFixed(0)} s)`));
+    if (v.rijk && !beginGetoond) {
+      beginGetoond = true;
+      const init = H.lees(path.join(MEESTER_UIT, m.tag, 'ZW-init.png'));
+      for (let i = 0; i < init.b * init.h; i++) if (init.rgba[i * 4] === 255 && init.rgba[i * 4 + 1] === 0 && init.rgba[i * 4 + 2] === 255) init.rgba[i * 4 + 3] = 0;
+      onder.unshift(E.met(knip(H.verklein(init, 3, 'naast')), 'het rijke begin: onze render met de stoffen'));
+    }
   }
   rijen.push(onder);
-  E.bewaar(path.join(MEESTER_UIT, 'eigen.png'), rijen, 'De eigen pijplijn: zonder referentie', 'FaeTastic, zonder stijlplaat: de huisstijl, en per gebied (uit onze render) de zin van zijn groep (huisstijl.cjs); de leeuw van de heer zelf getekend (wapen.cjs); met en zonder de pixelart-LoRA. SDXL schildert op onze render naar zuidwest, en dat wordt geprojecteerd. Maal 2 (spelmaat 2×).');
+  E.bewaar(path.join(MEESTER_UIT, 'eigen.png'), rijen, 'De eigen pijplijn: zonder referentie', 'FaeTastic, zonder stijlplaat: de huisstijl, en per gebied (uit onze render) de zin van zijn groep (huisstijl.cjs); de leeuw van de heer zelf getekend (wapen.cjs). Het rijke begin: vacht, jute en schors in onze render (stoffen.cjs). SDXL schildert op onze render naar zuidwest, en dat wordt geprojecteerd. Maal 2 (spelmaat 2×).');
   console.log('uit/karhd/meester/eigen.png');
 }
 
