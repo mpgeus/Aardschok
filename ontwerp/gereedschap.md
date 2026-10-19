@@ -182,7 +182,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `uit/ai/oppervlak/`; met `--wiel doel` voor het wiel naar het doel (in `uit/ai/oppervlak-doel/`), en met `--wiel gpt`
   de pixels van het ChatGPT-wiel zelf, geprojecteerd (`bak` legt het beeld en bewaart `gelegd.png` en `gelegd-half.png`
   ter controle; in `uit/ai/oppervlak-gpt/`, naast het wiel zoals nu en met het handschrift erover). De pixels van de
-  ChatGPT-wagen op de hele kar: `node gereedschap/pixelart/karhd.cjs gpt` (`uit/karhd/gpt.png`, vier minuten). Het wiel naar het doel
+  ChatGPT-wagen op de hele kar: `node gereedschap/pixelart/karhd.cjs gpt` (`uit/karhd/gpt.png`, vier minuten). De eigen
+  pijplijn: `CHECKPOINTS=<naam>.safetensors node gereedschap/pixelart/karhd.cjs meester` (SDXL schildert de kar op onze
+  render, en dat wordt geprojecteerd; ComfyUI moet draaien; `uit/karhd/meester/`, vijf minuten per checkpoint). Het wiel naar het doel
   zelf: `node gereedschap/pixelart/doelwiel.cjs proef` (de proefplaat) en `filters` (van 4× naar 2×: vier filters en drie
   manieren van palet, gemeten), in `uit/doelwiel/`.
 

@@ -14,6 +14,8 @@
 //   node gereedschap/pixelart/karhd.cjs proef      zuidwest, stand 0: de proefplaat naast de ChatGPT-wagen en de kar van nu
 //   node gereedschap/pixelart/karhd.cjs gpt        de pixels van de ChatGPT-wagen op de kar (geprojecteerd, zoals het wiel in
 //                                                  gereedschap/ai/oppervlak.cjs --wiel gpt): de plaat uit/karhd/gpt.png
+//   node gereedschap/pixelart/karhd.cjs meester    de eigen pijplijn: SDXL schildert de kar op onze render, per checkpoint
+//                                                  (CHECKPOINTS, met komma's), geprojecteerd: uit/karhd/meester/proef.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -330,31 +332,156 @@ const wielDraai = (k) => (p, deel) => {
 // de soort van een onderdeel voor de projectie: zijn materiaal en zijn soort (deel)
 const soortVan = (d) => `${d.m}|${d.deel}`;
 const KOPIEEN_KAR = [spiegelX, ...[1, 2, 3, 4, 5, 6, 7].flatMap((k) => [wielDraai(k), (p, d) => { const q = wielDraai(k)(p, d); return q && spiegelX(q); }])];
-function projectieWagen() {
+// De render waaruit geprojecteerd wordt: dezelfde materialen zonder beeld (alles met een textuur: anders is het licht van een
+// materiaal zonder textuur de stap in zijn ramp, en werden de os en de zakken zwart), en per pixel het ding en het onderdeel.
+function bakRender(kant, fijn) {
   const BK = require('./bakken.cjs');
-  const t0 = Date.now();
-  // de render waaruit geprojecteerd wordt, met dezelfde materialen zonder beeld (alles met een textuur: anders is het licht
-  // van een materiaal zonder textuur de stap in zijn ramp, en werden de os en de zakken zwart)
-  const km0 = karModel({ ...O_KAR, hoek: 0 });
-  const om0 = osModel({});
-  const R = render({ ...O_KAR, mat: km0.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })), osMat: om0.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })) }, 'ZW', FGPT);
-  const L = legWagen(R);
-  const paars = (k) => k[2] > k[1] + 8 && k[0] > k[1] + 8;
+  const km = karModel({ ...O_KAR, hoek: 0 });
+  const om = osModel({});
+  const R = render({ ...O_KAR, mat: km.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })), osMat: om.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })) }, kant, fijn);
+  const ding = (i) => (R.ramp[i] < 0 || Number.isNaN(R.rust[i * 4]) ? null : Math.floor(R.rust[i * 4 + 3] / 1000));
+  const onderdeel = (v) => {
+    const obj = Math.floor(v / 1000);
+    return (obj === 1 ? km : om).delen[Math.round(v - obj * 1000)];
+  };
+  return { R, km, om, ding, onderdeel };
+}
+// Een beeld dat op de render ligt (een pixel van het beeld is een pixel van R), op de kar en de os geprojecteerd: de
+// materialen die het lezen. beeldOs: een eigen beeld voor de os (ChatGPT, apart gelegd), anders hetzelfde.
+function projecteer(BR, beeld, beeldOs = beeld) {
+  const BK = require('./bakken.cjs');
   const SM = require('./stijlmaat.cjs');
+  const paars = (k) => k[2] > k[1] + 8 && k[0] > k[1] + 8;
   const opties = (obj) => ({
-    welke: (i) => L.ding(i) === obj,
-    sleutel: (v) => soortVan(L.onderdeel(v)),
-    binnen: (X, Y) => (obj === 2 ? L.beeldOs : L.beeld).rgba[(Y * L.beeld.b + X) * 4 + 3] >= 128,
+    welke: (i) => BR.ding(i) === obj,
+    sleutel: (v) => soortVan(BR.onderdeel(v)),
+    binnen: (X, Y) => (obj === 2 ? beeldOs : beeld).rgba[(Y * beeld.b + X) * 4 + 3] >= 128,
     // op de os ook geen rood van de bak (waar zijn romp voor de bak van ChatGPT ligt)
     soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !paars(k) && !(obj === 2 && k[0] > 60 && k[0] > 1.8 * k[1] && k[0] > 1.8 * k[2]),
   });
-  const prKar = BK.projectie(R, L.beeld, opties(1));
-  const prOs = BK.projectie(R, L.beeldOs, opties(2));
-  const mat = L.km.mat.map((m) => (m ? BK.projectieMateriaal(m, prKar, { kopieen: KOPIEEN_KAR, sleutelVan: soortVan, zacht: ZACHT }) : m));
-  const osMat = L.om.mat.map((m) => (m ? BK.projectieMateriaal(m, prOs, { kopieen: [spiegelX], sleutelVan: soortVan, zacht: ZACHT }) : m));
+  const prKar = BK.projectie(BR.R, beeld, opties(1));
+  const prOs = BK.projectie(BR.R, beeldOs, opties(2));
+  const mat = BR.km.mat.map((m) => (m ? BK.projectieMateriaal(m, prKar, { kopieen: KOPIEEN_KAR, sleutelVan: soortVan, zacht: ZACHT }) : m));
+  const osMat = BR.om.mat.map((m) => (m ? BK.projectieMateriaal(m, prOs, { kopieen: [spiegelX], sleutelVan: soortVan, zacht: ZACHT }) : m));
+  return { mat, osMat };
+}
+function projectieWagen() {
+  const t0 = Date.now();
+  const BR = bakRender('ZW', FGPT);
+  const L = legWagen(BR.R);
+  const { mat, osMat } = projecteer(BR, L.beeld, L.beeldOs);
   console.log(`gelegd (schaal ${L.schaal.toFixed(3)}, voorste wiel ${L.voor}; de os apart: ${JSON.stringify(L.osLigging)}) in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
   return { mat, osMat, beeld: L.gpt };
 }
+
+// ---------------------------------------------------------------- een meesterbeeld met SDXL (de eigen pijplijn)
+
+// Marcel, 19 okt: "We moeten zelf een betrouwbare pipeline hebben om te bouwen. Ik wil niet steeds gpt moeten gebruiken"
+// (gereedschap/ai/ai-afwerking.md, "Een eigen pijplijn"). SDXL schildert lokaal (ComfyUI, afwerking.cjs werkstroom: img2img
+// binnen ons silhouet, ControlNet lijnen en diepte, IP-Adapter met de stijlplaat) op onze eigen render, één op één: een
+// pixel van het doek is een pixel van de render. Het beeld ligt dus vanzelf op het model, zonder uitlijnen, en gaat met
+// dezelfde projectie op de kar en de os. De stijlplaat is de ChatGPT-wagen die er al is (geen nieuwe ChatGPT).
+const FMEESTER = 6; // de kar op het doek zo'n 1100 bij 850 pixels
+const MEESTER = { denoise: 0.65 };
+const PROMPT_KAR = 'HD pixel art game sprite of a medieval lord\'s ox cart, strategy game asset, red painted wooden wagon with golden lion ' +
+  'emblems on the side panels, heavy dark wooden corner posts with iron bands and rivets, yellow trim, two big spoked wooden wheels ' +
+  'with iron tyres, loaded with burlap sacks, an open treasure chest full of gold coins, a wooden barrel, a red sack, a log, a small ' +
+  'red and yellow banner on a pole, pulled by a cream colored ox with horns in a leather and brass harness collar, rich hand-painted ' +
+  'detail, warm light from the top left, crisp dark outlines';
+const NEG_KAR = 'blurry, smooth gradients, photo, 3d render, plastic, deformed, extra wheels, extra legs, text, watermark, signature, ' +
+  'ground, grass, shadow on the ground, background objects, frame, border';
+const MEESTER_UIT = path.join(UIT, 'meester');
+async function meester(kant, checkpoint) {
+  const AF = require('../ai/afwerking.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const DK = require('../ai/doek.cjs');
+  const BR = bakRender(kant, FMEESTER);
+  const R = BR.R;
+  // de uitsnede: wat dekt, met een rand, op veelvouden van 64 (SDXL)
+  let x0 = R.b, x1 = 0, y0 = R.h, y1 = 0;
+  for (let i = 0; i < R.b * R.h; i++) if (R.ramp[i] >= 0) {
+    const x = i % R.b;
+    const y = (i - x) / R.b;
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  const b = Math.ceil((x1 - x0 + 1 + 32) / 64) * 64;
+  const h = Math.ceil((y1 - y0 + 1 + 32) / 64) * 64;
+  const ox = Math.max(0, Math.floor((x0 + x1 - b) / 2));
+  const oy = Math.max(0, Math.floor((y0 + y1 - h) / 2));
+  const knip = (r, leeg) => {
+    const uit = { b, h, rgba: Buffer.alloc(b * h * 4) };
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+      const X = x + ox, Y = y + oy;
+      const i = (y * b + x) * 4;
+      if (X >= R.b || Y >= R.h) { uit.rgba.set([...leeg, 255], i); continue; }
+      r.rgba.copy(uit.rgba, i, (Y * R.b + X) * 4, (Y * R.b + X) * 4 + 4);
+      uit.rgba[i + 3] = 255;
+    }
+    return uit;
+  };
+  const dekt = (X, Y) => X >= 0 && Y >= 0 && X < R.b && Y < R.h && R.ramp[Y * R.b + X] >= 0;
+  const init = knip(R.zl, [255, 0, 255]);
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) if (!dekt(x + ox, y + oy)) init.rgba.set([255, 0, 255, 255], (y * b + x) * 4);
+  // het masker: het silhouet, vier pixels ruimer
+  const masker = { b, h, rgba: Buffer.alloc(b * h * 4) };
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    let in4 = false;
+    for (let dy = -4; dy <= 4 && !in4; dy++) for (let dx = -4; dx <= 4 && !in4; dx++) in4 = dekt(x + ox + dx, y + oy + dy);
+    masker.rgba.set(in4 ? [255, 255, 255, 255] : [0, 0, 0, 255], (y * b + x) * 4);
+  }
+  const lijnen = knip(S.lijnenVan(R), [0, 0, 0]);
+  const diepte = knip(S.diepteVan(R), [0, 0, 0]);
+  const tag = (checkpoint || 'sdxl-base').replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-');
+  const map = path.join(MEESTER_UIT, tag);
+  fs.mkdirSync(map, { recursive: true });
+  const namen = { positief: PROMPT_KAR, negatief: NEG_KAR, stijl: await A.upload('aardschok-meester-stijl.png', fs.readFileSync(BRON), 'image/png') };
+  for (const [k, r] of Object.entries({ init, masker, lijnen, diepte })) {
+    const data = K.pngVanBeeld(r);
+    fs.writeFileSync(path.join(map, `${kant}-${k}.png`), data);
+    namen[k] = await A.upload(`aardschok-meester-${kant}-${k}.png`, data, 'image/png');
+  }
+  const o = { ...AF.START, ...MEESTER, checkpoint };
+  const stroom = AF.werkstroom(namen, o);
+  const t0 = Date.now();
+  const png = await DK.maak(b, h).voerUit(stroom);
+  const tijd = (Date.now() - t0) / 1000;
+  fs.writeFileSync(path.join(map, `${kant}-ai.png`), png);
+  fs.writeFileSync(path.join(map, `${kant}-instellingen.json`), JSON.stringify({ kant, checkpoint: checkpoint || AF.MODELLEN.checkpoint, fijn: FMEESTER, doek: [b, h], plek: [ox, oy], instellingen: o, positief: PROMPT_KAR, negatief: NEG_KAR, stijlplaat: 'gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png', seconden: +tijd.toFixed(1), wanneer: new Date().toISOString() }, null, 1));
+  // terug op de render: het beeld op zijn plek, alleen binnen ons silhouet
+  const ai = A.leesPng(png);
+  const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    if (!dekt(x + ox, y + oy) || x >= ai.b || y >= ai.h) continue;
+    const j = (y * ai.b + x) * 4;
+    beeld.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], ((y + oy) * R.b + x + ox) * 4);
+  }
+  console.log(`${tag} ${kant}: ${tijd.toFixed(0)} s, doek ${b}×${h}`);
+  return { BR, beeld, ai, tag, tijd };
+}
+// De proef: per checkpoint het meesterbeeld naar zuidwest, geprojecteerd, in drie beelden op spelmaat, naast de kar met de
+// pixels van ChatGPT (gpt-ZW.png enz., uit `karhd.cjs gpt`).
+const CHECKPOINTS = (process.env.CHECKPOINTS || 'sd_xl_base_1.0.safetensors').split(',');
+async function meesterProef() {
+  const zl = (R) => ({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) });
+  const sprite = (R) => H.omlijnBeeld(H.verklein(zl(R), 2, 'naast'));
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const rijen = [['ZW', 'ZO', 'NW'].map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `de pixels van ChatGPT · ${k}`))];
+  for (const ck of CHECKPOINTS) {
+    const m = await meester('ZW', ck === 'sd_xl_base_1.0.safetensors' ? undefined : ck);
+    const { mat, osMat } = projecteer(m.BR, m.beeld);
+    const rij = [E.met(knip(H.verklein(m.beeld, 3, 'naast')), `${m.tag}: het meesterbeeld (${m.tijd.toFixed(0)} s)`)];
+    for (const k of ['ZW', 'ZO', 'NW']) {
+      const r = sprite(render({ ...O_KAR, mat, osMat }, k, FIJN));
+      H.bewaar(path.join(MEESTER_UIT, m.tag, `sprite-${k}.png`), r);
+      rij.push(E.met(groot(knip(r), 2), `${m.tag} · ${k}`));
+    }
+    rijen.push(rij);
+  }
+  E.bewaar(path.join(MEESTER_UIT, 'proef.png'), rijen, 'De eigen pijplijn: SDXL schildert de kar', 'Per checkpoint: SDXL schildert op onze render naar zuidwest (img2img, denoise 0,65, ControlNet lijnen en diepte, IP-Adapter met de ChatGPT-wagen als stijlplaat, seed 180), en dat wordt geprojecteerd. Maal 2 (spelmaat 2×). Bovenaan de kar met de pixels van ChatGPT.');
+  console.log('uit/karhd/meester/proef.png');
+}
+
 function gpt() {
   fs.mkdirSync(UIT, { recursive: true });
   const { mat, osMat, beeld } = projectieWagen();
@@ -388,4 +515,5 @@ module.exports = { materialen, karModel, osModel, render, stijlVoor, gestileerd,
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
-else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt');
+else if (wat === 'meester') meesterProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

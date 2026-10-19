@@ -818,3 +818,28 @@ CreativeML Open RAIL++-M van SDXL. Bewaar per gekozen model een afdruk van de mo
 **Middelen:** per checkpoint zo'n 7 GB schijf (747 GB vrij), en evenveel videogeheugen als de base (past op de 1080 Ti).
 De rest van de werkstroom (ControlNet Union, IP-Adapter Plus) blijft gelijk.
 
+### De eigen pijplijn: de eerste proef (19 okt)
+
+Marcel: "Prima alle 3" (de drie checkpoints downloaden). FaeTastic kwam binnen (grootte en SHA256 kloppen) en staat in
+`ComfyUI/models/checkpoints/civitai-faetastic/`. AlbedoBase XL en Cor Epica weigerde Civitai met 401: daarvoor moet je
+ingelogd zijn, en inloggen of een sleutel invullen doet Claude niet. Marcel kan ze zelf downloaden naar
+`civitai-albedobase/` en `civitai-corepica/`.
+
+**De weg** (`node gereedschap/pixelart/karhd.cjs meester`, `uit/karhd/meester/`; `CHECKPOINTS` kiest de checkpoints):
+- onze render naar zuidwest op 6× (het doek 1088 bij 832);
+- SDXL schildert erop, één pixel van het doek op één pixel van de render: img2img binnen het silhouet, denoise 0,65,
+  ControlNet lijnen en diepte, IP-Adapter met de ChatGPT-wagen als stijlplaat, seed 180, 83 seconden;
+- het resultaat wordt geprojecteerd zoals de pixels van ChatGPT (`karhd.cjs projecteer`), zonder uitlijnen.
+
+**Wat het laat zien** (`proef-base.png`, `proef-faetastic.png`):
+- **De pijplijn werkt.** Het beeld ligt vanzelf op de kar en de os, in elke richting.
+- **Het kale SDXL base schildert grof:** overal goud, de stam een rode rol, geen leeuwen, een gladde os.
+- **FaeTastic is duidelijk beter:** hout met schors, wielen met hout en ijzer, een juk met koperen nagels.
+- **Maar SDXL weet niet wat waar hoort**, bij beide checkpoints: de zakken worden goudhopen en rode kruiken, en de
+  leeuwen op de wanden ontbreken. Een ander checkpoint helpt een beetje, niet het meest.
+
+**Wat het meest zou helpen** (voorstel): SDXL per gebied zeggen wat het is. Onze render weet van elke pixel welk onderdeel
+het is, dus elk gebied krijgt zijn eigen prompt: de wanden rood geverfde planken met een gouden leeuw, de zakken jute, de
+kist met goud, de os een romige vacht. Dat kan in ComfyUI met maskers op de conditionering. En wat zeker moet kloppen,
+zoals de leeuw, tekenen we zelf op het model (een embleem op de wand), zodat SDXL het alleen hoeft af te werken.
+

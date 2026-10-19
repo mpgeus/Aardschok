@@ -374,8 +374,12 @@ stenen huizen. **Ronde 3 is af.**
   **Wacht op Marcel:** het voorstel (`ai-afwerking.md`, "Een eigen pijplijn"): SDXL lokaal schildert meesterbeelden op
   onze eigen render (zodat ze er vanzelf op liggen), met één vaste stijlplaat, en die worden geprojecteerd. Eerste proef:
   de kar. Marcel vroeg daarna om een beter SDXL-checkpoint: de korte lijst staat in `ai-afwerking.md`, "Een beter
-  SDXL-checkpoint" (AlbedoBase XL, Cor Epica, FaeTastic; allemaal de beelden verkopen toegestaan). **Wacht op Marcel:**
-  toestemming om ze te downloaden (elk zo'n 7 GB, van Civitai), en dan de kar met elk ervan naast elkaar.
+  SDXL-checkpoint" (AlbedoBase XL, Cor Epica, FaeTastic; allemaal de beelden verkopen toegestaan). Marcel: "Prima alle
+  3". FaeTastic staat erin; AlbedoBase en Cor Epica vragen een inlog bij Civitai (Marcel kan ze zelf downloaden). De
+  eerste proef (`karhd.cjs meester`; `ai-afwerking.md`, "De eigen pijplijn: de eerste proef"): de pijplijn werkt, en
+  FaeTastic schildert beter dan het base, maar SDXL weet niet wat waar hoort (de zakken worden goud, geen leeuwen).
+  **Wacht op Marcel:** het voorstel om SDXL per gebied te sturen (een prompt per onderdeel, uit onze render) en de leeuw
+  zelf op het model te tekenen.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

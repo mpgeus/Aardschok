@@ -159,7 +159,8 @@ function voorbeeld() {
 
 function werkstroom(n, o = START) {
   const st = {
-    1: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: MODELLEN.checkpoint }, _meta: { title: 'SDXL 1.0 base' } },
+    // o.checkpoint: een ander SDXL-checkpoint dan de base (karhd.cjs meester; ai-afwerking.md, "Een beter SDXL-checkpoint")
+    1: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: o.checkpoint || MODELLEN.checkpoint }, _meta: { title: o.checkpoint || 'SDXL 1.0 base' } },
     3: { class_type: 'LoadImage', inputs: { image: n.init }, _meta: { title: 'onze sprite (wiel D) maal 8, op #FF00FF' } },
     4: { class_type: 'VAEEncode', inputs: { pixels: ['3', 0], vae: ['1', 2] } },
     30: { class_type: 'LoadImage', inputs: { image: n.masker }, _meta: { title: 'ons silhouet, iets ruimer' } },
@@ -642,7 +643,7 @@ function platen() {
   console.log('uit/ai/afwerking/vergelijking.png, matrix.png, draaien.png, metingen.json');
 }
 
-module.exports = { werkstroom, invoer, terug, spakenTel, eenBeeld, stijlUpload, uitsnedeVan, gelijkheid, deltaE, spriteMaten, detailVan, START, MODELLEN, POSITIEF, NEGATIEF, UIT, Z, tagVan };
+module.exports = { werkstroom, invoer, terug, spakenTel, eenBeeld, stijlUpload, BRON, uitsnedeVan, gelijkheid, deltaE, spriteMaten, detailVan, START, MODELLEN, POSITIEF, NEGATIEF, UIT, Z, tagVan };
 
 if (require.main === module) main().catch((e) => {
   console.error(e.stack || e.message);

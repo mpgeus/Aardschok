@@ -1124,6 +1124,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ChatGPT, die zijn eigen licht al schildert). `karhd.cjs vormNaarDoel` maakt de rongen dikker en van hout met drie
   ijzeren banden, legt een gele onderrand langs de zijwanden en maakt de disselbomen een dikke vierkante balk
   (`onderdelen.cjs balk`); `ossenkar.cjs` geeft daarvoor ook `DISSEL` en `JUK`.
+- **De eigen pijplijn** (19 okt; Marcel: "Ik wil niet steeds gpt moeten gebruiken"): `karhd.cjs meester(kant, checkpoint)`
+  laat SDXL op onze eigen render schilderen, één op één (`bakRender`: de render met de materialen zonder beeld, en per pixel
+  het ding en het onderdeel), en `projecteer(BR, beeld)` zet een beeld dat op de render ligt op de kar en de os; de pixels
+  van ChatGPT gaan via dezelfde weg (`legWagen` legt ze eerst). `afwerking.cjs werkstroom` neemt `o.checkpoint`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**
