@@ -394,8 +394,10 @@ stenen huizen. **Ronde 3 is af.**
   Marcel daarna: "Kunnen wij aan 'rijker' schilderwerk komen?": **gedaan** (`karhd.cjs rijker`; `ai-afwerking.md`,
   "Rijker schilderwerk: drie wegen"): plaatselijk contrast in onze eigen code is de sterkste hefboom (buurverschil 70 bij
   0,7 en 77 bij 1,0; ChatGPT 76); schilderwoorden helpen een beetje; een tweede beurt in tegels werkt op deze maat tegen.
-  Wat nog verschilt is de tekening (de lading, de kop van de os, de warmte). **Wacht op Marcel:** welke sterkte (W4 of W5)
-  de huisstijl wordt, en dan: de pijplijn op een tweede ding (een koe of een huis), of eerst Cor Epica (Marcel downloadt).
+  Wat nog verschilt is de tekening (de lading, de kop van de os, de warmte). Marcel: "Ok, laten we de w5 gebruiken"
+  (`huisstijl.cjs HUISSTIJL.pijplijn`: het rijke begin, de schilderwoorden, H3, contrast 1,0), en: "kunnen we betere zinnen
+  maken voor het materiaal?" **Wacht op Marcel:** het voorstel voor betere zinnen per materiaal (de kleur uit het model,
+  het oppervlak, hoe het licht vangt; geen lijst van dingen), daarna de pijplijn op een tweede ding.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

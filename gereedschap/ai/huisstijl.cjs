@@ -18,6 +18,9 @@ const HUISSTIJL = {
   negatief: 'blurry, smooth gradients, photo, 3d render, plastic, deformed, text, watermark, signature, ground, grass, ' +
     'shadow on the ground, background objects, frame, border',
   instellingen: { denoise: 0.65, ip: 0, lijn: 0.8, diepte: 0.6, cnEind: 0.85, steps: 32, cfg: 5.5, sampler: 'dpmpp_2m', scheduler: 'karras', seed: 180 },
+  // de gekozen weg (Marcel, 19 okt: "Ok, laten we de w5 gebruiken"; ai-afwerking.md, "Rijker schilderwerk"): het rijke begin
+  // (stoffen.cjs), de schilderwoorden met cfg 7 (SCHILDER), ons handschrift H3 erover, met plaatselijk contrast 1,0
+  pijplijn: { rijk: true, schilder: true, handschrift: 'h3', contrast: 1.0 },
 };
 // De pixelart-LoRA (Marcel, 19 okt: "LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"):
 // PixelArtRedmond Lite 64 van artificialguybr (Civitai 144684, versie 160844; beelden verkopen mag: allowCommercialUse
