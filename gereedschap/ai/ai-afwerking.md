@@ -554,3 +554,31 @@ standen en een volle slag):
 Op de plaat heeft de velg nerf, naden en nagels, de spaken hebben nerf en een lijn langs hun kanten, en waar ze in de velg
 gaan zit het beslag met nagels. In alle acht richtingen blijft het hetzelfde wiel. Het flikkert iets meer dan D, omdat er
 meer getekende pixels meedraaien, maar het zit vast.
+
+## De ossenkar in HD (19 okt, tussenstap)
+
+Marcel: "Ok" op het voorstel: het nieuwe wiel en het handschrift op de hele ossenkar, en SDXL alleen op wat groot genoeg
+is. Eerst de kar zonder AI (`gereedschap/pixelart/karhd.cjs proef`, `uit/karhd/proef.png`). Het is de ossenkar van
+`ossenkar.cjs`, onveranderd, als de wagen van de heer met de buit, zoals de ChatGPT-wagen.
+
+- **De twee wielen** zijn het wiel naar het doel. Zijn soorten onderdelen staan 100 hoger, want de buit gebruikt 30 tot 35
+  ook.
+- **Hout, ijzer, koper en de rode verf** krijgen een textuur, met hun eigen licht en patroon (de naden van de planken, de
+  munten).
+- **De rest** (de zakken, het vaantje, de os) houdt de ramp van nu.
+  - Daarvoor schrijft `kern.cjs` met `o.gbuffer` nu ook een materiaal zonder textuur in de G-buffer, met de stap in zijn
+    ramp als licht.
+  - `stijl.cjs` leest zo'n materiaal onder `~` plus de rampnaam (`rampStijl`): zijn eigen ramp als kleurreeks, de toon
+    zoals `kwantiseer` hem kiest.
+  - Zo krijgt het het handschrift (de omlijning, en lijnen waar iets ervoor ligt) en houdt het de kleuren van nu.
+  - De renderer blijft gelijk: 65 van 65 beelden pixel voor pixel.
+- **Een les:** de lijnen tussen onderdelen van een andere soort, en de naden, horen bij hout en ijzer, niet bij een dier.
+  De os werd een lappenpop. Op wat geen textuur heeft, alleen de lijn waar iets ervoor ligt.
+
+**Op de plaat:**
+
+- De wielen, de rode bak met naden, de koperen bies en de buit staan.
+- De gouden leeuwen op de bak ontbreken nog; dat wordt de stap met SDXL.
+- De os is vlak en grijs, waar het doel een romige os met tekening heeft.
+- **De render kost 33 s per beeld op 4×** (358 onderdelen). Het meeste zit in de twee nieuwe wielen (103 onderdelen elk,
+  vooral losse nagels). Die moeten één onderdeel per kring worden, zoals de nagels op de band al zijn.

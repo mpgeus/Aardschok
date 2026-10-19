@@ -125,6 +125,8 @@ function gbuffer(B, n, stijl = {}) {
     diep: new Float32Array(N), nrm: new Float32Array(N * 3), rust: new Float32Array(N * 3), albedo: new Float32Array(N * 3),
     licht: new Float32Array(N), glans: new Float32Array(N), holte: new Float32Array(N), bol: new Float32Array(N),
     zon: new Float32Array(N), nL: new Float32Array(N), kleur: new Float32Array(N * 3), nerf: new Float32Array(N),
+    // zonder textuur (kern.cjs: zon -1): het licht is dan de stap in de ramp, zoals de kunst van nu (rampStijl)
+    kaal: new Uint8Array(N),
   };
   const GB = K.GB;
   const g = B.g;
@@ -175,7 +177,13 @@ function gbuffer(B, n, stijl = {}) {
         if (B.rust) som[4 + c] += B.rust[s * 4 + c];
         if (B.albedo) som[7 + c] += B.albedo[s * 3 + c];
       }
-      if (g) {
+      if (g && g[s * GB + K.G.zon] === -1) {
+        // zonder textuur: de stap na belicht (de punten van licht zitten erin), verder niets
+        som[10] += B.stap[s];
+        som[14] += 1;
+        som[15] += g[s * GB + K.G.nL];
+        som[16]++;
+      } else if (g) {
         const f = B.kleur ? K.klem(1 + (B.stap[s] - B.kleur[s * 4 + 3]) * 0.22, 0.45, 1.8) : 1;
         som[10] += g[s * GB + K.G.licht] * f;
         som[11] += g[s * GB + K.G.glans] * f;
@@ -189,6 +197,7 @@ function gbuffer(B, n, stijl = {}) {
       }
     }
     G.diep[o] = som[0] / m;
+    G.kaal[o] = som[16] * 2 > m ? 1 : 0;
     const nl = Math.hypot(som[1], som[2], som[3]) || 1;
     for (let c = 0; c < 3; c++) {
       G.nrm[o * 3 + c] = som[1 + c] / nl;
@@ -211,6 +220,7 @@ function gbuffer(B, n, stijl = {}) {
 // Het licht van een pixel als één getal s: het licht van de render, met de textuur (de helderheid van het albedo om zijn
 // gemiddelde, maal def.textuur) en de glans erbij.
 function lichtVan(G, o, def) {
+  if (G.kaal && G.kaal[o]) return G.licht[o];
   const a = lum([G.albedo[o * 3], G.albedo[o * 3 + 1], G.albedo[o * 3 + 2]]) / (def.ref || 1);
   return G.licht[o] * (1 + (def.textuur ?? 0.5) * (a - 1)) + (def.glans ?? 0) * G.glans[o];
 }
@@ -234,14 +244,15 @@ function verdeling(n, o = {}) {
 function kalibreer(Gs, stijl, doel = null, stappen = null) {
   const per = [];
   for (const [naam, def] of Object.entries(stijl.materialen)) {
+    if (def.vast) continue;
     const m = K.RAMP[naam];
     const alb = [];
-    for (const G of Gs) for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && G.mat[o] === m) alb.push(lum([G.albedo[o * 3], G.albedo[o * 3 + 1], G.albedo[o * 3 + 2]]));
+    for (const G of Gs) for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && G.mat[o] === m && !G.kaal[o]) alb.push(lum([G.albedo[o * 3], G.albedo[o * 3 + 1], G.albedo[o * 3 + 2]]));
     if (!alb.length) continue;
     alb.sort((a, b) => a - b);
     def.ref = alb[alb.length >> 1];
     const s = [];
-    for (const G of Gs) for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && G.mat[o] === m) s.push(lichtVan(G, o, def));
+    for (const G of Gs) for (let o = 0; o < G.b * G.h; o++) if (G.dek[o] && G.mat[o] === m && !G.kaal[o]) s.push(lichtVan(G, o, def));
     s.sort((a, b) => a - b);
     const q = (p) => s[K.klem(Math.floor(p * s.length), 0, s.length - 1)];
     const n = def.reeks.length;
@@ -263,7 +274,7 @@ function kalibreer(Gs, stijl, doel = null, stappen = null) {
     for (const G of Gs) {
       const r = stileer(G, stijl, stappen);
       for (let o = 0; o < G.b * G.h; o++) {
-        if (r.toon[o] < 0) continue;
+        if (r.toon[o] < 0 || G.kaal[o]) continue;
         const k = per.findIndex((x) => x.m === G.mat[o]);
         if (k >= 0) tel[k][r.toon[o]]++;
       }
@@ -280,6 +291,24 @@ function kalibreer(Gs, stijl, doel = null, stappen = null) {
   return stijl;
 }
 
+// De stijl van een materiaal zonder textuur (19 okt, de ossenkar): zijn eigen ramp uit kern.cjs als kleurreeks (de tonen
+// die de kunst van nu al heeft), en de toon zoals kwantiseer hem kiest (de stap afgerond, zonder dither). Onder de naam
+// '~' + rampnaam in stijl.materialen; o: wat er verder bij moet (een lijn, accenten, contact).
+function rampStijl(naam, o = {}) {
+  const reeks = K.RAMP_RGB[K.RAMP[naam]].map((k) => [...k]);
+  return {
+    vast: true,
+    reeks,
+    drempels: reeks.slice(1).map((_, k) => k + 0.5),
+    lijn: reeks[0].map((c) => Math.round(c * 0.55)),
+    textuur: 0,
+    glans: 0,
+    contact: { holte: 0, voor: 0.8, stap: 1 },
+    accent: { nL: 0.35, stap: 1 },
+    ...o,
+  };
+}
+
 // ---------------------------------------------------------------- stileren
 
 const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -292,7 +321,7 @@ function stileer(G, stijl, st = {}) {
   const toon = new Int16Array(N).fill(-1);
   const vast = new Uint8Array(N);
   const lijn = new Uint8Array(N);
-  const defVan = (o) => stijl.materialen[K.RAMP_NAMEN[G.mat[o]]];
+  const defVan = (o) => stijl.materialen[(G.kaal[o] ? '~' : '') + K.RAMP_NAMEN[G.mat[o]]];
   const dekt = (x, y) => x >= 0 && y >= 0 && x < b && y < h && G.dek[y * b + x];
   // 1. het licht en de toon. Met de clusters (stijl.clusters.glad) eerst het licht glad binnen elk onderdeel (een paar
   // keer het gemiddelde met de buren van hetzelfde onderdeel): dan ontstaan er minder losse eilandjes, en omdat het licht
@@ -473,11 +502,14 @@ function stileer(G, stijl, st = {}) {
         if (G.stuk[j] === G.stuk[o]) continue;
         // stijl.binnenlijnen.naden: ook tussen twee onderdelen van dezelfde soort die naast elkaar liggen (de stukken van
         // een velg, planken): een naad, op het onderdeel met het hogere nummer
-        const naad = stijl.binnenlijnen.naden && G.deel[j] === G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.stuk[o] > G.stuk[j] && !(stijl.details && (stijl.details.has(G.stuk[o]) || stijl.details.has(G.stuk[j])));
+        // zonder textuur (een dier, een zak: G.kaal) alleen de lijn waar iets ervoor ligt, niet tussen de stukken waar het uit
+        // gebouwd is (19 okt: de os werd een lappenpop)
+        const kaal = G.kaal && (G.kaal[o] || G.kaal[j]);
+        const naad = !kaal && stijl.binnenlijnen.naden && G.deel[j] === G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.stuk[o] > G.stuk[j] && !(stijl.details && (stijl.details.has(G.stuk[o]) || stijl.details.has(G.stuk[j])));
         // stijl.binnenlijnen.om: soorten onderdelen (deel.deel) die een lijn om zich heen krijgen, op wat erachter ligt (al
         // een fractie dieper, omVoor), zoals de spaken van een wiel tegen de velg aan de overkant (19 okt)
         const om = stijl.binnenlijnen.om && stijl.binnenlijnen.om.includes(G.deel[j]) && G.deel[o] !== G.deel[j] && G.diep[j] > G.diep[o] + (stijl.binnenlijnen.omVoor ?? 0.3);
-        if (naad || om || G.diep[j] > G.diep[o] + voor || (G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
+        if (naad || om || G.diep[j] > G.diep[o] + voor || (!kaal && G.deel[j] !== G.deel[o] && Math.abs(G.diep[j] - G.diep[o]) <= voor && G.deel[o] > G.deel[j])) {
           lijn[o] = 1;
           break;
         }
@@ -651,4 +683,4 @@ function verkleinDetail(R, n, o = {}) {
   return uit;
 }
 
-module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, passen, lijnenVan, diepteVan, verkleinDetail, lum, lin, srgb };
+module.exports = { reeks, verdeling, naarLch, vanLch, gbuffer, nerfBij, kalibreer, lichtVan, stileer, passen, lijnenVan, diepteVan, verkleinDetail, rampStijl, lum, lin, srgb };

@@ -1100,6 +1100,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   nooit een binnenlijn (anders werd een nagel op hout een donkere stip); `binnenlijnen.naden`: een naad tussen twee
   onderdelen van dezelfde soort die naast elkaar liggen; `binnenlijnen.om`: soorten onderdelen (deel.deel) die een lijn om
   zich heen krijgen, op wat er al een fractie achter ligt (de spaken). Op het wiel naar het doel: `doelwiel.cjs hand`.
+- **Het handschrift op wat geen textuur heeft** (19 okt, de ossenkar): `kern.cjs` schrijft met `o.gbuffer` ook een
+  materiaal zonder textuur in de G-buffer (de stap in zijn ramp als licht, zon -1 als teken); `stijl.cjs gbuffer` zet dan
+  `G.kaal`, en `stileer` zoekt zijn stijl onder `~` + rampnaam (`rampStijl`: de ramp van nu als kleurreeks, de toon zoals
+  `kwantiseer`). Op zo'n materiaal alleen de lijn waar iets ervoor ligt, geen naden en geen lijnen tussen soorten (anders
+  wordt een dier een lappenpop). De ossenkar in HD: `karhd.cjs` (de wielen naar het doel, hout, ijzer, koper en rood met
+  een textuur).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

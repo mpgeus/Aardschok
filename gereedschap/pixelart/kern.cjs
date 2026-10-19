@@ -427,7 +427,25 @@ function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, 
     B.rust[idx * 4 + 2] = rp[2];
     B.rust[idx * 4 + 3] = deelI;
   }
-  if (!mat.textuur) return 0;
+  if (!mat.textuur) {
+    // Een materiaal zonder textuur in de G-buffer (o.gbuffer, de stijlproef: stijl.cjs; 19 okt, de ossenkar): de stap in
+    // zijn ramp (het licht en het patroon samen) als licht, en zon -1 als teken dat het geen textuur heeft; het albedo grijs.
+    if (o.gbuffer) {
+      if (!B.g) B.g = new Float32Array(B.b * B.h * GB).fill(NaN);
+      const j = idx * GB;
+      B.g[j + 2] = stap;
+      B.g[j + 3] = 0;
+      B.g[j + 4] = 0;
+      B.g[j + 5] = 0;
+      B.g[j + 6] = -1;
+      B.g[j + 7] = nx * tc.lL[0] + ny * tc.lL[1] + nz * tc.lL[2];
+      if (o.rust) {
+        if (!B.albedo) B.albedo = new Float32Array(B.b * B.h * 3).fill(NaN);
+        B.albedo.fill(128, idx * 3, idx * 3 + 3);
+      }
+    }
+    return 0;
+  }
   const rq = naarDeel(deelI, x + nx, y + ny, z + nz);
   const rl = Math.hypot(rq[0] - rp[0], rq[1] - rp[1], rq[2] - rp[2]) || 1;
   const rn = [(rq[0] - rp[0]) / rl, (rq[1] - rp[1]) / rl, (rq[2] - rp[2]) / rl];

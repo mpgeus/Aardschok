@@ -340,7 +340,11 @@ stenen huizen. **Ronde 3 is af.**
   velg, het koper brons; in alle acht richtingen hetzelfde wiel. Marcel: "Ja die drie nog toevoegen, we zitten echt heel
   dicht op waar we willen zijn": gedaan (19 okt): beslag op de spaken (een plaatje met twee nagels aan elke kant), lijnen
   om de spaken (`binnenlijnen.om`), de nerf dichter en donkerder; 80 van 80 nagels te zien, flikkeren 0,231 (D 0,205).
-  **Wacht op Marcel:** het wiel goed zo; dan het handschrift en het nieuwe wiel op het hele ossenkar.
+  Marcel koos daarna (19 okt): het nieuwe wiel en het handschrift op de hele ossenkar, SDXL alleen op wat groot genoeg is
+  (de bak). **Tussenstap** (`karhd.cjs proef`, `uit/karhd/proef.png`): de kar met de nieuwe wielen en het handschrift
+  (ook op wat geen textuur heeft: `kern.cjs` schrijft dat met `o.gbuffer` nu in de G-buffer, `stijl.cjs rampStijl`); nog
+  zonder leeuwen; 33 s per beeld (de nagels van de wielen moeten één onderdeel per kring worden). **Bezig:** SDXL op de
+  bak (de leeuwen), gebakken.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
