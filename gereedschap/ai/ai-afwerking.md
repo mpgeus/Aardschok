@@ -650,19 +650,31 @@ Marcel: "Maak de proefplaat zonder download: zoals nu, en de ChatGPT-pixels geba
       de overkant: ChatGPT tekent daar de rode bak, wij laten de velg zien;
     - de andere helft valt door het filter hieronder.
   - Zo'n pixel leent van een kopie, en dan breken de spaken op 2×.
-  - Een donkerrood randje van de bak werd door ons licht paars. Daarom tellen een verzadigde pixel buiten oranje tot geel
-    niet mee, en wordt niets meer dan ruim twee keer lichter.
+  - Een donkerrood randje van de bak werd door ons licht paars. Daarom telt een paarse pixel niet mee (rood en blauw
+    allebei boven groen).
+  - **Een strenger filter maakte het slechter.** Ik gooide alles weg wat roder was dan oranje, en liet niets meer dan ruim
+    twee keer lichter worden. Daarmee verdween ook de roodbruine schaduw op de spaken, en die werden olijfkleurig
+    (`filter.png`). Marcel over de eerste versie: "deze kwam heel dichtbij die van gpt". Terug naar die versie, met alleen
+    het paars eruit.
+  - **Vullen hielp niet.** Een pixel die ChatGPT niet zag, nam de naaste pixel die hij wel zag (vaak de donkere rand). Dat
+    maakte de spaken naar zuidwest strakker, maar de gaten ertussen zwart, en in de andere richtingen kwamen er zwarte
+    vlekken (`plafond.png`). Weer weggehaald.
 - **De gemeten maten (alle acht richtingen, acht standen en een volle slag):**
 
   | | flikkeren | nagels (ZW) | lijnen (ZW) |
   |---|---|---|---|
   | zoals nu (stijl D met het handschrift) | 0,217 | 66/77 | 14% |
-  | ChatGPT, volle kleur | 0,310 | 25/77 | 21% |
-  | ChatGPT, met het handschrift | 0,208 | 13/77 | 20% |
+  | ChatGPT, volle kleur | 0,275 | 29/77 | 26% |
+  | ChatGPT, met het handschrift | 0,194 | 12/77 | 26% |
 
   - In volle kleur flikkert het meer: de naaste pixel springt bij draaien.
-  - Met het handschrift (de kleur van de render, de lijnen erover) flikkert het zo weinig als nu.
+  - Met het handschrift (de kleur van de render, de lijnen erover) flikkert het minder dan nu.
   - De nagels van ChatGPT zijn op 2× te klein, en onze nagels (losse onderdelen) liggen niet op die van ChatGPT.
+- **4× tegen 2×** (`maat.png`, even groot in beeld). Marcels "heel dichtbij" ging over een plaat op 4× en 8×, twee à vier
+  keer zo fijn als de sprite in het spel. Op 4× houdt de projectie het hout, de randen en de glimlichten van ChatGPT. Op 2×
+  gaat daar een deel van verloren; het ChatGPT-wiel zelf ook, maar minder, omdat zijn randen precies op zijn eigen vorm
+  liggen. Op 1920×1080 tekent het spel de sprite van 2× één op één. Een sprite van 4× zou je zien op een 4K-scherm, of
+  op 1920×1080 als alles twee keer zo groot in beeld komt (zie "Groter in beeld").
 - **Wat het voor de kar betekent:** de pixels van ChatGPT kunnen erop, als ons model dezelfde vorm heeft als het
   ChatGPT-beeld. Hoe beter de vorm past, hoe minder er geleend wordt. Daarom eerst de vorm (de kar forser), en dan de
   pixels van de wagen projecteren.

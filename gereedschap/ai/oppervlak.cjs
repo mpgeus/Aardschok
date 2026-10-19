@@ -225,22 +225,19 @@ function bronGpt() {
   bronGptMemo = { R, ...legGpt(R) };
   return bronGptMemo;
 }
-// de projectie (bakken.cjs): het albedo per pixel van de render op 8×. Een pixel van ChatGPT die geen hout, ijzer, koper of
-// lijn is, telt niet: een randje van de rode bak of het magenta tussen de spaken (verzadigd, en roder dan oranje of paarser
-// dan geel). En niet meer dan ruim twee keer lichter dan ChatGPT (minLicht 0,45): de binnenkant van de velg, bij ChatGPT in
-// de schaduw, werd anders felrood en paars.
+// de projectie (bakken.cjs): het albedo per pixel van de render op 8×. Een paarse pixel van ChatGPT (een randje van de rode
+// bak of het magenta tussen de spaken: rood en blauw allebei boven groen) telt niet, en ook niet wat geen hout, ijzer of lijn
+// is. Een strenger filter (alles wat roder is dan oranje, en niets meer dan ruim twee keer lichter) gooide ook de
+// roodbruine schaduw op de spaken weg: die werden olijfkleurig (uit/ai/oppervlak-gpt/filter.png; Marcel, 19 okt, over de
+// eerste versie: "deze kwam heel dichtbij die van gpt").
 function projectieGpt() {
   const { R, beeld } = bronGpt();
   const SM = require('../pixelart/stijlmaat.cjs');
-  const vreemd = (k) => {
-    const mx = Math.max(...k);
-    return mx > 0 && (mx - Math.min(...k)) / mx > 0.3 && !(SM.tint(k) >= 12 && SM.tint(k) <= 70);
-  };
+  const paars = (k) => k[2] > k[1] + 8 && k[0] > k[1] + 8;
   return BK.projectie(R, beeld, {
     lichtMacht: LICHTMACHT,
-    minLicht: 0.45,
     binnen: (X, Y) => beeld.rgba[(Y * beeld.b + X) * 4 + 3] >= 128,
-    soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !vreemd(k),
+    soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !paars(k),
     matVan: (st) => R.model.delen[st].m,
   });
 }

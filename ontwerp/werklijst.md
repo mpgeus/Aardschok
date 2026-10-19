@@ -357,8 +357,12 @@ stenen huizen. **Ronde 3 is af.**
   download: **gedaan** (19 okt, `oppervlak.cjs --wiel gpt`, `uit/ai/oppervlak-gpt/`; verslag in `ai-afwerking.md`, "De
   pixels van ChatGPT op het wiel"). De ChatGPT-pixels worden geprojecteerd: in de bakrichting komen ze bijna precies terug,
   en in de andere richtingen is het hout rijk. Naar zuidwest is het op spelmaat minder scherp, omdat ons wiel niet tot op
-  de pixel het hare is. **Wacht op Marcel:** wat hij van de plaat vindt, en of de kar zo verder gaat (eerst de vorm naar
-  de ChatGPT-wagen, dan de pixels erop).
+  de pixel het hare is. Marcel: "het lijkt erop, maar er is tóch minder detail als ik zou hopen", en over de eerste versie
+  op 4×: "deze kwam heel dichtbij die van gpt". Een strenger kleurfilter had het slechter gemaakt: terug naar de eerste
+  versie, met alleen het paars eruit. Op 4× (een 4K-scherm, of alles twee keer zo groot) blijft het detail, op 2× (de
+  spelmaat op 1920×1080) gaat er een deel verloren (`uit/ai/oppervlak-gpt/maat.png`). **Wacht op Marcel:** de keus
+  tussen 2× zo scherp mogelijk maken (ons wiel nog preciezer naar het hare, zodat de randen van ChatGPT op onze randen
+  vallen) en de sprites ook op 4× maken voor 4K en inzoomen.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat
