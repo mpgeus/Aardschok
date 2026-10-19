@@ -843,3 +843,72 @@ het is, dus elk gebied krijgt zijn eigen prompt: de wanden rood geverfde planken
 kist met goud, de os een romige vacht. Dat kan in ComfyUI met maskers op de conditionering. En wat zeker moet kloppen,
 zoals de leeuw, tekenen we zelf op het model (een embleem op de wand), zodat SDXL het alleen hoeft af te werken.
 
+### De eigen pijplijn zonder referentie (19 okt)
+
+Marcel: "Ja maar we kunnen niet voor elk plaatje een referentie maken. Ik wil dat wij onze eigen art maken met onze eigen
+pipeline" (`ontwerp/beeld.md`, "Onze eigen art, met onze eigen pijplijn").
+(`node gereedschap/pixelart/karhd.cjs eigen`, `uit/karhd/meester/eigen.png`.)
+
+**Wat er per ding nodig is: alleen het model in code.**
+- **Wat één keer vastligt** staat in `gereedschap/ai/huisstijl.cjs`: het checkpoint (FaeTastic), de zin voor de huisstijl,
+  één zin per materiaal, en de instellingen (denoise 0,65, geen IP-Adapter, seed 180).
+- **De gebieden komen uit onze render:** elke pixel weet zijn materiaal, en krijgt de zin van dat materiaal
+  (`ConditioningSetMask` in `afwerking.cjs werkstroom`). Een vacht krijgt het woord voor de kleur van zijn materiaal
+  (`kleurWoord`).
+- **De leeuw van de heer is zelf getekend** (`gereedschap/pixelart/wapen.cjs`): een raster van 18 bij 22, als dun onderdeel
+  op de wand, met een eigen materiaal en dus een eigen gebied.
+
+**Wat het laat zien:**
+- **De inhoud klopt nu, zonder referentie:** de zakken zijn jute, de kist heeft goud, de ton en de stam staan, de wielen zijn
+  hout met ijzer, de wanden rood met gouden biezen en de leeuwen, de os romig. Met de ChatGPT-wagen als stijlplaat werden
+  de zakken nog goud.
+- **Minder rijk dan ChatGPT:** de os is glad, als plastic. Het geheel is minder geschilderd en minder scherp omlijnd. De
+  leeuwen zijn op spelmaat kleine gouden vlekjes.
+- **Het vaantje werd wit:** het gebied was te klein voor een eigen zin (onder 0,2 procent van het doek).
+- **Traag: 714 seconden in plaats van 83.** Elk van de 14 gebieden wordt bij elke stap apart doorgerekend.
+
+**Wat nu kan helpen:**
+1. **Sneller:** minder gebieden, zes groepen in plaats van veertien (hout, rood met de biezen, ijzer, stof, goud, dier).
+2. **Rijker:** een hogere denoise (SDXL krijgt meer ruimte voor textuur), een betere zin voor de vacht, en ons handschrift
+   erover (de omlijning en de lijnen, `stijl.cjs` met `renderKleur`).
+3. **Later:** een pixelart-LoRA (Pixel Art XL, CreativeML OpenRAIL-M), en op den duur een eigen LoRA op onze eigen
+   goedgekeurde beelden.
+
+### Pixelart-modellen voor SDXL (19 okt)
+
+Marcel: "Zijn er geen specifieke sdxl modellen voor pixel art? Want dat is uiteindelijk wat het is toch?", en daarna
+"LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware". Uit de Civitai-API (`allowCommercialUse`):
+
+| model | soort | grootte | beelden verkopen |
+|---|---|---|---|
+| PixelArtRedmond (artificialguybr, 144684; voor SDXL: v1 Lite 64, 160844) | LoRA | 166 MB | ja (`Image`) |
+| Pixel art SDXL RW (leonnn1, 114334) | LoRA | 891 MB | ja |
+| Pixel-ART Style (Herrscher_AGGA, 574324) | LoRA | 891 MB | ja |
+| 【SDXL】 Pixel Art Base (276298) | checkpoint | 6,9 GB | ja |
+| Pixel Art XL (NeriJS, 120096) | LoRA | 166 MB | onduidelijk: Civitai geen vlaggen, HuggingFace OpenRAIL-M |
+| Pixel Art Diffusion XL, Super_PixelArt, Soft Pixel Art XL | | | nee |
+
+**De maat:** deze modellen schilderen pixel art in blokjes van ongeveer 8 pixels op een doek van 1024 (een sprite van zo'n
+128 pixels). De kar is op spelmaat zo'n 430 pixels breed. Op ons doek (6×, 1088 bij 832) zijn hun pixels dus ongeveer
+drie keer zo grof als die van het spel. Echte pixel art op onze maat vraagt een groter doek, in tegels.
+
+### Zes groepen, en de pixelart-LoRA in de eigen pijplijn (19 okt)
+
+(`node gereedschap/pixelart/karhd.cjs eigen`, `uit/karhd/meester/eigen.png`; `VARIANT=groepen,lora`.)
+
+- **Zes groepen in plaats van veertien gebieden** (hout, rood met de biezen, metaal, stof, goud, dier, en het wapen apart;
+  `huisstijl.cjs` `GROEP`, `GROEPZIN`): 406 seconden in plaats van 714, met dezelfde inhoud.
+- **PixelArtRedmond Lite 64** (`ComfyUI/models/loras/civitai-pixelartredmond/`, 166 MB, SHA256 klopt; kracht 0,8, met zijn
+  woorden "Pixel Art, PixArFK") **helpt niet op deze maat.** Hij schildert blokken van ongeveer 8 pixels, drie keer zo grof
+  als onze spelpixels. De zakken worden blokjes, de os geel en vlakker.
+
+**Wat er nu het meest ontbreekt:** de rijkdom van het schilderwerk, vooral op de os (glad, als plastic). Onze render van
+de os is glad, en SDXL houdt dat vast.
+
+**Wat de hardware nog kan geven:**
+1. **Een rijker begin:** de os en het hout met textuur in onze render (een vacht, nerf), of ons handschrift als begin, en
+   een hogere denoise (0,75), zodat SDXL meer schildert.
+2. **Een groter doek in tegels:** de kar op 12× in plaats van 6× (zo'n 2200 bij 1700), in vier tot zes tegels geschilderd.
+   Fijner detail, maar zo'n 20 tot 30 minuten per richting.
+3. **De LoRA zachter** (0,3 à 0,4): strakkere pixelgroepjes zonder grove blokken.
+

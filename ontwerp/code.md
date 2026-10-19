@@ -1127,7 +1127,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **De eigen pijplijn** (19 okt; Marcel: "Ik wil niet steeds gpt moeten gebruiken"): `karhd.cjs meester(kant, checkpoint)`
   laat SDXL op onze eigen render schilderen, één op één (`bakRender`: de render met de materialen zonder beeld, en per pixel
   het ding en het onderdeel), en `projecteer(BR, beeld)` zet een beeld dat op de render ligt op de kar en de os; de pixels
-  van ChatGPT gaan via dezelfde weg (`legWagen` legt ze eerst). `afwerking.cjs werkstroom` neemt `o.checkpoint`.
+  van ChatGPT gaan via dezelfde weg (`legWagen` legt ze eerst). `afwerking.cjs werkstroom` neemt `o.checkpoint`, zonder
+  stijlplaat (`o.ip` 0) geen IP-Adapter, en `n.gebieden` (per gebied een zin, `ConditioningSetMask`). Zonder referentie
+  (`karhd.cjs eigen`): `gereedschap/ai/huisstijl.cjs` (het checkpoint, de huisstijl, één zin per materiaal, `kleurWoord`
+  voor een vacht) en `gebiedenVan` (de gebieden uit de materialen van de render: `NAAM_KAR`, `NAAM_OS` via
+  `vee.cjs koeMaterialen`). Het wapen van de heer: `gereedschap/pixelart/wapen.cjs` (`leeuw`: een raster als dun onderdeel
+  op een wand, de afstand tot de vorm één keer uitgerekend), in de HD-kar met een eigen materiaal (`EMBLEEM`). De gebieden
+  standaard in zes groepen en het wapen (`huisstijl.cjs groepVoor`: elk gebied kost SDXL een eigen rekenslag per stap), en
+  `werkstroom` neemt `o.lora` ({ naam, kracht }, `LoraLoader` op het model en de tekst; `huisstijl.cjs LORA`).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

@@ -174,8 +174,30 @@ function werkstroom(n, o = START) {
     12: { class_type: 'CLIPTextEncode', inputs: { text: n.positief || POSITIEF, clip: ['1', 1] }, _meta: { title: 'Positief' } },
     13: { class_type: 'CLIPTextEncode', inputs: { text: n.negatief || NEGATIEF, clip: ['1', 1] }, _meta: { title: 'Negatief' } },
   };
+  // o.lora: { naam, kracht }: een LoRA op het model en de tekst (een pixelart-LoRA; Marcel, 19 okt: "LoRA's is ook goed")
+  if (o.lora) {
+    st[2] = { class_type: 'LoraLoader', inputs: { model: ['1', 0], clip: ['1', 1], lora_name: o.lora.naam, strength_model: o.lora.kracht, strength_clip: o.lora.kracht }, _meta: { title: `LoRA ${o.lora.naam}` } };
+    st[9].inputs.model = ['2', 0];
+    for (const k of [12, 13]) st[k].inputs.clip = ['2', 1];
+  }
+  // zonder stijlplaat (o.ip 0; Marcel, 19 okt: "Ik wil dat wij onze eigen art maken met onze eigen pipeline"): geen
+  // IP-Adapter, het model rechtstreeks
+  if (!(o.ip > 0)) for (const k of [5, 7, 8, 9]) delete st[k];
   let pos = ['12', 0];
   let neg = ['13', 0];
+  // n.gebieden: [{ masker, tekst }]: per gebied een eigen zin (ConditioningSetMask), bij de positieve prompt opgeteld
+  // (karhd.cjs meester: een zin per materiaal, de gebieden uit onze render)
+  (n.gebieden || []).forEach((g, k) => {
+    const id = 100 + k * 5;
+    Object.assign(st, {
+      [id]: { class_type: 'LoadImage', inputs: { image: g.masker }, _meta: { title: `gebied: ${g.tekst.slice(0, 40)}` } },
+      [id + 1]: { class_type: 'ImageToMask', inputs: { image: [String(id), 0], channel: 'red' } },
+      [id + 2]: { class_type: 'CLIPTextEncode', inputs: { text: g.tekst, clip: o.lora ? ['2', 1] : ['1', 1] } },
+      [id + 3]: { class_type: 'ConditioningSetMask', inputs: { conditioning: [String(id + 2), 0], mask: [String(id + 1), 0], strength: g.kracht ?? 1, set_cond_area: 'default' } },
+      [id + 4]: { class_type: 'ConditioningCombine', inputs: { conditioning_1: pos, conditioning_2: [String(id + 3), 0] } },
+    });
+    pos = [String(id + 4), 0];
+  });
   if (o.lijn > 0) {
     Object.assign(st, {
       10: { class_type: 'LoadImage', inputs: { image: n.lijnen }, _meta: { title: 'onze lijnen (uit de render op 4×)' } },
@@ -195,7 +217,7 @@ function werkstroom(n, o = START) {
     neg = ['22', 1];
   }
   Object.assign(st, {
-    15: { class_type: 'KSampler', inputs: { model: ['9', 0], positive: pos, negative: neg, latent_image: ['32', 0], seed: o.seed, steps: o.steps, cfg: o.cfg, sampler_name: o.sampler, scheduler: o.scheduler, denoise: o.denoise } },
+    15: { class_type: 'KSampler', inputs: { model: o.ip > 0 ? ['9', 0] : o.lora ? ['2', 0] : ['1', 0], positive: pos, negative: neg, latent_image: ['32', 0], seed: o.seed, steps: o.steps, cfg: o.cfg, sampler_name: o.sampler, scheduler: o.scheduler, denoise: o.denoise } },
     16: { class_type: 'VAEDecode', inputs: { samples: ['15', 0], vae: ['1', 2] } },
     17: { class_type: 'SaveImage', inputs: { images: ['16', 0], filename_prefix: 'aardschok-afwerking' } },
   });

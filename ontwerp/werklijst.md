@@ -378,8 +378,16 @@ stenen huizen. **Ronde 3 is af.**
   3". FaeTastic staat erin; AlbedoBase en Cor Epica vragen een inlog bij Civitai (Marcel kan ze zelf downloaden). De
   eerste proef (`karhd.cjs meester`; `ai-afwerking.md`, "De eigen pijplijn: de eerste proef"): de pijplijn werkt, en
   FaeTastic schildert beter dan het base, maar SDXL weet niet wat waar hoort (de zakken worden goud, geen leeuwen).
-  **Wacht op Marcel:** het voorstel om SDXL per gebied te sturen (een prompt per onderdeel, uit onze render) en de leeuw
-  zelf op het model te tekenen.
+  Marcel: "Ja maar we kunnen niet voor elk plaatje een referentie maken. Ik wil dat wij onze eigen art maken met onze
+  eigen pipeline" (`beeld.md`, "Onze eigen art, met onze eigen pijplijn"). **Gedaan** (19 okt, `karhd.cjs eigen`,
+  `uit/karhd/meester/eigen.png`; `ai-afwerking.md`, "De eigen pijplijn zonder referentie"): zonder referentie, de huisstijl
+  en een zin per materiaal per gebied (`gereedschap/ai/huisstijl.cjs`), de leeuw zelf getekend (`wapen.cjs`). De inhoud
+  klopt nu (jute, de kist, de leeuwen), maar het is minder rijk dan ChatGPT (een gladde os) en traag (714 s). Marcel
+  daarna: pixelart-modellen ("LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"; de lijst in
+  `ai-afwerking.md`, "Pixelart-modellen voor SDXL"). **Gedaan** (19 okt; "Zes groepen, en de pixelart-LoRA"): zes groepen
+  halveren de tijd (406 s); PixelArtRedmond (LoRA, 166 MB, beelden verkopen mag) helpt niet op deze maat (blokken drie
+  keer zo grof als onze pixels). **Wacht op Marcel:** de volgende stap om het maximale uit de 1080 Ti te halen: een rijker
+  begin (textuur op de os, een hogere denoise), een groter doek in tegels, of de LoRA zachter.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

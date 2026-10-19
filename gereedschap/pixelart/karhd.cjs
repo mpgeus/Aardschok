@@ -14,8 +14,11 @@
 //   node gereedschap/pixelart/karhd.cjs proef      zuidwest, stand 0: de proefplaat naast de ChatGPT-wagen en de kar van nu
 //   node gereedschap/pixelart/karhd.cjs gpt        de pixels van de ChatGPT-wagen op de kar (geprojecteerd, zoals het wiel in
 //                                                  gereedschap/ai/oppervlak.cjs --wiel gpt): de plaat uit/karhd/gpt.png
-//   node gereedschap/pixelart/karhd.cjs meester    de eigen pijplijn: SDXL schildert de kar op onze render, per checkpoint
-//                                                  (CHECKPOINTS, met komma's), geprojecteerd: uit/karhd/meester/proef.png
+//   node gereedschap/pixelart/karhd.cjs meester    SDXL schildert de kar op onze render, per checkpoint (CHECKPOINTS, met
+//                                                  komma's), met de ChatGPT-wagen als stijlplaat, geprojecteerd:
+//                                                  uit/karhd/meester/proef.png
+//   node gereedschap/pixelart/karhd.cjs eigen      de eigen pijplijn: zonder stijlplaat, de huisstijl en een zin per materiaal
+//                                                  per gebied (gereedschap/ai/huisstijl.cjs): uit/karhd/meester/eigen.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -28,11 +31,13 @@ const TX = require('./textuur.cjs');
 const HH = require('./houding.cjs');
 const { model, blok } = require('./figuren.cjs');
 const OD = require('./onderdelen.cjs');
+const V = require('./vee.cjs');
 const E = require('../ai/etiket.cjs');
 
 const UIT = path.join(__dirname, 'uit', 'karhd');
 const FIJN = 4;
 const MESSING = 19; // een eigen plek voor het koper van de wielen (M.goud is in de kar het goud van de buit)
+const EMBLEEM = 20; // de leeuw van de heer op de wanden (wapen.cjs), een eigen materiaal en dus een eigen gebied
 const WIELDEEL = 100; // zoveel hoger de soorten onderdelen van het wiel
 const SPAAK = 32 + WIELDEEL;
 const HOUT = TX.laad(path.join(__dirname, 'texturen', 'hout-grof.png'));
@@ -57,6 +62,7 @@ function materialen(blink = 0) {
     omslag: 0.8, afwerking: hout.afwerking, patroon: m[O.M.verf].patroon,
   });
   m[MESSING] = koper;
+  m[EMBLEEM] = { ...koper, lo: m[O.M.goud].lo, hi: m[O.M.goud].hi };
   return m;
 }
 
@@ -78,7 +84,7 @@ function wielen(hoek) {
 // De vorm naar de ChatGPT-wagen (Marcel, 19 okt: "Ja proefplaat"; op het voorste wiel uitgelijnd waren de bak en de wanden
 // al zo groot, uit/karhd/randen.png): de rongen dikker en van donker hout met drie ijzeren banden, een gele onderrand langs
 // de zijwanden, en de disselbomen van de bak tot het juk een dikke vierkante balk. En de os forser (vee.cjs o.bouw).
-const VORM = { rong: 3.6, band: 4.1, onderrand: true, dissel: [4.4, 4.0] };
+const VORM = { rong: 3.6, band: 4.1, onderrand: true, dissel: [4.4, 4.0], leeuwen: true };
 const OS_BOUW = { breed: 1.2, diep: 1.25, poot: 1.35, hals: 1.25, kop: 1.15 };
 function vormNaarDoel(delen) {
   const { b, l, vloer, rand } = O.BAK;
@@ -103,6 +109,12 @@ function vormNaarDoel(delen) {
     uit.push(d);
   }
   if (VORM.onderrand) for (const s of [-1, 1]) uit.push(blok([s * (b + 0.6), 0, vloer + 0.5], [1.3, l + 0.6, 0.7], 0.3, O.M.bies, 4));
+  // de leeuw van de heer op het voorste en het achterste vak van elke zijwand (de buitenkant: ossenkar.cjs bak, de wand op
+  // b + 0,4, half 0,9 dik), de kop naar voren (zoals bij ChatGPT)
+  if (VORM.leeuwen) {
+    const WP = require('./wapen.cjs');
+    for (const s of [-1, 1]) for (const y of [28, -28]) uit.push(WP.leeuw({ midden: [s * (b + 0.4 + 0.9), y, vloer + (rand - vloer) / 2], normaal: [s, 0, 0], hoog: 11, m: EMBLEEM, deel: 60, naarLinks: [0, 1, 0] }));
+  }
   return uit;
 }
 function karModel(o = {}) {
@@ -391,10 +403,42 @@ const PROMPT_KAR = 'HD pixel art game sprite of a medieval lord\'s ox cart, stra
 const NEG_KAR = 'blurry, smooth gradients, photo, 3d render, plastic, deformed, extra wheels, extra legs, text, watermark, signature, ' +
   'ground, grass, shadow on the ground, background objects, frame, border';
 const MEESTER_UIT = path.join(UIT, 'meester');
-async function meester(kant, checkpoint) {
+// De naam van elk materiaal (voor de zin per materiaal, huisstijl.cjs): de kar uit ossenkar.cjs M, de os uit vee.cjs.
+const NAAM_KAR = Object.assign(Object.fromEntries(Object.entries(O.M).map(([n, i]) => [i, n])), { [MESSING]: 'messing', [EMBLEEM]: 'embleem' });
+const NAAM_OS = Object.fromEntries(Object.entries(V.koeMaterialen(V.OS_KLEUREN[0], true).M).map(([n, i]) => [i, n]));
+// De gebieden: per zin (huisstijl.cjs zinVoor) de pixels van het doek met een materiaal dat die zin heeft. Een vacht krijgt
+// het woord voor de kleur van zijn materiaal.
+// groepen: de zes groepen en het wapen (huisstijl.cjs groepVoor), anders een gebied per materiaal.
+function gebiedenVan(BR, ox, oy, b, h, groepen = true) {
+  const HU = require('../ai/huisstijl.cjs');
+  const kleurVan = (mat) => {
+    const r = mat && K.RAMP_RGB[K.RAMP[mat.ramp]];
+    return r ? r[Math.floor(r.length * 0.6)] : [128, 128, 128];
+  };
+  const lijf = BR.om.mat[Object.entries(NAAM_OS).find(([, n]) => n === 'lijf')[0]];
+  const perZin = new Map();
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    const i = (y + oy) * BR.R.b + x + ox;
+    if (x + ox >= BR.R.b || y + oy >= BR.R.h) continue;
+    const obj = BR.ding(i);
+    if (!obj) continue;
+    const d = BR.onderdeel(BR.R.rust[i * 4 + 3]);
+    const naam = (obj === 1 ? NAAM_KAR : NAAM_OS)[d.m];
+    const groep = groepen && HU.groepVoor(naam);
+    const zin = groep ? HU.GROEPZIN[groep](kleurVan(lijf)) : HU.zinVoor(naam, kleurVan((obj === 1 ? BR.km : BR.om).mat[d.m]));
+    if (!zin) continue;
+    (perZin.get(zin) || perZin.set(zin, []).get(zin)).push(y * b + x);
+  }
+  // te kleine gebieden (een nagel, een oog) niet: die doet de rest
+  const min = b * h * 0.002;
+  return [...perZin].filter(([, p]) => p.length >= min).map(([tekst, pixels]) => ({ tekst, pixels }));
+}
+// extra: { lora, tag } (de pixelart-LoRA, een achtervoegsel voor de map)
+async function meester(kant, checkpoint, eigen = false, extra = {}) {
   const AF = require('../ai/afwerking.cjs');
   const A = require('../ai/beeld-ai.cjs');
   const DK = require('../ai/doek.cjs');
+  const HU = require('../ai/huisstijl.cjs');
   const BR = bakRender(kant, FMEESTER);
   const R = BR.R;
   // de uitsnede: wat dekt, met een rand, op veelvouden van 64 (SDXL)
@@ -431,22 +475,44 @@ async function meester(kant, checkpoint) {
   }
   const lijnen = knip(S.lijnenVan(R), [0, 0, 0]);
   const diepte = knip(S.diepteVan(R), [0, 0, 0]);
-  const tag = (checkpoint || 'sdxl-base').replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-');
+  if (eigen) checkpoint = HU.HUISSTIJL.checkpoint;
+  const tag = (checkpoint || 'sdxl-base').replace(/\.safetensors$/, '').replace(/[^A-Za-z0-9-]+/g, '-') + (eigen ? '-eigen' : '') + (extra.tag ? `-${extra.tag}` : '');
   const map = path.join(MEESTER_UIT, tag);
   fs.mkdirSync(map, { recursive: true });
-  const namen = { positief: PROMPT_KAR, negatief: NEG_KAR, stijl: await A.upload('aardschok-meester-stijl.png', fs.readFileSync(BRON), 'image/png') };
+  // eigen: de huisstijl, geen stijlplaat, en per gebied de zin van zijn materiaal; anders de ChatGPT-wagen als stijlplaat
+  const namen = eigen
+    ? { positief: extra.lora ? `${extra.lora.woorden}, ${HU.HUISSTIJL.zin}` : HU.HUISSTIJL.zin, negatief: HU.HUISSTIJL.negatief }
+    : { positief: PROMPT_KAR, negatief: NEG_KAR, stijl: await A.upload('aardschok-meester-stijl.png', fs.readFileSync(BRON), 'image/png') };
   for (const [k, r] of Object.entries({ init, masker, lijnen, diepte })) {
     const data = K.pngVanBeeld(r);
     fs.writeFileSync(path.join(map, `${kant}-${k}.png`), data);
     namen[k] = await A.upload(`aardschok-meester-${kant}-${k}.png`, data, 'image/png');
   }
-  const o = { ...AF.START, ...MEESTER, checkpoint };
+  let gebieden = [];
+  if (eigen) {
+    gebieden = gebiedenVan(BR, ox, oy, b, h);
+    namen.gebieden = [];
+    const kaart = { b, h, rgba: Buffer.alloc(b * h * 4) };
+    for (const [k, g] of gebieden.entries()) {
+      const mk = { b, h, rgba: Buffer.alloc(b * h * 4) };
+      for (let i = 0; i < b * h; i++) mk.rgba.set([0, 0, 0, 255], i * 4);
+      const kl = [(k * 97) % 255, (k * 57 + 80) % 255, (k * 151 + 40) % 255];
+      for (const p of g.pixels) {
+        mk.rgba.set([255, 255, 255, 255], p * 4);
+        kaart.rgba.set([...kl, 255], p * 4);
+      }
+      const data = K.pngVanBeeld(mk);
+      namen.gebieden.push({ masker: await A.upload(`aardschok-meester-${kant}-gebied-${k}.png`, data, 'image/png'), tekst: g.tekst });
+    }
+    H.bewaar(path.join(map, `${kant}-gebieden.png`), kaart);
+  }
+  const o = eigen ? { ...AF.START, ...HU.HUISSTIJL.instellingen, checkpoint, lora: extra.lora } : { ...AF.START, ...MEESTER, checkpoint };
   const stroom = AF.werkstroom(namen, o);
   const t0 = Date.now();
   const png = await DK.maak(b, h).voerUit(stroom);
   const tijd = (Date.now() - t0) / 1000;
   fs.writeFileSync(path.join(map, `${kant}-ai.png`), png);
-  fs.writeFileSync(path.join(map, `${kant}-instellingen.json`), JSON.stringify({ kant, checkpoint: checkpoint || AF.MODELLEN.checkpoint, fijn: FMEESTER, doek: [b, h], plek: [ox, oy], instellingen: o, positief: PROMPT_KAR, negatief: NEG_KAR, stijlplaat: 'gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png', seconden: +tijd.toFixed(1), wanneer: new Date().toISOString() }, null, 1));
+  fs.writeFileSync(path.join(map, `${kant}-instellingen.json`), JSON.stringify({ kant, checkpoint: checkpoint || AF.MODELLEN.checkpoint, fijn: FMEESTER, doek: [b, h], plek: [ox, oy], instellingen: o, positief: namen.positief, negatief: namen.negatief, stijlplaat: eigen ? 'geen' : 'gereedschap/pixelart/uit/ai/hand/wagen-zw.png.png', gebieden: gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), seconden: +tijd.toFixed(1), wanneer: new Date().toISOString() }, null, 1));
   // terug op de render: het beeld op zijn plek, alleen binnen ons silhouet
   const ai = A.leesPng(png);
   const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
@@ -512,8 +578,41 @@ function gpt() {
 
 module.exports = { materialen, karModel, osModel, render, stijlVoor, gestileerd, doelWagen, legWagen, projectieWagen, FGPT, O_KAR, MESSING, UIT };
 
+// De eigen pijplijn naast de kar met de pixels van ChatGPT en naast FaeTastic met de ChatGPT-wagen als stijlplaat (beide
+// ter vergelijking, uit eerdere runs: gpt-*.png, meester/civitai-faetastic-SDXLFaetastic-v24/sprite-*.png).
+async function eigenProef() {
+  const zl = (R) => ({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) });
+  const sprite = (R) => H.omlijnBeeld(H.verklein(zl(R), 2, 'naast'));
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const HU = require('../ai/huisstijl.cjs');
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  // de varianten (VARIANT: alleen deze, met komma's): zes groepen zonder en met de pixelart-LoRA
+  const ALLE = { groepen: { naam: 'zes groepen', tag: 'groepen' }, lora: { naam: `zes groepen, PixelArtRedmond ${HU.LORA.kracht}`, tag: 'lora', lora: HU.LORA } };
+  const kies = (process.env.VARIANT || 'groepen,lora').split(',');
+  const rijen = [KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(UIT, `gpt-${k}.png`))), 2), `ter vergelijking: de pixels van ChatGPT · ${k}`))];
+  // de vorige proef (een gebied per materiaal), als hij er is
+  const vorige = path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen');
+  if (fs.existsSync(path.join(vorige, 'sprite-ZW.png'))) rijen.push(KANTEN.map((k) => E.met(groot(knip(H.lees(path.join(vorige, `sprite-${k}.png`))), 2), `een gebied per materiaal (14, 714 s) · ${k}`)));
+  const onder = [];
+  for (const v of kies.map((k) => ALLE[k])) {
+    const m = await meester('ZW', null, true, v);
+    const { mat, osMat } = projecteer(m.BR, m.beeld);
+    rijen.push(KANTEN.map((k) => {
+      const r = sprite(render({ ...O_KAR, mat, osMat }, k, FIJN));
+      H.bewaar(path.join(MEESTER_UIT, m.tag, `sprite-${k}.png`), r);
+      return E.met(groot(knip(r), 2), `${v.naam} · ${k}`);
+    }));
+    onder.push(E.met(knip(H.verklein(m.beeld, 3, 'naast')), `${v.naam}: het meesterbeeld (${m.tijd.toFixed(0)} s)`));
+  }
+  rijen.push(onder);
+  E.bewaar(path.join(MEESTER_UIT, 'eigen.png'), rijen, 'De eigen pijplijn: zonder referentie', 'FaeTastic, zonder stijlplaat: de huisstijl, en per gebied (uit onze render) de zin van zijn groep (huisstijl.cjs); de leeuw van de heer zelf getekend (wapen.cjs); met en zonder de pixelart-LoRA. SDXL schildert op onze render naar zuidwest, en dat wordt geprojecteerd. Maal 2 (spelmaat 2×).');
+  console.log('uit/karhd/meester/eigen.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
 else if (wat === 'meester') meesterProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'eigen') eigenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

@@ -545,6 +545,24 @@ het hoogtesysteem, wegwijzers (horen bij "de doelen zijn zichtbaar"), tent en ka
 questplekken, een stenen brug naast onze houten, en meer grondsoorten — elke soort erbij is een
 terreinset erbij.
 
+### Onze eigen art, met onze eigen pijplijn (Marcel, 19 okt 2026)
+
+Marcel: "We moeten zelf een betrouwbare pipeline hebben om te bouwen. Ik wil niet steeds gpt moeten gebruiken", en "we
+kunnen niet voor elk plaatje een referentie maken. Ik wil dat wij onze eigen art maken met onze eigen pipeline."
+
+- **Per ding is er niets anders nodig dan het model in code.** Geen referentiebeeld per ding, en geen ChatGPT, ook niet als
+  stijlplaat.
+- **Wat de stijl maakt, ligt één keer vast voor het hele spel:**
+  - het SDXL-checkpoint, lokaal;
+  - één zin voor de huisstijl;
+  - één zin per materiaal (hout, rode verf, ijzer, jute, vacht, goud);
+  - de instellingen en de seed.
+- **De gebieden komen uit onze render.** Elke pixel weet welk materiaal hij is, dus SDXL krijgt per gebied zijn zin.
+- **Wat zeker moet kloppen** (een wapen, een leeuw), tekenen we zelf in code, als embleem op het model; SDXL werkt het af.
+- **Daarna de projectie:** het geschilderde beeld op het model, alle richtingen en standen door onze renderer
+  (`gereedschap/ai/ai-afwerking.md`, "Een eigen pijplijn").
+- **Later kan de stijl helemaal van ons worden:** een eigen LoRA, getraind op onze eigen goedgekeurde resultaten.
+
 ### Kinderkopjes in plaats van kasseien (Marcel, 21 sep 2026)
 
 "Mooie stenen straatjes, kinderkopjes zoals ze die hier noemen." Onze kasseien zijn platte,

@@ -728,6 +728,7 @@ const VELLEN = [
 
 module.exports = {
   koe,
+  koeMaterialen,
   schaap,
   VELLEN,
   KOE_KLEUREN,
