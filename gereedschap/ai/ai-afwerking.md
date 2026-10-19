@@ -1045,3 +1045,25 @@ Marcel: "Ja proef draaien maar". (`node gereedschap/pixelart/karhd.cjs spec`, `u
   maakten ijzer en hout blauw. Het verschil tussen warm licht en koele schaduw hoort in onze eigen code (H4), niet in de
   zin. Daar staan alleen de kleuren van het verlichte materiaal.
 
+### Twee LoRA's van Marcel (19 okt)
+
+Marcel: "heb er nog 2". Hij zette ze in `ComfyUI/models/checkpoints/`. Uit hun kop (`ss_base_model_version`) en Civitai (op
+SHA256, `model-versions/by-hash`):
+
+| bestand | wat | voor | maker, Civitai | beelden verkopen |
+|---|---|---|---|---|
+| `PixelArt_Perfect_ZIT_M_V1_epoch_2.safetensors` (340 MB, SHA256 27A300F9…) | LoRA, blokken van 6×6 | Z-Image Turbo | YoDaR2, 2481158 | **nee** (alleen `RentCivit`) |
+| `pixel_assets_general_ernie_v1_000002500.safetensors` (189 MB, SHA256 2A2D582D…) | LoRA, "Pixel Art Assets - General" | ERNIE-Image(-Turbo) | svntax_dev, 2732245 | ja (`Image`, `Rent`, `Sell`) |
+
+- **Geen van beide werkt met SDXL.** Het zijn LoRA's, geen checkpoints: ze horen in `models/loras/`, en elk vraagt zijn eigen
+  basismodel.
+- **De Z-Image-LoRA valt af:** dezelfde maker als eerder, en die verbiedt het verkopen van beelden.
+- **De ERNIE-LoRA mag commercieel.** Hij vraagt ERNIE-Image-Turbo van Baidu: 8 miljard parameters, Apache 2.0, een
+  turbomodel (8 stappen, CFG van ongeveer 1, dus geen negatieve zinnen).
+  - In 16 bits is dat 16 GB, voor kaarten van 24 GB. Gekwantiseerd (GGUF, `unsloth/ERNIE-Image-Turbo-GGUF`): Q4_K_M 5,0 GB,
+    Q5_K_M 5,9 GB, Q6_K 6,8 GB.
+  - Daarbij een tekstencoder (Ministral 3B) en een VAE, en de uitbreiding ComfyUI-GGUF (code van GitHub).
+  - Op de 1080 Ti zou dat passen, maar traag, want de kaart kent geen bf16.
+  - Een ControlNet voor ERNIE-Image is mij niet bekend. Zonder ControlNet houdt alleen img2img onze vorm vast, en de
+    projectie vraagt dat het beeld precies op het model ligt.
+
