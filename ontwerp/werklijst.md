@@ -369,9 +369,11 @@ stenen huizen. **Ronde 3 is af.**
   nog niet past, is de vorm: de os (romp breder, poten korter en dikker), de dissel en de hoekpalen dikker. Marcel: "Ja
   proefplaat": **gedaan** (19 okt; `ai-afwerking.md`, "De vorm naar de ChatGPT-wagen"): de os forser (`vee.cjs o.bouw`)
   en apart op de ChatGPT-os gelegd, de rongen en de dissel dikker, een onderrand, en het licht op wat geprojecteerd wordt
-  zachter (`kern.cjs mat.zacht`). Naar zuidwest lijkt het op spelmaat heel erg op de ChatGPT-wagen. **Wacht op Marcel:**
-  wat hij van de plaat vindt. Daarna: de andere richtingen beter (wat ChatGPT niet laat zien), en of dit de weg is voor
-  meer dingen (een ChatGPT-beeld per ding, geprojecteerd).
+  zachter (`kern.cjs mat.zacht`). Naar zuidwest lijkt het op spelmaat heel erg op de ChatGPT-wagen. Daarna Marcel (19
+  okt): "We moeten zelf een betrouwbare pipeline hebben om te bouwen. Ik wil niet steeds gpt moeten gebruiken."
+  **Wacht op Marcel:** het voorstel (`ai-afwerking.md`, "Een eigen pijplijn"): SDXL lokaal schildert meesterbeelden op
+  onze eigen render (zodat ze er vanzelf op liggen), met één vaste stijlplaat, en die worden geprojecteerd. Eerste proef:
+  de kar.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

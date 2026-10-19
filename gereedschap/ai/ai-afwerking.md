@@ -762,3 +762,25 @@ Marcel: "Ja proefplaat" (de os, de dissel en de rongen naar ChatGPT, alleen in d
 zwarte hoeven, de dikke dissel, de rongen met ijzer, de leeuwen, de lading. Lopend en naar zuidoost houdt het. Wat ChatGPT
 niet laat zien (de andere kant van de lading, de binnenkant van het deksel), heeft gespiegelde of eigen kleuren.
 
+## Een eigen pijplijn, zonder ChatGPT per ding (19 okt, voorstel)
+
+Marcel: "We moeten zelf een betrouwbare pipeline hebben om te bouwen. Ik wil niet steeds gpt moeten gebruiken."
+
+Wat de kar liet zien: de rijkdom van ChatGPT komt over als een geschilderd beeld precies op ons model ligt. Het moeilijke
+deel was het leggen: ChatGPT tekent niet in ons perspectief (de spaken tot 12° ernaast, de os in een ander perspectief dan
+de kar). Een beeld dat op onze eigen render geschilderd is, ligt er vanzelf goed op.
+
+**Voorstel, alles lokaal en herhaalbaar:**
+1. **Het model** in code (zoals nu), de vorm goedgekeurd met een proefplaat.
+2. **Meesterbeelden:** onze render op 8× uit twee of drie richtingen (zuidwest, noordoost, en waar nodig een derde), met
+   diepte en lijnen.
+3. **SDXL schildert ze lokaal** (ComfyUI op de 1080 Ti, zoals Route A): img2img op onze render, ControlNet diepte en
+   lijnen houden de vorm vast, IP-Adapter met één vaste stijlplaat geeft de stijl, met een vaste seed. Zo'n twee à drie
+   minuten per beeld. SDXL mag commercieel (CreativeML Open RAIL++-M).
+4. **Projecteren** (`bakken.cjs projectie`): elk punt neemt de kleur uit het meesterbeeld dat het het rechtst ziet. Daarna
+   rendert onze renderer alle richtingen en standen.
+5. **Spelmaat:** met de naaste pixel naar 2×, met de omlijning.
+
+De stijlplaat: de ChatGPT-wagen die er al is (geen nieuwe ChatGPT), en later ons eigen beste resultaat. Eerste proef: de
+kar, naast de kar met de pixels van ChatGPT.
+
