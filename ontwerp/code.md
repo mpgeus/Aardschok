@@ -1090,7 +1090,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een marge) en van hetzelfde materiaal; anders een kopie van het punt (gedraaid om de as, gespiegeld), en anders de eigen
   textuur. Via (u, v) gaf het ChatGPT-wiel strepen: de acht spaken delen één beschildering, en de voor- en zijkant van een
   spaak vallen op dezelfde texels. `oppervlak.cjs --wiel gpt` legt het ChatGPT-wiel op onze render (`hdstijl.cjs
-  ellipsVan`: de ellips naar een cirkel en terug, en de draaiing waarbij wat dekt het best samenvalt).
+  ellipsVan`: de ellips naar een cirkel en terug, en de draaiing waarbij wat dekt het best samenvalt), en buigt het beeld
+  per spaak in hoek bij (`buigSpaken`), want ChatGPT tekent zijn spaken niet om de 45°.
 - **Het wiel naar het doel** (19 okt, vraag 180): `hdproef.cjs wielDoel` (naast `wielC`, dat de eerdere proeven gebruiken)
   bouwt het wiel naar de opgemeten verhoudingen van het ChatGPT-wiel, met koper (`M.goud`, het gesmede ijzer naar koper
   getoond) voor de kap; `DOELWIEL` is de variant voor `wielModel`. De proefplaat: `doelwiel.cjs proef`.

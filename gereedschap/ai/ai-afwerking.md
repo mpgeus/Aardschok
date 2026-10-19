@@ -675,6 +675,21 @@ Marcel: "Maak de proefplaat zonder download: zoals nu, en de ChatGPT-pixels geba
   gaat daar een deel van verloren; het ChatGPT-wiel zelf ook, maar minder, omdat zijn randen precies op zijn eigen vorm
   liggen. Op 1920×1080 tekent het spel de sprite van 2× één op één. Een sprite van 4× zou je zien op een 4K-scherm, of
   op 1920×1080 als alles twee keer zo groot in beeld komt (zie "Groter in beeld").
+- **De spaken bijgebogen** (Marcel koos daarna "2× scherper": "Prima, probeer maar"). Onze randen over het ChatGPT-wiel
+  (`randen.png`) lieten zien dat band, velg en naaf goed samenvallen, maar de spaken niet. Bij ons staan ze om de 43 à 48°
+  (de ellips als cirkel), bij ChatGPT om de 39 tot 63°: tot 12° ernaast. Ze zijn bovendien zo'n 10 procent breder dan de
+  onze. Geen enkele draaiing legt ze dus alle acht op de onze.
+  - Daarom buig ik het beeld per spaak in hoek bij (`oppervlak.cjs buigSpaken`). Per spaak meet ik waar zijn randen liggen,
+    bij ons en bij ChatGPT, op vier stralen tussen naaf en velg. Het gemiddelde geeft hoeveel graden er bij elke rand bij
+    moeten; daartussen lineair. Naar de naaf en de velg toe gaat de buiging naar nul.
+  - Een buiging per straal gaf knikken in de spaken (op elke straal werden net andere spaken gevonden). Eén per spaak houdt
+    ze recht.
+  - Zeven van de acht spaken zijn gevonden, de grootste buiging is 12°.
+  - Op spelmaat leest het wiel naar zuidwest nu beter: de spaken hebben weer de donkere randen en glimlichten van ChatGPT
+    (`maat.png`, `vergelijking.png`). Flikkeren: in volle kleur 0,275, met het handschrift 0,194 (zoals nu 0,217).
+  - Wat overblijft: tussen de spaken laat ons wiel de velg aan de overkant zien, waar ChatGPT de rode bak tekent. Op de kar
+    staat de bak erachter, dus daar valt dat weg. De spaken van ChatGPT worden wat smaller gedrukt; onze spaken 10 procent
+    breder maken zou dat oplossen.
 - **Wat het voor de kar betekent:** de pixels van ChatGPT kunnen erop, als ons model dezelfde vorm heeft als het
   ChatGPT-beeld. Hoe beter de vorm past, hoe minder er geleend wordt. Daarom eerst de vorm (de kar forser), en dan de
   pixels van de wagen projecteren.

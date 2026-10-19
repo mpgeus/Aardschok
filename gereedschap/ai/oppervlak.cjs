@@ -134,6 +134,107 @@ function wortel2(xx, xy, yy) {
   const t = Math.sqrt(xx + yy + 2 * s);
   return [((xx + s) / t) * 2, (xy / t) * 2, ((yy + s) / t) * 2];
 }
+// De buiging van de spaken: in de ruimte van ons wiel (de ellips als cirkel, na de draaiing) per straal tussen naaf en velg
+// de hoeken van de spaken, bij ons (de onderdelen spaak en beslag) en bij ChatGPT (wat dekt: tussen de spaken is het
+// doorzichtig). Elke spaak van ons met een spaak van ChatGPT ernaast (binnen 20°, niet veel breder: dan zijn er twee
+// samengesmolten) geeft per rand hoeveel graden erbij; per spaak het gemiddelde over de stralen (per straal apart gaf
+// knikken in de spaken: op elke straal werden net andere spaken gevonden), en daartussen lineair. Naar de naaf en de velg
+// toe wordt de buiging nul, zodat band, velg en naaf blijven liggen. f(r, hoek) → de hoek erbij (radialen).
+const BUIG = { stralen: [0.38, 0.44, 0.5, 0.56], band: 0.025, binnen: 0.28, vol: [0.34, 0.6], buiten: 0.68, zoek: 20, minBreed: 8 };
+function buigSpaken(R, gpt, ru, p) {
+  const { eo, inv, eg, Mg } = ru;
+  const det = Mg[0] * Mg[2] - Mg[1] * Mg[1];
+  const ig = [Mg[2] / det, -Mg[1] / det, Mg[0] / det];
+  const graad = (x, y) => ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
+  const leeg = () => BUIG.stralen.map(() => ({ ja: new Float32Array(360), n: new Float32Array(360) }));
+  const ons = leeg();
+  const hun = leeg();
+  const tel = (prof, r, g, ja) => BUIG.stralen.forEach((s, k) => {
+    if (Math.abs(r - s) > BUIG.band) return;
+    prof[k].n[Math.floor(g)]++;
+    if (ja) prof[k].ja[Math.floor(g)]++;
+  });
+  const SPAAK = new Set([32, 34]);
+  for (let y = 0; y < R.h; y++) for (let x = 0; x < R.b; x++) {
+    const dx = x - eo.cx;
+    const dy = y - eo.cy;
+    const qx = inv[0] * dx + inv[1] * dy;
+    const qy = (inv[1] * dx + inv[2] * dy) * (p.spiegel ? -1 : 1);
+    const i = y * R.b + x;
+    tel(ons, Math.hypot(qx, qy), graad(qx, qy), R.ramp[i] >= 0 && !Number.isNaN(R.rust[i * 4]) && SPAAK.has(R.model.delen[R.rust[i * 4 + 3]].deel));
+  }
+  // ChatGPT terug naar onze ruimte: de verschuiving, de ellips als cirkel, schaal en draaiing eraf (en de spiegeling)
+  const c = Math.cos(-p.hoek) / p.schaal;
+  const z = Math.sin(-p.hoek) / p.schaal;
+  for (let Y = 0; Y < gpt.h; Y++) for (let X = 0; X < gpt.b; X++) {
+    const dx = X - eg.cx - p.tx;
+    const dy = Y - eg.cy - p.ty;
+    const gx = ig[0] * dx + ig[1] * dy;
+    const gy = ig[1] * dx + ig[2] * dy;
+    const qx = c * gx - z * gy;
+    const qy = z * gx + c * gy;
+    tel(hun, Math.hypot(qx, qy), graad(qx, qy), gpt.rgba[(Y * gpt.b + X) * 4 + 3] >= 128);
+  }
+  const stukken = (pr) => {
+    const v = Array.from(pr.ja, (j, g) => pr.n[g] > 0 && j / pr.n[g] >= 0.5);
+    const start = v.findIndex((a, g) => !a && v[(g + 1) % 360]);
+    const uit = [];
+    if (start < 0) return uit;
+    for (let k = 1; k <= 360; k++) {
+      const g = (start + k) % 360;
+      if (v[g] && !v[(g + 359) % 360]) uit.push({ van: g, tot: g + 1 });
+      else if (v[g] && uit.length) uit[uit.length - 1].tot = g + 1;
+    }
+    return uit.map((u) => {
+      const breed = (u.tot - u.van + 360) % 360;
+      return { van: u.van, breed, mid: (u.van + breed / 2) % 360 };
+    }).filter((u) => u.breed >= BUIG.minBreed);
+  };
+  const verschil = (a, b) => ((a - b + 540) % 360) - 180; // a - b, tussen -180 en 180
+  const verslag = [];
+  // de spaken van ons op de straal met de meeste: de lijst waar de andere stralen naar kijken
+  const per = BUIG.stralen.map((_, k) => ({ a: stukken(ons[k]), b: stukken(hun[k]) }));
+  const ref = per.reduce((x, y) => (y.a.length > x.a.length ? y : x)).a;
+  const som = ref.map(() => ({ van: 0, tot: 0, n: 0 }));
+  per.forEach(({ a, b }, k) => {
+    let n = 0;
+    for (const u of a) {
+      const w = b.filter((x) => Math.abs(verschil(x.mid, u.mid)) <= BUIG.zoek && x.breed <= u.breed * 1.6 + 4).sort((x, y) => Math.abs(verschil(x.mid, u.mid)) - Math.abs(verschil(y.mid, u.mid)))[0];
+      const r = ref.map((q, j) => [Math.abs(verschil(q.mid, u.mid)), j]).sort((x, y) => x[0] - y[0])[0];
+      if (!w || !r || r[0] > BUIG.zoek) continue;
+      som[r[1]].van += verschil(w.van, u.van);
+      som[r[1]].tot += verschil((w.van + w.breed) % 360, (u.van + u.breed) % 360);
+      som[r[1]].n++;
+      n++;
+    }
+    verslag.push({ straal: BUIG.stralen[k], spaken: n });
+  });
+  // per spaak twee paren [hoek bij ons, graden erbij], rondom gesorteerd
+  const pp = [];
+  ref.forEach((q, j) => {
+    if (!som[j].n) return;
+    pp.push([q.van, som[j].van / som[j].n], [(q.van + q.breed) % 360, som[j].tot / som[j].n]);
+  });
+  pp.sort((x, y) => x[0] - y[0]);
+  verslag.push({ spaken: pp.length / 2, grootst: +Math.max(0, ...pp.map((x) => Math.abs(x[1]))).toFixed(1) });
+  // lineair tussen de paren (rondom)
+  const opHoek = (g) => {
+    if (!pp.length) return 0;
+    let i = pp.findIndex((x) => x[0] > g);
+    if (i < 0) i = 0;
+    const na = pp[i];
+    const voor = pp[(i - 1 + pp.length) % pp.length];
+    const span = (na[0] - voor[0] + 360) % 360 || 360;
+    const t = ((g - voor[0] + 360) % 360) / span;
+    return voor[1] + (na[1] - voor[1]) * t;
+  };
+  const f = (r, hoek) => {
+    if (r <= BUIG.binnen || r >= BUIG.buiten) return 0;
+    const w = r < BUIG.vol[0] ? (r - BUIG.binnen) / (BUIG.vol[0] - BUIG.binnen) : r > BUIG.vol[1] ? (BUIG.buiten - r) / (BUIG.buiten - BUIG.vol[1]) : 1;
+    return (opHoek(((hoek * 180) / Math.PI + 360) % 360) * w * Math.PI) / 180;
+  };
+  return { f, verslag };
+}
 function legGpt(R) {
   const gpt = HS.doelWiel();
   const eo = HS.ellipsVan(R.zl);
@@ -142,11 +243,17 @@ function legGpt(R) {
   const det = a * d - b * b;
   const inv = [d / det, -b / det, a / det];
   const Mg = wortel2(eg.xx, eg.xy, eg.yy);
-  const naar = (x, y, p) => {
+  const naar = (x, y, p, buig = null) => {
     const dx = x - eo.cx;
     const dy = y - eo.cy;
-    const qx = inv[0] * dx + inv[1] * dy;
-    const qy = (inv[1] * dx + inv[2] * dy) * (p.spiegel ? -1 : 1);
+    let qx = inv[0] * dx + inv[1] * dy;
+    let qy = (inv[1] * dx + inv[2] * dy) * (p.spiegel ? -1 : 1);
+    if (buig) {
+      const r = Math.hypot(qx, qy);
+      const f = Math.atan2(qy, qx) + buig(r, Math.atan2(qy, qx));
+      qx = r * Math.cos(f);
+      qy = r * Math.sin(f);
+    }
     const c = Math.cos(p.hoek) * p.schaal;
     const z = Math.sin(p.hoek) * p.schaal;
     const rx = c * qx - z * qy;
@@ -197,16 +304,19 @@ function legGpt(R) {
       }
     }
   }
+  // de spaken van ChatGPT liggen niet om de 45° (tot 12° ernaast) en zijn wat breder: per spaak de hoek bijbuigen, zodat
+  // zijn randen op de onze vallen
+  const buig = buigSpaken(R, gpt, { eo, inv, eg, Mg }, best.p);
   // het beeld op onze render: per pixel die dekt de pixel van ChatGPT eronder
   const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
   for (let y = 0; y < R.h; y++) for (let x = 0; x < R.b; x++) {
     if (R.ramp[y * R.b + x] < 0) continue;
-    const [X, Y] = naar(x, y, best.p);
+    const [X, Y] = naar(x, y, best.p, buig.f);
     if (!dektG(X, Y)) continue;
     const s0 = (Math.round(Y) * gpt.b + Math.round(X)) * 4;
     gpt.rgba.copy(beeld.rgba, (y * R.b + x) * 4, s0, s0 + 4);
   }
-  return { beeld, p: best.p, samen: best.sc };
+  return { beeld, p: best.p, samen: best.sc, naar: (x, y) => naar(x, y, best.p, buig.f), gpt, buig: buig.verslag };
 }
 // het wiel is rondom gelijk om de 45° (spaken, stukken velg, beslag, nagels) en voor en achter gelijk: wat ChatGPT niet liet
 // zien, neemt de kleur van een gedraaide kopie, en de binnenkant die van de buitenkant (gespiegeld)
