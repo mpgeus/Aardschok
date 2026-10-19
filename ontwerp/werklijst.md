@@ -352,6 +352,8 @@ stenen huizen. **Ronde 3 is af.**
   zelf, en of een pixelart-LoRA kan: op dezelfde maat heeft ChatGPT 25.009 kleuren, wij 95 (`gereedschap/ai/ai-afwerking.md`,
   "Waarom niet de pixels van ChatGPT zelf"). Voorstel: één proefplaat van het wiel met drie versies: zoals nu, de pixels van
   het ChatGPT-wiel erop gebakken in volle kleur, en SDXL met Pixel Art XL (170,5 MB, wacht op toestemming om te downloaden).
+  Marcel noemde ook `Super_PixelArt_XL_M_V2.0` en `PixelArt_Krea2_5X5_V1`: van allebei verbiedt de maker het verkopen
+  van de beelden (Civitai: alleen "Run on Civitai"), en Krea 2 past niet op de 1080 Ti.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

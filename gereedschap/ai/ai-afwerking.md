@@ -610,3 +610,14 @@ kopieren toch?", en "de gpt variant heeft zoveel meer detail".
   CreativeML OpenRAIL-M). Hij schildert in blokken van 8×8, die je met de naaste buur acht keer verkleint, precies onze
   maat voor het wiel (Z = 8). Zo komt het detail op onze pixels, in plaats van eronder. Maar hij duwt naar weinig kleuren
   en vlakke pixel art, de andere kant op dan wat ChatGPT doet. Niet gedownload.
+- **Twee modellen die Marcel noemde** (19 okt), allebei van de maker YoDaR2 op Civitai:
+  - `Super_PixelArt_XL_M_V2.0` (Civitai 822320): een heel model (geen LoRA), SDXL Lightning,
+    `superPixelartXLMV20.safetensors`, 6,9 GB (fp16). Het maakt sprites van 128×128 op een doek van 1024, dus acht keer
+    verkleinen, zoals ons wiel. Het zou op onze kaart draaien, met dezelfde ControlNet en IP-Adapter.
+  - `PixelArt_Krea2_5X5_V1` (Civitai 2890305): een LoRA van 218 MB voor Krea 2, een raster van 5×5. Krea 2 zelf (22 juni
+    2026, open gewichten) heeft 12,9 miljard parameters, 24,8 GiB in bf16 en 12 GiB in fp8, en vraagt 16 GB of meer. De
+    1080 Ti heeft er 11, en kent geen bf16 of fp8. Lokaal draait dat dus niet goed.
+  - **De vergunning van allebei:** `allowCommercialUse: ["RentCivit"]`, wat Civitai toont als "Run on Civitai", en
+    "Sell images they generate" staat uit ("No commercial use"; nagekeken in `PermissionIndicator.tsx` van Civitai).
+    Voor een spel op Steam mogen we de beelden dus niet gebruiken, tenzij de maker het toestaat. Pixel Art XL (CreativeML
+    OpenRAIL-M) mag dat wel.
