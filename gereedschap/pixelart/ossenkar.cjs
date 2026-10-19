@@ -468,7 +468,7 @@ function kar(o = {}) {
 // De os voor de kar, in houding van de kar.
 function os(o = {}) {
   const H = HOUDINGEN[o.houding || 'staan'];
-  return V.koe({ os: true, juk: true, kleur: o.kleur || 0, houding: H.os, fase: o.fase || 0 });
+  return V.koe({ os: true, juk: true, kleur: o.kleur || 0, houding: H.os, fase: o.fase || 0, bouw: o.bouw });
 }
 
 // ---------------------------------------------------------------- tekenen
@@ -575,6 +575,6 @@ function proef() {
   console.log(`uit/ossenkar-rijden.png (${H.beelden} beelden, ${H.fps} per seconde)`);
 }
 
-module.exports = { kar, os, wiel, materialen, M, tekenOssenkar, beeld, kader, HOUDINGEN, LADINGEN, VELLEN, SNELHEID, WIEL, BAK, HUIF, OS_Y, MIDDEN, CEL, ANKER };
+module.exports = { kar, os, wiel, materialen, M, tekenOssenkar, beeld, kader, HOUDINGEN, LADINGEN, VELLEN, SNELHEID, WIEL, BAK, HUIF, DISSEL, JUK, OS_Y, MIDDEN, CEL, ANKER };
 
 if (require.main === module) proef();

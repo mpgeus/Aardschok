@@ -24,7 +24,8 @@ const HS = require('./hdstijl.cjs');
 const S = require('./stijl.cjs');
 const TX = require('./textuur.cjs');
 const HH = require('./houding.cjs');
-const { model } = require('./figuren.cjs');
+const { model, blok } = require('./figuren.cjs');
+const OD = require('./onderdelen.cjs');
 const E = require('../ai/etiket.cjs');
 
 const UIT = path.join(__dirname, 'uit', 'karhd');
@@ -72,11 +73,42 @@ function wielen(hoek) {
   }
   return d;
 }
+// De vorm naar de ChatGPT-wagen (Marcel, 19 okt: "Ja proefplaat"; op het voorste wiel uitgelijnd waren de bak en de wanden
+// al zo groot, uit/karhd/randen.png): de rongen dikker en van donker hout met drie ijzeren banden, een gele onderrand langs
+// de zijwanden, en de disselbomen van de bak tot het juk een dikke vierkante balk. En de os forser (vee.cjs o.bouw).
+const VORM = { rong: 3.6, band: 4.1, onderrand: true, dissel: [4.4, 4.0] };
+const OS_BOUW = { breed: 1.2, diep: 1.25, poot: 1.35, hals: 1.25, kop: 1.15 };
+function vormNaarDoel(delen) {
+  const { b, l, vloer, rand } = O.BAK;
+  const uit = [];
+  for (const d of delen) {
+    const g = d.g || [0, 0, 0, 0];
+    // de rongen: in de wagen van de heer rood geverfd (deel 4, verf)
+    if (d.deel === 4 && d.m === O.M.verf) {
+      // van net onder de vloer tot boven de bovenrand, zoals de rong in ossenkar.cjs bak
+      const z0 = vloer - 1.2;
+      const z1 = rand + 3.6;
+      uit.push(OD.balk([g[0], g[1], z0], [g[0], g[1], z1], { b0: VORM.rong, d0: VORM.rong, breedteRichting: [1, 0, 0], afschuin: 0.3, m: O.M.hout, deel: 4 }));
+      for (const z of [z0 + 1.6, (z0 + z1) / 2, z1 - 1.6]) uit.push(OD.balk([g[0], g[1], z - 0.5], [g[0], g[1], z + 0.5], { b0: VORM.band, d0: VORM.band, breedteRichting: [1, 0, 0], afschuin: 0.15, m: O.M.ijzer, deel: 4 }));
+      continue;
+    }
+    // de disselbomen van de bak tot het juk (deel 5, vóór de bak en opzij)
+    if (d.deel === 5 && g[1] > l + 12 && Math.abs(g[0]) > 5) {
+      const s = Math.sign(g[0]);
+      uit.push(OD.balk([s * O.DISSEL.x, l + 0.5, O.DISSEL.z], [s * O.JUK[0], O.JUK[1] - 0.5, O.JUK[2]], { b0: VORM.dissel[0], d0: VORM.dissel[1], breedteRichting: [0, 0, 1], afschuin: 0.4, m: O.M.hout, deel: 5 }));
+      continue;
+    }
+    uit.push(d);
+  }
+  if (VORM.onderrand) for (const s of [-1, 1]) uit.push(blok([s * (b + 0.6), 0, vloer + 0.5], [1.3, l + 0.6, 0.7], 0.3, O.M.bies, 4));
+  return uit;
+}
 function karModel(o = {}) {
   const k = O.kar({ ...o, hoek: 0 });
-  const delen = [...k.delen.filter((d) => d.deel !== 2 && d.deel !== 3), ...wielen(o.hoek || 0)];
+  const delen = [...vormNaarDoel(k.delen.filter((d) => d.deel !== 2 && d.deel !== 3)), ...wielen(o.hoek || 0)];
   return model(delen, materialen(o.blink || 0), { midden: k.midden, straal: k.straal });
 }
+const osModel = (o = {}) => O.os({ houding: o.houding, fase: o.fase, kleur: o.kleur, bouw: OS_BOUW });
 
 // De kar en de os in één beeld (zoals ossenkar.cjs tekenOssenkar), met de G-buffer. Een onderdeel heet daarna
 // obj × 1000 + zijn nummer (de kar is obj 1, de os 2), zodat de kar en de os niet hetzelfde nummer hebben.
@@ -86,7 +118,7 @@ function render(o, kant, fijn = FIJN) {
   const naar = (ly) => ({ gx: (ly * Math.cos(a)) / K.TEGEL, gy: (ly * Math.sin(a)) / K.TEGEL });
   const hoek = o.houding === 'lopen' ? O.WIEL.draai * (o.fase || 0) : 0;
   const km = karModel({ ...o, hoek });
-  const om = O.os({ houding: o.houding, fase: o.fase, kleur: o.kleur });
+  const om = osModel(o);
   // o.mat, o.osMat: andere materialen (de pixels van ChatGPT, hieronder)
   if (o.mat) km.mat = o.mat;
   if (o.osMat) om.mat = o.osMat;
@@ -197,12 +229,15 @@ function proef() {
 //      die (projectieMateriaal, ook de materialen zonder textuur). Wat ChatGPT niet liet zien: de kar en de os zijn links en
 //      rechts gelijk (spiegelen), een wiel ook rondom (om de 45°).
 const FGPT = 8;
+// het licht zachter op wat geprojecteerd wordt (bakken.cjs projectieMateriaal o.zacht, kern.cjs mat.zacht): ChatGPT
+// schildert zijn eigen licht al, en schildert de poten onder de os licht, waar ons licht een derde is
+const ZACHT = 0.4;
 const O_KAR = { lading: 'buit', bak: 'heer', wind: [0, -1], blink: 0 };
 function legWagen(R) {
   const A = require('../ai/beeld-ai.cjs');
   const g = A.leesPng(fs.readFileSync(BRON));
   const km = karModel({ ...O_KAR, hoek: 0 });
-  const om = O.os({});
+  const om = osModel({});
   const ding = (i) => (R.ramp[i] < 0 || Number.isNaN(R.rust[i * 4]) ? null : Math.floor(R.rust[i * 4 + 3] / 1000));
   const onderdeel = (v) => {
     const obj = Math.floor(v / 1000);
@@ -222,17 +257,66 @@ function legWagen(R) {
   // het midden van het ChatGPT-wiel in het hele beeld (de uitsnede van hdproef.cjs refWiel begint op 955, 385)
   const gx = eg.cx + 955;
   const gy = eg.cy + 385;
-  const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
-  for (let y = 0; y < R.h; y++) for (let x = 0; x < R.b; x++) {
-    const X = Math.round(gx + (x - eo.cx) / schaal);
-    const Y = Math.round(gy + (y - eo.cy) / schaal);
-    if (X < 0 || Y < 0 || X >= g.b || Y >= g.h) continue;
-    const j = (Y * g.b + X) * 4;
-    const [r0, g0, b0] = [g.rgba[j], g.rgba[j + 1], g.rgba[j + 2]];
-    if (r0 > 90 && b0 > 90 && g0 < 0.6 * Math.min(r0, b0)) continue;
-    beeld.rgba.set([r0, g0, b0, 255], (y * R.b + x) * 4);
+  const magenta = (j) => g.rgba[j] > 90 && g.rgba[j + 2] > 90 && g.rgba[j + 1] < 0.6 * Math.min(g.rgba[j], g.rgba[j + 2]);
+  // een pixel van ons naar ChatGPT; e: een extra schaal en verschuiving om (cx, cy) (de os, hieronder)
+  const naar = (x, y, e = null) => {
+    const [px, py] = e ? [e.cx + (x - e.cx) * e.sx + e.dx, e.cy + (y - e.cy) * e.sy + e.dy] : [x, y];
+    return [Math.round(gx + (px - eo.cx) / schaal), Math.round(gy + (py - eo.cy) / schaal)];
+  };
+  const dekt = ([X, Y]) => X >= 0 && Y >= 0 && X < g.b && Y < g.h && !magenta((Y * g.b + X) * 4);
+  const vul = (e, welke) => {
+    const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
+    for (let y = 0; y < R.h; y++) for (let x = 0; x < R.b; x++) {
+      if (!welke(y * R.b + x)) continue;
+      const P = naar(x, y, e);
+      if (!dekt(P)) continue;
+      const j = (P[1] * g.b + P[0]) * 4;
+      beeld.rgba.set([g.rgba[j], g.rgba[j + 1], g.rgba[j + 2], 255], (y * R.b + x) * 4);
+    }
+    return beeld;
+  };
+  // De os apart: ChatGPT tekent zijn os niet in hetzelfde perspectief als de kar (op het wiel uitgelijnd valt de rug samen,
+  // maar staan zijn hoeven zo'n 5 eenheden hoger, en ons onderbeen viel op zijn hoef en de achtergrond). Een eigen schaal
+  // (sx, sy) en verschuiving om het midden van onze os, waarbij wat dekt het best samenvalt (gemeten waar onze kar niet
+  // voor de os staat).
+  let n = 0, sx = 0, sy = 0, x0 = R.b, x1 = 0, y0 = R.h, y1 = 0;
+  for (let i = 0; i < R.b * R.h; i++) if (ding(i) === 2) {
+    const x = i % R.b;
+    const y = (i - x) / R.b;
+    n++; sx += x; sy += y;
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
   }
-  return { beeld, km, om, ding, onderdeel, schaal, voor };
+  const rand = Math.round(0.08 * (x1 - x0));
+  const proef = [];
+  for (let y = Math.max(0, y0 - rand); y <= Math.min(R.h - 1, y1 + rand); y += 2) for (let x = Math.max(0, x0 - rand); x <= Math.min(R.b - 1, x1 + rand); x += 2) {
+    const i = y * R.b + x;
+    if (ding(i) === 1) continue;
+    proef.push([x, y, ding(i) === 2]);
+  }
+  const score = (e) => {
+    let beide = 0, een = 0;
+    for (const [x, y, o] of proef) {
+      const d = dekt(naar(x, y, e));
+      if (o || d) { een++; if (o && d) beide++; }
+    }
+    return beide / een;
+  };
+  let os = { e: { cx: sx / n, cy: sy / n, sx: 1, sy: 1, dx: 0, dy: 0 } };
+  os.sc = score(os.e);
+  const begin = os.sc;
+  const stappen = { sy: [0.04, 0.01], sx: [0.04, 0.01], dy: [8, 2], dx: [8, 2] };
+  for (let ronde = 0; ronde < 3; ronde++) for (const [k, ds] of Object.entries(stappen)) for (const dd of ds) for (const r of [-1, 1]) {
+    for (;;) {
+      const e = { ...os.e, [k]: os.e[k] + r * dd };
+      const sc = score(e);
+      if (sc <= os.sc) break;
+      os = { e, sc };
+    }
+  }
+  const beeld = vul(null, (i) => ding(i) !== 2);
+  const beeldOs = vul(os.e, (i) => ding(i) === 2);
+  const osLigging = { ...Object.fromEntries(['sx', 'sy', 'dx', 'dy'].map((k) => [k, +os.e[k].toFixed(3)])), samen: [+begin.toFixed(3), +os.sc.toFixed(3)] };
+  return { beeld, beeldOs, gpt: vul(null, () => true), km, om, ding, onderdeel, schaal, voor, osLigging };
 }
 // de kopieën: spiegelen (x → -x, de kar en de os zijn links en rechts gelijk), en een wiel rondom om de 45°
 const spiegelX = (p) => [-p[0], p[1], p[2]];
@@ -252,23 +336,24 @@ function projectieWagen() {
   // de render waaruit geprojecteerd wordt, met dezelfde materialen zonder beeld (alles met een textuur: anders is het licht
   // van een materiaal zonder textuur de stap in zijn ramp, en werden de os en de zakken zwart)
   const km0 = karModel({ ...O_KAR, hoek: 0 });
-  const om0 = O.os({});
-  const R = render({ ...O_KAR, mat: km0.mat.map((m) => m && BK.projectieMateriaal(m, null)), osMat: om0.mat.map((m) => m && BK.projectieMateriaal(m, null)) }, 'ZW', FGPT);
+  const om0 = osModel({});
+  const R = render({ ...O_KAR, mat: km0.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })), osMat: om0.mat.map((m) => m && BK.projectieMateriaal(m, null, { zacht: ZACHT })) }, 'ZW', FGPT);
   const L = legWagen(R);
   const paars = (k) => k[2] > k[1] + 8 && k[0] > k[1] + 8;
   const SM = require('./stijlmaat.cjs');
   const opties = (obj) => ({
     welke: (i) => L.ding(i) === obj,
     sleutel: (v) => soortVan(L.onderdeel(v)),
-    binnen: (X, Y) => L.beeld.rgba[(Y * L.beeld.b + X) * 4 + 3] >= 128,
-    soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !paars(k),
+    binnen: (X, Y) => (obj === 2 ? L.beeldOs : L.beeld).rgba[(Y * L.beeld.b + X) * 4 + 3] >= 128,
+    // op de os ook geen rood van de bak (waar zijn romp voor de bak van ChatGPT ligt)
+    soort: (k) => SM.soortVan(k[0], k[1], k[2]) !== 'anders' && !paars(k) && !(obj === 2 && k[0] > 60 && k[0] > 1.8 * k[1] && k[0] > 1.8 * k[2]),
   });
   const prKar = BK.projectie(R, L.beeld, opties(1));
-  const prOs = BK.projectie(R, L.beeld, opties(2));
-  const mat = L.km.mat.map((m) => (m ? BK.projectieMateriaal(m, prKar, { kopieen: KOPIEEN_KAR, sleutelVan: soortVan }) : m));
-  const osMat = L.om.mat.map((m) => (m ? BK.projectieMateriaal(m, prOs, { kopieen: [spiegelX], sleutelVan: soortVan }) : m));
-  console.log(`gelegd (schaal ${L.schaal.toFixed(3)}, voorste wiel ${L.voor}) in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
-  return { mat, osMat, beeld: L.beeld };
+  const prOs = BK.projectie(R, L.beeldOs, opties(2));
+  const mat = L.km.mat.map((m) => (m ? BK.projectieMateriaal(m, prKar, { kopieen: KOPIEEN_KAR, sleutelVan: soortVan, zacht: ZACHT }) : m));
+  const osMat = L.om.mat.map((m) => (m ? BK.projectieMateriaal(m, prOs, { kopieen: [spiegelX], sleutelVan: soortVan, zacht: ZACHT }) : m));
+  console.log(`gelegd (schaal ${L.schaal.toFixed(3)}, voorste wiel ${L.voor}; de os apart: ${JSON.stringify(L.osLigging)}) in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  return { mat, osMat, beeld: L.gpt };
 }
 function gpt() {
   fs.mkdirSync(UIT, { recursive: true });
@@ -291,14 +376,14 @@ function gpt() {
   }
   const nu = H.lees(path.join(UIT, 'ZW-0.png'));
   E.bewaar(path.join(UIT, 'gpt.png'), [
-    [E.met(groot(knip(doel), 2), 'ChatGPT, op spelmaat'), E.met(groot(knip(nu), 2), 'de kar in HD van nu'), rij[0]],
+    [E.met(groot(knip(doel), 2), 'ChatGPT, op spelmaat'), E.met(groot(knip(nu), 2), 'de HD-kar van eerder (stijl D, zonder ChatGPT)'), rij[0]],
     rij.slice(1),
     [E.met(knip(H.verklein(beeld, 2, 'naast')), 'ChatGPT · 4×'), ...rij4],
-  ], 'De pixels van de ChatGPT-wagen op de kar', 'Zoals de kar nu is (de vorm nog niet aangepast), uitgelijnd op het voorste wiel. Rij 1 en 2 maal 2 (spelmaat 2×), rij 3 op 4×. Wat ChatGPT niet liet zien: gespiegeld, of het wiel gedraaid; anders onze eigen kleur.');
+  ], 'De pixels van de ChatGPT-wagen op de kar', 'De vorm naar de ChatGPT-wagen (de os forser, de dissel en de rongen dikker, een onderrand), uitgelijnd op het voorste wiel, de os apart. Rij 1 en 2 maal 2 (spelmaat 2×), rij 3 op 4×. Wat ChatGPT niet liet zien: gespiegeld, of het wiel gedraaid; anders onze eigen kleur.');
   console.log('uit/karhd/gpt.png');
 }
 
-module.exports = { materialen, karModel, render, stijlVoor, gestileerd, doelWagen, projectieWagen, MESSING, UIT };
+module.exports = { materialen, karModel, osModel, render, stijlVoor, gestileerd, doelWagen, legWagen, projectieWagen, FGPT, O_KAR, MESSING, UIT };
 
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();

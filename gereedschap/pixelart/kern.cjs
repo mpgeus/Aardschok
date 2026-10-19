@@ -460,6 +460,9 @@ function textuurPixel(B, idx, model, mat, naarDeel, deelI, x, y, z, nx, ny, nz, 
     B.albedo[idx * 3 + 2] = kl[2];
   }
   let licht = o.vlakLicht ? 1 : 0.22 + 0.95 * (stap - mat.lo) / ((mat.hi - mat.lo) || 1);
+  // mat.zacht (0 tot 1): het licht zachter, de schaduw zo ver op weg naar het volle licht (de pixels van ChatGPT,
+  // bakken.cjs projectieMateriaal: ChatGPT schildert zijn eigen licht al)
+  if (mat.zacht && !o.vlakLicht) licht = mat.zacht + (1 - mat.zacht) * licht;
   let glans = 0;
   let af = null;
   if (mat.afwerking && !o.vlakLicht) {

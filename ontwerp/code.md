@@ -1117,6 +1117,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `kwantiseer`). Op zo'n materiaal alleen de lijn waar iets ervoor ligt, geen naden en geen lijnen tussen soorten (anders
   wordt een dier een lappenpop). De ossenkar in HD: `karhd.cjs` (de wielen naar het doel, hout, ijzer, koper en rood met
   een textuur).
+- **De vorm naar de ChatGPT-wagen** (19 okt; Marcel: "Ja proefplaat"), allemaal optioneel, zonder blijven de spelbeelden
+  gelijk: `vee.cjs koe` met `o.bouw` ({ breed, diep, poot, hals, kop }: het lijf breder, de buik dieper met de rug op zijn
+  plek, dikkere poten en hals, de kop groter om de nek), via `ossenkar.cjs os({ bouw })`; `kern.cjs` met `mat.zacht` (het
+  licht van een materiaal met een textuur zachter: de schaduw zo ver op weg naar het volle licht, voor de pixels van
+  ChatGPT, die zijn eigen licht al schildert). `karhd.cjs vormNaarDoel` maakt de rongen dikker en van hout met drie
+  ijzeren banden, legt een gele onderrand langs de zijwanden en maakt de disselbomen een dikke vierkante balk
+  (`onderdelen.cjs balk`); `ossenkar.cjs` geeft daarvoor ook `DISSEL` en `JUK`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

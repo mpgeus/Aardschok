@@ -366,8 +366,12 @@ stenen huizen. **Ronde 3 is af.**
   ChatGPT. Marcel: "Naar de kar": **gedaan** (19 okt, `karhd.cjs gpt`, `uit/karhd/gpt.png`; verslag in
   `ai-afwerking.md`, "De pixels van de ChatGPT-wagen op de kar"). Op het voorste wiel uitgelijnd was de vorm van de bak al
   dichtbij, dus eerst de pixels op de kar zoals hij is: naar zuidwest is het bijna de ChatGPT-wagen, met de leeuwen. Wat
-  nog niet past, is de vorm: de os (romp breder, poten korter en dikker), de dissel en de hoekpalen dikker. **Wacht op
-  Marcel:** die vorm aanpassen (alleen in de HD-kar, de koeien in het spel blijven), dan opnieuw projecteren.
+  nog niet past, is de vorm: de os (romp breder, poten korter en dikker), de dissel en de hoekpalen dikker. Marcel: "Ja
+  proefplaat": **gedaan** (19 okt; `ai-afwerking.md`, "De vorm naar de ChatGPT-wagen"): de os forser (`vee.cjs o.bouw`)
+  en apart op de ChatGPT-os gelegd, de rongen en de dissel dikker, een onderrand, en het licht op wat geprojecteerd wordt
+  zachter (`kern.cjs mat.zacht`). Naar zuidwest lijkt het op spelmaat heel erg op de ChatGPT-wagen. **Wacht op Marcel:**
+  wat hij van de plaat vindt. Daarna: de andere richtingen beter (wat ChatGPT niet laat zien), en of dit de weg is voor
+  meer dingen (een ChatGPT-beeld per ding, geprojecteerd).
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

@@ -479,23 +479,29 @@ function koe(o = {}) {
   const N = (d) => beweeg(d, T.nek);
   const K = (d) => beweeg(d, T.kop);
   const delen = [];
+  // o.bouw: forser, alleen waar het gevraagd wordt (de os van de HD-kar, karhd.cjs: naar de ChatGPT-os; Marcel, 19 okt);
+  // zonder blijft alles zoals het was. breed: het lijf breder; diep: de buik dieper (de rug blijft liggen); poot, hals: zo
+  // veel dikker; kop: de kop groter, om de nek (poll).
+  const b = { breed: 1, diep: 1, poot: 1, hals: 1, kop: 1, ...(o.bouw || {}) };
+  const romp = (c, r) => [[c[0] * b.breed, c[1], c[2] + r[2] * (1 - b.diep)], [r[0] * b.breed, r[1], r[2] * b.diep]];
+  const kp = b.kop === 1 ? (p) => p : (p) => p.map((v, k) => KOE.poll[k] + (v - KOE.poll[k]) * b.kop);
 
   // --- romp: een diepe ton met een rechte rug, de heupknobbels en de zitbeenderen steken uit
-  delen.push(L(ellips([0, 13, 40.5], [12, 17.5, 13.5], M.lijf, D.lijf)));
-  delen.push(L(ellips([0, -5, 39.5], [15, 18.5, 14.2], M.lijf, D.lijf, 6)));
-  delen.push(L(ellips([0, -25, 42.5], [12.2, 13, 10.8], M.lijf, D.lijf, 6)));
+  delen.push(L(ellips(...romp([0, 13, 40.5], [12, 17.5, 13.5]), M.lijf, D.lijf)));
+  delen.push(L(ellips(...romp([0, -5, 39.5], [15, 18.5, 14.2]), M.lijf, D.lijf, 6)));
+  delen.push(L(ellips(...romp([0, -25, 42.5], [12.2, 13, 10.8]), M.lijf, D.lijf, 6)));
   delen.push(L(kegel([0, 21, 48.4], [0, -30, 48.6], 5.8, 5.2, M.lijf, D.lijf, 5)));
   delen.push(L(ellips([0, 19, 49], [6.5, 9, 5.5], M.lijf, D.lijf, 4)));
   for (const s of [-1, 1]) {
-    delen.push(L(bol([s * 11.8, -19.5, 49.4], 3.4, M.lijf, D.lijf, 3)));
-    delen.push(L(bol([s * 5.8, -35.5, 47], 2.8, M.lijf, D.lijf, 2.5)));
+    delen.push(L(bol([s * 11.8 * b.breed, -19.5, 49.4], 3.4, M.lijf, D.lijf, 3)));
+    delen.push(L(bol([s * 5.8 * b.breed, -35.5, 47], 2.8, M.lijf, D.lijf, 2.5)));
   }
   delen.push(L(kegel([0, -30, 50.4], [0, -36.5, 50], 3.4, 2.6, M.lijf, D.lijf, 2)));
   // het borstbeen, tussen de voorpoten
-  delen.push(L(ellips([0, 27, 31], [6.5, 6.5, 6], M.lijf, D.lijf, 4)));
+  delen.push(L(ellips(...romp([0, 27, 31], [6.5, 6.5, 6]), M.lijf, D.lijf, 4)));
   if (os) {
     // geen uier, maar een spierbult op de schoft, waar het juk tegenaan ligt
-    delen.push(L(ellips([0, 16.5, 49.5], [8.5, 10, 6.5], M.lijf, D.lijf, 4)));
+    delen.push(L(ellips([0, 16.5, 49.5], [8.5 * b.breed, 10, 6.5], M.lijf, D.lijf, 4)));
   } else {
     // een klein uier met vier spenen: een koe van toen gaf een paar liter per dag
     delen.push(L(ellips([0, -14.5, 25.2], [6.2, 7.2, 4.8], M.uier, D.lijf, 3)));
@@ -505,8 +511,8 @@ function koe(o = {}) {
   }
 
   // --- hals, met de kwab eronder (bij de os dikker en dieper)
-  delen.push(N(kegel([0, 22, 43.5], [0, 44, 47.5], os ? 12.5 : 11, os ? 8.4 : 7.6, M.lijf, D.lijf, 6)));
-  delen.push(N(platteKegel([0, 42.5, 39], [0, 25.5, 29.5], os ? 3.6 : 3, os ? 7.8 : 6, [1, 0, 0], 0.55, M.lijf, D.lijf, 3)));
+  delen.push(N(kegel([0, 22, 43.5], [0, 44, 47.5], (os ? 12.5 : 11) * b.hals, (os ? 8.4 : 7.6) * b.hals, M.lijf, D.lijf, 6)));
+  delen.push(N(platteKegel([0, 42.5, 39], [0, 25.5, 29.5], (os ? 3.6 : 3) * b.hals, (os ? 7.8 : 6) * b.hals, [1, 0, 0], 0.55, M.lijf, D.lijf, 3)));
   if (os && o.juk) {
     // het juk ligt op de lijn van de hals vóór de bult, en gaat met het lijf mee
     const [yJ, zTop, zEind, xEind] = [JUK.y, JUK.top, JUK.eind[2], JUK.eind[0]];
@@ -519,21 +525,22 @@ function koe(o = {}) {
   }
 
   // --- kop: een breed voorhoofd, een lang gezicht en een brede snuit
-  delen.push(K(ellips([0, 49.3, 48], [6.6, 5.6, 5.8], M.kop, D.kop, 3)));
-  delen.push(K(kegel([0, 51, 45.5], [0, 57.5, 37], 6, 4.6, M.kop, D.kop, 2.5)));
-  delen.push(K(ellips([0, 59.1, 34.4], [5.3, 4, 3.7], M.snuit, D.kop, 1.6)));
-  delen.push(beweeg(kegel([0, 48.3, 42.5], [0, 55.5, 33.8], 5.4, 3.3, M.kop, D.kop, 1.6), T.kaak));
+  const kr = (r) => r * b.kop;
+  delen.push(K(ellips(kp([0, 49.3, 48]), [6.6, 5.6, 5.8].map(kr), M.kop, D.kop, 3)));
+  delen.push(K(kegel(kp([0, 51, 45.5]), kp([0, 57.5, 37]), kr(6), kr(4.6), M.kop, D.kop, 2.5)));
+  delen.push(K(ellips(kp([0, 59.1, 34.4]), [5.3, 4, 3.7].map(kr), M.snuit, D.kop, 1.6)));
+  delen.push(beweeg(kegel(kp([0, 48.3, 42.5]), kp([0, 55.5, 33.8]), kr(5.4), kr(3.3), M.kop, D.kop, 1.6), T.kaak));
   const [hx, hz, hy] = kleur.hoorn;
   for (const s of [-1, 1]) {
-    delen.push(K(bol([s * 5.9, 51.7, 45.4], 1.35, M.oog, D.kop)));
-    delen.push(K(bol([s * 2.1, 62.3, 34.8], 0.95, M.neusgat, D.kop)));
+    delen.push(K(bol(kp([s * 5.9, 51.7, 45.4]), kr(1.35), M.oog, D.kop)));
+    delen.push(K(bol(kp([s * 2.1, 62.3, 34.8]), kr(0.95), M.neusgat, D.kop)));
     // horens: eerst naar buiten, dan omhoog en een beetje naar voren
-    const voet = [s * 4.8, 48.9, 52];
-    const punt = [s * (4.8 + hx), 48.9 + hy, 52 + hz];
-    const midden = [s * (4.8 + hx * 0.85), 48.9 + hy * 0.1, 52 + hz * 0.25];
-    for (const p of bochtProfiel(voet, midden, punt, (t) => (os ? mix(2.7, 0.65, t) : mix(2, 0.55, t)), os ? 6 : 4, M.hoorn, D.hoorn, 0.8)) delen.push(K(p));
+    const voet = kp([s * 4.8, 48.9, 52]);
+    const punt = kp([s * (4.8 + hx), 48.9 + hy, 52 + hz]);
+    const midden = kp([s * (4.8 + hx * 0.85), 48.9 + hy * 0.1, 52 + hz * 0.25]);
+    for (const p of bochtProfiel(voet, midden, punt, (t) => kr(os ? mix(2.7, 0.65, t) : mix(2, 0.55, t)), os ? 6 : 4, M.hoorn, D.hoorn, 0.8)) delen.push(K(p));
     // oren: plat, zijwaarts onder de horens, de holte naar voren
-    const oor = platteKegel(KOE.oor(s), [s * 12.6, 46.7, 47], 1.3, 2.7, [0, 1, 0.25], 0.5, M.oor, s < 0 ? D.oorL : D.oorR, 1);
+    const oor = platteKegel(kp(KOE.oor(s)), kp([s * 12.6, 46.7, 47]), kr(1.3), kr(2.7), [0, 1, 0.25], 0.5, M.oor, s < 0 ? D.oorL : D.oorR, 1);
     delen.push(beweeg(oor, s < 0 ? T.oorL : T.oorR));
   }
 
@@ -547,15 +554,16 @@ function koe(o = {}) {
       delen.push(...koeGevouwen(s, S, Hp, M, dv, da).map(L));
       continue;
     }
+    const pt = (r) => r * b.poot;
     const voor = [
-      [kegel(S, E, 6.2, 3.8, M.poot, dv, 4)],
-      [kegel(E, W, 3.3, 2.3, M.poot, dv, 1.2)],
-      [kegel(W, plus(V, [0, -0.2, 1.8]), 2.25, 2.05, M.poot, dv, 0.8), ellips(V, [2.6, 3.3, 1.9], M.hoef, dv, 0.8)],
+      [kegel(S, E, pt(6.2), pt(3.8), M.poot, dv, 4)],
+      [kegel(E, W, pt(3.3), pt(2.3), M.poot, dv, 1.2)],
+      [kegel(W, plus(V, [0, -0.2, 1.8]), pt(2.25), pt(2.05), M.poot, dv, 0.8), ellips(V, [pt(2.6), pt(3.3), 1.9], M.hoef, dv, 0.8)],
     ];
     const achter = [
-      [kegel(Hp, Kn, 8.6, 4.6, M.poot, da, 4.5)],
-      [kegel(Kn, Hk, 3.9, 2.1, M.poot, da, 1.2), bol(plus(Hk, [0, -1.3, 0.8]), 2.3, M.poot, da, 1)],
-      [kegel(Hk, plus(Ac, [0, 0.2, 1.8]), 2.05, 1.95, M.poot, da, 0.8), ellips(Ac, [2.5, 3.2, 1.9], M.hoef, da, 0.8)],
+      [kegel(Hp, Kn, pt(8.6), pt(4.6), M.poot, da, 4.5)],
+      [kegel(Kn, Hk, pt(3.9), pt(2.1), M.poot, da, 1.2), bol(plus(Hk, [0, -1.3, 0.8]), pt(2.3), M.poot, da, 1)],
+      [kegel(Hk, plus(Ac, [0, 0.2, 1.8]), pt(2.05), pt(1.95), M.poot, da, 0.8), ellips(Ac, [pt(2.5), pt(3.2), 1.9], M.hoef, da, 0.8)],
     ];
     const tv = poot(T, P, s < 0 ? 0 : 1, [S, E, W, V], true);
     const ta = poot(T, P, s < 0 ? 2 : 3, [Hp, Kn, Hk, Ac], false);

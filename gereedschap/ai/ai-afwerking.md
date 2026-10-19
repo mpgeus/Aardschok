@@ -738,3 +738,27 @@ Daarom eerst de pixels op de kar zoals hij is: dan zie je waar de vorm nog niet 
   - Wat ChatGPT niet laat zien, zoals de binnenkant van het deksel naar noordwest, houdt onze eigen kleur.
 - **Rendertijd:** de projectie (de render op 8×) ruim twee minuten, een beeld op 4× zo'n 37 seconden.
 
+### De vorm naar de ChatGPT-wagen (19 okt, proefplaat)
+
+Marcel: "Ja proefplaat" (de os, de dissel en de rongen naar ChatGPT, alleen in de HD-kar). (`karhd.cjs gpt`,
+`uit/karhd/gpt.png`; de plaat ervoor: `gpt-voor.png`.)
+
+- **De os forser** (`vee.cjs` `o.bouw`: breed 1,2, diep 1,25, poot 1,35, hals 1,25, kop 1,15). Zonder `bouw` blijft de os
+  zoals hij was: de 65 spelbeelden zijn pixel voor pixel gelijk.
+- **De rongen** 3,6 eenheden dik, van donker hout, met drie ijzeren banden. Een gele onderrand langs de zijwanden. De
+  disselbomen een vierkante balk van 4,4 bij 4,0 eenheden.
+- **De os apart op de ChatGPT-os gelegd.** Op het wiel uitgelijnd viel de rug samen, maar stonden de hoeven van ChatGPT zo'n
+  5 eenheden hoger: ChatGPT tekent zijn os niet in hetzelfde perspectief als de kar. Een eigen schaal (sy 0,96) en
+  verschuiving (28 pixels op 8×) maakt het samenvallen van 0,80 tot 0,90.
+- **De poten bleven zwart, en dat lag aan ons licht.** Onder de buik is ons licht zo'n 0,32. Een crème kleur gedeeld door
+  0,32 komt boven 255, en ik kapte af, dus hij kwam niet terug. Nu:
+  - wordt het albedo niet meer afgekapt op 255 (de render kapt zelf af);
+  - is het licht op wat geprojecteerd wordt zachter (`kern.cjs` `mat.zacht` 0,4: de donkerste schaduw ruim de helft van
+    het volle licht). ChatGPT schildert zijn eigen licht al.
+  - Een lagere `lo` deed niets: de renderer rekent de stap met dezelfde `lo` uit en deelt hem er weer door.
+- **Op de os telt geen rood van de bak**, waar zijn romp voor de bak van ChatGPT ligt.
+
+**Wat het laat zien:** naar zuidwest lijkt het op spelmaat heel erg op de ChatGPT-wagen: de os romig met lichte poten en
+zwarte hoeven, de dikke dissel, de rongen met ijzer, de leeuwen, de lading. Lopend en naar zuidoost houdt het. Wat ChatGPT
+niet laat zien (de andere kant van de lading, de binnenkant van het deksel), heeft gespiegelde of eigen kleuren.
+

@@ -233,7 +233,7 @@ function bakMateriaal(mat, bk, groepVan, model) {
 //                                      een spiegeling), en anders de eigen textuur (of, zonder textuur, de middelste toon van
 //                                      de ramp). Zonder pr (null): alleen de eigen textuur, voor de render waaruit
 //                                      geprojecteerd wordt (een materiaal zonder textuur schrijft anders de stap in zijn ramp
-//                                      als licht in de G-buffer, niet 0 tot 1)
+//                                      als licht in de G-buffer, niet 0 tot 1). o.zacht: het licht zachter (zie onder)
 function projectie(B, beeld, o = {}) {
   const minLicht = o.minLicht ?? 0.3;
   const gk = o.glansKleur || [255, 240, 214];
@@ -250,7 +250,8 @@ function projectie(B, beeld, o = {}) {
     const f = K.klem(1 + (B.stap[i] - B.kleur[i * 4 + 3]) * 0.22, 0.45, 1.8);
     const licht = Math.max(minLicht, B.g[i * K.GB + K.G.licht] * f) ** (o.lichtMacht ?? 1);
     const glans = B.g[i * K.GB + K.G.glans] * f;
-    for (let c = 0; c < 3; c++) alb[i * 3 + c] = K.klem((kb[c] - glans * gk[c]) / licht, 0, 255);
+    // niet afgekapt op 255: een lichte kleur in onze schaduw komt anders niet terug (de render kapt zelf af)
+    for (let c = 0; c < 3; c++) alb[i * 3 + c] = K.klem((kb[c] - glans * gk[c]) / licht, 0, 600);
   }
   // de marge: twee keer de afstand in rust tussen twee buurpixels van hetzelfde onderdeel (de mediaan)
   let marge = o.marge;
@@ -274,6 +275,10 @@ function projectie(B, beeld, o = {}) {
 }
 function projectieMateriaal(mat, pr, o = {}) {
   const basis = gebakkenAfwerking(mat);
+  // o.zacht (0 tot 1): het licht zachter (kern.cjs mat.zacht), voor de render waaruit geprojecteerd wordt en de render
+  // erna hetzelfde. In een diepe schaduw van ons die ChatGPT licht schildert (de poten onder de os), werd de kleur anders
+  // te sterk opgehaald en zwart of vaal.
+  if (o.zacht) basis.zacht = o.zacht;
   // een materiaal zonder textuur (een ramp): zijn middelste toon als eigen kleur
   const vlak = mat.textuur ? null : K.RAMP_RGB[K.RAMP[mat.ramp]][Math.floor(K.RAMP_RGB[K.RAMP[mat.ramp]].length / 2)];
   const eigen = mat.textuur || (() => vlak);
