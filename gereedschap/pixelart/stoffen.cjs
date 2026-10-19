@@ -14,16 +14,19 @@ const K = require('./kern.cjs');
 const klem = (v) => Math.max(0, Math.min(255, v));
 const maal = (kleur, f, warm = 0) => [klem(kleur[0] * f + warm * 10), klem(kleur[1] * f), klem(kleur[2] * f - warm * 10)];
 
-// Vacht: haren in de looprichting (langs het lijf, y; op een poot omlaag, z), fijne korrel, en grote vlekken iets donkerder
-// of warmer. De poten zijn deel 3 tot 6 van de koe (vee.cjs koe).
+// Vacht: streken in de groeirichting (langs het lijf, y; op een poot omlaag, z), geen ruis (de stijlspecificatie, 2 en 4:
+// "small hand-painted strokes and controlled clusters", geen "random pixel noise"). Een streek is een lange smalle vlek
+// (sterk uitgerekte ruis, afgekapt tot een vlek met een zachte rand), licht of donker, en grote vlekken iets warmer. De
+// poten zijn deel 3 tot 6 van de koe (vee.cjs koe).
 function vacht(kleur) {
+  const streek = (v) => Math.max(0, Math.min(1, (v - 0.58) / 0.12));
   return (x, y, z, nx, ny, nz, deel) => {
     const poot = deel && deel.deel >= 3 && deel.deel <= 6;
-    const [a, b, c] = poot ? [x * 1.8, z * 0.35, y * 1.8] : [x * 1.8, y * 0.35, z * 1.8];
-    const haar = K.ruis3(a, b, c, 11);
-    const korrel = K.ruis3(x * 5, y * 5, z * 5, 12);
+    const [a, b, c] = poot ? [x * 2.6, z * 0.16, y * 2.6] : [x * 2.6, y * 0.16, z * 2.6];
+    const licht = streek(K.ruis3(a, b, c, 11));
+    const donker = streek(K.ruis3(a + 7.3, b + 3.1, c + 5.7, 12));
     const vlek = K.ruis3(x * 0.12, y * 0.12, z * 0.12, 13);
-    return maal(kleur, 0.8 + 0.22 * haar + 0.1 * korrel - 0.08 * vlek, vlek - 0.5);
+    return maal(kleur, 0.92 + 0.1 * licht - 0.12 * donker - 0.05 * vlek, vlek - 0.5);
   };
 }
 // Jute: een grof weefsel (kruislings) en plooien.

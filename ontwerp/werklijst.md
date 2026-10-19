@@ -401,7 +401,10 @@ stenen huizen. **Ronde 3 is af.**
   "dark"). Marcel gaf daarna de stijlspecificatie (`ontwerp/stijlspecificatie.md`, letterlijk). **Wacht op Marcel:** het
   voorstel (`ai-afwerking.md`, "De stijlspecificatie in de pijplijn"): de zinnen uit de specificatie, zachtere
   binnenlijnen, warm licht en koele schaduw uit ons eigen licht, minder verscherping, en vergelijken op 4× en 2× met een
-  oordeel per punt; daarna de pijplijn op een tweede ding.
+  oordeel per punt. Marcel: "Ja proef draaien maar": **gedaan** (`karhd.cjs spec`; `ai-afwerking.md`, "De
+  stijlspecificatie: de eerste proef"). Beter: geen zwart, zachtere binnenlijnen, warm hout. Slechter: SDXL nam "blue-grey"
+  letterlijk (blauwe banden en stam), de zakken werden bollen, de os plastic. **Wacht op Marcel:** de kleurwoorden voor
+  schaduw uit de zinnen (warm en koel alleen in onze code) en nog één keer, of stoppen met zinnen schaven.
 - **De platen van de andere materialen bekijken** (vraag 177, 17 okt; Marcel koos eerder: de richting is goed, eerst de
   andere materialen): `gereedschap/pixelart/uit/stijlproef/materiaal-<leien, pannen, spanen, planken, baksteen,
   leem>.png` (opnieuw met `node gereedschap/pixelart/stijlproef.cjs materialen`, anderhalve minuut), de hele plaat

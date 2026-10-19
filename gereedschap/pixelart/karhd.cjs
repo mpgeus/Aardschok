@@ -25,6 +25,8 @@
 //                                                  plaatselijk contrast: uit/karhd/meester/rijker.png
 //   node gereedschap/pixelart/karhd.cjs zinnen     W5 met de zinnen van eerder en met de betere zinnen per materiaal:
 //                                                  uit/karhd/meester/zinnen.png
+//   node gereedschap/pixelart/karhd.cjs spec       de stijlspecificatie (ontwerp/stijlspecificatie.md): de zinnen eruit, H4,
+//                                                  op 4× en 2× naast ChatGPT: uit/karhd/meester/spec.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -762,7 +764,24 @@ function handschrift(R, stijl, o = {}) {
     const f = l > 0 ? Math.max(0, mid + (l - mid) * 1.3) / l : 1;
     h3.rgba.set([...k.map((c) => Math.max(0, Math.min(255, Math.round(c * f)))), 255], o * 4);
   }
-  return { naast: H.omlijnBeeld(naast), h1, h2, h3 };
+  // H4 (o.spec, de stijlspecificatie; huisstijl.cjs HUISSTIJL.spec): minder verscherping, warm licht en koelere schaduw uit
+  // ons eigen licht (G.licht: dezelfde lichtrichting voor elk ding), het donkerste opgetild, de binnenlijnen half naar de
+  // kleur eronder (dunner en zachter dan de omlijning, die van H1 blijft)
+  let h4 = null;
+  if (o.spec) {
+    const sp = o.spec;
+    const n4 = H.verklein(plaatselijkContrast(zl4, 6, sp.contrast), 2, 'naast');
+    h4 = { b: h1.b, h: h1.h, rgba: Buffer.from(h1.rgba) };
+    for (let p = 0; p < h1.b * h1.h; p++) {
+      if (!G.dek[p]) continue;
+      const t = Math.max(0, Math.min(1, (G.licht[p] - sp.licht[0]) / (sp.licht[1] - sp.licht[0])));
+      let k = [0, 1, 2].map((c) => n4.rgba[p * 4 + c] * (sp.koel[c] + (sp.warm[c] - sp.koel[c]) * t));
+      k = k.map((c) => sp.vloer + c * (1 - sp.vloer / 255));
+      if (h1.toon[p] === -1) k = k.map((c, i) => c * (1 - sp.binnenZacht) + h1.rgba[p * 4 + i] * sp.binnenZacht);
+      h4.rgba.set([...k.map((c) => Math.max(0, Math.min(255, Math.round(c)))), 255], p * 4);
+    }
+  }
+  return { naast: H.omlijnBeeld(naast), h1, h2, h3, h4 };
 }
 async function handProef() {
   const tag = 'civitai-faetastic-SDXLFaetastic-v24-eigen-rijk';
@@ -978,6 +997,42 @@ async function zinnenProef() {
   console.log('uit/karhd/meester/zinnen.png');
 }
 
+// De stijlspecificatie (Marcel, 19 okt: "Ja proef draaien maar"; ontwerp/stijlspecificatie.md): SDXL met de zinnen uit de
+// specificatie, het rijke begin met de vacht als streken, en H4. Vergeleken met de ChatGPT-wagen op 4× en op spelmaat (2×),
+// zoals de specificatie vraagt, naast W5.
+async function specProef() {
+  const HU = require('../ai/huisstijl.cjs');
+  const KANTEN = ['ZW', 'ZO', 'NW'];
+  const stijl = handschriftStijl();
+  const groot = (r, n) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, n);
+  const knip = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 4)));
+  const m = await meester('ZW', null, true, { rijk: true, schilder: true, tag: 'spec' });
+  const { mat, osMat } = projecteer(m.BR, m.beeld);
+  const ij = HS.leesIjk();
+  const gpt2 = doelWagen(ij.hoogte);
+  const gpt4 = doelWagen(ij.hoogte * 2);
+  const w5 = H.lees(path.join(MEESTER_UIT, 'civitai-faetastic-SDXLFaetastic-v24-eigen-schilder', 'w5-ZW.png'));
+  const sprites = {};
+  let vier = null;
+  for (const k of KANTEN) {
+    const R = render({ ...O_KAR, mat, osMat }, k, FIJN);
+    const v = handschrift(R, stijl, { spec: HU.HUISSTIJL.spec });
+    sprites[k] = v.h4;
+    H.bewaar(path.join(MEESTER_UIT, m.tag, `h4-${k}.png`), v.h4);
+    if (k === 'ZW') vier = plaatselijkContrast({ b: R.zl.b, h: R.zl.h, rgba: Buffer.from(R.zl.rgba) }, 6, HU.HUISSTIJL.spec.contrast);
+  }
+  H.bewaar(path.join(MEESTER_UIT, m.tag, 'vier-ZW.png'), vier);
+  const maten = { ChatGPT: buurverschil(gpt2), W5: buurverschil(w5), H4: buurverschil(sprites.ZW) };
+  E.bewaar(path.join(MEESTER_UIT, 'spec.png'), [
+    [E.met(knip(gpt4), 'ChatGPT op 4× (de maat van onze render)'), E.met(knip(vier), 'onze render op 4× (zonder het handschrift)')],
+    [E.met(groot(knip(gpt2), 2), 'ChatGPT op spelmaat (2×), maal 2'), E.met(groot(knip(sprites.ZW), 2), 'H4, de specificatie · ZW, maal 2'), E.met(groot(knip(w5), 2), 'W5 van eerder · ZW, maal 2')],
+    [E.met(groot(knip(sprites.ZO), 2), 'H4 · ZO, maal 2'), E.met(groot(knip(sprites.NW), 2), 'H4 · NW, maal 2'), E.met(knip(H.verklein(m.beeld, 3, 'naast')), `het meesterbeeld (${m.tijd.toFixed(0)} s)`)],
+  ], 'De stijlspecificatie in de eigen pijplijn', `SDXL (FaeTastic, zonder referentie) met de zinnen uit de specificatie, het rijke begin met de vacht als streken, en H4: plaatselijk contrast 0,6, warm licht en koelere schaduw uit ons licht, geen zwart, zachtere binnenlijnen. Rij 1 op 4×, rij 2 en 3 op spelmaat maal 2. Buurverschil (een maat voor dichtheid, niet voor kwaliteit): ${Object.entries(maten).map(([k, v]) => `${k} ${v}`).join(', ')}.`);
+  fs.writeFileSync(path.join(MEESTER_UIT, 'spec.json'), JSON.stringify({ buurverschil: maten, zinnen: m.gebieden.map((g) => ({ tekst: g.tekst, pixels: g.pixels.length })), positief: m.namen.positief }, null, 1));
+  console.log(JSON.stringify(maten));
+  console.log('uit/karhd/meester/spec.png');
+}
+
 const [wat] = require.main === module ? process.argv.slice(2) : ['geladen'];
 if (wat === 'proef') proef();
 else if (wat === 'gpt') gpt();
@@ -986,4 +1041,5 @@ else if (wat === 'eigen') eigenProef().catch((e) => { console.error(e.stack || e
 else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'zinnen') zinnenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'spec') specProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

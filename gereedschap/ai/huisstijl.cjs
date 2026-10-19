@@ -13,14 +13,24 @@
 
 const HUISSTIJL = {
   checkpoint: 'civitai-faetastic\\SDXLFaetastic_v24.safetensors',
-  zin: 'HD pixel art game sprite, isometric medieval strategy game asset, rich hand-painted detail, warm light from the ' +
-    'top left, crisp dark outlines, clean pixel clusters',
-  negatief: 'blurry, smooth gradients, photo, 3d render, plastic, deformed, text, watermark, signature, ground, grass, ' +
-    'shadow on the ground, background objects, frame, border, bread, loaf, buns, pastry',
+  // uit de stijlspecificatie (ontwerp/stijlspecificatie.md, Marcel, 19 okt): de kern, het licht, de afwerking
+  zin: 'high-definition isometric hand-painted pixel art game sprite, premium medieval strategy game asset, stylized ' +
+    'realism, rich tactile materials, painterly pixel clusters, warm directional key light from the upper left, warm cream ' +
+    'and golden highlights, cooler blue-grey shadows, crisp silhouettes, polished surface details',
+  // en de negatieve lijst van de specificatie, met wat er al stond
+  negatief: 'photorealism, photo, flat vector art, low-detail cartoon shading, generic 3d render, smooth plastic surfaces, ' +
+    'random pixel noise, automatic pixelation filter, blurry texture overlay, inconsistent perspective, excessive ' +
+    'microdetail, watercolor bleeding, thick uniform black outlines, excessive bloom, chrome reflections, procedural texture ' +
+    'repetition, blurry, deformed, text, watermark, signature, ground, grass, shadow on the ground, background objects, ' +
+    'frame, border, bread, loaf, buns, pastry',
   instellingen: { denoise: 0.65, ip: 0, lijn: 0.8, diepte: 0.6, cnEind: 0.85, steps: 32, cfg: 5.5, sampler: 'dpmpp_2m', scheduler: 'karras', seed: 180 },
   // de gekozen weg (Marcel, 19 okt: "Ok, laten we de w5 gebruiken"; ai-afwerking.md, "Rijker schilderwerk"): het rijke begin
   // (stoffen.cjs), de schilderwoorden met cfg 7 (SCHILDER), ons handschrift H3 erover, met plaatselijk contrast 1,0
   pijplijn: { rijk: true, schilder: true, handschrift: 'h3', contrast: 1.0 },
+  // de afwerking naar de stijlspecificatie (H4, karhd.cjs handschrift o.spec): minder verscherping (geen overdreven
+  // verscherping), warm licht en koelere schaduw uit ons eigen licht (de vermenigvuldiging per kanaal, licht 0,45 tot 1,05),
+  // het donkerste opgetild (geen zwarte schaduw), en de binnenlijnen half naar de kleur eronder (dunner en zachter dan buiten)
+  spec: { contrast: 0.6, warm: [1.07, 1.01, 0.88], koel: [0.9, 0.95, 1.08], licht: [0.45, 1.05], vloer: 16, binnenZacht: 0.5 },
 };
 // De pixelart-LoRA (Marcel, 19 okt: "LoRA's is ook goed, ik wil het maximale eruit halen met mijn hardware"):
 // PixelArtRedmond Lite 64 van artificialguybr (Civitai 144684, versie 160844; beelden verkopen mag: allowCommercialUse
@@ -28,7 +38,10 @@ const HUISSTIJL = {
 // Rijker schilderwerk (Marcel, 19 okt: "Kunnen wij aan 'rijker' schilderwerk komen?"): woorden voor geschilderd werk, en
 // wat er niet in mag (glad, plastic), met een sterkere prompt (cfg).
 const SCHILDER = {
-  zin: 'painterly hand-painted game art, visible brush strokes, strong highlights and deep shadows, rich texture detail',
+  // de specificatie, 2 en 3: geschilderde clusters, zacht verlopende schaduw die het volume beschrijft, kleine precieze
+  // glimlichten op de randen (eerder: "strong highlights and deep shadows", en de specificatie wil geen zwarte schaduw)
+  zin: 'carefully shaped hand-painted pixel clusters, broad softly graduated shading describing volume, small precise ' +
+    'highlights along exposed edges, deep contact shadows in joints and crevices',
   negatief: 'smooth, plastic, cgi, airbrushed, flat shading, waxy',
   cfg: 7,
 };
@@ -96,17 +109,27 @@ const GROEP = {
 // dingen (in het hout stonden planken, wielen, duigen en een stam tegelijk: SDXL weet niet welke pixel wat is); in de
 // volgorde kleur (uit het model: het hoofdmateriaal van het gebied), oppervlak, hoe het licht vangt, slijtage. kleur
 // [r, g, b]; info { soort (wat het dier is, uit het model), namen (de materialen in het gebied) }.
+// Uit de stijlspecificatie (4, materialen; 5, palet): de kleurfamilie van elk materiaal staat in de zin zelf (de zinnen
+// van daarvoor werden met "blackened", "deep" en "dark" te donker en koud). De rode verf houdt de kleur uit het model.
 const GROEPZIN = {
-  hout: (k) => `warm ${kleurWoord(k)} oak wood, clear dark grain lines and small knots, lighter worn edges, matte`,
-  schors: (k) => `${kleurWoord(k)} tree bark with deep vertical cracks and rough ridges, matte`,
-  verf: (k) => `deep ${kleurWoord(k)} paint on wooden boards, chipped and worn at the edges showing bare wood, dark grooves between the boards`,
-  bies: () => 'bright golden yellow painted trim, smooth paint with soft highlights',
-  metaal: () => 'blackened hammered iron with round rivet heads, bright steel-grey highlights on the edges, polished brass caps',
-  stof: (k) => `rough ${kleurWoord(k)} burlap grain sack, coarse woven jute with visible criss-cross threads, lumpy and tied at the neck with twine, soft folds, matte`,
-  goud: () => 'heap of small round gold coins, bright yellow highlights and warm orange shadows',
-  embleem: () => 'golden heraldic lion rampant emblem painted on red wood',
-  dier: (k, i = {}) => `${kleurWoord(k)} ${i.soort || 'animal'} hide, short coarse fur painted in small strokes along the body, warm grey shadows in the folds, matte` +
-    `${i.namen && i.namen.has('hoorn') ? ', pale curved horns' : ''}${i.namen && i.namen.has('hoef') ? ', dark hooves' : ''}${i.namen && i.namen.has('riem') ? ', leather harness strap' : ''}`,
+  hout: () => 'rich honey-brown, amber and warm walnut wood, visible directional wood grain following each plank and beam, ' +
+    'subtle fiber variation, small cracks, naturally worn edges, small warm highlights along exposed edges',
+  schors: (k) => `${kleurWoord(k)} tree bark with vertical cracks and rough ridges, warm highlights on the ridges`,
+  verf: (k) => `warm ${kleurWoord(k)} painted wood, paint worn at the edges showing honey-brown wood, dark seams between the ` +
+    'planks, small warm highlights along the edges',
+  bies: () => 'golden yellow painted trim with amber midtones, small precise highlights',
+  metaal: () => 'dark charcoal and desaturated blue-grey forged iron, slightly uneven hammered surface, sharp narrow ' +
+    'highlights along exposed edges, small individually shaded rivets, restrained reflectivity, warm brass caps',
+  stof: () => 'woven matte burlap sack in warm earthy beige, subtle directional fiber pattern, soft irregular folds, ' +
+    'shadows inside the folds, restrained highlights on the ridges, lumpy, tied at the neck with twine',
+  goud: () => 'heap of small round gold coins, warm saturated golden-yellow highlights, amber midtones, rich orange-brown ' +
+    'shadows, small precise specular highlights',
+  embleem: () => 'golden heraldic lion rampant emblem painted on red wood, golden-yellow highlights, amber midtones',
+  dier: (k, i = {}) => `soft layered ${kleurWoord(k)} ${i.soort || 'animal'} fur in small directional hand-painted strokes ` +
+    'following the anatomy, warm ivory and cream highlights, muted beige and grey-brown shadows, broad shading describing ' +
+    'the musculature' +
+    `${i.namen && i.namen.has('hoorn') ? ', pale curved horns' : ''}${i.namen && i.namen.has('hoef') ? ', dark hooves' : ''}` +
+    `${i.namen && i.namen.has('riem') ? ', thick warm chestnut leather harness' : ''}`,
 };
 const groepVoor = (naam) => GROEP[naam] || null;
 

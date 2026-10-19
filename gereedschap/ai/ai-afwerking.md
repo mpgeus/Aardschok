@@ -1019,3 +1019,29 @@ al is, wat botst, en wat er moet gebeuren:
 | Negatieve lijst | `HUISSTIJL.negatief` | aanvullen uit de specificatie |
 | Vergelijken op ware grootte en spelmaat, niet alleen op getallen | **botst:** ik noemde W5 "op ChatGPT-niveau" op het buurverschil alleen, en dat meet dichtheid, geen kwaliteit | voortaan een plaat op 4× en 2× naast de ChatGPT-wagen, met per punt (materiaal, randen, schaduw, hiërarchie, diepte) wat beter of slechter is |
 
+### De stijlspecificatie: de eerste proef (19 okt)
+
+Marcel: "Ja proef draaien maar". (`node gereedschap/pixelart/karhd.cjs spec`, `uit/karhd/meester/spec.png`, `spec.json`.)
+
+- **Wat er veranderde:**
+  - de huisstijl, de schilderwoorden, de zinnen per materiaal en de verboden woorden komen uit de specificatie
+    (`huisstijl.cjs`);
+  - de vacht is streken in plaats van ruis (`stoffen.cjs`);
+  - H4 (`handschrift` met `o.spec`, `HUISSTIJL.spec`): plaatselijk contrast 0,6, warm licht en koelere schaduw uit ons
+    eigen licht, het donkerste opgetild, de binnenlijnen half naar de kleur eronder.
+- **Vergeleken op 4× en op spelmaat met de ChatGPT-wagen**, per punt van de specificatie:
+  - **Materiaal:** slechter dan ChatGPT, en ook slechter dan W5. De ijzeren banden van de wielen werden helderblauw en de
+    stam blauwgroen. De zakken werden grijsgroene bollen in plaats van jute. De os is wit, vlak, en ziet eruit als
+    plastic. Het hout van de wielen en de bak is wel warm honingbruin, zoals de specificatie vraagt.
+  - **Randen:** dichter bij de specificatie dan W5. Een donkere omlijning, en zachtere binnenlijnen. ChatGPT heeft
+    scherpere lijnen binnenin (de planken, de nagels).
+  - **Schaduw en licht:** nergens meer zwart (beter dan W5), maar de schaduw is te blauw. De os heeft bijna geen schaduw
+    die zijn volume beschrijft.
+  - **Hiërarchie:** de grote vormen staan, want die komen uit ons model. De bouw (planken, naden, beslag) is deels
+    zichtbaar, het fijne detail zwak. Bij ChatGPT zijn alle drie lagen duidelijk.
+  - **Diepte:** zwakker dan ChatGPT. Er is weinig contactschaduw tussen de lading en onder de os.
+  - **Buurverschil** (alleen dichtheid, geen kwaliteit): ChatGPT 73,4, W5 76,7, H4 46,5.
+- **De les:** SDXL neemt kleurwoorden letterlijk. "Cooler blue-grey shadows" in de huisstijl en "blue-grey forged iron"
+  maakten ijzer en hout blauw. Het verschil tussen warm licht en koele schaduw hoort in onze eigen code (H4), niet in de
+  zin. Daar staan alleen de kleuren van het verlichte materiaal.
+
