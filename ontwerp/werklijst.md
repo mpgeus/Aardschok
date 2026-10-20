@@ -1840,6 +1840,20 @@ werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met dr
   SDXL met ControlNet op 4 kernen minuten per beeld kosten, voor acht richtingen maal elke houding. Dus lokaal op Marcels pc
   (de 1080 Ti, ComfyUI), en de cloud maakt wat zonder AI kan: de modellen, de renders en de nabewerking.
 
+**Besloten** (Marcel, 20 okt: "S. S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", "De soldaten staan gewoon
+waar je ze neerzet", "M2 B = prima C = akkoord"):
+- **d, M2:** rond het plein een overgang: open in het midden, dan losse bomen en open plekken, en pas verderop dicht bos.
+- **e:** in de demo komen **twee speermannen en een kruisboogschutter** mee met de huifkar (S1), met hun eigen stukken;
+  valt er een, dan is hij weg. Ze hebben geen wachthuis: ze staan waar je ze neerzet. Het **wachthuis en de wapenmaker**
+  zijn in de demo dicht (W1): ze staan in het bouwmenu, op slot, met *In the full game* (L1). **Later** (Marcel: "We
+  moeten later wel voorkomen dat een slim iemand even iets aanpast in code om er alsnog bij te kunnen"): bij het
+  verpakken van de demo wat dicht is er niet alleen met een vlag uit halen (`verpakken.md`).
+- **b:** de kar brengt twee koeien en vier schapen mee, die bij het kamp blijven tot er een weide is; de marskramer
+  verkoopt bij elk bezoek een koe of een schaap voor goud.
+- **c:** "in de buurt" is het land van je dorp: ligt daar geen steen, dan staat de steengroeve niet in het bouwmenu, en
+  zonder water de visser en de rietsnijder niet.
+- **De volgorde:** d, e, b, c, dan a (de speellijst, zodat die het demojaar beschrijft zoals het dan is); f lokaal ernaast.
+
 ## Af (sinds 11 okt)
 
 - De renderproef van de grond (vraag 178, 18 okt; `snelheid.md`, vanaf "Het plan voor de renderproef van de grond", en

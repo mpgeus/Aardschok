@@ -93,6 +93,12 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
    **De demo eindigt op het eerste Sint-Maarten** (werklijst E, stap 6; Marcel, 18 okt, D2): bij het verpakken van de
    demo voor Next Fest `T.DEMO_INSTELLINGEN.aan` op true, en `steam` het adres van de Steam-pagina (`js/einde.js`); dan
    eindigt ook betalen het spel, met de link naar de verlanglijst. In het volle spel blijft het uit.
+   **Wat in de demo dicht is, zit er niet in** (werklijst Q, vraag 181, e; Marcel, 20 okt: het wachthuis en de
+   wapenmaker op slot, en "We moeten later wel voorkomen dat een slim iemand even iets aanpast in code om er alsnog bij
+   te kunnen"): in het spel is het een vlag (`T.DEMO_INSTELLINGEN`), en die zet je in de console zo om. Dus haalt het
+   verpakken van de demo wat dicht is er echt uit (de regels en de tekeningen van die gebouwen), in plaats van alleen de
+   vlag te zetten. Dat botst niet met "open laten" hieronder: dat gaat over het volle spel; de demo laat zien wat er is,
+   en wat je koopt, zit pas in het volle spel. Nog te bouwen, met de demo voor Next Fest.
 
 1. **Geen bouwstap, gewone scripts.** Bewust gekozen, en het maakt verpakken bijna niets.
 2. **Geen `fetch` voor spullen.** `beelden/beschrijving.js` is met opzet een gewoon script. Dat
