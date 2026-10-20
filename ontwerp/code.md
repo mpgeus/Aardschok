@@ -290,7 +290,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gebouw) via `T.eisVanDeHeer`, alles maal `eisMaal` (buitensporig, behalve de schuld; per gebouw `T.heerVraagtVoor`),
   `T.gevolgVanBetaling` voor venster en knop; betalen is alles wat hij vraagt, zoveel als er is, en goud voor de rest
   (`T.alWatHijVraagt`, ook als hij het zelf neemt), en weigeren (`T.weigerHeer`) laat hem gaan en zijn leger komen als het
-  donker wordt (`h.leger`, in `T.werkHeerBij`; het eind, `D.einde.reden` 'leger'). Het venster heeft sinds 18 okt geen
+  donker wordt (een schemering na zonsondergang, als het dorp nog op zijn erf is). **Sinds 20 okt speelt dat in de
+  wereld** (werklijst E, stap 4; Marcel: "A1 B1 C1"): het leger (`h.leger`, `werkLegerBij` vanuit `T.werkHeerBij`) zijn
+  `leger.mannen` echte soldaten die om de `leger.elke` seconden over de weg de kaart op komen, allemaal langs één gezochte
+  weg naar het plein (`h.leger.pad`), elk met licht (`T.legerVanDeHeer`, js/zien.js); wie buiten is, vlucht naar het town
+  hall (`T.schuil`, en in js/gevecht.js blijft het dorp schuilen zolang het leger er is); er wordt niet gevochten (ze zijn
+  geen vijand); en is de eerste bij het plein, dan is het het eind (`legerKomt`, `D.einde.reden` 'leger'). Zonder wereld of
+  tegels (een toets) is het meteen het eind, en `T.tikHeerDag` maakt het af als het een dag later nog onderweg is. **Zijn
+  wagen** (C1): de heer brengt hem mee (`b.wagen`, de laatste van `b.wezens`; `T.maakKar` met `vanDeHeer`, dus niet van het
+  dorp: `T.isVanDorp` in js/wereld.js, en zijn tekst `T.heerWagenTekst` via `T.karTekst`), en die staat leeg op het plein
+  (`plekVoorDeWagen`). Betaal je, of neemt hij het zelf, dan laden zijn soldaten eerst (`T.heerVertrekt` → `laadDeWagen`,
+  `b.laden` met de fasen 'heen' en 'terug', `werkLadenBij`): naar je voorraad (`T.deVoorraad`, js/kar.js) en terug; dan
+  ligt wat hij nam op de wagen (`T.zetKarVel`), en rijden ze de weg af (`rijDeWegAf`). In de demo is het het eind als de
+  wagen `wagen.demoWegNa` tegels van het plein is (`betaaldEinde`); `T.eindVanSintMaarten` is het eind meteen (overslaan in
+  js/regie.js). Elke weg gaat langs `zoekWeg`, dat op een kaart zonder tegels niets zoekt. Het venster heeft sinds 18 okt geen
   schuiven meer, alleen twee zegels van lak (`zegel` in js/hud.js; Marcel, B2: "mooie grote knoppen", "in de stijl van een
   zegel"): heel is betalen, gebroken is weigeren, en weigeren vraagt één keer bevestiging; de straffen tot je ambt
   kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
@@ -1025,7 +1038,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   getuigen, vraag 151): het licht staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die
   's avonds branden, de ramen van de huizen waar iemand thuis is, de kaarsjes van de kerstboom, een brand, en wie een lantaarn draagt,
   soort 'drager': `T.draagtLicht(D, e)`, buiten in het donker, voor de bode en wie meegaat (`T.bodeDragers`, `js/bode.js`)
-  en de aanvoerder en de groepsleiders (`T.lantaarnDragers`, `js/soldaten.js`; vraag 171; tot vraag 170, stap 5 had
+  en de aanvoerder en de groepsleiders (`T.lantaarnDragers`, `js/soldaten.js`; vraag 171), en het leger van de heer
+  (`T.legerVanDeHeer`, js/heer.js: een fakkel, tot die getekend is de lantaarn; werklijst E, stap 4; tot vraag 170, stap 5 had
   alleen de schout er een, `T.draagtLantaarn`), voor het licht in `js/tekenen.js` en voor de
   wolven, die niemand in het licht aanvallen (`js/beesten.js`); wie er nu een brandende draagt, geeft `T.lichtDragers(D)`
   (voor zijn licht, en voor het lantaarntje in zijn hand), en zijn licht ziet er kleiner uit dan het voor de wolven is
@@ -1033,6 +1047,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vuren van de roverskampen (`T.BEGIN_INSTELLINGEN.vuur`: 3 tegels en 0,45 op het scherm, 6 voor de wolven, met een warme
   kleur in `T.LICHT_INSTELLINGEN.kleuren.kampvuur`; vraag 175, Marcel koos K3; zonder kleur was het wit); `T.huizenMetIemandThuis` zegt welke huizen
   een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
+
+### js/regie.js: de scènes op Sint-Maarten
+
+- `js/regie.js` (werklijst E, stap 4; Marcel, 18 okt, C2, en 20 okt: "A1 B1 C1"): **wat er gebeurt, speelt in de wereld
+  (js/heer.js), en de regie maakt er een scène van**: alles van het beeld weg behalve het doek (`body.regie` in stijl.css,
+  zoals de fotomodus; op het doek `zonderUi` in js/tekenen.js), zwarte banden die erin schuiven, een zin onderin
+  (`#regie-zin`), en de camera die meerijdt (`T.regieCamera`, js/main.js). Elk beeld (`T.werkRegieBij` vanuit `werkBij`)
+  kijkt de regie of er een scène begint (`T.welkeScene`: 'weigeren', of in de demo 'betalen'), en wat ze nu toont
+  (`T.regieShot`: de stap, waar de camera kijkt, de zin, en de snelheid van de tijd, met `T.zetSnelheid` als de stap
+  verandert). Allebei puur, uit wat de wereld nu is, en getoetst (`test/regie.test.cjs`); zo speelt een spel dat midden in
+  een scène geladen wordt, gewoon verder. **Weigeren:** de heer nakijken (`nakijken` seconden), de nacht valt (de tijd op
+  `nacht`), en de kop van zijn leger volgen (1×). **Betalen:** tussen de wagen en je voorraad in kijken terwijl ze halen
+  (`halen`) en brengen (1×), en dan de wagen. Is het spel uit (`D.einde`), dan wordt het beeld zwart (`zwart` seconden), en
+  dan pas het eindscherm (`T.ui.toonEinde` wacht zolang `S.regie` niet `klaar` is, js/hud.js); het zwart blijft erachter tot
+  het titelscherm. **De invoer:** `S.modus` is 'scene' (de wereld leeft door, js/tik.js; de rest van de invoer kijkt naar
+  'verkennen'), een toets gaat niet naar het spel (een luisteraar die als eerste luistert), en Esc of een klik op het beeld
+  (`#regie` ligt over het doek) slaat de scène over: `T.eindVanSintMaarten`, en snel zwart (`overslaan`). Dat is een klik
+  die de wereld verandert zonder opdracht, net als betalen en weigeren (`opmerkingen.md`). Alleen scherm: `S.regie` staat in
+  `T.schermVelden`. De getallen in `T.REGIE_INSTELLINGEN` (de werkbank: "The scenes at Martinmas").
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -2054,7 +2087,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. **Het doel van de demo**
   (18 okt; Marcel, D2): het eerste Sint-Maarten. Weiger je de heer, dan komt zijn leger (`D.einde`, reden `'leger'`,
   js/heer.js); betaal je, dan eindigt alleen de demo (`T.DEMO_INSTELLINGEN.aan`, hier, aan bij het verpakken van de demo,
-  `verpakken.md`), als hij weg is (`haalHeerWeg`, reden `'betaald'`). Het eindscherm (`T.ui.toonEinde`) zegt het jaar in
+  `verpakken.md`), als zijn wagen een eind de weg op is (reden `'betaald'`). Er komt eerst een scène (js/regie.js): zolang
+  die speelt, wacht het eindscherm tot het beeld zwart is. Het eindscherm (`T.ui.toonEinde`) zegt het jaar in
   het kort met `T.eindRegels` (het jaarverslag, met wat er staat), en de link naar Steam als `T.DEMO_INSTELLINGEN.steam`
   een adres heeft. Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
   leest ze meer (`test/einde.test.cjs`).

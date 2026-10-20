@@ -578,6 +578,7 @@
     { naam: T.t('Decorations'), blok: 'VERSIERING_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The market'), blok: 'MARKT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The ending'), blok: 'EINDE_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The scenes at Martinmas'), blok: 'REGIE_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The two masters'), blok: 'BAZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t("The lord's whims"), blok: 'GRILLEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The maker'), blok: 'MAKER_INSTELLINGEN' }, // geen tekst
@@ -1451,6 +1452,20 @@
     'BEESTEN_INSTELLINGEN.jager.hooguit': T.t('pack size limit'), // geen tekst
     'MAKER_INSTELLINGEN.b': T.t('width'), // geen tekst
     'MAKER_INSTELLINGEN.h': T.t('height'), // geen tekst
+    // Sint-Maarten: zijn leger, zijn wagen en de scènes (werklijst E, stap 4)
+    'HEER_INSTELLINGEN.leger': T.t('his army, if you refuse him'), // geen tekst
+    'HEER_INSTELLINGEN.leger.mannen': T.t('men'), // geen tekst
+    'HEER_INSTELLINGEN.leger.elke': T.t('seconds between two men on the road'), // geen tekst
+    'HEER_INSTELLINGEN.leger.bijHetPlein': T.t('the end when the first is this close to the square, tiles'), // geen tekst
+    'HEER_INSTELLINGEN.wagen': T.t('his wagon'), // geen tekst
+    'HEER_INSTELLINGEN.wagen.links': T.t('tiles to his left on the square'), // geen tekst
+    'HEER_INSTELLINGEN.wagen.ladenHooguit': T.t('loading takes at most, days each way'), // geen tekst
+    'HEER_INSTELLINGEN.wagen.demoWegNa': T.t('in the demo, the end when it is this far off, tiles'), // geen tekst
+    'REGIE_INSTELLINGEN.nakijken': T.t('seconds watching the lord leave'), // geen tekst
+    'REGIE_INSTELLINGEN.nacht': T.t('speed while night falls'), // geen tekst
+    'REGIE_INSTELLINGEN.halen': T.t('speed while his men fetch'), // geen tekst
+    'REGIE_INSTELLINGEN.zwart': T.t('seconds fading to black'), // geen tekst
+    'REGIE_INSTELLINGEN.overslaan': T.t('seconds to black when skipped'), // geen tekst
   };
   // De naam van de sleutel die bij dit pad hoort, of null als die ontbreekt.
   T.werkbankNaam = (pad) => {

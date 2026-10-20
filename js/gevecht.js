@@ -172,11 +172,12 @@
       vecht = vecht || plek(e);
       doeMet(S, D, e, d, nu, budget);
     }
-    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), en voor wie vecht voor een ander dorp; alleen
-    // voor wie in het land van het dorp is (T.dorpVak), zodat een roverskamp ver weg (js/rovers.js) niemand binnen houdt.
+    // Wie vlucht: voor een rover (geen wolf: die jaagt anders, js/beesten.js), voor wie vecht voor een ander dorp, en voor
+    // het leger van de heer (js/heer.js: dat vecht niet, maar je weigerde hem); alleen voor wie in het land van het dorp
+    // is (T.dorpVak), zodat een roverskamp ver weg (js/rovers.js) niemand binnen houdt.
     const land = T.dorpVak(D);
     const inLand = (m) => m.tx >= land.x && m.ty >= land.y && m.tx < land.x + land.b && m.ty < land.y + land.h;
-    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m)) && inLand(m)));
+    vlucht(D, vijanden.filter((m) => !m.beest && (T.isVijandig(m) || T.vechtVoor(m.dorp, m))).concat(T.legerVanDeHeer(D)).filter(inLand));
     if (vecht) aanHetVechten(S, D, vecht, nu);
     else if (D.gevecht && nu - D.gevecht.laatst >= IN().rustNa) T.gevechtVoorbij(S, D);
   };

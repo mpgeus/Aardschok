@@ -137,7 +137,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `gebied`, `minikaart`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL2), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
   licht), `ui` (één weg voor een venster), `dialoog`, `balk` (onderaan), `hud`, `huisbriefje`,
-  `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D).
+  `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D), `regie` (de scènes).
 - **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
 - **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
   `treden` (en de standen), `behoeften` (en de groei), `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`.

@@ -20,10 +20,12 @@ daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aa
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
 dat doel: het plan staat bij E, besloten (Marcel: A1 met drie maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6
-zijn gebouwd en staan in `main` (gepusht 20 okt). Stap 4, de cinematics, wacht op de nieuwe stijl: **vraag 180** (de eigen
-pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
-Dan het eerste jaar speelbaar: Marcel
-speelt, en wat scheef zit, eerst met een getal uit de werkbank.
+zijn gebouwd en staan in `main` (gepusht 20 okt). **Stap 4, de scènes, is gebouwd** (20 okt, op de branch
+`ccr-48dc841e-12fv6n`, nog niet in `main`; Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
+loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`). Wacht op Marcel
+(hieronder): bekijken. De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
+eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
+Dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -180,6 +182,23 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
+- **De scènes op Sint-Maarten bekijken** (E, stap 4, 20 okt, op de branch `ccr-48dc841e-12fv6n`): Nieuw spel (of het
+  proefdorp), in de console `Spel.debug.heer()`: hij komt nu over de weg, met zijn soldaten en zijn wagen (de ossenkar),
+  die leeg naast hem op het plein gaat staan (de muis erop: "The lord's wagon. Empty, for now."). Klik op hem, en
+  *Refuse* (twee keer): de banden schuiven erin, de camera kijkt hem na, de nacht valt, zijn leger komt met licht over
+  de weg, het dorp vlucht, en bij het plein wordt het zwart: *Death*. Voor betalen eerst `Spel.DEMO_INSTELLINGEN.aan =
+  true`, dan *Pay*: zijn soldaten halen het bij het raadhuis en laden de wagen, hij rijdt weg, en het wordt zwart: *Until
+  next year*. Een klik of Esc slaat over. Niet in een browser bekeken: hier laadt de headless Chromium het spel niet
+  (`opmerkingen.md`, "De scènes op Sint-Maarten"); in Node lopen beide scènes van begin tot eind. **Wat Claude erbij koos**
+  (zeg het als het anders moet): (1) zijn leger komt een schemering na zonsondergang (in november zo'n kwart over vijf),
+  niet meer bij het slapen, want dan is iedereen binnen en zie je niemand vluchten; (2) wie buiten is, vlucht meteen, ook
+  wie ze nog niet ziet ("het dorp hoort ze komen"); (3) zijn soldaten halen het bij je voorraad (het raadhuis), en terwijl
+  ze erheen lopen, gaat de tijd op 3× (anders duurt die scène 45 seconden); (4) in de demo wordt het zwart als de wagen 10
+  tegels van het plein is, niet pas als hij de kaart af is; (5) de wagen staat twee tegels links van de heer; (6) de
+  zinnen: *The lord turns and leaves without a word.*, *Night falls.*, *Torches come up the road: the army of the lord.*,
+  *His men fetch what he takes from your stores.*, *They load it onto his wagon.*, *The lord rides off down the road.*;
+  (7) in een scène staan de levensbalken en de tegel onder de muis er niet, zoals in de fotomodus; (8) de getallen staan
+  in de werkbank, bij *The lord* (zijn leger en zijn wagen) en *The scenes at Martinmas*.
 - **Vraag 180: de weg naar de stijl van Marcels plaat, voor alles** (18 okt; `beeld.md`, bovenaan "Besloten";
   `voorbeelden/heerstoet-doel.webp`; Marcel: "DAT is wat ik wil voor alles", en onze render "lijkt er in de verste verte
   niet op"). De render uit code bijschaven haalt het niet. Te kiezen: **W1** beelden van een beeld-AI als bron (zoals de
@@ -843,7 +862,8 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    demo *Until next year*), met het jaar in een paar regels en de link naar Steam zodra er een adres is, en de vlag
    `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). De speeltest liep zonder fouten (op `908ddcb0`), met
    de heer in het eerste jaar; wat opviel, staat in `opmerkingen.md`.
-4. **De twee cinematics** (C2; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt): bouwen, met wat er nu is): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
+4. **De twee cinematics** (C2; **gebouwd** in sessie `ccr-48dc841e-12fv6n` (20 okt), nog niet in `main`; hoe het werkt:
+   `spel.md`, Sint-Maarten, "Bijgewerkt op 20 okt", en `code.md` bij `js/regie.js`): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
    onderin; een klik of Esc slaat over. **Het plan voor stap 4** (Claude, 20 okt; **besloten**, Marcel: "A1 B1 C1"):
    **A1** nu bouwen met de tekeningen die er zijn (vraag 180 wisselt later alleen plaatjes); **B1** de scène speelt in de
    wereld: het leger zijn echte soldaten die over de weg lopen, en de dorpelingen vluchten met de regel van het gevecht;

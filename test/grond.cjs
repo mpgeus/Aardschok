@@ -61,7 +61,23 @@ function proefDorp(T, opties = {}) {
   };
 }
 
-module.exports = { leegBegin, proefDorp, dagen, bouwAf, zetBijHetVuur, legVeldBij, metVastToeval };
+// Het proefdorp met de heer op het plein (js/heer.js): om tien uur komt hij over de weg, met zijn twee soldaten en zijn
+// wagen, en de wereld tikt tot hij er staat. Geeft wat proefDorp geeft, met `b` (zijn bezoek), `plein` (waar hij staat)
+// en `tik(n)`: n tikken van de wereld, zoals het spel (js/tik.js). Voor het leger en de wagen (werklijst E, stap 4).
+function heerOpHetPlein(T, opties) {
+  const dorp = proefDorp(T, opties);
+  const { S, D } = dorp;
+  const tik = (n = 1) => {
+    for (let i = 0; i < n; i++) T.wereldTik(S);
+  };
+  S.kalender.dag = Math.floor(S.kalender.dag) + 10 / 24;
+  T.heerKomt(D, Math.floor(S.kalender.dag));
+  for (let i = 0; i < 60 * 120 && !D.heer.bezoek.staat; i++) tik();
+  assert.ok(D.heer.bezoek.staat, 'de heer staat op het plein');
+  return { ...dorp, b: D.heer.bezoek, plein: T.plekVanDeHeer(D), tik };
+}
+
+module.exports = { leegBegin, proefDorp, heerOpHetPlein, dagen, bouwAf, zetBijHetVuur, legVeldBij, metVastToeval };
 
 if (require.main === module) {
   const test = require('node:test');

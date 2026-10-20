@@ -13,6 +13,10 @@
 (function (T) {
   'use strict';
 
+  // Wat ui is op het doek (de tegel onder de muis, de levensbalken, de zwevende tekst), staat er niet in de fotomodus
+  // (js/main.js) en niet in een scène (js/regie.js).
+  const zonderUi = (S) => !!(S.foto || S.regie);
+
   // De hoogte van het land (werklijst vraag 121, js/hoogte.js): wat op de grond staat, komt op het scherm met de hoogte
   // van de grond eraf. kaartNu is de kaart die getekend wordt (T.tekenScene zet hem); zonder hoogte is opGrond precies
   // T.naarScherm, dus een vlakke kaart tekent pixel voor pixel als vroeger.
@@ -1617,11 +1621,11 @@
     // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
     // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
     tekenMist(ctx, S.dorp, w, vak);
-    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): de tegel onder de
+    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e) en een scène (js/regie.js): de tegel onder de
     // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
     // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
     // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
-    if (!S.foto) {
+    if (!zonderUi(S)) {
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
       tekenMarktPlek(ctx, S);
@@ -1645,7 +1649,7 @@
     if (vast) ctx.diepte = null;
     tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
-    if (!S.foto) tekenBouwGhost(ctx, S); // het gebouw in de hand, boven op alles
+    if (!zonderUi(S)) tekenBouwGhost(ctx, S); // het gebouw in de hand, boven op alles
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -1661,7 +1665,7 @@
     tekenOgen(ctx, S);
     tekenVuur(ctx, S);
     tekenWolkjes(ctx, S);
-    if (!S.foto) tekenEffecten(ctx, S);
+    if (!zonderUi(S)) tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
@@ -4304,7 +4308,7 @@
       ctx.fill();
     }
     ctx.restore();
-    if (S.foto) return; // de levensbalk en het uitroepteken zijn ui (tekenScene)
+    if (zonderUi(S)) return; // de levensbalk en het uitroepteken zijn ui (tekenScene)
     // Wie vecht, draagt zijn levensbalk (js/gevecht.js), en wie geraakt is; een rover altijd (js/rovers.js): hij draagt
     // het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
     if (!e.dood && e.maxLeven > 0 && (e.doelwit || e.volgt || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);

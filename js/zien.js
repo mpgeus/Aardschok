@@ -56,15 +56,17 @@
   };
 
   // Wie een lantaarn draagt, en hij brandt nu: de bode en wie meegaat (T.bodeDragers, js/bode.js), de aanvoerder en de
-  // leider van elke groep soldaten (T.lantaarnDragers, js/soldaten.js; vraag 171). Buiten, op de kaart van zijn dorp, als het
-  // donker genoeg is. Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'drager'.
+  // leider van elke groep soldaten (T.lantaarnDragers, js/soldaten.js; vraag 171), en elke man van het leger van de heer
+  // (T.legerVanDeHeer, js/heer.js: een fakkel, tot die getekend is de lantaarn). Buiten, op de kaart van zijn dorp, als
+  // het donker genoeg is. Zijn licht gaat met hem mee, op zijn plek zoals hij loopt (niet per tegel), met soort 'drager'.
+  const dragers = (D) => [...T.bodeDragers(D), ...T.lantaarnDragers(D), ...T.legerVanDeHeer(D)];
   T.draagtLicht = (D, e) => !!e && !e.dood && !e.binnen && !!D.kalender && !!D.wereld && D.wereld.wezens.includes(e) &&
-    T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf && (T.bodeDragers(D).includes(e) || T.lantaarnDragers(D).includes(e));
+    T.lichtVan(D.kalender.dag).nacht >= IN().lantaarn.vanaf && dragers(D).includes(e);
   // Wie er nu een brandende lantaarn draagt: voor zijn licht (hieronder) en voor het lantaarntje in zijn hand
   // (js/tekenen.js, tekenLantaarn).
   T.lichtDragers = function (D) {
     if (!D.kalender || !D.wereld || T.lichtVan(D.kalender.dag).nacht < IN().lantaarn.vanaf) return [];
-    return [...new Set([...T.bodeDragers(D), ...T.lantaarnDragers(D)])].filter((e) => T.draagtLicht(D, e));
+    return [...new Set(dragers(D))].filter((e) => T.draagtLicht(D, e));
   };
   function dragersLicht(D) {
     const L = IN().lantaarn;

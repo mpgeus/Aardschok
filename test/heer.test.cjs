@@ -480,8 +480,11 @@ test('weigeren: hij gaat, en als het donker wordt, komt zijn leger, en dat is he
   assert.ok(!T.heerWacht(S), 'hij gaat');
   assert.equal(S.voorraad.graan, 50, 'hij nam niets');
   assert.ok(S.heer.jaren[0].geweigerd);
-  const donker = SINT_MAARTEN + T.dagindeling(SINT_MAARTEN).slapen / 24;
-  assert.equal(S.heer.leger.komt, donker, 'zijn leger komt als het donker wordt');
+  // Een schemering na zonsondergang, als de dorpelingen nog op hun erf zijn (zo zie je ze vluchten); tot 20 okt bij het
+  // slapen, als iedereen binnen was.
+  const donker = SINT_MAARTEN + (T.dagindeling(SINT_MAARTEN).zon.onder + T.DAG_INSTELLINGEN.schemerUren) / 24;
+  assert.ok(Math.abs(S.heer.leger.komt - donker) < 1e-9, 'zijn leger komt als het donker wordt');
+  assert.ok(T.uurVanDag(donker) < T.dagindeling(SINT_MAARTEN).slapen, 'voor iedereen naar bed gaat');
   S.kalender.dag = donker - 0.01;
   T.werkHeerBij(S);
   assert.ok(!S.einde, 'nog niet');
@@ -858,4 +861,105 @@ test('mag de aanvoerder zichzelf niet aanwijzen, dan staat hij niet in het lijst
     assert.deepEqual(T.schandpaalKeuzes(S).map((k) => k.wie), ['bewoner1']);
     assert.equal(T.zetAanDeSchandpaal(S, 'aanvoerder').kan, false);
   });
+});
+
+// ---------------------------------------------------------------------------------------------
+// Sint-Maarten in de wereld: zijn leger en zijn wagen (werklijst E, stap 4; Marcel, 20 okt: "A1 B1 C1"). De scène erbij
+// (de camera, de banden, de zinnen) staat in test/regie.test.cjs.
+// ---------------------------------------------------------------------------------------------
+
+const { heerOpHetPlein } = require('./grond.cjs');
+
+// Weiger hem op het proefdorp, en laat de wereld tikken van het donker tot het eind. Geeft het dorp, zijn leger, hoeveel
+// tikken het duurde en hoeveel mensen er vóór waren.
+function weigerTotHetEind() {
+  const P = heerOpHetPlein(T);
+  const { S, D } = P;
+  const mensen = D.bewoners.mensen.length;
+  assert.ok(T.weigerHeer(D).kan);
+  S.kalender.dag = D.heer.leger.komt; // de middag voorbij: het donker
+  let n = 0;
+  for (; !D.einde && n < 60 * 120; n++) P.tik();
+  return { ...P, L: D.heer.leger, n, mensen };
+}
+
+test('weigeren: als het donker wordt, komt zijn leger met fakkels over de weg, het dorp vlucht, en bij het plein is het het eind', () => {
+  const { D, plein, L, n, mensen } = weigerTotHetEind();
+  assert.equal(D.einde && D.einde.reden, 'leger');
+  assert.equal(L.wezens.length, IN.leger.mannen, 'het hele leger kwam de kaart op, een voor een');
+  assert.ok(L.wezens.some((e) => T.afstand(T.tegelVan(e), plein) <= IN.leger.bijHetPlein), 'de eerste is bij het plein');
+  assert.ok(n > 60 * 10, `ze lopen over de weg: ${(n / 60).toFixed(1)} s`);
+  // Er wordt niet gevochten: ze zijn geen vijand, en niemand viel.
+  assert.ok(!L.wezens.some((e) => T.isVijandVan(D, e)));
+  assert.equal(D.bewoners.mensen.length, mensen, 'niemand viel');
+  // Wie buiten was, vluchtte naar het town hall.
+  const schuilen = D.bewoners.mensen.filter((p) => p.schuilt).length;
+  assert.ok(schuilen >= D.bewoners.mensen.length / 2, `${schuilen} van ${D.bewoners.mensen.length} schuilen`);
+  // Elk draagt licht in het donker: zijn fakkel (tot die getekend is, de lantaarn).
+  for (const e of L.wezens) assert.ok(T.draagtLicht(D, e));
+});
+
+test('zijn leger loopt op elke computer gelijk (lockstep: het toeval komt uit het zaad)', () => {
+  const a = weigerTotHetEind();
+  const b = weigerTotHetEind();
+  assert.equal(a.n, b.n);
+  assert.deepEqual(a.L.wezens.map(T.tegelVan), b.L.wezens.map(T.tegelVan));
+});
+
+test('zijn wagen staat leeg op het plein; betaal je, dan dragen zijn soldaten wat hij nam erheen, en rijdt hij ermee weg', () => {
+  const { D, b, plein, tik } = heerOpHetPlein(T);
+  const wagen = b.wagen;
+  assert.ok(b.wezens.includes(wagen) && D.wereld.wezens.includes(wagen), 'hij bracht hem mee');
+  tik(60 * 20);
+  assert.ok(T.afstand(T.tegelVan(wagen), plein) <= IN.wagen.links + 1 && !wagen.pad.length, 'hij staat bij hem op het plein');
+  assert.equal(wagen.vel, 'ossenkar-leeg');
+  assert.match(T.karTekst(D, wagen), /Empty, for now/);
+  assert.ok(!T.isVanDorp(D, wagen), 'de wagen is niet van het dorp: hij kijkt niet door je mist');
+  T.zetVoorraad(D, 'graan', 200);
+  T.zetVoorraad(D, 'goud', 50);
+  const g = T.betaalHeer(D, T.alWatHijVraagt(D));
+  assert.equal(b.laden && b.laden.fase, 'heen');
+  assert.ok(!b.weg, 'eerst laden, dan gaan');
+  const voorraad = T.deVoorraad(D);
+  let n = 0;
+  for (; b.laden && b.laden.fase === 'heen' && n < 60 * 100; n++) tik();
+  const mannen = b.wezens.filter((e) => e.wie === 'soldaat');
+  assert.equal(mannen.length, IN.soldaten);
+  // In de tik dat ze omkeren, zetten ze al hun eerste stap terug.
+  assert.ok(mannen.every((e) => T.afstand(T.tegelVan(e), voorraad) <= 2), 'ze haalden het bij je voorraad');
+  for (; b.laden && n < 60 * 200; n++) tik();
+  assert.ok(b.weg, 'en dan gaat hij');
+  assert.deepEqual(wagen.lading, g.neemt);
+  assert.notEqual(wagen.vel, 'ossenkar-leeg', 'zijn vel zegt wat erop ligt');
+  assert.match(T.karTekst(D, wagen), /loaded with/);
+  assert.ok(!D.einde, 'in het volle spel speelt het door');
+  for (; D.heer.bezoek && n < 60 * 400; n++) tik();
+  assert.equal(D.heer.bezoek, null, 'hij is de kaart af, met zijn wagen');
+  assert.ok(!D.wereld.wezens.includes(wagen));
+});
+
+test('in de demo is betalen het eind als zijn wagen een eind de weg op is, en overslaan is het meteen', () => {
+  T.DEMO_INSTELLINGEN.aan = true;
+  try {
+    const { D, b, plein, tik } = heerOpHetPlein(T);
+    T.zetVoorraad(D, 'graan', 200);
+    T.betaalHeer(D, T.alWatHijVraagt(D));
+    let n = 0;
+    for (; !D.einde && n < 60 * 300; n++) tik();
+    assert.equal(D.einde && D.einde.reden, 'betaald');
+    assert.ok(D.heer.bezoek, 'hij is nog op de kaart: het beeld wordt zwart terwijl hij wegrijdt');
+    assert.ok(T.afstand(T.tegelVan(b.wagen), plein) >= IN.wagen.demoWegNa);
+    // Overslaan (een klik of Esc in de scène, js/regie.js) is meteen het eind.
+    const P = heerOpHetPlein(T);
+    T.betaalHeer(P.D, T.alWatHijVraagt(P.D));
+    T.eindVanSintMaarten(P.D);
+    assert.equal(P.D.einde && P.D.einde.reden, 'betaald');
+  } finally {
+    T.DEMO_INSTELLINGEN.aan = false;
+  }
+  // In het volle spel is er na betalen niets over te slaan.
+  const V = heerOpHetPlein(T);
+  T.betaalHeer(V.D, T.alWatHijVraagt(V.D));
+  T.eindVanSintMaarten(V.D);
+  assert.ok(!V.D.einde);
 });

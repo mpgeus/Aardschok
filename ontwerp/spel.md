@@ -2482,8 +2482,17 @@ een markt (vraag 72, het buurdorp). De markt zelf staat sinds 6 okt op het plein
   vraagt zoveel als er is, en goud voor wat ontbreekt; daaronder de straffen zoals hieronder) en **Refuse** (gebroken:
   één keer bevestigen, dan gaat hij, en als het donker wordt komt zijn leger: het eind, *Death*). In de demo
   (`T.DEMO_INSTELLINGEN.aan`, bij het verpakken) eindigt ook betalen het spel, als hij weg is: *Until next year*, met het
-  jaar in een paar regels en de link naar Steam (sinds 18 okt). De cinematics komen nog (werklijst, E, stap 4). Wat hieronder over de brief in wijnmaand en het
+  jaar in een paar regels en de link naar Steam (sinds 18 okt). Wat hieronder over de brief in wijnmaand en het
   venster met schuiven staat, is van daarvoor.
+- **Bijgewerkt op 20 okt: de scènes** (werklijst, E, stap 4; Marcel: "A1 B1 C1"). Het speelt in de wereld, en een scène
+  maakt er een film van (de balken en knoppen weg, zwarte banden, de camera rijdt mee, een zin onderin; een klik of Esc
+  slaat haar over). Hij brengt zijn **wagen** mee (tot die getekend is, de ossenkar), en die staat leeg op het plein zolang
+  hij wacht ("The lord's wagon. Empty, for now."). **Weiger je**, dan kijkt de camera hem na, valt de nacht (de tijd
+  snel), en komt in de schemering zijn **leger** over de weg: twintig man, een voor een, elk met een fakkel (tot die
+  getekend is, de lantaarn); het dorp vlucht naar het town hall; er wordt niet gevochten; als de eerste bij het plein is,
+  wordt het beeld zwart: *Death*. **Betaal je** (of neemt hij het zelf), dan halen zijn soldaten wat hij nam bij je
+  voorraad en laden het op zijn wagen, en rijden ze de weg af; in de demo is dat een scène, en wordt het beeld zwart als de
+  wagen een eind de weg op is (*Until next year*); in het volle spel speelt het door. Een scène duurt zo'n halve minuut.
 - Op 1 wijnmaand komt zijn brief, een schatting. Op 11 slachtmaand komt hij zelf met twee soldaten
   naar het plein, overdag vanaf negen uur, en wacht daar drie dagen op je. Sinds de dag (26 sep) loopt
   de tijd dan door, op 1× (daarvoor stond hij stil). Bij argwaan vanaf 50% doorzoeken de soldaten

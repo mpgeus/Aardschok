@@ -295,13 +295,17 @@
   // Waar de kar laadt en lost: zijn schuur, of (de eerste kar) het raadhuis, en tot dat er is de plek van de kar
   // in het kamp. Als tegel, met `naast` als hij naast de deur stopt.
   function thuisVan(D, e) {
-    const w = D.wereld;
-    if (e.thuis && e.thuis.klaar && D.gebouwen.includes(e.thuis)) return { ...T.deurVan(w, e.thuis), naast: true };
-    const huis = D.gebouwen.find((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag && !T.GEBOUWEN[g.soort].kar);
-    if (huis) return { ...T.deurVan(w, huis), naast: true };
-    const k = D.plek.kamp;
-    return k && k.kar ? { x: k.kar.x, y: k.kar.y, naast: false } : null;
+    if (e.thuis && e.thuis.klaar && D.gebouwen.includes(e.thuis)) return { ...T.deurVan(D.wereld, e.thuis), naast: true };
+    return T.deVoorraad(D);
   }
+  // Waar de voorraad van het dorp ligt: de deur van het raadhuis (de eerste opslag die geen schuur is), en tot dat er is
+  // de plek van de kar in het kamp; of null. Ook waar de mannen van de heer halen wat hij nam (js/heer.js).
+  T.deVoorraad = function (D) {
+    const huis = D.gebouwen.find((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag && !T.GEBOUWEN[g.soort].kar);
+    if (huis) return { ...T.deurVan(D.wereld, huis), naast: true };
+    const k = D.plek && D.plek.kamp;
+    return k && k.kar ? { x: k.kar.x, y: k.kar.y, naast: false } : null;
+  };
 
   // Welke kar dit gebouw bedient: die met zijn opslag het dichtst bij zijn deur (Marcel: "c ja").
   function verantwoordelijk(D, g) {
@@ -592,6 +596,7 @@
 
   // Wat de kar doet, voor bij de muis (js/verkennen.js).
   T.karTekst = function (D, e) {
+    if (e.vanDeHeer) return T.heerWagenTekst(D, e); // de wagen van de heer (js/heer.js)
     if (!T.karrenVan(D).includes(e)) return T.t('The covered wagon, with everything you brought');
     const kar = T.hoofdletter(e.naam);
     const R = e.rit;

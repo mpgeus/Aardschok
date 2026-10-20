@@ -541,6 +541,8 @@
   T.ui.toonEinde = function (D) {
     const S = T.S;
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
+    // Speelt er een scène (js/regie.js), dan wacht het tot het beeld zwart is: dan roept de regie dit opnieuw aan.
+    if (S.regie && !S.regie.klaar) return;
     S.modus = 'einde';
     $('heer').classList.add('verborgen');
     if (T.ui.briefOpen()) $('brief').classList.add('verborgen');

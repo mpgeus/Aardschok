@@ -759,6 +759,7 @@
     // De wereld tikt in vaste stappen (js/tik.js; werklijst vraag 170, stap 0): zo vaak als er tijd verstreek, los van
     // hoeveel beelden deze computer tekent. Wat hieronder staat, is alleen scherm, en volgt elk beeld.
     T.tikBij(S, klok, dt);
+    T.werkRegieBij(S, dt); // de scène op Sint-Maarten, als er een speelt (js/regie.js)
     S.wind = T.windWaarde(S.tijd);
     // Elke ochtend vanzelf opslaan (js/opslaan.js, vraag 48 A); js/menu.js zegt het in de hoek. Niet in de tik: wat deze
     // computer bewaart, en wanneer (er staat misschien een venster open), is van hem alleen.
@@ -779,7 +780,7 @@
     // Wat je nodig hebt (een venster, een brief, een gesprek), haalt je uit de fotomodus.
     if (S.foto && !fotoKan()) zetFoto(false);
     schuifBij(dt);
-    const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
+    const doel = T.ui.titelOpen() ? titelCamera() : T.regieCamera(S) || cameraDoel();
     const k = 1 - Math.exp(-dt * 5);
     S.camera.x += (doel.x - S.camera.x) * k;
     S.camera.y += (doel.y - S.camera.y) * k;

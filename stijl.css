@@ -1072,6 +1072,37 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
   100% { opacity: 0; }
 }
 
+/* De scène op Sint-Maarten (js/regie.js; werklijst E, stap 4): alles van het beeld weg behalve het doek, zoals de
+   fotomodus, en het eindscherm dat erna komt. Zwarte banden schuiven boven en onder het beeld in, de zin vaagt onderin
+   in en uit, en aan het eind wordt het hele beeld zwart (de duur zet de regie: langzaam, of snel als je overslaat). Een
+   klik op het beeld slaat de scène over, dus de muis is een hand. */
+body.regie > :not(canvas, #regie, #overlay) { display: none !important; }
+#regie { position: fixed; inset: 0; z-index: 9; cursor: pointer; background: rgba(0, 0, 0, 0); transition: background-color 1.5s ease; }
+#regie::before,
+#regie::after { content: ''; position: absolute; left: 0; right: 0; height: 12vh; background: #000; transition: transform 0.9s ease; }
+#regie::before { top: 0; transform: translateY(-100%); }
+#regie::after { bottom: 0; transform: translateY(100%); }
+#regie.aan::before,
+#regie.aan::after { transform: none; }
+#regie.zwart { background: #000; }
+#regie-zin {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 12vh;
+  display: grid;
+  place-items: center;
+  padding: 0 16px;
+  font: italic clamp(15px, 2.2vh, 22px) var(--boek);
+  color: #e6dcc6;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#regie-zin.zichtbaar { opacity: 1; }
+
 /* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, boven de klok, dat weer wegvaagt. */
 #opgeslagen {
   position: fixed;

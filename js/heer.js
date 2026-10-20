@@ -89,6 +89,17 @@
     // Zijn eisen zijn buitensporig (Marcel, 18 okt, B2: "Met exhorbitante eisen"): alles hierboven (het deel van het graan
     // en van de kist, het hoofdgeld, de prijs per gebouw) maal dit; de schuld van vorig jaar niet, die was het al.
     eisMaal: 3,
+    // Zijn leger, als je hem weigert (Marcel, 18 okt, D2: "het leger van de heer ziet aankomen met death als gevolg";
+    // werklijst E, stap 4, B1): als het donker wordt, komen zoveel man over de weg de kaart op, om de zoveel seconden (van
+    // de wereld, op 1×) een, elk met een fakkel (tot die getekend is, het licht van de lantaarn, js/zien.js). De
+    // dorpelingen vluchten naar het town hall, en als de eerste zo dicht bij het plein is (tegels), is het het eind. Er
+    // wordt niet gevochten, tot het gevecht er is (werklijst, F).
+    leger: { mannen: 20, elke: 0.6, bijHetPlein: 2 },
+    // Zijn wagen (werklijst E, stap 4, C1): hij brengt hem mee, en zolang hij wacht, staat die leeg op het plein, zoveel
+    // tegels links van hem. Wat hij neemt, dragen zijn soldaten van je voorraad naar de wagen; een keer heen of terug duurt
+    // hooguit zoveel dagen, dan is het hoe dan ook gedaan. In de demo is het het eind als de wagen op weg naar buiten zo
+    // ver van het plein is (tegels): het beeld wordt zwart terwijl hij wegrijdt (js/regie.js).
+    wagen: { links: 2, ladenHooguit: 0.15, demoWegNa: 10 },
   };
 
   const IN = () => T.HEER_INSTELLINGEN;
@@ -108,7 +119,9 @@
       wrok: [], // [{ wie, dag, kost, staat }]: wie jij aan de schandpaal zette
       jaren: [], // [{ jaar, deel, straf }]: hoe elk Sint-Maarten afliep
       paal: null, // { x, y }: waar de schandpaal staat, vanaf de eerste keer (T.zetSchandpaalNeer)
-      leger: null, // { komt }: je weigerde hem, en op die dag (met het uur erin) komt zijn leger (T.weigerHeer)
+      // { komt, wezens, volgende, pad }: je weigerde hem, en op die dag (met het uur erin) komt zijn leger (T.weigerHeer);
+      // wie er al op de kaart is, wanneer de volgende komt, en hun weg naar het plein (werkLegerBij)
+      leger: null,
     };
   };
 
@@ -116,9 +129,12 @@
   function pleinVan(D) {
     return (D && D.plek && (D.plek.heer || D.plek.marskramer)) || null;
   }
+  T.plekVanDeHeer = pleinVan; // ook voor de camera van de scène (js/regie.js)
   function magKomen(D) {
     return !!pleinVan(D);
   }
+  // Een weg over de kaart (T.zoekRoute, js/lopen.js), of null; op een kaart zonder tegels (een toets) is er geen.
+  const zoekWeg = (D, van, doel, opties) => (doel && T.heeftTegels(D.wereld) ? T.zoekRoute(D.wereld, van, doel, opties) : null);
 
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const inJaar = (maand, dag) => maand * T.DAGEN_PER_MAAND + (dag - 1);
@@ -433,16 +449,20 @@
 
   // Je weigert hem (Marcel, 18 okt, B2 en D2: "je kunt dan weigeren, maar dan eindigt het met een korte cinematic waarin
   // je het leger van de heer ziet aankomen met death als gevolg"). Hij draait zich om en gaat, en als het donker wordt,
-  // komt zijn leger (`h.leger`, T.werkHeerBij): dat is het eind (D.einde, reden 'leger'). Er wordt niet gevochten; tot het
-  // gevecht er is (werklijst, F), ook in het volle spel. Geeft { kan } of { kan: false, reden }.
+  // komt zijn leger over de weg (`h.leger`, T.werkHeerBij); als het bij het plein is, is dat het eind (D.einde, reden
+  // 'leger'). Er wordt niet gevochten; tot het gevecht er is (werklijst, F), ook in het volle spel. De scène erbij (de
+  // camera, de zwarte banden, de zinnen) is alleen scherm (js/regie.js). Geeft { kan } of { kan: false, reden }.
   T.weigerHeer = function (D) {
     if (!T.heerWacht(D)) return { kan: false, reden: T.t('The lord is not here.') };
     const h = D.heer;
     const dag = D.kalender.dag;
     const d = T.dagindeling(dag);
     const uur = T.uurVanDag(dag);
-    // Vanavond bij het slapen, of meteen als het al donker is.
-    h.leger = { komt: Math.floor(dag) + (uur < d.slapen && uur >= d.opstaan ? d.slapen / 24 : uur / 24) };
+    // Als het donker wordt, een schemering na zonsondergang (dan staan de dorpelingen nog op hun erf, en zie je ze
+    // vluchten), of meteen als het al donker is. Tot 20 okt kwam het pas bij het slapen, als iedereen binnen was.
+    const donker = d.zon.onder + T.DAG_INSTELLINGEN.schemerUren;
+    const nu = uur >= donker || uur < d.opstaan;
+    h.leger = { komt: Math.floor(dag) + (nu ? uur : donker) / 24, wezens: null, volgende: null, pad: null };
     h.brief = null;
     h.bezoek.betaald = { geweigerd: true };
     h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: 0, straf: null, geweigerd: true });
@@ -451,14 +471,69 @@
     return { kan: true };
   };
 
-  // Zijn leger is er: het eind (in jouw dorp het scherm over alles heen, js/hud.js).
+  // Wie er van zijn leger op de kaart is: voor hun fakkels (js/zien.js), om voor te vluchten (js/gevecht.js) en voor de
+  // camera (js/regie.js).
+  T.legerVanDeHeer = (D) => (D && D.heer && D.heer.leger && D.heer.leger.wezens) || [];
+
+  // Zijn leger komt (T.weigerHeer), elke tik vanaf het donker: om de zoveel een man over de weg de kaart op, met een fakkel,
+  // allemaal langs dezelfde weg naar het plein (één keer gezocht); de dorpelingen vluchten naar het town hall; en als de
+  // eerste bij het plein is, is het het eind. Zonder wereld om in te lopen (een toets) is het meteen het eind.
+  function werkLegerBij(D) {
+    const L = D.heer.leger;
+    const plek = pleinVan(D);
+    if (!plek || !kanLopen(D) || !T.heeftTegels(D.wereld)) return legerKomt(D);
+    const I = IN().leger;
+    const uitgang = T.wegInEnUit(D);
+    if (!L.wezens) {
+      L.wezens = [];
+      L.volgende = D.kalender.dag;
+      L.pad = zoekWeg(D, uitgang, plek, { tot: 1 }) || [];
+      T.naarGewoneSnelheid(D); // anders zie je het nauwelijks komen, zoals de heer zelf
+      T.zeg(D, T.t('Torches come up the road in the dark: the army of the lord.'), 'gevaar', { x: uitgang.x, y: uitgang.y });
+      // Wie buiten is, vlucht (T.schuil, js/gevecht.js), ook wie ze nog niet ziet: het dorp hoort ze komen.
+      for (const p of D.bewoners ? D.bewoners.mensen : []) {
+        const e = p.wezen;
+        if (e && !e.dood && !e.binnen && !p.weg && D.wereld.wezens.includes(e) && !T.vechtVoor(D, e)) T.schuil(D, e);
+      }
+    }
+    while (L.wezens.length < I.mannen && D.kalender.dag >= L.volgende) {
+      const s = T.maakMens('soldaat', uitgang.x, uitgang.y, 3);
+      s.dorp = D; // in dit dorp, zoals de soldaten die met hem meekwamen (T.hoortBij, js/wereld.js)
+      s.thuis = { x: plek.x, y: plek.y };
+      if (L.pad.length) T.geefRoute(s, L.pad.map((t) => ({ x: t.x, y: t.y })), { x: plek.x, y: plek.y, tot: 1 });
+      L.wezens.push(s);
+      D.wereld.wezens.push(s);
+      L.volgende += I.elke / T.DAG_LENGTE;
+    }
+    if (L.wezens.some((e) => T.afstand(T.tegelVan(e), plek) <= I.bijHetPlein)) legerKomt(D);
+  }
+
+  // Zijn leger is er: het eind (in jouw dorp het scherm over alles heen, js/hud.js, na de scène van js/regie.js).
   function legerKomt(D) {
     if (D.einde) return;
     D.einde = { reden: 'leger', dag: dagNu(D) };
-    T.zeg(D, T.t('Torches come up the road in the dark: the army of the lord.'), 'gevaar');
+    if (!T.legerVanDeHeer(D).length) T.zeg(D, T.t('Torches come up the road in the dark: the army of the lord.'), 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   }
+
+  // In de demo (T.DEMO_INSTELLINGEN, js/einde.js) is betalen ook het eind: hij rijdt weg met je waren.
+  function betaaldEinde(D) {
+    if (D.einde) return;
+    D.einde = { reden: 'betaald', dag: dagNu(D) };
+    if (!D.ander) T.houdTijdStil(D, 'einde');
+    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+  }
+  const betaaldVan = (b) => !!(b && b.betaald && !b.betaald.geweigerd);
+
+  // Het eind van Sint-Maarten nu, zonder de scène uit te kijken (een klik of Esc slaat haar over, js/regie.js): je
+  // weigerde hem en zijn leger komt, of in de demo betaalde je en rijdt hij weg. Anders gebeurt er niets.
+  T.eindVanSintMaarten = function (D) {
+    const h = D.heer;
+    if (!h || D.einde) return;
+    if (h.leger) legerKomt(D);
+    else if (T.DEMO_INSTELLINGEN.aan && betaaldVan(h.bezoek)) betaaldEinde(D);
+  };
 
   // ---------------------------------------------------------------------------------------------
   // De straffen: soldaten, de schandpaal, en je ambt kwijt
@@ -706,12 +781,14 @@
     T.zeg(D, T.t('The lord stands on the square, waiting for you.'));
   };
 
+  // Hij gaat: wat hij nam, dragen zijn soldaten eerst naar zijn wagen (C1, hieronder), en dan gaan ze allemaal de weg af.
   T.heerVertrekt = function (D) {
     const h = D.heer;
     const b = h.bezoek;
+    if (!b.geladen && laadDeWagen(D)) return;
     b.weg = true;
     T.zetVlag(D, 'heerVertrekt');
-    if (b.wezens && b.wezens.length) for (const e of b.wezens) naarDeWeg(D, e);
+    if (b.wezens && b.wezens.length) for (const e of b.wezens) (e === b.wagen ? rijDeWegAf(D, e) : naarDeWeg(D, e));
     else haalHeerWeg(D);
   };
 
@@ -719,18 +796,102 @@
   function haalHeerWeg(D) {
     const h = D.heer;
     if (!h || !h.bezoek) return;
-    const betaald = h.bezoek.betaald && !h.bezoek.betaald.geweigerd;
+    const betaald = betaaldVan(h.bezoek);
     haalUitWereld(D, h.bezoek.wezens);
     if (T.wisVlag) for (const v of ['heerOpBezoek', 'heerBetaald', 'heerVertrekt', 'heerSchuld']) T.wisVlag(D, v);
     h.bezoek = null;
     // In de demo is dit het eind (js/einde.js, T.DEMO_INSTELLINGEN; Marcel, 18 okt: "Als je betaalt eindigt de demo ook"):
-    // hij rijdt weg met je waren. De cinematic komt ervoor (werklijst, E, stap 4).
-    if (betaald && T.DEMO_INSTELLINGEN.aan && !D.einde) {
-      D.einde = { reden: 'betaald', dag: dagNu(D) };
-      if (!D.ander) T.houdTijdStil(D, 'einde');
-      if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
-    }
+    // hij rijdt weg met je waren. Met een wagen is het al eerder het eind, als die een eind de weg op is (T.werkHeerBij).
+    if (betaald && T.DEMO_INSTELLINGEN.aan) betaaldEinde(D);
   }
+
+  // ---------------------------------------------------------------------------------------------
+  // Zijn wagen (werklijst E, stap 4, C1; Marcel, 20 okt: "C1"): hij brengt hem mee, en zolang hij wacht, staat die leeg op
+  // het plein. Betaal je (of neemt hij het zelf), dan halen zijn soldaten wat hij nam bij je voorraad (T.deVoorraad,
+  // js/kar.js) en brengen het naar de wagen; dan is hij vol (zijn vel zegt wat erop ligt, T.zetKarVel), en rijdt hij met
+  // hen de weg af. Tot de tekening er is, is het de ossenkar (vraag 180).
+  // ---------------------------------------------------------------------------------------------
+
+  // Waar de wagen staat: zo dicht mogelijk bij `links` tegels links van de heer, niet waar zijn soldaten staan.
+  function plekVoorDeWagen(D) {
+    const plek = pleinVan(D);
+    const bezet = (x, y) => Math.abs(x - plek.x) <= 1 && y >= plek.y && y <= plek.y + 1;
+    return eersteRond({ x: plek.x - IN().wagen.links, y: plek.y }, 4, (x, y) => !bezet(x, y) && vrijOpHetPlein(D, x, y));
+  }
+
+  // De wagen rijdt naar `doel`, over de weg als die er is (zoals de ossenkar, js/lopen.js). Geeft of hij er een weg heen vond.
+  function rijNaar(D, e, doel) {
+    const pad = zoekWeg(D, T.tegelVan(e), doel, { kar: true });
+    if (!pad || !pad.length) return false;
+    T.geefRoute(e, pad, doel);
+    return true;
+  }
+  // Naar de weg de kaart uit; vindt hij er geen weg heen, dan is hij meteen weg.
+  function rijDeWegAf(D, e) {
+    if (rijNaar(D, e, T.wegInEnUit(D))) return;
+    const b = D.heer.bezoek;
+    haalUitWereld(D, [e]);
+    b.wezens = b.wezens.filter((x) => x !== e);
+  }
+
+  // Een soldaat loopt naar `doel` en blijft daar (zijn thuis gaat mee, anders dwaalt hij terug naar het plein).
+  function loopNaar(D, e, doel) {
+    e.moetNaar = null;
+    e.thuis = { x: doel.x, y: doel.y };
+    e.straal = 1;
+    const pad = zoekWeg(D, T.tegelVan(e), doel, { tot: 1 });
+    if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, tot: 1 });
+  }
+
+  // Wat hij nam, gaat op de wagen: zijn soldaten lopen naar je voorraad (T.werkLadenBij). Geeft of ze gaan; zonder wagen,
+  // zonder iets te laden of zonder soldaten (die bleven, als straf) gaat hij meteen, en is de wagen meteen vol.
+  function laadDeWagen(D) {
+    const b = D.heer.bezoek;
+    b.geladen = true;
+    const wagen = b.wagen;
+    const neemt = betaaldVan(b) ? b.betaald.neemt : null;
+    if (!wagen || !neemt || !Object.values(neemt).some((n) => n > 0) || !D.wereld.wezens.includes(wagen)) return false;
+    const voorraad = T.deVoorraad(D);
+    const mannen = b.wezens.filter((e) => e.wie === 'soldaat');
+    if (!voorraad || !mannen.length) {
+      vulDeWagen(D);
+      return false;
+    }
+    b.laden = { fase: 'heen', tot: D.kalender.dag + IN().wagen.ladenHooguit };
+    for (const e of mannen) loopNaar(D, e, voorraad);
+    return true;
+  }
+  function vulDeWagen(D) {
+    const b = D.heer.bezoek;
+    b.wagen.lading = { ...b.betaald.neemt };
+    T.zetKarVel(b.wagen);
+  }
+
+  // Elke tik terwijl ze laden: zijn ze allemaal bij je voorraad, dan terug naar de wagen; zijn ze daar, dan is hij vol en
+  // gaan ze. Duurt het heen of terug langer dan ladenHooguit (iemand kwam er niet), dan is het hoe dan ook gedaan.
+  function werkLadenBij(D) {
+    const b = D.heer.bezoek;
+    const L = b.laden;
+    const mannen = b.wezens.filter((e) => e.wie === 'soldaat');
+    const doel = L.fase === 'heen' ? T.deVoorraad(D) : T.tegelVan(b.wagen);
+    const isEr = (e) => !(e.pad && e.pad.length) && !e.onderweg && T.afstand(T.tegelVan(e), doel) <= 1;
+    if (doel && !mannen.every(isEr) && D.kalender.dag < L.tot) return;
+    if (L.fase === 'heen') {
+      L.fase = 'terug';
+      L.tot = D.kalender.dag + IN().wagen.ladenHooguit;
+      for (const e of mannen) loopNaar(D, e, T.tegelVan(b.wagen));
+      return;
+    }
+    b.laden = null;
+    vulDeWagen(D);
+    T.heerVertrekt(D);
+  }
+
+  // Wat er bij de muis staat bij zijn wagen (T.karTekst, js/kar.js): leeg zolang hij wacht, en daarna wat erop ligt.
+  T.heerWagenTekst = function (D, e) {
+    const lading = Object.keys(e.lading || {}).filter((wat) => e.lading[wat] >= 0.5).map((wat) => T.hoeveel(Math.round(e.lading[wat]), wat));
+    return lading.length ? T.t("The lord's wagon, loaded with {lading}", { lading: T.opsomming(lading) }) : T.t("The lord's wagon. Empty, for now.");
+  };
 
   function haalUitWereld(D, wezens) {
     if (!wezens || !D.wereld) return;
@@ -761,8 +922,10 @@
   T.tikHeerDag = function (D, dag) {
     if (!magKomen(D) || D.einde) return;
     const h = D.heer || (D.heer = T.nieuweHeer());
-    // Zonder de tik van de beelden (een toets) komt zijn leger de dag erna (T.werkHeerBij doet het als het donker wordt).
-    if (h.leger && dag >= h.leger.komt) return legerKomt(D);
+    // Zonder de tik van de beelden (een toets) komt zijn leger de dag erna (T.werkHeerBij doet het als het donker wordt);
+    // en is het onderweg, maar een dag later nog niet bij het plein (het liep vast), dan ook.
+    const L = h.leger;
+    if (L && dag >= L.komt && (!L.wezens || dag >= L.komt + 1)) return legerKomt(D);
     const d = T.datumVanDag(dag);
     // De soldaten eten mee zolang ze er zijn, elk voor drie; in de lente gaan ze.
     if (h.soldaten && !h.soldaten.weg) {
@@ -820,8 +983,8 @@
 
   T.werkHeerBij = function (D) {
     const h = D.heer;
-    // Je weigerde hem: als het donker wordt, is zijn leger er (T.weigerHeer).
-    if (h && h.leger && !D.einde && D.kalender.dag >= h.leger.komt) legerKomt(D);
+    // Je weigerde hem: als het donker wordt, komt zijn leger (T.weigerHeer).
+    if (h && h.leger && !D.einde && D.kalender.dag >= h.leger.komt) werkLegerBij(D);
     if (!h || !magKomen(D) || !kanLopen(D)) return;
     const w = D.wereld;
     const uitgang = T.wegInEnUit(D);
@@ -830,7 +993,8 @@
     if (b && !b.wezens && !b.weg) {
       // Overdag, vanaf het bezoekuur, met zijn bericht (js/dag.js).
       if (!T.bezoekerKomtAan(D, b)) return;
-      // Hij komt de kaart op, met zijn twee soldaten vlak achter zich.
+      // Hij komt de kaart op, met zijn twee soldaten vlak achter zich, en zijn wagen (C1) rijdt erachteraan naar zijn plek
+      // op het plein. De wagen is de laatste van b.wezens (de heer is de eerste).
       const heer = T.maakMens('heer', uitgang.x, uitgang.y, 1);
       heer.dorp = D; // op bezoek in dit dorp (T.hoortBij, js/wereld.js)
       heer.thuis = { x: plek.x, y: plek.y };
@@ -841,19 +1005,30 @@
         s.thuis = { x: plek.x + (i ? 1 : -1), y: plek.y + 1 };
         soldaten.push(s);
       }
-      b.wezens = [heer, ...soldaten];
-      w.wezens.push(...b.wezens);
+      w.wezens.push(heer, ...soldaten);
+      const wagen = T.maakKar(D, uitgang.x, uitgang.y, T.t("the lord's wagon"), 'ossenkar-leeg'); // staat al in w.wezens
+      wagen.vanDeHeer = true;
+      rijNaar(D, wagen, plekVoorDeWagen(D));
+      b.wagen = wagen;
+      b.wezens = [heer, ...soldaten, wagen];
       return;
     }
     if (b && b.wezens && !b.staat && !b.weg) {
       const heer = b.wezens[0];
       if (T.afstand({ x: plek.x, y: plek.y }, { x: heer.tx, y: heer.ty }) <= 1) T.heerStaatErOp(D);
     }
+    if (b && b.laden) werkLadenBij(D);
     if (b && b.weg && b.wezens) {
       const nog = b.wezens.filter((e) => !isBijDeUitgang(D, e));
       haalUitWereld(D, b.wezens.filter((e) => !nog.includes(e)));
       b.wezens = nog;
-      if (!nog.length) haalHeerWeg(D);
+      // Bleef de wagen ergens staan (iemand stond in de weg), dan zoekt hij opnieuw.
+      const wagen = nog.includes(b.wagen) ? b.wagen : null;
+      if (wagen && !wagen.pad.length && !wagen.onderweg) rijDeWegAf(D, wagen);
+      // In de demo is het het eind als zijn wagen een eind de weg op is (het beeld wordt zwart terwijl hij wegrijdt).
+      const rijdt = wagen && b.wezens.includes(wagen);
+      if (rijdt && T.DEMO_INSTELLINGEN.aan && betaaldVan(b) && T.afstand(T.tegelVan(wagen), plek) >= IN().wagen.demoWegNa) betaaldEinde(D);
+      if (!b.wezens.length) haalHeerWeg(D);
     }
     // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen, en staat hij met zijn rug
     // naar de paal (e.kijkt, js/sprites.js): de paal staat een tegel schuin achter hem, dus naar Z.

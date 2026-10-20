@@ -492,9 +492,10 @@
   // kaart uit Tiled of een toets neerzet. Dat werkt de wereld bij, één keer per kaart (T.wereldTik, js/tik.js), en geen
   // dorp; `T.hoortBij(null, e)` is zo'n wezen (een kaart zonder dorp, het gereedschap).
   T.hoortBij = (D, e) => (e.dorp || null) === (D || null);
-  // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren (geen dier en geen bezoeker). Zij
-  // maken het land open (hieronder) en kijken door de mist van hun dorp (js/mist.js).
-  T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen && (!!e.bewoner || !!e.kar || e === D.aanvoerder);
+  // Wie van dorp D is en buiten staat: zijn aanvoerder, wie er woont, zijn ossenkarren (geen dier en geen bezoeker, ook
+  // de wagen van de heer niet, js/heer.js). Zij maken het land open (hieronder) en kijken door de mist van hun dorp
+  // (js/mist.js).
+  T.isVanDorp = (D, e) => !!D && !!e && e.dorp === D && !e.dood && !e.binnen && (!!e.bewoner || (!!e.kar && !e.vanDeHeer) || e === D.aanvoerder);
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
   // van de aanvoerder, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.

@@ -118,6 +118,7 @@
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
     kijk: null, // waar de camera heen kijkt (js/main.js; vraag 170, stap 1): { x, y } in pixels van de wereld
     foto: null, // de fotomodus (js/main.js, H): { zoom } van daarvoor, of null
+    regie: null, // de scène die nu speelt (js/regie.js), of null
     gekozen: null, // wat je koos, met zijn briefje rechts: een gebouw (js/gebouwbriefje.js), een wezen, of een lijst van je
     // mannen (js/kiezen.js); of null
     groepen: {}, // je groepen onder een cijfer (js/main.js; vraag 170, stap 1d): { 1: [wezen, ...] }, van elke speler zelf

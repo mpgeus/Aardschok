@@ -73,7 +73,8 @@
     // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de fase op, nog vóór er iets
     // dwaalt of iemand je ziet.
     T.werkQuestsBij(S);
-    if (S.modus === 'verkennen') {
+    // In een scène (js/regie.js) leeft de wereld door zoals anders; alleen de invoer ligt stil.
+    if (S.modus === 'verkennen' || S.modus === 'scene') {
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land
       // werkt (T.werkVeldwerkBij, js/veldwerk.js), staat voor T.laatDwalen al "bezig" (m.pad.length, m.maait of m.werkt)
       // en dwaalt deze tik niet ook nog weg.

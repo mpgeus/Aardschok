@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De scènes op Sint-Maarten** (20 okt; werklijst E, stap 4; `js/regie.js`, het leger en de wagen in `js/heer.js`): (a)
+  overslaan (een klik of Esc) verandert de wereld zonder opdracht (`T.eindVanSintMaarten`), net als betalen en weigeren:
+  dat hoort bij 6b, "alles een opdracht" (geparkeerd); (b) zolang het spel uit is, staat de wereld stil (`'einde'`), dus
+  wie vluchtte, staat stil terwijl het beeld zwart wordt; (c) de zwarte banden en het zwart zijn alleen in Node met een
+  nagebootst scherm doorgelopen (beide scènes, 34 en 36 seconden), niet in een browser: de speeltest laadt hier het spel
+  niet (`page.goto` time-out, ook op de stand ervoor; hieronder, "De speeltest laadt het spel niet"); (d) het leger en de
+  wagen van de heer rijden over dezelfde weg als hij die afgaat: in de proef op het proefdorp hield niemand de ander op,
+  maar op een smalle weg kan de lege wagen het leger even ophouden; (e) de wagen is de ossenkar (`vanDeHeer`), de fakkels
+  zijn de lantaarn, en de vaandels ontbreken, tot vraag 180 de tekeningen geeft.
 - **De heer in het eerste jaar, met zijn buitensporige eis** (18 okt; werklijst E, stap 1 tot 6; de speeltest op
   `908ddcb0`, zaad 1 tot 3, zonder fouten): de kolonist betaalt op Sint-Maarten alles wat er is, maar dat is steeds
   minder dan de helft van de drievoudige eis (`eisMaal` 3), dus "you paid too little" (−40 gunst, de schandpaal). De heer
