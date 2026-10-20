@@ -40,7 +40,8 @@
       // een tekening kan ook bij andere stijlen horen (`ook`: oker en roze nemen de hutten van wit, vraag 114, 2b)
       for (const stijl of [s.stijl, ...(s.ook || [])]) {
         const per = INDEX.stijlen[stijl] || (INDEX.stijlen[stijl] = {});
-        (per[s.soort] || (per[s.soort] = [])).push(ding);
+        // een werkplaats kan voor meer soorten zijn (`voor`: de houtschuur is ook de steengroeve; huizen.cjs, WERKPLAATSEN)
+        for (const soort of s.voor || [s.soort]) (per[soort] || (per[soort] = [])).push(ding);
       }
       INDEX.naam.set(ding.naam, ding);
     }
@@ -92,7 +93,11 @@
     if (soort === 'hut') return { dak: gehucht, steen: null };
     const gewenst = trede >= 2 ? 'pannen' : trede === 1 ? 'leien' : gehucht;
     const lijst = index().stijlen[stijl][soort] || [];
-    if (!lijst.some((t) => t.steen)) return { dak: gewenst, steen: null };
+    if (!lijst.some((t) => t.steen)) {
+      // een werkplaats heeft alleen het dak van haar trede (huizen.cjs, WERKPLAATSEN): dan krijgt ze dat
+      const daken = new Set(lijst.map((t) => t.dak));
+      return { dak: daken.has(gewenst) || !daken.size ? gewenst : daken.has(gehucht) ? gehucht : lijst[0].dak, steen: null };
+    }
     const bak = T.heeftSteenbakkerij(D) && lijst.some((t) => t.steen === 'baksteen');
     const natuur = lijst.find((t) => t.steen && t.steen !== 'baksteen');
     const steen = bak ? 'baksteen' : natuur ? natuur.steen : null;

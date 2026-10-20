@@ -134,6 +134,56 @@ const TORENS = {
   roze: { kapel: 'zadel', woontoren: 'tent' },
 };
 
+// De werkplaatsen in de bouwstijl (werklijst vraag 167, en R, vraag 183; Marcel, 20 okt: "de werkplaatsen mogen naar de
+// huizenbouwer"): wat tot 20 okt uit dorp.cjs en dorp2.cjs kwam (tegels/gebouwen/), als een opgave van de huizenbouwer,
+// zoals de zagerij, in de vier stijlen en met de deur naar elke kant. `trede`: onder welk dak (dat van het gehucht, leien
+// in een dorp, pannen met marktrecht); `voor`: de soorten van het spel die deze tekening nemen (T.GEBOUWEN, js/bouwstijl.js);
+// `steen`: de muur in de natuursteen van de stijl; `stukken`: losse stukken van tuin-sdf.cjs erbij, [stuk, zaad, plek in
+// tegels vanaf het midden], aan de kopgevel (+x), zodat ze met het gebouw meedraaien. Een vakwerkmuur wordt in de stijl
+// planken van planken. De watermolen blijft nog uit dorp2.cjs: de huizenbouwer heeft geen waterrad.
+//
+// NIEUW (Marcel, 20 okt: "Alle gebouwen worden nog opnieuw gemaakt denk ik. Kunnen we beter in 1x doen?", en: "als ik de
+// stijl heb, dan laat ik alle huizen opnieuw doen"): de werkplaatsen en de maat (MAAT, werklijst R, vraag 183: "65,
+// gebouwen kleiner", opnieuw gebouwd met de pannen, planken en balken even groot; huis-sdf.cjs, maat) gaan in één keer aan,
+// met het renderen van alle tekeningen (werklijst R, 183, "In één keer"). Tot dan zijn de opgaven die van de vellen in git,
+// zodat de toetsen ze daarmee vergelijken.
+const NIEUW = false;
+const MAAT = NIEUW ? 0.65 : 1;
+const WERKPLAATS_BASIS = { vorm: 'rechthoek', lagen: 1, schoor: false };
+const WERKPLAATSEN = {
+  // de houthakker (en tot ze een eigen tekening hebben de steengroeve, de ertsgraver en de steenbakkerij): een lage
+  // schuur van ruwe planken, met stammen tegen de kopgevel
+  houtschuur: { trede: 'gehucht', voor: ['houthakker', 'steengroeve', 'ertsgraver', 'steenbakkerij'], spec: { zaad: 81, b: 5, d: 4, laag: true, wand: 'planken', hout: 'schors', plint: 30, schoorsteen: false, uit: false }, stukken: [['stammen-y', 82, [3.9, 0]]] },
+  // een schuur van stammen, zonder ramen en zonder schoorsteen: de schaapskooi, de graanschuur, de schuur, de tiendschuur
+  // en het pakhuis
+  schuur: { trede: 'gehucht', voor: ['schuur', 'schaapskooi', 'graanschuur', 'tiendschuur', 'pakhuis'], spec: { zaad: 84, b: 7, d: 5, wand: 'blokhut', hout: 'schors', plint: 30, schoorsteen: false, ramen: false, uit: false } },
+  kippenhok: { trede: 'gehucht', voor: ['kippenhok'], spec: { zaad: 85, b: 4, d: 3, laag: true, wand: 'planken', hout: 'schors', plint: 24, schoorsteen: false, ramen: false, uit: false } },
+  // de jager: een hut van stammen, met een schoorsteen van leem
+  jagershut: { trede: 'gehucht', voor: ['jager'], spec: { zaad: 86, b: 5, d: 4, laag: true, wand: 'blokhut', hout: 'schors', plint: 30, schoorsteen: 'leem', uit: false } },
+  // de smidse (en de wapenmaker): steen, met de schoorsteen van de haard tegen de gevel en een afdakje boven de deur
+  smidse: { trede: 'gehucht', voor: ['smidse', 'wapenmaker'], steen: true, spec: { zaad: 87, b: 6, d: 5, wand: 'veldsteen', plint: 40, schoorsteen: 'steen', uit: { gevelschoorsteen: true, afdak: true } } },
+  // het wachthuis (en het gevang): klein en van steen, met luiken
+  wachthuis: { trede: 'gehucht', voor: ['wachthuis', 'gevang'], steen: true, luiken: true, spec: { zaad: 92, b: 5, d: 4, wand: 'veldsteen', plint: 40, schoorsteen: 'steen', uit: {} } },
+  // de wijnboerderij: een klein huis met tonnen tegen de gevel (de wijngaard komt uit de ranken op de tegels)
+  wijnhuis: { trede: 'gehucht', voor: ['wijnboerderij'], luiken: true, spec: { zaad: 96, b: 5, d: 4, wand: 'vakwerk', plint: 36, schoorsteen: 'leem', uit: {} }, stukken: [['tonnen', 97, [3.1, 0.6]]] },
+  // het schuurtje van wie buiten werkt: de kleiput, de rietsnijder, de visser, de turfsteker en de kalkbrander
+  schuurtje: { trede: 'gehucht', voor: ['kleiput', 'rietsnijder', 'visser', 'turfsteker', 'kalkbrander'], spec: { zaad: 98, b: 4, d: 3, laag: true, wand: 'planken', hout: 'schors', plint: 24, schoorsteen: false, ramen: false, uit: false } },
+  // de bakkerij: een aanbouw voor de oven, een stenen schoorsteen en een bord
+  bakkerij: { trede: 'dorp', voor: ['bakkerij'], luiken: true, spec: { zaad: 88, b: 7, d: 5, wand: 'vakwerk', plint: 36, schoorsteen: 'steen', bord: true, uit: { aanbouw: true } } },
+  // de brouwerij: anderhalve laag met een dakkapel, een bord, en tonnen tegen de gevel
+  brouwerij: { trede: 'dorp', voor: ['brouwerij'], luiken: true, spec: { zaad: 89, b: 7, d: 5, lagen: 1.5, wand: 'vakwerk', plint: 36, schoorsteen: 'steen', bord: true, uit: { kapellen: 1 } }, stukken: [['tonnen', 90, [4.1, 0.6]]] },
+  // de weverij: lang, anderhalve laag, twee dakkapellen voor het licht
+  weverij: { trede: 'dorp', voor: ['weverij'], luiken: true, spec: { zaad: 93, b: 8, d: 5, lagen: 1.5, wand: 'vakwerk', plint: 36, schoorsteen: 'leem', bord: true, uit: { kapellen: 2 } } },
+  // de markt (en tot ze een eigen tekening heeft de kazerne): twee lagen, steen beneden
+  markthal: { trede: 'dorp', voor: ['markt', 'kazerne'], steen: true, luiken: true, spec: { zaad: 94, b: 8, d: 6, lagen: 2, wand: 'veldsteen', boven: 'vakwerk', plint: 40, schoorsteen: 'steen', bord: true, uit: { bakken: 2 } } },
+  // een werkplaats met een bord en een afdakje: de slager en de leerlooier
+  werkplaats: { trede: 'marktrecht', voor: ['slager', 'leerlooier'], luiken: true, spec: { zaad: 90, b: 6, d: 4, wand: 'vakwerk', plint: 36, schoorsteen: 'leem', bord: true, uit: { afdak: true } } },
+  // de kuiper: een werkplaats met tonnen tegen de gevel
+  kuiperij: { trede: 'marktrecht', voor: ['kuiper'], luiken: true, spec: { zaad: 91, b: 6, d: 4, wand: 'vakwerk', plint: 36, schoorsteen: 'leem', bord: true, uit: { afdak: true } }, stukken: [['tonnen', 99, [3.6, 0.6]]] },
+  // het badhuis en het gasthuis: anderhalve laag, een stenen schoorsteen, bloembakken
+  gasthuis: { trede: 'marktrecht', voor: ['badhuis', 'gasthuis'], luiken: true, spec: { zaad: 95, b: 8, d: 5, lagen: 1.5, wand: 'vakwerk', plint: 36, schoorsteen: 'steen', uit: { kapellen: 1, bakken: 2 } } },
+};
+
 // De grote gebouwen van een stijl (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee, B: Ja, C: Ja graag"):
 // de kleine herberg (het gehucht), de grote met een stal aan een binnenplaats met een muur en een poort (een dorp: hij
 // groeit door), de kapel met de toren van de stijl, de woontoren (vanaf marktrecht, drie gezinnen) en het huis van de
@@ -147,6 +197,13 @@ function grootGebouw(stijl, soort, o = {}) {
   const draai = o.draai || 0;
   const rond = { rondom: true, nok: 'x', deur: 'voor', deurOp: 'hoofd', draai, kalk: S.kalk };
   const wand = S.wand ? { wand: S.wand } : {};
+  const W = WERKPLAATSEN[soort];
+  if (W) {
+    const uit = W.spec.uit && { ...W.spec.uit, ...(W.luiken ? { luiken: S.luiken } : {}) };
+    const spec = { ...WERKPLAATS_BASIS, ...W.spec, ...(W.spec.wand === 'vakwerk' ? wand : {}), ...(W.steen ? { steen } : {}), ...(W.spec.boven ? { boven: S.boven || W.spec.boven } : {}), ...rond, dak: o.dak || S.dak, uit };
+    if (!W.stukken) return { spec };
+    return { delen: [{ spec }, ...W.stukken.map(([tuin, zaad, plek]) => ({ spec: { tuin, zaad }, plek }))], deurVan: 0 };
+  }
   if (soort === 'herbergKlein') {
     const h = HUIZEN.herberg1;
     return { spec: { ...h, ...rond, ...wand, dak: o.dak || S.dak, uit: { ...h.uit, luiken: S.luiken } } };
@@ -299,14 +356,14 @@ function stijlHuizen() {
     // hij in een dorp toe doorgroeit (leien, pannen), de kapel en de woontoren in de steen van de stijl of in baksteen
     // (met een steenbakkerij), en het raadhuis. Alle met bouwfasen (de kapel per deel, fasenVanDelen), behalve
     // het raadhuis: dat bouwt niemand.
-    const groot = (soort, vorm, welk, daken, fasen) => {
+    const groot = (soort, vorm, welk, daken, fasen, voor) => {
       for (const [dak, steen] of daken) {
         for (const [stand, st] of Object.entries(STANDEN)) {
           const naam = stijlNaam(stijl, vorm, steen === 'baksteen' ? 'baksteen' : dak, stand);
           const g = grootGebouw(stijl, welk, { dak, steen, draai: st.draai });
           uit[naam] = {
             ...(g.spec || { delen: g.delen, deurVan: g.deurVan }), gebouw: soort, draai: st.draai, ...(fasen ? {} : { fasen: false }),
-            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand },
+            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand, ...(voor ? { voor } : {}) },
           };
         }
       }
@@ -322,6 +379,9 @@ function stijlHuizen() {
     // okt: "Eerst alleen het gehucht"), leien en pannen later
     groot('zagerij', 'zagerij', 'zagerij', [[S.dak]], true);
     groot('zagerij', 'zagerij', 'zagerij', [['leien'], ['pannen']], false);
+    // de werkplaatsen (vraag 167): onder het dak van hun trede, met bouwfasen; `voor` zegt het spel welke soorten ze nemen
+    const DAK = { gehucht: S.dak, dorp: 'leien', marktrecht: 'pannen' };
+    if (NIEUW) for (const [vorm, W] of Object.entries(WERKPLAATSEN)) groot(W.voor[0], vorm, vorm, [[DAK[W.trede]]], true, W.voor);
   }
   return uit;
 }
@@ -366,14 +426,30 @@ function inDeRonde(spec, oud, gebouw = spec.gebouw) {
   }
   return { ...spec, ...extra, ...(uit ? { uit } : {}), knoppen: knoppenVoor(spec, gebouw, oud) };
 }
+// De maat van alle tekeningen van het spel (MAAT, bij WERKPLAATSEN): een gebouw uit delen elk huis erin op die maat, en
+// de plekken mee, een huis op een halve tegel (zodat de achterste hoek van het geheel op een hele of een halve tegel
+// blijft, meetHuis), een los stuk (de stammen, de tonnen) waar het valt; een los stuk zelf blijft even groot.
+function opMaat(spec) {
+  if (MAAT === 1) return spec;
+  if (!spec.delen) return spec.maat ? spec : { ...spec, maat: MAAT };
+  return {
+    ...spec,
+    delen: spec.delen.map((d) => {
+      const los = d.spec.tuin || d.spec.erfmuur;
+      const plek = d.plek && d.plek.map((v) => (los ? v * MAAT : Math.round(v * MAAT * 2) / 2));
+      return { ...d, ...(plek ? { plek } : {}), spec: los ? d.spec : { maat: MAAT, ...d.spec } };
+    }),
+  };
+}
+
 // zoals elke tekening was vóór de ronde, voor de proefplaat (huis-sdf-export.cjs ronde)
 const ZONDER_RONDE = {};
 for (const naam of Object.keys(HUIZEN)) {
   const jong = HUIZEN[naam];
   ZONDER_RONDE[naam] = jong;
   const { stijl, ...zonderStijl } = jong;
-  HUIZEN[naam] = inDeRonde(jong, false);
-  HUIZEN[naam + OUD] = { ...inDeRonde(zonderStijl, true, jong.gebouw), fasen: false, jong: naam };
+  HUIZEN[naam] = opMaat(inDeRonde(jong, false));
+  HUIZEN[naam + OUD] = opMaat({ ...inDeRonde(zonderStijl, true, jong.gebouw), fasen: false, jong: naam });
 }
 
 // De wereld van een opgave: een huis of een toren van de bouwer, of een gebouw uit delen ({ delen: [{ spec, plek }],
@@ -2117,7 +2193,7 @@ function schrijfDaksneeuw(lijst, o = {}) {
   return { huizen: Object.keys(lagen).length, mb: Math.round((pixels * 4) / 1e6) };
 }
 
-module.exports = { HUIZEN, OUD, ZONDER_RONDE, SNEEUW_LAGEN, schrijfDaksneeuw, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, PLAT, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, renderHuisPlat, meetHuis, rookVan, wereldVan };
+module.exports = { HUIZEN, OUD, NIEUW, MAAT, WERKPLAATSEN, ZONDER_RONDE, SNEEUW_LAGEN, schrijfDaksneeuw, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, PLAT, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, renderHuisPlat, meetHuis, rookVan, wereldVan };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

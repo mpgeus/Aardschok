@@ -3753,10 +3753,10 @@ function gevelSchoorsteenVan(H) {
   for (const V of H.vleugels) {
     if (V.eind[1] !== 'gevel') continue;
     const P = stukVan(H, V, 'a', 0);
-    if (P && P.Lu >= 150 && !P.bezet.length) {
+    if (P && P.Lu >= 150 * H.maat && !P.bezet.length) {
       // mag hij daar staan zonder de voordeur te verdringen?
       const u = (V.hq * 0.36 * (R(1) < 0.6 ? 1 : -1) - P.l0) * P.dirU * SQ;
-      const probeer = [u - 40, u + 40, -10, 1e4];
+      const probeer = [u - 40 * H.maat, u + 40 * H.maat, -10, 1e4];
       if (!alsDeurPast(H, P, probeer)) continue;
       P.bezet.pop();
       keus = { V, P };
@@ -3770,9 +3770,9 @@ function gevelSchoorsteenVan(H) {
   const { V } = keus;
   const C = {
     V,
-    w0: sp ? 48 : 40, // breed onderaan (eenheden langs de muur)
-    w1: sp ? 30 : 25, // de pijp
-    d0: sp ? 25 : 21, // hoe ver hij uit de muur steekt
+    w0: (sp ? 48 : 40) * H.maat, // breed onderaan (eenheden langs de muur)
+    w1: (sp ? 30 : 25) * Math.max(H.maat, 0.75), // de pijp (smaller wordt hij een stok, zoals op het dak)
+    d0: (sp ? 25 : 21) * H.maat, // hoe ver hij uit de muur steekt
     kant: R(1) < 0.6 ? 1 : -1,
   };
   C.d1 = C.d0 - 4;
@@ -3780,12 +3780,12 @@ function gevelSchoorsteenVan(H) {
   C.d0 += H.kraag;
   C.d1 += H.kraag;
   C.qC = C.kant * V.hq * (0.3 + 0.12 * R(2));
-  C.zS0 = E((H.lagen === 2 ? H.h1 : H.trekH) - 26 + 14 * R(3));
-  C.zS1 = C.zS0 + E(sp ? 26 : 22);
+  C.zS0 = E((H.lagen === 2 ? H.h1 : H.trekH) + (-26 + 14 * R(3)) * H.maat);
+  C.zS1 = C.zS0 + E((sp ? 26 : 22) * H.maat);
   // tot ruim boven de rand van het dak waar hij erdoor gaat
   let top = 0;
   for (const dq of [-C.w1 / 2, 0, C.w1 / 2]) top = Math.max(top, dakBovenkant(H, V, V.XR, C.qC + dq), dakBovenkant(H, V, V.ha, C.qC + dq));
-  C.zTop = top + E(42 + 14 * R(4));
+  C.zTop = top + E((42 + 14 * R(4)) * H.maat);
   C.la = sch * (0.03 + 0.04 * R(5)) * (R(6) < 0.5 ? -1 : 1); // leunt langs de gevel
   C.ln = sch * (0.015 + 0.02 * R(7)); // en een fractie van de muur af
   H.gevelSchoorsteen = C;
@@ -3807,18 +3807,18 @@ function trapVan(H) {
   if (!H.uitbouw.trap) return;
   const { sp, sch } = H;
   const R = (k) => H.r(4600 + k);
-  const hD = 40 + Math.round(8 * R(1)); // de drempel van de opkamer
+  const hD = Math.round((40 + 8 * R(1)) * H.maat); // de drempel van de opkamer
   const nT = Math.max(3, Math.round(hD / (sp ? 10 : 9))); // treden, het bordes meegeteld
   const trU = (sp ? 16 : 13) * SQ; // een trede langs de muur, in px
-  const bD = sp ? 44 : 36;
+  const bD = Math.round((sp ? 44 : 36) * H.maat);
   const topReg = H.lagen === 1 ? H.plaatH : H.lagen === 1.5 ? H.zolderH : H.h1 - 16;
-  const hDeur = Math.min(sp ? 84 : 78, topReg - hD - (sp ? 16 : 11));
+  const hDeur = Math.min(Math.round((sp ? 84 : 78) * H.maat), topReg - hD - (sp ? 16 : 11));
   const bordes = bD + (sp ? 24 : 18);
   const lang = bordes + (nT - 1) * trU;
   const geen = () => {
     H.uitbouw.trap = false;
   };
-  if (hDeur < 62) return geen();
+  if (hDeur < 62 * H.maat) return geen();
   const kand = [];
   for (const V of H.vleugels) for (const zijde of ['a', 'q']) {
     const P = stukVan(H, V, zijde, 0);
@@ -3871,22 +3871,22 @@ function balkonVan(H) {
   const kand = [];
   for (const V of H.vleugels) for (const zijde of ['q', 'a']) {
     const P = stukVan(H, V, zijde, 1);
-    if (P && P.Lu >= 180) kand.push(P);
+    if (P && P.Lu >= 180 * H.maat) kand.push(P);
   }
   kand.sort((a, b) => (b.zijde === 'q' ? 1.3 : 1) * b.Lu * b.zicht - (a.zijde === 'q' ? 1.3 : 1) * a.Lu * a.zicht);
-  const bD = sp ? 42 : 36;
-  const hDeur = sp ? 86 : 80;
+  const bD = Math.round((sp ? 42 : 36) * H.maat);
+  const hDeur = Math.round((sp ? 86 : 80) * H.maat);
   for (const P of kand) {
     const hF = H.h1 + (sp ? 8 : 6);
-    const zones = vrijeStroken(P, hF, hF + hDeur, 30, 30).filter(([a, b]) => b - a >= 150);
+    const zones = vrijeStroken(P, hF, hF + hDeur, 30, 30).filter(([a, b]) => b - a >= 150 * H.maat);
     if (!zones.length) continue;
     const [a, b] = zones[0];
-    const lang = Math.min(b - a, (sp ? 150 : 130) + 80 * R(1));
+    const lang = Math.min(b - a, ((sp ? 150 : 130) + 80 * R(1)) * H.maat);
     const u0 = a + (b - a - lang) * R(2);
     const u1 = u0 + lang;
     const uD = u0 + lang * (R(3) < 0.5 ? 0.28 : 0.72);
     const d = maakDeur(H, P, uD, hF + 2, bD, hDeur, { reg: 1, blad: (R(4) - 0.5) * 3 * GRAAD, extra: { galerij: true } });
-    const dB = (sp ? 40 : 34) + 4 * R(5);
+    const dB = ((sp ? 40 : 34) + 4 * R(5)) * H.maat;
     H.balkon = { P, u0, u1, hF, dB, d };
     for (const u of [u0, u1]) H.uitPunten.push([...P.pos(u, hF + 40, dB), E(hF + 40)]);
     return;

@@ -33,8 +33,9 @@ de pijplijn van vraag 180 (Q, f; niet in de cloud).
 **Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
 overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **besloten**
 (bij R, "Besloten"), met de volgorde: 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp.
-**Bezig in sessie `claude/sharp-euler-1mygav`** (20 okt): 2a1, de maat van de huizen (een proef om te kijken), en dan
-184 met 182 (dragers en egaliseren).
+**183 in één keer, bij Marcel** (20 okt): de maat (65 procent) en de werkplaatsen in de huizenbouwer liggen klaar achter
+de schakelaar `NIEUW` in `huizen.cjs`; Marcel rendert eerst de poppetjes en de stijl, dan alle huizen in één keer, met de
+negen stappen bij R, 183. Daarna 184 met 182 (dragers en egaliseren).
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -1717,11 +1718,28 @@ hebben we zoizo nodig. volgorde is akkoord"):
   de plint, de deur (dan zo hoog als een mens), de ramen, de schoorsteen, de dakkapellen, de aanbouw en de erker. Alle 607
   opgaven meten op 0,65 een voet en een deur (de meeste 3×3 tot 6×5; was tot 9×7). Het riet hangt nog even ver over (mee
   geschaald scheelde het weinig). De proefplaat (huis1, een stijlhuis met pannen, het raadhuis, de herberg, een hut, een
-  stijlhuis met leien en een boerderij; nu, P1 en P2, met mensen voor de deur) is naar Marcel. **Nog niet:** `huizen.cjs`
-  geeft de maat nog niet door (eerst Marcels oordeel), en de gebouwen uit delen (de kapel met haar toren, de zagerij met
-  zijn stapels) moeten hun plekken mee laten schalen. **De werkplaatsen** (de 29 in `tegels/gebouwen/`, uit `dorp.cjs` en
-  `dorp2.cjs`, elk met eigen vaste maten): niet in de oude bouwer kleiner maken, maar met vraag 167 naar de huizenbouwer,
-  in de bouwstijl, en dan op dezelfde maat (voorstel; wacht op Marcel).
+  stijlhuis met leien en een boerderij; nu, P1 en P2, met mensen voor de deur) is naar Marcel. **De werkplaatsen** (vraag 167; Marcel, 20 okt: "de werkplaatsen mogen naar de
+  huizenbouwer"): 15 vormen in `WERKPLAATSEN` (`huizen.cjs`), zoals de zagerij in de vier stijlen en standen, onder het
+  dak van hun trede, met bouwfasen, en `voor`: de soorten die ze nemen (de houtschuur ook voor de steengroeve, de
+  ertsgraver en de steenbakkerij; de schuur voor de schaapskooi, de graanschuur, de tiendschuur en het pakhuis; het
+  schuurtje voor de kleiput, de rietsnijder, de visser, de turfsteker en de kalkbrander; de markthal ook voor de kazerne).
+  Het spel zoekt ze zo op (`js/bouwstijl.js`: `voor`, en een soort zonder het dak van nu krijgt het dak dat er is). De
+  watermolen blijft uit `dorp2.cjs` (geen waterrad in de huizenbouwer). De proefplaat in de stijl wit stond goed; nog
+  te verbeteren: het kippenhok en het schuurtje lijken op elkaar, en de smidse krijgt op 65 procent geen schoorsteen op
+  de gevel. **In één keer** (Marcel, 20 okt: "Kunnen we beter in 1x doen?", en: "Ik ben nu poppetjes aan het renderen.
+  En als ik de stijl heb, dan laat ik alle huizen opnieuw doen"): de maat (0,65 voor alle tekeningen, en de plekken van
+  de delen mee: `opMaat`) en de werkplaatsen staan achter één schakelaar, `NIEUW` in `huizen.cjs`, die uit staat, zodat
+  de toetsen de opgaven nog met de vellen in git vergelijken. De sessie die alles opnieuw rendert, doet in één keer:
+  (1) `NIEUW = true`; (2) de capaciteit van het vel `huizen` in `naar-tiled.cjs` naar 1792 (er komen er 480 bij, samen
+  zo'n 1694); (3) alles renderen (de huizen, de bouwfasen, de brandfasen, de platte tekeningen, de sneeuw op het dak),
+  door de pijplijn van Marcel; (4) in `T.GEBOUWEN` de tekening van de werkplaatsen naar hun nieuwe (de stijl wit, deur
+  naar zuid, voor een land zonder stijl), de herberg en de kapel naar die van de stijl, en de molen tot hij een rad heeft
+  het oude plaatje verkleind; (5) de toetsen die de vellen met de opgaven vergelijken (in `bouwstijl`, `huizen`,
+  `draaibare-huizen` en `verweren`: bij een kleine muur passen minder ramen) en die een vaste voet noemen (de
+  wijnboerderij 5×4, de deur bij een voet van 5×4, de houthakker 4×4, de hut 3×3); (6) de vaste dakhoogte achter de
+  marktplek (`achterDak: 200` in `js/markt.js`, naar zo'n 130); (7) het opslaan een versie hoger (een oud spel past niet
+  meer); (8) de knop in het debugvenster eruit (`gebouwMaat`, `js/tekenen.js` en `js/debugvenster.js`); (9) meten: het
+  tekenen (minder pixels) en hoeveel er in het bouwbereik past.
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers

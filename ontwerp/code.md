@@ -1013,7 +1013,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.standVan` in `js/treden.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
   pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
   `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
-  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
+  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Een tekening kan voor meer soorten zijn (`voor` in haar stijl: de
+  werkplaatsen van vraag 167, `WERKPLAATSEN` in `huizen.cjs`), en een soort zonder steen die het dak van nu niet heeft (een
+  werkplaats heeft alleen dat van haar trede), krijgt het dak dat er is. `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
   `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
