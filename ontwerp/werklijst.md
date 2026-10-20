@@ -1681,7 +1681,11 @@ hebben we zoizo nodig. volgorde is akkoord"):
 - **182:** egaliseren kost een klein vast deel plus wat de helling vraagt (1a3). Open: wie het doet (1b; het voorstel was
   dezelfde bouwers, met een schop en een hamer).
 - **183:** eerst kijken (2a1): een proef met de gebouwen op 100, 80 en 65 procent, alleen voor het oog geschaald; dan
-  kiest Marcel.
+  kiest Marcel. **De proef is er** (20 okt): het proefdorp op eiland 5, op 1920 bij 1080, op de dichtste zoom (2, dus
+  alles twee keer zo groot) en half zo ver, naar Marcel gestuurd; en zelf te proberen in het spel, met een knop in het
+  debugvenster (D) die de gebouwen op 100, 80 en 65 procent zet (`code.md` bij `js/debugvenster.js`). Op 100 is een huis
+  met dak vier à vijf mensen hoog (het raadhuis acht), op 65 een drie (het raadhuis vijf à zes). **Wacht op Marcel:** welke maat, en dan of de gebouwen kleiner worden
+  (alles opnieuw renderen, met een kleinere voet) of de mensen groter (2a2 of 2a3).
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer.
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers

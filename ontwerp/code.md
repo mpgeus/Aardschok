@@ -1988,6 +1988,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Het slot van de demo** (20 okt; Marcel: "dat we de gebouwen ook aan en uit kunnen zetten om te testen"): een knop zet
   `T.DEMO_INSTELLINGEN.slot` aan of uit (`T.demoSlot`, js/gebouwen.js; null volgt de demo), ook buiten de demo. Voor de
   demo gaat het debugvenster er echt uit (`verpakken.md`).
+- **De maat van de gebouwen, een proef** (20 okt; werklijst R, vraag 183, 2a1; Marcel: "ik twijfel of de huizen 'te
+  groot' zijn"): een knop wisselt `T.TEKENEN_INSTELLINGEN.gebouwMaat` door `T.DEBUG_INSTELLINGEN.gebouwMaten` (1, 0,8 en
+  0,65). `tekenOpMaat` in `js/tekenen.js` tekent een gebouw (en de sneeuw op zijn dak) dan zo veel kleiner, rond het
+  midden van zijn voet (`v.beslaat`); alleen voor het oog: de voet, de deur, het looppad, de rook uit de schoorsteen en
+  wat de muis raakt, blijven op hun plek. Gaat eruit als Marcel gekozen heeft.
 
 ### js/statussen.js: de statussen
 
