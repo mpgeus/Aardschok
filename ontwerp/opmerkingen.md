@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Niet gekozen uit vraag 189: de kerk, de herendienst en het kerkelijk jaar** (20 okt; werklijst R; Marcel koos paarden,
+  bijen, het kerkhof en belegeren). Voorstel van Claude, voor later: (a) **de kerk met haar eigen tiende**: de tiende was
+  eerst die van de kerk, en het spel heet *Tithebreaker*; dan nemen er twee, de heer en de kerk, en nu geeft de kapel
+  alleen tevredenheid; (b) **de herendienst**: in de oogst werken mensen dagen op het land van de heer (in het oude
+  ontwerp, `spel.md`, en de heervaart neemt al mannen mee en geeft ze terug); met de dragers van 184 zijn dat handen
+  minder; (c) **het kerkelijk jaar**: de vasten (geen vlees, wel vis, dus de visser telt), november de slachtmaand, en
+  Sint-Maarten het slachtfeest.
 - **Geparkeerd: een cinematic die een AI maakt** (20 okt; Marcel vroeg "hoe haalbaar is een ai gegenereerde cinematic?",
   en daarna: "dit parkeren we even"; werklijst E, stap 4). Via een dienst (Veo, Kling, Runway, Seedance) kost video zo'n
   $0,03 tot $0,75 per seconde (cijfers van vergelijkingssites, oktober 2026), in clips van 5 tot 10 seconden; lokaal op de

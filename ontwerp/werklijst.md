@@ -31,8 +31,10 @@ speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, loka
 de pijplijn van vraag 180 (Q, f; niet in de cloud).
 
 **Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
-overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **wacht
-op Marcel**, op de vragen bij R. Eerst 2a, de maat van een mens, want die telt voor de poppetjes van Q f.
+overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **besloten**
+(bij R, "Besloten"), met de volgorde: 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp.
+**Bezig in sessie `claude/sharp-euler-1mygav`** (20 okt): 2a1, de maat van de huizen (een proef om te kijken), en dan
+184 met 182 (dragers en egaliseren).
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -1587,8 +1589,8 @@ meten van 13 okt is de meting in Firefox geworden). Open: f, lokaal.
 
 ## R. Marcels acht punten (vraag 182 tot 189, 20 okt)
 
-Marcel, 20 okt, met acht punten; wat er al is, zochten twee agents uit (20 okt). Niets gebouwd: eerst zijn keuzes op de
-vragen hieronder (in het gesprek heetten de punten 1 tot 8, de vragen 1a, 1b, ...). Het voorstel van Claude voor de
+Marcel, 20 okt, met acht punten; wat er al is, zochten twee agents uit (20 okt). Zijn keuzes op de vragen staan onder
+"Besloten" (in het gesprek heetten de punten 1 tot 8, de vragen 1a, 1b, ...). Het voorstel van Claude voor de
 volgorde: eerst **2a** (de maat van een mens, want de nieuwe poppetjes van Q f worden nu gemaakt), dan **184 met 182**
 (allebei de bouwplaats, en allebei nieuwe figuren), dan **185** en **186** (klein, voor de demo); 187 en 188 na de demo,
 nu alleen het ontwerp; uit 189 kiest Marcel wat op de lijst komt, de rest gaat naar `opmerkingen.md`.
@@ -1672,6 +1674,27 @@ nu alleen het ontwerp; uit 189 kiest Marcel wat op de lijst komt, de rest gaat n
   kerkhof** (wie valt, krijgt een graf bij de kapel; het model staat al in `gereedschap/pixelart/dorp.cjs`), **f. bijen**
   (honing, en was voor kaarsen), **g. belegeren** (ladders, een ram, een blijde; nodig voor 188). Vraag: **8a** welke op
   de lijst.
+
+**Besloten** (Marcel, 20 okt: "1. 1a3 2. 2a1 3. 3a1, 3b ja klopt, 3b1 4. 4a3, 4b1, 4c1 5. 5a3, 5b1 6. 6a1, 6b1, 6c zet
+iets in gang. 7. 7a1 en ook siege 7a3, 7b akkoord 8. Paarden hebben we nodig, bijen wil ik, kerkhof goed idee, belegeren
+hebben we zoizo nodig. volgorde is akkoord"):
+- **182:** egaliseren kost een klein vast deel plus wat de helling vraagt (1a3). Open: wie het doet (1b; het voorstel was
+  dezelfde bouwers, met een schop en een hamer).
+- **183:** eerst kijken (2a1): een proef met de gebouwen op 100, 80 en 65 procent, alleen voor het oog geschaald; dan
+  kiest Marcel.
+- **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
+  en komt later, met de schuur (3b1): het begin heeft geen kar meer.
+- **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
+  zijn in de demo uit (4c1).
+- **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
+- **187:** nu alleen het ontwerp, bouwen na de demo (6a1); Tiled eruit in een snoeironde, de proefkaarten naar het
+  proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).
+- **188:** allebei: zoals Age of Empires, van niets tot er één valt (7a1), en een verdediger tegen een belegeraar (7a3);
+  eerst tegen de AI, dan samen (7b).
+- **189:** op de lijst: paarden ("hebben we nodig"), bijen ("wil ik"), het kerkhof ("goed idee") en belegeren ("hebben we
+  zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
+- **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van
+  189 achteraan, belegeren met 188.
 
 ## Af (sinds 11 okt)
 
