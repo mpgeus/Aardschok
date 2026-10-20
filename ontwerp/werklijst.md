@@ -20,8 +20,8 @@ daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aa
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
 dat doel: het plan staat bij E, besloten (Marcel: A1 met drie maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6
-zijn gebouwd en staan in `main` (gepusht 20 okt). **Stap 4, de scènes, is gebouwd** (20 okt, op de branch
-`ccr-48dc841e-12fv6n`, nog niet in `main`; Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
+zijn gebouwd en staan in `main` (gepusht 20 okt). **Stap 4, de scènes, is gebouwd** (20 okt, in `main`;
+Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
 loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`). Wacht op Marcel
 (hieronder): bekijken. De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
 eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
@@ -182,7 +182,7 @@ een huis 4, een stenen huis 5), voor bouwstof. In de speeltest wordt elk eiland 
 stenen huizen. **Ronde 3 is af.**
 
 **Wacht op Marcel:**
-- **De scènes op Sint-Maarten bekijken** (E, stap 4, 20 okt, op de branch `ccr-48dc841e-12fv6n`): Nieuw spel (of het
+- **De scènes op Sint-Maarten bekijken** (E, stap 4, 20 okt, in `main`): Nieuw spel (of het
   proefdorp), in de console `Spel.debug.heer()`: hij komt nu over de weg, met zijn soldaten en zijn wagen (de ossenkar),
   die leeg naast hem op het plein gaat staan (de muis erop: "The lord's wagon. Empty, for now."). Klik op hem, en
   *Refuse* (twee keer): de banden schuiven erin, de camera kijkt hem na, de nacht valt, zijn leger komt met licht over
@@ -862,7 +862,7 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    demo *Until next year*), met het jaar in een paar regels en de link naar Steam zodra er een adres is, en de vlag
    `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). De speeltest liep zonder fouten (op `908ddcb0`), met
    de heer in het eerste jaar; wat opviel, staat in `opmerkingen.md`.
-4. **De twee cinematics** (C2; **gebouwd** in sessie `ccr-48dc841e-12fv6n` (20 okt), nog niet in `main`; hoe het werkt:
+4. **De twee cinematics** (C2; **gebouwd** (20 okt, in `main`); hoe het werkt:
    `spel.md`, Sint-Maarten, "Bijgewerkt op 20 okt", en `code.md` bij `js/regie.js`): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
    onderin; een klik of Esc slaat over. **Het plan voor stap 4** (Claude, 20 okt; **besloten**, Marcel: "A1 B1 C1"):
    **A1** nu bouwen met de tekeningen die er zijn (vraag 180 wisselt later alleen plaatjes); **B1** de scène speelt in de
