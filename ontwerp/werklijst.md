@@ -880,6 +880,9 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    spelen de scènes met wat er is (de heer te voet, de ossenkar).
 5. **Het eindscherm**: wat je bouwde in een paar regels (het jaarboek is er al, `js/einde.js`), wat je koos, *Wishlist
    Tithebreaker* (zodra de Steam-pagina er is), en terug naar het menu.
+   **Geparkeerd** (Marcel, 20 okt: "dit parkeren we even"): een cinematic die een AI maakt; wat het kost, waar het wringt
+   en drie manieren (advies: geschilderde platen uit vraag 180, met de beweging in code): `opmerkingen.md`, "Geparkeerd:
+   een cinematic die een AI maakt".
 6. **Alleen in de demo** eindigt het spel ook na betalen: een vlag bij het verpakken, zoals het debugvenster
    (`verpakken.md`); in het volle spel speelt het dan door. Erbij: toetsen in `test/heer.test.cjs` (hij komt in het
    eerste jaar; betalen en weigeren), en de speeltest (de kolonist betaalt op Sint-Maarten van het eerste jaar).

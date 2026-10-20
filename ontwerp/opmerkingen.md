@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Geparkeerd: een cinematic die een AI maakt** (20 okt; Marcel vroeg "hoe haalbaar is een ai gegenereerde cinematic?",
+  en daarna: "dit parkeren we even"; werklijst E, stap 4). Via een dienst (Veo, Kling, Runway, Seedance) kost video zo'n
+  $0,03 tot $0,75 per seconde (cijfers van vergelijkingssites, oktober 2026), in clips van 5 tot 10 seconden; lokaal op de
+  GTX 1080 Ti waarschijnlijk te traag of te klein (niet gemeten). Wat wringt: pixel art flikkert in video (elk beeld
+  opnieuw beschilderd, het probleem van vraag 180), een film toont elke speler hetzelfde dorp (B1 koos jóuw dorp),
+  dezelfde heer in elke clip is lastig, en Steam vraagt het te melden (spelers zien juist een filmpje snel als "AI slop").
+  Drie manieren: **V1** de hele scène als AI-video; **V2** de scène in de wereld, met één AI-shot erin (het leger dat uit
+  het kasteel trekt); **V3** (advies van Claude) een of twee geschilderde platen uit de pijplijn van vraag 180, met de
+  beweging in code (flakkerende fakkels, rook, een trage camera), zoals Darkest Dungeon of Kingdom. Marcels plaat van de
+  heerstoet (`voorbeelden/heerstoet-doel.webp`) ís het eindbeeld van betalen. Een proef voor V1 of V2: die plaat via een
+  dienst tot een clip van 5 seconden, terug naar pixel art, en het flikkeren meten zoals bij vraag 180 (een API-sleutel
+  nodig).
 - **De scènes op Sint-Maarten** (20 okt; werklijst E, stap 4; `js/regie.js`, het leger en de wagen in `js/heer.js`): (a)
   overslaan (een klik of Esc) verandert de wereld zonder opdracht (`T.eindVanSintMaarten`), net als betalen en weigeren:
   dat hoort bij 6b, "alles een opdracht" (geparkeerd); (b) zolang het spel uit is, staat de wereld stil (`'einde'`), dus
