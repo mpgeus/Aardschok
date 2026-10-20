@@ -1701,7 +1701,17 @@ hebben we zoizo nodig. volgorde is akkoord"):
   de planken, pannen, stenen en lijnen even groot laat, zodat alles in de wereld dezelfde pixel heeft; dan één proefplaat
   (huis1, de herberg en de smidse, oud en nieuw, met mensen ernaast, 1:1 en op zoom 2, en P1 ernaast), en na goedkeuring
   alles. Daarna in het spel: de toetsen met een vaste voet, de vaste dakhoogte achter de marktplek (`achterDak: 200`,
-  `js/markt.js`), het opslaan een versie hoger (een oud spel past niet meer), de knop eruit, en meten.
+  `js/markt.js`), het opslaan een versie hoger (een oud spel past niet meer), de knop eruit, en meten. **P2** (Marcel, 20
+  okt: "p2, maar dit ga ik doen op mijn pc thuis. Ik wil de art pipeline nog wat refinen voor alles", en: "doen we dit
+  met SDXL? met onze handtekening?"): het renderen gebeurt bij Marcel, door de eigen pijplijn. Nu kennen alleen de kar
+  (`karhd.cjs`) de AI en ons handschrift (H3); de huizen komen nog kaal uit de bouwer. Met 1214 tekeningen kan een
+  meesterbeeld per tekening niet (7 tot 12 minuten elk); wel **per materiaal gebakken** (`bakken.cjs`, zoals het wiel):
+  de AI schildert elk materiaal één keer (planken, pannen, riet, leem en vakwerk, steen, baksteen), dat ligt op het
+  oppervlak, en de bouwer rendert er alles mee, met het handschrift erover. Voor een vlak materiaal is geen ControlNet
+  nodig, dus ERNIE (rijker dan SDXL op de kar) kan ook. Voorstel: (1) de maat in de twee bouwers, en een proefplaat
+  zonder AI (in de cloud); (2) de pijplijn voor gebouwen: het handschrift uit `karhd.cjs` los, voor alles, en de
+  materialen gebakken; een proefplaat bij Marcel; (3) alles in één keer renderen, bij Marcel. **Wacht op Marcel:** of dat
+  zo mag, en SDXL of ERNIE.
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
