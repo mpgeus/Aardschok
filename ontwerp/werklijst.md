@@ -30,6 +30,10 @@ rietsnijder zonder water (c), en de speellijst (a). **Wacht op Marcel** (hierond
 speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, lokaal op Marcels pc: betere poppetjes met
 de pijplijn van vraag 180 (Q, f; niet in de cloud).
 
+**Marcels acht punten van 20 okt** (R, vraag 182 tot 189; het blok R staat nog op de branch van de sessie hieronder):
+**Bezig in sessie `claude/sharp-euler-1mygav`** (20 okt): 2a1, de maat van de huizen (een proef om te kijken), en dan
+184 met 182 (dragers en egaliseren).
+
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
 videokaart, het filter in de mist, elk voorwerp onthoudt zijn plaatje, ronde 1 en 2 van elk plaatje goedkoper, en alleen
