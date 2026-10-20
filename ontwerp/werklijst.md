@@ -1703,7 +1703,7 @@ hebben we zoizo nodig. volgorde is akkoord"):
   alles. Daarna in het spel: de toetsen met een vaste voet, de vaste dakhoogte achter de marktplek (`achterDak: 200`,
   `js/markt.js`), het opslaan een versie hoger (een oud spel past niet meer), de knop eruit, en meten. **P2** (Marcel, 20
   okt: "p2, maar dit ga ik doen op mijn pc thuis. Ik wil de art pipeline nog wat refinen voor alles", en: "doen we dit
-  met SDXL? met onze handtekening?"): het renderen gebeurt bij Marcel, door de eigen pijplijn. Nu kennen alleen de kar
+  met SDXL? met onze handtekening?"): het renderen gebeurt bij Marcel, door de eigen pijplijn. Nu kent alleen de kar
   (`karhd.cjs`) de AI en ons handschrift (H3); de huizen komen nog kaal uit de bouwer. Met 1214 tekeningen kan een
   meesterbeeld per tekening niet (7 tot 12 minuten elk); wel **per materiaal gebakken** (`bakken.cjs`, zoals het wiel):
   de AI schildert elk materiaal één keer (planken, pannen, riet, leem en vakwerk, steen, baksteen), dat ligt op het
