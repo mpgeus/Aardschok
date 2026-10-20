@@ -796,6 +796,8 @@
   // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
   // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (de kolonist van de speeltest).
   T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
+    // Wat in de demo op slot is, is er pas in het volle spel (T.inDeDemoDicht).
+    if (T.inDeDemoDicht(soort)) return T.t('In the full game.');
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt') return T.waaromGeenMarktOpHetPlein(D);
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
@@ -1049,11 +1051,18 @@
   // Mag deze soort hier al gebouwd worden, door wie dan ook? Die van de trede van nu en de treden ervoor (in een dorp
   // ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van neerzetten heeft (menu:
   // false). Ook voor de raad (js/raad.js): wat mag, zegt de raad.
-  T.magGebouwd = function (D, soort) {
+  T.magGebouwd = (D, soort) => vanDeTrede(D, soort) && !T.inDeDemoDicht(soort);
+  function vanDeTrede(D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
     return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
-  };
+  }
+  // Wat in de demo op slot is (T.DEMO_INSTELLINGEN.dicht, js/einde.js; werklijst Q, vraag 181, e: het wachthuis en de
+  // wapenmaker): het staat in het bouwmenu, op slot, met "In the full game", maar je zet het niet neer
+  // (T.waaromPastHetNiet), en de raad noemt het niet (T.magGebouwd).
+  // Het slot volgt de demo, tenzij het debugvenster het aan- of uitzette (T.DEMO_INSTELLINGEN.slot).
+  T.demoSlot = () => (T.DEMO_INSTELLINGEN.slot != null ? !!T.DEMO_INSTELLINGEN.slot : !!T.DEMO_INSTELLINGEN.aan);
+  T.inDeDemoDicht = (soort) => T.demoSlot() && T.DEMO_INSTELLINGEN.dicht.includes(soort);
   // Het raadhuis (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
   // aanbouw), dan niet meer. Een veld (de akker, de wijngaard) pas als er een boerderij is die hem kan nemen: de akker
   // een boerderij, de wijngaard een wijnboerderij (`veld`; js/boerderij.js).
@@ -1067,7 +1076,8 @@
   // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd): jij zet alles neer (de spelregels "Huizen"
   // en "Wie bouwt", waarin het dorp zelf bouwde op erven en de mensen het je vroegen, zijn weg sinds ronde 2 van het
   // snoeien, 12 okt).
-  T.inBouwmenu = (D, soort) => T.magGebouwd(D, soort);
+  // In de demo ook wat op slot is (T.inDeDemoDicht): zo zie je wat het volle spel heeft.
+  T.inBouwmenu = (D, soort) => vanDeTrede(D, soort);
   T.gebouwPast = (D, soort, x, y, tekening) => !T.waaromPastHetNiet(D, soort, x, y, tekening);
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij

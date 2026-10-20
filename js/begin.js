@@ -75,11 +75,13 @@
   T.zetKamp = function (S, D) {
     const w = D.wereld;
     const I = IN();
-    D.plek.kamp.plekken.slice(0, 1 + I.gezinnen).forEach((p, i) => {
+    // In de demo een tent erbij voor de wacht (T.DEMO_INSTELLINGEN.wacht, js/einde.js; werklijst Q, vraag 181, e).
+    const wacht = T.DEMO_INSTELLINGEN.aan && T.DEMO_INSTELLINGEN.wacht.length ? 1 : 0;
+    D.plek.kamp.plekken.slice(0, 1 + I.gezinnen + wacht).forEach((p, i) => {
       D.gebouwen.push({
         soort: 'tent', x: p.voet.x, y: p.voet.y, voet: { b: p.voet.b, h: p.voet.h }, deur: { x: p.deur.x, y: p.deur.y },
         tent: { x: p.x, y: p.y, vorm: p.vorm, open: p.open }, tekening: null, klaar: true, klaarOp: 0, handen: 0,
-        voorwerp: null, huis: i === 0 ? 'aanvoerder' : null, bewoners: i === 0 ? null : 'kamp',
+        voorwerp: null, huis: i === 0 ? 'aanvoerder' : null, bewoners: i === 0 ? null : i > I.gezinnen ? 'wacht' : 'kamp',
       });
     });
     // de kar aan de rand, waar de weg het land in komt, en de aanvoerder ernaast
@@ -191,6 +193,10 @@
     T.karAanHetWerk(D, B.kar);
     if (!B.gezinnen) laatGezinnenKomen(D, true);
     T.zeg(D, T.t('The cart is on the open ground that will be the square. The families put up their tents around the campfire.'));
+    // Het vee dat meekwam (werklijst Q, vraag 181, b; js/vee.js): los bij de kar, tot er een weide is.
+    const vee = [];
+    for (const soort in T.VEE_INSTELLINGEN.metDeKar) vee.push(...T.veeErbij(D, soort, T.VEE_INSTELLINGEN.metDeKar[soort], k.kar));
+    if (vee.length) T.zeg(D, T.t('{kudde} came along with the cart. They need a meadow: make a field a pasture.', { kudde: T.hoofdletter(T.dierenTekst(vee, D.kalender ? D.kalender.dag : 0)) }));
   };
 
   // Elke nacht (T.tikGebouwenDag, js/gebouwen.js): staat het kamp nog niet, dan staat het nu (een kar die vastzat, of de
@@ -203,9 +209,10 @@
   // Verhuizen uit het kamp (vraag 152, 1c)
   // ---------------------------------------------------------------------------------------------
 
-  // De tenten van de gezinnen in het kamp; niet die van de aanvoerder, want die is zijn huis tot zijn eigen huis af is (1d).
+  // De tenten van de gezinnen in het kamp; niet die van de aanvoerder, want die is zijn huis tot zijn eigen huis af is (1d),
+  // en niet die van de wacht in de demo, die blijft (zijn soldaten trekken niet in een hut, en worden geen boer).
   // Zolang er een is, komt er geen nieuw gezin over de weg (T.waaromGeenGezin, js/gebouwen.js): eerst je eigen mensen.
-  T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'aanvoerder');
+  T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'aanvoerder' && g.bewoners !== 'wacht');
 
   // Elke nacht, als de gebouwen van vandaag af zijn en vóór er een nieuw gezin kan komen (T.tikGebouwenDag, js/gebouwen.js):
   // in een woning die af is en plaats heeft (een hut, een huis), trekt een gezin uit het kamp, het eerste dat er past; past
@@ -263,7 +270,7 @@
     const w = D.wereld;
     if (tent.voorwerp) T.haalVoorwerpWeg(w, tent.voorwerp);
     D.gebouwen.splice(D.gebouwen.indexOf(tent), 1);
-    if (D.gebouwen.some((g) => g.soort === 'tent')) return;
+    if (D.gebouwen.some((g) => g.soort === 'tent' && g.bewoners !== 'wacht')) return; // de tent van de wacht blijft staan
     // zijn eigen vuur, niet dat van een ander dorp of een roverskamp (js/rovers.js)
     const k = D.plek.kamp.vuur;
     const vuur = w.voorwerpen.find((v) => v.soort === 'kampvuur' && v.x === k.x && v.y === k.y);

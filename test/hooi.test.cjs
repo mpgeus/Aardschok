@@ -234,16 +234,18 @@ test('een winterdag in het spel: het vee eet hooi, en in de zomer niet', () => {
 });
 
 // Het ontworpen gehucht begon met 100 hooi (kaarten/gehucht.betekenis.json); het lege begin heeft geen hooi en geen vee,
-// het proefdorp alleen de beginkudde van de weide. Dit toetst dus niet meer dat het begin hooi heeft, maar wat daarachter
-// zat: met hooi voor de rest van de winter eet de beginkudde door, en niemand verhongert.
-test('de beginkudde haalt de rest van de winter met genoeg hooi: drie koeien, dertig dagen lentemaand', () => {
+// het proefdorp de beginkudde van de weide, en sinds 20 okt wat de kar meebracht (werklijst Q, vraag 181, b), dat ook naar
+// de weide ging. Dit toetst dus niet meer dat het begin hooi heeft, maar wat daarachter zat: met hooi voor de rest van de
+// winter eet de kudde door, en niemand verhongert.
+test('de kudde haalt de rest van de winter met genoeg hooi: vijf koeien, dertig dagen lentemaand', () => {
   const { D } = proefDorp(T, { weide: true });
   const koeien = () => T.veeVan(D).filter((e) => e.dier === 'koe').length;
-  assert.equal(koeien(), IN.beginKudde.koe);
+  const kudde = IN.beginKudde.koe + IN.metDeKar.koe;
+  assert.equal(koeien(), kudde);
   T.wijzigVoorraad(D, 'hooi', koeien() * 30 - (D.voorraad.hooi || 0));
   const begin = D.voorraad.hooi;
   for (let dag = 0; dag < 30; dag++) T.tikVeeDag(D, dag);
-  assert.equal(koeien(), IN.beginKudde.koe, 'niemand verhongerd');
+  assert.equal(koeien(), kudde, 'niemand verhongerd');
   assert.ok(bijna(D.voorraad.hooi, begin - 30 * koeien()));
   assert.equal(T.isVeeWinter(30), false, 'op 1 grasmaand graast het weer');
 });

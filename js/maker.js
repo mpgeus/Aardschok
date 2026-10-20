@@ -27,6 +27,12 @@
     // Het lege begin (vraag 152; js/begin.js): de maker legt alleen het land met een open plek die het plein wordt; zo ver
     // om het plein is het open (tegels), en verder staat het bos van het eiland (Marcel, 11 okt: "Klein, bos dichtbij").
     leegRand: 2,
+    // Om het open plein een overgang naar het bos (werklijst Q, vraag 181, d; Marcel, 20 okt: "Vaak zit je nu vast in een
+    // dicht bos en kun je moeilijk bouwen", en M2): van de rand van het open plein tot `tot` tegels ervan blijft er steeds
+    // meer staan van de bomen en struiken van het eiland, van een deel `binnen` aan de binnenkant tot alles op `tot`, in
+    // plekken (open stukken en bosjes, uit een gladde ruis van `plek` tegels). Waar het nog `wei` opener is dan nodig,
+    // is het geen bos meer maar wei. De rotsen blijven staan (de steengroeve; werklijst Q, c).
+    overgang: { tot: 16, binnen: 0.2, plek: 6, wei: 0.25 },
     // Zo ver om het land zijn de stukken van het eiland open bij een nieuw spel (tegels; js/wereld.js, T.openVak): zo ver
     // zie je het land om je dorp. In B2c wordt het de kring die je bij het begin kent.
     zicht: 16,
@@ -270,7 +276,8 @@
 
     // Hoeveel tegels in een vak rots van het eiland zijn, zodat de rotspartijen liever daar komen.
     const eilandRots = optelsom((x, y) => land.streek(x, y) === 'rots');
-    // Hoe ver een tegel van het plein ligt (in stappen van een koning), tot 12.
+    // Hoe ver een tegel van het plein ligt (in stappen van een koning), tot 12 (of tot het eind van de overgang naar het bos).
+    const verst = Math.max(12, I.overgang.tot);
     const pleinAfstand = new Uint8Array(B * H).fill(99);
     {
       const rij = [];
@@ -285,7 +292,7 @@
       for (let i = 0; i < rij.length; i++) {
         const [x, y] = rij[i];
         const d = pleinAfstand[y * B + x];
-        if (d >= 12) continue;
+        if (d >= verst) continue;
         for (let dy = -1; dy <= 1; dy++) {
           for (let dx = -1; dx <= 1; dx++) {
             const nx = x + dx;
@@ -320,7 +327,31 @@
     // omheen staat: daar is geen bos meer, en de grond is gras (weiden en tuinen), behalve het water en de weg. De weg van
     // het eiland houdt op aan de rand van het plein (hij loopt naar het midden van het dorp): op het plein is het gras.
     const inKern = (x, y) => totPlein(Math.floor(x), Math.floor(y)) <= I.leegRand;
-    for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (op(x, y) === BOS && inKern(x + 0.5, y + 0.5)) zet(x, y, VRIJ);
+    // De overgang naar het bos (M2): hoeveel er op een tegel van het bos blijft staan (0 vlak bij het open plein, 1 op
+    // `overgang.tot`, zacht ertussen), en hoe open de tegel is (een gladde ruis per plek, met wat ruis per tegel erdoor,
+    // vast per zaad). Is hij opener dan wat er blijft, dan gaan zijn bomen en struiken; nog `wei` opener, dan is het wei.
+    const O = I.overgang;
+    const blijft = (x, y) => {
+      const d = totPlein(x, y);
+      if (d <= I.leegRand) return 0;
+      if (d >= O.tot) return 1;
+      const t = (d - I.leegRand) / (O.tot - I.leegRand);
+      return O.binnen + (1 - O.binnen) * t * t * (3 - 2 * t);
+    };
+    const zacht = (t) => t * t * (3 - 2 * t);
+    const openHier = (x, y) => {
+      const gx = x / O.plek;
+      const gy = y / O.plek;
+      const [x0, y0] = [Math.floor(gx), Math.floor(gy)];
+      const [u, v] = [zacht(gx - x0), zacht(gy - y0)];
+      const h = (a, b) => hash(a, b, zaad + 101);
+      const glad = (h(x0, y0) * (1 - u) + h(x0 + 1, y0) * u) * (1 - v) + (h(x0, y0 + 1) * (1 - u) + h(x0 + 1, y0 + 1) * u) * v;
+      return 0.75 * glad + 0.25 * hash(x, y, zaad + 202);
+    };
+    const inOvergang = (x, y) => totPlein(x, y) > I.leegRand && totPlein(x, y) < O.tot;
+    const dunUit = (x, y) => inOvergang(x, y) && openHier(x, y) >= blijft(x, y);
+    const wordtWei = (x, y) => inOvergang(x, y) && openHier(x, y) >= blijft(x, y) + O.wei;
+    for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (op(x, y) === BOS && (inKern(x + 0.5, y + 0.5) || wordtWei(x, y))) zet(x, y, VRIJ);
     const binnenPlein = (x, y) => op(x - 1, y - 1) === PLEIN && op(x, y - 1) === PLEIN && op(x - 1, y) === PLEIN && op(x, y) === PLEIN;
     const hoeken = [];
     for (let y = 0; y <= H; y++) {
@@ -358,7 +389,8 @@
     for (const d of st.dingen) {
       const x = lx(d.x);
       const y = ly(d.y);
-      if (op(x, y) === PLEIN || (inKern(x + 0.5, y + 0.5) && isVastNaam(d.naam))) gerooid.push({ x, y, naam: d.naam });
+      const weg = inKern(x + 0.5, y + 0.5) || (dunUit(x, y) && !isRotsNaam(d.naam)); // de overgang laat de rotsen staan
+      if (op(x, y) === PLEIN || (weg && isVastNaam(d.naam))) gerooid.push({ x, y, naam: d.naam });
       else natuur.set(sleutel(x, y), { naam: d.naam, x, y });
     }
     const gelegd = []; // wat de maker erbij legt
@@ -722,6 +754,7 @@
   // Staat een voorwerp met deze naam in de weg (`vast` in tegels/tegels.js)? Een boom, een struik, een rots en de put
   // wel; een varen, een graspol en een kool niet.
   const VAST = {};
+  const isRotsNaam = (naam) => naam === 'rots' || naam === 'kleineRots';
   function isVastNaam(naam) {
     if (!(naam in VAST)) {
       const [vel, kaal] = opNaam(naam).split('/');

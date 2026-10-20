@@ -33,9 +33,19 @@
   // bij het spelen hier; aan bij het verpakken van de demo voor Next Fest (ontwerp/verpakken.md), zoals het debugvenster.
   // `steam`: het adres van de Steam-pagina, voor de link om het spel op je verlanglijst te zetten (in januari 2027); zonder
   // adres staat de link er niet.
+  // `dicht` (werklijst Q, vraag 181, e; Marcel, 20 okt: W1 en L1): wat in de demo op slot is, voor het volle spel; het
+  // staat in het bouwmenu, met "In the full game", maar je zet het niet neer (T.inDeDemoDicht, js/gebouwen.js). Bij het
+  // verpakken van de demo gaat het er echt uit, niet alleen met deze vlag (verpakken.md). `wacht` (S1: "2 speermannen en
+  // 1 kruisboogschutter"): wie in de demo met de huifkar meekomt, om te proeven wat vechten is: soldaten met hun eigen
+  // stukken en zonder wachthuis, in een eigen tent; ze staan waar je ze neerzet (js/bewoners.js, js/soldaten.js). `slot`:
+  // of wat `dicht` is op slot zit; null volgt `aan`, en het debugvenster zet het aan of uit om te proberen (Marcel, 20 okt:
+  // "dat we de gebouwen ook aan en uit kunnen zetten om te testen"; js/debugvenster.js).
   T.DEMO_INSTELLINGEN = {
     aan: false,
     steam: null,
+    dicht: ['wachthuis', 'wapenmaker'],
+    slot: null,
+    wacht: ['speerman', 'speerman', 'kruisboogschutter'],
   };
 
   // ---------------------------------------------------------------------------------------------

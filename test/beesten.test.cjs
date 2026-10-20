@@ -13,11 +13,17 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het eiland waar de beesten spelen: het lege begin van dit nummer heeft bos en herten rond het plein (hij is gekozen
 // omdat alle toetsen hieronder erop slagen; op sommige eilanden ligt het hol aan de rand van de kaart, of is er geen hert
 // dat een roedel kan halen). Sinds het wild per stuk land komt (vraag 170, stap 6a2, b) woont het anders: tot dan was het
-// eiland 7 (en de jager hieronder 1); op 16 okt zijn alle 24 eerste eilanden geprobeerd, en hierop slaagt alles.
-const LAND = 14;
+// eiland 7 (en de jager hieronder 1); op 16 okt zijn alle 24 eerste eilanden geprobeerd, en op 14 slaagde alles. Sinds de
+// overgang naar het bos om het plein (20 okt, js/maker.js; werklijst Q, vraag 181, d) staat er minder bos bij het dorp, en
+// zijn ze opnieuw geprobeerd: op 7 (en 18) slaagt alles, op 14 niet meer (de roedel bij het dorp kreeg minder bos).
+const LAND = 7;
 // De jager heeft een eiland nodig waar na een jaar jagen een groep onder de twee komt: dat hangt aan hoeveel herten er in
 // zijn bereik zijn (50 tegels), en dat verschilt per eiland.
+// Sinds 20 okt (de overgang naar het bos) ligt daar geen roedel meer in zijn bereik: de toets met de roedel speelt op LAND.
 const JAGERLAND = 2;
+// Een paar eilanden voor wat op elk eiland moet gelden. Tot 20 okt was eiland 1 erbij; dat heeft weinig bos, en sinds de
+// overgang naar het bos om het plein in zijn eerste stukken geen roedel meer (de wolven gaan naar het bos, Marcel: "D1").
+const EILANDEN = [3, 18, LAND];
 const grond = require('./grond.cjs');
 
 // Het lege begin op het eiland van `zaad`, zoals een nieuw spel begint, stil en met een vaste worp (test/grond.cjs).
@@ -67,7 +73,7 @@ const groepVan = (S, soort) => {
 const leiderVan = (g) => g.leden.find((e) => e.leider);
 
 test('elk eiland heeft een roedel wolven en herten, uit het zaad: hetzelfde land geeft dezelfde', () => {
-  for (const zaad of [1, 3, LAND]) {
+  for (const zaad of EILANDEN) {
     const S = leegLand(zaad);
     const groepen = T.zetWildBij(S, S.dorp.wereld);
     assert.ok(groepen.some((G) => G.soort === 'wolf'), `${zaad}: een roedel`);
@@ -662,8 +668,8 @@ test('een wolf die in een gevecht viel, ligt er de volgende ochtend niet meer', 
 
 // Een jager bij het dorp, klaar, in het proefdorp met zijn beesten (test/grond.cjs: de hut staat er af, en op dag 2 gaat er
 // iemand werken); jij bouwt, zonder voorvallen. `f` krijgt { S, D, g }.
-function metJager(f) {
-  const S = dorp({ gebouwen: ['jager'] }, JAGERLAND);
+function metJager(f, zaad = JAGERLAND) {
+  const S = dorp({ gebouwen: ['jager'] }, zaad);
   const D = S.dorp;
   T.zetOptie('voorvallen', 'uit');
   try {
@@ -782,7 +788,7 @@ test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan d
   assert.ok(roedel().leden.some((e) => e.leider), 'de leider blijft');
   assert.equal(g.gevangen.wolf, 6 - J.hooguit);
   assert.ok(Math.abs(vlees - werkte * T.GEBOUWEN.jager.maakt.uit.vlees * J.kleinWild) < 1e-6, `alleen klein wild, geen vlees van de wolven (${vlees})`);
-}));
+}, LAND)); // op LAND ligt een roedel in zijn bereik (JAGERLAND heeft de herten)
 
 test('zonder beesten (een dorp waar ze nog niet gezet zijn, of de spelregel uit) maakt de jager zijn vlees zoals altijd', () => {
   for (const regel of ['aan', 'uit']) {
@@ -898,7 +904,7 @@ test('komt er een buur, dan vluchten de wolven; komt de aanvoerder, dan vecht de
 // ---------------------------------------------------------------------------------------------
 
 test('elke roedel heeft een hol op de kaart naast zijn thuis, vast, en zijn plekken blijven te bereiken', () => {
-  for (const zaad of [1, 3, LAND]) {
+  for (const zaad of EILANDEN) {
     const S = leegLand(zaad);
     const D = S.dorp;
     const w = D.wereld;

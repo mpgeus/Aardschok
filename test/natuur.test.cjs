@@ -130,7 +130,10 @@ test('wat laag groeit (een varen, bloemen), maakt plaats voor een gebouw; wat in
   assert.equal(T.GEBOUWEN.hut.bij, undefined);
   const uit = T.plaatsGebouw(D, 'hut', plek.x, plek.y);
   assert.equal(uit.gelukt, true);
-  assert.ok(w.voorwerpen.includes(varen), 'de bouwers hebben nog niet gerooid');
+  // Moeten de bouwers eerst rooien, dan staat de varen er nog tot de hut komt; is de plek open (sinds de overgang naar het
+  // bos om het plein, js/maker.js, vaak), dan maakt hij meteen plaats.
+  if (uit.instantie.wachtOpRooien) assert.ok(w.voorwerpen.includes(varen), 'de bouwers hebben nog niet gerooid');
+  else assert.ok(!w.voorwerpen.includes(varen), 'de hut staat er meteen, en de varen maakte plaats');
   bouwAf(T, D, uit.instantie, 1);
   assert.ok(!w.voorwerpen.includes(varen), 'de varen staat er nog onder de hut');
   // een rots is vast: daar bouw je niet op, ook niet als de bouwers rooien

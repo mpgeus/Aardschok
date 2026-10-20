@@ -625,3 +625,31 @@ test('past het vee bij de wissel toch niet, dan staat het te krap; en is er geen
   assert.equal(geen.velden[0].bestemming, 'weide');
   assert.equal(T.dierenOp(geen.S, geen.velden[0]).length, 3);
 });
+
+// Het lege begin krijgt vee (werklijst Q, vraag 181, b; Marcel, 20 okt: "B1, en B2"): de kar brengt het mee, en de
+// marskramer verkoopt het (test/handel.test.cjs).
+test('de kar brengt vee mee: los bij de kar tot er een weide is, en dan elke ochtend naar een weide met plaats', () => {
+  const { S, D, boerderijen } = proefDorp(T);
+  const los = () => T.veeVan(D).filter((e) => !e.weide);
+  const tel = (soort) => los().filter((e) => e.dier === soort).length;
+  assert.equal(tel('koe'), IN.metDeKar.koe);
+  assert.equal(tel('schaap'), IN.metDeKar.schaap);
+  assert.ok(los().every((e) => e.thuis.x === D.plek.kamp.kar.x && e.thuis.y === D.plek.kamp.kar.y && e.dwaalt), 'ze dwalen bij de kar');
+  assert.deepEqual(T.losVeeNaarDeWeide(D), [], 'zonder weide blijven ze los');
+  // Een weide erbij: wie past, gaat erheen (de grootste eerst), en het dorp zegt het.
+  const veld = T.proefdorp.legVeldBij(D, 'akker', boerderijen[0], 4, 4); // 16 tegels: twee koeien (8) en vier schapen (8)
+  const dag = Math.floor(D.kalender.dag);
+  T.proefdorp.bouwAf(D, veld, dag);
+  T.proefdorp.dagen(S, dag); // die nacht is het veld er (en nog geen weide: ze blijven los)
+  assert.equal(los().length, IN.metDeKar.koe + IN.metDeKar.schaap);
+  const a = D.wereld.akkers.find((x) => x.x === veld.x && x.y === veld.y);
+  a.bestemming = a.plan = 'weide';
+  const ging = T.losVeeNaarDeWeide(D);
+  assert.equal(ging.length, IN.metDeKar.koe + IN.metDeKar.schaap);
+  assert.equal(los().length, 0);
+  assert.ok(ging.every((e) => e.weide === a), 'op de nieuwe weide');
+  // Een dier dat er nu bij komt (de marskramer), past er niet meer op, en blijft los.
+  T.veeErbij(D, 'koe', 1, D.plek.marskramer);
+  assert.deepEqual(T.losVeeNaarDeWeide(D), [], 'geen plaats');
+  assert.equal(los().length, 1);
+});

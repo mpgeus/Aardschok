@@ -87,8 +87,12 @@
     const soorten = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu(S.dorp, id));
     const cellen = ['weg', 'afbreken', ...soorten].map((id) => {
       const w = wenkVanSoort(S, id);
-      return `<button data-soort="${id}" data-naam="${veilig(w.naam)}" data-uitleg="${veilig(w.uitleg)}">` +
-        `<canvas class="bouw-plaatje"></canvas><span class="bouw-naam">${w.naam}</span></button>`;
+      // Wat in de demo op slot is (T.inDeDemoDicht, js/gebouwen.js; werklijst Q, vraag 181, e): je ziet het, met een
+      // slot, maar een klik pakt het niet op.
+      const dicht = T.inDeDemoDicht(id);
+      const uitleg = dicht ? `<b>${T.t('In the full game.')}</b><br>${w.uitleg}` : w.uitleg;
+      return `<button data-soort="${id}"${dicht ? ' data-dicht="1"' : ''} data-naam="${veilig(w.naam)}" data-uitleg="${veilig(uitleg)}">` +
+        `<canvas class="bouw-plaatje"></canvas><span class="bouw-naam">${w.naam}</span>${dicht ? '<span class="bouw-slot" aria-hidden="true"></span>' : ''}</button>`;
     });
     return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>` +
       `<div class="bouw-raster">${cellen.join('')}</div>` +
@@ -241,7 +245,7 @@
 
   $('bouwmenu').addEventListener('click', (ev) => {
     const b = ev.target.closest('button[data-soort]');
-    if (!b || !T.S) return;
+    if (!b || !T.S || b.dataset.dicht) return; // op slot in de demo: het briefje bij de muis zegt het al
     T.S.bouwSoort = b.dataset.soort;
     T.S.bouwKant = null; // een nieuw gebouw in de hand begint met zijn deur naar het zuiden (vraag 179, B1; js/main.js)
     T.S.veldHoek = null; // een veld begint weer bij zijn eerste hoek (js/main.js)
@@ -290,7 +294,8 @@
     const m = S.dorp.marskramer;
     const H = T.HANDEL_INSTELLINGEN;
     const v = S.dorp.voorraad;
-    const heb = (wat) => Math.floor(v[wat] || 0);
+    // Wat je hebt; van het vee dat hij verkoopt (js/handel.js, `vee`) de dieren van het dorp.
+    const heb = (wat) => (H.verkoopt[wat] && H.verkoopt[wat].vee ? T.veeVan(S.dorp).filter((e) => e.dier === wat).length : Math.floor(v[wat] || 0));
     // Wat hij deze ronde bij zich heeft (T.verkooptNu): graan alleen in de lente, per pak van tien.
     const verkoopt = T.verkooptNu(S.dorp).map((wat) => {
       const k = T.kanKopen(S.dorp, wat, 1);

@@ -310,7 +310,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   niet meer op een rapport en kent hij geen argwaan, toeslag of rond kijken meer;
   de inner zelf ging er op 11 okt ook uit; de schandpaal kost het dorp `schandpaalKost`, en er kan alleen een boer met
   een naam op de kaart aan, `e.wie`, dus in het lege begin alleen de aanvoerder), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
-  koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; velden naast elkaar als één weide,
+  koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; sinds 20 okt (werklijst Q, vraag 181, b) vee dat erbij
+  komt, `T.veeErbij` (de kar, `metDeKar`; de marskramer, `vee` in `verkoopt`, js/handel.js, en zijn venster telt dan je
+  dieren), los tot er een weide met plaats is: elke ochtend `T.losVeeNaarDeWeide` (in `T.tikVeeDag`), de grootste eerst; velden naast elkaar als één weide,
   `T.weideGroepen`; waar een dier graast, op een weide of op de meent (de heide), `T.graaslandVan`;
   het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`, en op 1 slachtmaand doen de boeren
   het zelf, `T.boerenSlachten`; en de schaapskooi,
@@ -589,7 +591,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het snoeien, stap 6, 12 okt, alleen het lege land: Marcel, "Alles wordt door spelers geplaatst"): op het eiland
   (`js/eiland.js`) komt het land, en sinds B2b (13 okt; Marcel: "Het eiland, overal") ook alles wat erop groeit en de
   wegen met hun bruggetjes (`T.landStuk`, hieronder); de maker legt er alleen het menselijke over: de open plek voor het
-  plein (`leegRand`; binnen het plein wordt de weg gras), de plek van het kamp op het plein (`kamp`: het vuur, een tent
+  plein (`leegRand`; binnen het plein wordt de weg gras), met **sinds 20 okt een overgang naar het bos** (werklijst Q,
+  vraag 181, d; Marcel: "Vaak zit je nu vast in een dicht bos", en M2; `overgang`): tot `overgang.tot` tegels van het plein
+  gaan steeds minder bomen en struiken van het eiland weg (`blijft`, zacht van `binnen` tot 1), in plekken uit een gladde
+  ruis per zaad (`openHier`, met `hash`), en waar het `wei` opener is, wordt het bos wei; de rotsen blijven (`isRotsNaam`,
+  voor de steengroeve). Gemeten op vijf eilanden: ring 3 tot 6 van 25-55% naar hooguit 4% te rooien, vanaf ring 11 het bos
+  zoals het was; zo kwamen de toetsen van de wolven op eiland 7 (`test/beesten.test.cjs`, LAND). Verder de plek van het kamp op het plein (`kamp`: het vuur, een tent
   per gezin en de kar; js/begin.js zet het op), de plek van de marskramer en de heer, een paar eiken op het plein (niet aan
   de voorkant, `eikenTot`, want daar komt de markt), en een rotspartij met plaats voor de steengroeve. Hij keurt het zelf
   (`T.keurGehucht`: kom je overal, staat er niets op het plein dat er niet hoort) en probeert het anders tot het deugt.
@@ -1360,6 +1367,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder; boeren en velden: `js/boerderij.js`.
   `T.verhuisUitHetKamp` zet een gezin ook in een boerderij of een wijnboerderij die af is (één gezin per boerderij; `T.isBoerderij`), en zegt dat de man de
   boer is.
+- **Sinds 20 okt** (werklijst Q, vraag 181): de kar brengt vee mee (`T.VEE_INSTELLINGEN.metDeKar`, in `T.zetKampOp` met
+  `T.veeErbij`, js/vee.js), en in de demo een tent erbij voor de wacht (`bewoners: 'wacht'`, `T.DEMO_INSTELLINGEN.wacht`,
+  js/einde.js). Die tent is geen kamptent (`T.kampTenten`): zijn soldaten trekken niet in een hut en worden geen boer, en
+  hij blijft staan als het kamp weggaat (`haalTentWeg`).
 
 ### js/bouwen.js: meebouwen
 
@@ -1972,6 +1983,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **De spelregels om te proberen** (vraag 172): in het spel lees je de spelregels alleen (ze liggen vast sinds het begin);
   de knop *Game rules and the workbench* opent ze hier in de stand `'debug'` (`T.ui.openSpelregels(S, 'debug')`, js/hud.js),
   te kiezen midden in een spel, met de werkbank. Die staat alleen bij een stand waarin je kiest en zolang dit venster aan is.
+- **Het slot van de demo** (20 okt; Marcel: "dat we de gebouwen ook aan en uit kunnen zetten om te testen"): een knop zet
+  `T.DEMO_INSTELLINGEN.slot` aan of uit (`T.demoSlot`, js/gebouwen.js; null volgt de demo), ook buiten de demo. Voor de
+  demo gaat het debugvenster er echt uit (`verpakken.md`).
 
 ### js/statussen.js: de statussen
 
@@ -2172,6 +2186,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   nachtwacht 's nachts haar eigen leider, en valt hij, dan is het de volgende. `T.lantaarnDragers(D)`: de aanvoerder
   (C1) en de leider van elk wachthuis. Of zijn lantaarn brandt, en zijn licht, zegt `js/zien.js` (`T.draagtLicht`).
   Getoetst in `test/soldaten.test.cjs`.
+- **De wacht van de demo** (20 okt; werklijst Q, vraag 181, e; Marcel: "S1. Maar 2 speermannen en 1 kruisboogschutter",
+  en "De soldaten staan gewoon waar je ze neerzet"): `T.zetBeginBewoners` (js/bewoners.js) zet in de tent van de wacht elk
+  een man met `p.soldaat = { soort, wachthuis: null }`, met zijn eigen stukken (niet uit de voorraad). Zonder wachthuis
+  levert hij niet in (`T.werkSoldatenBij`); zijn post zet je met rechts (`e.post`, js/kiezen.js), en buiten zijn dienst
+  slaapt hij in zijn tent (`T.dagAnker`, js/dag.js). Het wachthuis en de wapenmaker zijn in de demo op slot
+  (`T.inDeDemoDicht`, js/gebouwen.js).
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
 

@@ -98,7 +98,10 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
    te kunnen"): in het spel is het een vlag (`T.DEMO_INSTELLINGEN`), en die zet je in de console zo om. Dus haalt het
    verpakken van de demo wat dicht is er echt uit (de regels en de tekeningen van die gebouwen), in plaats van alleen de
    vlag te zetten. Dat botst niet met "open laten" hieronder: dat gaat over het volle spel; de demo laat zien wat er is,
-   en wat je koopt, zit pas in het volle spel. Nog te bouwen, met de demo voor Next Fest.
+   en wat je koopt, zit pas in het volle spel. **En het debugvenster gaat er voor de demo ook echt uit** (Marcel, 20 okt:
+   "later moet het wel echt eruit voor de demo, maak daar demo notitie van"): het heeft sinds 20 okt een knop die het slot
+   aan en uit zet (`js/debugvenster.js`, `T.DEMO_INSTELLINGEN.slot`), dus in de demo niet alleen `T.DEBUG_INSTELLINGEN.aan`
+   op false, maar het bestand niet mee, en `slot` vast. Nog te bouwen, met de demo voor Next Fest.
 
 1. **Geen bouwstap, gewone scripts.** Bewust gekozen, en het maakt verpakken bijna niets.
 2. **Geen `fetch` voor spullen.** `beelden/beschrijving.js` is met opzet een gewoon script. Dat

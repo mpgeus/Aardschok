@@ -78,13 +78,19 @@ lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wa
 **Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b tot 1e; `js/begin.js`, `js/bouwen.js`, `js/boerderij.js`): elk nieuw spel (sinds 12 okt het enige begin;
 de spelregels "Het begin" en "Je gehucht" zijn weg, ronde 2 van het snoeien, stap 3). De maker legt op het eiland
 geen gehucht, alleen het land: het bos, het water, de heide en de wegen van het eiland, en een open plek die het plein
-wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"). Na de benoeming (de heer
+wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"); **sinds 20 okt** (werklijst Q,
+vraag 181, d; Marcel: "Vaak zit je nu vast in een dicht bos", M2) met een overgang: tot zes tegels om het plein bijna
+open, dan losse bomen en open plekken, en zo'n twaalf tegels verder het bos zoals het was. Na de benoeming (de heer
 stuurt je met vier gezinnen naar een stuk van zijn wildernis) rijdt de huifkar over de weg het land in, de schout loopt
 ernaast tot je zelf ergens heen klikt, en de gezinnen lopen erachter (Marcel: "Rijdt nu binnen"). Op het plein zetten ze
 het kamp op: een tent of een afdak per gezin rond het kampvuur, en de kar ernaast. Daar wonen ze; de tent van de schout
 is zijn huis (slapen, de bode). Een tent is zo groot als zijn gezin, dus er komt geen nieuw gezin bij. In de kar: 50
 hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap, en sinds 13 okt (vraag 154, D1) 8 kaas, 8 vlees en 1 zout, zodat
-het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
+het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); **sinds 20 okt** (vraag 181, b) ook twee koeien
+en vier schapen, die los bij de kar staan tot er een weide met plaats is, en de marskramer verkoopt er meer (een koe en
+twee schapen per bezoek). **In de demo** (vraag 181, e) komt ook de wacht mee: twee speermannen en een kruisboogschutter,
+in een eigen tent, met hun eigen wapens en zonder wachthuis (ze staan waar je ze neerzet); het wachthuis en de wapenmaker
+staan in het bouwmenu op slot, "In the full game". Met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
 Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn

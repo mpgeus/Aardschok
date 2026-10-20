@@ -251,3 +251,54 @@ test('elk wachthuis heeft een groepsleider: van wie dienst heeft, wie het langst
   c.wezen.wakker = true; // opgestaan (te wapen, js/kiezen.js): nu in dienst
   assert.equal(T.groepsleiderVan(D, huis), c, 'valt de leider, dan draagt de volgende de lantaarn');
 });
+
+// ---------------------------------------------------------------------------------------------
+// De demo (werklijst Q, vraag 181, e; Marcel, 20 okt: "S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", en
+// "De soldaten staan gewoon waar je ze neerzet"): de wacht komt mee met de huifkar, en het wachthuis en de wapenmaker zijn
+// op slot.
+// ---------------------------------------------------------------------------------------------
+
+const metDemo = (doe) => {
+  T.DEMO_INSTELLINGEN.aan = true;
+  try {
+    return doe();
+  } finally {
+    T.DEMO_INSTELLINGEN.aan = false;
+    T.DEMO_INSTELLINGEN.slot = null;
+  }
+};
+
+test('in de demo komt de wacht mee met de huifkar: soldaten met hun eigen stukken, in een eigen tent, zonder wachthuis', () => metDemo(() => {
+  const S = T.proefdorp.begin(T.proefdorp.zaad);
+  const D = S.dorp;
+  const wacht = T.soldatenVan(D);
+  assert.deepEqual(wacht.map((p) => p.soldaat.soort), T.DEMO_INSTELLINGEN.wacht);
+  assert.ok(wacht.every((p) => p.soldaat.wachthuis === null && p.huis.bewoners === 'wacht' && p.komt), 'over de weg, naar hun tent');
+  assert.ok(!T.kampTenten(D).includes(wacht[0].huis), 'hun tent is geen tent van een gezin: ze trekken niet in een hut');
+  assert.equal(D.bevolking, D.bewoners.mensen.length);
+  // Hun stukken nemen ze niet uit de voorraad, en ze blijven soldaat, ook zonder wachthuis.
+  for (const stuk of ['speren', 'schilden', 'kruisbogen', 'harnassen']) assert.ok(!(D.voorraad[stuk] < 0), stuk);
+  T.werkSoldatenBij(D);
+  assert.equal(T.soldatenVan(D).length, 3, 'zonder wachthuis leveren ze niet in');
+  assert.ok(wacht.every((p) => !T.kanWerken(p)), 'een soldaat werkt niet');
+  // In het volle spel is er geen wacht.
+  T.DEMO_INSTELLINGEN.aan = false;
+  assert.equal(T.soldatenVan(T.proefdorp.begin(T.proefdorp.zaad).dorp).length, 0);
+}));
+
+test('in de demo staan het wachthuis en de wapenmaker in het bouwmenu, op slot; het debugvenster zet het slot aan en uit', () => metDemo(() => {
+  const { D } = proefDorp(T);
+  for (const soort of ['wachthuis', 'wapenmaker']) {
+    assert.ok(T.inBouwmenu(D, soort), `${soort} staat in het menu`);
+    assert.ok(!T.magGebouwd(D, soort), `${soort}: de raad noemt het niet`);
+    assert.equal(T.waaromPastHetNiet(D, soort, 0, 0), 'In the full game.');
+  }
+  assert.ok(T.magGebouwd(D, 'hut'), 'de rest is open');
+  T.DEMO_INSTELLINGEN.slot = false; // het debugvenster: uit
+  assert.ok(T.magGebouwd(D, 'wachthuis'));
+  T.DEMO_INSTELLINGEN.aan = false;
+  T.DEMO_INSTELLINGEN.slot = true; // en aan, ook buiten de demo, om te proberen
+  assert.ok(!T.magGebouwd(D, 'wachthuis'));
+  T.DEMO_INSTELLINGEN.slot = null;
+  assert.ok(T.magGebouwd(D, 'wachthuis'), 'in het volle spel is niets op slot');
+}));

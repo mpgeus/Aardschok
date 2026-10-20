@@ -1855,6 +1855,12 @@ waar je ze neerzet", "M2 B = prima C = akkoord"):
   zonder water de visser en de rietsnijder niet.
 - **De volgorde:** d, e, b, c, dan a (de speellijst, zodat die het demojaar beschrijft zoals het dan is); f lokaal ernaast.
 
+**d, e en b zijn gebouwd** (20 okt, op de branch `ccr-48dc841e-12fv6n`; hoe het werkt: `spel.md`, "Zo werkt het lege begin
+nu", en `code.md` bij `js/maker.js`, `js/soldaten.js`, `js/vee.js`, `js/debugvenster.js`): de overgang naar het bos (ring 3
+tot 6 van het plein van 25-55% naar hooguit 4% te rooien; de wolventoetsen spelen nu op eiland 7), de wacht en het slot in
+de demo (en een knop in het debugvenster die het slot aan en uit zet, Marcel: "voeg dan ook in debugmode het lock toe"), en
+het vee van de kar en van de marskramer. Het volgende is c.
+
 ## Af (sinds 11 okt)
 
 - De renderproef van de grond (vraag 178, 18 okt; `snelheid.md`, vanaf "Het plan voor de renderproef van de grond", en

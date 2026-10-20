@@ -47,6 +47,9 @@
     kansOpJong: { koe: 0.5, schaap: 0.5 },
     // Waar het gehucht mee begint, op de weide(s) die de kaart noemt (T.zetBeginKudde).
     beginKudde: { koe: 3, schaap: 8 },
+    // Wat de huifkar in het lege begin meebrengt (werklijst Q, vraag 181, b; Marcel, 20 okt: "B1, en B2"): ze staan los bij
+    // het kamp tot er een weide is (T.losVeeNaarDeWeide); de marskramer verkoopt er meer (js/handel.js).
+    metDeKar: { koe: 2, schaap: 4 },
 
     // ── De winter (stap 2; spel.md, "Het hooi beslist hoeveel land een koe kost") ──
     // Of het vee 's winters hooi nodig heeft: een optie in de spelregels ("Winterzorg"). Uit: er is
@@ -913,6 +916,48 @@
     return { nodig, gegeten, gestorven };
   };
 
+  // ── Vee dat erbij komt (werklijst Q, vraag 181, b; Marcel, 20 okt: "B1, en B2") ──
+
+  // Er komen dieren bij, los bij `bij` (de plek van de kar in het kamp, of het plein als de marskramer ze verkoopt): ze
+  // dwalen daar rond tot er een weide met plaats is (T.losVeeNaarDeWeide). Geeft de dieren.
+  T.veeErbij = function (D, soort, n, bij) {
+    const w = D.wereld;
+    const bezet = new Set(w.wezens.filter((e) => !e.dood).map((e) => e.tx + ',' + e.ty));
+    const uit = [];
+    for (let i = 0; i < n; i++) {
+      let t = { x: Math.round(bij.x), y: Math.round(bij.y) };
+      for (let r = 1, gevonden = false; r <= 4 && !gevonden; r++) {
+        for (let y = bij.y - r; y <= bij.y + r && !gevonden; y++) {
+          for (let x = bij.x - r; x <= bij.x + r && !gevonden; x++) {
+            if (Math.max(Math.abs(x - bij.x), Math.abs(y - bij.y)) !== r || bezet.has(x + ',' + y) || (T.heeftTegels(w) && !T.isBegaanbaar(w, x, y))) continue;
+            t = { x, y };
+            gevonden = true;
+          }
+        }
+      }
+      bezet.add(t.x + ',' + t.y);
+      const e = T.maakDier(soort, t.x, t.y, nieuwZaad(D));
+      Object.assign(e, { dorp: D, thuis: { x: bij.x, y: bij.y }, straal: 3, dwaalt: true }); // het vee van dit dorp (T.hoortBij)
+      w.wezens.push(e);
+      uit.push(e);
+    }
+    return uit;
+  };
+
+  // Elke ochtend (T.tikVeeDag): wie los staat (de dieren van de kar, of die de marskramer verkocht), gaat naar een weide met
+  // plaats, de grootste eerst; past er geen meer, dan blijft hij los tot er plaats is. Geeft wie ging.
+  T.losVeeNaarDeWeide = function (D) {
+    const los = T.veeVan(D).filter((e) => !e.weide);
+    if (!los.length) return [];
+    const weides = T.weideGroepen(D.wereld);
+    if (!weides.length) return [];
+    const vrij = new Map(weides.map((g) => [g, T.weideStand(D, g.velden[0]).vrij]));
+    const plek = verdeel(los, vrij, false);
+    for (const [e, g] of plek) T.zetOpWeide(e, dichtstbij(g.velden, e));
+    if (plek.size) T.zeg(D, T.t('The cattle go out to the meadow: {kudde}.', { kudde: telKudde([...plek.keys()]) }), 'goed');
+    return [...plek.keys()];
+  };
+
   // ── Elke dag ──
 
   // Eén dag, vanuit T.tikGebouwenDag (js/gebouwen.js, stap 0): ná de akkers (op 1 lentemaand
@@ -924,6 +969,7 @@
     const V = D.vee || (D.vee = T.nieuwVee());
     V.melk = 0;
     if (!T.veeVan(D).length) return;
+    T.losVeeNaarDeWeide(D);
     const d = T.datumVanDag(dag);
     const werpen = IN().werpen;
     if (IN().groeit && d.maand === maandIdx(werpen.maand) && d.dagVanMaand === werpen.dag) T.werpJongen(D, dag);

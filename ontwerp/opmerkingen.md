@@ -1262,14 +1262,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   gezin", maakt twee gehuchten zonder vast zaad en vergelijkt de bevolking van het ene op dag 10 met die van het andere
   vóór die dag. Komt er in het ene op dag 10 toevallig een kind bij, dan is hij rood (één keer gezien, 27 tegen 26; los
   veertien keer groen). Een vast zaad, of de bevolking van elk dorp met zichzelf vergelijken, maakt hem vast.
-- **Geen vee in het lege begin** (12 okt, stap 6 van ronde 2): de beginkudde (`T.zetBeginKudde`, `js/vee.js`) staat
-  alleen op de weide of de meent die de kaart legt, en het lege begin legt er geen; de marskramer die vee verkoopt, is er
-  nog niet (`js/vee.js`, bovenaan). Dus komt er nooit een koe of schaap, en geen melk, kaas of wol (dus geen laken voor de
-  weverij). Met het dorp dat er al was gaat ook de laatste meent weg. Een gat voor B: de kar brengt een paar dieren mee,
-  of de marskramer verkoopt ze, of de boer krijgt vee als hij een weide legt; Marcel kiest. Tot dan slaapt de meent: een
-  kaart kan er nog een leggen (`"meent"` in `js/kaart.js`), en `js/vee.js`, `js/bewoners.js`, `js/hud.js` en het hek om de
-  schapen (`T.hekOmDeSchapen`, `js/beesten.js`) lezen hem, maar geen kaart heeft er een. Ook zegt het spel als de wolven
-  een schaap pakken "The wolves have taken a sheep from the common.", ook als het van een weide was.
+- **Geen vee in het lege begin** (12 okt): **opgelost op 20 okt** (werklijst Q, vraag 181, b; Marcel: "B1, en B2"): de kar
+  brengt twee koeien en vier schapen mee, en de marskramer verkoopt een koe en twee schapen per bezoek. Nog open: de meent
+  slaapt nog steeds (geen kaart legt er een), en de wolven zeggen bij een schaap van een weide nog "from the common".
 - **Het plein achter het bos** (12 okt, bij de marktplek): op eiland 9 (`?kaart=gehucht` met het vaste toeval) vallen de
   kruinen van het bos vóór het plein (naar de camera) over een groot deel van het plein, zodat je het kamp en de
   marktplek half tussen de bomen ziet. De maker houdt alleen de eiken op het plein uit de voorkant (`eikenTot`), en de

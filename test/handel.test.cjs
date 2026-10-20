@@ -276,3 +276,20 @@ test('doe: { handel: true } in een gesprek opent het venster', () => {
   }
   assert.equal(geopend, 1);
 });
+
+test('hij verkoopt vee: een koe en twee schapen per bezoek; ze gaan niet in de voorraad, maar staan los bij hem', () => {
+  const S = metMarskramer(0);
+  S.voorraad.goud = 20;
+  const H = T.HANDEL_INSTELLINGEN.verkoopt;
+  assert.ok(T.verkooptNu(S).includes('koe') && T.verkooptNu(S).includes('schaap'));
+  const r = T.koop(S, 'koe', 1);
+  assert.ok(r.kan);
+  assert.equal(S.voorraad.goud, 20 - H.koe.prijs[0]);
+  assert.ok(!S.voorraad.koe, 'geen koe in de voorraad');
+  const koeien = T.veeVan(S).filter((e) => e.dier === 'koe');
+  assert.equal(koeien.length, 1);
+  assert.ok(!koeien[0].weide, 'los, tot er een weide met plaats is (js/vee.js)');
+  assert.equal(T.kanKopen(S, 'koe', 1).kan, false, 'hij had er één');
+  assert.ok(T.koop(S, 'schaap', 2).kan);
+  assert.equal(T.veeVan(S).filter((e) => e.dier === 'schaap').length, 2);
+});

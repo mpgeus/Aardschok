@@ -55,6 +55,11 @@
       // lente meer mee: zoveel pakken erbij als `naDroogte` maal wat de droogte vorig jaar van de oogst nam.
       graan: { naam: T.t('seed grain'), per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5], naDroogte: 30 },
       laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },
+      // Vee (werklijst Q, vraag 181, b; Marcel, 20 okt: "B1, en B2"), zodat het lege begin er meer van krijgt dan wat de
+      // kar meebracht: een koe en twee schapen per bezoek, per stuk. Ze lopen met hem mee terug naar je dorp en staan los
+      // tot er een weide met plaats is (`vee`; T.veeErbij en T.losVeeNaarDeWeide, js/vee.js).
+      koe: { naam: T.t('cows'), heeft: 1, prijs: [6, 6, 6], vee: true },
+      schaap: { naam: T.t('sheep'), heeft: 2, prijs: [2, 2, 2], vee: true },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
     // herfst). Graan is in de lente schaars en na de oogst goedkoop: wie het door Sint-Maarten
@@ -286,7 +291,9 @@
     if (!k.kan) return k;
     const m = D.marskramer;
     T.wijzigVoorraad(D, 'goud', -k.kosten);
-    T.wijzigVoorraad(D, wat, k.stuks);
+    // Vee gaat niet in de voorraad: het staat bij hem op het plein, los tot er een weide is (js/vee.js).
+    if (IN().verkoopt[wat] && IN().verkoopt[wat].vee) T.veeErbij(D, wat, k.stuks, (m.wezen && T.tegelVan(m.wezen)) || D.plek.marskramer);
+    else T.wijzigVoorraad(D, wat, k.stuks);
     m.heeft[wat] -= aantal;
     m.beurs += k.kosten;
     return k;

@@ -1452,6 +1452,12 @@
     'BEESTEN_INSTELLINGEN.jager.hooguit': T.t('pack size limit'), // geen tekst
     'MAKER_INSTELLINGEN.b': T.t('width'), // geen tekst
     'MAKER_INSTELLINGEN.h': T.t('height'), // geen tekst
+    'VEE_INSTELLINGEN.metDeKar': T.t('with the covered wagon at the start'), // geen tekst
+    'MAKER_INSTELLINGEN.overgang': T.t('from the open square to the forest'), // geen tekst
+    'MAKER_INSTELLINGEN.overgang.tot': T.t('all the forest from this far, tiles'), // geen tekst
+    'MAKER_INSTELLINGEN.overgang.binnen': T.t('share of the forest at the open edge'), // geen tekst
+    'MAKER_INSTELLINGEN.overgang.plek': T.t('size of a glade or a copse, tiles'), // geen tekst
+    'MAKER_INSTELLINGEN.overgang.wei': T.t('this much more open is meadow'), // geen tekst
     // Sint-Maarten: zijn leger, zijn wagen en de scènes (werklijst E, stap 4)
     'HEER_INSTELLINGEN.leger': T.t('his army, if you refuse him'), // geen tekst
     'HEER_INSTELLINGEN.leger.mannen': T.t('men'), // geen tekst

@@ -4,7 +4,8 @@
 // goud (T.wijzigVoorraad), een gezin (T.gezinKomt, zoals op een groeidag: zonder plaats zegt het spel dat), de
 // bouwplaatsen meteen af (T.proefdorp.bouwAf en T.komtKlaar, js/begin.js en js/gebouwen.js; wie erin trekt, volgt de
 // nacht erna, zoals bij elk gebouw), en de marskramer nu (Spel.debug.marskramer, js/main.js). Sinds vraag 172 (16 okt)
-// ook de spelregels en de werkbank, om midden in een spel te proberen: in het menu lees je ze alleen. Zolang het open is,
+// ook de spelregels en de werkbank, om midden in een spel te proberen: in het menu lees je ze alleen. Sinds 20 okt ook het
+// slot van de demo aan of uit (het wachthuis en de wapenmaker; werklijst Q, vraag 181, e). Zolang het open is,
 // staat de tijd stil, zoals bij elk venster.
 //
 // Aan tot de Steam-versie (Marcel, 15 okt), ook in de proefversie voor een tester; voor Steam zet het verpakken `aan` op
@@ -36,12 +37,16 @@
       knop('gezin', T.t('A family comes')) +
       knop('af', T.t('Finish all building sites')) +
       knop('marskramer', T.t('The merchant comes now')) +
+      knop('slot', T.demoSlot() ? T.t('Demo lock on: {gebouwen}', { gebouwen: dichtNamen() }) : T.t('Demo lock off: {gebouwen}', { gebouwen: dichtNamen() })) +
       knop('regels', T.t('Game rules and the workbench')) +
       '</div>' +
       (gedaan ? `<p class="venster-staat">${gedaan}</p>` : '') +
       `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>D</kbd> closes it.')}</p>`
     );
   }
+
+  // Wat in de demo op slot is (T.DEMO_INSTELLINGEN.dicht, js/einde.js), in woorden.
+  const dichtNamen = () => T.opsomming(T.DEMO_INSTELLINGEN.dicht.map((soort) => T.GEBOUWEN[soort].naam));
 
   function toon(S) {
     $('debug').innerHTML = inhoud(S);
@@ -71,6 +76,12 @@
     if (actie === 'marskramer') {
       T.debug.marskramer();
       return T.t('The merchant is on his way.');
+    }
+    // Het slot van de demo aan of uit, om te proberen (werklijst Q, vraag 181, e; Marcel, 20 okt): in het bouwmenu op
+    // slot, of te bouwen. Voor de demo gaat het debugvenster eruit (ontwerp/verpakken.md).
+    if (actie === 'slot') {
+      T.DEMO_INSTELLINGEN.slot = !T.demoSlot();
+      return T.demoSlot() ? T.t('Locked, as in the demo.') : T.t('Unlocked, as in the full game.');
     }
     return '';
   }
