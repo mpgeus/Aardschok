@@ -1678,16 +1678,18 @@ nu alleen het ontwerp; uit 189 kiest Marcel wat op de lijst komt, de rest gaat n
 **Besloten** (Marcel, 20 okt: "1. 1a3 2. 2a1 3. 3a1, 3b ja klopt, 3b1 4. 4a3, 4b1, 4c1 5. 5a3, 5b1 6. 6a1, 6b1, 6c zet
 iets in gang. 7. 7a1 en ook siege 7a3, 7b akkoord 8. Paarden hebben we nodig, bijen wil ik, kerkhof goed idee, belegeren
 hebben we zoizo nodig. volgorde is akkoord"):
-- **182:** egaliseren kost een klein vast deel plus wat de helling vraagt (1a3). Open: wie het doet (1b; het voorstel was
-  dezelfde bouwers, met een schop en een hamer).
+- **182:** egaliseren kost een klein vast deel plus wat de helling vraagt (1a3), en dezelfde bouwers doen het, met een
+  schop en een hamer (1b1; Marcel, 20 okt).
 - **183:** eerst kijken (2a1): een proef met de gebouwen op 100, 80 en 65 procent, alleen voor het oog geschaald; dan
   kiest Marcel. **De proef is er** (20 okt): het proefdorp op eiland 5, op 1920 bij 1080, op de dichtste zoom (2, dus
   alles twee keer zo groot) en half zo ver, naar Marcel gestuurd; en zelf te proberen in het spel, met een knop in het
   debugvenster (D) die de gebouwen op 100, 80 en 65 procent zet (`code.md` bij `js/debugvenster.js`). Op 100 is een huis
-  met dak vier à vijf mensen hoog (het raadhuis acht), op 65 een drie (het raadhuis vijf à zes). **Wacht op Marcel:** welke maat, en dan of de gebouwen kleiner worden
-  (alles opnieuw renderen, met een kleinere voet) of de mensen groter (2a2 of 2a3).
+  met dak vier à vijf mensen hoog (het raadhuis acht), op 65 een drie (het raadhuis vijf à zes). **Besloten** (Marcel, 20 okt: "65, gebouwen kleiner"): alle
+  gebouwen op 65 procent, met een kleinere voet, opnieuw gerenderd (2a2); de mensen, de bomen en de tegel blijven. Eerst
+  het plan en één proefplaat (CLAUDE.md, "Eerst goedkeuring, dan renderen"), dan alles; de knop in het debugvenster gaat
+  er dan uit.
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
-  en komt later, met de schuur (3b1): het begin heeft geen kar meer.
+  en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
   zijn in de demo uit (4c1).
 - **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
