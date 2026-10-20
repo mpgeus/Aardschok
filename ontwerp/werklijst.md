@@ -31,9 +31,12 @@ speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, loka
 de pijplijn van vraag 180 (Q, f; niet in de cloud). **Bezig in sessie `lokaal-dac05521`** (20 okt, op Marcels pc): het plan
 voor de poppetjes en een set soldaten met SDXL (Marcel: "maximale kwaliteit met pracht en praal").
 
-**Marcels acht punten van 20 okt** (R, vraag 182 tot 189; het blok R staat nog op de branch van de sessie hieronder):
-**Bezig in sessie `claude/sharp-euler-1mygav`** (20 okt): 2a1, de maat van de huizen (een proef om te kijken), en dan
-184 met 182 (dragers en egaliseren).
+**Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
+overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **besloten**
+(bij R, "Besloten"), met de volgorde: 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp.
+**183 in één keer, bij Marcel** (20 okt): de maat (65 procent) en de werkplaatsen in de huizenbouwer liggen klaar achter
+de schakelaar `NIEUW` in `huizen.cjs`; Marcel rendert eerst de poppetjes en de stijl, dan alle huizen in één keer, met de
+negen stappen bij R, 183. Daarna 184 met 182 (dragers en egaliseren).
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -1601,6 +1604,172 @@ eilanden, en daar staan de visser en de rietsnijder niet in het bouwmenu. **a is
 `speelbaar.md`, "De speellijst van het demojaar", met de 25 bekijk-punten van "Wacht op Marcel" in acht stappen, 7 erbuiten
 (het volle spel of geparkeerd), en 3 weg (vraag L is gebouwd, de drie gaten van stap 6 staan in `opmerkingen.md`, en het
 meten van 13 okt is de meting in Firefox geworden). Open: f, lokaal.
+
+## R. Marcels acht punten (vraag 182 tot 189, 20 okt)
+
+Marcel, 20 okt, met acht punten; wat er al is, zochten twee agents uit (20 okt). Zijn keuzes op de vragen staan onder
+"Besloten" (in het gesprek heetten de punten 1 tot 8, de vragen 1a, 1b, ...). Het voorstel van Claude voor de
+volgorde: eerst **2a** (de maat van een mens, want de nieuwe poppetjes van Q f worden nu gemaakt), dan **184 met 182**
+(allebei de bouwplaats, en allebei nieuwe figuren), dan **185** en **186** (klein, voor de demo); 187 en 188 na de demo,
+nu alleen het ontwerp; uit 189 kiest Marcel wat op de lijst komt, de rest gaat naar `opmerkingen.md`.
+
+- **182, egaliseren met de schop:** "Ik wil dat bouwers eerst de grond 'levelen' met een schop, zoals in knights and
+  merchants. Dit creeert een juiste, vlakke fundering." Nu maakt `T.egaliseer` (`js/hoogte.js`) de voet plus 2 tegels
+  rand in één klap vlak, als het gebouw op de kaart komt (na het rooien); geen werkstap, geen schop, en een bouwer is
+  nog de hakker met de bijl (`js/sprites.js`: "tot er een bouwer met een hamer is"). Op een helling bouwen mag tot
+  `T.teSteil`. Voorstel: rooien, dan egaliseren, dan bouwen; paaltjes op de hoeken, de kavel wordt kale aarde, en de
+  grond zakt of rijst in een paar stappen naar het vlak. Vragen: **1a** hoeveel werk: 1a1 altijd even veel (KaM), 1a2
+  alleen naar de helling, 1a3 een klein vast deel plus de helling (voorstel: dan is vlakke grond kostbaar); **1b** wie:
+  1b1 dezelfde bouwers, met een schop en een hamer (voorstel), 1b2 een eigen graver.
+- **183, de maat van de huizen:** "En ik twijfel of de huizen 'te groot' zijn?" Een tegel is 64×32 px (zo'n 80 cm), een
+  mens 66 px; een hut beslaat 5×4 tot 6×6 tegels (wand ±100 px), een huis 7×5 tot 10×7 (wand 130 tot 186), de kleine
+  herberg 11×8, het raadhuis 8×6 (wand ±270); om elk gebouw een looppad van 3 tegels (Marcel, 3 okt), en het bouwbereik
+  is 16 tegels. Naar de werkelijkheid klopt het (een muur van twee mensen), maar het voelt groot op drie manieren, elk
+  apart te regelen: naast een mens (met het dak is een huis zo'n vijf mensen hoog, en spellen als The Settlers tekenen
+  mensen groter dan echt), op het bouwbereik (een huis met looppad neemt zo'n 100 tegels), en op het scherm (de zoom).
+  Vragen: **2a** 2a1 eerst kijken: één schermafdruk van het proefdorp met de gebouwen op 100, 80 en 65 procent, alleen
+  voor het oog geschaald (voorstel), 2a2 de gebouwen kleiner (alles opnieuw renderen), 2a3 de mensen groter (mee met de
+  poppetjes van Q f), 2a4 alleen het looppad van 3 naar 2 tegels (een getal; 3 was Marcels keuze op 3 okt).
+- **184, dragers:** "Ik wil ook dat de mensen zonder werk zorgen voor het vervoer van materiaal. Ik wil dus mensen met
+  planken, stammen, en blokken steen zien lopen. De kar met een os wordt veel kleiner om met deze mensen mee te lopen als
+  latere 'upgrade'." Nu vervoert alleen de ossenkar (één van het kamp, plus één per schuur; 8 per rit, `js/kar.js`);
+  wie geen werk heeft, bouwt mee (hooguit 4 per bouwplaats) of hangt op het plein; niemand draagt een stam, plank of steen
+  (wel een takkenbos, een mand of een schoof: de drager met de schoof staat al in `werkfiguren.cjs`). Voorstel: zoals de
+  opperman van KaM pakt wie niets doet het dichtste klusje, één stuk per keer, van een stapel naar de opslag of
+  rechtstreeks naar een bouwplaats of werkplaats; de volgorde van de kar (`kiesRit`: eerst bouwplaatsen, dan werkplaatsen,
+  dan de grootste stapel) wordt die van de klusjes. Elke werkplaats die je vult, is dan een drager minder. Meten in de tik
+  (meer mensen die lopen). Vragen: **3a** 3a1 één rij klusjes, dragen of bouwen, wie het dichtst is (voorstel), 3a2 vaste
+  rollen: Marcel kiest hoeveel bouwers, de rest draagt; **3b** de kar: "veel kleiner" als kleiner in beeld, naast de
+  mensen, en pas later te krijgen (klopt dat?); hoe: 3b1 met de schuur, 3b2 met een os (van je vee of de marskramer),
+  3b3 met de trede dorp.
+- **185, een roversaanval in de demo:** "Voor de demo wil ik ook een keer een roversaanval; zodat de speler de combat kan
+  proberen en ervaren." Nu komen de wilde rovers op toeval (de eerste tussen dag 60 en 240, Sint-Maarten is dag 250; in
+  jaar 1 twee man, de helft 's nachts, alleen als er een akker is; ze roven graan), en de regie (`js/regie.js`) kent
+  alleen de heer. Voorstel: in de demo één vaste overval, aangekondigd ("Robbers were seen in the woods"), overdag, met
+  een korte scène van de rovers die uit het bos komen; verlies je, dan roven ze, maar de demo gaat door. Ze komen voor de
+  oogst, de heer op Sint-Maarten voor de tiende: twee die nemen, de een met geweld, de ander met de wet. Vragen: **4a**
+  wanneer: 4a1 een vaste datum, 4a2 na de eerste oogst (voorstel), 4a3 op toeval maar zeker één keer; **4b** hoeveel:
+  4b1 drie, 4b2 vier of vijf (je hebt de commander nodig), 4b3 twee golven; **4c** de wilde rovers in de demo: 4c1 uit,
+  4c2 erbij.
+- **186, punten:** "Een licht puntensysteem achter de schermen voor als mensen de demo 'uitspelen'; hoe meer je hebt
+  verzamelt en in je stores hebt, hoe hoger de punten. [...] Geen doden etc." Nu is er geen telling; het eindscherm
+  geeft een jaarverslag in zinnen (`T.eindRegels`, `js/einde.js`). Voorstel: één getal onder het jaarverslag, tijdens
+  het spel niet te zien: elke waar keer een waarde in goud (één tabel, in de werkbank), plus het goud; je beste score
+  blijft op je computer bewaard. Vragen: **5a** 5a1 wat er op Sint-Maarten ligt, 5a2 wat er dit jaar binnenkwam, 5a3
+  allebei (voorstel); **5b** 5b1 vóór de tiende, 5b2 erna.
+- **187, een campagne en een editor:** "Uiteindelijk wil ik ook een 'Campaign' modus; hierin een aantal levels die met de
+  hand gemaakt zijn op een gemaakt eiland. Hiervoor is er een editor nodig die de huidige generator gebruikt voor de
+  basislaag, maar hier ook aanpassingen in kan maken", en: "Volgens mij wordt Tiled nu al helemaal niet meer gebruikt?",
+  "We hebben dus alles 'inhouse'", "De editor moet wel wat functionaliteit hebben om een verhaal te maken, checkpoints en
+  een 'quest' systeem zoals bij age of empires." Tiled voedt alleen nog de twee proefkaarten (`kaarten/proef.tmj`,
+  `proefbos.tmj`), die acht toetsen en de wereld-bladzijde gebruiken; het eiland en je land komen uit code
+  (`js/eiland.js`, `js/maker.js`). Voorstel: **een level is een opgeslagen spel op minuut nul, plus triggers**: het
+  bewaren kent het eiland al als zaad plus wat er per stuk veranderde (B2), dus de editor is het spel in een stand om te
+  bewerken (de hoogte, het water, de bomen en rotsen, wegen, dorpen, kampen, mensen, de voorraad), en bewaart zoals het
+  spel. De triggers zoals Age of Empires: als (een datum, iemand in een gebied, een gebouw af, zoveel van een waar, iemand
+  dood, een doel af) dan (een bericht, een doel, mensen erbij, een aanval, een scène, iets geven of nemen, de mist weg,
+  een gebouw open of dicht, winst of verlies). Er is een begin: de fasen met `klaarAls` en `doe` (`js/quest.js`, nu leeg),
+  de regie, en het slot van de demo. Het demojaar is het eerste scenario (de brief van de heer, de overval, Sint-Maarten).
+  Vragen: **6a** 6a1 nu alleen het ontwerp, bouwen na de demo (voorstel), 6a2 de triggers nu, met de demo als eerste
+  scenario; **6b** Tiled eruit: 6b1 in een snoeironde, de proefkaarten naar het proefdorp (voorstel), 6b2 tot de editor
+  er is; **6c** een checkpoint: een plek die iets in gang zet, of ook een plek om verder te spelen als je verliest?
+- **188, skirmish:** "In het uiteindelijke spel wil ik ook een skirmisch modus hebben, zowel vs AI als vs andere
+  spelers. Hierin bouw je een kastaal, en vecht je één groot gevecht." De basis voor samen spelen ligt er (de wereld tikt
+  vast, het toeval komt uit het zaad, een klik is een opdracht, een ander dorp is vijand), maar niet de lijn (6c), een AI
+  die bouwt of vecht, het kasteel (163) en belegeren; de heer is een script. Een AI die uit een paar ontwerpen een kasteel
+  zet en een leger kiest, is veel minder werk dan een AI met een economie, en een korte partij gaat makkelijker over de
+  lijn. Vragen: **7a** 7a1 zoals Age of Empires, van niets tot er één valt, 7a2 eerst bouwen met een vaste tijd en een
+  budget, dan het grote gevecht (voorstel, past bij "één groot gevecht"), 7a3 een verdediger en een belegeraar; **7b**
+  eerst tegen de AI, dan samen (voorstel).
+- **189, wat er van het middeleeuwse leven mist:** "Welke elementen van een middeleeuws bestaan missen we nog? Denk even
+  mee met een aantal punten." Er is veel (49 soorten gebouwen, van molen tot badhuis, kapel, gevang en tiendschuur; geboren
+  worden, oud worden, sterven; seizoenen, weer, brand, koorts, wolven). Voorstel van Claude, in volgorde: **a. de kerk en
+  haar eigen tiende** (de tiende was eerst die van de kerk: de naam van het spel; nu geeft de kapel alleen tevredenheid),
+  **b. de herendienst** (in de oogst werken mensen dagen op het land van de heer; in het oude ontwerp, `spel.md`, en de
+  heervaart doet al iets dergelijks; met 184 zijn dat dragers minder), **c. paarden** (geen paard in het spel: geen
+  stal, geen ruiters, Marcel op 2 okt: "een paardenstal nodig [...] Voor ruiters, ridders"; en de os van de kar), **d. het
+  kerkelijk jaar** (de vasten: geen vlees, wel vis; november is de slachtmaand, Sint-Maarten het slachtfeest), **e. het
+  kerkhof** (wie valt, krijgt een graf bij de kapel; het model staat al in `gereedschap/pixelart/dorp.cjs`), **f. bijen**
+  (honing, en was voor kaarsen), **g. belegeren** (ladders, een ram, een blijde; nodig voor 188). Vraag: **8a** welke op
+  de lijst.
+
+**Besloten** (Marcel, 20 okt: "1. 1a3 2. 2a1 3. 3a1, 3b ja klopt, 3b1 4. 4a3, 4b1, 4c1 5. 5a3, 5b1 6. 6a1, 6b1, 6c zet
+iets in gang. 7. 7a1 en ook siege 7a3, 7b akkoord 8. Paarden hebben we nodig, bijen wil ik, kerkhof goed idee, belegeren
+hebben we zoizo nodig. volgorde is akkoord"):
+- **182:** egaliseren kost een klein vast deel plus wat de helling vraagt (1a3), en dezelfde bouwers doen het, met een
+  schop en een hamer (1b1; Marcel, 20 okt).
+- **183:** eerst kijken (2a1): een proef met de gebouwen op 100, 80 en 65 procent, alleen voor het oog geschaald; dan
+  kiest Marcel. **De proef is er** (20 okt): het proefdorp op eiland 5, op 1920 bij 1080, op de dichtste zoom (2, dus
+  alles twee keer zo groot) en half zo ver, naar Marcel gestuurd; en zelf te proberen in het spel, met een knop in het
+  debugvenster (D) die de gebouwen op 100, 80 en 65 procent zet (`code.md` bij `js/debugvenster.js`). Op 100 is een huis
+  met dak vier à vijf mensen hoog (het raadhuis acht), op 65 een drie (het raadhuis vijf à zes). **Besloten** (Marcel, 20 okt: "65, gebouwen kleiner"): alle
+  gebouwen op 65 procent, met een kleinere voet, opnieuw gerenderd (2a2); de mensen, de bomen en de tegel blijven. Eerst
+  het plan en één proefplaat (CLAUDE.md, "Eerst goedkeuring, dan renderen"), dan alles; de knop in het debugvenster gaat
+  er dan uit. **Wat er is** (een agent, 20 okt): de bouwers hebben geen schaal. De camera is vast (1 eenheid is 1 px,
+  `kern.cjs`), de plattegrond staat in tegels in de opgave, en de hoogtes, de deur (42×94 px), de ramen (24×30), het
+  overstek en de patronen van pannen en planken zijn vaste pixels (`huis-sdf.cjs`; voor de 29 gebouwen in
+  `tegels/gebouwen/` net zo in `huis(o)`, `dorp.cjs`). De voet, de deur, de ramen en de rook van een huis meet
+  `huizen.cjs` uit het model, dus die volgen vanzelf. Het is veel: 1214 huistekeningen, 561 bouwfasen, 461 brandfasen,
+  607 platte tekeningen en 1821 lagen sneeuw; op acht kernen samen zo'n vijftien uur (`beeld.md`, 17 okt), in de cloud
+  (vier kernen, en een taak stopt na twee uur) het dubbele, al rendert een kleiner huis sneller (geschat 2,4 keer: 0,42
+  van de pixels). Geen gebouw in het spel is nabewerkt (de herberg van O is een proef). **Twee manieren, de keuze aan
+  Marcel:** **P1 verkleinen**: de plaatjes die er zijn naar 65 procent, met de voet, de deur, de ramen en de rook mee (een
+  paar minuten, zoals de proef, maar zachter, en de pannen en planken fijner dan het hout van de bomen); **P2 opnieuw
+  renderen** (voorstel): een maat in de twee bouwers, die de vormen, de hoogtes, de deur en de ramen 65 procent maakt maar
+  de planken, pannen, stenen en lijnen even groot laat, zodat alles in de wereld dezelfde pixel heeft; dan één proefplaat
+  (huis1, de herberg en de smidse, oud en nieuw, met mensen ernaast, 1:1 en op zoom 2, en P1 ernaast), en na goedkeuring
+  alles. Daarna in het spel: de toetsen met een vaste voet, de vaste dakhoogte achter de marktplek (`achterDak: 200`,
+  `js/markt.js`), het opslaan een versie hoger (een oud spel past niet meer), de knop eruit, en meten. **P2** (Marcel, 20
+  okt: "p2, maar dit ga ik doen op mijn pc thuis. Ik wil de art pipeline nog wat refinen voor alles", en: "doen we dit
+  met SDXL? met onze handtekening?"): het renderen gebeurt bij Marcel, door de eigen pijplijn. Nu kent alleen de kar
+  (`karhd.cjs`) de AI en ons handschrift (H3); de huizen komen nog kaal uit de bouwer. Met 1214 tekeningen kan een
+  meesterbeeld per tekening niet (7 tot 12 minuten elk); wel **per materiaal gebakken** (`bakken.cjs`, zoals het wiel):
+  de AI schildert elk materiaal één keer (planken, pannen, riet, leem en vakwerk, steen, baksteen), dat ligt op het
+  oppervlak, en de bouwer rendert er alles mee, met het handschrift erover. Voor een vlak materiaal is geen ControlNet
+  nodig, dus ERNIE (rijker dan SDXL op de kar) kan ook. Voorstel: (1) de maat in de twee bouwers, en een proefplaat
+  zonder AI (in de cloud); (2) de pijplijn voor gebouwen: het handschrift uit `karhd.cjs` los, voor alles, en de
+  materialen gebakken; een proefplaat bij Marcel; (3) alles in één keer renderen, bij Marcel. Marcel (20 okt): "dat is
+  prima". SDXL of ERNIE: allebei op één materiaal naast elkaar, in stap 2. **Stap 1, de maat in de huizenbouwer, is
+  gebouwd** (20 okt; `huis-sdf.cjs`, `maat`, standaard 1, dus de tekeningen van nu blijven pixel voor pixel gelijk): het
+  plan op hele tegels (met halve viel de achterste hoek op een kwart tegel, en telde de voet een rij te veel), de hoogtes,
+  de plint, de deur (dan zo hoog als een mens), de ramen, de schoorsteen, de dakkapellen, de aanbouw en de erker. Alle 607
+  opgaven meten op 0,65 een voet en een deur (de meeste 3×3 tot 6×5; was tot 9×7). Het riet hangt nog even ver over (mee
+  geschaald scheelde het weinig). De proefplaat (huis1, een stijlhuis met pannen, het raadhuis, de herberg, een hut, een
+  stijlhuis met leien en een boerderij; nu, P1 en P2, met mensen voor de deur) is naar Marcel. **De werkplaatsen** (vraag 167; Marcel, 20 okt: "de werkplaatsen mogen naar de
+  huizenbouwer"): 15 vormen in `WERKPLAATSEN` (`huizen.cjs`), zoals de zagerij in de vier stijlen en standen, onder het
+  dak van hun trede, met bouwfasen, en `voor`: de soorten die ze nemen (de houtschuur ook voor de steengroeve, de
+  ertsgraver en de steenbakkerij; de schuur voor de schaapskooi, de graanschuur, de tiendschuur en het pakhuis; het
+  schuurtje voor de kleiput, de rietsnijder, de visser, de turfsteker en de kalkbrander; de markthal ook voor de kazerne).
+  Het spel zoekt ze zo op (`js/bouwstijl.js`: `voor`, en een soort zonder het dak van nu krijgt het dak dat er is). De
+  watermolen blijft uit `dorp2.cjs` (geen waterrad in de huizenbouwer). De proefplaat in de stijl wit stond goed; nog
+  te verbeteren: het kippenhok en het schuurtje lijken op elkaar, en de smidse krijgt op 65 procent geen schoorsteen op
+  de gevel. **In één keer** (Marcel, 20 okt: "Kunnen we beter in 1x doen?", en: "Ik ben nu poppetjes aan het renderen.
+  En als ik de stijl heb, dan laat ik alle huizen opnieuw doen"): de maat (0,65 voor alle tekeningen, en de plekken van
+  de delen mee: `opMaat`) en de werkplaatsen staan achter één schakelaar, `NIEUW` in `huizen.cjs`, die uit staat, zodat
+  de toetsen de opgaven nog met de vellen in git vergelijken. De sessie die alles opnieuw rendert, doet in één keer:
+  (1) `NIEUW = true`; (2) de capaciteit van het vel `huizen` in `naar-tiled.cjs` naar 1792 (er komen er 480 bij, samen
+  zo'n 1694); (3) alles renderen (de huizen, de bouwfasen, de brandfasen, de platte tekeningen, de sneeuw op het dak),
+  door de pijplijn van Marcel; (4) in `T.GEBOUWEN` de tekening van de werkplaatsen naar hun nieuwe (de stijl wit, deur
+  naar zuid, voor een land zonder stijl), de herberg en de kapel naar die van de stijl, en de molen tot hij een rad heeft
+  het oude plaatje verkleind; (5) de toetsen die de vellen met de opgaven vergelijken (in `bouwstijl`, `huizen`,
+  `draaibare-huizen` en `verweren`: bij een kleine muur passen minder ramen) en die een vaste voet noemen (de
+  wijnboerderij 5×4, de deur bij een voet van 5×4, de houthakker 4×4, de hut 3×3); (6) de vaste dakhoogte achter de
+  marktplek (`achterDak: 200` in `js/markt.js`, naar zo'n 130); (7) het opslaan een versie hoger (een oud spel past niet
+  meer); (8) de knop in het debugvenster eruit (`gebouwMaat`, `js/tekenen.js` en `js/debugvenster.js`); (9) meten: het
+  tekenen (minder pixels) en hoeveel er in het bouwbereik past.
+- **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
+  en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
+- **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
+  zijn in de demo uit (4c1).
+- **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
+- **187:** nu alleen het ontwerp, bouwen na de demo (6a1); Tiled eruit in een snoeironde, de proefkaarten naar het
+  proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).
+- **188:** allebei: zoals Age of Empires, van niets tot er één valt (7a1), en een verdediger tegen een belegeraar (7a3);
+  eerst tegen de AI, dan samen (7b).
+- **189:** op de lijst: paarden ("hebben we nodig"), bijen ("wil ik"), het kerkhof ("goed idee") en belegeren ("hebben we
+  zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
+- **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van
+  189 achteraan, belegeren met 188.
 
 ## Af (sinds 11 okt)
 

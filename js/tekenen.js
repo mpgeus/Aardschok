@@ -57,6 +57,10 @@
     beeldenPerSeconde: 0,
     meter: false,
     helderheid: 1,
+    // Een proef (werklijst R, vraag 183, 2a1; Marcel, 20 okt: "ik twijfel of de huizen 'te groot' zijn"): zo groot tekent
+    // het spel een gebouw, rond het midden van zijn voet; 1 is de tekening. Alleen voor het oog: de voet, de deur en het
+    // looppad blijven. Het debugvenster (D) wisselt 1, 0,8 en 0,65. Gaat eruit als Marcel gekozen heeft.
+    gebouwMaat: 1,
   };
 
   // Het licht met de videokaart (werklijst vraag 125, A; tekenNacht hieronder, js/gl.js): de kleur van het uur
@@ -3755,6 +3759,25 @@
   // tekenWezen). Alleen scherm, en weg met het voorwerp of het wezen.
   const vorigBeeld = new WeakMap();
 
+  // Een gebouw op T.TEKENEN_INSTELLINGEN.gebouwMaat (de proef van vraag 183, 2a1): kleiner rond het midden van zijn voet
+  // (v.beslaat, vanaf zijn tegel achteraan), net als T.sprites.teken; op 1, en voor wat geen voet heeft, gewoon dat.
+  function tekenOpMaat(ctx, deel, p, v, helder) {
+    const f = T.TEKENEN_INSTELLINGEN.gebouwMaat;
+    if (f === 1 || !v.beslaat) return T.sprites.teken(ctx, deel, p.x, p.y, helder);
+    const db = (v.beslaat[0] - 1) / 2;
+    const dh = (v.beslaat[1] - 1) / 2;
+    const mx = p.x + (db - dh) * T.HB;
+    const my = p.y + (db + dh) * T.HH;
+    const h = helder == null ? 1 : helder;
+    if (h < 1) {
+      ctx.save();
+      ctx.filter = `brightness(${h})`;
+    }
+    ctx.drawImage(deel.beeld, deel.sx, deel.sy, deel.b, deel.h, Math.round(mx + (p.x - deel.ax - mx) * f),
+      Math.round(my + (p.y - deel.ay - my) * f), Math.round(deel.b * f), Math.round(deel.h * f));
+    if (h < 1) ctx.restore();
+  }
+
   // gaten: de kijkgaten die na dit voorwerp komen (voorsteKijkgaten), of niets.
   function tekenVoorwerp(ctx, S, v, helder, gaten) {
     const p = plekVan(v);
@@ -3787,14 +3810,14 @@
       else if (stuk && (T.TEGELS[v.vel] || {}).perTekening) vorigBeeld.set(v, stuk);
       const raster = stuk && doorkijk > 0.02 && T.DOORKIJK_INSTELLINGEN.manier === 'raster';
       if (raster) T.tekenGerasterd(ctx, stuk, p.x, p.y, helder, doorkijk);
-      else if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
+      else if (stuk) tekenOpMaat(ctx, stuk, p, v, helder);
       else if (!wacht) tekenBuitenVlak(ctx, v, helder);
       // De sneeuw op het dak (vraag 144, 4b): de laag die bij de sneeuw op de grond past, over het huis heen; niet op wat
       // brandt of in aanbouw is. Een oud huis draagt de sneeuw van zijn jonge tekening (dezelfde vorm).
       const dakSneeuw = stuk && !puin && !fase && !v.brand && v.vel === 'huizen' ? T.dakSneeuwLaag(sneeuwLaag(S)) : -1;
       const sneeuwStuk = dakSneeuw >= 0 && T.sprites.daksneeuw(T.jongeTekeningVan(v), dakSneeuw);
       if (sneeuwStuk && raster) T.tekenGerasterd(ctx, sneeuwStuk, p.x, p.y, helder, doorkijk);
-      else if (sneeuwStuk) T.sprites.teken(ctx, sneeuwStuk, p.x, p.y, helder);
+      else if (sneeuwStuk) tekenOpMaat(ctx, sneeuwStuk, p, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
       if (!raster && gaten) {
         // Het kijkgat werpt geen schaduw (js/gl.js, werptSchaduw): wie erachter staat, heeft zijn eigen.

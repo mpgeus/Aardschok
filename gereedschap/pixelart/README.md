@@ -62,7 +62,9 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   torens met een steil dak (zadeldak, tentdak, naaldspits), de ramen van een kapel en een woontoren, een
   uithangbord, en gebouwen uit meer delen (`samen`: de kapel met haar toren, de herberg met zijn stal);
   `node huis-sdf-export.cjs afwisseling`, `verhouding` en `steen` maken de proefplaten daarvan
-  (`ontwerp/beeld.md`, "De afwisseling en de grote gebouwen").
+  (`ontwerp/beeld.md`, "De afwisseling en de grote gebouwen"). Sinds 20 okt een `maat` (werklijst R, vraag 183): de vormen kleiner,
+  de pannen, planken, stenen en balken even groot; het spel krijgt 0,65 (`MAAT` in `huizen.cjs`), samen met de werkplaatsen van vraag 167 (`WERKPLAATSEN`), als de
+  schakelaar `NIEUW` aangaat en alles in één keer opnieuw gerenderd wordt (werklijst R, vraag 183).
 - `huizen.cjs`: de huizen van het spel (ronde 4b): een vaste lijst opgaven (`HUIZEN`), en hoe er een
   voor het vel gerenderd wordt, met zijn voet en de tegel voor zijn deur. `node naar-tiled.cjs huizen`
   zet ze in `tegels/huizen/`, elk huis een eigen bestand dat het spel pas laadt als het op de kaart staat (vier

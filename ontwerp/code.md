@@ -1013,7 +1013,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.standVan` in `js/treden.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
   pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
   `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
-  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
+  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Een tekening kan voor meer soorten zijn (`voor` in haar stijl: de
+  werkplaatsen van vraag 167, `WERKPLAATSEN` in `huizen.cjs`), en een soort zonder steen die het dak van nu niet heeft (een
+  werkplaats heeft alleen dat van haar trede), krijgt het dak dat er is. `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
   `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
@@ -2006,6 +2008,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Het slot van de demo** (20 okt; Marcel: "dat we de gebouwen ook aan en uit kunnen zetten om te testen"): een knop zet
   `T.DEMO_INSTELLINGEN.slot` aan of uit (`T.demoSlot`, js/gebouwen.js; null volgt de demo), ook buiten de demo. Voor de
   demo gaat het debugvenster er echt uit (`verpakken.md`).
+- **De maat van de gebouwen, een proef** (20 okt; werklijst R, vraag 183, 2a1; Marcel: "ik twijfel of de huizen 'te
+  groot' zijn"): een knop wisselt `T.TEKENEN_INSTELLINGEN.gebouwMaat` door `T.DEBUG_INSTELLINGEN.gebouwMaten` (1, 0,8 en
+  0,65). `tekenOpMaat` in `js/tekenen.js` tekent een gebouw (en de sneeuw op zijn dak) dan zo veel kleiner, rond het
+  midden van zijn voet (`v.beslaat`); alleen voor het oog: de voet, de deur, het looppad, de rook uit de schoorsteen en
+  wat de muis raakt, blijven op hun plek. Gaat eruit als Marcel gekozen heeft.
 
 ### js/statussen.js: de statussen
 
