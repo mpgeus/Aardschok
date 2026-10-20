@@ -25,9 +25,10 @@ Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
 loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`). Wacht op Marcel
 (hieronder): bekijken. De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
 eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
-**Het volgende is Q, het eerste jaar speelbaar** (vraag 181, 20 okt; Marcel: "A1", "B1, en B2", "C3"): de speellijst, vee
-in het lege begin, steen en water, de maker (minder vast in het bos), soldaten in de demo met het wachthuis dicht, en
-betere poppetjes (lokaal, vraag 180); dan speelt Marcel.
+**Het volgende is Q, het eerste jaar speelbaar** (vraag 181, 20 okt; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt);
+Marcel: "A1", "B1, en B2", "C3", en de rest bij Q): de maker (minder vast in het bos), soldaten in de demo met het
+wachthuis dicht, vee in het lege begin, steen en water, dan de speellijst; betere poppetjes lokaal (vraag 180); dan speelt
+Marcel, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
