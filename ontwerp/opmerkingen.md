@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Oude tijden en verwijzingen bij de pixel art** (20 okt, een agent zag het bij vraag 183): `gereedschap/pixelart/README.md`
+  zegt dat `naar-tiled.cjs huizen` vier minuten duurt en `bouwfasen.cjs` een kwartier (uit de tijd van zo'n 108
+  tekeningen; op 17 okt was het twee en zes uur op acht kernen, `beeld.md`); `huizen.cjs` verwijst naar
+  `gereedschap/tiled/maak-gehucht.cjs`, dat er niet meer is; en `kaarten.md` noemt nog "vijftien gebouwen".
 - **Niet gekozen uit vraag 189: de kerk, de herendienst en het kerkelijk jaar** (20 okt; werklijst R; Marcel koos paarden,
   bijen, het kerkhof en belegeren). Voorstel van Claude, voor later: (a) **de kerk met haar eigen tiende**: de tiende was
   eerst die van de kerk, en het spel heet *Tithebreaker*; dan nemen er twee, de heer en de kerk, en nu geeft de kapel

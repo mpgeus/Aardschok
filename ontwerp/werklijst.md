@@ -1687,7 +1687,21 @@ hebben we zoizo nodig. volgorde is akkoord"):
   met dak vier à vijf mensen hoog (het raadhuis acht), op 65 een drie (het raadhuis vijf à zes). **Besloten** (Marcel, 20 okt: "65, gebouwen kleiner"): alle
   gebouwen op 65 procent, met een kleinere voet, opnieuw gerenderd (2a2); de mensen, de bomen en de tegel blijven. Eerst
   het plan en één proefplaat (CLAUDE.md, "Eerst goedkeuring, dan renderen"), dan alles; de knop in het debugvenster gaat
-  er dan uit.
+  er dan uit. **Wat er is** (een agent, 20 okt): de bouwers hebben geen schaal. De camera is vast (1 eenheid is 1 px,
+  `kern.cjs`), de plattegrond staat in tegels in de opgave, en de hoogtes, de deur (42×94 px), de ramen (24×30), het
+  overstek en de patronen van pannen en planken zijn vaste pixels (`huis-sdf.cjs`; voor de 29 gebouwen in
+  `tegels/gebouwen/` net zo in `huis(o)`, `dorp.cjs`). De voet, de deur, de ramen en de rook van een huis meet
+  `huizen.cjs` uit het model, dus die volgen vanzelf. Het is veel: 1214 huistekeningen, 561 bouwfasen, 461 brandfasen,
+  607 platte tekeningen en 1821 lagen sneeuw; op acht kernen samen zo'n vijftien uur (`beeld.md`, 17 okt), in de cloud
+  (vier kernen, en een taak stopt na twee uur) het dubbele, al rendert een kleiner huis sneller (geschat 2,4 keer: 0,42
+  van de pixels). Geen gebouw in het spel is nabewerkt (de herberg van O is een proef). **Twee manieren, de keuze aan
+  Marcel:** **P1 verkleinen**: de plaatjes die er zijn naar 65 procent, met de voet, de deur, de ramen en de rook mee (een
+  paar minuten, zoals de proef, maar zachter, en de pannen en planken fijner dan het hout van de bomen); **P2 opnieuw
+  renderen** (voorstel): een maat in de twee bouwers, die de vormen, de hoogtes, de deur en de ramen 65 procent maakt maar
+  de planken, pannen, stenen en lijnen even groot laat, zodat alles in de wereld dezelfde pixel heeft; dan één proefplaat
+  (huis1, de herberg en de smidse, oud en nieuw, met mensen ernaast, 1:1 en op zoom 2, en P1 ernaast), en na goedkeuring
+  alles. Daarna in het spel: de toetsen met een vaste voet, de vaste dakhoogte achter de marktplek (`achterDak: 200`,
+  `js/markt.js`), het opslaan een versie hoger (een oud spel past niet meer), de knop eruit, en meten.
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
