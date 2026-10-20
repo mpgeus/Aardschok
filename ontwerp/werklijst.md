@@ -19,10 +19,9 @@ de heer ziet aankomen met death als gevolg"): de heer komt al in het eerste jaar
 daar eindigt de demo; weiger je, dan zie je in een korte cinematic zijn leger aankomen, en het eind is de dood. **Betaal
 je, dan eindigt ze ook** (Marcel, 18 okt: "maar zie je een cinematic waar je de heer en zijn mannen met karren goederen
 en goud ziet wegrijden"; de keuzes waren P1 ook een eind, P2 doorspelen). **Het volgende is E**, de heer als klok, op
-dat doel; **Bezig in sessie `main` (lokaal, desktop)** (18 okt): het plan staat bij E, besloten (Marcel: A1 met drie
-maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6 zijn gebouwd (lokaal). Voor stap 4, de
-cinematics, kwam er een proefplaat, maar Marcel wil de stijl van zijn eigen plaat, voor alles: **vraag 180** (bovenaan
-"Wacht op Marcel").
+dat doel: het plan staat bij E, besloten (Marcel: A1 met drie maanden, B2 voor het hele spel, C2); stap 1 tot 3, 5 en 6
+zijn gebouwd en staan in `main` (gepusht 20 okt). Stap 4, de cinematics, wacht op de nieuwe stijl: **vraag 180** (de eigen
+pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
 Dan het eerste jaar speelbaar: Marcel
 speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
