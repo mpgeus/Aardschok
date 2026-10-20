@@ -25,7 +25,8 @@ Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
 loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`). Wacht op Marcel
 (hieronder): bekijken. De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
 eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
-Dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
+Dan het eerste jaar speelbaar (vraag 181; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt): de maker, soldaten in de demo,
+vee, steen en water, dan de speellijst): Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
