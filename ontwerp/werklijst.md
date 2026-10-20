@@ -30,6 +30,10 @@ rietsnijder zonder water (c), en de speellijst (a). **Wacht op Marcel** (hierond
 speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, lokaal op Marcels pc: betere poppetjes met
 de pijplijn van vraag 180 (Q, f; niet in de cloud).
 
+**Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
+overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **wacht
+op Marcel**, op de vragen bij R. Eerst 2a, de maat van een mens, want die telt voor de poppetjes van Q f.
+
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
 videokaart, het filter in de mist, elk voorwerp onthoudt zijn plaatje, ronde 1 en 2 van elk plaatje goedkoper, en alleen
@@ -1580,6 +1584,94 @@ eilanden, en daar staan de visser en de rietsnijder niet in het bouwmenu. **a is
 `speelbaar.md`, "De speellijst van het demojaar", met de 25 bekijk-punten van "Wacht op Marcel" in acht stappen, 7 erbuiten
 (het volle spel of geparkeerd), en 3 weg (vraag L is gebouwd, de drie gaten van stap 6 staan in `opmerkingen.md`, en het
 meten van 13 okt is de meting in Firefox geworden). Open: f, lokaal.
+
+## R. Marcels acht punten (vraag 182 tot 189, 20 okt)
+
+Marcel, 20 okt, met acht punten; wat er al is, zochten twee agents uit (20 okt). Niets gebouwd: eerst zijn keuzes op de
+vragen hieronder (in het gesprek heetten de punten 1 tot 8, de vragen 1a, 1b, ...). Het voorstel van Claude voor de
+volgorde: eerst **2a** (de maat van een mens, want de nieuwe poppetjes van Q f worden nu gemaakt), dan **184 met 182**
+(allebei de bouwplaats, en allebei nieuwe figuren), dan **185** en **186** (klein, voor de demo); 187 en 188 na de demo,
+nu alleen het ontwerp; uit 189 kiest Marcel wat op de lijst komt, de rest gaat naar `opmerkingen.md`.
+
+- **182, egaliseren met de schop:** "Ik wil dat bouwers eerst de grond 'levelen' met een schop, zoals in knights and
+  merchants. Dit creeert een juiste, vlakke fundering." Nu maakt `T.egaliseer` (`js/hoogte.js`) de voet plus 2 tegels
+  rand in één klap vlak, als het gebouw op de kaart komt (na het rooien); geen werkstap, geen schop, en een bouwer is
+  nog de hakker met de bijl (`js/sprites.js`: "tot er een bouwer met een hamer is"). Op een helling bouwen mag tot
+  `T.teSteil`. Voorstel: rooien, dan egaliseren, dan bouwen; paaltjes op de hoeken, de kavel wordt kale aarde, en de
+  grond zakt of rijst in een paar stappen naar het vlak. Vragen: **1a** hoeveel werk: 1a1 altijd even veel (KaM), 1a2
+  alleen naar de helling, 1a3 een klein vast deel plus de helling (voorstel: dan is vlakke grond kostbaar); **1b** wie:
+  1b1 dezelfde bouwers, met een schop en een hamer (voorstel), 1b2 een eigen graver.
+- **183, de maat van de huizen:** "En ik twijfel of de huizen 'te groot' zijn?" Een tegel is 64×32 px (zo'n 80 cm), een
+  mens 66 px; een hut beslaat 5×4 tot 6×6 tegels (wand ±100 px), een huis 7×5 tot 10×7 (wand 130 tot 186), de kleine
+  herberg 11×8, het raadhuis 8×6 (wand ±270); om elk gebouw een looppad van 3 tegels (Marcel, 3 okt), en het bouwbereik
+  is 16 tegels. Naar de werkelijkheid klopt het (een muur van twee mensen), maar het voelt groot op drie manieren, elk
+  apart te regelen: naast een mens (met het dak is een huis zo'n vijf mensen hoog, en spellen als The Settlers tekenen
+  mensen groter dan echt), op het bouwbereik (een huis met looppad neemt zo'n 100 tegels), en op het scherm (de zoom).
+  Vragen: **2a** 2a1 eerst kijken: één schermafdruk van het proefdorp met de gebouwen op 100, 80 en 65 procent, alleen
+  voor het oog geschaald (voorstel), 2a2 de gebouwen kleiner (alles opnieuw renderen), 2a3 de mensen groter (mee met de
+  poppetjes van Q f), 2a4 alleen het looppad van 3 naar 2 tegels (een getal; 3 was Marcels keuze op 3 okt).
+- **184, dragers:** "Ik wil ook dat de mensen zonder werk zorgen voor het vervoer van materiaal. Ik wil dus mensen met
+  planken, stammen, en blokken steen zien lopen. De kar met een os wordt veel kleiner om met deze mensen mee te lopen als
+  latere 'upgrade'." Nu vervoert alleen de ossenkar (één van het kamp, plus één per schuur; 8 per rit, `js/kar.js`);
+  wie geen werk heeft, bouwt mee (hooguit 4 per bouwplaats) of hangt op het plein; niemand draagt een stam, plank of steen
+  (wel een takkenbos, een mand of een schoof: de drager met de schoof staat al in `werkfiguren.cjs`). Voorstel: zoals de
+  opperman van KaM pakt wie niets doet het dichtste klusje, één stuk per keer, van een stapel naar de opslag of
+  rechtstreeks naar een bouwplaats of werkplaats; de volgorde van de kar (`kiesRit`: eerst bouwplaatsen, dan werkplaatsen,
+  dan de grootste stapel) wordt die van de klusjes. Elke werkplaats die je vult, is dan een drager minder. Meten in de tik
+  (meer mensen die lopen). Vragen: **3a** 3a1 één rij klusjes, dragen of bouwen, wie het dichtst is (voorstel), 3a2 vaste
+  rollen: Marcel kiest hoeveel bouwers, de rest draagt; **3b** de kar: "veel kleiner" als kleiner in beeld, naast de
+  mensen, en pas later te krijgen (klopt dat?); hoe: 3b1 met de schuur, 3b2 met een os (van je vee of de marskramer),
+  3b3 met de trede dorp.
+- **185, een roversaanval in de demo:** "Voor de demo wil ik ook een keer een roversaanval; zodat de speler de combat kan
+  proberen en ervaren." Nu komen de wilde rovers op toeval (de eerste tussen dag 60 en 240, Sint-Maarten is dag 250; in
+  jaar 1 twee man, de helft 's nachts, alleen als er een akker is; ze roven graan), en de regie (`js/regie.js`) kent
+  alleen de heer. Voorstel: in de demo één vaste overval, aangekondigd ("Robbers were seen in the woods"), overdag, met
+  een korte scène van de rovers die uit het bos komen; verlies je, dan roven ze, maar de demo gaat door. Ze komen voor de
+  oogst, de heer op Sint-Maarten voor de tiende: twee die nemen, de een met geweld, de ander met de wet. Vragen: **4a**
+  wanneer: 4a1 een vaste datum, 4a2 na de eerste oogst (voorstel), 4a3 op toeval maar zeker één keer; **4b** hoeveel:
+  4b1 drie, 4b2 vier of vijf (je hebt de commander nodig), 4b3 twee golven; **4c** de wilde rovers in de demo: 4c1 uit,
+  4c2 erbij.
+- **186, punten:** "Een licht puntensysteem achter de schermen voor als mensen de demo 'uitspelen'; hoe meer je hebt
+  verzamelt en in je stores hebt, hoe hoger de punten. [...] Geen doden etc." Nu is er geen telling; het eindscherm
+  geeft een jaarverslag in zinnen (`T.eindRegels`, `js/einde.js`). Voorstel: één getal onder het jaarverslag, tijdens
+  het spel niet te zien: elke waar keer een waarde in goud (één tabel, in de werkbank), plus het goud; je beste score
+  blijft op je computer bewaard. Vragen: **5a** 5a1 wat er op Sint-Maarten ligt, 5a2 wat er dit jaar binnenkwam, 5a3
+  allebei (voorstel); **5b** 5b1 vóór de tiende, 5b2 erna.
+- **187, een campagne en een editor:** "Uiteindelijk wil ik ook een 'Campaign' modus; hierin een aantal levels die met de
+  hand gemaakt zijn op een gemaakt eiland. Hiervoor is er een editor nodig die de huidige generator gebruikt voor de
+  basislaag, maar hier ook aanpassingen in kan maken", en: "Volgens mij wordt Tiled nu al helemaal niet meer gebruikt?",
+  "We hebben dus alles 'inhouse'", "De editor moet wel wat functionaliteit hebben om een verhaal te maken, checkpoints en
+  een 'quest' systeem zoals bij age of empires." Tiled voedt alleen nog de twee proefkaarten (`kaarten/proef.tmj`,
+  `proefbos.tmj`), die acht toetsen en de wereld-bladzijde gebruiken; het eiland en je land komen uit code
+  (`js/eiland.js`, `js/maker.js`). Voorstel: **een level is een opgeslagen spel op minuut nul, plus triggers**: het
+  bewaren kent het eiland al als zaad plus wat er per stuk veranderde (B2), dus de editor is het spel in een stand om te
+  bewerken (de hoogte, het water, de bomen en rotsen, wegen, dorpen, kampen, mensen, de voorraad), en bewaart zoals het
+  spel. De triggers zoals Age of Empires: als (een datum, iemand in een gebied, een gebouw af, zoveel van een waar, iemand
+  dood, een doel af) dan (een bericht, een doel, mensen erbij, een aanval, een scène, iets geven of nemen, de mist weg,
+  een gebouw open of dicht, winst of verlies). Er is een begin: de fasen met `klaarAls` en `doe` (`js/quest.js`, nu leeg),
+  de regie, en het slot van de demo. Het demojaar is het eerste scenario (de brief van de heer, de overval, Sint-Maarten).
+  Vragen: **6a** 6a1 nu alleen het ontwerp, bouwen na de demo (voorstel), 6a2 de triggers nu, met de demo als eerste
+  scenario; **6b** Tiled eruit: 6b1 in een snoeironde, de proefkaarten naar het proefdorp (voorstel), 6b2 tot de editor
+  er is; **6c** een checkpoint: een plek die iets in gang zet, of ook een plek om verder te spelen als je verliest?
+- **188, skirmish:** "In het uiteindelijke spel wil ik ook een skirmisch modus hebben, zowel vs AI als vs andere
+  spelers. Hierin bouw je een kastaal, en vecht je één groot gevecht." De basis voor samen spelen ligt er (de wereld tikt
+  vast, het toeval komt uit het zaad, een klik is een opdracht, een ander dorp is vijand), maar niet de lijn (6c), een AI
+  die bouwt of vecht, het kasteel (163) en belegeren; de heer is een script. Een AI die uit een paar ontwerpen een kasteel
+  zet en een leger kiest, is veel minder werk dan een AI met een economie, en een korte partij gaat makkelijker over de
+  lijn. Vragen: **7a** 7a1 zoals Age of Empires, van niets tot er één valt, 7a2 eerst bouwen met een vaste tijd en een
+  budget, dan het grote gevecht (voorstel, past bij "één groot gevecht"), 7a3 een verdediger en een belegeraar; **7b**
+  eerst tegen de AI, dan samen (voorstel).
+- **189, wat er van het middeleeuwse leven mist:** "Welke elementen van een middeleeuws bestaan missen we nog? Denk even
+  mee met een aantal punten." Er is veel (49 soorten gebouwen, van molen tot badhuis, kapel, gevang en tiendschuur; geboren
+  worden, oud worden, sterven; seizoenen, weer, brand, koorts, wolven). Voorstel van Claude, in volgorde: **a. de kerk en
+  haar eigen tiende** (de tiende was eerst die van de kerk: de naam van het spel; nu geeft de kapel alleen tevredenheid),
+  **b. de herendienst** (in de oogst werken mensen dagen op het land van de heer; in het oude ontwerp, `spel.md`, en de
+  heervaart doet al iets dergelijks; met 184 zijn dat dragers minder), **c. paarden** (geen paard in het spel: geen
+  stal, geen ruiters, Marcel op 2 okt: "een paardenstal nodig [...] Voor ruiters, ridders"; en de os van de kar), **d. het
+  kerkelijk jaar** (de vasten: geen vlees, wel vis; november is de slachtmaand, Sint-Maarten het slachtfeest), **e. het
+  kerkhof** (wie valt, krijgt een graf bij de kapel; het model staat al in `gereedschap/pixelart/dorp.cjs`), **f. bijen**
+  (honing, en was voor kaarsen), **g. belegeren** (ladders, een ram, een blijde; nodig voor 188). Vraag: **8a** welke op
+  de lijst.
 
 ## Af (sinds 11 okt)
 
