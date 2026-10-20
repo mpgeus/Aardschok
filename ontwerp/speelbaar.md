@@ -4,6 +4,335 @@ Marcel, 26 sep: "We moeten oppassen voor functie creep. Anders blijven we toevoe
 speelbaar product komen." Dit bestand zegt wat daarvoor nog nodig is, en wat kan wachten. Bovenaan
 staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het onderbouwt.
 
+## De speellijst van het demojaar (werklijst Q, vraag 181, a; 20 okt)
+
+Marcel, 20 okt: "A1": één lijst voor het demojaar, van de huifkar tot Sint-Maarten, in de volgorde waarin je het
+tegenkomt, met wat er onder "Wacht op Marcel" in de werklijst stond om te bekijken. Zo speel je in één keer en kijk je
+alles na. Wat je ziet dat scheef zit, los ik eerst op met een getal uit de werkbank (CLAUDE.md, "Niets erbij zonder
+overleg").
+
+**Zo begin je:** zet op het titelscherm in de console `Spel.DEMO_INSTELLINGEN.aan = true`, en dan *New game*. Dan komt de
+wacht mee (twee speermannen en een kruisboogschutter), staan het wachthuis en de wapenmaker op slot (in het debugvenster,
+D, zet je het slot uit om ze toch te proberen), en eindigt het spel op Sint-Maarten. Zonder die regel speel je het volle
+spel: dan geen wacht, en geen slot.
+
+**Het demojaar, in het kort:**
+1. **Het menu en Settings** (het titelscherm, de tabbladen).
+2. **De aankomst:** de huifkar rijdt binnen met de gezinnen, en in de demo de wacht; het kamp gaat op, en twee koeien en
+   vier schapen staan los bij de kar tot er een weide is (vraag 181, b).
+3. **Kijken, kiezen en het scherm:** de camera, links kiezen en rechts sturen, de balken, het briefje van een gebouw, de
+   mist.
+4. **Bouwen en groeien:** het bouwmenu en de ghost (vraag 179), het bouwbereik, de overgang naar het bos om het plein
+   (vraag 181, d: minder vast in het bos), wegen en afbreken, de marktplek, een boerderij met een weide (het vee gaat
+   erheen), de zagerij, de afwisseling en de groei van de huizen. Zonder water in je land staan de visser en de
+   rietsnijder niet in het bouwmenu (vraag 181, c); de rotsen liggen vaak buiten je bereik: een schuur brengt ze erbinnen.
+5. **Het wild:** de wolven en de herten om je land.
+6. **Vechten met de wacht:** stuur ze met rechts, formaties, de diensten, de held.
+7. **De heer:** zijn brief op 11 oogstmaand, de klok in de balk ("Martinmas in 90 days"), de marskramer (ook met vee), en op
+   Sint-Maarten betalen of weigeren, met de scène.
+8. **Om te testen:** het debugvenster (D).
+
+**De details per stap** (wat er tot 20 okt in de werklijst stond, met de dag waarop het gebouwd is; sommige zinnen zeggen
+nog "de schout": dat is de aanvoerder):
+
+### 1. Het menu en Settings
+
+- **Het menu bekijken** (vraag 172, 16 okt, in `main`): open het spel. Links het woord en de
+  keuzes als tekst, rechts het land; de muis of de pijltjes zetten het vaantje, Enter neemt. *Credits* en (met een spel
+  bewaard) *Load* liggen op papier ernaast; *Settings* heeft het beeld, het hele scherm, de taal en de toetsen. *New game*:
+  de naam, het land met het eiland, *Game rules* (*Standard*, of kies er zelf; dan maakt *Begin* het land opnieuw), en
+  *Begin*. In het spel Esc: het menu op papier, *Game rules* lees je daar alleen; in D zit *Game rules and the workbench*
+  om te proberen. **De proefplaat van het woordmerk** (gebroken goud, `beeld.md`, "Het woordmerk"): goed zo, of wat
+  anders? **Wat Claude erbij koos** (zeg het als het anders moet): (1) onder *Settings* staan *Drawing*, *Shadows*, de
+  twee keuzes voor de doorkijk, *Trees through the year*, *Small life*, *Clothes* en *Advice*: die raken de wereld niet;
+  (2) een nieuw spel krijgt de spelregels die je het laatst koos, en een spel van vóór vandaag speelt met wat de browser
+  had; (3) de werkbank staat alleen nog in D, niet bij *New game* of in het menu; (4) *Continue* heeft één regel eronder
+  (het dorp, de dag, de mensen), en verder heeft alleen *Game rules* en *Photo mode* een regel; (5) Credits zegt "A game by
+  Marcel, made with Claude", en de letters met hun licentie; (6) *Quit* staat er alleen in de Electron-versie.
+- **Settings bekijken** (vraag 172b, 16 okt, in `main`): het menu, *Settings*, en de vier
+  tabbladen. Het venster en zijn formaat zie je alleen in de verpakte versie: `npm run proefversie -- --windows`, en
+  *Display*. **Wat Claude erbij koos** (zeg het als het anders moet): (1) de Steam-versie opent op het hele scherm (tot nu
+  gemaximaliseerd); (2) pauze als je wegklikt staat standaard aan; (3) de helderheid in vijf stappen (80 tot 120%), alleen
+  op de wereld, niet op de vensters; (4) F2 en *The meter* zijn hetzelfde; (5) de formaten tellen in de pixels van
+  Windows: met een schaal van 150% past 1920×1080 niet op een scherm van 1080, en 1280×720 vult het dan.
+
+### 2. De aankomst: de huifkar, het kamp en de ossenkar
+
+- **1c tot 1e bekijken:** Nieuw spel (of in de console `Spel.debug.begin(2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
+  komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
+  er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Zet een boerderij neer en kies
+  in het bouwmenu de akker of de wijngaard: klik de ene hoek en dan de andere, bij de boerderij (rechtsklik haalt de
+  eerste hoek weg). Het eerste veld bepaalt wat de boerderij is; is ze af, dan trekt er een gezin in en is de man boer,
+  en een akker die vóór bloeimaand af is, wordt nog gezaaid. Te kiezen in de werkbank ("Meebouwen" en "Boeren uit het
+  niets"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom, een veld van 12 tot 40
+  tegels binnen 8 tegels van de boerderij, en wat een tegel wijn voedt (`wijnAlsGraan`, 0,4).
+- **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
+  Zet een houthakker: elke nacht legt hij zijn hout op een stapel naast zijn deur (klein, half of vol), en overdag rijdt
+  de kar erheen, laadt, en brengt het naar het huis van de schout (zolang dat er niet is, naar zijn plek in het kamp).
+  Bij de muis zegt de kar wat hij doet; in de console `Spel.debug.kar()`. Te kiezen in de werkbank ("The ox cart"): de
+  lading per rit (8) en wanneer een stapel vol is (16). Wat opviel (`opmerkingen.md`): een stapel achter een gebouw zie
+  je niet. **Stap 2:** zet een hut neer: het hout blijft in de balk staan, de kar haalt het uit de opslag en brengt het,
+  en het briefje van de bouwplaats zegt hoeveel er is ("5 of 8 here"); bouw meer dan je hout hebt, en zie de plaatsen
+  wachten. Wat opviel: een akker kan nu af zijn vóór zijn boerderij. **Stap 3:** zet een jager, een moestuin en een
+  kippenhok: bij hun deur staan een ton, een mand kool en een mand; het dorp eet ze pas als de kar ze binnen heeft. Na
+  de oogst ligt het graan in zakken bij de boerderij, en rijdt de kar er een week lang heen en weer. **Stap 4:** bouw een
+  schuur (B, "barn") aan de rand van het bereik: het bereik groeit om hem heen, en als hij af is, staat er een tweede
+  ossenkar bij zijn deur, die haalt wat bij de schuur ligt. Zo kom je bij de rotsen (de steengroeve) en het water.
+
+### 3. Kijken, kiezen en het scherm
+
+- **Kijken, kiezen en sturen bekijken** (vraag 170, stap 1, 15 okt): Nieuw spel. De
+  camera volgt de schout niet meer: de pijltjes of de muis tegen de rand van het scherm schuiven het beeld, het wiel zoomt,
+  een klik op de minikaart kijkt daar, en Tab kiest de held en kijkt naar hem. Zet een wachthuis (B) en op zijn briefje
+  twee man militie (+). Klik op een soldaat (een gouden ring om zijn voeten, rechts zijn briefje), trek een kader om
+  allebei, of dubbelklik op een van hen (alle militie in beeld). Klik rechts op de grond (*Send 2 men here*): daar staan
+  ze voortaan van het opstaan tot het slapen, tot je *Back to the guardhouse* drukt op hun briefje. Shift+1 maakt er groep
+  1 van (Ctrl+1 neemt Chrome zelf), 1 kiest hem, en 1 twee keer kijkt ernaar. Klik op een dorpeling: zijn briefje; de
+  waard heeft *Talk*. Laat rovers komen (`Spel.debug.rovers(3)`): het bericht is onderstreept, een klik erop of Spatie
+  brengt je erheen, en de plek knippert op de minikaart; rechts op een rover stuurt je mannen erop af (sinds stap 2 slaan
+  ze ook, hierboven). Te kiezen in de werkbank ("Choosing and
+  sending"): hoe dicht bij de rand de muis schuift (8 pixels; 0 zet het uit) en hoe snel (900).
+- **De balken bekijken** (164 tot 166, 14 okt): Nieuw spel. Bovenaan een dunne balk: het goud, de inwoners, de
+  tevredenheid, de datum en het uur (het seizoen en het weer bij de muis), de snelheid, de twee bazen en Menu. Onderaan
+  linksonder de waren die je hebt, in het midden Build, en rechtsonder de minikaart: het hele eiland, levendig, met een
+  lijn langs de kust en een zoom die in het beeld vervaagt (geen ruit), wat je kent in kleur; klik of sleep erop en de
+  camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
+  aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. De minimap bijstellen:
+  `verzadiging`, `onbekend`, `zeeTotOmtrek` en `omtrek` in `js/minikaart.js`.
+- **Het briefje van een gebouw bekijken** (156, 14 okt): Nieuw spel, zet een houthakker, en klik erop als hij af is:
+  rechts onder de balk ligt zijn briefje, even breed als het doel, en het spel loopt door. Wat hij maakt op volle kracht, vandaag, de laatste 7
+  dagen en dit jaar, wie er werkt, wat hem tegenhoudt (weinig afwisseling, de tevredenheid, uren onderweg, de stapel
+  vol), en de stapel bij zijn deur. Klik ergens anders, of Esc, en het is weg. Probeer ook het huis van de schout (wat
+  de kar doet), een boerderij (haar velden en de oogst) en een bouwplaats. In de console: `Spel.S.gekozen`.
+- **De mist bekijken** (B2c, 13 okt; `spel.md`, "Zo werkt de mist nu"): Nieuw spel, en zoom uit (het wiel, of `Tab`):
+  zwart wat je niet kent, grijs (donkerder en ontkleurd) de kring van 50 tegels die je bij het begin kent, en helder
+  rond je mensen. Loop met de schout het zwart in. Is het grijs goed zo? Het zijn getallen in de werkbank ("The fog":
+  hoeveel kleur eruit, hoeveel donkerder, hoe zacht de rand). Twee dingen die ik erbij deed: **het plein kijkt ook**,
+  zoals een gebouw (anders werd je eigen plein grijs als er niemand stond), en **zonder videokaart** is het grijs één
+  laag, grijzer in plaats van ontkleurd (twee lagen kostten daar de helft van de beelden per seconde).
+- **Spelen na stap 0** (vraag 170, 15 okt): het spel moet er precies zo uitzien en zo spelen als ervoor; de wereld rekent
+  nu in vaste tikken van een zestigste seconde. Let op of het lopen hortend oogt, vooral op een scherm van meer dan 60 Hz:
+  het beeld schuift tussen twee tikken nog niet mee (dat kan erbij, als je het ziet).
+
+### 4. Bouwen en groeien
+
+- **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
+  het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
+  van het volgende stuk, en een rechtsklik houdt op. Wie geen werk heeft, legt hem (na de gebouwen), en de ossenkar rijdt
+  er twee keer zo snel over. Dan **Demolish**: de muis zegt wat een klik doet. Breek een bewoonde hut af: het gezin
+  slaapt op het plein (de status Homeless) tot er een woning met plaats is. Wat opviel (`opmerkingen.md`): een weg ziet
+  eruit als een paadje, en de kolonist legt wegen naar elk gebouw van de kar (hij bouwt geen schuur).
+- **De marktplek bekijken** (stap 6a): Nieuw spel, en het bouwmenu (B): de marktplek ligt in zacht goud op het plein; met
+  de markt in de hand (vanaf een dorp) licht hij groen op, en een huis mag er niet tegenaan.
+- **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
+  gezin in, en de wijngaard leg je met twee klikken ernaast (de akker kan alleen nog bij een boerderij). In wijnmaand
+  plukt het gezin. Haalt de wijn het jaar niet, dan zegt de raad onder het doel: leg een wijngaard erbij.
+- **De zagerij bekijken** (157, 14 okt): Nieuw spel, zet een houthakker en een zagerij (in het bouwmenu, *Sawmill*). Hij
+  is een kapschuur in de stijl van je eiland, en bouwt op in fasen; eronder de zaagbok, de stammen en de planken. Klik
+  erop: zijn briefje zegt hoeveel planken hij maakt. Een dorp vraagt planken in plaats van stammen.
+- **De zager bekijken** (168, 15 okt): zet een zagerij, en kijk overdag (niet in de schaft): de eerste hand staat op de
+  tegel voor de deur en zaagt met de spanzaag aan de stam op de bok. Heeft de zagerij geen stammen, of is zijn stapel
+  vol, dan staat er niemand.
+- **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
+  kijk in de balk naar **Plain fare** (bij de muis wat helpt); laat de kaas en het vlees uit de kar opgaan zonder jager
+  of moestuin, en zie het werk naar 60% zakken (**One dish**). De speeltest (`speelbaar.md`, 13 okt, avond): de kolonist
+  heeft met een moestuin, een jager en een kippenhok (14 hout) rond dag 40 vier soorten, en werkt dan het jaar op vol.
+  Zo is de afwisseling een klein klusje, nog geen kern. Te kiezen, met getallen in de werkbank ("Needs and the winter"):
+  **a** zo laten tot het dorp groeit (C), want een soort moet met het dorp meegroeien; **b** vol werk pas bij vijf
+  soorten (`werkPerSoortErbij` 0,1): dan moet er wijn, vis of brood bij, en blijft een dorp zonder water tot de eerste
+  wijn op 90%; **c** groente en eieren minder laten voeden (`groenteAlsGraan`, `eierenAlsGraan`), zodat er bij een groter
+  dorp meer moestuinen nodig zijn. Voorstel van Claude: **b**, omdat het de ketens (de wijngaard, de molen en de bakker)
+  een reden geeft, met de getallen die er al zijn.
+- **De groei op de afwisseling bekijken** (ronde 3, stap 6, 16 okt, in `main`): Nieuw spel.
+  Een moestuin, een kippenhok en een jager naast het graan: dan worden de hutten na een maand huizen (voor 8 stammen), en
+  met een vierde soort en een steengroeve stenen huizen. De muis op een huis zegt hoe ver het is ("It grows into a stone
+  house after 30 days in which the village eats 4 kinds of food; now it eats 3"); `Spel.debug.groei()` zegt het voor
+  elk huis. **Wat Claude erbij koos** (zeg het als het anders moet; `snoeien.md`, stap 6): een ladder van soorten (3, 4,
+  5) in plaats van één lat; groeien kost bouwstof; de put en de markt hebben geen koper meer, bier is voor de herberg en
+  laken voor de heer; een stenen huis loopt deftig zonder laken; en de raad over zout voor de winter is weg.
+- **Ronde 3 van het snoeien bekijken** (15 okt, in `main`): Nieuw spel. Er komt niemand meer
+  met een uitroepteken naar je toe, R en de knop Rapport zijn weg, en de wetten (W) zijn het rantsoen en de belasting.
+  Een status zegt het nu zelf in een bericht ("It is cold in the houses, for ..."; en als hij over is). In de droogte
+  kan er een huis gaan branden: een bericht brengt je erheen, de buren blussen (`Spel.debug.brand('nu')`); de koorts
+  begint zelf in de kou of een vol dorp (`Spel.debug.koorts('nu')`). In bloeimaand staat de meiboom op het plein, en
+  vanaf 20 wintermaand de kerstboom met kaarsjes (`Spel.debug.versiering()`). Erbij gedaan, zeg het als het anders
+  moet: **een leeg bord telt als één soort** (60% werk), want zonder de tevredenheid werkte een dorp zonder eten op 100%.
+
+### 5. Het wild
+
+- **Het wild van de wereld bekijken** (vraag 170, stap 6a2, stuk a, 16 okt, in `main`): Nieuw
+  spel (een bewaard spel van vóór vandaag laadt niet meer: het opslaan is versie 18). Het spel speelt zoals het speelde;
+  het verschil zit onder de motorkap, met twee dorpen. `Spel.debug.tweedeDorp()`, dan `Spel.debug.wissel()`, en
+  `Spel.debug.beesten()`: in het bos van het tweede dorp leeft zijn eigen wild, van niemand. Dat een roedel de mensen van
+  het tweede dorp aanvalt, dat dorp het zegt en vecht, en het eerste van niets weet, toetst `test/meer-dorpen.test.cjs`; in
+  de browser is het lastig op te wekken (de aanvoerder draagt 's nachts zijn lantaarn, en een wolf vlucht voor wie hem
+  achterna zit; `opmerkingen.md`). **Wat Claude erbij koos** (zeg het als het anders moet): (1) het wild komt in de tik na
+  de dorpen, zijn nacht na die van de dorpen en hun bos; (2) een roedel vecht tegen het dorp van de man die hem het laatst
+  sloeg, of naar wie hij kwam (`G.tegen`), en een wolf die vecht, neemt de dichtste man die hij ziet, van welk dorp ook;
+  (3) wat je toetst (`test/meer-dorpen.test.cjs`): het eerste dorp speelt twintig dagen letter voor letter hetzelfde met of
+  zonder een tweede, nu met het wild in zijn bos erbij. **Om naar te kijken:** een toets die zei dat de mensen van een
+  dorp buiten beeld rondlopen, slaagde tot nu toe bij toeval (hij telde de wolven die het dorp neerzette); hij tikt nu de
+  hele wereld, en het klopt.
+- **Het wild over het hele eiland bekijken** (vraag 170, stap 6a2, stuk b, 16 okt, in `main`):
+  Nieuw spel (een bewaard spel van vóór stuk b laadt niet meer: versie 19), zoom uit, en loop met mensen het land uit: in
+  het bos dat opengaat, leven herten en wolven, ook ver van je dorp; `Spel.debug.beesten()` zegt wat er bij je dorp leeft.
+  **Om naar te kijken:** (1) rond het begin leven nu meer herten dan vroeger (het bos in de rand die bij het begin opengaat,
+  heeft ook zijn wild; roedels ongeveer evenveel), en in de speeltest had eiland 1 aan het eind geen hout en één dode van
+  honger, en groeide eiland 3 minder (`opmerkingen.md`): als het te veel is, zijn de getallen `bosPerKudde` (400) en
+  `maxKuddes` (3) in de werkbank ("Animals in the forest"); (2) het kost wat meer rekenwerk, zo'n 4% van één kern op 30× in
+  plaats van 2%; zeg het als je haperen ziet. **Wat Claude erbij koos** (zeg het als het anders moet): (1) het aantal per
+  stuk wordt afgerond met de dobbelsteen van het stuk (1.050 tegels bos is anderhalve roedel: de helft van de stukken
+  krijgt er twee); (2) de status "Wolves" telt het wild binnen 100 tegels van het plein, en dat dorp zegt het ook als zijn
+  wild wegtrekt; (3) de toetsen van het wild spelen nu op eiland 14 (en de jager op 2), waar alles slaagt.
+
+### 6. Vechten met de wacht
+
+- **Het gevecht in real time bekijken** (vraag 170, stap 2, 15 okt): Nieuw spel, zet een wachthuis (B) met twee man
+  militie (+), en laat rovers komen (`Spel.debug.rovers(3)`). Het bericht zegt waar ze heen gaan en hoe je stuurt: kies
+  je soldaten en klik rechts op een rover. Ze lopen erheen en slaan (een levensbalk boven wie vecht, de schade zweeft
+  boven het hoofd, een pijl vliegt), *Fighting* staat in de balk, de randen kleuren rood, en de tijd loopt op 1×. Een
+  dorpeling die een rover ziet, rent naar het **town hall** (zo heet het huis van de schout nu) en komt eruit als de
+  rovers weg zijn. Een soldaat bij het wachthuis valt uit zichzelf aan wat binnen 8 tegels komt, en laat het gaan op 10
+  tegels van zijn post. Opslaan mag midden in een gevecht. Te kiezen in de werkbank ("Fighting"). **Twee dingen om naar te
+  kijken:** (1) de held kiest zelf geen vijand, maar vecht als je hem stuurt of als hij geraakt wordt (een keuze van
+  Claude: anders liep hij van zijn plek een gevecht in dat het spel kan beëindigen); (2) het is nu dodelijk: twee wilde
+  rovers in de oogst doodden in een toets drie dorpelingen, en twee man militie verliest van drie rovers. De balans komt
+  later; de knoppen zijn `vluchtZicht`, `zicht` en `leiband` ("Fighting"), en de rovers in "The robbers".
+- **De formaties bekijken** (vraag 170, stap 3, 16 okt, in `main`): Nieuw spel,
+  zet een wachthuis (B) met drie man militie (+), en maak er in de console een speerman en een boogschutter van
+  (`m = Spel.militieVan(Spel.S.dorp); m[1].bewoner.soldaat.soort = 'speerman'; m[2].bewoner.soldaat.soort =
+  'boogschutter'`). Kies ze (een kader), en klik rechts op open grond: hun plekken liggen een halve seconde in groen, en
+  ze gaan in een *Line* staan, de militie voor, de speer erachter, de boog achteraan, allemaal de kant op waar ze heen
+  liepen. Op hun briefje *Formation*: druk *Ring*, en ze staan in een kring om hun plek, naar buiten kijkend, de boog in
+  het midden; de volgende rechtsklik houdt de *Ring*. Te kiezen in de werkbank ("Choosing and sending"): hoeveel naast
+  elkaar (8) en hoe lang het groen blijft (0,5). **Om naar te kijken:** (1) het midden van de *Line* komt op de plek
+  waar je klikt, niet de voorste rij (zo kun je wisselen tussen *Line* en *Ring* zonder dat de troep verschuift); (2)
+  wie gevochten had, keek tot nu toe altijd naar het zuiden als hij stilstond (een fout, nu weg).
+- **De diensten bekijken** (vraag 170, stap 4, 16 okt, in `main`): Nieuw
+  spel, zet een wachthuis (B) met drie man militie (+). Kies er een, en druk op zijn briefje bij *Watch* op *Night*: hij
+  gaat naar huis en slaapt overdag, en vanaf het slapen (`Spel.debug.uur(22)`) staat hij bij het wachthuis terwijl de
+  twee anderen slapen. Op het briefje van het wachthuis: *On watch by day 2, by night 1*, met *To arms*. Laat 's nachts
+  rovers komen (`Spel.debug.uur(2)`, dan `Spel.debug.rovers(3)`) en druk *To arms*: wie slaapt, komt naar buiten. Een
+  rechtsklik met een slapende man gekozen (een groep onder een cijfer vindt hem) wekt hem ook. In een spel komen de
+  rovers nu op elk uur, de helft 's nachts (de werkbank, "The robbers": `nachtKans`, 0,5). **Wat Claude erbij koos**
+  (zeg het als het anders moet): (1) *To arms* stuurt wie een post heeft naar zijn post, de rest naar het wachthuis; (2)
+  wie opstaat, blijft op tot zijn eigen dienst begint, net als na een bevel: een man met dagdienst die je om twee uur
+  wekt, waakt door tot de avond erna; (3) de dagdienst staat ook 's ochtends en 's avonds bij het wachthuis, en een
+  soldaat gaat niet meer naar de put of de herberg (A1).
+- **De held en het opruimen bekijken** (vraag 170, stap 5, 16 okt, in `main`): Nieuw spel. De held heet nu *commander* (ook in de brieven van de heer), Tab kiest hem. Zet een
+  wachthuis (B) met twee man militie (+), en laat hem vallen: `Spel.debug.aanvoerder('val')`. Het spel gaat door: een
+  bericht zegt dat de soldaat die het langst dient het overneemt, en dat zijn gezin in het town hall trekt (en het gezin
+  van wie viel in zijn huis, C2); Tab kiest nu hem, en hij vecht met zijn eigen wapen (B1). Zonder soldaat zegt het dorp
+  dat er niemand is, tot er een soldaat komt. Een klik op de marskramer opent meteen zijn handel, op de heer zijn
+  venster om te betalen; S (sluipen) en Z (slapen) doen niets meer. **Wat Claude erbij koos** (zeg het als het anders
+  moet): (1) onder veteranen gaat de eerste in het dorp voor (wie het langst veteraan is, onthoudt het spel niet); (2)
+  de nieuwe aanvoerder staat waar je hem zet, dag en nacht, zoals de eerste, en heet in de teksten *the commander*
+  (zijn eigen naam valt weg: "Martin, son of the commander"); zijn gezin werkt, zoals dat van de eerste, alleen als er
+  niemand anders is; (3) de brief aan de marskramer schrijf je nu overal (het was "bij je huis"); (4) in de code heet
+  het town hall `raadhuis`, en zijn 85 tekeningen ook (hernoemd, niet opnieuw gerenderd). **Om naar te kijken:**
+  zonder lantaarn is de held 's nachts buiten prooi voor de wolven als hij alleen staat. In de speeltest (zaad 1) viel hij
+  zo op 7 februari, en nam Reginald het over. (Marcel antwoordde met vraag 171, de groepsleider met een lantaarn.)
+
+### 7. De heer en Sint-Maarten
+
+- **De scènes op Sint-Maarten bekijken** (E, stap 4, 20 okt, in `main`): Nieuw spel (of het
+  proefdorp), in de console `Spel.debug.heer()`: hij komt nu over de weg, met zijn soldaten en zijn wagen (de ossenkar),
+  die leeg naast hem op het plein gaat staan (de muis erop: "The lord's wagon. Empty, for now."). Klik op hem, en
+  *Refuse* (twee keer): de banden schuiven erin, de camera kijkt hem na, de nacht valt, zijn leger komt met licht over
+  de weg, het dorp vlucht, en bij het plein wordt het zwart: *Death*. Voor betalen eerst `Spel.DEMO_INSTELLINGEN.aan =
+  true`, dan *Pay*: zijn soldaten halen het bij het raadhuis en laden de wagen, hij rijdt weg, en het wordt zwart: *Until
+  next year*. Een klik of Esc slaat over. Niet in een browser bekeken: hier laadt de headless Chromium het spel niet
+  (`opmerkingen.md`, "De scènes op Sint-Maarten"); in Node lopen beide scènes van begin tot eind. **Wat Claude erbij koos**
+  (zeg het als het anders moet): (1) zijn leger komt een schemering na zonsondergang (in november zo'n kwart over vijf),
+  niet meer bij het slapen, want dan is iedereen binnen en zie je niemand vluchten; (2) wie buiten is, vlucht meteen, ook
+  wie ze nog niet ziet ("het dorp hoort ze komen"); (3) zijn soldaten halen het bij je voorraad (het raadhuis), en terwijl
+  ze erheen lopen, gaat de tijd op 3× (anders duurt die scène 45 seconden); (4) in de demo wordt het zwart als de wagen 10
+  tegels van het plein is, niet pas als hij de kaart af is; (5) de wagen staat twee tegels links van de heer; (6) de
+  zinnen: *The lord turns and leaves without a word.*, *Night falls.*, *Torches come up the road: the army of the lord.*,
+  *His men fetch what he takes from your stores.*, *They load it onto his wagon.*, *The lord rides off down the road.*;
+  (7) in een scène staan de levensbalken en de tegel onder de muis er niet, zoals in de fotomodus; (8) de getallen staan
+  in de werkbank, bij *The lord* (zijn leger en zijn wagen) en *The scenes at Martinmas*.
+
+### 8. Om te testen
+
+- **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
+  goud, een gezin (zonder plaats zegt het spel dat), de bouwplaatsen meteen af (wie erin trekt, komt die nacht), en de
+  marskramer nu. De tijd staat stil zolang het open is; D of Esc sluit het. Voor Steam gaat het uit
+  (`T.DEBUG_INSTELLINGEN.aan`, `verpakken.md`).
+
+### Buiten het demojaar: het volle spel, of geparkeerd
+
+Het wachthuis (in de demo op slot), samen spelen (6b en 6c, geparkeerd), en de roverskampen (c3 en verder, geparkeerd).
+
+- **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
+  briefje zes soorten met − en +. Druk + bij Militia: wie geen werk heeft, pakt een hooivork en staat overdag bij het
+  wachthuis. Zet dan een wapenmaker (in het gehucht, 12 stammen en 14 goud), geef jezelf planken (D, +50), en druk +
+  bij Spearman: de wapenmaker maakt een speer en een schild, de kar brengt ze binnen, en dan wordt er een speerman.
+  Laat rovers komen (in de console `Spel.debug.rovers(3)`), stuur ze erop af, en kijk in het gevecht: de speerman steekt
+  van twee tegels, een boogschutter schiet van ver, en schild en harnas vangen een deel af. De getallen in de werkbank
+  ("Soldiers"). Het briefje van een gebouw is nu even breed als de andere kaartjes (het groeide met zijn regels mee).
+- **De groepsleider met de lantaarn bekijken** (vraag 171, 16 okt, in `main`): Nieuw spel, zet een wachthuis (B) met twee man militie (+), zet er een op
+  *Night*, en kijk 's nachts (`Spel.debug.uur(23)`): om de aanvoerder en de leider van wie dienst heeft, staat een warm
+  licht, een kleine plas om hem heen (L3), en de wolven vallen niemand binnen 3 tegels van hem aan. In zijn hand hangt een lantaarntje met een gloeiend hoorn,
+  dat bij het lopen meeschommelt; loopt hij achter een huis, dan is het mee weg. **Wat Claude erbij koos** (zeg het als
+  het anders moet): (1) de leider is, van wie *nu* dienst heeft, wie het langst dient, zodat de nachtwacht 's nachts
+  haar eigen leider heeft; (2) het lantaarntje komt in de diepte, direct na zijn figuur, en het hoorn gloeit zoals de
+  ramen (`beeld.md`): zo zweeft het niet boven een dak; (3) de bode en wie meegaat krijgen er ook een, als ze een vel
+  met handen hebben (wie in een werkvel loopt, krijgt er geen: zijn licht blijft).
+- **Meer dorpen op één eiland bekijken** (vraag 170, stap 6a, 16 okt, in `main`): Nieuw spel, en
+  in de console `Spel.debug.tweedeDorp()`: er komt een tweede dorp op de dichtste andere dorpsplek (op 430 tot 2100
+  tegels), met zijn eigen huifkar en gezinnen. `Spel.debug.wissel()` maakt jou dat dorp: de camera gaat erheen, en de
+  balk, de mist, de minikaart en de berichten zijn van hem; nog eens `wissel()` en je bent terug. Zet in het ene dorp een
+  wachthuis met militie, stuur ze naar het andere (rechts klikken, op de minikaart kijken): ze vallen de aanvoerder en de
+  dorpelingen van de ander aan (C2), die vluchten naar hun eigen town hall, en allebei de dorpen vechten. **Wat Claude
+  erbij koos** (zeg het als het anders moet): (1) elk wezen hoort bij één dorp, ook het vee, de wolven, de rovers en de
+  bezoekers, en elk dorp werkt alleen zijn eigen bij, met zijn eigen dobbelsteen: zo speelt het eerste dorp een half jaar
+  letter voor letter hetzelfde, met of zonder het tweede; (2) elk dorp heeft zijn eigen mist; (3) de muis op een mens, een
+  gebouw of een veld van de ander zegt alleen wat het is en van wie ("Gilbert, of Oldland"); (4) je bouwt niet in het
+  bereik van de ander; (5) wie aangevallen wordt, krijgt ook de status en het bericht van het gevecht; (6) de werkbank
+  heeft er één getal bij: *another village at least* (200 tegels, "The maker"). **Om naar te kijken:** het licht, de rook
+  en de paadjes tekent het scherm alleen voor het dorp waar je kijkt, en "Hoogte" en de bouwstijl volgen het eerste dorp
+  (`opmerkingen.md`).
+- **Op tocht bekijken** (vraag 170, stap 6a2, c0, 17 okt, op de branch `ccr-b0684dee-kk0n5b`): Nieuw spel, Tab (de held),
+  en klik rechts op de minikaart, ver weg: hij loopt erheen door land dat je niet kent, het land gaat open waar hij komt,
+  en de plek knippert even. Met een wachthuis en militie net zo: ver van huis blijven ze dag en nacht op hun post. Ligt
+  je dorp in een klein stuk land (vraag L), dan gaat hij zo ver als het kan en blijft daar. **Wat Claude erbij koos**
+  (zeg het als het anders moet): (1) rechts op de minikaart stuurt je gekozen mannen (links kijkt daar, zoals nu); (2) een
+  post buiten het land van je dorp (100 bij 100) houdt hem dag en nacht in dienst, tot je hem terugroept; (3) een plek in
+  land dat nog dicht was, schuift als hij er dichtbij is naar de dichtste tegel waar hij kan komen; (4) de weg zoekt hij
+  als een verkenner: grof over de schets (water en woud dicht, de wegen open), precies over wat open is; een dood eind
+  loopt hij eerst in en dan terug. **Om naar te kijken:** wie snel nieuw land in loopt, laat het spel het land maken
+  (45 ms per stuk), wat op 30× kan haperen; zeg het als je het ziet.
+- **De roverskampen bekijken** (vraag 170, stap 6a2, c1, 17 okt, in `main`): Nieuw spel (een bewaard spel van vóór
+  vandaag laadt niet meer: versie 21), en in de console `Spel.debug.kampen('erheen')`: de camera kijkt naar het dichtste
+  kamp, een open plek in het woud met vertrapte grond, een grijsgroene tent en het vuur; `Spel.debug.uur(22)`, en het vuur
+  brandt en licht de plek op. Op de minikaart staat het als een rode stip. Of loop erheen: `Spel.debug.kampen()` zegt waar
+  ze liggen, en het paadje van de weg brengt je er. **Wat Claude erbij koos** (zeg het als het anders moet): (1) er
+  staat nu één tent, voor de bende van twee in c2 (een tent per twee man, zoals besloten), en een tweede komt met de derde
+  man; (2) een kamp ligt hooguit 150 tegels van een weg (`totWeg`), zodat het paadje niet eindeloos wordt (45 tot 160
+  tegels op de eilanden die ik bekeek); (3) het plein om het vuur is vertrapte grond (5,5 tegels) en ligt vlak, de open
+  plek eromheen is 8 tegels, met gras en bloemen maar geen boom of struik; (4) het vuur brandt als het donker is en smeult
+  overdag, en zijn licht is dat van het kampvuur van het lege begin. **Om naar te kijken:** het plein is een ruit van kale grond, zoals een weg; zeg het als het te kaal of te
+  hoekig is.
+- **De bende in de kampen bekijken** (vraag 170, stap 6a2, c2, 17 okt, in `main`): Nieuw spel (een bewaard spel van
+  vóór c2 laadt niet meer: versie 22), en in de console `Spel.debug.kampen()`: wie er in elk kamp woont. Met
+  `Spel.debug.kampen('erheen')` kijk je naar het dichtste, en met `Spel.debug.geenMist = true` zie je de mannen ook als er
+  niemand van je dorp is: elk op zijn plek om het vuur, met zijn gezicht ernaartoe, en bij de muis zijn naam ("Sybil, a
+  robber"). `Spel.debug.uur(23)` en `await Spel.debug.stap(10)`: op de wacht na zijn ze hun tent in. **Wat Claude erbij
+  koos** (zeg het als het anders moet): (1) een man van buiten is een jongere of volwassene, meest mannen, met een
+  voornaam van de bewoners, zoals de wilde rovers; (2) wie erbij komt, loopt over het paadje het kamp in, vanaf de rand
+  van de open plek; (3) een tent gaat niet neer als er een man valt (dat is c4); (4) de wacht is elke nacht een ander, en
+  na een gevecht slaapt niemand tot een uur erna; (5) wie geen tent heeft (meer dan twaalf man), slaapt bij het vuur;
+  (6) de kans dat de bode onderweg rovers treft, telt de bende niet meer, dus is ze tot c3 die zonder bende (een op de
+  zeventien, in de winter en het donker meer); (7) een dorpeling vlucht alleen voor een rover in het land van zijn dorp,
+  zodat een kamp ver weg niemand binnen houdt; (8) de rovers in het kamp dragen hun levensbalk, zoals elke rover, zodat je
+  ziet dat het geen dorpelingen zijn. De speeltest (`npm run speeltest`) liep niet: zijn browser kreeg het spel niet
+  binnen 30 seconden geladen (sinds 174c draait hij in de volle Chromium, en loopt hij weer); de toetsen zijn groen.
+- **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
+  het land gaat open waar hij komt. Op 30× zou het niet meer moeten haperen (13 okt: alle stukken lagen klaar); zeg het
+  als je het toch ziet. Wat opviel en te kiezen is (`opmerkingen.md`): een richel zonder helling blijft onbereikbaar, en een hol kan
+  tien tegels van het kamp liggen.
+
 ## De proef: van gehucht tot dorp (Marcel, 28 sep; werklijst, vraag 51)
 
 **Zo staat het nu** (28 sep): besloten, en nog niets van gebouwd. Het eerste speelbare product is niet meer één
