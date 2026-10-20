@@ -843,8 +843,15 @@ spaarde hij je (`heerVrij: 1` in `js/begin.js`), en weigeren kon niet. In zes st
    demo *Until next year*), met het jaar in een paar regels en de link naar Steam zodra er een adres is, en de vlag
    `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`, `verpakken.md`). De speeltest liep zonder fouten (op `908ddcb0`), met
    de heer in het eerste jaar; wat opviel, staat in `opmerkingen.md`.
-4. **De twee cinematics** (C2; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt): eerst het plan, met wat er nu is): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
-   onderin; een klik of Esc slaat over. **Betaal je**: zijn mannen laden wat hij nam op zijn wagens op het plein, en de
+4. **De twee cinematics** (C2; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt): bouwen, met wat er nu is): de balken en knoppen weg, zwarte banden boven en onder, de camera rijdt mee, en een zin
+   onderin; een klik of Esc slaat over. **Het plan voor stap 4** (Claude, 20 okt; **besloten**, Marcel: "A1 B1 C1"):
+   **A1** nu bouwen met de tekeningen die er zijn (vraag 180 wisselt later alleen plaatjes); **B1** de scène speelt in de
+   wereld: het leger zijn echte soldaten die over de weg lopen, en de dorpelingen vluchten met de regel van het gevecht;
+   de regie doet alleen de camera, de banden en de zin, zodat dit leger later in het volle spel te bevechten is (F);
+   **C1** de heer brengt zijn wagen mee bij zijn aankomst, en die staat drie dagen leeg op het plein te wachten. Wat
+   Claude erbij koos: elke soldaat het licht van de lantaarn (vraag 171) als fakkel tot de tekening er is, de vaandels
+   wachten op de tekening, een scène duurt zo'n halve minuut, en in een scène klik je niets in de wereld aan. In vier
+   stukken: 4a de regie (alleen scherm), 4b weigeren, 4c betalen, 4d de toetsen en de speeltest. **Betaal je**: zijn mannen laden wat hij nam op zijn wagens op het plein, en de
    heer en zijn mannen rijden ermee de weg af; het beeld wordt zwart, en een zin zegt dat hij volgend jaar terugkomt, en
    meer wil. **Weiger je**: hij draait zich om en gaat; de nacht valt, en over de weg komt zijn leger, een rij van zo'n
    twintig soldaten met fakkels en vaandels; de dorpelingen vluchten naar het town hall; als ze het plein bereiken, wordt
