@@ -31,6 +31,9 @@
 //                                                  uit/karhd/meester/checkpoints.png
 //   node gereedschap/pixelart/karhd.cjs ernie      ERNIE-Image-Turbo, met en zonder de pixelart-LoRA voor ERNIE (VARIANT):
 //                                                  uit/karhd/meester/ernie.png
+//   node gereedschap/pixelart/karhd.cjs concept    de ossenkar eerst van de AI, zoals de speerman (gereedschap/ai/vrij.cjs):
+//                                                  vrij, onze diepte zacht, de kar uit Marcels plaat als stijl:
+//                                                  uit/karhd/vrij/ossenkar-1.png
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -868,7 +871,7 @@ function gpt() {
   console.log('uit/karhd/gpt.png');
 }
 
-module.exports = { materialen, karModel, osModel, render, stijlVoor, gestileerd, doelWagen, legWagen, projectieWagen, FGPT, O_KAR, MESSING, UIT };
+module.exports = { materialen, karModel, osModel, render, stijlVoor, gestileerd, doelWagen, legWagen, projectieWagen, FGPT, O_KAR, MESSING, UIT, handschrift, handschriftStijl, plaatselijkContrast, opRender, buurverschil, ZACHT, FMEESTER };
 
 // De eigen pijplijn naast de kar met de pixels van ChatGPT en naast FaeTastic met de ChatGPT-wagen als stijlplaat (beide
 // ter vergelijking, uit eerdere runs: gpt-*.png, meester/civitai-faetastic-SDXLFaetastic-v24/sprite-*.png).
@@ -1086,6 +1089,33 @@ async function checkpointProef() {
 
 // ERNIE-Image-Turbo (Marcel, 19 okt: "Verplaats maar en download maar alvast"): dezelfde gebieden en zinnen, met en zonder
 // de pixelart-LoRA voor ERNIE, naast ChatGPT en de laatste FaeTastic (spec2), met H4 erover.
+// De ossenkar eerst van de AI (Marcel, 20 okt, bij de speerman: "Huj, maar waarom konden we dit niet met de os en kar
+// doen?", en: "Eerst de os en kar zo"): SDXL vrij, van ons model alleen de diepte, en de linker ossenkar uit zijn plaat
+// (ontwerp/voorbeelden/stijlplaat-kar.png) als stijl op 0,6, zoals de gekozen speerman (gereedschap/ai/vrij.cjs).
+const CONCEPT_KAR = {
+  positief: 'medieval ox cart, a cream-colored ox with horns in a leather harness with brass fittings pulling a two-wheeled ' +
+    'red painted wooden cart with golden lion emblems on the side panels, iron-banded corner posts, big spoked wooden wheels ' +
+    'with iron tyres, loaded with burlap sacks, a barrel, clay jugs and a chest of gold coins, a small red banner with a golden ' +
+    'lion, seen from above at a three-quarter angle, high-definition hand-painted pixel art game sprite, premium medieval ' +
+    'strategy game asset, stylized realism, rich tactile materials, warm directional light from the upper left, crisp ' +
+    'silhouette, plain light grey background',
+  negatief: 'photo, photorealism, 3d render, plastic, blurry, deformed, extra legs, four wheels, extra wheels, horse, people, ' +
+    'soldier, driver, text, watermark, signature, frame, border, ground, grass, scenery, cropped',
+  ipSterktes: [0.6],
+  zaden: [11, 22, 33, 44],
+};
+async function conceptProef() {
+  const V = require('../ai/vrij.cjs');
+  await V.vrijeRonde(render({ ...O_KAR }, 'ZW', FMEESTER), {
+    naam: 'ossenkar',
+    map: path.join(UIT, 'vrij', 'ronde-1'),
+    plaat: path.join(UIT, 'vrij', 'ossenkar-1.png'),
+    titel: 'De ossenkar eerst van de AI',
+    stijl: path.join(__dirname, '..', '..', 'ontwerp', 'voorbeelden', 'stijlplaat-kar.png'),
+    ...CONCEPT_KAR,
+  });
+}
+
 async function ernieProef() {
   const HU = require('../ai/huisstijl.cjs');
   const KANTEN = ['ZW', 'ZO', 'NW'];
@@ -1137,6 +1167,7 @@ else if (wat === 'hand') handProef().catch((e) => { console.error(e.stack || e.m
 else if (wat === 'rijker') rijkerProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'zinnen') zinnenProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'spec') specProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
+else if (wat === 'concept') conceptProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'checkpoint') checkpointProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat === 'ernie') ernieProef().catch((e) => { console.error(e.stack || e.message); process.exit(1); });
 else if (wat !== 'geladen') console.log('node gereedschap/pixelart/karhd.cjs proef | gpt | meester (CHECKPOINTS=a.safetensors,b.safetensors)');

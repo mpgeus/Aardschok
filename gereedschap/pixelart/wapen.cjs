@@ -8,6 +8,11 @@
 //                                                                        normaal ([±1, 0, 0] of [0, ±1, 0]), `hoog`
 //                                                                        eenheden hoog, de kop naar `naarLinks` (een
 //                                                                        richting in de wand)
+//   schoof(hoog)                                                         het wapen van het dorp (werklijst Q, f; Marcel,
+//                                                                        20 okt: een gouden korenschoof op blauw): een
+//                                                                        functie (a, b) → de afstand tot de schoof, a
+//                                                                        naar rechts en b omhoog vanaf zijn midden, voor
+//                                                                        een materiaal dat goud kiest waar het < 0 is
 'use strict';
 
 const LEEUW = [
@@ -53,10 +58,32 @@ function afstanden(raster) {
 }
 const AF = afstanden(LEEUW);
 
+// De korenschoof: bovenaan de waaier van aren, in het midden de band, onderaan de halmen die weer uitwaaieren, recht
+// afgesneden. Symmetrisch, zodat hij op de rug gespiegeld hetzelfde is.
+const SCHOOF = [
+  '.#..#.#.#..#.',
+  '.##.#####.##.',
+  '#############',
+  '#############',
+  '.###########.',
+  '..#########..',
+  '...#######...',
+  '....#####....',
+  '...#######...',
+  '....#####....',
+  '....#####....',
+  '...#######...',
+  '..####.####..',
+  '.####.#.####.',
+  '####..#..####',
+  '###...#...###',
+];
+const AF_SCHOOF = afstanden(SCHOOF);
+
 // De afstand op een plek (u, v) in hokjes (0 tot b, 0 tot h vanaf linksboven), bilineair, en buiten het raster de afstand
-// tot het raster erbij.
-function afstandOp(u, v) {
-  const { b, h, d } = AF;
+// tot het raster erbij. A: de afstanden van een raster (standaard de leeuw).
+function afstandOp(u, v, A = AF) {
+  const { b, h, d } = A;
   const x = Math.max(0, Math.min(b - 1, u - 0.5));
   const y = Math.max(0, Math.min(h - 1, v - 0.5));
   const x0 = Math.floor(x), y0 = Math.floor(y);
@@ -82,4 +109,11 @@ function leeuw({ midden, normaal, boven = [0, 0, 1], hoog, dikte = 0.12, m, deel
   return { f, g: [midden[0], midden[1], midden[2], Math.hypot(AF.b, AF.h) * cel * 0.5 + 0.5], m, deel };
 }
 
-module.exports = { leeuw, LEEUW };
+// De schoof, `hoog` eenheden hoog: (a, b) → de afstand in eenheden (binnen negatief), a naar rechts en b omhoog vanaf het
+// midden.
+function schoof(hoog) {
+  const cel = hoog / AF_SCHOOF.h;
+  return (a, b) => afstandOp(a / cel + AF_SCHOOF.b / 2, -b / cel + AF_SCHOOF.h / 2, AF_SCHOOF) * cel;
+}
+
+module.exports = { leeuw, LEEUW, schoof, SCHOOF };

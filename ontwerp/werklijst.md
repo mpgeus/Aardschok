@@ -1560,6 +1560,16 @@ werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met dr
   `huggingface.co` (de modellen), `download.pytorch.org` en de diensten (Replicate, fal, OpenAI). Ook met toegang zou
   SDXL met ControlNet op 4 kernen minuten per beeld kosten, voor acht richtingen maal elke houding. Dus lokaal op Marcels pc
   (de 1080 Ti, ComfyUI), en de cloud maakt wat zonder AI kan: de modellen, de renders en de nabewerking.
+  **Besloten** (Marcel, 20 okt: "wil je eens een aantal nieuwe poppetjes maken voor het spel? en SDXL gebruiken? Ik heb
+  ook een set soldaten nodig"; "Pracht en praal betekent hier, gewoon goed, hd, passend en exact wat ik zoek"): het wapen
+  van het dorp een gouden korenschoof op blauw; de soldaten staan, lopen, vallen aan en vallen; SDXL, met op de proefplaat
+  ERNIE ernaast. De weg, de speerman in woorden en de volgorde: `beeld.md`, "De soldaten van het dorp en de poppetjes met
+  SDXL". **Stand (20 okt):** SDXL over onze render werd slecht; Marcel draaide het om ("kun je niet met ai een mooi
+  poppetje genereren en dat als basis gebruiken", en "de plaat die onze lat is gebruiken om sdxl te voeden"): de AI maakt
+  het poppetje vrij, onze diepte zacht, zijn plaat als stijl (`gereedschap/ai/vrij.cjs`). Gekozen: **speerman zaad 106 op
+  stijl 0,6** (ronde 4); de ossenkar zo is ook gedaan (ronde 1, de beste kar tot nu toe). **Het volgende:** de speerman in
+  acht richtingen en lopen (106 als referentie, onze diepte per richting, op het model voor de loopbeelden), de schoof uit
+  code erop, en ons handschrift naar de sprite van 2×.
 
 **Besloten** (Marcel, 20 okt: "S. S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", "De soldaten staan gewoon
 waar je ze neerzet", "M2 B = prima C = akkoord"):

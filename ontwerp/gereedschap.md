@@ -187,6 +187,13 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   render, en dat wordt geprojecteerd; ComfyUI moet draaien; `uit/karhd/meester/`, vijf minuten per checkpoint). Het wiel naar het doel
   zelf: `node gereedschap/pixelart/doelwiel.cjs proef` (de proefplaat) en `filters` (van 4× naar 2×: vier filters en drie
   manieren van palet, gemeten), in `uit/doelwiel/`.
+- **De AI eerst** (werklijst Q, f; ComfyUI moet draaien): `node gereedschap/pixelart/soldatenhd.cjs concept speerman <ronde>`
+  (SDXL maakt de speerman vrij, alleen onze diepte zacht, vanaf ronde 3 Marcels plaat als stijl; zo'n 55 seconden per
+  beeld; `uit/soldatenhd/concept-speerman-<ronde>.png`), `node gereedschap/pixelart/karhd.cjs concept` (de ossenkar zo,
+  `uit/karhd/vrij/ossenkar-1.png`). De stijlplaten zijn uitsneden uit `ontwerp/voorbeelden/heerstoet-doel.webp`, ernaast
+  (`stijlplaat-soldaten.png`, `-soldaten-blauw.png` met het rood van zijn livrei blauw, `stijlplaat-kar.png`; geknipt met
+  PIL in de Python van ComfyUI). Verder `soldatenhd.cjs kijk` (het model
+  zonder AI, acht richtingen) en `proef` (SDXL over onze render, de eerste weg).
 
 
 ## Testen in de browser

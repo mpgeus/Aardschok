@@ -117,6 +117,9 @@ const GROEP = {
   embleem: 'embleem',
   lijf: 'dier', kop: 'dier', poot: 'dier', staart: 'dier', oor: 'dier', snuit: 'dier', oog: 'dier', neusgat: 'dier',
   hoorn: 'dier', hoef: 'dier', kwast: 'dier', uier: 'dier', riem: 'dier',
+  // de poppetjes (soldatenhd.cjs, werklijst Q, f): de namen die soldatenhd.cjs aan hun materialen geeft
+  gezicht: 'gezicht', haar: 'haar', wambuis: 'wambuis', wapenrok: 'wapenrok', schoof: 'schoof', hozen: 'hozen',
+  laars: 'leer', gordel: 'leer', handschoen: 'leer', helm: 'metaal', malie: 'malie', schacht: 'hout', schildverf: 'schildverf',
 };
 // De zin per groep (Marcel, 19 okt: "kunnen we betere zinnen maken voor het materiaal?"): een oppervlak, geen lijst van
 // dingen (in het hout stonden planken, wielen, duigen en een stam tegelijk: SDXL weet niet welke pixel wat is); in de
@@ -138,6 +141,20 @@ const GROEPZIN = {
   goud: () => 'heap of small round gold coins, warm saturated golden-yellow highlights, amber midtones, rich orange-brown ' +
     'shadows, small precise specular highlights',
   embleem: () => 'golden heraldic lion rampant emblem painted on red wood, golden-yellow highlights, amber midtones',
+  // de poppetjes: een gezicht in een paar heldere vlakken (een gezicht van een paar pixels moet iets zeggen), de stof in
+  // zijn kleur uit het model, en het wapen van het dorp als borduursel
+  gezicht: () => 'weathered tanned face of a stern medieval soldier, painted with a few clear planes, warm skin tones, small ' +
+    'dark eyes, strong nose',
+  haar: () => 'short dark brown beard and hair in small hand-painted strokes',
+  wambuis: () => 'brown quilted padded gambeson with vertical stitched channels, thick matte linen, soft folds, warm highlights ' +
+    'on the raised quilting',
+  wapenrok: (k) => `deep royal ${kleurWoord(k)} woven wool tabard, matte cloth with soft heavy folds, warm highlights on the ` +
+    'raised folds',
+  schoof: () => 'golden yellow heraldic wheat sheaf emblem embroidered in warm golden thread, amber midtones',
+  hozen: () => 'dark brown wool hose, matte woven cloth',
+  leer: () => 'warm chestnut and reddish-brown leather, thick and supple, darker seams and stitching, wear around the edges',
+  malie: () => 'riveted iron chainmail of small interlocking rings, dark charcoal grey with tiny sharp highlights',
+  schildverf: (k) => `${kleurWoord(k)} painted wooden shield face, the paint slightly worn at the edges, matte`,
   dier: (k, i = {}) => `soft layered ${kleurWoord(k)} ${i.soort || 'animal'} fur in small directional hand-painted strokes ` +
     'following the anatomy, warm ivory and cream highlights, soft warm beige shading describing the musculature' +
     `${i.namen && i.namen.has('hoorn') ? ', pale curved horns' : ''}${i.namen && i.namen.has('hoef') ? ', dark hooves' : ''}` +

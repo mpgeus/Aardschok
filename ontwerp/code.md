@@ -1189,6 +1189,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   onderdeel dat het per plek kiest (de stam) op de plek in rust. Andere schilders: `karhd.cjs checkpoint` (Cor Epica naast
   FaeTastic, `huisstijl.cjs CHECKPOINTS`) en ERNIE-Image-Turbo (`afwerking.cjs werkstroomErnie`: fp8 bij het laden, 8
   stappen, cfg 1, zonder ControlNet; `meester` met `extra.ernie`; `karhd.cjs ernie`).
+- **De soldaten van het dorp en eerst de AI** (20 okt, werklijst Q, f; `beeld.md`, "De soldaten van het dorp en de
+  poppetjes met SDXL"): `heer.cjs soldaat(stand, o)` neemt `o.livrei: 'dorp'` (blauw, de schoof op borst en rug),
+  `o.wapen: 'speer'`, `o.schild` (de linkerarm met het schild gaat met de romp mee) en `o.kraag` (maliën); zonder opties
+  pixel voor pixel de soldaat van het spel. `SOLDAAT_M` en `SOLDAAT_D` zijn de nummers van zijn materialen en onderdelen.
+  `wapen.cjs schoof(hoog)`: het wapen van het dorp, een afstandsfunctie (a, b) voor een materiaal dat goud kiest waar het
+  < 0 is. `gereedschap/pixelart/soldatenhd.cjs`: de poppetjes (`POPPETJES`), hun render met de G-buffer, het meesterbeeld
+  op onze render en de projectie (de eerste weg; slecht), en `concept` (de rondes van de AI eerst, `CONCEPTEN`).
+  `gereedschap/ai/vrij.cjs vrijeRonde(R, o)`: de AI eerst, voor de poppetjes en de kar (`karhd.cjs concept`): denoise 1,
+  onze diepte zacht (`VRIJ`), een stijlplaat via de IP-Adapter ('style transfer'), een paar zaden en sterktes naast
+  elkaar. `bakken.cjs projectieMateriaal` neemt ook een lijst projecties (voor en achter: de eerste die het punt zag,
+  wint). `karhd.cjs` geeft `handschrift`, `handschriftStijl`, `plaatselijkContrast`, `opRender`, `buurverschil`, `ZACHT` en
+  `FMEESTER` ook aan anderen. De zinnen voor mensen staan bij die van de kar in `huisstijl.cjs` (`gezicht`, `wapenrok`,
+  `malie`, ...).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

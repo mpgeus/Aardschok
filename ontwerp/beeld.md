@@ -1543,6 +1543,71 @@ een geschulpte rand en de gouden bies, en een apart borststuk, zodat je het paar
 blijven zoals ze zijn. Eerst een nieuwe proefplaat, oud en nieuw naast elkaar; pas als Marcel hem goedkeurt, komt de
 nieuwe os in het spel (de vellen van de ossenkar opnieuw).
 
+## De soldaten van het dorp en de poppetjes met SDXL (20 okt 2026, werklijst Q, f)
+
+Marcel, 20 okt: "wil je eens een aantal nieuwe poppetjes maken voor het spel? en SDXL gebruiken? Ik heb ook een set
+soldaten nodig", en: "Let op, ik heb de maximale kwaliteit met pracht en praal nodig", en meteen erna: "Pracht en praal
+betekent hier, gewoon goed, hd, passend en exact wat ik zoek". Dus geen opsmuk: de maat is zijn plaat
+(`voorbeelden/heerstoet-doel.webp`, de soldaten onderaan) en de stijlspecificatie (`stijlspecificatie.md`).
+
+Wat er was: de soldaten van de speler hebben geen eigen tekening (een speerman is een dorpeling, `boer-u7`); alleen de
+soldaat van de heer heeft er een (hierboven, "Het huis van de heer draagt rood en geel"). De dorpelingen: 7 lijven, 108
+uiterlijken, 66 tot 80 pixels, 8 richtingen, staan, lopen en 9 werkhoudingen.
+
+**Besloten** (Marcel, 20 okt, op drie vragen):
+- **Het wapen van het dorp: een gouden korenschoof op diep blauw** (tegenover de gouden leeuw op rood van de heer; past
+  bij Tithebreaker: het dorp houdt zijn graan). Op de wapenrok, het schild en later de vaandels.
+- **De houdingen van een soldaat:** staan, lopen, aanvallen (steken, schieten en herladen) en vallen. Aanvallen en vallen
+  zijn nieuw: het spel moet ze ook tonen (een kleine stap in `js/sprites.js` en het gevecht).
+- **De schilder:** SDXL (FaeTastic, de huisstijl), en op de proefplaat één meesterbeeld van ERNIE-Image-Turbo ernaast.
+
+**De weg** (de eigen pijplijn van de kar, `gereedschap/ai/ai-afwerking.md`): het poppetje in code (vorm, botten,
+houdingen, acht richtingen); SDXL schildert een meesterbeeld van voren (zuidwest) en een van achteren (noordoost) op onze
+render van 6×, met ControlNet op onze lijnen en diepte en een zin per gebied; die verf gaat terug op het model (de
+projectie, `bakken.cjs`), zodat het in elke richting en elk loopbeeld hetzelfde poppetje blijft; dan ons handschrift (H4)
+naar de sprite van 2×.
+
+**De speerman in woorden** (eerst de proefplaat): de bouw van de soldaat van de heer (groot en zwaar), een gewatteerd
+wambuis met leren mouwen en handschoenen, een maliënkraag, een ijzeren ketelhoed met brede rand, een blauwe wapenrok met de
+gouden schoof op borst en rug, een langwerpig schild in blauw met de schoof en een ijzeren rand, en een speer met een
+bladvormige ijzeren punt. **De kruisboogschutter:** een harnas van huiden met koperen klinknagels, een leren kap onder een
+ijzeren kalot, een kruisboog met een ijzeren boog, en een koker met bouten op de heup. Daarna de aanvoerder, de militie,
+de piekenier, de zwaardvechter en de boogschutter, en dan de dorpelingen (zo'n 4 à 5 uur SDXL voor alle 108
+uiterlijken, 's nachts; de werkhoudingen krijgen dezelfde verf).
+
+**De proefplaat:** de speerman en één boer, elk als meesterbeeld en op spelmaat in acht richtingen met een loopcyclus,
+naast de boer van nu en de soldaat van de heer.
+
+**De eerste proef, en Marcels omkering** (20 okt; `gereedschap/pixelart/soldatenhd.cjs`): het model in code staat
+(`heer.cjs soldaat` met `livrei: 'dorp'`, `wapen: 'speer'`, `schild`, `kraag`; de schoof in `wapen.cjs`). SDXL over onze
+render (zoals de kar, denoise 0,65, lijnen en diepte, een zin per gebied) gaf een slecht meesterbeeld: een groene helm,
+paarse maliën (het magenta van de achtergrond), een esdoornblad als wapen, een stripgezicht. Marcel: "Maar, kun je niet
+met ai een mooi poppetje genereren en dat als basis gebruiken voor een schilderbeurt? Want dingen uit code worden gewoon
+niet zo mooi". Dus andersom (`soldatenhd.cjs concept`, `uit/soldatenhd/concept-speerman.png` en `-spelmaat.png`): SDXL
+vrij (denoise 1, geen kleur en geen lijnen van ons), alleen de diepte van ons model zacht (0,45 tot 60% van de stappen)
+voor de houding en de hoek; zo'n 55 seconden per beeld. Veel mooier, ook op spelmaat: een ketelhoed met rand en
+klinknagels, maliën, een gewatteerde blauwe wapenrok, een schild met beslag. Wat niet klopt: "wheat sheaf" werd een losse
+korenaar boven het hoofd, het schild goud in plaats van blauw, en het wapen op de borst ontbreekt. Het moeilijke deel
+blijft acht richtingen en de loopbeelden die bij elkaar horen.
+Marcel koos zaad 44 als richting, en "Eerst meer concepten". **Ronde 2** (wat 44 heeft in de zin, de schoof als wapen
+op een blauw schild): de schilden blauw, geen losse aren meer, maar het wapen een lelie of kruis (SDXL kent "wheat sheaf"
+niet als wapen), en nog de gladde stijl van SDXL. **Ronde 3** (Marcel: "Kun je niet de plaat die onze lat is gebruiken om
+sdxl te voeden"): de rij soldaten uit zijn plaat als stijl via de IP-Adapter (0,5 en 0,8): de stijl schuift naar de plaat
+(maliënkappen onder de ketelhoed, donkerder lijnen, textuur, zijn groen erachter), maar zijn rood en geel komen mee.
+**Ronde 4:** de stijlplaat omgekleurd (het verzadigde rood van zijn livrei wordt blauw, het goud blijft: blauw en goud zijn
+de kleuren van ons wapen), en rood in de negatieve zin: wapenrokken in blauw en goud, blauwe schilden met een gouden wapen,
+in de stijl van de plaat; zaad 101 en 106 het sterkst (`uit/soldatenhd/concept-speerman-4.png`). **Het wapen** tekenen we
+zelf (de schoof, `wapen.cjs`) en zetten we er na de AI op, zoals de leeuw van de kar. Marcel vroeg waarom dit niet bij de
+os en kar kon: daar was onze render altijd het begin (SDXL schilderde eroverheen), en de ene vrije proef (19 okt) was
+zonder onze diepte en zonder zijn plaat.
+Marcel koos **zaad 106 op stijl 0,6** als basis van de speerman, en: "Eerst de os en kar zo". **De ossenkar vrij**
+(`karhd.cjs concept`, `gereedschap/ai/vrij.cjs`, dat de speerman en de kar delen; `uit/karhd/vrij/ossenkar-1.png` en
+`-spelmaat.png`): de linker ossenkar uit zijn plaat als stijl op 0,6, onze diepte zacht, zo'n 90 seconden per beeld. Voor
+het eerst een echte os met horens en tuig voor een rode kar met spaakwielen, ijzeren banden, het vaantje en kruiken; de
+beste kar tot nu toe. Wat nog niet klopt: de lading is vooral goud (geen zakken en tonnen), de leeuwen worden krullen (die
+zetten we er zelf op, `wapen.cjs`), de os is wat lief (gouden horens, een roze neus), en het is gladder dan de korrelige
+pixels van de plaat.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

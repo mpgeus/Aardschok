@@ -231,7 +231,9 @@ function bakMateriaal(mat, bk, groepVan, model) {
 //                                      (o.sleutelVan(deel): zijn soort, zoals o.sleutel); zo niet (er lag iets voor), een
 //                                      kopie van het punt (o.kopieen: (p, deel) → p' of null, zoals een draaiing om de as of
 //                                      een spiegeling), en anders de eigen textuur (of, zonder textuur, de middelste toon van
-//                                      de ramp). Zonder pr (null): alleen de eigen textuur, voor de render waaruit
+//                                      de ramp). pr mag ook een lijst zijn (meer meesterbeelden, zoals een poppetje van
+//                                      voren en van achteren): de eerste die het punt zag, wint.
+//                                      Zonder pr (null): alleen de eigen textuur, voor de render waaruit
 //                                      geprojecteerd wordt (een materiaal zonder textuur schrijft anders de stap in zijn ramp
 //                                      als licht in de G-buffer, niet 0 tot 1). o.zacht: het licht zachter (zie onder)
 function projectie(B, beeld, o = {}) {
@@ -284,8 +286,8 @@ function projectieMateriaal(mat, pr, o = {}) {
   const eigen = mat.textuur || (() => vlak);
   const kopieen = [(p) => p, ...(o.kopieen || [])];
   const sleutelVan = o.sleutelVan || (() => 0);
-  const kijk = (p, s) => {
-    if (!pr) return null;
+  const prs = !pr ? [] : Array.isArray(pr) ? pr : [pr];
+  const kijkIn = (pr, p, s) => {
     const m = pr.marge;
     const [ix, iy, iz] = [Math.floor(p[0] / m), Math.floor(p[1] / m), Math.floor(p[2] / m)];
     let beste = -1;
@@ -302,6 +304,13 @@ function projectieMateriaal(mat, pr, o = {}) {
       }
     }
     return beste < 0 ? null : [pr.alb[beste * 3], pr.alb[beste * 3 + 1], pr.alb[beste * 3 + 2]];
+  };
+  const kijk = (p, s) => {
+    for (const een of prs) {
+      const k = kijkIn(een, p, s);
+      if (k) return k;
+    }
+    return null;
   };
   return {
     ...basis,
