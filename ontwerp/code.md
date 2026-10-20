@@ -1201,7 +1201,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   elkaar. `bakken.cjs projectieMateriaal` neemt ook een lijst projecties (voor en achter: de eerste die het punt zag,
   wint). `karhd.cjs` geeft `handschrift`, `handschriftStijl`, `plaatselijkContrast`, `opRender`, `buurverschil`, `ZACHT` en
   `FMEESTER` ook aan anderen. De zinnen voor mensen staan bij die van de kar in `huisstijl.cjs` (`gezicht`, `wapenrok`,
-  `malie`, ...).
+  `malie`, ...). Meer sturing (Marcel: "Controlnet toevoegen?"): `afwerking.cjs werkstroom` neemt `o.pose` (OpenPose via
+  de union-ControlNet, `n.pose`, tot `o.poseEind`), `vrij.cjs vrijeRonde` neemt `o.pose` (een beeld op de maat van de
+  render), `o.omtrek` (`omtrekVan`: alleen de buitenlijn van ons silhouet, als lijnen), `o.lora` en `o.ipSoort` ('linear'
+  voor hetzelfde poppetje in een andere richting), en geeft de beelden terug. `soldatenhd.cjs poseBeeld(kant, fijn)`: het
+  skelet uit `GEWRICHTEN_SOLDAAT` (de gewrichten van `heer.cjs soldaat`, staand; verandert zijn bouw, dan deze ook), zoals
+  `kern.cjs tekenModel` ze neerzet, met wat van ons af kijkt weggelaten (neus en ogen van achteren).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

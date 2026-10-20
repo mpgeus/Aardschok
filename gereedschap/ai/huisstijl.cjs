@@ -54,6 +54,9 @@ const SCHILDER = {
 const CHECKPOINTS = {
   faetastic: 'civitai-faetastic\\SDXLFaetastic_v24.safetensors',
   corepica: 'civitai-corepica\\corEpicaByZovya_v0Beta.safetensors',
+  // 【SDXL】 Pixel Art Base (Civitai 276298, versie 311399, bf16; beelden verkopen mag: allowCommercialUse Image; Marcel
+  // downloadde hem zelf, 20 okt; SHA256 nagekeken)
+  pixelartbase: 'civitai-pixelartbase\\SDXLPixelArtBase_v10.safetensors',
 };
 // De pixelart-LoRA voor ERNIE-Image ("Pixel Art Assets - General", svntax_dev, Civitai 2732245; beelden verkopen mag:
 // allowCommercialUse Image, Rent, Sell; Marcel downloadde hem, 19 okt), zonder triggerwoorden

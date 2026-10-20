@@ -718,7 +718,7 @@ function opRender(R, ai, ox, oy) {
   const beeld = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
   for (let y = 0; y < ai.h; y++) for (let x = 0; x < ai.b; x++) {
     const X = x + ox, Y = y + oy;
-    if (X >= R.b || Y >= R.h || R.ramp[Y * R.b + X] < 0) continue;
+    if (X < 0 || Y < 0 || X >= R.b || Y >= R.h || R.ramp[Y * R.b + X] < 0) continue;
     const j = (y * ai.b + x) * 4;
     beeld.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], (Y * R.b + X) * 4);
   }

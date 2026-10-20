@@ -1569,7 +1569,13 @@ werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met dr
   het poppetje vrij, onze diepte zacht, zijn plaat als stijl (`gereedschap/ai/vrij.cjs`). Gekozen: **speerman zaad 106 op
   stijl 0,6** (ronde 4); de ossenkar zo is ook gedaan (ronde 1, de beste kar tot nu toe). **Het volgende:** de speerman in
   acht richtingen en lopen (106 als referentie, onze diepte per richting, op het model voor de loopbeelden), de schoof uit
-  code erop, en ons handschrift naar de sprite van 2×.
+  code erop, en ons handschrift naar de sprite van 2×. **Gedaan** (20 okt, `beeld.md`): de acht richtingen (met OpenPose uit
+  onze gewrichten en onze buitenlijn liggen ze op het model), de eerste sprites (de AI direct mooi; via het model te hard,
+  van achteren rommelig, lopend wel zonder flikkeren), en Pixel Art Base naast FaeTastic. **Besloten** (Marcel, 20 okt):
+  **Pixel Art Base** voor de poppetjes, en de animatie met **een schilderbeurt over het model** (het beeld via het model
+  als begin, SDXL licht erover met het beeld van die richting als referentie). Geprobeerd (ook met ERNIE): het begin via
+  het model is te slecht, de benen blijven vlekken; nu de proef met lopen van de AI zelf (het staande beeld als begin,
+  de benen via OpenPose).
 
 **Besloten** (Marcel, 20 okt: "S. S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", "De soldaten staan gewoon
 waar je ze neerzet", "M2 B = prima C = akkoord"):

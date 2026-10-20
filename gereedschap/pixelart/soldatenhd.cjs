@@ -33,8 +33,22 @@ const STAND = { houding: 'staan', fase: 0 };
 
 // De poppetjes van de proef: de speerman (de bouw van de soldaat van de heer, in de kleuren van het dorp).
 const POPPETJES = {
-  speerman: (stand) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', schild: true, kraag: true }),
+  speerman: (stand, extra = {}) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', schild: true, kraag: true, ...extra }),
 };
+// De gewrichten in een stand: die van het staan, met de benen zoals het model ze in deze stand bouwt (heer.cjs
+// o.gewrichten); het bovenlijf deint maar een beetje, dat blijft staand.
+function gewrichtenIn(naam, stand) {
+  const g = {};
+  POPPETJES[naam](stand, { gewrichten: g });
+  const uit = GEWRICHTEN_SOLDAAT.map((p) => [...p]);
+  if (g.benen) {
+    [[1, 8], [0, 11]].forEach(([been, eerste]) => {
+      const b = g.benen[been];
+      uit[eerste] = b.heup; uit[eerste + 1] = b.knie; uit[eerste + 2] = b.enkel;
+    });
+  }
+  return uit;
+}
 
 // De naam van elk materiaal van de soldaat voor de zinnen per gebied (huisstijl.cjs GROEP); het blauw op het schild is
 // geschilderd hout, op de wapenrok wol.
@@ -317,6 +331,13 @@ CONCEPTEN[4] = {
   negatief: `${CONCEPTEN[3].negatief}, red clothes, red tabard, red scarf, red hood`,
   ipSterktes: [0.6, 0.8],
 };
+// ronde 5 (Marcel: "We hadden toch ook dat sdxl model met pixel art checkpoint?"; hij downloadde het, 20 okt): precies
+// ronde 4 (zijn plaat als stijl op 0,6), alleen met het checkpoint 【SDXL】 Pixel Art Base (huisstijl.cjs CHECKPOINTS).
+CONCEPTEN[5] = {
+  ...CONCEPTEN[4],
+  checkpoint: require('../ai/huisstijl.cjs').CHECKPOINTS.pixelartbase,
+  ipSterktes: [0.6],
+};
 async function concept(naam = 'speerman', ronde = '1') {
   const V = require('../ai/vrij.cjs');
   const C = CONCEPTEN[ronde];
@@ -332,7 +353,420 @@ async function concept(naam = 'speerman', ronde = '1') {
     ipSterktes: C.ipSterktes,
     zaden: C.zaden,
     instellingen: C.instellingen,
+    checkpoint: C.checkpoint,
   });
+  if (ronde === '5') vergelijkRondes(naam, '4', '5', 'FaeTastic', 'Pixel Art Base');
+}
+// Twee rondes naast elkaar (dezelfde zaden op stijl 0,6): groot (een derde) en op de HD-maat (2×, maal 2).
+function vergelijkRondes(naam, a, b, naamA, naamB) {
+  const A = require('../ai/beeld-ai.cjs');
+  const E = require('../ai/etiket.cjs');
+  const lees = (r, z) => A.leesPng(fs.readFileSync(path.join(UIT, 'concept', `${naam}-${r}`, `zaad-${z}-ip0.6.png`)));
+  const zaden = CONCEPTEN[b].zaden;
+  const groot = (r, n) => zaden.map((z) => E.met(H.verklein(lees(r, z), 3, 'naast'), `${n} · zaad ${z}`));
+  const klein = (r, n) => zaden.map((z) => { const s = H.verklein(lees(r, z), 5, 'gem'); return E.met(H.snij(s, { x0: 0, y0: 0, b: s.b, h: s.h }, 2), `${n} · HD-maat, maal 2`); });
+  E.bewaar(path.join(UIT, `concept-${naam}-${a}-${b}.png`), [groot(a, naamA), groot(b, naamB), klein(a, naamA), klein(b, naamB)], `${naamA} en ${naamB} naast elkaar`, `Dezelfde zin, jouw plaat als stijl (0,6), onze diepte, dezelfde zaden; alleen het checkpoint anders. Rij 1 en 2 een derde van het doek, rij 3 en 4 op de HD-maat (2×), maal 2.`);
+  console.log(`uit/soldatenhd/concept-${naam}-${a}-${b}.png`);
+}
+
+// De pixelart-LoRA op de gekozen speerman (Marcel: "En misschien met de pixel art addon?"): zaad 106 met de instellingen
+// van ronde 4, met PixelArtRedmond (huisstijl.cjs LORA) op twee sterktes. Op de kar gaf hij over onze render grove blokken;
+// vrij kan het anders uitpakken.
+async function pixelLora(naam = 'speerman') {
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const HU = require('../ai/huisstijl.cjs');
+  const C = CONCEPTEN[4];
+  const R = render(POPPETJES[naam](STAND), 'ZW', C.fijn);
+  const basis = A.leesPng(fs.readFileSync(path.join(UIT, 'concept', 'speerman-4', 'zaad-106-ip0.6.png')));
+  const rij = [{ beeld: basis, etiket: 'zonder LoRA (zaad 106)' }];
+  for (const kracht of [0.5, 0.9]) {
+    const [v] = await V.vrijeRonde(R, {
+      naam: `${naam}-lora${kracht}`,
+      map: path.join(UIT, 'concept', `${naam}-lora${kracht}`),
+      positief: C.positief,
+      negatief: C.negatief,
+      stijl: path.join(VOORBEELDEN, C.stijl),
+      ipSterktes: [0.6],
+      zaden: [106],
+      instellingen: C.instellingen,
+      lora: { ...HU.LORA, kracht },
+    });
+    rij.push({ beeld: v.beeld, etiket: `PixelArtRedmond ${String(kracht).replace('.', ',')}` });
+  }
+  // groot (gehalveerd) en op de HD-maat (2×, maal 2)
+  const groot = rij.map((v) => E.met(H.verklein(v.beeld, 2, 'naast'), v.etiket));
+  const klein = rij.map((v) => { const s = H.verklein(v.beeld, 5, 'gem'); return E.met(H.snij(s, { x0: 0, y0: 0, b: s.b, h: s.h }, 2), 'HD-maat, maal 2'); });
+  E.bewaar(path.join(UIT, `lora-${naam}.png`), [groot, klein], 'De pixelart-LoRA op de speerman', 'Zaad 106 met de instellingen van ronde 4 (jouw plaat als stijl op 0,6), zonder en met PixelArtRedmond. Rij 1 gehalveerd, rij 2 op de HD-maat maal 2.');
+  console.log(`uit/soldatenhd/lora-${naam}.png`);
+}
+
+// ---------------------------------------------------------------- het skelet voor OpenPose
+
+// De gewrichten van de soldaat (heer.cjs soldaat, staand; x naar zijn rechterhand, y naar voren, z omhoog), in de volgorde
+// van OpenPose (18 punten). Verandert de bouw van de soldaat, dan deze ook.
+const GEWRICHTEN_SOLDAAT = [
+  [0, 11.2, 70.6], // 0 neus
+  [0, 0.6, 61], // 1 nek (tussen de schouders)
+  [13.4, 0.4, 60.6], [18.4, -1.6, 50.6], [17, 6.6, 43.8], // 2-4 rechterschouder, -elleboog, -pols (om de schacht)
+  [-13.4, 0.4, 60.6], [-17.6, 1.6, 49.4], [-16.4, 10.4, 45.2], // 5-7 links (het schild)
+  [5.4, 0.2, 36], [5.3, 1, 21], [5.2, 0.8, 6.2], // 8-10 rechterheup, -knie, -enkel
+  [-5.4, 0.2, 36], [-5.3, 1, 21], [-5.2, 0.8, 6.2], // 11-13 links
+  [2.8, 9.8, 73.1], [-2.8, 9.8, 73.1], // 14-15 rechteroog, linkeroog
+  [7.3, 4, 72.2], [-7.3, 4, 72.2], // 16-17 rechteroor, linkeroor
+];
+// De kleuren en de ledematen van OpenPose (zoals controlnet_aux ze tekent), de punten vanaf 0.
+const OP_KLEUR = [[255, 0, 0], [255, 85, 0], [255, 170, 0], [255, 255, 0], [170, 255, 0], [85, 255, 0], [0, 255, 0], [0, 255, 85], [0, 255, 170], [0, 255, 255], [0, 170, 255], [0, 85, 255], [0, 0, 255], [85, 0, 255], [170, 0, 255], [255, 0, 255], [255, 0, 170], [255, 0, 85]];
+const OP_LEDEN = [[1, 2], [1, 5], [2, 3], [3, 4], [5, 6], [6, 7], [1, 8], [8, 9], [9, 10], [1, 11], [11, 12], [12, 13], [1, 0], [0, 14], [14, 16], [0, 15], [15, 17]];
+// Het skelet in een richting, op de maat van render(..., kant, fijn): de punten zoals kern.cjs tekenModel ze neerzet. Wat
+// van het hoofd van ons af kijkt (neus en ogen van achteren, het verre oor), laat OpenPose weg: zo weet SDXL of het de rug
+// ziet.
+function poseBeeld(kant, fijn, gewrichten = GEWRICHTEN_SOLDAAT) {
+  const B = new K.Beeld(CEL[0] * fijn, CEL[1] * fijn, ANKER[0] * fijn, ANKER[1] * fijn);
+  const hoek = (K.RICHTING[kant] * Math.PI) / 180;
+  const fx = Math.cos(hoek), fy = Math.sin(hoek), rx = -fy, ry = fx;
+  const wereld = ([x, y, z]) => [x * rx + y * fx, x * ry + y * fy, z];
+  const scherm = (p) => {
+    const [X, Y, Z] = wereld(p);
+    return [B.OX + (X * K.EX[0] + Y * K.EX[1] + Z * K.EX[2]) * fijn, B.OY + (X * K.EY[0] + Y * K.EY[1] + Z * K.EY[2]) * fijn];
+  };
+  // naar de kijker: een richting in het model die tegen de kijkrichting in wijst (1 recht naar ons, -1 van ons af)
+  const naarKijker = (lokaal) => {
+    const [X, Y] = wereld([lokaal[0], lokaal[1], 0]);
+    return -(X * K.V[0] + Y * K.V[1]) / Math.hypot(K.V[0], K.V[1]) / Math.hypot(lokaal[0], lokaal[1]);
+  };
+  const ziet = (i) => {
+    if (i === 0) return naarKijker([0, 1]) > -0.2;
+    if (i === 14 || i === 15) return naarKijker([i === 14 ? 0.5 : -0.5, 0.87]) > 0;
+    if (i === 16 || i === 17) return naarKijker([i === 16 ? 1 : -1, -0.2]) > -0.3;
+    return true;
+  };
+  const P = gewrichten.map(scherm);
+  const uit = { b: B.b, h: B.h, rgba: Buffer.alloc(B.b * B.h * 4) };
+  for (let i = 0; i < B.b * B.h; i++) uit.rgba[i * 4 + 3] = 255;
+  const dik = 0.72 * fijn;
+  const zet = (x, y, k, a) => {
+    if (x < 0 || y < 0 || x >= B.b || y >= B.h) return;
+    const o = (y * B.b + x) * 4;
+    for (let c = 0; c < 3; c++) uit.rgba[o + c] = Math.round(uit.rgba[o + c] * (1 - a) + k[c] * a);
+  };
+  OP_LEDEN.forEach(([a, b], li) => {
+    if (!ziet(a) || !ziet(b)) return;
+    const [x0, y0] = P[a];
+    const [x1, y1] = P[b];
+    const lx = x1 - x0, ly = y1 - y0, l2 = lx * lx + ly * ly || 1;
+    for (let y = Math.floor(Math.min(y0, y1) - dik); y <= Math.max(y0, y1) + dik; y++) {
+      for (let x = Math.floor(Math.min(x0, x1) - dik); x <= Math.max(x0, x1) + dik; x++) {
+        const t = Math.max(0, Math.min(1, ((x - x0) * lx + (y - y0) * ly) / l2));
+        if (Math.hypot(x - x0 - t * lx, y - y0 - t * ly) <= dik) zet(x, y, OP_KLEUR[li], 0.6);
+      }
+    }
+  });
+  P.forEach(([px, py], i) => {
+    if (!ziet(i)) return;
+    for (let y = Math.floor(py - dik); y <= py + dik; y++) {
+      for (let x = Math.floor(px - dik); x <= px + dik; x++) if (Math.hypot(x - px, y - py) <= dik) zet(x, y, OP_KLEUR[i], 1);
+    }
+  });
+  return uit;
+}
+
+// De gekozen speerman in acht richtingen (Marcel koos zaad 106 op stijl 0,6 uit ronde 4): hij zelf als referentie via de
+// IP-Adapter ('linear': ook de inhoud, zodat het dezelfde man blijft), en per richting de diepte van ons model, iets
+// sterker dan in de vrije ronde, zodat het beeld op het model ligt (voor de projectie en de loopbeelden daarna); hetzelfde
+// zaad. Eerst kijken of hij in elke richting dezelfde blijft.
+// Ronde 2 (de eerste: van achteren tekende SDXL toch een gezicht, en twee keer een sokkel): per richting een eigen zin, voor
+// de rug gezicht en baard in de negatieve zin, de sokkel ook, en de diepte iets sterker.
+const RICHTINGEN = {
+  basis: path.join('concept', 'speerman-4', 'zaad-106-ip0.6.png'),
+  zaad: 106,
+  ip: 0.7,
+  instellingen: { ...VRIJ, diepte: 0.7, cnEind: 0.8 },
+  ronde: 2,
+  zin: {
+    Z: 'front view, facing the viewer',
+    ZW: 'three-quarter front view, facing down and to the left',
+    W: 'side view, profile facing left',
+    NW: 'three-quarter back view, seen from behind, facing up and to the left, back of the head and back of the tabard, no face visible',
+    N: 'back view, seen from behind, facing away from the viewer, back of the head and back of the tabard, no face visible',
+    NO: 'three-quarter back view, seen from behind, facing up and to the right, back of the head and back of the tabard, no face visible',
+    O: 'side view, profile facing right',
+    ZO: 'three-quarter front view, facing down and to the right',
+  },
+  rug: 'face, eyes, nose, beard, mouth, front view, facing the viewer',
+  nooit: 'pedestal, base, platform, round base, floor tiles, stand',
+};
+// Ronde 3 (Marcel: "Controlnet toevoegen?" en "En misschien met de pixel art addon?"): erbij het skelet uit onze eigen
+// gewrichten (OpenPose, 0,8) en de buitenlijn van ons silhouet (lijnen, 0,4); twee rijen, zonder en met de pixelart-LoRA
+// (0,5, met pluim en veer in de negatieve zin: die zette hij op de helm).
+RICHTINGEN.ronde = 3;
+RICHTINGEN.instellingen = { ...RICHTINGEN.instellingen, pose: 0.8, poseEind: 0.8, lijn: 0.4 };
+RICHTINGEN.varianten = [{ naam: 'zonder LoRA' }, { naam: 'pixelart 0,5', lora: 0.5, negatief: 'plume, feather, crest, pointed helmet' }];
+// Ronde 4 (Marcel koos Pixel Art Base, 20 okt): hetzelfde, met Pixel Art Base, zaad 106 uit ronde 5 als referentie, en
+// pluim en veer in de negatieve zin (die zette hij in ronde 5 op de helm); geen LoRA.
+RICHTINGEN.ronde = 4;
+RICHTINGEN.basis = path.join('concept', 'speerman-5', 'zaad-106-ip0.6.png');
+RICHTINGEN.checkpoint = require('../ai/huisstijl.cjs').CHECKPOINTS.pixelartbase;
+RICHTINGEN.varianten = [{ naam: 'Pixel Art Base', negatief: 'plume, feather, crest, pointed helmet, pennant, flag' }];
+async function richtingen(naam = 'speerman') {
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const HU = require('../ai/huisstijl.cjs');
+  const C = CONCEPTEN[4];
+  const rijen = [];
+  for (const vr of RICHTINGEN.varianten || [{ naam: '' }]) {
+    const uit = [];
+    for (const kant of K.KANTEN) {
+      const [v] = await V.vrijeRonde(render(POPPETJES[naam](STAND), kant, C.fijn), {
+        naam: `${naam}-${kant}`,
+        map: path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}${vr.lora ? `-lora${vr.lora}` : ''}`, kant),
+        positief: `${RICHTINGEN.zin[kant]}, ${C.positief}`,
+        negatief: [C.negatief, RICHTINGEN.nooit, kant[0] === 'N' && RICHTINGEN.rug, vr.negatief].filter(Boolean).join(', '),
+        stijl: path.join(UIT, RICHTINGEN.basis),
+        ipSoort: 'linear',
+        ipSterktes: [RICHTINGEN.ip],
+        zaden: [RICHTINGEN.zaad],
+        instellingen: RICHTINGEN.instellingen,
+        pose: RICHTINGEN.instellingen.pose ? poseBeeld(kant, C.fijn) : null,
+        omtrek: RICHTINGEN.instellingen.lijn > 0,
+        lora: vr.lora ? { ...HU.LORA, kracht: vr.lora } : null,
+        checkpoint: RICHTINGEN.checkpoint,
+      });
+      uit.push(E.met(H.verklein(v.beeld, 3, 'naast'), `${kant}${vr.naam ? ` · ${vr.naam}` : ''}`));
+    }
+    rijen.push(uit);
+  }
+  const A = require('../ai/beeld-ai.cjs');
+  const basis = A.leesPng(fs.readFileSync(path.join(UIT, RICHTINGEN.basis)));
+  E.bewaar(path.join(UIT, `richtingen-${naam}-${RICHTINGEN.ronde}.png`), [[E.met(H.verklein(basis, 3, 'naast'), `de basis: ${RICHTINGEN.basis}`)], ...rijen], `De ${naam} in acht richtingen`, `SDXL vrij, de basis (zaad 106, stijl 0,6) als referentie (IP-Adapter, linear, ${String(RICHTINGEN.ip).replace('.', ',')}), per richting de diepte van ons model (${String(RICHTINGEN.instellingen.diepte).replace('.', ',')}, tot ${Math.round(RICHTINGEN.instellingen.cnEind * 100)}%)${RICHTINGEN.instellingen.pose ? `, ons skelet (OpenPose ${String(RICHTINGEN.instellingen.pose).replace('.', ',')}) en onze buitenlijn (${String(RICHTINGEN.instellingen.lijn).replace('.', ',')})` : ''} en een eigen zin, zaad ${RICHTINGEN.zaad}. Een derde van het doek.`);
+  console.log(`uit/soldatenhd/richtingen-${naam}-${RICHTINGEN.ronde}.png`);
+}
+
+// ---------------------------------------------------------------- van de acht beelden naar de sprites
+
+// De acht richtingen van de AI (ronde 3, zonder LoRA) op het model (bakken.cjs projectie: per punt van het model de kleur
+// van de eerste richting die het zag, in de volgorde van VOORKEUR), en daaruit de sprites van 2× met ons handschrift (H4):
+// staand in acht richtingen en lopend. Daarnaast de beelden van de AI zelf, verkleind en op ons silhouet geknipt, om te
+// vergelijken: zo zou het staan eruitzien zonder het model ertussen.
+const VOORKEUR = ['Z', 'ZW', 'ZO', 'W', 'O', 'NW', 'NO', 'N'];
+function aiBeeld(naam, kant, ronde = RICHTINGEN.ronde) {
+  const A = require('../ai/beeld-ai.cjs');
+  return A.leesPng(fs.readFileSync(path.join(UIT, 'richtingen', `${naam}-${ronde}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`)));
+}
+// De achtergrond van een beeld van de AI: de middelste kleur van de vier hoeken; wat daar dichtbij ligt, telt niet.
+function achtergrond(ai) {
+  const hoeken = [[2, 2], [ai.b - 3, 2], [2, ai.h - 3], [ai.b - 3, ai.h - 3]].map(([x, y]) => [0, 1, 2].map((c) => ai.rgba[(y * ai.b + x) * 4 + c]));
+  return [0, 1, 2].map((c) => hoeken.map((k) => k[c]).sort((p, q) => p - q)[1]);
+}
+function metAI(naam) {
+  const BK = require('./bakken.cjs');
+  const KH = require('./karhd.cjs');
+  const V = require('../ai/vrij.cjs');
+  const fijn = CONCEPTEN[4].fijn;
+  const prs = VOORKEUR.map((kant) => {
+    const BR = bakRender(naam, kant, fijn);
+    const ai = aiBeeld(naam, kant);
+    const { ox, oy } = V.doekVan(render(POPPETJES[naam](STAND), kant, fijn));
+    const beeld = KH.opRender(BR.R, ai, ox, oy);
+    const ag = achtergrond(ai);
+    return BK.projectie(BR.R, beeld, {
+      sleutel: (v) => BR.m.delen[Math.round(v)].deel,
+      binnen: (X, Y) => beeld.rgba[(Y * beeld.b + X) * 4 + 3] >= 128,
+      soort: (k) => Math.hypot(k[0] - ag[0], k[1] - ag[1], k[2] - ag[2]) > 28,
+    });
+  });
+  const spiegelX = (p) => [-p[0], p[1], p[2]];
+  return (m) => ({ ...m, mat: m.mat.map((x) => x && BK.projectieMateriaal(x, prs, { kopieen: [spiegelX], sleutelVan: (d) => d.deel, zacht: KH.ZACHT })) });
+}
+// Het beeld van de AI zelf als sprite: op ons silhouet geknipt (de render op dezelfde maat) en verkleind tot 2×.
+function aiSprite(naam, kant) {
+  const fijn = CONCEPTEN[4].fijn;
+  return geknipt(aiBeeld(naam, kant), render(POPPETJES[naam](STAND), kant, fijn), fijn);
+}
+// Een beeld van de AI (op het doek van vrij.cjs doekVan om render R) op het silhouet van R, verkleind tot 2× en omlijnd.
+function geknipt(ai, R, fijn) {
+  const V = require('../ai/vrij.cjs');
+  const { ox, oy } = V.doekVan(R);
+  const op = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
+  for (let Y = 0; Y < R.h; Y++) for (let X = 0; X < R.b; X++) {
+    if (R.ramp[Y * R.b + X] < 0) continue;
+    const x = X - ox, y = Y - oy;
+    if (x < 0 || y < 0 || x >= ai.b || y >= ai.h) continue;
+    const j = (y * ai.b + x) * 4;
+    op.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], (Y * R.b + X) * 4);
+  }
+  return H.omlijnBeeld(H.verklein(op, fijn / 2, 'gem'));
+}
+async function sprites(naam = 'speerman') {
+  const E = require('../ai/etiket.cjs');
+  const t0 = Date.now();
+  const kleur = metAI(naam);
+  console.log(`projectie in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  const maak = POPPETJES[naam];
+  const staan = K.KANTEN.map((kant) => sprite(kleur(maak(STAND)), kant));
+  const lopen = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => sprite(kleur(maak({ houding: 'lopen', fase: i / 8 })), 'ZW'));
+  const direct = K.KANTEN.map((kant) => aiSprite(naam, kant));
+  console.log(`sprites in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  const map = path.join(UIT, 'sprites', naam);
+  fs.mkdirSync(map, { recursive: true });
+  K.KANTEN.forEach((kant, i) => { H.bewaar(path.join(map, `staan-${kant}.png`), staan[i]); H.bewaar(path.join(map, `ai-${kant}.png`), direct[i]); });
+  lopen.forEach((r, i) => H.bewaar(path.join(map, `lopen-ZW-${i}.png`), r));
+  const groot = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
+  const rij = (beelden, etiket) => {
+    const u = H.uitsnede(beelden, 3);
+    return beelden.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), etiket(i)));
+  };
+  const nu = [celVanNu('boer-u7', 'staan', 'ZW'), celVanNu('soldaat', 'staan', 'ZW')].map((r) => H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, H.uitsnede([r], 3))), { x0: 0, y0: 0, b: r.b + 6, h: r.h + 6 }, 4));
+  E.bewaar(path.join(UIT, `sprites-${naam}.png`), [
+    rij(direct, (i) => (i ? K.KANTEN[i] : `de AI direct · ${K.KANTEN[i]}`)),
+    rij(staan, (i) => (i ? K.KANTEN[i] : `via het model · ${K.KANTEN[i]}`)),
+    rij(lopen, (i) => (i ? `${i}` : 'lopen via het model · 0')),
+    [E.met(nu[0], 'nu: een dorpeling (1×, maal 4)'), E.met(nu[1], 'nu: de soldaat van de heer (1×, maal 4)')],
+  ], `De ${naam}: de sprites`, 'Op de HD-maat (2×), maal 2. Rij 1: de acht beelden van de AI zelf, op ons silhouet geknipt en verkleind. Rij 2 en 3: die acht beelden op het model gezet, en zo door onze renderer getekend met ons handschrift (H4): staand en lopend. Rij 4: de speerman en de soldaat van nu.');
+  console.log(`uit/soldatenhd/sprites-${naam}.png`);
+}
+
+// De schilderbeurt over het model (Marcel koos: "Schilderbeurt over het model", 20 okt): het beeld via het model (de acht
+// richtingen van de AI erop, metAI) is het begin, op 10×; SDXL schildert er licht overheen binnen ons silhouet (denoise
+// BEURT.denoise), met het beeld van de AI van die richting als referentie, onze diepte en buitenlijn, en hetzelfde zaad.
+// Elk loopbeeld heeft zo een vast begin, en krijgt toch het schilderwerk van de AI. De proef: lopen naar zuidwest en de rug.
+const BEURT = { denoise: 0.4, ip: 0.6, instellingen: { ...VRIJ, denoise: 0.4, diepte: 0.6, cnEind: 0.8, lijn: 0.4 } };
+// Marcel: "Ernie ook nog een keer proberen?": ERNIE als schilder van de beurt (hij heeft geen ControlNet, maar het begin
+// houdt de vorm vast), op twee beelden (de rug en lopen 0), denoise 0,5; zo'n 12 minuten per beeld.
+const BEURT_ERNIE = { denoise: 0.5, welke: [0, 1] };
+// Lopen van de AI zelf (na de schilderbeurt over het model: het begin was te fel en de benen bleven vlekken): per loopbeeld
+// het staande beeld van de AI van die richting als begin, de benen in die stap via OpenPose (gewrichtenIn) en onze diepte,
+// en SDXL (Pixel Art Base) schildert binnen het silhouet van die stap, met hetzelfde beeld als referentie; twee denoises.
+const LOPEN = { kant: 'ZW', denoises: [0.5, 0.7], ip: 0.6 };
+async function lopenAI(naam = 'speerman') {
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const C = CONCEPTEN[4];
+  const fijn = C.fijn;
+  const kant = LOPEN.kant;
+  const staandPad = path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`);
+  const A = require('../ai/beeld-ai.cjs');
+  const staand = A.leesPng(fs.readFileSync(staandPad));
+  const Rs = render(POPPETJES[naam](STAND), kant, fijn);
+  const ds = V.doekVan(Rs);
+  // het staande beeld op de maat van de render (de voeten staan in elke stand op hetzelfde anker)
+  const begin = { b: Rs.b, h: Rs.h, rgba: Buffer.alloc(Rs.b * Rs.h * 4) };
+  for (let y = 0; y < staand.h; y++) for (let x = 0; x < staand.b; x++) {
+    const X = x + ds.ox, Y = y + ds.oy;
+    if (X < 0 || Y < 0 || X >= Rs.b || Y >= Rs.h) continue;
+    staand.rgba.copy(begin.rgba, (Y * Rs.b + X) * 4, (y * staand.b + x) * 4, (y * staand.b + x) * 4 + 4);
+  }
+  const rijen = [];
+  for (const dn of LOPEN.denoises) {
+    const rij = [];
+    for (let i = 0; i < 8; i++) {
+      const stand = { houding: 'lopen', fase: i / 8 };
+      const R = render(POPPETJES[naam](stand), kant, fijn);
+      const [v] = await V.vrijeRonde(R, {
+        naam: `${naam}-lopen-${i}`,
+        map: path.join(UIT, 'lopen', `${naam}-${kant}-${dn}`, String(i)),
+        positief: `${RICHTINGEN.zin[kant]}, walking, ${C.positief}`,
+        negatief: [C.negatief, RICHTINGEN.nooit, RICHTINGEN.varianten[0].negatief].filter(Boolean).join(', '),
+        stijl: staandPad,
+        ipSoort: 'linear',
+        ipSterktes: [LOPEN.ip],
+        zaden: [RICHTINGEN.zaad],
+        instellingen: { ...RICHTINGEN.instellingen, denoise: dn },
+        pose: poseBeeld(kant, fijn, gewrichtenIn(naam, stand)),
+        omtrek: true,
+        init: begin,
+        masker: 'silhouet',
+        checkpoint: RICHTINGEN.checkpoint,
+      });
+      rij.push(geknipt(v.beeld, R, fijn));
+    }
+    rijen.push(rij);
+  }
+  const groot = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
+  const u = H.uitsnede(rijen.flat(), 3);
+  E.bewaar(path.join(UIT, `lopen-${naam}.png`), rijen.map((rij, k) => rij.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), i ? `${i}` : `denoise ${String(LOPEN.denoises[k]).replace('.', ',')} · 0`))),
+    `De ${naam} loopt (${kant}), van de AI`, 'Pixel Art Base. Per loopbeeld het staande beeld van de AI als begin, de benen in die stap via OpenPose uit onze gewrichten, onze diepte en buitenlijn; het staande beeld als referentie. Op de HD-maat (2×), maal 2.');
+  // en als bewegend beeld, om het flikkeren te zien
+  const { apng } = require('./apng.cjs');
+  rijen.forEach((rij, k) => {
+    const platen = rij.map((r) => { const vak = H.alfaSnij(r, u); return { b: vak.b, h: vak.h, rgba: () => vak.rgba }; });
+    fs.writeFileSync(path.join(UIT, `lopen-${naam}-${LOPEN.denoises[k]}.png`), apng(platen, { schaal: 2, fps: 10 }));
+  });
+  console.log(`uit/soldatenhd/lopen-${naam}.png`);
+}
+
+async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
+  const ernie = schilder === 'ernie';
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const C = CONCEPTEN[4];
+  const fijn = C.fijn;
+  const t0 = Date.now();
+  const kleur = metAI(naam);
+  console.log(`projectie in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  const maak = POPPETJES[naam];
+  const lijst = [
+    { stand: STAND, kant: 'N', etiket: 'N, staan' },
+    ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ stand: { houding: 'lopen', fase: i / 8 }, kant: 'ZW', etiket: `lopen ${i}` })),
+  ];
+  const voor = [];
+  const na = [];
+  const sdxl = [];
+  for (const [n, it] of lijst.entries()) {
+    if (ernie && !BEURT_ERNIE.welke.includes(n)) continue;
+    const R = render(kleur(maak(it.stand)), it.kant, fijn);
+    const [v] = await V.vrijeRonde(R, {
+      naam: `${naam}-beurt-${n}`,
+      map: path.join(UIT, 'beurt', ernie ? `${naam}-ernie` : naam, `${n}-${it.kant}`),
+      positief: `${RICHTINGEN.zin[it.kant]}, ${C.positief}`,
+      negatief: [C.negatief, RICHTINGEN.nooit, it.kant[0] === 'N' && RICHTINGEN.rug, RICHTINGEN.varianten[0].negatief].filter(Boolean).join(', '),
+      stijl: path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}`, it.kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`),
+      ipSoort: 'linear',
+      ipSterktes: [BEURT.ip],
+      zaden: [RICHTINGEN.zaad],
+      instellingen: ernie ? { ...BEURT.instellingen, denoise: BEURT_ERNIE.denoise } : BEURT.instellingen,
+      omtrek: true,
+      init: R.zl,
+      masker: 'silhouet',
+      checkpoint: RICHTINGEN.checkpoint,
+      schilder: ernie ? 'ernie' : null,
+    });
+    if (ernie) {
+      const A = require('../ai/beeld-ai.cjs');
+      sdxl.push(geknipt(A.leesPng(fs.readFileSync(path.join(UIT, 'beurt', naam, `${n}-${it.kant}`, `zaad-${RICHTINGEN.zaad}-ip${BEURT.ip}.png`))), R, fijn));
+    }
+    const zonder = { b: R.b, h: R.h, rgba: Buffer.from(R.zl.rgba) };
+    for (let i = 0; i < R.b * R.h; i++) if (R.ramp[i] < 0) zonder.rgba[i * 4 + 3] = 0;
+    voor.push(H.omlijnBeeld(H.verklein(zonder, fijn / 2, 'gem')));
+    na.push(geknipt(v.beeld, R, fijn));
+  }
+  console.log(`klaar in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  if (ernie) {
+    const E2 = require('../ai/etiket.cjs');
+    const groot2 = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
+    const items = BEURT_ERNIE.welke.map((n) => lijst[n].etiket);
+    const rij2 = (beelden, wie) => {
+      const u = H.uitsnede([...voor, ...sdxl, ...na], 3);
+      return beelden.map((r, i) => E2.met(groot2(H.alfaSnijMetGrond(H.alfaSnij(r, u))), `${wie} · ${items[i]}`));
+    };
+    E2.bewaar(path.join(UIT, `beurt-${naam}-ernie.png`), [[...rij2(voor, 'via het model'), ...rij2(sdxl, 'SDXL 0,4'), ...rij2(na, `ERNIE ${String(BEURT_ERNIE.denoise).replace('.', ',')}`)]], `De ${naam}: de schilderbeurt met ERNIE`, 'Het begin (via het model), de beurt met SDXL (Pixel Art Base, denoise 0,4, de richting als referentie) en de beurt met ERNIE-Image-Turbo (denoise 0,5, zonder ControlNet en referentie). Op de HD-maat (2×), maal 2.');
+    console.log(`uit/soldatenhd/beurt-${naam}-ernie.png`);
+    return;
+  }
+  const map = path.join(UIT, 'sprites', `${naam}-beurt`);
+  fs.mkdirSync(map, { recursive: true });
+  na.forEach((r, i) => H.bewaar(path.join(map, `${i}.png`), r));
+  const groot = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
+  const rij = (beelden, etiket) => {
+    const u = H.uitsnede(beelden, 3);
+    return beelden.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), etiket(i)));
+  };
+  E.bewaar(path.join(UIT, `beurt-${naam}.png`), [
+    rij(voor, (i) => `via het model · ${lijst[i].etiket}`),
+    rij(na, (i) => `met de beurt · ${lijst[i].etiket}`),
+  ], `De ${naam}: de schilderbeurt over het model`, `Pixel Art Base. Rij 1: het beeld via het model (de acht richtingen van de AI erop), het begin. Rij 2: SDXL schildert er licht overheen (denoise ${String(BEURT.denoise).replace('.', ',')}), met het beeld van die richting als referentie. Op de HD-maat (2×), maal 2.`);
+  console.log(`uit/soldatenhd/beurt-${naam}.png`);
 }
 
 if (require.main === module) {
@@ -340,7 +774,12 @@ if (require.main === module) {
   if (opdracht === 'kijk') kijk(...rest);
   else if (opdracht === 'proef') proef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'lopen') lopenAI(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'beurt') schilderbeurt(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'sprites') sprites(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'lora') pixelLora(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'richtingen') richtingen(...rest).catch((e) => { console.error(e); process.exit(1); });
   else console.log('node gereedschap/pixelart/soldatenhd.cjs kijk | proef | concept');
 }
 
-module.exports = { POPPETJES, render, CEL, ANKER };
+module.exports = { POPPETJES, render, poseBeeld, gewrichtenIn, CEL, ANKER };

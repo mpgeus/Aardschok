@@ -216,6 +216,17 @@ function werkstroom(n, o = START) {
     pos = ['22', 0];
     neg = ['22', 1];
   }
+  // o.pose: de kracht van OpenPose (het skelet uit onze eigen gewrichten, soldatenhd.cjs pose; Marcel, 20 okt: "Controlnet
+  // toevoegen?"), tot o.poseEind (standaard cnEind)
+  if (o.pose > 0) {
+    Object.assign(st, {
+      40: { class_type: 'LoadImage', inputs: { image: n.pose }, _meta: { title: 'ons skelet (OpenPose)' } },
+      41: { class_type: 'SetUnionControlNetType', inputs: { control_net: ['11', 0], type: 'openpose' } },
+      42: { class_type: 'ControlNetApplyAdvanced', inputs: { positive: pos, negative: neg, control_net: ['41', 0], image: ['40', 0], strength: o.pose, start_percent: 0, end_percent: o.poseEind ?? o.cnEind, vae: ['1', 2] }, _meta: { title: 'ControlNet: skelet' } },
+    });
+    pos = ['42', 0];
+    neg = ['42', 1];
+  }
   Object.assign(st, {
     15: { class_type: 'KSampler', inputs: { model: o.ip > 0 ? ['9', 0] : o.lora ? ['2', 0] : ['1', 0], positive: pos, negative: neg, latent_image: ['32', 0], seed: o.seed, steps: o.steps, cfg: o.cfg, sampler_name: o.sampler, scheduler: o.scheduler, denoise: o.denoise } },
     16: { class_type: 'VAEDecode', inputs: { samples: ['15', 0], vae: ['1', 2] } },

@@ -359,6 +359,8 @@ const SOLDAAT_FPS = 10;
 // bouw, met o.livrei 'dorp' (een blauwe wapenrok met de gouden schoof op borst en rug, wapen.cjs schoof), o.wapen 'speer'
 // (in plaats van de hellebaard), o.schild (een schild in blauw met de schoof en een ijzeren rand, aan de linkerarm, die dan
 // niet zwaait) en o.kraag (een maliënkraag om hoofd en hals, onder de hoed). soldatenhd.cjs maakt er de speerman van.
+// o.gewrichten (een leeg object): daarin komen de heup, de knie en de enkel van elk been in deze stand ({ benen: [links,
+// rechts] }), voor het skelet van OpenPose (soldatenhd.cjs).
 // De materialen (M) en de soorten onderdelen (D) van de soldaat; soldatenhd.cjs leest ze voor de zinnen per gebied.
 const SOLDAAT_M = {
   huid: 0, oog: 1, mond: 2, baard: 3, wambuis: 4, rood: 5, geel: 6, hoos: 7, laars: 8, riem: 9,
@@ -427,6 +429,7 @@ function soldaat(stand = null, o = {}) {
   for (const s of [-1, 1]) {
     const i = s < 0 ? 0 : 1;
     const P = knieBeen(delen, hg, i, [s * 5.4, 0.2, 36], [s * 5.2, 0.8, 6.2], [5.2, 4], M.hoos, D.benen);
+    if (o.gewrichten) (o.gewrichten.benen = o.gewrichten.benen || [])[i] = { heup: P.heup, knie: P.knie, enkel: P.enkel };
     const omhoog = eenheid(min(P.knie, P.enkel));
     delen.push(kegel(plus(P.enkel, maal(omhoog, -1)), plus(P.enkel, maal(omhoog, 9.5 - s * 0.4)), 4.5, 4.8, M.laars, D.laars, 0.8));
     bot(null);

@@ -1607,6 +1607,59 @@ het eerst een echte os met horens en tuig voor een rode kar met spaakwielen, ijz
 beste kar tot nu toe. Wat nog niet klopt: de lading is vooral goud (geen zakken en tonnen), de leeuwen worden krullen (die
 zetten we er zelf op, `wapen.cjs`), de os is wat lief (gouden horens, een roze neus), en het is gladder dan de korrelige
 pixels van de plaat.
+**De speerman in acht richtingen** (`soldatenhd.cjs richtingen`): zaad 106 als referentie (IP-Adapter, 'linear' 0,7: ook
+de inhoud), per richting de diepte van ons model (0,6), hetzelfde zaad; zo'n 55 seconden per richting
+(`uit/soldatenhd/richtingen-speerman.png`). Hij blijft dezelfde man (ketelhoed, gele sjaal, maliën, blauwe wapenrok, het
+schild), maar van achteren (N, NO, NW) tekent SDXL toch een gezicht naar ons toe, en twee keer een sokkel. Ronde 2: per
+richting een eigen zin ("seen from behind, no face visible"), voor de rug gezicht en baard in de negatieve zin, geen
+sokkel, de diepte 0,7 (`richtingen-speerman-2.png`): van achteren nu echt de rug (het achterhoofd, de maliënkap), W en O in
+profiel; nog twee speren bij N, een sokkel bij ZW, en de achterkant van de wapenrok wisselt van kleur. Marcel: "Controlnet
+toevoegen?" en "En misschien met de pixel art addon?". **De pixelart-LoRA** (`soldatenhd.cjs lora`,
+`uit/soldatenhd/lora-speerman.png`): PixelArtRedmond op zaad 106, vrij: op 0,5 echte pixel art met strakke blokjes, op
+spelmaat dichter bij de plaat dan de gladde versie, maar hij zet een gele pluim op de helm en maakt hem puntig; op 0,9
+Minecraft. **Ronde 3 van de richtingen:** erbij OpenPose uit onze eigen gewrichten (`soldatenhd.cjs poseBeeld`: de
+gewrichten van de soldaat per richting naar het scherm, in de kleuren van OpenPose; van achteren zonder neus en ogen) op
+0,8, en de buitenlijn van ons silhouet (`vrij.cjs omtrekVan`) op 0,4; zonder en met de LoRA op 0,5 (pluim en veer in de
+negatieve zin). Uitkomst (`richtingen-speerman-3.png`): in alle acht richtingen precies op ons model (dezelfde maat en
+houding, één speer, van achteren echt de rug), maar stijver en gedrongener dan het vrije concept; blauwe plassen onder de
+voeten (die vallen weg: we knippen op ons silhouet); de LoRA doet op 0,5 met de referentie weinig.
+
+**Van de acht beelden naar sprites** (`soldatenhd.cjs sprites`, `uit/soldatenhd/sprites-speerman.png`): de acht beelden
+op het model gezet (`metAI`: per punt de eerste richting die het zag, in de volgorde Z, ZW, ZO, W, O, NW, NO, N), en
+daaruit de sprites van 2× met H4, staand en lopend; ernaast de AI direct (op ons silhouet geknipt en verkleind). De AI
+direct is op spelmaat mooi en blijft dezelfde man. Via het model: van voren te hard en glimmend (het licht van de AI en
+dat van ons over elkaar, plus H4), van achteren donker en rommelig; lopend wel steeds dezelfde man zonder flikkeren, maar
+even hard, en de benen vlekken. Het idee daarna (nog niet geprobeerd): een schilderbeurt over het beeld via het model
+(SDXL licht, denoise 0,4, met het beeld van de AI direct van die richting als referentie), zodat de loopbeelden hun vaste
+begin houden en toch het schilderwerk van de AI krijgen.
+
+**Pixel Art Base** (Marcel: "We hadden toch ook dat sdxl model met pixel art checkpoint?"; het stond op de lijst van 19
+okt, Marcel downloadde het, `huisstijl.cjs CHECKPOINTS.pixelartbase`; ronde 5, `concept-speerman-4-5.png`): precies ronde
+4, alleen het checkpoint anders. Echte pixel art: strakke blokjes, donkere lijnen, een beperkt palet, de korrel van de
+plaat, en zijn blokjes vallen op de HD-maat zo goed als één op één op onze pixels. Maar drukker: pluimen op de helm,
+rommeliger op spelmaat; zaad 106 kreeg een wimpel aan de speer. FaeTastic is gladder en schoner, meer geschilderd.
+**Marcel koos Pixel Art Base, en voor de animatie de schilderbeurt over het model.** De acht richtingen met Pixel Art Base
+(ronde 4, `richtingen-speerman-4.png`): echte pixel art, dezelfde man, van achteren de rug; feller blauw en drukker, W en O
+rommelig. **De schilderbeurt over het model** (`soldatenhd.cjs beurt`, `beurt-speerman.png`; denoise 0,4, het beeld van
+die richting als referentie): lopend dezelfde man zonder flikkeren, maar het begin is te slecht: via het model te fel,
+druk en hard (het licht van de AI en het onze over elkaar), en de benen blijven bruine vlekken, want de benen worden per
+loopbeeld opnieuw gebouwd (de knie per stand uitgerekend) en de verf van het staan vindt ze niet terug. Marcel: "Ernie ook
+nog een keer proberen?": ERNIE als schilder van die beurt (`beurt speerman ernie`, `beurt-speerman-ernie.png`, denoise
+0,5, zo'n minuut per beeld op dit doek) legt meer textuur, maar redt het slechte begin ook niet. Die weg laten we los.
+**Lopen van de AI zelf** (`soldatenhd.cjs lopen`): per loopbeeld het staande beeld van de AI als begin, de benen in die
+stap via OpenPose (`gewrichtenIn`: `heer.cjs soldaat` geeft met `o.gewrichten` de heup, knie en enkel van elk been in
+die stand), onze diepte en buitenlijn, het staande beeld als referentie, denoise 0,5 en 0,7 (`lopen-speerman.png`, en
+bewegend `lopen-speerman-0.5.png` en `-0.7.png`): de beste stap voor de animatie tot nu toe. Het bovenlijf blijft dezelfde
+man (helm, sjaal, schild, speer), met wat flikkeren in de details (het patroon van de maliën, de lelie); op 0,5 schemert
+waar het been eerst stond de achtergrond door, op 0,7 zijn de benen geschilderd, niet in elk beeld even mooi. Het
+volgende idee: alleen de benen opnieuw laten schilderen en het bovenlijf ongewijzigd uit het staande beeld nemen (de
+soldaat loopt met zijn bovenlijf stil), met het been van ons model als begin waar het been nu staat.
+
+Marcel vroeg ook of alle poppetjes gelijk zijn (een lijf per soort, met uiterlijken), en of een hogere "bitrate" het model
+meer detail kan geven: de render staat voor de AI al op 10×, en fijne vormen in code voegen weinig toe nu de AI schildert;
+wat wel helpt, zijn de verhoudingen: ons model is gedrongen (een groot hoofd, korte benen) en de AI volgt dat; de soldaten
+van zijn plaat zijn langer en echter van bouw. Pixel Art Base ("Ik vond ook de pixel art base erg mooi"): staan in acht
+richtingen werkt; lopen is de proef hierboven.
 
 ## Open
 
