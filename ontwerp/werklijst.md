@@ -25,8 +25,7 @@ Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
 loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`); bekijken: stap 7 van de
 speellijst (`speelbaar.md`). De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
 eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
-**Q, het eerste jaar speelbaar, is gebouwd** (vraag 181, 20 okt; **Bezig in sessie `ccr-48dc841e-12fv6n`** (20 okt) tot het
-in `main` staat): minder vast in het bos (d), de wacht en het slot in de demo (e), vee in het lege begin (b), geen visser of
+**Q, het eerste jaar speelbaar, is gebouwd** (vraag 181, 20 okt, in `main`): minder vast in het bos (d), de wacht en het slot in de demo (e), vee in het lege begin (b), geen visser of
 rietsnijder zonder water (c), en de speellijst (a). **Wacht op Marcel** (hieronder): het demojaar spelen met de
 speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, lokaal op Marcels pc: betere poppetjes met
 de pijplijn van vraag 180 (Q, f; niet in de cloud).
@@ -1571,7 +1570,7 @@ waar je ze neerzet", "M2 B = prima C = akkoord"):
   zonder water de visser en de rietsnijder niet.
 - **De volgorde:** d, e, b, c, dan a (de speellijst, zodat die het demojaar beschrijft zoals het dan is); f lokaal ernaast.
 
-**d, e en b zijn gebouwd** (20 okt, op de branch `ccr-48dc841e-12fv6n`; hoe het werkt: `spel.md`, "Zo werkt het lege begin
+**d, e en b zijn gebouwd** (20 okt, in `main`; hoe het werkt: `spel.md`, "Zo werkt het lege begin
 nu", en `code.md` bij `js/maker.js`, `js/soldaten.js`, `js/vee.js`, `js/debugvenster.js`): de overgang naar het bos (ring 3
 tot 6 van het plein van 25-55% naar hooguit 4% te rooien; de wolventoetsen spelen nu op eiland 7), de wacht en het slot in
 de demo (en een knop in het debugvenster die het slot aan en uit zet, Marcel: "voeg dan ook in debugmode het lock toe"), en
