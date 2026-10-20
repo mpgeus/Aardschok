@@ -25,7 +25,9 @@ Marcel: "A1 B1 C1"): met de tekeningen die er zijn, in de wereld (het leger
 loopt echt over de weg, de wagen van de heer laadt echt), en een regie erover (`js/regie.js`). Wacht op Marcel
 (hieronder): bekijken. De tekeningen (de heer te paard, zijn wagen, de vaandels, de fakkels) komen met **vraag 180** (de
 eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het rijkst, `gereedschap/ai/ai-afwerking.md`).
-Dan het eerste jaar speelbaar: Marcel speelt, en wat scheef zit, eerst met een getal uit de werkbank.
+**Het volgende is Q, het eerste jaar speelbaar** (vraag 181, 20 okt; Marcel: "A1", "B1, en B2", "C3"): de speellijst, vee
+in het lege begin, steen en water, de maker (minder vast in het bos), soldaten in de demo met het wachthuis dicht, en
+betere poppetjes (lokaal, vraag 180); dan speelt Marcel.
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
@@ -1811,6 +1813,32 @@ ook naar de kaart. Om en om gemeten in Chromium, steeds met hetzelfde beeld (op 
 op 50% en 75% na): ver uitgezoomd nu 1,7 ms per beeld voor de processor en 4,4 met de kaart erbij. B4 is niet meer
 nodig, C1 en C4 ook niet. **Het volgende**: Marcel meet in Firefox; daarna D1 (haperingen bij een ander seizoen of ver
 verderop kijken, vooral de grond) of E3 en E4, op zijn keuze.
+
+## Q. Het eerste jaar speelbaar (vraag 181, 20 okt)
+
+Het derde stuk van O1 (Marcel, 18 okt: "dan een speelbaar eerste jaar"), na het doel van de demo en E. Het plan van
+Claude (20 okt): eerst een speellijst voor het demojaar, dan speelt Marcel, en wat scheef zit eerst met een getal uit de
+werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met drie punten erbij:
+- **a. De speellijst** (A1): één lijst voor het demojaar, van de huifkar tot Sint-Maarten, in de volgorde waarin je het
+  tegenkomt, met de punten uit "Wacht op Marcel" die erbij horen; en de rest van die lijst opgeruimd (wat geparkeerd is,
+  naar zijn onderwerp).
+- **b. Vee in het lege begin** (B1 en B2; `opmerkingen.md`, "Geen vee in het lege begin"): de kar brengt bij het begin een
+  paar dieren mee, en de marskramer verkoopt vee.
+- **c. Steen en water** (C3; `opmerkingen.md`, "De natuur buiten het bouwbereik"): zo laten, want een schuur heeft een
+  eigen bereik, eerst gemeten over een paar eilanden. Marcel erbij: "maar indien er geen steen of water in de buurt is,
+  houden we de gebouwen uit het bouwmenu. Heeft dan weinig zin" (de steengroeve, de visser, de rietsnijder).
+- **d. De maker** (Marcel, 20 okt: "We moeten ook de generator (maker) aanpassen. Vaak zit je nu vast in een dicht bos en
+  kun je moeilijk bouwen"; zo wordt "de world gen bijstellen" van 18 okt concreet).
+- **e. Soldaten in de demo** (Marcel, 20 okt: "Ik wil ook een paar soldaten zodat de demo laat proeven wat vechten is,
+  maar ik wil de trainings gebouwen voor de demo zelf geblokkeerd hebben om het te houden voor het 'echte' spel. Zo deden
+  games het vroeger ook"): een paar soldaten om mee te vechten, en het wachthuis (en de wapenmaker?) dicht in de demo
+  (`T.DEMO_INSTELLINGEN`, js/einde.js).
+- **f. De poppetjes** (Marcel, 20 okt: "Ik zou anders graag een paar soldaten maken, en ook de rest van de poppetjes.
+  Deze zijn namelijk niet al te best, dat breekt de immersion een beetje"): met de pijplijn van vraag 180. **Niet in de
+  cloud** (gemeten 20 okt): geen videokaart, 4 kernen en 15 GB, en de netwerkregels van de omgeving weigeren
+  `huggingface.co` (de modellen), `download.pytorch.org` en de diensten (Replicate, fal, OpenAI). Ook met toegang zou
+  SDXL met ControlNet op 4 kernen minuten per beeld kosten, voor acht richtingen maal elke houding. Dus lokaal op Marcels pc
+  (de 1080 Ti, ComfyUI), en de cloud maakt wat zonder AI kan: de modellen, de renders en de nabewerking.
 
 ## Af (sinds 11 okt)
 
