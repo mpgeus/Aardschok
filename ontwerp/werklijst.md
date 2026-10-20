@@ -1710,8 +1710,18 @@ hebben we zoizo nodig. volgorde is akkoord"):
   oppervlak, en de bouwer rendert er alles mee, met het handschrift erover. Voor een vlak materiaal is geen ControlNet
   nodig, dus ERNIE (rijker dan SDXL op de kar) kan ook. Voorstel: (1) de maat in de twee bouwers, en een proefplaat
   zonder AI (in de cloud); (2) de pijplijn voor gebouwen: het handschrift uit `karhd.cjs` los, voor alles, en de
-  materialen gebakken; een proefplaat bij Marcel; (3) alles in één keer renderen, bij Marcel. **Wacht op Marcel:** of dat
-  zo mag, en SDXL of ERNIE.
+  materialen gebakken; een proefplaat bij Marcel; (3) alles in één keer renderen, bij Marcel. Marcel (20 okt): "dat is
+  prima". SDXL of ERNIE: allebei op één materiaal naast elkaar, in stap 2. **Stap 1, de maat in de huizenbouwer, is
+  gebouwd** (20 okt; `huis-sdf.cjs`, `maat`, standaard 1, dus de tekeningen van nu blijven pixel voor pixel gelijk): het
+  plan op hele tegels (met halve viel de achterste hoek op een kwart tegel, en telde de voet een rij te veel), de hoogtes,
+  de plint, de deur (dan zo hoog als een mens), de ramen, de schoorsteen, de dakkapellen, de aanbouw en de erker. Alle 607
+  opgaven meten op 0,65 een voet en een deur (de meeste 3×3 tot 6×5; was tot 9×7). Het riet hangt nog even ver over (mee
+  geschaald scheelde het weinig). De proefplaat (huis1, een stijlhuis met pannen, het raadhuis, de herberg, een hut, een
+  stijlhuis met leien en een boerderij; nu, P1 en P2, met mensen voor de deur) is naar Marcel. **Nog niet:** `huizen.cjs`
+  geeft de maat nog niet door (eerst Marcels oordeel), en de gebouwen uit delen (de kapel met haar toren, de zagerij met
+  zijn stapels) moeten hun plekken mee laten schalen. **De werkplaatsen** (de 29 in `tegels/gebouwen/`, uit `dorp.cjs` en
+  `dorp2.cjs`, elk met eigen vaste maten): niet in de oude bouwer kleiner maken, maar met vraag 167 naar de huizenbouwer,
+  in de bouwstijl, en dan op dezelfde maat (voorstel; wacht op Marcel).
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
