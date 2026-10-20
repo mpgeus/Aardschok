@@ -1055,8 +1055,19 @@
   function vanDeTrede(D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
-    return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
+    return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort) && T.natuurInHetLand(D, soort);
   }
+  // Ligt de natuur die deze soort nodig heeft (`bij`: de rotsen voor de steengroeve, het water voor de visser en de
+  // rietsnijder) ergens in het land van het dorp (T.dorpVak)? Anders heeft hij geen zin, en staat hij niet in het bouwmenu
+  // (werklijst Q, vraag 181, c; Marcel, 20 okt: "indien er geen steen of water in de buurt is, houden we de gebouwen uit
+  // het bouwmenu"). Ligt het er wel maar buiten je bereik, dan staat hij er: een schuur brengt het erbinnen (C3). Gemeten
+  // op 24 eilanden: rotsen in elk land, water in 19.
+  T.natuurInHetLand = function (D, soort) {
+    const bij = T.GEBOUWEN[soort] && T.GEBOUWEN[soort].bij;
+    const vak = D.plek && T.dorpVak(D);
+    if (!bij || !vak || !D.wereld || !T.heeftTegels(D.wereld)) return true;
+    return T.natuurBij(D.wereld, bij.natuur, vak, 0) >= bij.minstens;
+  };
   // Wat in de demo op slot is (T.DEMO_INSTELLINGEN.dicht, js/einde.js; werklijst Q, vraag 181, e: het wachthuis en de
   // wapenmaker): het staat in het bouwmenu, op slot, met "In the full game", maar je zet het niet neer
   // (T.waaromPastHetNiet), en de raad noemt het niet (T.magGebouwd).

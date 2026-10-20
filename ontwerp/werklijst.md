@@ -1859,7 +1859,9 @@ waar je ze neerzet", "M2 B = prima C = akkoord"):
 nu", en `code.md` bij `js/maker.js`, `js/soldaten.js`, `js/vee.js`, `js/debugvenster.js`): de overgang naar het bos (ring 3
 tot 6 van het plein van 25-55% naar hooguit 4% te rooien; de wolventoetsen spelen nu op eiland 7), de wacht en het slot in
 de demo (en een knop in het debugvenster die het slot aan en uit zet, Marcel: "voeg dan ook in debugmode het lock toe"), en
-het vee van de kar en van de marskramer. Het volgende is c.
+het vee van de kar en van de marskramer. **c is gebouwd** (20 okt; gemeten in `opmerkingen.md`, "De natuur buiten het
+bouwbereik"): rotsen liggen in elk land (meest buiten je bereik: een of twee schuren), water ontbreekt op 5 van de 24
+eilanden, en daar staan de visser en de rietsnijder niet in het bouwmenu. Het volgende is a, de speellijst.
 
 ## Af (sinds 11 okt)
 

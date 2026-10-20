@@ -90,7 +90,8 @@ het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); **sind
 en vier schapen, die los bij de kar staan tot er een weide met plaats is, en de marskramer verkoopt er meer (een koe en
 twee schapen per bezoek). **In de demo** (vraag 181, e) komt ook de wacht mee: twee speermannen en een kruisboogschutter,
 in een eigen tent, met hun eigen wapens en zonder wachthuis (ze staan waar je ze neerzet); het wachthuis en de wapenmaker
-staan in het bouwmenu op slot, "In the full game". Met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
+staan in het bouwmenu op slot, "In the full game". En wat de natuur nodig heeft die er niet is, staat niet in het
+bouwmenu (vraag 181, c): zonder water in je land geen visser en geen rietsnijder. Met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
 Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn

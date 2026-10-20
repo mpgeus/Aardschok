@@ -147,3 +147,25 @@ test('wat laag groeit (een varen, bloemen), maakt plaats voor een gebouw; wat in
   bouwAf(T, D, nieuw.instantie, 1);
   assert.ok(T.voorwerpOp(w, struik.x, struik.y) !== struik, 'de struik is gerooid');
 });
+
+// Werklijst Q, vraag 181, c (Marcel, 20 okt: "indien er geen steen of water in de buurt is, houden we de gebouwen uit het
+// bouwmenu. Heeft dan weinig zin"): ligt wat een gebouw nodig heeft nergens in het land van het dorp, dan staat het niet in
+// het bouwmenu, en de raad noemt het niet; ligt het er wel, ook buiten je bereik, dan wel (een schuur brengt het erbinnen).
+test('zonder water in het land geen visser en geen rietsnijder in het bouwmenu; zonder rotsen geen steengroeve', () => {
+  const zonder = T.proefdorp.begin(3).dorp; // een eiland zonder water in het land van het dorp
+  const met = T.proefdorp.begin(15).dorp; // en een met veel water
+  for (const soort of ['visser', 'rietsnijder']) {
+    assert.ok(!T.natuurInHetLand(zonder, soort) && !T.inBouwmenu(zonder, soort) && !T.magGebouwd(zonder, soort), `${soort}: geen water`);
+    assert.ok(T.natuurInHetLand(met, soort) && T.inBouwmenu(met, soort), `${soort}: wel water`);
+  }
+  assert.ok(T.inBouwmenu(zonder, 'steengroeve'), 'rotsen liggen er (gemeten: op elk van de eerste 24 eilanden)');
+  // Zonder rotsen ook geen steengroeve: haal ze even weg uit de telling.
+  const echt = T.NATUUR.rotsen.telt;
+  T.NATUUR.rotsen.telt = () => false;
+  try {
+    const leeg = T.proefdorp.begin(4).dorp;
+    assert.ok(!T.inBouwmenu(leeg, 'steengroeve'));
+  } finally {
+    T.NATUUR.rotsen.telt = echt;
+  }
+});

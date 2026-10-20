@@ -1274,6 +1274,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   het lege begin liggen de rotsen en het water op veel eilanden verder dan 16 tegels van het plein (het bouwbereik,
   `T.BEGIN_INSTELLINGEN.bouwBereik`), dus kan daar geen steengroeve, visser of rietsnijder staan tot er een opslag in de
   buurt is. `test/natuur.test.cjs` zet het bereik daarom op 120. Een spelvraag (B2, of het bereik), geen fout.
+  **Gemeten op 20 okt** (werklijst Q, vraag 181, c; Marcel koos C3, zo laten): op de eerste 24 eilanden liggen er rotsen
+  in het land van elk dorp, maar binnen 16 tegels van het plein maar op 5; op 16 haal je ze met één schuur (32 tegels),
+  op 4 (eiland 4, 9, 12 en 14) pas met twee. Water ontbreekt op 5 eilanden helemaal (2, 3, 8, 11 en 23): daar staan de
+  visser en de rietsnijder sinds 20 okt niet in het bouwmenu (`T.natuurInHetLand`); binnen 16 tegels ligt het maar op 3.
 - **De samenvatting is oud** (12 okt): `gereedschap/samenvatting/samenvatting.html` (en dus
   `ontwerp/het-spel-in-het-kort.pdf`) beschrijft nog het spel van vóór 11 okt: de inwoners die vragen, de erven, de
   oproepen, de ondernemers en de herbergierster. `npm run samenvatting -- --beelden` speelt sinds stap 6 op het

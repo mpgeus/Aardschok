@@ -614,7 +614,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de dobbelsteen van de maker (die trok tot B2b nog getallen die niets meer legden, om het land van een bewaard spel
   gelijk te houden; een bewaard spel past sinds B2b toch niet meer). `npm run maker` schetst het lege land
   (`gereedschap/maker/schets.cjs`). **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
-  rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
+  rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`); ligt die natuur nergens in het land
+  van het dorp, dan staat het gebouw niet in het bouwmenu (`T.natuurInHetLand` in `vanDeTrede`; werklijst Q, vraag 181, c,
+  sinds 20 okt). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
 - **Het land van een stuk** (`T.landStuk(E, x0, y0, b, h)`, B2b stap 1, 13 okt; `kaarten.md`, "Het hele eiland"): de
