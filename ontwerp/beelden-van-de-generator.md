@@ -137,69 +137,84 @@ Aanvallen en vallen bestaan in het spel nog niet als tekening; die komen er met 
 
 ## De vragen voor de speerman (21 okt)
 
-Marcel: "ok, goed idee. geef me een duidelijk prompt". Met zijn plaat erbij als voorbeeld, en vanaf de tweede vraag ook
-het eerste vel (de maatstaf). Gekozen bij het schrijven: staan is één beeld (het ademen maken wij, een pixel op en neer),
-de richtingen heten naar het kompas, en het wapen zit in het vel (per soort soldaat een eigen vel). De speerman zelf:
-staand de speer rechtop in de rechterhand, lopend schuin met twee handen, en stekend met twee handen (Marcel: "Bij
-stilstaan 1 hand recht, lopen 2 handen en steken ook"); speer en harnas, geen schild.
+Marcel: "ok, goed idee. geef me een duidelijk prompt", en daarna: "de prompten even aanpassen dat alles erin zit, nu moet
+ik 2 dingen kopieren". Elke vraag is één blok; bij een beweging vervang je alleen de richting. Gekozen bij het schrijven:
+staan is één beeld (het ademen maken wij, een pixel op en neer), de richtingen heten naar het kompas, en het wapen zit in
+het vel (per soort soldaat een eigen vel). De speerman: staand de speer rechtop in de rechterhand, lopend schuin met twee
+handen, en stekend met twee handen (Marcel: "Bij stilstaan 1 hand recht, lopen 2 handen en steken ook"); speer en
+harnas, geen schild. Erin verwerkt (21 okt, na de eerste vellen): ruimte tussen de beelden (de speren raakten de
+buurbeelden), één speer (staan NW had er twee), en uit de correctie die GPT meegaf bij de aanval: de speer met twee
+handen, de punt altijd vooruit, nooit van kant wisselen en niet over het hoofd.
+
+De richtingen, in plaats van "south-west (down-left)": Z south (towards the viewer), ZW south-west (down-left), W west
+(left), NW north-west (up-left, seen from behind at three-quarters), N north (away from the viewer, his back), NO
+north-east (up-right, seen from behind at three-quarters), O east (right), ZO south-east (down-right).
 
 1. **Staan, acht richtingen:**
 
    > Use the attached image as the reference for style, proportions and character. Draw the same medieval foot soldier as
    > in the attached image, now as a village spearman: the same face, steel kettle hat, mail coif, brown padded sleeves,
    > leather gloves, belt with pouch, brown boots and body proportions, but with a quartered deep blue and golden yellow
-   > tabard worn over brown leather armour. He carries a long wooden spear with a leaf-shaped iron spearhead, about one and
-   > a half times his height. No shield, no banner, no other weapons. Pose: standing at rest, the spear upright in his
-   > right hand with the butt on the ground, his left arm relaxed. Show him in 8 directions in one row, left to right in
-   > this order: facing south (towards the viewer), south-west (down-left), west (left), north-west (up-left, seen from
-   > behind at three-quarters), north (away from the viewer, his back), north-east (up-right), east (right), south-east
-   > (down-right). Every figure exactly the same size: about 220 pixels from the soles of his boots to the top of his
-   > helmet. Feet on one baseline, at least 40 pixels of empty space between the figures, nothing overlapping. Style:
+   > tabard worn over brown leather armour. He carries ONE long wooden spear with a leaf-shaped iron spearhead, about one
+   > and a half times his height. No shield, no banner, no second spear, no other weapons. Pose: standing at rest, the
+   > single spear upright in his right hand with the butt on the ground, his left hand empty and relaxed. Show him in 8
+   > directions in one row, left to right in this order: facing south (towards the viewer), south-west (down-left), west
+   > (left), north-west (up-left, seen from behind at three-quarters), north (away from the viewer, his back), north-east
+   > (up-right), east (right), south-east (down-right). Every figure exactly the same size: about 220 pixels from the soles
+   > of his boots to the top of his helmet, feet on one baseline. Leave generous empty space between the figures: they must
+   > never touch or overlap. Every figure, including the spear, stays completely inside its own equal-width column, with at
+   > least 60 pixels of empty magenta between neighbouring figures. Make the sheet wide enough for this. Style:
    > high-definition hand-painted pixel art exactly like the attached image: isometric three-quarter view from above, warm
    > light from the upper left, dark outlines, a crisp pixel grid, no blur. Background: plain flat magenta (#FF00FF). No
    > ground shadow, no text, no labels, no measurement lines, no frame.
 
-2. **Lopen, één richting per vel** (acht keer):
+2. **Eén staand beeld opnieuw (hier NW):**
+
+   > Redraw only the north-west figure (facing up-left, seen from behind at three-quarters) of the attached sheet: he holds
+   > ONE spear, upright in his right hand with the butt on the ground; his left hand is empty and relaxed at his side. No
+   > second spear. Exactly the same character, scale and style as the attached sheet: high-definition hand-painted pixel
+   > art, isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid. Plain
+   > flat magenta background (#FF00FF), no ground shadow, no text, no labels, no frame.
+
+3. **Lopen, één richting per vel:**
 
    > Use the attached sheet as the reference for the character, the scale and the style. A walk cycle of this spearman
    > facing south-west (down-left): 8 frames in one row, left to right in order, the last frame flowing back into the
-   > first. While walking he holds the spear diagonally across his body with both hands: his right hand low at the hip,
-   > his left hand higher in front of his chest, the spearhead pointing up and forward. Every frame exactly the same scale
-   > as the standing figures in the attached sheet, each in an equal-sized cell, his feet on one baseline, centered in the
-   > cell, at least 40 pixels of space between frames. The same high-definition pixel art style, plain flat magenta
-   > background (#FF00FF), no ground shadow, no text, no labels, no frame.
+   > first. While walking he holds the spear diagonally across his body with both hands: his right hand low at the hip, his
+   > left hand higher in front of his chest, the spearhead pointing up and forward in the direction he walks. Every frame
+   > exactly the same scale as the standing figures in the attached sheet (about 220 pixels from boots to helmet), each in
+   > an equal-sized cell, his feet on one baseline, centered in the cell. Leave generous empty space between the frames:
+   > the frames must never touch or overlap. Every frame, including the spear, stays completely inside its own equal-width
+   > column, with at least 60 pixels of empty magenta between neighbouring frames. Make the sheet wide enough for this. The
+   > same high-definition pixel art style: isometric three-quarter view from above, warm light from the upper left, dark
+   > outlines, a crisp pixel grid. Plain flat magenta background (#FF00FF), no ground shadow, no text, no labels, no frame.
 
-3. **Aanvallen, één richting per vel:**
+4. **Aanvallen, één richting per vel:**
 
    > Use the attached sheets as the reference for the character, the scale and the style. An attack animation of this
    > spearman facing south-west (down-left): 8 frames in one row, left to right in order: ready stance with the spear held
-   > diagonally in both hands, drawing back, thrusting forward, full extension, holding, pulling back, recovering, back to
-   > the ready stance. Every frame exactly the same scale as the attached sheets, equal-sized cells, feet on one baseline,
-   > at least 40 pixels of space between frames. The same high-definition pixel art style, plain flat magenta background
-   > (#FF00FF), no ground shadow, no text, no labels, no frame.
+   > diagonally in both hands, drawing the spear back horizontally, thrusting forward, full extension, holding, pulling
+   > back, recovering, back to the ready stance. He holds the spear with both hands in every frame. The spearhead always
+   > points in the direction he faces; the spear is one straight shaft of constant length and never swaps to the other
+   > side of his body or goes over his head. Every frame exactly the same scale as the attached sheets (about 220 pixels
+   > from boots to helmet when standing), equal-sized cells, feet on one baseline. Leave generous empty space between the
+   > frames: the frames must never touch or overlap. Every frame, including the spear at full extension, stays completely
+   > inside its own equal-width column, with at least 60 pixels of empty magenta between neighbouring frames. Make the
+   > sheet wide enough for this. The same high-definition pixel art style: isometric three-quarter view from above, warm
+   > light from the upper left, dark outlines, a crisp pixel grid. Plain flat magenta background (#FF00FF), no ground
+   > shadow, no text, no labels, no frame.
 
-4. **Vallen, één richting per vel:**
+5. **Vallen, één richting per vel:**
 
    > Use the attached sheets as the reference for the character, the scale and the style. This spearman facing south-west
    > (down-left) is hit and falls: 7 frames in one row, left to right in order: hit and flinching, staggering back, knees
    > buckling, falling, hitting the ground, settling, and the last frame lying still on the ground with the spear beside
-   > him. Every frame exactly the same scale as the attached sheets, equal-sized cells, at least 40 pixels of space between
-   > frames. The same high-definition pixel art style, plain flat magenta background (#FF00FF), no ground shadow, no text,
-   > no labels, no frame.
-
-**Erbij** (21 okt, na de eerste vellen: in de aanval raakten de speren de buurbeelden, en in staan NW had hij twee
-speren). Bij elke beweging, achteraan de vraag:
-
-> Leave generous empty space between the frames: the frames must never touch or overlap. Every frame, including the
-> spear at full extension, stays completely inside its own equal-width column, with at least 60 pixels of empty magenta
-> between neighbouring frames. Make the sheet wide enough for this.
-
-En een beeld laten overdoen (hier staan NW):
-
-> Redraw only the north-west figure (facing up-left, seen from behind at three-quarters) of the attached sheet: he holds
-> ONE spear, upright in his right hand, the butt on the ground; his left hand is empty and relaxed at his side. Exactly
-> the same character, scale and style as the attached sheet, plain flat magenta background (#FF00FF), no ground shadow,
-> no text.
+   > him. Every frame exactly the same scale as the attached sheets (about 220 pixels from boots to helmet when standing),
+   > equal-sized cells. Leave generous empty space between the frames: the frames must never touch or overlap. Every frame,
+   > including the spear and the fallen body, stays completely inside its own equal-width column, with at least 60 pixels
+   > of empty magenta between neighbouring frames. Make the sheet wide enough for this. The same high-definition pixel art
+   > style: isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid.
+   > Plain flat magenta background (#FF00FF), no ground shadow, no text, no labels, no frame.
 
 ## De inventaris
 
