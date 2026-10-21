@@ -1581,6 +1581,9 @@ werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met dr
   met **alleen de benen** opnieuw geschilderd (het bovenlijf pixel voor pixel het staande beeld; `beeld.md`). **Het
   volgende:** de laarzen bruin en de vlekjes weg, dan alle acht richtingen lopend; dan aanvallen en vallen (die houdingen
   moet het model nog krijgen), de schoof uit code erop, en de sprites in het spel (een eigen vel per soort soldaat).
+  **Stand 21 okt:** de laarzen en de vlekjes zijn opgelost (het palet van het staande been), lopen werkt in elke
+  richting; Marcel vond hem te glanzend en koos mat 3 plus de zin: de matte speerman loopt nu door in acht richtingen
+  (`soldatenhd.cjs alles`).
 
 **Besloten** (Marcel, 20 okt: "S. S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", "De soldaten staan gewoon
 waar je ze neerzet", "M2 B = prima C = akkoord"):

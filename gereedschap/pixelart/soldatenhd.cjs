@@ -338,6 +338,14 @@ CONCEPTEN[5] = {
   checkpoint: require('../ai/huisstijl.cjs').CHECKPOINTS.pixelartbase,
   ipSterktes: [0.6],
 };
+// ronde 6 (Marcel: "Hij is nog wat te shiny?", en koos "Mat 3 + de zin"): ronde 5 met mat in de zin en glans, chroom,
+// de pluim en de wimpel in de negatieve zin
+CONCEPTEN[6] = {
+  ...CONCEPTEN[5],
+  positief: CONCEPTEN[5].positief.replace('steel kettle hat with rivets', 'dull matte iron kettle hat with rivets') +
+    ', matte worn surfaces, dull iron, matte wool and leather, restrained reflectivity',
+  negatief: `${CONCEPTEN[5].negatief}, shiny, glossy, chrome, polished metal, reflective, specular highlights, plume, feather, pennant, flag`,
+};
 async function concept(naam = 'speerman', ronde = '1') {
   const V = require('../ai/vrij.cjs');
   const C = CONCEPTEN[ronde];
@@ -356,16 +364,17 @@ async function concept(naam = 'speerman', ronde = '1') {
     checkpoint: C.checkpoint,
   });
   if (ronde === '5') vergelijkRondes(naam, '4', '5', 'FaeTastic', 'Pixel Art Base');
+  if (ronde === '6') vergelijkRondes(naam, '5', '6', 'glanzend', 'mat', 'alleen de zin anders (mat in de zin, glans in de negatieve)');
 }
 // Twee rondes naast elkaar (dezelfde zaden op stijl 0,6): groot (een derde) en op de HD-maat (2×, maal 2).
-function vergelijkRondes(naam, a, b, naamA, naamB) {
+function vergelijkRondes(naam, a, b, naamA, naamB, wat = 'alleen het checkpoint anders') {
   const A = require('../ai/beeld-ai.cjs');
   const E = require('../ai/etiket.cjs');
   const lees = (r, z) => A.leesPng(fs.readFileSync(path.join(UIT, 'concept', `${naam}-${r}`, `zaad-${z}-ip0.6.png`)));
   const zaden = CONCEPTEN[b].zaden;
   const groot = (r, n) => zaden.map((z) => E.met(H.verklein(lees(r, z), 3, 'naast'), `${n} · zaad ${z}`));
   const klein = (r, n) => zaden.map((z) => { const s = H.verklein(lees(r, z), 5, 'gem'); return E.met(H.snij(s, { x0: 0, y0: 0, b: s.b, h: s.h }, 2), `${n} · HD-maat, maal 2`); });
-  E.bewaar(path.join(UIT, `concept-${naam}-${a}-${b}.png`), [groot(a, naamA), groot(b, naamB), klein(a, naamA), klein(b, naamB)], `${naamA} en ${naamB} naast elkaar`, `Dezelfde zin, jouw plaat als stijl (0,6), onze diepte, dezelfde zaden; alleen het checkpoint anders. Rij 1 en 2 een derde van het doek, rij 3 en 4 op de HD-maat (2×), maal 2.`);
+  E.bewaar(path.join(UIT, `concept-${naam}-${a}-${b}.png`), [groot(a, naamA), groot(b, naamB), klein(a, naamA), klein(b, naamB)], `${naamA} en ${naamB} naast elkaar`, `Jouw plaat als stijl (0,6), onze diepte, dezelfde zaden; ${wat}. Rij 1 en 2 een derde van het doek, rij 3 en 4 op de HD-maat (2×), maal 2.`);
   console.log(`uit/soldatenhd/concept-${naam}-${a}-${b}.png`);
 }
 
@@ -509,11 +518,17 @@ RICHTINGEN.ronde = 4;
 RICHTINGEN.basis = path.join('concept', 'speerman-5', 'zaad-106-ip0.6.png');
 RICHTINGEN.checkpoint = require('../ai/huisstijl.cjs').CHECKPOINTS.pixelartbase;
 RICHTINGEN.varianten = [{ naam: 'Pixel Art Base', negatief: 'plume, feather, crest, pointed helmet, pennant, flag' }];
+RICHTINGEN.concept = 5;
+// Ronde 5 (Marcel: "Mat 3 + de zin", 21 okt): de matte zin van conceptronde 6, en zaad 106 daaruit als referentie (hetzelfde
+// zaad als zijn keuze, zonder de wimpel, met een doffere helm).
+RICHTINGEN.ronde = 5;
+RICHTINGEN.concept = 6;
+RICHTINGEN.basis = path.join('concept', 'speerman-6', 'zaad-106-ip0.6.png');
 async function richtingen(naam = 'speerman') {
   const V = require('../ai/vrij.cjs');
   const E = require('../ai/etiket.cjs');
   const HU = require('../ai/huisstijl.cjs');
-  const C = CONCEPTEN[4];
+  const C = CONCEPTEN[RICHTINGEN.concept];
   const rijen = [];
   for (const vr of RICHTINGEN.varianten || [{ naam: '' }]) {
     const uit = [];
@@ -580,12 +595,12 @@ function metAI(naam) {
   return (m) => ({ ...m, mat: m.mat.map((x) => x && BK.projectieMateriaal(x, prs, { kopieen: [spiegelX], sleutelVan: (d) => d.deel, zacht: KH.ZACHT })) });
 }
 // Het beeld van de AI zelf als sprite: op ons silhouet geknipt (de render op dezelfde maat) en verkleind tot 2×.
-function aiSprite(naam, kant) {
+function aiSprite(naam, kant, mat = true) {
   const fijn = CONCEPTEN[4].fijn;
-  return geknipt(aiBeeld(naam, kant), render(POPPETJES[naam](STAND), kant, fijn), fijn);
+  return geknipt(aiBeeld(naam, kant), render(POPPETJES[naam](STAND), kant, fijn), fijn, mat);
 }
 // Een beeld van de AI (op het doek van vrij.cjs doekVan om render R) op het silhouet van R, verkleind tot 2× en omlijnd.
-function geknipt(ai, R, fijn) {
+function geknipt(ai, R, fijn, mat = true) {
   const V = require('../ai/vrij.cjs');
   const { ox, oy } = V.doekVan(R);
   const op = { b: R.b, h: R.h, rgba: Buffer.alloc(R.b * R.h * 4) };
@@ -596,7 +611,8 @@ function geknipt(ai, R, fijn) {
     const j = (y * ai.b + x) * 4;
     op.rgba.set([ai.rgba[j], ai.rgba[j + 1], ai.rgba[j + 2], 255], (Y * R.b + X) * 4);
   }
-  return H.omlijnBeeld(H.verklein(op, fijn / 2, 'gem'));
+  const klein = H.verklein(op, fijn / 2, 'gem');
+  return H.omlijnBeeld(mat ? matter(klein, MAT) : klein);
 }
 async function sprites(naam = 'speerman') {
   const E = require('../ai/etiket.cjs');
@@ -701,16 +717,53 @@ async function lopenAI(naam = 'speerman') {
 // schildert SDXL alleen waar de benen zijn (de hozen en laarzen van ons model, staand en in die stap, met een rand), op een
 // hoge denoise, met de benen van ons model in die stap als begin en het skelet van die stap. Daarna in pixels: buiten de
 // benen precies het staande beeld (daar flikkert niets), binnen de benen het nieuwe.
-const BENEN = { denoise: 0.85, rand: 8, delen: [HR.SOLDAAT_D.benen, HR.SOLDAAT_D.laars] };
+// Ronde 2 (21 okt; de eerste: op 0,85 werd het achterste been een doorzichtige schim en de laarzen glimmend oranje): het
+// begin krijgt op de benen van ons model de kleuren van de benen in het staande beeld (de laarzen zijn laarzen, de hozen
+// zijn hozen, op lichtheid gelegd), de denoise lager, en na afloop gaat elk nieuw beenpixel naar het palet van dat deel in
+// het staande beeld.
+// Ronde 3: het palet alleen uit het midden van het staande been (BENEN.kern pixels van de rand af), want aan de rand pakte
+// het het geel van de zoom van de wapenrok mee (een gele wig op de scheen); en alle acht richtingen (lopenAlle).
+const BENEN = { denoise: 0.6, rand: 8, kern: 4, delen: [HR.SOLDAAT_D.benen, HR.SOLDAAT_D.laars], ronde: 3 };
+// Ronde 4: hetzelfde, op de matte richtingen (RICHTINGEN ronde 5), met mat 3 als afwerking.
+BENEN.ronde = 4;
+// Per pixel de soort van het onderdeel (HR.SOLDAAT_D) als het een been is, anders 0.
 function benenVan(R, model) {
   const uit = new Uint8Array(R.b * R.h);
   for (let i = 0; i < R.b * R.h; i++) {
     if (R.ramp[i] < 0 || Number.isNaN(R.rust[i * 4])) continue;
     const d = model.delen[Math.round(R.rust[i * 4 + 3])];
-    if (d && BENEN.delen.includes(d.deel)) uit[i] = 1;
+    if (d && BENEN.delen.includes(d.deel)) uit[i] = d.deel;
   }
   return uit;
 }
+const lum = (k) => 0.299 * k[0] + 0.587 * k[1] + 0.114 * k[2];
+// Het palet van een deel van het staande beeld: de kleuren waar het staande model dat deel heeft (en de AI geen
+// achtergrond schilderde), naar lichtheid, en de meest voorkomende (in bakjes van 8) als korte lijst om naar te zoeken.
+function paletVan(beeld, soort, achter) {
+  const lijst = [];
+  const bak = new Map();
+  for (let k = 0; k < soort.length; k++) {
+    if (!soort[k]) continue;
+    const kl = [beeld.rgba[k * 4], beeld.rgba[k * 4 + 1], beeld.rgba[k * 4 + 2]];
+    if (Math.hypot(kl[0] - achter[0], kl[1] - achter[1], kl[2] - achter[2]) < 40) continue;
+    lijst.push(kl);
+    const sl = kl.map((c) => c >> 3).join(',');
+    const b = bak.get(sl) || bak.set(sl, { n: 0, s: [0, 0, 0] }).get(sl);
+    b.n++; b.s[0] += kl[0]; b.s[1] += kl[1]; b.s[2] += kl[2];
+  }
+  lijst.sort((p, q) => lum(p) - lum(q));
+  const kort = [...bak.values()].sort((p, q) => q.n - p.n).slice(0, 48).map((b) => b.s.map((c) => Math.round(c / b.n)));
+  return { lijst, kort };
+}
+const naaste = (kl, palet) => {
+  let beste = palet[0];
+  let bd = Infinity;
+  for (const p of palet) {
+    const d = (kl[0] - p[0]) ** 2 + (kl[1] - p[1]) ** 2 + (kl[2] - p[2]) ** 2 + 2 * (lum(kl) - lum(p)) ** 2;
+    if (d < bd) { bd = d; beste = p; }
+  }
+  return beste;
+};
 function ruimer(m, b, h, r) {
   const uit = new Uint8Array(b * h);
   for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
@@ -722,13 +775,12 @@ function ruimer(m, b, h, r) {
   }
   return uit;
 }
-async function lopenBenen(naam = 'speerman') {
+async function lopenBenen(naam = 'speerman', kant = LOPEN.kant) {
   const V = require('../ai/vrij.cjs');
   const E = require('../ai/etiket.cjs');
   const A = require('../ai/beeld-ai.cjs');
-  const C = CONCEPTEN[4];
+  const C = CONCEPTEN[RICHTINGEN.concept];
   const fijn = C.fijn;
-  const kant = LOPEN.kant;
   const staandPad = path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`);
   const staand = A.leesPng(fs.readFileSync(staandPad));
   const ms = POPPETJES[naam](STAND);
@@ -743,6 +795,15 @@ async function lopenBenen(naam = 'speerman') {
     staand.rgba.copy(begin.rgba, (Y * Rs.b + X) * 4, (y * staand.b + x) * 4, (y * staand.b + x) * 4 + 4);
   }
   const benenStaand = benenVan(Rs, ms);
+  // de achtergrond van het staande beeld (de hoeken), en per deel van het been zijn palet
+  const hk = [[2, 2], [staand.b - 3, 2], [2, staand.h - 3], [staand.b - 3, staand.h - 3]].map(([x, y]) => [0, 1, 2].map((c) => staand.rgba[(y * staand.b + x) * 4 + c]));
+  const achter = [0, 1, 2].map((c) => hk.map((k) => k[c]).sort((p, q) => p - q)[1]);
+  const kern = (d) => {
+    const van = benenStaand.map((v) => (v === d ? 1 : 0));
+    const buiten = ruimer(van.map((v) => 1 - v), Rs.b, Rs.h, BENEN.kern);
+    return van.map((v, k) => (v && !buiten[k] ? 1 : 0));
+  };
+  const paletten = Object.fromEntries(BENEN.delen.map((d) => [d, paletVan(begin, kern(d), achter)]));
   const beelden = [];
   for (let i = 0; i < 8; i++) {
     const stand = { houding: 'lopen', fase: i / 8 };
@@ -750,21 +811,34 @@ async function lopenBenen(naam = 'speerman') {
     const R = render(m, kant, fijn);
     const benen = benenVan(R, m);
     const zone = ruimer(benen.map((v, k) => v || benenStaand[k]), R.b, R.h, BENEN.rand);
-    // het begin: het staande beeld, en in de zone de benen van ons model in deze stap (elders in de zone grijs)
+    // het begin: het staande beeld, en in de zone de benen van ons model in deze stap, in de kleuren van het staande been
+    // (op lichtheid: de zoveelste lichtheid van ons deel krijgt de zoveelste kleur van zijn palet); elders in de zone de
+    // achtergrond van het staande beeld
     const init = { b: R.b, h: R.h, rgba: Buffer.from(begin.rgba) };
     const masker = { b: R.b, h: R.h, rgba: Buffer.alloc(N * 4) };
+    const rang = {};
+    for (const d of BENEN.delen) {
+      const l = [];
+      for (let k = 0; k < N; k++) if (benen[k] === d) l.push(lum([R.zl.rgba[k * 4], R.zl.rgba[k * 4 + 1], R.zl.rgba[k * 4 + 2]]));
+      rang[d] = l.sort((p, q) => p - q);
+    }
+    const plek = (l, v) => { let a = 0, z = l.length - 1; while (a < z) { const m = (a + z) >> 1; if (l[m] < v) a = m + 1; else z = m; } return l.length > 1 ? a / (l.length - 1) : 0.5; };
     for (let k = 0; k < N; k++) {
       if (!zone[k]) continue;
       masker.rgba.set([255, 255, 255, 255], k * 4);
-      if (benen[k]) R.zl.rgba.copy(init.rgba, k * 4, k * 4, k * 4 + 4);
-      else if (!(R.ramp[k] >= 0)) init.rgba.set([170, 170, 170, 255], k * 4);
+      const d = benen[k];
+      if (d && paletten[d].lijst.length) {
+        const q = plek(rang[d], lum([R.zl.rgba[k * 4], R.zl.rgba[k * 4 + 1], R.zl.rgba[k * 4 + 2]]));
+        const p = paletten[d].lijst[Math.round(q * (paletten[d].lijst.length - 1))];
+        init.rgba.set([...p, 255], k * 4);
+      } else if (!(R.ramp[k] >= 0)) init.rgba.set([...achter, 255], k * 4);
       init.rgba[k * 4 + 3] = 255;
     }
     const [v] = await V.vrijeRonde(R, {
       naam: `${naam}-benen-${i}`,
-      map: path.join(UIT, 'lopen', `${naam}-${kant}-benen`, String(i)),
+      map: path.join(UIT, 'lopen', `${naam}-${kant}-benen${BENEN.ronde > 1 ? `-${BENEN.ronde}` : ''}`, String(i)),
       positief: `${RICHTINGEN.zin[kant]}, walking, brown leather boots, dark blue hose, ${C.positief}`,
-      negatief: [C.negatief, RICHTINGEN.nooit, RICHTINGEN.varianten[0].negatief].filter(Boolean).join(', '),
+      negatief: [C.negatief, RICHTINGEN.nooit, RICHTINGEN.varianten[0].negatief, kant[0] === 'N' && RICHTINGEN.rug, 'golden boots, orange boots, shiny boots, transparent legs, ghost'].filter(Boolean).join(', '),
       stijl: staandPad,
       ipSoort: 'linear',
       ipSterktes: [LOPEN.ip],
@@ -787,21 +861,88 @@ async function lopenBenen(naam = 'speerman') {
         const x = X - ox, y = Y - oy;
         if (x < 0 || y < 0 || x >= v.beeld.b || y >= v.beeld.h) continue;
         const j = (y * v.beeld.b + x) * 4;
-        uit.rgba.set([v.beeld.rgba[j], v.beeld.rgba[j + 1], v.beeld.rgba[j + 2], 255], k * 4);
+        let kl = [v.beeld.rgba[j], v.beeld.rgba[j + 1], v.beeld.rgba[j + 2]];
+        // een beenpixel naar het palet van zijn deel in het staande beeld
+        const d = benen[k];
+        if (d && paletten[d].kort.length) kl = naaste(kl, paletten[d].kort);
+        uit.rgba.set([...kl, 255], k * 4);
       } else if (Rs.ramp[k] >= 0) {
         uit.rgba.set([begin.rgba[k * 4], begin.rgba[k * 4 + 1], begin.rgba[k * 4 + 2], 255], k * 4);
       }
     }
-    beelden.push(H.omlijnBeeld(H.verklein(uit, fijn / 2, 'gem')));
+    beelden.push(H.omlijnBeeld(matter(H.verklein(uit, fijn / 2, 'gem'), MAT)));
   }
   const groot = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
   const u = H.uitsnede(beelden, 3);
-  E.bewaar(path.join(UIT, `lopen-${naam}-benen.png`), [beelden.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), i ? `${i}` : 'alleen de benen · 0'))],
-    `De ${naam} loopt (${kant}): alleen de benen`, `Pixel Art Base. Elk beeld is het staande beeld van de AI; alleen waar de benen zijn (ons model, staand en in die stap) schildert SDXL opnieuw (denoise ${String(BENEN.denoise).replace('.', ',')}), met de benen van ons model als begin en het skelet van die stap. Op de HD-maat (2×), maal 2.`);
+  const plaat = `lopen-${naam}-${kant}-benen-${BENEN.ronde}`;
+  const losMap = path.join(UIT, 'sprites', `${naam}-${kant}-benen-${BENEN.ronde}`);
+  fs.mkdirSync(losMap, { recursive: true });
+  beelden.forEach((r, i) => H.bewaar(path.join(losMap, `${i}.png`), r));
+  E.bewaar(path.join(UIT, `${plaat}.png`), [beelden.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), i ? `${i}` : 'alleen de benen · 0'))],
+    `De ${naam} loopt (${kant}): alleen de benen, ronde ${BENEN.ronde}`, `Pixel Art Base. Elk beeld is het staande beeld van de AI; alleen waar de benen zijn (ons model, staand en in die stap) schildert SDXL opnieuw (denoise ${String(BENEN.denoise).replace('.', ',')}), met de benen van ons model in de kleuren van het staande been als begin en het skelet van die stap; daarna elk beenpixel naar het palet van het staande been. Op de HD-maat (2×), maal 2.`);
   const { apng } = require('./apng.cjs');
   const platen = beelden.map((r) => { const vak = H.alfaSnij(r, u); return { b: vak.b, h: vak.h, rgba: () => vak.rgba }; });
-  fs.writeFileSync(path.join(UIT, `lopen-${naam}-benen-bewegend.png`), apng(platen, { schaal: 2, fps: 10 }));
-  console.log(`uit/soldatenhd/lopen-${naam}-benen.png`);
+  fs.writeFileSync(path.join(UIT, `${plaat}-bewegend.png`), apng(platen, { schaal: 2, fps: 10 }));
+  console.log(`uit/soldatenhd/${plaat}.png`);
+  return beelden;
+}
+// Alle acht richtingen lopend, en een plaat met alles (een rij per richting) en een bewegend beeld met de acht naast elkaar.
+async function lopenAlle(naam = 'speerman') {
+  const E = require('../ai/etiket.cjs');
+  const t0 = Date.now();
+  const per = {};
+  for (const kant of K.KANTEN) {
+    per[kant] = await lopenBenen(naam, kant);
+    console.log(`${kant} klaar na ${((Date.now() - t0) / 60000).toFixed(0)} min`);
+  }
+  const alle = K.KANTEN.flatMap((k) => per[k]);
+  const u = H.uitsnede(alle, 3);
+  const vak = (r) => H.alfaSnijMetGrond(H.alfaSnij(r, u));
+  E.bewaar(path.join(UIT, `lopen-${naam}-alle.png`), K.KANTEN.map((k) => per[k].map((r, i) => E.met(vak(r), i ? `${i}` : k))),
+    `De ${naam} loopt in acht richtingen`, `Pixel Art Base. Elk beeld is het staande beeld van de AI in die richting; alleen de benen zijn per stap opnieuw geschilderd (denoise ${String(BENEN.denoise).replace('.', ',')}, het palet van het staande been). Op de HD-maat (2×).`);
+  // bewegend: de acht richtingen naast elkaar
+  const { apng } = require('./apng.cjs');
+  const platen = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+    const vel = H.naastElkaar(K.KANTEN.map((k) => H.alfaSnij(per[k][i], u)), 8);
+    return { b: vel.b, h: vel.h, rgba: () => vel.rgba };
+  });
+  fs.writeFileSync(path.join(UIT, `lopen-${naam}-alle-bewegend.png`), apng(platen, { schaal: 2, fps: 10 }));
+  console.log(`uit/soldatenhd/lopen-${naam}-alle.png, ${((Date.now() - t0) / 60000).toFixed(0)} min`);
+}
+
+// Matter (Marcel, 21 okt: "Hij is nog wat te shiny?"; de stijlspecificatie: "restrained reflectivity rather than polished
+// chrome"): de lichtste tonen samengedrukt (boven drempel gaat de lichtheid maar voor een deel mee) en daar iets van de
+// verzadiging eraf, zodat glimlichten minder spatten; voor elk beeld gelijk, dus het flikkert niet.
+// Marcel koos mat 3 (21 okt: "Mat 3 + de zin"): MAT is de afwerking van elke sprite (geknipt, lopenBenen).
+const MAT = { drempel: 0.55, rest: 0.35, ontkleur: 0.5 };
+function matter(r, o = {}) {
+  const { drempel = 0.62, rest = 0.45, ontkleur = 0.35 } = o;
+  const uit = { b: r.b, h: r.h, rgba: Buffer.from(r.rgba) };
+  for (let i = 0; i < r.b * r.h; i++) {
+    if (r.rgba[i * 4 + 3] < 128) continue;
+    const k = [r.rgba[i * 4], r.rgba[i * 4 + 1], r.rgba[i * 4 + 2]].map((c) => c / 255);
+    const L = 0.299 * k[0] + 0.587 * k[1] + 0.114 * k[2];
+    if (L <= drempel) continue;
+    const L2 = drempel + (L - drempel) * rest;
+    const t = (L - drempel) / (1 - drempel);
+    const n = k.map((c) => {
+      const grijs = L + (c - L) * (1 - ontkleur * t);
+      return Math.max(0, Math.min(1, grijs * (L2 / L)));
+    });
+    for (let c = 0; c < 3; c++) uit.rgba[i * 4 + c] = Math.round(n[c] * 255);
+  }
+  return uit;
+}
+function matterProef(naam = 'speerman') {
+  const E = require('../ai/etiket.cjs');
+  const kanten = ['Z', 'ZW', 'NO', 'O'];
+  const beelden = kanten.map((kant) => aiSprite(naam, kant, false));
+  const standen = [{ naam: 'zoals nu' }, { naam: 'mat 1', o: { drempel: 0.7, rest: 0.6, ontkleur: 0.25 } }, { naam: 'mat 2', o: {} }, { naam: 'mat 3', o: { drempel: 0.55, rest: 0.35, ontkleur: 0.5 } }];
+  const u = H.uitsnede(beelden, 3);
+  const groot = (r) => H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, u)), { x0: 0, y0: 0, b: u.b, h: u.h }, 2);
+  E.bewaar(path.join(UIT, `matter-${naam}.png`), standen.map((s) => beelden.map((r, i) => E.met(groot(s.o ? matter(r, s.o) : r), i ? '' : s.naam))),
+    'Minder glans', `Staand, ${kanten.join(', ')}. De lichtste tonen samengedrukt en daar wat verzadiging eraf; mat 1 zacht, mat 2 midden, mat 3 sterk. Op de HD-maat, maal 2.`);
+  console.log(`uit/soldatenhd/matter-${naam}.png`);
 }
 
 async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
@@ -882,6 +1023,9 @@ if (require.main === module) {
   if (opdracht === 'kijk') kijk(...rest);
   else if (opdracht === 'proef') proef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'matter') matterProef(...rest);
+  else if (opdracht === 'alles') richtingen(...rest).then(() => lopenAlle(...rest)).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'lopen-alle') lopenAlle(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'benen') lopenBenen(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen') lopenAI(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'beurt') schilderbeurt(...rest).catch((e) => { console.error(e); process.exit(1); });

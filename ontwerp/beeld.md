@@ -1669,6 +1669,23 @@ beeld. **Dit werkt:** het bovenlijf is in alle acht beelden pixel voor pixel het
 stappen echt, met laarzen in de goede stand. Nog niet goed: de laarzen worden glimmend oranje-goud in plaats van
 donkerbruin leer, een grijze vlek bij de benen in beeld 0, 1 en 4, en de benen verschillen per beeld nog wat in tekening.
 Het bovenlijf deint niet mee (het staande beeld); dat mag, of later een pixel op en neer.
+Marcel: "Laten we met 1 beginnen" (de laarzen en de vlekjes, dan alle richtingen). Wat er gebeurde: op 0,85 schilderde
+SDXL het voorste been goed en maakte van het achterste een doorzichtige schim; Pixel Art Base schildert leer graag
+glimmend oranje. **Ronde 2** (`lopen-speerman-benen-2.png`): het begin krijgt op de benen van ons model de kleuren van de
+benen in het staande beeld (per deel, hozen en laarzen, op lichtheid gelegd), denoise 0,6, en na afloop gaat elk nieuw
+beenpixel naar het palet van dat deel in het staande beeld (`paletVan`, `naaste`). Bruine laarzen zoals in het staande
+beeld, beide benen echt, geen schim meer; alleen een gele wig op de scheen in beeld 4 (het palet pakte aan de rand het
+geel van de zoom mee). **Ronde 3:** het palet alleen uit het midden van het staande been (vier pixels van de rand), en alle
+acht richtingen (`soldatenhd.cjs lopen-alle`, `lopen-speerman-alle.png` en `-alle-bewegend.png`; zo'n anderhalf uur).
+Z, ZW, W en NW werden gemaakt: het werkt in elke richting, ook van achteren (de benen stappen, de laarzen bruin, het
+bovenlijf staat vast). Daarna Marcel: **"Hij is nog wat te shiny?"** Pixel Art Base zet harde glimlichten (de helm bijna
+chroom). Twee knoppen: een afwerking achteraf (`soldatenhd.cjs matter`: de lichtste tonen samengedrukt en daar wat
+verzadiging eraf; `matter-speerman.png` met mat 1, 2 en 3) en de zin. **Marcel koos mat 3 plus de zin** (21 okt): mat 3
+is de vaste afwerking van elke sprite (`MAT`), en conceptronde 6 heeft mat in de zin (dull matte iron, matte worn
+surfaces) en glans, chroom, de pluim en de wimpel in de negatieve zin (`concept-speerman-5-6.png`). Zaad 106 mat is
+dezelfde man als 106 glanzend, zonder wimpel en met een doffere helm; dat is de nieuwe basis. De run met de oude, glanzende
+beelden is gestopt na NW; de acht richtingen en het lopen gaan opnieuw op de matte basis (`soldatenhd.cjs alles`:
+richtingen ronde 5, lopen ronde 4).
 
 ## Open
 

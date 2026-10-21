@@ -94,6 +94,7 @@ async function vrijeRonde(R, o) {
   if (o.pose) extra.pose = knip(o.pose, [0, 0, 0]);
   if (o.omtrek) extra.lijnen = knip(omtrekVan(R), [0, 0, 0]);
   for (const [k, r] of Object.entries(extra)) fs.writeFileSync(path.join(o.map, `${k}.png`), K.pngVanBeeld(r));
+  if (o.init) fs.writeFileSync(path.join(o.map, 'init.png'), K.pngVanBeeld(grijs));
   for (const [k, r] of Object.entries({ init: grijs, masker: wit, diepte, ...extra })) namen[k] = await A.upload(`aardschok-vrij-${o.naam}-${k}.png`, K.pngVanBeeld(r), 'image/png');
   if (o.stijl) namen.stijl = await A.upload(`aardschok-vrij-stijl-${path.basename(o.stijl)}`, fs.readFileSync(o.stijl), 'image/png');
   const beelden = [];
