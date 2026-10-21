@@ -444,9 +444,10 @@ function soldaat(stand = null, o = {}) {
     const P = knieBeen(delen, hg, i, [s * 5.4, 0.2, 36], [s * 5.2, 0.8, 6.2], [5.2, 4], M.hoos, D.benen);
     if (o.gewrichten) (o.gewrichten.benen = o.gewrichten.benen || [])[i] = { heup: P.heup, knie: P.knie, enkel: P.enkel };
     const omhoog = eenheid(min(P.knie, P.enkel));
-    delen.push(kegel(plus(P.enkel, maal(omhoog, -1)), plus(P.enkel, maal(omhoog, 9.5 - s * 0.4)), 4.5, 4.8, M.laars, D.laars, 0.8));
+    // het concept (de maten van de soldaten op Marcels plaat): forsere, hogere laarzen en grotere voeten
+    delen.push(kegel(plus(P.enkel, maal(omhoog, -1)), plus(P.enkel, maal(omhoog, (concept ? 11.5 : 9.5) - s * 0.4)), concept ? 5.3 : 4.5, concept ? 5.7 : 4.8, M.laars, D.laars, 0.8));
     bot(null);
-    delen.push(ellips([s * 5.2, 2.6, 2.6], [3.9, 6.8, 3], M.laars, D.laars, 1));
+    delen.push(concept ? ellips([s * 5.3, 3.4, 2.9], [4.7, 8.2, 3.4], M.laars, D.laars, 1) : ellips([s * 5.2, 2.6, 2.6], [3.9, 6.8, 3], M.laars, D.laars, 1));
     bot(voetBot(hg, i, [s * 5.2, 2.4, 0]));
   }
 
@@ -456,6 +457,11 @@ function soldaat(stand = null, o = {}) {
     ry: profiel([[25, 10.6], [31, 10], [37, 9.4], [43, 9.4], [50, 9.8], [56, 9.4], [61, 7.6]]),
     cy: profiel([[25, 0.6], [37, 1.1], [44, 1.4], [52, 1.3], [61, 0.7]]),
   };
+  // het concept: een bredere borst (de soldaten op Marcels plaat zijn breder)
+  if (concept) {
+    const rx0 = lijf.rx;
+    lijf.rx = (z) => rx0(z) * 1.08;
+  }
   delen.push(plooiRomp(lijf, 25, 61, M.wambuis, D.wambuis, { plooi: 0.8, zPlooi: 36, k: 2 }));
   delen.push(ellips([0, 0.5, 60.4], [13.9, 8.8, 4.6], M.wambuis, D.wambuis, 3));
   delen.push(ring([0, 1.3, 62.8], eenheid([0, 0.12, 1]), 5.6, 1.9, M.wambuis, D.wambuis));
@@ -480,7 +486,10 @@ function soldaat(stand = null, o = {}) {
 
   // --- de linkerarm zwaait, in een dikke gewatteerde mouw, met een leren handschoen. Met een schild houdt hij de onderarm
   // naar voren, en zwaait hij niet (arm en schild gaan met de romp mee).
-  const mouw = { r: [5, 4.4, 3.4], mouw: 2, stof: M.wambuis, huid: M.handschoen, hand: [3, 3.2, 3.4] };
+  // het concept: dikke gewatteerde mouwen en forse handschoenen, zoals op Marcels plaat
+  const mouw = concept
+    ? { r: [5.8, 5.2, 4.2], mouw: 2, stof: M.wambuis, huid: M.handschoen, hand: [4, 4.2, 4.4] }
+    : { r: [5, 4.4, 3.4], mouw: 2, stof: M.wambuis, huid: M.handschoen, hand: [3, 3.2, 3.4] };
   const twee = o.greep === 'twee' || o.greep === 'schuin';
   const schuin = o.greep === 'schuin';
   const schouderL = [-13.4, 0.4, 60.6];
@@ -526,6 +535,9 @@ function soldaat(stand = null, o = {}) {
   if (o.gewrichten) o.gewrichten.armen = armen;
 
   // --- het hoofd: een brede kop met een zware frons, een platte neus, een korte zwarte baard
+  // (het concept: hoofd en helm samen kleiner, rond de nek; op Marcels plaat is het hoofd met de helm zo'n vijfde van de
+  // lengte en de helmrand smaller dan de schouders; de sjaal en de schouderstukken blijven even groot)
+  const hoofdVan = delen.length;
   const oy = schedel(delen, H, M, D, { maat: kop, oog });
   for (const s of [-1, 1]) {
     // de frons: de wenkbrauwen lopen naar binnen omlaag
@@ -539,10 +551,12 @@ function soldaat(stand = null, o = {}) {
   delen.push(capsule(plus(H, [-1.6, 6.6, -5.9]), plus(H, [1.6, 6.5, -6]), 0.45, M.mond, D.baard));
   delen.push(ellips(plus(H, [0, -2.2, -0.8]), [7.5, 6.4, 6.4], M.baard, D.hoofd, 1));
   if (o.kraag) kraag(delen, H, M, D, { cape: !concept });
+  const hoofdTot = delen.length;
   if (concept) {
     sjaal(delen, M, D);
     for (const s of [-1, 1]) schouderstuk(delen, [s * 13.6, 0.4, 61.4], M, D);
   }
+  const helmVan = delen.length;
   // de ijzeren hoed: een koepel met een kam, en een brede rand die schuin omlaag loopt; hij staat
   // een fractie scheef en heeft een deuk
   const HC = plus(H, [0.3, -1.2, 6.2]);
@@ -552,7 +566,8 @@ function soldaat(stand = null, o = {}) {
       const dy = y - HC[1];
       const dz = z - HC[2] + 0.05 * dx;
       const deuk = 0.5 * Math.exp(-((dx + 4) ** 2 + (dy - 3) ** 2 + (dz - 3.5) ** 2) / 6);
-      return Math.max(sdf.ellipsoide(dx, dy, dz, 8.3, 8.1, 7) + deuk, -dz - 0.6);
+      // het concept: een diepere ketelhoed, zoals op Marcels plaat
+      return Math.max(sdf.ellipsoide(dx, dy, dz, concept ? 8.6 : 8.3, concept ? 8.4 : 8.1, concept ? 8.6 : 7) + deuk, -dz - 0.6);
     },
     g: [HC[0], HC[1], HC[2] + 3, 10.5],
     m: M.helm,
@@ -576,6 +591,10 @@ function soldaat(stand = null, o = {}) {
     m: M.helm,
     deel: D.rand,
   });
+  if (concept) {
+    for (let i = hoofdVan; i < delen.length; i++) if (i < hoofdTot || i >= helmVan) delen[i] = geschaald(delen[i], HOOFD.nek, HOOFD.schaal);
+    if (o.gewrichten) o.gewrichten.hoofd = HOOFD;
+  }
   bot(Bn.Bnek);
 
   return model(delen, mat, HH.omvat(delen, 2));
@@ -682,11 +701,28 @@ function schild(delen, midden, normaal, M, D) {
   delen.push(bol(plus(midden, maal(normaal, 0.2)), 1.1, M.ijzer, D.schild));
 }
 
+// Het hoofd van het concept: zoveel kleiner, rond de nek.
+const HOOFD = { nek: [0, 1, 63], schaal: 0.86 };
+// Een onderdeel geschaald rond c met factor k (de afstandsfunctie, de grensbol, de overgang en een materiaal per plek).
+function geschaald(d, c, k) {
+  const terug = (x, y, z) => [c[0] + (x - c[0]) / k, c[1] + (y - c[1]) / k, c[2] + (z - c[2]) / k];
+  return {
+    ...d,
+    f: (x, y, z) => {
+      const p = terug(x, y, z);
+      return d.f(p[0], p[1], p[2]) * k;
+    },
+    g: d.g && [c[0] + (d.g[0] - c[0]) * k, c[1] + (d.g[1] - c[1]) * k, c[2] + (d.g[2] - c[2]) * k, d.g[3] * k],
+    m: typeof d.m === 'function' ? (x, y, z) => { const p = terug(x, y, z); return d.m(p[0], p[1], p[2]); } : d.m,
+    k: d.k && d.k * k,
+  };
+}
+
 // De sjaal van het concept: twee dikke wollen ringen om de hals, over de maliën heen, de onderste ruimer en wat lager, en een
 // slip die voor op de borst valt.
 function sjaal(delen, M, D) {
-  delen.push(ring([0, 1.2, 62.4], eenheid([0, 0.18, 1]), 8.2, 3.4, M.sjaal, D.sjaal));
-  delen.push(ring([0, 1.8, 59.8], eenheid([0, 0.26, 1]), 10.4, 3.2, M.sjaal, D.sjaal));
+  delen.push(ring([0, 1.2, 61.2], eenheid([0, 0.18, 1]), 8.4, 3.1, M.sjaal, D.sjaal));
+  delen.push(ring([0, 1.8, 58.8], eenheid([0, 0.26, 1]), 10.6, 3.1, M.sjaal, D.sjaal));
   delen.push(capsule([3.4, 10.2, 59.4], [4.6, 11.8, 50.6], 2.4, M.sjaal, D.sjaal));
 }
 

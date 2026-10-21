@@ -1711,6 +1711,15 @@ uit het model renderen (in elke richting en elk beeld precies hetzelfde), (3) é
 ons silhouet op een lage denoise (0,45 en 0,6), het concept als referentie, ons skelet, onze diepte en buitenlijn, en als
 variant daarna het palet van het concept (`soldatenhd.cjs verf`, `verf-speerman.png`; met `CONCEPT=1` zolang het een proef
 is). Marcel liet de run van het lopen afmaken; de proef komt erna.
+Uitkomst (`verf-speerman.png`, en na de maten uit zijn plaat `verf-speerman-2.png`; `maat.png`): de verfbeurt geeft de
+meeste samenhang (in elke richting dezelfde soldaat), en met de maten uit de plaat (forsere handen, laarzen en mouwen,
+een bredere borst, een diepere helm, het hoofd 14% kleiner) is de bouw die van de plaat. Maar Marcel: **"Maar ze zijn
+eigenlijk niet duidelijk meer"** (ruis, kleuren die in elkaar lopen). Zijn vraag daarna: "kun je img2img gebruiken om de
+soldaat van de hoofdplaat te kopieren?" De negen soldaten op zijn plaat zijn dezelfde man in negen richtingen; uitgeknipt,
+het vaandel en het blad weg en het rood blauw (`uit/soldatenhd/plaat/blauw-rij.png`) zijn het al speermannen, helderder
+dan alles van SDXL. img2img met Pixel Art Base eroverheen (`plaat-img2img-speerman.png`, 0,35 en 0,5) maakt ze slechter.
+**Besluit** (Marcel, 21 okt): de generator van zijn plaat maakt de bron, één ding tegelijk, en wij maken het passend:
+`beelden-van-de-generator.md`.
 
 ## Open
 

@@ -55,6 +55,8 @@ function gewrichtenIn(naam, stand, extra = {}) {
       uit[eerste] = a.schouder; uit[eerste + 1] = a.elleboog; uit[eerste + 2] = a.pols;
     });
   }
+  // het hoofd van het concept is kleiner (heer.cjs HOOFD): de neus, de ogen en de oren mee
+  if (g.hoofd) for (const i of [0, 14, 15, 16, 17]) uit[i] = uit[i].map((v, c) => g.hoofd.nek[c] + (v - g.hoofd.nek[c]) * g.hoofd.schaal);
   if (g.benen) {
     [[1, 8], [0, 11]].forEach(([been, eerste]) => {
       const b = g.benen[been];
@@ -1004,6 +1006,11 @@ function matterProef(naam = 'speerman') {
 // silhouet op een lage denoise, met het concept als referentie, ons skelet, onze diepte en buitenlijn; en als variant
 // daarna elk pixel naar het palet van het concept. De proef: staan Z, ZW en N, en lopen ZW (beeld 2).
 const VERF = { denoises: [0.45, 0.6], ip: 0.6, basis: path.join('concept', 'speerman-7', 'zaad-106-ip0.6.png') };
+// Marcel koos 0,6 ("rijker"), en de maten uit zijn plaat (heer.cjs: forser, een kleiner hoofd); het palet van het concept
+// erna viel af (fel en hard). VERF.ronde: een eigen map en plaat.
+VERF.denoises = [0.6];
+VERF.palet = false;
+VERF.ronde = 2;
 async function verfProef(naam = 'speerman') {
   const V = require('../ai/vrij.cjs');
   const E = require('../ai/etiket.cjs');
@@ -1041,7 +1048,7 @@ async function verfProef(naam = 'speerman') {
     for (const dn of VERF.denoises) {
       const [v] = await V.vrijeRonde(R, {
         naam: `${naam}-verf-${n}`,
-        map: path.join(UIT, 'verf', naam, `${n}-${it.kant}-${dn}`),
+        map: path.join(UIT, 'verf', `${naam}${VERF.ronde ? `-${VERF.ronde}` : ''}`, `${n}-${it.kant}-${dn}`),
         positief: `${RICHTINGEN.zin[it.kant]}, ${it.stand.houding === 'lopen' ? `walking, ${SETS.lopen.zin(C.positief)}` : C.positief}`,
         negatief: [C.negatief, RICHTINGEN.nooit, it.kant[0] === 'N' && RICHTINGEN.rug].filter(Boolean).join(', '),
         stijl: basisPad,
@@ -1057,7 +1064,7 @@ async function verfProef(naam = 'speerman') {
       });
       const sprite = geknipt(v.beeld, R, fijn);
       rijen[dn].push(sprite);
-      if (dn === VERF.denoises[VERF.denoises.length - 1]) rijen.palet.push(H.omlijnBeeld(naarPalet(geknipt(v.beeld, R, fijn, false))));
+      if (VERF.palet !== false && dn === VERF.denoises[VERF.denoises.length - 1]) rijen.palet.push(H.omlijnBeeld(naarPalet(geknipt(v.beeld, R, fijn, false))));
     }
     // de aanpak van nu: staan uit de richtingen van ronde 6, lopen uit de loopbeelden van ronde 5
     const loopPad = path.join(UIT, 'sprites', `${naam}-${it.kant}-benen-${BENEN.ronde}`, '2.png');
@@ -1067,9 +1074,118 @@ async function verfProef(naam = 'speerman') {
   const u = H.uitsnede(alle, 3);
   const vak = (r) => H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, u)), { x0: 0, y0: 0, b: u.b, h: u.h }, 2);
   const namen = { model: 'het model (zonder AI)', 0.45: 'verfbeurt 0,45', 0.6: 'verfbeurt 0,6', palet: '0,6 + het palet van het concept', nu: 'de aanpak van nu' };
-  E.bewaar(path.join(UIT, `verf-${naam}.png`), Object.entries(rijen).map(([k, rij]) => rij.map((r, i) => E.met(vak(r), i ? '' : namen[k]))),
+  E.bewaar(path.join(UIT, `verf-${naam}${VERF.ronde ? `-${VERF.ronde}` : ''}.png`), Object.entries(rijen).filter(([, rij]) => rij.length).map(([k, rij]) => rij.map((r, i) => E.met(vak(r), i ? '' : namen[k]))),
     'Eerst de geometrie, dan de verfbeurt', 'Staan Z, ZW en N, en lopen ZW (beeld 2). Het model zoals het concept, uit het model gerenderd, en Pixel Art Base erover binnen ons silhouet (het concept als referentie, ons skelet, onze diepte en buitenlijn). Onderaan de aanpak van nu. Op de HD-maat, maal 2.');
-  console.log(`uit/soldatenhd/verf-${naam}.png`);
+  console.log(`uit/soldatenhd/verf-${naam}${VERF.ronde ? `-${VERF.ronde}` : ''}.png`);
+}
+
+// Eén beeld met de verfbeurt (verfProef, en het lopen hieronder): uit het model gerenderd op 10×, Pixel Art Base erover
+// binnen ons silhouet, en de sprite van 2×.
+async function verfBeeld(naam, stand, kant, dn, map) {
+  const V = require('../ai/vrij.cjs');
+  const C = CONCEPTEN[7];
+  const fijn = C.fijn;
+  const R = render(POPPETJES[naam](stand), kant, fijn);
+  const [v] = await V.vrijeRonde(R, {
+    naam: `${naam}-verf`,
+    map,
+    positief: `${RICHTINGEN.zin[kant]}, ${stand.houding === 'lopen' ? `walking, ${SETS.lopen.zin(C.positief)}` : C.positief}`,
+    negatief: [C.negatief, RICHTINGEN.nooit, kant[0] === 'N' && RICHTINGEN.rug].filter(Boolean).join(', '),
+    stijl: path.join(UIT, VERF.basis),
+    ipSoort: 'linear',
+    ipSterktes: [VERF.ip],
+    zaden: [RICHTINGEN.zaad],
+    instellingen: { ...RICHTINGEN.instellingen, denoise: dn },
+    pose: poseBeeld(kant, fijn, gewrichtenIn(naam, stand)),
+    omtrek: true,
+    init: R.zl,
+    masker: 'silhouet',
+    checkpoint: RICHTINGEN.checkpoint,
+  });
+  return geknipt(v.beeld, R, fijn);
+}
+// De loopcyclus met de verfbeurt in één richting, om het flikkeren te zien: elk beeld zijn eigen verfbeurt, op hetzelfde
+// model, met hetzelfde zaad. Een plaat en een bewegend beeld.
+async function verfLopen(naam = 'speerman', kant = 'ZW') {
+  const E = require('../ai/etiket.cjs');
+  if (!GEOMETRIE.concept) throw new Error('zet CONCEPT=1');
+  const dn = VERF.denoises[VERF.denoises.length - 1];
+  const beelden = [];
+  for (let i = 0; i < 8; i++) {
+    beelden.push(await verfBeeld(naam, { houding: 'lopen', fase: i / 8 }, kant, dn, path.join(UIT, 'verf', `${naam}-lopen-${kant}`, String(i))));
+    console.log(`lopen ${kant} ${i} klaar`);
+  }
+  const u = H.uitsnede(beelden, 3);
+  const groot = (r) => H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, u)), { x0: 0, y0: 0, b: u.b, h: u.h }, 2);
+  E.bewaar(path.join(UIT, `verf-lopen-${naam}-${kant}.png`), [beelden.map((r, i) => E.met(groot(r), i ? `${i}` : `lopen ${kant}, verfbeurt ${String(dn).replace('.', ',')} · 0`))],
+    `De ${naam} loopt (${kant}): eerst de geometrie, dan de verfbeurt`, 'Elk loopbeeld uit het model gerenderd, en elk zijn eigen verfbeurt (Pixel Art Base, het concept als referentie, ons skelet, diepte en buitenlijn, hetzelfde zaad). Op de HD-maat, maal 2.');
+  const { apng } = require('./apng.cjs');
+  const platen = beelden.map((r) => { const vak = H.alfaSnij(r, u); return { b: vak.b, h: vak.h, rgba: () => vak.rgba }; });
+  fs.writeFileSync(path.join(UIT, `verf-lopen-${naam}-${kant}-bewegend.png`), apng(platen, { schaal: 2, fps: 10 }));
+  console.log(`uit/soldatenhd/verf-lopen-${naam}-${kant}.png`);
+}
+
+// De soldaat van de plaat zelf (Marcel, 21 okt, na de verfbeurt: "Maar ze zijn eigenlijk niet duidelijk meer", en: "kun je
+// img2img gebruiken om de soldaat van de hoofdplaat te kopieren?"): de rij soldaten op zijn plaat is dezelfde soldaat in
+// negen richtingen. Uitgeknipt (uit/soldatenhd/plaat/soldaat-<n>.png), het vaandel en het blad van de hellebaard weg (de
+// stok en de punt blijven: een speer), en het rood van de livrei blauw (blauw-<n>.png; met de Python van ComfyUI). Hier een
+// img2img-beurt over zo'n soldaat: vier keer vergroot, Pixel Art Base op een lage denoise, en weer terug naar zijn maat.
+const PLAAT = {
+  soldaten: [1, 4, 5],
+  denoises: [0.35, 0.5],
+  vergroot: 4,
+  positief: 'medieval village spearman holding a long spear with a leaf-shaped iron spearhead, steel kettle hat, chainmail ' +
+    'coif, deep blue and golden yellow quartered tabard, brown padded sleeves, leather gloves, leather belt with pouch, blue ' +
+    'hose, brown leather boots, high-definition hand-painted pixel art game sprite, premium medieval strategy game asset, ' +
+    'crisp silhouette, clean pixel clusters, plain green background',
+  negatief: 'halberd, axe blade, banner, flag, pennant, thin lines, blurry, deformed, extra limbs, two spears, text, watermark, ' +
+    'frame, border, photo, 3d render, red clothes',
+};
+async function plaatImg(naam = 'speerman') {
+  const AF = require('../ai/afwerking.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const DK = require('../ai/doek.cjs');
+  const E = require('../ai/etiket.cjs');
+  const map = path.join(UIT, 'plaat');
+  const rijen = [];
+  for (const n of PLAAT.soldaten) {
+    const bron = H.lees(path.join(map, `blauw-${n}.png`));
+    const k = PLAAT.vergroot;
+    const b = Math.ceil((bron.b * k) / 64) * 64;
+    const h = Math.ceil((bron.h * k) / 64) * 64;
+    const ox = Math.floor((b - bron.b * k) / 2), oy = Math.floor((h - bron.h * k) / 2);
+    const groen = [bron.rgba[(2 * bron.b + 2) * 4], bron.rgba[(2 * bron.b + 2) * 4 + 1], bron.rgba[(2 * bron.b + 2) * 4 + 2]];
+    const init = { b, h, rgba: Buffer.alloc(b * h * 4) };
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+      const sx = Math.floor((x - ox) / k), sy = Math.floor((y - oy) / k);
+      const binnen = sx >= 0 && sy >= 0 && sx < bron.b && sy < bron.h;
+      const j = (sy * bron.b + sx) * 4;
+      init.rgba.set(binnen ? [bron.rgba[j], bron.rgba[j + 1], bron.rgba[j + 2], 255] : [...groen, 255], (y * b + x) * 4);
+    }
+    const wit = { b, h, rgba: Buffer.alloc(b * h * 4, 255) };
+    const namen = { positief: PLAAT.positief, negatief: PLAAT.negatief };
+    namen.init = await A.upload(`aardschok-plaat-${n}.png`, K.pngVanBeeld(init), 'image/png');
+    namen.masker = await A.upload('aardschok-plaat-masker.png', K.pngVanBeeld(wit), 'image/png');
+    const rij = [E.met(H.snij(bron, { x0: 0, y0: 0, b: bron.b, h: bron.h }, 2), `soldaat ${n}: de plaat, blauw`)];
+    for (const dn of PLAAT.denoises) {
+      const o = { ...AF.START, steps: 32, cfg: 6, sampler: 'dpmpp_2m', scheduler: 'karras', denoise: dn, lijn: 0, diepte: 0, ip: 0, seed: 106, checkpoint: RICHTINGEN.checkpoint };
+      const t0 = Date.now();
+      const png = await DK.maak(b, h).voerUit(AF.werkstroom(namen, o));
+      fs.writeFileSync(path.join(map, `img2img-${n}-${dn}.png`), png);
+      const ai = A.leesPng(png);
+      // terug naar de maat van de plaat (het midden van elk blok van k bij k)
+      const terug = { b: bron.b, h: bron.h, rgba: Buffer.alloc(bron.b * bron.h * 4) };
+      for (let y = 0; y < bron.h; y++) for (let x = 0; x < bron.b; x++) {
+        const s = ((oy + y * k + (k >> 1)) * b + ox + x * k + (k >> 1)) * 4;
+        terug.rgba.set([ai.rgba[s], ai.rgba[s + 1], ai.rgba[s + 2], 255], (y * bron.b + x) * 4);
+      }
+      console.log(`soldaat ${n}, denoise ${dn}: ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+      rij.push(E.met(H.snij(terug, { x0: 0, y0: 0, b: bron.b, h: bron.h }, 2), `img2img ${String(dn).replace('.', ',')}`));
+    }
+    rijen.push(rij);
+  }
+  E.bewaar(path.join(UIT, `plaat-img2img-${naam}.png`), rijen, 'De soldaat van de plaat, met img2img', 'Links de soldaat uit jouw plaat (het vaandel en het blad weg, het rood blauw), dan Pixel Art Base erover op 0,35 en 0,5 (vier keer vergroot, weer terug naar zijn maat). Op de maat van de plaat, maal 2.');
+  console.log(`uit/soldatenhd/plaat-img2img-${naam}.png`);
 }
 
 async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
@@ -1153,6 +1269,8 @@ if (require.main === module) {
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'matter') matterProef(...rest);
   else if (opdracht === 'alles') richtingen(rest[0], 'staan').then(() => richtingen(rest[0], 'lopen')).then(() => lopenAlle(rest[0])).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'verf-lopen') verfLopen(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'plaat') plaatImg(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'verf') verfProef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen-alle') lopenAlle(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'benen') lopenBenen(...rest).catch((e) => { console.error(e); process.exit(1); });
