@@ -1218,8 +1218,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   naar png) passend: de achtergrond weg (`voorgrond`: magenta is waar rood en blauw ver boven groen liggen), de poppetjes
   los (`beeldenVan`: per stuk het dichtste midden in de rij; een klein stukje bij het dichtste grote stuk; een stuk over
   meer middens via de kernen van de lijven, `toewijzing` vooraf en groeien), het anker (staan: het midden van de voeten;
-  een beweging: het midden van zijn vak en één grondlijn), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar
-  `FIGUREN[naam].doel` pixels tot de helm, en de vellen zoals `figuurvel.cjs` ze schrijft, in `uit/generator/animaties/`.
+  een beweging: het midden van zijn vak en één grondlijn), de kleur per stof gelijk aan die van het staande vel
+  (`kleurGelijk`: grijs, de tinten van `FIGUREN[naam].stoffen` en de rest, in Lab het gemiddelde, en de spreiding van de
+  lichtheid hoogstens die van het staande vel), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar
+  `FIGUREN[naam].doel` pixels tot de helm, met een maat per vel (`maatVan`: het lijf zonder de speer, met een kern van een
+  vijftigste van de beeldhoogte, tot de laagste voet; staan de mediaan, een beweging het hoogste beeld; de generator
+  tekent niet elk vel even groot), en de vellen zoals `figuurvel.cjs` ze schrijft, in `uit/generator/animaties/`. Elke bron
+  (webp, of de png van de generator in RGB) gaat via PIL naar een RGBA-png in `uit/generator/bron/`, want `H.lees` leest
+  alleen 8-bit RGBA. De genummerde vellen van de masterprompt (`bron/<soort>/<naam>/NN`, `genummerd`) gaan voor de losse.
   `naar-spel.cjs --alleen speerman` zet ze in `beelden/`. In het spel: `js/sprites.js eigenFiguur` geeft een soldaat het
   vel van zijn soort als dat er is; de houdingen 'aanval' en 'sterven' kiest `S.houding` al (bij `e.uitval` en `e.dood`).
 

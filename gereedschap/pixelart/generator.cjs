@@ -9,8 +9,10 @@
 //      eventueel alleen wat op een speer lijkt), en dan groeit elk beeld vanuit zijn kernen over wat eraan vastzit;
 //   4. het anker: staan op het midden van de voeten van elk poppetje; een beweging op het midden van zijn vak in de rij en
 //      één grondlijn, zodat de beweging blijft zoals de generator haar tekende;
-//   5. verkleind naar de maat van het spel (gemiddeld per blok, met de doorzichtigheid erbij, en dan scherp);
-//   6. de vellen zoals het spel ze leest (figuurvel.cjs: een rij per richting Z ZW W NW N NO O ZO, een kolom per beeld,
+//   5. de kleur per stof gelijk aan die van het staande vel (kleurGelijk);
+//   6. verkleind naar de maat van het spel (gemiddeld per blok, met de doorzichtigheid erbij, en dan scherp), met een maat
+//      per vel: de generator tekent niet elk vel even groot (21 okt: tot een vijfde verschil tussen de vellen);
+//   7. de vellen zoals het spel ze leest (figuurvel.cjs: een rij per richting Z ZW W NW N NO O ZO, een kolom per beeld,
 //      en <naam>.json met cel, anker, snelheid en houdingen), in uit/generator/animaties/, voor naar-spel.cjs.
 // Een richting die de generator nog niet maakte, krijgt voorlopig het staande beeld van die richting (vast); dat staat
 // in de proefplaat.
@@ -33,15 +35,16 @@ const UIT = path.join(__dirname, 'uit', 'generator');
 const PYTHON = process.env.PYTHON || 'C:/ComfyUI/ComfyUI_windows_portable/python_embeded/python.exe';
 const KANTEN = K.KANTEN;
 
-// De poppetjes. hoogte: van de bovenkant van het hoofd (de helm) tot de voeten in de bron, gemeten op het staande vel;
-// doel: dezelfde maat in het spel (1×; de soldaat van de heer is 74 pixels tot de helm). Per houding het vel, de
-// richting(en), het aantal beelden en de snelheid (zoals het spel ze nu heeft: beelden/beschrijving.json).
+// De poppetjes. doel: van de voeten tot de bovenkant van het hoofd (de helm) in het spel (1×; de soldaat van de heer is 74
+// pixels tot de helm); de maat in de bron meet maatVan per vel. Per houding het vel, de richting(en), het aantal beelden
+// en de snelheid (zoals het spel ze nu heeft: beelden/beschrijving.json).
 const FIGUREN = {
   speerman: {
     soort: 'soldaten',
-    hoogte: 380,
     doel: 74,
     snelheid: 1.5,
+    // de stoffen naar hun tint, voor het gelijktrekken van de kleur (kleurGelijk): de wapenrok geel en blauw
+    stoffen: { geel: [32, 70, 0.45], blauw: [190, 280] },
     // de masterprompt: vel 1 staan, 2 tot 9 lopen, 10 tot 17 aanval, 18 tot 25 sterven
     genummerd: { map: 'speerman', staan: 1, lopen: 2, aanval: 10, sterven: 18 },
     houdingen: {
@@ -59,15 +62,15 @@ const FIGUREN = {
 
 // Is er een bron met deze naam (png of webp)?
 const heeftBron = (soort, naam) => ['png', 'webp'].some((x) => fs.existsSync(path.join(BRON, soort, `${naam}.${x}`)));
+// Een bron gaat altijd via PIL naar een RGBA-png in uit/generator/bron: de generator levert webp, of png in RGB met zijn
+// herkomst (C2PA) erin, en H.lees leest alleen 8-bit RGBA.
 function leesBron(soort, naam) {
   const map = path.join(BRON, soort);
-  const png = path.join(map, `${naam}.png`);
-  if (fs.existsSync(png)) return H.lees(png);
-  const webp = path.join(map, `${naam}.webp`);
+  const bron = ['png', 'webp'].map((x) => path.join(map, `${naam}.${x}`)).find((f) => fs.existsSync(f));
   const tussen = path.join(UIT, 'bron', `${naam.replace(/[\\/]/g, '-')}.png`);
   fs.mkdirSync(path.dirname(tussen), { recursive: true });
-  if (!fs.existsSync(tussen) || fs.statSync(tussen).mtimeMs < fs.statSync(webp).mtimeMs) {
-    execFileSync(PYTHON, ['-I', '-c', 'import sys\nfrom PIL import Image\nImage.open(sys.argv[1]).convert("RGBA").save(sys.argv[2])', webp, tussen]);
+  if (!fs.existsSync(tussen) || fs.statSync(tussen).mtimeMs < fs.statSync(bron).mtimeMs) {
+    execFileSync(PYTHON, ['-I', '-c', 'import sys\nfrom PIL import Image\nImage.open(sys.argv[1]).convert("RGBA").save(sys.argv[2])', bron, tussen]);
   }
   return H.lees(tussen);
 }
@@ -228,7 +231,105 @@ function beeldenVan(beeld, n, toewijzing = []) {
   return per.map((pixels, i) => ({ pixels, midden: midden[i] }));
 }
 
+// ---------------------------------------------------------------- de kleur gelijktrekken
+
+// De generator kleurt niet elk vel hetzelfde (21 okt: lopen NW, N, NO en O kwamen oranjer en glimmender dan het staande
+// vel). Daarom per stof de kleur van het staande vel: de voorgrond in stoffen naar de tint (grijs: weinig verzadiging,
+// het staal en de maliën; dan de tinten van `stoffen`, zoals de wapenrok; de rest: het leer en de huid), en per stof in
+// Lab het gemiddelde van het staande vel, met de spreiding van de lichtheid hoogstens die van het staande vel (minder
+// glans, nooit meer).
+const srgbNaarLin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const linNaarSrgb = (c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+const WIT = [0.95047, 1, 1.08883];
+function naarLab(r, g, b) {
+  const [R, G, B] = [r, g, b].map((c) => srgbNaarLin(c / 255));
+  const xyz = [0.4124 * R + 0.3576 * G + 0.1805 * B, 0.2126 * R + 0.7152 * G + 0.0722 * B, 0.0193 * R + 0.1192 * G + 0.9505 * B];
+  const [fx, fy, fz] = xyz.map((v, i) => (v / WIT[i] > 0.008856 ? Math.cbrt(v / WIT[i]) : 7.787 * (v / WIT[i]) + 16 / 116));
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+function vanLab(L, a, bb) {
+  const fy = (L + 16) / 116;
+  const [X, Y, Z] = [fy + a / 500, fy, fy - bb / 200].map((f, i) => (f > 0.2069 ? f ** 3 : (f - 16 / 116) / 7.787) * WIT[i]);
+  const lin = [3.2406 * X - 1.5372 * Y - 0.4986 * Z, -0.9689 * X + 1.8758 * Y + 0.0415 * Z, 0.0557 * X - 0.204 * Y + 1.057 * Z];
+  return lin.map((c) => Math.round(255 * linNaarSrgb(Math.min(1, Math.max(0, c)))));
+}
+// de stof van een kleur: 'grijs', een naam uit stoffen ({ naam: [tint van, tint tot] }, de tint in graden), of 'rest'
+function stofVan(r, g, b, stoffen) {
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+  if (mx === 0 || d / mx < 0.22) return 'grijs';
+  let tint = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  tint = (tint * 60 + 360) % 360;
+  for (const [naam, [van, tot, licht = 0]] of Object.entries(stoffen)) if (tint >= van && tint < tot && mx / 255 > licht) return naam;
+  return 'rest';
+}
+// Per stof het gemiddelde en de spreiding in Lab van de voorgrond van een vel; met per pixel de stof (een nummer in
+// `namen`, 255: achtergrond) en zijn Lab, voor kleurGelijk.
+function kleurMaat(beeld, stoffen) {
+  const N = beeld.b * beeld.h;
+  const fg = voorgrond(beeld);
+  const namen = ['grijs', ...Object.keys(stoffen), 'rest'];
+  const stof = new Uint8Array(N).fill(255);
+  const lab = new Float32Array(N * 3);
+  const som = namen.map(() => ({ n: 0, t: [0, 0, 0], tt: [0, 0, 0] }));
+  for (let i = 0; i < N; i++) {
+    if (!fg[i]) continue;
+    const [r, g, b] = [beeld.rgba[i * 4], beeld.rgba[i * 4 + 1], beeld.rgba[i * 4 + 2]];
+    const s = namen.indexOf(stofVan(r, g, b, stoffen));
+    const l = naarLab(r, g, b);
+    stof[i] = s;
+    lab.set(l, i * 3);
+    som[s].n++;
+    for (let c = 0; c < 3; c++) {
+      som[s].t[c] += l[c];
+      som[s].tt[c] += l[c] * l[c];
+    }
+  }
+  const maat = {};
+  som.forEach((s, k) => {
+    if (!s.n) return;
+    const mu = s.t.map((t) => t / s.n);
+    maat[namen[k]] = { n: s.n, mu, sd: s.tt.map((tt, c) => Math.sqrt(Math.max(0, tt / s.n - mu[c] * mu[c]))) };
+  });
+  return { maat, namen, stof, lab };
+}
+// De kleur van een vel naar die van het voorbeeld (de maat van het staande vel), in het beeld zelf.
+function kleurGelijk(beeld, voorbeeld, stoffen) {
+  const { maat, namen, stof, lab } = kleurMaat(beeld, stoffen);
+  for (let i = 0; i < stof.length; i++) {
+    if (stof[i] === 255) continue;
+    const m = maat[namen[stof[i]]], v = voorbeeld[namen[stof[i]]];
+    if (!v || m.n < 200) continue;
+    const L = (lab[i * 3] - m.mu[0]) * Math.min(1, v.sd[0] / (m.sd[0] || 1)) + v.mu[0];
+    const rgb = vanLab(L, lab[i * 3 + 1] - m.mu[1] + v.mu[1], lab[i * 3 + 2] - m.mu[2] + v.mu[2]);
+    for (let c = 0; c < 3; c++) beeld.rgba[i * 4 + c] = rgb[c];
+  }
+}
+
 // ---------------------------------------------------------------- verkleinen
+
+// De maat van een vel: hoe hoog het lijf is, van de helm tot de zolen, zonder de speer. De bovenkant: per beeld de kern
+// (de voorgrond waar een blok vol is; het blok is een vijftigste van de beeldhoogte, ruim breder dan de schacht, die in
+// HD 13 pixels dik is) en daarvan het grootste stuk (het lijf; een speerpunt hangt los), en de rand die de kern
+// afknabbelde erbij. De onderkant: de laagste pixel van het beeld (de voeten; ook een dun enkeltje telt zo mee). Staan:
+// de mediaan over de richtingen; een beweging: het hoogste beeld, dat bijna rechtop staat (bij lopen de tussenstand, bij
+// de aanval de klaarstand, bij vallen het eerste beeld).
+function maatVan(beeld, rij, staan) {
+  const { b, h } = beeld;
+  const ys = (r) => r.pixels.map((p) => Math.floor(p / b));
+  const hoogBeeld = rij.map((r) => Math.max(...ys(r)) - Math.min(...ys(r)) + 1).sort((p, q) => p - q);
+  const R = Math.max(3, Math.round(0.02 * hoogBeeld[Math.floor(hoogBeeld.length / 2)]));
+  const kern = kernVan(voorgrond(beeld), b, h, R);
+  const hoogten = rij.map((r) => {
+    const m = new Uint8Array(b * h);
+    for (const p of r.pixels) if (kern[p]) m[p] = 1;
+    const st = stukken(m, b, h);
+    if (!st.length) return 0;
+    const lijf = st.reduce((a, s) => (s.pixels.length > a.pixels.length ? s : a));
+    const top = Math.min(...lijf.pixels.map((p) => Math.floor(p / b))) - R;
+    return Math.max(...ys(r)) - top + 1;
+  }).filter((x) => x > 0).sort((p, q) => p - q);
+  return staan ? hoogten[Math.floor(hoogten.length / 2)] : hoogten[hoogten.length - 1];
+}
 
 // Een beeld (pixels uit de bron) rond zijn anker [ax, ay] in de bron verkleind met factor k, naar een plaatje met het
 // anker op [AX, AY]: per doelpixel het gemiddelde van de bronpixels in zijn blok (met de doorzichtigheid), en dan scherp
@@ -271,7 +372,8 @@ function verkleind(beeld, pixels, [ax, ay], k) {
 
 function figuur(naam) {
   const F = FIGUREN[naam];
-  const k = F.doel / F.hoogte;
+  const maten = {}; // per vel de maat in de bron, voor de proefplaat
+  let voorbeeld = null; // de kleur per stof van het staande vel
   // per houding, per richting, per beeld: een verkleind plaatje met zijn anker
   const platen = {};
   // de bronnen per houding: een genummerd vel van de masterprompt (staan: één vel met acht richtingen; een beweging: één
@@ -294,6 +396,10 @@ function figuur(naam) {
       // een oud vel met meer richtingen dan we er nog van nodig hebben: alle richtingen knippen, de nodige houden
       const opVel = b.uit || b.richtingen;
       const rij = beeldenVan(bron, opVel.length * h.beelden, b.toewijzing);
+      maten[b.naam] = maatVan(bron, rij, h.beelden === 1);
+      if (F.stoffen && houding === 'staan') voorbeeld = kleurMaat(bron, F.stoffen).maat;
+      else if (F.stoffen) kleurGelijk(bron, voorbeeld, F.stoffen);
+      const k = F.doel / maten[b.naam];
       // de grondlijn van een beweging: de laagste voet over alle beelden
       const ys = (pix) => pix.map((p) => Math.floor(p / bron.b));
       const grond = Math.max(...rij.map((r) => Math.max(...ys(r.pixels))));
@@ -361,7 +467,7 @@ function figuur(naam) {
     beschrijving.houdingen[houding] = regel;
   }
   fs.writeFileSync(path.join(map, `${naam}.json`), JSON.stringify(beschrijving, null, 1));
-  return { beschrijving, cellen, ontbreekt };
+  return { beschrijving, cellen, ontbreekt, maten };
 }
 
 // De proefplaat: staan in acht richtingen, en elke beweging in de richting die er is, op spelmaat (maal 3), naast de
@@ -369,7 +475,8 @@ function figuur(naam) {
 function proef(naam) {
   const E = require('../ai/etiket.cjs');
   const { apng } = require('./apng.cjs');
-  const { beschrijving, cellen, ontbreekt } = figuur(naam);
+  const { beschrijving, cellen, ontbreekt, maten } = figuur(naam);
+  for (const [vel, m] of Object.entries(maten)) console.log(`${vel}: ${m} pixels hoog`);
   const groot = (c, n = 3) => H.snij(H.alfaSnijMetGrond(c), { x0: 0, y0: 0, b: c.b, h: c.h }, n);
   const rijen = [KANTEN.map((kant, i) => E.met(groot(cellen.staan[kant][0]), i ? kant : `staan · ${kant}`))];
   for (const [houding, h] of Object.entries(FIGUREN[naam].houdingen)) {
@@ -391,4 +498,4 @@ if (require.main === module) {
   else proef(naam);
 }
 
-module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind };
+module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind, maatVan };

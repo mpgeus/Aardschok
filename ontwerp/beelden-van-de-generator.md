@@ -45,11 +45,10 @@ delen:
 
 ## Wat wij ermee doen (het gereedschap)
 
-Nog te bouwen, als de eerste beelden er zijn: het groen eruit (op kleur, met een rand), elk poppetje in een rij los (op
-de doorzichtige kolommen), op maat (de hoogte van een man naar onze HD-maat), het anker op de voeten, de richtingen in
-de volgorde van het spel (Z, ZW, W, NW, N, NO, O, ZO), gespiegeld waar het ontbreekt, en naar `beelden/` met de
-beschrijving zoals `naar-spel.cjs` die nu maakt. De eerste: de speerman, uit de negen soldaten van de plaat
-(`soldatenhd.cjs`, `uit/soldatenhd/plaat/blauw-<n>.png`: het vaandel en het blad weg, het rood blauw).
+`gereedschap/pixelart/generator.cjs` (`code.md`): het magenta eruit, elk poppetje in een rij los, per vel op maat (het
+lijf zonder de speer gemeten, naar 74 pixels tot de helm), de kleur per stof gelijk aan die van het staande vel, het
+anker op de voeten, de richtingen in de volgorde van het spel (Z, ZW, W, NW, N, NO, O, ZO; niet gespiegeld: een richting
+die er nog niet is, staat voorlopig stil), en via `naar-spel.cjs --alleen speerman` naar `beelden/`.
 
 ## De eisen voor de poppetjes
 
@@ -243,8 +242,8 @@ DIRECTIONS (the viewer is in the south):
 S = facing south, towards the viewer. SW = facing down-left. W = facing left. NW = facing up-left, seen from behind at three-quarters. N = facing away from the viewer, his back. NE = facing up-right, seen from behind at three-quarters. E = facing right. SE = facing down-right.
 
 POSES:
-- Standing: at rest, the spear upright in his right hand with the butt on the ground, his left hand empty and relaxed.
-- Walking: 8 frames, a looping walk cycle (the last frame flows into the first). He holds the spear diagonally across his body with both hands: right hand low at the hip, left hand higher in front of the chest, the spearhead pointing up and forward in the direction he walks.
+- Standing: at rest, the spear upright in his right hand with the butt on the ground, his left hand empty and relaxed. Seen by the viewer, his right hand (and the spear) is on the left of his body in S, SW and SE, and on the right in N, NE and NW.
+- Walking: 8 frames, a looping walk cycle (the last frame flows into the first). He holds the spear diagonally across his body with both hands: right hand low at the hip, left hand higher in front of the chest, the spearhead pointing up and forward in the direction he walks: to the left of the sheet when he walks W, SW or NW, to the right when he walks E, SE or NE.
 - Attacking: 8 frames: ready stance with the spear diagonally in both hands, drawing the spear back horizontally, thrusting forward, full extension, holding, pulling back, recovering, back to ready. Both hands on the spear in every frame; the spearhead always points in the direction he faces; the spear is one straight shaft of constant length that never swaps to the other side of his body and never goes over his head.
 - Dying: 7 frames: hit and flinching, staggering back, knees buckling, falling, hitting the ground, settling, lying still on the ground with the spear beside him.
 
@@ -256,6 +255,29 @@ THE SHEETS, one per reply, in this order:
 
 Make sheet 1 now. After each sheet, wait until I say "next", then make the next sheet in the list. From sheet 2 on, use sheet 1 as the reference for the character and the scale, so he stays exactly the same. If I say "redo" with a remark, make the same sheet again with that correction.
 ```
+
+## De eerste vellen van de masterprompt (21 okt)
+
+Marcel stuurde vel 1 (staan) en lopen in zeven richtingen: Z, ZW, W, NW, N, NO en O. Ze staan als `01.webp` tot
+`08.webp` in `bron/soldaten/speerman/` (webp met kwaliteit 92, zo'n 180 KB per vel, in plaats van de png van de
+generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wat opviel, en wat ermee is gedaan:
+
+- **De maat verschilt per vel**, tot een vijfde: lopen O is 337 pixels van helm tot zool, staan 424. Daarom meet
+  `generator.cjs` elk vel zelf (`maatVan`). Ook de oude aanval en het oude vallen (ZW) staan nu op maat: die waren
+  kleiner getekend, en werden met één vaste maat kleiner dan de staande man.
+- **NW, N, NO en O zijn oranjer en glimmender getekend** dan het staande vel (het geel naar oranje, het leer roodbruin).
+  Opnieuw vragen hoeft niet: `kleurGelijk` trekt per stof (staal, geel, blauw, leer) de kleur gelijk met het staande vel,
+  en op spelmaat valt de glans weg.
+- **Meer keer gekomen:** NO twee keer, O vier keer en nog eens met de speer laag vooruit, N ook met de speer rechtop.
+  Gekozen: de speer schuin met twee handen, zoals gevraagd.
+- **Bij ZW en W wijst de punt naar achteren** (schuin omhoog naar rechts, terwijl hij naar links loopt); bij NW, NO en O
+  wijst hij vooruit. In de masterprompt staat de kant er nu bij. Opnieuw vragen: "redo 3: the spearhead must point up and
+  to the left, forward in the direction he walks, not backwards over his shoulder", en zo ook "redo 4".
+- **Bij staan NW en ZO houdt hij de speer in zijn linkerhand** (de speer springt van kant als hij draait). Klein op
+  spelmaat; vel 1 opnieuw vragen verandert ook het voorbeeld voor de maat en de kleur van alle andere, dus dat laten we.
+  In de masterprompt staat nu aan welke kant de speer staat.
+- **Nog te maken:** 9 (lopen ZO), 10 tot 17 (aanvallen) en 18 tot 25 (vallen). Tot dan staat ZO stil en vallen de
+  aanval en het vallen terug op de oude vellen van ZW.
 
 ## De inventaris
 
