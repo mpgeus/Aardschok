@@ -228,9 +228,9 @@ een andere soort soldaat verandert alleen CHARACTER en POSES.
 ```text
 You are producing the complete sprite set for one game character. Follow these rules for every sheet you make in this conversation.
 
-CHARACTER (identical in every sheet): a medieval village spearman, the same foot soldier as in the attached reference image: the same face with a short dark beard, steel kettle hat, mail coif, brown padded sleeves, leather gloves, belt with pouch, brown boots and stocky body proportions, wearing a quartered deep blue and golden yellow tabard over brown leather armour. He carries ONE long wooden spear with a leaf-shaped iron spearhead, about one and a half times his height. No shield, no banner, no second spear, no other weapons.
+CHARACTER (identical in every sheet): a medieval village spearman, the same foot soldier as in the attached reference image: the same face with a short dark beard, steel kettle hat, mail coif, brown padded sleeves, leather gloves, belt with pouch, brown boots and stocky body proportions, wearing a quartered deep blue and golden yellow tabard over brown leather armour. He carries ONE long wooden spear with a leaf-shaped iron spearhead, about one and a half times his height. No shield, no banner, no second spear, no other weapons, no rivets, no sash.
 
-STYLE: high-definition hand-painted pixel art exactly like the attached reference image: isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid, no blur.
+STYLE: high-definition hand-painted pixel art exactly like the attached reference image: matte colours, not glossy, not plastic, no shiny highlights, no 3D render look; isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid, no blur.
 
 TECHNICAL RULES (every sheet):
 - Plain flat magenta background (#FF00FF). No ground shadow, no text, no labels, no numbers, no measurement lines, no frame.
@@ -239,7 +239,7 @@ TECHNICAL RULES (every sheet):
 - Generous empty space: frames never touch or overlap; every frame, including the spear at full extension or a fallen body, stays completely inside its own column, with at least 60 pixels of empty magenta between neighbouring frames. Make the sheet as wide as needed.
 
 DIRECTIONS (the viewer is in the south):
-S = facing south, towards the viewer. SW = facing down-left. W = facing left. NW = facing up-left, seen from behind at three-quarters. N = facing away from the viewer, his back. NE = facing up-right, seen from behind at three-quarters. E = facing right. SE = facing down-right.
+S = facing south, towards the viewer. SW = facing down-left. W = facing left. NW = facing up-left, seen from behind at three-quarters. N = facing away from the viewer, his back. NE = facing up-right, seen from behind at three-quarters. E = facing right. SE = facing down-right, towards the viewer: we see his face, his beard and the front of his tabard.
 
 POSES:
 - Standing: at rest, the spear upright in his right hand with the butt on the ground, his left hand empty and relaxed. Seen by the viewer, his right hand (and the spear) is on the left of his body in S, SW and SE, and on the right in N, NE and NW.
@@ -278,6 +278,14 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   In de masterprompt staat nu aan welke kant de speer staat.
 - **Nog te maken:** 9 (lopen ZO), 10 tot 17 (aanvallen) en 18 tot 25 (vallen). Tot dan staat ZO stil en vallen de
   aanval en het vallen terug op de oude vellen van ZW.
+- **Vel 9 verliep** (21 okt): de richting klopte, maar het was een andere man (een sjerp, klinknagels, een geplooide rok,
+  geen baard) en glimmend als een 3D-render. Kleur en maat trekt `generator.cjs` gelijk, andere kleren niet. Daarom
+  **een nieuw gesprek** als de man verloopt: vel 1 en vel 2 (`01.webp`, `02.webp`, de twee die goed zijn) erbij in plaats
+  van de plaat, de masterprompt met in CHARACTER "exactly the man in the two attached sheets" en "the same scale as in
+  the attached sheets", en als slot: "The attached sheets are sheet 1 (standing in all 8 directions) and sheet 2 (walking
+  S); they are correct. Make sheet 9 now. After each sheet, wait until I say "next", then make the next sheet in the
+  list. Always use the attached sheets as the reference for the character, the style and the scale, so he stays exactly
+  the same." De regels mat, geen klinknagels en geen sjerp staan sindsdien ook in de masterprompt hierboven.
 
 ## De inventaris
 
