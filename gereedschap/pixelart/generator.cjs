@@ -15,6 +15,10 @@
 // Een richting die de generator nog niet maakte, krijgt voorlopig het staande beeld van die richting (vast); dat staat
 // in de proefplaat.
 //
+// De masterprompt (beelden-van-de-generator.md) levert genummerde vellen: `bron/<soort>/<naam>/01.webp` (staan, acht
+// richtingen) en dan per beweging één vel per richting in de volgorde Z ZW W NW N NO O ZO (`genummerd`). Een nummer dat
+// er nog niet is, komt uit de losse vellen van eerder (`vel`), en anders uit het staande beeld.
+//
 //   node gereedschap/pixelart/generator.cjs speerman      de vellen en uit/generator/speerman.png (de proefplaat), met
 //                                                          de bewegingen als bewegend beeld
 'use strict';
@@ -38,6 +42,8 @@ const FIGUREN = {
     hoogte: 380,
     doel: 74,
     snelheid: 1.5,
+    // de masterprompt: vel 1 staan, 2 tot 9 lopen, 10 tot 17 aanval, 18 tot 25 sterven
+    genummerd: { map: 'speerman', staan: 1, lopen: 2, aanval: 10, sterven: 18 },
     houdingen: {
       staan: { vel: 'speerman-staan', richtingen: KANTEN, beelden: 1, fps: 4 },
       lopen: { vel: 'speerman-lopen-ZW', richtingen: ['ZW'], beelden: 8, fps: 10 },
@@ -51,12 +57,14 @@ const FIGUREN = {
 
 // ---------------------------------------------------------------- de bron lezen
 
+// Is er een bron met deze naam (png of webp)?
+const heeftBron = (soort, naam) => ['png', 'webp'].some((x) => fs.existsSync(path.join(BRON, soort, `${naam}.${x}`)));
 function leesBron(soort, naam) {
   const map = path.join(BRON, soort);
   const png = path.join(map, `${naam}.png`);
   if (fs.existsSync(png)) return H.lees(png);
   const webp = path.join(map, `${naam}.webp`);
-  const tussen = path.join(UIT, 'bron', `${naam}.png`);
+  const tussen = path.join(UIT, 'bron', `${naam.replace(/[\\/]/g, '-')}.png`);
   fs.mkdirSync(path.dirname(tussen), { recursive: true });
   if (!fs.existsSync(tussen) || fs.statSync(tussen).mtimeMs < fs.statSync(webp).mtimeMs) {
     execFileSync(PYTHON, ['-I', '-c', 'import sys\nfrom PIL import Image\nImage.open(sys.argv[1]).convert("RGBA").save(sys.argv[2])', webp, tussen]);
@@ -266,27 +274,45 @@ function figuur(naam) {
   const k = F.doel / F.hoogte;
   // per houding, per richting, per beeld: een verkleind plaatje met zijn anker
   const platen = {};
+  // de bronnen per houding: een genummerd vel van de masterprompt (staan: één vel met acht richtingen; een beweging: één
+  // vel per richting), anders het losse vel van eerder
+  const bronnenVan = (houding, h) => {
+    const G = F.genummerd;
+    const nr = (i) => `${G.map}/${String(G[houding] + i).padStart(2, '0')}`;
+    if (G && G[houding] != null && h.beelden === 1 && heeftBron(F.soort, nr(0))) return [{ naam: nr(0), richtingen: KANTEN }];
+    if (G && G[houding] != null && h.beelden > 1) {
+      const lijst = KANTEN.map((kant, i) => ({ naam: nr(i), richtingen: [kant] })).filter((b) => heeftBron(F.soort, b.naam));
+      const oud = h.richtingen.filter((kant) => !lijst.some((b) => b.richtingen[0] === kant));
+      if (lijst.length) return oud.length ? [...lijst, { naam: h.vel, richtingen: oud, toewijzing: h.toewijzing, uit: h.richtingen }] : lijst;
+    }
+    return [{ naam: h.vel, richtingen: h.richtingen, toewijzing: h.toewijzing }];
+  };
   for (const [houding, h] of Object.entries(F.houdingen)) {
-    const bron = leesBron(F.soort, h.vel);
-    const rij = beeldenVan(bron, h.richtingen.length * h.beelden, h.toewijzing);
-    // de grondlijn van een beweging: de laagste voet over alle beelden
-    const ys = (pix) => pix.map((p) => Math.floor(p / bron.b));
-    const grond = Math.max(...rij.map((r) => Math.max(...ys(r.pixels))));
     platen[houding] = {};
-    h.richtingen.forEach((kant, ri) => {
-      platen[houding][kant] = [];
-      for (let i = 0; i < h.beelden; i++) {
-        const r = rij[ri * h.beelden + i];
-        let anker;
-        if (h.beelden === 1) {
-          // staan: het midden van de voeten (de onderste rijen) en de onderkant
-          const onder = Math.max(...ys(r.pixels));
-          const xs = r.pixels.filter((p) => Math.floor(p / bron.b) >= onder - 12).map((p) => p % bron.b);
-          anker = [(Math.min(...xs) + Math.max(...xs)) / 2, onder];
-        } else anker = [r.midden, grond];
-        platen[houding][kant].push(verkleind(bron, r.pixels, anker, k));
-      }
-    });
+    for (const b of bronnenVan(houding, h)) {
+      const bron = leesBron(F.soort, b.naam);
+      // een oud vel met meer richtingen dan we er nog van nodig hebben: alle richtingen knippen, de nodige houden
+      const opVel = b.uit || b.richtingen;
+      const rij = beeldenVan(bron, opVel.length * h.beelden, b.toewijzing);
+      // de grondlijn van een beweging: de laagste voet over alle beelden
+      const ys = (pix) => pix.map((p) => Math.floor(p / bron.b));
+      const grond = Math.max(...rij.map((r) => Math.max(...ys(r.pixels))));
+      opVel.forEach((kant, ri) => {
+        if (!b.richtingen.includes(kant)) return;
+        platen[houding][kant] = [];
+        for (let i = 0; i < h.beelden; i++) {
+          const r = rij[ri * h.beelden + i];
+          let anker;
+          if (h.beelden === 1) {
+            // staan: het midden van de voeten (de onderste rijen) en de onderkant
+            const onder = Math.max(...ys(r.pixels));
+            const xs = r.pixels.filter((p) => Math.floor(p / bron.b) >= onder - 12).map((p) => p % bron.b);
+            anker = [(Math.min(...xs) + Math.max(...xs)) / 2, onder];
+          } else anker = [r.midden, grond];
+          platen[houding][kant].push(verkleind(bron, r.pixels, anker, k));
+        }
+      });
+    }
   }
   // de richtingen die er nog niet zijn: het staande beeld van die richting (voorlopig)
   const ontbreekt = {};
@@ -348,7 +374,7 @@ function proef(naam) {
   const rijen = [KANTEN.map((kant, i) => E.met(groot(cellen.staan[kant][0]), i ? kant : `staan · ${kant}`))];
   for (const [houding, h] of Object.entries(FIGUREN[naam].houdingen)) {
     if (houding === 'staan') continue;
-    for (const kant of h.richtingen) {
+    for (const kant of KANTEN.filter((kt) => !ontbreekt[houding].includes(kt))) {
       rijen.push(cellen[houding][kant].map((c, i) => E.met(groot(c), i ? `${i}` : `${houding} · ${kant} · 0`)));
       const platen = cellen[houding][kant].map((c) => ({ b: c.b, h: c.h, rgba: () => c.rgba }));
       fs.writeFileSync(path.join(UIT, `${naam}-${houding}-${kant}-bewegend.png`), apng(platen, { schaal: 3, fps: h.fps }));

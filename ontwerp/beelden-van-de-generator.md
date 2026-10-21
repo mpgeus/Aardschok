@@ -216,6 +216,47 @@ north-east (up-right, seen from behind at three-quarters), O east (right), ZO so
    > style: isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid.
    > Plain flat magenta background (#FF00FF), no ground shadow, no text, no labels, no frame.
 
+## De masterprompt voor de speerman (21 okt)
+
+Marcel: "Denk je dat we het voor elkaar krijgen om 1 masterprompt te maken voor de speerman, 1 waar alles inzit?" Alles in
+één beeld kan niet (bijna 200 poppetjes: te klein, en de man verloopt); wel één prompt die alles vastlegt (de man, de
+stijl, de regels en een genummerde lijst van alle vellen), waarna de generator per antwoord één vel maakt en Marcel
+"next" typt. Marcel bewaart elk vel met zijn nummer (`01.webp` tot `25.webp`) in
+`gereedschap/pixelart/bron/soldaten/speerman/`; het nummer zegt welke beweging en richting het is. Klopt een vel niet:
+"redo" met wat er mis is. Verloopt de man in een lang gesprek: vel 1 er opnieuw bij, "keep him exactly like this". Voor
+een andere soort soldaat verandert alleen CHARACTER en POSES.
+
+```text
+You are producing the complete sprite set for one game character. Follow these rules for every sheet you make in this conversation.
+
+CHARACTER (identical in every sheet): a medieval village spearman, the same foot soldier as in the attached reference image: the same face with a short dark beard, steel kettle hat, mail coif, brown padded sleeves, leather gloves, belt with pouch, brown boots and stocky body proportions, wearing a quartered deep blue and golden yellow tabard over brown leather armour. He carries ONE long wooden spear with a leaf-shaped iron spearhead, about one and a half times his height. No shield, no banner, no second spear, no other weapons.
+
+STYLE: high-definition hand-painted pixel art exactly like the attached reference image: isometric three-quarter view from above, warm light from the upper left, dark outlines, a crisp pixel grid, no blur.
+
+TECHNICAL RULES (every sheet):
+- Plain flat magenta background (#FF00FF). No ground shadow, no text, no labels, no numbers, no measurement lines, no frame.
+- All figures at exactly the same scale in every sheet: about 220 pixels from the soles of his boots to the top of his helmet when standing.
+- Frames in one row, left to right in order, each in an equal-width cell, feet on one baseline, centered in the cell.
+- Generous empty space: frames never touch or overlap; every frame, including the spear at full extension or a fallen body, stays completely inside its own column, with at least 60 pixels of empty magenta between neighbouring frames. Make the sheet as wide as needed.
+
+DIRECTIONS (the viewer is in the south):
+S = facing south, towards the viewer. SW = facing down-left. W = facing left. NW = facing up-left, seen from behind at three-quarters. N = facing away from the viewer, his back. NE = facing up-right, seen from behind at three-quarters. E = facing right. SE = facing down-right.
+
+POSES:
+- Standing: at rest, the spear upright in his right hand with the butt on the ground, his left hand empty and relaxed.
+- Walking: 8 frames, a looping walk cycle (the last frame flows into the first). He holds the spear diagonally across his body with both hands: right hand low at the hip, left hand higher in front of the chest, the spearhead pointing up and forward in the direction he walks.
+- Attacking: 8 frames: ready stance with the spear diagonally in both hands, drawing the spear back horizontally, thrusting forward, full extension, holding, pulling back, recovering, back to ready. Both hands on the spear in every frame; the spearhead always points in the direction he faces; the spear is one straight shaft of constant length that never swaps to the other side of his body and never goes over his head.
+- Dying: 7 frames: hit and flinching, staggering back, knees buckling, falling, hitting the ground, settling, lying still on the ground with the spear beside him.
+
+THE SHEETS, one per reply, in this order:
+1. Standing in all 8 directions, in one row in this order: S, SW, W, NW, N, NE, E, SE.
+2. Walking S.   3. Walking SW.   4. Walking W.   5. Walking NW.   6. Walking N.   7. Walking NE.   8. Walking E.   9. Walking SE.
+10. Attacking S.   11. Attacking SW.   12. Attacking W.   13. Attacking NW.   14. Attacking N.   15. Attacking NE.   16. Attacking E.   17. Attacking SE.
+18. Dying S.   19. Dying SW.   20. Dying W.   21. Dying NW.   22. Dying N.   23. Dying NE.   24. Dying E.   25. Dying SE.
+
+Make sheet 1 now. After each sheet, wait until I say "next", then make the next sheet in the list. From sheet 2 on, use sheet 1 as the reference for the character and the scale, so he stays exactly the same. If I say "redo" with a remark, make the same sheet again with that correction.
+```
+
 ## De inventaris
 
 (volgt: de gebouwen, de mensen, de dieren en karren, en de rest, met wat de demo nodig heeft eerst)
