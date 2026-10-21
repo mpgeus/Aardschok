@@ -501,9 +501,10 @@ function soldaat(stand = null, o = {}) {
   // hem, een eind erboven. Een steekpunt, een bijlblad naar voren, een haak naar achteren, en een
   // kwastje in rood en geel waar het ijzer begint.
   const til = lopen ? 4.2 : 0;
-  // schuin: de schacht door de rechterhand (laag, bij de heup) en de linker (hoger, voor de borst)
-  const handR = [10, 5, 42 + til];
-  const handL = [-1, 13, 54 + til];
+  // schuin: de schacht door de rechterhand (laag, bij de heup) en de linker (hoger, voor de borst), ruim voor het lijf, zodat
+  // de schacht voor de jas langs loopt (Marcel, 21 okt: "de speer verdwijnt nu ook in het lichaam van de soldaat")
+  const handR = [10, 10.5, 42 + til];
+  const handL = [-1, 17.5, 54 + til];
   const as = eenheid(min(handL, handR));
   const voet = schuin ? plus(handR, maal(as, -26)) : twee ? [5.6, 12.4, 0.6 + til] : [17.2, 6.8, 0.6 + til];
   const top = schuin ? plus(handR, maal(as, 66)) : twee ? [5, 9.6, 92 + til] : [16.6, 5.8, (o.wapen === 'speer' ? 92 : 99.6) + til];
@@ -515,10 +516,10 @@ function soldaat(stand = null, o = {}) {
   else hellebaard(delen, voet, top, opSchacht, lengte, M, D);
   // de rechterhand om de schacht, de elleboog naar achteren; met twee handen ook de linker, hoger
   const grijp = schuin ? handR : opSchacht(43.2 - voet[2]);
-  armen.R = { schouder: schouderR, elleboog: schuin ? [17, -1, 48] : twee ? [16, 5.2, 50] : [18.4, -1.6, 50.6], pols: plus(grijp, twee ? [0.6, -0.8, 0] : [-0.6, -0.4, 0]) };
+  armen.R = { schouder: schouderR, elleboog: schuin ? [17, 3.4, 49] : twee ? [16, 5.2, 50] : [18.4, -1.6, 50.6], pols: plus(grijp, twee ? [0.6, -0.8, 0] : [-0.6, -0.4, 0]) };
   arm(delen, schouderR, armen.R.elleboog, armen.R.pols, { ...mouw, dArm: D.armR, dHand: D.handR });
   if (twee) {
-    armen.L = { schouder: schouderL, elleboog: schuin ? [-13, 7, 47] : [-8.4, 8, 51.6], pols: schuin ? plus(handL, [-0.6, -0.8, 0]) : plus(opSchacht(55 - voet[2]), [-0.8, -0.6, 0]) };
+    armen.L = { schouder: schouderL, elleboog: schuin ? [-12, 11, 48] : [-8.4, 8, 51.6], pols: schuin ? plus(handL, [-0.6, -0.8, 0]) : plus(opSchacht(55 - voet[2]), [-0.8, -0.6, 0]) };
     arm(delen, schouderL, armen.L.elleboog, armen.L.pols, { ...mouw, dArm: D.armL, dHand: D.handL });
   }
   bot(Bn.Bromp);
