@@ -53,20 +53,20 @@ test('hooguit zoveel soldaten als het wachthuis plaatsen heeft', () => {
   assert.ok(T.soldatenVan(D, huis).length <= plaatsen);
 });
 
-test('een speerman wacht tot speer en schild in de opslag liggen; dan pakt hij ze, en eraf levert hij ze weer in', () => {
+test('een speerman wacht tot speer en harnas in de opslag liggen; dan pakt hij ze, en eraf levert hij ze weer in', () => {
   const { D, huis } = gehucht();
   T.zetVoorraad(D, 'speren', 1);
-  T.zetVoorraad(D, 'schilden', 0);
+  T.zetVoorraad(D, 'harnassen', 0);
   T.zetSoldaten(D, huis, 'speerman', 1);
-  assert.equal(T.soldatenVan(D).length, 0, 'zonder schild nog niet');
-  assert.deepEqual(T.wapensGevraagd(D).schilden, 1, 'het schild is gevraagd');
-  assert.match(regelVan(D, huis, 'Spearman').tekst, /0 of 1, waiting for shields: build a weaponsmith/);
-  T.zetVoorraad(D, 'schilden', 1);
+  assert.equal(T.soldatenVan(D).length, 0, 'zonder harnas nog niet');
+  assert.deepEqual(T.wapensGevraagd(D).harnassen, 1, 'het harnas is gevraagd');
+  assert.match(regelVan(D, huis, 'Spearman').tekst, /0 of 1, waiting for leather armour: build a weaponsmith/);
+  T.zetVoorraad(D, 'harnassen', 1);
   T.tikSoldatenDag(D);
   const [p] = T.soldatenVan(D);
   assert.equal(p.soldaat.soort, 'speerman');
   assert.equal(D.voorraad.speren, 0);
-  assert.equal(D.voorraad.schilden, 0);
+  assert.equal(D.voorraad.harnassen, 0);
   assert.equal(T.wapensGevraagd(D).speren, 0, 'er wordt niets meer gevraagd');
   // De knop eraf, zoals op het briefje: zijn opdracht, zoals de tik hem uitvoert (js/tik.js).
   const min = regelVan(D, huis, 'Spearman').knoppen[0];
@@ -76,7 +76,7 @@ test('een speerman wacht tot speer en schild in de opslag liggen; dan pakt hij z
   assert.ok(!p.soldaat);
   assert.equal(T.kanWerken(p), true, 'hij is weer vrij');
   assert.equal(D.voorraad.speren, 1);
-  assert.equal(D.voorraad.schilden, 1);
+  assert.equal(D.voorraad.harnassen, 1);
 });
 
 test('de wapenmaker maakt wat het wachthuis vraagt, één stuk per dag, het liefst waarvoor hij heeft wat erin gaat', () => {
@@ -113,12 +113,12 @@ test('de wapenmaker maakt hele stukken: wat half af is, onthoudt hij, en op zijn
     S.kalender.dag = dag + 0.3;
     S.kalender.stil = [];
     T.tikGebouwenDag(D, dag);
-    for (const wat of ['speren', 'schilden']) {
+    for (const wat of ['speren', 'harnassen']) {
       const n = ((smid.stapel && smid.stapel[wat]) || 0) + (D.voorraad[wat] || 0);
       assert.equal(n, Math.round(n), `dag ${dag}: ${n} ${wat}`);
     }
     // wat er ligt, en wat een speerman al pakte
-    const ligt = ['speren', 'schilden'].reduce((n, wat) => n + ((smid.stapel && smid.stapel[wat]) || 0) + (D.voorraad[wat] || 0), 0);
+    const ligt = ['speren', 'harnassen'].reduce((n, wat) => n + ((smid.stapel && smid.stapel[wat]) || 0) + (D.voorraad[wat] || 0), 0);
     gemaakt = ligt + 2 * T.soldatenVan(D, huis).length;
   }
   assert.ok(gemaakt >= 1, `hij maakte iets (${gemaakt})`);
@@ -222,7 +222,7 @@ test('schild en harnas vangen een deel van elke klap af, maar niets van een bout
   const B = T.SOLDATEN_INSTELLINGEN.bescherming;
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } } });
   assert.equal(T.vangtAf(wie('zwaardvechter'), null), B.schild + B.harnas);
-  assert.equal(T.vangtAf(wie('speerman'), null), B.schild);
+  assert.equal(T.vangtAf(wie('speerman'), null), B.harnas);
   assert.equal(T.vangtAf(wie('piekenier'), null), B.harnas);
   assert.equal(T.vangtAf(wie('boogschutter'), null), 0);
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('kruisboogschutter')), 0, 'een bout gaat erdoor');

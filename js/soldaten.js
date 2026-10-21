@@ -4,7 +4,8 @@
 //
 // Soldaat word je in het wachthuis (A1): op zijn briefje zet je per soort hoeveel soldaten je wilt, samen hooguit
 // `plaatsen`. Elke soort heeft vaste stukken (T.SOLDAAT_SOORTEN, zoals in Knights and Merchants): de militie een
-// hooivork, de speerman speer en schild, de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
+// hooivork, de speerman speer en harnas (Marcel, 21 okt: "Speer is een 2 handed weapon": geen schild, zoals de lansdrager in
+// Knights and Merchants), de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
 // boogschutter een boog, en de kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan pakt wie
 // geen werk heeft (B1: geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het
 // gezin van de aanvoerder, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
@@ -69,7 +70,7 @@
   // De soorten soldaten, in de volgorde van het briefje, met hun stukken (het wapen eerst).
   T.SOLDAAT_SOORTEN = {
     militie: { stukken: ['hooivork'], naam: () => T.t('militia') },
-    speerman: { stukken: ['speer', 'schild'], naam: () => T.t('spearman') },
+    speerman: { stukken: ['speer', 'harnas'], naam: () => T.t('spearman') },
     piekenier: { stukken: ['piek', 'harnas'], naam: () => T.t('pikeman') },
     zwaardvechter: { stukken: ['zwaard', 'schild', 'harnas'], naam: () => T.t('swordsman') },
     boogschutter: { stukken: ['boog'], naam: () => T.t('archer') },
