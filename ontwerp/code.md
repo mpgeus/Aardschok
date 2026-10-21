@@ -1208,7 +1208,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   render), `o.omtrek` (`omtrekVan`: alleen de buitenlijn van ons silhouet, als lijnen), `o.lora` en `o.ipSoort` ('linear'
   voor hetzelfde poppetje in een andere richting), en geeft de beelden terug. `soldatenhd.cjs poseBeeld(kant, fijn)`: het
   skelet uit `GEWRICHTEN_SOLDAAT` (de gewrichten van `heer.cjs soldaat`, staand; verandert zijn bouw, dan deze ook), zoals
-  `kern.cjs tekenModel` ze neerzet, met wat van ons af kijkt weggelaten (neus en ogen van achteren).
+  `kern.cjs tekenModel` ze neerzet, met wat van ons af kijkt weggelaten (neus en ogen van achteren). Lopen
+  (`soldatenhd.cjs benen`): `gewrichtenIn(naam, stand)` (de benen uit `heer.cjs soldaat` met `o.gewrichten`), `benenVan`
+  (de pixels van de hozen en laarzen in een render), en `vrij.cjs vrijeRonde` met `o.masker` als beeld en `o.initOveral`;
+  daarna in pixels buiten de benen het staande beeld. Wat niet werkte, staat er nog als opdracht (`sprites`, `beurt`,
+  `lopen`), met de uitkomst in `beeld.md`.
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

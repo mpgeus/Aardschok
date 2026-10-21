@@ -1661,6 +1661,15 @@ wat wel helpt, zijn de verhoudingen: ons model is gedrongen (een groot hoofd, ko
 van zijn plaat zijn langer en echter van bouw. Pixel Art Base ("Ik vond ook de pixel art base erg mooi"): staan in acht
 richtingen werkt; lopen is de proef hierboven.
 
+**Alleen de benen** (Marcel koos het, 21 okt; `soldatenhd.cjs benen`, `uit/soldatenhd/lopen-speerman-benen.png` en
+bewegend `-benen-bewegend.png`): elk loopbeeld is het staande beeld van de AI; alleen waar de benen zijn (de hozen en
+laarzen van ons model, staand en in die stap, acht pixels ruimer) schildert SDXL opnieuw, op denoise 0,85, met de benen
+van ons model in die stap als begin en het skelet van die stap; daarna in pixels buiten de benen precies het staande
+beeld. **Dit werkt:** het bovenlijf is in alle acht beelden pixel voor pixel hetzelfde (geen flikkeren), en de benen
+stappen echt, met laarzen in de goede stand. Nog niet goed: de laarzen worden glimmend oranje-goud in plaats van
+donkerbruin leer, een grijze vlek bij de benen in beeld 0, 1 en 4, en de benen verschillen per beeld nog wat in tekening.
+Het bovenlijf deint niet mee (het staande beeld); dat mag, of later een pixel op en neer.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

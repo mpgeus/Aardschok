@@ -696,6 +696,114 @@ async function lopenAI(naam = 'speerman') {
   console.log(`uit/soldatenhd/lopen-${naam}.png`);
 }
 
+// Alleen de benen (Marcel koos het, 21 okt; na lopen van de AI flikkerde het bovenlijf in de details): de soldaat loopt met
+// zijn bovenlijf stil (het schild en de speer gaan met de romp mee), dus is elk loopbeeld het staande beeld van de AI, en
+// schildert SDXL alleen waar de benen zijn (de hozen en laarzen van ons model, staand en in die stap, met een rand), op een
+// hoge denoise, met de benen van ons model in die stap als begin en het skelet van die stap. Daarna in pixels: buiten de
+// benen precies het staande beeld (daar flikkert niets), binnen de benen het nieuwe.
+const BENEN = { denoise: 0.85, rand: 8, delen: [HR.SOLDAAT_D.benen, HR.SOLDAAT_D.laars] };
+function benenVan(R, model) {
+  const uit = new Uint8Array(R.b * R.h);
+  for (let i = 0; i < R.b * R.h; i++) {
+    if (R.ramp[i] < 0 || Number.isNaN(R.rust[i * 4])) continue;
+    const d = model.delen[Math.round(R.rust[i * 4 + 3])];
+    if (d && BENEN.delen.includes(d.deel)) uit[i] = 1;
+  }
+  return uit;
+}
+function ruimer(m, b, h, r) {
+  const uit = new Uint8Array(b * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+    if (!m[y * b + x]) continue;
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      const X = x + dx, Y = y + dy;
+      if (X >= 0 && Y >= 0 && X < b && Y < h && dx * dx + dy * dy <= r * r) uit[Y * b + X] = 1;
+    }
+  }
+  return uit;
+}
+async function lopenBenen(naam = 'speerman') {
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  const C = CONCEPTEN[4];
+  const fijn = C.fijn;
+  const kant = LOPEN.kant;
+  const staandPad = path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`);
+  const staand = A.leesPng(fs.readFileSync(staandPad));
+  const ms = POPPETJES[naam](STAND);
+  const Rs = render(ms, kant, fijn);
+  const ds = V.doekVan(Rs);
+  const N = Rs.b * Rs.h;
+  // het staande beeld op de maat van de render (de voeten staan in elke stand op hetzelfde anker)
+  const begin = { b: Rs.b, h: Rs.h, rgba: Buffer.alloc(N * 4) };
+  for (let y = 0; y < staand.h; y++) for (let x = 0; x < staand.b; x++) {
+    const X = x + ds.ox, Y = y + ds.oy;
+    if (X < 0 || Y < 0 || X >= Rs.b || Y >= Rs.h) continue;
+    staand.rgba.copy(begin.rgba, (Y * Rs.b + X) * 4, (y * staand.b + x) * 4, (y * staand.b + x) * 4 + 4);
+  }
+  const benenStaand = benenVan(Rs, ms);
+  const beelden = [];
+  for (let i = 0; i < 8; i++) {
+    const stand = { houding: 'lopen', fase: i / 8 };
+    const m = POPPETJES[naam](stand);
+    const R = render(m, kant, fijn);
+    const benen = benenVan(R, m);
+    const zone = ruimer(benen.map((v, k) => v || benenStaand[k]), R.b, R.h, BENEN.rand);
+    // het begin: het staande beeld, en in de zone de benen van ons model in deze stap (elders in de zone grijs)
+    const init = { b: R.b, h: R.h, rgba: Buffer.from(begin.rgba) };
+    const masker = { b: R.b, h: R.h, rgba: Buffer.alloc(N * 4) };
+    for (let k = 0; k < N; k++) {
+      if (!zone[k]) continue;
+      masker.rgba.set([255, 255, 255, 255], k * 4);
+      if (benen[k]) R.zl.rgba.copy(init.rgba, k * 4, k * 4, k * 4 + 4);
+      else if (!(R.ramp[k] >= 0)) init.rgba.set([170, 170, 170, 255], k * 4);
+      init.rgba[k * 4 + 3] = 255;
+    }
+    const [v] = await V.vrijeRonde(R, {
+      naam: `${naam}-benen-${i}`,
+      map: path.join(UIT, 'lopen', `${naam}-${kant}-benen`, String(i)),
+      positief: `${RICHTINGEN.zin[kant]}, walking, brown leather boots, dark blue hose, ${C.positief}`,
+      negatief: [C.negatief, RICHTINGEN.nooit, RICHTINGEN.varianten[0].negatief].filter(Boolean).join(', '),
+      stijl: staandPad,
+      ipSoort: 'linear',
+      ipSterktes: [LOPEN.ip],
+      zaden: [RICHTINGEN.zaad],
+      instellingen: { ...RICHTINGEN.instellingen, denoise: BENEN.denoise },
+      pose: poseBeeld(kant, fijn, gewrichtenIn(naam, stand)),
+      omtrek: true,
+      init,
+      initOveral: true,
+      masker,
+      checkpoint: RICHTINGEN.checkpoint,
+    });
+    // in pixels: buiten de zone het staande beeld met het staande silhouet, binnen de zone het nieuwe met dat van deze stap
+    const { ox, oy } = V.doekVan(R);
+    const uit = { b: R.b, h: R.h, rgba: Buffer.alloc(N * 4) };
+    for (let Y = 0; Y < R.h; Y++) for (let X = 0; X < R.b; X++) {
+      const k = Y * R.b + X;
+      if (zone[k]) {
+        if (!(R.ramp[k] >= 0)) continue;
+        const x = X - ox, y = Y - oy;
+        if (x < 0 || y < 0 || x >= v.beeld.b || y >= v.beeld.h) continue;
+        const j = (y * v.beeld.b + x) * 4;
+        uit.rgba.set([v.beeld.rgba[j], v.beeld.rgba[j + 1], v.beeld.rgba[j + 2], 255], k * 4);
+      } else if (Rs.ramp[k] >= 0) {
+        uit.rgba.set([begin.rgba[k * 4], begin.rgba[k * 4 + 1], begin.rgba[k * 4 + 2], 255], k * 4);
+      }
+    }
+    beelden.push(H.omlijnBeeld(H.verklein(uit, fijn / 2, 'gem')));
+  }
+  const groot = (r) => H.snij(r, { x0: 0, y0: 0, b: r.b, h: r.h }, 2);
+  const u = H.uitsnede(beelden, 3);
+  E.bewaar(path.join(UIT, `lopen-${naam}-benen.png`), [beelden.map((r, i) => E.met(groot(H.alfaSnijMetGrond(H.alfaSnij(r, u))), i ? `${i}` : 'alleen de benen · 0'))],
+    `De ${naam} loopt (${kant}): alleen de benen`, `Pixel Art Base. Elk beeld is het staande beeld van de AI; alleen waar de benen zijn (ons model, staand en in die stap) schildert SDXL opnieuw (denoise ${String(BENEN.denoise).replace('.', ',')}), met de benen van ons model als begin en het skelet van die stap. Op de HD-maat (2×), maal 2.`);
+  const { apng } = require('./apng.cjs');
+  const platen = beelden.map((r) => { const vak = H.alfaSnij(r, u); return { b: vak.b, h: vak.h, rgba: () => vak.rgba }; });
+  fs.writeFileSync(path.join(UIT, `lopen-${naam}-benen-bewegend.png`), apng(platen, { schaal: 2, fps: 10 }));
+  console.log(`uit/soldatenhd/lopen-${naam}-benen.png`);
+}
+
 async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
   const ernie = schilder === 'ernie';
   const V = require('../ai/vrij.cjs');
@@ -774,6 +882,7 @@ if (require.main === module) {
   if (opdracht === 'kijk') kijk(...rest);
   else if (opdracht === 'proef') proef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'benen') lopenBenen(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen') lopenAI(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'beurt') schilderbeurt(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'sprites') sprites(...rest).catch((e) => { console.error(e); process.exit(1); });

@@ -14,8 +14,9 @@
 //                      voor OpenPose, met instellingen.pose), omtrek (true: de buitenlijn van ons silhouet als lijnen,
 //                      met instellingen.lijn), checkpoint (een ander checkpoint dan de huisstijl, huisstijl.cjs
 //                      CHECKPOINTS), init (een beeld op de maat van R als begin, voor een schilderbeurt met een lagere
-//                      denoise; buiten het silhouet grijs), masker ('silhouet': alleen binnen ons silhouet, vier pixels
-//                      ruimer, schilderen; anders het hele doek), schilder ('ernie': ERNIE-Image-Turbo, afwerking.cjs
+//                      denoise; buiten het silhouet grijs, of met initOveral het hele beeld), masker ('silhouet': alleen binnen ons silhouet, vier pixels
+//                      ruimer, schilderen; een beeld op de maat van R: alleen waar het wit is; anders het hele doek),
+//                      schilder ('ernie': ERNIE-Image-Turbo, afwerking.cjs
 //                      werkstroomErnie, zonder ControlNet en IP-Adapter; dus alleen met een eigen begin, de denoise uit
 //                      instellingen) }. Schrijft elk beeld in map, en (met o.plaat) een plaat met alles
 //                      naast elkaar; geeft de beelden terug ({ beeld, etiket, bestand }).
@@ -66,9 +67,16 @@ async function vrijeRonde(R, o) {
   if (o.init) {
     for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
       const X = x + ox, Y = y + oy;
-      if (!dekt(X, Y)) continue;
+      if (!(o.initOveral ? X >= 0 && Y >= 0 && X < R.b && Y < R.h : dekt(X, Y))) continue;
       const j = (Y * R.b + X) * 4;
       grijs.rgba.set([o.init.rgba[j], o.init.rgba[j + 1], o.init.rgba[j + 2], 255], (y * b + x) * 4);
+    }
+  }
+  if (o.masker && o.masker.rgba) {
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) {
+      const X = x + ox, Y = y + oy;
+      const aan = X >= 0 && Y >= 0 && X < R.b && Y < R.h && o.masker.rgba[(Y * R.b + X) * 4] > 127;
+      wit.rgba.set(aan ? [255, 255, 255, 255] : [0, 0, 0, 255], (y * b + x) * 4);
     }
   }
   if (o.masker === 'silhouet') {

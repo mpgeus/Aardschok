@@ -1577,8 +1577,10 @@ werkbank. Marcel koos (20 okt: "A. A1 B. B1, en B2 C. C3 [...]"), en kwam met dr
   van achteren rommelig, lopend wel zonder flikkeren), en Pixel Art Base naast FaeTastic. **Besloten** (Marcel, 20 okt):
   **Pixel Art Base** voor de poppetjes, en de animatie met **een schilderbeurt over het model** (het beeld via het model
   als begin, SDXL licht erover met het beeld van die richting als referentie). Geprobeerd (ook met ERNIE): het begin via
-  het model is te slecht, de benen blijven vlekken; nu de proef met lopen van de AI zelf (het staande beeld als begin,
-  de benen via OpenPose).
+  het model is te slecht, de benen blijven vlekken. **Wat werkt** (21 okt): staan van de AI in acht richtingen, en lopen
+  met **alleen de benen** opnieuw geschilderd (het bovenlijf pixel voor pixel het staande beeld; `beeld.md`). **Het
+  volgende:** de laarzen bruin en de vlekjes weg, dan alle acht richtingen lopend; dan aanvallen en vallen (die houdingen
+  moet het model nog krijgen), de schoof uit code erop, en de sprites in het spel (een eigen vel per soort soldaat).
 
 **Besloten** (Marcel, 20 okt: "S. S1. Maar 2 speermannen en 1 kruisboogschutter. W. W1 L. L1", "De soldaten staan gewoon
 waar je ze neerzet", "M2 B = prima C = akkoord"):
