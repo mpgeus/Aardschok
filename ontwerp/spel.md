@@ -4765,3 +4765,14 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 
 In een gevecht heeft de schout levenspunten, net als een vijand. Wie valt, is dood (Marcel, 29 sep, vraag 55:
 "mensen kunnen sterven"): valt de schout, dan is het spel uit. Wie het overleeft, geneest na een nacht.
+
+### De voorbeelden bij de Git-regels (uit CLAUDE.md, 21 okt)
+
+CLAUDE.md werd 20,1 KB (de toets wil eronder); deze voorbeelden bij de Git-regels gingen er daarom uit, de regels zelf
+staan er nog:
+- **Alleen pushen als `npm test` groen is, en de toets houdt de push tegen:** op 22 sep ging er een falende toets mee
+  omdat de opdracht de uitslag wel toonde maar de push niet tegenhield (`npm test && git push`).
+- **De controle vóór het pushen houdt de push tegen:** op 27 sep ging een push door terwijl `main` zeven commits verder
+  was.
+- **Een speeltest of proef zegt op welke stand hij speelt:** op 27 sep speelde er een op `main`, terwijl een andere
+  sessie de kern op haar branch al verder had gebouwd.

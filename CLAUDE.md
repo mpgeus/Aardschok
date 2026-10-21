@@ -59,17 +59,15 @@ gesprek komt.
 - Opslagplaats: https://github.com/mpgeus/Aardschok. Werk rechtstreeks op `main`.
 - Een commit per onderwerp, met een Nederlands bericht dat ook het waarom vertelt.
 - Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap. En alleen als
-  `npm test` groen is: op 22 sep ging er een falende toets mee omdat de opdracht de uitslag wel
-  toonde maar de push niet tegenhield (`npm test && git push`). Eén uitzondering: het teken "Bezig in sessie …" in de
-  werklijst (hierboven, bij de werklijst) gaat zonder vragen naar `main`, en verder niets.
+  `npm test` groen is, en de toets houdt de push tegen (`npm test && git push`). Eén uitzondering: het teken "Bezig in
+  sessie …" in de werklijst (hierboven, bij de werklijst) gaat zonder vragen naar `main`, en verder niets.
 - In de cloud krijgt elke sessie een eigen branch. Zet die aan het eind in `main` als Marcel dat
   vraagt, anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen
   verder is (`git fetch origin main`, dan `git merge origin/main`): twee sessies tegelijk schrijven
   allebei in de stand van de werklijst. Laat die controle de push tegenhouden, niet alleen iets
   afdrukken: `git fetch origin main && git merge-base --is-ancestor origin/main HEAD && npm test &&
-  git push`. Op 27 sep ging een push door terwijl `main` zeven commits verder was.
-- Een speeltest of proef zegt op welke stand hij speelt (branch en commit). Op 27 sep speelde er een op
-  `main`, terwijl een andere sessie de kern op haar branch al verder had gebouwd.
+  git push`.
+- Een speeltest of proef zegt op welke stand hij speelt (branch en commit).
 - Haal in een verse kloon eerst de hele geschiedenis op (`git fetch --unshallow`):
   `test/tegelvolgorde.test.cjs` leest een oude commit, anders falen er twee toetsen.
 
