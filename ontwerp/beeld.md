@@ -1698,6 +1698,20 @@ recht, lopen 2 handen en steken ook", en "Bij lopen schuin".** Dus staan in A, l
 twee sets per richting (ronde 6): staan (A) en de basis voor het lopen (B), waarop het lopen alleen de benen schildert
 (lopen ronde 5); de basis B wordt ook het begin van het steken.
 
+De staande set zonder schild (`richtingen-speerman-6.png`): dezelfde man in acht richtingen, het wapen op de borst, wat
+bleker dan het concept. De basis voor het lopen (`richtingen-speerman-6-lopen.png`): schuin met twee handen in Z, W, NW,
+N, O en ZO; naar ZW wijst de speer naar ons (je ziet vooral de handen), bij NO tekende SDXL een tweede speer. Lopen naar Z
+op die basis is niet mooi (een witte helm, een rood vlekkerig gezicht, bleek en druk), omdat de basis al zwak was.
+**Marcel: "en de plaatjes worden niet echt mooi, misschien eerst alles kwa geometrie bouwen en dan pas refinen? of werkt
+dat niet".** Dat is de klassieke weg; onze eerste proef (SDXL over de render) ging mis omdat het model niet op het doel
+leek en het recept er nog niet was (geen Pixel Art Base, geen plaat, geen referentie, geen skelet, geen palet). Dus:
+(1) het model zoals het concept (`heer.cjs soldaat` `o.concept`: een dikke gele sjaal over de schouders, ijzeren
+schouderstukken, een gouden zoom langs de wapenrok, de jas en de mouwen blauw, de maliënkap zonder cape eronder), (2) alles
+uit het model renderen (in elke richting en elk beeld precies hetzelfde), (3) één verfbeurt erover: Pixel Art Base binnen
+ons silhouet op een lage denoise (0,45 en 0,6), het concept als referentie, ons skelet, onze diepte en buitenlijn, en als
+variant daarna het palet van het concept (`soldatenhd.cjs verf`, `verf-speerman.png`; met `CONCEPT=1` zolang het een proef
+is). Marcel liet de run van het lopen afmaken; de proef komt erna.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

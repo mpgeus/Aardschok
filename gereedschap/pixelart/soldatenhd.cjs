@@ -36,9 +36,12 @@ const STAND = { houding: 'staan', fase: 0 };
 // weapon"; in het spel speer en harnas, js/soldaten.js), en op de drie houdingen (greep.png): "Bij stilstaan 1 hand recht,
 // lopen 2 handen en steken ook". Dus staand rechtop opzij met één hand, lopend (en straks stekend) schuin met twee handen
 // (heer.cjs o.greep 'schuin'); extra.greep kiest zelf.
+// Eerst de geometrie (Marcel, 21 okt): het model zoals het gekozen concept (heer.cjs o.concept). Aan zodra de proef van de
+// verfbeurt loopt; de lopende run van de richtingen en het lopen draait op het model zonder (concept: false).
+const GEOMETRIE = { concept: !!process.env.CONCEPT };
 const greepVan = (stand) => (stand && typeof stand === 'object' && (stand.houding === 'lopen' || stand.houding === 'aanvallen') ? 'schuin' : undefined);
 const POPPETJES = {
-  speerman: (stand, extra = {}) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', kraag: true, greep: greepVan(stand), ...extra }),
+  speerman: (stand, extra = {}) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', kraag: true, concept: GEOMETRIE.concept, greep: greepVan(stand), ...extra }),
 };
 // De gewrichten in een stand: die van het staan, met de benen zoals het model ze in deze stand bouwt (heer.cjs
 // o.gewrichten); het bovenlijf deint maar een beetje, dat blijft staand.
@@ -995,6 +998,80 @@ function matterProef(naam = 'speerman') {
   console.log(`uit/soldatenhd/matter-${naam}.png`);
 }
 
+// Eerst de geometrie, dan de verfbeurt (Marcel, 21 okt: "misschien eerst alles kwa geometrie bouwen en dan pas refinen? of
+// werkt dat niet"): het model zoals het concept (heer.cjs o.concept, CONCEPT=1), elk beeld uit het model gerenderd (staan,
+// lopen, straks steken, in elke richting precies hetzelfde poppetje), en één verfbeurt erover: Pixel Art Base binnen ons
+// silhouet op een lage denoise, met het concept als referentie, ons skelet, onze diepte en buitenlijn; en als variant
+// daarna elk pixel naar het palet van het concept. De proef: staan Z, ZW en N, en lopen ZW (beeld 2).
+const VERF = { denoises: [0.45, 0.6], ip: 0.6, basis: path.join('concept', 'speerman-7', 'zaad-106-ip0.6.png') };
+async function verfProef(naam = 'speerman') {
+  const V = require('../ai/vrij.cjs');
+  const E = require('../ai/etiket.cjs');
+  const A = require('../ai/beeld-ai.cjs');
+  if (!GEOMETRIE.concept) throw new Error('zet CONCEPT=1: de proef is op het model zoals het concept');
+  const C = CONCEPTEN[7];
+  const fijn = C.fijn;
+  const basisPad = path.join(UIT, VERF.basis);
+  const basis = A.leesPng(fs.readFileSync(basisPad));
+  // het palet van het concept: zijn kleuren zonder de achtergrond
+  const hk = [[2, 2], [basis.b - 3, 2], [2, basis.h - 3], [basis.b - 3, basis.h - 3]].map(([x, y]) => [0, 1, 2].map((c) => basis.rgba[(y * basis.b + x) * 4 + c]));
+  const achter = [0, 1, 2].map((c) => hk.map((k) => k[c]).sort((p, q) => p - q)[1]);
+  const palet = paletVan(basis, new Uint8Array(basis.b * basis.h).fill(1), achter).kort;
+  const naarPalet = (r) => {
+    const uit = { b: r.b, h: r.h, rgba: Buffer.from(r.rgba) };
+    for (let i = 0; i < r.b * r.h; i++) {
+      if (r.rgba[i * 4 + 3] < 128) continue;
+      uit.rgba.set(naaste([r.rgba[i * 4], r.rgba[i * 4 + 1], r.rgba[i * 4 + 2]], palet), i * 4);
+    }
+    return uit;
+  };
+  const lijst = [
+    { stand: STAND, kant: 'Z', etiket: 'staan Z' },
+    { stand: STAND, kant: 'ZW', etiket: 'staan ZW' },
+    { stand: STAND, kant: 'N', etiket: 'staan N' },
+    { stand: { houding: 'lopen', fase: 2 / 8 }, kant: 'ZW', etiket: 'lopen ZW, 2' },
+  ];
+  const rijen = { model: [], ...Object.fromEntries(VERF.denoises.map((d) => [d, []])), palet: [], nu: [] };
+  for (const [n, it] of lijst.entries()) {
+    const m = POPPETJES[naam](it.stand);
+    const R = render(m, it.kant, fijn);
+    const kaal = { b: R.b, h: R.h, rgba: Buffer.from(R.zl.rgba) };
+    for (let i = 0; i < R.b * R.h; i++) if (R.ramp[i] < 0) kaal.rgba[i * 4 + 3] = 0;
+    rijen.model.push(H.omlijnBeeld(H.verklein(kaal, fijn / 2, 'gem')));
+    for (const dn of VERF.denoises) {
+      const [v] = await V.vrijeRonde(R, {
+        naam: `${naam}-verf-${n}`,
+        map: path.join(UIT, 'verf', naam, `${n}-${it.kant}-${dn}`),
+        positief: `${RICHTINGEN.zin[it.kant]}, ${it.stand.houding === 'lopen' ? `walking, ${SETS.lopen.zin(C.positief)}` : C.positief}`,
+        negatief: [C.negatief, RICHTINGEN.nooit, it.kant[0] === 'N' && RICHTINGEN.rug].filter(Boolean).join(', '),
+        stijl: basisPad,
+        ipSoort: 'linear',
+        ipSterktes: [VERF.ip],
+        zaden: [RICHTINGEN.zaad],
+        instellingen: { ...RICHTINGEN.instellingen, denoise: dn },
+        pose: poseBeeld(it.kant, fijn, gewrichtenIn(naam, it.stand)),
+        omtrek: true,
+        init: R.zl,
+        masker: 'silhouet',
+        checkpoint: RICHTINGEN.checkpoint,
+      });
+      const sprite = geknipt(v.beeld, R, fijn);
+      rijen[dn].push(sprite);
+      if (dn === VERF.denoises[VERF.denoises.length - 1]) rijen.palet.push(H.omlijnBeeld(naarPalet(geknipt(v.beeld, R, fijn, false))));
+    }
+    // de aanpak van nu: staan uit de richtingen van ronde 6, lopen uit de loopbeelden van ronde 5
+    const loopPad = path.join(UIT, 'sprites', `${naam}-${it.kant}-benen-${BENEN.ronde}`, '2.png');
+    rijen.nu.push(it.stand.houding === 'lopen' ? (fs.existsSync(loopPad) ? H.lees(loopPad) : rijen.model[n]) : aiSprite(naam, it.kant));
+  }
+  const alle = Object.values(rijen).flat();
+  const u = H.uitsnede(alle, 3);
+  const vak = (r) => H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, u)), { x0: 0, y0: 0, b: u.b, h: u.h }, 2);
+  const namen = { model: 'het model (zonder AI)', 0.45: 'verfbeurt 0,45', 0.6: 'verfbeurt 0,6', palet: '0,6 + het palet van het concept', nu: 'de aanpak van nu' };
+  E.bewaar(path.join(UIT, `verf-${naam}.png`), Object.entries(rijen).map(([k, rij]) => rij.map((r, i) => E.met(vak(r), i ? '' : namen[k]))),
+    'Eerst de geometrie, dan de verfbeurt', 'Staan Z, ZW en N, en lopen ZW (beeld 2). Het model zoals het concept, uit het model gerenderd, en Pixel Art Base erover binnen ons silhouet (het concept als referentie, ons skelet, onze diepte en buitenlijn). Onderaan de aanpak van nu. Op de HD-maat, maal 2.');
+  console.log(`uit/soldatenhd/verf-${naam}.png`);
+}
+
 async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
   const ernie = schilder === 'ernie';
   const V = require('../ai/vrij.cjs');
@@ -1076,6 +1153,7 @@ if (require.main === module) {
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'matter') matterProef(...rest);
   else if (opdracht === 'alles') richtingen(rest[0], 'staan').then(() => richtingen(rest[0], 'lopen')).then(() => lopenAlle(rest[0])).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'verf') verfProef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen-alle') lopenAlle(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'benen') lopenBenen(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen') lopenAI(...rest).catch((e) => { console.error(e); process.exit(1); });

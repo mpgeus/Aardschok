@@ -359,6 +359,9 @@ const SOLDAAT_FPS = 10;
 // bouw, met o.livrei 'dorp' (een blauwe wapenrok met de gouden schoof op borst en rug, wapen.cjs schoof), o.wapen 'speer'
 // (in plaats van de hellebaard), o.schild (een schild in blauw met de schoof en een ijzeren rand, aan de linkerarm, die dan
 // niet zwaait) en o.kraag (een maliënkraag om hoofd en hals, onder de hoed). soldatenhd.cjs maakt er de speerman van.
+// o.concept (Marcel, 21 okt: "misschien eerst alles kwa geometrie bouwen en dan pas refinen?"): de soldaat van het dorp
+// zoals het gekozen concept van de AI (soldatenhd.cjs, ronde 7, zaad 106): een dikke gele sjaal om hals en schouders,
+// ijzeren schouderstukken, een gouden zoom langs de wapenrok, en een blauwe jas en mouwen in plaats van het bruine wambuis.
 // o.greep 'twee' (Marcel, 21 okt: "Speer is een 2 handed weapon"): de speer iets voor zijn rechterzij, de rechterhand laag
 // en de linker hoog om de schacht, beide armen met de romp mee; o.greep 'schuin': met twee handen schuin voor het lijf, de
 // rechterhand laag bij de heup en de linker hoger voor de borst, de punt schuin omhoog naar voren (klaar om te steken).
@@ -368,9 +371,9 @@ const SOLDAAT_FPS = 10;
 // De materialen (M) en de soorten onderdelen (D) van de soldaat; soldatenhd.cjs leest ze voor de zinnen per gebied.
 const SOLDAAT_M = {
   huid: 0, oog: 1, mond: 2, baard: 3, wambuis: 4, rood: 5, geel: 6, hoos: 7, laars: 8, riem: 9,
-  gesp: 10, helm: 11, hout: 12, ijzer: 13, handschoen: 14, kwastR: 15, kwastG: 16, malie: 17,
+  gesp: 10, helm: 11, hout: 12, ijzer: 13, handschoen: 14, kwastR: 15, kwastG: 16, malie: 17, sjaal: 18,
 };
-const SOLDAAT_D = { benen: 1, laars: 2, wambuis: 3, rok: 4, riem: 5, armL: 6, armR: 7, handL: 8, handR: 9, hoofd: 10, baard: 11, helm: 12, rand: 13, schacht: 14, blad: 15, kwast: 16, kraag: 17, schild: 18 };
+const SOLDAAT_D = { benen: 1, laars: 2, wambuis: 3, rok: 4, riem: 5, armL: 6, armR: 7, handL: 8, handR: 9, hoofd: 10, baard: 11, helm: 12, rand: 13, schacht: 14, blad: 15, kwast: 16, kraag: 17, schild: 18, sjaal: 19, schouder: 20 };
 function soldaat(stand = null, o = {}) {
   const M = SOLDAAT_M;
   const D = SOLDAAT_D;
@@ -409,6 +412,12 @@ function soldaat(stand = null, o = {}) {
   if (o.vaandel) vaandelMaterialen(M, mat);
   // het dorp: diep blauw (de ramp van het gewaad) in plaats van het rood, met dezelfde weefdraad; het goud blijft
   if (dorp) mat[M.rood] = { ramp: 'gewaad', lo: 1, hi: 4.8, patroon: (x, y, z) => (Math.sin(x * 1.2 + z * 0.35) > 0.9 ? -0.6 : 0) };
+  // het concept: de jas en de mouwen blauw (gewatteerd, iets donkerder dan de wapenrok), en een gele wollen sjaal met plooien
+  const concept = dorp && o.concept;
+  if (concept) {
+    mat[M.wambuis] = { ...mat[M.wambuis], ramp: 'gewaad', lo: 0.8, hi: 4.2 };
+    mat[M.sjaal] = { ramp: 'goud', lo: 2.2, hi: 6.2, patroon: (x, y, z) => (Math.sin(Math.atan2(y, x) * 9 + z * 0.8) > 0.55 ? -0.9 : 0) };
+  }
   // maliën: rijen ringetjes die om en om verspringen
   if (o.kraag) {
     mat[M.malie] = {
@@ -459,7 +468,10 @@ function soldaat(stand = null, o = {}) {
     ...wapenrok,
     f: (x, y, z) => Math.max(wapenrok.f(x, y, z), 22.6 - 0.05 * x - z),
     m: dorp
-      ? (x, y, z) => (schoofRok(y > 0 ? x : -x, z - 51.4) < 0 ? M.geel : M.rood)
+      ? (x, y, z) => {
+        if (concept && (Math.abs(x) > 9.2 + Math.max(0, 44 - z) * 0.07 - 1.5 || z < 24.4 - 0.05 * x)) return M.geel;
+        return schoofRok(y > 0 ? x : -x, z - 51.4) < 0 ? M.geel : M.rood;
+      }
       : (x, y, z) => ((x > 0.4 + 0.03 * (z - 40)) === (z > 41.6 + 0.05 * x) ? M.rood : M.geel),
   });
   delen.push(band(lijf, [0, 0, 41.4], [0.03, 0, 1], 1.25, { los: 1.6, d: 0.6, z0: 38, z1: 45 }, M.riem, D.riem));
@@ -525,7 +537,11 @@ function soldaat(stand = null, o = {}) {
   delen.push(ellips(plus(H, [0, 6.2, -4.4]), [3.8, 1.8, 1.3], M.baard, D.baard, 0.6));
   delen.push(capsule(plus(H, [-1.6, 6.6, -5.9]), plus(H, [1.6, 6.5, -6]), 0.45, M.mond, D.baard));
   delen.push(ellips(plus(H, [0, -2.2, -0.8]), [7.5, 6.4, 6.4], M.baard, D.hoofd, 1));
-  if (o.kraag) kraag(delen, H, M, D);
+  if (o.kraag) kraag(delen, H, M, D, { cape: !concept });
+  if (concept) {
+    sjaal(delen, M, D);
+    for (const s of [-1, 1]) schouderstuk(delen, [s * 13.6, 0.4, 61.4], M, D);
+  }
   // de ijzeren hoed: een koepel met een kam, en een brede rand die schuin omlaag loopt; hij staat
   // een fractie scheef en heeft een deuk
   const HC = plus(H, [0.3, -1.2, 6.2]);
@@ -665,9 +681,32 @@ function schild(delen, midden, normaal, M, D) {
   delen.push(bol(plus(midden, maal(normaal, 0.2)), 1.1, M.ijzer, D.schild));
 }
 
+// De sjaal van het concept: twee dikke wollen ringen om de hals, over de maliën heen, de onderste ruimer en wat lager, en een
+// slip die voor op de borst valt.
+function sjaal(delen, M, D) {
+  delen.push(ring([0, 1.2, 62.4], eenheid([0, 0.18, 1]), 8.2, 3.4, M.sjaal, D.sjaal));
+  delen.push(ring([0, 1.8, 59.8], eenheid([0, 0.26, 1]), 10.4, 3.2, M.sjaal, D.sjaal));
+  delen.push(capsule([3.4, 10.2, 59.4], [4.6, 11.8, 50.6], 2.4, M.sjaal, D.sjaal));
+}
+
+// Een ijzeren schouderstuk: een halve koepel op de schouder, met een rand.
+function schouderstuk(delen, c, M, D) {
+  delen.push({
+    f: (x, y, z) => {
+      const dx = x - c[0], dy = y - c[1], dz = z - c[2];
+      const schaal = Math.abs(sdf.ellipsoide(dx, dy, dz, 5.6, 5.8, 4.2)) - 0.7;
+      return Math.max(schaal, -dz - 3.2);
+    },
+    g: [c[0], c[1], c[2], 8],
+    m: M.helm,
+    deel: D.schouder,
+  });
+}
+
 // De maliënkraag: een kap van maliën om het achterhoofd en de zijkanten, met het gezicht vrij, die als een korte cape op
 // de schouders valt. Onder de ijzeren hoed.
-function kraag(delen, H, M, D) {
+// o.cape: false laat de korte cape op de schouders weg (het concept: daar ligt de sjaal).
+function kraag(delen, H, M, D, o = {}) {
   const C = plus(H, [0, -0.4, -0.6]);
   delen.push({
     f: (x, y, z) => {
@@ -683,6 +722,7 @@ function kraag(delen, H, M, D) {
     m: M.malie,
     deel: D.kraag,
   });
+  if (o.cape === false) return;
   const S = plus(H, [0, -0.2, -10.6]);
   delen.push({
     f: (x, y, z) => {
