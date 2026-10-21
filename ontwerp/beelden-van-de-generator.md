@@ -276,8 +276,8 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Bij staan NW en ZO houdt hij de speer in zijn linkerhand** (de speer springt van kant als hij draait). Klein op
   spelmaat; vel 1 opnieuw vragen verandert ook het voorbeeld voor de maat en de kleur van alle andere, dus dat laten we.
   In de masterprompt staat nu aan welke kant de speer staat.
-- **Nog te maken:** 9 (lopen ZO), 10 tot 17 (aanvallen) en 18 tot 25 (vallen). Tot dan staat ZO stil en vallen de
-  aanval en het vallen terug op de oude vellen van ZW.
+- **Nog te maken:** 10 tot 17 (aanvallen) en 18 tot 25 (vallen). Tot dan vallen de aanval en het vallen terug op de
+  oude vellen van ZW. Vel 9 (lopen ZO) kwam in het nieuwe gesprek goed (hieronder), dus hij loopt in alle acht richtingen.
 - **Vel 9 verliep** (21 okt): de richting klopte, maar het was een andere man (een sjerp, klinknagels, een geplooide rok,
   geen baard) en glimmend als een 3D-render. Kleur en maat trekt `generator.cjs` gelijk, andere kleren niet. Daarom
   **een nieuw gesprek** als de man verloopt: vel 1 en vel 2 (`01.webp`, `02.webp`, de twee die goed zijn) erbij in plaats
@@ -285,7 +285,8 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   the attached sheets", en als slot: "The attached sheets are sheet 1 (standing in all 8 directions) and sheet 2 (walking
   S); they are correct. Make sheet 9 now. After each sheet, wait until I say "next", then make the next sheet in the
   list. Always use the attached sheets as the reference for the character, the style and the scale, so he stays exactly
-  the same." De regels mat, geen klinknagels en geen sjerp staan sindsdien ook in de masterprompt hierboven.
+  the same." De regels mat, geen klinknagels en geen sjerp staan sindsdien ook in de masterprompt hierboven. Het werkte:
+  vel 9 kwam daarna als dezelfde man, mat en met baard (Marcel: "Deze lijkt goed te werken").
 
 ## De inventaris
 

@@ -32,8 +32,8 @@ de pijplijn van vraag 180 (Q, f; niet in de cloud). **Bezig in sessie `lokaal-da
 **nieuwe weg** (Marcel, 21 okt: "Ok, dan zullen we moeten inventariseren welke gebouwen en poppetjes we nodig hebben. Dan
 kunnen we de andere generator deze 1 voor 1 laten maken. Jij moet dan zorgen dat ze passend worden in het spel"): de
 generator van zijn plaat maakt de bron, wij maken het passend; eerst de inventaris (`beelden-van-de-generator.md`). De
-speerman staat en loopt in het spel in zeven richtingen (21 okt, de masterprompt); **wacht op Marcel**: vel 9 en 10 tot
-25, en eventueel 3 en 4 opnieuw (de punt naar achteren).
+speerman staat en loopt in het spel in acht richtingen (21 okt, de masterprompt); **wacht op Marcel**: vel 10 tot 25 (in
+het nieuwe gesprek, `beelden-van-de-generator.md`), en eventueel 3 en 4 opnieuw (de punt naar achteren).
 
 **Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
 overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **besloten**
