@@ -287,6 +287,19 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   list. Always use the attached sheets as the reference for the character, the style and the scale, so he stays exactly
   the same." De regels mat, geen klinknagels en geen sjerp staan sindsdien ook in de masterprompt hierboven. Het werkte:
   vel 9 kwam daarna als dezelfde man, mat en met baard (Marcel: "Deze lijkt goed te werken").
+- **Vel 10, aanvallen Z** (21 okt): eerst wisselde de speer drie keer van kant en stak hij recht naar beneden (op
+  spelmaat leek het zwaaien en in de grond prikken). Recht naar de kijker steken is van voren lastig; met deze redo werd
+  het leesbaar: "redo 10: Attacking S, with one clear thrust towards the viewer. The spear stays on one straight diagonal
+  line in all 8 frames: the butt behind his right hip (on the left of the sheet), the spearhead in front of him,
+  pointing down and to the right of the sheet, towards the viewer, so the whole spear stays visible. Both hands on the
+  shaft in every frame. The spear never swaps to the other side, never turns around, never points up, and never points
+  straight down into the ground. Frames: 1 ready, 2 drawing the spear back along the line, 3 thrusting forward, 4 full
+  extension (arms stretched, the spearhead far forward), 5 holding, 6 pulling back, 7 recovering, 8 exactly the same as
+  frame 1, so it loops." De punt gaat op spelmaat 13 pixels vooruit en blijft aan het eind uitgestoken; na de klap
+  staat hij weer. Maar (Marcel: "Maar is dit nu echt Zuid?"): zijn lijf staat naar het zuiden, de speer wijst zo'n 45
+  graden naar rechtsonder, half naar ZO. Voorlopig in het spel; Marcel probeert een steilere hoek ("about 20 degrees
+  from straight down", de punt laag voor zijn voeten). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  omhoog, van de kijker af.
 
 ## De inventaris
 
