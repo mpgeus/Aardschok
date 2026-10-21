@@ -322,7 +322,8 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   viewer: held at the right side of his body (his right hand side, on the right of the sheet), so it rises beside his
   helmet on the right, never behind or over the helmet. The spear stays vertical and on that same line in all 8 frames,
   it only slides up and down along that line for the thrust; frame 8 is exactly the same as frame 1." Bij een richting
-  recht naar of van de kijker: de speer aan de kant van zijn hand, recht, en alleen langs zijn lijn schuivend. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  recht naar of van de kijker: de speer aan de kant van zijn hand, recht, en alleen langs zijn lijn schuivend.
+- **Vel 15, aanvallen NO** (21 okt): meteen goed, van achteren, de speer op één lijn naar rechtsboven. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
