@@ -325,7 +325,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   recht naar of van de kijker: de speer aan de kant van zijn hand, recht, en alleen langs zijn lijn schuivend.
 - **Vel 15, aanvallen NO** (21 okt): meteen goed, van achteren, de speer op één lijn naar rechtsboven.
 - **Vel 16, aanvallen O** (21 okt): meteen goed, de speer horizontaal naar rechts; wat van achteren gezien, zoals lopen O.
-  De punt van beeld 5 steekt tot in de rug van beeld 6; het knippen scheidt dat goed. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  De punt van beeld 5 steekt tot in de rug van beeld 6; het knippen scheidt dat goed.
+- **Vel 17, aanvallen ZO** (21 okt): eerst van achteren gezien (de speer wel naar rechtsonder). Goed werd het met:
+  "redo 17: Attacking SE again. He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking
+  SE sheet (sheet 9) and the 8th figure of sheet 1: we see his face, his beard and the front of his tabard with the belt
+  buckle; we do NOT see his back. [...]" Nog glimmend, met lichte mouwen; de kleur trekt `generator.cjs` gelijk. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
