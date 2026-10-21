@@ -307,7 +307,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 12, aanvallen W** (21 okt): goed (horizontaal, op één lijn, in beeld 4 ver uit), maar de vakken ongelijk breed
   (beeld 2 en 3 op elkaar, tot 44 pixels scheef), zodat de man op het midden van zijn vak heen en weer sprong. Een
   aanval staat daarom op zijn voeten (`anker: 'voeten'`): het eerste beeld met zijn lijf op het anker, zoals wie loopt,
-  en de andere zoals de voeten schuiven (bij W nu 5 pixels heen en weer, eerst 28). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  en de andere zoals de voeten schuiven (bij W nu 5 pixels heen en weer, eerst 28).
+- **Vel 13, aanvallen NW** (21 okt): meteen goed, van achteren, de speer op één lijn naar linksboven. In beeld 1 en 8
+  is zijn rechtermouw licht, bijna wit (zo getekend); op spelmaat een lichte vlek op de arm. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
