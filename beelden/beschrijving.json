@@ -538,6 +538,88 @@
     }
    }
   },
+  "speerman": {
+   "naam": "speerman",
+   "cel": [
+    95,
+    106
+   ],
+   "anker": [
+    60,
+    102
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "speerman-staan.png",
+     "beelden": 1,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      52,
+      97
+     ],
+     "anker": [
+      25,
+      97
+     ]
+    },
+    "lopen": {
+     "bestand": "speerman-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      52,
+      97
+     ],
+     "anker": [
+      25,
+      97
+     ]
+    },
+    "aanval": {
+     "bestand": "speerman-aanval.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": false,
+     "cel": [
+      74,
+      97
+     ],
+     "anker": [
+      43,
+      97
+     ]
+    },
+    "sterven": {
+     "bestand": "speerman-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      83,
+      97
+     ],
+     "anker": [
+      55,
+      97
+     ]
+    }
+   }
+  },
   "dorpeling0": {
    "naam": "dorpeling0",
    "cel": [

@@ -28,8 +28,10 @@ eigen pijplijn voor de beelden; stand op 19 okt: ERNIE-Image-Turbo schildert het
 **Q, het eerste jaar speelbaar, is gebouwd** (vraag 181, 20 okt, in `main`): minder vast in het bos (d), de wacht en het slot in de demo (e), vee in het lege begin (b), geen visser of
 rietsnijder zonder water (c), en de speellijst (a). **Wacht op Marcel** (hieronder): het demojaar spelen met de
 speellijst, en wat scheef zit eerst met een getal uit de werkbank. Ernaast, lokaal op Marcels pc: betere poppetjes met
-de pijplijn van vraag 180 (Q, f; niet in de cloud). **Bezig in sessie `lokaal-dac05521`** (20 okt, op Marcels pc): het plan
-voor de poppetjes en een set soldaten met SDXL (Marcel: "maximale kwaliteit met pracht en praal").
+de pijplijn van vraag 180 (Q, f; niet in de cloud). **Bezig in sessie `lokaal-dac05521`** (20 en 21 okt, op Marcels pc):
+**nieuwe weg** (Marcel, 21 okt: "Ok, dan zullen we moeten inventariseren welke gebouwen en poppetjes we nodig hebben. Dan
+kunnen we de andere generator deze 1 voor 1 laten maken. Jij moet dan zorgen dat ze passend worden in het spel"): de
+generator van zijn plaat maakt de bron, wij maken het passend; eerst de inventaris (`beelden-van-de-generator.md`).
 
 **Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een
 overval in de demo, punten, een campagne met een editor, skirmish, en wat er van het middeleeuwse leven mist): **besloten**

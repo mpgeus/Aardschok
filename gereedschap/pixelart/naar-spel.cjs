@@ -329,6 +329,8 @@ const FIGUURLIJST = {
   // rendert er elf meer met dezelfde manier (dorpelingen.cjs, "lopen en staan"), elk met een
   // eigen T.WEZENS-ingang zoals smid; de zeven vaklieden en meer gewone varianten volgen in B2b.
   smid: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
+  // de soldaten van het dorp, van de generator (generator.cjs; ontwerp/beelden-van-de-generator.md)
+  speerman: { map: ['generator', 'animaties'], houdingen: ['staan', 'lopen', 'aanval', 'sterven'], bron: 'generator.cjs speerman' },
   dorpeling0: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   dorpeling1: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
   herbergierster: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs' },
