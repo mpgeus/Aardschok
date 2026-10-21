@@ -1213,6 +1213,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (de pixels van de hozen en laarzen in een render), en `vrij.cjs vrijeRonde` met `o.masker` als beeld en `o.initOveral`;
   daarna in pixels buiten de benen het staande beeld. Wat niet werkte, staat er nog als opdracht (`sprites`, `beurt`,
   `lopen`), met de uitkomst in `beeld.md`.
+- **De beelden van de generator** (21 okt; `beelden-van-de-generator.md`): `gereedschap/pixelart/generator.cjs` maakt een
+  vel van de generator (een rij poppetjes op magenta, `gereedschap/pixelart/bron/<soort>/`, webp via de Python van ComfyUI
+  naar png) passend: de achtergrond weg (`voorgrond`: magenta is waar rood en blauw ver boven groen liggen), de poppetjes
+  los (`beeldenVan`: per stuk het dichtste midden in de rij; een klein stukje bij het dichtste grote stuk; een stuk over
+  meer middens via de kernen van de lijven, `toewijzing` vooraf en groeien), het anker (staan: het midden van de voeten;
+  een beweging: het midden van zijn vak en één grondlijn), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar
+  `FIGUREN[naam].doel` pixels tot de helm, en de vellen zoals `figuurvel.cjs` ze schrijft, in `uit/generator/animaties/`.
+  `naar-spel.cjs --alleen speerman` zet ze in `beelden/`. In het spel: `js/sprites.js eigenFiguur` geeft een soldaat het
+  vel van zijn soort als dat er is; de houdingen 'aanval' en 'sterven' kiest `S.houding` al (bij `e.uitval` en `e.dood`).
 
 - `gereedschap/pixelart/`: de beelden komen uit code. Figuren en voorwerpen zijn kleine
   3D-modellen die uit acht richtingen tot pixel art worden gerenderd; zie de README daar. **De bruggen**

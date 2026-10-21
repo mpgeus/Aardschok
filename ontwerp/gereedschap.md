@@ -194,6 +194,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (`stijlplaat-soldaten.png`, `-soldaten-blauw.png` met het rood van zijn livrei blauw, `stijlplaat-kar.png`; geknipt met
   PIL in de Python van ComfyUI). Verder `soldatenhd.cjs kijk` (het model
   zonder AI, acht richtingen) en `proef` (SDXL over onze render, de eerste weg).
+- **De beelden van de generator** (`beelden-van-de-generator.md`): `node gereedschap/pixelart/generator.cjs speerman` knipt
+  de vellen uit `gereedschap/pixelart/bron/soldaten/` uit en verkleint ze (een proefplaat `uit/generator/speerman.png`, de
+  bewegingen als bewegend beeld, en de vellen in `uit/generator/animaties/`); daarna
+  `node gereedschap/pixelart/naar-spel.cjs --alleen speerman`.
 
 
 ## Testen in de browser
