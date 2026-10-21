@@ -11,7 +11,8 @@
 //      één grondlijn, zodat de beweging blijft zoals de generator haar tekende;
 //   5. de kleur per stof gelijk aan die van het staande vel (kleurGelijk);
 //   6. verkleind naar de maat van het spel (gemiddeld per blok, met de doorzichtigheid erbij, en dan scherp), met een maat
-//      per vel: de generator tekent niet elk vel even groot (21 okt: tot een vijfde verschil tussen de vellen);
+//      per vel: de generator tekent niet elk vel even groot (21 okt: tot een vijfde verschil tussen de vellen); staan en
+//      lopen naar de hoogte van het lijf, de aanval en het vallen naar de helm van het lopen in dezelfde richting;
 //   7. de vellen zoals het spel ze leest (figuurvel.cjs: een rij per richting Z ZW W NW N NO O ZO, een kolom per beeld,
 //      en <naam>.json met cel, anker, snelheid en houdingen), in uit/generator/animaties/, voor naar-spel.cjs.
 // Een richting die de generator nog niet maakte, krijgt voorlopig het staande beeld van die richting (vast); dat staat
@@ -308,27 +309,102 @@ function kleurGelijk(beeld, voorbeeld, stoffen) {
 // ---------------------------------------------------------------- verkleinen
 
 // De maat van een vel: hoe hoog het lijf is, van de helm tot de zolen, zonder de speer. De bovenkant: per beeld de kern
-// (de voorgrond waar een blok vol is; het blok is een vijftigste van de beeldhoogte, ruim breder dan de schacht, die in
-// HD 13 pixels dik is) en daarvan het grootste stuk (het lijf; een speerpunt hangt los), en de rand die de kern
-// afknabbelde erbij. De onderkant: de laagste pixel van het beeld (de voeten; ook een dun enkeltje telt zo mee). Staan:
-// de mediaan over de richtingen; een beweging: het hoogste beeld, dat bijna rechtop staat (bij lopen de tussenstand, bij
-// de aanval de klaarstand, bij vallen het eerste beeld).
-function maatVan(beeld, rij, staan) {
+// (voetenVan) en daarvan het grootste stuk (het lijf; een speerpunt hangt los), en de rand die de kern afknabbelde
+// erbij. De onderkant: de voeten (voetenVan). Staan: de mediaan over de richtingen; een beweging: het hoogste beeld, dat
+// bijna rechtop staat (bij lopen de tussenstand). De aanval en het vallen meten zo alleen als er nog geen lopen is in
+// die richting; anders volgen ze het lopen, naar de helm (helmVan, in figuur).
+function maatVan(beeld, rij, staan, voeten) {
   const { b, h } = beeld;
-  const ys = (r) => r.pixels.map((p) => Math.floor(p / b));
-  const hoogBeeld = rij.map((r) => Math.max(...ys(r)) - Math.min(...ys(r)) + 1).sort((p, q) => p - q);
-  const R = Math.max(3, Math.round(0.02 * hoogBeeld[Math.floor(hoogBeeld.length / 2)]));
-  const kern = kernVan(voorgrond(beeld), b, h, R);
-  const hoogten = rij.map((r) => {
+  const { R, kern } = voeten;
+  const hoogten = rij.map((r, i) => {
     const m = new Uint8Array(b * h);
     for (const p of r.pixels) if (kern[p]) m[p] = 1;
     const st = stukken(m, b, h);
     if (!st.length) return 0;
     const lijf = st.reduce((a, s) => (s.pixels.length > a.pixels.length ? s : a));
     const top = Math.min(...lijf.pixels.map((p) => Math.floor(p / b))) - R;
-    return Math.max(...ys(r)) - top + 1;
+    return voeten.onder[i] - top + 1;
   }).filter((x) => x > 0).sort((p, q) => p - q);
   return staan ? hoogten[Math.floor(hoogten.length / 2)] : hoogten[hoogten.length - 1];
+}
+
+// De voeten van elk beeld: waar het op de grond staat, voor de maat (maatVan) en het anker. Niet zomaar de onderste
+// pixel: bij een steek naar de kijker steekt de speer onder de voeten uit (21 okt, aanvallen Z). Dus eerst het staal eruit
+// (de speerpunt; grijs en licht), dan wat dun is (een opening: de kern weer even breed gemaakt, zodat de schacht en de
+// omwikkeling onder de punt wegvallen en de laarzen blijven), en daarvan alleen de gekleurde pixels (het leer, niet de
+// donkere omtrek). De kern is een vijftigste van de beeldhoogte, ruim breder dan de schacht, die in HD 13 pixels dik is.
+// Geeft R, de kern van de hele voorgrond (met de helm, voor de bovenkant in maatVan), en per beeld de onderste rij
+// (`onder`) en de pixels van de voeten (`voet`, een masker); blijft er niets over, dan de onderste pixel van het beeld.
+function voetenVan(beeld, rij) {
+  const { b, h } = beeld;
+  const ys = (r) => r.pixels.map((p) => Math.floor(p / b));
+  const hoogBeeld = rij.map((r) => Math.max(...ys(r)) - Math.min(...ys(r)) + 1).sort((p, q) => p - q);
+  const R = Math.max(3, Math.round(0.02 * hoogBeeld[Math.floor(hoogBeeld.length / 2)]));
+  const fg = voorgrond(beeld);
+  const kern = kernVan(fg, b, h, R);
+  const rgb = (p) => [beeld.rgba[p * 4], beeld.rgba[p * 4 + 1], beeld.rgba[p * 4 + 2]];
+  const verzadigd = (p) => {
+    const c = rgb(p);
+    const mx = Math.max(...c);
+    return mx ? (mx - Math.min(...c)) / mx : 0;
+  };
+  const staal = (p) => Math.max(...rgb(p)) > 90 && verzadigd(p) < 0.22;
+  const kleur = (p) => Math.max(...rgb(p)) > 60 && verzadigd(p) >= 0.25;
+  const zonderStaal = new Uint8Array(b * h);
+  for (let p = 0; p < b * h; p++) if (fg[p] && !staal(p)) zonderStaal[p] = 1;
+  const kernVoet = kernVan(zonderStaal, b, h, R);
+  // de opening: elke pixel binnen R van die kern (een integraalbeeld)
+  const I = new Int32Array((b + 1) * (h + 1));
+  for (let y = 0; y < h; y++) {
+    let som = 0;
+    for (let x = 0; x < b; x++) {
+      som += kernVoet[y * b + x];
+      I[(y + 1) * (b + 1) + x + 1] = I[y * (b + 1) + x + 1] + som;
+    }
+  }
+  const open = (p) => {
+    const x = p % b, y = (p - x) / b;
+    const x0 = Math.max(0, x - R), x1 = Math.min(b - 1, x + R), y0 = Math.max(0, y - R), y1 = Math.min(h - 1, y + R);
+    return I[(y1 + 1) * (b + 1) + x1 + 1] - I[y0 * (b + 1) + x1 + 1] - I[(y1 + 1) * (b + 1) + x0] + I[y0 * (b + 1) + x0] > 0;
+  };
+  const voet = new Uint8Array(b * h);
+  const onder = rij.map((r) => {
+    let o = -1;
+    for (const p of r.pixels) {
+      if (!zonderStaal[p] || !open(p) || !kleur(p)) continue;
+      voet[p] = 1;
+      o = Math.max(o, Math.floor(p / b));
+    }
+    return o >= 0 ? o : Math.max(...ys(r));
+  });
+  return { R, kern, onder, voet };
+}
+
+// De breedte van de helm op een vel: per beeld het grootste stuk staal (grijs) dat breder is dan hoog (een speerpunt is
+// lang en smal), en daarvan de breedte; over de beelden de op één na grootste (een hand of de schacht voor de helm
+// knipt hem in tweeën, en één uitschieter telt zo niet). Alleen om twee vellen van dezelfde richting te vergelijken
+// (figuur): de generator houdt de verhouding van helm en lijf niet vast tussen de vellen.
+function helmVan(beeld, rij, R) {
+  const { b, h } = beeld;
+  const staal = new Uint8Array(b * h);
+  const breedten = rij.map((r) => {
+    staal.fill(0);
+    for (const p of r.pixels) {
+      const c = [beeld.rgba[p * 4], beeld.rgba[p * 4 + 1], beeld.rgba[p * 4 + 2]];
+      const mx = Math.max(...c);
+      if (mx > 60 && (mx - Math.min(...c)) / mx < 0.22) staal[p] = 1;
+    }
+    let beste = null;
+    for (const s of stukken(staal, b, h)) {
+      if (s.pixels.length < 10 * R * R) continue;
+      const ys = s.pixels.map((p) => Math.floor(p / b));
+      const breed = s.x1 - s.x0 + 1, hoog = Math.max(...ys) - Math.min(...ys) + 1;
+      if (breed < 0.9 * hoog) continue;
+      if (!beste || s.pixels.length > beste.n) beste = { n: s.pixels.length, breed };
+    }
+    return beste ? beste.breed : 0;
+  }).filter((x) => x > 0).sort((p, q) => q - p);
+  return breedten.length ? breedten[Math.min(1, breedten.length - 1)] : 0;
 }
 
 // Een beeld (pixels uit de bron) rond zijn anker [ax, ay] in de bron verkleind met factor k, naar een plaatje met het
@@ -374,6 +450,7 @@ function figuur(naam) {
   const F = FIGUREN[naam];
   const maten = {}; // per vel de maat in de bron, voor de proefplaat
   let voorbeeld = null; // de kleur per stof van het staande vel
+  const lopenMaat = {}; // per richting de verkleining en de helm van het lopen, voor de aanval en het vallen
   // per houding, per richting, per beeld: een verkleind plaatje met zijn anker
   const platen = {};
   // de bronnen per houding: een genummerd vel van de masterprompt (staan: één vel met acht richtingen; een beweging: één
@@ -396,23 +473,33 @@ function figuur(naam) {
       // een oud vel met meer richtingen dan we er nog van nodig hebben: alle richtingen knippen, de nodige houden
       const opVel = b.uit || b.richtingen;
       const rij = beeldenVan(bron, opVel.length * h.beelden, b.toewijzing);
-      maten[b.naam] = maatVan(bron, rij, h.beelden === 1);
+      const voeten = voetenVan(bron, rij);
+      // de maat: staan en lopen naar de hoogte van het lijf (maatVan); de aanval en het vallen staan gebukt of vallen,
+      // dus daar de maat van het lopen in dezelfde richting, naar de breedte van de helm op beide vellen (zo wordt een
+      // man in de klaarstand niet groter dan wie loopt; 21 okt, aanvallen Z)
+      const helm = helmVan(bron, rij, voeten.R);
+      let k = F.doel / maatVan(bron, rij, h.beelden === 1, voeten);
+      const loop = houding !== 'staan' && houding !== 'lopen' && lopenMaat[b.richtingen[0]];
+      if (loop && loop.helm && helm) k = (loop.k * loop.helm) / helm;
+      if (houding === 'lopen') for (const kant of b.richtingen) lopenMaat[kant] = { k, helm };
+      maten[b.naam] = Math.round(F.doel / k);
       if (F.stoffen && houding === 'staan') voorbeeld = kleurMaat(bron, F.stoffen).maat;
       else if (F.stoffen) kleurGelijk(bron, voorbeeld, F.stoffen);
-      const k = F.doel / maten[b.naam];
       // de grondlijn van een beweging: de laagste voet over alle beelden
-      const ys = (pix) => pix.map((p) => Math.floor(p / bron.b));
-      const grond = Math.max(...rij.map((r) => Math.max(...ys(r.pixels))));
+      const grond = Math.max(...voeten.onder);
       opVel.forEach((kant, ri) => {
         if (!b.richtingen.includes(kant)) return;
         platen[houding][kant] = [];
         for (let i = 0; i < h.beelden; i++) {
-          const r = rij[ri * h.beelden + i];
+          const j = ri * h.beelden + i;
+          const r = rij[j];
           let anker;
           if (h.beelden === 1) {
-            // staan: het midden van de voeten (de onderste rijen) en de onderkant
-            const onder = Math.max(...ys(r.pixels));
-            const xs = r.pixels.filter((p) => Math.floor(p / bron.b) >= onder - 12).map((p) => p % bron.b);
+            // staan: het midden van de voeten (de onderste rijen, zonder de schacht) en de onderkant
+            const onder = voeten.onder[j];
+            const onderin = r.pixels.filter((p) => Math.floor(p / bron.b) >= onder - 12);
+            const voet = onderin.filter((p) => voeten.voet[p]);
+            const xs = (voet.length ? voet : onderin).map((p) => p % bron.b);
             anker = [(Math.min(...xs) + Math.max(...xs)) / 2, onder];
           } else anker = [r.midden, grond];
           platen[houding][kant].push(verkleind(bron, r.pixels, anker, k));

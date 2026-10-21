@@ -1222,8 +1222,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`kleurGelijk`: grijs, de tinten van `FIGUREN[naam].stoffen` en de rest, in Lab het gemiddelde, en de spreiding van de
   lichtheid hoogstens die van het staande vel), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar
   `FIGUREN[naam].doel` pixels tot de helm, met een maat per vel (`maatVan`: het lijf zonder de speer, met een kern van een
-  vijftigste van de beeldhoogte, tot de laagste voet; staan de mediaan, een beweging het hoogste beeld; de generator
-  tekent niet elk vel even groot), en de vellen zoals `figuurvel.cjs` ze schrijft, in `uit/generator/animaties/`. Elke bron
+  vijftigste van de beeldhoogte, tot de voeten; staan de mediaan, lopen het hoogste beeld; de generator tekent niet elk
+  vel even groot; de aanval en het vallen, gebukt of vallend, volgen het lopen in dezelfde richting naar de breedte van
+  de helm, `helmVan`). De voeten (`voetenVan`, ook voor het anker): zonder staal, zonder wat dun is (een opening) en
+  alleen het gekleurde leer, want bij een steek naar de kijker steekt de speerpunt onder de voeten uit, en de vellen zoals `figuurvel.cjs` ze schrijft, in `uit/generator/animaties/`. Elke bron
   (webp, of de png van de generator in RGB) gaat via PIL naar een RGBA-png in `uit/generator/bron/`, want `H.lees` leest
   alleen 8-bit RGBA. De genummerde vellen van de masterprompt (`bron/<soort>/<naam>/NN`, `genummerd`) gaan voor de losse.
   `naar-spel.cjs --alleen speerman` zet ze in `beelden/`. In het spel: `js/sprites.js eigenFiguur` geeft een soldaat het

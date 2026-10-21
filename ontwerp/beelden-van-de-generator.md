@@ -297,8 +297,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   extension (arms stretched, the spearhead far forward), 5 holding, 6 pulling back, 7 recovering, 8 exactly the same as
   frame 1, so it loops." De punt gaat op spelmaat 13 pixels vooruit en blijft aan het eind uitgestoken; na de klap
   staat hij weer. Maar (Marcel: "Maar is dit nu echt Zuid?"): zijn lijf staat naar het zuiden, de speer wijst zo'n 45
-  graden naar rechtsonder, half naar ZO. Voorlopig in het spel; Marcel probeert een steilere hoek ("about 20 degrees
-  from straight down", de punt laag voor zijn voeten). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  graden naar rechtsonder, half naar ZO. Met een steilere hoek ("about 20 degrees from straight down", de punt laag voor zijn
+  voeten) kwam hij goed: echt zuid. Die steekt onder zijn voeten uit, en daarom zoekt `generator.cjs` de voeten nu zonder
+  het staal, en volgen de aanval en het vallen de maat van het lopen (naar de helm): gebukt werd hij anders 15% groter. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
