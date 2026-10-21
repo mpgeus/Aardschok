@@ -1220,7 +1220,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   meer middens: `toewijzing` vooraf, de kernen van de lijven (zonder het staal) naar hun midden en groeiend over wat dik
   is, en elk dun stuk dat overblijft, zoals een schacht met zijn punt, bij het beeld waar het met zijn gekleurde pixels
   het langst aan grenst: de schacht zit in de handen van zijn man, de punt raakt de buurman alleen met staal), het anker (staan: het midden van de voeten;
-  een beweging: het midden van zijn vak en één grondlijn), de kleur per stof gelijk aan die van het staande vel
+  een beweging: één grondlijn, en opzij het midden van zijn vak, of met `anker: 'voeten'` (de aanval) het eerste beeld
+  met zijn lijf op het anker en de andere zoals de voeten schuiven), de kleur per stof gelijk aan die van het staande vel
   (`kleurGelijk`: grijs, de tinten van `FIGUREN[naam].stoffen` en de rest, in Lab het gemiddelde, en de spreiding van de
   lichtheid hoogstens die van het staande vel), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar
   `FIGUREN[naam].doel` pixels tot de helm, met een maat per vel (`maatVan`: het lijf zonder de speer, met een kern van een

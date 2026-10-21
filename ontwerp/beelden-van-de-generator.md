@@ -303,7 +303,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 11, aanvallen ZW** (21 okt): meteen goed (de speer op één lijn naar linksonder, beeld 8 weer de klaarstand). De
   generator tekende hem kleiner (de helm 89 tegen 107 bij lopen ZW); daarom wordt de helm dichtgemaakt voor hij gemeten
   wordt (de donkere ribben knipten hem in tweeën). En de punt van beeld 5 raakte de laars van beeld 4: een dun stuk gaat
-  nu naar het beeld waar het met zijn hout het langst aan grenst, niet met het staal van de punt. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  nu naar het beeld waar het met zijn hout het langst aan grenst, niet met het staal van de punt.
+- **Vel 12, aanvallen W** (21 okt): goed (horizontaal, op één lijn, in beeld 4 ver uit), maar de vakken ongelijk breed
+  (beeld 2 en 3 op elkaar, tot 44 pixels scheef), zodat de man op het midden van zijn vak heen en weer sprong. Een
+  aanval staat daarom op zijn voeten (`anker: 'voeten'`): het eerste beeld met zijn lijf op het anker, zoals wie loopt,
+  en de andere zoals de voeten schuiven (bij W nu 5 pixels heen en weer, eerst 28). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
