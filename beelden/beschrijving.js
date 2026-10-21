@@ -545,11 +545,11 @@
      "naam": "speerman",
      "cel": [
       122,
-      124
+      125
      ],
      "anker": [
       83,
-      97
+      98
      ],
      "snelheid": 1.5,
      "richtingen": [
@@ -600,11 +600,11 @@
        "herhaal": false,
        "cel": [
         106,
-        114
+        115
        ],
        "anker": [
         78,
-        92
+        93
        ]
       },
       "sterven": {

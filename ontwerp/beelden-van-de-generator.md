@@ -309,7 +309,17 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   aanval staat daarom op zijn voeten (`anker: 'voeten'`): het eerste beeld met zijn lijf op het anker, zoals wie loopt,
   en de andere zoals de voeten schuiven (bij W nu 5 pixels heen en weer, eerst 28).
 - **Vel 13, aanvallen NW** (21 okt): meteen goed, van achteren, de speer op één lijn naar linksboven. In beeld 1 en 8
-  is zijn rechtermouw licht, bijna wit (zo getekend); op spelmaat een lichte vlek op de arm. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  is zijn rechtermouw licht, bijna wit (zo getekend); op spelmaat een lichte vlek op de arm.
+- **Vel 14, aanvallen N** (21 okt): eerst hief hij de speer boven zijn hoofd en wisselde hij van kant. Goed werd het met:
+  "redo 14: Attacking N again, as one clear thrust away from the viewer, like the Attacking S sheet (sheet 10) but seen
+  from behind. His hands stay low on the shaft, at his hips and chest, never above his shoulders, and he never lifts the
+  spear over his head. The spear stays on one straight line in all 8 frames: the butt at his right hip (on the right of
+  the sheet), the spearhead pointing up and slightly to the left of the sheet, about 20 degrees from straight up,
+  passing beside his helmet on the left, never hidden behind it. [...] Matte colours exactly like the attached reference
+  sheets, not glossy." Hij is nog wel glimmend; de kleur trekt `generator.cjs` gelijk. Maar (Marcel: "Maar noord is toch
+  recht omhoog?"): de speer wijst zo'n 30 graden naar links, half naar NW. Voorlopig in het spel; recht omhoog kan als
+  hij hem aan zijn rechterkant houdt, naast zijn helm en niet erachter ("the spear points straight up, exactly
+  vertical, [...] held at the right side of his body [...] so it rises beside his helmet on the right"). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
