@@ -299,7 +299,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   staat hij weer. Maar (Marcel: "Maar is dit nu echt Zuid?"): zijn lijf staat naar het zuiden, de speer wijst zo'n 45
   graden naar rechtsonder, half naar ZO. Met een steilere hoek ("about 20 degrees from straight down", de punt laag voor zijn
   voeten) kwam hij goed: echt zuid. Die steekt onder zijn voeten uit, en daarom zoekt `generator.cjs` de voeten nu zonder
-  het staal, en volgen de aanval en het vallen de maat van het lopen (naar de helm): gebukt werd hij anders 15% groter. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  het staal, en volgen de aanval en het vallen de maat van het lopen (naar de helm): gebukt werd hij anders 15% groter.
+- **Vel 11, aanvallen ZW** (21 okt): meteen goed (de speer op één lijn naar linksonder, beeld 8 weer de klaarstand). De
+  generator tekende hem kleiner (de helm 89 tegen 107 bij lopen ZW); daarom wordt de helm dichtgemaakt voor hij gemeten
+  wordt (de donkere ribben knipten hem in tweeën). En de punt van beeld 5 raakte de laars van beeld 4: een dun stuk gaat
+  nu naar het beeld waar het met zijn hout het langst aan grenst, niet met het staal van de punt. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris

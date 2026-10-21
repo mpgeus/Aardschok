@@ -1217,7 +1217,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vel van de generator (een rij poppetjes op magenta, `gereedschap/pixelart/bron/<soort>/`, webp via de Python van ComfyUI
   naar png) passend: de achtergrond weg (`voorgrond`: magenta is waar rood en blauw ver boven groen liggen), de poppetjes
   los (`beeldenVan`: per stuk het dichtste midden in de rij; een klein stukje bij het dichtste grote stuk; een stuk over
-  meer middens via de kernen van de lijven, `toewijzing` vooraf en groeien), het anker (staan: het midden van de voeten;
+  meer middens: `toewijzing` vooraf, de kernen van de lijven (zonder het staal) naar hun midden en groeiend over wat dik
+  is, en elk dun stuk dat overblijft, zoals een schacht met zijn punt, bij het beeld waar het met zijn gekleurde pixels
+  het langst aan grenst: de schacht zit in de handen van zijn man, de punt raakt de buurman alleen met staal), het anker (staan: het midden van de voeten;
   een beweging: het midden van zijn vak en één grondlijn), de kleur per stof gelijk aan die van het staande vel
   (`kleurGelijk`: grijs, de tinten van `FIGUREN[naam].stoffen` en de rest, in Lab het gemiddelde, en de spreiding van de
   lichtheid hoogstens die van het staande vel), verkleind (`verkleind`: gemiddeld per blok, dan scherp) naar

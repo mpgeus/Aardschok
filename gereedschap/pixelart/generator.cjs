@@ -5,8 +5,9 @@
 //   2. de achtergrond eruit (magenta, met de randjes die naar magenta trekken);
 //   3. de poppetjes los: de stukken die aan elkaar hangen, en per stuk het beeld met het dichtste midden in de rij; een
 //      klein los stukje bij het dichtste grote stuk; een stuk over meer middens (een speer die het buurbeeld raakt):
-//      de dikke kernen (de lijven, zonder de dunne schachten) naar hun midden, `toewijzing` vooraf (rechthoeken in de bron,
-//      eventueel alleen wat op een speer lijkt), en dan groeit elk beeld vanuit zijn kernen over wat eraan vastzit;
+//      `toewijzing` vooraf (rechthoeken in de bron, eventueel alleen wat op een speer lijkt), de dikke kernen (de lijven,
+//      zonder het staal en de dunne schachten) naar hun midden en groeiend over wat dik is, en elk dun stuk dat overblijft
+//      bij het beeld waar het met zijn gekleurde pixels het langst aan grenst;
 //   4. het anker: staan op het midden van de voeten van elk poppetje; een beweging op het midden van zijn vak in de rij en
 //      één grondlijn, zodat de beweging blijft zoals de generator haar tekende;
 //   5. de kleur per stof gelijk aan die van het staande vel (kleurGelijk);
@@ -123,6 +124,18 @@ function speerKleur(r, g, b) {
   const blauw = b > r + 30 && b > g + 15;
   return !geel && !blauw;
 }
+// Is pixel p gekleurd (leer, hout, stof): verzadigd en niet donker (geen omtrek)?
+function isKleur(beeld, p) {
+  const r = beeld.rgba[p * 4], g = beeld.rgba[p * 4 + 1], bl = beeld.rgba[p * 4 + 2];
+  const mx = Math.max(r, g, bl);
+  return mx > 60 && (mx - Math.min(r, g, bl)) / mx >= 0.25;
+}
+// Is pixel p staal (de helm, de speerpunt, de maliën): grijs en niet donker?
+function isStaal(beeld, p) {
+  const r = beeld.rgba[p * 4], g = beeld.rgba[p * 4 + 1], bl = beeld.rgba[p * 4 + 2];
+  const mx = Math.max(r, g, bl);
+  return mx > 90 && (mx - Math.min(r, g, bl)) / mx < 0.22;
+}
 // De kern van de voorgrond: pixels waarvan het hele blok van (2r+1) bij (2r+1) voorgrond is (een integraalbeeld), zodat
 // de dunne schachten wegvallen en de lijven blijven.
 function kernVan(fg, b, h, r) {
@@ -159,6 +172,7 @@ function beeldenVan(beeld, n, toewijzing = []) {
   const groot = alle.filter((s) => s.pixels.length >= drempel);
   const klein = alle.filter((s) => s.pixels.length < drempel);
   let kern = null;
+  let dik = null;
   for (const s of groot) {
     const over = midden.map((m, i) => i).filter((i) => midden[i] >= s.x0 && midden[i] <= s.x1);
     if (over.length <= 1) {
@@ -167,8 +181,20 @@ function beeldenVan(beeld, n, toewijzing = []) {
       for (const p of s.pixels) van[p] = i;
       continue;
     }
-    // een stuk over meer middens: de toewijzing vooraf, de kernen naar hun midden, en dan groeien
-    kern = kern || kernVan(fg, b, h, 5);
+    // een stuk over meer middens (een speer die het buurbeeld raakt): de toewijzing vooraf; dan de dikke delen (de kern
+    // zonder het staal, weer even breed gemaakt: de lijven), elk kernstuk naar zijn midden en groeiend over wat dik is;
+    // en dan elk dun stuk dat overblijft (een schacht met zijn punt, de rand van een helm) bij het beeld waar het met
+    // zijn gekleurde pixels het langst aan grenst (het hout; niet het staal en de donkere omtrek, anders telt alleen hoe
+    // lang de rand is). Een speer zit met zijn schacht in de handen van zijn eigen man, en raakt de laars van de buurman
+    // alleen met het staal van zijn punt (21 okt, aanvallen ZW: groeien van dichtbij gaf de punt aan de buurman).
+    if (!kern) {
+      const zonderStaal = new Uint8Array(b * h);
+      for (let p = 0; p < b * h; p++) if (fg[p] && !isStaal(beeld, p)) zonderStaal[p] = 1;
+      kern = kernVan(zonderStaal, b, h, 5);
+      const I = integraalVan(kern, b, h);
+      dik = new Uint8Array(b * h);
+      for (let p = 0; p < b * h; p++) if (fg[p] && blokSom(I, b, h, p, 5).som > 0) dik[p] = 1;
+    }
     const rij = [];
     for (const p of s.pixels) {
       const x = p % b;
@@ -192,24 +218,46 @@ function beeldenVan(beeld, n, toewijzing = []) {
         rij.push(p);
       }
     }
-    // groeien (breedte eerst, acht buren) binnen het stuk
+    // groeien (breedte eerst, acht buren) binnen het stuk, over wat dik is (en wat de toewijzing gaf)
     const binnen = new Uint8Array(b * h);
     for (const p of s.pixels) binnen[p] = 1;
-    for (let k = 0; k < rij.length; k++) {
-      const p = rij[k];
+    const buren = (p, doe) => {
       const x = p % b;
       const y = (p - x) / b;
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
         const X = x + dx, Y = y + dy;
-        if (X < 0 || Y < 0 || X >= b || Y >= h) continue;
-        const q = Y * b + X;
-        if (binnen[q] && van[q] < 0) {
+        if ((dx || dy) && X >= 0 && Y >= 0 && X < b && Y < h && binnen[Y * b + X]) doe(Y * b + X);
+      }
+    };
+    for (let k = 0; k < rij.length; k++) {
+      const p = rij[k];
+      buren(p, (q) => {
+        if (van[q] < 0 && dik[q]) {
           van[q] = van[p];
           rij.push(q);
         }
-      }
+      });
     }
-    for (const p of s.pixels) if (van[p] < 0) van[p] = naaste(p % b, over);
+    // de dunne stukken: bij het beeld waar ze met hun gekleurde pixels het langst aan grenzen (zonder gekleurde grens:
+    // met alle pixels; zonder grens: het dichtste midden)
+    const dun = new Uint8Array(b * h);
+    for (const p of s.pixels) if (van[p] < 0) dun[p] = 1;
+    for (const d of stukken(dun, b, h)) {
+      const grens = new Map();
+      const alleGrens = new Map();
+      for (const p of d.pixels) {
+        const telt = isKleur(beeld, p);
+        buren(p, (q) => {
+          if (van[q] < 0) return;
+          alleGrens.set(van[q], (alleGrens.get(van[q]) || 0) + 1);
+          if (telt) grens.set(van[q], (grens.get(van[q]) || 0) + 1);
+        });
+      }
+      const cx = d.pixels.reduce((t, p) => t + (p % b), 0) / d.pixels.length;
+      const g = grens.size ? grens : alleGrens;
+      const i = g.size ? [...g].sort((p, q) => q[1] - p[1])[0][0] : naaste(cx, over);
+      for (const p of d.pixels) van[p] = i;
+    }
   }
   // een klein los stukje: bij het beeld van het dichtste grote stuk (de dichtste pixel, gemeten op een rooster)
   for (const s of klein) {
@@ -342,16 +390,8 @@ function voetenVan(beeld, rij) {
   const R = Math.max(3, Math.round(0.02 * hoogBeeld[Math.floor(hoogBeeld.length / 2)]));
   const fg = voorgrond(beeld);
   const kern = kernVan(fg, b, h, R);
-  const rgb = (p) => [beeld.rgba[p * 4], beeld.rgba[p * 4 + 1], beeld.rgba[p * 4 + 2]];
-  const verzadigd = (p) => {
-    const c = rgb(p);
-    const mx = Math.max(...c);
-    return mx ? (mx - Math.min(...c)) / mx : 0;
-  };
-  const staal = (p) => Math.max(...rgb(p)) > 90 && verzadigd(p) < 0.22;
-  const kleur = (p) => Math.max(...rgb(p)) > 60 && verzadigd(p) >= 0.25;
   const zonderStaal = new Uint8Array(b * h);
-  for (let p = 0; p < b * h; p++) if (fg[p] && !staal(p)) zonderStaal[p] = 1;
+  for (let p = 0; p < b * h; p++) if (fg[p] && !isStaal(beeld, p)) zonderStaal[p] = 1;
   const kernVoet = kernVan(zonderStaal, b, h, R);
   // de opening: elke pixel binnen R van die kern (een integraalbeeld)
   const I = new Int32Array((b + 1) * (h + 1));
@@ -371,7 +411,7 @@ function voetenVan(beeld, rij) {
   const onder = rij.map((r) => {
     let o = -1;
     for (const p of r.pixels) {
-      if (!zonderStaal[p] || !open(p) || !kleur(p)) continue;
+      if (!zonderStaal[p] || !open(p) || !isKleur(beeld, p)) continue;
       voet[p] = 1;
       o = Math.max(o, Math.floor(p / b));
     }
@@ -380,22 +420,59 @@ function voetenVan(beeld, rij) {
   return { R, kern, onder, voet };
 }
 
-// De breedte van de helm op een vel: per beeld het grootste stuk staal (grijs) dat breder is dan hoog (een speerpunt is
+// Een integraalbeeld van een masker, en de som in het blok van (2r+1) bij (2r+1) rond een pixel (aan de rand kleiner).
+function integraalVan(m, b, h) {
+  const I = new Int32Array((b + 1) * (h + 1));
+  for (let y = 0; y < h; y++) {
+    let som = 0;
+    for (let x = 0; x < b; x++) {
+      som += m[y * b + x];
+      I[(y + 1) * (b + 1) + x + 1] = I[y * (b + 1) + x + 1] + som;
+    }
+  }
+  return I;
+}
+function blokSom(I, b, h, p, r) {
+  const x = p % b, y = (p - x) / b;
+  const x0 = Math.max(0, x - r), x1 = Math.min(b - 1, x + r), y0 = Math.max(0, y - r), y1 = Math.min(h - 1, y + r);
+  return { som: I[(y1 + 1) * (b + 1) + x1 + 1] - I[y0 * (b + 1) + x1 + 1] - I[(y1 + 1) * (b + 1) + x0] + I[y0 * (b + 1) + x0], vol: (x1 - x0 + 1) * (y1 - y0 + 1) };
+}
+
+// De breedte van de helm op een vel: per beeld het staal (grijs), dichtgemaakt (de donkere ribben en naden knippen de
+// helm anders in stukken; 21 okt, aanvallen ZW), daarvan het grootste stuk dat breder is dan hoog (een speerpunt is
 // lang en smal), en daarvan de breedte; over de beelden de op één na grootste (een hand of de schacht voor de helm
 // knipt hem in tweeën, en één uitschieter telt zo niet). Alleen om twee vellen van dezelfde richting te vergelijken
 // (figuur): de generator houdt de verhouding van helm en lijf niet vast tussen de vellen.
 function helmVan(beeld, rij, R) {
   const { b, h } = beeld;
+  const r = Math.max(2, Math.round(R / 2));
   const staal = new Uint8Array(b * h);
-  const breedten = rij.map((r) => {
+  const dik = new Uint8Array(b * h);
+  const dicht = new Uint8Array(b * h);
+  const breedten = rij.map((rr) => {
     staal.fill(0);
-    for (const p of r.pixels) {
+    dik.fill(0);
+    dicht.fill(0);
+    let x0 = Infinity, x1 = -1, y0 = Infinity, y1 = -1;
+    for (const p of rr.pixels) {
       const c = [beeld.rgba[p * 4], beeld.rgba[p * 4 + 1], beeld.rgba[p * 4 + 2]];
       const mx = Math.max(...c);
       if (mx > 60 && (mx - Math.min(...c)) / mx < 0.22) staal[p] = 1;
+      const x = p % b, y = (p - x) / b;
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+    }
+    // dichtmaken: eerst dikker (staal binnen r), dan weer dunner (alles binnen r dik)
+    const I = integraalVan(staal, b, h);
+    for (let y = Math.max(0, y0 - r); y <= Math.min(h - 1, y1 + r); y++) for (let x = Math.max(0, x0 - r); x <= Math.min(b - 1, x1 + r); x++) {
+      if (blokSom(I, b, h, y * b + x, r).som > 0) dik[y * b + x] = 1;
+    }
+    const J = integraalVan(dik, b, h);
+    for (let y = Math.max(0, y0 - r); y <= Math.min(h - 1, y1 + r); y++) for (let x = Math.max(0, x0 - r); x <= Math.min(b - 1, x1 + r); x++) {
+      const { som, vol } = blokSom(J, b, h, y * b + x, r);
+      if (som === vol) dicht[y * b + x] = 1;
     }
     let beste = null;
-    for (const s of stukken(staal, b, h)) {
+    for (const s of stukken(dicht, b, h)) {
       if (s.pixels.length < 10 * R * R) continue;
       const ys = s.pixels.map((p) => Math.floor(p / b));
       const breed = s.x1 - s.x0 + 1, hoog = Math.max(...ys) - Math.min(...ys) + 1;
@@ -585,4 +662,4 @@ if (require.main === module) {
   else proef(naam);
 }
 
-module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind, maatVan };
+module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind, maatVan, voetenVan, helmVan };
