@@ -317,9 +317,12 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   the sheet), the spearhead pointing up and slightly to the left of the sheet, about 20 degrees from straight up,
   passing beside his helmet on the left, never hidden behind it. [...] Matte colours exactly like the attached reference
   sheets, not glossy." Hij is nog wel glimmend; de kleur trekt `generator.cjs` gelijk. Maar (Marcel: "Maar noord is toch
-  recht omhoog?"): de speer wijst zo'n 30 graden naar links, half naar NW. Voorlopig in het spel; recht omhoog kan als
-  hij hem aan zijn rechterkant houdt, naast zijn helm en niet erachter ("the spear points straight up, exactly
-  vertical, [...] held at the right side of his body [...] so it rises beside his helmet on the right"). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  recht omhoog?"): de speer wees zo'n 30 graden naar links, half naar NW. Recht omhoog werd het met: "redo 14: Attacking
+  N again, keep everything of the last version, but the spear points straight up, exactly vertical, away from the
+  viewer: held at the right side of his body (his right hand side, on the right of the sheet), so it rises beside his
+  helmet on the right, never behind or over the helmet. The spear stays vertical and on that same line in all 8 frames,
+  it only slides up and down along that line for the thrust; frame 8 is exactly the same as frame 1." Bij een richting
+  recht naar of van de kijker: de speer aan de kant van zijn hand, recht, en alleen langs zijn lijn schuivend. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
