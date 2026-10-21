@@ -32,15 +32,26 @@ const FIJN = 4; // de render van de sprite (karhd.cjs: 4× gerenderd, een sprite
 const STAND = { houding: 'staan', fase: 0 };
 
 // De poppetjes van de proef: de speerman (de bouw van de soldaat van de heer, in de kleuren van het dorp).
+// De speerman heeft geen schild (Marcel, 21 okt: "Ik denk dat een speerman geen schild moet hebben. Speer is een 2 handed
+// weapon"; in het spel speer en harnas, js/soldaten.js), en op de drie houdingen (greep.png): "Bij stilstaan 1 hand recht,
+// lopen 2 handen en steken ook". Dus staand rechtop opzij met één hand, lopend (en straks stekend) schuin met twee handen
+// (heer.cjs o.greep 'schuin'); extra.greep kiest zelf.
+const greepVan = (stand) => (stand && typeof stand === 'object' && (stand.houding === 'lopen' || stand.houding === 'aanvallen') ? 'schuin' : undefined);
 const POPPETJES = {
-  speerman: (stand, extra = {}) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', schild: true, kraag: true, ...extra }),
+  speerman: (stand, extra = {}) => HR.soldaat(stand, { livrei: 'dorp', wapen: 'speer', kraag: true, greep: greepVan(stand), ...extra }),
 };
 // De gewrichten in een stand: die van het staan, met de benen zoals het model ze in deze stand bouwt (heer.cjs
 // o.gewrichten); het bovenlijf deint maar een beetje, dat blijft staand.
-function gewrichtenIn(naam, stand) {
+function gewrichtenIn(naam, stand, extra = {}) {
   const g = {};
-  POPPETJES[naam](stand, { gewrichten: g });
+  POPPETJES[naam](stand, { ...extra, gewrichten: g });
   const uit = GEWRICHTEN_SOLDAAT.map((p) => [...p]);
+  if (g.armen) {
+    [['R', 2], ['L', 5]].forEach(([kant, eerste]) => {
+      const a = g.armen[kant];
+      uit[eerste] = a.schouder; uit[eerste + 1] = a.elleboog; uit[eerste + 2] = a.pols;
+    });
+  }
   if (g.benen) {
     [[1, 8], [0, 11]].forEach(([been, eerste]) => {
       const b = g.benen[been];
@@ -70,6 +81,21 @@ function render(model, kant, fijn = 1) {
   K.belicht(B);
   const zl = K.kleurBeeld(B);
   return { b: B.b, h: B.h, ramp: B.ramp, stap: B.stap, diep: B.diep, deel: B.deel, nrm: B.nrm, rust: B.rust, albedo: B.albedo, g: B.g, kleur: B.kleur, zl, nagels: [] };
+}
+
+// Drie houdingen voor de speerman zonder schild, als model (Marcel, 21 okt: "Speer is een 2 handed weapon"): A rechtop opzij
+// met één hand, B schuin voor het lijf met twee handen, C rechtop voor het lijf met twee handen. uit/soldatenhd/greep.png
+function greepProef() {
+  const E = require('../ai/etiket.cjs');
+  const basis = { livrei: 'dorp', wapen: 'speer', kraag: true };
+  const varianten = [['A, rechtop opzij', {}], ['B, schuin, twee handen', { greep: 'schuin' }], ['C, rechtop voor, twee handen', { greep: 'twee' }]];
+  const rijen = varianten.map(([naam, o]) => {
+    const beelden = ['Z', 'ZW', 'W', 'NO'].map((kant) => render(HR.soldaat(STAND, { ...basis, ...o }), kant, 2).zl);
+    const u = H.uitsnede(beelden, 3);
+    return beelden.map((r, i) => E.met(H.snij(H.alfaSnijMetGrond(H.alfaSnij(r, u)), { x0: 0, y0: 0, b: u.b, h: u.h }, 2), i ? '' : naam));
+  });
+  E.bewaar(path.join(UIT, 'greep.png'), rijen, 'De speerman zonder schild: drie houdingen', 'Ons model zonder AI, naar Z, ZW, W en NO (op 2×, maal 2).');
+  console.log('uit/soldatenhd/greep.png');
 }
 
 // Het model zonder AI: acht richtingen op spelmaat (drie keer vergroot om te zien) en zuidwest op 4×.
@@ -346,6 +372,16 @@ CONCEPTEN[6] = {
     ', matte worn surfaces, dull iron, matte wool and leather, restrained reflectivity',
   negatief: `${CONCEPTEN[5].negatief}, shiny, glossy, chrome, polished metal, reflective, specular highlights, plume, feather, pennant, flag`,
 };
+// ronde 7 (Marcel, 21 okt: geen schild, de speer is een wapen voor twee handen; staand met één hand rechtop): ronde 6 zonder
+// schild in de zin, het wapen op de borst van de wapenrok, en het schild in de negatieve zin
+CONCEPTEN[7] = {
+  ...CONCEPTEN[6],
+  positief: CONCEPTEN[6].positief
+    .replace('deep blue quilted padded tabard with a leather belt, a deep blue heater shield with an iron rim and a golden wheat-ear coat of arms painted on it, ',
+      'deep blue quilted padded tabard with a golden wheat-ear coat of arms on the chest and a leather belt, brown leather armour pieces, no shield, ')
+    .replace('long spear with a leaf-shaped iron head', 'holding a long spear upright in his right hand, leaf-shaped iron spear head'),
+  negatief: `${CONCEPTEN[6].negatief}, shield, buckler, two spears`,
+};
 async function concept(naam = 'speerman', ronde = '1') {
   const V = require('../ai/vrij.cjs');
   const C = CONCEPTEN[ronde];
@@ -365,6 +401,7 @@ async function concept(naam = 'speerman', ronde = '1') {
   });
   if (ronde === '5') vergelijkRondes(naam, '4', '5', 'FaeTastic', 'Pixel Art Base');
   if (ronde === '6') vergelijkRondes(naam, '5', '6', 'glanzend', 'mat', 'alleen de zin anders (mat in de zin, glans in de negatieve)');
+  if (ronde === '7') vergelijkRondes(naam, '6', '7', 'met schild', 'zonder schild', 'de zin zonder schild, en ons model rechtop met één hand');
 }
 // Twee rondes naast elkaar (dezelfde zaden op stijl 0,6): groot (een derde) en op de HD-maat (2×, maal 2).
 function vergelijkRondes(naam, a, b, naamA, naamB, wat = 'alleen het checkpoint anders') {
@@ -524,7 +561,18 @@ RICHTINGEN.concept = 5;
 RICHTINGEN.ronde = 5;
 RICHTINGEN.concept = 6;
 RICHTINGEN.basis = path.join('concept', 'speerman-6', 'zaad-106-ip0.6.png');
-async function richtingen(naam = 'speerman') {
+// Ronde 6 (21 okt, zonder schild): zaad 106 uit conceptronde 7 als referentie, en twee sets: 'staan' (rechtop met één hand)
+// en 'lopen' (schuin met twee handen: de basis waarop het lopen alleen de benen schildert, en straks het begin van het
+// steken). Het skelet komt uit de armen en benen van het model in die greep.
+RICHTINGEN.ronde = 6;
+RICHTINGEN.concept = 7;
+RICHTINGEN.basis = path.join('concept', 'speerman-7', 'zaad-106-ip0.6.png');
+const SETS = {
+  staan: { extra: {}, map: '' },
+  lopen: { extra: { greep: 'schuin' }, map: '-lopen', zin: (z) => z.replace('holding a long spear upright in his right hand', 'holding a long spear diagonally across his body with both hands, ready to thrust') },
+};
+async function richtingen(naam = 'speerman', set = 'staan') {
+  const ST = SETS[set];
   const V = require('../ai/vrij.cjs');
   const E = require('../ai/etiket.cjs');
   const HU = require('../ai/huisstijl.cjs');
@@ -533,17 +581,17 @@ async function richtingen(naam = 'speerman') {
   for (const vr of RICHTINGEN.varianten || [{ naam: '' }]) {
     const uit = [];
     for (const kant of K.KANTEN) {
-      const [v] = await V.vrijeRonde(render(POPPETJES[naam](STAND), kant, C.fijn), {
+      const [v] = await V.vrijeRonde(render(POPPETJES[naam](STAND, ST.extra), kant, C.fijn), {
         naam: `${naam}-${kant}`,
-        map: path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}${vr.lora ? `-lora${vr.lora}` : ''}`, kant),
-        positief: `${RICHTINGEN.zin[kant]}, ${C.positief}`,
+        map: path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}${ST.map}${vr.lora ? `-lora${vr.lora}` : ''}`, kant),
+        positief: `${RICHTINGEN.zin[kant]}, ${ST.zin ? ST.zin(C.positief) : C.positief}`,
         negatief: [C.negatief, RICHTINGEN.nooit, kant[0] === 'N' && RICHTINGEN.rug, vr.negatief].filter(Boolean).join(', '),
         stijl: path.join(UIT, RICHTINGEN.basis),
         ipSoort: 'linear',
         ipSterktes: [RICHTINGEN.ip],
         zaden: [RICHTINGEN.zaad],
         instellingen: RICHTINGEN.instellingen,
-        pose: RICHTINGEN.instellingen.pose ? poseBeeld(kant, C.fijn) : null,
+        pose: RICHTINGEN.instellingen.pose ? poseBeeld(kant, C.fijn, gewrichtenIn(naam, STAND, ST.extra)) : null,
         omtrek: RICHTINGEN.instellingen.lijn > 0,
         lora: vr.lora ? { ...HU.LORA, kracht: vr.lora } : null,
         checkpoint: RICHTINGEN.checkpoint,
@@ -554,8 +602,8 @@ async function richtingen(naam = 'speerman') {
   }
   const A = require('../ai/beeld-ai.cjs');
   const basis = A.leesPng(fs.readFileSync(path.join(UIT, RICHTINGEN.basis)));
-  E.bewaar(path.join(UIT, `richtingen-${naam}-${RICHTINGEN.ronde}.png`), [[E.met(H.verklein(basis, 3, 'naast'), `de basis: ${RICHTINGEN.basis}`)], ...rijen], `De ${naam} in acht richtingen`, `SDXL vrij, de basis (zaad 106, stijl 0,6) als referentie (IP-Adapter, linear, ${String(RICHTINGEN.ip).replace('.', ',')}), per richting de diepte van ons model (${String(RICHTINGEN.instellingen.diepte).replace('.', ',')}, tot ${Math.round(RICHTINGEN.instellingen.cnEind * 100)}%)${RICHTINGEN.instellingen.pose ? `, ons skelet (OpenPose ${String(RICHTINGEN.instellingen.pose).replace('.', ',')}) en onze buitenlijn (${String(RICHTINGEN.instellingen.lijn).replace('.', ',')})` : ''} en een eigen zin, zaad ${RICHTINGEN.zaad}. Een derde van het doek.`);
-  console.log(`uit/soldatenhd/richtingen-${naam}-${RICHTINGEN.ronde}.png`);
+  E.bewaar(path.join(UIT, `richtingen-${naam}-${RICHTINGEN.ronde}${ST.map}.png`), [[E.met(H.verklein(basis, 3, 'naast'), `de basis: ${RICHTINGEN.basis}`)], ...rijen], `De ${naam} in acht richtingen`, `SDXL vrij, de basis (zaad 106, stijl 0,6) als referentie (IP-Adapter, linear, ${String(RICHTINGEN.ip).replace('.', ',')}), per richting de diepte van ons model (${String(RICHTINGEN.instellingen.diepte).replace('.', ',')}, tot ${Math.round(RICHTINGEN.instellingen.cnEind * 100)}%)${RICHTINGEN.instellingen.pose ? `, ons skelet (OpenPose ${String(RICHTINGEN.instellingen.pose).replace('.', ',')}) en onze buitenlijn (${String(RICHTINGEN.instellingen.lijn).replace('.', ',')})` : ''} en een eigen zin, zaad ${RICHTINGEN.zaad}. Een derde van het doek.`);
+  console.log(`uit/soldatenhd/richtingen-${naam}-${RICHTINGEN.ronde}${ST.map}.png`);
 }
 
 // ---------------------------------------------------------------- van de acht beelden naar de sprites
@@ -726,6 +774,8 @@ async function lopenAI(naam = 'speerman') {
 const BENEN = { denoise: 0.6, rand: 8, kern: 4, delen: [HR.SOLDAAT_D.benen, HR.SOLDAAT_D.laars], ronde: 3 };
 // Ronde 4: hetzelfde, op de matte richtingen (RICHTINGEN ronde 5), met mat 3 als afwerking.
 BENEN.ronde = 4;
+// Ronde 5 (zonder schild): het lopen op de set 'lopen' (schuin met twee handen).
+BENEN.ronde = 5;
 // Per pixel de soort van het onderdeel (HR.SOLDAAT_D) als het een been is, anders 0.
 function benenVan(R, model) {
   const uit = new Uint8Array(R.b * R.h);
@@ -781,9 +831,9 @@ async function lopenBenen(naam = 'speerman', kant = LOPEN.kant) {
   const A = require('../ai/beeld-ai.cjs');
   const C = CONCEPTEN[RICHTINGEN.concept];
   const fijn = C.fijn;
-  const staandPad = path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`);
+  const staandPad = path.join(UIT, 'richtingen', `${naam}-${RICHTINGEN.ronde}${SETS.lopen.map}`, kant, `zaad-${RICHTINGEN.zaad}-ip${RICHTINGEN.ip}.png`);
   const staand = A.leesPng(fs.readFileSync(staandPad));
-  const ms = POPPETJES[naam](STAND);
+  const ms = POPPETJES[naam](STAND, SETS.lopen.extra);
   const Rs = render(ms, kant, fijn);
   const ds = V.doekVan(Rs);
   const N = Rs.b * Rs.h;
@@ -837,7 +887,7 @@ async function lopenBenen(naam = 'speerman', kant = LOPEN.kant) {
     const [v] = await V.vrijeRonde(R, {
       naam: `${naam}-benen-${i}`,
       map: path.join(UIT, 'lopen', `${naam}-${kant}-benen${BENEN.ronde > 1 ? `-${BENEN.ronde}` : ''}`, String(i)),
-      positief: `${RICHTINGEN.zin[kant]}, walking, brown leather boots, dark blue hose, ${C.positief}`,
+      positief: `${RICHTINGEN.zin[kant]}, walking, brown leather boots, dark blue hose, ${SETS.lopen.zin(C.positief)}`,
       negatief: [C.negatief, RICHTINGEN.nooit, RICHTINGEN.varianten[0].negatief, kant[0] === 'N' && RICHTINGEN.rug, 'golden boots, orange boots, shiny boots, transparent legs, ghost'].filter(Boolean).join(', '),
       stijl: staandPad,
       ipSoort: 'linear',
@@ -1021,10 +1071,11 @@ async function schilderbeurt(naam = 'speerman', schilder = 'sdxl') {
 if (require.main === module) {
   const [opdracht, ...rest] = process.argv.slice(2);
   if (opdracht === 'kijk') kijk(...rest);
+  else if (opdracht === 'greep') greepProef();
   else if (opdracht === 'proef') proef(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'concept') concept(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'matter') matterProef(...rest);
-  else if (opdracht === 'alles') richtingen(...rest).then(() => lopenAlle(...rest)).catch((e) => { console.error(e); process.exit(1); });
+  else if (opdracht === 'alles') richtingen(rest[0], 'staan').then(() => richtingen(rest[0], 'lopen')).then(() => lopenAlle(rest[0])).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen-alle') lopenAlle(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'benen') lopenBenen(...rest).catch((e) => { console.error(e); process.exit(1); });
   else if (opdracht === 'lopen') lopenAI(...rest).catch((e) => { console.error(e); process.exit(1); });

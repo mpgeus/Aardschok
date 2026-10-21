@@ -359,8 +359,12 @@ const SOLDAAT_FPS = 10;
 // bouw, met o.livrei 'dorp' (een blauwe wapenrok met de gouden schoof op borst en rug, wapen.cjs schoof), o.wapen 'speer'
 // (in plaats van de hellebaard), o.schild (een schild in blauw met de schoof en een ijzeren rand, aan de linkerarm, die dan
 // niet zwaait) en o.kraag (een maliënkraag om hoofd en hals, onder de hoed). soldatenhd.cjs maakt er de speerman van.
+// o.greep 'twee' (Marcel, 21 okt: "Speer is een 2 handed weapon"): de speer iets voor zijn rechterzij, de rechterhand laag
+// en de linker hoog om de schacht, beide armen met de romp mee; o.greep 'schuin': met twee handen schuin voor het lijf, de
+// rechterhand laag bij de heup en de linker hoger voor de borst, de punt schuin omhoog naar voren (klaar om te steken).
 // o.gewrichten (een leeg object): daarin komen de heup, de knie en de enkel van elk been in deze stand ({ benen: [links,
-// rechts] }), voor het skelet van OpenPose (soldatenhd.cjs).
+// rechts] }) en de schouder, de elleboog en de pols van elke arm ({ armen: { L, R } }), voor het skelet van OpenPose
+// (soldatenhd.cjs).
 // De materialen (M) en de soorten onderdelen (D) van de soldaat; soldatenhd.cjs leest ze voor de zinnen per gebied.
 const SOLDAAT_M = {
   huid: 0, oog: 1, mond: 2, baard: 3, wambuis: 4, rood: 5, geel: 6, hoos: 7, laars: 8, riem: 9,
@@ -465,12 +469,19 @@ function soldaat(stand = null, o = {}) {
   // --- de linkerarm zwaait, in een dikke gewatteerde mouw, met een leren handschoen. Met een schild houdt hij de onderarm
   // naar voren, en zwaait hij niet (arm en schild gaan met de romp mee).
   const mouw = { r: [5, 4.4, 3.4], mouw: 2, stof: M.wambuis, huid: M.handschoen, hand: [3, 3.2, 3.4] };
+  const twee = o.greep === 'twee' || o.greep === 'schuin';
+  const schuin = o.greep === 'schuin';
+  const schouderL = [-13.4, 0.4, 60.6];
+  const schouderR = [13.4, 0.4, 60.6];
+  const armen = {};
   if (o.schild) {
-    arm(delen, [-13.4, 0.4, 60.6], [-17.6, 1.6, 49.4], [-16.4, 10.4, 45.2], { ...mouw, dArm: D.armL, dHand: D.handL });
+    armen.L = { schouder: schouderL, elleboog: [-17.6, 1.6, 49.4], pols: [-16.4, 10.4, 45.2] };
+    arm(delen, schouderL, armen.L.elleboog, armen.L.pols, { ...mouw, dArm: D.armL, dHand: D.handL });
     schild(delen, [-21, 11.9, 46.6], eenheid([-0.55, 0.83, 0]), M, D);
     bot(Bn.Bromp);
-  } else {
-    arm(delen, [-13.4, 0.4, 60.6], [-16, 0.2, 48.4], [-15.6, 3, 37.4], { ...mouw, dArm: D.armL, dHand: D.handL });
+  } else if (!twee) {
+    armen.L = { schouder: schouderL, elleboog: [-16, 0.2, 48.4], pols: [-15.6, 3, 37.4] };
+    arm(delen, schouderL, armen.L.elleboog, armen.L.pols, { ...mouw, dArm: D.armL, dHand: D.handL });
     bot(Bn.Barm[0]);
   }
 
@@ -478,18 +489,28 @@ function soldaat(stand = null, o = {}) {
   // hem, een eind erboven. Een steekpunt, een bijlblad naar voren, een haak naar achteren, en een
   // kwastje in rood en geel waar het ijzer begint.
   const til = lopen ? 4.2 : 0;
-  const voet = [17.2, 6.8, 0.6 + til];
-  const top = [16.6, 5.8, (o.wapen === 'speer' ? 92 : 99.6) + til];
+  // schuin: de schacht door de rechterhand (laag, bij de heup) en de linker (hoger, voor de borst)
+  const handR = [10, 5, 42 + til];
+  const handL = [-1, 13, 54 + til];
+  const as = eenheid(min(handL, handR));
+  const voet = schuin ? plus(handR, maal(as, -26)) : twee ? [5.6, 12.4, 0.6 + til] : [17.2, 6.8, 0.6 + til];
+  const top = schuin ? plus(handR, maal(as, 66)) : twee ? [5, 9.6, 92 + til] : [16.6, 5.8, (o.wapen === 'speer' ? 92 : 99.6) + til];
   const u = eenheid(min(top, voet));
   const opSchacht = (t) => plus(voet, maal(u, t));
   const lengte = Math.hypot(...min(top, voet));
   if (o.vaandel) vaandel(delen, opSchacht, M, D, o.vaandel);
   else if (o.wapen === 'speer') speer(delen, voet, top, opSchacht, lengte, M, D);
   else hellebaard(delen, voet, top, opSchacht, lengte, M, D);
-  // de rechterhand om de schacht, de elleboog naar achteren
-  const grijp = opSchacht(43.2 - voet[2]);
-  arm(delen, [13.4, 0.4, 60.6], [18.4, -1.6, 50.6], plus(grijp, [-0.6, -0.4, 0]), { ...mouw, dArm: D.armR, dHand: D.handR });
+  // de rechterhand om de schacht, de elleboog naar achteren; met twee handen ook de linker, hoger
+  const grijp = schuin ? handR : opSchacht(43.2 - voet[2]);
+  armen.R = { schouder: schouderR, elleboog: schuin ? [17, -1, 48] : twee ? [16, 5.2, 50] : [18.4, -1.6, 50.6], pols: plus(grijp, twee ? [0.6, -0.8, 0] : [-0.6, -0.4, 0]) };
+  arm(delen, schouderR, armen.R.elleboog, armen.R.pols, { ...mouw, dArm: D.armR, dHand: D.handR });
+  if (twee) {
+    armen.L = { schouder: schouderL, elleboog: schuin ? [-13, 7, 47] : [-8.4, 8, 51.6], pols: schuin ? plus(handL, [-0.6, -0.8, 0]) : plus(opSchacht(55 - voet[2]), [-0.8, -0.6, 0]) };
+    arm(delen, schouderL, armen.L.elleboog, armen.L.pols, { ...mouw, dArm: D.armL, dHand: D.handL });
+  }
   bot(Bn.Bromp);
+  if (o.gewrichten) o.gewrichten.armen = armen;
 
   // --- het hoofd: een brede kop met een zware frons, een platte neus, een korte zwarte baard
   const oy = schedel(delen, H, M, D, { maat: kop, oog });

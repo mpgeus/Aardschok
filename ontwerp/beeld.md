@@ -1687,6 +1687,17 @@ dezelfde man als 106 glanzend, zonder wimpel en met een doffere helm; dat is de 
 beelden is gestopt na NW; de acht richtingen en het lopen gaan opnieuw op de matte basis (`soldatenhd.cjs alles`:
 richtingen ronde 5, lopen ronde 4).
 
+**Geen schild** (Marcel, 21 okt: "Voordat we ook er te diep inzitten. Ik denk dat een speerman geen schild moet hebben.
+Speer is een 2 handed weapon"): de run op de matte basis is gestopt. In het spel heeft de speerman nu speer en harnas
+(Marcel koos het, zoals de lansdrager in Knights and Merchants; `js/soldaten.js`, `spel.md`). Voor de houding drie
+modellen zonder AI (`soldatenhd.cjs greep`, `greep.png`: A rechtop opzij met één hand, B schuin voor het lijf met twee
+handen, C rechtop voor het lijf met twee handen, waar de schacht door het gezicht liep). **Marcel: "Bij stilstaan 1 hand
+recht, lopen 2 handen en steken ook", en "Bij lopen schuin".** Dus staan in A, lopen en steken in B (`heer.cjs soldaat`
+`o.greep` 'schuin'; het model geeft ook de schouders, ellebogen en polsen door voor OpenPose). Conceptronde 7 zonder schild
+(`concept-speerman-6-7.png`): zaad 106 is dezelfde man, nu met het wapen op de borst; dat is de basis. De richtingen in
+twee sets per richting (ronde 6): staan (A) en de basis voor het lopen (B), waarop het lopen alleen de benen schildert
+(lopen ronde 5); de basis B wordt ook het begin van het steken.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
