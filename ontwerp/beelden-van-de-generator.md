@@ -334,7 +334,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   maar de liggende beelden steeds verder uit elkaar: met gelijke vakken kreeg één beeld twee mannen. Staan de beelden los,
   dan neemt `generator.cjs` ze nu zoals ze staan (`losseBeelden`), en wie valt, zakt op zijn plek in elkaar
   (`anker: 'lijf'`: het midden van zijn lijf op het anker, het laagste van zijn lijf op de grond).
-- **Vel 19, vallen ZW** (22 okt): meteen goed, voorover naar linksonder, de speer naast hem. Vervangt het oude vel van ZW. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+- **Vel 19, vallen ZW** (22 okt): meteen goed, voorover naar linksonder, de speer naast hem. Vervangt het oude vel van ZW.
+- **Vel 20, vallen W** (22 okt): meteen goed: door de klap achterover, dan voorover naar links. De punten raken de laars
+  van het beeld ervoor, dus de beelden staan niet los; de gelijke vakken met de dunne stukken knippen het goed. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
