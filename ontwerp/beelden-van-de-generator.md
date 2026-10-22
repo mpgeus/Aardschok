@@ -371,8 +371,8 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   messingkleurige helm. Daarom meet `helmVan` de helm nu naar zijn vorm (de breedste rij bovenaan het lijf, tot het
   gezicht of de maliën smaller worden) in plaats van naar het grijs, en meten de aanval en het vallen aan hun eerste
   beeld (de klaarstand, de klap) hoe gebukt hij staat, tussen 80 en 100% van de staande lengte. Lopen W kwam daarna
-  ook goed (de punt nu vooruit), net zo gedrongen als O: bij die twee is het hoofd bij lopen iets groter dan bij staan
-  en aanvallen.
+  ook goed (de punt nu vooruit), en lopen NO ook, allebei net zo gedrongen als O: bij die drie is het hoofd bij lopen
+  iets groter dan bij staan en aanvallen.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
