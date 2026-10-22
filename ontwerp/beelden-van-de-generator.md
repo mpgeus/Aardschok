@@ -329,7 +329,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 17, aanvallen ZO** (21 okt): eerst van achteren gezien (de speer wel naar rechtsonder). Goed werd het met:
   "redo 17: Attacking SE again. He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking
   SE sheet (sheet 9) and the 8th figure of sheet 1: we see his face, his beard and the front of his tabard with the belt
-  buckle; we do NOT see his back. [...]" Nog glimmend, met lichte mouwen; de kleur trekt `generator.cjs` gelijk. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  buckle; we do NOT see his back. [...]" Nog glimmend, met lichte mouwen; de kleur trekt `generator.cjs` gelijk.
+- **Vel 18, vallen Z** (22 okt): goed (geraakt, wankelen, op de knieën, voorover, en liggen met de speer naast zich),
+  maar de liggende beelden steeds verder uit elkaar: met gelijke vakken kreeg één beeld twee mannen. Staan de beelden los,
+  dan neemt `generator.cjs` ze nu zoals ze staan (`losseBeelden`), en wie valt, zakt op zijn plek in elkaar
+  (`anker: 'lijf'`: het midden van zijn lijf op het anker, het laagste van zijn lijf op de grond). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris

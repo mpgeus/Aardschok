@@ -56,7 +56,7 @@ const FIGUREN = {
       // de speer van beeld 5 steekt in het vak van beeld 4 (de punt), en die van 6 in dat van 5
       // de namen die het spel al kent (js/sprites.js S.houding): 'aanval' bij een klap (e.uitval), 'sterven' als hij valt
       aanval: { vel: 'speerman-aanvallen-ZW', richtingen: ['ZW'], beelden: 8, fps: 10, herhaal: false, anker: 'voeten', toewijzing: [[899, 343, 1010, 372, 4, 'speer'], [1236, 350, 1300, 372, 5, 'speer']] },
-      sterven: { vel: 'speerman-vallen-ZW', richtingen: ['ZW'], beelden: 7, fps: 8, herhaal: false },
+      sterven: { vel: 'speerman-vallen-ZW', richtingen: ['ZW'], beelden: 7, fps: 8, herhaal: false, anker: 'lijf' },
     },
   },
 };
@@ -156,6 +156,25 @@ function kernVan(fg, b, h, r) {
   }
   return kern;
 }
+// De grote stukken van een rij in n groepen naar links en rechts: eerst wat elkaar overlapt of het dichtst bij elkaar ligt
+// samen (een losse speer bij zijn lijf), tot er n over zijn. Alleen als de groepen dan met ruimte ertussen staan en even
+// groot zijn (geen twee mannen in één groep, geen halve man); anders null.
+function losseBeelden(groot, n) {
+  if (groot.length < n) return null;
+  let g = groot.map((s) => ({ x0: s.x0, x1: s.x1, n: s.pixels.length, stukken: [s] })).sort((p, q) => p.x0 + p.x1 - q.x0 - q.x1);
+  while (g.length > n) {
+    let k = 0;
+    for (let i = 1; i < g.length - 1; i++) if (g[i + 1].x0 - g[i].x1 < g[k + 1].x0 - g[k].x1) k = i;
+    const [a, c] = [g[k], g[k + 1]];
+    g.splice(k, 2, { x0: Math.min(a.x0, c.x0), x1: Math.max(a.x1, c.x1), n: a.n + c.n, stukken: [...a.stukken, ...c.stukken] });
+    g.sort((p, q) => p.x0 + p.x1 - q.x0 - q.x1);
+  }
+  for (let i = 1; i < g.length; i++) if (g[i].x0 <= g[i - 1].x1) return null;
+  const mediaan = g.map((x) => x.n).sort((p, q) => p - q)[Math.floor(g.length / 2)];
+  if (g.some((x) => x.n < 0.4 * mediaan || x.n > 2.5 * mediaan)) return null;
+  return g.map((x) => x.stukken);
+}
+
 // De beelden van een rij: per beeld zijn pixels (indexen in de bron), en het midden van zijn vak.
 function beeldenVan(beeld, n, toewijzing = []) {
   const { b, h } = beeld;
@@ -174,7 +193,14 @@ function beeldenVan(beeld, n, toewijzing = []) {
   const klein = alle.filter((s) => s.pixels.length < drempel);
   let kern = null;
   let dik = null;
-  for (const s of groot) {
+  // staan de beelden los van elkaar (n groepen grote stukken, met ruimte ertussen), dan is elke groep een beeld, waar hij
+  // ook staat (21 okt, vallen Z: de generator zette de liggende beelden steeds verder uit elkaar, en met gelijke vakken
+  // kreeg één beeld twee mannen); anders naar de middens van gelijke vakken
+  const groepen = losseBeelden(groot, n);
+  if (groepen) groepen.forEach((g, i) => {
+    for (const s of g) for (const p of s.pixels) van[p] = i;
+  });
+  for (const s of groepen ? [] : groot) {
     const over = midden.map((m, i) => i).filter((i) => midden[i] >= s.x0 && midden[i] <= s.x1);
     if (over.length <= 1) {
       const cx = s.pixels.reduce((t, p) => t + (p % b), 0) / s.pixels.length;
@@ -594,9 +620,12 @@ function figuur(naam) {
           // (bij lopen en vallen bewegen de voeten), of met `anker: 'voeten'` zoals de voeten schuiven: bij een steek
           // blijven ze staan, en de generator zet de vakken niet altijd even breed (21 okt, aanvallen W: tot 44 pixels
           // scheef). Dan staat het eerste beeld met zijn lijf op het anker, zoals wie loopt, en volgen de andere de voeten.
+          // Met `anker: 'lijf'` (vallen) zakt hij op zijn plek in elkaar: het midden van zijn lijf op het anker, en het
+          // laagste van zijn lijf (de zolen, of liggend een arm of zijn zij) op de grond.
           const j0 = ri * h.beelden;
           if (h.beelden === 1) anker = [voetMidden(bron, rij[j], voeten, j), voeten.onder[j]];
           else if (h.anker === 'voeten') anker = [voetMidden(bron, r, voeten, j) - voetMidden(bron, rij[j0], voeten, j0) + lijfMidden(bron, rij[j0], voeten), grond];
+          else if (h.anker === 'lijf') anker = [lijfMidden(bron, r, voeten), voeten.onder[j]];
           else anker = [r.midden, grond];
           platen[houding][kant].push(verkleind(bron, r.pixels, anker, k));
         }
