@@ -502,12 +502,13 @@ function lijfMidden(beeld, r, voeten) {
 // en wordt daaronder (het gezicht, de maliën) weer smaller; de breedste rij daarvoor is de helm, met de rand die de
 // kern afknabbelde erbij. Niet verder dan ruim half zo diep als hij breed is: bij een aanval of val zitten de schouders
 // en armen vlak onder de rand. Over de beelden de mediaan (een hand naast de helm maakt een beeld te breed, de schacht ervoor
-// te smal), of alleen beeld j. Alleen om twee vellen van dezelfde richting te vergelijken (figuur): de generator houdt
-// de verhouding van helm en lijf niet vast tussen de vellen.
-function helmVan(beeld, rij, voeten, j = null) {
+// te smal), of met `smalste` de smalste: bij een aanval of val maken een arm bij het hoofd of een liggend lijf hem
+// alleen breder, en op één vel is de helm overal even groot. Alleen om twee vellen van dezelfde richting te vergelijken
+// (figuur): de generator houdt de verhouding van helm en lijf niet vast tussen de vellen.
+function helmVan(beeld, rij, voeten, smalste = false) {
   const { b, h } = beeld;
   const { R, kern } = voeten;
-  const breedten = (j === null ? rij : [rij[j]]).map((r) => {
+  const breedten = rij.map((r) => {
     const m = new Uint8Array(b * h);
     for (const p of r.pixels) if (kern[p]) m[p] = 1;
     const st = stukken(m, b, h);
@@ -540,7 +541,8 @@ function helmVan(beeld, rij, voeten, j = null) {
     }
     return breedst ? breedst + 2 * R : 0;
   }).filter((x) => x > 0).sort((p, q) => p - q);
-  return breedten.length ? breedten[Math.floor(breedten.length / 2)] : 0;
+  if (!breedten.length) return 0;
+  return smalste ? breedten[0] : breedten[Math.floor(breedten.length / 2)];
 }
 
 // Een beeld (pixels uit de bron) rond zijn anker [ax, ay] in de bron verkleind met factor k, naar een plaatje met het
@@ -617,12 +619,12 @@ function figuur(naam) {
       // dan wie staat en niet kleiner dan 80% ervan
       const loop = houding !== 'staan' && houding !== 'lopen' && lopenMaat[b.richtingen[0]];
       // de aanval en het vallen: het eerste beeld (de klaarstand, de klap); het hoogste is soms een hand omhoog
-      const { maat, j: eerste } = maatEnBeeld(bron, rij, h.beelden === 1, voeten, loop ? 0 : null);
+      const { maat } = maatEnBeeld(bron, rij, h.beelden === 1, voeten, loop ? 0 : null);
       let k = F.doel / maat;
       if (loop && loop.helm) {
         // hoe ver hij in dat beeld gebukt staat: zijn lengte daar tegen de lengte die hij rechtop zou hebben, naar de
-        // helm van dat beeld tegen die van het lopen; altijd tussen 80% (een klaarstand, de klap) en 100%
-        const helm = helmVan(bron, rij, voeten, eerste);
+        // helm van dit vel (de smalste) tegen die van het lopen; altijd tussen 80% (een klaarstand, de klap) en 100%
+        const helm = helmVan(bron, rij, voeten, true);
         const rechtop = helm ? (loop.maat * helm) / loop.helm : maat;
         const gebukt = Math.min(1, Math.max(0.8, maat / rechtop));
         k = (F.doel * gebukt) / maat;
