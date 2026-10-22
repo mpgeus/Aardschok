@@ -329,7 +329,12 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 17, aanvallen ZO** (21 okt): eerst van achteren gezien (de speer wel naar rechtsonder). Goed werd het met:
   "redo 17: Attacking SE again. He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking
   SE sheet (sheet 9) and the 8th figure of sheet 1: we see his face, his beard and the front of his tabard with the belt
-  buckle; we do NOT see his back. [...]" Nog glimmend, met lichte mouwen; de kleur trekt `generator.cjs` gelijk.
+  buckle; we do NOT see his back. [...]" Nog glimmend, met lichte mouwen. Daarna (22 okt) in de stijl van het staande
+  vel, eerst met zeven beelden en een geheven speer, en goed met: "redo 17 again: this style is right (matte, brown
+  quilted sleeves, the blue and yellow quartered tabard), keep exactly this style. But make 8 frames, not 7, and use the
+  pose of your previous version of sheet 17: he faces south-east, towards the viewer, and the spear stays on one
+  straight line pointing down and to the right in all 8 frames, never raised. [...]" Een stijl verbeteren met behoud
+  van de houding kan dus in twee stappen: eerst de stijl, dan de houding van de vorige versie terug.
 - **Vel 18, vallen Z** (22 okt): goed (geraakt, wankelen, op de knieën, voorover, en liggen met de speer naast zich),
   maar de liggende beelden steeds verder uit elkaar: met gelijke vakken kreeg één beeld twee mannen. Staan de beelden los,
   dan neemt `generator.cjs` ze nu zoals ze staan (`losseBeelden`), en wie valt, zakt op zijn plek in elkaar
@@ -351,7 +356,7 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   attacking SE sheet (sheet 17): in frames 1 to 4 we see his face, his beard and the front of his tabard; we do NOT see
   his back. [...] One spear with one spearhead, which keeps pointing down and to the right. No blood. [...]"
 - **Alle 25 vellen zijn er** (22 okt). Voorlopig, met een redo die beter kan: 21 (vallen NW: de punt in beeld 1 naar
-  achteren, twee punten in beeld 2), 17 (aanvallen ZO: de stijl, glimmend en bijna zonder blauw); en eventueel 3 en 4 (lopen ZW en W:
+  achteren, twee punten in beeld 2); en eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
