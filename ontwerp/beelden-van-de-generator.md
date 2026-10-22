@@ -342,8 +342,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 19, vallen ZW** (22 okt): meteen goed, voorover naar linksonder, de speer naast hem. Vervangt het oude vel van ZW.
 - **Vel 20, vallen W** (22 okt): meteen goed: door de klap achterover, dan voorover naar links. De punten raken de laars
   van het beeld ervoor, dus de beelden staan niet los; de gelijke vakken met de dunne stukken knippen het goed.
-- **Vel 21, vallen NW** (22 okt), voorlopig: goed gevallen, maar in beeld 1 wijst de punt naar rechtsonder (bij lopen
-  en aanvallen NW naar linksboven), in beeld 2 heeft de speer aan beide kanten een punt, en er zitten rode vlekjes op.
+- **Vel 21, vallen NW** (22 okt): eerst wees de punt in beeld 1 naar rechtsonder en had de speer in beeld 2 twee
+  punten. Goed (en meteen mat, met een blauw-gele wapenrok) met: "redo 21: Dying NW again. Keep the fall of your last
+  version of sheet 21 [...], but in every frame he holds the same single spear the way he did when walking NW: the
+  spearhead pointing up and to the left, never down to the right. The spear has only one spearhead, at the front. No
+  blood. Matte colours exactly like the attached reference sheets [...]"
 - **Vel 22, vallen N** (22 okt): goed (van achteren, voorover van ons af), met weer een punt achteraan de speer in beeld
   1 en 2, en rode vlekjes. De generator gaf hem een kleine helm (55 pixels tegen 99 bij lopen N), zodat hij naar de helm
   20% te groot werd; een aanval of val neemt nu de kleinste van de twee maten (hoogte en helm), zodat hij nooit hoger
@@ -355,8 +358,7 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking SE sheet (sheet 9) and the
   attacking SE sheet (sheet 17): in frames 1 to 4 we see his face, his beard and the front of his tabard; we do NOT see
   his back. [...] One spear with one spearhead, which keeps pointing down and to the right. No blood. [...]"
-- **Alle 25 vellen zijn er** (22 okt). Voorlopig, met een redo die beter kan: 21 (vallen NW: de punt in beeld 1 naar
-  achteren, twee punten in beeld 2); en eventueel 3 en 4 (lopen ZW en W:
+- **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
