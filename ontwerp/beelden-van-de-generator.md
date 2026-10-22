@@ -346,10 +346,12 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 23, vallen NO** (22 okt): goed, van achteren voorover naar rechtsboven; weer een puntje achteraan de speer (beeld
   1 tot 4) en rode vlekjes.
 - **Vel 24, vallen O** (22 okt): goed, door de klap achterover en dan voorover naar rechts (gespiegeld aan W).
-- **Vel 25, vallen ZO** (22 okt), voorlopig: goed gevallen naar rechtsonder, maar in beeld 1 en 2 van achteren gezien
-  (bij lopen en aanvallen ZO kijkt hij naar de kijker), dus hij draait zich om als hij geraakt wordt.
+- **Vel 25, vallen ZO** (22 okt): eerst in beeld 1 en 2 van achteren gezien. Goed werd het met: "redo 25: Dying SE again.
+  He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking SE sheet (sheet 9) and the
+  attacking SE sheet (sheet 17): in frames 1 to 4 we see his face, his beard and the front of his tabard; we do NOT see
+  his back. [...] One spear with one spearhead, which keeps pointing down and to the right. No blood. [...]"
 - **Alle 25 vellen zijn er** (22 okt). Voorlopig, met een redo die beter kan: 21 (vallen NW: de punt in beeld 1 naar
-  achteren, twee punten in beeld 2) en 25 (vallen ZO: van achteren in beeld 1 en 2); en eventueel 3 en 4 (lopen ZW en W:
+  achteren, twee punten in beeld 2), 17 (aanvallen ZO: de stijl, glimmend en bijna zonder blauw); en eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.

@@ -32,7 +32,7 @@ de pijplijn van vraag 180 (Q, f; niet in de cloud). **Bezig in sessie `lokaal-da
 **nieuwe weg** (Marcel, 21 okt: "Ok, dan zullen we moeten inventariseren welke gebouwen en poppetjes we nodig hebben. Dan
 kunnen we de andere generator deze 1 voor 1 laten maken. Jij moet dan zorgen dat ze passend worden in het spel"): de
 generator van zijn plaat maakt de bron, wij maken het passend; eerst de inventaris (`beelden-van-de-generator.md`). De
-speerman staat en loopt in het spel in acht richtingen (21 okt, de masterprompt); de aanval in alle acht richtingen en alle 25 vellen staan erin (22 okt); eventueel nog een redo van 21 en 25 (en 3 en 4), `beelden-van-de-generator.md` (in
+speerman staat en loopt in het spel in acht richtingen (21 okt, de masterprompt); de aanval in alle acht richtingen en alle 25 vellen staan erin (22 okt); eventueel nog een redo van 21 en 17 (en 3 en 4), `beelden-van-de-generator.md` (in
 het nieuwe gesprek, `beelden-van-de-generator.md`), en eventueel 3 en 4 opnieuw (de punt naar achteren).
 
 **Marcels acht punten van 20 okt** (R, vraag 182 tot 189: egaliseren met de schop, de maat van de huizen, dragers, een

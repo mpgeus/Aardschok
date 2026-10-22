@@ -613,7 +613,7 @@
        "fps": 8,
        "herhaal": false,
        "cel": [
-        133,
+        132,
         107
        ],
        "anker": [
