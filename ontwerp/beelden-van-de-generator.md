@@ -338,7 +338,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 20, vallen W** (22 okt): meteen goed: door de klap achterover, dan voorover naar links. De punten raken de laars
   van het beeld ervoor, dus de beelden staan niet los; de gelijke vakken met de dunne stukken knippen het goed.
 - **Vel 21, vallen NW** (22 okt), voorlopig: goed gevallen, maar in beeld 1 wijst de punt naar rechtsonder (bij lopen
-  en aanvallen NW naar linksboven), in beeld 2 heeft de speer aan beide kanten een punt, en er zitten rode vlekjes op. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  en aanvallen NW naar linksboven), in beeld 2 heeft de speer aan beide kanten een punt, en er zitten rode vlekjes op.
+- **Vel 22, vallen N** (22 okt): goed (van achteren, voorover van ons af), met weer een punt achteraan de speer in beeld
+  1 en 2, en rode vlekjes. De generator gaf hem een kleine helm (55 pixels tegen 99 bij lopen N), zodat hij naar de helm
+  20% te groot werd; een aanval of val neemt nu de kleinste van de twee maten (hoogte en helm), zodat hij nooit hoger
+  wordt dan de staande man. Dat maakte ook aanvallen N, NO, O en ZO en vallen ZW, W en NW iets kleiner. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris

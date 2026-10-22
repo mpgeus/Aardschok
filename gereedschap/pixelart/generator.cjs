@@ -597,12 +597,14 @@ function figuur(naam) {
       const rij = beeldenVan(bron, opVel.length * h.beelden, b.toewijzing);
       const voeten = voetenVan(bron, rij);
       // de maat: staan en lopen naar de hoogte van het lijf (maatVan); de aanval en het vallen staan gebukt of vallen,
-      // dus daar de maat van het lopen in dezelfde richting, naar de breedte van de helm op beide vellen (zo wordt een
-      // man in de klaarstand niet groter dan wie loopt; 21 okt, aanvallen Z)
+      // dus daar ook de maat van het lopen in dezelfde richting, naar de breedte van de helm op beide vellen (zo wordt
+      // een man in de klaarstand niet groter dan wie loopt; 21 okt, aanvallen Z), en dan de kleinste van de twee: de
+      // hoogte maakt hem te groot als hij gebukt staat, de helm als de generator hem een kleine helm gaf (22 okt,
+      // vallen N: 55 pixels tegen 99 bij lopen N), en een te grote man valt meer op dan een iets te kleine
       const helm = helmVan(bron, rij, voeten.R);
       let k = F.doel / maatVan(bron, rij, h.beelden === 1, voeten);
       const loop = houding !== 'staan' && houding !== 'lopen' && lopenMaat[b.richtingen[0]];
-      if (loop && loop.helm && helm) k = (loop.k * loop.helm) / helm;
+      if (loop && loop.helm && helm) k = Math.min(k, (loop.k * loop.helm) / helm);
       if (houding === 'lopen') for (const kant of b.richtingen) lopenMaat[kant] = { k, helm };
       maten[b.naam] = Math.round(F.doel / k);
       if (F.stoffen && houding === 'staan') voorbeeld = kleurMaat(bron, F.stoffen).maat;
