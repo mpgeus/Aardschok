@@ -344,7 +344,8 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   20% te groot werd; een aanval of val neemt nu de kleinste van de twee maten (hoogte en helm), zodat hij nooit hoger
   wordt dan de staande man. Dat maakte ook aanvallen N, NO, O en ZO en vallen ZW, W en NW iets kleiner.
 - **Vel 23, vallen NO** (22 okt): goed, van achteren voorover naar rechtsboven; weer een puntje achteraan de speer (beeld
-  1 tot 4) en rode vlekjes. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  1 tot 4) en rode vlekjes.
+- **Vel 24, vallen O** (22 okt): goed, door de klap achterover en dan voorover naar rechts (gespiegeld aan W). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
