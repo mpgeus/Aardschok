@@ -358,6 +358,10 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   He faces south-east, down and to the right, TOWARDS the viewer, exactly like the walking SE sheet (sheet 9) and the
   attacking SE sheet (sheet 17): in frames 1 to 4 we see his face, his beard and the front of his tabard; we do NOT see
   his back. [...] One spear with one spearhead, which keeps pointing down and to the right. No blood. [...]"
+- **Het verspringen** (22 okt, Marcel: "De animaties verschieten nog wat"): op het midden van het vak schoof de romp
+  binnen een pas tot 10 pixels heen en weer en sprong hij bij een uitval tot 17. Nu staat de romp (hoofd en schouders)
+  bij staan, lopen en aanvallen in elk beeld op dezelfde plek (gemeten op spelmaat: lopen minder dan een halve pixel,
+  aanvallen hoogstens 3,6), en bewegen de benen en de speer eronder.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt

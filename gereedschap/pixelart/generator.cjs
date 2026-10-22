@@ -8,9 +8,8 @@
 //      `toewijzing` vooraf (rechthoeken in de bron, eventueel alleen wat op een speer lijkt), de dikke kernen (de lijven,
 //      zonder het staal en de dunne schachten) naar hun midden en groeiend over wat dik is, en elk dun stuk dat overblijft
 //      bij het beeld waar het met zijn gekleurde pixels het langst aan grenst;
-//   4. het anker: staan op het midden van de voeten van elk poppetje; een beweging op één grondlijn, en opzij op het
-//      midden van zijn vak in de rij, zodat de beweging blijft zoals de generator haar tekende, of (de aanval) zoals de
-//      voeten schuiven;
+//   4. het anker: opzij de romp (hoofd en schouders) steeds op dezelfde plek, of bij vallen het midden van het lijf;
+//      naar beneden staan op de zolen, een beweging op één grondlijn, en vallen het laagste van het lijf;
 //   5. de kleur per stof gelijk aan die van het staande vel (kleurGelijk);
 //   6. verkleind naar de maat van het spel (gemiddeld per blok, met de doorzichtigheid erbij, en dan scherp), met een maat
 //      per vel: de generator tekent niet elk vel even groot (21 okt: tot een vijfde verschil tussen de vellen); staan en
@@ -55,7 +54,7 @@ const FIGUREN = {
       lopen: { vel: 'speerman-lopen-ZW', richtingen: ['ZW'], beelden: 8, fps: 10 },
       // de speer van beeld 5 steekt in het vak van beeld 4 (de punt), en die van 6 in dat van 5
       // de namen die het spel al kent (js/sprites.js S.houding): 'aanval' bij een klap (e.uitval), 'sterven' als hij valt
-      aanval: { vel: 'speerman-aanvallen-ZW', richtingen: ['ZW'], beelden: 8, fps: 10, herhaal: false, anker: 'voeten', toewijzing: [[899, 343, 1010, 372, 4, 'speer'], [1236, 350, 1300, 372, 5, 'speer']] },
+      aanval: { vel: 'speerman-aanvallen-ZW', richtingen: ['ZW'], beelden: 8, fps: 10, herhaal: false, toewijzing: [[899, 343, 1010, 372, 4, 'speer'], [1236, 350, 1300, 372, 5, 'speer']] },
       sterven: { vel: 'speerman-vallen-ZW', richtingen: ['ZW'], beelden: 7, fps: 8, herhaal: false, anker: 'lijf' },
     },
   },
@@ -465,12 +464,20 @@ function blokSom(I, b, h, p, r) {
   return { som: I[(y1 + 1) * (b + 1) + x1 + 1] - I[y0 * (b + 1) + x1 + 1] - I[(y1 + 1) * (b + 1) + x0] + I[y0 * (b + 1) + x0], vol: (x1 - x0 + 1) * (y1 - y0 + 1) };
 }
 
-// Het midden van de voeten van beeld j (de onderste rijen van zijn voeten, zonder de schacht; voetenVan).
-function voetMidden(beeld, r, voeten, j) {
-  const onderin = r.pixels.filter((p) => Math.floor(p / beeld.b) >= voeten.onder[j] - 12);
-  const voet = onderin.filter((p) => voeten.voet[p]);
-  const xs = (voet.length ? voet : onderin).map((p) => p % beeld.b);
-  return (Math.min(...xs) + Math.max(...xs)) / 2;
+// Het midden van de romp van een beeld: hoofd en schouders, het bovenste derde van het grootste stuk van de kern (zonder
+// de dunne speer). Daar kijkt het oog naar; de benen en de speer bewegen eronder.
+function rompMidden(beeld, r, voeten) {
+  const { b, h } = beeld;
+  const m = new Uint8Array(b * h);
+  for (const p of r.pixels) if (voeten.kern[p]) m[p] = 1;
+  const st = stukken(m, b, h);
+  if (!st.length) return r.midden;
+  const lijf = st.reduce((a, s) => (s.pixels.length > a.pixels.length ? s : a));
+  const ys = lijf.pixels.map((p) => Math.floor(p / b));
+  const top = Math.min(...ys);
+  const grens = top + 0.35 * (Math.max(...ys) - top);
+  const boven = lijf.pixels.filter((p) => Math.floor(p / b) <= grens);
+  return boven.reduce((t, p) => t + (p % b), 0) / boven.length;
 }
 // Het midden van het lijf van een beeld: het gemiddelde van het grootste stuk van de kern (zonder de dunne speer).
 function lijfMidden(beeld, r, voeten) {
@@ -617,18 +624,16 @@ function figuur(naam) {
         for (let i = 0; i < h.beelden; i++) {
           const j = ri * h.beelden + i;
           const r = rij[j];
+          // Het anker naar opzij: de romp (hoofd en schouders) staat in elk beeld op dezelfde plek, en daaronder bewegen de
+          // benen en de speer. Waar de generator het beeld in zijn vak zette, telt niet: hij zet de vakken niet even breed,
+          // en op het midden van het vak of de voeten sprong de man binnen een pas tot 10 en bij een uitval tot 17 pixels
+          // (22 okt, Marcel: "De animaties verschieten nog wat"). Naar beneden: staan op zijn zolen, een beweging op één
+          // grondlijn. Met `anker: 'lijf'` (vallen) zakt hij op zijn plek in elkaar: het midden van zijn hele lijf op het
+          // anker, want liggend is er geen romp boven, en het laagste van zijn lijf (de zolen, of liggend een arm of zijn
+          // zij) op de grond.
           let anker;
-          // staan: op de voeten en hun onderkant; een beweging op één grondlijn, en naar opzij op het midden van zijn vak
-          // (bij lopen en vallen bewegen de voeten), of met `anker: 'voeten'` zoals de voeten schuiven: bij een steek
-          // blijven ze staan, en de generator zet de vakken niet altijd even breed (21 okt, aanvallen W: tot 44 pixels
-          // scheef). Dan staat het eerste beeld met zijn lijf op het anker, zoals wie loopt, en volgen de andere de voeten.
-          // Met `anker: 'lijf'` (vallen) zakt hij op zijn plek in elkaar: het midden van zijn lijf op het anker, en het
-          // laagste van zijn lijf (de zolen, of liggend een arm of zijn zij) op de grond.
-          const j0 = ri * h.beelden;
-          if (h.beelden === 1) anker = [voetMidden(bron, rij[j], voeten, j), voeten.onder[j]];
-          else if (h.anker === 'voeten') anker = [voetMidden(bron, r, voeten, j) - voetMidden(bron, rij[j0], voeten, j0) + lijfMidden(bron, rij[j0], voeten), grond];
-          else if (h.anker === 'lijf') anker = [lijfMidden(bron, r, voeten), voeten.onder[j]];
-          else anker = [r.midden, grond];
+          if (h.anker === 'lijf') anker = [lijfMidden(bron, r, voeten), voeten.onder[j]];
+          else anker = [rompMidden(bron, r, voeten), h.beelden === 1 ? voeten.onder[j] : grond];
           platen[houding][kant].push(verkleind(bron, r.pixels, anker, k));
         }
       });
