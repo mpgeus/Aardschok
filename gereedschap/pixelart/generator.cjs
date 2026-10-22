@@ -388,6 +388,11 @@ function kleurGelijk(beeld, voorbeeld, stoffen) {
 // bijna rechtop staat (bij lopen de tussenstand). De aanval en het vallen meten zo alleen als er nog geen lopen is in
 // die richting; anders volgen ze het lopen, naar de helm (helmVan, in figuur).
 function maatVan(beeld, rij, staan, voeten) {
+  return maatEnBeeld(beeld, rij, staan, voeten).maat;
+}
+// Zoals maatVan, met erbij welk beeld die maat gaf (bij een beweging het hoogste, het meest rechtop); of de hoogte van
+// beeld `alleen`.
+function maatEnBeeld(beeld, rij, staan, voeten, alleen = null) {
   const { b, h } = beeld;
   const { R, kern } = voeten;
   const hoogten = rij.map((r, i) => {
@@ -397,8 +402,9 @@ function maatVan(beeld, rij, staan, voeten) {
     if (!st.length) return 0;
     const lijf = st.reduce((a, s) => (s.pixels.length > a.pixels.length ? s : a));
     const top = Math.min(...lijf.pixels.map((p) => Math.floor(p / b))) - R;
-    return voeten.onder[i] - top + 1;
-  }).filter((x) => x > 0).sort((p, q) => p - q);
+    return { maat: voeten.onder[i] - top + 1, j: i };
+  }).filter((x) => x.maat > 0).sort((p, q) => p.maat - q.maat);
+  if (alleen !== null) return hoogten.find((x) => x.j === alleen) || hoogten[hoogten.length - 1];
   return staan ? hoogten[Math.floor(hoogten.length / 2)] : hoogten[hoogten.length - 1];
 }
 
@@ -490,50 +496,51 @@ function lijfMidden(beeld, r, voeten) {
   return lijf.pixels.reduce((t, p) => t + (p % b), 0) / lijf.pixels.length;
 }
 
-// De breedte van de helm op een vel: per beeld het staal (grijs), dichtgemaakt (de donkere ribben en naden knippen de
-// helm anders in stukken; 21 okt, aanvallen ZW), daarvan het grootste stuk dat breder is dan hoog (een speerpunt is
-// lang en smal), en daarvan de breedte; over de beelden de op één na grootste (een hand of de schacht voor de helm
-// knipt hem in tweeën, en één uitschieter telt zo niet). Alleen om twee vellen van dezelfde richting te vergelijken
-// (figuur): de generator houdt de verhouding van helm en lijf niet vast tussen de vellen.
-function helmVan(beeld, rij, R) {
+// De breedte van de helm op een vel, naar zijn vorm en niet naar zijn kleur (de generator kleurt hem grijs, wit of
+// messing: 22 okt, lopen O). Per beeld het grootste stuk van de kern (het lijf zonder de dunne speer), en daarvan van
+// boven naar beneden de breedte van de rij rond het midden van de top: die groeit over de bol tot de rand van de helm,
+// en wordt daaronder (het gezicht, de maliën) weer smaller; de breedste rij daarvoor is de helm, met de rand die de
+// kern afknabbelde erbij. Niet verder dan ruim half zo diep als hij breed is: bij een aanval of val zitten de schouders
+// en armen vlak onder de rand. Over de beelden de mediaan (een hand naast de helm maakt een beeld te breed, de schacht ervoor
+// te smal), of alleen beeld j. Alleen om twee vellen van dezelfde richting te vergelijken (figuur): de generator houdt
+// de verhouding van helm en lijf niet vast tussen de vellen.
+function helmVan(beeld, rij, voeten, j = null) {
   const { b, h } = beeld;
-  const r = Math.max(2, Math.round(R / 2));
-  const staal = new Uint8Array(b * h);
-  const dik = new Uint8Array(b * h);
-  const dicht = new Uint8Array(b * h);
-  const breedten = rij.map((rr) => {
-    staal.fill(0);
-    dik.fill(0);
-    dicht.fill(0);
-    let x0 = Infinity, x1 = -1, y0 = Infinity, y1 = -1;
-    for (const p of rr.pixels) {
-      const c = [beeld.rgba[p * 4], beeld.rgba[p * 4 + 1], beeld.rgba[p * 4 + 2]];
-      const mx = Math.max(...c);
-      if (mx > 60 && (mx - Math.min(...c)) / mx < 0.22) staal[p] = 1;
-      const x = p % b, y = (p - x) / b;
-      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  const { R, kern } = voeten;
+  const breedten = (j === null ? rij : [rij[j]]).map((r) => {
+    const m = new Uint8Array(b * h);
+    for (const p of r.pixels) if (kern[p]) m[p] = 1;
+    const st = stukken(m, b, h);
+    if (!st.length) return 0;
+    const lijf = st.reduce((a, s) => (s.pixels.length > a.pixels.length ? s : a));
+    const ys = lijf.pixels.map((p) => Math.floor(p / b));
+    const top = Math.min(...ys), hoog = Math.max(...ys) - top + 1;
+    const in_ = new Uint8Array(b * h);
+    for (const p of lijf.pixels) in_[p] = 1;
+    const bovenaan = lijf.pixels.filter((p) => Math.floor(p / b) <= top + 2).map((p) => p % b);
+    let cx = Math.round(bovenaan.reduce((t, x) => t + x, 0) / bovenaan.length);
+    let breedst = 0;
+    for (let y = top; y < top + 0.4 * hoog; y++) {
+      if (!in_[y * b + cx]) {
+        // het midden ligt in deze rij buiten het lijf: de dichtste pixel van het lijf in deze rij
+        let d = 1;
+        while (d < b && !in_[y * b + cx - d] && !in_[y * b + cx + d]) d++;
+        if (d >= b) break;
+        cx = in_[y * b + cx - d] ? cx - d : cx + d;
+      }
+      let l = cx, rr = cx;
+      while (l > 0 && in_[y * b + l - 1]) l--;
+      while (rr < b - 1 && in_[y * b + rr + 1]) rr++;
+      const w = rr - l + 1;
+      if (w > breedst) breedst = w;
+      else if (y - top > 0.04 * hoog && w < 0.85 * breedst) break;
+      // een helm is hooguit ruim half zo hoog als breed: wat daaronder nog breder wordt, is een schouder of een arm
+      if (y - top > 0.6 * (breedst + 2 * R)) break;
+      cx = Math.round((l + rr) / 2);
     }
-    // dichtmaken: eerst dikker (staal binnen r), dan weer dunner (alles binnen r dik)
-    const I = integraalVan(staal, b, h);
-    for (let y = Math.max(0, y0 - r); y <= Math.min(h - 1, y1 + r); y++) for (let x = Math.max(0, x0 - r); x <= Math.min(b - 1, x1 + r); x++) {
-      if (blokSom(I, b, h, y * b + x, r).som > 0) dik[y * b + x] = 1;
-    }
-    const J = integraalVan(dik, b, h);
-    for (let y = Math.max(0, y0 - r); y <= Math.min(h - 1, y1 + r); y++) for (let x = Math.max(0, x0 - r); x <= Math.min(b - 1, x1 + r); x++) {
-      const { som, vol } = blokSom(J, b, h, y * b + x, r);
-      if (som === vol) dicht[y * b + x] = 1;
-    }
-    let beste = null;
-    for (const s of stukken(dicht, b, h)) {
-      if (s.pixels.length < 10 * R * R) continue;
-      const ys = s.pixels.map((p) => Math.floor(p / b));
-      const breed = s.x1 - s.x0 + 1, hoog = Math.max(...ys) - Math.min(...ys) + 1;
-      if (breed < 0.9 * hoog) continue;
-      if (!beste || s.pixels.length > beste.n) beste = { n: s.pixels.length, breed };
-    }
-    return beste ? beste.breed : 0;
-  }).filter((x) => x > 0).sort((p, q) => q - p);
-  return breedten.length ? breedten[Math.min(1, breedten.length - 1)] : 0;
+    return breedst ? breedst + 2 * R : 0;
+  }).filter((x) => x > 0).sort((p, q) => p - q);
+  return breedten.length ? breedten[Math.floor(breedten.length / 2)] : 0;
 }
 
 // Een beeld (pixels uit de bron) rond zijn anker [ax, ay] in de bron verkleind met factor k, naar een plaatje met het
@@ -604,15 +611,23 @@ function figuur(naam) {
       const rij = beeldenVan(bron, opVel.length * h.beelden, b.toewijzing);
       const voeten = voetenVan(bron, rij);
       // de maat: staan en lopen naar de hoogte van het lijf (maatVan); de aanval en het vallen staan gebukt of vallen,
-      // dus daar ook de maat van het lopen in dezelfde richting, naar de breedte van de helm op beide vellen (zo wordt
-      // een man in de klaarstand niet groter dan wie loopt; 21 okt, aanvallen Z), en dan de kleinste van de twee: de
-      // hoogte maakt hem te groot als hij gebukt staat, de helm als de generator hem een kleine helm gaf (22 okt,
-      // vallen N: 55 pixels tegen 99 bij lopen N), en een te grote man valt meer op dan een iets te kleine
-      const helm = helmVan(bron, rij, voeten.R);
-      let k = F.doel / maatVan(bron, rij, h.beelden === 1, voeten);
+      // dus daar de hoogte van het eerste beeld, gedeeld door hoe gebukt hij daar staat (naar de helm, tegen
+      // die van het lopen in dezelfde richting; 21 okt, aanvallen Z: als gebukt man te groot), en dat tussen 80 en 100%:
+      // de helm meten gaat soms mis (22 okt: een messing helm, armen bij het hoofd), en dan kan hij zo niet groter worden
+      // dan wie staat en niet kleiner dan 80% ervan
       const loop = houding !== 'staan' && houding !== 'lopen' && lopenMaat[b.richtingen[0]];
-      if (loop && loop.helm && helm) k = Math.min(k, (loop.k * loop.helm) / helm);
-      if (houding === 'lopen') for (const kant of b.richtingen) lopenMaat[kant] = { k, helm };
+      // de aanval en het vallen: het eerste beeld (de klaarstand, de klap); het hoogste is soms een hand omhoog
+      const { maat, j: eerste } = maatEnBeeld(bron, rij, h.beelden === 1, voeten, loop ? 0 : null);
+      let k = F.doel / maat;
+      if (loop && loop.helm) {
+        // hoe ver hij in dat beeld gebukt staat: zijn lengte daar tegen de lengte die hij rechtop zou hebben, naar de
+        // helm van dat beeld tegen die van het lopen; altijd tussen 80% (een klaarstand, de klap) en 100%
+        const helm = helmVan(bron, rij, voeten, eerste);
+        const rechtop = helm ? (loop.maat * helm) / loop.helm : maat;
+        const gebukt = Math.min(1, Math.max(0.8, maat / rechtop));
+        k = (F.doel * gebukt) / maat;
+      }
+      if (houding === 'lopen') for (const kant of b.richtingen) lopenMaat[kant] = { maat, helm: helmVan(bron, rij, voeten) };
       maten[b.naam] = Math.round(F.doel / k);
       if (F.stoffen && houding === 'staan') voorbeeld = kleurMaat(bron, F.stoffen).maat;
       else if (F.stoffen) kleurGelijk(bron, voorbeeld, F.stoffen);

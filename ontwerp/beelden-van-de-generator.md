@@ -362,6 +362,15 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   binnen een pas tot 10 pixels heen en weer en sprong hij bij een uitval tot 17. Nu staat de romp (hoofd en schouders)
   bij staan, lopen en aanvallen in elk beeld op dezelfde plek (gemeten op spelmaat: lopen minder dan een halve pixel,
   aanvallen hoogstens 3,6), en bewegen de benen en de speer eronder.
+- **Bevroren benen** (22 okt, Marcel: "Lopen oost lijkt niet te kloppen", "Benen bewegen niet"): bij lopen O, W en
+  NO (vel 8, 4 en 7, alle vier de versies van O) staan de benen in alle acht beelden in dezelfde wijde pas. Opnieuw
+  gevraagd met de pas uitgeschreven: "[...] as a real walk cycle in which the legs clearly alternate. [...] Frames: 1
+  contact, left leg forward and right leg back; 2 down; 3 passing, the legs together under his body; 4 up; 5 contact,
+  right leg forward and left leg back; 6 down; 7 passing, the legs together; 8 up, flowing back into frame 1. [...]"
+  Lopen O kwam zo goed (de benen gaan in beeld 3 en 7 langs elkaar), maar gedrongener getekend, met een grotere
+  messingkleurige helm. Daarom meet `helmVan` de helm nu naar zijn vorm (de breedste rij bovenaan het lijf, tot het
+  gezicht of de maliën smaller worden) in plaats van naar het grijs, en meten de aanval en het vallen aan hun eerste
+  beeld (de klaarstand, de klap) hoe gebukt hij staat, tussen 80 en 100% van de staande lengte.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
