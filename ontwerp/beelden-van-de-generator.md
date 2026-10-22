@@ -411,6 +411,23 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   steeds verder uit elkaar, zodat beeld 5 het hoofd van beeld 6 kreeg. `beeldenVan` kijkt nu eerst of de lijven (zonder
   het staal en wat dun is) los staan, en geeft dan elk stuk aan de groep van zijn lijf. Vallen W ook (een rood vlekje in
   beeld 1), en vallen N, met de speer rechts naast hem zoals bij aanvallen N (breder getekend dan de staande man).
+  Nog te doen (23 okt, als eerste): vallen NO, O en ZO, in hetzelfde gesprek, elk apart:
+
+  ```text
+  redo 23: keep the fall of your last version of sheet 23 exactly (the direction, every pose, where he ends up, the spear beside him), but draw him with exactly the style and proportions of the attached sheet 1 (the 6th figure): matte, not glossy, a grey steel kettle hat, brown quilted sleeves, the blue and yellow quartered tabard, not stockier. One spear with one spearhead. No blood.
+  ```
+
+  ```text
+  redo 24: keep the fall of your last version of sheet 24 exactly (the direction, every pose, where he ends up, the spear beside him), but draw him with exactly the style and proportions of the attached sheet 1 (the 7th figure): matte, not glossy, a grey steel kettle hat, brown quilted sleeves, the blue and yellow quartered tabard, not stockier. One spear with one spearhead. No blood.
+  ```
+
+  ```text
+  redo 25: keep the fall of your last version of sheet 25 exactly (facing the viewer at the start, the direction, every pose, where he ends up, the spear beside him), but draw him with exactly the style and proportions of the attached sheet 1 (the 8th figure): matte, not glossy, a grey steel kettle hat, brown quilted sleeves, the blue and yellow quartered tabard, not stockier. One spear with one spearhead. No blood.
+  ```
+
+  Verandert een houding: "keep exactly this style, but use the poses of your previous version". Verwerken: het vel als
+  `NN.webp` (kwaliteit 92) in `bron/soldaten/speerman/`, `node gereedschap/pixelart/generator.cjs speerman`, nakijken
+  (opgedeeld in zeven hele mannen, op de grond), `node gereedschap/pixelart/naar-spel.cjs --alleen speerman`, `npm test`.
   Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
   Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
   [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
