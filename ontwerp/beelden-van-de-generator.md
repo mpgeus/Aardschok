@@ -336,7 +336,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   (`anker: 'lijf'`: het midden van zijn lijf op het anker, het laagste van zijn lijf op de grond).
 - **Vel 19, vallen ZW** (22 okt): meteen goed, voorover naar linksonder, de speer naast hem. Vervangt het oude vel van ZW.
 - **Vel 20, vallen W** (22 okt): meteen goed: door de klap achterover, dan voorover naar links. De punten raken de laars
-  van het beeld ervoor, dus de beelden staan niet los; de gelijke vakken met de dunne stukken knippen het goed. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  van het beeld ervoor, dus de beelden staan niet los; de gelijke vakken met de dunne stukken knippen het goed.
+- **Vel 21, vallen NW** (22 okt), voorlopig: goed gevallen, maar in beeld 1 wijst de punt naar rechtsonder (bij lopen
+  en aanvallen NW naar linksboven), in beeld 2 heeft de speer aan beide kanten een punt, en er zitten rode vlekjes op. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
