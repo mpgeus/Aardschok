@@ -404,6 +404,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   the pose of your earlier version of sheet 14: the spear held at the right side of his body [...] rising straight up
   beside his helmet, never over or behind the helmet; his hands stay low on the shaft [...] exactly vertical in all 8
   frames [...]": de punt op (7, -119) tegen (0, -104) op twee tegels. Alle acht aanvallen zijn nu in de stijl van vel 1.
+- **De stijl van vallen** (22 okt): met "redo 18: keep the fall of your last version [...] exactly, but draw him with
+  exactly the style and proportions of the attached sheet 1 [...]". Vallen Z kwam zo in de goede stijl, maar houdt de
+  speer in beeld 1 tot 4 nu rechtop in zijn linkerhand (bij aanvallen Z wijst hij naar rechtsonder).
   Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
   Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
   [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
