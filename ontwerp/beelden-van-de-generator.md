@@ -410,7 +410,7 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   met de speer in het begin naar linksboven; daar raakten de liggende beelden elkaar met punt en hand en stonden ze
   steeds verder uit elkaar, zodat beeld 5 het hoofd van beeld 6 kreeg. `beeldenVan` kijkt nu eerst of de lijven (zonder
   het staal en wat dun is) los staan, en geeft dan elk stuk aan de groep van zijn lijf. Vallen W ook (een rood vlekje in
-  beeld 1).
+  beeld 1), en vallen N, met de speer rechts naast hem zoals bij aanvallen N (breder getekend dan de staande man).
   Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
   Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
   [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
