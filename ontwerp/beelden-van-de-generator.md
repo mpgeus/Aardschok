@@ -372,7 +372,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   gezicht of de maliën smaller worden) in plaats van naar het grijs, en meten de aanval en het vallen aan hun eerste
   beeld (de klaarstand, de klap) hoe gebukt hij staat, tussen 80 en 100% van de staande lengte. Lopen W kwam daarna
   ook goed (de punt nu vooruit), en lopen NO ook, allebei net zo gedrongen als O: bij die drie is het hoofd bij lopen
-  iets groter dan bij staan en aanvallen.
+  iets groter dan bij staan en aanvallen. Daarna (Marcel: "Geef maar nieuwe prompts") met de bouw van vel 1: "redo 8:
+  keep the walk cycle, the legs, the direction and the spear of your last version of sheet 8 exactly, but draw him with
+  exactly the proportions of the attached sheet 1 (the 7th figure), not stockier: the same body height, the same head
+  and helmet size relative to his body, and a grey steel kettle hat, not brass or gold. Matte style like sheet 1 [...]".
+  Lopen O kwam zo goed; W en NO op dezelfde manier.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt

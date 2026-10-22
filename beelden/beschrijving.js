@@ -585,7 +585,7 @@
        "snelheid": 1.5,
        "stap": 0.6,
        "cel": [
-        94,
+        92,
         90
        ],
        "anker": [
@@ -599,7 +599,7 @@
        "fps": 10,
        "herhaal": false,
        "cel": [
-        123,
+        121,
         147
        ],
        "anker": [
