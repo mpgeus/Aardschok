@@ -394,7 +394,11 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   the spearhead is almost as far to the right of his body as he is tall": de punt op (73, -42) tegen (64, -40).
   Aanvallen NO met "thrust at a flatter angle [...] almost as far to the right of his body as he is tall, at the height
   of his own head": de punt op (71, -69) tegen (64, -72) op twee tegels, maar hij staat meer van opzij dan lopen NO.
-  Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; opnieuw gevraagd.
+  Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
+  Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
+  [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
+  he is tall, at the height of his own knees [...] evenly spaced [...]": de punt op (-67, -18), op twee tegels 8 pixels
+  boven het midden van de romp. Daarmee raken de speerpunten in alle vier de tweetallen van het duel het lijf.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
