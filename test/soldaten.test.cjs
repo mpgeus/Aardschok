@@ -202,6 +202,38 @@ test('in het gevecht reiken speer en piek twee tegels, de hooivork en het zwaard
   assert.deepEqual(T.slagVan(S.dorp.aanvoerder).schade, T.SLAAN.schade, 'de aanvoerder slaat zoals altijd');
 });
 
+test('de speer steekt van twee tegels schuin en recht voor of achter, maar opzij pas van ernaast: zover reikt de getekende speer', () => {
+  const { S, D, huis } = gehucht();
+  const w = S.wereld;
+  // een open vlak van vijf bij vijf tegels bij de aanvoerder
+  const a = S.dorp.aanvoerder;
+  let m = null;
+  for (let r = 0; r < 30 && !m; r++) for (let dy = -r; dy <= r && !m; dy++) for (let dx = -r; dx <= r && !m; dx++) {
+    const x = a.tx + dx, y = a.ty + dy;
+    let open = true;
+    for (let j = -2; j <= 2 && open; j++) for (let i = -2; i <= 2 && open; i++) open = T.isBegaanbaar(w, x + i, y + j);
+    if (open) m = { x, y };
+  }
+  assert.ok(m, 'een open vlak bij de aanvoerder');
+  const speer = soldaat(D, huis, 'speerman', m.x, m.y);
+  const rover = T.maakWezen('rover', m.x, m.y);
+  w.wezens.push(rover);
+  const kan = (dx, dy) => {
+    zet(rover, m.x + dx, m.y + dy);
+    return T.kanRaken(D, speer, rover);
+  };
+  // op het scherm: (dx - dy) * 32 opzij, (dx + dy) * 16 omlaag
+  assert.equal(kan(2, 2), true, 'recht voor (Z), twee tegels: 64 pixels');
+  assert.equal(kan(-2, -2), true, 'recht achter (N), twee tegels');
+  assert.equal(kan(2, 0), true, 'schuin (ZO), twee tegels: 72 pixels');
+  assert.equal(kan(2, -2), false, 'opzij (O), twee tegels: 128 pixels, verder dan de speer reikt');
+  assert.equal(kan(2, -1), false, 'bijna opzij, twee tegels: 97 pixels');
+  assert.equal(kan(1, -1), true, 'opzij van ernaast (64 pixels) wel');
+  const boog = soldaat(D, huis, 'boogschutter', m.x - 2, m.y - 2);
+  zet(rover, m.x, m.y);
+  assert.equal(T.kanRaken(D, boog, rover), true, 'een boog schiet ook recht vooruit van twee tegels');
+});
+
 test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', () => {
   const { S, D, huis } = gehucht();
   const w = S.wereld;

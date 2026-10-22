@@ -2170,6 +2170,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
   (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
   getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **Hoe ver een speer steekt** (22 okt; Marcel: "Steken van verder weg"): `T.kanRaken` laat een speer of piek van twee
+  tegels steken als hij dat op het scherm reikt (`steekReik`, 72 pixels op 1×, uit de getekende speerman: 60 tot 66):
+  schuin en recht voor of achter is twee tegels 58 tot 72 pixels, opzij 128, dus opzij steekt hij alleen van ernaast. De
+  schermafstand van een tegelstap is `((dx - dy) * T.HB, (dx + dy) * T.HH)`. Getoetst in `test/soldaten.test.cjs`.
 - **Wie van de wereld is** (vraag 170, stap 6a2, a; Marcel: "A1"): een wezen zonder dorp (de wolven van een roedel die
   vecht, een monster van een toets) vecht niet in de tik van een dorp, maar één keer per kaart in
   `T.werkGevechtVanDeWereldBij` (js/tik.js, na de dorpen). Het gevecht is van het dorp van zijn doel (`d.dorp`): daar

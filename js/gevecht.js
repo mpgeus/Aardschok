@@ -60,6 +60,11 @@
     vluchtZicht: 6,
     // Het leven van een dorpeling (een soldaat heeft dat van T.WEZENS.soldaat, T.levenAlsMan in js/rovers.js).
     leven: 10,
+    // Zo ver (pixels op het scherm, op 1×) reikt een speer of piek als hij van verder dan ernaast steekt: zover reikt de
+    // getekende speer (60 tot 66 pixels). Schuin en recht voor of achter is twee tegels 58 tot 72 pixels, dus daar steekt
+    // hij van twee tegels; opzij is twee tegels 128, dus daar loopt hij door tot ernaast (64). Marcel, 22 okt: "Steken
+    // van verder weg", nadat de speerpunten in een duel langs elkaar staken (ontwerp/beelden-van-de-generator.md).
+    steekReik: 72,
   };
   const IN = () => T.GEVECHT_INSTELLINGEN;
 
@@ -143,14 +148,17 @@
 
   // Kan e doel d raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast zoals altijd
   // (T.raakt); verder weg tot zijn bereik, als hij ziet waar hij heen steekt of schiet (T.zichtTussen: een ander wezen
-  // ertussen houdt het niet tegen, dus een speer steekt langs een zwaard); en wie schiet, niet met een vijand naast zich.
+  // ertussen houdt het niet tegen, dus een speer steekt langs een zwaard); wie steekt, niet verder dan zijn speer op het
+  // scherm reikt (steekReik: opzij is twee tegels te ver); en wie schiet, niet met een vijand naast zich.
   T.kanRaken = function (D, e, d, van = plek(e)) {
     const slag = T.slagVan(e);
     if (slag.schiet && vijandNaast(D, e, van)) return false;
     const p = plek(d);
     if (T.raakt(D.wereld, van, p)) return true;
     const a = T.afstand(van, p);
-    return a >= 2 && a <= slag.bereik && T.zichtTussen(D.wereld, van, p);
+    if (a < 2 || a > slag.bereik || !T.zichtTussen(D.wereld, van, p)) return false;
+    const dx = p.x - van.x, dy = p.y - van.y;
+    return slag.schiet || Math.hypot((dx - dy) * T.HB, (dx + dy) * T.HH) <= IN().steekReik;
   };
 
   // ── Elke tik ──

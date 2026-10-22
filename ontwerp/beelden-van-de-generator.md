@@ -384,7 +384,12 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   Gemeten op spelmaat (de verste staalpixel bij de steek tegen de romp van de ander in de klaarstand) staan ze goed op,
   van A naar B in schermpixels: O tegen W (57, -8), ongeveer één tegel; ZO tegen NW (53, 29) en ZW tegen NO (-39, 50),
   ruim anderhalve tegel; Z tegen N (-3, 66), twee tegels. Dan komt de punt binnen 2 tot 15 pixels van het midden van de
-  romp. Voor het gevecht in het spel (`js/gevecht.js`): een speerman steekt van zo ver, niet van de tegel ernaast.
+  romp. In het spel liggen de afstanden vast door de tegels (Marcel: "Ja maar in het spel kunnen we ook niet het
+  speelveld aanpassen?"); een kortere steek vragen werkte niet (vel 17: de punt kwam verder in plaats van korter, de
+  speer is anderhalf keer zo lang als hij). Marcel koos "Steken van verder weg": een speerman steekt opzij van de
+  buurtegel en schuin en recht voor of achter van twee tegels (`steekReik` in `js/gevecht.js`, `code.md`). Op die
+  afstanden komen de punten bij O-W, ZO-NW en Z-N binnen 16 pixels van de romp; ZW steekt 28 te kort en NO 33 te hoog,
+  en O 16 te hoog: die drie opnieuw, met waar de punt moet komen.
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt

@@ -908,6 +908,7 @@
     rustNaLoslaten: T.t('waits after letting go, seconds'),
     rustNa: T.t('fight over after quiet seconds'),
     vluchtZicht: T.t('flees from a robber within tiles'),
+    steekReik: T.t('a spear reaches up to pixels on screen'),
     // De brand, de koorts, ouder worden
     blusUren: T.t('extinguishing hours'),
     redKans: T.t('chance of saving the house'),

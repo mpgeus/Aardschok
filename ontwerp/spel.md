@@ -1059,7 +1059,8 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   ossenkar brengt hem alleen wat daarvoor nodig is. Vraagt niemand iets, dan staat hij stil. Hij leent het beeld van de
   smidse; zijn eigen gebouw komt met de werkplaatsen in de bouwstijl (vraag 167).
 - **In het gevecht slaat elk wapen anders** (de getallen in de werkbank, "Soldiers"): de hooivork zwak (2 tot 3), de
-  speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), het zwaard hard (5 tot 7); de boog en de
+  speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), maar opzij alleen van ernaast (zover reikt de
+  getekende speer; Marcel, 22 okt: "Steken van verder weg"; `steekReik` in "Fighting"), het zwaard hard (5 tot 7); de boog en de
   kruisboog schieten tot 8 tegels waar ze zien (2 tot 4, 4 punten), maar niet met een vijand naast zich. Een speer
   steekt langs wie ertussen staat. Het schild vangt 2 af van elke klap, het harnas 1, maar van een bout uit een
   kruisboog niets. Wie zonder soort meevecht (een veteraan, wie meegaat op de jacht), vecht met een hooivork; de schout

@@ -19,7 +19,7 @@
 // nog niet hebben), van planken, ijzer of huiden (T.receptVan, js/gebouwen.js). Vraagt niemand iets, dan staat hij stil.
 //
 // In het gevecht (js/gevecht.js) slaat elk wapen anders (D1; T.slagVan): de hooivork zwak, de speer en de piek reiken twee
-// tegels (de piek slaat harder), het zwaard hard, en de boog en de kruisboog schieten ver waar ze zien, maar niet met een
+// tegels (de piek slaat harder; opzij alleen van ernaast, steekReik in js/gevecht.js), het zwaard hard, en de boog en de kruisboog schieten ver waar ze zien, maar niet met een
 // vijand naast zich. Schild en harnas vangen een deel van elke klap af (T.vangtAf), behalve van een bout uit een
 // kruisboog. De getallen staan in T.SOLDATEN_INSTELLINGEN (in de werkbank).
 //

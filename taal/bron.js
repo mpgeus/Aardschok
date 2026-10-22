@@ -2022,6 +2022,7 @@ Spel.TAAL_BRON = [
   {"t":"waits after letting go, seconds","waar":["js/opties.js"]},
   {"t":"fight over after quiet seconds","waar":["js/opties.js"]},
   {"t":"flees from a robber within tiles","waar":["js/opties.js"]},
+  {"t":"a spear reaches up to pixels on screen","waar":["js/opties.js"]},
   {"t":"extinguishing hours","waar":["js/opties.js"]},
   {"t":"chance of saving the house","waar":["js/opties.js"]},
   {"t":"fire risk","waar":["js/opties.js"]},
