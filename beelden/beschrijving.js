@@ -544,12 +544,12 @@
     "speerman": {
      "naam": "speerman",
      "cel": [
-      152,
-      164
+      155,
+      154
      ],
      "anker": [
-      73,
-      136
+      76,
+      126
      ],
      "snelheid": 1.5,
      "richtingen": [
@@ -599,12 +599,12 @@
        "fps": 10,
        "herhaal": false,
        "cel": [
-        142,
-        154
+        145,
+        142
        ],
        "anker": [
-        68,
-        132
+        71,
+        120
        ]
       },
       "sterven": {
