@@ -3,7 +3,8 @@
 // generator (een rij poppetjes op een effen magenta achtergrond, `bron/<soort>/<naam>.webp` of .png) wordt hier:
 //   1. van webp naar png (met de Python van ComfyUI, PIL; de bron blijft zoals hij is);
 //   2. de achtergrond eruit (magenta, met de randjes die naar magenta trekken);
-//   3. de poppetjes los: de stukken die aan elkaar hangen, en per stuk het beeld met het dichtste midden in de rij; een
+//   3. de poppetjes los: staan ze los, of alleen hun lijven, dan elke groep een beeld (losseBeelden); anders de stukken
+//      die aan elkaar hangen, en per stuk het beeld met het dichtste midden in de rij; een
 //      klein los stukje bij het dichtste grote stuk; een stuk over meer middens (een speer die het buurbeeld raakt):
 //      `toewijzing` vooraf (rechthoeken in de bron, eventueel alleen wat op een speer lijkt), de dikke kernen (de lijven,
 //      zonder het staal en de dunne schachten) naar hun midden en groeiend over wat dik is, en elk dun stuk dat overblijft
@@ -199,11 +200,45 @@ function beeldenVan(beeld, n, toewijzing = []) {
   if (groepen) groepen.forEach((g, i) => {
     for (const s of g) for (const p of s.pixels) van[p] = i;
   });
+  // de dikke delen (de kern zonder het staal, weer even breed gemaakt: de lijven, zonder speer en vingers)
+  const maakDik = () => {
+    if (kern) return;
+    const zonderStaal = new Uint8Array(b * h);
+    for (let p = 0; p < b * h; p++) if (fg[p] && !isStaal(beeld, p)) zonderStaal[p] = 1;
+    kern = kernVan(zonderStaal, b, h, 5);
+    const I = integraalVan(kern, b, h);
+    dik = new Uint8Array(b * h);
+    for (let p = 0; p < b * h; p++) if (fg[p] && blokSom(I, b, h, p, 5).som > 0) dik[p] = 1;
+  };
+  // raken de beelden elkaar alleen met iets dunnes (een speerpunt, een hand), dan staan de lijven misschien wel los: dan
+  // is elke groep lijven een beeld, waar hij ook staat (22 okt, vallen ZW: liggend steeds verder uit elkaar, en de punten
+  // tegen de laars van de buurman), en hoort elk stuk bij de groep van zijn lijf; anders het dichtste midden
+  let lijfVan = null;
+  if (!groepen) {
+    maakDik();
+    const lijven = stukken(dik, b, h).filter((s) => s.pixels.length >= 30);
+    const lm = lijven.map((s) => s.pixels.length).sort((p, q) => q - p);
+    const lg = lm.length >= n ? losseBeelden(lijven.filter((s) => s.pixels.length >= 0.15 * lm[n - 1]), n) : null;
+    if (lg) {
+      lijfVan = new Int16Array(b * h).fill(-1);
+      lg.forEach((g, i) => {
+        for (const s of g) for (const p of s.pixels) lijfVan[p] = i;
+      });
+    }
+  }
+  // de groep van de meeste lijfpixels van een stuk, of -1
+  const groepVan = (pixels) => {
+    if (!lijfVan) return -1;
+    const tel = new Map();
+    for (const p of pixels) if (lijfVan[p] >= 0) tel.set(lijfVan[p], (tel.get(lijfVan[p]) || 0) + 1);
+    return tel.size ? [...tel].sort((p, q) => q[1] - p[1])[0][0] : -1;
+  };
   for (const s of groepen ? [] : groot) {
     const over = midden.map((m, i) => i).filter((i) => midden[i] >= s.x0 && midden[i] <= s.x1);
-    if (over.length <= 1) {
+    const g0 = groepVan(s.pixels);
+    if (over.length <= 1 || (g0 >= 0 && !s.pixels.some((p) => lijfVan[p] >= 0 && lijfVan[p] !== g0))) {
       const cx = s.pixels.reduce((t, p) => t + (p % b), 0) / s.pixels.length;
-      const i = naaste(cx);
+      const i = g0 >= 0 ? g0 : naaste(cx);
       for (const p of s.pixels) van[p] = i;
       continue;
     }
@@ -213,14 +248,7 @@ function beeldenVan(beeld, n, toewijzing = []) {
     // zijn gekleurde pixels het langst aan grenst (het hout; niet het staal en de donkere omtrek, anders telt alleen hoe
     // lang de rand is). Een speer zit met zijn schacht in de handen van zijn eigen man, en raakt de laars van de buurman
     // alleen met het staal van zijn punt (21 okt, aanvallen ZW: groeien van dichtbij gaf de punt aan de buurman).
-    if (!kern) {
-      const zonderStaal = new Uint8Array(b * h);
-      for (let p = 0; p < b * h; p++) if (fg[p] && !isStaal(beeld, p)) zonderStaal[p] = 1;
-      kern = kernVan(zonderStaal, b, h, 5);
-      const I = integraalVan(kern, b, h);
-      dik = new Uint8Array(b * h);
-      for (let p = 0; p < b * h; p++) if (fg[p] && blokSom(I, b, h, p, 5).som > 0) dik[p] = 1;
-    }
+    maakDik();
     const rij = [];
     for (const p of s.pixels) {
       const x = p % b;
@@ -238,7 +266,8 @@ function beeldenVan(beeld, n, toewijzing = []) {
     for (const k of stukken(inStuk, b, h)) {
       if (k.pixels.length < s.pixels.length * 0.02) continue;
       const cx = k.pixels.reduce((t, p) => t + (p % b), 0) / k.pixels.length;
-      const i = naaste(cx, over);
+      const gk = groepVan(k.pixels);
+      const i = gk >= 0 ? gk : naaste(cx, over);
       for (const p of k.pixels) {
         van[p] = i;
         rij.push(p);

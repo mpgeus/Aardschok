@@ -1216,8 +1216,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **De beelden van de generator** (21 okt; `beelden-van-de-generator.md`): `gereedschap/pixelart/generator.cjs` maakt een
   vel van de generator (een rij poppetjes op magenta, `gereedschap/pixelart/bron/<soort>/`, webp via de Python van ComfyUI
   naar png) passend: de achtergrond weg (`voorgrond`: magenta is waar rood en blauw ver boven groen liggen), de poppetjes
-  los (`beeldenVan`: staan ze los van elkaar, dan elke groep grote stukken een beeld, `losseBeelden`; anders per stuk het
-  dichtste midden van gelijke vakken in de rij; een klein stukje bij het dichtste grote stuk; een stuk over
+  los (`beeldenVan`: staan ze los van elkaar, dan elke groep grote stukken een beeld, `losseBeelden`; raken ze elkaar
+  alleen met iets dunnes, dan de groepen van hun lijven (de voorgrond zonder staal en zonder wat dun is); anders per stuk
+  het dichtste midden van gelijke vakken in de rij; een klein stukje bij het dichtste grote stuk; een stuk over
   meer middens: `toewijzing` vooraf, de kernen van de lijven (zonder het staal) naar hun midden en groeiend over wat dik
   is, en elk dun stuk dat overblijft, zoals een schacht met zijn punt, bij het beeld waar het met zijn gekleurde pixels
   het langst aan grenst: de schacht zit in de handen van zijn man, de punt raakt de buurman alleen met staal), het anker (opzij de romp, hoofd en schouders, in elk
