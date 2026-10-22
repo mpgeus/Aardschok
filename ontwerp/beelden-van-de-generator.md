@@ -342,7 +342,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
 - **Vel 22, vallen N** (22 okt): goed (van achteren, voorover van ons af), met weer een punt achteraan de speer in beeld
   1 en 2, en rode vlekjes. De generator gaf hem een kleine helm (55 pixels tegen 99 bij lopen N), zodat hij naar de helm
   20% te groot werd; een aanval of val neemt nu de kleinste van de twee maten (hoogte en helm), zodat hij nooit hoger
-  wordt dan de staande man. Dat maakte ook aanvallen N, NO, O en ZO en vallen ZW, W en NW iets kleiner. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+  wordt dan de staande man. Dat maakte ook aanvallen N, NO, O en ZO en vallen ZW, W en NW iets kleiner.
+- **Vel 23, vallen NO** (22 okt): goed, van achteren voorover naar rechtsboven; weer een puntje achteraan de speer (beeld
+  1 tot 4) en rode vlekjes. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
