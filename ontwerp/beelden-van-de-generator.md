@@ -396,6 +396,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   of his own head": de punt op (71, -69) tegen (64, -72) op twee tegels, maar hij stond meer van opzij dan lopen NO.
   Daarna schuin van achteren ("redo 15: keep the thrust [...] exactly, but he faces north-east [...] seen from behind at
   three-quarters, exactly like the walking NE sheet"): de punt op (65, -85), 13 pixels boven het midden van de romp.
+- **De stijl van de aanvallen** (22 okt): aanvallen W, NW en N kwamen nog uit de eerste, glimmende reeks; opnieuw met
+  "keep the pose, the spear and the thrust of your last version [...] exactly, but draw him with exactly the style and
+  proportions of the attached sheet 1 [...]". Aanvallen W kwam zo goed: de punt op (-66, -35) tegen (-64, -40).
   Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
   Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
   [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
