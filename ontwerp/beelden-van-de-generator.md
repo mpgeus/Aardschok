@@ -345,7 +345,13 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   wordt dan de staande man. Dat maakte ook aanvallen N, NO, O en ZO en vallen ZW, W en NW iets kleiner.
 - **Vel 23, vallen NO** (22 okt): goed, van achteren voorover naar rechtsboven; weer een puntje achteraan de speer (beeld
   1 tot 4) en rode vlekjes.
-- **Vel 24, vallen O** (22 okt): goed, door de klap achterover en dan voorover naar rechts (gespiegeld aan W). Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
+- **Vel 24, vallen O** (22 okt): goed, door de klap achterover en dan voorover naar rechts (gespiegeld aan W).
+- **Vel 25, vallen ZO** (22 okt), voorlopig: goed gevallen naar rechtsonder, maar in beeld 1 en 2 van achteren gezien
+  (bij lopen en aanvallen ZO kijkt hij naar de kijker), dus hij draait zich om als hij geraakt wordt.
+- **Alle 25 vellen zijn er** (22 okt). Voorlopig, met een redo die beter kan: 21 (vallen NW: de punt in beeld 1 naar
+  achteren, twee punten in beeld 2) en 25 (vallen ZO: van achteren in beeld 1 en 2); en eventueel 3 en 4 (lopen ZW en W:
+  de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
+  `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
   omhoog, van de kijker af.
 
 ## De inventaris
