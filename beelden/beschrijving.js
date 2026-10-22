@@ -544,7 +544,7 @@
     "speerman": {
      "naam": "speerman",
      "cel": [
-      135,
+      144,
       164
      ],
      "anker": [
@@ -599,7 +599,7 @@
        "fps": 10,
        "herhaal": false,
        "cel": [
-        121,
+        135,
         154
        ],
        "anker": [

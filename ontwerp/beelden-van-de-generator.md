@@ -389,7 +389,9 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   speer is anderhalf keer zo lang als hij). Marcel koos "Steken van verder weg": een speerman steekt opzij van de
   buurtegel en schuin en recht voor of achter van twee tegels (`steekReik` in `js/gevecht.js`, `code.md`). Op die
   afstanden komen de punten bij O-W, ZO-NW en Z-N binnen 16 pixels van de romp; ZW steekt 28 te kort en NO 33 te hoog,
-  en O 16 te hoog: die drie opnieuw, met waar de punt moet komen.
+  en O 16 te hoog: die drie opnieuw, met waar de punt moet komen. Aanvallen O kwam goed met "redo 16: [...] the spear
+  is held at the height of his own belly, just above his belt, not at shoulder height, in every frame; at full extension
+  the spearhead is almost as far to the right of his body as he is tall": de punt op (73, -42) tegen (64, -40).
 - **Alle 25 vellen zijn er** (22 okt). Wat nog beter kan: eventueel 3 en 4 (lopen ZW en W:
   de punt naar achteren). De vallen vanaf 18 zijn glimmender en oranjer getekend (de wapenrok bijna zonder blauw);
   `kleurGelijk` trekt de kleur bij, de vorm niet. Bij N (vel 14), van achteren, speelt hetzelfde: dan de punt
