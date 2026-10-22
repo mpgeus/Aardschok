@@ -400,8 +400,10 @@ generator van 1,7 MB; op spelmaat is het verschil ruis) en lopen in het spel. Wa
   "keep the pose, the spear and the thrust of your last version [...] exactly, but draw him with exactly the style and
   proportions of the attached sheet 1 [...]". Aanvallen W kwam zo goed: de punt op (-66, -35) tegen (-64, -40).
   Aanvallen NW ook: (-70, -75) tegen (-64, -72) op twee tegels. Aanvallen N raakt (-13, -100) tegen (0, -104), maar
-  houdt de speer nu met beide handen boven zijn helm in plaats van rechts ernaast, en in beeld 3 en 7 helt hij naar
-  links; voorlopig.
+  hield de speer toen met beide handen boven zijn helm, en goed werd het met "redo 14: keep exactly this style, but use
+  the pose of your earlier version of sheet 14: the spear held at the right side of his body [...] rising straight up
+  beside his helmet, never over or behind the helmet; his hands stay low on the shaft [...] exactly vertical in all 8
+  frames [...]": de punt op (7, -119) tegen (0, -104) op twee tegels. Alle acht aanvallen zijn nu in de stijl van vel 1.
   Aanvallen ZW kwam eerst van opzij (als W) en met twee beelden tegen elkaar; goed met "redo 11 again: this is
   Attacking SW, not W. He faces south-west, down and to the left, TOWARDS the viewer at three-quarters [...] the spear
   [...] pointing down and to the left at about 30 degrees below horizontal [...] almost as far to the left of his body as
