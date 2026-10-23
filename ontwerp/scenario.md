@@ -1,7 +1,7 @@
-# Scenario's: de campagne, de editor en skirmish (vraag 187 en 188)
+# Scenario's: de campagne, de editor, skirmish en AI-spelers (vraag 187 en 188)
 
 **Zo werkt het nu** (23 okt): dit is het ontwerp; er is niets van gebouwd, en bouwen komt na de demo (Marcel, 20 okt,
-6a1). Marcel koos op 23 okt in twee rondes (hieronder, en samen in 9); J en K staan nog open.
+6a1). Marcel koos op 23 okt in drie rondes (hieronder, en samen in 10); L staat nog open.
 
 ## Wat Marcel vroeg en koos
 
@@ -20,7 +20,7 @@
   level select etc. D, leg even extra uit. E, leg even extra uit. F, in skirmisch geen heer. G, gaan weg met tiled."
   Dus: **elk level is een losse kaart** (1); **de editor zit in het spel, ook voor spelers, eerst voor ons** (5);
   **de campagne is een land met hoofdstukken, gekozen op een kaart** (6); **in skirmish geen heer** (7); **de quests van
-  het oude spel gaan weg met Tiled** (4 en 8).
+  het oude spel gaan weg met Tiled** (4 en 9).
 - **En daarna** (Marcel, 23 okt): "D, de skirmisch geeft elke speler x punten om soldaten en leger van te kopen. Nadat
   beide partijen zich hebben voorbereid, begint direct het gevecht op een random map. De tijd is gewoon x1 voor
   iedereen. E, 1 speler kiest een kasteel, de andere speler valt het kasteel aan. Ook een mogelijkheid tot zelf een
@@ -29,6 +29,10 @@
   missies doet. H, h3. I, I1." Dus: **skirmish is een veldslag of een belegering, zonder economie** (7); van niets tegen
   elkaar (7a1 van 20 okt) is de multiplayer van het hele spel; **er komt een campagne voor samen** (6); een hoofdstuk is
   een uitsnede of een eigen eiland (H3), en alleen het verhaal gaat mee (I1).
+- **En toen** (Marcel, 23 okt): "J, J1. K, ai spelers moeten er zijn in easy, medium en hard modus. Ook voor skirmish
+  moet dat mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook ai spelers erbij kunnen
+  kiezen." Dus: **de campagne voor samen heeft eigen missies, ieder met zijn eigen dorp** (6), en **AI-spelers zijn er
+  overal, in drie standen** (8).
 
 ## Wat er al ligt (nagelopen op 23 okt)
 
@@ -235,7 +239,7 @@ merchants, dungeon keeper level select etc.").
   4. de koning, of de opstand;
   5. het kasteel van de heer (de finale; met het belegeren van 7).
 - **Een campagne voor samen** (Marcel, 23 okt: "Ik zou ook een multiplayer campaign willen. Waarin je samen missies
-  doet."). Voorstel (vraag J): een eigen rij missies, elk gemaakt voor twee (later tot vier, zoals de lijn), en elk met
+  doet."; J1): een eigen rij missies, elk gemaakt voor twee (later tot vier, zoals de lijn), en elk met
   zijn eigen dorp, zoals in het spel samen (werklijst I, 6a2: "echt losse spelers met hun eigen dorp"). De doelen zijn
   van allebei, en een trigger kent dan ook `samen` (samen 500 graan, of het hol van twee kanten); een missie geeft ieder
   een eigen rol (de een heeft het graan, de ander de mannen). Omdat de triggers in de tik draaien, is een missie op
@@ -267,48 +271,78 @@ skirmish.
   het na). Voor een belegering staat het kasteel erop.
 - **Een skirmish is ook een level** (1): een recept dat code maakt uit de keuzes op het scherm, met vaste triggers voor
   winst en verlies. Zo zijn er voor de campagne, skirmish en het spel één begin en één motor.
-- **De AI** koopt alleen een leger (een paar mengsels per karakter), stelt op en vecht; in de belegering bemant hij de
-  muren of bestormt hij ze. Een AI die een dorp opbouwt, is voor skirmish niet nodig. Het vechten en het sturen zijn er al
-  (`js/gevecht.js`, `js/kiezen.js`).
+- **De AI** is in skirmish de veldheer (8), in drie standen: hij koopt een leger, stelt op en vecht; in de belegering
+  bemant hij de muren of bestormt hij ze. Een AI die een dorp opbouwt, is voor skirmish niet nodig.
 - **Een proefbank voor het vechten:** nu speel je tot de overval voor een gevecht; met de veldslag zet je in een minuut
   twaalf speermannen tegen acht boogschutters, en zoek je de balans van de soldaten met de getallen uit de werkbank.
 - **Samen:** een veldslag is kort en heeft geen economie, dus het is de eerste goede proef voor de lijn (6c van vraag 170).
 - **Het kasteel van de heer** in het hoofdspel vraagt hetzelfde als de belegering: het kasteel (163), het belegeren en
   een AI die verdedigt. De belegering en de finale van de campagne komen daarom samen.
 
-## 8. De volgorde van bouwen (na de demo)
+## 8. AI-spelers: easy, medium en hard
+
+**Overal** (Marcel, 23 okt, K: "ai spelers moeten er zijn in easy, medium en hard modus. Ook voor skirmish moet dat
+mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook ai spelers erbij kunnen kiezen.").
+
+- **Dezelfde plekken overal:** voor het spel alleen, het spel samen en een skirmish kies je per plek een speler, een AI
+  (*Easy*, *Medium* of *Hard*) of niemand, zoals in Age of Empires; in de lobby van het spel samen (werklijst I, 6d)
+  net zo.
+- **Een AI speelt als een mens** (CLAUDE.md: "De heer of een ander dorp kiest uit de handelingen van een mens in zijn
+  plaats"): hij ziet wat zijn dorp ziet (zijn eigen mist), stelt dezelfde vraag als de muis (`handelingSturen`: `{ tekst,
+  kan, doe }`) en geeft opdrachten (`T.geefOpdracht`). Hij kan dus niets wat een speler niet kan.
+- **Hij denkt in de tik, op elke computer hetzelfde**, met het toeval van zijn eigen dorp (`T.toeval`). Dan hoeft er voor
+  een AI niets over de lijn, en speelt een bewaard spel met een AI gewoon verder; wat hij onthoudt, staat in zijn dorp in
+  `S`. Om de tik licht te houden, denkt hij niet elke tik maar om de zoveel (een getal in de werkbank), en niet alle AI's
+  in dezelfde tik. Meten, ook met vier AI's en in Firefox (CLAUDE.md, performance).
+- **Twee soorten AI, in deze volgorde:**
+  1. **De veldheer** (skirmish, en elk gevecht van een AI): een leger kopen met punten (een paar mengsels per
+     karakter), opstellen en vechten: wie hij aanvalt, wanneer hij terugtrekt, de schutters achter de speren. In de
+     belegering bemant hij de muren of bestormt hij ze, en zet hij een kasteel neer uit een paar ontwerpen. Dezelfde
+     veldheer verdedigt in de finale het kasteel van de heer.
+  2. **De dorpsbouwer** (het gewone spel, alleen en samen): wat, waar en wanneer hij bouwt (een bouwvolgorde per
+     karakter), zijn velden en wegen, en wanneer hij soldaten maakt en aanvalt; voor het gevecht zelf neemt de veldheer
+     het over. In een economie zoals die van The Settlers doen de mensen het werk zelf (de dragers, de bouwers, het
+     veldwerk), dus hij stuurt geen werkers, en dat is minder dan in Age of Empires. Hij speelt ook het jaar van de heer:
+     hij beantwoordt zijn brieven en grillen binnen de termijn, betaalt de tiende of niet, en kiest of hij in de bond van
+     de heer gaat (vraag 126: de heer "smeedt allianties met andere spelers"). Zijn karakter zegt hoe: trouw aan de heer,
+     opstandig, handelaar of krijger. Dit is het grootste stuk AI.
+- **Easy, medium en hard** verschillen in hoe snel hij denkt en hoe goed hij kiest, niet in wat hij krijgt. Een easy AI
+  denkt traag, bouwt slordig, valt laat aan en trekt nooit terug; een hard AI denkt snel, bouwt strak, valt aan waar je
+  zwak bent, en zet zijn schutters en speren goed neer. Of hard ook mag valsspelen, is vraag L.
+
+## 9. De volgorde van bouwen (na de demo)
 
 0. **De snoeironde (6b1, kan eerder):** Tiled eruit, de proefkaarten naar het proefdorp; mee weg gaan
    `gereedschap/wereld.html`, `js/kaart.js`, `kaarten/` en de kaarten als gebied, en de quests van het oude spel (G).
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
    eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
-3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, een AI die een leger koopt en vecht. Klein,
+3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.
 4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de
    generator; dan het land.
 5. **De eerste hoofdstukken** van de campagne.
-6. **Het kasteel** (163), **belegeren** (189g) en een AI die verdedigt en bestormt: de belegering, eerst met een kasteel
-   uit de lijst, dan met zelf bouwen; en de finale van de campagne.
+6. **Het kasteel** (163), **belegeren** (189g) en de veldheer in de belegering: eerst met een kasteel uit de lijst, dan
+   met zelf bouwen; en de finale van de campagne.
 7. **Samen** (de lijn, 6c van vraag 170): eerst de veldslag, dan de belegering, het hele spel (werklijst I) en de
-   campagne voor samen.
+   campagne voor samen; met AI-plekken in de lobby.
+8. **De dorpsbouwer** (8): het gewone spel tegen AI-spelers, alleen en samen. Kan ook vóór 7, als het spel alleen
+   voorgaat; dat kiest Marcel als het zover is.
 
-## 9. Besloten, en nog open
+## 10. Besloten, en nog open
 
 **Besloten** (Marcel, 23 okt):
 - A, losse kaarten (1); B2, de editor in het spel, ook voor spelers, eerst voor ons (5); C, één land met hoofdstukken,
-  gekozen op een kaart (6); F, in skirmish geen heer (7); G, de quests van het oude spel gaan weg met Tiled (4 en 8).
+  gekozen op een kaart (6); F, in skirmish geen heer (7); G, de quests van het oude spel gaan weg met Tiled (4 en 9).
 - D, skirmish geeft punten voor een leger, dan het gevecht op een willekeurige kaart, op 1× (7); E3, de verdediger kiest
   een kasteel of bouwt er een, de ander valt aan (7); H3, een hoofdstuk is een uitsnede of een eigen eiland (6); I1,
   alleen het verhaal gaat mee (6); en een campagne voor samen (6).
+- J1, de campagne voor samen heeft eigen missies, elk voor twee, ieder met zijn eigen dorp en een eigen rol (6); K,
+  AI-spelers in easy, medium en hard, in het gewone spel, in skirmish en als plek in de multiplayer (8).
 
 **Nog open:**
-- **J, de campagne voor samen:** J1 een eigen rij missies, elk voor twee, ieder met zijn eigen dorp en een eigen rol
-  (voorstel); J2 dezelfde campagne, ook samen te spelen (elk hoofdstuk krijgt een tweede dorp, en moet alleen en samen
-  in balans zijn); J3 samen in één dorp, de een bouwt en de ander vecht.
-- **K, een AI die een dorp opbouwt** (niet nu nodig, maar het is het grootste stuk AI): skirmish heeft hem niet meer
-  nodig, en samen spelen ook niet. Hij stond er nog voor het spel alleen, met tegenspelers die zelf een dorp bouwen
-  (vraag 60 tot 63, 29 sep, van voor de richting van 11 okt). K1 ja, die komen er later; K2 nee: in het spel alleen zijn
-  de heer, zijn bondgenoten en de rovers de tegenstanders, en tegen een ander dorp speel je samen of in een hoofdstuk
-  (voorstel, omdat het veel werk scheelt); K3 later beslissen.
+- **L, mag een hard AI valsspelen?** L1 nooit: elke stand krijgt wat een speler krijgt, en hard is alleen slimmer
+  (voorstel: eerlijk, en in skirmish gaat het met gelijke punten om wie beter speelt); L2 in het gewone spel krijgt hard
+  wat meer (grondstoffen, mensen), in skirmish niet; L3 een vierde stand boven hard die valsspeelt, zoals in veel
+  spellen de zwaarste stand.
 - De voorstellen voor winst en verlies (7), en de schets van de hoofdstukken (6), tot Marcel er iets van zegt.
