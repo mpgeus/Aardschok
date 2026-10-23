@@ -25,8 +25,6 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
 **Wacht op Marcel**
-- **Het ontwerp van 187 en 188: L** (23 okt; `scenario.md`, onderaan "Nog open"): mag een hard AI valsspelen? De rest
-  is gekozen.
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
   begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
@@ -1406,7 +1404,8 @@ hebben we zoizo nodig. volgorde is akkoord"):
   als veldslag of belegering zonder economie en zonder heer (D, E3, F), de oude quests weg met Tiled (G), een hoofdstuk
   als uitsnede of eigen eiland (H3) waarvan alleen het verhaal meegaat (I1), en een campagne voor samen met eigen missies (J1);
   van niets tegen elkaar is de multiplayer van het hele spel; en AI-spelers in easy, medium en hard, in het gewone spel,
-  in skirmish en in de multiplayer (K). L staat nog open.
+  in skirmish en in de multiplayer (K), met een vierde stand *Unfair* die opengaat als de campagne op hard is uitgespeeld
+  (L3). Het ontwerp is rond.
 - **189:** op de lijst: paarden ("hebben we nodig"), bijen ("wil ik"), het kerkhof ("goed idee") en belegeren ("hebben we
   zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
 - **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van

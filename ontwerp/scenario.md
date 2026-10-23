@@ -1,7 +1,7 @@
 # Scenario's: de campagne, de editor, skirmish en AI-spelers (vraag 187 en 188)
 
 **Zo werkt het nu** (23 okt): dit is het ontwerp; er is niets van gebouwd, en bouwen komt na de demo (Marcel, 20 okt,
-6a1). Marcel koos op 23 okt in drie rondes (hieronder, en samen in 10); L staat nog open.
+6a1). Marcel koos op 23 okt in vier rondes (hieronder, en samen in 10); het ontwerp is rond.
 
 ## Wat Marcel vroeg en koos
 
@@ -33,6 +33,9 @@
   moet dat mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook ai spelers erbij kunnen
   kiezen." Dus: **de campagne voor samen heeft eigen missies, ieder met zijn eigen dorp** (6), en **AI-spelers zijn er
   overal, in drie standen** (8).
+- **En als laatste** (Marcel, 23 okt): "L3, nadat hard modus in de campaign is uitgespeeld. 'Unfair' zodat spelers ook
+  snappen wat ze kiezen." Dus: **een vierde stand, *Unfair*, die valsspeelt en pas opengaat als je de campagne op hard
+  uitspeelde** (6 en 8).
 
 ## Wat er al ligt (nagelopen op 23 okt)
 
@@ -229,6 +232,10 @@ merchants, dungeon keeper level select etc.").
   het kasteel op de kaart. Een uitsnede van zo'n 250 bij 250 tegels is een kaart zoals in Knights and Merchants (die
   zijn 100 tot 200 tegels breed, maar onze tegels zijn kleiner: een hut beslaat er 5 bij 4); op een eiland van 2500 bij
   2500 is plek voor tientallen, dus het land is groot genoeg voor verschillende verhalen.
+- **De stand van de campagne:** je speelt haar op *Easy*, *Medium* of *Hard* (8): zo spelen de AI's in de
+  hoofdstukken. Welke hoofdstukken af zijn, en op welke stand, blijft op je computer bewaard, net als de beste punten
+  van de demo (`T.opslagPlek`, `js/opslaan.js`; later Steam Cloud). Speel je de hele campagne uit op hard, dan gaat
+  *Unfair* open (8).
 - **Tussen de hoofdstukken** een inleiding (een brief of een scène) en een kort verslag. Van hoofdstuk naar hoofdstuk
   gaat alleen het verhaal mee, niet wat je had: elk hoofdstuk is dan op zichzelf in balans, zoals in Knights and
   Merchants en Age of Empires (Marcel, 23 okt, I1).
@@ -308,7 +315,11 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
      opstandig, handelaar of krijger. Dit is het grootste stuk AI.
 - **Easy, medium en hard** verschillen in hoe snel hij denkt en hoe goed hij kiest, niet in wat hij krijgt. Een easy AI
   denkt traag, bouwt slordig, valt laat aan en trekt nooit terug; een hard AI denkt snel, bouwt strak, valt aan waar je
-  zwak bent, en zet zijn schutters en speren goed neer. Of hard ook mag valsspelen, is vraag L.
+  zwak bent, en zet zijn schutters en speren goed neer.
+- **Unfair**, de vierde stand (Marcel, 23 okt, L3): de enige die valsspeelt, en de naam zegt het, zodat een speler weet
+  wat hij kiest. Hij denkt als hard, en krijgt meer: in het gewone spel meer grondstoffen en mensen, in skirmish meer
+  punten (hoeveel: getallen in de werkbank). Hij gaat pas open als je de campagne op hard uitspeelde (6); daarvoor
+  staat hij in de lijst, op slot, met waarom.
 
 ## 9. De volgorde van bouwen (na de demo)
 
@@ -338,11 +349,8 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
   een kasteel of bouwt er een, de ander valt aan (7); H3, een hoofdstuk is een uitsnede of een eigen eiland (6); I1,
   alleen het verhaal gaat mee (6); en een campagne voor samen (6).
 - J1, de campagne voor samen heeft eigen missies, elk voor twee, ieder met zijn eigen dorp en een eigen rol (6); K,
-  AI-spelers in easy, medium en hard, in het gewone spel, in skirmish en als plek in de multiplayer (8).
+  AI-spelers in easy, medium en hard, in het gewone spel, in skirmish en als plek in de multiplayer (8); L3, een vierde
+  stand, *Unfair*, die valsspeelt en opengaat als de campagne op hard is uitgespeeld (6 en 8).
 
-**Nog open:**
-- **L, mag een hard AI valsspelen?** L1 nooit: elke stand krijgt wat een speler krijgt, en hard is alleen slimmer
-  (voorstel: eerlijk, en in skirmish gaat het met gelijke punten om wie beter speelt); L2 in het gewone spel krijgt hard
-  wat meer (grondstoffen, mensen), in skirmish niet; L3 een vierde stand boven hard die valsspeelt, zoals in veel
-  spellen de zwaarste stand.
-- De voorstellen voor winst en verlies (7), en de schets van de hoofdstukken (6), tot Marcel er iets van zegt.
+**Nog open:** alleen de voorstellen van Claude, tot Marcel er iets van zegt: wanneer je wint en verliest in skirmish
+(7), de schets van de hoofdstukken (6), en dat het level een recept is (1).
