@@ -23,6 +23,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
+- **Bezig in sessie `ccr-39520f0f-f5x764`** (23 okt): het debugvenster (D) met tabbladen, zodat alles om te testen een
+  knop is (Marcel: "Ik kan al die losse dingen niet onthouden"; "bouw maar").
 
 **Wacht op Marcel**
 - **185 en 186 bekijken** (in de branch `ccr-39520f0f-f5x764`, nog niet in `main`; `spel.md`, bij Rovers en de militie "In
