@@ -101,15 +101,6 @@
       if (S.berichtPlek) T.glijNaar(S.berichtPlek.x, S.berichtPlek.y);
     },
 
-    // De naam van een kamer, groot in beeld, als je er voor het eerst binnenloopt.
-    plek(naam) {
-      const el = $('plek');
-      el.textContent = naam;
-      el.classList.remove('toon');
-      void el.offsetWidth;
-      el.classList.add('toon');
-    },
-
     tooltip(tekst, x, y, fout) {
       const el = $('tooltip');
       const sleutel = tekst + '|' + (fout ? 1 : 0);

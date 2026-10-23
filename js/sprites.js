@@ -68,7 +68,8 @@
         S.mist.push('beschrijving');
         return false;
       }
-      const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
+      // (Tot 23 okt ook de muren, de vloeren en de spullen van de proefkamers: ronde 4 van het snoeien.)
+      const vellen = [];
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
@@ -83,8 +84,8 @@
       // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
       // stap 1b).
       const lijst = vellen.map((f) => MAP + f);
-      // De vellen van buiten staan los: gaat daar iets mis, dan tekent het spel buiten vlakken
-      // en binnen nog gewoon zijn pixel art. De bouwfasen laden hier niet: elk gebouw heeft zijn
+      // De vellen van buiten (tegels/) staan los: gaat daar iets mis, dan tekent het spel daar vlakken
+      // en de rest nog gewoon in pixel art. De bouwfasen laden hier niet: elk gebouw heeft zijn
       // eigen vel, dat pas komt als er een in aanbouw staat (S.bouwfase hieronder); en de huizen
       // en de gebouwen ook niet: die hebben een bestand per tekening, dat pas komt als hij op de
       // kaart staat (S.laadWatErStaat). (Tot 25 sep laadde hier ook beelden/effecten/, de
@@ -94,7 +95,6 @@
       const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
-      if (S.aan) snijVloeren();
       if (!S.aan || !S.buitenAan) console.warn(`${T.NAAM}: sprites ontbreken, het spel tekent daar vlakken.`, S.mist); // geen tekst
       return S.aan;
     })();
@@ -167,7 +167,7 @@
 
   // Wat de browser nu aan vellen vasthoudt (Spel.debug.vellen, vraag 114, stap 1): elk geladen vel met zijn maat en wat
   // het uitgepakt kost, vier bytes per pixel, zoals een browser een plaatje in zijn geheugen houdt. Wat nog laadt of
-  // mist, staat er niet in, en wat het spel zelf uit een vel bakt (de wind, de vloertegels) ook niet.
+  // mist, staat er niet in, en wat het spel zelf uit een vel bakt (de wind) ook niet.
   S.geladen = () => [...beelden].map(([pad, img]) => {
     const b = img.naturalWidth || img.width;
     const h = img.naturalHeight || img.height;
@@ -253,11 +253,11 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { skelet: 78, slijm: 28, wolf: 46, marskramer: 66, koe: 48, schaap: 30, hert: 62 };
+  const HOOG = { wolf: 46, marskramer: 66, koe: 48, schaap: 30, hert: 62 };
   S.figuurNaam = (soort) => soort;
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
-  // Een gewone dorpeling deelt één soort ("dorpeling", zie js/kaart.js) maar heeft meerdere
+  // Een gewone dorpeling deelt één soort ("dorpeling") maar heeft meerdere
   // vellen (dorpeling0, dorpeling1, ...); zijn zaad kiest welk, zodat hetzelfde zaad altijd
   // hetzelfde uiterlijk geeft (ontwerp/wereld.md, "Een flink dorp"). Puur, dus apart te toetsen.
   S.dorpelingVariant = (zaad, aantal) => (aantal ? ((zaad % aantal) + aantal) % aantal : 0);
@@ -269,53 +269,6 @@
     return n ? 'dorpeling' + S.dorpelingVariant(zaad, n) : null;
   }
 
-  // ---------------------------------------------------------------- vloeren, muren, voorwerpen
-
-  // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
-  // moet per tegel een ruit uit geknipt worden — en knippen (save, pad, clip, restore) is in een
-  // browser een van de duurste dingen die je per beeld kunt doen. Dus knippen we één keer bij het
-  // laden: per soort vier kant-en-klare tegels op een eigen vlakje, net zoals naar-tiled.cjs de
-  // stempels van vier bij vier vooraf in losse tegels snijdt. Daarna is tekenen niets meer dan
-  // drawImage.
-  //
-  // Het vlakje is een tikje ruimer dan 64×32 en de ruit een tikje ruimer dan een tegel: dan
-  // overlappen twee buren elkaar met een halve pixel en blijft er geen haarlijn tussen staan.
-  const VLOER_B = 66;
-  const VLOER_H = 34;
-  const VLOER_ANKER = [33, 17];
-  const vloertegels = new Map(); // "soort,a,b" → stuk
-  function snijVloeren() {
-    if (!gegevens || typeof document === 'undefined') return;
-    const v = gegevens.vloeren;
-    const bron = beelden.get(MAP + v.bestand);
-    if (!bron) return;
-    for (const [soort, k] of Object.entries(v.soorten)) {
-      for (let b = 0; b < 2; b++) {
-        for (let a = 0; a < 2; a++) {
-          const c = document.createElement('canvas');
-          c.width = VLOER_B;
-          c.height = VLOER_H;
-          const cx = c.getContext('2d');
-          cx.imageSmoothingEnabled = false;
-          T.ruit(cx, VLOER_ANKER[0], VLOER_ANKER[1], 1.04);
-          cx.clip();
-          // Het anker van de lap ligt op het midden van tegel (0, 0); voor tegel (a, b) van de
-          // lap schuift dat een halve ruit op, zodat het verband tussen de tegels doorloopt.
-          const ax = v.anker[0] + (a - b) * T.HB;
-          const ay = v.anker[1] + (a + b) * T.HH;
-          cx.drawImage(bron, k * v.cel[0], 0, v.cel[0], v.cel[1], Math.round(VLOER_ANKER[0] - ax), Math.round(VLOER_ANKER[1] - ay), v.cel[0], v.cel[1]);
-          c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
-          vloertegels.set(`${soort},${a},${b}`, { beeld: c, sx: 0, sy: 0, b: VLOER_B, h: VLOER_H, ax: VLOER_ANKER[0], ay: VLOER_ANKER[1] });
-        }
-      }
-    }
-  }
-
-  S.tegel = function (soort, x, y) {
-    const a = ((x % 2) + 2) % 2;
-    const b = ((y % 2) + 2) % 2;
-    return vloertegels.get(`${soort},${a},${b}`) || null;
-  };
 
   // ---------------------------------------------------------------- buiten (tegels/)
   //
@@ -598,30 +551,6 @@
   S.buitenHoogte = function (velNaam, id) {
     const plek = S.celVan(velNaam, id);
     return plek ? plek.anker[1] : 0;
-  };
-
-  // Een muurstuk. `west` is waar of niet: een westmuur kijkt naar het zuidoosten, een
-  // noordmuur naar het zuidwesten. Het anker is de tegel vóór de muur.
-  S.muur = function (soort, west) {
-    if (!gegevens) return null;
-    const m = gegevens.muren;
-    const k = m.kolommen.indexOf(soort);
-    const r = m.rijen.indexOf(soort === 'laag' ? 'laag' : west ? 'west' : 'noord');
-    if (r < 0) return null;
-    const kol = soort === 'laag' ? 0 : k;
-    if (kol < 0) return null;
-    return stuk(MAP + m.bestand, kol * m.cel[0], r * m.cel[1], m.cel[0], m.cel[1], m.anker);
-  };
-
-  S.muurSoorten = () => (gegevens ? gegevens.muren.kolommen : []);
-  S.laagHoogte = () => (gegevens ? gegevens.muren.laagHoogte : 22);
-
-  S.voorwerp = function (naam) {
-    if (!gegevens) return null;
-    const v = gegevens.voorwerpen;
-    const i = v.namen.indexOf(naam);
-    if (i < 0) return null;
-    return stuk(MAP + v.bestand, i * v.cel[0], 0, v.cel[0], v.cel[1], v.anker);
   };
 
   // De schandpaal (js/heer.js, gereedschap/pixelart/schandpaal.cjs): één rij met drie delen. `leeg`

@@ -23,7 +23,6 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 // Het proefdorp (test/grond.cjs), op `dag`. `opties` gaan naar proefDorp.
 function proef(dag = ZOMER, opties = {}) {
   const { S } = proefDorp(T, opties);
-  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag, snelheid: 1 });
   return S;
 }
@@ -129,11 +128,11 @@ test('het net, per plek bijgewerkt, is hetzelfde als opnieuw gelegd', () => {
   const gezet = [];
   let anders = 0;
   for (const p of opPaadje.slice(0, 6)) {
-    gezet.push(T.zetVoorwerp(w, { soort: 'kist', x: p.x, y: p.y })); // met een plek (T.voetVan)
+    gezet.push(T.zetVoorwerp(w, { soort: 'mand', x: p.x, y: p.y })); // met een plek (T.voetVan)
     const perPlek = T.aangelegdNet(D).slice();
     if (perPlek.some((n, k) => n !== net0[k])) anders++;
     T.kaartVeranderd(w); // zonder plek: alles opnieuw
-    assert.deepEqual(perPlek, T.aangelegdNet(D), `na een kist op ${p.x},${p.y}`);
+    assert.deepEqual(perPlek, T.aangelegdNet(D), `na een mand op ${p.x},${p.y}`);
   }
   assert.ok(anders > 0, 'een kist op een paadje legt het net om');
   for (const v of gezet) T.haalVoorwerpWeg(w, v);

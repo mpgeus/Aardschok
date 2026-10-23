@@ -187,10 +187,10 @@ const uitslag = {
     tijden2.push(nu() - s0);
   }
   const w2 = S.wereld;
-  const bewaard = [w2.tegels, w2.grond, w2.burenKamers];
-  w2.tegels = []; w2.grond = []; w2.burenKamers = [];
+  const bewaard = [w2.tegels, w2.grond];
+  w2.tegels = []; w2.grond = [];
   const zonderKaart = T.bewaarSpel(S).length;
-  [w2.tegels, w2.grond, w2.burenKamers] = bewaard;
+  [w2.tegels, w2.grond] = bewaard;
   uitslag.opslag = { tekens: tekst.length, kB: tekst.length / 1000, zonderKaartKB: zonderKaart / 1000, kaartKB: (tekst.length - zonderKaart) / 1000, ms: pct(tijden2, 0.5), msEerste: tijden2[0], msAlle: tijden2.map((x) => +x.toFixed(1)) };
 }
 if (global.gc) global.gc();

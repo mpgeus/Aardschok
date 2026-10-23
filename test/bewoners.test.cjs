@@ -25,7 +25,6 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 function proef(opties = {}) {
   const { dag, snelheid, ...dorp } = opties;
   const { S } = proefDorp(T, dorp);
-  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag: dag != null ? dag : bijUur(GROEI, 7), snelheid: snelheid || 1 });
   return S;
 }

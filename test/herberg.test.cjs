@@ -34,7 +34,6 @@ function proef(opties = {}) {
   toeval = 11;
   const { dag, snelheid, bier, ...dorp } = opties;
   const { S } = proefDorp(T, { gebouwen: ['herberg'], ...dorp });
-  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag: dag != null ? dag : bijUur(HERFST, 7), snelheid: snelheid || 1 });
   T.zetVoorraad(S.dorp, 'bier', bier != null ? bier : 100);
   return S;

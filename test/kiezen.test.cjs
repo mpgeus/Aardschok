@@ -11,7 +11,6 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het proefdorp met een wachthuis en twee man militie, om tien uur 's ochtends.
 function metMilitie() {
   const { S } = proefDorp(T, { gebouwen: ['wachthuis'] });
-  S.bezocht = new Set(); // waar de held kwam (js/verkennen.js, T.bijAankomst), zoals js/main.js het spel begint
   const D = S.dorp;
   const huis = D.gebouwen.find((g) => g.soort === 'wachthuis');
   assert.equal(T.zetSoldaten(D, huis, 'militie', 2), true);

@@ -301,7 +301,7 @@ test('een boompje komt niet op een paadje, een veld, voor een deur of waar ieman
   const voor = w.voorwerpen.length;
   const jong = T.plantNaast(D, t, 'eik');
   if (jong) {
-    assert.ok(!T.waaromNietOpDezeGrond(D, jong.x, jong.y) && !T.bijDeur(w, jong.x, jong.y) && !T.isAangelegdPaadje(D, jong.x, jong.y));
+    assert.ok(!T.waaromNietOpDezeGrond(D, jong.x, jong.y) && !T.isAangelegdPaadje(D, jong.x, jong.y));
   } else assert.equal(w.voorwerpen.length, voor);
   // Midden op de akker zelf mag het niet: alle buren zijn akker.
   const midden = { x: akker.x + Math.floor(akker.b / 2), y: akker.y + Math.floor(akker.h / 2) };

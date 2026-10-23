@@ -270,7 +270,7 @@
       e.dwaalTijd = 0;
       return true;
     }
-    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, deurenOpenen: e === D.aanvoerder, tocht: true });
+    const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, tocht: true });
     if (pad === null) return false;
     T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, { x: doel.x, y: doel.y, naast });
     return true;

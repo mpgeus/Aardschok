@@ -38,7 +38,7 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   const S = Object.assign({
     tijd: 0, modus: 'verkennen', gevecht: null, overgang: null, bezig: false,
     kalender: T.nieuweKalender(),
-    bezocht: new Set(['hal']), zoom: 1,
+    zoom: 1,
   }, T.schermVelden());
   const uit = T.herstelSpel(S, dorp);
   if (!uit.gelukt) throw new Error(uit.reden);

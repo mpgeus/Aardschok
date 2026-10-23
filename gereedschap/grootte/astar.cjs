@@ -5,11 +5,11 @@
 // korte omweg om wie er staat.
 const { T, beginSpel, nu, pct, gem } = require('./harnas.cjs');
 
-// Een kaart in code, zoals T.maakProefkamers dat doet, maar dan een lege vlakte van L bij L.
+// Een kleine kaart in code: een lege vlakte van L bij L.
 function legeKaart(L) {
   const tegels = [];
   for (let y = 0; y < L; y++) tegels.push(new Array(L).fill('vloer'));
-  return { b: L, h: L, tegels, deuren: new Map(), voorwerpen: [], wezens: [], kamers: [{ id: 'buiten', x1: 0, y1: 0, x2: L - 1, y2: L - 1 }], bekend: new Set(['buiten']), buiten: true };
+  return { b: L, h: L, tegels, voorwerpen: [], wezens: [] };
 }
 
 // Wat het spel aan T.zoekPad meegeeft (T.zoekRoute, js/lopen.js): begaanbaar en vast; en met wezensBlokkeren, zoals

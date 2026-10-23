@@ -67,7 +67,10 @@ test('bij het begin laadt geen enkel huis, gebouw of figuur; wel elk ander vel',
   assert.deepEqual(gevraagd.filter(perTekening), []);
   assert.deepEqual(gevraagd.filter(figuur), []);
   for (const vel of ['grond', 'rand', 'kust', 'bomen', 'begroeiing', 'erf', 'tuin']) assert.ok(gevraagd.includes(T.TEGELS[vel].bestand), vel);
-  for (const vel of ['muren', 'vloeren', 'voorwerpen']) assert.ok(gevraagd.includes(`beelden/${T.BEELDEN[vel].bestand}`), vel);
+  for (const vel of ['graan', 'schandpaal', 'lantaarn']) assert.ok(gevraagd.includes(`beelden/${T.BEELDEN[vel].bestand}`), vel);
+  // De muren, de vloeren en de spullen van de proefkamers laden niet meer: het eiland tekende ze nooit (ronde 4 van het
+  // snoeien, 23 okt).
+  for (const vel of ['muren', 'vloeren', 'voorwerpen']) assert.ok(!gevraagd.includes(`beelden/${T.BEELDEN[vel].bestand}`), vel);
 });
 
 test('een kaart laadt precies de huizen, gebouwen en figuren die erop staan, elk één keer', async () => {

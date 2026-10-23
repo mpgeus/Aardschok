@@ -915,7 +915,7 @@
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
         if (!T.opKaart(w, x, y)) continue;
-        const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetStuk(x, y) && T.ontginWerkOp(w, x, y));
+        const vrij = T.isBegaanbaar(w, x, y) || (opHetStuk(x, y) && T.ontginWerkOp(w, x, y));
         if (!vrij) return false;
       }
     }

@@ -15,7 +15,6 @@ T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (...a) => gezegd.
 // Het proefdorp (test/grond.cjs), met of zonder een tweede dorp op de kaart. `opties` gaan naar het proefdorp.
 function spel(metTweede, opties = {}) {
   const { S } = proefDorp(T, opties);
-  S.bezocht = S.bezocht || new Set();
   if (metTweede) T.dorpErbij(S);
   return S;
 }

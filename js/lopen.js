@@ -64,7 +64,7 @@
   const WEGEN = new WeakMap(); // kaart → { versie, wegen: Map(sleutel → Int16Array of null) }
 
   // De weg van `van` naar `doel` over wat vaststaat, zonder de starttegel, of null als er geen is. opties: `tot` en
-  // `naast` zoals T.zoekPad (js/pad.js), `deurenOpenen` (de aanvoerder duwt een dichte deur open), `veld`: het doel is een
+  // `naast` zoals T.zoekPad (js/pad.js), `veld`: het doel is een
   // plek waar velen heen gaan (hieronder, "Naar hetzelfde doel"), en `kar`: de ossenkar, die een weg opzoekt omdat hij er
   // sneller rijdt (T.karKostOp, js/wegen.js; werklijst C, stap 5).
   T.zoekRoute = function (w, van, doel, opties) {
@@ -74,36 +74,30 @@
     // Een man op tocht (`tocht`, js/kiezen.js): ligt zijn doel in land dat nog dicht is, of komt hij er over open land niet,
     // dan de weg van een tocht (hieronder). Een ander komt daar niet.
     if (o.tocht && T.opEiland(w) && (T.tegel(w, doel.x, doel.y) === 'buiten' || !T.kanErKomen(w, van, doel, { tot, naast }))) return tochtRoute(w, van, doel, o);
-    const open = !!o.deurenOpenen;
     const kar = !!o.kar;
-    // Een kaart met deuren (de proefkamers) onthoudt niets: een deur gaat open en dicht zonder dat de kaart verandert.
-    const onthoudt = !(w.deuren && w.deuren.size);
     const vv = o.veld && veldVak(w);
-    if (o.veld && !kar && !naast && onthoudt && T.inVak(vv, van.x, van.y) && T.inVak(vv, doel.x, doel.y)) {
+    if (o.veld && !kar && !naast && T.inVak(vv, van.x, van.y) && T.inVak(vv, doel.x, doel.y)) {
       if (T.afstand(van, doel) <= tot) return [];
       if (!T.kanErKomen(w, van, doel, { tot })) return null;
       // Loopt de enige weg buiten het vak van het veld om (een meer dat het dorp afsnijdt), dan zoekt hij hem zelf.
-      const weg = wegUitVeld(w, veldVan(w, doel, tot, open), van);
+      const weg = wegUitVeld(w, veldVan(w, doel, tot), van);
       if (weg || T.openGrootte(w) === 0) return weg;
     }
-    let wegen = null;
-    if (onthoudt) {
-      const versie = T.kaartVersie(w);
-      let m = WEGEN.get(w);
-      if (!m || m.versie !== versie || m.wegen.size >= IN().wegenOnthouden) {
-        m = { versie, open: T.openGrootte(w), wegen: new Map() };
-        WEGEN.set(w, m);
-      } else if (m.open !== T.openGrootte(w)) {
-        // Er ging land open (js/wereld.js): een weg die er was, blijft goed; wie geen weg had, zoekt opnieuw.
-        for (const [k, rij] of m.wegen) if (!rij) m.wegen.delete(k);
-        m.open = T.openGrootte(w);
-      }
-      wegen = m.wegen;
+    const versie = T.kaartVersie(w);
+    let m = WEGEN.get(w);
+    if (!m || m.versie !== versie || m.wegen.size >= IN().wegenOnthouden) {
+      m = { versie, open: T.openGrootte(w), wegen: new Map() };
+      WEGEN.set(w, m);
+    } else if (m.open !== T.openGrootte(w)) {
+      // Er ging land open (js/wereld.js): een weg die er was, blijft goed; wie geen weg had, zoekt opnieuw.
+      for (const [k, rij] of m.wegen) if (!rij) m.wegen.delete(k);
+      m.open = T.openGrootte(w);
     }
-    const sleutel = `${van.x},${van.y}>${doel.x},${doel.y}|${tot}|${naast ? 1 : 0}|${open ? 1 : 0}${kar ? '|kar' : ''}`;
-    if (wegen && wegen.has(sleutel)) return alsPad(wegen.get(sleutel));
+    const wegen = m.wegen;
+    const sleutel = `${van.x},${van.y}>${doel.x},${doel.y}|${tot}|${naast ? 1 : 0}${kar ? '|kar' : ''}`;
+    if (wegen.has(sleutel)) return alsPad(wegen.get(sleutel));
     const pad = T.kanErKomen(w, van, doel, { tot, naast })
-      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: open }), (x, y) => T.isVast(w, x, y), {
+      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y), {
         tot, naast, wereld: w, ...(kar ? { kost: (x, y) => T.karKostOp(w, x, y), minKost: T.karKostMin() } : {}),
       })
       : null;
@@ -157,7 +151,7 @@
     return vak;
   }
 
-  function veldVan(w, doel, tot, open) {
+  function veldVan(w, doel, tot) {
     const versie = T.kaartVersie(w);
     const vak = veldVak(w);
     let m = VELDEN.get(w);
@@ -165,11 +159,11 @@
       m = { versie, vak, velden: new Map() };
       VELDEN.set(w, m);
     }
-    const sleutel = `${doel.x},${doel.y}|${tot}|${open ? 1 : 0}`;
+    const sleutel = `${doel.x},${doel.y}|${tot}`;
     let v = m.velden.get(sleutel);
     if (v) m.velden.delete(sleutel); // achteraan: net gevraagd
     else {
-      v = nieuwVeld(w, m.vak, doel, tot, open);
+      v = nieuwVeld(w, m.vak, doel, tot);
       if (m.velden.size >= IN().veldenOnthouden) m.velden.delete(m.velden.keys().next().value);
     }
     m.velden.set(sleutel, v);
@@ -179,33 +173,24 @@
   // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af. Het veld beslaat zijn
   // vak (veldVak): tegel (x, y) staat op plek (y - vak.y) * vak.b + (x - vak.x). Het raster van wat vaststaat beslaat
   // T.loopVak (js/wereld.js), daar staat dezelfde tegel op (y - lv.y) * lv.b + (x - lv.x).
-  function nieuwVeld(w, vak, doel, tot, open) {
+  function nieuwVeld(w, vak, doel, tot) {
     const afstand = new Uint16Array(vak.b * vak.h).fill(ONBEKEND);
     const rand = [];
     for (let y = doel.y - tot; y <= doel.y + tot; y++) {
       for (let x = doel.x - tot; x <= doel.x + tot; x++) {
-        if (!T.inVak(vak, x, y) || !T.isBegaanbaar(w, x, y, { deurenOpenen: open })) continue;
+        if (!T.inVak(vak, x, y) || !T.isBegaanbaar(w, x, y)) continue;
         afstand[(y - vak.y) * vak.b + (x - vak.x)] = 0;
         rand.push((y - vak.y) * vak.b + (x - vak.x));
       }
     }
-    return { doel: { x: doel.x, y: doel.y }, open, vak, afstand, rand, ring: 0, op: !rand.length };
+    return { doel: { x: doel.x, y: doel.y }, vak, afstand, rand, ring: 0, op: !rand.length };
   }
 
   // Mag je op tegel j (x, y) staan, en houdt hij een schuine stap om de hoek tegen? Uit het raster van wat vaststaat
-  // (js/wereld.js), zonder voor elke buur T.isBegaanbaar te vragen: bij 400 mensen was dat de helft van het zoeken. Een
-  // deur vraagt het nog aan de deur.
+  // (js/wereld.js), zonder voor elke buur T.isBegaanbaar te vragen: bij 400 mensen was dat de helft van het zoeken.
   const R = T.RASTER;
   const DX = RICHTINGEN.map((r) => r[0]);
   const DY = RICHTINGEN.map((r) => r[1]);
-  function vrijOp(w, raster, j, x, y, open) {
-    const g = raster[j];
-    return g === R.VRIJ || (g === R.DEUR && T.isBegaanbaar(w, x, y, { deurenOpenen: open }));
-  }
-  function vastOp(w, raster, j, x, y) {
-    const g = raster[j];
-    return g === R.VAST || (g === R.DEUR && T.isVast(w, x, y));
-  }
 
   // Eén ring verder: de tegels die een stap verder liggen dan de vorige ring. Een schuine stap om een hoek telt niet,
   // zoals bij A*.
@@ -227,8 +212,8 @@
         const ny = y + dy;
         if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
         const j = ny * b + nx;
-        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, rj(nx, ny), x0 + nx, y0 + ny, v.open)) continue;
-        if (dx && dy && (vastOp(w, raster, rj(nx, y), x0 + nx, y0 + y) || vastOp(w, raster, rj(x, ny), x0 + x, y0 + ny))) continue;
+        if (v.afstand[j] !== ONBEKEND || raster[rj(nx, ny)] !== R.VRIJ) continue;
+        if (dx && dy && (raster[rj(nx, y)] === R.VAST || raster[rj(x, ny)] === R.VAST)) continue;
         if (w.hoogte && !T.kanStappen(w, x0 + x, y0 + y, x0 + nx, y0 + ny)) continue; // niet door een wand (js/hoogte.js)
         v.afstand[j] = d;
         volgende.push(j);
@@ -253,7 +238,7 @@
       if (nx < x0 || ny < y0 || nx >= x0 + b || ny >= y0 + h) continue;
       const a = v.afstand[(ny - y0) * b + (nx - x0)];
       if (a === ONBEKEND) continue;
-      if (dx && dy && (vastOp(w, raster, (y - lv.y) * lv.b + (nx - lv.x), nx, y) || vastOp(w, raster, (ny - lv.y) * lv.b + (x - lv.x), x, ny))) continue;
+      if (dx && dy && (raster[(y - lv.y) * lv.b + (nx - lv.x)] === R.VAST || raster[(ny - lv.y) * lv.b + (x - lv.x)] === R.VAST)) continue;
       if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
       uit.push({ x: nx, y: ny, a, r });
     }
@@ -324,10 +309,10 @@
   // opnieuw. 'verder': hij stapt nu (ze schuiven langs elkaar), of zijn weg is anders (een omweg). 'klaar': hij is er
   // (dichtbij genoeg), of hij geeft het op. `dt`: hoe lang hij dit beeld stond (de tijd van de wereld).
   T.ontwijk = function (S, w, e, volgende, dt) {
-    // Is de tegel zelf dicht (een deur, iets wat er sinds het zoeken kwam), of heeft hij geen doel (een stap van het
-    // dwalen), dan stopt hij: wie hem stuurde, kiest opnieuw.
+    // Is de tegel zelf dicht (iets wat er sinds het zoeken kwam), of heeft hij geen doel (een stap van het dwalen), dan
+    // stopt hij: wie hem stuurde, kiest opnieuw.
     if (!e.padDoel) return 'klaar';
-    if (!T.isBegaanbaar(w, volgende.x, volgende.y, { deurenOpenen: T.isAanvoerder(S, e) })) return 'klaar';
+    if (!T.isBegaanbaar(w, volgende.x, volgende.y)) return 'klaar';
     const ander = T.wezenOp(w, volgende.x, volgende.y, e);
     if (!ander) return 'verder';
     // Zijn ze allebei vrij en kennen ze elkaar, dan blijven ze staan voor een praatje (js/praatje.js; vraag 120, d).
@@ -411,7 +396,7 @@
   // mogen staan.
   function magRuilen(S, w, e, ander) {
     if (ander.dood || ander.maait || (ander.werkt && !ander.pad.length) || ander.kant === 'monster' || e.kant === 'monster') return false;
-    return T.isBegaanbaar(w, e.tx, e.ty, { deurenOpenen: T.isAanvoerder(S, ander) });
+    return T.isBegaanbaar(w, e.tx, e.ty);
   }
   // Ze ruilen van tegel. Wilde de ander niet recht naar e's tegel maar ernaast, dan gaat hij eerst naar e's tegel en dan
   // verder: zijn volgende tegel ligt daar altijd naast (tegenOver). Stond hij maar wat, dan staat hij daarna op e's tegel.
@@ -426,11 +411,10 @@
     ander.tx = oud.x;
     ander.ty = oud.y;
     ander.gewacht = 0;
-    if (w === S.wereld) T.bijStapBegin(S, ander, oud);
   }
 
-  // b gaat een stap opzij voor e: naar een vrije tegel naast hem, niet op e's weg, liefst zo ver mogelijk ervan, niet
-  // voor een deur en liever recht opzij dan schuin.
+  // b gaat een stap opzij voor e: naar een vrije tegel naast hem, niet op e's weg, liefst zo ver mogelijk ervan, en
+  // liever recht opzij dan schuin.
   const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
   function stapOpzij(w, b, e) {
     const weg = [{ x: e.tx, y: e.ty }, ...e.pad.slice(0, 4)];
@@ -444,7 +428,6 @@
       if (dx && dy && (T.isVast(w, b.tx + dx, b.ty) || T.isVast(w, b.tx, b.ty + dy))) continue;
       if (!T.kanStappen(w, b.tx, b.ty, x, y)) continue;
       let s = Math.min(...weg.map((t) => T.afstand(t, { x, y })));
-      if (T.bijDeur(w, x, y)) s -= 10;
       if (dx && dy) s -= 0.5;
       if (s > score) {
         score = s;
@@ -461,7 +444,7 @@
   // zijn doel een plek met een straal of naast iemand, naar een andere vrije tegel daar. Met de anderen als muur, zoals
   // vroeger, maar alleen hier, kort (omwegTegels).
   function omweg(S, w, e) {
-    const vrij = (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: T.isAanvoerder(S, e), wezensBlokkeren: true, wie: e });
+    const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e });
     const vast = (x, y) => T.isVast(w, x, y);
     const van = { x: e.tx, y: e.ty };
     const max = IN().omwegTegels;
@@ -732,7 +715,7 @@
       if (!t) continue;
       // Staat hij er al: wacht hij op het land voor hem, dan een lege weg; verder dan hier komt hij niet, dan geen.
       if (t.x === van.x && t.y === van.y) return wacht ? [] : null;
-      const pad = T.zoekRoute(w, van, t, { deurenOpenen: o.deurenOpenen });
+      const pad = T.zoekRoute(w, van, t);
       if (pad) return pad;
     }
     return null;

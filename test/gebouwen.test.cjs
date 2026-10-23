@@ -20,8 +20,7 @@ function alsJijHetSeizoenDoet(fn) {
   }
 }
 
-// Een kleine, lege wereld om gebouwen op neer te zetten: net als T.maakProefkamers() maar zonder de
-// hele toren erbij — alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
+// Een kleine, lege wereld om gebouwen op neer te zetten: alleen wat T.isVast/T.voorwerpOp nodig hebben (js/wereld.js).
 function maakLegeWereld(b, h) {
   const tegels = [];
   for (let y = 0; y < h; y++) tegels.push(new Array(b).fill('vloer'));

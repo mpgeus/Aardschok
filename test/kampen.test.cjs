@@ -190,7 +190,7 @@ const mannenVan = (w, nr) => w.wezens.filter((e) => e.kamp === nr && e.rover && 
 // kampen.
 function nieuwSpel() {
   const uit = leegBegin(T);
-  Object.assign(uit.S, { vlaggen: new Set(), bezocht: new Set() }, T.schermVelden());
+  Object.assign(uit.S, { vlaggen: new Set() }, T.schermVelden());
   T.wereldTik(uit.S);
   return uit;
 }

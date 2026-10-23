@@ -29,7 +29,7 @@ function wereldMet(velden, meent) {
     wereld: {
       b: 40, h: 40, wezens: [], akkers, meenten: meent ? [{ naam: 'heide', meent: true, ...meent }] : [],
       tegels: Array.from({ length: 40 }, () => Array(40).fill('gras')),
-      voorwerpen: [], deuren: new Map(), buiten: true,
+      voorwerpen: [],
     },
   };
   for (const v of akkers) v.dorp = S; // een veld is van een dorp (T.hoortBij is streng sinds stap 6a2: zonder dorp is het van de wereld)

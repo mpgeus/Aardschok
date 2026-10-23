@@ -132,8 +132,8 @@ test('verzamelingen blijven verzamelingen, en het scherm begint opnieuw', () => 
   const S2 = gehucht();
   T.herstelSpel(S2, T.bewaarSpel(S, { nu: NU }));
   assert.ok(S2.dorp.vlaggen instanceof Set && S2.dorp.vlaggen.has('heerBetaald'));
-  assert.ok(S2.wereld.deuren instanceof Map);
-  assert.equal(S2.wereld.deuren.size, S.wereld.deuren.size);
+  assert.ok(S2.wereld.tegelsAnders instanceof Map);
+  assert.equal(S2.wereld.tegelsAnders.size, S.wereld.tegelsAnders.size);
   assert.deepEqual(S2.effecten, [], 'wat op het scherm bewoog, beweegt niet meer');
   assert.equal(S2.hover, null);
   assert.equal(S2.grond, null);

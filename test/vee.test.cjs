@@ -134,12 +134,18 @@ test('niet de hele kudde tegelijk: ze liggen nooit allemaal, en slaan niet op he
   assert.ok(new Set(momenten).size >= momenten.length - 1, `ze slaan om op ${momenten}`);
 });
 
+// Een kleine kaart van vloer met de aanvoerder erop (tot 23 okt de proefkamers van js/wereld.js).
+function kaart() {
+  const tegels = [];
+  for (let y = 0; y < 10; y++) tegels.push(new Array(12).fill('vloer'));
+  const w = { b: 12, h: 10, tegels, voorwerpen: [], wezens: [] };
+  w.wezens.push(T.maakWezen('aanvoerder', 2, 2));
+  return w;
+}
+
 test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een stap', () => {
-  const w = T.maakProefkamers();
-  for (const e of w.wezens) if (e.soort !== 'aanvoerder') e.dood = true;
+  const w = kaart();
   const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
-  aanvoerder.x = aanvoerder.tx = 2;
-  aanvoerder.y = aanvoerder.ty = 2;
   const koe = T.maakDier('koe', 6, 4, 5);
   koe.straal = 2;
   koe.thuis = { x: 6, y: 4 };
@@ -167,7 +173,7 @@ test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een s
 });
 
 test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => {
-  const w = T.maakProefkamers();
+  const w = kaart();
   const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
   const S = { wereld: w, aanvoerder, spreuk: null };
   for (const soort of Object.keys(T.VEE)) {

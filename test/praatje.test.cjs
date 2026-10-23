@@ -58,7 +58,7 @@ function bekenden(S, aantal) {
 // Vrije tegels op het plein, met hun buren ook vrij, zodat er een groepje kan staan.
 function pleinPlek(S) {
   const w = S.wereld;
-  const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) && !T.bijDeur(w, x, y);
+  const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
   const t = T.pleinTegels(S.dorp).find((q) => {
     for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) if (!vrij(q.x + dx, q.y + dy)) return false;
     return true;
@@ -71,7 +71,7 @@ function pleinPlek(S) {
 function gewonePlek(S) {
   const w = S.wereld;
   const D = S.dorp;
-  const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) && !T.bijDeur(w, x, y) && !T.opVastePlek(D, w, x, y);
+  const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) && !T.opVastePlek(D, w, x, y);
   const K = T.kaartVak(w);
   for (let y = K.y + 5; y < K.y + K.h - 5; y++) {
     for (let x = K.x + 5; x < K.x + K.b - 5; x++) {
@@ -302,7 +302,7 @@ test('wie langs wil, loopt om een praatje heen; in een smalle doorgang gaat er e
   // Kaarten uit tekens (zoals test/lopen.test.cjs): # is een muur, de rest vloer.
   const kaart = (plan) => ({
     b: plan[0].length, h: plan.length, tegels: plan.map((r) => [...r].map((c) => (c === '#' ? 'muur' : 'vloer'))),
-    deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], buiten: true,
+    voorwerpen: [], wezens: [],
   });
   const mens = (w, x, y) => {
     const e = { soort: 'dorpeling', kant: 'neutraal', x, y, tx: x, ty: y, pad: [], onderweg: false, dood: false, snelheid: 1.3 };

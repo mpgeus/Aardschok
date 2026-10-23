@@ -151,7 +151,7 @@
     ROND.forEach(([dx, dy], i) => {
       const x = g.plek.x + dx;
       const y = g.plek.y + dy;
-      if (bezet.has(x + ',' + y) || T.bijDeur(w, x, y) || !vrij(x, y)) return;
+      if (bezet.has(x + ',' + y) || !vrij(x, y)) return;
       const s = i + T.afstand(van, { x, y }) / 10;
       if (s < score) {
         score = s;

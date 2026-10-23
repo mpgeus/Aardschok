@@ -28,7 +28,6 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 // (alleen wat hier telt).
 function proef(dag, snelheid) {
   const { S } = proefDorp(T);
-  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag, snelheid: snelheid || 1 });
   // De boeren krijgen hun akkers elke nacht (T.tikBoerderijenDag), en hun poppetjes kwamen in het proefdorp pas daarna: zoals de
   // eerstvolgende nacht het doet.

@@ -8,8 +8,6 @@
   const HH = 16; // halve tegelhoogte
   T.HB = HB;
   T.HH = HH;
-  T.MUUR_HOOG = 64;
-  T.MUUR_LAAG = 10;
 
   T.naarScherm = (x, y) => ({ x: (x - y) * HB, y: (x + y) * HH });
   T.naarWereld = (sx, sy) => ({ x: (sx / HB + sy / HH) / 2, y: (sy / HH - sx / HB) / 2 });

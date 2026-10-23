@@ -18,15 +18,9 @@
   // cameraproef/). Tot ronde 4 van het snoeien (23 okt) kon een proefje ook op een kaart uit Tiled beginnen.
   const PROEFJE = new URLSearchParams(window.location.search).get('kaart') === 'gehucht'; // geen tekst
 
-  // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
+  // Hoe hoog een wezen boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
-  const WEZEN_HOOGTE = { slijm: 28, skelet: 52 };
-  const VOORWERP_HOOGTE = { fontein: 32, kist: 36, sleutel: 28 };
-  const SPRITE_VOORWERP_HOOGTE = { fontein: 46, kist: 40, sleutel: 26 };
-  const hoogteVan = (e) =>
-    T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : WEZEN_HOOGTE[e.soort] || 48;
-  const voorwerpHoogte = (v) =>
-    (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
+  const hoogteVan = (e) => (T.sprites.aan && !T.debug.vlakken ? T.sprites.hoogte(e.soort) : 48);
 
   // Een nieuw spel: een verse wereld in het gehucht. Alles van een vorig spel gaat eerst weg, ook wat de
   // regels er onderweg bij zetten (de heer, het slapen, het einde); alleen de zoom van het scherm
@@ -44,7 +38,6 @@
       modus: 'verkennen',
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js), voor het spel en al zijn dorpen
       // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpEiland hieronder (js/begin.js).
-      bezocht: new Set(['hal']),
       // De spelregels van dit spel (vraag 172, js/opties.js): wat je het laatst koos. Ze gelden meteen, ook voor het land
       // dat hieronder komt (de hoogte), en liggen vast zodra het spel begint (New game, js/menu.js).
       spelregels: T.nieuweSpelregels(),
@@ -204,8 +197,9 @@
     return c;
   }
 
-  // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
-  // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
+  // Wat ligt er onder de muis? Wezens steken boven hun tegel uit, dus die worden eerst gezocht, van
+  // voor naar achter. Anders is het de tegel zelf (een gebouw zoekt de klik bij zijn voet, js/verkennen.js).
+  // (Tot 23 okt ook de kist, de fontein en de sleutel van de proefkamers en de quests; ronde 4 van het snoeien.)
   function zoekDoel(mx, my) {
     const w = S.wereld;
     const { x: sx, y: sy } = naarVlak(mx, my);
@@ -217,16 +211,6 @@
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
         kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
-      }
-    }
-    // wat er staat rond de plek onder de muis (ook wat er op het eiland groeit, T.voorwerpenIn); een gebouw steekt ver uit
-    const onder = T.naarWereld(sx, sy);
-    for (const v of T.voorwerpenIn(w, { x: Math.floor(onder.x) - 12, y: Math.floor(onder.y) - 12, b: 28, h: 28 })) {
-      const hoog = voorwerpHoogte(v);
-      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(S.dorp, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
-      const p = T.naarSchermOp(S.wereld, v.x, v.y);
-      if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
-        kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
       }
     }
     if (kandidaten.length) {

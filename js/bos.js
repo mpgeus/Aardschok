@@ -473,7 +473,7 @@
     if (!T.isBegaanbaar(w, x, y) || T.wezenOp(w, x, y)) return false;
     const v = T.voorwerpOp(w, x, y);
     if (v && !T.groeitLaag(v)) return false;
-    return !T.opHetPlein(w, x, y) && !T.bijDeur(w, x, y) && !T.isAangelegdPaadje(D, x, y) && !T.waaromNietOpDezeGrond(D, x, y);
+    return !T.opHetPlein(w, x, y) && !T.isAangelegdPaadje(D, x, y) && !T.waaromNietOpDezeGrond(D, x, y);
   }
 
   // Een boompje naast de stronk op t, van de boom `soort` die er stond: op de eerste tegel eromheen waar het mag, in een

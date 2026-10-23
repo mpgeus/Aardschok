@@ -1,6 +1,6 @@
 // Lopen tussen anderen (js/lopen.js; werklijst vraag 119, D; Marcel, 4 okt: "Je kunt nu eenmaal niet over iemand heen"):
 // een weg gaat alleen om wat vaststaat, en wie onderweg een ander treft, lost het daar op: langs elkaar schuiven, even
-// wachten, de ander opzij laten gaan, of eromheen. Deze toetsen lopen op kleine kaarten van tekens, zonder deuren.
+// wachten, de ander opzij laten gaan, of eromheen. Deze toetsen lopen op kleine kaarten van tekens.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -9,7 +9,7 @@ const T = require('./laad.cjs').spel();
 // Een kaart uit tekens: # is een muur, de rest vloer.
 function kaart(plan) {
   const tegels = plan.map((r) => [...r].map((c) => (c === '#' ? 'muur' : 'vloer')));
-  return { b: plan[0].length, h: plan.length, tegels, deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], buiten: true };
+  return { b: plan[0].length, h: plan.length, tegels, voorwerpen: [], wezens: [] };
 }
 function mens(w, x, y, extra) {
   const e = Object.assign(

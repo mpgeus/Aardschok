@@ -1,23 +1,34 @@
 // Dorpelingen die rondlopen (ontwerp/wereld.md, "Dorpelingen lopen rond"): ze gebruiken hetzelfde
 // dwalen als een monster (T.laatDwalen, js/verkennen.js). Deze toetsen gaan over wat een
 // dorpeling juist anders maakt: hij ontdekt de aanvoerder nooit en telt nooit mee als deelnemer, hij
-// blijft niet op een tegel naast een deur staan, hij houdt zich aan zijn straal, en een gesprek
-// onderbreekt het dwalen. Een losse dorpeling in de vorm die js/kaart.js voor een "zaad" op de
-// kaart maakt, en elke mens uit T.MENSEN, laten zien dat dat de gewone regel is voor elk neutraal
-// wezen. (Tot 25 sep deden Wim en de oude meester van het oude spel hier ook mee.)
+// houdt zich aan zijn straal, en een gesprek onderbreekt het dwalen. Een losse dorpeling, en elke mens
+// uit T.MENSEN, laten zien dat dat de gewone regel is voor elk neutraal wezen. Op een kleine kaart van
+// tekens: twee kamers met een doorgang. (Tot 25 sep deden Wim en de oude meester van het oude spel hier
+// ook mee, en tot 23 okt speelde dit op de proefkamers, met een deur waar niemand naast bleef staan.)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 
-const wezen = (w, soort) => w.wezens.find((e) => e.soort === soort);
-function zet(e, x, y) {
-  e.x = e.tx = x;
-  e.y = e.ty = y;
+// # is een muur, de rest vloer.
+const PLAN = [
+  '####################',
+  '#........#.........#',
+  '#........#.........#',
+  '#........#.........#',
+  '#..................#',
+  '#........#.........#',
+  '#........#.........#',
+  '#........#.........#',
+  '####################',
+];
+function kaart() {
+  const tegels = PLAN.map((r) => [...r].map((c) => (c === '#' ? 'muur' : 'vloer')));
+  return { b: PLAN[0].length, h: PLAN.length, tegels, voorwerpen: [], wezens: [] };
 }
 
-// Dezelfde vorm als maakDorpeling in js/kaart.js, maar zonder de kaart erbij te halen: alleen de
-// velden waar T.laatDwalen en het gevecht (T.isVijandig, js/gevecht.js) naar kijken.
+// Een gewone dorpeling, met alleen de velden waar T.laatDwalen en het gevecht (T.isVijandig, js/gevecht.js) naar
+// kijken.
 function maakDorpeling(x, y, straal) {
   return {
     soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal',
@@ -28,13 +39,9 @@ function maakDorpeling(x, y, straal) {
 }
 
 test('een dorpeling is nooit een vijand: je mannen vallen hem niet vanzelf aan', () => {
-  const w = T.maakProefkamers();
-  const wim = wezen(w, 'wim');
   const dorpeling = maakDorpeling(6, 3, 3);
-  w.wezens.push(dorpeling);
-  assert.equal(T.isVijandig(wim), false);
   assert.equal(T.isVijandig(dorpeling), false);
-  assert.equal(T.isVijandig(wezen(w, 'slijm')), true, 'een monster wel');
+  assert.equal(T.isVijandig(T.maakWezen('rover', 6, 4)), true, 'een rover wel');
 });
 
 // De mensen van het dorp staan sinds 22 sep in js/mensen.js en niet meer als eigen ingang in
@@ -76,7 +83,7 @@ test('elke mens heeft een vel om mee getekend te worden', () => {
 });
 
 test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', () => {
-  const w = T.maakProefkamers();
+  const w = kaart();
   const S = { wereld: w, spreektMet: null };
   const smid = T.maakMens('smid', 4, 3);
   w.wezens.push(smid);
@@ -96,20 +103,8 @@ test('de smid dwaalt bij de smidse, maar blijft binnen zijn straal van thuis', (
   }
 });
 
-test('een dorpeling die toevallig naast een deur staat, wacht zijn pauze niet uit', () => {
-  const w = T.maakProefkamers();
-  const dorpeling = maakDorpeling(6, 3, 3);
-  w.wezens.push(dorpeling);
-  zet(dorpeling, 8, 4); // pal naast de deur op (9, 4)
-  dorpeling.dwaalTijd = 10; // zijn pauze is nog lang niet om
-  const S = { wereld: w, spreektMet: null };
-  T.laatDwalen(S, 0.01);
-  // (8,3) en (8,5) liggen ook naast die deur; (7,4) is de enige stap die dat niet doet.
-  assert.deepEqual(dorpeling.pad, [{ x: 7, y: 4 }]);
-});
-
 test('een dwalende dorpeling blijft binnen zijn straal van thuis', () => {
-  const w = T.maakProefkamers();
+  const w = kaart();
   const S = { wereld: w, spreektMet: null };
   const dorpeling = maakDorpeling(4, 3, 2);
   w.wezens.push(dorpeling);
@@ -128,7 +123,7 @@ test('een dwalende dorpeling blijft binnen zijn straal van thuis', () => {
 });
 
 test('wie in gesprek is, dwaalt niet mee, ook niet als zijn pauze om is', () => {
-  const w = T.maakProefkamers();
+  const w = kaart();
   const dorpeling = maakDorpeling(4, 3, 2);
   w.wezens.push(dorpeling);
   dorpeling.dwaalTijd = -1; // allang tijd voor een stap
@@ -153,17 +148,17 @@ test('het zaad van een dorpeling kiest zijn vel via een modulo die altijd binnen
 });
 
 test('wie twee keer geen weg vindt naar waar hij hoort, wacht een uur voor hij het opnieuw zoekt (vraag 88)', () => {
-  const w = T.maakProefkamers();
+  const w = kaart();
   const S = { wereld: w, spreektMet: null, kalender: { dag: 10 } };
   const dorpeling = maakDorpeling(4, 3, 1);
   // Zijn thuis ligt ver weg, op een tegel die nooit te halen is: in de muur van de kaart.
   dorpeling.thuis = { x: -5, y: -5 };
   w.wezens.push(dorpeling);
-  const echt = T.zoekPad;
-  const echtKan = T.kanErKomen;
+  // Tel hoe vaak hij een weg vraagt (T.zoekRoute, js/lopen.js). Niet hoe vaak A* zoekt: de kaart onthoudt ook dat er
+  // geen weg is, tot ze verandert (tot 23 okt niet op de proefkamers, want daar gingen deuren open en dicht).
+  const echt = T.zoekRoute;
   let gezocht = 0;
-  T.kanErKomen = () => true; // laat A* het zelf merken, zodat we tellen hoe vaak hij zoekt
-  T.zoekPad = (...a) => {
+  T.zoekRoute = (...a) => {
     gezocht++;
     return echt(...a);
   };
@@ -181,7 +176,6 @@ test('wie twee keer geen weg vindt naar waar hij hoort, wacht een uur voor hij h
     T.laatDwalen(S, 0.01);
     assert.equal(gezocht, 3, 'na een uur zoekt hij weer');
   } finally {
-    T.zoekPad = echt;
-    T.kanErKomen = echtKan;
+    T.zoekRoute = echt;
   }
 });

@@ -25,12 +25,8 @@ function vergroot(S, L) {
       w.grond[y].push(gras);
     }
   }
-  // buiten is elke rij kamers dezelfde: een nieuwe, even breed
-  w.burenKamers = new Array(L).fill(new Array(L).fill(['buiten']));
   w.b = L;
   w.h = L;
-  w.kamers[0].x2 = L - 1;
-  w.kamers[0].y2 = L - 1;
 }
 
 // De vrije grond als raster. `muur`: er staat iets vast (T.isVast); `nee`: er mag niet gebouwd worden (plein, veld,

@@ -41,7 +41,7 @@ function boerMet(velden, opties) {
     wereld: {
       b: 30, h: 30, wezens: [boer], akkers, meenten: [],
       tegels: Array.from({ length: 30 }, () => Array(30).fill('gras')),
-      voorwerpen: [], deuren: new Map(), buiten: true,
+      voorwerpen: [],
     },
   };
   boer.dorp = S; // alles op het kaartje is van dit dorp (T.hoortBij is streng sinds stap 6a2: zonder dorp is een wezen of veld van de wereld)

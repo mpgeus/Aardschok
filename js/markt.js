@@ -196,7 +196,7 @@
     const deuren = gebouwen.filter((g) => !g.opHetPlein).map((g) => T.deurVan(w, g));
     const kamp = new Set(kampTegels(D).map((t) => sleutel(t.x, t.y)));
     const inKamp = (x, y) => kamp.has(sleutel(x, y));
-    const open = (x, y) => T.isBegaanbaar(w, x, y) && !T.voorwerpOp(w, x, y) && !T.bijDeur(w, x, y)
+    const open = (x, y) => T.isBegaanbaar(w, x, y) && !T.voorwerpOp(w, x, y)
       && !weg.has(sleutel(x, y)) && !inKamp(x, y) && !deuren.some((d) => cheb({ x, y }, d) <= 1);
     const vrijMidden = IN().vanHetMidden;
     // de bomen bij het plein (verder weg dekken ze er niets van af)

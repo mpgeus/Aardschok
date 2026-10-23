@@ -1,4 +1,4 @@
-// Rondlopen: wat een klik kiest (T.handelingVerkennen), deuren, en het dwalen van wie geen doel heeft. Het
+// Rondlopen: wat een klik kiest (T.handelingVerkennen), en het dwalen van wie geen doel heeft. Het
 // gevecht loopt in real time in de tik (js/gevecht.js; werklijst vraag 170, stap 2).
 (function (T) {
   'use strict';
@@ -136,8 +136,6 @@
       const g = T.gebouwOp(ander, doel.x, doel.y);
       return { tekst: T.t('{gebouw}, of {dorp}', { gebouw: T.hoofdletter(T.GEBOUWEN[g.soort].naam), dorp: naamVan(ander) }) };
     }
-    const d = T.deurOp(w, doel.x, doel.y);
-    if (d && d.staat === 'opslot') return { tekst: T.t('Locked'), fout: true };
     if (!T.isZichtbaar(w, doel.x, doel.y)) return null;
     // Een veld: de muis zegt wat het is. Wat het volgend jaar wordt, kies je in het veldenvenster (js/hud.js, V).
     const veld = T.veldOp(w, doel.x, doel.y);
@@ -151,8 +149,8 @@
 
   // Waar hoort dit wezen rond te blijven? Wie een plek en een straal heeft (`thuis`), blijft daar
   // in de buurt: de smid bij de smidse, een boer bij zijn akker, de wolf bij zijn stuk bos. Wie die niet
-  // heeft, blijft in zijn eigen kamer — binnen is een kamer vanzelf een stuk wereld, buiten is de
-  // hele kaart één kamer en zou een wolf tot de andere kant van het erf wandelen.
+  // heeft, mag overal heen. (Tot 23 okt bleef die in zijn eigen kamer van de proefkamers; ronde 4 van het
+  // snoeien.)
   //
   // `thuisNu` is waar T.laatDwalen hieronder nu voor deze wezen aanhoudt (normaal `e.thuis`, maar
   // voor een boer in het groeiseizoen zijn eigen akker — T.wandelAnker, js/akkers.js); die draagt
@@ -160,10 +158,7 @@
   function magDwalenNaar(w, e, x, y, thuisNu) {
     if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e })) return false;
     if (!T.kanStappen(w, e.tx, e.ty, x, y)) return false;
-    if (T.bijDeur(w, x, y)) return false;
-    if (thuisNu) return T.afstand(thuisNu, { x, y }) <= (thuisNu.straal != null ? thuisNu.straal : (e.straal || 3));
-    const k = T.kamerVan(w, e.tx, e.ty);
-    return !!k && T.kamerVan(w, x, y) === k;
+    return !thuisNu || T.afstand(thuisNu, { x, y }) <= (thuisNu.straal != null ? thuisNu.straal : (e.straal || 3));
   }
 
   // ── Vee op de weide (js/vee.js; spel.md, "Weides met koeien en schapen") ──
@@ -192,7 +187,7 @@
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const x = e.tx + dx;
       const y = e.ty + dy;
-      if (land.op(x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !T.bijDeur(w, x, y) && T.kanStappen(w, e.tx, e.ty, x, y)) opties.push({ x, y });
+      if (land.op(x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && T.kanStappen(w, e.tx, e.ty, x, y)) opties.push({ x, y });
     }
     return opties;
   };
@@ -290,9 +285,7 @@
         continue;
       }
       m.dwaalTijd -= dt;
-      // Staat hij toevallig stil op een tegel waar hij een doorgang blokkeert, dan wacht hij daar
-      // niet zijn hele pauze uit maar stapt meteen door.
-      if (m.dwaalTijd > 0 && !T.bijDeur(w, m.tx, m.ty)) continue;
+      if (m.dwaalTijd > 0) continue;
       // Wie een eigen pauze heeft (vee: dat staat lang te grazen voor het een stap zet), neemt die.
       m.dwaalTijd = m.pauze ? m.pauze[0] + T.toeval(D || w) * (m.pauze[1] - m.pauze[0]) : 1.5 + T.toeval(D || w) * 2.5;
       // Vee op een weide: binnen die rechthoek, of eerst ernaartoe (T.dwaalTegelsOpWeide hierboven).
@@ -364,36 +357,6 @@
     m.padDoel = null;
   }
 
-  // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.
-  T.magStappen = function (S, e, t, w = S.wereld) {
-    return T.isBegaanbaar(w, t.x, t.y, { deurenOpenen: T.isAanvoerder(S, e), wezensBlokkeren: true, wie: e });
-  };
-
-  // Een dichte deur gaat open op het moment dat de aanvoerder erdoor stapt, niet pas als hij er
-  // al half doorheen is.
-  T.bijStapBegin = function (S, e, t) {
-    if (!T.isAanvoerder(S, e)) return;
-    const d = T.deurOp(S.wereld, t.x, t.y);
-    if (d && d.staat === 'dicht') {
-      d.staat = 'open';
-      T.ontdekBijDeur(S.wereld, d);
-    }
-  };
-
-  T.bijAankomst = function (S, e, t) {
-    const w = S.wereld;
-    if (T.isAanvoerder(S, e)) {
-      const k = T.kamerVan(w, t.x, t.y);
-      if (k) {
-        w.bekend.add(k.id);
-        w.huidigeKamer = k.id;
-        if (!S.bezocht.has(k.id)) {
-          S.bezocht.add(k.id);
-          T.ui.plek(k.naam);
-        }
-      }
-      const d = T.deurOp(w, t.x, t.y);
-      if (d) T.ontdekBijDeur(w, d);
-    }
-  };
+  // Mag deze stap nog? Tijdens het rondlopen kan er intussen een rover in de weg staan.
+  T.magStappen = (S, e, t, w = S.wereld) => T.isBegaanbaar(w, t.x, t.y, { wezensBlokkeren: true, wie: e });
 })(globalThis.Spel = globalThis.Spel || {});

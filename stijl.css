@@ -201,27 +201,6 @@ kbd {
 #menu-knop.actief { color: var(--papier-rood); }
 .nieuwe-hud #hud { display: none; }
 
-/* De naam van een kamer als je hem voor het eerst binnenloopt */
-#plek {
-  position: fixed;
-  left: 50%;
-  top: 20%;
-  transform: translateX(-50%);
-  font: italic 30px var(--boek);
-  color: var(--inkt);
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-}
-#plek.toon { animation: plek 2.8s ease forwards; }
-@keyframes plek {
-  0% { opacity: 0; transform: translate(-50%, 8px); }
-  15% { opacity: 1; transform: translate(-50%, 0); }
-  70% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 /* Berichten, linksonder, boven de voorraad (js/balk.js). */
 #berichten {
   position: fixed;
@@ -1083,7 +1062,7 @@ body.titelscherm :is(#instellingen, #spelregels) {
 .credits .credits-kop { margin: 14px 0 2px; font: 16px var(--kop); }
 .credits .credits-stand { margin-top: 14px; font-size: 12px; color: var(--gedempt); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
-body.titelscherm :is(#hud-gehucht, #berichten, #plek, .hoek-onder) { visibility: hidden; }
+body.titelscherm :is(#hud-gehucht, #berichten, .hoek-onder) { visibility: hidden; }
 
 /* De fotomodus (H, js/main.js; werklijst vraag 146, e): alles van het beeld behalve het doek (en dat van de videokaart),
    en het briefje met de toetsen, dat onderaan in het midden even blijft staan en wegvaagt, zoals "Opgeslagen". */

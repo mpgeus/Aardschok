@@ -1,8 +1,9 @@
 // De wereld: wat een wezen is (T.WEZENS), wat een voorwerp is (T.VOORWERPEN), en de vragen die de
-// rest van het spel over een kaart stelt: kan ik hier staan, zie ik daar iets, in welke kamer
-// ligt dit. Een kaart komt uit Tiled (js/kaart.js), op één na: de proefkamers hieronder, drie
-// kamers in code voor de toetsen van het gevecht (test/regels.test.cjs). Tot 25 sep was dat één
-// verdieping van de toren van het oude spel; de toren ging eruit, de plattegrond bleef.
+// rest van het spel over een kaart stelt: kan ik hier staan, zie ik daar iets. De kaart is het eiland
+// uit code (T.eilandKaart hieronder, js/eiland.js); een toets zet soms een kleine kaart van tekens neer.
+// (Tot 25 sep stond hier één verdieping van de toren van het oude spel, en tot 23 okt bleef die als
+// proefkamers voor de toetsen, met deuren, kamers die je ontdekt, kisten en twee monsters; ronde 4 van
+// het snoeien.)
 (function (T) {
   'use strict';
 
@@ -25,39 +26,8 @@
   };
   const IN = () => T.WERELD_INSTELLINGEN;
 
-  // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten.
-  const PLATTEGROND = [
-    '####################',
-    '#........#.........#',
-    '#........#.........#',
-    '#........#.........#',
-    '#........D.........#',
-    '#........#.........#',
-    '#........#.........#',
-    '#........#.........#',
-    '####L###############',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '#........#          ',
-    '##########          ',
-  ];
-
-  // Een kamer is een rechthoek vloer. De muren eromheen horen er niet bij: een muur
-  // scheidt twee kamers, en welke kant de voorkant is, hangt af van waar je staat.
-  const KAMERS = [
-    { id: 'hal', naam: T.t('The hall'), x1: 1, y1: 1, x2: 8, y2: 7, vloer: ['#6e5c48', '#675643'] },
-    { id: 'opslag', naam: T.t('The storeroom'), x1: 10, y1: 1, x2: 18, y2: 7, vloer: ['#5f4b37', '#584532'] },
-    { id: 'trap', naam: T.t('The stairwell'), x1: 1, y1: 9, x2: 8, y2: 14, vloer: ['#51555a', '#4b4f54'] },
-  ];
-
   // blokkeert: je kunt er niet op staan. zichtDicht: je kijkt er niet langs.
   T.VOORWERPEN = {
-    fontein: { blokkeert: true, zichtDicht: false },
-    kist: { blokkeert: true, zichtDicht: true },
-    pilaar: { blokkeert: true, zichtDicht: true },
     // De schandpaal van de heer op het plein: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
     schandpaal: { blokkeert: true, zichtDicht: false, naam: T.t('the pillory') },
@@ -141,35 +111,12 @@
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
     // ontwerp/wereld.md, "Wie is wie, als het er honderd worden".
-    slijm: {
-      naam: T.t('slime crawler'), kant: 'monster', leven: 10, snelheid: 1.4, zicht: 5, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 3], zin: T.t('bites {doel}') },
-    },
-    skelet: {
-      naam: T.t('skeleton guard'), kant: 'monster', leven: 18, snelheid: 2.2, zicht: 5, dwaalt: false,
-      aanval: { kosten: 3, schade: [3, 5], zin: T.t('hits {doel} with his sword') },
-    },
-    // Buiten, in het bos. Hij loopt harder dan de aanvoerder en ziet verder dan wat er
-    // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
-    // slijmkruiper in een kelder.
+    // In het bos (js/beesten.js). Hij loopt harder dan de aanvoerder en ziet ver: een wolf hoort op te
+    // vallen. (Tot 23 okt stonden hier ook de monsters van de toren en van Tiled: de slijmkruiper, het
+    // skelet, de reuzenspin en de kobold; ronde 4 van het snoeien.)
     wolf: {
       naam: T.t('wolf'), kant: 'monster', leven: 12, snelheid: 2.6, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('bites {doel}') },
-    },
-    // Dieper het bos in. De sleutel is hier de naam: js/sprites.js zoekt het figuur op de soort
-    // op, dus deze twee heten precies zoals hun animatievellen in beelden/figuren
-    // (bosvijanden-anim.cjs, via naar-spel.cjs). Zo kan Marcel ze in Tiled neerzetten met
-    // wezen="reuzenspin" of wezen="kobold", zonder dat er nog ergens iets bij moet.
-    //
-    // De spin is traag maar taai en bijt gif: wie haar ziet aankomen, loopt om. De kobold loopt
-    // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen.
-    reuzenspin: {
-      naam: T.t('giant spider'), kant: 'monster', leven: 14, snelheid: 2.0, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, schade: [3, 4], zin: T.t('bites {doel} with her fangs') },
-    },
-    kobold: {
-      naam: T.t('kobold'), kant: 'monster', leven: 16, snelheid: 2.4, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 4], zin: T.t('stabs {doel} with his spear') },
     },
     // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): wie wegtrok, of wilde rovers van buiten. Ze dwalen niet
     // maar lopen waar hun aanval ze heen stuurt, en dragen het vel van gewone mensen (e.vel, zie S.houding in
@@ -189,11 +136,8 @@
 
   const sleutelVan = (x, y) => x + ',' + y;
 
-  // Alleen zodat js/kaart.js een wezen uit een ingelezen kaart in precies dezelfde vorm kan
-  // neerzetten als hierboven; de vorm zelf (WEZENS, maakWezen) blijft hier, en verandert niet.
+  // Een wezen in precies de vorm van hierboven (de maker, de rovers, de soldaten), en de tabel zelf.
   T.maakWezen = maakWezen;
-  // De tabel zelf gaat mee naar buiten, want dit is precies de lijst die Marcel in Tiled mag
-  // invullen bij de eigenschap "wezen". Wie wil weten wat er te plaatsen valt, vraagt het hier.
   T.WEZENS = WEZENS;
 
   // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
@@ -210,53 +154,6 @@
   // naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
   T.snelheidVan = (e) => e.snelheid;
 
-  // De proefkamers: een hal, een voorraadkamer en een trappenhuis, met een dichte deur en een deur
-  // op slot, kisten, pilaren, een fontein en twee monsters. Alleen voor de toetsen: in het spel
-  // staan ze op geen enkele kaart.
-  T.maakProefkamers = function () {
-    const h = PLATTEGROND.length;
-    const b = PLATTEGROND[0].length;
-    const tegels = [];
-    const deuren = new Map();
-    for (let y = 0; y < h; y++) {
-      const rij = [];
-      for (let x = 0; x < b; x++) {
-        const t = PLATTEGROND[y][x];
-        if (t === '#') rij.push('muur');
-        else if (t === '.') rij.push('vloer');
-        else if (t === 'D' || t === 'L') {
-          rij.push('deur');
-          deuren.set(sleutelVan(x, y), { x, y, staat: t === 'L' ? 'opslot' : 'dicht', richting: 'ow' });
-        } else rij.push('buiten');
-      }
-      tegels.push(rij);
-    }
-    const w = {
-      b, h, tegels, deuren, kamers: KAMERS,
-      voorwerpen: [], wezens: [],
-      bekend: new Set(['hal']), huidigeKamer: 'hal',
-      overgangen: [],
-      buiten: false,
-    };
-    // Loopt de muur rond de deur van noord naar zuid, dan staat het deurpaneel dwars op x.
-    for (const d of deuren.values()) if (T.tegel(w, d.x, d.y - 1) === 'muur') d.richting = 'ns';
-    w.voorwerpen.push(
-      { soort: 'fontein', x: 7, y: 6 },
-      { soort: 'kist', x: 12, y: 2 },
-      { soort: 'kist', x: 13, y: 5 },
-      { soort: 'kist', x: 14, y: 5 },
-      { soort: 'pilaar', x: 3, y: 11 },
-      { soort: 'pilaar', x: 6, y: 11 },
-    );
-    w.wezens.push(
-      maakWezen('aanvoerder', 3, 5),
-      maakWezen('slijm', 16, 4),
-      maakWezen('skelet', 5, 13),
-    );
-    w.burenKamers = berekenBurenKamers(w);
-    return w;
-  };
-
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.
   function maakWezen(soort, x, y) {
@@ -267,8 +164,7 @@
       soort, naam: s.naam, kant: s.kant,
       x, y, tx: x, ty: y, pad: [], onderweg: false,
       leven: s.leven, maxLeven: s.leven, snelheid: s.snelheid, zicht: s.zicht || 0,
-      // Waar hij hoort en hoe ver hij daarvandaan dwaalt. Zonder thuis blijft hij in zijn eigen
-      // kamer; dat werkt binnen, maar buiten is de hele kaart één kamer (zie T.laatDwalen).
+      // Waar hij hoort en hoe ver hij daarvandaan dwaalt (T.laatDwalen, js/verkennen.js).
       dwaalt: !!s.dwaalt, thuis: s.straal ? { x, y } : null, straal: s.straal || 0,
       aanval: s.aanval || null,
       // Een geleend vel, zolang dit figuur nog niet getekend is (js/sprites.js, S.houding).
@@ -278,34 +174,11 @@
     };
   }
 
-  // Per tegel: welke kamers liggen er direct omheen (ook schuin). Een muur of deur is
-  // zichtbaar zodra een van die kamers bekend is.
-  function berekenBurenKamers(w) {
-    const r = [];
-    const vak = T.kaartVak(w);
-    for (let y = vak.y; y < vak.y + vak.h; y++) {
-      const rij = [];
-      for (let x = vak.x; x < vak.x + vak.b; x++) {
-        const s = new Set();
-        for (let dy = -1; dy <= 1; dy++) {
-          for (let dx = -1; dx <= 1; dx++) {
-            const k = T.kamerVan(w, x + dx, y + dy);
-            if (k) s.add(k.id);
-          }
-        }
-        rij.push([...s]);
-      }
-      r.push(rij);
-    }
-    return r;
-  }
-
   // ── De kaart: één weg naar de tegels (B2a en B2b, vraag 117, stap 3; ontwerp/kaarten.md, "Het hele eiland") ──
-  // Wat een tegel is (een woord: 'buiten', 'muur', 'vloer' of 'deur'), welke grond eronder ligt, en wat de kaart
-  // beslaat, vraag en zet je alleen hier: niets anders leest w.tegels, w.grond, w.b of w.h zelf (test/tegels.test.cjs
-  // kijkt het na). Er zijn twee soorten kaart achter dezelfde vragen: een kaart uit Tiled (de proefkaarten, de kamers
-  // van de toetsen), met w.tegels en w.grond van (0, 0) tot (w.b, w.h), en een kaart van het eiland (T.eilandKaart
-  // hieronder), het hele eiland in stukken.
+  // Wat een tegel is (een woord: 'buiten', 'muur' of 'vloer'), welke grond eronder ligt, en wat de kaart beslaat, vraag
+  // en zet je alleen hier: niets anders leest w.tegels, w.grond, w.b of w.h zelf (test/tegels.test.cjs kijkt het na).
+  // Er zijn twee soorten kaart achter dezelfde vragen: een kleine kaart van een toets, met w.tegels en w.grond van (0, 0)
+  // tot (w.b, w.h), en een kaart van het eiland (T.eilandKaart hieronder), het hele eiland in stukken.
   const opEiland = (w) => !!(w && w.eiland && !w.tegels);
   T.opEiland = opEiland;
   T.opKaart = (w, x, y) => (opEiland(w) ? x >= 0 && y >= 0 && x < EILAND_MAAT() && y < EILAND_MAAT() : x >= 0 && y >= 0 && x < w.b && y < w.h);
@@ -383,10 +256,6 @@
   // per tegel bewaard wordt (het slijten van de paadjes, js/paden.js; wat op het eiland veranderde); en terug.
   T.tegelNummer = (x, y) => y * 4096 + x;
   T.tegelVanNummer = (k) => ({ x: k % 4096, y: Math.floor(k / 4096) });
-  // Welke kamers er om tegel (x, y) liggen (berekenBurenKamers, hierboven); buiten de kaart geen, en op het eiland is
-  // alles buiten.
-  const BUITEN = ['buiten'];
-  T.burenKamersOp = (w, x, y) => (!T.opKaart(w, x, y) ? [] : opEiland(w) ? BUITEN : w.burenKamers[y][x]);
 
   // ── De kaart van het eiland, in stukken (B2b) ──
   // Het eiland komt uit zijn nummer (js/eiland.js), en het land van elk stuk van STUK bij STUK tegels uit T.landStuk
@@ -400,20 +269,17 @@
   const STUK = 64;
   T.STUK = STUK;
   const EILAND_MAAT = () => T.EILAND_INSTELLINGEN.maat;
-  const WOORD = ['buiten', 'vloer', 'muur', 'deur'];
-  const CODE = { buiten: 0, vloer: 1, muur: 2, deur: 3 };
+  const WOORD = ['buiten', 'vloer', 'muur'];
+  const CODE = { buiten: 0, vloer: 1, muur: 2 };
   const STUKKEN = new WeakMap();
   T.stukNummer = (sx, sy) => sy * 64 + sx;
   T.stukVan = (x, y) => T.stukNummer(Math.floor(x / STUK), Math.floor(y / STUK));
   // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken.
   T.eilandKaart = function (zaad, vak) {
-    const kamer = { id: 'buiten', naam: T.t('Outside'), x1: 0, y1: 0, x2: EILAND_MAAT() - 1, y2: EILAND_MAAT() - 1, vloer: ['#3c5e1e', '#355f22'] };
     return {
       eiland: { zaad }, vak: { ...vak },
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
-      deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], wezens: [],
-      bekend: new Set(['buiten']), huidigeKamer: 'buiten', akkers: [], meenten: [],
-      buiten: true, naam: null, pleinen: [], plekken: [],
+      voorwerpen: [], wezens: [], akkers: [], meenten: [], naam: null, pleinen: [], plekken: [],
     };
   };
   function stukkenVan(w) {
@@ -655,8 +521,6 @@
     }
     return uit;
   };
-  T.deurOp = (w, x, y) => w.deuren.get(sleutelVan(x, y)) || null;
-  T.kamerVan = (w, x, y) => w.kamers.find((k) => x >= k.x1 && x <= k.x2 && y >= k.y1 && y <= k.y2) || null;
   // Een voorwerp staat meestal op één tegel, maar de spiraaltrap beslaat er drie bij drie: een
   // spiraal waar een man door past is minstens twee meter breed. `voet` geeft die rechthoek ten
   // opzichte van de tegel van het voorwerp zelf, als {dx, dy, b, h}. Die tegel is bij de trap de
@@ -829,13 +693,12 @@
   // vaststaat (muren, huizen, bomen, versiering), rekent de kaart één keer uit: welke begaanbare tegels samen één
   // gebied vormen, een eiland. Wil iemand naar een plek op een ander eiland, dan is er geen weg, en dat hoeft A* niet
   // na de hele kaart te merken (T.kanErKomen). Zoals de lijst per tegel is het geen spelstaat maar iets wat uit de
-  // kaart volgt: niet in S, en na T.kaartVeranderd opnieuw. Een eiland is ruim: een deur telt als open en wie er staat,
-  // telt niet. Zo zegt het nooit "geen weg" waar er een is, en verandert er niets aan wie waar loopt; het gaat alleen
+  // kaart volgt: niet in S, en na T.kaartVeranderd opnieuw. Een eiland is ruim: wie er staat, telt niet. Zo zegt het nooit "geen weg" waar er een is, en verandert er niets aan wie waar loopt; het gaat alleen
   // sneller (bij de bouwer van de speeltest liet een dichtgebouwde deur A* 4.000 keer per tien dagen de kaart afzoeken).
   // Op het eiland gaat er land open (T.werkStukkenBij): dan krijgen alleen de tegels van het nieuwe stuk een eiland, en
   // waar dat aan een eiland van het oude land raakt, worden ze één (`ouder`: elk eiland wijst naar het eiland waar het in
   // opging, en T.eilandOp geeft het bovenste). Wat ruim is, leest het uit het raster van wat vaststaat (hieronder): een
-  // deur telt als open, een muur, buiten en wat in de weg staat niet.
+  // muur, buiten en wat in de weg staat niet.
   const EILANDEN = new WeakMap();
   const RUIM = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
   function bovenste(ouder, a) {
@@ -990,36 +853,23 @@
     return bezet;
   }
 
-  // Mag je deze tegel op? deurenOpenen: een dichte deur telt als doorgang (de aanvoerder duwt
-  // hem open, een monster niet). wezensBlokkeren: andere wezens staan in de weg.
+  // Mag je deze tegel op? wezensBlokkeren: andere wezens (behalve `wie`) staan in de weg. (Tot 23 okt ook deurenOpenen:
+  // een dichte deur van de proefkamers telde als doorgang voor de aanvoerder; ronde 4 van het snoeien.)
   T.isBegaanbaar = function (w, x, y, opties) {
-    const o = opties || {};
-    const g = vastOp(w, x, y);
-    if (g === VAST) return false;
-    if (g === DEUR) {
-      const d = T.deurOp(w, x, y);
-      if (d.staat === 'opslot') return false;
-      if (d.staat === 'dicht' && !o.deurenOpenen) return false;
-    }
-    if (o.wezensBlokkeren && T.wezenOp(w, x, y, o.wie)) return false;
-    return true;
+    if (vastOp(w, x, y) === VAST) return false;
+    return !(opties && opties.wezensBlokkeren && T.wezenOp(w, x, y, opties.wie));
   };
 
   // Houdt deze tegel een schuine stap om de hoek tegen? Alleen vaste dingen tellen: een
   // wezen dat schuin naast je staat, sluit de doorgang niet af.
-  T.isVast = function (w, x, y) {
-    const g = vastOp(w, x, y);
-    return g === VAST || (g === DEUR && T.deurOp(w, x, y).staat !== 'open');
-  };
+  T.isVast = (w, x, y) => vastOp(w, x, y) === VAST;
 
   // Wat vaststaat, per tegel in een raster (vraag 113, 4 okt): A* vraagt voor elke tegel die hij bekijkt zestien keer
   // of er iets staat, en op een land van de maker van 100 bij 100 zijn het er duizenden per zoektocht. VAST is een muur,
-  // buiten de kaart, of een voorwerp dat in de weg staat (een huis, een boom); DEUR een deur, die open of dicht kan; en
-  // VRIJ de rest. Opnieuw als de kaart veranderde (T.kaartVeranderd), met hetzelfde vangnet als de lijst per tegel
+  // buiten de kaart, of een voorwerp dat in de weg staat (een huis, een boom); en VRIJ de rest. Opnieuw als de kaart veranderde (T.kaartVeranderd), met hetzelfde vangnet als de lijst per tegel
   // hierboven, en als de kaart groeide (het meetgereedschap, gereedschap/grootte/).
   const VRIJ = 0;
   const VAST = 1;
-  const DEUR = 2;
   const RASTERS = new WeakMap();
   let laatste = null; // het raster waar het laatst naar gevraagd werd: A* vraagt duizenden keren achter elkaar dezelfde kaart
   // Vul het raster (over `vak`) op de tegels van x0, y0, b bij h.
@@ -1028,7 +878,7 @@
       for (let x = x0; x < x0 + b; x++) {
         const t = T.tegel(w, x, y);
         const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, x, y);
-        raster[(y - vak.y) * vak.b + (x - vak.x)] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
+        raster[(y - vak.y) * vak.b + (x - vak.x)] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : VRIJ;
       }
     }
   }
@@ -1059,9 +909,9 @@
     return r.raster;
   }
   // Het raster zelf, voor wie per tegel heel vaak vraagt en de tegels al als getal kent (de velden in js/lopen.js: een
-  // veld vraagt het voor elke buur van elke tegel). Een DEUR vraag je dan nog aan T.isBegaanbaar of T.isVast.
+  // veld vraagt het voor elke buur van elke tegel).
   T.vastRaster = vastRaster;
-  T.RASTER = { VRIJ, VAST, DEUR };
+  T.RASTER = { VRIJ, VAST };
   function vastOp(w, x, y) {
     if (!T.opKaart(w, x, y)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {
@@ -1076,8 +926,7 @@
     const t = T.tegel(w, x, y);
     if (t === 'muur' || t === 'buiten') return VAST;
     const v = T.voorwerpOp(w, x, y);
-    if (v && T.VOORWERPEN[v.soort].blokkeert) return VAST;
-    return t === 'deur' ? DEUR : VRIJ;
+    return v && T.VOORWERPEN[v.soort].blokkeert ? VAST : VRIJ;
   }
 
   // Ligt het punt (px, py) binnen een rand, een lijst hoekpunten [[x, y], ...]? Een straal naar rechts
@@ -1149,16 +998,6 @@
 
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
   // om een muurhoek heen. Dat geldt voor slaan, praten en iets gebruiken.
-  // Staat deze tegel een doorgang in de weg? Een deur, of de tegel er pal naast: daar mag niemand
-  // blijven staan te dwalen (js/verkennen.js), en daar gaat niemand opzij heen (js/lopen.js). Anders sta je voor een
-  // dichte deur te wachten tot iemand opschuift, en dat mag je nooit jaren kosten (ontwerp/wereld.md).
-  T.bijDeur = function (w, x, y) {
-    for (let dy = -1; dy <= 1; dy++) {
-      for (let dx = -1; dx <= 1; dx++) if (T.tegel(w, x + dx, y + dy) === 'deur') return true;
-    }
-    return false;
-  };
-
   T.raakt = function (w, a, b) {
     const dx = b.x - a.x;
     const dy = b.y - a.y;
@@ -1170,13 +1009,12 @@
   T.blokkeertZicht = function (w, x, y) {
     const t = T.tegel(w, x, y);
     if (t === 'muur' || t === 'buiten') return true;
-    if (t === 'deur' && T.deurOp(w, x, y).staat !== 'open') return true;
     const v = T.voorwerpOp(w, x, y);
     return !!(v && T.VOORWERPEN[v.soort].zichtDicht);
   };
 
   // Zicht langs een lijn van tegelmidden naar tegelmidden (Bresenham). De begin- en
-  // eindtegel tellen niet mee: wie in een deuropening staat, ziet eruit. `open(x, y)` (mag ontbreken) zegt welke tegels
+  // eindtegel tellen niet mee: wie naast een boom staat, ziet erlangs. `open(x, y)` (mag ontbreken) zegt welke tegels
   // het zicht niet houden, wat er ook staat.
   T.zicht = function (w, a, b, open) {
     let x = a.x;
@@ -1211,18 +1049,7 @@
     return !T.heeftTegels(w) || T.zichtTussen(w, van, naar, open);
   };
 
-  T.isZichtbaar = function (w, x, y) {
-    const t = T.tegel(w, x, y);
-    if (t === 'buiten') return false;
-    if (t === 'vloer') return w.bekend.has(T.kamerVan(w, x, y).id);
-    return T.burenKamersOp(w, x, y).some((id) => w.bekend.has(id));
-  };
-
-  // Wie in een deuropening staat of een deur opendoet, kijkt in de kamers aan beide kanten.
-  T.ontdekBijDeur = function (w, d) {
-    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      const k = T.kamerVan(w, d.x + dx, d.y + dy);
-      if (k) w.bekend.add(k.id);
-    }
-  };
+  // Staat er op deze tegel iets om te tekenen? Wat buiten de kaart ligt of nog niet open is ('buiten'), niet. Wat je dorp
+  // nog niet kent, is de mist (js/mist.js). (Tot 23 okt keek dit ook welke kamers van de proefkamers je al kende.)
+  T.isZichtbaar = (w, x, y) => T.tegel(w, x, y) !== 'buiten';
 })(globalThis.Spel = globalThis.Spel || {});

@@ -138,7 +138,7 @@
     const kandidaten = [];
     for (let y = Math.max(vak.y, e.thuis.y - r); y <= Math.min(vak.y + vak.h - 1, e.thuis.y + r); y++) {
       for (let x = Math.max(vak.x, e.thuis.x - r); x <= Math.min(vak.x + vak.b - 1, e.thuis.x + r); x++) {
-        if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y)) continue;
+        if (!T.isBegaanbaar(w, x, y)) continue;
         if (!(boom(x - 1, y) || boom(x, y - 1) || boom(x - 1, y - 1))) continue;
         if (boom(x + 1, y) || boom(x, y + 1) || boom(x + 1, y + 1)) continue;
         if (!T.isBos(w, x, y) || gebouwVoor(x, y)) continue;
