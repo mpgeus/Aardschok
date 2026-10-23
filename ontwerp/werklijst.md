@@ -25,6 +25,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
 **Wacht op Marcel**
+- **185 en 186 bekijken** (in de branch `ccr-39520f0f-f5x764`, nog niet in `main`; `spel.md`, bij Rovers en de militie "In
+  de demo één overval", en bij het eind "De punten"). Speel het demojaar (`Spel.DEMO_INSTELLINGEN.aan = true`): een dag
+  voor de overval een bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder
+  het jaarverslag. De dag staat in `Spel.debug.rovers().demoOp`, de punten in `Spel.debug.einde()`. De speeltest liep in
+  de cloud niet (de pagina laadt daar niet, ook op `main`): draai `npm run speeltest` thuis. Open: de korte scène van de
+  rovers (met de cinematic), en de waarden van de waren (de werkbank, "The ending").
 - **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
   "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
   drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
@@ -43,17 +49,15 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **De proefplaten**: de andere materialen (vraag 177; `beeld.md`, "De andere materialen") en het woordmerk (`beeld.md`,
   "Het woordmerk").
 - **Het Engels lezen** (`engels.md`): *the innkeeper*, *the moneylender*, *the tradesmen*, *rent*, *the ledger*,
-  *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, en sinds 23 okt *carriers*.
+  *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, en sinds 23 okt *carriers*, de zinnen van de overval
+  (*Robbers were seen in the woods near the village. They will come soon.*) en van de punten (*Score*, *A new best!*).
 - De spullen bij de huizen (vraag 148, d), de ronde van alle huizen (vraag 144), en het geluid (vraag 145, 2: de sleutel
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **Bezig in sessie `ccr-39520f0f-f5x764`** (23 okt): 185 en 186 bouwen.
-   **185**, één overval in het demojaar (op toeval maar zeker één keer, drie rovers, de wilde rovers in de demo uit), en
-   **186**, de punten (wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, geteld vóór de tiende).
-2. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. Tiled eruit in een
+1. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. Tiled eruit in een
    snoeironde, de proefkaarten naar het proefdorp (6b1).
-3. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
+2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: 4b, plat in het spel (bij N); na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
 (`snelheid.md`, "Na B1 en B2"); later de world gen bijstellen (wat precies, zegt Marcel). G, naar Steam, loopt mee op het
@@ -1401,6 +1405,10 @@ hebben we zoizo nodig. volgorde is akkoord"):
 
 ## Af (sinds 11 okt)
 
+- De overval van de demo (vraag 185, 23 okt; `spel.md`, "In de demo één overval"): één keer drie rovers, overdag, een dag
+  van tevoren aangekondigd; zonder akker roven rovers de grootste stapel.
+- De punten (vraag 186, 23 okt; `spel.md`, "De punten"): wat je verzamelde en wat er in de opslag ligt, in goud, op
+  Sint-Maarten vóór de tiende; in de demo op het eindscherm, met je beste.
 - De dragers (vraag 184, 23 okt; `spel.md`, "Zo werken de dragers nu"): geen kar meer aan het begin; wie geen werk heeft,
   bouwt of draagt, één stuk per keer, op één klok met de karren van de schuren; de huifkar gaat op in het raadhuis.
 - Het egaliseren (vraag 182, 23 okt; `spel.md`, "Zo werkt het egaliseren nu"): op een land met heuvels maken de bouwers
