@@ -59,18 +59,27 @@
       const d = Math.hypot(vx - v.x, vy - v.y);
       if (d < I.vlakteTot) h = v.h + (h - v.h) * glad(I.vlakteVan, I.vlakteTot, d);
     }
-    // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
+    // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt. Een vlak stuk dat er pas
+    // voor een deel ligt (`deel`, van 0 tot 1: de bouwers egaliseren nog, vraag 182), schuift de grond die eronder ligt
+    // dat deel naar zijn hoogte.
     let naast = null;
+    let deels = null;
     for (const v of vlakken) {
       if (nat && v.droog) continue;
       const dx = Math.max(v.x0 - vx, 0, vx - v.x1);
       const dy = Math.max(v.y0 - vy, 0, vy - v.y1);
-      if (dx === 0 && dy === 0) return v.h;
+      if (dx === 0 && dy === 0) {
+        if (v.deel == null) return deels ? v.h + (deels.h - v.h) * deels.deel : v.h;
+        if (!deels) deels = v;
+        continue;
+      }
       if (dx >= I.vrijRond || dy >= I.vrijRond) continue;
       (naast || (naast = [])).push([v, Math.hypot(dx, dy)]);
     }
-    if (naast) for (const [v, d] of naast) h = v.h + (h - v.h) * glad(0, I.vrijRond, d);
-    return h;
+    if (naast) {
+      for (const [v, d] of naast) h = v.deel == null ? v.h + (h - v.h) * glad(0, I.vrijRond, d) : h + (v.h - h) * (1 - glad(0, I.vrijRond, d)) * v.deel;
+    }
+    return deels ? h + (deels.h - h) * deels.deel : h;
   }
   // Het landschap zelf: drie lagen gladde ruis uit het nummer van het land (ook voor de grote plaat,
   // gereedschap/pixelart/landschap-plaat.cjs).
@@ -695,8 +704,10 @@
   // Maak de grond onder een nieuw gebouw vlak: op de gemiddelde hoogte van wat er lag. Het nieuwe stuk gaat voor wat er
   // al lag (glooiingOp neemt het eerste vlakke stuk), en raakt geen ander gebouw: daar blijft een looppad tussen
   // (T.looppadOm, js/gebouwen.js), en het stuk is een tegel smaller dan het looppad. `zoalsBij`: een tegel { x, y } waarvan de
-  // grond blijft zoals hij ligt (een huis dat doorgroeit, blijft waar het stond). Geeft het vlakke stuk, of null.
-  T.egaliseer = function (w, plek, zoalsBij) {
+  // grond blijft zoals hij ligt (een huis dat doorgroeit, blijft waar het stond). `deel`: het stuk ligt er nog maar voor
+  // een deel (0: de grond is nog zoals hij was; de bouwers egaliseren, js/bouwen.js, en T.zetEgaliseerDeel schuift het
+  // verder). Geeft het vlakke stuk, of null.
+  T.egaliseer = function (w, plek, zoalsBij, deel = 1) {
     if (!w || !w.hoogte) return null;
     const hg = w.hoogte;
     const v = vlakVan(plek, randVanPlek());
@@ -707,10 +718,32 @@
       n++;
     });
     const vlak = { ...v, h: zoalsBij ? glooiingOp(hg, zoalsBij.x, zoalsBij.y) : Math.round(som / n) };
+    if (deel < 1) vlak.deel = deel;
     hg.vlakken.unshift(vlak);
+    if (deel > 0) veranderdOm(hg, vlak);
+    return vlak;
+  };
+  const veranderdOm = (hg, vlak) => {
     const r = IN().vrijRond + 1;
     veranderd(hg, vlak.x0 - r, vlak.y0 - r, vlak.x1 + r, vlak.y1 + r);
-    return vlak;
+  };
+  // Een vlak stuk dat er voor een deel ligt (T.egaliseer), ligt er nu voor `deel` (1: helemaal, en dan is het een gewoon
+  // vlak stuk). Het tekenen hoort waar de grond anders werd (T.hoogtePlekkenSinds).
+  T.zetEgaliseerDeel = function (w, vlak, deel) {
+    if (!w || !w.hoogte || !vlak) return;
+    if (deel >= 1) delete vlak.deel;
+    else vlak.deel = deel;
+    veranderdOm(w.hoogte, vlak);
+  };
+  // Hoeveel de grond onder een vlak stuk nog moet zakken of rijzen: de som over zijn hoekpunten van het verschil met zijn
+  // hoogte, in pixels (zo duur is het egaliseren, js/bouwen.js). Voor een stuk dat er nog niet ligt (`deel` 0).
+  T.egaliseerVerschil = function (w, vlak) {
+    if (!w || !w.hoogte || !vlak) return 0;
+    let som = 0;
+    hoekpuntenVan(vlak, (vx, vy) => {
+      som += Math.abs(glooiingOp(w.hoogte, vx, vy) - vlak.h);
+    });
+    return som;
   };
   // De glooiing veranderde op de tegels van (x0, y0) tot x1 en y1 (een nieuw vlak stuk, een nieuwe vlakte): een nieuwe
   // versie, en de lijsten van de stukken alleen daar opnieuw (een heel stuk kost zo'n 20 ms), wat afdekt tot twee tegels

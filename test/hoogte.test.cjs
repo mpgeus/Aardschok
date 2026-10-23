@@ -308,6 +308,9 @@ test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vla
     for (let y = vrij.y - 10; y < vrij.y + 16; y++) for (let x = vrij.x - 10; x < vrij.x + 16; x++) stappen.push([x, y, T.kanStappen(w, x, y, x + 1, y) && T.kanStappen(w, x, y, x, y + 1)]);
     const r = T.plaatsGebouw(D, 'houthakker', vrij.x, vrij.y);
     assert.ok(r.gelukt, r.reden);
+    // in het lege begin maken de bouwers de grond eerst vlak (js/bouwen.js; vraag 182, test/begin.test.cjs): hier meteen af
+    assert.ok(r.instantie.wachtOpRooien && !r.instantie.voorwerp, 'eerst egaliseren de bouwers');
+    T.proefdorp.bouwAf(D, r.instantie, Math.floor(D.kalender.dag));
     assert.ok((w.hoogte.versie || 0) > versie);
     const voet = r.instantie.voet;
     const hoogten = new Set();

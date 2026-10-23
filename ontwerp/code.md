@@ -685,7 +685,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   met hoogte van achter naar voren. **Wat de hoogte doet** (stap 2, 8 okt; Marcel: "Akkoord"): niemand stapt door een wand
   (`T.kanStappen`; `T.zoekPad` en `T.bereik` krijgen de kaart mee, `wereld`, en de eilanden en de velden vragen het ook),
   wel over een helling; een gebouw niet op steile grond (`T.teSteil`, "te steil" in `T.waaromPastHetNiet`), en waar het komt, wordt de grond vlak (`T.egaliseer`, vanuit `zetGebouwVoorwerp` en het
-  doorgroeien: een vlak stuk vooraan in `w.hoogte.vlakken`); een heuvel houdt het zicht tegen (`T.heuvelTussen` in
+  doorgroeien: een vlak stuk vooraan in `w.hoogte.vlakken`; in het lege begin egaliseren de bouwers het, vraag 182: dan
+  ligt het stuk er eerst voor een deel, `v.deel` van 0 tot 1, dat in `glooiingVan` de grond eronder dat deel naar zijn
+  hoogte schuift, en `T.zetEgaliseerDeel` zet het verder; `T.egaliseerVerschil` zegt hoeveel de grond moet zakken of
+  rijzen); een heuvel houdt het zicht tegen (`T.heuvelTussen` in
   `T.zichtTussen`) en wie hoog staat, ziet verder (`T.verderVanBoven` in `T.zietTegel`); en een tegel die iets achter zich
   afdekt (`T.dektAf`), komt nog eens in de tekenlijst (`heuvelsErvoor` in `js/tekenen.js`). De proefplaat:
   `gereedschap/pixelart/hoogte-proef.cjs`.
@@ -1438,7 +1441,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (17 okt: op de dag van aankomst rooide niemand), en telt wat de werkdag al achter de rug had als gedaan (`vandaag`),
   zodat de bomen van de ochtend niet in één klap vallen. Zo ook `T.blijftBouwen`: een drager die hout bracht naar een
   bouwplaats waar niemand bouwt, blijft er bouwen (alleen daar, anders bouwt na een paar ritten iedereen). `werkTot(D, g,
-  t)` rekent het werk tot een moment, zo vaak als je wilt. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
+  t)` rekent het werk tot een moment, zo vaak als je wilt. **Egaliseren** (vraag 182, 23 okt): op een land met hoogte
+  (`T.moetEgaliseren`) is een gebouw `wachtOpRooien` tot de plek vrij én vlak is; na het rooien zet `egaliseer` het vlakke
+  stuk neer (`g.vlak`, eerst met `deel` 0, op de gemiddelde hoogte van dat moment, js/hoogte.js), met als werk
+  `egaliseerVast` plus `egaliseerPerHoogte` keer `T.egaliseerVerschil` (`B.egaliseerWerk`), en het werk (`B.tegoed`, zoals
+  bij het rooien) zet de grond in `egaliseerStappen` stappen vlak; zolang is `g.egaliseert`, werken de bouwers met de
+  schoffel (`e.werkt.soort` 'egaliseren', de wieder in js/sprites.js), en mogen de dragers al hout brengen. Dan
+  `T.zetOpDeKaart`, dat de grond niet nog eens egaliseert (`g.vlak`). `B.gerooid`: of er iets gerooid werd (anders geen
+  bericht). Getoetst in `test/begin.test.cjs` ("egaliseren"). Elke nacht doet `T.tikBouwenDag` het werk van gisteren
   (`werkAan`): eerst het rooien, tegel voor tegel (`rooiBoom`, `rooiStruik`; `T.rooiTegel` in `js/bos.js`, dus een boom
   geeft zijn hout), dan het bouwen (`gedaan` tot `werk`, de bouwtijd keer `werkPerBouwdag`); is het af, dan `klaarOp`, en
   zet `T.tikGebouwenDag` hem op klaar zoals elk gebouw. Overdag doet `T.werkBouwenBij` (vanuit `T.werkDorpBij`, na het

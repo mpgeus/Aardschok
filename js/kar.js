@@ -498,7 +498,8 @@
   function vraag(D, g, wat, lading, alle) {
     const B = g.bouw;
     if (B && !g.klaar) {
-      if (g.wachtOpRooien || !B.nodig || !B.nodig[wat]) return 0; // eerst rooien: het hout van de plek gaat er eerst in
+      // eerst rooien: het hout van de plek gaat er eerst in (bij het egaliseren mag het hout al komen, js/bouwen.js)
+      if ((g.wachtOpRooien && !g.egaliseert) || !B.nodig || !B.nodig[wat]) return 0;
       return Math.max(0, B.nodig[wat] - (B.er[wat] || 0) - onderweg(D, g, wat, alle));
     }
     if (!g.klaar) return 0; // (wat erin gaat, gaf watHetVraagt al)

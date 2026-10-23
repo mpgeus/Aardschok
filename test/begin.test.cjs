@@ -500,6 +500,44 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
   assert.equal(spel(true), spel(false));
 });
 
+// Het egaliseren (vraag 182; Marcel, 20 okt: "1a3", "1b1"; 23 okt: "In een paar stappen"): op een land met heuvels maken
+// de bouwers de grond vlak voor ze bouwen.
+test('egaliseren: op een land met heuvels maken de bouwers eerst de grond vlak, in stappen, en dan komt het gebouw op de kaart', (t) => {
+  T.zetOptie('hoogte', 'heuvels');
+  t.after(() => T.optiesTerug());
+  const { S, D, w } = leegBegin();
+  assert.ok(w.hoogte, 'het land heeft heuvels');
+  dagen(S, 1, 1);
+  const I = T.BOUWEN_INSTELLINGEN;
+  const [hut] = zetHutten(D, 1);
+  assert.ok(hut.wachtOpRooien && !hut.voorwerp, 'tot de grond vlak is, staat de hut nog niet op de kaart');
+  assert.match(T.gebouwToestand(D, hut), /level/);
+  assert.equal(D.bewoners.mensen.filter((p) => p.bouwt === hut).length, I.perPlaats, 'en er beginnen meteen vier bouwers aan');
+  // Overdag, elk beeld het werk tot nu: de grond zakt of rijst in stappen naar het vlak.
+  const d = T.dagindeling(S.kalender.dag);
+  const delen = [];
+  for (let u = d.werkBegin; u < d.werkEind && !hut.voorwerp; u += 0.05) {
+    S.kalender.dag = 1 + u / 24;
+    T.werkKarBij(S, D);
+    T.werkBouwenBij(S, D);
+    const deel = hut.vlak ? (hut.vlak.deel == null ? 1 : hut.vlak.deel) : null;
+    if (deel != null && deel !== delen[delen.length - 1]) delen.push(deel);
+  }
+  assert.ok(hut.voorwerp, 'nu staat hij op de kaart');
+  assert.ok(!hut.wachtOpRooien && !hut.egaliseert);
+  assert.equal(delen[delen.length - 1], 1, 'helemaal vlak');
+  assert.ok(delen.length >= 3, `in stappen: ${delen.join(', ')}`);
+  assert.ok(delen.every((x, i) => (i === 0 || x > delen[i - 1]) && Math.abs(x * I.egaliseerStappen - Math.round(x * I.egaliseerStappen)) < 1e-9), `steeds een stap verder: ${delen.join(', ')}`);
+  assert.ok(hut.bouw.egaliseerWerk >= I.egaliseerVast, 'een klein vast deel, plus wat de helling vraagt');
+  const r = T.voetVanGebouw(hut);
+  const hoeken = new Set();
+  for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) for (const h of T.hoekHoogten(w, x, y)) hoeken.add(Math.round(h * 1e6));
+  assert.equal(hoeken.size, 1, 'de voet ligt vlak');
+  // en het bouwen gaat erna door, met wat de dragers brengen
+  for (let dag = 2; dag < 12 && !hut.klaar; dag++) dagen(S, dag, dag);
+  assert.ok(hut.klaar, 'de hut is af');
+});
+
 // De kolonist (werklijst B, 1f; Marcel, 12 okt: "a1, b1"): dezelfde speler in code als in de speeltest
 // (gereedschap/speeltest/kolonist.js), hier per dag. Zonder beelden lopen de mensen niet: wie nog naar zijn huis onderweg
 // is (p.komt), staat 's nachts thuis, zoals het kamp 's nachts staat als de kar vastzat; anders werkt hij nooit. Of iemand

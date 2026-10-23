@@ -1213,8 +1213,9 @@
         T.zetTegel(w, xx, yy, 'muur');
       }
     }
-    // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
-    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
+    // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2), als de bouwers dat niet al deden
+    // (`instantie.vlak`, js/bouwen.js; vraag 182)
+    if (!instantie.vlak) T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
     T.kaartVeranderd(w, { x1: instantie.x, y1: instantie.y, x2: instantie.x + voet.b - 1, y2: instantie.y + voet.h - 1 }); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
@@ -1258,9 +1259,14 @@
       T.nieuweBouwplaats(D, instantie);
       const gebouw = T.hoofdletter(g.naam);
       const werk = instantie.bouw.werk;
-      return { gelukt: true, instantie, bericht: instantie.wachtOpRooien
-        ? T.t('{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).', { gebouw, wat, werk })
-        : T.t('{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).', { gebouw, werk }) };
+      // eerst rooien, en op een land met hoogte de grond vlak maken (js/bouwen.js; vraag 182)
+      const rooien = instantie.wachtOpRooien && T.teRooienOp(D, instantie.kavel).length;
+      const egaliseren = instantie.wachtOpRooien && T.moetEgaliseren(D, instantie);
+      let bericht = T.t('{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).', { gebouw, werk });
+      if (rooien && egaliseren) bericht = T.t('{gebouw}: the builders first clear the site ({wat}) and level the ground, then build it ({werk} workdays).', { gebouw, wat, werk });
+      else if (rooien) bericht = T.t('{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).', { gebouw, wat, werk });
+      else if (egaliseren) bericht = T.t('{gebouw}: the builders first level the ground, then build it ({werk} workdays).', { gebouw, werk });
+      return { gelukt: true, instantie, bericht };
     }
     return { gelukt: true, instantie, bericht: T.t('{gebouw} under construction ({n|# day|# days}).', { gebouw: T.hoofdletter(g.naam), n: g.bouwtijd }) };
   };

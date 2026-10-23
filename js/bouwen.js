@@ -13,18 +13,23 @@
 //
 // Staat er iets op de plek (de voet en het looppad eromheen, de kavel, T.kavelVan in js/bos.js), dan rooien de bouwers
 // dat eerst (Marcel, 11 okt: "a1"): een boom omhakken en zijn stobbe eruit kost `rooiBoom` werkdagen, een struik, een
-// stronk of een boompje `rooiStruik`, en een boom geeft zijn hout, wie hem ook omhakt (T.hakBoom, js/bos.js). Tot de
-// kavel vrij is, staat het gebouw nog niet op de kaart (`wachtOpRooien`, zoals een werkplaats die een inwoner vroeg), en
-// js/tekenen.js laat zijn voet zien.
+// stronk of een boompje `rooiStruik`, en een boom geeft zijn hout, wie hem ook omhakt (T.hakBoom, js/bos.js). Dan maken
+// ze de grond vlak, op een land met hoogte (vraag 182; Marcel, 20 okt: "Ik wil dat bouwers eerst de grond 'levelen' met
+// een schop, zoals in knights and merchants", "1a3", "1b1"): een klein vast deel plus wat de helling vraagt
+// (`egaliseerVast`, `egaliseerPerHoogte`), en de grond zakt of rijst in `egaliseerStappen` stappen naar het vlak (23 okt).
+// Tot de kavel vrij en vlak is, staat het gebouw nog niet op de kaart (`wachtOpRooien`, en tijdens het egaliseren ook
+// `egaliseert`), en js/tekenen.js laat zijn voet zien.
 //
 // De regel is de nacht (T.tikBouwenDag): het werk van gisteren, van wie er gisteren bouwde. Overdag laten de beelden
 // hetzelfde eerder zien (T.werkBouwenBij): het werk van vandaag naar hoe ver de werkdag is, zodat een boom valt terwijl
 // ze hakken; en de bouwers lopen erheen en werken er met de bijl. Wat de beelden vandaag al deden (`vandaag`), doet de
 // nacht niet nog eens, dus met of zonder beelden komt er hetzelfde uit (de toetsen spelen zonder).
 //
-//   g.bouw    { werk, gedaan, tegoed, vandaag, hout }: `werk` is wat het bouwen vraagt en `gedaan` wat er al gebouwd
-//             is (in werkdagen, zonder het rooien); `tegoed` wat er al aan het rooien gedaan is maar nog geen hele tegel
-//             was; `vandaag` wat de beelden vandaag al deden; `hout` wat het rooien opbracht (voor het bericht).
+//   g.bouw    { werk, gedaan, tegoed, vandaag, hout, egaliseerWerk }: `werk` is wat het bouwen vraagt en `gedaan` wat er
+//             al gebouwd is (in werkdagen, zonder het rooien en het egaliseren); `tegoed` wat er al aan het rooien gedaan
+//             is maar nog geen hele tegel was, of aan het egaliseren; `vandaag` wat de beelden vandaag al deden; `hout` wat
+//             het rooien opbracht (voor het bericht); `egaliseerWerk` wat het egaliseren vraagt.
+//   g.vlak    het vlakke stuk onder het gebouw (js/hoogte.js), zodra de bouwers egaliseren; `g.egaliseert` zolang ze bezig zijn.
 //   p.bouwt   de bouwplaats waar deze bewoner vandaag aan bouwt.
 //   e.werkt   { soort: 'hakken' | 'bouwen', x, y, op, tot, rust, bouw }: een bouwer aan het werk, op (x, y), naar `op`
 //             toe (de boom of de voet); js/sprites.js kiest er de hakker bij.
@@ -45,6 +50,12 @@
     // Een veld (js/boerderij.js; vraag 152, 1e) vraagt zoveel werkdagen per tegel, na het rooien: een akker ploegen, een
     // wijngaard planten. Een akker van 30 tegels is zo anderhalve werkdag, een wijngaard drie.
     veldWerk: { akker: 0.05, wijngaard: 0.1 },
+    // Egaliseren (vraag 182, "1a3"), in werkdagen: een vast deel, en zoveel per pixel dat de grond onder het vlakke stuk
+    // moet zakken of rijzen, opgeteld over zijn hoekpunten (T.egaliseerVerschil, js/hoogte.js). In stappen (23 okt: "In een
+    // paar stappen"): elke stap tekent alleen dat stukje grond opnieuw.
+    egaliseerVast: 0.25,
+    egaliseerPerHoogte: 0.004,
+    egaliseerStappen: 4,
   };
   const IN = () => T.BOUWEN_INSTELLINGEN;
 
@@ -65,12 +76,16 @@
     return voet ? T.kavelVan(D, x, y, voet) : null;
   };
 
+  // Moet de grond onder gebouw g eerst vlak (vraag 182)? Op een land met hoogte (js/hoogte.js), voor een gebouw: een veld
+  // blijft liggen zoals het ligt.
+  T.moetEgaliseren = (D, g) => !!(D.wereld && D.wereld.hoogte) && !T.isVeldSoort(g.soort);
+
   // Een nieuw gebouw dat de mensen zelf bouwen (T.plaatsGebouw, js/gebouwen.js): het wacht op zijn werk, niet op een dag.
-  // Moet er eerst gerooid worden, dan staat het nog niet op de kaart.
+  // Moet er eerst gerooid of geëgaliseerd worden, dan staat het nog niet op de kaart.
   T.zetBouwplaats = function (D, instantie, kavel) {
     const rooien = !!(kavel && T.teRooienOp(D, kavel).length);
     Object.assign(instantie, { klaar: false, klaarOp: null, bouw: { werk: T.bouwWerkVan(instantie.soort, instantie.voet), gedaan: 0, tegoed: 0, vandaag: 0, hout: 0 } });
-    if (rooien) Object.assign(instantie, { wachtOpRooien: true, kavel });
+    if (kavel && (rooien || T.moetEgaliseren(D, instantie))) Object.assign(instantie, { wachtOpRooien: true, kavel });
     return instantie;
   };
 
@@ -99,14 +114,20 @@
         B.tegoed -= kost;
         if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') B.hout += T.rooiHoutPerBoom(D);
         T.rooiTegel(D, t, g); // het hout op de stapel van de bouwplaats (js/kar.js)
+        B.gerooid = true;
       }
       if (T.teRooienOp(D, g.kavel).length) return 0;
+      // de plek is vrij: dan de grond vlak (vraag 182), en dan komt het gebouw op de kaart
+      if (T.moetEgaliseren(D, g) && !egaliseer(D, g)) return 0;
       over = B.tegoed;
       B.tegoed = 0;
       g.wachtOpRooien = false;
       const gebouw = T.hoofdletter(T.GEBOUWEN[g.soort].naam);
       // Een veld komt niet als gebouw op de kaart: het wordt land als het af is (js/boerderij.js).
-      if (T.isVeldSoort(g.soort)) {
+      if (!B.gerooid) {
+        // er stond niets: alleen geëgaliseerd, en dat zie je
+        if (!T.isVeldSoort(g.soort)) T.zetOpDeKaart(D, g);
+      } else if (T.isVeldSoort(g.soort)) {
         T.zeg(D, B.hout
           ? T.t('{gebouw}: the ground is cleared (+{hout|# log|# logs}), and now they work it.', { gebouw, hout: B.hout })
           : T.t('{gebouw}: the ground is cleared, and now they work it.', { gebouw }));
@@ -124,6 +145,31 @@
     if (g.voorwerp) g.voorwerp.voortgang = B.gedaan / B.werk;
     if (B.gedaan >= B.werk - 1e-9) g.klaarOp = dag;
     return liggen;
+  }
+
+  // Het egaliseren (vraag 182): is de plek vrij, dan maakt het werk van de bouwers (`B.tegoed`) de grond vlak, in
+  // `egaliseerStappen` stappen (T.egaliseer en T.zetEgaliseerDeel, js/hoogte.js). Het vlakke stuk komt er bij het eerste
+  // werk, op de gemiddelde hoogte van wat er dan ligt, en het werk is een klein vast deel plus wat de grond moet zakken of
+  // rijzen (T.egaliseerVerschil). Geeft true als de grond vlak is; wat er dan nog over is, blijft in `B.tegoed`.
+  function egaliseer(D, g) {
+    const B = g.bouw;
+    const w = D.wereld;
+    if (!g.vlak) {
+      g.vlak = T.egaliseer(w, T.voetVanGebouw(g), null, 0);
+      g.egaliseert = true;
+      B.egaliseerWerk = Math.round((IN().egaliseerVast + IN().egaliseerPerHoogte * T.egaliseerVerschil(w, g.vlak)) * 100) / 100;
+    }
+    if (!g.egaliseert) return true;
+    if (B.tegoed + 1e-9 < B.egaliseerWerk) {
+      const n = IN().egaliseerStappen;
+      const deel = Math.floor((B.tegoed / B.egaliseerWerk) * n + 1e-9) / n;
+      if (deel !== (g.vlak.deel || 0)) T.zetEgaliseerDeel(w, g.vlak, deel);
+      return false;
+    }
+    B.tegoed -= B.egaliseerWerk;
+    T.zetEgaliseerDeel(w, g.vlak, 1);
+    g.egaliseert = false;
+    return true;
   }
 
   // Wacht deze bouwplaats op hout: gerooid, en de bouwers kwamen zo ver als het hout reikt.
@@ -279,7 +325,7 @@
     if (wt && wt.wacht && nu < wt.wacht) return; // hij kwam er niet: over een uur weer
     // Aan een weg (js/wegen.js) werken ze aan de eerste tegels die nog niet liggen: hakken als daar iets staat.
     const weg = isWeg(g) ? T.wegNogTeDoen(g).slice(0, IN().perPlaats) : null;
-    const soort = weg ? (weg.some((t) => T.ontginWerkOp(w, t.x, t.y)) ? 'hakken' : 'bouwen') : g.wachtOpRooien ? 'hakken' : 'bouwen';
+    const soort = weg ? (weg.some((t) => T.ontginWerkOp(w, t.x, t.y)) ? 'hakken' : 'bouwen') : g.egaliseert ? 'egaliseren' : g.wachtOpRooien ? 'hakken' : 'bouwen';
     // nog te doen: de boom waar hij naar kijkt, de tegel weg, of de voet
     const opNogTeDoen = (op) => (soort === 'hakken' ? !!T.ontginWerkOp(w, op.x, op.y) : weg ? !T.opPad(w, op.x, op.y) : true);
     if (wt && wt.soort === soort && opNogTeDoen(wt.op)) {
@@ -348,6 +394,13 @@
   T.bouwToestand = function (D, g) {
     const gebouw = T.hoofdletter(T.GEBOUWEN[g.soort].naam);
     const n = D.bewoners ? bouwersVan(D, g).length : 0;
+    // het egaliseren (vraag 182): bezig, of nog niet begonnen op een plek waar niets te rooien is
+    if (g.egaliseert || (g.wachtOpRooien && !T.teRooienOp(D, g.kavel).length)) {
+      const pct = g.egaliseert ? Math.floor((100 * g.bouw.tegoed) / g.bouw.egaliseerWerk) : 0;
+      return n
+        ? T.t('{gebouw}: {n|# builder levels|# builders level} the ground first ({pct}% done).', { gebouw, n, pct })
+        : T.t('{gebouw}: the ground still has to be levelled, and everyone has other work.', { gebouw });
+    }
     if (g.wachtOpRooien) {
       return n
         ? T.t('{gebouw}: {n|# builder clears|# builders clear} the site first: {wat}.', { gebouw, n, wat: T.rooiWoordenOp(D, g.kavel) })

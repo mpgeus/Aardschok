@@ -163,6 +163,17 @@ dorpeling wat hij draagt of bouwt. Je ziet hem met wat de figuren al kunnen: hou
 de rest in een mand; de figuren met een plank, een stam of een steen komen later (Marcel). Een schuur heeft nog zijn eigen
 ossenkar, naast de dragers. Wat hieronder over de kar staat, geldt sinds 23 okt voor de dragers en de kar samen.
 
+**Zo werkt het egaliseren nu** (23 okt, vraag 182; Marcel, 20 okt: "Ik wil dat bouwers eerst de grond 'levelen' met een
+schop, zoals in knights and merchants", "1a3", "1b1", en 23 okt: "In een paar stappen"; `js/bouwen.js`, `js/hoogte.js`):
+op een land met heuvels (de spelregel *Height*) maken de bouwers de grond vlak nadat ze de plek rooiden, en pas dan komt
+het gebouw op de kaart. Het werk is een klein vast deel (een kwart werkdag) plus wat de helling vraagt: hoeveel de grond
+onder het vlakke stuk moet zakken of rijzen (bij het dorp een kwart tot ruim een werkdag; een hut bouwen is er vier).
+Dezelfde bouwers doen het, vier per plaats, en de grond gaat in vier stappen naar het vlak, zodat je het ziet gebeuren;
+elke stap tekent alleen dat stukje grond opnieuw. De dragers mogen het hout al brengen. Het briefje zegt hoe ver het is
+("2 builders level the ground first (50% done)"). Tot er een graver met een schop is (Marcel), werken ze met de schoffel
+van de wieder; de paaltjes op de hoeken en de kale aarde komen met de figuren. Op een vlak land (de standaard tot d van
+de heuvels) is er niets te egaliseren.
+
 **Zo werkte de kar** (14 okt, C stap 1; Marcel: "A2, B2, C1, D2, E2", het plan in `werklijst.md` bij C; `js/kar.js`):
 wat de houthakker maakt en wat de bouwers rooien, ligt op een stapel naast de deur (het hout van een veld bij zijn
 boerderij), en telt pas in de voorraad als een drager of de kar het in de opslag heeft (tot 23 okt reed de huifkar van

@@ -439,7 +439,9 @@
     T.brengMeteen(D, g);
     if (g.wachtOpRooien) {
       for (const t of T.teRooienOp(D, g.kavel)) T.rooiTegel(D, t);
+      if (g.egaliseert) T.zetEgaliseerDeel(D.wereld, g.vlak, 1); // half geëgaliseerd: nu vlak (js/bouwen.js)
       g.wachtOpRooien = false;
+      g.egaliseert = false;
       if (!T.isVeldSoort(g.soort)) T.zetOpDeKaart(D, g);
     }
     g.bouw.gedaan = g.bouw.werk;
