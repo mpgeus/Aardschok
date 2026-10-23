@@ -9,6 +9,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De oogst komt met de dragers trager binnen** (23 okt, vraag 184): een drager neemt één stuk per keer (`perDrager` in
+  de werkbank, "Carriers and the ox cart"), en in de oogst zijn veel mensen dagloner. In het jaar van de kolonist in Node
+  lag op vier van de vijf eilanden de oogst binnen tien dagen in de opslag (zo'n 225 graan), op eiland 5 maar de helft
+  (108; de rest lag nog bij de boerderij, en telt wel voor de winter). Een getal voor later, als Marcel de balans doet:
+  `perDrager` hoger, of graan als schoof van meer stuks.
+- **De kolonist vindt geen plek voor een steengroeve** (23 okt, gezien bij vraag 184, al zo op `main`): op sommige
+  eilanden (in Node 1, 3, 4 en 5) zegt regel 7b "vindt geen plek voor een steengroeve": geen rotsen dichtbij, of het past
+  er niet. De speeltest telt het als mislukt; het hoort bij de kolonist, niet bij het spel.
+- **De speeltest in de browser laadt in de cloud nog steeds niet** (23 okt, zoals 17 en 18 okt hieronder): daarom speelde
+  de kolonist voor de dragers in Node, zoals `test/begin.test.cjs` het doet.
+
 - **Oude tijden en verwijzingen bij de pixel art** (20 okt, een agent zag het bij vraag 183): `gereedschap/pixelart/README.md`
   zegt dat `naar-tiled.cjs huizen` vier minuten duurt en `bouwfasen.cjs` een kwartier (uit de tijd van zo'n 108
   tekeningen; op 17 okt was het twee en zes uur op acht kernen, `beeld.md`); `huizen.cjs` verwijst naar
