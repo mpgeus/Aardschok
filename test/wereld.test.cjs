@@ -153,7 +153,7 @@ function vergelijkElkeTegel(w, waar) {
 // Het proefdorp (test/grond.cjs) van het eiland met dit zaad, met genoeg om te bouwen.
 function gehuchtOm(zaad) {
   const { S } = proefDorp(T, { zaad });
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   for (const wat of ['hout', 'goud', 'steen']) T.zetVoorraad(S.dorp, wat, 500);
   return S;
 }

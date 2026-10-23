@@ -13,7 +13,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // hutten. In het lege begin bouwen de mensen zelf: wat een toets neerzet met T.plaatsGebouw is een bouwplaats.
 function dorp(dag, opties) {
   const { S, D } = proefDorp(T, opties);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = S;
   if (dag != null) {
     S.kalender.dag = dag;

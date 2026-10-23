@@ -70,9 +70,6 @@
     // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat (T.bijAankomst): de lijst
     // wezens van de wereld verandert erdoor, en daar loopt het lopen net doorheen.
     if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
-    // Quests gaan vanzelf verder (js/quest.js): heb je wat een quest vraagt, dan schuift de fase op, nog vóór er iets
-    // dwaalt of iemand je ziet.
-    T.werkQuestsBij(S);
     // In een scène (js/regie.js) leeft de wereld door zoals anders; alleen de invoer ligt stil.
     if (S.modus === 'verkennen' || S.modus === 'scene') {
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land

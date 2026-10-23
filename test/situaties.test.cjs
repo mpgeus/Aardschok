@@ -14,8 +14,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').pagina('gereedschap/gesprekken.html');
 const { situatiesVan, staatVanSituatie } = T.gesprekkenTool;
 
-// Alle toestanden waarin we deze persoon bekijken: wat hij zelf aan situaties heeft, plus de
-// fasen van de quest die hij geeft (die staan er vanzelf bij).
+// Alle toestanden waarin we deze persoon bekijken: het begin, en wat hij zelf aan situaties heeft.
 const staten = (id) => situatiesVan(id).map((s) => ({ naam: s.naam, S: staatVanSituatie(s.als, id) }));
 
 test('elke zin die iemand zegt, klinkt in minstens één situatie', () => {
@@ -49,44 +48,11 @@ test('elk antwoord dat je kunt geven, staat er in minstens één situatie', () =
 });
 
 test('een situatie is een toestand, en levert dus een spelstaat op die het spel begrijpt', () => {
-  const S = staatVanSituatie({ vlag: ['briefVanDeHeer', 'heerBetaald'], heeft: 'sleutel' }, 'heer');
+  const S = staatVanSituatie({ vlag: ['briefVanDeHeer', 'heerBetaald'] }, 'heer');
   assert.ok(T.heeftVlag(S, 'briefVanDeHeer'));
   assert.ok(T.heeftVlag(S, 'heerBetaald'), 'een toestand mag twee vlaggen hebben');
-  assert.ok(S.inventaris.has('sleutel'));
   assert.equal(T.heeftVlag(S, 'soldatenInHuis'), false, 'wat niet genoemd is, staat niet aan');
 });
-
-// Een quest alleen voor deze toetsen, met de heer als gever (er staat nog geen echte quest in
-// js/quests.js; tot 25 sep was dit De koude oven, van de bakker).
-function metProefQuest(toets) {
-  T.QUESTS.proef = {
-    naam: 'De proef', gever: 'heer', begin: 'zoeken',
-    fasen: {
-      zoeken: { doel: 'Zoek iets.', wegen: { vinden: { kost: 'risico', naar: 'terug' } } },
-      terug: { doel: 'Breng het terug.', wegen: { afgeven: { kost: 'niets', naar: 'klaar' } } },
-      klaar: { eind: true },
-    },
-  };
-  try {
-    toets();
-  } finally {
-    delete T.QUESTS.proef;
-  }
-}
-
-test('een questfase in een situatie zet de quest echt in die fase', () => metProefQuest(() => {
-  const S = staatVanSituatie({ quest: 'proef', fase: 'terug' }, 'heer');
-  assert.equal(T.questFase(S, 'proef'), 'terug');
-  const af = staatVanSituatie({ questAf: 'proef' }, 'heer');
-  assert.ok(T.questAf(af, 'proef'), 'questAf zet hem in een fase waarop de quest af is');
-}));
-
-test('wie een quest geeft, krijgt zijn fasen als situatie zonder ze te verzinnen', () => metProefQuest(() => {
-  const namen = situatiesVan('heer').map((s) => s.naam);
-  for (const fase of Object.keys(T.QUESTS.proef.fasen)) {
-    assert.ok(namen.includes(fase), `fase "${fase}" hoort in de situatiebalk van de heer te staan`);
-  }
-}));
 
 test('een voorwaarde mag een lijstje vlaggen zijn, net als een gevolg', () => {
   const S = staatVanSituatie({ vlag: ['briefVanDeHeer', 'heerBetaald'] }, 'heer');
@@ -96,5 +62,5 @@ test('een voorwaarde mag een lijstje vlaggen zijn, net als een gevolg', () => {
   assert.ok(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'marskramerOpBezoek'] }), 'geen van beide');
   // Zo kun je in een situatie met twee vlaggen een antwoord toevoegen dat er ook echt staat:
   // de schrijver zet de voorwaarde van de situatie op wat je erbij maakt.
-  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { heeft: [] }), 'een leeg lijstje houdt niets tegen');
+  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { vlag: [] }), 'een leeg lijstje houdt niets tegen');
 });

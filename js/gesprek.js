@@ -1,13 +1,15 @@
 // De regels van een gesprek, los van het scherm en dus in Node te toetsen
 // (test/gesprek.test.cjs). De teksten zelf staan in gesprekken.js; hier staat alleen hoe we
 // daaruit kiezen: welke regel van een lijst wint (de eerste die past), welke keuzes je te zien
-// krijgt, en wat een antwoord doet. Een voorwaarde kijkt naar vlaggen, bezit en quests. (Tot 25 sep
-// ook naar de leeftijd van de held, de tovenaar van het oude spel: ouderDan, jongerDan en
-// ouderGewordenSinds; die gingen eruit met dat spel.)
+// krijgt, en wat een antwoord doet. Een voorwaarde kijkt naar vlaggen. (Tot 25 sep ook naar de
+// leeftijd van de held, de tovenaar van het oude spel: ouderDan, jongerDan en ouderGewordenSinds;
+// die gingen eruit met dat spel. Tot 23 okt ook naar wat je in je tas had, naar de quests en naar
+// het goud: die gingen weg met Tiled, in ronde 4 van het snoeien, en de triggers krijgen later hun
+// eigen taal, ontwerp/scenario.md, 2.)
 //
 // Een gesprek speelt tussen jou en iemand in een dorp (js/dorp.js; werklijst, vraag 71). Het krijgt daarom twee
-// dingen mee: het spel (S: wat je in je tas hebt, je quests) en het dorp waar het gesprek is (D: wat er in het dorp
-// speelt, als vlaggen, en het goud). De gespreksschrijver geeft twee keer dezelfde proefstaat mee.
+// dingen mee: het spel (S) en het dorp waar het gesprek is (D: wat er in het dorp speelt, als vlaggen). De
+// gespreksschrijver geeft twee keer dezelfde proefstaat mee.
 (function (T) {
   'use strict';
 
@@ -24,7 +26,7 @@
   T.heeftVlag = (D, naam) => vlaggen(D).has(naam) || D[naam] === true;
 
   // Wiens gesprek voert dit wezen? Normaal zijn soort ("heer", "marskramer"), want daaronder staat het
-  // in T.GESPREKKEN. Maar negentien dorpelingen delen één soort ("dorpeling", zie js/kaart.js), en
+  // in T.GESPREKKEN. Maar alle dorpelingen delen één soort ("dorpeling"), en
   // die hoeven niet allemaal hetzelfde te zeggen: staat er `gesprek` op, dan telt die. Zo krijgt
   // de vrouw bij de put haar eigen tekst zonder dat er een wezensoort voor bij hoeft.
   T.gesprekIdVan = (wezen) => (wezen && wezen.gesprek) || (wezen && wezen.soort) || null;
@@ -45,12 +47,6 @@
     if (!als) return true;
     if (!elk(als.vlag).every((n) => T.heeftVlag(D, n))) return false;
     if (elk(als.nietVlag).some((n) => T.heeftVlag(D, n))) return false;
-    const tas = S && S.inventaris;
-    if (!elk(als.heeft).every((n) => tas && tas.has(n))) return false;
-    if (elk(als.nietHeeft).some((n) => tas && tas.has(n))) return false;
-    // Quests en goud wonen in js/quest.js en haken hier in: zonder dat bestand werkt een gesprek
-    // gewoon door.
-    if (T.questVoorwaarde && !T.questVoorwaarde(S, D, als)) return false;
     return true;
   };
 
@@ -82,20 +78,11 @@
     return { tekst: regel ? T.vulWoordenIn(D, regel.zeg) : '', keuzes: T.zichtbareKeuzes(S, D, wieId, knoop.keuzes) };
   };
 
-  // Wat een antwoord doet: een vlag zetten of wissen, en iets in je tas stoppen of eruit halen
-  // (een naam, of een lijstje namen). Goud en quests staan in js/quest.js en haken hier in.
+  // Wat een antwoord doet: een vlag zetten of wissen (een naam, of een lijstje namen), en een venster openen.
   T.doeGevolg = function (S, D, doe) {
     if (!doe) return;
-    const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
-    for (const naam of lijst(doe.zetVlag)) T.zetVlag(D, naam);
-    for (const naam of lijst(doe.wisVlag)) T.wisVlag(D, naam);
-    // Je tas: alleen als jij het gesprek voert.
-    const tas = S ? lijst(doe.geef).concat(lijst(doe.neem)) : [];
-    if (S) for (const soort of lijst(doe.geef)) S.inventaris.add(soort);
-    if (S) for (const soort of lijst(doe.neem)) S.inventaris.delete(soort);
-    // Wat je in een gesprek krijgt of afgeeft, hoort meteen in beeld te staan; rondlopen doet
-    // dat zelf (js/verkennen.js), maar een gesprek kwam daar niet langs.
-    T.questGevolg(S, D, doe);
+    for (const naam of elk(doe.zetVlag)) T.zetVlag(D, naam);
+    for (const naam of elk(doe.wisVlag)) T.wisVlag(D, naam);
     // Handelen met de marskramer (js/handel.js): het venster staat in js/hud.js. Het gesprek sluit
     // daarna gewoon (sluit: true op hetzelfde antwoord); het venster blijft open.
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(D);

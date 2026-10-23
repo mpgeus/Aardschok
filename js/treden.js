@@ -7,7 +7,7 @@
 // ambachtslieden. (De eis van de proef van 28 sep, een dorp bij 50
 // mensen met een kapel en een smidse klaar, was tot 11 okt een spelregel "Treden"; die is weggehaald, snoeironde vraag
 // 153.) Het doel staat vanaf het begin linksboven (T.tredeDoel;
-// js/main.js zet het in het vak als er geen quest is), en de heer noemt het in zijn benoemingsbrief. Is het zover
+// js/main.js zet het in het vak), en de heer noemt het in zijn benoemingsbrief. Is het zover
 // (T.tikTredeDag, elke dag), dan blijft het zo, ook als er mensen wegtrekken, en schrijft de heer een brief
 // (js/brieven.js, T.ui.toonBrief(D, trede)). Een trede zet het bouwmenu van die trede open (T.inBouwmenu,
 // js/gebouwen.js: deze trede en de treden ervoor). De trede staat in D.trede, en wordt dus vanzelf bewaard.

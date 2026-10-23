@@ -231,7 +231,7 @@
   T.t = inTaal;
 
   // Een zin uit de gegevens, in de taal van nu: een tabel die een bewerker terugschrijft (T.bronBlok), zoals de
-  // gesprekken (T.GESPREKKEN, js/gesprekken.js) en de quests (T.QUESTS, js/quests.js), houdt zijn Engelse zinnen als
+  // gesprekken (T.GESPREKKEN, js/gesprekken.js), houdt zijn Engelse zinnen als
   // gewone tekst, want de bewerker kent geen T.t. Wie zo'n zin toont, vraagt hem hier (een gesprek: T.vulWoordenIn,
   // js/gesprek.js); hetzelfde als T.t, alleen met een zin die geen gewone tekst in de code is. npm run teksten leest
   // de zinnen uit die tabellen (GEGEVENS in gereedschap/teksten.cjs), zodat een vertaler ze ook ziet.

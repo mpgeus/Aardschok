@@ -391,7 +391,7 @@ test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
   assert.equal(T.meentOp(S.wereld, meent.x + 2, meent.y + 3), meent);
   assert.equal(T.meentOp(S.wereld, meent.x - 1, meent.y), null);
   assert.equal(T.meentTekst(S.dorp, meent), `The heath, the village common · ${IN.beginKudde.schaap} sheep · the fold holds ${IN.kooiPlaats}`);
-  const h = T.handelingVerkennen(Object.assign(S, { spreuk: null, inventaris: new Set() }), { x: meent.x + 2, y: meent.y + 3 });
+  const h = T.handelingVerkennen(Object.assign(S, { spreuk: null }), { x: meent.x + 2, y: meent.y + 3 });
   assert.equal(h.tekst, T.meentTekst(S.dorp, meent));
 });
 

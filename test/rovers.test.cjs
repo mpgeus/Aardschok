@@ -14,7 +14,7 @@ T.anim = { tekst() {}, pijl() {} };
 // vraagt het erbij (WACHTHUIS), en wie een weide nodig heeft, vraagt `weide`.
 function gehucht(opties) {
   const { S } = proefDorp(T, opties);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   return S;
 }
@@ -22,7 +22,7 @@ const WACHTHUIS = { gebouwen: ['wachthuis'] };
 // Het lege begin (test/grond.cjs): nog geen akker, en ook nog geen stapel.
 function leeg() {
   const { S } = leegBegin(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   return S;
 }

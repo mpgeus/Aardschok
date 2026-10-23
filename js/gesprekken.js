@@ -20,9 +20,7 @@
 //
 //   situaties: [{ naam: 'Hij komt innen', als: { vlag: 'heerOpBezoek' } }]
 //
-// Wat hier ontkent (nietVlag, nietHeeft, nietQuest) hoeft niets te doen: de toestand begint leeg.
-// De fasen van een quest staan er vanzelf bij bij wie hem geeft, en staan daarom niet in deze
-// lijst.
+// Wat hier ontkent (nietVlag) hoeft niets te doen: de toestand begint leeg.
 //
 // Een knoop heeft:
 //   tekst  — een lijstje regels. De eerste regel waarvan de voorwaarde (als) klopt, wint. Een
@@ -34,19 +32,10 @@
 // Een voorwaarde (als) mag hebben:
 //   vlag: 'naam'              — waar als die vlag gezet is (of een lijstje: dan allemaal)
 //   nietVlag: 'naam'          — waar als die vlag NIET gezet is (of een lijstje: dan geen ervan)
-//   heeft: 'ding'              — waar als je dat in je inventaris hebt (of een lijstje: allemaal)
-//   nietHeeft: 'ding'          — waar als je dat niet hebt (of een lijstje: geen ervan)
-//   quest: 'bakker'            — waar als die quest loopt; met fase: 'zoeken' (of een lijstje
-//                                 fasen) alleen in die fase, met weg: 'marskramer' alleen als je
-//                                 hem zo oploste
-//   nietQuest: 'bakker'        — waar als die quest nog niet begonnen is
-//   questAf: 'bakker'          — waar als die quest af is
-//   goud: 10                   — waar als je er minstens tien hebt
+// (Tot 23 okt ook heeft en nietHeeft voor je tas, quest, nietQuest en questAf, en goud; die gingen
+// weg met Tiled, in ronde 4 van het snoeien, en geen gesprek gebruikte ze.)
 //
-// Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje), geef en/of neem
-// (een voorwerp in je tas of eruit), goud: 20 of goud: -15, en quest: 'bakker' met fase: 'zoeken'
-// of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
-// En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
+// Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje). En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
 //
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals

@@ -31,7 +31,6 @@ const SOORTEN = {
 // kan geen van deze adressen misbruikt worden om iets anders te overschrijven.
 const OPSLAAN = {
   '/gereedschap/api/gesprekken-opslaan': path.join(MAP, 'js', 'gesprekken.js'),
-  '/gereedschap/api/quests-opslaan': path.join(MAP, 'js', 'quests.js'),
 };
 
 // Een schermafdruk van het spel als PNG bewaren in gereedschap/pixelart/uit/schermen/<naam>.png
@@ -453,7 +452,6 @@ http
     console.log('');
     console.log(`  het spel       ${hier}/`);
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
-    console.log(`  de quests      ${hier}/gereedschap/quests.html`);
     console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen, met de speeltest`);
     console.log(`  vertalen       ${hier}/gereedschap/vertalen.html      de spelteksten in een andere taal`);
     console.log('');

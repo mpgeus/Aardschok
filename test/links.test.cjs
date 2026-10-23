@@ -11,7 +11,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const WORTEL = path.join(__dirname, '..');
-const BLADEN = ['index.html', 'gereedschap/index.html', 'gereedschap/gesprekken.html', 'gereedschap/quests.html'];
+const BLADEN = ['index.html', 'gereedschap/index.html', 'gereedschap/gesprekken.html'];
 
 test('elke link in het spel en het gereedschap wijst naar een bestand dat bestaat', () => {
   for (const blad of BLADEN) {

@@ -15,7 +15,7 @@ T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevo
 // venster.
 function gehucht() {
   const { S } = proefDorp(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   return S;
 }
 
@@ -371,7 +371,7 @@ test('een verse bladzijde laadt een spel met een gebouw uit het spel', (t) => {
   assert.equal(r.gelukt, true, r.reden);
   const onbekend = new Set();
   for (const w of new Set([...Object.values(S2.gebieden), ...S2.dorpen.map((d) => d.wereld)])) {
-    for (const v of [...w.voorwerpen, ...(w.questVoorwerpen || [])]) if (!T.VOORWERPEN[v.soort]) onbekend.add(v.soort);
+    for (const v of w.voorwerpen) if (!T.VOORWERPEN[v.soort]) onbekend.add(v.soort);
   }
   assert.deepEqual([...onbekend], [], 'na het laden kent het alles wat er ligt');
   assert.ok(T.isVast(S2.wereld, huis.x, huis.y), 'en het huis staat vast');

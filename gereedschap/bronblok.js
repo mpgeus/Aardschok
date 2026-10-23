@@ -1,6 +1,6 @@
 // Eén blok uit een spelbestand halen, met alles eromheen ongemoeid.
 //
-// De twee bewerkers (gesprekken-tool.js, quests-tool.js) lezen een bestand als js/gesprekken.js,
+// De bewerker van de gesprekken (gesprekken-tool.js; tot 23 okt ook die van de quests) leest js/gesprekken.js,
 // bewerken wat erin staat, en schrijven het daarna helemaal opnieuw. Dat gaat goed zolang ze
 // álles kennen wat erin staat — en dat ging mis: js/gesprekken.js kreeg er T.TUTORIAL_TEKST bij,
 // de gespreksbewerker weet daar niets van, en dus wiste één keer opslaan het hele draaiboek van

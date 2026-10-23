@@ -49,7 +49,7 @@ function nieuwSpel(zaad) {
   } finally {
     console.warn = echt;
   }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   return S;
 }
 

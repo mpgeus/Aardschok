@@ -19,7 +19,7 @@ function dagVan(maand, dagVanMaand) {
 function maakS() {
   return {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
-    kalender: { dag: 0 }, inventaris: new Set(),
+    kalender: { dag: 0 },
     wereld: { overgangen: [{ x: 9, y: 5, naar: 'wereld' }], wezens: [] },
     plek: { marskramer: { x: 5, y: 5 }, uitgang: { x: 9, y: 5 } }, // de plek van het dorp (D.plek, js/wereld.js)
   };
@@ -258,7 +258,7 @@ test('in het gehucht opent zijn gesprek de handel, en buiten zijn bezoek niet', 
   assert.ok(knoop.keuzes.some((k) => k.doe && k.doe.handel), 'er is een antwoord dat de handel opent');
   // Buiten een bezoek (geen vlag marskramerOpBezoek) valt er niets te handelen. Tot 25 sep had hij
   // daar nog een gesprek uit het oude spel, over een sleutel bij de toren.
-  const buiten = { inventaris: new Set(), aanvoerder: {} };
+  const buiten = { aanvoerder: {} };
   const buitenKnoop = T.gesprekKnoop(buiten, buiten, 'marskramer', 'welkom');
   assert.ok(!buitenKnoop.keuzes.some((k) => k.doe && k.doe.handel));
   assert.ok(buitenKnoop.keuzes.some((k) => k.sluit), 'wel een afscheid');

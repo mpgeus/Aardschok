@@ -12,7 +12,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het proefdorp (test/grond.cjs), stil: het raadhuis (de opslag), twee boerderijen en hutten.
 function dorp() {
   const { S, D, w, raadhuis, boerderijen } = proefDorp(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = S;
   return { S, D, w, raadhuis, boerderijen, dag: Math.floor(S.kalender.dag) };
 }
@@ -226,7 +226,7 @@ test('de raad rekent het hout dat de bouwplaatsen nog vragen niet als brandhout'
 
 test('de zagerij neemt zijn stammen uit wat de dragers bij hem brachten, niet uit de opslag', () => {
   const { S, D } = proefDorp(T, { gebouwen: ['zagerij'] });
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = S;
   const dag = Math.floor(S.kalender.dag);
   const g = D.gebouwen.find((x) => x.soort === 'zagerij');

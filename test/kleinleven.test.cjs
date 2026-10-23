@@ -10,7 +10,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten voor de rest, en het raadhuis.
 function gehucht() {
   const { S } = proefDorp(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   T.S = S;
   return S;
 }

@@ -17,8 +17,8 @@
     // Wat je ooit gehad hebt: de balk (js/hud.js) laat ijzer, zout en gereedschap pas zien als ze er
     // eens geweest zijn, en daarna altijd, zodat hij niet heen en weer springt.
     if (v[wat] > 0) (D.gehad || (D.gehad = {}))[wat] = true;
-    // Goud had al een naam van vóór de voorraad bestond, D.goud (js/quest.js); die loopt hier
-    // gewoon in de pas mee, zodat het oude gereedschap en de bestaande toetsen blijven werken.
+    // Goud had al een naam van vóór de voorraad bestond, D.goud (van de quests, tot 23 okt); die loopt hier
+    // gewoon in de pas mee (js/ui.js en js/grillen.js lezen hem).
     if (wat === 'goud') {
       D.goud = v.goud;
       if (v.goud > 0) D.goudGehad = true;

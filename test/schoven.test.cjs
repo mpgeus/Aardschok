@@ -13,7 +13,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // `ongezaaid`), en de boeren hebben hun akkers (T.werkDeBoerenBij, anders pas na de eerste nacht).
 function dorpOp(dag) {
   const { S, D, akkers } = proefDorp(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   for (const a of akkers) a.ongezaaid.clear();
   T.werkDeBoerenBij(D);
   S.kalender.dag = dag;

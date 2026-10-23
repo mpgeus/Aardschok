@@ -1,5 +1,5 @@
 // De kalender: dag, maand, seizoen en jaar, en sinds 26 sep ook het uur, als regels zonder scherm
-// (net als js/quest.js) -- dus te toetsen, in test/tijd.test.cjs. De kalender loopt op zijn eigen
+// (net als js/pad.js) -- dus te toetsen, in test/tijd.test.cjs. De kalender loopt op zijn eigen
 // klok, los van S.tijd (de speltijd waar animaties op wachten, CLAUDE.md "Testen in de browser"):
 // T.tikKalender telt zijn eigen S.kalender.dag op, dus pauzeren of versnellen raakt S.tijd nooit
 // aan, en dus ook geen animatie.

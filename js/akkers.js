@@ -1,6 +1,6 @@
 // De akkers: welk stadium het graan heeft op welke dag, hoe de wind per tegel waait, welke vaste
-// variant een tegel krijgt, en hoe een boer op en rond zijn eigen akker werkt. Net als js/quest.js
-// en js/pad.js zijn dit regels zonder scherm, dus te toetsen (test/akkers.test.cjs). Alleen voor
+// variant een tegel krijgt, en hoe een boer op en rond zijn eigen akker werkt. Net als js/pad.js
+// zijn dit regels zonder scherm, dus te toetsen (test/akkers.test.cjs). Alleen voor
 // het nieuwe spel (?kaart=gehucht, ontwerp/spel.md, "Het eerste proefje"); het getekende gebruik
 // staat in js/tekenen.js, het lopen/maaien in js/verkennen.js (T.laatDwalen) en js/main.js. Sinds
 // Sint-Maarten (24 sep, ontwerp/spel.md) ook: zaaien kost graan, en wat niet gezaaid kan worden,

@@ -8,7 +8,7 @@
   let vorigeTip = '';
   let keuzes = [];
 
-  // Het doel van dit moment (een quest, of de volgende trede), linksboven, als briefje (#opdracht; vraag 146, d). Alleen
+  // Het doel van dit moment (de volgende trede), linksboven, als briefje (#opdracht; vraag 146, d). Alleen
   // als de tekst verandert, wordt het aangeraakt.
   let vorigeOpdracht = null;
 
@@ -31,7 +31,7 @@
     },
 
     // Wat er nu van je gevraagd wordt; null laat het briefje verdwijnen. `tekst` mag <kbd> bevatten.
-    // De kop zegt wie het vraagt: de naam van de quest, of je dorp en de trede. `deel` (0 tot 1) is hoe ver het is, als
+    // De kop zegt wie het vraagt: je dorp en de trede. `deel` (0 tot 1) is hoe ver het is, als
     // een streep. Daaronder de raad (js/raad.js), met een toets tussen haken ([B]) als toets.
     opdracht(tekst, kop, raad, deel) {
       const streep = deel == null ? null : Math.round(Math.max(0, Math.min(1, deel)) * 100);

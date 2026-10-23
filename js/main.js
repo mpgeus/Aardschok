@@ -43,12 +43,8 @@
       tijd: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
       modus: 'verkennen',
-      inventaris: new Set(),
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js), voor het spel en al zijn dorpen
       // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpKaart hieronder (js/dorp.js).
-      quests: {}, // per quest de fase waarin hij staat (js/quest.js)
-      questWeg: {}, // en hoe je hem oploste, zodat het dorp erop kan reageren
-      questBeloond: new Set(),
       bezocht: new Set(['hal']),
       naarGebied: null,
       netGeland: null, // de tegel waar de aanvoerder zojuist is neergezet (js/gebied.js)
@@ -763,9 +759,10 @@
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
     T.werkEffectenBij(S, dt); // de zwevende teksten, en wie in een beurt op een animatie wacht (js/anim.js)
-    // Het vak linksboven is van de quest die je het eerst aannam; zonder quest staat er het doel van het gehucht: een
-    // dorp worden (js/treden.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
-    const doelNu = T.questDoel(S) || T.tredeDoel(S.dorp);
+    // In het vak linksboven staat het doel van het gehucht: een dorp worden (js/treden.js). Daaronder de raad: wat nu
+    // tussen jou en een dorp staat (js/raad.js). (Tot 23 okt ging de quest die je het eerst aannam voor: ronde 4 van het
+    // snoeien.)
+    const doelNu = T.tredeDoel(S.dorp);
     if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
       raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;
@@ -2057,35 +2054,6 @@
         if (weer) Object.assign(D.weer, weer);
       }
       return uit;
-    },
-    // Een quest in een fase zetten zonder hem te spelen. Zo kun je zien wat het dorp in elke
-    // fase zegt terwijl je de kaart nog tekent (er zijn nog geen quests: js/quests.js is leeg):
-    //   Spel.debug.quest()                   → wat er loopt, en wat er te kiezen valt
-    //   Spel.debug.quest('<quest>')          → de fasen van die quest, en waar hij nu staat
-    //   Spel.debug.quest('<quest>', '<fase>') → zet hem daar neer
-    //   Spel.debug.quest('<quest>', 'uit')    → helemaal terug naar niet begonnen, beloning en al
-    quest(naam, fase) {
-      if (!naam) {
-        return {
-          loopt: { ...S.quests },
-          tekiezen: Object.fromEntries(Object.entries(T.QUESTS).map(([id, q]) => [id, Object.keys(q.fasen)])),
-        };
-      }
-      const q = T.QUESTS[naam];
-      if (!q) return `Die quest ken ik niet: ${naam}. Er is: ${Object.keys(T.QUESTS).join(', ') || 'nog niets'}.`; // geen tekst
-      if (!fase) return { nu: T.questFase(S, naam) || 'niet begonnen', weg: T.questWegVan(S, naam), fasen: Object.keys(q.fasen) }; // geen tekst
-      if (fase === 'uit') {
-        delete S.quests[naam];
-        delete S.questWeg[naam];
-        for (const sleutel of [...S.questBeloond]) if (sleutel.startsWith(`${naam}:`)) S.questBeloond.delete(sleutel);
-        T.werkQuestVoorwerpen(S);
-        T.werkGeheimenBij(S);
-        return `${q.naam}: niet begonnen. De beloning kan weer opnieuw.`; // geen tekst
-      }
-      if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`; // geen tekst
-      T.zetQuest(S, naam, fase);
-      const f = q.fasen[fase];
-      return { quest: q.naam, fase, doel: f.doel || null, goud: S.dorp.goud, tas: [...S.inventaris] };
     },
     // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('proefbos').
     gaNaar(naam) {

@@ -18,7 +18,6 @@ const lees = (p) => fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
 test('kop + blok + staart is weer precies het bestand', () => {
   for (const [bestand, naam] of [
     ['js/gesprekken.js', 'T.GESPREKKEN'],
-    ['js/quests.js', 'T.QUESTS'],
   ]) {
     // Op Windows zet git (core.autocrlf) de bestanden met CRLF op schijf. bronBlok werkt in LF,
     // dus opslaan schrijft het bestand in LF terug, en dat ziet git niet als verschil. Vergelijk

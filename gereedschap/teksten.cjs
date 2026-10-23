@@ -1,7 +1,7 @@
 // De zinnen van het spel uit de code lezen (vraag 147): npm run teksten.
 //
 // Elke zin die de speler ziet, staat in de code als T.t('Engelse zin', ...) (js/taal.js), of in een tabel met
-// gegevens die een bewerker terugschrijft (de gesprekken, de quests: GEGEVENS hieronder). Dit leest ze uit alle
+// gegevens die een bewerker terugschrijft (de gesprekken: GEGEVENS hieronder). Dit leest ze uit alle
 // bestanden in js/, zonder het spel te draaien, en schrijft ze naar taal/bron.js, met in welk bestand ze staan: dat
 // is de lijst waar de vertaaltool (gereedschap/vertalen.html) mee werkt, ook bij iemand zonder onze server. Daarna
 // zegt het per taal in taal/ hoeveel zinnen er ontbreken, welke over zijn (een zin die in de code veranderde of
@@ -169,12 +169,6 @@ const GEGEVENS = [
         ...Object.values(g.knopen || {}).flatMap((k) => [...(k.tekst || []), ...(k.keuzes || [])].map((r) => r.zeg)),
       ]),
     schrijver: (tabel) => Object.values(tabel).flatMap((g) => (g.situaties || []).map((s) => s.naam)),
-  },
-  {
-    bestand: 'js/quests.js',
-    blok: 'T.QUESTS',
-    zinnen: (tabel) => Object.values(tabel).flatMap((q) => [q.naam, ...Object.values(q.fasen || {}).flatMap((f) => [f.doel, f.melding])]),
-    schrijver: () => [],
   },
 ];
 

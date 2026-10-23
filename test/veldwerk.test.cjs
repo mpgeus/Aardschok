@@ -19,7 +19,7 @@ function dorpOp(dag, opties) {
   // Deze toetsen gaan niet over het weer: er wordt gezaaid op 1 lentemaand, ook als het die dag regent (vraag 144, 1).
   T.VELDEN_INSTELLINGEN.nietInDeRegen = false;
   const { S, D, akkers } = proefDorp(T, opties);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   for (const a of akkers) a.ongezaaid.clear();
   T.werkDeBoerenBij(D);
   S.kalender.dag = dag;

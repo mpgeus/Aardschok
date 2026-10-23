@@ -22,7 +22,7 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 // kiest.
 function gehucht(dag) {
   const { S } = proefDorp(T, { gebouwen: ['herberg'] });
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set() });
   Object.assign(S.kalender, { dag, snelheid: 1 });
   T.zetVoorraad(S.dorp, 'graan', 100);
   return S;

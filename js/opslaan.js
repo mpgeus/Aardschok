@@ -329,7 +329,6 @@
     for (const w of kaarten) {
       if (!w) continue;
       for (const v of w.voorwerpen || []) T.kenSoortVan(v);
-      for (const v of w.questVoorwerpen || []) T.kenSoortVan(v);
     }
   }
 

@@ -169,7 +169,7 @@ test('een dier dat ligt, dwaalt niet weg; staat of graast het, dan zet het een s
 test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => {
   const w = T.maakProefkamers();
   const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
-  const S = { wereld: w, aanvoerder, spreuk: null, inventaris: new Set() };
+  const S = { wereld: w, aanvoerder, spreuk: null };
   for (const soort of Object.keys(T.VEE)) {
     const e = T.maakDier(soort, 5, 5, 3);
     assert.equal(T.gesprekVan(e), null, 'er is geen gesprek "koe" of "schaap"');

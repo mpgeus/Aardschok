@@ -21,7 +21,6 @@
       <div id="gt-zoek-uit" class="gt-zoek-uit verborgen"></div>
     </div>
     <div class="gt-vul"></div>
-    <a class="gt-naar" href="quests.html">Quests &rarr;</a>
     <a class="gt-naar" href="index.html">Alle gereedschap</a>
     <button id="gt-proberen" type="button">Proberen &#9656;</button>
     <span id="gt-status" class="gt-status"></span>
@@ -41,10 +40,6 @@
     <div id="gt-kaart" class="gt-kaart"></div>
     <div id="gt-gesprek"></div>
 
-    <section class="paneel gt-quest-doos">
-      <div id="gt-quest"></div>
-    </section>
-
     <section class="paneel gt-controle">
       <h2>Controle<div class="gt-vul"></div><span id="gt-controle-tal" class="gt-status"></span></h2>
       <div id="gt-fouten-inhoud"></div>
@@ -62,13 +57,11 @@
     <div id="dialoog-keuzes"><button type="button"></button></div>
   </div>
 
-  <!-- Dezelfde spelbestanden als het spel, gewoon geladen: gesprekken.js en quests.js voor de
-       gegevens, gesprek.js en quest.js voor de regels. Dit gereedschap voegt alleen het scherm
+  <!-- Dezelfde spelbestanden als het spel, gewoon geladen: gesprekken.js voor de gegevens,
+       gesprek.js voor de regels. Dit gereedschap voegt alleen het scherm
        toe; het beoordeelt een voorwaarde nooit zelf. -->
   <script src="../js/gesprekken.js"></script>
   <script src="../js/gesprek.js"></script>
-  <script src="../js/quests.js"></script>
-  <script src="../js/quest.js"></script>
   <script src="bronblok.js"></script>
   <script src="gesprekken-tool.js"></script>
   <script>Spel.gesprekkenTool.start();</script>

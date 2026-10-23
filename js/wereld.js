@@ -411,7 +411,7 @@
     return {
       eiland: { zaad }, vak: { ...vak },
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
-      deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], questVoorwerpen: [], wezens: [],
+      deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], wezens: [],
       bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
       buiten: true, naam: null, proef: false, pleinen: [], plekken: [],
     };

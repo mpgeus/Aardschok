@@ -14,7 +14,7 @@ T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.
 // Het proefdorp (test/grond.cjs) met een wachthuis, en desgewenst meer.
 function gehucht(gebouwen = []) {
   const { S } = proefDorp(T, { gebouwen: ['wachthuis', ...gebouwen] });
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   const D = S.dorp;
   return { S, D, huis: D.gebouwen.find((g) => g.soort === 'wachthuis') };
 }

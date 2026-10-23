@@ -192,8 +192,7 @@ button:disabled { opacity: 0.4; cursor: default; }
   pointer-events: none;
 }
 
-/* ---- quests.html (gereedschap/quests-tool.js) ---- */
-/* De twee bladzijden van het gereedschap zijn aan elkaar geknoopt met deze link bovenin. */
+/* De link bovenin naar de rest van het gereedschap. */
 .gt-naar {
   color: var(--gedempt);
   text-decoration: none;
@@ -203,21 +202,6 @@ button:disabled { opacity: 0.4; cursor: default; }
   border-radius: 6px;
 }
 .gt-naar:hover { color: var(--inkt); }
-
-/* Een weg hangt onder zijn fase, met zijn prijs ernaast: zo zie je in één oogopslag of een
-   quest drie antwoorden heeft die verschillend kosten (ontwerp/toren.md). */
-.gt-boom-weg { font-family: inherit; font-size: 12px; }
-.gt-kost {
-  font-size: 11px;
-  padding: 0 6px;
-  border-radius: 999px;
-  border: 1px solid var(--rand);
-  color: var(--gedempt);
-}
-.gt-kost-jaren { color: #e8a0a0; border-color: rgba(232, 160, 160, 0.5); }
-.gt-kost-goud { color: #e2b64a; border-color: rgba(226, 182, 74, 0.5); }
-.gt-kost-gunst { color: #9ec9e8; border-color: rgba(158, 201, 232, 0.5); }
-.gt-kost-risico { color: #c9a6e8; border-color: rgba(201, 166, 232, 0.5); }
 
 /* Het proefdorp: iedereen die iets zegt, en wie het verschil merkt. */
 .gt-proef-persoon {
@@ -358,9 +342,7 @@ button:disabled { opacity: 0.4; cursor: default; }
   backdrop-filter: blur(3px);
 }
 .gt-sit-label { font-size: 12px; color: var(--gedempt); margin-right: 2px; }
-.gt-sit-groep { font-size: 11.5px; color: var(--goud); opacity: 0.8; margin-left: 6px; }
 button.gt-sit { border-radius: 14px; padding: 3px 12px; font-size: 12.5px; }
-button.gt-sit-quest { border-style: dashed; }
 button.gt-sit-aan { border-color: var(--goud); background: rgba(226, 182, 74, 0.22); color: var(--goud); border-style: solid; }
 button.gt-sit-plus { opacity: 0.5; padding: 3px 9px; }
 button.gt-sit-plus:hover { opacity: 1; }
@@ -444,30 +426,6 @@ button.gt-sit-plus:hover { opacity: 1; }
 .gt-elders-knoop .gt-wie-merk { flex: none; width: 46px; text-align: right; font-size: 11px; color: var(--gedempt); }
 .gt-elders-zin { flex: 1; font-size: 13px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gt-erbij-klein { font-size: 11.5px; margin-left: 56px; }
-
-/* De quest die aan dit gesprek hangt. Hij staat op dezelfde bladzijde omdat hij eraan vastzit:
-   zijn fasen zijn de knoppen in de situatiebalk hierboven. */
-.gt-quest-doos { margin-top: 30px; padding: 12px 16px; }
-.gt-quest-doos .gt-kopje { margin-top: 0; }
-.gt-fase { border-left: 2px solid var(--rand); padding: 2px 0 6px 12px; margin-bottom: 10px; }
-.gt-fase-nu { border-left-color: var(--goud); }
-.gt-fase-kop { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.gt-fase-regel { display: flex; align-items: flex-start; gap: 8px; }
-.gt-fase-wat { flex: none; width: 54px; font-size: 11px; color: var(--gedempt); padding-top: 7px; }
-.gt-fase-regel .gt-zin {
-  flex: 1; min-width: 0; background: none; border: 1px solid transparent; border-radius: 5px;
-  padding: 4px 6px; margin: 0; font-size: 13px; line-height: 1.45; resize: none; overflow: hidden;
-}
-.gt-fase-regel .gt-zin:hover { border-color: rgba(255, 255, 255, 0.07); }
-.gt-fase-regel .gt-zin:focus { border-color: var(--rand); background: rgba(255, 255, 255, 0.04); outline: none; }
-.gt-merkje { font-size: 10px; color: var(--goud); border: 1px solid rgba(226, 182, 74, 0.5); border-radius: 8px; padding: 0 6px; }
-.gt-weg { display: flex; align-items: baseline; gap: 8px; font-size: 11.5px; padding: 2px 0 2px 54px; flex-wrap: wrap; }
-.gt-weg-naam { color: var(--inkt); }
-.gt-weg-kost { color: var(--gedempt); border: 1px solid var(--rand); border-radius: 999px; padding: 0 6px; font-size: 10.5px; }
-.gt-weg-naar { color: var(--gedempt); }
-.gt-weg-als { color: var(--gedempt); font-style: italic; }
-.gt-weg-via { color: #6fa0e6; }
-.gt-quest-naar { margin-top: 8px; }
 
 /* De controle staat onderaan, niet in een kolom ernaast: het is een nalooplijst, geen gezelschap. */
 .gt-blad > .gt-controle { margin-top: 30px; padding: 12px 16px; max-height: 40vh; overflow: auto; }

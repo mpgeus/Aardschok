@@ -441,7 +441,7 @@
   const PROEF_ZAAD = 2;
   // Een nieuw spel op het eiland van `zaad`, met het lege begin, zoals js/main.js het begint, maar zonder scherm.
   function begin(zaad = PROEF_ZAAD) {
-    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
+    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen' };
     metVastToeval(11, () => {
       if (!T.beginOpKaart(S, 'gehucht', zaad)) throw new Error(`geen spel op het eiland van ${zaad}`); // geen tekst
     });

@@ -30,7 +30,7 @@ const SINT_MAARTEN = dagVan('slachtmaand', 11);
 function maakS() {
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
-    kalender: { dag: 0, snelheid: 1 }, inventaris: new Set(),
+    kalender: { dag: 0, snelheid: 1 },
     wereld: {
       overgangen: [], wezens: [],
       akkers: [{ x: 0, y: 0, b: 2, h: 3 }, { x: 10, y: 0, b: 1, h: 4 }],

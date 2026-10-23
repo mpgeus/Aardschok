@@ -19,12 +19,10 @@
 //
 // Drie dingen volgen daaruit:
 //
-//   * Een situatie schrijf je in dezelfde woorden als een voorwaarde ("meesterDood is gezet,
-//     sleutel in je tas"). Zo is er één woordenlijst voor het hele scherm, en kan de
-//     voorwaarde-editor hem ook bewerken. staatVanSituatie() maakt er een spelstaat van.
-//   * De fasen van een quest zíjn situaties, en staan er vanzelf bij als iemand een quest geeft.
-//     Daar raken gesprek en quest elkaar: een quest hangt aan een gesprek, dus horen ze op één
-//     bladzijde (Marcel, 22 sep).
+//   * Een situatie schrijf je in dezelfde woorden als een voorwaarde ("heerOpBezoek is gezet").
+//     Zo is er één woordenlijst voor het hele scherm, en kan de voorwaarde-editor hem ook
+//     bewerken. staatVanSituatie() maakt er een spelstaat van. (Tot 23 okt waren de fasen van
+//     een quest ook situaties; de quests gingen weg in ronde 4 van het snoeien.)
 //   * Een antwoord springt in als het gesprek doorloopt (één vraag komt hier uit), en krijgt een
 //     eigen blok als er meer vragen op uitkomen (Wims "Nog iets anders", waar er vijf op uitkomen).
 //     Zo wordt het nooit acht niveaus diep.
@@ -197,34 +195,16 @@
   // ---------- situaties: waar je doorheen kijkt ----------
   //
   // Een situatie is een toestand van de wereld, opgeschreven in dezelfde woorden als een
-  // voorwaarde. Drie soorten, en ze staan in deze volgorde in de balk:
-  //   1. "Zoals het begint" — niets gezet, niets in je tas. Die is er altijd.
-  //   2. de fasen van de quest die deze persoon geeft — die komen uit js/quests.js en zijn
-  //      daarom niet hier te bewerken; verander je de quest, dan verandert de balk mee.
-  //   3. wat je zelf hebt bedacht, in persoon.situaties.
-
-  function questVanPersoon(persoonId) {
-    if (!T.QUESTS) return null;
-    const paar = Object.entries(T.QUESTS).find(([, q]) => q.gever === persoonId);
-    return paar ? { id: paar[0], quest: paar[1] } : null;
-  }
+  // voorwaarde. Twee soorten, en ze staan in deze volgorde in de balk:
+  //   1. "Zoals het begint" — niets gezet. Die is er altijd.
+  //   2. wat je zelf hebt bedacht, in persoon.situaties.
+  // (Tot 23 okt stonden daartussen de fasen van de quest die deze persoon gaf, uit js/quests.js;
+  // de quests gingen weg in ronde 4 van het snoeien.)
 
   function situatiesVan(persoonId) {
     const persoon = T.GESPREKKEN[persoonId];
     if (!persoon) return [];
-    const uit = [{ naam: 'Zoals het begint', als: null, vast: true, uitleg: 'Niets gebeurd, niets in je tas, geen quest begonnen.' }];
-    const q = questVanPersoon(persoonId);
-    if (q) {
-      for (const [fid, fase] of Object.entries(q.quest.fasen || {})) {
-        uit.push({
-          naam: fid,
-          als: { quest: q.id, fase: fid },
-          vast: true,
-          quest: q.id,
-          uitleg: fase.doel || (fase.eind ? 'De quest is hier af.' : ''),
-        });
-      }
-    }
+    const uit = [{ naam: 'Zoals het begint', als: null, vast: true, uitleg: 'Niets gebeurd.' }];
     (persoon.situaties || []).forEach((s, i) => uit.push({ naam: s.naam, als: s.als, eigen: i }));
     return uit;
   }
@@ -234,32 +214,14 @@
     return lijst[Math.min(huidigeSituatieNr, lijst.length - 1)] || lijst[0] || null;
   }
 
-  // Van een situatie een spelstaat maken, zodat ../js/gesprek.js hem kan beoordelen. Wat een
-  // voorwaarde ontkent (nietVlag, nietHeeft, nietQuest) hoeft hier niets te doen: de verse staat
-  // is al leeg.
-  // Een situatie als proefstaat. Hij is spel en dorp tegelijk (js/gesprek.js krijgt beide: je tas en je quests van
-  // het spel, de vlaggen en het goud van het dorp), dus een regel krijgt hem twee keer.
-  function staatVanSituatie(als, persoonId) {
-    const S = {
-      aanvoerder: {},
-      inventaris: new Set(), vlaggen: new Set(),
-      quests: {}, questWeg: {}, questBeloond: new Set(), goud: 0,
-    };
+  // Van een situatie een proefstaat maken, zodat ../js/gesprek.js hem kan beoordelen. Wat een
+  // voorwaarde ontkent (nietVlag) hoeft hier niets te doen: de verse staat is al leeg. Hij is spel
+  // en dorp tegelijk (js/gesprek.js krijgt beide; de vlaggen zijn van het dorp), dus een regel
+  // krijgt hem twee keer.
+  function staatVanSituatie(als) {
+    const S = { aanvoerder: {}, vlaggen: new Set() };
     if (!als) return S;
     for (const naam of alsLijst(als.vlag)) S.vlaggen.add(naam);
-    for (const naam of alsLijst(als.heeft)) S.inventaris.add(naam);
-    if (als.goud != null) S.goud = Number(als.goud);
-    if (als.quest && T.QUESTS && T.QUESTS[als.quest]) {
-      const q = T.QUESTS[als.quest];
-      const fase = als.fase ? alsLijst(als.fase)[0] : q.begin;
-      if (q.fasen && q.fasen[fase]) S.quests[als.quest] = fase;
-      if (als.weg) S.questWeg[als.quest] = als.weg;
-    }
-    if (als.questAf && T.QUESTS && T.QUESTS[als.questAf]) {
-      const q = T.QUESTS[als.questAf];
-      const eind = Object.keys(q.fasen || {}).find((f) => q.fasen[f].eind);
-      if (eind) S.quests[als.questAf] = eind;
-    }
     return S;
   }
 
@@ -363,18 +325,7 @@
   const ALS_TAAL = {
     vlag: (v) => `als ${enNog(v)}`,
     nietVlag: (v) => `zolang niet ${enNog(v)}`,
-    heeft: (v) => `als je ${enNog(v)} hebt`,
-    nietHeeft: (v) => `als je geen ${enNog(v)} hebt`,
-    quest: (v) => `als ${questNaam(v)} loopt`,
-    nietQuest: (v) => `zolang ${questNaam(v)} niet begonnen is`,
-    questAf: (v) => `als ${questNaam(v)} af is`,
-    fase: (v) => `in fase ${alsLijst(v).join(' of ')}`,
-    weg: (v) => `via ${v}`,
-    goud: (v) => `als je ${v} goud hebt`,
   };
-  function questNaam(id) {
-    return (T.QUESTS && T.QUESTS[id] && T.QUESTS[id].naam) || id;
-  }
   function alsInTaal(als) {
     if (!als) return '';
     return Object.entries(als).map(([naam, v]) => (ALS_TAAL[naam] ? ALS_TAAL[naam](v) : `${naam}: ${v}`)).join(' en ');
@@ -382,19 +333,11 @@
   const DOE_TAAL = {
     zetVlag: (v) => `zet ${alsLijst(v).join(' en ')}`,
     wisVlag: (v) => `wist ${alsLijst(v).join(' en ')}`,
-    geef: (v) => `geeft je ${alsLijst(v).join(' en ')}`,
-    neem: (v) => `neemt ${alsLijst(v).join(' en ')}`,
-    goud: (v) => `${Number(v) < 0 ? '' : '+'}${v} goud`,
-    quest: (v) => `${questNaam(v)}`,
-    fase: (v) => `naar fase ${v}`,
-    weg: (v) => `via ${v}`,
     handel: () => 'opent de handel',
     heer: () => 'opent het betalen aan de heer',
   };
   function doeInTaal(doe) {
     if (!doe) return '';
-    // "quest bakker" alleen is: hem beginnen. Dat is het vaakst wat je bedoelt, dus zeg het zo.
-    if (doe.quest && !doe.fase && !doe.weg && Object.keys(doe).length === 1) return `start ${questNaam(doe.quest)}`;
     return Object.entries(doe).map(([naam, v]) => (DOE_TAAL[naam] ? DOE_TAAL[naam](v) : `${naam}: ${v}`)).join(', ');
   }
 
@@ -450,43 +393,9 @@
 
   // ---------- de formulieren achter de chips ----------
 
-  // Bij een quest-achtige voorwaarde of gevolg is een keuzelijst beter dan een tekstvak: dan
-  // hoef je "bakker:zoeken" niet uit je hoofd te kennen, en kun je niet naar een fase wijzen die
-  // niet bestaat.
-  function keuzelijst(opties, waarde, zet, leegTekst) {
-    const s = document.createElement('select');
-    s.className = 'gt-als-waarde';
-    if (leegTekst != null) { const o = document.createElement('option'); o.value = ''; o.textContent = leegTekst; s.appendChild(o); }
-    for (const [v, tekst] of opties) {
-      const o = document.createElement('option'); o.value = v; o.textContent = tekst; s.appendChild(o);
-    }
-    s.value = waarde == null ? '' : String(waarde);
-    // Staat er iets wat niet meer bestaat, dan mag dat niet stilletjes een andere waarde worden.
-    if (s.value !== (waarde == null ? '' : String(waarde))) {
-      const o = document.createElement('option'); o.value = String(waarde); o.textContent = waarde + ' (bestaat niet)';
-      s.appendChild(o); s.value = String(waarde);
-    }
-    s.addEventListener('change', () => zet(s.value));
-    return s;
-  }
-  const questOpties = () => Object.entries(T.QUESTS || {}).map(([id, q]) => [id, q.naam || id]);
-  function faseOpties(questId) {
-    const q = (T.QUESTS || {})[questId];
-    return Object.entries((q && q.fasen) || {}).map(([id, f]) => [id, f.doel ? `${id} — ${f.doel}` : id]);
-  }
-  function wegOpties(questId, faseId) {
-    const q = (T.QUESTS || {})[questId];
-    const f = q && q.fasen && q.fasen[faseId];
-    if (f) return Object.keys(f.wegen || {}).map((id) => [id, id]);
-    // Geen fase gekozen: alle wegen van de quest, zodat je toch iets kunt kiezen.
-    const alle = new Set();
-    Object.values((q && q.fasen) || {}).forEach((fase) => Object.keys(fase.wegen || {}).forEach((w) => alle.add(w)));
-    return [...alle].map((id) => [id, id]);
-  }
-
   // Het formulier achter een voorwaarde: rijen van "welke voorwaarde" en "welke waarde".
   function bouwAlsEditor(houder, naVerandering, opties) {
-    // `lijsten`: dit is een situatie en geen voorwaarde, dus mogen vlag en heeft er meer dan één
+    // `lijsten`: dit is een situatie en geen voorwaarde, dus mag vlag er meer dan één
     // zijn — een toestand kan twee vlaggen hebben, een voorwaarde vraagt er één.
     const lijsten = !!(opties && opties.lijsten);
     const wrap = el('div', 'gt-als');
@@ -500,10 +409,6 @@
     });
     function waardeVeld(naam) {
       const type = voorwaardeType(naam);
-      const zet = (v) => { houder.als[naam] = v; naVerandering(true); };
-      if (naam === 'quest' || naam === 'nietQuest' || naam === 'questAf') return keuzelijst(questOpties(), houder.als[naam], zet, '—');
-      if (naam === 'fase') return keuzelijst(faseOpties(houder.als.quest), alsLijst(houder.als[naam])[0], zet, '—');
-      if (naam === 'weg') return keuzelijst(wegOpties(houder.als.quest, alsLijst(houder.als.fase)[0]), houder.als[naam], zet, '—');
       const meerdere = lijsten && type.soort !== 'getal';
       const waarde = document.createElement('input');
       waarde.className = 'gt-als-waarde';
@@ -554,18 +459,11 @@
     return wrap;
   }
 
-  // Het formulier achter een gevolg. Dit deed tot 22 sep alleen vlaggen, terwijl een antwoord in
-  // het spel al goud gaf en quests startte (de bakker); die waren dus alleen in de code te
-  // bewerken. Nu staat dezelfde lijst hier als in het kop-commentaar van gesprekken.js.
+  // Het formulier achter een gevolg: dezelfde lijst als in het kop-commentaar van gesprekken.js. (Tot 23 okt ook
+  // geef en neem voor je tas, goud, en een quest met zijn fase en weg: ronde 4 van het snoeien.)
   const GEVOLGEN = [
     { naam: 'zetVlag', soort: 'namen', uitleg: 'zet één of meer vlaggen' },
     { naam: 'wisVlag', soort: 'namen', uitleg: 'wist één of meer vlaggen' },
-    { naam: 'geef', soort: 'namen', uitleg: 'stopt iets in je tas' },
-    { naam: 'neem', soort: 'namen', uitleg: 'haalt iets uit je tas' },
-    { naam: 'goud', soort: 'getal', uitleg: 'goud erbij (of eraf, met een min)' },
-    { naam: 'quest', soort: 'quest', uitleg: 'een quest; zonder fase of weg begint hij' },
-    { naam: 'fase', soort: 'fase', uitleg: 'zet die quest in deze fase' },
-    { naam: 'weg', soort: 'weg', uitleg: 'los die quest zo op' },
     { naam: 'handel', soort: 'aan', uitleg: 'opent het handelsvenster van de marskramer (js/handel.js)' },
     { naam: 'heer', soort: 'aan', uitleg: 'opent het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js)' },
   ];
@@ -582,10 +480,6 @@
       herbouw(); naVerandering(true);
     });
     function waardeVeld(g) {
-      const zet = (v) => { houder.doe[g.naam] = v; naVerandering(true); };
-      if (g.soort === 'quest') return keuzelijst(questOpties(), houder.doe.quest, zet, '—');
-      if (g.soort === 'fase') return keuzelijst(faseOpties(houder.doe.quest), houder.doe.fase, zet, '—');
-      if (g.soort === 'weg') return keuzelijst(wegOpties(houder.doe.quest, houder.doe.fase), houder.doe.weg, zet, '—');
       if (g.soort === 'aan') return el('span', 'gt-als-waarde', 'aan');
       const inv = document.createElement('input');
       inv.className = 'gt-als-waarde';
@@ -633,7 +527,7 @@
     return wrap;
   }
 
-  // ---------- het scherm: wie, situaties, gesprek, quest, controle ----------
+  // ---------- het scherm: wie, situaties, gesprek, controle ----------
 
   function renderPersonen() {
     const select = $('gt-persoon');
@@ -677,8 +571,8 @@
     wrap.appendChild(rij);
   }
 
-  // De situatiebalk. De vaste situaties (het begin, en de fasen van zijn quest) kun je niet
-  // weghalen — die volgen uit de quest. De situaties die jij bedenkt wel.
+  // De situatiebalk. De vaste situatie (het begin) kun je niet weghalen; de situaties die jij
+  // bedenkt wel.
   function renderSituaties() {
     const balk = $('gt-situaties');
     if (!balk) return;
@@ -689,16 +583,12 @@
     if (huidigeSituatieNr >= lijst.length) huidigeSituatieNr = 0;
 
     balk.appendChild(el('span', 'gt-sit-label', 'Situatie'));
-    const q = questVanPersoon(huidigePersoonId);
     lijst.forEach((s, i) => {
-      // De questfasen krijgen de naam van de quest ervoor, zodat je ziet waar ze vandaan komen.
-      if (q && s.quest && (i === 0 || !lijst[i - 1].quest)) balk.appendChild(el('span', 'gt-sit-groep', questNaam(q.id) + ':'));
-      const b = knop('gt-sit' + (i === huidigeSituatieNr ? ' gt-sit-aan' : '') + (s.quest ? ' gt-sit-quest' : ''), s.naam, () => {
+      const b = knop('gt-sit' + (i === huidigeSituatieNr ? ' gt-sit-aan' : ''), s.naam, () => {
         huidigeSituatieNr = i;
         renderSituaties();
         renderKaart();
         renderGesprek();
-        renderQuest();
       });
       if (s.uitleg) b.title = s.uitleg;
       if (s.als) b.title = (s.uitleg ? s.uitleg + '\n' : '') + alsInTaal(s.als);
@@ -991,7 +881,7 @@
     rij.appendChild(el('span', 'gt-waar' + (lab.fout ? ' gt-fout-tekst' : ''), lab.tekst));
     rij.addEventListener('click', () => {
       const naar = situatiesVan(huidigePersoonId).findIndex((s) => waar.has(s.naam));
-      if (naar >= 0) { huidigeSituatieNr = naar; renderSituaties(); renderKaart(); renderGesprek(); renderQuest(); setTimeout(() => gaNaarKnoop(id), 30); }
+      if (naar >= 0) { huidigeSituatieNr = naar; renderSituaties(); renderKaart(); renderGesprek(); setTimeout(() => gaNaarKnoop(id), 30); }
     });
     return rij;
   }
@@ -1174,87 +1064,6 @@
     vuil = false;
     updateStatus();
     setTimeout(() => gaNaarKnoop(kid), 40);
-  }
-
-  // ---------- de quest die aan dit gesprek hangt ----------
-  //
-  // Een quest hangt aan een gesprek (Marcel, 22 sep), dus staat hij op dezelfde bladzijde: welke
-  // fasen er zijn, wat het doel is, en langs welke wegen je eruit komt. De fasen zijn ook de
-  // knoppen in de situatiebalk, dus je ziet meteen wat de bakker in die fase zegt. De structuur
-  // van een quest (fasen erbij, wegen erbij) blijft in de questbewerker; hier schrijf je de
-  // teksten en zie je waar je gesprek op aanhaakt.
-  function renderQuest() {
-    const wrap = $('gt-quest');
-    if (!wrap) return;
-    wrap.innerHTML = '';
-    const q = questVanPersoon(huidigePersoonId);
-    if (!q) {
-      if (!T.QUESTS) return;
-      wrap.appendChild(el('p', 'gt-leeg', 'Deze persoon geeft geen quest.'));
-      return;
-    }
-    wrap.appendChild(el('h3', 'gt-kopje', questNaam(q.id) + ' — de quest van ' + (T.GESPREKKEN[huidigePersoonId].naam || huidigePersoonId)));
-    const sit = huidigeSituatie();
-    const nuFase = sit && sit.als && sit.als.quest === q.id ? alsLijst(sit.als.fase)[0] : null;
-
-    for (const [fid, fase] of Object.entries(q.quest.fasen || {})) {
-      const doos = el('div', 'gt-fase' + (fid === nuFase ? ' gt-fase-nu' : ''));
-      const kop = el('div', 'gt-fase-kop');
-      const naarSit = situatiesVan(huidigePersoonId).findIndex((s) => s.als && s.als.quest === q.id && alsLijst(s.als.fase)[0] === fid);
-      const b = knop('gt-sit gt-sit-quest' + (fid === nuFase ? ' gt-sit-aan' : ''), fid, () => {
-        if (naarSit < 0) return;
-        huidigeSituatieNr = naarSit;
-        renderSituaties(); renderKaart(); renderGesprek(); renderQuest();
-      });
-      b.title = 'Laat het gesprek zien zoals het in deze fase loopt';
-      kop.appendChild(b);
-      if (fid === q.quest.begin) kop.appendChild(el('span', 'gt-merkje', 'begint hier'));
-      if (fase.eind) kop.appendChild(el('span', 'gt-merkje', 'af'));
-      kop.appendChild(el('div', 'gt-vul'));
-      doos.appendChild(kop);
-
-      const doel = el('div', 'gt-fase-regel');
-      doel.appendChild(el('span', 'gt-fase-wat', 'doel'));
-      doel.appendChild(zinVeld(fase.doel, 'wat je nu moet doen — staat linksboven in beeld', (v) => { fase.doel = v || undefined; questVuil = true; naVeldWijziging(); }));
-      doos.appendChild(doel);
-
-      const melding = el('div', 'gt-fase-regel');
-      melding.appendChild(el('span', 'gt-fase-wat', 'melding'));
-      melding.appendChild(zinVeld(fase.melding, 'wat er in beeld komt zodra je hier komt', (v) => { fase.melding = v || undefined; questVuil = true; naVeldWijziging(); }));
-      doos.appendChild(melding);
-
-      for (const [wid, weg] of Object.entries(fase.wegen || {})) {
-        const r = el('div', 'gt-weg');
-        r.appendChild(el('span', 'gt-weg-naam', wid));
-        r.appendChild(el('span', 'gt-weg-kost', weg.kost || 'niets'));
-        r.appendChild(el('span', 'gt-weg-naar', '→ ' + (weg.naar || '?')));
-        if (weg.klaarAls) r.appendChild(el('span', 'gt-weg-als', 'vanzelf ' + alsInTaal(weg.klaarAls)));
-        if (weg.doe) r.appendChild(el('span', 'gt-weg-als', doeInTaal(weg.doe)));
-        // Welk antwoord in dit gesprek neemt deze weg? Dat is de naad tussen quest en gesprek.
-        const via = antwoordenDieWegNemen(q.id, wid);
-        if (via.length) r.appendChild(el('span', 'gt-weg-via', 'via: ' + via.map((k) => '"' + (k.zeg || '…') + '"').join(', ')));
-        doos.appendChild(r);
-      }
-      wrap.appendChild(doos);
-    }
-    const naar = el('p', 'gt-quest-naar');
-    const a = document.createElement('a');
-    a.href = 'quests.html';
-    a.className = 'gt-naar';
-    a.textContent = 'Fasen en wegen erbij → questbewerker';
-    naar.appendChild(a);
-    wrap.appendChild(naar);
-  }
-
-  function antwoordenDieWegNemen(questId, wegId) {
-    const persoon = T.GESPREKKEN[huidigePersoonId];
-    const uit = [];
-    for (const knoop of Object.values(persoon.knopen)) {
-      for (const k of knoop.keuzes || []) {
-        if (k.doe && k.doe.quest === questId && k.doe.weg === wegId) uit.push(k);
-      }
-    }
-    return uit;
   }
 
   // ---------- controle ----------
@@ -1443,7 +1252,6 @@
   // ---------- verversen ----------
   // Typen in een tekstveld herbouwt nooit het gesprek zelf (anders springt de cursor weg); een
   // structurele wijziging (een regel erbij, een ander doel, een andere voorwaarde) wel.
-  let questVuil = false;
   function naVeldWijziging() {
     vuil = true;
     renderFouten();
@@ -1453,7 +1261,6 @@
     renderSituaties();
     renderKaart();
     renderGesprek();
-    renderQuest();
     naVeldWijziging();
   }
   function herbouwAlles() {
@@ -1462,7 +1269,6 @@
     renderSituaties();
     renderKaart();
     renderGesprek();
-    renderQuest();
     renderFouten();
     vuil = true;
     updateStatus();
@@ -1470,7 +1276,7 @@
   function updateStatus() {
     const s = $('gt-status');
     if (!s) return;
-    s.textContent = vuil ? 'niet-opgeslagen wijzigingen' + (questVuil ? ' (ook in de quest — sla die in de questbewerker op)' : '') : s.dataset.opgeslagen || '';
+    s.textContent = vuil ? 'niet-opgeslagen wijzigingen' : s.dataset.opgeslagen || '';
   }
 
   // ---------- opslaan: T.GESPREKKEN terug naar leesbare code, kop en staart intact ----------
@@ -1583,7 +1389,6 @@
       vuil = false;
       const tijd = 'opgeslagen om ' + new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
       if (statusEl) { statusEl.dataset.opgeslagen = tijd; statusEl.textContent = tijd; }
-      if (questVuil) alert('De teksten van de quest (doel en melding) staan in js/quests.js en zijn hiermee niet opgeslagen. Sla ze op in de questbewerker.');
     } catch (fout) {
       if (statusEl) statusEl.textContent = 'Opslaan mislukt: ' + fout.message;
     }

@@ -19,7 +19,7 @@ const zonderLeeftijd = ({ knoppen, stijl, jong, fasen, ...rest }) => rest;
 // Het proefdorp (test/grond.cjs) op de dag die de toets kiest.
 function gehucht(dag) {
   const { S } = proefDorp(T);
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() }, T.schermVelden());
   T.S = S;
   S.kalender.dag = dag;
   return S;

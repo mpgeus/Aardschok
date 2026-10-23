@@ -17,7 +17,7 @@ test('wijzigVoorraad telt op en trekt af, en zakt nooit onder nul', () => {
   assert.equal(S.voorraad.graan, 0);
 });
 
-test('goud wijzigen houdt S.goud (de oude naam, js/quest.js) gelijk op', () => {
+test('goud wijzigen houdt S.goud (de oude naam) gelijk op', () => {
   const S = { goud: 0, voorraad: T.nieuweVoorraad() };
   T.wijzigVoorraad(S, 'goud', 15);
   assert.equal(S.goud, 15);

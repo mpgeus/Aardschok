@@ -36,8 +36,8 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   vastToeval(zaad);
   // De vorm van S zoals T.nieuwSpel in js/main.js hem maakt (plus wat alleen scherm is).
   const S = Object.assign({
-    tijd: 0, gebieden: {}, modus: 'verkennen', gevecht: null, overgang: null, bezig: false, inventaris: new Set(),
-    kalender: T.nieuweKalender(), quests: {}, questWeg: {}, questBeloond: new Set(),
+    tijd: 0, gebieden: {}, modus: 'verkennen', gevecht: null, overgang: null, bezig: false,
+    kalender: T.nieuweKalender(),
     bezocht: new Set(['hal']), naarGebied: null, netGeland: null, zoom: 1,
   }, T.schermVelden());
   const uit = T.herstelSpel(S, dorp);

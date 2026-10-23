@@ -74,7 +74,7 @@ test('het bereik telt schuine stappen als één', () => {
 // dicht, terwijl je erdoor wilde. Een klik op een deur is nu altijd erheen lopen.
 test('een open deur is een doorgang: links valt er niets te kiezen (rechts stuurt je mannen erheen, js/kiezen.js)', () => {
   const w = T.maakProefkamers();
-  const S = { wereld: w, dorp: { aanvoerder: wezen(w, 'aanvoerder') }, inventaris: new Set() };
+  const S = { wereld: w, dorp: { aanvoerder: wezen(w, 'aanvoerder') } };
   zet(S.dorp.aanvoerder, 8, 4);
   T.deurOp(w, 9, 4).staat = 'open';
   assert.equal(T.handelingVerkennen(S, { x: 9, y: 4 }), null);

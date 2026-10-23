@@ -11,7 +11,7 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 
 function dorp(opties) {
   const r = proefDorp(T, opties);
-  Object.assign(r.S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  Object.assign(r.S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = r.S;
   return { ...r, dag: Math.floor(r.S.kalender.dag) };
 }
