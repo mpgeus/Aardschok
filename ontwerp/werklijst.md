@@ -1770,6 +1770,16 @@ hebben we zoizo nodig. volgorde is akkoord"):
   tekenen (minder pixels) en hoeveel er in het bouwbereik past.
 - **184:** één rij klusjes, dragen of bouwen, wie het dichtst is (3a1); de kar wordt kleiner in beeld, naast de mensen,
   en komt later, met de schuur (3b1): het begin heeft geen kar meer, vanaf dag één dragen de mensen (Marcel: "klopt").
+  **Het plan** (Marcel, 23 okt: eerst 184 met 182, de art en de animatie liggen vandaag stil): een drager is een kar met
+  een lading van één, in het tempo van een mens; hij rijdt dezelfde ritten (halen en brengen, `kiesRit` in `js/kar.js`),
+  zodat er één manier van vervoer is en er met of zonder beelden hetzelfde uitkomt. Stappen: (1) het vervoer los van de
+  kar, zonder dat er iets verandert; (2) de dragers (de huifkar blijft na aankomst staan als eerste opslag tot het
+  raadhuis er is; een schuur krijgt nog een kar), de kolonist een jaar op vijf eilanden, de tik meten, het opslaan een
+  versie hoger; (3) egaliseren (182); (4) `spel.md` en `code.md` bij. De figuren (een plank, een stam, een steen, de
+  schop, de kleinere kar) komen later van Marcel; tot dan lopen de dragers met wat er is (de takkenbos, de mand, de
+  schoof) en houden de bouwers de bijl. **Besloten** (Marcel, 23 okt): **één stuk per keer, van alles** (zoals de
+  opperman van KaM; één getal in de werkbank), en bij 182 **zakt of rijst de grond in een paar stappen** naar het vlak
+  (zo'n vier; elke stap tekent alleen dat stukje grond opnieuw).
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
   zijn in de demo uit (4c1).
 - **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
