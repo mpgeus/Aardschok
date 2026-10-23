@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een oud getal in `js/opslaan.js`** (23 okt, de inventaris voor `scenario.md`): het commentaar bovenaan zegt dat een
+  spel zo'n 380 kB is; sinds B2 (het eiland als zaad plus wat anders is) is een leeg begin zo'n 23 kB en het proefdorp
+  43 kB.
+
 - **De oogst komt met de dragers trager binnen** (23 okt, vraag 184): een drager neemt één stuk per keer (`perDrager` in
   de werkbank, "Carriers and the ox cart"), en in de oogst zijn veel mensen dagloner. In het jaar van de kolonist in Node
   lag op vier van de vijf eilanden de oogst binnen tien dagen in de opslag (zo'n 225 graan), op eiland 5 maar een derde

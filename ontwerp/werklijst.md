@@ -25,6 +25,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
 **Wacht op Marcel**
+- **Het ontwerp van 187 en 188 lezen** (23 okt; `scenario.md`): een level is een recept, de triggers (als ... dan ...),
+  het demojaar als proef, de editor, de campagne en skirmish, en de volgorde van bouwen. Zeven vragen onderaan (A tot G).
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
   begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
@@ -57,9 +59,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. **Bezig in sessie
-   `ccr-4345e9b7-vopkuj`** (23 okt): het ontwerp in `ontwerp/scenario.md`. Tiled eruit in een
-   snoeironde, de proefkaarten naar het proefdorp (6b1).
+1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (8). Tiled eruit in een snoeironde, de
+   proefkaarten naar het proefdorp (6b1), kan eerder.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: 4b, plat in het spel (bij N); na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1400,7 +1401,8 @@ hebben we zoizo nodig. volgorde is akkoord"):
 - **187:** nu alleen het ontwerp, bouwen na de demo (6a1); Tiled eruit in een snoeironde, de proefkaarten naar het
   proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).
 - **188:** allebei: zoals Age of Empires, van niets tot er één valt (7a1), en een verdediger tegen een belegeraar (7a3);
-  eerst tegen de AI, dan samen (7b).
+  eerst tegen de AI, dan samen (7b). **Het ontwerp van 187 en 188** (23 okt): `scenario.md`, met de vragen A tot G
+  onderaan.
 - **189:** op de lijst: paarden ("hebben we nodig"), bijen ("wil ik"), het kerkhof ("goed idee") en belegeren ("hebben we
   zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
 - **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van

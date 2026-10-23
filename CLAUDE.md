@@ -45,6 +45,7 @@ gesprek komt.
   bouwt of verandert, werkt dat blok bij). Onderaan staat wat tot 11 okt in CLAUDE.md stond.
 - `ontwerp/gameloop.md`: de richting van 11 okt, en wat andere spellen als gameloop hebben.
 - `ontwerp/commercieel.md`: geld verdienen: de markt, Steam Next Fest, de haak, het tijdpad. `engels.md`: de woorden.
+  `scenario.md`: de campagne, de editor, de triggers en skirmish (vraag 187 en 188).
 - `ontwerp/beeld.md` (de beeldstijl, maten, palet), `kaarten.md` (van Tiled naar het spel, en de hoogte), `verpakken.md`
   (van map naar programma op Steam), `speelbaar.md` (wat de speeltests vonden), `concept.md` (het concept van 30 sep),
   `wereld.md` (het dorp en zijn mensen).
