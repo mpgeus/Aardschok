@@ -57,7 +57,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. Tiled eruit in een
+1. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. **Bezig in sessie
+   `ccr-4345e9b7-vopkuj`** (23 okt): het ontwerp in `ontwerp/scenario.md`. Tiled eruit in een
    snoeironde, de proefkaarten naar het proefdorp (6b1).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
