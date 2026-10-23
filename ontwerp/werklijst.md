@@ -20,19 +20,16 @@ weiger je, dan komt zijn leger). E, de heer als klok, en Q, het eerste jaar spee
 van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performance heeft hoge prioriteit** (CLAUDE.md).
 
 **Loopt**
-- **184 met 182 is af op de branch `claude/gracious-pascal-llq8tv`** (23 okt), nog niet in `main` (daar staat nog "Bezig
-  in sessie"): de dragers (`spel.md`, "Zo werken de dragers nu") en het egaliseren ("Zo werkt het egaliseren nu"). Wacht
-  op Marcel (hieronder).
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
 **Wacht op Marcel**
-- **De dragers en het egaliseren bekijken** (184 met 182, op de branch van 23 okt), en zeggen of ze in `main` mogen. In
-  het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een drager, en met *Height* op *Hills*
-  de grond die in vier stappen vlak wordt. De huifkar gaat op in het raadhuis, en wat erin zat, ligt als losse stapel
-  waar hij stond (Marcel, 23 okt; gebouwd). Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren
-  met een plank, een stam, een steen en de schop, en de kleinere kar bij de schuur, komen met de art.
+- **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
+  "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
+  drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
+  Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
+  schop, en de kleinere kar bij de schuur, komen met de art.
 - **Het demojaar spelen** met de speellijst (`speelbaar.md`, "De speellijst van het demojaar"); wat scheef zit, eerst
   met een getal uit de werkbank.
 - **183, de huizen op 65 procent**, in één keer bij Marcel thuis, door de pijplijn: de negen stappen bij R, 183 (de
@@ -1399,9 +1396,9 @@ hebben we zoizo nodig. volgorde is akkoord"):
 ## Af (sinds 11 okt)
 
 - De dragers (vraag 184, 23 okt; `spel.md`, "Zo werken de dragers nu"): geen kar meer aan het begin; wie geen werk heeft,
-  bouwt of draagt, één stuk per keer, op één klok met de karren van de schuren. Op de branch, nog niet in `main`.
+  bouwt of draagt, één stuk per keer, op één klok met de karren van de schuren; de huifkar gaat op in het raadhuis.
 - Het egaliseren (vraag 182, 23 okt; `spel.md`, "Zo werkt het egaliseren nu"): op een land met heuvels maken de bouwers
-  na het rooien de grond vlak, in vier stappen. Op de branch, nog niet in `main`.
+  na het rooien de grond vlak, in vier stappen.
 - Het blok "Nu en daarna" gesnoeid van 450 naar 45 regels (23 okt; Marcel: "Ja, snoei het"; het oude in
   `archief/werklijst-nu-tot-23-okt.md`).
 - De renderproef van de grond (vraag 178, 18 okt; `snelheid.md`, vanaf "Het plan voor de renderproef van de grond", en
