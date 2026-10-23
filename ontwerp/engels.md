@@ -165,7 +165,7 @@ onder een gril), zegt *my lord*; de raadsman schreef de schout aan met *Master r
 
 ## Erbij in deel 5 (het dorp dat spreekt: de gesprekken, de voorvallen, de raadsman)
 
-**Een zin uit de gegevens.** De gesprekken (`js/gesprekken.js`) en de quests (`js/quests.js`) zijn gegevens die een
+**Een zin uit de gegevens.** De gesprekken (`js/gesprekken.js`; tot 23 okt ook de quests) zijn gegevens die een
 bewerker terugschrijft (`T.bronBlok`): daar staat de Engelse zin als gewone tekst, niet in `T.t`. Wie zo'n zin toont,
 vertaalt hem met `T.tGegevens(zin)` (`js/taal.js`); een gesprek doet dat in `T.vulWoordenIn` (`js/gesprek.js`), dus wat
 in de gespreksschrijver staat, is meteen goed. `npm run teksten` leest de zinnen uit die tabellen (`GEGEVENS` in
@@ -215,15 +215,13 @@ over hem spreekt).
 | de bode: de brief aan de marskramer, de hinderlaag | the letter, "At the village exit robbers stopped them" | |
 | de marskramer: zijn mars, zijn beurs | his pack, his purse | de redenen bij kopen en verkopen |
 | het zaaigraan, wachters bij de graanschuur | seed grain, guards | `T.waarNaam('zaaigraan')` |
-| de monsters (`T.WEZENS[x].naam`) | slime crawler, skeleton guard, wolf, giant spider, kobold, robber, guard, veteran | met kleine letter: "The {wezen} sees you." |
-| de klappen (`aanval.zin`) | bites {doel}, hits {doel} with his sword, bites {doel} with her fangs, stabs {doel} with his spear, hits {doel} with a club | `{doel}` is *you* of de naam van wie geraakt wordt |
+| de monsters (`T.WEZENS[x].naam`) | wolf, robber, guard, veteran (tot 23 okt ook slime crawler, skeleton guard, giant spider, kobold) | met kleine letter: "The {wezen} sees you." |
+| de klappen (`aanval.zin`) | bites {doel}, hits {doel} with a club | `{doel}` is *you* of de naam van wie geraakt wordt |
 | slaan, lopen, de deur dichtgooien | hit, walk, slam the door shut | de knoppen en de berichten van het gevecht |
 | gevallen | fallen | het scherm als de schout viel (weg sinds 16 okt: dan neemt een ander het over) |
 | de voorwerpen (`T.VOORWERPEN[x].naam`) | the pillory, the maypole, the Christmas tree, a wolf den, a stall, a basket, a vine, a tent, the campfire | met hun lidwoord |
-| de proefkamers | the hall, the storeroom, the stairwell | |
 | de koorts, van ouderdom | the fever, old age | de reden bij een sterfgeval: "Old age: Henry died." |
 | een proefje, de opslag | a try-out, the browser storage | de redenen van `js/opslaan.js` |
-| de weg de wereld in | the road into the world | de uitgang van het gehucht |
 | de afwisseling (vraag 154, 13 okt): de status, en erger | Plain fare, One dish | "The food is plain, for the village eats only grain and wine, and works at 75%." |
 
 ## Erbij in deel 7 (de spelregels: `js/opties.js`)

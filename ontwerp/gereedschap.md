@@ -12,8 +12,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   alles zit. `.claude/launch.json` heeft dezelfde server onder de naam `aardschok`. Het
   browserpaneel kan een los bestand wel tonen maar niet bedienen, vandaar deze server.
   - het spel: `http://localhost:8123/`
-  - **het gereedschap: `http://localhost:8123/gereedschap/`** — een bladzijde die naar alle drie
-    wijst. De belangrijkste is `gereedschap/wereld.html`: daar wordt het spel gemaakt.
+  - **het gereedschap: `http://localhost:8123/gereedschap/`** — een bladzijde die naar alles wijst.
   - **alle getallen: `http://localhost:8123/gereedschap/instellingen.html`** (vraag 142; Marcel: "een bladzijde met
     duidelijk overzicht van alles", "Gelijk veranderen"): elk getal uit de blokken `*_INSTELLINGEN` (in de volgorde en met
     de namen van `T.WERKBANK`), de standaard van elke spelregel en de getallen van elk gebouw, met het commentaar uit de
@@ -29,7 +28,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
-  zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
+  zijn bladzijde laadt (`.pagina('gereedschap/gesprekken.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait. `test/namen.test.cjs` kijkt bij het laden
   mee of geen bestand een naam in `Spel` zet die een ander al zette (13 okt: `T.nieuwLand` stond in `js/land.js` en in
   `js/wereld.js`, en het laatste won stil); alleen `js/opties.js` mag de blokken van de werkbank terugzetten. Een toets die een dorp nodig heeft, speelt
@@ -123,7 +122,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden. Sinds ronde 2 van het snoeien (stap 6) zonder
   huizen of akkers: die bouwt de speler.
 - `npm run teksten` leest elke `T.t('…')` uit `js/`, en de zinnen uit de gegevens die een bewerker terugschrijft (de
-  gesprekken en de quests: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
+  gesprekken: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
   in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die
   erbij komt of verandert; `test/taal.test.cjs` faalt anders. **De vertaaltool** is `gereedschap/vertalen.html` (voor de
   community, dus in het Engels, en ook zonder server: wat je vertaalt, bewaart de browser, en het spel in dezelfde browser
@@ -225,9 +224,6 @@ Een opdracht van `Spel.debug` die een knop werd, blijft ook in de console; wat a
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook
 css-overgangen staan dan vrijwel stil. Het testgereedschap stuurt de spatiebalk niet goed door
 (lege `key`), dus test einde beurt met de knop of met een `KeyboardEvent`.
-`Spel.debug.quest('<quest>', '<fase>')` zet een quest in een fase zonder hem te spelen ('uit'
-haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog geen quests
-(`js/quests.js` is leeg). `Spel.debug.gaNaar('proefbos')` springt naar een ander gebied.
 `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. De camera naar een plek: sluit na
@@ -332,12 +328,10 @@ test (een keus voor een spelregel die er niet meer is, telt niet); `Spel.optiesT
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 
-Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken ze de regels uit
-`js/` zelf, nooit een eigen kopie:
+Het gereedschap draait op dezelfde server, en gebruikt de regels uit `js/` zelf, nooit een eigen kopie:
 
-- `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
-  (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
-  Wat de speler leest (een zin, een antwoord, de naam boven een gesprek, het doel en de melding van een quest), schrijf
+- `gereedschap/gesprekken.html` voor de gesprekken.
+  Wat de speler leest (een zin, een antwoord, de naam boven een gesprek), schrijf
   je in het Engels (`ontwerp/engels.md`; vraag 147); het spel vertaalt het bij het tonen, en na het opslaan draai je
   `npm run teksten`. De situaties zijn alleen voor de schrijver, en mogen Nederlands blijven.
   **In de gespreksschrijver kijk je door één situatie tegelijk** (22 sep): bovenin staan de
@@ -347,18 +341,12 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   is er gekomen omdat het scherm de gegevens liet zien en niet het gesprek: vijf versies van één
   zin stonden onder elkaar, alsof iemand ze achter elkaar zei.
   Een situatie staat bij de persoon (`situaties` in `js/gesprekken.js`), is geschreven in dezelfde
-  woorden als een voorwaarde, en het spel leest hem nooit. **De fasen van een quest zíjn
-  situaties** en staan er vanzelf bij bij wie hem geeft; de quest staat daarom op dezelfde
-  bladzijde, met erbij welk antwoord welke weg neemt. `test/situaties.test.cjs` bewaakt dat elke
+  woorden als een voorwaarde (een vlag), en het spel leest hem nooit. `test/situaties.test.cjs` bewaakt dat elke
   zin met een voorwaarde ergens wint. Boven het gesprek klapt een **kaartje** open: de vorm van
   het gesprek in deze situatie, vanzelf neergelegd, klikken springt naar de tekst — een kaartje
   erbij en geen canvas in plaats van, want slepen is een tweede baan en een canvas zet alle
   voorwaarden weer tegelijk in beeld. In de kopbalk **zoek je over alle mensen heen**; klikken
   brengt je naar een situatie waarin die zin ook echt klinkt.
-  Allebei starten ze zichzelf niet meer: de bladzijde die ze gebruikt roept
-  `T.gesprekkenTool.start()` of `T.questsTool.start()` aan, met `.kies(...)` en `.begin(...)` /
-  `.beginVoor(...)` erbij. Zo zet `wereld.html` dezelfde bewerkers in een paneel, zonder een
-  tweede te bouwen — want twee bewerkers voor hetzelfde bestand lopen vroeg of laat uit elkaar.
 - **Een bewerker schrijft alleen het blok dat hij kent.** `gereedschap/bronblok.js` knipt een
   bestand in kop, blok en staart (`T.bronBlok(tekst, 'T.GESPREKKEN')`); de bewerker regenereert
   alleen het blok, en kop en staart gaan letterlijk mee terug. Dat is geen netheid maar noodzaak:
@@ -367,33 +355,9 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
   een bewerker bouwt of uitbreidt, houdt zich hieraan; `test/bronblok.test.cjs` bewaakt het op de
   echte bestanden. Commentaar in het bestand hangt aan wat eronder staat — een persoon, een knoop,
   één regel tekst, één antwoord — en komt bij het opslaan terug op zijn plek.
-- `gereedschap/wereld.html` voor de kaarten, en dat is de bladzijde waar het spel gemaakt wordt.
-  **Tiled tekent alleen nog de grond; alles wat betekenis heeft ontstaat en verandert hier**
-  (Marcel, 22 sep; `ontwerp/kaarten.md`). Het tekent de kaart met `js/tekenen.js` zelf, kent lagen
-  die aan en uit kunnen (begaanbaar, mensen met hun dwaalstraal, questvoorwerpen, uitgangen),
-  zegt bij een klik wat het spel denkt dat daar is, en keurt de kaart. Ver uitgezoomd tekent het
-  zijn eigen plattegrond, want de tekencode van het spel is er niet op gebouwd.
-  - Het leest de `.tmj` rechtstreeks van schijf: opslaan in Tiled, verversen, zien.
-  - **Het schrijft alleen `kaarten/<naam>.betekenis.json`** — mensen, dorpelingen, deuren,
-    geheime doorgangen, aansluitingen en voorwerpen met hun `quest=`. Eén ding per
-    regel, zodat een verplaatsing ook één regel in `git diff` is. Tiled komt in dat bestand
-    nooit, dus er valt niets mee te botsen; tegen een tweede open blad stuurt het mee hoe het
-    bestand eruitzag toen het het las. Na het opslaan bundelt het zelf (`npm run kaarten`), zodat
-    het spel het meteen ziet.
-  - Een aansluiting leg je in één handeling: klik de tegel waar je vertrekt, het blad springt
-    naar de andere kaart, klik waar je aankomt, en beide kanten staan er — `komt` erbij bedacht.
-  - **Klik een poppetje en zijn gesprek én zijn quest staan ernaast** (dubbelklik, of de knoppen
-    in het tegelpaneel): een breed paneel over de kaart met twee tabbladen, en daarin de
-    volledige bewerkers uit `gesprekken-tool.js` en `quests-tool.js` — knopen, regels, fasen,
-    wegen, voorwaarden, gevolgen, de proef en de controle. Geeft iemand nog geen gesprek of
-    quest, dan biedt het paneel aan er een te beginnen, met hem als gever. Aanwijzen gaat op het
-    lijf van een wezen, niet op zijn voeten, met dezelfde maten als `zoekDoel` in `js/main.js`.
-    Esc sluit het paneel.
-  - Een questvoorwerp hang je aan een fase met twee keuzelijsten (quest en fase), niet door
-    `quest:fase` te typen; de kaart springt meteen naar die fase, zodat je ziet wat je legt.
-  - De controle staat in `gereedschap/keuring.js` (`T.keurKaart` en `T.keurDekking`, zonder scherm
-    en dus getoetst): wat op de kaart staat en niet kan, en omgekeerd wat het spel vraagt en
-    nergens staat. Die tweede zegt precies wat er nog neergezet moet worden.
+- Tot 23 okt was er ook `gereedschap/wereld.html`, voor de kaarten uit Tiled (mensen, deuren, aansluitingen,
+  questvoorwerpen, met de keuring in `gereedschap/keuring.js`), en `gereedschap/quests.html` voor de quests: ze gingen
+  weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`). De editor van de levels komt in het spel (`scenario.md`, 5).
 
 Drie dingen die bij het mikken misgaan:
 
@@ -401,9 +365,9 @@ Drie dingen die bij het mikken misgaan:
   (`#menu [data-actie="nieuw"]`; staat er al iets vanzelf bewaard, dan vraagt het eerst, en is het
   `[data-actie="ja"]`), dan Begin onder de naam van je dorp (`#menu [data-actie="begin"]`; het veld is
   `#dorpsnaam`, met een voorstel erin). Dan komt de benoemingsbrief, en zolang die openstaat, staat de tijd stil en valt elke
-  klik op de brief: sluit hem eerst (de knop "Aan het werk", `.heer-geef-knop`, of Esc). Op `?kaart=proef`
+  klik op de brief: sluit hem eerst (de knop "Aan het werk", `.heer-geef-knop`, of Esc). Op `?kaart=gehucht`
   komen er geen titelscherm en geen brief, en wordt er niet opgeslagen;
 - de camera glijdt mee, dus reken de schermpositie pas uit als hij stilstaat (een seconde
   `stap` na elke verplaatsing), anders klik je een tegel ernaast;
 - wat vooraan staat, vangt de muis. Mik op het lijf van een wezen (zo'n 16 pixels boven zijn
-  tegel), niet op zijn voeten, anders klik je de kist die ervoor staat.
+  tegel), niet op zijn voeten, anders klik je wat ervoor staat.

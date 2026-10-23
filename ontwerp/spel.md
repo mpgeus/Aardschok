@@ -1483,7 +1483,7 @@ zelf (vraag 162). Git bewaart het. Wat hieronder staat, is hoe het werkte.
   leggen.
 - **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C; sinds 4 okt de standaard, vraag 112, a;
   de spelregel "Je gehucht" is weg sinds 12 okt, en een nieuw spel begint leeg op het eiland). Een nieuw spel begint op een land van
-  de maker, met een nummer van vijf cijfers (`T.landVoorNieuwSpel`, `js/gebied.js`): bij Nieuw spel staat het onder de
+  de maker, met een nummer van vijf cijfers (`T.landVoorNieuwSpel`, nu in `js/begin.js`): bij Nieuw spel staat het onder de
   naam van je dorp, met een knop Ander land die meteen een ander land achter het menu legt, en wie een nummer typt,
   krijgt precies dat land (Marcel: "Zodat je kunt herspelen"). Hetzelfde nummer geeft hetzelfde land en dezelfde
   boeren, en een bewaard spel komt met zijn land terug. Er wonen dezelfde 26 mensen, met dezelfde beginvoorraad;

@@ -40,13 +40,13 @@ gesprek komt.
 - `ontwerp/code.md`: **de code per onderwerp**, met een kop per bestand (`grep -n 'js/bos.js' ontwerp/code.md`), en de
   afspraken in de code met het waarom. Lees alleen het stuk van je bestand.
 - `ontwerp/gereedschap.md`: elke `npm run`-opdracht in detail, testen in de browser met alle `Spel.debug`-opdrachten, en
-  de bladzijden gereedschap (de gesprekken, de quests, de wereld).
+  de bladzijden gereedschap (de gesprekken, de getallen, het vertalen).
 - `ontwerp/spel.md`: het spel per onderwerp; bovenaan de stand, en elk onderwerp begint met **Zo werkt het nu** (wie iets
   bouwt of verandert, werkt dat blok bij). Onderaan staat wat tot 11 okt in CLAUDE.md stond.
 - `ontwerp/gameloop.md`: de richting van 11 okt, en wat andere spellen als gameloop hebben.
 - `ontwerp/commercieel.md`: geld verdienen: de markt, Steam Next Fest, de haak, het tijdpad. `engels.md`: de woorden.
   `scenario.md`: de campagne, de editor, de triggers, skirmish en AI-spelers (vraag 187 en 188).
-- `ontwerp/beeld.md` (de beeldstijl, maten, palet), `kaarten.md` (van Tiled naar het spel, en de hoogte), `verpakken.md`
+- `ontwerp/beeld.md` (de beeldstijl, maten, palet), `kaarten.md` (het eiland en de hoogte; Tiled is weg), `verpakken.md`
   (van map naar programma op Steam), `speelbaar.md` (wat de speeltests vonden), `concept.md` (het concept van 30 sep),
   `wereld.md` (het dorp en zijn mensen).
 - `ontwerp/opmerkingen.md`: wat onderweg opviel en nog niet af is (Marcel, 25 sep). Zie je iets, zet het erbij.
@@ -69,8 +69,6 @@ gesprek komt.
   afdrukken: `git fetch origin main && git merge-base --is-ancestor origin/main HEAD && npm test &&
   git push`.
 - Een speeltest of proef zegt op welke stand hij speelt (branch en commit).
-- Haal in een verse kloon eerst de hele geschiedenis op (`git fetch --unshallow`):
-  `test/tegelvolgorde.test.cjs` leest een oude commit, anders falen er twee toetsen.
 
 ## Draaien en testen
 
@@ -132,13 +130,13 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Spel en dorp:** `dorp`, `opslaan`, `menu` (het titelscherm), `instellingen`, `taal`, `naam`, `tijd`, `tik`, `dag`, `opties`, `main` (de
   spellus, de invoer, de camera).
 - **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
-- **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (uit Tiled),
-  `gebied`, `minikaart`.
+- **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (de tegels op
+  naam), `minikaart`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL2), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
   licht), `ui` (één weg voor een venster), `dialoog`, `balk` (onderaan), `hud`, `huisbriefje`,
   `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D), `regie` (de scènes).
-- **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
-- **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
+- **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`.
+- **Bouwen en groeien:** `begin` (een nieuw spel, het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
   `treden` (en de standen), `behoeften` (en de groei), `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`.
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de dragers, de ossenkar, de stapels), `handel` (de marskramer), `bode`.

@@ -28,9 +28,9 @@ niet. `test/opslaan.test.cjs` bewaakt dat bewaren en laden hetzelfde spel geeft.
 
 **Geen bewakers voor regels** (27 sep, vraag 25 E): een toets laadt het hele spel, dus `T.x && T.x(...)`
 of `if (T.x)` voor een regel uit `js/` doet niets, behalve lezen alsof een deel van het spel er soms
-niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/wereld.html`
-zonder het vee, de heer en de bewoners), op `T.ui`, en op
-gegevens (`T.MENSEN.x && ...`).
+niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/gesprekken.html`:
+alleen de gesprekken; tot 23 okt ook `gereedschap/wereld.html`, zonder het vee, de heer en de bewoners), op `T.ui`,
+en op gegevens (`T.MENSEN.x && ...`).
 
 **Zo dat samen spelen later kan** (Marcel, 6 okt, vraag 126, f: na de release, met een speler als heer). Twee regels
 voor nieuw werk: wat de heer (of een ander dorp) beslist, kiest hij uit dezelfde handelingen als een mens in zijn plaats
@@ -47,9 +47,6 @@ Over het raster en het gevecht.
   (`js/gevecht.js`; vraag 170, stap 2): er is geen overgang, geen raster op de vloer en geen beurt meer.
 - Scherm en klik stellen dezelfde vraag: `handelingVerkennen` (links) en `handelingSturen` (rechts) geven
   `{ tekst, kan, doe }` terug. De tekst bij de muis en de klik komen uit hetzelfde antwoord.
-- Een klik op een deur is altijd erheen lopen. Eerst ging een open deur dicht als je er
-  naast stond en erop klikte, en dat is precies wat je niet wilt.
-- Monsters openen geen deuren.
 - Twee klokken (26 sep): wat in de wereld gebeurt (lopen, maaien, dwalen, het geduld van wie op een ander wacht),
   loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
   opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
@@ -83,13 +80,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`D.vlaggen`), en zijn eigen aanvoerder (`D.aanvoerder`, de held; valt hij, dan neemt een ander het over, `js/soldaten.js`). `D.kalender` is `S.kalender`.
   **Een regel over een dorp krijgt het dorp mee** (`T.tikGebouwenDag(D, dag)`, `T.wijzigVoorraad(D, ...)`); wat ook
   het spel nodig heeft (of je vecht, praat of slaapt, de klok van het scherm), krijgt allebei: `T.werkOogstBij(S, D, dt)`,
-  en een gesprek `T.doeGevolg(S, D, doe)` (je tas en je quests van het spel, de vlaggen en
-  het goud van het dorp). De balk en de vensters gaan over je eigen dorp (`S.dorp`, vraag 71, C); wat getekend,
+  en een gesprek `T.doeGevolg(S, D, doe)` (de vlaggen van het dorp, en een venster voor jou). De balk en de vensters gaan over je eigen dorp (`S.dorp`, vraag 71, C); wat getekend,
   aangeklikt of gevochten wordt, over het dorp dat er ligt (`T.dorpHier(S)`, of geen). Een venster dat een dorp zelf
   opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, het rekenboek met `T.ui.toonVoorraad(D)`), komt alleen voor je
-  eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.aanvoerderIsWeg(D)` zegt of zijn
-  aanvoerder niet op de kaart van het dorp staat (of er geen is); `T.isAanvoerder(S, e)` of e je eigen held is, ook op een
-  bladzijde zonder dorp (het lopen, het gereedschap). Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
+  eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpEiland`, `js/begin.js`), en `T.aanvoerderIsWeg(D)`
+  zegt of zijn aanvoerder niet op de kaart van het dorp staat (of er geen is); `T.isAanvoerder(S, e)` of e je eigen held
+  is, ook op een bladzijde zonder dorp (het lopen). De gesprekkenbewerker, die niet speelt, geeft zijn proefstaat als spel
+  en als dorp tegelijk.
   **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elke tik alles van een dorp (`T.wereldTik`,
   js/tik.js, voor elk dorp in `S.dorpen`), en ligt het niet waar je bent, dan lopen, maaien en dwalen zijn poppetjes daar ook, op
   zijn eigen kaart, niet getekend (`T.beweegWezens` in js/anim.js, `T.dwaal` in js/verkennen.js). Een ander dorp dan het
@@ -115,7 +112,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op woont) en houdt haar pleinen (`w.pleinen`: op geen enkel plein wordt gebouwd, `T.opHetPlein(w, x, y)`). Wat over het
   land van één dorp zoekt, neemt `T.dorpVak(D)`; wat van de kaart is (het tekenen, het lopen, de paadjes), `T.kaartVak(w)`,
   het vak om alle dorpen. **De tik** werkt elk dorp bij (`T.werkDorpBij`), en het lopen één keer per kaart (js/tik.js).
-  `T.dorpErbij(S)` (js/gebied.js) zet een tweede dorp op het eiland van het eerste (`T.legDorpOpKaart`, js/maker.js), met
+  `T.dorpErbij(S)` (js/begin.js) zet een tweede dorp op het eiland van het eerste (`T.legDorpOpKaart`, js/maker.js), met
   een zaad uit dat van het eiland en zijn nummer. **`S.dorp` is alleen scherm**: wat de balk, de mist, de minikaart, de
   berichten (`T.ui.bericht` krijgt het dorp mee, en toont alleen wat `S.dorp` zegt) en wie je stuurt, laten zien; de
   wereld leest het nergens (nog wel `S.modus` in `T.wereldTik`, tot stap 6b). `T.dorpHier(S)` is het dorp waar de camera
@@ -169,7 +166,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.bewaarSpel`, `T.leesSpel`, `T.zetSpel`). Een plek die vanzelf gaat, elke ochtend als de mensen opstaan
   (`T.werkOpslaanBij`; op 30× om de drie dagen, want het kost een hapering), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
   (`T.opslagPlek`: de opslag van de browser, straks een bestand). Na het laden meldt het de soorten aan van wat er op de
-  kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
+  kaart ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
   uit het spel (gevonden met de proef met opslaan, 4 okt). `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
   titelscherm (`T.naarTitelscherm`). Na het laden maakt de lus eerst het land van alle open stukken (`laden`,
@@ -230,10 +227,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van de dag uit `DAGDELEN` in `js/hud.js`. De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
   een zin passen ("You are in the castle"); de kaart zet de hoofdletter.
 - **Een zin uit de gegevens** (vraag 147, deel 5): een tabel die een bewerker terugschrijft (`T.bronBlok`), de gesprekken
-  (`T.GESPREKKEN`) en de quests (`T.QUESTS`), houdt zijn Engelse zinnen als gewone tekst, want de bewerker kent geen
+  (`T.GESPREKKEN`; tot 23 okt ook de quests), houdt zijn Engelse zinnen als gewone tekst, want de bewerker kent geen
   `T.t`. Wie zo'n zin toont, vraagt hem aan `T.tGegevens(zin, woorden)` (hetzelfde als `T.t`, voor een zin die geen gewone
   tekst in de code is): een gesprek doet dat in `T.vulWoordenIn` (`js/gesprek.js`), waar alles langs komt wat een gesprek
-  toont, en een quest in `js/quest.js`. `npm run teksten` leest die zinnen uit de tabel (`GEGEVENS` in
+  toont. `npm run teksten` leest die zinnen uit de tabel (`GEGEVENS` in
   `gereedschap/teksten.cjs`: per tabel welke velden de speler ziet, en wat alleen voor de schrijver is, zoals de situaties),
   zodat ze in `taal/bron.js` staan. Een tabel die gewone code is (`T.VOORVALLEN`, `T.OORZAKEN`), krijgt
   gewoon `T.t`.
@@ -245,7 +242,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat. `T.STAND` is leeg, behalve in
   een proefversie (`npm run proefversie` zet er de datum en de commit in).
 
-### js/tijd.js, js/dag.js, js/voorraad.js, js/gebouwen.js, js/behoeften.js, js/handel.js, js/heer.js, js/vee.js, js/opties.js, js/hud.js, js/brieven.js, js/gebied.js: het gehucht verder
+### js/tijd.js, js/dag.js, js/voorraad.js, js/gebouwen.js, js/behoeften.js, js/handel.js, js/heer.js, js/vee.js, js/opties.js, js/hud.js, js/brieven.js: het gehucht verder
 
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
@@ -340,7 +337,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spel begint, de schatting op 11 oogstmaand (tot 18 okt 1 wijnmaand), de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
   soort in `BRIEVEN`, getoond met
   `T.ui.toonBrief(D, soort)`, en alleen die aan jouw dorp komt in beeld; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint
-  met `T.beginOpKaart` (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief), op het land van de
+  met `T.beginOpEiland` (`js/begin.js`; `?kaart=gehucht` begint meteen, zonder titelscherm en brief), op het land van de
   maker (`js/maker.js`; tot ronde 2 van het snoeien, stap 3c, het ontworpen gehucht uit
   `gereedschap/tiled/maak-gehucht.cjs`, beide weg), de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen/<tekening>.png` + `bouwfasen.json`). Getallen
@@ -354,14 +351,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - **Eén weg naar de tegels** (B2a, 13 okt; `kaarten.md`, "Het hele eiland"): wat een tegel is (`T.tegel`, `T.zetTegel`),
   welke grond eronder ligt (`T.grondOp`), of een tegel op de kaart ligt (`T.opKaart`), wat de kaart beslaat
-  (`T.kaartVak(w)`: `{ x, y, b, h }`), de kamers om een tegel (`T.burenKamersOp`), of een kaart tegels en grond heeft
+  (`T.kaartVak(w)`: `{ x, y, b, h }`), of een kaart tegels en grond heeft
   (`T.heeftTegels`, `T.heeftGrond`), en een tegel als getal dat niet van de maat afhangt (`T.tegelNummer`,
   `T.tegelVanNummer`, voor wat per tegel bewaard wordt). Alleen `js/wereld.js` en `js/kaart.js` lezen `w.tegels`,
   `w.grond`, `w.b` en `w.h` (`test/tegels.test.cjs`). Een lijst over de hele kaart (het vaste raster, de eilanden, de
   velden van het lopen, het net van de paadjes, de natuur bij een gebouw, de beken, het bos van de beesten, de lichtkaart)
   beslaat `T.kaartVak(w)`, met tegel (x, y) op plek `(y - vak.y) * vak.b + (x - vak.x)`; in B2b krijgt elk zijn eigen vak.
 - **De kaart van het eiland** (B2b, 13 okt; `kaarten.md`, "Het hele eiland"): `T.eilandKaart(zaad, vak)` is het hele
-  eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kaart uit Tiled. In S staat alleen wat er
+  eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kleine kaart van een toets. In S staat alleen wat er
   anders werd, per tegelnummer: `w.tegelsAnders` (`T.zetTegel`), `w.grondAnders` (de maker), `w.gerooid` (een ding van het
   eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, welke stukken open zijn (`w.open`,
   `T.openVak`); wat een dorp kent, staat in het dorp (`D.gekend`, `js/mist.js`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
@@ -401,11 +398,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wat er op een tegel staat (`T.voorwerpOp`, uit een lijst per tegel die de kaart zelf bijhoudt, niet in `S`; een voorwerp
   zet je erbij en haal je weg met `T.zetVoorwerp` en `T.haalVoorwerpWeg`, vraag 71: dit was 85% van een speeldag; voor
   een heel vak in één keer `T.voorwerpOpVak`, met op elke tegel hetzelfde, voor de nacht van het wild),
-  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht. De naam van een wezen staat
+  en (tot 23 okt) de proefkamers, met deuren, kamers die je ontdekt en twee monsters: ronde 4 van het snoeien. Een toets
+  die een kleine kaart nodig heeft, zet er een van tekens neer (`test/regels.test.cjs`). De naam van een wezen staat
   met een kleine letter ("the wolf" in de zin, `T.t('The {wezen} sees you.')`), en wat een monster doet, is
   `aanval.zin` met `{doel}` erin (`T.t('bites {doel}')`): `js/gevecht.js` vult *you* of de naam van de man van de militie in
   (`T.vulTekst`), zodat een vertaler de hele zin kan bouwen.
-  Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.dorp.aanvoerder`, met soort
+  De kaart van het spel is het eiland. De speler is `S.dorp.aanvoerder`, met soort
   'aanvoerder' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
   'speler' zonder de aanvoerder te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
 
@@ -424,8 +422,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rover, een bezoeker) alleen waar je nu kijkt; het tekenen, de muis (`zoekDoel` in `js/main.js`), de doorkijk
   (`T.zichtbaarDoor`), de wolkjes en de ogen van de wolven vragen het. `T.waaromOnbekendLand(D, r)`: je bouwt alleen op land
   dat je kent (`T.waaromPastHetNiet`, `T.waaromPastVeldNiet`). Een klik in het zwart (B1) loopt erheen als er een weg is:
-  het land gaat verder open dan iemand kijkt (`openRond`, 16), dus dat gaat zoals op elke tegel. Een kaart uit Tiled heeft
-  geen mist. De getallen in `T.MIST_INSTELLINGEN` (de werkbank, "The fog"); het tekenen in `js/tekenen.js` (`tekenMist`,
+  het land gaat verder open dan iemand kijkt (`openRond`, 16), dus dat gaat zoals op elke tegel. Een kaart die niet op het
+  eiland ligt (een toets), heeft geen mist. De getallen in `T.MIST_INSTELLINGEN` (de werkbank, "The fog"); het tekenen in `js/tekenen.js` (`tekenMist`,
   `mistOverLijst`) en `js/gl.js` (`tekenMist`, grayscale). **Op de heuvels** (vraag 174, stap b4, 17 okt; Marcel: "M2"):
   het masker ligt op de grond via een net per stuk van 64, een punt op het midden van elke tegel op zijn hoogte
   (`mistNetVan`, eens gemaakt en na een vlak stuk alleen opnieuw waar de glooiing veranderde, `perStukVanDeHoogte`);
@@ -501,7 +499,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/verkennen.js`: wat een klik links kiest (`T.handelingVerkennen`; sinds vraag 170, stap 1, loopt de aanvoerder er niet
   meer heen: `js/kiezen.js`; sinds stap 5 opent een klik op de marskramer zijn handel, en op de heer het venster om hem te
-  betalen, zonder gesprek; oprapen, sluipen en `S.naLopen` zijn weg), dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
+  betalen, zonder gesprek; oprapen, sluipen en `S.naLopen` zijn weg, en sinds ronde 4 van het snoeien ook de deuren en
+  de kamers van de proefkamers), dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
   dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
   vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN` in `js/lopen.js`; Marcel, vraag 88), en per
   beeld zoeken hooguit `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
@@ -607,9 +606,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (jouw plek, anders die van een ander dorp), en `T.laadGemaaktGehucht(zaad)` maakt er een kaart van het eiland van, die
   alleen het verschil met het eiland overneemt, met de plek van het dorp in `w.plekken` (zijn land, plein, kamp, marskramer, uitgang en marktplek: `T.zoekMarktPlek` in `js/markt.js`; `T.nieuwDorp` neemt hem als `D.plek`). Het leggen zelf (`legPlanOp`) legt een plan op een kaart die er al is: zo legt `T.legDorpOpKaart(w, { bij, niet })` een tweede dorp op de dichtste andere dorpsplek die minstens `anderDorp` (200) tegels weg ligt (`T.planOpEiland(zaad, { bij, niet })`), en groeit het vak van de kaart om beide (vraag 170, stap 6a).
   Open zijn de stukken om het land, tot `zicht` tegels erbuiten. Welk land een
-  nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
-  spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
-  nummer (`D.lot.zaad`); de kaart heet `'gehucht'`, en `w.maker` zegt uit welk zaad hij komt. **Hetzelfde zaad,
+  nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/begin.js`; een nummer van vijf cijfers, in het menu bij Nieuw
+  spel); `T.beginOpEiland(S, zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
+  nummer (`D.lot.zaad`), en `w.maker` zegt uit welk zaad de kaart komt. **Hetzelfde zaad,
   hetzelfde land**, maar sinds B2b een ander land dan ervoor: wat er groeit komt per tegel uit het eiland, niet meer uit
   de dobbelsteen van de maker (die trok tot B2b nog getallen die niets meer legden, om het land van een bewaard spel
   gelijk te houden; een bewaard spel past sinds B2b toch niet meer). `npm run maker` schetst het lege land
@@ -832,7 +831,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van de bomen in de rijen loopt vooraf (`bomenBij` zoekt ze om wie je hoort te zien, `T.doorkijkKandidaten` in
   `js/doorkijk.js`), en wie open is, valt uit zijn rij (0 in de mist per tegel) en gaat op zijn plek in de lijst.
   `heuvelsErvoor` vraagt de rijen ook (`staatOp`). Een stuk gaat opnieuw als er op de kaart iets veranderde
-  (`T.kaartPlekkenSinds`), een gebouw erbij kwam of verschoof, of het seizoen, de hoogte of de kamer anders is; als er
+  (`T.kaartPlekkenSinds`), een gebouw erbij kwam of verschoof, of het seizoen of de hoogte anders is; als er
   alleen een beeld bij kwam (`T.sprites.geladenNr`), één stuk per beeld. Zonder videokaart blijft alles in de lijst.
   **De meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 
@@ -932,8 +931,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/sprites.js en js/kaart.js: de pixel art in het spel
 
-- `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
-  een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
+- `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur` en `T.sprites.buiten` wijzen
+  een cel op een vel aan (tot 23 okt ook `tegel`, `muur` en `voorwerp`, de vloeren, muren en spullen van de proefkamers;
+  die vellen laden niet meer), `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. **Elke boom anders** (vraag 148, a): een soort
   heeft op het vel meer tekeningen met zijn naam en een `vorm` (`BOOM_VORMEN` in `naar-tiled.cjs`), en welke een boom
@@ -968,7 +968,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   x + y min zijn hoogte gedeeld door 16 (een pixel hoger ligt een zestiende som verder naar achter), zodat een ossenkar die
   over twee tegels reikt er niet in zakt (Marcel, 17 okt: "de ossenkar lijkt nog in de brug te zakken"); de overkant op
   l 1 en de kant van de kijker op l 2,5, zoals het graan. De steen is die van het land (`steenVanLand`: zandsteen bij oker
-  en roze) of baksteen bij de stad. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
+  en roze) of baksteen bij de stad. De grond van het eiland leest een tegelnummer per vel (`T.grondVanGid`, `js/kaart.js`),
   dus een vel mag groeien. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
   (vraag 114, 2a; samen zo'n 210 MB in de browser, was 900): een vel met voorwerpen in `tegels/` zegt per tegel
@@ -1373,19 +1373,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/gesprekken.js` zijn Engels en gegevens (de gespreksschrijver schrijft ze terug), dus de naam boven een gesprek, de
   tekst van een knoop en een antwoord gaan allemaal hierlangs (`js/dialoog.js`).
 
-### js/quests.js en js/quest.js: de quests
-
-- `js/quests.js`: de quests als gegevens (nu nog leeg, met de vorm erboven);
-  `js/quest.js`: de regels erachter, zonder scherm en dus te toetsen — fasen en wegen
-  (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
-  gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
-  en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
+Tot 23 okt stonden hier ook `js/quests.js` en `js/quest.js`, de quests van het oude spel (leeg sinds 25 sep), met
+hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`); de triggers komen ervoor in de plaats
+(`scenario.md`, 2).
 
 ## Bouwen en groeien
 
-### js/begin.js: het lege begin
+### js/begin.js: een nieuw spel, en het lege begin
 
-- `js/begin.js`: **het lege begin** (vraag 152, stap 1b, 11 okt; Marcel: "We moeten ook zelf alles vanaf de start gaan
+- `js/begin.js`: **een nieuw spel** (sinds ronde 4 van het snoeien, 23 okt; daarvoor in `js/gebied.js`, met de gebieden
+  van Tiled): `T.beginOpEiland(S, zaad)` legt je land met de maker (`T.laadGemaaktGehucht`) en zet `S.wereld`, `S.dorp` en
+  `S.dorpen`; `T.landVoorNieuwSpel` en `T.nieuwLandZaad` kiezen het zaad, en `T.dorpErbij(S)` zet een tweede dorp op het
+  eiland. **Het lege begin** (vraag 152, stap 1b, 11 okt; Marcel: "We moeten ook zelf alles vanaf de start gaan
   bouwen", en "Rijdt nu binnen"): elk nieuw spel (sinds ronde 2 van het snoeien, stap 3, het enige begin; alleen op het
   eiland) legt de maker geen gehucht maar alleen het land (`leeg` in `js/maker.js`): het plein met `leegRand` tegels open eromheen en verder het bos van het eiland, een paar eiken, de plek
   van de marskramer waar de weg het plein raakt, en de plek van het kamp (`D.plek.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
@@ -1551,7 +1550,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   huis woont, `T.mensenVanStand`), en krijgt het marktrecht bij 20 ambachtslieden
   (`T.TREDEN_INSTELLINGEN`, in de werkbank; de eis van de proef van 28 sep, 50 mensen met een kapel en een smidse, was tot
   11 okt een spelregel "Treden" en is weggehaald, snoeironde vraag 153; het eisformaat kan het nog). De volgorde van de treden is `T.GEBOUW_TREDEN` (`js/gebouwen.js`). `T.tredeDoel` geeft het doel voor
-  het vak linksboven (js/main.js, als er geen quest is), `T.tredeMensenNodig` hoeveel mensen het nog vraagt (voor de
+  het vak linksboven (js/main.js), `T.tredeMensenNodig` hoeveel mensen het nog vraagt (voor de
   raad), `T.tikTredeDag` zet `D.trede` (en die gaat nooit terug), en de heer schrijft dan (`T.ui.toonBrief(D, trede)` in
   js/brieven.js, een brief per trede). Het bouwmenu toont deze trede en de treden ervoor (`T.inBouwmenu`; de markt en de
   weverij al in een dorp, vraag 90, B); wat pas in een dorp komt, vraagt `T.tredeMinstens`, en hoe een trede heet,
@@ -1683,8 +1682,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   volgend jaar worden (`T.boerenKiezenVelden`, vraag 74, stap 2): een uitgeputte akker rust of krijgt mest, een braak
   wordt weer akker; wat jij koos (`T.zetPlan`, `veld.planDoor`), laten ze staan, en het veldenvenster zegt wie wat koos
   (`T.planTekst`). `js/tekenen.js` tekent ermee (achterlaag,
-  wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
-  boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker. **Het graan is pas binnen in de schuur**
+  wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); een boer hoort bij zijn akker(s) via `huis`, dezelfde
+  id op de boer als op de akker. **Het graan is pas binnen in de schuur**
   (vraag 140, 8 okt; Marcel: "Alles telt pas als het binnen is"): wat de boer maait, blijft als zwad op de tegel liggen
   (`a.schoven`), de boerin en de kinderen (en de boer als er niets meer te maaien is) binden het tot hokken
   (`T.bindSchoof`), die drogen `droogDagen`, en dan dragen ze de schoven naar de schuur (`T.neemSchoven`, `e.vracht`,

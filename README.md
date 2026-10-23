@@ -21,7 +21,7 @@ verstoten en verslaan.
 ## Maken
 
 - `npm test` draait de regels van het spel in Node, zonder browser.
-- http://localhost:8123/gereedschap/ is het gereedschap: de kaarten, de gesprekken en de quests.
+- http://localhost:8123/gereedschap/ is het gereedschap: de gesprekken, alle getallen en het vertalen.
 - De pixel art komt uit code (`gereedschap/pixelart/`): `npm run pixelart` rendert alles,
   `npm run pixelart:spel` zet klaar wat het spel tekent.
 - Het ontwerp staat in `ontwerp/`, en `ontwerp/werklijst.md` zegt waar we zijn. Hoe de code in

@@ -162,10 +162,10 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
 
 async function main() {
   const o = leesOpdracht(process.argv.slice(2));
-  // Op welke stand: de laatste commit die het spel zelf veranderde (js/, index.html, de kaarten en de
+  // Op welke stand: de laatste commit die het spel zelf veranderde (js/, index.html en de
   // beelden), want een commit in ontwerp/ of hier verandert niets aan hoe het speelt.
   const git = (opdracht) => execSync(`git ${opdracht}`, { cwd: WORTEL, encoding: 'utf8' }).trim();
-  const SPEL = '-- js index.html kaarten beelden';
+  const SPEL = '-- js index.html beelden';
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');

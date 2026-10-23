@@ -1,11 +1,13 @@
-# Kaarten: van Tiled naar het spel
+# Kaarten: het eiland, en wat er van Tiled was
 
 Wat er op die kaarten komt te staan, staat in `wereld.md` en `toren.md`.
 
-**Sinds 12 okt** (ronde 2 van het snoeien, stap 3c) is er geen ontworpen gehucht meer: `kaarten/gehucht.tmj`, zijn
-betekenis en `gereedschap/tiled/maak-gehucht.cjs` zijn weg (git bewaart ze). Je dorp is het land van de maker op het
-eiland, met het lege begin erop; in Tiled staan nog de proefkaarten (`proef`, `proefbos`). Wat hieronder over het
-gehucht in Tiled staat, is hoe het was.
+**Sinds 23 okt is Tiled eruit** (ronde 4 van het snoeien, `snoeien.md`; 6b1 van vraag 187): de proefkaarten (`proef`,
+`proefbos`), `kaarten/`, `T.laadKaart`, de gebieden met hun overgangen, `gereedschap/wereld.html` met zijn keuring en
+`npm run kaarten` zijn weg (git bewaart ze). Sinds 12 okt (ronde 2, stap 3c) was er al geen ontworpen gehucht meer. De
+wereld is het eiland uit code; een level wordt een recept op een eiland uit de generator, met een editor in het spel
+(`scenario.md`, 1 en 5). Wat hieronder over Tiled staat (vanaf "Werken in Tiled"), is hoe het was. Wat blijft:
+de tegelvellen (`npm run tiled`, `naar-tiled.cjs`; `tegels/`) met hun vaste nummers, want het spel tekent eruit.
 
 ## Het eiland: de kaartenmaker (vraag 117, 8 okt 2026)
 

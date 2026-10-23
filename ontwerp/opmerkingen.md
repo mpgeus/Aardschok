@@ -9,6 +9,23 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat ronde 4 van het snoeien liet staan** (23 okt, `snoeien.md`):
+  (a) De tegelpijplijn heet nog `npm run tiled` (`naar-tiled.cjs`) en schrijft nog `.tsx`-bestanden voor Tiled; alleen
+  `rand.tsx` en `kust.tsx` zijn nog bron (van `tegels.json`). Een andere naam, en de rest van de `.tsx` weg: een kleine
+  ronde in de pixelart.
+  (b) De kunst van wat weg is, staat nog in `beelden/` en `gereedschap/pixelart/`: de figuren van de slijmkruiper, het
+  skelet, de reuzenspin en de kobold (`FIGUURLIJST` in `naar-spel.cjs`, `beelden/beschrijving.js`), en de vellen met de
+  muren, de vloeren en de spullen van de proefkamers (`kamers.cjs`). Het spel laadt ze niet meer. Weg in de volgende ronde
+  van de kunst, als de sessie op Marcels pc (de beelden van de generator) klaar is: die schrijft in dezelfde
+  `beelden/beschrijving.js`.
+  (c) Bewakers die er alleen voor een andere kaart stonden: `heeftTreden` (`js/treden.js`) en `heeftRovers`
+  (`js/rovers.js`), "een proefkaart heeft er geen", en `T.maakMens &&` in `js/heer.js` en `js/handel.js`. Elk dorp heeft
+  nu een plein; ze kunnen eruit als de toetsen met een los dorp het toelaten.
+  (d) `D.goud` loopt nog mee met `D.voorraad.goud` (`js/voorraad.js`), voor `js/ui.js` en `js/grillen.js`: één naam is
+  genoeg.
+  (e) Het meetgereedschap in `gereedschap/grootte/` (`bouw.cjs`, `meet.cjs`) rekent nog met een kaart met een rechthoek
+  (`w.tegels`); het eiland heeft die niet.
+
 - **Een oud getal in `js/opslaan.js`** (23 okt, de inventaris voor `scenario.md`): het commentaar bovenaan zegt dat een
   spel zo'n 380 kB is; sinds B2 (het eiland als zaad plus wat anders is) is een leeg begin zo'n 23 kB en het proefdorp
   43 kB.
@@ -91,7 +108,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   Chromium (`channel: 'chromium'`, zonder videokaart) niet verder dan het laden van de scripts; met `?kaart=gehucht`
   bestaat `Spel.debug` na 2 s, maar daarna komt geen `page.evaluate` meer terug, ook niet `Spel.debug.opslaan`, op de
   stand van toen en die ervoor. De spellus lijkt de pagina vast te houden; zo is F2 (`snelheid.md`) niet in de browser
-  nagekeken.
+  nagekeken. **Op 23 okt lukte het wel** (ronde 4 van het snoeien): de kale headless Chromium van Playwright met
+  `--use-angle=swiftshader --enable-unsafe-swiftshader`, `?kaart=gehucht`, `waitUntil: 'domcontentloaded'` en een
+  wachttijd van een paar minuten (laden duurt zo'n 90 s), de spellus stil zoals `tekenmeting.cjs` doet, en dan
+  `Spel.debug.proefdorp(5)`. Het WebGL-doek teruglezen gaf wit; `page.screenshot` werkt. Zo zijn de oude en de nieuwe
+  stand pixel voor pixel vergeleken. `npm run tekenmeting -- --tegen` en de speeltest wachten nog op "load" van `/`, en
+  dat komt hier nooit.
 - **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken
   gebroken: een weg kreeg geen bruggetje waar de oversteek breed of schuin was, en het proefdorp zat opgesloten in 7%
   van het land. Dat is opgelost met L1 (Marcel: "L1"; `code.md` bij `js/eiland.js`): tegel voor tegel gemeten liggen op
@@ -147,11 +169,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   steken kan nog niet (vraag 170, het plan bij 6). (f) `A.veld` van een overval is het nummer onder de velden van het dorp:
   breek je een veld af terwijl de rovers komen, dan schuift het nummer (dat kon al met één dorp).
 
-- **Ronde 4 van het snoeien** (16 okt, bij vraag 170, stap 5; buiten de stap gehouden): de overgang tussen de kaarten van
-  Tiled (`js/gebied.js`, `S.naarGebied`, zo'n 240 regels en 165 regels toetsen in `test/wereld.test.cjs`) en de kamers met
-  deuren (`T.maakProefkamers`, `T.ontdekBijDeur`, `w.bekend`, `deurenOpenen`) bestaan alleen nog op de proefkaarten, voor
-  een held die van kaart naar kaart liep. Veel toetsen leunen op de proefkamers (regels, vee, dorpelingen, voetafdruk),
-  dus het is een eigen ronde.
 - **Wat stap 1 van vraag 170 liet zien** (15 okt, kijken, kiezen en sturen): (a) een post is één tegel per man; staat
   er iemand op (een dorpeling die langsloopt), dan wacht hij ernaast tot de tegel vrij is, zoals iedereen bij zijn anker.
   (b) Rechts op een gebouw stuurt je mannen naar de vrije tegels eromheen; erin gaan ze niet (een toren of een muur om op
@@ -954,40 +971,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     doet sinds 7b niets meer (26 sep). Weg ermee, of laat 1 het monster slaan dat het dichtst bij
     staat?
 - **Na de oude kaart** (25 sep, werklijst punt 7c):
-  - Het gehucht staat nog als proefkaart gemarkeerd (`"proef": true` in zijn betekenisbestand),
-    omdat zijn weg de wereld in nergens heen leidt. Nu het de enige echte kaart is, hoort dat eraf
-    zodra er een tweede kaart is (een bos, het kasteel). Tot dan telt de controle hem niet mee bij
-    "wie staat er nergens".
   - De mensen van het oude dorp (de smid, de herbergierster, de molenaar, de koster, de jager, de
-    wachter en de anderen) staan nog in `js/mensen.js`, zonder plek op een kaart. De controle zegt
-    het in één regel ("18 van de 26 mensen staan nog nergens"). Voor als het gehucht een dorp wordt.
-  - Sluipen (`S`) en de spullen die je bij je hebt, hebben in het scherm van het gehucht geen plek:
-    het oude scherm linksboven staat nog in `index.html`, maar verborgen.
+    wachter en de anderen) staan nog in `js/mensen.js`, zonder plek op een kaart. Sinds ronde 4 van het snoeien
+    (23 okt) is er ook geen weg meer om ze neer te zetten: alleen een kaart uit Tiled deed dat ("wie": "smid"). Voor als
+    het gehucht een dorp wordt, of weg, zoals de karakters in ronde 2.
 - **Na de namen** (26 sep, werklijst punt 7e en 7f):
   - `T.NIEUWE_HUD` staat altijd aan (`js/hud.js`). De schakelaar was er voor de kaarten van het oude
     spel, en er vragen nog acht regels in `js/main.js` en `js/hud.js` naar. Hij kan eruit.
-  - Elke start zegt in de console dat de weg de wereld in (op 49, 19) geen `komt` heeft: er ligt
-    geen kaart achter. Onschuldig, maar het is ruis tussen echte meldingen. Weg zodra er een kaart
-    achter de weg ligt, of eerder door die melding voor 'wereld' over te slaan.
-- **Een questweg kan nog "jaren" kosten** (`js/quest.js`, KOSTEN, en de toets van drie antwoorden).
-  In het nieuwe spel kost niets meer jaren; misschien wordt het "tijd" of "leven". Beslissen als de
-  quests van het gehucht komen.
 - **Opslaan, het menu en het titelscherm, wat opviel** (28 sep, dertiende sessie; werklijst, vraag 48):
-  - **De kaart van het gehucht heet een proefkaart** (`"proef": true` in `kaarten/gehucht.betekenis.json`),
-    zodat de keuring zijn weg naar nergens met rust laat. Daardoor zegt `w.proef` niet of je een proefje
-    speelt; dat onthoudt het spel nu zelf (`S.proefje`, bij `?kaart=`). Eigenlijk hoort de keuring de weg
-    naar nergens anders toe te staan, en is het gehucht geen proefkaart.
-  - **De melding over de weg naar "wereld"** komt nu bij elk nieuw spel, en dus ook bij elk laden en elke
-    keer terug naar het titelscherm (hieronder, "Na de namen"): laden begint eerst een nieuw spel.
   - **Een opgeslagen spel is 380 kB, en vier vijfde daarvan is de kaart.** Zes plekken passen ruim in wat
     een browser bewaart (zo'n 5 MB). Groeit de kaart met de stad mee, dan kan de kaart eruit, en bij het
     laden uit Tiled komen; in de verpakking voor Steam, met een bestand, speelt het niet.
   - **Laden vraagt niets als het titelscherm open is**, want dan is er nog geen spel om kwijt te raken; in
     het menu wel. "Nieuw spel" vraagt het ook, als er iets vanzelf bewaard is: dat wordt overschreven.
-- **`server.oud.cjs` lijkt een overblijfsel** (28 sep, dertiende sessie, bij de naam op één plek). Het kwam op
-  22 sep mee in een commit die met de oude server iets nagemeten had (`e8ab95b`), en niets gebruikt het:
-  `npm start` draait `server.cjs`. Het mag weg.
-
 - **Langzamer bergop, sneller bergaf** (8 okt, bij vraag 121, stap 2, "D, wat ik niet doe"; Marcel: "Akkoord"). Met de
   hoogte zou een stap tegen een helling op meer tijd kunnen kosten, en eraf minder. Niet gebouwd, om niet te blijven
   toevoegen: lopen kent nu alleen "kan wel" of "kan niet" (een wand). Als het land groter wordt (het eiland) en een tocht

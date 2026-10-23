@@ -85,7 +85,9 @@
     // 23 (17 okt): vraag 174, stap b2: met heuvels ligt elk dorp op een eigen vlakte (w.hoogte.vlaktes, in plaats van
     // midden en dorpHoogte van het eerste).
     // 24 (23 okt): vraag 184: de huifkar rijdt niet meer (hij stond in D.karren), en wie geen werk heeft, draagt.
-    versie: 24,
+    // 25 (23 okt): ronde 4 van het snoeien: geen gebieden (S.gebieden, S.naarGebied), geen quests en tas (S.quests,
+    // S.inventaris), en een kaart zonder deuren en kamers (w.deuren, w.kamers, w.bekend; tegel 3 was 'deur').
+    versie: 25,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

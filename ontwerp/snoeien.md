@@ -337,6 +337,15 @@ gereedschap van de quests niet op Tiled):
 **Blijft:** de tegelpijplijn (`npm run tiled`, `randtegels`): die maakt de tegels voor het spel, en `rand.tsx` en
 `kust.tsx` zijn er de bron van. Een andere naam, en de `.tsx` voor Tiled weg, staat in `opmerkingen.md`.
 
+**Ronde 4 is af** (23 okt, sessie `ccr-c32d0a45-iielb4`): netto zo'n 10.600 regels minder, waarvan 1.700 in `js/`, 1.000
+in de toetsen en 7.900 in het gereedschap en de kaarten; 1119 toetsen werden er 1051. Een bewaard spel van vóór ronde 4
+laadt niet meer (`T.OPSLAAN_INSTELLINGEN.versie` 25). Nagekeken: na 9000 tikken op het proefdorp (zo'n vijftien
+speeldagen op 30×) is de wereld precies dezelfde als ervoor, en het beeld is pixel voor pixel hetzelfde (overdag, 's
+avonds, ver uitgezoomd); de tik is even snel (0,31 à 0,35 ms, om en om gemeten). Wat het ook opleverde: het spel laadt de vellen van binnen
+(de muren, de vloeren en de spullen van de proefkamers) niet meer bij het begin, de muis zoekt niet meer bij elke beweging
+naar de kist en de fontein van de toren, en elke weg wordt onthouden (de kaart had geen deuren meer die open en dicht
+gingen). Wat bleef staan, met de kunst van wat weg is: `opmerkingen.md`, "Wat ronde 4 van het snoeien liet staan".
+
 ## Later
 
 - **Ronde 2, na 1f:** `js/verzoeken.js` en `js/ondernemers.js` (de mensen vragen wat ze bouwen), `js/erven.js` (het
@@ -358,7 +367,7 @@ gereedschap van de quests niet op Tiled):
 
 - **Spel en dorp:** `dorp`, `opslaan`, `menu`, `taal`, `naam`, `tijd`, `dag`, `opties`, `main`.
 - **Wereld en lopen:** `wereld`, `pad`, `lopen`, `praatje`, `anim`, `verkennen`.
-- **Het land:** `eiland`, `maker`, `hoogte`, `kaart`, `gebied` (de proefkaarten), `begin`.
+- **Het land:** `eiland`, `maker`, `hoogte`, `kaart` (sinds ronde 4 alleen de tegels op naam), `begin`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl`, `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien`, `ui`, `dialoog`,
   `tafel`, `hud`.
 - **De mensen:** `mensen`, `bewoners`, `leven`, `boeren` (verandert in 1e), `gesprek` en `gesprekken`.

@@ -1,7 +1,8 @@
 # Scenario's: de campagne, de editor, skirmish en AI-spelers (vraag 187 en 188)
 
-**Zo werkt het nu** (23 okt): dit is het ontwerp; er is niets van gebouwd, en bouwen komt na de demo (Marcel, 20 okt,
-6a1). Marcel koos op 23 okt in vier rondes (hieronder, en samen in 10); het ontwerp is rond.
+**Zo werkt het nu** (23 okt): dit is het ontwerp; bouwen komt na de demo (Marcel, 20 okt, 6a1). Marcel koos op 23 okt
+in vier rondes (hieronder, en samen in 10); het ontwerp is rond. Stap 0 van 9, de snoeironde (Tiled eruit, met de
+quests, de gebieden en de proefkamers), is af: ronde 4 in `snoeien.md`.
 
 ## Wat Marcel vroeg en koos
 
@@ -41,22 +42,20 @@
 
 - **Bewaren** (`js/opslaan.js`): heel `S` behalve het scherm, als JSON; het eiland als zaad plus wat per tegel anders is
   (`tegelsAnders`, `grondAnders`, `gerooid`, `hoogte.vlaktes`; `T.eilandKaart` in `js/wereld.js`). Een leeg begin is zo'n
-  23 kB, het proefdorp 43 kB. Een spel van een andere versie (`T.OPSLAAN_INSTELLINGEN.versie`, nu 24) wordt geweigerd.
+  23 kB, het proefdorp 43 kB. Een spel van een andere versie (`T.OPSLAAN_INSTELLINGEN.versie`, nu 25) wordt geweigerd.
 - **Een dorp uit een recept:** `T.proefdorp.maak` (`js/begin.js`) bouwt het proefdorp elke keer opnieuw uit een paar
   woorden (hoeveel hoeven, hutten, welke gebouwen), met de gewone regels (`zetBijHetVuur`, `legVeldBij`, `bouwAf`).
 - **Het eiland heeft zijn plekken al** (`E.plekken`, `js/eiland.js`): het kasteel op een heuvel, de stad aan de grootste
   monding, acht dorpsplekken met een naam, en de roverskampen; met de wegen ertussen.
-- **Voorwaarden en gevolgen:** `T.voorwaardeGeldt` (`js/gesprek.js`) kent `vlag`, `heeft` (de tas), `quest` en `goud`;
-  `T.doeGevolg` kent vlaggen, de tas en goud. De quests (`js/quest.js`) worden elke tik nagekeken (`T.werkQuestsBij`),
-  maar alleen voor `S.dorp`, en `T.QUESTS` is leeg: het is de vorm uit het oude spel (fasen met wegen die jaren, goud,
-  gunst of risico kosten, voorwerpen en geheime deuren op een Tiled-kaart).
+- **Voorwaarden en gevolgen:** `T.voorwaardeGeldt` (`js/gesprek.js`) kent alleen nog `vlag` en `nietVlag`, en
+  `T.doeGevolg` vlaggen en een venster: de tas, het goud en de quests (de vorm uit het oude spel, met fasen, wegen,
+  voorwerpen en geheime deuren op een Tiled-kaart) gingen weg in de snoeironde van 23 okt.
 - **De demo zit verspreid:** `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`) wordt gelezen in `begin.js` en `bewoners.js` (de
   wacht van drie), `gebouwen.js` (wat dicht is), `rovers.js` (de ene overval), `heer.js` (betalen is het eind), `hud.js`
   (de punten) en `debugvenster.js`.
 - **De regie** (`js/regie.js`) leidt de scène af uit de wereld (`T.welkeScene(D)`), per beeld, niet in de tik.
-- **Gereedschap:** `gereedschap/wereld.html` bewerkt alleen de Tiled-kaarten (mensen, deuren, voorwerpen; de grond niet),
-  en kent het eiland en `S` niet. De bewerkers van de gesprekken en de quests schrijven hun blok terug (`T.bronBlok`) en
-  hebben een proefdorp-stand.
+- **Gereedschap:** de bewerker van de gesprekken schrijft zijn blok terug (`T.bronBlok`) en heeft een proefdorp-stand.
+  `gereedschap/wereld.html` (de Tiled-kaarten) en de bewerker van de quests zijn weg sinds de snoeironde van 23 okt.
 - **Er is geen AI:** niets kiest handelingen voor een dorp (`T.geefOpdracht` komt alleen uit een klik), en het leger van
   de heer loopt naar het plein en vecht niet. **Er is geen kasteel:** alleen de plek op het eiland; `palissade` en
   `stadsmuur` staan als gebouw zonder tekening en zonder bouwmenu. Belegeren, torens en poorten zijn er niet.
@@ -111,7 +110,7 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 
 **De afspraken in de code gelden ook hier:**
 - Triggers draaien in de tik (`T.wereldTik`, na de opdrachten), één keer per wereldseconde: vaak genoeg voor een
-  checkpoint, en goedkoop. Ze vervangen `T.werkQuestsBij`, dat alleen `S.dorp` kende.
+  checkpoint, en goedkoop. Ze komen waar tot 23 okt `T.werkQuestsBij` stond, dat alleen `S.dorp` kende.
 - Een gevolg verandert de wereld in de tik zelf. Elke computer rekent dezelfde trigger op dezelfde tik, dus samen spelen
   blijft kunnen; een gevolg hoeft geen opdracht te zijn (alleen een klik is dat).
 - Toeval komt uit `T.vastLot` met het zaad, nooit uit `Math.random`.
@@ -121,7 +120,7 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   zet de wereld, de regie leest haar, zoals nu bij de heer).
 - De zinnen zijn Engels, en het zijn gegevens die een bewerker terugschrijft: `T.tGegevens`, en `npm run teksten` leest
   ook `levels/`.
-- Een keuring, zoals `T.keurQuests`: rood voor een trigger die een gebied noemt dat er niet is, of een doel dat nooit af
+- Een keuring, zoals tot 23 okt `T.keurQuests` voor de quests: rood voor een trigger die een gebied noemt dat er niet is, of een doel dat nooit af
   kan.
 - Geen ronde over de hele kaart: een gebied is een rechthoek of kring van tegels, en `inGebied` kijkt alleen naar de
   mensen van het genoemde dorp.
@@ -156,7 +155,7 @@ naam ("the miller"). De editor geeft de namen; een trigger noemt ze. **Een check
 trigger `inGebied`. Je ziet het als een doel ernaar wijst (een vaandel op de plek en de ping op de minikaart), anders niet.
 
 **Doelen** staan in `S.scenario.doelen` (een tekst en een stand: open, af, mislukt). Het vak linksboven toont het
-hoofddoel, waar nu `T.questDoel` of `T.tredeDoel` staat; de rest staat op het briefje bij de muis (het scherm zo leeg
+hoofddoel, waar nu `T.tredeDoel` staat; de rest staat op het briefje bij de muis (het scherm zo leeg
 mogelijk). Een bericht zegt het als er een doel bij komt, of als het af is.
 
 ## 3. De proef: het demojaar als triggers
@@ -187,9 +186,9 @@ spel, zolang weigeren de dood is", `js/regie.js`). Daarmee wordt `T.DEMO_INSTELL
   grillen), de wilde rovers, het weer, de bazen. Een level zet een regel aan of uit met een spelregel, zoals de demo de
   wilde rovers uitzet.
 - **De regie blijft** de speler van de scènes; een trigger zegt alleen welke.
-- **De quests van het oude spel** (`js/quest.js`, `js/quests.js`, de bewerker ervan) gaan weg met Tiled (Marcel, 23 okt,
-  G: "gaan weg met tiled"), en de triggers komen ervoor in de plaats; `T.QUESTS` is leeg, en de tas, de voorwerpen en de
-  geheime deuren hoorden bij de toren en Tiled. De taal van de voorwaarden (`T.voorwaardeGeldt`) wordt er één voor de
+- **De quests van het oude spel** (`js/quest.js`, `js/quests.js`, de bewerker ervan) gingen weg met Tiled (Marcel, 23 okt,
+  G: "gaan weg met tiled"; de snoeironde van 23 okt), en de triggers komen ervoor in de plaats; `T.QUESTS` was leeg, en de
+  tas, de voorwerpen en de geheime deuren hoorden bij de toren en Tiled. De taal van de voorwaarden (`T.voorwaardeGeldt`) wordt er één voor de
   gesprekken en de triggers.
 
 ## 5. De editor
@@ -323,8 +322,9 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
 
 ## 9. De volgorde van bouwen (na de demo)
 
-0. **De snoeironde (6b1, kan eerder):** Tiled eruit, de proefkaarten naar het proefdorp; mee weg gaan
-   `gereedschap/wereld.html`, `js/kaart.js`, `kaarten/` en de kaarten als gebied, en de quests van het oude spel (G).
+0. **De snoeironde (6b1), af op 23 okt:** Tiled eruit, de proefkaarten naar het proefdorp; mee weg gingen
+   `gereedschap/wereld.html`, `kaarten/` en de kaarten als gebied, de quests van het oude spel (G), en de proefkamers met
+   hun deuren en monsters (ronde 4 in `snoeien.md`). `js/kaart.js` houdt alleen de tegels op naam.
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
    eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.

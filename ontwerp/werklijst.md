@@ -23,8 +23,6 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
-- **Bezig in sessie `ccr-c32d0a45-iielb4`** (23 okt): de snoeironde van 6b1 (`scenario.md`, 9, stap 0): Tiled eruit,
-  de proefkaarten naar het proefdorp. Eerst een plan voor Marcel.
 
 **Wacht op Marcel**
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
@@ -59,8 +57,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9). Tiled eruit in een snoeironde, de
-   proefkaarten naar het proefdorp (6b1), kan eerder.
+1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: 4b, plat in het spel (bij N); na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1415,6 +1412,9 @@ hebben we zoizo nodig. volgorde is akkoord"):
 
 ## Af (sinds 11 okt)
 
+- Ronde 4 van het snoeien: Tiled eruit (6b1 van vraag 187, 23 okt; `snoeien.md`): de kaarten uit Tiled, de quests en
+  de tas, de gebieden en de proefkamers met hun deuren en monsters; zo'n 10.600 regels minder. Het spel speelt en tekent
+  precies als ervoor (nagekeken). Wat bleef staan: `opmerkingen.md`, "Wat ronde 4 van het snoeien liet staan".
 - Het debugvenster met tabbladen (23 okt; Marcel: "Ik kan al die losse dingen niet onthouden"; `gereedschap.md`):
   alles om te testen is een knop, in zes tabbladen.
 - De overval van de demo (vraag 185, 23 okt; `spel.md`, "In de demo één overval"): één keer drie rovers, overdag, een dag
