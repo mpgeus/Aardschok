@@ -40,7 +40,8 @@ overval in de demo, punten, een campagne met een editor, skirmish, en wat er van
 (bij R, "Besloten"), met de volgorde: 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp.
 **183 in één keer, bij Marcel** (20 okt): de maat (65 procent) en de werkplaatsen in de huizenbouwer liggen klaar achter
 de schakelaar `NIEUW` in `huizen.cjs`; Marcel rendert eerst de poppetjes en de stijl, dan alle huizen in één keer, met de
-negen stappen bij R, 183. Daarna 184 met 182 (dragers en egaliseren).
+negen stappen bij R, 183. Daarna 184 met 182 (dragers en egaliseren). **Bezig in sessie `claude/gracious-pascal-llq8tv`**
+(23 okt): 184 met 182, de regels, met figuren die er al zijn (de art ligt vandaag stil).
 
 **Performance heeft hoge prioriteit** (Marcel, 17 okt: "maak van performance een hoge prio, spelers haken af als dat
 niet op orde is"; CLAUDE.md, "Hoe we kiezen"). **Het tekenen is af** (17 okt, in `main`): de opdrachten aan de
