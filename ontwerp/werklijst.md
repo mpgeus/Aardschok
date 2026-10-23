@@ -23,16 +23,16 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
-- **Bezig in sessie `ccr-39520f0f-f5x764`** (23 okt): het debugvenster (D) met tabbladen, zodat alles om te testen een
-  knop is (Marcel: "Ik kan al die losse dingen niet onthouden"; "bouw maar").
 
 **Wacht op Marcel**
-- **185 en 186 bekijken** (in de branch `ccr-39520f0f-f5x764`, nog niet in `main`; `spel.md`, bij Rovers en de militie "In
-  de demo één overval", en bij het eind "De punten"). Speel het demojaar (`Spel.DEMO_INSTELLINGEN.aan = true`): een dag
-  voor de overval een bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder
-  het jaarverslag. De dag staat in `Spel.debug.rovers().demoOp`, de punten in `Spel.debug.einde()`. De speeltest liep in
-  de cloud niet (de pagina laadt daar niet, ook op `main`): draai `npm run speeltest` thuis. Open: de korte scène van de
-  rovers (met de cinematic), en de waarden van de waren (de werkbank, "The ending").
+- **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
+  overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
+  begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
+  *Time* spring je naar de dag vóór Sint-Maarten. Kijk ook of elke knop doet wat hij zegt. Een dag voor de overval een
+  bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder het jaarverslag. De
+  speeltest en het spel in de browser liepen in de cloud niet (de pagina laadt daar niet, ook op `main`; de knoppen zijn
+  in Node nagelopen): draai `npm run speeltest` thuis. Open: de korte scène van de rovers (met de cinematic), en de
+  waarden van de waren (de werkbank, "The ending").
 - **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
   "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
   drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
@@ -1407,6 +1407,8 @@ hebben we zoizo nodig. volgorde is akkoord"):
 
 ## Af (sinds 11 okt)
 
+- Het debugvenster met tabbladen (23 okt; Marcel: "Ik kan al die losse dingen niet onthouden"; `gereedschap.md`):
+  alles om te testen is een knop, in zes tabbladen.
 - De overval van de demo (vraag 185, 23 okt; `spel.md`, "In de demo één overval"): één keer drie rovers, overdag, een dag
   van tevoren aangekondigd; zonder akker roven rovers de grootste stapel.
 - De punten (vraag 186, 23 okt; `spel.md`, "De punten"): wat je verzamelde en wat er in de opslag ligt, in goud, op

@@ -391,4 +391,26 @@ test('valt er in de demo niets te roven, dan komen ze een dag later', () =>
     assert.ok(R.aanval.gemeld, 'nu wel');
   }));
 
+// Het debugvenster (js/debugvenster.js, Danger): de overval van de demo morgen, met het bericht meteen.
+test('de overval van de demo morgen (het debugvenster): het bericht komt meteen, de rovers morgen', () =>
+  inDeDemo(() => {
+    const S = gehucht();
+    opUur(S, 40, 10);
+    const R = (S.dorp.rovers = T.nieuweRovers());
+    R.demoGeweest = true; // hij was al geweest: het debugvenster laat hem toch nog eens komen
+    assert.equal(T.demoOvervalMorgen(S.dorp), true);
+    const A = R.aanval;
+    assert.equal(A.dag, 41);
+    assert.equal(A.demo, true);
+    opUur(S, 40, Math.max(10, A.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf) + 0.1);
+    berichten.length = 0;
+    T.werkRoversBij(S, S.dorp);
+    assert.ok(A.gemeld, 'het bericht');
+    assert.ok(berichten.some((t) => /^Robbers were seen in the woods/.test(t)), berichten.join(' | '));
+    opUur(S, 41, A.uur + 0.1);
+    T.werkRoversBij(S, S.dorp);
+    assert.equal(A.fase, 'komen');
+    assert.equal(T.demoOvervalMorgen(S.dorp), false, 'niet terwijl er rovers op de kaart zijn');
+  }));
+
 // Hoe de wapens slaan, staat sinds vraag 159 in test/soldaten.test.cjs.

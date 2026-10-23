@@ -11,10 +11,11 @@ tegenkomt, met wat er onder "Wacht op Marcel" in de werklijst stond om te bekijk
 alles na. Wat je ziet dat scheef zit, los ik eerst op met een getal uit de werkbank (CLAUDE.md, "Niets erbij zonder
 overleg").
 
-**Zo begin je:** zet op het titelscherm in de console `Spel.DEMO_INSTELLINGEN.aan = true`, en dan *New game*. Dan komt de
-wacht mee (twee speermannen en een kruisboogschutter), staan het wachthuis en de wapenmaker op slot (in het debugvenster,
-D, zet je het slot uit om ze toch te proberen), en eindigt het spel op Sint-Maarten. Zonder die regel speel je het volle
-spel: dan geen wacht, en geen slot.
+**Zo begin je:** *New game*, druk D (het debugvenster), en kies in het tabblad *Demo* **New game as the demo**. Dan komt de
+wacht mee (twee speermannen en een kruisboogschutter), staan het wachthuis en de wapenmaker op slot (in hetzelfde tabblad
+zet je het slot uit om ze toch te proberen), en eindigt het spel op Sint-Maarten. De demo blijft aan tot je de bladzijde
+opnieuw laadt; *New game, the full game* zet hem uit (dan geen wacht, en geen slot). Alles om te testen staat in het
+debugvenster, als knop (punt 8): je hoeft niets te onthouden.
 
 **Het demojaar, in het kort:**
 1. **Het menu en Settings** (het titelscherm, de tabbladen).
@@ -28,8 +29,9 @@ spel: dan geen wacht, en geen slot.
    rietsnijder niet in het bouwmenu (vraag 181, c); de rotsen liggen vaak buiten je bereik: een schuur brengt ze erbinnen.
 5. **Het wild:** de wolven en de herten om je land.
 6. **Vechten met de wacht:** stuur ze met rechts, formaties, de diensten, de held. Eén keer in het jaar komen er drie
-   rovers, overdag, met een dag van tevoren een bericht (vraag 185); zonder akker komen ze voor een stapel. Wanneer:
-   `Spel.S.dorp.rovers.demoOp` (de dag).
+   rovers, overdag, met een dag van tevoren een bericht (vraag 185); zonder akker komen ze voor een stapel. Wanneer: D,
+   *Demo*; niet wachten: D, *Danger*, *The demo raid tomorrow*. Op het eindscherm de punten (vraag 186); de stand nu: D,
+   *Demo*.
 7. **De heer:** zijn brief op 11 oogstmaand, de klok in de balk ("Martinmas in 90 days"), de marskramer (ook met vee), en op
    Sint-Maarten betalen of weigeren, met de scène.
 8. **Om te testen:** het debugvenster (D).
@@ -257,10 +259,13 @@ nog "de schout": dat is de aanvoerder):
 
 ### 8. Om te testen
 
-- **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
-  goud, een gezin (zonder plaats zegt het spel dat), de bouwplaatsen meteen af (wie erin trekt, komt die nacht), en de
-  marskramer nu. De tijd staat stil zolang het open is; D of Esc sluit het. Voor Steam gaat het uit
-  (`T.DEBUG_INSTELLINGEN.aan`, `verpakken.md`).
+- **Het debugvenster bekijken** (169, 15 okt; tabbladen sinds 23 okt): Nieuw spel, en druk D bij het rondlopen. Zes
+  tabbladen: *Village* (waren, gezinnen, bouwplaatsen af, de volgende trede, vee, de marskramer), *Time* (naar de ochtend,
+  de avond of de nacht, dagen verder, naar Sint-Maarten), *The lord* (de heer, zijn brief, een gril, de heervaart, het
+  slachten), *Danger* (rovers, de demo-overval morgen, brand, koorts, regen, droogte, de aanvoerder valt), *Demo* (een
+  nieuw spel als demo of vol spel, de dag van de overval, de punten, het slot) en *Look* (de maat van de gebouwen, de
+  spelregels). Kijk of elke knop doet wat hij zegt. De tijd staat stil zolang het open is; D of Esc sluit het. Voor
+  Steam gaat het uit (`T.DEBUG_INSTELLINGEN.aan`, `verpakken.md`).
 
 ### Buiten het demojaar: het volle spel, of geparkeerd
 

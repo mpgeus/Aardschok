@@ -735,10 +735,11 @@ body.foto #kader { display: none; }
 #instellingen .toets { white-space: nowrap; color: var(--inkt); font-size: 12.5px; }
 #instellingen kbd { color: var(--inkt); border-color: color-mix(in srgb, var(--papier-inkt) 40%, transparent); border-bottom-width: 2px; }
 /* De tabbladen van Settings (vraag 172b): een vaste hoogte, zodat het venster niet verspringt; alleen wat onder de
-   tabbladen staat, schuift. Het gekozen tabblad staat in rood met een streep eronder. */
+   tabbladen staat, schuift. Het gekozen tabblad staat in rood met een streep eronder. Het debugvenster (D) heeft dezelfde
+   tabbladen, kleiner (hieronder bij #debug). */
 #instellingen { display: flex; flex-direction: column; height: min(680px, calc(100vh - 120px)); overflow: hidden; }
 #instellingen .tabs { display: flex; gap: 24px; margin: 10px 0 0; border-bottom: 1px solid var(--rand); }
-#instellingen .tab {
+:is(#instellingen, #debug) .tab {
   margin-bottom: -1px;
   padding: 4px 0 6px;
   font: 18px var(--kop);
@@ -748,8 +749,8 @@ body.foto #kader { display: none; }
   border-bottom: 2px solid transparent;
   cursor: pointer;
 }
-#instellingen .tab:hover { color: var(--inkt); }
-#instellingen .tab.gekozen { color: var(--goud); border-bottom-color: var(--goud); }
+:is(#instellingen, #debug) .tab:hover { color: var(--inkt); }
+:is(#instellingen, #debug) .tab.gekozen { color: var(--goud); border-bottom-color: var(--goud); }
 #instellingen .tab-inhoud { flex: 1; min-height: 0; overflow-y: auto; padding-right: 6px; }
 #spelregels .namen { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
 #spelregels .naam-rij { display: flex; flex-direction: column; gap: 2px; font-size: 11.5px; color: var(--gedempt); }
@@ -913,16 +914,25 @@ body.foto #kader { display: none; }
 #wetten .wet-doet .goed { color: var(--groen); }
 #wetten .wet-doet .kost { color: var(--rood); }
 
-/* Het debugvenster (js/debugvenster.js, onder D; werklijst 169): vier knoppen onder elkaar. */
+/* Het debugvenster (js/debugvenster.js, onder D; werklijst 169): tabbladen zoals Settings, maar kleiner, en per tabblad
+   een paar regels hoe het ervoor staat en de knoppen onder elkaar. Een vaste hoogte, zodat het venster niet verspringt
+   als je van tabblad wisselt; alleen wat onder de tabbladen staat, schuift. */
 #debug {
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(420px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  width: min(480px, calc(100vw - 32px));
+  height: min(560px, calc(100vh - 120px));
   padding: 12px 16px 14px;
   z-index: 5;
 }
+#debug .tabs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 10px; border-bottom: 1px solid var(--rand); }
+#debug .tab { font-size: 15px; }
+#debug .db-inhoud { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
+#debug .db-staat { margin: 0 0 6px; font-size: 12.5px; color: var(--gedempt); }
 #debug .db-knoppen { display: flex; flex-direction: column; gap: 6px; }
 #debug .db-knop {
   padding: 6px 10px;

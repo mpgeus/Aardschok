@@ -154,6 +154,18 @@
     R.aanval = { soort: 'wild', demo: true, dag: op, fase: 'wacht', aantal: M.aantal, uur: demoUur(D, op) };
   }
 
+  // De overval van de demo morgen (het debugvenster, js/debugvenster.js): het bericht vooraf komt dan meteen. Niet als er
+  // al rovers op de kaart zijn. Geeft of het lukte.
+  T.demoOvervalMorgen = function (D) {
+    if (!heeftRovers(D)) return false;
+    const R = D.rovers || (D.rovers = T.nieuweRovers());
+    if (R.aanval && R.aanval.fase !== 'wacht') return false;
+    const dag = dagNu(D);
+    Object.assign(R, { aanval: null, demoOp: dag + 1, demoGeweest: false });
+    planDemoOverval(D, R, dag);
+    return true;
+  };
+
   // Wie in een gevecht viel, ligt er tot de volgende dag: een rover, een man of een dorpeling, en een wolf.
   function begraaf(D) {
     const w = D.wereld;

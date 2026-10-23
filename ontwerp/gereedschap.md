@@ -203,10 +203,22 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 
 ## Testen in de browser
 
-**In het spel zelf: het debugvenster onder D** (werklijst 169; Marcel, 15 okt): +50 stammen, planken, steen en goud,
-een gezin, de bouwplaatsen meteen af, en de marskramer nu, zodat je het groeien test zonder te wachten
-(`js/debugvenster.js`); en het slot van de demo, en de gebouwen op 100, 80 of 65 procent, alleen voor het oog (de proef
-van vraag 183, 2a1). Aan tot de Steam-versie.
+**In het spel zelf: het debugvenster onder D** (werklijst 169; Marcel, 15 okt; sinds 23 okt met tabbladen, want "Ik kan
+al die losse dingen niet onthouden"): alles om het spel te testen is daar een knop, zodat Marcel geen opdracht hoeft te
+kennen (`js/debugvenster.js`). Aan tot de Steam-versie.
+- **Village:** +50 stammen, planken, steen en goud, een gezin erbij of vier mensen weg, de bouwplaatsen meteen af, de
+  volgende trede nu, vier koeien of schapen, de marskramer nu.
+- **Time:** naar 8:00, 20:00 of 2:00, een of tien dagen verder, naar de ochtend vóór Sint-Maarten. De nachten ertussen
+  tellen (wat de gebouwen maken, wat het dorp eet, de brieven), maar overdag loopt er niemand.
+- **The lord:** de heer nu, zijn brief, een gril, de heervaart, het slachtvenster.
+- **Danger:** drie rovers nu, de overval van de demo morgen (het bericht meteen), brand, koorts, regen, droogte, de
+  aanvoerder valt.
+- **Demo:** of dit spel de demo is, de dag van de overval, de punten nu en je beste; een nieuw spel als demo of als vol
+  spel (op hetzelfde land; de demo blijft aan tot je de bladzijde opnieuw laadt); het slot van de demo.
+- **Look:** de gebouwen op 100, 80 of 65 procent (de proef van vraag 183, 2a1), en de spelregels met de werkbank.
+
+Een opdracht van `Spel.debug` die een knop werd, blijft ook in de console; wat alleen voor het meten en de overzichten is
+(hieronder), staat alleen daar.
 
 `Spel.S` is de spelstaat, en `Spel.S.dorp` je eigen dorp (`js/dorp.js`). `Spel.debug.naarBeeld(x, y)` geeft de schermpositie van een tegel
 (css-pixels), `await Spel.debug.stap(seconden)` laat het spel vooruitlopen zonder op beelden te

@@ -2072,6 +2072,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en `T.komtKlaar` (`js/gebouwen.js`, de stap "een gebouw komt klaar" uit de nachtlus, zodat de nacht en het venster
   dezelfde weg gaan; wie erin trekt, volgt de nacht erna); en de marskramer met `T.debug.marskramer`. Alleen scherm
   (`ALLEEN_SCHERM` in `test/laad.cjs`); de regels die het aanroept, hebben hun eigen toetsen.
+- **De tabbladen** (23 okt; Marcel: "Ik kan al die losse dingen niet onthouden", "bouw maar"): `TABS()` is één lijst
+  met per tabblad zijn knoppen (`{ id, tekst, doe }`; `doe(S, D, dag)` geeft wat er onder de knoppen komt) en eventueel
+  `staat` (de regels bovenaan, wat je anders in de console vroeg). Een knop roept een regel aan die er is, of een
+  `Spel.debug`-opdracht (`js/main.js`) en zegt zelf in het Engels wat er gebeurde. De tijd springt met `S.kalender.dag`
+  (`spring`); `T.werkGebouwenBij` doet daarna elke nacht ertussen apart (240 nachten kosten zo'n seconde). Een nieuw spel
+  (Demo) zet `T.DEMO_INSTELLINGEN.aan`, en doet wat New game in het menu doet: `T.nieuwSpel` op het land van nu,
+  `T.zetDorpsnaam`, de brief `benoeming`. De overval van de demo morgen is `T.demoOvervalMorgen` (`js/rovers.js`). De
+  tabbladen hebben de opmaak van Settings (`:is(#instellingen, #debug) .tab` in `stijl.css`). Het open tabblad is alleen
+  scherm (`tab`). Getallen: `T.DEBUG_INSTELLINGEN` (`vee`, `gezin`, `rovers`, `uren`, `dagen`).
 - **Aan tot de Steam-versie** (Marcel, 15 okt), ook in de proefversie: `T.DEBUG_INSTELLINGEN.aan` gaat voor Steam op
   false (`ontwerp/verpakken.md`), en dan meldt het venster zich niet aan.
 - **De spelregels om te proberen** (vraag 172): in het spel lees je de spelregels alleen (ze liggen vast sinds het begin);
