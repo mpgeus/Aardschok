@@ -248,7 +248,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   assert.ok(T.isBegaanbaar(w, ver.x, ver.y) || T.isVast(w, ver.x, ver.y), 'buiten het bereik is gewoon land');
 });
 
-test('het raadhuis: één keer in het bouwmenu; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
+test('het raadhuis: één keer in het bouwmenu; is het af, dan verhuist hij, en is het de opslag (de huifkar blijft staan)', () => {
   huisVanDeAanvoerder();
 });
 function huisVanDeAanvoerder() {
@@ -271,8 +271,9 @@ function huisVanDeAanvoerder() {
   assert.equal(T.kampTenten(D).length, kampGezinnen, 'de gezinnen wonen nog in het kamp');
   const deur = T.deurVan(w, huis);
   assert.deepEqual([D.aanvoerder.thuis.x, D.aanvoerder.thuis.y], [deur.x, deur.y], 'zijn thuis is de deur van zijn huis');
-  assert.equal(D.begin.kar.vel, 'ossenkar-leeg', 'de huifkar is de ossenkar');
-  assert.ok(gezegd.some((t) => /ossenkar|ox cart/.test(t)), 'en het dorp zegt het');
+  assert.equal(D.begin.kar.vel, 'huifkar', 'de huifkar blijft de huifkar: een ossenkar komt er met een schuur (vraag 184)');
+  assert.deepEqual(T.deVoorraad(D), { ...deur, naast: true }, 'de voorraad ligt voortaan bij het raadhuis');
+  assert.ok(gezegd.some((t) => /stored there/.test(t)), 'en het dorp zegt het');
   // het is de eerste opslag: rond het huis bouw je ook, waar het plein te ver is
   const R = T.BEGIN_INSTELLINGEN.bouwBereik;
   const plein = T.pleinTegels(D);
@@ -288,11 +289,11 @@ function huisVanDeAanvoerder() {
   const tekst = T.bewaarSpel(S, { nu: 0 });
   const S2 = { kalender: T.nieuweKalender() };
   T.zetSpel(S2, T.leesSpel(tekst));
-  assert.equal(S2.dorp.begin.kar.vel, 'ossenkar-leeg');
+  assert.equal(S2.dorp.begin.kar.vel, 'huifkar');
   assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
 }
 
-test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, en zonder handen staat het stil', () => {
+test('meebouwen en dragen: wie geen werk heeft, bouwt of draagt, en een bouwplaats krijgt zoveel bouwers als er werk is (vraag 184)', () => {
   const { S, D } = leegBegin();
   // Met vijf soorten eten werkt een bouwer een hele dag (de afwisseling, vraag 154; de toets hieronder).
   T.zetVoorraad(D, 'groente', 50);
@@ -304,20 +305,48 @@ test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, e
     assert.ok(!g.klaar && g.klaarOp == null, 'een bouwplaats wacht op werk, niet op een dag');
     assert.equal(g.bouw.werk, T.GEBOUWEN.hut.bouwtijd * I.werkPerBouwdag);
   }
-  // meteen, niet pas morgenochtend (T.nieuweBouwplaats)
   const bouwers = (g) => D.bewoners.mensen.filter((p) => p.bouwt === g);
-  assert.equal(bouwers(a).length, I.perPlaats, 'de eerste bouwplaats krijgt er het eerst, tot perPlaats');
-  assert.equal(bouwers(b).length, I.perPlaats);
-  const vrij = D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong')).length;
-  assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij - 2 * I.perPlaats), 'de derde wat er over is');
+  const vrij = D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong'));
+  // Op de plaatsen ligt nog geen hout: er is niets te bouwen, en wie vrij is, draagt.
+  for (const g of [a, b, c]) assert.equal(bouwers(g).length, 0, 'zonder hout op de plaats bouwt er niemand');
+  assert.deepEqual(T.dragersVan(D), vrij, 'wie vrij is, draagt');
+  assert.ok(!T.dragersVan(D).some((p) => p.aanvoerder || p.werk || p.leeftijd === 'kind'), 'de aanvoerder, wie werk heeft en een kind dragen niet');
+  // Ligt het hout er, dan krijgt een plaats 's ochtends zoveel bouwers als het werk geeft: een hut van vier werkdagen vier,
+  // met de helft van het hout de helft.
+  T.brengMeteen(D, a);
+  b.bouw.er = { hout: b.bouw.nodig.hout / 2 };
+  T.wijzigVoorraad(D, 'hout', -b.bouw.nodig.hout / 2);
+  T.kiesBouwers(D);
+  assert.equal(bouwers(a).length, I.perPlaats);
+  assert.equal(bouwers(b).length, Math.ceil(b.bouw.werk / 2 / T.werkVanAfwisseling(D) - 1e-9));
+  assert.equal(bouwers(c).length, 0);
+  assert.equal(T.dragersVan(D).length, vrij.length - bouwers(a).length - bouwers(b).length, 'de rest draagt');
   assert.ok(D.bewoners.mensen.every((p) => !p.bouwt || p.leeftijd === 'volwassen' || p.leeftijd === 'jong'), 'een kind bouwt niet');
   assert.ok(!D.bewoners.mensen.some((p) => p.aanvoerder && p.bouwt), 'de aanvoerder bouwt niet mee');
   assert.ok(!D.bewoners.mensen.some((p) => p.werk && p.bouwt), 'wie werk heeft, bouwt niet');
-  const opC = bouwers(c).length;
   dagen(S, 2, 2);
-  assert.ok(a.klaar && b.klaar, 'vier bouwers zetten een hut in één dag');
-  assert.equal(c.bouw.gedaan, Math.min(c.bouw.werk, opC), 'elke bouwer doet er één werkdag aan');
-  assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij), 'zijn de eerste af, dan gaan de bouwers naar de volgende');
+  assert.ok(a.klaar, 'vier bouwers zetten een hut in één dag');
+  assert.ok(b.bouw.gedaan >= b.bouw.werk / 2 - 1e-9, 'het hout dat er lag, is verbouwd');
+  assert.ok(c.bouw.er.hout > 0, 'de dragers brachten de derde hout');
+  assert.ok(c.bouw.gedaan > 0, 'en wie het bracht, bleef er bouwen (T.blijftBouwen)');
+});
+
+test('meebouwen: wie hout brengt waar niemand bouwt, blijft er bouwen, zonder het werk van de ochtend in één klap', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  const [a] = zetHutten(D, 1);
+  const d = T.dagindeling(S.kalender.dag);
+  const t = 1 + (d.werkBegin + d.werkEind) / 2 / 24;
+  const p = T.dragersVan(D)[0];
+  a.bouw.er = { hout: a.bouw.nodig.hout };
+  T.wijzigVoorraad(D, 'hout', -a.bouw.nodig.hout);
+  T.blijftBouwen(D, p, a, t);
+  assert.equal(p.bouwt, a, 'er is werk en niemand bouwt: hij blijft');
+  assert.ok(!T.dragersVan(D).includes(p), 'en draagt niet meer');
+  assert.equal(a.bouw.gedaan, 0, 'hij begint nu');
+  dagen(S, 2, 2);
+  const w = T.werkVanAfwisseling(D);
+  assert.ok(Math.abs(a.bouw.gedaan - w / 2) < 0.15 * w, `${a.bouw.gedaan} werkdagen, verwacht de helft van ${w}`);
 });
 
 test('meebouwen: wie eentonig eet, bouwt trager (vraag 154, B1)', () => {
@@ -330,6 +359,8 @@ test('meebouwen: wie eentonig eet, bouwt trager (vraag 154, B1)', () => {
   dagen(S, 2, 2);
   assert.deepEqual(D.behoeften.afwisseling, ['graan']);
   const [a] = zetHutten(D, 1);
+  T.brengMeteen(D, a); // het hout ligt er: dan bouwen er vier
+  T.kiesBouwers(D);
   const bouwers = D.bewoners.mensen.filter((p) => p.bouwt === a).length;
   assert.equal(bouwers, I.perPlaats);
   dagen(S, 3, 3);
@@ -452,18 +483,18 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
       if (beelden) {
         for (let u = 0; u < 24; u += 0.5) {
           S.kalender.dag = dag + u / 24;
-          T.werkBouwenBij(S, D);
           T.werkKarBij(S, D);
+          T.werkBouwenBij(S, D);
         }
       }
     }
     dagen(S, 5, 5);
     // Op een miljardste: met de afwisseling (vraag 154) is een dag werk geen heel getal meer, en de beelden tellen het in
-    // stukjes op. Het hout telt met wat er op de stapels en de kar ligt (js/kar.js): met beelden valt een boom overdag, en
-    // haalt de kar hem eerder.
+    // stukjes op. Het hout telt met wat er op de stapels ligt en wat de dragers dragen (js/kar.js): met beelden valt een
+    // boom overdag, en halen ze hem eerder.
     const afgerond = (k, v) => (typeof v === 'number' ? Math.round(v * 1e9) / 1e9 : v);
-    const kar = D.begin.kar.lading.hout || 0;
-    const hout = D.voorraad.hout + T.opDeStapels(D, 'hout') + kar;
+    const gedragen = D.bewoners.mensen.reduce((n, p) => n + ((p.vervoer && p.vervoer.lading.hout) || 0), 0);
+    const hout = D.voorraad.hout + T.opDeStapels(D, 'hout') + gedragen;
     return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout, over: T.teRooienOp(D, hut.kavel || hut).length }, afgerond);
   };
   assert.equal(spel(true), spel(false));

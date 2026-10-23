@@ -140,8 +140,8 @@
       tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'], // geen tekst
     },
     // Het raadhuis in het lege begin (vraag 152, 1d; Marcel, 11 okt: "c ja"): je zet het één keer neer, en tot
-    // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), wordt de
-    // huifkar de ossenkar, en is het de eerste opslag: daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
+    // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), en is het
+    // de eerste opslag: daar lossen de dragers, en daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
     // van de aanvoerder in het gehucht dat er al was (een `huis` met `huis: 'aanvoerder'`, met plaats voor zijn gezin), en zijn
     // tekening in de stijl van het land (`aanvoerder` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
     // Sinds 15 okt is het het town hall (werklijst vraag 170, stap 2; Marcel: "We hebben dan een 'town hall' nodig. Daar
@@ -462,7 +462,7 @@
     stapel: {
       naam: T.t('pile'), meervoud: T.t('piles'), trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
       handen: 0, woonruimte: 0, maakt: null, menu: false,
-      tekening: null, beschrijving: T.t('what lay by a demolished building, until the ox cart fetches it'),
+      tekening: null, beschrijving: T.t('what lay by a demolished building, until it is carried off'),
       opmerking: 'Geen gebouw: een stapel zonder huis (werklijst C, stap 5). Getekend als elke stapel (T.stapelsOp).', // geen tekst
     },
     tent: {
@@ -1592,7 +1592,7 @@
       if (m.in) {
         for (const wat in m.in) {
           // wat met de ossenkar gaat, uit wat bij hem ligt (js/kar.js, T.verwerkVoorraad)
-          const vrij = Math.max(0, T.verwerkVoorraad(D, g, wat) - (wat === 'graan' && !T.gaatMetDeKar(D, wat) ? T.zaaigraanApart(D, dag) : 0));
+          const vrij = Math.max(0, T.verwerkVoorraad(D, g, wat) - (wat === 'graan' && !T.gaatMetVervoer(D, wat) ? T.zaaigraanApart(D, dag) : 0));
           const kan = vrij / m.in[wat];
           if (kan < factor) {
             factor = kan;
@@ -1623,10 +1623,10 @@
       if (ruimte < Infinity) {
         const per = perDag;
         let opStapel = 0;
-        for (const wat in per) if (T.gaatMetDeKar(D, wat)) opStapel += per[wat];
+        for (const wat in per) if (T.gaatMetVervoer(D, wat)) opStapel += per[wat];
         if (opStapel > 0 && ruimte / opStapel < factor) factor = ruimte / opStapel;
         if (factor <= 0) {
-          g.stilWant = T.t('its stack is full, waiting for the ox cart');
+          g.stilWant = T.t('its stack is full, waiting for carriers');
           if (!wasStil) T.zeg(D, T.t('The {naam} is idle: {waarom}.', { naam: soort.naam, waarom: g.stilWant }));
           continue;
         }

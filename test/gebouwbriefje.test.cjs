@@ -42,8 +42,8 @@ test('de houthakker: wat hij doet, wie er werkt, wat hij maakt op vol, vandaag e
   assert.match(maakt, /Last 7 days: [\d.]+ logs?\./);
   assert.match(maakt, /This year: [\d.]+ logs?\./);
   assert.ok(deel(b, 'Held back by'), 'en wat hem tegenhoudt (of niets)');
-  // Wat hij maakte, ligt bij zijn deur tot de kar het haalt (js/kar.js).
-  if (T.stapelVan(g) >= 0.05) assert.match(regels(b, 'Here'), /At the door, for the ox cart: [\d.]+ logs? \([\d.]+ of 16\)/);
+  // Wat hij maakte, ligt bij zijn deur tot een drager het haalt (js/kar.js).
+  if (T.stapelVan(g) >= 0.05) assert.match(regels(b, 'Here'), /At the door, to be carried off: [\d.]+ logs? \([\d.]+ of 16\)/);
 });
 
 test('wat hij maakte, telt per dag: zeven dagen terug, en het jaar samen', () => {
@@ -81,8 +81,8 @@ test('wat hem tegenhoudt: geen handen, te weinig om te bewerken, weinig afwissel
   Object.assign(g, { tekort: null, werkte: 1 });
   D.behoeften.afwisseling = ['graan'];
   assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /Little variety at table \(1 kind of food\): the village works at \d+%\./);
-  g.stilWant = T.t('its stack is full, waiting for the ox cart');
-  assert.equal(regels(T.gebouwBriefje(D, g), 'Held back by'), 'Its stack is full, waiting for the ox cart.', 'stil zegt waarom, en verder niets');
+  g.stilWant = T.t('its stack is full, waiting for carriers');
+  assert.equal(regels(T.gebouwBriefje(D, g), 'Held back by'), 'Its stack is full, waiting for carriers.', 'stil zegt waarom, en verder niets');
 });
 
 test('de boerderij: haar velden, en de oogst in het jaar', () => {
@@ -94,7 +94,7 @@ test('de boerderij: haar velden, en de oogst in het jaar', () => {
   assert.match(maakt, /This year: 12 grain\./);
 });
 
-test('in aanbouw zegt het briefje hoe ver het is; een opslag zegt wat zijn kar doet', () => {
+test('in aanbouw zegt het briefje hoe ver het is; het raadhuis heeft geen kar (daar lossen de dragers)', () => {
   const { D, raadhuis } = dorp();
   T.wijzigVoorraad(D, 'hout', 20);
   T.wijzigVoorraad(D, 'goud', 10);
@@ -104,7 +104,7 @@ test('in aanbouw zegt het briefje hoe ver het is; een opslag zegt wat zijn kar d
   assert.equal(b.delen.length, 1);
   const s = T.gebouwBriefje(D, raadhuis);
   assert.equal(s.kop, 'Town hall');
-  assert.match(regels(s, 'Its ox cart'), /ox cart/i);
+  assert.ok(!deel(s, 'Its ox cart'), 'het begin heeft geen kar meer (vraag 184): een schuur heeft er een');
   assert.ok(deel(s, 'Lives here'), 'de aanvoerder woont er');
 });
 

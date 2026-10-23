@@ -313,10 +313,11 @@
     if (dag < 160) E.graan.laagst = Math.min(E.graan.laagst == null ? Infinity : E.graan.laagst, Math.round(s.dorp.voorraad.graan || 0));
   }
 
-  // De ossenkar (werklijst C, stap 6; Marcel, 15 okt): wat elke kar doet, hoeveel hij vervoert, hoe groot de stapels worden
-  // en wat er op hem wacht. Gemeten in de speeltest, niet in het spel: elk beeld, na T.werkKarBij (js/kar.js), kijkt dit
-  // naar elke kar. Een stuk van een rit duurt minstens een kwartier (het laden), een beeld op 30× een paar minuten, dus
-  // elk stuk komt langs. Per kar:
+  // Het vervoer (werklijst C, stap 6; Marcel, 15 okt; de dragers sinds vraag 184): wat elke kar en de dragers samen doen,
+  // hoeveel ze vervoeren, hoe groot de stapels worden en wat er op hen wacht. Gemeten in de speeltest, niet in het spel:
+  // elk beeld, na T.werkKarBij (js/kar.js), kijkt dit naar elke kar en elke drager. Een stuk van een rit duurt minstens
+  // een kwartier (het laden), een beeld op 30× een paar minuten, dus elk stuk komt langs. Per kar, en voor de dragers samen
+  // (hun werktijd is die van allemaal opgeteld, dus "bezig" is wat een drager gemiddeld bezig was):
   //   werktijd   de dagen werktijd die hij er was (T.dagindeling: van werkBegin tot werkEind, zoals de kar zelf rekent)
   //   vol, leeg  daarvan rijdend met en zonder lading; laden: laden, lossen, inladen en afladen; de rest stond hij stil
   //   overwerk   een rit die na de werktijd nog doorliep
@@ -328,8 +329,11 @@
   // die iets missen dat met de kar komt (g.tekort, en of de opslag het wel had), en de dag waarop het dorp een dorp werd.
   const RIJDEN = new Set(['heen', 'terug', 'opslag', 'brengen']);
   const somVan = (o) => Object.values(o || {}).reduce((n, x) => n + x, 0);
-  const nieuweKar = () => ({ karren: [], stapels: {}, opDeStapels: { som: 0, keer: 0, meest: 0 }, dagen: 0, vol: {}, bouwWacht: 0, tekort: {}, dorp: null });
-  const laatsteRit = new WeakMap(); // per kar het stuk van de rit dat hij het laatst zag (niet in het boek: e.rit kent zijn gebouw)
+  const nieuweKar = () => ({ karren: [], dragers: null, stapels: {}, opDeStapels: { som: 0, keer: 0, meest: 0 }, dagen: 0, vol: {}, bouwWacht: 0, tekort: {}, dorp: null });
+  const nieuwVervoer = (thuis, t) => ({ thuis, vanaf: Math.floor(t), werktijd: 0, vol: 0, leeg: 0, laden: 0, overwerk: 0, halen: 0, brengen: 0, opgehaald: 0, vervoerd: {}, maanden: {} });
+  // per kar of drager het stuk van de rit dat hij het laatst zag, en wanneer (niet in het boek: v.rit kent zijn gebouw)
+  const laatsteRit = new WeakMap();
+  const laatsteT = new WeakMap();
   const werkKarBij = T.werkKarBij;
   T.werkKarBij = function (s, d) {
     werkKarBij(s, d);
@@ -338,8 +342,14 @@
   function meetKar(d) {
     const K = boek.kar;
     const t = d.kalender.dag;
-    T.karrenVan(d).forEach((e, i) => {
-      const k = K.karren[i] || (K.karren[i] = { thuis: d.gebouwen.includes(e.thuis) ? e.thuis.soort : 'raadhuis', vanaf: Math.floor(t), werktijd: 0, vol: 0, leeg: 0, laden: 0, overwerk: 0, halen: 0, brengen: 0, opgehaald: 0, vervoerd: {}, maanden: {} });
+    const vervoerders = T.karrenVan(d).map((e, i) => [e, K.karren[i] || (K.karren[i] = nieuwVervoer(d.gebouwen.includes(e.thuis) ? e.thuis.soort : 'raadhuis', t))]);
+    const dragers = T.dragersVan(d).filter((p) => p.vervoer);
+    if (dragers.length) {
+      const k = K.dragers || (K.dragers = { ...nieuwVervoer('dragers', t), mensen: 0 });
+      k.mensen = Math.max(k.mensen, dragers.length);
+      for (const p of dragers) vervoerders.push([p.vervoer, k]);
+    }
+    for (const [e, k] of vervoerders) {
       const R = e.rit;
       if (R && R !== laatsteRit.get(e)) {
         // een nieuw stuk van een rit (js/kar.js begint elk stuk met een nieuw e.rit)
@@ -354,9 +364,10 @@
           k.vervoerd[R.wat] = (k.vervoerd[R.wat] || 0) + R.n;
         }
       }
-      const dt = k.t == null ? 0 : t - k.t;
+      const dt = laatsteT.has(e) ? t - laatsteT.get(e) : 0;
+      laatsteT.set(e, t);
       k.t = t;
-      if (!(dt > 0)) return;
+      if (!(dt > 0) || dt > 1) continue; // (wie een tijd niet droeg, telt pas weer vanaf nu)
       const w = T.dagindeling(t);
       const uur = (t - Math.floor(t)) * 24;
       const wat = !R ? null : RIJDEN.has(R.fase) ? (somVan(e.lading) > 0 ? 'vol' : 'leeg') : 'laden';
@@ -367,9 +378,9 @@
         m.werktijd += dt;
         if (wat) m.bezig += dt;
       } else if (wat) k.overwerk += dt;
-    });
+    }
     const half = Math.floor(t * 48);
-    if (half === K.half || !T.karrenVan(d).length) return;
+    if (half === K.half || !T.metVervoer(d)) return;
     K.half = half;
     let n = 0;
     for (const g of d.gebouwen) {
@@ -386,13 +397,13 @@
     const K = boek.kar;
     const d = D();
     if (!K.dorp && T.tredeMinstens(d, 'dorp')) K.dorp = dag;
-    if (!T.karrenVan(d).length) return;
+    if (!T.metVervoer(d)) return;
     K.dagen++;
     const vol = T.KAR_INSTELLINGEN.stapelVol - 1e-6;
     for (const g of d.gebouwen) {
       if (T.stapelVan(g) >= vol) K.vol[g.soort] = (K.vol[g.soort] || 0) + 1;
       if (T.wachtOpHout(g)) K.bouwWacht++;
-      if (g.klaar && g.tekort && T.gaatMetDeKar(d, g.tekort)) {
+      if (g.klaar && g.tekort && T.gaatMetVervoer(d, g.tekort)) {
         const x = K.tekort[g.soort] || (K.tekort[g.soort] = { wat: g.tekort, dagen: 0, metVoorraad: 0 });
         x.dagen++;
         if ((d.voorraad[g.tekort] || 0) >= T.KAR_INSTELLINGEN.lading) x.metVoorraad++;

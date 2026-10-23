@@ -1430,15 +1430,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de muis in `js/main.js` en de klik); staat daar iets, dan `wachtOpRooien`, en staat hij nog niet op de kaart
   (`tekenRooiPlaatsen` in `js/tekenen.js` laat de voet zien; `T.tikRooienDag` in `js/bos.js` laat zo'n plaats aan de
   bouwers, zonder buren). Elke ochtend na `T.verdeelHanden` kiest `T.kiesBouwers` wie bouwt (`p.bouwt`): wie kan werken,
-  volwassen of jong, zonder werk en geen dagloner, hooguit `perPlaats` per plaats, in de volgorde van `D.gebouwen`; net
-  als de handen zonder te vragen of het poppetje er al is. Een nieuwe bouwplaats (`T.nieuweBouwplaats`, vanuit
-  `T.plaatsGebouw`, `T.legVeld` en `T.legWeg`) krijgt meteen wie vandaag nog nergens bouwt, niet pas de volgende ochtend
+  volwassen of jong, zonder werk en geen dagloner, in de volgorde van `D.gebouwen`, per plaats zoveel als er werk is
+  (`bouwersNodig`: bij het rooien en aan een weg `perPlaats`, daarna zoveel als het bouwmateriaal dat er ligt werk geeft,
+  hooguit `perPlaats`; vraag 184), de dichtsten bij eerst; net als de handen zonder te vragen of het poppetje er al is. Wie
+  overblijft, draagt (`T.dragersVan`, js/kar.js). Een nieuwe bouwplaats (`T.nieuweBouwplaats`, vanuit `T.plaatsGebouw`,
+  `T.legVeld` en `T.legWeg`) krijgt meteen wie vandaag nog nergens bouwt en niets draagt, niet pas de volgende ochtend
   (17 okt: op de dag van aankomst rooide niemand), en telt wat de werkdag al achter de rug had als gedaan (`vandaag`),
-  zodat de bomen van de ochtend niet in één klap vallen. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
+  zodat de bomen van de ochtend niet in één klap vallen. Zo ook `T.blijftBouwen`: een drager die hout bracht naar een
+  bouwplaats waar niemand bouwt, blijft er bouwen (alleen daar, anders bouwt na een paar ritten iedereen). `werkTot(D, g,
+  t)` rekent het werk tot een moment, zo vaak als je wilt. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
   (`werkAan`): eerst het rooien, tegel voor tegel (`rooiBoom`, `rooiStruik`; `T.rooiTegel` in `js/bos.js`, dus een boom
   geeft zijn hout), dan het bouwen (`gedaan` tot `werk`, de bouwtijd keer `werkPerBouwdag`); is het af, dan `klaarOp`, en
-  zet `T.tikGebouwenDag` hem op klaar zoals elk gebouw. Overdag doet `T.werkBouwenBij` (vanuit `T.werkDorpBij`) hetzelfde
-  werk naar hoe ver de werkdag is (`g.bouw.vandaag`, dat de nacht niet nog eens doet: met of zonder beelden hetzelfde), en
+  zet `T.tikGebouwenDag` hem op klaar zoals elk gebouw. Overdag doet `T.werkBouwenBij` (vanuit `T.werkDorpBij`, na het
+  vervoer) hetzelfde werk naar hoe ver de werkdag is (`g.bouw.vandaag`, dat de nacht niet nog eens doet: met of zonder beelden hetzelfde), en
   stuurt de bouwers naar een tegel naast een boom of de voet (`e.werkt` met `bouw`, de hakker met de bijl in
   `js/sprites.js`; `T.magWerken` en `T.stopWerk` uit `js/veldwerk.js`). De bouwfase volgt het werk (`v.voortgang`,
   `T.bouwFaseIndex`), het briefje zegt het (`T.bouwToestand`), en het bouwmenu zegt werkdagen in plaats van dagen. De
@@ -1857,11 +1861,33 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ## Voorraad en handel
 
-### js/kar.js: de ossenkar en de stapels
+### js/kar.js: de stapels, de dragers en de ossenkar
 
-- `js/kar.js`: **de ossenkar** (werklijst C, 14 okt; Marcel: "A2, B2, C1, D2, E2"). Wat een gebouw maakt, gaat via
-  `T.opStapel(D, g, wat, n)`: met een kar (`T.metDeKar`, `D.karren`) en een waar die niet in `nietMetDeKar` staat (het
-  goud; `T.gaatMetDeKar`) op `g.stapel` (een veld legt het bij zijn boerderij, `g.boerderij`), anders, of zonder `g`,
+- **De dragers** (vraag 184, 23 okt; Marcel: "3a1", "3b1", "Eén stuk, van alles"): sinds het kamp op is
+  (`T.metVervoer(D)`: `D.begin.kamp` niet meer 'onderweg') wordt er gedragen; het begin heeft geen kar meer (de huifkar
+  blijft in het kamp staan, en `T.deVoorraad` is ernaast tot het raadhuis af is). Wie draagt, zegt `T.dragersVan(D)` in
+  `js/bouwen.js` (wie kan meebouwen maar niet bouwt, niet schuilt en niet thuisblijft). Een drager is een vervoerder zoals
+  een kar, met zijn eigen regelstaat op de bewoner, `p.vervoer` (`{ drager, bewoner, tx, ty, lading, rit, klok, rust }`),
+  want zonder beelden heeft een bewoner geen poppetje; met beelden loopt `p.wezen` erachteraan (`loopMee`) en staat het
+  aan het eind van elk stuk waar de regel zegt (`staVervoerderOp`). Hij neemt `perDrager` (1) mee, loopt in het tempo van
+  zijn leeftijd (`T.BEWONERS_INSTELLINGEN`) zonder voordeel van een weg, laadt en lost bij de dichtste opslag
+  (`opslagBij`), en bedient elk gebouw; een kar alleen die bij zijn opslag, als er meer zijn (`verantwoordelijk`). Zolang hij
+  een rit heeft, is zijn poppetje bezig (`e.werkt.soort` 'vervoer', `zetBezig`: geen dwalen, geen praatje) en zegt
+  `e.draagt` wat je ziet (`DRAAGT`: hout als bundel, graan als schoof, de rest in een mand; js/sprites.js). **Eén klok**
+  (`werkVervoerBij`): de karren en de dragers worden samen bijgewerkt, steeds de stap van wie het eerst iets te doen heeft
+  (`volgendMoment`, `stap`), en wie niets vindt, kijkt over `rust` (een kwartier) weer; zo maakt het niet uit of het elk
+  beeld gebeurt (`T.werkKarBij`) of één keer per nacht (`T.tikKarDag`): met of zonder beelden hetzelfde, ook met meer
+  vervoerders tegelijk. Wie (weer) gaat dragen, begint op `D.vervoerKlok` (tot waar het vervoer de vorige keer was
+  bijgewerkt) bij zijn deur; wie stopt, krijgt `rust` (`rustWieNietDraagt`), en wat hij nog bij zich had, gaat 's nachts de
+  voorraad in. Na het afladen bij een bouwplaats waar niemand bouwt, blijft een drager er bouwen (`T.blijftBouwen`, js/bouwen.js).
+  Bij de muis `T.dragerTekst` (vanuit `T.overBewonerTekst`, js/bewoners.js). In `T.werkDorpBij` gaat het vervoer vóór het
+  bouwen (js/dorp.js), zodat wie blijft bouwen in hetzelfde beeld al bouwt. Getoetst in `test/kar.test.cjs` en
+  `test/begin.test.cjs`. Gemeten (23 okt, het jaar van de kolonist in Node, vijf eilanden): een nacht die een hele dag
+  dragen inhaalt, kost gemiddeld 9 à 10 ms (op `main` zonder dragers 5 à 8); de lijst van vervoerders gaat één keer per
+  ronde mee (`alle`), anders was het 15 tot 41 ms.
+- `js/kar.js`: **de stapels en de ossenkar** (werklijst C, 14 okt; Marcel: "A2, B2, C1, D2, E2"). Wat een gebouw maakt, gaat
+  via `T.opStapel(D, g, wat, n)`: met vervoer (`T.metVervoer`) en een waar die niet in `nietVervoerd` staat (het goud;
+  `T.gaatMetVervoer`) op `g.stapel` (een veld legt het bij zijn boerderij, `g.boerderij`), anders, of zonder `g`,
   meteen in de voorraad. Zo ook de oogst (`T.haalOogstBinnen`, `T.haalSchovenBinnen(D, graan, boerderij)`, met
   `e.vrachtVoor` voor wat iemand 's nachts nog droeg, en het hooi per boerderij in `js/akkers.js`) en de wijn
   (`T.wijnBinnen(D, ranken, g)`); wat het vee geeft, heeft geen `g`. `T.maaktTot` (de nachtlus) en `T.etenVoorDeWinter`
@@ -1869,34 +1895,36 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   nachtlus van de werkplaatsen (`js/gebouwen.js`, stap 6, die ook niet meer maakt dan `T.ruimteOpStapel` toelaat; vol is
   `stilWant`), en `T.hakBoom(D, x, y, bij)` in `js/bos.js` (de bouwers via `T.rooiTegel(D, t, g)` in `js/bouwen.js`, een
   huis dat doorgroeit in `js/behoeften.js` en `js/veldwerk.js`). Wie zonder `bij` hakt, brengt het meteen binnen.
-- **De kar** is een wezen (`e.kar`, in `w.wezens`); `T.karAanHetWerk` zet hem in `D.karren` als het kamp op is
-  (`T.zetKampOp`, `js/begin.js`, dat dan ook pas de lading in de voorraad zet). Een rit is een regel op de kalender
-  (`e.rit`: `fase` heen, laden, terug, lossen; `tot` in dagen; `naar` het gebouw; `e.klok`): `werkKar` werkt hem bij tot
-  een moment, vanuit `T.werkKarBij` (elk beeld, in `T.werkDorpBij`; geeft het wezen zijn weg met `T.geefRoute`) en
-  `T.tikKarDag` (elke nacht als eerste in `T.tikGebouwenDag`, tot middernacht). Aan het eind van een stuk staat het wezen
-  op `rit.doel` (`staOp`), dus met of zonder beelden komt er hetzelfde uit. Een rit begint alleen in de werktijd
+- **De kar** is een wezen (`e.kar`, in `w.wezens`); `T.karAanHetWerk` zet hem in `D.karren` (die van een schuur;
+  `T.zetKampOp`, `js/begin.js`, zet de lading van de huifkar in de voorraad). Een rit is een regel op de kalender
+  (`e.rit`: `fase` heen, laden, terug, lossen; `tot` in dagen; `naar` het gebouw; `e.klok`): `werkVervoerBij` werkt hem
+  bij tot een moment (op één klok met de dragers, hierboven), vanuit `T.werkKarBij` (elk beeld, in `T.werkDorpBij`; geeft
+  het wezen zijn weg met `T.geefRoute`) en `T.tikKarDag` (elke nacht als eerste in `T.tikGebouwenDag`, tot middernacht).
+  Aan het eind van een stuk staat het wezen op `rit.doel` (`staOp`), dus met of zonder beelden komt er hetzelfde uit. Een rit begint alleen in de werktijd
   (`T.dagindeling`), naar de grootste stapel (`kiesStapel`; zonder weg laat hij hem een dag liggen, `g.karKanNietTot`), en
-  lost bij de dichtste opslag (een gebouw met `opslag` dat af is, anders de plek van de kar in het kamp). Het vel
+  lost bij zijn opslag (zijn schuur). Het vel
   (`T.zetKarVel`): de huifkar blijft de huifkar; de ossenkar is leeg of draagt wat hij het meest heeft (`LADING_VEL`:
   `ossenkar-hout`, `-stenen`, `-spullen`, anders `-zakken`). De kar neemt geen zaaigraan mee (`beschikbaar`). Bij de muis
   `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur, met op een bouwplaats het hout dat er al is
   maar nog niet verbouwd), met `T.sprites.stapelDelen` (`js/sprites.js`: een hoop hout of steen, of een tot drie manden
   van de markt, `IN_DE_MAND`).
 - **De schuur** (stap 4): `T.GEBOUWEN.schuur` (`opslag`, `kar`, `leeg`). `T.geefSchurenEenKar` (in `T.tikGebouwenDag`, na de
-  gebouwen die af kwamen) zet naast zijn deur een kar (`T.maakKar`, ook voor de huifkar van het begin) met `e.thuis` en
-  `g.kar`. `thuisVan(D, e)`: waar een kar laadt en lost (zijn schuur, anders het raadhuis, anders de plek in
-  het kamp); `verantwoordelijk(D, g)`: de kar met zijn opslag het dichtst bij g, en alleen die neemt g in `kiesRit`. Een
-  kar zonder werk rijdt naar zijn opslag. Het bereik komt vanzelf uit `opslag` (`T.inBouwBereik`, `js/begin.js`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
-- **Bouwen met de kar** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet met de kar
-  gaat) en zet de rest met `T.zetBouwNodig` in `g.bouw.nodig`; wat er is, staat in `g.bouw.er` (de kar, en `T.opStapel`
-  vult eerst de bouwplaats). `T.bouwMateriaalDeel(g)` zegt hoe ver de bouwers mogen (`werkAan` in `js/bouwen.js` geeft
+  gebouwen die af kwamen) zet naast zijn deur een kar (`T.maakKar`, ook voor de huifkar van het begin, die niet rijdt) met
+  `e.thuis` en `g.kar`. `thuisVan(D, e)`: waar een kar laadt en lost (zijn schuur, anders `T.deVoorraad`);
+  `verantwoordelijk(D, g)`: als er meer karren zijn, de kar met zijn opslag het dichtst bij g, en alleen die neemt g in
+  `kiesRit`. Een kar zonder werk rijdt naar zijn opslag. Het bereik komt vanzelf uit `opslag` (`T.inBouwBereik`,
+  `js/begin.js`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "Carriers and the ox cart"); getoetst in `test/kar.test.cjs`.
+- **Bouwen met wat gebracht wordt** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet
+  gedragen wordt) en zet de rest met `T.zetBouwNodig` in `g.bouw.nodig`; wat er is, staat in `g.bouw.er` (wat de dragers
+  en de kar brachten, en `T.opStapel` vult eerst de bouwplaats). `T.bouwMateriaalDeel(g)` zegt hoe ver de bouwers mogen (`werkAan` in `js/bouwen.js` geeft
   terug wat bleef liggen, zodat overdag het werk na de levering alsnog gebeurt, en met of zonder beelden hetzelfde uitkomt);
-  `T.wachtOpHout(g)` en `T.krijgtVandaagHout(D)` sturen `T.kiesBouwers`. Een rit heeft een `plan`: 'halen' (heen, laden,
+  `T.bouwMateriaalDeel` stuurt ook hoeveel bouwers er komen (`bouwersNodig` in `js/bouwen.js`). Een rit heeft een `plan`: 'halen' (heen, laden,
   terug, lossen) of 'brengen' (opslag, inladen, brengen, afladen); `kiesRit` brengt eerst (bouwplaatsen in volgorde, dan
-  werkplaatsen tot `voorraadIn`, met `vraag` min wat al `onderweg` is), dan halen, en anders een halve vracht. Een
+  werkplaatsen tot `voorraadIn`, met `vraag` min wat al `onderweg` is; een kar als de helft op is, een drager voor één
+  stuk), dan halen (min wat anderen er al komen halen, `alGehaald`), en anders een halve vracht. Een
   werkplaats verwerkt via `T.verwerkVoorraad` en `T.verwerk` (uit `g.in`). `T.nogTeBrengen(D, wat)`: wat de bouwplaatsen
   nog vragen (de winter van het brandhout in `js/behoeften.js`, de kolonist). `T.brengMeteen(D, g)`: alsof de kar het
-  bracht (het proefdorp, `bouwAf`). Een losse stapel (`stapel` in `T.GEBOUWEN`, van een afgebroken gebouw, `js/afbreken.js`)
+  bracht (het proefdorp, `bouwAf`, en de toetsen). Een losse stapel (`stapel` in `T.GEBOUWEN`, van een afgebroken gebouw, `js/afbreken.js`)
   ligt op zijn eigen tegel (`T.stapelPlek`), en is weg als de kar hem leeg laadt.
 
 ### js/wegen.js: de wegen die jij legt

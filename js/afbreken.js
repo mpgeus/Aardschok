@@ -41,14 +41,14 @@
     const naam = soort ? soort.naam : g.soort;
     if (g.huis === 'aanvoerder' || g.soort === 'raadhuis') return { tekst: T.t('Your own house stays.'), kan: false };
     if (g.soort === 'tent') return { tekst: T.t('The camp goes by itself, when its families have a home.'), kan: false };
-    if (g.soort === 'stapel') return { tekst: T.t('The ox cart fetches this pile.'), kan: false };
+    if (g.soort === 'stapel') return { tekst: T.t('The carriers fetch this pile.'), kan: false };
     if (T.isVeldSoort(g.soort)) return { tekst: T.t('A field goes with its farm: demolish the farm.'), kan: false };
     const zinnen = [g.klaar ? T.t('Click to demolish the {gebouw}. Nothing comes back.', { gebouw: naam })
       : T.t('Click to stop building the {gebouw}. Nothing comes back.', { gebouw: naam })];
     const wonen = wonenIn(D, g);
     if (wonen.length) zinnen.push(T.t('{wie} and family will have no home.', { wie: hoofdVan(wonen).naam }));
     if (T.isBoerderij(g) && veldenVan(D, g).length) zinnen.push(T.t('Its fields go with it.'));
-    if (somVan(watErLigt(D, g)) >= 0.5) zinnen.push(T.t('What lies by it stays for the ox cart.'));
+    if (somVan(watErLigt(D, g)) >= 0.5) zinnen.push(T.t('What lies by it stays for the carriers.'));
     const r = T.voetVanGebouw(g);
     const plekken = [];
     for (let dy = 0; dy < r.h; dy++) for (let dx = 0; dx < r.b; dx++) plekken.push({ x: r.x + dx, y: r.y + dy });

@@ -189,8 +189,9 @@
     T.stapEraf(D, { x: k.vuur.x, y: k.vuur.y, b: 1, h: 1 });
     T.zetVoorwerp(w, { soort: 'kampvuur', x: k.vuur.x, y: k.vuur.y });
     B.kamp = 'op';
+    // wat de kar bracht, ligt nu in de voorraad; de kar zelf rijdt niet meer, maar blijft staan als de opslag tot het
+    // raadhuis er is (vraag 184: vanaf dag één dragen de mensen; T.deVoorraad, js/kar.js)
     for (const wat in IN().kar) T.wijzigVoorraad(D, wat === 'zaaigraan' ? 'graan' : wat, IN().kar[wat]);
-    T.karAanHetWerk(D, B.kar);
     if (!B.gezinnen) laatGezinnenKomen(D, true);
     T.zeg(D, T.t('The cart is on the open ground that will be the square. The families put up their tents around the campfire.'));
     // Het vee dat meekwam (werklijst Q, vraag 181, b; js/vee.js): los bij de kar, tot er een weide is.
@@ -250,8 +251,9 @@
 
   // Het raadhuis (1d; `aanvoerder` in T.GEBOUWEN): is het af, dan trekt de aanvoerder er met zijn gezin in. Het is
   // voortaan zijn huis (`huis: 'aanvoerder'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
-  // kampvuur), en de huifkar wordt de ossenkar (Marcel, 11 okt: "Huifkar wordt ossenkar"): het huis is voortaan de opslag
-  // waar hij lost (js/kar.js). Geen gezin uit het kamp trekt erin: het is geen woning.
+  // kampvuur), en het is voortaan de opslag waar de dragers lossen (js/kar.js). De huifkar blijft staan; een ossenkar komt
+  // er pas met een schuur (vraag 184, 3b1; tot 23 okt werd de huifkar hier de ossenkar). Geen gezin uit het kamp trekt
+  // erin: het is geen woning.
   function verhuisDeAanvoerder(D) {
     const huis = D.gebouwen.find((g) => g.soort === 'raadhuis' && g.klaar && g.huis !== 'aanvoerder');
     const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'aanvoerder');
@@ -259,9 +261,7 @@
     T.verhuis(D, inHuis(D, tent), huis);
     tent.huis = null;
     huis.huis = 'aanvoerder';
-    Object.assign(D.begin.kar, { naam: T.t('ox cart'), vel: 'ossenkar-leeg' });
-    T.zetKarVel(D.begin.kar);
-    T.zeg(D, T.t('The town hall is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
+    T.zeg(D, T.t('The town hall is ready: you and your family leave the tent, and from now on the goods are stored there.'));
     if (!inHuis(D, tent).length) haalTentWeg(D, tent);
   }
 

@@ -148,18 +148,33 @@ voor; zonder wijngaard geeft ze niets. **Wijn is eten** (zie "Eten", hieronder),
 dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in de werkbank ("Boeren uit het niets" en
 "Meebouwen"). Nog niet: een jaar zonder fouten met een speler in code die bouwt (1f).
 
-**Zo werkt de kar nu** (14 okt, C stap 1; Marcel: "A2, B2, C1, D2, E2", het plan in `werklijst.md` bij C; `js/kar.js`):
+**Zo werken de dragers nu** (23 okt, vraag 184; Marcel, 20 okt: "Ik wil ook dat de mensen zonder werk zorgen voor het
+vervoer van materiaal", "3a1", "3b1", en 23 okt: "Eén stuk, van alles"; `js/kar.js`, `js/bouwen.js`): het begin heeft geen
+kar meer. De huifkar rijdt het land in en blijft in het kamp staan: daar ligt de voorraad tot het raadhuis af is, en
+daarna in het raadhuis. Wie geen werk heeft (volwassen of jong, geen dagloner, niet de aanvoerder), bouwt of draagt: één
+rij klusjes. Elke ochtend krijgt elke bouwplaats, in de volgorde waarin je bouwde, zoveel bouwers als er werk is (bij het
+rooien vier, daarna zoveel als het hout dat er ligt werk geeft), de dichtsten bij eerst; wie overblijft, draagt. Een
+drager neemt één stuk per keer (een getal in de werkbank), loopt in het tempo van een mens (een weg helpt hem niet), en
+doet wat de kar deed, in dezelfde volgorde: eerst brengen naar de bouwplaatsen en de werkplaatsen, anders halen van de
+grootste stapel; hij laadt en lost bij de opslag die het dichtst bij is. Wie hout brengt naar een bouwplaats waar niemand
+bouwt, blijft er bouwen, zodat het bouwen nog dezelfde dag begint. Een drager is zo'n kwart kar: met vier gezinnen
+brengen ze op de eerste dag zo'n dertig stuks (in de proef vier hutten van 8 hout, af op dag 5). Bij de muis zegt een
+dorpeling wat hij draagt of bouwt. Je ziet hem met wat de figuren al kunnen: hout als een bundel, graan als een schoof,
+de rest in een mand; de figuren met een plank, een stam of een steen komen later (Marcel). Een schuur heeft nog zijn eigen
+ossenkar, naast de dragers. Wat hieronder over de kar staat, geldt sinds 23 okt voor de dragers en de kar samen.
+
+**Zo werkte de kar** (14 okt, C stap 1; Marcel: "A2, B2, C1, D2, E2", het plan in `werklijst.md` bij C; `js/kar.js`):
 wat de houthakker maakt en wat de bouwers rooien, ligt op een stapel naast de deur (het hout van een veld bij zijn
-boerderij), en telt pas in de voorraad als de ossenkar het in de opslag heeft: het huis van de schout, en tot dat er is de
-plek van de kar in het kamp. Wat de kar meebracht, telt ook pas als hij in het kamp staat. De kar rijdt zelf, in de
+boerderij), en telt pas in de voorraad als een drager of de kar het in de opslag heeft (tot 23 okt reed de huifkar van
+het begin als ossenkar). De kar rijdt zelf, in de
 werktijd van het dorp: naar de grootste stapel, laden (8 per rit), terug naar de dichtste opslag, lossen; een rit van 20
 tegels heen is zo'n twee uur, dus drie tot vier ritten per dag. Is een stapel vol (16), dan maakt het gebouw niets meer
-tot de kar komt, en het dorp zegt het ("its stack is full, waiting for the ox cart"). Je ziet de stapel klein, half of
+tot er iemand komt, en het dorp zegt het ("its stack is full, waiting for carriers"). Je ziet de stapel klein, half of
 vol naast de deur, de kar leeg of met stammen, en bij de muis wat hij doet. **Bouwen met de kar** (stap 2, B2, zoals in
 The Settlers): je zet neer wanneer je wilt, en betaalt alleen het goud meteen; het hout brengt de kar, in de volgorde
 waarin je bouwde, zodra de plek gerooid is. Wat de bouwers op de plek rooien, gaat eerst in het gebouw; wat over is, ligt
-op de stapel. De bouwers komen zo ver als het hout reikt, en het briefje zegt het ("waiting for the ox cart to bring wood
-(5 of 8 here)"); een plaats die op hout wacht en vandaag niets krijgt, slaan ze over. Een werkplaats die hout verwerkt (de
+op de stapel. De bouwers komen zo ver als het hout reikt, en het briefje zegt het ("waiting for carriers to bring logs
+(5 of 8 here)"); een plaats waar geen hout ligt, krijgt 's ochtends geen bouwers. Een werkplaats die hout verwerkt (de
 zagerij, de kuiper) neemt het uit wat de kar bij hem bracht, tot 8. De kar brengt eerst, dan haalt hij. De raad telt
 het hout dat de bouwplaatsen nog vragen niet als brandhout. **Alles met de kar** (stap 3; Marcel: "a ja, b ja, c ja, d
 ja"): niet alleen het hout, maar alles wat een gebouw maakt (het vlees en de huiden van de jager, de vis, de groente, de
@@ -174,8 +189,8 @@ markt (een, twee of drie, naar hoe vol de stapel is); de kar rijdt met stammen, 
 wilt: om hem heen kun je bouwen (bereik 16, zoals het huis van de schout), en als hij af is, krijgt hij een eigen
 ossenkar. Elke kar haalt en brengt wat het dichtst bij zijn eigen opslag ligt, en laadt en lost daar; de voorraad is één,
 voor alle opslagen samen. Een kar zonder werk wacht bij zijn opslag. Zo kom je bij de rotsen en het water: een schuur aan
-de rand van het bereik, en dan de steengroeve erachter. De getallen in de werkbank ("The ox cart"). In de console:
-`Spel.debug.kar()`.
+de rand van het bereik, en dan de steengroeve erachter. De getallen in de werkbank ("Carriers and the ox cart"). In de
+console: `Spel.debug.kar()`.
 
 **Zo werken de wegen en het afbreken nu** (14 okt, C stap 5; Marcel: "a ja, b ja, c1, d ja, e we moeten een
 'demolition' knop hebben ja, f ja", "Wegen en gebouwen, nu", en "ze lopen los, met een melding dat er huizen nodig

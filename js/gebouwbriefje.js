@@ -27,9 +27,9 @@
   const zin = (tekst) => (tekst ? T.hoofdletter(tekst) + (/[.!?]$/.test(tekst) ? '' : '.') : '');
   const namen = (mensen) => T.opsomming(mensen.map((p) => T.naamVanBewoner(p)));
 
-  // De kar van opslag g: een schuur heeft de zijne (g.kar, en e.thuis is de schuur), het raadhuis de ossenkar,
-  // de kar zonder schuur (js/kar.js).
-  const karVan = (D, g) => g.kar || (g.soort === 'raadhuis' ? T.karrenVan(D).find((e) => !D.gebouwen.includes(e.thuis)) || null : null);
+  // De kar van opslag g: een schuur heeft de zijne (g.kar, en e.thuis is de schuur; js/kar.js). Het raadhuis heeft er
+  // geen: daar lossen de dragers (vraag 184).
+  const karVan = (D, g) => g.kar || null;
 
   // Wat g tegenhoudt, als zinnen; leeg als hij op volle kracht werkt. Dezelfde getallen als de nachtlus
   // (T.tikGebouwenDag, js/gebouwen.js), en in die volgorde: stil, handen, onderweg, het werktempo, het water, en dan
@@ -151,15 +151,15 @@
       const gereedschap = T.gereedschapDekking(D);
       if (gereedschap.factor > 1.005) deel(T.t('Helped by'), [T.t('Tools: the village works {p}% harder.', { p: procent(gereedschap.factor - 1) })]);
     }
-    // Wat erbij ligt: wat de kar bracht om te bewerken (g.in), en de stapel bij de deur die hij komt halen.
+    // Wat erbij ligt: wat de dragers of de kar brachten om te bewerken (g.in), en de stapel bij de deur die ze komen halen.
     const hier = [];
-    if (soort.maakt && soort.maakt.in && T.metDeKar(D)) {
+    if (soort.maakt && soort.maakt.in && T.metVervoer(D)) {
       hier.push(heeftWaren(g.in)
-        ? T.t('Brought by the ox cart, to work with: {waren}.', { waren: waren(g.in) })
-        : T.t('Nothing brought by the ox cart yet.'));
+        ? T.t('Brought here, to work with: {waren}.', { waren: waren(g.in) })
+        : T.t('Nothing brought here yet.'));
     }
     if (T.stapelVan(g) >= 0.05) {
-      hier.push(T.t('At the door, for the ox cart: {waren} ({n} of {vol}).', {
+      hier.push(T.t('At the door, to be carried off: {waren} ({n} of {vol}).', {
         waren: waren(g.stapel), n: getal(T.stapelVan(g)), vol: T.KAR_INSTELLINGEN.stapelVol,
       }));
     }

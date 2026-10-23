@@ -3,7 +3,7 @@
 Tithebreaker (de werknaam sinds 11 okt, `ontwerp/commercieel.md`; de map en de opslag heten nog Aardschok): een spel dat Marcel en Claude samen bouwen, om het te verkopen (Steam eerst, als
 los programma verpakt; `ontwerp/commercieel.md`). **De economie van The Settlers (11 okt), met gevechten in real time (15
 okt)** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
-eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht
+eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, de mensen dragen de grondstoffen, en je vecht
 (RTS): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
 als een god van bovenaf; de aanvoerder (*commander*, de held) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
 isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
@@ -140,7 +140,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
   `treden` (en de standen), `behoeften` (en de groei), `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`.
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `wijngaard`.
-- **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
+- **Voorraad en handel:** `voorraad`, `kar` (de dragers, de ossenkar, de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
@@ -152,9 +152,9 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
 
 - **De richting** (Marcel, 11 okt, vraag 151: "A ja, B ja, C allebei"): A, jij bouwt van bovenaf (zonder held: vraag 170).
   B, je bouwt binnen een aantal tegels van je plein en van elke opslag, zonder grens en zonder vlaggen ("alles moet open
-  zijn"); een ossenkar haalt de grondstoffen op, en een waar telt pas als hij binnen is. C, vechten is allebei: je dorp
-  verdedigen, en erop uit over het eiland tot het kasteel van de heer. En: **"We moeten ook zelf alles vanaf de start gaan
-  bouwen"**, dus geen gehucht dat er al was. Het plan is vraag 152 in de werklijst.
+  zijn"); dragers halen de grondstoffen (vraag 184; een ossenkar komt met de schuur), en een waar telt pas als hij binnen
+  is. C, vechten is allebei: je dorp verdedigen, en erop uit over het eiland tot het kasteel van de heer. En: **"We moeten
+  ook zelf alles vanaf de start gaan bouwen"**, dus geen gehucht dat er al was. Het plan is vraag 152 in de werklijst.
 - **Wat om is:** "geen hand van bovenaf" (30 sep), "de mensen bouwen zelf" (3 okt), heel "rijk worden en arm lijken" (11
   okt), en sinds 15 okt (vraag 170) de schout als wie je speelt en het gevecht in beurten; het praten is geparkeerd. Wat ervan in de code stond, is eruit (vraag 153 en 170, stap 5).
 - **De heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij, en hij straft wat je tegen hem

@@ -1472,15 +1472,17 @@
       const D = S.dorp;
       return `Het proefdorp op het eiland van ${zaad}: ${D.gebouwen.length} gebouwen, ${D.bevolking} mensen.`; // geen tekst
     },
-    // De ossenkar (js/kar.js; werklijst C): wat hij doet en wat hij draagt, en wat er op de stapels ligt.
+    // Het vervoer (js/kar.js; werklijst C, en de dragers van vraag 184): wat elke kar en elke drager doet en draagt, en wat
+    // er op de stapels ligt.
     kar() {
       const D = S.dorp;
-      const karren = T.karrenVan(D);
-      if (!karren.length) return 'Er rijdt nog geen kar: het kamp staat nog niet, of dit spel begon niet leeg.'; // geen tekst
+      if (!T.metVervoer(D)) return 'Er wordt nog niet gedragen: het kamp staat nog niet, of dit spel begon niet leeg.'; // geen tekst
+      const rit = (v) => v.rit && { fase: v.rit.fase, naar: v.rit.naar && v.rit.naar.soort, klaarOm: T.uurTekst(v.rit.tot) };
       return {
-        karren: karren.map((e) => ({
-          tegel: [e.tx, e.ty], doet: T.karTekst(D, e), lading: e.lading,
-          rit: e.rit && { fase: e.rit.fase, naar: e.rit.naar && e.rit.naar.soort, klaarOm: T.uurTekst(e.rit.tot) },
+        karren: T.karrenVan(D).map((e) => ({ tegel: [e.tx, e.ty], doet: T.karTekst(D, e), lading: e.lading, rit: rit(e) })),
+        dragers: T.dragersVan(D).map((p) => ({
+          wie: T.naamVanBewoner(p), tegel: p.vervoer ? [p.vervoer.tx, p.vervoer.ty] : null, doet: T.dragerTekst(D, p),
+          lading: p.vervoer && p.vervoer.lading, rit: p.vervoer && rit(p.vervoer),
         })),
         stapels: T.stapelsOp(D).map((s) => ({ gebouw: s.g.soort, tegel: [s.x, s.y], wat: s.wat, hoeveel: Math.round(s.hoeveel * 10) / 10 })),
       };

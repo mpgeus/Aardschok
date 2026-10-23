@@ -1,10 +1,15 @@
 // Meebouwen (werklijst vraag 152, 1d; Marcel, 11 okt: "d ja", en bij het plan voor stap 1: "bouwen met handen (wie geen
 // werk heeft, bouwt mee, en hoe meer handen, hoe sneller)"): in het lege begin rijst een gebouw niet vanzelf op in zijn
-// bouwtijd, maar bouwen de mensen het. Een gebouw vraagt zijn bouwtijd keer `werkPerBouwdag` werkdagen. Elke ochtend
-// kiest het dorp wie vandaag bouwt: wie kan werken en geen werk heeft (zoals de dagloners in js/veldwerk.js), hooguit
-// `perPlaats` per bouwplaats, de bouwplaatsen in de volgorde waarin je ze neerzette. Elke bouwer doet er per dag één
-// werkdag aan, minder als het dorp eentonig eet (T.werkVanAfwisseling, js/behoeften.js; vraag 154, B1); zonder bouwers
-// staat het stil. Elke man in een werkplaats is dus een bouwer minder.
+// bouwtijd, maar bouwen de mensen het. Een gebouw vraagt zijn bouwtijd keer `werkPerBouwdag` werkdagen. Elke bouwer doet
+// er per dag één werkdag aan, minder als het dorp eentonig eet (T.werkVanAfwisseling, js/behoeften.js; vraag 154, B1);
+// zonder bouwers staat het stil. Elke man in een werkplaats is dus een bouwer minder.
+//
+// Bouwen en dragen zijn één rij klusjes (vraag 184; Marcel, 20 okt: "3a1", wie het dichtst is): wie kan werken en geen werk
+// heeft (zoals de dagloners in js/veldwerk.js), bouwt of draagt. Elke ochtend kiest het dorp wie vandaag bouwt: per
+// bouwplaats, in de volgorde waarin je ze neerzette, zoveel bouwers als er werk is (`bouwersNodig`: bij het rooien
+// `perPlaats`, en daarna zoveel als het bouwmateriaal dat er ligt werk geeft), de dichtsten bij eerst. Wie overblijft,
+// draagt (T.dragersVan; js/kar.js). Wie bouwmateriaal brengt naar een bouwplaats waar niemand bouwt, blijft er bouwen
+// (T.blijftBouwen): zo begint het bouwen nog dezelfde dag.
 //
 // Staat er iets op de plek (de voet en het looppad eromheen, de kavel, T.kavelVan in js/bos.js), dan rooien de bouwers
 // dat eerst (Marcel, 11 okt: "a1"): een boom omhakken en zijn stobbe eruit kost `rooiBoom` werkdagen, een struik, een
@@ -145,30 +150,54 @@
   // dagloner is. Net als de handen (T.verdeelHanden) zonder te vragen of zijn poppetje er al is: wie nog over de weg komt,
   // telt mee (zonder beelden komt hij nooit aan).
   const kanBouwen = (p) => T.kanWerken(p) && !p.werk && !p.dagloner && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong');
+  // Bouwt hij vandaag aan een bouwplaats die er nog is?
+  const bouwtNu = (D, p) => !!p.bouwt && !p.bouwt.klaar && bouwplaatsen(D).includes(p.bouwt);
 
-  // De bouwers van bouwplaats g uit `vrij` (die gaan eruit): hooguit perPlaats, de dichtsten bij zijn deur eerst, en
-  // niemand als g op hout wacht dat vandaag niet komt (`krijgt`, T.krijgtVandaagHout).
-  function stuurBouwers(D, g, vrij, krijgt) {
-    if (T.wachtOpHout(g) && !krijgt.has(g)) return; // daar komt vandaag geen hout: naar de volgende
+  // Wie nu draagt (vraag 184; js/kar.js): wie kan meebouwen maar niet bouwt, en niet schuilt of thuisblijft; wie het huis
+  // van zijn gezin vrijmaakt (js/bos.js), rooit. Net als bij het bouwen zonder te vragen of zijn poppetje er al is: de regel
+  // kent zijn eigen plek (p.vervoer), en het poppetje loopt erachteraan.
+  T.dragersVan = function (D) {
+    if (!T.metVervoer(D) || !D.bewoners || !D.kalender) return [];
+    const dag = D.kalender.dag;
+    const plaatsen = new Set(bouwplaatsen(D));
+    const bouwt = (p) => !!p.bouwt && !p.bouwt.klaar && plaatsen.has(p.bouwt);
+    return D.bewoners.mensen.filter((p) => !p.schuilt && kanBouwen(p) && !bouwt(p) && !(p.huis && p.huis.groeitNaRooien) && !T.blijftThuis(p, dag));
+  };
+
+  // Hoeveel bouwers bouwplaats g kan gebruiken, nog voor `rest` van de werkdag (1: de hele dag): bij het rooien en aan een
+  // weg `perPlaats`; daarna zoveel als het bouwmateriaal dat er ligt werk geeft (T.bouwMateriaalDeel, js/kar.js), want
+  // de rest draagt het aan.
+  function bouwersNodig(D, g, rest) {
+    if (isWeg(g) || g.wachtOpRooien) return IN().perPlaats;
+    const B = g.bouw;
+    const kan = B.werk * T.bouwMateriaalDeel(g) - B.gedaan;
+    const perBouwer = T.werkVanAfwisseling(D) * rest;
+    if (kan <= 1e-6 || !(perBouwer > 0)) return 0;
+    return Math.min(IN().perPlaats, Math.ceil(kan / perBouwer - 1e-9));
+  }
+
+  // De bouwers van bouwplaats g uit `vrij` (die gaan eruit): zoveel als hij kan gebruiken, de dichtsten bij zijn deur eerst.
+  function stuurBouwers(D, g, vrij, rest) {
+    const n = bouwersNodig(D, g, rest) - bouwersVan(D, g).length;
+    if (n <= 0) return;
     const r = isWeg(g) ? { ...T.wegNogTeDoen(g)[0], b: 1, h: 1 } : g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
     if (r.x == null) return; // een weg die af is
     const deur = (p) => (p.wezen && p.wezen.thuis) || (p.huis && T.deurVan(D.wereld, p.huis)) || { x: 0, y: 0 };
     const midden = { x: r.x + r.b / 2, y: r.y + r.h / 2 };
     vrij.sort((p, q) => T.afstand(deur(p), midden) - T.afstand(deur(q), midden));
-    for (const p of vrij.splice(0, IN().perPlaats)) p.bouwt = g;
+    for (const p of vrij.splice(0, n)) p.bouwt = g;
   }
 
   // Elke ochtend (T.tikGebouwenDag, na het verdelen van de handen): wie vandaag bouwt. Wie kan meebouwen, gaat naar de
-  // eerste bouwplaats met plaats.
+  // eerste bouwplaats die nog bouwers kan gebruiken; wie overblijft, draagt.
   T.kiesBouwers = function (D) {
     const B = D.bewoners;
     if (!B || !B.mensen) return;
     for (const p of B.mensen) if (p.bouwt) p.bouwt = null;
     if (!T.bouwenMetHanden(D)) return;
     const vrij = B.mensen.filter(kanBouwen);
-    const krijgt = T.krijgtVandaagHout(D);
     for (const g of bouwplaatsen(D)) {
-      stuurBouwers(D, g, vrij, krijgt);
+      stuurBouwers(D, g, vrij, 1);
       if (!vrij.length) break;
     }
   };
@@ -176,27 +205,48 @@
   // Een nieuwe bouwplaats (T.plaatsGebouw, T.legVeld, T.legWeg): wie vandaag nog nergens bouwt en kan, begint er meteen
   // aan, niet pas morgenochtend (T.kiesBouwers). Anders rooide op de dag van aankomst niemand (Marcel, 17 okt: "ze
   // beginnen nu op dag 2"). Wat de werkdag al achter de rug had, telt voor hem als gedaan (`vandaag`): het werk begint
-  // nu, en de nacht (T.tikBouwenDag) rekent alleen wat er na het neerzetten nog over was.
+  // nu, en de nacht (T.tikBouwenDag) rekent alleen wat er na het neerzetten nog over was. Wie iets draagt, maakt eerst
+  // zijn rit af.
   T.nieuweBouwplaats = function (D, g) {
     if (!T.bouwenMetHanden(D) || !D.bewoners || !D.kalender) return;
-    const bezig = new Set(bouwplaatsen(D).filter((x) => x !== g));
-    stuurBouwers(D, g, D.bewoners.mensen.filter((p) => kanBouwen(p) && !bezig.has(p.bouwt)), T.krijgtVandaagHout(D));
-    g.bouw.vandaag = werkdagenVan(D, g) * werkdagGedaan(D);
+    const vrij = D.bewoners.mensen.filter((p) => kanBouwen(p) && !bouwtNu(D, p) && !(p.vervoer && p.vervoer.rit));
+    stuurBouwers(D, g, vrij, 1 - werkdagGedaan(D, D.kalender.dag));
+    g.bouw.vandaag = werkdagenVan(D, g) * werkdagGedaan(D, D.kalender.dag);
+  };
+
+  // Een drager bracht op moment t bouwmateriaal naar bouwplaats g (js/kar.js): bouwt daar niemand en is er nu werk, dan
+  // blijft hij er bouwen, de rest van de werkdag. Alleen waar niemand bouwt, anders bouwt na een paar ritten iedereen en
+  // draagt er niemand meer; morgenochtend verdeelt het dorp opnieuw (T.kiesBouwers). Wat de werkdag al achter de rug had,
+  // telt voor hem als gedaan (`vandaag`), zoals bij een nieuwe bouwplaats.
+  T.blijftBouwen = function (D, p, g, t) {
+    if (!p || !g.bouw || g.klaar || !bouwplaatsen(D).includes(g) || bouwtNu(D, p) || bouwersVan(D, g).length) return;
+    const gedaan = werkdagGedaan(D, t);
+    if (!bouwersNodig(D, g, 1 - gedaan)) return;
+    p.bouwt = g;
+    g.bouw.vandaag += T.werkVanAfwisseling(D) * gedaan;
   };
 
   // ---------------------------------------------------------------------------------------------
   // Overdag, elk beeld
   // ---------------------------------------------------------------------------------------------
 
-  // Hoe ver de werkdag van vandaag is, van 0 tot 1 (js/dag.js).
-  function werkdagGedaan(D) {
-    const dag = D.kalender.dag;
+  // Hoe ver de werkdag van de dag van moment `dag` is, van 0 tot 1 (js/dag.js).
+  function werkdagGedaan(D, dag) {
     const d = T.dagindeling(dag);
     const eind = T.isOogstDag(dag) ? d.werkEindOogst : d.werkEind;
     if (!(eind > d.werkBegin)) return 0;
     return Math.max(0, Math.min(1, (T.uurVanDag(dag) - d.werkBegin) / (eind - d.werkBegin)));
   }
   const uur = () => (T.DAG_LENGTE || 300) / 24;
+
+  // Het werk aan bouwplaats g van vandaag, tot moment t (naar hoe ver de werkdag dan is). Wat bleef liggen omdat het hout
+  // er nog niet was, doen ze later vandaag (of vannacht, T.tikBouwenDag). Zo vaak als je wilt: het werk komt op hetzelfde uit.
+  function werkTot(D, g, t) {
+    const doel = werkdagenVan(D, g) * werkdagGedaan(D, t);
+    if (doel <= g.bouw.vandaag + 1e-6) return;
+    const liggen = werkAan(D, g, doel - g.bouw.vandaag, Math.floor(t) + 1);
+    g.bouw.vandaag = doel - liggen;
+  }
 
   // Elk beeld (T.werkDorpBij, js/dorp.js): het werk van vandaag tot nu, en de bouwers aan het werk. In de werkuren loopt
   // elke bouwer naar een tegel naast wat er nu te doen is (de dichtste boom op de kavel, of de voet), en werkt daar; buiten
@@ -207,17 +257,7 @@
     const dag = D.kalender.dag;
     const werktijd = T.dagdeelVan(dag, T.isOogstDag(dag)) === 'werk';
     const plaatsen = bouwplaatsen(D);
-    if (werktijd) {
-      const f = werkdagGedaan(D);
-      for (const g of plaatsen) {
-        const doel = werkdagenVan(D, g) * f;
-        if (doel > g.bouw.vandaag + 1e-6) {
-          // wat bleef liggen omdat het hout er nog niet was, doen ze later vandaag (of vannacht, T.tikBouwenDag)
-          const liggen = werkAan(D, g, doel - g.bouw.vandaag, Math.floor(dag) + 1);
-          g.bouw.vandaag = doel - liggen;
-        }
-      }
-    }
+    if (werktijd) for (const g of plaatsen) werkTot(D, g, dag);
     const nu = S.wereldTijd || 0;
     for (const p of D.bewoners.mensen) {
       const e = p.wezen;
@@ -314,13 +354,13 @@
         : T.t('{gebouw}: the site still has to be cleared ({wat}), and everyone has other work.', { gebouw, wat: T.rooiWoordenOp(D, g.kavel) });
     }
     const gedaan = Math.floor(g.bouw.gedaan);
-    // Het hout dat de ossenkar brengt (js/kar.js): wacht hij erop, of hoeveel is er al.
+    // Het hout dat de dragers brengen (js/kar.js): wacht hij erop, of hoeveel is er al.
     const B = g.bouw;
     if (B.nodig && T.bouwMateriaalDeel(g) < 1) {
       const wat = Object.keys(B.nodig)[0];
       const hout = { gebouw, er: Math.floor(B.er[wat] || 0), nodig: B.nodig[wat], waar: T.waarNaam(wat), gedaan, werk: B.werk };
       return T.wachtOpHout(g)
-        ? T.t('{gebouw}: waiting for the ox cart to bring {waar} ({er} of {nodig} here); {gedaan} of {werk} workdays done.', hout)
+        ? T.t('{gebouw}: waiting for carriers to bring {waar} ({er} of {nodig} here); {gedaan} of {werk} workdays done.', hout)
         : T.t('{gebouw}: {gedaan} of {werk} workdays done, as far as the {waar} goes ({er} of {nodig} here).', hout);
     }
     return n

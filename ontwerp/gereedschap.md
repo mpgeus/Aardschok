@@ -44,9 +44,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm run speeltest` speelt het lege begin een jaar met de kolonist (`gereedschap/speeltest/kolonist.js`; werklijst B,
   1f), op het eiland van elk zaad (standaard 1 tot en met 3; `--zaad 2`, `--zaden 1-5`), in een onzichtbare browser, en
   zet de uitslag in `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`: "Het eerste jaar"
-  (wat er vastliep, en het eten en het hout), de ossenkar (werklijst C, stap 6: per kar hoeveel van de werktijd hij
-  bezig was, vol, leeg of ladend, per seizoen, de ritten en wat hij vervoerde; en de stapels, hoe lang een waar erop ligt,
-  en wat er op de kar wachtte; gemeten in `speler.js`, `meetKar` en `karDag`, niet in het spel), de twee
+  (wat er vastliep, en het eten en het hout), het vervoer (werklijst C, stap 6, en de dragers van vraag 184: per kar en
+  voor de dragers samen hoeveel van de werktijd ze bezig waren, vol, leeg of ladend, per seizoen, de ritten en wat ze
+  vervoerden; en de stapels, hoe lang een waar erop ligt, en wat er op vervoer wachtte; gemeten in `speler.js`, `meetKar`
+  en `karDag`, niet in het spel), de twee
   bazen, het bos en het graanboek. `--jaren 2` speelt twee jaar in plaats van één. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
@@ -288,8 +289,8 @@ bewaard spel. De vaste schermafdrukken, de tekenmeting en de samenvatting spelen
 het gehucht dat er al was op een land van de maker).
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
-`Spel.debug.kar()` zegt wat de ossenkar doet (waar hij is, wat hij draagt, waar hij heen rijdt en hoe laat hij er is), en
-wat er op de stapels bij de deuren ligt (`js/kar.js`, werklijst C).
+`Spel.debug.kar()` zegt wat elke kar en elke drager doet (waar hij is, wat hij draagt, waar hij heen gaat en hoe laat hij er
+is), en wat er op de stapels bij de deuren ligt (`js/kar.js`, werklijst C en vraag 184).
 `Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder
 iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
 aanvoerder meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.

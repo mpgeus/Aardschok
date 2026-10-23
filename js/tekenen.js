@@ -4244,7 +4244,7 @@
   // en steen als hoop, de rest in manden, kratten, zakken en tonnen (T.sprites.stapelDelen). Zonder kunst: een blok, zo
   // hoog als hij vol is.
   function stapelsInLijst(ctx, S, w, D, vak, lijst) {
-    if (!D || !T.metDeKar(D)) return;
+    if (!D || !T.metVervoer(D)) return;
     for (const s of T.stapelsOp(D)) {
       if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
       const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];

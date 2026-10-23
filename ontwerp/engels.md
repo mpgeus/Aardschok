@@ -65,7 +65,8 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | het plein | the square | |
 | het kamp, de tent, het afdak, het kampvuur | the camp, the tent, the lean-to, the campfire | |
 | de huifkar, de ossenkar | the covered wagon, the ox cart | |
-| de stapel (bij een deur), de opslag (waar de kar lost) | the stack, the stores | "its stack is full, waiting for the ox cart" |
+| de stapel (bij een deur), de opslag (waar de kar lost) | the stack, the stores | "its stack is full, waiting for carriers" |
+| de drager, dragen (vraag 184) | the carrier, to carry | "carries 1 log to the hut", "waiting for carriers to bring logs" |
 | de schuur (een opslag met een eigen kar) | the barn | niet de graanschuur (*the granary*) |
 | de bouwplaats, de bouwers, meebouwen | the building site, the builders, help build | |
 | rooien | clear | "clear the site" |

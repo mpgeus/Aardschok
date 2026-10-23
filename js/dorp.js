@@ -122,8 +122,10 @@
   // scherm, `dtWereld` die van de wereld (js/tijd.js).
   T.werkDorpBij = function (S, D, dt, dtWereld) {
     T.werkBeginBij(S, D); // het lege begin: de kar rijdt het land in, met de gezinnen erachter (js/begin.js)
-    T.werkBouwenBij(S, D); // en de bouwers aan het werk (js/bouwen.js)
-    T.werkKarBij(S, D); // en de ossenkar, die de stapels haalt (js/kar.js)
+    // de dragers en de karren, die de stapels halen en de bouwplaatsen hun hout brengen (js/kar.js), en dan de bouwers aan
+    // het werk (js/bouwen.js): in die volgorde, zodat wie hout brengt en blijft bouwen, in hetzelfde beeld al bouwt
+    T.werkKarBij(S, D);
+    T.werkBouwenBij(S, D);
     T.werkGebouwenBij(D); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(D); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(D); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)

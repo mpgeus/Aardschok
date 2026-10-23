@@ -982,6 +982,9 @@
 
   function werkTekst(D, p) {
     const g = p.werk;
+    // wie geen werk heeft, bouwt of draagt (js/bouwen.js, js/kar.js; vraag 184)
+    if (!g && p.bouwt && !p.bouwt.klaar && T.GEBOUWEN[p.bouwt.soort]) return T.t('builds the {gebouw}', { gebouw: T.GEBOUWEN[p.bouwt.soort].naam });
+    if (!g && T.dragerTekst(D, p)) return T.dragerTekst(D, p);
     if (!g) return p.leeftijd === 'volwassen' && !vanAanvoerder(p) ? T.t('no work') : '';
     if (g === p.huis) return ''; // wie op zijn eigen boerderij werkt: dat spreekt vanzelf
     if (g.soort === 'schaapskooi') return T.t('shepherd');

@@ -20,11 +20,11 @@
 //      (T.watHelptAanAfwisseling, js/raad.js), het eerste dat één gebouw is (een jager, een moestuin, een kippenhok, een
 //      visser); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
 //   7b. als er een zagerij is en iedereen een woning heeft, een schuur richting de rotsen (werklijst C, stap 6; Marcel, 15
-//      okt: "Ja, bij de rotsen"): zo meet de speeltest een tweede kar, en komen de rotsen binnen bereik; is de schuur af,
-//      dan een steengroeve erbij, zodat die tweede kar een eigen stapel heeft om te halen;
+//      okt: "Ja, bij de rotsen"): zo meet de speeltest een kar naast de dragers (het begin heeft er geen, vraag 184), en
+//      komen de rotsen binnen bereik; is de schuur af, dan een steengroeve erbij, zodat die kar een eigen stapel heeft;
 //   7c. de soldaten (vraag 159): als er een zagerij is, iedereen een woning heeft en de schuur van 7b er staat (of er geen
 //      rotsen zijn), een wachthuis en een wapenmaker, en zijn die af, `speermannen` speermannen in het wachthuis (speer en
-//      schild, van planken): zo toetst de speeltest de hele keten, van de zagerij via de kar en de wapenmaker tot de soldaat;
+//      schild, van planken): zo toetst de speeltest de hele keten, van de zagerij via de dragers en de wapenmaker tot de soldaat;
 //   8. wordt er niets anders gebouwd (geen bouwplaats en geen weg in aanleg), dan een weg (werklijst C, stap 5, f; Marcel,
 //      14 okt: "f ja"): van de opslag (het raadhuis of een schuur) naar een gebouw waar de ossenkar heen rijdt
 //      (een werkplaats, een boerderij, een schuur), het dichtste eerst, één per dag, zodat de speeltest meet wat een weg
@@ -66,9 +66,9 @@
   function bouw(D, soort, bij, waarom) {
     if (!T.inBouwmenu(D, soort)) return { soort, gelukt: false, reden: 'niet in het bouwmenu', tekst: `wil een ${soort} bouwen (${waarom}), maar hij staat niet in het bouwmenu` };
     const kosten = T.GEBOUWEN[soort].kosten;
-    // Het hout dat de bouwplaatsen nog van de ossenkar vragen, is al vergeven (js/kar.js; werklijst C, stap 2): hij bouwt
-    // met wat er dan over is, ook al betaal je het hout pas als de kar het brengt.
-    const vrij = (wat) => (D.voorraad[wat] || 0) - (T.gaatMetDeKar(D, wat) ? T.nogTeBrengen(D, wat) : 0);
+    // Het hout dat de bouwplaatsen nog gebracht moeten krijgen, is al vergeven (js/kar.js; werklijst C, stap 2): hij bouwt
+    // met wat er dan over is, ook al betaal je het hout pas als het gebracht wordt.
+    const vrij = (wat) => (D.voorraad[wat] || 0) - (T.gaatMetVervoer(D, wat) ? T.nogTeBrengen(D, wat) : 0);
     const mist = Object.keys(kosten).filter((wat) => vrij(wat) < kosten[wat]);
     if (mist.length) {
       return { soort, gelukt: false, wacht: true, reden: `wacht op ${mist.join(' en ')}`, tekst: `wil een ${soort} bouwen (${waarom}), maar wacht op ${mist.join(' en ')}` };

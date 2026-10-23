@@ -18,7 +18,7 @@ exports.maak = function (uitslagen, stand) {
   const fouten = goed.filter((u) => u.fouten.length || (u.luisterFouten || []).length);
   uit.push(fouten.length ? fouten.map((u) => `- **Fouten** bij ${NAMEN[u.speler]}, zaad ${u.zaad}: ${[...u.fouten, ...(u.luisterFouten || [])].slice(0, 3).join(' / ')}`).join('\n') : 'Geen fouten in de console.', '');
   uit.push(...hetEersteJaar(goed.filter((u) => u.eersteJaar)));
-  uit.push(...deOssenkar(goed.filter((u) => u.kar)));
+  uit.push(...hetVervoer(goed.filter((u) => u.kar)));
   uit.push(...deTweeBazen(goed));
   uit.push(...hetBos(goed));
   uit.push(...hetGraanboek(goed));
@@ -115,19 +115,20 @@ function hetEersteJaar(goed) {
   return uit;
 }
 
-// De ossenkar (werklijst C, stap 6): wat elke kar deed (speler.js, meetKar), en de stapels en wat er wachtte (karDag).
-// Hoe lang een waar op een stapel ligt, is wat er gemiddeld op de stapels lag gedeeld door wat de karren per dag ophaalden
-// (de wet van Little: wat er ligt is wat erbij komt maal hoe lang het blijft).
+// Het vervoer (werklijst C, stap 6; de dragers sinds vraag 184): wat elke kar en de dragers samen deden (speler.js,
+// meetKar), en de stapels en wat er wachtte (karDag). Hoe lang een waar op een stapel ligt, is wat er gemiddeld op de
+// stapels lag gedeeld door wat er per dag werd opgehaald (de wet van Little: wat er ligt is wat erbij komt maal hoe lang
+// het blijft).
 const SEIZOENEN = ['lente', 'zomer', 'herfst', 'winter'];
-function deOssenkar(goed) {
+function hetVervoer(goed) {
   if (!goed.length) return [];
   const uur = (dagen) => `${Math.round(dagen * 24)} u`;
-  const uit = ['## De ossenkar', '', 'Per kar (het raadhuis of een schuur, en vanaf welke dag): hoeveel van de werktijd hij bezig was, en waarmee (rijden met lading, rijden leeg, laden en lossen); per seizoen hoeveel hij bezig was (het tweede jaar erachter); hoe lang een rit na de werktijd nog doorliep; de ritten (halen van een stapel, brengen naar een bouwplaats of werkplaats); en wat hij vervoerde, per dag en het meest per waar.', ''];
+  const uit = ['## Het vervoer', '', 'Per kar (van een schuur, en vanaf welke dag), en voor de dragers samen (hoeveel er het meest tegelijk waren; bij hen is "bezig" wat een drager gemiddeld bezig was): hoeveel van de werktijd hij bezig was, en waarmee (rijden met lading, rijden leeg, laden en lossen); per seizoen hoeveel hij bezig was (het tweede jaar erachter); hoe lang een rit na de werktijd nog doorliep; de ritten (halen van een stapel, brengen naar een bouwplaats of werkplaats); en wat hij vervoerde, per dag en het meest per waar.', ''];
   const kop = ['speler', 'zaad', 'kar', 'bezig', 'vol / leeg / laden', 'per seizoen', 'overwerk', 'ritten (halen, brengen)', 'per dag', 'vervoerd'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {
     const K = u.kar;
-    K.karren.forEach((k, i) => {
+    K.karren.concat(K.dragers ? [K.dragers] : []).forEach((k, i) => {
       const w = k.werktijd || 1e-9;
       const bezig = k.vol + k.leeg + k.laden;
       const maanden = Object.keys(k.maanden).map(Number);
@@ -147,19 +148,19 @@ function deOssenkar(goed) {
       const dagen = Math.max(1, (k.t || 0) - k.vanaf);
       const waren = Object.entries(k.vervoerd).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([wat, n]) => `${wat} ${getal(n)}`);
       uit.push(regel([
-        NAMEN[u.speler] || u.speler, u.zaad, `${i + 1}: ${k.thuis}, dag ${k.vanaf}`, pct(bezig / w),
+        NAMEN[u.speler] || u.speler, u.zaad, k.mensen ? `dragers (tot ${k.mensen}), dag ${k.vanaf}` : `${i + 1}: ${k.thuis}, dag ${k.vanaf}`, pct(bezig / w),
         `${pct(k.vol / w)} / ${pct(k.leeg / w)} / ${pct(k.laden / w)}`, seizoenen.join(' · '), uur(k.overwerk),
         `${k.halen + k.brengen} (${k.halen}, ${k.brengen})`, getal(somVan(k.vervoerd) / dagen), waren.join(', '),
       ]));
     });
   }
-  uit.push('', '### De stapels, en wat er op de kar wachtte', '', 'Wat er op alle stapels samen lag (gemiddeld en het meest), hoe lang een waar gemiddeld op een stapel lag voor de kar hem haalde (in uren, met de nacht erbij), de grootste stapel per soort gebouw, op hoeveel ochtenden een stapel vol was (dan maakt het gebouw niets), hoeveel dagen een bouwplaats op de kar wachtte (bouwplaatsdagen), welke werkplaats iets miste dat de kar brengt (dagen, en tussen haakjes op hoeveel daarvan de opslag het wel had), en op welke dag het dorp een dorp werd.', '');
+  uit.push('', '### De stapels, en wat er op vervoer wachtte', '', 'Wat er op alle stapels samen lag (gemiddeld en het meest), hoe lang een waar gemiddeld op een stapel lag voor iemand hem haalde (in uren, met de nacht erbij), de grootste stapel per soort gebouw, op hoeveel ochtenden een stapel vol was (dan maakt het gebouw niets), hoeveel dagen een bouwplaats op hout wachtte (bouwplaatsdagen), welke werkplaats iets miste dat gebracht wordt (dagen, en tussen haakjes op hoeveel daarvan de opslag het wel had), en op welke dag het dorp een dorp werd.', '');
   const kop2 = ['speler', 'zaad', 'op de stapels (gem., meest)', 'ligt er', 'grootste stapel', 'vol (ochtenden)', 'bouwplaats wacht', 'werkplaats mist', 'dorp op dag', 'planken'];
   uit.push(regel(kop2), regel(kop2.map(() => '---')));
   for (const u of goed) {
     const K = u.kar;
     const gem = K.opDeStapels.keer ? K.opDeStapels.som / K.opDeStapels.keer : 0;
-    const opgehaald = K.karren.reduce((n, k) => n + k.opgehaald, 0) / Math.max(1, K.dagen);
+    const opgehaald = K.karren.concat(K.dragers ? [K.dragers] : []).reduce((n, k) => n + k.opgehaald, 0) / Math.max(1, K.dagen);
     const stapels = Object.entries(K.stapels).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([soort, n]) => `${soort} ${getal(n)}`);
     const vol = Object.entries(K.vol).sort((a, b) => b[1] - a[1]).map(([soort, n]) => `${soort} ${n}`);
     const mist = Object.entries(K.tekort).map(([soort, x]) => `${soort} ${x.wat} ${x.dagen} (${x.metVoorraad})`);

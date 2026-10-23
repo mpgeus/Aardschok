@@ -92,7 +92,7 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
-**Stap 1 tot 4 zijn af** (14 okt, in `main`; hoe het werkt: `spel.md`, "Zo werkt de kar nu"): alles wat een gebouw
+**Stap 1 tot 4 zijn af** (14 okt, in `main`; hoe het werkt: `spel.md`, "Zo werkte de kar", en sinds 23 okt "Zo werken de dragers nu"): alles wat een gebouw
 maakt, ligt bij de deur tot de kar het haalt, de bouwplaats en de werkplaats krijgen hun waren met de kar, en een schuur
 is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): wegen die jij legt, en afbreken (`spel.md`,
 "Zo werken de wegen en het afbreken nu"). **Het volgende is stap 6, meten en spelen.**

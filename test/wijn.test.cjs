@@ -112,9 +112,11 @@ function pluktInWijnmaand(zonderAkker) {
     const geplukt = T.rankenVan(D, g).filter((v) => T.rankStand(v, S.kalender.dag) === 'leeg').length;
     assert.ok(geplukt >= T.WIJNGAARD_INSTELLINGEN.mand, `${geplukt} ranken geplukt`);
     const inDeMand = wie.reduce((n, p) => n + (p.wezen.mand || 0), 0);
-    // Binnen is bij het huis: op zijn stapel tot de ossenkar hem haalt, of al in de opslag (js/kar.js; C, stap 3).
-    const opDeKar = () => T.karrenVan(D).reduce((n, e) => n + ((e.lading && e.lading.wijn) || 0), 0);
-    const wijn = () => D.voorraad.wijn + T.opDeStapels(D, 'wijn') + opDeKar();
+    // Binnen is bij het huis: op zijn stapel tot een drager of een kar hem haalt, onderweg, of al in de opslag (js/kar.js;
+    // C, stap 3, en vraag 184).
+    const vervoerders = () => T.karrenVan(D).concat(D.bewoners.mensen.map((p) => p.vervoer).filter(Boolean));
+    const onderweg = () => vervoerders().reduce((n, v) => n + ((v.lading && v.lading.wijn) || 0), 0);
+    const wijn = () => D.voorraad.wijn + T.opDeStapels(D, 'wijn') + onderweg();
     assert.equal(wijn(), (geplukt - inDeMand) * T.WIJNGAARD_INSTELLINGEN.wijnPerRank, 'binnen is wat in het huis is');
     // 's Nachts gaat wat nog in de mand zat, mee naar huis.
     T.tikWijngaardDag(D, dag);
