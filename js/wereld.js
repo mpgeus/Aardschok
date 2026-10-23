@@ -466,7 +466,7 @@
       v.natuur = true;
       const i = (d.y - y0) * STUK + (d.x - x0);
       op[i] = v;
-      if (NATUUR.get(d.naam).eig.vast) tegel[i] = CODE.muur; // zoals T.laadKaart: een vast ding staat op een muur
+      if (NATUUR.get(d.naam).eig.vast) tegel[i] = CODE.muur; // een vast ding staat op een muur, zoals de maker het legt
     }
     for (let i = 0; i < STUK * STUK; i++) {
       const anders = w.tegelsAnders.get(T.tegelNummer(x0 + (i % STUK), y0 + Math.floor(i / STUK)));
@@ -1081,8 +1081,7 @@
   }
 
   // Ligt het punt (px, py) binnen een rand, een lijst hoekpunten [[x, y], ...]? Een straal naar rechts
-  // telt hoe vaak hij de rand kruist. Ook voor gereedschap/tiled/maak-gehucht.cjs, dat er het plein
-  // en het zand mee tekent.
+  // telt hoe vaak hij de rand kruist. Ook voor de maker (js/maker.js), die er het plein mee legt.
   T.binnenRand = function (rand, px, py) {
     let binnen = false;
     for (let i = 0, k = rand.length - 1; i < rand.length; k = i++) {
@@ -1093,9 +1092,8 @@
     return binnen;
   };
 
-  // Ligt deze tegel op een plein? Een kaart heeft de pleinen die erop liggen (w.pleinen: hun randen, in tegels; van de
-  // maker, of uit kaarten/<naam>.betekenis.json, "plein", via js/kaart.js), een voor elk dorp; een tegel ligt erop als
-  // zijn midden binnen een rand valt. Op een plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), van welk dorp ook.
+  // Ligt deze tegel op een plein? Een kaart heeft de pleinen die erop liggen (w.pleinen: hun randen, in tegels, van de
+  // maker), een voor elk dorp; een tegel ligt erop als zijn midden binnen een rand valt. Op een plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), van welk dorp ook.
   const opRand = (rand, x, y) => !!rand && rand.length >= 3 && T.binnenRand(rand, x + 0.5, y + 0.5);
   T.opHetPlein = function (w, x, y) {
     return !!w && (w.pleinen || []).some((rand) => opRand(rand, x, y));

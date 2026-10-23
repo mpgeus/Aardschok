@@ -6,12 +6,12 @@
 // op de kaart. Bij achttien kun je dat onthouden; bij honderd niet, en niets verbond ze: je kon
 // dezelfde bakker op twee plekken neerzetten zonder dat iets klaagde.
 //
-// Nu is één mens één regel hier, en zegt de kaart alleen nog wáár hij staat:
+// Nu is één mens één regel hier, en zegt wie hem neerzet alleen nog wáár hij staat (T.maakMens(id,
+// x, y, straal); de heer en de marskramer komen zo over de weg). Tot 23 okt kon een kaart uit Tiled
+// hem ook neerzetten ("wie": "smid"); die kaarten gingen weg in ronde 4 van het snoeien.
 //
-//   kaarten/<naam>.betekenis.json:  { "x": 17, "y": 14, "wie": "smid", "straal": 3 }
-//
-// Wie geen naam hoeft te hebben, staat er niet in. Dat is de menigte: `{ x, y, zaad: 7 }` zet een
-// gewone dorpeling neer die niets zegt en nergens bij hoort. Zie ontwerp/wereld.md, "Een flink
+// Wie geen naam hoeft te hebben, staat er niet in. Dat is de menigte: een gewone dorpeling die
+// niets zegt en nergens bij hoort. Zie ontwerp/wereld.md, "Een flink
 // dorp": achttien mensen met een karakter en een haakje voor een quest, en daarnaast zoveel
 // figuranten als het dorp druk moet doen aanvoelen. Alleen die eerste groep hoef je uit elkaar te
 // houden.
@@ -68,8 +68,7 @@
     // (gereedschap/pixelart/heer.cjs, ontwerp/beeld.md): de heer klein en dik onder een veel te
     // grote hoed, de soldaten groot en zwaar met een hellebaard. De koets is nog tekenwerk. Twee
     // soldaten zijn twee keer dezelfde mens; dat mag, want ze staan op geen kaart.
-    // `bezoeker`: hij komt over de weg en staat op geen kaart, dus de controle in
-    // gereedschap/wereld.html vraagt niet waar hij staat.
+    // `bezoeker`: hij komt over de weg en staat op geen kaart.
     // Hun loopvellen (heer.cjs) zijn op deze snelheden gemaakt. Glijden doen hun voeten nooit (het
     // spel telt de pas uit de afgelegde weg, js/sprites.js), maar met een andere snelheid stappen
     // ze vlugger of trager dan bedoeld: render de vellen dan opnieuw.

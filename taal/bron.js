@@ -116,7 +116,7 @@ Spel.TAAL_BRON = [
   {"t":"ten","waar":["js/wereld.js"]},
   {"t":"eleven","waar":["js/wereld.js"]},
   {"t":"twelve","waar":["js/wereld.js"]},
-  {"t":"Outside","waar":["js/wereld.js","js/kaart.js"]},
+  {"t":"Outside","waar":["js/wereld.js"]},
   {"t":"You do not know that land yet: you build only where your people have been.","waar":["js/mist.js"]},
   {"t":"the smith","waar":["js/mensen.js"]},
   {"t":"the smith's wife","waar":["js/mensen.js"]},

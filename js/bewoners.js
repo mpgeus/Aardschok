@@ -197,8 +197,7 @@
   }
 
   // Het plein, als één plek: waar de marskramer zijn waar uitstalt en de heer op Sint-Maarten staat
-  // (kaarten/<naam>.betekenis.json, "marskramer"; in het gehucht op het zand voor de deur van de
-  // aanvoerder).
+  // (D.plek.marskramer, van de maker, js/maker.js).
   T.pleinVan = function (D) {
     const b = D && D.plek && D.plek.marskramer;
     return b ? { x: b.x, y: b.y } : null;

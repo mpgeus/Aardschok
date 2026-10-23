@@ -704,10 +704,10 @@
   }
 
   // De paadjes van het dorp dat hier ligt (js/paden.js): ze liggen in de grond, dus verandert er een, dan wordt de grond
-  // opnieuw getekend. Het gereedschap (gereedschap/wereld.html) laadt js/paden.js niet, en tekent dan alleen de kaart.
+  // opnieuw getekend.
   function zandVan(S) {
     const D = T.dorpHier(S);
-    return D && D.gebouwen && T.zandHoeken ? { D, zand: T.zandHoeken(D) } : null;
+    return D && D.gebouwen ? { D, zand: T.zandHoeken(D) } : null;
   }
 
   // Ver uitgezoomd (het overzicht, js/main.js, vraag 108, a) wordt de grond niet op de maat van de vlakte bewaard
@@ -1447,9 +1447,9 @@
     kaartNu = w;
     zoomNu = S.zoom;
     if (metSprites()) laadWatErStaat(w);
-    // het seizoen van de bomen (vraag 148, stap 2): T.sprites tekent elke boom dan in zijn seizoen; gereedschap/wereld.html
-    // laadt js/bos.js niet, en tekent ze in de zomer. Spel.debug.bomen = 'herfst' laat ze zien in een seizoen naar keus.
-    if (metSprites()) T.sprites.zetSeizoen((T.debug && T.debug.bomen) || (T.boomSeizoen ? T.boomSeizoen(S) : 'zomer'));
+    // het seizoen van de bomen (vraag 148, stap 2): T.sprites tekent elke boom dan in zijn seizoen. Spel.debug.bomen =
+    // 'herfst' laat ze zien in een seizoen naar keus.
+    if (metSprites()) T.sprites.zetSeizoen((T.debug && T.debug.bomen) || T.boomSeizoen(S));
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
     const D = T.dorpHier(S);
@@ -1533,8 +1533,7 @@
     // lagere/hogere `l`: eerst de achterlaag (l 1, vóór een wezen l 2), dan via de gewone
     // sortering het wezen zelf, dan de voorlaag (l 2,5) erover — zo lijkt een boer tot zijn
     // middel in het graan te staan. De andere drie stadia zijn plat genoeg voor één laag. Zonder
-    // sprites blijft een akker gewoon de kale zandgrond die er al ligt, en zonder kalender ook (het gereedschap,
-    // gereedschap/wereld.html, speelt niet en heeft er geen).
+    // sprites blijft een akker gewoon de kale zandgrond die er al ligt, en zonder kalender ook.
     if (w.akkers && w.akkers.length && metSprites() && S.kalender) {
       const datum = T.datumVanDag(S.kalender.dag);
       const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
@@ -3488,8 +3487,7 @@
   // Eén windwaarde voor de hele wereld, ergens tussen -1 en 1: hoe hard en naar welke kant. Twee
   // golven op een verhouding die niet deelt (dus het herhaalt niet merkbaar) plus af en toe een
   // vlaag erbovenop, zodat het als weer leest en niet als een speeltje. js/sprites.js bakt hierop
-  // de standen van een voorwerp. Zie ontwerp/beeld.md, "Eén wind door alles heen". Stond in
-  // js/main.js; staat hier omdat gereedschap/wereld.html tekent zonder de spellus erbij te laden.
+  // de standen van een voorwerp. Zie ontwerp/beeld.md, "Eén wind door alles heen".
   T.windWaarde = function (tijd) {
     const golf = Math.sin(tijd * 0.31) * 0.4 + Math.sin(tijd * 0.13 + 1.3) * 0.3;
     const vlaag = Math.max(0, Math.sin(tijd * 0.085 + 0.7)) ** 4 * 0.5;

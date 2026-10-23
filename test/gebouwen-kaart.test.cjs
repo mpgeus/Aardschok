@@ -1,21 +1,11 @@
-// De gebouwen met een kaart erbij (js/kaart.js): het plein van een kaart, en de tekeningen en voeten van de gebouwen.
-// Los van test/gebouwen.test.cjs, want dat bestand test T.gebouwVoet zonder dat kaart.js geladen is (zijn
-// terugvaloptie); hier staat kaart.js er wél, tegen T.KAARTEN.proef, net als test/kaart.test.cjs. Tot ronde 2 van het
-// snoeien (stap 6) toetste het ook gebouwen die de kaart zelf neerzette, met een beginvoorraad: dat is weg.
+// De gebouwen met de tegels op naam erbij (js/kaart.js): de tekeningen en voeten van de gebouwen. Los van
+// test/gebouwen.test.cjs, want dat bestand test T.gebouwVoet zonder dat kaart.js geladen is (zijn terugvaloptie). Tot
+// ronde 2 van het snoeien (stap 6) toetste het ook gebouwen die de kaart zelf neerzette, met een beginvoorraad, en tot
+// ronde 4 (23 okt) het plein van een kaart uit Tiled: dat is weg (het plein van het eiland: test/wereld.test.cjs).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-
-// Het plein ("plein": zijn rand, in tegels): een tegel ligt erop als zijn midden binnen de rand valt.
-test('"plein" op het betekenisbestand: T.opHetPlein zegt welke tegels erop liggen', () => {
-  const w = T.laadKaart(T.KAARTEN.proef, { plein: [[2, 2], [6, 2], [6, 5], [2, 5]] });
-  assert.equal(T.opHetPlein(w, 2, 2), true);
-  assert.equal(T.opHetPlein(w, 5, 4), true);
-  assert.equal(T.opHetPlein(w, 6, 3), false, 'de rand zelf loopt over de rand van de tegel');
-  assert.equal(T.opHetPlein(w, 1, 3), false);
-  assert.equal(T.opHetPlein(T.laadKaart(T.KAARTEN.proef, {}), 3, 3), false, 'zonder plein ligt er niets op');
-});
 
 test('T.opzoekTegelNaam (door kaart.js naar buiten gezet) vindt een gewone tegel op naam', () => {
   // Dezelfde tegel als test/kaart.test.cjs gebruikt voor het huis op de proefkaart.

@@ -172,3 +172,17 @@ test('wie op zijn land werkt, draagt het vel van zijn werk; een boerin dat van e
   boer.draagt = 'bundel';
   assert.equal(basis(T.sprites.houding(S, boer).naam), 'sprokkelaar');
 });
+
+test('elk wezen in T.WEZENS heeft een figuur in beelden/, of leent er een', () => {
+  // Wie nog niet getekend is, mag een vel lenen (vel: 'boer'); dan moet dát vel er wel zijn, anders staat er niets op
+  // de kaart. De aanvoerder draagt het vel van een gewone dorpeling (js/sprites.js). Tot 23 okt stond dit in
+  // test/kaart.test.cjs, bij de kaarten uit Tiled.
+  for (const [soort, w] of Object.entries(T.WEZENS)) {
+    const eigen = soort === 'aanvoerder' ? 'dorpeling0' : soort;
+    const vel = T.BEELDEN.figuren[eigen] ? eigen : w.vel;
+    assert.ok(
+      vel && T.BEELDEN.figuren[vel],
+      `"${soort}" staat in T.WEZENS maar heeft geen figuur in beelden/ en leent er ook geen (vel:) — of draai npm run pixelart:spel`,
+    );
+  }
+});

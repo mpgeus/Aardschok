@@ -11,21 +11,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const WORTEL = path.join(__dirname, '..');
-const BLADEN = ['index.html', 'gereedschap/index.html', 'gereedschap/wereld.html',
-  'gereedschap/gesprekken.html', 'gereedschap/quests.html'];
-
-// Waar staat deze bladzijde "ten opzichte van"? Een <base href="..."> verzet dat (wereld.html
-// doet dat, zodat js/sprites.js zijn vellen vindt), en dan slaan alle relatieve links daarop.
-function basisVan(blad, tekst) {
-  const m = tekst.match(/<base\s+href="([^"]+)"/i);
-  const map = path.dirname(blad);
-  return m ? path.normalize(path.join(map, m[1])) : map;
-}
+const BLADEN = ['index.html', 'gereedschap/index.html', 'gereedschap/gesprekken.html', 'gereedschap/quests.html'];
 
 test('elke link in het spel en het gereedschap wijst naar een bestand dat bestaat', () => {
   for (const blad of BLADEN) {
     const tekst = fs.readFileSync(path.join(WORTEL, blad), 'utf8');
-    const basis = basisVan(blad, tekst);
+    const basis = path.dirname(blad);
     for (const m of tekst.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
       const doel = m[1];
       if (/^(https?:|mailto:|#)/.test(doel)) continue;
@@ -42,7 +33,7 @@ test('elke link in het spel en het gereedschap wijst naar een bestand dat bestaa
 test('en elk script en elke stijl die die bladzijden laden, staat er ook', () => {
   for (const blad of BLADEN) {
     const tekst = fs.readFileSync(path.join(WORTEL, blad), 'utf8');
-    const basis = basisVan(blad, tekst);
+    const basis = path.dirname(blad);
     const bronnen = [...tekst.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/gi), ...tekst.matchAll(/<link\b[^>]*\bhref="([^"]+)"/gi)];
     for (const m of bronnen) {
       if (/^https?:/.test(m[1])) continue;

@@ -13,9 +13,10 @@
   let zoomVenster = 1; // de zoom die bij het venster hoort (formaat); het wiel zoomt verder uit
   const S = (T.S = { tijd: 0, wind: 0 });
 
-  // Een nieuw spel begint in het gehucht. Met index.html?kaart=<naam> begint het op een andere
-  // kaart, voor een proefje (T.beginOpKaart, js/gebied.js), en dan zonder de benoemingsbrief.
-  const BEGIN_KAART = new URLSearchParams(window.location.search).get('kaart');
+  // Een proefje: index.html?kaart=gehucht begint meteen een nieuw spel, zonder titelscherm en zonder de benoemingsbrief,
+  // en slaat niets op (S.proefje, js/opslaan.js). Voor de meetgereedschappen (gereedschap/schermen/, zichtproef/,
+  // cameraproef/). Tot ronde 4 van het snoeien (23 okt) kon een proefje ook op een kaart uit Tiled beginnen.
+  const PROEFJE = new URLSearchParams(window.location.search).get('kaart') === 'gehucht'; // geen tekst
 
   // Hoe hoog iets boven zijn tegel uitsteekt, om erop te kunnen klikken. Met sprites zijn de
   // figuren groter dan de vlakken waren, dus vraagt het aanwijzen het aan de sprites zelf.
@@ -31,7 +32,7 @@
   // regels er onderweg bij zetten (de heer, het slapen, het einde); alleen de zoom van het scherm
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
-  // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
+  // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=gehucht) begint meteen,
   // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land is dat van de maker uit `makerZaad`
   // (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.begin), of een nieuw (T.landVoorNieuwSpel, js/gebied.js),
   // met het lege begin erop.
@@ -56,12 +57,8 @@
       spelregels: T.nieuweSpelregels(),
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
     T.pasSpelregelsToe(S);
-    // Een proefje (?kaart=) begint op zijn eigen kaart, zonder brief; lukt dat niet (de kaart
-    // bestaat niet), dan valt het terug op het gehucht — een half aangelegde wereld mag nooit het
-    // spel breken.
-    const proefje = !!BEGIN_KAART && T.beginOpKaart(S, BEGIN_KAART);
-    if (!proefje) T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.dorp.aanvoerder
-    if (proefje) S.proefje = true;
+    T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.dorp.aanvoerder
+    if (PROEFJE) S.proefje = true;
     zetCameraOpAanvoerder();
     T.ui.reset(S);
   };
@@ -2111,7 +2108,7 @@
   formaat();
   T.ui.pasBeeldToe();
   // De pixel art gaat meteen laden; tot hij klaar is tekent het spel zijn vlakken, achter het titelscherm.
-  // Een proefje (?kaart=) slaat het titelscherm over.
+  // Een proefje (?kaart=gehucht) slaat het titelscherm over.
   T.sprites.laad();
   T.nieuwSpel();
   if (!S.proefje) T.ui.toonTitel(S);

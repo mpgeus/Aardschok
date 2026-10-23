@@ -5,8 +5,8 @@
 // ontwerp/beeld.md ("Wat vast is", 22 sep 2026: het hek, de bank en de regenton houden je tegen;
 // het hekje en de bedden niet), dat een hek laag genoeg blijft (geen palissade meer, zie
 // ontwerp/werklijst.md ronde 4a en ontwerp/beeld.md "Hekjes van wilgentenen en van latten"), en dat
-// een geplaatst tuinstuk in het spel ook echt tegenhoudt of juist niet. Dat laatste op een kleine
-// kaart in het geheugen, niet op kaarten/proef.tmj — die blijft van test/kaart.test.cjs.
+// een geplaatst tuinstuk in het spel ook echt tegenhoudt of juist niet. Dat laatste op het proefdorp
+// (test/grond.cjs); tot 23 okt op een kleine kaart uit T.laadKaart, die wegging met Tiled.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -73,47 +73,40 @@ test('een hek is laag en open: geen terugval naar het dichte staketsel van ronde
 
 const T = require('./laad.cjs').spel();
 
-// Een kleine kaart in het geheugen: gras overal, en twee tuinstukken op de objectlaag, net zoals
-// Marcel ze met "Tegel invoegen" in Tiled zou neerzetten. th=32 (tileheight), obj.x/y in die
-// eenheid (zie js/kaart.js en naar-kaarten.cjs se eigen wachter).
-function kleineKaart(naam1, naam2) {
-  const grondId = T.TEGELS.grond.tiles.findIndex((t) => t.naam === 'gras');
-  const tuinId1 = T.TEGELS.tuin.tiles.findIndex((t) => t.naam === naam1);
-  const tuinId2 = T.TEGELS.tuin.tiles.findIndex((t) => t.naam === naam2);
-  assert.ok(grondId >= 0 && tuinId1 >= 0 && tuinId2 >= 0, 'gras, ' + naam1 + ' of ' + naam2 + ' niet gevonden in tegels.json');
-  const GROND_GID = 1;
-  const TUIN_GID = GROND_GID + T.TEGELS.grond.tiles.length;
-  const b = 6;
-  const h = 6;
-  return T.laadKaart({
-    width: b, height: h, tileheight: 32,
-    tilesets: [{ firstgid: GROND_GID, source: 'grond.tsx' }, { firstgid: TUIN_GID, source: 'tuin.tsx' }],
-    layers: [
-      { type: 'tilelayer', width: b, height: h, data: new Array(b * h).fill(GROND_GID + grondId) },
-      { type: 'objectgroup', objects: [
-        { id: 1, gid: TUIN_GID + tuinId1, x: 2 * 32, y: 2 * 32 },
-        { id: 2, gid: TUIN_GID + tuinId2, x: 3 * 32, y: 2 * 32 },
-      ] },
-    ],
-  });
+const { proefDorp } = require('./grond.cjs');
+
+// Twee tuinstukken naast elkaar op het proefdorp, op de eerste twee vrije tegels, zoals de maker ze legt (T.maakVoorwerp
+// uit het vel, js/kaart.js): of ze tegenhouden, zegt "vast" in het vel. Geeft de kaart en de tegel van het eerste.
+function tweeTuinstukken(naam1, naam2) {
+  const { w, D } = proefDorp(T);
+  const vrij = (x, y) => T.isBegaanbaar(w, x, y) && !T.voorwerpOp(w, x, y);
+  const v = D.plek.vak;
+  for (let y = v.y + 2; y < v.y + v.h - 2; y++) {
+    for (let x = v.x + 2; x < v.x + v.b - 3; x++) {
+      if (!vrij(x, y) || !vrij(x + 1, y)) continue;
+      T.zetVoorwerp(w, T.maakVoorwerp(T.opzoekTegelNaam('tuin/' + naam1), x, y));
+      T.zetVoorwerp(w, T.maakVoorwerp(T.opzoekTegelNaam('tuin/' + naam2), x + 1, y));
+      return { w, x, y };
+    }
+  }
+  throw new Error('geen twee vrije tegels naast elkaar op het proefdorp');
 }
 
 test('een vast tuinstuk (het hek) houdt de aanvoerder tegen', () => {
-  const w = kleineKaart('hek-lat-x', 'kool');
-  assert.equal(T.tegel(w, 2, 2), 'muur');
-  assert.equal(T.isVast(w, 2, 2), true);
-  assert.equal(T.isBegaanbaar(w, 2, 2), false);
-  const v = T.voorwerpOp(w, 2, 2);
+  const { w, x, y } = tweeTuinstukken('hek-lat-x', 'kool');
+  assert.equal(T.isVast(w, x, y), true);
+  assert.equal(T.isBegaanbaar(w, x, y), false);
+  const v = T.voorwerpOp(w, x, y);
   assert.equal(v && v.soort, 'hek-lat-x');
 });
 
 test('een los tuinstuk (het hekje, of een bed) houdt de aanvoerder niet tegen', () => {
-  const w = kleineKaart('hekje-tenen-x', 'kruidenbed');
-  assert.equal(T.isVast(w, 2, 2), false);
-  assert.equal(T.isBegaanbaar(w, 2, 2), true);
-  assert.equal(T.isVast(w, 3, 2), false);
-  assert.equal(T.isBegaanbaar(w, 3, 2), true);
+  const { w, x, y } = tweeTuinstukken('hekje-tenen-x', 'kruidenbed');
+  assert.equal(T.isVast(w, x, y), false);
+  assert.equal(T.isBegaanbaar(w, x, y), true);
+  assert.equal(T.isVast(w, x + 1, y), false);
+  assert.equal(T.isBegaanbaar(w, x + 1, y), true);
   // het staat er wel, alleen blokkeert het niet
-  const v = T.voorwerpOp(w, 2, 2);
+  const v = T.voorwerpOp(w, x, y);
   assert.equal(v && v.soort, 'hekje-tenen-x');
 });

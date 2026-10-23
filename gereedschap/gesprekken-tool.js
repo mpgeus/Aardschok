@@ -1624,10 +1624,8 @@
     window.addEventListener('beforeunload', (e) => { if (vuil) { e.preventDefault(); e.returnValue = ''; } });
   }
 
-  // De schrijver is ook van gereedschap/wereld.html: klik daar een poppetje en zijn gesprek staat
-  // in hetzelfde scherm. Er is geen tweede bewerker — dit is hem, en die bladzijde levert alleen
-  // dezelfde gt-*-elementen aan. Vandaar dat dit bestand zichzelf niet start: de bladzijde die
-  // hem gebruikt, zegt wanneer.
+  // De bladzijde start de schrijver (gereedschap/gesprekken.html); de toetsen lezen de situaties
+  // (test/situaties.test.cjs).
   let gestart = false;
   T.gesprekkenTool = {
     async start() {
@@ -1635,30 +1633,6 @@
       gestart = true;
       await init();
     },
-    // Naar één persoon springen. Geeft false als die nog geen gesprek heeft, zodat de aanroeper
-    // kan vragen of er een moet komen.
-    kies(persoonId) {
-      if (!T.GESPREKKEN[persoonId]) return false;
-      huidigePersoonId = persoonId;
-      huidigeSituatieNr = 0;
-      herbouwAlles();
-      vuil = false;
-      updateStatus();
-      return true;
-    },
-    // Een gesprek beginnen voor iemand die er nog geen heeft, met zijn eigen id (de soort uit
-    // T.WEZENS, want daarop zoekt js/verkennen.js het gesprek op).
-    begin(persoonId, naam) {
-      if (T.GESPREKKEN[persoonId]) return this.kies(persoonId);
-      T.GESPREKKEN[persoonId] = { naam: naam || persoonId, start: 'welkom', knopen: { welkom: { tekst: [{ zeg: '' }], keuzes: [] } } };
-      huidigePersoonId = persoonId;
-      huidigeSituatieNr = 0;
-      herbouwAlles();
-      return true;
-    },
-    heeft: (persoonId) => !!T.GESPREKKEN[persoonId],
-    isVuil: () => vuil,
-    // Voor de toetsen en voor wereld.html: waar de situaties vandaan komen en wat ze betekenen.
     situatiesVan,
     staatVanSituatie,
     planGesprek,

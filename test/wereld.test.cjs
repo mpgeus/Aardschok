@@ -1,8 +1,6 @@
-// De wereld zonder scherm: dat elke kaart vanzelf een gebied is, hoe een hoog ding op zijn voet
-// sorteert, en de overgang van de ene kaart naar de andere en terug. De overgangen lopen over de
-// twee proefkaarten (proef en proefbos), die voor de toetsen aan elkaar vastzitten. Tot 25 sep ging
-// dit bestand over het erf en de toren van het oude spel, op kaarten/wereld.tmj; die kaart ging weg,
-// de machinerie bleef.
+// De wereld zonder scherm, op het proefdorp: de grond per tegel, hoe een hoog ding op zijn voet sorteert, wat er op een
+// tegel staat, het plein en de eilanden. Tot 25 sep ging dit bestand over het erf en de toren van het oude spel, en tot
+// 23 okt (ronde 4 van het snoeien) ook over de overgang tussen de twee proefkaarten uit Tiled; die gingen weg.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -107,152 +105,6 @@ test('T.tekenVolgorde: twee gebouwen gaan op hun hele voet, ook een lang gebouw 
 });
 
 // ---------------------------------------------------------------- de overgang
-
-// Een spel op de proefkaart, met de aanvoerder naast de uitgang naar het proefbos.
-function nieuwSpel() {
-  const S = { tijd: 0, effecten: [], wachters: [], inventaris: new Set(), bezocht: new Set(), gebieden: {}, dorp: {} };
-  S.wereld = T.gebied(S, 'proef');
-  const o = S.wereld.overgangen[0];
-  S.dorp.aanvoerder = T.maakWezen('aanvoerder', o.komt.x, o.komt.y);
-  S.wereld.wezens.push(S.dorp.aanvoerder);
-  S.modus = 'verkennen';
-  return S;
-}
-
-test('een overgang brengt je naar de andere kaart, naast de uitgang daar', () => {
-  const S = nieuwSpel();
-  const o = S.wereld.overgangen[0];
-  assert.equal(o.naar, 'proefbos');
-  // erop stappen zet de overgang klaar; de spellus voert hem uit (js/main.js)
-  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, 'proefbos');
-  T.gaNaarGebied(S, S.naarGebied);
-  assert.equal(S.wereld.gebied, 'proefbos');
-  // hij staat náást de uitgang, niet erop, en kan daar staan
-  const terug = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  assert.notDeepEqual([S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty], [terug.x, terug.y]);
-  assert.equal(T.afstand({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, terug), 1);
-  assert.equal(T.isBegaanbaar(S.wereld, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty), true);
-  assert.ok(S.wereld.wezens.includes(S.dorp.aanvoerder), 'de aanvoerder hoort nu bij het proefbos');
-  assert.ok(!T.gebied(S, 'proef').wezens.includes(S.dorp.aanvoerder), 'en niet meer bij de proefkaart');
-});
-
-test('en weer terug: dezelfde weg, de andere kant op, met dezelfde aanvoerder', () => {
-  const S = nieuwSpel();
-  S.dorp.aanvoerder.leven -= 7; // een klap onderweg
-  S.inventaris.add('sleutel');
-  T.gaNaarGebied(S, 'proefbos');
-  const leven = S.dorp.aanvoerder.leven;
-  const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, 'proef');
-  T.gaNaarGebied(S, S.naarGebied);
-  assert.equal(S.wereld.gebied, 'proef');
-  assert.equal(S.dorp.aanvoerder.leven, leven, 'een overgang kost geen leven, en geeft het ook niet terug');
-  assert.ok(S.inventaris.has('sleutel'), 'wat je bij je hebt, neem je mee');
-  const uitgang = S.wereld.overgangen[0];
-  assert.equal(T.afstand({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, uitgang), 1);
-});
-
-test('heen en terug kaatst niet: je landt nooit op een overgangstegel', () => {
-  // Ging eerder mis: landen op de tegel die de overgang afvuurt, en dan sta je om beurten hier en
-  // daar. Twee sloten: je landt er niet op (T.landingIn), en een overgang gaat pas weer af als je
-  // er een keer af bent geweest (S.netGeland).
-  const S = nieuwSpel();
-  for (let ronde = 0; ronde < 3; ronde++) {
-    for (const naar of ['proefbos', 'proef']) {
-      T.gaNaarGebied(S, naar);
-      const w = S.wereld;
-      assert.equal(w.gebied, naar);
-      assert.equal(T.overgangOp(w, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty), null, `je landt in ${naar} niet op een overgangstegel`);
-      assert.equal(T.isBegaanbaar(w, S.dorp.aanvoerder.tx, S.dorp.aanvoerder.ty, { deurenOpenen: true }), true);
-      assert.equal(S.naarGebied, null, 'er staat geen tweede overgang klaar');
-      // en de spellus laten draaien verandert daar niets aan
-      T.bijAankomst(S, S.dorp.aanvoerder, { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty });
-      assert.equal(S.naarGebied, null, 'stilstaan op de landingstegel vuurt niets af');
-    }
-  }
-});
-
-test('een overgang gaat pas af als je er je pas beëindigt, niet als je erlangs loopt', () => {
-  // Een overgang kan midden op een pad liggen; wie verderop wil zijn, wil niet halverwege weg zijn.
-  const S = nieuwSpel();
-  T.gaNaarGebied(S, 'proefbos');
-  const o = S.wereld.overgangen.find((x) => x.naar === 'proef');
-  S.netGeland = null;
-  // er doorheen lopen: er staat nog een stap in het pad
-  S.dorp.aanvoerder.pad = [{ x: o.x - 1, y: o.y }];
-  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, null, 'erlangs lopen brengt je niet weg');
-  // er je pas beëindigen: dan wel
-  S.dorp.aanvoerder.pad = [];
-  T.bijAankomst(S, S.dorp.aanvoerder, { x: o.x, y: o.y });
-  assert.equal(S.naarGebied, 'proef');
-});
-
-test('elk gebied heeft een weg terug', () => {
-  const S = nieuwSpel();
-  for (const naam of Object.keys(T.GEBIEDEN)) {
-    const w = T.gebied(S, naam);
-    assert.ok(w.overgangen && w.overgangen.length, `gebied "${naam}" heeft geen enkele overgang`);
-    for (const o of w.overgangen) {
-      if (!T.GEBIEDEN[o.naar]) {
-        // Een weg die nog nergens heen leidt, mag alleen op een proefkaart: de weg de wereld in
-        // van het gehucht, waar alleen de marskramer en de heer overheen komen.
-        assert.ok(w.proef, `${naam}: de overgang wijst naar een gebied dat niet bestaat: ${o.naar}`);
-        continue;
-      }
-      const plek = T.landingIn(T.gebied(S, o.naar), naam);
-      assert.equal(T.overgangOp(T.gebied(S, o.naar), plek.x, plek.y), null);
-    }
-  }
-});
-
-test('een gebied blijft staan zoals je het achterliet', () => {
-  const S = nieuwSpel();
-  T.gaNaarGebied(S, 'proefbos');
-  const spin = S.wereld.wezens.find((e) => e.soort === 'reuzenspin');
-  assert.ok(spin, 'er loopt een reuzenspin in het proefbos');
-  spin.dood = true;
-  T.gaNaarGebied(S, 'proef');
-  T.gaNaarGebied(S, 'proefbos');
-  assert.equal(S.wereld.wezens.find((e) => e.soort === 'reuzenspin').dood, true, 'een gedode spin blijft dood');
-});
-
-// ------------------------------------------------- elke kaart is vanzelf een gebied (js/gebied.js)
-
-test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregistreerd is', () => {
-  // Dit is de hele bedoeling van de editor: Marcel tekent kaarten/<naam>.tmj, draait npm run
-  // kaarten, en `overgang: "<naam>"` werkt. Staat er ergens weer een lijstje met de hand, dan
-  // valt een nieuwe kaart daar stilletjes buiten.
-  for (const naam of Object.keys(T.KAARTEN)) {
-    assert.ok(T.GEBIEDEN[naam], `kaart "${naam}" hoort een gebied te zijn`);
-  }
-  assert.deepEqual(Object.keys(T.GEBIEDEN).sort(), Object.keys(T.KAARTEN).sort(), 'en er staat niets in code');
-  // en de naam die de speler ziet komt uit de kaart zelf (de eigenschap "naam" van de map)
-  assert.equal(T.GEBIEDEN.proefbos.naam, 'The test wood');
-});
-
-test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlopen', () => {
-  // Marcel typt "dorp" in Tiled en tekent kaarten/dorp.tmj pas morgen. Dan hoort het spel te
-  // klagen op de console, maar gewoon door te spelen: je blijft staan waar je staat.
-  const S = nieuwSpel();
-  const waar = { x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty };
-  const wereld = S.wereld;
-  const fouten = [];
-  const oud = console.error;
-  console.error = (m) => fouten.push(m);
-  try {
-    T.gaNaarGebied(S, 'ditbestaatniet');
-  } finally {
-    console.error = oud;
-  }
-  assert.equal(S.wereld, wereld, 'je blijft in hetzelfde gebied');
-  assert.deepEqual({ x: S.dorp.aanvoerder.tx, y: S.dorp.aanvoerder.ty }, waar, 'en op dezelfde tegel');
-  assert.equal(S.naarGebied, null, 'de overgang wordt niet elke tel opnieuw geprobeerd');
-  assert.equal(S.wereld.wezens.includes(S.dorp.aanvoerder), true, 'de aanvoerder staat nog in zijn eigen wereld');
-  assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
-});
 
 test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
   // Achter de weg is nog niets; de speeltest telde die fout als zijn aanvoerder de weg af liep (3 okt).
@@ -380,8 +232,6 @@ test('de tegels van het plein komen één keer per plein, en een plek op het ple
     assert.deepEqual(T.plekOpHetPlein(D, 3), vroeger(D, 3));
   }
   assert.deepEqual(T.pleinTegels({ plek: { plein: null } }), [], 'een plek zonder plein heeft geen tegels op het plein');
-  const proef = T.gebied({}, 'proef');
-  assert.equal(T.plekOpHetPlein({ wereld: proef, plek: proef.plekken[0] }, 1), null);
 });
 
 // ---------------------------------------------------------------------------------------------

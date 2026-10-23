@@ -59,7 +59,7 @@
 //     kar:         true,             // en hij krijgt een eigen ossenkar als hij af is (de schuur; js/kar.js)
 //     menu:        true,             // false: niet via het bouwmenu (stadsmuur, palissade — die hebben
 //                                    // een eigen manier van neerzetten, geen enkele voet)
-//     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
+//     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.opzoekTegelNaam het opzoekt
 //                                    // (js/kaart.js). null: (nog) geen tekening, zie "opmerking".
 //     tekeningen:  ['gebouwen/dorpshuis1', 'gebouwen/vakwerkhuis'],  // of meer dan één: dan krijgt
 //                                    // elk nieuw gebouw van deze soort er een, nooit twee keer

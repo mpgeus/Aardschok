@@ -156,7 +156,7 @@ function schrijfTsx(vel) {
     x += ` <tile id="${id}"${rechthoek}>\n  <properties>\n`;
     // Een lege cel (t.naam is null: gereserveerd voor een tegel die er later bij komt, zie
     // vasteVolgordeEnCapaciteit) krijgt een lege naam in plaats van de tekst "null", zodat
-    // naar-kaarten.cjs se wachter hem herkent als leeg.
+    // hij als leeg leest.
     x += eigenschapXml('naam', t.naam || '');
     x += eigenschapXml('vast', !!t.vast);
     if (t.beslaat) x += eigenschapXml('beslaat', `${t.beslaat[0]}x${t.beslaat[1]}`);
@@ -1066,7 +1066,7 @@ function leesVelUitTsx(veldNaam) {
   }
   const aantal = Number(attr(kop, 'tilecount')) || tiles.length;
   // Een gat (geen <tile>-blok voor dit id) is een lege cel, geen tegel die toevallig "de naam
-  // van het vel" draagt: anders zou naar-kaarten.cjs se wachter zo'n lege cel niet herkennen.
+  // van het vel" draagt: anders leest zo'n lege cel niet als leeg.
   for (let i = 0; i < aantal; i++) if (!tiles[i]) tiles[i] = { naam: '', vast: false };
   const vel = {
     naam: veldNaam,

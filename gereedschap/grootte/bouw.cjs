@@ -14,7 +14,7 @@ const { T } = require('./harnas.cjs');
 function vergroot(S, L) {
   const w = S.wereld;
   if (L <= w.b && L <= w.h) return;
-  const gras = { vel: 'rand', id: 0, naam: 'gras' }; // één ding voor elke tegel gras, zoals T.laadKaart
+  const gras = { vel: 'rand', id: 0, naam: 'gras' }; // één ding voor elke tegel gras, zoals T.grondVanGid
   for (let y = 0; y < L; y++) {
     if (y >= w.h) {
       w.tegels.push([]);
@@ -25,7 +25,7 @@ function vergroot(S, L) {
       w.grond[y].push(gras);
     }
   }
-  // buiten is elke rij kamers dezelfde (T.laadKaart): een nieuwe, even breed
+  // buiten is elke rij kamers dezelfde: een nieuwe, even breed
   w.burenKamers = new Array(L).fill(new Array(L).fill(['buiten']));
   w.b = L;
   w.h = L;

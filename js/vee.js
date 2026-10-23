@@ -399,7 +399,7 @@
   // Een dier bij een weide zetten. Het dwaalt dan binnen de rechthoek van e.weide, en loopt na een
   // wissel vanzelf naar zijn nieuwe weide (js/verkennen.js, T.dwaalTegelsOpWeide en T.wegNaarWeide).
   // Een plek en een straal rond het midden krijgt het er ook bij, zoals elk dwalend wezen: voor wie
-  // daarnaar kijkt (gereedschap/wereld.html tekent de dwaalstraal), niet meer voor het dwalen zelf.
+  // daarnaar kijkt, niet meer voor het dwalen zelf.
   T.zetOpWeide = function (e, veld) {
     e.weide = veld;
     e.thuis = { x: veld.x + (veld.b - 1) / 2, y: veld.y + (veld.h - 1) / 2 };

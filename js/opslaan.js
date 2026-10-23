@@ -360,7 +360,7 @@
   // telt niet als venster; het titelscherm wel, want daarachter wacht een spel dat nog niet begonnen is.
   T.waaromNietOpslaan = function (S) {
     if (!S || !S.kalender || !S.wereld) return T.t('There is no game yet.');
-    // Een proefje (?kaart=, js/main.js) is geen spel: het mag het spel van de speler niet overschrijven.
+    // Een proefje (?kaart=gehucht, js/main.js) is geen spel: het mag het spel van de speler niet overschrijven.
     if (S.proefje) return T.t('A try-out is not saved.');
     if (S.dorp.einde || S.modus === 'einde') return T.t('The game is over.');
     if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return T.t('Close the window first.');

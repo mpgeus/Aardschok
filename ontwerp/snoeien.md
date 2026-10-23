@@ -309,6 +309,34 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
      bij een put of kapel in de hand, en de spelregels "Wants", "The inn and the market" en "Decline". Wat de raad nog
      zegt: welke huizen op bouwstof wachten, en wie het maakt (`opmerkingen.md`).
 
+## Ronde 4: Tiled eruit (6b1 van vraag 187; voorstel van Claude, 23 okt)
+
+**Marcel (23 okt) koos alles zoals voorgesteld:** alle vijf stappen, het bord aan de rand weg, de monsters weg, en de
+tas en het goud in de gesprekken weg met de quests. Daarvoor (20 okt, 6b1): "Tiled eruit in een snoeironde, de
+proefkaarten naar het proefdorp", en (23 okt, G) de quests van het oude spel "gaan weg met tiled" (`scenario.md`, 4 en 9).
+
+Aan Tiled hingen drie lagen van het torenspel, en het spel liep er elke keer doorheen: elk nieuw spel via `T.gebied(S,
+'gehucht')`, elke tik langs `T.gaNaarGebied` en `T.werkQuestsBij`, elke padzoektocht langs de deuren, en het tekenen langs
+de kamers die je kent. In vijf commits, elk met groene toetsen (Tiled eerst: `T.laadKaart` leunt op de quests, het
+gereedschap van de quests niet op Tiled):
+
+1. **Tiled:** `kaarten/`, `T.laadKaart`, `gereedschap/wereld.html` met zijn keuring, `gereedschap/tiled/`, `npm run
+   kaarten`, de routes in de server, en `?kaart=proef`. `js/kaart.js` houdt alleen de tegels op naam (`T.opzoekTegelNaam`,
+   `T.maakVoorwerp`, `T.grondVanGid`, `T.kenSoortVan`), en `?kaart=gehucht` blijft voor de meetgereedschappen.
+2. **De quests en de tas:** `js/quest.js`, `js/quests.js`, `gereedschap/quests.html` met zijn bewerker, `Spel.debug.quest`,
+   `S.quests`, `S.inventaris`; een gesprek kijkt alleen nog naar vlaggen (`heeft`, `quest` en `goud` gaan weg, en ook
+   `geef` en `neem`). De triggers krijgen later hun eigen taal (`scenario.md`, 2).
+3. **De gebieden:** één wereld, `S.wereld`, zonder `S.gebieden`, overgangen, `S.naarGebied`, `S.netGeland` en
+   `S.bezocht`; het bord *The road into the world* aan de rand van je land gaat mee (je kunt al op tocht over het hele
+   eiland). De marskramer en de heer komen nog langs `D.plek.uitgang`. Het begin van een spel verhuist naar `js/begin.js`.
+4. **De deuren, de kamers en de monsters:** `T.maakProefkamers`, de deuren, `w.bekend` en `huidigeKamer`, de geheimen, en
+   het slijm, het skelet, de reuzenspin en de kobold; de toetsen die erop speelden (de dorpelingen, de regels, het vee, de
+   voetafdruk) spelen op het proefdorp. Gemeten: de tik en het tekenen, ervoor en erna.
+5. **Afronden:** de ontwerpbestanden, het bewaren naar versie 25, en een opruimronde.
+
+**Blijft:** de tegelpijplijn (`npm run tiled`, `randtegels`): die maakt de tegels voor het spel, en `rand.tsx` en
+`kust.tsx` zijn er de bron van. Een andere naam, en de `.tsx` voor Tiled weg, staat in `opmerkingen.md`.
+
 ## Later
 
 - **Ronde 2, na 1f:** `js/verzoeken.js` en `js/ondernemers.js` (de mensen vragen wat ze bouwen), `js/erven.js` (het

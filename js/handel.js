@@ -11,8 +11,8 @@
 // gesprek (js/gesprekken.js, een antwoord met doe: { handel: true }), want je bent de aanvoerder, een
 // poppetje in het dorp: je loopt naar hem toe.
 //
-// Alleen waar hij een plek heeft: "marskramer" in kaarten/<naam>.betekenis.json (js/kaart.js).
-// Het gehucht heeft die, de kaarten van het oude spel niet; daar blijft dit bestand stil.
+// Alleen waar hij een plek heeft (D.plek.marskramer, van de maker, js/maker.js); zonder blijft dit
+// bestand stil.
 (function (T) {
   'use strict';
 

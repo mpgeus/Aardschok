@@ -232,9 +232,8 @@
     // Wie geen huis heeft (js/afbreken.js, T.wordtDakloos), slaapt buiten op het plein en hangt er 's ochtends en 's avonds
     // rond; overdag werkt hij zoals iedereen.
     if (p && !p.huis && !p.aanvoerder && !p.soldaat && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
-    // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
-    // laadt de bewoners niet.
-    if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
+    // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js).
+    if (T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     // Een soldaat (js/soldaten.js) is in dienst of rust (vraag 170, stap 4; T.inDienst in js/kiezen.js): in zijn dienst
     // staat hij bij het wachthuis (zijn post gaf T.bevelAnker al), daarbuiten slaapt hij thuis (wie geen huis heeft, op
     // het plein). Naar de put of de herberg gaat hij niet.

@@ -1076,7 +1076,7 @@
     const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'aanvoerder';
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     if (S.figuurGegevens(naam) || !e.vel) return naam;
-    // Alleen een bewoner heeft een uiterlijk; het gereedschap (gereedschap/wereld.html) laadt js/bewoners.js niet.
+    // Alleen een bewoner heeft een uiterlijk.
     const eigen = e.bewoner ? S.inKleren(e, S.figuurVanUiterlijk(e, T.UITERLIJK_LIJF[e.vel])) : null;
     return eigen || e.vel;
   }

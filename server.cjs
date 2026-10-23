@@ -34,98 +34,6 @@ const OPSLAAN = {
   '/gereedschap/api/quests-opslaan': path.join(MAP, 'js', 'quests.js'),
 };
 
-// En het enige leesadres dat verder gaat dan een bestand teruggeven: welke kaarten staan er in
-// kaarten/? Dat is er voor gereedschap/wereld.html, zodat een kaart die net in Tiled getekend is
-// meteen in de keuzelijst staat, ook voordat npm run kaarten gedraaid heeft. Het kijkt altijd in
-// die ene map en geeft alleen namen terug, nooit inhoud.
-function kaartNamen(res) {
-  fs.readdir(path.join(MAP, 'kaarten'), (fout, bestanden) => {
-    if (fout) {
-      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('Kaarten lezen mislukt: ' + fout.message);
-      return;
-    }
-    const namen = bestanden.filter((b) => b.toLowerCase().endsWith('.tmj')).map((b) => b.slice(0, -4)).sort();
-    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
-    res.end(JSON.stringify(namen));
-  });
-}
-
-// De betekenis van één kaart opslaan: kaarten/<naam>.betekenis.json, geschreven door
-// gereedschap/wereld.html. De naam komt wel uit het verzoek, en daarom staan er twee sloten op:
-// hij mag alleen uit letters, cijfers en streepjes bestaan (dus geen ../ en geen punt), en er
-// moet een kaarten/<naam>.tmj naast liggen. Het pad wordt daarna hier samengesteld, nooit
-// overgenomen. Tiled schrijft dit bestand nooit — daarom is dit het enige bestand op schijf dat
-// het gereedschap verandert, en blijven de .tmj-en van Marcel onaangeroerd.
-//
-// Tegen overschrijven: het gereedschap stuurt mee hoe het bestand eruitzag toen het het las
-// ("vorige"). Klopt dat niet meer met wat er nu staat, dan schrijven we niet en zeggen we het,
-// zodat twee open bladen elkaars werk niet wissen.
-// De kaarten bundelen tot kaarten/kaarten.js, zodat het spel ziet wat het gereedschap zojuist
-// opsloeg. Dit is hetzelfde als npm run kaarten; er komt niets uit het verzoek in, het is altijd
-// precies dit ene script. De server luistert alleen op 127.0.0.1.
-function bundel(res) {
-  execFile(process.execPath, [path.join(MAP, 'gereedschap', 'pixelart', 'naar-kaarten.cjs')], { cwd: MAP }, (fout, uit, err) => {
-    // naar-kaarten.cjs geeft een foutcode als een kaart een tegel noemt die niet bestaat; dat is
-    // iets om te melden, maar kaarten.js is dan wel geschreven.
-    res.writeHead(fout ? 500 : 200, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end((uit || '') + (err || '') || 'klaar');
-  });
-}
-
-// Eén ding per regel. Dat is niet om mooi te doen: zo is het verplaatsen van één dorpeling ook
-// één regel in `git diff`, en zie je in de geschiedenis terug wat er werkelijk veranderde.
-function schrijfBetekenis(inhoud) {
-  const { dingen, ...rest } = inhoud;
-  const kop = Object.entries(rest).map(([k, v]) => `  ${JSON.stringify(k)}: ${JSON.stringify(v)},`);
-  const regels = (dingen || []).map((d) => '    ' + JSON.stringify(d));
-  return `{\n${kop.join('\n')}\n  "dingen": [\n${regels.join(',\n')}\n  ]\n}\n`;
-}
-
-function betekenisPad(naam) {
-  if (!/^[A-Za-z0-9_-]+$/.test(naam)) return null;
-  const tmj = path.join(MAP, 'kaarten', naam + '.tmj');
-  if (!fs.existsSync(tmj)) return null;
-  return path.join(MAP, 'kaarten', naam + '.betekenis.json');
-}
-
-function slaBetekenisOp(req, res, naam) {
-  const BESTAND = betekenisPad(naam);
-  if (!BESTAND) {
-    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end(`Geen kaart met de naam "${naam}"`);
-    return;
-  }
-  leesLijf(req, res, (body) => {
-    let pakket;
-    try {
-      pakket = JSON.parse(body);
-      if (!pakket || typeof pakket !== 'object' || !Array.isArray(pakket.inhoud.dingen)) throw new Error('geen { vorige, inhoud: { dingen: [] } }');
-    } catch (e) {
-      res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('Onleesbaar: ' + e.message);
-      return;
-    }
-    const huidig = fs.existsSync(BESTAND) ? fs.readFileSync(BESTAND, 'utf8') : null;
-    if ((pakket.vorige || null) !== huidig) {
-      res.writeHead(409, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end(`kaarten/${naam}.betekenis.json is intussen veranderd; ververs eerst, anders gaat er werk verloren`);
-      return;
-    }
-    const tekst = schrijfBetekenis(pakket.inhoud);
-    try {
-      if (huidig !== null) fs.writeFileSync(BESTAND + '.bak', huidig, 'utf8');
-      fs.writeFileSync(BESTAND, tekst, 'utf8');
-    } catch (e) {
-      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('Schrijven mislukt: ' + e.message);
-      return;
-    }
-    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    res.end(JSON.stringify({ ok: true, tekst }));
-  });
-}
-
 // Een schermafdruk van het spel als PNG bewaren in gereedschap/pixelart/uit/schermen/<naam>.png
 // (niet in git), zodat een sessie of agent een blik op het spel kan laten zien zonder de hele
 // afbeelding als tekst door zijn eigen gesprek te halen. Spel.debug.schermafdruk('naam') in
@@ -509,18 +417,6 @@ http
       draaiToetsen(res);
       return;
     }
-    if (req.method === 'GET' && pad === '/gereedschap/api/kaarten') {
-      kaartNamen(res);
-      return;
-    }
-    if (req.method === 'POST' && pad === '/gereedschap/api/bundelen') {
-      bundel(res);
-      return;
-    }
-    if (req.method === 'POST' && pad.startsWith('/gereedschap/api/betekenis/')) {
-      slaBetekenisOp(req, res, pad.slice('/gereedschap/api/betekenis/'.length));
-      return;
-    }
     if (req.method === 'POST' && pad.startsWith('/gereedschap/api/taal/')) {
       slaTaalOp(req, res, pad.slice('/gereedschap/api/taal/'.length));
       return;
@@ -556,7 +452,6 @@ http
     console.log(`${NAAM} draait op ${hier}`);
     console.log('');
     console.log(`  het spel       ${hier}/`);
-    console.log(`  de wereld      ${hier}/gereedschap/wereld.html      kaarten, mensen, quests, controle`);
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
     console.log(`  de quests      ${hier}/gereedschap/quests.html`);
     console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen, met de speeltest`);
