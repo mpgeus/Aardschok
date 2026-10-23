@@ -30,9 +30,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 **Wacht op Marcel**
 - **De dragers en het egaliseren bekijken** (184 met 182, op de branch van 23 okt), en zeggen of ze in `main` mogen. In
   het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een drager, en met *Height* op *Hills*
-  de grond die in vier stappen vlak wordt. Twee vragen: blijft de huifkar in het kamp staan als het raadhuis af is (nu
-  wel), en is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en
-  de schop, en de kleinere kar bij de schuur, komen met de art.
+  de grond die in vier stappen vlak wordt. De huifkar gaat op in het raadhuis, en wat erin zat, ligt als losse stapel
+  waar hij stond (Marcel, 23 okt; gebouwd). Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren
+  met een plank, een stam, een steen en de schop, en de kleinere kar bij de schuur, komen met de art.
 - **Het demojaar spelen** met de speellijst (`speelbaar.md`, "De speellijst van het demojaar"); wat scheef zit, eerst
   met een getal uit de werkbank.
 - **183, de huizen op 65 procent**, in één keer bij Marcel thuis, door de pijplijn: de negen stappen bij R, 183 (de
@@ -1378,7 +1378,9 @@ hebben we zoizo nodig. volgorde is akkoord"):
   raadhuis er is; een schuur krijgt nog een kar), de kolonist een jaar op vijf eilanden, de tik meten, het opslaan een
   versie hoger; (3) egaliseren (182); (4) `spel.md` en `code.md` bij. De figuren (een plank, een stam, een steen, de
   schop, de kleinere kar) komen later van Marcel; tot dan lopen de dragers met wat er is (de takkenbos, de mand, de
-  schoof) en houden de bouwers de bijl. **Besloten** (Marcel, 23 okt): **één stuk per keer, van alles** (zoals de
+  schoof) en houden de bouwers de bijl. **Besloten** (Marcel, 23 okt): **de huifkar verdwijnt als het raadhuis af is**
+  ("deze gaat op in het raadhuis. de spullen staan dan op de grond"): wat erin zat, ligt als losse stapel waar hij stond,
+  en telt pas als de dragers het binnen hebben; **één stuk per keer, van alles** (zoals de
   opperman van KaM; één getal in de werkbank), en bij 182 **zakt of rijst de grond in een paar stappen** naar het vlak
   (zo'n vier; elke stap tekent alleen dat stukje grond opnieuw). **Gebouwd** (23 okt): de dragers (`spel.md`, "Zo werken
   de dragers nu") en het egaliseren ("Zo werkt het egaliseren nu").

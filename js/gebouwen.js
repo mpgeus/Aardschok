@@ -1520,6 +1520,7 @@
     // js/behoeften.js). De maaltijd, in gelijke delen van elke soort die er ligt, en daaruit de afwisseling; het
     // zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js; vraag 154).
     const gegeten = T.eetVandaag(D, dag);
+    T.laadDeHuifkarUit(D); // is het raadhuis af, dan gaat de huifkar erin op, na het eten (js/begin.js)
     T.tikWijngaardDag(D, dag); // de wijn die nog in de manden zat, en of het gezin morgen plukt (js/wijngaard.js)
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
     // (T.boerenKiezenVelden, js/akkers.js; vraag 132).

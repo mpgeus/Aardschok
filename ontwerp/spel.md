@@ -150,8 +150,11 @@ dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in
 
 **Zo werken de dragers nu** (23 okt, vraag 184; Marcel, 20 okt: "Ik wil ook dat de mensen zonder werk zorgen voor het
 vervoer van materiaal", "3a1", "3b1", en 23 okt: "Eén stuk, van alles"; `js/kar.js`, `js/bouwen.js`): het begin heeft geen
-kar meer. De huifkar rijdt het land in en blijft in het kamp staan: daar ligt de voorraad tot het raadhuis af is, en
-daarna in het raadhuis. Wie geen werk heeft (volwassen of jong, geen dagloner, niet de aanvoerder), bouwt of draagt: één
+kar meer. De huifkar rijdt het land in en blijft in het kamp staan: daar ligt de voorraad tot het raadhuis af is. Dan
+gaat de huifkar op in het raadhuis (Marcel, 23 okt: "de huifkar verdwijnt, deze gaat op in het raadhuis. de spullen staan
+dan op de grond"): die avond eten ze nog uit de kar, en daarna ligt wat erin zat als losse stapel waar hij stond. Het
+telt pas weer als de dragers het binnen hebben: met vier gezinnen zo'n vijf dagen, het graan eerst, dus eten ze die dagen
+minder afwisselend. Het goud draagt de aanvoerder zelf. Wie geen werk heeft (volwassen of jong, geen dagloner, niet de aanvoerder), bouwt of draagt: één
 rij klusjes. Elke ochtend krijgt elke bouwplaats, in de volgorde waarin je bouwde, zoveel bouwers als er werk is (bij het
 rooien vier, daarna zoveel als het hout dat er ligt werk geeft), de dichtsten bij eerst; wie overblijft, draagt. Een
 drager neemt één stuk per keer (een getal in de werkbank), loopt in het tempo van een mens (een weg helpt hem niet), en

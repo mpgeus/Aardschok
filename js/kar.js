@@ -34,7 +34,8 @@
 // zijn de vervoerders (T.vervoerdersVan). Zolang hij iets draagt, is hij bezig (e.werkt, soort 'vervoer': hij dwaalt dan
 // niet, js/verkennen.js), en zegt `e.draagt` wat je hem ziet dragen (js/sprites.js; tot er dragers met een plank, een
 // stam of een steen zijn, een bundel, een mand of een schoof). De huifkar van het begin rijdt niet meer: hij staat in het
-// kamp, en is de opslag tot het raadhuis er is (T.deVoorraad).
+// kamp, en is de opslag tot het raadhuis er is (T.deVoorraad); dan gaat hij op in het raadhuis, en wat erin zat, ligt als
+// losse stapel waar hij stond (js/begin.js).
 //
 //   D.karren   de karren van het dorp, wezens in w.wezens (die van elke schuur, als hij af is)
 //   p.vervoer  wat de regel van een drager weet: { drager: true, bewoner: p, tx, ty, lading, rit, klok, rust }, met zijn
@@ -124,6 +125,18 @@
     if (rest <= 1e-9) return;
     const s = bij.stapel || (bij.stapel = {});
     s[wat] = (s[wat] || 0) + rest;
+  };
+
+  // Een losse stapel op tegel `plek` met de waren `ligt` ({ wat: hoeveel }): een stapel zonder huis, tot de dragers hem
+  // leeg halen (`stapel` in T.GEBOUWEN). Wat er bij een afgebroken gebouw lag (js/afbreken.js), en wat er in de huifkar
+  // zat als het raadhuis af is (js/begin.js).
+  T.legLosseStapel = function (D, plek, ligt) {
+    const g = {
+      soort: 'stapel', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, deur: { x: plek.x, y: plek.y }, tekening: null,
+      klaar: true, klaarOp: D.kalender ? Math.floor(D.kalender.dag) : 0, handen: 0, voorwerp: null, stapel: ligt,
+    };
+    D.gebouwen.push(g);
+    return g;
   };
 
   // Hoeveel er op de stapel van g ligt, alles samen.
@@ -297,7 +310,7 @@
     return T.deVoorraad(D);
   }
   // Waar de voorraad van het dorp ligt: de deur van het raadhuis (de eerste opslag die geen schuur is), en tot dat er is
-  // de huifkar in het kamp (die rijdt niet meer, vraag 184: je laadt en lost ernaast); of null. Ook waar de mannen van de
+  // de huifkar in het kamp (die rijdt niet meer, vraag 184: je laadt en lost ernaast; daarna is hij weg); of null. Ook waar de mannen van de
   // heer halen wat hij nam (js/heer.js).
   T.deVoorraad = function (D) {
     const huis = D.gebouwen.find((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag && !T.GEBOUWEN[g.soort].kar);
@@ -547,7 +560,8 @@
     for (const g of D.gebouwen) {
       if (!g.stapel || (g.karKanNietTot || 0) > t || !vanMij(g)) continue;
       const n = T.stapelVan(g) - alGehaald(D, g, e, alle);
-      if (n < IN().minstens) continue;
+      // een losse stapel (er komt niets meer bij) halen ze helemaal leeg; een stapel bij een deur pas vanaf `minstens`
+      if (n < (g.soort === 'stapel' ? 1e-6 : IN().minstens)) continue;
       if (!beste || n > beste.n) beste = { g, n };
     }
     if (beste) return { plan: 'halen', naar: beste.g };
@@ -741,11 +755,7 @@
   // Wat de kar doet, voor bij de muis (js/verkennen.js).
   T.karTekst = function (D, e) {
     if (e.vanDeHeer) return T.heerWagenTekst(D, e); // de wagen van de heer (js/heer.js)
-    if (!T.karrenVan(D).includes(e)) {
-      return D.gebouwen.some((g) => g.soort === 'raadhuis' && g.klaar)
-        ? T.t('The covered wagon that brought you here')
-        : T.t('The covered wagon: your stores, until the town hall is ready');
-    }
+    if (!T.karrenVan(D).includes(e)) return T.t('The covered wagon: your stores, until the town hall is ready');
     const kar = T.hoofdletter(e.naam);
     const R = e.rit;
     const gebouw = R && R.naar && T.GEBOUWEN[R.naar.soort] ? T.GEBOUWEN[R.naar.soort].naam : null;

@@ -9,7 +9,8 @@
 // een nieuw gezin (T.woonruimteVan, js/gebouwen.js). De tent van de aanvoerder is zijn huis (`huis: 'aanvoerder'`): daar slaapt
 // hij, en daar vertrekt de bode, tot zijn huis er staat.
 //
-// Wat het dorp van het lege begin weet, staat in D.begin (vanaf T.nieuwDorp, js/dorp.js): { kar: <het wezen>, kamp:
+// Wat het dorp van het lege begin weet, staat in D.begin (vanaf T.nieuwDorp, js/dorp.js): { kar: <het wezen, null zodra
+// het raadhuis af is>, kamp:
 // 'onderweg', 'op' of 'weg' (de laatste tent is weg), en hoe ver de aankomst is }.
 (function (T) {
   'use strict';
@@ -251,9 +252,13 @@
 
   // Het raadhuis (1d; `aanvoerder` in T.GEBOUWEN): is het af, dan trekt de aanvoerder er met zijn gezin in. Het is
   // voortaan zijn huis (`huis: 'aanvoerder'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
-  // kampvuur), en het is voortaan de opslag waar de dragers lossen (js/kar.js). De huifkar blijft staan; een ossenkar komt
-  // er pas met een schuur (vraag 184, 3b1; tot 23 okt werd de huifkar hier de ossenkar). Geen gezin uit het kamp trekt
-  // erin: het is geen woning.
+  // kampvuur), en het is voortaan de opslag waar de dragers lossen (js/kar.js). De huifkar gaat op in het raadhuis
+  // (Marcel, 23 okt: "de huifkar verdwijnt, deze gaat op in het raadhuis. de spullen staan dan op de grond"): wat erin zat
+  // (alles in de voorraad wat gedragen wordt; het goud niet), ligt als losse stapel waar hij stond, en telt pas weer als
+  // de dragers het binnen hebben. Een ossenkar komt er pas met een schuur (vraag 184, 3b1; tot 23 okt werd de huifkar
+  // hier de ossenkar). Geen gezin uit het kamp trekt erin: het is geen woning. Het uitladen gebeurt na het eten van die
+  // nacht (T.laadDeHuifkarUit): die avond eten ze nog uit de kar; anders at het dorp uit een lege opslag tot de dragers het
+  // binnen hadden.
   function verhuisDeAanvoerder(D) {
     const huis = D.gebouwen.find((g) => g.soort === 'raadhuis' && g.klaar && g.huis !== 'aanvoerder');
     const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'aanvoerder');
@@ -261,9 +266,28 @@
     T.verhuis(D, inHuis(D, tent), huis);
     tent.huis = null;
     huis.huis = 'aanvoerder';
-    T.zeg(D, T.t('The town hall is ready: you and your family leave the tent, and from now on the goods are stored there.'));
+    T.zeg(D, T.t('The town hall is ready: you and your family move in. The covered wagon goes into it, and the carriers bring in what it held.'));
     if (!inHuis(D, tent).length) haalTentWeg(D, tent);
   }
+
+  // Elke nacht na het eten (T.tikGebouwenDag, js/gebouwen.js): woont de aanvoerder in het raadhuis en staat de huifkar er
+  // nog, dan is de huifkar weg, en ligt wat erin zat waar hij stond (hierboven).
+  T.laadDeHuifkarUit = function (D) {
+    const kar = D.begin && D.begin.kar;
+    if (!kar || !D.gebouwen.some((g) => g.soort === 'raadhuis' && g.klaar && g.huis === 'aanvoerder')) return;
+    const w = D.wereld;
+    const plek = D.plek.kamp.kar;
+    if (w.wezens.includes(kar)) w.wezens.splice(w.wezens.indexOf(kar), 1);
+    D.begin.kar = null;
+    const ligt = {};
+    for (const wat of Object.keys(D.voorraad)) {
+      const n = D.voorraad[wat];
+      if (!(n > 1e-6) || !T.gaatMetVervoer(D, wat)) continue;
+      ligt[wat] = n;
+      T.wijzigVoorraad(D, wat, -n);
+    }
+    if (Object.keys(ligt).length) T.legLosseStapel(D, { x: plek.x, y: plek.y }, ligt);
+  };
 
   // Een lege tent gaat van de kaart en uit het dorp; is het de laatste, dan gaat ook het kampvuur uit.
   function haalTentWeg(D, tent) {
@@ -555,6 +579,12 @@
         IN().bouwBereik = echt;
       }
       dagen(S, 2);
+      // De huifkar ging op in het raadhuis, en wat erin zat, ligt als losse stapel waar hij stond (verhuisDeAanvoerder,
+      // hierboven): in het proefdorp is het meteen binnen, alsof de dragers het al haalden.
+      for (const g of D.gebouwen.filter((x) => x.soort === 'stapel')) {
+        for (const wat in g.stapel) T.wijzigVoorraad(D, wat, g.stapel[wat]);
+        D.gebouwen.splice(D.gebouwen.indexOf(g), 1);
+      }
       if (weiveld) {
         const a = w.akkers.find((x) => x.x === weiveld.x && x.y === weiveld.y);
         a.bestemming = a.plan = 'weide';

@@ -248,7 +248,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   assert.ok(T.isBegaanbaar(w, ver.x, ver.y) || T.isVast(w, ver.x, ver.y), 'buiten het bereik is gewoon land');
 });
 
-test('het raadhuis: één keer in het bouwmenu; is het af, dan verhuist hij, en is het de opslag (de huifkar blijft staan)', () => {
+test('het raadhuis: één keer in het bouwmenu; is het af, dan verhuist hij, is het de opslag, en gaat de huifkar erin op', () => {
   huisVanDeAanvoerder();
 });
 function huisVanDeAanvoerder() {
@@ -258,12 +258,18 @@ function huisVanDeAanvoerder() {
   const aanvoerderTent = D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'aanvoerder');
   const gezin = wonenIn(D, aanvoerderTent);
   const kampGezinnen = T.kampTenten(D).length;
+  const kar = D.begin.kar;
+  const karPlek = { ...D.plek.kamp.kar };
   const [huis] = zetHutten(D, 1, 'raadhuis');
   assert.ok(!T.inBouwmenu(D, 'raadhuis'), 'staat het er (ook in aanbouw), dan niet meer');
   assert.equal(T.plaatsGebouw(D, 'raadhuis', huis.x + 20, huis.y).gelukt, false, 'en een tweede kan niet');
   assert.equal(D.gebouwen.find((g) => g.huis === 'aanvoerder'), aanvoerderTent, 'tot het af is, woont hij in zijn tent');
   gezegd.length = 0;
-  totAf(S, [huis]);
+  let inDeKar = null;
+  for (let dag = 2; dag < 62 && !huis.klaar; dag++) {
+    inDeKar = { ...D.voorraad }; // wat er de avond ervoor in de huifkar lag
+    dagen(S, dag, dag);
+  }
   assert.ok(huis.klaar);
   assert.equal(D.gebouwen.find((g) => g.huis === 'aanvoerder'), huis, 'nu is het zijn huis');
   assert.deepEqual(wonenIn(D, huis), gezin, 'met zijn hele gezin, en verder niemand');
@@ -271,9 +277,16 @@ function huisVanDeAanvoerder() {
   assert.equal(T.kampTenten(D).length, kampGezinnen, 'de gezinnen wonen nog in het kamp');
   const deur = T.deurVan(w, huis);
   assert.deepEqual([D.aanvoerder.thuis.x, D.aanvoerder.thuis.y], [deur.x, deur.y], 'zijn thuis is de deur van zijn huis');
-  assert.equal(D.begin.kar.vel, 'huifkar', 'de huifkar blijft de huifkar: een ossenkar komt er met een schuur (vraag 184)');
+  // de huifkar gaat op in het raadhuis (Marcel, 23 okt), en wat erin zat, ligt waar hij stond, tot de dragers het halen
+  assert.equal(D.begin.kar, null, 'de huifkar is weg');
+  assert.ok(!w.wezens.includes(kar));
   assert.deepEqual(T.deVoorraad(D), { ...deur, naast: true }, 'de voorraad ligt voortaan bij het raadhuis');
-  assert.ok(gezegd.some((t) => /stored there/.test(t)), 'en het dorp zegt het');
+  assert.ok(gezegd.some((t) => /covered wagon goes into it/.test(t)), 'en het dorp zegt het');
+  const stapel = D.gebouwen.find((g) => g.soort === 'stapel' && g.x === karPlek.x && g.y === karPlek.y);
+  assert.ok(stapel, 'een losse stapel waar de kar stond');
+  assert.ok(stapel.stapel.graan > 0 && stapel.stapel.hout > 0, `met wat erin zat: ${JSON.stringify(stapel.stapel)}`);
+  assert.ok(!(D.voorraad.graan > 0), 'het graan telt pas als het binnen is');
+  assert.ok(D.voorraad.goud >= inDeKar.goud - 1e-9 - T.GEBOUWEN.raadhuis.kosten.goud, 'het goud draagt de aanvoerder zelf: dat blijft');
   // het is de eerste opslag: rond het huis bouw je ook, waar het plein te ver is
   const R = T.BEGIN_INSTELLINGEN.bouwBereik;
   const plein = T.pleinTegels(D);
@@ -289,8 +302,13 @@ function huisVanDeAanvoerder() {
   const tekst = T.bewaarSpel(S, { nu: 0 });
   const S2 = { kalender: T.nieuweKalender() };
   T.zetSpel(S2, T.leesSpel(tekst));
-  assert.equal(S2.dorp.begin.kar.vel, 'huifkar');
+  assert.equal(S2.dorp.begin.kar, null);
   assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
+  // de dragers halen de stapel binnen
+  const nu = Math.floor(S.kalender.dag);
+  for (let dag = nu + 1; dag <= nu + 10 && D.gebouwen.includes(stapel); dag++) dagen(S, dag, dag);
+  assert.ok(!D.gebouwen.includes(stapel), 'de stapel is binnen');
+  assert.ok(D.voorraad.graan > 0, 'en het graan telt weer');
 }
 
 test('meebouwen en dragen: wie geen werk heeft, bouwt of draagt, en een bouwplaats krijgt zoveel bouwers als er werk is (vraag 184)', () => {

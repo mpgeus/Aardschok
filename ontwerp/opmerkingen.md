@@ -11,8 +11,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **De oogst komt met de dragers trager binnen** (23 okt, vraag 184): een drager neemt één stuk per keer (`perDrager` in
   de werkbank, "Carriers and the ox cart"), en in de oogst zijn veel mensen dagloner. In het jaar van de kolonist in Node
-  lag op vier van de vijf eilanden de oogst binnen tien dagen in de opslag (zo'n 225 graan), op eiland 5 maar de helft
-  (108; de rest lag nog bij de boerderij, en telt wel voor de winter). Een getal voor later, als Marcel de balans doet:
+  lag op vier van de vijf eilanden de oogst binnen tien dagen in de opslag (zo'n 225 graan), op eiland 5 maar een derde
+  tot de helft (74 tot 108; de rest lag nog bij de boerderij, en telt wel voor de winter). Een getal voor later, als Marcel de balans doet:
   `perDrager` hoger, of graan als schoof van meer stuks.
 - **De kolonist vindt geen plek voor een steengroeve** (23 okt, gezien bij vraag 184, al zo op `main`): op sommige
   eilanden (in Node 1, 3, 4 en 5) zegt regel 7b "vindt geen plek voor een steengroeve": geen rotsen dichtbij, of het past

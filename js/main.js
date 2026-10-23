@@ -1497,7 +1497,7 @@
       if (!B) return 'Dit spel begon niet leeg (een proefje, of een oud spel van vóór 12 okt).'; // geen tekst
       return {
         kamp: B.kamp,
-        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.plek.kamp.kar.x, D.plek.kamp.kar.y], nogTegels: B.kar.pad.length },
+        kar: B.kar ? { tegel: [B.kar.tx, B.kar.ty], naar: [D.plek.kamp.kar.x, D.plek.kamp.kar.y], nogTegels: B.kar.pad.length } : 'opgegaan in het raadhuis', // geen tekst
         aanvoerderLooptMee: B.volgt,
         gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar', // geen tekst
         tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {

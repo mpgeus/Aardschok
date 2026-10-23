@@ -118,12 +118,7 @@
     }
     D.gebouwen.splice(D.gebouwen.indexOf(g), 1);
     for (const p of (D.bewoners && D.bewoners.mensen) || []) if (p.bouwt === g) p.bouwt = null;
-    if (plek) {
-      D.gebouwen.push({
-        soort: 'stapel', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, deur: { x: plek.x, y: plek.y }, tekening: null,
-        klaar: true, klaarOp: D.kalender ? Math.floor(D.kalender.dag) : 0, handen: 0, voorwerp: null, stapel: ligt,
-      });
-    }
+    if (plek) T.legLosseStapel(D, plek, ligt);
     // wie er werkte, is vrij, en de handen gaan opnieuw rond (js/gebouwen.js); de boeren kijken naar hun akkers; en de
     // soldaten van een wachthuis leveren hun wapen in (js/soldaten.js)
     if (D.bewoners) {

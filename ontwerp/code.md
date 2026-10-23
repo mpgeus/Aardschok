@@ -1875,7 +1875,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - **De dragers** (vraag 184, 23 okt; Marcel: "3a1", "3b1", "Eén stuk, van alles"): sinds het kamp op is
   (`T.metVervoer(D)`: `D.begin.kamp` niet meer 'onderweg') wordt er gedragen; het begin heeft geen kar meer (de huifkar
-  blijft in het kamp staan, en `T.deVoorraad` is ernaast tot het raadhuis af is). Wie draagt, zegt `T.dragersVan(D)` in
+  blijft in het kamp staan, en `T.deVoorraad` is ernaast tot het raadhuis af is; dan gaat hij op in het raadhuis,
+  `T.laadDeHuifkarUit` in js/begin.js, in de nachtlus na het eten (`T.eetVandaag`, js/gebouwen.js): het wezen is weg,
+  `D.begin.kar` null, en wat gedragen wordt uit de voorraad ligt met `T.legLosseStapel` waar hij stond; het proefdorp
+  haalt die stapel meteen binnen). Wie draagt, zegt `T.dragersVan(D)` in
   `js/bouwen.js` (wie kan meebouwen maar niet bouwt, niet schuilt en niet thuisblijft). Een drager is een vervoerder zoals
   een kar, met zijn eigen regelstaat op de bewoner, `p.vervoer` (`{ drager, bewoner, tx, ty, lading, rit, klok, rust }`),
   want zonder beelden heeft een bewoner geen poppetje; met beelden loopt `p.wezen` erachteraan (`loopMee`) en staat het
@@ -1935,7 +1938,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   werkplaats verwerkt via `T.verwerkVoorraad` en `T.verwerk` (uit `g.in`). `T.nogTeBrengen(D, wat)`: wat de bouwplaatsen
   nog vragen (de winter van het brandhout in `js/behoeften.js`, de kolonist). `T.brengMeteen(D, g)`: alsof de kar het
   bracht (het proefdorp, `bouwAf`, en de toetsen). Een losse stapel (`stapel` in `T.GEBOUWEN`, van een afgebroken gebouw, `js/afbreken.js`)
-  ligt op zijn eigen tegel (`T.stapelPlek`), en is weg als de kar hem leeg laadt.
+  ligt op zijn eigen tegel (`T.stapelPlek`; neergelegd met `T.legLosseStapel`, ook de inhoud van de huifkar), en is weg
+  als hij leeg gehaald is; er komt niets meer bij, dus die halen ze ook onder `minstens` leeg.
 
 ### js/wegen.js: de wegen die jij legt
 
