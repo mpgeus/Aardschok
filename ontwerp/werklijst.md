@@ -48,7 +48,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **185**, één overval in het demojaar (op toeval maar zeker één keer, drie rovers, de wilde rovers in de demo uit), en
+1. **Bezig in sessie `ccr-39520f0f-f5x764`** (23 okt): 185 en 186 bouwen.
+   **185**, één overval in het demojaar (op toeval maar zeker één keer, drie rovers, de wilde rovers in de demo uit), en
    **186**, de punten (wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, geteld vóór de tiende).
 2. **187 en 188**, nu alleen het ontwerp (een campagne met een editor; skirmish); bouwen na de demo. Tiled eruit in een
    snoeironde, de proefkaarten naar het proefdorp (6b1).
