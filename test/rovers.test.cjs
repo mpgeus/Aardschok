@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-const { proefDorp } = require('./grond.cjs');
+const { leegBegin, proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
@@ -19,6 +19,35 @@ function gehucht(opties) {
   return S;
 }
 const WACHTHUIS = { gebouwen: ['wachthuis'] };
+// Het lege begin (test/grond.cjs): nog geen akker, en ook nog geen stapel.
+function leeg() {
+  const { S } = leegBegin(T);
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
+  return S;
+}
+// Een losse stapel met `ligt` op de eerste vrije tegel een paar tegels van de huifkar.
+function losseStapel(S, ligt) {
+  const kar = S.dorp.begin.kar;
+  for (let r = 3; r < 10; r++) {
+    for (let dy = -r; dy <= r; dy++) {
+      const x = Math.round(kar.tx) + r;
+      const y = Math.round(kar.ty) + dy;
+      if (T.isBegaanbaar(S.wereld, x, y, { wezensBlokkeren: true })) return T.legLosseStapel(S.dorp, { x, y }, ligt);
+    }
+  }
+  throw new Error('geen plek voor een stapel');
+}
+// De demo aan (js/einde.js), alleen zolang `doe` loopt.
+function inDeDemo(doe) {
+  const was = T.DEMO_INSTELLINGEN.aan;
+  T.DEMO_INSTELLINGEN.aan = true;
+  try {
+    return doe();
+  } finally {
+    T.DEMO_INSTELLINGEN.aan = was;
+  }
+}
 
 function zet(e, x, y) {
   e.x = e.tx = x;
@@ -260,5 +289,106 @@ test('de roverskampen en een aanval gaan mee in een bewaard spel', () => {
   assert.equal(S2.dorp.rovers.aanval.fase, A.fase);
   for (const e of S2.dorp.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
 });
+
+// Zonder akker komen ze voor de grootste stapel die nog buiten ligt (werklijst R, vraag 185; Marcel, 23 okt: "stapels
+// ja"), en nemen ze ervan wat ze kunnen dragen.
+test('zonder akker gaan rovers naar de grootste stapel, en nemen mee wat ze kunnen dragen (vraag 185)', () => {
+  const S = leeg();
+  assert.equal(T.veldenVan(S.dorp).length, 0, 'nog geen akker');
+  losseStapel(S, { hout: 3 });
+  const g = losseStapel(S, { hout: 10, steen: 4 });
+  opUur(S, 5, 10);
+  berichten.length = 0;
+  const A = aanval(S, 3);
+  assert.equal(A.fase, 'komen');
+  assert.equal(A.stapel, g, 'de grootste stapel');
+  assert.ok(berichten.some((t) => /^Robbers are coming\. Three wild robbers turn up, heading for the logs left outside\./.test(t)), berichten.join(' | '));
+  zet(A.rovers[0], g.x + 1, g.y);
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(A.fase, 'roven', 'naast de stapel zijn ze er');
+  opUur(S, 5, 10 + T.ROVERS_INSTELLINGEN.roofUren + 0.1);
+  berichten.length = 0;
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(A.fase, 'weg');
+  assert.deepEqual(A.buit, { hout: 10, steen: 2 }, 'drie man, elk vier stuks');
+  assert.deepEqual(g.stapel, { steen: 2 }, 'de rest ligt er nog');
+  assert.ok(berichten.some((t) => /make off with 10 logs and 2 stone/.test(t)), berichten.join(' | '));
+});
+
+test('is er geen akker en geen stapel, dan komen er geen rovers', () => {
+  const S = leeg();
+  opUur(S, 5, 10);
+  aanval(S, 2);
+  assert.equal(S.dorp.rovers.aanval, null);
+  assert.ok(!S.wereld.wezens.some((e) => e.rover));
+});
+
+// De overval van de demo (vraag 185; Marcel, 20 okt: 4a3, 4b1 en 4c1, en 23 okt: overdag, met een aankondiging).
+test('in de demo geen wilde rovers maar één overval van drie, overdag, op een dag uit het zaad, met een bericht vooraf', () =>
+  inDeDemo(() => {
+    const M = T.ROVERS_INSTELLINGEN.demo;
+    const S = gehucht();
+    const R = (S.dorp.rovers = T.nieuweRovers());
+    let dag = 1;
+    for (; dag < 250 && !R.aanval; dag++) T.tikRoversDag(S.dorp, dag);
+    dag--;
+    assert.equal(R.wildeOp, null, 'geen wilde rovers');
+    assert.ok(R.demoOp >= M.van && R.demoOp <= M.tot, `dag ${R.demoOp}`);
+    const A = R.aanval;
+    assert.equal(dag, R.demoOp - 1, 'de nacht ervoor staat hij klaar');
+    assert.equal(A.dag, R.demoOp);
+    assert.equal(A.aantal, 3);
+    const zon = T.dagindeling(A.dag).zon;
+    assert.ok(A.uur >= zon.op + 1 && A.uur <= zon.onder - M.voorDonker, `overdag: ${A.uur} (de zon van ${zon.op} tot ${zon.onder})`);
+    const S2 = gehucht();
+    S2.dorp.rovers = T.nieuweRovers();
+    T.tikRoversDag(S2.dorp, 1);
+    assert.equal(S2.dorp.rovers.demoOp, R.demoOp, 'hetzelfde zaad, dezelfde dag');
+    // Het bericht, een dag van tevoren.
+    berichten.length = 0;
+    S.kalender.snelheid = 3;
+    opUur(S, A.dag - 1, A.uur + 24 - M.vooraf - 0.2);
+    T.werkRoversBij(S, S.dorp);
+    assert.ok(!A.gemeld && !berichten.length, 'nog niet');
+    opUur(S, A.dag - 1, A.uur + 24 - M.vooraf + 0.1);
+    T.werkRoversBij(S, S.dorp);
+    assert.ok(A.gemeld);
+    assert.ok(berichten.some((t) => /^Robbers were seen in the woods near the village\. They will come soon\./.test(t)), berichten.join(' | '));
+    assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
+    assert.equal(A.fase, 'wacht', 'ze zijn er nog niet');
+    assert.ok(!S.wereld.wezens.some((e) => e.rover));
+    // Ze komen waar het bericht zei.
+    const ingang = { ...A.ingang };
+    opUur(S, A.dag, A.uur + 0.1);
+    T.werkRoversBij(S, S.dorp);
+    assert.equal(A.fase, 'komen');
+    assert.equal(A.rovers.length, 3);
+    assert.deepEqual(A.ingang, ingang);
+    assert.equal(R.demoGeweest, true);
+    // En daarna niet meer.
+    R.aanval = null;
+    for (let d = A.dag + 1; d < 2 * T.DAGEN_PER_JAAR; d++) T.tikRoversDag(S.dorp, d);
+    assert.equal(R.aanval, null, 'één keer');
+  }));
+
+test('valt er in de demo niets te roven, dan komen ze een dag later', () =>
+  inDeDemo(() => {
+    const S = leeg();
+    const R = (S.dorp.rovers = T.nieuweRovers());
+    R.demoOp = 30;
+    T.tikRoversDag(S.dorp, 29);
+    const A = R.aanval;
+    berichten.length = 0;
+    opUur(S, 29, A.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf + 0.1);
+    T.werkRoversBij(S, S.dorp);
+    assert.equal(R.aanval, null, 'geen akker en geen stapel: nog niet');
+    assert.equal(berichten.length, 0);
+    losseStapel(S, { hout: 6 });
+    T.tikRoversDag(S.dorp, 30);
+    assert.equal(R.aanval.dag, 31, 'de dag erna');
+    opUur(S, 30, R.aanval.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf + 0.1);
+    T.werkRoversBij(S, S.dorp);
+    assert.ok(R.aanval.gemeld, 'nu wel');
+  }));
 
 // Hoe de wapens slaan, staat sinds vraag 159 in test/soldaten.test.cjs.

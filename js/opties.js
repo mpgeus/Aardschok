@@ -1069,6 +1069,7 @@
     opUren: T.t('give up after hours'),
     graanPerRover: T.t('grain per robber'),
     kansAkkerKapot: T.t('chance a field is ruined'),
+    stapelPerRover: T.t('taken from a pile per robber'),
     kampBende: T.t('men in a new camp'),
     kampErbijPerJaar: T.t('camp men added per year'),
     kampMeest: T.t('camp men from outside at most'),
@@ -1477,6 +1478,13 @@
     'REGIE_INSTELLINGEN.halen': T.t('speed while his men fetch'), // geen tekst
     'REGIE_INSTELLINGEN.zwart': T.t('seconds fading to black'), // geen tekst
     'REGIE_INSTELLINGEN.overslaan': T.t('seconds to black when skipped'), // geen tekst
+    // De overval van de demo (werklijst R, vraag 185)
+    'ROVERS_INSTELLINGEN.demo': T.t('the raid in the demo'), // geen tekst
+    'ROVERS_INSTELLINGEN.demo.aantal': T.t('robbers'), // geen tekst
+    'ROVERS_INSTELLINGEN.demo.van': T.t('on a day from'), // geen tekst
+    'ROVERS_INSTELLINGEN.demo.tot': T.t('until day'), // geen tekst
+    'ROVERS_INSTELLINGEN.demo.vooraf': T.t('the warning comes this many hours ahead'), // geen tekst
+    'ROVERS_INSTELLINGEN.demo.voorDonker': T.t('they come at the latest this many hours before sunset'), // geen tekst
   };
   // De naam van de sleutel die bij dit pad hoort, of null als die ontbreekt.
   T.werkbankNaam = (pad) => {

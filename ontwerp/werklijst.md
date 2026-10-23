@@ -1383,7 +1383,9 @@ hebben we zoizo nodig. volgorde is akkoord"):
   (zo'n vier; elke stap tekent alleen dat stukje grond opnieuw). **Gebouwd** (23 okt): de dragers (`spel.md`, "Zo werken
   de dragers nu") en het egaliseren ("Zo werkt het egaliseren nu").
 - **185:** de overval komt op toeval, maar zeker één keer in het demojaar (4a3), met drie rovers (4b1); de wilde rovers
-  zijn in de demo uit (4c1).
+  zijn in de demo uit (4c1). En 23 okt: **overdag**, met **een aankondiging** vooraf, en zonder akker komen ze voor **de
+  stapels** ("stapels ja"); de korte scène van de rovers kan later, met de cinematic. **Gebouwd** (23 okt; `spel.md`,
+  bij Rovers en de militie, "In de demo één overval").
 - **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
 - **187:** nu alleen het ontwerp, bouwen na de demo (6a1); Tiled eruit in een snoeironde, de proefkaarten naar het
   proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).

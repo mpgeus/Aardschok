@@ -1590,8 +1590,8 @@
       const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}`).join(', '); // geen tekst
       return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}`).join('; '); // geen tekst
     },
-    // De rovers (js/rovers.js): wanneer de wilde rovers komen, en de aanval die loopt (wie wegtrok, woont in een roverskamp:
-    // Spel.debug.kampen). Spel.debug.rovers(3) laat nu drie wilde rovers komen.
+    // De rovers (js/rovers.js): wanneer de wilde rovers komen (in de demo: de dag van de overval, demoOp), en de aanval die
+    // loopt (wie wegtrok, woont in een roverskamp: Spel.debug.kampen). Spel.debug.rovers(3) laat nu drie wilde rovers komen.
     rovers(wat) {
       const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
       if (wat != null && !R.aanval) {
@@ -1600,7 +1600,8 @@
       const A = R.aanval;
       return {
         wildeOp: R.wildeOp,
-        aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
+        demoOp: R.demoOp,
+        aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld, stapel: A.stapelPlek } : null,
         // Je mannen in het gevecht (js/gevecht.js): hun leven, hun wapen, en tegen wie ze vechten; en wie er schuilt.
         mannen: T.mannenVan(S.dorp).map((e) => {
           const d = e.volgt || e.doelwit;

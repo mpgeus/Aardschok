@@ -1939,7 +1939,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   nog vragen (de winter van het brandhout in `js/behoeften.js`, de kolonist). `T.brengMeteen(D, g)`: alsof de kar het
   bracht (het proefdorp, `bouwAf`, en de toetsen). Een losse stapel (`stapel` in `T.GEBOUWEN`, van een afgebroken gebouw, `js/afbreken.js`)
   ligt op zijn eigen tegel (`T.stapelPlek`; neergelegd met `T.legLosseStapel`, ook de inhoud van de huifkar), en is weg
-  als hij leeg gehaald is; er komt niets meer bij, dus die halen ze ook onder `minstens` leeg.
+  als hij leeg gehaald is; er komt niets meer bij, dus die halen ze ook onder `minstens` leeg. Van een stapel nemen gaat
+  altijd met `T.neemVanStapel(D, g, ruimte)` (een vervoerder die laadt, en rovers die er roven, vraag 185): een stuk van
+  de wapenmaker alleen heel, en een lege losse stapel is weg.
 
 ### js/wegen.js: de wegen die jij legt
 
@@ -2149,6 +2151,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (ook een wolf) begraaft `begraaf` de volgende dag. De laatste rover die valt, maakt de aanval af (`T.naGevecht`). De
   getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank). (`T.roepOp` en `e.opgeroepen`, wie met de schout meeliep, zijn
   sinds vraag 170, stap 5 weg.)
+- **Het doel van een overval** (vraag 185, 23 okt; Marcel: "stapels ja"): `kiesDoel` kiest een akker (`aanval.veld`, het
+  nummer onder `T.veldenVan`), en is er geen, de grootste stapel (`aanval.stapel`, het gebouw, en `aanval.stapelPlek`, de
+  tegel), met de ingang erbij; `doelVan` en `isEr` (op de akker, of naast de stapel) gelden voor allebei, en `roofStapel`
+  neemt met `T.neemVanStapel` (`js/kar.js`) `stapelPerRover` per man. Rovers horen bij een dorp dat vanaf niets begon
+  (`D.begin`) of akkers heeft (`heeftRovers`), dus ook voor de eerste akker.
+- **De overval van de demo** (vraag 185, 23 okt; Marcel: 4a3, 4b1, 4c1, "overdag, aankondiging ja"): met
+  `T.DEMO_INSTELLINGEN.aan` plant `T.tikRoversDag` geen wilde rovers maar `planDemoOverval`: de dag uit het zaad
+  (`D.rovers.demoOp`, tussen `demo.van` en `demo.tot`), en de nacht ervoor een aanval met `demo: true`, `demo.aantal` man,
+  op een uur van `demoUur` (overdag, tot `demo.voorDonker` uur voor zonsondergang). `demo.vooraf` uur ervoor kiest `meld`
+  het doel en de ingang, zegt het met de plek, en zet de tijd op 1× (`aanval.gemeld`); is er niets te roven, dan vervalt
+  de aanval, en staat hij de nacht erna weer klaar. `begin` zet `D.rovers.demoGeweest`; daarna komt er niets meer. De raad
+  zegt in de demo niet dat ze terugkomen (`js/raad.js`).
 - **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
   (`E.kampen`, `js/eiland.js`, `legKampen`, met de tentplekken en hun deur); wat een kamp in een spel is, staat op de
   kaart (`w.kampen`, bewaard, vanaf de eerste tik alle kampen van het eiland, `kampenVan`; de velden staan bovenaan het

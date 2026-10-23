@@ -139,6 +139,23 @@
     return g;
   };
 
+  // Neem van de stapel van g wat er in `ruimte` past: een vervoerder die laadt, en rovers die er komen roven
+  // (js/rovers.js; vraag 185). Een stuk van de wapenmaker alleen heel (js/soldaten.js): een halve speer kan niemand
+  // pakken. Een losse stapel (js/afbreken.js, js/begin.js) die leeg is, is weg. Geeft wat er af ging, { wat: hoeveel }.
+  T.neemVanStapel = function (D, g, ruimte) {
+    const af = {};
+    for (const wat of Object.keys(g.stapel || {})) {
+      const n = T.isStuk(wat) ? Math.floor(Math.min(ruimte, g.stapel[wat]) + 1e-9) : Math.min(ruimte, g.stapel[wat]);
+      if (n <= 0) continue;
+      af[wat] = n;
+      g.stapel[wat] -= n;
+      if (g.stapel[wat] < 1e-6) delete g.stapel[wat];
+      ruimte -= n;
+    }
+    const i = D.gebouwen.indexOf(g);
+    if (g.soort === 'stapel' && !T.stapelVan(g) && i >= 0) D.gebouwen.splice(i, 1);
+    return af;
+  };
   // Hoeveel er op de stapel van g ligt, alles samen.
   T.stapelVan = (g) => som(g && g.stapel);
   // Hoeveel er nog op de stapel van g kan (Infinity zonder kar): de nachtlus van de gebouwen maakt niet meer dan dat.
@@ -593,18 +610,8 @@
       case 'laden': {
         // wat erop past, van de stapel (is het gebouw er niet meer, dan is er niets)
         if (erNog && g.stapel) {
-          let ruimte = ladingVan(e) - som(e.lading);
-          for (const wat of Object.keys(g.stapel)) {
-            // een stuk van de wapenmaker alleen heel (js/soldaten.js): een halve speer kan niemand pakken
-            const n = T.isStuk(wat) ? Math.floor(Math.min(ruimte, g.stapel[wat]) + 1e-9) : Math.min(ruimte, g.stapel[wat]);
-            if (n <= 0) continue;
-            e.lading[wat] = (e.lading[wat] || 0) + n;
-            g.stapel[wat] -= n;
-            if (g.stapel[wat] < 1e-6) delete g.stapel[wat];
-            ruimte -= n;
-          }
-          // een losse stapel van een afgebroken gebouw (js/afbreken.js): is hij leeg, dan is hij weg
-          if (g.soort === 'stapel' && !T.stapelVan(g)) D.gebouwen.splice(D.gebouwen.indexOf(g), 1);
+          const af = T.neemVanStapel(D, g, ladingVan(e) - som(e.lading));
+          for (const wat in af) e.lading[wat] = (e.lading[wat] || 0) + af[wat];
         }
         zetVel(e, D);
         const o = opslagVoor(D, e, g);

@@ -9,12 +9,19 @@
 // Een aanval (S.rovers.aanval) gaat zo: op een uur dat je niet ziet aankomen, vaker in het donker (werklijst vraag 170,
 // stap 4; Marcel, 16 okt: D2), komen ze van de rand van de kaart die het dichtst bij een akker ligt, lopen erheen,
 // roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker kapot (wat erop staat, groeit
-// dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, met de plek, en de tijd gaat naar 1×
+// dit jaar niet meer: T.vertrapAkker, js/akkers.js). Is er geen akker, dan komen ze voor de grootste stapel die nog
+// buiten ligt, en nemen ze daarvan mee (werklijst R, vraag 185; Marcel, 23 okt: "stapels ja"): wat de dragers nog
+// niet binnen hebben, is niet veilig. Een bericht zegt het, met de plek, en de tijd gaat naar 1×
 // (T.bezoekerKomtAan, js/dag.js). Er komt niemand vanzelf (werklijst vraag 170, stap 2; Marcel, 15 okt: "Niemand
 // vanzelf"): jij stuurt je soldaten (js/kiezen.js), en het gevecht is in real time (js/gevecht.js): een rover slaat wie
 // hij tegenkomt, en een dorpeling die hem ziet, vlucht naar het town hall. Wie valt, is dood: een rover is uit zijn
 // bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de aanvoerder, dan is het spel uit. Wie het
 // overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
+//
+// In de demo (T.DEMO_INSTELLINGEN.aan, js/einde.js) komen er geen wilde rovers, maar één overval, zeker, op een dag uit
+// het zaad, overdag, en een bericht zegt het een dag van tevoren (werklijst R, vraag 185; Marcel, 20 okt: "Voor de demo
+// wil ik ook een keer een roversaanval; zodat de speler de combat kan proberen en ervaren", en 23 okt: "overdag,
+// aankondiging ja"): zo kan de speler zijn wacht klaarzetten.
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
 (function (T) {
@@ -41,6 +48,13 @@
     // Wat ieder meeneemt, en de kans dat ze de akker kapotmaken.
     graanPerRover: 10,
     kansAkkerKapot: 0.3,
+    // Zoveel neemt ieder van een stapel mee (vraag 185), als ze voor een stapel kwamen.
+    stapelPerRover: 4,
+    // De overval van de demo (vraag 185): met zoveel man, op een dag uit het zaad van `van` tot en met `tot` (Sint-Maarten
+    // is dag 250), overdag: van een uur na zonsopgang tot `voorDonker` uur voor zonsondergang, zodat het gevecht in het
+    // licht valt. Zoveel uur van tevoren (tot een dag) zegt een bericht dat er rovers gezien zijn, met de plek waar ze
+    // zullen komen.
+    demo: { aantal: 3, van: 60, tot: 220, vooraf: 24, voorDonker: 4 },
     // De roverskampen (werklijst vraag 170, stap 6a2, c1 en c2; waar ze liggen: T.EILAND_INSTELLINGEN.kampen): een kamp
     // begint met zoveel man, en elk jaar van het spel komen er zoveel van buiten bij, tot zoveel (de getallen van de wilde
     // rovers); wie uit een dorp wegtrekt, komt er altijd bij (Marcel, 17 okt: H2). Een tent per zoveel man, zolang het
@@ -68,8 +82,9 @@
 
   T.nieuweRovers = () => ({ wildeOp: null, aanval: null });
 
-  // Alleen in het gehucht zelf: een wereld met akkers. Een proefkaart (?kaart=proef) heeft geen rovers.
-  const heeftRovers = (D) => !!(D.wereld && T.veldenVan(D).length);
+  // Alleen in het gehucht zelf: een dorp dat vanaf niets begon (D.begin, js/begin.js), of een wereld met akkers. Een
+  // proefkaart (?kaart=proef) heeft geen rovers.
+  const heeftRovers = (D) => !!(D.wereld && (D.begin || T.veldenVan(D).length));
 
   // ---------------------------------------------------------------------------------------------
   // Wie rover wordt, en wanneer ze komen
@@ -102,6 +117,12 @@
     const u = r * (d.opstaan + 24 - d.slapen);
     return u < d.opstaan ? u : d.slapen + (u - d.opstaan);
   }
+  // De demo komt overdag (vraag 185): van een uur na zonsopgang tot `voorDonker` uur voor zonsondergang.
+  function demoUur(D, dag) {
+    const zon = T.dagindeling(dag).zon;
+    const van = zon.op + 1;
+    return van + lot(D, dag, 7) * Math.max(0, zon.onder - IN().demo.voorDonker - van);
+  }
   // Met hoeveel man ze komen: elk jaar van je ambt met een man meer (dag 0 is de dag van je benoeming).
   const wildeAantal = (dag) =>
     Math.min(IN().wildeMeest, IN().wildeEerst + Math.floor(dag / T.DAGEN_PER_JAAR) * IN().wildeErbijPerJaar);
@@ -113,6 +134,7 @@
     const R = D.rovers || (D.rovers = T.nieuweRovers());
     begraaf(D);
     if (!R.aanval) genees(D);
+    if (T.DEMO_INSTELLINGEN.aan) return planDemoOverval(D, R, dag);
     if (R.wildeOp == null) R.wildeOp = eersteWilde(D, dag);
     if (R.aanval) return;
     if (dag >= R.wildeOp) {
@@ -120,6 +142,17 @@
       R.wildeOp = dag + wildeTussen(D, dag);
     }
   };
+
+  // De overval van de demo (vraag 185), in plaats van de wilde rovers: de dag ligt vast in het zaad (R.demoOp). De nacht
+  // ervoor staat de aanval klaar, zodat het bericht vooraf op tijd komt (T.werkRoversBij); kon het niet (er was geen akker
+  // en geen stapel), dan staat hij de nacht erna weer klaar, tot hij geweest is (R.demoGeweest).
+  function planDemoOverval(D, R, dag) {
+    const M = IN().demo;
+    if (R.demoOp == null) R.demoOp = M.van + Math.floor(lot(D, 0, 9) * (M.tot - M.van + 1));
+    if (R.aanval || R.demoGeweest || dag + 1 < R.demoOp) return;
+    const op = Math.max(R.demoOp, dag + 1);
+    R.aanval = { soort: 'wild', demo: true, dag: op, fase: 'wacht', aantal: M.aantal, uur: demoUur(D, op) };
+  }
 
   // Wie in een gevecht viel, ligt er tot de volgende dag: een rover, een man of een dorpeling, en een wolf.
   function begraaf(D) {
@@ -217,21 +250,69 @@
     return e;
   }
 
-  // Het begin: de rovers komen de kaart op, en het dorp ziet ze. Wie soldaten heeft, hoort hoe hij ze stuurt.
+  // Waar een overval op afkomt: een akker (geen weide of braak), en is er geen, de grootste stapel (vraag 185); en waar
+  // ze de kaart op komen. A.veld is het nummer van de akker onder de velden van het dorp (T.veldenVan, js/boerderij.js),
+  // A.stapel het gebouw met de stapel, en A.stapelPlek de tegel waar die ligt. Zet het in A, of false: dan komen ze niet.
+  function kiesDoel(D, A) {
+    const velden = T.veldenVan(D);
+    const akkers = velden.map((a, i) => i).filter((i) => T.bestemmingVan(velden[i]) === 'akker');
+    const doel = {};
+    if (akkers.length) doel.veld = akkers[Math.floor(lot(D, A.dag, 1) * akkers.length)];
+    else {
+      const g = grootsteStapel(D);
+      if (!g) return false;
+      Object.assign(doel, stapelDoel(D, g));
+    }
+    doel.ingang = T.roverIngang(D, doel.stapel ? doel.stapelPlek : velden[doel.veld]);
+    if (!doel.ingang) return false;
+    Object.assign(A, doel);
+    return true;
+  }
+  // De stapel met het meeste erop, bij een deur of los; een kruimel (minder dan één) laten ze liggen.
+  const grootsteStapel = (D) =>
+    (D.gebouwen || []).filter((g) => T.stapelVan(g) >= 1).reduce((a, g) => (!a || T.stapelVan(g) > T.stapelVan(a) ? g : a), null);
+  const stapelDoel = (D, g) => {
+    const p = T.stapelPlek(D, g);
+    return { stapel: g, stapelPlek: { x: p.x, y: p.y, b: 1, h: 1 } };
+  };
+  // Waar ze heen lopen: de akker, of de tegel van de stapel.
+  const doelVan = (D, A) => (A.stapel ? A.stapelPlek : T.veldenVan(D)[A.veld]);
+  const midden = (d) => ({ x: d.x + Math.floor(d.b / 2), y: d.y + Math.floor(d.h / 2) });
+  // Zijn ze er: op de akker, of naast de stapel.
+  function isEr(D, A, e) {
+    const d = doelVan(D, A);
+    if (A.stapel) return Math.max(Math.abs(e.tx - d.x), Math.abs(e.ty - d.y)) <= 1;
+    return e.tx >= d.x && e.tx < d.x + d.b && e.ty >= d.y && e.ty < d.y + d.h;
+  }
+
+  // Het bericht van de demo, een dag van tevoren (vraag 185): er zijn rovers gezien, met de plek waar ze de kaart op zullen
+  // komen, en de tijd gaat naar 1×. Is er niets om te roven, dan komen ze nog niet (planDemoOverval).
+  function meld(D, A) {
+    if (!kiesDoel(D, A)) {
+      D.rovers.aanval = null;
+      return;
+    }
+    A.gemeld = true;
+    const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click where they should stand.')}` : '';
+    T.zeg(D, `${T.t('Robbers were seen in the woods near the village. They will come soon.')}${hulp}`, 'gevaar', A.ingang);
+    T.naarGewoneSnelheid(D);
+  }
+
+  // Het begin: de rovers komen de kaart op, en het dorp ziet ze. Wie soldaten heeft, hoort hoe hij ze stuurt. Na het
+  // bericht van de demo staat hun ingang vast; is hun stapel intussen weg, dan nemen ze de grootste die er nu ligt.
   function begin(D, A) {
     const w = D.wereld;
     const R = D.rovers;
-    // Een akker om te roven (geen weide of braak), en waar ze de kaart op komen. Is er geen, dan komen ze niet.
-    // A.veld is het nummer van het veld onder de velden van het dorp (T.veldenVan, js/boerderij.js).
-    const velden = T.veldenVan(D);
-    const akkers = velden.map((a, i) => i).filter((i) => T.bestemmingVan(velden[i]) === 'akker');
-    A.veld = akkers.length ? akkers[Math.floor(lot(D, A.dag, 1) * akkers.length)] : null;
-    const ingang = A.veld != null ? T.roverIngang(D, velden[A.veld]) : null;
-    if (!ingang) {
+    if (!A.ingang && !kiesDoel(D, A)) {
       R.aanval = null;
       return;
     }
-    A.ingang = ingang;
+    if (A.stapel && !(D.gebouwen.includes(A.stapel) && T.stapelVan(A.stapel) >= 1)) {
+      const g = grootsteStapel(D);
+      if (g) Object.assign(A, stapelDoel(D, g));
+    }
+    if (A.demo) R.demoGeweest = true;
+    const ingang = A.ingang;
     const aantal = A.aantal || 1;
     A.rovers = [];
     for (let i = 0; i < aantal; i++) {
@@ -242,14 +323,23 @@
     A.fase = 'komen';
     A.sinds = uurNu(D);
     R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
-    const boer = T.boerVanVeld(D, velden[A.veld]);
-    const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
     const wie = T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: aantal, aantal: T.hoofdletter(T.telwoord(aantal)) });
     // Er komt niemand vanzelf (vraag 170, stap 2): wie soldaten heeft, hoort hoe hij ze stuurt (js/kiezen.js).
     const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click a robber.')}` : '';
-    const veld = velden[A.veld];
-    const plek = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true, plek } });
+    const plek = midden(doelVan(D, A));
+    let tekst;
+    if (A.stapel) {
+      const ligt = A.stapel.stapel || {};
+      const meest = Object.keys(ligt).reduce((a, wat) => (!a || ligt[wat] > ligt[a] ? wat : a), null);
+      tekst = meest
+        ? T.t('Robbers are coming. {wie}, heading for the {waar} left outside.{hulp}', { wie, waar: T.waarNaam(meest), hulp })
+        : T.t('Robbers are coming. {wie}, heading for the village.{hulp}', { wie, hulp });
+    } else {
+      const boer = T.boerVanVeld(D, T.veldenVan(D)[A.veld]);
+      const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
+      tekst = T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp });
+    }
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst, soort: 'gevaar', naarGewoon: true, plek } });
   }
 
   // De hinderlaag (de bode naar de marskramer, js/bode.js; werklijst vraag 143; Marcel, 9 okt: "De bode moet "onderschept"
@@ -325,19 +415,18 @@
     return T.LEEFTIJDEN[leeftijd][lot(D, dag, 40 + i) < 0.75 ? 'man' : 'vrouw'];
   }
 
-  // Een pad voor een rover naar (x, y), of naast die tegel als hij bezet is; om wat vaststaat, en wie er onderweg staat,
-  // lost hij onderweg op (js/lopen.js).
-  function stuur(D, e, doel) {
+  // Een pad voor een rover naar (x, y), of naast die tegel als hij bezet is (of `naast`: een stapel); om wat vaststaat, en
+  // wie er onderweg staat, lost hij onderweg op (js/lopen.js).
+  function stuur(D, e, doel, ernaast = false) {
     const w = D.wereld;
-    const naast = T.wezenOp(w, doel.x, doel.y, e) != null;
+    const naast = ernaast || T.wezenOp(w, doel.x, doel.y, e) != null;
     const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, { naast });
     if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
   }
 
-  const opVeld = (veld, e) => e.tx >= veld.x && e.tx < veld.x + veld.b && e.ty >= veld.y && e.ty < veld.y + veld.h;
-
-  // Het roven zelf: graan uit de voorraad, en soms is de akker kapot.
+  // Het roven zelf: graan uit de voorraad, en soms is de akker kapot; of wat ze van hun stapel kunnen dragen.
   function roof(D, A, levend) {
+    if (A.stapel) return roofStapel(D, A, levend);
     const veld = T.veldenVan(D)[A.veld];
     const graan = Math.min((D.voorraad && D.voorraad.graan) || 0, levend.length * IN().graanPerRover);
     if (graan > 0) T.wijzigVoorraad(D, 'graan', -graan);
@@ -347,6 +436,15 @@
     const vertrapt = !kapot ? '' : ` ${boer ? T.t('The field of {boer} has been trampled: whatever stood on it is gone.', { boer: boer.naam }) : T.t('The field has been trampled: whatever stood on it is gone.')}`;
     T.zeg(D, `${weg}${vertrapt}`, 'gevaar');
     A.buit = { graan, kapot };
+  }
+  function roofStapel(D, A, levend) {
+    const g = A.stapel;
+    const buit = D.gebouwen.includes(g) ? T.neemVanStapel(D, g, levend.length * IN().stapelPerRover) : {};
+    const waren = Object.keys(buit).filter((wat) => buit[wat] >= 0.5);
+    T.zeg(D, waren.length
+      ? T.t('The robbers make off with {buit}.', { buit: T.opsomming(waren.map((wat) => T.hoeveel(Math.round(buit[wat]), wat))) })
+      : T.t('The robbers make off empty-handed.'), 'gevaar');
+    A.buit = buit;
   }
 
   // Het eind van een aanval: wie nog leeft, is de kaart af.
@@ -364,7 +462,9 @@
       if (S.modus !== 'verkennen') return;
       if (A.soort === 'hinderlaag') return beginHinderlaag(D, A);
       // Een aanval uit een spel van voor 16 okt heeft nog geen uur.
-      if (!A.meteen && uurNu(D) < A.dag * 24 + (A.uur != null ? A.uur : aanvalsUur(D, A.dag))) return;
+      const moment = A.dag * 24 + (A.uur != null ? A.uur : aanvalsUur(D, A.dag));
+      if (A.demo && !A.gemeld && !A.meteen && uurNu(D) >= moment - IN().demo.vooraf) return meld(D, A);
+      if (!A.meteen && uurNu(D) < moment) return;
       begin(D, A);
       return;
     }
@@ -376,10 +476,10 @@
       return;
     }
     if (A.soort === 'hinderlaag' && A.fase === 'roven') return werkHinderlaagBij(D, A, levend);
-    const veld = T.veldenVan(D)[A.veld];
     if (A.fase === 'komen') {
-      for (const e of vrij) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
-      if (levend.some((e) => opVeld(veld, e))) {
+      const naar = midden(doelVan(D, A));
+      for (const e of vrij) if (!e.pad.length && !e.onderweg && !isEr(D, A, e)) stuur(D, e, naar, !!A.stapel);
+      if (levend.some((e) => isEr(D, A, e))) {
         A.fase = 'roven';
         A.roofTot = uurNu(D) + IN().roofUren;
       } else if (uurNu(D) >= A.sinds + IN().opUren) {

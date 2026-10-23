@@ -27,7 +27,9 @@ spel: dan geen wacht, en geen slot.
    erheen), de zagerij, de afwisseling en de groei van de huizen. Zonder water in je land staan de visser en de
    rietsnijder niet in het bouwmenu (vraag 181, c); de rotsen liggen vaak buiten je bereik: een schuur brengt ze erbinnen.
 5. **Het wild:** de wolven en de herten om je land.
-6. **Vechten met de wacht:** stuur ze met rechts, formaties, de diensten, de held.
+6. **Vechten met de wacht:** stuur ze met rechts, formaties, de diensten, de held. Eén keer in het jaar komen er drie
+   rovers, overdag, met een dag van tevoren een bericht (vraag 185); zonder akker komen ze voor een stapel. Wanneer:
+   `Spel.S.dorp.rovers.demoOp` (de dag).
 7. **De heer:** zijn brief op 11 oogstmaand, de klok in de balk ("Martinmas in 90 days"), de marskramer (ook met vee), en op
    Sint-Maarten betalen of weigeren, met de scène.
 8. **Om te testen:** het debugvenster (D).
