@@ -1,7 +1,8 @@
 # Scenario's: de campagne, de editor en skirmish (vraag 187 en 188)
 
 **Zo werkt het nu** (23 okt): dit is het ontwerp; er is niets van gebouwd, en bouwen komt na de demo (Marcel, 20 okt,
-6a1). Onderaan staan de vragen aan Marcel; wat hij kiest, komt hier en in de werklijst (R).
+6a1). Marcel koos op 23 okt A, B, C, F en G (hieronder); D en E kregen meer uitleg, en H en I zijn erbij gekomen
+(onderaan, "Nog open").
 
 ## Wat Marcel vroeg en koos
 
@@ -14,6 +15,13 @@
 - **188** (20 okt): "In het uiteindelijke spel wil ik ook een skirmisch modus hebben, zowel vs AI als vs andere spelers.
   Hierin bouw je een kasteel, en vecht je één groot gevecht." **Gekozen:** allebei: zoals Age of Empires, van niets tot
   er één valt (7a1), en een verdediger tegen een belegeraar (7a3); eerst tegen de AI, dan samen (7b).
+- **Op dit ontwerp** (Marcel, 23 okt): "A, ik wil losse maps zoals de campaign in Knights and merchants of age of
+  Empires. B, B2. C, 1 land kan, maar dan moet je groot genoeg zijn voor verschillende 'verhalen' je speelt steeds
+  chapters die je uiteindelijk naar de finale brengen. Denk aan levels op een map Knights and merchants, dungeon keeper
+  level select etc. D, leg even extra uit. E, leg even extra uit. F, in skirmisch geen heer. G, gaan weg met tiled."
+  Dus: **elk level is een losse kaart** (1); **de editor zit in het spel, ook voor spelers, eerst voor ons** (5);
+  **de campagne is een land met hoofdstukken, gekozen op een kaart** (6); **in skirmish geen heer** (7); **de quests van
+  het oude spel gaan weg met Tiled** (4 en 8).
 
 ## Wat er al ligt (nagelopen op 23 okt)
 
@@ -41,12 +49,17 @@
 - **Hoe lang het duurt:** een dag is 300 seconden (`T.DAG_LENGTE`), een jaar dertig uur op 1× en een uur op 30×; een
   gevecht loopt altijd op 1×.
 
-## 1. Een level is een recept
+## 1. Een level is een losse kaart, bewaard als recept
+
+**Elk level is een losse kaart** (Marcel, 23 okt, A: "losse maps zoals de campaign in Knights and merchants of age of
+Empires"), met een rand: wat erbuiten ligt, bestaat in dat level niet. Waar de kaart vandaan komt: een uitsnede van het
+land van de campagne (6), of een eigen eiland uit de generator (vraag H).
 
 Het voorstel van 20 okt was "een opgeslagen spel op minuut nul, plus triggers". **Beter: een recept dat het spel op
 minuut nul maakt**, zoals het proefdorp. Een bewaard spel wordt geweigerd zodra de versie van het bewaren omhooggaat (nu
 24, en die stijgt als iets anders heet of betekent); een campagne van tien levels zou dan bij elke stijging opnieuw
-gemaakt moeten worden. Een recept bouwt het level elke keer met de code van vandaag.
+gemaakt moeten worden. Een recept bouwt het level elke keer met de code van vandaag. (Dit is techniek, de keuze van
+Claude; Marcel zegt het als hij A anders bedoelde.)
 
 ```js
 // levels/demojaar.js: één bestand per level, een script en geen JSON (dat laadt niet vanaf file://); de editor schrijft
@@ -54,6 +67,7 @@ gemaakt moeten worden. Een recept bouwt het level elke keer met de code van vand
 T.LEVELS.demojaar = {
   titel: 'The first year', inleiding: '...',
   eiland: { zaad: null },           // null: elk spel een ander eiland; een getal: een gemaakt eiland
+  kaart: { ... },                   // de rand: een uitsnede van het eiland (x, y, breed, hoog), of het hele eiland
   land: { ... },                    // wat de editor aan het eiland veranderde, per tegel (zoals tegelsAnders nu)
   plekken: { ... },                 // de plekken van het eiland, verschoven of erbij
   dorpen: [{ wie: 'speler', plek: 'jij', begin: 'huifkar', wacht: ['speerman', 'speerman', 'kruisboogschutter'] }],
@@ -63,6 +77,9 @@ T.LEVELS.demojaar = {
 };
 ```
 
+- **De rand:** het spel maakt het land al per stuk van 64 bij 64 tegels (B2, `w.open`); een level opent alleen de
+  stukken binnen zijn rand, en de rand is niet te begaan en niet te zien (zwart, zoals in Knights and
+  Merchants). Het demojaar en het vrije spel hebben geen rand.
 - **Beginnen:** het eiland uit het zaad, het land en de plekken eroverheen, per dorp het begin (`T.beginOpKaart`, en
   een tweede met `T.dorpErbij`), wat erop staat met dezelfde regels als het proefdorp, en dan `S.scenario` (hieronder).
 - **Tussendoor bewaren** is gewoon bewaren: `S.scenario` gaat mee, zoals alles in `S`.
@@ -156,9 +173,10 @@ spel, zolang weigeren de dood is", `js/regie.js`). Daarmee wordt `T.DEMO_INSTELL
   grillen), de wilde rovers, het weer, de bazen. Een level zet een regel aan of uit met een spelregel, zoals de demo de
   wilde rovers uitzet.
 - **De regie blijft** de speler van de scènes; een trigger zegt alleen welke.
-- **De quests van het oude spel** (`js/quest.js`, `js/quests.js`, de bewerker ervan) worden door de triggers vervangen;
-  `T.QUESTS` is leeg, en de tas, de voorwerpen en de geheime deuren hoorden bij de toren en Tiled (vraag G). De taal van
-  de voorwaarden (`T.voorwaardeGeldt`) wordt er één voor de gesprekken en de triggers.
+- **De quests van het oude spel** (`js/quest.js`, `js/quests.js`, de bewerker ervan) gaan weg met Tiled (Marcel, 23 okt,
+  G: "gaan weg met tiled"), en de triggers komen ervoor in de plaats; `T.QUESTS` is leeg, en de tas, de voorwerpen en de
+  geheime deuren hoorden bij de toren en Tiled. De taal van de voorwaarden (`T.voorwaardeGeldt`) wordt er één voor de
+  gesprekken en de triggers.
 
 ## 5. De editor
 
@@ -176,28 +194,44 @@ spel, zolang weigeren de dood is", `js/regie.js`). Daarmee wordt `T.DEMO_INSTELL
   4. gebieden en plekken met een naam;
   5. triggers en doelen: een lijst, en per trigger een formulier "als ... dan ..." met keuzelijsten, en de keuring ernaast;
   6. het level: de titel, de inleiding, de spelregels die vastliggen.
-- **Bewaren:** voor ons schrijft de server `levels/<naam>.js` (zoals de gesprekken nu, met `T.bronBlok`); voor een
-  speler een bestand (vraag B).
+- **Voor wie** (Marcel, 23 okt, B2): in het spel, ook voor spelers (mods zijn welkom, `verpakken.md`), maar eerst alleen
+  voor ons; *Editor* op het titelscherm komt er pas als hij af genoeg is voor een speler.
+- **Bewaren:** voor ons schrijft de server `levels/<naam>.js` (zoals de gesprekken nu, met `T.bronBlok`); een speler
+  bewaart in zijn eigen map (het verpakte spel, `verpakken.md`), en later deelt hij via de Steam Workshop.
 - Het vervangt `gereedschap/wereld.html`, dat met Tiled weggaat.
 
 ## 6. De campagne
 
-- **Een rij levels**, met een inleiding ertussen (een brief of een scène); af is het volgende open. Van level naar level
-  gaat alleen het verhaal mee, niet wat je had: elk level is dan op zichzelf in balans (zoals Age of Empires).
-- **Voorstel: één gemaakt eiland voor de hele campagne** (vraag C), waarover het verhaal naar het kasteel reist. Elk
-  level speelt op een andere plek en in een ander jaar, en leert één ding, zoals de campagnes van Age of Empires. Een
-  schets, niet besloten:
+**Een land met hoofdstukken** (Marcel, 23 okt, C: "1 land kan, maar dan moet je groot genoeg zijn voor verschillende
+'verhalen' je speelt steeds chapters die je uiteindelijk naar de finale brengen. Denk aan levels op een map Knights and
+merchants, dungeon keeper level select etc.").
+
+- **Het land is het keuzescherm**, zoals de kaart van Knights and Merchants en het land van Dungeon Keeper: één gemaakt
+  eiland (een vast zaad, bijgewerkt in de editor), groot getekend, met een vaandel op de plek van elk hoofdstuk. Een
+  hoofdstuk dat af is, krijgt jouw kleur, en het volgende gaat open; zo zie je het verhaal over het land naar het
+  kasteel van de heer gaan, de finale. Dat beeld is er bijna: de minikaart (`js/minikaart.js`) en de schets van `npm run
+  maker` tekenen het eiland al.
+- **Elk hoofdstuk is een losse kaart** (1), voorstel: **een uitsnede van dat land rond zijn plek** (vraag H). Dan passen
+  de kaart en het hoofdstuk bij elkaar: het hol ligt in het bos waar het vaandel staat, en het kasteel van de finale is
+  het kasteel op de kaart. Een uitsnede van zo'n 250 bij 250 tegels is een kaart zoals in Knights and Merchants (die
+  zijn 100 tot 200 tegels breed, maar onze tegels zijn kleiner: een hut beslaat er 5 bij 4); op een eiland van 2500 bij
+  2500 is plek voor tientallen, dus het land is groot genoeg voor verschillende verhalen.
+- **Tussen de hoofdstukken** een inleiding (een brief of een scène) en een kort verslag. Van hoofdstuk naar hoofdstuk
+  gaat alleen het verhaal mee, niet wat je had: elk hoofdstuk is dan op zichzelf in balans, zoals in Knights and
+  Merchants en Age of Empires (vraag I).
+- **Een schets van de hoofdstukken**, niet besloten; elk leert één ding, zoals de campagnes van Age of Empires:
   1. de aankomst en het eerste jaar (het demojaar);
   2. de rovers van het hol (werklijst K);
   3. het buurdorp: een bond of een strijd;
   4. de koning, of de opstand;
-  5. het kasteel van de heer.
+  5. het kasteel van de heer (de finale; met het belegeren van 7a3).
 
 ## 7. Skirmish
 
 **Een skirmish is ook een level**, maar gemaakt door code uit de keuzes op het scherm (het eiland, wie meedoet, de AI,
 de spelregels), met vaste triggers: wie `gevallen` is, ligt eruit, en de laatste die staat, wint. Zo zijn er voor de
-campagne, skirmish en het vrije spel één begin en één motor.
+campagne, skirmish en het vrije spel één begin en één motor. **In skirmish is er geen heer** (Marcel, 23 okt, F: "in
+skirmisch geen heer"): geen brieven, geen tiende, geen grillen en geen bazen; zijn jaar staat in een skirmish uit.
 
 - **7a3, de verdediger tegen de belegeraar:** daarvoor zijn het kasteel nodig (163: muren, torens en poorten los, zoals
   Stronghold), belegeren (189g: ladders, een ram, een blijde) en een AI die vecht. **Die AI heeft geen economie nodig**, en
@@ -210,38 +244,66 @@ campagne, skirmish en het vrije spel één begin en één motor.
   handelingen van een mens in zijn plaats"). Een bouwvolgorde per karakter, zoals de heer per spel een karakter heeft.
   Dezelfde AI is ook het buurdorp en de tegenspelers van vraag 60 tot 63.
 - **Hoe lang:** een jaar duurt dertig uur op 1× en een uur op 30×, en een gevecht zet iedereen op 1×. Van niets tot er
-  één valt, kan zo vele uren duren (vraag D).
+  één valt, kan zo vele uren duren (vraag D, met de uitleg).
 - **Samen** komt na de lijn (6c van vraag 170, werklijst I); omdat de triggers in de tik draaien, werkt een level dan meteen samen.
 
 ## 8. De volgorde van bouwen (na de demo)
 
 0. **De snoeironde (6b1, kan eerder):** Tiled eruit, de proefkaarten naar het proefdorp; mee weg gaan
-   `gereedschap/wereld.html`, `js/kaart.js`, `kaarten/` en de kaarten als gebied, en de quests van het oude spel (vraag G).
+   `gereedschap/wereld.html`, `js/kaart.js`, `kaarten/` en de kaarten als gebied, en de quests van het oude spel (G).
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
    eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor.
-2. **Het level als recept**, en *Campaign* op het titelscherm.
+2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
 3. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de
    generator; dan het land.
 4. **De eerste levels** van de campagne.
 5. **Het kasteel** (163), **belegeren** (189g) en een AI die vecht: 7a3 tegen de AI, en het kasteel van de heer in het
-   hoofdspel.
+   hoofdspel. Eerst met een kasteel uit de editor, dan met een bouwfase (vraag E).
 6. **Een AI die bouwt:** 7a1 tegen de AI, en de dorpen van vraag 60.
 7. **Samen** (de lijn, 6c van vraag 170): skirmish tegen elkaar.
 
-## 9. Vragen aan Marcel
+## 9. Besloten, en nog open
 
-- **A, een level:** A1 een recept (het zaad, wat de editor veranderde, en wat erop staat), dat een nieuwe versie van het
-  spel overleeft (voorstel); A2 een bewaard spel op minuut nul (eenvoudiger, maar bij elke nieuwe versie van het bewaren
-  opnieuw maken).
-- **B, de editor voor wie:** B1 alleen voor ons, in het gereedschap; B2 in het spel, ook voor spelers (mods zijn welkom,
-  later de Steam Workshop), eerst alleen voor ons (voorstel).
-- **C, de campagne:** C1 één gemaakt eiland voor alle levels, het verhaal reist naar het kasteel (voorstel); C2 elk level
-  zijn eigen eiland. En gaat er iets mee van level naar level: alleen het verhaal (voorstel), of ook de aanvoerder en
-  zijn veteranen?
-- **D, hoe lang een skirmish 7a1 duurt:** D1 een spelregel voor het begin, zoals Age of Empires (gewoon, rijk, of een
-  dorp dat er al staat) (voorstel); D2 een kortere dag in skirmish; D3 lang mag, zoals The Settlers.
-- **E, het kasteel in 7a3:** E1 het staat er (uit de editor); E2 de verdediger bouwt het eerst, met een tijd en een
-  budget; E3 allebei, te kiezen, zoals Stronghold (voorstel).
-- **F, de heer in skirmish:** F1 nooit; F2 een spelregel, standaard uit (voorstel); F3 altijd.
-- **G, de quests van het oude spel:** G1 mee weg in de snoeironde van Tiled, en de triggers komen ervoor in de plaats
-  (voorstel; de gesprekken blijven); G2 laten staan tot de triggers er zijn.
+**Besloten** (Marcel, 23 okt): A, losse kaarten (1); B2, de editor in het spel, ook voor spelers, eerst voor ons (5);
+C, één land met hoofdstukken, gekozen op een kaart (6); F1, in skirmish geen heer (7); G1, de quests van het oude spel
+gaan weg met Tiled (4 en 8).
+
+**Nog open:**
+
+- **D, hoe lang een skirmish van niets (7a1) duurt.** In 7a1 begint iedereen zoals in het hoofdspel, met een huifkar en
+  een paar gezinnen. Alles in onze economie gaat per dag, en een dag duurt vijf minuten op 1× (Marcel, 26 sep, voor het
+  dagritme). Een leger dat een ander dorp kan innemen, kost waarschijnlijk meer dan een jaar (geschat; de speeltest meet
+  het niet). Op 30× is een jaar een uur, maar elk gevecht zet de tijd op 1×, en samen geldt dat voor iedereen. Een partij
+  duurt zo, geschat, twee tot vier uur. Ter vergelijking, ongeveer: Age of Empires een half uur tot een uur, Knights and
+  Merchants een à twee uur, The Settlers 2 een avond of langer. De mogelijkheden:
+  - D1 **het begin kiezen**, zoals Age of Empires (dat kent een start in een latere tijd en met meer grondstoffen):
+    *Arrival* (de huifkar, zoals het hoofdspel), *Village* (een gehucht staat er al: een raadhuis, hoeven, akkers, een
+    wachthuis, een voorraad), *Town* (een dorp met soldaten, binnen een kwartier vechten). Iedereen begint gelijk, ook de
+    AI. Het kost weinig: zo'n begin is een recept, zoals het proefdorp (voorstel);
+  - D2 **een kortere dag in skirmish**, bijvoorbeeld een minuut. Afgeraden: alle getallen per dag (hoe ver iemand loopt,
+    hoe lang een klus duurt, het dagritme) staan op vijf minuten, en dan klopt er niets meer;
+  - D3 **lang mag**, zoals The Settlers: een partij is een avond of meer, met bewaren en later verder (samen ook: wie
+    opende, bewaart);
+  - D4 **een tijdslimiet met punten**, als spelregel naast D1: na zoveel jaar wint wie de meeste punten heeft, met de
+    telling van 186 (wat je hebt en wat je verzamelde). Zo eindigt een partij ook als niemand valt.
+  D1 en D4 zijn allebei spelregels en kunnen samen; het voorstel is D1, en D4 erbij.
+- **E, waar het kasteel in 7a3 vandaan komt.** In 7a3 verdedigt de een een kasteel en bestormt de ander het. Marcels
+  zin van 20 okt, "Hierin bouw je een kasteel, en vecht je één groot gevecht", zegt al: eerst bouwen, dan het gevecht.
+  De vraag is wie het kasteel maakt, en wanneer:
+  - E1 **het kasteel staat er al**, gemaakt in de editor (door ons of een speler), zoals de belegeringen in Stronghold.
+    De partij begint met het gevecht: de verdediger zet zijn mannen op de muren, de belegeraar kiest met een budget zijn
+    leger en zijn ladders, ram en blijde. Kort (een half uur tot een uur), alleen vechten, en het minste werk: de AI hoeft
+    alleen te vechten;
+  - E2 **de verdediger bouwt het eerst zelf**, in een bouwfase met een tijd (bijvoorbeeld twintig minuten) en een budget
+    (steen, hout, goud): muren, torens en poorten, los, zoals 163 ze wil. Ondertussen kiest de belegeraar zijn leger.
+    Dan het grote gevecht. Dit is wat Marcels zin zegt. Erbij nodig: een AI die een kasteel neerzet (uit een paar
+    ontwerpen);
+  - E3 **allebei, te kiezen bij het begin.**
+  Voorstel: E3, gebouwd in die volgorde: eerst E1 (het gevecht, het belegeren en de AI zijn dan te proberen zonder
+  bouwfase, en het kasteel van de heer in het hoofdspel staat er ook al), dan E2 erbij.
+- **H, de kaart van een hoofdstuk:** H1 een uitsnede van het land van de campagne, rond de plek van het hoofdstuk
+  (voorstel: de kaart en het hoofdstuk passen bij elkaar, en de generator hoeft niets nieuws); H2 een eigen klein eiland
+  uit de generator (de maat is een getal, `T.EILAND_INSTELLINGEN.maat`, nu 2500; of hij op 300 nog een goed eiland
+  maakt, is niet geprobeerd); H3 allebei: een uitsnede, en een eigen eiland voor een hoofdstuk dat over zee gaat.
+- **I, wat er meegaat van hoofdstuk naar hoofdstuk:** I1 alleen het verhaal, zoals Knights and Merchants en Age of
+  Empires, zodat elk hoofdstuk in balans is (voorstel); I2 ook de aanvoerder en zijn veteranen.
