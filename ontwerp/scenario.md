@@ -1,8 +1,7 @@
 # Scenario's: de campagne, de editor en skirmish (vraag 187 en 188)
 
 **Zo werkt het nu** (23 okt): dit is het ontwerp; er is niets van gebouwd, en bouwen komt na de demo (Marcel, 20 okt,
-6a1). Marcel koos op 23 okt A, B, C, F en G (hieronder); D en E kregen meer uitleg, en H en I zijn erbij gekomen
-(onderaan, "Nog open").
+6a1). Marcel koos op 23 okt in twee rondes (hieronder, en samen in 9); J en K staan nog open.
 
 ## Wat Marcel vroeg en koos
 
@@ -22,6 +21,14 @@
   Dus: **elk level is een losse kaart** (1); **de editor zit in het spel, ook voor spelers, eerst voor ons** (5);
   **de campagne is een land met hoofdstukken, gekozen op een kaart** (6); **in skirmish geen heer** (7); **de quests van
   het oude spel gaan weg met Tiled** (4 en 8).
+- **En daarna** (Marcel, 23 okt): "D, de skirmisch geeft elke speler x punten om soldaten en leger van te kopen. Nadat
+  beide partijen zich hebben voorbereid, begint direct het gevecht op een random map. De tijd is gewoon x1 voor
+  iedereen. E, 1 speler kiest een kasteel, de andere speler valt het kasteel aan. Ook een mogelijkheid tot zelf een
+  kasteel bouwen in de orep fase. Dat houdt het spannend en nieuw. Eigenlijk e3. Een multiplayer is er zoizo, daarin
+  spelen spelers het hele spel tegen elkaar of met elkaar. Ik zou ook een multiplayer campaign willen. Waarin je samen
+  missies doet. H, h3. I, I1." Dus: **skirmish is een veldslag of een belegering, zonder economie** (7); van niets tegen
+  elkaar (7a1 van 20 okt) is de multiplayer van het hele spel; **er komt een campagne voor samen** (6); een hoofdstuk is
+  een uitsnede of een eigen eiland (H3), en alleen het verhaal gaat mee (I1).
 
 ## Wat er al ligt (nagelopen op 23 okt)
 
@@ -53,7 +60,7 @@
 
 **Elk level is een losse kaart** (Marcel, 23 okt, A: "losse maps zoals de campaign in Knights and merchants of age of
 Empires"), met een rand: wat erbuiten ligt, bestaat in dat level niet. Waar de kaart vandaan komt: een uitsnede van het
-land van de campagne (6), of een eigen eiland uit de generator (vraag H).
+land van de campagne (6), of een eigen eiland uit de generator (H3: allebei).
 
 Het voorstel van 20 okt was "een opgeslagen spel op minuut nul, plus triggers". **Beter: een recept dat het spel op
 minuut nul maakt**, zoals het proefdorp. Een bewaard spel wordt geweigerd zodra de versie van het bewaren omhooggaat (nu
@@ -211,41 +218,63 @@ merchants, dungeon keeper level select etc.").
   hoofdstuk dat af is, krijgt jouw kleur, en het volgende gaat open; zo zie je het verhaal over het land naar het
   kasteel van de heer gaan, de finale. Dat beeld is er bijna: de minikaart (`js/minikaart.js`) en de schets van `npm run
   maker` tekenen het eiland al.
-- **Elk hoofdstuk is een losse kaart** (1), voorstel: **een uitsnede van dat land rond zijn plek** (vraag H). Dan passen
+- **Elk hoofdstuk is een losse kaart** (1): **een uitsnede van dat land rond zijn plek**, of een eigen eiland voor een
+  hoofdstuk dat over zee gaat (Marcel, 23 okt, H3; de maat van de generator is een getal, `T.EILAND_INSTELLINGEN.maat`,
+  maar of hij op 300 tegels nog een goed eiland maakt, is niet geprobeerd). Met een uitsnede passen
   de kaart en het hoofdstuk bij elkaar: het hol ligt in het bos waar het vaandel staat, en het kasteel van de finale is
   het kasteel op de kaart. Een uitsnede van zo'n 250 bij 250 tegels is een kaart zoals in Knights and Merchants (die
   zijn 100 tot 200 tegels breed, maar onze tegels zijn kleiner: een hut beslaat er 5 bij 4); op een eiland van 2500 bij
   2500 is plek voor tientallen, dus het land is groot genoeg voor verschillende verhalen.
 - **Tussen de hoofdstukken** een inleiding (een brief of een scène) en een kort verslag. Van hoofdstuk naar hoofdstuk
   gaat alleen het verhaal mee, niet wat je had: elk hoofdstuk is dan op zichzelf in balans, zoals in Knights and
-  Merchants en Age of Empires (vraag I).
+  Merchants en Age of Empires (Marcel, 23 okt, I1).
 - **Een schets van de hoofdstukken**, niet besloten; elk leert één ding, zoals de campagnes van Age of Empires:
   1. de aankomst en het eerste jaar (het demojaar);
   2. de rovers van het hol (werklijst K);
   3. het buurdorp: een bond of een strijd;
   4. de koning, of de opstand;
-  5. het kasteel van de heer (de finale; met het belegeren van 7a3).
+  5. het kasteel van de heer (de finale; met het belegeren van 7).
+- **Een campagne voor samen** (Marcel, 23 okt: "Ik zou ook een multiplayer campaign willen. Waarin je samen missies
+  doet."). Voorstel (vraag J): een eigen rij missies, elk gemaakt voor twee (later tot vier, zoals de lijn), en elk met
+  zijn eigen dorp, zoals in het spel samen (werklijst I, 6a2: "echt losse spelers met hun eigen dorp"). De doelen zijn
+  van allebei, en een trigger kent dan ook `samen` (samen 500 graan, of het hol van twee kanten); een missie geeft ieder
+  een eigen rol (de een heeft het graan, de ander de mannen). Omdat de triggers in de tik draaien, is een missie op
+  beide computers dezelfde, zodra de lijn er is (6c van vraag 170).
 
-## 7. Skirmish
+## 7. Skirmish: een veldslag of een belegering
 
-**Een skirmish is ook een level**, maar gemaakt door code uit de keuzes op het scherm (het eiland, wie meedoet, de AI,
-de spelregels), met vaste triggers: wie `gevallen` is, ligt eruit, en de laatste die staat, wint. Zo zijn er voor de
-campagne, skirmish en het vrije spel één begin en één motor. **In skirmish is er geen heer** (Marcel, 23 okt, F: "in
-skirmisch geen heer"): geen brieven, geen tiende, geen grillen en geen bazen; zijn jaar staat in een skirmish uit.
+**Skirmish heeft geen economie** (Marcel, 23 okt, D en E; zijn woorden staan bovenaan): geen huifkar, geen dorp en geen
+jaar, alleen een leger, een kaart en het gevecht, op 1× voor iedereen, zonder versneller. **En geen heer** (F). Van niets
+tegen elkaar spelen tot er één valt (7a1 van 20 okt) is de multiplayer van het hele spel (werklijst I, 6a tot 6c), niet
+skirmish.
 
-- **7a3, de verdediger tegen de belegeraar:** daarvoor zijn het kasteel nodig (163: muren, torens en poorten los, zoals
-  Stronghold), belegeren (189g: ladders, een ram, een blijde) en een AI die vecht. **Die AI heeft geen economie nodig**, en
-  het hoofdspel heeft hetzelfde nodig: de opstand eindigt met het bestormen van het kasteel van de heer, en de
-  verdediger van 7a3 is zijn bezetting. Daarom als eerste. Waar het kasteel vandaan komt: vraag E.
-- **7a1, van niets tot er één valt:** daarvoor is een AI nodig die een dorp opbouwt. In een economie zoals die van The
-  Settlers doen de mensen het werk zelf (de dragers, de bouwers, het veldwerk), dus de AI kiest alleen wat, waar en
-  wanneer, en wanneer hij aanvalt; minder dan in Age of Empires, waar de AI elke werker stuurt. Hij speelt als een mens:
-  dezelfde vraag als de muis (`handelingSturen`) en `T.geefOpdracht` (CLAUDE.md: "De heer of een ander dorp kiest uit de
-  handelingen van een mens in zijn plaats"). Een bouwvolgorde per karakter, zoals de heer per spel een karakter heeft.
-  Dezelfde AI is ook het buurdorp en de tegenspelers van vraag 60 tot 63.
-- **Hoe lang:** een jaar duurt dertig uur op 1× en een uur op 30×, en een gevecht zet iedereen op 1×. Van niets tot er
-  één valt, kan zo vele uren duren (vraag D, met de uitleg).
-- **Samen** komt na de lijn (6c van vraag 170, werklijst I); omdat de triggers in de tik draaien, werkt een level dan meteen samen.
+- **De veldslag:** elke kant krijgt evenveel punten (een getal op het scherm van de skirmish) en koopt er soldaten van.
+  Dan stellen ze op, elk in zijn eigen strook aan een kant van de kaart, zonder de ander te zien (de mist). Zijn ze
+  allebei klaar, of is de tijd van de voorbereiding om, dan begint het gevecht. Wie geen mannen meer heeft, verliest
+  (voorstel).
+- **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
+  spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
+  De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De
+  belegeraar wint als hij de burcht inneemt, het hart van het kasteel; de verdediger als de belegeraar niemand meer
+  heeft (voorstel). Een kasteel kiezen komt eerst, zelf bouwen erna: dan is het gevecht te proberen zonder bouwfase.
+- **De prijs van een soldaat is de waarde van zijn stukken.** Elke soort heeft vaste stukken (`T.SOLDAAT_SOORTEN`: de
+  militie een hooivork, de speerman een speer en een harnas, en zo de piekenier, de zwaardvechter, de boogschutter en de
+  kruisboogschutter), en elk stuk heeft al een waarde in goud, in de tabel van de punten van 186
+  (`T.EINDE_INSTELLINGEN.waarde`: een speer 2, een harnas 2, een kruisboog 3; alleen de hooivork van de militie staat er
+  nog niet in). Een speerman kost zo 4. Zo komt er geen tweede prijslijst.
+- **De kaart komt uit de generator:** een willekeurig zaad, en daaruit een uitsnede van zo'n 120 bij 120 tegels (een
+  getal in de werkbank), met open land, wat heuvels en bos, en de twee stroken over land te bereiken (de pad-zoeker kijkt
+  het na). Voor een belegering staat het kasteel erop.
+- **Een skirmish is ook een level** (1): een recept dat code maakt uit de keuzes op het scherm, met vaste triggers voor
+  winst en verlies. Zo zijn er voor de campagne, skirmish en het spel één begin en één motor.
+- **De AI** koopt alleen een leger (een paar mengsels per karakter), stelt op en vecht; in de belegering bemant hij de
+  muren of bestormt hij ze. Een AI die een dorp opbouwt, is voor skirmish niet nodig. Het vechten en het sturen zijn er al
+  (`js/gevecht.js`, `js/kiezen.js`).
+- **Een proefbank voor het vechten:** nu speel je tot de overval voor een gevecht; met de veldslag zet je in een minuut
+  twaalf speermannen tegen acht boogschutters, en zoek je de balans van de soldaten met de getallen uit de werkbank.
+- **Samen:** een veldslag is kort en heeft geen economie, dus het is de eerste goede proef voor de lijn (6c van vraag 170).
+- **Het kasteel van de heer** in het hoofdspel vraagt hetzelfde als de belegering: het kasteel (163), het belegeren en
+  een AI die verdedigt. De belegering en de finale van de campagne komen daarom samen.
 
 ## 8. De volgorde van bouwen (na de demo)
 
@@ -254,56 +283,32 @@ skirmisch geen heer"): geen brieven, geen tiende, geen grillen en geen bazen; zi
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
    eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
-3. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de
+3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, een AI die een leger koopt en vecht. Klein,
+   want het vechten is er, en meteen een proefbank voor de balans.
+4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de
    generator; dan het land.
-4. **De eerste levels** van de campagne.
-5. **Het kasteel** (163), **belegeren** (189g) en een AI die vecht: 7a3 tegen de AI, en het kasteel van de heer in het
-   hoofdspel. Eerst met een kasteel uit de editor, dan met een bouwfase (vraag E).
-6. **Een AI die bouwt:** 7a1 tegen de AI, en de dorpen van vraag 60.
-7. **Samen** (de lijn, 6c van vraag 170): skirmish tegen elkaar.
+5. **De eerste hoofdstukken** van de campagne.
+6. **Het kasteel** (163), **belegeren** (189g) en een AI die verdedigt en bestormt: de belegering, eerst met een kasteel
+   uit de lijst, dan met zelf bouwen; en de finale van de campagne.
+7. **Samen** (de lijn, 6c van vraag 170): eerst de veldslag, dan de belegering, het hele spel (werklijst I) en de
+   campagne voor samen.
 
 ## 9. Besloten, en nog open
 
-**Besloten** (Marcel, 23 okt): A, losse kaarten (1); B2, de editor in het spel, ook voor spelers, eerst voor ons (5);
-C, één land met hoofdstukken, gekozen op een kaart (6); F1, in skirmish geen heer (7); G1, de quests van het oude spel
-gaan weg met Tiled (4 en 8).
+**Besloten** (Marcel, 23 okt):
+- A, losse kaarten (1); B2, de editor in het spel, ook voor spelers, eerst voor ons (5); C, één land met hoofdstukken,
+  gekozen op een kaart (6); F, in skirmish geen heer (7); G, de quests van het oude spel gaan weg met Tiled (4 en 8).
+- D, skirmish geeft punten voor een leger, dan het gevecht op een willekeurige kaart, op 1× (7); E3, de verdediger kiest
+  een kasteel of bouwt er een, de ander valt aan (7); H3, een hoofdstuk is een uitsnede of een eigen eiland (6); I1,
+  alleen het verhaal gaat mee (6); en een campagne voor samen (6).
 
 **Nog open:**
-
-- **D, hoe lang een skirmish van niets (7a1) duurt.** In 7a1 begint iedereen zoals in het hoofdspel, met een huifkar en
-  een paar gezinnen. Alles in onze economie gaat per dag, en een dag duurt vijf minuten op 1× (Marcel, 26 sep, voor het
-  dagritme). Een leger dat een ander dorp kan innemen, kost waarschijnlijk meer dan een jaar (geschat; de speeltest meet
-  het niet). Op 30× is een jaar een uur, maar elk gevecht zet de tijd op 1×, en samen geldt dat voor iedereen. Een partij
-  duurt zo, geschat, twee tot vier uur. Ter vergelijking, ongeveer: Age of Empires een half uur tot een uur, Knights and
-  Merchants een à twee uur, The Settlers 2 een avond of langer. De mogelijkheden:
-  - D1 **het begin kiezen**, zoals Age of Empires (dat kent een start in een latere tijd en met meer grondstoffen):
-    *Arrival* (de huifkar, zoals het hoofdspel), *Village* (een gehucht staat er al: een raadhuis, hoeven, akkers, een
-    wachthuis, een voorraad), *Town* (een dorp met soldaten, binnen een kwartier vechten). Iedereen begint gelijk, ook de
-    AI. Het kost weinig: zo'n begin is een recept, zoals het proefdorp (voorstel);
-  - D2 **een kortere dag in skirmish**, bijvoorbeeld een minuut. Afgeraden: alle getallen per dag (hoe ver iemand loopt,
-    hoe lang een klus duurt, het dagritme) staan op vijf minuten, en dan klopt er niets meer;
-  - D3 **lang mag**, zoals The Settlers: een partij is een avond of meer, met bewaren en later verder (samen ook: wie
-    opende, bewaart);
-  - D4 **een tijdslimiet met punten**, als spelregel naast D1: na zoveel jaar wint wie de meeste punten heeft, met de
-    telling van 186 (wat je hebt en wat je verzamelde). Zo eindigt een partij ook als niemand valt.
-  D1 en D4 zijn allebei spelregels en kunnen samen; het voorstel is D1, en D4 erbij.
-- **E, waar het kasteel in 7a3 vandaan komt.** In 7a3 verdedigt de een een kasteel en bestormt de ander het. Marcels
-  zin van 20 okt, "Hierin bouw je een kasteel, en vecht je één groot gevecht", zegt al: eerst bouwen, dan het gevecht.
-  De vraag is wie het kasteel maakt, en wanneer:
-  - E1 **het kasteel staat er al**, gemaakt in de editor (door ons of een speler), zoals de belegeringen in Stronghold.
-    De partij begint met het gevecht: de verdediger zet zijn mannen op de muren, de belegeraar kiest met een budget zijn
-    leger en zijn ladders, ram en blijde. Kort (een half uur tot een uur), alleen vechten, en het minste werk: de AI hoeft
-    alleen te vechten;
-  - E2 **de verdediger bouwt het eerst zelf**, in een bouwfase met een tijd (bijvoorbeeld twintig minuten) en een budget
-    (steen, hout, goud): muren, torens en poorten, los, zoals 163 ze wil. Ondertussen kiest de belegeraar zijn leger.
-    Dan het grote gevecht. Dit is wat Marcels zin zegt. Erbij nodig: een AI die een kasteel neerzet (uit een paar
-    ontwerpen);
-  - E3 **allebei, te kiezen bij het begin.**
-  Voorstel: E3, gebouwd in die volgorde: eerst E1 (het gevecht, het belegeren en de AI zijn dan te proberen zonder
-  bouwfase, en het kasteel van de heer in het hoofdspel staat er ook al), dan E2 erbij.
-- **H, de kaart van een hoofdstuk:** H1 een uitsnede van het land van de campagne, rond de plek van het hoofdstuk
-  (voorstel: de kaart en het hoofdstuk passen bij elkaar, en de generator hoeft niets nieuws); H2 een eigen klein eiland
-  uit de generator (de maat is een getal, `T.EILAND_INSTELLINGEN.maat`, nu 2500; of hij op 300 nog een goed eiland
-  maakt, is niet geprobeerd); H3 allebei: een uitsnede, en een eigen eiland voor een hoofdstuk dat over zee gaat.
-- **I, wat er meegaat van hoofdstuk naar hoofdstuk:** I1 alleen het verhaal, zoals Knights and Merchants en Age of
-  Empires, zodat elk hoofdstuk in balans is (voorstel); I2 ook de aanvoerder en zijn veteranen.
+- **J, de campagne voor samen:** J1 een eigen rij missies, elk voor twee, ieder met zijn eigen dorp en een eigen rol
+  (voorstel); J2 dezelfde campagne, ook samen te spelen (elk hoofdstuk krijgt een tweede dorp, en moet alleen en samen
+  in balans zijn); J3 samen in één dorp, de een bouwt en de ander vecht.
+- **K, een AI die een dorp opbouwt** (niet nu nodig, maar het is het grootste stuk AI): skirmish heeft hem niet meer
+  nodig, en samen spelen ook niet. Hij stond er nog voor het spel alleen, met tegenspelers die zelf een dorp bouwen
+  (vraag 60 tot 63, 29 sep, van voor de richting van 11 okt). K1 ja, die komen er later; K2 nee: in het spel alleen zijn
+  de heer, zijn bondgenoten en de rovers de tegenstanders, en tegen een ander dorp speel je samen of in een hoofdstuk
+  (voorstel, omdat het veel werk scheelt); K3 later beslissen.
+- De voorstellen voor winst en verlies (7), en de schets van de hoofdstukken (6), tot Marcel er iets van zegt.

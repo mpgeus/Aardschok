@@ -25,9 +25,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
 **Wacht op Marcel**
-- **Het ontwerp van 187 en 188: D, E, H en I** (23 okt; `scenario.md`, onderaan "Nog open", met de uitleg): hoe lang
-  een skirmish van niets duurt (D), waar het kasteel in 7a3 vandaan komt (E), de kaart van een hoofdstuk (H), en wat er
-  meegaat van hoofdstuk naar hoofdstuk (I). A, B, C, F en G zijn gekozen.
+- **Het ontwerp van 187 en 188: J en K** (23 okt; `scenario.md`, onderaan "Nog open"): de vorm van de campagne voor
+  samen (J), en of er ooit een AI komt die een dorp opbouwt (K). De rest is gekozen.
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
   begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
@@ -1403,8 +1402,10 @@ hebben we zoizo nodig. volgorde is akkoord"):
   proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).
 - **188:** allebei: zoals Age of Empires, van niets tot er één valt (7a1), en een verdediger tegen een belegeraar (7a3);
   eerst tegen de AI, dan samen (7b). **Het ontwerp van 187 en 188** (23 okt): `scenario.md`. Marcel koos (23 okt) losse
-  kaarten (A), de editor in het spel en ook voor spelers (B2), één land met hoofdstukken als keuzescherm (C), in skirmish
-  geen heer (F) en de oude quests weg met Tiled (G); D, E, H en I staan nog open.
+  kaarten (A), de editor in het spel en ook voor spelers (B2), één land met hoofdstukken als keuzescherm (C), skirmish
+  als veldslag of belegering zonder economie en zonder heer (D, E3, F), de oude quests weg met Tiled (G), een hoofdstuk
+  als uitsnede of eigen eiland (H3) waarvan alleen het verhaal meegaat (I1), en een campagne voor samen; van niets tegen
+  elkaar is de multiplayer van het hele spel. J en K staan nog open.
 - **189:** op de lijst: paarden ("hebben we nodig"), bijen ("wil ik"), het kerkhof ("goed idee") en belegeren ("hebben we
   zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
 - **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van
