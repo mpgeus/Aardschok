@@ -15,7 +15,7 @@
 //
 // T.maakGehucht(zaad, land) legt het plan (de indeling, zonder tegels) op een stuk van het eiland, T.planOpEiland(zaad) kiest
 // dat stuk (jouw plek, anders die van een ander dorp), en T.laadGemaaktGehucht(zaad) maakt er een kaart van het eiland van
-// (T.eilandKaart, js/wereld.js), met alleen wat de maker anders legde dan het eiland. Een nieuw spel begint zo (T.beginOpKaart, js/gebied.js). De schets
+// (T.eilandKaart, js/wereld.js), met alleen wat de maker anders legde dan het eiland. Een nieuw spel begint zo (T.beginOpEiland, js/begin.js). De schets
 // (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
 //
 // Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/dorp.js), de rand van het plein
@@ -1064,7 +1064,7 @@
     return lijst[Math.floor(lotOp(E.zaad, x, y, 63) * lijst.length)];
   }
 
-  // Het land van de maker als wereld (T.gebied, js/gebied.js): een kaart van het eiland (T.eilandKaart, js/wereld.js; B2b),
+  // Het land van de maker als wereld (T.beginOpEiland, js/begin.js): een kaart van het eiland (T.eilandKaart, js/wereld.js; B2b),
   // met het plan erover. De kaart neemt alleen over wat de maker anders legde dan het eiland: de grond van het plein
   // (w.grondAnders), wat er van het eiland weg moest (w.gerooid), en wat hij erbij legde (de eiken, de rotsen). Alles in
   // de tegels van het eiland. Het is het lege begin van een nieuw spel: het land met een open plek voor het plein en het
@@ -1095,7 +1095,6 @@
     const { x0, y0 } = plan.eiland;
     const w = T.eilandKaart(plan.eiland.zaad, { x: x0, y: y0, b: plan.b, h: plan.h });
     w.naam = T.t('The hamlet');
-    w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
     const { plek } = legPlanOp(w, plan);
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.stijl) w.stijl = plan.stijl;
@@ -1145,7 +1144,6 @@
     w.pleinen.push(plek.plein);
     const aanvoerder = T.maakWezen('aanvoerder', x0 + plan.aanvoerder.x, y0 + plan.aanvoerder.y);
     w.wezens.push(aanvoerder);
-    w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
     const v = w.vak;
     const [vx0, vy0] = [Math.min(v.x, x0), Math.min(v.y, y0)];
     w.vak = { x: vx0, y: vy0, b: Math.max(v.x + v.b, x0 + B) - vx0, h: Math.max(v.y + v.h, y0 + H) - vy0 };

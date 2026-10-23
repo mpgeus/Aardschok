@@ -6,8 +6,8 @@
 // Wat je kent, is spelstaat (in S, en bewaard): per dorp (`D.gekend`, want elke speler heeft zijn eigen mist; werklijst
 // vraag 170, stap 6a), per stuk (T.stukNummer) een bitpatroon van 64 rijen van twee getallen van 32 bits, of `true` als
 // je het hele stuk kent. Zo blijft het bewaarde spel klein, ook als je het hele eiland verkent. Wat je nu ziet, is het
-// niet: dat rekent T.werkMistBij elke tik uit waar de mensen en de gebouwen van het dorp staan. Een kaart uit Tiled (de
-// proefkaarten, een ander gebied) heeft geen mist. Het scherm vraagt de mist van je eigen dorp (S.dorp).
+// niet: dat rekent T.werkMistBij elke tik uit waar de mensen en de gebouwen van het dorp staan. Een kaart die niet op
+// het eiland ligt (een toets met een losse kaart) heeft geen mist. Het scherm vraagt de mist van je eigen dorp (S.dorp).
 //
 // Het land gaat open waar je mensen komen (T.werkStukkenBij, js/wereld.js), verder dan iemand kijkt (openRond), dus wat
 // je ziet, ligt al klaar. Het tekenen staat in js/tekenen.js (tekenMist, en mistOverLijst voor wat erop staat).

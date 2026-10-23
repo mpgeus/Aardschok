@@ -1,5 +1,5 @@
 // Meer dorpen op één kaart (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op hetzelfde eiland", en
-// 16 okt: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van het eiland (T.dorpErbij, js/gebied.js),
+// 16 okt: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van het eiland (T.dorpErbij, js/begin.js),
 // met zijn eigen plek, zijn eigen mensen en zijn eigen mist. Wat het ene dorp doet, raakt het andere niet: het eerste
 // speelt letter voor letter hetzelfde, met of zonder het tweede op de kaart.
 const test = require('node:test');

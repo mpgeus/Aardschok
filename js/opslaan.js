@@ -7,7 +7,7 @@
 // Wat er bewaard wordt: heel Spel.S, behalve wat alleen scherm is (T.schermVelden hieronder). Gemeten op
 // 28 sep: alles wat het spel onthoudt, zit in S, en er zit geen functie in. Wel verzamelingen (Set, Map) en
 // zo'n 140 plekken waar het ene het andere aanwijst: een bewoner zijn poppetje, zijn huis en zijn werk,
-// S.wereld het gebied in S.gebieden, S.dorp.aanvoerder een wezen in die wereld. Gewone JSON verliest dat allemaal:
+// S.dorp.wereld de kaart in S.wereld, S.dorp.aanvoerder een wezen in die wereld. Gewone JSON verliest dat allemaal:
 // een Set wordt {}, en wat twee keer wordt aangewezen, komt terug als twee losse kopieën. Daarom schrijft
 // T.bewaarSpel alles wat vaker wordt aangewezen één keer uit, met een nummer, en daarna alleen dat nummer;
 // T.herstelSpel legt de draden terug. Zo hoeft geen regel te zeggen wat hij bewaart, en vergeet niemand iets
@@ -325,7 +325,7 @@
   // iets vroeg of zo'n tegel vaststaat (de proef met opslaan, 4 okt). Dus meldt het laden die soorten aan
   // (T.kenSoortVan, js/kaart.js).
   function kenDeSoorten(S) {
-    const kaarten = new Set([...Object.values(S.gebieden || {}), ...(S.dorpen || []).map((D) => D.wereld)]);
+    const kaarten = new Set([S.wereld, ...(S.dorpen || []).map((D) => D.wereld)]);
     for (const w of kaarten) {
       if (!w) continue;
       for (const v of w.voorwerpen || []) T.kenSoortVan(v);
@@ -365,7 +365,6 @@
     if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return T.t('Close the window first.');
     // Een gevecht (js/gevecht.js) mag: het staat helemaal in S, in de tik (werklijst vraag 170, stap 2). Tot 15 okt kon het
     // niet, want een gevecht in beurten wachtte op een beweging op het scherm.
-    if (S.naarGebied) return T.t('Wait a moment: something is still moving.');
     return null;
   };
 

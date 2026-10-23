@@ -412,8 +412,8 @@
       eiland: { zaad }, vak: { ...vak },
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], wezens: [],
-      bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
-      buiten: true, naam: null, proef: false, pleinen: [], plekken: [],
+      bekend: new Set(['buiten']), huidigeKamer: 'buiten', akkers: [], meenten: [],
+      buiten: true, naam: null, pleinen: [], plekken: [],
     };
   };
   function stukkenVan(w) {
@@ -1093,24 +1093,22 @@
   };
 
   // Ligt deze tegel op een plein? Een kaart heeft de pleinen die erop liggen (w.pleinen: hun randen, in tegels, van de
-  // maker), een voor elk dorp; een tegel ligt erop als zijn midden binnen een rand valt. Op een plein wordt niet gebouwd (js/gebouwen.js, T.gebouwPast), van welk dorp ook.
+  // maker), een voor elk dorp; een tegel ligt erop als zijn midden binnen een rand valt. Op een plein wordt niet gebouwd
+  // (js/gebouwen.js, T.gebouwPast), van welk dorp ook.
   const opRand = (rand, x, y) => !!rand && rand.length >= 3 && T.binnenRand(rand, x + 0.5, y + 0.5);
   T.opHetPlein = function (w, x, y) {
     return !!w && (w.pleinen || []).some((rand) => opRand(rand, x, y));
   };
 
   // Een dorp heeft zijn plek op de kaart (D.plek; werklijst vraag 170, stap 6a, zodat er meer dorpen op één kaart kunnen
-  // leven): wat de maker voor dat dorp legde, of wat een kaart uit Tiled noemt (js/kaart.js). { naam (de dorpsplek op
-  // het eiland, E.plekken, of null), vak (zijn land, { x, y, b, h }), plein (de rand van zijn plein, of null),
-  // marskramer (waar de marskramer uitstalt, { x, y, komt? }, of null), heer (waar de heer staat, alleen op een kaart uit
-  // Tiled), kamp (het kamp van het lege begin, js/begin.js), markt (de marktplek op het plein, js/markt.js), uitgang (waar
-  // zijn weg de wereld in gaat, { x, y }, of null; T.wegInEnUit in js/handel.js) }. Wat het
-  // dorp met zijn plek doet, vraagt het dorp (T.pleinTegels(D), T.pleinVan(D)); een kaart geeft haar plekken door in
-  // w.plekken, en T.nieuwDorp neemt er een (js/dorp.js). Het gereedschap, dat zijn eigen dorp is, neemt de eerste.
-  T.legePlek = (w) => {
-    const o = (w.overgangen || [])[0];
-    return { naam: null, vak: T.kaartVak(w), plein: null, marskramer: null, heer: null, kamp: null, markt: null, uitgang: o ? { x: o.x, y: o.y } : null };
-  };
+  // leven): wat de maker voor dat dorp legde (js/maker.js). { naam (de dorpsplek op het eiland, E.plekken, of null), vak
+  // (zijn land, { x, y, b, h }), plein (de rand van zijn plein, of null), marskramer (waar de marskramer uitstalt,
+  // { x, y, komt? }, of null), heer (waar de heer staat, of null: dan waar de marskramer staat), kamp (het kamp van het
+  // lege begin, js/begin.js), markt (de marktplek op het plein, js/markt.js), uitgang (waar zijn weg de wereld in gaat,
+  // { x, y }, of null; T.wegInEnUit in js/handel.js) }. Wat het dorp met zijn plek doet, vraagt het dorp
+  // (T.pleinTegels(D), T.pleinVan(D)); een kaart geeft haar plekken door in w.plekken, en T.nieuwDorp neemt er een
+  // (js/dorp.js). T.legePlek is de plek van een kaart zonder dorpsplek (een toets met een losse kaart).
+  T.legePlek = (w) => ({ naam: null, vak: T.kaartVak(w), plein: null, marskramer: null, heer: null, kamp: null, markt: null, uitgang: null });
 
   // De tegels van het plein van een dorp, rij voor rij van boven naar onder, en in een rij van links naar rechts. Eén keer
   // per plein uitgerekend, want de rand van een plein verandert niet (werklijst, vraag 71: dit werd elke dag voor elk

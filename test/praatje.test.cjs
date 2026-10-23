@@ -302,7 +302,7 @@ test('wie langs wil, loopt om een praatje heen; in een smalle doorgang gaat er e
   // Kaarten uit tekens (zoals test/lopen.test.cjs): # is een muur, de rest vloer.
   const kaart = (plan) => ({
     b: plan[0].length, h: plan.length, tegels: plan.map((r) => [...r].map((c) => (c === '#' ? 'muur' : 'vloer'))),
-    deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], overgangen: [], buiten: true,
+    deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], buiten: true,
   });
   const mens = (w, x, y) => {
     const e = { soort: 'dorpeling', kant: 'neutraal', x, y, tx: x, ty: y, pad: [], onderweg: false, dood: false, snelheid: 1.3 };

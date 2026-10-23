@@ -346,9 +346,9 @@
   // buiten zijn straal, dan zoekt hij er een pad heen.
   // ---------------------------------------------------------------------------------------------
 
-  // Waar hij het gehucht in komt, en waar hij het weer uit gaat: "komt" bij de plek in het
-  // betekenisbestand, anders de weg de wereld in van het dorp (D.plek.uitgang: van de maker, of op een kaart uit Tiled
-  // de eerste uitgang). De heer komt over dezelfde weg (js/heer.js), dus die vraagt het hier ook.
+  // Waar hij het gehucht in komt, en waar hij het weer uit gaat: "komt" bij zijn plek (D.plek.marskramer), anders de weg
+  // de wereld in van het dorp (D.plek.uitgang, van de maker). De heer komt over dezelfde weg (js/heer.js), dus die vraagt
+  // het hier ook.
   function deWeg(D) {
     const p = D.plek.marskramer;
     if (p && p.komt) return p.komt;

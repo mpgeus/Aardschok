@@ -67,9 +67,6 @@
     meet('lopen', () => {
       for (const w of kaartenVan(S)) T.beweegWezens(S, w, dt, dtWereld);
     });
-    // Een overgang naar een ander gebied wordt hier opgepakt, en niet daar waar hij ontstaat (T.bijAankomst): de lijst
-    // wezens van de wereld verandert erdoor, en daar loopt het lopen net doorheen.
-    if (S.naarGebied) T.gaNaarGebied(S, S.naarGebied);
     // In een scène (js/regie.js) leeft de wereld door zoals anders; alleen de invoer ligt stil.
     if (S.modus === 'verkennen' || S.modus === 'scene') {
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land

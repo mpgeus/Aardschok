@@ -739,7 +739,7 @@
   // Het begin, en het getal volgen
   // ---------------------------------------------------------------------------------------------
 
-  // Wie er bij een nieuw spel woont (T.beginOpKaart, js/gebied.js). Daarna evenveel bewoners als het getal, elk met een poppetje,
+  // Wie er bij een nieuw spel woont (T.beginOpEiland, js/begin.js). Daarna evenveel bewoners als het getal, elk met een poppetje,
   // en meteen het werk verdeeld, zodat de eerste dag niet stil begint.
   T.zetBeginBewoners = function (D) {
     const w = D.wereld;

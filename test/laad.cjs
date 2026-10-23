@@ -55,6 +55,6 @@ if (require.main === module) {
     for (const s of scripts.filter((s) => s.startsWith('js/') && !ALLEEN_SCHERM.includes(s))) {
       assert.ok(require.cache[path.join(WORTEL, s)], `${s} is niet geladen`);
     }
-    assert.equal(typeof T.beginOpKaart, 'function');
+    assert.equal(typeof T.beginOpEiland, 'function');
   });
 }

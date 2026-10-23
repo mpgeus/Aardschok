@@ -97,7 +97,6 @@ test('wat elkaar aanwijst, wijst na het laden nog steeds naar hetzelfde', () => 
   assert.equal(andereVorm(zonderScherm(S), zonderScherm(S2)), null);
   // Een paar die ertoe doen, met naam: ze gelden vóór het bewaren, en daarna nog.
   for (const [wie, s] of [['vóór', S], ['na', S2]]) {
-    assert.ok(s.gebieden[s.wereld.gebied] === s.wereld, `${wie}: S.wereld is het gebied in S.gebieden, geen kopie`);
     assert.ok(s.wereld.wezens.includes(s.dorp.aanvoerder), `${wie}: de aanvoerder is een wezen in de wereld, geen kopie`);
     assert.ok(s.dorp.bewoners.mensen.every((p) => !p.wezen || s.wereld.wezens.includes(p.wezen)), `${wie}: elk poppetje staat in de wereld`);
     // Het dorp (js/dorp.js) is een dorp in S.dorpen, en wijst naar de kaart, de aanvoerder en de kalender van het spel.
@@ -107,7 +106,7 @@ test('wat elkaar aanwijst, wijst na het laden nog steeds naar hetzelfde', () => 
   }
   // En wat nu verandert, verandert overal: één ding, geen twee.
   S2.dorp.aanvoerder.tx = -99;
-  assert.equal(S2.gebieden[S2.wereld.gebied].wezens.find((e) => e === S2.dorp.aanvoerder).tx, -99);
+  assert.equal(S2.wereld.wezens.find((e) => e === S2.dorp.aanvoerder).tx, -99);
   S2.kalender.dag = 99.5;
   assert.equal(S2.dorp.kalender.dag, 99.5);
 });
@@ -233,11 +232,8 @@ test('wanneer er opgeslagen mag worden: alleen als er niets openstaat of halverw
   S.modus = 'einde';
   assert.match(T.waaromNietOpslaan(S), /over/);
   S.modus = 'verkennen';
-  S.naarGebied = 'proefbos';
-  assert.match(T.waaromNietOpslaan(S), /moving/);
-  S.naarGebied = null;
   S.proefje = true;
-  assert.match(T.waaromNietOpslaan(S), /try-out/, 'een proefje (?kaart=) overschrijft het spel van de speler niet');
+  assert.match(T.waaromNietOpslaan(S), /try-out/, 'een proefje (?kaart=gehucht) overschrijft het spel van de speler niet');
 });
 
 test('de plekken: vijf eigen en één die vanzelf gaat, het nieuwste bovenaan', (t) => {
@@ -370,7 +366,7 @@ test('een verse bladzijde laadt een spel met een gebouw uit het spel', (t) => {
   const r = T.herstelSpel(S2, tekst);
   assert.equal(r.gelukt, true, r.reden);
   const onbekend = new Set();
-  for (const w of new Set([...Object.values(S2.gebieden), ...S2.dorpen.map((d) => d.wereld)])) {
+  for (const w of new Set([S2.wereld, ...S2.dorpen.map((d) => d.wereld)])) {
     for (const v of w.voorwerpen) if (!T.VOORWERPEN[v.soort]) onbekend.add(v.soort);
   }
   assert.deepEqual([...onbekend], [], 'na het laden kent het alles wat er ligt');

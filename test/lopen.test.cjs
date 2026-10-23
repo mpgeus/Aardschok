@@ -9,7 +9,7 @@ const T = require('./laad.cjs').spel();
 // Een kaart uit tekens: # is een muur, de rest vloer.
 function kaart(plan) {
   const tegels = plan.map((r) => [...r].map((c) => (c === '#' ? 'muur' : 'vloer')));
-  return { b: plan[0].length, h: plan.length, tegels, deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], overgangen: [], buiten: true };
+  return { b: plan[0].length, h: plan.length, tegels, deuren: new Map(), kamers: [], voorwerpen: [], wezens: [], buiten: true };
 }
 function mens(w, x, y, extra) {
   const e = Object.assign(

@@ -624,7 +624,7 @@
     // Wat er op de kaart veranderde (een gevelde boom, een gebouw) en waar het zand van de paadjes anders werd, tekent
     // werkGrondBij alleen daar opnieuw (vergeetVeranderdeKaart); de keuze voor de paadjes zelf tekent alles opnieuw.
     const paadjes = T.PADEN_INSTELLINGEN ? T.PADEN_INSTELLINGEN.paadjes : '';
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
+    return `${w.huidigeKamer}|${w.bekend.size}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -1451,7 +1451,7 @@
     // 'herfst' laat ze zien in een seizoen naar keus.
     if (metSprites()) T.sprites.zetSeizoen((T.debug && T.debug.bomen) || T.boomSeizoen(S));
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
-    // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
+    // Het dorp dat hier ligt (js/dorp.js), of geen.
     const D = T.dorpHier(S);
     // Buiten is het niets de nacht tussen de bomen, binnen het donker om de kamer heen.
     ctx.fillStyle = w.buiten ? '#0e1310' : '#0c0b0a';

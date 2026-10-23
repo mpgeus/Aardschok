@@ -32,7 +32,7 @@ function maakS() {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0,
     kalender: { dag: 0, snelheid: 1 },
     wereld: {
-      overgangen: [], wezens: [],
+      wezens: [],
       akkers: [{ x: 0, y: 0, b: 2, h: 3 }, { x: 10, y: 0, b: 1, h: 4 }],
     },
     plek: { marskramer: { x: 5, y: 5 } }, // de plek van het dorp (D.plek, js/wereld.js)
@@ -576,7 +576,6 @@ test('elk jaar opnieuw: brief, Sint-Maarten, en weer weg', () => {
 
 test('zijn poppetje komt over de weg met twee soldaten, en op het plein wacht hij', () => {
   const S = gehucht();
-  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
   S.plek.uitgang = { x: 9, y: 5 }; // de weg de wereld in van het dorp (D.plek, js/wereld.js)
   S.kalender.dag = SINT_MAARTEN;
   T.tikHeerDag(S, SINT_MAARTEN);
@@ -635,7 +634,6 @@ test('zijn gesprek opent het betalen, en na het betalen niet meer', () => {
 
 test('de schandpaal komt er de eerste keer, blijft staan, en wie gestraft wordt, staat ervoor', () => {
   const S = metHeer();
-  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
   S.plek.uitgang = { x: 9, y: 5 }; // de weg de wereld in van het dorp (D.plek, js/wereld.js)
   const aaltje = boerOp(S, 'Alice', 3, 3);
   assert.equal(S.heer.paal, null, 'nog geen paal');
@@ -685,7 +683,6 @@ test('de schandpaal komt niet in een akker of waar de heer staat, en beslaat zij
 
 test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op 1× maar zeven seconden)', () => {
   const S = metHeer();
-  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
   S.plek.uitgang = { x: 9, y: 5 }; // de weg de wereld in van het dorp (D.plek, js/wereld.js)
   const aaltje = boerOp(S, 'Alice', 3, 3);
   T.betaalHeer(S, geefDeel(S, 0.3));
@@ -708,7 +705,6 @@ test('de dagen aan de schandpaal tellen pas als hij er staat (drie dagen zijn op
 
 test('wie aan de schandpaal staat, staat met zijn rug naar de paal, en zolang is de paal bezet', () => {
   const S = metHeer();
-  S.wereld.overgangen = [{ x: 9, y: 5, naar: 'wereld' }];
   S.plek.uitgang = { x: 9, y: 5 }; // de weg de wereld in van het dorp (D.plek, js/wereld.js)
   const aaltje = boerOp(S, 'Alice', 3, 3);
   T.betaalHeer(S, geefDeel(S, 0.3));

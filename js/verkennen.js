@@ -139,12 +139,6 @@
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') return { tekst: T.t('Locked'), fout: true };
     if (!T.isZichtbaar(w, doel.x, doel.y)) return null;
-    // Een tegel die naar een ander gebied leidt, zegt dat erbij: wie de held erheen stuurt, gaat erheen.
-    const o = T.overgangOp(w, doel.x, doel.y);
-    if (o) {
-      const naam = (T.GEBIEDEN[o.naar] && T.GEBIEDEN[o.naar].naam) || o.naar;
-      return { tekst: o.tekst || T.t('To {plek}', { plek: naam.toLowerCase() }) };
-    }
     // Een veld: de muis zegt wat het is. Wat het volgend jaar wordt, kies je in het veldenvenster (js/hud.js, V).
     const veld = T.veldOp(w, doel.x, doel.y);
     if (veld && anderDorp(veld.dorp)) return { tekst: T.t('A field of {dorp}', { dorp: naamVan(veld.dorp) }) };
@@ -400,24 +394,6 @@
       }
       const d = T.deurOp(w, t.x, t.y);
       if (d) T.ontdekBijDeur(w, d);
-      // Stap je op een tegel die naar een ander gebied leidt, dan gaan we daarheen — maar niet
-      // hier, midden in de beweging: de spellus loopt nu door de lijst wezens van deze wereld
-      // heen, en die lijst verandert bij een overgang. main.js pakt het zo op.
-      //
-      // Alleen als je er echt op stápt. Wie er net is neergezet (S.netGeland, gezet door
-      // T.gaNaarGebied), staat er al, en dan zou de overgang meteen weer afgaan: heen en weer
-      // tussen twee gebieden. Die tegel staat pas weer scherp als hij er een keer af is geweest.
-      //
-      // En alleen als je daar je pas beëindigt. Een overgang kan midden op een pad liggen, en daar
-      // loop je aan één stuk door langs; wie verderop wil zijn, wil niet halverwege weg zijn. Wie
-      // echt weg wil, klikt op de overgang (en het scherm zegt erbij waarheen).
-      const zojuist = S.netGeland && S.netGeland.x === t.x && S.netGeland.y === t.y;
-      if (!zojuist) S.netGeland = null;
-      const o = !zojuist && !e.pad.length && S.modus === 'verkennen' ? T.overgangOp(w, t.x, t.y) : null;
-      if (o) {
-        e.pad = [];
-        S.naarGebied = o.naar;
-      }
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

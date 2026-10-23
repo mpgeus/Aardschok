@@ -98,7 +98,7 @@
   // een toets van het lopen): dan is niemand het.
   T.isAanvoerder = (S, e) => !!e && !!S.dorp && S.dorp.aanvoerder === e;
 
-  // Is de aanvoerder van dit dorp weg: in een ander gebied (js/gebied.js), of is er geen?
+  // Is de aanvoerder van dit dorp weg: niet (meer) op de kaart, of is er geen?
   T.aanvoerderIsWeg = (D) => !D.aanvoerder || !D.wereld.wezens.includes(D.aanvoerder);
 
   // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
@@ -146,7 +146,7 @@
   };
 
   // Het dorp waar je kijkt, voor het scherm (het tekenen, de muis, een klik): van de dorpen op de kaart die op het scherm
-  // is, dat waarvan het land het dichtst bij het midden van het beeld ligt; of null (een ander gebied, js/gebied.js). Op
+  // is, dat waarvan het land het dichtst bij het midden van het beeld ligt; of null (een kaart zonder dorp). Op
   // één kaart kunnen meer dorpen liggen (werklijst vraag 170, stap 6a). De wereld vraagt het niet: die werkt elk dorp bij.
   T.dorpHier = function (S) {
     const hier = (S.dorpen || []).filter((D) => D.wereld === S.wereld);

@@ -243,7 +243,7 @@ function nieuwSpel(zaad) {
   console.warn = () => {};
   const S = { kalender: T.nieuweKalender() };
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    assert.ok(T.beginOpEiland(S, zaad));
   } finally {
     console.warn = echt;
   }

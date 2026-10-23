@@ -11,8 +11,8 @@ const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => {} });
 
 test('de grond ligt per tegel klaar om te tekenen, uit de terreinsets van rand.tsx', () => {
-  const { w } = proefDorp(T);
-  const o = w.overgangen[0];
+  const { w, D } = proefDorp(T);
+  const o = D.plek.uitgang;
   const g = T.grondOp(w, o.x, o.y);
   assert.ok(g && g.vel === 'rand', 'elke tegel weet welk grondplaatje eronder ligt, uit tegels/rand.tsx');
   assert.ok(Number.isInteger(g.id));
@@ -102,29 +102,6 @@ test('T.tekenVolgorde: twee gebouwen gaan op hun hele voet, ook een lang gebouw 
   assert.deepEqual(namen([item(klein, 'klein'), item(rij, 'rij')]), ['rij', 'klein']);
   assert.equal(T.gebouwVoorGebouw(klein, rij), true);
   assert.equal(T.gebouwVoorGebouw(rij, klein), false);
-});
-
-// ---------------------------------------------------------------- de overgang
-
-test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
-  // Achter de weg is nog niets; de speeltest telde die fout als zijn aanvoerder de weg af liep (3 okt).
-  const { S } = proefDorp(T);
-  const uit = S.wereld.overgangen[0];
-  assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het dorp is een proefkaart met een weg naar nergens');
-  const fouten = [];
-  const berichten = [];
-  const oud = console.error;
-  const oudUi = T.ui;
-  console.error = (m) => fouten.push(m);
-  T.ui = { bericht: (t) => berichten.push(t) };
-  try {
-    T.gaNaarGebied(S, uit.naar);
-  } finally {
-    console.error = oud;
-    T.ui = oudUi;
-  }
-  assert.deepEqual(fouten, []);
-  assert.deepEqual(berichten, ['There is nothing that way yet, only mist.']);
 });
 
 // ------------------------------------------------- wat er op een tegel staat (js/wereld.js, werklijst vraag 71)

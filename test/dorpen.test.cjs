@@ -19,7 +19,6 @@ function tweeDorpen(zaad = 3) {
   const buur = proefDorp(T, { zaad }).D;
   buur.ander = true;
   buur.kalender = S.kalender;
-  buur.wereld.gebied = 'buurdorp';
   S.dorpen.push(buur);
   return { S, jij: S.dorp, buur };
 }

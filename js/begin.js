@@ -66,6 +66,60 @@
   const IN = () => T.BEGIN_INSTELLINGEN;
 
   // ---------------------------------------------------------------------------------------------
+  // Een nieuw spel op het eiland
+  // ---------------------------------------------------------------------------------------------
+
+  // Het land van een nieuw spel (vraag 112, a; Marcel, 3 okt: "Eigenlijk een random map generator per nieuwe game"): het
+  // zaad voor de maker, het land dat je bij Nieuw spel koos, of een nieuw. Een zaad is een getal van vijf cijfers, zodat
+  // je een land dat je mooi vond, kunt onthouden en opnieuw spelen.
+  T.landVoorNieuwSpel = (gekozen) => (gekozen != null ? gekozen : T.nieuwLandZaad());
+  T.nieuwLandZaad = () => 1 + Math.floor(Math.random() * T.MAKER_INSTELLINGEN.zaden);
+
+  // Een nieuw spel beginnen: de maker legt je land op het eiland (js/maker.js) uit `makerZaad` (zonder: een nieuw), met
+  // het lege begin erop, een open plek voor het plein en het kamp. Welk land een nieuw spel krijgt, zegt T.landVoorNieuwSpel
+  // hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad), zodat hetzelfde zaad
+  // hetzelfde spel geeft. Daarna staan S.wereld, S.dorp met zijn aanvoerder, en S.dorpen klaar; geeft het dorp. (Tot 23
+  // okt heette dit T.beginOpKaart, in js/gebied.js, en kon het ook op een kaart uit Tiled beginnen; ronde 4 van het
+  // snoeien.)
+  T.beginOpEiland = function (S, makerZaad) {
+    const zaad = makerZaad != null ? makerZaad : T.nieuwLandZaad();
+    const w = T.laadGemaaktGehucht(zaad);
+    S.wereld = w;
+    // Zijn soort is 'aanvoerder' en zijn kant 'speler' (T.WEZENS, js/wereld.js); hij draagt het vel van een gewone
+    // dorpeling, en welk, kiest zijn zaad (T.sprites.houding, js/sprites.js).
+    const aanvoerder = w.wezens.find((e) => e.soort === 'aanvoerder');
+    zetAanvoerderKlaar(aanvoerder, 1);
+    // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
+    // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp); een tweede
+    // komt erbij met T.dorpErbij (hieronder).
+    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad });
+    S.dorpen = [S.dorp];
+    return S.dorp;
+  };
+  function zetAanvoerderKlaar(aanvoerder, zaad) {
+    aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
+    if (aanvoerder.zaad == null) aanvoerder.zaad = zaad; // zijn zaad kiest zijn vel (T.sprites.houding, js/sprites.js)
+    Object.assign(aanvoerder, { tx: aanvoerder.x, ty: aanvoerder.y, pad: [], onderweg: false });
+  }
+
+  // Nog een dorp op het eiland van het eerste (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op
+  // hetzelfde eiland", en 16 okt: "A1"): op de dichtste andere dorpsplek die ver genoeg weg ligt (T.legDorpOpKaart,
+  // js/maker.js), op dezelfde kaart, met het lege begin erop. Zijn zaad komt uit dat van het eiland en zijn nummer, zodat
+  // hetzelfde spel hetzelfde tweede dorp krijgt. Het dorp komt achteraan in S.dorpen; geeft het dorp.
+  T.dorpErbij = function (S) {
+    const eerste = S.dorpen[0];
+    const w = eerste.wereld;
+    const E = T.eilandVan(w.eiland.zaad);
+    const bij = E.plekken.find((p) => p.naam === eerste.plek.naam);
+    const nummer = S.dorpen.length;
+    const { plek, aanvoerder } = T.legDorpOpKaart(w, { bij, niet: S.dorpen.map((D) => D.plek.naam) });
+    zetAanvoerderKlaar(aanvoerder, 1 + nummer);
+    const D = T.nieuwDorp(S, w, aanvoerder, { zaad: w.eiland.zaad + 7919 * nummer, plek });
+    S.dorpen.push(D);
+    return D;
+  };
+
+  // ---------------------------------------------------------------------------------------------
   // Het begin
   // ---------------------------------------------------------------------------------------------
 
@@ -442,9 +496,7 @@
   // Een nieuw spel op het eiland van `zaad`, met het lege begin, zoals js/main.js het begint, maar zonder scherm.
   function begin(zaad = PROEF_ZAAD) {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen' };
-    metVastToeval(11, () => {
-      if (!T.beginOpKaart(S, 'gehucht', zaad)) throw new Error(`geen spel op het eiland van ${zaad}`); // geen tekst
-    });
+    metVastToeval(11, () => T.beginOpEiland(S, zaad));
     return S;
   }
 

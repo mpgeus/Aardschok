@@ -34,26 +34,23 @@
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=gehucht) begint meteen,
   // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land is dat van de maker uit `makerZaad`
-  // (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.begin), of een nieuw (T.landVoorNieuwSpel, js/gebied.js),
+  // (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.begin), of een nieuw (T.landVoorNieuwSpel, js/begin.js),
   // met het lege begin erop.
   T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     S.zoom = zoomVenster; // ook als het vorige spel verder uitgezoomd was
     Object.assign(S, {
       tijd: 0,
-      gebieden: {}, // een nieuw spel begint met schone gebieden
       modus: 'verkennen',
       kalender: T.nieuweKalender(), // dag, seizoen, jaar en snelheid (js/tijd.js), voor het spel en al zijn dorpen
-      // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpKaart hieronder (js/dorp.js).
+      // De dorpen (S.dorpen) en je eigen dorp (S.dorp) komen met de kaart: T.beginOpEiland hieronder (js/begin.js).
       bezocht: new Set(['hal']),
-      naarGebied: null,
-      netGeland: null, // de tegel waar de aanvoerder zojuist is neergezet (js/gebied.js)
       // De spelregels van dit spel (vraag 172, js/opties.js): wat je het laatst koos. Ze gelden meteen, ook voor het land
       // dat hieronder komt (de hoogte), en liggen vast zodra het spel begint (New game, js/menu.js).
       spelregels: T.nieuweSpelregels(),
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
     T.pasSpelregelsToe(S);
-    T.beginOpKaart(S, 'gehucht', makerZaad != null ? makerZaad : T.landVoorNieuwSpel()); // zet S.wereld en S.dorp.aanvoerder
+    T.beginOpEiland(S, T.landVoorNieuwSpel(makerZaad)); // zet S.wereld en S.dorp.aanvoerder
     if (PROEFJE) S.proefje = true;
     zetCameraOpAanvoerder();
     T.ui.reset(S);
@@ -1443,8 +1440,7 @@
     // de wegen je land verlaten.
     eiland(zaad) {
       if (zaad != null) T.nieuwSpel(Number(zaad));
-      const w = S.gebieden && S.gebieden.gehucht;
-      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (een proefje, of een oud spel).'; // geen tekst
+      const w = S.wereld;
       const E = T.eilandVan(w.eiland.zaad);
       const dorp = E.plekken.find((p) => p.naam === S.dorp.plek.naam);
       return {
@@ -1452,7 +1448,7 @@
         dorp: S.dorp.plek.naam,
         plek: dorp ? dorp.aard : null,
         hoek: [w.eiland.x0, w.eiland.y0],
-        uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+        uitgang: S.dorp.plek.uitgang ? [S.dorp.plek.uitgang.x, S.dorp.plek.uitgang.y] : null,
       };
     },
     // Het proefdorp (T.proefdorp, js/begin.js; ronde 2 van het snoeien, stap 6): Spel.debug.proefdorp(5) speelt het dorp
@@ -1541,7 +1537,7 @@
       const p = T.opvolgerVan(D);
       return { aanvoerder: naam(D.aanvoerder), opvolger: p ? T.naamVanBewoner(p) : null, wapen: D.aanvoerder ? T.slagVan(D.aanvoerder).wapen : null };
     },
-    // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/gebied.js): op de dichtste andere
+    // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/begin.js): op de dichtste andere
     // dorpsplek, met het lege begin. Spel.debug.wissel() maakt jou het volgende dorp, zodat je ze in één browser speelt:
     // wat je ziet, hoort, bouwt en stuurt, is dan van dat dorp (S.dorp; alleen scherm).
     tweedeDorp() {
@@ -2054,11 +2050,6 @@
         if (weer) Object.assign(D.weer, weer);
       }
       return uit;
-    },
-    // Naar een ander gebied springen zonder ernaartoe te lopen: Spel.debug.gaNaar('proefbos').
-    gaNaar(naam) {
-      T.gaNaarGebied(S, naam);
-      return S.wereld.gebied;
     },
     // Laat het spel `seconden` verder lopen zonder op beelden van de browser te wachten.
     // Een verborgen tabblad tekent maar af en toe een beeld, en dan loopt alles in slow

@@ -381,7 +381,7 @@ test('hoogte, bruggen: vlak op de hoogte van hun oevers, met het water op zijn p
   assert.equal(T.brugOpTil(vlak, 0, x, y), 0);
 });
 
-// Vraag 174, stap b2: een dorp dat erbij komt (T.dorpErbij, js/gebied.js), ligt ook op een vlakte, met zijn plein vlak.
+// Vraag 174, stap b2: een dorp dat erbij komt (T.dorpErbij, js/begin.js), ligt ook op een vlakte, met zijn plein vlak.
 test('hoogte, meer dorpen: elk dorp ligt op zijn eigen vlakte, en het eerste blijft zoals het lag', () => {
   // waar het tweede dorp komt: eerst op een spel dat de hoogte daar nog niet uitrekende
   const vers = spelMetHeuvels(5);
