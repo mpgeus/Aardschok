@@ -2217,6 +2217,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het kort met `T.eindRegels` (het jaarverslag, met wat er staat), en de link naar Steam als `T.DEMO_INSTELLINGEN.steam`
   een adres heeft. Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
   leest ze meer (`test/einde.test.cjs`).
+- **De punten** (vraag 186, 23 okt; Marcel: 5a3 en 5b1): `T.telVerzameld(D, wat, n)` telt in `D.jaarboek.verzameld` wat
+  het dorp maakt, oogst of rooit; de enige bronnen zijn `T.opStapel` (`js/kar.js`: alles van een gebouw, een veld of
+  het rooien), de wol en het slachten (`js/vee.js`), de kaas en het sprokkelhout (`js/behoeften.js`). Wat er gekocht,
+  gegeven of teruggegeven wordt, gaat met `T.wijzigVoorraad` alleen en telt dus niet: wie een nieuwe bron maakt, telt
+  hem erbij. `T.waardeVan(wat)` geeft de waarde in goud per stuk: wat de marskramer gemiddeld geeft (`koopt`,
+  `js/handel.js`), en anders `T.EINDE_INSTELLINGEN.waarde` (in de werkbank; een waar heet daar met `T.waarNaam`).
+  `T.puntenVan(D)` telt verzameld en wat er in de voorraad ligt (met het goud, zonder de stapels buiten).
+  `T.telPunten(D)` staat in `T.heerKomt` (`js/heer.js`), vóór de tiende, alleen in de demo: `D.punten`, en de beste op
+  deze computer onder `aardschok.punten.beste` (`T.opslagPlek`, `T.bestePunten`). Het eindscherm van de demo zet ze
+  onder het jaarverslag (`js/hud.js`, `.einde-punten`). `Spel.debug.einde()` zegt ze ook.
 
 ## Het gevecht
 

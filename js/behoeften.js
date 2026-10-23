@@ -775,7 +775,10 @@
     r.graan += r.zaaigraan;
     r.tekort = Math.max(0, rest - r.zaaigraan);
     r.kaasErbij = (melkVandaag - r.melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
-    if (r.kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', r.kaasErbij);
+    if (r.kaasErbij > 0) {
+      T.wijzigVoorraad(D, 'kaas', r.kaasErbij);
+      T.telVerzameld(D, 'kaas', r.kaasErbij);
+    }
     if (D.vee) D.vee.melk = 0;
     // De afwisseling: wat het dorp at, per soort.
     const genoeg = nodig * IN.afwisselingDeel;
@@ -1042,7 +1045,10 @@
     pasBederfToe(D);
     pasBrandhoutToe(D, b);
     const sprokkel = T.sprokkelHout(D); // het dode hout van vandaag, voor de winter
-    if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
+    if (sprokkel > 0) {
+      T.wijzigVoorraad(D, 'hout', sprokkel);
+      T.telVerzameld(D, 'hout', sprokkel);
+    }
     pasWinterVerliesToe(D, b);
     pasVertrekToe(D, b, dag);
     pasHuisGroeiToe(D, b);

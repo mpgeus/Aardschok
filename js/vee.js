@@ -694,6 +694,7 @@
     const wol = schapen.length * IN().wolPerSchaap;
     if (wol > 0 && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'wol', wol);
+      T.telVerzameld(D, 'wol', wol);
       T.zeg(D, T.t('It is {maand}: {n|# sheep was|# sheep were} sheared. That gives {wol}.', { maand: T.MAANDEN[T.datumVanDag(dag).maand].toon, n: schapen.length, wol: T.hoeveel(wol, 'wol') }), 'goed');
     }
     return wol;
@@ -840,8 +841,11 @@
     const o = T.slachtOpbrengst(dieren, dag);
     for (const e of dieren) haalWeg(D, e);
     if (D.voorraad && T.wijzigVoorraad) {
-      if (o.vlees > 0) T.wijzigVoorraad(D, 'vlees', o.vlees);
-      if (o.huiden > 0) T.wijzigVoorraad(D, 'huiden', o.huiden);
+      for (const wat of ['vlees', 'huiden']) {
+        if (!(o[wat] > 0)) continue;
+        T.wijzigVoorraad(D, wat, o[wat]);
+        T.telVerzameld(D, wat, o[wat]);
+      }
     }
     if (D.vee) D.vee.slachtVraag = false;
     if (dieren.length) {

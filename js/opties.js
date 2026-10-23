@@ -1478,6 +1478,8 @@
     'REGIE_INSTELLINGEN.halen': T.t('speed while his men fetch'), // geen tekst
     'REGIE_INSTELLINGEN.zwart': T.t('seconds fading to black'), // geen tekst
     'REGIE_INSTELLINGEN.overslaan': T.t('seconds to black when skipped'), // geen tekst
+    // De punten van de demo (werklijst R, vraag 186)
+    'EINDE_INSTELLINGEN.waarde': T.t('the score: what each piece is worth in gold, unless the merchant buys it'), // geen tekst
     // De overval van de demo (werklijst R, vraag 185)
     'ROVERS_INSTELLINGEN.demo': T.t('the raid in the demo'), // geen tekst
     'ROVERS_INSTELLINGEN.demo.aantal': T.t('robbers'), // geen tekst
@@ -1487,14 +1489,17 @@
     'ROVERS_INSTELLINGEN.demo.voorDonker': T.t('they come at the latest this many hours before sunset'), // geen tekst
   };
   // De naam van de sleutel die bij dit pad hoort, of null als die ontbreekt.
+  // Een waar heet zoals op het scherm (T.waarNaam, js/voorraad.js), als hij hier geen eigen naam heeft: zo staat een
+  // naam niet twee keer (de waarde van elke waar, EINDE_INSTELLINGEN.waarde; vraag 186).
+  const waarNaam = (s) => (T.waarNaam(s) !== s ? T.waarNaam(s) : null);
   T.werkbankNaam = (pad) => {
     const sleutel = pad.slice(pad.lastIndexOf('.') + 1);
-    return NAAM_VAN_PAD[pad] || NAAM_VAN_SLEUTEL[sleutel] || null;
+    return NAAM_VAN_PAD[pad] || NAAM_VAN_SLEUTEL[sleutel] || waarNaam(sleutel) || null;
   };
 
   // "brandhoutPerHuishoudenPerDag" wordt "brandhout per huishouden per dag"; alleen als de sleutel geen naam heeft.
   const inWoorden = (s) => s.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
-  const sleutelNaam = (pad, s) => NAAM_VAN_PAD[pad] || NAAM_VAN_SLEUTEL[s] || inWoorden(s);
+  const sleutelNaam = (pad, s) => NAAM_VAN_PAD[pad] || NAAM_VAN_SLEUTEL[s] || waarNaam(s) || inWoorden(s);
 
   // Hoe heet plek `i` in een rij: wat de speler van het ding ziet (een bezoek van de marskramer heeft `toon`, want zijn
   // `naam` is de sleutel waar de regels op letten; een straf staat in T.STRAF_TOON), bij een prijs het bezoek waar hij bij

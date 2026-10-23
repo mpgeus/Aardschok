@@ -1834,8 +1834,9 @@
         aantal: G.aantal, beantwoord: G.beantwoord, stil: G.stil,
       };
     },
-    // Het jaar in het kort (js/einde.js): het jaarboek tot nu en het laatste jaarverslag. Spel.debug.einde('jaarverslag')
-    // maakt het verslag nu en toont het. (Het winnen is er sinds 11 okt niet meer.)
+    // Het jaar in het kort (js/einde.js): het jaarboek tot nu en het laatste jaarverslag, en de punten (vraag 186): nu, op
+    // Sint-Maarten (in de demo) en de beste op deze computer. Spel.debug.einde('jaarverslag') maakt het verslag nu en toont
+    // het. (Het winnen is er sinds 11 okt niet meer.)
     einde(wat) {
       const D = S.dorp;
       const dag = Math.floor(S.kalender.dag);
@@ -1846,6 +1847,9 @@
       return {
         jaarboek: D.jaarboek,
         laatsteJaarverslag: D.jaarverslag && D.jaarverslag.regels,
+        punten: T.puntenVan(D),
+        puntenOpSintMaarten: D.punten || null,
+        bestePunten: T.bestePunten(),
       };
     },
     // Opslaan en laden zonder het menu (js/opslaan.js): Spel.debug.opslaan('2') zet het spel op plek 2

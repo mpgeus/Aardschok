@@ -104,11 +104,13 @@
   // Wat gebouw g maakte, of wat er bij g gerooid werd: op zijn stapel als het met de kar gaat, anders meteen in de
   // voorraad. Een bouwplaats die het nog nodig heeft, neemt het eerst zelf (B2: "wat ze op de plek rooien, gaat eerst in
   // dat gebouw"). Eén weg voor alles wat een gebouw de voorraad in brengt. Wat het maakte (niet wat er gerooid werd,
-  // `{ gerooid: true }`), telt in zijn briefje (T.telGemaakt, js/gebouwen.js; vraag 156).
+  // `{ gerooid: true }`), telt in zijn briefje (T.telGemaakt, js/gebouwen.js; vraag 156), en alles telt als verzameld
+  // in het jaarboek (T.telVerzameld, js/einde.js: de punten).
   T.opStapel = function (D, g, wat, hoeveel, { gerooid = false } = {}) {
     const bij = stapelGebouw(g);
     if (!(hoeveel > 0)) return;
     if (!gerooid) T.telGemaakt(D, bij, wat, hoeveel);
+    T.telVerzameld(D, wat, hoeveel); // voor de punten (js/einde.js; vraag 186)
     if (!bij || !T.gaatMetVervoer(D, wat)) {
       T.wijzigVoorraad(D, wat, hoeveel);
       return;

@@ -624,6 +624,14 @@ een stand, en elke stand wil iets.
   welke huizen doorgroeiden, wat de heer kreeg, en wat het meest gemist werd (de feesten staan er niet meer in). De
   getallen in de werkbank ("Het eind": 10 over); `Spel.debug.einde('jaarverslag')` toont het
   verslag nu. De speeltest schrijft het jaarverslag op.
+  **De punten** (23 okt, vraag 186; Marcel, 20 okt: "Een licht puntensysteem achter de schermen voor als mensen de demo
+  'uitspelen'; hoe meer je hebt verzamelt en in je stores hebt, hoe hoger de punten. [...] Geen doden etc.", en zijn
+  keuzes 5a3 en 5b1). Als de heer op Sint-Maarten komt, vóór de tiende, telt het spel twee dingen in goud: wat je mensen
+  dit jaar verzamelden of maakten (de oogst, het hout, de stenen, de planken, de wol, ...), en wat er in je opslag ligt,
+  met je goud. Een waar is waard wat de marskramer ervoor geeft, en wat hij niet koopt, staat in de werkbank ("The
+  ending", *the score*). Wat je kocht of kreeg, telt niet als verzameld, en wat nog buiten op een stapel ligt, niet als in
+  de opslag. Tijdens het spel zie je ze niet; op het eindscherm van de demo staat één getal onder het jaarverslag
+  (*Score: 312*, met hoe het is opgebouwd), en je beste blijft op je computer (*A new best!* of *Your best: 340.*).
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
 en in hoeveel huizen; met een put, een kapel, de herberg of een markt in de hand zie je de kring, en zegt de muis welke

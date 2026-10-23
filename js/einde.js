@@ -15,9 +15,17 @@
 // bracht, welke huizen doorgroeiden, wat de heer kreeg, en wat het meest gemist werd. Regels
 // zonder scherm; toetsen in test/einde.test.cjs.
 //
-// D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, geoogst, gemist: { wat het miste: dagen } },
-//                sinds begin
+// De punten (werklijst R, vraag 186; Marcel, 20 okt: "Een licht puntensysteem achter de schermen voor als mensen de demo
+// 'uitspelen'; hoe meer je hebt verzamelt en in je stores hebt, hoe hoger de punten. [...] Geen doden etc.", en zijn
+// keuzes 5a3 en 5b1): wat het dorp dit jaar verzamelde of maakte, en wat er op Sint-Maarten in de opslag ligt, met het
+// goud, allebei in goud, geteld als de heer komt, vóór de tiende. Tijdens het spel zie je ze niet; in de demo staan ze op
+// het eindscherm (js/hud.js), en de beste blijft op deze computer. Wat het dorp kocht, kreeg of terugkreeg, telt niet
+// als verzameld; wat nog buiten op een stapel ligt, niet als in de opslag (vraag 184).
+//
+// D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, geoogst, gemist: { wat het miste: dagen },
+//                verzameld: { wat: hoeveel } }, sinds begin
 // D.jaarverslag: het laatste jaarverslag, { dag, regels }
+// D.punten:      in de demo, op Sint-Maarten: { dag, verzameld, ligt, totaal, beste (de beste van vóór dit spel, of null) }
 (function (T) {
   'use strict';
 
@@ -25,6 +33,15 @@
   T.EINDE_INSTELLINGEN = {
     // Minder mensen dan dit, en het spel is uit.
     minstensOver: 10,
+    // De punten (vraag 186): wat een waar waard is, in goud per stuk. Wat de marskramer koopt, is waard wat hij er
+    // gemiddeld voor geeft (`koopt`, js/handel.js); de rest staat hier, naar wat erin gaat en hoeveel werk het is. Een
+    // waar die nergens staat (de mest), telt niet.
+    waarde: {
+      planken: 0.3, steen: 0.3, klei: 0.15, riet: 0.15, turf: 0.2, kalk: 0.3, hooi: 0.05,
+      ijzer: 1.5, gereedschap: 3, zout: 0.5, laken: 1, leer: 0.6, vaten: 0.3,
+      meel: 0.4, brood: 0.5, bier: 0.2, wijn: 1, melk: 0.1, kaas: 0.4,
+      speren: 2, pieken: 3, zwaarden: 3, schilden: 2, bogen: 2, kruisbogen: 3, harnassen: 2,
+    },
   };
   const IN = () => T.EINDE_INSTELLINGEN;
 
@@ -71,12 +88,21 @@
   // Het jaarboek en het jaarverslag
   // ---------------------------------------------------------------------------------------------
 
-  const nieuwJaarboek = (D, dag) => ({ begin: dag, mensen: D.bevolking || 0, kwamen: 0, stierven: 0, weg: 0, doorgegroeid: 0, geoogst: 0, gemist: {} });
+  const nieuwJaarboek = (D, dag) => ({ begin: dag, mensen: D.bevolking || 0, kwamen: 0, stierven: 0, weg: 0, doorgegroeid: 0, geoogst: 0, gemist: {}, verzameld: {} });
 
   // Wat het jaarboek telt dat niet in het dagboek staat: het graan van de oogst, tegel voor tegel (js/akkers.js).
   T.telOogstInJaarboek = function (D, graan) {
     const J = D.jaarboek || (D.jaarboek = nieuwJaarboek(D, D.kalender ? Math.floor(D.kalender.dag) : 0));
     J.geoogst = (J.geoogst || 0) + graan;
+  };
+
+  // Wat het dorp verzamelde of maakte, voor de punten: alles wat een gebouw maakt of er gerooid wordt (T.opStapel,
+  // js/kar.js), de wol, het slachten (js/vee.js), de kaas en het sprokkelhout (js/behoeften.js).
+  T.telVerzameld = function (D, wat, n) {
+    if (!(n > 0)) return;
+    const J = D.jaarboek || (D.jaarboek = nieuwJaarboek(D, dagNu(D)));
+    const v = J.verzameld || (J.verzameld = {});
+    v[wat] = (v[wat] || 0) + n;
   };
 
   // Wat er vandaag gebeurde, in het jaarboek: uit het dagboek (wie er kwam, stierf of wegtrok, welke huizen doorgroeiden),
@@ -131,6 +157,55 @@
     const staat = (D.gebouwen || []).filter((g) => g.klaar && !T.isVeldSoort(g.soort) && g.soort !== 'tent').length;
     if (staat) regels.splice(1, 0, T.t('{n|One building stands|# buildings stand} where there was wilderness.', { n: staat }));
     return regels;
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // De punten (vraag 186)
+  // ---------------------------------------------------------------------------------------------
+
+  // Wat een stuk van `wat` waard is, in goud: goud is goud, wat de marskramer koopt, is waard wat hij er gemiddeld voor
+  // geeft, en de rest staat in `waarde`.
+  T.waardeVan = function (wat) {
+    if (wat === 'goud') return 1;
+    const k = T.HANDEL_INSTELLINGEN.koopt[wat];
+    if (!k) return IN().waarde[wat] || 0;
+    const prijs = [].concat(k.prijs);
+    return prijs.reduce((a, b) => a + b, 0) / prijs.length / (k.per || 1);
+  };
+  const inGoud = (waren) => Object.keys(waren || {}).reduce((som, wat) => som + (waren[wat] || 0) * T.waardeVan(wat), 0);
+
+  // De punten van dorp D nu: wat het dit jaar verzamelde, en wat er in de opslag ligt.
+  T.puntenVan = function (D) {
+    const verzameld = Math.round(inGoud(D.jaarboek && D.jaarboek.verzameld));
+    const ligt = Math.round(inGoud(D.voorraad));
+    return { verzameld, ligt, totaal: verzameld + ligt };
+  };
+
+  // De beste punten van de demo op deze computer (T.opslagPlek, js/opslaan.js), of null.
+  const besteSleutel = () => `${T.OPSLAG_SLEUTEL}.punten.beste`; // geen tekst
+  T.bestePunten = function () {
+    try {
+      const p = T.opslagPlek();
+      const n = p ? p.getItem(besteSleutel()) : null;
+      return n != null && Number.isFinite(Number(n)) ? Number(n) : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // Op Sint-Maarten, als de heer komt (T.heerKomt, js/heer.js), vóór de tiende (5b1): in de demo de punten, voor het
+  // eindscherm, en zijn ze beter dan ooit, dan blijven ze op deze computer.
+  T.telPunten = function (D) {
+    if (!T.DEMO_INSTELLINGEN.aan || D.ander) return;
+    const beste = T.bestePunten();
+    D.punten = { dag: dagNu(D), ...T.puntenVan(D), beste };
+    if (beste != null && D.punten.totaal <= beste) return;
+    try {
+      const p = T.opslagPlek();
+      if (p) p.setItem(besteSleutel(), String(D.punten.totaal));
+    } catch (e) {
+      // een browser die niets bewaart (een privévenster): dan blijft er niets
+    }
   };
 
   const nieuwJaar = (dag) => {

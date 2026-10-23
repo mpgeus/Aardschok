@@ -1387,6 +1387,9 @@ hebben we zoizo nodig. volgorde is akkoord"):
   stapels** ("stapels ja"); de korte scène van de rovers kan later, met de cinematic. **Gebouwd** (23 okt; `spel.md`,
   bij Rovers en de militie, "In de demo één overval").
 - **186:** wat er dit jaar binnenkwam en wat er op Sint-Maarten ligt, allebei (5a3), geteld vóór de tiende (5b1).
+  **Gebouwd** (23 okt; `spel.md`, bij "2e, het eind en het jaar in het kort", "De punten"): binnengekomen is wat je
+  mensen verzamelden of maakten, niet wat je kocht (anders tel je met kopen en verkopen op); een waar is waard wat de
+  marskramer ervoor geeft, en de rest staat in de werkbank.
 - **187:** nu alleen het ontwerp, bouwen na de demo (6a1); Tiled eruit in een snoeironde, de proefkaarten naar het
   proefdorp (6b1); een checkpoint is een plek die iets in gang zet (6c).
 - **188:** allebei: zoals Age of Empires, van niets tot er één valt (7a1), en een verdediger tegen een belegeraar (7a3);

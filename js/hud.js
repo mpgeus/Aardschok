@@ -560,10 +560,18 @@
     const heer = jaren ? `<p class="einde-jaren">${T.t('What the lord received: {jaren}', { jaren })}</p>` : '';
     // Het eerste Sint-Maarten (werklijst, E, stap 5; Marcel, 18 okt, D2): je weigerde hem en zijn leger kwam (js/heer.js,
     // T.weigerHeer: "met death als gevolg"), of je betaalde en hij reed weg met je waren (alleen in de demo,
-    // T.DEMO_INSTELLINGEN). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), en in de demo de link naar
-    // de Steam-pagina zodra die er is. De cinematics komen ervoor (werklijst, E, stap 4).
+    // T.DEMO_INSTELLINGEN). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), in de demo de punten (vraag
+    // 186: één getal onder het jaarverslag, D.punten, T.telPunten in js/einde.js), en de link naar de Steam-pagina zodra
+    // die er is. De cinematics komen ervoor (werklijst, E, stap 4).
     const regels = () => `<ul class="einde-regels">${T.eindRegels(D).map((r) => `<li>${veilig(r)}</li>`).join('')}</ul>`;
-    const demo = () => (!T.DEMO_INSTELLINGEN.aan ? '' : `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
+    const punten = () => {
+      const p = D.punten;
+      if (!p) return '';
+      const beste = p.beste == null ? '' : p.totaal > p.beste ? ` ${T.t('A new best!')}` : ` ${T.t('Your best: {beste}.', { beste: p.beste })}`;
+      return `<p class="einde-punten">${T.t('Score: {totaal}', { totaal: p.totaal })}</p>` +
+        `<p class="einde-jaren">${T.t('{verzameld} for what your people gathered this year, {ligt} for what lay in your stores on Martinmas.', { verzameld: p.verzameld, ligt: p.ligt })}${beste}</p>`;
+    };
+    const demo = () => (!T.DEMO_INSTELLINGEN.aan ? '' : punten() + `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
       (T.DEMO_INSTELLINGEN.steam ? `<p><a class="einde-wenslijst" href="${veilig(T.DEMO_INSTELLINGEN.steam)}" target="_blank" rel="noopener">${T.t('Wishlist {naam} on Steam', { naam: T.NAAM })}</a></p>` : ''));
     if (D.einde && D.einde.reden === 'leger') {
       T.ui.toonOverlay(

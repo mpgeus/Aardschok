@@ -253,7 +253,8 @@ berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in é
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.versiering()` zegt welke boom er op het plein staat (de meiboom of de kerstboom) en waar.
-`Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei; `('jaarverslag')` toont het jaar
+`Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei, en de punten (vraag 186: nu,
+op Sint-Maarten in de demo, en de beste op deze computer); `('jaarverslag')` toont het jaar
 in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 okt niet meer.)
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
 wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel

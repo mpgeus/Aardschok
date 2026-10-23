@@ -750,7 +750,8 @@
   T.heerKomt = function (D, dag) {
     const h = D.heer || (D.heer = T.nieuweHeer());
     // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer): anders werd zijn
-    // eis kleiner terwijl je hem betaalde.
+    // eis kleiner terwijl je hem betaalde. In de demo tellen dan ook de punten, vóór de tiende (js/einde.js; vraag 186).
+    T.telPunten(D);
     h.bezoek = {
       komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
       kist: (D.voorraad && D.voorraad.goud) || 0,
