@@ -763,4 +763,4 @@ if (require.main === module) {
   else proef(naam);
 }
 
-module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind, maatVan, voetenVan, helmVan };
+module.exports = { FIGUREN, figuur, beeldenVan, voorgrond, verkleind, maatVan, voetenVan, helmVan, kleurMaat, kleurGelijk };

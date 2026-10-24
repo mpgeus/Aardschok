@@ -2050,6 +2050,14 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   grijzer), de helm bijna wit en zonder lijn, de maliën een grauwe vlek; en lopend houdt hij de speer lager en steiler dan
   de generator (de handen voor de buik, het lange eind naar beneden, in Z bijna rechtop voor het lijf), waar de generator
   hem voor de borst draagt met het lange eind omhoog.
+- *De kleuren en de linkerhand* (Marcel: "Dan moeten we de kleuren iets dichterbij brengen. Ook heeft hij zijn linker hand
+  niet om de speer"). De kleur: in `eigen.cjs` per beeld op spelmaat de kleur per stof (staal en maliën, het geel, het
+  blauw, de rest) gelijkgetrokken met het staande beeld van de generator in die richting, met `kleurGelijk` uit
+  `generator.cjs` (waarmee die zijn eigen vellen gelijktrekt; nu ook uitgevoerd). Het geel is nu goudgeel, het blauw voller,
+  het leer warm bruin en de helm grijs in plaats van wit. Dat gebeurt na het renderen, op de vellen; de render uit Blender zelf
+  is nog bleek. De hand: de IK zette de pols op het doel en de vuist zat verder, dus de linkerhand hing naast de speer; nu
+  schuift het doel tot de vuist zelf op de lijn van de speer staat (op 0,4 en 1,4 millimeter), en beide handen zitten om de
+  schacht. Marcel daarna: **"Het gaat uiteindelijk om de gebakken render uit blender."**
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

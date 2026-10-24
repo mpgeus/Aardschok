@@ -397,6 +397,16 @@ def draag_schuin(sc, rig, dragen):
         c.use_tail = True
         doelen[k] = leeg
     bpy.context.view_layer.update()
+    # de IK zet de pols op het doel, maar de vuist zit verder: schuif het doel tot de vuist zelf op zijn plek komt, zodat
+    # beide handen om de speer zitten (Marcel: "Ook heeft hij zijn linker hand niet om de speer")
+    vuist = lambda k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3
+    for _ in range(4):
+        for k in ('R', 'L'):
+            mis = plekken[k] - vuist(k)
+            doelen[k].matrix_world = Matrix.Translation(doelen[k].matrix_world.translation + mis)
+        bpy.context.view_layer.update()
+    for k in ('R', 'L'):
+        print('VUIST', k, 'mist', round((plekken[k] - vuist(k)).length, 4), 'm')
     return doelen
 
 
@@ -408,11 +418,7 @@ def speer_in_handen(sc, rig, lengte, dragen):
     vuist = {k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3 for k in ('R', 'L')}
     laag = dragen['laag']
     hoog = 'L' if laag == 'R' else 'R'
-    as_ = (vuist[hoog] - vuist[laag]).normalized()
-    if 'as' in dragen:
-        # de vuisten komen niet precies op hun doel; de speer ligt langs de lijn tussen de doelen (die leunen en draaien mee)
-        doel = {k: bpy.data.objects[f'hand.{k}'].matrix_world.translation for k in ('R', 'L')}
-        as_ = (doel[hoog] - doel[laag]).normalized()
+    as_ = (vuist[hoog] - vuist[laag]).normalized()  # de vuisten staan op de lijn (draag_schuin), de speer gaat door allebei
     schacht = bpy.data.objects['speer.schacht']
     as0 = (schacht.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
     voet = schacht.matrix_world.translation - as0 * schacht.dimensions.z / 2
