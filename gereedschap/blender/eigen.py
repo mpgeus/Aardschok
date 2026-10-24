@@ -26,7 +26,7 @@ RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
 # gemeten tegen staan Z van de generator (kleurmeting op spelmaat, 24 okt): ons model was per stof 8 tot 18 punten lichter
 # (Lab) en vlakker, dus een stop donkerder, minder vullicht en lucht (diepere schaduwkant), en de zon meer van opzij, zodat
 # de plooien en de ruiten schaduw geven
-LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': 0.0, 'look': 'Medium High Contrast',
+LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': 0.4, 'look': 'Medium High Contrast',
          'zonrichting': (-0.82, -0.32, 0.48)}
 # proeven met het licht (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat maakt alles veel
 # dieper en echter"): -- <map> lichtproef rendert alleen staan Z in een paar standen, naar eigen-licht-<naam>.png
@@ -40,8 +40,33 @@ BREED = 0.9  # het skelet (en alles eraan) zo smal: de breedte van de generator 
 STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW vielen bijna over elkaar
 
 
+# Per soort materiaal hoe het licht erop valt (Marcel: "kan de kleding nog wat meer stoffiger gerenderd worden? Het ziet er
+# nog wat te plastic uit", en "Ook wat schaduw op de helm?"): stof helemaal mat, zonder glans maar met een zachte, wollige
+# rand in het licht (sheen) en het matte licht van ruwe stof (diffuse roughness); leer met een lichte glans; het staal glanst
+# (metaal toont zijn vorm door wat het weerspiegelt: de lucht met een verloop, licht_voor_spelmaat).
+STOF = ('wapenrok', 'wambuis', 'hozen')
+LEER = ('riem', 'leer', 'laars', 'omslag', 'armstuk', 'armrand', 'schede', 'handschoen', 'koord')
+STAAL = ('helm', 'staal')
+SOORTEN = {
+    'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
+             'Metallic': 0.0},
+    'leer': {'Roughness': 0.6, 'Specular IOR Level': 0.35, 'Metallic': 0.0},
+    'staal': {'Roughness': 0.42, 'Metallic': 0.9},
+    'anders': {'Roughness': 0.75},
+}
+
+
+def soort_van(m):
+    naam = m.name.split('.')[0]
+    for soort, namen in (('stof', STOF), ('leer', LEER), ('staal', STAAL)):
+        if naam.startswith(namen):
+            return soort
+    return 'anders'
+
+
 def mat_maken():
-    """Alle materialen mat, zoals de GLB: ruwheid 0,75, geen bump, metaal hooguit 0,7, geen lak."""
+    """Alle materialen zonder lak en fijne bobbels, per soort (SOORTEN): stof mat met sheen, leer licht glanzend, staal
+    glanzend; de rest mat zoals de GLB (ruwheid 0,75, metaal hooguit 0,7)."""
     for m in bpy.data.materials:
         if not m.node_tree or m.get('glans'):
             continue  # de maliën houden hun glans
@@ -58,9 +83,14 @@ def mat_maken():
                     if naam == 'Normal' and link.from_node.type == 'NORMAL_MAP':
                         continue
                     nt.links.remove(link)
-            n.inputs['Roughness'].default_value = 0.75
             n.inputs['Metallic'].default_value = min(n.inputs['Metallic'].default_value, 0.7)
             n.inputs['Coat Weight'].default_value = 0.0
+            for invoer, waarde in SOORTEN[soort_van(m)].items():
+                if invoer in n.inputs:
+                    n.inputs[invoer].default_value = waarde
+            # de wollige rand in de kleur van de stof zelf, niet wit (dan werden de donkerblauwe hozen grijs)
+            if soort_van(m) == 'stof' and n.inputs['Base Color'].links and 'Sheen Tint' in n.inputs:
+                nt.links.new(n.inputs['Base Color'].links[0].from_socket, n.inputs['Sheen Tint'])
 
 
 def holtes(afstand, diepte):
@@ -79,6 +109,30 @@ def holtes(afstand, diepte):
                     link.to_node.inputs['To Min'].default_value = 1 - diepte
 
 
+def lucht_met_verloop(sc):
+    """De lucht licht boven en donker onder (de grond): de onderkant van de helm en de rand worden donker, de bovenkant licht,
+    zoals op vel 01."""
+    nt = sc.world.node_tree
+    if nt.nodes.get('verloop'):
+        return
+    bg = nt.nodes['Background']
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ')
+    nt.links.new(tc.outputs['Generated'], sep.inputs[0])
+    mr = nt.nodes.new('ShaderNodeMapRange')
+    mr.name = 'verloop'
+    mr.interpolation_type = 'SMOOTHSTEP'
+    nt.links.new(sep.outputs['Z'], mr.inputs['Value'])
+    mr.inputs['From Min'].default_value, mr.inputs['From Max'].default_value = -0.15, 0.55
+    mix = nt.nodes.new('ShaderNodeMix')
+    mix.data_type = 'RGBA'
+    nt.links.new(mr.outputs['Result'], mix.inputs[0])
+    kl = [x for x in mix.inputs if x.type == 'RGBA']
+    kl[0].default_value = (0.05, 0.045, 0.04, 1)       # de grond
+    kl[1].default_value = (0.62, 0.68, 0.8, 1)        # de lucht
+    nt.links.new([x for x in mix.outputs if x.type == 'RGBA'][0], bg.inputs['Color'])
+
+
 def licht_voor_spelmaat(sc):
     if 'zonrichting' in LICHT:
         from mathutils import Vector
@@ -88,6 +142,7 @@ def licht_voor_spelmaat(sc):
     zon.energy = LICHT['zon']
     zon.angle = math.radians(LICHT['zonhoek'])
     bpy.data.objects['vul'].data.energy = LICHT['vul']
+    lucht_met_verloop(sc)
     sc.world.node_tree.nodes['Background'].inputs['Strength'].default_value = LICHT['lucht']
     sc.view_settings.exposure = LICHT['belichting']
     sc.view_settings.look = LICHT['look']

@@ -679,7 +679,7 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
     achter = k.glad(y, 0.0, 0.03)
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
-    kl = k.meng(f, lin('#16298a'), lin('#f7b21e'))
+    kl = k.meng(f, lin('#1f53b0'), lin('#f7b21e'))
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
@@ -804,12 +804,39 @@ def baardvorm(lijf, gb, gs, mond, kin):
     ob = uit_huid('baardvorm', lijf, kies, 0.0, mat_baardvorm(), sub=2)
     me = ob.data
     ns = [v.normal.copy() for v in me.vertices]
+    # hoe ver elk punt van de rand van de baard ligt (over de mesh): naar de rand loopt de baard dun uit in het gezicht
+    # (Marcel, bij de baard van opzij: "Dit is nog wat gek": een plaat met een harde rand langs de wang)
+    import heapq
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    bm.verts.ensure_lookup_table()
+    afstand = [1e9] * len(bm.verts)
+    rij = []
+    for e in bm.edges:
+        if len(e.link_faces) < 2:
+            for v in e.verts:
+                if afstand[v.index] > 0:
+                    afstand[v.index] = 0.0
+                    heapq.heappush(rij, (0.0, v.index))
+    while rij:
+        d, i = heapq.heappop(rij)
+        if d > afstand[i]:
+            continue
+        for e in bm.verts[i].link_edges:
+            j = e.other_vert(bm.verts[i]).index
+            nd = d + e.calc_length()
+            if nd < afstand[j]:
+                afstand[j] = nd
+                heapq.heappush(rij, (nd, j))
+    bm.free()
     for v, n in zip(me.vertices, ns):
         p = v.co
+        rand = max(0.0, min(1.0, afstand[v.index] / 0.022))
+        rand = rand * rand * (3 - 2 * rand)
         onder = max(0.0, min(1.0, (mond.z - p.z) / 0.06))           # 0 bij de mond, 1 bij de kin en lager
         voor = max(0.0, min(1.0, (0.06 - abs(p.x)) / 0.05))          # midden voor dikker dan op de wangen
-        uit = 0.005 + 0.03 * onder ** 0.7 * (0.45 + 0.55 * voor)
-        v.co = p + n * uit + Vector((0, -0.012 * onder * voor, -0.03 * onder ** 1.4 * voor))
+        uit = (0.002 + 0.03 * onder ** 0.7 * (0.35 + 0.65 * voor)) * rand
+        v.co = p + n * uit + Vector((0, -0.012 * onder * voor, -0.03 * onder ** 1.4 * voor)) * rand
     sm = ob.modifiers.new('glad', 'SMOOTH')
     sm.factor = 0.8
     sm.iterations = 12
@@ -1032,6 +1059,18 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
             diep = 0.02 * t * voor * plooien(th, t, LIJF_PLOOIEN)
             v.co.x += d.x * diep
             v.co.y += d.y * diep
+    # zwaartekracht (Marcel: "En zwaartekracht?"): boven de riem bolt de stof over en zakt wat door, voor meer dan opzij
+    for i in range(14, 25):
+        t = (i - 14) / 10
+        bol = math.sin(math.pi * min(1.0, t / 0.85)) if t < 0.85 else 0.0
+        for j in range(kol):
+            v = me.vertices[i * kol + j]
+            th = math.pi + 2 * math.pi * j / 96
+            voor = 0.4 + 0.6 * max(0.0, math.cos(th))
+            d = Vector((v.co.x, v.co.y - cy, 0)).normalized()
+            v.co.x += d.x * 0.012 * bol * voor
+            v.co.y += d.y * 0.012 * bol * voor
+            v.co.z -= 0.008 * bol * voor
     dik(lijfje, 0.005)
     # de rok: recht van de heupen naar beneden, wat wijder naar de zoom, met lange verticale plooien (zoals op vel 01; de
     # stofsimulatie liet hem onderaan als een zak doorhangen)
@@ -1057,9 +1096,66 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
                 r = verst + plooi(ts[i], th) - plooi(ts[i - 1], th)
                 v.co.x, v.co.y = (d.normalized() * r + Vector((0, cy, 0))).xy
             verst = max(verst, r)
+    hangen(rok, lijf, mouwen, cy, z_riem, z_zoom)
     zacht(rok)
     dik(rok, 0.005)
     return [lijfje, rok]
+
+
+def hangen(rok, lijf, mouwen, cy, z_riem, z_zoom):
+    """De rok onder zijn eigen gewicht (Marcel: "En zwaartekracht?"): een voorpand en een achterpand, aan de zijkant open vanaf
+    de heup zoals een wapenrok, vast aan de riem, en met de stofsimulatie van Blender over de benen gevallen. (De eerste
+    simulatie, 24 okt, hing als een zak: de rok was toen een gesloten koker, die tussen de benen in trok.)"""
+    me = rok.data
+    hoogte = lambda z: (z_riem + 0.01 - z) / (z_riem + 0.01 - z_zoom)
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    weg = []
+    for f in bm.faces:
+        c = f.calc_center_median()
+        d = Vector((c.x, c.y - cy, 0)).normalized()
+        if abs(d.x) > 0.95 and hoogte(c.z) > 0.15:
+            weg.append(f)
+    bmesh.ops.delete(bm, geom=weg, context='FACES')
+    bm.to_mesh(me)
+    bm.free()
+    vast = rok.vertex_groups.new(name='vast')
+    for v in me.vertices:
+        t = hoogte(v.co.z)
+        if t < 0.1:
+            vast.add([v.index], 1.0, 'REPLACE')
+        elif t < 0.2:
+            vast.add([v.index], (0.2 - t) / 0.1, 'REPLACE')
+    cm = rok.modifiers.new('stof', 'CLOTH')
+    cs = cm.settings
+    cs.quality = 10
+    cs.mass = 0.15
+    cs.tension_stiffness = cs.compression_stiffness = 12
+    cs.shear_stiffness = 6
+    cs.bending_stiffness = 0.8  # linnen: soepel, maar geen zijde
+    cs.air_damping = 2
+    cs.vertex_group_mass = 'vast'
+    cm.collision_settings.distance_min = 0.006
+    cm.point_cache.frame_start = 1
+    cm.point_cache.frame_end = 60
+    botsers = []
+    for ob in (lijf, mouwen):
+        ob.modifiers.new('botsen', 'COLLISION')
+        ob.collision.thickness_outer = 0.01
+        botsers.append(ob)
+    sc = bpy.context.scene
+    sc.frame_start, sc.frame_end = 1, 60
+    for f in range(1, 61):
+        sc.frame_set(f)
+    deps = bpy.context.evaluated_depsgraph_get()
+    gevallen = bpy.data.meshes.new_from_object(rok.evaluated_get(deps))
+    rok.modifiers.clear()
+    oud = rok.data
+    rok.data = gevallen
+    bpy.data.meshes.remove(oud)
+    for ob in botsers:
+        ob.modifiers.remove(ob.modifiers['botsen'])
+    sc.frame_set(1)
 
 
 def riem_en_hangers(bvh, cy, z_riem, M):

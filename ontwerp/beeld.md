@@ -2096,6 +2096,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   over de kraag, met strengen in de verf (fijne strepen omlaag, plukken, grijze strengen) en reliëf; het echte haar nog
   alleen als een zachte rand. Gemeten op spelmaat liggen de kleuren nog op een paar punten van de generator (het licht een
   derde stop lichter, omdat het reliëf alles wat donkerder maakte). Marcel daarop: **"En zwaartekracht?"**
+- *Zwaartekracht* (Marcel: "En zwaartekracht?"). De rok van de wapenrok is nu wat een wapenrok is: een voorpand en een
+  achterpand, aan de zijkant open vanaf de heup, vast aan de riem, en met de stofsimulatie van Blender onder zijn eigen
+  gewicht over de benen gevallen (`hangen` in `speerman_hd.py`; de eerste simulatie hing als een zak, omdat de rok toen een
+  gesloten koker was). Boven de riem bolt de stof wat over en zakt door, voor meer dan opzij. Bij het lopen hangt de rok aan
+  het bekken; hij valt niet per beeld opnieuw.
+- *Stoffig, niet plastic, en schaduw op de helm* (Marcel: "Dit is nog wat gek" bij de baard van opzij, "kan de kleding nog
+  wat meer stoffiger gerenderd worden? Het ziet er nog wat te plastic uit ofzo", en "Ook wat schaduw op de helm?"). In
+  `eigen.py` per soort materiaal (`SOORTEN`): stof helemaal mat, zonder glans, met een zachte, wollige rand in het licht in
+  de kleur van de stof (sheen; wit maakte de donkerblauwe hozen grijs) en het matte licht van ruwe stof (diffuse
+  roughness); leer met een lichte glans; het staal glanzend. De lucht heeft een verloop (licht boven, donker onder), zodat
+  de helm licht en schaduw krijgt in plaats van overal even licht. De baard loopt naar zijn rand dun uit in het gezicht (de
+  afstand tot de rand over de mesh), en is van opzij geen plaat meer. Met de matte stof een kleiner stop lichter (+0,4) en
+  een lichter, schoner blauw; gemeten op spelmaat liggen de kleuren per stof weer op een paar punten van de generator
+  (het geel van voren wat donkerder).
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,
