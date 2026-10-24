@@ -63,7 +63,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
+1. **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (24 okt; Marcel: "Stap 2a: kaart en rand"): het level maakt zijn kaart (een
+   vast eiland, een plek op naam, de rand op de stukken van 64), nog zonder menu.
+   **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
    **1a en 1b zijn af** (24 okt): de motor (`scenario.md`, 2), en het demojaar als eerste level (`levels/demojaar.js`;
    `scenario.md`, 3; Marcel: "1b nu"): geen regel leest nog een vlag van de demo, en de speeltest speelt precies
    hetzelfde jaar (zaad 1 tot 3). De speeltest speelt nu ook in de cloud (`opmerkingen.md`). Het volgende is **stap 2,
