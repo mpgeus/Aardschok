@@ -2032,6 +2032,40 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   hij is smal en vaag, zonder gezicht: de generator is veel beter. Als bron voor figuren dus niet; wel misschien als
   vorm voor wat moeilijk met de hand te maken is (de ossenkar, de heer te paard). Beter: één figuur per keer, recht van
   voren op een effen grond, dan krijgt hij de hele resolutie.
+- *Onze speerman als GLB* (Marcel, 24 okt: "geef mij nog eens ons basis soldaat blender bestand", "in glb"; daarna: "deze
+  ziet er veel beter uit nu!!!"): uit de huidige `speerman_hd.py`, alles in één mesh (152.000 vlakken), de kleur van de
+  procedurele materialen met Cycles in één textuur van 4096 gebakken (van de echte delen naar de ene mesh), het staal
+  (helm, blad, maliën, gespen) tijdelijk niet-metaal voor de bak en daarna een eigen materiaal (metaal 0,7). Het haar gaat
+  niet mee: de baard, de snor en de brauwen zijn verf op de huid. Naar `uit/blender/render/speerman-hd.glb`. Waarom hij
+  er beter uitziet dan de HD-render: hij is mat (ruwheid 0,75, geen bump, geen glans), de AO van de materialen zit in de
+  verf, het licht van de kijker is zacht in plaats van een harde zon met randlicht en 'Medium High Contrast', en de
+  fijne ruis (de spikkels op het leer, de vlekken op de helm) is door het bakken zachter. Het oogt geschilderd in plaats
+  van als plastic speelgoed. Op spelmaat (`uit/blender/gebakken-spelmaat.png`: de GLB in vijf richtingen met de camera van
+  `speerman_hd.py`, onbelicht en met zacht licht, naast de generator en de HD-render) valt de winst grotendeels weg: zacht
+  belicht is hij bijna gelijk aan de HD-render, het gezicht verdwijnt in de schaduw van de helm, en alles is donkerder en
+  minder fel dan bij de generator, die nog het best leest. Onbelicht is hij plat (de helm een grijze vlek). Het bakken
+  helpt dus van dichtbij; op 74 pixels zit het verschil in het licht en het contrast, niet in de verf.
+- *De gebakken modellen in het spel?* (Marcel, 24 okt: "Waarom gebruiken we niet de gebakken variant in game? En zetten
+  de wereld om naar 3d, met iso view? ... want dit kunnen we redelijk goed maken vind ik, dat neemt een hoop problemen weg
+  m.b.t. art", en "of een andere manier om deze te gebruiken in onze bestaande engine mag ook"). Op 4 okt vroeg hij al
+  naar 3D-modellen in het spel; toen werd het kwartslagen, omdat echte 3D geen pixel art meer is en maanden werk
+  (archief, vraag 124). Wat sindsdien anders is: we kunnen een man in 3D maken die Marcel goed vindt, en de vellen van de
+  generator kloppen niet tussen de richtingen en de beelden (vraag 190). Het zijn twee keuzes. **Eén: de figuren komen
+  uit 3D-modellen** in plaats van de generator; dat neemt het probleem weg (elke richting en elk loopbeeld komt uit
+  hetzelfde model), en het geldt voor allebei de wegen. **Twee: hoe ze op het scherm komen.** (a) In de bestaande motor:
+  het gebakken model uit Blender gerenderd tot vellen in acht richtingen met alle bewegingen, zoals The Settlers 3 en 4
+  en Age of Empires 2 het deden. De regels en `js/gl.js` blijven; alleen de bron van de vellen verandert. (b) Echte 3D in
+  het spel: de tekenlaag opnieuw (zo'n 10.000 van de 46.000 regels: `iso`, `tekenen`, `gl`, `sprites`, `doorkijk`,
+  `bouwstijl`, `kleinleven`, `zien`, `anim`, `kiezen`), het land als mesh met hoogte, figuren met een skelet en een
+  lichtere versie van het model (152.000 vlakken is voor één man; in het spel zo'n 5.000 met een normal map), en
+  alles in 3D, ook de dieren en de bomen. Dat geeft vrij zoomen tot HD, vrij draaien en echte schaduwen, maar het kost
+  maanden, en de Steam-pagina komt in januari. Op spelmaat ziet een 3D-model er live net zo uit als vooraf gerenderd
+  (`gebakken-spelmaat.png`), dus (b) lost het lezen op 74 pixels niet op. Marcel erbij: "zonder dat we de kwaliteit
+  naar beneden hoeven te brengen", en "knights and merchants is volgens mij ook 3d?" (dat is (a): vooraf gerenderde
+  modellen in een 2D-spel). Juist (a) houdt de kwaliteit: het rendert vooraf, dus het volle model met echt haar en
+  Cycles mag; (b) moet live een lichter model tekenen, zonder het haar. **Advies van Claude: (a) nu, (b) later
+  mogelijk**; de modellen gaan dan gewoon mee. **Marcel (24 okt): "ik wil a wel proberen, maar kunnen we daar een proef
+  van maken?"**
 
 ## Open
 
