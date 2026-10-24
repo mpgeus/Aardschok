@@ -2110,6 +2110,15 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   afstand tot de rand over de mesh), en is van opzij geen plaat meer. Met de matte stof een kleiner stop lichter (+0,4) en
   een lichter, schoner blauw; gemeten op spelmaat liggen de kleuren per stof weer op een paar punten van de generator
   (het geel van voren wat donkerder).
+- *Laarzen van leer, met een gesp* (Marcel, 24 okt: "Laarzen zijn nog niet naar mn zin, moeten leer zijn met gesp"; ze
+  waren glad als klei of rubber). De schacht stond sinds het begin ondersteboven (de kegel wijd bij de enkel en smal bij
+  de knie), en hing zo als een slobkous over de voet: nu smal naar de enkel, en om de hiel door tot de zool. De voet is
+  één bol, langs de voet vervormd (in plakken werd hij een rups): laag bij de hiel, het hoogst op de wreef, op de bal het
+  breedst, de neus laag, rond en stomp (als bol werd hij de schoen van een nar). Een zool die net uitsteekt, donker tot
+  een naad; kreukels bij de enkel, meest van voren en niet recht; de omslag strak om het been met een opgerolde boord.
+  Om de enkel een riem met een echte gesp van rond smeedijzer, met een pen en het eind van de riem dat eruit hangt. Het
+  leer met de nerf duidelijker (de textuur met meer contrast en reliëf), lichter op de bolle delen (slijtage), en leer
+  met een zachte glans (ruwheid 0,48). De voet van het lijf krijgt een masker, anders piept hij door de zool.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

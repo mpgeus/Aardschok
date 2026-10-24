@@ -50,7 +50,7 @@ STAAL = ('helm', 'staal')
 SOORTEN = {
     'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
              'Metallic': 0.0},
-    'leer': {'Roughness': 0.6, 'Specular IOR Level': 0.35, 'Metallic': 0.0},
+    'leer': {'Roughness': 0.48, 'Specular IOR Level': 0.45, 'Metallic': 0.0},  # leer met een zachte glans, geen klei
     'staal': {'Roughness': 0.42, 'Metallic': 0.9},
     'anders': {'Roughness': 0.75},
 }

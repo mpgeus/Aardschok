@@ -696,9 +696,13 @@ def mat_laars():
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], k.plek())
     kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#7c4828'), lin('#2e1609'))
-    kl = k.meng(k.glad(sep.outputs['Z'], 0.016, 0.012), kl, lin('#1e120c'))
-    kl = k.met_textuur(kl, 'brown_leather', 0.5, contrast=0.55, kracht=0.8)
-    return k.af(kl, ruw=0.5)
+    kl = k.meng(k.glad(sep.outputs['Z'], 0.017, 0.014), kl, lin('#1a0f09'))  # de zool tot de naad
+    # leer dat je ziet: de nerf en de kreukels van de textuur sterker, en slijtage (lichter) op de bolle delen: de neus, de
+    # hiel, de randen (Marcel: "moeten leer zijn met gesp")
+    kl = k.met_textuur(kl, 'brown_leather', 0.5, contrast=1.0, kracht=1.1)
+    geo = k.n('ShaderNodeNewGeometry')
+    kl = k.meng(k.w('MULTIPLY', k.glad(geo.outputs['Pointiness'], 0.52, 0.6), 0.45), kl, lin('#b07a4a'))
+    return k.af(kl, ruw=0.5, holte=0.5)
 
 
 def mat_blad():
@@ -1243,8 +1247,10 @@ def smelt(naam, delen, voxel, glad_n, mat):
 
 
 def laarzen(lijf, rig, M):
-    """Korte laarzen tot onder de knie: een schacht om het onderbeen en een voet met een ronde dikke neus, samengesmolten,
-    de zool vlak en donker; een omgeslagen rand, en om de enkel een riempje met een gespje aan de buitenkant."""
+    """Korte laarzen van leer (Marcel: "Laarzen zijn nog niet naar mn zin, moeten leer zijn met gesp"): een schacht om het
+    onderbeen met kreukels bij de enkel, een voet met een wreef die naar een ronde, lage neus afloopt, een hak, en een zool
+    met een rand die net uitsteekt; een omgeslagen rand met een opgerolde boord, en om de enkel een riem met een echte gesp
+    (een rechthoekig beslag met een pen, en het eind van de riem dat eruit hangt) aan de buitenkant."""
     delen = []
     for k, s in (('L', 1), ('R', -1)):
         been = gewicht(lijf, ('lowerleg', 'foot', 'toe'))
@@ -1261,65 +1267,155 @@ def laarzen(lijf, rig, M):
             rs = [straal(bvh, c, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
             rs = [r for r in rs if r is not None]
             return sum(rs) / len(rs) if rs else 0.06
-        # de laarsrand op 24 procent van de man, zoals op vel 01 (22; Marcel: "voeten ziet er nog raar uit": de schacht was
-        # hoger, en viel dan op de schaduw onder de rok in de verf)
+        # de laarsrand op 24 procent van de man, zoals op vel 01
         z_top = min(kn.z - 0.06, 0.24 * kruin(lijf))
-        print('LAARS', k, 'knie', round(kn.z, 3), 'rand', round(z_top, 3), 'kruin', round(kruin(lijf), 3))
         boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
-        r_boven, r_enkel = gem(boven) + 0.018, gem(en + as_ * -0.015) + 0.016
+        # bij de enkel nauw, zodat de schacht in de voet overgaat (wijder hing hij als een slobkous over de voet)
+        r_boven, r_enkel = gem(boven) + 0.007, gem(en + as_ * -0.015) + 0.008
         d = en - boven
+        # radius1 is de onderkant van de kegel (-z): die naar boven, dus +z omlaag langs d (met -d stond de schacht
+        # ondersteboven, wijd bij de enkel, en hing hij als een slobkous over de voet)
         bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=r_boven, radius2=r_enkel, depth=d.length, location=(boven + en) / 2,
-                                        rotation=Vector((0, 0, 1)).rotation_difference(-d).to_euler())
+                                        rotation=Vector((0, 0, 1)).rotation_difference(d).to_euler())
         stukken = [bpy.context.active_object]
+        # de schacht loopt door tot de zool, om de hiel (hield hij op bij de enkel, dan zat er opzij een trede)
+        grond = en + as_ * ((en.z - 0.012) / -as_.z)
+        bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=r_enkel, depth=(en - grond).length, location=(en + grond) / 2,
+                                            rotation=Vector((0, 0, 1)).rotation_difference(en - grond).to_euler())
+        stukken.append(bpy.context.active_object)
+        # de voet uit één bol, langs de voet vervormd (in plakken werd hij een rups): van de hiel naar de neus de wreef
+        # aflopend, op de bal het breedst, de neus laag en rond en een tikje omhoog
         voet = [v.co for v, b in zip(lijf.data.vertices, been) if b > 0.4 and v.co.x * s > 0 and v.co.z < 0.08]
         teen = min(voet, key=lambda q: q.y)
         hiel = max(voet, key=lambda q: q.y)
         breed = max(q.x for q in voet) - min(q.x for q in voet)
-        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
-        midden = Vector((hiel.x, hiel.y, 0.045)) + richting * lengte * 0.5
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=midden,
-                                             rotation=(0, 0, math.atan2(richting.y, richting.x) + math.pi / 2))
-        e = bpy.context.active_object
-        e.scale = (breed / 2 + 0.008, lengte / 2 + 0.004, 0.048)  # compact, zoals op vel 01
-        stukken.append(e)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=breed / 2 + 0.002,
-                                             location=Vector((teen.x, teen.y, 0.036)) - richting * 0.02)
-        neus = bpy.context.active_object
-        neus.scale = (1, 1, 0.75)  # een ronde neus, maar geen klomp
-        stukken.append(neus)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=r_enkel + 0.006, location=en + Vector((0, 0.012, -0.012)))
-        stukken.append(bpy.context.active_object)
-        laars = smelt('laars.' + k, stukken, 0.004, 6, M['laars'])
-        for v in laars.data.vertices:
-            v.co.z = max(v.co.z, 0.0)  # de zool vlak
+        opzij = Vector((-richting.y, richting.x, 0))
+        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.03
+        start = Vector((hiel.x, hiel.y, 0)) - richting * 0.016
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=1)
+        bol = bpy.context.active_object
+        for v in bol.data.vertices:
+            x, y, z = v.co
+            # de uiteinden stomp, niet puntig (de neus werd een schoen van een nar): de doorsnede krimpt naar de neus
+            # en de hiel trager dan bij een bol
+            rho = math.sqrt(max(0.0, 1 - y * y))
+            stomp = rho ** (0.4 if y > 0 else 0.6) / rho if rho > 1e-6 else 0.0
+            x, z = x * stomp, z * stomp
+            u = (y + 1) / 2
+            # de bovenkant: laag bij de hiel (daar maakt de schacht de laars; hoger lag de voet er als een richel omheen),
+            # het hoogst op de wreef voor de enkel, en dan aflopend naar de neus
+            glad = lambda a, b: (lambda t: t * t * (3 - 2 * t))(max(0.0, min(1.0, (u - a) / (b - a))))
+            wreef = 0.055 + 0.035 * glad(0.0, 0.35) - 0.05 * glad(0.35, 0.95)
+            half = (breed / 2 + 0.012) * (0.68 + 0.37 * math.exp(-((u - 0.68) / 0.28) ** 2))
+            v.co = start + richting * (lengte * u) + opzij * (x * half) + Vector((0, 0, wreef / 2 + z * (wreef / 2 + 0.012)))
+        stukken.append(bol)
+        laars = smelt('laars.' + k, stukken, 0.003, 4, M['laars'])
+        # de voet van het lijf zit in de laars, en piept anders door de zool (bouw zet er een masker op)
+        groep = lijf.vertex_groups.get('in-de-laars') or lijf.vertex_groups.new(name='in-de-laars')
+        groep.add([v.index for v, b in zip(lijf.data.vertices, gewicht(lijf, ('foot', 'toe')))
+                   if b > 0.5 and v.co.x * s > 0 and v.co.z < en.z], 1.0, 'REPLACE')
+        me = laars.data
+        # de zool: plat, de onderste anderhalve centimeter iets naar buiten (de rand van de zool steekt uit), en erboven een
+        # naad waar het leer op de zool zit
+        mid = Vector((0, 0, 0))
+        for v in me.vertices:
+            mid += v.co
+        mid /= len(me.vertices)
+        for v in me.vertices:
+            v.co.z = max(v.co.z, 0.0)
+            h = Vector((v.co.x - mid.x, v.co.y - mid.y, 0))
+            if h.length == 0:
+                continue
+            uit = 0.004 if v.co.z < 0.015 else -0.0015 if v.co.z < 0.02 else 0.0
+            v.co.x += h.normalized().x * uit
+            v.co.y += h.normalized().y * uit
+        # kreukels in de schacht bij de enkel, waar de voet buigt: meest van voren, liggend maar niet recht, en niet op de voet
+        ns = [v.normal.copy() for v in me.vertices]
+        for v, n in zip(me.vertices, ns):
+            hoogte = v.co.z - en.z
+            if not (-0.01 < hoogte < 0.1) or abs(n.z) > 0.6:
+                continue
+            as_punt = en + as_ * (hoogte / as_.z)
+            d = Vector((v.co.x - as_punt.x, v.co.y - as_punt.y, 0))
+            if d.length > r_enkel + 0.02:
+                continue
+            hoek = math.atan2(d.y, d.x)
+            voor = 0.35 + 0.65 * max(0.0, -d.normalized().y)
+            golf = math.sin(hoogte * 210 + 1.6 * math.sin(2 * hoek + s) + 0.8 * math.sin(5 * hoek))
+            v.co += n * 0.0025 * voor * golf * math.exp(-((hoogte - 0.035) / 0.04) ** 2)
+        zacht(laars)
         delen.append(laars)
-        # de omslag en het riempje strak om de schacht (Marcel: "voeten ziet er nog raar uit": de omslag waaierde uit als
-        # een klok, en het riempje volgde de bovenkant van de voet: een platte schotel om de voet)
-        def ring(naam, midden, hoog, r, mat, dikte):
-            bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=r, depth=hoog, end_fill_type='NOTHING', location=midden,
-                                                rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
+        lb = bvh_van([(laars, None)])
+
+        def om_de_laars(c):
+            rs = [straal(lb, c, x1 * math.cos(t) + y1 * math.sin(t), 0.25) for t in [i * math.pi / 12 for i in range(24)]]
+            rs = [x for x in rs if x is not None]
+            return max(rs) if rs else gem(c) + 0.02
+
+        def band(naam, midden, hoog, r_onder, r_boven_, mat, dikte):
+            bpy.ops.mesh.primitive_cone_add(vertices=64, radius1=r_onder, radius2=r_boven_, depth=hoog, end_fill_type='NOTHING',
+                                            location=midden, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
             o = bpy.context.active_object
             o.name = naam
             o.data.materials.append(mat)
             dik(o, dikte)
             zacht(o)
             return bak_mod(o)
-        delen.append(ring('omslag.' + k, boven + as_ * 0.022, 0.044, r_boven + 0.004, M['omslag'], 0.006))
-        enkel = en + as_ * -0.07
-        lb = bvh_van([(laars, None)])
-        rs = [straal(lb, enkel, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
-        rs = [x for x in rs if x is not None]
-        r_riem = (max(rs) if rs else gem(enkel) + 0.02) + 0.002  # op de laars, niet erin
-        delen.append(ring('enkelriem.' + k, enkel, 0.016, r_riem, M['omslag'], 0.004))
-        buiten = Vector((s, -0.35, 0)).normalized()
-        bpy.ops.mesh.primitive_cube_add(size=1, location=enkel + buiten * (r_riem + 0.004), scale=(0.014, 0.005, 0.018),
-                                        rotation=(0, 0, math.atan2(buiten.y, buiten.x) + math.pi / 2))
-        g = bpy.context.active_object
-        g.data.materials.append(M['staal'])
-        delen.append(g)
+        # de omgeslagen rand: wat wijder naar boven, met een opgerolde boord
+        r_om = om_de_laars(boven + as_ * 0.03) + 0.003
+        delen.append(band('omslag.' + k, boven + as_ * 0.026, 0.052, r_om + 0.004, r_om, M['omslag'], 0.006))
+        # de boord naar binnen, tegen het been: anders zie je van boven in de omslag
+        bpy.ops.mesh.primitive_torus_add(major_radius=r_om - 0.001, minor_radius=0.006, major_segments=64, minor_segments=12,
+                                         location=boven + as_ * 0.052, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
+        rol = bpy.context.active_object
+        rol.name = 'omslag.rol.' + k
+        rol.data.materials.append(M['omslag'])
+        zacht(rol)
+        delen.append(rol)
+        # de enkelriem en de gesp aan de buitenkant
+        enkel = en + as_ * -0.075
+        r_riem = om_de_laars(enkel) + 0.002
+        delen.append(band('enkelriem.' + k, enkel, 0.02, r_riem, r_riem, M['riem'], 0.004))
+        # de buitenkant van de enkel: schuin naar voren, waar je hem in Z en ZW ziet
+        buiten = Vector((s, -0.6, 0)).normalized()
+        buiten = (buiten - as_ * as_.dot(buiten)).normalized()
+        langs = as_.cross(buiten).normalized()                       # langs de riem, om de laars heen
+        plek = enkel + buiten * (r_riem + 0.004)
+        w, h, r = 0.024, 0.028, 0.0024
+        # het beslag: een rechthoek van rond smeedijzer, met de pen langs de riem van de ene stang naar de andere
+        hoeken = [plek + langs * (sx * w / 2) - as_ * (sy * h / 2) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        for i in range(4):
+            delen.append(staaf('gesp.' + k, hoeken[i], hoeken[(i + 1) % 4], r, M['staal']))
+        delen.append(staaf('gesp.pen.' + k, plek - langs * (w / 2), plek + langs * (w / 2 + 0.002) + buiten * 0.002, r * 0.75,
+                           M['staal']))
+        # het eind van de riem, door de gesp en een eind voorbij, een tikje omlaag
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        tong = bpy.context.active_object
+        tong.name = 'enkelriem.tong.' + k
+        tong.data.transform(Matrix.Diagonal((0.024, 0.004, 0.018, 1)))
+        omlaag = Matrix.Rotation(math.radians(-22 * s), 3, buiten)
+        m = omlaag @ Matrix((langs, buiten, -as_)).transposed()
+        midden = plek + omlaag @ (langs * (w / 2 + 0.01)) + buiten * 0.001
+        tong.matrix_world = Matrix.Translation(midden) @ m.to_4x4()
+        bv = tong.modifiers.new('rand', 'BEVEL')
+        bv.width = 0.0015
+        bv.segments = 2
+        tong.data.materials.append(M['riem'])
+        delen.append(bak_mod(tong))
     return delen
 
+
+def staaf(naam, a, b, r, mat, seg=12):
+    """Een ronde staaf van a naar b, met de uiteinden een straal voorbij (zodat hoeken dicht zijn)."""
+    d = b - a
+    bpy.ops.mesh.primitive_cylinder_add(vertices=seg, radius=r, depth=d.length + r, location=(a + b) / 2,
+                                        rotation=Vector((0, 0, 1)).rotation_difference(d).to_euler())
+    o = bpy.context.active_object
+    o.name = naam
+    o.data.materials.append(mat)
+    zacht(o)
+    return o
 
 def armstukken(rig, mouwen, M):
     """Een breed armstuk van donker leer over elke onderarm, boven en onder een lichtere band met klinknagels."""
@@ -1496,6 +1592,10 @@ def bouw():
     sub = lijf_b.modifiers.new('sub', 'SUBSURF')
     sub.levels = sub.render_levels = 1
     lijf_b.modifiers.move(len(lijf_b.modifiers) - 1, 0)  # eerst gladder, dan het haar
+    masker = lijf_b.modifiers.new('in-de-laars', 'MASK')  # als laatste: het haar hangt aan de punten van het hele lijf
+    masker.vertex_group = 'in-de-laars'
+    masker.invert_vertex_group = True
+    masker.threshold = 0.5
     # de ogen
     for k in ('L', 'R'):
         c = rig.matrix_world @ rig.pose.bones[f'eye.{k}'].head
