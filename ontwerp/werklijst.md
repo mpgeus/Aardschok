@@ -58,6 +58,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
 1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
+   **Bezig in sessie `ccr-23644f01-k4rv4e`** (24 okt): stap 1a, de motor (triggers, gebieden, doelen, `S.scenario`, de
+   keuring), zonder de demo te raken; 1b, het demojaar als eerste level, pas als Marcel 185 en 186 heeft bekeken.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: 4b, plat in het spel (bij N); na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
