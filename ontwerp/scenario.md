@@ -92,7 +92,12 @@ T.LEVELS.demojaar = {
 
 - **De rand:** het spel maakt het land al per stuk van 64 bij 64 tegels (B2, `w.open`); een level opent alleen de
   stukken binnen zijn rand, en de rand is niet te begaan en niet te zien (zwart, zoals in Knights and
-  Merchants). Het demojaar en het vrije spel hebben geen rand.
+  Merchants). Het demojaar en het vrije spel hebben geen rand. **Stap 2a** (24 okt; Marcel: "Stap 2a: kaart en rand"):
+  het level zegt `eiland: { zaad }` (een vast eiland), `plek` (een dorpsplek op naam; welke namen er zijn, verschilt per
+  eiland) en `rand: { b, h }` in stukken rond het dorp, alle drie als het moet. Een rand is minstens 4 bij 4 stukken
+  (256 bij 256 tegels), want het begin opent al 132 bij 132 tegels rond het dorp. **De minikaart toont alleen de kaart**
+  binnen de rand, op dezelfde maat (Marcel: "Alleen de kaart"), en **wie je buiten de rand stuurt, loopt tot de rand en
+  blijft daar staan**, zoals nu op een tocht naar land dat nog dicht is (Marcel: "Hij loopt tot de rand").
 - **Beginnen:** het eiland uit het zaad, het land en de plekken eroverheen, per dorp het begin (`T.beginOpKaart`, en
   een tweede met `T.dorpErbij`), wat erop staat met dezelfde regels als het proefdorp, en dan `S.scenario` (hieronder).
 - **Tussendoor bewaren** is gewoon bewaren: `S.scenario` gaat mee, zoals alles in `S`.
@@ -361,7 +366,11 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
    **1a, de motor, gebouwd op 24 okt** (2, en `code.md` bij `js/scenario.js`), zonder de demo te raken; **1b, het
    demojaar als level, gebouwd op 24 okt** (3; Marcel: "1b nu"): `levels/demojaar.js`, met `dorpen`, `demo`, `punten`,
    `scene` en de aangekondigde overval; `bouw` komt als een level iets midden in het spel opent.
-2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
+2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm. In stukken
+   (Marcel, 24 okt: "Stap 2a: kaart en rand"): **2a, de kaart, gebouwd op 24 okt** (1, "De rand"; `code.md` bij
+   `js/scenario.js`): een vast eiland, een plek op naam en de rand; **2b**, *Campaign* op het titelscherm, eerst als rij
+   hoofdstukken met het demojaar als hoofdstuk 1, en het land met vaandels daarna (eerst een proefplaat); **2c**, het
+   eerste echte hoofdstuk, het rovershol (werklijst K).
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.
 4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de

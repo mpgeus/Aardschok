@@ -1583,6 +1583,7 @@ Spel.TAAL_BRON = [
   {"t":"none yet","waar":["js/debugvenster.js"]},
   {"t":"New game as the demo","waar":["js/debugvenster.js"]},
   {"t":"New game, the full game","waar":["js/debugvenster.js"]},
+  {"t":"New game with a border (a test)","waar":["js/debugvenster.js"]},
   {"t":"Demo lock on: {gebouwen}","waar":["js/debugvenster.js"]},
   {"t":"Demo lock off: {gebouwen}","waar":["js/debugvenster.js"]},
   {"t":"Locked, as in the demo.","waar":["js/debugvenster.js"]},

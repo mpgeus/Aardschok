@@ -94,9 +94,11 @@
   // Wie wegtrekt (js/bewoners.js, gaanWeg): een jongere of volwassene gaat naar het roverskamp dat het dichtst bij het
   // plein van zijn dorp ligt, met zijn naam en zijn uiterlijk, ook als het al vol is (Marcel, 17 okt: H2). Hij loopt het
   // dorp uit, en staat dezelfde dag in het kamp (T.werkKampenBij). Geeft het kamp, of null (een kaart zonder kampen).
+  // In een level met een rand (js/wereld.js) alleen een kamp dat binnen de rand kan staan; is er geen, dan gaat hij weg.
   T.wordtRover = function (D, p) {
     if (p.leeftijd !== 'jong' && p.leeftijd !== 'volwassen') return null;
-    const kampen = kampenVan(D.wereld, dagNu(D));
+    const w = D.wereld;
+    const kampen = kampenVan(w, dagNu(D)).filter((K) => stukkenVanKamp(eilandKampen(w).kampen[K.nr]).every(([sx, sy]) => T.stukBinnenRand(w, sx, sy)));
     const plein = T.pleinVan(D);
     if (!kampen.length || !plein) return null;
     const K = kampen.reduce((a, b) => (T.afstand(b, plein) < T.afstand(a, plein) ? b : a));
@@ -616,16 +618,16 @@
     }
     return uit;
   };
-  // Is het land om kamp k open: elk stuk dat zijn open plek raakt?
-  function kampLandOpen(w, k) {
+  // De stukken die de open plek van kamp k raakt, als [sx, sy]; en is het land daar open?
+  function stukkenVanKamp(k) {
     const r = T.EILAND_INSTELLINGEN.kampen.open;
+    const uit = [];
     for (let sy = Math.floor((k.y - r) / T.STUK); sy <= Math.floor((k.y + r) / T.STUK); sy++) {
-      for (let sx = Math.floor((k.x - r) / T.STUK); sx <= Math.floor((k.x + r) / T.STUK); sx++) {
-        if (!w.open.has(T.stukNummer(sx, sy))) return false;
-      }
+      for (let sx = Math.floor((k.x - r) / T.STUK); sx <= Math.floor((k.x + r) / T.STUK); sx++) uit.push([sx, sy]);
     }
-    return true;
+    return uit;
   }
+  const kampLandOpen = (w, k) => stukkenVanKamp(k).every(([sx, sy]) => w.open.has(T.stukNummer(sx, sy)));
   // Een tent per `manPerTent` man, op de plekken die het eiland gaf, op volgorde; ze gaan niet weer neer als er een valt
   // (dat is c4). Staat er iemand waar een tent komt, dan komt hij een tik later.
   function zetTenten(w, K, k) {

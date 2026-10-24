@@ -63,13 +63,13 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (24 okt; Marcel: "Stap 2a: kaart en rand"): het level maakt zijn kaart (een
-   vast eiland, een plek op naam, de rand op de stukken van 64), nog zonder menu.
-   **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
-   **1a en 1b zijn af** (24 okt): de motor (`scenario.md`, 2), en het demojaar als eerste level (`levels/demojaar.js`;
-   `scenario.md`, 3; Marcel: "1b nu"): geen regel leest nog een vlag van de demo, en de speeltest speelt precies
-   hetzelfde jaar (zaad 1 tot 3). De speeltest speelt nu ook in de cloud (`opmerkingen.md`). Het volgende is **stap 2,
-   het level als recept** (een eigen kaart met een rand, en *Campaign* op het titelscherm): eerst een plan voor Marcel.
+1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
+   **1a, 1b en 2a zijn af** (24 okt): de motor (`scenario.md`, 2), het demojaar als eerste level (`levels/demojaar.js`;
+   `scenario.md`, 3), en de kaart van een level: een vast eiland, een plek op naam en een rand (`scenario.md`, 1, "De
+   rand"; Marcel: de minikaart "Alleen de kaart", en buiten de rand "Hij loopt tot de rand"). Te zien met D, *Demo*, *New
+   game with a border (a test)*. Het volgende is **2b**, *Campaign* op het titelscherm (eerst als rij hoofdstukken),
+   dan **2c**, het rovershol als eerste echte hoofdstuk: eerst een plan voor Marcel. Wat 2a liet zien (bezoekers midden
+   op de kaart, elke keer hetzelfde lot): `opmerkingen.md`.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1425,6 +1425,8 @@ hebben we zoizo nodig. volgorde is akkoord"):
 
 ## Af (sinds 11 okt)
 
+- 2a van vraag 187: de kaart van een level (24 okt; `scenario.md`, 1): een vast eiland, een plek op naam, en een rand op
+  de stukken van 64, met de minikaart van alleen de kaart.
 - 1b van vraag 187: het demojaar als eerste level (24 okt; `scenario.md`, 3): `levels/demojaar.js`, met de wacht, het
   slot, de aangekondigde overval, de punten en de scène van het betalen; de speeltest speelt nu ook in de cloud.
 - Ronde 4 van het snoeien: Tiled eruit (6b1 van vraag 187, 23 okt; `snoeien.md`): de kaarten uit Tiled, de quests en

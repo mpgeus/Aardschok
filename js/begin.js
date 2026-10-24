@@ -80,15 +80,19 @@
   // hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad), zodat hetzelfde zaad
   // hetzelfde spel geeft. Daarna staan S.wereld, S.dorp met zijn aanvoerder, en S.dorpen klaar; geeft het dorp. (Tot 23
   // okt heette dit T.beginOpKaart, in js/gebied.js, en kon het ook op een kaart uit Tiled beginnen; ronde 4 van het
-  // snoeien.) Met een `level` (T.LEVELS, levels/; vraag 187, stap 1b) krijgt je dorp wat het level van het eerste dorp
-  // zegt (de wacht, wat dicht is, de wilde rovers; T.nieuwDorp), en begint daarna zijn scenario (T.startScenario,
-  // js/scenario.js). Een level dat niet door de keuring komt, is een fout in het spel: dan begint het niet.
+  // snoeien.) Met een `level` (T.LEVELS, levels/; vraag 187, stap 1b en 2a) zijn eiland (`eiland.zaad`, anders dat van
+  // makerZaad), zijn dorpsplek (`plek`, een naam; anders jouw plek), en zijn rand (`rand`, in stukken: T.randOm in
+  // js/maker.js); je dorp krijgt wat het level van het eerste dorp zegt (de wacht, wat dicht is, de wilde rovers;
+  // T.nieuwDorp), en daarna begint zijn scenario (T.startScenario, js/scenario.js). Een level dat niet door de keuring
+  // komt, is een fout in het spel: dan begint het niet.
   T.beginOpEiland = function (S, makerZaad, level = null) {
+    const L = level || {};
     const fout = level ? T.keurScenario(level) : [];
     if (fout.length) throw new Error(`Het level klopt niet: ${fout.join('; ')}`); // geen tekst
-    const d = (level && level.dorpen && level.dorpen[0]) || {};
-    const zaad = makerZaad != null ? makerZaad : T.nieuwLandZaad();
-    const w = T.laadGemaaktGehucht(zaad);
+    const d = (L.dorpen && L.dorpen[0]) || {};
+    const zaad = L.eiland ? L.eiland.zaad : makerZaad != null ? makerZaad : T.nieuwLandZaad();
+    const w = T.laadGemaaktGehucht(zaad, { plek: L.plek });
+    if (L.rand) w.rand = T.randOm(w.plekken[0].vak, L.rand.b, L.rand.h);
     S.wereld = w;
     // Zijn soort is 'aanvoerder' en zijn kant 'speler' (T.WEZENS, js/wereld.js); hij draagt het vel van een gewone
     // dorpeling, en welk, kiest zijn zaad (T.sprites.houding, js/sprites.js).
