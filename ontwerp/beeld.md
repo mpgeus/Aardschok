@@ -1920,6 +1920,11 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   alleen nog aan de mouw dicht bij de onderarm (met de diepere borst raakte het de borst: een bruine waaier). De kraag valt
   voor lager, over de bovenrand van de wapenrok (die liep als een rechte streep over de borst). De kraag is nu wat groter
   dan op de plaat.
+- *De schouders zakken* (Marcel: "De schouders moeten zakken, nu alsof hij zn hoofd in trekt"): het intrekken kwam vooral
+  van de heel korte nek; die is weer wat langer (de nek van MakeHuman op 0,4 korter in plaats van helemaal). De
+  sleutelbeenderen en de schouders gaan in de houding wat omlaag. Helemaal omlaag gaf afhangende schouders, smal bovenaan
+  (vel 01 heeft brede, rechte schouders), dus half; het bolle van het wambuis begint pas op de schouderkop. Naast elkaar,
+  half gezakt en in de gewone stand: `uit/blender/schouders-vergelijk.png`.
 
 ## Open
 

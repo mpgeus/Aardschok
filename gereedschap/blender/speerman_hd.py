@@ -37,8 +37,8 @@ INSTELLINGEN = {
     'mens': {'gender': 1.0, 'age': 0.78, 'muscle': 0.85, 'weight': 0.9, 'proportions': 0.1, 'height': 0.1},
     # en gedrongen zoals op vel 01 (beeld.md, "De referentie, onderdeel voor onderdeel"): bredere schouders, een korte
     # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
-    'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 1,
-               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 1.0, 'torso/torso-scale-horiz-incr': 0.0,
+    'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 0.4,
+               'neck/neck-scale-vert-decr': 0.0, 'torso/measure-shoulder-dist-incr': 1.0, 'torso/torso-scale-horiz-incr': 0.0,
                'torso/measure-frontchest-dist-incr': 1, 'torso/torso-scale-depth-incr': 0.6,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
                'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.85, 'arms/r-upperarm-fat-incr': 0.85,
@@ -331,6 +331,10 @@ def mens():
         richt(rig, b, Matrix.Rotation(-math.radians(INSTELLINGEN['borst'] * deel), 3, 'X') @ richting(b))
     for b, r in hals.items():
         richt(rig, b, r)  # de nek en het hoofd houden hun richting
+    # de schouders laten zakken (Marcel: "De schouders moeten zakken"): de sleutelbeenderen en de schouders wat omlaag
+    for k, s in (('L', 1), ('R', -1)):
+        richt(rig, f'clavicle.{k}', (s, 0.0, -0.05))
+        richt(rig, f'shoulder01.{k}', (s, 0.08, -0.8))
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
@@ -471,7 +475,7 @@ def wambuis(lijf, rig, mat):
         fu, fw = u - math.floor(u), w - math.floor(w)
         kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
         # naar de hals plat (daar vallen de kraag en de wapenrok over), op de schouderkop en de arm bol
-        f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.07)) / 0.07))
+        f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.04)) / 0.06))
         f = f * f * (3 - 2 * f)
         v.co += nrm * (0.009 + (0.007 + 0.01 * kussen) * f)
     return ob
