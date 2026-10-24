@@ -53,6 +53,10 @@ function opSpelmaat(beeld, k, voorbeeld) {
   return L.omlijn(klein);
 }
 
+// Sinds de kleur in het model zelf zit (Marcel: "1 inderdaad": de diepte en de kleur in Blender), zonder kleurGelijk;
+// met --2d nog wel, om te vergelijken.
+const MET_2D = process.argv.includes('--2d');
+
 function main(richtingen = ['Z', 'ZW']) {
   const lees = (n) => L.lees(path.join(RENDER, n));
   const staanZ = lees('eigen-Z-staan.png');
@@ -63,7 +67,7 @@ function main(richtingen = ['Z', 'ZW']) {
   const plaat = (b) => { const v = L.vak(b, 1); return { b: v.b, h: v.h, rgba: () => v.rgba }; };
   for (const r of richtingen) {
     rijen.push([E.met(L.vak(L.uitVel('staan', r, 0)), `generator, staan ${r}`), ...BEELDEN.map((i) => E.met(L.vak(L.uitVel('lopen', r, i)), `lopen ${i}`))]);
-    const v = voorbeeld(r);
+    const v = MET_2D ? voorbeeld(r) : null;
     const ons = [...Array(8).keys()].map((i) => opSpelmaat(lees(`eigen-${r}-lopen-${i}.png`), k, v));
     rijen.push([E.met(L.vak(opSpelmaat(lees(`eigen-${r}-staan.png`), k, v)), `model, staan ${r}`), ...BEELDEN.map((i) => E.met(L.vak(ons[i]), `lopen ${i}`))]);
     fs.writeFileSync(path.join(UIT, `eigen-${r}-bewegend.png`), apng(ons.map(plaat), { schaal: 4, fps: 10 }));
@@ -90,6 +94,7 @@ function lichtplaat(standen = ['nu', 'dieper', 'diepst']) {
 }
 
 if (require.main === module) {
-  if (process.argv[2] === 'licht') lichtplaat(process.argv.slice(3).length ? process.argv.slice(3) : undefined);
-  else main(process.argv.slice(2).length ? process.argv.slice(2) : undefined);
+  const args = process.argv.slice(2).filter((a) => a !== '--2d');
+  if (args[0] === 'licht') lichtplaat(args.slice(1).length ? args.slice(1) : undefined);
+  else main(args.length ? args : undefined);
 }

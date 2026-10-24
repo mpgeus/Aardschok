@@ -8,7 +8,7 @@
 # licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
 # en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
 import bpy
 import math
@@ -23,7 +23,11 @@ from mathutils import Matrix  # noqa: E402
 
 UIT = sh.UIT
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
-LICHT = {'zonhoek': 12, 'zon': 4.0, 'vul': 2.0, 'lucht': 0.6, 'belichting': 0.25, 'look': 'Medium High Contrast'}
+# gemeten tegen staan Z van de generator (kleurmeting op spelmaat, 24 okt): ons model was per stof 8 tot 18 punten lichter
+# (Lab) en vlakker, dus een stop donkerder, minder vullicht en lucht (diepere schaduwkant), en de zon meer van opzij, zodat
+# de plooien en de ruiten schaduw geven
+LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': -0.3, 'look': 'Medium High Contrast',
+         'zonrichting': (-0.82, -0.32, 0.48)}
 # proeven met het licht (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat maakt alles veel
 # dieper en echter"): -- <map> lichtproef rendert alleen staan Z in een paar standen, naar eigen-licht-<naam>.png
 LICHTPROEF = {
@@ -70,6 +74,10 @@ def holtes(afstand, diepte):
 
 
 def licht_voor_spelmaat(sc):
+    if 'zonrichting' in LICHT:
+        from mathutils import Vector
+        bpy.data.objects['zon'].rotation_euler = Vector(LICHT['zonrichting']).normalized().to_track_quat('Z', 'Y').to_euler()
+        bpy.context.view_layer.update()
     zon = bpy.data.objects['zon'].data
     zon.energy = LICHT['zon']
     zon.angle = math.radians(LICHT['zonhoek'])
@@ -121,6 +129,7 @@ def main():
     # de kleren als een mesh (zonder het lijf: dat houdt zijn haar)
     pop = bk.een_mesh(sc, zonder=('lijf',))
     mat_maken()
+    holtes(0.12, 0.3)  # schaduw onder de kraag, de riem en tussen arm en lijf
     licht_voor_spelmaat(sc)
     bk.aan_het_skelet(sc, pop, rig)
     # het lijf aan het skelet: zijn gewichten zijn die van MakeHuman, de staande houding is nu de rust
@@ -141,6 +150,8 @@ def main():
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     for r in RICHTINGEN:
         render(sc, f'eigen-{r}-staan.png', sh.RICHTINGEN[r], lichten)
+    if 'staan' in sh.ARGS:
+        return
     # lopen: de speer schuin voor het lijf, zoals de generator
     sc.render.resolution_x = 2400
     dragen = bk.DRAGEN['generator']

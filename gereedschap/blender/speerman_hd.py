@@ -480,11 +480,11 @@ def wambuis(lijf, rig, mat):
         u = (langs + rond) / 0.065
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
-        kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
+        kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.3  # bolle kussens met smalle, diepe naden
         # naar de hals plat (daar vallen de kraag en de wapenrok over), op de schouderkop en de arm bol
         f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.04)) / 0.06))
         f = f * f * (3 - 2 * f)
-        v.co += nrm * (0.009 + (0.007 + 0.01 * kussen) * f)
+        v.co += nrm * (0.008 + (0.006 + 0.016 * kussen) * f)
     return ob
 
 
@@ -633,7 +633,7 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
     achter = k.glad(y, 0.0, 0.03)
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
-    kl = k.meng(f, lin('#14245a'), lin('#df9a1c'))
+    kl = k.meng(f, lin('#16298a'), lin('#f7b21e'))
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
@@ -904,6 +904,18 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
                     v.co.x, v.co.y = (d.normalized() * verst * 0.985 + Vector((0, cy, 0))).xy
                     r = verst * 0.985
             verst = max(verst, r)
+    # plooien van de borst naar de riem (Marcel: "de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat
+    # maakt alles veel dieper en echter"): vel 01 heeft lange plooien met lichte en donkere banen; een vlak heeft geen schaduw
+    for i in range(6, 25):
+        t = (i - 6) / 18
+        for j in range(kol):
+            v = me.vertices[i * kol + j]
+            th = math.pi + 2 * math.pi * j / 96
+            voor = max(0.0, math.cos(th)) ** 0.5
+            d = Vector((v.co.x, v.co.y - cy, 0)).normalized()
+            diep = 0.02 * t * voor * (0.6 * math.sin(9 * th + 0.4) + 0.4 * math.sin(15 * th + 1.7))
+            v.co.x += d.x * diep
+            v.co.y += d.y * diep
     dik(lijfje, 0.005)
     # de rok: recht van de heupen naar beneden, wat wijder naar de zoom, met lange verticale plooien (zoals op vel 01; de
     # stofsimulatie liet hem onderaan als een zak doorhangen)
@@ -911,7 +923,8 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     z_zoom = knie + 0.05
     ts = [i / 24 for i in range(25)]
     hoogte = lambda t, th: z_riem + 0.01 - t * (z_riem + 0.01 - z_zoom)
-    plooi = lambda t, th: 0.03 + 0.03 * t + (0.004 + 0.008 * t) * math.sin(7 * th + 0.6) + 0.003 * t * math.sin(13 * th + 2.1)
+    # diepe plooien (Marcel: "Dat maakt alles veel dieper en echter"), naar de zoom dieper
+    plooi = lambda t, th: 0.03 + 0.03 * t + (0.014 + 0.034 * t) * math.sin(7 * th + 0.6) + 0.012 * t * math.sin(13 * th + 2.1)
     rok = koker('wapenrok-rok', romp, staand(0, cy, hoogte), ts, plooi, n=128, mat=M['wapenrok'])
     me = rok.data
     kol = 129
@@ -1221,7 +1234,7 @@ def bouw():
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
         'malien': mat_malien(),
-        'helm': mat_staal('helm', '#9c99a4', 0.42),
+        'helm': mat_staal('helm', '#b2afba', 0.42),
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
         'riem': mat_leer('riem', '#793a28', '#3a160c'),
