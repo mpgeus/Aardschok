@@ -341,7 +341,9 @@ gereedschap van de quests niet op Tiled):
 in de toetsen en 7.900 in het gereedschap en de kaarten; 1119 toetsen werden er 1051. Een bewaard spel van vóór ronde 4
 laadt niet meer (`T.OPSLAAN_INSTELLINGEN.versie` 25). Nagekeken: na 9000 tikken op het proefdorp (zo'n vijftien
 speeldagen op 30×) is de wereld precies dezelfde als ervoor, en het beeld is pixel voor pixel hetzelfde (overdag, 's
-avonds, ver uitgezoomd); de tik is even snel (0,31 à 0,35 ms, om en om gemeten). Wat het ook opleverde: het spel laadt de vellen van binnen
+avonds, ver uitgezoomd); de tik is even snel (0,31 à 0,35 ms, om en om gemeten), en het tekenen ook (het rekenwerk per
+beeld, om en om in een browser zonder videokaart: 2 à 10 ms bij allebei; de uitschieters van seconden kwamen bij allebei,
+op dezelfde momenten, en hoorden bij de cloud). Wat het ook opleverde: het spel laadt de vellen van binnen
 (de muren, de vloeren en de spullen van de proefkamers) niet meer bij het begin, de muis zoekt niet meer bij elke beweging
 naar de kist en de fontein van de toren, en elke weg wordt onthouden (de kaart had geen deuren meer die open en dicht
 gingen). Wat bleef staan, met de kunst van wat weg is: `opmerkingen.md`, "Wat ronde 4 van het snoeien liet staan".
