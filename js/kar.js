@@ -558,6 +558,10 @@
   // (min wat anderen er al komen halen); en is er geen stapel, dan toch brengen wat er is. Een kar bedient, als er meer
   // karren zijn, de gebouwen bij zijn eigen opslag; een drager elk gebouw.
   function kiesRit(D, e, t, alle) {
+    // Wie draagt omdat de stapel van zijn werkplaats vol is (T.dragersVan, js/bouwen.js; Marcel, 24 okt: "A"), haalt eerst
+    // die stapel weg: dan kan hij morgen weer aan het werk.
+    const eigen = isDrager(e) && e.bewoner.werk && e.bewoner.werk.draagtZelf === 'stapel' ? e.bewoner.werk : null;
+    if (eigen && (eigen.karKanNietTot || 0) <= t && T.stapelVan(eigen) - alGehaald(D, eigen, e, alle) >= IN().minstens) return { plan: 'halen', naar: eigen };
     let half = null;
     const lading = ladingVan(e);
     const bouwplaatsenEerst = [...D.gebouwen].sort((a, b) => (a.bouw && !a.klaar ? 0 : 1) - (b.bouw && !b.klaar ? 0 : 1));

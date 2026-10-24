@@ -409,7 +409,8 @@
   function schuurWaarHijHakt(D, e) {
     const p = bewonerVan(D, e);
     const g = p && p.werk;
-    return g && g.klaar && g.boom && T.GEBOUWEN[g.soort].bos ? g : null;
+    // (draagt hij vandaag, omdat zijn stapel vol is: dan niet; T.dragersVan, js/bouwen.js)
+    return g && g.klaar && g.boom && !g.draagtZelf && T.GEBOUWEN[g.soort].bos ? g : null;
   }
 
   // De houthakker aan het werk (js/bos.js; vraag 115): hij hakt aan zijn boom van een tegel recht ernaast, hakUren aan een
@@ -500,7 +501,7 @@
   function hutWaarHijJaagt(D, e) {
     const p = T.bewonerVan(D, e);
     const g = p && p.werk;
-    return g && g.klaar && g.soort === 'jager' && g.wild ? g : null;
+    return g && g.klaar && g.soort === 'jager' && g.wild && !g.draagtZelf ? g : null;
   }
 
   // Waar de jager loert: op loerAfstand tegels van de leider van zijn groep, aan de kant van zijn hut (net buiten waar
