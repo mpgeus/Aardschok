@@ -10,7 +10,8 @@
 # het lijf van MakeHuman), en lopen de beelden mee.
 #
 #   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/bakken.py -- <map>
-#   ... -- <map> richting ZW      per richting, zonder mengen: alleen de verf van ZW, staan en acht loopbeelden
+#   ... -- <map> richting ZW [draag generator]   per richting, zonder mengen: alleen de verf van ZW, staan en acht
+#                                                loopbeelden; de speer gedragen zoals in DRAGEN
 import bpy
 import math
 import numpy as np
@@ -33,6 +34,7 @@ MACHT = 3  # hoe sterk een richting voorgaat als hij een plek rechter ziet
 SMAL, SMAL_VOET = 0.9, 0.8
 LEUN = math.radians(8)  # zo ver hangt hij bij het lopen naar voren
 STAP = 0.3  # hoe ver de dij naar voren en naar achteren zwaait (radialen)
+DRAAI = math.radians(12)  # het bovenlijf gedraaid bij het dragen: de rechterschouder naar voren, zoals bij de generator
 ZICHT = (0.2, 0.45)  # de hoek met de camera (cosinus) waarbinnen de verf overgaat in de verf ernaast
 
 
@@ -260,12 +262,14 @@ def aan_het_skelet(sc, pop, rig):
             ob.matrix_world = m
 
 
-def draai(rig, bot, hoek):
-    """Een bot voor- of achteruit draaien (om de x-as van het skelet), om zijn kop."""
+def draai(rig, bot, hoek, as_='X'):
+    """Een bot draaien om een as van het skelet (X: voor- of achterover, Z: om zijn lengte), om zijn kop; bij een bot dat al
+    gedraaid is, komt het erbij."""
     pb = rig.pose.bones[bot]
     R = pb.bone.matrix_local.to_3x3()
     pb.rotation_mode = 'QUATERNION'
-    pb.rotation_quaternion = (R.inverted() @ Matrix.Rotation(hoek, 3, 'X') @ R).to_quaternion()
+    erbij = (R.inverted() @ Matrix.Rotation(hoek, 3, as_) @ R).to_quaternion()
+    pb.rotation_quaternion = pb.rotation_quaternion @ erbij
 
 
 def loop(rig, i, n, draagt=False):
@@ -294,6 +298,12 @@ def loop(rig, i, n, draagt=False):
     draai(rig, 'spine04', LEUN * 0.7)  # om x: positief kantelt de top naar -y, naar voren
     draai(rig, 'spine02', LEUN * 0.3)
     draai(rig, 'head', -LEUN * 0.5)
+    if draagt:
+        # het bovenlijf gedraaid (om z: positief brengt zijn rechterschouder, op -x, naar voren), het hoofd half terug
+        # (Marcel: "ik heb ook het idee dat de rechter schouder uit de generator verder naar voren staat")
+        draai(rig, 'spine02', DRAAI * 0.5, 'Z')
+        draai(rig, 'spine01', DRAAI * 0.5, 'Z')
+        draai(rig, 'head', -DRAAI * 0.5, 'Z')
     rig.location.z = rig['z0'] - 0.02 * abs(math.sin(f))
     bpy.context.view_layer.update()
 
@@ -343,22 +353,37 @@ def verf_speer(sc, r):
 
 
 # De houding bij het lopen (Marcel, 21 okt: "Bij stilstaan 1 hand recht, lopen 2 handen en steken ook", "Bij lopen schuin";
-# 24 okt: "lopen moet ook speer schuin vasthouden hadden we besproken"): als houding B van heer.cjs (o.greep 'schuin'), de
-# rechterhand laag voor de heup, de linker hoger en verder voor het lijf, de punt schuin omhoog naar voren. In meters ten
-# opzichte van de schouder (+x is zijn linkerkant, -y voor): de maten van heer.cjs zelf zetten de linkerhand bij dit bredere
-# lijf in het midden, en dan liep de speer schuin naar achteren tussen de benen door.
-HAND_R = (0.03, -0.12, -0.29)
-HAND_L = (-0.24, -0.30, -0.08)
-GREEP = 0.12  # waar de rechterhand de speer vasthoudt, vanaf de voet, als deel van de lengte: kort, zodat de voet bij de heup blijft
+# 24 okt: "lopen moet ook speer schuin vasthouden hadden we besproken", en "hij moet hem schuin voor zich dragen zoals in de
+# generator file"). Per manier van dragen: waar elke hand zit, in meters ten opzichte van zijn schouder (+x is zijn
+# linkerkant, -y voor), welke hand laag zit, en waar die de speer vasthoudt (vanaf de voet, als deel van de lengte).
+# - vooruit: de rechterhand laag voor de heup, de linker ver voor het lijf: de punt schuin omhoog naar voren, de speer ver
+#   voor hem uit;
+# - generator en gespiegeld: dwars voor het lijf, zoals het lopen ZW van de generator: het midden van de speer voor de borst
+#   ('midden', ten opzichte van het midden tussen de schouders), schuin zodat hij in ZW zo'n 40 graden ligt ('as', van de
+#   lage hand naar de punt), de handen 'afstand' uit elkaar om het midden. Bij generator wijst de punt omhoog over de
+#   linkerschouder (in ZW naar achteren, zoals in het vel: het gebrek van 21 okt), bij gespiegeld over de rechterschouder
+#   naar voren.
+DRAGEN = {
+    'vooruit': {'R': (0.03, -0.12, -0.29), 'L': (-0.24, -0.30, -0.08), 'laag': 'R', 'greep': 0.12},
+    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.5, 0.5, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.38},
+    'gespiegeld': {'midden': (0.0, -0.25, -0.15), 'as': (-0.5, -0.5, 0.7), 'afstand': 0.26, 'laag': 'L', 'greep': 0.38},
+}
 
 
-def draag_schuin(sc, rig):
+def draag_schuin(sc, rig, dragen):
     """De handen met IK naar de plekken van houding B, aan de borst vast (spine01), zodat ze meeleunen."""
     bpy.context.view_layer.update()
     W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
     doelen = {}
-    for k, d in (('R', HAND_R), ('L', HAND_L)):
-        plek = W(f'upperarm01.{k}') + Vector(d)
+    if 'midden' in dragen:
+        c = (W('upperarm01.R') + W('upperarm01.L')) / 2 + Vector(dragen['midden'])
+        a = Vector(dragen['as']).normalized() * dragen['afstand'] / 2
+        laag = dragen['laag']
+        plekken = {laag: c - a, ('L' if laag == 'R' else 'R'): c + a}
+    else:
+        plekken = {k: W(f'upperarm01.{k}') + Vector(dragen[k]) for k in ('R', 'L')}
+    for k in ('R', 'L'):
+        plek = plekken[k]
         leeg = bpy.data.objects.new(f'hand.{k}', None)
         sc.collection.objects.link(leeg)
         leeg.parent = rig
@@ -375,18 +400,24 @@ def draag_schuin(sc, rig):
     return doelen
 
 
-def speer_in_handen(sc, rig, lengte):
+def speer_in_handen(sc, rig, lengte, dragen):
     """De speer door beide vuisten (na de IK): het punt GREEP van de speer in de rechtervuist, de punt naar de linker. Waar de
     speer nu staat, volgt uit de schacht zelf (na smal staat hij niet meer waar hij gebouwd is)."""
     bpy.context.view_layer.update()
     W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
     vuist = {k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3 for k in ('R', 'L')}
-    as_ = (vuist['L'] - vuist['R']).normalized()
+    laag = dragen['laag']
+    hoog = 'L' if laag == 'R' else 'R'
+    as_ = (vuist[hoog] - vuist[laag]).normalized()
+    if 'as' in dragen:
+        # de vuisten komen niet precies op hun doel; de speer ligt langs de lijn tussen de doelen (die leunen en draaien mee)
+        doel = {k: bpy.data.objects[f'hand.{k}'].matrix_world.translation for k in ('R', 'L')}
+        as_ = (doel[hoog] - doel[laag]).normalized()
     schacht = bpy.data.objects['speer.schacht']
     as0 = (schacht.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
     voet = schacht.matrix_world.translation - as0 * schacht.dimensions.z / 2
-    greep0 = voet + as0 * GREEP * lengte
-    T = Matrix.Translation(vuist['R']) @ as0.rotation_difference(as_).to_matrix().to_4x4() @ Matrix.Translation(-greep0)
+    greep0 = voet + as0 * dragen['greep'] * lengte
+    T = Matrix.Translation(vuist[laag]) @ as0.rotation_difference(as_).to_matrix().to_4x4() @ Matrix.Translation(-greep0)
     for ob in sc.objects:
         if not ob.name.startswith('speer.'):
             continue
@@ -523,7 +554,7 @@ def projectie(pop, r):
         pop.data.materials[i] = m
 
 
-def een_richting(r, n=8):
+def een_richting(r, n=8, draag='vooruit'):
     """Per richting projecteren, zonder mengen (Marcel, 24 okt: "lopen ZW alleen met de verf van ZW"): de verf van die
     richting op het model, staan en n loopbeelden uit die richting, naar richting-<r>-staan.png en richting-<r>-lopen-<i>.png."""
     sh.INSTELLINGEN['bladhoek'] = sh.RICHTINGEN[r]  # de brede kant van het blad naar deze camera
@@ -544,12 +575,12 @@ def een_richting(r, n=8):
     # lopen: de speer schuin met twee handen, in een bredere render (de speer wijst ver vooruit; de oorsprong blijft in het
     # midden, lopen.cjs rekent het anker uit de breedte)
     sc.render.resolution_x = 2400
-    draag_schuin(sc, rig)
+    draag_schuin(sc, rig, DRAGEN[draag])
     loop(rig, 0, n, draagt=True)
-    speer_in_handen(sc, rig, lengte)
+    speer_in_handen(sc, rig, lengte, DRAGEN[draag])
     for i in range(n):
         loop(rig, i, n, draagt=True)
-        render(sc, f'richting-{r}-lopen-{i}.png', sh.RICHTINGEN[r])
+        render(sc, f'richting-{r}-lopen-{draag}-{i}.png', sh.RICHTINGEN[r])
 
 
 def main():
@@ -573,6 +604,7 @@ def main():
 
 
 if 'richting' in sh.ARGS:
-    een_richting(sh.ARGS[sh.ARGS.index('richting') + 1])
+    een_richting(sh.ARGS[sh.ARGS.index('richting') + 1],
+                 draag=sh.ARGS[sh.ARGS.index('draag') + 1] if 'draag' in sh.ARGS else 'vooruit')
 else:
     main()

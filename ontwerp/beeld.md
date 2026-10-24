@@ -2012,6 +2012,15 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   afgedekt, gaf het aanvullen een vlakke beige schim; daar laat het model nu zijn eigen materiaal zien, belicht. Op spelmaat
   (`uit/blender/lopen-ZW.png`): de punt schuin omhoog naar voren, buiten de benen; de speer van de generator gaat schuin
   over het lijf naar achteren (het gebrek van 21 okt).
+- *Schuin voor het lijf, zoals de generator* (Marcel: "hij moet hem schuin voor zich dragen zoals in de generator file", en
+  "ik heb ook het idee dat de rechter schouder uit de generator verder naar voren staat"). `bakken.py` kent nu manieren van
+  dragen (`DRAGEN`, `-- <map> richting ZW draag <manier>`): het midden van de speer voor de borst, de speer schuin langs een
+  vaste lijn (in ZW zo'n 45 graden), de handen om dat midden (de vuisten komen niet precies op hun doel, dus de speer ligt
+  langs de lijn tussen de doelen, met de lage vuist als greep). Bij het dragen draait het bovenlijf 12 graden, de
+  rechterschouder naar voren, het hoofd half terug. `lopen.cjs ZW generator gespiegeld` zet ze onder elkaar naast de
+  generator (`uit/blender/lopen-ZW.png`). *generator*: dwars voor het lijf van linksonder naar rechtsboven, zoals in het vel
+  (de punt in ZW naar achteren, het gebrek van 21 okt); *gespiegeld*: de punt naar voren, maar vlakker, als een gevelde
+  speer. *vooruit* (de eerste poging) stak de speer ver voor hem uit.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

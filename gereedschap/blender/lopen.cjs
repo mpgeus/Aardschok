@@ -3,7 +3,8 @@
 // alle beelden met dezelfde maat en hetzelfde anker (de oorsprong van het model, onder het midden van de camera), van de
 // zolen tot de helm even hoog als de speerman in het spel, met een donkere rand.
 //
-//   node gereedschap/blender/lopen.cjs [ZW]   naar uit/blender/lopen-<richting>.png (de plaat) en -bewegend.png
+//   node gereedschap/blender/lopen.cjs ZW [vooruit generator ...]   naar uit/blender/lopen-<richting>.png (de plaat, een rij per
+//                                                                    manier van dragen) en de bewegende beelden
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -74,22 +75,22 @@ function vak(beeld, n = 3) {
   return g;
 }
 
-function main(r = 'ZW') {
+function main(r = 'ZW', varianten = ['vooruit']) {
   const staan = lees(path.join(RENDER, `richting-${r}-staan.png`));
   const k = hoogte(uitVel('staan', r, 0)) / hoogte(staan);
   const n = BESCHRIJVING.houdingen.lopen.beelden;
-  const ons = [...Array(8).keys()].map((i) => klein(lees(path.join(RENDER, `richting-${r}-lopen-${i}.png`)), k));
   const gen = [...Array(n).keys()].map((i) => uitVel('lopen', r, i));
-  const rijen = [
-    [E.met(vak(uitVel('staan', r, 0)), `generator · staan ${r}`), ...gen.map((b, i) => E.met(vak(b), `lopen ${i}`))],
-    [E.met(vak(klein(staan, k)), `Blender + verf ${r} · staan`), ...ons.map((b, i) => E.met(vak(b), `lopen ${i}`))],
-  ];
-  E.bewaar(path.join(UIT, `lopen-${r}.png`), rijen, `Vraag 190: lopen ${r}, per richting geprojecteerd (zonder mengen)`,
-    `Boven de generator zoals in het spel, onder het Blender-model met alleen de verf van vel 01 ${r}; op spelmaat maal 3.`);
+  const rijen = [[E.met(vak(uitVel('staan', r, 0)), `generator · staan ${r}`), ...gen.map((b, i) => E.met(vak(b), `lopen ${i}`))]];
   const plaat = (b) => { const v = vak(b, 1); return { b: v.b, h: v.h, rgba: () => v.rgba }; };
-  fs.writeFileSync(path.join(UIT, `lopen-${r}-bewegend.png`), apng(ons.map(plaat), { schaal: 4, fps: 10 }));
+  for (const v of varianten) {
+    const ons = [...Array(8).keys()].map((i) => klein(lees(path.join(RENDER, `richting-${r}-lopen-${v}-${i}.png`)), k));
+    rijen.push([E.met(vak(klein(staan, k)), `Blender · speer ${v}`), ...ons.map((b, i) => E.met(vak(b), `lopen ${i}`))]);
+    fs.writeFileSync(path.join(UIT, `lopen-${r}-${v}-bewegend.png`), apng(ons.map(plaat), { schaal: 4, fps: 10 }));
+  }
+  E.bewaar(path.join(UIT, `lopen-${r}.png`), rijen, `Vraag 190: lopen ${r}, per richting geprojecteerd (zonder mengen)`,
+    `Boven de generator zoals in het spel, daaronder het Blender-model met alleen de verf van vel 01 ${r}, per manier van de speer dragen; op spelmaat maal 3.`);
   fs.writeFileSync(path.join(UIT, `lopen-${r}-generator-bewegend.png`), apng(gen.map(plaat), { schaal: 4, fps: 10 }));
-  console.log(`uit/blender/lopen-${r}.png en -bewegend.png`);
+  console.log(`uit/blender/lopen-${r}.png en de bewegende beelden`);
 }
 
-if (require.main === module) main(process.argv[2]);
+if (require.main === module) main(process.argv[2], process.argv.slice(3).length ? process.argv.slice(3) : undefined);
