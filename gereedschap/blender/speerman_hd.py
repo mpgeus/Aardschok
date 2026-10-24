@@ -19,6 +19,7 @@ from mathutils.bvhtree import BVHTree
 
 from bl_ext.user_default.mpfb.services.humanservice import HumanService
 from bl_ext.user_default.mpfb.services.targetservice import TargetService
+from bl_ext.user_default.mpfb.services.locationservice import LocationService
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
@@ -26,14 +27,23 @@ UIT = os.path.abspath(ARGS[0] if ARGS else os.path.join(HIER, '..', 'pixelart', 
 BLEND = len(ARGS) > 1 and ARGS[1] == 'blend'
 
 INSTELLINGEN = {
-    'res': (1300, 2300),
-    'pxm': 820,              # pixels per meter
-    'anker_y': 2200,         # waar de voeten staan, van boven
+    'res': (1200, 1950),
+    'pxm': 1150,             # pixels per meter: de man (1,25 m tot de kruin van de helm) zo'n 1450 pixels
+    'anker_y': 1860,         # waar de voeten staan, van boven
     'camera': 15,
     'samples': 192,
     # de man: een gedrongen soldaat van middelbare leeftijd (de knoppen van MakeHuman, 0 tot 1)
-    'mens': {'gender': 1.0, 'age': 0.62, 'muscle': 0.78, 'weight': 0.82, 'proportions': 0.15, 'height': 0.12},
-    'hoofd': 1.12,           # het hoofd groter dan echt, zoals op de plaat
+    'mens': {'gender': 1.0, 'age': 0.62, 'muscle': 0.85, 'weight': 0.9, 'proportions': 0.1, 'height': 0.1},
+    # en gedrongen zoals op vel 01 (beeld.md, "De referentie, onderdeel voor onderdeel"): bredere schouders, een korte
+    # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
+    'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 1,
+               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 1, 'torso/torso-scale-horiz-incr': 0.6,
+               'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
+               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 1, 'arms/r-upperarm-fat-incr': 1,
+               'arms/l-lowerarm-fat-incr': 1, 'arms/r-lowerarm-fat-incr': 1},
+    'been': 0.65,            # de botten van de benen, in de lengte
+    'hoofd': 1.35,           # het hoofd: met de helm een kwart van de man, zoals op de plaat
+    'voeten': 14,            # graden naar buiten
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
     'lijn': 0,
@@ -207,7 +217,7 @@ class Knopen:
 def mat_huid():
     k = Knopen('huid')
     r = k.ruis(60, 4)
-    kl = k.meng(k.glad(k.ruis(14, 2), 0.4, 0.7, 0, 0.35), lin('#c98663'), lin('#b8604a'))
+    kl = k.meng(k.glad(k.ruis(14, 2), 0.4, 0.7, 0, 0.35), lin('#b8714c'), lin('#a4553c'))
     kl = k.meng(k.w('MULTIPLY', r, 0.15), kl, lin('#7a4630'))
     k.bsdf.inputs['Subsurface Weight'].default_value = 0.12
     k.bsdf.inputs['Subsurface Radius'].default_value = (0.9, 0.4, 0.25)
@@ -279,24 +289,43 @@ def mens():
     macro.update(INSTELLINGEN['mens'])
     macro['race'] = {'caucasian': 1.0, 'asian': 0.0, 'african': 0.0}
     lijf = HumanService.create_human(macro_detail_dict=macro, scale=0.1)
+    doelen = LocationService.get_mpfb_data('targets')
+    for naam, w in INSTELLINGEN['doelen'].items():
+        TargetService.load_target(lijf, os.path.join(doelen, naam + '.target.gz'), weight=w)
     rig = HumanService.add_builtin_rig(lijf, 'default')
     bpy.context.view_layer.objects.active = rig
+    # korte benen: de botten in de lengte korter, de onderbenen en voeten zonder de schaal van hun ouder
+    for b in rig.data.bones:
+        if b.name.startswith(('lowerleg', 'foot', 'toe')):
+            b.inherit_scale = 'NONE'
+    for k in ('L', 'R'):
+        for b in ('upperleg02', 'lowerleg01', 'lowerleg02'):
+            rig.pose.bones[f'{b}.{k}'].scale = (1, INSTELLINGEN['been'], 1)
+    bpy.context.view_layer.update()
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', (0.2 * s, 0.06, -1))
+            richt(rig, f'{b}.{k}', ((0.22 if k == 'R' else 0.3) * s, 0.06, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.L', (0.06, -0.22, -1))
     richt(rig, 'wrist.L', (0.02, -0.2, -1))
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.R', (-0.12, -1, 0.42))
-    richt(rig, 'wrist.R', (-0.1, -1, 0.3))
+        richt(rig, f'{b}.R', (-0.1, -1, 0.5))
+    richt(rig, 'wrist.R', (-0.1, -1, 0.35))
     # de voeten wat naar buiten
     for k, s in (('L', 1), ('R', -1)):
-        pb = rig.pose.bones[f'upperleg01.{k}']
-        pb.rotation_mode = 'XYZ'
+        pb = rig.pose.bones[f'foot.{k}']
+        nu = ((rig.matrix_world @ pb.tail) - (rig.matrix_world @ pb.head)).normalized()
+        richt(rig, f'foot.{k}', Matrix.Rotation(math.radians(INSTELLINGEN['voeten'] * s), 3, 'Z') @ nu)
     # het hoofd groter
     rig.pose.bones['head'].scale = (INSTELLINGEN['hoofd'],) * 3
+    bpy.context.view_layer.update()
+    # op de grond: de laagste punt van het lijf op z = 0
+    deps = bpy.context.evaluated_depsgraph_get()
+    me = lijf.evaluated_get(deps).to_mesh()
+    z0 = min(v.co.z for v in me.vertices)
+    lijf.evaluated_get(deps).to_mesh_clear()
+    rig.location.z -= z0
     bpy.context.view_layer.update()
     return lijf, rig
 
@@ -372,7 +401,7 @@ def uit_huid(naam, lijf, kies, dikte, mat, sub=1):
 
 def wambuis(lijf, rig, mat):
     """De mouwen van het gewatteerde wambuis: de armen van schouder tot pols, naar buiten, met echte ruiten."""
-    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01', 'clavicle'))
+    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01'))
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
@@ -411,7 +440,7 @@ def wambuis(lijf, rig, mat):
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
         kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
-        v.co += nrm * (0.012 + 0.009 * kussen)
+        v.co += nrm * (0.015 + 0.011 * kussen)
     return ob
 
 
@@ -546,15 +575,21 @@ def dik(ob, d, offset=1):
 # ---------------------------------------------------------------- materialen erbij
 
 def mat_wapenrok(z_riem):
-    """Gevierendeeld: van hemzelf rechtsboven en linksonder geel, de andere twee blauw (zoals de speerman in het spel)."""
+    """Van voren blauw met een brede gele baan in het midden, van de kraag tot de zoom; op de rok smaller. Op de rug
+    gevierendeeld (vel 01, en beeld.md, "De referentie, onderdeel voor onderdeel")."""
     k = Knopen('wapenrok')
     p = k.plek()
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], p)
-    rechts = k.glad(sep.outputs['X'], 0.003, -0.003)
-    boven = k.glad(sep.outputs['Z'], z_riem - 0.004, z_riem + 0.004)
-    f = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
-    kl = k.meng(f, lin('#2448b4'), lin('#eaa21f'))
+    x, y, z = sep.outputs['X'], sep.outputs['Y'], sep.outputs['Z']
+    boven = k.glad(z, z_riem - 0.004, z_riem + 0.004)
+    breed = k.w('ADD', 0.075, k.w('MULTIPLY', boven, 0.035))
+    baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.015)), breed), 0.003, -0.003)
+    rechts = k.glad(x, 0.003, -0.003)
+    kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
+    achter = k.glad(y, 0.0, 0.03)
+    f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
+    kl = k.meng(f, lin('#14245a'), lin('#df9a1c'))
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.2), kl, (0, 0, 0, 1))
     w = k.ruis(240, 2)
@@ -563,13 +598,34 @@ def mat_wapenrok(z_riem):
     return k.af(kl, ruw=0.92, holte=0.4)
 
 
+def mat_laars():
+    """Warm bruin leer, met een donkere zool."""
+    k = Knopen('laars')
+    r = k.ruis(18, 5)
+    sep = k.n('ShaderNodeSeparateXYZ')
+    k.zet(sep.inputs[0], k.plek())
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#6a3c22'), lin('#2e1609'))
+    kl = k.meng(k.glad(sep.outputs['Z'], 0.016, 0.012), kl, lin('#1e120c'))
+    k.bobbel(r, 0.35, 0.002)
+    return k.af(kl, ruw=0.5)
+
+
+def mat_blad():
+    """Het staal van het blad, met roestspikkels."""
+    k = Knopen('blad')
+    vlek = k.ruis(60, 3)
+    kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.7), lin('#b4b1ba'), lin('#7a3a20'))
+    k.bobbel(vlek, 0.2, 0.001)
+    return k.af(kl, ruw=k.w('ADD', 0.3, k.w('MULTIPLY', k.glad(vlek, 0.6, 0.7), 0.4)), metaal=1.0, holte=0.2)
+
+
 def mat_malien():
     """Maliën: rijen ringen (acht millimeter), elke rij een halve ring verschoven, met donkere gaten ertussen."""
     k = Knopen('malien')
     uvn = k.n('ShaderNodeUVMap', uv_map='uv')
     sep = k.n('ShaderNodeSeparateXYZ')
     k.nt.links.new(uvn.outputs['UV'], sep.inputs[0])
-    dx, dy = 0.009, 0.006
+    dx, dy = 0.013, 0.009
 
     def ring(ox, oy):
         x = k.w('ADD', k.w('DIVIDE', sep.outputs['X'], dx), ox)
@@ -580,7 +636,7 @@ def mat_malien():
         return k.glad(k.w('ABSOLUTE', k.w('SUBTRACT', d, 0.36)), 0.13, 0.03)
 
     ringen = k.w('MAXIMUM', ring(0.0, 0.0), ring(0.5, 0.5))
-    kl = k.meng(ringen, lin('#141518'), lin('#8b9098'))
+    kl = k.meng(ringen, lin('#1c1714'), lin('#86766a'))
     k.bobbel(ringen, 0.9, 0.0025)
     return k.af(kl, ruw=0.42, metaal=0.9, holte=0.5)
 
@@ -611,8 +667,9 @@ def mat_haar():
     uit = nt.nodes.new('ShaderNodeOutputMaterial')
     h = nt.nodes.new('ShaderNodeBsdfHairPrincipled')
     h.parametrization = 'MELANIN'
-    h.inputs['Melanin'].default_value = 0.88
-    h.inputs['Melanin Redness'].default_value = 0.45
+    h.inputs['Melanin'].default_value = 0.7
+    h.inputs['Melanin Redness'].default_value = 0.3
+    h.inputs['Random Color'].default_value = 0.8  # grijze spikkels
     h.inputs['Roughness'].default_value = 0.45
     nt.links.new(h.outputs[0], uit.inputs['Surface'])
     return m
@@ -638,17 +695,17 @@ def baard(lijf, rig, M):
         lip = abs(p.x) < 0.028 and mond.z - 0.014 < p.z < mond.z + 0.006 and p.y < mond.y + 0.012
         if p.z < mond.z - 0.004 and p.y < y_mid and not lip:
             gb.add([v.index], 1.0, 'REPLACE')
-        elif abs(p.x) > 0.04 and p.z < mond.z + 0.014 + (abs(p.x) - 0.04) * 0.9 and p.y < y_mid:
+        elif abs(p.x) > 0.03 and p.z < mond.z + 0.026 + (abs(p.x) - 0.03) * 0.8 and p.y < y_mid:
             gb.add([v.index], 1.0, 'REPLACE')  # de wangen en de bakkebaarden
-        elif abs(p.x) < 0.05 and mond.z + 0.006 < p.z < mond.z + 0.026 and p.y < mond.y + 0.012:
+        elif abs(p.x) < 0.055 and mond.z + 0.004 < p.z < mond.z + 0.03 and p.y < mond.y + 0.014:
             gs.add([v.index], 1.0, 'REPLACE')
         for o in (oogL, oogR):
-            if o.z + 0.016 < p.z < o.z + 0.03 and abs(p.x - o.x) < 0.024 and p.y < o.y + 0.005:
+            if o.z + 0.017 < p.z < o.z + 0.034 and abs(p.x - o.x) < 0.028 and p.y < o.y + 0.006:
                 gw.add([v.index], 1.0, 'REPLACE')
     lijf.data.materials.append(M['haar'])
     slot = len(lijf.data.materials)
-    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 20000, 0.016, -0.7), ('snor', 'snor', 4000, 0.013, -1.0),
-                                            ('brauw', 'brauw', 1500, 0.009, 0.0)):
+    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 40000, 0.015, -0.5), ('snor', 'snor', 7000, 0.016, -1.1),
+                                            ('brauw', 'brauw', 2500, 0.009, 0.0)):
         md = lijf.modifiers.new(naam, 'PARTICLE_SYSTEM')
         ps = md.particle_system
         st = ps.settings
@@ -674,69 +731,106 @@ def baard(lijf, rig, M):
         ps.seed = 7
 
 
+def kruin(lijf):
+    return max(v.co.z for v in lijf.data.vertices) + 0.045
+
+
 def helm(lijf, rig, M):
-    """De ketelhoed op het hoofd, op maat van de schedel; hoog genoeg dat je onder de rand de ogen ziet."""
+    """De ketelhoed: een hoge ronde koepel van vier delen (een kam van voor naar achter met een korte punt bovenop, en naden
+    aan weerszijden), een rand zo'n anderhalf keer zo breed die wat zakt. Hoog genoeg dat je onder de rand de ogen ziet."""
     hoofd = [v.co for v in lijf.data.vertices if v.co.z > (rig.matrix_world @ rig.pose.bones['head'].head).z + 0.01]
     xs, ys, zs = [p.x for p in hoofd], [p.y for p in hoofd], [p.z for p in hoofd]
     cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
     hx, hy, top = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, max(zs)
     oog = rig.matrix_world @ rig.pose.bones['eye.L'].head
-    zb = oog.z + 0.062
+    zb = oog.z + 0.06 * INSTELLINGEN['hoofd']
+    rx, ry = hx + 0.03, hy + 0.026
+    hoog = max(top - zb + 0.04, rx * 1.1)
     delen = []
     bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=1, location=(cx, cy, zb))
     k = bpy.context.active_object
-    hoog = max(top - zb + 0.035, (hx + 0.026) * 1.05)
-    k.scale = (hx + 0.026, hy + 0.024, hoog)
+    k.scale = (rx, ry, hoog)
     bm = bmesh.new()
     bm.from_mesh(k.data)
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.01], context='VERTS')
     bm.to_mesh(k.data)
     bm.free()
-    dik(k, 0.004)
     zacht(k)
     delen.append(bak_mod(k))
-    rx, ry = hx + 0.026, hy + 0.024
+    # de rand, wat naar beneden, met een opgerolde zoom
     vs, fs = [], []
     n = 96
-    for i, (f, dz) in enumerate(((1.0, 0.0), (1.15, -0.008), (1.3, -0.02), (1.42, -0.03))):
+    ringen = ((1.0, 0.0), (1.1, -0.005), (1.21, -0.013), (1.32, -0.026))
+    for f, dz in ringen:
         for j in range(n):
             th = 2 * math.pi * j / n
             vs.append((cx + rx * f * math.cos(th), cy + ry * f * math.sin(th), zb + dz))
-    for i in range(3):
+    for i in range(len(ringen) - 1):
         for j in range(n):
             a = i * n + j
             fs.append((a, i * n + (j + 1) % n, (i + 1) * n + (j + 1) % n, (i + 1) * n + j))
     r = maak('rand', vs, fs)
-    dik(r, 0.004)
+    dik(r, 0.005)
     delen.append(bak_mod(r))
-    bpy.ops.mesh.primitive_torus_add(major_radius=rx * 1.42, minor_radius=0.004, major_segments=96, minor_segments=12,
-                                     location=(cx, cy, zb - 0.03))
+    bpy.ops.mesh.primitive_torus_add(major_radius=rx * 1.32, minor_radius=0.005, major_segments=96, minor_segments=12,
+                                     location=(cx, cy, zb - 0.026))
     t = bpy.context.active_object
     t.scale = (1, ry / rx, 1)
     zacht(t)
     delen.append(bak_mod(t))
-    # de kam van voor naar achter, met klinknagels
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=(cx, cy, zb))
-    kam = bpy.context.active_object
-    kam.scale = (0.011, ry + 0.03, hoog + 0.006)
-    bm = bmesh.new()
-    bm.from_mesh(kam.data)
-    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < 0.0], context='VERTS')  # niet onder de rand
-    bm.to_mesh(kam.data)
-    bm.free()
-    zacht(kam)
-    delen.append(bak_mod(kam))
-    for g in (12, 28, 44, 60, 76):
-        a = math.radians(g)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.0045,
-                                             location=(cx, cy - (ry + 0.03) * math.sin(a), zb + (hoog + 0.006) * math.cos(a)))
-        zacht(bpy.context.active_object)
-        delen.append(bpy.context.active_object)
+    # de kam van voor naar achter, en de naden aan weerszijden (smaller), elk een smalle ribbe over de koepel
+    for hoek, dikte, hoger in ((0, 0.012, 0.008), (32, 0.005, 0.003), (-32, 0.005, 0.003)):
+        a = math.radians(hoek)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=(cx, cy, zb))
+        rib = bpy.context.active_object
+        rib.scale = (dikte, ry + hoger, hoog + hoger)
+        rib.rotation_euler = (0, 0, a)
+        bm = bmesh.new()
+        bm.from_mesh(rib.data)
+        bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < 0.0], context='VERTS')
+        bm.to_mesh(rib.data)
+        bm.free()
+        zacht(rib)
+        delen.append(bak_mod(rib))
+    # de korte punt bovenop
+    bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.016, radius2=0.004, depth=0.035, location=(cx, cy, zb + hoog + 0.012))
+    zacht(bpy.context.active_object)
+    delen.append(bpy.context.active_object)
     for o in delen:
         o.data.materials.clear()
         o.data.materials.append(M['helm'])
         o.visible_shadow = False  # het gezicht blijft leesbaar, zoals een schilder het doet
     return delen
+
+
+def maliekap(lijf, rig, M):
+    """De maliënkap onder de helm: langs de wangen, over de oren en het achterhoofd, tot de kraag; het gezicht met de baard
+    blijft vrij."""
+    hoofdbot = rig.matrix_world @ rig.pose.bones['head'].head
+    kin = rig.matrix_world @ rig.pose.bones['special04'].head
+    oog = rig.matrix_world @ rig.pose.bones['eye.L'].head
+    hoofd = [v.co for v in lijf.data.vertices if v.co.z > hoofdbot.z - 0.05]
+    cy = (min(p.y for p in hoofd) + max(p.y for p in hoofd)) / 2
+    bvh = bvh_van([(lijf, [v.co.z > hoofdbot.z - 0.12 for v in lijf.data.vertices])])
+    zb = oog.z + 0.06 * INSTELLINGEN['hoofd']
+    z_onder = kin.z - 0.02
+    ts = [i / 16 for i in range(17)]
+    k = koker('kap', bvh, staand(0, cy, lambda t, th: zb - t * (zb - z_onder)), ts, lambda t, th: 0.016, n=96,
+              mat=M['malien'], ver=0.4)
+    # het gezicht vrij: voor tot zo'n zestig graden opzij
+    bm = bmesh.new()
+    bm.from_mesh(k.data)
+    weg = []
+    for f in bm.faces:
+        c = f.calc_center_median()
+        hoek = math.degrees(math.atan2(c.x, -(c.y - cy)))
+        if abs(hoek) < 62:
+            weg.append(f)
+    bmesh.ops.delete(bm, geom=weg, context='FACES')
+    bm.to_mesh(k.data)
+    bm.free()
+    dik(k, 0.006)
+    return k
 
 
 def wapenrok(lijf, rig, mouwen, M, z_riem):
@@ -745,80 +839,63 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     romp = bvh_van([(lijf, [a < 0.25 for a in arm])])
     nek = rig.matrix_world @ rig.pose.bones['neck01'].head
     cy = nek.y + 0.01
-    z_top = nek.z - 0.035
+    kin = rig.matrix_world @ rig.pose.bones['special04'].head
+    z_top = min(nek.z - 0.035, kin.z - 0.04)
     lijfje = koker('wapenrok-lijf', romp, staand(0, cy, lambda t, th: z_top - t * (z_top - z_riem + 0.02)),
                    [i / 24 for i in range(25)], lambda t, th: 0.026 + 0.008 * t, n=96, mat=M['wapenrok'])
+    # de stof valt recht van de borst naar beneden: per kolom nooit smaller dan erboven (vanaf de schouders)
+    me = lijfje.data
+    kol = 97
+    for j in range(kol):
+        verst = 0.0
+        for i in range(25):
+            v = me.vertices[i * kol + j]
+            d = Vector((v.co.x, v.co.y - cy, 0))
+            r = d.length
+            if i >= 6:
+                if r < verst * 0.985:
+                    v.co.x, v.co.y = (d.normalized() * verst * 0.985 + Vector((0, cy, 0))).xy
+                    r = verst * 0.985
+            verst = max(verst, r)
     dik(lijfje, 0.005)
-    # de rok: wijd begonnen, de bovenrand trekt samen tot de taille, dan valt hij in plooien over de dijen
+    # de rok: recht van de heupen naar beneden, wat wijder naar de zoom, met lange verticale plooien (zoals op vel 01; de
+    # stofsimulatie liet hem onderaan als een zak doorhangen)
     knie = (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z
-    z_zoom = knie + 0.07
-    benen = romp
-    ts = [i / 20 for i in range(21)]
+    z_zoom = knie + 0.05
+    ts = [i / 24 for i in range(25)]
     hoogte = lambda t, th: z_riem + 0.01 - t * (z_riem + 0.01 - z_zoom)
-    taille = [straal(benen, Vector((0, cy, z_riem)), Vector((math.cos(th), math.sin(th), 0))) for th in
-              [math.pi + 2 * math.pi * j / 96 for j in range(97)]]
-    taille = vul(taille)
-    rok = koker('wapenrok-rok', benen, staand(0, cy, hoogte), ts, lambda t, th: 0.09 + 0.05 * t, n=96, mat=M['wapenrok'])
+    plooi = lambda t, th: 0.03 + 0.03 * t + (0.004 + 0.008 * t) * math.sin(7 * th + 0.6) + 0.003 * t * math.sin(13 * th + 2.1)
+    rok = koker('wapenrok-rok', romp, staand(0, cy, hoogte), ts, plooi, n=128, mat=M['wapenrok'])
     me = rok.data
-    bm = bmesh.new()
-    bm.from_mesh(me)
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)  # de naad dicht, anders valt de rok achter open
-    bm.to_mesh(me)
-    bm.free()
-    rok.shape_key_add(name='wijd')
-    sk = rok.shape_key_add(name='taille')
-    vast = rok.vertex_groups.new(name='vast')
-    for v in me.vertices:
-        if v.co.z < z_riem:
-            continue
-        d = Vector((v.co.x, v.co.y - cy, 0)).normalized()
-        th = math.atan2(d.y, d.x)
-        r = straal(romp, Vector((0, cy, z_riem)), d) or 0.16
-        sk.data[v.index].co = Vector((0, cy, v.co.z)) + d * (r + 0.034)
-        vast.add([v.index], 1.0, 'REPLACE')
-    sk.value = 0.0
-    sk.keyframe_insert('value', frame=1)
-    sk.value = 1.0
-    sk.keyframe_insert('value', frame=18)
-    cm = rok.modifiers.new('stof', 'CLOTH')
-    cs = cm.settings
-    cs.quality = 8
-    cs.mass = 0.3
-    cs.tension_stiffness = cs.compression_stiffness = 15
-    cs.shear_stiffness = 5
-    cs.bending_stiffness = 0.4
-    cs.vertex_group_mass = 'vast'
-    cm.collision_settings.distance_min = 0.006
-    cm.point_cache.frame_end = 60
-    botsen = lijf.modifiers.new('botsen', 'COLLISION')
-    lijf.collision.thickness_outer = 0.01
-    sc = bpy.context.scene
-    sc.frame_start, sc.frame_end = 1, 60
-    for f in range(1, 61):
-        sc.frame_set(f)
-    deps = bpy.context.evaluated_depsgraph_get()
-    gevallen = bpy.data.meshes.new_from_object(rok.evaluated_get(deps))
-    rok.modifiers.clear()
-    rok.shape_key_clear()
-    rok.data = gevallen
-    lijf.modifiers.remove(lijf.modifiers['botsen'])
-    sc.frame_set(1)
+    kol = 129
+    for j in range(kol):
+        verst = 0.0
+        for i in range(len(ts)):
+            v = me.vertices[i * kol + j]
+            d = Vector((v.co.x, v.co.y - cy, 0))
+            r = d.length
+            if r < verst:
+                th = math.pi + 2 * math.pi * j / 128
+                r = verst + plooi(ts[i], th) - plooi(ts[i - 1], th)
+                v.co.x, v.co.y = (d.normalized() * r + Vector((0, cy, 0))).xy
+            verst = max(verst, r)
     zacht(rok)
     dik(rok, 0.005)
     return [lijfje, rok]
 
 
-def riem_en_tas(bvh, cy, z_riem, M):
+def riem_en_hangers(bvh, cy, z_riem, M):
+    """De brede roodbruine riem met een grote rechthoekige gesp, en aan beide heupen een smalle hanger: rechts een schede
+    met een beslagen punt, links een riempje met een klein beslag."""
     delen = []
-    riem = koker('riem', bvh, staand(0, cy, lambda t, th: z_riem + 0.028 - t * 0.056), [0, 0.5, 1],
+    riem = koker('riem', bvh, staand(0, cy, lambda t, th: z_riem + 0.026 - t * 0.052), [0, 0.5, 1],
                  lambda t, th: 0.012, n=128, mat=M['riem'])
     dik(riem, 0.006)
     delen.append(riem)
     voor = straal(bvh, Vector((0, cy, z_riem)), Vector((0, -1, 0))) + 0.018
-    # de gesp: een rechthoekige ring, en de tong die eruit hangt
-    for naam, plek, maat, mat in (('gesp', (0, cy - voor, z_riem), (0.072, 0.012, 0.066), M['staal']),
-                                  ('gesp-gat', (0, cy - voor - 0.004, z_riem), (0.046, 0.01, 0.04), M['riem']),
-                                  ('tong', (0.05, cy - voor + 0.004, z_riem - 0.05), (0.034, 0.008, 0.09), M['riem'])):
+    for naam, plek, maat, mat in (('gesp', (0, cy - voor, z_riem), (0.07, 0.012, 0.062), M['staal']),
+                                  ('gesp-gat', (0, cy - voor - 0.004, z_riem), (0.044, 0.01, 0.038), M['riem']),
+                                  ('tong', (0.012, cy - voor - 0.007, z_riem), (0.026, 0.006, 0.03), M['omslag'])):
         bpy.ops.mesh.primitive_cube_add(size=1, location=plek, scale=maat)
         o = bpy.context.active_object
         b = o.modifiers.new('rand', 'BEVEL')
@@ -826,39 +903,30 @@ def riem_en_tas(bvh, cy, z_riem, M):
         b.segments = 3
         o.data.materials.append(mat)
         delen.append(bak_mod(o))
-    # de tas op de linkerheup, de schede met de dolk op de rechter
-    for x, naam in ((1, 'tas'), (-1, 'schede')):
-        d = Vector((0.82 * x, -0.57, 0)).normalized()
-        r = straal(bvh, Vector((0, cy, z_riem - 0.06)), d) + 0.03
+    for x, naam in ((-1, 'schede'), (1, 'hanger')):
+        d = Vector((0.86 * x, -0.5, 0)).normalized()
+        r = straal(bvh, Vector((0, cy, z_riem - 0.05)), d) + 0.02
         c = Vector((0, cy, 0)) + d * r
         draai = math.atan2(d.y, d.x) + math.pi / 2
-        if naam == 'tas':
-            for nm, dz, maat, mat in (('tas', -0.07, (0.1, 0.05, 0.12), M['riem']), ('klep', -0.03, (0.106, 0.056, 0.05), M['riem']),
-                                       ('tasgesp', -0.045, (0.018, 0.06, 0.022), M['staal'])):
-                bpy.ops.mesh.primitive_cube_add(size=1, location=(c.x, c.y, z_riem + dz), rotation=(0, 0, draai), scale=maat)
-                o = bpy.context.active_object
-                b = o.modifiers.new('rand', 'BEVEL')
-                b.width = 0.012 if nm != 'tasgesp' else 0.003
-                b.segments = 3
-                o.data.materials.append(mat)
-                delen.append(bak_mod(o))
-        else:
-            for nm, dz, maat, mat in (('schede', -0.17, (0.04, 0.024, 0.24), M['schede']), ('punt', -0.3, (0.046, 0.028, 0.03), M['staal']),
-                                       ('greep', 0.03, (0.024, 0.024, 0.09), M['leer']), ('stang', -0.025, (0.085, 0.018, 0.016), M['staal']),
-                                       ('knop', 0.085, (0.03, 0.03, 0.026), M['staal'])):
-                bpy.ops.mesh.primitive_cube_add(size=1, location=(c.x, c.y, z_riem + dz), rotation=(math.radians(-12), 0, draai), scale=maat)
-                o = bpy.context.active_object
-                b = o.modifiers.new('rand', 'BEVEL')
-                b.width = min(maat) * 0.35
-                b.segments = 3
-                o.data.materials.append(mat)
-                delen.append(bak_mod(o))
+        stukken = ((('lus', 0.0, (0.04, 0.02, 0.07), M['riem']), ('schede', -0.11, (0.042, 0.026, 0.17), M['schede']),
+                    ('punt', -0.2, (0.046, 0.03, 0.026), M['staal'])) if naam == 'schede' else
+                   (('lus', 0.0, (0.03, 0.018, 0.07), M['riem']), ('hanger', -0.08, (0.028, 0.012, 0.13), M['riem']),
+                    ('beslag', -0.05, (0.018, 0.016, 0.018), M['staal'])))
+        for nm, dz, maat, mat in stukken:
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(c.x, c.y, z_riem + dz), rotation=(math.radians(-6), 0, draai), scale=maat)
+            o = bpy.context.active_object
+            b = o.modifiers.new('rand', 'BEVEL')
+            b.width = min(maat) * 0.35
+            b.segments = 3
+            o.data.materials.append(mat)
+            delen.append(bak_mod(o))
     return delen
 
 
 def kraag(lijf, rig, mouwen, lijfje, M):
     """De maliënkraag: om de nek, onder de kin en de baard, en als een cape over de schouders."""
-    bvh = bvh_van([(lijf, None), (mouwen, None), (lijfje, None)])
+    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
+    bvh = bvh_van([(lijf, [a < 0.2 for a in arm]), (lijfje, None), (mouwen, None)])
     nek = rig.matrix_world @ rig.pose.bones['neck02'].head
     kin = rig.matrix_world @ rig.pose.bones['special04'].head
     hoofd = rig.matrix_world @ rig.pose.bones['head'].head
@@ -866,9 +934,9 @@ def kraag(lijf, rig, mouwen, lijfje, M):
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z + 0.012))
-        onder = nek.z - 0.17 - 0.02 * voor
+        onder = nek.z - 0.075 - 0.05 * voor
         return boven - t * (boven - onder)
-    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.006 * t,
+    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.016 * math.sin(math.pi * min(1.0, t * 1.15)) ** 0.7,
               n=128, mat=M['malien'])
     dik(k, 0.006)
     return k
@@ -901,8 +969,8 @@ def smelt(naam, delen, voxel, glad_n, mat):
 
 
 def laarzen(lijf, rig, M):
-    """Laarzen tot onder de knie: een schacht om het onderbeen en een voet om de voet, samengesmolten, met de zool vlak en
-    een omgeslagen rand van licht leer."""
+    """Korte laarzen tot onder de knie: een schacht om het onderbeen en een voet met een ronde dikke neus, samengesmolten,
+    de zool vlak en donker; een omgeslagen rand, en om de enkel een riempje met een gespje aan de buitenkant."""
     delen = []
     for k, s in (('L', 1), ('R', -1)):
         been = gewicht(lijf, ('lowerleg', 'foot', 'toe'))
@@ -911,7 +979,6 @@ def laarzen(lijf, rig, M):
         kn = rig.matrix_world @ rig.pose.bones[f'lowerleg01.{k}'].head
         en = rig.matrix_world @ rig.pose.bones[f'lowerleg02.{k}'].tail
         as_ = (en - kn).normalized()
-        L = (en - kn).length
         x1 = Vector((0, -1, 0)) - as_ * as_.dot(Vector((0, -1, 0)))
         x1.normalize()
         y1 = as_.cross(x1)
@@ -920,34 +987,59 @@ def laarzen(lijf, rig, M):
             rs = [straal(bvh, c, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
             rs = [r for r in rs if r is not None]
             return sum(rs) / len(rs) if rs else 0.06
-        boven = kn + as_ * (kn.z - 0.40) / as_.dot(Vector((0, 0, -1)))
-        r_boven, r_enkel = gem(boven) + 0.016, gem(en + as_ * -0.02) + 0.014
+        z_top = kn.z - 0.035
+        boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
+        r_boven, r_enkel = gem(boven) + 0.018, gem(en + as_ * -0.015) + 0.016
         d = en - boven
         bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=r_boven, radius2=r_enkel, depth=d.length, location=(boven + en) / 2,
                                         rotation=Vector((0, 0, 1)).rotation_difference(-d).to_euler())
         stukken = [bpy.context.active_object]
-        voet = [v.co for v, b in zip(lijf.data.vertices, been) if b > 0.4 and v.co.x * s > 0 and v.co.z < 0.1]
-        xs, ys = [q.x for q in voet], [q.y for q in voet]
-        midden = Vector(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2 - 0.006, 0.045))
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=midden)
+        voet = [v.co for v, b in zip(lijf.data.vertices, been) if b > 0.4 and v.co.x * s > 0 and v.co.z < 0.08]
+        teen = min(voet, key=lambda q: q.y)
+        hiel = max(voet, key=lambda q: q.y)
+        breed = max(q.x for q in voet) - min(q.x for q in voet)
+        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length
+        richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
+        midden = Vector((hiel.x, hiel.y, 0.05)) + richting * lengte * 0.5
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=midden,
+                                             rotation=(0, 0, math.atan2(richting.y, richting.x) + math.pi / 2))
         e = bpy.context.active_object
-        e.scale = ((max(xs) - min(xs)) / 2 + 0.016, (max(ys) - min(ys)) / 2 + 0.02, 0.062)
+        e.scale = (breed / 2 + 0.013, lengte / 2 + 0.013, 0.055)
         stukken.append(e)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=r_enkel + 0.004, location=en + Vector((0, 0.01, -0.01)))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=breed / 2 + 0.008,
+                                             location=Vector((teen.x, teen.y, 0.04)) - richting * 0.012)
+        neus = bpy.context.active_object
+        neus.scale = (1, 1, 0.85)
+        stukken.append(neus)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=r_enkel + 0.006, location=en + Vector((0, 0.012, -0.012)))
         stukken.append(bpy.context.active_object)
-        laars = smelt('laars.' + k, stukken, 0.005, 6, M['laars'])
+        laars = smelt('laars.' + k, stukken, 0.004, 6, M['laars'])
         for v in laars.data.vertices:
             v.co.z = max(v.co.z, 0.0)  # de zool vlak
         delen.append(laars)
         lb = bvh_van([(laars, None)])
-        o = koker('omslag.' + k, lb, lambda t, th, boven=boven, as_=as_: (boven + as_ * (0.005 + 0.07 * t), as_), [0, 0.3, 1],
-                  lambda t, th: 0.004 + 0.016 * t, n=64, mat=M['omslag'], ver=0.2)
+        o = koker('omslag.' + k, lb, lambda t, th, boven=boven, as_=as_: (boven + as_ * (0.004 + 0.055 * t), as_), [0, 0.3, 1],
+                  lambda t, th: 0.004 + 0.012 * t, n=64, mat=M['omslag'], ver=0.2)
         dik(o, 0.005)
         delen.append(o)
+        # het riempje om de enkel, met een gespje aan de buitenkant
+        enkel = en + as_ * -0.03
+        r = koker('enkelriem.' + k, lb, lambda t, th, enkel=enkel, as_=as_: (enkel + as_ * 0.02 * t, as_), [0, 1],
+                  lambda t, th: 0.004, n=64, mat=M['omslag'], ver=0.2)
+        dik(r, 0.004)
+        delen.append(r)
+        buiten = Vector((s, -0.35, 0)).normalized()
+        rb = straal(lb, enkel + as_ * 0.01, buiten, 0.2) or 0.06
+        bpy.ops.mesh.primitive_cube_add(size=1, location=enkel + as_ * 0.01 + buiten * (rb + 0.008), scale=(0.016, 0.006, 0.02),
+                                        rotation=(0, 0, math.atan2(buiten.y, buiten.x) + math.pi / 2))
+        g = bpy.context.active_object
+        g.data.materials.append(M['staal'])
+        delen.append(g)
     return delen
 
 
 def armstukken(rig, mouwen, M):
+    """Een breed armstuk van donker leer over elke onderarm, boven en onder een lichtere band met klinknagels."""
     delen = []
     bvh = bvh_van([(mouwen, None)])
     for k in ('L', 'R'):
@@ -955,16 +1047,31 @@ def armstukken(rig, mouwen, M):
         b = rig.matrix_world @ rig.pose.bones[f'lowerarm02.{k}'].tail
         as_ = (b - a).normalized()
         L = (b - a).length
-        p = lambda t, th, a=a, as_=as_, L=L: (a + as_ * L * (0.32 + 0.6 * t), as_)
-        st = koker('armstuk.' + k, bvh, p, [i / 8 for i in range(9)], lambda t, th: 0.004, n=64, mat=M['armstuk'], ver=0.2)
+        p = lambda t, th, a=a, as_=as_, L=L: (a + as_ * L * (0.3 + 0.62 * t), as_)
+        st = koker('armstuk.' + k, bvh, p, [i / 8 for i in range(9)], lambda t, th: 0.005 + 0.004 * t, n=64, mat=M['armstuk'], ver=0.2)
         dik(st, 0.005)
         delen.append(st)
-        for t0, naam, mat, ex in ((0.0, 'rand', M['omslag'], 0.012), (0.96, 'rand', M['omslag'], 0.012),
-                                  (0.35, 'band', M['riem'], 0.011), (0.68, 'band', M['riem'], 0.011)):
-            q = lambda t, th, t0=t0: p(t0 + t * 0.05, th)
-            r = koker(naam + '.' + k, bvh, q, [0, 1], lambda t, th, ex=ex: ex, n=64, mat=mat, ver=0.2)
+        for t0 in (0.0, 0.93):
+            q = lambda t, th, t0=t0: p(t0 + t * 0.07, th)
+            r = koker('armrand.' + k, bvh, q, [0, 1], lambda t, th, t0=t0: 0.012 + 0.004 * t0, n=64, mat=M['armrand'], ver=0.2)
             dik(r, 0.004)
             delen.append(r)
+            # klinknagels rond de band
+            c, _ = q(0.5, 0)
+            x1 = Vector((0, -1, 0)) - as_ * as_.dot(Vector((0, -1, 0)))
+            x1.normalize()
+            y1 = as_.cross(x1)
+            for i in range(10):
+                h = 2 * math.pi * i / 10
+                dvec = x1 * math.cos(h) + y1 * math.sin(h)
+                rr = straal(bvh, c, dvec, 0.2)
+                if rr is None:
+                    continue
+                bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=0.0035,
+                                                     location=c + dvec * (rr + 0.012 + 0.004 * t0 + 0.004))
+                n = bpy.context.active_object
+                n.data.materials.append(M['staal'])
+                delen.append(n)
     return delen
 
 
@@ -984,11 +1091,13 @@ def kappen(lijf, rig, M):
     return delen
 
 
-def speer(rig, M):
-    """De speer staat rechtop in de rechtervuist."""
+def speer(rig, M, kruin):
+    """De speer staat rechtop in de rechtervuist, zo'n 1,18 keer zo lang als de man (vel 01): een donkere schacht, bovenaan
+    een koker met koord omwonden, en een blad als een ruit met afgeronde zijden en een middenrib, met roestspikkels."""
     pb = lambda b: rig.matrix_world @ rig.pose.bones[b].head
     vuist = (pb('finger3-1.R') + pb('finger3-3.R') + pb('wrist.R')) / 3
     x, y = vuist.x, vuist.y
+    L = kruin * 1.18
     delen = []
 
     def cil(naam, z0, z1, r, mat, seg=24):
@@ -997,29 +1106,29 @@ def speer(rig, M):
         zacht(o)
         o.data.materials.append(mat)
         delen.append(o)
-    cil('schacht', 0.04, 2.1, 0.016, M['hout'])
-    cil('dop', 0.0, 0.06, 0.019, M['staal'])
-    cil('koker', 2.06, 2.2, 0.02, M['staal'])
-    for z in (2.075, 2.16):
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.021, minor_radius=0.004, location=(x, y, z))
+    z_koker, z_blad = L * 0.84, L * 0.9
+    cil('schacht', 0.02, z_koker + 0.01, 0.016, M['hout'])
+    cil('koker', z_koker, z_blad + 0.005, 0.017, M['staal'])
+    for i in range(7):  # het koord, zeven slagen
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.0185, minor_radius=0.004, location=(x, y, z_koker + 0.008 + i * (z_blad - z_koker - 0.014) / 6))
         o = bpy.context.active_object
-        o.data.materials.append(M['staal'])
+        zacht(o)
+        o.data.materials.append(M['koord'])
         delen.append(o)
-    # het blad: blad-vormig, ruitvormig in doorsnede, met een ribbel in het midden
     n = 24
     vs, fs = [], []
     for i in range(n + 1):
         t = i / n
-        w = 0.05 * math.sin(math.pi * min(1.0, t ** 0.7)) * (1 - t) ** 0.35 + 0.0004
-        d = 0.009 * (1 - t) + 0.0006
-        z = 2.2 + 0.34 * t
+        w = 0.026 * math.sin(math.pi * min(1.0, t ** 0.8)) ** 0.8 * (1 - t) ** 0.25 + 0.0004
+        d = 0.006 * (1 - t) + 0.0005
+        z = z_blad + (L - z_blad) * t
         for px, py in ((w, 0), (0, d), (-w, 0), (0, -d)):
             vs.append((x + px, y + py, z))
     for i in range(n):
         for j in range(4):
             a = i * 4 + j
             fs.append((a, i * 4 + (j + 1) % 4, (i + 1) * 4 + (j + 1) % 4, (i + 1) * 4 + j))
-    delen.append(maak('blad', vs, fs, mat=M['staal']))
+    delen.append(maak('blad', vs, fs, mat=M['blad']))
     delen[-1].data.polygons.foreach_set('use_smooth', [False] * len(delen[-1].data.polygons))
     return delen
 
@@ -1030,52 +1139,61 @@ def bouw():
     vingers(rig, {'L': math.radians(55), 'R': math.radians(75)}, {'L': math.radians(25), 'R': math.radians(35)})
     lijf_b = bak(lijf, 'lijf')
     bpy.data.objects.remove(lijf)
-    riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z + 0.035
+    riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z + 0.02
     M = {
         'huid': mat_huid(),
-        'hozen': mat_stof('hozen', '#2b3a66', 30, 0.3),
-        'wambuis': mat_stof('wambuis', '#8a5530', 20, 0.15),
-        'handschoen': mat_leer('handschoen', '#4f2e18'),
+        'hozen': mat_stof('hozen', '#1c2038', 30, 0.3),
+        'wambuis': mat_stof('wambuis', '#5e2f1c', 20, 0.15),
+        'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z),
         'malien': mat_malien(),
-        'helm': mat_staal('helm'),
+        'helm': mat_staal('helm', '#9c99a4', 0.42),
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
-        'riem': mat_leer('riem', '#7a3a1e'),
+        'riem': mat_leer('riem', '#793a28', '#3a160c'),
         'leer': mat_leer('leer', '#5a3418'),
-        'laars': mat_leer('laars', '#74462a', '#3a200e'),
-        'omslag': mat_leer('omslag', '#a0703e', '#5a3818'),
-        'armstuk': mat_leer('armstuk', '#4a4440', '#1e1c1a'),
-        'schede': mat_leer('schede', '#5a2412', '#200a04'),
+        'laars': mat_laars(),
+        'omslag': mat_leer('omslag', '#7c4c2a', '#3e2412'),
+        'armstuk': mat_leer('armstuk', '#4d3730', '#1e1410'),
+        'armrand': mat_leer('armrand', '#6e4c36', '#2e1e14'),
+        'schede': mat_leer('schede', '#8a4630', '#2e120a'),
+        'koord': mat_leer('koord', '#9a5a2a', '#4a2410'),
+        'blad': mat_blad(),
     }
     me = lijf_b.data
-    for k in ('huid', 'hozen', 'handschoen'):
+    for k in ('huid', 'hozen', 'handschoen', 'wambuis'):
         me.materials.append(M[k])
     been = gewicht(lijf_b, ('upperleg', 'lowerleg', 'foot', 'toe', 'pelvis'))
     hand = gewicht(lijf_b, ('wrist', 'finger', 'metacarpal'))
+    z_nek = (rig.matrix_world @ rig.pose.bones['neck01'].head).z - 0.02
     for p in me.polygons:
         vs = p.vertices
         if sum(hand[i] for i in vs) / len(vs) > 0.4:
             p.material_index = 2
         elif sum(been[i] for i in vs) / len(vs) > 0.5:
             p.material_index = 1
+        elif p.center.z < z_nek:
+            p.material_index = 3  # onder de kleren het wambuis: waar iets openvalt, zie je geen bloot vel
     zacht(lijf_b)
     mouwen = wambuis(lijf_b, rig, M['wambuis'])
+    handen = gewicht(lijf_b, ('wrist', 'finger', 'metacarpal'))
+    uit_huid('handschoenen', lijf_b, [h > 0.5 for h in handen], 0.007, M['handschoen'], sub=1)
     for ob in wapenrok(lijf_b, rig, mouwen, M, riem_z):
         pass
     lijfje = bpy.data.objects['wapenrok-lijf']
     rok = bpy.data.objects['wapenrok-rok']
     nek = rig.matrix_world @ rig.pose.bones['neck01'].head
-    riem_en_tas(bvh_van([(lijfje, None), (rok, None)]), nek.y + 0.01, riem_z, M)
+    riem_en_hangers(bvh_van([(lijfje, None), (rok, None)]), nek.y + 0.01, riem_z, M)
     kraag(lijf_b, rig, mouwen, lijfje, M)
     helm(lijf_b, rig, M)
     laarzen(lijf_b, rig, M)
     armstukken(rig, mouwen, M)
     kappen(lijf_b, rig, M)
-    speer(rig, M)
+    speer(rig, M, kruin(lijf_b))
     baard(lijf_b, rig, M)
+    maliekap(lijf_b, rig, M)
     sub = lijf_b.modifiers.new('sub', 'SUBSURF')
     sub.levels = sub.render_levels = 1
     lijf_b.modifiers.move(len(lijf_b.modifiers) - 1, 0)  # eerst gladder, dan het haar

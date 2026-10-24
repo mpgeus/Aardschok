@@ -1867,6 +1867,28 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
 - *Wat ik eerder verkeerd las:* de wapenrok als gevierendeeld (dat is het vel `speerman-staan` en de rug), en op 5 keer de
   baard als "grijs als de maliën"; de zijaanzichten laten zien dat het een baard is.
 
+**De HD-speerman naar de referentie (24 okt).** Marcel: "pas het HD-model aan naar de lijst uit de referentie".
+`gereedschap/blender/speerman_hd.py`, de vergelijking op gelijke hoogte in `uit/blender/hd-naast.png`, op spelmaat in
+`uit/blender/hd-spelmaat.png`.
+- *De bouw:* de knoppen van MakeHuman (zwaar, gespierd, breed in de schouders, korte nek, een breder en korter hoofd, grote
+  handen, dikke armen), en daarna de botten van de benen in de lengte op 0,65: de doelen van MakeHuman gaan niet verder
+  dan 1, en de man op de plaat is bijna een dwerg. Het hoofd maal 1,35. Gemeten: de riem op 48 procent (plaat 47), het hoofd
+  met helm ruim een kwart.
+- *Wat nu klopt:* de ketelhoed van vier delen met kam, naden en punt, de rand anderhalf keer de koepel; het gezicht met een
+  volle korte baard en snor van echt haar, grijs gespikkeld, de maliënkap om het gezicht; een ronde maliënkraag met grote
+  ringen; de wapenrok blauw met de gele baan, het lijf recht naar beneden en de rok recht met lange plooien (de
+  stofsimulatie hing onderaan als een zak, dus de rok is nu gebouwd: recht van de heupen, met plooien); bolle gewatteerde
+  mouwen, armstukken met lichte banden en klinknagels, grote handschoenen; de riem met de grote gesp en de twee hangers;
+  de hozen zichtbaar; korte laarzen met omslag, enkelriempje met gespje en ronde neuzen; de speer met koord om de koker en
+  een blad met roestspikkels.
+- *Wat nog anders is, in HD:* de kraag bedekt nog wat van de bovenkant van de mouwen; het gezicht is jonger en gladder dan
+  het verweerde gezicht op de plaat; de plaat heeft donkere lijnen en geschilderde plooien en slijtage, de render is
+  belicht zoals het is.
+- *Op spelmaat* (de HD-render verkleind tot 74 pixels, naast de speerman in het spel): dezelfde soldaat, maar slechter
+  leesbaar: donkerder en modderiger (het gezicht verdwijnt tussen baard en maliën, de kraag en de mouwen worden één
+  donkere massa), breder, en de speer te fijn. De generator overdrijft voor de kleine maat (lichtere kleuren, harde lijnen,
+  een groot speerblad); een HD-render die eerlijk is, moet voor het spel een eigen afwerking krijgen.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
