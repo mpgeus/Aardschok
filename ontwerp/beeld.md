@@ -1789,6 +1789,30 @@ wapenrok in blauw en geel, de riem met tas, de laarzen en de speer, op één ske
 vergroot: staan in acht richtingen en lopen in één richting (ZW), naast de speerman van de generator en een figuur uit
 onze renderer. Valt de bouw tegen, dan daarna MPFB2 als basis; valt de kleur tegen, dan de projectie van de generator.
 
+**De proef (24 okt).** Marcel had Blender 5.2 al op zijn pc ("blender heb ik al geinstalleerd"). Het model en de renders:
+`gereedschap/blender/speerman.py`, de plaat: `gereedschap/blender/proef.cjs` (`gereedschap.md`). Het lijf is samengesmolten
+uit bollen en capsules (voxel remesh), de kleren, de helm en de speer zijn eigen delen, en een skelet met een huid laat het
+lopen. Zestien beelden renderen in twintig seconden.
+- *De eerste plaat* (acht richtingen en lopen ZW, naast de generator en de soldaat uit onze renderer): elke richting is
+  dezelfde man en het lopen beweegt echt, maar hij was te dun, de speer te fijn en het gezicht verdween onder de helm.
+  Marcel: "oh, kan dat niet beter?", en daarna: **"laten we de focus houden op het basisbeeld, waarin hij staat Z. kijken
+  of we die gelijk kunnen krijgen aan de referentie"**, en: "je mag ook de plugin [MPFB] gebruiken".
+- *Wat het verschil maakte*, in volgorde van belang: (1) **de camera van de poppetjes op 15 graden** in plaats van 30. De
+  generator tekent zijn mannen veel vlakker dan de wereld (de rand van de helm is een smalle ellips), en alleen dan zie je
+  het gezicht onder de helm. (2) **Gedrongen**: hoofd en helm groter (maal 1,4), de man breder dan echt (maal 1,35), de
+  speer overdreven dik. (3) **Het licht meer van voren** dan dat van de wereld, zoals de generator belicht, en de
+  omgevingsschaduw alleen binnen een deel (anders maakt de helm het gezicht zwart). (4) De verdeling van de plaat: de
+  wapenrok gevierendeeld (van hemzelf rechtsboven geel, rechtsonder blauw), de riem in het midden, de zoom op een derde, en
+  daaronder blauwe hozen boven de laarzen. (5) Aflopende schouders en de armen in een lichte boog. (6) Lijnen om elk deel
+  (Freestyle), die op spelmaat een donkere pixel geven.
+- *Twee manieren van licht*, naast elkaar op de plaat: Cycles (doorgerekend) en geschilderd (EEVEE, het licht in vier vaste
+  banden). Met het licht van voren scheelt het op spelmaat weinig.
+- *Waar het nu staat* (`uit/blender/z.png`): op spelmaat dezelfde opbouw als de speerman in het spel (helm, gezicht met
+  baard, maliënkraag, gevierendeelde wapenrok, riem met gesp, hozen, laarzen, speer). Wat de generator nog meer heeft: een
+  geschilderde huid met textuur en meer contrast, en de kleine dingen die het leven geven (de leren armstukken, de schede,
+  de tas aan de riem, de omgeslagen laarzen, de voeten naar buiten). MPFB is nog niet gebruikt: onder de kleren is van het
+  lijf alleen het gezicht te zien, op spelmaat zo'n acht pixels breed.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

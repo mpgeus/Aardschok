@@ -198,6 +198,13 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   de vellen uit `gereedschap/pixelart/bron/soldaten/` uit en verkleint ze (een proefplaat `uit/generator/speerman.png`, de
   bewegingen als bewegend beeld, en de vellen in `uit/generator/animaties/`); daarna
   `node gereedschap/pixelart/naar-spel.cjs --alleen speerman`.
+- **Blender als basis** (vraag 190; `beeld.md`, "Blender als basis?"): `gereedschap/blender/speerman.py` bouwt de speerman
+  als 3D-model met een skelet en rendert hem (Blender 5.2, zonder venster):
+  `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P gereedschap/blender/speerman.py -- <Z|staan|lopen|alles> [uitmap] [toon|echt]`
+  (toon: EEVEE met het licht in banden; echt: Cycles, op de videokaart met CUDA, want OptiX werkt niet op de 1080 Ti).
+  Naar `gereedschap/pixelart/uit/blender/render/`, vier keer de spelmaat. `node gereedschap/blender/proef.cjs z` zet staan
+  naar Z naast de bron van de generator, groot en op spelmaat (`uit/blender/z.png`); zonder `z` alle richtingen en het lopen
+  (`uit/blender/proef.png`).
 
 
 ## Testen in de browser
