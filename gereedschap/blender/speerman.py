@@ -41,6 +41,12 @@ INSTELLINGEN = {
     'camera': 15,           # graden boven de grond; de wereld staat op 30, maar de generator tekent de poppetjes vlakker
 }
 
+# HD (Marcel, 24 okt: "ik wil echt een super HD variant, waarin ik alle details zichtbaar krijg"): staan naar Z, vier
+# keer zo groot als de render voor het spel (de man zo'n 1500 pixels hoog), met meer samples en naar verhouding dunnere lijnen.
+if WAT == 'hd':
+    INSTELLINGEN.update(pxm=INSTELLINGEN['pxm'] * 4, res=tuple(x * 4 for x in INSTELLINGEN['res']), anker_y=INSTELLINGEN['anker_y'] * 4,
+                        samples=192, lijn=INSTELLINGEN['lijn'] * 1.6)
+
 # De richtingen van het spel (Z kijkt naar ons toe), als draaiing van de man om z vanuit zijn rust (kijkt naar -y).
 RICHTINGEN = {'Z': 135, 'ZW': 90, 'W': 45, 'NW': 0, 'N': -45, 'NO': -90, 'O': -135, 'ZO': 180}
 
@@ -978,8 +984,12 @@ def maat(sc, cam):
 def main():
     os.makedirs(UIT, exist_ok=True)
     sc, cam, arm = bouw()
-    with open(os.path.join(UIT, 'maat.json'), 'w') as f:
+    with open(os.path.join(UIT, 'maat-hd.json' if WAT == 'hd' else 'maat.json'), 'w') as f:
         json.dump(maat(sc, cam), f)
+    if WAT == 'hd':
+        rust_houding(arm)
+        arm.rotation_euler = (0, 0, math.radians(RICHTINGEN['Z']))
+        render(sc, os.path.join(UIT, f'staan-Z-hd-{STIJL}.png'))
     if WAT in ('staan', 'alles', 'Z'):
         rust_houding(arm)
         for r, hoek in RICHTINGEN.items():

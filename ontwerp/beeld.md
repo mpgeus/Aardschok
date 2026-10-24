@@ -1821,7 +1821,51 @@ lopen. Zestien beelden renderen in twintig seconden.
   het armstuk, de omslag van de laarzen, de tas en de gesp; de schede valt achter de hand en de speer weg, en de
   klinknagels zijn er alleen groot.
 - *Het vel van de bron*: het vel `speerman-staan` heeft de wapenrok anders gevierendeeld (van hemzelf rechtsboven blauw)
-  dan de speerman in het spel (uit vel 01, rechtsboven geel); het model volgt het spel.
+  dan de speerman in het spel (uit vel 01, rechtsboven geel); het model volgt het spel. (Rechtgezet hieronder: vel 01 is
+  van voren niet gevierendeeld.)
+
+**De referentie, onderdeel voor onderdeel (24 okt).** Marcel, bij de HD-versie: "blijf kritisch", "hou de referentie in
+gedachten. Alles valt en staat met deze poppetjes", en: "ik wil dat je eerst de hele referentie nog eens nakijkt, zodat je
+alles écht duidelijk hebt." De referentie is **vel 01** (`gereedschap/pixelart/bron/soldaten/speerman/01.webp`, ontleed
+in `uit/generator/bron/speerman-01.png`): daar komt de speerman in het spel vandaan. Nagelopen op 2 tot 5 keer vergroot,
+staan naar Z, en waar het van voren niet zeker is in de zijaanzichten (W, ZW) en de rug (N). De kleuren zijn de mediaan van
+een vak van 7 bij 7 pixels (licht / midden / schaduw).
+- *Bouw:* heel gedrongen. Van de koepel van de helm tot de zolen 100: de schouders (met de mouwen) 47 breed, de wapenrok 32,
+  de rand van de helm 27, het gezicht 17, de laarzen samen 36. Van de zolen omhoog: de laarsrand op 22, de zoom op 25, de
+  riem op 47, de schouders op 77, de kin op 74, de ogen op 82, de helmrand op 85. Het hoofd met helm is dus een kwart van de
+  man, bijna twee keer zo groot als echt.
+- *De helm:* een ketelhoed van vier delen: een kam van voor naar achter met een korte punt bovenop, en aan weerszijden een
+  naad. De koepel hoog en rond, de rand zo'n anderhalf keer zo breed als de koepel, wat naar beneden. Mat grijs staal, koel
+  in de schaduw: #b7b4b8 / #6f6d79 / #514b5f.
+- *Het gezicht:* gebruind (#c27952, in de schaduw #954326), zware donkere wenkbrauwen, kleine diepe ogen, een brede neus.
+  **Een korte volle baard met grijze spikkels** (#493a34) over kaak en kin, en een dikke snor die over de lip hangt
+  (#3e3630). In het zijaanzicht staat de baard duidelijk vooruit onder de lip: het is een baard, geen kinriem. Om het gezicht
+  zit de maliënkap: onder de helm langs de wangen, over de oren, en verder als kraag.
+- *De maliënkraag:* groot en rond, over de schouders tot op de borst, ringen met lichte stippen, warm grijsbruin
+  (#765444 / #423830). Daaronder op de schouder een smalle gele rand van de wapenrok.
+- *De wapenrok:* **van voren blauw met een brede gele baan in het midden**, van de kraag tot de zoom (de gesp staat op het
+  geel); op de rok is het blauw aan de buitenkant breder. Op de rug is hij wel gevierendeeld (de generator is daar niet
+  consequent). Recht en wat stijf, tot net boven de knie, met verticale plooien. Geel #f9b423 / #db931a / #c37a1a, blauw
+  #1c3477 / #18295e / #151c41.
+- *De mouwen:* een gewatteerd wambuis, donkerbruin (#61301e / #522e1c), grote bolle ruiten, de schouders breed en bol.
+- *De linkerarm* (hangt): over de onderarm een breed armstuk van donker grijsbruin leer (#4d3730), boven en onder een lichtere
+  band met klinknagels (#593324); dan een grote bruine handschoen met kap (#7f563b), de vingers half gebogen.
+- *De rechterarm:* de onderarm omhoog, de vuist om de speer op borsthoogte, de handschoen donkerder (#563a2f) met duidelijke
+  vingers; achter de vuist de rand van het armstuk.
+- *De riem:* breed roodbruin leer (#793a28), een grote rechthoekige zilveren gesp (#615859, de rand lichter), aan beide
+  heupen een smalle leren hanger die tot halverwege de rok hangt: van hemzelf rechts een schede (#984f35), links een riempje
+  met een klein beslag.
+- *De benen:* donkere marineblauwe hozen (#141529), alleen een smalle strook tussen zoom en laars.
+- *De laarzen:* kort (tot halverwege de kuit), warm bruin leer (#643822, in de schaduw #462318), een omgeslagen rand, om de
+  enkel een riempje met een gespje aan de buitenkant (#643d24), ronde dikke neuzen, een donkere zool, de voeten wat naar
+  buiten.
+- *De speer:* een donkere roodbruine schacht (#603327) van de grond tot ver boven de helm; bovenaan een koker omwonden met
+  koord (zes, zeven slagen, koperbruin); een blad als een ruit met afgeronde zijden en een middenrib (licht vlak links, donker
+  rechts), wat roestspikkels (#72697a).
+- *Licht en afwerking:* licht van linksboven, de schaduw koel (paarsgrijs op staal, diep blauw op de rok), een donkere
+  omlijning om alles, geschilderde plooien en slijtage.
+- *Wat ik eerder verkeerd las:* de wapenrok als gevierendeeld (dat is het vel `speerman-staan` en de rug), en op 5 keer de
+  baard als "grijs als de maliën"; de zijaanzichten laten zien dat het een baard is.
 
 ## Open
 
