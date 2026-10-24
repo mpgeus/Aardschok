@@ -681,9 +681,18 @@ def mat_malien():
         return k.glad(k.w('ABSOLUTE', k.w('SUBTRACT', d, 0.36)), 0.13, 0.03)
 
     ringen = k.w('MAXIMUM', ring(0.0, 0.0), ring(0.5, 0.5))
-    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#1a1511'), lin('#7c6e62'))
-    k.bobbel(ringen, 0.9, 0.0025)
-    return k.af(kl, ruw=0.42, metaal=0.9, holte=0.5)
+    # (Marcel: "Maliënkolder ook nog wat"): lichtere ringen, per rij wat anders van toon, zodat ze op spelmaat als lichte
+    # stippen op donker lezen zoals op vel 01, niet als een grauwe vlek
+    toon = k.glad(k.ruis(55, 2), 0.35, 0.65, 0.75, 1.15)
+    cc = k.n('ShaderNodeCombineColor')
+    for i in range(3):
+        k.zet(cc.inputs[i], toon)
+    licht = k.meng(1.0, lin('#a89a8c'), cc.outputs[0], 'MULTIPLY')
+    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#17120e'), licht)
+    k.bobbel(ringen, 1.0, 0.003)
+    m = k.af(kl, ruw=0.38, metaal=0.85, holte=0.55)
+    m['glans'] = True  # eigen.py maakt dit materiaal niet mat: de glinstering maakt de ringen leesbaar
+    return m
 
 
 def mat_staal(naam='staal', kleur='#9aa0a8', ruw=0.32):
@@ -712,9 +721,10 @@ def mat_haar():
     uit = nt.nodes.new('ShaderNodeOutputMaterial')
     h = nt.nodes.new('ShaderNodeBsdfHairPrincipled')
     h.parametrization = 'MELANIN'
-    h.inputs['Melanin'].default_value = 0.55
-    h.inputs['Melanin Redness'].default_value = 0.12
-    h.inputs['Random Color'].default_value = 0.8  # grijze spikkels
+    h.inputs['Melanin'].default_value = 0.5
+    h.inputs['Melanin Redness'].default_value = 0.1
+    h.inputs['Random Color'].default_value = 0.95  # grijze spikkels, zoals op vel 01
+    h.inputs['Random Roughness'].default_value = 0.4
     h.inputs['Roughness'].default_value = 0.45
     nt.links.new(h.outputs[0], uit.inputs['Surface'])
     return m
@@ -749,8 +759,9 @@ def baard(lijf, rig, M):
                 gw.add([v.index], 1.0, 'REPLACE')
     lijf.data.materials.append(M['haar'])
     slot = len(lijf.data.materials)
-    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 40000, 0.015, -0.5), ('snor', 'snor', 7000, 0.016, -1.1),
-                                            ('brauw', 'brauw', 2500, 0.009, 0.0)):
+    # (Marcel: "De baard moet nog wat beter"): vol en lang genoeg om over de kraag van maliën te vallen, zoals op vel 01
+    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 60000, 0.03, -0.75), ('snor', 'snor', 9000, 0.022, -1.2),
+                                            ('brauw', 'brauw', 2500, 0.01, 0.0)):
         md = lijf.modifiers.new(naam, 'PARTICLE_SYSTEM')
         ps = md.particle_system
         st = ps.settings
@@ -766,11 +777,13 @@ def baard(lijf, rig, M):
         st.child_type = 'INTERPOLATED'
         st.rendered_child_count = 6
         st.child_percent = 3
-        st.clump_factor = 0.55
-        st.roughness_2 = 0.004
-        st.root_radius = 0.6
-        st.tip_radius = 0.0
-        st.radius_scale = 0.0008
+        st.clump_factor = 0.4
+        st.clump_shape = -0.3
+        st.roughness_1 = 0.003  # wat krullig: een volle baard, geen gekamde
+        st.roughness_2 = 0.006
+        st.root_radius = 0.7
+        st.tip_radius = 0.1
+        st.radius_scale = 0.0011  # dikker, zodat hij op spelmaat leest
         st.material = slot
         ps.vertex_group_density = groep
         ps.seed = 7
@@ -880,6 +893,20 @@ def maliekap(lijf, rig, M):
     return k
 
 
+
+# Plooien in de stof (Marcel: "Moeten meer plooien in zijn outfit", "En minder symmetrisch links en rechts", "In de stof"):
+# per plooi een golf rond het lijf (frequentie, fase, sterkte), met een fase die naar beneden verloopt, zodat de plooien
+# schuin lopen en links anders zijn dan rechts; een vaste lijst, zodat elke render dezelfde stof heeft.
+LIJF_PLOOIEN = [(5, 0.4, 0.45, 0.6), (8, 2.1, 0.35, -0.9), (11, 4.4, 0.25, 1.4), (17, 1.3, 0.15, -2.0)]
+ROK_PLOOIEN = [(4, 1.0, 0.35, 0.8), (7, 0.6, 0.5, -0.5), (10, 3.3, 0.3, 1.1), (13, 2.1, 0.22, -1.6), (19, 5.0, 0.12, 2.4)]
+
+
+def plooien(th, t, lijst):
+    """De som van de golven, ongeveer van -1 tot 1; t (0 boven, 1 onder) schuift de fase, zodat een plooi schuin loopt."""
+    som = sum(sterk * math.sin(f * th + fase + schuin * t) for f, fase, sterk, schuin in lijst)
+    # en sterker aan zijn linkerkant dan aan zijn rechter (zijn linkerkant is +x, bij th rond de nul is hij voor)
+    return som / sum(x[2] for x in lijst) * 1.6 * (1 + 0.35 * math.sin(th + 0.9))
+
 def wapenrok(lijf, rig, mouwen, M, z_riem):
     """Het lijf van de wapenrok (van de nek tot de riem, op de romp), en de rok die eronder valt (stofsimulatie)."""
     arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
@@ -913,7 +940,7 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
             th = math.pi + 2 * math.pi * j / 96
             voor = max(0.0, math.cos(th)) ** 0.5
             d = Vector((v.co.x, v.co.y - cy, 0)).normalized()
-            diep = 0.02 * t * voor * (0.6 * math.sin(9 * th + 0.4) + 0.4 * math.sin(15 * th + 1.7))
+            diep = 0.02 * t * voor * plooien(th, t, LIJF_PLOOIEN)
             v.co.x += d.x * diep
             v.co.y += d.y * diep
     dik(lijfje, 0.005)
@@ -922,9 +949,11 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     knie = (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z
     z_zoom = knie + 0.05
     ts = [i / 24 for i in range(25)]
-    hoogte = lambda t, th: z_riem + 0.01 - t * (z_riem + 0.01 - z_zoom)
+    # de zoom niet recht: hier en daar wat lager (Marcel: "minder symmetrisch links en rechts")
+    zoom = lambda th: 0.012 * math.sin(3 * th + 1.1) + 0.007 * math.sin(5 * th + 4.0)
+    hoogte = lambda t, th: z_riem + 0.01 - t * (z_riem + 0.01 - z_zoom) - t ** 3 * zoom(th)
     # diepe plooien (Marcel: "Dat maakt alles veel dieper en echter"), naar de zoom dieper
-    plooi = lambda t, th: 0.03 + 0.03 * t + (0.014 + 0.034 * t) * math.sin(7 * th + 0.6) + 0.012 * t * math.sin(13 * th + 2.1)
+    plooi = lambda t, th: 0.03 + 0.03 * t + (0.016 + 0.036 * t) * plooien(th, t, ROK_PLOOIEN)
     rok = koker('wapenrok-rok', romp, staand(0, cy, hoogte), ts, plooi, n=128, mat=M['wapenrok'])
     me = rok.data
     kol = 129
@@ -993,7 +1022,7 @@ def kraag(lijf, rig, mouwen, lijfje, M):
 
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
-        boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z + 0.012))
+        boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z - 0.012))  # voor onder de kin: de baard valt eroverheen
         onder = nek.z - 0.1 - 0.07 * voor  # voor over de bovenrand van de wapenrok
         return boven - t * (boven - onder)
     k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.032 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,

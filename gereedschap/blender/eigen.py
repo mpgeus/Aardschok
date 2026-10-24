@@ -43,8 +43,8 @@ STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW
 def mat_maken():
     """Alle materialen mat, zoals de GLB: ruwheid 0,75, geen bump, metaal hooguit 0,7, geen lak."""
     for m in bpy.data.materials:
-        if not m.node_tree:
-            continue
+        if not m.node_tree or m.get('glans'):
+            continue  # de maliën houden hun glans
         nt = m.node_tree
         for n in nt.nodes:
             if n.type != 'BSDF_PRINCIPLED':

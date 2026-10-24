@@ -2072,6 +2072,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   van de mouwen met een schaduwlijn, schaduw onder de kraag en tussen arm en lijf, en een donkere schaduwkant. Onze
   wapenrok is een vlak zonder plooien, dus daar valt niets te schaduwen; en `kleurGelijk` maakt de spreiding van de
   lichtheid hoogstens zo groot als bij de generator, nooit groter, dus wat vlak is, blijft vlak.
+- *De diepte en de kleur in het model* (Marcel: "1 inderdaad"). In `speerman_hd.py`: plooien in het lijf van de wapenrok
+  (van de borst naar de riem dieper) en dieper in de rok, diepere ruiten in de mouwen (bolle kussens, smalle naden); het
+  blauw voller, het geel en de helm lichter. In `eigen.py`: de schaduw van de materialen over de delen heen (de kraag op de
+  wapenrok, de arm op het lijf), en het licht een stop donkerder, met minder vullicht en lucht en de zon meer van opzij.
+  Gemeten op spelmaat (Lab per stof, tegen staan Z van de generator; in Z en ZW): het blauw, het leer en de huid op een
+  of twee punten, het geel en het staal op vijf tot zeven, zonder correctie achteraf (`eigen.cjs` doet dat alleen nog met
+  `--2d`).
+- *De baard, de maliën en de stof* (Marcel: "De baard moet nog wat beter", "Maliënkolder ook nog wat", "Moeten meer plooien
+  in zijn outfit", "En minder symmetrisch links en rechts", "In de stof"). De baard voller (60.000 haren), twee keer zo lang,
+  wat krullig, dikker en grijzer gespikkeld, en de kraag voor lager, zodat hij er zoals op vel 01 overheen valt. De maliën:
+  lichtere ringen met een toon per plek, een diepere voeg, en ze houden hun glans (mat maken haalde de glinstering weg die ze
+  leesbaar maakt). De plooien: per plooi een golf met een eigen fase, die naar beneden verschuift (schuine plooien), links
+  sterker dan rechts, en een ongelijke zoom. Marcel daarop: **"De baard ziet er fake uit"**, "Van veraf wel beter", en
+  **"Kunnen we de stof texture nog wat aanpakken? Desnoods blender plugins of addons"**.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,
