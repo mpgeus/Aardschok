@@ -217,15 +217,25 @@
   // Elke nacht
   // ---------------------------------------------------------------------------------------------
 
+  // Het spel is uit in dorp D (één weg, voor elk eind: het dorp leeg, je ambt kwijt, verjaagd, zijn leger, de demo betaald,
+  // en een scenario, js/scenario.js): `einde` is { reden, dag, ... } (D.einde), `zin` wat het dorp dan zegt ({ tekst,
+  // soort }, of niets). In jouw dorp staat de tijd dan stil, en toont js/hud.js het eind. Was het al uit, dan gebeurt er
+  // niets; geeft of het nu uit ging.
+  T.spelUit = function (D, einde, zin) {
+    if (D.einde) return false;
+    D.einde = einde;
+    if (zin) T.zeg(D, zin.tekst, zin.soort);
+    if (!D.ander) T.houdTijdStil(D, 'einde');
+    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    return true;
+  };
+
   // Elke nacht (T.tikGebouwenDag, js/gebouwen.js): het jaarboek, op 1 lentemaand het jaarverslag, en of
   // het spel verloren is. Een ander dorp (het buurdorp) verliest nog niet.
   T.tikEindeDag = function (D, dag) {
     if (D.einde || D.ander) return;
     if ((D.bevolking || 0) < IN().minstensOver) {
-      D.einde = { reden: 'leeg', dag };
-      T.zeg(D, T.t('{n|Only one person is left.|Only # people are left.} The lord strikes the village out of his book.', { n: D.bevolking || 0 }), 'gevaar');
-      T.houdTijdStil(D, 'einde');
-      if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+      T.spelUit(D, { reden: 'leeg', dag }, { tekst: T.t('{n|Only one person is left.|Only # people are left.} The lord strikes the village out of his book.', { n: D.bevolking || 0 }), soort: 'gevaar' });
       return;
     }
     schrijfJaarboek(D, dag);

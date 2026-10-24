@@ -579,6 +579,7 @@
     { naam: T.t('The market'), blok: 'MARKT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The ending'), blok: 'EINDE_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The scenes at Martinmas'), blok: 'REGIE_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Scenarios'), blok: 'SCENARIO_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The two masters'), blok: 'BAZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t("The lord's whims"), blok: 'GRILLEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The maker'), blok: 'MAKER_INSTELLINGEN' }, // geen tekst
@@ -1468,6 +1469,7 @@
     'HEER_INSTELLINGEN.leger': T.t('his army, if you refuse him'), // geen tekst
     'HEER_INSTELLINGEN.leger.mannen': T.t('men'), // geen tekst
     'HEER_INSTELLINGEN.leger.elke': T.t('seconds between two men on the road'), // geen tekst
+    'SCENARIO_INSTELLINGEN.elke': T.t('triggers look every so many world seconds'), // geen tekst
     'HEER_INSTELLINGEN.leger.bijHetPlein': T.t('the end when the first is this close to the square, tiles'), // geen tekst
     'HEER_INSTELLINGEN.wagen': T.t('his wagon'), // geen tekst
     'HEER_INSTELLINGEN.wagen.links': T.t('tiles to his left on the square'), // geen tekst

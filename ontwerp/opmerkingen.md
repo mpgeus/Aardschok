@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wat stap 1a van de scenario's liet staan** (24 okt, `scenario.md`, 2): (a) de gespreksschrijver
+  (`gereedschap/gesprekken-tool.js`, `leidVoorwaardenAf`) zoekt zijn voorwaarden in het kopcommentaar van
+  `js/gesprekken.js` en in `als.x` in `js/gesprek.js`; dat laatste staat sinds 24 okt in `T.VOORWAARDEN`, dus hij vindt
+  vlag en nietVlag alleen nog in het commentaar. Hij kan beter de sleutels van `T.VOORWAARDEN` lezen (hij laadt
+  `js/gesprek.js` al). (b) De andere doelen dan het hoofddoel staan nog nergens op het scherm (het briefje bij de muis
+  komt met het eerste level met meer doelen). (c) `veilig` (html veilig maken) staat nu in vijf bestanden, elk zijn eigen.
+
 - **Wat ronde 4 van het snoeien liet staan** (23 okt, `snoeien.md`):
   (a) De tegelpijplijn heet nog `npm run tiled` (`naar-tiled.cjs`) en schrijft nog `.tsx`-bestanden voor Tiled; alleen
   `rand.tsx` en `kust.tsx` zijn nog bron (van `tegels.json`). Een andere naam, en de rest van de `.tsx` weg: een kleine

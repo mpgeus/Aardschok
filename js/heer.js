@@ -511,20 +511,32 @@
   // Zijn leger is er: het eind (in jouw dorp het scherm over alles heen, js/hud.js, na de scène van js/regie.js).
   function legerKomt(D) {
     if (D.einde) return;
-    D.einde = { reden: 'leger', dag: dagNu(D) };
-    if (!T.legerVanDeHeer(D).length) T.zeg(D, T.t('Torches come up the road in the dark: the army of the lord.'), 'gevaar');
-    if (!D.ander) T.houdTijdStil(D, 'einde');
-    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    const zin = T.legerVanDeHeer(D).length ? null : { tekst: T.t('Torches come up the road in the dark: the army of the lord.'), soort: 'gevaar' };
+    T.spelUit(D, { reden: 'leger', dag: dagNu(D) }, zin);
   }
 
   // In de demo (T.DEMO_INSTELLINGEN, js/einde.js) is betalen ook het eind: hij rijdt weg met je waren.
   function betaaldEinde(D) {
-    if (D.einde) return;
-    D.einde = { reden: 'betaald', dag: dagNu(D) };
-    if (!D.ander) T.houdTijdStil(D, 'einde');
-    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    T.spelUit(D, { reden: 'betaald', dag: dagNu(D) });
   }
   const betaaldVan = (b) => !!(b && b.betaald && !b.betaald.geweigerd);
+
+  // Hoe het er met de heer voor staat in dorp D, in woorden (de voorwaarde `heer` van een trigger, js/scenario.js): 'brief'
+  // (zijn brief van dit jaar kwam, tot hij er is), 'komt' (zijn bezoek, tot hij helemaal weg is), 'staat' (hij wacht op
+  // het plein), 'betaald' of 'geweigerd' (wat je hem gaf; geweigerd ook zolang zijn leger komt), en 'weg' (hij gaat).
+  T.heerStand = function (D) {
+    const h = D.heer;
+    if (!h) return [];
+    const b = h.bezoek;
+    const uit = [];
+    if (h.brief && !b) uit.push('brief');
+    if (b) uit.push('komt');
+    if (b && b.staat) uit.push('staat');
+    if (betaaldVan(b)) uit.push('betaald');
+    if ((b && b.betaald && b.betaald.geweigerd) || h.leger) uit.push('geweigerd');
+    if (b && b.weg) uit.push('weg');
+    return uit;
+  };
 
   // Het eind van Sint-Maarten nu, zonder de scène uit te kijken (een klik of Esc slaat haar over, js/regie.js): je
   // weigerde hem en zijn leger komt, of in de demo betaalde je en rijdt hij weg. Anders gebeurt er niets.
@@ -728,11 +740,8 @@
   // toont het einde, en zet het spel stil.
   // Met twee bazen (js/bazen.js) omdat zijn gunst op is (`waarom`), anders na twee keer veel te weinig.
   T.ambtKwijt = function (D, waarom) {
-    if (D.einde) return;
-    D.einde = { reden: 'ambt', dag: dagNu(D), waarom: waarom || null };
-    T.zeg(D, waarom ? T.t('"Enough, commander." The lord shakes his head. "You are dismissed."') : T.t('"Twice, commander." The lord shakes his head. "You are dismissed."'), 'gevaar');
-    if (!D.ander) T.houdTijdStil(D, 'einde');
-    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    const zin = waarom ? T.t('"Enough, commander." The lord shakes his head. "You are dismissed."') : T.t('"Twice, commander." The lord shakes his head. "You are dismissed."');
+    T.spelUit(D, { reden: 'ambt', dag: dagNu(D), waarom: waarom || null }, { tekst: zin, soort: 'gevaar' });
   };
 
   // ---------------------------------------------------------------------------------------------

@@ -593,6 +593,18 @@
       );
       return;
     }
+    // Een scenario dat eindigt (de trigger `einde`, js/scenario.js): de kop en de tekst van het level, of gewonnen of
+    // verloren als het die niet geeft.
+    if (D.einde && D.einde.reden === 'scenario') {
+      const E = D.einde;
+      T.ui.toonOverlay(
+        E.kop ? T.tGegevens(E.kop) : E.gewonnen ? T.t('Victory') : T.t('Defeat'),
+        (E.tekst ? `<p>${veilig(T.tGegevens(E.tekst))}</p>` : '') + regels(),
+        T.t('To the title screen'),
+        () => T.naarTitelscherm(),
+      );
+      return;
+    }
     // Minder dan tien mensen over (js/einde.js; werklijst vraag 101, d), of je ambt kwijt (js/heer.js).
     if (D.einde && D.einde.reden === 'leeg') {
       T.ui.toonOverlay(

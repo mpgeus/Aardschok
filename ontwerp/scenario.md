@@ -103,6 +103,13 @@ T.LEVELS.demojaar = {
 
 ## 2. De triggers: als ... dan ...
 
+**Zo werkt het nu** (stap 1a, gebouwd op 24 okt; `code.md` bij `js/scenario.js`): de motor staat, met de woorden
+hieronder die **vet** staan; de demo gebruikt hem nog niet (dat is 1b). Gekozen bij het bouwen (techniek, Claude): de
+woorden van een gevolg heten zoals in de gesprekken (`zetVlag` en `wisVlag` in plaats van `vlag`), een trigger aan of uit
+is `triggerAan` en `triggerUit`, de heer is één woord of een lijstje (`{ heer: ['betaald', 'weg'] }` in plaats van
+`{ heer: 'weg', betaald: true }`), en `dag` is de dag van het spel (dag 0 is het begin, zoals overal in de code). Een getal
+in een eis is "minstens"; `{ minstens, minder }` is een stuk.
+
 Een trigger is gegevens, geen functie: `{ id, aan, keer, als: [...], dan: [...] }`. Hij gaat af als alle voorwaarden
 van `als` gelden (voor "of" maak je twee triggers), doet alles van `dan`, en gaat daarna uit, of blijft aan als `keer` meer
 dan één is. Elke voorwaarde en elk gevolg noemt het dorp waar het om gaat (`wie`: de speler, een nummer, de heer, de
@@ -125,38 +132,44 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 - Geen ronde over de hele kaart: een gebied is een rechthoek of kring van tegels, en `inGebied` kijkt alleen naar de
   mensen van het genoemde dorp.
 
-**Als** (de voorwaarden; tussen haakjes wat er al is):
-- **De tijd:** `dag` (een dag van het jaar, of een dag tussen twee, één keer getrokken uit het zaad; de kalender), `uur`
-  (overdag, of van tot), `na` (zoveel uur of dagen nadat een andere trigger afging).
-- **Het dorp:** `waar` (zoveel van een waar in de voorraad; nu alleen `goud`), `bevolking`, `gebouw` (zoveel van een
-  soort af), `trede`, `vlag` en `nietVlag` (`T.voorwaardeGeldt`).
-- **De kaart:** `inGebied` (iemand, of zoveel, van een dorp of een soort in een gebied: het checkpoint), `leegGebied`
-  (geen vijand meer in een gebied).
+**Als** (de voorwaarden; **vet** is gebouwd):
+- **De tijd:** **`dag`** (`5`: vanaf dag 5; `{ van, tot }`; `{ tussen: [60, 220], lot: 'overval' }`: vanaf een dag
+  daartussen, bij het begin getrokken uit het zaad, en dezelfde naam is dezelfde dag), **`uur`** (`'overdag'` als de zon
+  op is, `'nacht'`, of `{ van, tot }`, ook over middernacht), **`na`** (`{ trigger, uren }` of `{ trigger, dagen }`, na
+  de laatste keer dat die afging).
+- **Het dorp:** **`waar`** (`{ graan: 20, hout: { minder: 5 } }`), **`bevolking`**, **`gebouw`** (`{ molen: 1 }`: zoveel
+  af), **`trede`** (minstens), **`vlag`** en **`nietVlag`**.
+- **De kaart:** **`inGebied`** (`{ gebied, aantal, soort }`: zoveel van het dorp in een gebied, het checkpoint),
+  **`leegGebied`** (`'naam'`: geen vijand van het dorp meer in het gebied).
 - **Leven en dood:** `dood` (een mens met een naam, de aanvoerder, een groep), `gevallen` (een dorp zonder raadhuis en
   zonder mensen).
-- **De heer:** `heer` (de stand van zijn bezoek: komt, betaald, geweigerd, weg), `gunst` en `vertrouwen` (boven of
-  onder; `js/bazen.js`).
-- **Het scenario zelf:** `doel` (af of mislukt), `trigger` (ging af), `teller` (zoveel of meer).
+- **De heer:** **`heer`** (de woorden van `T.heerStand`: brief, komt, staat, betaald, geweigerd, weg), **`gunst`** en
+  **`vertrouwen`** (`js/bazen.js`; zonder die spelregel nooit).
+- **Het scenario zelf:** **`doel`** (`'id'`: af, of `{ id: 'mislukt' }`), **`trigger`** (ging af), **`teller`**
+  (`{ golven: 3 }`).
 
-**Dan** (de gevolgen):
-- **Zeggen:** `bericht` (`T.zeg`, met een plek voor de ping op de minikaart), `brief` (een brief met de tekst van het
-  level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`).
-- **Sturen:** `doel` (erbij, af, mislukt), `vlag`, `teller`, `trigger` (aan of uit).
-- **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), `rovers` (zoveel, vanaf een plek, en wat ze willen:
-  de akker of de stapels; de bestaande overval), `aanval` (een groep van een dorp naar een gebied; dezelfde weg als
-  `T.stuurMannen`).
-- **Geven en nemen:** een waar (`T.wijzigVoorraad`), gunst en vertrouwen.
-- **De kaart:** `mist` (een gebied gezien; `T.kenKring`), `bouw` (een soort open of dicht; nu `T.DEMO_INSTELLINGEN.dicht`).
-- **Het eind:** `scene` (de regie: een camera op een plek, de banden, een zin), `punten` (`T.telPunten`), `einde`
-  (gewonnen of verloren, met een reden; `D.einde` en het eindscherm).
+**Dan** (de gevolgen; **vet** is gebouwd):
+- **Zeggen:** **`bericht`** (een zin, of `{ tekst, toon, gebied }`: met een gebied brengt een klik je erheen), `brief`
+  (een brief met de tekst van het level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`).
+- **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het),
+  **`zetVlag`** en **`wisVlag`**, **`teller`** (`{ golven: 1 }`), **`triggerAan`** en **`triggerUit`**.
+- **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), **`rovers`** (`{ aantal, overUren }`: de bestaande
+  overval, voor een akker of anders een stapel; vanaf een plek komt later), `aanval` (een groep van een dorp naar een
+  gebied; dezelfde weg als `T.stuurMannen`).
+- **Geven en nemen:** **`waar`** (`{ goud: 50, graan: -10 }`, `T.wijzigVoorraad`), gunst en vertrouwen.
+- **De kaart:** `mist` (een gebied gezien; `T.kenKring`), `bouw` (een soort open of dicht; nu `T.DEMO_INSTELLINGEN.dicht`,
+  komt met 1b).
+- **Het eind:** `scene` (de regie: welke scène; komt met 1b), `punten` (`T.telPunten`; komt met 1b), **`einde`**
+  (`{ gewonnen, kop, tekst }`: `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
 naam ("the miller"). De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
 trigger `inGebied`. Je ziet het als een doel ernaar wijst (een vaandel op de plek en de ping op de minikaart), anders niet.
 
 **Doelen** staan in `S.scenario.doelen` (een tekst en een stand: open, af, mislukt). Het vak linksboven toont het
-hoofddoel, waar nu `T.tredeDoel` staat; de rest staat op het briefje bij de muis (het scherm zo leeg
-mogelijk). Een bericht zegt het als er een doel bij komt, of als het af is.
+hoofddoel zolang het open is, en anders het doel van de trede (`T.doelLinksboven`, gebouwd); de rest komt op het briefje
+bij de muis (het scherm zo leeg mogelijk; nog niet gebouwd, er is nog geen level met meer doelen). Een bericht zegt het
+als er een doel bij komt, of als het af of mislukt is.
 
 ## 3. De proef: het demojaar als triggers
 
@@ -165,13 +178,17 @@ Als de lijst hierboven de demo niet kan zeggen, mist er iets. Dit is de demo zoa
 ```js
 triggers: [
   { id: 'gezien', als: [{ dag: { tussen: [59, 219], lot: 'overval' } }],
-    dan: [{ bericht: 'Robbers were seen in the woods near the village. They will come soon.', toon: 'gevaar' }] },
+    dan: [{ bericht: { tekst: 'Robbers were seen in the woods near the village. They will come soon.', toon: 'gevaar' } }] },
   { id: 'overval', als: [{ na: { trigger: 'gezien', uren: 24 } }, { uur: 'overdag' }],
-    dan: [{ rovers: { aantal: 3, van: 'bos', voor: ['akker', 'stapels'] } }] },
+    dan: [{ rovers: { aantal: 3 } }] },
   { id: 'tiende', als: [{ heer: 'komt' }], dan: [{ punten: true }] },
-  { id: 'betaald', als: [{ heer: 'weg', betaald: true }], dan: [{ scene: 'betalen' }, { einde: 'betaald' }] },
+  { id: 'betaald', als: [{ heer: ['betaald', 'weg'] }], dan: [{ scene: 'betalen' }, { einde: { reden: 'betaald' } }] },
 ]
 ```
+
+De eerste twee speelt de motor al (`test/scenario.test.cjs`); voor de laatste twee komen in 1b `punten`, `scene` en een
+`einde` met de reden van de demo erbij. Wat 1b nog moet oplossen: het bericht vooraf noemt nu de plek waar de rovers
+zullen komen (`A.ingang`), en een trigger weet die plek pas als de overval gepland is.
 
 Met in het recept de wacht (`dorpen`), wat dicht is (`dicht`), en de wilde rovers uit (`spelregels`). Het lukt, met
 twee dingen erbij die er al half zijn: een dag uit het zaad (nu `planDemoOverval` in `js/rovers.js`) en de stand van de
@@ -326,7 +343,10 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
    `gereedschap/wereld.html`, `kaarten/` en de kaarten als gebied, de quests van het oude spel (G), en de proefkamers met
    hun deuren en monsters (ronde 4 in `snoeien.md`). `js/kaart.js` houdt alleen de tegels op naam.
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
-   eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor.
+   eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor. In twee helften (Marcel, 24 okt: "1a"):
+   **1a, de motor, gebouwd op 24 okt** (2, en `code.md` bij `js/scenario.js`), zonder de demo te raken; **1b, het
+   demojaar als level**, na Marcels blik op 185 en 186: `T.DEMO_INSTELLINGEN.aan` eruit, en `bouw`, `punten`, `scene`
+   erbij.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.

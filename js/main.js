@@ -740,10 +740,10 @@
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
     T.werkEffectenBij(S, dt); // de zwevende teksten, en wie in een beurt op een animatie wacht (js/anim.js)
-    // In het vak linksboven staat het doel van het gehucht: een dorp worden (js/treden.js). Daaronder de raad: wat nu
-    // tussen jou en een dorp staat (js/raad.js). (Tot 23 okt ging de quest die je het eerst aannam voor: ronde 4 van het
-    // snoeien.)
-    const doelNu = T.tredeDoel(S.dorp);
+    // In het vak linksboven staat het doel van het gehucht: een dorp worden (js/treden.js), of in een scenario zijn
+    // hoofddoel (T.doelLinksboven, js/scenario.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
+    // (Tot 23 okt ging de quest die je het eerst aannam voor: ronde 4 van het snoeien.)
+    const doelNu = T.doelLinksboven(S, S.dorp);
     if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
       raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;

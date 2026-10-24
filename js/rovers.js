@@ -166,6 +166,19 @@
     return true;
   };
 
+  // Rovers die komen omdat een scenario het zegt (de trigger `rovers`, js/scenario.js): zoveel man, over zoveel uur (0: nu),
+  // zoals een wilde overval (voor een akker, anders een stapel). Niet als er al een aanval is, of het dorp geen rovers kan
+  // hebben. Geeft of het lukte.
+  T.roversKomen = function (D, aantal, overUren = 0) {
+    if (!heeftRovers(D)) return false;
+    const R = D.rovers || (D.rovers = T.nieuweRovers());
+    if (R.aanval) return false;
+    const moment = uurNu(D) + Math.max(0, overUren);
+    const dag = Math.floor(moment / 24);
+    R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: Math.max(1, aantal || 1), uur: moment - dag * 24 };
+    return true;
+  };
+
   // Wie in een gevecht viel, ligt er tot de volgende dag: een rover, een man of een dorpeling, en een wolf.
   function begraaf(D) {
     const w = D.wereld;

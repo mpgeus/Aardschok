@@ -142,10 +142,7 @@
       T.ambtKwijt(D, tekst ? T.t('His favour is spent: {waarom}.', { waarom: tekst }) : T.t('His favour is spent.'));
       return;
     }
-    D.einde = { reden: 'verjaagd', dag: dagNu(D), waarom: tekst || null };
-    T.zeg(D, T.t('The village stands at your door, with torches. "Go, commander." You go.'), 'gevaar');
-    if (!D.ander) T.houdTijdStil(D, 'einde');
-    if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
+    T.spelUit(D, { reden: 'verjaagd', dag: dagNu(D), waarom: tekst || null }, { tekst: T.t('The village stands at your door, with torches. "Go, commander." You go.'), soort: 'gevaar' });
   }
 
   // Wat de meters nu zijn: { gunst, vertrouwen } (zonder de spelregel: null).

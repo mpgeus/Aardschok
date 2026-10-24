@@ -42,6 +42,7 @@
     S.tijd += dt;
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     T.tikKalender(S, dt);
+    T.werkScenarioBij(S); // de triggers van een scenario (js/scenario.js), één keer per seconde van de wereld
     // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
     // voorvallen. Waar de aanvoerder is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
     // T.werkDorpBij zelf.

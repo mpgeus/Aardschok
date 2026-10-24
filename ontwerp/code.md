@@ -1081,6 +1081,26 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   die de wereld verandert zonder opdracht, net als betalen en weigeren (`opmerkingen.md`). Alleen scherm: `S.regie` staat in
   `T.schermVelden`. De getallen in `T.REGIE_INSTELLINGEN` (de werkbank: "The scenes at Martinmas").
 
+### js/scenario.js: de triggers van een level
+
+- `js/scenario.js` (vraag 187, stap 1a, 24 okt; het ontwerp in `scenario.md`, 2): **de motor van een scenario**, zonder
+  scherm en getoetst (`test/scenario.test.cjs`). `T.startScenario(S, level)` keurt eerst (`T.keurScenario`: een lijst
+  zinnen voor wie het level maakt; met een fout begint het niet) en zet dan `S.scenario`: de gebieden, een kopie van de
+  triggers met wat elk van zichzelf weet (`aan`, `keer`, `gedaan`, `laatst` in uren van het spel), de doelen, de tellers,
+  en de dagen uit het zaad (`lot`, meteen getrokken met `T.vastLot`). Gewone gegevens, dus het wordt bewaard zoals de rest
+  van `S`, zonder nieuwe `versie` (een oud spel heeft gewoon geen scenario). **In de tik:** `T.werkScenarioBij` direct na
+  de kalender (`js/tik.js`), maar alleen als er een seconde van de wereld om is (`T.SCENARIO_INSTELLINGEN.elke`); dan kijkt
+  elke trigger die aan is, in de volgorde van het level, en wat een trigger verandert, ziet een trigger verderop in
+  dezelfde ronde al. Gemeten (24 okt, Node, het proefdorp): zonder scenario 25 ns per tik; 17 triggers waarvan 6 op een
+  gebied, bij 220 wezens, 37 µs per ronde; 31 triggers waarvan 21 op een gebied, bij 520 wezens, 160 à 180 µs.
+  **De taal is die van de gesprekken:** `T.VOORWAARDEN` en `T.GEVOLGEN` staan in `js/gesprek.js` (vlag, nietVlag,
+  zetVlag, wisVlag, handel, heer), en dit bestand zet de rest erbij; `T.voorwaardeGeldt` en `T.doeGevolg` lopen de woorden
+  van een object af. Een voorwaarde met een woord dat niemand kent, geldt niet; `wie` kiest het dorp (`T.scenarioDorp`:
+  'speler' of een nummer in `S.dorpen`). Wat elk woord doet, staat in het bestand en in `scenario.md`, 2. Het hoofddoel
+  staat linksboven (`T.doelLinksboven`, vanuit `js/main.js`, anders `T.tredeDoel`); het eind is `T.spelUit` met reden
+  `'scenario'` (`js/einde.js`, het scherm in `js/hud.js`). Een gebied is een vak of een kring van tegels, en een
+  voorwaarde erop loopt de wezens van de kaart af, niet de tegels (`minstensIn`, zonder lijst).
+
 ### gereedschap/pixelart/: de beelden uit code
 
 - **AI-texturen in de renderer** (18 okt, werklijst vraag 180; `gereedschap/ai/hybride-voorstel.md`, de proef in
@@ -1365,6 +1385,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
+- Een voorwaarde (`als`) en een gevolg (`doe`) zijn objecten met woorden, en elk woord staat één keer in `T.VOORWAARDEN`
+  of `T.GEVOLGEN` (24 okt, vraag 187): hier die van de gesprekken, en `js/scenario.js` zet die van de triggers erbij. De
+  gespreksschrijver laadt alleen `js/gesprek.js`, en kent dus alleen de woorden van hier.
 
 ### js/gesprek.js: woorden uit het spel in een zin
 
@@ -2225,6 +2248,9 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   het kort met `T.eindRegels` (het jaarverslag, met wat er staat), en de link naar Steam als `T.DEMO_INSTELLINGEN.steam`
   een adres heeft. Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
   leest ze meer (`test/einde.test.cjs`).
+- **Eén weg naar het eind** (24 okt): `T.spelUit(D, einde, zin)` zet `D.einde`, zegt de zin, zet in jouw dorp de tijd
+  stil en toont het eindscherm; het dorp leeg (hier), verjaagd (`js/bazen.js`), je ambt kwijt, zijn leger en de demo
+  betaald (`js/heer.js`), en een scenario (`js/scenario.js`, reden `'scenario'`) gaan er allemaal langs.
 - **De punten** (vraag 186, 23 okt; Marcel: 5a3 en 5b1): `T.telVerzameld(D, wat, n)` telt in `D.jaarboek.verzameld` wat
   het dorp maakt, oogst of rooit; de enige bronnen zijn `T.opStapel` (`js/kar.js`: alles van een gebouw, een veld of
   het rooien), de wol en het slachten (`js/vee.js`), de kaas en het sprokkelhout (`js/behoeften.js`). Wat er gekocht,
