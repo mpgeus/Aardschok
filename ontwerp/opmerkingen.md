@@ -1324,3 +1324,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   tegel, dus volgt een brug de glooiing; standaard staat de hoogte uit. (3) In het woud vallen de kruinen vóór de brug
   (naar de camera) over een groot deel ervan, zoals bij het plein; de doorkijk (`js/doorkijk.js`) maakt alleen een boom
   doorzichtig die iemand van je bedekt.
+- **Een fout in het wild na `Spel.debug.uur`** (24 okt, bij vraag 191 gezien): in het demojaar op land 5, na
+  `Spel.debug.uur(10)` op de eerste dag (de klok ging terug), gooide elke tik `Cannot read properties of null (reading
+  'x')` in `werkGroepBij` (`js/beesten.js`, `T.afstand(lt, doel)` met een leeg doel), en het spel liep niet meer. Zonder
+  de sprong in de tijd liep het twee dagen goed. Nog niet uitgezocht of het ook zonder het debugvenster kan.
+- **`Math.hypot` in het lopen** (24 okt, bij vraag 191): `js/anim.js` rekent de stap met `Math.hypot`, en die is niet op
+  elke computer letter voor letter gelijk (de standaard vraagt dat alleen van `Math.sqrt`). Voor samen spelen in
+  lockstep (`code.md` bij `js/kiezen.js`, "Alleen gewone rekensommen") is `Math.sqrt(dx * dx + dy * dy)` veiliger.

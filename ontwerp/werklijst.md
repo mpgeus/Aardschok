@@ -28,6 +28,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   de speerman in Blender (acht richtingen en lopen ZW, naast die van de generator).
 
 **Wacht op Marcel**
+- **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
+  speeltest van 24 okt"). Ze lopen zigzag, een soldaat loopt als een boer (1,35 tegel per seconde, een rover 2,2), ze
+  wachten op elkaar, een stap gaat eerst af voor ze omdraaien, en op hun post maken ze praatjes.
 - **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
   in een dicht stuk dorp, ook 's avonds en in de winter; kijk of het teken onder de bovenbalk goed staat, en meet in
   Firefox (de meter, *drawing*) plat tegen gewoon. Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
@@ -1425,6 +1428,31 @@ hebben we zoizo nodig. volgorde is akkoord"):
   zoizo nodig"); de kerk met haar tiende, de herendienst en het kerkelijk jaar staan in `opmerkingen.md`.
 - **De volgorde** ("akkoord"): 2a1, dan 184 met 182, dan 185 en 186; 187 en 188 na de demo, nu het ontwerp; de vier van
   189 achteraan, belegeren met 188.
+
+## S. De mannen lopen stroef (vraag 191, 24 okt)
+
+Marcel, 24 okt: "het voelt gewoon clunky, niet smooth", "in combat wordt dat denk ik vervelend", en "het duurt ook even
+voordat ze reageren op commandos". Wat Claude mat: `speelbaar.md`, "De speeltest van 24 okt". Het voorstel, van klein
+naar groot; alleen voor je mannen (de held, de soldaten, de veteranen), het lopen van de dorpelingen blijft zoals het is:
+
+- **S1. Soldaten even snel als de held** (een getal): een man loopt 2,2 tegels per seconde, net als de held en een rover,
+  in plaats van 1,35 zoals een boer (een getal in de werkbank, "Choosing and sending").
+- **S2. Geen praatje in dienst:** een soldaat die in zijn dienst is, maakt geen praatje (`T.kanPraten`); "De soldaten
+  staan gewoon waar je ze neerzet" (20 okt).
+- **S3. De klik voelt meteen:** rechts gaat in bij het indrukken van de knop, niet bij het loslaten; een kort teken op de
+  grond waar je klikte; en wie je stuurt, draait meteen naar zijn doel.
+- **S4. Meteen omdraaien:** een nieuw bevel laat hem midden in een stap terug naar de tegel waar hij vandaan kwam (als
+  die vrij is), in plaats van de stap eerst af te maken.
+- **S5. Rechte lijnen** (de grootste winst voor "smooth", en het grootste stuk): een man loopt rechtdoor waar de weg vrij
+  is. A* geeft de tegels zoals nu, daarna gaan de tussenpunten eruit waar een rechte lijn vrij is (geen vaste tegel,
+  geen hoek afgesneden); onderweg reserveert hij de tegel waar hij in komt, zoals nu, en zijn poppetje draait alleen
+  bij een echte bocht. Alleen gewone rekensommen (lockstep). Meten: de tik met tien en met vijftig mannen.
+- **S6. Minder wachten in een troep:** mannen van één troep ruilen van plek als ze elkaar in de weg staan, in plaats
+  van te wachten (`T.ontwijk`).
+- Open (nieuw, dus alleen als Marcel het kiest): een troep die je samen stuurt, loopt op het tempo van de traagste, zodat
+  ze samen aankomen.
+
+Voorstel van Claude: S1 tot S3 eerst (klein, een middag), dan S4 en S5 samen, en S6 alleen als het dan nog stroef is.
 
 ## Af (sinds 11 okt)
 

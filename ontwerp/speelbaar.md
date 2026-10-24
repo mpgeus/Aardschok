@@ -489,6 +489,37 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 24 okt: de mannen lopen stroef (Marcel)
+
+Marcel, 24 okt: "het verplaatsen van poppetjes voelt sloom aan en onhandig", "in combat wordt dat denk ik vervelend",
+"niet sloom in fps, maar het voelt gewoon clunky, niet smooth", "bijvoorbeeld de speermannen in de demo", en "het duurt
+ook even voordat ze reageren op commandos". Gemeten in de browser door Claude, op `main` (4b84670f), in het demojaar op
+land 5, met de twee speermannen, de kruisboogschutter en de held:
+
+1. **Ze lopen zigzag.** Een weg is een rij tegels in acht richtingen, en op het scherm liggen die richtingen ongelijk:
+   recht rechts (0°), schuin (27°), recht omlaag (90°), en daartussen niets. Een speerman die schuin over het scherm
+   gaat, wisselt elke tegel of twee van richting (in één proef: links, omhoog, schuin, links, omhoog), draait zijn
+   poppetje elke stap om, en loopt op het scherm afwisselend sneller en trager (een stap naar rechts is 64 pixels, een
+   stap omlaag 32, in bijna dezelfde tijd). In een weg van tien tegels draaide een man 3 tot 10 keer. A* telt schuin als
+   één stap, dus van alle even korte wegen kiest hij er een die in een knik gaat (eerst recht, dan schuin), niet langs
+   de rechte lijn.
+2. **Je soldaten zijn traag.** Een soldaat loopt als een boer, 1,35 tegel per seconde (`snelheidVolwassen`,
+   `js/bewoners.js`); de held en een rover lopen 2,2, een wolf 2,6. De 2,4 van `soldaat` en `veteraan` in `T.WEZENS`
+   (`js/wereld.js`) gebruikt niemand: hun wezen is dat van hun bewoner. Een troep valt zo uit elkaar (de held loopt
+   voorop), en een rover haal je nooit in; in een gevecht loopt de tijd op 1×, dus juist dan valt het op.
+3. **Ze wachten op elkaar.** In een troep van vier stond elk 0 tot 3,5 seconde stil in een tocht van tien seconden
+   (`wachtOpLoper` 1,5 en het ontwijken, `js/lopen.js`).
+4. **Het bevel zelf is niet traag:** het gaat in na één tik (een zestigste seconde), ook als hij een praatje maakt. Wat
+   traag voelt: (a) wie midden in een stap is, maakt die eerst af (op 1,35 schuin tot ruim een seconde), ook als je
+   hem de andere kant op stuurt; (b) de rechtsklik gaat op Windows pas in als je de knop loslaat (`contextmenu`,
+   `js/main.js`); (c) je ziet niets gebeuren tot hij stapt: geen teken waar je klikte (alleen een halve seconde groen),
+   en hij draait pas als hij loopt.
+5. **Soldaten op hun post maken praatjes:** in 150 seconden dienst stonden ze 23 tot 59 seconden in een praatje
+   (`T.kanPraten`, `js/praatje.js`: een soldaat zonder wachthuis heeft geen werk, dus mag hij overdag praten). Dat
+   strookt niet met "De soldaten staan gewoon waar je ze neerzet" (Marcel, 20 okt).
+
+Het voorstel van Claude staat in de werklijst (vraag 191).
+
 ## De speeltest van 16 okt: de huizen groeien op de afwisseling (ronde 3 van het snoeien, stap 6)
 
 Op de branch `ccr-74384ea2-mxeou7` (vanaf `0db846dc`, met stap 6 erin), de kolonist op eiland 1, 2 en 3: alle drie het
