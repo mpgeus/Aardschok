@@ -23,11 +23,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
+- **Bezig in sessie `lokaal-15c604fa`** (24 okt, op Marcels pc; Blender 5.2 staat erop): **190, Blender als basis?**
+  (`beeld.md`, "Blender als basis?"). Claude: niet voor de gebouwen, wel proberen voor de poppetjes; nu de proefplaat van
+  de speerman in Blender (acht richtingen en lopen ZW, naast die van de generator).
 
 **Wacht op Marcel**
-- **190, Blender als basis?** (24 okt; `beeld.md`, "Blender als basis?"): het onderzoek staat er. Claude: niet voor de
-  gebouwen, wel proberen voor de poppetjes. Wacht op een ja voor Blender (de zip van blender.org, zo'n 400 MB) en de
-  proefplaat van de speerman.
 - **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
   in een dicht stuk dorp, ook 's avonds en in de winter; kijk of het teken onder de bovenbalk goed staat, en meet in
   Firefox (de meter, *drawing*) plat tegen gewoon. Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
