@@ -1907,6 +1907,14 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 ### js/kar.js: de stapels, de dragers en de ossenkar
 
+- **Wie stilligt, draagt** (24 okt; Marcel: "A", na "de houthakker zit vol en wacht op carriers, maar die komen niet"):
+  de nacht (`T.tikGebouwenDag`, stap 6 in `js/gebouwen.js`) geeft een werkplaats `g.draagtZelf` als hij vandaag niets
+  kan: `'stapel'` als er geen dag werk meer op zijn stapel past (dan maakt hij ook niet meer wat er nog op paste), of
+  `'niets'` als hij niets heeft om mee te werken (`g.tekort`; tot 24 okt viel dat door naar de stapel, die dan ten
+  onrechte "vol" zei). Wie er werkt, staat die dag in `T.dragersVan` (`draagtVoorZijnWerk`, `js/bouwen.js`), hakt of
+  jaagt niet (`js/veldwerk.js`), en zegt bij de muis wat hij draagt (`js/bewoners.js`); bij een volle stapel haalt hij
+  eerst die (`kiesRit`). Zonder dit droeg niemand meer zodra iedereen werk had. Getoetst in `test/kar.test.cjs`; de
+  kolonist, wiens stapels niet vol raken, speelt precies als ervoor.
 - **De dragers** (vraag 184, 23 okt; Marcel: "3a1", "3b1", "Eén stuk, van alles"): sinds het kamp op is
   (`T.metVervoer(D)`: `D.begin.kamp` niet meer 'onderweg') wordt er gedragen; het begin heeft geen kar meer (de huifkar
   blijft in het kamp staan, en `T.deVoorraad` is ernaast tot het raadhuis af is; dan gaat hij op in het raadhuis,

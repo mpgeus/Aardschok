@@ -201,13 +201,17 @@
 
   // Wie nu draagt (vraag 184; js/kar.js): wie kan meebouwen maar niet bouwt, en niet schuilt of thuisblijft; wie het huis
   // van zijn gezin vrijmaakt (js/bos.js), rooit. Net als bij het bouwen zonder te vragen of zijn poppetje er al is: de regel
-  // kent zijn eigen plek (p.vervoer), en het poppetje loopt erachteraan.
+  // kent zijn eigen plek (p.vervoer), en het poppetje loopt erachteraan. En wie stilligt, draagt (Marcel, 24 okt: "A"): wie
+  // werkt waar vandaag niets gemaakt kan worden, omdat de stapel bij de deur vol is of er niets is om mee te werken
+  // (g.draagtZelf, de nacht in js/gebouwen.js). Anders droeg niemand meer zodra iedereen werk had, en bleef een volle
+  // stapel liggen.
+  const draagtVoorZijnWerk = (p) => !!p.werk && !!p.werk.draagtZelf && T.kanWerken(p);
   T.dragersVan = function (D) {
     if (!T.metVervoer(D) || !D.bewoners || !D.kalender) return [];
     const dag = D.kalender.dag;
     const plaatsen = new Set(bouwplaatsen(D));
     const bouwt = (p) => !!p.bouwt && !p.bouwt.klaar && plaatsen.has(p.bouwt);
-    return D.bewoners.mensen.filter((p) => !p.schuilt && kanBouwen(p) && !bouwt(p) && !(p.huis && p.huis.groeitNaRooien) && !T.blijftThuis(p, dag));
+    return D.bewoners.mensen.filter((p) => !p.schuilt && (kanBouwen(p) || draagtVoorZijnWerk(p)) && !bouwt(p) && !(p.huis && p.huis.groeitNaRooien) && !T.blijftThuis(p, dag));
   };
 
   // Hoeveel bouwers bouwplaats g kan gebruiken, nog voor `rest` van de werkdag (1: de hele dag): bij het rooien en aan een

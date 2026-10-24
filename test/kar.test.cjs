@@ -104,6 +104,46 @@ test('een volle stapel zet het gebouw stil, tot er iemand komt', () => {
   assert.ok(!g.stilWant);
 });
 
+// Wie stilligt, draagt (Marcel, 24 okt: "A"): dragers waren alleen wie geen werk had, dus droeg niemand meer zodra iedereen
+// werk had, en bleef een volle stapel liggen ("de houthakker zit vol en wacht op carriers, maar die komen niet").
+test('wie stilligt, draagt: zonder vrije drager haalt de houthakker zijn volle stapel zelf weg, en hakt dan weer', () => {
+  const { S, D, dag } = dorp();
+  const g = metHouthakker(S, D, dag);
+  const hakker = D.bewoners.mensen.find((p) => p.werk === g);
+  assert.ok(hakker, 'er werkt iemand');
+  for (const p of D.bewoners.mensen) if (p !== hakker && !p.werk) p.thuisTot = dag + 100; // niemand anders is vrij
+  g.stapel = { hout: T.KAR_INSTELLINGEN.stapelVol - 1 }; // er past geen dag werk meer bij
+  dagen(T, S, dag + 2);
+  assert.equal(g.draagtZelf, 'stapel', 'hij ligt vandaag stil');
+  assert.equal(g.werkte, 0, 'en hakt niet, ook niet wat er nog bij paste');
+  assert.match(g.stilWant, /stack is full/);
+  assert.deepEqual(T.dragersVan(D), [hakker], 'hij draagt, en verder niemand');
+  const hout = D.voorraad.hout;
+  dagen(T, S, dag + 3);
+  assert.ok(D.voorraad.hout >= hout + 3, `hij bracht een dag lang hout naar de opslag (${D.voorraad.hout - hout})`);
+  assert.ok(T.stapelVan(g) < T.KAR_INSTELLINGEN.stapelVol - 1, `en zijn stapel is kleiner (${T.stapelVan(g)})`);
+  assert.equal(g.draagtZelf, null, 'en hakt weer');
+  assert.ok(g.werkte > 0);
+  assert.ok(!T.dragersVan(D).includes(hakker));
+});
+
+test('een werkplaats die niets heeft om mee te werken, zegt niet dat zijn stapel vol is; zijn mensen gaan het halen', () => {
+  const { S, D, dag } = dorp();
+  T.wijzigVoorraad(D, 'hout', 40);
+  T.wijzigVoorraad(D, 'goud', 20);
+  const g = T.proefdorp.zetBijHetVuur(D, 'zagerij');
+  bouwAf(T, D, g, dag);
+  T.zetVoorraad(D, 'hout', 0);
+  g.in = {};
+  dagen(T, S, dag + 1);
+  assert.equal(g.werkte, 0);
+  assert.equal(g.tekort, 'hout');
+  assert.ok(!g.stilWant, `geen valse reden (${g.stilWant})`);
+  assert.equal(g.draagtZelf, 'niets');
+  const zagers = D.bewoners.mensen.filter((p) => p.werk === g);
+  assert.ok(zagers.length && zagers.every((p) => T.dragersVan(D).includes(p)), 'wie er werkt, draagt vandaag');
+});
+
 test('wat de bouwers rooien, ligt op de stapel van de bouwplaats; het hout van een veld op die van zijn boerderij', () => {
   const { D, boerderijen } = proefDorp(T);
   const g = { soort: 'hut', x: 0, y: 0, voet: { b: 3, h: 3 } };

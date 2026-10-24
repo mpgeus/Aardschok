@@ -39,7 +39,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
   "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
   drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
-  Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
+  Sinds 24 okt: **wie stilligt, draagt** (Marcel: "A"; `spel.md`, bij de dragers): had iedereen werk, dan droeg niemand
+  meer, en bleef een volle stapel liggen. Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
   schop, en de kleinere kar bij de schuur, komen met de art.
 - **Het demojaar spelen** met de speellijst (`speelbaar.md`, "De speellijst van het demojaar"); wat scheef zit, eerst
   met een getal uit de werkbank.
