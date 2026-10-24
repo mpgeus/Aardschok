@@ -1911,6 +1911,15 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   vlekken, de ringen grover): het werd daar gespikkelde ruis.
 - *Wat misging:* de wapenrok over de schouders trekken (de breedte van de schouders liep door tot de zoom: een doos om de
   armen); teruggedraaid. Open: bij de schouders nog een rafelige rand tussen kraag, wapenrok en mouw.
+- *Schouders, hoofd en borst* (Marcel: "De schouders breder en het rafelige oplossen. Hij lijkt nu te smal", "En het hoofd
+  lijkt toch wat groot naast dat van de referentie", "Borstkas ligt ook verder terug dan de referentie, die lijkt borst
+  vooruit te hebben"): brede schouders met MakeHuman (de schouderbreedte, dikkere bovenarmen) zonder de romp breder; het
+  wambuis loopt nu door tot de hals, plat bij de hals en bol op de schouderkop en de arm, zodat de rand onder de kraag valt
+  en er niets meer rafelt. Het hoofd maal 1,25 in plaats van 1,35. De borst vooruit: een diepere borst (MakeHuman), de
+  bovenrug 7 graden achterover, de nek en het hoofd houden hun richting (eerst keek hij daardoor omlaag). Het armstuk meet
+  alleen nog aan de mouw dicht bij de onderarm (met de diepere borst raakte het de borst: een bruine waaier). De kraag valt
+  voor lager, over de bovenrand van de wapenrok (die liep als een rechte streep over de borst). De kraag is nu wat groter
+  dan op de plaat.
 
 ## Open
 

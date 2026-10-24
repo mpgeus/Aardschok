@@ -38,14 +38,16 @@ INSTELLINGEN = {
     # en gedrongen zoals op vel 01 (beeld.md, "De referentie, onderdeel voor onderdeel"): bredere schouders, een korte
     # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
     'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 1,
-               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 0.4, 'torso/torso-scale-horiz-incr': 0.0,
+               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 1.0, 'torso/torso-scale-horiz-incr': 0.0,
+               'torso/measure-frontchest-dist-incr': 1, 'torso/torso-scale-depth-incr': 0.6,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
-               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.5, 'arms/r-upperarm-fat-incr': 0.5,
+               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.85, 'arms/r-upperarm-fat-incr': 0.85,
                'arms/l-lowerarm-fat-incr': 0.5, 'arms/r-lowerarm-fat-incr': 0.5,
                'eyebrows/eyebrows-angle-down': 1, 'eyebrows/eyebrows-trans-down': 0.6, 'nose/nose-scale-horiz-incr': 0.8,
                'nose/nose-flaring-incr': 0.6, 'nose/nose-volume-incr': 0.5, 'head/head-age-incr': 0.6},
     'been': 0.72,            # de botten van de benen, in de lengte
-    'hoofd': 1.35,           # het hoofd: met de helm een kwart van de man, zoals op de plaat
+    'hoofd': 1.25,           # het hoofd groter dan echt, zoals op de plaat (1,35 oogde naast de plaat te groot)
+    'borst': 7,              # graden dat de bovenrug achterover leunt: de borst vooruit, zoals op de plaat
     'voeten': 14,            # graden naar buiten
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
@@ -322,6 +324,13 @@ def mens():
         for b in ('upperleg02', 'lowerleg01', 'lowerleg02'):
             rig.pose.bones[f'{b}.{k}'].scale = (1, INSTELLINGEN['been'], 1)
     bpy.context.view_layer.update()
+    # de borst vooruit: de bovenrug wat achterover, de nek en het hoofd weer recht (MakeHuman staat wat ingezakt)
+    richting = lambda b: ((rig.matrix_world @ rig.pose.bones[b].tail) - (rig.matrix_world @ rig.pose.bones[b].head)).normalized()
+    hals = {b: richting(b) for b in ('neck01', 'neck02', 'neck03', 'head')}
+    for b, deel in (('spine02', 0.4), ('spine01', 0.6)):
+        richt(rig, b, Matrix.Rotation(-math.radians(INSTELLINGEN['borst'] * deel), 3, 'X') @ richting(b))
+    for b, r in hals.items():
+        richt(rig, b, r)  # de nek en het hoofd houden hun richting
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
@@ -421,7 +430,7 @@ def uit_huid(naam, lijf, kies, dikte, mat, sub=1):
 
 def wambuis(lijf, rig, mat):
     """De mouwen van het gewatteerde wambuis: de armen van schouder tot pols, naar buiten, met echte ruiten."""
-    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01'))
+    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01', 'clavicle'))
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
@@ -461,10 +470,10 @@ def wambuis(lijf, rig, mat):
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
         kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
-        # op de schouder plat (anders bolt hij op tot de helm), verder bol
-        f = max(0.0, min(1.0, (min((p - q).length for q in schouders) - 0.02) / 0.07))
+        # naar de hals plat (daar vallen de kraag en de wapenrok over), op de schouderkop en de arm bol
+        f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.07)) / 0.07))
         f = f * f * (3 - 2 * f)
-        v.co += nrm * (0.009 + (0.004 + 0.009 * kussen) * f)
+        v.co += nrm * (0.009 + (0.007 + 0.01 * kussen) * f)
     return ob
 
 
@@ -961,7 +970,7 @@ def kraag(lijf, rig, mouwen, lijfje, M):
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z + 0.012))
-        onder = nek.z - 0.09 - 0.04 * voor
+        onder = nek.z - 0.1 - 0.07 * voor  # voor over de bovenrand van de wapenrok
         return boven - t * (boven - onder)
     k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.032 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
               n=128, mat=M['malien'])
@@ -1068,10 +1077,12 @@ def laarzen(lijf, rig, M):
 def armstukken(rig, mouwen, M):
     """Een breed armstuk van donker leer over elke onderarm, boven en onder een lichtere band met klinknagels."""
     delen = []
-    bvh = bvh_van([(mouwen, None)])
     for k in ('L', 'R'):
         a = rig.matrix_world @ rig.pose.bones[f'lowerarm01.{k}'].head
         b = rig.matrix_world @ rig.pose.bones[f'lowerarm02.{k}'].tail
+        ab = b - a
+        dichtbij = [((v.co - (a + ab * max(0.0, min(1.0, (v.co - a).dot(ab) / ab.length_squared)))).length < 0.11) for v in mouwen.data.vertices]
+        bvh = bvh_van([(mouwen, dichtbij)])
         as_ = (b - a).normalized()
         L = (b - a).length
         p = lambda t, th, a=a, as_=as_, L=L: (a + as_ * L * (0.3 + 0.62 * t), as_)
