@@ -2151,6 +2151,13 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   procent met de dij aan zijn kant mee, in het midden geleidelijk. En de wapenrok gaat vlak boven de riem over op het
   bekken, zoals de riem: leunde hij voorover, dan stak de riem er rood doorheen. Op spelmaat is de helm nu bijna zwart
   naast het zilver van de generator.
+- *Het lijf loopt mee* (Marcel, 24 okt, bij de eerste lopende video: "Het lijf beweegt niet, ziet er heel onnatuurlijk
+  uit"; de APNG's speelden bij hem niet, nu een MP4 en een GIF, `eigen-lopen.mp4`). Alleen de benen bewogen. Nu draait
+  het bekken (het onderste bot, `root`) 6 graden mee met het been dat naar voren gaat, zakt het 4 graden aan de kant van
+  het zwaaiende been, en schuift het 1,8 cm over de voet die staat; de borst draait en kantelt terug, het hoofd kijkt
+  recht vooruit, en hij veert 2 cm (`bekken`, de getallen bovenaan in `bakken.py`). De benen rekenen vanaf waar de heup
+  nu is, draaien opzij en om hun lengte mee, zodat de voeten op hun spoor blijven, de knie vooruit wijst en de zool vlak
+  blijft.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

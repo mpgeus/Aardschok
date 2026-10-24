@@ -345,6 +345,7 @@ def loop(rig, i, n, draagt=False):
                 rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']  # de vuist langs de speer
     bpy.context.view_layer.update()
     f = 2 * math.pi * i / n
+    bekken(rig, f)
     zakken = benen(rig, f)
     # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf
     if not draagt:
@@ -355,6 +356,14 @@ def loop(rig, i, n, draagt=False):
     draai(rig, 'spine04', LEUN * 0.7)  # om x: positief kantelt de top naar -y, naar voren
     draai(rig, 'spine02', LEUN * 0.3)
     draai(rig, 'head', -LEUN * 0.5)
+    # de borst draait en kantelt terug, tegen het bekken in, en het hoofd blijft recht vooruit kijken
+    terug = (BORST_DRAAI + BEKKEN_DRAAI) * math.cos(f) / 2
+    rol = (BORST_KANTEL + BEKKEN_KANTEL) * math.sin(f) / 2
+    for bot in ('spine04', 'spine02'):
+        draai(rig, bot, terug, 'Z')
+        draai(rig, bot, rol, 'Y')
+    draai(rig, 'head', -BORST_DRAAI * math.cos(f), 'Z')
+    draai(rig, 'head', -BORST_KANTEL * math.sin(f), 'Y')
     if draagt:
         # het bovenlijf gedraaid (om z: positief brengt zijn rechterschouder, op -x, naar voren), het hoofd half terug
         # (Marcel: "ik heb ook het idee dat de rechter schouder uit de generator verder naar voren staat")
@@ -362,6 +371,25 @@ def loop(rig, i, n, draagt=False):
         draai(rig, 'spine01', DRAAI * 0.5, 'Z')
         draai(rig, 'head', -DRAAI * 0.5, 'Z')
     rig.location.z = rig['z0'] - zakken
+    bpy.context.view_layer.update()
+
+
+# Het lijf loopt mee (Marcel: "Het lijf beweegt niet, ziet er heel onnatuurlijk uit"): het bekken draait mee met het
+# been dat naar voren gaat, zakt aan de kant van het zwaaiende been en schuift over de voet die staat; de borst draait en
+# kantelt terug, het hoofd blijft recht vooruit kijken; en hij veert op en neer, het laagst als beide voeten staan.
+BEKKEN_DRAAI, BEKKEN_KANTEL, BEKKEN_OPZIJ = math.radians(6), math.radians(4), 0.018  # om de lengte, opzij, in meter
+BORST_DRAAI, BORST_KANTEL = math.radians(4), math.radians(2)  # de borst, in de wereld, tegen het bekken in
+VEREN = 0.02  # meter
+
+
+def bekken(rig, f):
+    """Het bekken bij beeld f van de pas (het onderste bot, root: de heupen en de rug hangen eraan). Bij f = 0 zet de
+    linkervoet neer (vooraan), bij pi de rechter."""
+    draai(rig, 'root', -BEKKEN_DRAAI * math.cos(f), 'Z')  # de linkerheup (+x) naar voren (-y)
+    draai(rig, 'root', -BEKKEN_KANTEL * math.sin(f), 'Y')  # staat links, dan zakt rechts (-x)
+    bpy.context.view_layer.update()
+    w = rig.pose.bones['root']
+    w.matrix = Matrix.Translation((BEKKEN_OPZIJ * math.sin(f), 0, 0)) @ w.matrix  # over de voet die staat
     bpy.context.view_layer.update()
 
 
@@ -374,16 +402,18 @@ def benen(rig, f):
     gestrekt hoeft, en veert mee (het laagst als beide voeten staan). Kleine stappen: een gedrongen man (STAP). Geeft hoe
     ver het bekken zakt; de botten staan bij het begin in rust."""
     pb = rig.pose.bones
-    rust = {k: (pb[f'upperleg01.{k}'].head.copy(), pb[f'lowerleg01.{k}'].head.copy(), pb[f'foot.{k}'].head.copy())
-            for k in ('L', 'R')}
+    bb = rig.data.bones
+    rust = {k: (bb[f'upperleg01.{k}'].head_local.copy(), bb[f'lowerleg01.{k}'].head_local.copy(),
+                bb[f'foot.{k}'].head_local.copy()) for k in ('L', 'R')}
     yz = lambda v: Vector((v.y, v.z))
     H, K, A = rust['L']
     been = (yz(K) - yz(H)).length + (yz(A) - yz(K)).length
     half = 0.4 * been * math.sin(STAP)  # de halve pas
-    zakken = max(0.0, math.hypot(H.z - A.z, half) - 0.97 * been) + 0.012 * (0.5 + 0.5 * math.cos(2 * f))
+    zakken = max(0.0, math.hypot(H.z - A.z, half) - 0.97 * been) + VEREN * (0.5 + 0.5 * math.cos(2 * f))
     for k, fase in (('L', 0.0), ('R', math.pi)):
-        H, K, A = rust[k]
-        L1, L2 = (yz(K) - yz(H)).length, (yz(A) - yz(K)).length
+        H0, K, A = rust[k]
+        H = pb[f'upperleg01.{k}'].head.copy()  # waar de heup nu is: met het bekken mee gedraaid en geschoven
+        L1, L2 = (yz(K) - yz(H0)).length, (yz(A) - yz(K)).length
         u = ((f + fase) / (2 * math.pi)) % 1.0
         kantel = -0.15 * math.exp(-((u - 0.02) / 0.06) ** 2) + 0.4 * math.exp(-((u - 0.5) / 0.08) ** 2)
         if u < 0.5:  # staan: vlak over de grond, van voor naar achter (vooruit is -y)
@@ -393,17 +423,23 @@ def benen(rig, f):
             t = t * t * (3 - 2 * t)
             y, z = half - 2 * half * t, 0.05 * math.sin(math.pi * t)
         z += 0.14 * math.sin(max(0.0, kantel))  # bij het afzetten draait de voet om de bal: de enkel omhoog
-        dy, dz = A.y + y - H.y, A.z + zakken + z - H.z
+        dx, dy, dz = A.x - H.x, A.y + y - H.y, A.z + zakken + z - H.z
         d = min(math.hypot(dy, dz), 0.999 * (L1 + L2))
         knie = math.pi - math.acos(max(-1.0, min(1.0, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))))
         alfa = math.acos(max(-1.0, min(1.0, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))))
-        dij0 = math.atan2(K.y - H.y, -(K.z - H.z))  # de hoeken in rust, van recht omlaag naar achteren
+        dij0 = math.atan2(K.y - H0.y, -(K.z - H0.z))  # de hoeken in rust, van recht omlaag naar achteren
         scheen0 = math.atan2(A.y - K.y, -(A.z - K.z))
         dij = math.atan2(dy, -dz) - alfa - dij0
         buig = knie - (scheen0 - dij0)
+        # opzij: de voet blijft op zijn spoor terwijl het bekken schuift en kantelt (om y: positief brengt de voet naar -x)
+        zij = math.atan2(dx, -dz) - math.atan2(A.x - H0.x, -(A.z - H0.z))
+        rol = -BEKKEN_KANTEL * math.sin(f)
+        draai(rig, f'upperleg01.{k}', BEKKEN_DRAAI * math.cos(f), 'Z')  # de knie en de voet blijven vooruit wijzen
+        draai(rig, f'upperleg01.{k}', -zij - rol, 'Y')
         draai(rig, f'upperleg01.{k}', dij)
         draai(rig, f'lowerleg01.{k}', buig)
         draai(rig, f'foot.{k}', -(dij + buig) + kantel)  # de voet houdt zijn stand in rust: vlak
+        draai(rig, f'foot.{k}', zij, 'Y')
     return zakken
 
 
