@@ -1889,6 +1889,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   donkere massa), breder, en de speer te fijn. De generator overdrijft voor de kleine maat (lichtere kleuren, harde lijnen,
   een groot speerblad); een HD-render die eerlijk is, moet voor het spel een eigen afwerking krijgen.
 
+**De verbeterronde (24 okt).** Marcel: "Dus we moeten nog een verbeter ronde doen."
+- *HD:* een ouder, gebruind gezicht met een frons en een brede neus (de doelen van MakeHuman voor de wenkbrauwen en de
+  neus, leeftijd 0,78); de baard grijzer; een zacht licht van voren, zodat het gezicht onder de helm licht is zoals op de
+  plaat; lijnen om de kleren (niet om het lijf: die tekenden door de baard heen); een vuile zoom. De kraag is nu een dikke
+  ronde rol om hals en kin, op de romp gelegd, met de mouwen ernaast. Onder de kleren heeft het lijf de kleur van het
+  wambuis, zodat er nergens bloot vel door een kier valt.
+- *Wat misging en terug is gedraaid:* lichte vlekken op de stof (leken verfspatten), en de schouders in de mouw (werden
+  kussens tot de helm).
+- *Op spelmaat* (`speerman_hd.py -- <uitmap> spel`, vier keer de spelmaat): lijnen van een pixel in het spel, meer
+  contrast (de look *Medium High Contrast*), het speerblad en de schacht overdreven (maal 1,9 en 1,4). Naast de speerman
+  in het spel (`uit/blender/spel-spelmaat.png`): dezelfde opbouw en dezelfde leesbaarheid van helm, gezicht, kraag,
+  wapenrok, riem en laarzen; de generator is nog iets helderder en verzadigder, en zijn kleine dingen (de hangers, het
+  koord) lezen beter. Dat is nu afstellen, geen opbouw meer.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

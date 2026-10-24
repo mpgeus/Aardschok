@@ -7,7 +7,7 @@
 # De man staat stil, dus de houding wordt in de mesh gebakken; de camera staat recht voor hem, 15 graden boven de grond,
 # zoals de generator tekent (speerman.py, 'camera').
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel]
 # (zonder --factory-startup: dan laadt Blender de extensie MPFB niet)
 import bpy
 import bmesh
@@ -24,7 +24,8 @@ from bl_ext.user_default.mpfb.services.locationservice import LocationService
 HIER = os.path.dirname(os.path.abspath(__file__))
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 UIT = os.path.abspath(ARGS[0] if ARGS else os.path.join(HIER, '..', 'pixelart', 'uit', 'blender', 'render'))
-BLEND = len(ARGS) > 1 and ARGS[1] == 'blend'
+BLEND = 'blend' in ARGS[1:]
+SPEL = 'spel' in ARGS[1:]
 
 INSTELLINGEN = {
     'res': (1200, 1950),
@@ -33,21 +34,32 @@ INSTELLINGEN = {
     'camera': 15,
     'samples': 192,
     # de man: een gedrongen soldaat van middelbare leeftijd (de knoppen van MakeHuman, 0 tot 1)
-    'mens': {'gender': 1.0, 'age': 0.62, 'muscle': 0.85, 'weight': 0.9, 'proportions': 0.1, 'height': 0.1},
+    'mens': {'gender': 1.0, 'age': 0.78, 'muscle': 0.85, 'weight': 0.9, 'proportions': 0.1, 'height': 0.1},
     # en gedrongen zoals op vel 01 (beeld.md, "De referentie, onderdeel voor onderdeel"): bredere schouders, een korte
     # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
     'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 1,
                'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 1, 'torso/torso-scale-horiz-incr': 0.6,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
                'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 1, 'arms/r-upperarm-fat-incr': 1,
-               'arms/l-lowerarm-fat-incr': 1, 'arms/r-lowerarm-fat-incr': 1},
+               'arms/l-lowerarm-fat-incr': 1, 'arms/r-lowerarm-fat-incr': 1,
+               'eyebrows/eyebrows-angle-down': 1, 'eyebrows/eyebrows-trans-down': 0.6, 'nose/nose-scale-horiz-incr': 0.8,
+               'nose/nose-flaring-incr': 0.6, 'nose/nose-volume-incr': 0.5, 'head/head-age-incr': 0.6},
     'been': 0.65,            # de botten van de benen, in de lengte
     'hoofd': 1.35,           # het hoofd: met de helm een kwart van de man, zoals op de plaat
     'voeten': 14,            # graden naar buiten
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
-    'lijn': 0,
+    'lijn': 3.0,
+    'vullicht': 1.2,         # een zacht licht van voren, zodat het gezicht onder de helm licht is zoals op de plaat
+    'speer': 1.0,            # het speerblad en de schacht, maal
+    'belichting': 0.0,
 }
+
+# Op spelmaat (zo'n 74 pixels hoog) verdwijnt wat in HD klopt: de generator overdrijft, en dat doen wij hier ook. Vier keer
+# zo groot als het spel gerenderd (proef: spelmaat.cjs verkleint), met lijnen van één pixel in het spel, lichter licht, en
+# een groter speerblad en een dikkere schacht.
+if SPEL:
+    INSTELLINGEN.update(pxm=240, res=(330, 480), anker_y=455, samples=96, lijn=5.5, vullicht=1.2, speer=1.9, belichting=0.1, contrast=True)
 
 # licht van linksvoor en hoog, vast aan de kijker; randlicht van rechtsachter
 LICHT = Vector((-0.55, -0.62, 0.56)).normalized()
@@ -81,6 +93,12 @@ def scene():
     sc.render.image_settings.file_format = 'PNG'
     sc.render.image_settings.color_mode = 'RGBA'
     sc.view_settings.view_transform = 'Standard'
+    sc.view_settings.exposure = INSTELLINGEN['belichting']
+    if INSTELLINGEN.get('contrast'):
+        try:
+            sc.view_settings.look = 'Medium High Contrast'
+        except TypeError:
+            print('LOOK', [l.identifier for l in sc.view_settings.bl_rna.properties['look'].enum_items])
     # de camera, recht van voren
     b, h = INSTELLINGEN['res']
     cd = bpy.data.cameras.new('camera')
@@ -98,7 +116,8 @@ def scene():
     sc.camera = cam
     # het licht
     for naam, r, e, kl, hoek in (('zon', LICHT, INSTELLINGEN['zon'], INSTELLINGEN['zonkleur'], 3),
-                                 ('rand', RANDLICHT, 1.6, (0.8, 0.88, 1.0), 8)):
+                                 ('rand', RANDLICHT, 1.6, (0.8, 0.88, 1.0), 8),
+                                 ('vul', Vector((0.1, -1, 0.35)).normalized(), INSTELLINGEN['vullicht'], (1.0, 0.95, 0.9), 20)):
         ld = bpy.data.lights.new(naam, 'SUN')
         ld.energy, ld.color, ld.angle = e, kl, math.radians(hoek)
         ob = bpy.data.objects.new(naam, ld)
@@ -123,7 +142,7 @@ def scene():
         ls.linestyle = bpy.data.linestyles.new('lijn')
     ls.linestyle.color = (0.07, 0.045, 0.03)
     ls.linestyle.thickness = INSTELLINGEN['lijn']
-    ls.linestyle.alpha = 0.85
+    ls.linestyle.alpha = 1.0 if INSTELLINGEN.get('contrast') else 0.85
     return sc
 
 
@@ -401,7 +420,7 @@ def uit_huid(naam, lijf, kies, dikte, mat, sub=1):
 
 def wambuis(lijf, rig, mat):
     """De mouwen van het gewatteerde wambuis: de armen van schouder tot pols, naar buiten, met echte ruiten."""
-    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01'))
+    arm = gewicht(lijf, ('upperarm', 'lowerarm'))
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
@@ -440,7 +459,7 @@ def wambuis(lijf, rig, mat):
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
         kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
-        v.co += nrm * (0.015 + 0.011 * kussen)
+        v.co += nrm * (0.012 + 0.009 * kussen)
     return ob
 
 
@@ -574,7 +593,7 @@ def dik(ob, d, offset=1):
 
 # ---------------------------------------------------------------- materialen erbij
 
-def mat_wapenrok(z_riem):
+def mat_wapenrok(z_riem, z_zoom=0.0):
     """Van voren blauw met een brede gele baan in het midden, van de kraag tot de zoom; op de rok smaller. Op de rug
     gevierendeeld (vel 01, en beeld.md, "De referentie, onderdeel voor onderdeel")."""
     k = Knopen('wapenrok')
@@ -591,7 +610,8 @@ def mat_wapenrok(z_riem):
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
     kl = k.meng(f, lin('#14245a'), lin('#df9a1c'))
     v = k.ruis(7, 2)
-    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.2), kl, (0, 0, 0, 1))
+    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3), kl, (0, 0, 0, 1))
+    kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
     w = k.ruis(240, 2)
     k.bobbel(w, 0.25, 0.0012)
     k.bsdf.inputs['Sheen Weight'].default_value = 0.3
@@ -604,7 +624,7 @@ def mat_laars():
     r = k.ruis(18, 5)
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], k.plek())
-    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#6a3c22'), lin('#2e1609'))
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#7c4828'), lin('#2e1609'))
     kl = k.meng(k.glad(sep.outputs['Z'], 0.016, 0.012), kl, lin('#1e120c'))
     k.bobbel(r, 0.35, 0.002)
     return k.af(kl, ruw=0.5)
@@ -667,7 +687,7 @@ def mat_haar():
     uit = nt.nodes.new('ShaderNodeOutputMaterial')
     h = nt.nodes.new('ShaderNodeBsdfHairPrincipled')
     h.parametrization = 'MELANIN'
-    h.inputs['Melanin'].default_value = 0.7
+    h.inputs['Melanin'].default_value = 0.62
     h.inputs['Melanin Redness'].default_value = 0.3
     h.inputs['Random Color'].default_value = 0.8  # grijze spikkels
     h.inputs['Roughness'].default_value = 0.45
@@ -926,7 +946,7 @@ def riem_en_hangers(bvh, cy, z_riem, M):
 def kraag(lijf, rig, mouwen, lijfje, M):
     """De maliënkraag: om de nek, onder de kin en de baard, en als een cape over de schouders."""
     arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
-    bvh = bvh_van([(lijf, [a < 0.2 for a in arm]), (lijfje, None), (mouwen, None)])
+    bvh = bvh_van([(lijf, [a < 0.2 for a in arm]), (lijfje, None)])
     nek = rig.matrix_world @ rig.pose.bones['neck02'].head
     kin = rig.matrix_world @ rig.pose.bones['special04'].head
     hoofd = rig.matrix_world @ rig.pose.bones['head'].head
@@ -934,9 +954,9 @@ def kraag(lijf, rig, mouwen, lijfje, M):
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z + 0.012))
-        onder = nek.z - 0.075 - 0.05 * voor
+        onder = nek.z - 0.09 - 0.04 * voor
         return boven - t * (boven - onder)
-    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.016 * math.sin(math.pi * min(1.0, t * 1.15)) ** 0.7,
+    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.045 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
               n=128, mat=M['malien'])
     dik(k, 0.006)
     return k
@@ -1106,11 +1126,12 @@ def speer(rig, M, kruin):
         zacht(o)
         o.data.materials.append(mat)
         delen.append(o)
-    z_koker, z_blad = L * 0.84, L * 0.9
-    cil('schacht', 0.02, z_koker + 0.01, 0.016, M['hout'])
-    cil('koker', z_koker, z_blad + 0.005, 0.017, M['staal'])
+    z_koker, z_blad = L * (1 - 0.16 * INSTELLINGEN['speer']), L * (1 - 0.1 * INSTELLINGEN['speer'])
+    ov = INSTELLINGEN['speer'] ** 0.5
+    cil('schacht', 0.02, z_koker + 0.01, 0.016 * ov, M['hout'])
+    cil('koker', z_koker, z_blad + 0.005, 0.017 * ov, M['staal'])
     for i in range(7):  # het koord, zeven slagen
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.0185, minor_radius=0.004, location=(x, y, z_koker + 0.008 + i * (z_blad - z_koker - 0.014) / 6))
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.0185 * ov, minor_radius=0.004 * ov, location=(x, y, z_koker + 0.008 + i * (z_blad - z_koker - 0.014) / 6))
         o = bpy.context.active_object
         zacht(o)
         o.data.materials.append(M['koord'])
@@ -1119,8 +1140,8 @@ def speer(rig, M, kruin):
     vs, fs = [], []
     for i in range(n + 1):
         t = i / n
-        w = 0.026 * math.sin(math.pi * min(1.0, t ** 0.8)) ** 0.8 * (1 - t) ** 0.25 + 0.0004
-        d = 0.006 * (1 - t) + 0.0005
+        w = 0.026 * INSTELLINGEN['speer'] * math.sin(math.pi * min(1.0, t ** 0.8)) ** 0.8 * (1 - t) ** 0.25 + 0.0004
+        d = 0.006 * INSTELLINGEN['speer'] * (1 - t) + 0.0005
         z = z_blad + (L - z_blad) * t
         for px, py in ((w, 0), (0, d), (-w, 0), (0, -d)):
             vs.append((x + px, y + py, z))
@@ -1147,7 +1168,7 @@ def bouw():
         'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),
         'haar': mat_haar(),
-        'wapenrok': mat_wapenrok(riem_z),
+        'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
         'malien': mat_malien(),
         'helm': mat_staal('helm', '#9c99a4', 0.42),
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
@@ -1202,9 +1223,20 @@ def bouw():
         c = rig.matrix_world @ rig.pose.bones[f'eye.{k}'].head
         bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.0125 * INSTELLINGEN['hoofd'], location=c)
         o = bpy.context.active_object
+        o.name = 'oog.' + k
         o.data.materials.append(M['oog'])
         zacht(o)
     rig.hide_render = True
+    kol = bpy.data.collections.new('zonder-lijnen')
+    sc.collection.children.link(kol)
+    for ob in [lijf_b] + [o for o in sc.collection.objects if o.name.startswith('oog.')]:
+        if ob.name in sc.collection.objects:
+            kol.objects.link(ob)
+            sc.collection.objects.unlink(ob)
+    ls = sc.view_layers[0].freestyle_settings.linesets[0]
+    ls.select_by_collection = True
+    ls.collection = kol
+    ls.collection_negation = 'EXCLUSIVE'
     return sc
 
 
@@ -1213,7 +1245,7 @@ def main():
     sc = bouw()
     if BLEND:
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(UIT, 'speerman-hd.blend'))
-    sc.render.filepath = os.path.join(UIT, 'staan-Z-hd-mens.png')
+    sc.render.filepath = os.path.join(UIT, 'staan-Z-spel-mens.png' if SPEL else 'staan-Z-hd-mens.png')
     bpy.ops.render.render(write_still=True)
 
 
