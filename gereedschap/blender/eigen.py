@@ -1,0 +1,114 @@
+# Proef (a) van vraag 190 (ontwerp/beeld.md, "Proef (a)"): de speerman uit het 3D-model met zijn eigen kleuren, als vel
+# voor het spel. Marcel: "we proberen de proef die de andere sessie doorgaf" (via de sessie van de GLB: "staan en lopen in
+# acht richtingen met de eigen gebakken kleuren, licht bijgesteld voor spelmaat, en in het spel naast de generator").
+#
+# Het model van speerman_hd.py, niet de verf van vel 01: zijn eigen materialen, mat gemaakt zoals de GLB (ruwheid 0,75, geen
+# bump, het staal metaal 0,7), de baard echt haar. Het lijf blijft een eigen deel (met het haar) aan het skelet; de kleren
+# worden een mesh zoals in bakken.py. Smaller met de schaal van het skelet (de maat van de generator op spelmaat). Het
+# licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
+# en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
+#
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW
+# naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
+import bpy
+import math
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import speerman_hd as sh  # noqa: E402
+import bakken as bk  # noqa: E402
+
+from mathutils import Matrix  # noqa: E402
+
+UIT = sh.UIT
+RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
+LICHT = {'zonhoek': 12, 'zon': 4.0, 'vul': 2.0, 'lucht': 0.6, 'belichting': 0.25, 'look': 'Medium High Contrast'}
+BREED = 0.9  # het skelet (en alles eraan) zo smal: de breedte van de generator op spelmaat
+STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW vielen bijna over elkaar
+
+
+def mat_maken():
+    """Alle materialen mat, zoals de GLB: ruwheid 0,75, geen bump, metaal hooguit 0,7, geen lak."""
+    for m in bpy.data.materials:
+        if not m.node_tree:
+            continue
+        nt = m.node_tree
+        for n in nt.nodes:
+            if n.type != 'BSDF_PRINCIPLED':
+                continue
+            for naam in ('Roughness', 'Normal', 'Metallic', 'Coat Weight'):
+                for link in list(n.inputs[naam].links):
+                    nt.links.remove(link)
+            n.inputs['Roughness'].default_value = 0.75
+            n.inputs['Metallic'].default_value = min(n.inputs['Metallic'].default_value, 0.7)
+            n.inputs['Coat Weight'].default_value = 0.0
+
+
+def licht_voor_spelmaat(sc):
+    zon = bpy.data.objects['zon'].data
+    zon.energy = LICHT['zon']
+    zon.angle = math.radians(LICHT['zonhoek'])
+    bpy.data.objects['vul'].data.energy = LICHT['vul']
+    sc.world.node_tree.nodes['Background'].inputs['Strength'].default_value = LICHT['lucht']
+    sc.view_settings.exposure = LICHT['belichting']
+    sc.view_settings.look = LICHT['look']
+    sc.render.use_freestyle = False
+    sc.cycles.samples = 48
+
+
+def render(sc, naam, hoek, lichten):
+    """De camera en het licht samen om de man gedraaid: het licht komt op het scherm altijd van linksboven."""
+    cam = sc.camera
+    m0 = cam.matrix_world.copy()
+    R = Matrix.Rotation(math.radians(hoek), 4, 'Z')
+    cam.matrix_world = R @ m0
+    for ob, m in lichten.items():
+        ob.matrix_world = R @ m
+    sc.render.filepath = os.path.join(UIT, naam)
+    bpy.ops.render.render(write_still=True)
+    cam.matrix_world = m0
+    for ob, m in lichten.items():
+        ob.matrix_world = m
+
+
+def main():
+    sc = sh.bouw()
+    rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
+    lijf = bpy.data.objects['lijf']
+    # de kleren als een mesh (zonder het lijf: dat houdt zijn haar)
+    pop = bk.een_mesh(sc, zonder=('lijf',))
+    mat_maken()
+    licht_voor_spelmaat(sc)
+    bk.aan_het_skelet(sc, pop, rig)
+    # het lijf aan het skelet: zijn gewichten zijn die van MakeHuman, de staande houding is nu de rust
+    lijf.hide_render = False
+    lijf.hide_viewport = False
+    md = lijf.modifiers.new('skelet', 'ARMATURE')
+    md.object = rig
+    while lijf.modifiers[0].name != 'skelet':
+        lijf.modifiers.move(lijf.modifiers.find('skelet'), 0)
+    for ob in (pop, lijf):
+        m = ob.matrix_world.copy()
+        ob.parent = rig
+        ob.matrix_world = m
+    rig.scale = (BREED, BREED, 1.0)
+    bpy.context.view_layer.update()
+    rig['z0'] = rig.location.z
+    bk.STAP = STAP
+    lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
+    for r in RICHTINGEN:
+        render(sc, f'eigen-{r}-staan.png', sh.RICHTINGEN[r], lichten)
+    # lopen: de speer schuin voor het lijf, zoals de generator
+    sc.render.resolution_x = 2400
+    dragen = bk.DRAGEN['generator']
+    bk.draag_schuin(sc, rig, dragen)
+    bk.loop(rig, 0, 8, draagt=True)
+    bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, dragen)
+    for i in range(8):
+        bk.loop(rig, i, 8, draagt=True)
+        for r in RICHTINGEN:
+            render(sc, f'eigen-{r}-lopen-{i}.png', sh.RICHTINGEN[r], lichten)
+
+
+main()

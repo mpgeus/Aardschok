@@ -2039,6 +2039,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
      de vellen van de generator en een met die van het model, het tweede alleen in de browser omgezet. Niets blijvends in
      het spel zonder Marcel.
   Eerst één proefplaat: Z en ZW, staan en vier loopbeelden, groot en op spelmaat naast de generator.
+- *De proefplaat van proef (a)* (Marcel: "Ja, maak de proefplaat: Z en ZW, staan en vier loopbeelden, groot en op spelmaat
+  naast de generator"). `gereedschap/blender/eigen.py` (het model met zijn eigen materialen, mat gemaakt: ruwheid 0,75,
+  geen bump, metaal hooguit 0,7, geen lak; het lijf met de echte baard als eigen deel aan het skelet, de kleren een mesh
+  zoals in `bakken.py`; smaller met de schaal van het skelet, 0,9; het licht met de camera mee: de zon zachter, 4,0 met een
+  hoek van 12 graden, licht van voren 2,0, de lucht 0,6, belichting +0,25, *Medium High Contrast*; de stap 0,38), en
+  `eigen.cjs` voor de plaat (`uit/blender/eigen.png`, bewegend `eigen-Z-bewegend.png` en `eigen-ZW-bewegend.png`; acht
+  minuten voor twee richtingen). Op spelmaat: staand dezelfde opbouw als de generator en het gezicht leest onder de helm;
+  het beweegt zonder te flikkeren. Wat nog anders is: de kleuren bleker dan bij de generator (het geel lichter, het blauw
+  grijzer), de helm bijna wit en zonder lijn, de maliën een grauwe vlek; en lopend houdt hij de speer lager en steiler dan
+  de generator (de handen voor de buik, het lange eind naar beneden, in Z bijna rechtop voor het lijf), waar de generator
+  hem voor de borst draagt met het lange eind omhoog.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

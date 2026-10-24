@@ -96,3 +96,4 @@ function main(r = 'ZW', varianten = ['vooruit']) {
 }
 
 if (require.main === module) main(process.argv[2], process.argv.slice(3).length ? process.argv.slice(3) : undefined);
+module.exports = { hoogte, omlijn, klein, uitVel, vak, lees };

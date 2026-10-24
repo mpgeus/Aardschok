@@ -56,14 +56,14 @@ def aan_de_heup(ob, z_knie):
     return False
 
 
-def een_mesh(sc):
+def een_mesh(sc, zonder=()):
     """Alle delen behalve de speer en de grond als één mesh, met de modifiers erin (zonder het haar). Wat aan de heup hangt,
     krijgt het kenmerk 'heup'."""
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
     z_knie = (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z
     delen = []
     for ob in list(sc.objects):
-        if ob.type != 'MESH' or ob.name.startswith('speer.') or ob.name == 'grond':
+        if ob.type != 'MESH' or ob.name.startswith('speer.') or ob.name == 'grond' or ob.name in zonder:
             continue
         for md in list(ob.modifiers):
             if md.type == 'PARTICLE_SYSTEM':
@@ -603,8 +603,8 @@ def main():
         render(sc, f'gebakken-lopen-ZW-{i}.png', sh.RICHTINGEN['ZW'])
 
 
-if 'richting' in sh.ARGS:
+if __name__ == '__main__' and 'richting' in sh.ARGS:
     een_richting(sh.ARGS[sh.ARGS.index('richting') + 1],
                  draag=sh.ARGS[sh.ARGS.index('draag') + 1] if 'draag' in sh.ARGS else 'vooruit')
-else:
+elif __name__ == '__main__':
     main()
