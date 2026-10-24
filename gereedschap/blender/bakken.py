@@ -13,6 +13,7 @@
 #   ... -- <map> richting ZW      per richting, zonder mengen: alleen de verf van ZW, staan en acht loopbeelden
 import bpy
 import math
+import numpy as np
 import os
 import sys
 
@@ -27,6 +28,11 @@ UIT = sh.UIT
 VERF = ['Z', 'ZW', 'W', 'ZO', 'O']  # de richtingen met verf (ZO en O gespiegeld)
 ATLAS = 4096
 MACHT = 3  # hoe sterk een richting voorgaat als hij een plek rechter ziet
+# Smaller dan het model, zodat hij op spelmaat de maat van de generator heeft (Marcel, 24 okt; gemeten op ZW: borst en rok
+# 7 procent te breed, de laarzen bijna 30): het lijf maal SMAL, naar de voeten toe aflopend tot SMAL_VOET.
+SMAL, SMAL_VOET = 0.9, 0.8
+LEUN = math.radians(8)  # zo ver hangt hij bij het lopen naar voren
+ZICHT = (0.2, 0.45)  # de hoek met de camera (cosinus) waarbinnen de verf overgaat in de verf ernaast
 
 
 def actief(ob):
@@ -256,8 +262,14 @@ def loop(rig, i, n):
         draai(rig, f'upperleg01.{k}', dij)
         draai(rig, f'lowerleg01.{k}', knie)
         draai(rig, f'foot.{k}', -(dij + knie) * 0.7)
-    draai(rig, 'upperarm01.L', 0.3 * math.sin(f))
-    draai(rig, 'lowerarm01.L', -0.1 - 0.15 * max(0.0, -math.sin(f)))
+    # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf
+    draai(rig, 'upperarm01.L', 0.1 * math.sin(f))
+    draai(rig, 'lowerarm01.L', -0.05 - 0.05 * max(0.0, -math.sin(f)))
+    # naar voren hangen (Marcel: "de soldaat moet eigenlijk ook iets naar voren 'hangen' als hij loopt"): het bovenlijf vanaf
+    # de taille voorover, het hoofd wat terug zodat hij vooruit blijft kijken; de rok en de riem hangen aan het bekken
+    draai(rig, 'spine04', LEUN * 0.7)  # om x: positief kantelt de top naar -y, naar voren
+    draai(rig, 'spine02', LEUN * 0.3)
+    draai(rig, 'head', -LEUN * 0.5)
     rig.location.z = rig['z0'] - 0.02 * abs(math.sin(f))
     bpy.context.view_layer.update()
 
@@ -271,15 +283,98 @@ def render(sc, naam, hoek):
     cam.matrix_world = m0
 
 
+def vul_verborgen(sc, pop, r):
+    """Wat de camera van r niet ziet (erachter, of van opzij: daar rekt de verf uit), krijgt de verf van de plekken ernaast
+    (Marcel: "de verborgen delen vullen met de verf ernaast"). Per punt: hoe goed hij gezien wordt ('zicht', 0 tot 1, uit de
+    hoek met de camera en of iets ervoor zit), en een kleur ('vulkleur'): waar hij gezien wordt de verf op die plek, en
+    verder over de mesh doorgegeven van buur naar buur."""
+    me = pop.data
+    n = len(me.vertices)
+    beeld = bpy.data.images.load(os.path.join(UIT, f'verf-{r}.png'))
+    B, H = beeld.size
+    px = np.empty(B * H * 4, dtype=np.float32)
+    beeld.pixels.foreach_get(px)
+    px = px.reshape(H, B, 4)
+    w = np.zeros(n, dtype=np.float32)
+    me.attributes[f'w-{r}'].data.foreach_get('value', w)
+    h = np.power(np.maximum(w, 0), 1 / MACHT)  # de cosinus van de hoek (nul als iets ervoor zit)
+    uv = np.zeros((n, 2), dtype=np.float32)
+    laag = me.uv_layers[f'proj-{r}']
+    lv = np.zeros(len(me.loops), dtype=np.int64)
+    me.loops.foreach_get('vertex_index', lv)
+    luv = np.zeros(len(me.loops) * 2, dtype=np.float32)
+    laag.data.foreach_get('uv', luv)
+    uv[lv] = luv.reshape(-1, 2)
+    xi = np.clip((uv[:, 0] * B).astype(int), 0, B - 1)
+    yi = np.clip((uv[:, 1] * H).astype(int), 0, H - 1)
+    kl = px[yi, xi]
+    t = np.clip((h - ZICHT[0]) / (ZICHT[1] - ZICHT[0]), 0, 1)
+    zicht = (t * t * (3 - 2 * t)) * (kl[:, 3] > 0.5)
+    # sRGB naar lineair: het kleurattribuut is lineair, zoals de textuur na het laden
+    lin = np.where(kl[:, :3] <= 0.04045, kl[:, :3] / 12.92, ((kl[:, :3] + 0.055) / 1.055) ** 2.4)
+    bekend = zicht > 0.5
+    kleur = np.where(bekend[:, None], lin, 0.0)
+    ev = np.zeros(len(me.edges) * 2, dtype=np.int64)
+    me.edges.foreach_get('vertices', ev)
+    ev = ev.reshape(-1, 2)
+    for _ in range(400):
+        a, b = ev[:, 0], ev[:, 1]
+        naar_b = bekend[a] & ~bekend[b]
+        naar_a = bekend[b] & ~bekend[a]
+        if not (naar_b.any() or naar_a.any()):
+            break
+        som = np.zeros((n, 3), dtype=np.float32)
+        tel = np.zeros(n, dtype=np.float32)
+        np.add.at(som, b[naar_b], kleur[a[naar_b]])
+        np.add.at(tel, b[naar_b], 1)
+        np.add.at(som, a[naar_a], kleur[b[naar_a]])
+        np.add.at(tel, a[naar_a], 1)
+        nieuw = tel > 0
+        kleur[nieuw] = som[nieuw] / tel[nieuw, None]
+        bekend = bekend | nieuw
+    print('VUL', r, 'gezien', int((zicht > 0.5).sum()), 'gevuld', int(bekend.sum()), 'van', n)
+    za = me.attributes.new('zicht', 'FLOAT', 'POINT')
+    za.data.foreach_set('value', zicht.astype(np.float32))
+    ka = me.attributes.new('vulkleur', 'FLOAT_COLOR', 'POINT')
+    ka.data.foreach_set('color', np.concatenate([kleur, np.ones((n, 1), dtype=np.float32)], axis=1).ravel())
+
+
+def smal(rig, pop):
+    """Het model smaller (SMAL, naar de voeten SMAL_VOET), in rust: de mesh en de botten, om de as van de man. De verf zit al
+    vast (de UV's uit de camera zijn eerder gezet), dus die gaat mee."""
+    z_knie = rig.data.bones['lowerleg01.L'].head_local.z + rig.location.z
+
+    def f(z):
+        t = max(0.0, min(1.0, z / z_knie))
+        return SMAL_VOET + (SMAL - SMAL_VOET) * t
+    for v in pop.data.vertices:
+        s = f(v.co.z)
+        v.co.x *= s
+        v.co.y *= s
+    actief(rig)
+    bpy.ops.object.mode_set(mode='EDIT')
+    for eb in rig.data.edit_bones:
+        for kant in ('head', 'tail'):
+            q = getattr(eb, kant)
+            s = f(q.z + rig.location.z)
+            setattr(eb, kant, Vector((q.x * s, q.y * s, q.z)))
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.context.view_layer.update()
+
+
 def projectie(pop, r):
-    """Alleen de verf van richting r, vanuit zijn eigen camera, onbelicht; niets gemengd."""
+    """Alleen de verf van richting r, vanuit zijn eigen camera, onbelicht; niets gemengd. Waar de camera de plek niet goed
+    ziet, de verf van ernaast (vul_verborgen)."""
     k = sh.Knopen(f'verf-{r}')
     k.nt.nodes.remove(k.bsdf)
     uv = k.n('ShaderNodeUVMap', uv_map=f'proj-{r}')
     tex = k.n('ShaderNodeTexImage', image=bpy.data.images.load(os.path.join(UIT, f'verf-{r}.png')), interpolation='Linear', extension='EXTEND')
     k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
+    zicht = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='zicht')
+    vul = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='vulkleur')
+    kleur = k.meng(zicht.outputs['Fac'], vul.outputs['Color'], tex.outputs['Color'])
     em = k.n('ShaderNodeEmission')
-    k.nt.links.new(tex.outputs['Color'], em.inputs['Color'])
+    k.nt.links.new(kleur, em.inputs['Color'])
     k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
     pop.data.materials.clear()
     pop.data.materials.append(k.m)
@@ -292,12 +387,14 @@ def een_richting(r, n=8):
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
     pop = een_mesh(sc)
     per_richting(sc, pop, [r])
+    vul_verborgen(sc, pop, r)
     projectie(pop, r)
     sc.render.use_freestyle = False
     sc.cycles.samples = 32
-    render(sc, f'richting-{r}-staan.png', sh.RICHTINGEN[r])
     aan_het_skelet(sc, pop, rig)
+    smal(rig, pop)
     rig['z0'] = rig.location.z
+    render(sc, f'richting-{r}-staan.png', sh.RICHTINGEN[r])
     for i in range(n):
         loop(rig, i, n)
         render(sc, f'richting-{r}-lopen-{i}.png', sh.RICHTINGEN[r])

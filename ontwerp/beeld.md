@@ -1979,6 +1979,27 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   staande beeld verborgen was (het achterste been, de arm als die naar voren zwaait), komt uitgerekte verf (donkere vegen);
   en ons model is breder dan de man op vel 01 ZW, dus op spelmaat oogt hij zwaarder dan de speerman van de generator. De
   generator draagt de speer bij het lopen schuin; hier blijft hij rechtop in de hand.
+- *De vegen, de breedte en naar voren hangen* (Marcel: "Los op ZW eerst de vegen op (de verborgen delen vullen met de verf
+  ernaast, de linkerarm minder zwaaien) en maak het model wat smaller", en "de soldaat moet eigenlijk ook iets naar voren
+  'hangen' als hij loopt"). In `bakken.py`: per punt hoe goed de camera van ZW hem ziet (de hoek, en of iets ervoor zit);
+  waar niet of maar schuin, krijgt hij de verf van de punten ernaast, van buur naar buur over de mesh doorgegeven
+  (`vul_verborgen`). De linkerarm zwaait een derde zo ver. Na het projecteren (de verf zit dan vast) wordt het model
+  smaller, de mesh en de botten in rust: het lijf maal 0,9, naar de voeten maal 0,8 (gemeten op spelmaat tegen staan ZW van
+  de generator: borst en rok nu 1,00 en 1,03 van zijn breedte, de laarzen nog 0,83: hij staat wat breder op zijn benen).
+  Bij het lopen leunt het bovenlijf vanaf de taille 8 graden voorover, het hoofd half terug; de rok en de riem blijven aan
+  het bekken. En in `verf.cjs` gaat de omlijning van de generator eraf voor het aanvullen (die gaf donkerpaarse randjes
+  langs de laarzen). De vegen op het achterste been en de arm zijn weg, de laarzen hebben schone randen.
+- *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
+  de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
+  vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,
+  ORM) en 2048 (normalen), 78 MB. Elke figuur is rond, met een achterkant, maar het geheel staat 24 graden naar de camera
+  gekanteld (de schuine blik van het vel zit in de vorm), en de figuren zijn geen losse objecten: knippen gaat met een vak
+  vanuit de camera. Eén hellebaardier krijgt zo'n 13.500 driehoeken en een dertigste van de textuur: van dichtbij klonterig
+  (wanten als handen, de benen aan elkaar, de verf uitgesmeerd), en wat op het vel niet te zien was, is donker en modderig.
+  Op spelmaat (`uit/blender/trellis-glb.png`, rechtop gezet, naast de speerman van de generator) leest het silhouet, maar
+  hij is smal en vaag, zonder gezicht: de generator is veel beter. Als bron voor figuren dus niet; wel misschien als
+  vorm voor wat moeilijk met de hand te maken is (de ossenkar, de heer te paard). Beter: één figuur per keer, recht van
+  voren op een effen grond, dan krijgt hij de hele resolutie.
 
 ## Open
 

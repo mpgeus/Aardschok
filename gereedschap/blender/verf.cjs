@@ -158,6 +158,16 @@ function bron(x0 = 0, x1 = 300) {
     const o = y * vel.b + x0 + x;
     if (fg[o] && !zweem(o * 4)) for (let c = 0; c < 3; c++) kl[(y * b + x) * 3 + c] = vel.rgba[o * 4 + c];
   }
+  // de omlijning van de generator eraf (twee pixels van de rand: zwart met een magenta zweem), anders vult die hieronder het
+  // model aan waar het net buiten zijn man valt (donkerpaarse randjes langs de laarzen)
+  for (let ronde = 0; ronde < 2; ronde++) {
+    const weg = [];
+    for (let y = 1; y < h - 1; y++) for (let x = 1; x < b - 1; x++) {
+      const i = y * b + x;
+      if (kl[i * 3] >= 0 && [i - 1, i + 1, i - b, i + b].some((j) => kl[j * 3] < 0)) weg.push(i);
+    }
+    for (const i of weg) kl[i * 3] = kl[i * 3 + 1] = kl[i * 3 + 2] = -1;
+  }
   for (let ronde = 0; ronde < 30; ronde++) {
     const nieuw = kl.slice();
     for (let y = 1; y < h - 1; y++) for (let x = 1; x < b - 1; x++) {
