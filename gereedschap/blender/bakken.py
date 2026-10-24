@@ -401,7 +401,7 @@ def draag_schuin(sc, rig, dragen):
     bpy.context.view_layer.update()
     # de IK zet de pols op het doel, maar de vuist zit verder: schuif het doel tot de vuist zelf op zijn plek komt, zodat
     # beide handen om de speer zitten (Marcel: "Ook heeft hij zijn linker hand niet om de speer")
-    vuist = lambda k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3
+    vuist = lambda k: sh.holte(rig, k)  # de holte van de vuist, niet de handrug
     for _ in range(4):
         for k in ('R', 'L'):
             mis = plekken[k] - vuist(k)
@@ -416,8 +416,7 @@ def speer_in_handen(sc, rig, lengte, dragen):
     """De speer door beide vuisten (na de IK): het punt GREEP van de speer in de rechtervuist, de punt naar de linker. Waar de
     speer nu staat, volgt uit de schacht zelf (na smal staat hij niet meer waar hij gebouwd is)."""
     bpy.context.view_layer.update()
-    W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
-    vuist = {k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3 for k in ('R', 'L')}
+    vuist = {k: sh.holte(rig, k) for k in ('R', 'L')}
     laag = dragen['laag']
     hoog = 'L' if laag == 'R' else 'R'
     as_ = (vuist[hoog] - vuist[laag]).normalized()  # de vuisten staan op de lijn (draag_schuin), de speer gaat door allebei

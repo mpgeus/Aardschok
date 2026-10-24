@@ -2119,6 +2119,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   Om de enkel een riem met een echte gesp van rond smeedijzer, met een pen en het eind van de riem dat eruit hangt. Het
   leer met de nerf duidelijker (de textuur met meer contrast en reliëf), lichter op de bolle delen (slijtage), en leer
   met een zachte glans (ruwheid 0,48). De voet van het lijf krijgt een masker, anders piept hij door de zool.
+- *Bol, om de kuit, de speer in de vuist en een donkerdere helm* (Marcel, 24 okt: "De vorm van de laars is wel te puntig,
+  ik vind het bollere van de referentie beter staan", "Materiaal is goed", bij de kuit die achter de omslag uitstak "Dat
+  gaat nog niet goed ook", "Rechter hand ook niet heel goed om de speer", "Ik vind de helm ook nog te licht"). De voet
+  korter, met een hoge, bolle neus die tot voorin breed blijft. De schacht, de omslag en de enkelriem volgen de vorm van
+  het been (de koker van de kleren, `passend` voor de opgerolde rand) in plaats van rond te zijn: als ronde kegel met de
+  gemiddelde dikte stak de kuit eruit. De speer gaat door de holte van de vuist (`vuistholte`: het midden van de lussen
+  die de gekrulde middel- en ringvinger maken, bewaard in de ruimte van de pols), bij staan en bij lopen; het oude punt
+  lag op de handrug. Zoeken in de mesh naar het meest omsloten punt vond een punt in de vinger: binnen of buiten het vlees
+  is op de mesh van MakeHuman niet te zeggen. En bij staan stond de speer los op de plek van het bouwen, terwijl de hand
+  met het binden en het smaller maken verschoof: nu zet `eigen.py` hem op de holte zoals die op het eind is. De helm
+  donkerder staal (#6c6a74).
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

@@ -165,11 +165,25 @@ def render(sc, naam, hoek, lichten):
         ob.matrix_world = m
 
 
+def smal_maken(sc, rig):
+    """Het skelet smaller (BREED), en de speer, die los staat, rechtop door de holte van de vuist waar die nu is (het binden
+    aan het skelet en het smaller maken verschuiven de hand; de speer stond ernaast; Marcel: "Rechter hand ook niet heel
+    goed om de speer")."""
+    rig.scale = (BREED, BREED, 1.0)
+    bpy.context.view_layer.update()
+    mis = sh.holte(rig, 'R') - bpy.data.objects['speer.schacht'].matrix_world.translation
+    mis.z = 0.0
+    for ob in sc.objects:
+        if ob.name.startswith('speer.'):
+            ob.location += mis
+    bpy.context.view_layer.update()
+
+
 def lichtproef():
     sc = sh.bouw()
     mat_maken()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
-    rig.scale = (BREED, BREED, 1.0)
+    smal_maken(sc, rig)
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     basis = dict(LICHT)
     for naam, anders in LICHTPROEF.items():
@@ -204,8 +218,7 @@ def main():
         m = ob.matrix_world.copy()
         ob.parent = rig
         ob.matrix_world = m
-    rig.scale = (BREED, BREED, 1.0)
-    bpy.context.view_layer.update()
+    smal_maken(sc, rig)
     rig['z0'] = rig.location.z
     bk.STAP = STAP
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
