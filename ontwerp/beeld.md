@@ -1902,6 +1902,15 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   in het spel (`uit/blender/spel-spelmaat.png`): dezelfde opbouw en dezelfde leesbaarheid van helm, gezicht, kraag,
   wapenrok, riem en laarzen; de generator is nog iets helderder en verzadigder, en zijn kleine dingen (de hangers, het
   koord) lezen beter. Dat is nu afstellen, geen opbouw meer.
+- *De detailronde* (Marcel: "De helm is denk ik nog wat groot", "Doe donkere zwarte lijnen op de helm zijn ook niet zo",
+  "we moeten nog dichter op de referentie", "In game is het rommelig", "Te platgedrukt"): de helm strakker om het hoofd en
+  lager, de rand op de wenkbrauwen (de rand nu zo'n 28 procent van de lengte, plaat 27); de kam, de naden, de punt en de
+  klinknagels zonder lijnen (op de plaat zachte ribben); de baard grijszwart; grovere maliën in warm grijsbruin; het
+  wambuis lichter bruin; kortere laarzen met meer hozen; een steviger speer. Minder breed (de schouders en de armen minder
+  dik, de benen op 0,72): hij was breder dan de man op de plaat. Op spelmaat een derde van het fijne detail (bobbels,
+  vlekken, de ringen grover): het werd daar gespikkelde ruis.
+- *Wat misging:* de wapenrok over de schouders trekken (de breedte van de schouders liep door tot de zoom: een doos om de
+  armen); teruggedraaid. Open: bij de schouders nog een rafelige rand tussen kraag, wapenrok en mouw.
 
 ## Open
 

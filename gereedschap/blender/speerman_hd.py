@@ -38,20 +38,20 @@ INSTELLINGEN = {
     # en gedrongen zoals op vel 01 (beeld.md, "De referentie, onderdeel voor onderdeel"): bredere schouders, een korte
     # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
     'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 1,
-               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 1, 'torso/torso-scale-horiz-incr': 0.6,
+               'neck/neck-scale-vert-decr': 1, 'torso/measure-shoulder-dist-incr': 0.4, 'torso/torso-scale-horiz-incr': 0.0,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
-               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 1, 'arms/r-upperarm-fat-incr': 1,
-               'arms/l-lowerarm-fat-incr': 1, 'arms/r-lowerarm-fat-incr': 1,
+               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.5, 'arms/r-upperarm-fat-incr': 0.5,
+               'arms/l-lowerarm-fat-incr': 0.5, 'arms/r-lowerarm-fat-incr': 0.5,
                'eyebrows/eyebrows-angle-down': 1, 'eyebrows/eyebrows-trans-down': 0.6, 'nose/nose-scale-horiz-incr': 0.8,
                'nose/nose-flaring-incr': 0.6, 'nose/nose-volume-incr': 0.5, 'head/head-age-incr': 0.6},
-    'been': 0.65,            # de botten van de benen, in de lengte
+    'been': 0.72,            # de botten van de benen, in de lengte
     'hoofd': 1.35,           # het hoofd: met de helm een kwart van de man, zoals op de plaat
     'voeten': 14,            # graden naar buiten
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
     'lijn': 3.0,
     'vullicht': 1.2,         # een zacht licht van voren, zodat het gezicht onder de helm licht is zoals op de plaat
-    'speer': 1.0,            # het speerblad en de schacht, maal
+    'speer': 1.3,            # het speerblad en de schacht, maal
     'belichting': 0.0,
 }
 
@@ -59,7 +59,8 @@ INSTELLINGEN = {
 # zo groot als het spel gerenderd (proef: spelmaat.cjs verkleint), met lijnen van één pixel in het spel, lichter licht, en
 # een groter speerblad en een dikkere schacht.
 if SPEL:
-    INSTELLINGEN.update(pxm=240, res=(330, 480), anker_y=455, samples=96, lijn=5.5, vullicht=1.2, speer=1.9, belichting=0.1, contrast=True)
+    INSTELLINGEN.update(pxm=240, res=(330, 480), anker_y=455, samples=96, lijn=5.5, vullicht=1.2, speer=1.9, belichting=0.1, contrast=True,
+                        detail=0.3)
 
 # licht van linksvoor en hoog, vast aan de kijker; randlicht van rechtsachter
 LICHT = Vector((-0.55, -0.62, 0.56)).normalized()
@@ -214,7 +215,7 @@ class Knopen:
 
     def bobbel(self, hoogte, kracht=0.5, afstand=0.003):
         b = self.n('ShaderNodeBump')
-        b.inputs['Strength'].default_value = kracht
+        b.inputs['Strength'].default_value = kracht * INSTELLINGEN.get('detail', 1.0)
         b.inputs['Distance'].default_value = afstand
         self.zet(b.inputs['Height'], hoogte)
         self.nt.links.new(b.outputs['Normal'], self.bsdf.inputs['Normal'])
@@ -249,7 +250,7 @@ def mat_stof(naam, kleur, schaal=30, kracht=0.25):
     k = Knopen(naam)
     r = k.ruis(schaal * 8, 2)          # het weefsel
     v = k.ruis(schaal / 4, 2)          # vlekken
-    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.22), lin(kleur), (0, 0, 0, 1))
+    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.22 * INSTELLINGEN.get('detail', 1.0)), lin(kleur), (0, 0, 0, 1))
     k.bobbel(r, kracht, 0.0015)
     return k.af(kl, ruw=0.9)
 
@@ -258,8 +259,8 @@ def mat_leer(naam, kleur, donker='#2a160a'):
     k = Knopen(naam)
     r = k.ruis(18, 5)
     kras = k.ruis(90, 2, rek=(1, 1, 6))
-    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.45), lin(kleur), lin(donker))
-    kl = k.meng(k.glad(kras, 0.62, 0.72, 0, 0.25), kl, (1, 0.9, 0.75, 1))
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.45 * INSTELLINGEN.get('detail', 1.0)), lin(kleur), lin(donker))
+    kl = k.meng(k.glad(kras, 0.62, 0.72, 0, 0.25 * INSTELLINGEN.get('detail', 1.0)), kl, (1, 0.9, 0.75, 1))
     k.bobbel(k.w('ADD', r, k.w('MULTIPLY', kras, 0.3)), 0.35, 0.002)
     return k.af(kl, ruw=0.55)
 
@@ -420,7 +421,7 @@ def uit_huid(naam, lijf, kies, dikte, mat, sub=1):
 
 def wambuis(lijf, rig, mat):
     """De mouwen van het gewatteerde wambuis: de armen van schouder tot pols, naar buiten, met echte ruiten."""
-    arm = gewicht(lijf, ('upperarm', 'lowerarm'))
+    arm = gewicht(lijf, ('upperarm', 'lowerarm', 'shoulder01'))
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
@@ -435,6 +436,7 @@ def wambuis(lijf, rig, mat):
             segs.append((a, e, begin))
             begin += (e - a).length
     me = ob.data
+    schouders = [rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head for k in ('L', 'R')]
     ns = [v.normal.copy() for v in me.vertices]
     for v, nrm in zip(me.vertices, ns):
         p = v.co.copy()
@@ -459,7 +461,10 @@ def wambuis(lijf, rig, mat):
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
         kussen = (math.sin(math.pi * fu) * math.sin(math.pi * fw)) ** 0.45
-        v.co += nrm * (0.012 + 0.009 * kussen)
+        # op de schouder plat (anders bolt hij op tot de helm), verder bol
+        f = max(0.0, min(1.0, (min((p - q).length for q in schouders) - 0.02) / 0.07))
+        f = f * f * (3 - 2 * f)
+        v.co += nrm * (0.009 + (0.004 + 0.009 * kussen) * f)
     return ob
 
 
@@ -610,7 +615,7 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
     kl = k.meng(f, lin('#14245a'), lin('#df9a1c'))
     v = k.ruis(7, 2)
-    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3), kl, (0, 0, 0, 1))
+    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
     w = k.ruis(240, 2)
     k.bobbel(w, 0.25, 0.0012)
@@ -645,7 +650,7 @@ def mat_malien():
     uvn = k.n('ShaderNodeUVMap', uv_map='uv')
     sep = k.n('ShaderNodeSeparateXYZ')
     k.nt.links.new(uvn.outputs['UV'], sep.inputs[0])
-    dx, dy = 0.013, 0.009
+    dx, dy = 0.017 / INSTELLINGEN.get('detail', 1.0) ** 0.5, 0.012 / INSTELLINGEN.get('detail', 1.0) ** 0.5
 
     def ring(ox, oy):
         x = k.w('ADD', k.w('DIVIDE', sep.outputs['X'], dx), ox)
@@ -656,7 +661,7 @@ def mat_malien():
         return k.glad(k.w('ABSOLUTE', k.w('SUBTRACT', d, 0.36)), 0.13, 0.03)
 
     ringen = k.w('MAXIMUM', ring(0.0, 0.0), ring(0.5, 0.5))
-    kl = k.meng(ringen, lin('#1c1714'), lin('#86766a'))
+    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#1a1511'), lin('#7c6e62'))
     k.bobbel(ringen, 0.9, 0.0025)
     return k.af(kl, ruw=0.42, metaal=0.9, holte=0.5)
 
@@ -687,8 +692,8 @@ def mat_haar():
     uit = nt.nodes.new('ShaderNodeOutputMaterial')
     h = nt.nodes.new('ShaderNodeBsdfHairPrincipled')
     h.parametrization = 'MELANIN'
-    h.inputs['Melanin'].default_value = 0.62
-    h.inputs['Melanin Redness'].default_value = 0.3
+    h.inputs['Melanin'].default_value = 0.55
+    h.inputs['Melanin Redness'].default_value = 0.12
     h.inputs['Random Color'].default_value = 0.8  # grijze spikkels
     h.inputs['Roughness'].default_value = 0.45
     nt.links.new(h.outputs[0], uit.inputs['Surface'])
@@ -763,9 +768,9 @@ def helm(lijf, rig, M):
     cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
     hx, hy, top = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, max(zs)
     oog = rig.matrix_world @ rig.pose.bones['eye.L'].head
-    zb = oog.z + 0.06 * INSTELLINGEN['hoofd']
-    rx, ry = hx + 0.03, hy + 0.026
-    hoog = max(top - zb + 0.04, rx * 1.1)
+    zb = oog.z + 0.045 * INSTELLINGEN['hoofd']
+    rx, ry = hx + 0.012, hy + 0.01  # strak om het hoofd: de rand op een kwart van de lengte, zoals op de plaat
+    hoog = max(top - zb + 0.012, rx * 0.95)
     delen = []
     bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=1, location=(cx, cy, zb))
     k = bpy.context.active_object
@@ -780,7 +785,7 @@ def helm(lijf, rig, M):
     # de rand, wat naar beneden, met een opgerolde zoom
     vs, fs = [], []
     n = 96
-    ringen = ((1.0, 0.0), (1.1, -0.005), (1.21, -0.013), (1.32, -0.026))
+    ringen = ((1.0, 0.0), (1.09, -0.005), (1.18, -0.012), (1.27, -0.024))
     for f, dz in ringen:
         for j in range(n):
             th = 2 * math.pi * j / n
@@ -792,8 +797,8 @@ def helm(lijf, rig, M):
     r = maak('rand', vs, fs)
     dik(r, 0.005)
     delen.append(bak_mod(r))
-    bpy.ops.mesh.primitive_torus_add(major_radius=rx * 1.32, minor_radius=0.005, major_segments=96, minor_segments=12,
-                                     location=(cx, cy, zb - 0.026))
+    bpy.ops.mesh.primitive_torus_add(major_radius=rx * 1.27, minor_radius=0.005, major_segments=96, minor_segments=12,
+                                     location=(cx, cy, zb - 0.024))
     t = bpy.context.active_object
     t.scale = (1, ry / rx, 1)
     zacht(t)
@@ -811,10 +816,12 @@ def helm(lijf, rig, M):
         bm.to_mesh(rib.data)
         bm.free()
         zacht(rib)
+        rib.name = 'helmrib'
         delen.append(bak_mod(rib))
     # de korte punt bovenop
     bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.016, radius2=0.004, depth=0.035, location=(cx, cy, zb + hoog + 0.012))
     zacht(bpy.context.active_object)
+    bpy.context.active_object.name = 'helmpunt'
     delen.append(bpy.context.active_object)
     for o in delen:
         o.data.materials.clear()
@@ -832,7 +839,7 @@ def maliekap(lijf, rig, M):
     hoofd = [v.co for v in lijf.data.vertices if v.co.z > hoofdbot.z - 0.05]
     cy = (min(p.y for p in hoofd) + max(p.y for p in hoofd)) / 2
     bvh = bvh_van([(lijf, [v.co.z > hoofdbot.z - 0.12 for v in lijf.data.vertices])])
-    zb = oog.z + 0.06 * INSTELLINGEN['hoofd']
+    zb = oog.z + 0.045 * INSTELLINGEN['hoofd']
     z_onder = kin.z - 0.02
     ts = [i / 16 for i in range(17)]
     k = koker('kap', bvh, staand(0, cy, lambda t, th: zb - t * (zb - z_onder)), ts, lambda t, th: 0.016, n=96,
@@ -956,7 +963,7 @@ def kraag(lijf, rig, mouwen, lijfje, M):
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z + 0.012))
         onder = nek.z - 0.09 - 0.04 * voor
         return boven - t * (boven - onder)
-    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.045 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
+    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.032 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
               n=128, mat=M['malien'])
     dik(k, 0.006)
     return k
@@ -1007,7 +1014,7 @@ def laarzen(lijf, rig, M):
             rs = [straal(bvh, c, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
             rs = [r for r in rs if r is not None]
             return sum(rs) / len(rs) if rs else 0.06
-        z_top = kn.z - 0.035
+        z_top = kn.z - 0.06
         boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
         r_boven, r_enkel = gem(boven) + 0.018, gem(en + as_ * -0.015) + 0.016
         d = en - boven
@@ -1090,6 +1097,7 @@ def armstukken(rig, mouwen, M):
                 bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=0.0035,
                                                      location=c + dvec * (rr + 0.012 + 0.004 * t0 + 0.004))
                 n = bpy.context.active_object
+                n.name = 'nagel'
                 n.data.materials.append(M['staal'])
                 delen.append(n)
     return delen
@@ -1164,7 +1172,7 @@ def bouw():
     M = {
         'huid': mat_huid(),
         'hozen': mat_stof('hozen', '#1c2038', 30, 0.3),
-        'wambuis': mat_stof('wambuis', '#5e2f1c', 20, 0.15),
+        'wambuis': mat_stof('wambuis', '#6e3c22', 20, 0.15),
         'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),
         'haar': mat_haar(),
@@ -1229,7 +1237,7 @@ def bouw():
     rig.hide_render = True
     kol = bpy.data.collections.new('zonder-lijnen')
     sc.collection.children.link(kol)
-    for ob in [lijf_b] + [o for o in sc.collection.objects if o.name.startswith('oog.')]:
+    for ob in [lijf_b] + [o for o in sc.collection.objects if o.name.startswith(('oog.', 'helmrib', 'helmpunt', 'nagel'))]:
         if ob.name in sc.collection.objects:
             kol.objects.link(ob)
             sc.collection.objects.unlink(ob)
