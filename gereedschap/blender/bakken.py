@@ -365,8 +365,10 @@ def verf_speer(sc, r):
 #   naar voren.
 DRAGEN = {
     'vooruit': {'R': (0.03, -0.12, -0.29), 'L': (-0.24, -0.30, -0.08), 'laag': 'R', 'greep': 0.12},
-    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.5, 0.5, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.38},
-    'gespiegeld': {'midden': (0.0, -0.25, -0.15), 'as': (-0.5, -0.5, 0.7), 'afstand': 0.26, 'laag': 'L', 'greep': 0.38},
+    # kort vastgepakt: onder de lage hand steekt een kort eind uit, het lange eind gaat omhoog voorbij de hoge hand (Marcel:
+    # "De speer steekt verder door")
+    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.5, 0.5, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.15},
+    'gespiegeld': {'midden': (0.0, -0.25, -0.15), 'as': (-0.5, -0.5, 0.7), 'afstand': 0.26, 'laag': 'L', 'greep': 0.15},
 }
 
 
@@ -427,15 +429,24 @@ def speer_in_handen(sc, rig, lengte, dragen):
     for ob in sc.objects:
         if not ob.name.startswith('speer.'):
             continue
-        m = ob.matrix_world.copy()
-        ob.parent = None
-        ob.matrix_world = T @ m
-        m = ob.matrix_world.copy()
+        # exact ophangen: met een volle matrix als parent-inverse, niet via matrix_world. Een skelet met een ongelijke schaal
+        # (eigen.py, smaller) geeft anders een scheefheid die Blender weggooit, en dan schuift elk deel van de speer anders
+        # (het blad stond los boven de schacht; Marcel: "Gaat niet helemaal goed nog")
+        B = T @ ob.matrix_world
         ob.parent = rig
         ob.parent_type = 'BONE'
         ob.parent_bone = 'spine01'
+        ob.matrix_parent_inverse = Matrix.Identity(4)
+        ob.matrix_basis = Matrix.Identity(4)
         bpy.context.view_layer.update()
-        ob.matrix_world = m
+        Pw = ob.matrix_world.copy()
+        ob.matrix_parent_inverse = Pw.inverted()
+        ob.matrix_basis = Matrix.Identity(4)
+        bpy.context.view_layer.update()
+        # de geometrie zelf naar de nieuwe plek: de mesh in de nieuwe wereldstand, het object op de eenheid
+        me = ob.data.copy()
+        me.transform(B)
+        ob.data = me
     bpy.context.view_layer.update()
 
 

@@ -2058,6 +2058,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   is nog bleek. De hand: de IK zette de pols op het doel en de vuist zat verder, dus de linkerhand hing naast de speer; nu
   schuift het doel tot de vuist zelf op de lijn van de speer staat (op 0,4 en 1,4 millimeter), en beide handen zitten om de
   schacht. Marcel daarna: **"Het gaat uiteindelijk om de gebakken render uit blender."**
+- *De speer los, en te ver naar beneden* (Marcel, met rode cirkels: "Gaat niet helemaal goed nog", en "De speer steekt
+  verder door"). Het blad zweefde boven de schacht: het skelet heeft in `eigen.py` een ongelijke schaal (smaller), en bij
+  het opnieuw ophangen van de speer gooide Blender de scheefheid weg, voor elk deel van de speer anders (elk heeft een eigen
+  middelpunt). Nu hangt de speer exact (een volle matrix als parent-inverse, de geometrie in de mesh). En hij werd te ver
+  naar het midden vastgehouden: het lange eind ging naar beneden. Nu kort vastgepakt (de lage hand op 15 procent van de
+  voet), zodat onder de lage hand een kort eind uitsteekt en het lange eind omhoog gaat, zoals bij de generator.
+- *De schaduwen* (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc.", "Dat maakt alles veel
+  dieper en echter"). Een lichtproef op staan Z (`eigen.py -- <map> lichtproef`, plaat `eigen.cjs licht`,
+  `uit/blender/eigen-licht.png`): een hardere zon, minder vullicht en lucht, en diepere holtes (de AO van de materialen
+  niet meer alleen binnen een deel, verder en donkerder). Het verschil is klein, en op spelmaat bijna weg. De diepte van de
+  generator zit niet in het licht maar in de vorm en de verf: plooien in de wapenrok (lichte en donkere banen), de ruiten
+  van de mouwen met een schaduwlijn, schaduw onder de kraag en tussen arm en lijf, en een donkere schaduwkant. Onze
+  wapenrok is een vlak zonder plooien, dus daar valt niets te schaduwen; en `kleurGelijk` maakt de spreiding van de
+  lichtheid hoogstens zo groot als bij de generator, nooit groter, dus wat vlak is, blijft vlak.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

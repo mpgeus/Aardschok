@@ -73,4 +73,23 @@ function main(richtingen = ['Z', 'ZW']) {
   console.log('uit/blender/eigen.png en eigen-<r>-bewegend.png');
 }
 
-if (require.main === module) main(process.argv.slice(2).length ? process.argv.slice(2) : undefined);
+// De lichtproef (eigen.py -- <map> lichtproef): staan Z in een paar lichtstanden, groot en op spelmaat (met de kleur van de
+// generator), naast de generator. Naar uit/blender/eigen-licht.png.
+function lichtplaat(standen = ['nu', 'dieper', 'diepst']) {
+  const lees = (n) => L.lees(path.join(RENDER, n));
+  const k = L.hoogte(L.uitVel('staan', 'Z', 0)) / L.hoogte(lees('eigen-Z-staan.png'));
+  const v = G.kleurMaat(alsMagenta(L.uitVel('staan', 'Z', 0)), STOFFEN).maat;
+  const beelden = standen.map((s) => ({ s, b: lees(`eigen-licht-${s}.png`) }));
+  const rijen = [
+    beelden.map(({ s, b }) => E.met(groot(b, 420), `licht: ${s}`)),
+    [E.met(L.vak(L.uitVel('staan', 'Z', 0)), 'generator'), ...beelden.map(({ s, b }) => E.met(L.vak(opSpelmaat(b, k, v)), s))],
+  ];
+  E.bewaar(path.join(UIT, 'eigen-licht.png'), rijen, 'Vraag 190, proef (a): het licht, voor diepere schaduwen',
+    'Boven staan Z groot in drie lichtstanden; onder op spelmaat maal 3, met de kleur van de generator, naast de generator.');
+  console.log('uit/blender/eigen-licht.png');
+}
+
+if (require.main === module) {
+  if (process.argv[2] === 'licht') lichtplaat(process.argv.slice(3).length ? process.argv.slice(3) : undefined);
+  else main(process.argv.slice(2).length ? process.argv.slice(2) : undefined);
+}

@@ -24,6 +24,14 @@ from mathutils import Matrix  # noqa: E402
 UIT = sh.UIT
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
 LICHT = {'zonhoek': 12, 'zon': 4.0, 'vul': 2.0, 'lucht': 0.6, 'belichting': 0.25, 'look': 'Medium High Contrast'}
+# proeven met het licht (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat maakt alles veel
+# dieper en echter"): -- <map> lichtproef rendert alleen staan Z in een paar standen, naar eigen-licht-<naam>.png
+LICHTPROEF = {
+    'nu': {},
+    'dieper': {'zon': 5.0, 'zonhoek': 6, 'vul': 0.8, 'lucht': 0.3, 'belichting': 0.35},
+    'diepst': {'zon': 5.5, 'zonhoek': 4, 'vul': 0.4, 'lucht': 0.15, 'belichting': 0.5},
+    'schaduw': {'zon': 5.0, 'zonhoek': 6, 'vul': 0.8, 'lucht': 0.3, 'belichting': 0.35, 'holte': (0.12, 0.3)},
+}
 BREED = 0.9  # het skelet (en alles eraan) zo smal: de breedte van de generator op spelmaat
 STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW vielen bijna over elkaar
 
@@ -43,6 +51,22 @@ def mat_maken():
             n.inputs['Roughness'].default_value = 0.75
             n.inputs['Metallic'].default_value = min(n.inputs['Metallic'].default_value, 0.7)
             n.inputs['Coat Weight'].default_value = 0.0
+
+
+def holtes(afstand, diepte):
+    """Diepere schaduw in de holtes (de AO van de materialen): niet meer alleen binnen een deel, zodat de kraag, de riem en de
+    armen schaduw geven op wat eronder ligt, en verder en donkerder."""
+    for m in bpy.data.materials:
+        if not m.node_tree:
+            continue
+        for n in m.node_tree.nodes:
+            if n.type != 'AMBIENT_OCCLUSION':
+                continue
+            n.only_local = False
+            n.inputs['Distance'].default_value = afstand
+            for link in n.outputs['AO'].links:
+                if link.to_node.type == 'MAP_RANGE':
+                    link.to_node.inputs['To Min'].default_value = 1 - diepte
 
 
 def licht_voor_spelmaat(sc):
@@ -72,7 +96,25 @@ def render(sc, naam, hoek, lichten):
         ob.matrix_world = m
 
 
+def lichtproef():
+    sc = sh.bouw()
+    mat_maken()
+    rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
+    rig.scale = (BREED, BREED, 1.0)
+    lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
+    basis = dict(LICHT)
+    for naam, anders in LICHTPROEF.items():
+        LICHT.clear()
+        LICHT.update(basis, **anders)
+        if 'holte' in LICHT:
+            holtes(*LICHT['holte'])
+        licht_voor_spelmaat(sc)
+        render(sc, f'eigen-licht-{naam}.png', sh.RICHTINGEN['Z'], lichten)
+
+
 def main():
+    if 'lichtproef' in sh.ARGS:
+        return lichtproef()
     sc = sh.bouw()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
     lijf = bpy.data.objects['lijf']
