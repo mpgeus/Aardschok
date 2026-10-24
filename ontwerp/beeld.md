@@ -1733,6 +1733,62 @@ dan alles van SDXL. img2img met Pixel Art Base eroverheen (`plaat-img2img-speerm
 **Besluit** (Marcel, 21 okt): de generator van zijn plaat maakt de bron, één ding tegelijk, en wij maken het passend:
 `beelden-van-de-generator.md`.
 
+## Blender als basis? (24 okt 2026, vraag 190)
+
+Marcel, 24 okt: "onderzoeken of we hogere kwaliteit art krijgen door als basis een 3d model te gebruiken die jij in
+blender maakt". Een onderzoek, nog zonder render: Blender staat niet op deze pc, en een proefplaat komt pas na een ja
+(hierboven, "Eerst goedkeuring, dan renderen").
+
+**Wat we nu hebben.** Twee wegen. (1) Onze renderer in Node (`kern.cjs`): modellen uit afstandsfuncties (bollen,
+capsules, dozen), licht, omgevingsschaduw, zachte schaduw, een vast palet en een omlijning. Voor de gebouwen goed, en na
+de stijlproef dicht bij het doel (hierboven, "De nieuwe stijl"). Voor de mensen het zwakke punt: houterig, en de botten
+bewegen star, zonder huid die meebuigt (`houding.cjs`). (2) Sinds 21 okt de generator als bron voor de poppetjes
+(`beelden-van-de-generator.md`): per beeld mooier dan alles uit code, maar één speerman kostte zo'n 25 vellen met redo's,
+de speer wees soms naar achteren, de kleur liep weg (de vallen oranjer), en in `speerman-staan.webp` heeft NW twee speren.
+
+**Wat Blender toevoegt, tegen onze renderer:**
+- *Vorm:* echte meshes met subdivision (ronde, organische vormen uit een grove kooi, waar wij capsules aan elkaar
+  smelten), bevel (de lichte randjes langs elke kant, die de stijlspecificatie vraagt), cloth (een wapenrok die valt en
+  plooit), haar en curves (baard, vacht, riet), en displacement (stenen in een plint).
+- *Beweging:* een skelet met een huid: ellebogen, knieën en kleren buigen mee. En één loopcyclus geldt voor elk
+  poppetje met hetzelfde skelet.
+- *Licht:* Cycles rekent het licht door, ook wat van de grond in de schaduw kaatst, met echte zachte schaduwen. Wij
+  benaderen dat.
+- *Lagen per pixel:* diepte, normaal, object- en materiaalnummer en omgevingsschaduw, voor onze omlijning en ons palet
+  (zoals `B.diep` en `B.nrm` nu).
+- *Vrije bouwstenen:* MakeHuman (MPFB2, CC0) geeft een mens met een goede bouw en een skelet, zonder boetseren.
+
+**Wat hetzelfde blijft:**
+- Claude maakt het model in code (`blender -b -P script.py`), niet met de hand, en beoordeelt het op een render, zoals
+  nu. Een model uit losse vormen blijft er zo uitzien, in Blender of hier: de winst zit in de gereedschappen
+  (subdivision, cloth, skelet), niet in Blender zelf.
+- Blender maakt geen pixel art. Een verkleinde 3D-render oogt als "a photograph converted into pixel art", wat de
+  stijlspecificatie verbiedt. Het palet, de clusters en de omlijning blijven ons werk, op elke weg. Blender rendert dus
+  vier keer zo groot met de lagen erbij, en onze Node-code maakt er pixel art van.
+- Per beeld haalt een model van Claude de generator waarschijnlijk niet: die schildert. De winst is dat elke richting en
+  elk beeld klopt, en dat een tweede poppetje (andere kleren, ander wapen, andere livrei) minuten kost in plaats van 25
+  vellen. En de maatstaf blijft de les van de verfbeurt hierboven: duidelijk op spelmaat.
+
+**Wat het kost:**
+- Blender is gratis (GPL; wat het rendert, is van ons, ook voor verkoop): de draagbare zip van blender.org, zo'n 400 MB,
+  zonder installatie. Het gereedschap is dan niet meer "alleen Node"; het spel merkt niets.
+- De GTX 1080 Ti rendert met Cycles op de videokaart (CUDA); voor sprites van een paar honderd pixels is de processor
+  ook genoeg.
+- In de cloud moet Blender elke sessie opnieuw binnenkomen (de Linux-versie, ook zo'n 400 MB).
+- De huizen overzetten loont niet: de huizenbouwer is af (1214 tekeningen, de bouwfasen, de brand, de sneeuw, plat) en
+  ligt na de stijlproef dicht bij het doel.
+
+**Het oordeel van Claude:** voor de gebouwen nee; voor de poppetjes waarschijnlijk wel, als het model en het skelet uit
+Blender komen (vorm en beweging kloppen in elke richting), de afwerking tot pixel art van ons, en eventueel de kleur van
+de generator, zijn staande beeld op het model geprojecteerd (het idee van `gereedschap/ai/hybride-voorstel.md`, met de
+projectie van Blender). Te toetsen met één proefplaat.
+
+**De proefplaat, in woorden** (wacht op Marcels ja, en op Blender op deze pc): de speerman van het dorp, door Claude in
+Blender gemaakt, naar de plaat van de generator: gedrongen, met de ketelhoed, de maliënkraag, de gewatteerde mouwen, de
+wapenrok in blauw en geel, de riem met tas, de laarzen en de speer, op één skelet. Op de plaat, op spelmaat en twee keer
+vergroot: staan in acht richtingen en lopen in één richting (ZW), naast de speerman van de generator en een figuur uit
+onze renderer. Valt de bouw tegen, dan daarna MPFB2 als basis; valt de kleur tegen, dan de projectie van de generator.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
