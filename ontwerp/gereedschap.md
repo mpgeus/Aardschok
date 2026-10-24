@@ -51,7 +51,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost zo'n twee minuten (12 okt: zaad 1 in 124 s); nodig is Playwright (in
-  de cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
+  de cloud staat het klaar, en sinds 24 okt speelt het daar ook: de spellus staat stil, `opmerkingen.md`). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder, en het
   jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--regel seizoen=jij`
   speelt het met een spelregel anders, en met `--getal BOS_INSTELLINGEN.bosVanDeHeer=20` met een getal uit de
