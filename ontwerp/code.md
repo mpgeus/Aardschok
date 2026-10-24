@@ -177,7 +177,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tegelijk, 0,5 s op het proefdorp en seconden na veel verkennen).
 - `js/menu.js` is het scherm erbij, sinds vraag 172 (16 okt; Marcel: "We hebben een volledig menu nodig geen a.i slop") een
   volledig menu. **Het titelscherm is tekst over de wereld**: links het woordmerk en de keuzes (`.titel-links`; Continue,
-  New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
+  Campaign (niet in de demo; de hoofdstukken op een rij, `campagneScherm`, en een hoofdstuk begint met `speelHoofdstuk`;
+  `js/campagne.js`), New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
   `T.titelCamera`, `js/main.js`). Elke keuze is een `.menu-keuze`, tekst zonder kader; wat je hebt, is wat de focus
   heeft (de muis zet hem, de pijltjes stappen, Enter neemt), en een vaantje (`--vaantje` in `stijl.css`, zeven bij tien
   pixels op twee keer) staat ervoor. **New game** is een eigen scherm op die plek: de naam, het land (het nummer, *Other
@@ -1141,8 +1142,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `test/rand.test.cjs`.
 - **Een level** (stap 1b, 24 okt; Marcel: "1b nu"): een bestand in `levels/` (een script, geen JSON: dat laadt niet vanaf
   `file://`; in `index.html` na `js/scenario.js`) zet `T.LEVELS.<naam>`: een scenario met `dorpen` (per dorp wat het bij
-  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`) en `demo`. `T.nieuwSpel(makerZaad, level)` (`js/main.js`; zonder
-  level het demojaar als `T.DEMO_INSTELLINGEN.aan`, anders het volle spel) geeft het aan `T.beginOpEiland` (`js/begin.js`):
+  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
+  null voor het volle spel; zonder: de demo als `T.DEMO_INSTELLINGEN.aan`) geeft het aan `T.beginOpEiland` (`js/begin.js`):
   dat keurt het (een fout gooit, want dat is een fout in het spel), geeft `T.nieuwDorp` wat het van het eerste dorp zegt,
   en start daarna het scenario. `T.proefdorp.begin(zaad, level)` doet hetzelfde voor de toetsen. **Het eerste level is
   het demojaar** (`levels/demojaar.js`): de wacht in een eigen tent (de tent draagt de lijst, `g.wacht`, voor
@@ -1150,11 +1151,30 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rovers (`D.rovers.wilde === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
   (`{ rovers: { aantal: 3, aangekondigd: true } }`, `js/rovers.js`), en een trigger als de heer komt (`{ heer: 'komt' }`)
   voor de punten (`punten`, `T.telPunten`) en de scène van het betalen (`scene: 'betalen'` zet `D.scene`; dan is betalen
-  het eind, `js/heer.js`, en speelt `js/regie.js` de scène). `S.scenario.demo` laat het eindscherm zeggen dat de demo daar
-  eindigt (`js/hud.js`). Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
+  het eind, `js/heer.js`, en speelt `js/regie.js` de scène). Hoe een spel begon, zet wie het begint erbij (stap 2b): de
+  demo is `T.demoLevel()` (`js/einde.js`: het demojaar met `demo: true`), en dan laat `S.scenario.demo` het eindscherm
+  zeggen dat de demo daar eindigt (`js/hud.js`); een hoofdstuk is `T.hoofdstukLevel(id)` (`js/campagne.js`), en dan zegt
+  `S.scenario.hoofdstuk` welk. Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
   Het getal van de overval en zijn dagen staan nu in het level, niet meer in de werkbank (die houdt `vooraf` en
   `voorDonker`, `T.ROVERS_INSTELLINGEN.aangekondigd`). Nog niet: `bouw` als gevolg (iets open of dicht midden in een
   level), en `npm run teksten` voor de zinnen van een level (het demojaar heeft er geen).
+
+### js/campagne.js: de campagne
+
+- `js/campagne.js` (vraag 187, stap 2b, 24 okt; het ontwerp in `scenario.md`, 6; Marcel: hoofdstuk 1 "Op het
+  campagne-eiland, 5×5", en voor het eiland "Kies jij er voorlopig een"): **de regels van de campagne**, zonder scherm en
+  getoetst (`test/campagne.test.cjs`). De campagne zelf staat in `levels/campagne.js` (`T.CAMPAGNE`): één eiland (`eiland:
+  { zaad: 5 }`, waar Millcombe het verst van het kasteel ligt), en per hoofdstuk een `id`, een `titel` (een zin uit
+  gegevens: `T.tGegevens`, en `npm run teksten` leest hem daar), een `level` (`T.LEVELS`), een `plek` en een `rand`.
+  `T.hoofdstukLevel(id)` maakt het level waarmee het hoofdstuk begint: het level met het eiland, de plek en de rand erover,
+  en `hoofdstuk: id`, zodat `S.scenario.hoofdstuk` zegt dat het een hoofdstuk is (zoals `T.demoLevel`, `js/einde.js`,
+  `demo: true` zet: hoe een spel begon, zegt niet het level). Wat af is, blijft op deze computer (`T.campagneAf`, onder
+  `<OPSLAG_SLEUTEL>.campagne`, zoals de beste punten), niet in `S`. `T.hoofdstukOpen(id)`: het eerste altijd, een volgend
+  als het hoofdstuk ervoor af is. `T.spelGewonnen(D)`: betaald (het demojaar), of een scenario dat gewonnen eindigt.
+  `T.eindVanHoofdstuk(S, D)` (vanuit het eindscherm, `js/hud.js`) zet een gewonnen hoofdstuk af en geeft `{ hoofdstuk,
+  gewonnen, volgende }`. `T.keurCampagne` keurt de campagne zoals `T.keurScenario` een level. Het scherm: *Campaign* op het
+  titelscherm (`campagneScherm` en `speelHoofdstuk` in `js/menu.js`; niet in de demo), dat een hoofdstuk begint zoals Begin
+  bij New game, met de naam van zijn plek; en op het eindscherm bij elk eind of het hoofdstuk af is.
 
 ### gereedschap/pixelart/: de beelden uit code
 

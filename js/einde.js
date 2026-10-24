@@ -56,6 +56,9 @@
     aan: false,
     steam: null,
   };
+  // Het level van de demo: het demojaar, als demo (S.scenario.demo: het eindscherm zegt dat de demo hier eindigt, met de
+  // link naar Steam, js/hud.js). Als hoofdstuk van de campagne is hetzelfde level geen demo (T.hoofdstukLevel).
+  T.demoLevel = () => ({ ...T.LEVELS.demojaar, demo: true });
 
   // ---------------------------------------------------------------------------------------------
   // Het dagboek: wat er vandaag gebeurde

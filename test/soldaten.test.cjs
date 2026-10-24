@@ -294,7 +294,7 @@ test('elk wachthuis heeft een groepsleider: van wie dienst heeft, wie het langst
 const DEMO = () => T.LEVELS.demojaar.dorpen[0];
 
 test('in de demo komt de wacht mee met de huifkar: soldaten met hun eigen stukken, in een eigen tent, zonder wachthuis', () => {
-  const S = T.proefdorp.begin(T.proefdorp.zaad, T.LEVELS.demojaar);
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.demoLevel());
   const D = S.dorp;
   const wacht = T.soldatenVan(D);
   assert.deepEqual(wacht.map((p) => p.soldaat.soort), DEMO().wacht);

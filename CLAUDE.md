@@ -128,7 +128,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 
 - **Spel en dorp:** `dorp`, `opslaan`, `menu` (het titelscherm), `instellingen`, `taal`, `naam`, `tijd`, `tik`, `dag`, `opties`, `scenario` (de
-  triggers; de levels in `levels/`), `main` (de spellus, de invoer, de camera).
+  triggers; de levels in `levels/`), `campagne`, `main` (de spellus, de invoer, de camera).
 - **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
 - **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (de tegels op
   naam), `minikaart`.

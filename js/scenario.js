@@ -24,8 +24,9 @@
 // bewerker terugschrijft (stap 2 en 4: het level als recept, en de editor).
 //
 // Een level (T.LEVELS, in levels/; stap 1b: het demojaar) is zo'n scenario, met `dorpen` erbij: per dorp wat het bij het
-// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js),
-// en `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js). Stap 2a: zijn kaart, met `eiland: { zaad }` (een
+// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js).
+// Hoe het begon, zet wie het begint erbij: `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js; T.demoLevel) of
+// `hoofdstuk` (een hoofdstuk van de campagne, js/campagne.js). Stap 2a: zijn kaart, met `eiland: { zaad }` (een
 // vast eiland), `plek` (een dorpsplek op naam) en `rand: { b, h }` (zoveel stukken om het dorp, T.randOm in js/maker.js).
 // Zonder scherm, en dus getoetst (test/scenario.test.cjs en test/rand.test.cjs).
 (function (T) {
@@ -65,7 +66,10 @@
       tellers: {},
       lot: {},
       seconde: Math.floor((S.wereldTijd || 0) / IN().elke),
+      // Hoe het spel begon (stap 2b): als de demo (T.demoLevel, js/einde.js), of als hoofdstuk van de campagne
+      // (T.hoofdstukLevel, js/campagne.js). Dat zegt niet het level zelf, want het demojaar is allebei.
       demo: !!L.demo,
+      hoofdstuk: L.hoofdstuk || null,
     };
     for (const t of S.scenario.triggers) {
       for (const v of elk(t.als)) {

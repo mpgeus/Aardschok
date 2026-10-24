@@ -562,8 +562,17 @@
     // T.weigerHeer: "met death als gevolg"), of je betaalde en hij reed weg met je waren (met de scène van het betalen, de
     // demo). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), de punten als ze geteld zijn (vraag 186:
     // één getal onder het jaarverslag, D.punten, de trigger `punten` van het demojaar), en in de demo (S.scenario.demo,
-    // levels/demojaar.js) dat ze hier eindigt, met de link naar de Steam-pagina zodra die er is (T.DEMO_INSTELLINGEN). De
-    // cinematics komen ervoor (werklijst, E, stap 4).
+    // levels/demojaar.js) dat ze hier eindigt, met de link naar de Steam-pagina zodra die er is (T.DEMO_INSTELLINGEN). In
+    // een hoofdstuk van de campagne (vraag 187, stap 2b; T.eindVanHoofdstuk, js/campagne.js) zegt het of het af is, bij elk
+    // eind. De cinematics komen ervoor (werklijst, E, stap 4).
+    const hoofdstuk = T.eindVanHoofdstuk(S, D);
+    const titel = (h) => veilig(T.tGegevens(h.titel));
+    const hoofdstukRegel = () =>
+      !hoofdstuk ? ''
+        : hoofdstuk.gewonnen
+          ? `<p class="einde-demo">${T.t('Chapter complete: {titel}.', { titel: titel(hoofdstuk.hoofdstuk) })}</p>` +
+            (hoofdstuk.volgende ? `<p>${T.t('The next chapter is open: {titel}.', { titel: titel(hoofdstuk.volgende) })}</p>` : '')
+          : `<p class="einde-demo">${T.t('Chapter failed: {titel}. You can play it again from the campaign.', { titel: titel(hoofdstuk.hoofdstuk) })}</p>`;
     const regels = () => `<ul class="einde-regels">${T.eindRegels(D).map((r) => `<li>${veilig(r)}</li>`).join('')}</ul>`;
     const punten = () => {
       const p = D.punten;
@@ -572,7 +581,7 @@
       return `<p class="einde-punten">${T.t('Score: {totaal}', { totaal: p.totaal })}</p>` +
         `<p class="einde-jaren">${T.t('{verzameld} for what your people gathered this year, {ligt} for what lay in your stores on Martinmas.', { verzameld: p.verzameld, ligt: p.ligt })}${beste}</p>`;
     };
-    const demo = () => punten() + (!(S.scenario && S.scenario.demo) ? '' : `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
+    const demo = () => punten() + hoofdstukRegel() + (!(S.scenario && S.scenario.demo) ? '' : `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
       (T.DEMO_INSTELLINGEN.steam ? `<p><a class="einde-wenslijst" href="${veilig(T.DEMO_INSTELLINGEN.steam)}" target="_blank" rel="noopener">${T.t('Wishlist {naam} on Steam', { naam: T.NAAM })}</a></p>` : ''));
     if (D.einde && D.einde.reden === 'leger') {
       T.ui.toonOverlay(
@@ -600,7 +609,7 @@
       const E = D.einde;
       T.ui.toonOverlay(
         E.kop ? T.tGegevens(E.kop) : E.gewonnen ? T.t('Victory') : T.t('Defeat'),
-        (E.tekst ? `<p>${veilig(T.tGegevens(E.tekst))}</p>` : '') + regels(),
+        (E.tekst ? `<p>${veilig(T.tGegevens(E.tekst))}</p>` : '') + regels() + hoofdstukRegel(),
         T.t('To the title screen'),
         () => T.naarTitelscherm(),
       );
@@ -611,7 +620,7 @@
       T.ui.toonOverlay(
         T.t('The village is empty'),
         `<p>${T.t('There are fewer than {n} people left. The lord strikes {dorp} from his book: a village without people brings in nothing.', { n: T.EINDE_INSTELLINGEN.minstensOver, dorp: veiligeNaam(D) })}</p>` +
-          `<p>${T.t('Whoever is left moves away. So do you.')}</p>` + heer,
+          `<p>${T.t('Whoever is left moves away. So do you.')}</p>` + heer + hoofdstukRegel(),
         T.t('To the title screen'),
         () => T.naarTitelscherm(),
       );
@@ -623,7 +632,7 @@
       T.ui.toonOverlay(
         T.t('Driven out'),
         `<p>${T.t('The village no longer trusted you. One evening they stood at your door, with torches.')}${waarom}</p>` +
-          `<p>${T.t('The lord appoints a new commander. Whether the village trusts that one, you will never hear: you are already over the hill.')}</p>` + heer,
+          `<p>${T.t('The lord appoints a new commander. Whether the village trusts that one, you will never hear: you are already over the hill.')}</p>` + heer + hoofdstukRegel(),
         T.t('To the title screen'),
         () => T.naarTitelscherm(),
       );
@@ -636,7 +645,7 @@
     T.ui.toonOverlay(
       T.t('You lost your office'),
       ontslag +
-        `<p>${T.t('You are an ordinary villager again, and your neighbours remember exactly what you did.')}</p>` + heer,
+        `<p>${T.t('You are an ordinary villager again, and your neighbours remember exactly what you did.')}</p>` + heer + hoofdstukRegel(),
       T.t('To the title screen'), // daar begin je opnieuw, of laad je een bewaard spel (js/menu.js)
       () => T.naarTitelscherm(),
     );

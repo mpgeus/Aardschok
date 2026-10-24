@@ -255,6 +255,17 @@ speelt erna precies hetzelfde jaar als ervoor, en draait sinds 1b ook in de clou
 'verhalen' je speelt steeds chapters die je uiteindelijk naar de finale brengen. Denk aan levels op een map Knights and
 merchants, dungeon keeper level select etc.").
 
+- **Stap 2b, gebouwd op 24 okt** (Marcel: hoofdstuk 1 "Op het campagne-eiland, 5×5", en voor het eiland "Kies jij er
+  voorlopig een"; `code.md` bij `js/campagne.js`): *Campaign* op het titelscherm (niet in de demo), eerst als rij
+  hoofdstukken: af met een vinkje, het volgende open,
+  de rest op slot, en wat af is blijft op je computer. Het eiland staat één keer, bij de campagne (`levels/campagne.js`),
+  en elk hoofdstuk noemt zijn level, zijn dorpsplek en zijn rand; hoofdstuk 1 is het demojaar op het campagne-eiland, met
+  een rand van 5 bij 5 stukken. Of een spel de demo is of een hoofdstuk, zegt hoe het begon, niet het level: als hoofdstuk
+  zegt het eindscherm of het af is (betalen op Sint-Maarten is gewonnen; zijn leger, een leeg dorp of weggejaagd
+  verloren). Claude koos eiland 5: daar ligt Millcombe het verst van het kasteel (1721 tegels), dus hoofdstuk 1 begint
+  aan het verre eind; bij Oldland ligt een roverskamp op 190 tegels (voor 2c). Een hoofdstuk heet naar zijn plek, en
+  speelt met de spelregels die de browser het laatst koos, zoals New game. De moeilijkheid komt met de AI-spelers (8), en
+  het land als keuzescherm daarna (eerst een proefplaat).
 - **Het land is het keuzescherm**, zoals de kaart van Knights and Merchants en het land van Dungeon Keeper: één gemaakt
   eiland (een vast zaad, bijgewerkt in de editor), groot getekend, met een vaandel op de plek van elk hoofdstuk. Een
   hoofdstuk dat af is, krijgt jouw kleur, en het volgende gaat open; zo zie je het verhaal over het land naar het
@@ -368,9 +379,9 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
    `scene` en de aangekondigde overval; `bouw` komt als een level iets midden in het spel opent.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm. In stukken
    (Marcel, 24 okt: "Stap 2a: kaart en rand"): **2a, de kaart, gebouwd op 24 okt** (1, "De rand"; `code.md` bij
-   `js/scenario.js`): een vast eiland, een plek op naam en de rand; **2b**, *Campaign* op het titelscherm, eerst als rij
-   hoofdstukken met het demojaar als hoofdstuk 1, en het land met vaandels daarna (eerst een proefplaat); **2c**, het
-   eerste echte hoofdstuk, het rovershol (werklijst K).
+   `js/scenario.js`): een vast eiland, een plek op naam en de rand; **2b, gebouwd op 24 okt** (6; `code.md` bij
+   `js/campagne.js`), *Campaign* op het titelscherm als rij hoofdstukken met het demojaar als hoofdstuk 1, en het land met
+   vaandels daarna (eerst een proefplaat); **2c**, het eerste echte hoofdstuk, het rovershol (werklijst K).
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.
 4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de

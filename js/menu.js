@@ -6,7 +6,8 @@
 // en Quit in de Steam-versie), over een donker verloop, en rechts glijdt de camera over het land dat achter het scherm
 // wacht (js/main.js, T.titelCamera). Een vaantje staat bij de keuze die je hebt: de muis en de pijltjes kiezen hetzelfde,
 // Enter neemt hem. New game is een eigen scherm op die plek: de naam van je dorp, het land (zijn nummer en het eiland),
-// en de spelregels, die daar vastliggen voor het hele spel (js/opties.js). Load en Credits openen ernaast op papier.
+// en de spelregels, die daar vastliggen voor het hele spel (js/opties.js). Campaign ook (vraag 187, stap 2b; niet in de
+// demo): de hoofdstukken op een rij (js/campagne.js). Load en Credits openen ernaast op papier.
 // In het spel opent Esc, of de knop Menu, het menu op papier: Resume, Save, Load, Settings, Game rules (alleen lezen),
 // Photo mode, To the title screen, en Quit. Settings (js/instellingen.js) en de spelregels (js/hud.js) zijn vensters die
 // erbovenop opengaan; dicht is weer het menu. Het titelscherm en het menu zetten de tijd stil ('titel' en 'menu'). De
@@ -28,6 +29,8 @@
   let laadt = null;
   // Bij New game eerst de naam van je dorp (Marcel, 29 sep, werklijst vraag 60): het voorstel dat in het veld staat.
   let naamVoorstel = null;
+  // Of de hoofdstukken van de campagne er staan (Campaign).
+  let campagne = false;
   // Met welke spelregels het land achter het scherm gemaakt is: kies je bij New game andere, dan maakt Begin het opnieuw
   // (de hoogte maakt een ander land).
   let landRegels = null;
@@ -90,6 +93,7 @@
       const nieuwste = spellen.find((s) => !s.reden);
       return (
         (nieuwste ? knop('verder', T.t('Continue'), { uitleg: beschrijf(nieuwste.kop), hoofd: true }) : '') +
+        (T.DEMO_INSTELLINGEN.aan ? '' : knop('campagne', T.t('Campaign'))) +
         knop('nieuw', T.t('New game'), { hoofd: !nieuwste }) +
         (spellen.length ? knop('laden', T.t('Load'), { open: lijst === 'laden' }) : '') +
         knop('instellingen', T.t('Settings')) +
@@ -156,6 +160,19 @@
     );
   }
 
+  // Campaign (vraag 187, stap 2b; js/campagne.js): de hoofdstukken op een rij. Wat af is, zegt het; wat nog op slot is,
+  // zegt waarom.
+  function campagneScherm() {
+    const af = T.campagneAf();
+    const rij = T.CAMPAGNE.hoofdstukken.map((h, i) =>
+      knop('hoofdstuk', T.t('Chapter {n}: {titel}', { n: i + 1, titel: veilig(T.tGegevens(h.titel)) }), {
+        plek: h.id,
+        uitleg: af[h.id] ? T.t('Complete') : '',
+        uit: T.hoofdstukOpen(h.id) ? null : T.t('Finish chapter {n} first.', { n: i }),
+      }));
+    return `<p class="titel-kop">${T.t('Campaign')}</p>` + rij.join('') + knop('terug', T.t('Back'));
+  }
+
   function inhoud(S) {
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
     const vraagje = () => `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
@@ -165,6 +182,7 @@
       if (laadt) links = laden();
       else if (vraag) links = vraagje();
       else if (naamVoorstel != null) links = nieuwSpelScherm(S);
+      else if (campagne) links = campagneScherm();
       else links = hoofdKeuzes(S);
       // Load en Credits liggen op papier naast de keuzes.
       const naast = lijst
@@ -297,6 +315,7 @@
     vraag = null;
     melding = null;
     naamVoorstel = null;
+    campagne = false;
     document.body.classList.remove('titelscherm');
     $('menu-knop').classList.remove('actief');
     toon(S);
@@ -351,6 +370,17 @@
     T.ui.toonBrief(S.dorp, 'benoeming'); // een nieuw spel begint met de brief van de heer (js/brieven.js)
   }
 
+  // Een hoofdstuk beginnen (js/campagne.js): een nieuw spel met zijn level (op het eiland van de campagne, op zijn plek,
+  // met zijn rand), het dorp met de naam van zijn plek, en dan de brief van de heer, zoals Begin bij New game. Het land
+  // wordt meteen gemaakt (een seconde of zo).
+  function speelHoofdstuk(S, id) {
+    T.nieuwSpel(null, T.hoofdstukLevel(id));
+    T.houdTijdStil(S, 'titel'); // zoals het spel achter het titelscherm; sluit laat hem gaan
+    T.zetDorpsnaam(S.dorp, T.hoofdstukVan(id).plek);
+    sluit(S);
+    T.ui.toonBrief(S.dorp, 'benoeming');
+  }
+
   function laad(S, plek) {
     const r = T.laadSpel(plek); // js/main.js: een nieuw spel, en het bewaarde erover
     lijst = null;
@@ -393,6 +423,7 @@
       if (vraag) vraag = null;
       else if (lijst) lijst = null;
       else if (naamVoorstel != null) naamVoorstel = naamNu = null;
+      else if (campagne) campagne = false;
     } else if (actie === 'verder') {
       if (scherm === 'menu') return sluit(S);
       const nieuwste = T.nieuwsteSpel();
@@ -411,6 +442,21 @@
       }
     } else if (actie === 'begin') {
       return begin(S);
+    } else if (actie === 'campagne') {
+      lijst = null;
+      campagne = true;
+    } else if (actie === 'hoofdstuk') {
+      if (!T.hoofdstukOpen(plek)) return;
+      // Zoals bij New game: wat er vanzelf bewaard is, wordt straks overschreven; de eigen plekken niet.
+      if (T.opgeslagenSpellen().some((s) => s.plek === 'auto')) {
+        vraag = {
+          tekst: T.t('Start this chapter? The autosave will be overwritten. Your own slots stay.'),
+          ja: T.t('Begin'),
+          doe: () => speelHoofdstuk(S, plek),
+        };
+      } else {
+        return speelHoofdstuk(S, plek);
+      }
     } else if (actie === 'anderland') {
       naarLand(S, T.nieuwLandZaad());
     } else if (actie === 'opslaan' || actie === 'laden' || actie === 'credits') {
@@ -503,7 +549,7 @@
         return stapKeuze(ev.key === 'ArrowDown' ? 1 : -1);
       }
       if (ev.key !== 'Escape' || laadt) return;
-      if (vraag || lijst || naamVoorstel != null) doe(T.S, 'terug');
+      if (vraag || lijst || naamVoorstel != null || campagne) doe(T.S, 'terug');
       else if (scherm === 'menu') sluit(T.S);
     },
     true,

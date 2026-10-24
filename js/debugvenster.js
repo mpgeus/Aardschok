@@ -240,15 +240,12 @@
         ];
       },
       knoppen: [
-        { id: 'nieuwDemo', tekst: () => T.t('New game as the demo'), doe: (S) => nieuwSpel(S, 'demojaar') },
+        { id: 'nieuwDemo', tekst: () => T.t('New game as the demo'), doe: (S) => nieuwSpel(S, T.demoLevel()) },
         { id: 'nieuwVol', tekst: () => T.t('New game, the full game'), doe: (S) => nieuwSpel(S, null) },
         // Een kaart met een rand, om te proberen (vraag 187, stap 2a): het land van nu, met de kleinste rand (T.randMinstens,
         // js/maker.js). Dat level staat alleen hier, want het debugvenster gaat niet mee naar Steam.
         { id: 'nieuwRand', tekst: () => T.t('New game with a border (a test)'),
-          doe: (S) => {
-            T.LEVELS.proefRand = { rand: { b: T.randMinstens(), h: T.randMinstens() } };
-            return nieuwSpel(S, 'proefRand');
-          } },
+          doe: (S) => nieuwSpel(S, { rand: { b: T.randMinstens(), h: T.randMinstens() } }) },
         { id: 'slot', tekst: (S, D) => (opSlot(D) ? T.t('Demo lock on: {gebouwen}', { gebouwen: dichtNamen() }) : T.t('Demo lock off: {gebouwen}', { gebouwen: dichtNamen() })),
           // Het slot van de demo aan of uit in dit spel, om te proberen (werklijst Q, vraag 181, e; Marcel, 20 okt): in het
           // bouwmenu op slot (D.dicht, T.isDicht in js/gebouwen.js), of te bouwen.
