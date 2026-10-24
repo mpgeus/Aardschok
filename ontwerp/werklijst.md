@@ -24,6 +24,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
+- **Bezig in sessie `ccr-23644f01-k4rv4e`** (24 okt): 4b, gebouwen plat in het spel (bij N; Marcel: "A", de toets F).
+
 **Wacht op Marcel**
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
@@ -64,7 +66,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    *Defeat*).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
-Ernaast, als het past: 4b, plat in het spel (bij N); na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
+Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
 (`snelheid.md`, "Na B1 en B2"); later de world gen bijstellen (wat precies, zegt Marcel). G, naar Steam, loopt mee op het
 tijdpad van `commercieel.md`.
 
