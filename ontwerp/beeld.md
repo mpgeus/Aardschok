@@ -1942,6 +1942,21 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   (helm, kin, riem, handen, zoom, laarzen); wat in die richting verborgen is (de binnenkant van een arm), krijgt verf uit een
   andere richting van vel 01; en het licht zit in de verf, dus die richt zich naar de richting waaruit hij komt. Het idee
   stond al in `gereedschap/ai/hybride-voorstel.md` (de projectie), toen op ons oude model.
+- *De proef met projecteren* (Marcel: "projecteer vel 01 (staan Z) op het model, met het beeld eerst naar onze render
+  gebogen, en laat zien hoe het eruitziet in Z en een paar graden gedraaid"): `gereedschap/blender/verf.cjs` buigt staan
+  naar Z van vel 01 op de HD-render (een thin-plate spline door 26 vaste punten, afgelezen op een raster: helm, ogen, neus,
+  kin, kraag, schouders, vuisten, gesp, riem, zoom, laarzen, speer), naar `render/verf-Z.png` (`uit/blender/verf-buigen.png`
+  om het buigen te beoordelen). `speerman_hd.py -- <map> verf` legt het als textuur op het model, met een UV-kaart uit de
+  camera, onbelicht; de speer houdt zijn eigen materiaal (het buigen trok er paarse strepen en een kromme schacht), het haar
+  valt weg (de baard zit in de verf). Uitkomst (`uit/blender/verf-hoeken.png`): recht van voren is de render vel 01 in de
+  vorm van ons model; gedraaid (20 en 45 graden) beweegt de verf mee en blijven de wapenrok, de riem, het gezicht en de helm
+  kloppen, maar op de zijkanten die de camera van voren schuin ziet (de rand van de helm, de zijkant van de armen en de
+  laarzen) rekt de verf uit tot strepen. De baard wordt groter dan op de plaat (zijn baard en kraag vullen onze grotere
+  kraag).
+- *Uitvouwen en bakken* (Marcel: "kunnen we de uv niet unwrappen en in blender inbrengen als mesh"): ja, dat is de volgende
+  stap. Het model krijgt een echte UV-kaart (uitgevouwen), en de verf wordt in een textuur gebakken die bij de mesh hoort.
+  Dan kan elke richting van vel 01 erin, elk op de plekken die hij het best ziet (naar de hoek en of hij ze ziet), en draagt
+  elk loop- en aanvalsbeeld dezelfde textuur; de textuur is ook met de hand bij te werken.
 
 ## Open
 

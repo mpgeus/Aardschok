@@ -7,7 +7,7 @@
 # De man staat stil, dus de houding wordt in de mesh gebakken; de camera staat recht voor hem, 15 graden boven de grond,
 # zoals de generator tekent (speerman.py, 'camera').
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel] [stuur]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel] [stuur] [verf]
 # (zonder --factory-startup: dan laadt Blender de extensie MPFB niet)
 import bpy
 import bmesh
@@ -16,6 +16,7 @@ import os
 import sys
 from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
+from bpy_extras.object_utils import world_to_camera_view
 
 from bl_ext.user_default.mpfb.services.humanservice import HumanService
 from bl_ext.user_default.mpfb.services.targetservice import TargetService
@@ -27,6 +28,7 @@ UIT = os.path.abspath(ARGS[0] if ARGS else os.path.join(HIER, '..', 'pixelart', 
 BLEND = 'blend' in ARGS[1:]
 SPEL = 'spel' in ARGS[1:]
 STUUR = 'stuur' in ARGS[1:]
+VERF = 'verf' in ARGS[1:]
 
 INSTELLINGEN = {
     'res': (1200, 1950),
@@ -1147,6 +1149,7 @@ def speer(rig, M, kruin):
     def cil(naam, z0, z1, r, mat, seg=24):
         bpy.ops.mesh.primitive_cylinder_add(vertices=seg, radius=r, depth=z1 - z0, location=(x, y, (z0 + z1) / 2))
         o = bpy.context.active_object
+        o.name = 'speer.' + naam
         zacht(o)
         o.data.materials.append(mat)
         delen.append(o)
@@ -1157,6 +1160,7 @@ def speer(rig, M, kruin):
     for i in range(7):  # het koord, zeven slagen
         bpy.ops.mesh.primitive_torus_add(major_radius=0.0185 * ov, minor_radius=0.004 * ov, location=(x, y, z_koker + 0.008 + i * (z_blad - z_koker - 0.014) / 6))
         o = bpy.context.active_object
+        o.name = 'speer.koord'
         zacht(o)
         o.data.materials.append(M['koord'])
         delen.append(o)
@@ -1173,7 +1177,7 @@ def speer(rig, M, kruin):
         for j in range(4):
             a = i * 4 + j
             fs.append((a, i * 4 + (j + 1) % 4, (i + 1) * 4 + (j + 1) % 4, (i + 1) * 4 + j))
-    delen.append(maak('blad', vs, fs, mat=M['blad']))
+    delen.append(maak('speer.blad', vs, fs, mat=M['blad']))
     delen[-1].data.polygons.foreach_set('use_smooth', [False] * len(delen[-1].data.polygons))
     return delen
 
@@ -1314,9 +1318,55 @@ def stuurbeelden(sc):
     bpy.ops.render.render(write_still=True)
 
 
+def projecteer(sc, hoeken=(0, 20, -20, 45)):
+    """De referentie als verf op het model (verf.cjs maakt verf-Z.png: vel 01, gebogen tot het op deze render valt): een
+    UV-kaart uit de camera, het beeld als textuur, onbelicht (het licht zit in de verf). De speer houdt zijn eigen
+    materiaal, het haar valt weg (de baard zit in de verf). Dan gerenderd recht van voren en een paar graden gedraaid
+    (de camera om de man heen), naar verf-Z-<hoek>.png."""
+    cam = sc.camera
+    beeld = bpy.data.images.load(os.path.join(UIT, 'verf-Z.png'))
+    k = Knopen('verf')
+    k.nt.nodes.remove(k.bsdf)
+    uv = k.n('ShaderNodeUVMap', uv_map='projectie')
+    tex = k.n('ShaderNodeTexImage', image=beeld, interpolation='Linear', extension='EXTEND')
+    k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
+    em = k.n('ShaderNodeEmission')
+    k.nt.links.new(tex.outputs['Color'], em.inputs['Color'])
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    bpy.context.view_layer.update()
+    for ob in list(sc.objects):
+        if ob.type != 'MESH' or ob.name.startswith('speer.') or ob.name == 'grond':
+            continue
+        for md in ob.modifiers:
+            if md.type == 'PARTICLE_SYSTEM':
+                md.show_render = False
+        me = ob.data
+        laag = me.uv_layers.get('projectie') or me.uv_layers.new(name='projectie')
+        mw = ob.matrix_world
+        plek = [world_to_camera_view(sc, cam, mw @ v.co) for v in me.vertices]
+        for lp in me.loops:
+            q = plek[lp.vertex_index]
+            laag.data[lp.index].uv = (q.x, q.y)
+        for i in range(len(me.materials)):
+            me.materials[i] = k.m
+        if not len(me.materials):
+            me.materials.append(k.m)
+    sc.render.use_freestyle = False
+    sc.cycles.samples = 48
+    m0 = cam.matrix_world.copy()
+    for h in hoeken:
+        cam.matrix_world = Matrix.Rotation(math.radians(h), 4, 'Z') @ m0
+        sc.render.filepath = os.path.join(UIT, f'verf-Z-{h}.png')
+        bpy.ops.render.render(write_still=True)
+    cam.matrix_world = m0
+
+
 def main():
     os.makedirs(UIT, exist_ok=True)
     sc = bouw()
+    if VERF:
+        projecteer(sc)
+        return
     if BLEND:
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(UIT, 'speerman-hd.blend'))
     sc.render.filepath = os.path.join(UIT, 'staan-Z-spel-mens.png' if SPEL else 'staan-Z-hd-mens.png')
