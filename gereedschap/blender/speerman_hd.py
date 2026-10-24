@@ -32,7 +32,7 @@ VERF = 'verf' in ARGS[1:]
 KIJK = 'kijk' in ARGS[1:]
 
 # de richtingen van vel 01 als draaiing van de camera om de man (Z recht van voren, ZW: hij kijkt naar linksonder)
-RICHTINGEN = {'Z': 0, 'ZW': 45, 'W': 90, 'ZO': -45, 'O': -90}
+RICHTINGEN = {'Z': 0, 'ZW': 45, 'W': 90, 'NW': 135, 'N': 180, 'NO': -135, 'O': -90, 'ZO': -45}
 
 INSTELLINGEN = {
     'res': (1200, 1950),
@@ -1613,7 +1613,9 @@ def bouw():
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
         'malien': mat_malien(),
-        'helm': mat_staal('helm', '#6c6a74', 0.24),  # donkerder (Marcel: "Ik vind de helm ook nog te licht")
+        # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de
+        # generator: ertussenin
+        'helm': mat_staal('helm', '#8c8a94', 0.24),
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
         'riem': mat_leer('riem', '#793a28', '#3a160c'),

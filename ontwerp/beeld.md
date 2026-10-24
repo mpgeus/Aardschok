@@ -2183,6 +2183,34 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   eigen as en zweefde de voorste vuist halverwege de steek 6 cm boven de schacht). Isometrisch: `eigen.py --
   <map> ... iso` zet de camera op 30 graden zoals de wereld (in plaats van de 15 van de generator), naar
   `eigen-<r>-iso-...png`; van bovenaf is een speer die naar de kijker wijst twee keer zo lang in beeld.
+- *Polsen, armstukken en de rok als stof* (Marcel: "Die handen maken toch nog een rare knik", "Laten we de kleding
+  fixen, de helm en de volledige speerman renderen daarna", en bij de steek in ZW "Arm nogsteeds niet"). De knik: met
+  de kleinste draai die de vuist langs de speer legt, knikte de hand haaks op de pols, want de onderarm liep bij de
+  bovenste hand bijna evenwijdig aan de speer. Nu krijgt de IK van elke arm een richtpunt voor de elleboog (van 24
+  standen die waarin de pols het minst knikt, zonder dat de elleboog door het lijf gaat; `kies_ellebogen`), blijft de
+  hand zo veel mogelijk in het verlengde van de onderarm (`pols_langs`), en zit de wring om de onderarm voor 80 procent
+  in de twee botten van de onderarm (de IK laat die draai staan) in plaats van in de pols, waar de huid ging draaien
+  als een snoepwikkel. Bij de wacht van de steek knikt de rechterpols nog zo'n 30 graden, zoals bij een echte wacht.
+  Het armstuk volgt alleen de onderarm (het scheurde in latten als de pols draaide), en de kap van de handschoen ook,
+  met alleen het smalle eind bij de pols mee (hij rekte uit tot een trechter). De rok is geen deel van de ene mesh
+  meer: hij hangt aan de riem en valt bij elk beeld met de stofsimulatie van Blender tegen het bewegende lijf (bij het
+  lopen drie rondes, zodat de stof op gang is; `rok_als_stof`, `met_stof`), stugger dan bij het hangen (soepel
+  verfrommelde de pand bij elke stap). Alle patronen rekenen nu op de plek van elk punt toen het model af was (het
+  kenmerk `oorsprong`), anders schuiven de banen en het weefsel over de stof. De helm lichter (#8c8a94): op spelmaat
+  was hij zwart naast het zilver van de generator. En acht richtingen: NW, N en NO erbij.
+- *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
+  wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
+  steken meekomen; wat anders is:
+  - *Het harnas*: een borstkuras van ijzer met een middenrib en klinknagels, een rugplaat, een kraag van ijzer om de
+    hals in plaats van de maliënkap, en onder het kuras twee rijen dijplaten over de dijen. De mouwen blijven het
+    gewatteerde wambuis, maar blauw en geel gestreept, zodat de kleuren van het dorp blijven lezen; onder de dijplaten
+    nog een stuk van de gevierendeelde rok.
+  - *De helm*: een stormhoed (morion) met een kam en een omgebogen rand, zodat hij van de speerman te onderscheiden is.
+  - *De piek*: twee keer zo lang als de man (echt was hij drie keer zo lang, maar dan past hij niet op een tegel), een
+    schacht van es, een smal blad zonder koord, met twee ijzeren strips langs de schacht.
+  - *Dragen en steken*: bij het lopen op de schouder, de punt schuin omhoog naar achteren; de steek met beide handen op
+    borsthoogte, de piek vlak naar voren.
+  - *Het gezicht*: een jongere man met een korte baard, zodat ze in een groep uit elkaar te houden zijn.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

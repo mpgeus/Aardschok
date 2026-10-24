@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import speerman_hd as sh  # noqa: E402
 
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Matrix, Quaternion, Vector  # noqa: E402
 from mathutils.kdtree import KDTree  # noqa: E402
 from bpy_extras.object_utils import world_to_camera_view  # noqa: E402
 
@@ -59,7 +59,7 @@ def aan_de_heup(ob, z_knie):
 # Per deel welke botten het volgt (Marcel: "Moeten we het model een skelet geven? Zodat we goed kunnen animeren"): het
 # skelet is dat van MakeHuman, maar de kleren nemen de gewichten van het dichtstbijzijnde punt van het lijf, en de omslag
 # van de laars boog zo met de knie mee. De laars volgt alleen het onderbeen en de voet, de helm zit stijf aan het hoofd.
-LAARS, HELM, ROK, LIJFJE = 1, 2, 3, 4
+LAARS, HELM, ROK, LIJFJE, ARMSTUK, KAP = 1, 2, 3, 4, 5, 6
 
 
 def deel_van(ob):
@@ -69,9 +69,80 @@ def deel_van(ob):
         return ROK
     if ob.name.startswith('wapenrok-lijf'):
         return LIJFJE
+    if ob.name.startswith(('armstuk', 'armrand', 'nagel')):
+        return ARMSTUK
+    if ob.name.startswith('kap.'):
+        return KAP
     if any(m and m.name.startswith('helm') for m in ob.data.materials):
         return HELM
     return 0
+
+
+def oorsprong_vast(sc):
+    """Elk punt onthoudt waar het zat toen het model af was (het kenmerk 'oorsprong', in de ruimte van zijn eigen object):
+    de materialen rekenen hun patronen daarop in plaats van op de plek nu (eigen.py, plek_vast). Anders schuiven de
+    banen van de wapenrok en het weefsel over de stof als die beweegt."""
+    for ob in sc.objects:
+        if ob.type == 'MESH' and 'oorsprong' not in ob.data.attributes:
+            a = ob.data.attributes.new('oorsprong', 'FLOAT_VECTOR', 'POINT')
+            a.data.foreach_set('vector', [c for v in ob.data.vertices for c in v.co])
+
+
+def rok_als_stof(sc, rig, lijf):
+    """De rok van de wapenrok als stof bij elk beeld (Marcel: "Laten we de kleding fixen"; hij hing als een stijve plaat
+    aan het bekken en de dijen): vast aan de riem met het skelet, en eronder de stofsimulatie van Blender, die tegen het
+    bewegende lijf valt (met_stof in eigen.py). De dikte komt na de stof."""
+    rok = bpy.data.objects['wapenrok-rok']
+    rok.modifiers.clear()
+    rok.vertex_groups.clear()
+    me = rok.data
+    zs = [v.co.z for v in me.vertices]
+    z_top, z_zoom = max(zs), min(zs)
+    glad = lambda t: (lambda u: u * u * (3 - 2 * u))(max(0.0, min(1.0, t)))
+    z_heup = (rig.matrix_world @ rig.data.bones['upperleg01.L'].head_local).z
+    vast = rok.vertex_groups.new(name='vast')
+    groep = {n: rok.vertex_groups.new(name=n) for n in ('spine05', 'upperleg01.L', 'upperleg01.R')}
+    for v in me.vertices:
+        t = (z_top + 0.01 - v.co.z) / (z_top + 0.01 - z_zoom)
+        if t < 0.2:
+            vast.add([v.index], 1.0 if t < 0.1 else (0.2 - t) / 0.1, 'REPLACE')
+        mee = 0.8 * glad((z_heup - v.co.z) / max(1e-3, 0.6 * (z_heup - z_zoom)))
+        wl, wr = mee * glad((v.co.x + 0.04) / 0.08), mee * glad((-v.co.x + 0.04) / 0.08)
+        groep['spine05'].add([v.index], 1.0 - wl - wr, 'REPLACE')
+        groep['upperleg01.L'].add([v.index], wl, 'REPLACE')
+        groep['upperleg01.R'].add([v.index], wr, 'REPLACE')
+    md = rok.modifiers.new('skelet', 'ARMATURE')
+    md.object = rig
+    nieuwe_stof(rok)
+    dik = rok.modifiers.new('dik', 'SOLIDIFY')
+    dik.thickness = 0.005
+    dik.offset = 1
+    # het lijf als botser, met zijn skelet (de botser komt direct na het skelet, voor het gladmaken en het haar)
+    if 'botsen' not in lijf.modifiers:
+        lijf.modifiers.new('botsen', 'COLLISION')
+        lijf.modifiers.move(lijf.modifiers.find('botsen'), lijf.modifiers.find('skelet') + 1)
+    lijf.collision.thickness_outer = 0.01
+    return rok
+
+
+def nieuwe_stof(rok):
+    """Een verse stofsimulatie op de rok (een nieuwe animatie begint niet met wat de vorige onthield), net na het
+    skelet: zoals in hangen (speerman_hd.py), maar met tijd voor duizenden beelden."""
+    if 'stof' in rok.modifiers:
+        rok.modifiers.remove(rok.modifiers['stof'])
+    cm = rok.modifiers.new('stof', 'CLOTH')
+    rok.modifiers.move(rok.modifiers.find('stof'), rok.modifiers.find('skelet') + 1)
+    cs = cm.settings
+    cs.quality = 12
+    cs.mass = 0.15
+    cs.tension_stiffness = cs.compression_stiffness = 15
+    cs.shear_stiffness = 8
+    cs.bending_stiffness = 4  # stugger dan bij het hangen: soepel verfrommelde de pand bij elke stap
+    cs.air_damping = 3
+    cs.vertex_group_mass = 'vast'
+    cm.collision_settings.distance_min = 0.006
+    cm.point_cache.frame_start = 1
+    cm.point_cache.frame_end = 100000
 
 
 def een_mesh(sc, zonder=()):
@@ -291,6 +362,31 @@ def aan_het_skelet(sc, pop, rig):
         if deel[v.index] == HELM:
             groepen['head'].add([v.index], 1.0, 'REPLACE')
             continue
+        if deel[v.index] == ARMSTUK:
+            # het armstuk alleen aan de onderarm, langs zijn lengte van het ene bot naar het andere: met de gewichten van het
+            # dichtstbijzijnde punt volgde het bij de pols de hand, en scheurde het leer in latten als de pols draaide
+            k = 'L' if v.co.x > 0 else 'R'
+            a = rig.data.bones[f'lowerarm01.{k}'].head_local
+            b = rig.data.bones[f'lowerarm02.{k}'].tail_local
+            t = glad(((v.co - a).dot(b - a) / (b - a).length_squared - 0.3) / 0.4)
+            for naam, w in ((f'lowerarm01.{k}', 1.0 - t), (f'lowerarm02.{k}', t)):
+                if naam not in groepen:
+                    groepen[naam] = pop.vertex_groups.new(name=naam)
+                groepen[naam].add([v.index], w, 'REPLACE')
+            continue
+        if deel[v.index] == KAP:
+            # de kap van de handschoen op de onderarm, en alleen het smalle eind bij de pols met de hand mee: met de
+            # gewichten van het dichtstbijzijnde punt rekte hij uit tot een trechter als de pols knikte (Marcel: "Arm
+            # nogsteeds niet")
+            k = 'L' if v.co.x > 0 else 'R'
+            a = rig.data.bones[f'lowerarm02.{k}'].head_local
+            w = rig.data.bones[f'wrist.{k}'].head_local
+            t = glad(((v.co - w).dot((w - a).normalized()) + 0.015) / 0.025)
+            for naam, gw in ((f'lowerarm02.{k}', 1.0 - t), (f'wrist.{k}', t)):
+                if naam not in groepen:
+                    groepen[naam] = pop.vertex_groups.new(name=naam)
+                groepen[naam].add([v.index], gw, 'REPLACE')
+            continue
         laars = deel[v.index] == LAARS
         houd = 1.0
         if deel[v.index] == LIJFJE:
@@ -398,6 +494,76 @@ def speer_vast(rig):
     _drager['half'] = (holtes['L'] - holtes['R']).length / 2
 
 
+def pols_langs(rig, k, langs):
+    """De draai van de pols (in de ruimte van het skelet) die de as van de vuist (dwars over de knokkels) langs de speer
+    legt, met de hand zo veel mogelijk in het verlengde van de onderarm (Marcel: "Die handen maken toch nog een rare knik":
+    met de kleinste draai die de as goed legt, knikte de hand haaks op de pols). Van de twee greepen (de duim naar de punt
+    of naar de voet) die met de minste knik. Geeft (draai, knik, wring): de knik opzij en de wring om de onderarm, in
+    radialen; en de wring met teken, om de richting van de onderarm."""
+    pb = rig.pose.bones
+    as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
+    voor = (pb[f'wrist.{k}'].head - pb[f'lowerarm01.{k}'].head).normalized()
+    hand = pb[f'finger3-1.{k}'].head - pb[f'wrist.{k}'].head
+    hand = (hand - as_ * hand.dot(as_)).normalized()
+    B0 = Matrix((as_, hand, as_.cross(hand))).transposed()
+    beste = None
+    for doel in (langs, -langs):
+        hand_doel = voor - doel * voor.dot(doel)
+        if hand_doel.length < 1e-3:
+            hand_doel = hand - doel * hand.dot(doel)
+        hand_doel.normalize()
+        B1 = Matrix((doel, hand_doel, doel.cross(hand_doel))).transposed()
+        R = B1 @ B0.transposed()
+        q = R.to_quaternion()
+        v = voor * Vector((q.x, q.y, q.z)).dot(voor)
+        wring = Quaternion((q.w, v.x, v.y, v.z))
+        wring = wring.normalized() if wring.magnitude > 1e-6 else Quaternion()
+        knik = (q @ wring.inverted()).angle
+        w = min(wring.angle, 2 * math.pi - wring.angle)
+        if beste is None or knik + 0.3 * w < beste[1] + 0.3 * beste[2]:
+            hoek = 2 * math.atan2(Vector((wring.x, wring.y, wring.z)).dot(voor), wring.w)
+            beste = (R, knik, w, math.atan2(math.sin(hoek), math.cos(hoek)))
+    return beste
+
+
+def zet_pols(rig, k, R):
+    pols = rig.pose.bones[f'wrist.{k}']
+    h = pols.head.copy()
+    pols.matrix = Matrix.Translation(h) @ R.to_4x4() @ Matrix.Translation(-h) @ pols.matrix
+
+
+def kies_ellebogen(rig, langs):
+    """De ellebogen, met een richtpunt voor de IK van elke arm: van 24 standen rond de lijn van schouder naar hand die
+    waarin de pols het minst hoeft te knikken (zie pols_langs), zonder dat de elleboog door het lijf gaat, boven de
+    schouder komt of ver achter de rug. Een mens houdt een speer zo: de elleboog naar buiten, de onderarm dwars op de
+    schacht."""
+    pb = rig.pose.bones
+    M = rig.matrix_world
+    langs_s = (M.inverted().to_3x3() @ langs).normalized()
+    for k, zij in (('R', -1), ('L', 1)):
+        pool = bpy.data.objects[f'elleboog.{k}']
+        S = M @ pb[f'upperarm01.{k}'].head
+        H = bpy.data.objects[f'hand.{k}'].matrix_world.translation
+        a = (H - S).normalized()
+        u = (Vector((0, 0, -1)) - a * a.dot(Vector((0, 0, -1)))).normalized()
+        v = a.cross(u)
+        beste = None
+        for i in range(24):
+            th = 2 * math.pi * i / 24
+            pool.matrix_world = Matrix.Translation((S + H) / 2 + (u * math.cos(th) + v * math.sin(th)) * 0.6)
+            bpy.context.view_layer.update()
+            E = M @ pb[f'lowerarm01.{k}'].head
+            _, knik, wring, _ = pols_langs(rig, k, langs_s)
+            straf = (max(0.0, (S.x - E.x) * zij + 0.02) * 20 + max(0.0, E.z - S.z) * 10
+                     + max(0.0, E.y - S.y - 0.12) * 10)
+            kosten = knik + 0.3 * wring + straf
+            if beste is None or kosten < beste[0]:
+                beste = (kosten, pool.matrix_world.copy(), knik, wring)
+        pool.matrix_world = beste[1]
+        bpy.context.view_layer.update()
+        print('ELLEBOOG', k, 'knik', round(math.degrees(beste[2])), 'wring', round(math.degrees(beste[3])), 'graden')
+
+
 def handen_op_speer(rig, plekken, langs, n=3):
     """De vuisten om de speer, in elk beeld: de pols draait tot de as van de vuist langs de speer ligt, en het doel van de
     hand schuift tot de holte van de vuist op zijn plek op de schacht zit. (De IK zet de pols op het doel, niet de holte;
@@ -407,12 +573,14 @@ def handen_op_speer(rig, plekken, langs, n=3):
     langs = (rig.matrix_world.inverted().to_3x3() @ langs).normalized()  # in de ruimte van het skelet
     for _ in range(n):
         for k in ('R', 'L'):
-            as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
-            doel = langs if as_.dot(langs) > 0 else -langs
-            pols = pb[f'wrist.{k}']
-            h = pols.head.copy()
-            pols.matrix = (Matrix.Translation(h) @ as_.rotation_difference(doel).to_matrix().to_4x4() @ Matrix.Translation(-h)
-                           @ pols.matrix)
+            # de wring om de onderarm verdeeld over de twee botten van de onderarm (de IK laat die draai staan): in de pols
+            # alleen draaide de huid daar als een snoepwikkel
+            wring = pols_langs(rig, k, langs)[3]
+            for bot in (f'lowerarm01.{k}', f'lowerarm02.{k}'):
+                pb[bot].rotation_mode = 'QUATERNION'
+                pb[bot].rotation_quaternion = pb[bot].rotation_quaternion @ Quaternion((0, 1, 0), 0.4 * wring)
+            bpy.context.view_layer.update()
+            zet_pols(rig, k, pols_langs(rig, k, langs)[0])
             bpy.context.view_layer.update()
         for k in ('R', 'L'):
             leeg = bpy.data.objects[f'hand.{k}']
@@ -452,8 +620,17 @@ WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, voor
 WACHT_ZAKKEN = 0.05  # door de knieën (meter)
 
 
+def tussen(rij, i):
+    """Een rij getallen op plek i, ook tussen twee beelden in (de stof rekent in tussenstappen)."""
+    i = max(0.0, min(len(rij) - 1.0, i))
+    a = int(math.floor(i))
+    b = min(a + 1, len(rij) - 1)
+    return rij[a] + (rij[b] - rij[a]) * (i - a)
+
+
 def steek(rig, i):
-    """Beeld i van de steek (STEEK); de handen houden de speer (draag_schuin met WACHT, dan speer_vast)."""
+    """Beeld i van de steek (STEEK; i mag ook tussen twee beelden in liggen); de handen houden de speer (draag_schuin met
+    WACHT, dan speer_vast)."""
     for pb in rig.pose.bones:
         pb.rotation_mode = 'QUATERNION'
         pb.rotation_quaternion = (1, 0, 0, 0)
@@ -462,7 +639,8 @@ def steek(rig, i):
         if f'pols.{k}' in rig:
             rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']
     bpy.context.view_layer.update()
-    vooruit, draaien, leun = STEEK['bekken'][i], math.radians(STEEK['draai'][i]), math.radians(STEEK['leun'][i])
+    vooruit, draaien, leun = (tussen(STEEK['bekken'], i), math.radians(tussen(STEEK['draai'], i)),
+                              math.radians(tussen(STEEK['leun'], i)))
     gier = 0.4 * draaien  # het bekken draait een beetje mee, de borst de rest
     draai(rig, 'root', gier, 'Z')
     bpy.context.view_layer.update()
@@ -471,7 +649,7 @@ def steek(rig, i):
     bpy.context.view_layer.update()
     zakken = WACHT_ZAKKEN + 0.4 * max(0.0, vooruit)
     for k in ('L', 'R'):
-        stap, til = (STEEK['stap'][i], STEEK['til'][i]) if k == 'L' else (0.0, 0.0)
+        stap, til = (tussen(STEEK['stap'], i), tussen(STEEK['til'], i)) if k == 'L' else (0.0, 0.0)
         been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier)
     for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
         draai(rig, bot, (LEUN * 0.5 + leun) * deel)
@@ -493,7 +671,8 @@ def steek(rig, i):
             ob.matrix_world = m
         _drager['los'] = {ob.name: ob.matrix_world.copy() for ob in delen}
     lijf = rig.matrix_world.to_3x3() @ Vector((0, -vooruit, 0)) - Vector((0, 0, zakken - WACHT_ZAKKEN))
-    mee = {k: _drager['richting'] * STEEK['speer'][i] * (VOORSTE_HAND if k == 'L' else 1.0) + lijf for k in ('R', 'L')}
+    mee = {k: _drager['richting'] * tussen(STEEK['speer'], i) * (VOORSTE_HAND if k == 'L' else 1.0) + lijf
+           for k in ('R', 'L')}
     for naam, m0 in _drager['los'].items():
         bpy.data.objects[naam].matrix_world = Matrix.Translation(mee['L' if naam == 'hand.L' else 'R']) @ m0
     bpy.context.view_layer.update()
@@ -677,6 +856,12 @@ def draag_schuin(sc, rig, dragen):
         c.target = leeg
         c.chain_count = 4
         c.use_tail = True
+        pool = bpy.data.objects.new(f'elleboog.{k}', None)
+        sc.collection.objects.link(pool)
+        pool.parent = rig
+        pool.parent_type = 'BONE'
+        pool.parent_bone = 'spine01'
+        c.pole_target = pool
         doelen[k] = leeg
     bpy.context.view_layer.update()
     # de IK zet de pols op het doel, maar de vuist zit verder: schuif het doel tot de vuist zelf op zijn plek komt, zodat
@@ -686,21 +871,10 @@ def draag_schuin(sc, rig, dragen):
     # draai; die draai onthoudt het skelet (rig['pols.k']), want loop zet elk beeld alle botten terug.
     vuist = lambda k: sh.holte(rig, k)  # de holte van de vuist, niet de handrug
     hoog = 'L' if dragen.get('laag', 'R') == 'R' else 'R'
-    langs = (rig.matrix_world.inverted().to_3x3() @ (plekken[hoog] - plekken['L' if hoog == 'R' else 'R'])).normalized()
-    for _ in range(6):
-        for k in ('R', 'L'):
-            pb = rig.pose.bones
-            as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
-            doel = langs if as_.dot(langs) > 0 else -langs
-            pols = pb[f'wrist.{k}']
-            h = pols.head.copy()
-            pols.matrix = (Matrix.Translation(h) @ as_.rotation_difference(doel).to_matrix().to_4x4() @ Matrix.Translation(-h)
-                           @ pols.matrix)
-            bpy.context.view_layer.update()
-        for k in ('R', 'L'):
-            mis = plekken[k] - vuist(k)
-            doelen[k].matrix_world = Matrix.Translation(doelen[k].matrix_world.translation + mis)
-        bpy.context.view_layer.update()
+    langs_w = (plekken[hoog] - plekken['L' if hoog == 'R' else 'R']).normalized()
+    kies_ellebogen(rig, langs_w)
+    handen_op_speer(rig, plekken, langs_w, n=6)
+    langs = (rig.matrix_world.inverted().to_3x3() @ langs_w).normalized()
     for k in ('R', 'L'):
         rig[f'pols.{k}'] = list(rig.pose.bones[f'wrist.{k}'].rotation_quaternion)
         pb = rig.pose.bones

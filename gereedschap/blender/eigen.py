@@ -202,15 +202,54 @@ def lichtproef():
         render(sc, f'eigen-licht-{naam}.png', sh.RICHTINGEN['Z'], lichten)
 
 
+def plek_vast():
+    """De patronen op de plek waar elk punt zat toen het model af was (het kenmerk 'oorsprong', bakken.py,
+    oorsprong_vast), niet op de plek nu: anders schuiven ze over de stof als die beweegt. Niet voor het haar (dat zijn
+    deeltjes zonder dat kenmerk)."""
+    for m in bpy.data.materials:
+        if not m.node_tree or m.name.startswith('haar'):
+            continue
+        nt = m.node_tree
+        for n in list(nt.nodes):
+            if n.type != 'TEX_COORD' or not n.outputs['Object'].links:
+                continue
+            at = nt.nodes.new('ShaderNodeAttribute')
+            at.attribute_name = 'oorsprong'
+            for link in list(n.outputs['Object'].links):
+                nt.links.new(at.outputs['Vector'], link.to_socket)
+
+
+SUB = 3  # stappen van de stof per beeld: een beeld is een achtste seconde, de stof rekent op 24 per seconde
+
+
+def met_stof(sc, rig, zet, beelden, naam, lichten, rondes=1, rust=8):
+    """De beweging afspelen met de rok als stof (bakken.py, rok_als_stof): eerst `rust` stappen stilstaan in de eerste
+    houding (de stof valt), dan `rondes` keer de `beelden` in tussenstappen, en in de laatste ronde elk beeld renderen in
+    alle richtingen. zet(t) zet de houding op tijd t (in beelden)."""
+    rok = bpy.data.objects['wapenrok-rok']
+    bk.nieuwe_stof(rok)
+    totaal = rust + rondes * beelden * SUB
+    for stap in range(totaal + 1):
+        t = max(0, stap - rust) / SUB
+        zet(t)
+        sc.frame_set(stap + 1)
+        if stap >= rust + (rondes - 1) * beelden * SUB and (stap - rust) % SUB == 0 and t < rondes * beelden:
+            i = int(round(t)) % beelden
+            for r in RICHTINGEN:
+                render(sc, naam(r, i), sh.RICHTINGEN[r], lichten)
+
+
 def main():
     if 'lichtproef' in sh.ARGS:
         return lichtproef()
     sc = sh.bouw()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
     lijf = bpy.data.objects['lijf']
-    # de kleren als een mesh (zonder het lijf: dat houdt zijn haar)
-    pop = bk.een_mesh(sc, zonder=('lijf',))
+    bk.oorsprong_vast(sc)
+    # de kleren als een mesh (zonder het lijf: dat houdt zijn haar; en zonder de rok: die wordt stof)
+    pop = bk.een_mesh(sc, zonder=('lijf', 'wapenrok-rok'))
     mat_maken()
+    plek_vast()
     holtes(0.12, 0.3)  # schaduw onder de kraag, de riem en tussen arm en lijf
     licht_voor_spelmaat(sc)
     bk.aan_het_skelet(sc, pop, rig)
@@ -221,7 +260,8 @@ def main():
     md.object = rig
     while lijf.modifiers[0].name != 'skelet':
         lijf.modifiers.move(lijf.modifiers.find('skelet'), 0)
-    for ob in (pop, lijf):
+    rok = bk.rok_als_stof(sc, rig, lijf)
+    for ob in (pop, lijf, rok):
         m = ob.matrix_world.copy()
         ob.parent = rig
         ob.matrix_world = m
@@ -229,8 +269,8 @@ def main():
     rig['z0'] = rig.location.z
     bk.STAP = STAP
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
-    for r in RICHTINGEN:
-        render(sc, f'eigen-{r}{ISO}-staan.png', sh.RICHTINGEN[r], lichten)
+    if 'steek' not in sh.ARGS:
+        met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
     if 'staan' in sh.ARGS:
         return
     sc.render.resolution_x = 2400
@@ -242,21 +282,15 @@ def main():
         bk.steek(rig, 0)
         bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, bk.WACHT)
         bk.speer_vast(rig)
-        for i in range(8):
-            bk.steek(rig, i)
-            for r in RICHTINGEN:
-                render(sc, f'eigen-{r}{ISO}-steek-{i}.png', sh.RICHTINGEN[r], lichten)
+        met_stof(sc, rig, lambda t: bk.steek(rig, t), 8, lambda r, i: f'eigen-{r}{ISO}-steek-{i}.png', lichten)
         return
-    # lopen: de speer schuin voor het lijf, zoals de generator
+    # lopen: de speer schuin voor het lijf, zoals de generator; drie rondes, zodat de stof op gang is
     dragen = bk.DRAGEN['generator']
     bk.draag_schuin(sc, rig, dragen)
     bk.loop(rig, 0, 8, draagt=True)
     bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, dragen)
     bk.speer_vast(rig)
-    for i in range(8):
-        bk.loop(rig, i, 8, draagt=True)
-        for r in RICHTINGEN:
-            render(sc, f'eigen-{r}{ISO}-lopen-{i}.png', sh.RICHTINGEN[r], lichten)
-
+    met_stof(sc, rig, lambda t: bk.loop(rig, t, 8, draagt=True), 8, lambda r, i: f'eigen-{r}{ISO}-lopen-{i}.png', lichten,
+             rondes=3)
 
 main()
