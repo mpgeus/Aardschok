@@ -1812,6 +1812,16 @@ lopen. Zestien beelden renderen in twintig seconden.
   geschilderde huid met textuur en meer contrast, en de kleine dingen die het leven geven (de leren armstukken, de schede,
   de tas aan de riem, de omgeslagen laarzen, de voeten naar buiten). MPFB is nog niet gebruikt: onder de kleren is van het
   lijf alleen het gezicht te zien, op spelmaat zo'n acht pixels breed.
+- *De kleine onderdelen* (Marcel: "Ga door op Z: de kleine onderdelen erbij [...] en meer textuur en contrast"): leren
+  armstukken met lichte randen over de onderarm, donkere handschoenen met een kap, een brede riem met een grote gesp en
+  een hangende tong, de tas met klep en gespje aan de linkerheup, de schede met dolk aan de rechter, laarzen met een
+  omgeslagen rand van licht leer, de voeten 24 graden naar buiten, en klinknagels langs de kam van de helm. De stof is
+  gevlekt in twee maten (eerst te sterk: krassen in het blauw), de naden van het wambuis dieper, de ringen van de maliën
+  donkerder, en het licht harder (de schaduwband donkerder en koeler, de zon sterker, de lucht zwakker). Op spelmaat lezen
+  het armstuk, de omslag van de laarzen, de tas en de gesp; de schede valt achter de hand en de speer weg, en de
+  klinknagels zijn er alleen groot.
+- *Het vel van de bron*: het vel `speerman-staan` heeft de wapenrok anders gevierendeeld (van hemzelf rechtsboven blauw)
+  dan de speerman in het spel (uit vel 01, rechtsboven geel); het model volgt het spel.
 
 ## Open
 

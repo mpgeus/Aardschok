@@ -30,14 +30,14 @@ INSTELLINGEN = {
     'res': (360, 560),      # de render, in pixels
     'anker_y': 500,         # waar de oorsprong (tussen de voeten) in de render staat, van boven
     'samples': 64,
-    'zon': 4.8, 'zonkleur': (1.0, 0.90, 0.76), 'zonhoek': 4.0,
+    'zon': 5.5, 'zonkleur': (1.0, 0.90, 0.76), 'zonhoek': 4.0,
     'rand': 1.4, 'randkleur': (0.80, 0.88, 1.0),
-    'lucht': 0.65, 'luchtkleur': (0.48, 0.56, 0.72),
+    'lucht': 0.55, 'luchtkleur': (0.48, 0.56, 0.72),
     'breed': 1.35,          # gedrongen: de man breder dan echt, zoals op de plaat van de generator
     'lijn': 4.6,            # de dikte van de lijnen (Freestyle) in de render: na het verkleinen zo'n driekwart pixel
     'beelden': 8,           # lopen
     # toon: EEVEE, het licht in vaste banden zoals een pixeltekenaar het zet; echt: Cycles, het licht doorgerekend
-    'banden': [(0.0, (0.40, 0.43, 0.58)), (0.40, (0.70, 0.70, 0.74)), (0.72, (1.0, 0.97, 0.90)), (1.12, (1.13, 1.09, 1.0))],
+    'banden': [(0.0, (0.33, 0.36, 0.52)), (0.42, (0.66, 0.66, 0.72)), (0.74, (1.0, 0.97, 0.90)), (1.1, (1.13, 1.09, 1.0))],
     'camera': 15,           # graden boven de grond; de wereld staat op 30, maar de generator tekent de poppetjes vlakker
 }
 
@@ -270,19 +270,21 @@ def materiaal(naam, kleur, ruw=0.75, metaal=0.0, patroon=None, kleur2=None, bol=
         u = W(nt, 'DIVIDE', W(nt, 'ADD', z, W(nt, 'ADD', W(nt, 'MULTIPLY', x, 0.8), W(nt, 'MULTIPLY', y, -0.6))), 0.05)
         v = W(nt, 'DIVIDE', W(nt, 'SUBTRACT', z, W(nt, 'ADD', W(nt, 'MULTIPLY', x, 0.8), W(nt, 'MULTIPLY', y, -0.6))), 0.05)
         naad = W(nt, 'MAXIMUM', groef(nt, u, 0.22), groef(nt, v, 0.22))
-        kl = meng(nt, W(nt, 'MULTIPLY', naad, 0.75), kl, lin('#3a2210'))
-        hoogte = W(nt, 'MULTIPLY', naad, -1.0)
+        kl = meng(nt, W(nt, 'MULTIPLY', naad, 0.9), kl, lin('#2e1a0c'))
+        hoogte = W(nt, 'MULTIPLY', naad, -2.0)
     elif patroon == 'malien':
         n = nt.nodes.new('ShaderNodeTexVoronoi')
         nt.links.new(vec, n.inputs['Vector'])
         n.inputs['Scale'].default_value = 55
-        ring = glad(nt, n.outputs['Distance'], 0.18, 0.42)
-        kl = meng(nt, W(nt, 'MULTIPLY', ring, 0.8), kl, lin('#2e3036'))
+        ring = glad(nt, n.outputs['Distance'], 0.16, 0.4)
+        kl = meng(nt, W(nt, 'MULTIPLY', ring, 0.92), kl, lin('#1f2125'))
         hoogte = W(nt, 'MULTIPLY', ring, -1.0)
     elif patroon == 'stof':
         r = ruis(nt, vec, 40, 3)
-        kl = meng(nt, W(nt, 'MULTIPLY', glad(nt, r, 0.35, 0.65), 0.18), kl, (0, 0, 0, 1))
-        hoogte = W(nt, 'MULTIPLY', r, 0.3)
+        r2 = ruis(nt, vec, 9, 2)
+        kl = meng(nt, W(nt, 'MULTIPLY', glad(nt, r2, 0.38, 0.62), 0.24), kl, (0, 0, 0, 1))
+        kl = meng(nt, W(nt, 'MULTIPLY', glad(nt, r, 0.6, 0.8), 0.07), kl, (1, 0.95, 0.85, 1))
+        hoogte = W(nt, 'MULTIPLY', r2, 0.5)
     elif patroon == 'leer':
         r = ruis(nt, vec, 25, 4)
         kl = meng(nt, W(nt, 'MULTIPLY', glad(nt, r, 0.3, 0.7), 0.35), kl, lin('#2a160a'))
@@ -543,6 +545,10 @@ def maak_materialen():
     M['leer'] = materiaal('leer', '#6b3f1f', ruw=0.6, patroon='leer')[0]
     M['riem'] = materiaal('riem', '#7c3a1f', ruw=0.5, patroon='leer')[0]
     M['laars'] = materiaal('laars', '#7a4a26', ruw=0.55, patroon='leer')[0]
+    M['omslag'] = materiaal('omslag', '#a06c3c', ruw=0.6, patroon='leer')[0]
+    M['handschoen'] = materiaal('handschoen', '#4a2c18', ruw=0.6, patroon='leer')[0]
+    M['armstuk'] = materiaal('armstuk', '#4d4741', ruw=0.55, metaal=0.3, patroon='leer')[0]
+    M['schede'] = materiaal('schede', '#5a2412', ruw=0.5, patroon='leer')[0]
     M['wapenrok'] = materiaal('wapenrok', '#2c52bd', ruw=0.85, patroon='stof', kleur2='#f0ae25')[0]
     M['malien'] = materiaal('malien', '#5e636b', ruw=0.6, metaal=0.4, patroon='malien', bol=0.1)[0]
     M['staal'] = materiaal('staal', '#a9afb8', ruw=0.42, metaal=1.0, bol=0.25)[0]
@@ -577,7 +583,7 @@ def lijf(M):
         d += capsule(KNIE[k], ENKEL[k], 0.064, 0.046)
     ob = samen('lijf', d)
     me = ob.data
-    for k in ('huid', 'wambuis', 'hozen', 'leer'):
+    for k in ('huid', 'wambuis', 'hozen', 'handschoen'):
         me.materials.append(M[k])
     idx = {'huid': 0, 'wambuis': 1, 'hozen': 2, 'leer': 3}
     vuisten = [VUIST['L'], VUIST['R']]
@@ -642,7 +648,7 @@ def kleren(M):
         (1.395, 0.214, 0.176, 0, 0.005, 0.035),
     ], mat=M['malien']))
     delen[-1].modifiers.new('dik', 'SOLIDIFY').thickness = 0.01
-    # de riem, de gesp en de tas
+    # de riem met een grote gesp en een hangende tong
     riem = ringen('riem', [(0.885, 0.19, 0.146), (0.968, 0.188, 0.144)], mat=M['riem'])
     riem.modifiers.new('dik', 'SOLIDIFY').thickness = 0.008
     delen.append(riem)
@@ -650,37 +656,76 @@ def kleren(M):
     g = actief()
     g.modifiers.new('rand', 'BEVEL').width = 0.004
     delen.append(vast_mod(g, 'gesp', M['staal']))
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.155, -0.1, 0.847), rotation=(0, 0, math.radians(-35)), scale=(0.075, 0.04, 0.085))
-    t = actief()
-    b = t.modifiers.new('rand', 'BEVEL')
-    b.width = 0.012
-    b.segments = 3
-    delen.append(vast_mod(t, 'tas', M['leer']))
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.157, -0.104, 0.877), rotation=(0, 0, math.radians(-35)), scale=(0.08, 0.046, 0.03))
-    f = actief()
-    b = f.modifiers.new('rand', 'BEVEL')
-    b.width = 0.01
-    b.segments = 2
-    delen.append(vast_mod(f, 'klep', M['leer']))
-    # de laarzen, met een omgeslagen rand
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.159, 0.927), scale=(0.046, 0.008, 0.036))
+    delen.append(vast(actief(), 'gesp-binnen', M['riem']))
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.055, -0.152, 0.895), rotation=(0, math.radians(8), 0), scale=(0.04, 0.01, 0.075))
+    delen.append(vast(actief(), 'riemtong', M['riem']))
+    # de tas aan de linkerheup, met een klep en een gespje
+    def blok(naam, plek, maat, draai, mat, rand=0.01, seg=2):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=plek, rotation=(0, 0, math.radians(draai)), scale=maat)
+        o = actief()
+        bv = o.modifiers.new('rand', 'BEVEL')
+        bv.width = rand
+        bv.segments = seg
+        return vast_mod(o, naam, mat)
+    delen.append(blok('tas', (0.158, -0.098, 0.83), (0.08, 0.045, 0.1), -35, M['riem'], 0.014, 3))
+    delen.append(blok('klep', (0.161, -0.104, 0.865), (0.086, 0.05, 0.04), -35, M['riem'], 0.012, 2))
+    delen.append(blok('tasgesp', (0.148, -0.128, 0.85), (0.016, 0.008, 0.02), -35, M['staal'], 0.002, 1))
+    # de schede met de dolk aan de rechterheup, schuin naar voren
+    sx, sy = -0.16, -0.085
+    for naam, plek, maat, mat in (('schede', (sx, sy, 0.79), (0.035, 0.022, 0.2), M['schede']),
+                                  ('punt', (sx, sy - 0.004, 0.685), (0.038, 0.025, 0.03), M['staal']),
+                                  ('greep', (sx, sy + 0.004, 0.95), (0.022, 0.022, 0.08), M['leer']),
+                                  ('pareerstang', (sx, sy + 0.002, 0.9), (0.07, 0.016, 0.014), M['staal']),
+                                  ('knop', (sx, sy + 0.006, 0.995), (0.026, 0.026, 0.022), M['staal'])):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=plek, rotation=(math.radians(-14), 0, math.radians(30)), scale=maat)
+        o = actief()
+        bv = o.modifiers.new('rand', 'BEVEL')
+        bv.width = min(maat) * 0.3
+        bv.segments = 2
+        delen.append(vast_mod(o, 'schede.' + naam, mat))
+    # de laarzen: wijd, met een omgeslagen rand van licht leer, de voeten wat naar buiten
     for k in ('L', 'R'):
         e, kn = ENKEL[k], KNIE[k]
-        schacht = ringen('schacht', [(0.40, 0.084, 0.087, kn.x + (e.x - kn.x) * 0.2, -0.004), (0.28, 0.074, 0.077, e.x * 0.99, 0.0),
-                                     (0.14, 0.066, 0.07, e.x, 0.006), (0.08, 0.068, 0.078, e.x, 0.0)], dicht=(True, True))
-        voet = bol((e.x * 1.15, -0.05, 0.05), (0.066, 0.13, 0.055), rot=(0, 0, math.radians(14 if e.x > 0 else -14)))
-        hiel = bol((e.x, 0.03, 0.055), (0.06, 0.06, 0.055))
-        laars = samen('laars.' + k, [schacht, voet, hiel], voxel=0.009, glad_n=2, mat=M['laars'])
-        # de zool vlak
+        bx = kn.x + (e.x - kn.x) * 0.2
+        schacht = ringen('schacht', [(0.38, 0.084, 0.087, bx, -0.004), (0.28, 0.076, 0.079, e.x * 0.99, 0.0),
+                                     (0.14, 0.068, 0.072, e.x, 0.006), (0.08, 0.07, 0.08, e.x, 0.0)], dicht=(True, True))
+        hoek = math.radians(24 if e.x > 0 else -24)
+        voet = bol((e.x * 1.2, -0.055, 0.052), (0.07, 0.14, 0.056), rot=(0, 0, hoek))
+        neus = bol((e.x * 1.2 + math.sin(hoek) * 0.1, -0.055 - math.cos(hoek) * 0.1, 0.045), (0.06, 0.06, 0.045))
+        hiel = bol((e.x, 0.03, 0.055), (0.062, 0.062, 0.056))
+        laars = samen('laars.' + k, [schacht, voet, neus, hiel], voxel=0.009, glad_n=2, mat=M['laars'])
         for v in laars.data.vertices:
-            v.co.z = max(v.co.z, 0.0)
+            v.co.z = max(v.co.z, 0.0)  # de zool vlak
         zacht(laars)
         delen.append(laars)
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.085, minor_radius=0.026, location=(kn.x + (e.x - kn.x) * 0.2, -0.004, 0.395))
-        rand = actief()
-        rand.scale = (1.0, 1.04, 0.8)
-        zacht(rand)
-        delen.append(vast(rand, 'laarsrand.' + k, M['laars']))
+        omslag = ringen('omslag.' + k, [(0.405, 0.086, 0.089, bx, -0.004), (0.40, 0.098, 0.1, bx, -0.004),
+                                       (0.335, 0.104, 0.106, bx, -0.004, 0, 0.04), (0.325, 0.098, 0.1, bx, -0.004, 0, 0.04)],
+                        mat=M['omslag'])
+        omslag.modifiers.new('dik', 'SOLIDIFY').thickness = 0.008
+        zacht(omslag)
+        delen.append(vast_mod(omslag, 'omslag.' + k, M['omslag']))
+    # de armstukken over de onderarm en de kap van de handschoen
+    for k in ('L', 'R'):
+        el, po = ELLEBOOG[k], POLS[k]
+        a = el + (po - el) * 0.3
+        b = el + (po - el) * 0.92
+        delen.append(buis('armstuk.' + k, a, b, 0.08, 0.072, M['armstuk']))
+        for t, r in ((0.0, 0.082), (1.0, 0.074)):
+            delen.append(buis('armrand.' + k, a + (b - a) * (t - 0.04 if t else t), a + (b - a) * (t if t else t + 0.06), r + 0.004, r + 0.004, M['omslag']))
+        delen.append(buis('kap.' + k, po + (po - el).normalized() * -0.01, po + (po - el).normalized() * 0.045, 0.07, 0.064, M['handschoen']))
     return delen
+
+
+def buis(naam, a, b, ra, rb, mat, seg=24):
+    """Een afgeknotte kegel van a naar b, als eigen deel."""
+    a, b = Vector(a), Vector(b)
+    d = b - a
+    bpy.ops.mesh.primitive_cone_add(vertices=seg, radius1=ra, radius2=rb, depth=d.length, location=(a + b) / 2,
+                                    rotation=Vector((0, 0, 1)).rotation_difference(d).to_euler())
+    o = actief()
+    zacht(o)
+    return vast(o, naam, mat)
 
 
 def vast_mod(ob, naam, mat):
@@ -721,6 +766,10 @@ def helm(M):
     delen.append(vast(kbol((0, 0.004, 1.857), (0.015, 0.015, 0.013)), 'knop', M['staal']))
     for ob in delen[-2:]:
         zacht(ob)
+    for graden in (18, 36, 54, 72, 88):
+        f = math.radians(graden)
+        nagel = kbol((0, 0.004 - 0.119 * math.sin(f), 1.718 + 0.141 * math.cos(f)), (0.0045, 0.0045, 0.0045), seg=12, ringen=8)
+        delen.append(vast(nagel, 'nagel', M['staal']))
     for ob in delen:
         ob.visible_shadow = False  # de helm werpt geen schaduw: het gezicht blijft leesbaar, zoals een schilder doet
     return delen
@@ -882,8 +931,14 @@ def bouw():
             huid(ob, arm, rokgewicht)
         elif n.startswith('kraag'):
             huid(ob, arm, naast(['borst', 'nek']))
-        elif n.startswith(('riem', 'gesp', 'tas', 'klep')):
+        elif n.startswith(('riem', 'gesp', 'tas', 'klep', 'schede')):
             huid(ob, arm, alleen('heup'))
+        elif n.startswith(('armstuk', 'armrand')):
+            huid(ob, arm, alleen('onderarm.' + n.split('.')[1][0]))
+        elif n.startswith('kap.'):
+            huid(ob, arm, alleen('hand.' + n[-1]))
+        elif n.startswith('omslag.'):
+            huid(ob, arm, alleen('scheen.' + n[-1]))
         elif n.startswith(('laars', 'laarsrand')):
             k = n[-1]
             huid(ob, arm, naast(['scheen.' + k, 'voet.' + k]) if n.startswith('laars.') else alleen('scheen.' + k))
