@@ -7,7 +7,7 @@
 # De man staat stil, dus de houding wordt in de mesh gebakken; de camera staat recht voor hem, 15 graden boven de grond,
 # zoals de generator tekent (speerman.py, 'camera').
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel] [stuur]
 # (zonder --factory-startup: dan laadt Blender de extensie MPFB niet)
 import bpy
 import bmesh
@@ -26,6 +26,7 @@ ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 UIT = os.path.abspath(ARGS[0] if ARGS else os.path.join(HIER, '..', 'pixelart', 'uit', 'blender', 'render'))
 BLEND = 'blend' in ARGS[1:]
 SPEL = 'spel' in ARGS[1:]
+STUUR = 'stuur' in ARGS[1:]
 
 INSTELLINGEN = {
     'res': (1200, 1950),
@@ -1263,6 +1264,56 @@ def bouw():
     return sc
 
 
+def stuurbeelden(sc):
+    """De stuurbeelden voor ControlNet (de schilderbeurt met SDXL, schilder.cjs), met dezelfde camera: de lijnen wit op
+    zwart (van alle delen, ook het lijf), en de diepte (dichtbij licht, ver donker)."""
+    vl = sc.view_layers[0]
+    sc.render.film_transparent = False
+    bg = sc.world.node_tree.nodes['Background']
+    bg.inputs['Color'].default_value = (0, 0, 0, 1)
+    bg.inputs['Strength'].default_value = 0.0
+    for ob in sc.objects:
+        if ob.type == 'LIGHT':
+            ob.hide_render = True
+    sc.view_settings.look = 'None'
+    sc.view_settings.exposure = 0.0
+    sc.cycles.samples = 16
+
+    def vlak(naam, kleur):
+        k = Knopen(naam)
+        k.nt.nodes.remove(k.bsdf)
+        em = k.n('ShaderNodeEmission')
+        k.zet(em.inputs['Color'], kleur)
+        k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+        return k
+    vl.material_override = vlak('stuur-zwart', (0, 0, 0, 1)).m
+    sc.render.use_freestyle = True
+    fs = vl.freestyle_settings
+    fs.crease_angle = math.radians(130)
+    ls = fs.linesets[0]
+    ls.select_by_collection = False
+    ls.select_crease = True
+    ls.linestyle.color = (1, 1, 1)
+    ls.linestyle.thickness = 3.0
+    ls.linestyle.alpha = 1.0
+    sc.render.filepath = os.path.join(UIT, 'stuur-lijnen.png')
+    bpy.ops.render.render(write_still=True)
+    sc.render.use_freestyle = False
+    k = Knopen('stuur-diepte')
+    cam = k.n('ShaderNodeCameraData')
+    d = k.glad(cam.outputs['View Z Depth'], 19.4, 20.6, 1.0, 0.0)
+    c = k.n('ShaderNodeCombineColor')
+    for i in range(3):
+        k.zet(c.inputs[i], d)
+    k.nt.nodes.remove(k.bsdf)
+    em = k.n('ShaderNodeEmission')
+    k.nt.links.new(c.outputs[0], em.inputs['Color'])
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    vl.material_override = k.m
+    sc.render.filepath = os.path.join(UIT, 'stuur-diepte.png')
+    bpy.ops.render.render(write_still=True)
+
+
 def main():
     os.makedirs(UIT, exist_ok=True)
     sc = bouw()
@@ -1270,6 +1321,8 @@ def main():
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(UIT, 'speerman-hd.blend'))
     sc.render.filepath = os.path.join(UIT, 'staan-Z-spel-mens.png' if SPEL else 'staan-Z-hd-mens.png')
     bpy.ops.render.render(write_still=True)
+    if STUUR:
+        stuurbeelden(sc)
 
 
 main()

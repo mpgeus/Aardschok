@@ -1925,6 +1925,23 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   sleutelbeenderen en de schouders gaan in de houding wat omlaag. Helemaal omlaag gaf afhangende schouders, smal bovenaan
   (vel 01 heeft brede, rechte schouders), dus half; het bolle van het wambuis begint pas op de schouderkop. Naast elkaar,
   half gezakt en in de gewone stand: `uit/blender/schouders-vergelijk.png`.
+- *SDXL over het model* (Marcel: "Is er een mogelijkheid om de basis 3d vorm te gebruiken en te verven met sdxl? Met de
+  pixel lora?", en "ok, laten we sdxl met de pixel lora proberen"): `gereedschap/blender/schilder.cjs`, met de werkstroom
+  van `afwerking.cjs`. Het begin is de HD-render op magenta, de vorm komt van zijn lijnen en zijn diepte (`speerman_hd.py
+  -- <map> stuur`, dezelfde camera), vel 01 is het voorbeeld voor de stijl (IP-Adapter 0,5), SDXL schildert alleen binnen
+  ons silhouet, daarna mat 3. Plaat: `uit/blender/sdxl/plaat.png`. De vorm blijft staan. Op 0,35 verandert weinig (wat meer
+  geschilderd, de maliën groenig); op 0,5 echte pixelblokjes, maar de kleuren schuiven (de maliën olijfbruin, het geel
+  oranjer); op 0,65 de sterkste pixel art, maar de kleuren lopen weg en de blokjes vallen op spelmaat niet op onze pixels.
+  Op spelmaat leest geen versie beter dan de Blender-render zelf. Pixel Art Base op 0,5 en 0,65 wachtten in ComfyUI achter
+  twee opdrachten met TRELLIS 2 die niet van deze sessie waren.
+- *Projecteren* (Marcel: "en hoe krijgen we dit dichter op de referentie? uv wrapping?"): het beeld van de generator als verf
+  op het model leggen, vanuit de camera van die richting (een UV-kaart uit de camera, het beeld als textuur, onbelicht).
+  In de richting van het beeld is de render dan de referentie zelf; in de loop- en aanvalsbeelden beweegt de verf met het
+  model mee, dus die kloppen met het staande beeld (het probleem van de generator). Wat ervoor nodig is: het model moet op
+  het beeld passen (anders komt de riem op de rok terecht), dus eerst het beeld naar onze render buigen met vaste punten
+  (helm, kin, riem, handen, zoom, laarzen); wat in die richting verborgen is (de binnenkant van een arm), krijgt verf uit een
+  andere richting van vel 01; en het licht zit in de verf, dus die richt zich naar de richting waaruit hij komt. Het idee
+  stond al in `gereedschap/ai/hybride-voorstel.md` (de projectie), toen op ons oude model.
 
 ## Open
 

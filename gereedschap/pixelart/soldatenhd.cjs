@@ -1282,4 +1282,4 @@ if (require.main === module) {
   else console.log('node gereedschap/pixelart/soldatenhd.cjs kijk | proef | concept');
 }
 
-module.exports = { POPPETJES, render, poseBeeld, gewrichtenIn, CEL, ANKER };
+module.exports = { POPPETJES, render, poseBeeld, gewrichtenIn, CEL, ANKER, matter, MAT };
