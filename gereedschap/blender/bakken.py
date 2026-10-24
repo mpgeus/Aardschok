@@ -88,6 +88,9 @@ def oorsprong_vast(sc):
             a.data.foreach_set('vector', [c for v in ob.data.vertices for c in v.co])
 
 
+ROK_TREK = 0.2  # hoe sterk de onderkant van de rok naar zijn vorm aan het skelet getrokken wordt (0 is vrij)
+
+
 def rok_als_stof(sc, rig, lijf):
     """De rok van de wapenrok als stof bij elk beeld (Marcel: "Laten we de kleding fixen"; hij hing als een stijve plaat
     aan het bekken en de dijen): vast aan de riem met het skelet, en eronder de stofsimulatie van Blender, die tegen het
@@ -104,8 +107,8 @@ def rok_als_stof(sc, rig, lijf):
     groep = {n: rok.vertex_groups.new(name=n) for n in ('spine05', 'upperleg01.L', 'upperleg01.R')}
     for v in me.vertices:
         t = (z_top + 0.01 - v.co.z) / (z_top + 0.01 - z_zoom)
-        if t < 0.2:
-            vast.add([v.index], 1.0 if t < 0.1 else (0.2 - t) / 0.1, 'REPLACE')
+        # vast aan de riem, en daaronder een lichte trek naar de vorm aan het skelet (die met de dijen meegaat)
+        vast.add([v.index], 1.0 if t < 0.1 else ROK_TREK + (1.0 - ROK_TREK) * (1.0 - glad((t - 0.1) / 0.2)), 'REPLACE')
         mee = 0.8 * glad((z_heup - v.co.z) / max(1e-3, 0.6 * (z_heup - z_zoom)))
         wl, wr = mee * glad((v.co.x + 0.04) / 0.08), mee * glad((-v.co.x + 0.04) / 0.08)
         groep['spine05'].add([v.index], 1.0 - wl - wr, 'REPLACE')
@@ -121,7 +124,7 @@ def rok_als_stof(sc, rig, lijf):
     if 'botsen' not in lijf.modifiers:
         lijf.modifiers.new('botsen', 'COLLISION')
         lijf.modifiers.move(lijf.modifiers.find('botsen'), lijf.modifiers.find('skelet') + 1)
-    lijf.collision.thickness_outer = 0.01
+    lijf.collision.thickness_outer = 0.012
     return rok
 
 
@@ -133,14 +136,18 @@ def nieuwe_stof(rok):
     cm = rok.modifiers.new('stof', 'CLOTH')
     rok.modifiers.move(rok.modifiers.find('stof'), rok.modifiers.find('skelet') + 1)
     cs = cm.settings
+    # de onderkant licht naar zijn vorm aan het skelet getrokken (rok_als_stof, 'vast'): vrij verfrommelde de pand bij
+    # elke stap, bleef hij achter de knie haken en rolde hij zich op tot een prop (ook stugger, zwaarder of tegen zichzelf
+    # botsend; dat laatste trok de plooien uit elkaar en de rok omhoog)
     cs.quality = 12
-    cs.mass = 0.15
+    cs.mass = 0.2
     cs.tension_stiffness = cs.compression_stiffness = 15
     cs.shear_stiffness = 8
-    cs.bending_stiffness = 4  # stugger dan bij het hangen: soepel verfrommelde de pand bij elke stap
+    cs.bending_stiffness = 1.5
     cs.air_damping = 3
     cs.vertex_group_mass = 'vast'
-    cm.collision_settings.distance_min = 0.006
+    cs.pin_stiffness = 1.0
+    cm.collision_settings.distance_min = 0.008
     cm.point_cache.frame_start = 1
     cm.point_cache.frame_end = 100000
 

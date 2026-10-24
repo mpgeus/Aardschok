@@ -2194,8 +2194,10 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   Het armstuk volgt alleen de onderarm (het scheurde in latten als de pols draaide), en de kap van de handschoen ook,
   met alleen het smalle eind bij de pols mee (hij rekte uit tot een trechter). De rok is geen deel van de ene mesh
   meer: hij hangt aan de riem en valt bij elk beeld met de stofsimulatie van Blender tegen het bewegende lijf (bij het
-  lopen drie rondes, zodat de stof op gang is; `rok_als_stof`, `met_stof`), stugger dan bij het hangen (soepel
-  verfrommelde de pand bij elke stap). Alle patronen rekenen nu op de plek van elk punt toen het model af was (het
+  lopen drie rondes, zodat de stof op gang is; `rok_als_stof`, `met_stof`). Vrij verfrommelde de pand bij elke stap,
+  bleef hij achter de knie haken en rolde hij zich op tot een prop; stugger, zwaarder of tegen zichzelf botsend hielp
+  niet (dat laatste trok de plooien uit elkaar en de rok omhoog). Nu trekt het skelet de onderkant licht naar zijn
+  vorm (`ROK_TREK`, 0,2): hij zwaait en valt, maar haakt niet meer. Alle patronen rekenen nu op de plek van elk punt toen het model af was (het
   kenmerk `oorsprong`), anders schuiven de banen en het weefsel over de stof. De helm lichter (#8c8a94): op spelmaat
   was hij zwart naast het zilver van de generator. En acht richtingen: NW, N en NO erbij.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
