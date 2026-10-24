@@ -23,6 +23,11 @@ from mathutils import Matrix  # noqa: E402
 
 UIT = sh.UIT
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
+# isometrisch (Marcel: "Ik wil ook de poppetjes in isometrisch zien"): de camera op 30 graden zoals de wereld, in plaats
+# van de 15 van de generator (beeld.md, "Wat het verschil maakte"); de beelden krijgen -iso in hun naam
+ISO = '-iso' if 'iso' in sh.ARGS else ''
+if ISO:
+    sh.INSTELLINGEN['camera'] = 30
 # gemeten tegen staan Z van de generator (kleurmeting op spelmaat, 24 okt): ons model was per stof 8 tot 18 punten lichter
 # (Lab) en vlakker, dus een stop donkerder, minder vullicht en lucht (diepere schaduwkant), en de zon meer van opzij, zodat
 # de plooien en de ruiten schaduw geven
@@ -225,12 +230,14 @@ def main():
     bk.STAP = STAP
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     for r in RICHTINGEN:
-        render(sc, f'eigen-{r}-staan.png', sh.RICHTINGEN[r], lichten)
+        render(sc, f'eigen-{r}{ISO}-staan.png', sh.RICHTINGEN[r], lichten)
     if 'staan' in sh.ARGS:
         return
     sc.render.resolution_x = 2400
     if 'steek' in sh.ARGS:
-        # de steek: uit de wacht, met de speer laag bij de rechterheup (bakken.py, STEEK)
+        # de steek: uit de wacht, met de speer laag bij de rechterheup (bakken.py, STEEK); breder, zodat de punt in beeld
+        # blijft als hij vooruit schiet
+        sc.render.resolution_x = 4400
         bk.draag_schuin(sc, rig, bk.WACHT)
         bk.steek(rig, 0)
         bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, bk.WACHT)
@@ -238,7 +245,7 @@ def main():
         for i in range(8):
             bk.steek(rig, i)
             for r in RICHTINGEN:
-                render(sc, f'eigen-{r}-steek-{i}.png', sh.RICHTINGEN[r], lichten)
+                render(sc, f'eigen-{r}{ISO}-steek-{i}.png', sh.RICHTINGEN[r], lichten)
         return
     # lopen: de speer schuin voor het lijf, zoals de generator
     dragen = bk.DRAGEN['generator']
@@ -249,7 +256,7 @@ def main():
     for i in range(8):
         bk.loop(rig, i, 8, draagt=True)
         for r in RICHTINGEN:
-            render(sc, f'eigen-{r}-lopen-{i}.png', sh.RICHTINGEN[r], lichten)
+            render(sc, f'eigen-{r}{ISO}-lopen-{i}.png', sh.RICHTINGEN[r], lichten)
 
 
 main()

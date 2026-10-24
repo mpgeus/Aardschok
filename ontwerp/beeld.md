@@ -2170,6 +2170,19 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   met gestrekte armen) en terug (`STEEK` in `bakken.py`; de benen met dezelfde IK als het lopen, `been_ik`). Aan de borst
   vast kantelde de speer mee met het voorover leunen en dook de punt naar de grond: bij de steek houdt hij zijn richting
   in de wereld en schuift hij alleen mee. In ZW wijst de speer naar de kijker, en is hij dus sterk verkort.
+  Daarna (Marcel: "De steek klopt niet", "De speer moet naar voren komen. Ik wil ook de poppetjes in isometrisch zien",
+  en "Die handen zijn nog niet gefixed"): met beide handen samen kwam de speer maar 20 cm vooruit, zo ver als de armen
+  reiken. Nu valt hij uit: het voorste been stapt 14 cm uit, het bekken gaat 10 cm naar voren, de borst draait 18 graden
+  en leunt 14 voorover, en de achterste hand duwt de speer 34 cm vooruit door de voorste hand heen, die 30 procent
+  meegaat (met 15 eindigden de vuisten in elkaar, de linker als een zwevende vuist boven de schacht; met 50 reikte de
+  linkerarm niet). Daarom staat de wacht dichter bij het lijf (12 cm voor de schouders) en de handen verder uit elkaar
+  (40 cm). De handen: de IK zet de pols op zijn doel, niet de holte van de vuist; eenmaal goed gezet in rust draaide de
+  vuist bij een andere stand van de arm van de schacht af. Nu draait in elk beeld de pols langs de speer en schuift het
+  doel tot de holte op zijn plek op de schacht zit (`handen_op_speer`), bij lopen en steken; en de as waarlangs de
+  speer schuift, gaat door de holtes van de vuisten, niet door de doelen van de polsen (dan schoof hij schuin langs zijn
+  eigen as en zweefde de voorste vuist halverwege de steek 6 cm boven de schacht). Isometrisch: `eigen.py --
+  <map> ... iso` zet de camera op 30 graden zoals de wereld (in plaats van de 15 van de generator), naar
+  `eigen-<r>-iso-...png`; van bovenaf is een speer die naar de kijker wijst twee keer zo lang in beeld.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

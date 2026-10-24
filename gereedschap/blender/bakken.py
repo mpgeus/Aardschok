@@ -373,7 +373,7 @@ def loop(rig, i, n, draagt=False):
     rig.location.z = rig['z0'] - zakken
     bpy.context.view_layer.update()
     if draagt:
-        speer_mee(f)
+        speer_mee(rig, f)
 
 
 # De armen en de speer lopen mee (Marcel: "En de armen?", "En dus ook de speer", "Moet allemaal meebewegen"): beide handen
@@ -389,9 +389,35 @@ def speer_vast(rig):
     bpy.context.view_layer.update()
     doelen = {k: bpy.data.objects[f'hand.{k}'].matrix_world.copy() for k in ('R', 'L')}
     _drager['doelen'] = doelen
-    _drager['midden'] = (doelen['R'].translation + doelen['L'].translation) / 2
-    _drager['richting'] = (doelen['L'].translation - doelen['R'].translation).normalized()
-    _drager['half'] = (doelen['L'].translation - doelen['R'].translation).length / 2
+    # de as van de speer door de holtes van de vuisten (die liggen op de schacht; de doelen van de polsen niet: langs
+    # die lijn schoof de speer bij de steek schuin langs zijn eigen as, en verloor de voorste hand hem)
+    holtes = {k: sh.holte(rig, k) for k in ('R', 'L')}
+    _drager['holtes'] = holtes
+    _drager['midden'] = (holtes['R'] + holtes['L']) / 2
+    _drager['richting'] = (holtes['L'] - holtes['R']).normalized()
+    _drager['half'] = (holtes['L'] - holtes['R']).length / 2
+
+
+def handen_op_speer(rig, plekken, langs, n=3):
+    """De vuisten om de speer, in elk beeld: de pols draait tot de as van de vuist langs de speer ligt, en het doel van de
+    hand schuift tot de holte van de vuist op zijn plek op de schacht zit. (De IK zet de pols op het doel, niet de holte;
+    eenmaal goed gezet in rust draaide de vuist bij een andere stand van de arm van de schacht af, en lag hij erop of
+    eronder; Marcel: "Die handen zijn nog niet gefixed".)"""
+    pb = rig.pose.bones
+    langs = (rig.matrix_world.inverted().to_3x3() @ langs).normalized()  # in de ruimte van het skelet
+    for _ in range(n):
+        for k in ('R', 'L'):
+            as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
+            doel = langs if as_.dot(langs) > 0 else -langs
+            pols = pb[f'wrist.{k}']
+            h = pols.head.copy()
+            pols.matrix = (Matrix.Translation(h) @ as_.rotation_difference(doel).to_matrix().to_4x4() @ Matrix.Translation(-h)
+                           @ pols.matrix)
+            bpy.context.view_layer.update()
+        for k in ('R', 'L'):
+            leeg = bpy.data.objects[f'hand.{k}']
+            leeg.matrix_world = Matrix.Translation(plekken[k] - sh.holte(rig, k)) @ leeg.matrix_world
+        bpy.context.view_layer.update()
 
 
 def verschuif(D):
@@ -406,16 +432,22 @@ def verschuif(D):
 
 
 # De steek (Marcel: "En nu er een skelet is, kunnen we ook een steek aanval doen?"): uit de wacht (de speer laag bij de
-# rechterheup, de punt naar voren en iets omhoog, links voor en rechts achter) aanhalen, dan het lijf naar voren met de
-# rechterschouder mee en de armen gestrekt, en terug. Per beeld (8): hoe ver de speer langs zijn lengte gaat (meter), het
-# bekken naar voren (meter), de borst gedraaid (graden, de rechterschouder naar voren) en voorover (graden).
+# rechterheup, de punt naar voren en iets omhoog, links voor en rechts achter) aanhalen, dan uitvallen: het voorste been
+# stapt uit, het lijf valt naar voren met de rechterschouder mee, en de achterste hand duwt de speer door de voorste
+# heen, ver naar voren (Marcel: "De steek klopt niet", "De speer moet naar voren komen": met beide handen samen kwam hij
+# maar 20 cm, zo ver als de armen reiken); en terug. Per beeld (8): hoe ver de speer langs zijn lengte gaat (meter), het
+# bekken naar voren (meter), de borst gedraaid (graden, de rechterschouder naar voren) en voorover (graden), en de
+# voorste voet vooruit en omhoog (meter).
 STEEK = {
-    'speer': (0.0, -0.06, -0.11, 0.06, 0.2, 0.16, 0.07, 0.02),
-    'bekken': (0.0, -0.015, -0.03, 0.02, 0.06, 0.05, 0.025, 0.008),
-    'draai': (0, -5, -10, 6, 14, 10, 5, 1),
-    'leun': (0, -2, -4, 6, 12, 9, 5, 2),
+    'speer': (0.0, -0.08, -0.14, 0.12, 0.34, 0.28, 0.12, 0.03),
+    'bekken': (0.0, -0.02, -0.04, 0.04, 0.10, 0.09, 0.04, 0.01),
+    'draai': (0, -8, -14, 8, 18, 14, 6, 1),
+    'leun': (0, -2, -4, 6, 14, 11, 5, 1),
+    'stap': (0.0, 0.0, 0.0, 0.07, 0.14, 0.14, 0.07, 0.0),
+    'til': (0.0, 0.0, 0.0, 0.03, 0.0, 0.0, 0.02, 0.0),
 }
-WACHT = {'midden': (0.02, -0.2, -0.32), 'as': (0.3, -1.0, 0.25), 'afstand': 0.34, 'laag': 'R', 'greep': 0.32}
+VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoorheen, en de vuisten blijven 16 cm uit elkaar (met 0,15 eindigden ze in elkaar, met 0,5 reikte de linkerarm niet)
+WACHT = {'midden': (0.02, -0.12, -0.32), 'as': (0.3, -1.0, 0.25), 'afstand': 0.4, 'laag': 'R', 'greep': 0.32}
 WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, vooruit is -y)
 WACHT_ZAKKEN = 0.05  # door de knieën (meter)
 
@@ -439,7 +471,8 @@ def steek(rig, i):
     bpy.context.view_layer.update()
     zakken = WACHT_ZAKKEN + 0.4 * max(0.0, vooruit)
     for k in ('L', 'R'):
-        been_ik(rig, k, WACHT_VOETEN[k], 0.0, zakken, gier=gier)
+        stap, til = (STEEK['stap'][i], STEEK['til'][i]) if k == 'L' else (0.0, 0.0)
+        been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier)
     for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
         draai(rig, bot, (LEUN * 0.5 + leun) * deel)
         draai(rig, bot, (draaien - gier) * deel, 'Z')
@@ -459,14 +492,15 @@ def steek(rig, i):
             ob.parent = None
             ob.matrix_world = m
         _drager['los'] = {ob.name: ob.matrix_world.copy() for ob in delen}
-    mee = (_drager['richting'] * STEEK['speer'][i] + rig.matrix_world.to_3x3() @ Vector((0, -vooruit, 0))
-           - Vector((0, 0, zakken - WACHT_ZAKKEN)))
+    lijf = rig.matrix_world.to_3x3() @ Vector((0, -vooruit, 0)) - Vector((0, 0, zakken - WACHT_ZAKKEN))
+    mee = {k: _drager['richting'] * STEEK['speer'][i] * (VOORSTE_HAND if k == 'L' else 1.0) + lijf for k in ('R', 'L')}
     for naam, m0 in _drager['los'].items():
-        bpy.data.objects[naam].matrix_world = Matrix.Translation(mee) @ m0
+        bpy.data.objects[naam].matrix_world = Matrix.Translation(mee['L' if naam == 'hand.L' else 'R']) @ m0
     bpy.context.view_layer.update()
+    handen_op_speer(rig, {k: _drager['holtes'][k] + mee[k] for k in ('R', 'L')}, _drager['richting'])
 
 
-def speer_mee(f):
+def speer_mee(rig, f):
     if not _drager:
         return
     c, s = _drager['midden'], _drager['richting']
@@ -475,6 +509,8 @@ def speer_mee(f):
     D = (Matrix.Translation(Vector((0, 0, -SPEER_NAVEREN * math.cos(2 * f - 1.0)))) @ Matrix.Translation(c)
          @ Matrix.Rotation(hoek, 4, as_) @ Matrix.Translation(-c))
     verschuif(D)
+    S = bpy.data.objects['speer.schacht'].matrix_world  # bij speer_vast de eenheid: de mesh staat in de wereld
+    handen_op_speer(rig, {k: S @ p for k, p in _drager['holtes'].items()}, S.to_3x3() @ _drager['richting'])
 
 
 def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0):
