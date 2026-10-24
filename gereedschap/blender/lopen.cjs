@@ -4,7 +4,9 @@
 // zolen tot de helm even hoog als de speerman in het spel, met een donkere rand.
 //
 //   node gereedschap/blender/lopen.cjs ZW [vooruit generator ...]   naar uit/blender/lopen-<richting>.png (de plaat, een rij per
-//                                                                    manier van dragen) en de bewegende beelden
+//                                                                    manier van dragen) en de bewegende beelden (lopen-<r>-blender-<manier>- en
+//                                                                    lopen-<r>-uit-de-generator-bewegend.png; eerst hadden de
+//                                                                    manier "generator" en de generator zelf dezelfde naam)
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -85,11 +87,11 @@ function main(r = 'ZW', varianten = ['vooruit']) {
   for (const v of varianten) {
     const ons = [...Array(8).keys()].map((i) => klein(lees(path.join(RENDER, `richting-${r}-lopen-${v}-${i}.png`)), k));
     rijen.push([E.met(vak(klein(staan, k)), `Blender · speer ${v}`), ...ons.map((b, i) => E.met(vak(b), `lopen ${i}`))]);
-    fs.writeFileSync(path.join(UIT, `lopen-${r}-${v}-bewegend.png`), apng(ons.map(plaat), { schaal: 4, fps: 10 }));
+    fs.writeFileSync(path.join(UIT, `lopen-${r}-blender-${v}-bewegend.png`), apng(ons.map(plaat), { schaal: 4, fps: 10 }));
   }
   E.bewaar(path.join(UIT, `lopen-${r}.png`), rijen, `Vraag 190: lopen ${r}, per richting geprojecteerd (zonder mengen)`,
     `Boven de generator zoals in het spel, daaronder het Blender-model met alleen de verf van vel 01 ${r}, per manier van de speer dragen; op spelmaat maal 3.`);
-  fs.writeFileSync(path.join(UIT, `lopen-${r}-generator-bewegend.png`), apng(gen.map(plaat), { schaal: 4, fps: 10 }));
+  fs.writeFileSync(path.join(UIT, `lopen-${r}-uit-de-generator-bewegend.png`), apng(gen.map(plaat), { schaal: 4, fps: 10 }));
   console.log(`uit/blender/lopen-${r}.png en de bewegende beelden`);
 }
 
