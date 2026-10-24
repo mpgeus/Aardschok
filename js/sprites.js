@@ -476,7 +476,7 @@
       const t = tekeningNu(v, false);
       const vel = T.TEGELS && T.TEGELS[t.vel];
       const tegel = vel && vel.tiles[t.id];
-      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, zomer: null, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [], doos: undefined, plat: undefined, grond: null, grondKaart: null, grondVersie: 0 };
+      o = { vel: v.vel, id: v.id, x: v.x, y: v.y, seizoen: seizoenNu, geladen: geladenNr, t, zomer: null, wind: tegel ? windGewicht(tegel.naam) : 0, stil: null, standen: [], doos: undefined, plat: undefined, platHuis: null, grond: null, grondKaart: null, grondVersie: 0 };
       v.getekend = o;
     }
     return o;
@@ -745,6 +745,26 @@
     const pad = TEGELMAP + c.bestand;
     if (!laadAlsNodig(pad)) return null;
     return onthoud(`daksneeuw,${naam},${laag}`, () => stuk(pad, 0, 0, c.b, c.h, c.anker));
+  };
+
+  // ---------------------------------------------------------------- de huizen plat (tegels/plat/<naam>.png, plat.js)
+  //
+  // Een huis van de huizenbouwer als lage tekening (vraag 176, 4b; gereedschap/pixelart/plat.cjs): geen dak, de muren aan
+  // de kant van de camera tot de heup, de vloer in de kleur van het dak. Eén per jonge tekening (een oude deelt die van
+  // zijn jonge), elk een eigen plaatje dat pas laadt als je de gebouwen plat zet (F, js/main.js). Tot het er is, of voor
+  // wat er geen heeft, geeft dit null. Het anker is dat van het huis: js/tekenen.js tekent hem in zijn plaats.
+  S.platHuis = function (naam) {
+    const c = T.PLAT && naam && T.PLAT.platten[naam];
+    if (!c) return null;
+    const pad = TEGELMAP + c.bestand;
+    if (!laadAlsNodig(pad)) return null;
+    return onthoud(`plat,${naam}`, () => stuk(pad, 0, 0, c.b, c.h, c.anker));
+  };
+  // De platte tekening van huis v, onthouden op het huis (v.getekend, zoals S.buitenVan): elk beeld vraagt elk huis in
+  // beeld het, en de naam van zijn jonge tekening zoeken kost dan te veel. Wat nog laadt, onthoudt het niet.
+  S.platVan = function (v) {
+    const o = onthoudVoorwerp(v);
+    return o.platHuis || (o.platHuis = S.platHuis(T.jongeTekeningVan(v)));
   };
 
   // ---------------------------------------------------------------- brandfasen (tegels/brandfasen/<naam>.png, brandfasen.js)

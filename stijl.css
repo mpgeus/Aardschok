@@ -1082,6 +1082,24 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
   pointer-events: none;
 }
 #foto-wenk.flits { animation: foto-wenk 4s ease forwards; }
+/* De gebouwen plat (F, js/main.js; vraag 176, 4b): een klein teken in het midden onder de bovenbalk, zolang ze plat staan. */
+#plat-teken {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 44px;
+  transform: translateX(-50%);
+  z-index: 3;
+  zoom: var(--ui-zoom, 1);
+  padding: 4px 12px;
+  font: italic 14px var(--boek);
+  color: var(--gedempt);
+  background: rgba(22, 18, 14, 0.72);
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+body.gebouwen-plat #plat-teken { display: block; }
 @keyframes foto-wenk {
   0% { opacity: 0; }
   8% { opacity: 1; }

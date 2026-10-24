@@ -1570,7 +1570,7 @@
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
-    const ramen = brandendeRamen(S);
+    const ramen = gebouwenPlat(S) ? [] : brandendeRamen(S); // plat zijn er geen ramen (tekenVoorwerp)
     const metSchaduw = tekenZonneschaduw(ctx, S);
     // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
     // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
@@ -1601,7 +1601,7 @@
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
     if (vast) ctx.diepte = null;
-    tekenSchoorsteenRook(ctx, S);
+    if (!gebouwenPlat(S)) tekenSchoorsteenRook(ctx, S); // plat zijn er geen schoorstenen (tekenVoorwerp)
     tekenRook(ctx, S);
     if (!zonderUi(S)) tekenBouwGhost(ctx, S); // het gebouw in de hand, boven op alles
     ctx.restore();
@@ -3550,6 +3550,9 @@
     if (h < 1) ctx.restore();
   }
 
+  // Staan de gebouwen plat (F, js/main.js; vraag 176, 4b)? Niet in een scène (js/regie.js): die toont het dorp zoals het is.
+  const gebouwenPlat = (S) => !!S.gebouwenPlat && S.modus !== 'scene';
+
   // gaten: de kijkgaten die na dit voorwerp komen (voorsteKijkgaten), of niets.
   function tekenVoorwerp(ctx, S, v, helder, gaten) {
     const p = plekVan(v);
@@ -3557,23 +3560,29 @@
     // struik, een gebouw. Het anker van de cel is de voet, dus hij valt precies op het
     // midden van zijn eigen tegel.
     if (v.vel) {
-      // doorkijk: staat er iemand achter die je hoort te zien (js/doorkijk.js)? Dan gaat het voorwerp
-      // om de andere pixel open (het raster), of het blijft staan en krijgt na het tekenen een
-      // kijkgat op wie erachter staat (het venster): wat de spelregels zeggen.
-      const doorkijk = v.doorkijk || 0;
+      // De gebouwen plat (F, js/main.js; vraag 176, 4b): een huis van de huizenbouwer tekent zijn platte tekening, op zijn
+      // plek en in zijn volgorde (T.sprites.platVan), zonder doorkijk en sneeuw op het dak (de ramen en de rook slaat het
+      // beeld zelf over, bij brandendeRamen en tekenSchoorsteenRook); een bouwplaats is zijn fundering, de eerste fase. Wat
+      // brandt, blijft zoals het is: dat moet je zien. Tot de platte tekening er is, staat er het gewone huis.
+      const plat = gebouwenPlat(S) && metSprites();
       // In aanbouw (js/gebouwen.js, T.plaatsGebouw): heeft dit gebouw fases in tegels/bouwfasen.png
       // (T.bouwFaseIndex kiest welke, op hoe ver de bouwtijd is), dan die — anders (kapel,
       // watermolen, put, ...) net als voorheen gewoon bleker tot hij klaar is, zonder er een
       // tweede tekening voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
-        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0, v.voortgang));
+        && T.sprites.bouwfase(v.tekeningNaam, plat ? 0 : T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0, v.voortgang));
       // Wat brandt of afbrandde (js/brand.js): de fase van het afbranden (brandBeeldVan hieronder).
       const puin = v.brand && metSprites() ? brandBeeldVan(S, v) : null;
+      const platStuk = plat && !puin && !fase && v.vel === 'huizen' ? T.sprites.platVan(v) : null;
+      // doorkijk: staat er iemand achter die je hoort te zien (js/doorkijk.js)? Dan gaat het voorwerp
+      // om de andere pixel open (het raster), of het blijft staan en krijgt na het tekenen een
+      // kijkgat op wie erachter staat (het venster): wat de spelregels zeggen. Plat is er niets achter te zien.
+      const doorkijk = platStuk ? 0 : v.doorkijk || 0;
       const alpha = v.inAanbouw && !fase ? 0.45 : 1;
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const plaatjes = metSprites() && T.sprites.buitenAan;
-      let stuk = puin || fase || (plaatjes && T.sprites.buitenVan(v, windVoorInstantie(S, v)));
+      let stuk = puin || fase || platStuk || (plaatjes && T.sprites.buitenVan(v, windVoorInstantie(S, v)));
       // Een huis of een gebouw heeft een eigen bestand, dat pas laadt als hij op de kaart staat (js/sprites.js; vraag
       // 114, stap 1). Laadt het nog, dan wat er daarnet stond (een huis dat net doorgroeide), en anders niets: een vlak
       // alleen als het plaatje echt ontbreekt.
@@ -3586,12 +3595,12 @@
       else if (!wacht) tekenBuitenVlak(ctx, v, helder);
       // De sneeuw op het dak (vraag 144, 4b): de laag die bij de sneeuw op de grond past, over het huis heen; niet op wat
       // brandt of in aanbouw is. Een oud huis draagt de sneeuw van zijn jonge tekening (dezelfde vorm).
-      const dakSneeuw = stuk && !puin && !fase && !v.brand && v.vel === 'huizen' ? T.dakSneeuwLaag(sneeuwLaag(S)) : -1;
+      const dakSneeuw = stuk && !puin && !fase && !platStuk && !v.brand && v.vel === 'huizen' ? T.dakSneeuwLaag(sneeuwLaag(S)) : -1;
       const sneeuwStuk = dakSneeuw >= 0 && T.sprites.daksneeuw(T.jongeTekeningVan(v), dakSneeuw);
       if (sneeuwStuk && raster) T.tekenGerasterd(ctx, sneeuwStuk, p.x, p.y, helder, doorkijk);
       else if (sneeuwStuk) tekenOpMaat(ctx, sneeuwStuk, p, v, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
-      if (!raster && gaten) {
+      if (!raster && gaten && !platStuk) {
         // Het kijkgat werpt geen schaduw (js/gl.js, werptSchaduw): wie erachter staat, heeft zijn eigen.
         const werpt = ctx.werptSchaduw;
         if (werpt) ctx.werptSchaduw = false;

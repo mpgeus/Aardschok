@@ -1029,6 +1029,14 @@
       zetFoto(true);
       return;
     }
+    // F: de gebouwen plat, en weer gewoon (vraag 176, 4b; Marcel, 24 okt: "A", met F, want de spatie brengt je al naar
+    // een bericht). Elk huis wordt een lage tekening op zijn eigen plek, zodat je ziet wie en wat erachter staat; alleen
+    // beeld, dus geen opdracht (js/tekenen.js, tekenVoorwerp).
+    if (ev.key === 'f' || ev.key === 'F') {
+      S.gebouwenPlat = !S.gebouwenPlat;
+      T.ui.toonPlat(S);
+      return;
+    }
     // De pijltjes schuiven het beeld zolang je ze indrukt (schuifBij), niet de bladzijde.
     if (SCHUIF[ev.key]) {
       ev.preventDefault();

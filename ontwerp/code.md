@@ -1007,6 +1007,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de doos van alles in beeld uit. Met de vaste rijen (vraag 178, B2) loopt de doorkijk van hun bomen vooraf, alleen om
   wie je hoort te zien (`T.doorkijkKandidaten`, dezelfde kandidaten voor beide keren).
 
+### js/tekenen.js en js/sprites.js: de gebouwen plat
+
+- **De gebouwen plat** (vraag 176, 4b, 24 okt; `beeld.md`, "Zicht in een dicht dorp"): F (`js/main.js`) zet
+  `S.gebouwenPlat`, een veld van het scherm (`T.schermVelden`: de wereld en het bewaren merken er niets van), en
+  `T.ui.toonPlat` het teken (`#plat-teken`, de klasse `gebouwen-plat` op de body). `tekenVoorwerp` (`js/tekenen.js`) neemt
+  dan voor een huis van de huizenbouwer `T.sprites.platVan(v)`: de platte tekening van zijn jonge tekening
+  (`tegels/plat.js`, `T.PLAT`, uit `gereedschap/pixelart/plat.cjs`), onthouden op het huis (`v.getekend.platHuis`, zoals
+  `S.buitenVan`), met het anker van het huis. Plat geen doorkijk, geen daksneeuw en geen kijkgat; `brandendeRamen` en de
+  rook uit de schoorsteen slaan over; een bouwplaats neemt fase 0 van zijn bouwfasen; wat brandt, tekent zijn
+  brandfase. `gebouwenPlat(S)` is uit in een scène (`S.modus === 'scene'`). Let op de naam: `isPlat` en `platVan` in
+  `js/tekenen.js` gaan over wat plat op de grond ligt (de grondbuffer), niet over deze weergave.
+
 ### js/bouwstijl.js: de bouwstijl van een land
 
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl

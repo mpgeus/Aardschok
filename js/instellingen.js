@@ -45,6 +45,7 @@
       [kbd('P'), T.t('Pause, and on again')],
       [`${kbd('−')} ${kbd('+')}`, T.t('Slower, faster')],
       [kbd('H'), T.t('Photo mode; there Enter saves a picture')],
+      [kbd('F'), T.t('Buildings flat, to see what stands behind them')],
       [kbd('F2'), T.t('The meter')],
       [ESC, T.t('Close, put away, or the menu')],
     ];

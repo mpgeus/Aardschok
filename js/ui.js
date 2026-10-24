@@ -20,6 +20,7 @@
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
+      this.toonPlat(S);
       // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
       if (this.toonKalender) this.toonKalender(S);
@@ -28,6 +29,13 @@
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
       if (this.toonTevredenheid && S.dorp) this.toonTevredenheid(S.dorp); // en de tevredenheid ernaast (js/balk.js)
       if (this.toonStatussen && S.dorp && S.dorp.kalender) this.toonStatussen(S.dorp); // honger, droogte, ... (js/hud.js)
+    },
+
+    // De gebouwen plat (F, js/main.js): zolang ze plat staan, een klein teken onder de bovenbalk (stijl.css, #plat-teken).
+    toonPlat(S) {
+      const aan = !!S.gebouwenPlat;
+      document.body.classList.toggle('gebouwen-plat', aan);
+      if (aan) $('plat-teken').innerHTML = T.t('Buildings flat · [F] to raise them').replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>');
     },
 
     // Wat er nu van je gevraagd wordt; null laat het briefje verdwijnen. `tekst` mag <kbd> bevatten.

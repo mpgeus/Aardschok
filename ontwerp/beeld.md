@@ -1253,6 +1253,18 @@ straat was in alle vier de standen weg). De keuzes voor een weergave in het spel
 de kleur van het dak met rijen zoals een dak (het dambord van de proef leest op spanen als een tegelvloer), de F zet
 plat aan en uit, met een klein teken zolang het aan staat.
 
+**Zo werkt het nu** (4b, 24 okt; Marcel: "A", met F): F zet de gebouwen plat en weer recht, ook tijdens het spelen; een
+teken onder de bovenbalk zegt het zolang ze plat staan ("Buildings flat · F to raise them"), en de toetsen in het menu
+noemen het. Plat tekent elk huis van de huizenbouwer (ook de zagerij en de kapel) zijn platte tekening, op zijn plek en
+in zijn volgorde; er zijn dan geen ramen die branden, geen rook uit de schoorsteen, geen sneeuw op het dak en geen
+doorkijk (er is niets meer achter te zien). Een bouwplaats is zijn fundering (de eerste fase), ook bij de werkplaatsen.
+Wat brandt, blijft zoals het is: dat moet je zien. De werkplaatsen staan gewoon tot 4c. In een scène (de cinematic op
+Sint-Maarten) staat alles recht, en het teken is weg. De platte tekeningen laden pas als je F voor het eerst indrukt; tot
+een tekening er is, staat er het gewone huis. Het kiezen verandert niet: de muis kiest eerst een mens en dan pas wat op
+de tegel staat, dus wie achter een huis staat, is ook gewoon te kiezen. Gemeten in de cloud (SwiftShader, het proefdorp,
+1280×800, zoom 1): gewoon 4,9 à 6,3 ms per beeld, plat 4,8 à 5,3; de platte tekeningen van vijf huizen laden in 0,14 s.
+In Firefox nog niet gemeten.
+
 ## De nieuwe stijl: de nabewerkte herberg als maat (17 okt 2026, werklijst vraag 177)
 
 Marcel bracht twee plaatjes: de herberg uit onze huizenbouwer (`voorbeelden/herberg-stijl-origineel.png`, byte voor byte

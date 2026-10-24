@@ -118,7 +118,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   nagekeken. **Op 23 okt lukte het wel** (ronde 4 van het snoeien): de kale headless Chromium van Playwright met
   `--use-angle=swiftshader --enable-unsafe-swiftshader`, `?kaart=gehucht`, `waitUntil: 'domcontentloaded'` en een
   wachttijd van een paar minuten (laden duurt zo'n 90 s), de spellus stil zoals `tekenmeting.cjs` doet, en dan
-  `Spel.debug.proefdorp(5)`. Het WebGL-doek teruglezen gaf wit; `page.screenshot` werkt. Zo zijn de oude en de nieuwe
+  `Spel.debug.proefdorp(5)`. Het WebGL-doek teruglezen gaf wit; `page.screenshot` werkt. **Op 24 okt (4b) in 5 à 11 s**:
+  hetzelfde recept (de spellus stil met een `requestAnimationFrame` die niets doet, `?kaart=gehucht`,
+  `waitUntil: 'domcontentloaded'`), `Spel.debug` na 5 à 11 s, het proefdorp na nog 7 à 11; `Spel.tekenBeeld()` tot
+  `Spel.sprites.bezig()` 0 is, en dan `page.screenshot`. Zo zijn de oude en de nieuwe
   stand pixel voor pixel vergeleken. `npm run tekenmeting -- --tegen` en de speeltest wachten nog op "load" van `/`, en
   dat komt hier nooit.
 - **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken

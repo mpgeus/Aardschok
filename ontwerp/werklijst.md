@@ -24,9 +24,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
 
-- **Bezig in sessie `ccr-23644f01-k4rv4e`** (24 okt): 4b, gebouwen plat in het spel (bij N; Marcel: "A", de toets F).
-
 **Wacht op Marcel**
+- **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
+  in een dicht stuk dorp, ook 's avonds en in de winter; kijk of het teken onder de bovenbalk goed staat, en meet in
+  Firefox (de meter, *drawing*) plat tegen gewoon. Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
 - **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
   begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
@@ -1066,7 +1067,8 @@ spelregel. De speler bouwt huizen uit de huizenbouwer en werkplaatsen uit `dorp.
   dak recht erboven), `gereedschap/pixelart/plat.cjs` rendert: 607 jonge tekeningen in 67 minuten, elk
   `tegels/plat/<naam>.png` met een eigen anker, en `tegels/plat.json` + `.js` (`T.PLAT.platten`); een oude deelt die
   van zijn jonge (`code.md` bij `gereedschap/pixelart/`, `test/plat.test.cjs`).
-- **4b, in het spel.** Een toets zet plat aan en uit; dan tekent het spel van elk huis de platte tekening (`js/tekenen.js`,
+- **4b, in het spel: af** (24 okt; Marcel: "A", met F; `beeld.md`, "Zo werkt het nu", en `code.md` bij de gebouwen plat).
+  Het plan was: een toets zet plat aan en uit; dan tekent het spel van elk huis de platte tekening (`js/tekenen.js`,
   zoals de daksneeuw en de bouwfasen: `T.sprites.plat`), op dezelfde plek en in dezelfde volgorde. In plat gaan uit: de
   ramen 's nachts, de sneeuw op het dak, de rook en de doorkijk. Een bouwplaats is plat zijn fundering (fase 1). Wat elk
   voorwerp van zijn plaatje onthoudt (`js/sprites.js`), krijgt plat erbij. Een klein teken op het scherm zolang plat aan
@@ -1080,7 +1082,7 @@ spelregel. De speler bouwt huizen uit de huizenbouwer en werkplaatsen uit `dorp.
 **Besloten** (17 okt; Marcel koos bij alle vier A): (1) de muren als de doorsnede van de proef (voor tot de heup,
 achter laag); (2) de vloer in de kleur van het dak, met rijen zoals een dak in plaats van het dambord; (3) de toets is
 de F (de spatie blijft het laatste bericht); (4) schakelen, zoals Stronghold, met een klein teken zolang plat aan staat.
-**Het volgende is 4b**, plat in het spel.
+**Het volgende is 4c**, de werkplaatsen plat (renderwerk: eerst een proefplaat).
 
 ## O. De nieuwe stijl: de nabewerkte herberg als maat (vraag 177, 17 okt)
 

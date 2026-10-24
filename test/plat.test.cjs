@@ -1,6 +1,7 @@
 // De platte tekeningen van de huizen (werklijst vraag 176, stap 4a; ontwerp/beeld.md, "Zicht in een dicht dorp"): elk
 // huis op het vel heeft er een (tegels/plat/, uit gereedschap/pixelart/plat.cjs), een oude deelt die van zijn jonge, en
-// de platte past op zijn anker binnen de tekening van het huis, zodat er niets verspringt als je plat kijkt.
+// de platte past op zijn anker binnen de tekening van het huis, zodat er niets verspringt als je plat kijkt. In het spel
+// (stap 4b): F zet de gebouwen plat (js/main.js, js/tekenen.js), en dat is alleen beeld.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -17,9 +18,8 @@ function maatVan(pad) {
 }
 const jongVan = (naam) => naam.replace(/-oud$/, '');
 
-test('plat.js is plat.json, als script', () => {
-  require(path.join(WORTEL, 'tegels', 'plat.js'));
-  assert.deepEqual(globalThis.Spel.PLAT, json);
+test('plat.js is plat.json, als script, en het spel laadt hem (index.html)', () => {
+  assert.deepEqual(T.PLAT, json);
 });
 
 test('elk huis op het vel heeft een platte tekening, op zijn anker binnen de tekening van het huis', () => {
@@ -44,4 +44,25 @@ test('alleen jonge tekeningen in plat.json, en niets anders in de map', () => {
   }
   const bestanden = fs.readdirSync(path.join(WORTEL, 'tegels', 'plat')).map((f) => `plat/${f}`).sort();
   assert.deepEqual(bestanden, Object.values(json.platten).map((p) => p.bestand).sort());
+});
+
+test('in het spel vindt elk huis zijn platte tekening, ook een oud huis (T.jongeTekeningVan, T.sprites.platVan)', () => {
+  T.TEGELS.huizen.tiles.forEach((t, id) => {
+    if (!t || !t.naam) return;
+    const v = { vel: 'huizen', id, x: 0, y: 0 };
+    assert.ok(T.PLAT.platten[T.jongeTekeningVan(v)], `${t.naam}: geen platte tekening in het spel`);
+  });
+  // Zonder beelden (Node) laadt er niets: dan het gewone huis, en niets onthouden.
+  const v = { vel: 'huizen', id: T.TEGELS.huizen.tiles.findIndex((t) => t && t.naam), x: 0, y: 0 };
+  assert.equal(T.sprites.platVan(v), null);
+  assert.equal(v.getekend.platHuis, null);
+});
+
+test('plat is alleen beeld: een veld van het scherm, en een bewaard spel is met en zonder gelijk', () => {
+  const { proefDorp } = require('./grond.cjs');
+  const { S } = proefDorp(T);
+  assert.equal(T.schermVelden().gebouwenPlat, false);
+  const zonder = T.bewaarSpel(S, { nu: 0 });
+  S.gebouwenPlat = true;
+  assert.equal(T.bewaarSpel(S, { nu: 0 }), zonder);
 });
