@@ -80,7 +80,7 @@ In detail in `ontwerp/gereedschap.md`.
   op `/gereedschap/`, en alle getallen op `/gereedschap/instellingen.html` (wat je daar verandert, schrijft de server
   meteen in het bestand: commit het, en pas een toets aan die het oude getal verwacht).
 - `npm test` draait de toetsen in `test/`. Een toets laadt het spel zoals het draait, met `require('./laad.cjs').spel()`
-  (of `.pagina('gereedschap/wereld.html')`), **nooit met een eigen lijstje**: dan mist er vroeg of laat een bestand, en
+  (of `.pagina('gereedschap/gesprekken.html')`), **nooit met een eigen lijstje**: dan mist er vroeg of laat een bestand, en
   toetst hij een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt op het proefdorp (`test/grond.cjs`).
 - `npm run speeltest`: de kolonist in code speelt met vaste zaden, en toetst of het werkt zoals het moet (Marcel, 15
   okt: de balans komt later, het echte spel test hij zelf; `speelbaar.md`). Verder `proefversie` (de zip voor een tester), `grootte`, `schermen`,
