@@ -2158,6 +2158,18 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   recht vooruit, en hij veert 2 cm (`bekken`, de getallen bovenaan in `bakken.py`). De benen rekenen vanaf waar de heup
   nu is, draaien opzij en om hun lengte mee, zodat de voeten op hun spoor blijven, de knie vooruit wijst en de zool vlak
   blijft.
+- *De armen en de speer lopen mee* (Marcel: "En de armen?", "En dus ook de speer", "Moet allemaal meebewegen"). Beide
+  handen dragen de speer, dus de armen zwaaien niet, maar de speer schommelt met de pas zoals armen zwaaien (de lage,
+  rechterhand naar voren met het linkerbeen, de hoge naar achteren; 1,5 cm aan de handen) en veert 0,8 cm na op het
+  veren van het lijf (`speer_mee`). Speer en handen bewegen als één stuk, zodat de vuisten om de schacht blijven; de
+  ellebogen volgen met de IK.
+- *De steek* (Marcel: "En nu er een skelet is, kunnen we ook een steek aanval doen?"; `eigen.py -- <map> ZW steek`, naar
+  `eigen-<r>-steek-<i>.png`). Acht beelden uit de wacht: de speer laag bij de rechterheup, de punt naar voren en iets
+  omhoog, links voor en rechts achter, door de knieën (`WACHT`). Aanhalen (de speer 11 cm terug, de rechterschouder
+  naar achteren), steken (het bekken 6 cm naar voren, de borst 14 graden gedraaid en 12 voorover, de speer 20 cm vooruit
+  met gestrekte armen) en terug (`STEEK` in `bakken.py`; de benen met dezelfde IK als het lopen, `been_ik`). Aan de borst
+  vast kantelde de speer mee met het voorover leunen en dook de punt naar de grond: bij de steek houdt hij zijn richting
+  in de wereld en schuift hij alleen mee. In ZW wijst de speer naar de kijker, en is hij dus sterk verkort.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

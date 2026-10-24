@@ -372,6 +372,137 @@ def loop(rig, i, n, draagt=False):
         draai(rig, 'head', -DRAAI * 0.5, 'Z')
     rig.location.z = rig['z0'] - zakken
     bpy.context.view_layer.update()
+    if draagt:
+        speer_mee(f)
+
+
+# De armen en de speer lopen mee (Marcel: "En de armen?", "En dus ook de speer", "Moet allemaal meebewegen"): beide handen
+# dragen de speer, dus de armen zwaaien niet, maar de speer schommelt met de pas zoals armen zwaaien (de rechterarm naar
+# voren met het linkerbeen: de lage hand naar voren, de hoge naar achteren), en veert iets na op het veren van het lijf.
+# Speer en handen bewegen als één stuk, zodat de vuisten om de schacht blijven; de ellebogen volgen met de IK.
+SPEER_SCHOMMEL, SPEER_NAVEREN = 0.015, 0.008  # meter, aan de handen
+_drager = {}
+
+
+def speer_vast(rig):
+    """Na speer_in_handen: waar de speer en de doelen van de handen staan, het vertrekpunt van speer_mee."""
+    bpy.context.view_layer.update()
+    doelen = {k: bpy.data.objects[f'hand.{k}'].matrix_world.copy() for k in ('R', 'L')}
+    _drager['doelen'] = doelen
+    _drager['midden'] = (doelen['R'].translation + doelen['L'].translation) / 2
+    _drager['richting'] = (doelen['L'].translation - doelen['R'].translation).normalized()
+    _drager['half'] = (doelen['L'].translation - doelen['R'].translation).length / 2
+
+
+def verschuif(D):
+    """Speer en handen samen verplaatsen met D (in de wereld zoals bij speer_vast), met de borst mee."""
+    terug = bpy.data.objects['speer.schacht'].matrix_parent_inverse  # de borst bij het vastmaken, omgekeerd
+    for ob in bpy.data.objects:
+        if ob.name.startswith('speer.') and ob.parent is not None:
+            ob.matrix_basis = D
+    for k, T0 in _drager['doelen'].items():
+        bpy.data.objects[f'hand.{k}'].matrix_basis = terug @ D @ T0
+    bpy.context.view_layer.update()
+
+
+# De steek (Marcel: "En nu er een skelet is, kunnen we ook een steek aanval doen?"): uit de wacht (de speer laag bij de
+# rechterheup, de punt naar voren en iets omhoog, links voor en rechts achter) aanhalen, dan het lijf naar voren met de
+# rechterschouder mee en de armen gestrekt, en terug. Per beeld (8): hoe ver de speer langs zijn lengte gaat (meter), het
+# bekken naar voren (meter), de borst gedraaid (graden, de rechterschouder naar voren) en voorover (graden).
+STEEK = {
+    'speer': (0.0, -0.06, -0.11, 0.06, 0.2, 0.16, 0.07, 0.02),
+    'bekken': (0.0, -0.015, -0.03, 0.02, 0.06, 0.05, 0.025, 0.008),
+    'draai': (0, -5, -10, 6, 14, 10, 5, 1),
+    'leun': (0, -2, -4, 6, 12, 9, 5, 2),
+}
+WACHT = {'midden': (0.02, -0.2, -0.32), 'as': (0.3, -1.0, 0.25), 'afstand': 0.34, 'laag': 'R', 'greep': 0.32}
+WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, vooruit is -y)
+WACHT_ZAKKEN = 0.05  # door de knieën (meter)
+
+
+def steek(rig, i):
+    """Beeld i van de steek (STEEK); de handen houden de speer (draag_schuin met WACHT, dan speer_vast)."""
+    for pb in rig.pose.bones:
+        pb.rotation_mode = 'QUATERNION'
+        pb.rotation_quaternion = (1, 0, 0, 0)
+        pb.location = (0, 0, 0)
+    for k in ('R', 'L'):
+        if f'pols.{k}' in rig:
+            rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']
+    bpy.context.view_layer.update()
+    vooruit, draaien, leun = STEEK['bekken'][i], math.radians(STEEK['draai'][i]), math.radians(STEEK['leun'][i])
+    gier = 0.4 * draaien  # het bekken draait een beetje mee, de borst de rest
+    draai(rig, 'root', gier, 'Z')
+    bpy.context.view_layer.update()
+    w = rig.pose.bones['root']
+    w.matrix = Matrix.Translation((0, -vooruit, 0)) @ w.matrix
+    bpy.context.view_layer.update()
+    zakken = WACHT_ZAKKEN + 0.4 * max(0.0, vooruit)
+    for k in ('L', 'R'):
+        been_ik(rig, k, WACHT_VOETEN[k], 0.0, zakken, gier=gier)
+    for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
+        draai(rig, bot, (LEUN * 0.5 + leun) * deel)
+        draai(rig, bot, (draaien - gier) * deel, 'Z')
+    draai(rig, 'head', -(LEUN * 0.5 + leun) * 0.7)
+    draai(rig, 'head', -draaien * 0.8, 'Z')  # hij blijft kijken waar hij steekt
+    rig.location.z = rig['z0'] - zakken
+    bpy.context.view_layer.update()
+    if not _drager:
+        return
+    # Bij de steek houdt de speer zijn richting in de wereld en schiet hij alleen naar voren: aan de borst vast kantelde
+    # hij mee als die vooroverleunt, en dook de punt naar de grond. Speer en handen staan daarom los (eenmaal, in de
+    # stand van speer_vast), en schuiven met de steek en met het lijf mee.
+    if 'los' not in _drager:
+        delen = [o for o in bpy.data.objects if o.name.startswith('speer.')] + [bpy.data.objects[f'hand.{k}'] for k in 'RL']
+        for ob in delen:
+            m = ob.matrix_world.copy()
+            ob.parent = None
+            ob.matrix_world = m
+        _drager['los'] = {ob.name: ob.matrix_world.copy() for ob in delen}
+    mee = (_drager['richting'] * STEEK['speer'][i] + rig.matrix_world.to_3x3() @ Vector((0, -vooruit, 0))
+           - Vector((0, 0, zakken - WACHT_ZAKKEN)))
+    for naam, m0 in _drager['los'].items():
+        bpy.data.objects[naam].matrix_world = Matrix.Translation(mee) @ m0
+    bpy.context.view_layer.update()
+
+
+def speer_mee(f):
+    if not _drager:
+        return
+    c, s = _drager['midden'], _drager['richting']
+    as_ = s.cross(Vector((0, 1, 0))).normalized()  # een draai om deze as brengt de hoge hand naar achteren (+y)
+    hoek = SPEER_SCHOMMEL * math.cos(f) / _drager['half']
+    D = (Matrix.Translation(Vector((0, 0, -SPEER_NAVEREN * math.cos(2 * f - 1.0)))) @ Matrix.Translation(c)
+         @ Matrix.Rotation(hoek, 4, as_) @ Matrix.Translation(-c))
+    verschuif(D)
+
+
+def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0):
+    """Eén been met IK: de enkel op (y, z) ten opzichte van zijn plek in rust (vooruit is -y), terwijl het bekken `zakken`
+    lager staat, `rol` om y gekanteld en `gier` om z gedraaid (het bekken staat al, de heup is waar hij nu is). De dij en
+    de knie uit de cosinusregel in het vlak van voor naar achter; opzij zo dat de voet op zijn spoor blijft; de knie en de
+    voet wijzen vooruit, en de voet ligt vlak (of draait met `kantel` om de bal)."""
+    pb, bb = rig.pose.bones, rig.data.bones
+    yz = lambda v: Vector((v.y, v.z))
+    H0, K, A = (bb[f'{b}.{k}'].head_local for b in ('upperleg01', 'lowerleg01', 'foot'))
+    H = pb[f'upperleg01.{k}'].head.copy()
+    L1, L2 = (yz(K) - yz(H0)).length, (yz(A) - yz(K)).length
+    dx, dy, dz = A.x - H.x, A.y + y - H.y, A.z + zakken + z - H.z
+    d = min(math.hypot(dy, dz), 0.999 * (L1 + L2))
+    knie = math.pi - math.acos(max(-1.0, min(1.0, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))))
+    alfa = math.acos(max(-1.0, min(1.0, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))))
+    dij0 = math.atan2(K.y - H0.y, -(K.z - H0.z))  # de hoeken in rust, van recht omlaag naar achteren
+    scheen0 = math.atan2(A.y - K.y, -(A.z - K.z))
+    dij = math.atan2(dy, -dz) - alfa - dij0
+    buig = knie - (scheen0 - dij0)
+    # opzij (om y: positief brengt de voet naar -x)
+    zij = math.atan2(dx, -dz) - math.atan2(A.x - H0.x, -(A.z - H0.z))
+    draai(rig, f'upperleg01.{k}', -gier, 'Z')
+    draai(rig, f'upperleg01.{k}', -zij - rol, 'Y')
+    draai(rig, f'upperleg01.{k}', dij)
+    draai(rig, f'lowerleg01.{k}', buig)
+    draai(rig, f'foot.{k}', -(dij + buig) + kantel)
+    draai(rig, f'foot.{k}', zij, 'Y')
 
 
 # Het lijf loopt mee (Marcel: "Het lijf beweegt niet, ziet er heel onnatuurlijk uit"): het bekken draait mee met het
@@ -401,19 +532,13 @@ def benen(rig, f):
     neerzetten de teen wat omhoog, bij het afzetten de hiel. Het bekken zakt zo ver dat het been ook achteraan niet
     gestrekt hoeft, en veert mee (het laagst als beide voeten staan). Kleine stappen: een gedrongen man (STAP). Geeft hoe
     ver het bekken zakt; de botten staan bij het begin in rust."""
-    pb = rig.pose.bones
     bb = rig.data.bones
-    rust = {k: (bb[f'upperleg01.{k}'].head_local.copy(), bb[f'lowerleg01.{k}'].head_local.copy(),
-                bb[f'foot.{k}'].head_local.copy()) for k in ('L', 'R')}
     yz = lambda v: Vector((v.y, v.z))
-    H, K, A = rust['L']
+    H, K, A = (bb[f'{b}.L'].head_local for b in ('upperleg01', 'lowerleg01', 'foot'))
     been = (yz(K) - yz(H)).length + (yz(A) - yz(K)).length
     half = 0.4 * been * math.sin(STAP)  # de halve pas
     zakken = max(0.0, math.hypot(H.z - A.z, half) - 0.97 * been) + VEREN * (0.5 + 0.5 * math.cos(2 * f))
     for k, fase in (('L', 0.0), ('R', math.pi)):
-        H0, K, A = rust[k]
-        H = pb[f'upperleg01.{k}'].head.copy()  # waar de heup nu is: met het bekken mee gedraaid en geschoven
-        L1, L2 = (yz(K) - yz(H0)).length, (yz(A) - yz(K)).length
         u = ((f + fase) / (2 * math.pi)) % 1.0
         kantel = -0.15 * math.exp(-((u - 0.02) / 0.06) ** 2) + 0.4 * math.exp(-((u - 0.5) / 0.08) ** 2)
         if u < 0.5:  # staan: vlak over de grond, van voor naar achter (vooruit is -y)
@@ -423,23 +548,7 @@ def benen(rig, f):
             t = t * t * (3 - 2 * t)
             y, z = half - 2 * half * t, 0.05 * math.sin(math.pi * t)
         z += 0.14 * math.sin(max(0.0, kantel))  # bij het afzetten draait de voet om de bal: de enkel omhoog
-        dx, dy, dz = A.x - H.x, A.y + y - H.y, A.z + zakken + z - H.z
-        d = min(math.hypot(dy, dz), 0.999 * (L1 + L2))
-        knie = math.pi - math.acos(max(-1.0, min(1.0, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))))
-        alfa = math.acos(max(-1.0, min(1.0, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))))
-        dij0 = math.atan2(K.y - H0.y, -(K.z - H0.z))  # de hoeken in rust, van recht omlaag naar achteren
-        scheen0 = math.atan2(A.y - K.y, -(A.z - K.z))
-        dij = math.atan2(dy, -dz) - alfa - dij0
-        buig = knie - (scheen0 - dij0)
-        # opzij: de voet blijft op zijn spoor terwijl het bekken schuift en kantelt (om y: positief brengt de voet naar -x)
-        zij = math.atan2(dx, -dz) - math.atan2(A.x - H0.x, -(A.z - H0.z))
-        rol = -BEKKEN_KANTEL * math.sin(f)
-        draai(rig, f'upperleg01.{k}', BEKKEN_DRAAI * math.cos(f), 'Z')  # de knie en de voet blijven vooruit wijzen
-        draai(rig, f'upperleg01.{k}', -zij - rol, 'Y')
-        draai(rig, f'upperleg01.{k}', dij)
-        draai(rig, f'lowerleg01.{k}', buig)
-        draai(rig, f'foot.{k}', -(dij + buig) + kantel)  # de voet houdt zijn stand in rust: vlak
-        draai(rig, f'foot.{k}', zij, 'Y')
+        been_ik(rig, k, y, z, zakken, kantel, rol=-BEKKEN_KANTEL * math.sin(f), gier=-BEKKEN_DRAAI * math.cos(f))
     return zakken
 
 

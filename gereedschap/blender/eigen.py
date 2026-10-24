@@ -228,12 +228,24 @@ def main():
         render(sc, f'eigen-{r}-staan.png', sh.RICHTINGEN[r], lichten)
     if 'staan' in sh.ARGS:
         return
-    # lopen: de speer schuin voor het lijf, zoals de generator
     sc.render.resolution_x = 2400
+    if 'steek' in sh.ARGS:
+        # de steek: uit de wacht, met de speer laag bij de rechterheup (bakken.py, STEEK)
+        bk.draag_schuin(sc, rig, bk.WACHT)
+        bk.steek(rig, 0)
+        bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, bk.WACHT)
+        bk.speer_vast(rig)
+        for i in range(8):
+            bk.steek(rig, i)
+            for r in RICHTINGEN:
+                render(sc, f'eigen-{r}-steek-{i}.png', sh.RICHTINGEN[r], lichten)
+        return
+    # lopen: de speer schuin voor het lijf, zoals de generator
     dragen = bk.DRAGEN['generator']
     bk.draag_schuin(sc, rig, dragen)
     bk.loop(rig, 0, 8, draagt=True)
     bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, dragen)
+    bk.speer_vast(rig)
     for i in range(8):
         bk.loop(rig, i, 8, draagt=True)
         for r in RICHTINGEN:
