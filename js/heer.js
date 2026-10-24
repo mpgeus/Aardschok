@@ -515,11 +515,13 @@
     T.spelUit(D, { reden: 'leger', dag: dagNu(D) }, zin);
   }
 
-  // In de demo (T.DEMO_INSTELLINGEN, js/einde.js) is betalen ook het eind: hij rijdt weg met je waren.
+  // Met de scène van het betalen (D.scene, de trigger `scene` van een level, js/scenario.js; het demojaar) is betalen ook
+  // het eind: hij rijdt weg met je waren.
   function betaaldEinde(D) {
     T.spelUit(D, { reden: 'betaald', dag: dagNu(D) });
   }
   const betaaldVan = (b) => !!(b && b.betaald && !b.betaald.geweigerd);
+  const betalenIsHetEind = (D, b) => D.scene === 'betalen' && betaaldVan(b);
 
   // Hoe het er met de heer voor staat in dorp D, in woorden (de voorwaarde `heer` van een trigger, js/scenario.js): 'brief'
   // (zijn brief van dit jaar kwam, tot hij er is), 'komt' (zijn bezoek, tot hij helemaal weg is), 'staat' (hij wacht op
@@ -539,12 +541,12 @@
   };
 
   // Het eind van Sint-Maarten nu, zonder de scène uit te kijken (een klik of Esc slaat haar over, js/regie.js): je
-  // weigerde hem en zijn leger komt, of in de demo betaalde je en rijdt hij weg. Anders gebeurt er niets.
+  // weigerde hem en zijn leger komt, of met de scène van het betalen betaalde je en rijdt hij weg. Anders gebeurt er niets.
   T.eindVanSintMaarten = function (D) {
     const h = D.heer;
     if (!h || D.einde) return;
     if (h.leger) legerKomt(D);
-    else if (T.DEMO_INSTELLINGEN.aan && betaaldVan(h.bezoek)) betaaldEinde(D);
+    else if (betalenIsHetEind(D, h.bezoek)) betaaldEinde(D);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -759,8 +761,8 @@
   T.heerKomt = function (D, dag) {
     const h = D.heer || (D.heer = T.nieuweHeer());
     // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer): anders werd zijn
-    // eis kleiner terwijl je hem betaalde. In de demo tellen dan ook de punten, vóór de tiende (js/einde.js; vraag 186).
-    T.telPunten(D);
+    // eis kleiner terwijl je hem betaalde. (In de demo tellen dan ook de punten, vóór de tiende: de trigger `punten` van het
+    // demojaar, levels/demojaar.js.)
     h.bezoek = {
       komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
       kist: (D.voorraad && D.voorraad.goud) || 0,
@@ -806,13 +808,13 @@
   function haalHeerWeg(D) {
     const h = D.heer;
     if (!h || !h.bezoek) return;
-    const betaald = betaaldVan(h.bezoek);
+    const uit = betalenIsHetEind(D, h.bezoek);
     haalUitWereld(D, h.bezoek.wezens);
     if (T.wisVlag) for (const v of ['heerOpBezoek', 'heerBetaald', 'heerVertrekt', 'heerSchuld']) T.wisVlag(D, v);
     h.bezoek = null;
-    // In de demo is dit het eind (js/einde.js, T.DEMO_INSTELLINGEN; Marcel, 18 okt: "Als je betaalt eindigt de demo ook"):
-    // hij rijdt weg met je waren. Met een wagen is het al eerder het eind, als die een eind de weg op is (T.werkHeerBij).
-    if (betaald && T.DEMO_INSTELLINGEN.aan) betaaldEinde(D);
+    // Met de scène van het betalen is dit het eind (de demo; Marcel, 18 okt: "Als je betaalt eindigt de demo ook"): hij
+    // rijdt weg met je waren. Met een wagen is het al eerder het eind, als die een eind de weg op is (T.werkHeerBij).
+    if (uit) betaaldEinde(D);
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -1035,9 +1037,10 @@
       // Bleef de wagen ergens staan (iemand stond in de weg), dan zoekt hij opnieuw.
       const wagen = nog.includes(b.wagen) ? b.wagen : null;
       if (wagen && !wagen.pad.length && !wagen.onderweg) rijDeWegAf(D, wagen);
-      // In de demo is het het eind als zijn wagen een eind de weg op is (het beeld wordt zwart terwijl hij wegrijdt).
+      // Met de scène van het betalen (de demo) is het het eind als zijn wagen een eind de weg op is (het beeld wordt zwart
+      // terwijl hij wegrijdt).
       const rijdt = wagen && b.wezens.includes(wagen);
-      if (rijdt && T.DEMO_INSTELLINGEN.aan && betaaldVan(b) && T.afstand(T.tegelVan(wagen), plek) >= IN().wagen.demoWegNa) betaaldEinde(D);
+      if (rijdt && betalenIsHetEind(D, b) && T.afstand(T.tegelVan(wagen), plek) >= IN().wagen.demoWegNa) betaaldEinde(D);
       if (!b.wezens.length) haalHeerWeg(D);
     }
     // Wie aan de schandpaal moet: staat hij er, dan beginnen zijn dagen, en staat hij met zijn rug

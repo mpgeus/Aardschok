@@ -236,8 +236,10 @@
     },
     {
       id: 'rovers',
-      // In de demo komen ze niet terug (één overval, js/rovers.js; vraag 185), en het wachthuis is er op slot.
-      als: (D) => D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis') && !T.DEMO_INSTELLINGEN.aan,
+      // Niet waar ze niet terugkomen (geen wilde rovers, zoals in de demo: één overval, js/rovers.js; vraag 185), of waar het
+      // wachthuis op slot is.
+      als: (D) => D.rovers && D.rovers.wilde !== false && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa &&
+        !heeft(D, 'wachthuis') && !T.isDicht(D, 'wachthuis'),
       tekst: (D) => {
         const woorden = { gebouw: eenNaam('wachthuis'), getal: T.telwoord(T.SOLDATEN_INSTELLINGEN.plaatsen) };
         return T.t('The robbers are coming back. In {gebouw} [B], up to {getal} who have no work become soldiers, to fight at your side.', woorden);

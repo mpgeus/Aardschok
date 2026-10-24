@@ -29,8 +29,9 @@
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=gehucht) begint meteen,
   // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land is dat van de maker uit `makerZaad`
   // (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.begin), of een nieuw (T.landVoorNieuwSpel, js/begin.js),
-  // met het lege begin erop.
-  T.nieuwSpel = function (makerZaad) {
+  // met het lege begin erop. `level`: de naam van een level (T.LEVELS, levels/; vraag 187, stap 1b), of null voor het volle
+  // spel; zonder is het in de demo het demojaar (T.DEMO_INSTELLINGEN.aan, js/einde.js).
+  T.nieuwSpel = function (makerZaad, level = T.DEMO_INSTELLINGEN.aan ? 'demojaar' : null) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     S.zoom = zoomVenster; // ook als het vorige spel verder uitgezoomd was
     Object.assign(S, {
@@ -43,7 +44,7 @@
       spelregels: T.nieuweSpelregels(),
     }, T.schermVelden()); // wat alleen scherm is (de muis, het bouwmenu): js/opslaan.js
     T.pasSpelregelsToe(S);
-    T.beginOpEiland(S, T.landVoorNieuwSpel(makerZaad)); // zet S.wereld en S.dorp.aanvoerder
+    T.beginOpEiland(S, T.landVoorNieuwSpel(makerZaad), level ? T.LEVELS[level] : null); // zet S.wereld en S.dorp.aanvoerder
     if (PROEFJE) S.proefje = true;
     zetCameraOpAanvoerder();
     T.ui.reset(S);
@@ -1572,8 +1573,9 @@
       const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}`).join(', '); // geen tekst
       return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}`).join('; '); // geen tekst
     },
-    // De rovers (js/rovers.js): wanneer de wilde rovers komen (in de demo: de dag van de overval, demoOp), en de aanval die
-    // loopt (wie wegtrok, woont in een roverskamp: Spel.debug.kampen). Spel.debug.rovers(3) laat nu drie wilde rovers komen.
+    // De rovers (js/rovers.js): wanneer de wilde rovers komen (in de demo niet: de dag van zijn overval staat in het
+    // scenario, S.scenario.lot), en de aanval die loopt (wie wegtrok, woont in een roverskamp: Spel.debug.kampen).
+    // Spel.debug.rovers(3) laat nu drie wilde rovers komen.
     rovers(wat) {
       const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
       if (wat != null && !R.aanval) {
@@ -1581,8 +1583,8 @@
       }
       const A = R.aanval;
       return {
-        wildeOp: R.wildeOp,
-        demoOp: R.demoOp,
+        wildeOp: R.wilde === false ? 'geen' : R.wildeOp, // geen tekst
+        overval: S.scenario ? S.scenario.lot.overval : null,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld, stapel: A.stapelPlek } : null,
         // Je mannen in het gevecht (js/gevecht.js): hun leven, hun wapen, en tegen wie ze vechten; en wie er schuilt.
         mannen: T.mannenVan(S.dorp).map((e) => {

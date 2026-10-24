@@ -80,8 +80,13 @@
   // hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad), zodat hetzelfde zaad
   // hetzelfde spel geeft. Daarna staan S.wereld, S.dorp met zijn aanvoerder, en S.dorpen klaar; geeft het dorp. (Tot 23
   // okt heette dit T.beginOpKaart, in js/gebied.js, en kon het ook op een kaart uit Tiled beginnen; ronde 4 van het
-  // snoeien.)
-  T.beginOpEiland = function (S, makerZaad) {
+  // snoeien.) Met een `level` (T.LEVELS, levels/; vraag 187, stap 1b) krijgt je dorp wat het level van het eerste dorp
+  // zegt (de wacht, wat dicht is, de wilde rovers; T.nieuwDorp), en begint daarna zijn scenario (T.startScenario,
+  // js/scenario.js). Een level dat niet door de keuring komt, is een fout in het spel: dan begint het niet.
+  T.beginOpEiland = function (S, makerZaad, level = null) {
+    const fout = level ? T.keurScenario(level) : [];
+    if (fout.length) throw new Error(`Het level klopt niet: ${fout.join('; ')}`); // geen tekst
+    const d = (level && level.dorpen && level.dorpen[0]) || {};
     const zaad = makerZaad != null ? makerZaad : T.nieuwLandZaad();
     const w = T.laadGemaaktGehucht(zaad);
     S.wereld = w;
@@ -92,8 +97,9 @@
     // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
     // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp); een tweede
     // komt erbij met T.dorpErbij (hieronder).
-    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad });
+    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, wildeRovers: d.wildeRovers });
     S.dorpen = [S.dorp];
+    if (level) T.startScenario(S, level);
     return S.dorp;
   };
   function zetAanvoerderKlaar(aanvoerder, zaad) {
@@ -127,16 +133,17 @@
   // tent per gezin (nog niet opgezet: dat doen ze als de kar er is, T.zetKampOp), de kar aan de rand op de weg, met de
   // aanvoerder ernaast, en de kar op weg naar het plein. Wat de kar meebrengt, telt pas als hij er is (werklijst C, stap 1).
   // Wie er woont, zet T.zetBeginBewoners (js/bewoners.js) erna: een gezin per tent, dat nog over de weg moet komen.
-  T.zetKamp = function (S, D) {
+  // `wacht`: de soldaten die met de huifkar meekomen (een level, zoals het demojaar; werklijst Q, vraag 181, e), met een
+  // tent erbij, die weet wie erin woont (`wacht`).
+  T.zetKamp = function (S, D, wacht = []) {
     const w = D.wereld;
     const I = IN();
-    // In de demo een tent erbij voor de wacht (T.DEMO_INSTELLINGEN.wacht, js/einde.js; werklijst Q, vraag 181, e).
-    const wacht = T.DEMO_INSTELLINGEN.aan && T.DEMO_INSTELLINGEN.wacht.length ? 1 : 0;
-    D.plek.kamp.plekken.slice(0, 1 + I.gezinnen + wacht).forEach((p, i) => {
+    D.plek.kamp.plekken.slice(0, 1 + I.gezinnen + (wacht.length ? 1 : 0)).forEach((p, i) => {
       D.gebouwen.push({
         soort: 'tent', x: p.voet.x, y: p.voet.y, voet: { b: p.voet.b, h: p.voet.h }, deur: { x: p.deur.x, y: p.deur.y },
         tent: { x: p.x, y: p.y, vorm: p.vorm, open: p.open }, tekening: null, klaar: true, klaarOp: 0, handen: 0,
         voorwerp: null, huis: i === 0 ? 'aanvoerder' : null, bewoners: i === 0 ? null : i > I.gezinnen ? 'wacht' : 'kamp',
+        ...(i > I.gezinnen ? { wacht: [...wacht] } : {}),
       });
     });
     // de kar aan de rand, waar de weg het land in komt, en de aanvoerder ernaast
@@ -469,6 +476,7 @@
   // (Marcel: "Alles wordt door spelers geplaatst"). Alles met een vaste reeks toeval, en stil: wat het dorp zegt, gaat
   // nergens heen, ook niet als het spel in de browser draait.
   //   T.proefdorp.begin(zaad)   een nieuw spel op het eiland van `zaad` (PROEF_ZAAD), met het lege begin, op dag 1: geeft S
+  //                             (met een level erachter, zoals T.LEVELS.demojaar, het spel van dat level)
   //   T.proefdorp.maak(opties)  en het dorp erop, op dag 2, iedereen thuis: geeft S (zie maak, hieronder)
   // De stappen ertussen (dagen, bouwAf, zetBijHetVuur, legVeldBij) gebruiken de toetsen ook los.
   const STIL = new Proxy({}, { get: () => () => undefined });
@@ -494,9 +502,9 @@
   // bos en rotsen in de buurt (B2b, 13 okt: sinds het land overal van het eiland komt, ligt elk land anders dan ervoor).
   const PROEF_ZAAD = 2;
   // Een nieuw spel op het eiland van `zaad`, met het lege begin, zoals js/main.js het begint, maar zonder scherm.
-  function begin(zaad = PROEF_ZAAD) {
+  function begin(zaad = PROEF_ZAAD, level = null) {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen' };
-    metVastToeval(11, () => T.beginOpEiland(S, zaad));
+    metVastToeval(11, () => T.beginOpEiland(S, zaad, level));
     return S;
   }
 

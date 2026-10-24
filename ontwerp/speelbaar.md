@@ -244,7 +244,7 @@ nog "de schout": dat is de aanvoerder):
   die leeg naast hem op het plein gaat staan (de muis erop: "The lord's wagon. Empty, for now."). Klik op hem, en
   *Refuse* (twee keer): de banden schuiven erin, de camera kijkt hem na, de nacht valt, zijn leger komt met licht over
   de weg, het dorp vlucht, en bij het plein wordt het zwart: *Death*. Voor betalen eerst `Spel.DEMO_INSTELLINGEN.aan =
-  true`, dan *Pay*: zijn soldaten halen het bij het raadhuis en laden de wagen, hij rijdt weg, en het wordt zwart: *Until
+  true` (sinds 24 okt: een nieuw spel als demo, D, *Demo*), dan *Pay*: zijn soldaten halen het bij het raadhuis en laden de wagen, hij rijdt weg, en het wordt zwart: *Until
   next year*. Een klik of Esc slaat over. Niet in een browser bekeken: hier laadt de headless Chromium het spel niet
   (`opmerkingen.md`, "De scènes op Sint-Maarten"); in Node lopen beide scènes van begin tot eind. **Wat Claude erbij koos**
   (zeg het als het anders moet): (1) zijn leger komt een schemering na zonsondergang (in november zo'n kwart over vijf),

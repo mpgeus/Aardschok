@@ -154,7 +154,7 @@
       weg.push({ p, soort: p.soldaat.soort });
       leverIn(D, p);
     };
-    // (De wacht van de demo heeft geen wachthuis, en blijft: T.DEMO_INSTELLINGEN.wacht, js/bewoners.js.)
+    // (De wacht van de demo heeft geen wachthuis, en blijft: T.zetKamp in js/begin.js, js/bewoners.js.)
     for (const p of T.soldatenVan(D)) if (p.soldaat.wachthuis && !huizen.includes(p.soldaat.wachthuis)) geef(p);
     for (const g of huizen) {
       for (const soort of SOORTEN) for (const p of vanSoort(D, g, soort).slice(gewild(g)[soort] || 0)) geef(p);

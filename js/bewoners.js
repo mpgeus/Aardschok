@@ -759,10 +759,10 @@
     // zoveel als er zijn. Ze komen over de weg, achter de kar aan (T.werkBeginBij), dus nog zonder poppetje.
     const kamp = D.gebouwen.filter((g) => g.klaar && g.bewoners === 'kamp');
     kamp.forEach((g, n) => kampGezin(D, g, n, r));
-    // De wacht van de demo (T.DEMO_INSTELLINGEN.wacht, js/einde.js; werklijst Q, vraag 181, e): in hun eigen tent elk een
+    // De wacht van een level (het demojaar; T.zetKamp in js/begin.js, werklijst Q, vraag 181, e): in hun eigen tent elk een
     // man, soldaat van zijn soort met zijn eigen stukken (die liggen niet in de voorraad), zonder wachthuis (js/soldaten.js).
     for (const g of D.gebouwen.filter((x) => x.klaar && x.bewoners === 'wacht')) {
-      for (const soort of T.DEMO_INSTELLINGEN.wacht) {
+      for (const soort of g.wacht) {
         const p = nieuweBewoner(D, { naam: kiesNaam(D, 'man', r), geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: g });
         p.soldaat = { soort, wachthuis: null, sinds: D.kalender ? Math.floor(D.kalender.dag) : 0 };
       }

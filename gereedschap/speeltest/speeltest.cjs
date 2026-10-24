@@ -132,13 +132,18 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
     if (spelregels) localStorage.setItem('aardschok.spelregels', JSON.stringify(spelregels));
+    // De spellus loopt niet: het jaar gaat met Spel.debug.stap, dat nooit op de browser wacht, dus speelt het zo precies
+    // hetzelfde. En zonder videokaart (in de cloud) houdt de spellus de bladzijde vast, zodat er geen "load" komt en
+    // geen evaluate terug (opmerkingen.md, "De speeltest laadt het spel niet").
+    window.requestAnimationFrame = () => 0;
   }, { z: zaad, spelregels });
   const laad = async () => {
     await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
     await page.addScriptTag({ path: path.join(__dirname, 'kolonist.js') });
     await page.addScriptTag({ path: path.join(__dirname, 'speler.js') });
   };
-  await page.goto('file://' + path.join(WORTEL, 'index.html'));
+  const KLAAR = { waitUntil: 'domcontentloaded' }; // laad() wacht daarna op het spel zelf
+  await page.goto('file://' + path.join(WORTEL, 'index.html'), KLAAR);
   await laad();
   const begin = Date.now();
   let uitslag;
@@ -146,7 +151,7 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
     uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan, jaren });
     if (uitslag.opgeslagen) {
       const opgeslagen = uitslag.opgeslagen;
-      await page.reload();
+      await page.reload(KLAAR);
       await laad();
       uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, verder: { eenKeer: opgeslagen.eenKeer }, jaren });
       uitslag.opgeslagen = opgeslagen;
@@ -162,10 +167,10 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
 
 async function main() {
   const o = leesOpdracht(process.argv.slice(2));
-  // Op welke stand: de laatste commit die het spel zelf veranderde (js/, index.html en de
-  // beelden), want een commit in ontwerp/ of hier verandert niets aan hoe het speelt.
+  // Op welke stand: de laatste commit die het spel zelf veranderde (js/, de levels, index.html en
+  // de beelden), want een commit in ontwerp/ of hier verandert niets aan hoe het speelt.
   const git = (opdracht) => execSync(`git ${opdracht}`, { cwd: WORTEL, encoding: 'utf8' }).trim();
-  const SPEL = '-- js index.html beelden';
+  const SPEL = '-- js levels index.html beelden';
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');

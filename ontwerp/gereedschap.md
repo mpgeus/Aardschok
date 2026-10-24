@@ -51,7 +51,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost zo'n twee minuten (12 okt: zaad 1 in 124 s); nodig is Playwright (in
-  de cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
+  de cloud staat het klaar, en sinds 24 okt speelt het daar ook: de spellus staat stil, `opmerkingen.md`). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder, en het
   jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--regel seizoen=jij`
   speelt het met een spelregel anders, en met `--getal BOS_INSTELLINGEN.bosVanDeHeer=20` met een getal uit de
@@ -249,8 +249,8 @@ hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp
 hoeveel tenten), en wie er woont, met het dorp van wie wegtrok (`js/rovers.js`, werklijst vraag 170, stap 6a2, c1 en c2); `('erheen')` maakt het land om het dichtste kamp open, zet het
 kamp neer, laat je dorp het kennen (de rode stip op de minikaart) en kijkt erheen. In een verborgen paneel tekent de
 minikaart pas opnieuw met `Spel.ui.werkMinikaartBij(Spel.S)`.
-`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `demoOp`, de dag van de overval), hoe een aanval ervoor
-staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
+`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `geen`, en bij `overval` de dag van het bericht van
+de overval, uit het scenario), hoe een aanval ervoor staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
 drie wilde rovers komen. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
 wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).

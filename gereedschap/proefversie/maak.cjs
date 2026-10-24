@@ -54,13 +54,13 @@ function bestanden() {
 }
 
 // De stand: "Proefversie van 29 sep 2026 · 6750a21", met "en wijzigingen" als het spel wijzigingen heeft die nog niet
-// gecommit zijn (zoals de speeltest het zegt: js, index.html, de beelden en de stijl).
+// gecommit zijn (zoals de speeltest het zegt: js, de levels, index.html, de beelden en de stijl).
 function stand() {
   const git = (opdracht) => execSync(`git ${opdracht}`, { cwd: WORTEL, encoding: 'utf8' }).trim();
   const MAANDEN = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   const nu = new Date();
   const commit = git('rev-parse --short HEAD');
-  const vies = git('status --porcelain -- js index.html beelden tegels letters stijl.css');
+  const vies = git('status --porcelain -- js levels index.html beelden tegels letters stijl.css');
   return {
     tekst: `Proefversie van ${nu.getDate()} ${MAANDEN[nu.getMonth()]} ${nu.getFullYear()} · ${commit}${vies ? ' en wijzigingen' : ''}`,
     bestand: `${NAAM.toLowerCase()}-proef-${nu.toISOString().slice(0, 10)}-${commit}${vies ? '-met-wijzigingen' : ''}.zip`,

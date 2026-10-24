@@ -7,8 +7,8 @@
 //
 //   weigeren: hij gaat (de camera op de heer, 1×), de nacht valt (het plein, de tijd snel), zijn leger komt (de kop van
 //             de rij, 1×). Ook in het volle spel, zolang weigeren de dood is (werklijst, F).
-//   betalen:  alleen in de demo (T.DEMO_INSTELLINGEN, js/einde.js): zijn mannen halen het bij je voorraad (de tijd wat
-//             sneller), ze brengen het naar zijn wagen (1×), en hij rijdt weg (de wagen, 1×).
+//   betalen:  alleen als het level het zegt (de trigger `scene`, js/scenario.js; het demojaar): zijn mannen halen het bij
+//             je voorraad (de tijd wat sneller), ze brengen het naar zijn wagen (1×), en hij rijdt weg (de wagen, 1×).
 //
 // Wat de scène nu toont, komt uit wat de wereld nu is (T.welkeScene en T.regieShot, zonder scherm en getoetst in
 // test/regie.test.cjs), zodat een spel dat midden in een scène geladen wordt, gewoon verder speelt. Wat alleen scherm
@@ -31,16 +31,16 @@
   };
   const IN = () => T.REGIE_INSTELLINGEN;
 
-  // Welke scène er nu in dorp D speelt: 'weigeren' (je weigerde de heer, en zijn leger komt), 'betalen' (in de demo: hij
-  // gaat met wat hij nam, zijn mannen laden of hij rijdt al), of null. Een scène begint alleen zolang het spel nog niet
-  // uit is.
+  // Welke scène er nu in dorp D speelt: 'weigeren' (je weigerde de heer, en zijn leger komt), 'betalen' (met de scène van
+  // het betalen, D.scene: hij gaat met wat hij nam, zijn mannen laden of hij rijdt al), of null. Een scène begint alleen
+  // zolang het spel nog niet uit is.
   T.welkeScene = function (D) {
     const h = D && D.heer;
     if (!h || D.einde) return null;
     if (h.leger) return 'weigeren';
     const b = h.bezoek;
     const betaald = !!(b && b.betaald && !b.betaald.geweigerd);
-    return T.DEMO_INSTELLINGEN.aan && betaald && (b.laden || b.weg) ? 'betalen' : null;
+    return D.scene === 'betalen' && betaald && (b.laden || b.weg) ? 'betalen' : null;
   };
 
   // Wat de scène `R` (S.regie) nu toont in dorp D: { stap, volg, zin, snelheid }. `volg` is waar de camera kijkt (in

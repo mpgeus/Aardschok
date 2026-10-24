@@ -1112,6 +1112,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat linksboven (`T.doelLinksboven`, vanuit `js/main.js`, anders `T.tredeDoel`); het eind is `T.spelUit` met reden
   `'scenario'` (`js/einde.js`, het scherm in `js/hud.js`). Een gebied is een vak of een kring van tegels, en een
   voorwaarde erop loopt de wezens van de kaart af, niet de tegels (`minstensIn`, zonder lijst).
+- **Een level** (stap 1b, 24 okt; Marcel: "1b nu"): een bestand in `levels/` (een script, geen JSON: dat laadt niet vanaf
+  `file://`; in `index.html` na `js/scenario.js`) zet `T.LEVELS.<naam>`: een scenario met `dorpen` (per dorp wat het bij
+  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`) en `demo`. `T.nieuwSpel(makerZaad, level)` (`js/main.js`; zonder
+  level het demojaar als `T.DEMO_INSTELLINGEN.aan`, anders het volle spel) geeft het aan `T.beginOpEiland` (`js/begin.js`):
+  dat keurt het (een fout gooit, want dat is een fout in het spel), geeft `T.nieuwDorp` wat het van het eerste dorp zegt,
+  en start daarna het scenario. `T.proefdorp.begin(zaad, level)` doet hetzelfde voor de toetsen. **Het eerste level is
+  het demojaar** (`levels/demojaar.js`): de wacht in een eigen tent (de tent draagt de lijst, `g.wacht`, voor
+  `T.zetBeginBewoners`), het wachthuis en de wapenmaker op slot (`D.dicht`, `T.isDicht` in `js/gebouwen.js`), geen wilde
+  rovers (`D.rovers.wilde === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
+  (`{ rovers: { aantal: 3, aangekondigd: true } }`, `js/rovers.js`), en een trigger als de heer komt (`{ heer: 'komt' }`)
+  voor de punten (`punten`, `T.telPunten`) en de scène van het betalen (`scene: 'betalen'` zet `D.scene`; dan is betalen
+  het eind, `js/heer.js`, en speelt `js/regie.js` de scène). `S.scenario.demo` laat het eindscherm zeggen dat de demo daar
+  eindigt (`js/hud.js`). Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
+  Het getal van de overval en zijn dagen staan nu in het level, niet meer in de werkbank (die houdt `vooraf` en
+  `voorDonker`, `T.ROVERS_INSTELLINGEN.aangekondigd`). Nog niet: `bouw` als gevolg (iets open of dicht midden in een
+  level), en `npm run teksten` voor de zinnen van een level (het demojaar heeft er geen).
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -1455,9 +1471,9 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `T.verhuisUitHetKamp` zet een gezin ook in een boerderij of een wijnboerderij die af is (één gezin per boerderij; `T.isBoerderij`), en zegt dat de man de
   boer is.
 - **Sinds 20 okt** (werklijst Q, vraag 181): de kar brengt vee mee (`T.VEE_INSTELLINGEN.metDeKar`, in `T.zetKampOp` met
-  `T.veeErbij`, js/vee.js), en in de demo een tent erbij voor de wacht (`bewoners: 'wacht'`, `T.DEMO_INSTELLINGEN.wacht`,
-  js/einde.js). Die tent is geen kamptent (`T.kampTenten`): zijn soldaten trekken niet in een hut en worden geen boer, en
-  hij blijft staan als het kamp weggaat (`haalTentWeg`).
+  `T.veeErbij`, js/vee.js), en in de demo een tent erbij voor de wacht (`bewoners: 'wacht'`, met de soorten in `wacht`; de
+  `wacht` van het level, `T.zetKamp(S, D, wacht)`, levels/demojaar.js). Die tent is geen kamptent (`T.kampTenten`): zijn
+  soldaten trekken niet in een hut en worden geen boer, en hij blijft staan als het kamp weggaat (`haalTentWeg`).
 
 ### js/bouwen.js: meebouwen
 
@@ -2119,8 +2135,9 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `staat` (de regels bovenaan, wat je anders in de console vroeg). Een knop roept een regel aan die er is, of een
   `Spel.debug`-opdracht (`js/main.js`) en zegt zelf in het Engels wat er gebeurde. De tijd springt met `S.kalender.dag`
   (`spring`); `T.werkGebouwenBij` doet daarna elke nacht ertussen apart (240 nachten kosten zo'n seconde). Een nieuw spel
-  (Demo) zet `T.DEMO_INSTELLINGEN.aan`, en doet wat New game in het menu doet: `T.nieuwSpel` op het land van nu,
-  `T.zetDorpsnaam`, de brief `benoeming`. De overval van de demo morgen is `T.demoOvervalMorgen` (`js/rovers.js`). De
+  (Demo) doet wat New game in het menu doet, met het level `demojaar` of zonder (`T.nieuwSpel(zaad, level)`, voor dit spel):
+  op het land van nu, `T.zetDorpsnaam`, de brief `benoeming`. De overval van de demo morgen (`overvalMorgen`) is
+  `T.roversKomen` met de rovers van de trigger `overval` van het demojaar, en zet die trigger in het spel uit. De
   tabbladen hebben de opmaak van Settings (`:is(#instellingen, #debug) .tab` in `stijl.css`). Het open tabblad is alleen
   scherm (`tab`). Getallen: `T.DEBUG_INSTELLINGEN` (`vee`, `gezin`, `rovers`, `uren`, `dagen`).
 - **Aan tot de Steam-versie** (Marcel, 15 okt), ook in de proefversie: `T.DEBUG_INSTELLINGEN.aan` gaat voor Steam op
@@ -2129,8 +2146,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   de knop *Game rules and the workbench* opent ze hier in de stand `'debug'` (`T.ui.openSpelregels(S, 'debug')`, js/hud.js),
   te kiezen midden in een spel, met de werkbank. Die staat alleen bij een stand waarin je kiest en zolang dit venster aan is.
 - **Het slot van de demo** (20 okt; Marcel: "dat we de gebouwen ook aan en uit kunnen zetten om te testen"): een knop zet
-  `T.DEMO_INSTELLINGEN.slot` aan of uit (`T.demoSlot`, js/gebouwen.js; null volgt de demo), ook buiten de demo. Voor de
-  demo gaat het debugvenster er echt uit (`verpakken.md`).
+  in dit spel `D.dicht` op wat het demojaar dicht heeft, of leeg (`T.isDicht`, js/gebouwen.js), ook buiten de demo. Voor
+  de demo gaat het debugvenster er echt uit (`verpakken.md`).
 - **De maat van de gebouwen, een proef** (20 okt; werklijst R, vraag 183, 2a1; Marcel: "ik twijfel of de huizen 'te
   groot' zijn"): een knop wisselt `T.TEKENEN_INSTELLINGEN.gebouwMaat` door `T.DEBUG_INSTELLINGEN.gebouwMaten` (1, 0,8 en
   0,65). `tekenOpMaat` in `js/tekenen.js` tekent een gebouw (en de sneeuw op zijn dak) dan zo veel kleiner, rond het
@@ -2207,13 +2224,14 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   tegel), met de ingang erbij; `doelVan` en `isEr` (op de akker, of naast de stapel) gelden voor allebei, en `roofStapel`
   neemt met `T.neemVanStapel` (`js/kar.js`) `stapelPerRover` per man. Rovers horen bij een dorp dat vanaf niets begon
   (`D.begin`) of akkers heeft (`heeftRovers`), dus ook voor de eerste akker.
-- **De overval van de demo** (vraag 185, 23 okt; Marcel: 4a3, 4b1, 4c1, "overdag, aankondiging ja"): met
-  `T.DEMO_INSTELLINGEN.aan` plant `T.tikRoversDag` geen wilde rovers maar `planDemoOverval`: de dag uit het zaad
-  (`D.rovers.demoOp`, tussen `demo.van` en `demo.tot`), en de nacht ervoor een aanval met `demo: true`, `demo.aantal` man,
-  op een uur van `demoUur` (overdag, tot `demo.voorDonker` uur voor zonsondergang). `demo.vooraf` uur ervoor kiest `meld`
-  het doel en de ingang, zegt het met de plek, en zet de tijd op 1× (`aanval.gemeld`); is er niets te roven, dan vervalt
-  de aanval, en staat hij de nacht erna weer klaar. `begin` zet `D.rovers.demoGeweest`; daarna komt er niets meer. De raad
-  zegt in de demo niet dat ze terugkomen (`js/raad.js`).
+- **De overval van de demo** (vraag 185, 23 okt; Marcel: 4a3, 4b1, 4c1, "overdag, aankondiging ja"; sinds 24 okt een
+  trigger van het demojaar, `levels/demojaar.js`): een dorp met `D.rovers.wilde === false` krijgt van `T.tikRoversDag`
+  geen wilde rovers. De trigger `overval` gaat af op een dag uit het zaad (`S.scenario.lot.overval`) en roept
+  `T.roversKomen(D, { aantal, aangekondigd: true })`: een aanval met `aangekondigd: true` voor morgen, op een uur van
+  `overdagUur` (overdag, tot `aangekondigd.voorDonker` uur voor zonsondergang). `aangekondigd.vooraf` uur ervoor kiest
+  `meld` het doel en de ingang, zegt het met de plek, en zet de tijd op 1× (`aanval.gemeld`); is er niets te roven, dan
+  schuift de aanval een dag op (met het uur van die dag, zoals de nacht erna eerst opnieuw plande). De trigger gaat één
+  keer af. De raad zegt niet dat ze terugkomen waar geen wilde rovers komen of het wachthuis dicht is (`js/raad.js`).
 - **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
   (`E.kampen`, `js/eiland.js`, `legKampen`, met de tentplekken en hun deur); wat een kamp in een spel is, staat op de
   kaart (`w.kampen`, bewaard, vanaf de eerste tik alle kampen van het eiland, `kampenVan`; de velden staan bovenaan het
@@ -2262,11 +2280,13 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   het eindscherm (`T.ui.toonGewonnen`), het grote feest (`T.FEESTEN.stad`) en de spelregel "Het eind" zijn weg, en met
   hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. **Het doel van de demo**
   (18 okt; Marcel, D2): het eerste Sint-Maarten. Weiger je de heer, dan komt zijn leger (`D.einde`, reden `'leger'`,
-  js/heer.js); betaal je, dan eindigt alleen de demo (`T.DEMO_INSTELLINGEN.aan`, hier, aan bij het verpakken van de demo,
-  `verpakken.md`), als zijn wagen een eind de weg op is (reden `'betaald'`). Er komt eerst een scène (js/regie.js): zolang
-  die speelt, wacht het eindscherm tot het beeld zwart is. Het eindscherm (`T.ui.toonEinde`) zegt het jaar in
-  het kort met `T.eindRegels` (het jaarverslag, met wat er staat), en de link naar Steam als `T.DEMO_INSTELLINGEN.steam`
-  een adres heeft. Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
+  js/heer.js); betaal je, dan eindigt alleen de demo (met de scène van het betalen, `D.scene`, die de trigger van het
+  demojaar zet; `levels/demojaar.js`), als zijn wagen een eind de weg op is (reden `'betaald'`). Er komt eerst een scène
+  (js/regie.js): zolang die speelt, wacht het eindscherm tot het beeld zwart is. Het eindscherm (`T.ui.toonEinde`) zegt
+  het jaar in het kort met `T.eindRegels` (het jaarverslag, met wat er staat), de punten als ze geteld zijn (`D.punten`,
+  de trigger `punten`), en in de demo (`S.scenario.demo`) dat ze hier eindigt, met de link naar Steam als
+  `T.DEMO_INSTELLINGEN.steam` een adres heeft. `T.DEMO_INSTELLINGEN.aan` zegt alleen nog dat een nieuw spel het demojaar
+  is (aan bij het verpakken van de demo, `verpakken.md`). Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
   leest ze meer (`test/einde.test.cjs`).
 - **Eén weg naar het eind** (24 okt): `T.spelUit(D, einde, zin)` zet `D.einde`, zegt de zin, zet in jouw dorp de tijd
   stil en toont het eindscherm; het dorp leeg (hier), verjaagd (`js/bazen.js`), je ambt kwijt, zijn leger en de demo
@@ -2370,7 +2390,7 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   een man met `p.soldaat = { soort, wachthuis: null }`, met zijn eigen stukken (niet uit de voorraad). Zonder wachthuis
   levert hij niet in (`T.werkSoldatenBij`); zijn post zet je met rechts (`e.post`, js/kiezen.js), en buiten zijn dienst
   slaapt hij in zijn tent (`T.dagAnker`, js/dag.js). Het wachthuis en de wapenmaker zijn in de demo op slot
-  (`T.inDeDemoDicht`, js/gebouwen.js).
+  (`D.dicht`, `T.isDicht` in js/gebouwen.js). Wie meekomt en wat dicht is, zegt het demojaar (`levels/demojaar.js`).
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
 

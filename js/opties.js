@@ -1482,13 +1482,10 @@
     'REGIE_INSTELLINGEN.overslaan': T.t('seconds to black when skipped'), // geen tekst
     // De punten van de demo (werklijst R, vraag 186)
     'EINDE_INSTELLINGEN.waarde': T.t('the score: what each piece is worth in gold, unless the merchant buys it'), // geen tekst
-    // De overval van de demo (werklijst R, vraag 185)
-    'ROVERS_INSTELLINGEN.demo': T.t('the raid in the demo'), // geen tekst
-    'ROVERS_INSTELLINGEN.demo.aantal': T.t('robbers'), // geen tekst
-    'ROVERS_INSTELLINGEN.demo.van': T.t('on a day from'), // geen tekst
-    'ROVERS_INSTELLINGEN.demo.tot': T.t('until day'), // geen tekst
-    'ROVERS_INSTELLINGEN.demo.vooraf': T.t('the warning comes this many hours ahead'), // geen tekst
-    'ROVERS_INSTELLINGEN.demo.voorDonker': T.t('they come at the latest this many hours before sunset'), // geen tekst
+    // De aangekondigde overval, zoals in de demo (werklijst R, vraag 185); hoeveel man en op welke dag zegt het level
+    'ROVERS_INSTELLINGEN.aangekondigd': T.t('an announced raid, as in the demo'), // geen tekst
+    'ROVERS_INSTELLINGEN.aangekondigd.vooraf': T.t('the warning comes this many hours ahead'), // geen tekst
+    'ROVERS_INSTELLINGEN.aangekondigd.voorDonker': T.t('they come at the latest this many hours before sunset'), // geen tekst
   };
   // De naam van de sleutel die bij dit pad hoort, of null als die ontbreekt.
   // Een waar heet zoals op het scherm (T.waarNaam, js/voorraad.js), als hij hier geen eigen naam heeft: zo staat een

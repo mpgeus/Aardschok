@@ -87,9 +87,9 @@
     const soorten = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu(S.dorp, id));
     const cellen = ['weg', 'afbreken', ...soorten].map((id) => {
       const w = wenkVanSoort(S, id);
-      // Wat in de demo op slot is (T.inDeDemoDicht, js/gebouwen.js; werklijst Q, vraag 181, e): je ziet het, met een
-      // slot, maar een klik pakt het niet op.
-      const dicht = T.inDeDemoDicht(id);
+      // Wat in de demo op slot is (T.isDicht, js/gebouwen.js; werklijst Q, vraag 181, e): je ziet het, met een slot, maar
+      // een klik pakt het niet op.
+      const dicht = T.isDicht(S.dorp, id);
       const uitleg = dicht ? `<b>${T.t('In the full game.')}</b><br>${w.uitleg}` : w.uitleg;
       return `<button data-soort="${id}"${dicht ? ' data-dicht="1"' : ''} data-naam="${veilig(w.naam)}" data-uitleg="${veilig(uitleg)}">` +
         `<canvas class="bouw-plaatje"></canvas><span class="bouw-naam">${w.naam}</span>${dicht ? '<span class="bouw-slot" aria-hidden="true"></span>' : ''}</button>`;
@@ -559,10 +559,11 @@
       .join(' · ');
     const heer = jaren ? `<p class="einde-jaren">${T.t('What the lord received: {jaren}', { jaren })}</p>` : '';
     // Het eerste Sint-Maarten (werklijst, E, stap 5; Marcel, 18 okt, D2): je weigerde hem en zijn leger kwam (js/heer.js,
-    // T.weigerHeer: "met death als gevolg"), of je betaalde en hij reed weg met je waren (alleen in de demo,
-    // T.DEMO_INSTELLINGEN). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), in de demo de punten (vraag
-    // 186: één getal onder het jaarverslag, D.punten, T.telPunten in js/einde.js), en de link naar de Steam-pagina zodra
-    // die er is. De cinematics komen ervoor (werklijst, E, stap 4).
+    // T.weigerHeer: "met death als gevolg"), of je betaalde en hij reed weg met je waren (met de scène van het betalen, de
+    // demo). Daaronder het jaar in een paar regels (T.eindRegels, js/einde.js), de punten als ze geteld zijn (vraag 186:
+    // één getal onder het jaarverslag, D.punten, de trigger `punten` van het demojaar), en in de demo (S.scenario.demo,
+    // levels/demojaar.js) dat ze hier eindigt, met de link naar de Steam-pagina zodra die er is (T.DEMO_INSTELLINGEN). De
+    // cinematics komen ervoor (werklijst, E, stap 4).
     const regels = () => `<ul class="einde-regels">${T.eindRegels(D).map((r) => `<li>${veilig(r)}</li>`).join('')}</ul>`;
     const punten = () => {
       const p = D.punten;
@@ -571,7 +572,7 @@
       return `<p class="einde-punten">${T.t('Score: {totaal}', { totaal: p.totaal })}</p>` +
         `<p class="einde-jaren">${T.t('{verzameld} for what your people gathered this year, {ligt} for what lay in your stores on Martinmas.', { verzameld: p.verzameld, ligt: p.ligt })}${beste}</p>`;
     };
-    const demo = () => (!T.DEMO_INSTELLINGEN.aan ? '' : punten() + `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
+    const demo = () => punten() + (!(S.scenario && S.scenario.demo) ? '' : `<p class="einde-demo">${T.t('This is where the demo ends.')}</p>` +
       (T.DEMO_INSTELLINGEN.steam ? `<p><a class="einde-wenslijst" href="${veilig(T.DEMO_INSTELLINGEN.steam)}" target="_blank" rel="noopener">${T.t('Wishlist {naam} on Steam', { naam: T.NAAM })}</a></p>` : ''));
     if (D.einde && D.einde.reden === 'leger') {
       T.ui.toonOverlay(

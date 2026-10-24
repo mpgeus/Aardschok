@@ -107,23 +107,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   keuze is aan Marcel. Onderweg: `npm run grootte` werkt niet op het eiland (`gereedschap/grootte/bouw.cjs` zoekt alleen
   kaarten tot 512 tegels, bouwt niets en meldt een lege reden).
 
-- **De speeltest laadt het spel niet** (17 okt, bij c2 van 6a2): `npm run speeltest` stopt met `page.goto: Timeout
-  30000ms exceeded` op `file:///.../index.html`, en ook met drie minuten wachten komt er geen "load"; op de stand zonder
-  c2 (een losse kopie met `git worktree add`) net zo, dus het ligt niet aan c2. Via de server (`npm start`, in de
-  browser van de app) laadt het spel gewoon. Nog niet uitgezocht wat er via `file://` blijft hangen (een plaatje, een
-  lettertype van buiten, of Chromium van Playwright zelf). Op 18 okt, in de cloud: ook via de server komt de headless
-  Chromium (`channel: 'chromium'`, zonder videokaart) niet verder dan het laden van de scripts; met `?kaart=gehucht`
-  bestaat `Spel.debug` na 2 s, maar daarna komt geen `page.evaluate` meer terug, ook niet `Spel.debug.opslaan`, op de
-  stand van toen en die ervoor. De spellus lijkt de pagina vast te houden; zo is F2 (`snelheid.md`) niet in de browser
-  nagekeken. **Op 23 okt lukte het wel** (ronde 4 van het snoeien): de kale headless Chromium van Playwright met
-  `--use-angle=swiftshader --enable-unsafe-swiftshader`, `?kaart=gehucht`, `waitUntil: 'domcontentloaded'` en een
-  wachttijd van een paar minuten (laden duurt zo'n 90 s), de spellus stil zoals `tekenmeting.cjs` doet, en dan
-  `Spel.debug.proefdorp(5)`. Het WebGL-doek teruglezen gaf wit; `page.screenshot` werkt. **Op 24 okt (4b) in 5 à 11 s**:
-  hetzelfde recept (de spellus stil met een `requestAnimationFrame` die niets doet, `?kaart=gehucht`,
-  `waitUntil: 'domcontentloaded'`), `Spel.debug` na 5 à 11 s, het proefdorp na nog 7 à 11; `Spel.tekenBeeld()` tot
-  `Spel.sprites.bezig()` 0 is, en dan `page.screenshot`. Zo zijn de oude en de nieuwe
-  stand pixel voor pixel vergeleken. `npm run tekenmeting -- --tegen` en de speeltest wachten nog op "load" van `/`, en
-  dat komt hier nooit.
+- **De tekenmeting met `--tegen` laadt het spel niet in de cloud** (17 okt; tot 24 okt gold het ook voor de speeltest):
+  zonder videokaart houdt de spellus de bladzijde vast, zodat er geen "load" komt en geen `page.evaluate` terug. Het
+  recept dat werkt (4b, 24 okt): de spellus stil met een `requestAnimationFrame` die niets doet, `waitUntil:
+  'domcontentloaded'`, en dan wachten op `Spel.debug` (5 à 11 s); met `?kaart=gehucht` en `Spel.debug.proefdorp(5)` het
+  proefdorp, `Spel.tekenBeeld()` tot `Spel.sprites.bezig()` 0 is, en dan `page.screenshot` (het WebGL-doek teruglezen
+  geeft wit). **De speeltest doet het zo sinds 24 okt** (1b), en speelt ook in de cloud (zaad 1 in 143 s): het jaar gaat
+  met `Spel.debug.stap`, dat nooit op de browser wacht, dus is het hetzelfde jaar. `npm run tekenmeting -- --tegen` wacht
+  nog op "load" van `/`.
+- **De proef met opslaan geeft een verschil in wie wat deelt** (24 okt, de eerste keer in de cloud, op 133e13c):
+  `npm run speeltest -- --zaad 1 --opslaan` vindt 10 plekken, alle tien bij de wolven (`wezens.95` tot `102`): in het
+  jaar zonder opslaan wijst hun `aanval` naar een object dat een eerder wezen al had, na het laden hebben ze er samen een
+  nieuw. Verder is het jaar letter voor letter gelijk, dus het spel loopt hetzelfde; het is wie hetzelfde object deelt
+  (een vaste aanval die bij het laden een eigen kopie krijgt). Niet uitgezocht; de proef zegt pas weer "precies
+  hetzelfde jaar" als dat gelijk is.
 - **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken
   gebroken: een weg kreeg geen bruggetje waar de oversteek breed of schuin was, en het proefdorp zat opgesloten in 7%
   van het land. Dat is opgelost met L1 (Marcel: "L1"; `code.md` bij `js/eiland.js`): tegel voor tegel gemeten liggen op

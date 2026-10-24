@@ -512,20 +512,19 @@ test('in de demo eindigt het spel ook als je betaalt: als hij weg is, met je war
   const S = metHeer();
   assert.ok(geefAlles(S).kan);
   assert.ok(!S.einde, 'in het volle spel speelt het door');
-  T.DEMO_INSTELLINGEN.aan = true;
-  try {
-    const S2 = metHeer();
-    geefAlles(S2);
-    assert.equal(S2.einde && S2.einde.reden, 'betaald', 'zonder poppetje is hij meteen weg, en is de demo uit');
-    const S3 = metHeer();
-    T.weigerHeer(S3);
-    assert.ok(!S3.einde, 'wie weigert, wacht op zijn leger');
-    T.tikHeerDag(S3, SINT_MAARTEN + 1);
-    assert.equal(S3.einde.reden, 'leger');
-    assert.ok(T.eindRegels(S3).some((r) => /refused the lord/.test(r)), 'het eindscherm zegt dat je hem weigerde');
-  } finally {
-    T.DEMO_INSTELLINGEN.aan = false;
-  }
+  // De demo: de scène van het betalen, zoals de trigger van het demojaar die zet als hij komt (levels/demojaar.js).
+  const demo = (D) => T.doeGevolg(null, D, { scene: 'betalen' });
+  const S2 = metHeer();
+  demo(S2);
+  geefAlles(S2);
+  assert.equal(S2.einde && S2.einde.reden, 'betaald', 'zonder poppetje is hij meteen weg, en is de demo uit');
+  const S3 = metHeer();
+  demo(S3);
+  T.weigerHeer(S3);
+  assert.ok(!S3.einde, 'wie weigert, wacht op zijn leger');
+  T.tikHeerDag(S3, SINT_MAARTEN + 1);
+  assert.equal(S3.einde.reden, 'leger');
+  assert.ok(T.eindRegels(S3).some((r) => /refused the lord/.test(r)), 'het eindscherm zegt dat je hem weigerde');
 });
 
 test('waar geen plein is (het oude spel), komt hij nooit', () => {
@@ -935,24 +934,23 @@ test('zijn wagen staat leeg op het plein; betaal je, dan dragen zijn soldaten wa
 });
 
 test('in de demo is betalen het eind als zijn wagen een eind de weg op is, en overslaan is het meteen', () => {
-  T.DEMO_INSTELLINGEN.aan = true;
-  try {
-    const { D, b, plein, tik } = heerOpHetPlein(T);
-    T.zetVoorraad(D, 'graan', 200);
-    T.betaalHeer(D, T.alWatHijVraagt(D));
-    let n = 0;
-    for (; !D.einde && n < 60 * 300; n++) tik();
-    assert.equal(D.einde && D.einde.reden, 'betaald');
-    assert.ok(D.heer.bezoek, 'hij is nog op de kaart: het beeld wordt zwart terwijl hij wegrijdt');
-    assert.ok(T.afstand(T.tegelVan(b.wagen), plein) >= IN.wagen.demoWegNa);
-    // Overslaan (een klik of Esc in de scène, js/regie.js) is meteen het eind.
-    const P = heerOpHetPlein(T);
-    T.betaalHeer(P.D, T.alWatHijVraagt(P.D));
-    T.eindVanSintMaarten(P.D);
-    assert.equal(P.D.einde && P.D.einde.reden, 'betaald');
-  } finally {
-    T.DEMO_INSTELLINGEN.aan = false;
-  }
+  // Het demojaar (levels/demojaar.js): zijn trigger zet de scène van het betalen, de seconde nadat de heer kwam.
+  const { S, D, b, plein, tik } = heerOpHetPlein(T);
+  assert.deepEqual(T.startScenario(S, T.LEVELS.demojaar), []);
+  T.zetVoorraad(D, 'graan', 200);
+  T.betaalHeer(D, T.alWatHijVraagt(D));
+  let n = 0;
+  for (; !D.einde && n < 60 * 300; n++) tik();
+  assert.equal(D.scene, 'betalen');
+  assert.equal(D.einde && D.einde.reden, 'betaald');
+  assert.ok(D.heer.bezoek, 'hij is nog op de kaart: het beeld wordt zwart terwijl hij wegrijdt');
+  assert.ok(T.afstand(T.tegelVan(b.wagen), plein) >= IN.wagen.demoWegNa);
+  // Overslaan (een klik of Esc in de scène, js/regie.js) is meteen het eind.
+  const P = heerOpHetPlein(T);
+  T.doeGevolg(P.S, P.D, { scene: 'betalen' });
+  T.betaalHeer(P.D, T.alWatHijVraagt(P.D));
+  T.eindVanSintMaarten(P.D);
+  assert.equal(P.D.einde && P.D.einde.reden, 'betaald');
   // In het volle spel is er na betalen niets over te slaan.
   const V = heerOpHetPlein(T);
   T.betaalHeer(V.D, T.alWatHijVraagt(V.D));
