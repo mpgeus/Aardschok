@@ -38,16 +38,6 @@ function losseStapel(S, ligt) {
   }
   throw new Error('geen plek voor een stapel');
 }
-// De demo aan (js/einde.js), alleen zolang `doe` loopt.
-function inDeDemo(doe) {
-  const was = T.DEMO_INSTELLINGEN.aan;
-  T.DEMO_INSTELLINGEN.aan = true;
-  try {
-    return doe();
-  } finally {
-    T.DEMO_INSTELLINGEN.aan = was;
-  }
-}
 
 function zet(e, x, y) {
   e.x = e.tx = x;
@@ -323,94 +313,104 @@ test('is er geen akker en geen stapel, dan komen er geen rovers', () => {
   assert.ok(!S.wereld.wezens.some((e) => e.rover));
 });
 
-// De overval van de demo (vraag 185; Marcel, 20 okt: 4a3, 4b1 en 4c1, en 23 okt: overdag, met een aankondiging).
-test('in de demo geen wilde rovers maar één overval van drie, overdag, op een dag uit het zaad, met een bericht vooraf', () =>
-  inDeDemo(() => {
-    const M = T.ROVERS_INSTELLINGEN.demo;
-    const S = gehucht();
-    const R = (S.dorp.rovers = T.nieuweRovers());
-    let dag = 1;
-    for (; dag < 250 && !R.aanval; dag++) T.tikRoversDag(S.dorp, dag);
-    dag--;
-    assert.equal(R.wildeOp, null, 'geen wilde rovers');
-    assert.ok(R.demoOp >= M.van && R.demoOp <= M.tot, `dag ${R.demoOp}`);
-    const A = R.aanval;
-    assert.equal(dag, R.demoOp - 1, 'de nacht ervoor staat hij klaar');
-    assert.equal(A.dag, R.demoOp);
-    assert.equal(A.aantal, 3);
-    const zon = T.dagindeling(A.dag).zon;
-    assert.ok(A.uur >= zon.op + 1 && A.uur <= zon.onder - M.voorDonker, `overdag: ${A.uur} (de zon van ${zon.op} tot ${zon.onder})`);
-    const S2 = gehucht();
-    S2.dorp.rovers = T.nieuweRovers();
-    T.tikRoversDag(S2.dorp, 1);
-    assert.equal(S2.dorp.rovers.demoOp, R.demoOp, 'hetzelfde zaad, dezelfde dag');
-    // Het bericht, een dag van tevoren.
-    berichten.length = 0;
-    S.kalender.snelheid = 3;
-    opUur(S, A.dag - 1, A.uur + 24 - M.vooraf - 0.2);
-    T.werkRoversBij(S, S.dorp);
-    assert.ok(!A.gemeld && !berichten.length, 'nog niet');
-    opUur(S, A.dag - 1, A.uur + 24 - M.vooraf + 0.1);
-    T.werkRoversBij(S, S.dorp);
-    assert.ok(A.gemeld);
-    assert.ok(berichten.some((t) => /^Robbers were seen in the woods near the village\. They will come soon\./.test(t)), berichten.join(' | '));
-    assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
-    assert.equal(A.fase, 'wacht', 'ze zijn er nog niet');
-    assert.ok(!S.wereld.wezens.some((e) => e.rover));
-    // Ze komen waar het bericht zei.
-    const ingang = { ...A.ingang };
-    opUur(S, A.dag, A.uur + 0.1);
-    T.werkRoversBij(S, S.dorp);
-    assert.equal(A.fase, 'komen');
-    assert.equal(A.rovers.length, 3);
-    assert.deepEqual(A.ingang, ingang);
-    assert.equal(R.demoGeweest, true);
-    // En daarna niet meer.
-    R.aanval = null;
-    for (let d = A.dag + 1; d < 2 * T.DAGEN_PER_JAAR; d++) T.tikRoversDag(S.dorp, d);
-    assert.equal(R.aanval, null, 'één keer');
-  }));
+// De overval van de demo (vraag 185; Marcel, 20 okt: 4a3, 4b1 en 4c1, en 23 okt: overdag, met een aankondiging): het
+// demojaar (levels/demojaar.js) zet de wilde rovers uit, en zijn trigger begint de aangekondigde overval (T.roversKomen).
+const V = () => T.ROVERS_INSTELLINGEN.aangekondigd;
+const geenWilde = (S) => (S.dorp.rovers = { ...T.nieuweRovers(), wilde: false });
+// Een seconde van de wereld verder, en de triggers kijken (zoals de tik dat doet, js/tik.js).
+function seconde(S) {
+  S.wereldTijd += 1;
+  T.werkScenarioBij(S);
+}
 
-test('valt er in de demo niets te roven, dan komen ze een dag later', () =>
-  inDeDemo(() => {
-    const S = leeg();
-    const R = (S.dorp.rovers = T.nieuweRovers());
-    R.demoOp = 30;
-    T.tikRoversDag(S.dorp, 29);
-    const A = R.aanval;
-    berichten.length = 0;
-    opUur(S, 29, A.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf + 0.1);
-    T.werkRoversBij(S, S.dorp);
-    assert.equal(R.aanval, null, 'geen akker en geen stapel: nog niet');
-    assert.equal(berichten.length, 0);
-    losseStapel(S, { hout: 6 });
-    T.tikRoversDag(S.dorp, 30);
-    assert.equal(R.aanval.dag, 31, 'de dag erna');
-    opUur(S, 30, R.aanval.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf + 0.1);
-    T.werkRoversBij(S, S.dorp);
-    assert.ok(R.aanval.gemeld, 'nu wel');
-  }));
+test('in de demo geen wilde rovers maar één overval van drie, overdag, op een dag uit het zaad, met een bericht vooraf', () => {
+  const S = gehucht();
+  const R = geenWilde(S);
+  assert.deepEqual(T.startScenario(S, T.LEVELS.demojaar), []);
+  for (let dag = 1; dag < 250; dag++) T.tikRoversDag(S.dorp, dag);
+  assert.equal(R.aanval, null, 'geen wilde rovers');
+  assert.equal(R.wildeOp, null);
+  // De dag van het bericht ligt vast in het zaad; de overval komt de dag erna.
+  const L = S.scenario.lot.overval;
+  assert.ok(L >= 59 && L <= 219, `dag ${L}`);
+  const S2 = gehucht();
+  T.startScenario(S2, T.LEVELS.demojaar);
+  assert.equal(S2.scenario.lot.overval, L, 'hetzelfde zaad, dezelfde dag');
+  opUur(S, L - 1, 12);
+  seconde(S);
+  assert.equal(R.aanval, null, 'de dag ervoor nog niet');
+  opUur(S, L, 0.5);
+  seconde(S);
+  const A = R.aanval;
+  assert.ok(A && A.aangekondigd && A.dag === L + 1 && A.aantal === 3, JSON.stringify(A));
+  const zon = T.dagindeling(A.dag).zon;
+  assert.ok(A.uur >= zon.op + 1 && A.uur <= zon.onder - V().voorDonker, `overdag: ${A.uur} (de zon van ${zon.op} tot ${zon.onder})`);
+  // Het bericht, een dag van tevoren.
+  berichten.length = 0;
+  S.kalender.snelheid = 3;
+  opUur(S, A.dag - 1, A.uur + 24 - V().vooraf - 0.2);
+  T.werkRoversBij(S, S.dorp);
+  assert.ok(!A.gemeld && !berichten.length, 'nog niet');
+  opUur(S, A.dag - 1, A.uur + 24 - V().vooraf + 0.1);
+  T.werkRoversBij(S, S.dorp);
+  assert.ok(A.gemeld);
+  assert.ok(berichten.some((t) => /^Robbers were seen in the woods near the village\. They will come soon\./.test(t)), berichten.join(' | '));
+  assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
+  assert.equal(A.fase, 'wacht', 'ze zijn er nog niet');
+  assert.ok(!S.wereld.wezens.some((e) => e.rover));
+  // Ze komen waar het bericht zei.
+  const ingang = { ...A.ingang };
+  opUur(S, A.dag, A.uur + 0.1);
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(A.fase, 'komen');
+  assert.equal(A.rovers.length, 3);
+  assert.deepEqual(A.ingang, ingang);
+  // En daarna niet meer.
+  R.aanval = null;
+  for (let d = A.dag + 1; d < 2 * T.DAGEN_PER_JAAR; d += 10) {
+    T.tikRoversDag(S.dorp, d);
+    opUur(S, d, 12);
+    seconde(S);
+  }
+  assert.equal(R.aanval, null, 'één keer');
+});
 
-// Het debugvenster (js/debugvenster.js, Danger): de overval van de demo morgen, met het bericht meteen.
-test('de overval van de demo morgen (het debugvenster): het bericht komt meteen, de rovers morgen', () =>
-  inDeDemo(() => {
-    const S = gehucht();
-    opUur(S, 40, 10);
-    const R = (S.dorp.rovers = T.nieuweRovers());
-    R.demoGeweest = true; // hij was al geweest: het debugvenster laat hem toch nog eens komen
-    assert.equal(T.demoOvervalMorgen(S.dorp), true);
-    const A = R.aanval;
-    assert.equal(A.dag, 41);
-    assert.equal(A.demo, true);
-    opUur(S, 40, Math.max(10, A.uur + 24 - T.ROVERS_INSTELLINGEN.demo.vooraf) + 0.1);
-    berichten.length = 0;
-    T.werkRoversBij(S, S.dorp);
-    assert.ok(A.gemeld, 'het bericht');
-    assert.ok(berichten.some((t) => /^Robbers were seen in the woods/.test(t)), berichten.join(' | '));
-    opUur(S, 41, A.uur + 0.1);
-    T.werkRoversBij(S, S.dorp);
-    assert.equal(A.fase, 'komen');
-    assert.equal(T.demoOvervalMorgen(S.dorp), false, 'niet terwijl er rovers op de kaart zijn');
-  }));
+test('valt er bij een aangekondigde overval niets te roven, dan komen ze een dag later', () => {
+  const S = leeg();
+  const R = geenWilde(S);
+  opUur(S, 29, 3);
+  assert.equal(T.roversKomen(S.dorp, { aantal: 3, aangekondigd: true }), true);
+  const A = R.aanval;
+  assert.equal(A.dag, 30);
+  berichten.length = 0;
+  opUur(S, 29, A.uur + 24 - V().vooraf + 0.1);
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(R.aanval, A, 'de overval blijft staan');
+  assert.ok(!A.gemeld && A.dag === 31, 'geen akker en geen stapel: een dag later');
+  assert.equal(berichten.length, 0);
+  losseStapel(S, { hout: 6 });
+  opUur(S, 30, A.uur + 24 - V().vooraf + 0.1);
+  T.werkRoversBij(S, S.dorp);
+  assert.ok(A.gemeld, 'nu wel');
+});
+
+// Het debugvenster (js/debugvenster.js, Danger): de overval van de demo morgen, ook in het volle spel, met het bericht vandaag.
+test('een aangekondigde overval morgen (het debugvenster): het bericht vandaag, de rovers morgen, en niet twee tegelijk', () => {
+  const S = gehucht();
+  opUur(S, 40, 10);
+  const R = (S.dorp.rovers = T.nieuweRovers());
+  assert.equal(T.roversKomen(S.dorp, { aantal: 3, aangekondigd: true }), true);
+  const A = R.aanval;
+  assert.equal(A.dag, 41);
+  opUur(S, 40, Math.max(10, A.uur + 24 - V().vooraf) + 0.1);
+  berichten.length = 0;
+  T.werkRoversBij(S, S.dorp);
+  assert.ok(A.gemeld, 'het bericht');
+  assert.ok(berichten.some((t) => /^Robbers were seen in the woods/.test(t)), berichten.join(' | '));
+  opUur(S, 41, A.uur + 0.1);
+  T.werkRoversBij(S, S.dorp);
+  assert.equal(A.fase, 'komen');
+  assert.equal(T.roversKomen(S.dorp, { aantal: 3, aangekondigd: true }), false, 'niet terwijl er rovers op de kaart zijn');
+});
 
 // Hoe de wapens slaan, staat sinds vraag 159 in test/soldaten.test.cjs.

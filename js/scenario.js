@@ -23,8 +23,10 @@
 // kaart van het dorp, nooit over de hele kaart. Een level kan geen functie bevatten, dus het past in een bestand dat een
 // bewerker terugschrijft (stap 2 en 4: het level als recept, en de editor).
 //
-// Nog niet: een level dat een spel maakt (stap 2), het demojaar als triggers (1b), en de woorden die daarbij komen
-// (wat dicht is, de punten, een scène). Zonder scherm, en dus getoetst (test/scenario.test.cjs).
+// Een level (T.LEVELS, in levels/; stap 1b: het demojaar) is zo'n scenario, met `dorpen` erbij: per dorp wat het bij het
+// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js),
+// en `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js). Nog niet: een level dat zijn eigen kaart maakt,
+// met een rand (stap 2). Zonder scherm, en dus getoetst (test/scenario.test.cjs).
 (function (T) {
   'use strict';
 
@@ -62,6 +64,7 @@
       tellers: {},
       lot: {},
       seconde: Math.floor((S.wereldTijd || 0) / IN().elke),
+      demo: !!L.demo,
     };
     for (const t of S.scenario.triggers) {
       for (const v of elk(t.als)) {
@@ -230,8 +233,16 @@
     triggerUit: (S, D, v) => elk(v).forEach((id) => triggerVan(S, id) && (triggerVan(S, id).aan = false)),
     // Geven en nemen: { goud: 50, graan: -10 } (T.wijzigVoorraad).
     waar: (S, D, v) => Object.entries(v).forEach(([wat, n]) => T.wijzigVoorraad(D, wat, n)),
-    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), zoals een wilde overval.
-    rovers: (S, D, v) => T.roversKomen(D, v.aantal, v.overUren),
+    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), zoals een wilde overval; of { aantal, aangekondigd: true }:
+    // morgen, overdag, en een bericht vooraf, met de plek (de overval van de demo).
+    rovers: (S, D, v) => T.roversKomen(D, v),
+    // De punten van het jaar, voor het eindscherm (T.telPunten, js/einde.js): op Sint-Maarten, vóór de tiende.
+    punten: (S, D) => T.telPunten(D),
+    // De scène als je de heer betaalt ('betalen', js/regie.js): zijn mannen halen wat hij nam, hij rijdt weg, en dan is het
+    // uit (js/heer.js). Weigeren heeft altijd zijn scène, want zijn leger is in elk spel het eind.
+    scene: (S, D, v) => {
+      D.scene = v;
+    },
     // Het eind: { gewonnen, kop, tekst } (T.spelUit, js/einde.js; het eindscherm in js/hud.js).
     einde: (S, D, v) => T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: !!v.gewonnen, kop: v.kop || null, tekst: v.tekst || null }),
   });
@@ -258,10 +269,16 @@
   // dat niemand kent, een gebied, trigger of doel dat er niet is, een dag uit het zaad zonder naam, en een doel dat nooit
   // af kan (geen trigger zet het af). Leeg: het is goed. Zoals T.keurQuests voor de quests tot 23 okt.
   const HEER_WOORDEN = ['brief', 'komt', 'staat', 'betaald', 'geweigerd', 'weg'];
+  const SCENES = ['betalen'];
   T.keurScenario = function (level) {
     const fout = [];
     const gebieden = (level && level.gebieden) || {};
     const triggers = (level && level.triggers) || [];
+    ((level && level.dorpen) || []).forEach((d, i) => {
+      const wie = `dorp ${i + 1}`; // geen tekst
+      for (const soort of d.wacht || []) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`${wie}: de soldaat ${soort} bestaat niet`); // geen tekst
+      for (const soort of d.dicht || []) if (!T.GEBOUWEN[soort]) fout.push(`${wie}: het gebouw ${soort} bestaat niet`); // geen tekst
+    });
     for (const [naam, g] of Object.entries(gebieden)) {
       const rond = g && [g.x, g.y, g.r].every(Number.isFinite);
       const vierkant = g && [g.x, g.y, g.b, g.h].every(Number.isFinite) && g.b > 0 && g.h > 0;
@@ -297,6 +314,7 @@
       for (const doe of elk(t.dan)) {
         for (const woord of Object.keys(doe)) if (woord !== 'wie' && !T.GEVOLGEN[woord]) fout.push(`${wie}: het gevolg ${woord} bestaat niet`); // geen tekst
         if (doe.bericht && doe.bericht.gebied) isGebied(wie, doe.bericht.gebied);
+        if (doe.scene && !SCENES.includes(doe.scene)) fout.push(`${wie}: de scène ${doe.scene} bestaat niet`); // geen tekst
         for (const id of elk(doe.triggerAan).concat(elk(doe.triggerUit))) isTrigger(wie, id);
         if (doe.doel) {
           if (!doe.doel.id) fout.push(`${wie}: een doel heeft een id`); // geen tekst

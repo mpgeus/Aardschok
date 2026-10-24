@@ -51,26 +51,23 @@ test('betalen is alleen in de demo een scène: ze halen het (de tijd wat sneller
   T.zetVoorraad(D, 'graan', 200);
   T.betaalHeer(D, T.alWatHijVraagt(D));
   assert.equal(T.welkeScene(D), null, 'in het volle spel gaat het spel gewoon door');
-  T.DEMO_INSTELLINGEN.aan = true;
-  try {
-    assert.equal(T.welkeScene(D), 'betalen');
-    const R = { soort: 'betalen', t: 0 };
-    let s = T.regieShot(D, R);
-    assert.equal(s.stap, 'halen');
-    assert.equal(s.snelheid, IN.halen);
-    // De camera kijkt tussen de wagen en je voorraad in, zodat je ze ziet gaan en komen.
-    const v = T.deVoorraad(D);
-    assert.deepEqual(s.volg, { x: (b.wagen.x + v.x) / 2, y: (b.wagen.y + v.y) / 2 });
-    b.laden.fase = 'terug';
-    s = T.regieShot(D, R);
-    assert.equal(s.stap, 'brengen');
-    assert.equal(s.snelheid, 1);
-    b.laden = null;
-    b.weg = true;
-    s = T.regieShot(D, R);
-    assert.equal(s.stap, 'weg');
-    assert.deepEqual(s.volg, { x: b.wagen.x, y: b.wagen.y });
-  } finally {
-    T.DEMO_INSTELLINGEN.aan = false;
-  }
+  // De scène van het betalen, zoals de trigger van het demojaar die zet als hij komt (levels/demojaar.js).
+  T.doeGevolg(null, D, { scene: 'betalen' });
+  assert.equal(T.welkeScene(D), 'betalen');
+  const R = { soort: 'betalen', t: 0 };
+  let s = T.regieShot(D, R);
+  assert.equal(s.stap, 'halen');
+  assert.equal(s.snelheid, IN.halen);
+  // De camera kijkt tussen de wagen en je voorraad in, zodat je ze ziet gaan en komen.
+  const v = T.deVoorraad(D);
+  assert.deepEqual(s.volg, { x: (b.wagen.x + v.x) / 2, y: (b.wagen.y + v.y) / 2 });
+  b.laden.fase = 'terug';
+  s = T.regieShot(D, R);
+  assert.equal(s.stap, 'brengen');
+  assert.equal(s.snelheid, 1);
+  b.laden = null;
+  b.weg = true;
+  s = T.regieShot(D, R);
+  assert.equal(s.stap, 'weg');
+  assert.deepEqual(s.volg, { x: b.wagen.x, y: b.wagen.y });
 });

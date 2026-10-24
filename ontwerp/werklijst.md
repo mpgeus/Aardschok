@@ -32,10 +32,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
   begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
   *Time* spring je naar de dag vóór Sint-Maarten. Kijk ook of elke knop doet wat hij zegt. Een dag voor de overval een
-  bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder het jaarverslag. De
-  speeltest en het spel in de browser liepen in de cloud niet (de pagina laadt daar niet, ook op `main`; de knoppen zijn
-  in Node nagelopen): draai `npm run speeltest` thuis. Open: de korte scène van de rovers (met de cinematic), en de
-  waarden van de waren (de werkbank, "The ending").
+  bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder het jaarverslag.
+  Sinds 24 okt (1b) is de demo een level (`levels/demojaar.js`): het speelt hetzelfde, maar hoeveel rovers en tussen
+  welke dagen staat nu daar, niet meer in de werkbank, en *Demo* geldt voor dat ene spel (niet meer tot je de bladzijde
+  opnieuw laadt). In de cloud nagelopen in de browser (Demo, het slot, de overval morgen, Sint-Maarten tot het
+  eindscherm, zonder fouten). Open: de korte scène van de rovers (met de cinematic), en de waarden van de waren (de
+  werkbank, "The ending").
 - **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
   "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
   drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
@@ -55,18 +57,17 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   "Het woordmerk").
 - **Het Engels lezen** (`engels.md`): *the innkeeper*, *the moneylender*, *the tradesmen*, *rent*, *the ledger*,
   *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, en sinds 23 okt *carriers*, de zinnen van de overval
-  (*Robbers were seen in the woods near the village. They will come soon.*) en van de punten (*Score*, *A new best!*).
+  (*Robbers were seen in the woods near the village. They will come soon.*) en van de punten (*Score*, *A new best!*);
+  sinds 24 okt die van de scenario's (*Goal*, *New goal: …*, *Goal reached: …*, *Goal failed: …*, *Victory*, *Defeat*).
 - De spullen bij de huizen (vraag 148, d), de ronde van alle huizen (vraag 144), en het geluid (vraag 145, 2: de sleutel
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (24 okt; Marcel: "1b nu", vóór zijn blik op 185 en 186): eerst de speeltest
-   in de cloud (het recept van 4b), dan 1b, het demojaar als level.
-   **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
-   **1a, de motor, is af** (24 okt, in `main`): triggers, gebieden, doelen, `S.scenario`, de keuring (`scenario.md`, 2,
-   en `code.md` bij `js/scenario.js`); het spel speelt precies als ervoor. Het volgende is **1b, het demojaar als eerste
-   level**, als Marcel 185 en 186 heeft bekeken; dan ook de nieuwe zinnen lezen (*Goal*, *New goal: …*, *Victory*,
-   *Defeat*).
+1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
+   **1a en 1b zijn af** (24 okt): de motor (`scenario.md`, 2), en het demojaar als eerste level (`levels/demojaar.js`;
+   `scenario.md`, 3; Marcel: "1b nu"): geen regel leest nog een vlag van de demo, en de speeltest speelt precies
+   hetzelfde jaar (zaad 1 tot 3). De speeltest speelt nu ook in de cloud (`opmerkingen.md`). Het volgende is **stap 2,
+   het level als recept** (een eigen kaart met een rand, en *Campaign* op het titelscherm): eerst een plan voor Marcel.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1422,6 +1423,8 @@ hebben we zoizo nodig. volgorde is akkoord"):
 
 ## Af (sinds 11 okt)
 
+- 1b van vraag 187: het demojaar als eerste level (24 okt; `scenario.md`, 3): `levels/demojaar.js`, met de wacht, het
+  slot, de aangekondigde overval, de punten en de scène van het betalen; de speeltest speelt nu ook in de cloud.
 - Ronde 4 van het snoeien: Tiled eruit (6b1 van vraag 187, 23 okt; `snoeien.md`): de kaarten uit Tiled, de quests en
   de tas, de gebieden en de proefkamers met hun deuren en monsters; zo'n 10.600 regels minder. Het spel speelt en tekent
   precies als ervoor (nagekeken). Wat bleef staan: `opmerkingen.md`, "Wat ronde 4 van het snoeien liet staan".

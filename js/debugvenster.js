@@ -37,8 +37,24 @@
     const u = T.uurVanDag(dag);
     return `${T.datumVanDag(dag).tekst}, ${Math.floor(u)}:${String(Math.floor((u % 1) * 60)).padStart(2, '0')}`; // geen tekst
   };
-  // Wat in de demo op slot is (T.DEMO_INSTELLINGEN.dicht, js/einde.js), in woorden.
-  const dichtNamen = () => T.opsomming(T.DEMO_INSTELLINGEN.dicht.map((soort) => T.GEBOUWEN[soort].naam));
+  // Het demojaar (levels/demojaar.js): wat er op slot is, in woorden, en zijn overval.
+  const DEMO = () => T.LEVELS.demojaar;
+  const demoDicht = () => DEMO().dorpen[0].dicht;
+  const dichtNamen = () => T.opsomming(demoDicht().map((soort) => T.GEBOUWEN[soort].naam));
+  const opSlot = (D) => demoDicht().some((soort) => T.isDicht(D, soort)); // een spel van vóór 24 okt heeft geen D.dicht
+  const overvalVan = (triggers) => (triggers || []).find((t) => t.id === 'overval') || null;
+  // De overval van de demo morgen (Danger): dezelfde als in het demojaar, met het bericht vooraf (T.roversKomen,
+  // js/rovers.js). In het demojaar gaat zijn trigger dan uit, zodat hij niet nog eens komt. Niet als er al rovers op de kaart
+  // zijn. Geeft of het lukte.
+  function overvalMorgen(S, D) {
+    const R = D.rovers || (D.rovers = T.nieuweRovers());
+    if (R.aanval && R.aanval.fase !== 'wacht') return false;
+    R.aanval = null;
+    if (!T.roversKomen(D, overvalVan(DEMO().triggers).dan[0].rovers)) return false;
+    const t = overvalVan(S.scenario && S.scenario.triggers);
+    if (t) t.aan = false;
+    return true;
+  }
 
   // Springen in de tijd. De nachten ertussen tellen (T.werkGebouwenBij doet elke dag die voorbij is apart: wat de gebouwen
   // maken, wat het dorp eet, de brieven van de heer), maar overdag loopt er niemand: dragen, bouwen en oogsten wachten.
@@ -61,12 +77,12 @@
     }
   }
 
-  // Een nieuw spel op het land van nu, als demo of als vol spel (Demo): zoals New game in het menu (js/menu.js), met het
-  // voorstel voor de naam en de brief van de heer. De demo blijft aan of uit tot je de bladzijde opnieuw laadt.
+  // Een nieuw spel op het land van nu, als demo (het level demojaar) of als vol spel (Demo): zoals New game in het menu
+  // (js/menu.js), met het voorstel voor de naam en de brief van de heer. Het geldt voor dit spel; wat New game in het menu
+  // begint, zegt T.DEMO_INSTELLINGEN.aan.
   function nieuwSpel(S, demo) {
-    T.DEMO_INSTELLINGEN.aan = demo;
     T.ui.sluitDebug(S);
-    T.nieuwSpel(S.wereld && S.wereld.maker ? S.wereld.maker.zaad : undefined);
+    T.nieuwSpel(S.wereld && S.wereld.maker ? S.wereld.maker.zaad : undefined, demo ? 'demojaar' : null);
     T.zetDorpsnaam(S.dorp, T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad));
     T.ui.toonBrief(S.dorp, 'benoeming');
   }
@@ -182,7 +198,7 @@
             return T.t('They come for a field, or else for the largest pile left outside; with neither, they stay away.');
           } },
         { id: 'demoOverval', tekst: () => T.t('The demo raid tomorrow'),
-          doe: (S, D) => (T.demoOvervalMorgen(D) ? T.t('The warning comes now, the robbers tomorrow.') : T.t('Not now: there are robbers on the map already.')) },
+          doe: (S, D) => (overvalMorgen(S, D) ? T.t('The warning comes now, the robbers tomorrow.') : T.t('Not now: there are robbers on the map already.')) },
         { id: 'brand', tekst: () => T.t('A fire now'),
           doe: () => (typeof T.debug.brand('nu') === 'string' ? T.t('There is no house that can burn.') : T.t('A fire has started.')) },
         { id: 'koorts', tekst: () => T.t('Fever now'),
@@ -208,13 +224,17 @@
       id: 'demo',
       naam: T.t('Demo'),
       staat: (S, D) => {
-        const R = D.rovers || {};
-        const overval = R.demoGeweest ? T.t('it came') : R.demoOp != null ? T.datumVanDag(R.demoOp).tekst : T.t('planned tonight');
+        // De overval: gepland (de dag van de aanval), geweest (zijn trigger ging af), of nog de dag na het bericht uit het zaad.
+        const A = D.rovers && D.rovers.aanval;
+        const t = overvalVan(S.scenario && S.scenario.triggers);
+        const demo = !!(S.scenario && S.scenario.demo);
+        const overval = A && A.aangekondigd ? T.datumVanDag(A.dag).tekst
+          : !t || t.gedaan ? T.t('it came') : T.datumVanDag(S.scenario.lot.overval + 1).tekst;
         const p = T.puntenVan(D);
         const beste = T.bestePunten();
         return [
-          T.DEMO_INSTELLINGEN.aan ? T.t('This game is the demo (until you reload the page).') : T.t('This game is the full game.'),
-          T.DEMO_INSTELLINGEN.aan ? T.t('The raid: {wanneer}.', { wanneer: overval }) : T.t('The raid comes only in the demo.'),
+          demo ? T.t('This game is the demo.') : T.t('This game is the full game.'),
+          demo ? T.t('The raid: {wanneer}.', { wanneer: overval }) : T.t('The raid comes only in the demo.'),
           T.t('Score now: {totaal} ({verzameld} gathered, {ligt} in store). Best on this computer: {beste}.',
             { totaal: p.totaal, verzameld: p.verzameld, ligt: p.ligt, beste: beste == null ? T.t('none yet') : beste }),
         ];
@@ -222,12 +242,12 @@
       knoppen: [
         { id: 'nieuwDemo', tekst: () => T.t('New game as the demo'), doe: (S) => nieuwSpel(S, true) },
         { id: 'nieuwVol', tekst: () => T.t('New game, the full game'), doe: (S) => nieuwSpel(S, false) },
-        { id: 'slot', tekst: () => (T.demoSlot() ? T.t('Demo lock on: {gebouwen}', { gebouwen: dichtNamen() }) : T.t('Demo lock off: {gebouwen}', { gebouwen: dichtNamen() })),
-          // Het slot van de demo aan of uit, om te proberen (werklijst Q, vraag 181, e; Marcel, 20 okt): in het bouwmenu op
-          // slot, of te bouwen.
-          doe: () => {
-            T.DEMO_INSTELLINGEN.slot = !T.demoSlot();
-            return T.demoSlot() ? T.t('Locked, as in the demo.') : T.t('Unlocked, as in the full game.');
+        { id: 'slot', tekst: (S, D) => (opSlot(D) ? T.t('Demo lock on: {gebouwen}', { gebouwen: dichtNamen() }) : T.t('Demo lock off: {gebouwen}', { gebouwen: dichtNamen() })),
+          // Het slot van de demo aan of uit in dit spel, om te proberen (werklijst Q, vraag 181, e; Marcel, 20 okt): in het
+          // bouwmenu op slot (D.dicht, T.isDicht in js/gebouwen.js), of te bouwen.
+          doe: (S, D) => {
+            D.dicht = opSlot(D) ? [] : [...demoDicht()];
+            return opSlot(D) ? T.t('Locked, as in the demo.') : T.t('Unlocked, as in the full game.');
           } },
       ],
     },

@@ -53,6 +53,9 @@ test('de keuring: een goed level is goed, en elke fout heeft een zin', () => {
   heeft(fouten([{ id: 'a', dan: [{ doel: { id: 'd', tekst: 'Do it.' } }] }]), 'doel d kan nooit af');
   heeft(fouten([{ id: 'a', als: [{ doel: 'd' }] }]), 'doel d komt er nergens bij');
   heeft(fouten([], { kapot: { x: 1, y: 1 } }), 'gebied kapot');
+  heeft(fouten([{ id: 'a', dan: [{ scene: 'dansen' }] }]), 'de scène dansen bestaat niet');
+  heeft(T.keurScenario({ dorpen: [{ wacht: ['ridder'] }] }), 'de soldaat ridder bestaat niet');
+  heeft(T.keurScenario({ dorpen: [{ dicht: ['kasteeltje'] }] }), 'het gebouw kasteeltje bestaat niet');
   // Met een fout begint het niet.
   const S = gehucht();
   assert.ok(T.startScenario(S, { triggers: [{ id: 'a', als: [{ dgg: 3 }] }] }).length);
@@ -242,6 +245,26 @@ test('een scenario wordt bewaard, en speelt na het laden verder', () => {
   L.wereldTijd += 1;
   T.werkScenarioBij(L);
   assert.equal(L.scenario.doelen[0].stand, 'af');
+});
+
+// Het demojaar (vraag 187, stap 1b; levels/demojaar.js): wat het doet, toetsen test/rovers, soldaten, heer, einde en regie.
+test('het demojaar komt door de keuring, en een nieuw spel ermee heeft de wacht, het slot, geen wilde rovers en de triggers', () => {
+  assert.deepEqual(T.keurScenario(T.LEVELS.demojaar), []);
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.LEVELS.demojaar);
+  const D = S.dorp;
+  assert.deepEqual(D.dicht, ['wachthuis', 'wapenmaker']);
+  assert.equal(D.rovers.wilde, false);
+  assert.deepEqual(T.soldatenVan(D).map((p) => p.soldaat.soort), ['speerman', 'speerman', 'kruisboogschutter']);
+  assert.equal(S.scenario.demo, true);
+  assert.deepEqual(S.scenario.triggers.map((t) => t.id), ['overval', 'sintMaarten']);
+  assert.ok(S.scenario.lot.overval >= 59 && S.scenario.lot.overval <= 219);
+  // Het volle spel heeft er niets van.
+  const V = T.proefdorp.begin(T.proefdorp.zaad);
+  assert.deepEqual(V.dorp.dicht, []);
+  assert.equal(V.dorp.rovers, undefined);
+  assert.equal(V.scenario, undefined);
+  // Een level dat niet door de keuring komt, begint geen spel.
+  assert.throws(() => T.proefdorp.begin(T.proefdorp.zaad, { dorpen: [{ dicht: ['kasteeltje'] }] }), /het gebouw kasteeltje bestaat niet/);
 });
 
 test('de tik laat de triggers kijken (T.wereldTik, js/tik.js)', () => {

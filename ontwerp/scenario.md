@@ -50,9 +50,9 @@ quests, de gebieden en de proefkamers), is af: ronde 4 in `snoeien.md`.
 - **Voorwaarden en gevolgen:** `T.voorwaardeGeldt` (`js/gesprek.js`) kent alleen nog `vlag` en `nietVlag`, en
   `T.doeGevolg` vlaggen en een venster: de tas, het goud en de quests (de vorm uit het oude spel, met fasen, wegen,
   voorwerpen en geheime deuren op een Tiled-kaart) gingen weg in de snoeironde van 23 okt.
-- **De demo zit verspreid:** `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`) wordt gelezen in `begin.js` en `bewoners.js` (de
-  wacht van drie), `gebouwen.js` (wat dicht is), `rovers.js` (de ene overval), `heer.js` (betalen is het eind), `hud.js`
-  (de punten) en `debugvenster.js`.
+- **De demo zat verspreid** (tot 1b, 24 okt): `T.DEMO_INSTELLINGEN.aan` (`js/einde.js`) werd gelezen in `begin.js` en
+  `bewoners.js` (de wacht van drie), `gebouwen.js` (wat dicht is), `rovers.js` (de ene overval), `heer.js` (betalen is
+  het eind), `hud.js` (de punten) en `debugvenster.js`. Nu is het één level, `levels/demojaar.js` (3).
 - **De regie** (`js/regie.js`) leidt de scène af uit de wereld (`T.welkeScene(D)`), per beeld, niet in de tik.
 - **Gereedschap:** de bewerker van de gesprekken schrijft zijn blok terug (`T.bronBlok`) en heeft een proefdorp-stand.
   `gereedschap/wereld.html` (de Tiled-kaarten) en de bewerker van de quests zijn weg sinds de snoeironde van 23 okt.
@@ -83,9 +83,9 @@ T.LEVELS.demojaar = {
   kaart: { ... },                   // de rand: een uitsnede van het eiland (x, y, breed, hoog), of het hele eiland
   land: { ... },                    // wat de editor aan het eiland veranderde, per tegel (zoals tegelsAnders nu)
   plekken: { ... },                 // de plekken van het eiland, verschoven of erbij
-  dorpen: [{ wie: 'speler', plek: 'jij', begin: 'huifkar', wacht: ['speerman', 'speerman', 'kruisboogschutter'] }],
+  dorpen: [{ wie: 'speler', plek: 'jij', begin: 'huifkar', wacht: ['speerman', 'speerman', 'kruisboogschutter'],
+             dicht: ['wachthuis', 'wapenmaker'], wildeRovers: false }],   // sinds 1b: wacht, dicht en wildeRovers
   spelregels: { ... },              // wat in dit level vastligt (T.OPTIES)
-  dicht: ['wachthuis', 'wapenmaker'],
   gebieden: { ... }, triggers: [ ... ], doelen: [ ... ],
 };
 ```
@@ -104,7 +104,7 @@ T.LEVELS.demojaar = {
 ## 2. De triggers: als ... dan ...
 
 **Zo werkt het nu** (stap 1a, gebouwd op 24 okt; `code.md` bij `js/scenario.js`): de motor staat, met de woorden
-hieronder die **vet** staan; de demo gebruikt hem nog niet (dat is 1b). Gekozen bij het bouwen (techniek, Claude): de
+hieronder die **vet** staan; sinds 1b speelt de demo erop (3). Gekozen bij het bouwen (techniek, Claude): de
 woorden van een gevolg heten zoals in de gesprekken (`zetVlag` en `wisVlag` in plaats van `vlag`), een trigger aan of uit
 is `triggerAan` en `triggerUit`, de heer is één woord of een lijstje (`{ heer: ['betaald', 'weg'] }` in plaats van
 `{ heer: 'weg', betaald: true }`), en `dag` is de dag van het spel (dag 0 is het begin, zoals overal in de code). Een getal
@@ -154,13 +154,15 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 - **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het),
   **`zetVlag`** en **`wisVlag`**, **`teller`** (`{ golven: 1 }`), **`triggerAan`** en **`triggerUit`**.
 - **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), **`rovers`** (`{ aantal, overUren }`: de bestaande
-  overval, voor een akker of anders een stapel; vanaf een plek komt later), `aanval` (een groep van een dorp naar een
-  gebied; dezelfde weg als `T.stuurMannen`).
+  overval, voor een akker of anders een stapel; `{ aantal, aangekondigd: true }`: morgen, overdag, met een bericht vooraf
+  en de plek, zoals in de demo; vanaf een plek komt later), `aanval` (een groep van een dorp naar een gebied; dezelfde
+  weg als `T.stuurMannen`).
 - **Geven en nemen:** **`waar`** (`{ goud: 50, graan: -10 }`, `T.wijzigVoorraad`), gunst en vertrouwen.
-- **De kaart:** `mist` (een gebied gezien; `T.kenKring`), `bouw` (een soort open of dicht; nu `T.DEMO_INSTELLINGEN.dicht`,
-  komt met 1b).
-- **Het eind:** `scene` (de regie: welke scène; komt met 1b), `punten` (`T.telPunten`; komt met 1b), **`einde`**
-  (`{ gewonnen, kop, tekst }`: `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
+- **De kaart:** `mist` (een gebied gezien; `T.kenKring`), `bouw` (een soort open of dicht midden in een level; wat bij
+  het begin dicht is, staat sinds 1b bij het dorp, `dorpen[].dicht`, en `bouw` komt als een level iets later opent).
+- **Het eind:** **`scene`** (`'betalen'`: betaal je de heer, dan halen zijn mannen het, rijdt hij weg, en is het uit;
+  `D.scene`, gebouwd in 1b), **`punten`** (`T.telPunten`, gebouwd in 1b), **`einde`** (`{ gewonnen, kop, tekst }`:
+  `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
 naam ("the miller"). De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
@@ -173,27 +175,39 @@ als er een doel bij komt, of als het af of mislukt is.
 
 ## 3. De proef: het demojaar als triggers
 
-Als de lijst hierboven de demo niet kan zeggen, mist er iets. Dit is de demo zoals hij nu speelt:
+Als de lijst hierboven de demo niet kan zeggen, mist er iets. **Zo werkt het nu** (stap 1b, gebouwd op 24 okt; Marcel:
+"1b nu", vóór zijn blik op 185 en 186; `code.md` bij `js/scenario.js`, "Een level"): de demo is het level
+`levels/demojaar.js`, en geen regel leest nog een vlag van de demo.
 
 ```js
-triggers: [
-  { id: 'gezien', als: [{ dag: { tussen: [59, 219], lot: 'overval' } }],
-    dan: [{ bericht: { tekst: 'Robbers were seen in the woods near the village. They will come soon.', toon: 'gevaar' } }] },
-  { id: 'overval', als: [{ na: { trigger: 'gezien', uren: 24 } }, { uur: 'overdag' }],
-    dan: [{ rovers: { aantal: 3 } }] },
-  { id: 'tiende', als: [{ heer: 'komt' }], dan: [{ punten: true }] },
-  { id: 'betaald', als: [{ heer: ['betaald', 'weg'] }], dan: [{ scene: 'betalen' }, { einde: { reden: 'betaald' } }] },
-]
+T.LEVELS.demojaar = {
+  demo: true,
+  dorpen: [{ wacht: ['speerman', 'speerman', 'kruisboogschutter'], dicht: ['wachthuis', 'wapenmaker'], wildeRovers: false }],
+  triggers: [
+    { id: 'overval', als: [{ dag: { tussen: [59, 219], lot: 'overval' } }], dan: [{ rovers: { aantal: 3, aangekondigd: true } }] },
+    { id: 'sintMaarten', als: [{ heer: 'komt' }], dan: [{ punten: true }, { scene: 'betalen' }] },
+  ],
+};
 ```
 
-De eerste twee speelt de motor al (`test/scenario.test.cjs`); voor de laatste twee komen in 1b `punten`, `scene` en een
-`einde` met de reden van de demo erbij. Wat 1b nog moet oplossen: het bericht vooraf noemt nu de plek waar de rovers
-zullen komen (`A.ingang`), en een trigger weet die plek pas als de overval gepland is.
+Anders dan het voorstel van 23 okt (twee triggers voor het bericht en de overval, en een `einde` als hij weg is), om
+drie redenen die bij het bouwen bleken:
+- **Het bericht en de overval zijn één gevolg** (`rovers` met `aangekondigd`): het bericht noemt de plek waar ze komen,
+  en die plek kiest pas de overval zelf (`meld` in `js/rovers.js`); is er dan niets te roven, dan schuift de overval een
+  dag op. Twee triggers konden dat niet zeggen. De zin van het bericht blijft een speltekst in `js/rovers.js`.
+- **De scène van het betalen staat vanaf zijn komst klaar** (`scene: 'betalen'` zet `D.scene`), en het eind blijft bij
+  de heer (`js/heer.js`): de scène begint als zijn mannen laden, en het is uit als zijn wagen een eind de weg op is, of
+  als je de scène overslaat. Een trigger op "betaald en weg" kwam te laat (de scène begint al bij het laden) en kon het
+  overslaan niet volgen.
+- **Wat bij het begin anders is, staat bij het dorp** (`dorpen`): de wacht moet er zijn als het kamp gelegd wordt, vóór
+  de eerste trigger kijkt; wat dicht is, ook (anders stond het wachthuis een seconde open); en de wilde rovers uit is geen
+  spelregel (die bestaat niet, en een nieuwe spelregel zou in het menu komen), maar `D.rovers.wilde`.
 
-Met in het recept de wacht (`dorpen`), wat dicht is (`dicht`), en de wilde rovers uit (`spelregels`). Het lukt, met
-twee dingen erbij die er al half zijn: een dag uit het zaad (nu `planDemoOverval` in `js/rovers.js`) en de stand van de
-heer als voorwaarde. Weigeren hoeft er niet in: zijn leger en het eind zijn een regel van elk spel ("Ook in het volle
-spel, zolang weigeren de dood is", `js/regie.js`). Daarmee wordt `T.DEMO_INSTELLINGEN.aan` in zeven bestanden één level.
+Het getal van de overval (3) en zijn dagen staan nu in het level, niet in de werkbank; die houdt hoe een aangekondigde
+overval gaat (`vooraf`, `voorDonker`). Weigeren hoeft er niet in: zijn leger en het eind zijn een regel van elk spel ("Ook
+in het volle spel, zolang weigeren de dood is", `js/regie.js`). `T.DEMO_INSTELLINGEN.aan` zegt nog één ding, op één plek:
+dat een nieuw spel het demojaar is (`T.nieuwSpel`, `js/main.js`), aan bij het verpakken. De speeltest (het volle spel)
+speelt erna precies hetzelfde jaar als ervoor, en draait sinds 1b ook in de cloud (`opmerkingen.md`).
 
 ## 4. Wat een trigger wordt, en wat een regel blijft
 
@@ -345,8 +359,8 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
 1. **De motor:** de triggers, de gebieden, de doelen, `S.scenario`, de keuring, met toetsen. Het demojaar wordt het
    eerste level; de speeltest moet daarna hetzelfde jaar spelen als ervoor. In twee helften (Marcel, 24 okt: "1a"):
    **1a, de motor, gebouwd op 24 okt** (2, en `code.md` bij `js/scenario.js`), zonder de demo te raken; **1b, het
-   demojaar als level**, na Marcels blik op 185 en 186: `T.DEMO_INSTELLINGEN.aan` eruit, en `bouw`, `punten`, `scene`
-   erbij.
+   demojaar als level, gebouwd op 24 okt** (3; Marcel: "1b nu"): `levels/demojaar.js`, met `dorpen`, `demo`, `punten`,
+   `scene` en de aangekondigde overval; `bouw` komt als een level iets midden in het spel opent.
 2. **Het level als recept**, met zijn rand, en *Campaign* op het titelscherm, met het land als keuzescherm.
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.

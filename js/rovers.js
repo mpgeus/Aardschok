@@ -18,10 +18,11 @@
 // bende, een soldaat of een dorpeling is een mond minder (T.sneuvelt), en valt de aanvoerder, dan is het spel uit. Wie het
 // overleeft, staat de volgende ochtend weer met al zijn leven op (werklijst vraag 11).
 //
-// In de demo (T.DEMO_INSTELLINGEN.aan, js/einde.js) komen er geen wilde rovers, maar één overval, zeker, op een dag uit
+// In de demo (het level demojaar, levels/demojaar.js) komen er geen wilde rovers, maar één overval, zeker, op een dag uit
 // het zaad, overdag, en een bericht zegt het een dag van tevoren (werklijst R, vraag 185; Marcel, 20 okt: "Voor de demo
 // wil ik ook een keer een roversaanval; zodat de speler de combat kan proberen en ervaren", en 23 okt: "overdag,
-// aankondiging ja"): zo kan de speler zijn wacht klaarzetten.
+// aankondiging ja"): zo kan de speler zijn wacht klaarzetten. Dat is de aangekondigde overval (T.roversKomen), die een
+// trigger van het level begint (js/scenario.js).
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
 (function (T) {
@@ -50,11 +51,10 @@
     kansAkkerKapot: 0.3,
     // Zoveel neemt ieder van een stapel mee (vraag 185), als ze voor een stapel kwamen.
     stapelPerRover: 4,
-    // De overval van de demo (vraag 185): met zoveel man, op een dag uit het zaad van `van` tot en met `tot` (Sint-Maarten
-    // is dag 250), overdag: van een uur na zonsopgang tot `voorDonker` uur voor zonsondergang, zodat het gevecht in het
-    // licht valt. Zoveel uur van tevoren (tot een dag) zegt een bericht dat er rovers gezien zijn, met de plek waar ze
-    // zullen komen.
-    demo: { aantal: 3, van: 60, tot: 220, vooraf: 24, voorDonker: 4 },
+    // De aangekondigde overval (vraag 185; de demo, T.roversKomen): overdag, van een uur na zonsopgang tot `voorDonker` uur
+    // voor zonsondergang, zodat het gevecht in het licht valt. Zoveel uur van tevoren (tot een dag) zegt een bericht dat er
+    // rovers gezien zijn, met de plek waar ze zullen komen. Met hoeveel man, en op welke dag, zegt het level.
+    aangekondigd: { vooraf: 24, voorDonker: 4 },
     // De roverskampen (werklijst vraag 170, stap 6a2, c1 en c2; waar ze liggen: T.EILAND_INSTELLINGEN.kampen): een kamp
     // begint met zoveel man, en elk jaar van het spel komen er zoveel van buiten bij, tot zoveel (de getallen van de wilde
     // rovers); wie uit een dorp wegtrekt, komt er altijd bij (Marcel, 17 okt: H2). Een tent per zoveel man, zolang het
@@ -80,6 +80,7 @@
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 
 
+  // Een dorp met `wilde: false` (een level, T.nieuwDorp in js/dorp.js) krijgt geen wilde rovers.
   T.nieuweRovers = () => ({ wildeOp: null, aanval: null });
 
   // Alleen in het gehucht zelf: een dorp dat vanaf niets begon (D.begin, js/begin.js), of een wereld met akkers. Een
@@ -117,11 +118,11 @@
     const u = r * (d.opstaan + 24 - d.slapen);
     return u < d.opstaan ? u : d.slapen + (u - d.opstaan);
   }
-  // De demo komt overdag (vraag 185): van een uur na zonsopgang tot `voorDonker` uur voor zonsondergang.
-  function demoUur(D, dag) {
+  // De aangekondigde overval komt overdag (vraag 185): van een uur na zonsopgang tot `voorDonker` uur voor zonsondergang.
+  function overdagUur(D, dag) {
     const zon = T.dagindeling(dag).zon;
     const van = zon.op + 1;
-    return van + lot(D, dag, 7) * Math.max(0, zon.onder - IN().demo.voorDonker - van);
+    return van + lot(D, dag, 7) * Math.max(0, zon.onder - IN().aangekondigd.voorDonker - van);
   }
   // Met hoeveel man ze komen: elk jaar van je ambt met een man meer (dag 0 is de dag van je benoeming).
   const wildeAantal = (dag) =>
@@ -134,7 +135,7 @@
     const R = D.rovers || (D.rovers = T.nieuweRovers());
     begraaf(D);
     if (!R.aanval) genees(D);
-    if (T.DEMO_INSTELLINGEN.aan) return planDemoOverval(D, R, dag);
+    if (R.wilde === false) return;
     if (R.wildeOp == null) R.wildeOp = eersteWilde(D, dag);
     if (R.aanval) return;
     if (dag >= R.wildeOp) {
@@ -143,39 +144,23 @@
     }
   };
 
-  // De overval van de demo (vraag 185), in plaats van de wilde rovers: de dag ligt vast in het zaad (R.demoOp). De nacht
-  // ervoor staat de aanval klaar, zodat het bericht vooraf op tijd komt (T.werkRoversBij); kon het niet (er was geen akker
-  // en geen stapel), dan staat hij de nacht erna weer klaar, tot hij geweest is (R.demoGeweest).
-  function planDemoOverval(D, R, dag) {
-    const M = IN().demo;
-    if (R.demoOp == null) R.demoOp = M.van + Math.floor(lot(D, 0, 9) * (M.tot - M.van + 1));
-    if (R.aanval || R.demoGeweest || dag + 1 < R.demoOp) return;
-    const op = Math.max(R.demoOp, dag + 1);
-    R.aanval = { soort: 'wild', demo: true, dag: op, fase: 'wacht', aantal: M.aantal, uur: demoUur(D, op) };
-  }
-
-  // De overval van de demo morgen (het debugvenster, js/debugvenster.js): het bericht vooraf komt dan meteen. Niet als er
-  // al rovers op de kaart zijn. Geeft of het lukte.
-  T.demoOvervalMorgen = function (D) {
-    if (!heeftRovers(D)) return false;
-    const R = D.rovers || (D.rovers = T.nieuweRovers());
-    if (R.aanval && R.aanval.fase !== 'wacht') return false;
-    const dag = dagNu(D);
-    Object.assign(R, { aanval: null, demoOp: dag + 1, demoGeweest: false });
-    planDemoOverval(D, R, dag);
-    return true;
-  };
-
-  // Rovers die komen omdat een scenario het zegt (de trigger `rovers`, js/scenario.js): zoveel man, over zoveel uur (0: nu),
-  // zoals een wilde overval (voor een akker, anders een stapel). Niet als er al een aanval is, of het dorp geen rovers kan
-  // hebben. Geeft of het lukte.
-  T.roversKomen = function (D, aantal, overUren = 0) {
+  // Rovers die komen omdat een scenario het zegt (de trigger `rovers`, js/scenario.js): `aantal` man, over `overUren` uur
+  // (0: nu), zoals een wilde overval (voor een akker, anders een stapel). Of `aangekondigd` (de overval van de demo, vraag
+  // 185): morgen, overdag, en een bericht vooraf met de plek waar ze komen (meld, hieronder); is er dan nog niets om te
+  // roven, dan komen ze een dag later. Niet als er al een aanval is, of het dorp geen rovers kan hebben. Geeft of het
+  // lukte.
+  T.roversKomen = function (D, { aantal = 1, overUren = 0, aangekondigd = false } = {}) {
     if (!heeftRovers(D)) return false;
     const R = D.rovers || (D.rovers = T.nieuweRovers());
     if (R.aanval) return false;
+    if (aangekondigd) {
+      const dag = dagNu(D) + 1;
+      R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: Math.max(1, aantal), uur: overdagUur(D, dag), aangekondigd: true };
+      return true;
+    }
     const moment = uurNu(D) + Math.max(0, overUren);
     const dag = Math.floor(moment / 24);
-    R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: Math.max(1, aantal || 1), uur: moment - dag * 24 };
+    R.aanval = { soort: 'wild', dag, fase: 'wacht', aantal: Math.max(1, aantal), uur: moment - dag * 24 };
     return true;
   };
 
@@ -310,11 +295,13 @@
     return e.tx >= d.x && e.tx < d.x + d.b && e.ty >= d.y && e.ty < d.y + d.h;
   }
 
-  // Het bericht van de demo, een dag van tevoren (vraag 185): er zijn rovers gezien, met de plek waar ze de kaart op zullen
-  // komen, en de tijd gaat naar 1×. Is er niets om te roven, dan komen ze nog niet (planDemoOverval).
+  // Het bericht van de aangekondigde overval, een dag van tevoren (vraag 185): er zijn rovers gezien, met de plek waar ze de
+  // kaart op zullen komen, en de tijd gaat naar 1×. Is er niets om te roven, dan komen ze een dag later, met het bericht
+  // morgen.
   function meld(D, A) {
     if (!kiesDoel(D, A)) {
-      D.rovers.aanval = null;
+      A.dag += 1;
+      A.uur = overdagUur(D, A.dag);
       return;
     }
     A.gemeld = true;
@@ -324,7 +311,7 @@
   }
 
   // Het begin: de rovers komen de kaart op, en het dorp ziet ze. Wie soldaten heeft, hoort hoe hij ze stuurt. Na het
-  // bericht van de demo staat hun ingang vast; is hun stapel intussen weg, dan nemen ze de grootste die er nu ligt.
+  // bericht vooraf staat hun ingang vast; is hun stapel intussen weg, dan nemen ze de grootste die er nu ligt.
   function begin(D, A) {
     const w = D.wereld;
     const R = D.rovers;
@@ -336,7 +323,6 @@
       const g = grootsteStapel(D);
       if (g) Object.assign(A, stapelDoel(D, g));
     }
-    if (A.demo) R.demoGeweest = true;
     const ingang = A.ingang;
     const aantal = A.aantal || 1;
     A.rovers = [];
@@ -488,7 +474,7 @@
       if (A.soort === 'hinderlaag') return beginHinderlaag(D, A);
       // Een aanval uit een spel van voor 16 okt heeft nog geen uur.
       const moment = A.dag * 24 + (A.uur != null ? A.uur : aanvalsUur(D, A.dag));
-      if (A.demo && !A.gemeld && !A.meteen && uurNu(D) >= moment - IN().demo.vooraf) return meld(D, A);
+      if (A.aangekondigd && !A.gemeld && !A.meteen && uurNu(D) >= moment - IN().aangekondigd.vooraf) return meld(D, A);
       if (!A.meteen && uurNu(D) < moment) return;
       begin(D, A);
       return;

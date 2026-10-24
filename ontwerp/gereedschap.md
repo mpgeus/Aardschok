@@ -249,8 +249,8 @@ hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp
 hoeveel tenten), en wie er woont, met het dorp van wie wegtrok (`js/rovers.js`, werklijst vraag 170, stap 6a2, c1 en c2); `('erheen')` maakt het land om het dichtste kamp open, zet het
 kamp neer, laat je dorp het kennen (de rode stip op de minikaart) en kijkt erheen. In een verborgen paneel tekent de
 minikaart pas opnieuw met `Spel.ui.werkMinikaartBij(Spel.S)`.
-`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `demoOp`, de dag van de overval), hoe een aanval ervoor
-staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
+`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `geen`, en bij `overval` de dag van het bericht van
+de overval, uit het scenario), hoe een aanval ervoor staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
 drie wilde rovers komen. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
 wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).

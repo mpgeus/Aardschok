@@ -172,18 +172,21 @@ test('de punten: wat verzameld werd en wat in de opslag ligt, in goud', () => {
 test('in de demo tellen de punten als de heer komt, vóór de tiende, en de beste blijft op deze computer', () => {
   const plek = new Map();
   T.gebruikOpslagPlek({ getItem: (k) => (plek.has(k) ? plek.get(k) : null), setItem: (k, w) => plek.set(k, String(w)) });
-  const was = T.DEMO_INSTELLINGEN.aan;
   try {
     const S = gehucht();
     T.heerKomt(S.dorp, 250);
     assert.equal(S.dorp.punten, undefined, 'in het volle spel niet');
-    T.DEMO_INSTELLINGEN.aan = true;
+    // In het demojaar (levels/demojaar.js) telt zijn trigger ze, de seconde nadat de heer komt.
     const S1 = gehucht();
+    assert.deepEqual(T.startScenario(S1, T.LEVELS.demojaar), []);
     S1.dorp.heer = null;
     T.heerKomt(S1.dorp, 250);
+    S1.wereldTijd += 1;
+    T.werkScenarioBij(S1);
     const p1 = S1.dorp.punten;
     assert.ok(p1 && p1.totaal > 0, JSON.stringify(p1));
     assert.equal(p1.totaal, T.puntenVan(S1.dorp).totaal, 'geteld met wat er lag toen hij kwam');
+    assert.equal(S1.dorp.scene, 'betalen', 'en betalen is het eind, met zijn scène');
     assert.equal(p1.beste, null, 'nog geen beste');
     assert.equal(T.bestePunten(), p1.totaal);
     // Een slechter jaar: de beste blijft.
@@ -200,7 +203,6 @@ test('in de demo tellen de punten als de heer komt, vóór de tiende, en de best
     assert.equal(T.bestePunten(), S3.dorp.punten.totaal);
     assert.ok(S3.dorp.punten.totaal > S3.dorp.punten.beste);
   } finally {
-    T.DEMO_INSTELLINGEN.aan = was;
     T.gebruikOpslagPlek(null);
   }
 });

@@ -52,7 +52,10 @@
   // Een nieuw dorp op kaart w, met zijn aanvoerder: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
   // verder woont. `zaad` is het zaad van het dorp (D.lot.zaad; zonder: een willekeurig): hetzelfde zaad geeft hetzelfde
   // dorp, want de bewoners, de voorvallen, het vee, de rovers en het weer gooien er hun dobbelsteen mee. `ander`: het is
-  // niet jouw dorp (het buurdorp): het spreekt niet tegen jou. `plek`: zijn plek op de kaart (D.plek, js/wereld.js).
+  // niet jouw dorp (het buurdorp): het spreekt niet tegen jou. `plek`: zijn plek op de kaart (D.plek, js/wereld.js). Wat een
+  // level van het dorp zegt (vraag 187, stap 1b; T.beginOpEiland, js/begin.js): `wacht` (wie met de huifkar meekomt,
+  // T.zetKamp), `dicht` (wat het niet bouwt, T.isDicht in js/gebouwen.js) en `wildeRovers` (false: er komen geen wilde
+  // rovers, js/rovers.js).
   T.nieuwDorp = function (S, w, aanvoerder, opties) {
     const o = opties || {};
     const D = {
@@ -69,7 +72,9 @@
       goud: 0,
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       einde: null, // de heer ontsloeg de aanvoerder (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
+      dicht: [...(o.dicht || [])], // wat in dit dorp op slot is (een level, T.isDicht in js/gebouwen.js)
     };
+    if (o.wildeRovers === false) D.rovers = { ...T.nieuweRovers(), wilde: false };
     if (aanvoerder) aanvoerder.dorp = D; // hij is van dit dorp (T.isVanDorp, js/wereld.js)
     // Zijn plek op de kaart (T.legePlek, js/wereld.js): wat `plek` meegeeft, anders de eerste die de kaart noemt.
     D.plek = o.plek || (w.plekken && w.plekken[0]) || T.legePlek(w);
@@ -79,7 +84,7 @@
     if (T.opEiland(w)) T.kenHetBegin(D, D.plek.vak);
     // Er staat nog niets (vraag 152; sinds ronde 2 van het snoeien legt een kaart geen gebouwen, velden of voorraad meer):
     // de kar brengt wat er is, en het kamp (js/begin.js).
-    if (D.plek.kamp) T.zetKamp(S, D);
+    if (D.plek.kamp) T.zetKamp(S, D, o.wacht);
     // Het zaad van het dorp. Tot ronde 2 van het snoeien (stap 4, 12 okt) loot T.lootBoeren hiermee ook wie de boeren
     // waren (hun karakter en wat ze konden); dat lot is weg, het zaad bleef, en heet nog zo.
     D.lot = { zaad: o.zaad != null ? o.zaad : Math.floor(Math.random() * 2147483647) };

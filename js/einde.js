@@ -46,23 +46,15 @@
   const IN = () => T.EINDE_INSTELLINGEN;
 
   // De demo (werklijst, E, stap 6; Marcel, 18 okt, D2): de demo eindigt op het eerste Sint-Maarten, ook als je betaalt
-  // (dan rijdt de heer weg met je waren; wie weigert, krijgt zijn leger, ook in het volle spel). Uit in het volle spel en
-  // bij het spelen hier; aan bij het verpakken van de demo voor Next Fest (ontwerp/verpakken.md), zoals het debugvenster.
-  // `steam`: het adres van de Steam-pagina, voor de link om het spel op je verlanglijst te zetten (in januari 2027); zonder
-  // adres staat de link er niet.
-  // `dicht` (werklijst Q, vraag 181, e; Marcel, 20 okt: W1 en L1): wat in de demo op slot is, voor het volle spel; het
-  // staat in het bouwmenu, met "In the full game", maar je zet het niet neer (T.inDeDemoDicht, js/gebouwen.js). Bij het
-  // verpakken van de demo gaat het er echt uit, niet alleen met deze vlag (verpakken.md). `wacht` (S1: "2 speermannen en
-  // 1 kruisboogschutter"): wie in de demo met de huifkar meekomt, om te proeven wat vechten is: soldaten met hun eigen
-  // stukken en zonder wachthuis, in een eigen tent; ze staan waar je ze neerzet (js/bewoners.js, js/soldaten.js). `slot`:
-  // of wat `dicht` is op slot zit; null volgt `aan`, en het debugvenster zet het aan of uit om te proberen (Marcel, 20 okt:
-  // "dat we de gebouwen ook aan en uit kunnen zetten om te testen"; js/debugvenster.js).
+  // (dan rijdt de heer weg met je waren; wie weigert, krijgt zijn leger, ook in het volle spel). Wat de demo anders maakt,
+  // staat in een level, het demojaar (levels/demojaar.js; vraag 187, stap 1b), en `aan` zegt alleen dat een nieuw spel met
+  // dat level begint (T.nieuwSpel, js/main.js): uit in het volle spel en bij het spelen hier, aan bij het verpakken van de
+  // demo voor Next Fest (ontwerp/verpakken.md); het debugvenster begint een spel als demo zonder. `steam`: het adres van de
+  // Steam-pagina, voor de link om het spel op je verlanglijst te zetten (in januari 2027); zonder adres staat de link er
+  // niet.
   T.DEMO_INSTELLINGEN = {
     aan: false,
     steam: null,
-    dicht: ['wachthuis', 'wapenmaker'],
-    slot: null,
-    wacht: ['speerman', 'speerman', 'kruisboogschutter'],
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -193,10 +185,10 @@
     }
   };
 
-  // Op Sint-Maarten, als de heer komt (T.heerKomt, js/heer.js), vóór de tiende (5b1): in de demo de punten, voor het
-  // eindscherm, en zijn ze beter dan ooit, dan blijven ze op deze computer.
+  // Op Sint-Maarten, als de heer komt, vóór de tiende (5b1; de trigger `punten` van het demojaar, levels/demojaar.js): de
+  // punten, voor het eindscherm, en zijn ze beter dan ooit, dan blijven ze op deze computer. Een ander dorp telt niet.
   T.telPunten = function (D) {
-    if (!T.DEMO_INSTELLINGEN.aan || D.ander) return;
+    if (D.ander) return;
     const beste = T.bestePunten();
     D.punten = { dag: dagNu(D), ...T.puntenVan(D), beste };
     if (beste != null && D.punten.totaal <= beste) return;

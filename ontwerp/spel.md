@@ -90,8 +90,8 @@ het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); **sind
 en vier schapen, die los bij de kar staan tot er een weide met plaats is, en de marskramer verkoopt er meer (een koe en
 twee schapen per bezoek). **In de demo** (vraag 181, e) komt ook de wacht mee: twee speermannen en een kruisboogschutter,
 in een eigen tent, met hun eigen wapens en zonder wachthuis (ze staan waar je ze neerzet); het wachthuis en de wapenmaker
-staan in het bouwmenu op slot, "In the full game". En wat de natuur nodig heeft die er niet is, staat niet in het
-bouwmenu (vraag 181, c): zonder water in je land geen visser en geen rietsnijder. Met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
+staan in het bouwmenu op slot, "In the full game" (sinds 24 okt zegt het level van de demo dat, `levels/demojaar.js`).
+En wat de natuur nodig heeft die er niet is, staat niet in het bouwmenu (vraag 181, c): zonder water in je land geen visser en geen rietsnijder. Met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
 Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn
@@ -1202,8 +1202,10 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   (Sint-Maarten is dag 250), overdag, zodat het gevecht in het licht valt. Een dag van tevoren zegt een bericht het,
   met de plek waar ze komen (*Robbers were seen in the woods near the village. They will come soon.*), en gaat de tijd
   naar 1×: zo zet je de wacht klaar. Valt er dan niets te roven (geen akker, geen stapel), dan komen ze een dag later.
-  Verlies je, dan roven ze en gaat de demo door. De getallen staan in de werkbank ("The robbers", *the raid in the
-  demo*). Nog niet: een korte scène van de rovers die uit het bos komen (dat kan met de cinematic van de heer).
+  Verlies je, dan roven ze en gaat de demo door. Hoeveel man en tussen welke dagen staat sinds 24 okt in het level van
+  de demo (`levels/demojaar.js`, vraag 187, stap 1b; `scenario.md`, 3); hoe lang vooraf het bericht komt en hoe laat ze
+  op zijn laatst komen, in de werkbank ("The robbers", *an announced raid, as in the demo*). Nog niet: een korte scène van
+  de rovers die uit het bos komen (dat kan met de cinematic van de heer).
 
 **Zo werkt het gevecht nu** (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie
 kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen", "Huis schout wordt town hall",
