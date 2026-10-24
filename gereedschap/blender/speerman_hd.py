@@ -7,7 +7,7 @@
 # De man staat stil, dus de houding wordt in de mesh gebakken; de camera staat recht voor hem, 15 graden boven de grond,
 # zoals de generator tekent (speerman.py, 'camera').
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel] [stuur] [verf]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- [uitmap] [blend] [spel] [stuur] [verf] [kijk]
 # (zonder --factory-startup: dan laadt Blender de extensie MPFB niet)
 import bpy
 import bmesh
@@ -29,6 +29,10 @@ BLEND = 'blend' in ARGS[1:]
 SPEL = 'spel' in ARGS[1:]
 STUUR = 'stuur' in ARGS[1:]
 VERF = 'verf' in ARGS[1:]
+KIJK = 'kijk' in ARGS[1:]
+
+# de richtingen van vel 01 als draaiing van de camera om de man (Z recht van voren, ZW: hij kijkt naar linksonder)
+RICHTINGEN = {'Z': 0, 'ZW': 45, 'W': 90, 'ZO': -45, 'O': -90}
 
 INSTELLINGEN = {
     'res': (1200, 1950),
@@ -1367,6 +1371,17 @@ def main():
     if VERF:
         projecteer(sc)
         return
+    if KIJK:
+        # het model uit de richtingen van vel 01, om er de vaste punten in af te lezen (verf.cjs)
+        sc.render.use_freestyle = False
+        cam = sc.camera
+        m0 = cam.matrix_world.copy()
+        for r in ('Z', 'ZW', 'W'):
+            cam.matrix_world = Matrix.Rotation(math.radians(RICHTINGEN[r]), 4, 'Z') @ m0
+            sc.render.filepath = os.path.join(UIT, f'kijk-{r}.png')
+            bpy.ops.render.render(write_still=True)
+        cam.matrix_world = m0
+        return
     if BLEND:
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(UIT, 'speerman-hd.blend'))
     sc.render.filepath = os.path.join(UIT, 'staan-Z-spel-mens.png' if SPEL else 'staan-Z-hd-mens.png')
@@ -1375,4 +1390,5 @@ def main():
         stuurbeelden(sc)
 
 
-main()
+if __name__ == '__main__':
+    main()

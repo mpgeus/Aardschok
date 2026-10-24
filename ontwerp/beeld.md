@@ -1957,6 +1957,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   stap. Het model krijgt een echte UV-kaart (uitgevouwen), en de verf wordt in een textuur gebakken die bij de mesh hoort.
   Dan kan elke richting van vel 01 erin, elk op de plekken die hij het best ziet (naar de hoek en of hij ze ziet), en draagt
   elk loop- en aanvalsbeeld dezelfde textuur; de textuur is ook met de hand bij te werken.
+- *De proef met bakken* (Marcel: "vouw het model uit en bak de verf van vel 01 in een textuur op de mesh, eerst met Z, ZW en
+  W (en gespiegeld voor de andere kant)"): `verf.cjs` buigt nu Z, ZW en W (vaste punten per richting, op renders van het
+  model uit die richting: `speerman_hd.py -- <map> kijk`), ZO en O gespiegeld; `gereedschap/blender/bakken.py` maakt van
+  het model één mesh, vouwt hem uit (smart project), weegt per punt elke richting naar de hoek met de camera (nul als iets
+  ervoor zit) en bakt alles in één textuur van 4096 (`render/atlas.png`); daarna hangt de mesh aan het skelet (de staande
+  houding als rust, de gewichten van het dichtste punt van het lijf). Marcel: **"meh"**. Wat er mis is: waar richtingen
+  elkaar overlappen, mengt de verf tot vlekken, want de generator tekent de wapenrok in elke richting anders (van voren
+  een gele baan in het midden, uit ZW en W op andere plekken): de wapenrok wordt een blauw-gele modder, het gezicht
+  vlekkerig. In de loopbeelden scheurt de rok tussen de benen (hij volgt het dichtste punt van het lijf, dus de dijen), en
+  de achterkant van de armstukken is zwart (daar had geen richting verf). Mengen werkt dus niet met beelden die het onderling
+  niet eens zijn.
 
 ## Open
 
