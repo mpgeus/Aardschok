@@ -32,6 +32,7 @@ MACHT = 3  # hoe sterk een richting voorgaat als hij een plek rechter ziet
 # 7 procent te breed, de laarzen bijna 30): het lijf maal SMAL, naar de voeten toe aflopend tot SMAL_VOET.
 SMAL, SMAL_VOET = 0.9, 0.8
 LEUN = math.radians(8)  # zo ver hangt hij bij het lopen naar voren
+STAP = 0.3  # hoe ver de dij naar voren en naar achteren zwaait (radialen)
 ZICHT = (0.2, 0.45)  # de hoek met de camera (cosinus) waarbinnen de verf overgaat in de verf ernaast
 
 
@@ -257,11 +258,13 @@ def loop(rig, i, n):
     f = 2 * math.pi * i / n
     for k, fase in (('L', 0.0), ('R', math.pi)):
         g = f + fase
-        dij = -0.4 * math.sin(g)
-        knie = 0.1 + 0.7 * max(0.0, math.cos(g)) ** 1.5
+        # kleine stappen (een gedrongen man), de voet vlak op de grond; bij het neerzetten de teen wat omhoog, bij het afzetten
+        # de hiel (Marcel: "voeten ziet er nog raar uit": de voet kantelde mee met de knie en wipte achteruit omhoog)
+        dij = -STAP * math.sin(g)
+        knie = 0.08 + 0.55 * max(0.0, math.cos(g)) ** 1.5
         draai(rig, f'upperleg01.{k}', dij)
         draai(rig, f'lowerleg01.{k}', knie)
-        draai(rig, f'foot.{k}', -(dij + knie) * 0.7)
+        draai(rig, f'foot.{k}', -(dij + knie) - 0.15 * max(0.0, math.sin(g)) ** 2 + 0.3 * max(0.0, -math.sin(g)) ** 3)
     # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf
     draai(rig, 'upperarm01.L', 0.1 * math.sin(f))
     draai(rig, 'lowerarm01.L', -0.05 - 0.05 * max(0.0, -math.sin(f)))

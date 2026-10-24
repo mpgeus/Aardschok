@@ -71,6 +71,8 @@ const PUNTEN_ZW = [
   ['laars rechts, omslag binnen', [620, 1610], [460, 530]],
   ['laars links, omslag', [550, 1550], [430, 520]],
   ['laars links, hak', [530, 1810], [425, 585]],
+  ['laars links, enkelriem', [465, 1690], [422, 550]],
+  ['laars rechts, enkelriem', [710, 1750], [480, 568]],
   ['speer, punt', [200, 155], [340, 90]],
   ['speer, voet', [200, 1840], [347, 580]],
 ];
@@ -173,7 +175,11 @@ function bron(x0 = 0, x1 = 300) {
     for (let y = 1; y < h - 1; y++) for (let x = 1; x < b - 1; x++) {
       const i = y * b + x;
       if (kl[i * 3] >= 0) continue;
-      for (const j of [i - 1, i + 1, i - b, i + b]) if (kl[j * 3] >= 0) { for (let c = 0; c < 3; c++) nieuw[i * 3 + c] = kl[j * 3 + c]; break; }
+      // het gemiddelde van de bekende buren (de eerste buur nemen gaf strepen onder de laarzen)
+      const som = [0, 0, 0];
+      let n = 0;
+      for (const j of [i - 1, i + 1, i - b, i + b, i - b - 1, i - b + 1, i + b - 1, i + b + 1]) if (kl[j * 3] >= 0) { for (let c = 0; c < 3; c++) som[c] += kl[j * 3 + c]; n++; }
+      if (n) for (let c = 0; c < 3; c++) nieuw[i * 3 + c] = Math.round(som[c] / n);
     }
     kl.set(nieuw);
   }

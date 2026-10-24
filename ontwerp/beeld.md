@@ -1989,6 +1989,15 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   Bij het lopen leunt het bovenlijf vanaf de taille 8 graden voorover, het hoofd half terug; de rok en de riem blijven aan
   het bekken. En in `verf.cjs` gaat de omlijning van de generator eraf voor het aanvullen (die gaf donkerpaarse randjes
   langs de laarzen). De vegen op het achterste been en de arm zijn weg, de laarzen hebben schone randen.
+- *De voeten* (Marcel: "voeten ziet er nog raar uit"). Wat raar was: het riempje om de enkel volgde de bovenkant van de voet
+  en stond als een platte schotel om de voet; de omslag waaierde uit als een klok; de neus was een klomp; en bij het lopen
+  kantelde de voet mee met de knie (de achterste voet wipte omhoog alsof hij trapte), met grote stappen. Nu: de omslag en het
+  riempje zijn strakke ringen om de schacht (het riempje gemeten aan de laars, met het gespje buiten), de voet en de neus
+  compacter; bij het lopen kleinere stappen (de dij 0,3 radiaal), de voet vlak op de grond met de teen wat omhoog bij het
+  neerzetten en de hiel bij het afzetten. Twee vaste punten erbij (de riempjes), en het aanvullen in `verf.cjs` neemt het
+  gemiddelde van de buren. Overblijft: onder de neus en de zool rekt de zool van vel 01 uit tot strepen (onze laars is
+  onderaan breder dan de zijne); op spelmaat een donkere onderrand van een pixel. Schuine vlakken eerder vullen hielp daar
+  niet en maakte de omslag glad als plastic, dus dat is terug. HD: `uit/blender/lopen-ZW-voeten.png`.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

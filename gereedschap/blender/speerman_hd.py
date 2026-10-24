@@ -1034,7 +1034,10 @@ def laarzen(lijf, rig, M):
             rs = [straal(bvh, c, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
             rs = [r for r in rs if r is not None]
             return sum(rs) / len(rs) if rs else 0.06
-        z_top = kn.z - 0.06
+        # de laarsrand op 24 procent van de man, zoals op vel 01 (22; Marcel: "voeten ziet er nog raar uit": de schacht was
+        # hoger, en viel dan op de schaduw onder de rok in de verf)
+        z_top = min(kn.z - 0.06, 0.24 * kruin(lijf))
+        print('LAARS', k, 'knie', round(kn.z, 3), 'rand', round(z_top, 3), 'kruin', round(kruin(lijf), 3))
         boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
         r_boven, r_enkel = gem(boven) + 0.018, gem(en + as_ * -0.015) + 0.016
         d = en - boven
@@ -1047,16 +1050,16 @@ def laarzen(lijf, rig, M):
         breed = max(q.x for q in voet) - min(q.x for q in voet)
         lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
-        midden = Vector((hiel.x, hiel.y, 0.05)) + richting * lengte * 0.5
+        midden = Vector((hiel.x, hiel.y, 0.045)) + richting * lengte * 0.5
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=midden,
                                              rotation=(0, 0, math.atan2(richting.y, richting.x) + math.pi / 2))
         e = bpy.context.active_object
-        e.scale = (breed / 2 + 0.013, lengte / 2 + 0.013, 0.055)
+        e.scale = (breed / 2 + 0.008, lengte / 2 + 0.004, 0.048)  # compact, zoals op vel 01
         stukken.append(e)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=breed / 2 + 0.008,
-                                             location=Vector((teen.x, teen.y, 0.04)) - richting * 0.012)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=breed / 2 + 0.002,
+                                             location=Vector((teen.x, teen.y, 0.036)) - richting * 0.02)
         neus = bpy.context.active_object
-        neus.scale = (1, 1, 0.85)
+        neus.scale = (1, 1, 0.75)  # een ronde neus, maar geen klomp
         stukken.append(neus)
         bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=r_enkel + 0.006, location=en + Vector((0, 0.012, -0.012)))
         stukken.append(bpy.context.active_object)
@@ -1064,20 +1067,26 @@ def laarzen(lijf, rig, M):
         for v in laars.data.vertices:
             v.co.z = max(v.co.z, 0.0)  # de zool vlak
         delen.append(laars)
+        # de omslag en het riempje strak om de schacht (Marcel: "voeten ziet er nog raar uit": de omslag waaierde uit als
+        # een klok, en het riempje volgde de bovenkant van de voet: een platte schotel om de voet)
+        def ring(naam, midden, hoog, r, mat, dikte):
+            bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=r, depth=hoog, end_fill_type='NOTHING', location=midden,
+                                                rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
+            o = bpy.context.active_object
+            o.name = naam
+            o.data.materials.append(mat)
+            dik(o, dikte)
+            zacht(o)
+            return bak_mod(o)
+        delen.append(ring('omslag.' + k, boven + as_ * 0.022, 0.044, r_boven + 0.004, M['omslag'], 0.006))
+        enkel = en + as_ * -0.07
         lb = bvh_van([(laars, None)])
-        o = koker('omslag.' + k, lb, lambda t, th, boven=boven, as_=as_: (boven + as_ * (0.004 + 0.055 * t), as_), [0, 0.3, 1],
-                  lambda t, th: 0.004 + 0.012 * t, n=64, mat=M['omslag'], ver=0.2)
-        dik(o, 0.005)
-        delen.append(o)
-        # het riempje om de enkel, met een gespje aan de buitenkant
-        enkel = en + as_ * -0.03
-        r = koker('enkelriem.' + k, lb, lambda t, th, enkel=enkel, as_=as_: (enkel + as_ * 0.02 * t, as_), [0, 1],
-                  lambda t, th: 0.004, n=64, mat=M['omslag'], ver=0.2)
-        dik(r, 0.004)
-        delen.append(r)
+        rs = [straal(lb, enkel, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
+        rs = [x for x in rs if x is not None]
+        r_riem = (max(rs) if rs else gem(enkel) + 0.02) + 0.002  # op de laars, niet erin
+        delen.append(ring('enkelriem.' + k, enkel, 0.016, r_riem, M['omslag'], 0.004))
         buiten = Vector((s, -0.35, 0)).normalized()
-        rb = straal(lb, enkel + as_ * 0.01, buiten, 0.2) or 0.06
-        bpy.ops.mesh.primitive_cube_add(size=1, location=enkel + as_ * 0.01 + buiten * (rb + 0.008), scale=(0.016, 0.006, 0.02),
+        bpy.ops.mesh.primitive_cube_add(size=1, location=enkel + buiten * (r_riem + 0.004), scale=(0.014, 0.005, 0.018),
                                         rotation=(0, 0, math.atan2(buiten.y, buiten.x) + math.pi / 2))
         g = bpy.context.active_object
         g.data.materials.append(M['staal'])
