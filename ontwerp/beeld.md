@@ -2200,6 +2200,11 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   vorm (`ROK_TREK`, 0,2): hij zwaait en valt, maar haakt niet meer. Alle patronen rekenen nu op de plek van elk punt toen het model af was (het
   kenmerk `oorsprong`), anders schuiven de banen en het weefsel over de stof. De helm lichter (#8c8a94): op spelmaat
   was hij zwart naast het zilver van de generator. En acht richtingen: NW, N en NO erbij.
+- *De volledige speerman* (25 okt): staan, lopen en steken in de acht richtingen, isometrisch (`eigen.py -- <map> Z ZW W
+  NW N NO O ZO iso`, en nog eens met `steek`; zo'n anderhalf uur op de GTX 1080 Ti), in `uit/blender/render/eigen-<r>-iso-
+  <soort>-<i>.png`, met de rasters `uit/blender/eigen-acht-lopen-iso.mp4` en `eigen-acht-steek-iso.mp4` en het vel
+  `eigen-acht-vel-iso.png` (alles op één schaal, de voeten op één lijn). Wat nog opvalt: de blauwe pand kreukelt bij
+  het lopen nog wat aan de zijkant, en van achteren eindigt de mouw van het wambuis met een harde rand.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
