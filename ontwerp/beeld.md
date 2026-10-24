@@ -2086,6 +2086,16 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   leesbaar maakt). De plooien: per plooi een golf met een eigen fase, die naar beneden verschuift (schuine plooien), links
   sterker dan rechts, en een ongelijke zoom. Marcel daarop: **"De baard ziet er fake uit"**, "Van veraf wel beter", en
   **"Kunnen we de stof texture nog wat aanpakken? Desnoods blender plugins of addons"**.
+- *Echte stof en een baard als vorm* (Marcel: "Allebei"). Drie CC0-texturen van Poly Haven in
+  `gereedschap/blender/texturen/` (met een `LEESMIJ.md`): grof linnen voor de wapenrok en de mouwen, jute voor de hozen, bruin
+  leer voor de riem, de laarzen, de armstukken, de handschoenen en de schede. `Knopen.met_textuur` legt ze in een doos
+  geprojecteerd op het model: van de kleur alleen het licht en donker (de kleur blijft die van het model), en de normal map,
+  onder de bobbels die er al waren; `eigen.py` laat dat reliëf staan bij het mat maken. Op de echte maat (een tegel van
+  27 cm) waren de draden kleiner dan een pixel van de HD-render; nu groter dan echt (70 cm linnen, 50 cm jute en leer), zodat
+  het weefsel te zien is. De baard is een vorm over kin en kaak: de huid naar buiten gezet, onder de mond dik en wat omlaag
+  over de kraag, met strengen in de verf (fijne strepen omlaag, plukken, grijze strengen) en reliëf; het echte haar nog
+  alleen als een zachte rand. Gemeten op spelmaat liggen de kleuren nog op een paar punten van de generator (het licht een
+  derde stop lichter, omdat het reliëf alles wat donkerder maakte). Marcel daarop: **"En zwaartekracht?"**
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

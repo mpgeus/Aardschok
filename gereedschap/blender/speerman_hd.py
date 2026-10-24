@@ -222,14 +222,61 @@ class Knopen:
         self.zet(n.inputs[0], f)
         return [s for s in n.outputs if s.type == 'RGBA'][0]
 
+    def textuur(self, naam, tegel, contrast, kracht):
+        """Een textuur van Poly Haven (texturen/LEESMIJ.md) in een doos geprojecteerd op de plek in het object, een tegel van
+        `tegel` meter: van de kleur alleen het licht en donker, rond 1, met `contrast` (de kleur zelf blijft die van het
+        model), en de normal map met `kracht`. Geeft (factor, normaal)."""
+        map_ = os.path.join(HIER, 'texturen')
+        bestand = lambda soort: next(os.path.join(map_, f) for f in sorted(os.listdir(map_)) if f.startswith(f'{naam}_{soort}'))
+        vm = self.n('ShaderNodeVectorMath', operation='SCALE')
+        self.zet(vm.inputs[0], self.plek())
+        vm.inputs['Scale'].default_value = 1 / tegel
+
+        def beeld(soort, kleur):
+            img = bpy.data.images.load(bestand(soort), check_existing=True)
+            if not kleur:
+                img.colorspace_settings.name = 'Non-Color'
+            t = self.n('ShaderNodeTexImage', image=img, projection='BOX', projection_blend=0.35)
+            self.nt.links.new(vm.outputs[0], t.inputs['Vector'])
+            return t, img
+        kleur, img = beeld('diff' if any(f.startswith(f'{naam}_diff') for f in os.listdir(map_)) else 'albedo', True)
+        if 'gem' not in img:
+            import numpy as np
+            px = np.empty(img.size[0] * img.size[1] * 4, dtype=np.float32)
+            img.pixels.foreach_get(px)
+            px = px.reshape(-1, 4)
+            img['gem'] = float((px[:, 0] * 0.2126 + px[:, 1] * 0.7152 + px[:, 2] * 0.0722).mean())
+        bw = self.n('ShaderNodeRGBToBW')
+        self.nt.links.new(kleur.outputs['Color'], bw.inputs[0])
+        rel = self.w('DIVIDE', bw.outputs[0], img['gem'])
+        fac = self.w('ADD', 1 - contrast, self.w('MULTIPLY', rel, contrast))
+        nk, _ = beeld('nor_gl', False)
+        nm = self.n('ShaderNodeNormalMap')
+        nm.inputs['Strength'].default_value = kracht * INSTELLINGEN.get('detail', 1.0)
+        self.nt.links.new(nk.outputs['Color'], nm.inputs['Color'])
+        return fac, nm.outputs['Normal']
+
+    def met_textuur(self, kl, naam, tegel, contrast=0.6, kracht=0.7):
+        """De kleur kl met de draad en de slijtage van een textuur, en zijn reliëf (onder een bobbel, als die er is)."""
+        fac, normaal = self.textuur(naam, tegel, contrast, kracht)
+        cc = self.n('ShaderNodeCombineColor')
+        for i in range(3):
+            self.zet(cc.inputs[i], fac)
+        self.normaal = normaal
+        return self.meng(1.0, kl, cc.outputs[0], 'MULTIPLY')
+
     def bobbel(self, hoogte, kracht=0.5, afstand=0.003):
         b = self.n('ShaderNodeBump')
+        if getattr(self, 'normaal', None) is not None:
+            self.nt.links.new(self.normaal, b.inputs['Normal'])  # de bobbel bovenop het reliëf van de textuur
         b.inputs['Strength'].default_value = kracht * INSTELLINGEN.get('detail', 1.0)
         b.inputs['Distance'].default_value = afstand
         self.zet(b.inputs['Height'], hoogte)
         self.nt.links.new(b.outputs['Normal'], self.bsdf.inputs['Normal'])
 
     def af(self, kleur, ruw=0.7, metaal=0.0, holte=0.35):
+        if getattr(self, 'normaal', None) is not None and not self.bsdf.inputs['Normal'].links:
+            self.nt.links.new(self.normaal, self.bsdf.inputs['Normal'])
         # holtes donkerder: omgevingsschaduw, alleen binnen het eigen deel
         ao = self.n('ShaderNodeAmbientOcclusion', only_local=True)
         ao.inputs['Distance'].default_value = 0.03
@@ -255,22 +302,21 @@ def mat_huid():
     return k.af(kl, ruw=0.48, holte=0.25)
 
 
-def mat_stof(naam, kleur, schaal=30, kracht=0.25):
+def mat_stof(naam, kleur, schaal=30, kracht=0.25, textuur=('rough_linen', 0.7)):
     k = Knopen(naam)
-    r = k.ruis(schaal * 8, 2)          # het weefsel
     v = k.ruis(schaal / 4, 2)          # vlekken
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.22 * INSTELLINGEN.get('detail', 1.0)), lin(kleur), (0, 0, 0, 1))
-    k.bobbel(r, kracht, 0.0015)
+    # het weefsel uit een echte textuur (Poly Haven), niet meer uit ruis
+    kl = k.met_textuur(kl, textuur[0], textuur[1], contrast=1.0, kracht=1.2)
     return k.af(kl, ruw=0.9)
 
 
 def mat_leer(naam, kleur, donker='#2a160a'):
     k = Knopen(naam)
     r = k.ruis(18, 5)
-    kras = k.ruis(90, 2, rek=(1, 1, 6))
-    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.45 * INSTELLINGEN.get('detail', 1.0)), lin(kleur), lin(donker))
-    kl = k.meng(k.glad(kras, 0.62, 0.72, 0, 0.25 * INSTELLINGEN.get('detail', 1.0)), kl, (1, 0.9, 0.75, 1))
-    k.bobbel(k.w('ADD', r, k.w('MULTIPLY', kras, 0.3)), 0.35, 0.002)
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.35 * INSTELLINGEN.get('detail', 1.0)), lin(kleur), lin(donker))
+    # de nerf, de kreukels en de slijtage van echt leer (Poly Haven)
+    kl = k.met_textuur(kl, 'brown_leather', 0.5, contrast=0.55, kracht=0.8)
     return k.af(kl, ruw=0.55)
 
 
@@ -637,8 +683,8 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
-    w = k.ruis(240, 2)
-    k.bobbel(w, 0.25, 0.0012)
+    # het weefsel van echt linnen, de draden groter dan echt (op de echte maat zijn ze kleiner dan een pixel van de HD-render)
+    kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
     k.bsdf.inputs['Sheen Weight'].default_value = 0.3
     return k.af(kl, ruw=0.92, holte=0.4)
 
@@ -651,7 +697,7 @@ def mat_laars():
     k.zet(sep.inputs[0], k.plek())
     kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#7c4828'), lin('#2e1609'))
     kl = k.meng(k.glad(sep.outputs['Z'], 0.016, 0.012), kl, lin('#1e120c'))
-    k.bobbel(r, 0.35, 0.002)
+    kl = k.met_textuur(kl, 'brown_leather', 0.5, contrast=0.55, kracht=0.8)
     return k.af(kl, ruw=0.5)
 
 
@@ -732,6 +778,47 @@ def mat_haar():
 
 # ---------------------------------------------------------------- de delen
 
+
+def mat_baardvorm():
+    """De baard als vorm: strengen in de verf, zoals een schilder een baard zet (lange, smalle strepen omlaag, in plukken),
+    donker grijsbruin met grijze strengen, en reliëf langs de strengen."""
+    k = Knopen('baardvorm')
+    fijn = k.ruis(4, 3, rek=(110, 110, 5))     # fijne strengen: snel over de breedte, traag omlaag
+    pluk = k.ruis(2, 2, rek=(28, 28, 3))       # plukken
+    kl = k.meng(k.glad(pluk, 0.35, 0.65), lin('#2a211b'), lin('#5c4b3e'))
+    kl = k.meng(k.w('MULTIPLY', k.glad(fijn, 0.55, 0.7), 0.85), kl, lin('#aaa39a'))   # grijze strengen
+    kl = k.meng(k.glad(fijn, 0.42, 0.28), kl, lin('#120d0a'))                        # donker tussen de strengen
+    k.bobbel(k.w('ADD', k.w('MULTIPLY', fijn, 0.7), k.w('MULTIPLY', pluk, 0.3)), 0.9, 0.003)
+    return k.af(kl, ruw=0.75, holte=0.5)
+
+
+def baardvorm(lijf, gb, gs, mond, kin):
+    """De baard en de snor als vorm over het gezicht: de huid daar naar buiten gezet, onder de mond dik en wat omlaag
+    hangend over de kraag, de snor dun en over de lip; glad, met strengen in de verf (mat_baardvorm)."""
+    w = {}
+    for v in lijf.data.vertices:
+        for g in v.groups:
+            if g.group in (gb.index, gs.index) and g.weight > 0.5:
+                w[v.index] = 'snor' if g.group == gs.index else 'baard'
+    kies = [i in w for i in range(len(lijf.data.vertices))]
+    ob = uit_huid('baardvorm', lijf, kies, 0.0, mat_baardvorm(), sub=2)
+    me = ob.data
+    ns = [v.normal.copy() for v in me.vertices]
+    for v, n in zip(me.vertices, ns):
+        p = v.co
+        onder = max(0.0, min(1.0, (mond.z - p.z) / 0.06))           # 0 bij de mond, 1 bij de kin en lager
+        voor = max(0.0, min(1.0, (0.06 - abs(p.x)) / 0.05))          # midden voor dikker dan op de wangen
+        uit = 0.005 + 0.03 * onder ** 0.7 * (0.45 + 0.55 * voor)
+        v.co = p + n * uit + Vector((0, -0.012 * onder * voor, -0.03 * onder ** 1.4 * voor))
+    sm = ob.modifiers.new('glad', 'SMOOTH')
+    sm.factor = 0.8
+    sm.iterations = 12
+    dik(ob, 0.004, offset=-1)
+    bak_mod(ob)
+    zacht(ob)
+    ob.visible_shadow = True
+    return ob
+
 def baard(lijf, rig, M):
     """Baard, snor en wenkbrauwen van echt haar (particle hair), op plekken van het gezicht die het skelet aanwijst."""
     bpy.context.view_layer.update()
@@ -757,10 +844,12 @@ def baard(lijf, rig, M):
         for o in (oogL, oogR):
             if o.z + 0.017 < p.z < o.z + 0.034 and abs(p.x - o.x) < 0.028 and p.y < o.y + 0.006:
                 gw.add([v.index], 1.0, 'REPLACE')
+    baardvorm(lijf, gb, gs, mond, kin)
     lijf.data.materials.append(M['haar'])
     slot = len(lijf.data.materials)
     # (Marcel: "De baard moet nog wat beter"): vol en lang genoeg om over de kraag van maliën te vallen, zoals op vel 01
-    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 60000, 0.03, -0.75), ('snor', 'snor', 9000, 0.022, -1.2),
+    # het echte haar nog alleen als een zachte rand over de vorm (alleen haar zag er van dichtbij nep uit)
+    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 9000, 0.012, -0.8), ('snor', 'snor', 2500, 0.01, -1.2),
                                             ('brauw', 'brauw', 2500, 0.01, 0.0)):
         md = lijf.modifiers.new(naam, 'PARTICLE_SYSTEM')
         ps = md.particle_system
@@ -1256,7 +1345,7 @@ def bouw():
     riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z + 0.02
     M = {
         'huid': mat_huid(),
-        'hozen': mat_stof('hozen', '#1c2038', 30, 0.3),
+        'hozen': mat_stof('hozen', '#1c2038', 30, 0.3, textuur=('hessian_230', 0.5)),
         'wambuis': mat_stof('wambuis', '#6e3c22', 20, 0.15),
         'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),

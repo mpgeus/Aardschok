@@ -26,7 +26,7 @@ RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
 # gemeten tegen staan Z van de generator (kleurmeting op spelmaat, 24 okt): ons model was per stof 8 tot 18 punten lichter
 # (Lab) en vlakker, dus een stop donkerder, minder vullicht en lucht (diepere schaduwkant), en de zon meer van opzij, zodat
 # de plooien en de ruiten schaduw geven
-LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': -0.3, 'look': 'Medium High Contrast',
+LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': 0.0, 'look': 'Medium High Contrast',
          'zonrichting': (-0.82, -0.32, 0.48)}
 # proeven met het licht (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat maakt alles veel
 # dieper en echter"): -- <map> lichtproef rendert alleen staan Z in een paar standen, naar eigen-licht-<naam>.png
@@ -51,6 +51,12 @@ def mat_maken():
                 continue
             for naam in ('Roughness', 'Normal', 'Metallic', 'Coat Weight'):
                 for link in list(n.inputs[naam].links):
+                    # het reliëf van een textuur (een normal map onder de bobbel) blijft; de fijne bobbels gaan eraf
+                    if naam == 'Normal' and link.from_node.type == 'BUMP' and link.from_node.inputs['Normal'].links:
+                        nt.links.new(link.from_node.inputs['Normal'].links[0].from_socket, n.inputs['Normal'])
+                        continue
+                    if naam == 'Normal' and link.from_node.type == 'NORMAL_MAP':
+                        continue
                     nt.links.remove(link)
             n.inputs['Roughness'].default_value = 0.75
             n.inputs['Metallic'].default_value = min(n.inputs['Metallic'].default_value, 0.7)
