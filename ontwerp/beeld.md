@@ -2021,6 +2021,24 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   generator (`uit/blender/lopen-ZW.png`). *generator*: dwars voor het lijf van linksonder naar rechtsboven, zoals in het vel
   (de punt in ZW naar achteren, het gebrek van 21 okt); *gespiegeld*: de punt naar voren, maar vlakker, als een gevelde
   speer. *vooruit* (de eerste poging) stak de speer ver voor hem uit.
+- *Proef (a): het model met zijn eigen kleuren, als vel in het spel* (Marcel: "we proberen de proef die de andere sessie
+  doorgaf"; de opdracht kwam via de sessie van de GLB: "staan en lopen in acht richtingen met de eigen gebakken kleuren,
+  licht bijgesteld voor spelmaat, en in het spel naast de generator te zien"). Het plan, voor de proefplaat:
+  1. *Het model:* `speerman_hd.py` zoals hij nu is (de speer, de laarzen en de schouders van vandaag), met zijn eigen
+     kleuren, niet de verf van vel 01, en mat afgewerkt zoals de GLB: de materialen tijdelijk overschreven (ruwheid 0,75,
+     geen bump, het staal metaal 0,7), zodat de baard echt haar blijft en het skelet loopt zoals in `bakken.py`. Smaller
+     zoals bij de verf (het lijf 0,9, de voeten 0,8): toen had hij op spelmaat de breedte van de generator.
+  2. *Het licht voor spelmaat,* per richting met de camera meegedraaid: een zachte zon van linksboven, een zacht licht van
+     voren dat onder de helmrand komt (het gezicht moet lezen), wat feller en meer contrast; op spelmaat de donkere rand.
+  3. *De bewegingen:* staan (een beeld, de speer rechtop in een hand) en lopen (acht beelden, de speer schuin voor het lijf
+     zoals de generator, met de rechterschouder naar voren en wat voorover), in de acht richtingen. Wat vandaag aan het
+     lopen opviel (de kleine stap, de voeten in ZW bijna over elkaar), neem ik mee: de stap iets groter.
+  4. *De vellen* in de maten van nu (`beelden/beschrijving.json`: staan 44 bij 94, lopen 89 bij 91, 74 pixels van de zool
+     tot de helm), als een eigen figuur, zodat de vellen van de generator (van de sessie `lokaal-dac05521`) blijven staan.
+  5. *In het spel:* een paar speermannen in het proefdorp, staand en lopend, twee schermafdrukken op dezelfde plek: een met
+     de vellen van de generator en een met die van het model, het tweede alleen in de browser omgezet. Niets blijvends in
+     het spel zonder Marcel.
+  Eerst één proefplaat: Z en ZW, staan en vier loopbeelden, groot en op spelmaat naast de generator.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,
