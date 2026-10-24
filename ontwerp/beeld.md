@@ -1998,6 +1998,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   gemiddelde van de buren. Overblijft: onder de neus en de zool rekt de zool van vel 01 uit tot strepen (onze laars is
   onderaan breder dan de zijne); op spelmaat een donkere onderrand van een pixel. Schuine vlakken eerder vullen hielp daar
   niet en maakte de omslag glad als plastic, dus dat is terug. HD: `uit/blender/lopen-ZW-voeten.png`.
+- *De speer* (Marcel: "ze raken de speer. ook de speer zelf mag nog beter", "maar we gaan de goede kant op", en "lopen moet
+  ook speer schuin vasthouden hadden we besproken": de afspraak van 21 okt, staand rechtop met een hand, lopend en stekend
+  schuin met twee handen, de punt altijd vooruit). De speer zelf naar vel 01: een breed blad als een ruit met afgeronde
+  zijden, het breedst op een derde, met een middenrib, de brede kant naar de camera; het koord slag tegen slag om de koker;
+  en in `bakken.py` geschilderd in drie vaste tonen (licht, midden, donker naar de hoek met het licht van linksboven op het
+  scherm), met de kleuren van vel 01 en roestvlekken op het blad, zoals het lijf onbelicht. Lopen: de handen met IK naar
+  hun plek (rechts laag voor de heup, links hoger en verder voor het lijf; de maten van `heer.cjs` zelf zetten de linkerhand
+  bij dit bredere lijf in het midden, en dan liep de speer naar achteren tussen de benen door), aan de borst vast zodat ze
+  meeleunen, en de speer door beide vuisten, kort vastgehouden (de voet bij de heup, achter de rok). De render voor het lopen
+  is breder (de speer wijst ver vooruit). Twee dingen die daarbij misgingen en opgelost zijn: het armstuk bleef achter bij
+  de heup als de arm naar voren ging (wat aan de arm zit, volgt nu alleen de arm), en waar de hangende arm de wapenrok had
+  afgedekt, gaf het aanvullen een vlakke beige schim; daar laat het model nu zijn eigen materiaal zien, belicht. Op spelmaat
+  (`uit/blender/lopen-ZW.png`): de punt schuin omhoog naar voren, buiten de benen; de speer van de generator gaat schuin
+  over het lijf naar achteren (het gebrek van 21 okt).
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,

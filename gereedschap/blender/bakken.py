@@ -76,6 +76,11 @@ def een_mesh(sc):
         kopie.vertex_groups.clear()
         heup = kopie.data.attributes.new('heup', 'FLOAT', 'POINT')
         heup.data.foreach_set('value', [1.0 if aan_de_heup(ob, z_knie) else 0.0] * len(kopie.data.vertices))
+        # wat aan de arm vastzit, volgt alleen de arm (het armstuk hing dicht bij de heup en bleef anders achter als de arm
+        # naar voren ging)
+        arm = kopie.data.attributes.new('arm', 'FLOAT', 'POINT')
+        aan_arm = ob.name.startswith(('armstuk', 'armrand', 'kap.', 'handschoenen', 'wambuis', 'nagel'))
+        arm.data.foreach_set('value', [1.0 if aan_arm else 0.0] * len(kopie.data.vertices))
         delen.append(kopie)
         ob.hide_render = True
         ob.hide_viewport = True
@@ -118,15 +123,19 @@ def per_richting(sc, pop, richtingen=VERF):
             q = plek[lp.vertex_index]
             uv.data[lp.index].uv = (q.x, q.y)
         g = me.attributes.new(f'w-{r}', 'FLOAT', 'POINT')
-        w = []
+        bedekt_a = me.attributes.new(f'b-{r}', 'FLOAT', 'POINT')
+        w, bedekt = [], []
         for v, n in zip(me.vertices, ns):
             h = n.dot(naar_cam)
             if h <= 0.05:
                 w.append(0.0)
+                bedekt.append(0.0)
                 continue
             hit = bvh.ray_cast(v.co + n * 0.003, naar_cam, 10.0)
             w.append(0.0 if hit[0] is not None else h ** MACHT)
+            bedekt.append(1.0 if hit[0] is not None else 0.0)
         g.data.foreach_set('value', w)
+        bedekt_a.data.foreach_set('value', bedekt)
         print('RICHTING', r, 'zichtbaar', sum(1 for x in w if x > 0), 'van', len(w))
     cam.matrix_world = m0
     if 'atlas' in me.uv_layers:
@@ -209,6 +218,16 @@ def aan_het_skelet(sc, pop, rig):
         kd.insert(lijf.matrix_world @ v.co, v.index)
     kd.balance()
     namen = {g.index: g.name for g in lijf.vertex_groups}
+    # de punten van de armen (en handen) van het lijf, voor wat aan de arm vastzit
+    armgroepen = {g.index for g in lijf.vertex_groups if g.name.startswith(('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))}
+    armpunten = [v for v in lijf.data.vertices if sum(g.weight for g in v.groups if g.group in armgroepen) > 0.5]
+    kd_arm = KDTree(len(armpunten))
+    for v in armpunten:
+        kd_arm.insert(lijf.matrix_world @ v.co, v.index)
+    kd_arm.balance()
+    aan_arm = [0.0] * len(pop.data.vertices)
+    if 'arm' in pop.data.attributes:
+        pop.data.attributes['arm'].data.foreach_get('value', aan_arm)
     groepen = {}
     rig.data.bones['spine05'].use_deform = True
     heup = [0.0] * len(pop.data.vertices)
@@ -220,7 +239,7 @@ def aan_het_skelet(sc, pop, rig):
         if heup[v.index] > 0.5:
             bekken.add([v.index], 1.0, 'REPLACE')
             continue
-        _, i, _ = kd.find(v.co)
+        _, i, _ = (kd_arm if aan_arm[v.index] > 0.5 else kd).find(v.co)
         for g in lijf.data.vertices[i].groups:
             if g.weight < 1e-3 or namen[g.group] not in rig.data.bones:
                 continue
@@ -249,8 +268,9 @@ def draai(rig, bot, hoek):
     pb.rotation_quaternion = (R.inverted() @ Matrix.Rotation(hoek, 3, 'X') @ R).to_quaternion()
 
 
-def loop(rig, i, n):
-    """Beeld i van n van een loopcyclus op de plaats (vooruit is -y)."""
+def loop(rig, i, n, draagt=False):
+    """Beeld i van n van een loopcyclus op de plaats (vooruit is -y). Met draagt houden de armen de speer schuin (IK, zie
+    draag_schuin) en zwaait de linkerarm niet."""
     for pb in rig.pose.bones:
         pb.rotation_mode = 'QUATERNION'
         pb.rotation_quaternion = (1, 0, 0, 0)
@@ -266,14 +286,119 @@ def loop(rig, i, n):
         draai(rig, f'lowerleg01.{k}', knie)
         draai(rig, f'foot.{k}', -(dij + knie) - 0.15 * max(0.0, math.sin(g)) ** 2 + 0.3 * max(0.0, -math.sin(g)) ** 3)
     # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf
-    draai(rig, 'upperarm01.L', 0.1 * math.sin(f))
-    draai(rig, 'lowerarm01.L', -0.05 - 0.05 * max(0.0, -math.sin(f)))
+    if not draagt:
+        draai(rig, 'upperarm01.L', 0.1 * math.sin(f))
+        draai(rig, 'lowerarm01.L', -0.05 - 0.05 * max(0.0, -math.sin(f)))
     # naar voren hangen (Marcel: "de soldaat moet eigenlijk ook iets naar voren 'hangen' als hij loopt"): het bovenlijf vanaf
     # de taille voorover, het hoofd wat terug zodat hij vooruit blijft kijken; de rok en de riem hangen aan het bekken
     draai(rig, 'spine04', LEUN * 0.7)  # om x: positief kantelt de top naar -y, naar voren
     draai(rig, 'spine02', LEUN * 0.3)
     draai(rig, 'head', -LEUN * 0.5)
     rig.location.z = rig['z0'] - 0.02 * abs(math.sin(f))
+    bpy.context.view_layer.update()
+
+
+def geschilderd(naam, hoek, banden, roest=False):
+    """Een materiaal in vaste tonen, zoals een pixeltekenaar het zet en zoals de verf op het lijf: licht, midden en donker
+    naar de hoek met het licht (van linksboven op het scherm, dus met de camera meegedraaid), onbelicht gerenderd."""
+    k = sh.Knopen(naam)
+    k.nt.nodes.remove(k.bsdf)
+    geo = k.n('ShaderNodeNewGeometry')
+    licht = Matrix.Rotation(math.radians(hoek), 3, 'Z') @ sh.LICHT
+    dot = k.n('ShaderNodeVectorMath', operation='DOT_PRODUCT')
+    k.nt.links.new(geo.outputs['Normal'], dot.inputs[0])
+    dot.inputs[1].default_value = licht
+    ramp = k.n('ShaderNodeValToRGB')
+    cr = ramp.color_ramp
+    cr.interpolation = 'CONSTANT'
+    for i, (pos, kleur) in enumerate(banden):
+        e = cr.elements[i] if i < len(cr.elements) else cr.elements.new(pos)
+        e.position = pos
+        e.color = sh.lin(kleur)
+    k.nt.links.new(dot.outputs['Value'], ramp.inputs['Fac'])
+    kleur = ramp.outputs['Color']
+    if roest:
+        kleur = k.meng(k.glad(k.ruis(45, 3), 0.66, 0.7), kleur, sh.lin('#7a3a20'))
+    em = k.n('ShaderNodeEmission')
+    k.nt.links.new(kleur, em.inputs['Color'])
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    return k.m
+
+
+def verf_speer(sc, r):
+    """De speer in vaste tonen, met de kleuren van vel 01 (Marcel: "ook de speer zelf mag nog beter"): de dofglanzende
+    schacht roodbruin, het koord koperbruin, het blad licht en donker per vlak van de ruit, met roestvlekken."""
+    hoek = sh.RICHTINGEN[r]
+    M = {
+        'schacht': geschilderd('speer-schacht', hoek, [(0.0, '#3a1a12'), (0.15, '#603327'), (0.6, '#8a4a2c')]),
+        'koker': geschilderd('speer-koker', hoek, [(0.0, '#4a2410'), (0.15, '#8a4a22'), (0.6, '#c07a3c')]),
+        'koord': geschilderd('speer-koord', hoek, [(0.0, '#4a2410'), (0.15, '#8a4a22'), (0.6, '#c07a3c')]),
+        'blad': geschilderd('speer-blad', hoek, [(0.0, '#4f4c5a'), (0.05, '#8e8a96'), (0.45, '#cfccd2')], roest=True),
+    }
+    for ob in sc.objects:
+        if ob.name.startswith('speer.'):
+            deel = ob.name.split('.')[1]
+            ob.data.materials.clear()
+            ob.data.materials.append(M.get(deel, M['koker']))
+
+
+# De houding bij het lopen (Marcel, 21 okt: "Bij stilstaan 1 hand recht, lopen 2 handen en steken ook", "Bij lopen schuin";
+# 24 okt: "lopen moet ook speer schuin vasthouden hadden we besproken"): als houding B van heer.cjs (o.greep 'schuin'), de
+# rechterhand laag voor de heup, de linker hoger en verder voor het lijf, de punt schuin omhoog naar voren. In meters ten
+# opzichte van de schouder (+x is zijn linkerkant, -y voor): de maten van heer.cjs zelf zetten de linkerhand bij dit bredere
+# lijf in het midden, en dan liep de speer schuin naar achteren tussen de benen door.
+HAND_R = (0.03, -0.12, -0.29)
+HAND_L = (-0.24, -0.30, -0.08)
+GREEP = 0.12  # waar de rechterhand de speer vasthoudt, vanaf de voet, als deel van de lengte: kort, zodat de voet bij de heup blijft
+
+
+def draag_schuin(sc, rig):
+    """De handen met IK naar de plekken van houding B, aan de borst vast (spine01), zodat ze meeleunen."""
+    bpy.context.view_layer.update()
+    W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
+    doelen = {}
+    for k, d in (('R', HAND_R), ('L', HAND_L)):
+        plek = W(f'upperarm01.{k}') + Vector(d)
+        leeg = bpy.data.objects.new(f'hand.{k}', None)
+        sc.collection.objects.link(leeg)
+        leeg.parent = rig
+        leeg.parent_type = 'BONE'
+        leeg.parent_bone = 'spine01'
+        bpy.context.view_layer.update()
+        leeg.matrix_world = Matrix.Translation(plek)
+        c = rig.pose.bones[f'lowerarm02.{k}'].constraints.new('IK')
+        c.target = leeg
+        c.chain_count = 4
+        c.use_tail = True
+        doelen[k] = leeg
+    bpy.context.view_layer.update()
+    return doelen
+
+
+def speer_in_handen(sc, rig, lengte):
+    """De speer door beide vuisten (na de IK): het punt GREEP van de speer in de rechtervuist, de punt naar de linker. Waar de
+    speer nu staat, volgt uit de schacht zelf (na smal staat hij niet meer waar hij gebouwd is)."""
+    bpy.context.view_layer.update()
+    W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
+    vuist = {k: (W(f'finger3-1.{k}') + W(f'finger3-3.{k}') + W(f'wrist.{k}')) / 3 for k in ('R', 'L')}
+    as_ = (vuist['L'] - vuist['R']).normalized()
+    schacht = bpy.data.objects['speer.schacht']
+    as0 = (schacht.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+    voet = schacht.matrix_world.translation - as0 * schacht.dimensions.z / 2
+    greep0 = voet + as0 * GREEP * lengte
+    T = Matrix.Translation(vuist['R']) @ as0.rotation_difference(as_).to_matrix().to_4x4() @ Matrix.Translation(-greep0)
+    for ob in sc.objects:
+        if not ob.name.startswith('speer.'):
+            continue
+        m = ob.matrix_world.copy()
+        ob.parent = None
+        ob.matrix_world = T @ m
+        m = ob.matrix_world.copy()
+        ob.parent = rig
+        ob.parent_type = 'BONE'
+        ob.parent_bone = 'spine01'
+        bpy.context.view_layer.update()
+        ob.matrix_world = m
     bpy.context.view_layer.update()
 
 
@@ -366,30 +491,48 @@ def smal(rig, pop):
 
 
 def projectie(pop, r):
-    """Alleen de verf van richting r, vanuit zijn eigen camera, onbelicht; niets gemengd. Waar de camera de plek niet goed
-    ziet, de verf van ernaast (vul_verborgen)."""
-    k = sh.Knopen(f'verf-{r}')
-    k.nt.nodes.remove(k.bsdf)
-    uv = k.n('ShaderNodeUVMap', uv_map=f'proj-{r}')
-    tex = k.n('ShaderNodeTexImage', image=bpy.data.images.load(os.path.join(UIT, f'verf-{r}.png')), interpolation='Linear', extension='EXTEND')
-    k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
-    zicht = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='zicht')
-    vul = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='vulkleur')
-    kleur = k.meng(zicht.outputs['Fac'], vul.outputs['Color'], tex.outputs['Color'])
-    em = k.n('ShaderNodeEmission')
-    k.nt.links.new(kleur, em.inputs['Color'])
-    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
-    pop.data.materials.clear()
-    pop.data.materials.append(k.m)
+    """Alleen de verf van richting r, vanuit zijn eigen camera, onbelicht; niets gemengd. Waar de camera de plek schuin of van
+    achteren ziet, de verf van ernaast (vul_verborgen); waar iets anders ervoor zat (de wapenrok achter de hangende arm, die
+    vrijkomt als de arm naar voren gaat), het eigen materiaal van het model, belicht: een egale vulling gaf daar een vlakke
+    beige schim. Per materiaal van het model, zodat elk deel zijn eigen materiaal houdt."""
+    beeld = bpy.data.images.load(os.path.join(UIT, f'verf-{r}.png'))
+    for i, oud in enumerate(list(pop.data.materials)):
+        if oud is None:
+            continue
+        m = oud.copy()
+        m.name = f'{oud.name}-verf-{r}'
+        nt = m.node_tree
+        uit = next(n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL')
+        eigen = uit.inputs['Surface'].links[0].from_socket
+        k = sh.Knopen.__new__(sh.Knopen)
+        k.m, k.nt, k.uit = m, nt, uit
+        uv = k.n('ShaderNodeUVMap', uv_map=f'proj-{r}')
+        tex = k.n('ShaderNodeTexImage', image=beeld, interpolation='Linear', extension='EXTEND')
+        k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
+        zicht = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='zicht')
+        vul = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name='vulkleur')
+        bedekt = k.n('ShaderNodeAttribute', attribute_type='GEOMETRY', attribute_name=f'b-{r}')
+        kleur = k.meng(zicht.outputs['Fac'], vul.outputs['Color'], tex.outputs['Color'])
+        em = k.n('ShaderNodeEmission')
+        k.nt.links.new(kleur, em.inputs['Color'])
+        mix = k.n('ShaderNodeMixShader')
+        k.nt.links.new(bedekt.outputs['Fac'], mix.inputs['Fac'])
+        k.nt.links.new(em.outputs[0], mix.inputs[1])
+        k.nt.links.new(eigen, mix.inputs[2])
+        k.nt.links.new(mix.outputs[0], uit.inputs['Surface'])
+        pop.data.materials[i] = m
 
 
 def een_richting(r, n=8):
     """Per richting projecteren, zonder mengen (Marcel, 24 okt: "lopen ZW alleen met de verf van ZW"): de verf van die
     richting op het model, staan en n loopbeelden uit die richting, naar richting-<r>-staan.png en richting-<r>-lopen-<i>.png."""
+    sh.INSTELLINGEN['bladhoek'] = sh.RICHTINGEN[r]  # de brede kant van het blad naar deze camera
     sc = sh.bouw()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
+    lengte = sh.kruin(bpy.data.objects['lijf']) * 1.18
     pop = een_mesh(sc)
     per_richting(sc, pop, [r])
+    verf_speer(sc, r)
     vul_verborgen(sc, pop, r)
     projectie(pop, r)
     sc.render.use_freestyle = False
@@ -398,8 +541,14 @@ def een_richting(r, n=8):
     smal(rig, pop)
     rig['z0'] = rig.location.z
     render(sc, f'richting-{r}-staan.png', sh.RICHTINGEN[r])
+    # lopen: de speer schuin met twee handen, in een bredere render (de speer wijst ver vooruit; de oorsprong blijft in het
+    # midden, lopen.cjs rekent het anker uit de breedte)
+    sc.render.resolution_x = 2400
+    draag_schuin(sc, rig)
+    loop(rig, 0, n, draagt=True)
+    speer_in_handen(sc, rig, lengte)
     for i in range(n):
-        loop(rig, i, n)
+        loop(rig, i, n, draagt=True)
         render(sc, f'richting-{r}-lopen-{i}.png', sh.RICHTINGEN[r])
 
 

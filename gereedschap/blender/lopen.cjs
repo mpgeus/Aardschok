@@ -14,7 +14,7 @@ const { apng } = require('../pixelart/apng.cjs');
 
 const RENDER = path.join(__dirname, '..', 'pixelart', 'uit', 'blender', 'render');
 const UIT = path.join(__dirname, '..', 'pixelart', 'uit', 'blender');
-const ANKER = [600, 1860]; // de oorsprong in de HD-render (speerman_hd.py: res en anker_y)
+const ANKER_Y = 1860; // de oorsprong in de HD-render: in het midden van de breedte, op anker_y (speerman_hd.py)
 const GRAS = [79, 104, 52];
 const BESCHRIJVING = require('../../beelden/beschrijving.json').figuren.speerman;
 const lees = (p) => K.leesPng(fs.readFileSync(p));
@@ -46,7 +46,7 @@ function omlijn(b) {
 function klein(beeld, k) {
   const pix = [];
   for (let p = 0; p < beeld.b * beeld.h; p++) if (beeld.rgba[p * 4 + 3] >= 128) pix.push(p);
-  return omlijn(G.verkleind(beeld, pix, ANKER, k));
+  return omlijn(G.verkleind(beeld, pix, [beeld.b / 2, ANKER_Y], k));
 }
 
 // een cel uit een vel van het spel
@@ -61,7 +61,7 @@ function uitVel(houding, kant, beeld) {
 }
 
 function vak(beeld, n = 3) {
-  const V = 84, H = 108, ax = 42, ay = 100;
+  const V = 104, H = 108, ax = 56, ay = 100;
   const v = { b: V, h: H, rgba: Buffer.alloc(V * H * 4) };
   for (let i = 0; i < V * H; i++) v.rgba.set([...GRAS, 255], i * 4);
   for (let y = 0; y < beeld.h; y++) for (let x = 0; x < beeld.b; x++) {

@@ -1170,22 +1170,32 @@ def speer(rig, M, kruin):
     ov = INSTELLINGEN['speer'] ** 0.5
     cil('schacht', 0.02, z_koker + 0.01, 0.016 * ov, M['hout'])
     cil('koker', z_koker, z_blad + 0.005, 0.017 * ov, M['staal'])
-    for i in range(7):  # het koord, zeven slagen
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.0185 * ov, minor_radius=0.004 * ov, location=(x, y, z_koker + 0.008 + i * (z_blad - z_koker - 0.014) / 6))
+    # het koord strak gewonden, slag tegen slag, zoals op vel 01 (Marcel: "ook de speer zelf mag nog beter")
+    dik_koord = 0.0045 * ov
+    slagen = max(3, int((z_blad - z_koker) / (2 * dik_koord * 0.95)))
+    for i in range(slagen):
+        z = z_koker + dik_koord + i * (z_blad - z_koker - 2 * dik_koord) / (slagen - 1)
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.017 * ov + 0.001, minor_radius=dik_koord, location=(x, y, z))
         o = bpy.context.active_object
         o.name = 'speer.koord'
         zacht(o)
         o.data.materials.append(M['koord'])
         delen.append(o)
+    # het blad als op vel 01: een ruit met afgeronde zijden, het breedst op een derde, met een middenrib (een ruit in doorsnede);
+    # de brede kant naar de camera van de richting die gerenderd wordt (INSTELLINGEN['bladhoek'])
     n = 24
     vs, fs = [], []
+    Wb = 0.03 * INSTELLINGEN['speer']
+    hoek = math.radians(INSTELLINGEN.get('bladhoek', 0))
+    ux, uy = math.cos(hoek), math.sin(hoek)
     for i in range(n + 1):
         t = i / n
-        w = 0.026 * INSTELLINGEN['speer'] * math.sin(math.pi * min(1.0, t ** 0.8)) ** 0.8 * (1 - t) ** 0.25 + 0.0004
-        d = 0.006 * INSTELLINGEN['speer'] * (1 - t) + 0.0005
+        w = Wb * (0.35 + 0.65 * (t / 0.3) ** 0.6) if t < 0.3 else Wb * ((1 - t) / 0.7) ** 1.1
+        w = max(w, 0.0004)
+        d = 0.008 * INSTELLINGEN['speer'] * (w / Wb) + 0.0005
         z = z_blad + (L - z_blad) * t
         for px, py in ((w, 0), (0, d), (-w, 0), (0, -d)):
-            vs.append((x + px, y + py, z))
+            vs.append((x + px * ux - py * uy, y + px * uy + py * ux, z))
     for i in range(n):
         for j in range(4):
             a = i * 4 + j
