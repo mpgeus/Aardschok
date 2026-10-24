@@ -75,6 +75,8 @@ def mat_maken():
             if n.type != 'BSDF_PRINCIPLED':
                 continue
             for naam in ('Roughness', 'Normal', 'Metallic', 'Coat Weight'):
+                if naam == 'Roughness' and soort_van(m) == 'staal':
+                    continue  # het staal houdt zijn ruwheid uit de textuur: blank en mat door elkaar, geen plastic
                 for link in list(n.inputs[naam].links):
                     # het reliëf van een textuur (een normal map onder de bobbel) blijft; de fijne bobbels gaan eraf
                     if naam == 'Normal' and link.from_node.type == 'BUMP' and link.from_node.inputs['Normal'].links:
@@ -175,7 +177,7 @@ def smal_maken(sc, rig):
     mis.z = 0.0
     for ob in sc.objects:
         if ob.name.startswith('speer.'):
-            ob.location += mis
+            ob.matrix_world = Matrix.Translation(mis) @ ob.matrix_world  # in de wereld: hij hangt aan de pols
     bpy.context.view_layer.update()
 
 

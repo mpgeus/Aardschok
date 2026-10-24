@@ -222,21 +222,21 @@ class Knopen:
         self.zet(n.inputs[0], f)
         return [s for s in n.outputs if s.type == 'RGBA'][0]
 
-    def textuur(self, naam, tegel, contrast, kracht):
-        """Een textuur van Poly Haven (texturen/LEESMIJ.md) in een doos geprojecteerd op de plek in het object, een tegel van
-        `tegel` meter: van de kleur alleen het licht en donker, rond 1, met `contrast` (de kleur zelf blijft die van het
-        model), en de normal map met `kracht`. Geeft (factor, normaal)."""
+    def textuur(self, naam, tegel, contrast, kracht, vec=None, projectie='BOX'):
+        """Een textuur van Poly Haven (texturen/LEESMIJ.md) in een doos geprojecteerd op de plek in het object (of op `vec`,
+        met `projectie`), een tegel van `tegel` meter: van de kleur alleen het licht en donker, rond 1, met `contrast` (de
+        kleur zelf blijft die van het model), en de normal map met `kracht`. Geeft (factor, normaal)."""
         map_ = os.path.join(HIER, 'texturen')
         bestand = lambda soort: next(os.path.join(map_, f) for f in sorted(os.listdir(map_)) if f.startswith(f'{naam}_{soort}'))
         vm = self.n('ShaderNodeVectorMath', operation='SCALE')
-        self.zet(vm.inputs[0], self.plek())
+        self.zet(vm.inputs[0], vec if vec is not None else self.plek())
         vm.inputs['Scale'].default_value = 1 / tegel
 
         def beeld(soort, kleur):
             img = bpy.data.images.load(bestand(soort), check_existing=True)
             if not kleur:
                 img.colorspace_settings.name = 'Non-Color'
-            t = self.n('ShaderNodeTexImage', image=img, projection='BOX', projection_blend=0.35)
+            t = self.n('ShaderNodeTexImage', image=img, projection=projectie, projection_blend=0.35)
             self.nt.links.new(vm.outputs[0], t.inputs['Vector'])
             return t, img
         kleur, img = beeld('diff' if any(f.startswith(f'{naam}_diff') for f in os.listdir(map_)) else 'albedo', True)
@@ -256,9 +256,10 @@ class Knopen:
         self.nt.links.new(nk.outputs['Color'], nm.inputs['Color'])
         return fac, nm.outputs['Normal']
 
-    def met_textuur(self, kl, naam, tegel, contrast=0.6, kracht=0.7):
+    def met_textuur(self, kl, naam, tegel, contrast=0.6, kracht=0.7, **kw):
         """De kleur kl met de draad en de slijtage van een textuur, en zijn reliëf (onder een bobbel, als die er is)."""
-        fac, normaal = self.textuur(naam, tegel, contrast, kracht)
+        fac, normaal = self.textuur(naam, tegel, contrast, kracht, **kw)
+        self.fac = fac  # het licht en donker van de textuur, rond 1 (voor wie er ook de ruwheid mee wil kleuren)
         cc = self.n('ShaderNodeCombineColor')
         for i in range(3):
             self.zet(cc.inputs[i], fac)
@@ -416,33 +417,53 @@ def mens():
     return lijf, rig
 
 
-def vingers(rig, hoek_vinger, hoek_duim):
-    for k in ('L', 'R'):
-        for v in range(2, 6):
-            for d in range(1, 4):
-                krul(rig, f'finger{v}-{d}.{k}', hoek_vinger[k])
-        for d in range(2, 4):
-            krul(rig, f'finger1-{d}.{k}', hoek_duim[k])
-
-
-def vuistholte(rig, k):
-    """De holte van de vuist, waar de speer doorheen moet (Marcel: "Rechter hand ook niet heel goed om de speer": het oude
-    punt, het midden van knokkels en pols, ligt in de handrug, en de speer stond ervoor of ernaast). De gekrulde middel- en
-    ringvinger maken elk een lus (knokkel, twee gewrichten, de top); de holte is het midden van die lussen. (Zoeken in de
-    mesh van de hand naar het meest omsloten punt vond een punt in de vinger zelf: binnen of buiten het vlees is op deze mesh
-    niet te zeggen.) Bewaard in de ruimte van de pols (rig['holte.k']), zodat het meegaat als de hand beweegt (holte, en
-    bakken.py bij het lopen)."""
+def greep(rig, k, r_schacht, handschoen=0.007, duim=math.radians(35)):
+    """De vingers om een schacht (Marcel: "Rechter hand ook niet heel goed om de speer"): met alle kootjes even ver gekruld
+    sloot de vuist zich tot in de palm, zonder plek voor een schacht van bijna 4 cm, en staken de toppen aan de andere kant
+    door de schacht. Nu ligt de schacht tegen de palm, vlak onder de knokkels, langs de as van de vuist; elk kootje van
+    elke vinger krult, van de knokkel naar de top, tot de vinger (met de handschoen) de schacht net raakt. Het midden van
+    de schacht is de holte, bewaard in de ruimte van de pols (rig['holte.k']), zodat hij meegaat als de hand beweegt
+    (holte, en bakken.py bij het lopen)."""
     pb = rig.pose.bones
-    lus = [rig.matrix_world @ p for v in (3, 4) for p in (pb[f'finger{v}-1.{k}'].head, pb[f'finger{v}-2.{k}'].head,
-                                                          pb[f'finger{v}-3.{k}'].head, pb[f'finger{v}-3.{k}'].tail)]
-    midden = sum(lus, Vector()) / len(lus)
+    W = lambda p: rig.matrix_world @ p
+    knokkel = lambda v: W(pb[f'finger{v}-1.{k}'].head)
+    as_ = (knokkel(2) - knokkel(5)).normalized()  # dwars over de knokkels: de as van de vuist en van de schacht
+    m = (knokkel(3) + knokkel(4)) / 2
+    # de kant van de palm: waar de middelvinger heen wijst als hij een kwartslag krult
+    voor = W(pb[f'finger3-1.{k}'].tail) - knokkel(3)
+    krul(rig, f'finger3-1.{k}', math.radians(90))
+    palm = W(pb[f'finger3-1.{k}'].tail) - knokkel(3)
+    krul(rig, f'finger3-1.{k}', -math.radians(90))
+    palm = (palm - as_ * palm.dot(as_)).normalized()
+    voor = (voor - as_ * voor.dot(as_) - palm * voor.dot(palm)).normalized()
+    vinger_r = 0.0085
+    S = m + palm * (0.012 + handschoen + r_schacht) - voor * 0.006
+    ruimte = r_schacht + handschoen + vinger_r  # van de as van de schacht tot de lijn van een kootje
+
+    def raakt(v):
+        punten = []
+        for d in range(1, 4):
+            b_ = pb[f'finger{v}-{d}.{k}']
+            h, t = W(b_.head), W(b_.tail)
+            punten += [h + (t - h) * (i / 4) for i in range(5)]
+        return any(((q - S) - as_ * (q - S).dot(as_)).length < ruimte for q in punten[3:])
+    stap = math.radians(4)
+    for v in range(2, 6):
+        for d in range(1, 4):
+            for _ in range(28):
+                krul(rig, f'finger{v}-{d}.{k}', stap)
+                if raakt(v):
+                    krul(rig, f'finger{v}-{d}.{k}', -stap)
+                    break
+    for d in range(2, 4):
+        krul(rig, f'finger1-{d}.{k}', duim)
     pols = rig.matrix_world @ pb[f'wrist.{k}'].matrix
-    rig[f'holte.{k}'] = list(pols.inverted() @ midden)
-    return midden
+    rig[f'holte.{k}'] = list(pols.inverted() @ S)
+    return S
 
 
 def holte(rig, k):
-    """De holte van de vuist (vuistholte) in de wereld, waar de hand nu ook is."""
+    """De holte van de vuist (greep) in de wereld, waar de hand nu ook is."""
     return rig.matrix_world @ rig.pose.bones[f'wrist.{k}'].matrix @ Vector(rig[f'holte.{k}'])
 
 
@@ -731,6 +752,7 @@ def mat_blad():
     k = Knopen('blad')
     vlek = k.ruis(60, 3)
     kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.7), lin('#b4b1ba'), lin('#7a3a20'))
+    kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.25, contrast=0.5, kracht=0.4)
     k.bobbel(vlek, 0.2, 0.001)
     return k.af(kl, ruw=k.w('ADD', 0.3, k.w('MULTIPLY', k.glad(vlek, 0.6, 0.7), 0.4)), metaal=1.0, holte=0.2)
 
@@ -772,14 +794,29 @@ def mat_staal(naam='staal', kleur='#9aa0a8', ruw=0.32):
     vlek = k.ruis(9, 3)
     r = k.w('ADD', ruw, k.w('MULTIPLY', k.glad(vlek, 0.3, 0.7), 0.2))
     kl = k.meng(k.glad(vlek, 0.45, 0.75, 0, 0.35), lin(kleur), lin('#4d4a46'))
+    # de vlekken, krassen en het reliëf van echt plaatstaal met een zachte patina (Poly Haven; Marcel: "kunnen we echte
+    # materialen gebruiken")
+    kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.3, contrast=0.9, kracht=0.8)
+    r = k.w('ADD', r, k.w('MULTIPLY', k.w('SUBTRACT', 1.0, k.fac), 0.45))  # de donkere patina matter dan het blanke staal
     k.bobbel(k.w('ADD', k.w('MULTIPLY', kras, 0.3), k.w('MULTIPLY', vlek, 0.6)), 0.25, 0.002)
     return k.af(kl, ruw=r, metaal=1.0, holte=0.3)
 
 
 def mat_hout():
+    """De schacht van essenhout, het hout van speren (Poly Haven), de nerf langs de schacht. De plek is die van de schacht
+    zoals hij gebouwd is (het kenmerk 'oorsprong'): bij het dragen zet bakken.py de mesh schuin in de wereld, en dan zou de
+    nerf mee draaien."""
     k = Knopen('hout')
-    nerf = k.ruis(4, 4, rek=(40, 40, 1.2))
+    oorsprong = k.n('ShaderNodeAttribute', attribute_name='oorsprong').outputs['Vector']
+    nerf = k.ruis(4, 4, rek=(40, 40, 1.2), vec=oorsprong)
     kl = k.meng(k.glad(nerf, 0.35, 0.7), lin('#4a2412'), lin('#7a4422'))
+    # de nerf loopt in de textuur dwars over het beeld: dat wordt de lengte van de schacht
+    p = k.n('ShaderNodeSeparateXYZ')
+    k.zet(p.inputs[0], oorsprong)
+    langs = k.n('ShaderNodeCombineXYZ')
+    k.zet(langs.inputs[0], p.outputs['Z'])
+    k.zet(langs.inputs[1], k.w('ADD', p.outputs['X'], p.outputs['Y']))
+    kl = k.met_textuur(kl, 'ash_veneer', 0.6, contrast=1.0, kracht=0.6, vec=langs.outputs[0], projectie='FLAT')
     k.bobbel(nerf, 0.25, 0.002)
     return k.af(kl, ruw=0.55)
 
@@ -1520,6 +1557,8 @@ def speer(rig, M, kruin):
     z_koker, z_blad = L * (1 - 0.16 * INSTELLINGEN['speer']), L * (1 - 0.1 * INSTELLINGEN['speer'])
     ov = INSTELLINGEN['speer'] ** 0.5
     cil('schacht', 0.02, z_koker + 0.01, 0.016 * ov, M['hout'])
+    oorsprong = delen[-1].data.attributes.new('oorsprong', 'FLOAT_VECTOR', 'POINT')  # voor de nerf (mat_hout)
+    oorsprong.data.foreach_set('vector', [c for v in delen[-1].data.vertices for c in v.co])
     cil('koker', z_koker, z_blad + 0.005, 0.017 * ov, M['staal'])
     # het koord strak gewonden, slag tegen slag, zoals op vel 01 (Marcel: "ook de speer zelf mag nog beter")
     dik_koord = 0.0045 * ov
@@ -1559,11 +1598,11 @@ def speer(rig, M, kruin):
 def bouw():
     sc = scene()
     lijf, rig = mens()
-    vingers(rig, {'L': math.radians(55), 'R': math.radians(75)}, {'L': math.radians(25), 'R': math.radians(35)})
+    r_schacht = 0.016 * INSTELLINGEN['speer'] ** 0.5  # zoals in speer
+    greep(rig, 'R', r_schacht)
+    greep(rig, 'L', r_schacht, duim=math.radians(25))
     lijf_b = bak(lijf, 'lijf')
     bpy.data.objects.remove(lijf)
-    for k in ('R', 'L'):
-        vuistholte(rig, k)
     riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z + 0.02
     M = {
         'huid': mat_huid(),
@@ -1574,7 +1613,7 @@ def bouw():
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
         'malien': mat_malien(),
-        'helm': mat_staal('helm', '#6c6a74', 0.42),  # donkerder (Marcel: "Ik vind de helm ook nog te licht")
+        'helm': mat_staal('helm', '#6c6a74', 0.24),  # donkerder (Marcel: "Ik vind de helm ook nog te licht")
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
         'riem': mat_leer('riem', '#793a28', '#3a160c'),

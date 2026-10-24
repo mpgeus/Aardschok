@@ -56,6 +56,24 @@ def aan_de_heup(ob, z_knie):
     return False
 
 
+# Per deel welke botten het volgt (Marcel: "Moeten we het model een skelet geven? Zodat we goed kunnen animeren"): het
+# skelet is dat van MakeHuman, maar de kleren nemen de gewichten van het dichtstbijzijnde punt van het lijf, en de omslag
+# van de laars boog zo met de knie mee. De laars volgt alleen het onderbeen en de voet, de helm zit stijf aan het hoofd.
+LAARS, HELM, ROK, LIJFJE = 1, 2, 3, 4
+
+
+def deel_van(ob):
+    if ob.name.startswith(('laars', 'omslag', 'enkelriem', 'gesp.')):
+        return LAARS
+    if ob.name.startswith('wapenrok-rok'):
+        return ROK
+    if ob.name.startswith('wapenrok-lijf'):
+        return LIJFJE
+    if any(m and m.name.startswith('helm') for m in ob.data.materials):
+        return HELM
+    return 0
+
+
 def een_mesh(sc, zonder=()):
     """Alle delen behalve de speer en de grond als één mesh, met de modifiers erin (zonder het haar). Wat aan de heup hangt,
     krijgt het kenmerk 'heup'."""
@@ -83,6 +101,8 @@ def een_mesh(sc, zonder=()):
         arm = kopie.data.attributes.new('arm', 'FLOAT', 'POINT')
         aan_arm = ob.name.startswith(('armstuk', 'armrand', 'kap.', 'handschoenen', 'wambuis', 'nagel'))
         arm.data.foreach_set('value', [1.0 if aan_arm else 0.0] * len(kopie.data.vertices))
+        deel = kopie.data.attributes.new('deel', 'INT', 'POINT')
+        deel.data.foreach_set('value', [deel_van(ob)] * len(kopie.data.vertices))
         delen.append(kopie)
         ob.hide_render = True
         ob.hide_viewport = True
@@ -227,6 +247,15 @@ def aan_het_skelet(sc, pop, rig):
     for v in armpunten:
         kd_arm.insert(lijf.matrix_world @ v.co, v.index)
     kd_arm.balance()
+    beengroepen = {g.index for g in lijf.vertex_groups if g.name.startswith(('lowerleg', 'foot', 'toe'))}
+    beenpunten = [v for v in lijf.data.vertices if sum(g.weight for g in v.groups if g.group in beengroepen) > 0.5]
+    kd_been = KDTree(len(beenpunten))
+    for v in beenpunten:
+        kd_been.insert(lijf.matrix_world @ v.co, v.index)
+    kd_been.balance()
+    deel = [0] * len(pop.data.vertices)
+    if 'deel' in pop.data.attributes:
+        pop.data.attributes['deel'].data.foreach_get('value', deel)
     aan_arm = [0.0] * len(pop.data.vertices)
     if 'arm' in pop.data.attributes:
         pop.data.attributes['arm'].data.foreach_get('value', aan_arm)
@@ -237,18 +266,49 @@ def aan_het_skelet(sc, pop, rig):
         pop.data.attributes['heup'].data.foreach_get('value', heup)
     bekken = pop.vertex_groups.new(name='spine05')
     groepen['spine05'] = bekken
+    groepen['head'] = pop.vertex_groups.new(name='head')
+    # de rok gaat naar de zoom toe een beetje met de dij mee, aan elke kant met het been daar en in het midden geleidelijk
+    # (stijf aan het bekken kwam de knie er bij het lopen doorheen; helemaal aan de dijen scheurde hij tussen de benen)
+    for k in ('L', 'R'):
+        groepen[f'upperleg01.{k}'] = pop.vertex_groups.new(name=f'upperleg01.{k}')
+    z_heup = (rig.matrix_world @ rig.data.bones['upperleg01.L'].head_local).z
+    z_zoom = min((v.co.z for v in pop.data.vertices if deel[v.index] == ROK), default=0.0)
+    glad = lambda t: (lambda u: u * u * (3 - 2 * u))(max(0.0, min(1.0, t)))
+    # de wapenrok gaat vlak boven de riem over op het bekken, zoals de riem: leunde hij voorover, dan stak de riem er rood
+    # doorheen
+    z_riem = max((v.co.z for v in pop.data.vertices if heup[v.index] > 0.5 and deel[v.index] != ROK), default=0.0)
     for v in pop.data.vertices:
         if heup[v.index] > 0.5:
+            if deel[v.index] == ROK:
+                mee = 0.8 * glad((z_heup - v.co.z) / max(1e-3, 0.6 * (z_heup - z_zoom)))
+                wl, wr = mee * glad((v.co.x + 0.04) / 0.08), mee * glad((-v.co.x + 0.04) / 0.08)
+                bekken.add([v.index], 1.0 - wl - wr, 'REPLACE')
+                groepen['upperleg01.L'].add([v.index], wl, 'REPLACE')
+                groepen['upperleg01.R'].add([v.index], wr, 'REPLACE')
+                continue
             bekken.add([v.index], 1.0, 'REPLACE')
             continue
-        _, i, _ = (kd_arm if aan_arm[v.index] > 0.5 else kd).find(v.co)
+        if deel[v.index] == HELM:
+            groepen['head'].add([v.index], 1.0, 'REPLACE')
+            continue
+        laars = deel[v.index] == LAARS
+        houd = 1.0
+        if deel[v.index] == LIJFJE:
+            b = 1.0 - glad((v.co.z - (z_riem - 0.03)) / 0.09)
+            if b > 0.0:
+                bekken.add([v.index], b, 'REPLACE')
+                houd = 1.0 - b
+        _, i, _ = (kd_been if laars else kd_arm if aan_arm[v.index] > 0.5 else kd).find(v.co)
         for g in lijf.data.vertices[i].groups:
-            if g.weight < 1e-3 or namen[g.group] not in rig.data.bones:
+            if g.weight < 1e-3 or namen[g.group] not in rig.data.bones or (laars and g.group not in beengroepen):
                 continue
             naam = namen[g.group]
             if naam not in groepen:
                 groepen[naam] = pop.vertex_groups.new(name=naam)
-            groepen[naam].add([v.index], g.weight, 'REPLACE')
+            if naam == 'spine05' and houd < 1.0:
+                bekken.add([v.index], 1.0 - houd + g.weight * houd, 'REPLACE')
+                continue
+            groepen[naam].add([v.index], g.weight * houd, 'REPLACE')
     md = pop.modifiers.new('skelet', 'ARMATURE')
     md.object = rig
     bpy.context.view_layer.update()
@@ -279,16 +339,13 @@ def loop(rig, i, n, draagt=False):
         pb.rotation_mode = 'QUATERNION'
         pb.rotation_quaternion = (1, 0, 0, 0)
         pb.location = (0, 0, 0)
+    if draagt:
+        for k in ('R', 'L'):
+            if f'pols.{k}' in rig:
+                rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']  # de vuist langs de speer
+    bpy.context.view_layer.update()
     f = 2 * math.pi * i / n
-    for k, fase in (('L', 0.0), ('R', math.pi)):
-        g = f + fase
-        # kleine stappen (een gedrongen man), de voet vlak op de grond; bij het neerzetten de teen wat omhoog, bij het afzetten
-        # de hiel (Marcel: "voeten ziet er nog raar uit": de voet kantelde mee met de knie en wipte achteruit omhoog)
-        dij = -STAP * math.sin(g)
-        knie = 0.08 + 0.55 * max(0.0, math.cos(g)) ** 1.5
-        draai(rig, f'upperleg01.{k}', dij)
-        draai(rig, f'lowerleg01.{k}', knie)
-        draai(rig, f'foot.{k}', -(dij + knie) - 0.15 * max(0.0, math.sin(g)) ** 2 + 0.3 * max(0.0, -math.sin(g)) ** 3)
+    zakken = benen(rig, f)
     # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf
     if not draagt:
         draai(rig, 'upperarm01.L', 0.1 * math.sin(f))
@@ -304,8 +361,50 @@ def loop(rig, i, n, draagt=False):
         draai(rig, 'spine02', DRAAI * 0.5, 'Z')
         draai(rig, 'spine01', DRAAI * 0.5, 'Z')
         draai(rig, 'head', -DRAAI * 0.5, 'Z')
-    rig.location.z = rig['z0'] - 0.02 * abs(math.sin(f))
+    rig.location.z = rig['z0'] - zakken
     bpy.context.view_layer.update()
+
+
+def benen(rig, f):
+    """De benen met IK in de code (Marcel: "Moeten we het model een skelet geven? Zodat we goed kunnen animeren", en eerder
+    "zijn voeten lopen niet goed"): elke enkel op een doel, de dij en de knie uit de cosinusregel, in het vlak van voor naar
+    achter (de ruimte van het skelet, dus ook goed als het smaller is). Lopen op de plaats: de voet die staat, schuift vlak
+    over de grond naar achteren (hij glijdt niet en zakt er niet in), de andere zwaait met een boog naar voren; bij het
+    neerzetten de teen wat omhoog, bij het afzetten de hiel. Het bekken zakt zo ver dat het been ook achteraan niet
+    gestrekt hoeft, en veert mee (het laagst als beide voeten staan). Kleine stappen: een gedrongen man (STAP). Geeft hoe
+    ver het bekken zakt; de botten staan bij het begin in rust."""
+    pb = rig.pose.bones
+    rust = {k: (pb[f'upperleg01.{k}'].head.copy(), pb[f'lowerleg01.{k}'].head.copy(), pb[f'foot.{k}'].head.copy())
+            for k in ('L', 'R')}
+    yz = lambda v: Vector((v.y, v.z))
+    H, K, A = rust['L']
+    been = (yz(K) - yz(H)).length + (yz(A) - yz(K)).length
+    half = 0.4 * been * math.sin(STAP)  # de halve pas
+    zakken = max(0.0, math.hypot(H.z - A.z, half) - 0.97 * been) + 0.012 * (0.5 + 0.5 * math.cos(2 * f))
+    for k, fase in (('L', 0.0), ('R', math.pi)):
+        H, K, A = rust[k]
+        L1, L2 = (yz(K) - yz(H)).length, (yz(A) - yz(K)).length
+        u = ((f + fase) / (2 * math.pi)) % 1.0
+        kantel = -0.15 * math.exp(-((u - 0.02) / 0.06) ** 2) + 0.4 * math.exp(-((u - 0.5) / 0.08) ** 2)
+        if u < 0.5:  # staan: vlak over de grond, van voor naar achter (vooruit is -y)
+            y, z = -half + 2 * half * u / 0.5, 0.0
+        else:  # zwaaien: met een boog naar voren
+            t = (u - 0.5) / 0.5
+            t = t * t * (3 - 2 * t)
+            y, z = half - 2 * half * t, 0.05 * math.sin(math.pi * t)
+        z += 0.14 * math.sin(max(0.0, kantel))  # bij het afzetten draait de voet om de bal: de enkel omhoog
+        dy, dz = A.y + y - H.y, A.z + zakken + z - H.z
+        d = min(math.hypot(dy, dz), 0.999 * (L1 + L2))
+        knie = math.pi - math.acos(max(-1.0, min(1.0, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))))
+        alfa = math.acos(max(-1.0, min(1.0, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))))
+        dij0 = math.atan2(K.y - H.y, -(K.z - H.z))  # de hoeken in rust, van recht omlaag naar achteren
+        scheen0 = math.atan2(A.y - K.y, -(A.z - K.z))
+        dij = math.atan2(dy, -dz) - alfa - dij0
+        buig = knie - (scheen0 - dij0)
+        draai(rig, f'upperleg01.{k}', dij)
+        draai(rig, f'lowerleg01.{k}', buig)
+        draai(rig, f'foot.{k}', -(dij + buig) + kantel)  # de voet houdt zijn stand in rust: vlak
+    return zakken
 
 
 def geschilderd(naam, hoek, banden, roest=False):
@@ -401,14 +500,32 @@ def draag_schuin(sc, rig, dragen):
     bpy.context.view_layer.update()
     # de IK zet de pols op het doel, maar de vuist zit verder: schuif het doel tot de vuist zelf op zijn plek komt, zodat
     # beide handen om de speer zitten (Marcel: "Ook heeft hij zijn linker hand niet om de speer")
+    # En de vuist draait mee: de greep is gemaakt om een staande schacht, en de schuine speer liep dwars door de handrug
+    # (Marcel: "Handen"). De pols draait tot de as van de vuist (dwars over de knokkels) langs de speer ligt, de kleinste
+    # draai; die draai onthoudt het skelet (rig['pols.k']), want loop zet elk beeld alle botten terug.
     vuist = lambda k: sh.holte(rig, k)  # de holte van de vuist, niet de handrug
-    for _ in range(4):
+    hoog = 'L' if dragen.get('laag', 'R') == 'R' else 'R'
+    langs = (rig.matrix_world.inverted().to_3x3() @ (plekken[hoog] - plekken['L' if hoog == 'R' else 'R'])).normalized()
+    for _ in range(6):
+        for k in ('R', 'L'):
+            pb = rig.pose.bones
+            as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
+            doel = langs if as_.dot(langs) > 0 else -langs
+            pols = pb[f'wrist.{k}']
+            h = pols.head.copy()
+            pols.matrix = (Matrix.Translation(h) @ as_.rotation_difference(doel).to_matrix().to_4x4() @ Matrix.Translation(-h)
+                           @ pols.matrix)
+            bpy.context.view_layer.update()
         for k in ('R', 'L'):
             mis = plekken[k] - vuist(k)
             doelen[k].matrix_world = Matrix.Translation(doelen[k].matrix_world.translation + mis)
         bpy.context.view_layer.update()
     for k in ('R', 'L'):
-        print('VUIST', k, 'mist', round((plekken[k] - vuist(k)).length, 4), 'm')
+        rig[f'pols.{k}'] = list(rig.pose.bones[f'wrist.{k}'].rotation_quaternion)
+        pb = rig.pose.bones
+        as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
+        print('VUIST', k, 'mist', round((plekken[k] - vuist(k)).length, 4), 'm, scheef',
+              round(math.degrees(math.acos(min(1.0, abs(as_.dot(langs))))), 1), 'graden')
     return doelen
 
 

@@ -2130,6 +2130,27 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   is op de mesh van MakeHuman niet te zeggen. En bij staan stond de speer los op de plek van het bouwen, terwijl de hand
   met het binden en het smaller maken verschoof: nu zet `eigen.py` hem op de holte zoals die op het eind is. De helm
   donkerder staal (#6c6a74).
+- *Echte materialen, een greep om de schacht en een skelet om mee te animeren* (Marcel, 24 okt: "kunnen we echte
+  materialen gebruiken", "Moeten we het model een skelet geven? Zodat we goed kunnen animeren", en "Allebei download
+  maar"; bij de vuist nog eens een rode cirkel: de toppen staken door de schacht). Van Poly Haven erbij plaatstaal met
+  patina (helm, blad, gespen) en essenhout (de schacht; de nerf langs de schacht via het kenmerk `oorsprong`, want bij
+  het dragen staat de mesh schuin). Het staal houdt in `eigen.py` zijn ruwheid uit de textuur: blank en mat door elkaar
+  (gelijk overal oogde het als plastic, en met alleen de patina als dof lood). De greep (`greep`): een vuist van MakeHuman
+  met alle kootjes even ver gekruld sluit zich tot in de palm, zonder plek voor een schacht van bijna 4 cm; nu ligt de
+  schacht tegen de palm onder de knokkels, en krult elk kootje van de knokkel naar de top tot de vinger met handschoen de
+  schacht raakt (zoeken naar een gat in de mesh vond telkens het binnenste van de pols). Het skelet was er al (dat van
+  MakeHuman, met vingers), maar elk punt van de kleren nam de gewichten van het dichtstbijzijnde punt van het lijf: de
+  laars volgt nu alleen het onderbeen en de voet (de omslag boog met de knie mee), de helm zit stijf aan het hoofd
+  (`bakken.py`, `deel_van`). De benen lopen met IK in de code (`benen`): elke enkel op een doel, de dij en de knie uit de
+  cosinusregel; de voet die staat schuift vlak over de grond naar achteren, de andere zwaait met een boog naar voren, bij
+  het afzetten draait de voet om de bal, en het bekken zakt zo ver dat het achterste been niet gestrekt hoeft.
+  Daarna, bij het lopen (Marcel: "Handen", met rode cirkels om de onderste hand): de greep is gemaakt om een staande
+  schacht, en de schuine speer liep dwars door de handrug. Nu draait de pols tot de as van de vuist langs de speer ligt
+  (`draag_schuin`), en die draai houdt het skelet vast in elk loopbeeld (`rig['pols.k']`). Met de IK zwaaide de dij
+  verder naar voren, en kwam de knie door de rok, die stijf aan het bekken hing: de rok gaat nu vanaf halverwege tot 80
+  procent met de dij aan zijn kant mee, in het midden geleidelijk. En de wapenrok gaat vlak boven de riem over op het
+  bekken, zoals de riem: leunde hij voorover, dan stak de riem er rood doorheen. Op spelmaat is de helm nu bijna zwart
+  naast het zilver van de generator.
 - *Een GLB uit ComfyUI* (Marcel, 24 okt: "check dit", met `ComfyUI_00002.glb`, waarschijnlijk TRELLIS 2): een heel vel in 3D,
   de stoet van de heer (de heer te paard in vijf richtingen, twee ossenkarren met de tiende, negen hellebaardiers met
   vaandels, groepjes), in rood en geel. Eén mesh van 694.000 driehoeken in 15.768 losse stukken, texturen van 4096 (kleur,
