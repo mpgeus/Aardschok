@@ -10,6 +10,7 @@
 # het lijf van MakeHuman), en lopen de beelden mee.
 #
 #   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/bakken.py -- <map>
+#   ... -- <map> richting ZW      per richting, zonder mengen: alleen de verf van ZW, staan en acht loopbeelden
 import bpy
 import math
 import os
@@ -34,8 +35,23 @@ def actief(ob):
     bpy.context.view_layer.objects.active = ob
 
 
+def aan_de_heup(ob, z_knie):
+    """Hangt dit deel aan het bekken in plaats van aan het dichtste punt van het lijf? De rok, de riem, en wat aan de riem
+    hangt (de gesp, de tas, de schede: blokken boven de knie). Marcel, 24 okt: "de rok aan de heupen in plaats van de dijen"
+    (aan de dijen scheurde hij tussen de benen)."""
+    if ob.name.startswith(('wapenrok-rok', 'riem')):
+        return True
+    if ob.name.startswith('Cube'):
+        zs = [(ob.matrix_world @ v.co).z for v in ob.data.vertices]
+        return sum(zs) / len(zs) > z_knie
+    return False
+
+
 def een_mesh(sc):
-    """Alle delen behalve de speer en de grond als één mesh, met de modifiers erin (zonder het haar)."""
+    """Alle delen behalve de speer en de grond als één mesh, met de modifiers erin (zonder het haar). Wat aan de heup hangt,
+    krijgt het kenmerk 'heup'."""
+    rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
+    z_knie = (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z
     delen = []
     for ob in list(sc.objects):
         if ob.type != 'MESH' or ob.name.startswith('speer.') or ob.name == 'grond':
@@ -51,6 +67,8 @@ def een_mesh(sc):
         kopie.matrix_world = Matrix.Identity(4)
         kopie.parent = None
         kopie.vertex_groups.clear()
+        heup = kopie.data.attributes.new('heup', 'FLOAT', 'POINT')
+        heup.data.foreach_set('value', [1.0 if aan_de_heup(ob, z_knie) else 0.0] * len(kopie.data.vertices))
         delen.append(kopie)
         ob.hide_render = True
         ob.hide_viewport = True
@@ -75,7 +93,7 @@ def uitvouwen(pop):
     bpy.ops.object.mode_set(mode='OBJECT')
 
 
-def per_richting(sc, pop):
+def per_richting(sc, pop, richtingen=VERF):
     """Per richting een UV-kaart uit zijn camera en een gewicht per punt (de hoek met de camera, nul als iets ervoor zit)."""
     cam = sc.camera
     m0 = cam.matrix_world.copy()
@@ -83,7 +101,7 @@ def per_richting(sc, pop):
     # wat ervoor zit: het model zelf en de speer (anders krijgt de wapenrok achter de speer de verf van de speer)
     bvh = sh.bvh_van([(pop, None)] + [(o, None) for o in sc.objects if o.name.startswith('speer.')])
     ns = [v.normal.copy() for v in me.vertices]
-    for r in VERF:
+    for r in richtingen:
         cam.matrix_world = Matrix.Rotation(math.radians(sh.RICHTINGEN[r]), 4, 'Z') @ m0
         bpy.context.view_layer.update()
         naar_cam = (cam.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()  # de camera kijkt langs -z
@@ -104,7 +122,8 @@ def per_richting(sc, pop):
         g.data.foreach_set('value', w)
         print('RICHTING', r, 'zichtbaar', sum(1 for x in w if x > 0), 'van', len(w))
     cam.matrix_world = m0
-    me.uv_layers.active = me.uv_layers['atlas']
+    if 'atlas' in me.uv_layers:
+        me.uv_layers.active = me.uv_layers['atlas']
 
 
 def bakmateriaal(pop):
@@ -184,7 +203,16 @@ def aan_het_skelet(sc, pop, rig):
     kd.balance()
     namen = {g.index: g.name for g in lijf.vertex_groups}
     groepen = {}
+    rig.data.bones['spine05'].use_deform = True
+    heup = [0.0] * len(pop.data.vertices)
+    if 'heup' in pop.data.attributes:
+        pop.data.attributes['heup'].data.foreach_get('value', heup)
+    bekken = pop.vertex_groups.new(name='spine05')
+    groepen['spine05'] = bekken
     for v in pop.data.vertices:
+        if heup[v.index] > 0.5:
+            bekken.add([v.index], 1.0, 'REPLACE')
+            continue
         _, i, _ = kd.find(v.co)
         for g in lijf.data.vertices[i].groups:
             if g.weight < 1e-3 or namen[g.group] not in rig.data.bones:
@@ -243,6 +271,38 @@ def render(sc, naam, hoek):
     cam.matrix_world = m0
 
 
+def projectie(pop, r):
+    """Alleen de verf van richting r, vanuit zijn eigen camera, onbelicht; niets gemengd."""
+    k = sh.Knopen(f'verf-{r}')
+    k.nt.nodes.remove(k.bsdf)
+    uv = k.n('ShaderNodeUVMap', uv_map=f'proj-{r}')
+    tex = k.n('ShaderNodeTexImage', image=bpy.data.images.load(os.path.join(UIT, f'verf-{r}.png')), interpolation='Linear', extension='EXTEND')
+    k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
+    em = k.n('ShaderNodeEmission')
+    k.nt.links.new(tex.outputs['Color'], em.inputs['Color'])
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    pop.data.materials.clear()
+    pop.data.materials.append(k.m)
+
+
+def een_richting(r, n=8):
+    """Per richting projecteren, zonder mengen (Marcel, 24 okt: "lopen ZW alleen met de verf van ZW"): de verf van die
+    richting op het model, staan en n loopbeelden uit die richting, naar richting-<r>-staan.png en richting-<r>-lopen-<i>.png."""
+    sc = sh.bouw()
+    rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
+    pop = een_mesh(sc)
+    per_richting(sc, pop, [r])
+    projectie(pop, r)
+    sc.render.use_freestyle = False
+    sc.cycles.samples = 32
+    render(sc, f'richting-{r}-staan.png', sh.RICHTINGEN[r])
+    aan_het_skelet(sc, pop, rig)
+    rig['z0'] = rig.location.z
+    for i in range(n):
+        loop(rig, i, n)
+        render(sc, f'richting-{r}-lopen-{i}.png', sh.RICHTINGEN[r])
+
+
 def main():
     sc = sh.bouw()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
@@ -263,4 +323,7 @@ def main():
         render(sc, f'gebakken-lopen-ZW-{i}.png', sh.RICHTINGEN['ZW'])
 
 
-main()
+if 'richting' in sh.ARGS:
+    een_richting(sh.ARGS[sh.ARGS.index('richting') + 1])
+else:
+    main()

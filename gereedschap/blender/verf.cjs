@@ -66,6 +66,11 @@ const PUNTEN_ZW = [
   ['zoom rechts', [700, 1510], [512, 505]],
   ['laars voor, neus', [265, 1800], [375, 575]],
   ['laars achter, neus', [550, 1890], [450, 605]],
+  ['laars rechts, achterkant', [800, 1820], [510, 595]],
+  ['laars rechts, omslag buiten', [790, 1620], [500, 535]],
+  ['laars rechts, omslag binnen', [620, 1610], [460, 530]],
+  ['laars links, omslag', [550, 1550], [430, 520]],
+  ['laars links, hak', [530, 1810], [425, 585]],
   ['speer, punt', [200, 155], [340, 90]],
   ['speer, voet', [200, 1840], [347, 580]],
 ];

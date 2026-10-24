@@ -1968,6 +1968,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   vlekkerig. In de loopbeelden scheurt de rok tussen de benen (hij volgt het dichtste punt van het lijf, dus de dijen), en
   de achterkant van de armstukken is zwart (daar had geen richting verf). Mengen werkt dus niet met beelden die het onderling
   niet eens zijn.
+- *Per richting projecteren, zonder mengen* (Marcel: "Probeer per richting projecteren zonder mengen: lopen ZW alleen met
+  de verf van ZW, en de rok aan de heupen in plaats van de dijen"): `bakken.py -- <map> richting ZW` legt alleen de verf van
+  ZW op het model (vanuit de camera van ZW, onbelicht), rendert staan en acht loopbeelden; de rok, de riem en wat eraan hangt
+  volgen het bekken (spine05). `lopen.cjs ZW` zet ze op spelmaat naast het lopen ZW van de generator in het spel
+  (`uit/blender/lopen-ZW.png`, en bewegend `lopen-ZW-bewegend.png` naast `lopen-ZW-generator-bewegend.png`). Voor de
+  laarzen kwamen er vijf vaste punten bij (de stand van de benen op vel 01 wijkt af van het model: eerst paarse strepen op
+  het achterste been). Uitkomst: het bovenlijf is in elk loopbeeld pixel voor pixel de referentie, de rok scheurt niet meer,
+  en de benen stappen met laarzen in hun eigen kleur. Nog fout: waar een been of de linkerarm iets laat zien dat in het
+  staande beeld verborgen was (het achterste been, de arm als die naar voren zwaait), komt uitgerekte verf (donkere vegen);
+  en ons model is breder dan de man op vel 01 ZW, dus op spelmaat oogt hij zwaarder dan de speerman van de generator. De
+  generator draagt de speer bij het lopen schuin; hier blijft hij rechtop in de hand.
 
 ## Open
 
