@@ -59,7 +59,7 @@ def aan_de_heup(ob, z_knie):
 # Per deel welke botten het volgt (Marcel: "Moeten we het model een skelet geven? Zodat we goed kunnen animeren"): het
 # skelet is dat van MakeHuman, maar de kleren nemen de gewichten van het dichtstbijzijnde punt van het lijf, en de omslag
 # van de laars boog zo met de knie mee. De laars volgt alleen het onderbeen en de voet, de helm zit stijf aan het hoofd.
-LAARS, HELM, ROK, LIJFJE, ARMSTUK, KAP = 1, 2, 3, 4, 5, 6
+LAARS, HELM, ROK, LIJFJE, ARMSTUK, KAP, WAMBUIS = 1, 2, 3, 4, 5, 6, 7
 
 
 def deel_van(ob):
@@ -73,6 +73,8 @@ def deel_van(ob):
         return ARMSTUK
     if ob.name.startswith('kap.'):
         return KAP
+    if ob.name.startswith('wambuis'):
+        return WAMBUIS
     if any(m and m.name.startswith('helm') for m in ob.data.materials):
         return HELM
     return 0
@@ -325,12 +327,28 @@ def aan_het_skelet(sc, pop, rig):
     for v in armpunten:
         kd_arm.insert(lijf.matrix_world @ v.co, v.index)
     kd_arm.balance()
+    # de mouw van het wambuis: ook de punten van de schouder waar de huid half met de romp meegaat (alleen met de punten
+    # van de arm zelf rafelde de mouw bovenaan de schouder als de arm naar voren ging)
+    mouwpunten = [v for v in lijf.data.vertices if sum(g.weight for g in v.groups if g.group in armgroepen) > 0.05]
+    kd_mouw = KDTree(len(mouwpunten))
+    for v in mouwpunten:
+        kd_mouw.insert(lijf.matrix_world @ v.co, v.index)
+    kd_mouw.balance()
     beengroepen = {g.index for g in lijf.vertex_groups if g.name.startswith(('lowerleg', 'foot', 'toe'))}
     beenpunten = [v for v in lijf.data.vertices if sum(g.weight for g in v.groups if g.group in beengroepen) > 0.5]
     kd_been = KDTree(len(beenpunten))
     for v in beenpunten:
         kd_been.insert(lijf.matrix_world @ v.co, v.index)
     kd_been.balance()
+    # de romp zonder de armen: de wapenrok heeft geen mouwen, en met de gewichten van de arm hing hij als een flap over de
+    # schouder als de arm naar voren ging (Marcel, bij NO en O: "Dat klopt niet")
+    rompgroepen = {g.index for g in lijf.vertex_groups if not g.name.startswith(('upperarm', 'lowerarm', 'wrist', 'finger',
+                                                                                'metacarpal'))}
+    romppunten = [v for v in lijf.data.vertices if sum(g.weight for g in v.groups if g.group not in rompgroepen) < 0.05]
+    kd_romp = KDTree(len(romppunten))
+    for v in romppunten:
+        kd_romp.insert(lijf.matrix_world @ v.co, v.index)
+    kd_romp.balance()
     deel = [0] * len(pop.data.vertices)
     if 'deel' in pop.data.attributes:
         pop.data.attributes['deel'].data.foreach_get('value', deel)
@@ -401,9 +419,14 @@ def aan_het_skelet(sc, pop, rig):
             if b > 0.0:
                 bekken.add([v.index], b, 'REPLACE')
                 houd = 1.0 - b
-        _, i, _ = (kd_been if laars else kd_arm if aan_arm[v.index] > 0.5 else kd).find(v.co)
+        romp = deel[v.index] == LIJFJE
+        boom = (kd_been if laars else kd_romp if romp else kd_mouw if deel[v.index] == WAMBUIS
+                else kd_arm if aan_arm[v.index] > 0.5 else kd)
+        _, i, _ = boom.find(v.co)
         for g in lijf.data.vertices[i].groups:
             if g.weight < 1e-3 or namen[g.group] not in rig.data.bones or (laars and g.group not in beengroepen):
+                continue
+            if romp and g.group not in rompgroepen:
                 continue
             naam = namen[g.group]
             if naam not in groepen:

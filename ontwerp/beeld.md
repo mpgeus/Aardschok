@@ -2205,6 +2205,14 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   <soort>-<i>.png`, met de rasters `uit/blender/eigen-acht-lopen-iso.mp4` en `eigen-acht-steek-iso.mp4` en het vel
   `eigen-acht-vel-iso.png` (alles op één schaal, de voeten op één lijn). Wat nog opvalt: de blauwe pand kreukelt bij
   het lopen nog wat aan de zijkant, en van achteren eindigt de mouw van het wambuis met een harde rand.
+- *De wapenrok en de mouw van achteren* (Marcel, 25 okt, bij NO en O: "Dat klopt niet en hij loopt nog echt houterig"):
+  het gele bovenstuk van de wapenrok hing als een flap over de rechterschouder, want het volgde bij de schouder de
+  botten van de arm; nu alleen de romp (de wapenrok heeft geen mouwen). En de ruiten van het wambuis braken achter op de
+  arm in scherven: ze werden per armbot berekend (het patroon sprong waar het ene bot het andere afloste) en rondom paste
+  geen heel aantal ruiten (6,28), zodat achter op de arm een naad zat. Nu om één as per arm, met precies 6 ruiten rondom.
+  Het lopen zelf (houterig: kleine passen, de knieën komen nauwelijks omhoog, de voeten sloffen) wacht op een keuze:
+  zelf beter rekenen, of echte bewegingen uit motion capture (CMU, of Mixamo met een Adobe-account), die MPFB op een
+  eigen skelet kan zetten.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

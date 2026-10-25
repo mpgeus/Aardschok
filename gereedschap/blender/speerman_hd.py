@@ -533,38 +533,30 @@ def wambuis(lijf, rig, mat):
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
-    # per punt de dichtstbijzijnde armbot: de plek langs de arm (t) en rond de arm (s), en daaruit de ruiten
+    # per punt de plek langs de arm en rond de arm, om één as per arm (van de schouder naar de pols), en daaruit de ruiten:
+    # met een as per armbot sprong het patroon waar het ene bot het andere afloste, en rondom paste geen heel aantal ruiten,
+    # zodat achter op de arm een naad zat waar het in scherven brak (van achteren te zien: Marcel, bij NO en O)
     bpy.context.view_layer.update()
-    segs = []
+    assen = {}
     for k in ('L', 'R'):
-        begin = 0.0
-        for b in ('shoulder01', 'upperarm01', 'upperarm02', 'lowerarm01', 'lowerarm02'):
-            pb = rig.pose.bones[f'{b}.{k}']
-            a, e = rig.matrix_world @ pb.head, rig.matrix_world @ pb.tail
-            segs.append((a, e, begin))
-            begin += (e - a).length
+        a = rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head
+        e = rig.matrix_world @ rig.pose.bones[f'lowerarm02.{k}'].tail
+        assen[k] = (a, (e - a).normalized())
     me = ob.data
     schouders = [rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head for k in ('L', 'R')]
     ns = [v.normal.copy() for v in me.vertices]
+    RONDOM = 6  # ruiten rond de arm
     for v, nrm in zip(me.vertices, ns):
         p = v.co.copy()
-        best = None
-        for a, b, begin in segs:
-            ab = b - a
-            t = max(0.0, min(1.0, (p - a).dot(ab) / ab.length_squared))
-            q = a + ab * t
-            d = (p - q).length
-            if best is None or d < best[0]:
-                best = (d, a, b, t, q, begin)
-        d, a, b, t, q, begin = best
-        as_ = (b - a).normalized()
+        a, as_ = assen['L' if p.x > 0 else 'R']
+        langs = (p - a).dot(as_)  # langs de arm, in meters
+        q = a + as_ * langs
         voor = Vector((0, -1, 0))
         x1 = (voor - as_ * voor.dot(as_)).normalized()
         y1 = as_.cross(x1)
         r = p - q
         hoek = math.atan2(r.dot(y1), r.dot(x1))
-        langs = begin + (p - a).dot(as_)  # langs de arm, in meters
-        rond = hoek * 0.065
+        rond = hoek / (2 * math.pi) * RONDOM * 0.065
         u = (langs + rond) / 0.065
         w = (langs - rond) / 0.065
         fu, fw = u - math.floor(u), w - math.floor(w)
