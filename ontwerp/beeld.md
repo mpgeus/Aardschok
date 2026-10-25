@@ -2342,7 +2342,10 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   het gezicht: het hoofd recht vooruit (`kijk` -12, 0: 10 graden omlaag verborg de ogen onder de rand), de rand iets hoger
   (`HELM_RAND_HOOGTE` 0,048), de oogkassen kleiner en lichter, de baard lager op de wangen, de maliënkap wijder open
   (82 graden), en de huid lichter (helder perzik, zoals het vel). Het gezicht leest nu, maar is nog smaller en wat
-  donkerder dan bij de referentie (L 5 lager).
+  donkerder dan bij de referentie (L 5 lager). En (Marcel: "Speer is ook te dun", "Lijkt wel saté prikker", en "Schoenen staan
+  niet op dezelfde manier"): de schacht 2,2 cm dik (was 1,3; op spelmaat nu twee pixels zoals het vel), de koker en het
+  koord mee, en de greep om de dikkere schacht; de voeten per kant naar buiten zoals op het vel (de rechter 45 graden,
+  de linker 28: van voren zie je de lengte van de voet schuin naar buiten) en de stand iets wijder (`benen_in` -2).
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

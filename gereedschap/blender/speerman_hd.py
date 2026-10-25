@@ -60,12 +60,14 @@ INSTELLINGEN = {
     # graden dat de bovenrug achterover leunt (de borst vooruit): -4, licht voorover, want met 7 stond het hoofd 4 tot 5 cm
     # achter dat van de referentie (Marcel, 25 okt: "Referentie lijkt ook wat meer overeind te staan. Iets naar voren")
     'borst': -4,
-    'voeten': 8,             # graden naar buiten (14 stond in Z breder dan de referentie)
+    # graden naar buiten, per voet: zoals op het vel de rechtervoet schuin naar buiten, de linker bijna recht (Marcel:
+    # "Schoenen staan niet op dezelfde manier")
+    'voeten': {'R': 45, 'L': 28},
     'arm': 0.3,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 in Z te smal, 0,4 in ZW te ver uit)
     'armlengte': 0.85,       # de onderarmen korter, zoals de gedrongen man van de referentie (de hand bij de heup)
     'kijk': (-12, 0),        # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag (10 omlaag verborg in Z het
                              # gezicht onder de helm: Marcel, "het gezicht in Zuid is onduidelijk")
-    'benen_in': 2,           # graden dat de dijen naar binnen staan: de voeten dichter bij elkaar, zoals de referentie
+    'benen_in': -2,          # graden dat de dijen naar binnen staan (negatief: wat wijder, zoals de stand op het vel)
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
     'lijn': 3.0,
@@ -457,7 +459,7 @@ def mens():
     for k, s in (('L', 1), ('R', -1)):
         pb = rig.pose.bones[f'foot.{k}']
         nu = ((rig.matrix_world @ pb.tail) - (rig.matrix_world @ pb.head)).normalized()
-        richt(rig, f'foot.{k}', Matrix.Rotation(math.radians(INSTELLINGEN['voeten'] * s), 3, 'Z') @ nu)
+        richt(rig, f'foot.{k}', Matrix.Rotation(math.radians(INSTELLINGEN['voeten'][k] * s), 3, 'Z') @ nu)
     # het hoofd groter, en wat naar de speer gedraaid en omlaag (Marcel, bij ZW: het vel kijkt naar links en omlaag, de neus
     # in profiel, het model recht in de camera)
     rig.pose.bones['head'].scale = (INSTELLINGEN['hoofd'],) * 3
@@ -1719,16 +1721,18 @@ def speer(rig, M, kruin):
     # bij de referentie 4 en 10
     z_koker, z_blad = L * (1 - (0.06 + 0.1 * BLAD) * INSTELLINGEN['speer']), L * (1 - 0.1 * BLAD * INSTELLINGEN['speer'])
     ov = INSTELLINGEN['speer'] ** 0.5
-    cil('schacht', 0.02, z_koker + 0.01, 0.013 * ov, M['hout'])
+    # stevig: met 0,013 was het op spelmaat een prikker van een pixel (Marcel: "Speer is ook te dun", "Lijkt wel saté
+    # prikker"); de referentie heeft een schacht van twee pixels
+    cil('schacht', 0.02, z_koker + 0.01, 0.022 * ov, M['hout'])
     oorsprong = delen[-1].data.attributes.new('oorsprong', 'FLOAT_VECTOR', 'POINT')  # voor de nerf (mat_hout)
     oorsprong.data.foreach_set('vector', [c for v in delen[-1].data.vertices for c in v.co])
-    cil('koker', z_koker, z_blad + 0.005, 0.017 * ov, M['staal'])
+    cil('koker', z_koker, z_blad + 0.005, 0.024 * ov, M['staal'])
     # het koord strak gewonden, slag tegen slag, zoals op vel 01 (Marcel: "ook de speer zelf mag nog beter")
     dik_koord = 0.0045 * ov
     slagen = max(3, int((z_blad - z_koker) / (2 * dik_koord * 0.95)))
     for i in range(slagen):
         z = z_koker + dik_koord + i * (z_blad - z_koker - 2 * dik_koord) / (slagen - 1)
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.017 * ov + 0.001, minor_radius=dik_koord, location=(x, y, z))
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.024 * ov + 0.001, minor_radius=dik_koord, location=(x, y, z))
         o = bpy.context.active_object
         o.name = 'speer.koord'
         zacht(o)
@@ -1761,7 +1765,7 @@ def speer(rig, M, kruin):
 def bouw():
     sc = scene()
     lijf, rig = mens()
-    r_schacht = 0.016 * INSTELLINGEN['speer'] ** 0.5  # zoals in speer
+    r_schacht = 0.022 * INSTELLINGEN['speer'] ** 0.5  # zoals in speer
     greep(rig, 'R', r_schacht)
     greep(rig, 'L', r_schacht, duim=math.radians(25))
     lijf_b = bak(lijf, 'lijf')
