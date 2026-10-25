@@ -177,17 +177,47 @@ def blad_naar_camera(hoek):
     return blad, m0
 
 
-def render(sc, naam, hoek, lichten):
-    """De camera en het licht samen om de man gedraaid: het licht komt op het scherm altijd van linksboven."""
+# Hoe elke richting in beeld komt, zoals op het vel van het spel (Marcel, 25 okt: "De richtingen lijken ook wat af te
+# wijken", "De arm ZO staat ook wat anders"): de draaiing van de camera en of het beeld gespiegeld is. Gemeten met de
+# omtrek (omtrek.py) over draaiingen van 5 graden: het vel staat niet om de 45 graden (W staat 25 graden meer naar de
+# kijker, NW 20 graden meer van hem af), en de oostkanten O en ZO zijn er gespiegelde westkanten (de speer in de
+# linkerhand). Samen viel de omtrek gemiddeld van 0,79 naar 0,83.
+BEELD = {'Z': (5, False), 'ZW': (40, False), 'W': (65, False), 'NW': (155, False), 'N': (185, False),
+         'NO': (-145, False), 'O': (65, True), 'ZO': (25, True)}
+SPIEGEL = Matrix.Diagonal((-1, 1, 1, 1))  # om het vlak van de camera in rust (x = 0)
+
+
+def spiegel_png(pad):
+    """Het beeld links-rechts omgekeerd, in hetzelfde bestand."""
+    import numpy as np
+    img = bpy.data.images.load(pad, check_existing=False)
+    b, h = img.size
+    px = np.empty(b * h * 4, dtype=np.float32)
+    img.pixels.foreach_get(px)
+    img.pixels.foreach_set(px.reshape(h, b, 4)[:, ::-1, :].ravel())
+    img.save()
+    bpy.data.images.remove(img)
+
+
+def render_richting(sc, naam, r, lichten):
+    hoek, spiegel = BEELD[r]
+    render(sc, naam, hoek, lichten, spiegel)
+
+
+def render(sc, naam, hoek, lichten, spiegel=False):
+    """De camera en het licht samen om de man gedraaid: het licht komt op het scherm altijd van linksboven. Gespiegeld:
+    het licht eerst gespiegeld, zodat het na het omkeren van het beeld weer van linksboven komt."""
     cam = sc.camera
     m0 = cam.matrix_world.copy()
     R = Matrix.Rotation(math.radians(hoek), 4, 'Z')
     cam.matrix_world = R @ m0
     for ob, m in lichten.items():
-        ob.matrix_world = R @ m
+        ob.matrix_world = R @ (SPIEGEL @ m @ SPIEGEL if spiegel else m)
     terug = blad_naar_camera(hoek)
     sc.render.filepath = os.path.join(UIT, naam)
     bpy.ops.render.render(write_still=True)
+    if spiegel:
+        spiegel_png(os.path.join(UIT, naam))
     cam.matrix_world = m0
     for ob, m in lichten.items():
         ob.matrix_world = m
@@ -259,7 +289,7 @@ def met_stof(sc, rig, zet, beelden, naam, lichten, rondes=1, rust=8):
         if stap >= rust + (rondes - 1) * beelden * SUB and (stap - rust) % SUB == 0 and t < rondes * beelden:
             i = int(round(t)) % beelden
             for r in RICHTINGEN:
-                render(sc, naam(r, i), sh.RICHTINGEN[r], lichten)
+                render_richting(sc, naam(r, i), r, lichten)
 
 
 def main():

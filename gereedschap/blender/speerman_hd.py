@@ -317,6 +317,19 @@ def mat_stof(naam, kleur, schaal=30, kracht=0.25, textuur=('rough_linen', 0.7)):
     return k.af(kl, ruw=0.9)
 
 
+def mat_wambuis():
+    """Het gewatteerde wambuis: bruin, de ruiten met donkere naden (het kenmerk 'kussen' uit wambuis), zoals de gevlekte,
+    geruite mouwen van de referentie (Marcel: "bij de referentie zie je hier een mooiere overgang in het materiaal met meer
+    details en schaduwen / kleurverschillen"); eerder was het een vlak oranje."""
+    k = Knopen('wambuis')
+    v = k.ruis(5, 2)
+    kus = k.n('ShaderNodeAttribute', attribute_name='kussen').outputs['Fac']
+    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.25), lin('#8a4a22'), lin('#4a2410'))
+    kl = k.meng(k.glad(kus, 0.15, 0.8, 0.85, 0.0), kl, lin('#2a1408'))
+    kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
+    return k.af(kl, ruw=0.9, holte=0.55)
+
+
 def mat_leer(naam, kleur, donker='#2a160a'):
     k = Knopen(naam)
     r = k.ruis(18, 5)
@@ -542,6 +555,7 @@ def wambuis(lijf, rig, mat):
     hand = gewicht(lijf, ('wrist', 'finger', 'metacarpal'))
     kies = [a > 0.35 and h < 0.2 for a, h in zip(arm, hand)]
     ob = uit_huid('wambuis', lijf, kies, 0.0, mat, sub=2)
+    kussens = []
     # per punt de plek langs de arm en rond de arm, om één as per arm (van de schouder naar de pols), en daaruit de ruiten:
     # met een as per armbot sprong het patroon waar het ene bot het andere afloste, en rondom paste geen heel aantal ruiten,
     # zodat achter op de arm een naad zat waar het in scherven brak (van achteren te zien: Marcel, bij NO en O)
@@ -574,6 +588,10 @@ def wambuis(lijf, rig, mat):
         f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.04)) / 0.06))
         f = f * f * (3 - 2 * f)
         v.co += nrm * (0.008 + (0.006 + 0.016 * kussen) * f)
+        kussens.append(kussen)
+    # de ruiten ook in de verf (mat_wambuis): donkere naden, zodat ze op spelmaat lezen zoals bij de referentie
+    a = me.attributes.new('kussen', 'FLOAT', 'POINT')
+    a.data.foreach_set('value', kussens)
     return ob
 
 
@@ -979,8 +997,11 @@ def kruin(lijf):
 
 
 HELM_RAND = 1.45  # de rand van de helm, maal de koepel
-HELM_ZAK = 1.2  # hoeveel verder de rand achteraan zakt
-HELM_RAND_HOOGTE = 0.035  # de rand boven de ogen (maal het hoofd): lager dan eerst (0,045), zoals de referentie
+HELM_ZAK = 2.0  # hoeveel verder de rand achteraan zakt
+HELM_VOOR = 0.6  # hoeveel smaller de rand van voren is (0 even breed als opzij)
+HELM_ACHTER = 0.022  # de helm zo ver naar achteren op het hoofd: het gezicht steekt er van voren onder uit
+HELM_RAND_HOOGTE = 0.05  # de rand boven de ogen (maal het hoofd): het gezicht komt eronder uit, zoals bij de referentie
+# (Marcel: "Het gezicht lijkt op de referentie met wat verder onder de helm uit te komen"); achteraan zakt hij (HELM_ZAK)
 
 
 def helm(lijf, rig, M):
@@ -988,7 +1009,7 @@ def helm(lijf, rig, M):
     aan weerszijden), een rand zo'n anderhalf keer zo breed die wat zakt. Hoog genoeg dat je onder de rand de ogen ziet."""
     hoofd = [v.co for v in lijf.data.vertices if v.co.z > (rig.matrix_world @ rig.pose.bones['head'].head).z + 0.01]
     xs, ys, zs = [p.x for p in hoofd], [p.y for p in hoofd], [p.z for p in hoofd]
-    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2 + HELM_ACHTER
     hx, hy, top = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, max(zs)
     oog = rig.matrix_world @ rig.pose.bones['eye.L'].head
     zb = oog.z + HELM_RAND_HOOGTE * INSTELLINGEN['hoofd']
@@ -1012,10 +1033,13 @@ def helm(lijf, rig, M):
     # nek (Marcel: "De helm is ook wat anders van vorm aan de achterzijde")
     ringen = ((1.0, 0.0), (1.15, -0.006), (1.3, -0.015), (HELM_RAND, -0.03))
     zak = lambda th, dz: dz * (1 + HELM_ZAK * max(0.0, math.sin(th)) ** 1.5)  # +y is achter
+    # van voren smaller: van bovenaf bedekte de brede rand de ogen (het gezicht moet eronder uitkomen)
+    smal = lambda th, f: 1 + (f - 1) * (1 - HELM_VOOR * max(0.0, -math.sin(th)) ** 1.5)  # -y is voor
     for f, dz in ringen:
         for j in range(n):
             th = 2 * math.pi * j / n
-            vs.append((cx + rx * f * math.cos(th), cy + ry * f * math.sin(th), zb + zak(th, dz)))
+            fe = smal(th, f)
+            vs.append((cx + rx * fe * math.cos(th), cy + ry * fe * math.sin(th), zb + zak(th, dz)))
     for i in range(len(ringen) - 1):
         for j in range(n):
             a = i * n + j
@@ -1031,9 +1055,12 @@ def helm(lijf, rig, M):
     bak_mod(t)
     t.data.transform(t.matrix_world)
     t.matrix_world = Matrix.Identity(4)
-    for v in t.data.vertices:  # de opgerolde zoom zakt achteraan mee
+    for v in t.data.vertices:  # de opgerolde zoom zakt achteraan mee, en is van voren smaller
         th = math.atan2((v.co.y - cy) / ry, (v.co.x - cx) / rx)
         v.co.z += zak(th, -0.03) + 0.03
+        k = smal(th, HELM_RAND) / HELM_RAND
+        v.co.x = cx + (v.co.x - cx) * k
+        v.co.y = cy + (v.co.y - cy) * k
     delen.append(t)
     # de kam van voor naar achter, en de naden aan weerszijden (smaller), elk een smalle ribbe over de koepel
     for hoek, dikte, hoger in ((0, 0.012, 0.008), (32, 0.005, 0.003), (-32, 0.005, 0.003)):
@@ -1281,8 +1308,8 @@ def riem_en_hangers(bvh, cy, z_riem, M):
 
 
 def kraag(lijf, rig, mouwen, lijfje, M):
-    """De maliënkraag: om de nek, onder de kin en de baard; een kraag, geen cape over de schouders: bij de referentie
-    loopt de wapenrok door tot de nek, en met een cape leek de helm erbovenop te staan."""
+    """De maliënkraag: om de nek, onder de kin en de baard, en als een korte, brede cape over de schouders; donker, zoals
+    bij de referentie, waar hij de overgang van de wapenrok naar de mouwen bedekt."""
     arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
     bvh = bvh_van([(lijf, [a < 0.2 for a in arm]), (lijfje, None)])
     nek = rig.matrix_world @ rig.pose.bones['neck02'].head
@@ -1292,9 +1319,9 @@ def kraag(lijf, rig, mouwen, lijfje, M):
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z - 0.012))  # voor onder de kin: de baard valt eroverheen
-        onder = nek.z - 0.045 - 0.05 * voor  # voor over de bovenrand van de wapenrok
+        onder = nek.z - 0.085 - 0.05 * voor  # over de schouders en voor over de bovenrand van de wapenrok
         return boven - t * (boven - onder)
-    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.016 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
+    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.026 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
               n=128, mat=M['malien'])
     dik(k, 0.006)
     return k
@@ -1635,7 +1662,7 @@ def bouw():
     M = {
         'huid': mat_huid(),
         'hozen': mat_stof('hozen', '#1c2038', 30, 0.3, textuur=('hessian_230', 0.5)),
-        'wambuis': mat_stof('wambuis', '#a05824', 20, 0.15),  # warmer: de schouders waren op spelmaat te dof
+        'wambuis': mat_wambuis(),
         'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),
         'haar': mat_haar(),

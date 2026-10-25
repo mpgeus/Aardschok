@@ -2273,6 +2273,19 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   wapenrok gevierendeeld zoals op het vel. Vergelijking in de acht richtingen: `uit/blender/omtrek-spelmaat-acht.png`.
   Wat er nog van achteren scheelt: bij de referentie valt de kap breed en donker over de schouders, en is de helm van
   achteren ronder en lager.
+- *Richtingen, gezicht, mouwen en kap* (Marcel, 25 okt, met rode cirkels: "Het gezicht lijkt op de referentie met wat
+  verder onder de helm uit te komen", "bij de referentie zie je hier een mooiere overgang in het materiaal met meer
+  details en schaduwen / kleurverschillen", "Bij NO zie je ook de aansluiting tussen de kleding minder goed", "De
+  richtingen lijken ook wat af te wijken", "De arm ZO staat ook wat anders"). De richtingen gemeten: elke richting om
+  de vijf graden gedraaid, en per richting de stand waarin de omtrek het best met het vel samenvalt. Het vel staat niet om
+  de 45 graden: Z 5, ZW 40, W 65 (25 graden meer naar de kijker), NW 155, N 185, NO -145; en O en ZO zijn er gespiegelde
+  westkanten (W op 65 en ZW op 25), met de speer in de linkerhand. Dat verklaart de arm in ZO. `eigen.py` rendert nu zo
+  (`BEELD`), gespiegeld met het licht meegespiegeld, zodat het na het omkeren van linksboven blijft komen; de omtrek viel
+  samen van gemiddeld 0,79 naar 0,83. Het gezicht: de helm 2,2 cm naar achteren op het hoofd (`HELM_ACHTER`), de rand van
+  voren hoger en smaller (`HELM_RAND_HOOGTE` 0,05, `HELM_VOOR` 0,6) en achteraan lager (`HELM_ZAK` 2): de ogen en het
+  voorhoofd komen onder de rand uit. De mouwen: een eigen materiaal (`mat_wambuis`), donkerder bruin met donkere naden
+  tussen de ruiten (het kenmerk `kussen` uit `wambuis`), zodat ze op spelmaat geruit lezen in plaats van vlak oranje. De
+  kap weer breed en donker over de schouders, waar hij de overgang van de wapenrok naar de mouwen bedekt.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
