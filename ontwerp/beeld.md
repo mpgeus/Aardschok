@@ -2321,6 +2321,14 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   wenkbrauwen. Het speerblad een ruit met een diepe middenrib, lichter staal dat half spiegelt: een lichte en een donkere
   helft. De handschoen donker, zodat de vuist loskomt van de schacht. De wapenrok dieper geplooid met meer schaduw in de
   plooien, minder vullicht (`vul` 0,65), en de riem 2 cm lager. De omtrek valt gemiddeld voor 0,84 samen.
+- *Het hemd zakt niet meer af* (Marcel, bij ZW: "Lijkt alsof zijn hemd afzakt nog"). Het losse stuk om de bovenarm hing
+  schuin over de arm als een afzakkende kraag; het is eruit (`schouderstukken`). Nu loopt de wapenrok zelf boven de
+  oksel over het binnenste deel van de schouder (de koker raakt daar ook de top van de mouw, tot het schoudergewricht)
+  en keert hij bij het armsgat terug naar de romp; de buitenkant van de schouder is de ronde, bruine mouw, zoals op het
+  vel in ZW. Tot de buitenkant van de schouder werd het een breed, plat juk. De gouden rand: boven op de schouder (boven
+  de oksel, opzij); waar de stof de mouw raakt gaf losse gele vlekken in het blauw (de arm hangt ook voor de borst).
+  Op spelmaat valt de rand nu grotendeels onder de kap; bij het vel loopt hij als een lijn langs het armsgat, en dat
+  vraagt een eigen rand in de vorm, geen kleur op de koker.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

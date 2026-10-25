@@ -74,7 +74,7 @@ def deel_van(ob):
         return ARMSTUK
     if ob.name.startswith('kap.'):
         return KAP
-    if ob.name.startswith(('wambuis', 'wapenrok-schouder')):
+    if ob.name.startswith('wambuis'):
         return WAMBUIS
     if any(m and m.name.startswith('helm') for m in ob.data.materials):
         return HELM
@@ -180,7 +180,7 @@ def een_mesh(sc, zonder=()):
         # wat aan de arm vastzit, volgt alleen de arm (het armstuk hing dicht bij de heup en bleef anders achter als de arm
         # naar voren ging)
         arm = kopie.data.attributes.new('arm', 'FLOAT', 'POINT')
-        aan_arm = ob.name.startswith(('armstuk', 'armrand', 'kap.', 'handschoenen', 'wambuis', 'nagel', 'wapenrok-schouder'))
+        aan_arm = ob.name.startswith(('armstuk', 'armrand', 'kap.', 'handschoenen', 'wambuis', 'nagel'))
         arm.data.foreach_set('value', [1.0 if aan_arm else 0.0] * len(kopie.data.vertices))
         deel = kopie.data.attributes.new('deel', 'INT', 'POINT')
         deel.data.foreach_set('value', [deel_van(ob)] * len(kopie.data.vertices))

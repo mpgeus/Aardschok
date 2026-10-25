@@ -1183,22 +1183,43 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     cy = nek.y + 0.01
     kin = rig.matrix_world @ rig.pose.bones['special04'].head
     z_top = min(nek.z - 0.035, kin.z - 0.04)
-    lijfje = koker('wapenrok-lijf', romp, staand(0, cy, lambda t, th: z_top - t * (z_top - z_riem + 0.02)),
-                   [i / 24 for i in range(25)], lambda t, th: 0.026 + 0.008 * t, n=96, mat=M['wapenrok'])
-    # de stof valt recht van de borst naar beneden: per kolom nooit smaller dan erboven (vanaf de schouders)
+    # over de schouders (Marcel, 25 okt: "Bij de referentie lijkt de kleding over de schouder heen te lopen", en bij een
+    # los stuk om de bovenarm: "Lijkt alsof zijn hemd afzakt"): boven de oksel raakt de wapenrok ook de top van de mouw,
+    # zodat hij over de schouder loopt; eronder alleen de romp, zodat hij bij het armsgat terugkeert en de mouw eronder
+    # uit komt
+    schouder = rig.matrix_world @ rig.pose.bones['upperarm01.L'].head
+    schouder_z = schouder.z
+    # alleen het binnenste deel van de schouder, tot het schoudergewricht: de buitenkant blijft de bruine mouw, en de rand
+    # loopt schuin over de schouder zoals op het vel (tot de buitenkant werd het een breed, plat juk)
+    kap = [v.co.z > schouder_z - 0.03 and abs(v.co.x) < abs(schouder.x) for v in mouwen.data.vertices]
+    romp_kap = bvh_van([(lijf, [a < 0.25 for a in arm]), (mouwen, kap)])
+    hoogte_lijf = lambda t, th: z_top - t * (z_top - z_riem + 0.02)
+    lijfje = koker('wapenrok-lijf', romp_kap, staand(0, cy, hoogte_lijf),
+                   [i / 24 for i in range(25)], lambda t, th: 0.012 + 0.022 * min(1.0, t * 3) + 0.008 * t, n=96,
+                   mat=M['wapenrok'])
+    # de stof valt recht van de borst naar beneden: per kolom nooit smaller dan erboven, vanaf de oksel (daarboven loopt hij
+    # over de schouder, en die breedte telt niet mee)
     me = lijfje.data
     kol = 97
+    oksel = next(i for i in range(25) if hoogte_lijf(i / 24, 0) < schouder_z - 0.03)
     for j in range(kol):
         verst = 0.0
-        for i in range(25):
+        for i in range(oksel, 25):
             v = me.vertices[i * kol + j]
             d = Vector((v.co.x, v.co.y - cy, 0))
             r = d.length
-            if i >= 6:
-                if r < verst * 0.985:
-                    v.co.x, v.co.y = (d.normalized() * verst * 0.985 + Vector((0, cy, 0))).xy
-                    r = verst * 0.985
+            if i > oksel and r < verst * 0.985:
+                v.co.x, v.co.y = (d.normalized() * verst * 0.985 + Vector((0, cy, 0))).xy
+                r = verst * 0.985
             verst = max(verst, r)
+    # de rand over de schouder goud (Marcel: "De schouder mist de overloop van het geel / goud"): boven de oksel, opzij, waar
+    # de wapenrok over de schoudertop loopt (waar de stof de mouw raakt gaf losse gele vlekken in het blauw, want de arm
+    # hangt ook voor de borst)
+    lijfje.data.materials.append(M['wapenrok-goud'])
+    for f in lijfje.data.polygons:
+        i, j = divmod(f.index, 96)
+        if i < oksel and abs(math.sin(math.pi + 2 * math.pi * (j + 0.5) / 96)) > 0.75:
+            f.material_index = 1
     # plooien van de borst naar de riem (Marcel: "de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat
     # maakt alles veel dieper en echter"): vel 01 heeft lange plooien met lichte en donkere banen; een vlak heeft geen schaduw
     for i in range(6, 25):
@@ -1252,37 +1273,6 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     zacht(rok)
     dik(rok, 0.005)
     return [lijfje, rok]
-
-
-SCHOUDER_LANG = 0.05  # hoe ver de wapenrok over de bovenarm valt (meter, langs de arm)
-SCHOUDER_WIJD = 0.005  # hoe wijd hij onderaan van de mouw af staat (met 0,012 en 6 mm erbij was hij te dik: Marcel)
-
-
-def schouderstukken(rig, mouwen, M):
-    """De wapenrok over de schouders (Marcel, 25 okt: "Schouders lijken nog niet aan te sluiten. Bij de referentie lijkt de
-    kleding over de schouder heen te lopen"): de wapenrok houdt op aan de rand van de romp, en de mouw liep door tot in de
-    kap, met een harde naad. Nu valt er over elke schouder een stuk van dezelfde stof, als een poncho: van boven op de
-    schouder (onder de kap) langs de bovenarm naar beneden, naar onderen wijder, en de mouw komt eronder uit."""
-    delen = []
-    for k in ('L', 'R'):
-        a = rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head
-        e = rig.matrix_world @ rig.pose.bones[f'upperarm02.{k}'].tail
-        as_ = (e - a).normalized()
-        dichtbij = [((v.co - a).dot(as_) < SCHOUDER_LANG + 0.06) and ((v.co - a).dot(as_) > -0.08) for v in mouwen.data.vertices]
-        bvh = bvh_van([(mouwen, dichtbij)])
-        p = lambda t, th, a=a, as_=as_: (a + as_ * (-0.035 + (SCHOUDER_LANG + 0.035) * t), as_)
-        st = koker('wapenrok-schouder.' + k, bvh, p, [i / 10 for i in range(11)],
-                   lambda t, th: 0.002 + SCHOUDER_WIJD * t ** 1.5, n=64, mat=M['wapenrok'], ver=0.25)
-        # de onderrand goud, zoals de zoom die bij de referentie over de schouder loopt (Marcel: "De schouder mist de
-        # overloop van het geel / goud")
-        st.data.materials.append(M['wapenrok-goud'])
-        for f in st.data.polygons:
-            if f.index // 64 >= 6:
-                f.material_index = 1
-        dik(st, 0.004)
-        zacht(st)
-        delen.append(bak_mod(st))
-    return delen
 
 
 def hangen(rok, lijf, mouwen, cy, z_riem, z_zoom):
@@ -1780,7 +1770,6 @@ def bouw():
         pass
     lijfje = bpy.data.objects['wapenrok-lijf']
     rok = bpy.data.objects['wapenrok-rok']
-    schouderstukken(rig, mouwen, M)
     nek = rig.matrix_world @ rig.pose.bones['neck01'].head
     riem_en_hangers(bvh_van([(lijfje, None), (rok, None)]), nek.y + 0.01, riem_z, M)
     kraag(lijf_b, rig, mouwen, lijfje, M)
