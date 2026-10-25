@@ -2357,6 +2357,11 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   van de laars in drie getallen bovenaan (`LAARS_OM` 1,2 cm om het been, `LAARS_BREDER` 2,2 cm, `LAARS_LANGER` 4 cm), op het
   vel gemeten; de strook laarzen scheelt nu meestal 0 tot 2 pixels.
 
+**De stand "oké" (25 okt).** Marcel: "Deze als staat 'oké' noteren en dan de verschillen aanpakken". De staande speerman
+van commit df35dbbd is het ijkpunt: in git het label `speerman-oke-25okt` (`git show speerman-oke-25okt`, of een losse
+kopie met `git worktree add`), en de renders in de acht richtingen met de vergelijking in
+`uit/blender/staat-oke-25okt/`. Wat hierna verandert, wordt daarmee vergeleken; wordt het slechter, dan gaat het terug.
+
 **Analyse tot op de pixel (25 okt).** Marcel: "Maak nu eens een goed analyse tussen de referentie en ons model. Zoek in
 detail uit waar de verschillen zitten. Tot op de laatste pixel." Gereedschap: `gereedschap/blender/vergelijk.py` (per
 richting de referentie en het model op spelmaat, uitgelijnd op de beste overlap van de omtrek, met kaarten van de omtrek,
