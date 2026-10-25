@@ -50,12 +50,14 @@ STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW
 # rand in het licht (sheen) en het matte licht van ruwe stof (diffuse roughness); leer met een lichte glans; het staal glanst
 # (metaal toont zijn vorm door wat het weerspiegelt: de lucht met een verloop, licht_voor_spelmaat).
 STOF = ('wapenrok', 'wambuis', 'hozen')
-LEER = ('riem', 'leer', 'laars', 'omslag', 'armstuk', 'armrand', 'schede', 'handschoen', 'koord')
+LEER = ('riem', 'leer', 'armstuk', 'armrand', 'schede', 'handschoen', 'koord')
+LAARS = ('laars', 'omslag')
 STAAL = ('helm', 'staal')
 SOORTEN = {
     'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
              'Metallic': 0.0},
     'leer': {'Roughness': 0.48, 'Specular IOR Level': 0.45, 'Metallic': 0.0},  # leer met een zachte glans, geen klei
+    'laars': {'Roughness': 0.7, 'Specular IOR Level': 0.2, 'Metallic': 0.0},  # dof: de glans gaf grijze plekken op het bruin
     'staal': {'Roughness': 0.42, 'Metallic': 0.9},
     'blad': {'Roughness': 0.3, 'Metallic': 0.5},  # het blad spiegelt de lucht met haar verloop: een lichte en een donkere
     # helft
@@ -67,7 +69,7 @@ def soort_van(m):
     naam = m.name.split('.')[0]
     if naam == 'blad':
         return 'blad'
-    for soort, namen in (('stof', STOF), ('leer', LEER), ('staal', STAAL)):
+    for soort, namen in (('stof', STOF), ('leer', LEER), ('laars', LAARS), ('staal', STAAL)):
         if naam.startswith(namen):
             return soort
     return 'anders'

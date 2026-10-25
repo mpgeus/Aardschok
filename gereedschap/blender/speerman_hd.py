@@ -62,12 +62,12 @@ INSTELLINGEN = {
     'borst': -4,
     # graden naar buiten, per voet: zoals op het vel de rechtervoet schuin naar buiten, de linker bijna recht (Marcel:
     # "Schoenen staan niet op dezelfde manier")
-    'voeten': {'R': 45, 'L': 28},
+    'voeten': {'R': 24, 'L': 12},
     'arm': 0.3,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 in Z te smal, 0,4 in ZW te ver uit)
     'armlengte': 0.85,       # de onderarmen korter, zoals de gedrongen man van de referentie (de hand bij de heup)
     'kijk': (-12, 0),        # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag (10 omlaag verborg in Z het
                              # gezicht onder de helm: Marcel, "het gezicht in Zuid is onduidelijk")
-    'benen_in': -2,          # graden dat de dijen naar binnen staan (negatief: wat wijder, zoals de stand op het vel)
+    'benen_in': 0,           # graden dat de dijen naar binnen staan (negatief: wat wijder, zoals de stand op het vel)
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
     'lijn': 3.0,
@@ -442,12 +442,14 @@ def mens():
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.34) * s, -0.16 if k == 'L' else 0.06, -1))
+            # de linkerarm in een boog naar buiten, de elleboog uit (Marcel, bij Z: "En de arm aan de rechterkant", "Loopt
+            # ook anders": dicht tegen het lijf was de lijn recht naar beneden)
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.5) * s, -0.14 if k == 'L' else 0.06, -1))
     # de linkerhand voor het lijf, bij de buik, zoals op het vel in W (Marcel: "de arm van de referentie lijkt verder naar
     # voren gedraaid dan wat wij hebben"); eerst hing hij recht naast het lijf
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.L', (-0.06, -0.6, -1))
-    richt(rig, 'wrist.L', (-0.06, -0.55, -1))
+        richt(rig, f'{b}.L', (0.02, -0.55, -1))
+    richt(rig, 'wrist.L', (0.0, -0.5, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.R', (-0.08, -0.75, 0.9))  # de speerhand hoger, op borsthoogte, zoals op het vel
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
@@ -807,7 +809,7 @@ def mat_laars():
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], k.plek())
     # lichter en warmer bruin, zoals de laarzen van de referentie (op spelmaat waren ze donkerder en veel minder warm)
-    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#b4622a'), lin('#52280e'))
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.3), lin('#d07a3c'), lin('#7a3c16'))  # warm tanbruin, zoals het vel
     kl = k.meng(k.glad(sep.outputs['Z'], 0.017, 0.014), kl, lin('#1a0f09'))  # de zool tot de naad
     # leer dat je ziet: de nerf en de kreukels van de textuur sterker, en slijtage (lichter) op de bolle delen: de neus, de
     # hiel, de randen (Marcel: "moeten leer zijn met gesp")
@@ -1479,7 +1481,9 @@ def laarzen(lijf, rig, M):
         y1 = as_.cross(x1)
 
         # de laarsrand op 24 procent van de man, zoals op vel 01
-        z_top = min(kn.z - 0.05, 0.26 * kruin(lijf))
+        # halverwege de kuit, met de blauwe hozen erboven, zoals op het vel (Marcel: "Aub die boots man, meer zoals de
+        # referentie": hoger liep de laars door tot onder de rok)
+        z_top = min(kn.z - 0.07, 0.2 * kruin(lijf))
         boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
         # de schacht om het been in zijn eigen vorm, smal naar de enkel: als ronde kegel met de gemiddelde dikte stak de kuit
         # er van achteren uit (Marcel: "Dat gaat nog niet goed ook"), en als kegel ondersteboven hing hij als een slobkous
@@ -1507,7 +1511,7 @@ def laarzen(lijf, rig, M):
         breed = max(q.x for q in voet) - min(q.x for q in voet)
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
         opzij = Vector((-richting.y, richting.x, 0))
-        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.035
+        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.06
         start = Vector((hiel.x, hiel.y, 0)) - richting * 0.046  # 3 cm verder naar achteren, zoals de referentie van opzij
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=1)
         bol = bpy.context.active_object
@@ -1523,7 +1527,7 @@ def laarzen(lijf, rig, M):
             # het hoogst op de wreef voor de enkel, dan wat lager, en de neus weer bol
             glad = lambda a, b: (lambda t: t * t * (3 - 2 * t))(max(0.0, min(1.0, (u - a) / (b - a))))
             wreef = 0.068 + 0.035 * glad(0.0, 0.35) - 0.03 * glad(0.35, 0.75) + 0.008 * math.exp(-((u - 0.86) / 0.1) ** 2)
-            half = (breed / 2 + 0.026) * (0.78 + 0.3 * math.exp(-((u - 0.78) / 0.32) ** 2))
+            half = (breed / 2 + 0.042) * (0.8 + 0.32 * math.exp(-((u - 0.72) / 0.35) ** 2))  # breed: een grove soldatenlaars
             v.co = start + richting * (lengte * u) + opzij * (x * half) + Vector((0, 0, wreef / 2 + z * (wreef / 2 + 0.012)))
         stukken.append(bol)
         laars = smelt('laars.' + k, stukken, 0.003, 4, M['laars'])
@@ -1773,7 +1777,7 @@ def bouw():
     riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z  # 2 cm lager: de borst wat langer, zoals op het vel
     M = {
         'huid': mat_huid(rig),
-        'hozen': mat_stof('hozen', '#1c2038', 30, 0.3, textuur=('hessian_230', 0.5)),
+        'hozen': mat_stof('hozen', '#26357a', 30, 0.3, textuur=('hessian_230', 0.5)),  # blauw, zoals op het vel
         'wambuis': mat_wambuis(),
         'handschoen': mat_leer('handschoen', '#4a3428', '#1a100a'),  # donker: de vuist los van de schacht, zoals op het vel
         'oog': mat_oog(),
@@ -1789,7 +1793,7 @@ def bouw():
         'riem': mat_leer('riem', '#793a28', '#3a160c'),
         'leer': mat_leer('leer', '#5a3418'),
         'laars': mat_laars(),
-        'omslag': mat_leer('omslag', '#a85e28', '#4e2810'),  # als de laars zelf: bij de referentie geen lichte band
+        'omslag': mat_leer('omslag', '#a8582a', '#5a2a10'),  # een tikje donkerder dan de laars: de rand bovenaan
         'armstuk': mat_leer('armstuk', '#4d3730', '#1e1410'),
         'armrand': mat_leer('armrand', '#3e2c22', '#1a120c'),  # donker: bij de referentie compacte, donkere armstukken
         'schede': mat_leer('schede', '#8a4630', '#2e120a'),

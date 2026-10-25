@@ -2346,6 +2346,14 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   niet op dezelfde manier"): de schacht 2,2 cm dik (was 1,3; op spelmaat nu twee pixels zoals het vel), de koker en het
   koord mee, en de greep om de dikkere schacht; de voeten per kant naar buiten zoals op het vel (de rechter 45 graden,
   de linker 28: van voren zie je de lengte van de voet schuin naar buiten) en de stand iets wijder (`benen_in` -2).
+- *De laarzen opnieuw, in één keer naar het vel, en de linkerarm in een boog* (Marcel: "Aub die boots man, meer zoals de
+  referentie", "Hey wordt steeds gekker", "En de arm aan de rechterkant", "Loopt ook anders"). Met steeds een klein stapje
+  werd het rommeliger (de voeten op 45 graden naar buiten maakten het gekker), dus nu in één keer, uit de vergelijking
+  stuk voor stuk: de laars korter, tot halverwege de kuit (0,2 van de man), met de hozen erboven in blauw (#26357a, eerst
+  bijna zwart); warm, licht tanbruin (#d07a3c) en dof (een eigen soort `laars` in `eigen.py`: de glans gaf grijze plekken);
+  de voet langer en breder (een grove soldatenlaars); de voeten weer gematigd naar buiten (rechts 24, links 12 graden), de
+  stand recht. De linkerarm (rechts in beeld in Z) in een boog naar buiten, de elleboog uit en de hand naast de heup en
+  naar voren, zoals de lijn van de arm op het vel.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
