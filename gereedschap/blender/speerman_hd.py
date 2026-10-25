@@ -400,6 +400,17 @@ def richt(rig, bot, richting):
     bpy.context.view_layer.update()
 
 
+def draai_om_z(rig, bot, graden):
+    """Een bot in de houding om de staande as door zijn begin draaien (met alles wat eraan hangt)."""
+    bpy.context.view_layer.update()
+    pb = rig.pose.bones[bot]
+    M = pb.matrix.copy()
+    nieuw = Matrix.Rotation(math.radians(graden), 4, 'Z') @ M
+    nieuw.translation = M.translation
+    pb.matrix = nieuw
+    bpy.context.view_layer.update()
+
+
 def krul(rig, bot, hoek):
     pb = rig.pose.bones[bot]
     pb.rotation_mode = 'XYZ'
@@ -439,21 +450,25 @@ def mens():
         richt(rig, b, Matrix.Rotation(-math.radians(INSTELLINGEN['borst'] * deel), 3, 'X') @ richting(b))
     for b, r in hals.items():
         richt(rig, b, r)  # de nek en het hoofd houden hun richting
+    # het bovenlijf gedraaid, de linkerschouder naar voren (Marcel, 25 okt, bij W: "De armen van de referentie staan verder
+    # naar voren gedraaid"); de nek draait terug, zodat het hoofd blijft kijken waar het keek
+    for b, deel in (('spine03', 0.3), ('spine02', 0.4), ('spine01', 0.3), ('neck01', -1.0)):
+        draai_om_z(rig, b, -ARM_VOOR['draai'] * deel)
     # de schouders laten zakken (Marcel: "De schouders moeten zakken"): de sleutelbeenderen en de schouders wat omlaag
     for k, s in (('L', 1), ('R', -1)):
-        richt(rig, f'clavicle.{k}', (s, 0.0, -0.05))
-        richt(rig, f'shoulder01.{k}', (s, 0.08, -0.8))
+        richt(rig, f'clavicle.{k}', (s, -ARM_VOOR['sleutelbeen'] if k == 'L' else 0.0, -0.05))
+        richt(rig, f'shoulder01.{k}', (s, 0.08 - (ARM_VOOR['schouder'] if k == 'L' else 0.0), -0.8))
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
             # de linkerarm in een boog naar buiten, de elleboog uit (Marcel, bij Z: "En de arm aan de rechterkant", "Loopt
             # ook anders": dicht tegen het lijf was de lijn recht naar beneden)
-            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.5) * s, -0.14 if k == 'L' else 0.06, -1))
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.5) * s, -ARM_VOOR['bovenarm'] if k == 'L' else 0.06, -1))
     # de linkerhand voor het lijf, bij de buik, zoals op het vel in W (Marcel: "de arm van de referentie lijkt verder naar
     # voren gedraaid dan wat wij hebben"); eerst hing hij recht naast het lijf
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.L', (0.02, -0.55, -1))
-    richt(rig, 'wrist.L', (0.0, -0.5, -1))
+        richt(rig, f'{b}.L', (0.02, -ARM_VOOR['onderarm'], -1))
+    richt(rig, 'wrist.L', (0.0, -ARM_VOOR['onderarm'] + 0.05, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.R', (-0.28, -0.5, 0.9))  # de speerhand op borsthoogte, opzij en minder naar voren (de analyse)
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
@@ -1064,6 +1079,14 @@ def baard(lijf, rig, M):
 
 def kruin(lijf):
     return max(v.co.z for v in lijf.data.vertices) + 0.045
+
+
+# hoe ver de linkerarm (de arm zonder speer) naar voren staat: het sleutelbeen en de schouder naar voren, de bovenarm recht
+# omlaag en de onderarm schuin naar voren, de hand voor de buik op riemhoogte (Marcel, 25 okt, bij W: "De armen van de
+# referentie staan verder naar voren gedraaid"; op het vel hangt de arm in W midden op de zij, met de onderarm naar voren;
+# bij ons hing hij aan de achterkant, met de hand bij de dij). Elk getal is de y van een richting (vooruit), 'draai' graden
+# het bovenlijf om (de linkerschouder voor; 10 en 20 maakten ZW slechter).
+ARM_VOOR = {'draai': 0.0, 'sleutelbeen': 0.3, 'schouder': 0.25, 'bovenarm': 0.0, 'onderarm': 1.6}
 
 
 HELM_RAND = 1.45  # de rand van de helm, maal de koepel

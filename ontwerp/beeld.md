@@ -2441,6 +2441,23 @@ de riem, per richting. Wat eruit kwam:
 - Samen, tegen de stand oké: het kleurverschil per pixel van 27,3 naar 23,4 (Z 20,2  ZW 23,3  W 26,3  NW 18,3  N 33,7
   NO 21,6  O 22,2  ZO 21,9), de omtrek van 0,79 naar 0,84. Renders en het vel met het vel, oké en nu:
   `uit/blender/staat-een-lijf-25okt/`.
+
+**De linkerarm naar voren (25 okt).** Marcel, met een streep door W: "De armen van de referentie staan verder naar voren
+gedraaid", "West gaat het dan vooral over". Op het vel hangt de arm aan onze kant (zijn linker, zonder speer) in W midden
+op de zij, de onderarm schuin naar voren en de hand voor de buik op riemhoogte; bij ons hing hij aan de achterkant van het
+lijf, recht omlaag, de hand bij de dij. Geprobeerd (W, ZW en Z, halve maat):
+- *W meer in profiel* (75 en 85 graden in plaats van 65): de arm komt meer in het midden, maar de omtrek valt van 0,84
+  naar 0,81 en 0,78, en het kleurverschil wordt groter. W blijft 65.
+- *Het bovenlijf gedraaid*, de linkerschouder naar voren (10 en 20 graden, `ARM_VOOR['draai']`): de mouw schuift wat naar
+  voren, maar ZW wordt slechter (kleur 23,3 naar 26,2). Niet gebruikt.
+- *De onderarm naar voren* alleen: de hand komt voor de buik, maar de mouw blijft achteraan.
+- *Sleutelbeen en schouder naar voren, de bovenarm recht omlaag en de onderarm naar voren* (`ARM_VOOR`): de voorkant van
+  de mouw in W scheelt nog 1,3 pixel met het vel in plaats van 2,7, en de hand zit voor de buik zoals op het vel. Dat is
+  het geworden. Een onderarm wat steiler (45 in plaats van 32 graden onder de horizon) gaf hetzelfde.
+- Het kleurverschil per pixel gaat over alle richtingen samen wel iets omhoog, van 23,4 naar 24,1 (W 26,3 naar 26,9,
+  O 22,2 naar 24,8, ZW 23,3 naar 25,3; Z iets omlaag): die maat telt elke pixel van de hand en de mouw die een paar
+  pixels anders ligt. De omtrek gemiddeld 0,83. Renders, het vel met het vel, oké en nu, en W, O, ZW en Z met de vorige
+  stand: `uit/blender/staat-arm-25okt/`.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
