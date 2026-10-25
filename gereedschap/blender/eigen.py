@@ -284,7 +284,9 @@ def main():
         bk.speer_vast(rig)
         met_stof(sc, rig, lambda t: bk.steek(rig, t), 8, lambda r, i: f'eigen-{r}{ISO}-steek-{i}.png', lichten)
         return
-    # lopen: de speer schuin voor het lijf, zoals de generator; drie rondes, zodat de stof op gang is
+    # lopen: de speer schuin voor het lijf, zoals de generator; drie rondes, zodat de stof op gang is; de pas uit een echte
+    # opname (mocap.py)
+    bk.BEWEGING = bk.mocap.Beweging(rig)
     dragen = bk.DRAGEN['generator']
     bk.draag_schuin(sc, rig, dragen)
     bk.loop(rig, 0, 8, draagt=True)

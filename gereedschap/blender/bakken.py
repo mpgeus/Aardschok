@@ -20,6 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import speerman_hd as sh  # noqa: E402
+import mocap  # noqa: E402
 
 from mathutils import Matrix, Quaternion, Vector  # noqa: E402
 from mathutils.kdtree import KDTree  # noqa: E402
@@ -458,6 +459,9 @@ def draai(rig, bot, hoek, as_='X'):
     pb.rotation_quaternion = pb.rotation_quaternion @ erbij
 
 
+BEWEGING = None  # een pas uit motion capture (mocap.py, Beweging); zonder: de pas die hier gerekend wordt (bekken, benen)
+
+
 def loop(rig, i, n, draagt=False):
     """Beeld i van n van een loopcyclus op de plaats (vooruit is -y). Met draagt houden de armen de speer schuin (IK, zie
     draag_schuin) en zwaait de linkerarm niet."""
@@ -471,6 +475,19 @@ def loop(rig, i, n, draagt=False):
                 rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']  # de vuist langs de speer
     bpy.context.view_layer.update()
     f = 2 * math.pi * i / n
+    if BEWEGING is not None:
+        # benen, bekken, rug en hoofd uit een echte opname (Marcel: "hij loopt nog echt houterig"); het bovenlijf wat
+        # gedraaid zoals bij de generator, en de voeten op de grond
+        laagst = mocap.zet(rig, BEWEGING, i / n)
+        if draagt:
+            draai(rig, 'spine02', DRAAI * 0.5, 'Z')
+            draai(rig, 'spine01', DRAAI * 0.5, 'Z')
+            draai(rig, 'head', -DRAAI * 0.5, 'Z')
+        rig.location.z = rig['z0'] - laagst
+        bpy.context.view_layer.update()
+        if draagt:
+            speer_mee(rig, f)
+        return
     bekken(rig, f)
     zakken = benen(rig, f)
     # de linkerarm zwaait weinig (Marcel: "de linkerarm minder zwaaien"): wat hij naar voren laat zien, staat niet in de verf

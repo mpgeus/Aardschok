@@ -2210,9 +2210,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   botten van de arm; nu alleen de romp (de wapenrok heeft geen mouwen). En de ruiten van het wambuis braken achter op de
   arm in scherven: ze werden per armbot berekend (het patroon sprong waar het ene bot het andere afloste) en rondom paste
   geen heel aantal ruiten (6,28), zodat achter op de arm een naad zat. Nu om één as per arm, met precies 6 ruiten rondom.
-  Het lopen zelf (houterig: kleine passen, de knieën komen nauwelijks omhoog, de voeten sloffen) wacht op een keuze:
-  zelf beter rekenen, of echte bewegingen uit motion capture (CMU, of Mixamo met een Adobe-account), die MPFB op een
-  eigen skelet kan zetten.
+- *Lopen uit een echte opname* (Marcel: "hij loopt nog echt houterig", "Zijn er geen addons voor natuurlijke bewegingen",
+  over Human Generator "Zou de human generator addon beter werken?", en "Cmu dan maar"). Van opzij schuifelde hij:
+  kleine passen, de knieën nauwelijks omhoog, de voeten sloffend. Human Generator maakt mooiere mensen, maar geen
+  bewegingen, en op spelmaat is een gezicht een paar pixels. Nu de motion capture van CMU (`beweging/`, met de
+  voorwaarden in `beweging/LEESMIJ.md`: vrij te kopiëren, te veranderen en te verspreiden), gelezen door `mocap.py`:
+  per bot de draai in de wereld ten opzichte van de ruststand, met de ruststand van de opname eerst gelijkgezet aan de
+  onze (de opname staat met de benen twintig graden gespreid); één pas uit `35_02` (van de linkerhiel tot de
+  linkerhiel, 1,1 s), op de plaats, sluitend gemaakt, en het bekken zo laag dat de laagste voet de grond raakt. Benen,
+  bekken, rug en hoofd komen uit de opname; de armen houden met de IK de speer. (Een eerste poging lag plat op de grond:
+  `Bone.vector` staat in de ruimte van het ouderbot.) De gerekende pas (`bekken`, `benen` in `bakken.py`) blijft als
+  terugval tot Marcel de opname goedkeurt, en gaat er dan uit.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
