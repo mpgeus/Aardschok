@@ -2327,8 +2327,11 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   en keert hij bij het armsgat terug naar de romp; de buitenkant van de schouder is de ronde, bruine mouw, zoals op het
   vel in ZW. Tot de buitenkant van de schouder werd het een breed, plat juk. De gouden rand: boven op de schouder (boven
   de oksel, opzij); waar de stof de mouw raakt gaf losse gele vlekken in het blauw (de arm hangt ook voor de borst).
-  Op spelmaat valt de rand nu grotendeels onder de kap; bij het vel loopt hij als een lijn langs het armsgat, en dat
-  vraagt een eigen rand in de vorm, geen kleur op de koker.
+  Daarna (Marcel: "Maar nu missen we het gele bandje / randje of overgang", "Ja doe maar"): de rand is een eigen deel
+  geworden (`armsgat_zoom`), een gouden koord van 7 mm om elk armsgat, in een staand vlak iets buiten het
+  schoudergewricht (`ZOOM_UIT` 1,12; op 0,97 lag het als een lijn midden op de borst), per hoek op de buitenkant van
+  wapenrok, mouw en lijf; aan het skelet zoals de wapenrok. Op spelmaat een smalle gouden rand tussen het blauw en de
+  mouw, in alle richtingen.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

@@ -1212,14 +1212,6 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
                 v.co.x, v.co.y = (d.normalized() * verst * 0.985 + Vector((0, cy, 0))).xy
                 r = verst * 0.985
             verst = max(verst, r)
-    # de rand over de schouder goud (Marcel: "De schouder mist de overloop van het geel / goud"): boven de oksel, opzij, waar
-    # de wapenrok over de schoudertop loopt (waar de stof de mouw raakt gaf losse gele vlekken in het blauw, want de arm
-    # hangt ook voor de borst)
-    lijfje.data.materials.append(M['wapenrok-goud'])
-    for f in lijfje.data.polygons:
-        i, j = divmod(f.index, 96)
-        if i < oksel and abs(math.sin(math.pi + 2 * math.pi * (j + 0.5) / 96)) > 0.75:
-            f.material_index = 1
     # plooien van de borst naar de riem (Marcel: "de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat
     # maakt alles veel dieper en echter"): vel 01 heeft lange plooien met lichte en donkere banen; een vlak heeft geen schaduw
     for i in range(6, 25):
@@ -1273,6 +1265,51 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     zacht(rok)
     dik(rok, 0.005)
     return [lijfje, rok]
+
+
+ZOOM_DIK = 0.007  # de straal van de gouden zoom om het armsgat (meter)
+ZOOM_UIT = 1.12  # hoe ver naar buiten het vlak van de zoom ligt, maal het schoudergewricht (0,97 lag midden op de borst)
+
+
+def armsgat_zoom(lijf, rig, mouwen, lijfje, M):
+    """Een gouden zoom om elk armsgat van de wapenrok (Marcel, 25 okt: "De schouder mist de overloop van het geel / goud",
+    "Maar nu missen we het gele bandje / randje of overgang"): een koord dat rond de schouder loopt waar de wapenrok
+    ophoudt en de mouw begint, van de schoudertop langs de voorkant naar de oksel en aan de rug weer omhoog. Als kleur op
+    de wapenrok lag hij achter de mouw, of gaf hij losse gele vlekken waar de arm voor de borst hangt; als eigen deel ligt
+    hij erop. In een staand vlak door het schoudergewricht: per hoek de buitenkant van wapenrok, mouw en lijf."""
+    bvh = bvh_van([(lijfje, None), (mouwen, None), (lijf, None)])
+    delen = []
+    for k in ('L', 'R'):
+        sch = rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head
+        c = Vector((sch.x * ZOOM_UIT, sch.y, sch.z - 0.035))
+        punten = []
+        for i in range(64):
+            a = 2 * math.pi * i / 64
+            d = Vector((0, math.cos(a), math.sin(a)))
+            r = straal(bvh, c, d, 0.3)
+            if r is not None:
+                punten.append(c + d * (r + 0.002))
+        kromme = bpy.data.curves.new('zoom.' + k, 'CURVE')
+        kromme.dimensions = '3D'
+        kromme.bevel_depth = ZOOM_DIK
+        kromme.bevel_resolution = 2
+        sp = kromme.splines.new('POLY')
+        sp.points.add(len(punten) - 1)
+        for pt, q in zip(sp.points, punten):
+            pt.co = (q.x, q.y, q.z, 1.0)
+        sp.use_cyclic_u = True
+        ob = bpy.data.objects.new('zoom.' + k, kromme)
+        bpy.context.scene.collection.objects.link(ob)
+        deps = bpy.context.evaluated_depsgraph_get()
+        me = bpy.data.meshes.new_from_object(ob.evaluated_get(deps))
+        bpy.data.objects.remove(ob)
+        bpy.data.curves.remove(kromme)
+        zoom = bpy.data.objects.new('wapenrok-lijf-zoom.' + k, me)  # aan het skelet zoals de wapenrok (bakken.py, LIJFJE)
+        bpy.context.scene.collection.objects.link(zoom)
+        zoom.data.materials.append(M['wapenrok-goud'])
+        zacht(zoom)
+        delen.append(zoom)
+    return delen
 
 
 def hangen(rok, lijf, mouwen, cy, z_riem, z_zoom):
@@ -1770,6 +1807,7 @@ def bouw():
         pass
     lijfje = bpy.data.objects['wapenrok-lijf']
     rok = bpy.data.objects['wapenrok-rok']
+    armsgat_zoom(lijf_b, rig, mouwen, lijfje, M)
     nek = rig.matrix_world @ rig.pose.bones['neck01'].head
     riem_en_hangers(bvh_van([(lijfje, None), (rok, None)]), nek.y + 0.01, riem_z, M)
     kraag(lijf_b, rig, mouwen, lijfje, M)
