@@ -1216,6 +1216,31 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     return [lijfje, rok]
 
 
+SCHOUDER_LANG = 0.07  # hoe ver de wapenrok over de bovenarm valt (meter, langs de arm)
+SCHOUDER_WIJD = 0.012  # hoe wijd hij onderaan van de mouw af staat
+
+
+def schouderstukken(rig, mouwen, M):
+    """De wapenrok over de schouders (Marcel, 25 okt: "Schouders lijken nog niet aan te sluiten. Bij de referentie lijkt de
+    kleding over de schouder heen te lopen"): de wapenrok houdt op aan de rand van de romp, en de mouw liep door tot in de
+    kap, met een harde naad. Nu valt er over elke schouder een stuk van dezelfde stof, als een poncho: van boven op de
+    schouder (onder de kap) langs de bovenarm naar beneden, naar onderen wijder, en de mouw komt eronder uit."""
+    delen = []
+    for k in ('L', 'R'):
+        a = rig.matrix_world @ rig.pose.bones[f'upperarm01.{k}'].head
+        e = rig.matrix_world @ rig.pose.bones[f'upperarm02.{k}'].tail
+        as_ = (e - a).normalized()
+        dichtbij = [((v.co - a).dot(as_) < SCHOUDER_LANG + 0.06) and ((v.co - a).dot(as_) > -0.08) for v in mouwen.data.vertices]
+        bvh = bvh_van([(mouwen, dichtbij)])
+        p = lambda t, th, a=a, as_=as_: (a + as_ * (-0.035 + (SCHOUDER_LANG + 0.035) * t), as_)
+        st = koker('wapenrok-schouder.' + k, bvh, p, [i / 10 for i in range(11)],
+                   lambda t, th: 0.006 + SCHOUDER_WIJD * t ** 1.5, n=64, mat=M['wapenrok'], ver=0.25)
+        dik(st, 0.005)
+        zacht(st)
+        delen.append(bak_mod(st))
+    return delen
+
+
 def hangen(rok, lijf, mouwen, cy, z_riem, z_zoom):
     """De rok onder zijn eigen gewicht (Marcel: "En zwaartekracht?"): een voorpand en een achterpand, aan de zijkant open vanaf
     de heup zoals een wapenrok, vast aan de riem, en met de stofsimulatie van Blender over de benen gevallen. (De eerste
@@ -1709,6 +1734,7 @@ def bouw():
         pass
     lijfje = bpy.data.objects['wapenrok-lijf']
     rok = bpy.data.objects['wapenrok-rok']
+    schouderstukken(rig, mouwen, M)
     nek = rig.matrix_world @ rig.pose.bones['neck01'].head
     riem_en_hangers(bvh_van([(lijfje, None), (rok, None)]), nek.y + 0.01, riem_z, M)
     kraag(lijf_b, rig, mouwen, lijfje, M)
