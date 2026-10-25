@@ -111,6 +111,51 @@ def meet(model_pad, r):
     return overlap, stroken, ref_m, model, s
 
 
+def lab(rgb):
+    """Van sRGB (0-255) naar Lab (D65)."""
+    def lin(c):
+        c = c / 255
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+    r, g, b = (lin(c) for c in rgb)
+    X = (0.4124 * r + 0.3576 * g + 0.1805 * b) / 0.95047
+    Y = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    Z = (0.0193 * r + 0.1192 * g + 0.9505 * b) / 1.08883
+    f = lambda t: t ** (1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116
+    return 116 * f(Y) - 16, 500 * (f(X) - f(Y)), 200 * (f(Y) - f(Z))
+
+
+def kleuren(model_pad, r):
+    """Per strook de gemiddelde kleur (Lab) van de referentie en van het model op spelmaat, elk binnen zijn eigen lijf."""
+    vel = Image.open(VEL).convert('RGBA')
+    rij = ALLE.index(r)
+    ref = vel.crop((0, rij * CH, CB, (rij + 1) * CH))
+    ref_m = lijf(masker(ref))
+    rb = ref_m.getbbox()
+    ons = Image.open(model_pad).convert('RGBA')
+    ons_lijf = lijf(masker(ons))
+    ob = ons_lijf.getbbox()
+    s = (rb[3] - rb[1]) / (ob[3] - ob[1])
+    klein = ons.resize((max(1, round(ons.width * s)), max(1, round(ons.height * s))), Image.BOX)
+    km = ons_lijf.resize(klein.size, Image.BOX).point(lambda a: 255 if a > 200 else 0)  # alleen pixels die helemaal lijf zijn
+    kb = km.getbbox()
+    uit = []
+    for naam, a, b in STROKEN:
+        rij_kl = []
+        for beeld, m, bb in ((ref, ref_m.point(lambda v: v), rb), (klein, km, kb)):
+            hoog = bb[3] - bb[1]
+            px, mp = beeld.load(), m.load()
+            som, n = [0.0, 0.0, 0.0], 0
+            for y in range(bb[1] + round(a * hoog), bb[1] + round(b * hoog)):
+                for x in range(bb[0], bb[2]):
+                    if mp[x, y] and px[x, y][3] > 200:
+                        for c in range(3):
+                            som[c] += px[x, y][c]
+                        n += 1
+            rij_kl.append(lab([c / max(n, 1) for c in som]))
+        uit.append((naam, rij_kl[0], rij_kl[1]))
+    return uit
+
+
 def plaat(ref_m, model, uit, schaal=8):
     w, h = ref_m.size
     p = Image.new('RGB', (w * schaal, h * schaal), GRIJS)
@@ -131,3 +176,8 @@ if __name__ == '__main__':
         plaat(ref_m, model, f'{uit}/omtrek-{r}.png')
         print(f'{r}: samen {overlap:.2f}  ' + '  '.join(f'{n} {l:+.1f}/{rt:+.1f}' for n, l, rt in stroken))
     print(f'gemiddeld samen {totaal / len(richtingen):.3f}')
+    if 'kleur' in sys.argv[4:]:
+        # per strook: de helderheid (L) en de kleur (a, b) van de referentie, en hoeveel het model ervan afwijkt
+        for r in richtingen:
+            print(r, '  '.join(f'{n} L{rk[0]:.0f}{mk[0] - rk[0]:+.0f} a{rk[1]:.0f}{mk[1] - rk[1]:+.0f} b{rk[2]:.0f}{mk[2] - rk[2]:+.0f}'
+                                for n, rk, mk in kleuren(f'{kaart}/eigen-{r}-staan.png', r)))

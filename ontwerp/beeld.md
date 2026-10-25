@@ -2249,6 +2249,16 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   rand en een lagere koepel (bij ons donkergrijs en hoger; Marcel vond hem eerder te licht), de kap en de baard zijn een
   donkere massa (bij ons lichtgrijze maliën en een licht, oranje gezicht), de laarzen lichtbruin en breed met grote
   omslagen, en het geheel helderder en verzadigder.
+- *Helm, kap, laarzen en kleuren naar de referentie* (Marcel: "Ja doe dat"). `omtrek.py ... kleur` meet per strook de
+  gemiddelde kleur (Lab) op spelmaat, de referentie en het model elk binnen zijn eigen lijf. Eerst was het model 4 tot
+  13 punten donkerder en veel minder geel (b 10 tot 24 lager), de helm 12 donkerder en geler, de laarzen donkerder en
+  minder warm. Nu: de helm helder blauwig zilver (#a0a6bc, de patina zachter), de kap van maliën en de baard donker (de
+  baard bijna zwart, minder grijze strengen), het geel en het blauw van de wapenrok voller (#ffbc12, #2258c8), de gele
+  baan naar zijn rechterkant en breed zoals op het vel van het spel (in Z links in beeld; op de rok bijna even breed),
+  het wambuis warmer (#a05824), de laarzen lichter en warmer bruin met een hogere, wijdere omslag, en het geheel iets
+  helderder belicht (`belichting` 0,6). Per strook nu meestal binnen een paar punten (`uit/blender/omtrek-spelmaat-kleur.png`);
+  de benen nog 4 tot 8 te licht, en in W de schouders minder geel (bij de referentie zie je daar de wapenrok, bij ons
+  valt de mouw ervoor). De speer is nog dikker en donkerder dan die van de referentie, met een kleiner blad.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

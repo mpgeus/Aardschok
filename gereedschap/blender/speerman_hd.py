@@ -716,13 +716,16 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     k.zet(sep.inputs[0], p)
     x, y, z = sep.outputs['X'], sep.outputs['Y'], sep.outputs['Z']
     boven = k.glad(z, z_riem - 0.004, z_riem + 0.004)
-    breed = k.w('ADD', 0.075, k.w('MULTIPLY', boven, 0.035))
-    baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.015)), breed), 0.003, -0.003)
+    # de gele baan naar zijn rechterkant (-x) en breed, zoals op het vel van het spel: in Z links in beeld, met rechts in
+    # beeld veel blauw en links een smalle blauwe rand; op de rok bijna even breed (in Z was de rok te blauw)
+    breed = k.w('ADD', 0.1, k.w('MULTIPLY', boven, 0.01))
+    baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.05)), breed), 0.003, -0.003)
     rechts = k.glad(x, 0.003, -0.003)
     kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
     achter = k.glad(y, 0.0, 0.03)
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
-    kl = k.meng(f, lin('#1f53b0'), lin('#f7b21e'))
+    # voller dan eerst: op spelmaat was het geel naast het vel van het spel te dof (omtrek.py, kleur: b 10 tot 24 lager)
+    kl = k.meng(f, lin('#2258c8'), lin('#ffbc12'))
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
@@ -738,7 +741,8 @@ def mat_laars():
     r = k.ruis(18, 5)
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], k.plek())
-    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#7c4828'), lin('#2e1609'))
+    # lichter en warmer bruin, zoals de laarzen van de referentie (op spelmaat waren ze donkerder en veel minder warm)
+    kl = k.meng(k.glad(r, 0.3, 0.75, 0, 0.4), lin('#b4622a'), lin('#52280e'))
     kl = k.meng(k.glad(sep.outputs['Z'], 0.017, 0.014), kl, lin('#1a0f09'))  # de zool tot de naad
     # leer dat je ziet: de nerf en de kreukels van de textuur sterker, en slijtage (lichter) op de bolle delen: de neus, de
     # hiel, de randen (Marcel: "moeten leer zijn met gesp")
@@ -781,7 +785,8 @@ def mat_malien():
     cc = k.n('ShaderNodeCombineColor')
     for i in range(3):
         k.zet(cc.inputs[i], toon)
-    licht = k.meng(1.0, lin('#a89a8c'), cc.outputs[0], 'MULTIPLY')
+    # donkerder dan eerst: bij de referentie zijn kap en baard één donkere massa
+    licht = k.meng(1.0, lin('#6e6258'), cc.outputs[0], 'MULTIPLY')
     kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#17120e'), licht)
     k.bobbel(ringen, 1.0, 0.003)
     m = k.af(kl, ruw=0.38, metaal=0.85, holte=0.55)
@@ -797,7 +802,7 @@ def mat_staal(naam='staal', kleur='#9aa0a8', ruw=0.32):
     kl = k.meng(k.glad(vlek, 0.45, 0.75, 0, 0.35), lin(kleur), lin('#4d4a46'))
     # de vlekken, krassen en het reliëf van echt plaatstaal met een zachte patina (Poly Haven; Marcel: "kunnen we echte
     # materialen gebruiken")
-    kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.3, contrast=0.9, kracht=0.8)
+    kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.3, contrast=0.5, kracht=0.8)
     r = k.w('ADD', r, k.w('MULTIPLY', k.w('SUBTRACT', 1.0, k.fac), 0.45))  # de donkere patina matter dan het blanke staal
     k.bobbel(k.w('ADD', k.w('MULTIPLY', kras, 0.3), k.w('MULTIPLY', vlek, 0.6)), 0.25, 0.002)
     return k.af(kl, ruw=r, metaal=1.0, holte=0.3)
@@ -830,9 +835,9 @@ def mat_haar():
     uit = nt.nodes.new('ShaderNodeOutputMaterial')
     h = nt.nodes.new('ShaderNodeBsdfHairPrincipled')
     h.parametrization = 'MELANIN'
-    h.inputs['Melanin'].default_value = 0.5
+    h.inputs['Melanin'].default_value = 0.8
     h.inputs['Melanin Redness'].default_value = 0.1
-    h.inputs['Random Color'].default_value = 0.95  # grijze spikkels, zoals op vel 01
+    h.inputs['Random Color'].default_value = 0.4  # minder grijs: de baard van de referentie is bijna zwart
     h.inputs['Random Roughness'].default_value = 0.4
     h.inputs['Roughness'].default_value = 0.45
     nt.links.new(h.outputs[0], uit.inputs['Surface'])
@@ -849,7 +854,7 @@ def mat_baardvorm():
     fijn = k.ruis(4, 3, rek=(110, 110, 5))     # fijne strengen: snel over de breedte, traag omlaag
     pluk = k.ruis(2, 2, rek=(28, 28, 3))       # plukken
     kl = k.meng(k.glad(pluk, 0.35, 0.65), lin('#2a211b'), lin('#5c4b3e'))
-    kl = k.meng(k.w('MULTIPLY', k.glad(fijn, 0.55, 0.7), 0.85), kl, lin('#aaa39a'))   # grijze strengen
+    kl = k.meng(k.w('MULTIPLY', k.glad(fijn, 0.55, 0.7), 0.4), kl, lin('#6b5f55'))   # een paar grijze strengen
     kl = k.meng(k.glad(fijn, 0.42, 0.28), kl, lin('#120d0a'))                        # donker tussen de strengen
     k.bobbel(k.w('ADD', k.w('MULTIPLY', fijn, 0.7), k.w('MULTIPLY', pluk, 0.3)), 0.9, 0.003)
     return k.af(kl, ruw=0.75, holte=0.5)
@@ -1409,17 +1414,18 @@ def laarzen(lijf, rig, M):
 
         # de omgeslagen rand en de enkelriem liggen strak op de laars, in zijn vorm (rond stonden ze van het been af, of
         # sneed de kuit erdoor)
-        omslag = koker('omslag.' + k, lb, recht(boven, as_), [0.004 + 0.048 * i / 6 for i in range(7)],
-                       lambda t, th: 0.003 + 0.004 * t / 0.052, n=96, mat=M['omslag'], ver=0.25)
+        # hoog en wijd, zoals de grote omslagen van de referentie
+        omslag = koker('omslag.' + k, lb, recht(boven, as_), [0.004 + 0.054 * i / 6 for i in range(7)],
+                       lambda t, th: 0.004 + 0.012 * t / 0.058, n=96, mat=M['omslag'], ver=0.25)
         dik(omslag, 0.006)
         delen.append(bak_mod(omslag))
         # de opgerolde onderrand van de omslag
         bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.0045, major_segments=96, minor_segments=12,
-                                         location=boven + as_ * 0.052, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
+                                         location=boven + as_ * 0.058, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
         rol = bpy.context.active_object
         rol.name = 'omslag.rol.' + k
         rol.data.materials.append(M['omslag'])
-        passend(rol, lb, boven, as_, 0.1, 0.01, proef=-0.004)
+        passend(rol, lb, boven, as_, 0.1, 0.018, proef=-0.004)
         zacht(rol)
         delen.append(rol)
         # de enkelriem en de gesp aan de buitenkant
@@ -1608,7 +1614,7 @@ def bouw():
     M = {
         'huid': mat_huid(),
         'hozen': mat_stof('hozen', '#1c2038', 30, 0.3, textuur=('hessian_230', 0.5)),
-        'wambuis': mat_stof('wambuis', '#6e3c22', 20, 0.15),
+        'wambuis': mat_stof('wambuis', '#a05824', 20, 0.15),  # warmer: de schouders waren op spelmaat te dof
         'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
         'oog': mat_oog(),
         'haar': mat_haar(),
@@ -1616,13 +1622,13 @@ def bouw():
         'malien': mat_malien(),
         # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de
         # generator: ertussenin
-        'helm': mat_staal('helm', '#8c8a94', 0.24),
+        'helm': mat_staal('helm', '#a0a6bc', 0.24),  # helder blauwig zilver, zoals de referentie (op spelmaat 12 donkerder)
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
         'riem': mat_leer('riem', '#793a28', '#3a160c'),
         'leer': mat_leer('leer', '#5a3418'),
         'laars': mat_laars(),
-        'omslag': mat_leer('omslag', '#7c4c2a', '#3e2412'),
+        'omslag': mat_leer('omslag', '#9a5e30', '#4e2c14'),
         'armstuk': mat_leer('armstuk', '#4d3730', '#1e1410'),
         'armrand': mat_leer('armrand', '#6e4c36', '#2e1e14'),
         'schede': mat_leer('schede', '#8a4630', '#2e120a'),
