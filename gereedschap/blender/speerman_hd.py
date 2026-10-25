@@ -437,10 +437,12 @@ def mens():
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.38) * s, 0.06, -1))
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.36) * s, -0.06 if k == 'L' else 0.06, -1))
+    # de linkerhand voor het lijf, bij de buik, zoals op het vel in W (Marcel: "de arm van de referentie lijkt verder naar
+    # voren gedraaid dan wat wij hebben"); eerst hing hij recht naast het lijf
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.L', (0.06, -0.22, -1))
-    richt(rig, 'wrist.L', (0.02, -0.2, -1))
+        richt(rig, f'{b}.L', (0.0, -0.36, -1))
+    richt(rig, 'wrist.L', (0.0, -0.32, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.R', (-0.08, -0.75, 0.9))  # de speerhand hoger, op borsthoogte, zoals op het vel
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
@@ -1390,7 +1392,7 @@ def riem_en_hangers(bvh, cy, z_riem, M):
         delen.append(bak_mod(o))
     for x, naam in ((-1, 'schede'), (1, 'hanger')):
         d = Vector((0.86 * x, -0.5, 0)).normalized()
-        r = straal(bvh, Vector((0, cy, z_riem - 0.05)), d) + 0.02
+        r = (straal(bvh, Vector((0, cy, z_riem - 0.05)), d) or straal(bvh, Vector((0, cy, z_riem)), d) or 0.16) + 0.02
         c = Vector((0, cy, 0)) + d * r
         draai = math.atan2(d.y, d.x) + math.pi / 2
         stukken = ((('lus', 0.0, (0.04, 0.02, 0.07), M['riem']), ('schede', -0.11, (0.042, 0.026, 0.17), M['schede']),
@@ -1560,17 +1562,18 @@ def laarzen(lijf, rig, M):
         # de omgeslagen rand en de enkelriem liggen strak op de laars, in zijn vorm (rond stonden ze van het been af, of
         # sneed de kuit erdoor)
         # hoog en wijd, zoals de grote omslagen van de referentie
-        omslag = koker('omslag.' + k, lb, recht(boven, as_), [0.004 + 0.054 * i / 6 for i in range(7)],
-                       lambda t, th: 0.004 + 0.012 * t / 0.058, n=96, mat=M['omslag'], ver=0.25)
+        # lager en strakker om de laars (Marcel: "de bovenkant van de laarzen wat te groot, lijken nu grote ringen")
+        omslag = koker('omslag.' + k, lb, recht(boven, as_), [0.004 + 0.036 * i / 6 for i in range(7)],
+                       lambda t, th: 0.003 + 0.005 * t / 0.04, n=96, mat=M['omslag'], ver=0.25)
         dik(omslag, 0.006)
         delen.append(bak_mod(omslag))
         # de opgerolde onderrand van de omslag
         bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.0045, major_segments=96, minor_segments=12,
-                                         location=boven + as_ * 0.058, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
+                                         location=boven + as_ * 0.04, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
         rol = bpy.context.active_object
         rol.name = 'omslag.rol.' + k
         rol.data.materials.append(M['omslag'])
-        passend(rol, lb, boven, as_, 0.1, 0.018, proef=-0.004)
+        passend(rol, lb, boven, as_, 0.1, 0.009, proef=-0.004)
         zacht(rol)
         delen.append(rol)
         # de enkelriem en de gesp aan de buitenkant

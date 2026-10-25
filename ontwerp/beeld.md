@@ -2332,7 +2332,11 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   schoudergewricht (`ZOOM_UIT` 1,12; op 0,97 lag het als een lijn midden op de borst), per hoek op de buitenkant van
   wapenrok, mouw en lijf; aan het skelet zoals de wapenrok. Op spelmaat een smalle gouden rand tussen het blauw en de
   mouw, in alle richtingen. Daarna (Marcel: "De helm steekt aan achterkant te ver uit, wat beter verdelen"): de helm 1 cm naar
-  achteren op het hoofd in plaats van 2,2 (`HELM_ACHTER`); het gezicht blijft eronder zichtbaar.
+  achteren op het hoofd in plaats van 2,2 (`HELM_ACHTER`); het gezicht blijft eronder zichtbaar. En (Marcel: "de bovenkant van de laarzen wat te groot, lijken nu grote ringen", en "de arm van de
+  referentie lijkt verder naar voren gedraaid dan wat wij hebben. Staat net iets meer westelijker"): de omslag lager
+  (4 cm in plaats van 5,8) en strakker om de laars, en de linkerarm naar voren met de onderarm gebogen, zodat de hand
+  voor het lijf hangt zoals op het vel in W. (Met de hand nog verder naar voren raakte de stof van de rok in de knoop
+  met de arm, en vond de schede aan de riem geen plek meer.)
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
