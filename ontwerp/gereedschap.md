@@ -215,6 +215,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   en het kleurverschil per pixel per richting en gemiddeld), en `python gereedschap/blender/palet.py <map> [nog een map]`
   (per deel de mediaan in Lab van het vel en van elk model, op Z; daarna per kleurgroep over alle richtingen, maar die
   mengt delen). Met halve maat en 16 monsters rendert alles in een minuut; vergelijk alleen renders van dezelfde maat.
+  Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
+  in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
+  onder de riem, hoe vaak het vel daar geel of blauw is, per richting.
 
 
 ## Testen in de browser

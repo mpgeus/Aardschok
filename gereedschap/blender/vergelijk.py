@@ -42,8 +42,9 @@ def rand(b):
     return uit
 
 
-def uitgelijnd(model_pad, r):
-    """De referentie en het model op het vak van het vel (44 bij 94), het model zoals omtrek.meet het uitlijnt."""
+def uitgelijnd(model_pad, r, met_maat=False):
+    """De referentie en het model op het vak van het vel (44 bij 94), het model zoals omtrek.meet het uitlijnt. Met
+    met_maat ook hoe (de maat van het verkleinde model en waar het staat), om een ander beeld zo te leggen (patroon.py)."""
     vel = Image.open(omtrek.VEL).convert('RGBA')
     rij = omtrek.ALLE.index(r)
     ref = vel.crop((0, rij * omtrek.CH, omtrek.CB, (rij + 1) * omtrek.CH))
@@ -53,7 +54,8 @@ def uitgelijnd(model_pad, r):
     ons_lijf = omtrek.lijf(omtrek.masker(ons))
     ob = ons_lijf.getbbox()
     s = (rb[3] - rb[1]) / (ob[3] - ob[1])
-    klein = ons.resize((max(1, round(ons.width * s)), max(1, round(ons.height * s))), Image.BOX)
+    maat = (max(1, round(ons.width * s)), max(1, round(ons.height * s)))
+    klein = ons.resize(maat, Image.BOX)
     klein.putalpha(klein.getchannel('A').point(lambda v: 255 if v >= 128 else 0))
     klein = rand(klein)
     km = omtrek.lijf(omtrek.masker(klein))
@@ -73,6 +75,8 @@ def uitgelijnd(model_pad, r):
     vlak = Image.new('RGBA', (omtrek.CB * 3, omtrek.CH), (0, 0, 0, 0))
     vlak.paste(klein, (beste[1], dy), klein)
     model = vlak.crop((omtrek.CB, 0, 2 * omtrek.CB, omtrek.CH))
+    if met_maat:
+        return ref, model, ref_lijf, omtrek.lijf(omtrek.masker(model)), (maat, beste[1], dy)
     return ref, model, ref_lijf, omtrek.lijf(omtrek.masker(model))
 
 

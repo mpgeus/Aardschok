@@ -351,9 +351,10 @@ def mat_wambuis():
     kus = k.n('ShaderNodeAttribute', attribute_name='kussen').outputs['Fac']
     # warm roodbruin met goudgele toppen op de kussens, zoals op het vel (de analyse van 25 okt: bij het vel licht L46 a21
     # b50, midden L28 a18 b21; bij ons was het donkerder en minder rood, zonder lichte toppen)
-    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.25), lin('#965238'), lin('#4c2410'))
+    kl = k.meng(k.glad(v, 0.3, 0.7, 0, 0.45), lin('#965238'), lin('#4c2410'))  # gevlekt, zoals het vel
     kl = k.meng(k.glad(kus, 0.8, 0.98, 0.0, 0.3), kl, lin('#b0684a'))  # het licht op de bolle kussens
-    kl = k.meng(k.glad(kus, 0.15, 0.8, 0.85, 0.0), kl, lin('#2e1206'))
+    # de naden zacht: met 0,85 lazen de kussens op spelmaat als scherpe schubben, het vel is gemêleerd
+    kl = k.meng(k.glad(kus, 0.15, 0.8, 0.55, 0.0), kl, lin('#2e1206'))
     kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
     return k.af(kl, ruw=0.9, holte=0.55)
 
@@ -780,28 +781,27 @@ GEEL_GLOED = 0.12  # hoe sterk de wapenrok gloeit (0 is gewoon belicht): het vel
 
 
 def mat_wapenrok(z_riem, z_zoom=0.0):
-    """Van voren blauw met een brede gele baan in het midden, van de kraag tot de zoom; op de rok smaller. Op de rug
-    gevierendeeld (vel 01, en beeld.md, "De referentie, onderdeel voor onderdeel")."""
+    """Van voren blauw met een brede gele baan, wat naar zijn rechterkant, van de kraag tot de zoom. Op de rug boven de
+    riem zijn rechterhelft geel, op de rok een gele baan in het midden; de zijkanten blauw. Overal hetzelfde lijf (Marcel,
+    25 okt: "de wapenrok moet inderdaad overal gelijk zijn"); het vel van het spel is dat niet (in N ligt het geel boven op
+    de rug links, in NO en NW rechts), en dit patroon past over de acht richtingen samen het best (beeld.md, "Eén wapenrok
+    voor alle richtingen")."""
     k = Knopen('wapenrok')
     p = k.plek()
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], p)
     x, y, z = sep.outputs['X'], sep.outputs['Y'], sep.outputs['Z']
-    # links en rechts per richting om te keren (eigen.py, BEELD): het vel van het spel is per richting getekend, niet één
-    # lijf; in NO ligt het geel op de rug aan de andere kant dan in N
-    om = k.n('ShaderNodeValue', name='patroon')
-    om.outputs[0].default_value = 1.0
-    x = k.w('MULTIPLY', x, om.outputs[0])
     boven = k.glad(z, z_riem - 0.004, z_riem + 0.004)
     # de gele baan naar zijn rechterkant (-x) en breed, zoals op het vel van het spel: in Z links in beeld, met rechts in
     # beeld veel blauw en links een smalle blauwe rand; op de rok bijna even breed (in Z was de rok te blauw)
     breed = k.w('ADD', 0.1, k.w('MULTIPLY', boven, 0.01))
     baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.05)), breed), 0.003, -0.003)
     rechts = k.glad(x, 0.003, -0.003)
-    # op de rug van hemzelf linksboven geel, rechtsonder geel (van achteren gezien links boven), zoals het vel van het spel
-    kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, boven))
+    # op de rug boven de riem zijn rechterhelft geel, op de rok een gele baan van 26 cm in het midden (wat naar rechts)
+    rok_baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.02)), 0.13), 0.003, -0.003)
+    rug = k.w('ADD', k.w('MULTIPLY', boven, rechts), k.w('MULTIPLY', k.w('SUBTRACT', 1.0, boven), rok_baan))
     achter = k.glad(y, 0.0, 0.03)
-    f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
+    f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', rug, achter))
     # voller dan eerst: op spelmaat was het geel naast het vel van het spel te dof (omtrek.py, kleur: b 10 tot 24 lager)
     kl = k.meng(f, lin('#2258c8'), lin('#f0a812'))
     v = k.ruis(7, 2)
@@ -871,10 +871,10 @@ def mat_malien():
     for i in range(3):
         k.zet(cc.inputs[i], toon)
     # donkerder dan eerst: bij de referentie zijn kap en baard één donkere massa
-    licht = k.meng(1.0, lin('#b0a090'), cc.outputs[0], 'MULTIPLY')  # warm grijsbruin, per vlak gemeten op het vel (L40 a5 b9)
-    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#221a14'), licht)
+    licht = k.meng(1.0, lin('#8e8278'), cc.outputs[0], 'MULTIPLY')  # warm grijsbruin; op het vel in Z L40, in de rug L17 tot 34
+    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#16100c'), licht)
     k.bobbel(ringen, 1.0, 0.003)
-    m = k.af(kl, ruw=0.38, metaal=0.85, holte=0.55)
+    m = k.af(kl, ruw=0.55, metaal=0.85, holte=0.65)  # doffer: de glinsteringen gaven in de rug een lichte bult
     m['glans'] = True  # eigen.py maakt dit materiaal niet mat: de glinstering maakt de ringen leesbaar
     return m
 
@@ -909,6 +909,10 @@ def mat_hout():
     k.zet(langs.inputs[1], k.w('ADD', p.outputs['X'], p.outputs['Y']))
     kl = k.met_textuur(kl, 'ash_veneer', 0.6, contrast=1.0, kracht=0.6, vec=langs.outputs[0], projectie='FLAT')
     k.bobbel(nerf, 0.25, 0.002)
+    # wat gloed, zodat de schaduwkant niet zwart wordt: op spelmaat gaf die een doorlopende zwarte rand langs de schacht,
+    # waar het vel een roodbruine schacht van twee pixels met hier en daar een donkere pixel heeft
+    k.zet(k.bsdf.inputs['Emission Color'], kl)
+    k.bsdf.inputs['Emission Strength'].default_value = 0.25
     return k.af(kl, ruw=0.55)
 
 
@@ -1290,6 +1294,7 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     hangen(rok, lijf, mouwen, cy, z_riem, z_zoom)
     zacht(rok)
     dik(rok, 0.005)
+    rok['midden_y'], rok['z_riem'] = cy, z_riem  # voor de hoekpas (eigen.py hoek, patroon.py)
     return [lijfje, rok]
 
 
@@ -1802,7 +1807,7 @@ def bouw():
     riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z  # 2 cm lager: de borst wat langer, zoals op het vel
     M = {
         'huid': mat_huid(rig),
-        'hozen': mat_stof('hozen', '#3e4a88', 30, 0.3, textuur=('hessian_230', 0.5)),  # blauw, zoals op het vel
+        'hozen': mat_stof('hozen', '#4c5aa2', 30, 0.3, textuur=('hessian_230', 0.5)),  # blauw, zoals op het vel
         'wambuis': mat_wambuis(),
         'handschoen': mat_leer('handschoen', '#5a3a26', '#22140c'),  # donker: de vuist los van de schacht, zoals op het vel
         'oog': mat_oog(),
@@ -1812,7 +1817,7 @@ def bouw():
         'malien': mat_malien(),
         # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de
         # generator: ertussenin
-        'helm': mat_staal('helm', '#a0a6bc', 0.24),  # helder blauwig zilver, zoals de referentie (op spelmaat 12 donkerder)
+        'helm': mat_staal('helm', '#949ab0', 0.24),  # helder blauwig zilver, zoals de referentie (op spelmaat 12 donkerder)
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
         'riem': mat_leer('riem', '#965038', '#4a2010'),

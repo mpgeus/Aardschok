@@ -2403,8 +2403,8 @@ per richting en gemiddeld) en `palet.py` (nu eerst per vlak). Het kleurverschil 
   grijsbruin (de kap L40 a5 b9), en was de helm al gelijk (L46). Die stap uit de analyse was fout: terug, en de kap
   lichter (`mat_malien`).
 - *Het patroon van de wapenrok per richting*: het vel is per richting getekend, niet één lijf; in NO ligt het geel op de
-  rug aan de andere kant dan in N. `BEELD` in `eigen.py` keert het patroon om in NO en NW (een knoop `patroon` in
-  `mat_wapenrok`), zoals het blad van de speer al per richting naar de camera draait. NO ging van 43,5 naar 24,5.
+  rug aan de andere kant dan in N. Eerst keerde `BEELD` het patroon om in NO en NW (NO van 43,5 naar 24,5); Marcel wilde
+  dat niet ("de wapenrok moet inderdaad overal gelijk zijn"): zie hieronder, "Eén wapenrok voor alle richtingen".
 - *NW gespiegeld*, een gespiegelde NO zoals O en ZO gespiegelde westkanten zijn: de omtrek in NW van 0,77 naar 0,84.
 - *De wapenrok gloeit wat na* (`GEEL_GLOED` 0,12): het geel blijft in de schaduw oranje in plaats van olijf (geel boven
   L57 naar 73, het vel 71), en de blauwe rok zakt minder weg (L15 naar 17, het vel 21). Het geel iets dieper (`#f0a812`).
@@ -2418,6 +2418,29 @@ per richting en gemiddeld) en `palet.py` (nu eerst per vlak). Het kleurverschil 
 - *Wat nog scheelt*: de helm een tikje licht (L51 tegen 46), de schaduwkant van de kap te licht (L28 tegen 19), de hozen
   te donker (L7 tegen 12); de schubben op de mouwen zijn scherper dan het gemêleerde van het vel; de speer heeft geen
   onderbroken donkere rand.
+
+**Eén wapenrok voor alle richtingen (25 okt).** Marcel, bij NW omcirkeld: "dit gaat niet goed nog", en "de wapenrok moet
+inderdaad overal gelijk zijn". Dus geen patroon per richting meer, maar één lijf dat over de acht richtingen samen het best
+past. Gereedschap: de hoekpas (`eigen.py ... staan hoek`: elke pixel van de wapenrok krijgt de plek waar hij gemaakt is als
+kleur) en `patroon.py`, dat per vak van 10 graden rond het lijf telt hoe vaak het vel daar geel of blauw is, boven en onder
+de riem, per richting. Wat eruit kwam:
+- *Voor* (Z, ZW, ZO, W, O) is het vel eenduidig: een gele baan van de kraag tot de zoom, wat naar zijn rechterkant (van -60
+  tot +15 graden), de rest blauw. Zo was het al.
+- *De rok op de rug*: in N, NO en NW samen een gele baan in het midden (van 140 tot -125 graden), de zijkanten blauw. Het
+  oude patroon had daar gevierendeeld, met het geel op één helft.
+- *De rug boven de riem* spreekt zichzelf tegen: N heeft het geel links (zijn linkerkant), NO en NW rechts. Twee
+  richtingen tegen één: zijn rechterhelft geel. Daarmee is boven de wapenrok in twee helften gedeeld, voor en achter:
+  rechts geel, links blauw.
+- Hoeveel pixels van de wapenrok de goede kleur hebben, over alle richtingen: het oude patroon overal gelijk 67 procent,
+  omgekeerd in NO en NW 82, het nieuwe 83 (Z 95, ZW 88, W 79, NW 97, N 55, NO 92, O 84, ZO 81). Alleen N verliest (van 77
+  naar 55): daar staat de bovenkant van de rug nu andersom dan op het vel.
+- Verder in deze ronde: de kap in de rugaanzichten was een lichte, bobbelige bult (per vlak in N en NW L28 tot 40 tegen 17
+  tot 34 op het vel): donkerder en doffer. De helm een tikje donkerder (L47, het vel 46), de hozen lichter (L11 tegen 12),
+  de naden van de mouwen zachter en de mouwen meer gevlekt, en de schacht van de speer gloeit wat na, zodat zijn
+  schaduwkant geen doorlopende zwarte rand meer is.
+- Samen, tegen de stand oké: het kleurverschil per pixel van 27,3 naar 23,4 (Z 20,2  ZW 23,3  W 26,3  NW 18,3  N 33,7
+  NO 21,6  O 22,2  ZO 21,9), de omtrek van 0,79 naar 0,84. Renders en het vel met het vel, oké en nu:
+  `uit/blender/staat-een-lijf-25okt/`.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

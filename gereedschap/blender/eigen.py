@@ -10,6 +10,7 @@
 #
 #   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
+# Met `staan hoek` (naar een eigen map) de hoekpas voor patroon.py: de plek op de wapenrok als kleur.
 import bpy
 import math
 import os
@@ -185,10 +186,9 @@ def blad_naar_camera(hoek):
 # omtrek (omtrek.py) over draaiingen van 5 graden: het vel staat niet om de 45 graden (W staat 25 graden meer naar de
 # kijker, NW 20 graden meer van hem af), en de oostkanten O en ZO zijn er gespiegelde westkanten (de speer in de
 # linkerhand). Samen viel de omtrek gemiddeld van 0,79 naar 0,83. NW is er een gespiegelde NO (de analyse van 25 okt:
-# de omtrek 0,77 naar 0,84). Het derde getal keert het patroon van de wapenrok om (speerman_hd.mat_wapenrok): in NO ligt
-# het geel op de rug op het vel aan de andere kant dan in N.
-BEELD = {'Z': (5, False, False), 'ZW': (40, False, False), 'W': (65, False, False), 'NW': (-145, True, True),
-         'N': (185, False, False), 'NO': (-145, False, True), 'O': (65, True, False), 'ZO': (25, True, False)}
+# de omtrek 0,77 naar 0,84).
+BEELD = {'Z': (5, False), 'ZW': (40, False), 'W': (65, False), 'NW': (-145, True), 'N': (185, False),
+         'NO': (-145, False), 'O': (65, True), 'ZO': (25, True)}
 SPIEGEL = Matrix.Diagonal((-1, 1, 1, 1))  # om het vlak van de camera in rust (x = 0)
 
 
@@ -205,10 +205,7 @@ def spiegel_png(pad):
 
 
 def render_richting(sc, naam, r, lichten):
-    hoek, spiegel, om = BEELD[r]
-    for m in bpy.data.materials:
-        if m.node_tree and m.node_tree.nodes.get('patroon'):
-            m.node_tree.nodes['patroon'].outputs[0].default_value = -1.0 if om else 1.0
+    hoek, spiegel = BEELD[r]
     render(sc, naam, hoek, lichten, spiegel)
 
 
@@ -280,6 +277,42 @@ def plek_vast():
                 nt.links.new(at.outputs['Vector'], link.to_socket)
 
 
+def hoekpas(sc):
+    """Voor patroon.py: de wapenrok geeft de plek waar hij gemaakt is (het kenmerk 'oorsprong', zoals zijn patroon) als
+    kleur, x + 0,5, y + 0,5 en z / 2 + 0,1, rauw en zonder licht; de rest is zwart. Met het midden van de romp en de hoogte
+    van de riem in hoekpas.json."""
+    import json
+    for m in bpy.data.materials:
+        nt = m.node_tree
+        uit = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'] if nt else []
+        if not uit:
+            continue
+        em = nt.nodes.new('ShaderNodeEmission')
+        if m.name.split('.')[0] == 'wapenrok':
+            at = nt.nodes.new('ShaderNodeAttribute')
+            at.attribute_name = 'oorsprong'
+            vm = nt.nodes.new('ShaderNodeVectorMath')
+            vm.operation = 'MULTIPLY_ADD'
+            vm.inputs[1].default_value = (1.0, 1.0, 0.5)
+            vm.inputs[2].default_value = (0.5, 0.5, 0.1)
+            nt.links.new(at.outputs['Vector'], vm.inputs[0])
+            nt.links.new(vm.outputs[0], em.inputs['Color'])
+        else:
+            em.inputs['Color'].default_value = (0, 0, 0, 1)
+        for u in uit:
+            nt.links.new(em.outputs[0], u.inputs['Surface'])
+            for link in list(u.inputs['Displacement'].links):
+                nt.links.remove(link)
+    sc.view_settings.view_transform = 'Raw'
+    sc.view_settings.look = 'None'
+    sc.view_settings.exposure = 0
+    sc.cycles.samples = 1
+    sc.cycles.use_denoising = False
+    sc.cycles.filter_width = 0.01
+    rok = bpy.data.objects['wapenrok-rok']
+    json.dump({'midden_y': rok['midden_y'], 'z_riem': rok['z_riem']}, open(os.path.join(UIT, 'hoekpas.json'), 'w'))
+
+
 SUB = 3  # stappen van de stof per beeld: een beeld is een achtste seconde, de stof rekent op 24 per seconde
 
 
@@ -330,6 +363,8 @@ def main():
     rig['z0'] = rig.location.z
     bk.STAP = STAP
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
+    if 'hoek' in sh.ARGS:
+        hoekpas(sc)
     if 'steek' not in sh.ARGS:
         met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
     if 'staan' in sh.ARGS:
