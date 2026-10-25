@@ -2302,6 +2302,13 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   van een T-shirt. Daarna (Marcel, bij ZW: "Is te dik"): het stuk 5 cm lang en strak over de mouw (2 tot 7 mm), en de
   watten van het wambuis bovenaan de arm dunner (45 procent bij de schouder, vol op 14 cm), zodat de schouder rond
   verloopt in plaats van een blok te worden.
+- *ZW: het hoofd, de armen, de speerhand* (Marcel omcirkelde ZW in zijn geheel). Naast elkaar: bij het vel kijkt hij naar
+  links en omlaag, de neus in profiel, bij ons recht in de camera; bij ons waren de armen lang (de handschoen tot over
+  de dij, bij het vel bij de heup) en stond de speerarm ver uit, met de hand laag. Nu: het hoofd 20 graden naar zijn
+  rechterkant (de speer) en 10 omlaag (`kijk`), de onderarmen korter (`armlengte` 0,85, de pols zonder de schaal van de
+  arm), de speerarm dichter bij het lijf (`arm` 0,3) en de speerhand op borsthoogte. In ZW viel de omtrek van 0,82 naar
+  0,87, gemiddeld 0,83 (`uit/blender/omtrek-zw-naast.png`). Nog anders in ZW: bij ons hangt de linkerhand nog wat lager,
+  zie je meer van de donkere broek, en zijn de laarzen minder grof.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

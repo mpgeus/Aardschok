@@ -61,7 +61,9 @@ INSTELLINGEN = {
     # achter dat van de referentie (Marcel, 25 okt: "Referentie lijkt ook wat meer overeind te staan. Iets naar voren")
     'borst': -4,
     'voeten': 8,             # graden naar buiten (14 stond in Z breder dan de referentie)
-    'arm': 0.4,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 stond in Z 5 pixels te smal)
+    'arm': 0.3,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 in Z te smal, 0,4 in ZW te ver uit)
+    'armlengte': 0.85,       # de onderarmen korter, zoals de gedrongen man van de referentie (de hand bij de heup)
+    'kijk': (-20, 10),       # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag, zoals op het vel
     'benen_in': 2,           # graden dat de dijen naar binnen staan: de voeten dichter bij elkaar, zoals de referentie
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
@@ -397,6 +399,13 @@ def mens():
     for k in ('L', 'R'):
         for b in ('upperleg02', 'lowerleg01', 'lowerleg02'):
             rig.pose.bones[f'{b}.{k}'].scale = (1, INSTELLINGEN['been'], 1)
+    # kortere onderarmen: de pols en de hand zonder de schaal van hun ouder
+    for b in rig.data.bones:
+        if b.name.startswith(('lowerarm02', 'wrist')):
+            b.inherit_scale = 'NONE'
+    for k in ('L', 'R'):
+        for b in ('lowerarm01', 'lowerarm02'):
+            rig.pose.bones[f'{b}.{k}'].scale = (1, INSTELLINGEN['armlengte'], 1)
     bpy.context.view_layer.update()
     # de borst vooruit: de bovenrug wat achterover, de nek en het hoofd weer recht (MakeHuman staat wat ingezakt)
     richting = lambda b: ((rig.matrix_world @ rig.pose.bones[b].tail) - (rig.matrix_world @ rig.pose.bones[b].head)).normalized()
@@ -417,7 +426,7 @@ def mens():
         richt(rig, f'{b}.L', (0.06, -0.22, -1))
     richt(rig, 'wrist.L', (0.02, -0.2, -1))
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.R', (-0.1, -1, 0.5))
+        richt(rig, f'{b}.R', (-0.08, -0.75, 0.9))  # de speerhand hoger, op borsthoogte, zoals op het vel
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
     # de benen wat naar binnen, en de voeten wat naar buiten
     for k, s in (('L', 1), ('R', -1)):
@@ -428,8 +437,15 @@ def mens():
         pb = rig.pose.bones[f'foot.{k}']
         nu = ((rig.matrix_world @ pb.tail) - (rig.matrix_world @ pb.head)).normalized()
         richt(rig, f'foot.{k}', Matrix.Rotation(math.radians(INSTELLINGEN['voeten'] * s), 3, 'Z') @ nu)
-    # het hoofd groter
+    # het hoofd groter, en wat naar de speer gedraaid en omlaag (Marcel, bij ZW: het vel kijkt naar links en omlaag, de neus
+    # in profiel, het model recht in de camera)
     rig.pose.bones['head'].scale = (INSTELLINGEN['hoofd'],) * 3
+    bpy.context.view_layer.update()
+    pb = rig.pose.bones['head']
+    h = pb.head.copy()
+    opzij, omlaag = INSTELLINGEN['kijk']
+    R = Matrix.Rotation(math.radians(opzij), 4, 'Z') @ Matrix.Rotation(math.radians(omlaag), 4, 'X')
+    pb.matrix = Matrix.Translation(h) @ R @ Matrix.Translation(-h) @ pb.matrix
     bpy.context.view_layer.update()
     # op de grond: de laagste punt van het lijf op z = 0
     deps = bpy.context.evaluated_depsgraph_get()
