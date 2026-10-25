@@ -2221,6 +2221,23 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   bekken, rug en hoofd komen uit de opname; de armen houden met de IK de speer. (Een eerste poging lag plat op de grond:
   `Bone.vector` staat in de ruimte van het ouderbot.) De gerekende pas (`bekken`, `benen` in `bakken.py`) blijft als
   terugval tot Marcel de opname goedkeurt, en gaat er dan uit.
+- *Lopen naar de referentie, en gestopt: de basis zit te ver van de referentie* (Marcel, 25 okt: "De loop animatie van de
+  referentie is veel beter", en daarna "Nee stop maar, de basis is gewoon niet goed. We zitten te ver van de referentie
+  met het 3d model", "Hoe gaan we dat verbeteren"). Het lopen van de referentie (`beelden/figuren/speerman-lopen.png`) heeft
+  grote passen (van teen tot hiel zo'n 70 procent van de man; bij ons 43), duidelijke standen (in beeld 0 en 4 de benen
+  wijd als een schaar, in 2 en 6 de knie omhoog), en een rustig bovenlijf met de speer stil. Laatste poging: het ritme
+  uit de opname, de benen met IK op de pas van de referentie (`PAS_HALF` 0,28), de speer naar voren. Het vel van de
+  referentie is niet in 3D getekend (in W wijst de speer sterk naar voren, in ZW en Z rechtsboven).
+  De omtrek van de staande man naast die van de referentie, even hoog (`uit/blender/omtrek-staan-z.png`, met
+  `omtrek.py` in de kladmap): de referentie is over de hele hoogte veel breder en gedrongener (schouders, armen, lijf,
+  laarzen die als blokken uit elkaar staan; ons model is smal, en nog eens versmald met `BREED` 0,9); zijn helm is breed
+  en plat met een grote rand laag over de ogen (de onze een hoge koepel); baard en kap zijn één donkere massa (bij ons
+  glimmende maliën); de armen hangen verder van het lijf met grote bruine handschoenen; en hij is donkerder en
+  verzadigder, met donkere zijkanten.
+  Plan om te verbeteren, in deze volgorde: (1) de omtrek eerst: per rij de breedte van de referentie en van het model
+  meten in Z, ZW en W, en de maten van het model (lijf, armen, helm, laarzen, `BREED`) bijstellen tot de omtrekken
+  samenvallen; (2) dan licht en kleur per deel op spelmaat (zoals de kleurmeting van 24 okt), met de kap donker; (3) dan
+  de bewegingen naar de standen van de referentie, beeld voor beeld.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

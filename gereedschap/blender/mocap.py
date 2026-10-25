@@ -132,21 +132,65 @@ class Beweging:
         ons = sum(bb[f'{n}.L'].length for n in ('upperleg01', 'upperleg02', 'lowerleg01', 'lowerleg02') if f'{n}.L' in bb)
         hun = (botten['lfemur']['len'] + botten['ltibia']['len']) * SCHAAL
         verhouding = ons / hun
-        # per beeld van de pas: per bot van ons de draai in de ruimte van het skelet, en het zwaaien van het bekken
+        # per beeld van de pas: per bot van ons de draai in de ruimte van het skelet, het zwaaien van het bekken, en per voet
+        # de enkel ten opzichte van het bekken (voor en achter, hoogte) en hoe de voet kantelt (de teen omlaag is positief)
         a, b = self.a, self.b
-        self.draai, self.zwaai = [], []
+        self.draai, self.zwaai, self.enkel, self.hoogte = [], [], [], []
         w0, w1 = Rh @ wortel[a], Rh @ wortel[b]
         for i in range(a, b + 1):
-            W, _ = houdingen[i]
+            W, e = houdingen[i]
             u = (i - a) / (b - a)
             self.draai.append({o: (Rh @ P @ W[s] @ P.transposed() @ Q[o].transposed()).to_quaternion()
                                for o, s in self.koppel.items()})
             w = Rh @ wortel[i] - (w0 + (w1 - w0) * u)
             self.zwaai.append(Vector((w.x, w.y, 0.0)) * verhouding)
+            enkels = {}
+            for k, o in (('L', 'l'), ('R', 'r')):
+                rel = Rh @ (P @ e[o + 'tibia'] - P @ e['root'])
+                f = Rh @ P @ (W[o + 'foot'] @ botten[o + 'foot']['dir'])
+                enkels[k] = (rel.y, rel.z, math.atan2(-f.z, math.hypot(f.x, f.y)))
+            self.enkel.append(enkels)
+            self.hoogte.append((Rh @ wortel[i]).z)
         # sluitend: wat het eind nog van het begin verschilt, gaat geleidelijk over de pas weg
         self.rest = {o: self.draai[-1][o] @ self.draai[0][o].inverted() for o in self.koppel}
+        n = len(self.enkel) - 1
+        for k in ('L', 'R'):
+            fout = [self.enkel[-1][k][j] - self.enkel[0][k][j] for j in range(3)]
+            for i in range(n + 1):
+                y, z, h = self.enkel[i][k]
+                self.enkel[i][k] = (y - fout[0] * i / n, z - fout[1] * i / n, h - fout[2] * i / n)
+        fout = self.hoogte[-1] - self.hoogte[0]
+        self.hoogte = [h - fout * i / n for i, h in enumerate(self.hoogte)]
+        # de voeten naar de maat van de pas (voeten): de enkel voor en achter rond zijn midden, de hoogte boven de grond (de
+        # laagste stand van die enkel), en het kantelen ten opzichte van de voet die plat staat (de middelste stand)
+        self.voet_midden, self.voet_grond, self.voet_plat, self.voet_half = {}, {}, {}, {}
+        for k in ('L', 'R'):
+            ys = [e[k][0] for e in self.enkel]
+            self.voet_midden[k] = (max(ys) + min(ys)) / 2
+            self.voet_half[k] = (max(ys) - min(ys)) / 2
+            self.voet_grond[k] = min(e[k][1] for e in self.enkel)
+            self.voet_plat[k] = sorted(e[k][2] for e in self.enkel)[len(self.enkel) // 2]
         self.duur = (b - a) / 120.0
         print('BEWEGING', naam, 'pas van beeld', a, 'tot', b, f'({self.duur:.2f} s), benen maal {verhouding:.2f}')
+
+    def voeten(self, u, half, til=1.0):
+        """Op plek u van de pas per voet: hoe ver de enkel voor (negatief) of achter het midden staat, met `half` als
+        halve pas (meter), hoe hoog hij boven de grond is (in dezelfde maat, maal `til`), en hoe de voet kantelt (radialen,
+        de hiel omhoog is positief); en hoe ver het bekken zakt ten opzichte van zijn hoogste stand (in dezelfde maat)."""
+        u = u % 1.0
+        x = u * (len(self.enkel) - 1)
+        i = min(int(x), len(self.enkel) - 2)
+        f = x - i
+        uit = {}
+        for k in ('L', 'R'):
+            schaal = half / self.voet_half[k]
+            e0, e1 = self.enkel[i][k], self.enkel[i + 1][k]
+            y, z, h = (e0[j] + (e1[j] - e0[j]) * f for j in range(3))
+            uit[k] = ((y - self.voet_midden[k]) * schaal, (z - self.voet_grond[k]) * schaal * til, h - self.voet_plat[k])
+        schaal = half / ((self.voet_half['L'] + self.voet_half['R']) / 2)
+        h = self.hoogte[i] + (self.hoogte[i + 1] - self.hoogte[i]) * f
+        uit['bekken'] = (max(self.hoogte) - h) * schaal
+        return uit
 
     def op(self, u):
         """De draaien en het zwaaien op plek u van de pas (0 tot 1, rond)."""
@@ -162,11 +206,16 @@ class Beweging:
         return draai, zwaai
 
 
-def zet(rig, beweging, u):
+BENEN = ('upperleg', 'lowerleg', 'foot')
+
+
+def zet(rig, beweging, u, benen=True):
     """De houding op plek u van de pas op het skelet: de gekoppelde botten met hun draai (de andere, zoals de armen,
-    houden hun eigen stand), het bekken met zijn zwaaien. Geeft hoe ver het skelet moet zakken (of rijzen) zodat de laagste
-    voet de grond raakt."""
+    houden hun eigen stand), het bekken met zijn zwaaien; zonder `benen` alleen bekken, rug en hoofd (de benen zet dan de
+    IK). Geeft hoe ver het skelet moet zakken (of rijzen) zodat de laagste voet de grond raakt (met de benen)."""
     draai, zwaai = beweging.op(u)
+    if not benen:
+        draai = {o: q for o, q in draai.items() if not o.startswith(BENEN)}
     bb = rig.data.bones
     M = {}
 
@@ -187,6 +236,8 @@ def zet(rig, beweging, u):
         return M[b.name]
     for b in bb:
         stand(b)
+    if not benen:
+        return 0.0
     laagst = 1e9
     for k in ('L', 'R'):
         voet = bb[f'foot.{k}']

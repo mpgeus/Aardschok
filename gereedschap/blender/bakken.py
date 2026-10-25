@@ -460,6 +460,9 @@ def draai(rig, bot, hoek, as_='X'):
 
 
 BEWEGING = None  # een pas uit motion capture (mocap.py, Beweging); zonder: de pas die hier gerekend wordt (bekken, benen)
+PAS_HALF = 0.28  # de halve pas bij de opname: zo ver staat de enkel voor en achter de heup (meter), zoals bij de referentie
+# (daar is de pas van teen tot hiel zo'n 70 procent van de man; met 0,2 was het 43)
+PAS_TIL = 1.3  # de voet die zwaait wat hoger dan in de opname, zodat de knie duidelijk omhoog komt
 
 
 def loop(rig, i, n, draagt=False):
@@ -476,14 +479,26 @@ def loop(rig, i, n, draagt=False):
     bpy.context.view_layer.update()
     f = 2 * math.pi * i / n
     if BEWEGING is not None:
-        # benen, bekken, rug en hoofd uit een echte opname (Marcel: "hij loopt nog echt houterig"); het bovenlijf wat
-        # gedraaid zoals bij de generator, en de voeten op de grond
-        laagst = mocap.zet(rig, BEWEGING, i / n)
+        # bekken, rug en hoofd uit een echte opname (Marcel: "hij loopt nog echt houterig"); de benen met IK, met het
+        # ritme van de opname (hiel neer, afrollen, teen af) maar met passen en een knie zo groot als bij de referentie
+        # (Marcel: "De loop animatie van de referentie is veel beter": daar staan de benen in beeld 0 en 4 wijd als een
+        # schaar, en komt de knie in beeld 2 en 6 duidelijk omhoog); het bovenlijf wat gedraaid zoals bij de generator
+        mocap.zet(rig, BEWEGING, i / n, benen=False)
+        bpy.context.view_layer.update()
+        v = BEWEGING.voeten(i / n, PAS_HALF, PAS_TIL)
+        e = BEWEGING.op(i / n)[0]['root'].to_euler('XYZ')
+        bb = rig.data.bones
+        H, A = bb['upperleg01.L'].head_local, bb['foot.L'].head_local
+        been = sum(bb[f'{b}.L'].length for b in ('upperleg01', 'upperleg02', 'lowerleg01', 'lowerleg02'))
+        zakken = max(0.0, math.hypot(H.z - A.z, PAS_HALF) - 0.97 * been) + v['bekken']
+        for k in ('L', 'R'):
+            y, z, kantel = v[k]
+            been_ik(rig, k, y, z, zakken, kantel, rol=e.y, gier=e.z, voorover=e.x)
         if draagt:
             draai(rig, 'spine02', DRAAI * 0.5, 'Z')
             draai(rig, 'spine01', DRAAI * 0.5, 'Z')
             draai(rig, 'head', -DRAAI * 0.5, 'Z')
-        rig.location.z = rig['z0'] - laagst
+        rig.location.z = rig['z0'] - zakken
         bpy.context.view_layer.update()
         if draagt:
             speer_mee(rig, f)
@@ -739,9 +754,10 @@ def speer_mee(rig, f):
     handen_op_speer(rig, {k: S @ p for k, p in _drager['holtes'].items()}, S.to_3x3() @ _drager['richting'])
 
 
-def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0):
+def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0, voorover=0.0):
     """Eén been met IK: de enkel op (y, z) ten opzichte van zijn plek in rust (vooruit is -y), terwijl het bekken `zakken`
-    lager staat, `rol` om y gekanteld en `gier` om z gedraaid (het bekken staat al, de heup is waar hij nu is). De dij en
+    lager staat, `rol` om y gekanteld, `gier` om z gedraaid en `voorover` om x (het bekken staat al, de heup is waar hij
+    nu is). De dij en
     de knie uit de cosinusregel in het vlak van voor naar achter; opzij zo dat de voet op zijn spoor blijft; de knie en de
     voet wijzen vooruit, en de voet ligt vlak (of draait met `kantel` om de bal)."""
     pb, bb = rig.pose.bones, rig.data.bones
@@ -761,7 +777,7 @@ def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0):
     zij = math.atan2(dx, -dz) - math.atan2(A.x - H0.x, -(A.z - H0.z))
     draai(rig, f'upperleg01.{k}', -gier, 'Z')
     draai(rig, f'upperleg01.{k}', -zij - rol, 'Y')
-    draai(rig, f'upperleg01.{k}', dij)
+    draai(rig, f'upperleg01.{k}', dij - voorover)
     draai(rig, f'lowerleg01.{k}', buig)
     draai(rig, f'foot.{k}', -(dij + buig) + kantel)
     draai(rig, f'foot.{k}', zij, 'Y')
@@ -866,14 +882,16 @@ def verf_speer(sc, r):
 #   voor hem uit;
 # - generator en gespiegeld: dwars voor het lijf, zoals het lopen ZW van de generator: het midden van de speer voor de borst
 #   ('midden', ten opzichte van het midden tussen de schouders), schuin zodat hij in ZW zo'n 40 graden ligt ('as', van de
-#   lage hand naar de punt), de handen 'afstand' uit elkaar om het midden. Bij generator wijst de punt omhoog over de
-#   linkerschouder (in ZW naar achteren, zoals in het vel: het gebrek van 21 okt), bij gespiegeld over de rechterschouder
-#   naar voren.
+#   lage hand naar de punt), de handen 'afstand' uit elkaar om het midden. Bij generator wijst de punt omhoog naar links en
+#   wat naar voren: in Z en ZW rechtsboven, en in W naar voren omhoog, zoals in het vel van de generator (naar achteren,
+#   zoals eerst, stak hij in W achter de man omhoog; Marcel, 25 okt: "De loop animatie van de referentie is veel beter").
+#   Het vel is niet in 3D getekend: in W wijst de speer daar sterk naar voren, in ZW en Z rechtsboven, en geen stand in 3D
+#   geeft alle drie; dit is het midden. Bij gespiegeld over de rechterschouder.
 DRAGEN = {
     'vooruit': {'R': (0.03, -0.12, -0.29), 'L': (-0.24, -0.30, -0.08), 'laag': 'R', 'greep': 0.12},
     # kort vastgepakt: onder de lage hand steekt een kort eind uit, het lange eind gaat omhoog voorbij de hoge hand (Marcel:
     # "De speer steekt verder door")
-    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.5, 0.5, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.15},
+    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.6, -0.2, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.15},
     'gespiegeld': {'midden': (0.0, -0.25, -0.15), 'as': (-0.5, -0.5, 0.7), 'afstand': 0.26, 'laag': 'L', 'greep': 0.15},
 }
 
