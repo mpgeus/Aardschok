@@ -2309,6 +2309,18 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   arm), de speerarm dichter bij het lijf (`arm` 0,3) en de speerhand op borsthoogte. In ZW viel de omtrek van 0,82 naar
   0,87, gemiddeld 0,83 (`uit/blender/omtrek-zw-naast.png`). Nog anders in ZW: bij ons hangt de linkerhand nog wat lager,
   zie je meer van de donkere broek, en zijn de laarzen minder grof.
+- *Helm, schouder, armstukken, laarzen, gezicht, speer, vuist en schaduw* (Marcel, 25 okt, bij ZW: "De helm past nog niet
+  goed", "De schouder mist de overloop van het geel / goud", "De bracers verschillen nog", "De schoenen lijken wel dunne
+  dingetjes. De referentie is voller, robuuster, echte boots voor een soldaat", "Het gezicht is heel onduidelijk", "Speer
+  kop is ook onduidelijk, de helm is ongelijk. De hand rondom de speer die hem vasthoudt is onduidelijk. De schaduwen op
+  zijn kleed"). De helm dieper op het hoofd (`HELM_RAND_HOOGTE` 0,036) en de rand weer gelijk rondom (`HELM_VOOR` 0,
+  `HELM_ZAK` 0,5: smaller voor en diep zakkend achter maakten hem scheef). Over de schouder een gouden zoom (de
+  onderrand van het schouderstuk, `wapenrok-goud`). De armstukken compacter en de randen donker. De laarzen vol: de
+  schacht 2 cm om het been, de voet breder, langer en hoger, de rand hoger, de omslag in de kleur van de laars (geen
+  lichte band). Het gezicht: donkere oogkassen in de huid op de plek van de ogen (`mat_huid(rig)`) en zwaardere
+  wenkbrauwen. Het speerblad een ruit met een diepe middenrib, lichter staal dat half spiegelt: een lichte en een donkere
+  helft. De handschoen donker, zodat de vuist loskomt van de schacht. De wapenrok dieper geplooid met meer schaduw in de
+  plooien, minder vullicht (`vul` 0,65), en de riem 2 cm lager. De omtrek valt gemiddeld voor 0,84 samen.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

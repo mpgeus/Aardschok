@@ -300,11 +300,27 @@ class Knopen:
         return self.m
 
 
-def mat_huid():
+def mat_huid(rig=None):
+    """De huid; met het skelet ook donkere oogkassen op de plek van de ogen, zodat het gezicht op spelmaat leest zoals bij
+    de referentie: een donkere oogkas onder een zware wenkbrauw (Marcel: "Het gezicht is heel onduidelijk, bij de
+    referentie zie je wel wat uiterlijke kenmerken")."""
     k = Knopen('huid')
     r = k.ruis(60, 4)
     kl = k.meng(k.glad(k.ruis(14, 2), 0.4, 0.7, 0, 0.35), lin('#b8714c'), lin('#a4553c'))
     kl = k.meng(k.w('MULTIPLY', r, 0.15), kl, lin('#7a4630'))
+    if rig is not None:
+        p = k.n('ShaderNodeVectorMath', operation='MULTIPLY')
+        k.zet(p.inputs[0], k.plek())
+        p.inputs[1].default_value = (1, 0.35, 1)  # de diepte telt minder: een vlek op het gezicht, geen bol
+        kas = None
+        for kant in ('L', 'R'):
+            o = rig.matrix_world @ rig.pose.bones[f'eye.{kant}'].head
+            d = k.n('ShaderNodeVectorMath', operation='DISTANCE')
+            k.nt.links.new(p.outputs[0], d.inputs[0])
+            d.inputs[1].default_value = (o.x, o.y * 0.35, o.z + 0.003)
+            g = k.glad(d.outputs['Value'], 0.03, 0.012)
+            kas = g if kas is None else k.w('MAXIMUM', kas, g)
+        kl = k.meng(k.w('MULTIPLY', kas, 0.85), kl, lin('#2a140a'))
     k.bsdf.inputs['Subsurface Weight'].default_value = 0.12
     k.bsdf.inputs['Subsurface Radius'].default_value = (0.9, 0.4, 0.25)
     k.bsdf.inputs['Subsurface Scale'].default_value = 0.01
@@ -774,7 +790,7 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     # het weefsel van echt linnen, de draden groter dan echt (op de echte maat zijn ze kleiner dan een pixel van de HD-render)
     kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
     k.bsdf.inputs['Sheen Weight'].default_value = 0.3
-    return k.af(kl, ruw=0.92, holte=0.4)
+    return k.af(kl, ruw=0.92, holte=0.65)  # diepere schaduw in de plooien, zoals op het vel
 
 
 def mat_laars():
@@ -798,7 +814,9 @@ def mat_blad():
     """Het staal van het blad, met roestspikkels."""
     k = Knopen('blad')
     vlek = k.ruis(60, 3)
-    kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.4), lin('#dfe3ec'), lin('#7a3a20'))  # helder, zoals de referentie
+    # staal met een lichte en een donkere helft (de middenrib vangt het licht aan een kant), zoals de ruit op het vel; egaal
+    # licht was het op spelmaat een vlek (Marcel: "Speer kop is ook onduidelijk")
+    kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.4), lin('#d8d6e6'), lin('#7a3a20'))
     kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.25, contrast=0.5, kracht=0.4)
     k.bobbel(vlek, 0.2, 0.001)
     return k.af(kl, ruw=k.w('ADD', 0.3, k.w('MULTIPLY', k.glad(vlek, 0.6, 0.7), 0.4)), metaal=1.0, holte=0.2)
@@ -979,7 +997,7 @@ def baard(lijf, rig, M):
         elif abs(p.x) < 0.055 and mond.z + 0.004 < p.z < mond.z + 0.03 and p.y < mond.y + 0.014:
             gs.add([v.index], 1.0, 'REPLACE')
         for o in (oogL, oogR):
-            if o.z + 0.017 < p.z < o.z + 0.034 and abs(p.x - o.x) < 0.028 and p.y < o.y + 0.006:
+            if o.z + 0.014 < p.z < o.z + 0.036 and abs(p.x - o.x) < 0.032 and p.y < o.y + 0.006:  # zware wenkbrauwen
                 gw.add([v.index], 1.0, 'REPLACE')
     baardvorm(lijf, gb, gs, mond, kin)
     lijf.data.materials.append(M['haar'])
@@ -987,7 +1005,7 @@ def baard(lijf, rig, M):
     # (Marcel: "De baard moet nog wat beter"): vol en lang genoeg om over de kraag van maliën te vallen, zoals op vel 01
     # het echte haar nog alleen als een zachte rand over de vorm (alleen haar zag er van dichtbij nep uit)
     for naam, groep, n, lengte, omlaag in (('baard', 'baard', 9000, 0.012, -0.8), ('snor', 'snor', 2500, 0.01, -1.2),
-                                            ('brauw', 'brauw', 2500, 0.01, 0.0)):
+                                            ('brauw', 'brauw', 5000, 0.013, 0.0)):
         md = lijf.modifiers.new(naam, 'PARTICLE_SYSTEM')
         ps = md.particle_system
         st = ps.settings
@@ -1020,11 +1038,12 @@ def kruin(lijf):
 
 
 HELM_RAND = 1.45  # de rand van de helm, maal de koepel
-HELM_ZAK = 2.0  # hoeveel verder de rand achteraan zakt
-HELM_VOOR = 0.6  # hoeveel smaller de rand van voren is (0 even breed als opzij)
+HELM_ZAK = 0.5  # hoeveel verder de rand achteraan zakt (2 en een smallere rand voor maakten hem scheef: Marcel, "de helm
+HELM_VOOR = 0.0  # is ongelijk"); hoeveel smaller de rand van voren is (0 even breed als opzij)
 HELM_ACHTER = 0.022  # de helm zo ver naar achteren op het hoofd: het gezicht steekt er van voren onder uit
-HELM_RAND_HOOGTE = 0.05  # de rand boven de ogen (maal het hoofd): het gezicht komt eronder uit, zoals bij de referentie
-# (Marcel: "Het gezicht lijkt op de referentie met wat verder onder de helm uit te komen"); achteraan zakt hij (HELM_ZAK)
+HELM_RAND_HOOGTE = 0.036  # de rand boven de ogen (maal het hoofd): diep op het hoofd, de rand laag over het voorhoofd
+# (Marcel: "De helm past nog niet goed zoals de referentie": met 0,05 stond hij er hoog bovenop); het gezicht komt eronder
+# uit doordat de helm naar achteren staat (HELM_ACHTER); achteraan zakt hij (HELM_ZAK)
 
 
 def helm(lijf, rig, M):
@@ -1189,7 +1208,7 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
             th = math.pi + 2 * math.pi * j / 96
             voor = max(0.0, math.cos(th)) ** 0.5
             d = Vector((v.co.x, v.co.y - cy, 0)).normalized()
-            diep = 0.02 * t * voor * plooien(th, t, LIJF_PLOOIEN)
+            diep = 0.03 * t * voor * plooien(th, t, LIJF_PLOOIEN)
             v.co.x += d.x * diep
             v.co.y += d.y * diep
     # zwaartekracht (Marcel: "En zwaartekracht?"): boven de riem bolt de stof over en zakt wat door, voor meer dan opzij
@@ -1254,6 +1273,12 @@ def schouderstukken(rig, mouwen, M):
         p = lambda t, th, a=a, as_=as_: (a + as_ * (-0.035 + (SCHOUDER_LANG + 0.035) * t), as_)
         st = koker('wapenrok-schouder.' + k, bvh, p, [i / 10 for i in range(11)],
                    lambda t, th: 0.002 + SCHOUDER_WIJD * t ** 1.5, n=64, mat=M['wapenrok'], ver=0.25)
+        # de onderrand goud, zoals de zoom die bij de referentie over de schouder loopt (Marcel: "De schouder mist de
+        # overloop van het geel / goud")
+        st.data.materials.append(M['wapenrok-goud'])
+        for f in st.data.polygons:
+            if f.index // 64 >= 6:
+                f.material_index = 1
         dik(st, 0.004)
         zacht(st)
         delen.append(bak_mod(st))
@@ -1419,19 +1444,20 @@ def laarzen(lijf, rig, M):
         y1 = as_.cross(x1)
 
         # de laarsrand op 24 procent van de man, zoals op vel 01
-        z_top = min(kn.z - 0.06, 0.24 * kruin(lijf))
+        z_top = min(kn.z - 0.05, 0.26 * kruin(lijf))
         boven = kn + as_ * (kn.z - z_top) / as_.dot(Vector((0, 0, -1)))
         # de schacht om het been in zijn eigen vorm, smal naar de enkel: als ronde kegel met de gemiddelde dikte stak de kuit
         # er van achteren uit (Marcel: "Dat gaat nog niet goed ook"), en als kegel ondersteboven hing hij als een slobkous
         # over de voet
         d = en - boven
-        schacht = koker('schacht.' + k, bvh, recht(boven, as_), [d.length * i / 12 for i in range(13)], lambda t, th: 0.008,
+        # vol en robuust, echte soldatenlaarzen (Marcel: "De schoenen lijken wel dunne dingetjes")
+        schacht = koker('schacht.' + k, bvh, recht(boven, as_), [d.length * i / 12 for i in range(13)], lambda t, th: 0.02,
                         n=64, ver=0.2)
         dik(schacht, 0.006, offset=-1)
         stukken = [bak_mod(schacht)]
         rs = [straal(bvh, en + as_ * -0.015, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
         rs = [r for r in rs if r is not None] or [0.05]
-        r_enkel = sum(rs) / len(rs) + 0.008  # gemiddeld: met de grootste stak hij achter de hiel uit als een blok
+        r_enkel = sum(rs) / len(rs) + 0.02  # gemiddeld: met de grootste stak hij achter de hiel uit als een blok
         # de schacht loopt door tot de zool, om de hiel (hield hij op bij de enkel, dan zat er opzij een trede)
         grond = en + as_ * ((en.z - 0.012) / -as_.z)
         bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=r_enkel, depth=(en - grond).length, location=(en + grond) / 2,
@@ -1446,7 +1472,7 @@ def laarzen(lijf, rig, M):
         breed = max(q.x for q in voet) - min(q.x for q in voet)
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
         opzij = Vector((-richting.y, richting.x, 0))
-        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.012
+        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.035
         start = Vector((hiel.x, hiel.y, 0)) - richting * 0.046  # 3 cm verder naar achteren, zoals de referentie van opzij
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=1)
         bol = bpy.context.active_object
@@ -1461,8 +1487,8 @@ def laarzen(lijf, rig, M):
             # de bovenkant: laag bij de hiel (daar maakt de schacht de laars; hoger lag de voet er als een richel omheen),
             # het hoogst op de wreef voor de enkel, dan wat lager, en de neus weer bol
             glad = lambda a, b: (lambda t: t * t * (3 - 2 * t))(max(0.0, min(1.0, (u - a) / (b - a))))
-            wreef = 0.055 + 0.035 * glad(0.0, 0.35) - 0.032 * glad(0.35, 0.75) + 0.006 * math.exp(-((u - 0.86) / 0.1) ** 2)
-            half = (breed / 2 + 0.012) * (0.74 + 0.34 * math.exp(-((u - 0.78) / 0.32) ** 2))
+            wreef = 0.068 + 0.035 * glad(0.0, 0.35) - 0.03 * glad(0.35, 0.75) + 0.008 * math.exp(-((u - 0.86) / 0.1) ** 2)
+            half = (breed / 2 + 0.026) * (0.78 + 0.3 * math.exp(-((u - 0.78) / 0.32) ** 2))
             v.co = start + richting * (lengte * u) + opzij * (x * half) + Vector((0, 0, wreef / 2 + z * (wreef / 2 + 0.012)))
         stukken.append(bol)
         laars = smelt('laars.' + k, stukken, 0.003, 4, M['laars'])
@@ -1592,12 +1618,12 @@ def armstukken(rig, mouwen, M):
         as_ = (b - a).normalized()
         L = (b - a).length
         p = lambda t, th, a=a, as_=as_, L=L: (a + as_ * L * (0.3 + 0.62 * t), as_)
-        st = koker('armstuk.' + k, bvh, p, [i / 8 for i in range(9)], lambda t, th: 0.005 + 0.004 * t, n=64, mat=M['armstuk'], ver=0.2)
+        st = koker('armstuk.' + k, bvh, p, [i / 8 for i in range(9)], lambda t, th: 0.003 + 0.003 * t, n=64, mat=M['armstuk'], ver=0.2)
         dik(st, 0.005)
         delen.append(st)
         for t0 in (0.0, 0.93):
             q = lambda t, th, t0=t0: p(t0 + t * 0.07, th)
-            r = koker('armrand.' + k, bvh, q, [0, 1], lambda t, th, t0=t0: 0.012 + 0.004 * t0, n=64, mat=M['armrand'], ver=0.2)
+            r = koker('armrand.' + k, bvh, q, [0, 1], lambda t, th, t0=t0: 0.007 + 0.003 * t0, n=64, mat=M['armrand'], ver=0.2)
             dik(r, 0.004)
             delen.append(r)
             # klinknagels rond de band
@@ -1678,14 +1704,14 @@ def speer(rig, M, kruin):
     # de brede kant naar de camera van de richting die gerenderd wordt (INSTELLINGEN['bladhoek'])
     n = 24
     vs, fs = [], []
-    Wb = 0.03 * BLAD * INSTELLINGEN['speer']
+    Wb = 0.038 * BLAD * INSTELLINGEN['speer']  # breder dan lang: een ruit, zoals op het vel
     hoek = math.radians(INSTELLINGEN.get('bladhoek', 0))
     ux, uy = math.cos(hoek), math.sin(hoek)
     for i in range(n + 1):
         t = i / n
         w = Wb * (0.35 + 0.65 * (t / 0.3) ** 0.6) if t < 0.3 else Wb * ((1 - t) / 0.7) ** 1.1
         w = max(w, 0.0004)
-        d = 0.008 * INSTELLINGEN['speer'] * (w / Wb) + 0.0005
+        d = 0.016 * INSTELLINGEN['speer'] * (w / Wb) + 0.0005  # een diepe middenrib
         z = z_blad + (L - z_blad) * t
         for px, py in ((w, 0), (0, d), (-w, 0), (0, -d)):
             vs.append((x + px * ux - py * uy, y + px * uy + py * ux, z))
@@ -1706,15 +1732,16 @@ def bouw():
     greep(rig, 'L', r_schacht, duim=math.radians(25))
     lijf_b = bak(lijf, 'lijf')
     bpy.data.objects.remove(lijf)
-    riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z + 0.02
+    riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z  # 2 cm lager: de borst wat langer, zoals op het vel
     M = {
-        'huid': mat_huid(),
+        'huid': mat_huid(rig),
         'hozen': mat_stof('hozen', '#1c2038', 30, 0.3, textuur=('hessian_230', 0.5)),
         'wambuis': mat_wambuis(),
-        'handschoen': mat_leer('handschoen', '#6a4632', '#2e1a10'),
+        'handschoen': mat_leer('handschoen', '#4a3428', '#1a100a'),  # donker: de vuist los van de schacht, zoals op het vel
         'oog': mat_oog(),
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
+        'wapenrok-goud': mat_stof('wapenrok-goud', '#ffbc12', 30, 0.25),
         'malien': mat_malien(),
         # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de
         # generator: ertussenin
@@ -1724,9 +1751,9 @@ def bouw():
         'riem': mat_leer('riem', '#793a28', '#3a160c'),
         'leer': mat_leer('leer', '#5a3418'),
         'laars': mat_laars(),
-        'omslag': mat_leer('omslag', '#9a5e30', '#4e2c14'),
+        'omslag': mat_leer('omslag', '#a85e28', '#4e2810'),  # als de laars zelf: bij de referentie geen lichte band
         'armstuk': mat_leer('armstuk', '#4d3730', '#1e1410'),
-        'armrand': mat_leer('armrand', '#6e4c36', '#2e1e14'),
+        'armrand': mat_leer('armrand', '#3e2c22', '#1a120c'),  # donker: bij de referentie compacte, donkere armstukken
         'schede': mat_leer('schede', '#8a4630', '#2e120a'),
         'koord': mat_leer('koord', '#9a5a2a', '#4a2410'),
         'blad': mat_blad(),

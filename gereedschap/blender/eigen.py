@@ -31,7 +31,7 @@ if ISO:
 # gemeten tegen staan Z van de generator (kleurmeting op spelmaat, 24 okt): ons model was per stof 8 tot 18 punten lichter
 # (Lab) en vlakker, dus een stop donkerder, minder vullicht en lucht (diepere schaduwkant), en de zon meer van opzij, zodat
 # de plooien en de ruiten schaduw geven
-LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.9, 'lucht': 0.35, 'belichting': 0.6, 'look': 'Medium High Contrast',
+LICHT = {'zonhoek': 8, 'zon': 5.0, 'vul': 0.65, 'lucht': 0.35, 'belichting': 0.6, 'look': 'Medium High Contrast',
          'zonrichting': (-0.82, -0.32, 0.48)}
 # proeven met het licht (Marcel: "En de schaduwen in het origineel zijn ook beter. Op de kleding etc. Dat maakt alles veel
 # dieper en echter"): -- <map> lichtproef rendert alleen staan Z in een paar standen, naar eigen-licht-<naam>.png
@@ -57,7 +57,8 @@ SOORTEN = {
              'Metallic': 0.0},
     'leer': {'Roughness': 0.48, 'Specular IOR Level': 0.45, 'Metallic': 0.0},  # leer met een zachte glans, geen klei
     'staal': {'Roughness': 0.42, 'Metallic': 0.9},
-    'blad': {'Roughness': 0.3, 'Metallic': 0.55},  # het blad helder: als volle spiegel was het donker op spelmaat
+    'blad': {'Roughness': 0.3, 'Metallic': 0.5},  # het blad spiegelt de lucht met haar verloop: een lichte en een donkere
+    # helft
     'anders': {'Roughness': 0.75},
 }
 
