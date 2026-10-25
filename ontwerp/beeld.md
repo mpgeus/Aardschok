@@ -2259,6 +2259,20 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   helderder belicht (`belichting` 0,6). Per strook nu meestal binnen een paar punten (`uit/blender/omtrek-spelmaat-kleur.png`);
   de benen nog 4 tot 8 te licht, en in W de schouders minder geel (bij de referentie zie je daar de wapenrok, bij ons
   valt de mouw ervoor). De speer is nog dikker en donkerder dan die van de referentie, met een kleiner blad.
+- *De rand, de speer, en de helm van achteren* (Marcel: "Ja fix dat eerst, en de referentie heeft ook niet zomaar zwarte
+  lijn eromheen toch?", en "De helm is ook wat anders van vorm aan de achterzijde"). De rand: het vel van het spel heeft
+  geen lijn om de figuur, maar zijn eigen randpixels zijn donkerder, het meest aan de schaduwkant (gemeten op het hele
+  vel: een randpixel is links 0,92 keer zo licht als twee pixels naar binnen, boven 0,77, onder 0,60, rechts 0,68).
+  `omlijn` in `lopen.cjs` legde er een bijna zwarte lijn van een pixel omheen; nu maakt het de eigen randpixels per kant
+  donkerder (`RAND`), met het verschil tussen het vel en het model zonder rand. De speer: langer (1,32 keer de man, de
+  punt zo ver boven de helm als bij de referentie), dunner, roodbruin, met een groter (`BLAD` 1,4) en helder blad, dat
+  per richting met zijn brede kant naar de camera draait (`blad_naar_camera` in `eigen.py`, zoals een tekenaar het per
+  richting zet: anders was het in de meeste richtingen een streepje). De helm: wat wijder, de rand breder (1,45 keer de
+  koepel), lager over de ogen, en achteraan lager over het achterhoofd en de nek; de maliënkraag een kraag om de hals in
+  plaats van een cape over de schouders (bij de referentie loopt de wapenrok door tot de nek), en de rug van de
+  wapenrok gevierendeeld zoals op het vel. Vergelijking in de acht richtingen: `uit/blender/omtrek-spelmaat-acht.png`.
+  Wat er nog van achteren scheelt: bij de referentie valt de kap breed en donker over de schouders, en is de helm van
+  achteren ronder en lager.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

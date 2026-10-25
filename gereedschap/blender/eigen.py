@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import speerman_hd as sh  # noqa: E402
 import bakken as bk  # noqa: E402
 
-from mathutils import Matrix  # noqa: E402
+from mathutils import Matrix, Vector  # noqa: E402
 
 UIT = sh.UIT
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
@@ -57,12 +57,15 @@ SOORTEN = {
              'Metallic': 0.0},
     'leer': {'Roughness': 0.48, 'Specular IOR Level': 0.45, 'Metallic': 0.0},  # leer met een zachte glans, geen klei
     'staal': {'Roughness': 0.42, 'Metallic': 0.9},
+    'blad': {'Roughness': 0.3, 'Metallic': 0.55},  # het blad helder: als volle spiegel was het donker op spelmaat
     'anders': {'Roughness': 0.75},
 }
 
 
 def soort_van(m):
     naam = m.name.split('.')[0]
+    if naam == 'blad':
+        return 'blad'
     for soort, namen in (('stof', STOF), ('leer', LEER), ('staal', STAAL)):
         if naam.startswith(namen):
             return soort
@@ -157,6 +160,23 @@ def licht_voor_spelmaat(sc):
     sc.cycles.samples = 48
 
 
+def blad_naar_camera(hoek):
+    """Het blad van de speer om de schacht gedraaid, zodat zijn brede kant naar de camera van deze richting staat, zoals
+    een tekenaar het per richting zet (het blad is plat: met de brede kant vast naar Z was het in de meeste richtingen een
+    streepje, waar de referentie in elke richting het brede blad laat zien). Geeft wat terug moet."""
+    blad = bpy.data.objects.get('speer.blad')
+    if blad is None or not hoek:
+        return None
+    vs = blad.data.vertices
+    mw = blad.matrix_world
+    onder = sum((mw @ vs[i].co for i in range(4)), Vector()) / 4  # de eerste ring van het blad, op de koker
+    boven = sum((mw @ vs[i].co for i in range(len(vs) - 4, len(vs))), Vector()) / 4  # de punt
+    as_ = (boven - onder).normalized()
+    m0 = mw.copy()
+    blad.matrix_world = Matrix.Translation(onder) @ Matrix.Rotation(math.radians(hoek), 4, as_) @ Matrix.Translation(-onder) @ m0
+    return blad, m0
+
+
 def render(sc, naam, hoek, lichten):
     """De camera en het licht samen om de man gedraaid: het licht komt op het scherm altijd van linksboven."""
     cam = sc.camera
@@ -165,11 +185,14 @@ def render(sc, naam, hoek, lichten):
     cam.matrix_world = R @ m0
     for ob, m in lichten.items():
         ob.matrix_world = R @ m
+    terug = blad_naar_camera(hoek)
     sc.render.filepath = os.path.join(UIT, naam)
     bpy.ops.render.render(write_still=True)
     cam.matrix_world = m0
     for ob, m in lichten.items():
         ob.matrix_world = m
+    if terug:
+        terug[0].matrix_world = terug[1]
 
 
 def smal_maken(sc, rig):

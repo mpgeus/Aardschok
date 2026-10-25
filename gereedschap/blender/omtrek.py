@@ -3,7 +3,7 @@
 # (beelden/figuren/speerman-staan.png) en die van het model (eigen.py -- <map> Z ZW W staan), even hoog en met de voeten
 # op één lijn: hoeveel ze samenvallen (de overlap gedeeld door het geheel), en per strook van boven naar beneden hoeveel
 # pixels van de referentie het model links en rechts te smal (min) of te breed (plus) is. De speer telt niet mee (dunne
-# delen gaan eraf), en het model krijgt de donkere rand van een pixel die het vel ook heeft. Met een plaat per richting:
+# delen gaan eraf); het vel heeft geen lijn om de figuur heen (de rand is van het lijf zelf). Met een plaat per richting:
 # de omtrekken over elkaar, rood de referentie, blauw het model.
 #
 #   python omtrek.py <map met eigen-<r>-staan.png> <uit-map> [Z,ZW,W]      (de Python van ComfyUI heeft PIL)
@@ -88,7 +88,7 @@ def meet(model_pad, r):
     # het model even hoog als de referentie (het lijf), met de voeten op dezelfde rij en het midden onder gelijk
     s = (rb[3] - rb[1]) / (ob[3] - ob[1])
     klein = ons_lijf.resize((max(1, round(ons.width * s)), max(1, round(ons.height * s))), Image.BOX)
-    klein = klein.point(lambda a: 255 if a > 127 else 0).filter(ImageFilter.MaxFilter(3))  # de donkere rand van een pixel
+    klein = klein.point(lambda a: 255 if a > 127 else 0)  # (het vel heeft geen lijn erbuiten: de rand is van het lijf zelf)
     kb = klein.getbbox()
     vlak = Image.new('L', (CB * 3, CH), 0)
     vlak.paste(klein, (round(CB + midden_onder(ref_m) - midden_onder(klein)), rb[3] - kb[3]))

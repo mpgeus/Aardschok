@@ -721,7 +721,8 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     breed = k.w('ADD', 0.1, k.w('MULTIPLY', boven, 0.01))
     baan = k.glad(k.w('SUBTRACT', k.w('ABSOLUTE', k.w('ADD', x, 0.05)), breed), 0.003, -0.003)
     rechts = k.glad(x, 0.003, -0.003)
-    kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, k.w('SUBTRACT', 1.0, boven)))
+    # op de rug van hemzelf linksboven geel, rechtsonder geel (van achteren gezien links boven), zoals het vel van het spel
+    kwartier = k.w('ABSOLUTE', k.w('SUBTRACT', rechts, boven))
     achter = k.glad(y, 0.0, 0.03)
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
     # voller dan eerst: op spelmaat was het geel naast het vel van het spel te dof (omtrek.py, kleur: b 10 tot 24 lager)
@@ -756,7 +757,7 @@ def mat_blad():
     """Het staal van het blad, met roestspikkels."""
     k = Knopen('blad')
     vlek = k.ruis(60, 3)
-    kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.7), lin('#b4b1ba'), lin('#7a3a20'))
+    kl = k.meng(k.glad(vlek, 0.66, 0.72, 0, 0.4), lin('#dfe3ec'), lin('#7a3a20'))  # helder, zoals de referentie
     kl = k.met_textuur(kl, 'rusty_metal_sheet', 0.25, contrast=0.5, kracht=0.4)
     k.bobbel(vlek, 0.2, 0.001)
     return k.af(kl, ruw=k.w('ADD', 0.3, k.w('MULTIPLY', k.glad(vlek, 0.6, 0.7), 0.4)), metaal=1.0, holte=0.2)
@@ -815,7 +816,7 @@ def mat_hout():
     k = Knopen('hout')
     oorsprong = k.n('ShaderNodeAttribute', attribute_name='oorsprong').outputs['Vector']
     nerf = k.ruis(4, 4, rek=(40, 40, 1.2), vec=oorsprong)
-    kl = k.meng(k.glad(nerf, 0.35, 0.7), lin('#4a2412'), lin('#7a4422'))
+    kl = k.meng(k.glad(nerf, 0.35, 0.7), lin('#7a3418'), lin('#a8582c'))  # roodbruin, zoals de referentie
     # de nerf loopt in de textuur dwars over het beeld: dat wordt de lengte van de schacht
     p = k.n('ShaderNodeSeparateXYZ')
     k.zet(p.inputs[0], oorsprong)
@@ -977,6 +978,11 @@ def kruin(lijf):
     return max(v.co.z for v in lijf.data.vertices) + 0.045
 
 
+HELM_RAND = 1.45  # de rand van de helm, maal de koepel
+HELM_ZAK = 1.2  # hoeveel verder de rand achteraan zakt
+HELM_RAND_HOOGTE = 0.035  # de rand boven de ogen (maal het hoofd): lager dan eerst (0,045), zoals de referentie
+
+
 def helm(lijf, rig, M):
     """De ketelhoed: een hoge ronde koepel van vier delen (een kam van voor naar achter met een korte punt bovenop, en naden
     aan weerszijden), een rand zo'n anderhalf keer zo breed die wat zakt. Hoog genoeg dat je onder de rand de ogen ziet."""
@@ -985,8 +991,8 @@ def helm(lijf, rig, M):
     cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
     hx, hy, top = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, max(zs)
     oog = rig.matrix_world @ rig.pose.bones['eye.L'].head
-    zb = oog.z + 0.045 * INSTELLINGEN['hoofd']
-    rx, ry = hx + 0.012, hy + 0.01  # strak om het hoofd: de rand op een kwart van de lengte, zoals op de plaat
+    zb = oog.z + HELM_RAND_HOOGTE * INSTELLINGEN['hoofd']
+    rx, ry = hx + 0.02, hy + 0.018  # wat wijder dan het hoofd, zoals de lage, brede koepel van de referentie
     hoog = max(top - zb + 0.012, rx * 0.95)
     delen = []
     bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=1, location=(cx, cy, zb))
@@ -1002,11 +1008,14 @@ def helm(lijf, rig, M):
     # de rand, wat naar beneden, met een opgerolde zoom
     vs, fs = [], []
     n = 96
-    ringen = ((1.0, 0.0), (1.09, -0.005), (1.18, -0.012), (1.27, -0.024))
+    # breder dan eerst (op spelmaat 15 pixels tegen 18 bij de referentie), en achteraan lager over het achterhoofd en de
+    # nek (Marcel: "De helm is ook wat anders van vorm aan de achterzijde")
+    ringen = ((1.0, 0.0), (1.15, -0.006), (1.3, -0.015), (HELM_RAND, -0.03))
+    zak = lambda th, dz: dz * (1 + HELM_ZAK * max(0.0, math.sin(th)) ** 1.5)  # +y is achter
     for f, dz in ringen:
         for j in range(n):
             th = 2 * math.pi * j / n
-            vs.append((cx + rx * f * math.cos(th), cy + ry * f * math.sin(th), zb + dz))
+            vs.append((cx + rx * f * math.cos(th), cy + ry * f * math.sin(th), zb + zak(th, dz)))
     for i in range(len(ringen) - 1):
         for j in range(n):
             a = i * n + j
@@ -1014,12 +1023,18 @@ def helm(lijf, rig, M):
     r = maak('rand', vs, fs)
     dik(r, 0.005)
     delen.append(bak_mod(r))
-    bpy.ops.mesh.primitive_torus_add(major_radius=rx * 1.27, minor_radius=0.005, major_segments=96, minor_segments=12,
-                                     location=(cx, cy, zb - 0.024))
+    bpy.ops.mesh.primitive_torus_add(major_radius=rx * HELM_RAND, minor_radius=0.005, major_segments=96, minor_segments=12,
+                                     location=(cx, cy, zb - 0.03))
     t = bpy.context.active_object
     t.scale = (1, ry / rx, 1)
     zacht(t)
-    delen.append(bak_mod(t))
+    bak_mod(t)
+    t.data.transform(t.matrix_world)
+    t.matrix_world = Matrix.Identity(4)
+    for v in t.data.vertices:  # de opgerolde zoom zakt achteraan mee
+        th = math.atan2((v.co.y - cy) / ry, (v.co.x - cx) / rx)
+        v.co.z += zak(th, -0.03) + 0.03
+    delen.append(t)
     # de kam van voor naar achter, en de naden aan weerszijden (smaller), elk een smalle ribbe over de koepel
     for hoek, dikte, hoger in ((0, 0.012, 0.008), (32, 0.005, 0.003), (-32, 0.005, 0.003)):
         a = math.radians(hoek)
@@ -1056,7 +1071,7 @@ def maliekap(lijf, rig, M):
     hoofd = [v.co for v in lijf.data.vertices if v.co.z > hoofdbot.z - 0.05]
     cy = (min(p.y for p in hoofd) + max(p.y for p in hoofd)) / 2
     bvh = bvh_van([(lijf, [v.co.z > hoofdbot.z - 0.12 for v in lijf.data.vertices])])
-    zb = oog.z + 0.045 * INSTELLINGEN['hoofd']
+    zb = oog.z + HELM_RAND_HOOGTE * INSTELLINGEN['hoofd']
     z_onder = kin.z - 0.02
     ts = [i / 16 for i in range(17)]
     k = koker('kap', bvh, staand(0, cy, lambda t, th: zb - t * (zb - z_onder)), ts, lambda t, th: 0.016, n=96,
@@ -1266,7 +1281,8 @@ def riem_en_hangers(bvh, cy, z_riem, M):
 
 
 def kraag(lijf, rig, mouwen, lijfje, M):
-    """De maliënkraag: om de nek, onder de kin en de baard, en als een cape over de schouders."""
+    """De maliënkraag: om de nek, onder de kin en de baard; een kraag, geen cape over de schouders: bij de referentie
+    loopt de wapenrok door tot de nek, en met een cape leek de helm erbovenop te staan."""
     arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
     bvh = bvh_van([(lijf, [a < 0.2 for a in arm]), (lijfje, None)])
     nek = rig.matrix_world @ rig.pose.bones['neck02'].head
@@ -1276,9 +1292,9 @@ def kraag(lijf, rig, mouwen, lijfje, M):
     def z(t, th):
         voor = max(0.0, math.cos(th)) ** 1.5  # 1 recht voor, 0 opzij en achter
         boven = (hoofd.z + 0.03) - voor * (hoofd.z + 0.03 - (kin.z - 0.012))  # voor onder de kin: de baard valt eroverheen
-        onder = nek.z - 0.1 - 0.07 * voor  # voor over de bovenrand van de wapenrok
+        onder = nek.z - 0.045 - 0.05 * voor  # voor over de bovenrand van de wapenrok
         return boven - t * (boven - onder)
-    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.014 + 0.032 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
+    k = koker('kraag', bvh, staand(0, nek.y + 0.015, z), [i / 22 for i in range(23)], lambda t, th: 0.012 + 0.016 * math.sin(math.pi * min(1.0, t * 1.1)) ** 0.6,
               n=128, mat=M['malien'])
     dik(k, 0.006)
     return k
@@ -1545,13 +1561,16 @@ def kappen(lijf, rig, M):
     return delen
 
 
+BLAD = 1.4  # het blad van de speer, maal
+
+
 def speer(rig, M, kruin):
     """De speer staat rechtop in de rechtervuist, zo'n 1,18 keer zo lang als de man (vel 01): een donkere schacht, bovenaan
     een koker met koord omwonden, en een blad als een ruit met afgeronde zijden en een middenrib, met roestspikkels."""
     pb = lambda b: rig.matrix_world @ rig.pose.bones[b].head
     vuist = holte(rig, 'R')
     x, y = vuist.x, vuist.y
-    L = kruin * 1.18
+    L = kruin * 1.32  # zo ver boven de helm als bij de referentie (met 1,18 nauwelijks)
     delen = []
 
     def cil(naam, z0, z1, r, mat, seg=24):
@@ -1561,9 +1580,11 @@ def speer(rig, M, kruin):
         zacht(o)
         o.data.materials.append(mat)
         delen.append(o)
-    z_koker, z_blad = L * (1 - 0.16 * INSTELLINGEN['speer']), L * (1 - 0.1 * INSTELLINGEN['speer'])
+    # het blad groter dan echt (BLAD), zoals de referentie het overdrijft: op spelmaat was het 3 pixels breed en 8 hoog,
+    # bij de referentie 4 en 10
+    z_koker, z_blad = L * (1 - (0.06 + 0.1 * BLAD) * INSTELLINGEN['speer']), L * (1 - 0.1 * BLAD * INSTELLINGEN['speer'])
     ov = INSTELLINGEN['speer'] ** 0.5
-    cil('schacht', 0.02, z_koker + 0.01, 0.016 * ov, M['hout'])
+    cil('schacht', 0.02, z_koker + 0.01, 0.013 * ov, M['hout'])
     oorsprong = delen[-1].data.attributes.new('oorsprong', 'FLOAT_VECTOR', 'POINT')  # voor de nerf (mat_hout)
     oorsprong.data.foreach_set('vector', [c for v in delen[-1].data.vertices for c in v.co])
     cil('koker', z_koker, z_blad + 0.005, 0.017 * ov, M['staal'])
@@ -1582,7 +1603,7 @@ def speer(rig, M, kruin):
     # de brede kant naar de camera van de richting die gerenderd wordt (INSTELLINGEN['bladhoek'])
     n = 24
     vs, fs = [], []
-    Wb = 0.03 * INSTELLINGEN['speer']
+    Wb = 0.03 * BLAD * INSTELLINGEN['speer']
     hoek = math.radians(INSTELLINGEN.get('bladhoek', 0))
     ux, uy = math.cos(hoek), math.sin(hoek)
     for i in range(n + 1):

@@ -33,15 +33,24 @@ function hoogte(beeld) {
   return o - t + 1;
 }
 
+// De rand zoals op het vel van het spel (Marcel, 25 okt: "de referentie heeft ook niet zomaar zwarte lijn eromheen toch?"):
+// geen lijn erbuiten, maar de eigen randpixels donkerder, het meest aan de schaduwkant. Op het vel is een randpixel links
+// 0,92 keer zo licht als twee pixels naar binnen, boven 0,77, onder 0,60 en rechts 0,68; bij het model zonder rand is dat
+// 1,14, 1,04, 0,72 en 1,08 (het randlicht). Per kant het verschil (omtrek.py, de meting van 25 okt).
+const RAND = { links: 0.81, boven: 0.74, onder: 0.83, rechts: 0.63 };
 function omlijn(b) {
   const om = Buffer.from(b.rgba);
   const dekt = (x, y) => x >= 0 && y >= 0 && x < b.b && y < b.h && b.rgba[(y * b.b + x) * 4 + 3] >= 128;
   for (let y = 0; y < b.h; y++) for (let x = 0; x < b.b; x++) {
     if (!dekt(x, y)) continue;
-    const sch = !dekt(x + 1, y) || !dekt(x, y + 1), li = !dekt(x - 1, y) || !dekt(x, y - 1);
-    if (!sch && !li) continue;
-    const f = sch ? 0.38 : 0.55, d = (y * b.b + x) * 4;
-    for (let c = 0; c < 3; c++) om[d + c] = Math.round(b.rgba[d + c] * f + [22, 14, 10][c] * (1 - f));
+    let f = 1;
+    if (!dekt(x - 1, y)) f = Math.min(f, RAND.links);
+    if (!dekt(x + 1, y)) f = Math.min(f, RAND.rechts);
+    if (!dekt(x, y - 1)) f = Math.min(f, RAND.boven);
+    if (!dekt(x, y + 1)) f = Math.min(f, RAND.onder);
+    if (f === 1) continue;
+    const d = (y * b.b + x) * 4;
+    for (let c = 0; c < 3; c++) om[d + c] = Math.round(b.rgba[d + c] * f);
   }
   return { ...b, rgba: om };
 }
