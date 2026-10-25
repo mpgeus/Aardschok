@@ -2393,6 +2393,31 @@ en `palet.py` (per materiaal het lichtbereik, licht, midden en schaduw, over all
 - *Wat klopt*: de omtrek valt in de meeste richtingen voor 0,80 tot 0,85 samen, de breedte per strook scheelt meestal
   0 tot 2 pixels, het blauw van de wapenrok en de hozen ligt in hetzelfde bereik (L10 tot 32), de huid heeft de goede
   kleur, en de helm, de laarzen en de rok hebben de goede maat.
+
+**De verschillen aangepakt (25 okt).** Op de stand oké, gemeten met `vergelijk.py` (nu ook het kleurverschil per pixel,
+per richting en gemiddeld) en `palet.py` (nu eerst per vlak). Het kleurverschil per pixel ging gemiddeld van 27,3 naar
+23,9, in elke richting omlaag; de omtrek (`omtrek.py`, gemiddeld) van 0,79 naar 0,84. Renders en het vel met drie rijen
+(het vel van het spel, oké, nu): `uit/blender/staat-kleur-25okt/vel-oke-nu.png`. Wat er veranderde, en waarom:
+- *Per vlak meten, niet per kleurgroep*: de groep "grijs" van het vel bevatte ook de schaduw van de helm, en zei daardoor
+  dat kap en armstuk koel blauwgrijs moesten. Per vlak (een rechthoek per deel op Z, `palet.VLAK`) zijn ze warm
+  grijsbruin (de kap L40 a5 b9), en was de helm al gelijk (L46). Die stap uit de analyse was fout: terug, en de kap
+  lichter (`mat_malien`).
+- *Het patroon van de wapenrok per richting*: het vel is per richting getekend, niet één lijf; in NO ligt het geel op de
+  rug aan de andere kant dan in N. `BEELD` in `eigen.py` keert het patroon om in NO en NW (een knoop `patroon` in
+  `mat_wapenrok`), zoals het blad van de speer al per richting naar de camera draait. NO ging van 43,5 naar 24,5.
+- *NW gespiegeld*, een gespiegelde NO zoals O en ZO gespiegelde westkanten zijn: de omtrek in NW van 0,77 naar 0,84.
+- *De wapenrok gloeit wat na* (`GEEL_GLOED` 0,12): het geel blijft in de schaduw oranje in plaats van olijf (geel boven
+  L57 naar 73, het vel 71), en de blauwe rok zakt minder weg (L15 naar 17, het vel 21). Het geel iets dieper (`#f0a812`).
+- *De mouwen* roodbruin met een zacht licht op de kussens (L23 a20 b19, het vel L24 a16 b17; was b24). Een eerste poging
+  met fel goudgeel licht werd oranje: het felle licht van de groep "bruin" kwam van de laarzen, niet van de mouwen.
+- *De riem* lichter en 7 cm hoog met een grotere gesp (op het vel 3 pixels, met een gesp van 3 bij 2); de hozen iets
+  lichter.
+- *De speerhand* verder opzij (`arm` 0,4, de onderarm minder naar voren): Z van 0,80 naar 0,86.
+- *De rechtervoet* minder naar buiten (`voeten` R 12): ZO van 0,67 naar 0,86.
+- *Handschoenen en armstukken* dof, zonder glans (in `eigen.py` bij `LAARS`); de baard iets lager op de wangen.
+- *Wat nog scheelt*: de helm een tikje licht (L51 tegen 46), de schaduwkant van de kap te licht (L28 tegen 19), de hozen
+  te donker (L7 tegen 12); de schubben op de mouwen zijn scherper dan het gemêleerde van het vel; de speer heeft geen
+  onderbroken donkere rand.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

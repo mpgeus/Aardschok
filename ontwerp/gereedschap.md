@@ -210,7 +210,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `mocap.py` en de opnames in `gereedschap/blender/beweging/`; `iso` de camera op 30 graden). De omtrek naast die van het
   vel van het spel: `python gereedschap/blender/omtrek.py <map met eigen-<r>-staan.png> <uitmap> Z,ZW,W` (met de Python van
   ComfyUI, die PIL heeft): per richting hoeveel ze samenvallen, per strook hoeveel pixels het model te smal of te breed
-  is, en een plaat met de omtrekken over elkaar.
+  is, en een plaat met de omtrekken over elkaar. Tot op de pixel: `python gereedschap/blender/vergelijk.py <map> <uit.png>
+  [richtingen]` (per richting vel, model, omtrek, kleurverschil en licht naast elkaar, per strook de breedte en de kleur,
+  en het kleurverschil per pixel per richting en gemiddeld), en `python gereedschap/blender/palet.py <map> [nog een map]`
+  (per deel de mediaan in Lab van het vel en van elk model, op Z; daarna per kleurgroep over alle richtingen, maar die
+  mengt delen). Met halve maat en 16 monsters rendert alles in een minuut; vergelijk alleen renders van dezelfde maat.
 
 
 ## Testen in de browser

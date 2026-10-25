@@ -5,7 +5,9 @@
 #   1. de referentie;  2. het model;  3. de omtrek (grijs allebei, rood alleen de referentie, blauw alleen het model);
 #   4. het kleurverschil per pixel (Lab, groen gelijk, rood 30 of meer);  5. licht en donker (rood: het model lichter,
 #   blauw: donkerder, 20 punten L is vol).
-# En per strook van boven naar beneden: de breedte links en rechts, het kleurverschil, en het verschil in L, a en b.
+# En per strook van boven naar beneden: de breedte links en rechts, het kleurverschil, en het verschil in L, a en b; en
+# per richting het kleurverschil per pixel gemiddeld (waar vel en model allebei dekken), met onderaan het gemiddelde.
+# De stand oké van 25 okt: 27,3 (Z 22,2  ZW 25,3  W 26,6  NW 26,0  N 27,9  NO 43,5  O 22,5  ZO 24,4).
 #
 #   python vergelijk.py <map met eigen-<r>-staan.png> <uit.png> [richtingen]     (de Python van ComfyUI, met PIL)
 import sys
@@ -129,6 +131,19 @@ def stroken(ref, model, ref_m, mod_m):
     return uit
 
 
+def per_pixel(ref, model):
+    """Het kleurverschil (Lab) gemiddeld over de pixels waar vel en model allebei dekken."""
+    pr, pm = ref.load(), model.load()
+    s = n = 0
+    for y in range(ref.height):
+        for x in range(ref.width):
+            if pr[x, y][3] >= 128 and pm[x, y][3] >= 128:
+                a, b = omtrek.lab(pr[x, y][:3]), omtrek.lab(pm[x, y][:3])
+                s += sum((a[i] - b[i]) ** 2 for i in range(3)) ** 0.5
+                n += 1
+    return s / max(n, 1)
+
+
 def groot(b):
     return b.resize((b.width * N, b.height * N), Image.NEAREST)
 
@@ -145,6 +160,7 @@ if __name__ == '__main__':
     W, H = omtrek.CB * N, omtrek.CH * N
     vel = Image.new('RGB', (W * 5 + 40, (H + 24) * len(richtingen)), (40, 40, 40))
     d = ImageDraw.Draw(vel)
+    verschil = {}
     for n, r in enumerate(richtingen):
         ref, model, ref_m, mod_m = uitgelijnd(f'{kaart}/eigen-{r}-staan.png', r)
         omt, de, dl = kaarten(ref, model, ref_m, mod_m)
@@ -153,9 +169,12 @@ if __name__ == '__main__':
             vel.paste(groot(b), (i * (W + 10), y))
         d.text((4, y - 16), f'{r}:  referentie | model | omtrek (rood alleen ref, blauw alleen model) | kleurverschil | '
                             f'licht (rood model lichter, blauw donkerder)', fill=(230, 230, 220))
-        print(f'== {r}')
+        verschil[r] = per_pixel(ref, model)
+        print(f'== {r}   kleurverschil per pixel {verschil[r]:.1f}')
         for naam, l, rt, ga, gb in stroken(ref, model, ref_m, mod_m):
             e = sum((ga[i] - gb[i]) ** 2 for i in range(3)) ** 0.5
             print(f'  {naam:10s} breedte links {l:+.1f} rechts {rt:+.1f}   ref L{ga[0]:.0f} a{ga[1]:.0f} b{ga[2]:.0f}   '
                   f'model L{gb[0] - ga[0]:+.0f} a{gb[1] - ga[1]:+.0f} b{gb[2] - ga[2]:+.0f}   verschil {e:.0f}')
+    print('kleurverschil per pixel: ' + '  '.join(f'{r} {e:.1f}' for r, e in verschil.items()) +
+          f'   gemiddeld {sum(verschil.values()) / len(verschil):.1f}')
     vel.save(uit)

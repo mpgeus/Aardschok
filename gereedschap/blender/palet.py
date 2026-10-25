@@ -3,7 +3,11 @@
 # uitgelijnd zoals vergelijk.py) gaat naar een materiaal op zijn kleur (tint en verzadiging); per materiaal het aantal
 # pixels (hoeveel ervan in beeld is) en L, a en b bij het licht (80e percentiel van L), het midden en de schaduw (20e).
 #
-#   python palet.py <map met eigen-<r>-staan.png>      (de Python van ComfyUI, met PIL)
+# Let op: een groep op kleur mengt delen. "Grijs" van het vel bevat ook de schaduw van de helm, en zei daardoor dat kap en
+# armstuk koel blauwgrijs moesten; per vlak gemeten (hieronder, VLAK) zijn ze warm grijsbruin. Kijk dus eerst per vlak: een
+# rechthoek per deel, met de hand op het raster van Z gezet, en daarin de mediaan van het vel en van het model.
+#
+#   python palet.py <map met eigen-<r>-staan.png> [nog een map ...]      (de Python van ComfyUI, met PIL)
 import colorsys
 import sys
 
@@ -31,6 +35,27 @@ def soort(rgb):
     return 'anders'
 
 
+# per deel een rechthoek op het vak van Z (x0, y0, x1, y1, op spelmaat), binnen het deel zodat een pixel scheef niet telt
+VLAK = {'helm': (16, 21, 32, 29), 'kap': (15, 37, 19, 43), 'kap schaduw': (28, 37, 32, 43), 'mouw L': (34, 42, 40, 54),
+        'riem': (16, 57, 33, 59), 'armstuk': (35, 56, 40, 62), 'geel boven': (15, 45, 24, 55),
+        'blauw boven': (26, 45, 32, 55), 'geel rok': (17, 62, 26, 72), 'blauw rok': (27, 62, 33, 72),
+        'hozen': (16, 75, 33, 77), 'laarzen': (15, 81, 22, 88)}
+
+
+def vlakken(kaarten):
+    """Per deel de mediaan in Lab van het vel en van elk model (staan Z)."""
+    uit = {}
+    for kaart in kaarten:
+        ref, model, _, _ = vergelijk.uitgelijnd(f'{kaart}/eigen-Z-staan.png', 'Z')
+        for naam, b in (('vel', ref), (kaart.replace(chr(92), '/').rstrip('/').rsplit('/', 1)[-1], model)):
+            px = b.load()
+            for v, (x0, y0, x1, y1) in VLAK.items():
+                labs = [omtrek.lab(px[x, y][:3]) for x in range(x0, x1 + 1) for y in range(y0, y1 + 1) if px[x, y][3] >= 128]
+                uit.setdefault(v, {})[naam] = [sorted(l[i] for l in labs)[len(labs) // 2] for i in range(3)] if labs else None
+    for v, d in uit.items():
+        print(f'{v:12s} ' + '   '.join(f'{n[:10]:10s} L{c[0]:3.0f} a{c[1]:3.0f} b{c[2]:3.0f}' for n, c in d.items() if c))
+
+
 def bereik(px):
     if not px:
         return None
@@ -40,7 +65,11 @@ def bereik(px):
 
 
 if __name__ == '__main__':
-    kaart = sys.argv[1]
+    print('Per vlak (staan Z):')
+    vlakken(sys.argv[1:])
+    kaart = sys.argv[-1]
+    print()
+    print(f'Per kleurgroep, alle richtingen ({kaart}):')
     verz = {}
     for r in omtrek.ALLE:
         ref, model, ref_m, mod_m = vergelijk.uitgelijnd(f'{kaart}/eigen-{r}-staan.png', r)

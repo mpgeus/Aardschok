@@ -62,8 +62,8 @@ INSTELLINGEN = {
     'borst': -4,
     # graden naar buiten, per voet: zoals op het vel de rechtervoet schuin naar buiten, de linker bijna recht (Marcel:
     # "Schoenen staan niet op dezelfde manier")
-    'voeten': {'R': 24, 'L': 12},
-    'arm': 0.3,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 in Z te smal, 0,4 in ZW te ver uit)
+    'voeten': {'R': 12, 'L': 12},  # de analyse: met 24 rechts stond de voet in Z 4 en in ZO 7 pixels buiten het vel
+    'arm': 0.4,              # hoe ver de rechterarm met de speer van het lijf staat (de analyse: in Z 4 pixels te dicht)
     'armlengte': 0.85,       # de onderarmen korter, zoals de gedrongen man van de referentie (de hand bij de heup)
     'kijk': (-12, 0),        # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag (10 omlaag verborg in Z het
                              # gezicht onder de helm: Marcel, "het gezicht in Zuid is onduidelijk")
@@ -349,8 +349,11 @@ def mat_wambuis():
     k = Knopen('wambuis')
     v = k.ruis(5, 2)
     kus = k.n('ShaderNodeAttribute', attribute_name='kussen').outputs['Fac']
-    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.25), lin('#8a4a22'), lin('#4a2410'))
-    kl = k.meng(k.glad(kus, 0.15, 0.8, 0.85, 0.0), kl, lin('#2a1408'))
+    # warm roodbruin met goudgele toppen op de kussens, zoals op het vel (de analyse van 25 okt: bij het vel licht L46 a21
+    # b50, midden L28 a18 b21; bij ons was het donkerder en minder rood, zonder lichte toppen)
+    kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.25), lin('#965238'), lin('#4c2410'))
+    kl = k.meng(k.glad(kus, 0.8, 0.98, 0.0, 0.3), kl, lin('#b0684a'))  # het licht op de bolle kussens
+    kl = k.meng(k.glad(kus, 0.15, 0.8, 0.85, 0.0), kl, lin('#2e1206'))
     kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
     return k.af(kl, ruw=0.9, holte=0.55)
 
@@ -451,7 +454,7 @@ def mens():
         richt(rig, f'{b}.L', (0.02, -0.55, -1))
     richt(rig, 'wrist.L', (0.0, -0.5, -1))
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.R', (-0.08, -0.75, 0.9))  # de speerhand hoger, op borsthoogte, zoals op het vel
+        richt(rig, f'{b}.R', (-0.28, -0.5, 0.9))  # de speerhand op borsthoogte, opzij en minder naar voren (de analyse)
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
     # de benen wat naar binnen, en de voeten wat naar buiten
     for k, s in (('L', 1), ('R', -1)):
@@ -773,6 +776,9 @@ def dik(ob, d, offset=1):
 
 # ---------------------------------------------------------------- materialen erbij
 
+GEEL_GLOED = 0.12  # hoe sterk de wapenrok gloeit (0 is gewoon belicht): het vel schaduwt hem nauwelijks
+
+
 def mat_wapenrok(z_riem, z_zoom=0.0):
     """Van voren blauw met een brede gele baan in het midden, van de kraag tot de zoom; op de rok smaller. Op de rug
     gevierendeeld (vel 01, en beeld.md, "De referentie, onderdeel voor onderdeel")."""
@@ -781,6 +787,11 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     sep = k.n('ShaderNodeSeparateXYZ')
     k.zet(sep.inputs[0], p)
     x, y, z = sep.outputs['X'], sep.outputs['Y'], sep.outputs['Z']
+    # links en rechts per richting om te keren (eigen.py, BEELD): het vel van het spel is per richting getekend, niet één
+    # lijf; in NO ligt het geel op de rug aan de andere kant dan in N
+    om = k.n('ShaderNodeValue', name='patroon')
+    om.outputs[0].default_value = 1.0
+    x = k.w('MULTIPLY', x, om.outputs[0])
     boven = k.glad(z, z_riem - 0.004, z_riem + 0.004)
     # de gele baan naar zijn rechterkant (-x) en breed, zoals op het vel van het spel: in Z links in beeld, met rechts in
     # beeld veel blauw en links een smalle blauwe rand; op de rok bijna even breed (in Z was de rok te blauw)
@@ -792,13 +803,18 @@ def mat_wapenrok(z_riem, z_zoom=0.0):
     achter = k.glad(y, 0.0, 0.03)
     f = k.w('ADD', k.w('MULTIPLY', baan, k.w('SUBTRACT', 1.0, achter)), k.w('MULTIPLY', kwartier, achter))
     # voller dan eerst: op spelmaat was het geel naast het vel van het spel te dof (omtrek.py, kleur: b 10 tot 24 lager)
-    kl = k.meng(f, lin('#2258c8'), lin('#ffbc12'))
+    kl = k.meng(f, lin('#2258c8'), lin('#f0a812'))
     v = k.ruis(7, 2)
     kl = k.meng(k.glad(v, 0.35, 0.65, 0, 0.3 * INSTELLINGEN.get('detail', 1.0)), kl, (0, 0, 0, 1))
     kl = k.meng(k.w('MULTIPLY', k.glad(z, z_zoom + 0.06, z_zoom), k.glad(k.ruis(30, 3), 0.3, 0.6, 0.35, 0.7)), kl, lin('#3a2a1c'))
     # het weefsel van echt linnen, de draden groter dan echt (op de echte maat zijn ze kleiner dan een pixel van de HD-render)
     kl = k.met_textuur(kl, 'rough_linen', 0.7, contrast=1.0, kracht=1.2)
     k.bsdf.inputs['Sheen Weight'].default_value = 0.3
+    # de stof gloeit wat na, zodat het geel in de schaduw oranje blijft in plaats van modderig olijf, en het blauw van de
+    # rok niet wegzakt (de analyse: het vel schaduwt de wapenrok nauwelijks, geel L70 tot 76, de blauwe rok L21 tegen 23
+    # boven; bij ons in de schaduw olijf, en de rok L13)
+    k.zet(k.bsdf.inputs['Emission Color'], k.meng(f, lin('#2c3c78'), lin('#ffaa14')))
+    k.bsdf.inputs['Emission Strength'].default_value = GEEL_GLOED
     return k.af(kl, ruw=0.92, holte=0.65)  # diepere schaduw in de plooien, zoals op het vel
 
 
@@ -855,8 +871,8 @@ def mat_malien():
     for i in range(3):
         k.zet(cc.inputs[i], toon)
     # donkerder dan eerst: bij de referentie zijn kap en baard één donkere massa
-    licht = k.meng(1.0, lin('#6e6258'), cc.outputs[0], 'MULTIPLY')
-    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#17120e'), licht)
+    licht = k.meng(1.0, lin('#b0a090'), cc.outputs[0], 'MULTIPLY')  # warm grijsbruin, per vlak gemeten op het vel (L40 a5 b9)
+    kl = k.meng(k.w('ADD', k.w('MULTIPLY', ringen, INSTELLINGEN.get('detail', 1.0)), 1 - INSTELLINGEN.get('detail', 1.0)), lin('#221a14'), licht)
     k.bobbel(ringen, 1.0, 0.003)
     m = k.af(kl, ruw=0.38, metaal=0.85, holte=0.55)
     m['glans'] = True  # eigen.py maakt dit materiaal niet mat: de glinstering maakt de ringen leesbaar
@@ -1001,7 +1017,7 @@ def baard(lijf, rig, M):
         lip = abs(p.x) < 0.028 and mond.z - 0.014 < p.z < mond.z + 0.006 and p.y < mond.y + 0.012
         if p.z < mond.z - 0.004 and p.y < y_mid and not lip:
             gb.add([v.index], 1.0, 'REPLACE')
-        elif abs(p.x) > 0.03 and p.z < mond.z + 0.012 + (abs(p.x) - 0.03) * 0.8 and p.y < y_mid:
+        elif abs(p.x) > 0.03 and p.z < mond.z - 0.002 + (abs(p.x) - 0.03) * 0.8 and p.y < y_mid:
             gb.add([v.index], 1.0, 'REPLACE')  # de wangen en de bakkebaarden (lager dan eerst: de wangen vrij, zoals op het vel)
         elif abs(p.x) < 0.055 and mond.z + 0.004 < p.z < mond.z + 0.03 and p.y < mond.y + 0.014:
             gs.add([v.index], 1.0, 'REPLACE')
@@ -1382,14 +1398,16 @@ def riem_en_hangers(bvh, cy, z_riem, M):
     """De brede roodbruine riem met een grote rechthoekige gesp, en aan beide heupen een smalle hanger: rechts een schede
     met een beslagen punt, links een riempje met een klein beslag."""
     delen = []
-    riem = koker('riem', bvh, staand(0, cy, lambda t, th: z_riem + 0.026 - t * 0.052), [0, 0.5, 1],
+    # 7 cm hoog: op het vel is de riem op spelmaat 3 pixels met een gesp van 3 bij 2 (de analyse van 25 okt; met 5 cm was
+    # hij bij ons een donkere lijn van 1 pixel)
+    riem = koker('riem', bvh, staand(0, cy, lambda t, th: z_riem + 0.035 - t * 0.07), [0, 0.5, 1],
                  lambda t, th: 0.012, n=128, mat=M['riem'])
     dik(riem, 0.006)
     delen.append(riem)
     voor = straal(bvh, Vector((0, cy, z_riem)), Vector((0, -1, 0))) + 0.018
-    for naam, plek, maat, mat in (('gesp', (0, cy - voor, z_riem), (0.07, 0.012, 0.062), M['staal']),
-                                  ('gesp-gat', (0, cy - voor - 0.004, z_riem), (0.044, 0.01, 0.038), M['riem']),
-                                  ('tong', (0.012, cy - voor - 0.007, z_riem), (0.026, 0.006, 0.03), M['omslag'])):
+    for naam, plek, maat, mat in (('gesp', (0, cy - voor, z_riem), (0.085, 0.012, 0.075), M['staal']),
+                                  ('gesp-gat', (0, cy - voor - 0.004, z_riem), (0.05, 0.01, 0.042), M['riem']),
+                                  ('tong', (0.014, cy - voor - 0.007, z_riem), (0.03, 0.006, 0.034), M['omslag'])):
         bpy.ops.mesh.primitive_cube_add(size=1, location=plek, scale=maat)
         o = bpy.context.active_object
         b = o.modifiers.new('rand', 'BEVEL')
@@ -1784,24 +1802,24 @@ def bouw():
     riem_z = (rig.matrix_world @ rig.pose.bones['spine03'].head).z  # 2 cm lager: de borst wat langer, zoals op het vel
     M = {
         'huid': mat_huid(rig),
-        'hozen': mat_stof('hozen', '#26357a', 30, 0.3, textuur=('hessian_230', 0.5)),  # blauw, zoals op het vel
+        'hozen': mat_stof('hozen', '#3e4a88', 30, 0.3, textuur=('hessian_230', 0.5)),  # blauw, zoals op het vel
         'wambuis': mat_wambuis(),
-        'handschoen': mat_leer('handschoen', '#4a3428', '#1a100a'),  # donker: de vuist los van de schacht, zoals op het vel
+        'handschoen': mat_leer('handschoen', '#5a3a26', '#22140c'),  # donker: de vuist los van de schacht, zoals op het vel
         'oog': mat_oog(),
         'haar': mat_haar(),
         'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
-        'wapenrok-goud': mat_stof('wapenrok-goud', '#ffbc12', 30, 0.25),
+        'wapenrok-goud': mat_stof('wapenrok-goud', '#f0a812', 30, 0.25),
         'malien': mat_malien(),
         # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de
         # generator: ertussenin
         'helm': mat_staal('helm', '#a0a6bc', 0.24),  # helder blauwig zilver, zoals de referentie (op spelmaat 12 donkerder)
         'staal': mat_staal('staal', '#a3a8b0', 0.28),
         'hout': mat_hout(),
-        'riem': mat_leer('riem', '#793a28', '#3a160c'),
+        'riem': mat_leer('riem', '#965038', '#4a2010'),
         'leer': mat_leer('leer', '#5a3418'),
         'laars': mat_laars(),
         'omslag': mat_leer('omslag', '#a8582a', '#5a2a10'),  # een tikje donkerder dan de laars: de rand bovenaan
-        'armstuk': mat_leer('armstuk', '#4d3730', '#1e1410'),
+        'armstuk': mat_leer('armstuk', '#5e4438', '#261a14'),
         'armrand': mat_leer('armrand', '#3e2c22', '#1a120c'),  # donker: bij de referentie compacte, donkere armstukken
         'schede': mat_leer('schede', '#8a4630', '#2e120a'),
         'koord': mat_leer('koord', '#9a5a2a', '#4a2410'),

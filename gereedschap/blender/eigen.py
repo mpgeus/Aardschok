@@ -50,8 +50,8 @@ STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW
 # rand in het licht (sheen) en het matte licht van ruwe stof (diffuse roughness); leer met een lichte glans; het staal glanst
 # (metaal toont zijn vorm door wat het weerspiegelt: de lucht met een verloop, licht_voor_spelmaat).
 STOF = ('wapenrok', 'wambuis', 'hozen')
-LEER = ('riem', 'leer', 'armstuk', 'armrand', 'schede', 'handschoen', 'koord')
-LAARS = ('laars', 'omslag')
+LEER = ('riem', 'leer', 'schede', 'koord')
+LAARS = ('laars', 'omslag', 'handschoen', 'armstuk', 'armrand')  # dof leer
 STAAL = ('helm', 'staal')
 SOORTEN = {
     'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
@@ -184,9 +184,11 @@ def blad_naar_camera(hoek):
 # wijken", "De arm ZO staat ook wat anders"): de draaiing van de camera en of het beeld gespiegeld is. Gemeten met de
 # omtrek (omtrek.py) over draaiingen van 5 graden: het vel staat niet om de 45 graden (W staat 25 graden meer naar de
 # kijker, NW 20 graden meer van hem af), en de oostkanten O en ZO zijn er gespiegelde westkanten (de speer in de
-# linkerhand). Samen viel de omtrek gemiddeld van 0,79 naar 0,83.
-BEELD = {'Z': (5, False), 'ZW': (40, False), 'W': (65, False), 'NW': (155, False), 'N': (185, False),
-         'NO': (-145, False), 'O': (65, True), 'ZO': (25, True)}
+# linkerhand). Samen viel de omtrek gemiddeld van 0,79 naar 0,83. NW is er een gespiegelde NO (de analyse van 25 okt:
+# de omtrek 0,77 naar 0,84). Het derde getal keert het patroon van de wapenrok om (speerman_hd.mat_wapenrok): in NO ligt
+# het geel op de rug op het vel aan de andere kant dan in N.
+BEELD = {'Z': (5, False, False), 'ZW': (40, False, False), 'W': (65, False, False), 'NW': (-145, True, True),
+         'N': (185, False, False), 'NO': (-145, False, True), 'O': (65, True, False), 'ZO': (25, True, False)}
 SPIEGEL = Matrix.Diagonal((-1, 1, 1, 1))  # om het vlak van de camera in rust (x = 0)
 
 
@@ -203,7 +205,10 @@ def spiegel_png(pad):
 
 
 def render_richting(sc, naam, r, lichten):
-    hoek, spiegel = BEELD[r]
+    hoek, spiegel, om = BEELD[r]
+    for m in bpy.data.materials:
+        if m.node_tree and m.node_tree.nodes.get('patroon'):
+            m.node_tree.nodes['patroon'].outputs[0].default_value = -1.0 if om else 1.0
     render(sc, naam, hoek, lichten, spiegel)
 
 
