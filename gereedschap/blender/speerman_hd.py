@@ -1040,7 +1040,8 @@ def kruin(lijf):
 HELM_RAND = 1.45  # de rand van de helm, maal de koepel
 HELM_ZAK = 0.5  # hoeveel verder de rand achteraan zakt (2 en een smallere rand voor maakten hem scheef: Marcel, "de helm
 HELM_VOOR = 0.0  # is ongelijk"); hoeveel smaller de rand van voren is (0 even breed als opzij)
-HELM_ACHTER = 0.022  # de helm zo ver naar achteren op het hoofd: het gezicht steekt er van voren onder uit
+HELM_ACHTER = 0.01  # de helm zo ver naar achteren op het hoofd: het gezicht steekt er van voren onder uit (met 0,022
+# stak hij achter te ver uit: Marcel, "wat beter verdelen")
 HELM_RAND_HOOGTE = 0.036  # de rand boven de ogen (maal het hoofd): diep op het hoofd, de rand laag over het voorhoofd
 # (Marcel: "De helm past nog niet goed zoals de referentie": met 0,05 stond hij er hoog bovenop); het gezicht komt eronder
 # uit doordat de helm naar achteren staat (HELM_ACHTER); achteraan zakt hij (HELM_ZAK)
