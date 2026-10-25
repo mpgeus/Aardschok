@@ -2336,7 +2336,13 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   referentie lijkt verder naar voren gedraaid dan wat wij hebben. Staat net iets meer westelijker"): de omslag lager
   (4 cm in plaats van 5,8) en strakker om de laars, en de linkerarm naar voren met de onderarm gebogen, zodat de hand
   voor het lijf hangt zoals op het vel in W. (Met de hand nog verder naar voren raakte de stof van de rok in de knoop
-  met de arm, en vond de schede aan de riem geen plek meer.)
+  met de arm, en vond de schede aan de riem geen plek meer.) Daarna (Marcel: "Arm toch nog verder naar voren. Ook het gezicht in
+  Zuid is onduidelijk", en "De ring om de laars is mij nog steeds te dik"): de linkerhand verder naar voren (de schede
+  valt nu terug op een vaste plek als de meting mist); de omslag van de laars een dun randje (2 tot 4 mm, de rol 2,8 mm);
+  het gezicht: het hoofd recht vooruit (`kijk` -12, 0: 10 graden omlaag verborg de ogen onder de rand), de rand iets hoger
+  (`HELM_RAND_HOOGTE` 0,048), de oogkassen kleiner en lichter, de baard lager op de wangen, de maliënkap wijder open
+  (82 graden), en de huid lichter (helder perzik, zoals het vel). Het gezicht leest nu, maar is nog smaller en wat
+  donkerder dan bij de referentie (L 5 lager).
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

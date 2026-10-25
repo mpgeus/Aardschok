@@ -63,7 +63,8 @@ INSTELLINGEN = {
     'voeten': 8,             # graden naar buiten (14 stond in Z breder dan de referentie)
     'arm': 0.3,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 in Z te smal, 0,4 in ZW te ver uit)
     'armlengte': 0.85,       # de onderarmen korter, zoals de gedrongen man van de referentie (de hand bij de heup)
-    'kijk': (-20, 10),       # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag, zoals op het vel
+    'kijk': (-12, 0),        # het hoofd zoveel graden naar zijn rechterkant (de speer) en omlaag (10 omlaag verborg in Z het
+                             # gezicht onder de helm: Marcel, "het gezicht in Zuid is onduidelijk")
     'benen_in': 2,           # graden dat de dijen naar binnen staan: de voeten dichter bij elkaar, zoals de referentie
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
@@ -306,8 +307,10 @@ def mat_huid(rig=None):
     referentie zie je wel wat uiterlijke kenmerken")."""
     k = Knopen('huid')
     r = k.ruis(60, 4)
-    kl = k.meng(k.glad(k.ruis(14, 2), 0.4, 0.7, 0, 0.35), lin('#b8714c'), lin('#a4553c'))
-    kl = k.meng(k.w('MULTIPLY', r, 0.15), kl, lin('#7a4630'))
+    # lichter dan eerst: onder de rand van de helm was het gezicht een donker vlak (Marcel: "het gezicht in Zuid is
+    # onduidelijk"); bij de referentie is het helder perzik
+    kl = k.meng(k.glad(k.ruis(14, 2), 0.4, 0.7, 0, 0.35), lin('#e0946a'), lin('#c8764e'))
+    kl = k.meng(k.w('MULTIPLY', r, 0.15), kl, lin('#8a5236'))
     if rig is not None:
         p = k.n('ShaderNodeVectorMath', operation='MULTIPLY')
         k.zet(p.inputs[0], k.plek())
@@ -318,9 +321,9 @@ def mat_huid(rig=None):
             d = k.n('ShaderNodeVectorMath', operation='DISTANCE')
             k.nt.links.new(p.outputs[0], d.inputs[0])
             d.inputs[1].default_value = (o.x, o.y * 0.35, o.z + 0.003)
-            g = k.glad(d.outputs['Value'], 0.03, 0.012)
+            g = k.glad(d.outputs['Value'], 0.022, 0.01)
             kas = g if kas is None else k.w('MAXIMUM', kas, g)
-        kl = k.meng(k.w('MULTIPLY', kas, 0.85), kl, lin('#2a140a'))
+        kl = k.meng(k.w('MULTIPLY', kas, 0.45), kl, lin('#3a1c0e'))  # niet te zwaar: anders werd het gezicht een donkere vlek
     k.bsdf.inputs['Subsurface Weight'].default_value = 0.12
     k.bsdf.inputs['Subsurface Radius'].default_value = (0.9, 0.4, 0.25)
     k.bsdf.inputs['Subsurface Scale'].default_value = 0.01
@@ -437,12 +440,12 @@ def mens():
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.36) * s, -0.06 if k == 'L' else 0.06, -1))
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.34) * s, -0.16 if k == 'L' else 0.06, -1))
     # de linkerhand voor het lijf, bij de buik, zoals op het vel in W (Marcel: "de arm van de referentie lijkt verder naar
     # voren gedraaid dan wat wij hebben"); eerst hing hij recht naast het lijf
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.L', (0.0, -0.36, -1))
-    richt(rig, 'wrist.L', (0.0, -0.32, -1))
+        richt(rig, f'{b}.L', (-0.06, -0.6, -1))
+    richt(rig, 'wrist.L', (-0.06, -0.55, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.R', (-0.08, -0.75, 0.9))  # de speerhand hoger, op borsthoogte, zoals op het vel
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
@@ -994,8 +997,8 @@ def baard(lijf, rig, M):
         lip = abs(p.x) < 0.028 and mond.z - 0.014 < p.z < mond.z + 0.006 and p.y < mond.y + 0.012
         if p.z < mond.z - 0.004 and p.y < y_mid and not lip:
             gb.add([v.index], 1.0, 'REPLACE')
-        elif abs(p.x) > 0.03 and p.z < mond.z + 0.026 + (abs(p.x) - 0.03) * 0.8 and p.y < y_mid:
-            gb.add([v.index], 1.0, 'REPLACE')  # de wangen en de bakkebaarden
+        elif abs(p.x) > 0.03 and p.z < mond.z + 0.012 + (abs(p.x) - 0.03) * 0.8 and p.y < y_mid:
+            gb.add([v.index], 1.0, 'REPLACE')  # de wangen en de bakkebaarden (lager dan eerst: de wangen vrij, zoals op het vel)
         elif abs(p.x) < 0.055 and mond.z + 0.004 < p.z < mond.z + 0.03 and p.y < mond.y + 0.014:
             gs.add([v.index], 1.0, 'REPLACE')
         for o in (oogL, oogR):
@@ -1044,7 +1047,7 @@ HELM_ZAK = 0.5  # hoeveel verder de rand achteraan zakt (2 en een smallere rand 
 HELM_VOOR = 0.0  # is ongelijk"); hoeveel smaller de rand van voren is (0 even breed als opzij)
 HELM_ACHTER = 0.01  # de helm zo ver naar achteren op het hoofd: het gezicht steekt er van voren onder uit (met 0,022
 # stak hij achter te ver uit: Marcel, "wat beter verdelen")
-HELM_RAND_HOOGTE = 0.036  # de rand boven de ogen (maal het hoofd): diep op het hoofd, de rand laag over het voorhoofd
+HELM_RAND_HOOGTE = 0.048  # de rand boven de ogen (maal het hoofd): diep op het hoofd, de rand laag over het voorhoofd
 # (Marcel: "De helm past nog niet goed zoals de referentie": met 0,05 stond hij er hoog bovenop); het gezicht komt eronder
 # uit doordat de helm naar achteren staat (HELM_ACHTER); achteraan zakt hij (HELM_ZAK)
 
@@ -1155,7 +1158,7 @@ def maliekap(lijf, rig, M):
     for f in bm.faces:
         c = f.calc_center_median()
         hoek = math.degrees(math.atan2(c.x, -(c.y - cy)))
-        if abs(hoek) < 62:
+        if abs(hoek) < 82:  # wijd open: met 62 omlijstte de kap het gezicht als een donkere lijst (Marcel: "onduidelijk")
             weg.append(f)
     bmesh.ops.delete(bm, geom=weg, context='FACES')
     bm.to_mesh(k.data)
@@ -1564,16 +1567,16 @@ def laarzen(lijf, rig, M):
         # hoog en wijd, zoals de grote omslagen van de referentie
         # lager en strakker om de laars (Marcel: "de bovenkant van de laarzen wat te groot, lijken nu grote ringen")
         omslag = koker('omslag.' + k, lb, recht(boven, as_), [0.004 + 0.036 * i / 6 for i in range(7)],
-                       lambda t, th: 0.003 + 0.005 * t / 0.04, n=96, mat=M['omslag'], ver=0.25)
+                       lambda t, th: 0.002 + 0.002 * t / 0.04, n=96, mat=M['omslag'], ver=0.25)  # dun (Marcel: "nog steeds te dik")
         dik(omslag, 0.006)
         delen.append(bak_mod(omslag))
         # de opgerolde onderrand van de omslag
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.0045, major_segments=96, minor_segments=12,
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.0028, major_segments=96, minor_segments=12,
                                          location=boven + as_ * 0.04, rotation=Vector((0, 0, 1)).rotation_difference(-as_).to_euler())
         rol = bpy.context.active_object
         rol.name = 'omslag.rol.' + k
         rol.data.materials.append(M['omslag'])
-        passend(rol, lb, boven, as_, 0.1, 0.009, proef=-0.004)
+        passend(rol, lb, boven, as_, 0.1, 0.005, proef=-0.004)
         zacht(rol)
         delen.append(rol)
         # de enkelriem en de gesp aan de buitenkant
