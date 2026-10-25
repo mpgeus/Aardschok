@@ -46,7 +46,10 @@ INSTELLINGEN = {
     # nek, korte benen (de doelen van MakeHuman, dan de botten van de benen korter: de doelen gaan niet verder dan 1)
     'doelen': {'legs/measure-upperleg-height-decr': 1, 'legs/measure-lowerleg-height-decr': 1, 'neck/measure-neck-height-decr': 0.4,
                'neck/neck-scale-vert-decr': 0.0, 'torso/measure-shoulder-dist-incr': 1.0, 'torso/torso-scale-horiz-incr': 0.0,
-               'torso/measure-frontchest-dist-incr': 1, 'torso/torso-scale-depth-incr': 0.6,
+               'torso/measure-frontchest-dist-incr': 1, 'torso/torso-scale-depth-incr': 1.0,
+               # wijdere broek en een volle borst, zoals de omtrek van de referentie (omtrek.py; Marcel, 25 okt: "Begin maar
+               # met de omtrek"): van opzij waren de benen 1,3 pixel per kant te dun en de borst 2 te plat
+               'legs/measure-thigh-circ-incr': 0.7, 'legs/measure-calf-circ-incr': 0.7,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
                'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.85, 'arms/r-upperarm-fat-incr': 0.85,
                'arms/l-lowerarm-fat-incr': 0.5, 'arms/r-lowerarm-fat-incr': 0.5,
@@ -55,7 +58,9 @@ INSTELLINGEN = {
     'been': 0.72,            # de botten van de benen, in de lengte
     'hoofd': 1.25,           # het hoofd groter dan echt, zoals op de plaat (1,35 oogde naast de plaat te groot)
     'borst': 7,              # graden dat de bovenrug achterover leunt: de borst vooruit, zoals op de plaat
-    'voeten': 14,            # graden naar buiten
+    'voeten': 8,             # graden naar buiten (14 stond in Z breder dan de referentie)
+    'arm': 0.4,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 stond in Z 5 pixels te smal)
+    'benen_in': 2,           # graden dat de dijen naar binnen staan: de voeten dichter bij elkaar, zoals de referentie
     'zon': 4.5, 'zonkleur': (1.0, 0.9, 0.78),
     'lucht': 0.5, 'luchtkleur': (0.5, 0.58, 0.74),
     'lijn': 3.0,
@@ -392,14 +397,18 @@ def mens():
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', ((0.22 if k == 'R' else 0.3) * s, 0.06, -1))
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.3) * s, 0.06, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.L', (0.06, -0.22, -1))
     richt(rig, 'wrist.L', (0.02, -0.2, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.R', (-0.1, -1, 0.5))
     richt(rig, 'wrist.R', (-0.1, -1, 0.35))
-    # de voeten wat naar buiten
+    # de benen wat naar binnen, en de voeten wat naar buiten
+    for k, s in (('L', 1), ('R', -1)):
+        pb = rig.pose.bones[f'upperleg01.{k}']
+        nu = ((rig.matrix_world @ pb.tail) - (rig.matrix_world @ pb.head)).normalized()
+        richt(rig, f'upperleg01.{k}', Matrix.Rotation(math.radians(INSTELLINGEN['benen_in'] * s), 3, 'Y') @ nu)
     for k, s in (('L', 1), ('R', -1)):
         pb = rig.pose.bones[f'foot.{k}']
         nu = ((rig.matrix_world @ pb.tail) - (rig.matrix_world @ pb.head)).normalized()
@@ -1342,7 +1351,7 @@ def laarzen(lijf, rig, M):
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
         opzij = Vector((-richting.y, richting.x, 0))
         lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.012
-        start = Vector((hiel.x, hiel.y, 0)) - richting * 0.016
+        start = Vector((hiel.x, hiel.y, 0)) - richting * 0.046  # 3 cm verder naar achteren, zoals de referentie van opzij
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=1)
         bol = bpy.context.active_object
         for v in bol.data.vertices:

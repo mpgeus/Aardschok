@@ -205,6 +205,12 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   Naar `gereedschap/pixelart/uit/blender/render/`, vier keer de spelmaat. `node gereedschap/blender/proef.cjs z` zet staan
   naar Z naast de bron van de generator, groot en op spelmaat (`uit/blender/z.png`); zonder `z` alle richtingen en het lopen
   (`uit/blender/proef.png`).
+  Proef (a), het HD-model met zijn eigen kleuren: `blender.exe -b -P gereedschap/blender/eigen.py -- <map> <richtingen>
+  [staan|steek] [iso]` (de richtingen Z ZW W NW N NO O ZO; zonder `staan` of `steek` ook het lopen, met de pas uit
+  `mocap.py` en de opnames in `gereedschap/blender/beweging/`; `iso` de camera op 30 graden). De omtrek naast die van het
+  vel van het spel: `python gereedschap/blender/omtrek.py <map met eigen-<r>-staan.png> <uitmap> Z,ZW,W` (met de Python van
+  ComfyUI, die PIL heeft): per richting hoeveel ze samenvallen, per strook hoeveel pixels het model te smal of te breed
+  is, en een plaat met de omtrekken over elkaar.
 
 
 ## Testen in de browser

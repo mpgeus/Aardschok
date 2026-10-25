@@ -2238,6 +2238,17 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   meten in Z, ZW en W, en de maten van het model (lijf, armen, helm, laarzen, `BREED`) bijstellen tot de omtrekken
   samenvallen; (2) dan licht en kleur per deel op spelmaat (zoals de kleurmeting van 24 okt), met de kap donker; (3) dan
   de bewegingen naar de standen van de referentie, beeld voor beeld.
+- *De omtrek gemeten* (Marcel, 25 okt: "Begin maar met de omtrek"; `omtrek.py`, met de man even hoog als op het vel van
+  het spel en de voeten op één lijn, zonder de speer). De omtrek valt al voor 84 procent samen (Z 0,83, ZW 0,86, W 0,83):
+  op het oog leek het verschil groter, maar dat kwam doordat de speer en de helm mee telden. Bijgesteld waar het meer dan
+  twee pixels van het vel scheelde: de rechterarm met de speer verder van het lijf (`arm` 0,4; in Z links 5 pixels te
+  smal), de voeten 8 graden naar buiten in plaats van 14 en de dijen 2 graden naar binnen, de laarzen 3 cm naar achteren
+  (van opzij te ver naar voren), wijdere dijen en kuiten, en een diepere borst. Daarna 0,83: wat overblijft, een tot drie
+  pixels, valt binnen wat de stof en het uitlijnen per keer verschuiven. Het verschil zit dus vooral binnen de omtrek, op
+  spelmaat naast elkaar (`uit/blender/omtrek-spelmaat.png`): de helm is bij de referentie helder zilver met een bredere
+  rand en een lagere koepel (bij ons donkergrijs en hoger; Marcel vond hem eerder te licht), de kap en de baard zijn een
+  donkere massa (bij ons lichtgrijze maliën en een licht, oranje gezicht), de laarzen lichtbruin en breed met grote
+  omslagen, en het geheel helderder en verzadigder.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
