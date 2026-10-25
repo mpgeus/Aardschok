@@ -51,13 +51,15 @@ INSTELLINGEN = {
                # met de omtrek"): van opzij waren de benen 1,3 pixel per kant te dun en de borst 2 te plat
                'legs/measure-thigh-circ-incr': 0.7, 'legs/measure-calf-circ-incr': 0.7,
                'head/head-square': 0.6, 'head/head-fat-incr': 0.4, 'hands/l-hand-scale-incr': 1, 'hands/r-hand-scale-incr': 1,
-               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 0.85, 'arms/r-upperarm-fat-incr': 0.85,
-               'arms/l-lowerarm-fat-incr': 0.5, 'arms/r-lowerarm-fat-incr': 0.5,
+               'head/head-scale-horiz-incr': 1, 'head/head-scale-vert-decr': 0.4, 'arms/l-upperarm-fat-incr': 1, 'arms/r-upperarm-fat-incr': 1,
+               'arms/l-lowerarm-fat-incr': 0.9, 'arms/r-lowerarm-fat-incr': 0.9,
                'eyebrows/eyebrows-angle-down': 1, 'eyebrows/eyebrows-trans-down': 0.6, 'nose/nose-scale-horiz-incr': 0.8,
                'nose/nose-flaring-incr': 0.6, 'nose/nose-volume-incr': 0.5, 'head/head-age-incr': 0.6},
     'been': 0.72,            # de botten van de benen, in de lengte
     'hoofd': 1.25,           # het hoofd groter dan echt, zoals op de plaat (1,35 oogde naast de plaat te groot)
-    'borst': 7,              # graden dat de bovenrug achterover leunt: de borst vooruit, zoals op de plaat
+    # graden dat de bovenrug achterover leunt (de borst vooruit): -4, licht voorover, want met 7 stond het hoofd 4 tot 5 cm
+    # achter dat van de referentie (Marcel, 25 okt: "Referentie lijkt ook wat meer overeind te staan. Iets naar voren")
+    'borst': -4,
     'voeten': 8,             # graden naar buiten (14 stond in Z breder dan de referentie)
     'arm': 0.4,              # hoe ver de rechterarm met de speer van het lijf staat (0,22 stond in Z 5 pixels te smal)
     'benen_in': 2,           # graden dat de dijen naar binnen staan: de voeten dichter bij elkaar, zoals de referentie
@@ -410,7 +412,7 @@ def mens():
     # de armen omlaag: links hangend, rechts de onderarm naar voren voor de speer
     for k, s in (('L', 1), ('R', -1)):
         for b in ('upperarm01', 'upperarm02'):
-            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.3) * s, 0.06, -1))
+            richt(rig, f'{b}.{k}', ((INSTELLINGEN['arm'] if k == 'R' else 0.38) * s, 0.06, -1))
     for b in ('lowerarm01', 'lowerarm02'):
         richt(rig, f'{b}.L', (0.06, -0.22, -1))
     richt(rig, 'wrist.L', (0.02, -0.2, -1))
@@ -587,7 +589,9 @@ def wambuis(lijf, rig, mat):
         # naar de hals plat (daar vallen de kraag en de wapenrok over), op de schouderkop en de arm bol
         f = max(0.0, min(1.0, (abs(p.x) - (abs(schouders[0].x) - 0.04)) / 0.06))
         f = f * f * (3 - 2 * f)
-        v.co += nrm * (0.008 + (0.006 + 0.016 * kussen) * f)
+        # dik gewatteerd (Marcel: "Armen zijn bij de referentie ook wat bulkier"; in Z waren de schouders aan elke kant 3 tot
+        # 4 pixels te smal)
+        v.co += nrm * (0.012 + (0.016 + 0.018 * kussen) * f)
         kussens.append(kussen)
     # de ruiten ook in de verf (mat_wambuis): donkere naden, zodat ze op spelmaat lezen zoals bij de referentie
     a = me.attributes.new('kussen', 'FLOAT', 'POINT')

@@ -2286,6 +2286,14 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   voorhoofd komen onder de rand uit. De mouwen: een eigen materiaal (`mat_wambuis`), donkerder bruin met donkere naden
   tussen de ruiten (het kenmerk `kussen` uit `wambuis`), zodat ze op spelmaat geruit lezen in plaats van vlak oranje. De
   kap weer breed en donker over de schouders, waar hij de overgang van de wapenrok naar de mouwen bedekt.
+- *Rechter op, en vollere armen* (Marcel, 25 okt: "Referentie lijkt ook wat meer overeind te staan. Iets naar voren tov
+  wat we hebben", en "Armen zijn bij de referentie ook wat bulkier"). Gemeten met het midden van elke strook ten opzichte
+  van de voeten: in W en ZW stond het hoofd bij de referentie 1 à 2 pixels voor de voeten, bij ons 1 erachter (4 à 5 cm),
+  door de holle rug (`borst` 7: de bovenrug achterover). Nu leunt de bovenrug 4 graden voorover (`borst` -4); het hoofd
+  staat nu boven de voeten, nog zo'n pixel achter dat van de referentie. De armen: MakeHuman dikker (bovenarm 1,
+  onderarm 0,9), de watten van het wambuis dikker (1,2 tot 4,6 cm in plaats van 0,8 tot 3), en de linkerarm wat verder
+  van het lijf; in Z waren de schouders aan elke kant 3 à 4 pixels te smal. De omtrek valt gemiddeld voor 0,82 samen
+  (was 0,80).
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
