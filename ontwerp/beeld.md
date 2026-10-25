@@ -2353,7 +2353,41 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   bijna zwart); warm, licht tanbruin (#d07a3c) en dof (een eigen soort `laars` in `eigen.py`: de glans gaf grijze plekken);
   de voet langer en breder (een grove soldatenlaars); de voeten weer gematigd naar buiten (rechts 24, links 12 graden), de
   stand recht. De linkerarm (rechts in beeld in Z) in een boog naar buiten, de elleboog uit en de hand naast de heup en
-  naar voren, zoals de lijn van de arm op het vel.
+  naar voren, zoals de lijn van de arm op het vel. Daarna (Marcel: "Maar die laarzen zijn nog steeds te groot en lomp"): de maat
+  van de laars in drie getallen bovenaan (`LAARS_OM` 1,2 cm om het been, `LAARS_BREDER` 2,2 cm, `LAARS_LANGER` 4 cm), op het
+  vel gemeten; de strook laarzen scheelt nu meestal 0 tot 2 pixels.
+
+**Analyse tot op de pixel (25 okt).** Marcel: "Maak nu eens een goed analyse tussen de referentie en ons model. Zoek in
+detail uit waar de verschillen zitten. Tot op de laatste pixel." Gereedschap: `gereedschap/blender/vergelijk.py` (per
+richting de referentie en het model op spelmaat, uitgelijnd op de beste overlap van de omtrek, met kaarten van de omtrek,
+het kleurverschil per pixel en licht en donker, en per strook de breedte en de kleur; naar `uit/blender/vergelijk-acht.png`)
+en `palet.py` (per materiaal het lichtbereik, licht, midden en schaduw, over alle richtingen samen). Op de stand van 25 okt
+(de staande man, halve maat gerenderd). Wat eruit komt, het grootste eerst:
+- *De bruinen (mouwen, laarzen, leer; de meeste pixels van de man)*: bij het vel warm roodbruin met sterke, goudgele
+  lichten (licht L46 a21 b50, midden L28 a18 b21); bij ons donkerder, minder rood en zonder die lichten (licht L35 a27 b34,
+  midden L23 a8 b30). De mouwen lezen daardoor als vlak oranjebruin, niet als glanzend gewatteerd leer. En er zijn bij ons
+  een kwart minder bruine pixels: een deel valt in de schaduw weg naar olijfkleurig.
+- *Het geel van de wapenrok*: bij het vel vlak en fel (L70 tot 76, verzadigd); bij ons met een veel groter lichtbereik
+  (L63 tot 78) en in de schaduw modderig olijf (de 772 pixels "anders" bij ons, tegen 173 bij het vel, zijn bijna allemaal
+  geel in de schaduw). Het vel schaduwt geel nauwelijks.
+- *Het grijs (de kap, de baard, de armstukken)*: bij het vel koel blauwgrijs (b -11), bij ons warm bruingrijs (b +8 tot
+  +10) en donkerder (midden L23 tegen 29).
+- *Het staal (helm, blad)*: bij het vel lichter en koeler (licht L80, midden L65, blauwig); bij ons licht L67, midden L55
+  en in het midden geelachtig (b +9).
+- *Het gezicht*: bij het vel 117 pixels huid, bij ons 44 (38 procent). De kleur van de huid klopt (L57 tot 71), maar er
+  is te weinig van te zien: rand, baard en kap nemen het gezicht in.
+- *De speer per richting*: in Z staat de speer bij het vel zo'n 4 pixels verder naar buiten (bij ons dichter bij het
+  lijf; ook de schouder aan die kant is 5 pixels smaller), in ZW 2, en in W staat hij juist minder ver naar voren. De
+  speerhand moet meer opzij en minder naar voren.
+- *NW is op het vel gespiegeld*: in NW houdt de man de speer links (in zijn linkerhand), zoals in NO maar gespiegeld, net
+  als O en ZO gespiegelde westkanten zijn. Ons NW is ongespiegeld, met de speer rechts; daardoor scheelt de strook riem in
+  NW 35 en de rok 26 (de kwartieren van de wapenrok staan andersom).
+- *De voeten*: de rechtervoet staat te ver naar buiten (in Z 4 pixels, in ZO 6,6 pixels buiten de omtrek van het vel).
+- *Kleine dingen*: de speer heeft op het vel een donkere, onderbroken rand langs de schacht; de handschoenen zijn bij het
+  vel donkerbruin, bij ons grijzig licht; aan de riem hangen op het vel in Z een tas en de schede duidelijk voor het lijf.
+- *Wat klopt*: de omtrek valt in de meeste richtingen voor 0,80 tot 0,85 samen, de breedte per strook scheelt meestal
+  0 tot 2 pixels, het blauw van de wapenrok en de hozen ligt in hetzelfde bereik (L10 tot 32), de huid heeft de goede
+  kleur, en de helm, de laarzen en de rok hebben de goede maat.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

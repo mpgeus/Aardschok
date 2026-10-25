@@ -1463,6 +1463,13 @@ def smelt(naam, delen, voxel, glad_n, mat):
     return ob
 
 
+# De maat van de laars, op het vel van het spel gemeten (omtrek.py, de strook laarzen): met 2 cm om het been en een voet
+# 4,2 cm breder was hij te groot en lomp (Marcel: "nog steeds te groot en lomp"; in Z 3 pixels te breed)
+LAARS_OM = 0.012  # zo ver staat de schacht van het been af (meter)
+LAARS_BREDER = 0.022  # de voet zoveel breder dan de voet van het lijf (meter, aan elke kant)
+LAARS_LANGER = 0.04  # en zoveel langer
+
+
 def laarzen(lijf, rig, M):
     """Korte laarzen van leer (Marcel: "Laarzen zijn nog niet naar mn zin, moeten leer zijn met gesp"): een schacht om het
     onderbeen met kreukels bij de enkel, een voet met een wreef die naar een ronde, lage neus afloopt, een hak, en een zool
@@ -1490,13 +1497,13 @@ def laarzen(lijf, rig, M):
         # over de voet
         d = en - boven
         # vol en robuust, echte soldatenlaarzen (Marcel: "De schoenen lijken wel dunne dingetjes")
-        schacht = koker('schacht.' + k, bvh, recht(boven, as_), [d.length * i / 12 for i in range(13)], lambda t, th: 0.02,
+        schacht = koker('schacht.' + k, bvh, recht(boven, as_), [d.length * i / 12 for i in range(13)], lambda t, th: LAARS_OM,
                         n=64, ver=0.2)
         dik(schacht, 0.006, offset=-1)
         stukken = [bak_mod(schacht)]
         rs = [straal(bvh, en + as_ * -0.015, x1 * math.cos(t) + y1 * math.sin(t), 0.2) for t in [i * math.pi / 8 for i in range(16)]]
         rs = [r for r in rs if r is not None] or [0.05]
-        r_enkel = sum(rs) / len(rs) + 0.02  # gemiddeld: met de grootste stak hij achter de hiel uit als een blok
+        r_enkel = sum(rs) / len(rs) + LAARS_OM  # gemiddeld: met de grootste stak hij achter de hiel uit als een blok
         # de schacht loopt door tot de zool, om de hiel (hield hij op bij de enkel, dan zat er opzij een trede)
         grond = en + as_ * ((en.z - 0.012) / -as_.z)
         bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=r_enkel, depth=(en - grond).length, location=(en + grond) / 2,
@@ -1511,7 +1518,7 @@ def laarzen(lijf, rig, M):
         breed = max(q.x for q in voet) - min(q.x for q in voet)
         richting = (Vector((teen.x - hiel.x, teen.y - hiel.y, 0))).normalized()
         opzij = Vector((-richting.y, richting.x, 0))
-        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + 0.06
+        lengte = (Vector((teen.x, teen.y, 0)) - Vector((hiel.x, hiel.y, 0))).length + LAARS_LANGER
         start = Vector((hiel.x, hiel.y, 0)) - richting * 0.046  # 3 cm verder naar achteren, zoals de referentie van opzij
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=1)
         bol = bpy.context.active_object
@@ -1527,7 +1534,7 @@ def laarzen(lijf, rig, M):
             # het hoogst op de wreef voor de enkel, dan wat lager, en de neus weer bol
             glad = lambda a, b: (lambda t: t * t * (3 - 2 * t))(max(0.0, min(1.0, (u - a) / (b - a))))
             wreef = 0.068 + 0.035 * glad(0.0, 0.35) - 0.03 * glad(0.35, 0.75) + 0.008 * math.exp(-((u - 0.86) / 0.1) ** 2)
-            half = (breed / 2 + 0.042) * (0.8 + 0.32 * math.exp(-((u - 0.72) / 0.35) ** 2))  # breed: een grove soldatenlaars
+            half = (breed / 2 + LAARS_BREDER) * (0.8 + 0.32 * math.exp(-((u - 0.72) / 0.35) ** 2))
             v.co = start + richting * (lengte * u) + opzij * (x * half) + Vector((0, 0, wreef / 2 + z * (wreef / 2 + 0.012)))
         stukken.append(bol)
         laars = smelt('laars.' + k, stukken, 0.003, 4, M['laars'])
