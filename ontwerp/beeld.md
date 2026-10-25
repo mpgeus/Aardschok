@@ -2280,8 +2280,8 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   de vijf graden gedraaid, en per richting de stand waarin de omtrek het best met het vel samenvalt. Het vel staat niet om
   de 45 graden: Z 5, ZW 40, W 65 (25 graden meer naar de kijker), NW 155, N 185, NO -145; en O en ZO zijn er gespiegelde
   westkanten (W op 65 en ZW op 25), met de speer in de linkerhand. Dat verklaart de arm in ZO. `eigen.py` rendert nu zo
-  (`BEELD`), gespiegeld met het licht meegespiegeld, zodat het na het omkeren van linksboven blijft komen; de omtrek viel
-  samen van gemiddeld 0,79 naar 0,83. Het gezicht: de helm 2,2 cm naar achteren op het hoofd (`HELM_ACHTER`), de rand van
+  (`BEELD`), gespiegeld met het licht meegespiegeld, zodat het na het omkeren van linksboven blijft komen; bij het zoeken
+  ging de omtrek van gemiddeld 0,79 naar 0,83, en met de bredere kap en de verschoven helm erbij meet hij 0,80. Het gezicht: de helm 2,2 cm naar achteren op het hoofd (`HELM_ACHTER`), de rand van
   voren hoger en smaller (`HELM_RAND_HOOGTE` 0,05, `HELM_VOOR` 0,6) en achteraan lager (`HELM_ZAK` 2): de ogen en het
   voorhoofd komen onder de rand uit. De mouwen: een eigen materiaal (`mat_wambuis`), donkerder bruin met donkere naden
   tussen de ruiten (het kenmerk `kussen` uit `wambuis`), zodat ze op spelmaat geruit lezen in plaats van vlak oranje. De
