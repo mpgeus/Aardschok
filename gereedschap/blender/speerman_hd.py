@@ -591,7 +591,10 @@ def wambuis(lijf, rig, mat):
         f = f * f * (3 - 2 * f)
         # dik gewatteerd (Marcel: "Armen zijn bij de referentie ook wat bulkier"; in Z waren de schouders aan elke kant 3 tot
         # 4 pixels te smal)
-        v.co += nrm * (0.012 + (0.016 + 0.018 * kussen) * f)
+        # bovenaan de arm dunner (onder het stuk van de wapenrok over de schouder): dik tot boven in de schouder werd die een
+        # blok (Marcel: "Is te dik")
+        sch = 0.45 + 0.55 * min(1.0, max(0.0, langs / 0.14)) ** 0.8
+        v.co += nrm * (0.012 + (0.016 + 0.018 * kussen) * f * sch)
         kussens.append(kussen)
     # de ruiten ook in de verf (mat_wambuis): donkere naden, zodat ze op spelmaat lezen zoals bij de referentie
     a = me.attributes.new('kussen', 'FLOAT', 'POINT')
@@ -1216,8 +1219,8 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     return [lijfje, rok]
 
 
-SCHOUDER_LANG = 0.07  # hoe ver de wapenrok over de bovenarm valt (meter, langs de arm)
-SCHOUDER_WIJD = 0.012  # hoe wijd hij onderaan van de mouw af staat
+SCHOUDER_LANG = 0.05  # hoe ver de wapenrok over de bovenarm valt (meter, langs de arm)
+SCHOUDER_WIJD = 0.005  # hoe wijd hij onderaan van de mouw af staat (met 0,012 en 6 mm erbij was hij te dik: Marcel)
 
 
 def schouderstukken(rig, mouwen, M):
@@ -1234,8 +1237,8 @@ def schouderstukken(rig, mouwen, M):
         bvh = bvh_van([(mouwen, dichtbij)])
         p = lambda t, th, a=a, as_=as_: (a + as_ * (-0.035 + (SCHOUDER_LANG + 0.035) * t), as_)
         st = koker('wapenrok-schouder.' + k, bvh, p, [i / 10 for i in range(11)],
-                   lambda t, th: 0.006 + SCHOUDER_WIJD * t ** 1.5, n=64, mat=M['wapenrok'], ver=0.25)
-        dik(st, 0.005)
+                   lambda t, th: 0.002 + SCHOUDER_WIJD * t ** 1.5, n=64, mat=M['wapenrok'], ver=0.25)
+        dik(st, 0.004)
         zacht(st)
         delen.append(bak_mod(st))
     return delen

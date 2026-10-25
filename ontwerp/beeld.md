@@ -2299,7 +2299,9 @@ een vak van 7 bij 7 pixels (licht / midden / schaduw).
   mouw liep door tot in de kap, met een harde naad (van achteren het best te zien). Nu valt over elke schouder een stuk
   van dezelfde stof (`schouderstukken`), als een poncho: van boven op de schouder langs de bovenarm 7 cm naar beneden,
   naar onderen wat wijder, en de mouw komt eronder uit; aan het skelet zoals de mouw. Met 11 cm leek het korte mouwen
-  van een T-shirt. Van voren staan de stukken nog wat hoekig af.
+  van een T-shirt. Daarna (Marcel, bij ZW: "Is te dik"): het stuk 5 cm lang en strak over de mouw (2 tot 7 mm), en de
+  watten van het wambuis bovenaan de arm dunner (45 procent bij de schouder, vol op 14 cm), zodat de schouder rond
+  verloopt in plaats van een blok te worden.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
