@@ -533,7 +533,8 @@
   }
 
   // ── De minikaart, in de hoek rechtsonder (js/minikaart.js; vraag 165) ──
-  // Het hele eiland als een ruit die ligt zoals het beeld: het beeld van het eiland (T.maakMinikaart, in stukjes van een
+  // Het hele eiland als een ruit die ligt zoals het beeld (in een level met een rand alleen de kaart: T.minikaartVeld,
+  // js/minikaart.js): het beeld van het eiland (T.maakMinikaart, in stukjes van een
   // paar ms per beeld; de zee vervaagt naar doorzichtig, dus er blijft een eiland over en geen ruit), daarover een donkere
   // tint over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert, T.mistVersie), je gebouwen, de aanvoerder,
   // de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js).
@@ -542,7 +543,7 @@
   };
   // De breedte van de ruit in pixels van de kunst: die van het kaartje (--kaart, stijl.css), want er is geen rand omheen.
   const miniBreed = () => $('minikaart').querySelector('canvas').clientWidth || 380;
-  const mini = { E: null, w: null, beeld: null, mist: null, omtrek: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false, pings: [] };
+  const mini = { E: null, m: null, veld: null, w: null, beeld: null, mist: null, omtrek: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false, pings: [] };
   // Een bericht met een plek (T.ui.bericht, js/ui.js; vraag 170, stap 1d): die plek knippert zo lang op de minikaart als
   // het bericht te lezen is.
   const PING = { duur: 10000, knipper: 400 }; // ms
@@ -560,11 +561,12 @@
     if (!aan) return;
     const IN = T.MINIKAART_INSTELLINGEN;
     const E = T.eilandVan(w.eiland.zaad);
-    const m = T.minikaartBeeld(E);
-    if (mini.E !== E) Object.assign(mini, { E, beeld: nieuwDoek(m.n), mist: nieuwDoek(m.n), omtrek: null, klaar: -1, versie: -1 });
+    const veld = T.minikaartVeld(w);
+    const m = T.minikaartBeeld(E, veld);
+    if (mini.m !== m) Object.assign(mini, { E, m, veld, beeld: nieuwDoek(m.n), mist: nieuwDoek(m.n), omtrek: null, klaar: -1, versie: -1 });
     // Het beeld verder maken, zolang het niet af is: zo lang per beeld van het spel.
     const t0 = performance.now();
-    while (m.klaar < m.n && performance.now() - t0 < IN.msPerBeeld) T.maakMinikaart(E, IN.rijenPerKeer);
+    while (m.klaar < m.n && performance.now() - t0 < IN.msPerBeeld) T.maakMinikaart(E, IN.rijenPerKeer, veld);
     if (mini.klaar !== m.klaar) {
       mini.beeld.getContext('2d').putImageData(new ImageData(m.rgba, m.n, m.n), 0, 0);
       mini.klaar = m.klaar;
@@ -574,7 +576,7 @@
       mini.w = w;
       mini.dorp = S.dorp;
       mini.versie = T.mistVersie(S.dorp);
-      const gekend = T.minikaartGekend(S.dorp);
+      const gekend = T.minikaartGekend(S.dorp, veld);
       const rgba = new Uint8ClampedArray(m.n * m.n * 4);
       const a = Math.round(255 * IN.onbekend);
       for (let i = 0; i < gekend.length; i++) {
@@ -605,8 +607,9 @@
     c.setTransform(1, 0, 0, 1, 0, 0);
     c.clearRect(0, 0, pb, ph);
     c.imageSmoothingEnabled = false;
-    // Een pixel van het beeld is vak (i, j), de tegels i * stap tot (i + 1) * stap: zo ligt het als het beeld.
-    const s = (B / (2 * T.EILAND_INSTELLINGEN.maat)) * T.MINIKAART_INSTELLINGEN.stap * k;
+    // Een pixel van het beeld is vak (i, j), de tegels i * stap tot (i + 1) * stap van het veld: zo ligt het als het beeld.
+    const veld = mini.veld;
+    const s = (B / (2 * veld.maat)) * veld.stap * k;
     const ligt = [s, s / 2, -s, s / 2, (B / 2) * k, 0];
     c.setTransform(...ligt);
     c.drawImage(mini.beeld, 0, 0);
@@ -619,7 +622,7 @@
     if (mini.klaar >= n) c.drawImage(omtrekVan(pb, ph, ligt, k), 0, 0);
     c.setTransform(k, 0, 0, k, 0, 0);
     const stip = (x, y, maat, kleur) => {
-      const p = T.minikaartPunt(x, y, B);
+      const p = T.minikaartPunt(x, y, B, veld);
       c.fillStyle = kleur;
       c.fillRect(Math.round(p.x * k - (maat * k) / 2) / k, Math.round(p.y * k - (maat * k) / 2) / k, maat, maat);
     };
@@ -638,7 +641,7 @@
       c.strokeStyle = '#f3b1a5';
       c.lineWidth = 1.5;
       for (const q of mini.pings) {
-        const p = T.minikaartPunt(q.x, q.y, B);
+        const p = T.minikaartPunt(q.x, q.y, B, veld);
         c.beginPath();
         c.arc(p.x, p.y, 4 + 6 * (1 - (nu % PING.knipper) / PING.knipper), 0, Math.PI * 2);
         c.stroke();
@@ -647,8 +650,8 @@
     // Het kader: wat de camera nu ziet (T.tekenMaat, gedeeld door de zoom van het beeld), in pixels van de wereld.
     const maat = T.tekenMaat();
     const midden = T.naarWereld(S.camera.x, S.camera.y);
-    const p = T.minikaartPunt(midden.x, midden.y, B);
-    const f = B / (2 * T.EILAND_INSTELLINGEN.maat) / T.HB; // van pixels van de wereld naar pixels van de minikaart
+    const p = T.minikaartPunt(midden.x, midden.y, B, veld);
+    const f = B / (2 * veld.maat) / T.HB; // van pixels van de wereld naar pixels van de minikaart
     const kb = (maat.b / S.zoom) * f;
     const kh = (maat.h / S.zoom) * f;
     c.strokeStyle = '#f3e3b8';
@@ -663,7 +666,7 @@
     const o = mini.omtrek;
     if (o && o.width === pb && o.height === ph) return o;
     const IN = T.MINIKAART_INSTELLINGEN;
-    const m = T.minikaartBeeld(mini.E);
+    const m = mini.m;
     const masker = new ImageData(m.n, m.n);
     for (let i = 0; i < m.n * m.n; i++) masker.data[i * 4 + 3] = m.binnen[i] ? 255 : 0;
     const bron = nieuwDoek(m.n);
@@ -701,7 +704,7 @@
   function tegelOpMinikaart(ev) {
     const r = ev.currentTarget.getBoundingClientRect();
     const B = miniBreed();
-    return T.minikaartTegel(((ev.clientX - r.left) / r.width) * B, ((ev.clientY - r.top) / r.height) * (B / 2), B);
+    return T.minikaartTegel(((ev.clientX - r.left) / r.width) * B, ((ev.clientY - r.top) / r.height) * (B / 2), B, mini.veld);
   }
   // Een klik of slepen op de minikaart: kijk daar (T.kijkNaar, js/main.js).
   function kijkOpMinikaart(ev) {

@@ -130,6 +130,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   nieuw. Verder is het jaar letter voor letter gelijk, dus het spel loopt hetzelfde; het is wie hetzelfde object deelt
   (een vaste aanval die bij het laden een eigen kopie krijgt). Niet uitgezocht; de proef zegt pas weer "precies
   hetzelfde jaar" als dat gelijk is.
+- **Wat stap 2a van vraag 187 liet zien** (24 okt, de kaart van een level met een rand; `scenario.md`, 1):
+  - **Bezoekers verschijnen midden op de kaart.** De huifkar, de heer, de marskramer en de rovers komen binnen op de rand
+    van het dorpsland van 100 bij 100 (`D.plek.uitgang`, `T.roverIngang`), zo'n 80 tegels binnen de rand, terwijl de weg
+    doorloopt tot de zwarte rand. Dat was er al (16 tegels binnen het open land), maar met een rand valt het op. Later:
+    binnenkomen waar de weg de rand kruist.
+  - **Een hoofdstuk speelt elke keer hetzelfde lot.** Het zaad van het dorp is het zaad van het eiland, dus een level met
+    een vast eiland heeft elke keer hetzelfde weer, dezelfde dag van de overval en dezelfde voorvallen. Voor 2c kiezen:
+    zo laten (zoals Knights and Merchants), of het lot per keer anders.
+  - **Aan de rand is het halve scherm zwart**: de camera komt tot de rand, niet verder (zoals in Knights and Merchants).
+  - **Een tweede dorp** (`Spel.debug.tweedeDorp`, alleen in het debugvenster) let niet op de rand: zijn land gaat niet
+    open als het erbuiten ligt.
 - **Wat c0 van 6a2 liet zien** (17 okt, op tocht naar land dat je niet kent): het eiland was te voet in stukken
   gebroken: een weg kreeg geen bruggetje waar de oversteek breed of schuin was, en het proefdorp zat opgesloten in 7%
   van het land. Dat is opgelost met L1 (Marcel: "L1"; `code.md` bij `js/eiland.js`): tegel voor tegel gemeten liggen op

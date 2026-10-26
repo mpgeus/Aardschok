@@ -215,9 +215,21 @@
   // neemt dit vak; wat van de kaart is (het tekenen, het lopen, de paadjes), neemt T.kaartVak: op het eiland het vak om
   // alle dorpen op de kaart (werklijst vraag 170, stap 6a).
   T.dorpVak = (D) => D.plek.vak;
-  // Waar de kaart tegels kan hebben, { x, y, b, h }: om het tekenen af te knippen, en om te zoeken in wat er in beeld is.
-  // Op het eiland het hele eiland, dus maak er nooit een lijst over (daarvoor is T.kaartVak).
-  T.kaartGrens = (w) => (opEiland(w) ? { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() } : { x: 0, y: 0, b: w.b, h: w.h });
+  // Waar de kaart tegels kan hebben, { x, y, b, h }: om het tekenen af te knippen, om te zoeken in wat er in beeld is, en
+  // waar de camera kan komen (js/main.js). Op het eiland het hele eiland, of de rand van een level (T.stukBinnenRand,
+  // hieronder), dus maak er nooit een lijst over (daarvoor is T.kaartVak).
+  T.kaartGrens = function (w) {
+    if (!opEiland(w)) return { x: 0, y: 0, b: w.b, h: w.h };
+    if (!w.rand) return { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() };
+    const [x, y] = [w.rand.sx * STUK, w.rand.sy * STUK];
+    return { x, y, b: Math.min(w.rand.b * STUK, EILAND_MAAT() - x), h: Math.min(w.rand.h * STUK, EILAND_MAAT() - y) };
+  };
+  // De rand van een level (vraag 187, stap 2a; T.randOm in js/maker.js, ontwerp/scenario.md, 1): w.rand is { sx, sy, b, h }
+  // in stukken, en daarbuiten is er geen land. Het gaat nooit open (T.openVak, T.werkStukkenBij, en het vooruit maken
+  // slaat het over), dus het is 'buiten': niet te begaan, en niet getekend (zwart, zoals in Knights and Merchants); de
+  // camera blijft erbinnen (T.kaartGrens), een tocht erheen loopt tot de rand (js/lopen.js), en de minikaart toont alleen
+  // wat erbinnen ligt (js/minikaart.js). Zonder rand: het hele eiland.
+  T.stukBinnenRand = (w, sx, sy) => !w.rand || (sx >= w.rand.sx && sy >= w.rand.sy && sx < w.rand.sx + w.rand.b && sy < w.rand.sy + w.rand.h);
   // Het vak waarin gelopen wordt, { x, y, b, h }: op het eiland alle stukken die open zijn (B2b, stap 4: "Overal"), op een
   // kaart uit Tiled de kaart. Het vaste raster en de eilanden van A* (hieronder) beslaan dit vak, zodat wie buiten het vak
   // om het dorp staat (die over de weg binnenkwam), ook een weg vindt; de velden van het lopen het dorp met een rand
@@ -340,13 +352,15 @@
     }
     return { sx, sy, x0, y0, tegel, grond, op };
   }
-  // Maak de stukken open die (een deel van) dit vak raken. Een stuk dat open gaat, is geen verandering van de kaart (geen
+  // Maak de stukken open die (een deel van) dit vak raken, binnen de rand van een level. Een stuk dat open gaat, is geen verandering van de kaart (geen
   // T.kaartVeranderd): er komt alleen land bij. Wat het land beslaat, kijkt zelf naar w.open, en neemt alleen het nieuwe
   // stuk erbij (het raster en de eilanden hieronder, de velden en de wegen in js/lopen.js, de grond in js/tekenen.js;
   // Marcel, 13 okt: "Alles per stuk").
   T.openVak = function (w, vak) {
     for (let sy = Math.max(0, Math.floor(vak.y / STUK)); sy * STUK < Math.min(EILAND_MAAT(), vak.y + vak.h); sy++) {
-      for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
+      for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) {
+        if (T.stukBinnenRand(w, sx, sy)) w.open.add(T.stukNummer(sx, sy));
+      }
     }
   };
   // Bij welk dorp een wezen hoort (werklijst vraag 170, stap 6a; Marcel, 15 okt: "elk een eigen dorp op hetzelfde
@@ -376,7 +390,7 @@
       for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
         for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
           const n = T.stukNummer(sx, sy);
-          if (w.open.has(n)) continue;
+          if (w.open.has(n) || !T.stukBinnenRand(w, sx, sy)) continue;
           w.open.add(n);
           return n;
         }
@@ -405,7 +419,7 @@
           for (let sy = Math.max(0, Math.floor((y - r) / STUK)); sy <= Math.min(rand, Math.floor((y + r) / STUK)); sy++) {
             for (let sx = Math.max(0, Math.floor((x - r) / STUK)); sx <= Math.min(rand, Math.floor((x + r) / STUK)); sx++) {
               const n = T.stukNummer(sx, sy);
-              if (w.open.has(n) || m.has(n)) continue;
+              if (w.open.has(n) || m.has(n) || !T.stukBinnenRand(w, sx, sy)) continue;
               const d = nodigOver(e, sx, sy);
               if (d < ver) [ver, v] = [d, { n, sx, sy, delen: [] }];
             }

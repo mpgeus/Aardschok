@@ -8,6 +8,10 @@
 // Het beeld wordt in stukken gemaakt (`rijenPerKeer` rijen per beeld van het spel, T.maakMinikaart vanuit js/balk.js), zodat het maken
 // niet hapert: het hele eiland in één keer kost zo'n 0,15 s. Het hoort bij het nummer van het eiland, en wordt niet
 // bewaard: hetzelfde nummer maakt het opnieuw.
+//
+// In een level met een rand (vraag 187, stap 2a; w.rand, js/wereld.js) toont de minikaart alleen de kaart (Marcel, 24 okt:
+// "Alleen de kaart"): het veld (T.minikaartVeld) is dan het vierkant om de rand, met een kleinere stap, zodat de kaart
+// even groot is als anders het eiland; wat buiten de rand ligt, is doorzichtig, en de lijn loopt om de rand.
 (function (T) {
   'use strict';
 
@@ -88,19 +92,45 @@
     return k.map((c) => (grijs + (c - grijs) * I.verzadiging) * I.helderheid);
   }
 
-  // Het beeld van eiland E, in wording: { n, rgba, zee, binnen, klaar } met n bij n pixels (n = de maat van het eiland
-  // gedeeld door stap, naar boven), `zee` 1 waar het zee is, en als het af is `binnen` 1 binnen de lijn om het eiland
-  // (het land, en de zee tot zeeTotOmtrek vakken uit de kust). Eén per nummer.
+  // Wat de minikaart van kaart w toont: { x, y, maat, stap, rand }, het vierkant van `maat` tegels vanaf tegel (x, y), een
+  // pixel per `stap` bij `stap` tegels. Zonder rand het hele eiland (ook zonder w); met een rand het vierkant om de rand,
+  // met de stap gehalveerd zolang het beeld niet groter wordt dan dat van het eiland (een stuk van 64 blijft zo een heel
+  // aantal vakken), en `rand` het vak van de kaart in tegels (T.kaartGrens).
+  T.minikaartVeld = function (w) {
+    const maat = T.EILAND_INSTELLINGEN.maat;
+    if (!w || !w.rand) return { x: 0, y: 0, maat, stap: IN().stap, rand: null };
+    const g = T.kaartGrens(w);
+    const zijde = Math.max(w.rand.b, w.rand.h) * T.STUK;
+    let stap = IN().stap;
+    while (stap > 1 && zijde / (stap / 2) <= maat / IN().stap) stap /= 2;
+    return { x: g.x, y: g.y, maat: zijde, stap, rand: g };
+  };
+  const HEEL = () => T.minikaartVeld(null);
+
+  // Het beeld van veld `veld` (T.minikaartVeld) van eiland E, in wording: { n, rgba, zee, binnen, klaar } met n bij n pixels
+  // (n = de maat van het veld gedeeld door stap, naar boven), `zee` 1 waar het zee is, en als het af is `binnen` 1 binnen
+  // de lijn (op het hele eiland het land, en de zee tot zeeTotOmtrek vakken uit de kust; met een rand de kaart). Eén per
+  // nummer en veld.
   const BEELDEN = new Map();
-  T.minikaartBeeld = function (E) {
-    let m = BEELDEN.get(E);
+  T.minikaartBeeld = function (E, veld = HEEL()) {
+    const sleutel = `${veld.x},${veld.y},${veld.maat},${veld.stap}`; // geen tekst
+    let per = BEELDEN.get(E);
+    if (!per) BEELDEN.set(E, (per = new Map()));
+    let m = per.get(sleutel);
     if (!m) {
-      const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / IN().stap);
-      m = { n, rgba: new Uint8ClampedArray(n * n * 4), zee: new Uint8Array(n * n), binnen: null, klaar: 0 };
-      BEELDEN.set(E, m);
+      const n = Math.ceil(veld.maat / veld.stap);
+      m = { n, rgba: new Uint8ClampedArray(n * n * 4), zee: new Uint8Array(n * n), binnen: null, klaar: 0, veld };
+      per.set(sleutel, m);
     }
     return m;
   };
+  // Ligt pixel (x, y) van beeld m binnen de rand van zijn veld (zonder rand: altijd)?
+  const binnenRandVan = (m, x, y) => !m.veld.rand || (x * m.veld.stap < m.veld.rand.b && y * m.veld.stap < m.veld.rand.h);
+  // Als het beeld met een rand af is: de lijn om de rand, en de zee gewoon zee (de kust is daar niet de rand van de kaart).
+  function zetDeRand(m) {
+    m.binnen = new Uint8Array(m.n * m.n);
+    for (let i = 0; i < m.n * m.n; i++) m.binnen[i] = binnenRandVan(m, i % m.n, Math.floor(i / m.n)) ? 1 : 0;
+  }
 
   // Ruis van 0 tot 1 die zacht verloopt, in vlekken van `vlek` pixels (waarde-ruis, bilineair), voor de rafelige rand.
   const hash = (x, y) => {
@@ -173,18 +203,18 @@
     }
   }
 
-  // Maak het beeld van E verder, `rijen` rijen (zonder: alles). Geeft true als het af is. Elke rij is een stuk van
-  // T.eilandStuk, met een rij erboven en eronder voor het licht.
-  T.maakMinikaart = function (E, rijen = Infinity) {
-    const m = T.minikaartBeeld(E);
+  // Maak het beeld van E verder (van zijn veld, T.minikaartVeld), `rijen` rijen (zonder: alles). Geeft true als het af is.
+  // Elke rij is een stuk van T.eilandStuk, met een rij erboven en eronder voor het licht.
+  T.maakMinikaart = function (E, rijen = Infinity, veld = HEEL()) {
+    const m = T.minikaartBeeld(E, veld);
     if (m.klaar >= m.n) return true;
-    const stap = IN().stap;
+    const stap = veld.stap;
     const van = m.klaar;
     const tot = Math.min(m.n, van + rijen);
     const boven = van > 0 ? 1 : 0;
     const onder = tot < m.n ? 1 : 0;
     const h = tot - van + boven + onder;
-    const D = T.eilandStuk(E, stap / 2, (van - boven) * stap + stap / 2, m.n, h, stap);
+    const D = T.eilandStuk(E, veld.x + stap / 2, veld.y + (van - boven) * stap + stap / 2, m.n, h, stap);
     for (let y = boven; y < h - onder; y++) {
       for (let x = 0; x < m.n; x++) {
         const o = y * m.n + x;
@@ -195,19 +225,23 @@
         m.rgba[i * 4] = k[0];
         m.rgba[i * 4 + 1] = k[1];
         m.rgba[i * 4 + 2] = k[2];
-        m.rgba[i * 4 + 3] = zee ? 0 : 255; // de zee komt erbij als het beeld af is (vervaagDeZee)
+        // op het hele eiland komt de zee erbij als het beeld af is (vervaagDeZee); met een rand is buiten de rand niets
+        m.rgba[i * 4 + 3] = veld.rand ? (binnenRandVan(m, x, van + y - boven) ? 255 : 0) : zee ? 0 : 255;
       }
     }
     m.klaar = tot;
-    if (m.klaar >= m.n) vervaagDeZee(m);
+    if (m.klaar >= m.n && veld.rand) zetDeRand(m);
+    else if (m.klaar >= m.n) vervaagDeZee(m);
     return m.klaar >= m.n;
   };
 
-  // Wat je kent, per vak: een Uint8Array van n bij n, 1 waar je minstens één tegel van het vak kent (js/mist.js, D.gekend:
-  // per stuk van 64 bij 64 een rij bits, twee getallen van 32 per rij, of true als je het hele stuk kent).
-  T.minikaartGekend = function (D) {
-    const stap = IN().stap;
-    const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / stap);
+  // Wat je kent, per vak van het veld (T.minikaartVeld): een Uint8Array van n bij n, 1 waar je minstens één tegel van het
+  // vak kent (js/mist.js, D.gekend: per stuk van 64 bij 64 een rij bits, twee getallen van 32 per rij, of true als je het
+  // hele stuk kent).
+  T.minikaartGekend = function (D, veld = HEEL()) {
+    const stap = veld.stap;
+    const n = Math.ceil(veld.maat / stap);
+    const [ox, oy] = [veld.x / stap, veld.y / stap]; // het veld begint op een stuk, dus een heel aantal vakken
     const uit = new Uint8Array(n * n);
     const STUK = 64;
     const per = STUK / stap; // vakken per stuk, in elke richting
@@ -216,9 +250,9 @@
       const sy = Math.floor(nummer / 64);
       for (let by = 0; by < per; by++) {
         for (let bx = 0; bx < per; bx++) {
-          const vx = sx * per + bx;
-          const vy = sy * per + by;
-          if (vx >= n || vy >= n) continue;
+          const vx = sx * per + bx - ox;
+          const vy = sy * per + by - oy;
+          if (vx < 0 || vy < 0 || vx >= n || vy >= n) continue;
           let ja = rij === true;
           if (!ja) {
             // de bits van dit vak: stap kolommen vanaf bx * stap, in het getal van die kolom
@@ -234,15 +268,16 @@
   };
 
   // Van tegel (x, y) naar een punt op de minikaart van `breed` pixels breed (de ruit is half zo hoog), en terug: de
-  // minikaart ligt zoals het beeld (T.naarScherm, js/iso.js), met tegel (0, 0) bovenaan.
-  T.minikaartPunt = function (x, y, breed) {
-    const s = breed / (2 * T.EILAND_INSTELLINGEN.maat);
-    return { x: breed / 2 + (x - y) * s, y: (x + y) * s / 2 };
+  // minikaart ligt zoals het beeld (T.naarScherm, js/iso.js), met de eerste tegel van het veld (T.minikaartVeld) bovenaan.
+  T.minikaartPunt = function (x, y, breed, veld = HEEL()) {
+    const s = breed / (2 * veld.maat);
+    const [dx, dy] = [x - veld.x, y - veld.y];
+    return { x: breed / 2 + (dx - dy) * s, y: (dx + dy) * s / 2 };
   };
-  T.minikaartTegel = function (mx, my, breed) {
-    const s = breed / (2 * T.EILAND_INSTELLINGEN.maat);
+  T.minikaartTegel = function (mx, my, breed, veld = HEEL()) {
+    const s = breed / (2 * veld.maat);
     const a = (mx - breed / 2) / s; // x - y
     const b = (2 * my) / s; // x + y
-    return { x: (a + b) / 2, y: (b - a) / 2 };
+    return { x: veld.x + (a + b) / 2, y: veld.y + (b - a) / 2 };
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -768,14 +768,19 @@
   // pogingen dan op een land van de maker, want een andere plek is er wel. Een plan deugt hier pas als zijn plein een
   // marktplek heeft met rijen van `marktRij` (daarvoor maakt hij de kaart al, en die bewaart hij voor
   // T.laadGemaaktGehucht). Met `bij` (een dorpsplek, { x, y }) een plan voor een dorp naast een ander (vraag 170, stap
-  // 6a): op de dichtste andere plek die minstens `anderDorp` tegels weg ligt, niet op een plek uit `niet` (hun namen).
-  T.planOpEiland = function (zaad, { bij = null, niet = [] } = {}) {
+  // 6a): op de dichtste andere plek die minstens `anderDorp` tegels weg ligt, niet op een plek uit `niet` (hun namen). Met
+  // `naam` (een level, vraag 187, stap 2a) alleen op de dorpsplek met die naam; die verschillen per eiland, en is hij er
+  // niet, of lukt het daar niet, dan gooit het.
+  T.planOpEiland = function (zaad, { bij = null, niet = [], naam = null } = {}) {
     const E = T.eilandVan(zaad);
     const dorpen = E.plekken.filter((p) => p.soort === 'dorp');
     const af = (p) => Math.hypot(p.x - bij.x, p.y - bij.y);
     const volgorde = bij
       ? dorpen.filter((p) => !niet.includes(p.naam) && af(p) >= IN().anderDorp).sort((a, b) => af(a) - af(b))
-      : [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)];
+      : naam != null
+        ? dorpen.filter((p) => p.naam === naam)
+        : [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)];
+    if (naam != null && !volgorde.length) throw new Error(`geen dorpsplek ${naam} op het eiland van ${zaad}; wel ${dorpen.map((p) => p.naam).join(', ')}`); // geen tekst
     const waarom = [];
     for (const p of volgorde) {
       const land = T.landVanEiland(E, p, IN().b, IN().h);
@@ -1068,13 +1073,35 @@
   // met het plan erover. De kaart neemt alleen over wat de maker anders legde dan het eiland: de grond van het plein
   // (w.grondAnders), wat er van het eiland weg moest (w.gerooid), en wat hij erbij legde (de eiken, de rotsen). Alles in
   // de tegels van het eiland. Het is het lege begin van een nieuw spel: het land met een open plek voor het plein en het
-  // kamp erop. Open zijn de stukken om het land, tot `zicht` tegels erbuiten.
-  T.laadGemaaktGehucht = function (zaad) {
-    const plan = T.planOpEiland(zaad);
+  // kamp erop. Open zijn de stukken om het land, tot `zicht` tegels erbuiten. Met `plek` op de dorpsplek met die naam (een
+  // level; T.planOpEiland).
+  T.laadGemaaktGehucht = function (zaad, { plek = null } = {}) {
+    const plan = T.planOpEiland(zaad, { naam: plek });
     const w = WERELD.get(plan) || wereldVanPlan(plan);
     WERELD.delete(plan);
     return w;
   };
+
+  // De rand van een level (vraag 187, stap 2a; ontwerp/scenario.md, 1; w.rand en T.stukBinnenRand in js/wereld.js): `b` bij `h`
+  // stukken van T.STUK tegels om het land van het dorp (`vak`, D.plek.vak), zo midden als het kan, met wat het begin opent
+  // erbinnen (het land met `zicht` tegels eromheen, legPlanOp), en op het eiland. Geeft { sx, sy, b, h } in stukken; is de
+  // rand te klein voor het begin, dan gooit het.
+  T.randOm = function (vak, b, h) {
+    const z = IN().zicht;
+    const S = T.STUK;
+    const laatste = Math.floor((T.EILAND_INSTELLINGEN.maat - 1) / S);
+    const as = (v, lengte, n) => {
+      const van = Math.max(0, Math.floor((v - z) / S));
+      const tot = Math.min(laatste, Math.floor((v + lengte - 1 + z) / S));
+      if (tot - van + 1 > n) throw new Error(`een rand van ${n} stukken is te klein: het begin beslaat er ${tot - van + 1}`); // geen tekst
+      const midden = Math.round((v + lengte / 2) / S - n / 2);
+      return Math.max(0, Math.min(laatste - n + 1, Math.max(tot - n + 1, Math.min(van, midden))));
+    };
+    return { sx: as(vak.x, vak.b, b), sy: as(vak.y, vak.h, h), b, h };
+  };
+  // Hoeveel stukken een rand minstens breed en hoog is: zoveel als het begin hooguit beslaat (het land met `zicht` tegels
+  // eromheen; nu 132 tegels, dus 4 stukken).
+  T.randMinstens = () => Math.floor((Math.max(IN().b, IN().h) + 2 * IN().zicht + T.STUK - 2) / T.STUK) + 1;
 
   // Nog een dorp op kaart w van het eiland (werklijst vraag 170, stap 6a; Marcel, 16 okt: "A1"): op de dichtste andere
   // dorpsplek bij `bij` die minstens `anderDorp` tegels weg ligt, en niet op een plek uit `niet`. Het plan komt op de

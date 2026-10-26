@@ -240,7 +240,8 @@ kennen (`js/debugvenster.js`). Aan tot de Steam-versie.
 - **Danger:** drie rovers nu, de overval van de demo morgen (het bericht meteen), brand, koorts, regen, droogte, de
   aanvoerder valt.
 - **Demo:** of dit spel de demo is, de dag van de overval, de punten nu en je beste; een nieuw spel als demo of als vol
-  spel (op hetzelfde land; de demo blijft aan tot je de bladzijde opnieuw laadt); het slot van de demo.
+  spel (op hetzelfde land, voor dat ene spel), of met een rand (*New game with a border (a test)*: het land van nu met de
+  kleinste rand, 4 bij 4 stukken; vraag 187, stap 2a); het slot van de demo.
 - **Look:** de gebouwen op 100, 80 of 65 procent (de proef van vraag 183, 2a1), en de spelregels met de werkbank.
 
 Een opdracht van `Spel.debug` die een knop werd, blijft ook in de console; wat alleen voor het meten en de overzichten is

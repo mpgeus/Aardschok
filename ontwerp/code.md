@@ -177,7 +177,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tegelijk, 0,5 s op het proefdorp en seconden na veel verkennen).
 - `js/menu.js` is het scherm erbij, sinds vraag 172 (16 okt; Marcel: "We hebben een volledig menu nodig geen a.i slop") een
   volledig menu. **Het titelscherm is tekst over de wereld**: links het woordmerk en de keuzes (`.titel-links`; Continue,
-  New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
+  Campaign (niet in de demo; de hoofdstukken op een rij, `campagneScherm`, en een hoofdstuk begint met `speelHoofdstuk`;
+  `js/campagne.js`), New game, Load, Settings, Credits, en Quit alleen in Electron, `kanAfsluiten`), rechts het land (`CAMERA.titelOpzij` in
   `T.titelCamera`, `js/main.js`). Elke keuze is een `.menu-keuze`, tekst zonder kader; wat je hebt, is wat de focus
   heeft (de muis zet hem, de pijltjes stappen, Enter neemt), en een vaantje (`--vaantje` in `stijl.css`, zeven bij tien
   pixels op twee keer) staat ervoor. **New game** is een eigen scherm op die plek: de naam, het land (het nummer, *Other
@@ -369,7 +370,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de eilanden van A\* (met een unie, `ouder`), de lijst platte dingen en de grondbuffer in `js/tekenen.js` (een
   bufferstuk per beeld opnieuw, `buf.oud`), en de wegen in `js/lopen.js` (alleen 'geen weg' opnieuw). `T.kaartVeranderd(w,
   plek)` met een plek (zoals `T.voetVan`) werkt alleen die tegels van het raster bij, en kwam er alleen ruimte bij, dan
-  gaan ze op in de eilanden ernaast (`maakVrij`). De kaart onthoudt de laatste 64 plekken (`T.kaartPlekkenSinds(w,
+  gaan ze op in de eilanden ernaast (`maakVrij`). **De rand van een level** (vraag 187, stap 2a, 24 okt; `scenario.md`,
+  1): `w.rand` is `{ sx, sy, b, h }` in stukken (`T.randOm` in `js/maker.js`), en `T.stukBinnenRand(w, sx, sy)` zegt of een
+  stuk erbinnen ligt (zonder rand altijd; niet te verwarren met `T.binnenRand`, een punt in een veelhoek). Alleen de twee
+  plekken die `w.open` vullen (`T.openVak` en `T.werkStukkenBij`) en het vooruit maken kijken ernaar: wat nooit open gaat,
+  is 'buiten', dus niet te begaan en niet getekend. `T.kaartGrens` geeft dan de rand, zodat de camera erbinnen blijft
+  (`begrens`, `js/main.js`) en het tekenen erop afknipt. De kaart onthoudt de laatste 64 plekken (`T.kaartPlekkenSinds(w,
   versie)`, null als het niet bekend is, alleen scherm): de lijst platte dingen en de grondbuffer in `js/tekenen.js`
   werken alleen die plekken bij, een bufferstuk per beeld (`vergeetVeranderdeKaart`, 13 okt; eerst alle grond in beeld,
   49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Van zo'n stuk alleen het deel dat
@@ -466,8 +472,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   De grove weg is een veld over de vakken van de schets (`E.vak`, `js/eiland.js`; Dial, 10 recht en 14 schuin, geen
   hoek afsnijden): in land dat dicht is wat de schets zegt (`grofKost`: water en woud dicht, broek drie keer zo duur, een
   weg van het eiland open, vak voor vak recht aansluitend), in land dat open is alleen een vak met een tegel van het
-  eiland van wie loopt (`kostVoor`, met `T.eilandOp`). Kan hij er niet komen (`delenVan`, `doelVak`), dan naar het vak
-  van zijn deel dat er het dichtst bij ligt. Alles uit het nummer van het eiland en het open land, geen spelstaat; per
+  eiland van wie loopt (`kostVoor`, met `T.eilandOp`), en buiten de rand van een level dicht (`T.stukBinnenRand`; stap 2a
+  van vraag 187, Marcel: "Hij loopt tot de rand"). Kan hij er niet komen (`delenVan`, `doelVak`), dan naar het vak
+  van zijn deel dat er het dichtst bij ligt: bij een doel buiten de rand loopt hij zo tot de rand, en daar houdt de tocht
+  op (`tochtRoute` geeft null, hij wacht niet). Alles uit het nummer van het eiland en het open land, geen spelstaat; per
   kaart opnieuw als de kaart of het open land verandert (`grofVan`). Wat het kost, valt weg tegen het maken van het
   land zelf (`T.landStuk`, een profiel van 17 okt); de getallen `grofOnthouden` en `grofVooruit` in
   `T.LOPEN_INSTELLINGEN`.
@@ -605,6 +613,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `plan.gelegd` wat hij erbij legde, `plan.gerooid` wat er van het eiland weg moest), `T.planOpEiland(zaad)` kiest het stuk
   (jouw plek, anders die van een ander dorp), en `T.laadGemaaktGehucht(zaad)` maakt er een kaart van het eiland van, die
   alleen het verschil met het eiland overneemt, met de plek van het dorp in `w.plekken` (zijn land, plein, kamp, marskramer, uitgang en marktplek: `T.zoekMarktPlek` in `js/markt.js`; `T.nieuwDorp` neemt hem als `D.plek`). Het leggen zelf (`legPlanOp`) legt een plan op een kaart die er al is: zo legt `T.legDorpOpKaart(w, { bij, niet })` een tweede dorp op de dichtste andere dorpsplek die minstens `anderDorp` (200) tegels weg ligt (`T.planOpEiland(zaad, { bij, niet })`), en groeit het vak van de kaart om beide (vraag 170, stap 6a).
+  **Een level** (vraag 187, stap 2a, 24 okt): `T.planOpEiland(zaad, { naam })` legt het dorp op de dorpsplek met die naam
+  (de namen komen uit `T.DORPSNAMEN`, geschud per eiland, dus ze verschillen per zaad; is hij er niet, of lukt het daar
+  niet, dan gooit het), en `T.laadGemaaktGehucht(zaad, { plek })` geeft hem door. `T.randOm(vak, b, h)` legt de rand van
+  het level: `b` bij `h` stukken om het land van het dorp, zo midden als het kan, met wat het begin opent erbinnen (het land
+  met `zicht` tegels eromheen) en op het eiland; `T.randMinstens()` (nu 4) is wat het begin hooguit beslaat. Een tweede
+  dorp (`T.legDorpOpKaart`, alleen in het debugvenster) let nog niet op de rand.
   Open zijn de stukken om het land, tot `zicht` tegels erbuiten. Welk land een
   nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/begin.js`; een nummer van vijf cijfers, in het menu bij Nieuw
   spel); `T.beginOpEiland(S, zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
@@ -714,6 +728,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`m.binnen`, en in `js/balk.js` `omtrekVan`: de rand ervan op de maat van het doek, één keer per maat), en daarbuiten
   vervaagt hij in `zeeVervaagt` vakken, rafelig (`rafel`, `rafelVlek`); vlak bij de rand van het vierkant altijd. Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
   (Tab) aan en de camera erheen.
+- **Alleen de kaart** (vraag 187, stap 2a, 24 okt; Marcel: "Alleen de kaart"): wat de minikaart toont, is een veld
+  (`T.minikaartVeld(w)`: `{ x, y, maat, stap, rand }`). Zonder rand het hele eiland met `stap` 8; met de rand van een level
+  (`w.rand`) het vierkant om de rand, met de stap gehalveerd zolang het beeld niet groter wordt dan dat van het eiland
+  (een rand van 4 bij 4: 256 tegels, stap 1). Het beeld hoort bij het eiland en het veld (`T.minikaartBeeld(E, veld)`);
+  wat buiten de rand valt (bij een rand die niet vierkant is) is doorzichtig, de zee blijft zee (de kust is daar niet de
+  rand van de kaart), en de lijn loopt om de rand (`zetDeRand` in plaats van `vervaagDeZee`). `T.minikaartGekend`,
+  `T.minikaartPunt` en `T.minikaartTegel` nemen het veld mee; `js/balk.js` houdt het bij in `mini.veld` (getoetst in
+  `test/rand.test.cjs`).
 
 ## Beeld en scherm
 
@@ -1112,10 +1134,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat linksboven (`T.doelLinksboven`, vanuit `js/main.js`, anders `T.tredeDoel`); het eind is `T.spelUit` met reden
   `'scenario'` (`js/einde.js`, het scherm in `js/hud.js`). Een gebied is een vak of een kring van tegels, en een
   voorwaarde erop loopt de wezens van de kaart af, niet de tegels (`minstensIn`, zonder lijst).
+- **De kaart van een level** (stap 2a, 24 okt; Marcel: "Stap 2a: kaart en rand"): `eiland: { zaad }`, `plek` (een naam)
+  en `rand: { b, h }` (in stukken) gaan via `T.beginOpEiland` naar de maker (`T.laadGemaaktGehucht(zaad, { plek })`,
+  `T.randOm`) en op de kaart (`w.rand`, `js/wereld.js`); de keuring wil een zaad vanaf 1, een plek alleen met een vast
+  eiland, en een rand van minstens `T.randMinstens()` stukken. Het debugvenster heeft een proef: *New game with a border
+  (a test)*, het land van nu met de kleinste rand (`T.LEVELS.proefRand`, gezet bij de klik). Getoetst in
+  `test/rand.test.cjs`.
 - **Een level** (stap 1b, 24 okt; Marcel: "1b nu"): een bestand in `levels/` (een script, geen JSON: dat laadt niet vanaf
   `file://`; in `index.html` na `js/scenario.js`) zet `T.LEVELS.<naam>`: een scenario met `dorpen` (per dorp wat het bij
-  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`) en `demo`. `T.nieuwSpel(makerZaad, level)` (`js/main.js`; zonder
-  level het demojaar als `T.DEMO_INSTELLINGEN.aan`, anders het volle spel) geeft het aan `T.beginOpEiland` (`js/begin.js`):
+  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
+  null voor het volle spel; zonder: de demo als `T.DEMO_INSTELLINGEN.aan`) geeft het aan `T.beginOpEiland` (`js/begin.js`):
   dat keurt het (een fout gooit, want dat is een fout in het spel), geeft `T.nieuwDorp` wat het van het eerste dorp zegt,
   en start daarna het scenario. `T.proefdorp.begin(zaad, level)` doet hetzelfde voor de toetsen. **Het eerste level is
   het demojaar** (`levels/demojaar.js`): de wacht in een eigen tent (de tent draagt de lijst, `g.wacht`, voor
@@ -1123,11 +1151,30 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rovers (`D.rovers.wilde === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
   (`{ rovers: { aantal: 3, aangekondigd: true } }`, `js/rovers.js`), en een trigger als de heer komt (`{ heer: 'komt' }`)
   voor de punten (`punten`, `T.telPunten`) en de scène van het betalen (`scene: 'betalen'` zet `D.scene`; dan is betalen
-  het eind, `js/heer.js`, en speelt `js/regie.js` de scène). `S.scenario.demo` laat het eindscherm zeggen dat de demo daar
-  eindigt (`js/hud.js`). Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
+  het eind, `js/heer.js`, en speelt `js/regie.js` de scène). Hoe een spel begon, zet wie het begint erbij (stap 2b): de
+  demo is `T.demoLevel()` (`js/einde.js`: het demojaar met `demo: true`), en dan laat `S.scenario.demo` het eindscherm
+  zeggen dat de demo daar eindigt (`js/hud.js`); een hoofdstuk is `T.hoofdstukLevel(id)` (`js/campagne.js`), en dan zegt
+  `S.scenario.hoofdstuk` welk. Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
   Het getal van de overval en zijn dagen staan nu in het level, niet meer in de werkbank (die houdt `vooraf` en
   `voorDonker`, `T.ROVERS_INSTELLINGEN.aangekondigd`). Nog niet: `bouw` als gevolg (iets open of dicht midden in een
   level), en `npm run teksten` voor de zinnen van een level (het demojaar heeft er geen).
+
+### js/campagne.js: de campagne
+
+- `js/campagne.js` (vraag 187, stap 2b, 24 okt; het ontwerp in `scenario.md`, 6; Marcel: hoofdstuk 1 "Op het
+  campagne-eiland, 5×5", en voor het eiland "Kies jij er voorlopig een"): **de regels van de campagne**, zonder scherm en
+  getoetst (`test/campagne.test.cjs`). De campagne zelf staat in `levels/campagne.js` (`T.CAMPAGNE`): één eiland (`eiland:
+  { zaad: 5 }`, waar Millcombe het verst van het kasteel ligt), en per hoofdstuk een `id`, een `titel` (een zin uit
+  gegevens: `T.tGegevens`, en `npm run teksten` leest hem daar), een `level` (`T.LEVELS`), een `plek` en een `rand`.
+  `T.hoofdstukLevel(id)` maakt het level waarmee het hoofdstuk begint: het level met het eiland, de plek en de rand erover,
+  en `hoofdstuk: id`, zodat `S.scenario.hoofdstuk` zegt dat het een hoofdstuk is (zoals `T.demoLevel`, `js/einde.js`,
+  `demo: true` zet: hoe een spel begon, zegt niet het level). Wat af is, blijft op deze computer (`T.campagneAf`, onder
+  `<OPSLAG_SLEUTEL>.campagne`, zoals de beste punten), niet in `S`. `T.hoofdstukOpen(id)`: het eerste altijd, een volgend
+  als het hoofdstuk ervoor af is. `T.spelGewonnen(D)`: betaald (het demojaar), of een scenario dat gewonnen eindigt.
+  `T.eindVanHoofdstuk(S, D)` (vanuit het eindscherm, `js/hud.js`) zet een gewonnen hoofdstuk af en geeft `{ hoofdstuk,
+  gewonnen, volgende }`. `T.keurCampagne` keurt de campagne zoals `T.keurScenario` een level. Het scherm: *Campaign* op het
+  titelscherm (`campagneScherm` en `speelHoofdstuk` in `js/menu.js`; niet in de demo), dat een hoofdstuk begint zoals Begin
+  bij New game, met de naam van zijn plek; en op het eindscherm bij elk eind of het hoofdstuk af is.
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -1923,6 +1970,14 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 ### js/kar.js: de stapels, de dragers en de ossenkar
 
+- **Wie stilligt, draagt** (24 okt; Marcel: "A", na "de houthakker zit vol en wacht op carriers, maar die komen niet"):
+  de nacht (`T.tikGebouwenDag`, stap 6 in `js/gebouwen.js`) geeft een werkplaats `g.draagtZelf` als hij vandaag niets
+  kan: `'stapel'` als er geen dag werk meer op zijn stapel past (dan maakt hij ook niet meer wat er nog op paste), of
+  `'niets'` als hij niets heeft om mee te werken (`g.tekort`; tot 24 okt viel dat door naar de stapel, die dan ten
+  onrechte "vol" zei). Wie er werkt, staat die dag in `T.dragersVan` (`draagtVoorZijnWerk`, `js/bouwen.js`), hakt of
+  jaagt niet (`js/veldwerk.js`), en zegt bij de muis wat hij draagt (`js/bewoners.js`); bij een volle stapel haalt hij
+  eerst die (`kiesRit`). Zonder dit droeg niemand meer zodra iedereen werk had. Getoetst in `test/kar.test.cjs`; de
+  kolonist, wiens stapels niet vol raken, speelt precies als ervoor.
 - **De dragers** (vraag 184, 23 okt; Marcel: "3a1", "3b1", "Eén stuk, van alles"): sinds het kamp op is
   (`T.metVervoer(D)`: `D.begin.kamp` niet meer 'onderweg') wordt er gedragen; het begin heeft geen kar meer (de huifkar
   blijft in het kamp staan, en `T.deVoorraad` is ernaast tot het raadhuis af is; dan gaat hij op in het raadhuis,
@@ -2200,7 +2255,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 ### js/rovers.js: de rovers en de militie
 
 - `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat naar het
-  dichtste roverskamp (`T.wordtRover` vanuit `js/bewoners.js`; hieronder; tot c2 kwam hij met de bende van het dorp,
+  dichtste roverskamp (`T.wordtRover` vanuit `js/bewoners.js`; in een level met een rand alleen een kamp dat erbinnen kan
+  staan, `stukkenVanKamp`, en anders vertrekt hij gewoon; hieronder; tot c2 kwam hij met de bende van het dorp,
   `D.rovers.bende`, terug), en er komen wilde rovers van buiten (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
   (`T.roverIngang`) naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
   vraag 170, stap 4), twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in

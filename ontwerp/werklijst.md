@@ -27,11 +27,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   speerman uit het 3D-model met zijn eigen kleuren, staan en lopen in acht richtingen, het licht voor spelmaat, en in
   het spel naast de generator (`beeld.md`, "Blender als basis?"). Stand 26 okt: staan in acht richtingen dicht bij het
   vel (de stand "oké" van 25 okt, daarna de kleuren per vlak, één wapenrok voor alle richtingen, de linkerarm naar
-  voren); lopen in het spel (`spelvel.py`, alleen in de browser, de vellen van de generator blijven), en Marcel: "Ja dit
-  is al heel veel beter zo!" (rechtop, de nek recht, niet meer door de knieën). Nog: de steek met het nieuwe uiterlijk,
-  in W de punt van de speer naar voren, en de piekenier (in woorden in `beeld.md`, wacht op Marcel). En **geraakt
-  worden** (Marcel, 26 okt: "We hebben ook een 'hit' animatie nodig bij soldaten"): het spel speelt `geraakt` al af bij
-  een klap; de speerman (ook die van de generator) heeft nog geen vel. Voorstel in woorden in `beeld.md`, wacht op Marcel.
+  voren); lopen in het spel (`spelvel.py`, alleen in de browser, de vellen van de generator blijven), Marcel: "Ja dit is
+  al heel veel beter zo!" (rechtop, de nek recht, niet meer door de knieën), met de punt naar voren in W ("P2"); de steek
+  hoger, en **geraakt worden** (Marcel: "We hebben ook een 'hit' animatie nodig bij soldaten", het voorstel goedgekeurd),
+  allebei als vel voor het spel; een gevecht in het spel opgenomen (`uit/blender/spel/`). Nog: de steek als echte uitval
+  zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
@@ -53,7 +53,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
   "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
   drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
-  Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
+  Sinds 24 okt: **wie stilligt, draagt** (Marcel: "A"; `spel.md`, bij de dragers): had iedereen werk, dan droeg niemand
+  meer, en bleef een volle stapel liggen. Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
   schop, en de kleinere kar bij de schuur, komen met de art.
 - **Het demojaar spelen** met de speellijst (`speelbaar.md`, "De speellijst van het demojaar"); wat scheef zit, eerst
   met een getal uit de werkbank.
@@ -70,18 +71,19 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **Het Engels lezen** (`engels.md`): *the innkeeper*, *the moneylender*, *the tradesmen*, *rent*, *the ledger*,
   *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, en sinds 23 okt *carriers*, de zinnen van de overval
   (*Robbers were seen in the woods near the village. They will come soon.*) en van de punten (*Score*, *A new best!*);
-  sinds 24 okt die van de scenario's (*Goal*, *New goal: …*, *Goal reached: …*, *Goal failed: …*, *Victory*, *Defeat*).
+  sinds 24 okt die van de scenario's (*Goal*, *New goal: …*, *Goal reached: …*, *Goal failed: …*, *Victory*, *Defeat*)
+  en van de campagne (*Campaign*, *Chapter 1: The first year*, *Complete*, *Finish chapter 1 first.*, *Chapter complete:
+  …*, *The next chapter is open: …*, *Chapter failed: … You can play it again from the campaign.*).
 - De spullen bij de huizen (vraag 148, d), de ronde van alle huizen (vraag 144), en het geluid (vraag 145, 2: de sleutel
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
 **Daarna, in deze volgorde** (Marcel, 20 okt, bij R: "volgorde is akkoord")
-1. **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (24 okt; Marcel: "Stap 2a: kaart en rand"): het level maakt zijn kaart (een
-   vast eiland, een plek op naam, de rand op de stukken van 64), nog zonder menu.
-   **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
-   **1a en 1b zijn af** (24 okt): de motor (`scenario.md`, 2), en het demojaar als eerste level (`levels/demojaar.js`;
-   `scenario.md`, 3; Marcel: "1b nu"): geen regel leest nog een vlag van de demo, en de speeltest speelt precies
-   hetzelfde jaar (zaad 1 tot 3). De speeltest speelt nu ook in de cloud (`opmerkingen.md`). Het volgende is **stap 2,
-   het level als recept** (een eigen kaart met een rand, en *Campaign* op het titelscherm): eerst een plan voor Marcel.
+1. **187 en 188 bouwen**, na de demo, in de volgorde van `scenario.md` (9); stap 0, Tiled eruit, is af (23 okt).
+   **1a tot en met 2b zijn af** (24 okt): de motor (`scenario.md`, 2), het demojaar als level (3), de kaart van een level
+   met een rand (1, "De rand"), en *Campaign* op het titelscherm (6, "Stap 2b"): het demojaar is hoofdstuk 1, op eiland 5
+   bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
+   Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
+   eerst een plan. Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1462,6 +1464,10 @@ Voorstel van Claude: S1 tot S3 eerst (klein, een middag), dan S4 en S5 samen, en
 
 ## Af (sinds 11 okt)
 
+- 2b van vraag 187: *Campaign* op het titelscherm (24 okt; `scenario.md`, 6): de hoofdstukken op een rij, het demojaar als
+  hoofdstuk 1 op eiland 5, en op het eindscherm of het af is.
+- 2a van vraag 187: de kaart van een level (24 okt; `scenario.md`, 1): een vast eiland, een plek op naam, en een rand op
+  de stukken van 64, met de minikaart van alleen de kaart.
 - 1b van vraag 187: het demojaar als eerste level (24 okt; `scenario.md`, 3): `levels/demojaar.js`, met de wacht, het
   slot, de aangekondigde overval, de punten en de scène van het betalen; de speeltest speelt nu ook in de cloud.
 - Ronde 4 van het snoeien: Tiled eruit (6b1 van vraag 187, 23 okt; `snoeien.md`): de kaarten uit Tiled, de quests en

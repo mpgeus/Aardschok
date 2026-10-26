@@ -24,9 +24,11 @@
 // bewerker terugschrijft (stap 2 en 4: het level als recept, en de editor).
 //
 // Een level (T.LEVELS, in levels/; stap 1b: het demojaar) is zo'n scenario, met `dorpen` erbij: per dorp wat het bij het
-// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js),
-// en `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js). Nog niet: een level dat zijn eigen kaart maakt,
-// met een rand (stap 2). Zonder scherm, en dus getoetst (test/scenario.test.cjs).
+// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js).
+// Hoe het begon, zet wie het begint erbij: `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js; T.demoLevel) of
+// `hoofdstuk` (een hoofdstuk van de campagne, js/campagne.js). Stap 2a: zijn kaart, met `eiland: { zaad }` (een
+// vast eiland), `plek` (een dorpsplek op naam) en `rand: { b, h }` (zoveel stukken om het dorp, T.randOm in js/maker.js).
+// Zonder scherm, en dus getoetst (test/scenario.test.cjs en test/rand.test.cjs).
 (function (T) {
   'use strict';
 
@@ -64,7 +66,10 @@
       tellers: {},
       lot: {},
       seconde: Math.floor((S.wereldTijd || 0) / IN().elke),
+      // Hoe het spel begon (stap 2b): als de demo (T.demoLevel, js/einde.js), of als hoofdstuk van de campagne
+      // (T.hoofdstukLevel, js/campagne.js). Dat zegt niet het level zelf, want het demojaar is allebei.
       demo: !!L.demo,
+      hoofdstuk: L.hoofdstuk || null,
     };
     for (const t of S.scenario.triggers) {
       for (const v of elk(t.als)) {
@@ -274,6 +279,11 @@
     const fout = [];
     const gebieden = (level && level.gebieden) || {};
     const triggers = (level && level.triggers) || [];
+    if (level && level.eiland && !(Number.isInteger(level.eiland.zaad) && level.eiland.zaad >= 1)) fout.push('het eiland heeft een zaad, een heel getal vanaf 1'); // geen tekst
+    if (level && level.plek != null && !level.eiland) fout.push(`de plek ${level.plek} vraagt een vast eiland: de namen verschillen per eiland`); // geen tekst
+    if (level && level.rand && ![level.rand.b, level.rand.h].every((n) => Number.isInteger(n) && n >= T.randMinstens())) {
+      fout.push(`een rand is minstens ${T.randMinstens()} bij ${T.randMinstens()} stukken`); // geen tekst
+    }
     ((level && level.dorpen) || []).forEach((d, i) => {
       const wie = `dorp ${i + 1}`; // geen tekst
       for (const soort of d.wacht || []) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`${wie}: de soldaat ${soort} bestaat niet`); // geen tekst

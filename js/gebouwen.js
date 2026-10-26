@@ -1560,6 +1560,7 @@
       g.werkte = 0;
       g.stilWant = null;
       g.uren = null;
+      g.draagtZelf = null;
       if (!g.klaar) continue;
       // Wie niets per dag maakt, maar in zijn maanden oogst (de wijnboerderij, `alleenIn`), ligt daarbuiten stil; dan zegt
       // het briefje dat, en niet dat hij te weinig maakt.
@@ -1622,17 +1623,27 @@
           }
         }
       }
-      // Met de ossenkar (js/kar.js) legt hij wat hij maakt op de stapel bij zijn deur, en maakt hij niet meer dan erop
-      // past: is de stapel vol, dan staat hij stil tot de kar komt (werklijst C, stap 1).
+      // Kan hij vandaag niets, omdat hij niets heeft om mee te werken, dan dragen zijn mensen vandaag (`draagtZelf`,
+      // T.dragersVan in js/bouwen.js; Marcel, 24 okt: "A", wie stilligt, draagt): zo brengen ze zelf wat hij nodig heeft.
+      // (Tot 24 okt ging hij hier verder, en zei de stapel hieronder dan ten onrechte dat hij vol was.)
+      if (factor <= 0) {
+        if (g.tekort) g.draagtZelf = 'niets';
+        continue;
+      }
+      // Met de ossenkar (js/kar.js) legt hij wat hij maakt op de stapel bij zijn deur. Past er geen dag werk meer op, dan
+      // staat hij vandaag stil, en dragen zijn mensen, zijn eigen stapel eerst (werklijst C, stap 1; Marcel, 24 okt: "A").
+      // Tot 24 okt maakte hij dan wat er nog op paste: met één drager die er een stuk per dag afhaalde, hakte hij zo
+      // eindeloos op halve kracht naast een volle stapel, en ging hij nooit zelf dragen.
       const perDag = m === soort.maakt ? T.maaktUit(D, soort) : m.uit;
       const ruimte = T.ruimteOpStapel(D, g);
       if (ruimte < Infinity) {
         const per = perDag;
         let opStapel = 0;
         for (const wat in per) if (T.gaatMetVervoer(D, wat)) opStapel += per[wat];
-        if (opStapel > 0 && ruimte / opStapel < factor) factor = ruimte / opStapel;
+        if (opStapel > 0 && ruimte + 1e-9 < opStapel * factor) factor = 0;
         if (factor <= 0) {
           g.stilWant = T.t('its stack is full, waiting for carriers');
+          g.draagtZelf = 'stapel';
           if (!wasStil) T.zeg(D, T.t('The {naam} is idle: {waarom}.', { naam: soort.naam, waarom: g.stilWant }));
           continue;
         }

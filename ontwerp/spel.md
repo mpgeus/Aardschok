@@ -163,8 +163,11 @@ grootste stapel; hij laadt en lost bij de opslag die het dichtst bij is. Wie hou
 bouwt, blijft er bouwen, zodat het bouwen nog dezelfde dag begint. Een drager is zo'n kwart kar: met vier gezinnen
 brengen ze op de eerste dag zo'n dertig stuks (in de proef vier hutten van 8 hout, af op dag 5). Bij de muis zegt een
 dorpeling wat hij draagt of bouwt. Je ziet hem met wat de figuren al kunnen: hout als een bundel, graan als een schoof,
-de rest in een mand; de figuren met een plank, een stam of een steen komen later (Marcel). Een schuur heeft nog zijn eigen
-ossenkar, naast de dragers. Wat hieronder over de kar staat, geldt sinds 23 okt voor de dragers en de kar samen.
+de rest in een mand; de figuren met een plank, een stam of een steen komen later (Marcel). **Wie stilligt, draagt**
+(Marcel, 24 okt: "A", na "de houthakker zit vol en wacht op carriers, maar die komen niet"): past er op de stapel van
+een werkplaats geen dag werk meer, of heeft hij niets om mee te werken, dan dragen zijn eigen mensen die dag (bij een
+volle stapel die van henzelf eerst), en de dag erna werken ze weer. Zonder dat droeg niemand meer zodra iedereen werk had.
+Een schuur heeft nog zijn eigen ossenkar, naast de dragers. Wat hieronder over de kar staat, geldt sinds 23 okt voor de dragers en de kar samen.
 
 **Zo werkt het egaliseren nu** (23 okt, vraag 182; Marcel, 20 okt: "Ik wil dat bouwers eerst de grond 'levelen' met een
 schop, zoals in knights and merchants", "1a3", "1b1", en 23 okt: "In een paar stappen"; `js/bouwen.js`, `js/hoogte.js`):

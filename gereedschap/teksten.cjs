@@ -170,6 +170,13 @@ const GEGEVENS = [
       ]),
     schrijver: (tabel) => Object.values(tabel).flatMap((g) => (g.situaties || []).map((s) => s.naam)),
   },
+  {
+    // De titels van de hoofdstukken van de campagne (vraag 187, stap 2b; js/campagne.js).
+    bestand: 'levels/campagne.js',
+    blok: 'T.CAMPAGNE',
+    zinnen: (tabel) => tabel.hoofdstukken.map((h) => h.titel),
+    schrijver: () => [],
+  },
 ];
 
 // De zinnen van de gegevens in een bestand: { zinnen, schrijver }, elk een lijst teksten (leeg voor een ander bestand).
@@ -186,10 +193,10 @@ function gegevensIn(bestand) {
   return { zinnen: tekst(g.zinnen(tabel)), schrijver: tekst(g.schrijver(tabel)) };
 }
 
-// De bestanden van het spel: eerst in de volgorde van index.html, dan wat er verder in js/ staat.
+// De bestanden van het spel: eerst in de volgorde van index.html (js/ en de levels), dan wat er verder in js/ staat.
 function bestanden() {
   const { scriptsVan } = require('../test/laad.cjs');
-  const geladen = scriptsVan('index.html').filter((s) => s.startsWith('js/'));
+  const geladen = scriptsVan('index.html').filter((s) => s.startsWith('js/') || s.startsWith('levels/'));
   const rest = fs.readdirSync(path.join(WORTEL, 'js')).filter((f) => f.endsWith('.js')).map((f) => `js/${f}`).filter((f) => !geladen.includes(f)).sort();
   return [...geladen, ...rest];
 }

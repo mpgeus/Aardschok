@@ -564,6 +564,12 @@
         }
       }
     }
+    // Buiten de rand van een level (T.stukBinnenRand, js/wereld.js) is er geen land, dus ook geen grove weg: een tocht erheen
+    // gaat naar het vak binnen de rand dat het dichtst bij zijn doel ligt (doelVak), en blijft daar staan (Marcel, 24 okt:
+    // "Hij loopt tot de rand").
+    if (w.rand) {
+      for (let k = 0; k < E.n * E.n; k++) if (!T.stukBinnenRand(w, Math.floor((k % E.n) / per), Math.floor(Math.floor(k / E.n) / per))) kost[k] = 0;
+    }
     const uit = { kost, deel: delenVan(kost, E.n) };
     g.kost.set(eig, uit);
     return uit;

@@ -1,5 +1,6 @@
 // Het demojaar: de demo voor Next Fest als level (vraag 187, stap 1b; ontwerp/scenario.md, 3). Een nieuw spel begint ermee
-// als de demo aan staat (T.DEMO_INSTELLINGEN.aan, js/einde.js), of met Demo in het debugvenster (js/debugvenster.js).
+// als de demo aan staat (T.DEMO_INSTELLINGEN.aan en T.demoLevel, js/einde.js), of met Demo in het debugvenster
+// (js/debugvenster.js); en het is hoofdstuk 1 van de campagne (levels/campagne.js), op het eiland van de campagne.
 //
 // Het lege begin op het eiland van je zaad, zoals elk spel; wat de demo anders maakt, staat hieronder:
 //   - de wacht (werklijst Q, vraag 181, e; Marcel, 20 okt, S1: "2 speermannen en 1 kruisboogschutter"): soldaten die met de
@@ -19,7 +20,6 @@
 
   T.LEVELS = T.LEVELS || {};
   T.LEVELS.demojaar = {
-    demo: true, // het eindscherm zegt dat de demo hier eindigt, met de link naar Steam (js/hud.js)
     dorpen: [{
       wacht: ['speerman', 'speerman', 'kruisboogschutter'],
       dicht: ['wachthuis', 'wapenmaker'],
