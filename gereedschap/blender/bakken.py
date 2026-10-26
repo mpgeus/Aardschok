@@ -467,6 +467,14 @@ PAS_TIL = 1.3  # de voet die zwaait wat hoger dan in de opname, zodat de knie du
 # lijkt het alsof hij zn nek te ver naar achter zet", "de referentie is mooier kwa beweging"): de proefpersoon hing
 # voorover met de nek naar achteren; de referentie loopt rechtop met een stil bovenlijf, het hoofd boven de borst
 OPNAME_RUG, OPNAME_HOOFD = 0.3, 0.0
+# Niet als een dwerg (Marcel, 26 okt: "hij loopt een beetje als 'dwerg'", "ongelukkig"): met de korte benen ('been' 0,72)
+# en de pas van de referentie zakte het bekken het hele rondje 10 cm, een kwart van het been, en liep hij door zijn knieën
+# (70 tot 120 graden, ook op het been waar hij op staat), 17 tot 25 procent korter dan staand; de voeten 30 cm uit elkaar.
+# De referentie is lopend even lang als staand: de tekenaar rekt de benen in de wijde stand op. Hier zo ook: het bekken
+# zakt maar voor BEKKEN_ZAKT van wat de pas vraagt, en waar het been dan te kort is, rekken dij en onderbeen (de voet en de
+# laars niet) tot de knie nog BEEN_REIK gestrekt staat; en de voeten op een smaller spoor (SPOOR maal hun afstand tot het
+# midden in rust).
+BEKKEN_ZAKT, BEEN_REIK, SPOOR = 0.15, 0.99, 0.6
 
 
 def loop(rig, i, n, draagt=False):
@@ -494,10 +502,10 @@ def loop(rig, i, n, draagt=False):
         bb = rig.data.bones
         H, A = bb['upperleg01.L'].head_local, bb['foot.L'].head_local
         been = sum(bb[f'{b}.L'].length for b in ('upperleg01', 'upperleg02', 'lowerleg01', 'lowerleg02'))
-        zakken = max(0.0, math.hypot(H.z - A.z, PAS_HALF) - 0.97 * been) + v['bekken']
+        zakken = (max(0.0, math.hypot(H.z - A.z, PAS_HALF) - 0.97 * been) + v['bekken']) * BEKKEN_ZAKT
         for k in ('L', 'R'):
             y, z, kantel = v[k]
-            been_ik(rig, k, y, z, zakken, kantel, rol=e.y, gier=e.z, voorover=e.x)
+            been_ik(rig, k, y, z, zakken, kantel, rol=e.y, gier=e.z, voorover=e.x, spoor=SPOOR, reik=BEEN_REIK)
         if draagt:
             draai(rig, 'spine02', DRAAI * 0.5, 'Z')
             draai(rig, 'spine01', DRAAI * 0.5, 'Z')
@@ -758,18 +766,25 @@ def speer_mee(rig, f):
     handen_op_speer(rig, {k: S @ p for k, p in _drager['holtes'].items()}, S.to_3x3() @ _drager['richting'])
 
 
-def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0, voorover=0.0):
+def been_ik(rig, k, y, z, zakken, kantel=0.0, rol=0.0, gier=0.0, voorover=0.0, spoor=1.0, reik=None):
     """Eén been met IK: de enkel op (y, z) ten opzichte van zijn plek in rust (vooruit is -y), terwijl het bekken `zakken`
     lager staat, `rol` om y gekanteld, `gier` om z gedraaid en `voorover` om x (het bekken staat al, de heup is waar hij
     nu is). De dij en
-    de knie uit de cosinusregel in het vlak van voor naar achter; opzij zo dat de voet op zijn spoor blijft; de knie en de
-    voet wijzen vooruit, en de voet ligt vlak (of draait met `kantel` om de bal)."""
+    de knie uit de cosinusregel in het vlak van voor naar achter; opzij zo dat de voet op zijn spoor blijft (`spoor` maal
+    zijn afstand tot het midden in rust); de knie en de voet wijzen vooruit, en de voet ligt vlak (of draait met `kantel`
+    om de bal).
+    Met `reik`: is het been te kort om de enkel te halen met de knie zo ver gestrekt, dan rekken dij en onderbeen (zie
+    BEEN_REIK); anders blijft de enkel staan waar het been ophoudt."""
     pb, bb = rig.pose.bones, rig.data.bones
     yz = lambda v: Vector((v.y, v.z))
     H0, K, A = (bb[f'{b}.{k}'].head_local for b in ('upperleg01', 'lowerleg01', 'foot'))
     H = pb[f'upperleg01.{k}'].head.copy()
     L1, L2 = (yz(K) - yz(H0)).length, (yz(A) - yz(K)).length
-    dx, dy, dz = A.x - H.x, A.y + y - H.y, A.z + zakken + z - H.z
+    dx, dy, dz = A.x * spoor - H.x, A.y + y - H.y, A.z + zakken + z - H.z
+    rek = max(1.0, math.hypot(dy, dz) / (reik * (L1 + L2))) if reik else 1.0
+    for b in ('upperleg01', 'lowerleg01', 'lowerleg02'):  # upperleg02 erft van upperleg01, de onderbenen niet
+        pb[f'{b}.{k}'].scale = (1, rek, 1)
+    L1, L2 = L1 * rek, L2 * rek
     d = min(math.hypot(dy, dz), 0.999 * (L1 + L2))
     knie = math.pi - math.acos(max(-1.0, min(1.0, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))))
     alfa = math.acos(max(-1.0, min(1.0, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))))

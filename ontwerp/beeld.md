@@ -2480,6 +2480,14 @@ voorover, de nek naar achteren. Nu krijgt de rug nog 30 procent van de opname en
 met de pas van de referentie. Geprobeerd en niet gebruikt: de handen lager en de punt meer naar voren (de speer werd veel
 vlakker dan bij de generator, en verdween in W achter het lijf), en de ellebogen naar binnen (de speer ook vlakker, en de
 linkerpols moest 77 graden wringen). Op spelmaat naast de generator: `uit/blender/spel/lopen-nek.gif`.
+Daarna: "hij loopt een beetje als 'dwerg'; laat ik het zo zeggen: 'ongelukkig'". Gemeten: lopend was hij 17 tot 25
+procent korter dan staand, de generator is lopend even lang of langer (100 tot 106 procent). Ons model heeft korte benen
+(`'been'` 0,72; de heup op 0,49 m, het hoofd op 1,09 m), en met de pas van de referentie (de halve pas 0,63 maal het been,
+net als op het vel) zakte het bekken het hele rondje 10 cm: de knieën 70 tot 120 graden gebogen, ook van het been waar
+hij op staat, en de voeten 30 cm uit elkaar. De tekenaar van de referentie rekt de benen in de wijde stand op in plaats
+van het lijf te laten zakken. Nu ook zo (`BEKKEN_ZAKT` 0,15, `BEEN_REIK` 0,99, `SPOOR` 0,6 in `bakken.py`): het bekken
+zakt nog 1,5 cm, dij en onderbeen rekken waar het been te kort is (de voet en de laars niet), de knie van het standbeen
+staat op zo'n 17 graden, de voeten 18 cm uit elkaar, en hij is lopend 97 tot 101 procent zo lang als staand.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
