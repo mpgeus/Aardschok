@@ -2467,6 +2467,19 @@ rondje door de acht richtingen, opgenomen op zoom 2: `uit/blender/spel/speerman3
 spelmaat iets kleiner en smaller dan de dorpelingen van de generator ernaast; in Z draagt hij de speer zoals de generator,
 in W wijst de punt bij ons naar achteren en bij de generator naar voren (het vel van de generator is daar niet in 3D
 getekend, hierboven).
+Marcel: "hij loopt nog wat te horkig". Naast het lopen van de generator (`uit/blender/spel/lopen-generator-model.gif`):
+de generator loopt rechtop, de handen laag (de speer schuin voor de buik, de armen ontspannen langs het lijf), en de
+romp blijft stil. Bij ons hangt hij voorover, de schouders hoog en het hoofd ertussen, de ellebogen wijd met beide handen
+op borsthoogte om de speer, en de dikke mouwen maken daar één bult van; in W ook kortere passen. Het sleutelbeen en de
+schouder naar voren (`ARM_VOOR`, voor de staande man in W) maken het lopen nog krommer.
+Daarna: "bij de onze lijkt het alsof hij zn nek te ver naar achter zet", en "de referentie is mooier kwa beweging". De
+referentie houdt het bovenlijf rechtop en stil, het hoofd boven de borst; alleen de benen bewegen (twee keer wijd als een
+schaar, twee keer bij elkaar). Bij ons zette de opname (`mocap.py`) rug, nek en hoofd zoals de proefpersoon ze hield:
+voorover, de nek naar achteren. Nu krijgt de rug nog 30 procent van de opname en blijven nek en hoofd in de staande houding
+(`OPNAME_RUG`, `OPNAME_HOOFD` in `bakken.py`; `mocap.zet` met `rug` en `hoofd`); bekken en benen blijven uit de opname,
+met de pas van de referentie. Geprobeerd en niet gebruikt: de handen lager en de punt meer naar voren (de speer werd veel
+vlakker dan bij de generator, en verdween in W achter het lijf), en de ellebogen naar binnen (de speer ook vlakker, en de
+linkerpols moest 77 graden wringen). Op spelmaat naast de generator: `uit/blender/spel/lopen-nek.gif`.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

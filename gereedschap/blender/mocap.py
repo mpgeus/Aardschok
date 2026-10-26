@@ -209,13 +209,18 @@ class Beweging:
 BENEN = ('upperleg', 'lowerleg', 'foot')
 
 
-def zet(rig, beweging, u, benen=True):
+def zet(rig, beweging, u, benen=True, rug=1.0, hoofd=1.0):
     """De houding op plek u van de pas op het skelet: de gekoppelde botten met hun draai (de andere, zoals de armen,
     houden hun eigen stand), het bekken met zijn zwaaien; zonder `benen` alleen bekken, rug en hoofd (de benen zet dan de
-    IK). Geeft hoe ver het skelet moet zakken (of rijzen) zodat de laagste voet de grond raakt (met de benen)."""
+    IK). `rug` en `hoofd` zeggen hoeveel van de opname de rug en de nek met het hoofd krijgen (0: recht, zoals in de
+    ruststand). Geeft hoe ver het skelet moet zakken (of rijzen) zodat de laagste voet de grond raakt (met de benen)."""
     draai, zwaai = beweging.op(u)
     if not benen:
         draai = {o: q for o, q in draai.items() if not o.startswith(BENEN)}
+    for o in draai:
+        deel = rug if o.startswith('spine') else hoofd if o.startswith(('neck', 'head')) else 1.0
+        if deel != 1.0:
+            draai[o] = Quaternion().slerp(draai[o], deel)
     bb = rig.data.bones
     M = {}
 

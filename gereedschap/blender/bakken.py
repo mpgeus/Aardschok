@@ -463,6 +463,10 @@ BEWEGING = None  # een pas uit motion capture (mocap.py, Beweging); zonder: de p
 PAS_HALF = 0.28  # de halve pas bij de opname: zo ver staat de enkel voor en achter de heup (meter), zoals bij de referentie
 # (daar is de pas van teen tot hiel zo'n 70 procent van de man; met 0,2 was het 43)
 PAS_TIL = 1.3  # de voet die zwaait wat hoger dan in de opname, zodat de knie duidelijk omhoog komt
+# hoeveel van de opname de rug en de nek met het hoofd krijgen (Marcel, 26 okt: "hij loopt nog wat te horkig", "bij de onze
+# lijkt het alsof hij zn nek te ver naar achter zet", "de referentie is mooier kwa beweging"): de proefpersoon hing
+# voorover met de nek naar achteren; de referentie loopt rechtop met een stil bovenlijf, het hoofd boven de borst
+OPNAME_RUG, OPNAME_HOOFD = 0.3, 0.0
 
 
 def loop(rig, i, n, draagt=False):
@@ -483,7 +487,7 @@ def loop(rig, i, n, draagt=False):
         # ritme van de opname (hiel neer, afrollen, teen af) maar met passen en een knie zo groot als bij de referentie
         # (Marcel: "De loop animatie van de referentie is veel beter": daar staan de benen in beeld 0 en 4 wijd als een
         # schaar, en komt de knie in beeld 2 en 6 duidelijk omhoog); het bovenlijf wat gedraaid zoals bij de generator
-        mocap.zet(rig, BEWEGING, i / n, benen=False)
+        mocap.zet(rig, BEWEGING, i / n, benen=False, rug=OPNAME_RUG, hoofd=OPNAME_HOOFD)
         bpy.context.view_layer.update()
         v = BEWEGING.voeten(i / n, PAS_HALF, PAS_TIL)
         e = BEWEGING.op(i / n)[0]['root'].to_euler('XYZ')
