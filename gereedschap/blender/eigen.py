@@ -344,6 +344,12 @@ def main():
     sc = sh.bouw()
     rig = [o for o in sc.objects if o.type == 'ARMATURE'][0]
     lijf = bpy.data.objects['lijf']
+    if 'plaatmasker' in sh.ARGS or 'plaat' in sh.ARGS:
+        # de wapenrok van Marcels plaat erin gebakken (plaatbak.py): eerst de maskers, dan na plaatverf.py het bakken
+        import plaatbak
+        if 'plaatmasker' in sh.ARGS:
+            return plaatbak.maskers(sc)
+        plaatbak.bak_wapenrok(sc)
     bk.oorsprong_vast(sc)
     # de kleren als een mesh (zonder het lijf: dat houdt zijn haar; en zonder de rok: die wordt stof)
     pop = bk.een_mesh(sc, zonder=('lijf', 'wapenrok-rok'))

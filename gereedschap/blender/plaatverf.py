@@ -5,6 +5,7 @@
 # tot rand. Daarna legt hg_soldaat.py ... verf hem op het model.
 #
 #   python gereedschap/blender/plaatverf.py <map met masker-wapenrok.png en .json>   (de Python van ComfyUI, met PIL)
+#   python gereedschap/blender/plaatverf.py <map> alle    de vijf richtingen van plaatbak.py (masker-<r>.png naar verf-<r>.png)
 import json
 import sys
 
@@ -13,7 +14,8 @@ from PIL import Image
 
 PLAAT = __file__.replace('\\', '/').rsplit('/', 3)[0] + '/EXTRA/Middeleeuwse krijgeruitrusting spritesheet.png'
 RIJ = (270, 545)  # de rij met de wapenrokken op de plaat (y)
-VOOR = 0  # de wapenrok van voren: de eerste in de rij
+# per richting welke wapenrok van de plaat (van links af geteld), zoals plaatbak.RICHTINGEN
+RICHTINGEN = {'Z': 0, 'ZW': 1, 'W': 2, 'N': 3, 'O': 4}
 RAND = 2.0  # zoveel pixels van de tekening binnen de rand blijven (daar mengt het magenta mee)
 
 
@@ -21,8 +23,9 @@ def magenta(a):
     return (a[..., 0] > 170) & (a[..., 2] > 170) & (a[..., 1] < 110)
 
 
-def tekening():
-    """De wapenrok van voren van de plaat, met zijn vorm (geen magenta) en de rijen van de hals, de riem en de zoom."""
+def tekening(nummer=0):
+    """De wapenrok met dit nummer van de plaat (0 van voren), met zijn vorm (geen magenta) en de rijen van de hals, de
+    riem en de zoom."""
     plaat = np.asarray(Image.open(PLAAT).convert('RGB')).astype(np.float32)
     rij = plaat[RIJ[0]:RIJ[1]]
     vorm = ~magenta(rij)
@@ -35,7 +38,7 @@ def tekening():
             aan = False
             if x - start > 40:
                 stukken.append((start, x))
-    x0, x1 = stukken[VOOR]
+    x0, x1 = stukken[nummer]
     beeld, vorm = rij[:, x0:x1], vorm[:, x0:x1]
     ys = np.where(vorm.sum(1) > 0)[0]
     beeld, vorm = beeld[ys[0]:ys[-1] + 1], vorm[ys[0]:ys[-1] + 1]
@@ -48,11 +51,11 @@ def tekening():
     return beeld, vorm, {'hals': 0.0, 'riem': float(riem), 'zoom': float(h - 1)}
 
 
-def buig(map_):
-    doel = np.asarray(Image.open(f'{map_}/masker-wapenrok.png').convert('RGBA')).astype(np.float32)
+def buig(map_, naam='wapenrok', nummer=0):
+    doel = np.asarray(Image.open(f'{map_}/masker-{naam}.png').convert('RGBA')).astype(np.float32)
     binnen = doel[..., 3] > 128
-    ankers = json.load(open(f'{map_}/masker-wapenrok.json'))
-    beeld, vorm, bron = tekening()
+    ankers = json.load(open(f'{map_}/masker-{naam}.json'))
+    beeld, vorm, bron = tekening(nummer)
     print('ankers doel', {k: round(v) for k, v in ankers.items()}, 'bron', bron, 'tekening', beeld.shape[:2])
     H, W = binnen.shape
     uit = np.zeros((H, W, 4), np.uint8)
@@ -88,9 +91,13 @@ def buig(map_):
                   + beeld[yi2, xi2] * fx * fy)
             uit[y, x, :3] = np.clip(kl, 0, 255)
             uit[y, x, 3] = 255
-    Image.fromarray(uit).save(f'{map_}/verf-wapenrok.png')
-    print(f'{map_}/verf-wapenrok.png')
+    Image.fromarray(uit).save(f'{map_}/verf-{naam}.png')
+    print(f'{map_}/verf-{naam}.png')
 
 
 if __name__ == '__main__':
-    buig(sys.argv[1])
+    if len(sys.argv) > 2 and sys.argv[2] == 'alle':
+        for r, nummer in RICHTINGEN.items():
+            buig(sys.argv[1], r, nummer)
+    else:
+        buig(sys.argv[1])

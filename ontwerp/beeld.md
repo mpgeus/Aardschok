@@ -2628,6 +2628,19 @@ en aan de hals en de zoom wat magenta en strepen. Marcel daarop: **"nah, dit gaa
 Human Generator met onze delen, overschilderen en projecteren laten we voorlopig rusten (de code staat er nog:
 `hg_soldaat.py`, `uitrusting.py`, `plaatverf.py`, `schilder.cjs hg`; eruit als Marcel zegt dat de richting om is).
 
+**De proef met uitvouwen en bakken met de plaat (26 okt).** Marcel: "Ik wil graag nog een proef doen met uv wrapping op een
+3d model uit code", "op basis van de platen in de extra map", op ons eigen model. `plaatbak.py`, met de stappen van het
+bakken van 24 okt (`bakken.py`): `eigen.py -- <map> Z plaatmasker` rendert de wapenrok van de speerman wit uit vijf
+richtingen (voor, schuin voor, links, rug, rechts: de wapenrokken 0 tot 4 op de plaat); `plaatverf.py <map> alle` buigt
+per richting de tekening naar zijn masker; `eigen.py -- <map> ... plaat` vouwt het lijf en de rok van de wapenrok uit,
+bakt de vijf tekeningen erin (per plek gewogen naar de hoek met de camera, nul waar iets ervoor zit; elk een textuur van
+2048), en rendert dan zoals altijd (de rok wordt bij het lopen gewoon stof: zijn UV-kaart en textuur gaan mee). Plaat:
+`uit/blender/plaatbak/plaat-staan.png`. De verf zit nu op de mesh, dus elke richting en elk beeld draagt dezelfde
+wapenrok. Maar het wordt een dambord in plaats van vier heldere vierendelen, ook als per plek de richting die hem het best
+ziet bijna alleen telt (`MACHT` 12): de tekeningen zijn per rij op ons silhouet gelegd, en de vierendelen, de armsgaten en
+de riem liggen op de tekeningen van verschillende kanten niet op dezelfde plek van ons model. Ook dubbel: de riem van de
+plaat in de verf en onze eigen riem erover; en onze mouwen bedekken veel.
+
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
 in Z: `proef-z-groot.png`), uit `kruisboog_hd.py`: het model van de speerman met zijn eigen onderdelen (`kies()`), zodat
