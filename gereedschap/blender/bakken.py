@@ -697,7 +697,10 @@ VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoo
 # de kijker laat wijzen en in ZW en W lang naar voren
 # en achteraan vast (`greep`, van de achterkant, maal de lengte), zoals de generator: met 0,32 stak er een halve meter voor
 # de voorste hand uit, en zag je de speer bij de steek nauwelijks
-WACHT = {'midden': (0.02, -0.12, -0.32), 'as': (0.3, -1.0, -0.12), 'afstand': 0.4, 'laag': 'R', 'greep': 0.12}
+# en hoger (Marcel, 26 okt: "de steek lijkt wat aan de lage kant bij ons model"): de handen 20 cm onder de schouders in
+# plaats van 32, de speer vlak, de handen 32 cm uit elkaar (met 40 moest de linkerpols 136 graden wringen); bij het verst
+# zit de punt op 0,68 m, de buik van wie voor hem staat, in plaats van 0,30
+WACHT = {'midden': (0.02, -0.12, -0.2), 'as': (0.3, -1.0, 0.0), 'afstand': 0.32, 'laag': 'R', 'greep': 0.12}
 WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, vooruit is -y)
 WACHT_ZAKKEN = 0.05  # door de knieën (meter)
 

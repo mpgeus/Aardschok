@@ -2513,6 +2513,11 @@ De handen hoger en de speer vlakker gaf de linkerpols 142 graden wringen: terug.
 schuin omlaag naar voren, zoals de generator in Z; maar de generator maakt een echte uitval (de voeten heel wijd, het lijf
 gestrekt naar voren, de armen op schouderhoogte, de speer lang en vlak), en de onze blijft gebogen en compact, van achteren
 (N, NO) met de armen nauwelijks te zien. Bewegend naast elkaar: `uit/blender/spel/steek-generator-model.gif`.
+Marcel: "de steek lijkt wat aan de lage kant bij ons model". De punt zat bij het verst op 0,30 m, kniehoogte. Zonder te
+renderen een paar wachten geprobeerd (`wachtproef` in de kladmap: alleen de stand en hoe de polsen wringen): de handen 20 cm
+onder de schouders, de speer vlak en de handen 32 cm uit elkaar zet de punt op 0,68 m, de buik van wie voor hem staat, met
+de linkerpols op 15 graden wringen (met 40 cm uit elkaar 136). Van achteren steekt de speer nu schuin boven het lijf uit,
+zoals bij de generator in N. Laag en hoger naast de generator: `uit/blender/spel/steek-hoger.gif`.
 
 **De punt in W bij het lopen (26 okt).** Marcel: "De punt in W ook oppakken". De generator is daar niet in 3D getekend: in Z
 wijst de punt rechtsboven (schuin over het lijf), in W sterk naar voren. Met één speer in 3D gaat het een ten koste van het
