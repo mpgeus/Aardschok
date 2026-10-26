@@ -691,6 +691,18 @@ STEEK = {
     'stap': (0.0, 0.0, 0.0, 0.2, 0.45, 0.45, 0.2, 0.0),
     'til': (0.0, 0.0, 0.0, 0.05, 0.0, 0.0, 0.03, 0.0),
 }
+# De tweede aanval, een stoot van boven, voor de afwisseling (Marcel, 26 okt: "En we hebben een 2e aanvals animatie nodig
+# voor de afwisseling", en het voorstel: "Ja doen we zo bouw die maar"; beeld.md): de speer boven de rechterschouder, de
+# punt omlaag naar voren; hij heft hem nog wat (beeld 1 en 2) en stoot hard vooruit en omlaag, met een korte stap.
+WACHT_BOVEN = {'midden': (-0.04, -0.12, 0.06), 'as': (0.15, -1.0, -0.45), 'afstand': 0.34, 'laag': 'R', 'greep': 0.12}
+STEEK_BOVEN = {
+    'speer': (0.0, -0.10, -0.16, 0.20, 0.50, 0.40, 0.16, 0.03),
+    'bekken': (0.0, -0.02, -0.04, 0.06, 0.14, 0.12, 0.05, 0.01),
+    'draai': (0, -8, -12, 8, 18, 14, 6, 1),
+    'leun': (0, -4, -6, 8, 18, 14, 6, 1),
+    'stap': (0.0, 0.0, 0.0, 0.12, 0.25, 0.25, 0.12, 0.0),
+    'til': (0.0, 0.0, 0.0, 0.04, 0.0, 0.0, 0.02, 0.0),
+}
 VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoorheen, en de vuisten blijven 16 cm uit elkaar (met 0,15 eindigden ze in elkaar, met 0,5 reikte de linkerarm niet)
 # de speer in de wacht wat omlaag, naar de buik van wie voor hem staat (Marcel, 26 okt: "De steek maar doen"): met de punt
 # wat omhoog (z 0,25) zag je hem in Z als een kort stokje opzij en in W kort, waar de generator hem in Z schuin omlaag naar
@@ -716,9 +728,10 @@ def tussen(rij, i):
     return rij[a] + (rij[b] - rij[a]) * (i - a)
 
 
-def steek(rig, i):
-    """Beeld i van de steek (STEEK; i mag ook tussen twee beelden in liggen); de handen houden de speer (draag_schuin met
-    WACHT, dan speer_vast)."""
+def steek(rig, i, rij=None):
+    """Beeld i van de steek (`rij`: STEEK, of STEEK_BOVEN voor de stoot van boven; i mag ook tussen twee beelden in liggen);
+    de handen houden de speer (draag_schuin met WACHT of WACHT_BOVEN, dan speer_vast)."""
+    rij = rij or STEEK
     for pb in rig.pose.bones:
         pb.rotation_mode = 'QUATERNION'
         pb.rotation_quaternion = (1, 0, 0, 0)
@@ -727,8 +740,8 @@ def steek(rig, i):
         if f'pols.{k}' in rig:
             rig.pose.bones[f'wrist.{k}'].rotation_quaternion = rig[f'pols.{k}']
     bpy.context.view_layer.update()
-    vooruit, draaien, leun = (tussen(STEEK['bekken'], i), math.radians(tussen(STEEK['draai'], i)),
-                              math.radians(tussen(STEEK['leun'], i)))
+    vooruit, draaien, leun = (tussen(rij['bekken'], i), math.radians(tussen(rij['draai'], i)),
+                              math.radians(tussen(rij['leun'], i)))
     gier = 0.4 * draaien  # het bekken draait een beetje mee, de borst de rest
     draai(rig, 'root', gier, 'Z')
     bpy.context.view_layer.update()
@@ -740,7 +753,7 @@ def steek(rig, i):
     draai(rig, 'root', heup)  # het bekken voorover, de rug erop recht
     bpy.context.view_layer.update()
     for k in ('L', 'R'):
-        stap, til = (tussen(STEEK['stap'], i), tussen(STEEK['til'], i)) if k == 'L' else (0.0, 0.0)
+        stap, til = (tussen(rij['stap'], i), tussen(rij['til'], i)) if k == 'L' else (0.0, 0.0)
         been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier, voorover=heup, reik=BEEN_REIK)
     for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
         draai(rig, bot, (LEUN * 0.5 + leun - heup) * deel)
@@ -762,7 +775,7 @@ def steek(rig, i):
             ob.matrix_world = m
         _drager['los'] = {ob.name: ob.matrix_world.copy() for ob in delen}
     lijf = rig.matrix_world.to_3x3() @ Vector((0, -vooruit, 0)) - Vector((0, 0, zakken - WACHT_ZAKKEN))
-    mee = {k: _drager['richting'] * tussen(STEEK['speer'], i) * (VOORSTE_HAND if k == 'L' else 1.0) + lijf
+    mee = {k: _drager['richting'] * tussen(rij['speer'], i) * (VOORSTE_HAND if k == 'L' else 1.0) + lijf
            for k in ('R', 'L')}
     for naam, m0 in _drager['los'].items():
         bpy.data.objects[naam].matrix_world = Matrix.Translation(mee['L' if naam == 'hand.L' else 'R']) @ m0

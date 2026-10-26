@@ -956,7 +956,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur` en `T.sprites.buiten` wijzen
   een cel op een vel aan (tot 23 okt ook `tegel`, `muur` en `voorwerp`, de vloeren, muren en spullen van de proefkamers;
   die vellen laden niet meer), `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
-  spelstaat zelf (pad, uitval, flits, dood), en
+  spelstaat zelf (pad, uitval, flits, dood); een uitval speelt eenmalig `slaan` of `aanval`, en heeft de figuur ook een
+  `aanval2`, dan om en om de eerste en de tweede (een teller `uithalen` in zijn beeldstand, alleen scherm; de speerman uit
+  het 3D-model, vraag 190: de steek en de stoot van boven), en
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. **Elke boom anders** (vraag 148, a): een soort
   heeft op het vel meer tekeningen met zijn naam en een `vorm` (`BOOM_VORMEN` in `naar-tiled.cjs`), en welke een boom
   krijgt, zegt zijn tegel (`T.sprites.tekeningVan(v)`, een vaste hasj; `v.id` blijft de eerste, dus een bewaard spel past).

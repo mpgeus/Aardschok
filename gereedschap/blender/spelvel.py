@@ -1,5 +1,6 @@
 # De speerman uit het model als vel voor het spel (vraag 190; Marcel, 26 okt: "kun je nu eens een animatie maken in
-# game?"): staan, lopen, de steek (aanval), geraakt worden en sterven in acht richtingen uit eigen.py, op spelmaat, in de cellen en met het anker
+# game?"): staan, lopen, de steek (aanval), de stoot van boven (aanval2), geraakt worden en sterven in acht
+# richtingen uit eigen.py, op spelmaat, in de cellen en met het anker
 # van het vel van de generator (beelden/beschrijving.json, figuren.speerman), zodat het spel ze zonder meer kan tonen. De
 # vellen van de generator blijven staan: dit schrijft speerman3d-<houding>.png naar een eigen map, voor elke houding
 # waarvan de renders er zijn.
@@ -24,12 +25,15 @@ HIER = __file__.replace('\\', '/').rsplit('/', 1)[0]
 FIGUUR = json.load(open(f'{HIER}/../../beelden/beschrijving.json', encoding='utf-8'))['figuren']['speerman']
 ANKER_Y = 1860  # speerman_hd.INSTELLINGEN['anker_y'], bij 100 procent
 # welke renders bij welke houding horen (de steek is de aanval van het spel)
-RENDER = {'staan': 'staan', 'lopen': 'lopen-{i}', 'aanval': 'steek-{i}', 'geraakt': 'geraakt-{i}', 'sterven': 'sterven-{i}'}
+RENDER = {'staan': 'staan', 'lopen': 'lopen-{i}', 'aanval': 'steek-{i}', 'aanval2': 'steek2-{i}', 'geraakt': 'geraakt-{i}',
+          'sterven': 'sterven-{i}'}
 # wat de generator niet heeft (geraakt worden: 3 beelden zoals de wolf en het skelet), of waar zijn cel niet past (sterven:
 # languit ligt hij naar voren, en dus in Z omlaag in beeld; de cel van de generator heeft onder het anker 9 pixels), met
 # een cel waar het in past; die gaat voor
 EIGEN = {'geraakt': {'beelden': 3, 'fps': 12, 'herhaal': False, 'cel': [89, 110], 'anker': [44, 105]},
-         'sterven': {'beelden': 7, 'fps': 8, 'herhaal': False, 'cel': [150, 124], 'anker': [75, 84]}}
+         'sterven': {'beelden': 7, 'fps': 8, 'herhaal': False, 'cel': [150, 124], 'anker': [75, 84]},
+         # de tweede aanval (de stoot van boven) in de cel van de eerste
+         'aanval2': dict(FIGUUR['houdingen']['aanval'])}
 
 
 def schaal(kaart):

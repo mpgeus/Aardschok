@@ -8,7 +8,7 @@
 # licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
 # en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|geraakt|sterven]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|steek2|geraakt|sterven]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
 # Met `staan hoek` (naar een eigen map) de hoekpas voor patroon.py: de plek op de wapenrok als kleur.
 import bpy
@@ -382,11 +382,21 @@ def main():
         # geraakt worden (bakken.py, geraakt): drie beelden vanuit staan, de speer in de rechterhand
         met_stof(sc, rig, lambda t: bk.geraakt(rig, t), 3, lambda r, i: f'eigen-{r}{ISO}-geraakt-{i}.png', lichten)
         return
-    if 'steek' not in sh.ARGS:
+    if 'steek' not in sh.ARGS and 'steek2' not in sh.ARGS:
         met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
     if 'staan' in sh.ARGS:
         return
     sc.render.resolution_x = 2400
+    if 'steek2' in sh.ARGS:
+        # de tweede aanval, de stoot van boven (bakken.py, STEEK_BOVEN), zoals de steek
+        sc.render.resolution_x = 4400
+        bk.draag_schuin(sc, rig, bk.WACHT_BOVEN)
+        bk.steek(rig, 0, bk.STEEK_BOVEN)
+        bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, bk.WACHT_BOVEN)
+        bk.speer_vast(rig)
+        met_stof(sc, rig, lambda t: bk.steek(rig, t, bk.STEEK_BOVEN), 8, lambda r, i: f'eigen-{r}{ISO}-steek2-{i}.png',
+                 lichten)
+        return
     if 'steek' in sh.ARGS:
         # de steek: uit de wacht, met de speer laag bij de rechterheup (bakken.py, STEEK); breder, zodat de punt in beeld
         # blijft als hij vooruit schiet
