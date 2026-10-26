@@ -2640,6 +2640,15 @@ wapenrok. Maar het wordt een dambord in plaats van vier heldere vierendelen, ook
 ziet bijna alleen telt (`MACHT` 12): de tekeningen zijn per rij op ons silhouet gelegd, en de vierendelen, de armsgaten en
 de riem liggen op de tekeningen van verschillende kanten niet op dezelfde plek van ons model. Ook dubbel: de riem van de
 plaat in de verf en onze eigen riem erover; en onze mouwen bedekken veel.
+Marcel daarop: "Ik bedoelde meer op een model wat jij uit code maakte", en hij koos een nieuw soldaatje helemaal uit
+code. `gereedschap/blender/plaatsoldaat.py`: geen mensenlijf van MakeHuman of Human Generator, eenvoudige vormen, en de
+wapenrok uit de tekeningen zelf: per hoogte de breedte uit de wapenrok van voren en de diepte uit die van opzij (een
+ellips per ring, de riem op elkaar), en de textuur rechtstreeks uit de vijf tekeningen (voor, schuin voor, links, rug,
+rechts): per plek rond het lijf (de hoek en de hoogte, ook de UV-kaart) de kanten die hem zien, gewogen naar de hoek, op
+de plek waar die kant hem tekent; onbelicht. Plaat: `uit/blender/plaatsoldaat/proef1-plaat.png`. Nu is de wapenrok uit
+elke richting de wapenrok van de plaat, met de vierendelen, de nagels, de riem en de banen, zonder dambord: omdat de vorm
+uit de tekeningen komt, valt elke tekening op zijn plek. Het lijf eromheen is nog grof (worsten als armen, een bol als
+hoofd, een eenvoudige helm).
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
