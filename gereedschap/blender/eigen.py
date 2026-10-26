@@ -8,7 +8,7 @@
 # licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
 # en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|geraakt]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|geraakt|sterven]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
 # Met `staan hoek` (naar een eigen map) de hoekpas voor patroon.py: de plek op de wapenrok als kleur.
 import bpy
@@ -365,6 +365,19 @@ def main():
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     if 'hoek' in sh.ARGS:
         hoekpas(sc)
+    if 'sterven' in sh.ARGS:
+        # sterven (bakken.py, sterven): zeven beelden vanuit staan, op zijn knieën en dan voorover; breder, zodat de speer
+        # die naast hem valt en het lijf dat languit ligt in beeld blijven, en onderaan hoger: languit ligt hij naar de
+        # camera toe, en onder de voeten was maar 90 pixels; de bovenrand en de maat blijven, zodat het anker (anker_y) klopt
+        sc.render.resolution_x = 2400
+        cam = sc.camera
+        extra = 600
+        pxm = sc.render.resolution_y / cam.data.ortho_scale
+        cam.data.ortho_scale = (sc.render.resolution_y + extra) / pxm
+        cam.location -= (cam.matrix_world.to_3x3() @ Vector((0, 1, 0))) * (extra / 2 / pxm)
+        sc.render.resolution_y += extra
+        met_stof(sc, rig, lambda t: bk.sterven(rig, t), 7, lambda r, i: f'eigen-{r}{ISO}-sterven-{i}.png', lichten)
+        return
     if 'geraakt' in sh.ARGS:
         # geraakt worden (bakken.py, geraakt): drie beelden vanuit staan, de speer in de rechterhand
         met_stof(sc, rig, lambda t: bk.geraakt(rig, t), 3, lambda r, i: f'eigen-{r}{ISO}-geraakt-{i}.png', lichten)

@@ -685,10 +685,10 @@ def verschuif(D):
 # achteren uit het lijf komen; eerst stond hij compact en rechtop, de armen dicht bij het lijf
 STEEK = {
     'speer': (0.0, -0.10, -0.18, 0.18, 0.50, 0.42, 0.18, 0.04),
-    'bekken': (0.0, -0.03, -0.05, 0.08, 0.20, 0.18, 0.08, 0.02),
+    'bekken': (0.0, -0.03, -0.05, 0.10, 0.26, 0.23, 0.10, 0.02),
     'draai': (0, -10, -16, 10, 24, 19, 8, 1),
-    'leun': (0, -3, -5, 10, 22, 18, 8, 1),
-    'stap': (0.0, 0.0, 0.0, 0.15, 0.32, 0.32, 0.15, 0.0),
+    'leun': (0, -3, -5, 12, 28, 23, 10, 1),
+    'stap': (0.0, 0.0, 0.0, 0.2, 0.45, 0.45, 0.2, 0.0),
     'til': (0.0, 0.0, 0.0, 0.05, 0.0, 0.0, 0.03, 0.0),
 }
 VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoorheen, en de vuisten blijven 16 cm uit elkaar (met 0,15 eindigden ze in elkaar, met 0,5 reikte de linkerarm niet)
@@ -701,7 +701,10 @@ VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoo
 # plaats van 32, de speer vlak, de handen 32 cm uit elkaar (met 40 moest de linkerpols 136 graden wringen); bij het verst
 # zit de punt op 0,68 m, de buik van wie voor hem staat, in plaats van 0,30
 WACHT = {'midden': (0.02, -0.12, -0.2), 'as': (0.3, -1.0, 0.0), 'afstand': 0.32, 'laag': 'R', 'greep': 0.12}
-WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, vooruit is -y)
+WACHT_VOETEN = {'L': -0.16, 'R': 0.2}  # links voor, rechts achter (meter, vooruit is -y)
+# hoeveel van het voorover leunen bij de steek uit de heupen komt (het bekken kantelt, de rug blijft recht), zoals de
+# generator (Marcel, 26 okt: "Eerst de speerman"; uit de rug alleen leek het een bult)
+STEEK_HEUP = 0.7
 WACHT_ZAKKEN = 0.05  # door de knieën (meter)
 
 
@@ -733,11 +736,14 @@ def steek(rig, i):
     w.matrix = Matrix.Translation((0, -vooruit, 0)) @ w.matrix
     bpy.context.view_layer.update()
     zakken = WACHT_ZAKKEN + 0.4 * max(0.0, vooruit)
+    heup = leun * STEEK_HEUP
+    draai(rig, 'root', heup)  # het bekken voorover, de rug erop recht
+    bpy.context.view_layer.update()
     for k in ('L', 'R'):
         stap, til = (tussen(STEEK['stap'], i), tussen(STEEK['til'], i)) if k == 'L' else (0.0, 0.0)
-        been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier, reik=BEEN_REIK)
+        been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier, voorover=heup, reik=BEEN_REIK)
     for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
-        draai(rig, bot, (LEUN * 0.5 + leun) * deel)
+        draai(rig, bot, (LEUN * 0.5 + leun - heup) * deel)
         draai(rig, bot, (draaien - gier) * deel, 'Z')
     draai(rig, 'head', -(LEUN * 0.5 + leun) * 0.7)
     draai(rig, 'head', -draaien * 0.8, 'Z')  # hij blijft kijken waar hij steekt
@@ -787,6 +793,82 @@ def geraakt(rig, i):
     draai(rig, 'spine02', -leun * 0.4)
     draai(rig, 'head', -leun * 0.3)  # het hoofd slaat erachteraan
     rig.location.z = rig['z0'] - zakken
+    bpy.context.view_layer.update()
+
+
+# Sterven (Marcel, 26 okt: "Ik wil bij het sterven dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen op
+# zn gezicht", en daarna "Hij moet een beetje plat komen te liggen nu is het meer een propje": van de knieën valt hij
+# languit, de benen gestrekt naar achteren, plat op zijn buik; beeld.md): 7 beelden vanuit staan, zoals de generator (8 per seconde; het spel houdt het laatste vast). Per
+# beeld: hoe ver het bovenlijf vanuit de heupen voorover valt en hoeveel de rug daarbij krult (graden; negatief is
+# achterover, de klap), hoe ver het bekken zakt en naar achteren gaat (meter; op zijn knieën zit hij op zijn hielen), hoe ver
+# de enkels naar achteren gaan (de knieën op de grond), en hoe het hoofd buigt. De speer glijdt tussen beeld 1 en 2 uit zijn
+# hand en valt plat naast hem.
+STERVEN = {
+    'leun': (-8, 0, 5, 30, 60, 85, 88),
+    'rug': (0, 0, 5, 10, 10, 5, 0),
+    'zakken': (0.0, 0.12, 0.25, 0.25, 0.28, 0.36, 0.37),
+    'terug': (0.0, 0.02, 0.06, 0.06, 0.02, -0.08, -0.10),
+    'enkels': (0.0, 0.08, 0.22, 0.24, 0.32, 0.45, 0.48),
+    'hoofd': (-6, 8, 25, 20, 10, -10, -15),
+    'plat': (0, 0, 0, 0, 0, 1, 1),  # ligt hij plat: de benen volgen het bekken, gestrekt achter hem (geen IK)
+}
+_gevallen = {}  # de speer: zijn stand in de hand, eenmaal onthouden
+
+
+def sterven(rig, i):
+    """Beeld i van sterven (STERVEN; i mag ook tussen twee beelden in liggen), vanuit de staande houding."""
+    for pb in rig.pose.bones:
+        pb.rotation_mode = 'QUATERNION'
+        pb.rotation_quaternion = (1, 0, 0, 0)
+        pb.location = (0, 0, 0)
+    bpy.context.view_layer.update()
+    heup = math.radians(tussen(STERVEN['leun'], i))
+    zakken = tussen(STERVEN['zakken'], i)
+    w = rig.pose.bones['root']
+    w.matrix = Matrix.Translation((0, tussen(STERVEN['terug'], i), 0)) @ w.matrix
+    bpy.context.view_layer.update()
+    draai(rig, 'root', heup)  # na het schuiven: pb.matrix lezen voor de bijwerking zette de draai terug
+    bpy.context.view_layer.update()
+    for k in ('L', 'R'):
+        if tussen(STERVEN['plat'], i) < 0.5:
+            been_ik(rig, k, tussen(STERVEN['enkels'], i), 0.0, zakken, voorover=heup, reik=BEEN_REIK)
+        else:
+            for b in ('upperleg01', 'lowerleg01', 'lowerleg02'):
+                rig.pose.bones[f'{b}.{k}'].scale = (1, 1, 1)
+    rug = math.radians(tussen(STERVEN['rug'], i))
+    draai(rig, 'spine04', rug * 0.5)
+    draai(rig, 'spine02', rug * 0.5)
+    draai(rig, 'head', math.radians(tussen(STERVEN['hoofd'], i)))
+    rig.location.z = rig['z0'] - zakken
+    bpy.context.view_layer.update()
+    # de speer: in de hand tot beeld 1, dan valt hij om zijn onderkant opzij, naar zijn rechterkant (-x), plat op de grond;
+    # naar achteren leek hij van voren nog rechtop te staan
+    delen = [o for o in bpy.data.objects if o.name.startswith('speer.')]
+    if not _gevallen:
+        _gevallen.update({o.name: (o.parent, o.parent_type, o.parent_bone, o.matrix_parent_inverse.copy()) for o in delen})
+    val = max(0.0, min(1.0, i - 1.0))
+    if val <= 0.0:
+        for o in delen:
+            ouder, soort, bot, inv = _gevallen[o.name]
+            if o.parent is None and ouder is not None:
+                o.parent, o.parent_type, o.parent_bone = ouder, soort, bot
+                o.matrix_parent_inverse = inv
+        return
+    if 'los' not in _gevallen:
+        for o in delen:
+            m = o.matrix_world.copy()
+            o.parent = None
+            o.matrix_world = m
+        bpy.context.view_layer.update()
+        punten = [o.matrix_world @ Vector(c) for o in delen for c in o.bound_box]
+        onder = min(punten, key=lambda p: p.z)
+        _gevallen['los'] = ({o.name: o.matrix_world.copy() for o in delen}, onder.copy())
+    los, onder = _gevallen['los']
+    hoek = math.radians(84) * val * val  # vallen gaat steeds sneller
+    naar = Vector((onder.x - 0.1 * val, onder.y - 0.15 * val, 0.03 + (onder.z - 0.03) * (1 - val)))
+    for o in delen:
+        o.matrix_world = (Matrix.Translation(naar) @ Matrix.Rotation(-hoek, 4, 'Y') @ Matrix.Translation(-onder)
+                          @ los[o.name])
     bpy.context.view_layer.update()
 
 

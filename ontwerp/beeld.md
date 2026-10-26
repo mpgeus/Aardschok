@@ -2514,6 +2514,33 @@ wacht; de mannen kozen ze zelf. Onze speerman stak drie keer, de rovers vielen; 
 `uit/blender/spel/gevecht-in-het-spel.mp4` (en `-traag`, half zo snel). Let op bij een proef in de browser: zet de vellen
 vóór er een speerman op de kaart staat, na het herladen van de pagina; een figuur die al geladen is, laadt geen nieuwe paden.
 
+**Sterven (26 okt).** Marcel: "Ik wil bij het sterven dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen
+op zn gezicht". Het spel speelt `sterven` eenmalig af en houdt het laatste beeld vast (`js/sprites.js`); de generator heeft
+7 beelden, 8 per seconde. Voor het model in 7 beelden, vanuit staan: (0) de klap, wat achterover, de speer glijdt uit de
+hand; (1) de knieën knikken; (2) op zijn knieën, rechtop, het hoofd hangt, de speer valt naast hem; (3) en (4) het
+bovenlijf valt vanuit de heupen voorover; (5) het gezicht op de grond, de knieën nog gebogen; (6) zo blijft hij liggen.
+Gebouwd als `sterven` in `bakken.py` (de getallen in `STERVEN`; `eigen.py ... sterven`). Een fout onderweg: het bekken
+draaide niet mee, omdat ik de stand van het bot las vóór Blender de draai had bijgewerkt (`pb.matrix` zette hem terug);
+nu eerst schuiven, dan draaien. De speer valt opzij, naar zijn rechterkant: naar achteren leek hij van voren rechtop te
+staan.
+Marcel: "Hij moet een beetje plat komen te liggen nu is het meer een propje", en "er lijken 'onderdelen' van het poppetje
+te ontbreken". Het laatste: het beeld was zo smal als bij staan, en wat languit lag of opzij viel, viel eruit; nu breder
+(zoals het lopen). Het eerste: van de knieën valt hij nu languit (beeld 5 en 6): het bekken op de grond, het hoofd 58 cm
+ervoor, de benen gestrekt achter hem. Met de IK van de benen bleven die onder hem gevouwen; liggend volgen ze nu gewoon het
+bekken (`STERVEN['plat']`). En het beeld was onderaan te kort: languit ligt hij in Z naar de camera toe, en onder de
+voeten was maar 90 pixels; bij sterven is het beeld nu 600 pixels hoger (de bovenrand, de maat en het anker blijven), en in
+`spelvel.py` heeft sterven een eigen, ruimere cel (150 bij 124, het anker op 75, 84). Op spelmaat naast de generator:
+`uit/blender/spel/sterven-generator-model.gif`. Hij ligt compacter dan de generator, die zijn armen wijd uitstrekt.
+De uitval van de steek (leunen vanuit de heupen, `STEEK_HEUP`, een wijdere stap) gaf op spelmaat weinig verschil; nog te
+doen.
+
+**Een tweede aanval, voor de afwisseling (26 okt, voorstel in woorden).** Marcel: "En we hebben een 2e aanvals animatie
+nodig voor de afwisseling". Voorstel: een stoot van boven, 8 beelden zoals de eerste. (0) uit de wacht; (1) en (2) hij
+heft de speer tot boven zijn rechterschouder, de punt omlaag naar voren, het gewicht naar achteren; (3) en (4) hij
+stoot hard vooruit en omlaag, een korte stap, het lijf erachteraan; (5) de punt het verst, laag; (6) en (7) terug in de
+wacht. In het spel: bij elke uithaal om en om de eerste en de tweede (`js/sprites.js`, bij de eenmalige houdingen; een
+teller per figuur, geen toeval, zodat het op elke computer hetzelfde is).
+
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
 de punt in Z schuin omlaag naar de kijker wijzen en in ZW en W lang naar voren. Nu de wacht wat omlaag (`WACHT['as']`, z

@@ -33,6 +33,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   allebei als vel voor het spel; een gevecht in het spel opgenomen (`uit/blender/spel/`). Nog: de steek als echte uitval
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel). Marcel daarna (26 okt): "ik wil een
   kruisboog schutter in het spel" (de kruisboogschutter van de demo heeft nog geen eigen vel in `beelden/beschrijving.json`).
+  En (26 okt): sterven ("dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen op zn gezicht", in
+  `beeld.md`), en "we hebben een 2e aanvals animatie nodig voor de afwisseling" (het spel speelt bij elke uithaal nu
+  dezelfde `aanval`, `js/sprites.js`; een tweede vraagt ook daar een regel).
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
