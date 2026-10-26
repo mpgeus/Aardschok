@@ -2604,6 +2604,16 @@ van `speerman_hd.py` (lijf, skelet met de botten van MPFB, materialen): `ketelho
 vierendelen bedekte, dus een eigen, kortere kraag (`KRAAG`); dichte, donkere stiksels maakten van de mouwen een net, dus
 wijder en zachter met bollere kussens. Nog anders dan de plaat: de helm is wat donkerder en warmer, de stiksels van de
 mouwen lezen in HD nog als ruiten, en de speer staat naast de open hand.
+Marcel: "tja... het ziet er niet fantastisch uit..", "ik had er wat meer van verwacht, zeker omdat je nu een voorbeeld hebt
+waar je van af kunt kijken". Wat Claude zag: het lijf maakt er een ton van (de wapenrok valt recht van de brede schouders,
+als een bord), de mouwen zijn glad met lijnen erop in plaats van bolle kussens, het licht is egaal (plastic naast een
+geschilderde plaat), en een echt gezicht botst met de gestileerde plaat. Marcel koos daarop "3D, dan overschilderen", met
+"gebruik het nieuwe referentie sheet met alle losse onderdelen". `schilder.cjs hg`: de render van de soldaat (minder buik,
+`hg_soldaat.py ... stuur` voor de lijnen en de diepte), de plaat met alle onderdelen als voorbeeld voor de stijl
+(IP-Adapter 0,8), FaeTastic zonder pixel-LoRA op 0,35, 0,5 en 0,65 (`uit/blender/hg/sdxl/plaat.png`). Op 0,35 en 0,5
+wordt het wat meer geschilderd en valer, op 0,65 een geel masker als gezicht en magenta spikkels; de vorm blijft die van
+de render (de wapenrok als een plat bord), en op spelmaat leest geen versie zo goed als de speerman die nu in het spel
+staat. Net als op 24 okt: de schilderbeurt redt een zwakke basis niet.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot

@@ -8,7 +8,8 @@
 # Generator (Rigify-achtig: `neck`, `jaw`, `upper_arm.L`), en `vorm` maakt van zijn lijf en kleren een kopie zoals ze nu
 # staan, met de groepen op de namen van MPFB.
 #
-#   blender.exe -b -P gereedschap/blender/hg_soldaat.py -- <map> [Z ZW W NW N NO O ZO]
+#   blender.exe -b -P gereedschap/blender/hg_soldaat.py -- <map> [Z ZW W NW N NO O ZO] [stuur]
+# (met `stuur` ook staan Z op volle maat en de stuurbeelden voor de schilderbeurt: node gereedschap/blender/schilder.cjs hg)
 import math
 import os
 import sys
@@ -29,9 +30,10 @@ BEELD = {'Z': 5, 'ZW': 40, 'W': 65, 'NW': 135, 'N': 185, 'NO': -145, 'O': -65, '
 # de man: zo gedrongen als de knoppen toelaten (zie de speerman: een korte, brede soldaat met korte benen en een groot
 # hoofd); de knoppen lopen verder dan -1 tot 1
 LENGTE = 150  # centimeter, het laagste dat Human Generator kent
-LIJF = {'muscular': 1.0, 'overweight': 0.8, 'skinny': 0.0, 'Stylized': 1.0, 'Shoulder Width': 1.5, 'Chest Width': 1.2,
-        'Belly Size': 0.6, 'Neck Length': -1.5, 'Thigh Length': -1.5, 'Shin Length': -1.5, 'Upper Arm Thickness': 0.8,
-        'Forearm Thickness': 0.8, 'Thigh Thickness': 0.8, 'Shin Thickness': 0.5, 'Waist Thickness': 0.8,
+# (een dikke buik en taille maakten van de wapenrok een ton; Marcel: "het ziet er niet fantastisch uit")
+LIJF = {'muscular': 1.0, 'overweight': 0.3, 'skinny': 0.0, 'Stylized': 1.0, 'Shoulder Width': 1.5, 'Chest Width': 1.2,
+        'Belly Size': 0.0, 'Neck Length': -1.5, 'Thigh Length': -1.5, 'Shin Length': -1.5, 'Upper Arm Thickness': 0.8,
+        'Forearm Thickness': 0.8, 'Thigh Thickness': 0.8, 'Shin Thickness': 0.5, 'Waist Thickness': 0.0,
         'Traps Muscles': 0.8, 'Hand Width': 0.5}
 HOOFD = 1.3  # het hoofd zoveel groter (het bot), zoals de speerman (speerman_hd.INSTELLINGEN['hoofd'])
 HOOGTE = 1520  # pixels van de voeten tot de top van de helm bij volle maat (de speerman 1450; Marcel: "wat groter")
@@ -221,6 +223,16 @@ def main():
         sc.render.filepath = os.path.join(sh.UIT, f'hg-{r}-staan.png')
         bpy.ops.render.render(write_still=True)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(sh.UIT, 'hg-soldaat.blend'))
+    if 'stuur' in sh.ARGS:
+        # voor de schilderbeurt (schilder.cjs hg): staan Z op volle maat, en de lijnen en de diepte met dezelfde camera
+        R = Matrix.Rotation(math.radians(BEELD['Z']), 4, 'Z')
+        cam.matrix_world = R @ m0
+        for ob, m in lichten.items():
+            ob.matrix_world = R @ m
+        sc.render.resolution_percentage = 100
+        sc.render.filepath = os.path.join(sh.UIT, 'hg-Z-staan-hd.png')
+        bpy.ops.render.render(write_still=True)
+        sh.stuurbeelden(sc)
     print('HG KLAAR')
 
 

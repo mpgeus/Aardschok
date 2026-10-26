@@ -5,9 +5,15 @@
 // alleen binnen ons silhouet. Dezelfde werkstroom als de rest (afwerking.cjs werkstroom), twee schilders: SDXL met de
 // pixelart-LoRA (huisstijl.cjs LORA) en Pixel Art Base (huisstijl.cjs CHECKPOINTS), elk op drie sterktes.
 //
+// Met `hg` de proef van 26 okt (Marcel koos "3D, dan overschilderen", en: "gebruik het nieuwe referentie sheet met alle
+// losse onderdelen"): de soldaat van Human Generator in de aankleding naar Marcels plaat (hg_soldaat.py, uitrusting.py),
+// met die plaat (EXTRA/) als voorbeeld voor de stijl, geschilderd door FaeTastic zonder pixel-LoRA.
+//
 //   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/speerman_hd.py -- <render> stuur
 //   node gereedschap/blender/schilder.cjs        (ComfyUI moet draaien) naar gereedschap/pixelart/uit/blender/sdxl/
 //   node gereedschap/blender/schilder.cjs plaat  de plaat opnieuw uit de bewaarde beelden van SDXL
+//   blender.exe -b -P gereedschap/blender/hg_soldaat.py -- gereedschap/pixelart/uit/blender/hg/schilder Z stuur
+//   node gereedschap/blender/schilder.cjs hg [plaat]   naar gereedschap/pixelart/uit/blender/hg/sdxl/
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -22,27 +28,45 @@ const S = require('../pixelart/soldatenhd.cjs');
 const W = 832;
 const H = 1216; // een staand formaat van SDXL
 const DOEK = require('../ai/doek.cjs').maak(W, H);
-const RENDER = path.join(__dirname, '..', 'pixelart', 'uit', 'blender', 'render');
-const UIT = path.join(__dirname, '..', 'pixelart', 'uit', 'blender', 'sdxl');
+const HG = process.argv.includes('hg');
+const RENDER = path.join(__dirname, '..', 'pixelart', 'uit', 'blender', ...(HG ? ['hg', 'schilder'] : ['render']));
+const KLEUR = HG ? 'hg-Z-staan-hd.png' : 'staan-Z-hd-mens.png';
+const UIT = path.join(__dirname, '..', 'pixelart', 'uit', 'blender', ...(HG ? ['hg', 'sdxl'] : ['sdxl']));
 const VEL01 = path.join(__dirname, '..', 'pixelart', 'uit', 'generator', 'bron', 'speerman-01.png');
+// Marcels platen: alle onderdelen (het voorbeeld voor de stijl), en de soldaat in zijn geheel van voren (de vergelijking)
+const ONDERDELEN = path.join(__dirname, '..', '..', 'EXTRA', 'Middeleeuwse krijgeruitrusting spritesheet.png');
+const GEHEEL = path.join(__dirname, '..', '..', 'EXTRA', 'Middeleeuwse harnasonderdelen als spritesheet.png');
 const MAGENTA = [255, 0, 255];
 const lees = (p) => K.leesPng(fs.readFileSync(p));
 
-const POSITIEF = `${HU.LORA.woorden}, full body medieval village spearman standing, seen from the front, stocky ` +
+const POSITIEF_SPEERMAN = `${HU.LORA.woorden}, full body medieval village spearman standing, seen from the front, stocky ` +
   'broad-shouldered soldier, dull matte iron kettle hat with a ridge, short grey-black beard and moustache, chainmail coif ' +
   'and a round chainmail collar, deep blue tabard with a broad yellow vertical stripe down the middle, brown quilted gambeson ' +
   'sleeves, dark leather bracers, brown leather gloves, wide red-brown leather belt with a silver buckle, dark blue hose, ' +
   'short brown leather boots with turned-down cuffs, holding a long spear upright in his right hand, leaf-shaped iron spear ' +
   `head, ${HU.HUISSTIJL.zin}, matte worn surfaces, dull iron, matte wool and leather`;
-const NEGATIEF = 'photo, photorealism, 3d render, cgi, plastic, blurry, deformed, extra limbs, extra weapons, two spears, ' +
+const NEGATIEF_SPEERMAN = 'photo, photorealism, 3d render, cgi, plastic, blurry, deformed, extra limbs, extra weapons, two spears, ' +
   'text, watermark, signature, frame, border, ground, grass, scenery, multiple people, cropped, shiny, glossy, chrome, ' +
   'polished metal, plume, feather, pennant, flag, shield, red clothes, quartered tabard';
+const POSITIEF_HG = 'full body medieval soldier standing, seen from the front, stocky broad-shouldered man, iron kettle hat ' +
+  'with four riveted segments, brass rivets and a riveted band, wide flat brim, leather chin strap, short standing chainmail ' +
+  'collar with a leather rim, quartered tabard in mustard yellow and slate blue with brass studs along the seams, paneled ' +
+  'skirt with alternating yellow and slate blue panels, brown quilted leather sleeves with chainmail at the shoulders, brown ' +
+  'leather gloves, brown leather belt with a brass buckle and two hanging strap ends, small leather pouch, baggy grey wool ' +
+  'breeches, brown leather boots, holding a spear, hand-painted game sprite, painterly, rich shading, worn leather, ' +
+  'matte iron, crisp dark outlines, warm light from the upper left';
+const NEGATIEF_HG = 'photo, photorealism, 3d render, cgi, plastic, smooth, blurry, deformed, extra limbs, extra weapons, ' +
+  'two spears, text, watermark, signature, frame, border, ground, grass, scenery, multiple people, cropped, shiny, glossy, ' +
+  'chrome, plume, feather, flag, shield, red clothes, pixel art';
+const POSITIEF = HG ? POSITIEF_HG : POSITIEF_SPEERMAN;
+const NEGATIEF = HG ? NEGATIEF_HG : NEGATIEF_SPEERMAN;
 
-const VARIANTEN = [
+const VARIANTEN = HG ? [0.35, 0.5, 0.65].map((denoise) => ({ naam: `fae-${denoise}`, label: `FaeTastic, ${denoise}`, denoise, checkpoint: HU.CHECKPOINTS.faetastic })) : [
   ...[0.35, 0.5, 0.65].map((denoise) => ({ naam: `lora-${denoise}`, label: `SDXL + pixel-LoRA, ${denoise}`, denoise, lora: HU.LORA })),
   ...[0.35, 0.5, 0.65].map((denoise) => ({ naam: `pab-${denoise}`, label: `Pixel Art Base, ${denoise}`, denoise, checkpoint: HU.CHECKPOINTS.pixelartbase })),
 ];
-const INSTELLINGEN = { ...AF.START, lijn: 0.8, diepte: 0.6, cnEind: 0.85, ip: 0.5, ipSoort: 'style transfer', seed: 180 };
+// bij de proef met Marcels plaat de stijl sterker: de plaat is het doel
+const INSTELLINGEN = { ...AF.START, lijn: 0.8, diepte: 0.6, cnEind: 0.85, ip: HG ? 0.8 : 0.5, ipSoort: 'style transfer', seed: 180 };
 
 // Een beeld uit de render op het doek: het silhouet in een kader, verkleind (gemiddeld per blok) tot het past, onderaan.
 function plaatsing(kleur) {
@@ -76,7 +100,7 @@ function opDoek(beeld, p, metAlfa) {
 }
 
 function invoer() {
-  const kleur = lees(path.join(RENDER, 'staan-Z-hd-mens.png'));
+  const kleur = lees(path.join(RENDER, KLEUR));
   const p = plaatsing(kleur);
   const init = opDoek(kleur, p, true);
   const lijnen = opDoek(lees(path.join(RENDER, 'stuur-lijnen.png')), p, false);
@@ -110,8 +134,18 @@ function invoer() {
   return { p, init, lijnen, diepte, masker, binnen };
 }
 
-// het voorbeeld voor de stijl: staan naar Z van vel 01, op magenta
+// het voorbeeld voor de stijl: staan naar Z van vel 01, op magenta; bij `hg` Marcels plaat met alle onderdelen, vierkant
+// gemaakt met magenta (de IP-Adapter snijdt anders de randen weg)
 function stijl() {
+  if (HG) {
+    const plaat = A.leesPng(fs.readFileSync(ONDERDELEN));  // RGB, zoals een beeld van een AI
+    const z = Math.max(plaat.b, plaat.h), uit = { b: z, h: z, rgba: Buffer.alloc(z * z * 4) };
+    for (let i = 0; i < z * z; i++) uit.rgba.set([...MAGENTA, 255], i * 4);
+    const oy = Math.floor((z - plaat.h) / 2), ox = Math.floor((z - plaat.b) / 2);
+    for (let y = 0; y < plaat.h; y++) plaat.rgba.copy(uit.rgba, ((oy + y) * z + ox) * 4, y * plaat.b * 4, (y + 1) * plaat.b * 4);
+    for (let i = 0; i < z * z; i++) uit.rgba[i * 4 + 3] = 255;
+    return uit;
+  }
   const vel = lees(VEL01);
   const b = 300, h = 560, uit = { b, h, rgba: Buffer.alloc(b * h * 4) };
   for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) vel.rgba.copy(uit.rgba, (y * b + x) * 4, ((100 + y) * vel.b + x) * 4, ((100 + y) * vel.b + x) * 4 + 4);
@@ -209,9 +243,15 @@ function plaat(inv, uitkomst) {
   // de render van Blender en vel 01 op het doek, als beelden met doorzichtigheid
   const blender = { b: W, h: H, rgba: Buffer.alloc(W * H * 4) };
   for (let d = 0; d < W * H; d++) if (inv.binnen[d]) blender.rgba.set([inv.init.rgba[d * 4], inv.init.rgba[d * 4 + 1], inv.init.rgba[d * 4 + 2], 255], d * 4);
-  const vel = lees(VEL01), fg = G.voorgrond(vel);
-  const ref = { b: 300, h: 560, rgba: Buffer.alloc(300 * 560 * 4) };
-  for (let y = 0; y < 560; y++) for (let x = 0; x < 300; x++) if (fg[(100 + y) * vel.b + x]) ref.rgba.set([...vel.rgba.subarray(((100 + y) * vel.b + x) * 4, ((100 + y) * vel.b + x) * 4 + 3), 255], (y * 300 + x) * 4);
+  // links het voorbeeld: staan Z van vel 01, of bij `hg` de soldaat van voren van Marcels plaat (zonder het magenta)
+  const vel = HG ? A.leesPng(fs.readFileSync(GEHEEL)) : lees(VEL01), fg = HG ? null : G.voorgrond(vel);
+  const [rx, ry, rb, rh] = HG ? [0, 95, 250, 380] : [0, 100, 300, 560];
+  const magenta = (d) => vel.rgba[d] > 170 && vel.rgba[d + 2] > 170 && vel.rgba[d + 1] < 110;
+  const ref = { b: rb, h: rh, rgba: Buffer.alloc(rb * rh * 4) };
+  for (let y = 0; y < rh; y++) for (let x = 0; x < rb; x++) {
+    const d = ((ry + y) * vel.b + rx + x) * 4;
+    if (HG ? !magenta(d) : fg[(ry + y) * vel.b + rx + x]) ref.rgba.set([...vel.rgba.subarray(d, d + 3), 255], (y * rb + x) * 4);
+  }
   const besch = require('../../beelden/beschrijving.json').figuren.speerman.houdingen.staan;
   const spelVel = lees(path.join(__dirname, '..', '..', 'beelden', 'figuren', besch.bestand));
   const [cb, ch] = besch.cel;
@@ -219,14 +259,15 @@ function plaat(inv, uitkomst) {
   for (let y = 0; y < ch; y++) spelVel.rgba.copy(spel.rgba, y * cb * 4, y * spelVel.b * 4, (y * spelVel.b + cb) * 4);
   const doel = 74;
   const HOOG = 420;
-  const groot = [E.met(klein(ref, HOOG), 'Vel 01'), E.met(klein(blender, HOOG), 'Blender'), ...uitkomst.map((u) => E.met(klein(u.beeld, HOOG), u.label))];
+  const groot = [E.met(klein(ref, HOOG), HG ? 'Marcels plaat' : 'Vel 01'), E.met(klein(blender, HOOG), 'Blender'), ...uitkomst.map((u) => E.met(klein(u.beeld, HOOG), u.label))];
   const gras = [79, 104, 52];
   const op = (b) => vak(b, 80, 112, 40, 104, gras, 3);
   const spelrij = [E.met(op(spel), 'in het spel'), E.met(op(spelmaat(blender, doel)), 'Blender'), ...uitkomst.map((u) => E.met(op(spelmaat(u.beeld, doel)), u.label.replace('SDXL + pixel-LoRA', 'LoRA').replace('Pixel Art Base', 'PAB')))];
-  E.bewaar(path.join(UIT, 'plaat.png'), [groot.slice(0, 5), [groot[0], groot[1], ...groot.slice(5)], spelrij.slice(0, 5), [spelrij[0], spelrij[1], ...spelrij.slice(5)]],
-    'Vraag 190: SDXL schildert over het Blender-model (staan Z)',
-    `Begin: de Blender-render; vorm: zijn lijnen en diepte (ControlNet union ${INSTELLINGEN.lijn} en ${INSTELLINGEN.diepte}); stijl: vel 01 (IP-Adapter ${INSTELLINGEN.ip}); zaad ${INSTELLINGEN.seed}; mat 3. Onder op spelmaat maal 3.`);
-  console.log('uit/blender/sdxl/plaat.png');
+  const rijen = HG ? [groot, spelrij] : [groot.slice(0, 5), [groot[0], groot[1], ...groot.slice(5)], spelrij.slice(0, 5), [spelrij[0], spelrij[1], ...spelrij.slice(5)]];
+  E.bewaar(path.join(UIT, 'plaat.png'), rijen,
+    HG ? 'Vraag 190: SDXL schildert de soldaat van Human Generator over, in de stijl van Marcels plaat (staan Z)' : 'Vraag 190: SDXL schildert over het Blender-model (staan Z)',
+    `Begin: de Blender-render; vorm: zijn lijnen en diepte (ControlNet union ${INSTELLINGEN.lijn} en ${INSTELLINGEN.diepte}); stijl: ${HG ? 'Marcels plaat met alle onderdelen' : 'vel 01'} (IP-Adapter ${INSTELLINGEN.ip}); zaad ${INSTELLINGEN.seed}; mat 3. Onder op spelmaat maal 3.`);
+  console.log(path.relative(path.join(__dirname, '..', 'pixelart'), path.join(UIT, 'plaat.png')));
 }
 
 // de plaat opnieuw uit de bewaarde beelden van SDXL (<naam>-ai.png), zonder opnieuw te schilderen
@@ -240,5 +281,5 @@ function plaatOpnieuw() {
   plaat(inv, uitkomst);
 }
 
-if (require.main === module) (process.argv[2] === 'plaat' ? Promise.resolve(plaatOpnieuw()) : main()).catch((e) => { console.error(e); process.exit(1); });
+if (require.main === module) (process.argv.includes('plaat') ? Promise.resolve(plaatOpnieuw()) : main()).catch((e) => { console.error(e); process.exit(1); });
 module.exports = { invoer, POSITIEF, NEGATIEF };
