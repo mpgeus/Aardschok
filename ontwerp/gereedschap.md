@@ -219,6 +219,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (`kruisboog_hd.py`: het model van de speerman met een jak en een smalle tabbaard, een kalot, een snor, de koker en de
   kruisboog in beide handen; zonder `staan` het lopen, met de kruisboog over de schouder; `draag=` kiest een andere
   draagwijze uit `DRAAGWIJZEN`).
+  Proef met Human Generator (de add-on, met zijn inhoud in de voorkeuren van Blender): `blender.exe -b -P
+  gereedschap/blender/hg_soldaat.py -- <map> [Z ZW W N]`: een man uit Human Generator met de helm, de maliën, de
+  wapenrok, de riem en de kleuren van de speerman, staan (`ontwerp/opmerkingen.md`, "Human Generator").
   Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
   in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
   onder de riem, hoe vaak het vel daar geel of blauw is, per richting.
