@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De wacht van de demo vecht niet** (26 okt, gezien bij vraag 190, in de browser op `main`): de twee speermannen en de
+  kruisboogschutter die met de huifkar meekomen (`T.zetKamp`, `wacht` in `levels/demojaar.js`) zijn wezens van soort
+  `bewoner`, kant `neutraal`, met 0 van 0 leven (`Spel.debug.rovers()` zegt "0/0 leven"; de aanvoerder heeft 20/20). Een
+  aanvalsopdracht (`volg`, op een wolf) nemen ze aan (`e.volgt`), maar ze lopen geen pad. Ook trok de overval van de demo
+  op dag 1 zich terug: `kiesDoel` vindt dan nog geen akker of stapel (`js/rovers.js`, `begin`). Nog niet uitgezocht.
 - **Wat stap 1a van de scenario's liet staan** (24 okt, `scenario.md`, 2): (a) de gespreksschrijver
   (`gereedschap/gesprekken-tool.js`, `leidVoorwaardenAf`) zoekt zijn voorwaarden in het kopcommentaar van
   `js/gesprekken.js` en in `als.x` in `js/gesprek.js`; dat laatste staat sinds 24 okt in `T.VOORWAARDEN`, dus hij vindt

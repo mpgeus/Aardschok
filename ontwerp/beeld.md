@@ -2505,6 +2505,10 @@ geraakt` (drie beelden vanuit staan) en in `spelvel.py` een eigen cel (89 bij 11
 Z, ZW, W en N, groot en op spelmaat: `uit/blender/spel/geraakt-proef.png`. Op spelmaat is het achterover gaan klein maar
 te zien (vooral in W, het hoofd en de speer naar achteren); in het spel komt de rode flits erover.
 Marcel: "het geraakt worden is oké".
+Daarna in acht richtingen, met het lopen (P2) opnieuw, als vellen voor het spel (`speerman3d-geraakt.png` in een eigen cel,
+`spelvel.py`). In het spel een gevecht opnemen lukte niet: de wacht van de demo vecht nog niet (`opmerkingen.md`), en
+uitval en flits met de hand zetten gaf een nachtbeeld met regen achter het kampvuur. Op spelmaat, staan, de steek en
+geraakt achter elkaar: `uit/blender/spel/steek-en-geraakt.gif`.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
