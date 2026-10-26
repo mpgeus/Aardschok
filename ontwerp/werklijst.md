@@ -39,8 +39,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   stoot van boven om en om met de steek. Marcel (26 okt): "zet de speerman uit het 3D-model echt in het spel, in plaats
   van die van de generator, met renders op volle kwaliteit": de renders lopen (`uit/blender/vol/`, `keten.sh`), daarna de
   vellen `speerman3d-*` in `beelden/`. Nog voor de speerman: de steek als echte uitval, de kleine verschillen bij staan.
-  **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie; de proefplaat van staan
-  is er (`kruisboog_hd.py`, `beeld.md`, "De proefplaat van de kruisboogschutter"), wacht op Marcel.
+  **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie (`kruisboog_hd.py`,
+  `beeld.md`, "De proefplaat van de kruisboogschutter"). De boog boven en de handen zoals een mens hem houdt; staan
+  vanaf de heup schuin naar voren (`vooruit`; `schuin` gaat eruit als Marcel kiest), lopen met de kruisboog op de
+  linkerschouder (Marcels keuze), de rechterarm vrij (`uit/blender/kruisboog/lopen-schouder.mp4`), wacht op Marcel.
+  Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
