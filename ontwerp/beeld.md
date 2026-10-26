@@ -2624,7 +2624,9 @@ de riem op de plaat is de rij met het meeste bruin); `hg_soldaat.py ... verf` le
 onbelicht op de wapenrok, en haalt onze riem weg (die zit in de verf). Plaat: `uit/blender/hg/verf-plaat.png`. Van voren
 is het de tekening; gedraaid (ZW, W) loopt de verf mee en blijven de vierendelen, de nagels en de riem staan; op
 spelmaat leest hij scherper dan alles van vandaag. Van achteren nog de voorkant (de tekening van de rug ontbreekt nog),
-en aan de hals en de zoom wat magenta en strepen.
+en aan de hals en de zoom wat magenta en strepen. Marcel daarop: **"nah, dit gaat hem niet worden zo"**: de weg van
+Human Generator met onze delen, overschilderen en projecteren laten we voorlopig rusten (de code staat er nog:
+`hg_soldaat.py`, `uitrusting.py`, `plaatverf.py`, `schilder.cjs hg`; eruit als Marcel zegt dat de richting om is).
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
