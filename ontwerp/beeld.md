@@ -2504,6 +2504,7 @@ Marcel: "Geraakt worden is akkoord". Gebouwd als `geraakt` in `bakken.py` (de ge
 geraakt` (drie beelden vanuit staan) en in `spelvel.py` een eigen cel (89 bij 110, de speer past erin). De proefplaat in
 Z, ZW, W en N, groot en op spelmaat: `uit/blender/spel/geraakt-proef.png`. Op spelmaat is het achterover gaan klein maar
 te zien (vooral in W, het hoofd en de speer naar achteren); in het spel komt de rode flits erover.
+Marcel: "het geraakt worden is oké".
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
@@ -2527,7 +2528,8 @@ zoals bij de generator in N. Laag en hoger naast de generator: `uit/blender/spel
 wijst de punt rechtsboven (schuin over het lijf), in W sterk naar voren. Met één speer in 3D gaat het een ten koste van het
 ander (`uit/blender/spel/lopen-punt-in-w.gif`, Z, ZW en W): de punt meer naar voren (`DRAGEN['generator']['as']` (0,4,
 -0,9, 0,6)) wijst in W naar voren maar ligt in Z plat; (0,45, -0,55, 0,7) zonder de draai van de schouders zet hem in W
-rechtop en houdt Z schuin. Wacht op Marcel.
+rechtop en houdt Z schuin. Uitgelegd met `uit/blender/spel/punt-in-w-uitleg.png`; Marcel: "P2 denk ik". Nu de punt naar
+voren (`DRAGEN['generator']['as']` (0,4, -0,9, 0,6)).
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

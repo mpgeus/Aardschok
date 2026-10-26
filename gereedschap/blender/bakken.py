@@ -947,7 +947,9 @@ DRAGEN = {
     'vooruit': {'R': (0.03, -0.12, -0.29), 'L': (-0.24, -0.30, -0.08), 'laag': 'R', 'greep': 0.12},
     # kort vastgepakt: onder de lage hand steekt een kort eind uit, het lange eind gaat omhoog voorbij de hoge hand (Marcel:
     # "De speer steekt verder door")
-    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.6, -0.2, 0.7), 'afstand': 0.26, 'laag': 'R', 'greep': 0.15},
+    # de punt meer naar voren (Marcel, 26 okt: "P2 denk ik"): in W wijst hij nu naar voren zoals bij de generator, in Z ligt
+    # hij vlakker dan daar (het vel van de generator is in Z en W niet dezelfde speer; beeld.md, "De punt in W")
+    'generator': {'midden': (0.0, -0.25, -0.15), 'as': (0.4, -0.9, 0.6), 'afstand': 0.26, 'laag': 'R', 'greep': 0.15},
     'gespiegeld': {'midden': (0.0, -0.25, -0.15), 'as': (-0.5, -0.5, 0.7), 'afstand': 0.26, 'laag': 'L', 'greep': 0.15},
 }
 
