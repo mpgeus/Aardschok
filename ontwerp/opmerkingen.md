@@ -1034,6 +1034,16 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **Human Generator als bron voor mensen** (26 okt, Marcel: "kijk hier alvast eens naar", https://humgen3d.com/docs/guides):
+  een add-on voor Blender die mensen maakt (lijf, leeftijd, gezicht, huid, haar met baarden, kleren, houdingen met een
+  Rigify-skelet, gezichtsuitdrukkingen), met een Python-API (`Human.from_preset`, instellingen per onderdeel) en een
+  batchgenerator voor veel verschillende mensen. Een spel op Steam vraagt de commerciële licentie (128 dollar, eenmalig);
+  renders in een spel mogen, de modellen zelf meegeven niet. Wat de site niet zegt: of hij op Blender 5.2 werkt, en of de
+  API zonder scherm draait (`blender -b`); de gratis proefversie kan dat laten zien. Voor de soldaten nu weinig winst:
+  zijn kleren maken we zelf, op spelmaat telt vooral het silhouet, en bakken.py en mocap.py hangen aan de botten van
+  MPFB (een ander skelet is veel overwerk). Wel interessant voor de dorpelingen: veel verschillende mensen, jong en oud,
+  mannen en vrouwen, uit één generator.
+
 - **Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet, ook vlak** (17 okt, vraag 174, c; de tekenmeting met
   `--videokaart`, GTX 1080 Ti, proefdorp op eiland 5, 1920×1080): op zoom 0,5 en 0,35 zo'n 16 à 21 ms per beeld, vlak of
   met heuvels, en het meeste is rekenwerk van het spel zelf (`onthoudVoorwerp`, `mistOverLijst`, `isPlat`,
