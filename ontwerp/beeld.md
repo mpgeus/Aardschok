@@ -2547,6 +2547,7 @@ Marcel: "Ja doen we zo bouw die maar". Gebouwd: `WACHT_BOVEN` en `STEEK_BOVEN` i
 het spel om en om (`js/sprites.js`, een teller `uithalen` in de beeldstand; met een toets in `test/vellen.test.cjs`). Een
 gevecht in de demo (die start nu met `Spel.nieuwSpel(undefined, Spel.demoLevel())`, op de vaste kaart van het level): zes
 uithalen, om en om, en twee keer geraakt. `uit/blender/spel/twee-aanvallen.mp4` en `gevecht-twee-aanvallen-traag.mp4`.
+Marcel: "Ja, de stoot van boven is goed zo."
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
