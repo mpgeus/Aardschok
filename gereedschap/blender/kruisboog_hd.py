@@ -40,13 +40,14 @@ DRAAGWIJZEN = {
                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-1.0, -0.3, 0.0), 'L': (0.5, 0.0, -1.0)}},
     # bij het lopen over de rechterschouder (Marcel: "kan hij de kruisboog over zn schouder dragen? en ondersteunen met de
     # handen? als hij loopt"): de lade vlak naar achteren, zodat de boog dwars achter het hoofd ligt, op oorhoogte (steiler
-    # kwam hij door het hoofd: de lade is kort en het hoofd groot); de lade rust 28 cm boven de kolf op de schouder. De
-    # rechterhand om de lade voor de schouder, de linker onder het eind van de kolf, de palm omhoog en dwars op de lade
-    # (Marcel: "linker hand moet aan onderzijde van de kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook
-    # in een normale positie"; eromheen geklemd wrong de onderarm 108 graden)
-    'schouder': {'dragen': {'midden': (-0.12, -0.245, -0.059), 'as': (-0.25, 0.855, 0.453), 'afstand': 0.15, 'laag': 'L',
+    # kwam hij door het hoofd: de lade is kort en het hoofd groot); de lade rust 40 cm boven de kolf op de schouder. De
+    # rechterhand om de lade voor de schouder, de linker 24 cm verder vooruit onder het eind van de kolf, plat met de palm
+    # omhoog (Marcel: "linker hand moet aan onderzijde van de kruisboog ondersteunen. kopse kant als het ware. dan kan de
+    # arm ook in een normale positie"; eromheen geklemd wrong de onderarm 108 graden; en met 15 cm ertussen: "het lijkt
+    # alsof zn handen in de knoop zitten")
+    'schouder': {'dragen': {'midden': (-0.1, -0.25, -0.085), 'as': (-0.25, 0.855, 0.453), 'afstand': 0.235, 'laag': 'L',
                             'greep': -0.035 / LADE},
-                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-0.3, -1.0, 0.3), 'L': (0.0, 0.0, -1.0)}, 'dwars': {'L'}},
+                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-0.3, -1.0, 0.3), 'L': (0.0, 0.0, -1.0)}, 'plat': {'L'}},
 }
 # de draagwijze van de opdrachtregel (`draag=...`); zonder: staan 'vooruit', lopen 'schouder'
 DRAAGWIJZE = next((a.split('=', 1)[1] for a in sh.ARGS if a.startswith('draag=')), None)
@@ -79,7 +80,7 @@ def in_handen(sc, rig, lopen=False):
     import bakken as bk
     wijze = DRAAGWIJZEN[DRAAGWIJZE or ('schouder' if lopen else 'vooruit')]
     bk.HANDRUG = wijze['handrug']
-    bk.HANDDWARS = wijze.get('dwars', set())
+    bk.HANDPLAT = wijze.get('plat', set())
     if lopen:
         bk.BEWEGING = bk.mocap.Beweging(rig)  # de pas uit een echte opname, zoals de speerman
     bk.draag_schuin(sc, rig, wijze['dragen'])

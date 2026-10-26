@@ -572,10 +572,11 @@ def speer_vast(rig):
 # (kruisboog_hd.py) van hem af (Marcel: "een normaal mens heeft de bovenkant van zijn hand van zich weg"); zonder: de
 # greep met de minste knik, zoals bij de speer
 HANDRUG = {}
-# de handen die het wapen dwars houden in plaats van erlangs: de as van de vuist liggend, haaks op het wapen, zoals de
-# linkerhand die de kolf van de kruisboog van onderen draagt (Marcel: "linker hand moet aan onderzijde van de kruisboog
-# ondersteunen. kopse kant als het ware")
-HANDDWARS = set()
+# de handen die het wapen plat dragen in plaats van erom te grijpen: de as van de vuist liggend en haaks op de onderarm,
+# zodat de hand in het verlengde van de arm ligt (met HANDRUG omlaag de palm omhoog), zoals de linkerhand die de kolf van
+# de kruisboog van onderen draagt (Marcel: "linker hand moet aan onderzijde van de kruisboog ondersteunen. kopse kant
+# als het ware"; dwars op de kolf knikte de pols 76 graden)
+HANDPLAT = set()
 
 
 def pols_langs(rig, k, langs):
@@ -585,11 +586,11 @@ def pols_langs(rig, k, langs):
     of naar de voet) die met de minste knik, of die met de rug van de hand naar HANDRUG. Geeft (draai, knik, wring): de
     knik opzij en de wring om de onderarm, in radialen; en de wring met teken, om de richting van de onderarm."""
     pb = rig.pose.bones
-    if k in HANDDWARS:
-        boven = (rig.matrix_world.inverted().to_3x3() @ Vector((0, 0, 1))).normalized()
-        langs = langs.cross(boven).normalized()
     as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
     voor = (pb[f'wrist.{k}'].head - pb[f'lowerarm01.{k}'].head).normalized()
+    if k in HANDPLAT:
+        boven = (rig.matrix_world.inverted().to_3x3() @ Vector((0, 0, 1))).normalized()
+        langs = boven.cross(voor).normalized()
     hand = pb[f'finger3-1.{k}'].head - pb[f'wrist.{k}'].head
     hand = (hand - as_ * hand.dot(as_)).normalized()
     B0 = Matrix((as_, hand, as_.cross(hand))).transposed()

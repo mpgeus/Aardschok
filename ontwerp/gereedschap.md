@@ -215,9 +215,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   en het kleurverschil per pixel per richting en gemiddeld), en `python gereedschap/blender/palet.py <map> [nog een map]`
   (per deel de mediaan in Lab van het vel en van elk model, op Z; daarna per kleurgroep over alle richtingen, maar die
   mengt delen). Met halve maat en 16 monsters rendert alles in een minuut; vergelijk alleen renders van dezelfde maat.
-  De kruisboogschutter: `eigen.py -- <map> Z ZW W NW N NO O ZO kruisboog staan` (`kruisboog_hd.py`: het model van de
-  speerman met een jak en een smalle tabbaard, een kalot, een snor, de koker en de kruisboog in beide handen; voor nu
-  alleen staan).
+  De kruisboogschutter: `eigen.py -- <map> Z ZW W NW N NO O ZO kruisboog [staan] [draag=vooruit|schuin|schouder]`
+  (`kruisboog_hd.py`: het model van de speerman met een jak en een smalle tabbaard, een kalot, een snor, de koker en de
+  kruisboog in beide handen; zonder `staan` het lopen, met de kruisboog over de schouder; `draag=` kiest een andere
+  draagwijze uit `DRAAGWIJZEN`).
   Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
   in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
   onder de riem, hoe vaak het vel daar geel of blauw is, per richting.

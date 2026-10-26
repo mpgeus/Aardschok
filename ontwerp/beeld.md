@@ -2597,8 +2597,10 @@ de lade vlak over de rechterschouder naar achteren, de boog dwars achter het hoo
 schouder onder de kolf. Steiler ging de boog door het hoofd (de lade is kort, het hoofd groot), en met de bovenkant
 opzij stond de boog rechtop achter de schouder, als een handboog. Marcel daarop: "linker hand moet aan onderzijde van de
 kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook in een normale positie, is nu beetje exocist
-achtig": de linkerhand nu onder het eind van de kolf, de palm omhoog en dwars op de lade (`bakken.HANDDWARS`); de
-onderarm wringt 1 graad in plaats van 108.
+achtig": de linkerhand nu onder het eind van de kolf, de palm omhoog; de onderarm wringt 1 graad in plaats van 108.
+Daarna: "het lijkt alsof zn handen in de knoop zitten" (de handen 15 cm uit elkaar, vlak voor de rechterschouder, de
+linkerpols 76 graden geknikt): nu rust de lade 40 cm boven de kolf op de schouder, zodat de linkerhand 24 cm verder
+vooruit ligt dan de rechter, en ligt die hand plat in het verlengde van de onderarm (`bakken.HANDPLAT`).
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
