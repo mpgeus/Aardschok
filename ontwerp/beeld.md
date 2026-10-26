@@ -2569,6 +2569,21 @@ van de demo. Hetzelfde lijf en skelet als de speerman, zodat staan, lopen, geraa
   een eenmalige houding `herladen` die volgt op `aanval`, als de figuur hem heeft).
 - *Het gezicht*: een andere man dan de speerman: een snor en een korte stoppelbaard.
 
+**De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
+proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
+in Z: `proef-z-groot.png`), uit `kruisboog_hd.py`: het model van de speerman met zijn eigen onderdelen (`kies()`), zodat
+staan, lopen, geraakt en sterven later meekomen. Het jak is lappen huid met donkere stiksels (een Voronoi), de tabbaard
+20 cm breed met de gele baan in het midden, het jak tot halverwege de dij (`ROK_ZOOM` 0,1); de kap en de kraag van
+donkerder leer; de kalot is de koepel van de helm zonder rand, met een opgerolde zoom. Aan de riem rechts een koker met
+vier bouten, links de spanhaak. De kruisboog: een lade van 68 cm, een boog van 72 cm (groter dan echt, zoals de speer),
+gespannen, met een bout op de lade, de stijgbeugel voorop en een lange trekker; schuin voor de borst, de linkerhand net
+achter de boog, de rechter bij de trekker, de kolf naar de rechterschouder (`DRAGEN`).
+Wat de proeven leerden: op spelmaat verdween de kruisboog in het bruin van het jak, en de stalen boog was een dun lijntje;
+nu is de lade licht hout en de boog licht (hoorn bekleed met berkenbast, zoals toen gebruikelijk), en dikker. In HD
+leken de wenkbrauwen een zonnebril (zonder rand van de helm is er geen schaduw over): minder en korter haar. De volle
+baard als vorm werd één donkere vlek: nu stoppels (de huid grauw met fijne puntjes, `BAARD_VOL` 0,1), waarop de snor
+leest. Nog niet: lopen, schieten, herladen, geraakt en sterven met de kruisboog.
+
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
 de punt in Z schuin omlaag naar de kijker wijzen en in ZW en W lang naar voren. Nu de wacht wat omlaag (`WACHT['as']`, z

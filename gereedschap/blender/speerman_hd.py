@@ -908,14 +908,14 @@ def mat_staal(naam='staal', kleur='#9aa0a8', ruw=0.32):
     return k.af(kl, ruw=r, metaal=1.0, holte=0.3)
 
 
-def mat_hout():
+def mat_hout(licht='#a8582c', donker='#7a3418'):
     """De schacht van essenhout, het hout van speren (Poly Haven), de nerf langs de schacht. De plek is die van de schacht
     zoals hij gebouwd is (het kenmerk 'oorsprong'): bij het dragen zet bakken.py de mesh schuin in de wereld, en dan zou de
     nerf mee draaien."""
     k = Knopen('hout')
     oorsprong = k.n('ShaderNodeAttribute', attribute_name='oorsprong').outputs['Vector']
     nerf = k.ruis(4, 4, rek=(40, 40, 1.2), vec=oorsprong)
-    kl = k.meng(k.glad(nerf, 0.35, 0.7), lin('#7a3418'), lin('#a8582c'))  # roodbruin, zoals de referentie
+    kl = k.meng(k.glad(nerf, 0.35, 0.7), lin(donker), lin(licht))  # roodbruin, zoals de referentie
     # de nerf loopt in de textuur dwars over het beeld: dat wordt de lengte van de schacht
     p = k.n('ShaderNodeSeparateXYZ')
     k.zet(p.inputs[0], oorsprong)
@@ -1007,8 +1007,8 @@ def baardvorm(lijf, gb, gs, mond, kin):
         rand = rand * rand * (3 - 2 * rand)
         onder = max(0.0, min(1.0, (mond.z - p.z) / 0.06))           # 0 bij de mond, 1 bij de kin en lager
         voor = max(0.0, min(1.0, (0.06 - abs(p.x)) / 0.05))          # midden voor dikker dan op de wangen
-        uit = (0.002 + 0.03 * onder ** 0.7 * (0.35 + 0.65 * voor)) * rand
-        v.co = p + n * uit + Vector((0, -0.012 * onder * voor, -0.03 * onder ** 1.4 * voor)) * rand
+        uit = (0.002 + 0.03 * BAARD_VOL * onder ** 0.7 * (0.35 + 0.65 * voor)) * rand
+        v.co = p + n * uit + Vector((0, -0.012 * onder * voor, -0.03 * onder ** 1.4 * voor)) * rand * BAARD_VOL
     sm = ob.modifiers.new('glad', 'SMOOTH')
     sm.factor = 0.8
     sm.iterations = 12
@@ -1017,6 +1017,12 @@ def baardvorm(lijf, gb, gs, mond, kin):
     zacht(ob)
     ob.visible_shadow = True
     return ob
+
+# het haar per plek van het gezicht: (naam, groep, hoeveel, lengte in meter, hoe ver omlaag), en hoe vol de baard als vorm
+# is (1: de volle baard die over de kraag valt; de kruisboogschutter, kruisboog_hd.py, heeft een snor en stoppels)
+BAARD = (('baard', 'baard', 9000, 0.012, -0.8), ('snor', 'snor', 2500, 0.01, -1.2), ('brauw', 'brauw', 5000, 0.013, 0.0))
+BAARD_VOL = 1.0
+
 
 def baard(lijf, rig, M):
     """Baard, snor en wenkbrauwen van echt haar (particle hair), op plekken van het gezicht die het skelet aanwijst."""
@@ -1048,8 +1054,7 @@ def baard(lijf, rig, M):
     slot = len(lijf.data.materials)
     # (Marcel: "De baard moet nog wat beter"): vol en lang genoeg om over de kraag van maliën te vallen, zoals op vel 01
     # het echte haar nog alleen als een zachte rand over de vorm (alleen haar zag er van dichtbij nep uit)
-    for naam, groep, n, lengte, omlaag in (('baard', 'baard', 9000, 0.012, -0.8), ('snor', 'snor', 2500, 0.01, -1.2),
-                                            ('brauw', 'brauw', 5000, 0.013, 0.0)):
+    for naam, groep, n, lengte, omlaag in BAARD:
         md = lijf.modifiers.new(naam, 'PARTICLE_SYSTEM')
         ps = md.particle_system
         st = ps.settings
@@ -1228,6 +1233,9 @@ def plooien(th, t, lijst):
     # en sterker aan zijn linkerkant dan aan zijn rechter (zijn linkerkant is +x, bij th rond de nul is hij voor)
     return som / sum(x[2] for x in lijst) * 1.6 * (1 + 0.35 * math.sin(th + 0.9))
 
+ROK_ZOOM = 0.05  # de zoom van de rok zo ver boven de knie (meter)
+
+
 def wapenrok(lijf, rig, mouwen, M, z_riem):
     """Het lijf van de wapenrok (van de nek tot de riem, op de romp), en de rok die eronder valt (stofsimulatie)."""
     arm = gewicht(lijf, ('upperarm', 'lowerarm', 'wrist', 'finger', 'metacarpal'))
@@ -1293,7 +1301,7 @@ def wapenrok(lijf, rig, mouwen, M, z_riem):
     # de rok: recht van de heupen naar beneden, wat wijder naar de zoom, met lange verticale plooien (zoals op vel 01; de
     # stofsimulatie liet hem onderaan als een zak doorhangen)
     knie = (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z
-    z_zoom = knie + 0.05
+    z_zoom = knie + ROK_ZOOM
     ts = [i / 24 for i in range(25)]
     # de zoom niet recht: hier en daar wat lager (Marcel: "minder symmetrisch links en rechts")
     zoom = lambda th: 0.012 * math.sin(3 * th + 1.1) + 0.007 * math.sin(5 * th + 4.0)
@@ -1422,7 +1430,7 @@ def hangen(rok, lijf, mouwen, cy, z_riem, z_zoom):
     sc.frame_set(1)
 
 
-def riem_en_hangers(bvh, cy, z_riem, M):
+def riem_en_hangers(bvh, cy, z_riem, M, hangers=True):
     """De brede roodbruine riem met een grote rechthoekige gesp, en aan beide heupen een smalle hanger: rechts een schede
     met een beslagen punt, links een riempje met een klein beslag."""
     delen = []
@@ -1443,6 +1451,8 @@ def riem_en_hangers(bvh, cy, z_riem, M):
         b.segments = 3
         o.data.materials.append(mat)
         delen.append(bak_mod(o))
+    if not hangers:
+        return delen
     for x, naam in ((-1, 'schede'), (1, 'hanger')):
         d = Vector((0.86 * x, -0.5, 0)).normalized()
         r = (straal(bvh, Vector((0, cy, z_riem - 0.05)), d) or straal(bvh, Vector((0, cy, z_riem)), d) or 0.16) + 0.02
@@ -1835,7 +1845,7 @@ def bouw():
         'handschoen': mat_leer('handschoen', '#5a3a26', '#22140c'),  # donker: de vuist los van de schacht, zoals op het vel
         'oog': mat_oog(),
         'haar': mat_haar(),
-        'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + 0.05),
+        'wapenrok': mat_wapenrok(riem_z, (rig.matrix_world @ rig.pose.bones['lowerleg01.L'].head).z + ROK_ZOOM),
         'wapenrok-goud': mat_stof('wapenrok-goud', '#f0a812', 30, 0.25),
         'malien': mat_malien(),
         # donkerder (Marcel: "Ik vind de helm ook nog te licht"), maar op spelmaat werd hij zwart naast het zilver van de

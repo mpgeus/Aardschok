@@ -23,6 +23,11 @@ import bakken as bk  # noqa: E402
 from mathutils import Matrix, Vector  # noqa: E402
 
 UIT = sh.UIT
+# de kruisboogschutter (kruisboog_hd.py): het model van de speerman met zijn eigen onderdelen; voor nu alleen staan
+KRUISBOOG = 'kruisboog' in sh.ARGS
+if KRUISBOOG:
+    import kruisboog_hd as kb
+    kb.kies()
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
 # isometrisch (Marcel: "Ik wil ook de poppetjes in isometrisch zien"): de camera op 30 graden zoals de wereld, in plaats
 # van de 15 van de generator (beeld.md, "Wat het verschil maakte"); de beelden krijgen -iso in hun naam
@@ -52,7 +57,7 @@ STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW
 # (metaal toont zijn vorm door wat het weerspiegelt: de lucht met een verloop, licht_voor_spelmaat).
 STOF = ('wapenrok', 'wambuis', 'hozen')
 LEER = ('riem', 'leer', 'schede', 'koord')
-LAARS = ('laars', 'omslag', 'handschoen', 'armstuk', 'armrand')  # dof leer
+LAARS = ('laars', 'omslag', 'handschoen', 'armstuk', 'armrand', 'jak')  # dof leer
 STAAL = ('helm', 'staal')
 SOORTEN = {
     'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
@@ -365,6 +370,11 @@ def main():
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     if 'hoek' in sh.ARGS:
         hoekpas(sc)
+    if KRUISBOOG:
+        # staan met de kruisboog schuin voor de borst, in beide handen
+        kb.in_handen(sc, rig)
+        met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
+        return
     if 'sterven' in sh.ARGS:
         # sterven (bakken.py, sterven): zeven beelden vanuit staan, op zijn knieën en dan voorover; breder, zodat de speer
         # die naast hem valt en het lijf dat languit ligt in beeld blijven, en onderaan hoger: languit ligt hij naar de

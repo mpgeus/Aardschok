@@ -36,8 +36,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   En (26 okt): sterven ("dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen op zn gezicht", in
   `beeld.md`), en "we hebben een 2e aanvals animatie nodig voor de afwisseling" (het spel speelt bij elke uithaal nu
   dezelfde `aanval`, `js/sprites.js`; een tweede vraagt ook daar een regel). Af en goedgekeurd (26 okt): sterven, en de
-  stoot van boven om en om met de steek. Nog voor de speerman: de steek als echte uitval, renders op volle kwaliteit, de
-  kleine verschillen bij staan, en of hij echt in het spel komt (in plaats van de generator, of ernaast).
+  stoot van boven om en om met de steek. Marcel (26 okt): "zet de speerman uit het 3D-model echt in het spel, in plaats
+  van die van de generator, met renders op volle kwaliteit": de renders lopen (`uit/blender/vol/`, `keten.sh`), daarna de
+  vellen `speerman3d-*` in `beelden/`. Nog voor de speerman: de steek als echte uitval, de kleine verschillen bij staan.
+  **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie; de proefplaat van staan
+  is er (`kruisboog_hd.py`, `beeld.md`, "De proefplaat van de kruisboogschutter"), wacht op Marcel.
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
