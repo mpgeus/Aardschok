@@ -680,16 +680,24 @@ def verschuif(D):
 # maar 20 cm, zo ver als de armen reiken); en terug. Per beeld (8): hoe ver de speer langs zijn lengte gaat (meter), het
 # bekken naar voren (meter), de borst gedraaid (graden, de rechterschouder naar voren) en voorover (graden), en de
 # voorste voet vooruit en omhoog (meter).
+# een grote uitval, zoals de generator (Marcel, 26 okt, bij N, NO en O: "Die armen zien er nog beetje slecht uit zo"): een
+# wijde stap, het lijf voorover over de voorste voet, de speer ver vooruit en de rechterschouder mee, zodat de armen ook van
+# achteren uit het lijf komen; eerst stond hij compact en rechtop, de armen dicht bij het lijf
 STEEK = {
-    'speer': (0.0, -0.08, -0.14, 0.12, 0.34, 0.28, 0.12, 0.03),
-    'bekken': (0.0, -0.02, -0.04, 0.04, 0.10, 0.09, 0.04, 0.01),
-    'draai': (0, -8, -14, 8, 18, 14, 6, 1),
-    'leun': (0, -2, -4, 6, 14, 11, 5, 1),
-    'stap': (0.0, 0.0, 0.0, 0.07, 0.14, 0.14, 0.07, 0.0),
-    'til': (0.0, 0.0, 0.0, 0.03, 0.0, 0.0, 0.02, 0.0),
+    'speer': (0.0, -0.10, -0.18, 0.18, 0.50, 0.42, 0.18, 0.04),
+    'bekken': (0.0, -0.03, -0.05, 0.08, 0.20, 0.18, 0.08, 0.02),
+    'draai': (0, -10, -16, 10, 24, 19, 8, 1),
+    'leun': (0, -3, -5, 10, 22, 18, 8, 1),
+    'stap': (0.0, 0.0, 0.0, 0.15, 0.32, 0.32, 0.15, 0.0),
+    'til': (0.0, 0.0, 0.0, 0.05, 0.0, 0.0, 0.03, 0.0),
 }
 VOORSTE_HAND = 0.3  # de voorste hand gaat zo'n deel mee: de speer schuift erdoorheen, en de vuisten blijven 16 cm uit elkaar (met 0,15 eindigden ze in elkaar, met 0,5 reikte de linkerarm niet)
-WACHT = {'midden': (0.02, -0.12, -0.32), 'as': (0.3, -1.0, 0.25), 'afstand': 0.4, 'laag': 'R', 'greep': 0.32}
+# de speer in de wacht wat omlaag, naar de buik van wie voor hem staat (Marcel, 26 okt: "De steek maar doen"): met de punt
+# wat omhoog (z 0,25) zag je hem in Z als een kort stokje opzij en in W kort, waar de generator hem in Z schuin omlaag naar
+# de kijker laat wijzen en in ZW en W lang naar voren
+# en achteraan vast (`greep`, van de achterkant, maal de lengte), zoals de generator: met 0,32 stak er een halve meter voor
+# de voorste hand uit, en zag je de speer bij de steek nauwelijks
+WACHT = {'midden': (0.02, -0.12, -0.32), 'as': (0.3, -1.0, -0.12), 'afstand': 0.4, 'laag': 'R', 'greep': 0.12}
 WACHT_VOETEN = {'L': -0.16, 'R': 0.14}  # links voor, rechts achter (meter, vooruit is -y)
 WACHT_ZAKKEN = 0.05  # door de knieën (meter)
 
@@ -724,7 +732,7 @@ def steek(rig, i):
     zakken = WACHT_ZAKKEN + 0.4 * max(0.0, vooruit)
     for k in ('L', 'R'):
         stap, til = (tussen(STEEK['stap'], i), tussen(STEEK['til'], i)) if k == 'L' else (0.0, 0.0)
-        been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier)
+        been_ik(rig, k, WACHT_VOETEN[k] - stap, til, zakken, gier=gier, reik=BEEN_REIK)
     for bot, deel in (('spine04', 0.6), ('spine02', 0.4)):
         draai(rig, bot, (LEUN * 0.5 + leun) * deel)
         draai(rig, bot, (draaien - gier) * deel, 'Z')

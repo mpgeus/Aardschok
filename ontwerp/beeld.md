@@ -2489,6 +2489,36 @@ van het lijf te laten zakken. Nu ook zo (`BEKKEN_ZAKT` 0,15, `BEEN_REIK` 0,99, `
 zakt nog 1,5 cm, dij en onderbeen rekken waar het been te kort is (de voet en de laars niet), de knie van het standbeen
 staat op zo'n 17 graden, de voeten 18 cm uit elkaar, en hij is lopend 97 tot 101 procent zo lang als staand.
 In het spel (`uit/blender/spel/speerman3d-in-het-spel-3.mp4`), Marcel: "Ja dit is al heel veel beter zo!"
+
+**Geraakt worden (26 okt, voorstel in woorden).** Marcel: "We hebben ook een 'hit' animatie nodig bij soldaten. Waarin je
+ziet dat ze geraakt worden." Het spel heeft het al: bij elke klap speelt een figuur eenmalig zijn houding `geraakt`, als
+hij die heeft (`js/sprites.js`, bij "Eenmalige houdingen"), met de rode flits erover (`js/tekenen.js`); de wolf, het
+skelet en de kobold hebben er een (3 beelden, 12 per seconde, 0,25 s). De speerman heeft er nog geen, ook die van de
+generator niet. Voorstel voor het model, in dezelfde maat (3 beelden, 12 per seconde, niet herhalen), altijd naar achteren
+ten opzichte van waar hij kijkt (hij kijkt naar wie hem slaat):
+- *Beeld 0, de klap*: hij schokt achteruit, het bovenlijf 12 graden achterover vanuit de heupen, het hoofd erachteraan,
+  de schouders op; de speer blijft in beide handen, de punt zwiept wat omhoog.
+- *Beeld 1, het verst*: 18 graden achterover, de voorste voet schuift een halve voet terug, de knieën wat door.
+- *Beeld 2, terug*: nog 6 graden achterover, op weg naar staan; daarna neemt het spel zelf staan of lopen weer op.
+
+**De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
+86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
+de punt in Z schuin omlaag naar de kijker wijzen en in ZW en W lang naar voren. Nu de wacht wat omlaag (`WACHT['as']`, z
+-0,2). Bij de oude steek (`eigen-acht-steek-iso.mp4`, 25 okt) zei Marcel bij N, NO en O: "Die armen zien er nog beetje
+slecht uit zo. Ook zn wapenrok lijkt aan achterkant nog niet te kloppen".
+Daarna, in stappen (op spelmaat naast de generator, beeld 4, het verst): de wacht iets omlaag; een grotere uitval (`STEEK`:
+een wijdere stap, meer voorover, de speer verder, de schouder meer mee; de benen rekken zoals bij het lopen); en de speer
+achteraan vast (`WACHT['greep']` 0,12 in plaats van 0,32: er stak een halve meter voor de voorste hand uit, nu ruim 80 cm).
+De handen hoger en de speer vlakker gaf de linkerpols 142 graden wringen: terug. Stand: in Z, ZW, W, O en ZO steekt hij
+schuin omlaag naar voren, zoals de generator in Z; maar de generator maakt een echte uitval (de voeten heel wijd, het lijf
+gestrekt naar voren, de armen op schouderhoogte, de speer lang en vlak), en de onze blijft gebogen en compact, van achteren
+(N, NO) met de armen nauwelijks te zien. Bewegend naast elkaar: `uit/blender/spel/steek-generator-model.gif`.
+
+**De punt in W bij het lopen (26 okt).** Marcel: "De punt in W ook oppakken". De generator is daar niet in 3D getekend: in Z
+wijst de punt rechtsboven (schuin over het lijf), in W sterk naar voren. Met één speer in 3D gaat het een ten koste van het
+ander (`uit/blender/spel/lopen-punt-in-w.gif`, Z, ZW en W): de punt meer naar voren (`DRAGEN['generator']['as']` (0,4,
+-0,9, 0,6)) wijst in W naar voren maar ligt in Z plat; (0,45, -0,55, 0,7) zonder de draai van de schouders zet hem in W
+rechtop en houdt Z schuin. Wacht op Marcel.
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:

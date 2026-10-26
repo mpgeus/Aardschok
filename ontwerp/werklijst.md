@@ -29,7 +29,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   vel (de stand "oké" van 25 okt, daarna de kleuren per vlak, één wapenrok voor alle richtingen, de linkerarm naar
   voren); lopen in het spel (`spelvel.py`, alleen in de browser, de vellen van de generator blijven), en Marcel: "Ja dit
   is al heel veel beter zo!" (rechtop, de nek recht, niet meer door de knieën). Nog: de steek met het nieuwe uiterlijk,
-  in W de punt van de speer naar voren, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
+  in W de punt van de speer naar voren, en de piekenier (in woorden in `beeld.md`, wacht op Marcel). En **geraakt
+  worden** (Marcel, 26 okt: "We hebben ook een 'hit' animatie nodig bij soldaten"): het spel speelt `geraakt` al af bij
+  een klap; de speerman (ook die van de generator) heeft nog geen vel. Voorstel in woorden in `beeld.md`, wacht op Marcel.
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
