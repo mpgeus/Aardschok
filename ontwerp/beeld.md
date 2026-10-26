@@ -2589,6 +2589,10 @@ op ons soldaatje kunnen plakken". Dus per onderdeel een eigen 3D-deel in code, d
 - *Broek*: een wijde broek van grijsgroene wol tot onder de knie, met een riem (in plaats van de blauwe hozen).
 - *Laarzen*: bruin leer met een omgeslagen rand en een riempje, zoals nu, wat lager.
 - *Riem*: bruin leer met een koperen gesp en twee afhangende riemeinden voor, opzij een tasje.
+De platen staan in `EXTRA/` ("Middeleeuwse krijgeruitrusting spritesheet.png" heeft alle onderdelen). Gemeten op die
+plaat (donker, midden, licht; zonder het magenta en de zwarte omtrek): het geel van de wapenrok #ce8514, #eea821, #fac43e;
+het blauw #1e2e39, #405769, #6a8498; de mouwen #491f0d, #7f401c, #bd7940; de broek #3c2b1e, #705e47, #b2a585; de laarzen
+#441e0c, #703717, #b67135; de helm #36261c, #655244, #c8bda7; de maliën #2e221f, #584b4a, #bab7ae.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
