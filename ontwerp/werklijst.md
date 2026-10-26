@@ -31,7 +31,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   al heel veel beter zo!" (rechtop, de nek recht, niet meer door de knieën), met de punt naar voren in W ("P2"); de steek
   hoger, en **geraakt worden** (Marcel: "We hebben ook een 'hit' animatie nodig bij soldaten", het voorstel goedgekeurd),
   allebei als vel voor het spel; een gevecht in het spel opgenomen (`uit/blender/spel/`). Nog: de steek als echte uitval
-  zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
+  zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel). Marcel daarna (26 okt): "ik wil een
+  kruisboog schutter in het spel" (de kruisboogschutter van de demo heeft nog geen eigen vel in `beelden/beschrijving.json`).
 
 **Wacht op Marcel**
 - **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
