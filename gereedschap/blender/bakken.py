@@ -811,6 +811,7 @@ STERVEN = {
     'enkels': (0.0, 0.08, 0.22, 0.24, 0.32, 0.45, 0.48),
     'hoofd': (-6, 8, 25, 20, 10, -10, -15),
     'plat': (0, 0, 0, 0, 0, 1, 1),  # ligt hij plat: de benen volgen het bekken, gestrekt achter hem (geen IK)
+    'spreid': (0, 0, 0, 0, 0, 10, 14),  # en dan elk been zoveel graden naar buiten (Marcel: "Bij NO vallen benen iets wijder")
 }
 _gevallen = {}  # de speer: zijn stand in de hand, eenmaal onthouden
 
@@ -835,6 +836,8 @@ def sterven(rig, i):
         else:
             for b in ('upperleg01', 'lowerleg01', 'lowerleg02'):
                 rig.pose.bones[f'{b}.{k}'].scale = (1, 1, 1)
+            spreid = math.radians(tussen(STERVEN['spreid'], i))
+            draai(rig, f'upperleg01.{k}', -spreid if k == 'L' else spreid, 'Y')  # om y: positief brengt de voet naar -x
     rug = math.radians(tussen(STERVEN['rug'], i))
     draai(rig, 'spine04', rug * 0.5)
     draai(rig, 'spine02', rug * 0.5)

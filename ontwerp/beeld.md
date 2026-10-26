@@ -2531,6 +2531,8 @@ bekken (`STERVEN['plat']`). En het beeld was onderaan te kort: languit ligt hij 
 voeten was maar 90 pixels; bij sterven is het beeld nu 600 pixels hoger (de bovenrand, de maat en het anker blijven), en in
 `spelvel.py` heeft sterven een eigen, ruimere cel (150 bij 124, het anker op 75, 84). Op spelmaat naast de generator:
 `uit/blender/spel/sterven-generator-model.gif`. Hij ligt compacter dan de generator, die zijn armen wijd uitstrekt.
+Als filmpje (de GIF speelde bij Marcel niet af): `sterven-generator-model.mp4`. Marcel: "Bij NO vallen benen iets wijder
+denk ik", "Maar verder oké": liggend spreidt hij nu elk been 14 graden (`STERVEN['spreid']`).
 De uitval van de steek (leunen vanuit de heupen, `STEEK_HEUP`, een wijdere stap) gaf op spelmaat weinig verschil; nog te
 doen.
 
