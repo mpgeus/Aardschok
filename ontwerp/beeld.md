@@ -2549,6 +2549,26 @@ gevecht in de demo (die start nu met `Spel.nieuwSpel(undefined, Spel.demoLevel()
 uithalen, om en om, en twee keer geraakt. `uit/blender/spel/twee-aanvallen.mp4` en `gevecht-twee-aanvallen-traag.mp4`.
 Marcel: "Ja, de stoot van boven is goed zo."
 
+**Voorstel: de kruisboogschutter (26 okt, in woorden).** Marcel: "ik wil een kruisboog schutter in het spel", en "kunnen wij
+dan alvast kijken naar een pikeman of crossbowman?". In het spel heeft hij kruisboog en harnas (het harnas nu van huiden,
+van de jager), schiet hij tot 8 tegels waar hij ziet, maar niet met een vijand naast zich, en komt er een mee met de wacht
+van de demo. Hetzelfde lijf en skelet als de speerman, zodat staan, lopen, geraakt en sterven meekomen; wat anders is:
+- *Het harnas*: een leren jak van huiden, bruin met stiksels en een opstaande kraag, tot halverwege de dij; daaroverheen
+  een smalle tabbaard in het blauw en geel van het dorp, zodat hij bij de wacht hoort.
+- *De helm*: een ronde ijzeren kalot zonder rand, met een leren kap eronder: van verre anders dan de speerman.
+- *De kruisboog*: een houten lade met dwars voorop een boog, de pees, en voorop een stijgbeugel om hem te spannen. Aan de
+  riem rechts een koker met bouten, links de spanhaak.
+- *Staan en lopen*: de kruisboog schuin voor de borst in beide handen, de boog omlaag.
+- *Schieten* (de aanval, 6 beelden): (0) uit de wacht; (1) en (2) aanleggen tegen de schouder en mikken; (3) het schot,
+  de pees schiet naar voren; (4) en (5) de terugslag. (De bout zelf tekent het spel, `js/gevecht.js`.)
+- *Herladen*, een eigen animatie (Marcel: "kruisboogschutter moet een animatie hebben waarin hij de kruisboog herlaadt"),
+  10 beelden, zo'n anderhalve seconde, meteen na elk schot: (0) de kruisboog omlaag, de stijgbeugel op de grond; (1) een
+  voet erin; (2) en (3) hij buigt, de haak aan de riem in de pees; (4) tot (6) hij komt omhoog en trekt de pees mee tot
+  de noot; (7) een bout uit de koker; (8) op de lade gelegd; (9) terug in de wacht. In het spel schiet een kruisboog om
+  de vier seconden (`kosten` 4, `js/soldaten.js`); het herladen speelt het spel na het schot af (in `js/sprites.js`
+  een eenmalige houding `herladen` die volgt op `aanval`, als de figuur hem heeft).
+- *Het gezicht*: een andere man dan de speerman: een snor en een korte stoppelbaard.
+
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
 de punt in Z schuin omlaag naar de kijker wijzen en in ZW en W lang naar voren. Nu de wacht wat omlaag (`WACHT['as']`, z
