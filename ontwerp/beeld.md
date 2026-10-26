@@ -2649,6 +2649,15 @@ de plek waar die kant hem tekent; onbelicht. Plaat: `uit/blender/plaatsoldaat/pr
 elke richting de wapenrok van de plaat, met de vierendelen, de nagels, de riem en de banen, zonder dambord: omdat de vorm
 uit de tekeningen komt, valt elke tekening op zijn plek. Het lijf eromheen is nog grof (worsten als armen, een bol als
 hoofd, een eenvoudige helm).
+Marcel: "Alles". Nu komt elk onderdeel zo uit de plaat (`ONDERDELEN` in `plaatsoldaat.py`: per onderdeel de rij op de
+plaat en welke tekening welke kant laat zien; een zijkant gespiegeld voor de andere kant, een voorkant voor de rug waar de
+rug ontbreekt): de helm (van voren en opzij, zonder de kinriemen die eronder hangen), de kraag (voor, opzij, achter met
+het gespje), de mouwen (de twee rechte: voor en opzij), de handschoenen (twee vuisten), en de benen met broek en laars
+(voor en opzij: het midden van de zijtekening geeft de laars zijn neus). Alles op één schaal (de plaat tekent zijn
+onderdelen even groot: de wapenrok van voren, 256 pixels, is 68 cm); de man wordt zo 1,42 m tot de top van de helm. Waar
+de omtrek met het magenta mengt (paarsig), wordt hij donker, zoals de omtrek zelf. Het hoofd is nog eenvoudig (een bol,
+een baard, een neus): de plaat heeft geen hoofd. Plaat: `uit/blender/plaatsoldaat/proef3-plaat.png`. Alleen staan; de
+delen hangen nog niet aan een skelet.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
