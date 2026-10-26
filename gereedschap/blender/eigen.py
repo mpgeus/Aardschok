@@ -23,7 +23,7 @@ import bakken as bk  # noqa: E402
 from mathutils import Matrix, Vector  # noqa: E402
 
 UIT = sh.UIT
-# de kruisboogschutter (kruisboog_hd.py): het model van de speerman met zijn eigen onderdelen; voor nu alleen staan
+# de kruisboogschutter (kruisboog_hd.py): het model van de speerman met zijn eigen onderdelen; staan en lopen
 KRUISBOOG = 'kruisboog' in sh.ARGS
 if KRUISBOOG:
     import kruisboog_hd as kb
@@ -371,9 +371,15 @@ def main():
     if 'hoek' in sh.ARGS:
         hoekpas(sc)
     if KRUISBOOG:
-        # staan met de kruisboog schuin voor de borst, in beide handen
-        kb.in_handen(sc, rig)
-        met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
+        if 'staan' in sh.ARGS:
+            # staan met de kruisboog in beide handen (kruisboog_hd.DRAAGWIJZEN)
+            kb.in_handen(sc, rig)
+            met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
+            return
+        # lopen met de kruisboog over de schouder, de pas zoals de speerman
+        kb.in_handen(sc, rig, lopen=True)
+        met_stof(sc, rig, lambda t: bk.loop(rig, t, 8, draagt=True), 8, lambda r, i: f'eigen-{r}{ISO}-lopen-{i}.png',
+                 lichten, rondes=3)
         return
     if 'sterven' in sh.ARGS:
         # sterven (bakken.py, sterven): zeven beelden vanuit staan, op zijn knieën en dan voorover; breder, zodat de speer

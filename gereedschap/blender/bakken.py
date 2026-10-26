@@ -568,18 +568,34 @@ def speer_vast(rig):
     _drager['half'] = (holtes['L'] - holtes['R']).length / 2
 
 
+# per hand de richting (in de wereld) waar de rug van de hand heen wijst, als een wapen dat vraagt: bij de kruisboog
+# (kruisboog_hd.py) van hem af (Marcel: "een normaal mens heeft de bovenkant van zijn hand van zich weg"); zonder: de
+# greep met de minste knik, zoals bij de speer
+HANDRUG = {}
+# de handen die het wapen dwars houden in plaats van erlangs: de as van de vuist liggend, haaks op het wapen, zoals de
+# linkerhand die de kolf van de kruisboog van onderen draagt (Marcel: "linker hand moet aan onderzijde van de kruisboog
+# ondersteunen. kopse kant als het ware")
+HANDDWARS = set()
+
+
 def pols_langs(rig, k, langs):
     """De draai van de pols (in de ruimte van het skelet) die de as van de vuist (dwars over de knokkels) langs de speer
     legt, met de hand zo veel mogelijk in het verlengde van de onderarm (Marcel: "Die handen maken toch nog een rare knik":
     met de kleinste draai die de as goed legt, knikte de hand haaks op de pols). Van de twee greepen (de duim naar de punt
-    of naar de voet) die met de minste knik. Geeft (draai, knik, wring): de knik opzij en de wring om de onderarm, in
-    radialen; en de wring met teken, om de richting van de onderarm."""
+    of naar de voet) die met de minste knik, of die met de rug van de hand naar HANDRUG. Geeft (draai, knik, wring): de
+    knik opzij en de wring om de onderarm, in radialen; en de wring met teken, om de richting van de onderarm."""
     pb = rig.pose.bones
+    if k in HANDDWARS:
+        boven = (rig.matrix_world.inverted().to_3x3() @ Vector((0, 0, 1))).normalized()
+        langs = langs.cross(boven).normalized()
     as_ = (pb[f'finger2-1.{k}'].head - pb[f'finger5-1.{k}'].head).normalized()
     voor = (pb[f'wrist.{k}'].head - pb[f'lowerarm01.{k}'].head).normalized()
     hand = pb[f'finger3-1.{k}'].head - pb[f'wrist.{k}'].head
     hand = (hand - as_ * hand.dot(as_)).normalized()
     B0 = Matrix((as_, hand, as_.cross(hand))).transposed()
+    # waar de rug van de hand heen moet (HANDRUG), in de ruimte van het skelet; de rug is de knokkels maal de hand, voor de
+    # rechterhand andersom (de as van de vuist loopt van de pink naar de wijsvinger)
+    rug = (rig.matrix_world.inverted().to_3x3() @ Vector(HANDRUG[k])).normalized() if k in HANDRUG else None
     beste = None
     for doel in (langs, -langs):
         hand_doel = voor - doel * voor.dot(doel)
@@ -594,10 +610,11 @@ def pols_langs(rig, k, langs):
         wring = wring.normalized() if wring.magnitude > 1e-6 else Quaternion()
         knik = (q @ wring.inverted()).angle
         w = min(wring.angle, 2 * math.pi - wring.angle)
-        if beste is None or knik + 0.3 * w < beste[1] + 0.3 * beste[2]:
+        kosten = knik + 0.3 * w if rug is None else -(doel.cross(hand_doel) * (-1 if k == 'R' else 1)).dot(rug)
+        if beste is None or kosten < beste[4]:
             hoek = 2 * math.atan2(Vector((wring.x, wring.y, wring.z)).dot(voor), wring.w)
-            beste = (R, knik, w, math.atan2(math.sin(hoek), math.cos(hoek)))
-    return beste
+            beste = (R, knik, w, math.atan2(math.sin(hoek), math.cos(hoek)), kosten)
+    return beste[:4]
 
 
 def zet_pols(rig, k, R):

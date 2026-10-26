@@ -2,7 +2,7 @@
 # proefplaat"; beeld.md, "Voorstel: de kruisboogschutter"). Hetzelfde lijf, skelet en dezelfde bewegingen als de speerman
 # (speerman_hd.py, bakken.py), met wat anders is: een leren jak van huiden met een smalle tabbaard erover, een ronde
 # ijzeren kalot zonder rand met een leren kap, een snor en stoppels, aan de riem een koker met bouten en een spanhaak, en
-# de kruisboog schuin voor de borst in beide handen, de boog omlaag.
+# de kruisboog schuin voor de borst in beide handen, de boog boven.
 #
 # kies() zet die onderdelen in de plaats van die van de speerman, vóór speerman_hd.bouw(); eigen.py doet dat met
 # `kruisboog` op de opdrachtregel:
@@ -11,7 +11,7 @@ import math
 
 import bmesh
 import bpy
-from mathutils import Vector
+from mathutils import Matrix, Vector
 
 import speerman_hd as sh
 from speerman_hd import Knopen, lin
@@ -23,9 +23,33 @@ BOOG_TERUG = 0.09  # zo ver buigen de punten van de gespannen boog naar achteren
 NOOT = 0.30       # de noot, waar de gespannen pees achter zit, zo ver achter de voorkant
 TABBAARD = 0.1    # de halve breedte van de tabbaard (meter): smal, het jak komt er opzij onder uit
 ROK_ZOOM = 0.1    # het jak tot halverwege de dij: de zoom zo ver boven de knie
-# de kruisboog schuin voor de borst, de boog omlaag (bakken.draag_schuin): de linkerhand vooraan, net achter de boog, de
-# rechter achteraan bij de trekker, de kolf naar zijn rechterschouder ('as' van de linker- naar de rechterhand)
-DRAGEN = {'midden': (0.0, -0.22, -0.18), 'as': (-0.7, 0.15, 0.7), 'afstand': 0.27, 'laag': 'L', 'greep': 0.15 / LADE}
+# Hoe hij de kruisboog draagt, met de boog boven (Marcel: "Hij heeft de boog ondersteboven"; met de boog omlaag stond hij
+# in ZW en W bijna rechtop op zijn kop). Twee manieren, voor Marcel om uit te kiezen (`draag=schuin` of `draag=vooruit` op
+# de opdrachtregel): 'schuin' voor de borst zoals je een geweer schuin voor je draagt, de boog bij de linkerschouder, de
+# bovenkant van de lade naar voren; 'vooruit' vanaf de rechterheup schuin omhoog naar voren, de bovenkant boven, de boog
+# dwars voor de borst. Per manier: 'dragen' voor bakken.draag_schuin ('as' van de rechter- naar de linkerhand, 'greep' vanaf
+# de kolf, de rechterhand bij de trekker, de linker net achter de boog), waar de bovenkant van de lade heen wijst ('boven',
+# in de wereld; de lade draait om zijn as tot zijn bovenkant zo ligt), en waar de rug van elke hand heen wijst
+# (bakken.HANDRUG; Marcel: "een normaal mens heeft de bovenkant van zijn hand van zich weg. de hand zit dan voor de
+# kruisboog").
+GREEP = (LADE - 0.42) / LADE
+DRAAGWIJZEN = {
+    'schuin': {'dragen': {'midden': (0.0, -0.26, -0.24), 'as': (0.7, -0.15, 0.7), 'afstand': 0.27, 'laag': 'R', 'greep': GREEP},
+               'boven': (0.0, -1.0, 0.0), 'handrug': {'R': (0.0, -1.0, 0.0), 'L': (0.0, -1.0, 0.0)}},
+    'vooruit': {'dragen': {'midden': (-0.085, -0.34, -0.22), 'as': (0.48, -0.65, 0.59), 'afstand': 0.27, 'laag': 'R', 'greep': GREEP},
+                'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-1.0, -0.3, 0.0), 'L': (0.5, 0.0, -1.0)}},
+    # bij het lopen over de rechterschouder (Marcel: "kan hij de kruisboog over zn schouder dragen? en ondersteunen met de
+    # handen? als hij loopt"): de lade vlak naar achteren, zodat de boog dwars achter het hoofd ligt, op oorhoogte (steiler
+    # kwam hij door het hoofd: de lade is kort en het hoofd groot); de lade rust 28 cm boven de kolf op de schouder. De
+    # rechterhand om de lade voor de schouder, de linker onder het eind van de kolf, de palm omhoog en dwars op de lade
+    # (Marcel: "linker hand moet aan onderzijde van de kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook
+    # in een normale positie"; eromheen geklemd wrong de onderarm 108 graden)
+    'schouder': {'dragen': {'midden': (-0.12, -0.245, -0.059), 'as': (-0.25, 0.855, 0.453), 'afstand': 0.15, 'laag': 'L',
+                            'greep': -0.035 / LADE},
+                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-0.3, -1.0, 0.3), 'L': (0.0, 0.0, -1.0)}, 'dwars': {'L'}},
+}
+# de draagwijze van de opdrachtregel (`draag=...`); zonder: staan 'vooruit', lopen 'schouder'
+DRAAGWIJZE = next((a.split('=', 1)[1] for a in sh.ARGS if a.startswith('draag=')), None)
 # een snor die wat hangt, en stoppels in plaats van de volle baard (speerman_hd.BAARD)
 BAARD = (('baard', 'baard', 14000, 0.004, -0.4), ('snor', 'snor', 4000, 0.017, -1.6), ('brauw', 'brauw', 1200, 0.006, 0.0))
 BAARD_VOL = 0.1
@@ -48,12 +72,40 @@ def kies():
     sh.BAARD_VOL = BAARD_VOL
 
 
-def in_handen(sc, rig):
-    """De kruisboog in beide handen (na smal_maken in eigen.py), zoals de speer bij het lopen."""
+def in_handen(sc, rig, lopen=False):
+    """De kruisboog in beide handen (na smal_maken in eigen.py), zoals de speer bij het lopen, en om zijn as gedraaid tot
+    de bovenkant van de lade ligt zoals de draagwijze wil: hij hing tot dan aan de rechterpols, en lag dus gedraaid zoals
+    die pols draaide (bij de ronde speer maakt dat niets uit)."""
     import bakken as bk
-    bk.draag_schuin(sc, rig, DRAGEN)
-    bk.speer_in_handen(sc, rig, LADE, DRAGEN)
+    wijze = DRAAGWIJZEN[DRAAGWIJZE or ('schouder' if lopen else 'vooruit')]
+    bk.HANDRUG = wijze['handrug']
+    bk.HANDDWARS = wijze.get('dwars', set())
+    if lopen:
+        bk.BEWEGING = bk.mocap.Beweging(rig)  # de pas uit een echte opname, zoals de speerman
+    bk.draag_schuin(sc, rig, wijze['dragen'])
+    if lopen:
+        bk.loop(rig, 0, 8, draagt=True)
+    bk.speer_in_handen(sc, rig, LADE, wijze['dragen'])
+    rol(sc, rig, Vector(wijze['boven']))
     bk.speer_vast(rig)
+
+
+def rol(sc, rig, boven):
+    """De kruisboog om de as van de lade (door de holtes van de vuisten) gedraaid, tot zijn bovenkant (waar de noot zit)
+    zo dicht mogelijk bij `boven` ligt. Na bakken.speer_in_handen staan de meshes in de wereld."""
+    bpy.context.view_layer.update()
+    a, b = sh.holte(rig, 'R'), sh.holte(rig, 'L')
+    as_ = (b - a).normalized()
+    loodrecht = lambda v: (v - as_ * v.dot(as_)).normalized()
+    noot = bpy.data.objects['speer.noot']
+    c = sum((noot.matrix_world @ v.co for v in noot.data.vertices), Vector()) / len(noot.data.vertices)
+    nu, doel = loodrecht(c - a), loodrecht(boven)
+    hoek = math.atan2(nu.cross(doel).dot(as_), nu.dot(doel))
+    D = Matrix.Translation(a) @ Matrix.Rotation(hoek, 4, as_) @ Matrix.Translation(-a)
+    for ob in sc.objects:
+        if ob.name.startswith('speer.'):
+            ob.data.transform(ob.matrix_world.inverted() @ D @ ob.matrix_world)
+    bpy.context.view_layer.update()
 
 
 # ---------------------------------------------------------------- de kleren
@@ -201,13 +253,14 @@ def mat_veer():
 
 def kruisboog(rig, M, kruin=None):
     """De kruisboog, rechtop in de rechtervuist gebouwd zoals de speer (bakken.speer_in_handen legt hem daarna in beide
-    handen): de lade langs z, met de voorkant onderaan en de stijgbeugel eronder, de boog dwars (x) met de punten naar
-    achteren (gespannen), de pees naar de noot, een bout op de lade, de trekker eronder. De bovenkant van de lade, waar de
-    bout ligt, wijst naar voren (-y). Elk deel heet speer.*, zodat het dragen van de speer hem meeneemt; de lade is
-    speer.schacht (de lengte langs z, de oorsprong in het midden)."""
+    handen): de lade langs z, met de kolf onderaan en de voorkant boven, met de stijgbeugel erboven, de boog dwars (x) met
+    de punten naar de kolf (gespannen), de pees naar de noot, een bout op de lade, de trekker eronder. De bovenkant van de
+    lade, waar de bout ligt, wijst naar voren (-y). Elk deel heet speer.*, zodat het dragen van de speer hem meeneemt; de
+    lade is speer.schacht (de lengte langs z, de oorsprong in het midden, de kolf aan zijn voet). Een plek wordt gegeven
+    vanaf de voorkant (z)."""
     vuist = sh.holte(rig, 'R')
-    z0 = vuist.z - 0.15  # de voorkant van de lade: de rechtervuist zit om de lade, zoals om de speer
-    P = lambda x, y, z: Vector((vuist.x + x, vuist.y + y, z0 + z))
+    z0 = vuist.z - (LADE - 0.42)  # de kolf: de rechtervuist zit om de lade bij de trekker, zoals om de speer
+    P = lambda x, y, z: Vector((vuist.x + x, vuist.y + y, z0 + LADE - z))
     delen = []
 
     def deel(o, naam, mat=None):
@@ -222,7 +275,7 @@ def kruisboog(rig, M, kruin=None):
     vs, fs = [], []
     for z, hb, yb, yo in rijen:
         for x, y in ((-hb, yb), (hb, yb), (hb, yo), (-hb, yo)):
-            vs.append((x, y, z - LADE / 2))
+            vs.append((x, y, LADE / 2 - z))
     for i in range(len(rijen) - 1):
         for j in range(4):
             fs.append((i * 4 + j, i * 4 + (j + 1) % 4, (i + 1) * 4 + (j + 1) % 4, (i + 1) * 4 + j))
@@ -272,7 +325,7 @@ def kruisboog(rig, M, kruin=None):
     # de bout op de lade, de punt voorop, de veren bij de noot
     deel(sh.staaf('bout', P(0, -0.032, NOOT - 0.015), P(0, -0.032, 0.0), 0.005, M['hout'], seg=8), 'bout')
     bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.008, radius2=0.0, depth=0.035, location=P(0, -0.032, -0.016),
-                                    rotation=(math.pi, 0, 0))
+                                    rotation=(0, 0, 0))
     deel(bpy.context.active_object, 'boutpunt', M['staal'])
     bpy.ops.mesh.primitive_cube_add(size=1, location=P(0, -0.036, NOOT - 0.04), scale=(0.022, 0.002, 0.035))
     deel(bpy.context.active_object, 'boutveer', mat_veer())

@@ -2583,6 +2583,22 @@ nu is de lade licht hout en de boog licht (hoorn bekleed met berkenbast, zoals t
 leken de wenkbrauwen een zonnebril (zonder rand van de helm is er geen schaduw over): minder en korter haar. De volle
 baard als vorm werd één donkere vlek: nu stoppels (de huid grauw met fijne puntjes, `BAARD_VOL` 0,1), waarop de snor
 leest. Nog niet: lopen, schieten, herladen, geraakt en sterven met de kruisboog.
+Marcel bij de plaat: "Hij heeft de boog ondersteboven", en "zijn rechterhand heeft hij met de bovenkant naar zichzelf
+gericht om de kruisboog heen. een normaal mens heeft de bovenkant van zijn hand van zich weg. de hand zit dan voor de
+kruisboog als het ware. De pols draait dan ook om zijn as 180 graden". Wat er mis was: de kruisboog hangt tot hij in de
+handen komt aan de rechterpols, en lag dus om zijn as gedraaid zoals die pols draaide (bij de ronde speer maakt dat
+niets uit); in ZW en W stond hij bijna rechtop met de boog onderaan. Nu draait `rol` hem om de lade tot de bovenkant ligt
+zoals de draagwijze wil, en kiest de pols de greep met de rug van de hand naar een gegeven kant (`bakken.HANDRUG`; leeg
+voor de speerman, zodat die niet verandert). Drie draagwijzen geprobeerd met de boog boven (`DRAAGWIJZEN`): *schuin*,
+zoals een geweer schuin voor de borst, maakte van de boog een handboog rechtop voor zijn lijf (die gaat eruit als Marcel
+kiest); *vooruit*, vanaf de rechterheup schuin naar voren met de boog dwars ervoor, leest als kruisboog (staan); en
+Marcel daarna: "kan hij de kruisboog over zn schouder dragen? en ondersteunen met de handen? als hij loopt". *Schouder*:
+de lade vlak over de rechterschouder naar achteren, de boog dwars achter het hoofd op helmhoogte, beide handen voor de
+schouder onder de kolf. Steiler ging de boog door het hoofd (de lade is kort, het hoofd groot), en met de bovenkant
+opzij stond de boog rechtop achter de schouder, als een handboog. Marcel daarop: "linker hand moet aan onderzijde van de
+kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook in een normale positie, is nu beetje exocist
+achtig": de linkerhand nu onder het eind van de kolf, de palm omhoog en dwars op de lade (`bakken.HANDDWARS`); de
+onderarm wringt 1 graad in plaats van 108.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
