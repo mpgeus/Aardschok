@@ -2542,6 +2542,11 @@ heft de speer tot boven zijn rechterschouder, de punt omlaag naar voren, het gew
 stoot hard vooruit en omlaag, een korte stap, het lijf erachteraan; (5) de punt het verst, laag; (6) en (7) terug in de
 wacht. In het spel: bij elke uithaal om en om de eerste en de tweede (`js/sprites.js`, bij de eenmalige houdingen; een
 teller per figuur, geen toeval, zodat het op elke computer hetzelfde is).
+Marcel: "Ja doen we zo bouw die maar". Gebouwd: `WACHT_BOVEN` en `STEEK_BOVEN` in `bakken.py` (`steek` neemt nu een rij),
+`eigen.py ... steek2`, en in `spelvel.py` `aanval2` in de cel van de eerste aanval; de polsen wringen 30 en 11 graden. In
+het spel om en om (`js/sprites.js`, een teller `uithalen` in de beeldstand; met een toets in `test/vellen.test.cjs`). Een
+gevecht in de demo (die start nu met `Spel.nieuwSpel(undefined, Spel.demoLevel())`, op de vaste kaart van het level): zes
+uithalen, om en om, en twee keer geraakt. `uit/blender/spel/twee-aanvallen.mp4` en `gevecht-twee-aanvallen-traag.mp4`.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
