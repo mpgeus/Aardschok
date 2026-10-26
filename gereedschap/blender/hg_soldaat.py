@@ -1,7 +1,7 @@
 # Proef met Human Generator (vraag 190; Marcel, 26 okt: "probeer de soldaat met Human Generator verder: onze helm,
 # wapenrok en kleuren erop. en ook verder de afmetingen aanpassen", "hij moet wat groter worden"; ontwerp/opmerkingen.md,
-# "Human Generator als bron voor mensen"): een man uit Human Generator, met de helm, de maliënkap en -kraag, de wapenrok,
-# de riem en de kleuren van de speerman (speerman_hd.py), en een speer, gerenderd met de camera en het licht van eigen.py.
+# "Human Generator als bron voor mensen"): een man uit Human Generator in de aankleding naar Marcels plaat (uitrusting.py,
+# met de wapenrok en de kraag van speerman_hd.py), en een speer, gerenderd met de camera en het licht van eigen.py.
 #
 # De bouwers van de speerman vragen het skelet van MPFB (botten als `neck01`, `special04`, `upperarm01.L`) en de
 # armgroepen van zijn lijf (`upperarm`, `lowerarm`, `wrist`, `finger`): `Nep` geeft die plekken uit het skelet van Human
@@ -21,6 +21,7 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import speerman_hd as sh  # noqa: E402
+import uitrusting as ui  # noqa: E402
 
 INHOUD = os.path.normpath('C:/Users/mpgeu/Downloads/Gen1/HUMAN GEN 4') + os.sep  # de inhoud van Human Generator
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW', 'W', 'N']
@@ -52,6 +53,8 @@ class Nep:
         for k in ('L', 'R'):
             plek[f'eye.{k}'] = W(f'eyeball.{k}')
             plek[f'upperarm01.{k}'] = W(f'upper_arm.{k}')
+            plek[f'lowerarm01.{k}'] = W(f'forearm.{k}')
+            plek[f'wrist.{k}'] = W(f'hand.{k}')
             plek[f'lowerleg01.{k}'] = W(f'shin.{k}')
         self.matrix_world = Matrix.Identity(4)
         self.pose = SimpleNamespace(bones={n: SimpleNamespace(head=p, tail=p) for n, p in plek.items()})
@@ -113,43 +116,32 @@ def man():
 
 
 def kleding(rig):
-    """De helm, de maliënkap en -kraag, de wapenrok met zijn gouden zoom, de riem met de hangers, en de kleuren van de
-    speerman op het pak: het hemd als zijn wambuis, de broek als zijn hozen, de laarzen als de zijne."""
+    """De aankleding naar Marcels plaat (uitrusting.py): de ketelhoed, de maliënkraag, de gevierendeelde wapenrok met de
+    donkere randen om de armsgaten, de riem met de riemeinden en het tasje, op de mouwen een maliënrand en een manchet,
+    handschoenen; het hemd wordt de gewatteerde mouwen, de broek de grijsbeige wol, de laarzen bruin leer."""
     kleren = [o for o in bpy.data.objects if o.name.startswith('HG_Pirate_')]
     hemd = next(o for o in kleren if 'Shirt' in o.name)
     lijf = vorm([bpy.data.objects['HG_Body']] + [o for o in kleren if 'Shirt' in o.name or 'Pants' in o.name], 'hg-vorm')
+    alleen_lijf = vorm([bpy.data.objects['HG_Body']], 'hg-lijf')
     mouwen = vorm([hemd], 'hg-mouwen')
     nep = Nep(rig)
     sh.INSTELLINGEN['hoofd'] = HOOFD
     riem_z = nep.pose.bones['spine03'].head.z
-    knie = nep.pose.bones['lowerleg01.L'].head.z
-    M = {
-        'wapenrok': sh.mat_wapenrok(riem_z, knie + sh.ROK_ZOOM),
-        'wapenrok-goud': sh.mat_stof('wapenrok-goud', '#f0a812', 30, 0.25),
-        'malien': sh.mat_malien(),
-        'helm': sh.mat_staal('helm', '#949ab0', 0.24),
-        'staal': sh.mat_staal('staal', '#a3a8b0', 0.28),
-        'riem': sh.mat_leer('riem', '#965038', '#4a2010'),
-        'leer': sh.mat_leer('leer', '#5a3418'),
-        'omslag': sh.mat_leer('omslag', '#a8582a', '#5a2a10'),
-        'schede': sh.mat_leer('schede', '#8a4630', '#2e120a'),
-        'koord': sh.mat_leer('koord', '#9a5a2a', '#4a2410'),
-        'hout': sh.mat_hout(),
-        'blad': sh.mat_blad(),
-    }
+    nek = nep.pose.bones['neck01'].head
+    cy = nek.y + 0.01
+    M = ui.materialen()
+    M['wapenrok'] = ui.mat_kwartier(riem_z + 0.55 * (nek.z - riem_z), riem_z, cy)
     for ob in kleren:
-        mat = (sh.mat_stof('wambuis', '#965238', 30, 0.3) if 'Shirt' in ob.name else
-               sh.mat_stof('hozen', '#4c5aa2', 30, 0.3, textuur=('hessian_230', 0.5)) if 'Pants' in ob.name else
-               sh.mat_laars())
         ob.data.materials.clear()
-        ob.data.materials.append(mat)
+        ob.data.materials.append(M['mouw'] if 'Shirt' in ob.name else M['broek'] if 'Pants' in ob.name else M['laars'])
     lijfje, rok = sh.wapenrok(lijf, nep, mouwen, M, riem_z)
     sh.armsgat_zoom(lijf, nep, mouwen, lijfje, M)
-    sh.riem_en_hangers(sh.bvh_van([(lijfje, None), (rok, None)]), nep.pose.bones['neck01'].head.y + 0.01, riem_z, M)
-    sh.kraag(lijf, nep, mouwen, lijfje, M)
-    helm = sh.helm(lijf, nep, M)
-    sh.maliekap(lijf, nep, M)
-    return M, helm
+    ui.riem(sh.bvh_van([(lijfje, None), (rok, None)]), cy, riem_z, M)
+    ui.maliekraag(lijf, nep, mouwen, lijfje, M)
+    ui.mouwranden(mouwen, nep, M)
+    ui.handschoenen(alleen_lijf, M)
+    helm = ui.ketelhoed(lijf, nep, M)
+    return M, [o for o in helm if o.type == 'MESH']
 
 
 def speer(rig, M, top):

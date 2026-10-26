@@ -2594,6 +2594,17 @@ plaat (donker, midden, licht; zonder het magenta en de zwarte omtrek): het geel 
 het blauw #1e2e39, #405769, #6a8498; de mouwen #491f0d, #7f401c, #bd7940; de broek #3c2b1e, #705e47, #b2a585; de laarzen
 #441e0c, #703717, #b67135; de helm #36261c, #655244, #c8bda7; de maliën #2e221f, #584b4a, #bab7ae.
 
+**De proefplaat van de aankleding (26 okt).** Marcel: "Het voorstel is goed. Bouw de delen op de soldaat van Human
+Generator en maak een proefplaat." De delen staan in `gereedschap/blender/uitrusting.py`, elk een eigen bouwer zoals die
+van `speerman_hd.py` (lijf, skelet met de botten van MPFB, materialen): `ketelhoed`, `maliekraag`, de wapenrok
+(`speerman_hd.wapenrok` met `mat_kwartier`), `riem`, `mouwranden` (maliën aan de schouder, een manchet aan de pols),
+`handschoenen`; mouwen, broek en laarzen zijn de kleren van Human Generator met de materialen van de plaat
+(`mat_gewatteerd`, grijsbeige wol, bruin leer). `hg_soldaat.py` zet ze op zijn soldaat. Plaat:
+`uit/blender/hg/proef8-plaat.png`. Wat de proeven leerden: de kraag van de speerman is een cape die de bovenste
+vierendelen bedekte, dus een eigen, kortere kraag (`KRAAG`); dichte, donkere stiksels maakten van de mouwen een net, dus
+wijder en zachter met bollere kussens. Nog anders dan de plaat: de helm is wat donkerder en warmer, de stiksels van de
+mouwen lezen in HD nog als ruiten, en de speer staat naast de open hand.
+
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
 in Z: `proef-z-groot.png`), uit `kruisboog_hd.py`: het model van de speerman met zijn eigen onderdelen (`kies()`), zodat
