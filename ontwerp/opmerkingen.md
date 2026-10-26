@@ -13,7 +13,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `main`): de speermannen van de wacht in de demo kregen een aanvalsopdracht (`volg`) op een roedel wolven in het bos; ze
   namen hem aan (`e.volgt`) maar liepen niet, omdat er geen route was (`doeMet` in `js/gevecht.js`: met `volgt` laat hij
   zijn doel niet gaan, maar staat hij stil). Tegen een rover op open grond vechten ze gewoon (pad, 16 leven, de rover is
-  in twee seconden dood). Misschien een bericht als hij er niet kan komen. (Eerst stond hier ten onrechte dat de wacht niet
+  in twee seconden dood). Misschien een bericht als hij er niet kan komen. Ook: wie je op een rover stuurt, blijft die
+  volgen als hij wegvlucht, en steekt niet terug naar twee andere rovers die hem intussen slaan (gezien met drie rovers
+  van 30 leven; de speerman sneuvelde zonder één steek). (Eerst stond hier ten onrechte dat de wacht niet
   vecht; hun 0 van 0 leven is gewoon: dat krijgt een man pas bij het vechten, `zorgLeven`.) En de overval van de demo
   trekt zich op dag 1 terug, omdat `kiesDoel` in `js/rovers.js` dan nog geen akker of stapel vindt; vermoedelijk zo bedoeld.
 - **Wat stap 1a van de scenario's liet staan** (24 okt, `scenario.md`, 2): (a) de gespreksschrijver
