@@ -218,6 +218,13 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
   in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
   onder de riem, hoe vaak het vel daar geel of blauw is, per richting.
+  In het spel: `python gereedschap/blender/spelvel.py <map> <uitmap> [procent]` maakt van staan en lopen uit `eigen.py`
+  (zonder `staan`: ook het lopen) de vellen `speerman3d-staan.png` en `-lopen.png`, in de cellen en met het anker van de
+  speerman van de generator (`beelden/beschrijving.json`), één schaal en het anker op de voeten. De vellen van de
+  generator blijven: in de browser, vóór er een speerman op de kaart staat (op het titelscherm),
+  `Spel.BEELDEN.figuren.speerman.houdingen.lopen.bestand = '../../gereedschap/pixelart/uit/blender/spel/speerman3d-lopen.png'`
+  (en zo `staan`), dan een demo (`Spel.nieuwSpel(undefined, 'demojaar')`): zijn wacht heeft twee speermannen. Inzoomen
+  tot 2 kan pas in een venster van 1800 bij 1080 (de zoom gaat niet verder dan het venster toelaat, `zoomVenster`).
 
 
 ## Testen in de browser

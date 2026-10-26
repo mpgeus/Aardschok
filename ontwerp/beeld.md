@@ -2458,6 +2458,15 @@ lijf, recht omlaag, de hand bij de dij. Geprobeerd (W, ZW en Z, halve maat):
   O 22,2 naar 24,8, ZW 23,3 naar 25,3; Z iets omlaag): die maat telt elke pixel van de hand en de mouw die een paar
   pixels anders ligt. De omtrek gemiddeld 0,83. Renders, het vel met het vel, oké en nu, en W, O, ZW en Z met de vorige
   stand: `uit/blender/staat-arm-25okt/`.
+
+**In het spel (26 okt).** Marcel: "kun je nu eens een animatie maken in game?". Staan en lopen uit `eigen.py` (de stand
+hierboven, halve maat; het lopen met het ritme uit de opname en de pas van de referentie, de speer schuin voor het lijf,
+`DRAGEN['generator']`) tot vellen voor het spel met `spelvel.py`, in de cellen van de generator, en in de browser aan de
+speermannen van de wacht in de demo gegeven, zonder de vellen van de generator te raken (`ontwerp/gereedschap.md`). Een
+rondje door de acht richtingen, opgenomen op zoom 2: `uit/blender/spel/speerman3d-in-het-spel.mp4`. Wat opviel: hij is op
+spelmaat iets kleiner en smaller dan de dorpelingen van de generator ernaast; in Z draagt hij de speer zoals de generator,
+in W wijst de punt bij ons naar achteren en bij de generator naar voren (het vel van de generator is daar niet in 3D
+getekend, hierboven).
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
