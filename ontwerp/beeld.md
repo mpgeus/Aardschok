@@ -2609,7 +2609,10 @@ Marcel koos uit drie (rechts met twee handen, rechts met de rechterhand onder, o
 een soldaat met het geweer op de schouder. De linkerhand plat onder het eind van de kolf, aan dezelfde kant, de elleboog
 laag langs het lijf (de IK met een eigen richtpunt voor de elleboog, `SCHOUDER` in `kruisboog_hd.py`), de boog dwars
 achter het hoofd, en de rechterarm vrij: hij hangt (`speerman_hd.RECHTERHAND`, voor de speerman de speerhand op
-borsthoogte) en zwaait met de pas, naar voren als de linkervoet voor is.
+borsthoogte) en zwaait met de pas, naar voren als de linkervoet voor is. Marcel: "zn loopje is wel goed", maar "de
+kruisboog valt alleen nog door zn schouder": de lade lag op de schouder van het lijf, en jak en kraag maken die 11 cm
+dikker. Nu meet `boven_op` van boven waar de kleren onder de lade liggen, en legt de lade daar met zijn halve dikte en
+wat speling bovenop (`SCHOUDER['dik']`).
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat

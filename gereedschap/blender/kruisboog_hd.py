@@ -48,9 +48,10 @@ DRAAGWIJZEN = {
 # lade op de schouder rust (van het midden tussen de schouders); 'as': de lade, van de kolf schuin omhoog naar achteren,
 # vlak, zodat de boog dwars achter het hoofd ligt (steiler kwam hij door het hoofd: de lade is kort en het hoofd groot);
 # 'kolf': zo ver voor de steun ligt het eind van de kolf (langs de lade); 'elleboog': waar de IK de linkerelleboog heen
-# richt (van de schouder); 'zwaai': hoe ver de rechterarm meezwaait (radialen bij een volle pas).
+# richt (van de schouder); 'zwaai': hoe ver de rechterarm meezwaait (radialen bij een volle pas); 'dik': zo ver ligt de
+# as van de lade boven de kleren (de halve lade en speling: de schouder gaat bij het lopen wat op en neer).
 SCHOUDER = {'steun': (0.18, 0.02, 0.06), 'as': (0.15, 0.83, 0.52), 'kolf': 0.34, 'elleboog': (0.3, 0.2, -0.6),
-            'zwaai': 0.35}
+            'zwaai': 0.35, 'dik': 0.05}
 # de rechterarm hangt (in plaats van de speerhand op borsthoogte, speerman_hd.RECHTERHAND), wat van het lijf af
 RECHTERHAND = ((-0.05, -0.25, -1.0), (-0.05, -0.2, -1.0))
 RECHTERARM = 0.3
@@ -105,6 +106,7 @@ def op_de_schouder(sc, rig, lopen):
     W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
     as_ = Vector(SCHOUDER['as']).normalized()
     steun = (W('upperarm01.R') + W('upperarm01.L')) / 2 + Vector(SCHOUDER['steun'])
+    steun.z += boven_op(steun, as_)
     plek = steun - as_ * (SCHOUDER['kolf'] + 0.035)  # de holte van de linkerhand, net voorbij het eind van de kolf
 
     def aan_de_borst(naam, waar):
@@ -127,6 +129,25 @@ def op_de_schouder(sc, rig, lopen):
     rig['pols.L'] = list(rig.pose.bones['wrist.L'].rotation_quaternion)  # loop zet elk beeld alle botten terug
     bk.speer_in_handen(sc, rig, LADE, {'laag': 'L', 'greep': -0.035 / LADE}, richting=as_)
     rol(sc, sh.holte(rig, 'L'), as_, Vector((0.0, 0.0, 1.0)))
+
+
+def boven_op(steun, as_):
+    """Hoe ver de lade omhoog moet om op de schouder te liggen in plaats van erdoor (Marcel: "de kruisboog valt alleen nog
+    door zn schouder"): langs de lade, 20 cm aan weerszijden van de steun, van boven gemeten waar de kleren (de pop, met
+    het jak en de kraag) liggen, plus de halve dikte van de lade en wat speling voor het lopen."""
+    from mathutils.bvhtree import BVHTree
+    pop = bpy.data.objects['pop']
+    bvh = BVHTree.FromObject(pop, bpy.context.evaluated_depsgraph_get())
+    M = pop.matrix_world
+    Mi, omlaag = M.inverted(), (M.inverted().to_3x3() @ Vector((0.0, 0.0, -1.0))).normalized()
+    hoger = 0.0
+    for i in range(-10, 11):
+        p = steun + as_ * (0.02 * i)
+        raak = bvh.ray_cast(Mi @ (p + Vector((0.0, 0.0, 1.0))), omlaag)[0]
+        if raak is not None:
+            hoger = max(hoger, (M @ raak).z + SCHOUDER['dik'] - p.z)
+    print('KRUISBOOG', round(hoger, 3), 'm hoger op de schouder')
+    return hoger
 
 
 def loop(rig, i):
