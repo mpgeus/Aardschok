@@ -376,9 +376,9 @@ def main():
             kb.in_handen(sc, rig)
             met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
             return
-        # lopen met de kruisboog over de schouder, de pas zoals de speerman
+        # lopen met de kruisboog op de schouder, de pas zoals de speerman, de rechterarm vrij (kruisboog_hd.loop)
         kb.in_handen(sc, rig, lopen=True)
-        met_stof(sc, rig, lambda t: bk.loop(rig, t, 8, draagt=True), 8, lambda r, i: f'eigen-{r}{ISO}-lopen-{i}.png',
+        met_stof(sc, rig, lambda t: kb.loop(rig, t), 8, lambda r, i: f'eigen-{r}{ISO}-lopen-{i}.png',
                  lichten, rondes=3)
         return
     if 'sterven' in sh.ARGS:

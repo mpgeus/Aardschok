@@ -2600,7 +2600,16 @@ kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook in een norma
 achtig": de linkerhand nu onder het eind van de kolf, de palm omhoog; de onderarm wringt 1 graad in plaats van 108.
 Daarna: "het lijkt alsof zn handen in de knoop zitten" (de handen 15 cm uit elkaar, vlak voor de rechterschouder, de
 linkerpols 76 graden geknikt): nu rust de lade 40 cm boven de kolf op de schouder, zodat de linkerhand 24 cm verder
-vooruit ligt dan de rechter, en ligt die hand plat in het verlengde van de onderarm (`bakken.HANDPLAT`).
+vooruit ligt dan de rechter, en ligt die hand plat in het verlengde van de onderarm (`bakken.HANDPLAT`). Dan: "zn
+elleboog mag wel wat zakken van de ondersteunende hand". De linkerarm stond gestrekt (zijn armen zijn kort: 40 cm
+bereik), dus de elleboog kon nergens heen. Met de kolf binnen bereik en de elleboog laag: "zn arm zit nu in zn lijf".
+Daar zat het: met de kruisboog op de rechterschouder moet de linkerhand dwars voor het lijf langs, en daarvoor zijn
+zijn armen te kort; een lage elleboog komt in zijn lijf, een elleboog erbuiten staat hoog of draait de onderarm om.
+Marcel koos uit drie (rechts met twee handen, rechts met de rechterhand onder, of links): **de linkerschouder**, zoals
+een soldaat met het geweer op de schouder. De linkerhand plat onder het eind van de kolf, aan dezelfde kant, de elleboog
+laag langs het lijf (de IK met een eigen richtpunt voor de elleboog, `SCHOUDER` in `kruisboog_hd.py`), de boog dwars
+achter het hoofd, en de rechterarm vrij: hij hangt (`speerman_hd.RECHTERHAND`, voor de speerman de speerhand op
+borsthoogte) en zwaait met de pas, naar voren als de linkervoet voor is.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat

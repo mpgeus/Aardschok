@@ -470,8 +470,8 @@ def mens():
         richt(rig, f'{b}.L', (0.02, -ARM_VOOR['onderarm'], -1))
     richt(rig, 'wrist.L', (0.0, -ARM_VOOR['onderarm'] + 0.05, -1))
     for b in ('lowerarm01', 'lowerarm02'):
-        richt(rig, f'{b}.R', (-0.28, -0.5, 0.9))  # de speerhand op borsthoogte, opzij en minder naar voren (de analyse)
-    richt(rig, 'wrist.R', (-0.1, -1, 0.35))
+        richt(rig, f'{b}.R', RECHTERHAND[0])
+    richt(rig, 'wrist.R', RECHTERHAND[1])
     # de benen wat naar binnen, en de voeten wat naar buiten
     for k, s in (('L', 1), ('R', -1)):
         pb = rig.pose.bones[f'upperleg01.{k}']
@@ -1092,6 +1092,8 @@ def kruin(lijf):
 # bij ons hing hij aan de achterkant, met de hand bij de dij). Elk getal is de y van een richting (vooruit), 'draai' graden
 # het bovenlijf om (de linkerschouder voor; 10 en 20 maakten ZW slechter).
 ARM_VOOR = {'draai': 0.0, 'sleutelbeen': 0.3, 'schouder': 0.25, 'bovenarm': 0.0, 'onderarm': 1.6}
+# waar de rechteronderarm en de pols heen wijzen: de speerhand op borsthoogte, opzij en minder naar voren (de analyse)
+RECHTERHAND = ((-0.28, -0.5, 0.9), (-0.1, -1, 0.35))
 
 
 HELM_RAND = 1.45  # de rand van de helm, maal de koepel

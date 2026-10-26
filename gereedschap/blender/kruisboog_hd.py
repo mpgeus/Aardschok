@@ -38,18 +38,23 @@ DRAAGWIJZEN = {
                'boven': (0.0, -1.0, 0.0), 'handrug': {'R': (0.0, -1.0, 0.0), 'L': (0.0, -1.0, 0.0)}},
     'vooruit': {'dragen': {'midden': (-0.085, -0.34, -0.22), 'as': (0.48, -0.65, 0.59), 'afstand': 0.27, 'laag': 'R', 'greep': GREEP},
                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-1.0, -0.3, 0.0), 'L': (0.5, 0.0, -1.0)}},
-    # bij het lopen over de rechterschouder (Marcel: "kan hij de kruisboog over zn schouder dragen? en ondersteunen met de
-    # handen? als hij loopt"): de lade vlak naar achteren, zodat de boog dwars achter het hoofd ligt, op oorhoogte (steiler
-    # kwam hij door het hoofd: de lade is kort en het hoofd groot); de lade rust 40 cm boven de kolf op de schouder. De
-    # rechterhand om de lade voor de schouder, de linker 24 cm verder vooruit onder het eind van de kolf, plat met de palm
-    # omhoog (Marcel: "linker hand moet aan onderzijde van de kruisboog ondersteunen. kopse kant als het ware. dan kan de
-    # arm ook in een normale positie"; eromheen geklemd wrong de onderarm 108 graden; en met 15 cm ertussen: "het lijkt
-    # alsof zn handen in de knoop zitten")
-    'schouder': {'dragen': {'midden': (-0.1, -0.25, -0.085), 'as': (-0.25, 0.855, 0.453), 'afstand': 0.235, 'laag': 'L',
-                            'greep': -0.035 / LADE},
-                 'boven': (0.0, 0.0, 1.0), 'handrug': {'R': (-0.3, -1.0, 0.3), 'L': (0.0, 0.0, -1.0)}, 'plat': {'L'}},
 }
-# de draagwijze van de opdrachtregel (`draag=...`); zonder: staan 'vooruit', lopen 'schouder'
+# bij het lopen over de linkerschouder, zoals een soldaat met het geweer op de schouder (Marcel: "kan hij de kruisboog
+# over zn schouder dragen? en ondersteunen met de handen? als hij loopt", "linker hand moet aan onderzijde van de kruisboog
+# ondersteunen. kopse kant als het ware"; gekozen uit drie: de linkerschouder): de linkerhand plat onder het eind van de
+# kolf, aan dezelfde kant, de elleboog laag langs het lijf, en de rechterarm vrij, die zwaait met de pas. Over de
+# rechterschouder met de linkerhand eronder moest die hand dwars voor het lijf langs, en daarvoor zijn zijn armen te kort:
+# een lage elleboog kwam in zijn lijf ("zn arm zit nu in zn lijf"), een hoge stond als een exorcist. 'steun': waar de
+# lade op de schouder rust (van het midden tussen de schouders); 'as': de lade, van de kolf schuin omhoog naar achteren,
+# vlak, zodat de boog dwars achter het hoofd ligt (steiler kwam hij door het hoofd: de lade is kort en het hoofd groot);
+# 'kolf': zo ver voor de steun ligt het eind van de kolf (langs de lade); 'elleboog': waar de IK de linkerelleboog heen
+# richt (van de schouder); 'zwaai': hoe ver de rechterarm meezwaait (radialen bij een volle pas).
+SCHOUDER = {'steun': (0.18, 0.02, 0.06), 'as': (0.15, 0.83, 0.52), 'kolf': 0.34, 'elleboog': (0.3, 0.2, -0.6),
+            'zwaai': 0.35}
+# de rechterarm hangt (in plaats van de speerhand op borsthoogte, speerman_hd.RECHTERHAND), wat van het lijf af
+RECHTERHAND = ((-0.05, -0.25, -1.0), (-0.05, -0.2, -1.0))
+RECHTERARM = 0.3
+# de draagwijze van de opdrachtregel (`draag=...`, ook `schouder`); zonder: staan 'vooruit', lopen op de schouder
 DRAAGWIJZE = next((a.split('=', 1)[1] for a in sh.ARGS if a.startswith('draag=')), None)
 # een snor die wat hangt, en stoppels in plaats van de volle baard (speerman_hd.BAARD)
 BAARD = (('baard', 'baard', 14000, 0.004, -0.4), ('snor', 'snor', 4000, 0.017, -1.6), ('brauw', 'brauw', 1200, 0.006, 0.0))
@@ -71,32 +76,77 @@ def kies():
     sh.ROK_ZOOM = ROK_ZOOM
     sh.BAARD = BAARD
     sh.BAARD_VOL = BAARD_VOL
+    sh.RECHTERHAND = RECHTERHAND
+    sh.INSTELLINGEN['arm'] = RECHTERARM
 
 
 def in_handen(sc, rig, lopen=False):
-    """De kruisboog in beide handen (na smal_maken in eigen.py), zoals de speer bij het lopen, en om zijn as gedraaid tot
-    de bovenkant van de lade ligt zoals de draagwijze wil: hij hing tot dan aan de rechterpols, en lag dus gedraaid zoals
-    die pols draaide (bij de ronde speer maakt dat niets uit)."""
+    """De kruisboog in de handen (na smal_maken in eigen.py): bij het lopen op de schouder, bij staan in beide handen
+    zoals de speer, en om zijn as gedraaid tot de bovenkant van de lade ligt zoals de draagwijze wil: hij hing tot dan aan
+    de rechterpols, en lag dus gedraaid zoals die pols draaide (bij de ronde speer maakt dat niets uit)."""
     import bakken as bk
-    wijze = DRAAGWIJZEN[DRAAGWIJZE or ('schouder' if lopen else 'vooruit')]
+    wijze = DRAAGWIJZE or ('schouder' if lopen else 'vooruit')
+    if wijze == 'schouder':
+        return op_de_schouder(sc, rig, lopen)
+    wijze = DRAAGWIJZEN[wijze]
     bk.HANDRUG = wijze['handrug']
-    bk.HANDPLAT = wijze.get('plat', set())
-    if lopen:
-        bk.BEWEGING = bk.mocap.Beweging(rig)  # de pas uit een echte opname, zoals de speerman
     bk.draag_schuin(sc, rig, wijze['dragen'])
-    if lopen:
-        bk.loop(rig, 0, 8, draagt=True)
     bk.speer_in_handen(sc, rig, LADE, wijze['dragen'])
-    rol(sc, rig, Vector(wijze['boven']))
+    a, b = sh.holte(rig, 'R'), sh.holte(rig, 'L')
+    rol(sc, a, (b - a).normalized(), Vector(wijze['boven']))
     bk.speer_vast(rig)
 
 
-def rol(sc, rig, boven):
-    """De kruisboog om de as van de lade (door de holtes van de vuisten) gedraaid, tot zijn bovenkant (waar de noot zit)
-    zo dicht mogelijk bij `boven` ligt. Na bakken.speer_in_handen staan de meshes in de wereld."""
+def op_de_schouder(sc, rig, lopen):
+    """De kruisboog op de linkerschouder (SCHOUDER): de linkerhand met IK onder het eind van de kolf, plat met de palm
+    omhoog, aan de borst vast (spine01), zodat hij met het lijf meegaat; de kruisboog aan de borst, de rechterarm vrij."""
+    import bakken as bk
     bpy.context.view_layer.update()
-    a, b = sh.holte(rig, 'R'), sh.holte(rig, 'L')
-    as_ = (b - a).normalized()
+    W = lambda b: rig.matrix_world @ rig.pose.bones[b].head
+    as_ = Vector(SCHOUDER['as']).normalized()
+    steun = (W('upperarm01.R') + W('upperarm01.L')) / 2 + Vector(SCHOUDER['steun'])
+    plek = steun - as_ * (SCHOUDER['kolf'] + 0.035)  # de holte van de linkerhand, net voorbij het eind van de kolf
+
+    def aan_de_borst(naam, waar):
+        leeg = bpy.data.objects.new(naam, None)
+        sc.collection.objects.link(leeg)
+        leeg.parent, leeg.parent_type, leeg.parent_bone = rig, 'BONE', 'spine01'
+        bpy.context.view_layer.update()
+        leeg.matrix_world = Matrix.Translation(waar)
+        return leeg
+    ik = rig.pose.bones['lowerarm02.L'].constraints.new('IK')
+    ik.target = aan_de_borst('hand.L', plek)
+    ik.chain_count, ik.use_tail = 4, True
+    ik.pole_target = aan_de_borst('elleboog.L', W('upperarm01.L') + Vector(SCHOUDER['elleboog']))
+    bpy.context.view_layer.update()
+    if lopen:
+        bk.BEWEGING = bk.mocap.Beweging(rig)  # de pas uit een echte opname, zoals de speerman
+        loop(rig, 0)
+    bk.HANDPLAT, bk.HANDRUG = {'L'}, {'L': (0.0, 0.0, -1.0)}
+    bk.handen_op_speer(rig, {'L': plek}, as_, n=6, handen=('L',))
+    rig['pols.L'] = list(rig.pose.bones['wrist.L'].rotation_quaternion)  # loop zet elk beeld alle botten terug
+    bk.speer_in_handen(sc, rig, LADE, {'laag': 'L', 'greep': -0.035 / LADE}, richting=as_)
+    rol(sc, sh.holte(rig, 'L'), as_, Vector((0.0, 0.0, 1.0)))
+
+
+def loop(rig, i):
+    """Beeld i van 8 van het lopen met de kruisboog op de schouder: de pas van de speerman (bakken.loop), de linkerpols
+    weer plat onder de kolf, en de rechterarm die tegen de pas in zwaait (naar voren als de linkervoet voor is)."""
+    import bakken as bk
+    bk.loop(rig, i, 8)
+    pb = rig.pose.bones
+    if 'pols.L' in rig:
+        pb['wrist.L'].rotation_quaternion = rig['pols.L']
+    bpy.context.view_layer.update()
+    voor = (rig.matrix_world @ pb['foot.R'].head).y - (rig.matrix_world @ pb['foot.L'].head).y
+    bk.draai(rig, 'upperarm01.R', -SCHOUDER['zwaai'] * max(-1.0, min(1.0, voor / (2 * bk.PAS_HALF))), 'X')
+    bpy.context.view_layer.update()
+
+
+def rol(sc, a, as_, boven):
+    """De kruisboog om de as van de lade (door punt a, langs as_) gedraaid, tot zijn bovenkant (waar de noot zit) zo dicht
+    mogelijk bij `boven` ligt. Na bakken.speer_in_handen staan de meshes in de wereld."""
+    bpy.context.view_layer.update()
     loodrecht = lambda v: (v - as_ * v.dot(as_)).normalized()
     noot = bpy.data.objects['speer.noot']
     c = sum((noot.matrix_world @ v.co for v in noot.data.vertices), Vector()) / len(noot.data.vertices)

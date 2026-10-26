@@ -650,21 +650,22 @@ def kies_ellebogen(rig, langs):
                      + max(0.0, E.y - S.y - 0.12) * 10)
             kosten = knik + 0.3 * wring + straf
             if beste is None or kosten < beste[0]:
-                beste = (kosten, pool.matrix_world.copy(), knik, wring)
+                beste = (kosten, pool.matrix_world.copy(), knik, wring, E.z - S.z)
         pool.matrix_world = beste[1]
         bpy.context.view_layer.update()
-        print('ELLEBOOG', k, 'knik', round(math.degrees(beste[2])), 'wring', round(math.degrees(beste[3])), 'graden')
+        print('ELLEBOOG', k, 'knik', round(math.degrees(beste[2])), 'wring', round(math.degrees(beste[3])), 'graden,',
+              round(beste[4], 3), 'm boven de schouder')
 
 
-def handen_op_speer(rig, plekken, langs, n=3):
+def handen_op_speer(rig, plekken, langs, n=3, handen=('R', 'L')):
     """De vuisten om de speer, in elk beeld: de pols draait tot de as van de vuist langs de speer ligt, en het doel van de
     hand schuift tot de holte van de vuist op zijn plek op de schacht zit. (De IK zet de pols op het doel, niet de holte;
     eenmaal goed gezet in rust draaide de vuist bij een andere stand van de arm van de schacht af, en lag hij erop of
-    eronder; Marcel: "Die handen zijn nog niet gefixed".)"""
+    eronder; Marcel: "Die handen zijn nog niet gefixed".) Met `handen` alleen die handen (een wapen in één hand)."""
     pb = rig.pose.bones
     langs = (rig.matrix_world.inverted().to_3x3() @ langs).normalized()  # in de ruimte van het skelet
     for _ in range(n):
-        for k in ('R', 'L'):
+        for k in handen:
             # de wring om de onderarm verdeeld over de twee botten van de onderarm (de IK laat die draai staan): in de pols
             # alleen draaide de huid daar als een snoepwikkel
             wring = pols_langs(rig, k, langs)[3]
@@ -674,7 +675,7 @@ def handen_op_speer(rig, plekken, langs, n=3):
             bpy.context.view_layer.update()
             zet_pols(rig, k, pols_langs(rig, k, langs)[0])
             bpy.context.view_layer.update()
-        for k in ('R', 'L'):
+        for k in handen:
             leeg = bpy.data.objects[f'hand.{k}']
             leeg.matrix_world = Matrix.Translation(plekken[k] - sh.holte(rig, k)) @ leeg.matrix_world
         bpy.context.view_layer.update()
@@ -1123,14 +1124,16 @@ def draag_schuin(sc, rig, dragen):
     return doelen
 
 
-def speer_in_handen(sc, rig, lengte, dragen):
+def speer_in_handen(sc, rig, lengte, dragen, richting=None):
     """De speer door beide vuisten (na de IK): het punt GREEP van de speer in de rechtervuist, de punt naar de linker. Waar de
-    speer nu staat, volgt uit de schacht zelf (na smal staat hij niet meer waar hij gebouwd is)."""
+    speer nu staat, volgt uit de schacht zelf (na smal staat hij niet meer waar hij gebouwd is). Met `richting` (in de
+    wereld) in één hand, de lage, langs die richting."""
     bpy.context.view_layer.update()
     vuist = {k: sh.holte(rig, k) for k in ('R', 'L')}
     laag = dragen['laag']
     hoog = 'L' if laag == 'R' else 'R'
-    as_ = (vuist[hoog] - vuist[laag]).normalized()  # de vuisten staan op de lijn (draag_schuin), de speer gaat door allebei
+    # de vuisten staan op de lijn (draag_schuin), de speer gaat door allebei
+    as_ = (vuist[hoog] - vuist[laag]).normalized() if richting is None else richting.normalized()
     schacht = bpy.data.objects['speer.schacht']
     as0 = (schacht.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
     voet = schacht.matrix_world.translation - as0 * schacht.dimensions.z / 2
