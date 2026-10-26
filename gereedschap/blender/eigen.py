@@ -8,7 +8,7 @@
 # licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
 # en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|geraakt]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
 # Met `staan hoek` (naar een eigen map) de hoekpas voor patroon.py: de plek op de wapenrok als kleur.
 import bpy
@@ -365,6 +365,10 @@ def main():
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     if 'hoek' in sh.ARGS:
         hoekpas(sc)
+    if 'geraakt' in sh.ARGS:
+        # geraakt worden (bakken.py, geraakt): drie beelden vanuit staan, de speer in de rechterhand
+        met_stof(sc, rig, lambda t: bk.geraakt(rig, t), 3, lambda r, i: f'eigen-{r}{ISO}-geraakt-{i}.png', lichten)
+        return
     if 'steek' not in sh.ARGS:
         met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
     if 'staan' in sh.ARGS:

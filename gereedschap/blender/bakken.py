@@ -764,6 +764,32 @@ def steek(rig, i):
     handen_op_speer(rig, {k: _drager['holtes'][k] + mee[k] for k in ('R', 'L')}, _drager['richting'])
 
 
+# Geraakt worden (Marcel, 26 okt: "We hebben ook een 'hit' animatie nodig bij soldaten. Waarin je ziet dat ze geraakt
+# worden", en het voorstel in woorden: "Geraakt worden is akkoord"; beeld.md): drie beelden vanuit staan, zoals de wolf en het
+# skelet in het spel (12 per seconde, niet herhalen), naar achteren ten opzichte van waar hij kijkt. Per beeld: hoe ver het
+# bovenlijf achterover gaat (graden, vanuit de heupen, het hoofd erachteraan), hoe ver de linkervoet terugschuift en hoe ver
+# hij door de knieën zakt (meter). De speer hangt aan de rechterhand en zwiept met het lijf mee.
+GERAAKT = {'leun': (12, 18, 6), 'stap': (0.0, 0.06, 0.03), 'zakken': (0.01, 0.025, 0.01)}
+
+
+def geraakt(rig, i):
+    """Beeld i van geraakt worden (GERAAKT; i mag ook tussen twee beelden in liggen), vanuit de staande houding."""
+    for pb in rig.pose.bones:
+        pb.rotation_mode = 'QUATERNION'
+        pb.rotation_quaternion = (1, 0, 0, 0)
+        pb.location = (0, 0, 0)
+    bpy.context.view_layer.update()
+    leun = math.radians(tussen(GERAAKT['leun'], i))
+    zakken = tussen(GERAAKT['zakken'], i)
+    for k in ('L', 'R'):
+        been_ik(rig, k, tussen(GERAAKT['stap'], i) if k == 'L' else 0.0, 0.0, zakken)
+    draai(rig, 'spine04', -leun * 0.6)  # negatief: de top naar achteren
+    draai(rig, 'spine02', -leun * 0.4)
+    draai(rig, 'head', -leun * 0.3)  # het hoofd slaat erachteraan
+    rig.location.z = rig['z0'] - zakken
+    bpy.context.view_layer.update()
+
+
 def speer_mee(rig, f):
     if not _drager:
         return

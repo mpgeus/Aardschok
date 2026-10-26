@@ -2500,6 +2500,10 @@ ten opzichte van waar hij kijkt (hij kijkt naar wie hem slaat):
   de schouders op; de speer blijft in beide handen, de punt zwiept wat omhoog.
 - *Beeld 1, het verst*: 18 graden achterover, de voorste voet schuift een halve voet terug, de knieën wat door.
 - *Beeld 2, terug*: nog 6 graden achterover, op weg naar staan; daarna neemt het spel zelf staan of lopen weer op.
+Marcel: "Geraakt worden is akkoord". Gebouwd als `geraakt` in `bakken.py` (de getallen in `GERAAKT`), met `eigen.py ...
+geraakt` (drie beelden vanuit staan) en in `spelvel.py` een eigen cel (89 bij 110, de speer past erin). De proefplaat in
+Z, ZW, W en N, groot en op spelmaat: `uit/blender/spel/geraakt-proef.png`. Op spelmaat is het achterover gaan klein maar
+te zien (vooral in W, het hoofd en de speer naar achteren); in het spel komt de rode flits erover.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
