@@ -2488,6 +2488,7 @@ hij op staat, en de voeten 30 cm uit elkaar. De tekenaar van de referentie rekt 
 van het lijf te laten zakken. Nu ook zo (`BEKKEN_ZAKT` 0,15, `BEEN_REIK` 0,99, `SPOOR` 0,6 in `bakken.py`): het bekken
 zakt nog 1,5 cm, dij en onderbeen rekken waar het been te kort is (de voet en de laars niet), de knie van het standbeen
 staat op zo'n 17 graden, de voeten 18 cm uit elkaar, en hij is lopend 97 tot 101 procent zo lang als staand.
+In het spel (`uit/blender/spel/speerman3d-in-het-spel-3.mp4`), Marcel: "Ja dit is al heel veel beter zo!"
 - *Voorstel: de piekenier* (Marcel, 24 okt: "Ook een variatie, de pikeman, deze heeft een ijzeren harnas en een Pike als
   wapen"; eerst in woorden, dan één proefplaat). Hetzelfde lijf en skelet als de speerman, zodat staan, lopen en
   steken meekomen; wat anders is:
