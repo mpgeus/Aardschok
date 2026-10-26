@@ -8,7 +8,8 @@
 # Generator (Rigify-achtig: `neck`, `jaw`, `upper_arm.L`), en `vorm` maakt van zijn lijf en kleren een kopie zoals ze nu
 # staan, met de groepen op de namen van MPFB.
 #
-#   blender.exe -b -P gereedschap/blender/hg_soldaat.py -- <map> [Z ZW W NW N NO O ZO] [stuur]
+#   blender.exe -b -P gereedschap/blender/hg_soldaat.py -- <map> [Z ZW W NW N NO O ZO] [stuur | masker | verf]
+# (met `masker` het masker van de wapenrok voor plaatverf.py, met `verf` daarna de gebogen plaat op de wapenrok)
 # (met `stuur` ook staan Z op volle maat en de stuurbeelden voor de schilderbeurt: node gereedschap/blender/schilder.cjs hg)
 import math
 import os
@@ -168,6 +169,74 @@ def speer(rig, M, top):
     return delen
 
 
+# De verf van Marcels plaat op onze wapenrok (Marcel koos "Plaat op 3D projecteren"; plaatverf.py buigt de tekening naar
+# het masker): de delen die de verf krijgen, en de riem die eruit gaat (die zit in de verf van de plaat)
+WAPENROK = ('wapenrok-lijf', 'wapenrok-rok')
+RIEMDELEN = ('riem', 'gesp', 'riemeind', 'riempunt')
+
+
+def wapenrok_delen():
+    return [o for o in bpy.data.objects if o.type == 'MESH' and o.name.startswith(WAPENROK) and 'zoom' not in o.name]
+
+
+def masker(sc, rig):
+    """Voor plaatverf.py, vanuit de camera zoals hij nu staat: de wapenrok alleen, wit (zonder wat ervoor staat, zodat de
+    verf het hele doek bedekt), en de rijen in beeld van de hals, de riem en de zoom (masker-wapenrok.json)."""
+    import json
+    from bpy_extras.object_utils import world_to_camera_view
+    delen = wapenrok_delen()
+    for ob in sc.objects:
+        if ob.type in ('MESH', 'CURVE') and ob not in delen:
+            ob.hide_render = True
+    k = sh.Knopen('masker')
+    k.nt.nodes.remove(k.bsdf)
+    em = k.n('ShaderNodeEmission')
+    em.inputs['Color'].default_value = (1, 1, 1, 1)
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    sc.view_layers[0].material_override = k.m
+    sc.render.film_transparent = True
+    sc.cycles.samples = 4
+    sc.render.filepath = os.path.join(sh.UIT, 'masker-wapenrok.png')
+    bpy.ops.render.render(write_still=True)
+    punten = [o.matrix_world @ v.co for o in delen for v in o.data.vertices]
+    voor = min(p.y for p in punten if abs(p.x) < 0.03)
+    riem_z = Nep(rig).pose.bones['spine03'].head.z
+    h = sc.render.resolution_y * sc.render.resolution_percentage / 100
+    rij = lambda z: (1 - world_to_camera_view(sc, sc.camera, Vector((0, voor, z))).y) * h
+    ankers = {'hals': rij(max(p.z for p in punten)), 'riem': rij(riem_z), 'zoom': rij(min(p.z for p in punten))}
+    json.dump(ankers, open(os.path.join(sh.UIT, 'masker-wapenrok.json'), 'w'))
+    print('HG ANKERS', {k: round(v) for k, v in ankers.items()})
+
+
+def verf(sc):
+    """De gebogen tekening (verf-wapenrok.png, van plaatverf.py) vanuit de camera zoals hij nu staat op de wapenrok
+    gelegd: een UV-kaart uit de camera, het beeld als textuur, onbelicht (het licht zit in de verf, zoals
+    speerman_hd.projecteer); de riem van het model eruit."""
+    from bpy_extras.object_utils import world_to_camera_view
+    beeld = bpy.data.images.load(os.path.join(sh.UIT, 'verf-wapenrok.png'))
+    k = sh.Knopen('verf-wapenrok')
+    k.nt.nodes.remove(k.bsdf)
+    uv = k.n('ShaderNodeUVMap', uv_map='projectie')
+    tex = k.n('ShaderNodeTexImage', image=beeld, interpolation='Linear', extension='EXTEND')
+    k.nt.links.new(uv.outputs['UV'], tex.inputs['Vector'])
+    em = k.n('ShaderNodeEmission')
+    k.nt.links.new(tex.outputs['Color'], em.inputs['Color'])
+    k.nt.links.new(em.outputs[0], k.uit.inputs['Surface'])
+    bpy.context.view_layer.update()
+    for ob in wapenrok_delen():
+        me = ob.data
+        laag = me.uv_layers.get('projectie') or me.uv_layers.new(name='projectie')
+        plek = [world_to_camera_view(sc, sc.camera, ob.matrix_world @ v.co) for v in me.vertices]
+        for lp in me.loops:
+            q = plek[lp.vertex_index]
+            laag.data[lp.index].uv = (q.x, q.y)
+        me.materials.clear()
+        me.materials.append(k.m)
+    for ob in sc.objects:
+        if ob.name.startswith(RIEMDELEN):
+            ob.hide_render = True
+
+
 def camera_op(sc, top):
     """De camera van speerman_hd.scene, maar met zoveel pixels per meter dat de top van de helm HOOGTE pixels boven de
     voeten komt."""
@@ -215,6 +284,14 @@ def main():
     cam = sc.camera
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     m0 = cam.matrix_world.copy()
+    if 'masker' in sh.ARGS or 'verf' in sh.ARGS:
+        # de camera van Z op volle maat: daaruit komt het masker, en daaruit valt de verf
+        cam.matrix_world = Matrix.Rotation(math.radians(BEELD['Z']), 4, 'Z') @ m0
+        if 'masker' in sh.ARGS:
+            sc.render.resolution_percentage = 100
+            masker(sc, rig)
+            return
+        verf(sc)
     for r in RICHTINGEN:
         R = Matrix.Rotation(math.radians(BEELD[r]), 4, 'Z')
         cam.matrix_world = R @ m0

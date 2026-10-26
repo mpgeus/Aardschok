@@ -2614,6 +2614,17 @@ geschilderde plaat), en een echt gezicht botst met de gestileerde plaat. Marcel 
 wordt het wat meer geschilderd en valer, op 0,65 een geel masker als gezicht en magenta spikkels; de vorm blijft die van
 de render (de wapenrok als een plat bord), en op spelmaat leest geen versie zo goed als de speerman die nu in het spel
 staat. Net als op 24 okt: de schilderbeurt redt een zwakke basis niet.
+Marcel: "geen van alles lijkt er op", en hij koos **de plaat op 3D projecteren**: de verf van de plaat zelf op onze
+delen, per richting het getekende onderdeel van die kant (zoals de proef met vel 01 van 24 okt; toen mengde het bakken
+van meer richtingen tot vlekken, omdat de generator de wapenrok in elke richting anders tekende; Marcels plaat is
+consequent en heeft de onderdelen los). Eerste proef, alleen de wapenrok van voren: `hg_soldaat.py ... masker` rendert
+onze wapenrok alleen, wit, vanuit Z, met de rij van de riem in beeld; `plaatverf.py` buigt de wapenrok van voren van de
+plaat per beeldrij naar dat masker (de bovenrand, de riem en de onderrand op elkaar, binnen een rij van rand tot rand;
+de riem op de plaat is de rij met het meeste bruin); `hg_soldaat.py ... verf` legt hem met een UV-kaart uit die camera
+onbelicht op de wapenrok, en haalt onze riem weg (die zit in de verf). Plaat: `uit/blender/hg/verf-plaat.png`. Van voren
+is het de tekening; gedraaid (ZW, W) loopt de verf mee en blijven de vierendelen, de nagels en de riem staan; op
+spelmaat leest hij scherper dan alles van vandaag. Van achteren nog de voorkant (de tekening van de rug ontbreekt nog),
+en aan de hals en de zoom wat magenta en strepen.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
