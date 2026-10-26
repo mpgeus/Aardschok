@@ -2508,7 +2508,11 @@ Marcel: "het geraakt worden is oké".
 Daarna in acht richtingen, met het lopen (P2) opnieuw, als vellen voor het spel (`speerman3d-geraakt.png` in een eigen cel,
 `spelvel.py`). In het spel een gevecht opnemen lukte niet: de wacht van de demo vecht nog niet (`opmerkingen.md`), en
 uitval en flits met de hand zetten gaf een nachtbeeld met regen achter het kampvuur. Op spelmaat, staan, de steek en
-geraakt achter elkaar: `uit/blender/spel/steek-en-geraakt.gif`.
+geraakt achter elkaar: `uit/blender/spel/steek-en-geraakt.gif`. Daarna toch een echt gevecht: de wacht vecht wel (dat
+klopte niet: de wolven stonden waar geen route naartoe was, `opmerkingen.md`). Drie rovers (18 leven) op open grond naast de
+wacht; de mannen kozen ze zelf. Onze speerman stak drie keer, de rovers vielen; geraakt werd hij deze keer niet.
+`uit/blender/spel/gevecht-in-het-spel.mp4` (en `-traag`, half zo snel). Let op bij een proef in de browser: zet de vellen
+vóór er een speerman op de kaart staat, na het herladen van de pagina; een figuur die al geladen is, laadt geen nieuwe paden.
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat
