@@ -2569,6 +2569,27 @@ van de demo. Hetzelfde lijf en skelet als de speerman, zodat staan, lopen, geraa
   een eenmalige houding `herladen` die volgt op `aanval`, als de figuur hem heeft).
 - *Het gezicht*: een andere man dan de speerman: een snor en een korte stoppelbaard.
 
+**Voorstel: de aankleding naar Marcels platen, als losse 3D-delen (26 okt, in woorden).** Marcel stuurde twee platen
+op magenta met de uitrusting in onderdelen, in acht à tien richtingen (de tweede: "dit heeft alle onderdelen"), en:
+"ja ik wil dat wij onze aankleding op basis van dit plaatje maken", "jij moet hier 3d varianten van maken, zodat we deze
+op ons soldaatje kunnen plakken". Dus per onderdeel een eigen 3D-deel in code, dat op het lijf past (zoals de delen van
+`speerman_hd.py` nu), en dat je los kunt aan- en uitzetten. Wat er anders wordt dan bij de speerman nu:
+- *Helm*: de ketelhoed met een koepel van vier delen (een kruis van ribben met klinknagels, een nagel bovenop in plaats
+  van de punt), een band met klinknagels waar de koepel op de rand staat, een brede, vlakke rand, en een leren kinriem.
+  Donker staal met bruine vlekken; binnenin een leren voering.
+- *Maliënkraag*: een staande kraag van maliën tot onder de kin, met een leren rand bovenaan en een gespje achter, die
+  over de schouders uitwaaiert. De maliënkap over het hoofd gaat eruit.
+- *Wapenrok*: gevierendeeld, op de borst en op de rug: boven en onder de borst geel en blauw om en om, links en rechts
+  ook; de rok onder de riem in banen, om en om geel en blauw, met een split voor; koperen klinknagels langs de naden, de
+  zoom en de armsgaten; de armsgaten met een donkere omgeslagen rand (in plaats van de gouden zoom). Mosterdgeel en
+  grijsblauw (leisteen), minder fel dan nu.
+- *Mouwen*: gewatteerd bruin leer, in de lengte doorgestikt in banen, met een maliënrand aan de schouder en een manchet
+  (in plaats van het roodbruine wambuis met ruiten).
+- *Handschoenen*: bruin leer, zonder de brede kap en de armstukken van nu.
+- *Broek*: een wijde broek van grijsgroene wol tot onder de knie, met een riem (in plaats van de blauwe hozen).
+- *Laarzen*: bruin leer met een omgeslagen rand en een riempje, zoals nu, wat lager.
+- *Riem*: bruin leer met een koperen gesp en twee afhangende riemeinden voor, opzij een tasje.
+
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
 in Z: `proef-z-groot.png`), uit `kruisboog_hd.py`: het model van de speerman met zijn eigen onderdelen (`kies()`), zodat
