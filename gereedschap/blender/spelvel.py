@@ -12,6 +12,7 @@
 #   blender.exe -b -P gereedschap/blender/eigen.py -- <map> Z ZW W NW N NO O ZO [steek]   (staan en lopen, of de steek)
 #   python spelvel.py <map> <uitmap> [procent] [schaal=<getal>]   (de Python van ComfyUI; procent van de render, 50 voor de
 #   snelle; een map met alleen de steek krijgt de schaal van de staande man mee)
+#   node gereedschap/blender/spelvel-zet.cjs <uitmap>   de vellen in beelden/figuren en in de beschrijving van het spel
 import json
 import os
 import sys
@@ -71,6 +72,10 @@ if __name__ == '__main__':
     vast = [a for a in sys.argv[4:] if a.startswith('schaal=')]
     s = float(vast[0].split('=')[1]) if vast else schaal(kaart)
     print(f'schaal {s:.4f}')
+    # wat het spel per houding moet weten (bestand, beelden, cel, anker), naast de vellen, voor spelvel-zet.cjs; aangevuld,
+    # want de houdingen komen uit verschillende mappen
+    gegevens_pad = f'{uitmap}/speerman3d.json'
+    gegevens = json.load(open(gegevens_pad, encoding='utf-8')) if os.path.exists(gegevens_pad) else {}
     for houding, naam in RENDER.items():
         if not os.path.exists(f'{kaart}/eigen-Z-{naam.format(i=0)}.png'):
             continue
@@ -83,3 +88,6 @@ if __name__ == '__main__':
                 vel.paste(cel(f'{kaart}/eigen-{r}-{naam.format(i=i)}.png', s, anker_y, houding), (i * cb, j * ch))
         vel.save(f'{uitmap}/speerman3d-{houding}.png')
         print(f'{uitmap}/speerman3d-{houding}.png', vel.size)
+        gegevens[houding] = {'bestand': f'speerman3d-{houding}.png', 'beelden': n, 'fps': h['fps'], 'herhaal': h['herhaal'],
+                             'cel': [cb, ch], 'anker': list(h['anker'])}
+    json.dump(gegevens, open(gegevens_pad, 'w', encoding='utf-8'), indent=1)

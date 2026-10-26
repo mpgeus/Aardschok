@@ -202,13 +202,16 @@ test('een figuur met een tweede uithaal (aanval2) slaat om en om de eerste en de
     e.uitval = { doel: { x: e.x + 1, y: e.y } };
     return T.sprites.houding(S, e).houding;
   };
-  assert.deepEqual([uithaal(), uithaal(), uithaal()], ['aanval', 'aanval', 'aanval'], 'de speerman van de generator heeft er één');
+  // de speerman uit het 3D-model heeft er twee (de steek en de stoot van boven)
+  assert.ok(h.aanval2, 'de speerman heeft een tweede uithaal');
+  const [a, b, c] = [uithaal(), uithaal(), uithaal()];
+  assert.deepEqual([a, b].sort(), ['aanval', 'aanval2'], 'de eerste en de tweede');
+  assert.equal(c, a, 'om en om');
+  const tweede = h.aanval2;
   try {
-    h.aanval2 = { ...h.aanval };
-    const [a, b, c] = [uithaal(), uithaal(), uithaal()];
-    assert.deepEqual([a, b].sort(), ['aanval', 'aanval2'], 'de eerste en de tweede');
-    assert.equal(c, a, 'om en om');
-  } finally {
     delete h.aanval2;
+    assert.deepEqual([uithaal(), uithaal(), uithaal()], ['aanval', 'aanval', 'aanval'], 'zonder tweede alleen de eerste');
+  } finally {
+    h.aanval2 = tweede;
   }
 });

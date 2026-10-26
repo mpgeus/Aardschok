@@ -37,8 +37,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   `beeld.md`), en "we hebben een 2e aanvals animatie nodig voor de afwisseling" (het spel speelt bij elke uithaal nu
   dezelfde `aanval`, `js/sprites.js`; een tweede vraagt ook daar een regel). Af en goedgekeurd (26 okt): sterven, en de
   stoot van boven om en om met de steek. Marcel (26 okt): "zet de speerman uit het 3D-model echt in het spel, in plaats
-  van die van de generator, met renders op volle kwaliteit": de renders lopen (`uit/blender/vol/`, `keten.sh`), daarna de
-  vellen `speerman3d-*` in `beelden/`. Nog voor de speerman: de steek als echte uitval, de kleine verschillen bij staan.
+  van die van de generator, met renders op volle kwaliteit": **af** (26 okt): de vellen `speerman3d-*` in `beelden/`, met
+  de stoot van boven, geraakt en sterven (`beelden-van-de-generator.md`). Nog voor de speerman: de steek als echte uitval,
+  de kleine verschillen bij staan. Daarna (26 okt) Marcels plaat met losse uitrustingsdelen (`EXTRA/`): de proeven met
+  Human Generator, overschilderen en projecteren (`beeld.md`) liet hij rusten ("nah, dit gaat hem niet worden zo"), en hij
+  koos "terug naar ons model".
   **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie (`kruisboog_hd.py`,
   `beeld.md`, "De proefplaat van de kruisboogschutter"). De boog boven en de handen zoals een mens hem houdt; staan
   vanaf de heup schuin naar voren (`vooruit`; `schuin` gaat eruit als Marcel kiest), lopen met de kruisboog op de
