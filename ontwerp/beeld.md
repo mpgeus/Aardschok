@@ -2597,6 +2597,25 @@ voren (`DRAGEN['generator']['as']` (0,4, -0,9, 0,6)).
   mogelijk**; de modellen gaan dan gewoon mee. **Marcel (24 okt): "ik wil a wel proberen, maar kunnen we daar een proef
   van maken?"**
 
+## Het rovershol: een groot kamp met een palissade (27 okt 2026, werklijst K, 2c; voorstel, wacht op Marcel)
+
+Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp. In woorden, voor de proefplaat:
+
+- **Wat er al is:** de open plek (straal 8) met het vuur, de tenten van de rovers (`tent-rover`, T1) en het paadje. Het
+  level zet er zo'n tien man in vijf tenten (het kamp heeft zes tentplekken).
+- **Nieuw is één ding: de palissade.** Een ring van puntige palen om het plein, op zo'n 7 tegels van het vuur, met één
+  opening van drie tegels waar het paadje binnenkomt. Ruwe stammen met de schors er nog aan, een hand breed uit elkaar,
+  ongelijk van hoogte (anderhalf tot twee keer een man), de punt naar boven geslagen, vastgesjord met touw aan twee
+  dwarsliggers; hier en daar staat er een scheef of ontbreekt er een, met een plank ertussen gespijkerd. Grijs, verweerd
+  hout, mos aan de voet, en aan een paal bij de opening een schedel van een hert of een lap van de rovers (de rode van
+  de tent). In het spel is hij niet te begaan: je komt binnen door de opening (of je schutters schieten erover).
+- **Hoe het gemaakt wordt:** een model in code, zoals de tent en de bruggen (`kamp.cjs`), in stukken van één tegel (recht,
+  schuin, de hoek, de opening met een zware paal aan elke kant), zodat dezelfde ring om elk kamp past. Eén proefplaat: een
+  stuk van de ring met de opening, van één kant. Dezelfde tekening kan later de palissade van je eigen dorp worden (vraag
+  158, de muren; `palissade` staat al als gebouw zonder tekening).
+- **Wat het hol nog laat zien, zonder nieuwe tekening:** de buit bij het vuur, met de tekening van een losse stapel. Nu
+  zegt het bericht van c4 dat de buit bij het vuur ligt, maar je ziet hem niet.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
