@@ -34,7 +34,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
+- **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (27 okt; Marcel: "191: S1 tot S3"): S1 tot S3 van S hieronder.
+  **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
   speeltest van 24 okt"). Ze lopen zigzag, een soldaat loopt als een boer (1,35 tegel per seconde, een rover 2,2), ze
   wachten op elkaar, een stap gaat eerst af voor ze omdraaien, en op hun post maken ze praatjes.
 - **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
