@@ -539,6 +539,8 @@
     const regels = [T.t('Life: {leven}', { leven: leven(e, D) })];
     const soort = p && p.soldaat ? T.SOLDAAT_SOORTEN[p.soldaat.soort] : null;
     if (soort) regels.push(T.t('Carries: {wat}', { wat: T.opsomming(soort.stukken.map(T.stukNaam)) }));
+    // De buit uit een verslagen roverskamp, tot hij thuis is (js/rovers.js, c4).
+    if (e.buit) regels.push(T.t('Loot: {wat}', { wat: T.opsomming(Object.keys(e.buit).map((wat) => T.hoeveel(Math.round(e.buit[wat]), wat))) }));
     const dienst = dienstKnoppen(D, [e]);
     if (dienst) regels.push({ tekst: T.t('Watch'), knoppen: dienst });
     const knop = terugKnop(D, [e]);

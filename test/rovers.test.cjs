@@ -384,6 +384,8 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij', () => {
   for (const e of mannen) assert.notEqual(e.kant, 'speler');
   const K = S.wereld.kampen.find((k) => k.nr === A.kamp);
   assert.equal(K.bende.length, 0, 'wie valt, is uit zijn bende');
+  assert.equal(K.verslagen, true, 'en valt de laatste, ook op een overval, dan is het kamp verslagen (c4)');
+  assert.ok(berichten.includes("The robbers' camp is beaten."), berichten.join(' | '));
 });
 
 test('de roverskampen en een aanval gaan mee in een bewaard spel', () => {

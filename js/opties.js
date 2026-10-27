@@ -1078,6 +1078,8 @@
     manPerTent: T.t('men per tent'),
     rondHetVuur: T.t('distance from the fire'),
     wakkerUren: T.t('hours awake after a fight'),
+    buitAfstand: T.t('loot picked up within'),
+    buitPerMan: T.t('loot carried per man'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),

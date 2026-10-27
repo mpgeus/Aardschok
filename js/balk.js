@@ -627,8 +627,10 @@
       c.fillRect(Math.round(p.x * k - (maat * k) / 2) / k, Math.round(p.y * k - (maat * k) / 2) / k, maat, maat);
     };
     // De plekken die je kent (het kasteel, de stad, de dorpen, en in rood een roverskamp dat je mensen zagen: werklijst
-    // vraag 170, stap 6a2, c1, Marcel: "M1"), dan je gebouwen, en de aanvoerder.
-    for (const p of E.plekken || []) if (T.kentTegel(S.dorp, p.x, p.y)) stip(p.x, p.y, 4, p.soort === 'kamp' ? '#8e2418' : '#2c1d12');
+    // vraag 170, stap 6a2, c1, Marcel: "M1"; een verslagen kamp, c4, zoals de andere plekken), dan je gebouwen, en de
+    // aanvoerder.
+    const rood = (p) => p.soort === 'kamp' && !(T.kampVan(S.wereld, { kamp: p.nr }) || {}).verslagen;
+    for (const p of E.plekken || []) if (T.kentTegel(S.dorp, p.x, p.y)) stip(p.x, p.y, 4, rood(p) ? '#8e2418' : '#2c1d12');
     for (const g of S.dorp.gebouwen) {
       const r = T.voetVanGebouw(g);
       stip(r.x + r.b / 2, r.y + r.h / 2, 2, '#f3e3b8');

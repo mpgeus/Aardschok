@@ -1579,7 +1579,7 @@
       }
       const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}${l.opPad ? ' op pad' : ''}`).join(', '); // geen tekst
       const buit = (K) => Object.entries(K.buit).map(([wat, n]) => `${Math.round(n)} ${wat}`).join(', ') || 'geen'; // geen tekst
-      return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}; buit: ${buit(K)}`).join('; '); // geen tekst
+      return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.verslagen ? 'verslagen' : K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}; buit: ${buit(K)}`).join('; '); // geen tekst
     },
     // De rovers (js/rovers.js): wanneer de volgende overval komt (in de demo niet op het rooster: de dag van zijn overval
     // staat in het scenario, S.scenario.lot), en de aanval die loopt: uit welk kamp, en hoe lang de reis is (de mannen van

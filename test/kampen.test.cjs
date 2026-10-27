@@ -398,6 +398,68 @@ test('roverskampen: wie op een overval gaat, loopt het paadje af en is uit beeld
   for (const m of thuis) assert.ok(Math.hypot(m.tx - k.x, m.ty - k.y) >= K().open - 2, 'aan de rand van de open plek');
 });
 
+// c4 (R1, K1; Marcel, 17 okt: "B1, dan kun je het ook nog verliezen tijdens een gevecht"): valt de laatste man, dan is
+// het kamp verslagen en komt het niet terug; de buit ligt er, en je mannen dragen hem naar huis.
+test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten neer, het vuur uit, niemand erbij, en je mannen dragen de buit naar huis (c4)', () => {
+  const { S, D, w } = nieuwSpel();
+  const berichten = [];
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t, soort, plek) => berichten.push({ t, plek }) : () => {}) });
+  try {
+    const E = T.eilandVan(w.eiland.zaad);
+    const plein = T.pleinVan(D);
+    const k = E.kampen.slice().sort((a, b) => T.afstand(a, plein) - T.afstand(b, plein))[0];
+    const kamp = openKamp(S, w, k);
+    kamp.buit = { graan: 14, goud: 3 };
+    for (const e of mannenVan(w, k.nr)) T.raak(S, D, e, 100, null);
+    assert.equal(kamp.bende.length, 0);
+    assert.equal(kamp.verslagen, true, 'de laatste man viel');
+    assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === k.nr).length, 0, 'de tenten zijn neer');
+    assert.equal(kamp.tenten, 0);
+    const dag = Math.floor(S.kalender.dag);
+    assert.equal(T.roverskampVuur(dag + 23 / 24, kamp), 'uit', 'het vuur is uit');
+    assert.equal(T.roverskampenLicht(w, dag + 23 / 24).length, 0, 'en geeft geen licht');
+    const b = berichten.find((x) => /^The robbers' camp is beaten\. Their loot lies by the fire/.test(x.t));
+    assert.ok(b, berichten.map((x) => x.t).join(' | '));
+    assert.deepEqual(b.plek, { x: kamp.x, y: kamp.y }, 'met de plek');
+    // Het komt niet terug (R1): geen man van buiten, en wie wegtrekt, gaat naar een ander kamp.
+    S.kalender.dag += T.DAGEN_PER_JAAR;
+    T.werkKampenBij(S, w);
+    assert.equal(kamp.bende.length, 0, 'er komt niemand van buiten bij');
+    const K2 = T.wordtRover(D, { naam: 'Ralph', leeftijd: 'volwassen', geslacht: 'man' });
+    assert.ok(K2 && K2 !== kamp, 'wie wegtrekt, gaat naar een ander kamp');
+    // De buit: wie bij het vuur komt, neemt mee wat hij kan dragen, en het telt als hij terug is in het bereik.
+    const held = D.aanvoerder;
+    const zet = (x, y) => Object.assign(held, { x, y, tx: x, ty: y, pad: [], onderweg: false });
+    zet(k.x + 1, k.y);
+    T.werkKampenBij(S, w);
+    assert.deepEqual(held.buit, { graan: T.ROVERS_INSTELLINGEN.buitPerMan }, 'hij draagt zoveel als een man kan');
+    assert.deepEqual(kamp.buit, { graan: 4, goud: 3 }, 'de rest ligt er nog');
+    assert.ok(T.manBriefje(D, held).delen[0].regels.some((r) => r === 'Loot: 10 grain'), 'zijn briefje zegt het');
+    T.werkRoversBij(S, D);
+    assert.ok(held.buit, 'buiten het bereik telt het nog niet');
+    const voor = D.gebouwen.length;
+    zet(plein.x + 2, plein.y + 2);
+    T.werkRoversBij(S, D);
+    assert.equal(held.buit, undefined);
+    const stapel = D.gebouwen[voor];
+    assert.ok(stapel && stapel.soort === 'stapel', 'thuis legt hij het neer, en de dragers brengen het binnen');
+    assert.deepEqual(stapel.stapel, { graan: T.ROVERS_INSTELLINGEN.buitPerMan });
+    assert.ok(berichten.some((x) => /brings home 10 grain from the robbers' camp/.test(x.t)), berichten.map((x) => x.t).join(' | '));
+    // Een tweede keer haalt hij de rest.
+    zet(k.x + 1, k.y);
+    T.werkKampenBij(S, w);
+    assert.deepEqual(held.buit, { graan: 4, goud: 3 });
+    assert.deepEqual(kamp.buit, {});
+    // Bewaard en geladen: het blijft verslagen.
+    const S2 = {};
+    assert.ok(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 0 })).gelukt);
+    assert.equal(S2.wereld.kampen.find((q) => q.nr === k.nr).verslagen, true);
+  } finally {
+    T.ui = ui;
+  }
+});
+
 // A1, zoals het wild: een kamp gooit met zijn eigen dobbelsteen, dus wat het doet, verandert niets aan het dorp.
 test('roverskampen: een kamp met zijn mannen verandert niets aan wat het dorp gooit', () => {
   const spel = (open) => {

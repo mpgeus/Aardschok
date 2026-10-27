@@ -75,6 +75,10 @@
     rondHetVuur: [2, 3.5],
     wakkerUren: 1,
     rustVerder: 20,
+    // Een verslagen kamp (c4): wat er aan buit ligt, nemen je mannen mee als ze tot zoveel tegels bij het vuur komen,
+    // ieder hooguit zoveel (alles samen, zoals een rover van een stapel, `stapelPerRover`, maar dan voor de hele buit).
+    buitAfstand: 2,
+    buitPerMan: 10,
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -229,6 +233,7 @@
   T.roverVerslagen = function (D, e) {
     const K = T.kampVan(D.wereld, e);
     if (K) K.bende = K.bende.filter((l) => l.id !== e.lid);
+    if (K && !K.bende.length && !K.verslagen) kampValt(D, K);
     const ligt = {};
     for (const [wat, n] of Object.entries(e.buit || {})) if (n > 0) ligt[wat] = n;
     if (Object.keys(ligt).length) T.legLosseStapel(e.dorp || D, T.tegelVan(e), ligt);
@@ -241,8 +246,9 @@
 
   // De kampen van kaart w waar een overval vandaan kan komen, en waar wie wegtrekt heen kan: in een level met een rand
   // (js/wereld.js) alleen een kamp dat erbinnen kan staan.
+  // Een verslagen kamp (c4) telt niet meer.
   const kampenBinnen = (w, dag) =>
-    kampenVan(w, dag).filter((K) => stukkenVanKamp(eilandKampen(w).kampen[K.nr]).every(([sx, sy]) => T.stukBinnenRand(w, sx, sy)));
+    kampenVan(w, dag).filter((K) => !K.verslagen && stukkenVanKamp(eilandKampen(w).kampen[K.nr]).every(([sx, sy]) => T.stukBinnenRand(w, sx, sy)));
   // Het kamp met nummer nr op kaart w, of null; en wie van kamp K thuis is (niet op pad).
   const kampNr = (w, nr) => (nr != null && w.kampen ? w.kampen.find((K) => K.nr === nr) || null : null);
   const thuis = (K) => K.bende.filter((l) => !l.opPad);
@@ -601,9 +607,11 @@
     }
   }
 
-  // Elke tik (T.werkDorpBij, js/dorp.js): de aanval loopt, van komen tot weggaan. Wie vecht (e.doelwit), laat het gevecht
-  // lopen (js/gevecht.js); laat hij zijn doel gaan, dan gaat hij verder met wat hij deed.
+  // Elke tik (T.werkDorpBij, js/dorp.js): de buit uit een verslagen kamp die je mannen thuisbrengen, en de aanval, van
+  // komen tot weggaan. Wie vecht (e.doelwit), laat het gevecht lopen (js/gevecht.js); laat hij zijn doel gaan, dan gaat hij
+  // verder met wat hij deed.
   T.werkRoversBij = function (S, D) {
+    if (D.buitOnderweg) brengBuit(D);
     const A = D.rovers && D.rovers.aanval;
     if (!A || !heeftRovers(D)) return;
     const w = D.wereld;
@@ -693,7 +701,8 @@
   //         hij om het vuur staat), opPad (op een overval, c3: { terug: de dag dat hij thuis is, of null zolang hij op je
   //         land is; buit: wat hij meebrengt }) }], geteld (het id van de volgende), jaar (het jaar van het spel dat er het
   //         laatst een bij kwam), wakker (de dag tot wanneer niemand slaapt: er was een vijand), ver (er is niemand van een
-  //         dorp in de buurt; keekVer: wanneer het weer kijkt), buit ({ wat: hoeveel }: wat ze thuisbrachten, c3) }
+  //         dorp in de buurt; keekVer: wanneer het weer kijkt), buit ({ wat: hoeveel }: wat ze thuisbrachten, c3),
+  //         verslagen (de laatste man viel, c4) }
   // Een man van een kamp op de kaart is een rover: e.rover, e.kamp (het nummer van zijn kamp) en e.lid (zijn id in de
   // bende); thuis van geen dorp, op een overval van het dorp dat hij overvalt (e.dorp). De wereld werkt hem bij, één keer per kaart (T.werkKampenBij); vechten doet hij in
   // T.werkGevechtVanDeWereldBij (js/gevecht.js), met de dobbelsteen van zijn kamp.
@@ -775,6 +784,7 @@
   // Een tent per `manPerTent` man, op de plekken die het eiland gaf, op volgorde; ze gaan niet weer neer als er een valt
   // (dat is c4). Staat er iemand waar een tent komt, dan komt hij een tik later.
   function zetTenten(w, K, k) {
+    if (K.verslagen) return;
     const nodig = Math.min(k.tenten.length, Math.ceil(K.bende.length / IN().manPerTent));
     while (K.tenten < nodig) {
       const t = k.tenten[K.tenten];
@@ -878,12 +888,67 @@
     delete l.opPad;
   }
 
+  // Valt de laatste man van een kamp, thuis of op een overval (c4), dan is het verslagen, en het komt niet terug (R1): de
+  // tenten gaan neer, het vuur gaat uit, en er komt niemand meer bij, van buiten of wie wegtrekt. Wat er aan buit lag,
+  // ligt er nog (K1): je mannen dragen het naar huis (neemBuit). Een bericht zegt het, met de plek.
+  function kampValt(D, K) {
+    const w = D.wereld;
+    K.verslagen = true;
+    for (const v of w.voorwerpen.filter((x) => x.soort === 'tent' && x.kamp === K.nr)) T.haalVoorwerpWeg(w, v);
+    K.tenten = 0;
+    const tekst = Object.keys(K.buit).length
+      ? T.t("The robbers' camp is beaten. Their loot lies by the fire: send your men there to carry it home.")
+      : T.t("The robbers' camp is beaten.");
+    T.zeg(D, tekst, 'goed', { x: K.x, y: K.y });
+  }
+  // De buit van een verslagen kamp (c4; Marcel, 17 okt: "B1, dan kun je het ook nog verliezen tijdens een gevecht"): wie
+  // van je mannen bij het vuur komt, neemt mee wat hij kan dragen (`buitPerMan`), en het telt pas als hij terug is in het
+  // bereik van zijn dorp (brengBuit); wat blijft liggen, haal je een tweede keer. Wie het draagt en valt, verliest het.
+  function neemBuit(S, w, K) {
+    if (!Object.keys(K.buit).length) return;
+    for (const D of S.dorpen || []) {
+      if (D.wereld !== w) continue;
+      for (const e of T.mannenVan(D)) {
+        if (e.buit || T.afstand(T.tegelVan(e), K) > IN().buitAfstand) continue;
+        let ruimte = IN().buitPerMan;
+        e.buit = {};
+        for (const wat of Object.keys(K.buit)) {
+          const n = Math.min(ruimte, K.buit[wat]);
+          if (n <= 0) continue;
+          e.buit[wat] = n;
+          K.buit[wat] -= n;
+          if (K.buit[wat] < 1e-6) delete K.buit[wat];
+          ruimte -= n;
+        }
+        D.buitOnderweg = true;
+        if (!Object.keys(K.buit).length) return;
+      }
+    }
+  }
+  // Een man met buit uit een kamp is terug in het bereik van zijn dorp (T.inBouwBereik, js/begin.js): hij legt hem neer
+  // als een losse stapel, en de dragers brengen hem binnen (een waar telt pas als hij binnen is).
+  function brengBuit(D) {
+    let nog = false;
+    for (const e of T.mannenVan(D)) {
+      if (!e.buit) continue;
+      if (!T.inBouwBereik(D, e.tx, e.ty)) {
+        nog = true;
+        continue;
+      }
+      const waren = Object.keys(e.buit);
+      T.legLosseStapel(D, T.tegelVan(e), e.buit);
+      T.zeg(D, T.t("{naam} brings home {buit} from the robbers' camp.", { naam: e.naam, buit: T.opsomming(waren.map((wat) => T.hoeveel(Math.round(e.buit[wat]), wat))) }), 'goed', T.tegelVan(e));
+      delete e.buit;
+    }
+    if (!nog) delete D.buitOnderweg;
+  }
+
   // Elke nacht van de kampen: is er een jaar van het spel om, dan komt er in elk kamp een man van buiten bij, tot
   // `kampMeest` (de getallen van het rooster); en wie in een gevecht gewond raakte, heeft weer al zijn leven (vraag 11).
   function tikKampenDag(w, dag) {
     const jaar = Math.floor(dag / T.DAGEN_PER_JAAR);
     for (const K of w.kampen) {
-      if (jaar <= K.jaar) continue;
+      if (jaar <= K.jaar || K.verslagen) continue;
       K.jaar = jaar;
       for (let i = 0; i < IN().kampErbijPerJaar && K.bende.length < IN().kampMeest; i++) vanBuiten(K);
     }
@@ -897,6 +962,7 @@
   // van een dorp binnen `rustVerder` (om de twee seconden gevraagd), dan kijken ze niet om zich heen (e.ver; zoals het
   // wild): dan kost een kamp ver weg bijna niets.
   function werkKampBij(S, w, K, k, mannen, dag) {
+    if (K.verslagen) return neemBuit(S, w, K);
     zetTenten(w, K, k);
     if (mannen.length < K.bende.length) {
       const er = new Set(mannen.map((e) => e.lid));
@@ -981,14 +1047,14 @@
     if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
   }
 
-  // Het vuur van een roverskamp: het brandt als het donker is, en smeult overdag.
-  T.roverskampVuur = (dag) => (T.lichtVan(dag).nacht > 0 ? 'brandt' : 'smeult');
+  // Het vuur van roverskamp K: het brandt als het donker is, en smeult overdag; van een verslagen kamp is het uit (c4).
+  T.roverskampVuur = (dag, K) => (K && K.verslagen ? 'uit' : T.lichtVan(dag).nacht > 0 ? 'brandt' : 'smeult');
   // Het licht van de roverskampen op kaart w die er staan, voor T.lichtBronnen (js/zien.js): 's avonds en 's nachts, zoals
   // het kampvuur van het lege begin (T.BEGIN_INSTELLINGEN.vuur). Zo zie je in het donker een gloed in het bos, waar je het
   // land kent.
   T.roverskampenLicht = function (w, dag) {
     if (!w || !w.kampen || T.roverskampVuur(dag) !== 'brandt') return [];
     const L = T.BEGIN_INSTELLINGEN.vuur;
-    return w.kampen.filter((K) => K.staat).map((K) => ({ x: K.x, y: K.y, straal: L.straal, beeldStraal: L.beeldStraal, sterkte: L.sterkte, soort: 'kampvuur' }));
+    return w.kampen.filter((K) => K.staat && !K.verslagen).map((K) => ({ x: K.x, y: K.y, straal: L.straal, beeldStraal: L.beeldStraal, sterkte: L.sterkte, soort: 'kampvuur' }));
   };
 })(globalThis.Spel = globalThis.Spel || {});

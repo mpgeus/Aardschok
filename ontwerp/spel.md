@@ -1165,7 +1165,8 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   bij het vuur waakt (elke nacht een ander). Ziet een van hen een vijand, dan komt iedereen naar buiten en vechten ze,
   zoals een rover nu; wie valt, is uit de bende, en wie het overleeft, geneest na een nacht. Bij de muis staat zijn naam
   ("Sybil, a robber"). Een kamp is van de wereld, niet van een dorp, en gooit met zijn eigen dobbelsteen, zoals een
-  roedel. Een kamp verslaan is c4, en een kamp dat groot genoeg wordt, bouwt een rovershol (vraag 173).
+  roedel. Een kamp dat groot genoeg wordt, bouwt een rovershol (vraag 173; voor hoofdstuk 2 zet het level een groot kamp
+  neer, werklijst K, "2c").
 - **De overval komt uit een kamp** (27 okt, c3; Marcel: "c3 A1 B1 C1, demo mee"; `js/rovers.js`). Het rooster blijft: per
   dorp twee keer per jaar, de eerste na 60 dagen, de helft 's nachts. Een dag van tevoren staat vast wanneer, en uit welk
   kamp: het dichtst bij je plein dat mannen thuis heeft (in een level met een rand alleen een kamp binnen de rand). Heeft
@@ -1182,6 +1183,15 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   niemand, dan zijn er geen rovers onderweg), wie van hen buiten beeld valt, is uit zijn bende, en het loon dat ze de bode
   afnemen, ligt daarna in hun kamp. De wilde rovers van de rand zijn weg. Gemeten: de eerste keer per eiland kost de grove
   weg zo'n 50 ms (dezelfde schets als de eerste tocht), daarna een paar ms per overval.
+- **Een kamp verslaan** (27 okt, c4; Marcel, 17 okt: R1, K1, en "B1, dan kun je het ook nog verliezen tijdens een
+  gevecht"). Valt de laatste man van een kamp, thuis of op een overval, dan is het verslagen, en het komt niet terug: de
+  tenten gaan neer, het vuur gaat uit (geen licht meer), er komt niemand meer bij (van buiten niet, en wie wegtrekt,
+  gaat naar een ander kamp), en op de minikaart is het niet meer rood. Een bericht zegt het, met de plek (*The robbers'
+  camp is beaten. Their loot lies by the fire: send your men there to carry it home.*). De buit die ze thuisbrachten,
+  ligt er nog: wie van je mannen bij het vuur komt (2 tegels, `buitAfstand`), neemt mee wat hij kan dragen (10, alles
+  samen, `buitPerMan`); zijn briefje zegt het (*Loot: 10 grain*), en het telt pas als hij terug is in het bereik van je
+  dorp: daar legt hij het neer als een losse stapel, en de dragers brengen het binnen (*Ralph brings home 10 grain from
+  the robbers' camp.*). Wat blijft liggen, haal je een tweede keer; wie het draagt en valt, verliest het.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

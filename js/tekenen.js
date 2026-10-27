@@ -3642,7 +3642,7 @@
       // slapen (T.kampvuurStand); dat van een roverskamp (js/rovers.js) brandt als het donker is. Zonder kunst: een kring
       // stenen met een gloed.
       const D = T.dorpHier(S);
-      const stand = v.kamp != null ? T.roverskampVuur(S.kalender.dag) : (D && T.kampvuurStand(D)) || 'uit';
+      const stand = v.kamp != null ? T.roverskampVuur(S.kalender.dag, T.kampVan(S.wereld, v)) : (D && T.kampvuurStand(D)) || 'uit';
       const vuur = metSprites() && T.sprites.kampvuur(stand, S.tijd);
       if (vuur) T.sprites.teken(ctx, vuur, p.x, p.y, helder);
       else T.blok(ctx, p.x, p.y, 0.3, 0.3, 4, stand === 'brandt' ? '#e0782a' : '#6f6a62', { helder });

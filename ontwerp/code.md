@@ -2331,6 +2331,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   'rovers' alleen als er een is), de hinderlaag uit dat kamp (`beginHinderlaag`), `T.roverValtOnderweg` en
   `T.buitNaarKamp` (het loon, `D.bode.loon`). `Spel.debug.rovers(n)` is `T.roversKomen(D, { aantal, meteen: true })`.
   Weg: `T.roverIngang` (de rand van `T.dorpVak`), `wildVel` en de wilde rovers. Het opslaan is versie 26.
+- **Een kamp verslaan** (vraag 170, c4, 27 okt; `test/kampen.test.cjs`): valt de laatste man (`T.roverVerslagen`), dan
+  `kampValt`: `K.verslagen`, de tenten weg (`T.haalVoorwerpWeg`), en een bericht met de plek. Een verslagen kamp telt
+  nergens meer mee (`kampenBinnen`: geen overval, wie wegtrekt gaat naar een ander; `tikKampenDag`: niemand van buiten;
+  `zetTenten`), zijn vuur is `'uit'` (`T.roverskampVuur(dag, K)`, ook in `js/tekenen.js`) zonder licht, en op de
+  minikaart is het niet rood (`js/balk.js`). `werkKampBij` doet voor een verslagen kamp alleen `neemBuit`: wie van
+  `T.mannenVan` binnen `buitAfstand` van het vuur staat, neemt tot `buitPerMan` uit `K.buit` (`e.buit`, op zijn briefje
+  in `js/kiezen.js`), en het dorp onthoudt dat er buit onderweg is (`D.buitOnderweg`); `brengBuit` (in
+  `T.werkRoversBij`, alleen zolang dat zo is) legt hem neer als losse stapel zodra de man in het bouwbereik is
+  (`T.inBouwBereik`). Geen gewone stapel in het kamp: de dragers halen elke stapel van het dorp, hoe ver ook (`js/kar.js`).
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
