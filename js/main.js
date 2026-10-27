@@ -873,6 +873,9 @@
   }
 
   canvas.addEventListener('mousedown', (ev) => {
+    // Rechts gaat in bij het indrukken (vraag 191, S3: "het duurt ook even voordat ze reageren op commandos"), niet bij het
+    // loslaten: contextmenu, hieronder, komt op Windows pas dan.
+    if (ev.button === 2) return rechtsKlik(ev);
     slepen = ev.button === 0 && S.foto ? { x: ev.clientX, y: ev.clientY, bewogen: false } : null;
     netGekaderd = false;
     kader = ev.button === 0 && !S.foto && !S.bouwSoort && S.modus === 'verkennen' ? { x0: ev.clientX, y0: ev.clientY, x: ev.clientX, y: ev.clientY, bewogen: false } : null;
@@ -968,8 +971,8 @@
     if (!h || !h.doe || h.kan === false) return;
     h.doe();
   });
-  canvas.addEventListener('contextmenu', (ev) => {
-    ev.preventDefault();
+  canvas.addEventListener('contextmenu', (ev) => ev.preventDefault()); // het menu van de browser niet; rechts: rechtsKlik
+  function rechtsKlik(ev) {
     // Met een veld of een weg in de hand haalt de eerste rechtsklik zijn eerste hoek (of het begin) weg.
     if (S.bouwSoort && S.veldHoek) S.veldHoek = null;
     else if (S.bouwSoort) S.bouwSoort = null;
@@ -981,14 +984,16 @@
       const r = S.sturen;
       if (r && r.kan && r.doe) {
         r.doe();
-        // Erheen: hun plekken in hun vorm, even in groen op de grond (vraag 170, stap 3, E1; js/tekenen.js).
+        // Waar je klikte, een ring op de grond die krimpt (vraag 191, S3; rood op een vijand), en erheen: hun plekken in
+        // hun vorm, even in groen (vraag 170, stap 3, E1; js/tekenen.js).
+        if (S.hover) S.klikTeken = { x: S.hover.x, y: S.hover.y, tot: S.tijd + T.KIEZEN_INSTELLINGEN.teken, aanval: r.opdracht.soort !== 'stuur' };
         if (r.opdracht.soort === 'stuur') {
           const { plekken } = T.formatiePlekken(S.dorp, T.gekozenMannen(S), r.opdracht.naar);
           S.stuurPlekken = { plekken: plekken.map((p) => ({ x: p.x, y: p.y })), tot: S.tijd + T.KIEZEN_INSTELLINGEN.formatie.groen };
         }
       } else if (r && r.tekst) T.ui.bericht(r.tekst, 'gevaar');
     }
-  });
+  }
   window.addEventListener('keydown', (ev) => {
     // F2: de meter (hierboven), altijd, ook als er een venster openstaat; hij is ook een instelling (Settings, The meter).
     if (ev.key === 'F2') {

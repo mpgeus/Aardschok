@@ -2448,6 +2448,17 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   tot je terugroept"): de regels zonder scherm van kijken, kiezen en sturen, met de getallen in `T.KIEZEN_INSTELLINGEN`
   (de werkbank: "Choosing and sending"), getoetst in `test/kiezen.test.cjs`; de camera, de muis, het kader en de groepen
   staan in `js/main.js`, de ring om de voeten in `tekenWezen` (`js/tekenen.js`), het briefje in `js/huisbriefje.js`.
+- **Minder stroef** (vraag 191, 27 okt; werklijst S, S1 tot S4; gemeten in `speelbaar.md`, "De speeltest van 24 okt"):
+  `T.snelheidVan(e)` (`js/wereld.js`) geeft een soldaat of veteraan `KIEZEN_INSTELLINGEN.loopt` (2,2, als de held), want
+  zijn poppetje is dat van een boer; de `snelheid` van `T.WEZENS.soldaat` en `veteraan` ging eruit (niemand las hem), en
+  de looptijd van een bewoner (`T.looptijdVan`, `js/bewoners.js`) vraagt ook `T.snelheidVan`. `T.kanPraten`
+  (`js/praatje.js`): geen praatje voor een soldaat in zijn dienst (`T.inDienst`) of een veteraan op zijn post. Rechts
+  gaat in bij het indrukken (`rechtsKlik` op `mousedown` met knop 2 in `js/main.js`, en op de minikaart in `js/balk.js`;
+  `contextmenu` houdt alleen het menu van de browser tegen), met een ring waar je klikte (`S.klikTeken`, een schermveld;
+  `tekenKlikTeken` in `js/tekenen.js`, `KIEZEN_INSTELLINGEN.teken` seconden, rood bij een aanval). `loop` keert wie
+  midden in een stap is meteen om (`vanWaar`: de tegel een stap terug van tx en ty, door waar hij is), als die tegel
+  dichter bij zijn doel ligt en vrij is: zijn tx en ty worden die tegel, en zijn weg begint daar; zijn poppetje kijkt dan
+  meteen die kant op (`e.pad[0]`, `js/sprites.js`). Alleen bij een bevel, dus alleen voor je mannen.
 - **Je mannen** (4a): `T.isMan(D, e)` (de held, een soldaat, een veteraan; een dorpeling werkt vanzelf), `T.mannenVan(D)`,
   en wat er gekozen is: `S.gekozen` (alleen scherm) is een gebouw, één wezen of een lijst van je mannen;
   `T.gekozenMannen(S)` haalt er je mannen uit.

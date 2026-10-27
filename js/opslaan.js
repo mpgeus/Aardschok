@@ -112,6 +112,7 @@
     handeling: null, // wat links zou doen (js/verkennen.js)
     sturen: null, // wat rechts zou doen met je gekozen mannen (js/kiezen.js)
     stuurPlekken: null, // waar je mannen gaan staan na een rechtsklik, even in groen (js/main.js, js/tekenen.js): { plekken, tot }
+    klikTeken: null, // een ring op de grond waar je met rechts klikte (vraag 191, S3): { x, y, tot, aanval }
     effecten: [], // wat nu beweegt: zwevende tekst, een pijl (js/anim.js)
     gevechtGloed: 0, // de rode rand van het beeld in een gevecht, die in- en uitfaadt (js/main.js, js/tekenen.js)
     bouwSoort: null, // het bouwmenu (js/hud.js)

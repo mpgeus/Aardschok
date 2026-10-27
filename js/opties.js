@@ -1436,6 +1436,8 @@
     beeldStraal: T.t('radius on screen'),
   };
   const NAAM_VAN_PAD = {
+    'KIEZEN_INSTELLINGEN.loopt': T.t('soldiers and veterans walk, tiles per second'), // geen tekst
+    'KIEZEN_INSTELLINGEN.teken': T.t('the ring where you right-clicked stays, seconds'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst

@@ -128,10 +128,10 @@
     // Een soldaat van het wachthuis (js/soldaten.js; vraag 159): wat hij kan als hij bij een aanval naast de aanvoerder vecht
     // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten, en hoe hij slaat
     // zegt zijn wapen (T.slagVan).
-    soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, snelheid: 2.4, vel: 'boer' },
+    soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, vel: 'boer' },
     // Wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B): hij heeft leren vechten. Hij
     // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een soldaat.
-    veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, snelheid: 2.4, vel: 'boer' },
+    veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, vel: 'boer' },
   };
 
   const sleutelVan = (x, y) => x + ',' + y;
@@ -150,9 +150,10 @@
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-  // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat. (Tot 25 sep liep de tovenaar trager
-  // naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
-  T.snelheidVan = (e) => e.snelheid;
+  // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat; je soldaten en veteranen even snel als de held
+  // (T.KIEZEN_INSTELLINGEN.loopt, js/kiezen.js; vraag 191, S1), want hun poppetje is dat van een boer. (Tot 25 sep liep de
+  // tovenaar trager naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
+  T.snelheidVan = (e) => (e.bewoner && (e.bewoner.soldaat || e.bewoner.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt : e.snelheid);
 
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.
