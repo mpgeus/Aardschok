@@ -287,7 +287,8 @@ merchants, dungeon keeper level select etc.").
   Merchants en Age of Empires (Marcel, 23 okt, I1).
 - **Een schets van de hoofdstukken**, niet besloten; elk leert één ding, zoals de campagnes van Age of Empires:
   1. de aankomst en het eerste jaar (het demojaar);
-  2. de rovers van het hol (werklijst K);
+  2. de rovers van het hol (werklijst K; **besloten** op 27 okt, bij K "2c": bij Oldland, van niets, het hol weg vóór
+     Sint-Maarten);
   3. het buurdorp: een bond of een strijd;
   4. de koning, of de opstand;
   5. het kasteel van de heer (de finale; met het belegeren van 7).
@@ -381,7 +382,8 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
    (Marcel, 24 okt: "Stap 2a: kaart en rand"): **2a, de kaart, gebouwd op 24 okt** (1, "De rand"; `code.md` bij
    `js/scenario.js`): een vast eiland, een plek op naam en de rand; **2b, gebouwd op 24 okt** (6; `code.md` bij
    `js/campagne.js`), *Campaign* op het titelscherm als rij hoofdstukken met het demojaar als hoofdstuk 1, en het land met
-   vaandels daarna (eerst een proefplaat); **2c**, het eerste echte hoofdstuk, het rovershol (werklijst K).
+   vaandels daarna (eerst een proefplaat); **2c**, het eerste echte hoofdstuk, het rovershol (werklijst K, "2c";
+   Marcel, 27 okt: "A1, B1, C1, D2, E1; c3 A1 B1 C1, demo mee"), in vijf stappen: c3, c4, het hol, het level, nalopen.
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.
 4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de

@@ -84,7 +84,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    met een rand (1, "De rand"), en *Campaign* op het titelscherm (6, "Stap 2b"): het demojaar is hoofdstuk 1, op eiland 5
    bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
    Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
-   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan voor 2c, ligt bij Marcel.
+   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan is besloten (bij K, "2c"), nu
+   stap 1, c3.
    Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
@@ -798,7 +799,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   okt, in `main`; `spel.md`, "De bende van een kamp"; `code.md` bij `js/rovers.js`; `test/kampen.test.cjs`). Voor c3:
   de kans voor de bode (`T.bodeGevaar`, js/bode.js) telt sinds c2 geen bende meer; de hinderlaag uit het dichtste kamp
   kan haar weer laten meetellen.
-  **c3 in detail** (Claude, 18 okt; **geparkeerd**, Marcel, 18 okt: eerst de basis, O1). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
+  **c3 in detail** (Claude, 18 okt; geparkeerd op 18 okt, O1; **besloten** voor 2c, Marcel, 27 okt: "c3 A1 B1 C1, demo
+  mee", bij K). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
   na 60 dagen, de helft 's nachts (`R.wildeOp`, `aanvalsUur`). De overval komt uit het kamp dat het dichtst bij het plein
   ligt en mannen thuis heeft; is er geen (alle kampen leeg of op pad), dan komt er deze keer niemand, en loopt het rooster
   door. (2) **De tocht**: ze vertrekken zo dat ze op het uur van de aanval bij je zijn. Hun weg is de grove weg van c0
@@ -956,6 +958,24 @@ zijn huizen en zijn infra zijn (eerst in woorden, dan een proefplaat), of het in
 zoals het tweede dorp van 6a, dat zelf kiest uit de handelingen van een mens: 6b), wat het doet (roven, handelen met wie
 wil, wegtrekkers lokken), en hoe je het verslaat. Voorstel voor de volgorde: na stuk c en 6b, omdat een hol dat zelf
 bouwt een dorp is dat kiest zonder speler.
+
+**2c, het rovershol als hoofdstuk 2** (Claude, 27 okt; **besloten**, Marcel, 27 okt: "A1, B1, C1, D2, E1; c3 A1 B1 C1,
+demo mee"; `scenario.md`, 6 en 9). Het hoofdstuk: de heer schrijft dat rovers in het bos bij Oldland "zijn" graan stelen,
+en wil ze weg vóór Sint-Maarten; je komt met de huifkar (B1: van niets, zoals hoofdstuk 1), het wachthuis en de
+wapenmaker zijn open, en het hol overvalt je (c3). Na de eerste overval wijst het doel naar het hol, met een vaandel en
+een ping op de minikaart (D2: ze lieten een spoor; alleen in dit hoofdstuk, het vrije spel houdt V2). Valt de laatste
+rover, dan is het gewonnen (E1, c4); staat het hol op Sint-Maarten nog, dan is het mislukt (C1; de tiende betaal je zoals
+altijd). **Het hol is een groot kamp** (A1): het level zet een kamp op zo'n 10 man in vijf tenten, met een palissade
+eromheen (de code van c2; eerst in woorden, dan één proefplaat). Het hol van hierboven, een dorp dat zelf bouwt (A3), komt
+na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (176 oost, 72 zuid), dus de rand is 7 bij
+7 stukken. De stappen, elk een eigen commit met toetsen:
+1. **c3**, de overval uit het dichtste kamp (bij I, "c3 in detail", met A1, B1 en C1); de wilde rovers gaan eruit, en de
+   ene overval van de demo komt ook uit een kamp ("demo mee").
+2. **c4**, een kamp valt: de tenten neer, het vuur uit, de buit ligt er, en het komt niet terug (R1, K1).
+3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade).
+4. **Het level** `levels/rovershol.js` en hoofdstuk 2 in `levels/campagne.js` (Oldland, 7 bij 7), met de woorden die nog
+   missen: `kamp` (verslagen) bij *als*, de brief van de heer als inleiding, en een doel dat naar een plek wijst (D2).
+5. **Nalopen** in de browser, en de speeltest.
 
 ## L. De heuvels op het hele eiland (vraag 174, 17 okt)
 
