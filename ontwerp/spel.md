@@ -1196,6 +1196,17 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   zien" en "b"): een hoop, klein tot 20 stuks (een kist en twee zakken), middel tot 60 (de kist open met goud en zilver,
   tonnen en zakken), en daarboven groot (een hoge hoop met tonnen, zakken, twee kisten, een rol laken, een ketel, een
   kandelaar en een karrenwiel); de grenzen in de werkbank (`buitMaten`). Je mannen halen hem bij de hoop.
+- **Het rovershol** (27 okt, werklijst K, 2c; Marcel: "P zoals in de woorden", "1, 2, 3 en 5", "variatie is goed",
+  "alle negen", "misschien het kamp iets ruimer opzetten"; `beeld.md`, "Het rovershol"). Een level kan een kamp tot hol
+  maken (`hol: { bende, buit, palissade }`): het dichtste kamp binnen de rand krijgt zijn bende en zijn buit, en een
+  palissade, een ronde ring van palen op 9 tegels van het vuur, op een open plek van 14 tegels, met een poort waar het
+  paadje de ring kruist. Door de ring kom je alleen door de poort. Elke paal is een andere: meestal gewoon, soms nieuw,
+  scheef, afgebroken, met een plank of mos, en her en der ontbreekt er een (de liggers lopen door, dus je komt er niet
+  door). Elk kamp krijgt aankleding, het hol het meest: slaapvellen voor de tenten, een waslijn met gestolen kleren,
+  zitstammen (een met een bijl erin), een spit met een zwijn, een vat bier op een bok, een wapenrek, een droograam met
+  een vel, een schietschijf, brandhout en een hakblok, een paal met konijnen, een kapotte kar, modder en stro, en bij de
+  poort twee fakkels, die 's nachts licht geven. Hoe het staat, ligt vast in het zaad van het kamp; je mannen en de
+  rovers lopen eromheen. Valt het hol, dan blijft het zoals het is, alleen de tenten gaan neer en het licht gaat uit.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

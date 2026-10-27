@@ -1567,6 +1567,8 @@
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     stapelsInLijst(ctx, S, w, D, vak, lijst);
     kampBuitInLijst(ctx, S, w, vak, lijst);
+    palissadeInLijst(ctx, S, w, vak, lijst);
+    aankledingInLijst(ctx, S, w, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g, vast, opDeKaart); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
@@ -3638,13 +3640,9 @@
       else T.blok(ctx, p.x, p.y, 0.4, 0.4, 24, v.vorm === 'afdak' ? '#6b4f33' : '#d8cfae', { helder });
       return;
     }
-    if (v.soort === 'palissade') {
-      // Een stuk van de palissade om een rovershol (js/rovers.js, zetPalissade). Zonder kunst: een hoge, smalle paal.
-      const deel = metSprites() && T.sprites.palissade(v.rij, v.richting);
-      if (deel) T.sprites.teken(ctx, deel, p.x, p.y, helder);
-      else T.blok(ctx, p.x, p.y, 0.15, 0.15, 60, '#6f665a', { helder });
-      return;
-    }
+    // De tegels van de palissade om een rovershol houden alleen tegen (js/rovers.js, zetPalissade); de palen zelf staan elk
+    // op hun eigen plek op de cirkel (palissadeInLijst).
+    if (v.soort === 'palissade') return;
     if (v.soort === 'kampvuur') {
       // Het kampvuur in het midden van het kamp (js/begin.js): het brandt als de mensen op zijn, en smeult als ze werken of
       // slapen (T.kampvuurStand); dat van een roverskamp (js/rovers.js) brandt als het donker is. Zonder kunst: een kring
@@ -3973,6 +3971,50 @@
       } });
     }
   }
+  // De palissade om een rovershol (T.palissadeVan, js/rovers.js): elke paal op zijn eigen plek op de cirkel, met zijn soort
+  // en zijn richting (T.sprites.palissade), en de balk van de poort over wie eronder loopt. Zonder kunst: een hoge, smalle
+  // paal.
+  function palissadeInLijst(ctx, S, w, vak, lijst) {
+    for (const K of w.kampen || []) {
+      for (const q of T.palissadeVan(w, K)) {
+        const tx = Math.round(q.x);
+        const ty = Math.round(q.y);
+        if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+        lijst.push({
+          d: q.x + q.y + (q.boven ? 1 : 0), l: 1, punt: { x: tx, y: ty }, f: () => {
+            const p = opGrond(q.x, q.y);
+            const deel = metSprites() ? T.sprites.palissade(q.rij, q.richting) : null;
+            if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+            else if (q.rij !== 'gat' && q.rij !== 'balk') T.blok(ctx, p.x, p.y, 0.1, 0.1, 60, '#6f665a');
+          },
+        });
+      }
+    }
+  }
+
+  // De aankleding van de roverskampen (K.spullen, js/rovers.js): elk ding op zijn plek, met zijn voorkant naar het vuur
+  // (T.sprites.aankleding); wat plat op de grond ligt (modder, stro, een slaapvel), onder wie erop staat. Zonder kunst: een
+  // klein blok.
+  const OP_DE_GROND = new Set(['modderplas', 'stro', 'slaapvel']);
+  function aankledingInLijst(ctx, S, w, vak, lijst) {
+    for (const K of w.kampen || []) {
+      if (!K.staat || !K.spullen) continue;
+      for (const q of K.spullen) {
+        const tx = Math.round(q.x);
+        const ty = Math.round(q.y);
+        if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+        lijst.push({
+          d: q.x + q.y, l: OP_DE_GROND.has(q.soort) ? 0 : 1, punt: { x: tx, y: ty }, f: () => {
+            const p = opGrond(q.x, q.y);
+            const deel = metSprites() ? T.sprites.aankleding(q.soort, q.richting) : null;
+            if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+            else if (!OP_DE_GROND.has(q.soort)) T.blok(ctx, p.x, p.y, 0.2, 0.2, 8, '#6b5a44');
+          },
+        });
+      }
+    }
+  }
+
   // Eén stapel s ({ x, y, wat, vol }), als hij in het vak ligt en te zien is.
   function stapelInLijst(ctx, w, vak, lijst, s) {
     if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) return;

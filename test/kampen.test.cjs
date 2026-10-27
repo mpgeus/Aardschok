@@ -492,31 +492,103 @@ test('het hol van een level: het dichtste kamp, met zijn bende, zijn buit en een
   T.openVak(w, { x: K.x - 30, y: K.y - 30, b: 61, h: 61 });
   T.wereldTik(S);
   const ring = w.voorwerpen.filter((x) => x.soort === 'palissade' && x.kamp === K.nr);
-  const R = T.ROVERS_INSTELLINGEN.palissade.straal;
+  const P = T.ROVERS_INSTELLINGEN.palissade;
+  const R = P.straal;
   assert.ok(ring.length > 20, `${ring.length} tegels`);
   for (const t of ring) {
     assert.ok(Math.abs(Math.hypot(t.x - K.x, t.y - K.y) - R) <= 0.5, 'op de straal');
     assert.ok(!T.isBegaanbaar(w, t.x, t.y, {}), 'je komt er niet door');
-    // de buitenkant wijst van het vuur af
-    const hoek = (t.richting * Math.PI) / 4;
-    assert.ok(Math.cos(hoek) * (t.x - K.x) + Math.sin(hoek) * (t.y - K.y) > 0, 'de buitenkant naar buiten');
   }
-  assert.deepEqual(ring.filter((t) => t.rij.startsWith('poort')).map((t) => t.rij).sort(), ['poort', 'poort-lap'], 'twee zware palen bij de opening');
   T.wereldTik(S);
   assert.equal(w.voorwerpen.filter((x) => x.soort === 'palissade' && x.kamp === K.nr).length, ring.length, 'één keer');
+  // De grotere open plek (Marcel, 27 okt: "5"): wat er groeide, is weg tot `vrij` van het vuur.
+  for (let y = K.y - P.vrij; y <= K.y + P.vrij; y++) {
+    for (let x = K.x - P.vrij; x <= K.x + P.vrij; x++) {
+      const v = Math.hypot(x - K.x, y - K.y) <= P.vrij && T.voorwerpOp(w, x, y);
+      assert.ok(!v || !v.natuur, `(${x - K.x}, ${y - K.y}): ${v && v.soort}`);
+    }
+  }
+  // De palen: elk op zijn eigen plek op de cirkel, de buitenkant naar buiten, een soort uit het vel (Marcel, 27 okt: "Als
+  // een soort random tile erin"), geen twee gaatjes of afgebroken naast elkaar, en de poort: twee palen en een balk.
+  const palen = T.palissadeVan(w, K);
+  const vel = require('../beelden/beschrijving.json').palissade.rijen.map((r) => r.naam);
+  const gewoon = palen.filter((q) => !['paal-lap', 'paal', 'balk'].includes(q.rij));
+  assert.ok(gewoon.length > 100, `${gewoon.length} palen`);
+  const soort = (rij) => (rij.startsWith('gat') ? 'gat' : rij.startsWith('gewoon') ? 'gewoon' : rij.startsWith('scheef') ? 'scheef' : rij);
+  gewoon.forEach((q, i) => {
+    assert.ok(Math.abs(Math.hypot(q.x - K.x, q.y - K.y) - R) < 1e-6, 'op de cirkel');
+    assert.ok(vel.includes(q.rij), `${q.rij} staat op het vel`);
+    const hoek = (q.richting * Math.PI) / 8;
+    assert.ok(Math.cos(hoek) * (q.x - K.x) + Math.sin(hoek) * (q.y - K.y) > 0, 'de buitenkant naar buiten');
+    if (i > 0 && ['gat', 'afgebroken'].includes(soort(q.rij))) assert.notEqual(soort(gewoon[i - 1].rij), soort(q.rij), 'niet twee naast elkaar');
+  });
+  assert.ok(new Set(gewoon.map((q) => soort(q.rij))).size >= 5, 'er zit variatie in');
+  assert.deepEqual(palen.filter((q) => !gewoon.includes(q)).map((q) => q.rij), ['paal-lap', 'paal', 'balk']);
+  assert.equal(T.palissadeVan(w, K), palen, 'één keer uitgerekend');
   // Over het paadje kom je bij het vuur; is de opening dicht, dan niet: de ring is dicht.
   const pad = T.eilandVan(w.eiland.zaad).paden.find((p) => p.kamp === K.nr);
   const pt = pad.punten.find(([x, y]) => Math.hypot(x - K.x, y - K.y) > R + 4);
   const van = { x: Math.round(pt[0]), y: Math.round(pt[1]) };
   assert.ok(T.zoekRoute(w, van, { x: K.x, y: K.y }, { naast: true }), 'door de opening');
-  const poort = ring.filter((t) => t.rij.startsWith('poort'));
-  const [a, b] = poort;
-  for (let i = 1; i < 8; i++) {
+  const [a, b] = palen.filter((q) => q.rij.startsWith('paal'));
+  for (let i = 0; i <= 8; i++) {
     const x = Math.round(a.x + ((b.x - a.x) * i) / 8);
     const y = Math.round(a.y + ((b.y - a.y) * i) / 8);
-    if (!w.voorwerpen.some((q) => q.x === x && q.y === y)) T.zetVoorwerp(w, { soort: 'palissade', x, y, kamp: K.nr, richting: 0, rij: '0' });
+    if (!w.voorwerpen.some((q) => q.x === x && q.y === y)) T.zetVoorwerp(w, { soort: 'palissade', x, y, kamp: K.nr });
   }
   assert.equal(T.zoekRoute(w, van, { x: K.x, y: K.y }, { naast: true }), null, 'zonder opening geen weg naar binnen');
+});
+
+// De aankleding (Marcel, 27 okt: "Alles valt en staat met de aankleding", "alle negen"): het kamp krijgt zijn spullen
+// vanzelf, met een vast lot op vrije plekken; het hol het meest, een gewoon kamp een paar.
+test('de aankleding: het hol krijgt zijn spullen op vrije plekken, met een vast lot, en ze gaan mee in een bewaard spel', () => {
+  const L = { eiland: { zaad: 5 }, plek: 'Oldland', rand: { b: 7, h: 7 }, dorpen: [{ hol: { bende: 10, palissade: true, buit: { graan: 60 } } }] };
+  const spel = () => {
+    const S = T.proefdorp.begin(T.proefdorp.zaad, L);
+    Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+    const K = S.wereld.kampen.find((k) => k.nr === S.dorp.hol);
+    T.openVak(S.wereld, { x: K.x - 30, y: K.y - 30, b: 61, h: 61 });
+    T.wereldTik(S);
+    return { S, K };
+  };
+  const { S, K } = spel();
+  const w = S.wereld;
+  const vel = require('../beelden/beschrijving.json').aankleding.rijen.map((r) => r.naam);
+  const soorten = new Set(K.spullen.map((q) => q.soort));
+  for (const s of ['zitstam', 'spit', 'slaapvel', 'waslijn', 'wapenrek', 'schietschijf', 'hakblok', 'brandhout', 'bierbok', 'droograam', 'konijnenpaal', 'kar', 'fakkel', 'modderplas', 'stro']) {
+    assert.ok(soorten.has(s), `het hol heeft ${s}`);
+  }
+  for (const q of K.spullen) assert.ok(vel.includes(q.soort), `${q.soort} staat op het vel`);
+  const k = T.eilandVan(w.eiland.zaad).kampen[K.nr];
+  const tent = new Set(k.tenten.flatMap((t) => [`${t.deur.x},${t.deur.y}`, ...Array.from({ length: t.voet.b * t.voet.h }, (_, i) => `${t.voet.x + (i % t.voet.b)},${t.voet.y + Math.floor(i / t.voet.b)}`)]));
+  for (const q of K.spullen) {
+    if (['slaapvel', 'waslijn'].includes(q.soort)) continue;
+    assert.ok(!tent.has(`${Math.round(q.x)},${Math.round(q.y)}`), `${q.soort} niet op een tent`);
+    assert.ok(Math.hypot(q.x - K.x, q.y - K.y) < T.ROVERS_INSTELLINGEN.palissade.straal, `${q.soort} binnen de palissade`);
+  }
+  assert.equal(K.spullen.filter((q) => q.soort === 'fakkel').length, 2, 'twee fakkels bij de poort');
+  // Hetzelfde zaad, dezelfde spullen; en bewaard en geladen blijven ze.
+  assert.deepEqual(spel().K.spullen, K.spullen);
+  const S2 = {};
+  assert.ok(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 0 })).gelukt);
+  assert.deepEqual(S2.wereld.kampen.find((q) => q.nr === K.nr).spullen, K.spullen);
+  // De mannen staan niet op wat er staat (plekVan).
+  for (const l of K.bende) {
+    if (!l.plek) continue;
+    for (const q of K.spullen) if (!['modderplas', 'stro', 'slaapvel'].includes(q.soort)) assert.ok(Math.hypot(l.plek.x - q.x, l.plek.y - q.y) > 0.5, `${l.naam} staat niet op ${q.soort}`);
+  }
+  // 's Nachts geven de fakkels licht, naast het vuur.
+  const nacht = Math.floor(S.kalender.dag) + 23 / 24;
+  assert.equal(T.roverskampenLicht(w, nacht).length, 1 + 2);
+});
+
+test('de aankleding: een gewoon roverskamp krijgt een paar spullen, zonder palissade en zonder fakkels', () => {
+  const { S, w } = nieuwSpel();
+  const k = T.eilandVan(w.eiland.zaad).kampen[0];
+  const K = openKamp(S, w, k);
+  assert.ok(K.spullen.length >= 3, `${K.spullen.length} spullen`);
+  assert.ok(!K.spullen.some((q) => ['fakkel', 'kar', 'wapenrek'].includes(q.soort)), 'wat bij het hol hoort, niet');
+  assert.equal(T.palissadeVan(w, K).length, 0, 'geen palissade');
 });
 
 // A1, zoals het wild: een kamp gooit met zijn eigen dobbelsteen, dus wat het doet, verandert niets aan het dorp.

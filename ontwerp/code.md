@@ -2349,12 +2349,30 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 - **Het hol van een level** (werklijst K, 2c, 27 okt; `test/kampen.test.cjs`): `dorpen[].hol: { bende, buit, palissade }`
   (gekeurd in `T.keurScenario`) laat `T.beginOpEiland` (`js/begin.js`) `T.maakHol(D, o)` doen: het dichtste kamp binnen de
   rand krijgt zijn bende (`vanBuiten`), zijn buit en `K.palissade`, en `D.hol` is zijn nummer (`T.holStand(D)`: 'staat',
-  'verslagen' of null). Gaat zijn land open, dan zet `zetPalissade` de ring: elke tegel op `palissade.straal` (7) van het
-  vuur een voorwerp `palissade` (`blokkeert` in `T.VOORWERPEN`, js/wereld.js), behalve `palissade.opening` (3) tegels waar
-  het paadje de ring kruist (`kruisingMetPaadje`); de twee einden daar zijn de poortpalen (`rij` 'poort' en 'poort-lap'),
-  de rest een variant ('0' tot '2'); `richting` (0 tot 7) is de buitenkant, van het vuur af. Getekend met
-  `T.sprites.palissade(rij, richting)` uit `beelden/palissade.png` (`gereedschap/pixelart/palissade.cjs`, `vel`; laadt pas
-  als er een te zien is). De tekening wordt nog beter (Marcel, 27 okt: "De palissade moet beter").
+  'verslagen' of null). Gaat zijn land open, dan maakt `zetPalissade` de open plek (geen natuur binnen `palissade.vrij`,
+  14) en de ring: elke tegel op `palissade.straal` (9) van het vuur een voorwerp `palissade` (`blokkeert` in
+  `T.VOORWERPEN`, js/wereld.js; het voorwerp zelf tekent niets), behalve `palissade.opening` (3) tegels waar het paadje
+  de ring kruist (`kruisingMetPaadje`). Wat je ziet, zijn de palen: `palenVan(w, K)` (onthouden in `PALEN`, een
+  WeakMap, en `T.palissadeVan(w, K)` zolang `K.palissadeStaat`) zet ze op de cirkel, `palissade.tussen` tegel uit
+  elkaar, vanaf de poort rond, elk met een soort uit een vast lot (`palissade.soorten`, `kiesPaal`: twee gaatjes of twee
+  afgebroken naast elkaar komen niet voor) en een van de 16 richtingen (de buitenkant); bij de poort de poortpalen
+  (`paal-lap`, `paal`) en de balk (`boven`). `palissadeInLijst` in `js/tekenen.js` zet elke paal op zijn eigen plek
+  (`d = x + y`, de balk een laag hoger), met `T.sprites.palissade(rij, richting)` uit `beelden/palissade.png`
+  (`gereedschap/pixelart/palissade.cjs`, `vel`: 12 soorten paal en 3 poortstukken, elk in 16 richtingen, gepakt met
+  `rijenVel` in `kern.cjs`; laadt pas als er een te zien is). Zo kan dezelfde tekening later de palissade van je dorp
+  worden (vraag 158).
+- **De aankleding van een kamp** (werklijst K, 2c, 27 okt; Marcel: "Alles valt en staat met de aankleding"):
+  `spullenVoor(w, K, k)` geeft een kamp zijn spullen als het opengaat (`K.spullen`, bewaard, dus ze verschuiven niet),
+  uit de tabel `SPUL` (per ding een zone van tegels vanaf het vuur, een voet, of het op de grond ligt, en hoeveel in een
+  gewoon kamp en in het hol), met een vast lot uit het zaad van het kamp: de slaapvellen voor de tentdeuren, de waslijn
+  tussen de twee tenten die het dichtst bij elkaar staan, de fakkels bij de poort, en de rest op volgorde van groot naar
+  klein (`VOLGORDE`), elk tot 80 pogingen in zijn zone. Een spul staat niet op een tent, het paadje, bij het vuur, op de
+  buit, waar je niet kunt lopen, of op een ander spul; in het hol reikt de zone tot een tegel binnen de palissade, in een
+  gewoon kamp tot `KAMP_TOT` (5,6). `plekVan` zet geen man op een spul dat niet op de grond ligt, en heeft het kamp geen
+  plek meer om het vuur, dan zoekt het een tegel verder. `aankledingInLijst` tekent ze (`OP_DE_GROND`, modder, stro en
+  slaapvel, op laag 0), met `T.sprites.aankleding(soort, richting)` uit `beelden/aankleding.png`
+  (`gereedschap/pixelart/aankleding.cjs`, 16 rijen in 4 richtingen); `T.roverskampenLicht` geeft de fakkels licht.
+  Een kamp dat valt, houdt zijn spullen (het is er nog, verlaten).
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de

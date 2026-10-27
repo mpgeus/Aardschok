@@ -2655,7 +2655,14 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   (`gereedschap/pixelart/aankleding.cjs`), eerst één proefplaat van het aangeklede hol. **De proefplaat** (27 okt,
   `uit/aankleding-proef.png`): het hele hol, met daaronder het binnenste twee keer vergroot. Bij het maken bleek: wat
   rechts achter de grote buit of vlak achter de voorwand staat, zie je niet; dus het wapenrek achter tegen de palissade en
-  het vat bier voor het vuur, en de kar en het spit links voor. Wacht op Marcel.
+  het vat bier voor het vuur, en de kar en het spit links voor. **In het spel** (Marcel, 27 okt: "Goed, zet alles in het
+  spel"): de palissade per paal, elk op zijn eigen plek op de cirkel met een soort uit een vast lot (`palissade.cjs`,
+  `vel`: 12 soorten paal en de poort, in 16 richtingen, `beelden/palissade.png`, 177 kB), en de aankleding per ding in
+  vier richtingen (`aankleding.cjs`, `vel`, `beelden/aankleding.png`, 40 kB); waar het staat, kiest `js/rovers.js`
+  (`spullenVoor`). **Ruimer** (Marcel, 27 okt, daarop: "misschien het kamp iets ruimer opzetten"): de ring van 7 naar 9
+  tegels van het vuur, de open plek van 12 naar 14, en de spullen mogen tot een tegel binnen de palissade staan. De tenten
+  staan nog op hun plek van het eiland, op zo'n 4 tegels van het vuur. Gemeten (software, in de cloud): hetzelfde beeld
+  met de palissade en de aankleding 20 tot 25 ms, zonder 20 ms, binnen de ruis; nog te meten in Firefox.
 - **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
   vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
   *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen

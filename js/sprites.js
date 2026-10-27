@@ -632,14 +632,25 @@
     return plekken.slice(0, n).sort((a, b) => a[1] - b[1]).map(([dx, dy]) => ({ deel: mand, dx, dy }));
   };
 
-  // Een stuk van de palissade om een rovershol (js/rovers.js, zetPalissade; gereedschap/pixelart/palissade.cjs): `rij` is
-  // een variant ('0' tot '2') of de poortpaal ('poort', 'poort-lap'), `richting` de kant van de buitenkant (0 tot 7). Het
+  // Een ding van de aankleding van een roverskamp (js/rovers.js, spullenVoor; gereedschap/pixelart/aankleding.cjs): `soort`
+  // ('zitstam', 'spit', 'kar', ...), `richting` de kant van zijn voorkant (0 tot 3, vanaf ZO). Elke rij heeft zijn eigen
+  // cel. Het vel laadt pas als er iets van te zien is; tot dan null.
+  S.aankleding = function (soort, richting) {
+    const t = gegevens && gegevens.aankleding;
+    const r = t && t.rijen.find((q) => q.naam === soort);
+    if (!r || !laadAlsNodig(MAP + t.bestand)) return null;
+    return onthoud(`aankleding|${soort}|${richting}`, () => stuk(MAP + t.bestand, r.x + (richting % t.richtingen) * r.cel[0], r.y, r.cel[0], r.cel[1], r.anker));
+  };
+
+  // Een paal van de palissade om een rovershol, of een stuk van zijn poort (js/rovers.js, palenVan;
+  // gereedschap/pixelart/palissade.cjs): `rij` is de soort ('gewoon0', 'scheef-uit', 'gat', ...) of 'paal-lap', 'paal' of
+  // 'balk', `richting` de buitenkant (0 tot 15). Elke rij heeft zijn eigen cel op het vel (krap, kern.cjs rijenVel). Het
   // vel laadt pas als er een palissade te zien is; tot dan null.
   S.palissade = function (rij, richting) {
     const t = gegevens && gegevens.palissade;
-    const r = t ? t.rijen.indexOf(rij) : -1;
-    if (r < 0 || !laadAlsNodig(MAP + t.bestand)) return null;
-    return stuk(MAP + t.bestand, (richting % t.richtingen) * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
+    const r = t && t.rijen.find((q) => q.naam === rij);
+    if (!r || !laadAlsNodig(MAP + t.bestand)) return null;
+    return onthoud(`palissade|${rij}|${richting}`, () => stuk(MAP + t.bestand, r.x + (richting % t.richtingen) * r.cel[0], r.y, r.cel[0], r.cel[1], r.anker));
   };
 
   // De buit van een roverskamp (js/rovers.js, T.roverskampenBuit; gereedschap/pixelart/buit.cjs): 'klein', 'middel' of

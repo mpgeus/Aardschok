@@ -34,10 +34,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **2c, het hol in woorden en de plek van hoofdstuk 1** (27 okt; bij K, "2c", en `beeld.md`, "Het rovershol"): c3 en c4
-  zijn af (de overval komt uit het dichtste kamp, een kamp valt, je mannen dragen de buit naar huis). Nu: de palissade
-  in woorden goedkeuren (dan één proefplaat), en of hoofdstuk 1 naar Oakley gaat (Millcombe heeft geen kamp binnen zijn
-  rand, dus geen overval).
+- **2c, het ruimere hol bekijken** (27 okt; bij K, "2c", en `beeld.md`, "Het rovershol"): c3 en c4 zijn af, en het hol
+  staat in het spel (de palissade per paal, de aankleding, de ring op 9 tegels). Ruim genoeg, of de tenten ook naar
+  buiten, tegen de palissade? Daarna stap 4: het level en hoofdstuk 2.
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
@@ -989,7 +988,9 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    Het hol uit het level en de ring staan in het spel (`T.maakHol`, `zetPalissade`), maar de palissade moet beter
    (Marcel, 27 okt: "1, 2, 3 en 5": een dichte muur, een ronde ring, een echte poort, en een grotere open plek; `beeld.md`,
    "Het rovershol"). De ronde ring is goed, met variatie erin (Marcel: "her en der een gaatje, etc."), als willekeurige
-   soorten paal, zodat het later ook vanzelf gaat als je zelf een palissade plaatst (158): eerst een proefplaat.
+   soorten paal, zodat het later ook vanzelf gaat als je zelf een palissade plaatst (158), en met aankleding (Marcel:
+   "alle negen"). **In het spel** (27 okt; "Goed, zet alles in het spel"): elke paal op zijn plek, de aankleding in elk
+   kamp, en ruimer (Marcel: "misschien het kamp iets ruimer opzetten": de ring op 9 tegels, de open plek 14).
    **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
    (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
    van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).

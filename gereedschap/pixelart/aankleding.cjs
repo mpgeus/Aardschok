@@ -14,6 +14,7 @@
 // proefplaat van het aangeklede hol.
 //
 //   node gereedschap/pixelart/aankleding.cjs     (de proefplaat: uit/aankleding-proef.png, het hele hol)
+//   node gereedschap/pixelart/naar-spel.cjs --alleen aankleding   (naar het spel: beelden/aankleding.png)
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -325,6 +326,36 @@ function paadje(l) {
   }]);
 }
 
+// ---------------------------------------------------------------- het vel voor het spel
+
+// Elk ding op een rij, in vier richtingen (zijn voorkant naar ZO, ZW, NW en NO; js/rovers.js zet hem met zijn voorkant
+// naar het vuur). Het paadje niet: dat ligt er in het spel al (het paadje van het kamp, js/eiland.js).
+const SPULLEN = {
+  zitstam: () => zitstam(),
+  'zitstam-bijl': () => zitstam({ bijl: true }),
+  spit,
+  slaapvel,
+  waslijn: () => waslijn(),
+  wapenrek,
+  schietschijf,
+  hakblok,
+  brandhout,
+  bierbok,
+  droograam,
+  konijnenpaal,
+  kar,
+  fakkel,
+  modderplas: () => modderplas(),
+  stro,
+};
+const RICHTINGEN4 = [0, 90, 180, 270];
+function vel() {
+  return K.rijenVel(Object.entries(SPULLEN).map(([naam, maakModel]) => ({ naam, model: maakModel() })), RICHTINGEN4, [320, 260], [160, 190]);
+}
+// Wat in beelden/beschrijving.json komt: het bestand, de rijen (elk met zijn plek, cel en anker), en het aantal
+// richtingen.
+const beschrijving = (bestand, rijen) => ({ bestand, rijen, richtingen: RICHTINGEN4.length });
+
 // ---------------------------------------------------------------- de proefplaat
 
 function kader(p) {
@@ -418,4 +449,4 @@ function proef() {
 
 if (require.main === module) proef();
 
-module.exports = { zitstam, spit, slaapvel, waslijn, wapenrek, schietschijf, hakblok, brandhout, bierbok, droograam, konijnenpaal, kar, fakkel, modderplas, stro, paadje, omZ };
+module.exports = { vel, beschrijving, SPULLEN, zitstam, spit, slaapvel, waslijn, wapenrek, schietschijf, hakblok, brandhout, bierbok, droograam, konijnenpaal, kar, fakkel, modderplas, stro, paadje, omZ };
