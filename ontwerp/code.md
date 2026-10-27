@@ -478,7 +478,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op (`tochtRoute` geeft null, hij wacht niet). Alles uit het nummer van het eiland en het open land, geen spelstaat; per
   kaart opnieuw als de kaart of het open land verandert (`grofVan`). Wat het kost, valt weg tegen het maken van het
   land zelf (`T.landStuk`, een profiel van 17 okt); de getallen `grofOnthouden` en `grofVooruit` in
-  `T.LOPEN_INSTELLINGEN`.
+  `T.LOPEN_INSTELLINGEN`. `T.groveWeg(w, van, doel)` (c3, 27 okt) geeft de hele grove weg als een rij middens van vakken,
+  voor wie buiten beeld reist (de rovers van een kamp, `js/rovers.js`), gezien vanaf het eiland van het doel; null als er
+  geen is. Gemeten op 27 okt: de eerste keer op een eiland zo'n 50 ms (de schets, `grofKost`), daarna 4 à 7 ms per nieuw
+  doel, en 0,3 ms voor een doel dat het al kent.
 
 ### js/praatje.js: een praatje
 
@@ -1142,13 +1145,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `test/rand.test.cjs`.
 - **Een level** (stap 1b, 24 okt; Marcel: "1b nu"): een bestand in `levels/` (een script, geen JSON: dat laadt niet vanaf
   `file://`; in `index.html` na `js/scenario.js`) zet `T.LEVELS.<naam>`: een scenario met `dorpen` (per dorp wat het bij
-  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
+  het begin anders heeft: `wacht`, `dicht`, `overvallen`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
   null voor het volle spel; zonder: de demo als `T.DEMO_INSTELLINGEN.aan`) geeft het aan `T.beginOpEiland` (`js/begin.js`):
   dat keurt het (een fout gooit, want dat is een fout in het spel), geeft `T.nieuwDorp` wat het van het eerste dorp zegt,
   en start daarna het scenario. `T.proefdorp.begin(zaad, level)` doet hetzelfde voor de toetsen. **Het eerste level is
   het demojaar** (`levels/demojaar.js`): de wacht in een eigen tent (de tent draagt de lijst, `g.wacht`, voor
-  `T.zetBeginBewoners`), het wachthuis en de wapenmaker op slot (`D.dicht`, `T.isDicht` in `js/gebouwen.js`), geen wilde
-  rovers (`D.rovers.wilde === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
+  `T.zetBeginBewoners`), het wachthuis en de wapenmaker op slot (`D.dicht`, `T.isDicht` in `js/gebouwen.js`), geen overvallen
+  op het rooster (`D.rovers.overvallen === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
   (`{ rovers: { aantal: 3, aangekondigd: true } }`, `js/rovers.js`), en een trigger als de heer komt (`{ heer: 'komt' }`)
   voor de punten (`punten`, `T.telPunten`) en de scène van het betalen (`scene: 'betalen'` zet `D.scene`; dan is betalen
   het eind, `js/heer.js`, en speelt `js/regie.js` de scène). Hoe een spel begon, zet wie het begint erbij (stap 2b): de
@@ -2257,8 +2260,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 - `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat naar het
   dichtste roverskamp (`T.wordtRover` vanuit `js/bewoners.js`; in een level met een rand alleen een kamp dat erbinnen kan
   staan, `stukkenVanKamp`, en anders vertrekt hij gewoon; hieronder; tot c2 kwam hij met de bende van het dorp,
-  `D.rovers.bende`, terug), en er komen wilde rovers van buiten (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
-  (`T.roverIngang`) naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
+  `D.rovers.bende`, terug), en uit dat kamp komt de overval (c3, hieronder; `T.tikRoversDag` zet hem een dag van
+  tevoren). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): langs hun weg naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
   vraag 170, stap 4), twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
   `js/akkers.js`), en weer weg. Er komt niemand vanzelf (vraag 170, stap 2): het bericht zegt hoe je je soldaten stuurt,
   en het gevecht is in real time (`js/gevecht.js`); wie vecht (`e.doelwit`), laat `T.werkRoversBij` met rust. Wie valt,
@@ -2273,13 +2276,13 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   neemt met `T.neemVanStapel` (`js/kar.js`) `stapelPerRover` per man. Rovers horen bij een dorp dat vanaf niets begon
   (`D.begin`) of akkers heeft (`heeftRovers`), dus ook voor de eerste akker.
 - **De overval van de demo** (vraag 185, 23 okt; Marcel: 4a3, 4b1, 4c1, "overdag, aankondiging ja"; sinds 24 okt een
-  trigger van het demojaar, `levels/demojaar.js`): een dorp met `D.rovers.wilde === false` krijgt van `T.tikRoversDag`
-  geen wilde rovers. De trigger `overval` gaat af op een dag uit het zaad (`S.scenario.lot.overval`) en roept
+  trigger van het demojaar, `levels/demojaar.js`): een dorp met `D.rovers.overvallen === false` krijgt van
+  `T.tikRoversDag` geen overvallen op het rooster. De trigger `overval` gaat af op een dag uit het zaad (`S.scenario.lot.overval`) en roept
   `T.roversKomen(D, { aantal, aangekondigd: true })`: een aanval met `aangekondigd: true` voor morgen, op een uur van
   `overdagUur` (overdag, tot `aangekondigd.voorDonker` uur voor zonsondergang). `aangekondigd.vooraf` uur ervoor kiest
   `meld` het doel en de ingang, zegt het met de plek, en zet de tijd op 1× (`aanval.gemeld`); is er niets te roven, dan
   schuift de aanval een dag op (met het uur van die dag, zoals de nacht erna eerst opnieuw plande). De trigger gaat één
-  keer af. De raad zegt niet dat ze terugkomen waar geen wilde rovers komen of het wachthuis dicht is (`js/raad.js`).
+  keer af. De raad zegt niet dat ze terugkomen waar geen overvallen op het rooster komen of het wachthuis dicht is (`js/raad.js`).
 - **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
   (`E.kampen`, `js/eiland.js`, `legKampen`, met de tentplekken en hun deur); wat een kamp in een spel is, staat op de
   kaart (`w.kampen`, bewaard, vanaf de eerste tik alle kampen van het eiland, `kampenVan`; de velden staan bovenaan het
@@ -2309,7 +2312,25 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   voor een vijand in het land van zijn dorp (`vlucht` in js/gevecht.js, `T.dorpVak`), zodat een kamp ver weg niemand
   binnen houdt. Bij de muis zijn naam (`T.handelingVerkennen`, js/verkennen.js). D1: de bende van een dorp
   (`D.rovers.bende`, `bendeOp`, de overval van soort `'bende'`) is weg, en de bode telt haar niet meer (js/bode.js);
-  tot c3 is een overval wild.
+  tot c3 was een overval wild.
+- **De overval komt uit een kamp** (vraag 170, c3, 27 okt; Marcel: "c3 A1 B1 C1, demo mee"; `test/rovers.test.cjs`,
+  `kampen`, `bode`): `T.tikRoversDag` zet de aanval een dag van tevoren (`soort: 'overval'`, `D.rovers.overvalOp`, de
+  getallen `overval…` in de werkbank). Elke tik in de fase `wacht`: `plan` kiest het kamp (`kampVoor`: het dichtst bij
+  het plein met mannen thuis, `thuis`, binnen de rand, `kampenBinnen`, met een grove weg, `T.groveWeg` in `js/lopen.js`)
+  en de reis (`reisUren`, de weg op de pas van een rover tot `ingangAfstand` van het plein); vanaf het uur min de reis
+  kiest `kiesDoel` de akker of stapel en de ingang (`ingangVan`, B1: het eerste vak van de grove weg naar het doel binnen
+  `ingangAfstand` waar een begaanbare tegel ligt vanwaar ze erheen kunnen), en `vertrek` zet wie gaat op pad (`A.leden`,
+  `lid.opPad = { terug: null }`; A1: tot `aantal`, met `aanvullen`, een level of het debugvenster, komen er van buiten
+  bij, `vanBuiten`). Fase `onderweg`: op het uur zet `opDeKaart` ze bij de ingang (`maakRover(D, K, lid, plek)`: `e.dorp`
+  het dorp, `e.kamp` en `e.lid` hun kamp), en haalt wie nog in zijn kamp liep weg. `roof` deelt de buit (`deelBuit`,
+  `e.buit`); valt er een, dan legt `T.roverVerslagen` zijn deel als losse stapel (`T.legLosseStapel`, C1). `eind` (het
+  enige eind van een aanval) geeft wie nog leeft `lid.opPad = { terug, buit }`, en `T.werkKampenBij` maakt hem thuis
+  (`thuisVan`: `K.buit`). In het kamp (`werkKampBij`): wie `opPad` is, loopt naar de rand van de open plek (`gaatOpPad`,
+  `e.naarRand`) en is daar weg, en komt niet terug op de kaart tot hij thuis is; een rover op een overval (`e.dorp`)
+  telt niet als man thuis. De bode (`js/bode.js`): `T.kampVoorDeBode` bij het vertrek (`D.bode.kamp`, en `onderschept`
+  'rovers' alleen als er een is), de hinderlaag uit dat kamp (`beginHinderlaag`), `T.roverValtOnderweg` en
+  `T.buitNaarKamp` (het loon, `D.bode.loon`). `Spel.debug.rovers(n)` is `T.roversKomen(D, { aantal, meteen: true })`.
+  Weg: `T.roverIngang` (de rand van `T.dorpVak`), `wildVel` en de wilde rovers. Het opslaan is versie 26.
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de

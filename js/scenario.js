@@ -24,7 +24,7 @@
 // bewerker terugschrijft (stap 2 en 4: het level als recept, en de editor).
 //
 // Een level (T.LEVELS, in levels/; stap 1b: het demojaar) is zo'n scenario, met `dorpen` erbij: per dorp wat het bij het
-// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js).
+// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er overvallen op het rooster komen; T.beginOpEiland, js/begin.js).
 // Hoe het begon, zet wie het begint erbij: `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js; T.demoLevel) of
 // `hoofdstuk` (een hoofdstuk van de campagne, js/campagne.js). Stap 2a: zijn kaart, met `eiland: { zaad }` (een
 // vast eiland), `plek` (een dorpsplek op naam) en `rand: { b, h }` (zoveel stukken om het dorp, T.randOm in js/maker.js).
@@ -238,8 +238,8 @@
     triggerUit: (S, D, v) => elk(v).forEach((id) => triggerVan(S, id) && (triggerVan(S, id).aan = false)),
     // Geven en nemen: { goud: 50, graan: -10 } (T.wijzigVoorraad).
     waar: (S, D, v) => Object.entries(v).forEach(([wat, n]) => T.wijzigVoorraad(D, wat, n)),
-    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), zoals een wilde overval; of { aantal, aangekondigd: true }:
-    // morgen, overdag, en een bericht vooraf, met de plek (de overval van de demo).
+    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), uit het dichtste kamp, zoals op het rooster; of { aantal,
+    // aangekondigd: true }: morgen, overdag, en een bericht vooraf, met de plek (de overval van de demo).
     rovers: (S, D, v) => T.roversKomen(D, v),
     // De punten van het jaar, voor het eindscherm (T.telPunten, js/einde.js): op Sint-Maarten, vóór de tiende.
     punten: (S, D) => T.telPunten(D),

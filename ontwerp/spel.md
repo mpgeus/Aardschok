@@ -30,7 +30,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
 | Meer dorpen op één eiland | gebouwd (16 okt, vraag 170, stap 6a; Marcel: "A1 b1 c2 d1"): een tweede dorp op de dichtste andere dorpsplek van hetzelfde eiland, met zijn eigen plek, mensen, velden en mist; wie van een ander dorp is, is een vijand, ook een dorpeling; je bouwt niet in zijn bereik; te spelen in één browser met `Spel.debug.tweedeDorp()` en `Spel.debug.wissel()` ("Zo werken meer dorpen op één eiland nu", bij Rovers en de militie) | vraag 170 |
 | De wereld van iedereen | stuk a gebouwd (16 okt, vraag 170, stap 6a2; Marcel: "W1, R1, Rb, maar dit wisselt ze leren, N1, V1", "K1 en L1", "A1"): het wild is van de wereld, niet van een dorp; wie het aangaat, zijn dorp zegt het en vecht; elke roedel een eigen dobbelsteen. Nog niet: het wild over het hele eiland (b), de roverskampen (c) en de rooftocht die leert (d) ("Zo werken meer dorpen op één eiland nu") | vraag 170 |
-| Rovers en de militie | gebouwd (29 sep): wie wegtrekt gaat naar een roverskamp (sinds 17 okt, c2), wilde rovers van buiten, ze roven een akker (of zonder akker een stapel, 23 okt), jij stuurt je soldaten, en wie valt is dood; in de demo één overval, overdag en aangekondigd (vraag 185) | vraag 55, 185 |
+| Rovers en de militie | gebouwd (29 sep): wie wegtrekt gaat naar een roverskamp (sinds 17 okt, c2), en uit dat kamp komt de overval (sinds 27 okt, c3), ze roven een akker (of zonder akker een stapel, 23 okt), jij stuurt je soldaten, en wie valt is dood; in de demo één overval, overdag en aangekondigd (vraag 185) | vraag 55, 185 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
@@ -837,8 +837,9 @@ vaste ronde in die dagen, dan komt die meteen erna. Wat je bij hem koopt, vertel
 "De bode".
 
 Onderweg kan hij onderschept worden. De rovers uit het bos doen het een op de zeventien keer, in de winter en in het
-donker vaker (tot 17 okt ook vaker naarmate de bende van het dorp groter was; wie wegtrekt, woont nu in een roverskamp, en
-in c3 komt de hinderlaag uit het dichtste kamp). De brief zegt het gevaar,
+donker vaker (tot 17 okt ook vaker naarmate de bende van het dorp groter was; wie wegtrekt, woont nu in een roverskamp,
+en sinds c3, 27 okt, komen de rovers onderweg uit het dichtste kamp met mannen thuis: is er geen, dan is er geen gevaar
+van rovers). De brief zegt het gevaar,
 en hoe vaak ze de rovers afslaan met de mannen die je meestuurt: de bode telt half, een man een, een veteraan twee, en met
 een wapen voor elke man anderhalf keer zoveel. Slaan ze ze af, dan gaat de bode verder, maar een man kan gewond raken of
 sneuvelen, en soms valt er een rover. Lukt het niet, dan nemen ze alles: geen marskramer, en wie meeging is
@@ -1164,8 +1165,23 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   bij het vuur waakt (elke nacht een ander). Ziet een van hen een vijand, dan komt iedereen naar buiten en vechten ze,
   zoals een rover nu; wie valt, is uit de bende, en wie het overleeft, geneest na een nacht. Bij de muis staat zijn naam
   ("Sybil, a robber"). Een kamp is van de wereld, niet van een dorp, en gooit met zijn eigen dobbelsteen, zoals een
-  roedel. Een overval komt tot c3 nog van wilde rovers van de rand; een kamp verslaan is c4, en een kamp dat groot genoeg
-  wordt, bouwt een rovershol (vraag 173).
+  roedel. Een kamp verslaan is c4, en een kamp dat groot genoeg wordt, bouwt een rovershol (vraag 173).
+- **De overval komt uit een kamp** (27 okt, c3; Marcel: "c3 A1 B1 C1, demo mee"; `js/rovers.js`). Het rooster blijft: per
+  dorp twee keer per jaar, de eerste na 60 dagen, de helft 's nachts. Een dag van tevoren staat vast wanneer, en uit welk
+  kamp: het dichtst bij je plein dat mannen thuis heeft (in een level met een rand alleen een kamp binnen de rand). Heeft
+  geen kamp mannen thuis, dan komt er deze keer niemand. Er gaan zoveel man op pad als het rooster zegt (het eerste jaar
+  twee, elk jaar een meer, tot vier), de rest blijft thuis, en heeft het kamp er minder, dan gaan die (A1). Ze vertrekken
+  zo dat ze op het uur van het zaad bij je zijn: hun reis is de grove weg over de schets en de wegen (het paadje, de
+  bruggen), op hun pas. Staat het kamp er, dan zie je ze het paadje af lopen tot de rand van de open plek; daarna reizen
+  ze buiten beeld, en het kamp is zolang leeg (de tenten blijven staan). Je land op komen ze langs hun weg, zodra ze 40
+  tegels van hun akker of stapel zijn, of later, als het land daar nog dicht is (B1, `ingangAfstand` in de werkbank). Het
+  zijn de mannen van het kamp, met hun naam ("Sybil, a robber"). Met de buit gaan ze terug langs dezelfde weg, en na hun
+  reis zijn ze thuis: wat ze meebrachten, ligt in het kamp (voor wie het in c4 opruimt). Ieder draagt een even groot
+  deel, en valt hij, dan ligt zijn deel er als een losse stapel, die de dragers halen als hij in je bereik ligt (C1). Wie
+  valt, is uit zijn bende. Ook de hinderlaag op de bode komt uit het dichtste kamp met mannen thuis (twee man; is er
+  niemand, dan zijn er geen rovers onderweg), wie van hen buiten beeld valt, is uit zijn bende, en het loon dat ze de bode
+  afnemen, ligt daarna in hun kamp. De wilde rovers van de rand zijn weg. Gemeten: de eerste keer per eiland kost de grove
+  weg zo'n 50 ms (dezelfde schets als de eerste tocht), daarna een paar ms per overval.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat
@@ -1207,7 +1223,8 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   rovers ook komen voor er een akker is.
 - **In de demo één overval** (23 okt, vraag 185; Marcel, 20 okt: "Voor de demo wil ik ook een keer een roversaanval;
   zodat de speler de combat kan proberen en ervaren", en zijn keuzes 4a3, 4b1 en 4c1, en 23 okt: "overdag, aankondiging
-  ja"). In de demo komen er geen wilde rovers, maar zeker één keer drie, op een dag uit het zaad tussen dag 60 en 220
+  ja"). In de demo komen er geen overvallen op het rooster, maar zeker één keer drie, uit het dichtste kamp (sinds 27
+  okt, c3, "demo mee"; heeft het er minder thuis, dan komen er van buiten bij), op een dag uit het zaad tussen dag 60 en 220
   (Sint-Maarten is dag 250), overdag, zodat het gevecht in het licht valt. Een dag van tevoren zegt een bericht het,
   met de plek waar ze komen (*Robbers were seen in the woods near the village. They will come soon.*), en gaat de tijd
   naar 1×: zo zet je de wacht klaar. Valt er dan niets te roven (geen akker, geen stapel), dan komen ze een dag later.

@@ -726,4 +726,35 @@
     }
     return null;
   }
+
+  // De hele grove weg van `van` naar `doel`, voor wie buiten beeld reist (de rovers van een kamp op weg naar een dorp,
+  // js/rovers.js; werklijst vraag 170, c3): het midden van elk vak, van het vak van `van` tot dat van het doel, over de
+  // schets en het land dat open is, zoals een tocht hem ziet vanaf het eiland van het doel. Null als er geen weg is (dicht,
+  // of een ander eiland).
+  T.groveWeg = function (w, van, doel) {
+    if (!T.opEiland(w) || !T.opKaart(w, doel.x, doel.y)) return null;
+    const E = T.eilandVan(w.eiland.zaad);
+    const n = E.n;
+    const eig = eilandBij(w, doel);
+    if (eig < 0) return null;
+    const g = grofVan(w);
+    const { kost, deel } = kostVoor(w, E, g, eig);
+    const naar = Math.floor(doel.y / E.vak) * n + Math.floor(doel.x / E.vak);
+    let k = Math.floor(van.y / E.vak) * n + Math.floor(van.x / E.vak);
+    if (deel[k] < 0 || deel[k] !== deel[naar]) return null;
+    const d = grofVeld(g, kost, E, naar, eig);
+    const midden = (v) => ({ x: (v % n) * E.vak + (E.vak >> 1), y: Math.floor(v / n) * E.vak + (E.vak >> 1) });
+    const uit = [midden(k)];
+    while (d[k] > 0) {
+      let beste = -1;
+      for (const [dx, dy] of RICHTINGEN) {
+        const j = grofStap(kost, n, k, dx, dy);
+        if (j >= 0 && d[j] < (beste < 0 ? d[k] : d[beste])) beste = j;
+      }
+      if (beste < 0) return null;
+      k = beste;
+      uit.push(midden(k));
+    }
+    return uit;
+  };
 })(globalThis.Spel = globalThis.Spel || {});

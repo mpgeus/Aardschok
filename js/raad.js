@@ -236,9 +236,9 @@
     },
     {
       id: 'rovers',
-      // Niet waar ze niet terugkomen (geen wilde rovers, zoals in de demo: één overval, js/rovers.js; vraag 185), of waar het
+      // Niet waar ze niet terugkomen (geen overvallen op het rooster, zoals in de demo: één overval, js/rovers.js; vraag 185), of waar het
       // wachthuis op slot is.
-      als: (D) => D.rovers && D.rovers.wilde !== false && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa &&
+      als: (D) => D.rovers && D.rovers.overvallen !== false && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa &&
         !heeft(D, 'wachthuis') && !T.isDicht(D, 'wachthuis'),
       tekst: (D) => {
         const woorden = { gebouw: eenNaam('wachthuis'), getal: T.telwoord(T.SOLDATEN_INSTELLINGEN.plaatsen) };

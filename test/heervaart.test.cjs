@@ -217,7 +217,7 @@ test('een veteraan vecht aan jouw kant als er rovers komen, ook zonder wachthuis
   }
   assert.ok(!S.dorp.gebouwen.some((g) => g.soort === 'wachthuis'), 'er is geen wachthuis');
   S.dorp.rovers = T.nieuweRovers();
-  S.dorp.rovers.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: 2, meteen: true };
+  T.roversKomen(S.dorp, { aantal: 2, meteen: true });
   berichten.length = 0;
   T.werkRoversBij(S, S.dorp);
   // Er komt niemand vanzelf (js/gevecht.js; vraag 170, stap 2): een veteraan is een man van je, en jij stuurt hem.

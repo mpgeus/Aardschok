@@ -136,7 +136,7 @@ test('bij een aanval komt niemand vanzelf: de soldaten blijven bij het wachthuis
   const { S, D, een, twee } = dorp();
   S.kalender.dag = 5 + 17.5 / 24;
   D.rovers = D.rovers || T.nieuweRovers();
-  D.rovers.aanval = { soort: 'wild', dag: 5, fase: 'wacht', aantal: 2, meteen: true };
+  T.roversKomen(D, { aantal: 2, meteen: true });
   T.werkRoversBij(S, D);
   assert.equal(D.rovers.aanval.fase, 'komen');
   assert.ok(berichten.some((t) => /^Robbers are coming\./.test(t) && /Choose your soldiers/.test(t)), berichten.join(' | '));
@@ -177,7 +177,7 @@ test('wie valt, is dood: een dorpeling of een soldaat is een mond minder; de laa
   assert.equal(D.bevolking, voor - 2);
   // Een aanval van één rover: valt hij, dan is de aanval voorbij.
   D.rovers = D.rovers || T.nieuweRovers();
-  D.rovers.aanval = { soort: 'wild', dag: 5, fase: 'komen', rovers: [r] };
+  D.rovers.aanval = { soort: 'overval', dag: 5, fase: 'komen', rovers: [r] };
   berichten.length = 0;
   T.raak(S, D, r, 100, null);
   assert.equal(r.dood, true);

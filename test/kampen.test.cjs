@@ -3,7 +3,8 @@
 // open plek om het vuur en een paadje naar de dichtste weg (P1). In het spel staat een kamp er als het land eromheen
 // opengaat (T.zetRoverskampenBij, js/rovers.js): een tent per twee man en het vuur, en de kaart onthoudt het (w.kampen).
 // In c2 heeft elk kamp zijn bende vanaf het begin (twee man, een erbij per jaar tot vier, en wie wegtrekt), en staan de
-// mannen om hun vuur; in de nacht slapen ze in hun tent, op een na (N1).
+// mannen om hun vuur; in de nacht slapen ze in hun tent, op een na (N1). In c3 komt de overval uit een kamp (de rest staat
+// in test/rovers.test.cjs).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -350,6 +351,51 @@ test('roverskampen: wie van een kamp valt, is uit zijn bende, en een kamp ver we
   T.werkGevechtBij(S, D);
   assert.equal(D.schuilen, false);
   assert.equal(p.schuilt, undefined);
+});
+
+// c3 (Marcel, 27 okt: "c3 A1 B1 C1"): de overval komt uit een kamp. Wie op pad gaat, loopt het paadje af tot de rand van
+// de open plek en is daar uit beeld; de tenten blijven staan; een rover op een overval is van het dorp dat hij overvalt,
+// niet een man thuis om het vuur; en wie terug is, komt over het paadje binnen.
+test('roverskampen: wie op een overval gaat, loopt het paadje af en is uit beeld; de tenten blijven, en thuis komt hij binnen (c3)', () => {
+  const { S, D, w } = nieuwSpel();
+  const k = T.eilandVan(w.eiland.zaad).kampen[0];
+  const kamp = openKamp(S, w, k);
+  const loop = (seconden) => {
+    for (let i = 0; i < seconden / T.TIK; i++) {
+      S.tijd += T.TIK;
+      S.wereldTijd += T.TIK;
+      T.werkKampenBij(S, w);
+      T.beweegWezens(S, w, T.TIK, T.TIK);
+    }
+  };
+  S.kalender.dag = Math.floor(S.kalender.dag) + 1 + 12 / 24; // overdag
+  loop(5);
+  const tenten = kamp.tenten;
+  for (const l of kamp.bende) l.opPad = { terug: null };
+  loop(1);
+  assert.ok(mannenVan(w, k.nr).every((e) => e.naarRand), 'ze lopen naar de rand van de open plek');
+  loop(15);
+  assert.equal(mannenVan(w, k.nr).length, 0, 'en zijn daar uit beeld');
+  assert.equal(kamp.tenten, tenten, 'de tenten blijven staan');
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === k.nr).length, tenten);
+  // Een rover van dit kamp op een overval (e.dorp) hoort niet bij de mannen thuis: het kamp stuurt hem niet naar zijn vuur.
+  const lid = kamp.bende[0];
+  const op = T.tegelVan(D.aanvoerder);
+  const e = T.maakWezen('rover', op.x + 3, op.y);
+  Object.assign(e, { rover: true, dorp: D, kamp: k.nr, lid: lid.id, pad: [] });
+  w.wezens.push(e);
+  loop(1);
+  assert.equal(e.pad.length, 0, 'het kamp laat hem met rust');
+  assert.equal(mannenVan(w, k.nr).filter((m) => !m.dorp).length, 0, 'en zet hem niet nog eens neer');
+  w.wezens.splice(w.wezens.indexOf(e), 1);
+  // Thuis: over het paadje komt hij binnen, aan de rand van de open plek, en de buit ligt in het kamp.
+  for (const l of kamp.bende) l.opPad = { terug: S.kalender.dag, buit: { graan: 5 } };
+  loop(T.TIK);
+  const thuis = mannenVan(w, k.nr);
+  assert.equal(thuis.length, kamp.bende.length, 'ze zijn er weer');
+  assert.ok(kamp.bende.every((l) => !l.opPad));
+  assert.equal(kamp.buit.graan, 5 * kamp.bende.length, 'met hun buit');
+  for (const m of thuis) assert.ok(Math.hypot(m.tx - k.x, m.ty - k.y) >= K().open - 2, 'aan de rand van de open plek');
 });
 
 // A1, zoals het wild: een kamp gooit met zijn eigen dobbelsteen, dus wat het doet, verandert niets aan het dorp.

@@ -274,13 +274,15 @@ wegtrekken. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
 `Spel.debug.kampen()` zegt waar de drie roverskampen van het eiland liggen, hoe ver van je plein, of ze er al staan (met
-hoeveel tenten), en wie er woont, met het dorp van wie wegtrok (`js/rovers.js`, werklijst vraag 170, stap 6a2, c1 en c2); `('erheen')` maakt het land om het dichtste kamp open, zet het
+hoeveel tenten), wie er woont, met het dorp van wie wegtrok en wie op pad is, en wat er aan buit ligt (`js/rovers.js`,
+werklijst vraag 170, stap 6a2, c1 tot c3); `('erheen')` maakt het land om het dichtste kamp open, zet het
 kamp neer, laat je dorp het kennen (de rode stip op de minikaart) en kijkt erheen. In een verborgen paneel tekent de
 minikaart pas opnieuw met `Spel.ui.werkMinikaartBij(Spel.S)`.
-`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `geen`, en bij `overval` de dag van het bericht van
-de overval, uit het scenario), hoe een aanval ervoor staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
+`Spel.debug.rovers()` zegt wanneer de volgende overval komt (`overvalOp`; in de demo `geen`, en bij `overval` de dag van
+het bericht van de overval, uit het scenario), hoe een aanval ervoor staat (uit welk kamp, de reis in uren, waar ze je
+land op komen), wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
-drie wilde rovers komen. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
+drie man van het dichtste kamp komen, zonder reis (heeft het er minder thuis, dan komen er van buiten bij). `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
 wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).
 `Spel.debug.tweedeDorp()` zet een tweede dorp op het eiland, op de dichtste andere dorpsplek, met het lege begin (vraag
 170, stap 6a), en `Spel.debug.wissel()` maakt jou het volgende dorp: de camera gaat erheen, en de balk, de mist, de

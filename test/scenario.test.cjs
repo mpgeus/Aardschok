@@ -248,12 +248,12 @@ test('een scenario wordt bewaard, en speelt na het laden verder', () => {
 });
 
 // Het demojaar (vraag 187, stap 1b; levels/demojaar.js): wat het doet, toetsen test/rovers, soldaten, heer, einde en regie.
-test('het demojaar komt door de keuring, en een nieuw spel ermee heeft de wacht, het slot, geen wilde rovers en de triggers', () => {
+test('het demojaar komt door de keuring, en een nieuw spel ermee heeft de wacht, het slot, geen overvallen op het rooster en de triggers', () => {
   assert.deepEqual(T.keurScenario(T.LEVELS.demojaar), []);
   const S = T.proefdorp.begin(T.proefdorp.zaad, T.demoLevel());
   const D = S.dorp;
   assert.deepEqual(D.dicht, ['wachthuis', 'wapenmaker']);
-  assert.equal(D.rovers.wilde, false);
+  assert.equal(D.rovers.overvallen, false);
   assert.deepEqual(T.soldatenVan(D).map((p) => p.soldaat.soort), ['speerman', 'speerman', 'kruisboogschutter']);
   assert.equal(S.scenario.demo, true, 'begonnen als de demo (T.demoLevel)');
   assert.equal(S.scenario.hoofdstuk, null);

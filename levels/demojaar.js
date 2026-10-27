@@ -7,7 +7,7 @@
 //     huifkar meekomen, met hun eigen stukken, in een eigen tent en zonder wachthuis (js/begin.js, js/bewoners.js);
 //   - wat dicht is (Marcel, 20 okt, W1 en L1): het staat in het bouwmenu, met "In the full game", maar je zet het niet neer
 //     (T.isDicht, js/gebouwen.js);
-//   - geen wilde rovers, maar één overval (vraag 185; Marcel, 20 okt: "zodat de speler de combat kan proberen en ervaren",
+//   - geen overvallen op het rooster, maar één (vraag 185; Marcel, 20 okt: "zodat de speler de combat kan proberen en ervaren",
 //     en 23 okt: "overdag, aankondiging ja"): op een dag uit het zaad zegt een bericht dat er rovers gezien zijn, met de
 //     plek, en de dag erna komen ze, overdag (T.roversKomen, js/rovers.js);
 //   - op Sint-Maarten (Marcel, 18 okt, D2): de punten, vóór de tiende (vraag 186, T.telPunten in js/einde.js), en betaal je,
@@ -23,7 +23,7 @@
     dorpen: [{
       wacht: ['speerman', 'speerman', 'kruisboogschutter'],
       dicht: ['wachthuis', 'wapenmaker'],
-      wildeRovers: false,
+      overvallen: false,
     }],
     triggers: [
       // De dag van het bericht ligt tussen dag 59 en 219, de overval een dag later (Sint-Maarten is dag 250).

@@ -54,8 +54,8 @@
   // dorp, want de bewoners, de voorvallen, het vee, de rovers en het weer gooien er hun dobbelsteen mee. `ander`: het is
   // niet jouw dorp (het buurdorp): het spreekt niet tegen jou. `plek`: zijn plek op de kaart (D.plek, js/wereld.js). Wat een
   // level van het dorp zegt (vraag 187, stap 1b; T.beginOpEiland, js/begin.js): `wacht` (wie met de huifkar meekomt,
-  // T.zetKamp), `dicht` (wat het niet bouwt, T.isDicht in js/gebouwen.js) en `wildeRovers` (false: er komen geen wilde
-  // rovers, js/rovers.js).
+  // T.zetKamp), `dicht` (wat het niet bouwt, T.isDicht in js/gebouwen.js) en `overvallen` (false: er komen geen
+  // overvallen op het rooster, js/rovers.js).
   T.nieuwDorp = function (S, w, aanvoerder, opties) {
     const o = opties || {};
     const D = {
@@ -74,7 +74,7 @@
       einde: null, // de heer ontsloeg de aanvoerder (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
       dicht: [...(o.dicht || [])], // wat in dit dorp op slot is (een level, T.isDicht in js/gebouwen.js)
     };
-    if (o.wildeRovers === false) D.rovers = { ...T.nieuweRovers(), wilde: false };
+    if (o.overvallen === false) D.rovers = { ...T.nieuweRovers(), overvallen: false };
     if (aanvoerder) aanvoerder.dorp = D; // hij is van dit dorp (T.isVanDorp, js/wereld.js)
     // Zijn plek op de kaart (T.legePlek, js/wereld.js): wat `plek` meegeeft, anders de eerste die de kaart noemt.
     D.plek = o.plek || (w.plekken && w.plekken[0]) || T.legePlek(w);

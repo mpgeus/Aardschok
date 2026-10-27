@@ -82,8 +82,8 @@
   // okt heette dit T.beginOpKaart, in js/gebied.js, en kon het ook op een kaart uit Tiled beginnen; ronde 4 van het
   // snoeien.) Met een `level` (T.LEVELS, levels/; vraag 187, stap 1b en 2a) zijn eiland (`eiland.zaad`, anders dat van
   // makerZaad), zijn dorpsplek (`plek`, een naam; anders jouw plek), en zijn rand (`rand`, in stukken: T.randOm in
-  // js/maker.js); je dorp krijgt wat het level van het eerste dorp zegt (de wacht, wat dicht is, de wilde rovers;
-  // T.nieuwDorp), en daarna begint zijn scenario (T.startScenario, js/scenario.js). Een level dat niet door de keuring
+  // js/maker.js); je dorp krijgt wat het level van het eerste dorp zegt (de wacht, wat dicht is, of er overvallen
+  // op het rooster komen; T.nieuwDorp), en daarna begint zijn scenario (T.startScenario, js/scenario.js). Een level dat niet door de keuring
   // komt, is een fout in het spel: dan begint het niet.
   T.beginOpEiland = function (S, makerZaad, level = null) {
     const L = level || {};
@@ -101,7 +101,7 @@
     // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
     // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp); een tweede
     // komt erbij met T.dorpErbij (hieronder).
-    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, wildeRovers: d.wildeRovers });
+    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, overvallen: d.overvallen });
     S.dorpen = [S.dorp];
     if (level) T.startScenario(S, level);
     return S.dorp;

@@ -111,7 +111,7 @@ function metGevaar(rovers, heer, doe) {
 // Er zijn al rovers op de kaart: dan houden ze de bode buiten beeld aan. Geeft een functie die ze weer weghaalt.
 function alRoversOpDeKaart(D) {
   D.rovers = D.rovers || T.nieuweRovers();
-  D.rovers.aanval = { soort: 'wild', dag: 0, fase: 'wacht' };
+  D.rovers.aanval = { soort: 'overval', dag: 0, uur: 0, fase: 'wacht' };
   return () => {
     D.rovers.aanval = null;
   };
@@ -150,12 +150,17 @@ test('rovers onderscheppen de bode: zonder mannen erbij is alles weg, en hij is 
       assert.ok(r.kan, r.reden);
       assert.equal(D.bode.onderschept, 'rovers');
       assert.ok(!D.bode.hinderlaag, 'buiten beeld');
+      const kamp = D.bode.kamp;
       T.tikBodeDag(D, r.komt);
       assert.ok(!D.marskramer, 'geen marskramer');
       assert.equal(D.bode, null);
       const bode = r.bode;
       const dood = !D.bewoners.mensen.includes(bode);
       assert.ok(dood ? D.bevolking === mensen - 1 : bode.gewond && T.blijftThuis(bode, r.komt + 1), 'gewond of dood');
+      // De rovers kwamen uit het dichtste kamp met mannen thuis (vraag 170, c3), en zijn loon ligt daar.
+      const K = S.wereld.kampen.find((k) => k.nr === kamp);
+      assert.ok(K, 'uit een kamp');
+      assert.equal(K.buit.goud, B.loon, 'het loon van de bode ligt in hun kamp');
     } finally {
       B.kracht.bode = kracht;
     }
@@ -286,7 +291,9 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     T.werkRoversBij(S, D);
     const A = D.rovers.aanval;
     assert.equal(A.fase, 'roven');
-    assert.ok(A.rovers.length >= B.rovers.aanvallers, 'de rovers staan op de kaart');
+    assert.equal(A.rovers.length, B.rovers.aanvallers, 'de rovers staan op de kaart');
+    assert.equal(A.kamp, D.bode.kamp, 'uit het kamp van de bode (c3)');
+    for (const e of A.rovers) assert.ok(T.lidVan(S.wereld, e), 'mannen van dat kamp, met hun naam');
     assert.ok(bode.aangehouden, 'de bode staat stil');
     assert.ok(r.begeleiders[0].wezen.aangehouden, 'wie meegaat, staat ook stil: de rovers houden hem vast, en slaan hem niet');
     assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
@@ -297,6 +304,21 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.ok(!bode.aangehouden);
     assert.ok(!D.bode || !D.bode.onderschept, 'beroofd (geen bode meer) of afgeslagen (de weg is vrij)');
     if (D.bode) assert.match(D.bode.aanval, /drove the robbers off/);
+  });
+});
+
+// c3: zijn er geen rovers thuis in een kamp, dan zijn er geen rovers onderweg.
+test('heeft geen kamp mannen thuis, dan houden geen rovers de bode aan (c3)', () => {
+  metGevaar(1, 0, () => {
+    const S = gehucht(dagVan('zomermaand', 5) + 0.5);
+    const D = S.dorp;
+    T.zetWet(D, 'rantsoen', 'krap');
+    T.zetRoverskampenBij(S, S.wereld);
+    for (const K of S.wereld.kampen) for (const l of K.bende) l.opPad = { terug: null };
+    const r = T.stuurBode(D, { graan: 2 });
+    assert.ok(r.kan, r.reden);
+    assert.equal(D.bode.onderschept, null);
+    assert.ok(!D.bode.hinderlaag);
   });
 });
 
@@ -315,8 +337,11 @@ test('je mannen verslaan de rovers van de hinderlaag: de bode gaat verder', () =
     bode.ty = bode.y = uitgang.y - 3;
     T.werkRoversBij(S, D);
     const A = D.rovers.aanval;
+    const K = S.wereld.kampen.find((k) => k.nr === A.kamp);
+    const voor = K.bende.length;
     for (const e of A.rovers) T.raak(S, D, e, 100, null); // het gevecht (js/gevecht.js): de laatste maakt het af
     assert.equal(D.rovers.aanval, null);
+    assert.equal(K.bende.length, voor - A.rovers.length, 'wie valt, is uit zijn bende');
     assert.ok(D.bode && !D.bode.onderschept && !D.bode.hinderlaag);
     assert.ok(!bode.aangehouden);
     T.tikBodeDag(D, D.bode.komt);
