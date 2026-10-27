@@ -559,19 +559,21 @@ test('de aankleding: het hol krijgt zijn spullen op vrije plekken, met een vast 
     assert.ok(soorten.has(s), `het hol heeft ${s}`);
   }
   for (const q of K.spullen) assert.ok(vel.includes(q.soort), `${q.soort} staat op het vel`);
-  const k = T.eilandVan(w.eiland.zaad).kampen[K.nr];
-  const tent = new Set(k.tenten.flatMap((t) => [`${t.deur.x},${t.deur.y}`, ...Array.from({ length: t.voet.b * t.voet.h }, (_, i) => `${t.voet.x + (i % t.voet.b)},${t.voet.y + Math.floor(i / t.voet.b)}`)]));
+  const tent = new Set(T.tentPlekkenVan(w, K).flatMap((t) => T.tentTegels(t).map(([x, y]) => `${x},${y}`)));
   for (const q of K.spullen) {
     if (['slaapvel', 'waslijn'].includes(q.soort)) continue;
     assert.ok(!tent.has(`${Math.round(q.x)},${Math.round(q.y)}`), `${q.soort} niet op een tent`);
     assert.ok(Math.hypot(q.x - K.x, q.y - K.y) < T.ROVERS_INSTELLINGEN.palissade.straal, `${q.soort} binnen de palissade`);
   }
   assert.equal(K.spullen.filter((q) => q.soort === 'fakkel').length, 2, 'twee fakkels bij de poort');
-  // Hetzelfde zaad, dezelfde spullen; en bewaard en geladen blijven ze.
-  assert.deepEqual(spel().K.spullen, K.spullen);
+  // Hetzelfde zaad, dezelfde spullen en tenten; en bewaard en geladen blijven ze.
+  const nog = spel().K;
+  assert.deepEqual(nog.spullen, K.spullen);
+  assert.deepEqual(nog.tentPlekken, K.tentPlekken);
   const S2 = {};
   assert.ok(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 0 })).gelukt);
   assert.deepEqual(S2.wereld.kampen.find((q) => q.nr === K.nr).spullen, K.spullen);
+  assert.deepEqual(S2.wereld.kampen.find((q) => q.nr === K.nr).tentPlekken, K.tentPlekken);
   // De mannen staan niet op wat er staat (plekVan).
   for (const l of K.bende) {
     if (!l.plek) continue;
@@ -580,6 +582,57 @@ test('de aankleding: het hol krijgt zijn spullen op vrije plekken, met een vast 
   // 's Nachts geven de fakkels licht, naast het vuur.
   const nacht = Math.floor(S.kalender.dag) + 23 / 24;
   assert.equal(T.roverskampenLicht(w, nacht).length, 1 + 2);
+});
+
+// De tenten van het hol tegen de palissade (Marcel, 27 okt: "B; mag beetje random"): verdeeld over de ring, niet bij de
+// poort of vooraan, met de opening naar het vuur; een gewoon kamp houdt de plekken van het eiland.
+test('het hol: de tenten staan tegen de palissade, verdeeld over de ring, met de opening naar het vuur', () => {
+  const L = { eiland: { zaad: 5 }, plek: 'Oldland', rand: { b: 7, h: 7 }, dorpen: [{ hol: { bende: 10, palissade: true, buit: { graan: 60 } } }] };
+  const S = T.proefdorp.begin(T.proefdorp.zaad, L);
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+  const w = S.wereld;
+  const K = w.kampen.find((k) => k.nr === S.dorp.hol);
+  T.openVak(w, { x: K.x - 30, y: K.y - 30, b: 61, h: 61 });
+  T.wereldTik(S);
+  const P = T.ROVERS_INSTELLINGEN.palissade;
+  const plekken = T.tentPlekkenVan(w, K);
+  assert.equal(plekken, K.tentPlekken, 'het hol heeft zijn eigen plekken');
+  assert.ok(plekken.length >= 5, `${plekken.length} plekken`);
+  assert.equal(K.tenten, 5, 'vijf tenten voor tien man');
+  const tenten = w.voorwerpen.filter((v) => v.soort === 'tent' && v.kamp === K.nr);
+  assert.deepEqual(tenten.map((v) => `${v.x},${v.y}`), plekken.slice(0, 5).map((t) => `${t.x},${t.y}`), 'de tenten staan op de plekken');
+  const poort = T.palissadeVan(w, K).find((q) => q.rij === 'balk');
+  const hoek = (x, y) => Math.atan2(y - K.y, x - K.x);
+  const tussen = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  for (const t of plekken) {
+    const r = Math.hypot(t.x - K.x, t.y - K.y);
+    assert.ok(r >= P.tentAfstand[0] - 0.75 && r <= P.tentAfstand[1] + 0.75, `tegen de palissade: ${r.toFixed(1)}`);
+    for (const [x, y] of T.tentTegels(t)) assert.ok(Math.hypot(x - K.x, y - K.y) < P.straal - 1, 'binnen de palissade, met ruimte erachter');
+    assert.ok(tussen(hoek(t.x, t.y), Math.PI / 4) > (P.tentNietVoor * Math.PI) / 180 - 0.15, 'niet vooraan, achter de voorwand');
+    assert.ok(tussen(hoek(t.x, t.y), hoek(poort.x, poort.y)) > 0.5, 'niet bij de poort');
+    assert.ok(Math.hypot(t.deur.x - K.x, t.deur.y - K.y) < r, 'de opening naar het vuur');
+  }
+  for (let i = 0; i < plekken.length; i++) for (let j = i + 1; j < plekken.length; j++) {
+    assert.ok(Math.hypot(plekken[i].x - plekken[j].x, plekken[i].y - plekken[j].y) >= 3, 'niet op elkaar');
+  }
+  // 's Nachts gaat een man zijn eigen tent in, ook in het hol.
+  S.kalender.dag = Math.floor(S.kalender.dag) + 1 + 2 / 24; // twee uur 's nachts
+  for (let i = 0; i < 20 / T.TIK; i++) {
+    S.tijd += T.TIK;
+    S.wereldTijd += T.TIK;
+    T.werkKampenBij(S, w);
+    T.beweegWezens(S, w, T.TIK, T.TIK);
+  }
+  const mannen = w.wezens.filter((e) => e.kamp === K.nr && !e.dood);
+  const binnen = mannen.filter((e) => e.binnen);
+  assert.equal(binnen.length, mannen.length - 1, 'op één na in een tent');
+  for (const e of binnen) {
+    const i = K.bende.findIndex((l) => l.id === e.lid);
+    assert.ok(T.afstand(T.tegelVan(e), plekken[Math.floor(i / T.ROVERS_INSTELLINGEN.manPerTent)].deur) <= 1, 'bij de deur van zijn tent');
+  }
+  // Een gewoon kamp: de plekken van het eiland.
+  const gewoon = w.kampen.find((k) => !k.palissade);
+  assert.equal(T.tentPlekkenVan(w, gewoon), T.eilandVan(w.eiland.zaad).kampen[gewoon.nr].tenten);
 });
 
 test('de aankleding: een gewoon roverskamp krijgt een paar spullen, zonder palissade en zonder fakkels', () => {

@@ -1644,11 +1644,22 @@
     }
     E.padIndex = indexVan(E, E.paden, () => K.padBreed + 1);
   }
-  // De tenten van een kamp om zijn vuur (x, y), op de plekken van `kampen.tenten` op volgorde, met hun voet (de tegel
-  // van de tent en die erachter, weg van de opening; zoals de maker het kamp van het lege begin legt) en hun deur (de
-  // tegel voor de opening, waar een rover de tent in gaat, js/rovers.js), niet waar de voet
-  // of de tegel voor de opening op het paadje `lijn` ligt; zoveel als `tentenMeest`.
+  // Een tent van een kamp op tegel (x, y), met zijn opening naar `open`: zijn voet (de tegel van de tent en die erachter,
+  // weg van de opening; zoals de maker het kamp van het lege begin legt) en zijn deur (de tegel voor de opening, waar een
+  // rover de tent in gaat, js/rovers.js). Ook voor de tenten van het hol, tegen zijn palissade.
   const OPENING = { ZO: [1, 0], ZW: [0, 1], NW: [-1, 0], NO: [0, -1] };
+  T.tentOp = function (x, y, open) {
+    const [rx, ry] = OPENING[open];
+    return { x, y, open, voet: { x: Math.min(x, x - rx), y: Math.min(y, y - ry), b: rx ? 2 : 1, h: ry ? 2 : 1 }, deur: { x: x + rx, y: y + ry } };
+  };
+  // De tegels van tent t ([x, y]): zijn deur en zijn voet.
+  T.tentTegels = function (t) {
+    const uit = [[t.deur.x, t.deur.y]];
+    for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) uit.push([x, y]);
+    return uit;
+  };
+  // De tenten van een kamp om zijn vuur (x, y), op de plekken van `kampen.tenten` op volgorde (T.tentOp), niet waar de
+  // voet of de deur op het paadje `lijn` ligt; zoveel als `tentenMeest`.
   function tentenVan(K, x, y, lijn) {
     const opPad = (tx, ty) => {
       for (let i = 0; i + 1 < lijn.length; i++) {
@@ -1668,14 +1679,9 @@
     const uit = [];
     for (const p of K.tenten) {
       if (uit.length >= K.tentenMeest) break;
-      const [rx, ry] = OPENING[p.open];
-      const tx = x + p.dx;
-      const ty = y + p.dy;
-      const voet = { x: Math.min(tx, tx - rx), y: Math.min(ty, ty - ry), b: rx ? 2 : 1, h: ry ? 2 : 1 };
-      const tegels = [[tx + rx, ty + ry]];
-      for (let yy = voet.y; yy < voet.y + voet.h; yy++) for (let xx = voet.x; xx < voet.x + voet.b; xx++) tegels.push([xx, yy]);
-      if (tegels.some(([a, b]) => opPad(a, b))) continue;
-      uit.push({ x: tx, y: ty, open: p.open, voet, deur: { x: tx + rx, y: ty + ry } });
+      const t = T.tentOp(x + p.dx, y + p.dy, p.open);
+      if (T.tentTegels(t).some(([a, b]) => opPad(a, b))) continue;
+      uit.push(t);
     }
     return uit;
   }

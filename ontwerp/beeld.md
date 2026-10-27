@@ -2660,8 +2660,11 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   `vel`: 12 soorten paal en de poort, in 16 richtingen, `beelden/palissade.png`, 177 kB), en de aankleding per ding in
   vier richtingen (`aankleding.cjs`, `vel`, `beelden/aankleding.png`, 40 kB); waar het staat, kiest `js/rovers.js`
   (`spullenVoor`). **Ruimer** (Marcel, 27 okt, daarop: "misschien het kamp iets ruimer opzetten"): de ring van 7 naar 9
-  tegels van het vuur, de open plek van 12 naar 14, en de spullen mogen tot een tegel binnen de palissade staan. De tenten
-  staan nog op hun plek van het eiland, op zo'n 4 tegels van het vuur. Gemeten (software, in de cloud): hetzelfde beeld
+  tegels van het vuur, de open plek van 12 naar 14, en de spullen mogen tot een tegel binnen de palissade staan. Daarop
+  stelde Claude voor de tenten (die op zo'n 4 tegels van het vuur stonden, zodat de achterkant leeg was) tegen de
+  palissade te zetten, met het midden vrij om te vechten. **Gekozen** (Marcel, 27 okt: "B; mag beetje random"): de tenten
+  op 5,5 tot 6,5 tegels, verdeeld over de ring met een beetje toeval, niet bij de poort, en niet vooraan (35 graden om de
+  kant van de kijker: daar verdwijnt een tent achter de voorwand; met 50 graden pasten er soms maar vier). Gemeten (software, in de cloud): hetzelfde beeld
   met de palissade en de aankleding 20 tot 25 ms, zonder 20 ms, binnen de ruis; nog te meten in Firefox.
 - **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
   vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.

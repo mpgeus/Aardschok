@@ -88,9 +88,13 @@
     // tot zoveel tegels van het vuur (`vrij`, de grotere open plek). Elke paal staat `tussen` tegels van de vorige (dicht
     // tegen elkaar), de eerste `poortRuimte` tegels van een poortpaal, en is een soort met deze kansen (`soorten`; twee
     // gaatjes of twee afgebroken naast elkaar komen niet voor). De tekeningen: gereedschap/pixelart/palissade.cjs.
+    // De tenten staan tegen de palissade (Marcel, 27 okt: "B; mag beetje random"): `tentAfstand` tegels van het vuur (van,
+    // tot), elk tot `tentSchuif` van de ruimte tussen twee tenten van zijn plek, en niet binnen `tentNietVoor` graden van
+    // de kant van de kijker (daar verdwijnt een tent achter de voorwand).
     palissade: {
       straal: 9, opening: 3, vrij: 14, tussen: 0.305, poortRuimte: 0.41,
       soorten: { gewoon: 0.6, nieuw: 0.08, scheef: 0.07, afgebroken: 0.07, gat: 0.06, plank: 0.06, mos: 0.06 },
+      tentAfstand: [5.5, 6.5], tentSchuif: 0.2, tentNietVoor: 35,
     },
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
@@ -739,7 +743,8 @@
   //         laatst een bij kwam), wakker (de dag tot wanneer niemand slaapt: er was een vijand), ver (er is niemand van een
   //         dorp in de buurt; keekVer: wanneer het weer kijkt), buit ({ wat: hoeveel }: wat ze thuisbrachten, c3),
   //         verslagen (de laatste man viel, c4), palissade (het hol van een level heeft er een, T.maakHol; palissadeStaat:
-  //         hij staat er, zetPalissade), spullen (de aankleding, spullenVoor) }
+  //         hij staat er, zetPalissade), tentPlekken (die van het hol, tegen de palissade; een gewoon kamp heeft die van
+  //         het eiland, tentPlekken()), spullen (de aankleding, spullenVoor) }
   // Een man van een kamp op de kaart is een rover: e.rover, e.kamp (het nummer van zijn kamp) en e.lid (zijn id in de
   // bende); thuis van geen dorp, op een overval van het dorp dat hij overvalt (e.dorp). De wereld werkt hem bij, één keer per kaart (T.werkKampenBij); vechten doet hij in
   // T.werkGevechtVanDeWereldBij (js/gevecht.js), met de dobbelsteen van zijn kamp.
@@ -802,9 +807,9 @@
       if (K.staat || !kampLandOpen(w, k, K.palissade ? IN().palissade.vrij : undefined)) continue;
       K.staat = true;
       T.zetVoorwerp(w, { soort: 'kampvuur', x: k.x, y: k.y, kamp: k.nr });
-      zetTenten(w, K, k);
       if (K.palissade) zetPalissade(w, K);
-      if (!K.spullen) K.spullen = spullenVoor(w, K, k);
+      zetTenten(w, K);
+      if (!K.spullen) K.spullen = spullenVoor(w, K);
       for (const lid of K.bende) zetMan(w, K, lid, plekVan(w, K, lid));
       uit.push(K);
     }
@@ -850,6 +855,67 @@
         T.zetVoorwerp(w, { soort: 'palissade', x, y, kamp: K.nr });
       }
     }
+    if (!K.tentPlekken) K.tentPlekken = tentenTegenDePalissade(w, K);
+  }
+  // De tentplekken van kamp K ({ x, y, open, voet, deur }, T.tentOp in js/eiland.js), op volgorde: die van het hol tegen
+  // zijn palissade, anders die het eiland gaf.
+  const tentPlekken = (w, K) => K.tentPlekken || eilandKampen(w).kampen[K.nr].tenten;
+  T.tentPlekkenVan = tentPlekken;
+  // De tenten van het hol tegen zijn palissade (Marcel, 27 okt: "B; mag beetje random"): `tentenMeest` plekken, gelijk
+  // verdeeld over de ring vanaf de poort, behalve bij de poort (het paadje naar het vuur blijft vrij) en vooraan
+  // (`tentNietVoor`); elk `tentAfstand` van het vuur en een stukje verschoven (`tentSchuif`), met zijn opening naar het
+  // vuur (staat hij schuin, dan een van de twee), met een vast lot uit het zaad van het kamp. Kan een plek niet (op een
+  // andere tent of ernaast, het paadje, de buit, water), dan nog een paar worpen, en anders valt hij weg. Eén keer, als
+  // het hol er komt te staan (K.tentPlekken, bewaard: zo blijven ze waar de tenten staan).
+  function tentenTegenDePalissade(w, K) {
+    const P = IN().palissade;
+    const lot = T.dobbelsteen((K.lot.zaad ^ 0x7a3c91e5) >>> 0);
+    const pad = eilandKampen(w).paden.find((p) => p.kamp === K.nr);
+    const p = kruisingMetPaadje(w, K, P.straal);
+    const poortHoek = p ? Math.atan2(p.y - K.y, p.x - K.x) : 0;
+    const [van, tot] = P.tentAfstand;
+    const poortVrij = (P.opening / 2 + 2) / van;
+    const nietVoor = (P.tentNietVoor * Math.PI) / 180;
+    const tussen = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+    // de hoeken waar een tent mag, in stappen van een halve graad vanaf de poort rond
+    const hoeken = [];
+    for (let i = 0; i < 720; i++) {
+      const a = poortHoek + (i * Math.PI) / 360;
+      if (tussen(a, poortHoek) > poortVrij && tussen(a, Math.PI / 4) > nietVoor) hoeken.push(a);
+    }
+    const n = T.EILAND_INSTELLINGEN.kampen.tentenMeest;
+    const stap = hoeken.length / n;
+    const b = buitPlek(K);
+    const bezet = [];
+    const uit = [];
+    for (let i = 0; i < n && hoeken.length; i++) {
+      for (let poging = 0; poging < 8; poging++) {
+        const j = Math.floor((i + 0.5 + (lot() - 0.5) * 2 * P.tentSchuif) * stap);
+        const a = hoeken[Math.max(0, Math.min(hoeken.length - 1, j))];
+        const r = van + lot() * (tot - van);
+        const x = Math.round(K.x + Math.cos(a) * r);
+        const y = Math.round(K.y + Math.sin(a) * r);
+        const dx = K.x - x;
+        const dy = K.y - y;
+        const langsX = dx > 0 ? 'ZO' : 'NW'; // geen tekst
+        const langsY = dy > 0 ? 'ZW' : 'NO'; // geen tekst
+        const schuin = Math.min(Math.abs(dx), Math.abs(dy)) > 0.65 * Math.max(Math.abs(dx), Math.abs(dy));
+        const open = schuin ? (lot() < 0.5 ? langsX : langsY) : Math.abs(dx) > Math.abs(dy) ? langsX : langsY;
+        const t = T.tentOp(x, y, open);
+        const tegels = T.tentTegels(t);
+        const kan = tegels.every(([tx, ty]) =>
+          T.isBegaanbaar(w, tx, ty, {}) &&
+          Math.hypot(tx - K.x, ty - K.y) <= P.straal - 1.2 &&
+          Math.max(Math.abs(tx - b.x), Math.abs(ty - b.y)) > 2 &&
+          !(pad && totPad(pad.punten, tx, ty) < 1.5) &&
+          !bezet.some(([ax, ay]) => Math.max(Math.abs(ax - tx), Math.abs(ay - ty)) < 3));
+        if (!kan) continue;
+        bezet.push(...tegels);
+        uit.push(t);
+        break;
+      }
+    }
+    return uit;
   }
   // Waar het paadje van kamp K (vanaf het vuur naar buiten) op `r` tegels van het vuur komt ({ x, y }, niet afgerond), of
   // null.
@@ -919,16 +985,17 @@
   // uitgerekend, dan dezelfde lijst elk beeld.
   T.palissadeVan = (w, K) => (K.palissadeStaat ? palenVan(w, K) : []);
 
-  // Een tent per `manPerTent` man, op de plekken die het eiland gaf, op volgorde; ze gaan niet weer neer als er een valt
-  // (dat is c4). Staat er iemand waar een tent komt, dan komt hij een tik later.
-  function zetTenten(w, K, k) {
+  // Een tent per `manPerTent` man, op de tentplekken op volgorde; ze gaan niet weer neer als er een valt (dat is c4).
+  // Staat er iemand waar een tent komt, dan komt hij een tik later.
+  function zetTenten(w, K) {
     if (K.verslagen) return;
-    const nodig = Math.min(k.tenten.length, Math.ceil(K.bende.length / IN().manPerTent));
+    const plekken = tentPlekken(w, K);
+    const nodig = Math.min(plekken.length, Math.ceil(K.bende.length / IN().manPerTent));
     while (K.tenten < nodig) {
-      const t = k.tenten[K.tenten];
+      const t = plekken[K.tenten];
       for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) if (T.wezenOp(w, x, y)) return;
       const voet = { dx: t.voet.x - t.x, dy: t.voet.y - t.y, b: t.voet.b, h: t.voet.h };
-      T.zetVoorwerp(w, { soort: 'tent', x: t.x, y: t.y, vorm: 'tent-rover', richting: t.open, voet, kamp: k.nr });
+      T.zetVoorwerp(w, { soort: 'tent', x: t.x, y: t.y, vorm: 'tent-rover', richting: t.open, voet, kamp: K.nr });
       K.tenten++;
     }
   }
@@ -938,14 +1005,9 @@
   // is dezelfde, of je het kamp nu zag of niet), en dan onthouden (lid.plek).
   function plekVan(w, K, lid) {
     if (lid.plek) return lid.plek;
-    const E = eilandKampen(w);
-    const k = E.kampen[K.nr];
-    const pad = E.paden.find((p) => p.kamp === K.nr);
+    const pad = eilandKampen(w).paden.find((p) => p.kamp === K.nr);
     const nee = new Set();
-    for (const t of k.tenten) {
-      nee.add(`${t.deur.x},${t.deur.y}`);
-      for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) nee.add(`${x},${y}`);
-    }
+    for (const t of tentPlekken(w, K)) for (const [x, y] of T.tentTegels(t)) nee.add(`${x},${y}`);
     for (const l of K.bende) if (l.plek) nee.add(`${l.plek.x},${l.plek.y}`);
     const b = buitPlek(K);
     for (let y = b.y - 1; y <= b.y + 1; y++) for (let x = b.x - 1; x <= b.x + 1; x++) nee.add(`${x},${y}`);
@@ -1026,8 +1088,7 @@
       if (lijst) lijst.push(e);
       else mannen.set(e.kamp, [e]);
     }
-    const E = eilandKampen(w);
-    for (const K of w.kampen) if (K.staat) werkKampBij(S, w, K, E.kampen[K.nr], mannen.get(K.nr) || [], dag);
+    for (const K of w.kampen) if (K.staat) werkKampBij(S, w, K, mannen.get(K.nr) || [], dag);
   };
 
   // Thuis van een overval (c3): wat hij meebracht, ligt in het kamp (K.buit; in c4 haal je het daar), en staat het kamp er,
@@ -1084,15 +1145,13 @@
   // elk ding probeert plekken in zijn zone tot er een vrij is (niet op een tent of waar er een komt, het vuur, de buit,
   // het paadje of een ander ding), en kijkt met zijn voorkant naar het vuur. Eén keer, als het kamp er komt te staan
   // (K.spullen, bewaard).
-  function spullenVoor(w, K, k) {
+  function spullenVoor(w, K) {
     const lot = T.dobbelsteen((K.lot.zaad ^ 0x51ed270b) >>> 0);
     const pad = eilandKampen(w).paden.find((p) => p.kamp === K.nr);
     const uit = [];
+    const plekken = tentPlekken(w, K);
     const tentTegels = new Set();
-    for (const t of k.tenten) {
-      tentTegels.add(`${t.deur.x},${t.deur.y}`);
-      for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) tentTegels.add(`${x},${y}`);
-    }
+    for (const t of plekken) for (const [x, y] of T.tentTegels(t)) tentTegels.add(`${x},${y}`);
     const b = buitPlek(K);
     const naarVuur = (x, y) => richting4(Math.atan2(K.y - y, K.x - x));
     const vrij = (soort, x, y) => {
@@ -1110,7 +1169,7 @@
     };
     const zet = (soort, x, y, richting) => uit.push({ soort, x, y, richting });
     // de slaapvellen voor de tenten (alle tentplekken van het kamp, ook die nog komen), een halve tegel naar het vuur
-    for (const t of k.tenten.slice(0, Math.max(1, Math.ceil(K.bende.length / IN().manPerTent)))) {
+    for (const t of plekken.slice(0, Math.max(1, Math.ceil(K.bende.length / IN().manPerTent)))) {
       const a = Math.atan2(K.y - t.deur.y, K.x - t.deur.x);
       zet('slaapvel', t.deur.x + Math.cos(a) * 0.6, t.deur.y + Math.sin(a) * 0.6, richting4(a));
     }
@@ -1124,23 +1183,27 @@
         zet('fakkel', K.x + Math.cos(a) * (P.straal - 1), K.y + Math.sin(a) * (P.straal - 1), 0);
       }
     }
-    // de waslijn tussen de twee tenten die het dichtst bij elkaar staan (3 tot 6 tegels), wat naar het vuur
-    const tenten = k.tenten.slice(0, Math.max(2, Math.ceil(K.bende.length / IN().manPerTent)));
-    let paar = null;
+    // de waslijn tussen twee tenten die 3 tot 6 tegels uit elkaar staan, wat naar het vuur: de dichtste twee waar plaats is
+    const tenten = plekken.slice(0, Math.max(2, Math.ceil(K.bende.length / IN().manPerTent)));
+    const paren = [];
     for (let i = 0; i < tenten.length; i++) for (let j = i + 1; j < tenten.length; j++) {
       const d = Math.hypot(tenten[i].x - tenten[j].x, tenten[i].y - tenten[j].y);
-      if (d >= 3 && d <= 6 && (!paar || d < paar.d)) paar = { a: tenten[i], b: tenten[j], d };
+      if (d >= 3 && d <= 6) paren.push({ a: tenten[i], b: tenten[j], d });
     }
     const hoeveel = (S) => {
       const n = K.palissade ? S.hol || 0 : S.kamp || 0;
       return Math.floor(n) + (lot() < n % 1 ? 1 : 0);
     };
-    if (paar && hoeveel(SPUL.waslijn)) {
-      const m = { x: (paar.a.x + paar.b.x) / 2, y: (paar.a.y + paar.b.y) / 2 };
-      const a = Math.atan2(K.y - m.y, K.x - m.x);
-      const x = m.x + Math.cos(a) * 0.8;
-      const y = m.y + Math.sin(a) * 0.8;
-      if (vrij('waslijn', x, y)) zet('waslijn', x, y, richting4(Math.atan2(paar.b.y - paar.a.y, paar.b.x - paar.a.x) - Math.PI / 2));
+    if (hoeveel(SPUL.waslijn)) {
+      for (const paar of paren.sort((p, q) => p.d - q.d)) {
+        const m = { x: (paar.a.x + paar.b.x) / 2, y: (paar.a.y + paar.b.y) / 2 };
+        const a = Math.atan2(K.y - m.y, K.x - m.x);
+        const x = m.x + Math.cos(a) * 0.8;
+        const y = m.y + Math.sin(a) * 0.8;
+        if (!vrij('waslijn', x, y)) continue;
+        zet('waslijn', x, y, richting4(Math.atan2(paar.b.y - paar.a.y, paar.b.x - paar.a.x) - Math.PI / 2));
+        break;
+      }
     }
     // de rest in hun zone, van groot naar klein
     for (const soort of VOLGORDE) {
@@ -1224,9 +1287,9 @@
   // gevecht kiest die, js/gevecht.js), dan komt iedereen naar buiten, en slaapt niemand tot `wakkerUren` erna. Is er niemand
   // van een dorp binnen `rustVerder` (om de twee seconden gevraagd), dan kijken ze niet om zich heen (e.ver; zoals het
   // wild): dan kost een kamp ver weg bijna niets.
-  function werkKampBij(S, w, K, k, mannen, dag) {
+  function werkKampBij(S, w, K, mannen, dag) {
     if (K.verslagen) return neemBuit(S, w, K);
-    zetTenten(w, K, k);
+    zetTenten(w, K);
     if (mannen.length < K.bende.length) {
       const er = new Set(mannen.map((e) => e.lid));
       for (const lid of K.bende) if (!er.has(lid.id) && !lid.opPad) mannen.push(zetMan(w, K, lid, aankomst(w, K)));
@@ -1249,7 +1312,7 @@
         continue;
       }
       const tent = Math.floor(i / IN().manPerTent);
-      if (slapen && e.lid !== wacht && tent < K.tenten) naarBinnen(S, w, e, k.tenten[tent].deur);
+      if (slapen && e.lid !== wacht && tent < K.tenten) naarBinnen(S, w, e, tentPlekken(w, K)[tent].deur);
       else naarBuiten(S, w, K, e, plekVan(w, K, K.bende[i]));
     }
   }

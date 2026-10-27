@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De voorwand van het hol verbergt wie erachter staat** (27 okt, werklijst K, 2c, in de browser): in isometrisch zie
+  je niet wat vlak achter de voorkant van de palissade staat (de mannen die vooraan bij het vuur staan, een tent vooraan),
+  en de bomen voor de open plek dekken de voorwand weer af. Voor de tenten is er een lapmiddel (`tentNietVoor`: vooraan
+  geen tent), maar in een gevecht in het hol zie je je mannen vooraan niet. Misschien kan de palissade plat met F, zoals
+  de gebouwen (4b), of doorzichtig waar je mannen achter staan (`js/doorkijk.js`). Idee van Claude; nog niet gekozen.
 - **Wie een onbereikbare vijand volgt, blijft zonder melding staan** (26 okt, gezien bij vraag 190, in de browser op
   `main`): de speermannen van de wacht in de demo kregen een aanvalsopdracht (`volg`) op een roedel wolven in het bos; ze
   namen hem aan (`e.volgt`) maar liepen niet, omdat er geen route was (`doeMet` in `js/gevecht.js`: met `volgt` laat hij

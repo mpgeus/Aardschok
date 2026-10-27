@@ -1197,12 +1197,14 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   tonnen en zakken), en daarboven groot (een hoge hoop met tonnen, zakken, twee kisten, een rol laken, een ketel, een
   kandelaar en een karrenwiel); de grenzen in de werkbank (`buitMaten`). Je mannen halen hem bij de hoop.
 - **Het rovershol** (27 okt, werklijst K, 2c; Marcel: "P zoals in de woorden", "1, 2, 3 en 5", "variatie is goed",
-  "alle negen", "misschien het kamp iets ruimer opzetten"; `beeld.md`, "Het rovershol"). Een level kan een kamp tot hol
+  "alle negen", "misschien het kamp iets ruimer opzetten", "B; mag beetje random"; `beeld.md`, "Het rovershol"). Een level kan een kamp tot hol
   maken (`hol: { bende, buit, palissade }`): het dichtste kamp binnen de rand krijgt zijn bende en zijn buit, en een
   palissade, een ronde ring van palen op 9 tegels van het vuur, op een open plek van 14 tegels, met een poort waar het
   paadje de ring kruist. Door de ring kom je alleen door de poort. Elke paal is een andere: meestal gewoon, soms nieuw,
   scheef, afgebroken, met een plank of mos, en her en der ontbreekt er een (de liggers lopen door, dus je komt er niet
-  door). Elk kamp krijgt aankleding, het hol het meest: slaapvellen voor de tenten, een waslijn met gestolen kleren,
+  door). De tenten van het hol staan tegen de palissade, verdeeld over de ring, met de opening naar het vuur, elk hol een
+  beetje anders (Marcel: "B; mag beetje random"); niet bij de poort, en niet vooraan, waar je ze achter de voorwand niet
+  zou zien. Zo blijft het midden vrij, om het vuur, en om te vechten. Elk kamp krijgt aankleding, het hol het meest: slaapvellen voor de tenten, een waslijn met gestolen kleren,
   zitstammen (een met een bijl erin), een spit met een zwijn, een vat bier op een bok, een wapenrek, een droograam met
   een vel, een schietschijf, brandhout en een hakblok, een paal met konijnen, een kapotte kar, modder en stro, en bij de
   poort twee fakkels, die 's nachts licht geven. Hoe het staat, ligt vast in het zaad van het kamp; je mannen en de

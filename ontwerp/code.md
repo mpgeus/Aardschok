@@ -2361,6 +2361,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   (`gereedschap/pixelart/palissade.cjs`, `vel`: 12 soorten paal en 3 poortstukken, elk in 16 richtingen, gepakt met
   `rijenVel` in `kern.cjs`; laadt pas als er een te zien is). Zo kan dezelfde tekening later de palissade van je dorp
   worden (vraag 158).
+- **De tenten van het hol** (werklijst K, 2c, 27 okt; Marcel: "B; mag beetje random"): een gewoon kamp zet zijn tenten
+  op de plekken van het eiland (`k.tenten`, `tentenVan` in `js/eiland.js`), het hol tegen zijn palissade:
+  `tentenTegenDePalissade` (vanuit `zetPalissade`, dus vóór `zetTenten`) verdeelt `tentenMeest` plekken over de ring vanaf
+  de poort, niet bij de poort en niet binnen `palissade.tentNietVoor` graden van de kijker (+x en +y samen: daar verdwijnt
+  een tent achter de voorwand), op `tentAfstand` van het vuur, met een vast lot een stukje verschoven (`tentSchuif`), de
+  opening naar het vuur, en minstens twee tegels tussen twee tenten. Ze staan in `K.tentPlekken` (bewaard), en
+  `tentPlekken(w, K)` (`T.tentPlekkenVan`) geeft wat geldt: wie een tent neerzet, er een slaapt, een man een plek om het
+  vuur zoekt of de aankleding een plek, vraagt het daar. De vorm van een tent (voet en deur) komt voor allebei uit
+  `T.tentOp` en `T.tentTegels` (`js/eiland.js`).
 - **De aankleding van een kamp** (werklijst K, 2c, 27 okt; Marcel: "Alles valt en staat met de aankleding"):
   `spullenVoor(w, K, k)` geeft een kamp zijn spullen als het opengaat (`K.spullen`, bewaard, dus ze verschuiven niet),
   uit de tabel `SPUL` (per ding een zone van tegels vanaf het vuur, een voet, of het op de grond ligt, en hoeveel in een
