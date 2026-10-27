@@ -2597,9 +2597,10 @@ voren (`DRAGEN['generator']['as']` (0,4, -0,9, 0,6)).
   mogelijk**; de modellen gaan dan gewoon mee. **Marcel (24 okt): "ik wil a wel proberen, maar kunnen we daar een proef
   van maken?"**
 
-## Het rovershol: een groot kamp met een palissade (27 okt 2026, werklijst K, 2c; voorstel, wacht op Marcel)
+## Het rovershol: een groot kamp met een palissade (27 okt 2026, werklijst K, 2c)
 
-Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp. In woorden, voor de proefplaat:
+Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp. In woorden, voor de proefplaat; Marcel,
+27 okt: **"P zoals in de woorden, B ja"** (B: de buit zichtbaar bij het vuur, het laatste punt hieronder):
 
 - **Wat er al is:** de open plek (straal 8) met het vuur, de tenten van de rovers (`tent-rover`, T1) en het paadje. Het
   level zet er zo'n tien man in vijf tenten (het kamp heeft zes tentplekken).

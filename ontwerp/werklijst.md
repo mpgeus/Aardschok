@@ -977,12 +977,11 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    ene overval van de demo komt ook uit een kamp ("demo mee"). **Af** (27 okt; `spel.md`, "De overval komt uit een kamp").
 2. **c4**, een kamp valt: de tenten neer, het vuur uit, de buit ligt er, en het komt niet terug (R1, K1). **Af** (27 okt;
    `spel.md`, "Een kamp verslaan"): je mannen dragen de buit naar huis, tot 10 per man.
-3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade). **De woorden staan in `beeld.md`** ("Het
-   rovershol"), en wachten op Marcel.
+3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade). **De woorden zijn goed** (Marcel, 27 okt: "P
+   zoals in de woorden, B ja"; `beeld.md`, "Het rovershol"): nu de proefplaat, en de buit zichtbaar bij het vuur (B).
    **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
-   (Millcombe, 5 bij 5) heeft er geen: het dichtste kamp ligt 906 tegels weg. Dan komt zijn ene overval niet. Op eiland 5
-   hebben alleen Oldland en Oakley een kamp binnen 7 bij 7; voorstel: hoofdstuk 1 naar Oakley (1295 tegels van het
-   kasteel, het kamp op 210), 7 bij 7, en hoofdstuk 2 in Oldland (630 van het kasteel). Wacht op Marcel.
+   (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
+   van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).
 4. **Het level** `levels/rovershol.js` en hoofdstuk 2 in `levels/campagne.js` (Oldland, 7 bij 7), met de woorden die nog
    missen: `kamp` (verslagen) bij *als*, de brief van de heer als inleiding, en een doel dat naar een plek wijst (D2).
 5. **Nalopen** in de browser, en de speeltest.

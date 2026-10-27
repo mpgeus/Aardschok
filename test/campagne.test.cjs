@@ -55,6 +55,18 @@ test('elk hoofdstuk begint op het eiland van de campagne, op zijn plek, met zijn
   assert.equal(T.LEVELS.demojaar.demo, undefined);
 });
 
+// Sinds c3 van vraag 170 komt een overval uit een kamp, en in een level met een rand alleen uit een kamp binnen de rand
+// (Marcel, 27 okt: "H1", hoofdstuk 1 naar Oakley): een hoofdstuk met een overval heeft er een.
+test('elk hoofdstuk met een overval heeft een roverskamp binnen zijn rand', () => {
+  for (const h of T.CAMPAGNE.hoofdstukken) {
+    const L = T.LEVELS[h.level];
+    if (!(L.triggers || []).some((t) => t.dan.some((d) => d.rovers))) continue;
+    const S = T.proefdorp.begin(T.proefdorp.zaad, T.hoofdstukLevel(h.id));
+    T.zetRoverskampenBij(S, S.wereld);
+    assert.notEqual(T.kampVoorDeBode(S.dorp), null, `${h.id} in ${h.plek}: geen kamp binnen de rand`);
+  }
+});
+
 test('het eerste hoofdstuk is open, een volgend als het hoofdstuk ervoor af is; af is wat gewonnen is', () =>
   metOpslag(() =>
     metTweeHoofdstukken(() => {

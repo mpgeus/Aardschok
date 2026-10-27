@@ -1167,7 +1167,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/campagne.js` (vraag 187, stap 2b, 24 okt; het ontwerp in `scenario.md`, 6; Marcel: hoofdstuk 1 "Op het
   campagne-eiland, 5×5", en voor het eiland "Kies jij er voorlopig een"): **de regels van de campagne**, zonder scherm en
   getoetst (`test/campagne.test.cjs`). De campagne zelf staat in `levels/campagne.js` (`T.CAMPAGNE`): één eiland (`eiland:
-  { zaad: 5 }`, waar Millcombe het verst van het kasteel ligt), en per hoofdstuk een `id`, een `titel` (een zin uit
+  { zaad: 5 }`; hoofdstuk 1 in Oakley, 7 bij 7, sinds c3 van vraag 170, want een overval komt uit een kamp binnen de
+  rand), en per hoofdstuk een `id`, een `titel` (een zin uit
   gegevens: `T.tGegevens`, en `npm run teksten` leest hem daar), een `level` (`T.LEVELS`), een `plek` en een `rand`.
   `T.hoofdstukLevel(id)` maakt het level waarmee het hoofdstuk begint: het level met het eiland, de plek en de rand erover,
   en `hoofdstuk: id`, zodat `S.scenario.hoofdstuk` zegt dat het een hoofdstuk is (zoals `T.demoLevel`, `js/einde.js`,

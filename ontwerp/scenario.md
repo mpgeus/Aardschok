@@ -259,11 +259,15 @@ merchants, dungeon keeper level select etc.").
   voorlopig een"; `code.md` bij `js/campagne.js`): *Campaign* op het titelscherm (niet in de demo), eerst als rij
   hoofdstukken: af met een vinkje, het volgende open,
   de rest op slot, en wat af is blijft op je computer. Het eiland staat één keer, bij de campagne (`levels/campagne.js`),
-  en elk hoofdstuk noemt zijn level, zijn dorpsplek en zijn rand; hoofdstuk 1 is het demojaar op het campagne-eiland, met
-  een rand van 5 bij 5 stukken. Of een spel de demo is of een hoofdstuk, zegt hoe het begon, niet het level: als hoofdstuk
+  en elk hoofdstuk noemt zijn level, zijn dorpsplek en zijn rand; hoofdstuk 1 is het demojaar op het campagne-eiland, in
+  Oakley met een rand van 7 bij 7 stukken (tot 27 okt Millcombe, 5 bij 5; hieronder). Of een spel de demo is of een hoofdstuk, zegt hoe het begon, niet het level: als hoofdstuk
   zegt het eindscherm of het af is (betalen op Sint-Maarten is gewonnen; zijn leger, een leeg dorp of weggejaagd
-  verloren). Claude koos eiland 5: daar ligt Millcombe het verst van het kasteel (1721 tegels), dus hoofdstuk 1 begint
-  aan het verre eind; bij Oldland ligt een roverskamp op 190 tegels (voor 2c). Een hoofdstuk heet naar zijn plek, en
+  verloren). Claude koos eiland 5: daar ligt Millcombe het verst van het kasteel (1721 tegels), dus hoofdstuk 1 begon
+  aan het verre eind; bij Oldland ligt een roverskamp op 190 tegels (voor 2c). Sinds c3 (27 okt) komt een overval uit
+  een kamp binnen de rand, en Millcombe heeft er geen (het dichtste ligt 906 tegels weg), dus hoofdstuk 1 ging naar
+  Oakley (Marcel: "H1"): 1295 tegels van het kasteel, met een kamp op 210, en een rand van 7 bij 7 (op eiland 5 hebben
+  alleen Oldland en Oakley een kamp binnen 7 bij 7). Zo trekt het verhaal van Oakley naar Oldland (630 van het kasteel).
+  Een hoofdstuk met een overval heeft een kamp binnen zijn rand (`test/campagne.test.cjs`). Een hoofdstuk heet naar zijn plek, en
   speelt met de spelregels die de browser het laatst koos, zoals New game. De moeilijkheid komt met de AI-spelers (8), en
   het land als keuzescherm daarna (eerst een proefplaat).
 - **Het land is het keuzescherm**, zoals de kaart van Knights and Merchants en het land van Dungeon Keeper: één gemaakt
