@@ -1735,6 +1735,9 @@ dan alles van SDXL. img2img met Pixel Art Base eroverheen (`plaat-img2img-speerm
 
 ## Blender als basis? (24 okt 2026, vraag 190)
 
+De lessen hieronder staan kort in de skill `modelleren` (`.claude/skills/modelleren/SKILL.md`, 27 okt), met wat je
+nakijkt voor Marcel een plaat ziet. Leer je iets nieuws, zet het hier en kort daar.
+
 Marcel, 24 okt: "onderzoeken of we hogere kwaliteit art krijgen door als basis een 3d model te gebruiken die jij in
 blender maakt". Een onderzoek, nog zonder render: Blender staat niet op deze pc, en een proefplaat komt pas na een ja
 (hierboven, "Eerst goedkeuring, dan renderen").

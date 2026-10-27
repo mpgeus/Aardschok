@@ -198,7 +198,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   de vellen uit `gereedschap/pixelart/bron/soldaten/` uit en verkleint ze (een proefplaat `uit/generator/speerman.png`, de
   bewegingen als bewegend beeld, en de vellen in `uit/generator/animaties/`); daarna
   `node gereedschap/pixelart/naar-spel.cjs --alleen speerman`.
-- **Blender als basis** (vraag 190; `beeld.md`, "Blender als basis?"): `gereedschap/blender/speerman.py` bouwt de speerman
+- **Blender als basis** (vraag 190; `beeld.md`, "Blender als basis?"; de werkwijze en de lessen in de skill `modelleren`,
+  `.claude/skills/`, met twaalf algemene Blender-skills ernaast, `LEESMIJ-blender-skills.md`): `gereedschap/blender/speerman.py` bouwt de speerman
   als 3D-model met een skelet en rendert hem (Blender 5.2, zonder venster):
   `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P gereedschap/blender/speerman.py -- <Z|staan|lopen|alles> [uitmap] [toon|echt]`
   (toon: EEVEE met het licht in banden; echt: Cycles, op de videokaart met CUDA, want OptiX werkt niet op de 1080 Ti).
