@@ -41,7 +41,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   de stoot van boven, geraakt en sterven (`beelden-van-de-generator.md`). Nog voor de speerman: de steek als echte uitval,
   de kleine verschillen bij staan. Daarna (26 okt) Marcels plaat met losse uitrustingsdelen (`EXTRA/`): de proeven met
   Human Generator, overschilderen en projecteren (`beeld.md`) liet hij rusten ("nah, dit gaat hem niet worden zo"), en hij
-  koos "terug naar ons model".
+  koos "terug naar ons model". Daarna nog twee proeven met de plaat (in ons model gebakken, en een soldaatje helemaal uit
+  code); Marcel (27 okt): "ik denk dat we met ons blender model toch beter zaten. Laten we daar maar mee verder gaan". De
+  code van die weg is eruit (`beeld.md`).
   **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie (`kruisboog_hd.py`,
   `beeld.md`, "De proefplaat van de kruisboogschutter"). De boog boven en de handen zoals een mens hem houdt; staan
   vanaf de heup schuin naar voren (`vooruit`; `schuin` gaat eruit als Marcel kiest), lopen met de kruisboog op de

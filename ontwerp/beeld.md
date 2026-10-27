@@ -2625,8 +2625,10 @@ onbelicht op de wapenrok, en haalt onze riem weg (die zit in de verf). Plaat: `u
 is het de tekening; gedraaid (ZW, W) loopt de verf mee en blijven de vierendelen, de nagels en de riem staan; op
 spelmaat leest hij scherper dan alles van vandaag. Van achteren nog de voorkant (de tekening van de rug ontbreekt nog),
 en aan de hals en de zoom wat magenta en strepen. Marcel daarop: **"nah, dit gaat hem niet worden zo"**: de weg van
-Human Generator met onze delen, overschilderen en projecteren laten we voorlopig rusten (de code staat er nog:
-`hg_soldaat.py`, `uitrusting.py`, `plaatverf.py`, `schilder.cjs hg`; eruit als Marcel zegt dat de richting om is).
+Human Generator met onze delen, overschilderen en projecteren laten we voorlopig rusten. Op 27 okt koos Marcel ons
+Blender-model (hieronder, na het soldaatje uit code), en ging de code eruit: `hg_soldaat.py`, `uitrusting.py`,
+`plaatverf.py`, `plaatbak.py`, `plaatsoldaat.py`, heel `schilder.cjs` (ook het overschilderen van 24 okt) en de
+stuurbeelden in `speerman_hd.py`. Git bewaart ze: het laatst in 4e2094c9.
 
 **De proef met uitvouwen en bakken met de plaat (26 okt).** Marcel: "Ik wil graag nog een proef doen met uv wrapping op een
 3d model uit code", "op basis van de platen in de extra map", op ons eigen model. `plaatbak.py`, met de stappen van het
@@ -2663,6 +2665,11 @@ onderste rij van de zoom is de smalle punt (1,7 cm), dus stonden ze 1,4 cm uit e
 breedte, met een handbreed ertussen (28 cm van midden tot midden). Mager: per onderdeel hoeveel breder en dieper dan
 getekend (`DIK`: de wapenrok en de mouwen 1,3, de benen en de kraag 1,25, de handen 1,2, de helm 1); de hoogte blijft, en
 de verf rekt mee. Op spelmaat is hij nu ongeveer zo breed als de speerman. Plaat: `uit/blender/plaatsoldaat/proef4-plaat.png`.
+Marcel daarop (27 okt): **"ik denk dat we met ons blender model toch beter zaten. Laten we daar maar mee verder gaan"**.
+De weg van Marcels plaat met losse delen (`EXTRA/`) is daarmee om: Human Generator, overschilderen, projecteren, de plaat
+in ons model bakken en het soldaatje uit code. De code is eruit (zie hierboven, bij "nah, dit gaat hem niet worden zo"),
+en verder gaat het met `speerman_hd.py`, `eigen.py` en `kruisboog_hd.py`. De plaat zelf blijft in `EXTRA/`, als
+voorbeeld voor de stijl.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot

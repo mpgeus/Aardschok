@@ -1062,6 +1062,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   schouders, buik), het hoofd 1,3 keer, en de helm 1520 pixels boven de voeten (de speerman 1450). Plaat:
   `uit/blender/hg/proef6-plaat.png`. Op spelmaat leest hij nu als onze soldaat; hij is breder, zijn wapenrok voller, en
   hij heeft nog geen handschoenen en armstukken, en de speer staat naast zijn open hand.
+  Om voor de soldaten (27 okt, Marcel: "ik denk dat we met ons blender model toch beter zaten"): de code is eruit
+  (`beeld.md`, bij "nah, dit gaat hem niet worden zo"). De add-on staat nog in Blender; voor de dorpelingen blijft het een
+  idee.
 
 - **Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet, ook vlak** (17 okt, vraag 174, c; de tekenmeting met
   `--videokaart`, GTX 1080 Ti, proefdorp op eiland 5, 1920×1080): op zoom 0,5 en 0,35 zo'n 16 à 21 ms per beeld, vlak of
