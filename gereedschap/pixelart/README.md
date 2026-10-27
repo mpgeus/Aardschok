@@ -185,6 +185,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   baksteen), de houten jukbrug en de houten boogbrug. `node bruggen.cjs` maakt de proefplaat `uit/bruggen-proef.png`
   (met de rovertent T1 uit `kamp.cjs`); `bruggen-vel.cjs` knipt hele bruggen in stukken van één tegel in twee lagen voor
   het spel. Naar het spel: `node naar-spel.cjs --alleen bruggen` (`beelden/bruggen.png`, in een paar seconden).
+- `palissade.cjs`: de palissade van het rovershol (werklijst K, 2c): ruwe, grijze palen met een geslagen punt, mos aan de
+  voet, twee dwarsliggers met touw aan de binnenkant, een plank waar er een ontbreekt, en de opening met twee zware palen
+  en een rode lap. `node palissade.cjs` maakt de proefplaat `uit/palissade-proef.png` (een stuk met de opening, van
+  buiten, met een boer voor de maat; in zo'n acht seconden). Nog niet naar het spel.
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

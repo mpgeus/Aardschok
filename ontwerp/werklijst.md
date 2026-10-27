@@ -978,7 +978,8 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
 2. **c4**, een kamp valt: de tenten neer, het vuur uit, de buit ligt er, en het komt niet terug (R1, K1). **Af** (27 okt;
    `spel.md`, "Een kamp verslaan"): je mannen dragen de buit naar huis, tot 10 per man.
 3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade). **De woorden zijn goed** (Marcel, 27 okt: "P
-   zoals in de woorden, B ja"; `beeld.md`, "Het rovershol"): nu de proefplaat, en de buit zichtbaar bij het vuur (B).
+   zoals in de woorden, B ja"; `beeld.md`, "Het rovershol"). B is gebouwd (de buit naast het vuur), en **de proefplaat
+   van de palissade wacht op Marcel** (`gereedschap/pixelart/palissade.cjs`).
    **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
    (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
    van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).

@@ -2617,6 +2617,11 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
 - **Wat het hol nog laat zien, zonder nieuwe tekening:** de buit bij het vuur, met de tekening van een losse stapel. Nu
   zegt het bericht van c4 dat de buit bij het vuur ligt, maar je ziet hem niet. **Gebouwd** (27 okt): een tegel rechts
   van het vuur (`T.roverskampenBuit`).
+- **De eerste proefplaat** (27 okt; `gereedschap/pixelart/palissade.cjs`, `uit/palissade-proef.png`): een stuk van de ring
+  met de opening, van buiten (ZO), met een boer in de opening voor de maat, op ware grootte en twee keer vergroot. De
+  schors is de warme grijs van `bot` met plekken bruine schors (`schors`), de punt licht hout (`hout`), het mos uit
+  `mos`, het touw uit `stro`, de lap uit `rood`. Wat opvalt: twee keer een man is hoog; in het spel dekt de voorkant van
+  de ring zo de voorste tegels van het plein af. Wacht op Marcel.
 
 ## Open
 
