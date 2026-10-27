@@ -345,6 +345,10 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   tegen één kant. De bouwfasen komen met de huizenbouwer mee.
 - **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
   erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
+  **De palissade varieert vanzelf** (Marcel, 27 okt, bij het hol: "Dit moet uiteindelijk automatisch gaan als je zelf
+  ook palissade plaatst. Als een soort random tile erin"): elke paal kiest uit een vaste set soorten (gewoon, scheef,
+  afgebroken, een gaatje, een plank erover, ...), met een vast lot; dezelfde palen als de ring om het hol (`beeld.md`,
+  "Het rovershol").
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
   weer inleveren. Eerst drie wapens: de speer (planken), de boog (planken), zwaard en schild (ijzer en planken); zonder
   wapen een hooivork.
@@ -984,7 +988,8 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    27 okt: "b"; `beeld.md`, "Het rovershol"): **in het spel** (27 okt; "ja, zet hem in het spel").
    Het hol uit het level en de ring staan in het spel (`T.maakHol`, `zetPalissade`), maar de palissade moet beter
    (Marcel, 27 okt: "1, 2, 3 en 5": een dichte muur, een ronde ring, een echte poort, en een grotere open plek; `beeld.md`,
-   "Het rovershol"): eerst een nieuwe proefplaat.
+   "Het rovershol"). De ronde ring is goed, met variatie erin (Marcel: "her en der een gaatje, etc."), als willekeurige
+   soorten paal, zodat het later ook vanzelf gaat als je zelf een palissade plaatst (158): eerst een proefplaat.
    **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
    (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
    van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).

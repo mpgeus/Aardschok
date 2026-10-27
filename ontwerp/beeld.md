@@ -2634,7 +2634,15 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   hart 13,8 eenheden (dicht tegen elkaar), elk op zijn eigen plek op de cirkel van zeven tegels; de liggers als korte
   stukken van paal tot paal aan de binnenkant; hier en daar een plank over de buitenkant. De poort: twee palen van 22
   centimeter dik en bijna vier meter hoog, een balk erover met touw, de rode lap aan de linker, en een hertenschedel met
-  gewei midden op de balk. Wacht op Marcel.
+  gewei midden op de balk. **Goed** (Marcel, 27 okt: "De palissade is goed, maar ik wil wat variatie erin, her en der een
+  gaatje, etc. Dit moet uiteindelijk automatisch gaan als je zelf ook palissade plaatst. Als een soort random tile erin").
+- **De variatie: soorten paal, willekeurig gekozen** (27 okt): elke paal is een soort uit een vaste set, gekozen met een
+  vast lot uit zijn plek (zoals een willekeurige tegel), met een kans per soort: gewoon (drie hoogtes), nieuw (dunner, nog
+  bruin), scheef, afgebroken (korter, met een gesplinterde top), een gaatje (er ontbreekt een, soms staat er nog een
+  stomp; de liggers lopen door), een plank over de buitenkant, en veel mos. Twee gaatjes of twee afgebroken naast elkaar
+  komen niet voor. Dezelfde set dient later de palissade die je zelf legt (werklijst, 158). In het model: `SOORTEN_PAAL`
+  en `kiesSoort` in `palissade.cjs` (kansen: gewoon 0,6, nieuw, scheef, afgebroken en gat elk zo'n 0,07, plank en mos
+  0,06). De derde proefplaat (27 okt) toont de ring zo, met daaronder de voorkant twee keer vergroot. Wacht op Marcel.
 - **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
   vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
   *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen
