@@ -38,6 +38,9 @@ ONDERDELEN = {
     'been': {'rij': (795, 1020, 725, 1300), 'kanten': {0: (0, False), 90: (3, False), 180: (0, True), -90: (3, True)}},
 }
 RIEM_T = 0.55  # waar de riem van de wapenrok zit, van zijn bovenkant (0) tot de zoom (1)
+# hoeveel breder en dieper dan getekend (Marcel, 27 okt: "wat mager"; op de schaal van de plaat was hij slanker dan de
+# gedrongen speerman); de hoogte blijft, en de verf rekt mee
+DIK = {'wapenrok': 1.3, 'kraag': 1.25, 'mouw': 1.3, 'hand': 1.2, 'been': 1.25, 'helm': 1.0}
 
 
 def plaat():
@@ -143,6 +146,8 @@ def deel(naam, a, mag, riem=False, bijsnijden=None):
     boven = slice(0, max(2, K // 10))
     cx = ((lv + rv) / 2 - np.mean((lv + rv)[boven] / 2)) * SCHAAL
     cy = ((lz + rz) / 2 - np.mean((lz + rz)[boven] / 2)) * SCHAAL
+    # breder en dieper allebei even veel: zo kijkt elke kant nog op dezelfde plek van zijn tekening
+    rx, ry, cx, cy = (v * DIK[naam] for v in (rx, ry, cx, cy))
     zs = -ts / deelt * hoog
     vs, fs, uvs = [], [], []
     for k in range(K + 1):
@@ -235,14 +240,16 @@ def bol(naam, plek, maat, materiaal):
 def soldaat(a, mag):
     """De delen op hun plek: de benen (met broek en laars) op de grond, de wapenrok met zijn riem op de heup, de mouwen uit
     de armsgaten met de handen eronder, de kraag om de hals, een hoofd met een baard, de helm erop, en een speer."""
-    been, been_h, _, _ = deel('been', a, mag)
+    been, been_h, been_rx, _ = deel('been', a, mag)
     wapenrok, rok_h, rx, ry = deel('wapenrok', a, mag, riem=True)
     mouw, mouw_h, _, _ = deel('mouw', a, mag)
     hand, hand_h, _, _ = deel('hand', a, mag)
     kraag, kraag_h, _, _ = deel('kraag', a, mag)
     helm, helm_h, _, _ = deel('helm', a, mag, bijsnijden=0.8)  # zonder de kinriemen die eronder hangen
-    # de benen: voeten op de grond, een eind uit elkaar
-    breed = rx[-1] * 0.42
+    # de benen: voeten op de grond, naast elkaar met een handbreed ertussen. Naar de zoom van de wapenrok gemeten stonden
+    # ze op elkaar (zijn onderste rij is de smalle punt van de zoom, 1,7 cm), en had hij één voet (Marcel, 27 okt)
+    breed = been_rx.max() + 0.03
+    print('BENEN', round(float(been_rx.max()), 3), 'uit elkaar', round(2 * breed, 3), 'zoom', round(float(rx[-1]), 3))
     zet(been, Vector((-breed, 0, been_h)))
     zet(kopie(been, 'been.L'), Vector((breed, 0, been_h)))
     # de wapenrok: de zoom over de knie (de broek steekt eronder uit)

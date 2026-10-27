@@ -2658,6 +2658,11 @@ onderdelen even groot: de wapenrok van voren, 256 pixels, is 68 cm); de man word
 de omtrek met het magenta mengt (paarsig), wordt hij donker, zoals de omtrek zelf. Het hoofd is nog eenvoudig (een bol,
 een baard, een neus): de plaat heeft geen hoofd. Plaat: `uit/blender/plaatsoldaat/proef3-plaat.png`. Alleen staan; de
 delen hangen nog niet aan een skelet.
+Marcel (27 okt): "Hij heeft 1 voet en is wat mager". De voet: de benen stonden naar de zoom van de wapenrok gemeten, en de
+onderste rij van de zoom is de smalle punt (1,7 cm), dus stonden ze 1,4 cm uit elkaar, op elkaar. Nu naar hun eigen
+breedte, met een handbreed ertussen (28 cm van midden tot midden). Mager: per onderdeel hoeveel breder en dieper dan
+getekend (`DIK`: de wapenrok en de mouwen 1,3, de benen en de kraag 1,25, de handen 1,2, de helm 1); de hoogte blijft, en
+de verf rekt mee. Op spelmaat is hij nu ongeveer zo breed als de speerman. Plaat: `uit/blender/plaatsoldaat/proef4-plaat.png`.
 
 **De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
 proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
