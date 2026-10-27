@@ -1081,6 +1081,8 @@
     buitAfstand: T.t('loot picked up within'),
     buitPerMan: T.t('loot carried per man'),
     buitMaten: T.t('loot pile small up to, middle up to'),
+    palissade: T.t('palisade around a den'),
+    opening: T.t('opening'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),

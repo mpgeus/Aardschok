@@ -3638,6 +3638,13 @@
       else T.blok(ctx, p.x, p.y, 0.4, 0.4, 24, v.vorm === 'afdak' ? '#6b4f33' : '#d8cfae', { helder });
       return;
     }
+    if (v.soort === 'palissade') {
+      // Een stuk van de palissade om een rovershol (js/rovers.js, zetPalissade). Zonder kunst: een hoge, smalle paal.
+      const deel = metSprites() && T.sprites.palissade(v.rij, v.richting);
+      if (deel) T.sprites.teken(ctx, deel, p.x, p.y, helder);
+      else T.blok(ctx, p.x, p.y, 0.15, 0.15, 60, '#6f665a', { helder });
+      return;
+    }
     if (v.soort === 'kampvuur') {
       // Het kampvuur in het midden van het kamp (js/begin.js): het brandt als de mensen op zijn, en smeult als ze werken of
       // slapen (T.kampvuurStand); dat van een roverskamp (js/rovers.js) brandt als het donker is. Zonder kunst: een kring

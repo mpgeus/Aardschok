@@ -103,6 +103,8 @@
     // komt erbij met T.dorpErbij (hieronder).
     S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, overvallen: d.overvallen });
     S.dorpen = [S.dorp];
+    // Het hol van het level: het dichtste roverskamp, met zijn bende, zijn buit en een palissade (T.maakHol, js/rovers.js).
+    if (d.hol) T.maakHol(S.dorp, d.hol);
     if (level) T.startScenario(S, level);
     return S.dorp;
   };

@@ -471,6 +471,54 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
   }
 });
 
+// Het hol van een level (werklijst K, 2c; Marcel, 27 okt: "A1", en "de palisade is goed"): het dichtste kamp krijgt de
+// bende, de buit en de palissade die het level zegt; de palissade is een ring met één opening, waar het paadje binnenkomt.
+test('het hol van een level: het dichtste kamp, met zijn bende, zijn buit en een dichte palissade met één opening', () => {
+  const L = { eiland: { zaad: 5 }, plek: 'Oldland', rand: { b: 7, h: 7 }, dorpen: [{ hol: { bende: 10, palissade: true, buit: { graan: 60, goud: 20 } } }] };
+  const S = T.proefdorp.begin(T.proefdorp.zaad, L);
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+  const w = S.wereld;
+  const D = S.dorp;
+  const v = D.plek.vak;
+  const midden = { x: v.x + Math.floor(v.b / 2), y: v.y + Math.floor(v.h / 2) };
+  const dichtst = w.kampen.slice().sort((a, b) => T.afstand(a, midden) - T.afstand(b, midden))[0];
+  assert.equal(D.hol, dichtst.nr, 'het dichtste kamp');
+  const K = dichtst;
+  assert.equal(K.bende.length, 10);
+  assert.deepEqual(K.buit, { graan: 60, goud: 20 });
+  assert.equal(T.holStand(D), 'staat');
+  assert.equal(w.voorwerpen.filter((x) => x.soort === 'palissade').length, 0, 'de palissade komt als zijn land opengaat');
+  // Het land gaat open: de ring staat er.
+  T.openVak(w, { x: K.x - 30, y: K.y - 30, b: 61, h: 61 });
+  T.wereldTik(S);
+  const ring = w.voorwerpen.filter((x) => x.soort === 'palissade' && x.kamp === K.nr);
+  const R = T.ROVERS_INSTELLINGEN.palissade.straal;
+  assert.ok(ring.length > 20, `${ring.length} tegels`);
+  for (const t of ring) {
+    assert.ok(Math.abs(Math.hypot(t.x - K.x, t.y - K.y) - R) <= 0.5, 'op de straal');
+    assert.ok(!T.isBegaanbaar(w, t.x, t.y, {}), 'je komt er niet door');
+    // de buitenkant wijst van het vuur af
+    const hoek = (t.richting * Math.PI) / 4;
+    assert.ok(Math.cos(hoek) * (t.x - K.x) + Math.sin(hoek) * (t.y - K.y) > 0, 'de buitenkant naar buiten');
+  }
+  assert.deepEqual(ring.filter((t) => t.rij.startsWith('poort')).map((t) => t.rij).sort(), ['poort', 'poort-lap'], 'twee zware palen bij de opening');
+  T.wereldTik(S);
+  assert.equal(w.voorwerpen.filter((x) => x.soort === 'palissade' && x.kamp === K.nr).length, ring.length, 'één keer');
+  // Over het paadje kom je bij het vuur; is de opening dicht, dan niet: de ring is dicht.
+  const pad = T.eilandVan(w.eiland.zaad).paden.find((p) => p.kamp === K.nr);
+  const pt = pad.punten.find(([x, y]) => Math.hypot(x - K.x, y - K.y) > R + 4);
+  const van = { x: Math.round(pt[0]), y: Math.round(pt[1]) };
+  assert.ok(T.zoekRoute(w, van, { x: K.x, y: K.y }, { naast: true }), 'door de opening');
+  const poort = ring.filter((t) => t.rij.startsWith('poort'));
+  const [a, b] = poort;
+  for (let i = 1; i < 8; i++) {
+    const x = Math.round(a.x + ((b.x - a.x) * i) / 8);
+    const y = Math.round(a.y + ((b.y - a.y) * i) / 8);
+    if (!w.voorwerpen.some((q) => q.x === x && q.y === y)) T.zetVoorwerp(w, { soort: 'palissade', x, y, kamp: K.nr, richting: 0, rij: '0' });
+  }
+  assert.equal(T.zoekRoute(w, van, { x: K.x, y: K.y }, { naast: true }), null, 'zonder opening geen weg naar binnen');
+});
+
 // A1, zoals het wild: een kamp gooit met zijn eigen dobbelsteen, dus wat het doet, verandert niets aan het dorp.
 test('roverskampen: een kamp met zijn mannen verandert niets aan wat het dorp gooit', () => {
   const spel = (open) => {

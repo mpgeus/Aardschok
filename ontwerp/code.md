@@ -2346,6 +2346,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   klein, middel, groot), en `kampBuitInLijst` in `js/tekenen.js` tekent de hoop (`T.sprites.buit(maat)`, het vel
   `beelden/buit.png` uit `gereedschap/pixelart/buit.cjs`, dat pas laadt als er buit te zien is), of zolang dat laadt een
   losse stapel (`stapelInLijst`, dezelfde als de stapels bij de deuren). `neemBuit` meet vanaf de hoop.
+- **Het hol van een level** (werklijst K, 2c, 27 okt; `test/kampen.test.cjs`): `dorpen[].hol: { bende, buit, palissade }`
+  (gekeurd in `T.keurScenario`) laat `T.beginOpEiland` (`js/begin.js`) `T.maakHol(D, o)` doen: het dichtste kamp binnen de
+  rand krijgt zijn bende (`vanBuiten`), zijn buit en `K.palissade`, en `D.hol` is zijn nummer (`T.holStand(D)`: 'staat',
+  'verslagen' of null). Gaat zijn land open, dan zet `zetPalissade` de ring: elke tegel op `palissade.straal` (7) van het
+  vuur een voorwerp `palissade` (`blokkeert` in `T.VOORWERPEN`, js/wereld.js), behalve `palissade.opening` (3) tegels waar
+  het paadje de ring kruist (`kruisingMetPaadje`); de twee einden daar zijn de poortpalen (`rij` 'poort' en 'poort-lap'),
+  de rest een variant ('0' tot '2'); `richting` (0 tot 7) is de buitenkant, van het vuur af. Getekend met
+  `T.sprites.palissade(rij, richting)` uit `beelden/palissade.png` (`gereedschap/pixelart/palissade.cjs`, `vel`; laadt pas
+  als er een te zien is). De tekening wordt nog beter (Marcel, 27 okt: "De palissade moet beter").
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de

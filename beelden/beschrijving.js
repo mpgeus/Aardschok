@@ -50117,6 +50117,25 @@
      "middel",
      "groot"
     ]
+   },
+   "palissade": {
+    "bestand": "palissade.png",
+    "cel": [
+     120,
+     220
+    ],
+    "anker": [
+     60,
+     186
+    ],
+    "rijen": [
+     "0",
+     "1",
+     "2",
+     "poort",
+     "poort-lap"
+    ],
+    "richtingen": 8
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -14,6 +14,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen buit
+//   node gereedschap/pixelart/naar-spel.cjs --alleen palissade
 //   node gereedschap/pixelart/naar-spel.cjs --alleen lantaarn
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
@@ -26,7 +27,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de buit, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier, de bruggen) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de buit, de palissade, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier, de bruggen) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -51,6 +52,7 @@ const Kamp = require('./kamp.cjs');
 const Bruggen = require('./bruggen-vel.cjs');
 const Hol = require('./hol.cjs');
 const Buit = require('./buit.cjs');
+const Palissade = require('./palissade.cjs');
 const Lantaarn = require('./lantaarn.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
@@ -241,6 +243,14 @@ function buit() {
   return Buit.beschrijving('buit.png');
 }
 
+// De palissade van het rovershol in stukken van één tegel: drie varianten en de poortpaal (zonder en met lap), elk in acht
+// richtingen (palissade.cjs; werklijst K, 2c). js/sprites.js zoekt er een op met S.palissade(rij, richting), en laadt het
+// vel pas als er een palissade te zien is.
+function palissade() {
+  schrijf('palissade.png', Palissade.vel());
+  return Palissade.beschrijving('palissade.png');
+}
+
 // ---------------------------------------------------------------- het wolvenhol
 //
 // Eén tekening: het hol van een roedel wolven, een kuil onder een omgevallen boom met botten ervoor (hol.cjs,
@@ -304,7 +314,7 @@ function bruggen() {
   return Bruggen.beschrijving('bruggen.png', stukken);
 }
 
-const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, buit, lantaarn, wijnrank, marktkraam, tekens, bruggen, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, buit, palissade, lantaarn, wijnrank, marktkraam, tekens, bruggen, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

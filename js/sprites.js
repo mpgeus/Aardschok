@@ -632,6 +632,16 @@
     return plekken.slice(0, n).sort((a, b) => a[1] - b[1]).map(([dx, dy]) => ({ deel: mand, dx, dy }));
   };
 
+  // Een stuk van de palissade om een rovershol (js/rovers.js, zetPalissade; gereedschap/pixelart/palissade.cjs): `rij` is
+  // een variant ('0' tot '2') of de poortpaal ('poort', 'poort-lap'), `richting` de kant van de buitenkant (0 tot 7). Het
+  // vel laadt pas als er een palissade te zien is; tot dan null.
+  S.palissade = function (rij, richting) {
+    const t = gegevens && gegevens.palissade;
+    const r = t ? t.rijen.indexOf(rij) : -1;
+    if (r < 0 || !laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, (richting % t.richtingen) * t.cel[0], r * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+
   // De buit van een roverskamp (js/rovers.js, T.roverskampenBuit; gereedschap/pixelart/buit.cjs): 'klein', 'middel' of
   // 'groot', met het anker op de grond in het midden van de hoop. Het vel laadt pas als er buit te zien is; tot dan null.
   S.buit = function (maat) {

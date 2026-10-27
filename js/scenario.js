@@ -288,6 +288,7 @@
       const wie = `dorp ${i + 1}`; // geen tekst
       for (const soort of d.wacht || []) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`${wie}: de soldaat ${soort} bestaat niet`); // geen tekst
       for (const soort of d.dicht || []) if (!T.GEBOUWEN[soort]) fout.push(`${wie}: het gebouw ${soort} bestaat niet`); // geen tekst
+      if (d.hol && !(Number.isInteger(d.hol.bende) && d.hol.bende >= 1)) fout.push(`${wie}: het hol heeft een bende van minstens één man`); // geen tekst
     });
     for (const [naam, g] of Object.entries(gebieden)) {
       const rond = g && [g.x, g.y, g.r].every(Number.isFinite);

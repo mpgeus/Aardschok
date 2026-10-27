@@ -55,6 +55,8 @@
     // als voet (`voet` op het voorwerp), en het kampvuur in het midden.
     tent: { blokkeert: true, zichtDicht: false, naam: T.t('a tent') },
     kampvuur: { blokkeert: true, zichtDicht: false, naam: T.t('the campfire') },
+    // De palissade om een rovershol (js/rovers.js, zetPalissade): je komt er niet door, maar schutters schieten erover.
+    palissade: { blokkeert: true, zichtDicht: false, naam: T.t('a palisade') },
   };
 
   // De bomen en de struiken, op één plek (vraag 148, a: met een nieuwe soort hier telt hij overal mee). Een boom zonder

@@ -10,6 +10,8 @@
 // met een boer ernaast voor de maat.
 //
 //   node gereedschap/pixelart/palissade.cjs      (uit/palissade-proef.png)
+//   node gereedschap/pixelart/palissade.cjs --stukken   (uit/palissade-stukken.png: het vel voor het spel, om te bekijken)
+//   node gereedschap/pixelart/naar-spel.cjs --alleen palissade   (naar het spel: beelden/palissade.png)
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -66,51 +68,92 @@ function paal(d, x, y, h, r, kant, deel) {
   d.push(kegel(hals, top, r * 0.9, 0.6, M.kern, deel, 1.2));
 }
 
+// De palen van een recht stuk langs x, van a tot b (eenheden), de buitenkant naar +y: elke paal anders (`zaad`, en `i`, het
+// nummer van de eerste), hier en daar een plank waar er een ontbreekt, en de twee dwarsliggers aan de binnenkant (-y) van
+// `liggerVan` tot `liggerTot`, met om de paar palen een sjorring van touw. Geeft het nummer na de laatste paal.
+function palen(d, a, b, zaad, i = 0, liggerVan = a + 2, liggerTot = b - 2) {
+  const kanten = [];
+  for (let x = a + PAAL.tussen / 2; x < b - PAAL.tussen / 2 + 0.1; x += PAAL.tussen, i++) {
+    const h1 = rnd(zaad, i, 1);
+    if (h1 < PAAL.weg) {
+      // er ontbreekt er een: een plank ertussen gespijkerd, schuin over het gat
+      d.push(blok([x, 1, 70 + h1 * 300], [PAAL.tussen * 0.75, 1.2, 6], 0.6, M.plank, 9));
+      continue;
+    }
+    const h = PAAL.hoog[0] + rnd(zaad, i, 2) * (PAAL.hoog[1] - PAAL.hoog[0]);
+    const r = PAAL.r * (0.85 + rnd(zaad, i, 3) * 0.35);
+    const s = rnd(zaad, i, 4) < PAAL.scheefKans ? (rnd(zaad, i, 5) - 0.5) * 2 * PAAL.scheef : (rnd(zaad, i, 5) - 0.5) * 0.02;
+    const kant = [s, (rnd(zaad, i, 6) - 0.5) * 0.03];
+    paal(d, x + (rnd(zaad, i, 7) - 0.5) * 2.5, (rnd(zaad, i, 8) - 0.5) * 3, h, r, kant, 1 + (i % 3));
+    kanten.push(x);
+  }
+  for (const z of LIGGER.z) {
+    d.push(capsule([liggerVan, LIGGER.binnen, z + (rnd(zaad, a, z) - 0.5) * 4], [liggerTot, LIGGER.binnen, z + (rnd(zaad, b, z) - 0.5) * 4], LIGGER.r, M.schors, 5));
+    for (const x of kanten.filter((k) => rnd(zaad, k, z) < 0.45)) d.push(capsule([x, LIGGER.binnen + 3, z - 4.5], [x, -3, z + 4.5], 1.2, M.touw, 6));
+  }
+  return i;
+}
+// Een zware paal van de opening op x, met de sjorringen, en met `lap` de rode lap van de rovers aan de buitenkant.
+function poortPaal(d, x, lap) {
+  paal(d, x, 0, POORT.hoog, POORT.r, [0, 0], 7);
+  for (const z of LIGGER.z) d.push(capsule([x - 4, -2, z - 6], [x - 4, 3, z + 6], 1.5, M.touw, 6));
+  if (!lap) return;
+  d.push(blok([x + 1, POORT.r + 1.8, 128], [5.5, 0.9, 13], 0.8, M.lap, 8));
+  d.push(blok([x + 4.5, POORT.r + 2.2, 110], [3, 0.8, 7], 0.8, M.lap, 8));
+}
+
 // palissade({ van, tot, zaad }): een recht stuk langs x, van `van` tot `tot` tegels, de buitenkant naar +y, met de opening
-// van POORT.breed tegels in het midden (x = 0).
+// van POORT.breed tegels in het midden (x = 0). Voor de proefplaat.
 function palissade(o = {}) {
   const van = (o.van ?? -4) * TEGEL;
   const tot = (o.tot ?? 4) * TEGEL;
   const gat = (POORT.breed * TEGEL) / 2;
   const zaad = o.zaad ?? 7;
   const d = [];
-  let i = 0;
-  const kanten = [];
-  for (const [a, b] of [[van, -gat], [gat, tot]]) {
-    for (let x = a + PAAL.tussen / 2; x < b - PAAL.tussen / 2 + 0.1; x += PAAL.tussen, i++) {
-      const h1 = rnd(zaad, i, 1);
-      if (h1 < PAAL.weg) {
-        // er ontbreekt er een: een plank ertussen gespijkerd, schuin over het gat
-        d.push(blok([x, 1, 70 + h1 * 300], [PAAL.tussen * 0.75, 1.2, 6], 0.6, M.plank, 9));
-        continue;
-      }
-      const h = PAAL.hoog[0] + rnd(zaad, i, 2) * (PAAL.hoog[1] - PAAL.hoog[0]);
-      const r = PAAL.r * (0.85 + rnd(zaad, i, 3) * 0.35);
-      const s = rnd(zaad, i, 4) < PAAL.scheefKans ? (rnd(zaad, i, 5) - 0.5) * 2 * PAAL.scheef : (rnd(zaad, i, 5) - 0.5) * 0.02;
-      const kant = [s, (rnd(zaad, i, 6) - 0.5) * 0.03];
-      paal(d, x + (rnd(zaad, i, 7) - 0.5) * 2.5, (rnd(zaad, i, 8) - 0.5) * 3, h, r, kant, 1 + (i % 3));
-      kanten.push(x);
-    }
-    // de dwarsliggers aan de binnenkant, met om de paar palen een sjorring van touw
-    for (const z of LIGGER.z) {
-      d.push(capsule([a + 2, LIGGER.binnen, z + (rnd(zaad, a, z) - 0.5) * 4], [b - 2, LIGGER.binnen, z + (rnd(zaad, b, z) - 0.5) * 4], LIGGER.r, M.schors, 5));
-      for (const x of kanten.filter((k) => k > a && k < b && rnd(zaad, k, z) < 0.45)) {
-        d.push(capsule([x, LIGGER.binnen + 3, z - 4.5], [x, -3, z + 4.5], 1.2, M.touw, 6));
-      }
-    }
-  }
+  const i = palen(d, van, -gat, zaad, 0);
+  palen(d, gat, tot, zaad, i);
   // de zware palen van de opening, met een lap van de rovers aan de linker
-  for (const s of [-1, 1]) {
-    const x = s * (gat + POORT.r * 0.6);
-    paal(d, x, 0, POORT.hoog, POORT.r, [0, 0], 7);
-    for (const z of LIGGER.z) d.push(capsule([x - s * 4, -2, z - 6], [x - s * 4, 3, z + 6], 1.5, M.touw, 6));
-  }
-  const xl = -(gat + POORT.r * 0.6);
-  d.push(blok([xl + 1, POORT.r + 1.8, 128], [5.5, 0.9, 13], 0.8, M.lap, 8));
-  d.push(blok([xl + 4.5, POORT.r + 2.2, 110], [3, 0.8, 7], 0.8, M.lap, 8));
+  poortPaal(d, -(gat + POORT.r * 0.6), true);
+  poortPaal(d, gat + POORT.r * 0.6, false);
   d.push(Bm.onderGrond);
   return model(d, materialen(), Bm.omhul(d));
 }
+
+// ---------------------------------------------------------------- de stukken voor het spel
+
+// Eén tegel van de ring om een roverskamp (js/rovers.js, zetPalissade), met het midden van de tegel in het midden: 'recht'
+// (een tegel lang, drie palen; de ring loopt langs een as), 'schuin' (de diagonaal van een tegel, vier palen), of 'poort'
+// (een zware paal aan het eind van de ring bij de opening; `lap`: met de rode lap). De buitenkant naar +y; de richting
+// van het vel draait hem (de buitenkant naar de kant van de tegel weg van het vuur). `zaad`: elke variant anders.
+const VARIANTEN = 3;
+function stuk({ vorm, zaad = 1, lap = false }) {
+  const d = [];
+  if (vorm === 'poort') poortPaal(d, 0, lap);
+  else {
+    const L = TEGEL * (vorm === 'schuin' ? Math.SQRT2 : 1);
+    palen(d, -L / 2, L / 2, 100 + zaad, 0, -L / 2 - 1, L / 2 + 1);
+  }
+  d.push(Bm.onderGrond);
+  return model(d, materialen(), Bm.omhul(d));
+}
+// De rijen van het vel: de varianten (recht of schuin, naar de richting), dan de poortpaal zonder en met lap; de kolommen
+// zijn de acht richtingen van de buitenkant, in stappen van 45 graden (zoals T.RICHTING in kern.cjs telt: 0 is +x).
+const RIJEN = [...Array.from({ length: VARIANTEN }, (_, v) => `${v}`), 'poort', 'poort-lap'];
+const STUK_CEL = [120, 220];
+const STUK_ANKER = [60, 186];
+function vel() {
+  const uit = new K.Plaat(STUK_CEL[0] * 8, STUK_CEL[1] * RIJEN.length);
+  RIJEN.forEach((rij, r) => {
+    for (let k = 0; k < 8; k++) {
+      const vorm = rij.startsWith('poort') ? 'poort' : k % 2 ? 'schuin' : 'recht';
+      const m = stuk({ vorm, zaad: Number(rij) || 0, lap: rij === 'poort-lap' });
+      uit.plak(teken(m, STUK_CEL, STUK_ANKER, k * 45), k * STUK_CEL[0], r * STUK_CEL[1]);
+    }
+  });
+  return uit;
+}
+// Wat in beelden/beschrijving.json komt (naar-spel.cjs --alleen palissade).
+const beschrijving = (bestand) => ({ bestand, cel: STUK_CEL, anker: STUK_ANKER, rijen: RIJEN, richtingen: 8 });
 
 // ---------------------------------------------------------------- de proefplaat
 
@@ -181,6 +224,13 @@ function proef() {
   console.log(`uit/palissade-proef.png (${samen.b}×${samen.h})`);
 }
 
-if (require.main === module) proef();
+if (require.main === module) {
+  if (process.argv.includes('--stukken')) {
+    const p = vel();
+    fs.mkdirSync(path.join(__dirname, 'uit'), { recursive: true });
+    fs.writeFileSync(path.join(__dirname, 'uit', 'palissade-stukken.png'), K.png(p, 1, '#5e6a44'));
+    console.log(`uit/palissade-stukken.png (${p.b}×${p.h})`);
+  } else proef();
+}
 
-module.exports = { palissade, PAAL, POORT, LIGGER };
+module.exports = { palissade, stuk, vel, beschrijving, RIJEN, VARIANTEN, STUK_CEL, STUK_ANKER, PAAL, POORT, LIGGER };
