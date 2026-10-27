@@ -2615,7 +2615,8 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   stuk van de ring met de opening, van één kant. Dezelfde tekening kan later de palissade van je eigen dorp worden (vraag
   158, de muren; `palissade` staat al als gebouw zonder tekening).
 - **Wat het hol nog laat zien, zonder nieuwe tekening:** de buit bij het vuur, met de tekening van een losse stapel. Nu
-  zegt het bericht van c4 dat de buit bij het vuur ligt, maar je ziet hem niet.
+  zegt het bericht van c4 dat de buit bij het vuur ligt, maar je ziet hem niet. **Gebouwd** (27 okt): een tegel rechts
+  van het vuur (`T.roverskampenBuit`).
 
 ## Open
 

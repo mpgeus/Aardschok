@@ -1191,7 +1191,9 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   ligt er nog: wie van je mannen bij het vuur komt (2 tegels, `buitAfstand`), neemt mee wat hij kan dragen (10, alles
   samen, `buitPerMan`); zijn briefje zegt het (*Loot: 10 grain*), en het telt pas als hij terug is in het bereik van je
   dorp: daar legt hij het neer als een losse stapel, en de dragers brengen het binnen (*Ralph brings home 10 grain from
-  the robbers' camp.*). Wat blijft liggen, haal je een tweede keer; wie het draagt en valt, verliest het.
+  the robbers' camp.*). Wat blijft liggen, haal je een tweede keer; wie het draagt en valt, verliest het. De buit van een
+  kamp zie je naast het vuur liggen, ook in een kamp dat nog leeft (Marcel, 27 okt: "B ja"), met de tekening van een
+  losse stapel.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

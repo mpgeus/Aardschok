@@ -1047,6 +1047,24 @@
     if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
   }
 
+  // De buit van de roverskampen op kaart w die er staan, om te tekenen (js/tekenen.js; Marcel, 27 okt: "B ja"): een
+  // stapel naast het vuur, met de tekening van een losse stapel (de waar waar het meest van is, en hoe vol), zolang er
+  // iets ligt, ook in een kamp dat nog leeft (wat ze thuisbrachten, c3). Alleen beeld: je loopt erover.
+  T.roverskampenBuit = function (w) {
+    const uit = [];
+    for (const K of (w && w.kampen) || []) {
+      if (!K.staat) continue;
+      let n = 0;
+      let wat = null;
+      for (const k of Object.keys(K.buit)) {
+        n += K.buit[k];
+        if (!wat || K.buit[k] > K.buit[wat]) wat = k;
+      }
+      if (n >= 0.5) uit.push({ x: K.x + 1, y: K.y - 1, wat, vol: n / T.KAR_INSTELLINGEN.stapelVol });
+    }
+    return uit;
+  };
+
   // Het vuur van roverskamp K: het brandt als het donker is, en smeult overdag; van een verslagen kamp is het uit (c4).
   T.roverskampVuur = (dag, K) => (K && K.verslagen ? 'uit' : T.lichtVan(dag).nacht > 0 ? 'brandt' : 'smeult');
   // Het licht van de roverskampen op kaart w die er staan, voor T.lichtBronnen (js/zien.js): 's avonds en 's nachts, zoals

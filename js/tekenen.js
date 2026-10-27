@@ -1566,6 +1566,7 @@
     }
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     stapelsInLijst(ctx, S, w, D, vak, lijst);
+    kampBuitInLijst(ctx, S, w, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g, vast, opDeKaart); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
@@ -3947,17 +3948,23 @@
   // hoog als hij vol is.
   function stapelsInLijst(ctx, S, w, D, vak, lijst) {
     if (!D || !T.metVervoer(D)) return;
-    for (const s of T.stapelsOp(D)) {
-      if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
-      const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];
-      lijst.push({
-        d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
-          const p = opGrond(s.x, s.y);
-          if (delen.length) for (const d of delen) T.sprites.teken(ctx, d.deel, p.x + d.dx, p.y + d.dy);
-          else T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
-        },
-      });
-    }
+    for (const s of T.stapelsOp(D)) stapelInLijst(ctx, w, vak, lijst, s);
+  }
+  // De buit in een roverskamp (T.roverskampenBuit, js/rovers.js): naast het vuur, met de tekening van een losse stapel.
+  function kampBuitInLijst(ctx, S, w, vak, lijst) {
+    for (const s of T.roverskampenBuit(w)) stapelInLijst(ctx, w, vak, lijst, s);
+  }
+  // Eén stapel s ({ x, y, wat, vol }), als hij in het vak ligt en te zien is.
+  function stapelInLijst(ctx, w, vak, lijst, s) {
+    if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) return;
+    const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];
+    lijst.push({
+      d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
+        const p = opGrond(s.x, s.y);
+        if (delen.length) for (const d of delen) T.sprites.teken(ctx, d.deel, p.x + d.dx, p.y + d.dy);
+        else T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
+      },
+    });
   }
 
   function tekenKlein(ctx, deel, x, y, schaduw) {

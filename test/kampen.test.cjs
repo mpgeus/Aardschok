@@ -419,6 +419,8 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
     const dag = Math.floor(S.kalender.dag);
     assert.equal(T.roverskampVuur(dag + 23 / 24, kamp), 'uit', 'het vuur is uit');
     assert.equal(T.roverskampenLicht(w, dag + 23 / 24).length, 0, 'en geeft geen licht');
+    // De buit ligt zichtbaar naast het vuur (Marcel, 27 okt: "B ja"), met de tekening van een losse stapel.
+    assert.deepEqual(T.roverskampenBuit(w), [{ x: kamp.x + 1, y: kamp.y - 1, wat: 'graan', vol: 17 / T.KAR_INSTELLINGEN.stapelVol }]);
     const b = berichten.find((x) => /^The robbers' camp is beaten\. Their loot lies by the fire/.test(x.t));
     assert.ok(b, berichten.map((x) => x.t).join(' | '));
     assert.deepEqual(b.plek, { x: kamp.x, y: kamp.y }, 'met de plek');
@@ -451,6 +453,7 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
     T.werkKampenBij(S, w);
     assert.deepEqual(held.buit, { graan: 4, goud: 3 });
     assert.deepEqual(kamp.buit, {});
+    assert.deepEqual(T.roverskampenBuit(w), [], 'en is hij weg, dan zie je niets meer');
     // Bewaard en geladen: het blijft verslagen.
     const S2 = {};
     assert.ok(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 0 })).gelukt);
