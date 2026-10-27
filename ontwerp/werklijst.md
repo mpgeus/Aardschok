@@ -980,7 +980,8 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
 3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade). **De woorden zijn goed** (Marcel, 27 okt: "P
    zoals in de woorden, B ja"; `beeld.md`, "Het rovershol"). B is gebouwd (de buit naast het vuur), en de proefplaat van
    de palissade is goed (Marcel, 27 okt: "de palisade is goed, maar ik wil een grotere buit zien"; `palissade.cjs`). Nog:
-   de palissade in stukken van één tegel en in het spel, en een grotere buit (hoe, kiest Marcel).
+   de palissade in stukken van één tegel en in het spel, en een grotere buit: een eigen tekening in drie maten (Marcel,
+   27 okt: "b"; `beeld.md`, "Het rovershol"); **de proefplaat wacht op Marcel** (`gereedschap/pixelart/buit.cjs`).
    **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
    (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
    van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).

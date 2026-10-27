@@ -2623,6 +2623,15 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   `mos`, het touw uit `stro`, de lap uit `rood`. Wat opvalt: twee keer een man is hoog; in het spel dekt de voorkant van
   de ring zo de voorste tegels van het plein af. **Goedgekeurd** (Marcel, 27 okt: "de palisade is goed, maar ik wil een
   grotere buit zien"): de palissade blijft zo; de buit bij het vuur (nu een, twee of drie zakken) moet groter.
+- **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
+  vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
+  *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen
+  ketel, een kandelaar en een wiel van een gestolen kar. Hoeveel er ligt, zegt de maat. Een model in code
+  (`gereedschap/pixelart/buit.cjs`); eerst één proefplaat met de drie maten. **De proefplaat** (27 okt,
+  `uit/buit-proef.png`): eiken kisten met ijzeren banden (de open met het deksel achterover, goud uit `goud` en zilver uit
+  de lichte `ijzer`, en munten ernaast), zakken jute (`zand`) met een vastgebonden hals, tonnen met ijzeren hoepels (een
+  ligt), de rol laken met de windingen op de kopse kant, de ketel uit een donkere `herfst`. In de grote hoop liggen zakken
+  bovenop de tonnen en de kist, zodat hij hoog wordt; het wiel staat er opzij tegenaan. Wacht op Marcel.
 
 ## Open
 
