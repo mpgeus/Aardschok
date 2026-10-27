@@ -2621,7 +2621,8 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   met de opening, van buiten (ZO), met een boer in de opening voor de maat, op ware grootte en twee keer vergroot. De
   schors is de warme grijs van `bot` met plekken bruine schors (`schors`), de punt licht hout (`hout`), het mos uit
   `mos`, het touw uit `stro`, de lap uit `rood`. Wat opvalt: twee keer een man is hoog; in het spel dekt de voorkant van
-  de ring zo de voorste tegels van het plein af. Wacht op Marcel.
+  de ring zo de voorste tegels van het plein af. **Goedgekeurd** (Marcel, 27 okt: "de palisade is goed, maar ik wil een
+  grotere buit zien"): de palissade blijft zo; de buit bij het vuur (nu een, twee of drie zakken) moet groter.
 
 ## Open
 
