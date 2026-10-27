@@ -1586,6 +1586,7 @@
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
       tekenStuurPlekken(ctx, S);
+      tekenKlikTeken(ctx, S);
     }
     const volgorde = tekenVolgorde(lijst);
     voorsteKijkgaten(volgorde, kijkgaten);
@@ -3179,6 +3180,25 @@
       T.ruit(ctx, p.x, p.y, 0.94);
       ctx.fill();
     }
+  }
+
+  // Waar je met rechts klikte (S.klikTeken, js/main.js; vraag 191, S3): een ring op de grond die in `teken` seconden
+  // krimpt en vervaagt, licht bij erheen en rood bij een vijand, zodat je meteen ziet dat de klik aankwam.
+  function tekenKlikTeken(ctx, S) {
+    const k = S.klikTeken;
+    if (!k) return;
+    const over = (k.tot - S.tijd) / T.KIEZEN_INSTELLINGEN.teken;
+    if (!(over > 0)) {
+      S.klikTeken = null;
+      return;
+    }
+    const p = opGrond(k.x, k.y);
+    const r = 8 + 14 * over;
+    ctx.strokeStyle = k.aanval ? `rgba(224, 96, 79, ${over.toFixed(3)})` : `rgba(250, 240, 210, ${over.toFixed(3)})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y, r, r / 2, 0, 0, Math.PI * 2);
+    ctx.stroke();
   }
 
   function tekenMarkeringen(ctx, S) {

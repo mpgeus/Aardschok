@@ -721,8 +721,10 @@
   });
   // Rechts op de minikaart, met je mannen gekozen: erheen, ook naar land dat je niet kent (js/kiezen.js; vraag 170, stap
   // 6a2, c0; Marcel, 17 okt: "Stel je stuurt een soldaat maar de andere kant van de wereld met een klik").
-  miniDoek.addEventListener('contextmenu', (ev) => {
-    ev.preventDefault();
+  // Bij het indrukken, zoals op het beeld (js/main.js; vraag 191, S3).
+  miniDoek.addEventListener('contextmenu', (ev) => ev.preventDefault());
+  miniDoek.addEventListener('mousedown', (ev) => {
+    if (ev.button !== 2) return;
     const S = T.S;
     if (!S || S.modus !== 'verkennen' || S.foto) return;
     const t = tegelOpMinikaart(ev);

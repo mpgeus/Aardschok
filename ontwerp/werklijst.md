@@ -34,11 +34,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **Bezig in sessie `ccr-fa3e2dd5-ylm9al`** (27 okt; Marcel: "191: S1 tot S3", en S4 erbij, want S3c, meteen draaien, kan
-  alleen met S4): S1 tot S4 van S hieronder.
-  **191, de mannen lopen stroef: kiezen wat eerst** (24 okt; bij S hieronder, en wat Claude mat in `speelbaar.md`, "De
-  speeltest van 24 okt"). Ze lopen zigzag, een soldaat loopt als een boer (1,35 tegel per seconde, een rover 2,2), ze
-  wachten op elkaar, een stap gaat eerst af voor ze omdraaien, en op hun post maken ze praatjes.
+- **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
+  "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
+  het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
+  Voelt het nog stroef, dan S5 (rechte lijnen) en S6 (minder wachten in een troep).
 - **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
   in een dicht stuk dorp, ook 's avonds en in de winter; kijk of het teken onder de bovenbalk goed staat, en meet in
   Firefox (de meter, *drawing*) plat tegen gewoon. Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
@@ -1463,6 +1462,10 @@ naar groot; alleen voor je mannen (de held, de soldaten, de veteranen), het lope
   ze samen aankomen.
 
 Voorstel van Claude: S1 tot S3 eerst (klein, een middag), dan S4 en S5 samen, en S6 alleen als het dan nog stroef is.
+**S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij, want meteen draaien kan alleen met S4; `spel.md`,
+"Minder stroef"). In de browser gemeten: de wacht loopt 2,2 tegels per seconde, het bevel staat er bij het indrukken, en
+van drie mannen midden in een stap keerde er één meteen om; bij de andere twee stond een maat op de tegel achter hem (dat
+is S6).
 
 ## Af (sinds 11 okt)
 

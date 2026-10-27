@@ -67,6 +67,9 @@
     if (deel === 'nacht') return false;
     const p = T.bewonerVan(D, e);
     if (!p || p.aanvoerder || p.komt || p.weg || p.leeftijd === 'kleuter') return false;
+    // Een man in dienst staat waar je hem neerzette (Marcel, 20 okt), en maakt geen praatje (vraag 191, S2): een soldaat in
+    // zijn dienst (T.inDienst, js/kiezen.js), en een veteraan op zijn post.
+    if ((p.soldaat && T.inDienst(D, e)) || (p.veteraan && e.post)) return false;
     if (deel === 'werk') {
       if (p.werk || e.werkAkkers) return false;
       if (T.helpAnker(D, e)) return false;

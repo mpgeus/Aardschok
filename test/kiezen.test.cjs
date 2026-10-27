@@ -520,3 +520,60 @@ test('op tocht: kan hij er niet komen (water), dan gaat hij zo dicht als het kan
   assert.ok(T.isBegaanbaar(w, a.tx, a.ty), 'op het land');
   assert.ok(T.afstand(T.tegelVan(a), doel) < T.afstand(van, doel) - 20, 'dichter bij het water dan hij begon');
 });
+
+// Vraag 191 (de mannen lopen stroef; Marcel, 27 okt: "S1 tot S3", en S4 erbij).
+test('S1: je soldaten en veteranen lopen zo snel als de held, niet als een boer', () => {
+  const { D, a } = metMilitie();
+  assert.equal(T.snelheidVan(a), T.KIEZEN_INSTELLINGEN.loopt);
+  assert.equal(T.snelheidVan(a), T.AANVOERDER_SNELHEID, 'net als de held');
+  const boer = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder && p.leeftijd === 'volwassen').wezen;
+  assert.equal(T.snelheidVan(boer), T.BEWONERS_INSTELLINGEN.snelheidVolwassen);
+  assert.ok(T.snelheidVan(a) > T.snelheidVan(boer));
+  // Legt hij zijn wapens neer, dan loopt hij weer als een boer.
+  const s = a.bewoner.soldaat;
+  delete a.bewoner.soldaat;
+  assert.equal(T.snelheidVan(a), T.BEWONERS_INSTELLINGEN.snelheidVolwassen);
+  a.bewoner.soldaat = s;
+});
+
+test('S2: een soldaat in zijn dienst maakt geen praatje; buiten zijn dienst wel, zoals ieder', () => {
+  const { S, D, a } = metMilitie();
+  assert.ok(T.inDienst(D, a), 'om tien uur is de dagdienst');
+  assert.equal(T.kanPraten(S, D, a, 'werk'), false);
+  assert.equal(T.kanPraten(S, D, a, 'vrij'), false);
+  // In de nachtdienst is hij overdag vrij (in het spel slaapt hij dan thuis; hier staat hij nog buiten).
+  a.bewoner.soldaat.dienst = 'nacht';
+  delete a.wakker;
+  assert.equal(T.inDienst(D, a), false);
+  assert.equal(T.kanPraten(S, D, a, 'vrij'), true);
+});
+
+test('S4: een bevel midden in een stap: is de tegel waar hij vandaan kwam dichter bij zijn doel, dan keert hij meteen om', () => {
+  const { S, D, huis, a } = metMilitie();
+  const van = vrijeTegel(D, T.deurVan(D.wereld, huis), 4, 3);
+  // Hij stapt van `van` een tegel naar rechts, en is halverwege.
+  const naar = { x: van.x + 1, y: van.y };
+  assert.ok(T.isBegaanbaar(D.wereld, naar.x, naar.y), 'een vrije tegel om in te stappen');
+  const zetHalverwege = () => Object.assign(a, { x: van.x + 0.5, y: van.y, tx: naar.x, ty: naar.y, onderweg: true, pad: [naar], binnen: false });
+  // Een doel links: dan meteen terug, en hij kijkt (pad[0]) naar links.
+  zetHalverwege();
+  const links = vrijeTegel(D, van, -6, 0);
+  T.stuurMannen(D, [a.bewoner.id], links);
+  assert.deepEqual([a.tx, a.ty], [van.x, van.y], 'zijn tegel is weer die waar hij vandaan kwam');
+  assert.deepEqual(a.pad[0], van);
+  assert.ok(a.pad[0].x - a.x < 0, 'hij draait meteen om');
+  // Een doel rechts: dan maakt hij zijn stap af.
+  zetHalverwege();
+  const rechts = vrijeTegel(D, naar, 5, 0);
+  T.stuurMannen(D, [a.bewoner.id], rechts);
+  assert.deepEqual([a.tx, a.ty], [naar.x, naar.y]);
+  assert.deepEqual(a.pad[0], naar);
+  // Staat er intussen een ander op zijn oude tegel, dan maakt hij zijn stap ook af.
+  zetHalverwege();
+  const ander = D.bewoners.mensen.find((p) => p.wezen && !p.soldaat && !p.aanvoerder).wezen;
+  const was = { x: ander.x, y: ander.y, tx: ander.tx, ty: ander.ty };
+  Object.assign(ander, { x: van.x, y: van.y, tx: van.x, ty: van.y });
+  T.stuurMannen(D, [a.bewoner.id], links);
+  assert.deepEqual([a.tx, a.ty], [naar.x, naar.y], 'de tegel is bezet');
+  Object.assign(ander, was);
+});

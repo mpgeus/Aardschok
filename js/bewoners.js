@@ -285,9 +285,9 @@
       if (!pad) lengte = Math.max(0, T.afstand(van, doel) - straal);
       o = wegen[sleutel] = { van: { x: van.x, y: van.y }, doel: { x: doel.x, y: doel.y }, straal, pad: pad || [], lengte };
     }
-    // Zijn eigen snelheid: die van zijn poppetje (een boer loopt zoals T.MENSEN zegt), anders die van
-    // zijn leeftijd.
-    const snelheid = (p.wezen && p.wezen.snelheid) || IN()[T.LEEFTIJDEN[p.leeftijd].snelheid] || 1;
+    // Zijn eigen snelheid: die van zijn poppetje (een boer loopt zoals T.MENSEN zegt, een soldaat als de held:
+    // T.snelheidVan), anders die van zijn leeftijd.
+    const snelheid = (p.wezen && T.snelheidVan(p.wezen)) || IN()[T.LEEFTIJDEN[p.leeftijd].snelheid] || 1;
     return o.lengte / snelheid / (T.DAG_LENGTE / 24);
   };
   // Van zijn deur naar zijn werk.

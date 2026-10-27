@@ -21,6 +21,11 @@
   'use strict';
 
   T.KIEZEN_INSTELLINGEN = {
+    // Zo snel lopen je soldaten en veteranen, in tegels per seconde (vraag 191, S1; Marcel, 27 okt: "S1 tot S3"): net als de
+    // held (T.AANVOERDER_SNELHEID) en een rover, niet als een boer (1,35), zodat een troep bij elkaar blijft (T.snelheidVan).
+    loopt: 2.2,
+    // Zoveel seconden staat er een ring op de grond waar je met rechts klikte (vraag 191, S3; alleen scherm, js/tekenen.js).
+    teken: 0.6,
     camera: {
       rand: 8, // zo dicht bij de rand van het scherm (in pixels) schuift de muis het beeld; 0 zet het uit
       snelheid: 900, // zoveel pixels van het beeld per seconde schuiven de pijltjes en de rand
@@ -264,16 +269,36 @@
 
   // Loop naar `doel` (een tegel, of met `naast` ernaast). Wie binnen is, komt eerst naar buiten (het dwalen, js/verkennen.js,
   // dat hij nu meteen doet); wie midden in een stap is, maakt die af. Geeft of er een weg is.
+  // Wie midden in een stap is, keert meteen om als de tegel waar hij vandaan kwam dichter bij zijn doel ligt en vrij is
+  // (vraag 191, S4: "meteen omdraaien"): zijn tegel (tx, ty) wordt weer die, en hij loopt vanaf waar hij is terug. Anders
+  // maakt hij de stap eerst af, zoals ieder.
   function loop(D, e, doel, naast) {
     const w = D.wereld;
     if (e.binnen) {
       e.dwaalTijd = 0;
       return true;
     }
+    const terug = e.onderweg && e.pad[0] ? vanWaar(e) : null;
+    if (terug && T.afstand(terug, doel) < T.afstand(T.tegelVan(e), doel) && T.isBegaanbaar(w, terug.x, terug.y, { wezensBlokkeren: true, wie: e })) {
+      const omweg = T.zoekRoute(w, terug, doel, { naast, tocht: true });
+      if (omweg !== null) {
+        e.tx = terug.x;
+        e.ty = terug.y;
+        T.geefRoute(e, [terug, ...omweg], { x: doel.x, y: doel.y, naast });
+        return true;
+      }
+    }
     const pad = T.zoekRoute(w, T.tegelVan(e), doel, { naast, tocht: true });
     if (pad === null) return false;
     T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...pad] : pad, { x: doel.x, y: doel.y, naast });
     return true;
+  }
+
+  // De tegel waar wie midden in een stap is, vandaan kwam: een stap terug van waar hij heen gaat (tx, ty), langs waar hij
+  // nu is. Null als hij er al staat.
+  function vanWaar(e) {
+    const t = { x: e.tx - Math.sign(e.tx - e.x), y: e.ty - Math.sign(e.ty - e.y) };
+    return t.x === e.tx && t.y === e.ty ? null : t;
   }
 
   // Een bevel gaat voor: wie een vijand achterna zat (e.volgt), laat hem gaan.

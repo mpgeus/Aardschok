@@ -1121,6 +1121,12 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   wat hij draagt; van meer mannen een lijstje; van een dorpeling wat hij doet en waar hij woont. Wie iets te zeggen
   heeft (de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
   de held erheen loopt. De heer en de marskramer spreek je aan met een klik.
+- **Minder stroef** (vraag 191, 27 okt; Marcel: "S1 tot S3", en S4 erbij): je soldaten en veteranen lopen 2,2 tegels per
+  seconde, zo snel als de held en een rover (een boer loopt 1,35; de werkbank, "Choosing and sending"); een soldaat in
+  zijn dienst en een veteraan op zijn post maken geen praatje; rechts gaat in bij het indrukken van de knop, met een ring
+  op de grond die krimpt (rood op een vijand); en wie midden in een stap een bevel krijgt, keert meteen om als de tegel
+  waar hij vandaan kwam dichter bij zijn doel ligt en vrij is. Nog niet: rechte lijnen in plaats van zigzag (S5), en
+  minder wachten in een troep (S6).
 - **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze gaan in
   hun formatie staan (hieronder), en die plek is hun **post**: daar staan ze in hun dienst (hieronder), daarbuiten
   slapen ze thuis, en als hun dienst begint, gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
