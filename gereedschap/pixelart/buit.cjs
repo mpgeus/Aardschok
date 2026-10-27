@@ -7,6 +7,7 @@
 // Eén tekening per maat, van één kant: de hoop ligt los op de grond, dus hij draait niet mee.
 //
 //   node gereedschap/pixelart/buit.cjs      (de proefplaat: uit/buit-proef.png, de drie maten met een boer ernaast)
+//   node gereedschap/pixelart/naar-spel.cjs --alleen buit   (naar het spel: beelden/buit.png, een cel per maat)
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -277,6 +278,16 @@ function kader(p) {
   return { x0, x1, y0, y1 };
 }
 
+// Het vel voor het spel (naar-spel.cjs --alleen buit): de drie maten naast elkaar, een cel per maat (MATEN), met het anker
+// op de grond in het midden van de hoop; js/sprites.js zoekt hem op met S.buit(maat).
+function vel() {
+  const uit = new K.Plaat(CEL[0] * MATEN.length, CEL[1]);
+  MATEN.forEach((m, i) => uit.plak(teken(buit(m)), i * CEL[0], 0));
+  return uit;
+}
+// Wat in beelden/beschrijving.json komt: het bestand, de maat van een cel, het anker en de volgorde van de maten.
+const beschrijving = (bestand) => ({ bestand, cel: CEL, anker: ANKER, maten: MATEN });
+
 // De drie maten naast elkaar op ware grootte, met een boer ervoor voor de maat; daaronder twee keer vergroot.
 function proef() {
   const uit = path.join(__dirname, 'uit');
@@ -319,4 +330,4 @@ function proef() {
 
 if (require.main === module) proef();
 
-module.exports = { buit, MATEN, CEL, ANKER, teken };
+module.exports = { buit, vel, beschrijving, MATEN, CEL, ANKER, teken };

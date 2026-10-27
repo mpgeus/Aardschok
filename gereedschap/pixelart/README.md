@@ -192,7 +192,8 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `buit.cjs`: de buit van een roverskamp in drie maten (werklijst K, 2c): klein (een kist en twee zakken), middel (de kist
   open met goud en zilver, tonnen en zakken) en groot (een hoge hoop met tonnen, zakken, twee kisten, een rol rood laken,
   een koperen ketel, een kandelaar en een karrenwiel). `node buit.cjs` maakt de proefplaat `uit/buit-proef.png` (de drie
-  naast een boer, op ware grootte en twee keer vergroot; in zo'n tien seconden). Nog niet naar het spel.
+  naast een boer, op ware grootte en twee keer vergroot; in zo'n tien seconden). Naar het spel: `node naar-spel.cjs
+  --alleen buit` (`beelden/buit.png`, een cel per maat).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

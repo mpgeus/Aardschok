@@ -3950,9 +3950,21 @@
     if (!D || !T.metVervoer(D)) return;
     for (const s of T.stapelsOp(D)) stapelInLijst(ctx, w, vak, lijst, s);
   }
-  // De buit in een roverskamp (T.roverskampenBuit, js/rovers.js): naast het vuur, met de tekening van een losse stapel.
+  // De buit in een roverskamp (T.roverskampenBuit, js/rovers.js): een hoop naast het vuur, klein, middel of groot
+  // (T.sprites.buit); zolang dat vel laadt, of zonder kunst, als een losse stapel.
   function kampBuitInLijst(ctx, S, w, vak, lijst) {
-    for (const s of T.roverskampenBuit(w)) stapelInLijst(ctx, w, vak, lijst, s);
+    for (const s of T.roverskampenBuit(w)) {
+      const hoop = metSprites() ? T.sprites.buit(s.maat) : null;
+      if (!hoop) {
+        stapelInLijst(ctx, w, vak, lijst, s);
+        continue;
+      }
+      if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
+      lijst.push({ d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
+        const p = opGrond(s.x, s.y);
+        T.sprites.teken(ctx, hoop, p.x, p.y);
+      } });
+    }
   }
   // Eén stapel s ({ x, y, wat, vol }), als hij in het vak ligt en te zien is.
   function stapelInLijst(ctx, w, vak, lijst, s) {

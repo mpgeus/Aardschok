@@ -632,6 +632,15 @@
     return plekken.slice(0, n).sort((a, b) => a[1] - b[1]).map(([dx, dy]) => ({ deel: mand, dx, dy }));
   };
 
+  // De buit van een roverskamp (js/rovers.js, T.roverskampenBuit; gereedschap/pixelart/buit.cjs): 'klein', 'middel' of
+  // 'groot', met het anker op de grond in het midden van de hoop. Het vel laadt pas als er buit te zien is; tot dan null.
+  S.buit = function (maat) {
+    const t = gegevens && gegevens.buit;
+    const i = t ? t.maten.indexOf(maat) : -1;
+    if (i < 0 || !laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+  };
+
   // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het
   // anker op de grond in het midden van de tegel. Null als het vel er niet is.
   S.hol = function () {

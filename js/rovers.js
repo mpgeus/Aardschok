@@ -75,10 +75,13 @@
     rondHetVuur: [2, 3.5],
     wakkerUren: 1,
     rustVerder: 20,
-    // Een verslagen kamp (c4): wat er aan buit ligt, nemen je mannen mee als ze tot zoveel tegels bij het vuur komen,
+    // Een verslagen kamp (c4): wat er aan buit ligt, nemen je mannen mee als ze tot zoveel tegels bij de hoop komen,
     // ieder hooguit zoveel (alles samen, zoals een rover van een stapel, `stapelPerRover`, maar dan voor de hele buit).
     buitAfstand: 2,
     buitPerMan: 10,
+    // De hoop buit naast het vuur (Marcel, 27 okt: "ik wil een grotere buit zien", en "b"): klein tot het eerste getal,
+    // middel tot het tweede, daarboven groot (alles samen geteld).
+    buitMaten: [20, 60],
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -809,6 +812,8 @@
       for (let y = t.voet.y; y < t.voet.y + t.voet.h; y++) for (let x = t.voet.x; x < t.voet.x + t.voet.b; x++) nee.add(`${x},${y}`);
     }
     for (const l of K.bende) if (l.plek) nee.add(`${l.plek.x},${l.plek.y}`);
+    const b = buitPlek(K);
+    for (let y = b.y - 1; y <= b.y + 1; y++) for (let x = b.x - 1; x <= b.x + 1; x++) nee.add(`${x},${y}`);
     const [van, tot] = IN().rondHetVuur;
     const kan = [];
     for (let y = Math.floor(K.y - tot); y <= K.y + tot; y++) {
@@ -901,6 +906,10 @@
       : T.t("The robbers' camp is beaten.");
     T.zeg(D, tekst, 'goed', { x: K.x, y: K.y });
   }
+  // Waar de buit van kamp K ligt: twee tegels rechts van het vuur op het scherm, tussen de tentplekken door (de grote
+  // hoop beslaat er zo'n twee bij twee); niemand staat daar om het vuur (plekVan).
+  const buitPlek = (K) => ({ x: K.x + 2, y: K.y - 2 });
+
   // De buit van een verslagen kamp (c4; Marcel, 17 okt: "B1, dan kun je het ook nog verliezen tijdens een gevecht"): wie
   // van je mannen bij het vuur komt, neemt mee wat hij kan dragen (`buitPerMan`), en het telt pas als hij terug is in het
   // bereik van zijn dorp (brengBuit); wat blijft liggen, haal je een tweede keer. Wie het draagt en valt, verliest het.
@@ -909,7 +918,7 @@
     for (const D of S.dorpen || []) {
       if (D.wereld !== w) continue;
       for (const e of T.mannenVan(D)) {
-        if (e.buit || T.afstand(T.tegelVan(e), K) > IN().buitAfstand) continue;
+        if (e.buit || T.afstand(T.tegelVan(e), buitPlek(K)) > IN().buitAfstand) continue;
         let ruimte = IN().buitPerMan;
         e.buit = {};
         for (const wat of Object.keys(K.buit)) {
@@ -1047,9 +1056,10 @@
     if (pad && pad.length) T.geefRoute(e, pad, { x: doel.x, y: doel.y, naast });
   }
 
-  // De buit van de roverskampen op kaart w die er staan, om te tekenen (js/tekenen.js; Marcel, 27 okt: "B ja"): een
-  // stapel naast het vuur, met de tekening van een losse stapel (de waar waar het meest van is, en hoe vol), zolang er
-  // iets ligt, ook in een kamp dat nog leeft (wat ze thuisbrachten, c3). Alleen beeld: je loopt erover.
+  // De buit van de roverskampen op kaart w die er staan, om te tekenen (js/tekenen.js; Marcel, 27 okt: "B ja", "ik wil een
+  // grotere buit zien" en "b"): een hoop naast het vuur (buitPlek), klein, middel of groot naar hoeveel er ligt
+  // (`buitMaten`; gereedschap/pixelart/buit.cjs), zolang er iets ligt, ook in een kamp dat nog leeft (wat ze thuisbrachten,
+  // c3). Met `wat` en `vol` voor wie hem zonder dat vel als losse stapel tekent. Alleen beeld: je loopt erover.
   T.roverskampenBuit = function (w) {
     const uit = [];
     for (const K of (w && w.kampen) || []) {
@@ -1060,7 +1070,9 @@
         n += K.buit[k];
         if (!wat || K.buit[k] > K.buit[wat]) wat = k;
       }
-      if (n >= 0.5) uit.push({ x: K.x + 1, y: K.y - 1, wat, vol: n / T.KAR_INSTELLINGEN.stapelVol });
+      const [klein, middel] = IN().buitMaten;
+      const maat = n < klein ? 'klein' : n < middel ? 'middel' : 'groot';
+      if (n >= 0.5) uit.push({ ...buitPlek(K), wat, vol: n / T.KAR_INSTELLINGEN.stapelVol, maat });
     }
     return uit;
   };

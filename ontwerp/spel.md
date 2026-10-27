@@ -1192,8 +1192,10 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   samen, `buitPerMan`); zijn briefje zegt het (*Loot: 10 grain*), en het telt pas als hij terug is in het bereik van je
   dorp: daar legt hij het neer als een losse stapel, en de dragers brengen het binnen (*Ralph brings home 10 grain from
   the robbers' camp.*). Wat blijft liggen, haal je een tweede keer; wie het draagt en valt, verliest het. De buit van een
-  kamp zie je naast het vuur liggen, ook in een kamp dat nog leeft (Marcel, 27 okt: "B ja"), met de tekening van een
-  losse stapel.
+  kamp zie je naast het vuur liggen, ook in een kamp dat nog leeft (Marcel, 27 okt: "B ja", "ik wil een grotere buit
+  zien" en "b"): een hoop, klein tot 20 stuks (een kist en twee zakken), middel tot 60 (de kist open met goud en zilver,
+  tonnen en zakken), en daarboven groot (een hoge hoop met tonnen, zakken, twee kisten, een rol laken, een ketel, een
+  kandelaar en een karrenwiel); de grenzen in de werkbank (`buitMaten`). Je mannen halen hem bij de hoop.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat

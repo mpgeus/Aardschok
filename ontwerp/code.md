@@ -2341,8 +2341,11 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   in `js/kiezen.js`), en het dorp onthoudt dat er buit onderweg is (`D.buitOnderweg`); `brengBuit` (in
   `T.werkRoversBij`, alleen zolang dat zo is) legt hem neer als losse stapel zodra de man in het bouwbereik is
   (`T.inBouwBereik`). Geen gewone stapel in het kamp: de dragers halen elke stapel van het dorp, hoe ver ook (`js/kar.js`).
-  Wel te zien (Marcel, 27 okt: "B ja"): `T.roverskampenBuit(w)` geeft per kamp dat er staat de buit als stapel naast het
-  vuur, en `kampBuitInLijst` in `js/tekenen.js` tekent hem met dezelfde `stapelInLijst` als de stapels bij de deuren.
+  Wel te zien (Marcel, 27 okt: "B ja", en "b"): `T.roverskampenBuit(w)` geeft per kamp dat er staat de buit op
+  `buitPlek` (twee tegels rechts van het vuur op het scherm; `plekVan` zet daar niemand), met zijn maat (`buitMaten`:
+  klein, middel, groot), en `kampBuitInLijst` in `js/tekenen.js` tekent de hoop (`T.sprites.buit(maat)`, het vel
+  `beelden/buit.png` uit `gereedschap/pixelart/buit.cjs`, dat pas laadt als er buit te zien is), of zolang dat laadt een
+  losse stapel (`stapelInLijst`, dezelfde als de stapels bij de deuren). `neemBuit` meet vanaf de hoop.
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de

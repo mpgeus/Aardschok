@@ -1080,6 +1080,7 @@
     wakkerUren: T.t('hours awake after a fight'),
     buitAfstand: T.t('loot picked up within'),
     buitPerMan: T.t('loot carried per man'),
+    buitMaten: T.t('loot pile small up to, middle up to'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),

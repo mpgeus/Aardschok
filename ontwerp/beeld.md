@@ -2631,7 +2631,9 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   `uit/buit-proef.png`): eiken kisten met ijzeren banden (de open met het deksel achterover, goud uit `goud` en zilver uit
   de lichte `ijzer`, en munten ernaast), zakken jute (`zand`) met een vastgebonden hals, tonnen met ijzeren hoepels (een
   ligt), de rol laken met de windingen op de kopse kant, de ketel uit een donkere `herfst`. In de grote hoop liggen zakken
-  bovenop de tonnen en de kist, zodat hij hoog wordt; het wiel staat er opzij tegenaan. Wacht op Marcel.
+  bovenop de tonnen en de kist, zodat hij hoog wordt; het wiel staat er opzij tegenaan. **In het spel** (Marcel, 27 okt:
+  "ja, zet hem in het spel"): `node gereedschap/pixelart/naar-spel.cjs --alleen buit` maakt `beelden/buit.png` (een cel
+  per maat, 260 bij 200, 9 kB), en `js/sprites.js` laadt het pas als er buit te zien is (`S.buit`).
 
 ## Open
 

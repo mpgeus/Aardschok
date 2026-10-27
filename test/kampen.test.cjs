@@ -420,7 +420,15 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
     assert.equal(T.roverskampVuur(dag + 23 / 24, kamp), 'uit', 'het vuur is uit');
     assert.equal(T.roverskampenLicht(w, dag + 23 / 24).length, 0, 'en geeft geen licht');
     // De buit ligt zichtbaar naast het vuur (Marcel, 27 okt: "B ja"), met de tekening van een losse stapel.
-    assert.deepEqual(T.roverskampenBuit(w), [{ x: kamp.x + 1, y: kamp.y - 1, wat: 'graan', vol: 17 / T.KAR_INSTELLINGEN.stapelVol }]);
+    assert.deepEqual(T.roverskampenBuit(w), [{ x: kamp.x + 2, y: kamp.y - 2, wat: 'graan', vol: 17 / T.KAR_INSTELLINGEN.stapelVol, maat: 'klein' }]);
+    // Klein, middel of groot, naar hoeveel er ligt (Marcel, 27 okt: "ik wil een grotere buit zien", en "b").
+    const [klein, middel] = T.ROVERS_INSTELLINGEN.buitMaten;
+    const echt = kamp.buit;
+    kamp.buit = { graan: klein, goud: 1 };
+    assert.equal(T.roverskampenBuit(w)[0].maat, 'middel');
+    kamp.buit = { graan: middel };
+    assert.equal(T.roverskampenBuit(w)[0].maat, 'groot');
+    kamp.buit = echt;
     const b = berichten.find((x) => /^The robbers' camp is beaten\. Their loot lies by the fire/.test(x.t));
     assert.ok(b, berichten.map((x) => x.t).join(' | '));
     assert.deepEqual(b.plek, { x: kamp.x, y: kamp.y }, 'met de plek');
@@ -433,7 +441,7 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
     // De buit: wie bij het vuur komt, neemt mee wat hij kan dragen, en het telt als hij terug is in het bereik.
     const held = D.aanvoerder;
     const zet = (x, y) => Object.assign(held, { x, y, tx: x, ty: y, pad: [], onderweg: false });
-    zet(k.x + 1, k.y);
+    zet(k.x + 2, k.y - 1); // bij de hoop
     T.werkKampenBij(S, w);
     assert.deepEqual(held.buit, { graan: T.ROVERS_INSTELLINGEN.buitPerMan }, 'hij draagt zoveel als een man kan');
     assert.deepEqual(kamp.buit, { graan: 4, goud: 3 }, 'de rest ligt er nog');
@@ -449,7 +457,7 @@ test('roverskampen: valt de laatste man, dan is het kamp verslagen: de tenten ne
     assert.deepEqual(stapel.stapel, { graan: T.ROVERS_INSTELLINGEN.buitPerMan });
     assert.ok(berichten.some((x) => /brings home 10 grain from the robbers' camp/.test(x.t)), berichten.map((x) => x.t).join(' | '));
     // Een tweede keer haalt hij de rest.
-    zet(k.x + 1, k.y);
+    zet(k.x + 2, k.y - 1); // bij de hoop
     T.werkKampenBij(S, w);
     assert.deepEqual(held.buit, { graan: 4, goud: 3 });
     assert.deepEqual(kamp.buit, {});

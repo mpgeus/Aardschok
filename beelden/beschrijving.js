@@ -50101,6 +50101,22 @@
       }
      }
     }
+   },
+   "buit": {
+    "bestand": "buit.png",
+    "cel": [
+     260,
+     200
+    ],
+    "anker": [
+     130,
+     150
+    ],
+    "maten": [
+     "klein",
+     "middel",
+     "groot"
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

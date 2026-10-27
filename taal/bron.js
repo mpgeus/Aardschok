@@ -2253,6 +2253,7 @@ Spel.TAAL_BRON = [
   {"t":"hours awake after a fight","waar":["js/opties.js"]},
   {"t":"loot picked up within","waar":["js/opties.js"]},
   {"t":"loot carried per man","waar":["js/opties.js"]},
+  {"t":"loot pile small up to, middle up to","waar":["js/opties.js"]},
   {"t":"people per fisherman","waar":["js/opties.js"]},
   {"t":"water per fisherman","waar":["js/opties.js"]},
   {"t":"robbers after","waar":["js/opties.js"]},
