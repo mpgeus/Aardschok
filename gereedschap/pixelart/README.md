@@ -185,10 +185,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   baksteen), de houten jukbrug en de houten boogbrug. `node bruggen.cjs` maakt de proefplaat `uit/bruggen-proef.png`
   (met de rovertent T1 uit `kamp.cjs`); `bruggen-vel.cjs` knipt hele bruggen in stukken van één tegel in twee lagen voor
   het spel. Naar het spel: `node naar-spel.cjs --alleen bruggen` (`beelden/bruggen.png`, in een paar seconden).
-- `palissade.cjs`: de palissade van het rovershol (werklijst K, 2c): ruwe, grijze palen met een geslagen punt, mos aan de
-  voet, twee dwarsliggers met touw aan de binnenkant, een plank waar er een ontbreekt, en de opening met twee zware palen
-  en een rode lap. `node palissade.cjs` maakt de proefplaat `uit/palissade-proef.png` (een stuk met de opening, van
-  buiten, met een boer voor de maat; in zo'n acht seconden). Nog niet naar het spel.
+- `palissade.cjs`: de palissade van het rovershol (werklijst K, 2c): een ronde ring van dikke, grijze palen dicht tegen
+  elkaar, met een geslagen punt en mos aan de voet, de dwarsliggers met touw aan de binnenkant, en een poort van twee
+  zware palen met een balk, een rode lap en een hertenschedel (`ring`). `node palissade.cjs` maakt de proefplaat
+  `uit/palissade-proef.png` (de hele ring met het vuur, twee tenten en een boer; in zo'n 50 seconden). Het vel voor het
+  spel (`vel`, per tegel) volgt de ring nog niet.
 - `buit.cjs`: de buit van een roverskamp in drie maten (werklijst K, 2c): klein (een kist en twee zakken), middel (de kist
   open met goud en zilver, tonnen en zakken) en groot (een hoge hoop met tonnen, zakken, twee kisten, een rol rood laken,
   een koperen ketel, een kandelaar en een karrenwiel). `node buit.cjs` maakt de proefplaat `uit/buit-proef.png` (de drie

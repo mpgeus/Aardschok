@@ -16,25 +16,25 @@
 const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
-const { TEGEL, ruis3, rnd } = K;
-const { model, kegel, capsule, blok, naarRamp } = require('./figuren.cjs');
+const { TEGEL, ruis3, rnd, sdf } = K;
+const { model, kegel, capsule, blok, ellips, naarRamp } = require('./figuren.cjs');
 const Bm = require('./bomen.cjs');
 
 // ---------------------------------------------------------------- maten (eenheden: een eenheid is zo'n twee centimeter)
 
 const PAAL = {
-  r: 5.2, // een stam van een voet dik
-  tussen: 15.5, // van hart tot hart: een hand breed ertussen
+  r: 7.4, // een stam van dertig centimeter (Marcel, 27 okt: "1", een muur en geen hek)
+  tussen: 13.8, // van hart tot hart: dicht tegen elkaar, zonder kieren
   hoog: [130, 165], // anderhalf tot twee keer een man (een man is zo'n 88)
   punt: 14, // zo lang is de geslagen punt
   scheef: 0.08, // hooguit zoveel uit het lood (een op de zoveel staat scheef: zie `scheefKans`)
   scheefKans: 0.18,
   weg: 0.06, // de kans dat er een ontbreekt (dan een plank ertussen)
 };
-const POORT = { r: 8.5, hoog: 178, breed: 3 }; // de zware palen aan weerskanten van de opening, en de opening in tegels
+const POORT = { r: 11, hoog: 194, breed: 3, balk: 176 }; // de zware palen aan weerskanten van de opening, de opening in tegels, en de balk erover
 const LIGGER = { z: [34, 104], r: 3.6, binnen: -8.5 }; // de twee dwarsliggers, aan de binnenkant (-y)
 
-const M = { schors: 0, kern: 1, touw: 2, plank: 3, lap: 4 };
+const M = { schors: 0, kern: 1, touw: 2, plank: 3, lap: 4, bot: 5, oog: 6 };
 
 function materialen() {
   const mat = [];
@@ -55,6 +55,9 @@ function materialen() {
   mat[M.touw] = { ramp: 'stro', lo: 1.2, hi: 4.2 };
   mat[M.plank] = { ramp: 'hout', lo: 0.8, hi: 4.0, patroon: (x, y, z) => (Math.sin(x * 0.9 + z * 0.15) > 0.85 ? -0.8 : 0) };
   mat[M.lap] = { ramp: 'rood', lo: 1.6, hi: 4.8, patroon: (x, y, z) => (ruis3(x * 0.4, y * 0.4, z * 0.4, 64) > 0.7 ? -0.9 : 0) };
+  // De hertenschedel: gebleekt bot, en de oogkassen donker.
+  mat[M.bot] = { ramp: 'bot', lo: 3.0, hi: 7.2, patroon: (x, y, z) => (ruis3(x * 0.6, y * 0.6, z * 0.6, 66) > 0.7 ? -0.8 : 0) };
+  mat[M.oog] = { ramp: 'inkt', lo: 0.2, hi: 1.0 };
   return mat;
 }
 
@@ -102,21 +105,100 @@ function poortPaal(d, x, lap) {
   d.push(blok([x + 4.5, POORT.r + 2.2, 110], [3, 0.8, 7], 0.8, M.lap, 8));
 }
 
-// palissade({ van, tot, zaad }): een recht stuk langs x, van `van` tot `tot` tegels, de buitenkant naar +y, met de opening
-// van POORT.breed tegels in het midden (x = 0). Voor de proefplaat.
-function palissade(o = {}) {
-  const van = (o.van ?? -4) * TEGEL;
-  const tot = (o.tot ?? 4) * TEGEL;
-  const gat = (POORT.breed * TEGEL) / 2;
-  const zaad = o.zaad ?? 7;
+// ---------------------------------------------------------------- de ring (Marcel, 27 okt: "1, 2, 3 en 5")
+
+// De ring om het hol: een paal op elke `tussen` langs een cirkel van `straal` tegels om het vuur (0, 0), elk op zijn eigen
+// plek, met de buitenkant naar buiten; de dwarsliggers aan de binnenkant, als korte stukken van paal tot paal; en een
+// opening van POORT.breed tegels rond de hoek `poort` (graden, in het vlak van het model), met de poort erin. Hier en daar
+// staat er een scheef, en soms is er een plank over de buitenkant gespijkerd. Geeft een lijst modellen, een per stuk van
+// de ring (`stukken` graden), zodat de renderer ze een voor een tekent.
+function ring({ straal = 7, poort = 45, zaad = 7, stukken = 30 } = {}) {
+  const R = straal * TEGEL;
+  const halfGat = ((POORT.breed / 2) * TEGEL) / R; // in radialen
+  const poortHoek = (poort * Math.PI) / 180;
+  const stap = PAAL.tussen / R;
+  const n = Math.floor((2 * Math.PI - 2 * halfGat) / stap);
+  const palenOp = []; // [hoek] van de palen, van de ene poortpaal naar de andere
+  for (let i = 0; i <= n; i++) palenOp.push(poortHoek + halfGat + (POORT.r + PAAL.r) / R + i * ((2 * Math.PI - 2 * halfGat - 2 * (POORT.r + PAAL.r) / R) / n));
+  const op = (a, r = R) => [Math.cos(a) * r, Math.sin(a) * r];
+  const delen = new Map(); // stuk → delen
+  const bij = (a, d) => {
+    const k = Math.floor((((a * 180) / Math.PI) % 360 + 360) % 360 / stukken);
+    if (!delen.has(k)) delen.set(k, []);
+    delen.get(k).push(d);
+  };
+  palenOp.forEach((a, i) => {
+    const [x, y] = op(a);
+    const d = [];
+    const h = PAAL.hoog[0] + rnd(zaad, i, 2) * (PAAL.hoog[1] - PAAL.hoog[0]);
+    const r = PAAL.r * (0.88 + rnd(zaad, i, 3) * 0.24);
+    // scheef: naar buiten of naar binnen, of langs de ring
+    const s = rnd(zaad, i, 4) < PAAL.scheefKans ? (rnd(zaad, i, 5) - 0.5) * 2 * PAAL.scheef : (rnd(zaad, i, 5) - 0.5) * 0.02;
+    const t = (rnd(zaad, i, 6) - 0.5) * 0.03;
+    const kant = [Math.cos(a) * t - Math.sin(a) * s, Math.sin(a) * t + Math.cos(a) * s];
+    paal(d, x, y, h, r, kant, 1 + (i % 3));
+    d.forEach((q) => bij(a, q));
+  });
+  // de dwarsliggers aan de binnenkant: van paal tot paal, met om de paar palen een sjorring
+  const Rl = R - PAAL.r - LIGGER.r - 1;
+  for (let i = 0; i + 1 < palenOp.length; i++) {
+    const [a, b] = [palenOp[i], palenOp[i + 1]];
+    for (const z of LIGGER.z) {
+      const [x0, y0] = op(a, Rl);
+      const [x1, y1] = op(b, Rl);
+      bij(a, capsule([x0, y0, z + (rnd(zaad, i, z) - 0.5) * 3], [x1, y1, z + (rnd(zaad, i + 1, z) - 0.5) * 3], LIGGER.r, M.schors, 5));
+      if (rnd(zaad, i, z + 1) < 0.35) {
+        const [xi, yi] = op(a, Rl + 2);
+        const [xo, yo] = op(a, R - PAAL.r + 1);
+        bij(a, capsule([xi, yi, z - 4.5], [xo, yo, z + 4.5], 1.3, M.touw, 6));
+      }
+    }
+    // een plank over de buitenkant gespijkerd, over drie palen
+    if (rnd(zaad, i, 9) < PAAL.weg && i + 3 < palenOp.length) {
+      const [x0, y0] = op(a, R + PAAL.r + 1);
+      const [x1, y1] = op(palenOp[i + 3], R + PAAL.r + 1);
+      const z = 50 + rnd(zaad, i, 10) * 60;
+      bij(a, capsule([x0, y0, z], [x1, y1, z + (rnd(zaad, i, 11) - 0.5) * 10], 2.4, M.plank, 9));
+    }
+  }
+  // de poort: twee zware palen, een balk erover met touw, de lap aan de linker, en een hertenschedel midden op de balk
+  const poortD = [];
+  const posten = [-1, 1].map((k) => poortHoek + k * halfGat);
+  for (const [j, a] of posten.entries()) {
+    const [x, y] = op(a);
+    paal(poortD, x, y, POORT.hoog, POORT.r, [0, 0], 7);
+    for (const z of [...LIGGER.z, POORT.balk]) poortD.push(capsule(op(a, R - POORT.r - 1).concat(z - 7), op(a, R + POORT.r + 1).concat(z + 7), 1.6, M.touw, 6));
+    if (j === 0) {
+      const [lx, ly] = op(a, R + POORT.r + 1.5);
+      poortD.push(blok([lx, ly, 128], [5.5, 1, 14], 0.8, M.lap, 8));
+      poortD.push(blok([lx + 2, ly + 1, 108], [3.2, 0.9, 8], 0.8, M.lap, 8));
+    }
+  }
+  const [b0, b1] = posten.map((a) => op(a, R + 1));
+  const uit = [(b0[0] - b1[0]) / 2, (b0[1] - b1[1]) / 2].map((v) => v * 0.16); // de balk steekt een eindje over
+  poortD.push(capsule([b0[0] + uit[0], b0[1] + uit[1], POORT.balk], [b1[0] - uit[0], b1[1] - uit[1], POORT.balk], 7, M.schors, 10));
+  poortD.push(...schedel(...op(poortHoek, R + 9), POORT.balk - 4, poortHoek));
+  return [...[...delen.values()].map((d) => model([...d, Bm.onderGrond], materialen(), Bm.omhul(d))), model([...poortD, Bm.onderGrond], materialen(), Bm.omhul(poortD))];
+}
+
+// Een hertenschedel op (x, y, z), naar buiten kijkend langs hoek a: de schedel met de snuit omlaag, twee donkere oogkassen,
+// en het gewei, twee takken met elk twee punten.
+function schedel(x, y, z, a) {
+  const [ux, uy] = [Math.cos(a), Math.sin(a)]; // naar buiten
+  const [zx, zy] = [-uy, ux]; // opzij
   const d = [];
-  const i = palen(d, van, -gat, zaad, 0);
-  palen(d, gat, tot, zaad, i);
-  // de zware palen van de opening, met een lap van de rovers aan de linker
-  poortPaal(d, -(gat + POORT.r * 0.6), true);
-  poortPaal(d, gat + POORT.r * 0.6, false);
-  d.push(Bm.onderGrond);
-  return model(d, materialen(), Bm.omhul(d));
+  d.push(ellips([x, y, z - 6], [5, 5, 9], M.bot, 11));
+  d.push(kegel([x + ux * 2, y + uy * 2, z - 10], [x + ux * 3, y + uy * 3, z - 19], 3.4, 2.2, M.bot, 11));
+  for (const k of [-1, 1]) {
+    d.push({ f: (px, py, pz) => sdf.bol(px - (x + ux * 4 + zx * k * 2.6), py - (y + uy * 4 + zy * k * 2.6), pz - (z - 4), 1.7), g: [x, y, z - 4, 8], m: M.oog, deel: 12 });
+    const voet = [x + zx * k * 3, y + zy * k * 3, z + 1];
+    const top = [x + zx * k * 14 - ux * 2, y + zy * k * 14 - uy * 2, z + 16];
+    d.push(capsule(voet, top, 1.4, M.bot, 13));
+    const mid = voet.map((v, i) => v + (top[i] - v) * 0.5);
+    d.push(capsule(mid, [mid[0] + ux * 6 + zx * k * 2, mid[1] + uy * 6 + zy * k * 2, mid[2] + 7], 1.1, M.bot, 13));
+    d.push(capsule(top, [top[0] + zx * k * 3, top[1] + zy * k * 3, top[2] + 6], 1, M.bot, 13));
+  }
+  return d;
 }
 
 // ---------------------------------------------------------------- de stukken voor het spel
@@ -179,49 +261,31 @@ function kader(p) {
   return { x0, x1, y0, y1 };
 }
 
-// Op ware grootte: het stuk palissade van buiten (ZO), met een boer in de opening en een ernaast; daaronder twee keer
-// vergroot.
+// De proefplaat (Marcel, 27 okt: "1, 2, 3 en 5"): de hele ring om het vuur, zoals in het spel, met de poort naar de
+// kijker, twee tenten en het vuur erin, en een boer bij de poort voor de maat; op ware grootte.
 function proef() {
   const uit = path.join(__dirname, 'uit');
   fs.mkdirSync(uit, { recursive: true });
-  const CEL = [560, 340];
-  const ANKER = [280, 250];
-  const wand = teken(palissade(), CEL, ANKER, 'ZO');
+  const Kamp = require('./kamp.cjs');
   const { boer } = require('./dorpelingen.cjs');
-  const FIG = [112, 124];
-  const FIG_ANKER = [56, 110];
-  const man = K.losRenderen(boer({ houding: 'staan', fase: 0 }), { b: FIG[0], h: FIG[1], anker: FIG_ANKER, richting: 'Z' });
-  // De boer in de opening: het midden van het stuk (x = 0, y = 0) ligt op het anker; een stap naar buiten (+y) is op het
-  // scherm schuin naar rechts onder.
-  const plaat = new K.Plaat(CEL[0], CEL[1]);
-  plaat.plak(wand, 0, 0);
-  const op = (p, dx, dy) => {
-    for (let y = 0; y < p.h; y++) {
-      for (let x = 0; x < p.b; x++) {
-        const k = p.lees(x, y);
-        const px = x + dx;
-        const py = y + dy;
-        if (k && px >= 0 && py >= 0 && px < plaat.b && py < plaat.h) plaat.zet(px, py, k[0], k[1]);
-      }
-    }
-  };
-  op(man, ANKER[0] - FIG_ANKER[0] + 14, ANKER[1] - FIG_ANKER[1] + 10);
+  const CEL = [1040, 800];
+  const ANKER = [520, 400];
+  const B = new K.Beeld(CEL[0], CEL[1], ANKER[0], ANKER[1]);
+  // Richting ZO: het model kijkt met +x naar wereld +y en +y naar wereld +x; de poort op 45 graden is naar de kijker.
+  for (const m of ring({ poort: 45 })) K.tekenModel(B, m, { richting: 'ZO' });
+  K.tekenModel(B, Kamp.kampvuur({ stand: 'smeult' }), { richting: 'Z' });
+  K.tekenModel(B, Kamp.tent({ rover: true, zaad: 5 }), { richting: 'ZO', gx: -4, gy: 0 });
+  K.tekenModel(B, Kamp.tent({ rover: true, zaad: 5 }), { richting: 'ZW', gx: 0, gy: -4 });
+  K.tekenModel(B, boer({ houding: 'staan', fase: 0 }), { richting: 'Z', gx: 6.4, gy: 6.4 });
+  K.belicht(B);
+  K.omlijn(B);
+  const plaat = K.Plaat.van(K.kwantiseer(B));
   const k = kader(plaat);
-  if (k.x0 <= 0 || k.y0 <= 0 || k.x1 >= plaat.b - 1 || k.y1 >= plaat.h - 1) console.log('LET OP: de palissade raakt de rand van de cel');
-  const R = 4;
+  if (k.x0 <= 0 || k.y0 <= 0 || k.x1 >= plaat.b - 1 || k.y1 >= plaat.h - 1) console.log('LET OP: de ring raakt de rand van de cel');
+  const R = 6;
   const snede = plaat.uitsnede(Math.max(0, k.x0 - R), Math.max(0, k.y0 - R), Math.min(plaat.b, k.x1 - k.x0 + 1 + 2 * R), Math.min(plaat.h, k.y1 - k.y0 + 1 + 2 * R));
-  const groot = new K.Plaat(snede.b * 2, snede.h * 2);
-  for (let y = 0; y < snede.h; y++) {
-    for (let x = 0; x < snede.b; x++) {
-      const c = snede.lees(x, y);
-      if (c) for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) groot.zet(x * 2 + i, y * 2 + j, c[0], c[1]);
-    }
-  }
-  const samen = new K.Plaat(groot.b, snede.h + 8 + groot.h);
-  samen.plak(snede, 0, 0);
-  samen.plak(groot, 0, snede.h + 8);
-  fs.writeFileSync(path.join(uit, 'palissade-proef.png'), K.png(samen, 1, '#5e6a44'));
-  console.log(`uit/palissade-proef.png (${samen.b}×${samen.h})`);
+  fs.writeFileSync(path.join(uit, 'palissade-proef.png'), K.png(snede, 1, '#5e6a44'));
+  console.log(`uit/palissade-proef.png (${snede.b}×${snede.h})`);
 }
 
 if (require.main === module) {
@@ -233,4 +297,4 @@ if (require.main === module) {
   } else proef();
 }
 
-module.exports = { palissade, stuk, vel, beschrijving, RIJEN, VARIANTEN, STUK_CEL, STUK_ANKER, PAAL, POORT, LIGGER };
+module.exports = { ring, stuk, vel, beschrijving, RIJEN, VARIANTEN, STUK_CEL, STUK_ANKER, PAAL, POORT, LIGGER };

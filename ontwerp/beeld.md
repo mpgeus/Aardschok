@@ -2623,6 +2623,18 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   `mos`, het touw uit `stro`, de lap uit `rood`. Wat opvalt: twee keer een man is hoog; in het spel dekt de voorkant van
   de ring zo de voorste tegels van het plein af. **Goedgekeurd** (Marcel, 27 okt: "de palisade is goed, maar ik wil een
   grotere buit zien"): de palissade blijft zo; de buit bij het vuur (nu een, twee of drie zakken) moet groter.
+- **De palissade moet beter** (Marcel, 27 okt, op het hol in het spel: "De palissade moet beter", en op de vier punten
+  van Claude "1, 2, 3 en 5"): (1) een muur, geen hek: dikkere stammen, dicht tegen elkaar, zonder kieren; (2) één
+  doorlopende ronde ring: elke paal op zijn eigen plek op een echte cirkel, in plaats van een stuk per tegel in acht
+  richtingen (met naden, hoeken en dwarsliggers die uitsteken), de liggers alleen aan de binnenkant; (3) een echte poort:
+  twee zware palen met een balk erover, de rode lap en een hertenschedel; (5) de open plek om het hol een paar tegels
+  groter, zodat het woud de voorwand en de poort niet afdekt. De hoogte blijft (4 niet). Eerst een nieuwe proefplaat.
+  **De tweede proefplaat** (27 okt; `palissade.cjs`, `ring`; `node palissade.cjs`, zo'n 50 seconden): de hele ring om het
+  vuur, met de poort naar de kijker, twee tenten erin en een boer bij de poort. Palen van dertig centimeter, van hart tot
+  hart 13,8 eenheden (dicht tegen elkaar), elk op zijn eigen plek op de cirkel van zeven tegels; de liggers als korte
+  stukken van paal tot paal aan de binnenkant; hier en daar een plank over de buitenkant. De poort: twee palen van 22
+  centimeter dik en bijna vier meter hoog, een balk erover met touw, de rode lap aan de linker, en een hertenschedel met
+  gewei midden op de balk. Wacht op Marcel.
 - **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
   vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
   *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen
