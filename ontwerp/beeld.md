@@ -2642,15 +2642,20 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   stomp; de liggers lopen door), een plank over de buitenkant, en veel mos. Twee gaatjes of twee afgebroken naast elkaar
   komen niet voor. Dezelfde set dient later de palissade die je zelf legt (werklijst, 158). In het model: `SOORTEN_PAAL`
   en `kiesSoort` in `palissade.cjs` (kansen: gewoon 0,6, nieuw, scheef, afgebroken en gat elk zo'n 0,07, plank en mos
-  0,06). De derde proefplaat (27 okt) toont de ring zo, met daaronder de voorkant twee keer vergroot. Wacht op Marcel.
+  0,06). De derde proefplaat (27 okt) toont de ring zo, met daaronder de voorkant twee keer vergroot. **Goed** (Marcel,
+  27 okt: "variatie is goed").
 - **De aankleding van het kamp** (Marcel, 27 okt, op die plaat: "Ook is het kamp een beetje saai zo. Alles valt en staat
   met de aankleding"): een plein met tenten en een vuur vertelt niet dat hier rovers wonen. Voorstel van Claude, in
-  woorden (wacht op Marcel): spullen die het kamp vanzelf krijgt, zoals de soorten paal, met een vast lot op vrije
+  woorden, **gekozen** (Marcel, 27 okt: "alle negen"): spullen die het kamp vanzelf krijgt, zoals de soorten paal, met een vast lot op vrije
   plekken (niet op een tent, een plek om het vuur, de buit of het paadje); een gewoon kamp een paar, het hol het meest.
   Rond het vuur zitstammen en een spit met een half geroosterd zwijn; bij de tenten slaapvellen en een waslijn met
   gestolen kleren; een wapenrek en een schietschijf van stro; een hakblok met brandhout tegen de palissade; een vat bier
   op een bok met kruiken; een hertenvel op een droograam; een kapotte kar; fakkels bij de poort; en op de grond modder,
-  stro en een uitgesleten paadje van de poort naar het vuur.
+  stro en een uitgesleten paadje van de poort naar het vuur. Een model in code per ding
+  (`gereedschap/pixelart/aankleding.cjs`), eerst één proefplaat van het aangeklede hol. **De proefplaat** (27 okt,
+  `uit/aankleding-proef.png`): het hele hol, met daaronder het binnenste twee keer vergroot. Bij het maken bleek: wat
+  rechts achter de grote buit of vlak achter de voorwand staat, zie je niet; dus het wapenrek achter tegen de palissade en
+  het vat bier voor het vuur, en de kar en het spit links voor. Wacht op Marcel.
 - **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
   vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
   *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen

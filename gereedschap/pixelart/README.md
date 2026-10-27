@@ -190,6 +190,11 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   zware palen met een balk, een rode lap en een hertenschedel (`ring`). `node palissade.cjs` maakt de proefplaat
   `uit/palissade-proef.png` (de hele ring met het vuur, twee tenten en een boer; in zo'n 50 seconden). Het vel voor het
   spel (`vel`, per tegel) volgt de ring nog niet.
+- `aankleding.cjs`: de aankleding van een roverskamp (werklijst K, 2c; Marcel: "Alles valt en staat met de aankleding"):
+  zitstammen, een spit met een zwijn, slaapvellen, een waslijn, een wapenrek, een schietschijf, een hakblok en brandhout,
+  een vat bier op een bok, een droograam met een vel, een paal met konijnen, een kapotte kar, fakkels, en modder, stro en
+  een paadje. `node aankleding.cjs` maakt de proefplaat `uit/aankleding-proef.png` (het hele hol met de ring, de tenten,
+  de buit en alles; in zo'n minuut). Nog niet naar het spel.
 - `buit.cjs`: de buit van een roverskamp in drie maten (werklijst K, 2c): klein (een kist en twee zakken), middel (de kist
   open met goud en zilver, tonnen en zakken) en groot (een hoge hoop met tonnen, zakken, twee kisten, een rol rood laken,
   een koperen ketel, een kandelaar en een karrenwiel). `node buit.cjs` maakt de proefplaat `uit/buit-proef.png` (de drie

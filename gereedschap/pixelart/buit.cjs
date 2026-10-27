@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const K = require('./kern.cjs');
 const { sdf, ruis3, rnd } = K;
-const { model, kegel, capsule, blok, ellips, naarRamp } = require('./figuren.cjs');
+const { model, kegel, capsule, blok, ellips, naarRamp, gedraaid, omZ } = require('./figuren.cjs');
 const Bm = require('./bomen.cjs');
 
 // ---------------------------------------------------------------- materialen
@@ -51,39 +51,6 @@ function materialen() {
   mat[M.kaars] = { ramp: 'pleister', lo: 3.0, hi: 6.0 };
   return mat;
 }
-
-// ---------------------------------------------------------------- draaien
-
-// Een deel gedraaid om as `as` door punt c, over `graden` (zoals gekanteld in figuren.cjs, maar voor één deel).
-function gedraaid(d, as, graden, c) {
-  const l = Math.hypot(as[0], as[1], as[2]);
-  const [ux, uy, uz] = as.map((v) => v / l);
-  const draai = (hoek) => {
-    const co = Math.cos(hoek);
-    const si = Math.sin(hoek);
-    return (x, y, z) => {
-      const p = ux * x + uy * y + uz * z;
-      return [
-        x * co + (uy * z - uz * y) * si + ux * p * (1 - co),
-        y * co + (uz * x - ux * z) * si + uy * p * (1 - co),
-        z * co + (ux * y - uy * x) * si + uz * p * (1 - co),
-      ];
-    };
-  };
-  const terug = draai((-graden * Math.PI) / 180);
-  const heen = draai((graden * Math.PI) / 180);
-  const g = d.g && heen(d.g[0] - c[0], d.g[1] - c[1], d.g[2] - c[2]);
-  return {
-    ...d,
-    f: (x, y, z) => {
-      const [px, py, pz] = terug(x - c[0], y - c[1], z - c[2]);
-      return d.f(px + c[0], py + c[1], pz + c[2]);
-    },
-    g: d.g && [g[0] + c[0], g[1] + c[1], g[2] + c[2], d.g[3]],
-  };
-}
-// Een lijst delen om de z-as door (x, y), over `graden`.
-const omZ = (delen, x, y, graden) => (graden ? delen.map((d) => gedraaid(d, [0, 0, 1], graden, [x, y, 0])) : delen);
 
 // ---------------------------------------------------------------- de dingen
 
