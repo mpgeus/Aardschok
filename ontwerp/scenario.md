@@ -330,6 +330,16 @@ skirmish.
   Dan stellen ze op, elk in zijn eigen strook aan een kant van de kaart, zonder de ander te zien (de mist). Zijn ze
   allebei klaar, of is de tijd van de voorbereiding om, dan begint het gevecht. Wie geen mannen meer heeft, verliest
   (voorstel).
+- **Besloten voor de veldslag** (Marcel, 28 okt, op het plan van stap 3: "B1, c2, D1, F2, L2, H2, E2"):
+  - **B1, de militie kost 1:** de hooivork krijgt een waarde, een getal in de werkbank; de rest van de prijs blijft de
+    waarde van de stukken.
+  - **C2, eigen kleine kaarten:** "we hebben een aantal kleinere skirmish maps nodig. Dit zijn veel kleinere werelden met
+    obstakels die je kunt gebruiken, hoogtes etc." Geen uitsnede van het eiland, maar een eigen kleine wereld per kaart.
+  - **D1, opstellen:** je mannen staan vanzelf in een linie in je strook, en in de voorbereidingstijd verschuif je ze.
+  - **F2, met een held:** elke kant een held, "maar keuze uit x aantal vaste helden".
+  - **L2, een kleur per speler:** "elke speler een eigen kleur" (de wapenrok in de kleur van de speler; niet een ring).
+  - **H2, alle soorten te koop**, en erbij: "Archer, Knights, Maceman".
+  - **E2, een tijdslimiet**, "instelbaar in de skirmish lobby".
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De
