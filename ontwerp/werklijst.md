@@ -8,7 +8,7 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (23 okt)
+## Nu en daarna (28 okt)
 
 Kort, in volgorde (Marcel, 8 okt: "snel, duidelijk en low cost"): wat loopt, wat op Marcel wacht, en wat erna komt. Wat
 af is, gaat eruit; het hoe staat in het ontwerpbestand van het onderwerp. Het blok zoals het tot 23 okt was, met de hele
@@ -51,6 +51,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
+- **2c spelen: hoofdstuk 2, het rovershol** (af op 28 okt, in `main`; bij K, "2c"). *Campaign*, hoofdstuk 2 (zit op
+  slot tot hoofdstuk 1 af is; meteen open met `localStorage.setItem('aardschok.campagne', '{"aankomst":true}')` in de
+  console). Kijk: de brief met de rovers, het doel linksboven, de eerste overval (rond dag 100) met het spoor, het
+  vaandel en de ring op de minikaart, het hol (de palissade, de aankleding, de tenten tegen de palissade), het hol
+  aanvallen tot de laatste rover valt (dat deed nog niemand), en anders Sint-Maarten. Meet in Firefox het hol in beeld
+  (de palissade en de aankleding; in de cloud binnen de ruis), en lees het Engels (`levels/rovershol.js`).
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
@@ -100,11 +106,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    **1a tot en met 2b zijn af** (24 okt): de motor (`scenario.md`, 2), het demojaar als level (3), de kaart van een level
    met een rand (1, "De rand"), en *Campaign* op het titelscherm (6, "Stap 2b"): het demojaar is hoofdstuk 1, op eiland 5
    bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
-   Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
-   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan is besloten (bij K, "2c"); c3, c4,
-   het hol en het level (stap 1 tot 4) zijn af op die branch, en de speeltest speelt hoofdstuk 2; het vaandel is goed
-   (Marcel, 28 okt: "Vaandel goed") en staat in het spel; het lot van een hoofdstuk blijft gelijk ("lot gelijk").
-   Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
+   **2c is af** (28 okt; bij K, "2c"): het rovershol als hoofdstuk 2, met c3 (de overval uit het dichtste kamp), c4 (een
+   kamp valt), het hol met de palissade en de aankleding, het level met zijn woorden en het vaandel van een doel, en de
+   speeltest van een hoofdstuk (`--hoofdstuk hol`). Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk").
+   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1015,7 +1020,9 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    **Af** (28 okt; Marcel: "Goed, door met stap 4"; `scenario.md`, 2 en 6, en `code.md` bij `js/scenario.js`): de
    voorwaarden `hol` en `overval`, het gebied `hol`, een doel met een gebied (een gouden ring op de minikaart), en de
    `inleiding` in de eerste brief, en het vaandel op de plek (Marcel, 28 okt: "1 ja", "Vaandel goed").
-5. **Nalopen** in de browser, en de speeltest.
+5. **Nalopen** in de browser, en de speeltest. **Af** (28 okt): in de browser de brief, het doel, het spoor, de ring en
+   het vaandel; de speeltest speelt het hoofdstuk (`speelbaar.md`, 28 okt). Het hol aanvallen tot het valt, speelt
+   Marcel zelf ("Wacht op Marcel").
 
 ## L. De heuvels op het hele eiland (vraag 174, 17 okt)
 
