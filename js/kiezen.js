@@ -77,13 +77,14 @@
   // Is dit een vijand die de mannen van D kunnen aanvallen: een rover, een wolf, een monster, of een mens van een ander
   // dorp (T.isVijandVan, js/gevecht.js)?
   const isVijand = (D, e) => !!e && !e.dood && (e.kant === 'monster' || T.isVijandVan(D, e));
-  // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null.
-  T.handelingSturen = function (S, doel, mannen) {
+  // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null. Je stuurt je eigen
+  // mannen (S.dorp), ook bij een ander dorp op dezelfde kaart; een veldheer (js/veldheer.js) stelt dezelfde vraag voor
+  // zijn dorp D.
+  T.handelingSturen = function (S, doel, mannen, D = S.dorp) {
     if (!doel || !mannen || !mannen.length) return null;
-    const D = S.dorp; // je stuurt je eigen mannen, ook bij een ander dorp op dezelfde kaart
     if (!D || D.wereld !== S.wereld) return null;
     const wie = T.nummersVan(D, mannen);
-    const geef = (o) => () => T.geefOpdracht(S, o);
+    const geef = (o) => () => T.geefOpdracht(S, { ...o, dorp: S.dorpen.indexOf(D) });
     if (doel.wezen && isVijand(D, doel.wezen)) {
       const e = doel.wezen;
       const opdracht = { soort: 'volg', wie, doel: { x: e.tx, y: e.ty, soort: e.soort } };

@@ -374,7 +374,15 @@ skirmish.
   **3c** de kleur per speler (met 190); **3d** de generaals; **3e** de knotsdrager (en thuis de ridder); **3f** de veldheer
   in drie standen; **3g** meer kaarten, en de hoogte; **3h** nalopen. **Stand** (28 okt): 3a1 (de kaart) en 3a2 (de
   slag: twee legers in een linie in hun strook, de dag staat stil, 1×, gewonnen, verloren of de tijd om, met
-  `Spel.debug.veldslag()`) zijn gebouwd; 3a3 (de veldheer en de proefbank) is de volgende.
+  `Spel.debug.veldslag()`) en 3a3 (de veldheer, `js/veldheer.js`, en de proefbank `npm run veldslag`) zijn gebouwd; de
+  militie voor 1 komt met het kopen in 3b.
+- **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
+  mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
+  de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en
+  terugtrekken komen met de standen in 3f. Gebouwd (28 okt): zie `code.md` bij `js/veldheer.js`. Wat de proefbank
+  vond: dertig slagen eindigen allemaal, in gemiddeld 53 seconden; maar wie eerst in de tik komt, slaat eerst (leger A
+  wint 15 van de 20, met de volgorde omgedraaid 11), en een bevel over de hele kaart kost voor twaalf man 25 tot 45 ms in
+  één tik (het zoeken van de weg, ook bij een klik van de speler). Allebei een vraag aan Marcel (`opmerkingen.md`).
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De

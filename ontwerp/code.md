@@ -1241,6 +1241,28 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   versneller (`S.veldslag` in `T.tikKalender` en `T.snelheidNu`, js/tijd.js), er zijn geen statussen dan het gevecht
   (`inVeldslag` in `T.OORZAKEN`, js/statussen.js) en geen raad (`T.raadNu`, js/raad.js), en wie valt, valt in de slag,
   niet door rovers (js/rovers.js). Getoetst: de linie, een minuut stilstaan, het gevecht tot het eind, en de tijd om.
+  Een leger met `veldheer: true` speelt de AI (`js/veldheer.js`); zonder keus is dat elk leger behalve het eerste.
+
+### js/veldheer.js: de veldheer
+
+- `js/veldheer.js` (vraag 187 en 188, stap 3a3; `scenario.md`, 7 en 8; Marcel, 28 okt: "1. A", "2. Oke"): **de AI van een
+  leger**, als een mens in zijn plaats. Hij weet alleen wat zijn dorp nu ziet (`T.zietNu`, js/mist.js) en waar de stroken
+  liggen, en hij stuurt met dezelfde vraag als de muis: `T.handelingSturen(S, doel, mannen, D)` (js/kiezen.js; de vierde
+  is nieuw, zonder is het `S.dorp`), dus een opdracht met `dorp` (`T.geefOpdracht`). Hij denkt in de tik
+  (`T.werkVeldheerBij` in `T.werkDorpBij`, na de mist), om de `denkElke` seconden, en niet alle veldheren in dezelfde tik;
+  wat hij onthoudt, staat in `D.veldheer` (`T.nieuweVeldheer`: wanneer hij weer denkt, de plek van de kaart waar hij heen
+  gaat, waar hij het laatst een vijand zag, en waar hij zijn held heen stuurde). Elke keer: zijn doel is de dichtste
+  vijand die hij ziet, anders waar hij er het laatst een zag, anders de volgende plek die hij kent (de stroken van de
+  anderen, het midden, de voorden, de brug). Wie vecht, laat hij; wie een vijand die hij ziet vlakbij heeft (`aanval`), valt
+  hem aan zoals een klik op die vijand (`volg`): zo vecht ook wie hem zelf niet ziet (een heuvel of boom ertussen,
+  `T.zichtTussen`; zonder dit stonden ze op drie tegels van elkaar tot de tijd om was). De rest stuurt hij in een Line naar
+  het doel, of als dat verder is dan een etappe, een etappe die kant op: een weg zoeken kost zo'n 2 ms per man voor 70
+  tegels (`opmerkingen.md`), en met etappes van 24 tegels zakte de hoogste piek van 70 naar 22 ms. Een man wiens post al
+  bij het doel ligt (`ver`), krijgt geen nieuw bevel. Een plek is bereikt als het midden er is, of als iedereen stilstaat
+  op een post erbij (een plek in de rivier haal je nooit). De held loopt `achterDeLinie` tegels achter het doel; is hij
+  de laatste, dan vecht hij zelf. Gemeten met de proefbank (`npm run veldslag`, 28 okt, Node): dertig slagen tussen twee
+  veldheren eindigen allemaal, in gemiddeld 53 seconden; een tik kost gemiddeld 0,13 ms. Getoetst in
+  `test/veldheer.test.cjs`.
 
 ### gereedschap/pixelart/: de beelden uit code
 

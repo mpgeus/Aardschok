@@ -6,7 +6,8 @@
 // js/eiland.js). Stap 3a2: het begin, de legers en het eind. Een veldslag is een level (scenario.md, 7: "Een skirmish is
 // ook een level"), met `veldslag: { kaart, zaad, legers }` en vaste triggers voor winst en verlies (T.veldslagLevel); T.beginOpEiland
 // (js/begin.js) begint hem met T.beginVeldslag. In het spel staat dan S.veldslag: de dag staat stil en de snelheid is 1×
-// (js/tijd.js).
+// (js/tijd.js). Stap 3a3: een leger met `veldheer` speelt zelf (js/veldheer.js); zonder keus is dat elk leger behalve
+// het eerste.
 (function (T) {
   'use strict';
 
@@ -14,7 +15,6 @@
   T.VELDSLAG_INSTELLINGEN = {
     zee: 8, // zoveel tegels zee om het land zijn open en te zien
     dag: 120 + 11 / 24, // de dag en het uur waarop een veldslag speelt, en blijft spelen (1 hooimaand, elf uur)
-    achterDeLinie: 4, // de held staat zoveel tegels achter de voorste rij
   };
   const IN = () => T.VELDSLAG_INSTELLINGEN;
 
@@ -59,7 +59,8 @@
       { id: 'verloren', als: [{ mannen: { minder: 1 } }], dan: [{ doel: { id: 'slag', stand: 'mislukt' } }, { uitslag: true }] },
     ];
     if (minuten) triggers.push({ id: 'tijd', als: [{ seconden: minuten * 60 }], dan: [{ uitslag: true }] });
-    return { veldslag: { kaart, zaad, legers: legers.map((l) => ({ soorten: { ...l.soorten } })) }, triggers };
+    const metVeldheer = (l, i) => (l.veldheer != null ? !!l.veldheer : i > 0); // zonder keus: jij het eerste, een veldheer de rest
+    return { veldslag: { kaart, zaad, legers: legers.map((l, i) => ({ soorten: { ...l.soorten }, veldheer: metVeldheer(l, i) })) }, triggers };
   };
 
   // De mannen van een leger (of een dorp) die nog staan: zijn soldaten en veteranen (T.militieVan, js/rovers.js) en zijn
@@ -103,6 +104,7 @@
     T.zetAanvoerderKlaar(held, i + 1);
     const D = T.nieuwDorp(S, w, held, { plek, zaad: (Math.imul(zaad >>> 0, 31) + i + 1) >>> 0, overvallen: false, ander: i > 0 });
     D.veldslag = true; // een leger, geen dorp: geen statussen van een dorp (js/statussen.js) en geen raad (js/raad.js)
+    if (leger.veldheer) D.veldheer = T.nieuweVeldheer(S, i); // de AI van dit leger (js/veldheer.js)
     stelOp(D, R, st, leger.soorten);
     return D;
   }
@@ -126,7 +128,7 @@
     const ids = D.bewoners.mensen.filter((p) => p.soldaat).map((p) => p.id);
     T.stuurMannen(D, ids, op(voor + naarAchter * 2 * tegel, bMidden));
     for (const e of T.militieVan(D)) if (e.post) Object.assign(e, { x: e.post.x, y: e.post.y, tx: e.post.x, ty: e.post.y, pad: [], onderweg: false, padDoel: null });
-    const held = op(voor + naarAchter * (IN().achterDeLinie + 2) * tegel, bMidden);
+    const held = op(voor + naarAchter * (T.VELDHEER_INSTELLINGEN.achterDeLinie + 2) * tegel, bMidden);
     Object.assign(D.aanvoerder, { x: held.x, y: held.y, tx: held.x, ty: held.y, pad: [], onderweg: false });
   }
 })(globalThis.Spel = globalThis.Spel || {});

@@ -569,6 +569,7 @@
     { naam: T.t('Fighting'), blok: 'GEVECHT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Choosing and sending'), blok: 'KIEZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The battle'), blok: 'VELDSLAG_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The AI general'), blok: 'VELDHEER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
@@ -1462,7 +1463,12 @@
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
     'VELDSLAG_INSTELLINGEN.zee': T.t('this many tiles of sea around the map are open and visible'), // geen tekst
     'VELDSLAG_INSTELLINGEN.dag': T.t('the day and hour a battle is fought on, and stays on'), // geen tekst
-    'VELDSLAG_INSTELLINGEN.achterDeLinie': T.t('the general stands this many tiles behind the front row'), // geen tekst
+    'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst
+    'VELDHEER_INSTELLINGEN.ver': T.t('a man whose post is this many tiles from the goal gets a new order'), // geen tekst
+    'VELDHEER_INSTELLINGEN.aanval': T.t('a man who is not fighting attacks an enemy his army sees this close (tiles)'), // geen tekst
+    'VELDHEER_INSTELLINGEN.erbij': T.t('this close (tiles) to a place, his army is there'), // geen tekst
+    'VELDHEER_INSTELLINGEN.etappe': T.t('he sends his men at most this many tiles at once'), // geen tekst
+    'VELDHEER_INSTELLINGEN.achterDeLinie': T.t('the commander stands this many tiles behind his men'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
     'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst

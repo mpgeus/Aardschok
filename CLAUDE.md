@@ -83,7 +83,7 @@ In detail in `ontwerp/gereedschap.md`.
   (of `.pagina('gereedschap/gesprekken.html')`), **nooit met een eigen lijstje**: dan mist er vroeg of laat een bestand, en
   toetst hij een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt op het proefdorp (`test/grond.cjs`).
 - `npm run speeltest`: de kolonist in code speelt met vaste zaden, en toetst of het werkt zoals het moet (Marcel, 15
-  okt: de balans komt later, het echte spel test hij zelf; `speelbaar.md`). Verder `proefversie` (de zip voor een tester), `grootte`, `schermen`,
+  okt: de balans komt later, het echte spel test hij zelf; `speelbaar.md`). Verder `veldslag` (de proefbank van het vechten), `proefversie` (de zip voor een tester), `grootte`, `schermen`,
   `tekenmeting`, `samenvatting`, `maker`, `teksten` (na elke zin die erbij komt of verandert), en `pixelart` en
   `pixelart:spel` (de kunst naar `beelden/`, opnieuw als de kunst verandert).
 
@@ -144,7 +144,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
   en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen; `veldslag` (skirmish, de kaarten
-  uit een recept).
+  uit een recept) en `veldheer` (de AI van een leger).
 
 ## Het spel in het kort
 

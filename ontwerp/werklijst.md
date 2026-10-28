@@ -116,8 +116,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    uit een zaad; de hoogte geeft schutters bereik en zicht; de ridder te paard (thuis); de knotsdrager ook in het dorp; de
    helden heten generaals en geven allemaal hetzelfde; de kleurlaag doet de Blender-sessie. Het plan in acht stappen
    (`scenario.md`, 7, "Het plan van stap 3"). Af: 3a1 (de kaart *The Ford*) en 3a2 (de slag zelf: twee legers in een
-   linie, de dag staat stil, gewonnen, verloren of de tijd om; `Spel.debug.veldslag()`). Nu **3a3**: de veldheer die
-   oprukt en vecht, en de proefbank `npm run veldslag`.
+   linie, de dag staat stil, gewonnen, verloren of de tijd om; `Spel.debug.veldslag()`) en 3a3 (de veldheer die ziet
+   wat zijn mannen zien en oprukt, `js/veldheer.js`, en de proefbank `npm run veldslag`). **Wacht op Marcel**: twee
+   vondsten van de proefbank (`opmerkingen.md`, bovenaan): wie eerst in de tik komt, slaat eerst, en een bevel ver weg
+   kost 25 tot 45 ms in één tik. Daarna **3b**, de lobby; daarin ook de resten van het dorp in een veldslag weg (op het
+   eindscherm "the village stayed at 0 people", het doel *Towards a village* na het eind, het bericht dat niemand het
+   bevel overneemt, de knop Build en de getallen in de balk).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

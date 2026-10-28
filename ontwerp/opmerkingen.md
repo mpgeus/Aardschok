@@ -9,6 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Wie eerst in de tik komt, slaat eerst** (28 okt, vraag 187 en 188, 3a3; `npm run veldslag`): de wereld werkt de dorpen
+  een voor een bij (`T.wereldTik`, js/tik.js), en daarin het gevecht (`T.werkGevechtBij`); wie in dezelfde tik valt door
+  een man van het eerste dorp, slaat niet meer terug. Twee gelijke veldheren op *The Ford*, zaad 1 tot 20: leger A wint
+  15 keer; draai je de volgorde om, dan 11. Dat geldt voor elk gevecht tussen twee dorpen, ook bij samen spelen.
+  Voorstel: de beurt per tik laten rouleren (de ene tik A eerst, de volgende B), of de klappen van een tik pas aan het eind
+  laten vallen. Wacht op Marcel.
+- **Een bevel ver weg kost veel in één tik** (28 okt, 3a3): wie je stuurt, zoekt elk zijn eigen weg (`T.stuurMannen` en
+  `loop` in js/kiezen.js, `T.zoekRoute` in js/lopen.js), zo'n 2 ms per man voor 70 tegels; twaalf man over de hele kaart
+  is 25 tot 45 ms in één tik, een hapering van een paar beelden, ook bij een klik van de speler, en met grotere legers
+  erger. De veldheer gaat daarom in etappes van 24 tegels (de hoogste piek van 70 naar 22 ms). Voorstel: één weg voor de
+  groep (vanaf hun midden), en elk een korte weg erheen. Wacht op Marcel.
+
 - **De voorwand van het hol verbergt wie erachter staat** (27 okt, werklijst K, 2c, in de browser): in isometrisch zie
   je niet wat vlak achter de voorkant van de palissade staat (de mannen die vooraan bij het vuur staan, een tent vooraan),
   en de bomen voor de open plek dekken de voorwand weer af. Voor de tenten is er een lapmiddel (`tentNietVoor`: vooraan

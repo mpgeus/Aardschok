@@ -80,8 +80,10 @@ test('het grote eiland blijft wat het was, en een kaart en het eiland wisselen e
 // Stap 3a2: de veldslag zelf. Twee legers zonder dorp op de kaart, in een linie in hun strook (D1), de dag staat stil en
 // de snelheid is 1×, en wie geen mannen meer heeft, verliest; is de tijd om, dan wint wie er de meeste heeft (E2).
 const berichten = [];
+// Zonder veldheer: hier staan beide legers stil tot de toets ze stuurt (de veldheer toetst test/veldheer.test.cjs).
 const slag = (legers, minuten = null) => {
-  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers, minuten }));
+  const zonder = legers.map((l) => ({ ...l, veldheer: false }));
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: zonder, minuten }));
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
   S.kalender.snelheid = 1;
   berichten.length = 0;

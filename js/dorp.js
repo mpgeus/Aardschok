@@ -142,6 +142,7 @@
     T.werkBrandBij(S, D); // de brand: het huis brandt, tot de buren hem geblust hebben of het afgebrand is (js/brand.js)
     T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
     T.werkMistBij(S, D); // wat je mensen en je gebouwen zien, ken je voortaan (js/mist.js)
+    T.werkVeldheerBij(S, D); // een leger met een veldheer: hij denkt, met wat het dorp nu ziet (js/veldheer.js)
     // Waar je kijkt, maaien en dwalen ze in T.wereldTik (js/tik.js), en worden ze getekend; het lopen doet de tik voor
     // elke kaart één keer, ook voor deze.
     if (D.wereld === S.wereld) return;

@@ -68,6 +68,13 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
   Tot ronde 2 van het snoeien (stap 5, 12 okt) speelden ook braaf, slim, de bouwer en de sluwe bouwer, op het gehucht dat
   er al was, met `--jaren`, `--maker` en `--eiland`; dat begin is weg.
+- `npm run veldslag` is de proefbank van het vechten (vraag 187 en 188, stap 3a3; `gereedschap/veldslag/proefbank.cjs`):
+  twee veldheren (`js/veldheer.js`) vechten zonder scherm op *The Ford*, met vaste zaden (standaard 1 tot en met 5), elk
+  leger acht speermannen en vier boogschutters, tien minuten. Per slag: wie won (A heeft de eerste strook), na hoeveel
+  seconden, wanneer het eerste gevecht begon, wie er per soort nog staat, en wat een tik kost (gemiddeld en de hoogste).
+  `--zaden 1-30` of `--zaad 7`, `--kaart`, `--a speerman=8,boogschutter=4` en `--b ...` (de legers), `--minuten 5` (0 is
+  geen tijd), en `--getal BLOK.naam=waarde` (een getal uit de werkbank, zo vaak als je wilt). Dertig slagen kosten zo'n
+  tien seconden. Het meet de tik in Node; het tekenen en Firefox meet het spel zelf.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
@@ -303,8 +310,8 @@ wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5)
 berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in één browser.
 `Spel.debug.veldslag(zaad, legers, minuten)` begint een veldslag op *The Ford* (vraag 187 en 188, stap 3a2; tot de lobby
 er is): standaard zaad 1, elk leger acht speermannen en vier boogschutters (`[{ soorten: { speerman: 8, boogschutter: 4
-} }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger; het andere staat stil tot de veldheer er
-is (3a3), maar `Spel.debug.wissel()` maakt jou het andere.
+} }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger, het andere speelt de veldheer (3a3);
+met `veldheer: true` bij je eigen leger kijk je naar twee veldheren. `Spel.debug.wissel()` maakt jou het andere leger.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
