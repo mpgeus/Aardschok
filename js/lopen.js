@@ -297,12 +297,14 @@
 
   // ── Onderweg: wie er in de weg staat ──
 
-  // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de aanvoerder (hij gaat waar jij hem stuurt), niet wie
+  // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet een aanvoerder (hij gaat waar zijn speler hem
+  // stuurt; van welk dorp ook, niet alleen de jouwe: samen speelt elke computer een ander dorp, en wie opzij gaat, moet op
+  // elke computer dezelfde zijn), niet wie
   // bezig is (maaien, op zijn land werken, een gesprek), geen dier, geen kar
   // (js/begin.js) en geen monster, en niet wie vecht (js/gevecht.js). Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
   // in een smalle doorgang toch even opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
-    !b.dood && !b.binnen && !T.isAanvoerder(S, b) && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
+    !b.dood && !b.binnen && !(b.dorp && b.dorp.aanvoerder === b) && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
     !b.doelwit && !b.volgt && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld

@@ -157,6 +157,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kijkt na dat het scherm die regels niet zelf aanroept. **Nog niet** (stap 6 van vraag 170, als een venster de tijd niet
   meer stilzet): de vensters (de handel, de velden, het slachten, de heer, de wetten, de brieven, de bode),
   de snelheid, en het debugvenster; het lopen van de schout en het gevecht in beurten zijn eruit (stap 2 en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
+- **Samen: wat elke regel en straks de lijn moeten** (28 okt; Marcel: "Vergeet niet dat dit ook in multiplayer allemaal
+  moet werken"). **Een regel vraagt nooit `S.dorp`**: dat is wat dit scherm speelt, en samen speelt elke computer een
+  ander dorp. Zo ging het mis: een trigger zonder `wie` vroeg `S.dorp` (nu de speler, het eerste dorp:
+  `T.scenarioDorp`, js/scenario.js), de uitslag van een veldslag gold alleen dat dorp (nu elk leger), en wie opzij mag
+  gaan vroeg of hij jouw aanvoerder was (`T.magOpzij`, js/lopen.js; nu een aanvoerder van welk dorp ook). Het scherm
+  mag `S.dorp` wel vragen (wat je ziet, hoort en kiest). **De opdrachten van een tik gaan per dorp** (`voerOpdrachtenUit`
+  sorteert op `o.dorp`, en van een dorp in de volgorde waarin het ze gaf), zodat het niet uitmaakt wanneer ze over de
+  lijn binnenkomen. **Over de lijn gaan alleen de opdrachten van het dorp dat de speler van die computer speelt**: wat
+  een veldheer (js/veldheer.js) geeft, geeft elke computer zelf in dezelfde tik, en een tweede keer zou het dubbel doen.
+  Getoetst in `test/veldslag.test.cjs` ("samen"): twee computers met hetzelfde begin en dezelfde opdrachten, de een
+  speelt leger A en de ander B, blijven letter voor letter gelijk tot de uitslag, met twee spelers en met twee
+  veldheren; met de oude trigger valt die toets om. Wat nog open is: `opmerkingen.md`.
 
 
 ### js/opslaan.js, js/menu.js en js/instellingen.js: opslaan en laden, het titelscherm, het menu en Settings
@@ -1228,12 +1240,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ms.
 - Stap 3a2 (28 okt): **de slag zelf**. Een veldslag is een level (`scenario.md`, 7): `T.veldslagLevel({ kaart, zaad,
   legers, minuten })` geeft `{ veldslag: { kaart, zaad, legers }, triggers }`, met vaste triggers in de woorden van elk
-  level: het doel *Defeat the enemy army.*, `mannen` (`{ minder: 1 }`, met `wie: 1` voor de vijand) voor winst en verlies,
-  `seconden` voor de tijd, en het gevolg `uitslag` (wie de meeste mannen heeft, wint; js/scenario.js). De keuring kijkt de
+  level: het doel *Defeat the enemy army.* (van iedereen; het gaat niet af, want dan was het voor de verliezer fout),
+  `legers` (`{ minder: 2 }`: hooguit één leger heeft nog mannen) en `seconden` voor de tijd, en het gevolg `uitslag`
+  (voor elk leger: wie de meeste mannen heeft, wint; js/scenario.js). Geen trigger vraagt naar één speler: samen speelt
+  elke computer een ander leger (28 okt; tot dan vroegen `gewonnen` en `verloren` het dorp van dit scherm). De keuring kijkt de
   kaart, het zaad, het aantal legers (2 tot het aantal stroken) en de soorten na. `T.beginOpEiland` (js/begin.js) geeft
   een level met `veldslag` aan `T.beginVeldslag`: de wereld van de kaart, `S.veldslag = { kaart, zaad }`, en per strook
   een **leger als dorp** (`T.nieuwDorp` met een lege plek, het vak van de strook en een plein van 5 bij 5 in het midden;
-  `D.veldslag = true`, de vijand `D.ander`): geen kar, gezinnen of voorraad, maar zijn soldaten (`T.zetSoldaatBij`,
+  `D.veldslag = true`; een leger met een veldheer is `D.ander`, een speler niet): geen kar, gezinnen of voorraad, maar zijn soldaten (`T.zetSoldaatBij`,
   js/bewoners.js: een bewoner zonder huis met `p.soldaat`, en zijn poppetje) en zijn held (`T.zetHeld`: de aanvoerder
   als bewoner, zodat je hem met de rest stuurt). De opstelling is de knop Line (`T.stuurMannen`, js/kiezen.js) naar de
   voorkant van de strook, en ze staan er meteen op hun post; de held staat achter het midden. `T.legerVan(D)` zijn de

@@ -149,7 +149,8 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   **`leegGebied`** (`'naam'`: geen vijand van het dorp meer in het gebied).
 - **Leven en dood:** `dood` (een mens met een naam, de aanvoerder, een groep), `gevallen` (een dorp zonder raadhuis en
   zonder mensen), **`mannen`** (hoeveel van het leger nog staan, de soldaten, veteranen en de held, `T.legerVan`; met
-  `wie` van een ander dorp; 3a2).
+  `wie` van een ander dorp; 3a2), **`legers`** (hoeveel legers nog mannen hebben, van alle dorpen samen, dus voor elke
+  speler hetzelfde: het eind van een veldslag; 28 okt).
 - **De rovers** (2c, 28 okt): **`hol`** (`'staat'` of `'verslagen'`: het hol van het dorp, `dorpen[].hol`), **`overval`**
   (hoeveel overvallen er op je land kwamen; een getal is minstens zoveel).
 - **De heer:** **`heer`** (de woorden van `T.heerStand`: brief, komt, staat, betaald, geweigerd, weg), **`gunst`** en
@@ -176,7 +177,12 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 - **Het eind:** **`scene`** (`'betalen'`: betaal je de heer, dan halen zijn mannen het, rijdt hij weg, en is het uit;
   `D.scene`, gebouwd in 1b), **`punten`** (`T.telPunten`, gebouwd in 1b), **`einde`** (`{ gewonnen, kop, tekst }`:
   `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level), **`uitslag`** (het eind van
-  een veldslag: wie de meeste mannen heeft, wint, evenveel is gelijk; de kop en de tekst geeft het spel; 3a2).
+  een veldslag, voor elk leger: wie de meeste mannen heeft, wint, evenveel is gelijk; de kop en de tekst geeft het spel;
+  3a2; een level met een uitslag hoeft zijn doel niet af te zetten, want dat doel is van iedereen).
+
+**`wie` zonder nummer is de speler: het eerste dorp** (`S.dorpen[0]`), niet het dorp van dit scherm (`S.dorp`): samen
+speelt elke computer een ander dorp, en een trigger moet op elke computer hetzelfde doen (28 okt; Marcel: "Vergeet niet
+dat dit ook in multiplayer allemaal moet werken"). Een level voor samen noemt de dorpen bij nummer.
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
 naam ("the miller"). Eén gebied geeft het spel zelf: **`hol`**, het hol van het dorp (2c), want waar dat ligt, weet pas het

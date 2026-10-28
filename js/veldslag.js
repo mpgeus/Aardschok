@@ -50,13 +50,13 @@
 
   // Een veldslag als level (scenario.md, 7), uit de keuzes: de kaart, het zaad, de legers ({ soorten: { speerman: 6 } } per
   // speler, in de volgorde van de stroken) en de tijd (`minuten`, of geen; Marcel, 28 okt: E2, "instelbaar in de skirmish
-  // lobby"). Met de vaste triggers: wie geen mannen meer heeft, verliest, en is de tijd om, dan wint wie de meeste heeft
-  // (T.GEVOLGEN.uitslag, js/scenario.js).
+  // lobby"). Met de vaste triggers: heeft nog maar één leger mannen (of geen), of is de tijd om, dan is het uit, en wint
+  // wie de meeste heeft (T.GEVOLGEN.uitslag, js/scenario.js). Geen trigger vraagt naar één speler, want samen speelt
+  // elke computer een ander leger: het doel is van iedereen, en de uitslag is er voor elk leger.
   T.veldslagLevel = function ({ kaart, zaad, legers, minuten = null }) {
     const triggers = [
       { id: 'begin', dan: [{ doel: { id: 'slag', tekst: T.t('Defeat the enemy army.'), hoofd: true } }] },
-      { id: 'gewonnen', als: [{ mannen: { minder: 1 }, wie: 1 }], dan: [{ doel: { id: 'slag', stand: 'af' } }, { uitslag: true }] },
-      { id: 'verloren', als: [{ mannen: { minder: 1 } }], dan: [{ doel: { id: 'slag', stand: 'mislukt' } }, { uitslag: true }] },
+      { id: 'eind', als: [{ legers: { minder: 2 } }], dan: [{ uitslag: true }] },
     ];
     if (minuten) triggers.push({ id: 'tijd', als: [{ seconden: minuten * 60 }], dan: [{ uitslag: true }] });
     const metVeldheer = (l, i) => (l.veldheer != null ? !!l.veldheer : i > 0); // zonder keus: jij het eerste, een veldheer de rest
@@ -102,7 +102,9 @@
     const held = T.maakWezen('aanvoerder', mx, my);
     w.wezens.push(held);
     T.zetAanvoerderKlaar(held, i + 1);
-    const D = T.nieuwDorp(S, w, held, { plek, zaad: (Math.imul(zaad >>> 0, 31) + i + 1) >>> 0, overvallen: false, ander: i > 0 });
+    // een leger met een veldheer is een ander dorp (D.ander: wat het zegt, staat niet op een scherm); een speler niet, ook
+    // niet de tweede als jullie samen spelen
+    const D = T.nieuwDorp(S, w, held, { plek, zaad: (Math.imul(zaad >>> 0, 31) + i + 1) >>> 0, overvallen: false, ander: !!leger.veldheer });
     D.veldslag = true; // een leger, geen dorp: geen statussen van een dorp (js/statussen.js) en geen raad (js/raad.js)
     if (leger.veldheer) D.veldheer = T.nieuweVeldheer(S, i); // de AI van dit leger (js/veldheer.js)
     stelOp(D, R, st, leger.soorten);

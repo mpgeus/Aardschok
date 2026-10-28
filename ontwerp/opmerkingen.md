@@ -16,6 +16,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   ongeveer half om half. Daarnaast telt de volgorde in de tik nog wat (A 43 tegen 34 met de volgorde om): de klappen
   vallen sinds 28 okt aan het eind van de tik, maar het lopen en het kiezen van een doel gaan nog op volgorde.
 
+- **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
+  de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
+  dezelfde vraag stelt, krijgt hem uit het geheugen; een computer die herlaadt of later instapt, zoekt opnieuw en kan een
+  kortere vinden, en dan lopen de werelden uiteen. Voor de lijn (6c van vraag 170): het geheugen op elke computer op
+  hetzelfde moment legen, of een weg niet bewaren over een opening heen. (2) Het bericht van een gedeeld doel ("New goal")
+  gaat naar het eerste dorp; samen moet elke speler het krijgen (de kaart linksboven zien ze al allemaal). (3)
+  `T.magOpzij` kijkt nog naar `S.spreektMet` (een gesprek, nu geparkeerd). (4) De vensters roepen hun regels nog zelf aan
+  (de bode, de brieven; al bekend, `code.md` bij `js/tik.js`).
+
 - **De voorwand van het hol verbergt wie erachter staat** (27 okt, werklijst K, 2c, in de browser): in isometrisch zie
   je niet wat vlak achter de voorkant van de palissade staat (de mannen die vooraan bij het vuur staan, een tent vooraan),
   en de bomen voor de open plek dekken de voorwand weer af. Voor de tenten is er een lapmiddel (`tentNietVoor`: vooraan

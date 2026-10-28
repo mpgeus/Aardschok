@@ -108,7 +108,8 @@ test('een veldslag: de keuring, en twee legers zonder dorp, elk in een linie in 
     const S = slag(L.veldslag.legers, 5);
     const [A, B] = S.dorpen;
     assert.equal(S.dorp, A);
-    assert.ok(S.veldslag && A.veldslag && B.veldslag && B.ander && !A.ander);
+    assert.ok(S.veldslag && A.veldslag && B.veldslag);
+    assert.ok(!A.ander && !B.ander, 'twee spelers: geen van beide is een ander dorp (dat is een leger met een veldheer)');
     assert.equal(T.legerVan(A).length, 10, 'negen soldaten en de held');
     assert.equal(T.legerVan(B).length, 7);
     assert.ok(!A.gebouwen.length && !A.begin, 'geen kar en geen kamp');
@@ -136,11 +137,13 @@ test('een veldslag: de keuring, en twee legers zonder dorp, elk in een linie in 
     // de vijand rukt op: het gevecht, en wie geen mannen meer heeft, verliest
     T.geefOpdracht(S, { soort: 'stuur', dorp: 1, wie: ids(B), naar: T.tegelVan(mannen[0]) });
     seconden(S, 300, () => !!A.einde);
-    assert.ok(A.einde, 'het is uit');
+    assert.ok(A.einde && B.einde, 'het is uit, voor elk leger');
     assert.equal(A.einde.reden, 'scenario');
-    assert.equal(A.einde.gewonnen, T.legerVan(A).length > 0);
-    assert.equal(A.einde.kop, A.einde.gewonnen ? 'Victory' : 'Defeat');
-    assert.equal(S.scenario.doelen[0].stand, A.einde.gewonnen ? 'af' : 'mislukt');
+    const [a, b] = [T.legerVan(A).length, T.legerVan(B).length];
+    assert.ok(!a || !b, 'een van beide heeft geen mannen meer');
+    assert.equal(A.einde.kop, a > b ? 'Victory' : a === b ? 'A draw' : 'Defeat');
+    assert.equal(B.einde.kop, b > a ? 'Victory' : a === b ? 'A draw' : 'Defeat');
+    assert.equal(A.einde.gewonnen, a > b);
     assert.ok(berichten.some((t) => t.startsWith('The battle was hard')), 'wie viel, viel in een veldslag');
   } finally {
     T.ui = ui;
@@ -158,4 +161,53 @@ test('een veldslag met een tijd: is die om, dan wint wie de meeste mannen heeft,
   seconden(S2, 70, () => !!S2.dorp.einde);
   assert.equal(S2.dorp.einde.kop, 'Victory');
   assert.ok(/4 of your men are still standing, against 3/.test(S2.dorp.einde.tekst), S2.dorp.einde.tekst);
+});
+
+// Samen (lockstep; Marcel, 28 okt: "Vergeet niet dat dit ook in multiplayer allemaal moet werken"): twee computers met
+// hetzelfde begin en dezelfde opdrachten, maar de een speelt leger A en de ander leger B (S.dorp, wat het scherm speelt).
+// De wereld moet op beide letter voor letter gelijk lopen, en elk leger krijgt op beide zijn eigen uitslag. Met twee
+// spelers die elkaar tegemoet gaan, en met twee veldheren (js/veldheer.js) waar elke computer naar een ander leger kijkt.
+test('samen: twee computers die elk een ander leger spelen, lopen letter voor letter gelijk tot de uitslag', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  try {
+    const staat = (S) => {
+      const d = S.dorp;
+      S.dorp = S.dorpen[0];
+      const s = T.bewaarSpel(S, { nu: 0 });
+      S.dorp = d;
+      return s;
+    };
+    for (const veldheer of [false, true]) {
+      const legers = [{ soorten: { speerman: 4, boogschutter: 2 }, veldheer }, { soorten: { speerman: 4, boogschutter: 2 }, veldheer }];
+      const computers = [0, 1].map((speelt) => {
+        const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 3, legers, minuten: 5 }));
+        Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
+        S.kalender.snelheid = 1;
+        S.dorp = S.dorpen[speelt];
+        return S;
+      });
+      const R = T.eilandVan(computers[0].wereld.eiland).recept;
+      const strook = (i) => R.naarTegel((R.stroken[i].a[0] + R.stroken[i].a[1]) / 2, (R.stroken[i].b[0] + R.stroken[i].b[1]) / 2).map(Math.round);
+      for (let tik = 0; tik < 5 * 60 / T.TIK && !computers.every((S) => S.dorpen.every((D) => D.einde)); tik++) {
+        // twee spelers: A valt aan, B houdt stand; de opdracht komt op beide computers in dezelfde tik (de lijn)
+        if (!veldheer && tik === 30) {
+          const [x, y] = strook(1);
+          for (const S of computers) T.geefOpdracht(S, { soort: 'stuur', dorp: 0, wie: T.nummersVan(S.dorpen[0], T.legerVan(S.dorpen[0])), naar: { x, y } });
+        }
+        for (const S of computers) T.wereldTik(S);
+        if (tik % 600 === 0) assert.equal(staat(computers[1]), staat(computers[0]), `gelijk in tik ${tik}`);
+      }
+      const [een, twee] = computers;
+      assert.equal(staat(twee), staat(een), 'gelijk tot het eind');
+      for (const S of computers) {
+        const [A, B] = S.dorpen;
+        assert.ok(A.einde && B.einde, `het is uit voor elk leger (${veldheer ? 'veldheren' : 'spelers'})`);
+        assert.notEqual(A.einde.kop, 'A draw', `iemand won: ${A.einde.tekst} (${veldheer ? 'veldheren' : 'spelers'}, ${Math.round(S.wereldTijd)} s)`);
+        assert.equal(A.einde.gewonnen, !B.einde.gewonnen, 'de een wint, de ander niet');
+      }
+    }
+  } finally {
+    T.ui = ui;
+  }
 });

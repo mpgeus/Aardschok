@@ -206,7 +206,8 @@ Hoe we kiezen:
   uit `js/`; alleen op `T.ui`, op gegevens, en waar een bladzijde een deel van het spel laadt.
 - **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170; `code.md` bij `js/tik.js`): de wereld tikt
   (`T.wereldTik`), haar toeval is `T.toeval` of `T.vastLot`, **nooit `Math.random`**, en een klik die haar verandert,
-  geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats;
+  geeft een opdracht (`T.geefOpdracht`), en een regel vraagt nooit `S.dorp` (wat dit scherm speelt; samen verschilt dat
+  per computer). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats;
   een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is (zoals een gril van de heer).
 - **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` (links) en `handelingSturen` (rechts) geven `{ tekst,
   kan, doe }`, en de tekst bij de muis en de klik komen uit hetzelfde antwoord.

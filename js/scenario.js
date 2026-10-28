@@ -4,7 +4,7 @@
 // `als` gelden (voor "of" maak je twee triggers), doet alles van `dan`, en gaat daarna uit; met `keer` gaat hij zo vaak
 // af ('altijd': elke keer dat `als` geldt), met `aan: false` begint hij uit (een andere trigger zet hem aan). Elke
 // voorwaarde en elk gevolg is een object met één of meer woorden, en `wie`: het dorp waar het om gaat ('speler', of een
-// nummer in S.dorpen; zonder wie je eigen dorp). De woorden zijn één taal met de gesprekken: T.VOORWAARDEN en T.GEVOLGEN
+// nummer in S.dorpen; zonder wie de speler, het eerste dorp). De woorden zijn één taal met de gesprekken: T.VOORWAARDEN en T.GEVOLGEN
 // (js/gesprek.js), hier aangevuld.
 //
 //   T.startScenario(S, {
@@ -85,10 +85,12 @@
     return [];
   };
 
-  // Het dorp van een voorwaarde of een gevolg: `wie` is 'speler' (je eigen dorp, S.dorp; ook zonder wie) of een nummer
-  // in S.dorpen. Geeft null als dat dorp er niet is.
+  // Het dorp van een voorwaarde of een gevolg: `wie` is 'speler' (ook zonder wie) of een nummer in S.dorpen. Geeft null
+  // als dat dorp er niet is. De speler is het eerste dorp, niet S.dorp: dat is wat dit scherm speelt, en samen (lockstep)
+  // speelt elke computer een ander dorp, dus een trigger die S.dorp vroeg, ging op elke computer anders af (Marcel, 28
+  // okt: "Vergeet niet dat dit ook in multiplayer allemaal moet werken"). Alleen spelend is het eerste dorp het jouwe.
   T.scenarioDorp = function (S, wie) {
-    if (wie == null || wie === 'speler') return S.dorp;
+    if (wie == null || wie === 'speler') return S.dorpen[0] || null;
     return (Number.isInteger(wie) && S.dorpen[wie]) || null;
   };
 
@@ -203,8 +205,10 @@
     // zonder hol nooit), en hoeveel overvallen er op je land kwamen (een getal: minstens zoveel; of { minstens, minder }).
     hol: (S, D, v) => T.holStand(D) === v,
     // De veldslag (stap 3a2, js/veldslag.js): hoeveel mannen van het dorp nog staan (T.legerVan: zijn soldaten en zijn
-    // held), en hoeveel seconden van de wereld er sinds het begin om zijn (de tijd van een veldslag; E2).
+    // held), hoeveel legers nog mannen hebben (van alle dorpen, dus voor elke speler hetzelfde), en hoeveel seconden van
+    // de wereld er sinds het begin om zijn (de tijd van een veldslag; E2).
     mannen: (S, D, v) => telt(T.legerVan(D).length, v),
+    legers: (S, D, v) => telt(S.dorpen.filter((x) => T.legerVan(x).length > 0).length, v),
     seconden: (S, D, v) => !!S.scenario && (S.wereldTijd || 0) - S.scenario.begin >= v,
     overval: (S, D, v) => telt((D.rovers && D.rovers.geweest) || 0, v),
     // Het scenario zelf: een doel ('id': af, of { id: 'mislukt' }), een trigger die afging ('id'), een teller ({ naam: 3 }).
@@ -264,14 +268,17 @@
     scene: (S, D, v) => {
       D.scene = v;
     },
-    // De uitslag van een veldslag (js/veldslag.js): wie de meeste mannen overhoudt, wint; evenveel is gelijk (en niet
-    // gewonnen). Het eindscherm zegt het, met hoeveel er van elke kant staan.
-    uitslag: (S, D) => {
-      const wij = T.legerVan(D).length;
-      const zij = Math.max(0, ...S.dorpen.filter((x) => x !== D).map((x) => T.legerVan(x).length));
-      const kop = wij > zij ? T.t('Victory') : wij === zij ? T.t('A draw') : T.t('Defeat');
-      const tekst = T.t('{wij|# of your men is still standing|# of your men are still standing}, against {zij}.', { wij, zij });
-      T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: wij > zij, kop, tekst });
+    // De uitslag van een veldslag (js/veldslag.js): voor elk leger, want samen speelt elke speler er een (lockstep: op elke
+    // computer hetzelfde, wie er ook kijkt). Wie de meeste mannen overhoudt, wint; evenveel is gelijk (en niet gewonnen).
+    // Het eindscherm zegt het, met hoeveel er van elke kant staan.
+    uitslag: (S) => {
+      for (const D of S.dorpen) {
+        const wij = T.legerVan(D).length;
+        const zij = Math.max(0, ...S.dorpen.filter((x) => x !== D).map((x) => T.legerVan(x).length));
+        const kop = wij > zij ? T.t('Victory') : wij === zij ? T.t('A draw') : T.t('Defeat');
+        const tekst = T.t('{wij|# of your men is still standing|# of your men are still standing}, against {zij}.', { wij, zij });
+        T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: wij > zij, kop, tekst });
+      }
     },
     // Het eind: { gewonnen, kop, tekst } (T.spelUit, js/einde.js; het eindscherm in js/hud.js).
     einde: (S, D, v) => T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: !!v.gewonnen, kop: v.kop || null, tekst: v.tekst || null }),
@@ -337,7 +344,7 @@
     }
     const ids = triggers.map((t) => t.id);
     const lotten = {};
-    const doelen = { erbij: new Set(), af: new Set(), genoemd: new Set() };
+    const doelen = { erbij: new Set(), af: new Set(), genoemd: new Set(), uitslag: false };
     const isGebied = (wie, naam) =>
       (naam === 'hol' ? heeftHol : gebieden[naam]) || fout.push(naam === 'hol' ? `${wie}: gebied hol vraagt een dorp met een hol` : `${wie}: gebied ${naam} is er niet`); // geen tekst
     const isTrigger = (wie, id) => ids.includes(id) || fout.push(`${wie}: trigger ${id} is er niet`); // geen tekst
@@ -374,6 +381,7 @@
         if (doe.doel && doe.doel.gebied) isGebied(wie, doe.doel.gebied);
         if (doe.scene && !SCENES.includes(doe.scene)) fout.push(`${wie}: de scène ${doe.scene} bestaat niet`); // geen tekst
         for (const id of elk(doe.triggerAan).concat(elk(doe.triggerUit))) isTrigger(wie, id);
+        if (doe.uitslag) doelen.uitslag = true;
         if (doe.doel) {
           if (!doe.doel.id) fout.push(`${wie}: een doel heeft een id`); // geen tekst
           else if (doe.doel.tekst) doelen.erbij.add(doe.doel.id);
@@ -384,7 +392,9 @@
       }
     });
     for (const id of doelen.genoemd) if (!doelen.erbij.has(id)) fout.push(`doel ${id} komt er nergens bij (een doel met een tekst)`); // geen tekst
-    for (const id of doelen.erbij) if (!doelen.af.has(id)) fout.push(`doel ${id} kan nooit af: geen trigger zet het af`); // geen tekst
+    // Een level dat eindigt met de uitslag van een veldslag, hoeft zijn doel niet af te zetten: het doel is van iedereen,
+    // en de uitslag zegt voor elk leger of het won.
+    if (!doelen.uitslag) for (const id of doelen.erbij) if (!doelen.af.has(id)) fout.push(`doel ${id} kan nooit af: geen trigger zet het af`); // geen tekst
     return fout;
   };
 })(globalThis.Spel = globalThis.Spel || {});

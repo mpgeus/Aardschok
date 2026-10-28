@@ -170,6 +170,10 @@
     const nu = S.opdrachten.filter((o) => o.tik <= S.tik);
     if (!nu.length) return;
     S.opdrachten = S.opdrachten.filter((o) => o.tik > S.tik);
+    // Per dorp (zijn nummer in S.dorpen), en van een dorp in de volgorde waarin het ze gaf: samen komen de opdrachten van
+    // de anderen over de lijn op elke computer op een ander moment binnen dan die van een veldheer (js/veldheer.js), die
+    // elke computer zelf geeft, en toch doet elke computer ze zo in dezelfde volgorde.
+    nu.sort((a, b) => a.dorp - b.dorp);
     for (const o of nu) {
       const D = S.dorpen[o.dorp];
       if (D) T.OPDRACHTEN[o.soort](S, D, o);
