@@ -489,6 +489,19 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 28 okt: hoofdstuk 2, het rovershol (werklijst K, 2c)
+
+Op het spel van `bde26be` (branch `ccr-4ab305e2-5eexor`), met `npm run speeltest -- --hoofdstuk hol` (Marcel, 28 okt:
+"3, prima"), zaad 1 tot 3. De kolonist speelt het hoofdstuk zoals het lege begin, en valt het hol niet aan.
+- **Het hoofdstuk loopt zoals bedoeld:** het doel bij het begin; de eerste overval kwam op 11 juni (dag 100), roofde 20
+  graan en werd verslagen; dezelfde dag ging het spoor af (het doel kreeg zijn plek); op Sint-Maarten kwam de heer en
+  stond het hol er nog: mislukt (*The robbers still hold the woods*). De wacht kwam mee, het wachthuis stond er op dag
+  218. Geen fouten in het spel.
+- **Gevonden:** een luisteraar van de speeltest zelf (`zetVoorwerp` in `speler.js`) viel om, omdat een hoofdstuk zijn
+  land legt voordat er een dorp is; gerepareerd, daarna geen fouten in de console.
+- **De drie zaden spelen precies hetzelfde jaar**, want het lot van een hoofdstuk is het zaad van het eiland (open uit
+  2a, `opmerkingen.md`: "Een hoofdstuk speelt elke keer hetzelfde lot"). Zolang dat zo is, is één zaad genoeg.
+
 ## De speeltest van 24 okt: de mannen lopen stroef (Marcel)
 
 Marcel, 24 okt: "het verplaatsen van poppetjes voelt sloom aan en onhandig", "in combat wordt dat denk ik vervelend",

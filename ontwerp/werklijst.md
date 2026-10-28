@@ -34,15 +34,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **2c, hoofdstuk 2 is gebouwd** (28 okt; bij K, "2c", stap 4): het rovershol speelt als hoofdstuk 2 in Oldland. Drie
-  vragen: (1) **het vaandel** (D2) in woorden: een staak met een lange smalle wimpel in jouw kleur, twee tegels hoog,
-  die wappert op de plek waar een open doel naar wijst, ook boven land dat je nog niet kent, en weg is als het doel af
-  is; dezelfde tekening later op het keuzescherm van de campagne (`scenario.md`, 6). Eerst de woorden, dan één
-  proefplaat. (2) Het eerste jaar heeft maar **één overval vóór Sint-Maarten** (vanaf dag 60; de volgende valt erna),
-  en valt er dan niets te roven, dan komt hij niet, en wijst het doel nergens heen: zo laten (je zoekt het hol zelf),
-  of het spoor ook op een vaste dag (bijvoorbeeld dag 150) als er nog geen overval was? (3) Mag de speeltest
-  hoofdstuk 2 spelen (`--hoofdstuk hol`)? De kolonist valt het hol niet aan, dus hij toetst het verliezen en de
-  overvallen, niet het winnen.
+- **2c, de proefplaat van het vaandel bekijken** (28 okt; bij K, "2c"; `beeld.md`, "Het vaandel van een doel"): het
+  vaandel zoals in de woorden (Marcel: "1 ja"), in vier standen, op gras en op het donker. En een open keuze uit 2a
+  (`opmerkingen.md`, "Een hoofdstuk speelt elke keer hetzelfde lot"): het lot van een hoofdstuk vast, zoals Knights and
+  Merchants, of per keer anders? De speeltest van hoofdstuk 2 (Marcel: "3, prima"; `speelbaar.md`, 28 okt) speelt nu met
+  drie zaden drie keer hetzelfde jaar. Besloten (Marcel, 28 okt: "2 zo laten"): komt de ene overval vóór Sint-Maarten
+  niet, dan wijst het doel nergens heen, en zoek je het hol zelf.
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.

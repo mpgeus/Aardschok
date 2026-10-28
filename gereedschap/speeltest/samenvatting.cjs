@@ -17,6 +17,14 @@ exports.maak = function (uitslagen, stand) {
   if (mislukt.length) uit.push(...mislukt.map((u) => `- **Mislukt:** ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${u.mislukt}`), '');
   const fouten = goed.filter((u) => u.fouten.length || (u.luisterFouten || []).length);
   uit.push(fouten.length ? fouten.map((u) => `- **Fouten** bij ${NAMEN[u.speler]}, zaad ${u.zaad}: ${[...u.fouten, ...(u.luisterFouten || [])].slice(0, 3).join(' / ')}`).join('\n') : 'Geen fouten in de console.', '');
+  // Een hoofdstuk van de campagne (--hoofdstuk): de doelen, de triggers die afgingen, de overvallen en het hol.
+  const hoofdstukken = goed.filter((u) => u.eind && u.eind.hoofdstuk);
+  if (hoofdstukken.length) {
+    uit.push(...hoofdstukken.map((u) => {
+      const h = u.eind.hoofdstuk;
+      return `- **Hoofdstuk ${h.id}**, zaad ${u.zaad}: ${u.eind.tekst}; doelen ${h.doelen.join(', ') || 'geen'}; triggers ${h.triggers.join(', ')}; ${h.overvallen} overval(len); het hol ${h.hol || 'is er niet'}`;
+    }), '');
+  }
   uit.push(...hetEersteJaar(goed.filter((u) => u.eersteJaar)));
   uit.push(...hetVervoer(goed.filter((u) => u.kar)));
   uit.push(...deTweeBazen(goed));

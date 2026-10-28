@@ -2678,6 +2678,22 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   "ja, zet hem in het spel"): `node gereedschap/pixelart/naar-spel.cjs --alleen buit` maakt `beelden/buit.png` (een cel
   per maat, 260 bij 200, 9 kB), en `js/sprites.js` laadt het pas als er buit te zien is (`S.buit`).
 
+## Het vaandel van een doel (28 okt 2026, werklijst K, 2c, D2)
+
+- **In woorden, gekozen** (Marcel, 28 okt: "1 ja"): een staak met een lange smalle wimpel in jouw kleur, twee tegels hoog,
+  die wappert op de plek waar een open doel naar wijst, ook boven land dat je nog niet kent, en weg is als het doel af is.
+  Dezelfde tekening later op het keuzescherm van de campagne (`scenario.md`, 6). Jouw kleur is die van het wapen van het
+  dorp: diep blauw met goud (hierboven, "Het wapen van het dorp: een gouden korenschoof op diep blauw"; Marcel: "later
+  de vaandels").
+- **De proefplaat** (28 okt; `gereedschap/pixelart/vaandel.cjs`, `node vaandel.cjs`, `uit/vaandel-proef.png`, in een paar
+  seconden): een boer en de vier standen van het wapperen, op gras en op het donker van land dat je niet kent, en
+  daaronder twee keer vergroot. De staak is 150 hoog (een boer zo'n 85), met een gouden knop en punt, in een hoopje aarde
+  met drie stenen. De wimpel (80 lang, 26 hoog bij de staak, naar de punt smaller) is diep blauw (de ramp `gewaad`, zoals
+  de wapenrok van de soldaten), met een gouden zoom boven en onder en bij de staak de gouden korenschoof (drie bossen
+  aren, een band, en halmen in strepen); hij waait op het scherm naar rechts, en slaat in vier standen op en neer.
+  Bij het maken bleek: het blauw alleen viel weg op het donker, dus de zoom is goud; en een schoof op 26 hoog leest pas
+  als drie bossen aren, anders lijkt hij een strik. Wacht op Marcel.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

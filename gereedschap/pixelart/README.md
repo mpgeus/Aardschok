@@ -197,6 +197,10 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   een paadje. `node aankleding.cjs` maakt de proefplaat `uit/aankleding-proef.png` (het hele hol met de ring, de tenten,
   de buit en alles; in zo'n minuut). Naar het spel (`vel`, elk ding in 4 richtingen): `node naar-spel.cjs --alleen
   aankleding` maakt `beelden/aankleding.png`.
+- `vaandel.cjs`: het vaandel van een doel (werklijst K, 2c, D2): een staak met een blauwe wimpel met een gouden zoom en
+  de gouden korenschoof van het dorp, in vier standen van het wapperen. `node vaandel.cjs` maakt de proefplaat
+  `uit/vaandel-proef.png` (met een boer, op gras en op het donker, en twee keer vergroot; in een paar seconden). Nog niet
+  naar het spel.
 - `buit.cjs`: de buit van een roverskamp in drie maten (werklijst K, 2c): klein (een kist en twee zakken), middel (de kist
   open met goud en zilver, tonnen en zakken) en groot (een hoge hoop met tonnen, zakken, twee kisten, een rol rood laken,
   een koperen ketel, een kandelaar en een karrenwiel). `node buit.cjs` maakt de proefplaat `uit/buit-proef.png` (de drie

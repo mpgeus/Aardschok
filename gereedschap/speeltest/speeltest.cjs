@@ -11,6 +11,10 @@
 //   npm run speeltest -- --tegelijk 4          zoveel spellen tegelijk, elk in een eigen tabblad (standaard 3)
 //   npm run speeltest -- --jaren 2             zoveel jaren in plaats van één, tot 1 grasmaand van het jaar erna (C, stap 6:
 //                                              zo komt het dorp er, en worden de planken gebruikt)
+//   npm run speeltest -- --hoofdstuk hol       een hoofdstuk van de campagne (levels/campagne.js) in plaats van het lege
+//                                              begin op het eiland van het zaad: de speler kiest Campaign en het hoofdstuk,
+//                                              zoals een mens (de hoofdstukken ervoor tellen als af), en speelt tot het
+//                                              eind van het hoofdstuk of van het jaar (werklijst K, 2c; Marcel, 28 okt)
 //   npm run speeltest -- --zaad 1 --opslaan    de proef met opslaan (vraag 48): op 1 oogstmaand opslaan, herladen, Verder,
 //                                              en dan precies hetzelfde jaar als zonder opslaan (--opslaan 245: een andere dag)
 //   npm run speeltest -- --samenvatting        niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt: zo
@@ -83,6 +87,7 @@ function leesOpdracht(argv) {
     }
     else if (a === '--tegelijk') o.tegelijk = Number(argv[++i]);
     else if (a === '--jaren') o.jaren = Math.max(1, Number(argv[++i]) || 1);
+    else if (a === '--hoofdstuk') o.hoofdstuk = argv[++i] || '';
     else if (a === '--zaad') o.zaden = [Number(argv[++i])];
     else if (a === '--zaden') {
       const [van, tot] = argv[++i].split('-').map(Number);
@@ -90,11 +95,19 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --tegelijk n, --jaren n, --opslaan [dag], --samenvatting, --regel naam=keuze, --getal pad=waarde, --naam naam of --tegen naam.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --tegelijk n, --jaren n, --hoofdstuk id, --opslaan [dag], --samenvatting, --regel naam=keuze, --getal pad=waarde, --naam naam of --tegen naam.`);
       process.exit(1);
     }
   }
   if (!o.spelers.length) o.spelers = SPELERS;
+  if (o.hoofdstuk != null && !/^\w+$/.test(o.hoofdstuk)) {
+    console.error('--hoofdstuk wil het id van een hoofdstuk uit levels/campagne.js, zoals --hoofdstuk hol.');
+    process.exit(1);
+  }
+  if (o.hoofdstuk && o.opslaan != null) {
+    console.error('--opslaan speelt het lege begin, niet een hoofdstuk.');
+    process.exit(1);
+  }
   if (o.tegen && !o.naam) {
     console.error('--tegen vergelijkt met een speeltest met een naam, dus deze krijgt er ook een: --naam na --tegen voor.');
     process.exit(1);
@@ -114,7 +127,7 @@ function leesOpdracht(argv) {
 // D.lot.zaad in js/dorp.js), het spel zoals index.html het laadt, en dan de speler erbij. Met `opslaan` (de proef
 // met opslaan): { dag, bewaar }, zie speler.js; slaat de speler op, dan herlaadt dit de bladzijde, en gaat
 // hij verder met Verder op het titelscherm. `spelregels`: wat de browser onthoudt (leesOpdracht).
-async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = null, jaren = 1) {
+async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = null, jaren = 1, hoofdstuk = null) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const fouten = [];
@@ -148,7 +161,7 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
   const begin = Date.now();
   let uitslag;
   try {
-    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan, jaren });
+    uitslag = await page.evaluate((o) => Spel.speeltest.speel(o), { speler, zaad, opslaan, jaren, hoofdstuk });
     if (uitslag.opgeslagen) {
       const opgeslagen = uitslag.opgeslagen;
       await page.reload(KLAAR);
@@ -174,8 +187,9 @@ async function main() {
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
-  const op = stand + ', de kolonist op het eiland, met het lege begin' + (o.jaren > 1 ? `, ${o.jaren} jaar` : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
-  const achter = o.anders.length ? '-regels' : '';
+  const op = stand + (o.hoofdstuk ? `, de kolonist in hoofdstuk ${o.hoofdstuk} van de campagne` : ', de kolonist op het eiland, met het lege begin') +
+    (o.jaren > 1 ? `, ${o.jaren} jaar` : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
+  const achter = (o.hoofdstuk ? `-${o.hoofdstuk}` : '') + (o.anders.length ? '-regels' : '');
   // Met een naam komt alles in uit/<naam>/, met set.json (wat er gespeeld werd, op welke stand) en waarden.json (alle
   // waarden van de bladzijde met getallen zoals ze bij het begin in de code stonden; vergelijk.cjs). Zo staat de vorige
   // ernaast.
@@ -215,7 +229,7 @@ async function main() {
   fs.mkdirSync(map, { recursive: true });
   const set = o.naam ? {
     naam: o.naam, wanneer: new Date().toISOString(), stand: op, klaar: false,
-    opdracht: { spelers: o.spelers, zaden: o.zaden, land: 'eiland', regels: o.regels, getallen: o.getallen, jaren: o.jaren }, // `land`: vergelijk.cjs leest het
+    opdracht: { spelers: o.spelers, zaden: o.zaden, land: 'eiland', regels: o.regels, getallen: o.getallen, jaren: o.jaren, hoofdstuk: o.hoofdstuk || null }, // `land`: vergelijk.cjs leest het
   } : null;
   if (set) {
     // Een vorige speeltest met dezelfde naam gaat weg, zodat er geen spel van de vorige keer tussen blijft liggen.
@@ -239,7 +253,7 @@ async function main() {
   async function werker() {
     while (volgende < rij.length) {
       const { speler, zaad } = rij[volgende++];
-      const u = await speelJaar(browser, speler, zaad, null, o.spelregels, o.jaren);
+      const u = await speelJaar(browser, speler, zaad, null, o.spelregels, o.jaren, o.hoofdstuk || null);
       u.stand = op;
       uitslagen.push(u);
       fs.writeFileSync(path.join(map, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
