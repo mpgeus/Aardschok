@@ -1137,6 +1137,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat linksboven (`T.doelLinksboven`, vanuit `js/main.js`, anders `T.tredeDoel`); het eind is `T.spelUit` met reden
   `'scenario'` (`js/einde.js`, het scherm in `js/hud.js`). Een gebied is een vak of een kring van tegels, en een
   voorwaarde erop loopt de wezens van de kaart af, niet de tegels (`minstensIn`, zonder lijst).
+- **De woorden van het rovershol** (werklijst K, 2c, stap 4, 28 okt): de voorwaarde `hol` ('staat' of 'verslagen',
+  `T.holStand` in `js/rovers.js`) en `overval` (hoeveel overvallen er op je land kwamen: `D.rovers.geweest`, dat `eind`
+  in `js/rovers.js` ophoogt voor een overval met rovers op de kaart, niet voor een die niet kwam). Het gebied `hol` heeft
+  elk level met een hol zonder het te noemen (`gebiedVan(S, naam, D)`: `T.holGebied(D)`, een kring tot de palissade),
+  want waar het ligt, weet pas het spel; een level mag geen eigen gebied zo noemen. Een doel met `gebied` wijst naar een
+  plek (D2): `d.plek` (bewaard, het midden van het gebied), een klik op het bericht van een nieuw doel brengt je erheen,
+  en `T.doelPlekken(S)` geeft de plekken van de open doelen, die de minikaart een gouden ring geeft (`js/balk.js`);
+  krijgt een doel dat er al is een gebied, dan zegt het level het met een bericht met dat gebied. De zin van het level
+  voor de eerste brief is `inleiding` (`S.scenario.inleiding`; `benoemingInDeWildernis` in `js/brieven.js` zet hem vóór
+  de wetten). De keuring kent ze allemaal (een hol vraagt een dorp met een hol).
 - **De kaart van een level** (stap 2a, 24 okt; Marcel: "Stap 2a: kaart en rand"): `eiland: { zaad }`, `plek` (een naam)
   en `rand: { b, h }` (in stukken) gaan via `T.beginOpEiland` naar de maker (`T.laadGemaaktGehucht(zaad, { plek })`,
   `T.randOm`) en op de kaart (`w.rand`, `js/wereld.js`); de keuring wil een zaad vanaf 1, een plek alleen met een vast
@@ -1160,7 +1170,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `S.scenario.hoofdstuk` welk. Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
   Het getal van de overval en zijn dagen staan nu in het level, niet meer in de werkbank (die houdt `vooraf` en
   `voorDonker`, `T.ROVERS_INSTELLINGEN.aangekondigd`). Nog niet: `bouw` als gevolg (iets open of dicht midden in een
-  level), en `npm run teksten` voor de zinnen van een level (het demojaar heeft er geen).
+  level). **Het tweede level is het rovershol** (`levels/rovershol.js`, 2c, 28 okt): de wacht, het hol (`dorpen[].hol`),
+  de overvallen op het rooster, en vier triggers: het hoofddoel bij het begin, na de eerste overval het doel met het
+  gebied `hol`, gewonnen als het hol verslagen is, en mislukt als de heer komt en het staat er nog. `npm run teksten`
+  leest de zinnen van elk level (`zinnenVanLevel` in `gereedschap/teksten.cjs`: de inleiding, de berichten, de doelen en
+  het eind; het blok `T.LEVELS.<naam>` van `levels/<naam>.js`).
 
 ### js/campagne.js: de campagne
 
@@ -1168,7 +1182,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   campagne-eiland, 5×5", en voor het eiland "Kies jij er voorlopig een"): **de regels van de campagne**, zonder scherm en
   getoetst (`test/campagne.test.cjs`). De campagne zelf staat in `levels/campagne.js` (`T.CAMPAGNE`): één eiland (`eiland:
   { zaad: 5 }`; hoofdstuk 1 in Oakley, 7 bij 7, sinds c3 van vraag 170, want een overval komt uit een kamp binnen de
-  rand), en per hoofdstuk een `id`, een `titel` (een zin uit
+  rand; hoofdstuk 2, het rovershol, in Oldland, 7 bij 7), en per hoofdstuk een `id`, een `titel` (een zin uit
   gegevens: `T.tGegevens`, en `npm run teksten` leest hem daar), een `level` (`T.LEVELS`), een `plek` en een `rand`.
   `T.hoofdstukLevel(id)` maakt het level waarmee het hoofdstuk begint: het level met het eiland, de plek en de rand erover,
   en `hoofdstuk: id`, zodat `S.scenario.hoofdstuk` zegt dat het een hoofdstuk is (zoals `T.demoLevel`, `js/einde.js`,

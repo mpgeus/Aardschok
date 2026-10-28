@@ -56,6 +56,15 @@ test('de keuring: een goed level is goed, en elke fout heeft een zin', () => {
   heeft(fouten([{ id: 'a', dan: [{ scene: 'dansen' }] }]), 'de scène dansen bestaat niet');
   heeft(T.keurScenario({ dorpen: [{ wacht: ['ridder'] }] }), 'de soldaat ridder bestaat niet');
   heeft(T.keurScenario({ dorpen: [{ dicht: ['kasteeltje'] }] }), 'het gebouw kasteeltje bestaat niet');
+  // De woorden van het hol (2c): alleen in een level met een hol, en het gebied 'hol' is van het spel.
+  heeft(fouten([{ id: 'a', als: [{ hol: 'verslagen' }] }]), 'de voorwaarde hol vraagt een dorp met een hol');
+  heeft(fouten([{ id: 'a', dan: [{ bericht: { tekst: 'There.', gebied: 'hol' } }] }]), 'gebied hol vraagt een dorp met een hol');
+  heeft(fouten([], { hol: { x: 1, y: 1, r: 2 } }), 'gebied hol is van het spel');
+  heeft(fouten([{ id: 'a', als: [{ overval: 'vaak' }] }]), 'overval is een getal');
+  heeft(fouten([{ id: 'a', dan: [{ doel: { id: 'd', gebied: 'nergens' } }] }]), 'gebied nergens is er niet');
+  const metHol = (triggers) => T.keurScenario({ dorpen: [{ hol: { bende: 3 } }], triggers });
+  heeft(metHol([{ id: 'a', als: [{ hol: 'weg' }] }]), "het hol is 'staat' of 'verslagen'");
+  assert.deepEqual(metHol([{ id: 'a', als: [{ hol: 'staat' }, { overval: { minstens: 1 } }, { inGebied: { gebied: 'hol' } }] }]), []);
   // Met een fout begint het niet.
   const S = gehucht();
   assert.ok(T.startScenario(S, { triggers: [{ id: 'a', als: [{ dgg: 3 }] }] }).length);
@@ -213,7 +222,7 @@ test('de gevolgen: een doel erbij en af, linksboven, een bericht met een plek, w
   });
   assert.deepEqual(T.doelLinksboven(S, D), T.tredeDoel(D), 'zonder doel het doel van de trede');
   seconde(S);
-  assert.deepEqual(S.scenario.doelen, [{ id: 'put', tekst: 'Guard the <well>.', hoofd: true, stand: 'open' }]);
+  assert.deepEqual(S.scenario.doelen, [{ id: 'put', tekst: 'Guard the <well>.', hoofd: true, stand: 'open', plek: null }]);
   assert.deepEqual(T.doelLinksboven(S, D), { kop: 'Goal', tekst: 'Guard the &lt;well&gt;.', deel: null });
   assert.deepEqual(berichten.map((b) => b.tekst), ['New goal: Guard the <well>.', 'Look here.']);
   assert.deepEqual(berichten[1].plek, { x: 42, y: 51 });
@@ -266,6 +275,67 @@ test('het demojaar komt door de keuring, en een nieuw spel ermee heeft de wacht,
   assert.equal(V.scenario, undefined);
   // Een level dat niet door de keuring komt, begint geen spel.
   assert.throws(() => T.proefdorp.begin(T.proefdorp.zaad, { dorpen: [{ dicht: ['kasteeltje'] }] }), /het gebouw kasteeltje bestaat niet/);
+});
+
+// Het rovershol, hoofdstuk 2 (werklijst K, 2c; levels/rovershol.js): de brief zegt het, het hol staat er, na de eerste
+// overval wijst het doel ernaar, en het eind komt als het valt, of als de heer op Sint-Maarten komt en het staat er nog.
+test('het rovershol: het hol met zijn bende, een doel dat na de eerste overval naar het hol wijst, en gewonnen of mislukt', () => {
+  assert.deepEqual(T.keurScenario(T.LEVELS.rovershol), []);
+  const nieuw = () => {
+    const S = T.proefdorp.begin(T.proefdorp.zaad, T.hoofdstukLevel('hol'));
+    Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
+    berichten.length = 0;
+    return S;
+  };
+  const S = nieuw();
+  const D = S.dorp;
+  assert.equal(S.scenario.hoofdstuk, 'hol');
+  assert.equal(S.scenario.inleiding, T.LEVELS.rovershol.inleiding, 'de zin voor de eerste brief');
+  assert.deepEqual(D.dicht, [], 'het wachthuis en de wapenmaker zijn open');
+  assert.deepEqual(T.soldatenVan(D).map((p) => p.soldaat.soort), ['speerman', 'speerman', 'kruisboogschutter']);
+  assert.notEqual(D.rovers && D.rovers.overvallen, false, 'de overvallen op het rooster');
+  const K = S.wereld.kampen.find((k) => k.nr === D.hol);
+  assert.equal(K.bende.length, 10);
+  assert.equal(K.palissade, true);
+  assert.deepEqual(K.buit, { graan: 60, goud: 20 });
+  // Het begin: het hoofddoel, nog zonder plek.
+  seconde(S);
+  assert.equal(T.doelLinksboven(S, D).tekst, "Destroy the robbers' den before Martinmas.");
+  assert.deepEqual(T.doelPlekken(S), []);
+  // Het gebied 'hol': een kring om het vuur tot de palissade.
+  const g = T.holGebied(D);
+  assert.deepEqual(g, { x: K.x, y: K.y, r: T.ROVERS_INSTELLINGEN.palissade.straal });
+  const erin = { inGebied: { gebied: 'hol' } };
+  assert.equal(T.voorwaardeGeldt(S, D, null, erin), false);
+  const man = D.wereld.wezens.find((e) => T.isVanDorp(D, e));
+  Object.assign(man, { tx: K.x + 3, ty: K.y });
+  assert.equal(T.voorwaardeGeldt(S, D, null, erin), true, 'een van je mensen in het hol');
+  // Na de eerste overval die kwam (D2): het spoor, een bericht met de plek, en de ring op de minikaart.
+  seconde(S, 3);
+  assert.equal(S.scenario.triggers.find((t) => t.id === 'spoor').gedaan, 0, 'nog geen overval');
+  (D.rovers || (D.rovers = T.nieuweRovers())).geweest = 1;
+  seconde(S);
+  const spoor = berichten.find((b) => b.tekst.startsWith('The robbers left a trail'));
+  assert.deepEqual(spoor && spoor.plek, { x: K.x, y: K.y });
+  assert.deepEqual(T.doelPlekken(S), [{ x: K.x, y: K.y }]);
+  // Valt de laatste rover, dan is het gewonnen (E1).
+  K.verslagen = true;
+  seconde(S);
+  assert.equal(S.scenario.doelen[0].stand, 'af');
+  assert.deepEqual(T.doelPlekken(S), [], 'een doel dat af is, wijst nergens meer heen');
+  assert.equal(D.einde.reden, 'scenario');
+  assert.equal(D.einde.gewonnen, true);
+  assert.equal(D.einde.kop, 'The woods are quiet');
+  assert.equal(T.spelGewonnen(D), true);
+  // Komt de heer op Sint-Maarten en staat het hol er nog, dan is het mislukt (C1).
+  const S2 = nieuw();
+  seconde(S2);
+  (S2.dorp.heer || (S2.dorp.heer = T.nieuweHeer())).bezoek = {}; // Sint-Maarten: hij komt (T.heerStand)
+  assert.ok(T.heerStand(S2.dorp).includes('komt'));
+  seconde(S2);
+  assert.equal(S2.scenario.doelen[0].stand, 'mislukt');
+  assert.equal(S2.dorp.einde.gewonnen, false);
+  assert.equal(T.spelGewonnen(S2.dorp), false);
 });
 
 test('de tik laat de triggers kijken (T.wereldTik, js/tik.js)', () => {

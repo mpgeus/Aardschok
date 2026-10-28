@@ -148,6 +148,8 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   **`leegGebied`** (`'naam'`: geen vijand van het dorp meer in het gebied).
 - **Leven en dood:** `dood` (een mens met een naam, de aanvoerder, een groep), `gevallen` (een dorp zonder raadhuis en
   zonder mensen).
+- **De rovers** (2c, 28 okt): **`hol`** (`'staat'` of `'verslagen'`: het hol van het dorp, `dorpen[].hol`), **`overval`**
+  (hoeveel overvallen er op je land kwamen; een getal is minstens zoveel).
 - **De heer:** **`heer`** (de woorden van `T.heerStand`: brief, komt, staat, betaald, geweigerd, weg), **`gunst`** en
   **`vertrouwen`** (`js/bazen.js`; zonder die spelregel nooit).
 - **Het scenario zelf:** **`doel`** (`'id'`: af, of `{ id: 'mislukt' }`), **`trigger`** (ging af), **`teller`**
@@ -155,8 +157,11 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 
 **Dan** (de gevolgen; **vet** is gebouwd):
 - **Zeggen:** **`bericht`** (een zin, of `{ tekst, toon, gebied }`: met een gebied brengt een klik je erheen), `brief`
-  (een brief met de tekst van het level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`).
-- **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het),
+  (een brief met de tekst van het level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`). De brief
+  bij het begin is er (2c, 28 okt): de **`inleiding`** van het level staat in de eerste brief van de heer, de benoeming;
+  een brief midden in een level komt als een level hem vraagt.
+- **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het;
+  met **`gebied`** wijst het naar een plek, met een gouden ring op de minikaart zolang het open is: D2 van 2c),
   **`zetVlag`** en **`wisVlag`**, **`teller`** (`{ golven: 1 }`), **`triggerAan`** en **`triggerUit`**.
 - **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), **`rovers`** (`{ aantal, overUren }`: de bestaande
   overval, voor een akker of anders een stapel; `{ aantal, aangekondigd: true }`: morgen, overdag, met een bericht vooraf
@@ -170,7 +175,8 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
-naam ("the miller"). De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
+naam ("the miller"). Eén gebied geeft het spel zelf: **`hol`**, het hol van het dorp (2c), want waar dat ligt, weet pas het
+spel. De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
 trigger `inGebied`. Je ziet het als een doel ernaar wijst (een vaandel op de plek en de ping op de minikaart), anders niet.
 
 **Doelen** staan in `S.scenario.doelen` (een tekst en een stand: open, af, mislukt). Het vak linksboven toont het
@@ -267,6 +273,11 @@ merchants, dungeon keeper level select etc.").
   een kamp binnen de rand, en Millcombe heeft er geen (het dichtste ligt 906 tegels weg), dus hoofdstuk 1 ging naar
   Oakley (Marcel: "H1"): 1295 tegels van het kasteel, met een kamp op 210, en een rand van 7 bij 7 (op eiland 5 hebben
   alleen Oldland en Oakley een kamp binnen 7 bij 7). Zo trekt het verhaal van Oakley naar Oldland (630 van het kasteel).
+  **Hoofdstuk 2, het rovershol, gebouwd op 28 okt** (werklijst K, 2c; `levels/rovershol.js`): in Oldland, 7 bij 7, met
+  de wacht van hoofdstuk 1, het hol (10 man, een palissade, 60 graan en 20 goud), de overvallen op het rooster, de
+  inleiding in de eerste brief, het hoofddoel *Destroy the robbers' den before Martinmas.*, na de eerste overval een
+  ring om het hol op de minikaart, gewonnen als het hol valt, mislukt als de heer op Sint-Maarten komt en het staat er
+  nog.
   Een hoofdstuk met een overval heeft een kamp binnen zijn rand (`test/campagne.test.cjs`). Een hoofdstuk heet naar zijn plek, en
   speelt met de spelregels die de browser het laatst koos, zoals New game. De moeilijkheid komt met de AI-spelers (8), en
   het land als keuzescherm daarna (eerst een proefplaat).

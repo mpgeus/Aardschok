@@ -16,6 +16,9 @@
       // 1295 tegels van het kasteel, met een kamp op 210 tegels, dus een rand van 7 bij 7 (Marcel, 27 okt: "H1"; tot dan
       // Millcombe, 5 bij 5, maar daar ligt geen kamp binnen de rand, en kwam de overval van het demojaar niet).
       { id: 'aankomst', titel: 'The first year', level: 'demojaar', plek: 'Oakley', rand: { b: 7, h: 7 } },
+      // Hoofdstuk 2 (werklijst K, 2c; Marcel, 27 okt: "A1, B1, C1, D2, E1"): het rovershol. In Oldland, 630 tegels van het
+      // kasteel, met een kamp op 190 tegels, dus een rand van 7 bij 7.
+      { id: 'hol', titel: "The robbers' den", level: 'rovershol', plek: 'Oldland', rand: { b: 7, h: 7 } },
     ],
   };
 })(globalThis.Spel = globalThis.Spel || {});

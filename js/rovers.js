@@ -106,8 +106,9 @@
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 
 
-  // Een dorp met `overvallen: false` (een level, T.nieuwDorp in js/dorp.js) krijgt geen overvallen op het rooster.
-  T.nieuweRovers = () => ({ overvalOp: null, aanval: null });
+  // Een dorp met `overvallen: false` (een level, T.nieuwDorp in js/dorp.js) krijgt geen overvallen op het rooster;
+  // `geweest` telt de overvallen die op je land kwamen (eind).
+  T.nieuweRovers = () => ({ overvalOp: null, aanval: null, geweest: 0 });
 
   // Alleen in het gehucht zelf: een dorp dat vanaf niets begon (D.begin, js/begin.js), of een wereld met akkers. Een
   // proefkaart (?kaart=proef) heeft geen rovers.
@@ -382,6 +383,12 @@
     const K = D.hol != null ? kampNr(D.wereld, D.hol) : null;
     return K ? (K.verslagen ? 'verslagen' : 'staat') : null;
   };
+  // Het hol van dorp D als gebied van een scenario (het gebied 'hol', js/scenario.js): een kring om het vuur tot de
+  // palissade (of de open plek van een kamp zonder), of null als het geen hol heeft.
+  T.holGebied = function (D) {
+    const K = D.hol != null ? kampNr(D.wereld, D.hol) : null;
+    return K ? { x: K.x, y: K.y, r: K.palissade ? IN().palissade.straal : T.EILAND_INSTELLINGEN.kampen.open } : null;
+  };
 
   // De bode (js/bode.js): het kamp waar de rovers vandaan komen die hem onderweg kunnen aanhouden, het dichtste met mannen
   // thuis, of null: dan zijn er geen rovers onderweg. Valt er buiten beeld een (T.roverValtOnderweg), dan is hij uit zijn
@@ -637,6 +644,9 @@
   function eind(D) {
     const A = D.rovers.aanval;
     D.rovers.aanval = null;
+    // Een overval die op je land kwam, telt (D.rovers.geweest; de voorwaarde `overval`, js/scenario.js); een die niet kwam
+    // (geen kamp met mannen thuis, niets te roven), niet.
+    if (A && A.soort === 'overval' && A.rovers) D.rovers.geweest = (D.rovers.geweest || 0) + 1;
     const K = A && A.leden ? kampNr(D.wereld, A.kamp) : null;
     if (!K) return;
     const terug = D.kalender.dag + (A.reis || 0) / 24;

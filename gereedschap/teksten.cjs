@@ -179,16 +179,36 @@ const GEGEVENS = [
   },
 ];
 
+// Een level (levels/<naam>.js, T.LEVELS.<naam>; vraag 187, 2c) is ook gegevens: de speler ziet zijn inleiding (in de
+// eerste brief), en in zijn triggers de berichten, de doelen en de kop en de tekst van het eind.
+const zinnenVanLevel = (L) => [
+  L.inleiding,
+  ...(L.triggers || []).flatMap((t) =>
+    [].concat(t.dan || []).flatMap((d) => [
+      typeof d.bericht === 'string' ? d.bericht : d.bericht && d.bericht.tekst,
+      d.doel && d.doel.tekst,
+      d.einde && d.einde.kop,
+      d.einde && d.einde.tekst,
+    ]),
+  ),
+];
+function gegevensVan(bestand) {
+  const g = GEGEVENS.find((x) => x.bestand === bestand);
+  if (g) return g;
+  const level = /^levels\/(\w+)\.js$/.exec(bestand);
+  return level ? { bestand, blok: `T.LEVELS.${level[1]}`, zinnen: zinnenVanLevel, schrijver: () => [] } : null;
+}
+
 // De zinnen van de gegevens in een bestand: { zinnen, schrijver }, elk een lijst teksten (leeg voor een ander bestand).
 function gegevensIn(bestand) {
-  const g = GEGEVENS.find((x) => x.bestand === bestand);
+  const g = gegevensVan(bestand);
   if (!g) return { zinnen: [], schrijver: [] };
   if (!globalThis.Spel || !globalThis.Spel.bronBlok) require('./bronblok.js');
   const b = globalThis.Spel.bronBlok(fs.readFileSync(path.join(WORTEL, bestand), 'utf8'), g.blok);
   if (!b) throw new Error(`${bestand}: geen blok ${g.blok}`);
-  const T = {};
+  const T = { LEVELS: {} };
   new Function('T', `'use strict';\n${b.blok}`)(T);
-  const tabel = T[g.blok.slice(2)];
+  const tabel = g.blok.slice(2).split('.').reduce((o, k) => o[k], T);
   const tekst = (lijst) => lijst.filter((z) => typeof z === 'string' && z.trim() !== '');
   return { zinnen: tekst(g.zinnen(tabel)), schrijver: tekst(g.schrijver(tabel)) };
 }

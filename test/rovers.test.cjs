@@ -228,6 +228,7 @@ test('heeft geen kamp mannen thuis, dan komt er deze keer niemand, en loopt het 
   assert.equal(S.dorp.rovers.aanval, null);
   assert.ok(op > 41, 'de volgende staat al vast');
   assert.ok(!S.wereld.wezens.some((e) => e.rover));
+  assert.equal(S.dorp.rovers.geweest, 0, 'een overval die niet kwam, telt niet (de voorwaarde overval)');
 });
 
 test('rovers die de akker halen, roven er graan en gaan weer weg', () => {
@@ -276,6 +277,7 @@ test('na een overval reizen ze terug, en zijn ze na hun reis thuis met de buit; 
   for (const e of A.rovers) zet(e, A.ingang.x, A.ingang.y);
   T.werkRoversBij(S, S.dorp);
   assert.equal(S.dorp.rovers.aanval, null);
+  assert.equal(S.dorp.rovers.geweest, 1, 'een overval die kwam, telt (de voorwaarde overval)');
   const terug = 5 + (17 + T.ROVERS_INSTELLINGEN.roofUren + 0.1 + A.reis) / 24;
   assert.ok(K.bende.every((l) => l.opPad && Math.abs(l.opPad.terug - terug) < 1e-6), 'ze zijn onderweg naar huis');
   S.kalender.dag = terug - 0.01;
@@ -380,6 +382,7 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij', () => {
   assert.ok(S.dorp.rovers.aanval, 'nog één rover');
   T.raak(S, S.dorp, A.rovers[1], 100, mannen[0]);
   assert.equal(S.dorp.rovers.aanval, null);
+  assert.equal(S.dorp.rovers.geweest, 1, 'ook een overval die je versloeg, telt');
   assert.ok(berichten.includes('The robbers are defeated.'), berichten.join(' | '));
   for (const e of mannen) assert.notEqual(e.kant, 'speler');
   const K = S.wereld.kampen.find((k) => k.nr === A.kamp);

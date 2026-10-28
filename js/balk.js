@@ -636,6 +636,16 @@
       stip(r.x + r.b / 2, r.y + r.h / 2, 2, '#f3e3b8');
     }
     if (S.dorp.aanvoerder) stip(S.dorp.aanvoerder.x, S.dorp.aanvoerder.y, 3, '#c0392b');
+    // Waar een open doel naar wijst (T.doelPlekken, js/scenario.js; werklijst K, 2c, D2): een gouden ring, ook waar je het
+    // land nog niet kent.
+    c.strokeStyle = '#e8c25a';
+    c.lineWidth = 1.5;
+    for (const q of T.doelPlekken(S)) {
+      const p = T.minikaartPunt(q.x, q.y, B, veld);
+      c.beginPath();
+      c.arc(p.x, p.y, 5, 0, Math.PI * 2);
+      c.stroke();
+    }
     const nu = performance.now();
     mini.pings = mini.pings.filter((q) => q.tot > nu);
     // Een ring om de plek, die klein wordt als hij aangaat, zodat je oog erheen gaat.

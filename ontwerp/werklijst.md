@@ -34,9 +34,15 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **2c, de tenten tegen de palissade bekijken** (27 okt; bij K, "2c", en `beeld.md`, "Het rovershol"): c3 en c4 zijn af,
-  en het hol staat in het spel (de palissade per paal, de aankleding, de ring op 9 tegels, de tenten tegen de palissade:
-  "B; mag beetje random"). Daarna stap 4: het level en hoofdstuk 2.
+- **2c, hoofdstuk 2 is gebouwd** (28 okt; bij K, "2c", stap 4): het rovershol speelt als hoofdstuk 2 in Oldland. Drie
+  vragen: (1) **het vaandel** (D2) in woorden: een staak met een lange smalle wimpel in jouw kleur, twee tegels hoog,
+  die wappert op de plek waar een open doel naar wijst, ook boven land dat je nog niet kent, en weg is als het doel af
+  is; dezelfde tekening later op het keuzescherm van de campagne (`scenario.md`, 6). Eerst de woorden, dan één
+  proefplaat. (2) Het eerste jaar heeft maar **één overval vóór Sint-Maarten** (vanaf dag 60; de volgende valt erna),
+  en valt er dan niets te roven, dan komt hij niet, en wijst het doel nergens heen: zo laten (je zoekt het hol zelf),
+  of het spoor ook op een vaste dag (bijvoorbeeld dag 150) als er nog geen overval was? (3) Mag de speeltest
+  hoofdstuk 2 spelen (`--hoofdstuk hol`)? De kolonist valt het hol niet aan, dus hij toetst het verliezen en de
+  overvallen, niet het winnen.
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
@@ -87,8 +93,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    met een rand (1, "De rand"), en *Campaign* op het titelscherm (6, "Stap 2b"): het demojaar is hoofdstuk 1, op eiland 5
    bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
    Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
-   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan is besloten (bij K, "2c"); c3 en c4
-   zijn af op die branch, stap 3 (het hol) wacht op Marcel.
+   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan is besloten (bij K, "2c"); c3, c4,
+   het hol en het level (stap 1 tot 4) zijn af op die branch; nog stap 5, nalopen, en het vaandel (wacht op Marcel).
    Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
@@ -997,6 +1003,9 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).
 4. **Het level** `levels/rovershol.js` en hoofdstuk 2 in `levels/campagne.js` (Oldland, 7 bij 7), met de woorden die nog
    missen: `kamp` (verslagen) bij *als*, de brief van de heer als inleiding, en een doel dat naar een plek wijst (D2).
+   **Af** (28 okt; Marcel: "Goed, door met stap 4"; `scenario.md`, 2 en 6, en `code.md` bij `js/scenario.js`): de
+   voorwaarden `hol` en `overval`, het gebied `hol`, een doel met een gebied (een gouden ring op de minikaart), en de
+   `inleiding` in de eerste brief. Nog niet: het vaandel op de plek (eerst in woorden, wacht op Marcel).
 5. **Nalopen** in de browser, en de speeltest.
 
 ## L. De heuvels op het hele eiland (vraag 174, 17 okt)

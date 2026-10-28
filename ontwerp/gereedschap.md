@@ -122,7 +122,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden. Sinds ronde 2 van het snoeien (stap 6) zonder
   huizen of akkers: die bouwt de speler.
 - `npm run teksten` leest elke `T.t('…')` uit `js/`, en de zinnen uit de gegevens die een bewerker terugschrijft (de
-  gesprekken: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
+  gesprekken: `GEGEVENS` in `gereedschap/teksten.cjs`; de titels van de campagne; en de zinnen van elk level in `levels/`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
   in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die
   erbij komt of verandert; `test/taal.test.cjs` faalt anders. **De vertaaltool** is `gereedschap/vertalen.html` (voor de
   community, dus in het Engels, en ook zonder server: wat je vertaalt, bewaart de browser, en het spel in dezelfde browser

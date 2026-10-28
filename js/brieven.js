@@ -26,8 +26,10 @@
 
   // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
   // van zijn wildernis, met wat er op de kar ligt, en zegt wanneer hij komt halen wat hem toekomt (T.heerLaatMetRust).
+  // Een level zet er zijn eigen zin bij, vóór de wetten (`inleiding`, S.scenario; werklijst K, 2c: de rovers bij Oldland).
   function benoemingInDeWildernis(S) {
     const I = T.BEGIN_INSTELLINGEN;
+    const inleiding = S.scenario && S.scenario.inleiding;
     return {
       wanneer: vandaag(S),
       aan: T.t('To Our new commander,'),
@@ -38,6 +40,7 @@
         `<p>${I.heerVrij > 0
           ? T.t('This year We ask nothing of you. We are generous. Next year, at Martinmas, We shall come in person to collect what is Ours.')
           : T.t('At Martinmas We shall come in person to collect what is Ours. In good time We shall write what that is. We are generous: you have until then.')}</p>` +
+        (inleiding ? `<p>${veilig(T.tGegevens(inleiding))}</p>` : '') +
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     };
@@ -78,6 +81,7 @@
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
         `<p>${T.t('We expect Our hamlet to become a village, with {eis}. A village brings Us more.', { eis: T.tredeEisTekst('dorp') })}</p>` +
         // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W.
+        (inleiding ? `<p>${veilig(T.tGegevens(inleiding))}</p>` : '') +
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
