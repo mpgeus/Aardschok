@@ -50,6 +50,13 @@ lijf zonder de speer gemeten, naar 74 pixels tot de helm), de kleur per stof gel
 anker op de voeten, de richtingen in de volgorde van het spel (Z, ZW, W, NW, N, NO, O, ZO; niet gespiegeld: een richting
 die er nog niet is, staat voorlopig stil), en via `naar-spel.cjs --alleen speerman` naar `beelden/`.
 
+**Sinds 26 okt komt de speerman in het spel uit het 3D-model** (vraag 190; Marcel: "zet de speerman uit het 3D-model echt
+in het spel, in plaats van die van de generator, met renders op volle kwaliteit"): `beelden/figuren/speerman3d-*.png`,
+met een tweede uithaal (de stoot van boven), geraakt worden en sterven (`ontwerp/gereedschap.md`, bij `spelvel.py`). De
+vellen van de generator (`speerman-*.png`) staan er nog, maar de beschrijving wijst er niet meer naar. Let op:
+`naar-spel.cjs --alleen speerman` schrijft de ingang van de speerman opnieuw en zet hem terug op de generator; daarna
+`node gereedschap/blender/spelvel-zet.cjs gereedschap/pixelart/uit/blender/vol/vellen` om hem weer op het 3D-model te zetten.
+
 ## De eisen voor de poppetjes
 
 Marcel, 21 okt, bij het eerste vel van de generator (de soldaat van de heer zonder wapens: staan in acht richtingen,

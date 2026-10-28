@@ -203,7 +203,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   de vellen uit `gereedschap/pixelart/bron/soldaten/` uit en verkleint ze (een proefplaat `uit/generator/speerman.png`, de
   bewegingen als bewegend beeld, en de vellen in `uit/generator/animaties/`); daarna
   `node gereedschap/pixelart/naar-spel.cjs --alleen speerman`.
-- **Blender als basis** (vraag 190; `beeld.md`, "Blender als basis?"): `gereedschap/blender/speerman.py` bouwt de speerman
+- **Blender als basis** (vraag 190; `beeld.md`, "Blender als basis?"; de werkwijze en de lessen in de skill `modelleren`,
+  `.claude/skills/`, met twaalf algemene Blender-skills ernaast, `LEESMIJ-blender-skills.md`): `gereedschap/blender/speerman.py` bouwt de speerman
   als 3D-model met een skelet en rendert hem (Blender 5.2, zonder venster):
   `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P gereedschap/blender/speerman.py -- <Z|staan|lopen|alles> [uitmap] [toon|echt]`
   (toon: EEVEE met het licht in banden; echt: Cycles, op de videokaart met CUDA, want OptiX werkt niet op de 1080 Ti).
@@ -220,16 +221,24 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   en het kleurverschil per pixel per richting en gemiddeld), en `python gereedschap/blender/palet.py <map> [nog een map]`
   (per deel de mediaan in Lab van het vel en van elk model, op Z; daarna per kleurgroep over alle richtingen, maar die
   mengt delen). Met halve maat en 16 monsters rendert alles in een minuut; vergelijk alleen renders van dezelfde maat.
+  De kruisboogschutter: `eigen.py -- <map> Z ZW W NW N NO O ZO kruisboog [staan] [draag=vooruit|schuin|schouder]`
+  (`kruisboog_hd.py`: het model van de speerman met een jak en een smalle tabbaard, een kalot, een snor, de koker en de
+  kruisboog in beide handen; zonder `staan` het lopen, met de kruisboog over de schouder; `draag=` kiest een andere
+  draagwijze uit `DRAAGWIJZEN`).
   Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
   in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
   onder de riem, hoe vaak het vel daar geel of blauw is, per richting.
-  In het spel: `python gereedschap/blender/spelvel.py <map> <uitmap> [procent]` maakt van staan en lopen uit `eigen.py`
-  (zonder `staan`: ook het lopen) de vellen `speerman3d-staan.png` en `-lopen.png`, in de cellen en met het anker van de
-  speerman van de generator (`beelden/beschrijving.json`), één schaal en het anker op de voeten. De vellen van de
-  generator blijven: in de browser, vóór er een speerman op de kaart staat (op het titelscherm),
-  `Spel.BEELDEN.figuren.speerman.houdingen.lopen.bestand = '../../gereedschap/pixelart/uit/blender/spel/speerman3d-lopen.png'`
-  (en zo `staan`), dan een demo (`Spel.nieuwSpel(undefined, 'demojaar')`): zijn wacht heeft twee speermannen. Inzoomen
-  tot 2 kan pas in een venster van 1800 bij 1080 (de zoom gaat niet verder dan het venster toelaat, `zoomVenster`).
+  In het spel (sinds 26 okt staat de speerman uit het 3D-model in het spel, in plaats van die van de generator): de
+  houdingen op volle kwaliteit met `gereedschap/pixelart/uit/blender/vol/keten.sh lopen steek steek2 geraakt sterven`
+  (100 procent, 48 monsters, per houding een map; zo'n drie uur), dan `python gereedschap/blender/spelvel.py <map>
+  <uitmap> 100` voor staan en lopen (die meet de schaal) en `... <map> <uitmap> 100 schaal=<die schaal>` voor de andere
+  mappen: de vellen `speerman3d-<houding>.png` in de cellen en met het anker van de speerman (`beelden/beschrijving.json`;
+  geraakt en sterven met een eigen cel, `EIGEN`), één schaal en het anker op de voeten, en `speerman3d.json` ernaast. Dan
+  `node gereedschap/blender/spelvel-zet.cjs <uitmap>`: de vellen naar `beelden/figuren` en hun gegevens in de
+  beschrijving. Bekijken in de browser: een demo (`Spel.nieuwSpel(undefined, Spel.demoLevel())`), de camera op de wacht
+  met `Spel.kijkNaar` op `Spel.naarSchermOp(Spel.S.wereld, x, y)` (niet op de tegel zelf), en `Spel.debug.schermafdruk`.
+  Een wezen buiten je land (`Spel.isZichtbaar`) tekent het spel niet. Inzoomen tot 2 kan pas in een venster van 1800 bij
+  1080 (de zoom gaat niet verder dan het venster toelaat, `zoomVenster`).
 
 
 ## Testen in de browser

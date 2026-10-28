@@ -564,7 +564,7 @@
      ],
      "houdingen": {
       "staan": {
-       "bestand": "speerman-staan.png",
+       "bestand": "speerman3d-staan.png",
        "beelden": 1,
        "fps": 4,
        "herhaal": true,
@@ -578,7 +578,7 @@
        ]
       },
       "lopen": {
-       "bestand": "speerman-lopen.png",
+       "bestand": "speerman3d-lopen.png",
        "beelden": 8,
        "fps": 10,
        "herhaal": true,
@@ -594,7 +594,7 @@
        ]
       },
       "aanval": {
-       "bestand": "speerman-aanval.png",
+       "bestand": "speerman3d-aanval.png",
        "beelden": 8,
        "fps": 10,
        "herhaal": false,
@@ -608,17 +608,45 @@
        ]
       },
       "sterven": {
-       "bestand": "speerman-sterven.png",
+       "bestand": "speerman3d-sterven.png",
        "beelden": 7,
        "fps": 8,
        "herhaal": false,
        "cel": [
-        125,
-        107
+        150,
+        124
        ],
        "anker": [
-        59,
-        98
+        75,
+        84
+       ]
+      },
+      "aanval2": {
+       "bestand": "speerman3d-aanval2.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": false,
+       "cel": [
+        145,
+        142
+       ],
+       "anker": [
+        71,
+        120
+       ]
+      },
+      "geraakt": {
+       "bestand": "speerman3d-geraakt.png",
+       "beelden": 3,
+       "fps": 12,
+       "herhaal": false,
+       "cel": [
+        89,
+        110
+       ],
+       "anker": [
+        44,
+        105
        ]
       }
      }

@@ -1735,6 +1735,9 @@ dan alles van SDXL. img2img met Pixel Art Base eroverheen (`plaat-img2img-speerm
 
 ## Blender als basis? (24 okt 2026, vraag 190)
 
+De lessen hieronder staan kort in de skill `modelleren` (`.claude/skills/modelleren/SKILL.md`, 27 okt), met wat je
+nakijkt voor Marcel een plaat ziet. Leer je iets nieuws, zet het hier en kort daar.
+
 Marcel, 24 okt: "onderzoeken of we hogere kwaliteit art krijgen door als basis een 3d model te gebruiken die jij in
 blender maakt". Een onderzoek, nog zonder render: Blender staat niet op deze pc, en een proefplaat komt pas na een ja
 (hierboven, "Eerst goedkeuring, dan renderen").
@@ -2513,6 +2516,208 @@ klopte niet: de wolven stonden waar geen route naartoe was, `opmerkingen.md`). D
 wacht; de mannen kozen ze zelf. Onze speerman stak drie keer, de rovers vielen; geraakt werd hij deze keer niet.
 `uit/blender/spel/gevecht-in-het-spel.mp4` (en `-traag`, half zo snel). Let op bij een proef in de browser: zet de vellen
 vóór er een speerman op de kaart staat, na het herladen van de pagina; een figuur die al geladen is, laadt geen nieuwe paden.
+
+**Sterven (26 okt).** Marcel: "Ik wil bij het sterven dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen
+op zn gezicht". Het spel speelt `sterven` eenmalig af en houdt het laatste beeld vast (`js/sprites.js`); de generator heeft
+7 beelden, 8 per seconde. Voor het model in 7 beelden, vanuit staan: (0) de klap, wat achterover, de speer glijdt uit de
+hand; (1) de knieën knikken; (2) op zijn knieën, rechtop, het hoofd hangt, de speer valt naast hem; (3) en (4) het
+bovenlijf valt vanuit de heupen voorover; (5) het gezicht op de grond, de knieën nog gebogen; (6) zo blijft hij liggen.
+Gebouwd als `sterven` in `bakken.py` (de getallen in `STERVEN`; `eigen.py ... sterven`). Een fout onderweg: het bekken
+draaide niet mee, omdat ik de stand van het bot las vóór Blender de draai had bijgewerkt (`pb.matrix` zette hem terug);
+nu eerst schuiven, dan draaien. De speer valt opzij, naar zijn rechterkant: naar achteren leek hij van voren rechtop te
+staan.
+Marcel: "Hij moet een beetje plat komen te liggen nu is het meer een propje", en "er lijken 'onderdelen' van het poppetje
+te ontbreken". Het laatste: het beeld was zo smal als bij staan, en wat languit lag of opzij viel, viel eruit; nu breder
+(zoals het lopen). Het eerste: van de knieën valt hij nu languit (beeld 5 en 6): het bekken op de grond, het hoofd 58 cm
+ervoor, de benen gestrekt achter hem. Met de IK van de benen bleven die onder hem gevouwen; liggend volgen ze nu gewoon het
+bekken (`STERVEN['plat']`). En het beeld was onderaan te kort: languit ligt hij in Z naar de camera toe, en onder de
+voeten was maar 90 pixels; bij sterven is het beeld nu 600 pixels hoger (de bovenrand, de maat en het anker blijven), en in
+`spelvel.py` heeft sterven een eigen, ruimere cel (150 bij 124, het anker op 75, 84). Op spelmaat naast de generator:
+`uit/blender/spel/sterven-generator-model.gif`. Hij ligt compacter dan de generator, die zijn armen wijd uitstrekt.
+Als filmpje (de GIF speelde bij Marcel niet af): `sterven-generator-model.mp4`. Marcel: "Bij NO vallen benen iets wijder
+denk ik", "Maar verder oké": liggend spreidt hij nu elk been 14 graden (`STERVEN['spreid']`).
+De uitval van de steek (leunen vanuit de heupen, `STEEK_HEUP`, een wijdere stap) gaf op spelmaat weinig verschil; nog te
+doen.
+
+**Een tweede aanval, voor de afwisseling (26 okt, voorstel in woorden).** Marcel: "En we hebben een 2e aanvals animatie
+nodig voor de afwisseling". Voorstel: een stoot van boven, 8 beelden zoals de eerste. (0) uit de wacht; (1) en (2) hij
+heft de speer tot boven zijn rechterschouder, de punt omlaag naar voren, het gewicht naar achteren; (3) en (4) hij
+stoot hard vooruit en omlaag, een korte stap, het lijf erachteraan; (5) de punt het verst, laag; (6) en (7) terug in de
+wacht. In het spel: bij elke uithaal om en om de eerste en de tweede (`js/sprites.js`, bij de eenmalige houdingen; een
+teller per figuur, geen toeval, zodat het op elke computer hetzelfde is).
+Marcel: "Ja doen we zo bouw die maar". Gebouwd: `WACHT_BOVEN` en `STEEK_BOVEN` in `bakken.py` (`steek` neemt nu een rij),
+`eigen.py ... steek2`, en in `spelvel.py` `aanval2` in de cel van de eerste aanval; de polsen wringen 30 en 11 graden. In
+het spel om en om (`js/sprites.js`, een teller `uithalen` in de beeldstand; met een toets in `test/vellen.test.cjs`). Een
+gevecht in de demo (die start nu met `Spel.nieuwSpel(undefined, Spel.demoLevel())`, op de vaste kaart van het level): zes
+uithalen, om en om, en twee keer geraakt. `uit/blender/spel/twee-aanvallen.mp4` en `gevecht-twee-aanvallen-traag.mp4`.
+Marcel: "Ja, de stoot van boven is goed zo."
+
+**Voorstel: de kruisboogschutter (26 okt, in woorden).** Marcel: "ik wil een kruisboog schutter in het spel", en "kunnen wij
+dan alvast kijken naar een pikeman of crossbowman?". In het spel heeft hij kruisboog en harnas (het harnas nu van huiden,
+van de jager), schiet hij tot 8 tegels waar hij ziet, maar niet met een vijand naast zich, en komt er een mee met de wacht
+van de demo. Hetzelfde lijf en skelet als de speerman, zodat staan, lopen, geraakt en sterven meekomen; wat anders is:
+- *Het harnas*: een leren jak van huiden, bruin met stiksels en een opstaande kraag, tot halverwege de dij; daaroverheen
+  een smalle tabbaard in het blauw en geel van het dorp, zodat hij bij de wacht hoort.
+- *De helm*: een ronde ijzeren kalot zonder rand, met een leren kap eronder: van verre anders dan de speerman.
+- *De kruisboog*: een houten lade met dwars voorop een boog, de pees, en voorop een stijgbeugel om hem te spannen. Aan de
+  riem rechts een koker met bouten, links de spanhaak.
+- *Staan en lopen*: de kruisboog schuin voor de borst in beide handen, de boog omlaag.
+- *Schieten* (de aanval, 6 beelden): (0) uit de wacht; (1) en (2) aanleggen tegen de schouder en mikken; (3) het schot,
+  de pees schiet naar voren; (4) en (5) de terugslag. (De bout zelf tekent het spel, `js/gevecht.js`.)
+- *Herladen*, een eigen animatie (Marcel: "kruisboogschutter moet een animatie hebben waarin hij de kruisboog herlaadt"),
+  10 beelden, zo'n anderhalve seconde, meteen na elk schot: (0) de kruisboog omlaag, de stijgbeugel op de grond; (1) een
+  voet erin; (2) en (3) hij buigt, de haak aan de riem in de pees; (4) tot (6) hij komt omhoog en trekt de pees mee tot
+  de noot; (7) een bout uit de koker; (8) op de lade gelegd; (9) terug in de wacht. In het spel schiet een kruisboog om
+  de vier seconden (`kosten` 4, `js/soldaten.js`); het herladen speelt het spel na het schot af (in `js/sprites.js`
+  een eenmalige houding `herladen` die volgt op `aanval`, als de figuur hem heeft).
+- *Het gezicht*: een andere man dan de speerman: een snor en een korte stoppelbaard.
+
+**Voorstel: de aankleding naar Marcels platen, als losse 3D-delen (26 okt, in woorden).** Marcel stuurde twee platen
+op magenta met de uitrusting in onderdelen, in acht à tien richtingen (de tweede: "dit heeft alle onderdelen"), en:
+"ja ik wil dat wij onze aankleding op basis van dit plaatje maken", "jij moet hier 3d varianten van maken, zodat we deze
+op ons soldaatje kunnen plakken". Dus per onderdeel een eigen 3D-deel in code, dat op het lijf past (zoals de delen van
+`speerman_hd.py` nu), en dat je los kunt aan- en uitzetten. Wat er anders wordt dan bij de speerman nu:
+- *Helm*: de ketelhoed met een koepel van vier delen (een kruis van ribben met klinknagels, een nagel bovenop in plaats
+  van de punt), een band met klinknagels waar de koepel op de rand staat, een brede, vlakke rand, en een leren kinriem.
+  Donker staal met bruine vlekken; binnenin een leren voering.
+- *Maliënkraag*: een staande kraag van maliën tot onder de kin, met een leren rand bovenaan en een gespje achter, die
+  over de schouders uitwaaiert. De maliënkap over het hoofd gaat eruit.
+- *Wapenrok*: gevierendeeld, op de borst en op de rug: boven en onder de borst geel en blauw om en om, links en rechts
+  ook; de rok onder de riem in banen, om en om geel en blauw, met een split voor; koperen klinknagels langs de naden, de
+  zoom en de armsgaten; de armsgaten met een donkere omgeslagen rand (in plaats van de gouden zoom). Mosterdgeel en
+  grijsblauw (leisteen), minder fel dan nu.
+- *Mouwen*: gewatteerd bruin leer, in de lengte doorgestikt in banen, met een maliënrand aan de schouder en een manchet
+  (in plaats van het roodbruine wambuis met ruiten).
+- *Handschoenen*: bruin leer, zonder de brede kap en de armstukken van nu.
+- *Broek*: een wijde broek van grijsgroene wol tot onder de knie, met een riem (in plaats van de blauwe hozen).
+- *Laarzen*: bruin leer met een omgeslagen rand en een riempje, zoals nu, wat lager.
+- *Riem*: bruin leer met een koperen gesp en twee afhangende riemeinden voor, opzij een tasje.
+De platen staan in `EXTRA/` ("Middeleeuwse krijgeruitrusting spritesheet.png" heeft alle onderdelen). Gemeten op die
+plaat (donker, midden, licht; zonder het magenta en de zwarte omtrek): het geel van de wapenrok #ce8514, #eea821, #fac43e;
+het blauw #1e2e39, #405769, #6a8498; de mouwen #491f0d, #7f401c, #bd7940; de broek #3c2b1e, #705e47, #b2a585; de laarzen
+#441e0c, #703717, #b67135; de helm #36261c, #655244, #c8bda7; de maliën #2e221f, #584b4a, #bab7ae.
+
+**De proefplaat van de aankleding (26 okt).** Marcel: "Het voorstel is goed. Bouw de delen op de soldaat van Human
+Generator en maak een proefplaat." De delen staan in `gereedschap/blender/uitrusting.py`, elk een eigen bouwer zoals die
+van `speerman_hd.py` (lijf, skelet met de botten van MPFB, materialen): `ketelhoed`, `maliekraag`, de wapenrok
+(`speerman_hd.wapenrok` met `mat_kwartier`), `riem`, `mouwranden` (maliën aan de schouder, een manchet aan de pols),
+`handschoenen`; mouwen, broek en laarzen zijn de kleren van Human Generator met de materialen van de plaat
+(`mat_gewatteerd`, grijsbeige wol, bruin leer). `hg_soldaat.py` zet ze op zijn soldaat. Plaat:
+`uit/blender/hg/proef8-plaat.png`. Wat de proeven leerden: de kraag van de speerman is een cape die de bovenste
+vierendelen bedekte, dus een eigen, kortere kraag (`KRAAG`); dichte, donkere stiksels maakten van de mouwen een net, dus
+wijder en zachter met bollere kussens. Nog anders dan de plaat: de helm is wat donkerder en warmer, de stiksels van de
+mouwen lezen in HD nog als ruiten, en de speer staat naast de open hand.
+Marcel: "tja... het ziet er niet fantastisch uit..", "ik had er wat meer van verwacht, zeker omdat je nu een voorbeeld hebt
+waar je van af kunt kijken". Wat Claude zag: het lijf maakt er een ton van (de wapenrok valt recht van de brede schouders,
+als een bord), de mouwen zijn glad met lijnen erop in plaats van bolle kussens, het licht is egaal (plastic naast een
+geschilderde plaat), en een echt gezicht botst met de gestileerde plaat. Marcel koos daarop "3D, dan overschilderen", met
+"gebruik het nieuwe referentie sheet met alle losse onderdelen". `schilder.cjs hg`: de render van de soldaat (minder buik,
+`hg_soldaat.py ... stuur` voor de lijnen en de diepte), de plaat met alle onderdelen als voorbeeld voor de stijl
+(IP-Adapter 0,8), FaeTastic zonder pixel-LoRA op 0,35, 0,5 en 0,65 (`uit/blender/hg/sdxl/plaat.png`). Op 0,35 en 0,5
+wordt het wat meer geschilderd en valer, op 0,65 een geel masker als gezicht en magenta spikkels; de vorm blijft die van
+de render (de wapenrok als een plat bord), en op spelmaat leest geen versie zo goed als de speerman die nu in het spel
+staat. Net als op 24 okt: de schilderbeurt redt een zwakke basis niet.
+Marcel: "geen van alles lijkt er op", en hij koos **de plaat op 3D projecteren**: de verf van de plaat zelf op onze
+delen, per richting het getekende onderdeel van die kant (zoals de proef met vel 01 van 24 okt; toen mengde het bakken
+van meer richtingen tot vlekken, omdat de generator de wapenrok in elke richting anders tekende; Marcels plaat is
+consequent en heeft de onderdelen los). Eerste proef, alleen de wapenrok van voren: `hg_soldaat.py ... masker` rendert
+onze wapenrok alleen, wit, vanuit Z, met de rij van de riem in beeld; `plaatverf.py` buigt de wapenrok van voren van de
+plaat per beeldrij naar dat masker (de bovenrand, de riem en de onderrand op elkaar, binnen een rij van rand tot rand;
+de riem op de plaat is de rij met het meeste bruin); `hg_soldaat.py ... verf` legt hem met een UV-kaart uit die camera
+onbelicht op de wapenrok, en haalt onze riem weg (die zit in de verf). Plaat: `uit/blender/hg/verf-plaat.png`. Van voren
+is het de tekening; gedraaid (ZW, W) loopt de verf mee en blijven de vierendelen, de nagels en de riem staan; op
+spelmaat leest hij scherper dan alles van vandaag. Van achteren nog de voorkant (de tekening van de rug ontbreekt nog),
+en aan de hals en de zoom wat magenta en strepen. Marcel daarop: **"nah, dit gaat hem niet worden zo"**: de weg van
+Human Generator met onze delen, overschilderen en projecteren laten we voorlopig rusten. Op 27 okt koos Marcel ons
+Blender-model (hieronder, na het soldaatje uit code), en ging de code eruit: `hg_soldaat.py`, `uitrusting.py`,
+`plaatverf.py`, `plaatbak.py`, `plaatsoldaat.py`, heel `schilder.cjs` (ook het overschilderen van 24 okt) en de
+stuurbeelden in `speerman_hd.py`. Git bewaart ze: het laatst in 4e2094c9.
+
+**De proef met uitvouwen en bakken met de plaat (26 okt).** Marcel: "Ik wil graag nog een proef doen met uv wrapping op een
+3d model uit code", "op basis van de platen in de extra map", op ons eigen model. `plaatbak.py`, met de stappen van het
+bakken van 24 okt (`bakken.py`): `eigen.py -- <map> Z plaatmasker` rendert de wapenrok van de speerman wit uit vijf
+richtingen (voor, schuin voor, links, rug, rechts: de wapenrokken 0 tot 4 op de plaat); `plaatverf.py <map> alle` buigt
+per richting de tekening naar zijn masker; `eigen.py -- <map> ... plaat` vouwt het lijf en de rok van de wapenrok uit,
+bakt de vijf tekeningen erin (per plek gewogen naar de hoek met de camera, nul waar iets ervoor zit; elk een textuur van
+2048), en rendert dan zoals altijd (de rok wordt bij het lopen gewoon stof: zijn UV-kaart en textuur gaan mee). Plaat:
+`uit/blender/plaatbak/plaat-staan.png`. De verf zit nu op de mesh, dus elke richting en elk beeld draagt dezelfde
+wapenrok. Maar het wordt een dambord in plaats van vier heldere vierendelen, ook als per plek de richting die hem het best
+ziet bijna alleen telt (`MACHT` 12): de tekeningen zijn per rij op ons silhouet gelegd, en de vierendelen, de armsgaten en
+de riem liggen op de tekeningen van verschillende kanten niet op dezelfde plek van ons model. Ook dubbel: de riem van de
+plaat in de verf en onze eigen riem erover; en onze mouwen bedekken veel.
+Marcel daarop: "Ik bedoelde meer op een model wat jij uit code maakte", en hij koos een nieuw soldaatje helemaal uit
+code. `gereedschap/blender/plaatsoldaat.py`: geen mensenlijf van MakeHuman of Human Generator, eenvoudige vormen, en de
+wapenrok uit de tekeningen zelf: per hoogte de breedte uit de wapenrok van voren en de diepte uit die van opzij (een
+ellips per ring, de riem op elkaar), en de textuur rechtstreeks uit de vijf tekeningen (voor, schuin voor, links, rug,
+rechts): per plek rond het lijf (de hoek en de hoogte, ook de UV-kaart) de kanten die hem zien, gewogen naar de hoek, op
+de plek waar die kant hem tekent; onbelicht. Plaat: `uit/blender/plaatsoldaat/proef1-plaat.png`. Nu is de wapenrok uit
+elke richting de wapenrok van de plaat, met de vierendelen, de nagels, de riem en de banen, zonder dambord: omdat de vorm
+uit de tekeningen komt, valt elke tekening op zijn plek. Het lijf eromheen is nog grof (worsten als armen, een bol als
+hoofd, een eenvoudige helm).
+Marcel: "Alles". Nu komt elk onderdeel zo uit de plaat (`ONDERDELEN` in `plaatsoldaat.py`: per onderdeel de rij op de
+plaat en welke tekening welke kant laat zien; een zijkant gespiegeld voor de andere kant, een voorkant voor de rug waar de
+rug ontbreekt): de helm (van voren en opzij, zonder de kinriemen die eronder hangen), de kraag (voor, opzij, achter met
+het gespje), de mouwen (de twee rechte: voor en opzij), de handschoenen (twee vuisten), en de benen met broek en laars
+(voor en opzij: het midden van de zijtekening geeft de laars zijn neus). Alles op één schaal (de plaat tekent zijn
+onderdelen even groot: de wapenrok van voren, 256 pixels, is 68 cm); de man wordt zo 1,42 m tot de top van de helm. Waar
+de omtrek met het magenta mengt (paarsig), wordt hij donker, zoals de omtrek zelf. Het hoofd is nog eenvoudig (een bol,
+een baard, een neus): de plaat heeft geen hoofd. Plaat: `uit/blender/plaatsoldaat/proef3-plaat.png`. Alleen staan; de
+delen hangen nog niet aan een skelet.
+Marcel (27 okt): "Hij heeft 1 voet en is wat mager". De voet: de benen stonden naar de zoom van de wapenrok gemeten, en de
+onderste rij van de zoom is de smalle punt (1,7 cm), dus stonden ze 1,4 cm uit elkaar, op elkaar. Nu naar hun eigen
+breedte, met een handbreed ertussen (28 cm van midden tot midden). Mager: per onderdeel hoeveel breder en dieper dan
+getekend (`DIK`: de wapenrok en de mouwen 1,3, de benen en de kraag 1,25, de handen 1,2, de helm 1); de hoogte blijft, en
+de verf rekt mee. Op spelmaat is hij nu ongeveer zo breed als de speerman. Plaat: `uit/blender/plaatsoldaat/proef4-plaat.png`.
+Marcel daarop (27 okt): **"ik denk dat we met ons blender model toch beter zaten. Laten we daar maar mee verder gaan"**.
+De weg van Marcels plaat met losse delen (`EXTRA/`) is daarmee om: Human Generator, overschilderen, projecteren, de plaat
+in ons model bakken en het soldaatje uit code. De code is eruit (zie hierboven, bij "nah, dit gaat hem niet worden zo"),
+en verder gaat het met `speerman_hd.py`, `eigen.py` en `kruisboog_hd.py`. De plaat zelf blijft in `EXTRA/`, als
+voorbeeld voor de stijl.
+
+**De proefplaat van de kruisboogschutter (26 okt).** Marcel: "Ja, het voorstel voor de kruisboogschutter is goed; maak een
+proefplaat". Staan in acht richtingen (`uit/blender/kruisboog/proefplaat.png`, onder op spelmaat naast de speerman; groot
+in Z: `proef-z-groot.png`), uit `kruisboog_hd.py`: het model van de speerman met zijn eigen onderdelen (`kies()`), zodat
+staan, lopen, geraakt en sterven later meekomen. Het jak is lappen huid met donkere stiksels (een Voronoi), de tabbaard
+20 cm breed met de gele baan in het midden, het jak tot halverwege de dij (`ROK_ZOOM` 0,1); de kap en de kraag van
+donkerder leer; de kalot is de koepel van de helm zonder rand, met een opgerolde zoom. Aan de riem rechts een koker met
+vier bouten, links de spanhaak. De kruisboog: een lade van 68 cm, een boog van 72 cm (groter dan echt, zoals de speer),
+gespannen, met een bout op de lade, de stijgbeugel voorop en een lange trekker; schuin voor de borst, de linkerhand net
+achter de boog, de rechter bij de trekker, de kolf naar de rechterschouder (`DRAGEN`).
+Wat de proeven leerden: op spelmaat verdween de kruisboog in het bruin van het jak, en de stalen boog was een dun lijntje;
+nu is de lade licht hout en de boog licht (hoorn bekleed met berkenbast, zoals toen gebruikelijk), en dikker. In HD
+leken de wenkbrauwen een zonnebril (zonder rand van de helm is er geen schaduw over): minder en korter haar. De volle
+baard als vorm werd één donkere vlek: nu stoppels (de huid grauw met fijne puntjes, `BAARD_VOL` 0,1), waarop de snor
+leest. Nog niet: lopen, schieten, herladen, geraakt en sterven met de kruisboog.
+Marcel bij de plaat: "Hij heeft de boog ondersteboven", en "zijn rechterhand heeft hij met de bovenkant naar zichzelf
+gericht om de kruisboog heen. een normaal mens heeft de bovenkant van zijn hand van zich weg. de hand zit dan voor de
+kruisboog als het ware. De pols draait dan ook om zijn as 180 graden". Wat er mis was: de kruisboog hangt tot hij in de
+handen komt aan de rechterpols, en lag dus om zijn as gedraaid zoals die pols draaide (bij de ronde speer maakt dat
+niets uit); in ZW en W stond hij bijna rechtop met de boog onderaan. Nu draait `rol` hem om de lade tot de bovenkant ligt
+zoals de draagwijze wil, en kiest de pols de greep met de rug van de hand naar een gegeven kant (`bakken.HANDRUG`; leeg
+voor de speerman, zodat die niet verandert). Drie draagwijzen geprobeerd met de boog boven (`DRAAGWIJZEN`): *schuin*,
+zoals een geweer schuin voor de borst, maakte van de boog een handboog rechtop voor zijn lijf (die gaat eruit als Marcel
+kiest); *vooruit*, vanaf de rechterheup schuin naar voren met de boog dwars ervoor, leest als kruisboog (staan); en
+Marcel daarna: "kan hij de kruisboog over zn schouder dragen? en ondersteunen met de handen? als hij loopt". *Schouder*:
+de lade vlak over de rechterschouder naar achteren, de boog dwars achter het hoofd op helmhoogte, beide handen voor de
+schouder onder de kolf. Steiler ging de boog door het hoofd (de lade is kort, het hoofd groot), en met de bovenkant
+opzij stond de boog rechtop achter de schouder, als een handboog. Marcel daarop: "linker hand moet aan onderzijde van de
+kruisboog ondersteunen. kopse kant als het ware. dan kan de arm ook in een normale positie, is nu beetje exocist
+achtig": de linkerhand nu onder het eind van de kolf, de palm omhoog; de onderarm wringt 1 graad in plaats van 108.
+Daarna: "het lijkt alsof zn handen in de knoop zitten" (de handen 15 cm uit elkaar, vlak voor de rechterschouder, de
+linkerpols 76 graden geknikt): nu rust de lade 40 cm boven de kolf op de schouder, zodat de linkerhand 24 cm verder
+vooruit ligt dan de rechter, en ligt die hand plat in het verlengde van de onderarm (`bakken.HANDPLAT`). Dan: "zn
+elleboog mag wel wat zakken van de ondersteunende hand". De linkerarm stond gestrekt (zijn armen zijn kort: 40 cm
+bereik), dus de elleboog kon nergens heen. Met de kolf binnen bereik en de elleboog laag: "zn arm zit nu in zn lijf".
+Daar zat het: met de kruisboog op de rechterschouder moet de linkerhand dwars voor het lijf langs, en daarvoor zijn
+zijn armen te kort; een lage elleboog komt in zijn lijf, een elleboog erbuiten staat hoog of draait de onderarm om.
+Marcel koos uit drie (rechts met twee handen, rechts met de rechterhand onder, of links): **de linkerschouder**, zoals
+een soldaat met het geweer op de schouder. De linkerhand plat onder het eind van de kolf, aan dezelfde kant, de elleboog
+laag langs het lijf (de IK met een eigen richtpunt voor de elleboog, `SCHOUDER` in `kruisboog_hd.py`), de boog dwars
+achter het hoofd, en de rechterarm vrij: hij hangt (`speerman_hd.RECHTERHAND`, voor de speerman de speerhand op
+borsthoogte) en zwaait met de pas, naar voren als de linkervoet voor is. Marcel: "zn loopje is wel goed", maar "de
+kruisboog valt alleen nog door zn schouder": de lade lag op de schouder van het lijf, en jak en kraag maken die 11 cm
+dikker. Nu meet `boven_op` van boven waar de kleren onder de lade liggen, en legt de lade daar met zijn halve dikte en
+wat speling bovenop (`SCHOUDER['dik']`).
 
 **De steek (26 okt).** Marcel: "De steek maar doen", en "De punt in W ook oppakken". In 3D stak hij wel vooruit (de speer
 86 procent naar voren), maar met de punt wat omhoog en naar links: in Z een kort stokje opzij, in W kort; de generator laat

@@ -1190,7 +1190,12 @@
     if (e.uitval) {
       if (st.uitval !== e.uitval) {
         st.uitval = e.uitval;
-        zet(S.heeftHouding(naam, 'slaan') ? 'slaan' : 'aanval');
+        // Om en om de eerste en de tweede uithaal, als de figuur er twee heeft (de speerman uit het 3D-model: de steek en
+        // de stoot van boven; Marcel, 26 okt: "we hebben een 2e aanvals animatie nodig voor de afwisseling"). Een teller
+        // in zijn beeldstand, geen toeval: het is alleen scherm.
+        st.uithalen = (st.uithalen || 0) + 1;
+        const eerste = S.heeftHouding(naam, 'slaan') ? 'slaan' : 'aanval';
+        zet(st.uithalen % 2 === 0 && S.heeftHouding(naam, 'aanval2') ? 'aanval2' : eerste);
       }
     } else st.uitval = null;
     // flits springt bij een klap naar 0,3 en telt daarna af: gaat hij omhoog, dan is het een

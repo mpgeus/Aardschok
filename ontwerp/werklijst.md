@@ -31,7 +31,24 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   al heel veel beter zo!" (rechtop, de nek recht, niet meer door de knieën), met de punt naar voren in W ("P2"); de steek
   hoger, en **geraakt worden** (Marcel: "We hebben ook een 'hit' animatie nodig bij soldaten", het voorstel goedgekeurd),
   allebei als vel voor het spel; een gevecht in het spel opgenomen (`uit/blender/spel/`). Nog: de steek als echte uitval
-  zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
+  zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel). Marcel daarna (26 okt): "ik wil een
+  kruisboog schutter in het spel" (de kruisboogschutter van de demo heeft nog geen eigen vel in `beelden/beschrijving.json`).
+  En (26 okt): sterven ("dat hij op zn knieën valt en dan zijn hoofd naar de grond laat vallen op zn gezicht", in
+  `beeld.md`), en "we hebben een 2e aanvals animatie nodig voor de afwisseling" (het spel speelt bij elke uithaal nu
+  dezelfde `aanval`, `js/sprites.js`; een tweede vraagt ook daar een regel). Af en goedgekeurd (26 okt): sterven, en de
+  stoot van boven om en om met de steek. Marcel (26 okt): "zet de speerman uit het 3D-model echt in het spel, in plaats
+  van die van de generator, met renders op volle kwaliteit": **af** (26 okt): de vellen `speerman3d-*` in `beelden/`, met
+  de stoot van boven, geraakt en sterven (`beelden-van-de-generator.md`). Nog voor de speerman: de steek als echte uitval,
+  de kleine verschillen bij staan. Daarna (26 okt) Marcels plaat met losse uitrustingsdelen (`EXTRA/`): de proeven met
+  Human Generator, overschilderen en projecteren (`beeld.md`) liet hij rusten ("nah, dit gaat hem niet worden zo"), en hij
+  koos "terug naar ons model". Daarna nog twee proeven met de plaat (in ons model gebakken, en een soldaatje helemaal uit
+  code); Marcel (27 okt): "ik denk dat we met ons blender model toch beter zaten. Laten we daar maar mee verder gaan". De
+  code van die weg is eruit (`beeld.md`).
+  **De kruisboogschutter** (26 okt): het voorstel goedgekeurd, met herladen als eigen animatie (`kruisboog_hd.py`,
+  `beeld.md`, "De proefplaat van de kruisboogschutter"). De boog boven en de handen zoals een mens hem houdt; staan
+  vanaf de heup schuin naar voren (`vooruit`; `schuin` gaat eruit als Marcel kiest), lopen met de kruisboog op de
+  linkerschouder (Marcels keuze), de rechterarm vrij (`uit/blender/kruisboog/lopen-schouder.mp4`), wacht op Marcel.
+  Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,

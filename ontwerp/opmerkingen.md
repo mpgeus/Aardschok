@@ -1036,6 +1036,38 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **Human Generator als bron voor mensen** (26 okt, Marcel: "kijk hier alvast eens naar", https://humgen3d.com/docs/guides):
+  een add-on voor Blender die mensen maakt (lijf, leeftijd, gezicht, huid, haar met baarden, kleren, houdingen met een
+  Rigify-skelet, gezichtsuitdrukkingen), met een Python-API (`Human.from_preset`, instellingen per onderdeel) en een
+  batchgenerator voor veel verschillende mensen. Een spel op Steam vraagt de commerciële licentie (128 dollar, eenmalig);
+  renders in een spel mogen, de modellen zelf meegeven niet. Wat de site niet zegt: of hij op Blender 5.2 werkt, en of de
+  API zonder scherm draait (`blender -b`); de gratis proefversie kan dat laten zien. Voor de soldaten nu weinig winst:
+  zijn kleren maken we zelf, op spelmaat telt vooral het silhouet, en bakken.py en mocap.py hangen aan de botten van
+  MPFB (een ander skelet is veel overwerk). Wel interessant voor de dorpelingen: veel verschillende mensen, jong en oud,
+  mannen en vrouwen, uit één generator.
+  Marcel installeerde 4.0.38 (de licentie heeft hij per mail; de inhoud staat in `Downloads/Gen1/HUMAN GEN 4`, in de
+  voorkeuren van Blender ingesteld). Hij werkt in Blender 5.2 zonder scherm: een man in 2 seconden, met een eigen skelet
+  (`spine`, `hand.R`, 102 botten met de gezichtsbesturing). Let op: `speerman_hd.scene()` begint met de
+  fabrieksinstellingen, dus wie hem daarna wil, zet hem opnieuw aan en zet de inhoudmap opnieuw. Marcel: "Ik wil even
+  zien wat het resultaat is als we hier een soldaat maken": een proef (het script staat in de kladmap, `hg_soldaat.py`;
+  de plaat in `uit/blender/hg/proef2-plaat.png`): een man van 1,55 m zo gedrongen als de knoppen toelaten, volle baard,
+  het piratenpak (de basisinhoud heeft verder alleen moderne kleren), en een eenvoudige speer. In HD een echt gezicht en
+  echte stof; op spelmaat smal, met een klein hoofd, minder leesbaar dan onze speerman: de verhoudingen blijven
+  realistisch (ook met "Stylized"). Helm, wapenrok en harnas zouden we nog zelf moeten maken.
+  Marcel daarop: "probeer de soldaat met Human Generator verder: onze helm, wapenrok en kleuren erop. en ook verder de
+  afmetingen aanpassen", "hij moet wat groter worden". `gereedschap/blender/hg_soldaat.py` zet de bouwers van de
+  speerman (helm, maliënkap en -kraag, wapenrok met de gouden zoom, riem met hangers) op zijn lijf, via een tussenstuk:
+  `Nep` geeft de botten van MPFB die de bouwers vragen uit het skelet van Human Generator, en `vorm` maakt een kopie van
+  lijf, hemd en broek zoals ze staan, met de armgroepen op de namen van MPFB (zonder die namen hield de wapenrok de
+  armen voor romp, en spande hij als een cape eroverheen). Het hemd wordt het roodbruine wambuis, de broek de blauwe
+  hozen, de laarzen die van de speerman. De man is 1,50 m, de knoppen ver voorbij 1 (korte benen en nek, brede
+  schouders, buik), het hoofd 1,3 keer, en de helm 1520 pixels boven de voeten (de speerman 1450). Plaat:
+  `uit/blender/hg/proef6-plaat.png`. Op spelmaat leest hij nu als onze soldaat; hij is breder, zijn wapenrok voller, en
+  hij heeft nog geen handschoenen en armstukken, en de speer staat naast zijn open hand.
+  Om voor de soldaten (27 okt, Marcel: "ik denk dat we met ons blender model toch beter zaten"): de code is eruit
+  (`beeld.md`, bij "nah, dit gaat hem niet worden zo"). De add-on staat nog in Blender; voor de dorpelingen blijft het een
+  idee.
+
 - **Ver uitgezoomd haalt het spel in Chromium en Edge de 60 niet, ook vlak** (17 okt, vraag 174, c; de tekenmeting met
   `--videokaart`, GTX 1080 Ti, proefdorp op eiland 5, 1920×1080): op zoom 0,5 en 0,35 zo'n 16 à 21 ms per beeld, vlak of
   met heuvels, en het meeste is rekenwerk van het spel zelf (`onthoudVoorwerp`, `mistOverLijst`, `isPlat`,

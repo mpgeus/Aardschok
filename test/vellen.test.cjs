@@ -189,3 +189,29 @@ test('elk wezen in T.WEZENS heeft een figuur in beelden/, of leent er een', () =
     );
   }
 });
+
+test('een figuur met een tweede uithaal (aanval2) slaat om en om de eerste en de tweede; zonder alleen de eerste', () => {
+  const S = nieuwSpel();
+  const e = S.wereld.wezens.find((x) => x.bewoner && !x.dood);
+  e.bewoner.soldaat = { soort: 'speerman', wachthuis: null, sinds: 0 };
+  const h = T.BEELDEN.figuren.speerman.houdingen;
+  const uithaal = () => {
+    S.tijd = (S.tijd || 0) + 5; // de vorige uithaal is voorbij
+    e.uitval = null;
+    T.sprites.houding(S, e);
+    e.uitval = { doel: { x: e.x + 1, y: e.y } };
+    return T.sprites.houding(S, e).houding;
+  };
+  // de speerman uit het 3D-model heeft er twee (de steek en de stoot van boven)
+  assert.ok(h.aanval2, 'de speerman heeft een tweede uithaal');
+  const [a, b, c] = [uithaal(), uithaal(), uithaal()];
+  assert.deepEqual([a, b].sort(), ['aanval', 'aanval2'], 'de eerste en de tweede');
+  assert.equal(c, a, 'om en om');
+  const tweede = h.aanval2;
+  try {
+    delete h.aanval2;
+    assert.deepEqual([uithaal(), uithaal(), uithaal()], ['aanval', 'aanval', 'aanval'], 'zonder tweede alleen de eerste');
+  } finally {
+    h.aanval2 = tweede;
+  }
+});

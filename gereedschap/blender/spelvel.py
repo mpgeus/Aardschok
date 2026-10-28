@@ -1,5 +1,6 @@
 # De speerman uit het model als vel voor het spel (vraag 190; Marcel, 26 okt: "kun je nu eens een animatie maken in
-# game?"): staan, lopen, de steek (aanval) en geraakt worden in acht richtingen uit eigen.py, op spelmaat, in de cellen en met het anker
+# game?"): staan, lopen, de steek (aanval), de stoot van boven (aanval2), geraakt worden en sterven in acht
+# richtingen uit eigen.py, op spelmaat, in de cellen en met het anker
 # van het vel van de generator (beelden/beschrijving.json, figuren.speerman), zodat het spel ze zonder meer kan tonen. De
 # vellen van de generator blijven staan: dit schrijft speerman3d-<houding>.png naar een eigen map, voor elke houding
 # waarvan de renders er zijn.
@@ -11,6 +12,7 @@
 #   blender.exe -b -P gereedschap/blender/eigen.py -- <map> Z ZW W NW N NO O ZO [steek]   (staan en lopen, of de steek)
 #   python spelvel.py <map> <uitmap> [procent] [schaal=<getal>]   (de Python van ComfyUI; procent van de render, 50 voor de
 #   snelle; een map met alleen de steek krijgt de schaal van de staande man mee)
+#   node gereedschap/blender/spelvel-zet.cjs <uitmap>   de vellen in beelden/figuren en in de beschrijving van het spel
 import json
 import os
 import sys
@@ -24,9 +26,15 @@ HIER = __file__.replace('\\', '/').rsplit('/', 1)[0]
 FIGUUR = json.load(open(f'{HIER}/../../beelden/beschrijving.json', encoding='utf-8'))['figuren']['speerman']
 ANKER_Y = 1860  # speerman_hd.INSTELLINGEN['anker_y'], bij 100 procent
 # welke renders bij welke houding horen (de steek is de aanval van het spel)
-RENDER = {'staan': 'staan', 'lopen': 'lopen-{i}', 'aanval': 'steek-{i}', 'geraakt': 'geraakt-{i}'}
-# wat de generator niet heeft (geraakt worden: 3 beelden zoals de wolf en het skelet), met een cel waar de speer in past
-EIGEN = {'geraakt': {'beelden': 3, 'fps': 12, 'herhaal': False, 'cel': [89, 110], 'anker': [44, 105]}}
+RENDER = {'staan': 'staan', 'lopen': 'lopen-{i}', 'aanval': 'steek-{i}', 'aanval2': 'steek2-{i}', 'geraakt': 'geraakt-{i}',
+          'sterven': 'sterven-{i}'}
+# wat de generator niet heeft (geraakt worden: 3 beelden zoals de wolf en het skelet), of waar zijn cel niet past (sterven:
+# languit ligt hij naar voren, en dus in Z omlaag in beeld; de cel van de generator heeft onder het anker 9 pixels), met
+# een cel waar het in past; die gaat voor
+EIGEN = {'geraakt': {'beelden': 3, 'fps': 12, 'herhaal': False, 'cel': [89, 110], 'anker': [44, 105]},
+         'sterven': {'beelden': 7, 'fps': 8, 'herhaal': False, 'cel': [150, 124], 'anker': [75, 84]},
+         # de tweede aanval (de stoot van boven) in de cel van de eerste
+         'aanval2': dict(FIGUUR['houdingen']['aanval'])}
 
 
 def schaal(kaart):
@@ -44,7 +52,7 @@ def schaal(kaart):
 
 def cel(pad, s, anker_y, houding):
     """Een render verkleind en met de oorsprong op het anker van de cel."""
-    h = FIGUUR['houdingen'].get(houding) or EIGEN[houding]
+    h = EIGEN.get(houding) or FIGUUR['houdingen'][houding]
     cb, ch = h['cel']
     ax, ay = h['anker']
     b = Image.open(pad).convert('RGBA')
@@ -64,10 +72,14 @@ if __name__ == '__main__':
     vast = [a for a in sys.argv[4:] if a.startswith('schaal=')]
     s = float(vast[0].split('=')[1]) if vast else schaal(kaart)
     print(f'schaal {s:.4f}')
+    # wat het spel per houding moet weten (bestand, beelden, cel, anker), naast de vellen, voor spelvel-zet.cjs; aangevuld,
+    # want de houdingen komen uit verschillende mappen
+    gegevens_pad = f'{uitmap}/speerman3d.json'
+    gegevens = json.load(open(gegevens_pad, encoding='utf-8')) if os.path.exists(gegevens_pad) else {}
     for houding, naam in RENDER.items():
         if not os.path.exists(f'{kaart}/eigen-Z-{naam.format(i=0)}.png'):
             continue
-        h = FIGUUR['houdingen'].get(houding) or EIGEN[houding]
+        h = EIGEN.get(houding) or FIGUUR['houdingen'][houding]
         cb, ch = h['cel']
         n = h['beelden']
         vel = Image.new('RGBA', (cb * n, ch * len(FIGUUR['richtingen'])), (0, 0, 0, 0))
@@ -76,3 +88,6 @@ if __name__ == '__main__':
                 vel.paste(cel(f'{kaart}/eigen-{r}-{naam.format(i=i)}.png', s, anker_y, houding), (i * cb, j * ch))
         vel.save(f'{uitmap}/speerman3d-{houding}.png')
         print(f'{uitmap}/speerman3d-{houding}.png', vel.size)
+        gegevens[houding] = {'bestand': f'speerman3d-{houding}.png', 'beelden': n, 'fps': h['fps'], 'herhaal': h['herhaal'],
+                             'cel': [cb, ch], 'anker': list(h['anker'])}
+    json.dump(gegevens, open(gegevens_pad, 'w', encoding='utf-8'), indent=1)

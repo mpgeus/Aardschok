@@ -8,7 +8,7 @@
 # licht draait per richting met de camera mee: een zachte zon van linksboven, licht van voren onder de helmrand, wat feller
 # en meer contrast. Staan met de speer rechtop, lopen met de speer schuin voor het lijf zoals de generator.
 #
-#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|geraakt]
+#   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P gereedschap/blender/eigen.py -- <map> Z ZW [staan|steek|steek2|geraakt|sterven]
 # naar <map>/eigen-<richting>-staan.png en eigen-<richting>-lopen-<i>.png; de plaat: node gereedschap/blender/eigen.cjs
 # Met `staan hoek` (naar een eigen map) de hoekpas voor patroon.py: de plek op de wapenrok als kleur.
 import bpy
@@ -23,6 +23,11 @@ import bakken as bk  # noqa: E402
 from mathutils import Matrix, Vector  # noqa: E402
 
 UIT = sh.UIT
+# de kruisboogschutter (kruisboog_hd.py): het model van de speerman met zijn eigen onderdelen; staan en lopen
+KRUISBOOG = 'kruisboog' in sh.ARGS
+if KRUISBOOG:
+    import kruisboog_hd as kb
+    kb.kies()
 RICHTINGEN = [a for a in sh.ARGS[1:] if a in sh.RICHTINGEN] or ['Z', 'ZW']
 # isometrisch (Marcel: "Ik wil ook de poppetjes in isometrisch zien"): de camera op 30 graden zoals de wereld, in plaats
 # van de 15 van de generator (beeld.md, "Wat het verschil maakte"); de beelden krijgen -iso in hun naam
@@ -52,7 +57,7 @@ STAP = 0.38  # iets grotere stappen dan in de proef met de verf: de voeten in ZW
 # (metaal toont zijn vorm door wat het weerspiegelt: de lucht met een verloop, licht_voor_spelmaat).
 STOF = ('wapenrok', 'wambuis', 'hozen')
 LEER = ('riem', 'leer', 'schede', 'koord')
-LAARS = ('laars', 'omslag', 'handschoen', 'armstuk', 'armrand')  # dof leer
+LAARS = ('laars', 'omslag', 'handschoen', 'armstuk', 'armrand', 'jak')  # dof leer
 STAAL = ('helm', 'staal')
 SOORTEN = {
     'stof': {'Roughness': 1.0, 'Specular IOR Level': 0.12, 'Sheen Weight': 0.55, 'Sheen Roughness': 0.6, 'Diffuse Roughness': 1.0,
@@ -365,15 +370,49 @@ def main():
     lichten = {bpy.data.objects[n]: bpy.data.objects[n].matrix_world.copy() for n in ('zon', 'rand', 'vul')}
     if 'hoek' in sh.ARGS:
         hoekpas(sc)
+    if KRUISBOOG:
+        if 'staan' in sh.ARGS:
+            # staan met de kruisboog in beide handen (kruisboog_hd.DRAAGWIJZEN)
+            kb.in_handen(sc, rig)
+            met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
+            return
+        # lopen met de kruisboog op de schouder, de pas zoals de speerman, de rechterarm vrij (kruisboog_hd.loop)
+        kb.in_handen(sc, rig, lopen=True)
+        met_stof(sc, rig, lambda t: kb.loop(rig, t), 8, lambda r, i: f'eigen-{r}{ISO}-lopen-{i}.png',
+                 lichten, rondes=3)
+        return
+    if 'sterven' in sh.ARGS:
+        # sterven (bakken.py, sterven): zeven beelden vanuit staan, op zijn knieën en dan voorover; breder, zodat de speer
+        # die naast hem valt en het lijf dat languit ligt in beeld blijven, en onderaan hoger: languit ligt hij naar de
+        # camera toe, en onder de voeten was maar 90 pixels; de bovenrand en de maat blijven, zodat het anker (anker_y) klopt
+        sc.render.resolution_x = 2400
+        cam = sc.camera
+        extra = 600
+        pxm = sc.render.resolution_y / cam.data.ortho_scale
+        cam.data.ortho_scale = (sc.render.resolution_y + extra) / pxm
+        cam.location -= (cam.matrix_world.to_3x3() @ Vector((0, 1, 0))) * (extra / 2 / pxm)
+        sc.render.resolution_y += extra
+        met_stof(sc, rig, lambda t: bk.sterven(rig, t), 7, lambda r, i: f'eigen-{r}{ISO}-sterven-{i}.png', lichten)
+        return
     if 'geraakt' in sh.ARGS:
         # geraakt worden (bakken.py, geraakt): drie beelden vanuit staan, de speer in de rechterhand
         met_stof(sc, rig, lambda t: bk.geraakt(rig, t), 3, lambda r, i: f'eigen-{r}{ISO}-geraakt-{i}.png', lichten)
         return
-    if 'steek' not in sh.ARGS:
+    if 'steek' not in sh.ARGS and 'steek2' not in sh.ARGS:
         met_stof(sc, rig, lambda t: None, 1, lambda r, i: f'eigen-{r}{ISO}-staan.png', lichten, rust=12)
     if 'staan' in sh.ARGS:
         return
     sc.render.resolution_x = 2400
+    if 'steek2' in sh.ARGS:
+        # de tweede aanval, de stoot van boven (bakken.py, STEEK_BOVEN), zoals de steek
+        sc.render.resolution_x = 4400
+        bk.draag_schuin(sc, rig, bk.WACHT_BOVEN)
+        bk.steek(rig, 0, bk.STEEK_BOVEN)
+        bk.speer_in_handen(sc, rig, sh.kruin(lijf) * 1.18, bk.WACHT_BOVEN)
+        bk.speer_vast(rig)
+        met_stof(sc, rig, lambda t: bk.steek(rig, t, bk.STEEK_BOVEN), 8, lambda r, i: f'eigen-{r}{ISO}-steek2-{i}.png',
+                 lichten)
+        return
     if 'steek' in sh.ARGS:
         # de steek: uit de wacht, met de speer laag bij de rechterheup (bakken.py, STEEK); breder, zodat de punt in beeld
         # blijft als hij vooruit schiet
