@@ -358,6 +358,10 @@ skirmish.
     hetzelfde, en verschilt in zijn wapen.
   - **De kleur per speler:** de kleurlaag in de tekeningen doet de Blender-sessie (190); "Thuis op de computer wordt alles
     gerenderd."
+- **Op de eerste kaart** (Marcel, 28 okt, op *The Ford*): "Heuvels mogen hoger", "niet bij elke map een rivier door het
+  midden maar dit is oke", en "Er moet voldoende open zijn voor het gevecht. Bomen en bossen waar troepen doorheen kunnen
+  lopen hebben extra dekking." Dus: hogere heuvels, minder en kleinere bossen op de kaart, de volgende kaarten met een
+  andere opzet, en troepen lopen door een bos en hebben daar dekking (hoe precies: vervolgvraag).
 - **Het plan van stap 3** (Claude, 28 okt): **3a** een kleine wereld uit een recept (*The Ford*) en een veldslag zonder
   economie op die kaart, met een eenvoudige veldheer, gewonnen, verloren of de tijd om, de militie voor 1, en een
   proefbank (`npm run veldslag`); **3b** de lobby (kaart, zaad, punten, tijd, per plek mens of AI, kopen, opstellen);

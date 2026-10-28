@@ -25,7 +25,8 @@
   T.KAARTEN = {
     // The Ford (Marcel, 28 okt: "1. Ja"): een rivier van boven naar onder door het midden, met twee voorden en een brug,
     // een heuvel bij elke strook, bos op de flanken (boven en onder), en rotsen die bij een voorde een smalle doorgang
-    // maken. Voor twee spelers, links en rechts.
+    // maken. Voor twee spelers, links en rechts. Daarna (28 okt: "Heuvels mogen hoger", "Er moet voldoende open zijn voor
+    // het gevecht"): de heuvels van 56 naar 96, kleinere bossen, en minder losse bomen.
     ford: {
       naam: 'The Ford',
       maat: 96,
@@ -34,12 +35,12 @@
       glooiing: 0.35,
       dal: [3, 0.5],
       kust: 0.04,
-      bomen: 0.012,
+      bomen: 0.006,
       variatie: 0.05,
-      heuvels: [{ a: -0.5, b: 0.05, r: 0.3, h: 56 }, { a: 0.5, b: -0.05, r: 0.3, h: 56 }],
+      heuvels: [{ a: -0.5, b: 0.05, r: 0.3, h: 96 }, { a: 0.5, b: -0.05, r: 0.3, h: 96 }],
       rivier: { punten: [[0.02, -1.25], [-0.12, -0.5], [0.1, 0.05], [-0.08, 0.6], [0.02, 1.25]], breed: 6, diep: 10, voorden: [0.27, 0.74], voordeBreed: 7, brug: 0.5 },
       pas: { breed: 3, lang: 6 },
-      bos: [{ a: -0.3, b: -0.6, r: 0.24 }, { a: 0.32, b: -0.58, r: 0.2 }, { a: -0.32, b: 0.58, r: 0.2 }, { a: 0.3, b: 0.6, r: 0.24 }],
+      bos: [{ a: -0.32, b: -0.62, r: 0.17 }, { a: 0.34, b: -0.6, r: 0.14 }, { a: -0.34, b: 0.6, r: 0.14 }, { a: 0.32, b: 0.62, r: 0.17 }],
       stroken: [{ a: [-0.82, -0.6], b: [-0.15, 0.15] }, { a: [0.6, 0.82], b: [-0.15, 0.15] }],
     },
   };
