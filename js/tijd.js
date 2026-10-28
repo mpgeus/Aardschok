@@ -128,7 +128,7 @@
   T.tikKalender = function (S, dt) {
     const k = S.kalender;
     const snelheid = T.snelheidNu(S);
-    if (!snelheid) return;
+    if (!snelheid || S.veldslag) return; // in een veldslag (js/veldslag.js) staat de dag stil: geen jaar en geen nacht
     // Elk half uur ververst de balk (de datum en het uur, js/dag.js); bij 1× is dat elke 6,25 seconde.
     const vorig = Math.floor(k.dag * 48);
     k.dag += (dt * snelheid) / T.DAG_LENGTE;
@@ -181,7 +181,8 @@
     const k = S && S.kalender;
     if (!k) return 0;
     const s = k.stil && k.stil.length ? 0 : k.snelheid || 0;
-    return s > 1 && T.erWordtGevochten(S) ? 1 : s;
+    // een gevecht loopt op 1×, en een veldslag (js/veldslag.js) helemaal: geen versneller
+    return s > 1 && (S.veldslag || T.erWordtGevochten(S)) ? 1 : s;
   };
 
   // Voor wie ertoe doet als hij in een dorp komt (de heer, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×

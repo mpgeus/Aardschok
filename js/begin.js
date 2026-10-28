@@ -89,6 +89,7 @@
     const L = level || {};
     const fout = level ? T.keurScenario(level) : [];
     if (fout.length) throw new Error(`Het level klopt niet: ${fout.join('; ')}`); // geen tekst
+    if (L.veldslag) return T.beginVeldslag(S, L); // een veldslag: geen dorp, maar twee legers op een kaart (js/veldslag.js)
     const d = (L.dorpen && L.dorpen[0]) || {};
     const zaad = L.eiland ? L.eiland.zaad : makerZaad != null ? makerZaad : T.nieuwLandZaad();
     const w = T.laadGemaaktGehucht(zaad, { plek: L.plek });
@@ -108,6 +109,7 @@
     if (level) T.startScenario(S, level);
     return S.dorp;
   };
+  T.zetAanvoerderKlaar = zetAanvoerderKlaar; // ook voor de held van een leger (js/veldslag.js)
   function zetAanvoerderKlaar(aanvoerder, zaad) {
     aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
     if (aanvoerder.zaad == null) aanvoerder.zaad = zaad; // zijn zaad kiest zijn vel (T.sprites.houding, js/sprites.js)

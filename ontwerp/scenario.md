@@ -141,13 +141,15 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 - **De tijd:** **`dag`** (`5`: vanaf dag 5; `{ van, tot }`; `{ tussen: [60, 220], lot: 'overval' }`: vanaf een dag
   daartussen, bij het begin getrokken uit het zaad, en dezelfde naam is dezelfde dag), **`uur`** (`'overdag'` als de zon
   op is, `'nacht'`, of `{ van, tot }`, ook over middernacht), **`na`** (`{ trigger, uren }` of `{ trigger, dagen }`, na
-  de laatste keer dat die afging).
+  de laatste keer dat die afging), **`seconden`** (zoveel seconden wereldtijd na het begin van het level: de tijd van een
+  veldslag, waar de dag stilstaat; 3a2, 28 okt).
 - **Het dorp:** **`waar`** (`{ graan: 20, hout: { minder: 5 } }`), **`bevolking`**, **`gebouw`** (`{ molen: 1 }`: zoveel
   af), **`trede`** (minstens), **`vlag`** en **`nietVlag`**.
 - **De kaart:** **`inGebied`** (`{ gebied, aantal, soort }`: zoveel van het dorp in een gebied, het checkpoint),
   **`leegGebied`** (`'naam'`: geen vijand van het dorp meer in het gebied).
 - **Leven en dood:** `dood` (een mens met een naam, de aanvoerder, een groep), `gevallen` (een dorp zonder raadhuis en
-  zonder mensen).
+  zonder mensen), **`mannen`** (hoeveel van het leger nog staan, de soldaten, veteranen en de held, `T.legerVan`; met
+  `wie` van een ander dorp; 3a2).
 - **De rovers** (2c, 28 okt): **`hol`** (`'staat'` of `'verslagen'`: het hol van het dorp, `dorpen[].hol`), **`overval`**
   (hoeveel overvallen er op je land kwamen; een getal is minstens zoveel).
 - **De heer:** **`heer`** (de woorden van `T.heerStand`: brief, komt, staat, betaald, geweigerd, weg), **`gunst`** en
@@ -173,7 +175,8 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   het begin dicht is, staat sinds 1b bij het dorp, `dorpen[].dicht`, en `bouw` komt als een level iets later opent).
 - **Het eind:** **`scene`** (`'betalen'`: betaal je de heer, dan halen zijn mannen het, rijdt hij weg, en is het uit;
   `D.scene`, gebouwd in 1b), **`punten`** (`T.telPunten`, gebouwd in 1b), **`einde`** (`{ gewonnen, kop, tekst }`:
-  `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
+  `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level), **`uitslag`** (het eind van
+  een veldslag: wie de meeste mannen heeft, wint, evenveel is gelijk; de kop en de tekst geeft het spel; 3a2).
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
 naam ("the miller"). Eén gebied geeft het spel zelf: **`hol`**, het hol van het dorp (2c), want waar dat ligt, weet pas het
@@ -361,12 +364,17 @@ skirmish.
 - **Op de eerste kaart** (Marcel, 28 okt, op *The Ford*): "Heuvels mogen hoger", "niet bij elke map een rivier door het
   midden maar dit is oke", en "Er moet voldoende open zijn voor het gevecht. Bomen en bossen waar troepen doorheen kunnen
   lopen hebben extra dekking." Dus: hogere heuvels, minder en kleinere bossen op de kaart, de volgende kaarten met een
-  andere opzet, en troepen lopen door een bos en hebben daar dekking (hoe precies: vervolgvraag).
+  andere opzet, en troepen lopen door een bos en hebben daar dekking (hoe precies: vervolgvraag). **Besloten** (Marcel, 28
+  okt: "1 misschien wanneer je achter een boom staat", "2 d1", en na de uitleg "A dan"): een boom houdt het zicht al
+  tegen, dus wie vlak achter een boom staat (gezien vanaf de schutter), wordt nu al niet geraakt; dat blijft zo. Bossen
+  blijven in de weg staan; er komt geen regel bij.
 - **Het plan van stap 3** (Claude, 28 okt): **3a** een kleine wereld uit een recept (*The Ford*) en een veldslag zonder
   economie op die kaart, met een eenvoudige veldheer, gewonnen, verloren of de tijd om, de militie voor 1, en een
   proefbank (`npm run veldslag`); **3b** de lobby (kaart, zaad, punten, tijd, per plek mens of AI, kopen, opstellen);
   **3c** de kleur per speler (met 190); **3d** de generaals; **3e** de knotsdrager (en thuis de ridder); **3f** de veldheer
-  in drie standen; **3g** meer kaarten, en de hoogte; **3h** nalopen.
+  in drie standen; **3g** meer kaarten, en de hoogte; **3h** nalopen. **Stand** (28 okt): 3a1 (de kaart) en 3a2 (de
+  slag: twee legers in een linie in hun strook, de dag staat stil, 1×, gewonnen, verloren of de tijd om, met
+  `Spel.debug.veldslag()`) zijn gebouwd; 3a3 (de veldheer en de proefbank) is de volgende.
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De

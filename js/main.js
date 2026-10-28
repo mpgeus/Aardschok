@@ -1539,6 +1539,13 @@
     // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/begin.js): op de dichtste andere
     // dorpsplek, met het lege begin. Spel.debug.wissel() maakt jou het volgende dorp, zodat je ze in één browser speelt:
     // wat je ziet, hoort, bouwt en stuurt, is dan van dat dorp (S.dorp; alleen scherm).
+    // Een veldslag (vraag 187 en 188, stap 3a2; js/veldslag.js), tot de lobby er is (3b): op The Ford met dit zaad, twee
+    // legers (standaard elk acht speermannen en vier boogschutters) en `minuten` (of geen tijd).
+    veldslag(zaad = 1, legers = [{ soorten: { speerman: 8, boogschutter: 4 } }, { soorten: { speerman: 8, boogschutter: 4 } }], minuten = 10) {
+      T.nieuwSpel(null, T.veldslagLevel({ kaart: 'ford', zaad, legers, minuten }));
+      T.ui.sluitTitel(S);
+      return `Een veldslag op The Ford (zaad ${zaad}): ${S.dorpen.map((D) => T.legerVan(D).length).join(' tegen ')} man.`; // geen tekst
+    },
     tweedeDorp() {
       if (!S.dorp.plek.naam) return 'Een tweede dorp kan alleen op het eiland.'; // geen tekst
       const D = T.dorpErbij(S);
@@ -1554,7 +1561,7 @@
       const p = T.naarSchermOp(S.wereld, m.x, m.y);
       T.kijkNaar(p.x, p.y);
       T.ui.werkBalkBij(S);
-      return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
+      return `Je speelt nu ${S.dorp.plek.naam || 'het leger'} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst (een leger in een veldslag heeft geen naam)
     },
     // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1 tot c3): waar ze liggen, hoe ver van je plein, of ze
     // er al staan (hun land is open), hun bende (wie, waar hij vandaan kwam, en wie op pad is), en hun buit.

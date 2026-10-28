@@ -371,7 +371,7 @@
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.
   T.raadNu = function (D) {
-    if (!IN().aan || !(D.wereld && D.plek.plein) || !D.kalender || !D.voorraad) return null;
+    if (!IN().aan || D.veldslag || !(D.wereld && D.plek.plein) || !D.kalender || !D.voorraad) return null; // een leger (js/veldslag.js) krijgt geen raad over een dorp
     for (const r of T.RADEN) if (r.als(D)) return { id: r.id, tekst: r.tekst(D) };
     return null;
   };

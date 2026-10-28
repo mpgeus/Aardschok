@@ -39,6 +39,7 @@
     // Een gevecht (js/gevecht.js; werklijst vraag 170, stap 2): zolang er gevochten wordt, loopt de tijd hooguit op 1×.
     gevecht: {
       zegtZelf: true,
+      inVeldslag: true, // de enige die een leger in een veldslag heeft (js/veldslag.js): het is geen dorp
       naam: T.t('Fighting'),
       kop: T.t('There is fighting'),
       nog: T.t('There is still fighting'),
@@ -228,7 +229,11 @@
   };
 
   // Welke oorzaken er nu spelen, in de volgorde van T.OORZAKEN, als [{ id, zin }].
-  T.oorzakenNu = (D, dag) => Object.keys(T.OORZAKEN).map((o) => T.oorzaakNu(D, o, dag)).filter(Boolean);
+  T.oorzakenNu = (D, dag) =>
+    Object.keys(T.OORZAKEN)
+      .filter((o) => !D.veldslag || T.OORZAKEN[o].inVeldslag)
+      .map((o) => T.oorzaakNu(D, o, dag))
+      .filter(Boolean);
 
   // De statussen van het dorp (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt"): wat er
   // nu speelt, met sinds wanneer en op welk niveau (`D.statussen`, elke nacht), voor de kaartjes in de balk (js/hud.js).

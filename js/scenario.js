@@ -66,6 +66,7 @@
       tellers: {},
       lot: {},
       seconde: Math.floor((S.wereldTijd || 0) / IN().elke),
+      begin: S.wereldTijd || 0, // de tijd van de wereld bij het begin (de voorwaarde `seconden`)
       // Hoe het spel begon (stap 2b): als de demo (T.demoLevel, js/einde.js), of als hoofdstuk van de campagne
       // (T.hoofdstukLevel, js/campagne.js). Dat zegt niet het level zelf, want het demojaar is allebei.
       demo: !!L.demo,
@@ -201,6 +202,10 @@
     // De rovers (2c, js/rovers.js): hoe het hol van het dorp ervoor staat ('staat' of 'verslagen', T.holStand; een dorp
     // zonder hol nooit), en hoeveel overvallen er op je land kwamen (een getal: minstens zoveel; of { minstens, minder }).
     hol: (S, D, v) => T.holStand(D) === v,
+    // De veldslag (stap 3a2, js/veldslag.js): hoeveel mannen van het dorp nog staan (T.legerVan: zijn soldaten en zijn
+    // held), en hoeveel seconden van de wereld er sinds het begin om zijn (de tijd van een veldslag; E2).
+    mannen: (S, D, v) => telt(T.legerVan(D).length, v),
+    seconden: (S, D, v) => !!S.scenario && (S.wereldTijd || 0) - S.scenario.begin >= v,
     overval: (S, D, v) => telt((D.rovers && D.rovers.geweest) || 0, v),
     // Het scenario zelf: een doel ('id': af, of { id: 'mislukt' }), een trigger die afging ('id'), een teller ({ naam: 3 }).
     doel: (S, D, v) =>
@@ -259,6 +264,15 @@
     scene: (S, D, v) => {
       D.scene = v;
     },
+    // De uitslag van een veldslag (js/veldslag.js): wie de meeste mannen overhoudt, wint; evenveel is gelijk (en niet
+    // gewonnen). Het eindscherm zegt het, met hoeveel er van elke kant staan.
+    uitslag: (S, D) => {
+      const wij = T.legerVan(D).length;
+      const zij = Math.max(0, ...S.dorpen.filter((x) => x !== D).map((x) => T.legerVan(x).length));
+      const kop = wij > zij ? T.t('Victory') : wij === zij ? T.t('A draw') : T.t('Defeat');
+      const tekst = T.t('{wij|# of your men is still standing|# of your men are still standing}, against {zij}.', { wij, zij });
+      T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: wij > zij, kop, tekst });
+    },
     // Het eind: { gewonnen, kop, tekst } (T.spelUit, js/einde.js; het eindscherm in js/hud.js).
     einde: (S, D, v) => T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: !!v.gewonnen, kop: v.kop || null, tekst: v.tekst || null }),
   });
@@ -296,6 +310,15 @@
     const triggers = (level && level.triggers) || [];
     if (level && level.eiland && !(Number.isInteger(level.eiland.zaad) && level.eiland.zaad >= 1)) fout.push('het eiland heeft een zaad, een heel getal vanaf 1'); // geen tekst
     if (level && level.plek != null && !level.eiland) fout.push(`de plek ${level.plek} vraagt een vast eiland: de namen verschillen per eiland`); // geen tekst
+    if (level && level.veldslag) {
+      const V = level.veldslag;
+      const K = T.KAARTEN[V.kaart];
+      if (!K) fout.push(`de kaart ${V.kaart} is er niet`); // geen tekst
+      if (!Number.isInteger(V.zaad)) fout.push('een veldslag heeft een zaad, een heel getal'); // geen tekst
+      if (!Array.isArray(V.legers) || V.legers.length < 2) fout.push('een veldslag heeft minstens twee legers'); // geen tekst
+      else if (K && V.legers.length > K.spelers) fout.push(`de kaart ${V.kaart} is voor ${K.spelers} spelers`); // geen tekst
+      for (const l of V.legers || []) for (const soort of Object.keys(l.soorten || {})) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`de soldaat ${soort} bestaat niet`); // geen tekst
+    }
     if (level && level.rand && ![level.rand.b, level.rand.h].every((n) => Number.isInteger(n) && n >= T.randMinstens())) {
       fout.push(`een rand is minstens ${T.randMinstens()} bij ${T.randMinstens()} stukken`); // geen tekst
     }

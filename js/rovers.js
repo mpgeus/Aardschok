@@ -241,8 +241,10 @@
     e.gesneuveld = true;
     const p = T.bewonerVan(D, e); // de eerste aanvoerder draagt zijn bewoner niet mee (js/bewoners.js)
     const man = !!p && !!(p.soldaat || p.veteraan || p.aanvoerder);
+    // wie hem velde: een wolf, een man van een ander dorp (een veldslag, js/veldslag.js), of een rover
     const waarom = van && van.beest ? T.t('The fight with the wolves was hard')
-      : man ? T.t('The fight with the robbers was hard') : T.t('The robbers struck in the village');
+      : van && van.dorp && van.dorp !== D && !van.rover ? T.t('The battle was hard')
+        : man ? T.t('The fight with the robbers was hard') : T.t('The robbers struck in the village');
     if (p) T.wijzigBevolking(D, -1, 'gesneuveld', waarom, [p]);
   };
 

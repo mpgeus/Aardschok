@@ -301,6 +301,10 @@ wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5)
 `Spel.debug.tweedeDorp()` zet een tweede dorp op het eiland, op de dichtste andere dorpsplek, met het lege begin (vraag
 170, stap 6a), en `Spel.debug.wissel()` maakt jou het volgende dorp: de camera gaat erheen, en de balk, de mist, de
 berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in één browser.
+`Spel.debug.veldslag(zaad, legers, minuten)` begint een veldslag op *The Ford* (vraag 187 en 188, stap 3a2; tot de lobby
+er is): standaard zaad 1, elk leger acht speermannen en vier boogschutters (`[{ soorten: { speerman: 8, boogschutter: 4
+} }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger; het andere staat stil tot de veldheer er
+is (3a3), maar `Spel.debug.wissel()` maakt jou het andere.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.

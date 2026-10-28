@@ -76,3 +76,84 @@ test('het grote eiland blijft wat het was, en een kaart en het eiland wisselen e
   assert.notEqual(T.eilandVan(5), kaart, 'en het eiland van 5 is weer het grote');
   assert.throws(() => T.eilandVan({ zaad: 1, recept: 'nergens' }), /geen kaart nergens/);
 });
+
+// Stap 3a2: de veldslag zelf. Twee legers zonder dorp op de kaart, in een linie in hun strook (D1), de dag staat stil en
+// de snelheid is 1×, en wie geen mannen meer heeft, verliest; is de tijd om, dan wint wie er de meeste heeft (E2).
+const berichten = [];
+const slag = (legers, minuten = null) => {
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers, minuten }));
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
+  S.kalender.snelheid = 1;
+  berichten.length = 0;
+  return S;
+};
+const seconden = (S, n, stop = () => false) => {
+  for (let t = 0; t < n && !stop(); t++) for (let i = 0; i < 1 / T.TIK; i++) T.wereldTik(S);
+};
+const ids = (D) => D.bewoners.mensen.filter((p) => p.soldaat || p.aanvoerder).map((p) => p.id);
+
+test('een veldslag: de keuring, en twee legers zonder dorp, elk in een linie in zijn strook', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
+  try {
+    const L = T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: [{ soorten: { speerman: 6, boogschutter: 3 } }, { soorten: { speerman: 6 } }], minuten: 5 });
+    assert.deepEqual(T.keurScenario(L), []);
+    const heeft = (lijst, stuk) => assert.ok(lijst.some((z) => z.includes(stuk)), `${stuk} in ${JSON.stringify(lijst)}`);
+    heeft(T.keurScenario({ veldslag: { kaart: 'nergens', zaad: 1, legers: [{}, {}] } }), 'de kaart nergens is er niet');
+    heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{}] } }), 'minstens twee legers');
+    heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{}, {}, {}] } }), 'is voor 2 spelers');
+    heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{ soorten: { ridder: 1 } }, {}] } }), 'de soldaat ridder bestaat niet');
+    const S = slag(L.veldslag.legers, 5);
+    const [A, B] = S.dorpen;
+    assert.equal(S.dorp, A);
+    assert.ok(S.veldslag && A.veldslag && B.veldslag && B.ander && !A.ander);
+    assert.equal(T.legerVan(A).length, 10, 'negen soldaten en de held');
+    assert.equal(T.legerVan(B).length, 7);
+    assert.ok(!A.gebouwen.length && !A.begin, 'geen kar en geen kamp');
+    // de linie: wie schiet, staat achter wie steekt, en elk heeft zijn post. Voor en achter is langs de richting van de
+    // troep (post.richting, naar de vijand): de linie staat schuin op de kaart, dus de afstand tot de vijand zegt het niet.
+    const mannen = T.militieVan(A);
+    for (const e of mannen) assert.deepEqual([e.tx, e.ty], [e.post.x, e.post.y], 'op zijn post');
+    const r = mannen[0].post.richting;
+    const voor = (e) => e.tx * r.x + e.ty * r.y;
+    const speer = mannen.filter((e) => e.bewoner.soldaat.soort === 'speerman').map(voor);
+    const boog = mannen.filter((e) => e.bewoner.soldaat.soort === 'boogschutter').map(voor);
+    assert.ok(Math.min(...speer) > Math.max(...boog), `de speren voor: ${speer} tegen ${boog}`);
+    assert.ok(voor(A.aanvoerder) < Math.min(...boog), 'de held achter de linie');
+    // een minuut later: iedereen staat er nog, de dag staat stil, en geen dorp met zijn zorgen
+    const plekken = mannen.map((e) => `${e.tx},${e.ty}`).join(' ');
+    const dag = S.kalender.dag;
+    S.kalender.snelheid = 30;
+    assert.equal(T.snelheidNu(S), 1, 'geen versneller');
+    seconden(S, 60);
+    assert.equal(S.kalender.dag, dag, 'de dag staat stil');
+    assert.equal(mannen.map((e) => `${e.tx},${e.ty}`).join(' '), plekken, 'iedereen staat op zijn post');
+    assert.deepEqual(T.oorzakenNu(A, Math.floor(dag)), [], 'geen statussen van een dorp');
+    assert.equal(T.raadNu(A), null, 'geen raad');
+    assert.equal(T.doelLinksboven(S, A).tekst, 'Defeat the enemy army.');
+    // de vijand rukt op: het gevecht, en wie geen mannen meer heeft, verliest
+    T.geefOpdracht(S, { soort: 'stuur', dorp: 1, wie: ids(B), naar: T.tegelVan(mannen[0]) });
+    seconden(S, 300, () => !!A.einde);
+    assert.ok(A.einde, 'het is uit');
+    assert.equal(A.einde.reden, 'scenario');
+    assert.equal(A.einde.gewonnen, T.legerVan(A).length > 0);
+    assert.equal(A.einde.kop, A.einde.gewonnen ? 'Victory' : 'Defeat');
+    assert.equal(S.scenario.doelen[0].stand, A.einde.gewonnen ? 'af' : 'mislukt');
+    assert.ok(berichten.some((t) => t.startsWith('The battle was hard')), 'wie viel, viel in een veldslag');
+  } finally {
+    T.ui = ui;
+  }
+});
+
+test('een veldslag met een tijd: is die om, dan wint wie de meeste mannen heeft, en evenveel is gelijk', () => {
+  const S = slag([{ soorten: { speerman: 3 } }, { soorten: { speerman: 3 } }], 1);
+  seconden(S, 70, () => !!S.dorp.einde);
+  assert.equal(S.dorp.einde.kop, 'A draw');
+  assert.equal(S.dorp.einde.gewonnen, false);
+  const S2 = slag([{ soorten: { speerman: 3 } }, { soorten: { speerman: 3 } }], 1);
+  const [, B] = S2.dorpen;
+  T.militieVan(B)[0].dood = true;
+  seconden(S2, 70, () => !!S2.dorp.einde);
+  assert.equal(S2.dorp.einde.kop, 'Victory');
+  assert.ok(/4 of your men are still standing, against 3/.test(S2.dorp.einde.tekst), S2.dorp.einde.tekst);
+});

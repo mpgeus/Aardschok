@@ -1226,6 +1226,21 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spelregel Hoogte uit staat. `w.eiland` draagt het recept, dus alles wat het eiland van een kaart opzoekt
   (`T.eilandVan(w.eiland)`, op 19 plekken), krijgt het juiste. Gemeten (28 okt, Node): *The Ford* maken kost 300 à 550
   ms.
+- Stap 3a2 (28 okt): **de slag zelf**. Een veldslag is een level (`scenario.md`, 7): `T.veldslagLevel({ kaart, zaad,
+  legers, minuten })` geeft `{ veldslag: { kaart, zaad, legers }, triggers }`, met vaste triggers in de woorden van elk
+  level: het doel *Defeat the enemy army.*, `mannen` (`{ minder: 1 }`, met `wie: 1` voor de vijand) voor winst en verlies,
+  `seconden` voor de tijd, en het gevolg `uitslag` (wie de meeste mannen heeft, wint; js/scenario.js). De keuring kijkt de
+  kaart, het zaad, het aantal legers (2 tot het aantal stroken) en de soorten na. `T.beginOpEiland` (js/begin.js) geeft
+  een level met `veldslag` aan `T.beginVeldslag`: de wereld van de kaart, `S.veldslag = { kaart, zaad }`, en per strook
+  een **leger als dorp** (`T.nieuwDorp` met een lege plek, het vak van de strook en een plein van 5 bij 5 in het midden;
+  `D.veldslag = true`, de vijand `D.ander`): geen kar, gezinnen of voorraad, maar zijn soldaten (`T.zetSoldaatBij`,
+  js/bewoners.js: een bewoner zonder huis met `p.soldaat`, en zijn poppetje) en zijn held (`T.zetHeld`: de aanvoerder
+  als bewoner, zodat je hem met de rest stuurt). De opstelling is de knop Line (`T.stuurMannen`, js/kiezen.js) naar de
+  voorkant van de strook, en ze staan er meteen op hun post; de held staat achter het midden. `T.legerVan(D)` zijn de
+  mannen die nog staan (de militie en de held). Wat een dorp heeft en een leger niet: de dag staat stil en er is geen
+  versneller (`S.veldslag` in `T.tikKalender` en `T.snelheidNu`, js/tijd.js), er zijn geen statussen dan het gevecht
+  (`inVeldslag` in `T.OORZAKEN`, js/statussen.js) en geen raad (`T.raadNu`, js/raad.js), en wie valt, valt in de slag,
+  niet door rovers (js/rovers.js). Getoetst: de linie, een minuut stilstaan, het gevecht tot het eind, en de tijd om.
 
 ### gereedschap/pixelart/: de beelden uit code
 
