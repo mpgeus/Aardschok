@@ -662,6 +662,16 @@
     return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
+  // Het vaandel van een doel (T.doelPlekken, js/scenario.js; gereedschap/pixelart/vaandel.cjs; werklijst K, 2c, D2): een
+  // tekening per stand van het wapperen (0 tot `standen` - 1), met het anker op de grond aan de voet van de staak. Het vel
+  // laadt pas als er een doel met een plek is; tot dan null. `S.vaandelStanden()`: hoeveel standen het vel heeft.
+  S.vaandel = function (stand) {
+    const t = gegevens && gegevens.vaandel;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, (stand % t.standen) * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+  };
+  S.vaandelStanden = () => (gegevens && gegevens.vaandel ? gegevens.vaandel.standen : 1);
+
   // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het
   // anker op de grond in het midden van de tegel. Null als het vel er niet is.
   S.hol = function () {

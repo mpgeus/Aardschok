@@ -14,7 +14,9 @@
 //   npm run speeltest -- --hoofdstuk hol       een hoofdstuk van de campagne (levels/campagne.js) in plaats van het lege
 //                                              begin op het eiland van het zaad: de speler kiest Campaign en het hoofdstuk,
 //                                              zoals een mens (de hoofdstukken ervoor tellen als af), en speelt tot het
-//                                              eind van het hoofdstuk of van het jaar (werklijst K, 2c; Marcel, 28 okt)
+//                                              eind van het hoofdstuk of van het jaar (werklijst K, 2c; Marcel, 28 okt).
+//                                              Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk"), dus
+//                                              zonder --zaad of --zaden één zaad
 //   npm run speeltest -- --zaad 1 --opslaan    de proef met opslaan (vraag 48): op 1 oogstmaand opslaan, herladen, Verder,
 //                                              en dan precies hetzelfde jaar als zonder opslaan (--opslaan 245: een andere dag)
 //   npm run speeltest -- --samenvatting        niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt: zo
@@ -88,8 +90,12 @@ function leesOpdracht(argv) {
     else if (a === '--tegelijk') o.tegelijk = Number(argv[++i]);
     else if (a === '--jaren') o.jaren = Math.max(1, Number(argv[++i]) || 1);
     else if (a === '--hoofdstuk') o.hoofdstuk = argv[++i] || '';
-    else if (a === '--zaad') o.zaden = [Number(argv[++i])];
+    else if (a === '--zaad') {
+      o.zaden = [Number(argv[++i])];
+      o.zadenGezet = true;
+    }
     else if (a === '--zaden') {
+      o.zadenGezet = true;
       const [van, tot] = argv[++i].split('-').map(Number);
       o.zaden = [];
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
@@ -104,6 +110,7 @@ function leesOpdracht(argv) {
     console.error('--hoofdstuk wil het id van een hoofdstuk uit levels/campagne.js, zoals --hoofdstuk hol.');
     process.exit(1);
   }
+  if (o.hoofdstuk && !o.zadenGezet) o.zaden = [1]; // het lot van een hoofdstuk is dat van zijn eiland: elk zaad hetzelfde
   if (o.hoofdstuk && o.opslaan != null) {
     console.error('--opslaan speelt het lege begin, niet een hoofdstuk.');
     process.exit(1);

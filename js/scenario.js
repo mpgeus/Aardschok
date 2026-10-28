@@ -130,7 +130,8 @@
   // van het dorp (T.holGebied, js/rovers.js; 2c), want waar het ligt, weet pas het spel.
   const inGebied = (g, x, y) =>
     g.r != null ? Math.max(Math.abs(x - g.x), Math.abs(y - g.y)) <= g.r : x >= g.x && x < g.x + g.b && y >= g.y && y < g.y + g.h;
-  const middenVan = (g) => (g.r != null ? { x: g.x, y: g.y } : { x: g.x + Math.floor(g.b / 2), y: g.y + Math.floor(g.h / 2) });
+  // Het midden van een gebied, of zijn eigen `plek` als het die heeft (het hol: zijn poort).
+  const middenVan = (g) => (g.plek ? { ...g.plek } : g.r != null ? { x: g.x, y: g.y } : { x: g.x + Math.floor(g.b / 2), y: g.y + Math.floor(g.h / 2) });
   const gebiedVan = (S, naam, D) => (naam === 'hol' ? T.holGebied(D) : (S.scenario && S.scenario.gebieden[naam]) || null);
   // Staan er minstens `aantal` wezens op de kaart van D in gebied g waarvoor `telt` geldt? Alleen wie er staat, niet de
   // tegels; zonder lijst, en klaar zodra het er genoeg zijn (zo'n 10 µs per gebied bij 500 wezens).

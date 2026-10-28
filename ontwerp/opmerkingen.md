@@ -140,9 +140,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     van het dorpsland van 100 bij 100 (`D.plek.uitgang`, `T.roverIngang`), zo'n 80 tegels binnen de rand, terwijl de weg
     doorloopt tot de zwarte rand. Dat was er al (16 tegels binnen het open land), maar met een rand valt het op. Later:
     binnenkomen waar de weg de rand kruist.
-  - **Een hoofdstuk speelt elke keer hetzelfde lot.** Het zaad van het dorp is het zaad van het eiland, dus een level met
-    een vast eiland heeft elke keer hetzelfde weer, dezelfde dag van de overval en dezelfde voorvallen. Voor 2c kiezen:
-    zo laten (zoals Knights and Merchants), of het lot per keer anders.
   - **Aan de rand is het halve scherm zwart**: de camera komt tot de rand, niet verder (zoals in Knights and Merchants).
   - **Een tweede dorp** (`Spel.debug.tweedeDorp`, alleen in het debugvenster) let niet op de rand: zijn land gaat niet
     open als het erbuiten ligt.

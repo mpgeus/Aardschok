@@ -28,7 +28,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de buit, de palissade, de aankleding, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier, de bruggen) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de buit, de palissade, de aankleding, het vaandel, de lantaarn, de wijnrank, de marktkraam, de tekens met het papier, de bruggen) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -55,6 +55,7 @@ const Hol = require('./hol.cjs');
 const Buit = require('./buit.cjs');
 const Palissade = require('./palissade.cjs');
 const Aankleding = require('./aankleding.cjs');
+const Vaandel = require('./vaandel.cjs');
 const Lantaarn = require('./lantaarn.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
@@ -254,6 +255,13 @@ function palissade() {
   return Palissade.beschrijving('palissade.png', rijen);
 }
 
+// Het vaandel van een doel: een cel per stand van het wapperen (vaandel.cjs; werklijst K, 2c, D2). js/sprites.js zoekt er
+// een op met S.vaandel(stand), en laadt het vel pas als er een doel met een plek is.
+function vaandel() {
+  schrijf('vaandel.png', Vaandel.vel());
+  return Vaandel.beschrijving('vaandel.png');
+}
+
 // De aankleding van een roverskamp: een rij per ding, in vier richtingen (aankleding.cjs; werklijst K, 2c). js/sprites.js
 // zoekt er een op met S.aankleding(soort, richting), en laadt het vel pas als er iets van te zien is.
 function aankleding() {
@@ -325,7 +333,7 @@ function bruggen() {
   return Bruggen.beschrijving('bruggen.png', stukken);
 }
 
-const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, buit, palissade, aankleding, lantaarn, wijnrank, marktkraam, tekens, bruggen, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, buit, palissade, aankleding, vaandel, lantaarn, wijnrank, marktkraam, tekens, bruggen, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

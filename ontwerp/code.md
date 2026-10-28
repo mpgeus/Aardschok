@@ -1142,8 +1142,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   in `js/rovers.js` ophoogt voor een overval met rovers op de kaart, niet voor een die niet kwam). Het gebied `hol` heeft
   elk level met een hol zonder het te noemen (`gebiedVan(S, naam, D)`: `T.holGebied(D)`, een kring tot de palissade),
   want waar het ligt, weet pas het spel; een level mag geen eigen gebied zo noemen. Een doel met `gebied` wijst naar een
-  plek (D2): `d.plek` (bewaard, het midden van het gebied), een klik op het bericht van een nieuw doel brengt je erheen,
-  en `T.doelPlekken(S)` geeft de plekken van de open doelen, die de minikaart een gouden ring geeft (`js/balk.js`);
+  plek (D2): `d.plek` (bewaard, het midden van het gebied, of zijn eigen `plek`: die van het hol is voor de poort, twee
+  tegels buiten de palissade op het paadje), een klik op het bericht van een nieuw doel brengt je erheen, en
+  `T.doelPlekken(S)` geeft de plekken van de open doelen: de minikaart geeft ze een gouden ring (`js/balk.js`), en
+  `vaandelsInLijst` in `js/tekenen.js` zet er het vaandel (`T.sprites.vaandel(stand)`, `beelden/vaandel.png` uit
+  `gereedschap/pixelart/vaandel.cjs`, 3,5 kB, laadt pas als er een doel met een plek is), dat op de klok van het scherm
+  wappert (vier standen, vijf per seconde). Het item heeft geen punt, dus de mist laat het staan (`mistOverLijst`): je
+  ziet het ook boven land dat je nog niet kent of dat nog niet open is; niet in de fotomodus en niet in een scène.
+  Gemeten (28 okt, in de cloud, hetzelfde beeld): 1,1 ms met en 1,2 zonder, binnen de ruis;
   krijgt een doel dat er al is een gebied, dan zegt het level het met een bericht met dat gebied. De zin van het level
   voor de eerste brief is `inleiding` (`S.scenario.inleiding`; `benoemingInDeWildernis` in `js/brieven.js` zet hem vóór
   de wetten). De keuring kent ze allemaal (een hol vraagt een dorp met een hol).

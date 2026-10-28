@@ -161,7 +161,8 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   bij het begin is er (2c, 28 okt): de **`inleiding`** van het level staat in de eerste brief van de heer, de benoeming;
   een brief midden in een level komt als een level hem vraagt.
 - **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het;
-  met **`gebied`** wijst het naar een plek, met een gouden ring op de minikaart zolang het open is: D2 van 2c),
+  met **`gebied`** wijst het naar een plek, met een gouden ring op de minikaart en het vaandel op de plek zolang het
+  open is: D2 van 2c),
   **`zetVlag`** en **`wisVlag`**, **`teller`** (`{ golven: 1 }`), **`triggerAan`** en **`triggerUit`**.
 - **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), **`rovers`** (`{ aantal, overUren }`: de bestaande
   overval, voor een akker of anders een stapel; `{ aantal, aangekondigd: true }`: morgen, overdag, met een bericht vooraf
@@ -278,7 +279,11 @@ merchants, dungeon keeper level select etc.").
   inleiding in de eerste brief, het hoofddoel *Destroy the robbers' den before Martinmas.*, na de eerste overval een
   ring om het hol op de minikaart, gewonnen als het hol valt, mislukt als de heer op Sint-Maarten komt en het staat er
   nog.
-  Een hoofdstuk met een overval heeft een kamp binnen zijn rand (`test/campagne.test.cjs`). Een hoofdstuk heet naar zijn plek, en
+  Een hoofdstuk met een overval heeft een kamp binnen zijn rand (`test/campagne.test.cjs`). **Een hoofdstuk speelt elke
+  keer hetzelfde lot** (Marcel, 28 okt: "lot gelijk, de campaign moet denk ik wel betrouwbaar zijn. Je wilt daarin
+  dezelfde speelervaring"): het zaad van het dorp is het zaad van het eiland, dus hetzelfde weer, dezelfde dag van de
+  overval en dezelfde voorvallen, zoals Knights and Merchants; de speeltest van een hoofdstuk heeft dus één zaad nodig.
+  Een hoofdstuk heet naar zijn plek, en
   speelt met de spelregels die de browser het laatst koos, zoals New game. De moeilijkheid komt met de AI-spelers (8), en
   het land als keuzescherm daarna (eerst een proefplaat).
 - **Het land is het keuzescherm**, zoals de kaart van Knights and Merchants en het land van Dungeon Keeper: één gemaakt

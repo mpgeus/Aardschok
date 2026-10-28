@@ -6,6 +6,8 @@
 //
 //   node gereedschap/pixelart/vaandel.cjs   (de proefplaat: uit/vaandel-proef.png, de vier standen met een boer ernaast,
 //                                            op gras en op het donker van land dat je nog niet kent, en twee keer vergroot)
+//   node gereedschap/pixelart/naar-spel.cjs --alleen vaandel   (naar het spel: beelden/vaandel.png, een cel per stand;
+//                                            Marcel, 28 okt: "Vaandel goed")
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -144,6 +146,16 @@ function vlak(b, h, ramp, stap) {
   return p;
 }
 
+// Het vel voor het spel (naar-spel.cjs --alleen vaandel): de vier standen naast elkaar, een cel per stand, met het anker
+// op de grond aan de voet van de staak; js/sprites.js zoekt er een op met S.vaandel(stand).
+function vel() {
+  const uit = new K.Plaat(CEL[0] * STANDEN, CEL[1]);
+  for (let i = 0; i < STANDEN; i++) uit.plak(teken(vaandel(i)), i * CEL[0], 0);
+  return uit;
+}
+// Wat in beelden/beschrijving.json komt: het bestand, de maat van een cel, het anker en hoeveel standen.
+const beschrijving = (bestand) => ({ bestand, cel: CEL, anker: ANKER, standen: STANDEN });
+
 // ---------------------------------------------------------------- de proefplaat
 
 // Een boer en de vier standen naast elkaar op ware grootte, eerst op gras, dan op het donker van land dat je niet kent;
@@ -198,4 +210,4 @@ function proef() {
 
 if (require.main === module) proef();
 
-module.exports = { vaandel, teken, CEL, ANKER, STANDEN };
+module.exports = { vaandel, vel, beschrijving, teken, CEL, ANKER, STANDEN };

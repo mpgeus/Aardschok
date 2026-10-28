@@ -2692,7 +2692,10 @@ Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp.
   de wapenrok van de soldaten), met een gouden zoom boven en onder en bij de staak de gouden korenschoof (drie bossen
   aren, een band, en halmen in strepen); hij waait op het scherm naar rechts, en slaat in vier standen op en neer.
   Bij het maken bleek: het blauw alleen viel weg op het donker, dus de zoom is goud; en een schoof op 26 hoog leest pas
-  als drie bossen aren, anders lijkt hij een strik. Wacht op Marcel.
+  als drie bossen aren, anders lijkt hij een strik. **Goed** (Marcel, 28 okt: "Vaandel goed").
+- **In het spel** (28 okt; `node naar-spel.cjs --alleen vaandel`, `beelden/vaandel.png`, een cel per stand, 3,5 kB): op
+  de plek van elk open doel van je dorp, wapperend op vijf standen per seconde, ook boven het donker; bij het rovershol
+  voor de poort, niet op het vuur (`code.md` bij `js/scenario.js`).
 
 ## Open
 

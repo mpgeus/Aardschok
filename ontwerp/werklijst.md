@@ -34,12 +34,6 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   zoals de generator, en de piekenier (in woorden in `beeld.md`, wacht op Marcel).
 
 **Wacht op Marcel**
-- **2c, de proefplaat van het vaandel bekijken** (28 okt; bij K, "2c"; `beeld.md`, "Het vaandel van een doel"): het
-  vaandel zoals in de woorden (Marcel: "1 ja"), in vier standen, op gras en op het donker. En een open keuze uit 2a
-  (`opmerkingen.md`, "Een hoofdstuk speelt elke keer hetzelfde lot"): het lot van een hoofdstuk vast, zoals Knights and
-  Merchants, of per keer anders? De speeltest van hoofdstuk 2 (Marcel: "3, prima"; `speelbaar.md`, 28 okt) speelt nu met
-  drie zaden drie keer hetzelfde jaar. Besloten (Marcel, 28 okt: "2 zo laten"): komt de ene overval vóór Sint-Maarten
-  niet, dan wijst het doel nergens heen, en zoek je het hol zelf.
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
@@ -91,7 +85,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
    Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
    eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan is besloten (bij K, "2c"); c3, c4,
-   het hol en het level (stap 1 tot 4) zijn af op die branch; nog stap 5, nalopen, en het vaandel (wacht op Marcel).
+   het hol en het level (stap 1 tot 4) zijn af op die branch, en de speeltest speelt hoofdstuk 2; het vaandel is goed
+   (Marcel, 28 okt: "Vaandel goed") en staat in het spel; het lot van een hoofdstuk blijft gelijk ("lot gelijk").
    Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
@@ -1002,7 +997,7 @@ na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (
    missen: `kamp` (verslagen) bij *als*, de brief van de heer als inleiding, en een doel dat naar een plek wijst (D2).
    **Af** (28 okt; Marcel: "Goed, door met stap 4"; `scenario.md`, 2 en 6, en `code.md` bij `js/scenario.js`): de
    voorwaarden `hol` en `overval`, het gebied `hol`, een doel met een gebied (een gouden ring op de minikaart), en de
-   `inleiding` in de eerste brief. Nog niet: het vaandel op de plek (eerst in woorden, wacht op Marcel).
+   `inleiding` in de eerste brief, en het vaandel op de plek (Marcel, 28 okt: "1 ja", "Vaandel goed").
 5. **Nalopen** in de browser, en de speeltest.
 
 ## L. De heuvels op het hele eiland (vraag 174, 17 okt)

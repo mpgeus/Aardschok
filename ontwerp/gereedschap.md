@@ -51,7 +51,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   hoofdstuk van de campagne in plaats van het lege begin (Marcel, 28 okt): de speler kiest Campaign en het hoofdstuk,
   de hoofdstukken ervoor tellen als af, en het speelt tot het eind van het hoofdstuk; de samenvatting zegt per zaad het
   eind, de doelen, de triggers die afgingen (met de dag), de overvallen en het hol. De kolonist valt het hol niet aan,
-  dus het toetst het verliezen en de overvallen, niet het winnen. Hetzelfde zaad geeft
+  dus het toetst het verliezen en de overvallen, niet het winnen. Een hoofdstuk speelt elke keer hetzelfde lot (Marcel,
+  28 okt: "lot gelijk"), dus zonder `--zaad` speelt het één zaad. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost zo'n twee minuten (12 okt: zaad 1 in 124 s); nodig is Playwright (in

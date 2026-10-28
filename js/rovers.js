@@ -384,10 +384,15 @@
     return K ? (K.verslagen ? 'verslagen' : 'staat') : null;
   };
   // Het hol van dorp D als gebied van een scenario (het gebied 'hol', js/scenario.js): een kring om het vuur tot de
-  // palissade (of de open plek van een kamp zonder), of null als het geen hol heeft.
+  // palissade (of de open plek van een kamp zonder), of null als het geen hol heeft. Zijn `plek` (waar een doel naar
+  // wijst: de minikaart, het vaandel, een klik op het bericht) is voor de poort, twee tegels buiten de palissade op het
+  // paadje: daar kom je binnen, en het vaandel staat dan niet op het vuur.
   T.holGebied = function (D) {
     const K = D.hol != null ? kampNr(D.wereld, D.hol) : null;
-    return K ? { x: K.x, y: K.y, r: K.palissade ? IN().palissade.straal : T.EILAND_INSTELLINGEN.kampen.open } : null;
+    if (!K) return null;
+    const r = K.palissade ? IN().palissade.straal : T.EILAND_INSTELLINGEN.kampen.open;
+    const poort = kruisingMetPaadje(D.wereld, K, r + 2);
+    return { x: K.x, y: K.y, r, plek: poort ? { x: Math.round(poort.x), y: Math.round(poort.y) } : { x: K.x, y: K.y } };
   };
 
   // De bode (js/bode.js): het kamp waar de rovers vandaan komen die hem onderweg kunnen aanhouden, het dichtste met mannen

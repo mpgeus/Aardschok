@@ -302,9 +302,14 @@ test('het rovershol: het hol met zijn bende, een doel dat na de eerste overval n
   seconde(S);
   assert.equal(T.doelLinksboven(S, D).tekst, "Destroy the robbers' den before Martinmas.");
   assert.deepEqual(T.doelPlekken(S), []);
-  // Het gebied 'hol': een kring om het vuur tot de palissade.
+  // Het gebied 'hol': een kring om het vuur tot de palissade, met zijn plek voor de poort (het vaandel staat niet op het vuur).
   const g = T.holGebied(D);
-  assert.deepEqual(g, { x: K.x, y: K.y, r: T.ROVERS_INSTELLINGEN.palissade.straal });
+  const R = T.ROVERS_INSTELLINGEN.palissade.straal;
+  assert.deepEqual([g.x, g.y, g.r], [K.x, K.y, R]);
+  const buiten = Math.hypot(g.plek.x - K.x, g.plek.y - K.y);
+  assert.ok(buiten > R && buiten < R + 3.5, `de plek is net buiten de palissade: ${buiten.toFixed(1)}`);
+  const poort = T.palissadeVan(S.wereld, K).find((q) => q.rij === 'balk');
+  if (poort) assert.ok(Math.hypot(g.plek.x - poort.x, g.plek.y - poort.y) < 4, 'voor de poort');
   const erin = { inGebied: { gebied: 'hol' } };
   assert.equal(T.voorwaardeGeldt(S, D, null, erin), false);
   const man = D.wereld.wezens.find((e) => T.isVanDorp(D, e));
@@ -316,8 +321,8 @@ test('het rovershol: het hol met zijn bende, een doel dat na de eerste overval n
   (D.rovers || (D.rovers = T.nieuweRovers())).geweest = 1;
   seconde(S);
   const spoor = berichten.find((b) => b.tekst.startsWith('The robbers left a trail'));
-  assert.deepEqual(spoor && spoor.plek, { x: K.x, y: K.y });
-  assert.deepEqual(T.doelPlekken(S), [{ x: K.x, y: K.y }]);
+  assert.deepEqual(spoor && spoor.plek, g.plek);
+  assert.deepEqual(T.doelPlekken(S), [g.plek]);
   // Valt de laatste rover, dan is het gewonnen (E1).
   K.verslagen = true;
   seconde(S);

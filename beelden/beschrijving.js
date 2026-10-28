@@ -50532,6 +50532,18 @@
      }
     ],
     "richtingen": 4
+   },
+   "vaandel": {
+    "bestand": "vaandel.png",
+    "cel": [
+     180,
+     220
+    ],
+    "anker": [
+     60,
+     200
+    ],
+    "standen": 4
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

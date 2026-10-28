@@ -1569,6 +1569,7 @@
     kampBuitInLijst(ctx, S, w, vak, lijst);
     palissadeInLijst(ctx, S, w, vak, lijst);
     aankledingInLijst(ctx, S, w, vak, lijst);
+    vaandelsInLijst(ctx, S, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g, vast, opDeKaart); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
@@ -4012,6 +4013,27 @@
           },
         });
       }
+    }
+  }
+
+  // Het vaandel van een doel (werklijst K, 2c, D2; Marcel, 28 okt: "Vaandel goed"): op elke plek waar een open doel van je
+  // eigen dorp naar wijst (T.doelPlekken, js/scenario.js), ook boven land dat je nog niet kent of dat nog niet open is:
+  // zonder punt, dus de mist laat hem staan (mistOverLijst), en zonder te vragen of de tegel te zien is. Hij wappert op
+  // de klok van het scherm, VAANDEL_PER_SECONDE standen per seconde. Niet in de fotomodus en niet in een scène: het is een
+  // teken voor de speler. Zonder kunst, of zolang het vel laadt: een dunne blauwe staak.
+  const VAANDEL_PER_SECONDE = 5;
+  function vaandelsInLijst(ctx, S, vak, lijst) {
+    if (zonderUi(S)) return;
+    for (const q of T.doelPlekken(S)) {
+      if (!inVak(vak, q.x, q.y)) continue;
+      lijst.push({
+        d: q.x + q.y, l: 1, punt: null, f: () => {
+          const p = opGrond(q.x, q.y);
+          const deel = metSprites() ? T.sprites.vaandel(Math.floor(S.tijd * VAANDEL_PER_SECONDE) % T.sprites.vaandelStanden()) : null;
+          if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+          else T.blok(ctx, p.x, p.y, 0.05, 0.05, 70, '#283a90');
+        },
+      });
     }
   }
 
