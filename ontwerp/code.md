@@ -1216,6 +1216,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/veldslag.js: de veldslag
 
+- **De lobby** (3b1, 28 okt; Marcel: "1 ja, 2 b, 3 ja, 4 ja"): *Skirmish* op het titelscherm, ook in de demo
+  (`lobbyScherm`, `legerPapier` en `beginSlag` in `js/menu.js`; alleen scherm, in de module `lobby`). Links de kaart (zijn
+  naam, het nummer van het zaad, *Other map*, en het plaatje: `tekenKaartje`, de minikaart van de kaart beeld voor beeld
+  zoals in het spel, met een stip per strook, goud de jouwe), de punten van elke kant en de tijd (`stapper`: een regel met
+  min en plus; de grenzen en keuzes in `T.VELDSLAG_INSTELLINGEN.punten` en `minuten`); rechts op papier je leger, per soort
+  met zijn prijs (`T.soldaatPrijs`, js/soldaten.js). Min en plus zeggen waarom ze niet kunnen (niet meer punten dan je
+  hebt, niet minder punten dan je leger kost). Begin maakt een level (`T.veldslagLevel` met `punten`, jouw leger met zijn
+  soorten, de AI als `{ veldheer: true }` zonder soorten) en begint het zoals een hoofdstuk. Het plaatje maakt het eiland
+  van de kaart los (`T.veldslagPlaatje`, niet `T.eilandVan`: dat onthoudt er één, en het tekenen vraagt elk beeld het
+  grote eiland achter het titelscherm; 0,4 s per nieuw zaad). Een veldslag slaat niet vanzelf op (dat doet het spel elke
+  ochtend, en de dag staat stil), dus Continue blijft je dorp.
+
 - `js/veldslag.js` (vraag 187 en 188, stap 3; het ontwerp in `scenario.md`, 7; Marcel, 28 okt): **skirmish zonder
   economie**, zonder scherm en getoetst (`test/veldslag.test.cjs`). Stap 3a1 (28 okt): **de kaart uit een recept**.
   Een kaart is een recept in `levels/kaarten.js` (`T.KAARTEN`, gegevens die later de editor terugschrijft; de naam is een
@@ -1255,7 +1267,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   versneller (`S.veldslag` in `T.tikKalender` en `T.snelheidNu`, js/tijd.js), er zijn geen statussen dan het gevecht
   (`inVeldslag` in `T.OORZAKEN`, js/statussen.js) en geen raad (`T.raadNu`, js/raad.js), en wie valt, valt in de slag,
   niet door rovers (js/rovers.js). Getoetst: de linie, een minuut stilstaan, het gevecht tot het eind, en de tijd om.
-  Een leger met `veldheer: true` speelt de AI (`js/veldheer.js`); zonder keus is dat elk leger behalve het eerste.
+  Een leger met `veldheer: true` speelt de AI (`js/veldheer.js`); zonder keus is dat elk leger behalve het eerste. Met
+  `punten` in het level (3b1) koopt een veldheer zonder soorten zijn leger bij het begin (`maakLeger`: `T.veldheerKoopt`
+  met een lot uit het zaad van de slag en zijn strook, zodat elke computer hetzelfde koopt; de mix in `D.veldheer.mix`), en
+  kijkt de keuring na dat een speler niet meer kocht dan zijn punten.
 
 ### js/veldheer.js: de veldheer
 
@@ -1277,7 +1292,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op een post erbij (een plek in de rivier haal je nooit). De held loopt `achterDeLinie` tegels achter het doel; is hij
   de laatste, dan vecht hij zelf. Gemeten met de proefbank (`npm run veldslag`, 28 okt, Node): dertig slagen tussen twee
   veldheren eindigen allemaal, in gemiddeld 53 seconden; een tik kost gemiddeld 0,13 ms. Getoetst in
-  `test/veldheer.test.cjs`.
+  `test/veldheer.test.cjs`. **Hij koopt** (3b1; Marcel: "2 b"): `T.veldheerKoopt(punten, lot)` kiest een van de mixen in
+  `VELDHEER_INSTELLINGEN.mixen` (gewoon, schutters, zwaar: per soort een deel van de punten) uit het lot (gemengd, want de
+  eerste worp van een dobbelsteen is bij een klein zaad niet verspreid), koopt per soort zoveel als zijn deel betaalt, en
+  met wat overblijft steeds de duurste soort die er nog in past, en anders de militie: alle punten op, en geen toeval.
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -2576,6 +2594,10 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 ### js/soldaten.js: de soldaten en hun wapens
 
+- **De prijs van een soldaat** (3b1, 28 okt; `scenario.md`, 7: "De prijs van een soldaat is de waarde van zijn stukken"):
+  `T.soldaatPrijs(soort)` telt de waarde van zijn stukken (`T.waardeVan`, js/einde.js, de tabel van de punten van 186);
+  de hooivork, die geen waar is, staat er op zijn eigen naam (`waarde.hooivork: 1`, B1). Een speerman kost zo 4, een
+  boogschutter 2, een zwaardvechter 7.
 - `js/soldaten.js` (werklijst vraag 159, 15 okt; Marcel: "A1, B1, C1, D1", de wapens "sword, spear, shield, pike, bow,
   crossbow, armor", in vaste soorten): **in het wachthuis word je soldaat.** Per wachthuis `g.soldaten` (hoeveel je er
   per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zes soorten met vaste

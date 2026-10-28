@@ -1464,12 +1464,31 @@
     'KIEZEN_INSTELLINGEN.groep': T.t('a man further than this many tiles from his group finds his own way'), // geen tekst
     'VELDSLAG_INSTELLINGEN.zee': T.t('this many tiles of sea around the map are open and visible'), // geen tekst
     'VELDSLAG_INSTELLINGEN.dag': T.t('the day and hour a battle is fought on, and stays on'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten': T.t('points for each side, in the skirmish lobby'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.standaard': T.t('at first'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.min': T.t('at least'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.max': T.t('at most'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.stap': T.t('in steps of'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.minuten': T.t('the time limits to choose from, in minutes (0: none)'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.minutenStandaard': T.t('the time limit at first, in minutes'), // geen tekst
     'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst
     'VELDHEER_INSTELLINGEN.ver': T.t('a man whose post is this many tiles from the goal gets a new order'), // geen tekst
     'VELDHEER_INSTELLINGEN.aanval': T.t('a man who is not fighting attacks an enemy his army sees this close (tiles)'), // geen tekst
     'VELDHEER_INSTELLINGEN.erbij': T.t('this close (tiles) to a place, his army is there'), // geen tekst
     'VELDHEER_INSTELLINGEN.etappe': T.t('he sends his men at most this many tiles at once'), // geen tekst
     'VELDHEER_INSTELLINGEN.achterDeLinie': T.t('the commander stands this many tiles behind his men'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen': T.t('what the AI general buys: one of these mixes, from the seed'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.speerman': T.t('spearmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.boogschutter': T.t('archers, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters': T.t('the mix of archers'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.speerman': T.t('spearmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.boogschutter': T.t('archers, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar': T.t('the heavy mix'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.piekenier': T.t('pikemen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
     'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst

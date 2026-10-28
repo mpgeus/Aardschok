@@ -11,6 +11,8 @@
 //   npm run veldslag -- --a speerman=8,boogschutter=4 --b zwaardvechter=6,kruisboogschutter=4
 //                                                     de legers: leger A heeft de eerste strook, B de tweede
 //   npm run veldslag -- --minuten 5                   de tijd (0: geen tijd; dan stopt hij na een uur)
+//   npm run veldslag -- --punten 40                   elke veldheer koopt zelf voor zoveel punten (T.veldheerKoopt: een van
+//                                                     de drie mixen uit het zaad), tenzij --a of --b zegt wat
 //   npm run veldslag -- --getal GEVECHT_INSTELLINGEN.zicht=10
 //                                                     een getal uit de werkbank, zo vaak als je wilt
 //
@@ -39,9 +41,10 @@ function lees(argv) {
       o.zaden = [];
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (a === '--kaart') o.kaart = argv[++i];
-    else if (a === '--a') o.a = leger(argv[++i]);
-    else if (a === '--b') o.b = leger(argv[++i]);
+    else if (a === '--a') o.a = o.aGezet = leger(argv[++i]);
+    else if (a === '--b') o.b = o.bGezet = leger(argv[++i]);
     else if (a === '--minuten') o.minuten = Number(argv[++i]);
+    else if (a === '--punten') o.punten = Number(argv[++i]);
     else if (a === '--getal') {
       const [naam, waarde] = String(argv[++i] || '').split('=');
       if (!naam || waarde == null || waarde === '') {
@@ -50,7 +53,7 @@ function lees(argv) {
       }
       o.getallen[naam] = Number(waarde);
     } else {
-      console.error(`Onbekend: ${a}. Wel: --zaad n, --zaden van-tot, --kaart naam, --a soort=n,..., --b soort=n,..., --minuten n, --getal pad=waarde.`);
+      console.error(`Onbekend: ${a}. Wel: --zaad n, --zaden van-tot, --kaart naam, --a soort=n,..., --b soort=n,..., --minuten n, --punten n, --getal pad=waarde.`);
       process.exit(1);
     }
   }
@@ -69,8 +72,10 @@ function overVan(T, D) {
 
 // Eén slag: tot het eind (de triggers van het level), of na een uur als er geen tijd is.
 function slag(T, o, zaad) {
-  const legers = [{ soorten: o.a, veldheer: true }, { soorten: o.b, veldheer: true }];
-  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: o.kaart, zaad, legers, minuten: o.minuten || null }));
+  // met --punten koopt elke veldheer zelf, behalve wie --a of --b zijn leger gaf
+  const koopt = (soorten, gezet) => (o.punten && !gezet ? { veldheer: true } : { soorten, veldheer: true });
+  const legers = [koopt(o.a, o.aGezet), koopt(o.b, o.bGezet)];
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: o.kaart, zaad, punten: o.punten || null, legers, minuten: o.minuten || null }));
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
   S.kalender.snelheid = 1;
   const [A, B] = S.dorpen;
@@ -94,8 +99,8 @@ function slag(T, o, zaad) {
     winnaar: !A.einde ? '?' : wij > zij ? 'A' : zij > wij ? 'B' : '=',
     seconden: Math.round(S.wereldTijd),
     eerste: eerste == null ? '-' : Math.round(eerste),
-    A: overVan(T, A),
-    B: overVan(T, B),
+    A: (A.veldheer.mix ? `${A.veldheer.mix}: ` : '') + overVan(T, A),
+    B: (B.veldheer.mix ? `${B.veldheer.mix}: ` : '') + overVan(T, B),
     tik: duur / tikken,
     hoogst,
   };
@@ -112,16 +117,17 @@ function main() {
     }
   }
   const tekst = (s) => Object.entries(s).map(([k, n]) => `${n} ${k}`).join(', ');
-  console.log(`De veldslag op ${o.kaart}: A (${tekst(o.a)}) tegen B (${tekst(o.b)}), ${o.minuten ? `${o.minuten} minuten` : 'geen tijd'}.`);
+  const wie = (s, gezet) => (o.punten && !gezet ? `zelf gekocht voor ${o.punten}` : tekst(s));
+  console.log(`De veldslag op ${o.kaart}: A (${wie(o.a, o.aGezet)}) tegen B (${wie(o.b, o.bGezet)}), ${o.minuten ? `${o.minuten} minuten` : 'geen tijd'}.`);
   for (const [pad, waarde] of Object.entries(o.getallen)) console.log(`  ${pad} = ${waarde}`);
   console.log('');
-  console.log('zaad  wint  sec  gevecht  A over                            B over                            ms/tik (hoogst)');
+  console.log('zaad  wint  sec  gevecht  A over                                              B over                                              ms/tik (hoogst)');
   const uit = [];
   for (const zaad of o.zaden) {
     const r = slag(T, o, zaad);
     uit.push(r);
     console.log(
-      `${String(r.zaad).padEnd(6)}${r.winnaar.padEnd(6)}${String(r.seconden).padEnd(5)}${String(r.eerste).padEnd(9)}${r.A.padEnd(34)}${r.B.padEnd(34)}${r.tik.toFixed(2)} (${r.hoogst.toFixed(1)})`,
+      `${String(r.zaad).padEnd(6)}${r.winnaar.padEnd(6)}${String(r.seconden).padEnd(5)}${String(r.eerste).padEnd(9)}${r.A.padEnd(52)}${r.B.padEnd(52)}${r.tik.toFixed(2)} (${r.hoogst.toFixed(1)})`,
     );
   }
   const tel = (w) => uit.filter((r) => r.winnaar === w).length;

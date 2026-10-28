@@ -41,6 +41,9 @@
       ijzer: 1.5, gereedschap: 3, zout: 0.5, laken: 1, leer: 0.6, vaten: 0.3,
       meel: 0.4, brood: 0.5, bier: 0.2, wijn: 1, melk: 0.1, kaas: 0.4,
       speren: 2, pieken: 3, zwaarden: 3, schilden: 2, bogen: 2, kruisbogen: 3, harnassen: 2,
+      // geen waar, maar de hooivork van de militie: in een veldslag kost een man militie zoveel (T.soldaatPrijs,
+      // js/soldaten.js; Marcel, 28 okt: B1)
+      hooivork: 1,
     },
   };
   const IN = () => T.EINDE_INSTELLINGEN;

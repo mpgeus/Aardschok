@@ -7,7 +7,8 @@
 // wacht (js/main.js, T.titelCamera). Een vaantje staat bij de keuze die je hebt: de muis en de pijltjes kiezen hetzelfde,
 // Enter neemt hem. New game is een eigen scherm op die plek: de naam van je dorp, het land (zijn nummer en het eiland),
 // en de spelregels, die daar vastliggen voor het hele spel (js/opties.js). Campaign ook (vraag 187, stap 2b; niet in de
-// demo): de hoofdstukken op een rij (js/campagne.js). Load en Credits openen ernaast op papier.
+// demo): de hoofdstukken op een rij (js/campagne.js). Skirmish ook (vraag 187 en 188, stap 3b; ook in de demo): de lobby
+// van een veldslag (js/veldslag.js), met je leger op papier ernaast. Load en Credits openen ernaast op papier.
 // In het spel opent Esc, of de knop Menu, het menu op papier: Resume, Save, Load, Settings, Game rules (alleen lezen),
 // Photo mode, To the title screen, en Quit. Settings (js/instellingen.js) en de spelregels (js/hud.js) zijn vensters die
 // erbovenop opengaan; dicht is weer het menu. Het titelscherm en het menu zetten de tijd stil ('titel' en 'menu'). De
@@ -31,6 +32,9 @@
   let naamVoorstel = null;
   // Of de hoofdstukken van de campagne er staan (Campaign).
   let campagne = false;
+  // De lobby van Skirmish (vraag 187 en 188, stap 3b): { kaart, zaad, punten, minuten, koop } en het plaatje van de kaart
+  // (`plaatje`, T.veldslagPlaatje), of null. Alleen scherm: Begin maakt er een level van (T.veldslagLevel).
+  let lobby = null;
   // Met welke spelregels het land achter het scherm gemaakt is: kies je bij New game andere, dan maakt Begin het opnieuw
   // (de hoogte maakt een ander land).
   let landRegels = null;
@@ -94,6 +98,7 @@
       return (
         (nieuwste ? knop('verder', T.t('Continue'), { uitleg: beschrijf(nieuwste.kop), hoofd: true }) : '') +
         (T.DEMO_INSTELLINGEN.aan ? '' : knop('campagne', T.t('Campaign'))) +
+        knop('skirmish', T.t('Skirmish'), { uitleg: T.t('A battle against the AI, without a village') }) +
         knop('nieuw', T.t('New game'), { hoofd: !nieuwste }) +
         (spellen.length ? knop('laden', T.t('Load'), { open: lijst === 'laden' }) : '') +
         knop('instellingen', T.t('Settings')) +
@@ -173,6 +178,128 @@
     return `<p class="titel-kop">${T.t('Campaign')}</p>` + rij.join('') + knop('terug', T.t('Back'));
   }
 
+  // ── Skirmish (vraag 187 en 188, stap 3b; Marcel, 28 okt: "1 ja, 2 b, 3 ja, 4 ja") ──
+  //
+  // Links de kaart (zijn naam, zijn nummer, een andere, en het plaatje met de stroken: goud is de jouwe), de punten van
+  // elke kant en de tijd; rechts op papier je leger: per soort hoeveel, met zijn prijs (de waarde van zijn stukken,
+  // T.soldaatPrijs). De AI koopt zijn eigen leger met dezelfde punten (T.veldheerKoopt, js/veldheer.js). Begin maakt er
+  // een level van (T.veldslagLevel) en begint het, zoals een hoofdstuk.
+  const VS = () => T.VELDSLAG_INSTELLINGEN;
+  const kostVan = (koop) => Object.entries(koop).reduce((som, [soort, n]) => som + T.soldaatPrijs(soort) * n, 0);
+  const nieuwKaartZaad = () => 1 + Math.floor(Math.random() * 99999); // een nieuw spel kiest zijn zaad zo (code.md bij js/tik.js)
+  function nieuweLobby() {
+    return { kaart: Object.keys(T.KAARTEN)[0], zaad: nieuwKaartZaad(), punten: VS().punten.standaard, minuten: VS().minutenStandaard, koop: { speerman: 8, boogschutter: 4 }, plaatje: null };
+  }
+  // Een regel met min en plus: wat het is, wat het nu is, en waarom min of plus niet kan (of niets).
+  function stapper(plek, tekst, waarde, { min = null, plus = null } = {}) {
+    const k = (actie, teken, uit) =>
+      `<button class="menu-keuze klein lobby-knop" data-actie="${actie}" data-plek="${plek}"${uit ? ` disabled title="${veilig(uit)}"` : ''}><span>${teken}</span></button>`;
+    return `<div class="lobby-rij"><span class="lobby-naam">${tekst}</span>${k('min', '−', min)}<span class="lobby-waarde">${waarde}</span>${k('plus', '+', plus)}</div>`;
+  }
+  const minutenTekst = (m) => (m ? T.t('{n|# minute|# minutes}', { n: m }) : T.t('No time limit'));
+  function lobbyScherm() {
+    const L = lobby;
+    const P = VS().punten;
+    const kost = kostVan(L.koop);
+    const tijden = VS().minuten;
+    const t = tijden.indexOf(L.minuten);
+    return (
+      `<p class="titel-kop">${T.t('Skirmish')}</p>` +
+      `<div class="menu-veld"><label for="kaartzaad">${veilig(T.tGegevens(T.KAARTEN[L.kaart].naam))}</label>` +
+      `<div class="menu-land"><input id="kaartzaad" class="menu-invoer" type="text" inputmode="numeric" maxlength="5" autocomplete="off" spellcheck="false" value="${L.zaad}">` +
+      `<button class="menu-keuze klein" data-actie="anderekaart" title="${T.t('The same map, laid out differently')}"><span>${T.t('Other map')}</span></button></div>` +
+      `<canvas id="kaartje" class="menu-eiland" width="1" height="1"></canvas></div>` +
+      stapper('punten', T.t('Points for each side'), L.punten, {
+        min: L.punten - P.stap < P.min ? T.t('Not fewer than {n}', { n: P.min }) : L.punten - P.stap < kost ? T.t('Your army costs {n}', { n: kost }) : null,
+        plus: L.punten + P.stap > P.max ? T.t('Not more than {n}', { n: P.max }) : null,
+      }) +
+      stapper('tijd', T.t('Time'), minutenTekst(L.minuten), { min: t <= 0 ? ' ' : null, plus: t >= tijden.length - 1 ? ' ' : null }) +
+      knop('slag', T.t('Begin'), { hoofd: true }) +
+      knop('terug', T.t('Back'))
+    );
+  }
+  // Je leger, op papier naast de lobby.
+  function legerPapier() {
+    const L = lobby;
+    const kost = kostVan(L.koop);
+    const rijen = Object.keys(T.SOLDAAT_SOORTEN).map((soort) => {
+      const prijs = T.soldaatPrijs(soort);
+      const n = L.koop[soort] || 0;
+      return stapper(soort, `${veilig(T.hoofdletter(T.soortNaam(soort)))} <small>${T.t('{n|# point|# points}', { n: prijs })}</small>`, n, {
+        min: n ? null : ' ',
+        plus: kost + prijs > L.punten ? T.t('Not enough points') : null,
+      });
+    });
+    return (
+      `<div class="paneel menu-venster naast lobby-leger">` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Your army')}</span>` +
+      `<span class="venster-wanneer">${T.t('{kost} of {punten} points', { kost, punten: L.punten })}</span></div>` +
+      `<div class="menu-regels">${rijen.join('')}` +
+      `<p class="lobby-tegen">${T.t('Against you: the AI. It buys its own army with the same points.')}</p></div></div>`
+    );
+  }
+  // Een stap min of plus: de punten (niet onder wat je leger kost), de tijd, of een soldaat (niet boven je punten).
+  function lobbyStap(plek, richting) {
+    const L = lobby;
+    const P = VS().punten;
+    if (plek === 'punten') L.punten = Math.max(P.min, Math.max(kostVan(L.koop), Math.min(P.max, L.punten + richting * P.stap)));
+    else if (plek === 'tijd') {
+      const tijden = VS().minuten;
+      L.minuten = tijden[Math.max(0, Math.min(tijden.length - 1, tijden.indexOf(L.minuten) + richting))];
+    } else if (T.SOLDAAT_SOORTEN[plek]) {
+      const n = Math.max(0, (L.koop[plek] || 0) + richting);
+      if (richting > 0 && kostVan(L.koop) + T.soldaatPrijs(plek) > L.punten) return;
+      if (n) L.koop[plek] = n;
+      else delete L.koop[plek];
+    }
+  }
+  // Het nummer in het veld van de kaart, als het een nummer is, anders wat er was.
+  function leesKaartZaad() {
+    const veld = $('kaartzaad');
+    const v = veld && veld.value.trim();
+    if (v && /^\d+$/.test(v) && Number(v) >= 1) lobby.zaad = Number(v);
+  }
+  // Het plaatje van de kaart, zoals de minikaart in het spel: de ruit van de kaart, beeld voor beeld verder gemaakt
+  // (T.maakMinikaart), met een stip in het midden van elke strook: goud de jouwe, rood die van de AI.
+  function tekenKaartje() {
+    const doek = $('kaartje');
+    if (!doek || !lobby) return;
+    const L = lobby;
+    if (!L.plaatje || L.plaatje.kaart !== L.kaart || L.plaatje.zaad !== L.zaad) L.plaatje = { kaart: L.kaart, zaad: L.zaad, ...T.veldslagPlaatje(L.kaart, L.zaad) };
+    const { E, veld, stroken } = L.plaatje;
+    const t0 = performance.now();
+    while (!T.maakMinikaart(E, 16, veld) && performance.now() - t0 < 8);
+    const m = T.minikaartBeeld(E, veld);
+    const B = doek.clientWidth;
+    const k = window.devicePixelRatio || 1;
+    Object.assign(doek, { width: Math.round(B * k), height: Math.round((B / 2) * k) });
+    const beeld = Object.assign(document.createElement('canvas'), { width: m.n, height: m.n });
+    beeld.getContext('2d').putImageData(new ImageData(m.rgba, m.n, m.n), 0, 0);
+    const c = doek.getContext('2d');
+    c.imageSmoothingEnabled = false;
+    const s = (B / (2 * veld.maat)) * veld.stap * k;
+    c.setTransform(s, s / 2, -s, s / 2, (B / 2) * k, 0);
+    c.drawImage(beeld, 0, 0);
+    c.setTransform(k, 0, 0, k, 0, 0);
+    stroken.forEach((st, i) => {
+      const p = T.minikaartPunt(st.x, st.y, B, veld);
+      c.fillStyle = '#1b1510';
+      c.fillRect(Math.round(p.x) - 4, Math.round(p.y) - 4, 8, 8);
+      c.fillStyle = i === 0 ? '#e2b64a' : '#c4553f';
+      c.fillRect(Math.round(p.x) - 3, Math.round(p.y) - 3, 6, 6);
+    });
+    if (m.klaar < m.n) requestAnimationFrame(tekenKaartje);
+  }
+  // Begin: de slag als level, jouw leger tegen een veldheer die zelf koopt (js/veldslag.js), en het titelscherm dicht.
+  function beginSlag(S) {
+    leesKaartZaad();
+    const L = lobby;
+    const level = T.veldslagLevel({ kaart: L.kaart, zaad: L.zaad, punten: L.punten, minuten: L.minuten || null, legers: [{ soorten: { ...L.koop } }, { veldheer: true }] });
+    T.nieuwSpel(null, level);
+    T.houdTijdStil(S, 'titel'); // zoals het spel achter het titelscherm; sluit laat hem gaan
+    sluit(S);
+  }
+
   function inhoud(S) {
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
     const vraagje = () => `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
@@ -183,9 +310,10 @@
       else if (vraag) links = vraagje();
       else if (naamVoorstel != null) links = nieuwSpelScherm(S);
       else if (campagne) links = campagneScherm();
+      else if (lobby) links = lobbyScherm();
       else links = hoofdKeuzes(S);
-      // Load en Credits liggen op papier naast de keuzes.
-      const naast = lijst
+      // Load en Credits liggen op papier naast de keuzes, en je leger naast de lobby.
+      const naast = lobby && !vraag ? legerPapier() : lijst
         ? `<div class="paneel menu-venster naast">` +
           `<div class="venster-kop"><span class="venster-titel">${lijst === 'credits' ? T.t('Credits') : T.t('Load')}</span>` +
           `<button class="venster-sluit" data-actie="terug" title="${T.t('Close (Esc)')}">✕</button></div>` +
@@ -212,7 +340,7 @@
   }
 
   // Waar de pijltjes kiezen: op het papier als dat ernaast openstaat, anders alles.
-  const keuzeVak = () => $('menu').querySelector('.menu-venster.naast') || $('menu');
+  const keuzeVak = () => $('menu').querySelector('.menu-venster.naast:not(.lobby-leger)') || $('menu'); // geen tekst (je leger naast de lobby hoort erbij)
   const keuzesIn = (vak) => [...vak.querySelectorAll('.menu-keuze:not(:disabled), .menu-invoer')]; // geen tekst
   const sleutelVan = (el) => el && (el.id || `${el.dataset.actie}|${el.dataset.plek || ''}`);
 
@@ -233,6 +361,7 @@
       veld.select();
     } else if (keuzes.length) keuzes[0].focus({ preventScroll: true });
     if ($('eilandje')) tekenEiland(S);
+    if ($('kaartje')) tekenKaartje();
   }
 
   // Na een venster erbovenop (de spelregels): het menu zegt weer wat er nu is (js/hud.js).
@@ -316,6 +445,7 @@
     melding = null;
     naamVoorstel = null;
     campagne = false;
+    lobby = null;
     document.body.classList.remove('titelscherm');
     $('menu-knop').classList.remove('actief');
     toon(S);
@@ -424,6 +554,7 @@
       else if (lijst) lijst = null;
       else if (naamVoorstel != null) naamVoorstel = naamNu = null;
       else if (campagne) campagne = false;
+      else if (lobby) lobby = null;
     } else if (actie === 'verder') {
       if (scherm === 'menu') return sluit(S);
       const nieuwste = T.nieuwsteSpel();
@@ -445,6 +576,16 @@
     } else if (actie === 'campagne') {
       lijst = null;
       campagne = true;
+    } else if (actie === 'skirmish') {
+      lijst = null;
+      lobby = nieuweLobby();
+    } else if (actie === 'min' || actie === 'plus') {
+      leesKaartZaad();
+      lobbyStap(plek, actie === 'plus' ? 1 : -1);
+    } else if (actie === 'anderekaart') {
+      lobby.zaad = nieuwKaartZaad();
+    } else if (actie === 'slag') {
+      return beginSlag(S);
     } else if (actie === 'hoofdstuk') {
       if (!T.hoofdstukOpen(plek)) return;
       // Zoals bij New game: wat er vanzelf bewaard is, wordt straks overschreven; de eigen plekken niet.
@@ -544,12 +685,17 @@
         ev.preventDefault();
         return doe(T.S, 'begin');
       }
+      if (ev.key === 'Enter' && inVeld && lobby) {
+        ev.preventDefault();
+        leesKaartZaad();
+        return toon(T.S); // een ander nummer: het plaatje van die kaart
+      }
       if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
         ev.preventDefault();
         return stapKeuze(ev.key === 'ArrowDown' ? 1 : -1);
       }
       if (ev.key !== 'Escape' || laadt) return;
-      if (vraag || lijst || naamVoorstel != null || campagne) doe(T.S, 'terug');
+      if (vraag || lijst || naamVoorstel != null || campagne || lobby) doe(T.S, 'terug');
       else if (scherm === 'menu') sluit(T.S);
     },
     true,

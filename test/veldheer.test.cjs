@@ -95,3 +95,26 @@ test('is de held de laatste, dan vecht hij zelf: twee helden wachten niet tot de
     assert.ok(T.legerVan(A).length + T.legerVan(B).length <= 1, 'een van de helden viel');
   });
 });
+
+// Wat de veldheer koopt (3b; Marcel, 28 okt: "2 b"): een van drie mixen uit het zaad, voor zijn punten, en de prijs van
+// een soldaat is de waarde van zijn stukken (de militie 1, B1).
+test('de prijs van een soldaat is de waarde van zijn stukken, en de militie kost 1', () => {
+  assert.equal(T.soldaatPrijs('militie'), 1);
+  assert.equal(T.soldaatPrijs('speerman'), 4);
+  assert.equal(T.soldaatPrijs('boogschutter'), 2);
+  assert.equal(T.soldaatPrijs('zwaardvechter'), 7);
+});
+
+test('de veldheer koopt een van drie mixen uit het zaad, voor al zijn punten en niet meer, en hetzelfde lot is hetzelfde leger', () => {
+  const kost = (soorten) => Object.entries(soorten).reduce((s, [soort, n]) => s + T.soldaatPrijs(soort) * n, 0);
+  const mixen = new Set();
+  for (const punten of [20, 40, 100, 200]) {
+    for (let lot = 1; lot <= 30; lot++) {
+      const k = T.veldheerKoopt(punten, lot);
+      mixen.add(k.mix);
+      assert.equal(kost(k.soorten), punten, `${punten} punten, lot ${lot}: ${JSON.stringify(k)}`);
+      assert.deepEqual(T.veldheerKoopt(punten, lot), k, 'hetzelfde lot, hetzelfde leger');
+    }
+  }
+  assert.deepEqual([...mixen].sort(), Object.keys(T.VELDHEER_INSTELLINGEN.mixen).sort(), 'alle drie de mixen komen voor');
+});

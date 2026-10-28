@@ -73,8 +73,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   leger acht speermannen en vier boogschutters, tien minuten. Per slag: wie won (A heeft de eerste strook), na hoeveel
   seconden, wanneer het eerste gevecht begon, wie er per soort nog staat, en wat een tik kost (gemiddeld en de hoogste).
   `--zaden 1-30` of `--zaad 7`, `--kaart`, `--a speerman=8,boogschutter=4` en `--b ...` (de legers), `--minuten 5` (0 is
-  geen tijd), en `--getal BLOK.naam=waarde` (een getal uit de werkbank, zo vaak als je wilt). Dertig slagen kosten zo'n
-  tien seconden. Het meet de tik in Node; het tekenen en Firefox meet het spel zelf.
+  geen tijd), `--punten 40` (elke veldheer koopt zelf, een van de drie mixen uit het zaad, tenzij `--a` of `--b` zegt
+  wat; de uitslag zegt welke mix), en `--getal BLOK.naam=waarde` (een getal uit de werkbank, zo vaak als je wilt).
+  Dertig slagen kosten zo'n tien seconden. Het meet de tik in Node; het tekenen en Firefox meet het spel zelf.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam

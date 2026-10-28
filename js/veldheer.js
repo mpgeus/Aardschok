@@ -24,12 +24,43 @@
     erbij: 5, // zo dicht (tegels) bij een plek is zijn leger er
     etappe: 24, // zo ver (tegels) stuurt hij zijn mannen hooguit in één keer
     achterDeLinie: 4, // de held staat zoveel tegels achter zijn mannen (ook bij het begin van een veldslag, js/veldslag.js)
+    // Wat hij koopt met zijn punten (3b; Marcel, 28 okt: "2 b"): een van deze mixen, gekozen uit het zaad, met per soort
+    // welk deel van de punten; wat overblijft, gaat naar de soort die er nog in past. De standen van 3f krijgen er elk
+    // hun eigen.
+    mixen: {
+      gewoon: { speerman: 0.5, boogschutter: 0.25, zwaardvechter: 0.25 },
+      schutters: { speerman: 0.4, boogschutter: 0.4, kruisboogschutter: 0.2 },
+      zwaar: { zwaardvechter: 0.4, piekenier: 0.3, kruisboogschutter: 0.3 },
+    },
   };
   const IN = () => T.VELDHEER_INSTELLINGEN;
 
   // Een veldheer voor leger i. Hij denkt voor het eerst na een halve seconde per nummer, zodat niet alle veldheren in
   // dezelfde tik denken.
   T.nieuweVeldheer = (S, i = 0) => ({ denkt: (S.wereldTijd || 0) + (i % 4) * 0.5, stap: 0, laatst: null, held: null });
+
+  // Wat de veldheer koopt voor `punten` (een veldslag, js/veldslag.js): { mix, soorten }, de mix uit `lot` (een getal:
+  // hetzelfde lot, dezelfde mix). Per soort zoveel als zijn deel van de punten koopt, en wat overblijft, steeds de duurste
+  // soort van de mix die er nog in past, en anders de militie. Zonder toeval: op elke computer hetzelfde.
+  T.veldheerKoopt = function (punten, lot) {
+    const namen = Object.keys(IN().mixen);
+    const mix = namen[Math.floor(T.dobbelsteen((Math.imul(lot >>> 0, 2654435761) ^ 0x5bd1e995) >>> 0)() * namen.length)]; // gemengd: bij een klein lot is de eerste worp anders niet verspreid
+    const soorten = {};
+    let over = punten;
+    for (const [soort, deel] of Object.entries(IN().mixen[mix])) {
+      const n = Math.floor((punten * deel) / T.soldaatPrijs(soort));
+      if (n > 0) soorten[soort] = n;
+      over -= n * T.soldaatPrijs(soort);
+    }
+    const opVolgorde = [...Object.keys(IN().mixen[mix]), 'militie'].sort((a, b) => T.soldaatPrijs(b) - T.soldaatPrijs(a));
+    for (const soort of opVolgorde) {
+      while (T.soldaatPrijs(soort) > 0 && T.soldaatPrijs(soort) <= over) {
+        soorten[soort] = (soorten[soort] || 0) + 1;
+        over -= T.soldaatPrijs(soort);
+      }
+    }
+    return { mix, soorten };
+  };
 
   // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): heeft het een veldheer, en is het tijd, dan denkt hij.
   T.werkVeldheerBij = function (S, D) {

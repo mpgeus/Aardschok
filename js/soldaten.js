@@ -78,6 +78,10 @@
   };
   const SOORTEN = Object.keys(T.SOLDAAT_SOORTEN);
   T.soortNaam = (soort) => T.SOLDAAT_SOORTEN[soort].naam();
+  // Wat een soldaat van deze soort kost in een veldslag (js/veldslag.js; scenario.md, 7: "De prijs van een soldaat is de
+  // waarde van zijn stukken"): de waarde van zijn stukken in goud (T.waardeVan, js/einde.js), de hooivork, die geen waar
+  // is, op zijn eigen naam. Zo is er geen tweede prijslijst: een speerman kost 4, de militie 1 (B1).
+  T.soldaatPrijs = (soort) => stukkenVan(soort).reduce((som, stuk) => som + T.waardeVan(STUKKEN[stuk].waar || stuk), 0);
   T.stukNaam = (stuk) => STUKKEN[stuk].naam();
   const stukkenVan = (soort) => T.SOLDAAT_SOORTEN[soort].stukken;
 

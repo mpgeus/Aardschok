@@ -382,6 +382,16 @@ skirmish.
   slag: twee legers in een linie in hun strook, de dag staat stil, 1×, gewonnen, verloren of de tijd om, met
   `Spel.debug.veldslag()`) en 3a3 (de veldheer, `js/veldheer.js`, en de proefbank `npm run veldslag`) zijn gebouwd; de
   militie voor 1 komt met het kopen in 3b.
+- **De lobby, besloten** (Marcel, 28 okt, op het plan van 3b: "1 ja, 2 b, 3 ja, 4 ja, 5, Nee helden zijn generaals"):
+  **Skirmish** op het titelscherm, ook in de demo voor Next Fest. Elke kant krijgt evenveel punten, standaard 40 (nu acht
+  speermannen en vier boogschutters), van 20 tot 200 in stappen van 10; de prijs is de waarde van de stukken, de militie
+  1. De AI koopt tot de standen van 3f een van drie mixen, gekozen uit het zaad, zodat geen slag hetzelfde is. Na Begin
+  stellen de mannen zich op, en is er een voorbereiding (standaard 60 seconden, een getal in de werkbank) waarin je ze
+  binnen je strook verschuift; met *Fight!* begin je eerder. En de held van een leger is in een skirmish een **generaal**
+  (3d komt dus mee): niet de aanvoerder van het dorp. **Gebouwd** (3b1, 28 okt): de lobby, het kopen en de mixen van de
+  AI (`code.md` bij `js/veldslag.js`). De proefbank (`npm run veldslag -- --punten 40 --zaden 1-90`) liet meteen de
+  balans zien: de mix *schutters* won 38 van zijn 39 slagen tegen een andere, *gewoon* 19 van 37, en *zwaar* 5 van 48.
+  Een boogschutter voor 2 punten is te goedkoop, of de zware soorten te duur (vraag aan Marcel).
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

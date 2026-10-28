@@ -1057,6 +1057,21 @@ body.titelscherm :is(#instellingen, #spelregels) {
   .menu-venster.naast,
   body.titelscherm :is(#instellingen, #spelregels) { left: 50%; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); }
 }
+/* Skirmish (vraag 187 en 188, stap 3b; js/menu.js): een regel met min en plus, links op het titelscherm (de punten, de
+   tijd) en op het papier van je leger (per soort). Min en plus zijn keuzes zonder vaantje: wie ze kiest, kleurt goud. */
+.lobby-rij { display: flex; align-items: baseline; gap: 6px; margin: 0 0 6px; }
+.lobby-naam { flex: 1; font: 21px var(--kop); color: var(--inkt); }
+.lobby-naam small { font: italic 13px var(--boek); color: var(--gedempt); }
+.lobby-waarde { min-width: 2.2em; text-align: center; font: 21px var(--kop); color: var(--inkt); }
+.titel-keuzes .lobby-rij { width: 400px; }
+.titel-keuzes .lobby-waarde { min-width: 5.6em; }
+#menu.titel .titel-keuzes .lobby-rij { text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55); }
+.menu-keuze.lobby-knop,
+.menu-venster .menu-keuze.lobby-knop { margin: 0; padding: 0 8px; font-size: 24px; border-top: 0; }
+.menu-keuze.lobby-knop > span::before { display: none; }
+.lobby-leger .lobby-rij { margin: 0; padding: 4px 0; border-top: 1px solid color-mix(in srgb, var(--inkt) 14%, transparent); }
+.lobby-leger .lobby-rij:first-child { border-top: 0; }
+.lobby-tegen { margin: 10px 0 2px; font: italic 14px var(--boek); color: var(--gedempt); }
 .credits p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.5; }
 .credits .credits-naam { margin-bottom: 4px; font: 26px var(--kop); color: var(--goud); }
 .credits .credits-kop { margin: 14px 0 2px; font: 16px var(--kop); }

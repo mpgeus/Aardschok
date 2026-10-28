@@ -325,6 +325,12 @@
       if (!Array.isArray(V.legers) || V.legers.length < 2) fout.push('een veldslag heeft minstens twee legers'); // geen tekst
       else if (K && V.legers.length > K.spelers) fout.push(`de kaart ${V.kaart} is voor ${K.spelers} spelers`); // geen tekst
       for (const l of V.legers || []) for (const soort of Object.keys(l.soorten || {})) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`de soldaat ${soort} bestaat niet`); // geen tekst
+      if (V.punten != null && !(Number.isInteger(V.punten) && V.punten > 0)) fout.push('de punten van een veldslag zijn een heel getal boven 0'); // geen tekst
+      (V.legers || []).forEach((l, i) => {
+        if (!l.soorten && !(l.veldheer && V.punten)) fout.push(`leger ${i + 1} heeft geen soldaten, en geen veldheer met punten om te kopen`); // geen tekst
+        const kost = Object.entries(l.soorten || {}).reduce((som, [soort, n]) => som + (T.SOLDAAT_SOORTEN[soort] ? T.soldaatPrijs(soort) * n : 0), 0);
+        if (V.punten && kost > V.punten) fout.push(`leger ${i + 1} kost ${kost} punten, meer dan ${V.punten}`); // geen tekst
+      });
     }
     if (level && level.rand && ![level.rand.b, level.rand.h].every((n) => Number.isInteger(n) && n >= T.randMinstens())) {
       fout.push(`een rand is minstens ${T.randMinstens()} bij ${T.randMinstens()} stukken`); // geen tekst

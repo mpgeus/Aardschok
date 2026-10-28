@@ -211,3 +211,27 @@ test('samen: twee computers die elk een ander leger spelen, lopen letter voor le
     T.ui = ui;
   }
 });
+
+// De lobby (3b): het level heeft de punten van elke kant; een veldheer zonder soorten koopt bij het begin, en de keuring
+// kijkt na dat een speler niet meer kocht dan hij had.
+test('een veldslag met punten: de veldheer koopt bij het begin, en een speler koopt niet meer dan hij heeft', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  try {
+    const heeft = (lijst, stuk) => assert.ok(lijst.some((z) => z.includes(stuk)), `${stuk} in ${JSON.stringify(lijst)}`);
+    const L = T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { speerman: 8, boogschutter: 4 } }, { veldheer: true }] });
+    assert.deepEqual(T.keurScenario(L), []);
+    heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { zwaardvechter: 6 } }, { veldheer: true }] })), 'kost 42 punten, meer dan 40');
+    heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, legers: [{ soorten: { speerman: 1 } }, { veldheer: true }] })), 'geen veldheer met punten');
+    const S = T.proefdorp.begin(T.proefdorp.zaad, L);
+    const [A, B] = S.dorpen;
+    assert.equal(T.legerVan(A).length, 13, 'twaalf soldaten en de held');
+    assert.ok(B.veldheer.mix, `hij koos een mix: ${B.veldheer.mix}`);
+    const kost = B.bewoners.mensen.filter((p) => p.soldaat).reduce((s, p) => s + T.soldaatPrijs(p.soldaat.soort), 0);
+    assert.equal(kost, 40, 'voor al zijn punten');
+    const S2 = T.proefdorp.begin(T.proefdorp.zaad, L);
+    assert.deepEqual(S2.dorpen[1].bewoners.mensen.filter((p) => p.soldaat).map((p) => p.soldaat.soort), B.bewoners.mensen.filter((p) => p.soldaat).map((p) => p.soldaat.soort), 'hetzelfde zaad, hetzelfde leger');
+  } finally {
+    T.ui = ui;
+  }
+});
