@@ -242,6 +242,7 @@
   // De landheid op tegel (x, y): boven 0 is land, onder 0 zee. Ruw 1 in het midden van het eiland, en in de buurt van de
   // kust zo'n 0,002 per tegel.
   function landheid(E, x, y) {
+    if (E.recept) return receptLand(E, x, y);
     const K = IN().kust;
     const V = E.vorm;
     const z = V.z;
@@ -307,6 +308,7 @@
     const I = IN();
     const K = I.kust;
     if (c <= 0) return c * K.zee;
+    if (E.recept) return receptHoogte(E, x, y, c);
     const z = E.vorm.z;
     const H = I.heuvels;
     let h = I.laagland * (c < 0.8 ? c : 0.8);
@@ -932,7 +934,7 @@
           c = LAAG; // een kom onder de zee midden in het land (zie legLand)
         }
         land[i] = c;
-        const heuvelig = heuveligOp(z, x, y); // één keer, voor grof en fijn
+        const heuvelig = E.recept ? E.recept.glooiing : heuveligOp(z, x, y); // één keer, voor grof en fijn
         let g = grof(E, x, y, c, heuvelig);
         // het dal van de rivier: de grond zakt naar het peil van de rivier, met een vlakke vloer langs het water
         const dr = tussenVak(E, E.rivierAfstand, x, y);
@@ -940,7 +942,8 @@
           const pr = tussenVak(E, E.rivierPeil, x, y);
           const wr = tussenVak(E, E.rivierBreed, x, y);
           const vloer = wr / 2 + 3;
-          const f = glad(vloer, vloer + I.rivier.dal[0] + I.rivier.dal[1] * wr, dr);
+          const dal = E.recept ? E.recept.dal : I.rivier.dal;
+          const f = glad(vloer, vloer + dal[0] + dal[1] * wr, dr);
           const gedaald = pr + 2 + (g - pr - 2) * f;
           if (gedaald < g) g = gedaald;
         }
@@ -970,6 +973,11 @@
         if (g < meerPeil) {
           hoog[i] = meerPeil;
           water[i] = S.meer;
+          continue;
+        }
+        // een voorde (een kaart uit een recept): ondiep, net boven het water, en je loopt erdoor (de streek is het strand)
+        if (inRivier && E.recept && voordeOp(E.recept, x, y)) {
+          hoog[i] = rv.peil + 1;
           continue;
         }
         if (inRivier) {
@@ -1022,11 +1030,12 @@
         const helling = Math.sqrt(gx * gx + gy * gy);
         const s = streekOp(E, x, y, hg, helling, land[i], nabij[i], ST, z);
         streek[o] = s;
-        const kans = BO[T.EILAND_STREKEN[s]] || 0;
+        // op een kaart uit een recept: het bos, en op het open land hier en daar een boom (`bomen`)
+        const kans = E.recept ? (s === S.woud ? BO.woud : E.recept.bomen) : BO[T.EILAND_STREKEN[s]] || 0;
         if (!weg[o] && !kamp[o] && kans > 0) {
           // in de kampen staan de bomen in bosjes en houtwallen
           let k = kans;
-          if (s === S.kampen) k += 0.5 * glad(0.35, 0.6, simplex(x / 14 + 3.3, y / 14 - 1.4, z + 151));
+          if (s === S.kampen && !E.recept) k += 0.5 * glad(0.35, 0.6, simplex(x / 14 + 3.3, y / 14 - 1.4, z + 151));
           if (lot(x, y, z + 157) < k) boom[o] = 1;
         }
       }
@@ -1137,6 +1146,7 @@
   // De streek van een landtegel, uit hoe hoog, steil, nat en zandig het er is (vraag 117, D: de zes wildernissen van de
   // landkaart en de kust).
   function streekOp(E, x, y, hg, helling, c, waterPeil, ST, z) {
+    if (E.recept) return receptStreek(E, x, y, c, z);
     const rafel = 0.035 * simplex(x / 9 + 0.5, y / 9 + 1.5, z + 161); // grillige grenzen
     const duin = simplex(x / 260 + 4.4, y / 260 - 8.8, z + 163);
     // het strand: de eerste tegels van de kust (aan zee, niet in een laagte midden in het land)
@@ -2090,22 +2100,224 @@
     };
   };
 
-  // Het eiland van een nummer, één keer gemaakt zolang er naar hetzelfde nummer gevraagd wordt (het is uit het nummer
-  // te maken, dus het hoeft niet in Spel.S).
+  // Het eiland van een nummer, of van `w.eiland` ({ zaad, recept }: met een recept een kaart van de veldslag, T.KAARTEN in
+  // levels/kaarten.js), één keer gemaakt zolang er naar hetzelfde gevraagd wordt (het is uit het nummer en het recept te
+  // maken, dus het hoeft niet in Spel.S).
   let laatsteEiland = null;
-  T.eilandVan = function (zaad) {
-    if (!laatsteEiland || laatsteEiland.zaad !== zaad) laatsteEiland = T.maakEiland(zaad);
+  T.eilandVan = function (e) {
+    const zaad = typeof e === 'object' ? e.zaad : e;
+    const recept = (typeof e === 'object' && e.recept) || null;
+    if (!laatsteEiland || laatsteEiland.zaad !== zaad || laatsteEiland.receptNaam !== recept) laatsteEiland = T.maakEiland(zaad, recept);
     return laatsteEiland;
   };
+
+  // ---- een kaart uit een recept: de veldslag ------------------------------------------------------------------------
+
+  // Een kaart van de veldslag (vraag 187 en 188, stap 3a; Marcel, 28 okt: "we hebben een aantal kleinere skirmish maps
+  // nodig. Dit zijn veel kleinere werelden met obstakels die je kunt gebruiken, hoogtes etc.", en "niet altijd dezelfde
+  // map"; ontwerp/scenario.md, 7): een klein eiland uit een recept (T.KAARTEN, levels/kaarten.js) en een zaad. Het recept
+  // zegt de opzet, het zaad schuift elk ding een stukje (`variatie`), zodat geen twee keer hetzelfde ligt. Het is een eiland
+  // zoals het grote, met dezelfde stappen (het land, het water, de afstanden, de streken, de bruggen): alles wat het spel
+  // met een eiland doet (de stukken, de grond op de videokaart, de hoogte, de mist, de minikaart), werkt hier ook. Alleen
+  // de vorm, de hoogte, de rivier, de voorden, het bos en de rotsen komen uit het recept; geen dorpen, wegen of kampen.
+  // Het land ligt vanaf KAART_OORSPRONG op het eiland, met zee eromheen.
+  //
+  // Een plek in het recept is in de maat van het scherm: `a` van links (-1) naar rechts (1), `b` van boven (-1) naar onder
+  // (1). Het land is de ruit |a| + |b| <= 1: in tegels een vierkant van `maat`, met de linkerhoek op het scherm bij
+  // (a, b) = (-1, 0), de bovenhoek bij (0, -1).
+  const afstand = (dx, dy) => Math.sqrt(dx * dx + dy * dy); // geen Math.hypot: dat rekent niet in elke browser hetzelfde
+  const KAART_OORSPRONG = 2 * 64 + 16; // het land begint na twee stukken en een strook zee (T.STUK is 64)
+  T.KAART_OORSPRONG = KAART_OORSPRONG;
+
+  // Het recept van naam `naam` met zaad `zaad`, in tegels van het eiland: { naam, maat, x0, y0, land, glooiing, dal,
+  // heuvels: [{ x, y, r, h }], rivier: { punten, breed, diep }, voorden: [{ x, y, r, nx, ny }], brug: { x, y, nx, ny },
+  // bos: [{ x, y, r }], rotsen: [{ x, y }], stroken: [{ x, y, b, h, punten }] }. De rivier, de voorden en de brug liggen pas
+  // vast na legRivieren (receptRivier), want de rivier slingert.
+  function receptVan(naam, zaad) {
+    const R = T.KAARTEN && T.KAARTEN[naam];
+    if (!R) throw new Error(`er is geen kaart ${naam}`); // geen tekst
+    const r = T.dobbelsteen(((zaad >>> 0) * 2654435761 + 0x5ca1ab1e) >>> 0);
+    const half = R.maat / 2;
+    const x0 = KAART_OORSPRONG;
+    const y0 = KAART_OORSPRONG;
+    const cx = x0 + half;
+    const cy = y0 + half;
+    const schuif = () => (r() * 2 - 1) * (R.variatie || 0);
+    const naarTegel = (a, b) => [cx + (a + b) * half, cy + (b - a) * half];
+    const plek = (p, ruim = 1) => {
+      const [x, y] = naarTegel(p.a + schuif() * ruim, p.b + schuif() * ruim);
+      return { x, y };
+    };
+    const maat = (v) => v * half * (1 + schuif());
+    return {
+      naam, maat: R.maat, x0, y0, cx, cy, half,
+      land: R.land, glooiing: R.glooiing, dal: R.dal, kust: R.kust, bomen: R.bomen,
+      heuvels: R.heuvels.map((h) => ({ ...plek(h), r: maat(h.r), h: h.h * (1 + schuif()) })),
+      rivier: { punten: R.rivier.punten.map(([a, b], i, l) => naarTegel(a + (i && i < l.length - 1 ? schuif() : 0), b)), breed: R.rivier.breed, diep: R.rivier.diep },
+      voordenOp: R.rivier.voorden.map((t) => Math.min(0.9, Math.max(0.1, t + schuif() * 0.5))),
+      voordeBreed: R.rivier.voordeBreed,
+      brugOp: R.rivier.brug,
+      rotsenBij: Math.floor(r() * R.rivier.voorden.length), // bij welke voorde de rotsen de doorgang smal maken
+      pas: R.pas,
+      bos: R.bos.map((b) => ({ ...plek(b), r: maat(b.r) })),
+      stroken: R.stroken.map((st) => {
+        const hoeken = [[st.a[0], st.b[0]], [st.a[1], st.b[0]], [st.a[1], st.b[1]], [st.a[0], st.b[1]]].map(([a, b]) => naarTegel(a, b));
+        return { a: st.a, b: st.b, hoeken };
+      }),
+      naarTegel,
+      voorden: [],
+      brug: null,
+      rotsen: [],
+    };
+  }
+  // In de maat van het scherm (a, b; zie hierboven) waar tegel (x, y) ligt.
+  const receptAB = (R, x, y) => {
+    const u = (x - R.cx) / R.half;
+    const v = (y - R.cy) / R.half;
+    return [(u - v) / 2, (u + v) / 2];
+  };
+  // De landheid: positief op het land (de ruit, met een grillige kust), negatief in de zee.
+  function receptLand(E, x, y) {
+    const R = E.recept;
+    const u = Math.abs(x - R.cx) / R.half;
+    const v = Math.abs(y - R.cy) / R.half;
+    const m = Math.max(u, v) + R.kust * lagen(x / 18 + 1.3, y / 18 - 2.1, E.vorm.z + 191, 3);
+    return ((1 - m) * R.half) / 400;
+  }
+  // De grove hoogte op het land: het strand, het land op `land` pixels, en de heuvels (met een vlakke top); zonder heuvels
+  // (`heuvels` false) de hoogte van het land eronder, voor het peil van de rivier.
+  function receptHoogte(E, x, y, c, heuvels = true) {
+    const R = E.recept;
+    const K = IN().kust;
+    let h = R.land;
+    if (heuvels) for (const H of R.heuvels) h += H.h * (1 - glad(H.r * 0.25, H.r, afstand(x - H.x, y - H.y)));
+    return (c < K.strand ? c : K.strand) * K.helling + h * glad(0, 0.025, c);
+  }
+  // Ligt tegel (x, y) in een voorde?
+  function voordeOp(R, x, y) {
+    for (const v of R.voorden) if (afstand(x - v.x, y - v.y) < v.r) return true;
+    return false;
+  }
+  // De streek: de voorde (zand), het bos, de grond om de rotsen (heide), en verder de kampen (gras), met hier en daar heide.
+  function receptStreek(E, x, y, c, z) {
+    const R = E.recept;
+    if (voordeOp(R, x, y)) return S.strand;
+    if (c < IN().kust.strand) return S.strand;
+    const rafel = 0.12 * simplex(x / 7 + 0.5, y / 7 + 1.5, z + 161);
+    for (const b of R.bos) if (afstand(x - b.x, y - b.y) / b.r + rafel < 1) return S.woud;
+    if (R.pasMidden && afstand(x - R.pasMidden.x, y - R.pasMidden.y) < R.pas.r + 3) return S.heide;
+    return lagen(x / 22 + 4.4, y / 22 - 2.2, z + 173, 3) > 0.35 ? S.heide : S.kampen;
+  }
+  // De rivier van het recept, na de rivieren van het land (die er op zo'n klein eiland niet zijn): zijn punten, glad en
+  // slingerend zoals een rivier van het eiland, met het peil `diep` onder het land (naar de zee toe het land zelf); dan de
+  // voorden en de brug op hun plek langs de rivier (`voorden` en `brug`: een deel van zijn lengte), en de rotsen die
+  // bij één voorde (`rotsenBij`) een smalle doorgang maken: twee wanden van rotsen langs de oversteek, `pas.breed` tegels
+  // uit elkaar en `pas.lang` lang, aan elke oever.
+  function receptRivier(E) {
+    const R = E.recept;
+    const peilOp = (x, y) => {
+      const c = receptLand(E, x, y);
+      return c <= 0 ? 0 : Math.max(0, receptHoogte(E, x, y, c, false) - R.rivier.diep);
+    };
+    let punten = R.rivier.punten.map(([x, y]) => [x, y, R.rivier.breed, peilOp(x, y)]);
+    for (let i = 0; i < 3; i++) punten = chaikin(punten);
+    punten = slinger(E, punten);
+    E.rivieren.push({ punten, zee: true });
+    for (const p of punten) {
+      const vx = Math.floor(p[0] / E.vak);
+      const vy = Math.floor(p[1] / E.vak);
+      if (vx >= 0 && vy >= 0 && vx < E.n && vy < E.n) E.rivier[vy * E.n + vx] = 1;
+    }
+    E.rivierIndex = indexVan(E, E.rivieren, (p) => p[2] / 2 + 1.5);
+    // een plek langs de rivier (deel t van zijn lengte op het land), met de richting dwars erop
+    const opLand = punten.filter((p) => receptLand(E, p[0], p[1]) > 0);
+    const langs = (t) => {
+      const i = Math.max(1, Math.min(opLand.length - 2, Math.round(t * (opLand.length - 1))));
+      const [a, b] = [opLand[i - 1], opLand[i + 1]];
+      const l = afstand(b[0] - a[0], b[1] - a[1]) || 1;
+      return { x: opLand[i][0], y: opLand[i][1], nx: -(b[1] - a[1]) / l, ny: (b[0] - a[0]) / l };
+    };
+    R.voorden = R.voordenOp.map((t) => ({ ...langs(t), r: R.voordeBreed / 2 }));
+    R.brug = langs(R.brugOp);
+    const v = R.voorden[R.rotsenBij];
+    R.pasMidden = v ? { x: v.x, y: v.y } : null;
+    R.rotsen = [];
+    if (v) {
+      // de wanden zijn grillig: elke rij een ander stukje opzij en een andere dikte (één tot drie rotsen), naar het eind toe
+      // dunner; met het lot van het zaad, zodat het elke keer anders ligt
+      const r = T.dobbelsteen(((E.zaad >>> 0) * 7477 + 0x9a55) >>> 0);
+      const tx = v.ny;
+      const ty = -v.nx; // langs de rivier
+      const gezet = new Set();
+      for (const kant of [-1, 1]) {
+        for (const zij of [-1, 1]) {
+          let schuif = 0;
+          for (let d = R.rivier.breed / 2 + 1; d <= R.rivier.breed / 2 + R.pas.lang; d++) {
+            const eind = d > R.rivier.breed / 2 + R.pas.lang - 2;
+            schuif = Math.max(0, Math.min(1, schuif + (r() < 0.5 ? -0.5 : 0.5)));
+            const dik = eind ? 1 : 1 + Math.floor(r() * 2.6);
+            for (let k = 0; k < dik; k++) {
+              const o = zij * (R.pas.breed / 2 + 0.5 + schuif + k);
+              const x = Math.round(v.x + kant * d * v.nx + o * tx);
+              const y = Math.round(v.y + kant * d * v.ny + o * ty);
+              if (gezet.has(`${x},${y}`)) continue;
+              gezet.add(`${x},${y}`);
+              R.rotsen.push({ x, y });
+            }
+          }
+        }
+      }
+    }
+  }
+  // De weg naar de brug: een stukje weg dwars over de rivier, waar legBruggen de brug legt (zoals waar een weg van het
+  // eiland een rivier kruist); geen wegen verder, en geen kampen.
+  function receptWegen(E) {
+    const R = E.recept;
+    const b = R.brug;
+    const L = R.rivier.breed / 2 + 8;
+    E.wegen = [{ punten: [[b.x - b.nx * L, b.y - b.ny * L], [b.x + b.nx * L, b.y + b.ny * L]] }];
+    E.wegIndex = indexVan(E, E.wegen, () => IN().wegen.breed + 1);
+    E.kampen = [];
+    E.paden = [];
+    E.padIndex = indexVan(E, E.paden, () => IN().kampen.padBreed + 1);
+  }
+  // Het eiland van een recept: de stappen van het grote eiland, met het recept erin (T.maakEiland).
+  function maakKaart(E, begin) {
+    E.recept = receptVan(E.receptNaam, E.zaad);
+    E.vorm = { z: (E.zaad % 100003) * 7 + 1, ax: 1, ay: 0, rek: 1, rug: [], rugBreed: 0, passen: [] };
+    const N = E.n * E.n;
+    E.rugAfstand = new Float32Array(N).fill(1e9);
+    E.rugLangs = new Float32Array(N);
+    E.tijden = {};
+    const doe = (naam, f) => {
+      const t = Date.now();
+      f();
+      E.tijden[naam] = Date.now() - t;
+    };
+    doe('land', () => legLand(E));
+    doe('water', () => legWater(E));
+    doe('rivieren', () => {
+      legRivieren(E);
+      receptRivier(E);
+    });
+    doe('afstanden', () => legAfstanden(E));
+    doe('streken', () => legStreken(E));
+    E.plekken = [];
+    doe('wegen', () => receptWegen(E));
+    doe('bruggen', () => legBruggen(E));
+    E.tijd = Date.now() - begin;
+    return E;
+  }
 
   // ---- het eiland ---------------------------------------------------------------------------------------------------
 
   // Het eiland van nummer `zaad`: de schets, met alles wat het hele eiland moet kennen. Wat het per tegel is, vraag je
   // daarna aan T.eilandStuk. `E.tijd` zegt hoeveel milliseconden het kostte, en `E.tijden` per stap (voor de plaat, vraag 113).
-  T.maakEiland = function (zaad) {
+  T.maakEiland = function (zaad, recept = null) {
     const I = IN();
     const begin = Date.now();
-    const E = { zaad, maat: I.maat, vak: I.vak, n: Math.ceil(I.maat / I.vak) };
+    const E = { zaad, maat: I.maat, vak: I.vak, n: Math.ceil(I.maat / I.vak), receptNaam: recept };
+    if (recept) return maakKaart(E, begin);
     const r = T.dobbelsteen(zaad * 7919 + 17);
     E.tijden = {};
     const doe = (naam, f) => {

@@ -690,7 +690,7 @@
   // geen grove weg is of hij niet verder komt.
   function tochtRoute(w, van, doel, o) {
     if (!T.opKaart(w, doel.x, doel.y)) return null;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const n = E.n;
     const eig = eilandBij(w, van);
     if (eig < 0) return null;
@@ -733,7 +733,7 @@
   // of een ander eiland).
   T.groveWeg = function (w, van, doel) {
     if (!T.opEiland(w) || !T.opKaart(w, doel.x, doel.y)) return null;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const n = E.n;
     const eig = eilandBij(w, doel);
     if (eig < 0) return null;

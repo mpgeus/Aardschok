@@ -211,7 +211,7 @@
   function bruggenVan(hg) {
     let b = BRUGGEN.get(hg);
     if (b) return b;
-    const E = T.eilandVan(hg.eiland.zaad);
+    const E = T.eilandVan(hg.eiland);
     const Z = T.STUK;
     const r = IN().vrijRond + 1;
     b = { basis: [], perStuk: new Map() };
@@ -252,8 +252,8 @@
   function eilandVanStuk(hg, s) {
     if (!s.eiland) {
       const [ox, oy] = oorsprong(hg);
-      const { zaad, x0, y0 } = hg.eiland;
-      const stuk = T.eilandRaster(T.eilandVan(zaad), x0 + s.x0 - ox, y0 + s.y0 - oy, T.STUK + 1, T.STUK + 1, true); // uit de blokken (js/eiland.js)
+      const { x0, y0 } = hg.eiland;
+      const stuk = T.eilandRaster(T.eilandVan(hg.eiland), x0 + s.x0 - ox, y0 + s.y0 - oy, T.STUK + 1, T.STUK + 1, true); // uit de blokken (js/eiland.js)
       s.eiland = stuk.hoogte;
       s.nat = stuk.streek.map((st) => (NATTE().includes(st) ? 1 : 0));
     }
@@ -271,8 +271,8 @@
       return s.nat[(py - s.y0) * (T.STUK + 1) + px - s.x0];
     }
     const [ox, oy] = oorsprong(hg);
-    const { zaad, x0, y0 } = hg.eiland;
-    return NATTE().includes(T.eilandStuk(T.eilandVan(zaad), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).streek[0]) ? 1 : 0;
+    const { x0, y0 } = hg.eiland;
+    return NATTE().includes(T.eilandStuk(T.eilandVan(hg.eiland), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).streek[0]) ? 1 : 0;
   }
   // De hoogte van het eiland op punt (px, py) van de kaart (een hoekpunt van tegel (x, y) is (x, y) tot (x + 1, y + 1)):
   // de grond, een meer of een rivier op zijn peil, en de zee op 0. Een hoekpunt uit de lijst van zijn stuk; een ander
@@ -283,8 +283,8 @@
       return Math.max(0, eilandVanStuk(hg, s)[(py - s.y0) * (T.STUK + 1) + px - s.x0]);
     }
     const [ox, oy] = oorsprong(hg);
-    const { zaad, x0, y0 } = hg.eiland;
-    return Math.max(0, T.eilandStuk(T.eilandVan(zaad), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).hoogte[0]);
+    const { x0, y0 } = hg.eiland;
+    return Math.max(0, T.eilandStuk(T.eilandVan(hg.eiland), x0 + px - ox - 0.5, y0 + py - oy - 0.5, 1, 1).hoogte[0]);
   }
 
   // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels, uit de lijst van zijn stuk.
@@ -404,7 +404,7 @@
   T.dekOp = function (w, x, y) {
     const op = T.brugOp(w, Math.round(x), Math.round(y));
     if (!op) return 0;
-    const brug = T.eilandVan(w.eiland.zaad).bruggen[op.brug];
+    const brug = T.eilandVan(w.eiland).bruggen[op.brug];
     return T.brugOpTil(w, op.brug, x, y) + T.sprites.brugDek(brug, T.brugStap(brug, x, y));
   };
   // Hoeveel brug `nummer` op punt (x, y) boven de grond ligt, omdat hij vlak op zijn basis ligt (T.brugBasis; vraag 174,

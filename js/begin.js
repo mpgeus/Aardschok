@@ -121,7 +121,7 @@
   T.dorpErbij = function (S) {
     const eerste = S.dorpen[0];
     const w = eerste.wereld;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const bij = E.plekken.find((p) => p.naam === eerste.plek.naam);
     const nummer = S.dorpen.length;
     const { plek, aanvoerder } = T.legDorpOpKaart(w, { bij, niet: S.dorpen.map((D) => D.plek.naam) });

@@ -560,7 +560,7 @@
     box.classList.toggle('verborgen', !aan);
     if (!aan) return;
     const IN = T.MINIKAART_INSTELLINGEN;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const veld = T.minikaartVeld(w);
     const m = T.minikaartBeeld(E, veld);
     if (mini.m !== m) Object.assign(mini, { E, m, veld, beeld: nieuwDoek(m.n), mist: nieuwDoek(m.n), omtrek: null, klaar: -1, versie: -1 });

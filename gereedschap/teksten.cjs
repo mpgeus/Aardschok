@@ -177,6 +177,13 @@ const GEGEVENS = [
     zinnen: (tabel) => tabel.hoofdstukken.map((h) => h.titel),
     schrijver: () => [],
   },
+  {
+    // De namen van de kaarten van de veldslag (vraag 187 en 188, stap 3a; js/veldslag.js).
+    bestand: 'levels/kaarten.js',
+    blok: 'T.KAARTEN',
+    zinnen: (tabel) => Object.values(tabel).map((k) => k.naam),
+    schrijver: () => [],
+  },
 ];
 
 // Een level (levels/<naam>.js, T.LEVELS.<naam>; vraag 187, 2c) is ook gegevens: de speler ziet zijn inleiding (in de

@@ -776,7 +776,7 @@
   function eilandKampen(w) {
     let uit = EILAND_KAMPEN.get(w);
     if (!uit) {
-      const E = T.eilandVan(w.eiland.zaad);
+      const E = T.eilandVan(w.eiland);
       uit = { kampen: E.kampen, paden: E.paden };
       EILAND_KAMPEN.set(w, uit);
     }

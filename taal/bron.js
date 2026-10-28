@@ -1709,6 +1709,7 @@ Spel.TAAL_BRON = [
   {"t":"Martinmas came, and so did the lord. The robbers are still in his woods, eating his grain. He finds you a new post, far from anything he owns.","waar":["levels/rovershol.js"]},
   {"t":"The first year","waar":["levels/campagne.js"]},
   {"t":"The robbers' den","waar":["levels/campagne.js"]},
+  {"t":"The Ford","waar":["levels/kaarten.js"]},
   {"t":"This game is damaged.","waar":["js/opslaan.js"]},
   {"t":"This game was saved in another version of {naam} and no longer fits.","waar":["js/opslaan.js"]},
   {"t":"There is no game yet.","waar":["js/opslaan.js"]},

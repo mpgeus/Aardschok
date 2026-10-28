@@ -143,7 +143,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
-  en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
+  en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen; `veldslag` (skirmish, de kaarten
+  uit een recept).
 
 ## Het spel in het kort
 

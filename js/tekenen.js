@@ -1529,7 +1529,7 @@
     // (T.brugOpTil), en zijn pijlers lopen door tot het water (tekenBrugStuk).
     if (metSprites() && T.opEiland(w)) {
       const steen = steenVanLand(w);
-      for (const [n, brug] of T.eilandVan(w.eiland.zaad).bruggen.entries()) {
+      for (const [n, brug] of T.eilandVan(w.eiland).bruggen.entries()) {
         const R = T.brugRijen(brug);
         const hoeken = [[-1, 0], [-1, R - 1], [brug.L, 0], [brug.L, R - 1]].map(([i, k]) => T.brugTegel(brug, i, k));
         const xs = hoeken.map((t) => t[0]);

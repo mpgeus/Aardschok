@@ -1440,7 +1440,7 @@
     eiland(zaad) {
       if (zaad != null) T.nieuwSpel(Number(zaad));
       const w = S.wereld;
-      const E = T.eilandVan(w.eiland.zaad);
+      const E = T.eilandVan(w.eiland);
       const dorp = E.plekken.find((p) => p.naam === S.dorp.plek.naam);
       return {
         eiland: w.eiland.zaad,

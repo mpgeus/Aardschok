@@ -289,10 +289,11 @@
   const STUKKEN = new WeakMap();
   T.stukNummer = (sx, sy) => sy * 64 + sx;
   T.stukVan = (x, y) => T.stukNummer(Math.floor(x / STUK), Math.floor(y / STUK));
-  // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken.
-  T.eilandKaart = function (zaad, vak) {
+  // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken. Met
+  // `recept` een kaart van de veldslag (T.KAARTEN, levels/kaarten.js; T.eilandVan in js/eiland.js).
+  T.eilandKaart = function (zaad, vak, recept = null) {
     return {
-      eiland: { zaad }, vak: { ...vak },
+      eiland: recept ? { zaad, recept } : { zaad }, vak: { ...vak },
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       voorwerpen: [], wezens: [], akkers: [], meenten: [], naam: null, pleinen: [], plekken: [],
     };
@@ -321,7 +322,7 @@
   // (dwars, 0 tot 2) }, of null.
   T.brugOp = function (w, x, y) {
     if (!opEiland(w)) return null;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     return E.brugOp.get(y * E.maat + x) || null;
   };
   // Het land van het eiland (T.landStuk, of `L` als het vooruit gemaakt is), met wat er anders werd erover.
@@ -329,7 +330,7 @@
   function maakStuk(w, sx, sy, L = null) {
     const x0 = sx * STUK;
     const y0 = sy * STUK;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     if (!L) L = T.landStuk(E, x0, y0, STUK, STUK);
     const tegel = new Uint8Array(STUK * STUK);
     const grond = new Uint16Array(STUK * STUK);
@@ -440,7 +441,7 @@
     const per = Math.ceil(STUK / d);
     if (v.delen.length < per * per) {
       const i = v.delen.length;
-      const E = T.eilandVan(w.eiland.zaad);
+      const E = T.eilandVan(w.eiland);
       const [x, y] = [v.sx * STUK + (i % per) * d, v.sy * STUK + Math.floor(i / per) * d];
       // eerst de blokken van het eiland onder het rekenvak van dit deel (zijn rand erbij, de tegels en de hoeken), één per
       // stap, zodat geen stap meer dan een paar ms kost (T.eilandRaster, js/eiland.js; `snelheid.md`, F1)
@@ -632,7 +633,7 @@
         s.op[j] = null;
         // de tegel wordt wat de grond is, zoals een geladen spel hem maakt (maakStuk)
         const nr = T.tegelNummer(v.x, v.y);
-        if (!w.tegelsAnders.has(nr)) s.tegel[j] = tegelVanGrond(T.eilandVan(w.eiland.zaad), v.x, v.y, s.grond[j]);
+        if (!w.tegelsAnders.has(nr)) s.tegel[j] = tegelVanGrond(T.eilandVan(w.eiland), v.x, v.y, s.grond[j]);
       }
       w.gerooid.add(T.tegelNummer(v.x, v.y));
     }

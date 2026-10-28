@@ -249,7 +249,7 @@
     const doek = $('eilandje');
     const w = S.wereld;
     if (!doek || !w || !T.opEiland(w)) return;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const m = T.minikaartBeeld(E);
     const B = doek.clientWidth;
     const k = window.devicePixelRatio || 1;

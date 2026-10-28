@@ -1202,6 +1202,31 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   titelscherm (`campagneScherm` en `speelHoofdstuk` in `js/menu.js`; niet in de demo), dat een hoofdstuk begint zoals Begin
   bij New game, met de naam van zijn plek; en op het eindscherm bij elk eind of het hoofdstuk af is.
 
+### js/veldslag.js: de veldslag
+
+- `js/veldslag.js` (vraag 187 en 188, stap 3; het ontwerp in `scenario.md`, 7; Marcel, 28 okt): **skirmish zonder
+  economie**, zonder scherm en getoetst (`test/veldslag.test.cjs`). Stap 3a1 (28 okt): **de kaart uit een recept**.
+  Een kaart is een recept in `levels/kaarten.js` (`T.KAARTEN`, gegevens die later de editor terugschrijft; de naam is een
+  zin uit gegevens, en `npm run teksten` leest hem): de maat, de heuvels, de rivier met zijn voorden en brug, de pas van
+  rotsen bij een voorde, het bos en de stroken van de spelers, in de maat van het scherm (`a` van links naar rechts, `b`
+  van boven naar onder; het land is de ruit |a| + |b| <= 1). **Een kaart is een klein eiland**: `T.eilandVan(w.eiland)`
+  met `{ zaad, recept }` maakt het met dezelfde stappen als het grote eiland (`maakKaart` in `js/eiland.js`), alleen de
+  vorm (`receptLand`), de hoogte (`receptHoogte`), de rivier (`receptRivier`: een rivier van het recept, glad en
+  slingerend zoals een rivier van het eiland, met zijn voorden en de plek van de brug), de streken (`receptStreek`: het
+  bos, de voorde als strand, en verder gras met heide) en de wegen (`receptWegen`: alleen een stukje weg dwars over de
+  rivier, waar `legBruggen` dan de brug legt) komen uit het recept. Zo werkt alles van het eiland er vanzelf op (de
+  stukken, de grond op de videokaart, de hoogte, de mist, de minikaart, de bruggen), en is er geen tweede soort wereld.
+  Het zaad schuift elk ding een stukje (`variatie` in het recept, `receptVan`): Marcel, 28 okt: "niet altijd dezelfde
+  map". Een voorde is een stuk rivier dat geen water is maar zand net boven het water (`voordeOp` in `T.eilandStuk`).
+  Op het open land staat hier en daar een boom (`bomen` in het recept), niet de bosjes van de kampen van het grote
+  eiland. Een kaart ligt op het eiland vanaf `T.KAART_OORSPRONG`, met zee eromheen. `T.veldslagWereld(recept, zaad)`
+  maakt de wereld: een kaart van dat eiland (`T.eilandKaart` met het recept), het land en een strook zee open
+  (`T.VELDSLAG_INSTELLINGEN.zee`), de rand eromheen (`w.rand`), de rotsen van de pas (het recept geeft hun tegels; ze
+  staan vast, dus ze zijn er altijd), en de hoogte van het eiland (`w.hoogte` met `eiland: { zaad, recept }`), ook als de
+  spelregel Hoogte uit staat. `w.eiland` draagt het recept, dus alles wat het eiland van een kaart opzoekt
+  (`T.eilandVan(w.eiland)`, op 19 plekken), krijgt het juiste. Gemeten (28 okt, Node): *The Ford* maken kost 300 à 550
+  ms.
+
 ### gereedschap/pixelart/: de beelden uit code
 
 - **AI-texturen in de renderer** (18 okt, werklijst vraag 180; `gereedschap/ai/hybride-voorstel.md`, de proef in
