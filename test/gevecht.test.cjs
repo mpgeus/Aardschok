@@ -76,17 +76,42 @@ test('wie raakt, slaat; de kosten van zijn slag maal secondenPerPunt is de tijd 
   const r = rover(D, plekOp(w, hier, 1));
   T.werkGevechtBij(S, D);
   assert.equal(een.doelwit, r, 'hij koos de rover die naast hem staat');
+  assert.equal(r.leven, 12, 'de klap valt aan het eind van de tik');
+  T.laatKlappenVallen(S);
   assert.ok(r.leven >= 12 - 3 && r.leven <= 12 - 2, `een hooivork slaat 2 tot 3 (${r.leven})`);
   const klaar = 3 * T.GEVECHT_INSTELLINGEN.secondenPerPunt;
   assert.ok(Math.abs(een.slagKlaar - klaar) < 1e-9, `de volgende slag op ${klaar} (${een.slagKlaar})`);
   const na = r.leven;
   S.wereldTijd = klaar - 0.1;
   T.werkGevechtBij(S, D);
+  T.laatKlappenVallen(S);
   assert.equal(r.leven, na, 'nog niet');
   S.wereldTijd = klaar;
   T.werkGevechtBij(S, D);
+  T.laatKlappenVallen(S);
   assert.ok(r.leven < na, 'nu wel');
   assert.equal(r.doelwit, een, 'en de rover slaat terug');
+});
+
+// Marcel, 28 okt: "1 tik alle klappen aan einde". Wie eerst aan de beurt is in de tik, slaat niet eerst: twee die elkaar in
+// dezelfde tik raken, vallen allebei, ook als de een al viel voor de ander sloeg.
+test('de klappen van een tik vallen tegelijk aan het eind: wie in die tik valt, sloeg nog', () => {
+  const { S, D, w, een, twee } = dorp();
+  twee.binnen = true;
+  const hier = ruimePlek(w, T.tegelVan(een));
+  zet(een, hier);
+  een.post = { x: hier.x, y: hier.y };
+  const r = rover(D, plekOp(w, hier, 1));
+  // allebei nog een half levenspunt: de eerste klap velt
+  Object.assign(een, { leven: 0.5, maxLeven: T.levenAlsMan(een).max });
+  Object.assign(r, { leven: 0.5, maxLeven: 12 });
+  T.werkGevechtBij(S, D);
+  assert.equal(een.doelwit, r);
+  assert.equal(r.doelwit, een);
+  assert.ok(!een.dood && !r.dood, 'nog staat iedereen');
+  T.laatKlappenVallen(S);
+  assert.ok(een.dood && r.dood, 'allebei gevallen');
+  assert.equal(S.klappen, undefined, 'na de tik zijn er geen klappen meer');
 });
 
 test('aanvallen, dan terug: een man valt aan wat hij ziet, maar niet verder dan de leiband van zijn post', () => {

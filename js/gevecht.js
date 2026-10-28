@@ -22,7 +22,10 @@
 // Een slag: wie raakt (T.kanRaken, met het wapen van T.slagVan in js/soldaten.js: de speer en de piek twee tegels, de boog
 // en de kruisboog ver waar ze zien, maar niet met een vijand naast zich), blijft staan en slaat; de kosten van zijn slag
 // (de actiepunten van vroeger) maal secondenPerPunt is de tijd tot de volgende. Schild en harnas vangen een deel af
-// (T.vangtAf). Wie geraakt wordt en niets doet, slaat terug; een dorpeling vlucht.
+// (T.vangtAf). Wie geraakt wordt en niets doet, slaat terug; een dorpeling vlucht. De klappen van een tik vallen aan het
+// eind van die tik, allemaal tegelijk (T.laatKlappenVallen; Marcel, 28 okt: "1 tik alle klappen aan einde"): de wereld
+// werkt de dorpen een voor een bij, en zo slaat wie eerst aan de beurt is niet eerst (de proefbank, npm run veldslag:
+// leger A won 15 van de 20 gelijke slagen, met de volgorde om 11). Wie in een tik valt, sloeg in die tik nog.
 //
 // Een dorpeling die een rover ziet, vlucht naar het town hall (het raadhuis: de eerste opslag, het midden van
 // je bereik), en zit daar binnen tot er geen rover meer op de kaart is (p.schuilt, en T.blijftThuis in js/bewoners.js: wie
@@ -306,8 +309,19 @@
       if (slag.schiet) T.anim.pijl(S, plek(e), doel);
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
-    raak(S, D, d, Math.max(0, worp(D, e, slag.schade) - T.vangtAf(d, e)), e);
+    // de klap valt aan het eind van de tik (T.laatKlappenVallen)
+    (S.klappen || (S.klappen = [])).push({ D, doel: d, n: Math.max(0, worp(D, e, slag.schade) - T.vangtAf(d, e)), van: e });
   }
+
+  // Aan het eind van een tik (T.wereldTik, js/tik.js, na alle dorpen en de wereld): de klappen van die tik vallen, in de
+  // volgorde waarin ze geslagen werden. Een klap op wie al viel, valt niet meer. S.klappen is er alleen binnen een tik, dus
+  // het gaat nooit mee in wat bewaard wordt.
+  T.laatKlappenVallen = function (S) {
+    const klappen = S.klappen;
+    if (!klappen) return;
+    delete S.klappen;
+    for (const k of klappen) if (!k.doel.dood) raak(S, k.D, k.doel, k.n, k.van);
+  };
 
   // Een klap kost levenspunten. Wie op nul komt, valt (T.valt); wie het overleeft en niets doet, slaat terug, en een
   // dorpeling vlucht. Ook voor de toetsen (test/gevecht.test.cjs) en Spel.debug.

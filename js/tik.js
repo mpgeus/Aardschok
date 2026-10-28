@@ -62,6 +62,7 @@
         T.werkGevechtVanDeWereldBij(S, w);
         if (w !== S.wereld) T.werkBeestenBij(S, w);
       }
+      T.laatKlappenVallen(S); // de klappen van deze tik, allemaal tegelijk, nu iedereen geslagen heeft (js/gevecht.js)
     });
     // Wie loopt, één keer per kaart (js/anim.js): waar je kijkt, en elke kaart met een dorp erop (op één kaart kunnen
     // meer dorpen leven; werklijst vraag 170, stap 6a).
