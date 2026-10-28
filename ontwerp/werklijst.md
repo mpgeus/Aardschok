@@ -109,7 +109,8 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    **2c is af** (28 okt; bij K, "2c"): het rovershol als hoofdstuk 2, met c3 (de overval uit het dichtste kamp), c4 (een
    kamp valt), het hol met de palissade en de aankleding, het level met zijn woorden en het vaandel van een doel, en de
    speeltest van een hoofdstuk (`--hoofdstuk hol`). Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk").
-   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel.
+   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel. **Bezig in sessie
+   `ccr-4ab305e2-5eexor`** (28 okt): het plan maken.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
