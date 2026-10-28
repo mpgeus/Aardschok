@@ -340,6 +340,29 @@ skirmish.
   - **L2, een kleur per speler:** "elke speler een eigen kleur" (de wapenrok in de kleur van de speler; niet een ring).
   - **H2, alle soorten te koop**, en erbij: "Archer, Knights, Maceman".
   - **E2, een tijdslimiet**, "instelbaar in de skirmish lobby".
+- **Besloten, de vervolgvragen** (Marcel, 28 okt):
+  - **De kaarten:** de eerste is *The Ford* (een kleine wereld van zo'n 96 bij 96 tegels, een rivier van noord naar zuid
+    met twee voorden en een brug, een heuvel bij elke strook, bos op de flanken, en rotsen die bij een voorde een smalle
+    doorgang maken; voor twee spelers), "maar niet altijd dezelfde map, ook hierin moet wel variatie mogelijk zijn en
+    uiteindelijk ook ruimte om voor spelers zelf maps te maken". Een kaart is dus een recept met een zaad: de opzet ligt
+    vast, het zaad varieert de rest; en een recept is gegevens, zodat de editor (4) en later een speler er een kunnen
+    maken.
+  - **De hoogte (a):** schutters op een heuvel schieten 2 tegels verder, en vanaf een heuvel zie je verder. Verder geen
+    regel.
+  - **De Knight (R1): te paard**, "we pakken dit thuis weer op" (de art en het paard thuis, in Blender).
+  - **De Maceman (K2): ook in het dorp**: de wapenmaker maakt knotsen, het wachthuis leidt ze op; de knots slaat door een
+    harnas heen.
+  - **De helden heten Generaals** (F2): "Ze inspireren alleen troepen die in de buurt zijn. Deze troepen vechten dan
+    harder en krijgen een armour buff. De helden zelf kunnen we allemaal hun eigen wapen hebben. eenmaal dood vecht de
+    rest door tot het eind." Geen kracht per generaal (dat klonk Marcel "beetje unbalanced"): elke generaal geeft
+    hetzelfde, en verschilt in zijn wapen.
+  - **De kleur per speler:** de kleurlaag in de tekeningen doet de Blender-sessie (190); "Thuis op de computer wordt alles
+    gerenderd."
+- **Het plan van stap 3** (Claude, 28 okt): **3a** een kleine wereld uit een recept (*The Ford*) en een veldslag zonder
+  economie op die kaart, met een eenvoudige veldheer, gewonnen, verloren of de tijd om, de militie voor 1, en een
+  proefbank (`npm run veldslag`); **3b** de lobby (kaart, zaad, punten, tijd, per plek mens of AI, kopen, opstellen);
+  **3c** de kleur per speler (met 190); **3d** de generaals; **3e** de knotsdrager (en thuis de ridder); **3f** de veldheer
+  in drie standen; **3g** meer kaarten, en de hoogte; **3h** nalopen.
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De

@@ -112,7 +112,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel. **Bezig in sessie
    `ccr-4ab305e2-5eexor`** (28 okt): het plan. De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
    E2"; `scenario.md`, 7): eigen kleine kaarten, een held uit een vaste lijst, een kleur per speler, de ridder en de
-   knotsdrager erbij, en een tijdslimiet in de lobby. De vervolgvragen liggen bij Marcel.
+   knotsdrager erbij, en een tijdslimiet in de lobby; en op de vervolgvragen: *The Ford* als eerste kaart, met variatie
+   uit een zaad; de hoogte geeft schutters bereik en zicht; de ridder te paard (thuis); de knotsdrager ook in het dorp; de
+   helden heten generaals en geven allemaal hetzelfde; de kleurlaag doet de Blender-sessie. Het plan in acht stappen
+   (`scenario.md`, 7, "Het plan van stap 3"); nu **3a**, de kaart en een veldslag zonder economie.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
