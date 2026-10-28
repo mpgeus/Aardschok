@@ -577,3 +577,67 @@ test('S4: een bevel midden in een stap: is de tegel waar hij vandaan kwam dichte
   assert.deepEqual([a.tx, a.ty], [naar.x, naar.y], 'de tegel is bezet');
   Object.assign(ander, was);
 });
+
+// Eén weg voor de groep (Marcel, 28 okt: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
+// veldslag"): de groep zoekt één lange weg, en elk loopt hem verschoven naar zijn plek in de formatie. Op The Ford (js/veldslag.js), over
+// de rivier.
+test('wie je samen stuurt, krijgt één weg: de groep zoekt hem één keer, en elk loopt hem op zijn plek in de linie', () => {
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: [{ soorten: { speerman: 6, boogschutter: 3 } }, { soorten: { speerman: 1 } }], minuten: null }));
+  const [A, B] = S.dorpen;
+  const w = S.wereld;
+  const mannen = T.militieVan(A);
+  const naar = T.tegelVan(T.militieVan(B)[0]); // de overkant van de rivier
+  const zoek = T.zoekRoute;
+  const lang = [];
+  T.zoekRoute = (w2, van, doel, o) => {
+    if (T.afstand(van, doel) > 15) lang.push(`${van.x},${van.y} > ${doel.x},${doel.y}`);
+    return zoek(w2, van, doel, o);
+  };
+  try {
+    T.stuurMannen(A, T.nummersVan(A, mannen), naar);
+  } finally {
+    T.zoekRoute = zoek;
+  }
+  assert.ok(T.afstand(T.tegelVan(mannen[0]), naar) > 40, 'een eind weg');
+  assert.equal(lang.length, 1, `één lange weg voor de groep, niet een per man: ${JSON.stringify(lang)}`);
+  for (const e of mannen) {
+    const pad = [T.tegelVan(e), ...e.pad];
+    for (let i = 1; i < pad.length; i++) {
+      assert.ok(T.afstand(pad[i - 1], pad[i]) === 1, `stap voor stap: ${JSON.stringify(pad[i - 1])} naar ${JSON.stringify(pad[i])}`);
+      assert.ok(T.isBegaanbaar(w, pad[i].x, pad[i].y), `te begaan: ${JSON.stringify(pad[i])}`);
+    }
+    assert.deepEqual(pad.at(-1), { x: e.post.x, y: e.post.y }, 'en hij eindigt op zijn post');
+  }
+  // op open land lopen ze naast elkaar: hun banen liggen uit elkaar, niet achter elkaar op één weg (halverwege ligt hier
+  // de brug, en daar gaan ze wel achter elkaar over)
+  const onderweg = mannen.map((e) => e.pad[Math.floor(e.pad.length / 4)]);
+  assert.ok(new Set(onderweg.map((t) => `${t.x},${t.y}`)).size >= mannen.length - 1, `naast elkaar: ${JSON.stringify(onderweg)}`);
+});
+
+test('wie ver van de groep staat, zoekt zijn eigen weg; een man alleen ook', () => {
+  const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: [{ soorten: { speerman: 4 } }, { soorten: { speerman: 1 } }], minuten: null }));
+  const [A, B] = S.dorpen;
+  const mannen = T.militieVan(A);
+  const naar = T.tegelVan(T.militieVan(B)[0]);
+  // een van hen staat een eind verderop (verder dan `groep` van het midden)
+  const ver = mannen[3];
+  const t = { x: ver.tx + T.KIEZEN_INSTELLINGEN.groep + 4, y: ver.ty - 4 };
+  assert.ok(T.isBegaanbaar(S.wereld, t.x, t.y), 'een vrije tegel verderop');
+  Object.assign(ver, { x: t.x, y: t.y, tx: t.x, ty: t.y, pad: [] });
+  const zoek = T.zoekRoute;
+  const van = [];
+  T.zoekRoute = (w2, a, doel, o) => {
+    if (T.afstand(a, doel) > 15) van.push(a);
+    return zoek(w2, a, doel, o);
+  };
+  try {
+    T.stuurMannen(A, T.nummersVan(A, mannen), naar);
+    assert.equal(van.length, 2, 'de groep en hij');
+    assert.ok(van.some((a) => a.x === t.x && a.y === t.y), 'hij zoekt zijn eigen weg');
+    van.length = 0;
+    T.stuurMannen(A, T.nummersVan(A, [mannen[0]]), { x: naar.x + 2, y: naar.y });
+    assert.equal(van.length, 1, 'een man alleen: zijn eigen weg');
+  } finally {
+    T.zoekRoute = zoek;
+  }
+});

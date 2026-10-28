@@ -1256,8 +1256,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   anderen, het midden, de voorden, de brug). Wie vecht, laat hij; wie een vijand die hij ziet vlakbij heeft (`aanval`), valt
   hem aan zoals een klik op die vijand (`volg`): zo vecht ook wie hem zelf niet ziet (een heuvel of boom ertussen,
   `T.zichtTussen`; zonder dit stonden ze op drie tegels van elkaar tot de tijd om was). De rest stuurt hij in een Line naar
-  het doel, of als dat verder is dan een etappe, een etappe die kant op: een weg zoeken kost zo'n 2 ms per man voor 70
-  tegels (`opmerkingen.md`), en met etappes van 24 tegels zakte de hoogste piek van 70 naar 22 ms. Een man wiens post al
+  het doel, of als dat verder is dan een etappe, een etappe die kant op: met etappes van 24 tegels zakte de hoogste piek
+  van 70 naar 22 ms, en ook met één weg voor de groep (js/kiezen.js) helpen ze nog (mediaan van de hoogste piek per slag
+  3,6 tegen 9,4 ms). Een man wiens post al
   bij het doel ligt (`ver`), krijgt geen nieuw bevel. Een plek is bereikt als het midden er is, of als iedereen stilstaat
   op een post erbij (een plek in de rivier haal je nooit). De held loopt `achterDeLinie` tegels achter het doel; is hij
   de laatste, dan vecht hij zelf. Gemeten met de proefbank (`npm run veldslag`, 28 okt, Node): dertig slagen tussen twee
@@ -2515,6 +2516,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
   (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
   getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **De klappen van een tik vallen aan het eind** (28 okt; Marcel: "1 tik alle klappen aan einde"): `slaan` zet de klap
+  klaar in `S.klappen` (wie, wat, hoeveel, van wie; de worp en wat harnas afvangt, rekent hij meteen), en
+  `T.laatKlappenVallen(S)` laat ze vallen aan het eind van `T.wereldTik`, na alle dorpen en de wereld, in de volgorde waarin
+  ze geslagen werden; een klap op wie al viel, valt niet meer. `S.klappen` is er alleen binnen een tik, dus het gaat
+  nooit mee in wat bewaard wordt. Waarom: de wereld werkt de dorpen een voor een bij, en wie eerst aan de beurt was,
+  sloeg eerst; wie in die tik viel, sloeg niet meer terug. De proefbank (`npm run veldslag`, zestig gelijke slagen op
+  *The Ford*) mat het effect van de volgorde: leger A won 46 keer, met de volgorde om 29; nu 43 en 34. De rest komt van
+  het lopen en het kiezen van een doel, die ook op volgorde gaan (`opmerkingen.md`). `T.raak` zelf (de toetsen,
+  `Spel.debug`) valt meteen. Een toets die `T.werkGevechtBij` los roept, laat de klappen zelf vallen.
 - **Hoe ver een speer steekt** (22 okt; Marcel: "Steken van verder weg"): `T.kanRaken` laat een speer of piek van twee
   tegels steken als hij dat op het scherm reikt (`steekReik`, 72 pixels op 1×, uit de getekende speerman: 60 tot 66):
   schuin en recht voor of achter is twee tegels 58 tot 72 pixels, opzij 128, dus opzij steekt hij alleen van ernaast. De
@@ -2621,7 +2631,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   rechts is `T.handelingSturen(S, doel, mannen)`: `{ tekst, kan, opdracht, doe }`. Bij de muis staat wat rechts doet,
   behalve boven wat links te kiezen is.
 - **Een bevel is een opdracht** (`T.OPDRACHTEN` in `js/tik.js`), met de nummers van de mannen (`p.id` van hun bewoner,
-  `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, en daar is `e.post`), `formatie`
+  `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, langs één weg voor de groep,
+  en daar is `e.post`), `formatie`
   (`T.zetFormatie`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
   geen nummer, dus zijn soort en plek), `terug` (`T.roepTerug`), `dienst` (`T.zetDienst`) en `teWapen` (`T.roepTeWapen`, met
   de plek van het wachthuis). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
@@ -2656,6 +2667,17 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   en dat vraagt samen spelen in lockstep. Tot 16 okt gebruikte `js/gevecht.js` `e.kijkt` ook als klok (wanneer hij weer
   om zich heen kijkt); die heet nu `e.omkijken`, want `js/sprites.js` las het getal als een plek, en wie gevochten had,
   keek dan naar het zuiden.
+- **Eén weg voor de groep** (28 okt; Marcel: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
+  veldslag"): `groepsBanen` zoekt één weg (`T.zoekRoute`, over open land) van de man in het midden van de groep naar de
+  plek in het midden van hun formatie, en `baanVan` geeft elke man die weg verschoven naar zijn plek in de formatie (zijn
+  baan): hij komt erop waar ze het dichtst bij hem is (in de eerste `groep` stappen), volgt haar zolang ze vrij is (en een
+  schuine stap niet om een muurhoek gaat, `stapMag`), en gaat om wat in de weg staat met een korte weg naar waar ze weer
+  vrij is. Zo blijft een Line onderweg een Line, en gaan ze bij een voorde of een brug vanzelf smal door. Wie alleen gaat,
+  binnen is, verder dan `groep` tegels van het midden staat, of als de groep geen weg over open land heeft (een tocht),
+  zoekt zijn eigen weg (`loop`), zoals voor 28 okt iedereen. Waarom: een lange weg zoeken kost zo'n 2 ms per man (70
+  tegels), en twaalf man over *The Ford* was 25 tot 45 ms in één tik; nu 4 à 10 ms (de eerste keer, met de JIT, meer).
+  Gemeten met `npm run veldslag`: de hoogste piek per slag heeft een mediaan van 3,6 ms. Getoetst in
+  `test/kiezen.test.cjs` (één lange weg, stap voor stap te begaan, op zijn post, en naast elkaar op open land).
 - **De diensten** (stap 4; Marcel, 16 okt: "A1, B1, C2, D2"): de dienst hoort bij de soldaat (`p.soldaat.dienst`, alleen
   `'nacht'`; zonder is het de dag), `T.dienstVan(e)`. `T.inDienst(D, e)` is `e.wakker` of zijn eigen dienst nu (de nacht
   is `T.dagdeelVan` 'nacht', van het slapen tot het opstaan; zonder kalender altijd). `T.dagAnker` zet een soldaat in

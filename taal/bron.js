@@ -2602,6 +2602,7 @@ Spel.TAAL_BRON = [
   {"t":"formations","waar":["js/opties.js"]},
   {"t":"men side by side in a line","waar":["js/opties.js"]},
   {"t":"their spots stay green, seconds","waar":["js/opties.js"]},
+  {"t":"a man further than this many tiles from his group finds his own way","waar":["js/opties.js"]},
   {"t":"this many tiles of sea around the map are open and visible","waar":["js/opties.js"]},
   {"t":"the day and hour a battle is fought on, and stays on","waar":["js/opties.js"]},
   {"t":"the AI general thinks every this many seconds","waar":["js/opties.js"]},

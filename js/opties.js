@@ -1461,6 +1461,7 @@
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
+    'KIEZEN_INSTELLINGEN.groep': T.t('a man further than this many tiles from his group finds his own way'), // geen tekst
     'VELDSLAG_INSTELLINGEN.zee': T.t('this many tiles of sea around the map are open and visible'), // geen tekst
     'VELDSLAG_INSTELLINGEN.dag': T.t('the day and hour a battle is fought on, and stays on'), // geen tekst
     'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst

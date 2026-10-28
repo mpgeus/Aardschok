@@ -380,9 +380,10 @@ skirmish.
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en
   terugtrekken komen met de standen in 3f. Gebouwd (28 okt): zie `code.md` bij `js/veldheer.js`. Wat de proefbank
-  vond: dertig slagen eindigen allemaal, in gemiddeld 53 seconden; maar wie eerst in de tik komt, slaat eerst (leger A
-  wint 15 van de 20, met de volgorde omgedraaid 11), en een bevel over de hele kaart kost voor twaalf man 25 tot 45 ms in
-  één tik (het zoeken van de weg, ook bij een klik van de speler). Allebei een vraag aan Marcel (`opmerkingen.md`).
+  vond: dertig slagen eindigen allemaal, in gemiddeld 53 seconden; wie eerst in de tik kwam, sloeg eerst, en een bevel
+  over de hele kaart kostte voor twaalf man 25 tot 45 ms in één tik. **Besloten** (Marcel, 28 okt: "1 tik alle klappen
+  aan einde", "per geselecteerde groep 1 pad"), en gebouwd: `code.md` bij `js/gevecht.js` en `js/kiezen.js`. En: strook A
+  van *The Ford* wint drie van de vier, wie er ook staat (`opmerkingen.md`; voor 3g).
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De
