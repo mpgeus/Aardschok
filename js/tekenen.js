@@ -1586,6 +1586,7 @@
     if (!zonderUi(S)) {
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
+      tekenStrook(ctx, S, vak);
       tekenMarktPlek(ctx, S);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
@@ -3042,17 +3043,40 @@
     if (!(S.bouwSoort || S.bouwMenuOpen)) return;
     const B = T.bouwBereikVan(S.dorp); // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
     if (!B) return;
-    const paden = BEREIK_GLOED.map(() => new Path2D());
-    const x0 = Math.max(B.x0, vak.x0);
-    const y0 = Math.max(B.y0, vak.y0);
-    const x1 = Math.min(B.x0 + B.b - 1, vak.x1);
-    const y1 = Math.min(B.y0 + B.h - 1, vak.y1);
+    tekenGloed(ctx, vak, { x: B.x0, y: B.y0, b: B.b, h: B.h }, (x, y) => {
+      const rand = B.straal - T.afstandInBouwBereik(B, x, y);
+      return !(rand >= 0) ? -1 : rand < 1 ? 0 : rand < 2 ? 1 : 2;
+    });
+  }
+
+  // De strook waarin je opstelt, zolang de voorbereiding van een veldslag loopt (D.strook, js/veldslag.js; 3b2, Marcel,
+  // 30 okt: "2. A"): een lichte rand, de gloed van het bouwbereik omgekeerd: het sterkst op de rand, en in drie tegels
+  // naar binnen weg. Sterker dan het bouwbereik, want hij ligt op het lichte gras dat je mannen zien.
+  const STROOK_GLOED = [0.12, 0.24, 0.4];
+  function tekenStrook(ctx, S, vak) {
+    const D = S.dorp;
+    if (!D || !D.strook) return;
+    const sterkte = (x, y) => {
+      const rand = T.strookRand(D, x, y);
+      return !(rand >= 0) || rand >= 3 ? -1 : rand < 1 ? 2 : rand < 2 ? 1 : 0;
+    };
+    tekenGloed(ctx, vak, D.plek.vak, sterkte, STROOK_GLOED);
+  }
+
+  // Een gloed op de grond over een gebied (het bouwbereik, de strook): elke tegel van `gebied` ({ x, y, b, h }) binnen het
+  // beeld (`vak`) in de sterkte die sterkteVan(x, y) zegt (een plek in `gloed`, of -1: niet).
+  function tekenGloed(ctx, vak, gebied, sterkteVan, gloed = BEREIK_GLOED) {
+    const paden = gloed.map(() => new Path2D());
+    const x0 = Math.max(gebied.x, vak.x0);
+    const y0 = Math.max(gebied.y, vak.y0);
+    const x1 = Math.min(gebied.x + gebied.b - 1, vak.x1);
+    const y1 = Math.min(gebied.y + gebied.h - 1, vak.y1);
     for (let y = y0; y <= y1; y++) {
       for (let x = x0; x <= x1; x++) {
-        const rand = B.straal - T.afstandInBouwBereik(B, x, y);
-        if (!(rand >= 0)) continue;
+        const sterkte = sterkteVan(x, y);
+        if (sterkte < 0) continue;
         const p = opGrond(x, y);
-        const pad = paden[rand < 1 ? 0 : rand < 2 ? 1 : 2];
+        const pad = paden[sterkte];
         pad.moveTo(p.x, p.y - T.HH);
         pad.lineTo(p.x + T.HB, p.y);
         pad.lineTo(p.x, p.y + T.HH);
@@ -3060,7 +3084,7 @@
         pad.closePath();
       }
     }
-    BEREIK_GLOED.forEach((a, i) => {
+    gloed.forEach((a, i) => {
       ctx.fillStyle = `rgba(240, 225, 170, ${a})`;
       ctx.fill(paden[i]);
     });

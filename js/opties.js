@@ -1470,6 +1470,7 @@
     'VELDSLAG_INSTELLINGEN.punten.max': T.t('at most'), // geen tekst
     'VELDSLAG_INSTELLINGEN.punten.stap': T.t('in steps of'), // geen tekst
     'VELDSLAG_INSTELLINGEN.minuten': T.t('the time limits to choose from, in minutes (0: none)'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.voorbereiding': T.t('seconds to deploy before the battle begins (Fight! starts it sooner)'), // geen tekst
     'VELDSLAG_INSTELLINGEN.minutenStandaard': T.t('the time limit at first, in minutes'), // geen tekst
     'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst
     'VELDHEER_INSTELLINGEN.ver': T.t('a man whose post is this many tiles from the goal gets a new order'), // geen tekst

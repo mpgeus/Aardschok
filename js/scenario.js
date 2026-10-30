@@ -205,11 +205,13 @@
     // zonder hol nooit), en hoeveel overvallen er op je land kwamen (een getal: minstens zoveel; of { minstens, minder }).
     hol: (S, D, v) => T.holStand(D) === v,
     // De veldslag (stap 3a2, js/veldslag.js): hoeveel mannen van het dorp nog staan (T.legerVan: zijn soldaten en zijn
-    // held), hoeveel legers nog mannen hebben (van alle dorpen, dus voor elke speler hetzelfde), en hoeveel seconden van
-    // de wereld er sinds het begin om zijn (de tijd van een veldslag; E2).
+    // held), hoeveel legers nog mannen hebben (van alle dorpen, dus voor elke speler hetzelfde), hoeveel seconden van de
+    // wereld er sinds het begin om zijn, en hoeveel sinds de slag begon, na de voorbereiding (de tijd van een veldslag;
+    // E2, en 3b2).
     mannen: (S, D, v) => telt(T.legerVan(D).length, v),
     legers: (S, D, v) => telt(S.dorpen.filter((x) => T.legerVan(x).length > 0).length, v),
     seconden: (S, D, v) => !!S.scenario && (S.wereldTijd || 0) - S.scenario.begin >= v,
+    slag: (S, D, v) => T.slagSeconden(S) != null && T.slagSeconden(S) >= v,
     overval: (S, D, v) => telt((D.rovers && D.rovers.geweest) || 0, v),
     // Het scenario zelf: een doel ('id': af, of { id: 'mislukt' }), een trigger die afging ('id'), een teller ({ naam: 3 }).
     doel: (S, D, v) =>
@@ -291,10 +293,10 @@
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
   // Wat linksboven staat (js/main.js): in je eigen dorp het hoofddoel van het scenario zolang het open is, anders het doel
-  // van de trede (T.tredeDoel, js/treden.js). { kop, tekst, deel }, of null.
+  // van de trede (T.tredeDoel, js/treden.js; een leger in een veldslag heeft geen trede). { kop, tekst, deel }, of null.
   T.doelLinksboven = function (S, D) {
     const hoofd = S.scenario && D === S.dorp ? S.scenario.doelen.find((d) => d.hoofd && d.stand === 'open') : null;
-    if (!hoofd) return T.tredeDoel(D);
+    if (!hoofd) return D.veldslag ? null : T.tredeDoel(D);
     return { kop: T.t('Goal'), tekst: veilig(T.tGegevens(hoofd.tekst)), deel: null };
   };
 

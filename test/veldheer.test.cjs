@@ -10,6 +10,8 @@ const slag = (legers, zaad = 1) => {
   const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad, legers, minuten: 10 }));
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen' }, T.schermVelden());
   S.kalender.snelheid = 1;
+  for (const D of S.dorpen) T.legerKlaar(S, D);
+  T.werkVeldslagBij(S, 0); // Fight! voor iedereen: de slag begint, na de voorbereiding (js/veldslag.js)
   return S;
 };
 const tot = (S, seconden, stop = () => false) => {

@@ -165,6 +165,12 @@
     '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
     '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
+  // Je mannen in een veldslag (T.ui.werkSlagBalkBij, hieronder): een schild.
+  const LEGER_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M12 3l7 2.5v5.5c0 4.6-3 8.2-7 10-4-1.8-7-5.4-7-10V5.5z" fill="#8a5a2c" stroke="#c89a5a" stroke-width="1.2" stroke-linejoin="round"/>' +
+    '<path d="M12 6.5v11M7.5 10.5h9" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
+    '</svg>';
   // De tevredenheid van het dorp (js/behoeften.js): een gezichtje, in dezelfde stijl als hierboven.
   const TEVREDENHEID_ICOON =
     '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
@@ -237,7 +243,7 @@
   // tevredenheid).
   // Elk getal is een post met een pictogram en het getal; de naam en wat het nu zegt, staan op het briefje bij de muis
   // (data-naam, data-uitleg). Een post blijft staan zolang zijn waar er is, zodat het briefje bij de muis blijft kloppen.
-  const NAAM = { goud: T.t('Treasury'), bevolking: T.t('People'), tevredenheid: T.t('Content') };
+  const NAAM = { goud: T.t('Treasury'), bevolking: T.t('People'), tevredenheid: T.t('Content'), mannen: T.t('Your men') };
   const naamVan = (wat) => NAAM[wat] || T.hoofdletter(T.waarNaam(wat));
   function post(box, wat, icoon) {
     let el = box.querySelector(`[data-wat="${wat}"]`);
@@ -409,6 +415,37 @@
     el.classList.toggle('laag', B.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
   };
 
+  // ── Een veldslag (js/veldslag.js; 3b2 en 3b3, Marcel, 30 okt: "1. In de ui balk, daar is ruimte voor buiten de
+  // campaign en reguliere spel") ──
+  // Een slag heeft geen dorp: de balk bovenaan zegt links je mannen die nog staan, en in het midden eerst de
+  // voorbereiding met haar klok en Fight! (de opdracht `klaar`, js/tik.js), daarna de tijd van de slag: wat er nog over
+  // is, of zonder tijd hoe lang hij al duurt. Het dorp, de datum, de snelheid (een slag loopt op 1×) en de bazen staan er
+  // dan niet, en onderaan alleen de minikaart (stijl.css, body.veldslag). Elk beeld (js/main.js): de dag staat stil, dus
+  // de kalender ververst niet.
+  const klokTekst = (s) => {
+    const t = Math.max(0, Math.ceil(s - 1e-6)); // 57,0000000002 is nog 57
+    return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+  };
+  T.ui.werkSlagBalkBij = function (S) {
+    const V = S.veldslag;
+    document.body.classList.toggle('veldslag', !!V);
+    if (!V || !S.dorp) return;
+    zet(post($('bovenbalk').querySelector('.balk-leger'), 'mannen', LEGER_ICOON), T.legerVan(S.dorp).length, T.t('Your men who are still standing.'));
+    const vb = V.voorbereiding;
+    const tijd = T.slagSeconden(S) || 0;
+    const kop = vb ? T.t('Deploy') : T.t('Battle');
+    const klok = klokTekst(vb ? vb.over : V.minuten ? V.minuten * 60 - tijd : tijd);
+    if ($('slag-kop').textContent !== kop) $('slag-kop').textContent = kop;
+    if ($('slag-tijd').textContent !== klok) $('slag-tijd').textContent = klok;
+    $('vechten-knop').classList.toggle('verborgen', !vb || vb.klaar.includes(S.dorpen.indexOf(S.dorp)));
+  };
+  $('vechten-knop').textContent = T.t('Fight!');
+  $('vechten-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    const S = T.S;
+    if (S && T.inVoorbereiding(S)) T.geefOpdracht(S, { soort: 'klaar' });
+  });
+
   // ── De dingen ──
   // Wat elk ding is (naam), wat het nu zegt (uitleg, uit de regels) en zijn toets, voor het briefje bij de muis. Wat een
   // ding doet als je erop klikt, doet de knop die het was (zijn id: js/hud.js, js/brieven.js).
@@ -427,6 +464,17 @@
         return `${T.t('A messenger to the merchant, in hard times: you write what you want and choose who goes along.')}${k.kan ? '' : ` ${k.reden}`}`;
       },
     },
+    // Een veldslag (hierboven): de klok in het midden, en Fight!.
+    slagklok: {
+      naam: T.t('The battle'),
+      uitleg: (S) =>
+        T.inVoorbereiding(S)
+          ? T.t('Place your men within your zone, inside the glow on the ground. When the time is up, or when you press Fight!, the battle begins.')
+          : S.veldslag && S.veldslag.minuten
+            ? T.t('The time that is left. When it is up, the side with the most men standing wins.')
+            : T.t('How long the battle has lasted. It ends when one side has no men left.'),
+    },
+    vechten: { naam: T.t('Fight!'), uitleg: () => T.t('Start the battle now, before the time is up.') },
     gunst: { naam: T.t("The lord's favour"), uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },
     vertrouwen: { naam: T.t("The village's trust"), uitleg: (S) => T.bazenTekst(S.dorp, 'vertrouwen') },
     // Bovenaan (vraag 146, d): het lipje Menu en de datum, met het weer.

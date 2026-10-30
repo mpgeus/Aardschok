@@ -88,7 +88,8 @@
     if (!D || D.wereld !== S.wereld) return null;
     const wie = T.nummersVan(D, mannen);
     const geef = (o) => () => T.geefOpdracht(S, { ...o, dorp: S.dorpen.indexOf(D) });
-    if (doel.wezen && isVijand(D, doel.wezen)) {
+    // in de voorbereiding van een veldslag (D.strook, js/veldslag.js) valt niemand aan: een klik op een vijand is erheen
+    if (doel.wezen && isVijand(D, doel.wezen) && !D.strook) {
       const e = doel.wezen;
       const opdracht = { soort: 'volg', wie, doel: { x: e.tx, y: e.ty, soort: e.soort } };
       return { tekst: T.t('Attack the {wie}', { wie: e.naam }), kan: true, opdracht, doe: geef(opdracht) };
@@ -252,16 +253,20 @@
 
   // Waar elk van `mannen` komt te staan in hun formatie bij `naar`: { plekken: [{ e, x, y, kijk }], richting }. Zonder
   // `richting` die van hun midden naar `naar`; staan ze er al, dan die ze hadden. Ook voor het scherm (de plekken in groen
-  // na een rechtsklik, js/main.js): het verandert niets.
+  // na een rechtsklik, js/main.js): het verandert niets. Stelt D op (de voorbereiding van een veldslag, D.strook in
+  // js/veldslag.js; Marcel, 30 okt: "3. b"), dan blijft elke plek in zijn strook: wie je erbuiten stuurt, loopt tot de
+  // rand.
   T.formatiePlekken = function (D, mannen, naar, richting) {
+    naar = T.naarStrook(D, naar);
     const m = midden(mannen.map((e) => T.tegelVan(e)));
     const dx = naar.x - m.x;
     const dy = naar.y - m.y;
     const f = richting || (Math.abs(dx) + Math.abs(dy) >= 1 && achtVan(dx, dy)) || vorigeRichting(mannen);
     const plekken = T.formatieVan(mannen) === 'ring' ? ringPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
     const bezet = new Set();
+    const mag = D.strook ? (q) => T.inStrook(D, q.x, q.y) : null;
     for (const p of plekken) {
-      const t = vrijBij(D.wereld, p, bezet);
+      const t = vrijBij(D.wereld, T.naarStrook(D, p), bezet, mag);
       bezet.add(t.x + ',' + t.y);
       p.x = t.x;
       p.y = t.y;
@@ -438,6 +443,7 @@
   // Een vijand aanvallen (`volg`): de vijand van die soort het dichtst bij waar je klikte. Het gevecht (js/gevecht.js)
   // brengt hem erheen en laat hem slaan.
   T.volgVijand = function (D, wie, doel) {
+    if (D.strook) return; // in de voorbereiding van een veldslag valt niemand aan (js/veldslag.js)
     const mannen = mannenMet(D, wie);
     let vijand = null;
     let bij = Infinity;

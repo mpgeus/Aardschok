@@ -392,6 +392,16 @@ skirmish.
   AI (`code.md` bij `js/veldslag.js`). De proefbank (`npm run veldslag -- --punten 40 --zaden 1-90`) liet meteen de
   balans zien: de mix *schutters* won 38 van zijn 39 slagen tegen een andere, *gewoon* 19 van 37, en *zwaar* 5 van 48.
   Een boogschutter voor 2 punten is te goedkoop, of de zware soorten te duur (vraag aan Marcel).
+- **De voorbereiding en het scherm van een slag, besloten** (Marcel, 30 okt, op het plan van 3b2 en 3b3: "1. In de ui
+  balk, daar is ruimte voor buiten de campaign en reguliere spel. 2. A 3. b 4. A"): de klok van de voorbereiding en
+  *Fight!* staan in de balk onderaan (in een slag staat daar geen dorp); zolang de voorbereiding loopt, ligt er een
+  lichte rand om je strook; stuur je je mannen erbuiten, dan lopen ze tot de rand; en na de slag speelt *Again* dezelfde
+  slag nog eens (kaart, zaad en leger), en brengt *Lobby* je terug naar de lobby met je keuzes. Verder, uit het plan:
+  *Fight!* is een opdracht, de slag begint als iedereen klaar is of de tijd om is, de tijd van de slag loopt vanaf
+  *Fight!*, en de AI blijft in zijn linie staan en is meteen klaar (zelf opstellen komt met zijn standen in 3f).
+  **Gebouwd** (3b2 en 3b3, 30 okt; `code.md` bij `js/veldslag.js`): ook valt de held in een slag, dan neemt niemand het
+  over (zoals de generaals), en staat linksboven alleen het doel van de slag. In de cloud in de browser nagelopen, van de
+  voorbereiding tot het eindscherm en terug naar de lobby.
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

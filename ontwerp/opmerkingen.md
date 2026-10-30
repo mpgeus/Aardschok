@@ -16,6 +16,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   ongeveer half om half. Daarnaast telt de volgorde in de tik nog wat (A 43 tegen 34 met de volgorde om): de klappen
   vallen sinds 28 okt aan het eind van de tik, maar het lopen en het kiezen van een doel gaan nog op volgorde.
 
+- **In de voorbereiding kan alleen jij de heuvel op** (30 okt, bij 3b2): je zet je schutters op de heuvel bij je strook
+  (2 tegels verder), de AI blijft in zijn linie. Tot de standen van 3f is dat een voordeel bovenop de scheve balans; meet
+  de balans (na de generaals) met een AI die zelf opstelt, of zet in 3f als eerste zijn schutters de heuvel op.
+
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
   dezelfde vraag stelt, krijgt hem uit het geheugen; een computer die herlaadt of later instapt, zoekt opnieuw en kan een

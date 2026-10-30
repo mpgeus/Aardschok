@@ -1271,6 +1271,30 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `punten` in het level (3b1) koopt een veldheer zonder soorten zijn leger bij het begin (`maakLeger`: `T.veldheerKoopt`
   met een lot uit het zaad van de slag en zijn strook, zodat elke computer hetzelfde koopt; de mix in `D.veldheer.mix`), en
   kijkt de keuring na dat een speler niet meer kocht dan zijn punten.
+- Stap 3b2 (30 okt; Marcel: "1. In de ui balk", "2. A", "3. b"): **de voorbereiding**. Speelt er een mens mee, dan staat
+  in `S.veldslag.voorbereiding` `{ over, klaar }` (de seconden die nog over zijn, `VELDSLAG_INSTELLINGEN.voorbereiding`, en
+  de nummers van de legers die *Fight!* gaven), en heeft elk leger `D.strook` (de strook uit het recept, `{ a, b, cx, cy,
+  half }`). Zolang die er is, blijft elke plek van een formatie in de strook (`T.formatiePlekken`, js/kiezen.js, met
+  `T.naarStrook` en `T.inStrook`: wie je erbuiten stuurt, loopt tot de rand; het scherm toont dezelfde plekken), valt
+  niemand aan (`handelingSturen` en `T.volgVijand`), en wacht een veldheer (`T.werkVeldheerBij`). *Fight!* is de opdracht
+  `klaar` (js/tik.js, `T.legerKlaar`); `T.werkVeldslagBij` (in `T.wereldTik`, na de opdrachten) telt af, en zijn alle
+  spelers klaar of is de tijd om, dan gaan de voorbereiding en de stroken weg, zegt elk leger *The battle begins.*, en
+  staat in `S.veldslag.begon` de tijd van de wereld. Spelen alleen veldheren (de proefbank), dan is er geen
+  voorbereiding. De tijd van de slag is de trigger `slag` (js/scenario.js, `T.slagSeconden`): seconden sinds `begon`, niet
+  sinds het begin van het level. Op het scherm (js/balk.js, `T.ui.werkSlagBalkBij`, elk beeld, want de dag staat stil):
+  `body.veldslag` (stijl.css) haalt het dorp, de datum, de snelheid, de bazen, Build, de brief, de bode en de voorraad
+  weg; links in de balk bovenaan je mannen (`T.legerVan`), in het midden *Deploy* met de klok en *Fight!*, daarna
+  *Battle* met de tijd die over is (of zonder tijd hoe lang hij al duurt). De rand van je strook is een gloed op de grond
+  (`tekenStrook`, js/tekenen.js, met `T.strookRand`: hoe ver een tegel binnen de rand ligt, in tegels), dezelfde gloed als
+  het bouwbereik (`tekenGloed`) maar omgekeerd: het sterkst op de rand, en sterker, want hij ligt op het lichte gras. B
+  opent in een slag geen bouwmenu. Getoetst in `test/veldslag.test.cjs`.
+- Stap 3b3 (30 okt; Marcel: "4. A"): **het scherm van een slag**. Het eindscherm (`T.ui.toonEinde`, js/hud.js) heeft na
+  een slag geen jaar van een dorp, maar *Again* (`T.veldslagNogEens`: hetzelfde level uit `S.veldslag`, dat de kaart, het
+  zaad, de punten, de tijd en de legers van het level onthoudt; een veldheer koopt met hetzelfde zaad weer hetzelfde) en
+  *Lobby* (`T.ui.toonLobby`, js/menu.js, met `T.veldslagKeuzes`: de lobby met de keuzes van de slag); de tweede knop is
+  `tweede` in `T.ui.toonOverlay` (js/ui.js). Linksboven staat alleen het doel van de slag, nooit de trede van een dorp
+  (`T.doelLinksboven`), en valt de held, dan neemt niemand het over en zegt niemand het (`T.werkAanvoerderBij` en
+  `T.aanvoerderValt`, js/soldaten.js; zo ook de generaals, `scenario.md`, 7); de veldheer vecht dan door zonder held.
 
 ### js/veldheer.js: de veldheer
 

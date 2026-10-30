@@ -51,6 +51,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
+- **3b2 en 3b3 bekijken: de voorbereiding en het scherm van een slag** (30 okt; bij 1 hieronder, en `scenario.md`, 7).
+  *Skirmish*, Begin: in de balk bovenaan je mannen, *Deploy* met een minuut en *Fight!*; een lichte rand om je strook,
+  en wie je erbuiten stuurt, loopt tot de rand; de veldheer wacht. Na *Fight!* (of de minuut) *Battle* met de tijd die
+  over is, en na de slag *Again* en *Lobby*. Vraag: het briefje *Fighting, since today* linksboven staat er in een slag
+  nog; weg?
 - **2c spelen: hoofdstuk 2, het rovershol** (af op 28 okt, in `main`; bij K, "2c"). *Campaign*, hoofdstuk 2 (zit op
   slot tot hoofdstuk 1 af is; meteen open met `localStorage.setItem('aardschok.campagne', '{"aankomst":true}')` in de
   console). Kijk: de brief met de rovers, het doel linksboven, de eerste overval (rond dag 100) met het spoor, het
@@ -109,8 +114,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    **2c is af** (28 okt; bij K, "2c"): het rovershol als hoofdstuk 2, met c3 (de overval uit het dichtste kamp), c4 (een
    kamp valt), het hol met de palissade en de aankleding, het level met zijn woorden en het vaandel van een doel, en de
    speeltest van een hoofdstuk (`--hoofdstuk hol`). Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk").
-   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel. **Bezig in sessie
-   `ccr-9cc1d4fb-1dnxen`** (30 okt): 3b2 en 3b3. De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
+   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9). De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
    E2"; `scenario.md`, 7): eigen kleine kaarten, een held uit een vaste lijst, een kleur per speler, de ridder en de
    knotsdrager erbij, en een tijdslimiet in de lobby; en op de vervolgvragen: *The Ford* als eerste kaart, met variatie
    uit een zaad; de hoogte geeft schutters bereik en zicht; de ridder te paard (thuis); de knotsdrager ook in het dorp; de
@@ -120,12 +124,14 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    wat zijn mannen zien en oprukt, `js/veldheer.js`, en de proefbank `npm run veldslag`), en wat de proefbank vond: de
    klappen van een tik vallen aan het eind, en een groep loopt één weg (Marcel, 28 okt); alles nagelopen voor samen
    spelen (`code.md` bij `js/tik.js`, "Samen"; wat open is in `opmerkingen.md`). 3b1 is af: de lobby (*Skirmish* op het
-   titelscherm, ook in de demo), kopen met punten, en de AI koopt een van drie mixen (`scenario.md`, 7). **Wacht op
-   Marcel**: het voorstel voor de generaals (3d komt mee in skirmish: Marcel, "helden zijn generaals"; vier, elk een eigen
-   wapen, inspiratie binnen 5 tegels: 25 % meer schade en 1 harnas), en de balans (de mix *schutters* wint 97 %; een ronde
-   met de proefbank na de generaals en de knotsdrager). Daarna **3b2** (de voorbereiding: 60 s, alleen in je strook,
-   *Fight!* als opdracht) en **3b3** (het scherm van een slag: de knop Build, de getallen van het dorp, "the village stayed
-   at 0 people", *Towards a village* en het bericht over wie het bevel overneemt weg; je mannen en de tijd erbij; *Again*).
+   titelscherm, ook in de demo), kopen met punten, en de AI koopt een van drie mixen (`scenario.md`, 7). 3b2 en 3b3 zijn
+   af (30 okt; Marcel: "1. In de ui balk", "2. A 3. b 4. A"): de voorbereiding met de klok en *Fight!* in de balk, de
+   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **Wacht op Marcel**: het voorstel voor de
+   generaals (3d komt mee in skirmish: Marcel, "helden zijn generaals"; vier, *Sir Godfrey* met zwaard en schild, *Dame
+   Agnes* met piek, *Brother Anselm* met knots, *Old Wat* met kruisboog; inspiratie binnen 5 tegels: 25 % meer schade en
+   1 harnas; valt hij, dan vecht de rest door; zijn kring even op de grond als je hem kiest), en de balans (de mix
+   *schutters* wint 97 %; een ronde met de proefbank na de generaals en de knotsdrager, met een AI die zelf opstelt:
+   `opmerkingen.md`). Daarna 3d, 3e en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

@@ -432,6 +432,14 @@
     toon(S);
   };
 
+  // Het titelscherm met de lobby open, met de keuzes van een slag ({ kaart, zaad, punten, minuten, koop }: Lobby op het
+  // eindscherm van een veldslag, js/hud.js; Marcel, 30 okt: "4. A").
+  T.ui.toonLobby = function (S, keuzes) {
+    T.ui.toonTitel(S);
+    lobby = { ...nieuweLobby(), ...keuzes, koop: { ...keuzes.koop } };
+    toon(S);
+  };
+
   // Het titelscherm dicht zonder iets te kiezen (Spel.debug.laden, js/main.js).
   T.ui.sluitTitel = (S) => {
     if (scherm === 'titel') sluit(S);

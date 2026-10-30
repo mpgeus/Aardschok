@@ -66,7 +66,7 @@
   T.werkVeldheerBij = function (S, D) {
     const V = D.veldheer;
     const nu = S.wereldTijd || 0;
-    if (!V || nu < V.denkt) return;
+    if (!V || nu < V.denkt || T.inVoorbereiding(S)) return; // in de voorbereiding blijft hij in zijn linie (3b2)
     V.denkt = nu + IN().denkElke;
     const held = D.aanvoerder;
     const soldaten = T.militieVan(D).filter((e) => T.isMan(D, e));
@@ -87,7 +87,7 @@
     }
     for (const [v, wie] of aanval) stuur(S, D, wie, { wezen: v, x: v.tx, y: v.ty });
     if (verder.length) stuur(S, D, verder, doel);
-    if (!soldaten.length || held.doelwit || !T.isMan(D, held)) return;
+    if (!soldaten.length || !T.isMan(D, held) || held.doelwit) return; // ook als hij viel: in een slag neemt niemand het over
     const plek = achter(midden, doel);
     if (V.held && T.afstand(V.held, plek) <= IN().ver) return;
     V.held = plek;

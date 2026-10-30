@@ -195,6 +195,19 @@ kbd {
 #kalender-datum { font: 23px/1.1 var(--kop); }
 #kalender-datum.sint-maarten { color: var(--papier-rood); }
 #kalender-seizoen { font-style: italic; color: var(--papier-grijs); }
+/* Een veldslag (js/balk.js, T.ui.werkSlagBalkBij; 3b2 en 3b3): geen dorp, dus links je mannen in plaats van het dorp,
+   in het midden de klok van de slag met Fight! in plaats van de datum, geen snelheid (een slag loopt op 1×) en geen
+   bazen; onderaan alleen de minikaart. */
+#slagbalk, #bovenbalk .balk-leger { display: none; }
+body.veldslag #slagbalk { display: flex; align-items: baseline; gap: 14px; white-space: nowrap; }
+body.veldslag #bovenbalk .balk-leger { display: flex; gap: 22px; }
+body.veldslag :is(#kalenderbalk, #bovenbalk .balk-dorp, #kalender-knoppen, #bazen, #middenonder, #linksonder) { display: none; }
+#slagklok { display: flex; align-items: baseline; gap: 12px; cursor: default; }
+#slag-kop { font: 23px/1.1 var(--kop); }
+#slag-tijd { font-style: italic; color: var(--papier-grijs); font-variant-numeric: lining-nums tabular-nums; }
+#vechten-knop { padding: 0 10px; font: 23px/1.1 var(--kop); color: var(--papier-rood); background: none; border: 1px solid var(--papier-rood); cursor: pointer; }
+#vechten-knop:hover,
+#vechten-knop:focus-visible { color: var(--papier-inkt); border-color: var(--papier-inkt); }
 #menu-knop { padding: 2px 4px; font: 23px/1.1 var(--kop); color: var(--papier-inkt); background: none; border: 0; cursor: pointer; }
 #menu-knop:hover,
 #menu-knop:focus-visible,
@@ -381,8 +394,9 @@ body.foto #kader { display: none; }
 #overlay h1 { margin: 0 0 10px; font: 30px var(--kop); color: var(--goud); letter-spacing: 0.02em; }
 #overlay-tekst { font-size: 15px; line-height: 1.6; }
 #overlay-tekst p { margin: 0 0 10px; }
-#overlay-knop {
-  margin-top: 10px;
+#overlay-knop,
+#overlay-knop2 {
+  margin: 10px 4px 0;
   padding: 9px 22px;
   font: 15px var(--boek);
   color: var(--op-goud);
@@ -391,7 +405,8 @@ body.foto #kader { display: none; }
   border-radius: 8px;
   cursor: pointer;
 }
-#overlay-knop:hover { filter: brightness(1.08); }
+#overlay-knop:hover,
+#overlay-knop2:hover { filter: brightness(1.08); }
 
 /* Het bouwmenu (js/hud.js; vraag 179, C2; Marcel, 18 okt: "ik wil geen lange lijst aan de linkerkant. Ook wil ik plaatjes
    van gebouwen erbij"): een klein venster boven de knop Build, met een raster van plaatjes en de naam eronder, zoals in

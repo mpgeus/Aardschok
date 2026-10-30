@@ -313,6 +313,11 @@ berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in é
 er is): standaard zaad 1, elk leger acht speermannen en vier boogschutters (`[{ soorten: { speerman: 8, boogschutter: 4
 } }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger, het andere speelt de veldheer (3a3);
 met `veldheer: true` bij je eigen leger kijk je naar twee veldheren. `Spel.debug.wissel()` maakt jou het andere leger.
+Speel je mee, dan begint de slag met de voorbereiding (3b2): een minuut, of tot je *Fight!* geeft in de balk bovenaan
+(`Spel.geefOpdracht(Spel.S, { soort: 'klaar' })`). **In de cloud** laadt het spel in Playwright alleen met de spellus stil
+(opmerkingen.md, "De tekenmeting met `--tegen`"): `requestAnimationFrame` leeg in een `addInitScript`, `file://` met
+`waitUntil: 'domcontentloaded'`, dan `Spel.debug.stap` en `Spel.tekenBeeld()` voor elke schermafdruk (30 okt: zo
+nagelopen, de voorbereiding tot het eindscherm en terug naar de lobby).
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.

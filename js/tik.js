@@ -42,6 +42,7 @@
     S.tijd += dt;
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     T.tikKalender(S, dt);
+    T.werkVeldslagBij(S, dtWereld); // de voorbereiding van een veldslag, en wanneer de slag begint (js/veldslag.js)
     T.werkScenarioBij(S); // de triggers van een scenario (js/scenario.js), één keer per seconde van de wereld
     // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
     // voorvallen. Waar de aanvoerder is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
@@ -152,6 +153,8 @@
       const g = D.gebouwen.find((x) => x.soort === 'wachthuis' && x.x === o.x && x.y === o.y);
       if (g) T.roepTeWapen(D, g);
     },
+    // Een speler is klaar met opstellen (Fight!, de voorbereiding van een veldslag, js/veldslag.js): {}.
+    klaar: (S, D) => T.legerKlaar(S, D),
   };
 
   // Een speler geeft een opdracht (een klik, een knop). `opdracht.dorp`: het nummer van het dorp in S.dorpen (zonder: je

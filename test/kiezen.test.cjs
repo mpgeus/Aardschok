@@ -583,6 +583,8 @@ test('S4: een bevel midden in een stap: is de tegel waar hij vandaan kwam dichte
 // de rivier.
 test('wie je samen stuurt, krijgt één weg: de groep zoekt hem één keer, en elk loopt hem op zijn plek in de linie', () => {
   const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: [{ soorten: { speerman: 6, boogschutter: 3 } }, { soorten: { speerman: 1 } }], minuten: null }));
+  for (const D of S.dorpen) T.legerKlaar(S, D);
+  T.werkVeldslagBij(S, 0); // Fight! voor iedereen: de slag begint, na de voorbereiding (js/veldslag.js)
   const [A, B] = S.dorpen;
   const w = S.wereld;
   const mannen = T.militieVan(A);
@@ -616,6 +618,8 @@ test('wie je samen stuurt, krijgt één weg: de groep zoekt hem één keer, en e
 
 test('wie ver van de groep staat, zoekt zijn eigen weg; een man alleen ook', () => {
   const S = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagLevel({ kaart: 'ford', zaad: 1, legers: [{ soorten: { speerman: 4 } }, { soorten: { speerman: 1 } }], minuten: null }));
+  for (const D of S.dorpen) T.legerKlaar(S, D);
+  T.werkVeldslagBij(S, 0); // Fight! voor iedereen: de slag begint, na de voorbereiding (js/veldslag.js)
   const [A, B] = S.dorpen;
   const mannen = T.militieVan(A);
   const naar = T.tegelVan(T.militieVan(B)[0]);

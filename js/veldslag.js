@@ -7,7 +7,7 @@
 // ook een level"), met `veldslag: { kaart, zaad, legers }` en vaste triggers voor winst en verlies (T.veldslagLevel); T.beginOpEiland
 // (js/begin.js) begint hem met T.beginVeldslag. In het spel staat dan S.veldslag: de dag staat stil en de snelheid is 1×
 // (js/tijd.js). Stap 3a3: een leger met `veldheer` speelt zelf (js/veldheer.js); zonder keus is dat elk leger behalve
-// het eerste.
+// het eerste. Stap 3b2: de voorbereiding (hieronder, "De voorbereiding").
 (function (T) {
   'use strict';
 
@@ -21,6 +21,9 @@
     // De tijd van een slag in minuten, de keuzes in de lobby (0 is geen tijd; E2), en welke er eerst staat.
     minuten: [0, 5, 10, 15, 20],
     minutenStandaard: 10,
+    // Zoveel seconden van de wereld stellen de spelers op voor de slag begint (3b2; scenario.md, 7: "standaard 60
+    // seconden"); met Fight! eerder.
+    voorbereiding: 60,
   };
   const IN = () => T.VELDSLAG_INSTELLINGEN;
 
@@ -85,10 +88,11 @@
       { id: 'begin', dan: [{ doel: { id: 'slag', tekst: T.t('Defeat the enemy army.'), hoofd: true } }] },
       { id: 'eind', als: [{ legers: { minder: 2 } }], dan: [{ uitslag: true }] },
     ];
-    if (minuten) triggers.push({ id: 'tijd', als: [{ seconden: minuten * 60 }], dan: [{ uitslag: true }] });
+    // de tijd van de slag loopt vanaf Fight! (3b2), niet vanaf de voorbereiding
+    if (minuten) triggers.push({ id: 'tijd', als: [{ slag: minuten * 60 }], dan: [{ uitslag: true }] });
     const metVeldheer = (l, i) => (l.veldheer != null ? !!l.veldheer : i > 0); // zonder keus: jij het eerste, een veldheer de rest
     const leger = (l, i) => ({ ...(l.soorten ? { soorten: { ...l.soorten } } : {}), veldheer: metVeldheer(l, i) });
-    return { veldslag: { kaart, zaad, ...(punten ? { punten } : {}), legers: legers.map(leger) }, triggers };
+    return { veldslag: { kaart, zaad, ...(punten ? { punten } : {}), ...(minuten ? { minuten } : {}), legers: legers.map(leger) }, triggers };
   };
 
   // De mannen van een leger (of een dorp) die nog staan: zijn soldaten en veteranen (T.militieVan, js/rovers.js) en zijn
@@ -101,18 +105,107 @@
 
   // Het begin van een veldslag (T.beginOpEiland, js/begin.js): de wereld van de kaart, de dag die blijft, en per leger een
   // dorp zonder kar, gezinnen of voorraad, met zijn held en zijn soldaten in zijn strook. Het eerste leger is van jou
-  // (S.dorp); de andere zijn een ander dorp (D.ander: wat zij zeggen, zie je niet).
+  // (S.dorp); de andere zijn een ander dorp (D.ander: wat zij zeggen, zie je niet). Speelt er een mens mee, dan begint
+  // de slag met de voorbereiding (hieronder); spelen alleen veldheren (de proefbank), dan meteen.
+  // S.veldslag: { kaart, zaad, punten, minuten (de tijd van de slag, of geen), legers (zoals in het level),
+  // voorbereiding: { over, klaar } zolang die loopt, en begon: de tijd van de wereld toen de slag begon }.
   T.beginVeldslag = function (S, L) {
     const V = L.veldslag;
     const w = T.veldslagWereld(V.kaart, V.zaad);
     const R = T.eilandVan(w.eiland).recept;
     S.wereld = w;
-    S.veldslag = { kaart: V.kaart, zaad: V.zaad };
+    const legers = V.legers.map((l) => ({ ...l, ...(l.soorten ? { soorten: { ...l.soorten } } : {}) }));
+    S.veldslag = { kaart: V.kaart, zaad: V.zaad, punten: V.punten || null, minuten: V.minuten || null, legers };
     S.kalender.dag = IN().dag;
     S.dorpen = V.legers.map((leger, i) => maakLeger(S, w, R, i, leger, V));
     S.dorp = S.dorpen[0];
+    if (S.dorpen.some((D) => !D.veldheer)) {
+      S.veldslag.voorbereiding = { over: IN().voorbereiding, klaar: [] };
+      for (const [i, D] of S.dorpen.entries()) {
+        const st = R.stroken[i];
+        D.strook = { a: [...st.a], b: [...st.b], cx: R.cx, cy: R.cy, half: R.half };
+      }
+    }
     T.startScenario(S, L);
     return S.dorp;
+  };
+
+  // Na de slag (het eindscherm, js/hud.js; 3b3, Marcel, 30 okt: "4. A"): Again is het level van dezelfde slag (dezelfde
+  // kaart, hetzelfde zaad, dezelfde punten, tijd en legers: een veldheer koopt met hetzelfde zaad weer hetzelfde), en
+  // Lobby gaat terug naar de lobby met deze keuzes (js/menu.js: { kaart, zaad, punten, minuten, koop }, je eigen leger).
+  T.veldslagNogEens = (S) => {
+    const V = S.veldslag;
+    return T.veldslagLevel({ kaart: V.kaart, zaad: V.zaad, punten: V.punten, minuten: V.minuten, legers: V.legers });
+  };
+  T.veldslagKeuzes = (S) => {
+    const V = S.veldslag;
+    const jij = V.legers[S.dorpen.indexOf(S.dorp)] || V.legers[0];
+    return { kaart: V.kaart, zaad: V.zaad, punten: V.punten || T.VELDSLAG_INSTELLINGEN.punten.standaard, minuten: V.minuten || 0, koop: { ...(jij.soorten || {}) } };
+  };
+
+  // ── De voorbereiding (3b2; scenario.md, 7; Marcel, 30 okt: "2. A 3. b") ──
+  //
+  // Na het begin stellen de spelers op: hun mannen staan in een linie in hun strook, en zolang de voorbereiding loopt,
+  // sturen ze hen alleen binnen die strook (D.strook: wie je erbuiten stuurt, loopt tot de rand, T.formatiePlekken in
+  // js/kiezen.js) en valt niemand aan. Een veldheer wacht (js/veldheer.js). Met Fight! (de opdracht `klaar`, js/tik.js)
+  // is een speler klaar; zijn alle spelers klaar, of is de tijd om, dan begint de slag, op elke computer in dezelfde
+  // tik. De tijd van de slag (`minuten`, de trigger `slag` in js/scenario.js) loopt vanaf dan.
+
+  T.inVoorbereiding = (S) => !!(S.veldslag && S.veldslag.voorbereiding);
+
+  // Een speler is klaar (Fight!).
+  T.legerKlaar = function (S, D) {
+    const vb = S.veldslag && S.veldslag.voorbereiding;
+    const i = S.dorpen.indexOf(D);
+    if (vb && i >= 0 && !vb.klaar.includes(i)) vb.klaar.push(i);
+  };
+
+  // Elke tik (T.wereldTik, js/tik.js), na de opdrachten: de klok van de voorbereiding, en wanneer de slag begint.
+  T.werkVeldslagBij = function (S, dtWereld) {
+    const V = S.veldslag;
+    if (!V) return;
+    const vb = V.voorbereiding;
+    if (vb) {
+      vb.over -= dtWereld;
+      const spelers = S.dorpen.filter((D) => !D.veldheer);
+      if (vb.over > 0 && !spelers.every((D) => vb.klaar.includes(S.dorpen.indexOf(D)))) return;
+      delete V.voorbereiding;
+      for (const D of S.dorpen) {
+        delete D.strook;
+        T.zeg(D, T.t('The battle begins.'), 'gevaar');
+      }
+    }
+    if (V.begon == null) V.begon = S.wereldTijd || 0;
+  };
+
+  // Hoeveel seconden de slag loopt (na de voorbereiding), of null als hij nog niet begon.
+  T.slagSeconden = (S) => (S.veldslag && S.veldslag.begon != null ? (S.wereldTijd || 0) - S.veldslag.begon : null);
+
+  // Waar tegel (x, y) ligt in de maat van het scherm van de kaart (a, b; js/eiland.js, receptVan), voor strook s.
+  function abVan(s, x, y) {
+    const u = (x - s.cx) / s.half;
+    const v = (y - s.cy) / s.half;
+    return [(u - v) / 2, (u + v) / 2];
+  }
+  // Hoe ver tegel (x, y) binnen de strook ligt waarin D opstelt, in tegels tot de dichtste rand (erbuiten onder 0); ook
+  // voor de gloed langs de rand (js/tekenen.js). Een stap van een tegel verschuift a en b elk 1 / (2 · half).
+  T.strookRand = function (D, x, y) {
+    const s = D.strook;
+    const [a, b] = abVan(s, x, y);
+    return 2 * s.half * Math.min(a - s.a[0], s.a[1] - a, b - s.b[0], s.b[1] - b);
+  };
+  // Ligt tegel (x, y) in de strook waarin D opstelt? Zonder strook (geen voorbereiding) overal.
+  T.inStrook = (D, x, y) => !D.strook || T.strookRand(D, x, y) >= 0;
+  // De tegel in de strook van D het dichtst bij p (p zelf als hij erin ligt): de rand, waar je erbuiten wees. Een halve
+  // tegel van de rand af, zodat het afronden binnen blijft.
+  T.naarStrook = function (D, p) {
+    const s = D.strook;
+    if (!s || T.inStrook(D, p.x, p.y)) return { x: p.x, y: p.y };
+    const m = 0.5 / s.half;
+    const binnen = (v, [lo, hi]) => Math.min(hi - m, Math.max(lo + m, v));
+    const [a0, b0] = abVan(s, p.x, p.y);
+    const [a, b] = [binnen(a0, s.a), binnen(b0, s.b)];
+    return { x: Math.round(s.cx + (a + b) * s.half), y: Math.round(s.cy + (b - a) * s.half) };
   };
 
   // Een leger in strook i van het recept: zijn plek (het vak van de strook, en een plein van vijf bij vijf in het midden:

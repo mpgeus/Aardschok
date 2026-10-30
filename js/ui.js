@@ -155,15 +155,20 @@
     },
 
     // Een scherm over het spel, met een knop.
-    toonOverlay(titel, html, knop, opKlik) {
+    // Met `tweede` ({ knop, opKlik }) een tweede knop ernaast (Again en Lobby na een veldslag, js/hud.js).
+    toonOverlay(titel, html, knop, opKlik, tweede = null) {
       $('overlay-titel').textContent = titel;
       $('overlay-tekst').innerHTML = html;
-      const b = $('overlay-knop');
-      b.textContent = knop;
-      b.onclick = () => {
-        this.verbergOverlay();
-        opKlik();
-      };
+      const knoppen = [[$('overlay-knop'), { knop, opKlik }], [$('overlay-knop2'), tweede]];
+      for (const [b, k] of knoppen) {
+        b.classList.toggle('verborgen', !k);
+        if (!k) continue;
+        b.textContent = k.knop;
+        b.onclick = () => {
+          this.verbergOverlay();
+          k.opKlik();
+        };
+      }
       $('overlay').classList.remove('verborgen');
       this.verbergTooltip();
     },

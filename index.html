@@ -23,10 +23,12 @@
   <div id="hud-gehucht">
     <!-- De balk bovenaan (js/balk.js; vraag 166, Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness
          jaar en tijd", en "zo leeg mogelijk zonder info te missen"): links het dorp, in het midden de datum en de tijd
-         (het seizoen en het weer bij de muis), rechts de snelheid, de twee bazen en Menu. -->
+         (het seizoen en het weer bij de muis), rechts de snelheid, de twee bazen en Menu. In een veldslag (js/balk.js,
+         T.ui.werkSlagBalkBij) links je mannen, en in het midden de klok van de slag met Fight!. -->
     <div id="bovenbalk" class="briefje">
-      <div class="balk-links"><div class="balk-dorp"></div></div>
+      <div class="balk-links"><div class="balk-dorp"></div><div class="balk-leger"></div></div>
       <div id="kalenderbalk" data-ding="datum"><span id="kalender-datum"></span><span id="kalender-seizoen"></span></div>
+      <div id="slagbalk"><span id="slagklok" data-ding="slagklok"><span id="slag-kop"></span><span id="slag-tijd"></span></span><button id="vechten-knop" data-ding="vechten"></button></div>
       <div class="balk-rechts">
         <div id="kalender-knoppen" role="group">
           <button data-snelheid="0" data-toets="P"></button>
@@ -133,6 +135,7 @@
       <h1 id="overlay-titel"></h1>
       <div id="overlay-tekst"></div>
       <button id="overlay-knop"></button>
+      <button id="overlay-knop2" class="verborgen"></button>
     </div>
   </div>
 

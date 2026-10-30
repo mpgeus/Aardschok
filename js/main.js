@@ -764,6 +764,7 @@
     werkHoverBij();
     T.ui.werkGebouwbriefjeBij(S); // het briefje van het gekozen gebouw (js/huisbriefje.js)
     T.ui.werkMinikaartBij(S); // de minikaart in de hoek (js/balk.js)
+    T.ui.werkSlagBalkBij(S); // de balk in een veldslag: je mannen, de klok en Fight! (js/balk.js)
   }
 
   let vorige = 0;
@@ -1058,7 +1059,7 @@
     }
     // B: het bouwmenu (js/hud.js), net zo — botst nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik
     // legt een gebouw weer weg.
-    if (T.NIEUWE_HUD && (ev.key === 'b' || ev.key === 'B')) {
+    if (T.NIEUWE_HUD && !S.veldslag && (ev.key === 'b' || ev.key === 'B')) { // in een veldslag is er niets te bouwen
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
