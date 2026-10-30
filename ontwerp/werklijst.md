@@ -110,7 +110,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    kamp valt), het hol met de palissade en de aankleding, het level met zijn woorden en het vaandel van een doel, en de
    speeltest van een hoofdstuk (`--hoofdstuk hol`). Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk").
    Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9): eerst een plan voor Marcel. **Bezig in sessie
-   `ccr-4ab305e2-5eexor`** (28 okt): het plan. De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
+   `ccr-9cc1d4fb-1dnxen`** (30 okt): 3b2 en 3b3. De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
    E2"; `scenario.md`, 7): eigen kleine kaarten, een held uit een vaste lijst, een kleur per speler, de ridder en de
    knotsdrager erbij, en een tijdslimiet in de lobby; en op de vervolgvragen: *The Ford* als eerste kaart, met variatie
    uit een zaad; de hoogte geeft schutters bereik en zicht; de ridder te paard (thuis); de knotsdrager ook in het dorp; de
