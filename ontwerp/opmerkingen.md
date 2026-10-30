@@ -141,6 +141,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   keuze is aan Marcel. Onderweg: `npm run grootte` werkt niet op het eiland (`gereedschap/grootte/bouw.cjs` zoekt alleen
   kaarten tot 512 tegels, bouwt niets en meldt een lege reden).
 
+- **Zonder videokaart duurt een beeld van de spellus vijf seconden, maar het tekenen niet** (30 okt, in de cloud, op
+  df6e83f; Marcel: "Browser iets met videokaart eis misschien"): met de lus stil kost `Spel.tekenBeeld()` op het
+  titelscherm en in een veldslag 3 tot 9 ms (het eerste beeld 3 s, de grond), maar een beeld van de echte lus (`lus` in
+  js/main.js) duurt 5 à 6 s, elk beeld opnieuw, met 3 tikken erin. Het traagste deel zit dus in de lus buiten het tekenen,
+  of in wat het tekenen alleen in de lus doet; de profiler van Chromium kwam er niet doorheen. Waarom het telt: een
+  speler wiens videokaart Chromium of Electron weigert (een oude driver op de zwarte lijst), tekent ook zonder kaart, en
+  dan staat het titelscherm vast. Na te spelen op Marcels pc: Chrome, Settings, System, *Use graphics acceleration when
+  available* uit, en dan de meter (F2). Een eigen punt, als Marcel het kiest.
 - **De tekenmeting met `--tegen` laadt het spel niet in de cloud** (17 okt; tot 24 okt gold het ook voor de speeltest):
   zonder videokaart houdt de spellus de bladzijde vast, zodat er geen "load" komt en geen `page.evaluate` terug. Het
   recept dat werkt (4b, 24 okt): de spellus stil met een `requestAnimationFrame` die niets doet, `waitUntil:
