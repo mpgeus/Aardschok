@@ -20,6 +20,9 @@ weiger je, dan komt zijn leger). E, de heer als klok, en Q, het eerste jaar spee
 van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performance heeft hoge prioriteit** (CLAUDE.md).
 
 **Loopt**
+- **Bezig in sessie `lokaal-510618ba`** (30 okt, op Marcels pc): **192, de art-pijplijn in de stijl van Settlers II 10th
+  Anniversary** (Marcels stijlplaat en opdracht, `docs/art/`): de eerste mijlpaal, een nieuwe gestileerde speerman tot in
+  WebGL2, daarna stoppen voor Marcels oordeel.
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
