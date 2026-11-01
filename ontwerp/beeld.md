@@ -3178,6 +3178,106 @@ geschilderd licht per pixel en een AI-laag per richting op de UV, dus geen AI pe
 
 **Vormproef V4 (31 okt):** zie `docs/art/v4/OVERDRACHT.md` en `V4-KWALITEITSRAPPORT.md`. Marcels opdracht en zijn opmerkingen tijdens het werk. Variant (`stijl/proef/vorm4.py`, `pose4.py`) met een nieuwe rustpose: gewicht op één been, de vrije arm gebogen met de vuist voor het lijf, de arm breed bij de schouder en ovaal, taps naar de elleboog, aflopende schouders, een holle rok met betere gewichten (variant A; hulpbotten per pand, B, waren slechter), buidel op de heup. Niet alles gehaald: de overgang van staan naar lopen springt meer, de zolen in de loop staan niet op de grond, aanval en sterven bestaan niet op dit skelet. Wacht op Marcels oordeel; D8 pas na zijn akkoord.
 
+## Het rovershol: een groot kamp met een palissade (27 okt 2026, werklijst K, 2c)
+
+Stap 3 van 2c (Marcel, 27 okt: "A1"): het hol van hoofdstuk 2 is een groot kamp. In woorden, voor de proefplaat; Marcel,
+27 okt: **"P zoals in de woorden, B ja"** (B: de buit zichtbaar bij het vuur, het laatste punt hieronder):
+
+- **Wat er al is:** de open plek (straal 8) met het vuur, de tenten van de rovers (`tent-rover`, T1) en het paadje. Het
+  level zet er zo'n tien man in vijf tenten (het kamp heeft zes tentplekken).
+- **Nieuw is één ding: de palissade.** Een ring van puntige palen om het plein, op zo'n 7 tegels van het vuur, met één
+  opening van drie tegels waar het paadje binnenkomt. Ruwe stammen met de schors er nog aan, een hand breed uit elkaar,
+  ongelijk van hoogte (anderhalf tot twee keer een man), de punt naar boven geslagen, vastgesjord met touw aan twee
+  dwarsliggers; hier en daar staat er een scheef of ontbreekt er een, met een plank ertussen gespijkerd. Grijs, verweerd
+  hout, mos aan de voet, en aan een paal bij de opening een schedel van een hert of een lap van de rovers (de rode van
+  de tent). In het spel is hij niet te begaan: je komt binnen door de opening (of je schutters schieten erover).
+- **Hoe het gemaakt wordt:** een model in code, zoals de tent en de bruggen (`kamp.cjs`), in stukken van één tegel (recht,
+  schuin, de hoek, de opening met een zware paal aan elke kant), zodat dezelfde ring om elk kamp past. Eén proefplaat: een
+  stuk van de ring met de opening, van één kant. Dezelfde tekening kan later de palissade van je eigen dorp worden (vraag
+  158, de muren; `palissade` staat al als gebouw zonder tekening).
+- **Wat het hol nog laat zien, zonder nieuwe tekening:** de buit bij het vuur, met de tekening van een losse stapel. Nu
+  zegt het bericht van c4 dat de buit bij het vuur ligt, maar je ziet hem niet. **Gebouwd** (27 okt): een tegel rechts
+  van het vuur (`T.roverskampenBuit`).
+- **De eerste proefplaat** (27 okt; `gereedschap/pixelart/palissade.cjs`, `uit/palissade-proef.png`): een stuk van de ring
+  met de opening, van buiten (ZO), met een boer in de opening voor de maat, op ware grootte en twee keer vergroot. De
+  schors is de warme grijs van `bot` met plekken bruine schors (`schors`), de punt licht hout (`hout`), het mos uit
+  `mos`, het touw uit `stro`, de lap uit `rood`. Wat opvalt: twee keer een man is hoog; in het spel dekt de voorkant van
+  de ring zo de voorste tegels van het plein af. **Goedgekeurd** (Marcel, 27 okt: "de palisade is goed, maar ik wil een
+  grotere buit zien"): de palissade blijft zo; de buit bij het vuur (nu een, twee of drie zakken) moet groter.
+- **De palissade moet beter** (Marcel, 27 okt, op het hol in het spel: "De palissade moet beter", en op de vier punten
+  van Claude "1, 2, 3 en 5"): (1) een muur, geen hek: dikkere stammen, dicht tegen elkaar, zonder kieren; (2) één
+  doorlopende ronde ring: elke paal op zijn eigen plek op een echte cirkel, in plaats van een stuk per tegel in acht
+  richtingen (met naden, hoeken en dwarsliggers die uitsteken), de liggers alleen aan de binnenkant; (3) een echte poort:
+  twee zware palen met een balk erover, de rode lap en een hertenschedel; (5) de open plek om het hol een paar tegels
+  groter, zodat het woud de voorwand en de poort niet afdekt. De hoogte blijft (4 niet). Eerst een nieuwe proefplaat.
+  **De tweede proefplaat** (27 okt; `palissade.cjs`, `ring`; `node palissade.cjs`, zo'n 50 seconden): de hele ring om het
+  vuur, met de poort naar de kijker, twee tenten erin en een boer bij de poort. Palen van dertig centimeter, van hart tot
+  hart 13,8 eenheden (dicht tegen elkaar), elk op zijn eigen plek op de cirkel van zeven tegels; de liggers als korte
+  stukken van paal tot paal aan de binnenkant; hier en daar een plank over de buitenkant. De poort: twee palen van 22
+  centimeter dik en bijna vier meter hoog, een balk erover met touw, de rode lap aan de linker, en een hertenschedel met
+  gewei midden op de balk. **Goed** (Marcel, 27 okt: "De palissade is goed, maar ik wil wat variatie erin, her en der een
+  gaatje, etc. Dit moet uiteindelijk automatisch gaan als je zelf ook palissade plaatst. Als een soort random tile erin").
+- **De variatie: soorten paal, willekeurig gekozen** (27 okt): elke paal is een soort uit een vaste set, gekozen met een
+  vast lot uit zijn plek (zoals een willekeurige tegel), met een kans per soort: gewoon (drie hoogtes), nieuw (dunner, nog
+  bruin), scheef, afgebroken (korter, met een gesplinterde top), een gaatje (er ontbreekt een, soms staat er nog een
+  stomp; de liggers lopen door), een plank over de buitenkant, en veel mos. Twee gaatjes of twee afgebroken naast elkaar
+  komen niet voor. Dezelfde set dient later de palissade die je zelf legt (werklijst, 158). In het model: `SOORTEN_PAAL`
+  en `kiesSoort` in `palissade.cjs` (kansen: gewoon 0,6, nieuw, scheef, afgebroken en gat elk zo'n 0,07, plank en mos
+  0,06). De derde proefplaat (27 okt) toont de ring zo, met daaronder de voorkant twee keer vergroot. **Goed** (Marcel,
+  27 okt: "variatie is goed").
+- **De aankleding van het kamp** (Marcel, 27 okt, op die plaat: "Ook is het kamp een beetje saai zo. Alles valt en staat
+  met de aankleding"): een plein met tenten en een vuur vertelt niet dat hier rovers wonen. Voorstel van Claude, in
+  woorden, **gekozen** (Marcel, 27 okt: "alle negen"): spullen die het kamp vanzelf krijgt, zoals de soorten paal, met een vast lot op vrije
+  plekken (niet op een tent, een plek om het vuur, de buit of het paadje); een gewoon kamp een paar, het hol het meest.
+  Rond het vuur zitstammen en een spit met een half geroosterd zwijn; bij de tenten slaapvellen en een waslijn met
+  gestolen kleren; een wapenrek en een schietschijf van stro; een hakblok met brandhout tegen de palissade; een vat bier
+  op een bok met kruiken; een hertenvel op een droograam; een kapotte kar; fakkels bij de poort; en op de grond modder,
+  stro en een uitgesleten paadje van de poort naar het vuur. Een model in code per ding
+  (`gereedschap/pixelart/aankleding.cjs`), eerst één proefplaat van het aangeklede hol. **De proefplaat** (27 okt,
+  `uit/aankleding-proef.png`): het hele hol, met daaronder het binnenste twee keer vergroot. Bij het maken bleek: wat
+  rechts achter de grote buit of vlak achter de voorwand staat, zie je niet; dus het wapenrek achter tegen de palissade en
+  het vat bier voor het vuur, en de kar en het spit links voor. **In het spel** (Marcel, 27 okt: "Goed, zet alles in het
+  spel"): de palissade per paal, elk op zijn eigen plek op de cirkel met een soort uit een vast lot (`palissade.cjs`,
+  `vel`: 12 soorten paal en de poort, in 16 richtingen, `beelden/palissade.png`, 177 kB), en de aankleding per ding in
+  vier richtingen (`aankleding.cjs`, `vel`, `beelden/aankleding.png`, 40 kB); waar het staat, kiest `js/rovers.js`
+  (`spullenVoor`). **Ruimer** (Marcel, 27 okt, daarop: "misschien het kamp iets ruimer opzetten"): de ring van 7 naar 9
+  tegels van het vuur, de open plek van 12 naar 14, en de spullen mogen tot een tegel binnen de palissade staan. Daarop
+  stelde Claude voor de tenten (die op zo'n 4 tegels van het vuur stonden, zodat de achterkant leeg was) tegen de
+  palissade te zetten, met het midden vrij om te vechten. **Gekozen** (Marcel, 27 okt: "B; mag beetje random"): de tenten
+  op 5,5 tot 6,5 tegels, verdeeld over de ring met een beetje toeval, niet bij de poort, en niet vooraan (35 graden om de
+  kant van de kijker: daar verdwijnt een tent achter de voorwand; met 50 graden pasten er soms maar vier). Gemeten (software, in de cloud): hetzelfde beeld
+  met de palissade en de aankleding 20 tot 25 ms, zonder 20 ms, binnen de ruis; nog te meten in Firefox.
+- **De buit: een eigen tekening in drie maten** (Marcel, 27 okt: "b", op het voorstel van Claude): een hoop naast het
+  vuur. *Klein*: een kist en twee zakken. *Middel*: de kist open, met zilver en goud erin, een paar tonnen en zakken.
+  *Groot*: een hoop van zo'n 2 bij 2 tegels, met tonnen, zakken graan, een rol rood laken (van de tent), een koperen
+  ketel, een kandelaar en een wiel van een gestolen kar. Hoeveel er ligt, zegt de maat. Een model in code
+  (`gereedschap/pixelart/buit.cjs`); eerst één proefplaat met de drie maten. **De proefplaat** (27 okt,
+  `uit/buit-proef.png`): eiken kisten met ijzeren banden (de open met het deksel achterover, goud uit `goud` en zilver uit
+  de lichte `ijzer`, en munten ernaast), zakken jute (`zand`) met een vastgebonden hals, tonnen met ijzeren hoepels (een
+  ligt), de rol laken met de windingen op de kopse kant, de ketel uit een donkere `herfst`. In de grote hoop liggen zakken
+  bovenop de tonnen en de kist, zodat hij hoog wordt; het wiel staat er opzij tegenaan. **In het spel** (Marcel, 27 okt:
+  "ja, zet hem in het spel"): `node gereedschap/pixelart/naar-spel.cjs --alleen buit` maakt `beelden/buit.png` (een cel
+  per maat, 260 bij 200, 9 kB), en `js/sprites.js` laadt het pas als er buit te zien is (`S.buit`).
+
+## Het vaandel van een doel (28 okt 2026, werklijst K, 2c, D2)
+
+- **In woorden, gekozen** (Marcel, 28 okt: "1 ja"): een staak met een lange smalle wimpel in jouw kleur, twee tegels hoog,
+  die wappert op de plek waar een open doel naar wijst, ook boven land dat je nog niet kent, en weg is als het doel af is.
+  Dezelfde tekening later op het keuzescherm van de campagne (`scenario.md`, 6). Jouw kleur is die van het wapen van het
+  dorp: diep blauw met goud (hierboven, "Het wapen van het dorp: een gouden korenschoof op diep blauw"; Marcel: "later
+  de vaandels").
+- **De proefplaat** (28 okt; `gereedschap/pixelart/vaandel.cjs`, `node vaandel.cjs`, `uit/vaandel-proef.png`, in een paar
+  seconden): een boer en de vier standen van het wapperen, op gras en op het donker van land dat je niet kent, en
+  daaronder twee keer vergroot. De staak is 150 hoog (een boer zo'n 85), met een gouden knop en punt, in een hoopje aarde
+  met drie stenen. De wimpel (80 lang, 26 hoog bij de staak, naar de punt smaller) is diep blauw (de ramp `gewaad`, zoals
+  de wapenrok van de soldaten), met een gouden zoom boven en onder en bij de staak de gouden korenschoof (drie bossen
+  aren, een band, en halmen in strepen); hij waait op het scherm naar rechts, en slaat in vier standen op en neer.
+  Bij het maken bleek: het blauw alleen viel weg op het donker, dus de zoom is goud; en een schoof op 26 hoog leest pas
+  als drie bossen aren, anders lijkt hij een strik. **Goed** (Marcel, 28 okt: "Vaandel goed").
+- **In het spel** (28 okt; `node naar-spel.cjs --alleen vaandel`, `beelden/vaandel.png`, een cel per stand, 3,5 kB): op
+  de plek van elk open doel van je dorp, wapperend op vijf standen per seconde, ook boven het donker; bij het rovershol
+  voor de poort, niet op het vuur (`code.md` bij `js/scenario.js`).
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

@@ -1529,7 +1529,7 @@
     // (T.brugOpTil), en zijn pijlers lopen door tot het water (tekenBrugStuk).
     if (metSprites() && T.opEiland(w)) {
       const steen = steenVanLand(w);
-      for (const [n, brug] of T.eilandVan(w.eiland.zaad).bruggen.entries()) {
+      for (const [n, brug] of T.eilandVan(w.eiland).bruggen.entries()) {
         const R = T.brugRijen(brug);
         const hoeken = [[-1, 0], [-1, R - 1], [brug.L, 0], [brug.L, R - 1]].map(([i, k]) => T.brugTegel(brug, i, k));
         const xs = hoeken.map((t) => t[0]);
@@ -1566,6 +1566,10 @@
     }
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     stapelsInLijst(ctx, S, w, D, vak, lijst);
+    kampBuitInLijst(ctx, S, w, vak, lijst);
+    palissadeInLijst(ctx, S, w, vak, lijst);
+    aankledingInLijst(ctx, S, w, vak, lijst);
+    vaandelsInLijst(ctx, S, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g, vast, opDeKaart); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
@@ -1582,6 +1586,7 @@
     if (!zonderUi(S)) {
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
+      tekenStrook(ctx, S, vak);
       tekenMarktPlek(ctx, S);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
@@ -3038,17 +3043,40 @@
     if (!(S.bouwSoort || S.bouwMenuOpen)) return;
     const B = T.bouwBereikVan(S.dorp); // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
     if (!B) return;
-    const paden = BEREIK_GLOED.map(() => new Path2D());
-    const x0 = Math.max(B.x0, vak.x0);
-    const y0 = Math.max(B.y0, vak.y0);
-    const x1 = Math.min(B.x0 + B.b - 1, vak.x1);
-    const y1 = Math.min(B.y0 + B.h - 1, vak.y1);
+    tekenGloed(ctx, vak, { x: B.x0, y: B.y0, b: B.b, h: B.h }, (x, y) => {
+      const rand = B.straal - T.afstandInBouwBereik(B, x, y);
+      return !(rand >= 0) ? -1 : rand < 1 ? 0 : rand < 2 ? 1 : 2;
+    });
+  }
+
+  // De strook waarin je opstelt, zolang de voorbereiding van een veldslag loopt (D.strook, js/veldslag.js; 3b2, Marcel,
+  // 30 okt: "2. A"): een lichte rand, de gloed van het bouwbereik omgekeerd: het sterkst op de rand, en in drie tegels
+  // naar binnen weg. Sterker dan het bouwbereik, want hij ligt op het lichte gras dat je mannen zien.
+  const STROOK_GLOED = [0.12, 0.24, 0.4];
+  function tekenStrook(ctx, S, vak) {
+    const D = S.dorp;
+    if (!D || !D.strook) return;
+    const sterkte = (x, y) => {
+      const rand = T.strookRand(D, x, y);
+      return !(rand >= 0) || rand >= 3 ? -1 : rand < 1 ? 2 : rand < 2 ? 1 : 0;
+    };
+    tekenGloed(ctx, vak, D.plek.vak, sterkte, STROOK_GLOED);
+  }
+
+  // Een gloed op de grond over een gebied (het bouwbereik, de strook): elke tegel van `gebied` ({ x, y, b, h }) binnen het
+  // beeld (`vak`) in de sterkte die sterkteVan(x, y) zegt (een plek in `gloed`, of -1: niet).
+  function tekenGloed(ctx, vak, gebied, sterkteVan, gloed = BEREIK_GLOED) {
+    const paden = gloed.map(() => new Path2D());
+    const x0 = Math.max(gebied.x, vak.x0);
+    const y0 = Math.max(gebied.y, vak.y0);
+    const x1 = Math.min(gebied.x + gebied.b - 1, vak.x1);
+    const y1 = Math.min(gebied.y + gebied.h - 1, vak.y1);
     for (let y = y0; y <= y1; y++) {
       for (let x = x0; x <= x1; x++) {
-        const rand = B.straal - T.afstandInBouwBereik(B, x, y);
-        if (!(rand >= 0)) continue;
+        const sterkte = sterkteVan(x, y);
+        if (sterkte < 0) continue;
         const p = opGrond(x, y);
-        const pad = paden[rand < 1 ? 0 : rand < 2 ? 1 : 2];
+        const pad = paden[sterkte];
         pad.moveTo(p.x, p.y - T.HH);
         pad.lineTo(p.x + T.HB, p.y);
         pad.lineTo(p.x, p.y + T.HH);
@@ -3056,7 +3084,7 @@
         pad.closePath();
       }
     }
-    BEREIK_GLOED.forEach((a, i) => {
+    gloed.forEach((a, i) => {
       ctx.fillStyle = `rgba(240, 225, 170, ${a})`;
       ctx.fill(paden[i]);
     });
@@ -3637,12 +3665,15 @@
       else T.blok(ctx, p.x, p.y, 0.4, 0.4, 24, v.vorm === 'afdak' ? '#6b4f33' : '#d8cfae', { helder });
       return;
     }
+    // De tegels van de palissade om een rovershol houden alleen tegen (js/rovers.js, zetPalissade); de palen zelf staan elk
+    // op hun eigen plek op de cirkel (palissadeInLijst).
+    if (v.soort === 'palissade') return;
     if (v.soort === 'kampvuur') {
       // Het kampvuur in het midden van het kamp (js/begin.js): het brandt als de mensen op zijn, en smeult als ze werken of
       // slapen (T.kampvuurStand); dat van een roverskamp (js/rovers.js) brandt als het donker is. Zonder kunst: een kring
       // stenen met een gloed.
       const D = T.dorpHier(S);
-      const stand = v.kamp != null ? T.roverskampVuur(S.kalender.dag) : (D && T.kampvuurStand(D)) || 'uit';
+      const stand = v.kamp != null ? T.roverskampVuur(S.kalender.dag, T.kampVan(S.wereld, v)) : (D && T.kampvuurStand(D)) || 'uit';
       const vuur = metSprites() && T.sprites.kampvuur(stand, S.tijd);
       if (vuur) T.sprites.teken(ctx, vuur, p.x, p.y, helder);
       else T.blok(ctx, p.x, p.y, 0.3, 0.3, 4, stand === 'brandt' ? '#e0782a' : '#6f6a62', { helder });
@@ -3947,17 +3978,100 @@
   // hoog als hij vol is.
   function stapelsInLijst(ctx, S, w, D, vak, lijst) {
     if (!D || !T.metVervoer(D)) return;
-    for (const s of T.stapelsOp(D)) {
+    for (const s of T.stapelsOp(D)) stapelInLijst(ctx, w, vak, lijst, s);
+  }
+  // De buit in een roverskamp (T.roverskampenBuit, js/rovers.js): een hoop naast het vuur, klein, middel of groot
+  // (T.sprites.buit); zolang dat vel laadt, of zonder kunst, als een losse stapel.
+  function kampBuitInLijst(ctx, S, w, vak, lijst) {
+    for (const s of T.roverskampenBuit(w)) {
+      const hoop = metSprites() ? T.sprites.buit(s.maat) : null;
+      if (!hoop) {
+        stapelInLijst(ctx, w, vak, lijst, s);
+        continue;
+      }
       if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
-      const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];
+      lijst.push({ d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
+        const p = opGrond(s.x, s.y);
+        T.sprites.teken(ctx, hoop, p.x, p.y);
+      } });
+    }
+  }
+  // De palissade om een rovershol (T.palissadeVan, js/rovers.js): elke paal op zijn eigen plek op de cirkel, met zijn soort
+  // en zijn richting (T.sprites.palissade), en de balk van de poort over wie eronder loopt. Zonder kunst: een hoge, smalle
+  // paal.
+  function palissadeInLijst(ctx, S, w, vak, lijst) {
+    for (const K of w.kampen || []) {
+      for (const q of T.palissadeVan(w, K)) {
+        const tx = Math.round(q.x);
+        const ty = Math.round(q.y);
+        if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+        lijst.push({
+          d: q.x + q.y + (q.boven ? 1 : 0), l: 1, punt: { x: tx, y: ty }, f: () => {
+            const p = opGrond(q.x, q.y);
+            const deel = metSprites() ? T.sprites.palissade(q.rij, q.richting) : null;
+            if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+            else if (q.rij !== 'gat' && q.rij !== 'balk') T.blok(ctx, p.x, p.y, 0.1, 0.1, 60, '#6f665a');
+          },
+        });
+      }
+    }
+  }
+
+  // De aankleding van de roverskampen (K.spullen, js/rovers.js): elk ding op zijn plek, met zijn voorkant naar het vuur
+  // (T.sprites.aankleding); wat plat op de grond ligt (modder, stro, een slaapvel), onder wie erop staat. Zonder kunst: een
+  // klein blok.
+  const OP_DE_GROND = new Set(['modderplas', 'stro', 'slaapvel']);
+  function aankledingInLijst(ctx, S, w, vak, lijst) {
+    for (const K of w.kampen || []) {
+      if (!K.staat || !K.spullen) continue;
+      for (const q of K.spullen) {
+        const tx = Math.round(q.x);
+        const ty = Math.round(q.y);
+        if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+        lijst.push({
+          d: q.x + q.y, l: OP_DE_GROND.has(q.soort) ? 0 : 1, punt: { x: tx, y: ty }, f: () => {
+            const p = opGrond(q.x, q.y);
+            const deel = metSprites() ? T.sprites.aankleding(q.soort, q.richting) : null;
+            if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+            else if (!OP_DE_GROND.has(q.soort)) T.blok(ctx, p.x, p.y, 0.2, 0.2, 8, '#6b5a44');
+          },
+        });
+      }
+    }
+  }
+
+  // Het vaandel van een doel (werklijst K, 2c, D2; Marcel, 28 okt: "Vaandel goed"): op elke plek waar een open doel van je
+  // eigen dorp naar wijst (T.doelPlekken, js/scenario.js), ook boven land dat je nog niet kent of dat nog niet open is:
+  // zonder punt, dus de mist laat hem staan (mistOverLijst), en zonder te vragen of de tegel te zien is. Hij wappert op
+  // de klok van het scherm, VAANDEL_PER_SECONDE standen per seconde. Niet in de fotomodus en niet in een scène: het is een
+  // teken voor de speler. Zonder kunst, of zolang het vel laadt: een dunne blauwe staak.
+  const VAANDEL_PER_SECONDE = 5;
+  function vaandelsInLijst(ctx, S, vak, lijst) {
+    if (zonderUi(S)) return;
+    for (const q of T.doelPlekken(S)) {
+      if (!inVak(vak, q.x, q.y)) continue;
       lijst.push({
-        d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
-          const p = opGrond(s.x, s.y);
-          if (delen.length) for (const d of delen) T.sprites.teken(ctx, d.deel, p.x + d.dx, p.y + d.dy);
-          else T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
+        d: q.x + q.y, l: 1, punt: null, f: () => {
+          const p = opGrond(q.x, q.y);
+          const deel = metSprites() ? T.sprites.vaandel(Math.floor(S.tijd * VAANDEL_PER_SECONDE) % T.sprites.vaandelStanden()) : null;
+          if (deel) T.sprites.teken(ctx, deel, p.x, p.y);
+          else T.blok(ctx, p.x, p.y, 0.05, 0.05, 70, '#283a90');
         },
       });
     }
+  }
+
+  // Eén stapel s ({ x, y, wat, vol }), als hij in het vak ligt en te zien is.
+  function stapelInLijst(ctx, w, vak, lijst, s) {
+    if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) return;
+    const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];
+    lijst.push({
+      d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
+        const p = opGrond(s.x, s.y);
+        if (delen.length) for (const d of delen) T.sprites.teken(ctx, d.deel, p.x + d.dx, p.y + d.dy);
+        else T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
+      },
+    });
   }
 
   function tekenKlein(ctx, deel, x, y, schaduw) {

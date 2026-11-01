@@ -8,7 +8,7 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (23 okt)
+## Nu en daarna (28 okt)
 
 Kort, in volgorde (Marcel, 8 okt: "snel, duidelijk en low cost"): wat loopt, wat op Marcel wacht, en wat erna komt. Wat
 af is, gaat eruit; het hoe staat in het ontwerpbestand van het onderwerp. Het blok zoals het tot 23 okt was, met de hele
@@ -20,6 +20,9 @@ weiger je, dan komt zijn leger). E, de heer als klok, en Q, het eerste jaar spee
 van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performance heeft hoge prioriteit** (CLAUDE.md).
 
 **Loopt**
+- **Bezig in sessie `lokaal-510618ba`** (30 okt, op Marcels pc): **192, de art-pijplijn in de stijl van Settlers II 10th
+  Anniversary** (Marcels stijlplaat en opdracht, `docs/art/`): de eerste mijlpaal, een nieuwe gestileerde speerman tot in
+  WebGL2, daarna stoppen voor Marcels oordeel.
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).
@@ -51,6 +54,17 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
+- **3b2 en 3b3 bekijken: de voorbereiding en het scherm van een slag** (30 okt; bij 1 hieronder, en `scenario.md`, 7).
+  *Skirmish*, Begin: in de balk bovenaan je mannen, *Deploy* met een minuut en *Fight!*; een lichte rand om je strook,
+  en wie je erbuiten stuurt, loopt tot de rand; de veldheer wacht. Na *Fight!* (of de minuut) *Battle* met de tijd die
+  over is, en na de slag *Again* en *Lobby*. Vraag: het briefje *Fighting, since today* linksboven staat er in een slag
+  nog; weg?
+- **2c spelen: hoofdstuk 2, het rovershol** (af op 28 okt, in `main`; bij K, "2c"). *Campaign*, hoofdstuk 2 (zit op
+  slot tot hoofdstuk 1 af is; meteen open met `localStorage.setItem('aardschok.campagne', '{"aankomst":true}')` in de
+  console). Kijk: de brief met de rovers, het doel linksboven, de eerste overval (rond dag 100) met het spoor, het
+  vaandel en de ring op de minikaart, het hol (de palissade, de aankleding, de tenten tegen de palissade), het hol
+  aanvallen tot de laatste rover valt (dat deed nog niemand), en anders Sint-Maarten. Meet in Firefox het hol in beeld
+  (de palissade en de aankleding; in de cloud binnen de ruis), en lees het Engels (`levels/rovershol.js`).
 - **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
   "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
   het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
@@ -100,9 +114,27 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    **1a tot en met 2b zijn af** (24 okt): de motor (`scenario.md`, 2), het demojaar als level (3), de kaart van een level
    met een rand (1, "De rand"), en *Campaign* op het titelscherm (6, "Stap 2b"): het demojaar is hoofdstuk 1, op eiland 5
    bij Millcombe, met een rand van 5 bij 5; wat af is, blijft op je computer. Te zien op het titelscherm (niet in de demo).
-   Het volgende is **2c**, het rovershol als eerste echte hoofdstuk (werklijst K): wat erin gebeurt, kiest Marcel, dus
-   eerst een plan. **Bezig in sessie `ccr-4ab305e2-5eexor`** (27 okt): het plan voor 2c, ligt bij Marcel.
-   Open uit 2a: elke keer hetzelfde lot in een hoofdstuk (`opmerkingen.md`).
+   **2c is af** (28 okt; bij K, "2c"): het rovershol als hoofdstuk 2, met c3 (de overval uit het dichtste kamp), c4 (een
+   kamp valt), het hol met de palissade en de aankleding, het level met zijn woorden en het vaandel van een doel, en de
+   speeltest van een hoofdstuk (`--hoofdstuk hol`). Een hoofdstuk speelt elke keer hetzelfde lot (Marcel: "lot gelijk").
+   Het volgende is **3, de veldslag** (`scenario.md`, 7 en 9). De eerste keuzes zijn gemaakt (Marcel, 28 okt: "B1, c2, D1, F2, L2, H2,
+   E2"; `scenario.md`, 7): eigen kleine kaarten, een held uit een vaste lijst, een kleur per speler, de ridder en de
+   knotsdrager erbij, en een tijdslimiet in de lobby; en op de vervolgvragen: *The Ford* als eerste kaart, met variatie
+   uit een zaad; de hoogte geeft schutters bereik en zicht; de ridder te paard (thuis); de knotsdrager ook in het dorp; de
+   helden heten generaals en geven allemaal hetzelfde; de kleurlaag doet de Blender-sessie. Het plan in acht stappen
+   (`scenario.md`, 7, "Het plan van stap 3"). Af: 3a1 (de kaart *The Ford*) en 3a2 (de slag zelf: twee legers in een
+   linie, de dag staat stil, gewonnen, verloren of de tijd om; `Spel.debug.veldslag()`) en 3a3 (de veldheer die ziet
+   wat zijn mannen zien en oprukt, `js/veldheer.js`, en de proefbank `npm run veldslag`), en wat de proefbank vond: de
+   klappen van een tik vallen aan het eind, en een groep loopt één weg (Marcel, 28 okt); alles nagelopen voor samen
+   spelen (`code.md` bij `js/tik.js`, "Samen"; wat open is in `opmerkingen.md`). 3b1 is af: de lobby (*Skirmish* op het
+   titelscherm, ook in de demo), kopen met punten, en de AI koopt een van drie mixen (`scenario.md`, 7). 3b2 en 3b3 zijn
+   af (30 okt; Marcel: "1. In de ui balk", "2. A 3. b 4. A"): de voorbereiding met de klok en *Fight!* in de balk, de
+   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **Wacht op Marcel**: het voorstel voor de
+   generaals (3d komt mee in skirmish: Marcel, "helden zijn generaals"; vier, *Sir Godfrey* met zwaard en schild, *Dame
+   Agnes* met piek, *Brother Anselm* met knots, *Old Wat* met kruisboog; inspiratie binnen 5 tegels: 25 % meer schade en
+   1 harnas; valt hij, dan vecht de rest door; zijn kring even op de grond als je hem kiest), en de balans (de mix
+   *schutters* wint 97 %; een ronde met de proefbank na de generaals en de knotsdrager, met een AI die zelf opstelt:
+   `opmerkingen.md`). Daarna 3d, 3e en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -357,6 +389,10 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   tegen één kant. De bouwfasen komen met de huizenbouwer mee.
 - **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
   erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
+  **De palissade varieert vanzelf** (Marcel, 27 okt, bij het hol: "Dit moet uiteindelijk automatisch gaan als je zelf
+  ook palissade plaatst. Als een soort random tile erin"): elke paal kiest uit een vaste set soorten (gewoon, scheef,
+  afgebroken, een gaatje, een plank erover, ...), met een vast lot; dezelfde palen als de ring om het hol (`beeld.md`,
+  "Het rovershol").
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
   weer inleveren. Eerst drie wapens: de speer (planken), de boog (planken), zwaard en schild (ijzer en planken); zonder
   wapen een hooivork.
@@ -815,7 +851,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   okt, in `main`; `spel.md`, "De bende van een kamp"; `code.md` bij `js/rovers.js`; `test/kampen.test.cjs`). Voor c3:
   de kans voor de bode (`T.bodeGevaar`, js/bode.js) telt sinds c2 geen bende meer; de hinderlaag uit het dichtste kamp
   kan haar weer laten meetellen.
-  **c3 in detail** (Claude, 18 okt; **geparkeerd**, Marcel, 18 okt: eerst de basis, O1). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
+  **c3 in detail** (Claude, 18 okt; geparkeerd op 18 okt, O1; **besloten** voor 2c, Marcel, 27 okt: "c3 A1 B1 C1, demo
+  mee", bij K). (1) **Het rooster blijft**: per dorp twee keer per jaar, de eerste
   na 60 dagen, de helft 's nachts (`R.wildeOp`, `aanvalsUur`). De overval komt uit het kamp dat het dichtst bij het plein
   ligt en mannen thuis heeft; is er geen (alle kampen leeg of op pad), dan komt er deze keer niemand, en loopt het rooster
   door. (2) **De tocht**: ze vertrekken zo dat ze op het uur van de aanval bij je zijn. Hun weg is de grove weg van c0
@@ -973,6 +1010,44 @@ zijn huizen en zijn infra zijn (eerst in woorden, dan een proefplaat), of het in
 zoals het tweede dorp van 6a, dat zelf kiest uit de handelingen van een mens: 6b), wat het doet (roven, handelen met wie
 wil, wegtrekkers lokken), en hoe je het verslaat. Voorstel voor de volgorde: na stuk c en 6b, omdat een hol dat zelf
 bouwt een dorp is dat kiest zonder speler.
+
+**2c, het rovershol als hoofdstuk 2** (Claude, 27 okt; **besloten**, Marcel, 27 okt: "A1, B1, C1, D2, E1; c3 A1 B1 C1,
+demo mee"; `scenario.md`, 6 en 9). Het hoofdstuk: de heer schrijft dat rovers in het bos bij Oldland "zijn" graan stelen,
+en wil ze weg vóór Sint-Maarten; je komt met de huifkar (B1: van niets, zoals hoofdstuk 1), het wachthuis en de
+wapenmaker zijn open, en het hol overvalt je (c3). Na de eerste overval wijst het doel naar het hol, met een vaandel en
+een ping op de minikaart (D2: ze lieten een spoor; alleen in dit hoofdstuk, het vrije spel houdt V2). Valt de laatste
+rover, dan is het gewonnen (E1, c4); staat het hol op Sint-Maarten nog, dan is het mislukt (C1; de tiende betaal je zoals
+altijd). **Het hol is een groot kamp** (A1): het level zet een kamp op zo'n 10 man in vijf tenten, met een palissade
+eromheen (de code van c2; eerst in woorden, dan één proefplaat). Het hol van hierboven, een dorp dat zelf bouwt (A3), komt
+na 6b en bouwt hierop voort. Oldland op eiland 5 ligt 190 tegels van zijn kamp (176 oost, 72 zuid), dus de rand is 7 bij
+7 stukken. De stappen, elk een eigen commit met toetsen:
+1. **c3**, de overval uit het dichtste kamp (bij I, "c3 in detail", met A1, B1 en C1); de wilde rovers gaan eruit, en de
+   ene overval van de demo komt ook uit een kamp ("demo mee"). **Af** (27 okt; `spel.md`, "De overval komt uit een kamp").
+2. **c4**, een kamp valt: de tenten neer, het vuur uit, de buit ligt er, en het komt niet terug (R1, K1). **Af** (27 okt;
+   `spel.md`, "Een kamp verslaan"): je mannen dragen de buit naar huis, tot 10 per man.
+3. **Het hol**: in woorden bij Marcel, dan één proefplaat (de palissade). **De woorden zijn goed** (Marcel, 27 okt: "P
+   zoals in de woorden, B ja"; `beeld.md`, "Het rovershol"). B is gebouwd (de buit naast het vuur), en de proefplaat van
+   de palissade is goed (Marcel, 27 okt: "de palisade is goed, maar ik wil een grotere buit zien"; `palissade.cjs`). Nog:
+   de palissade in stukken van één tegel en in het spel, en een grotere buit: een eigen tekening in drie maten (Marcel,
+   27 okt: "b"; `beeld.md`, "Het rovershol"): **in het spel** (27 okt; "ja, zet hem in het spel").
+   Het hol uit het level en de ring staan in het spel (`T.maakHol`, `zetPalissade`), maar de palissade moet beter
+   (Marcel, 27 okt: "1, 2, 3 en 5": een dichte muur, een ronde ring, een echte poort, en een grotere open plek; `beeld.md`,
+   "Het rovershol"). De ronde ring is goed, met variatie erin (Marcel: "her en der een gaatje, etc."), als willekeurige
+   soorten paal, zodat het later ook vanzelf gaat als je zelf een palissade plaatst (158), en met aankleding (Marcel:
+   "alle negen"). **In het spel** (27 okt; "Goed, zet alles in het spel"): elke paal op zijn plek, de aankleding in elk
+   kamp, en ruimer (Marcel: "misschien het kamp iets ruimer opzetten": de ring op 9 tegels, de open plek 14), met de
+   tenten tegen de palissade (Marcel: "B; mag beetje random").
+   **Gevonden bij c3:** in een level met een rand komt een overval alleen uit een kamp binnen de rand, en hoofdstuk 1
+   (Millcombe, 5 bij 5) had er geen. **Besloten** (Marcel, 27 okt: "H1"): hoofdstuk 1 naar Oakley, 7 bij 7 (1295 tegels
+   van het kasteel, het kamp op 210); hoofdstuk 2 in Oldland (630). Gebouwd (`levels/campagne.js`, met een toets).
+4. **Het level** `levels/rovershol.js` en hoofdstuk 2 in `levels/campagne.js` (Oldland, 7 bij 7), met de woorden die nog
+   missen: `kamp` (verslagen) bij *als*, de brief van de heer als inleiding, en een doel dat naar een plek wijst (D2).
+   **Af** (28 okt; Marcel: "Goed, door met stap 4"; `scenario.md`, 2 en 6, en `code.md` bij `js/scenario.js`): de
+   voorwaarden `hol` en `overval`, het gebied `hol`, een doel met een gebied (een gouden ring op de minikaart), en de
+   `inleiding` in de eerste brief, en het vaandel op de plek (Marcel, 28 okt: "1 ja", "Vaandel goed").
+5. **Nalopen** in de browser, en de speeltest. **Af** (28 okt): in de browser de brief, het doel, het spoor, de ring en
+   het vaandel; de speeltest speelt het hoofdstuk (`speelbaar.md`, 28 okt). Het hol aanvallen tot het valt, speelt
+   Marcel zelf ("Wacht op Marcel").
 
 ## L. De heuvels op het hele eiland (vraag 174, 17 okt)
 

@@ -7,6 +7,7 @@
     "start": "node server.cjs",
     "test": "node --test",
     "speeltest": "node gereedschap/speeltest/speeltest.cjs",
+    "veldslag": "node gereedschap/veldslag/proefbank.cjs",
     "proefversie": "node gereedschap/proefversie/maak.cjs",
     "maker": "node gereedschap/maker/schets.cjs",
     "grootte": "node gereedschap/grootte/grootte.cjs",

@@ -42,6 +42,7 @@
     S.tijd += dt;
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     T.tikKalender(S, dt);
+    T.werkVeldslagBij(S, dtWereld); // de voorbereiding van een veldslag, en wanneer de slag begint (js/veldslag.js)
     T.werkScenarioBij(S); // de triggers van een scenario (js/scenario.js), één keer per seconde van de wereld
     // Elk dorp leeft (js/dorp.js; werklijst, vraag 71, A): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn
     // voorvallen. Waar de aanvoerder is, lopen, maaien en dwalen ze hieronder; een dorp waar hij niet is, doet dat in
@@ -62,6 +63,7 @@
         T.werkGevechtVanDeWereldBij(S, w);
         if (w !== S.wereld) T.werkBeestenBij(S, w);
       }
+      T.laatKlappenVallen(S); // de klappen van deze tik, allemaal tegelijk, nu iedereen geslagen heeft (js/gevecht.js)
     });
     // Wie loopt, één keer per kaart (js/anim.js): waar je kijkt, en elke kaart met een dorp erop (op één kaart kunnen
     // meer dorpen leven; werklijst vraag 170, stap 6a).
@@ -151,6 +153,8 @@
       const g = D.gebouwen.find((x) => x.soort === 'wachthuis' && x.x === o.x && x.y === o.y);
       if (g) T.roepTeWapen(D, g);
     },
+    // Een speler is klaar met opstellen (Fight!, de voorbereiding van een veldslag, js/veldslag.js): {}.
+    klaar: (S, D) => T.legerKlaar(S, D),
   };
 
   // Een speler geeft een opdracht (een klik, een knop). `opdracht.dorp`: het nummer van het dorp in S.dorpen (zonder: je
@@ -169,6 +173,10 @@
     const nu = S.opdrachten.filter((o) => o.tik <= S.tik);
     if (!nu.length) return;
     S.opdrachten = S.opdrachten.filter((o) => o.tik > S.tik);
+    // Per dorp (zijn nummer in S.dorpen), en van een dorp in de volgorde waarin het ze gaf: samen komen de opdrachten van
+    // de anderen over de lijn op elke computer op een ander moment binnen dan die van een veldheer (js/veldheer.js), die
+    // elke computer zelf geeft, en toch doet elke computer ze zo in dezelfde volgorde.
+    nu.sort((a, b) => a.dorp - b.dorp);
     for (const o of nu) {
       const D = S.dorpen[o.dorp];
       if (D) T.OPDRACHTEN[o.soort](S, D, o);

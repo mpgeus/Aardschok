@@ -36,6 +36,9 @@
       breedte: 8, // zoveel mannen staan er hooguit naast elkaar in een Line; wie er meer is, staat een rij erachter
       groen: 0.5, // zoveel seconden liggen hun plekken in groen op de grond na een rechtsklik (alleen scherm)
     },
+    // Wie verder dan zoveel tegels van het midden van de groep staat, loopt niet mee op de weg van de groep, maar zoekt
+    // zijn eigen weg (T.stuurMannen, "Eén weg voor de groep").
+    groep: 12,
   };
   const IN = () => T.KIEZEN_INSTELLINGEN;
 
@@ -77,14 +80,16 @@
   // Is dit een vijand die de mannen van D kunnen aanvallen: een rover, een wolf, een monster, of een mens van een ander
   // dorp (T.isVijandVan, js/gevecht.js)?
   const isVijand = (D, e) => !!e && !e.dood && (e.kant === 'monster' || T.isVijandVan(D, e));
-  // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null.
-  T.handelingSturen = function (S, doel, mannen) {
+  // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null. Je stuurt je eigen
+  // mannen (S.dorp), ook bij een ander dorp op dezelfde kaart; een veldheer (js/veldheer.js) stelt dezelfde vraag voor
+  // zijn dorp D.
+  T.handelingSturen = function (S, doel, mannen, D = S.dorp) {
     if (!doel || !mannen || !mannen.length) return null;
-    const D = S.dorp; // je stuurt je eigen mannen, ook bij een ander dorp op dezelfde kaart
     if (!D || D.wereld !== S.wereld) return null;
     const wie = T.nummersVan(D, mannen);
-    const geef = (o) => () => T.geefOpdracht(S, o);
-    if (doel.wezen && isVijand(D, doel.wezen)) {
+    const geef = (o) => () => T.geefOpdracht(S, { ...o, dorp: S.dorpen.indexOf(D) });
+    // in de voorbereiding van een veldslag (D.strook, js/veldslag.js) valt niemand aan: een klik op een vijand is erheen
+    if (doel.wezen && isVijand(D, doel.wezen) && !D.strook) {
       const e = doel.wezen;
       const opdracht = { soort: 'volg', wie, doel: { x: e.tx, y: e.ty, soort: e.soort } };
       return { tekst: T.t('Attack the {wie}', { wie: e.naam }), kan: true, opdracht, doe: geef(opdracht) };
@@ -248,16 +253,20 @@
 
   // Waar elk van `mannen` komt te staan in hun formatie bij `naar`: { plekken: [{ e, x, y, kijk }], richting }. Zonder
   // `richting` die van hun midden naar `naar`; staan ze er al, dan die ze hadden. Ook voor het scherm (de plekken in groen
-  // na een rechtsklik, js/main.js): het verandert niets.
+  // na een rechtsklik, js/main.js): het verandert niets. Stelt D op (de voorbereiding van een veldslag, D.strook in
+  // js/veldslag.js; Marcel, 30 okt: "3. b"), dan blijft elke plek in zijn strook: wie je erbuiten stuurt, loopt tot de
+  // rand.
   T.formatiePlekken = function (D, mannen, naar, richting) {
+    naar = T.naarStrook(D, naar);
     const m = midden(mannen.map((e) => T.tegelVan(e)));
     const dx = naar.x - m.x;
     const dy = naar.y - m.y;
     const f = richting || (Math.abs(dx) + Math.abs(dy) >= 1 && achtVan(dx, dy)) || vorigeRichting(mannen);
     const plekken = T.formatieVan(mannen) === 'ring' ? ringPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
     const bezet = new Set();
+    const mag = D.strook ? (q) => T.inStrook(D, q.x, q.y) : null;
     for (const p of plekken) {
-      const t = vrijBij(D.wereld, p, bezet);
+      const t = vrijBij(D.wereld, T.naarStrook(D, p), bezet, mag);
       bezet.add(t.x + ',' + t.y);
       p.x = t.x;
       p.y = t.y;
@@ -294,6 +303,83 @@
     return true;
   }
 
+  // ── Eén weg voor de groep (Marcel, 28 okt: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
+  // veldslag") ──
+  //
+  // Wie je samen stuurt, zoekt niet elk zijn eigen weg: dat kostte zo'n 2 ms per man voor 70 tegels, en twaalf man over
+  // de hele kaart 25 tot 45 ms in één tik (gemeten 28 okt met npm run veldslag; opmerkingen.md). De groep zoekt één weg,
+  // van de man in hun midden naar de plek in het midden van hun formatie, en elk loopt die weg verschoven naar zijn plek
+  // in de formatie: zijn baan. Zo blijft een Line onderweg een Line. Waar zijn baan niet te begaan is (een boom, de
+  // rivier, een rots), zoekt hij een korte weg naar waar ze weer vrij is: bij een voorde gaan ze er zo vanzelf smal door.
+  // Wie binnen is of ver van de groep staat (`groep`), en ieder als de groep over open land geen weg heeft (een tocht naar
+  // land dat nog dicht is), zoekt zijn eigen weg (loop). Geeft per man zijn weg (Map), of null.
+  function groepsBanen(D, plekken) {
+    const w = D.wereld;
+    const mee = plekken.filter((p) => !p.e.binnen);
+    if (mee.length < 2) return null;
+    const m = midden(mee.map((p) => T.tegelVan(p.e)));
+    const bij = (lijst, t) => lijst.reduce((a, b) => (afstandTot(b, t) < afstandTot(a, t) ? b : a));
+    const start = T.tegelVan(bij(mee.map((p) => p.e), m));
+    const { x, y } = bij(plekken, midden(plekken));
+    const eind = { x, y };
+    const weg = T.zoekRoute(w, start, eind, {});
+    if (!weg) return null;
+    const P = [start, ...weg];
+    const banen = new Map();
+    for (const p of mee) {
+      if (T.afstand(T.tegelVan(p.e), start) > IN().groep) continue;
+      const baan = baanVan(w, p.e, P, { x: p.x - eind.x, y: p.y - eind.y }, p);
+      if (baan) banen.set(p.e, baan);
+    }
+    return banen;
+  }
+  const afstandTot = (e, t) => {
+    const p = e.tx != null ? T.tegelVan(e) : e;
+    return T.afstand(p, { x: Math.round(t.x), y: Math.round(t.y) });
+  };
+
+  // De weg van e langs de weg van de groep P, verschoven met o, tot zijn plek: hij komt op zijn baan waar die het
+  // dichtst bij hem is (in de eerste `groep` stappen), volgt haar zolang ze vrij is, en gaat om wat in de weg staat met
+  // een korte weg naar waar ze weer vrij is. Null als een stuk geen weg heeft (dan zoekt hij zijn eigen weg).
+  function baanVan(w, e, P, o, plek) {
+    const vrij = (t) => T.opKaart(w, t.x, t.y) && T.isBegaanbaar(w, t.x, t.y);
+    const L = P.map((t) => ({ x: t.x + o.x, y: t.y + o.y }));
+    L[L.length - 1] = { x: plek.x, y: plek.y };
+    const van = T.tegelVan(e);
+    let j = -1;
+    for (let i = 0; i < Math.min(L.length, IN().groep); i++) if (vrij(L[i]) && (j < 0 || T.afstand(van, L[i]) <= T.afstand(van, L[j]))) j = i;
+    if (j < 0) return null;
+    const pad = [];
+    const erheen = (a, b) => {
+      if (a.x === b.x && a.y === b.y) return true;
+      const stuk = T.zoekRoute(w, a, b, {});
+      if (stuk) pad.push(...stuk);
+      return !!stuk;
+    };
+    if (!erheen(van, L[j])) return null;
+    let hier = L[j];
+    for (let i = j + 1; i < L.length; i++) {
+      if (vrij(L[i]) && stapMag(w, hier, L[i])) {
+        pad.push(L[i]);
+        hier = L[i];
+        continue;
+      }
+      let k = i; // de volgende vrije tegel van zijn baan (of deze, als alleen de stap om een hoek niet mag)
+      while (k < L.length - 1 && !vrij(L[k])) k++;
+      if (!erheen(hier, L[k])) return null;
+      hier = L[k];
+      i = k;
+    }
+    return pad;
+  }
+  // Mag hij van a naar buurtegel b: niet schuin om een muurhoek (zoals js/pad.js).
+  function stapMag(w, a, b) {
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) return false;
+    return !(dx && dy && (T.isVast(w, a.x + dx, a.y) || T.isVast(w, a.x, a.y + dy)));
+  }
+
   // De tegel waar wie midden in een stap is, vandaan kwam: een stap terug van waar hij heen gaat (tx, ty), langs waar hij
   // nu is. Null als hij er al staat.
   function vanWaar(e) {
@@ -314,6 +400,7 @@
     if (!mannen.length) return;
     const formatie = T.formatieVan(mannen);
     const uit = T.formatiePlekken(D, mannen, naar, richting);
+    const banen = groepsBanen(D, uit.plekken);
     for (const { e, x, y, kijk } of uit.plekken) {
       neemBevel(e);
       wek(D, e);
@@ -331,7 +418,9 @@
         // Een plek in land dat nog dicht is: wat daar staat, weet niemand; is het open, dan schuift hij (werkTochtBij).
         if (T.tegel(D.wereld, x, y) === 'buiten') e.post.dicht = true;
       }
-      if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
+      const baan = banen && banen.get(e);
+      if (baan) T.geefRoute(e, e.onderweg && e.pad[0] ? [e.pad[0], ...baan] : baan, { x, y });
+      else if (!loop(D, e, { x, y }, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
     }
   };
 
@@ -354,6 +443,7 @@
   // Een vijand aanvallen (`volg`): de vijand van die soort het dichtst bij waar je klikte. Het gevecht (js/gevecht.js)
   // brengt hem erheen en laat hem slaan.
   T.volgVijand = function (D, wie, doel) {
+    if (D.strook) return; // in de voorbereiding van een veldslag valt niemand aan (js/veldslag.js)
     const mannen = mannenMet(D, wie);
     let vijand = null;
     let bij = Infinity;
@@ -539,6 +629,8 @@
     const regels = [T.t('Life: {leven}', { leven: leven(e, D) })];
     const soort = p && p.soldaat ? T.SOLDAAT_SOORTEN[p.soldaat.soort] : null;
     if (soort) regels.push(T.t('Carries: {wat}', { wat: T.opsomming(soort.stukken.map(T.stukNaam)) }));
+    // De buit uit een verslagen roverskamp, tot hij thuis is (js/rovers.js, c4).
+    if (e.buit) regels.push(T.t('Loot: {wat}', { wat: T.opsomming(Object.keys(e.buit).map((wat) => T.hoeveel(Math.round(e.buit[wat]), wat))) }));
     const dienst = dienstKnoppen(D, [e]);
     if (dienst) regels.push({ tekst: T.t('Watch'), knoppen: dienst });
     const knop = terugKnop(D, [e]);

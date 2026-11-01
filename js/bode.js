@@ -40,8 +40,9 @@
     halfBijZich: 0.25,
     // Onderweg (werklijst vraag 143, het vervolg). De rovers uit het bos: de kans dat ze hem onderscheppen is `basis`, maal
     // `winter` in de winter en `donker` als hij in het donker vertrekt, en hooguit `hooguit`. Ze zijn dan met
-    // `aanvallers` man. (Tot vraag 170, stap 6a2, c2 telde de bende van het dorp mee, wie wegtrok; die woont nu in een
-    // roverskamp, en in c3 komt de hinderlaag uit het dichtste kamp.)
+    // `aanvallers` man, uit het dichtste roverskamp met mannen thuis (vraag 170, c3; T.kampVoorDeBode, js/rovers.js): is er
+    // geen, dan zijn er geen rovers onderweg. Wie van hen buiten beeld valt, is uit zijn bende, en het loon dat ze hem
+    // afnemen, ligt daarna in hun kamp.
     rovers: { basis: 0.06, winter: 1.6, donker: 1.6, hooguit: 0.8, aanvallers: 2 },
     // De rovers houden hem aan op je eigen kaart, bij de uitgang (de hinderlaag, js/rovers.js; Marcel, 9 okt: "Vergeet niet
     // dat alles onze eigen kaart is. Het wordt 1 aaneengesloten stuk"): vanaf `afstand` tegels van de uitgang komen ze, en
@@ -175,8 +176,9 @@
     // Wie hem onderschept, valt nu: het uur waarop hij vertrekt, telt (het donker).
     const g = T.bodeGevaar(D, k.winter);
     const uur = Math.floor(D.kalender.dag * 24);
-    const onderschept = T.vastLot(D, uur, 1431) < g.heer ? 'heer' : T.vastLot(D, uur, 1432) < g.rovers ? 'rovers' : null;
-    D.bode = { verstuurd: D.kalender.dag, komt: dag + k.dagen, winter: k.winter, wie, bestelling: vraag, onderschept };
+    const kamp = T.kampVoorDeBode(D);
+    const onderschept = T.vastLot(D, uur, 1431) < g.heer ? 'heer' : kamp != null && T.vastLot(D, uur, 1432) < g.rovers ? 'rovers' : null;
+    D.bode = { verstuurd: D.kalender.dag, komt: dag + k.dagen, winter: k.winter, wie, bestelling: vraag, onderschept, kamp, loon };
     // Op je eigen kaart: de rovers wachten hem op bij de uitgang (js/rovers.js), als er niet al rovers op de kaart zijn.
     const R = D.rovers || (D.rovers = T.nieuweRovers());
     if (onderschept === 'rovers' && bode.wezen && T.wegInEnUit(D) && !R.aanval) {
@@ -253,16 +255,18 @@
       if (e) {
         e.dood = true;
         e.leven = 0;
-      }
+        T.roverVerslagen(D, e);
+      } else T.roverValtOnderweg(D, B.kamp);
       over += ` ${T.t('One of the robbers fell.')}`;
     }
     const leeft = B.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p));
     return { over, leeft };
   }
 
-  // Beroofd: wie nog leeft, komt terug, zonder marskramer.
+  // Beroofd: wie nog leeft, komt terug, zonder marskramer; en hun loon ligt in het kamp van de rovers.
   function beroofd(D, B, over, leeft) {
     D.bode = null;
+    T.buitNaarKamp(D, B.kamp, { goud: B.loon || 0 });
     const n = B.wie.length;
     const tekst = leeft.length
       ? T.t('{n|{naam} is back without the merchant: robbers stopped him on the road and took everything.{over}|{naam} is back without the merchant: robbers stopped them on the road and took everything.{over}}', { n, naam: T.naamVanBewoner(leeft[0]), over })

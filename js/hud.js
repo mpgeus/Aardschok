@@ -605,14 +605,25 @@
     }
     // Een scenario dat eindigt (de trigger `einde`, js/scenario.js): de kop en de tekst van het level, of gewonnen of
     // verloren als het die niet geeft.
+    // Na een veldslag (js/veldslag.js; 3b3, Marcel, 30 okt: "4. A") geen jaar van een dorp, maar Again (dezelfde slag
+    // nog eens) en Lobby (terug naar de lobby, met de keuzes van deze slag).
     if (D.einde && D.einde.reden === 'scenario') {
       const E = D.einde;
-      T.ui.toonOverlay(
-        E.kop ? T.tGegevens(E.kop) : E.gewonnen ? T.t('Victory') : T.t('Defeat'),
-        (E.tekst ? `<p>${veilig(T.tGegevens(E.tekst))}</p>` : '') + regels() + hoofdstukRegel(),
-        T.t('To the title screen'),
-        () => T.naarTitelscherm(),
-      );
+      const kop = E.kop ? T.tGegevens(E.kop) : E.gewonnen ? T.t('Victory') : T.t('Defeat');
+      const tekst = E.tekst ? `<p>${veilig(T.tGegevens(E.tekst))}</p>` : '';
+      if (S.veldslag) {
+        const nogEens = T.veldslagNogEens(S);
+        const keuzes = T.veldslagKeuzes(S);
+        T.ui.toonOverlay(kop, tekst, T.t('Again'), () => T.nieuwSpel(null, nogEens), {
+          knop: T.t('Lobby'),
+          opKlik: () => {
+            T.nieuwSpel();
+            T.ui.toonLobby(S, keuzes);
+          },
+        });
+        return;
+      }
+      T.ui.toonOverlay(kop, tekst + regels() + hoofdstukRegel(), T.t('To the title screen'), () => T.naarTitelscherm());
       return;
     }
     // Minder dan tien mensen over (js/einde.js; werklijst vraag 101, d), of je ambt kwijt (js/heer.js).

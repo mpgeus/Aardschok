@@ -84,7 +84,7 @@ In detail in `ontwerp/gereedschap.md`.
   (of `.pagina('gereedschap/gesprekken.html')`), **nooit met een eigen lijstje**: dan mist er vroeg of laat een bestand, en
   toetst hij een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt op het proefdorp (`test/grond.cjs`).
 - `npm run speeltest`: de kolonist in code speelt met vaste zaden, en toetst of het werkt zoals het moet (Marcel, 15
-  okt: de balans komt later, het echte spel test hij zelf; `speelbaar.md`). Verder `proefversie` (de zip voor een tester), `grootte`, `schermen`,
+  okt: de balans komt later, het echte spel test hij zelf; `speelbaar.md`). Verder `veldslag` (de proefbank van het vechten), `proefversie` (de zip voor een tester), `grootte`, `schermen`,
   `tekenmeting`, `samenvatting`, `maker`, `teksten` (na elke zin die erbij komt of verandert), en `pixelart` en
   `pixelart:spel` (de kunst naar `beelden/`, opnieuw als de kunst verandert).
 
@@ -144,7 +144,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
-  en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
+  en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen; `veldslag` (skirmish, de kaarten
+  uit een recept) en `veldheer` (de AI van een leger).
 
 ## Het spel in het kort
 
@@ -206,7 +207,8 @@ Hoe we kiezen:
   uit `js/`; alleen op `T.ui`, op gegevens, en waar een bladzijde een deel van het spel laadt.
 - **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170; `code.md` bij `js/tik.js`): de wereld tikt
   (`T.wereldTik`), haar toeval is `T.toeval` of `T.vastLot`, **nooit `Math.random`**, en een klik die haar verandert,
-  geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats;
+  geeft een opdracht (`T.geefOpdracht`), en een regel vraagt nooit `S.dorp` (wat dit scherm speelt; samen verschilt dat
+  per computer). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats;
   een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is (zoals een gril van de heer).
 - **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` (links) en `handelingSturen` (rechts) geven `{ tekst,
   kan, doe }`, en de tekst bij de muis en de klik komen uit hetzelfde antwoord.

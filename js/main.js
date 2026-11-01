@@ -764,6 +764,7 @@
     werkHoverBij();
     T.ui.werkGebouwbriefjeBij(S); // het briefje van het gekozen gebouw (js/huisbriefje.js)
     T.ui.werkMinikaartBij(S); // de minikaart in de hoek (js/balk.js)
+    T.ui.werkSlagBalkBij(S); // de balk in een veldslag: je mannen, de klok en Fight! (js/balk.js)
   }
 
   let vorige = 0;
@@ -1058,7 +1059,7 @@
     }
     // B: het bouwmenu (js/hud.js), net zo — botst nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik
     // legt een gebouw weer weg.
-    if (T.NIEUWE_HUD && (ev.key === 'b' || ev.key === 'B')) {
+    if (T.NIEUWE_HUD && !S.veldslag && (ev.key === 'b' || ev.key === 'B')) { // in een veldslag is er niets te bouwen
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
@@ -1440,7 +1441,7 @@
     eiland(zaad) {
       if (zaad != null) T.nieuwSpel(Number(zaad));
       const w = S.wereld;
-      const E = T.eilandVan(w.eiland.zaad);
+      const E = T.eilandVan(w.eiland);
       const dorp = E.plekken.find((p) => p.naam === S.dorp.plek.naam);
       return {
         eiland: w.eiland.zaad,
@@ -1539,6 +1540,13 @@
     // Een tweede dorp op het eiland (werklijst vraag 170, stap 6a; T.dorpErbij, js/begin.js): op de dichtste andere
     // dorpsplek, met het lege begin. Spel.debug.wissel() maakt jou het volgende dorp, zodat je ze in één browser speelt:
     // wat je ziet, hoort, bouwt en stuurt, is dan van dat dorp (S.dorp; alleen scherm).
+    // Een veldslag (vraag 187 en 188, stap 3a2; js/veldslag.js), tot de lobby er is (3b): op The Ford met dit zaad, twee
+    // legers (standaard elk acht speermannen en vier boogschutters) en `minuten` (of geen tijd).
+    veldslag(zaad = 1, legers = [{ soorten: { speerman: 8, boogschutter: 4 } }, { soorten: { speerman: 8, boogschutter: 4 } }], minuten = 10) {
+      T.nieuwSpel(null, T.veldslagLevel({ kaart: 'ford', zaad, legers, minuten }));
+      T.ui.sluitTitel(S);
+      return `Een veldslag op The Ford (zaad ${zaad}): ${S.dorpen.map((D) => T.legerVan(D).length).join(' tegen ')} man.`; // geen tekst
+    },
     tweedeDorp() {
       if (!S.dorp.plek.naam) return 'Een tweede dorp kan alleen op het eiland.'; // geen tekst
       const D = T.dorpErbij(S);
@@ -1554,17 +1562,17 @@
       const p = T.naarSchermOp(S.wereld, m.x, m.y);
       T.kijkNaar(p.x, p.y);
       T.ui.werkBalkBij(S);
-      return `Je speelt nu ${S.dorp.plek.naam} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst
+      return `Je speelt nu ${S.dorp.plek.naam || 'het leger'} (${S.dorpen.indexOf(S.dorp) + 1} van ${S.dorpen.length}).`; // geen tekst (een leger in een veldslag heeft geen naam)
     },
-    // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1 en c2): waar ze liggen, hoe ver van je plein, of ze
-    // er al staan (hun land is open), en hun bende: wie, en waar hij vandaan kwam. Spel.debug.kampen('erheen'): het land om
+    // De roverskampen (js/rovers.js; werklijst vraag 170, stap 6a2, c1 tot c3): waar ze liggen, hoe ver van je plein, of ze
+    // er al staan (hun land is open), hun bende (wie, waar hij vandaan kwam, en wie op pad is), en hun buit.
+    // Spel.debug.kampen('erheen'): het land om
     // het dichtste kamp gaat open, het kamp staat er, je kent het (zijn open plek, en de rode stip op de minikaart), en de
     // camera kijkt erheen.
     kampen(wat) {
       const w = S.wereld;
       if (!T.opEiland(w)) return 'Er zijn alleen roverskampen op het eiland.'; // geen tekst
       T.zetRoverskampenBij(S, w);
-      const E = T.eilandVan(w.eiland.zaad);
       const m = T.pleinVan(S.dorp) || { x: S.dorp.plek.vak.x + S.dorp.plek.vak.b / 2, y: S.dorp.plek.vak.y + S.dorp.plek.vak.h / 2 };
       const lijst = w.kampen.map((K) => ({ K, ver: Math.round(T.afstand(m, K)) })).sort((a, b) => a.ver - b.ver);
       if (wat === 'erheen' && lijst.length) {
@@ -1576,22 +1584,22 @@
         const p = T.naarSchermOp(w, K.x, K.y);
         T.kijkNaar(p.x, p.y);
       }
-      const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}`).join(', '); // geen tekst
-      return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.staat ? `staat er, ${K.tenten} van de ${E.kampen[K.nr].tenten.length} tenten` : 'nog niet gezien'}: ${wie(K)}`).join('; '); // geen tekst
+      const wie = (K) => K.bende.map((l) => `${l.naam}${l.uit ? ` (uit ${l.uit})` : ''}${l.opPad ? ' op pad' : ''}`).join(', '); // geen tekst
+      const buit = (K) => Object.entries(K.buit).map(([wat, n]) => `${Math.round(n)} ${wat}`).join(', ') || 'geen'; // geen tekst
+      return lijst.map(({ K, ver }) => `kamp ${K.nr} op (${K.x}, ${K.y}), ${ver} tegels van je plein, ${K.verslagen ? 'verslagen' : K.staat ? `staat er, ${K.tenten} van de ${T.tentPlekkenVan(w, K).length} tenten` : 'nog niet gezien'}: ${wie(K)}; buit: ${buit(K)}`).join('; '); // geen tekst
     },
-    // De rovers (js/rovers.js): wanneer de wilde rovers komen (in de demo niet: de dag van zijn overval staat in het
-    // scenario, S.scenario.lot), en de aanval die loopt (wie wegtrok, woont in een roverskamp: Spel.debug.kampen).
-    // Spel.debug.rovers(3) laat nu drie wilde rovers komen.
+    // De rovers (js/rovers.js): wanneer de volgende overval komt (in de demo niet op het rooster: de dag van zijn overval
+    // staat in het scenario, S.scenario.lot), en de aanval die loopt: uit welk kamp, en hoe lang de reis is (de mannen van
+    // de kampen: Spel.debug.kampen). Spel.debug.rovers(3) laat nu drie man van het dichtste kamp komen, zonder reis (heeft
+    // het er minder thuis, dan komen er van buiten bij).
     rovers(wat) {
       const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
-      if (wat != null && !R.aanval) {
-        R.aanval = { soort: 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: Number(wat) || 3, meteen: true };
-      }
+      if (wat != null) T.roversKomen(S.dorp, { aantal: Number(wat) || 3, meteen: true });
       const A = R.aanval;
       return {
-        wildeOp: R.wilde === false ? 'geen' : R.wildeOp, // geen tekst
+        overvalOp: R.overvallen === false ? 'geen' : R.overvalOp, // geen tekst
         overval: S.scenario ? S.scenario.lot.overval : null,
-        aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld, stapel: A.stapelPlek } : null,
+        aanval: A ? { soort: A.soort, fase: A.fase, kamp: A.kamp, reis: A.reis, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld, stapel: A.stapelPlek, ingang: A.ingang } : null,
         // Je mannen in het gevecht (js/gevecht.js): hun leven, hun wapen, en tegen wie ze vechten; en wie er schuilt.
         mannen: T.mannenVan(S.dorp).map((e) => {
           const d = e.volgt || e.doelwit;

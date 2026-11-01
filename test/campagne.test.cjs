@@ -55,6 +55,20 @@ test('elk hoofdstuk begint op het eiland van de campagne, op zijn plek, met zijn
   assert.equal(T.LEVELS.demojaar.demo, undefined);
 });
 
+// Sinds c3 van vraag 170 komt een overval uit een kamp, en in een level met een rand alleen uit een kamp binnen de rand
+// (Marcel, 27 okt: "H1", hoofdstuk 1 naar Oakley): een hoofdstuk met een overval heeft er een.
+test('elk hoofdstuk met een overval heeft een roverskamp binnen zijn rand', () => {
+  for (const h of T.CAMPAGNE.hoofdstukken) {
+    const L = T.LEVELS[h.level];
+    // een overval van een trigger (de demo), of het rooster (een dorp zonder `overvallen: false`, zoals het rovershol)
+    const rooster = (L.dorpen || [{}]).some((d) => d.overvallen !== false);
+    if (!rooster && !(L.triggers || []).some((t) => [].concat(t.dan || []).some((d) => d.rovers))) continue;
+    const S = T.proefdorp.begin(T.proefdorp.zaad, T.hoofdstukLevel(h.id));
+    T.zetRoverskampenBij(S, S.wereld);
+    assert.notEqual(T.kampVoorDeBode(S.dorp), null, `${h.id} in ${h.plek}: geen kamp binnen de rand`);
+  }
+});
+
 test('het eerste hoofdstuk is open, een volgend als het hoofdstuk ervoor af is; af is wat gewonnen is', () =>
   metOpslag(() =>
     metTweeHoofdstukken(() => {
@@ -74,10 +88,11 @@ test('het eerste hoofdstuk is open, een volgend als het hoofdstuk ervoor af is; 
       assert.deepEqual(T.campagneAf(), { [eerste.id]: true });
       assert.equal(T.hoofdstukOpen(tweede.id), true);
       // Een scenario dat gewonnen eindigt, ook; het laatste heeft geen volgende.
-      const r = T.eindVanHoofdstuk({ scenario: { hoofdstuk: tweede.id } }, { einde: { reden: 'scenario', gewonnen: true } });
+      const laatste = T.CAMPAGNE.hoofdstukken.at(-1);
+      const r = T.eindVanHoofdstuk({ scenario: { hoofdstuk: laatste.id } }, { einde: { reden: 'scenario', gewonnen: true } });
       assert.equal(r.gewonnen, true);
       assert.equal(r.volgende, null);
-      assert.deepEqual(T.campagneAf(), { [eerste.id]: true, [tweede.id]: true });
+      assert.deepEqual(T.campagneAf(), { [eerste.id]: true, [laatste.id]: true });
     })));
 
 test('wat gewonnen is: betaald, of een scenario dat gewonnen eindigt; de rest is verloren', () => {

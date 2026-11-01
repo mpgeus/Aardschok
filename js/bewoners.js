@@ -780,6 +780,23 @@
     T.verdeelHanden(D);
   };
 
+  // Een soldaat van een leger zonder dorp (de veldslag, js/veldslag.js): een man van soort `soort`, met zijn eigen stukken
+  // (zoals de wacht van een level: ze liggen niet in de voorraad), zonder huis, gezin of wachthuis, op een vrije tegel bij
+  // `bij`. Het getal in de balk telt hem. Geeft zijn poppetje.
+  T.zetSoldaatBij = function (D, soort, bij) {
+    const p = nieuweBewoner(D, { naam: kiesNaam(D, 'man', worp(D)), geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: null });
+    p.soldaat = { soort, wachthuis: null, sinds: D.kalender ? Math.floor(D.kalender.dag) : 0 };
+    T.wijzigBevolking(D, 1, 'begin');
+    return maakPoppetje(D, p, bij);
+  };
+
+  // De held van zo'n leger: zijn bewoner (zonder huis of gezin), zodat je hem kiest en stuurt zoals de aanvoerder van een
+  // dorp (T.isMan en mannenMet, js/kiezen.js, vinden een man aan zijn bewoner).
+  T.zetHeld = function (D) {
+    nieuweBewoner(D, { aanvoerder: true, geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: null, wezen: D.aanvoerder });
+    T.wijzigBevolking(D, 1, 'begin');
+  };
+
   // Een huis kreeg een andere tekening, en dus misschien een andere deur (een hut die een huis werd,
   // js/behoeften.js): wie er woont, gaat voortaan naar die deur, en rekent zijn wegen opnieuw uit. Tot
   // 28 sep bleef zijn deur waar die was.

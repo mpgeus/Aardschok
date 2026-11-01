@@ -568,6 +568,8 @@
     { naam: T.t('Soldiers'), blok: 'SOLDATEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fighting'), blok: 'GEVECHT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Choosing and sending'), blok: 'KIEZEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The battle'), blok: 'VELDSLAG_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The AI general'), blok: 'VELDHEER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
@@ -1059,11 +1061,12 @@
     goud: T.t('gold'),
     belastingNaarStand: T.t('tax by standing'),
     // De rovers, de raad, de herberg
-    wildePerJaar: T.t('wild attacks per year'),
-    eersteWildeNa: T.t('first wild attack after'),
-    wildeEerst: T.t('wild robbers in the first year'),
-    wildeErbijPerJaar: T.t('wild robbers added per year'),
-    wildeMeest: T.t('wild robbers at most'),
+    overvalPerJaar: T.t('attacks per year'),
+    eersteOvervalNa: T.t('first attack after'),
+    overvalEerst: T.t('robbers in an attack, the first year'),
+    overvalErbijPerJaar: T.t('robbers added per year'),
+    overvalMeest: T.t('robbers in an attack at most'),
+    ingangAfstand: T.t('robbers come in at this distance'),
     uur: T.t('arrival hour'),
     nachtKans: T.t('chance at night'),
     roofUren: T.t('raiding hours'),
@@ -1077,6 +1080,23 @@
     manPerTent: T.t('men per tent'),
     rondHetVuur: T.t('distance from the fire'),
     wakkerUren: T.t('hours awake after a fight'),
+    buitAfstand: T.t('loot picked up within'),
+    buitPerMan: T.t('loot carried per man'),
+    buitMaten: T.t('loot pile small up to, middle up to'),
+    palissade: T.t('palisade around a den'),
+    opening: T.t('opening'),
+    tussen: T.t('between posts'),
+    poortRuimte: T.t('room beside a gate post'),
+    soorten: T.t('kinds of post'),
+    nieuw: T.t('new'),
+    scheef: T.t('leaning'),
+    afgebroken: T.t('broken'),
+    gat: T.t('gap'),
+    plank: T.t('plank nailed over'),
+    mos: T.t('mossy'),
+    tentAfstand: T.t('tents from the fire, from and to'),
+    tentSchuif: T.t('how far a tent may shift'),
+    tentNietVoor: T.t('no tent in front (degrees)'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     roversNa: T.t('robbers after'),
@@ -1441,6 +1461,35 @@
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
+    'KIEZEN_INSTELLINGEN.groep': T.t('a man further than this many tiles from his group finds his own way'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.zee': T.t('this many tiles of sea around the map are open and visible'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.dag': T.t('the day and hour a battle is fought on, and stays on'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten': T.t('points for each side, in the skirmish lobby'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.standaard': T.t('at first'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.min': T.t('at least'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.max': T.t('at most'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.punten.stap': T.t('in steps of'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.minuten': T.t('the time limits to choose from, in minutes (0: none)'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.voorbereiding': T.t('seconds to deploy before the battle begins (Fight! starts it sooner)'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.minutenStandaard': T.t('the time limit at first, in minutes'), // geen tekst
+    'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst
+    'VELDHEER_INSTELLINGEN.ver': T.t('a man whose post is this many tiles from the goal gets a new order'), // geen tekst
+    'VELDHEER_INSTELLINGEN.aanval': T.t('a man who is not fighting attacks an enemy his army sees this close (tiles)'), // geen tekst
+    'VELDHEER_INSTELLINGEN.erbij': T.t('this close (tiles) to a place, his army is there'), // geen tekst
+    'VELDHEER_INSTELLINGEN.etappe': T.t('he sends his men at most this many tiles at once'), // geen tekst
+    'VELDHEER_INSTELLINGEN.achterDeLinie': T.t('the commander stands this many tiles behind his men'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen': T.t('what the AI general buys: one of these mixes, from the seed'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.speerman': T.t('spearmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.boogschutter': T.t('archers, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.gewoon.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters': T.t('the mix of archers'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.speerman': T.t('spearmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.boogschutter': T.t('archers, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.schutters.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar': T.t('the heavy mix'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.piekenier': T.t('pikemen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
     'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst

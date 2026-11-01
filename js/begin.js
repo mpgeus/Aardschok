@@ -82,13 +82,14 @@
   // okt heette dit T.beginOpKaart, in js/gebied.js, en kon het ook op een kaart uit Tiled beginnen; ronde 4 van het
   // snoeien.) Met een `level` (T.LEVELS, levels/; vraag 187, stap 1b en 2a) zijn eiland (`eiland.zaad`, anders dat van
   // makerZaad), zijn dorpsplek (`plek`, een naam; anders jouw plek), en zijn rand (`rand`, in stukken: T.randOm in
-  // js/maker.js); je dorp krijgt wat het level van het eerste dorp zegt (de wacht, wat dicht is, de wilde rovers;
-  // T.nieuwDorp), en daarna begint zijn scenario (T.startScenario, js/scenario.js). Een level dat niet door de keuring
+  // js/maker.js); je dorp krijgt wat het level van het eerste dorp zegt (de wacht, wat dicht is, of er overvallen
+  // op het rooster komen; T.nieuwDorp), en daarna begint zijn scenario (T.startScenario, js/scenario.js). Een level dat niet door de keuring
   // komt, is een fout in het spel: dan begint het niet.
   T.beginOpEiland = function (S, makerZaad, level = null) {
     const L = level || {};
     const fout = level ? T.keurScenario(level) : [];
     if (fout.length) throw new Error(`Het level klopt niet: ${fout.join('; ')}`); // geen tekst
+    if (L.veldslag) return T.beginVeldslag(S, L); // een veldslag: geen dorp, maar twee legers op een kaart (js/veldslag.js)
     const d = (L.dorpen && L.dorpen[0]) || {};
     const zaad = L.eiland ? L.eiland.zaad : makerZaad != null ? makerZaad : T.nieuwLandZaad();
     const w = T.laadGemaaktGehucht(zaad, { plek: L.plek });
@@ -101,11 +102,14 @@
     // Het dorp op deze kaart, met zijn aanvoerder (js/dorp.js; sinds vraag 170, stap 5 staat hij alleen daar, als
     // S.dorp.aanvoerder): wat er staat, de boeren, het vee en wie er woont. Het is je eigen dorp (S.dorp); een tweede
     // komt erbij met T.dorpErbij (hieronder).
-    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, wildeRovers: d.wildeRovers });
+    S.dorp = T.nieuwDorp(S, w, aanvoerder, { zaad, wacht: d.wacht, dicht: d.dicht, overvallen: d.overvallen });
     S.dorpen = [S.dorp];
+    // Het hol van het level: het dichtste roverskamp, met zijn bende, zijn buit en een palissade (T.maakHol, js/rovers.js).
+    if (d.hol) T.maakHol(S.dorp, d.hol);
     if (level) T.startScenario(S, level);
     return S.dorp;
   };
+  T.zetAanvoerderKlaar = zetAanvoerderKlaar; // ook voor de held van een leger (js/veldslag.js)
   function zetAanvoerderKlaar(aanvoerder, zaad) {
     aanvoerder.snelheid = T.AANVOERDER_SNELHEID;
     if (aanvoerder.zaad == null) aanvoerder.zaad = zaad; // zijn zaad kiest zijn vel (T.sprites.houding, js/sprites.js)
@@ -119,7 +123,7 @@
   T.dorpErbij = function (S) {
     const eerste = S.dorpen[0];
     const w = eerste.wereld;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     const bij = E.plekken.find((p) => p.naam === eerste.plek.naam);
     const nummer = S.dorpen.length;
     const { plek, aanvoerder } = T.legDorpOpKaart(w, { bij, niet: S.dorpen.map((D) => D.plek.naam) });

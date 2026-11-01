@@ -78,6 +78,10 @@
   };
   const SOORTEN = Object.keys(T.SOLDAAT_SOORTEN);
   T.soortNaam = (soort) => T.SOLDAAT_SOORTEN[soort].naam();
+  // Wat een soldaat van deze soort kost in een veldslag (js/veldslag.js; scenario.md, 7: "De prijs van een soldaat is de
+  // waarde van zijn stukken"): de waarde van zijn stukken in goud (T.waardeVan, js/einde.js), de hooivork, die geen waar
+  // is, op zijn eigen naam. Zo is er geen tweede prijslijst: een speerman kost 4, de militie 1 (B1).
+  T.soldaatPrijs = (soort) => stukkenVan(soort).reduce((som, stuk) => som + T.waardeVan(STUKKEN[stuk].waar || stuk), 0);
   T.stukNaam = (stuk) => STUKKEN[stuk].naam();
   const stukkenVan = (soort) => T.SOLDAAT_SOORTEN[soort].stukken;
 
@@ -355,15 +359,17 @@
 
   // De aanvoerder van D viel (T.valt, js/gevecht.js; T.sneuvelt zei het al): een ander neemt het over, of het dorp zegt
   // dat er niemand is.
+  // In een veldslag (js/veldslag.js; 3b3, en Marcel, 28 okt, over de generaals: "eenmaal dood vecht de rest door tot het
+  // eind") neemt niemand het over, en zegt niemand het.
   T.aanvoerderValt = function (D) {
     D.aanvoerder = null;
-    if (!T.werkAanvoerderBij(D)) T.zeg(D, T.t('There is no one to take command. The first who becomes a soldier, will.'), 'gevaar');
+    if (!T.werkAanvoerderBij(D) && !D.veldslag) T.zeg(D, T.t('There is no one to take command. The first who becomes a soldier, will.'), 'gevaar');
   };
 
   // Elke tik (T.werkDorpBij, js/dorp.js): heeft D geen aanvoerder, en is er een veteraan of een soldaat, dan neemt die het
-  // over. Geeft wie, of null.
+  // over (niet in een veldslag, hierboven). Geeft wie, of null.
   T.werkAanvoerderBij = function (D) {
-    if (D.aanvoerder || !D.bewoners) return null;
+    if (D.aanvoerder || !D.bewoners || D.veldslag) return null;
     const p = T.opvolgerVan(D);
     if (!p) return null;
     const wie = T.hoofdletter(T.naamVanBewoner(p));

@@ -185,6 +185,27 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   baksteen), de houten jukbrug en de houten boogbrug. `node bruggen.cjs` maakt de proefplaat `uit/bruggen-proef.png`
   (met de rovertent T1 uit `kamp.cjs`); `bruggen-vel.cjs` knipt hele bruggen in stukken van één tegel in twee lagen voor
   het spel. Naar het spel: `node naar-spel.cjs --alleen bruggen` (`beelden/bruggen.png`, in een paar seconden).
+- `palissade.cjs`: de palissade van het rovershol (werklijst K, 2c): een ronde ring van dikke, grijze palen dicht tegen
+  elkaar, met een geslagen punt en mos aan de voet, de dwarsliggers met touw aan de binnenkant, en een poort van twee
+  zware palen met een balk, een rode lap en een hertenschedel (`ring`). `node palissade.cjs` maakt de proefplaat
+  `uit/palissade-proef.png` (de hele ring met het vuur, twee tenten en een boer; in zo'n 50 seconden). Het vel voor het
+  spel (`vel`): elke soort paal (`PAAL_RIJEN`) en de poort (`POORT_RIJEN`) los, in 16 richtingen, gepakt met `rijenVel`
+  (`kern.cjs`); `node naar-spel.cjs --alleen palissade` maakt `beelden/palissade.png`.
+- `aankleding.cjs`: de aankleding van een roverskamp (werklijst K, 2c; Marcel: "Alles valt en staat met de aankleding"):
+  zitstammen, een spit met een zwijn, slaapvellen, een waslijn, een wapenrek, een schietschijf, een hakblok en brandhout,
+  een vat bier op een bok, een droograam met een vel, een paal met konijnen, een kapotte kar, fakkels, en modder, stro en
+  een paadje. `node aankleding.cjs` maakt de proefplaat `uit/aankleding-proef.png` (het hele hol met de ring, de tenten,
+  de buit en alles; in zo'n minuut). Naar het spel (`vel`, elk ding in 4 richtingen): `node naar-spel.cjs --alleen
+  aankleding` maakt `beelden/aankleding.png`.
+- `vaandel.cjs`: het vaandel van een doel (werklijst K, 2c, D2): een staak met een blauwe wimpel met een gouden zoom en
+  de gouden korenschoof van het dorp, in vier standen van het wapperen. `node vaandel.cjs` maakt de proefplaat
+  `uit/vaandel-proef.png` (met een boer, op gras en op het donker, en twee keer vergroot; in een paar seconden). Naar het
+  spel (`vel`, een cel per stand): `node naar-spel.cjs --alleen vaandel` maakt `beelden/vaandel.png`.
+- `buit.cjs`: de buit van een roverskamp in drie maten (werklijst K, 2c): klein (een kist en twee zakken), middel (de kist
+  open met goud en zilver, tonnen en zakken) en groot (een hoge hoop met tonnen, zakken, twee kisten, een rol rood laken,
+  een koperen ketel, een kandelaar en een karrenwiel). `node buit.cjs` maakt de proefplaat `uit/buit-proef.png` (de drie
+  naast een boer, op ware grootte en twee keer vergroot; in zo'n tien seconden). Naar het spel: `node naar-spel.cjs
+  --alleen buit` (`beelden/buit.png`, een cel per maat).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

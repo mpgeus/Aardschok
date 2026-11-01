@@ -4,7 +4,7 @@
 // `als` gelden (voor "of" maak je twee triggers), doet alles van `dan`, en gaat daarna uit; met `keer` gaat hij zo vaak
 // af ('altijd': elke keer dat `als` geldt), met `aan: false` begint hij uit (een andere trigger zet hem aan). Elke
 // voorwaarde en elk gevolg is een object met één of meer woorden, en `wie`: het dorp waar het om gaat ('speler', of een
-// nummer in S.dorpen; zonder wie je eigen dorp). De woorden zijn één taal met de gesprekken: T.VOORWAARDEN en T.GEVOLGEN
+// nummer in S.dorpen; zonder wie de speler, het eerste dorp). De woorden zijn één taal met de gesprekken: T.VOORWAARDEN en T.GEVOLGEN
 // (js/gesprek.js), hier aangevuld.
 //
 //   T.startScenario(S, {
@@ -24,7 +24,7 @@
 // bewerker terugschrijft (stap 2 en 4: het level als recept, en de editor).
 //
 // Een level (T.LEVELS, in levels/; stap 1b: het demojaar) is zo'n scenario, met `dorpen` erbij: per dorp wat het bij het
-// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er wilde rovers komen; T.beginOpEiland, js/begin.js).
+// begin anders heeft (wie met de huifkar meekomt, wat dicht is, of er overvallen op het rooster komen; T.beginOpEiland, js/begin.js).
 // Hoe het begon, zet wie het begint erbij: `demo` (het eindscherm zegt dat de demo daar eindigt, js/hud.js; T.demoLevel) of
 // `hoofdstuk` (een hoofdstuk van de campagne, js/campagne.js). Stap 2a: zijn kaart, met `eiland: { zaad }` (een
 // vast eiland), `plek` (een dorpsplek op naam) en `rand: { b, h }` (zoveel stukken om het dorp, T.randOm in js/maker.js).
@@ -66,10 +66,13 @@
       tellers: {},
       lot: {},
       seconde: Math.floor((S.wereldTijd || 0) / IN().elke),
+      begin: S.wereldTijd || 0, // de tijd van de wereld bij het begin (de voorwaarde `seconden`)
       // Hoe het spel begon (stap 2b): als de demo (T.demoLevel, js/einde.js), of als hoofdstuk van de campagne
       // (T.hoofdstukLevel, js/campagne.js). Dat zegt niet het level zelf, want het demojaar is allebei.
       demo: !!L.demo,
       hoofdstuk: L.hoofdstuk || null,
+      // Wat de heer er in zijn eerste brief bij schrijft (de benoeming, js/brieven.js; 2c): een zin uit het level.
+      inleiding: L.inleiding || null,
     };
     for (const t of S.scenario.triggers) {
       for (const v of elk(t.als)) {
@@ -82,10 +85,12 @@
     return [];
   };
 
-  // Het dorp van een voorwaarde of een gevolg: `wie` is 'speler' (je eigen dorp, S.dorp; ook zonder wie) of een nummer
-  // in S.dorpen. Geeft null als dat dorp er niet is.
+  // Het dorp van een voorwaarde of een gevolg: `wie` is 'speler' (ook zonder wie) of een nummer in S.dorpen. Geeft null
+  // als dat dorp er niet is. De speler is het eerste dorp, niet S.dorp: dat is wat dit scherm speelt, en samen (lockstep)
+  // speelt elke computer een ander dorp, dus een trigger die S.dorp vroeg, ging op elke computer anders af (Marcel, 28
+  // okt: "Vergeet niet dat dit ook in multiplayer allemaal moet werken"). Alleen spelend is het eerste dorp het jouwe.
   T.scenarioDorp = function (S, wie) {
-    if (wie == null || wie === 'speler') return S.dorp;
+    if (wie == null || wie === 'speler') return S.dorpen[0] || null;
     return (Number.isInteger(wie) && S.dorpen[wie]) || null;
   };
 
@@ -124,11 +129,13 @@
   // ---------------------------------------------------------------------------------------------
 
   // Een gebied is een rechthoek van tegels ({ x, y, b, h }) of een kring ({ x, y, r }: elke tegel tot r stappen van het
-  // midden, zoals T.afstand telt).
+  // midden, zoals T.afstand telt). Eén gebied heeft elk level dat een hol heeft, zonder dat het het noemt: 'hol', het hol
+  // van het dorp (T.holGebied, js/rovers.js; 2c), want waar het ligt, weet pas het spel.
   const inGebied = (g, x, y) =>
     g.r != null ? Math.max(Math.abs(x - g.x), Math.abs(y - g.y)) <= g.r : x >= g.x && x < g.x + g.b && y >= g.y && y < g.y + g.h;
-  const middenVan = (g) => (g.r != null ? { x: g.x, y: g.y } : { x: g.x + Math.floor(g.b / 2), y: g.y + Math.floor(g.h / 2) });
-  const gebiedVan = (S, naam) => (S.scenario && S.scenario.gebieden[naam]) || null;
+  // Het midden van een gebied, of zijn eigen `plek` als het die heeft (het hol: zijn poort).
+  const middenVan = (g) => (g.plek ? { ...g.plek } : g.r != null ? { x: g.x, y: g.y } : { x: g.x + Math.floor(g.b / 2), y: g.y + Math.floor(g.h / 2) });
+  const gebiedVan = (S, naam, D) => (naam === 'hol' ? T.holGebied(D) : (S.scenario && S.scenario.gebieden[naam]) || null);
   // Staan er minstens `aantal` wezens op de kaart van D in gebied g waarvoor `telt` geldt? Alleen wie er staat, niet de
   // tegels; zonder lijst, en klaar zodra het er genoeg zijn (zo'n 10 µs per gebied bij 500 wezens).
   function minstensIn(D, g, aantal, telt) {
@@ -187,13 +194,25 @@
     // het gebied, van die soort als die er staat ('speerman'); de aanvoerder telt mee. Een gebied zonder vijand van het
     // dorp (T.isVijandVan, js/gevecht.js): leegGebied.
     inGebied: (S, D, v) => {
-      const g = gebiedVan(S, v.gebied);
+      const g = gebiedVan(S, v.gebied, D);
       return !!g && minstensIn(D, g, v.aantal || 1, (e) => T.isVanDorp(D, e) && (!v.soort || e.soort === v.soort));
     },
     leegGebied: (S, D, v) => {
-      const g = gebiedVan(S, v);
+      const g = gebiedVan(S, v, D);
       return !!g && !minstensIn(D, g, 1, (e) => T.isVijandVan(D, e));
     },
+    // De rovers (2c, js/rovers.js): hoe het hol van het dorp ervoor staat ('staat' of 'verslagen', T.holStand; een dorp
+    // zonder hol nooit), en hoeveel overvallen er op je land kwamen (een getal: minstens zoveel; of { minstens, minder }).
+    hol: (S, D, v) => T.holStand(D) === v,
+    // De veldslag (stap 3a2, js/veldslag.js): hoeveel mannen van het dorp nog staan (T.legerVan: zijn soldaten en zijn
+    // held), hoeveel legers nog mannen hebben (van alle dorpen, dus voor elke speler hetzelfde), hoeveel seconden van de
+    // wereld er sinds het begin om zijn, en hoeveel sinds de slag begon, na de voorbereiding (de tijd van een veldslag;
+    // E2, en 3b2).
+    mannen: (S, D, v) => telt(T.legerVan(D).length, v),
+    legers: (S, D, v) => telt(S.dorpen.filter((x) => T.legerVan(x).length > 0).length, v),
+    seconden: (S, D, v) => !!S.scenario && (S.wereldTijd || 0) - S.scenario.begin >= v,
+    slag: (S, D, v) => T.slagSeconden(S) != null && T.slagSeconden(S) >= v,
+    overval: (S, D, v) => telt((D.rovers && D.rovers.geweest) || 0, v),
     // Het scenario zelf: een doel ('id': af, of { id: 'mislukt' }), een trigger die afging ('id'), een teller ({ naam: 3 }).
     doel: (S, D, v) =>
       typeof v === 'string' ? !!doelVan(S, v) && doelVan(S, v).stand === 'af' : Object.entries(v).every(([id, stand]) => !!doelVan(S, id) && doelVan(S, id).stand === stand),
@@ -212,19 +231,22 @@
     // bericht de camera erheen, js/ui.js).
     bericht: (S, D, v) => {
       const b = typeof v === 'string' ? { tekst: v } : v;
-      const g = b.gebied ? gebiedVan(S, b.gebied) : null;
+      const g = b.gebied ? gebiedVan(S, b.gebied, D) : null;
       T.zeg(D, T.tGegevens(b.tekst), b.toon || '', g ? middenVan(g) : undefined);
     },
     // Een doel: { id, tekst, hoofd } zet het erbij (het hoofddoel staat linksboven, T.doelLinksboven); { id, stand: 'af' }
-    // of 'mislukt' zet het af. Een bericht zegt het allebei.
+    // of 'mislukt' zet het af. Een bericht zegt het allebei. Met `gebied` wijst het naar een plek (2c, D2): het midden van
+    // het gebied staat op de minikaart zolang het doel open is (T.doelPlekken, js/balk.js), en een klik op het bericht
+    // brengt je erheen; krijgt een doel dat er al is een gebied, dan zegt het level het (een bericht met dat gebied).
     doel: (S, D, v) => {
       if (!S.scenario) return;
       let d = doelVan(S, v.id);
+      const g = v.gebied ? gebiedVan(S, v.gebied, D) : null;
       if (!d) {
-        d = { id: v.id, tekst: v.tekst || '', hoofd: !!v.hoofd, stand: 'open' };
+        d = { id: v.id, tekst: v.tekst || '', hoofd: !!v.hoofd, stand: 'open', plek: g ? middenVan(g) : null };
         S.scenario.doelen.push(d);
-        if (d.tekst) T.zeg(D, T.t('New goal: {doel}', { doel: T.tGegevens(d.tekst) }));
-      }
+        if (d.tekst) T.zeg(D, T.t('New goal: {doel}', { doel: T.tGegevens(d.tekst) }), '', d.plek || undefined);
+      } else if (g) d.plek = middenVan(g);
       if (!v.stand || v.stand === d.stand) return;
       d.stand = v.stand;
       if (d.stand === 'af') T.zeg(D, T.t('Goal reached: {doel}', { doel: T.tGegevens(d.tekst) }), 'goed');
@@ -238,8 +260,8 @@
     triggerUit: (S, D, v) => elk(v).forEach((id) => triggerVan(S, id) && (triggerVan(S, id).aan = false)),
     // Geven en nemen: { goud: 50, graan: -10 } (T.wijzigVoorraad).
     waar: (S, D, v) => Object.entries(v).forEach(([wat, n]) => T.wijzigVoorraad(D, wat, n)),
-    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), zoals een wilde overval; of { aantal, aangekondigd: true }:
-    // morgen, overdag, en een bericht vooraf, met de plek (de overval van de demo).
+    // Rovers: { aantal, overUren } (T.roversKomen, js/rovers.js), uit het dichtste kamp, zoals op het rooster; of { aantal,
+    // aangekondigd: true }: morgen, overdag, en een bericht vooraf, met de plek (de overval van de demo).
     rovers: (S, D, v) => T.roversKomen(D, v),
     // De punten van het jaar, voor het eindscherm (T.telPunten, js/einde.js): op Sint-Maarten, vóór de tiende.
     punten: (S, D) => T.telPunten(D),
@@ -247,6 +269,18 @@
     // uit (js/heer.js). Weigeren heeft altijd zijn scène, want zijn leger is in elk spel het eind.
     scene: (S, D, v) => {
       D.scene = v;
+    },
+    // De uitslag van een veldslag (js/veldslag.js): voor elk leger, want samen speelt elke speler er een (lockstep: op elke
+    // computer hetzelfde, wie er ook kijkt). Wie de meeste mannen overhoudt, wint; evenveel is gelijk (en niet gewonnen).
+    // Het eindscherm zegt het, met hoeveel er van elke kant staan.
+    uitslag: (S) => {
+      for (const D of S.dorpen) {
+        const wij = T.legerVan(D).length;
+        const zij = Math.max(0, ...S.dorpen.filter((x) => x !== D).map((x) => T.legerVan(x).length));
+        const kop = wij > zij ? T.t('Victory') : wij === zij ? T.t('A draw') : T.t('Defeat');
+        const tekst = T.t('{wij|# of your men is still standing|# of your men are still standing}, against {zij}.', { wij, zij });
+        T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: wij > zij, kop, tekst });
+      }
     },
     // Het eind: { gewonnen, kop, tekst } (T.spelUit, js/einde.js; het eindscherm in js/hud.js).
     einde: (S, D, v) => T.spelUit(D, { reden: 'scenario', dag: dagNu(S), gewonnen: !!v.gewonnen, kop: v.kop || null, tekst: v.tekst || null }),
@@ -259,12 +293,15 @@
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
   // Wat linksboven staat (js/main.js): in je eigen dorp het hoofddoel van het scenario zolang het open is, anders het doel
-  // van de trede (T.tredeDoel, js/treden.js). { kop, tekst, deel }, of null.
+  // van de trede (T.tredeDoel, js/treden.js; een leger in een veldslag heeft geen trede). { kop, tekst, deel }, of null.
   T.doelLinksboven = function (S, D) {
     const hoofd = S.scenario && D === S.dorp ? S.scenario.doelen.find((d) => d.hoofd && d.stand === 'open') : null;
-    if (!hoofd) return T.tredeDoel(D);
+    if (!hoofd) return D.veldslag ? null : T.tredeDoel(D);
     return { kop: T.t('Goal'), tekst: veilig(T.tGegevens(hoofd.tekst)), deel: null };
   };
+
+  // Waar de open doelen van je eigen dorp naar wijzen ([{ x, y }]): de minikaart zet er een ring om (js/balk.js).
+  T.doelPlekken = (S) => (S.scenario ? S.scenario.doelen.filter((d) => d.stand === 'open' && d.plek).map((d) => d.plek) : []);
 
   // ---------------------------------------------------------------------------------------------
   // De keuring
@@ -274,6 +311,7 @@
   // dat niemand kent, een gebied, trigger of doel dat er niet is, een dag uit het zaad zonder naam, en een doel dat nooit
   // af kan (geen trigger zet het af). Leeg: het is goed. Zoals T.keurQuests voor de quests tot 23 okt.
   const HEER_WOORDEN = ['brief', 'komt', 'staat', 'betaald', 'geweigerd', 'weg'];
+  const HOL_WOORDEN = ['staat', 'verslagen'];
   const SCENES = ['betalen'];
   T.keurScenario = function (level) {
     const fout = [];
@@ -281,6 +319,21 @@
     const triggers = (level && level.triggers) || [];
     if (level && level.eiland && !(Number.isInteger(level.eiland.zaad) && level.eiland.zaad >= 1)) fout.push('het eiland heeft een zaad, een heel getal vanaf 1'); // geen tekst
     if (level && level.plek != null && !level.eiland) fout.push(`de plek ${level.plek} vraagt een vast eiland: de namen verschillen per eiland`); // geen tekst
+    if (level && level.veldslag) {
+      const V = level.veldslag;
+      const K = T.KAARTEN[V.kaart];
+      if (!K) fout.push(`de kaart ${V.kaart} is er niet`); // geen tekst
+      if (!Number.isInteger(V.zaad)) fout.push('een veldslag heeft een zaad, een heel getal'); // geen tekst
+      if (!Array.isArray(V.legers) || V.legers.length < 2) fout.push('een veldslag heeft minstens twee legers'); // geen tekst
+      else if (K && V.legers.length > K.spelers) fout.push(`de kaart ${V.kaart} is voor ${K.spelers} spelers`); // geen tekst
+      for (const l of V.legers || []) for (const soort of Object.keys(l.soorten || {})) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`de soldaat ${soort} bestaat niet`); // geen tekst
+      if (V.punten != null && !(Number.isInteger(V.punten) && V.punten > 0)) fout.push('de punten van een veldslag zijn een heel getal boven 0'); // geen tekst
+      (V.legers || []).forEach((l, i) => {
+        if (!l.soorten && !(l.veldheer && V.punten)) fout.push(`leger ${i + 1} heeft geen soldaten, en geen veldheer met punten om te kopen`); // geen tekst
+        const kost = Object.entries(l.soorten || {}).reduce((som, [soort, n]) => som + (T.SOLDAAT_SOORTEN[soort] ? T.soldaatPrijs(soort) * n : 0), 0);
+        if (V.punten && kost > V.punten) fout.push(`leger ${i + 1} kost ${kost} punten, meer dan ${V.punten}`); // geen tekst
+      });
+    }
     if (level && level.rand && ![level.rand.b, level.rand.h].every((n) => Number.isInteger(n) && n >= T.randMinstens())) {
       fout.push(`een rand is minstens ${T.randMinstens()} bij ${T.randMinstens()} stukken`); // geen tekst
     }
@@ -288,7 +341,10 @@
       const wie = `dorp ${i + 1}`; // geen tekst
       for (const soort of d.wacht || []) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`${wie}: de soldaat ${soort} bestaat niet`); // geen tekst
       for (const soort of d.dicht || []) if (!T.GEBOUWEN[soort]) fout.push(`${wie}: het gebouw ${soort} bestaat niet`); // geen tekst
+      if (d.hol && !(Number.isInteger(d.hol.bende) && d.hol.bende >= 1)) fout.push(`${wie}: het hol heeft een bende van minstens één man`); // geen tekst
     });
+    const heeftHol = ((level && level.dorpen) || []).some((d) => d.hol);
+    if (gebieden.hol) fout.push("gebied hol is van het spel: het hol van het dorp; geef het een andere naam"); // geen tekst
     for (const [naam, g] of Object.entries(gebieden)) {
       const rond = g && [g.x, g.y, g.r].every(Number.isFinite);
       const vierkant = g && [g.x, g.y, g.b, g.h].every(Number.isFinite) && g.b > 0 && g.h > 0;
@@ -296,8 +352,9 @@
     }
     const ids = triggers.map((t) => t.id);
     const lotten = {};
-    const doelen = { erbij: new Set(), af: new Set(), genoemd: new Set() };
-    const isGebied = (wie, naam) => gebieden[naam] || fout.push(`${wie}: gebied ${naam} is er niet`); // geen tekst
+    const doelen = { erbij: new Set(), af: new Set(), genoemd: new Set(), uitslag: false };
+    const isGebied = (wie, naam) =>
+      (naam === 'hol' ? heeftHol : gebieden[naam]) || fout.push(naam === 'hol' ? `${wie}: gebied hol vraagt een dorp met een hol` : `${wie}: gebied ${naam} is er niet`); // geen tekst
     const isTrigger = (wie, id) => ids.includes(id) || fout.push(`${wie}: trigger ${id} is er niet`); // geen tekst
     triggers.forEach((t, i) => {
       const wie = `trigger ${t.id || i + 1}`; // geen tekst
@@ -317,6 +374,11 @@
         if (v.na) isTrigger(wie, v.na.trigger);
         if (v.trigger) elk(v.trigger).forEach((id) => isTrigger(wie, id));
         if (v.heer) for (const w of elk(v.heer)) if (!HEER_WOORDEN.includes(w)) fout.push(`${wie}: de heer kent ${w} niet`); // geen tekst
+        if (v.hol != null && !HOL_WOORDEN.includes(v.hol)) fout.push(`${wie}: het hol is 'staat' of 'verslagen'`); // geen tekst
+        if (v.hol != null && !heeftHol) fout.push(`${wie}: de voorwaarde hol vraagt een dorp met een hol`); // geen tekst
+        if (v.overval != null && !(typeof v.overval === 'number' || (typeof v.overval === 'object' && (v.overval.minstens != null || v.overval.minder != null)))) {
+          fout.push(`${wie}: overval is een getal of { minstens, minder }`); // geen tekst
+        }
         if (v.inGebied) isGebied(wie, v.inGebied.gebied);
         if (v.leegGebied) isGebied(wie, v.leegGebied);
         if (v.doel) (typeof v.doel === 'string' ? [v.doel] : Object.keys(v.doel)).forEach((id) => doelen.genoemd.add(id));
@@ -324,8 +386,10 @@
       for (const doe of elk(t.dan)) {
         for (const woord of Object.keys(doe)) if (woord !== 'wie' && !T.GEVOLGEN[woord]) fout.push(`${wie}: het gevolg ${woord} bestaat niet`); // geen tekst
         if (doe.bericht && doe.bericht.gebied) isGebied(wie, doe.bericht.gebied);
+        if (doe.doel && doe.doel.gebied) isGebied(wie, doe.doel.gebied);
         if (doe.scene && !SCENES.includes(doe.scene)) fout.push(`${wie}: de scène ${doe.scene} bestaat niet`); // geen tekst
         for (const id of elk(doe.triggerAan).concat(elk(doe.triggerUit))) isTrigger(wie, id);
+        if (doe.uitslag) doelen.uitslag = true;
         if (doe.doel) {
           if (!doe.doel.id) fout.push(`${wie}: een doel heeft een id`); // geen tekst
           else if (doe.doel.tekst) doelen.erbij.add(doe.doel.id);
@@ -336,7 +400,9 @@
       }
     });
     for (const id of doelen.genoemd) if (!doelen.erbij.has(id)) fout.push(`doel ${id} komt er nergens bij (een doel met een tekst)`); // geen tekst
-    for (const id of doelen.erbij) if (!doelen.af.has(id)) fout.push(`doel ${id} kan nooit af: geen trigger zet het af`); // geen tekst
+    // Een level dat eindigt met de uitslag van een veldslag, hoeft zijn doel niet af te zetten: het doel is van iedereen,
+    // en de uitslag zegt voor elk leger of het won.
+    if (!doelen.uitslag) for (const id of doelen.erbij) if (!doelen.af.has(id)) fout.push(`doel ${id} kan nooit af: geen trigger zet het af`); // geen tekst
     return fout;
   };
 })(globalThis.Spel = globalThis.Spel || {});

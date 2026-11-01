@@ -141,13 +141,18 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 - **De tijd:** **`dag`** (`5`: vanaf dag 5; `{ van, tot }`; `{ tussen: [60, 220], lot: 'overval' }`: vanaf een dag
   daartussen, bij het begin getrokken uit het zaad, en dezelfde naam is dezelfde dag), **`uur`** (`'overdag'` als de zon
   op is, `'nacht'`, of `{ van, tot }`, ook over middernacht), **`na`** (`{ trigger, uren }` of `{ trigger, dagen }`, na
-  de laatste keer dat die afging).
+  de laatste keer dat die afging), **`seconden`** (zoveel seconden wereldtijd na het begin van het level: de tijd van een
+  veldslag, waar de dag stilstaat; 3a2, 28 okt).
 - **Het dorp:** **`waar`** (`{ graan: 20, hout: { minder: 5 } }`), **`bevolking`**, **`gebouw`** (`{ molen: 1 }`: zoveel
   af), **`trede`** (minstens), **`vlag`** en **`nietVlag`**.
 - **De kaart:** **`inGebied`** (`{ gebied, aantal, soort }`: zoveel van het dorp in een gebied, het checkpoint),
   **`leegGebied`** (`'naam'`: geen vijand van het dorp meer in het gebied).
 - **Leven en dood:** `dood` (een mens met een naam, de aanvoerder, een groep), `gevallen` (een dorp zonder raadhuis en
-  zonder mensen).
+  zonder mensen), **`mannen`** (hoeveel van het leger nog staan, de soldaten, veteranen en de held, `T.legerVan`; met
+  `wie` van een ander dorp; 3a2), **`legers`** (hoeveel legers nog mannen hebben, van alle dorpen samen, dus voor elke
+  speler hetzelfde: het eind van een veldslag; 28 okt).
+- **De rovers** (2c, 28 okt): **`hol`** (`'staat'` of `'verslagen'`: het hol van het dorp, `dorpen[].hol`), **`overval`**
+  (hoeveel overvallen er op je land kwamen; een getal is minstens zoveel).
 - **De heer:** **`heer`** (de woorden van `T.heerStand`: brief, komt, staat, betaald, geweigerd, weg), **`gunst`** en
   **`vertrouwen`** (`js/bazen.js`; zonder die spelregel nooit).
 - **Het scenario zelf:** **`doel`** (`'id'`: af, of `{ id: 'mislukt' }`), **`trigger`** (ging af), **`teller`**
@@ -155,8 +160,12 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
 
 **Dan** (de gevolgen; **vet** is gebouwd):
 - **Zeggen:** **`bericht`** (een zin, of `{ tekst, toon, gebied }`: met een gebied brengt een klik je erheen), `brief`
-  (een brief met de tekst van het level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`).
-- **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het),
+  (een brief met de tekst van het level; `BRIEVEN` krijgt één soort erbij), `gesprek` (een uit `T.GESPREKKEN`). De brief
+  bij het begin is er (2c, 28 okt): de **`inleiding`** van het level staat in de eerste brief van de heer, de benoeming;
+  een brief midden in een level komt als een level hem vraagt.
+- **Sturen:** **`doel`** (`{ id, tekst, hoofd }` erbij, `{ id, stand: 'af' }` of `'mislukt'`; een bericht zegt het;
+  met **`gebied`** wijst het naar een plek, met een gouden ring op de minikaart en het vaandel op de plek zolang het
+  open is: D2 van 2c),
   **`zetVlag`** en **`wisVlag`**, **`teller`** (`{ golven: 1 }`), **`triggerAan`** en **`triggerUit`**.
 - **Mensen:** `mensen` (gezinnen, soldaten, een mens met een naam), **`rovers`** (`{ aantal, overUren }`: de bestaande
   overval, voor een akker of anders een stapel; `{ aantal, aangekondigd: true }`: morgen, overdag, met een bericht vooraf
@@ -167,10 +176,17 @@ rovers; zonder `wie` de eerste speler); in skirmish `elk`.
   het begin dicht is, staat sinds 1b bij het dorp, `dorpen[].dicht`, en `bouw` komt als een level iets later opent).
 - **Het eind:** **`scene`** (`'betalen'`: betaal je de heer, dan halen zijn mannen het, rijdt hij weg, en is het uit;
   `D.scene`, gebouwd in 1b), **`punten`** (`T.telPunten`, gebouwd in 1b), **`einde`** (`{ gewonnen, kop, tekst }`:
-  `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level).
+  `T.spelUit`, reden `'scenario'`, en het eindscherm met de kop en de tekst van het level), **`uitslag`** (het eind van
+  een veldslag, voor elk leger: wie de meeste mannen heeft, wint, evenveel is gelijk; de kop en de tekst geeft het spel;
+  3a2; een level met een uitslag hoeft zijn doel niet af te zetten, want dat doel is van iedereen).
+
+**`wie` zonder nummer is de speler: het eerste dorp** (`S.dorpen[0]`), niet het dorp van dit scherm (`S.dorp`): samen
+speelt elke computer een ander dorp, en een trigger moet op elke computer hetzelfde doen (28 okt; Marcel: "Vergeet niet
+dat dit ook in multiplayer allemaal moet werken"). Een level voor samen noemt de dorpen bij nummer.
 
 **Namen op de kaart:** een gebied (een rechthoek of kring van tegels), een plek (één tegel), een mens of een groep met een
-naam ("the miller"). De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
+naam ("the miller"). Eén gebied geeft het spel zelf: **`hol`**, het hol van het dorp (2c), want waar dat ligt, weet pas het
+spel. De editor geeft de namen; een trigger noemt ze. **Een checkpoint** (6c) is een gebied met een
 trigger `inGebied`. Je ziet het als een doel ernaar wijst (een vaandel op de plek en de ping op de minikaart), anders niet.
 
 **Doelen** staan in `S.scenario.doelen` (een tekst en een stand: open, af, mislukt). Het vak linksboven toont het
@@ -259,11 +275,24 @@ merchants, dungeon keeper level select etc.").
   voorlopig een"; `code.md` bij `js/campagne.js`): *Campaign* op het titelscherm (niet in de demo), eerst als rij
   hoofdstukken: af met een vinkje, het volgende open,
   de rest op slot, en wat af is blijft op je computer. Het eiland staat één keer, bij de campagne (`levels/campagne.js`),
-  en elk hoofdstuk noemt zijn level, zijn dorpsplek en zijn rand; hoofdstuk 1 is het demojaar op het campagne-eiland, met
-  een rand van 5 bij 5 stukken. Of een spel de demo is of een hoofdstuk, zegt hoe het begon, niet het level: als hoofdstuk
+  en elk hoofdstuk noemt zijn level, zijn dorpsplek en zijn rand; hoofdstuk 1 is het demojaar op het campagne-eiland, in
+  Oakley met een rand van 7 bij 7 stukken (tot 27 okt Millcombe, 5 bij 5; hieronder). Of een spel de demo is of een hoofdstuk, zegt hoe het begon, niet het level: als hoofdstuk
   zegt het eindscherm of het af is (betalen op Sint-Maarten is gewonnen; zijn leger, een leeg dorp of weggejaagd
-  verloren). Claude koos eiland 5: daar ligt Millcombe het verst van het kasteel (1721 tegels), dus hoofdstuk 1 begint
-  aan het verre eind; bij Oldland ligt een roverskamp op 190 tegels (voor 2c). Een hoofdstuk heet naar zijn plek, en
+  verloren). Claude koos eiland 5: daar ligt Millcombe het verst van het kasteel (1721 tegels), dus hoofdstuk 1 begon
+  aan het verre eind; bij Oldland ligt een roverskamp op 190 tegels (voor 2c). Sinds c3 (27 okt) komt een overval uit
+  een kamp binnen de rand, en Millcombe heeft er geen (het dichtste ligt 906 tegels weg), dus hoofdstuk 1 ging naar
+  Oakley (Marcel: "H1"): 1295 tegels van het kasteel, met een kamp op 210, en een rand van 7 bij 7 (op eiland 5 hebben
+  alleen Oldland en Oakley een kamp binnen 7 bij 7). Zo trekt het verhaal van Oakley naar Oldland (630 van het kasteel).
+  **Hoofdstuk 2, het rovershol, gebouwd op 28 okt** (werklijst K, 2c; `levels/rovershol.js`): in Oldland, 7 bij 7, met
+  de wacht van hoofdstuk 1, het hol (10 man, een palissade, 60 graan en 20 goud), de overvallen op het rooster, de
+  inleiding in de eerste brief, het hoofddoel *Destroy the robbers' den before Martinmas.*, na de eerste overval een
+  ring om het hol op de minikaart, gewonnen als het hol valt, mislukt als de heer op Sint-Maarten komt en het staat er
+  nog.
+  Een hoofdstuk met een overval heeft een kamp binnen zijn rand (`test/campagne.test.cjs`). **Een hoofdstuk speelt elke
+  keer hetzelfde lot** (Marcel, 28 okt: "lot gelijk, de campaign moet denk ik wel betrouwbaar zijn. Je wilt daarin
+  dezelfde speelervaring"): het zaad van het dorp is het zaad van het eiland, dus hetzelfde weer, dezelfde dag van de
+  overval en dezelfde voorvallen, zoals Knights and Merchants; de speeltest van een hoofdstuk heeft dus één zaad nodig.
+  Een hoofdstuk heet naar zijn plek, en
   speelt met de spelregels die de browser het laatst koos, zoals New game. De moeilijkheid komt met de AI-spelers (8), en
   het land als keuzescherm daarna (eerst een proefplaat).
 - **Het land is het keuzescherm**, zoals de kaart van Knights and Merchants en het land van Dungeon Keeper: één gemaakt
@@ -287,7 +316,8 @@ merchants, dungeon keeper level select etc.").
   Merchants en Age of Empires (Marcel, 23 okt, I1).
 - **Een schets van de hoofdstukken**, niet besloten; elk leert één ding, zoals de campagnes van Age of Empires:
   1. de aankomst en het eerste jaar (het demojaar);
-  2. de rovers van het hol (werklijst K);
+  2. de rovers van het hol (werklijst K; **besloten** op 27 okt, bij K "2c": bij Oldland, van niets, het hol weg vóór
+     Sint-Maarten);
   3. het buurdorp: een bond of een strijd;
   4. de koning, of de opstand;
   5. het kasteel van de heer (de finale; met het belegeren van 7).
@@ -309,6 +339,77 @@ skirmish.
   Dan stellen ze op, elk in zijn eigen strook aan een kant van de kaart, zonder de ander te zien (de mist). Zijn ze
   allebei klaar, of is de tijd van de voorbereiding om, dan begint het gevecht. Wie geen mannen meer heeft, verliest
   (voorstel).
+- **Besloten voor de veldslag** (Marcel, 28 okt, op het plan van stap 3: "B1, c2, D1, F2, L2, H2, E2"):
+  - **B1, de militie kost 1:** de hooivork krijgt een waarde, een getal in de werkbank; de rest van de prijs blijft de
+    waarde van de stukken.
+  - **C2, eigen kleine kaarten:** "we hebben een aantal kleinere skirmish maps nodig. Dit zijn veel kleinere werelden met
+    obstakels die je kunt gebruiken, hoogtes etc." Geen uitsnede van het eiland, maar een eigen kleine wereld per kaart.
+  - **D1, opstellen:** je mannen staan vanzelf in een linie in je strook, en in de voorbereidingstijd verschuif je ze.
+  - **F2, met een held:** elke kant een held, "maar keuze uit x aantal vaste helden".
+  - **L2, een kleur per speler:** "elke speler een eigen kleur" (de wapenrok in de kleur van de speler; niet een ring).
+  - **H2, alle soorten te koop**, en erbij: "Archer, Knights, Maceman".
+  - **E2, een tijdslimiet**, "instelbaar in de skirmish lobby".
+- **Besloten, de vervolgvragen** (Marcel, 28 okt):
+  - **De kaarten:** de eerste is *The Ford* (een kleine wereld van zo'n 96 bij 96 tegels, een rivier van noord naar zuid
+    met twee voorden en een brug, een heuvel bij elke strook, bos op de flanken, en rotsen die bij een voorde een smalle
+    doorgang maken; voor twee spelers), "maar niet altijd dezelfde map, ook hierin moet wel variatie mogelijk zijn en
+    uiteindelijk ook ruimte om voor spelers zelf maps te maken". Een kaart is dus een recept met een zaad: de opzet ligt
+    vast, het zaad varieert de rest; en een recept is gegevens, zodat de editor (4) en later een speler er een kunnen
+    maken.
+  - **De hoogte (a):** schutters op een heuvel schieten 2 tegels verder, en vanaf een heuvel zie je verder. Verder geen
+    regel.
+  - **De Knight (R1): te paard**, "we pakken dit thuis weer op" (de art en het paard thuis, in Blender).
+  - **De Maceman (K2): ook in het dorp**: de wapenmaker maakt knotsen, het wachthuis leidt ze op; de knots slaat door een
+    harnas heen.
+  - **De helden heten Generaals** (F2): "Ze inspireren alleen troepen die in de buurt zijn. Deze troepen vechten dan
+    harder en krijgen een armour buff. De helden zelf kunnen we allemaal hun eigen wapen hebben. eenmaal dood vecht de
+    rest door tot het eind." Geen kracht per generaal (dat klonk Marcel "beetje unbalanced"): elke generaal geeft
+    hetzelfde, en verschilt in zijn wapen.
+  - **De kleur per speler:** de kleurlaag in de tekeningen doet de Blender-sessie (190); "Thuis op de computer wordt alles
+    gerenderd."
+- **Op de eerste kaart** (Marcel, 28 okt, op *The Ford*): "Heuvels mogen hoger", "niet bij elke map een rivier door het
+  midden maar dit is oke", en "Er moet voldoende open zijn voor het gevecht. Bomen en bossen waar troepen doorheen kunnen
+  lopen hebben extra dekking." Dus: hogere heuvels, minder en kleinere bossen op de kaart, de volgende kaarten met een
+  andere opzet, en troepen lopen door een bos en hebben daar dekking (hoe precies: vervolgvraag). **Besloten** (Marcel, 28
+  okt: "1 misschien wanneer je achter een boom staat", "2 d1", en na de uitleg "A dan"): een boom houdt het zicht al
+  tegen, dus wie vlak achter een boom staat (gezien vanaf de schutter), wordt nu al niet geraakt; dat blijft zo. Bossen
+  blijven in de weg staan; er komt geen regel bij.
+- **Het plan van stap 3** (Claude, 28 okt): **3a** een kleine wereld uit een recept (*The Ford*) en een veldslag zonder
+  economie op die kaart, met een eenvoudige veldheer, gewonnen, verloren of de tijd om, de militie voor 1, en een
+  proefbank (`npm run veldslag`); **3b** de lobby (kaart, zaad, punten, tijd, per plek mens of AI, kopen, opstellen);
+  **3c** de kleur per speler (met 190); **3d** de generaals; **3e** de knotsdrager (en thuis de ridder); **3f** de veldheer
+  in drie standen; **3g** meer kaarten, en de hoogte; **3h** nalopen. **Stand** (28 okt): 3a1 (de kaart) en 3a2 (de
+  slag: twee legers in een linie in hun strook, de dag staat stil, 1×, gewonnen, verloren of de tijd om, met
+  `Spel.debug.veldslag()`) en 3a3 (de veldheer, `js/veldheer.js`, en de proefbank `npm run veldslag`) zijn gebouwd; de
+  militie voor 1 komt met het kopen in 3b.
+- **De lobby, besloten** (Marcel, 28 okt, op het plan van 3b: "1 ja, 2 b, 3 ja, 4 ja, 5, Nee helden zijn generaals"):
+  **Skirmish** op het titelscherm, ook in de demo voor Next Fest. Elke kant krijgt evenveel punten, standaard 40 (nu acht
+  speermannen en vier boogschutters), van 20 tot 200 in stappen van 10; de prijs is de waarde van de stukken, de militie
+  1. De AI koopt tot de standen van 3f een van drie mixen, gekozen uit het zaad, zodat geen slag hetzelfde is. Na Begin
+  stellen de mannen zich op, en is er een voorbereiding (standaard 60 seconden, een getal in de werkbank) waarin je ze
+  binnen je strook verschuift; met *Fight!* begin je eerder. En de held van een leger is in een skirmish een **generaal**
+  (3d komt dus mee): niet de aanvoerder van het dorp. **Gebouwd** (3b1, 28 okt): de lobby, het kopen en de mixen van de
+  AI (`code.md` bij `js/veldslag.js`). De proefbank (`npm run veldslag -- --punten 40 --zaden 1-90`) liet meteen de
+  balans zien: de mix *schutters* won 38 van zijn 39 slagen tegen een andere, *gewoon* 19 van 37, en *zwaar* 5 van 48.
+  Een boogschutter voor 2 punten is te goedkoop, of de zware soorten te duur (vraag aan Marcel).
+- **De voorbereiding en het scherm van een slag, besloten** (Marcel, 30 okt, op het plan van 3b2 en 3b3: "1. In de ui
+  balk, daar is ruimte voor buiten de campaign en reguliere spel. 2. A 3. b 4. A"): de klok van de voorbereiding en
+  *Fight!* staan in de balk onderaan (in een slag staat daar geen dorp); zolang de voorbereiding loopt, ligt er een
+  lichte rand om je strook; stuur je je mannen erbuiten, dan lopen ze tot de rand; en na de slag speelt *Again* dezelfde
+  slag nog eens (kaart, zaad en leger), en brengt *Lobby* je terug naar de lobby met je keuzes. Verder, uit het plan:
+  *Fight!* is een opdracht, de slag begint als iedereen klaar is of de tijd om is, de tijd van de slag loopt vanaf
+  *Fight!*, en de AI blijft in zijn linie staan en is meteen klaar (zelf opstellen komt met zijn standen in 3f).
+  **Gebouwd** (3b2 en 3b3, 30 okt; `code.md` bij `js/veldslag.js`): ook valt de held in een slag, dan neemt niemand het
+  over (zoals de generaals), en staat linksboven alleen het doel van de slag. In de cloud in de browser nagelopen, van de
+  voorbereiding tot het eindscherm en terug naar de lobby.
+- **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
+  mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
+  de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en
+  terugtrekken komen met de standen in 3f. Gebouwd (28 okt): zie `code.md` bij `js/veldheer.js`. Wat de proefbank
+  vond: dertig slagen eindigen allemaal, in gemiddeld 53 seconden; wie eerst in de tik kwam, sloeg eerst, en een bevel
+  over de hele kaart kostte voor twaalf man 25 tot 45 ms in één tik. **Besloten** (Marcel, 28 okt: "1 tik alle klappen
+  aan einde", "per geselecteerde groep 1 pad"), en gebouwd: `code.md` bij `js/gevecht.js` en `js/kiezen.js`. En: strook A
+  van *The Ford* wint drie van de vier, wie er ook staat (`opmerkingen.md`; voor 3g).
 - **De belegering** (E3): de verdediger kiest een kasteel uit een lijst (gemaakt in de editor, door ons en later door
   spelers), of bouwt er zelf een in de voorbereiding, met een tijd en een budget; hij koopt zijn bezetting met punten.
   De belegeraar koopt met meer punten (een getal in de werkbank) zijn leger en zijn ladders, ram en blijde (189g). De
@@ -381,7 +482,8 @@ mogelijk zijn. Dus zowel regulier spel als skirmish. In multiplayer moet je ook 
    (Marcel, 24 okt: "Stap 2a: kaart en rand"): **2a, de kaart, gebouwd op 24 okt** (1, "De rand"; `code.md` bij
    `js/scenario.js`): een vast eiland, een plek op naam en de rand; **2b, gebouwd op 24 okt** (6; `code.md` bij
    `js/campagne.js`), *Campaign* op het titelscherm als rij hoofdstukken met het demojaar als hoofdstuk 1, en het land met
-   vaandels daarna (eerst een proefplaat); **2c**, het eerste echte hoofdstuk, het rovershol (werklijst K).
+   vaandels daarna (eerst een proefplaat); **2c**, het eerste echte hoofdstuk, het rovershol (werklijst K, "2c";
+   Marcel, 27 okt: "A1, B1, C1, D2, E1; c3 A1 B1 C1, demo mee"), in vijf stappen: c3, c4, het hol, het level, nalopen.
 3. **De veldslag:** de punten, kopen en opstellen, een kaart uit de generator, en de veldheer in drie standen (8). Klein,
    want het vechten is er, en meteen een proefbank voor de balans.
 4. **De editor**, in twee stappen: eerst de plekken, de dorpen, de gebieden, de triggers en de doelen op een eiland uit de

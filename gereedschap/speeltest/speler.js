@@ -570,7 +570,8 @@
       b.om[wie] = (b.om[wie] || 0) + 1;
     });
     na('zetVoorwerp', (r, voor, w_, v) => {
-      if (!v || w_ !== s.dorp.wereld) return;
+      // een hoofdstuk legt zijn land (het hol, de tent van de wacht) voordat er een dorp is (T.nieuwSpel)
+      if (!v || !s.dorp || w_ !== s.dorp.wereld) return;
       if (v.soort === 'boompje') bosJaar().geplant++;
       else if (groeit > 0 && v.geplant != null) bosJaar().jong++;
       else if (groeit > 0 && T.NATUUR.bos.telt(w_, v.x, v.y, v)) bosJaar().volgroeid++;
@@ -624,7 +625,17 @@
       ongezaaid += a.ongezaaid ? a.ongezaaid.size : 0;
     }
     return Object.assign(tel(), {
-      tekst: s.dorp.einde ? `${{ leeg: 'het dorp leeg', verjaagd: 'weggejaagd door het dorp' }[s.dorp.einde.reden] || 'het ambt kwijt'} op ${datum()}` : `het jaar uit, tot ${datum()}`,
+      tekst: !s.dorp.einde ? `het jaar uit, tot ${datum()}`
+        : s.dorp.einde.reden === 'scenario' ? `${s.dorp.einde.gewonnen ? 'gewonnen' : 'mislukt'} op ${datum()}${s.dorp.einde.kop ? ` (${s.dorp.einde.kop})` : ''}`
+          : `${{ leeg: 'het dorp leeg', verjaagd: 'weggejaagd door het dorp', leger: 'het leger van de heer' }[s.dorp.einde.reden] || 'het ambt kwijt'} op ${datum()}`,
+      // Een hoofdstuk van de campagne (--hoofdstuk): de doelen, de triggers die afgingen (met de dag), en het hol.
+      hoofdstuk: s.scenario && s.scenario.hoofdstuk ? {
+        id: s.scenario.hoofdstuk,
+        doelen: s.scenario.doelen.map((d) => `${d.id}: ${d.stand}${d.plek ? ' (met plek)' : ''}`),
+        triggers: s.scenario.triggers.filter((t) => t.gedaan).map((t) => `${t.id} op dag ${Math.floor(t.laatst / 24)}`),
+        overvallen: (s.dorp.rovers && s.dorp.rovers.geweest) || 0,
+        hol: T.holStand(s.dorp),
+      } : null,
       ambtKwijt: !!s.dorp.einde && s.dorp.einde.reden === 'ambt',
       dorpLeeg: !!s.dorp.einde && s.dorp.einde.reden === 'leeg',
       // De twee bazen (js/bazen.js; vraag 106): waar ze eindigden, hoe laag ze kwamen, de waarschuwingen, waarom je weg
@@ -691,7 +702,7 @@
     // opslaan: { dag, bewaar }: op de eerste stille stap vanaf die dag opslaan en stoppen (bewaar), of alleen
     // het lot opnieuw trekken (hetzelfde jaar zonder opslaan). verder: { eenKeer }: na het herladen verder
     // met Verder op het titelscherm, met wat de speler al één keer deed.
-    async speel({ speler, zaad, opslaan = null, verder = null, jaren = 1 }) {
+    async speel({ speler, zaad, opslaan = null, verder = null, jaren = 1, hoofdstuk = null }) {
       EIND = JAAR * jaren + 30;
       if (!verder) {
         zaai(Math.imul(zaad, 2654435761) ^ 0x5eed);
@@ -718,8 +729,20 @@
       } else {
         // Het titelscherm: een nieuw spel (js/menu.js), met de naam die het voorstelt (vraag 60). Dan de
         // benoemingsbrief: lezen, en aan het werk.
-        if (!klik('#menu [data-actie="nieuw"]')) throw new Error('er staat geen Nieuw spel op het titelscherm');
-        if (!klik('#menu [data-actie="begin"]')) throw new Error('er staat geen Begin onder de naam van het dorp');
+        if (hoofdstuk) {
+          // Een hoofdstuk (--hoofdstuk): de hoofdstukken ervoor tellen als af (op deze computer, js/campagne.js), dan
+          // Campaign en het hoofdstuk, zoals een mens.
+          const lijst = T.CAMPAGNE.hoofdstukken;
+          const i = lijst.findIndex((h) => h.id === hoofdstuk);
+          if (i < 0) throw new Error(`er is geen hoofdstuk ${hoofdstuk}`);
+          T.opslagPlek().setItem(`${T.OPSLAG_SLEUTEL}.campagne`, JSON.stringify(Object.fromEntries(lijst.slice(0, i).map((h) => [h.id, true]))));
+          if (!klik('#menu [data-actie="campagne"]')) throw new Error('er staat geen Campaign op het titelscherm');
+          if (!klik(`#menu [data-actie="hoofdstuk"][data-plek="${hoofdstuk}"]`)) throw new Error(`er staat geen hoofdstuk ${hoofdstuk} onder Campaign`);
+          klik('#menu [data-actie="ja"]'); // is er al een spel vanzelf bewaard, dan vraagt het eerst
+        } else {
+          if (!klik('#menu [data-actie="nieuw"]')) throw new Error('er staat geen Nieuw spel op het titelscherm');
+          if (!klik('#menu [data-actie="begin"]')) throw new Error('er staat geen Begin onder de naam van het dorp');
+        }
         if (!klik('#brief .heer-geef-knop') && T.ui.briefOpen()) T.ui.sluitBrief(s);
       }
       T.zetSnelheid(s, 30);

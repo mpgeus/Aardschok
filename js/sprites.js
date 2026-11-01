@@ -632,6 +632,46 @@
     return plekken.slice(0, n).sort((a, b) => a[1] - b[1]).map(([dx, dy]) => ({ deel: mand, dx, dy }));
   };
 
+  // Een ding van de aankleding van een roverskamp (js/rovers.js, spullenVoor; gereedschap/pixelart/aankleding.cjs): `soort`
+  // ('zitstam', 'spit', 'kar', ...), `richting` de kant van zijn voorkant (0 tot 3, vanaf ZO). Elke rij heeft zijn eigen
+  // cel. Het vel laadt pas als er iets van te zien is; tot dan null.
+  S.aankleding = function (soort, richting) {
+    const t = gegevens && gegevens.aankleding;
+    const r = t && t.rijen.find((q) => q.naam === soort);
+    if (!r || !laadAlsNodig(MAP + t.bestand)) return null;
+    return onthoud(`aankleding|${soort}|${richting}`, () => stuk(MAP + t.bestand, r.x + (richting % t.richtingen) * r.cel[0], r.y, r.cel[0], r.cel[1], r.anker));
+  };
+
+  // Een paal van de palissade om een rovershol, of een stuk van zijn poort (js/rovers.js, palenVan;
+  // gereedschap/pixelart/palissade.cjs): `rij` is de soort ('gewoon0', 'scheef-uit', 'gat', ...) of 'paal-lap', 'paal' of
+  // 'balk', `richting` de buitenkant (0 tot 15). Elke rij heeft zijn eigen cel op het vel (krap, kern.cjs rijenVel). Het
+  // vel laadt pas als er een palissade te zien is; tot dan null.
+  S.palissade = function (rij, richting) {
+    const t = gegevens && gegevens.palissade;
+    const r = t && t.rijen.find((q) => q.naam === rij);
+    if (!r || !laadAlsNodig(MAP + t.bestand)) return null;
+    return onthoud(`palissade|${rij}|${richting}`, () => stuk(MAP + t.bestand, r.x + (richting % t.richtingen) * r.cel[0], r.y, r.cel[0], r.cel[1], r.anker));
+  };
+
+  // De buit van een roverskamp (js/rovers.js, T.roverskampenBuit; gereedschap/pixelart/buit.cjs): 'klein', 'middel' of
+  // 'groot', met het anker op de grond in het midden van de hoop. Het vel laadt pas als er buit te zien is; tot dan null.
+  S.buit = function (maat) {
+    const t = gegevens && gegevens.buit;
+    const i = t ? t.maten.indexOf(maat) : -1;
+    if (i < 0 || !laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // Het vaandel van een doel (T.doelPlekken, js/scenario.js; gereedschap/pixelart/vaandel.cjs; werklijst K, 2c, D2): een
+  // tekening per stand van het wapperen (0 tot `standen` - 1), met het anker op de grond aan de voet van de staak. Het vel
+  // laadt pas als er een doel met een plek is; tot dan null. `S.vaandelStanden()`: hoeveel standen het vel heeft.
+  S.vaandel = function (stand) {
+    const t = gegevens && gegevens.vaandel;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, (stand % t.standen) * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+  };
+  S.vaandelStanden = () => (gegevens && gegevens.vaandel ? gegevens.vaandel.standen : 1);
+
   // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het
   // anker op de grond in het midden van de tegel. Null als het vel er niet is.
   S.hol = function () {

@@ -157,6 +157,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kijkt na dat het scherm die regels niet zelf aanroept. **Nog niet** (stap 6 van vraag 170, als een venster de tijd niet
   meer stilzet): de vensters (de handel, de velden, het slachten, de heer, de wetten, de brieven, de bode),
   de snelheid, en het debugvenster; het lopen van de schout en het gevecht in beurten zijn eruit (stap 2 en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
+- **Samen: wat elke regel en straks de lijn moeten** (28 okt; Marcel: "Vergeet niet dat dit ook in multiplayer allemaal
+  moet werken"). **Een regel vraagt nooit `S.dorp`**: dat is wat dit scherm speelt, en samen speelt elke computer een
+  ander dorp. Zo ging het mis: een trigger zonder `wie` vroeg `S.dorp` (nu de speler, het eerste dorp:
+  `T.scenarioDorp`, js/scenario.js), de uitslag van een veldslag gold alleen dat dorp (nu elk leger), en wie opzij mag
+  gaan vroeg of hij jouw aanvoerder was (`T.magOpzij`, js/lopen.js; nu een aanvoerder van welk dorp ook). Het scherm
+  mag `S.dorp` wel vragen (wat je ziet, hoort en kiest). **De opdrachten van een tik gaan per dorp** (`voerOpdrachtenUit`
+  sorteert op `o.dorp`, en van een dorp in de volgorde waarin het ze gaf), zodat het niet uitmaakt wanneer ze over de
+  lijn binnenkomen. **Over de lijn gaan alleen de opdrachten van het dorp dat de speler van die computer speelt**: wat
+  een veldheer (js/veldheer.js) geeft, geeft elke computer zelf in dezelfde tik, en een tweede keer zou het dubbel doen.
+  Getoetst in `test/veldslag.test.cjs` ("samen"): twee computers met hetzelfde begin en dezelfde opdrachten, de een
+  speelt leger A en de ander B, blijven letter voor letter gelijk tot de uitslag, met twee spelers en met twee
+  veldheren; met de oude trigger valt die toets om. Wat nog open is: `opmerkingen.md`.
 
 
 ### js/opslaan.js, js/menu.js en js/instellingen.js: opslaan en laden, het titelscherm, het menu en Settings
@@ -478,7 +490,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op (`tochtRoute` geeft null, hij wacht niet). Alles uit het nummer van het eiland en het open land, geen spelstaat; per
   kaart opnieuw als de kaart of het open land verandert (`grofVan`). Wat het kost, valt weg tegen het maken van het
   land zelf (`T.landStuk`, een profiel van 17 okt); de getallen `grofOnthouden` en `grofVooruit` in
-  `T.LOPEN_INSTELLINGEN`.
+  `T.LOPEN_INSTELLINGEN`. `T.groveWeg(w, van, doel)` (c3, 27 okt) geeft de hele grove weg als een rij middens van vakken,
+  voor wie buiten beeld reist (de rovers van een kamp, `js/rovers.js`), gezien vanaf het eiland van het doel; null als er
+  geen is. Gemeten op 27 okt: de eerste keer op een eiland zo'n 50 ms (de schets, `grofKost`), daarna 4 à 7 ms per nieuw
+  doel, en 0,3 ms voor een doel dat het al kent.
 
 ### js/praatje.js: een praatje
 
@@ -1136,6 +1151,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat linksboven (`T.doelLinksboven`, vanuit `js/main.js`, anders `T.tredeDoel`); het eind is `T.spelUit` met reden
   `'scenario'` (`js/einde.js`, het scherm in `js/hud.js`). Een gebied is een vak of een kring van tegels, en een
   voorwaarde erop loopt de wezens van de kaart af, niet de tegels (`minstensIn`, zonder lijst).
+- **De woorden van het rovershol** (werklijst K, 2c, stap 4, 28 okt): de voorwaarde `hol` ('staat' of 'verslagen',
+  `T.holStand` in `js/rovers.js`) en `overval` (hoeveel overvallen er op je land kwamen: `D.rovers.geweest`, dat `eind`
+  in `js/rovers.js` ophoogt voor een overval met rovers op de kaart, niet voor een die niet kwam). Het gebied `hol` heeft
+  elk level met een hol zonder het te noemen (`gebiedVan(S, naam, D)`: `T.holGebied(D)`, een kring tot de palissade),
+  want waar het ligt, weet pas het spel; een level mag geen eigen gebied zo noemen. Een doel met `gebied` wijst naar een
+  plek (D2): `d.plek` (bewaard, het midden van het gebied, of zijn eigen `plek`: die van het hol is voor de poort, twee
+  tegels buiten de palissade op het paadje), een klik op het bericht van een nieuw doel brengt je erheen, en
+  `T.doelPlekken(S)` geeft de plekken van de open doelen: de minikaart geeft ze een gouden ring (`js/balk.js`), en
+  `vaandelsInLijst` in `js/tekenen.js` zet er het vaandel (`T.sprites.vaandel(stand)`, `beelden/vaandel.png` uit
+  `gereedschap/pixelart/vaandel.cjs`, 3,5 kB, laadt pas als er een doel met een plek is), dat op de klok van het scherm
+  wappert (vier standen, vijf per seconde). Het item heeft geen punt, dus de mist laat het staan (`mistOverLijst`): je
+  ziet het ook boven land dat je nog niet kent of dat nog niet open is; niet in de fotomodus en niet in een scène.
+  Gemeten (28 okt, in de cloud, hetzelfde beeld): 1,1 ms met en 1,2 zonder, binnen de ruis;
+  krijgt een doel dat er al is een gebied, dan zegt het level het met een bericht met dat gebied. De zin van het level
+  voor de eerste brief is `inleiding` (`S.scenario.inleiding`; `benoemingInDeWildernis` in `js/brieven.js` zet hem vóór
+  de wetten). De keuring kent ze allemaal (een hol vraagt een dorp met een hol).
 - **De kaart van een level** (stap 2a, 24 okt; Marcel: "Stap 2a: kaart en rand"): `eiland: { zaad }`, `plek` (een naam)
   en `rand: { b, h }` (in stukken) gaan via `T.beginOpEiland` naar de maker (`T.laadGemaaktGehucht(zaad, { plek })`,
   `T.randOm`) en op de kaart (`w.rand`, `js/wereld.js`); de keuring wil een zaad vanaf 1, een plek alleen met een vast
@@ -1144,13 +1175,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `test/rand.test.cjs`.
 - **Een level** (stap 1b, 24 okt; Marcel: "1b nu"): een bestand in `levels/` (een script, geen JSON: dat laadt niet vanaf
   `file://`; in `index.html` na `js/scenario.js`) zet `T.LEVELS.<naam>`: een scenario met `dorpen` (per dorp wat het bij
-  het begin anders heeft: `wacht`, `dicht`, `wildeRovers`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
+  het begin anders heeft: `wacht`, `dicht`, `overvallen`). `T.nieuwSpel(makerZaad, level)` (`js/main.js`; een level, of
   null voor het volle spel; zonder: de demo als `T.DEMO_INSTELLINGEN.aan`) geeft het aan `T.beginOpEiland` (`js/begin.js`):
   dat keurt het (een fout gooit, want dat is een fout in het spel), geeft `T.nieuwDorp` wat het van het eerste dorp zegt,
   en start daarna het scenario. `T.proefdorp.begin(zaad, level)` doet hetzelfde voor de toetsen. **Het eerste level is
   het demojaar** (`levels/demojaar.js`): de wacht in een eigen tent (de tent draagt de lijst, `g.wacht`, voor
-  `T.zetBeginBewoners`), het wachthuis en de wapenmaker op slot (`D.dicht`, `T.isDicht` in `js/gebouwen.js`), geen wilde
-  rovers (`D.rovers.wilde === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
+  `T.zetBeginBewoners`), het wachthuis en de wapenmaker op slot (`D.dicht`, `T.isDicht` in `js/gebouwen.js`), geen overvallen
+  op het rooster (`D.rovers.overvallen === false`), een trigger op een dag uit het zaad voor de aangekondigde overval
   (`{ rovers: { aantal: 3, aangekondigd: true } }`, `js/rovers.js`), en een trigger als de heer komt (`{ heer: 'komt' }`)
   voor de punten (`punten`, `T.telPunten`) en de scène van het betalen (`scene: 'betalen'` zet `D.scene`; dan is betalen
   het eind, `js/heer.js`, en speelt `js/regie.js` de scène). Hoe een spel begon, zet wie het begint erbij (stap 2b): de
@@ -1159,14 +1190,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `S.scenario.hoofdstuk` welk. Zo leest geen regel meer een vlag van de demo; wat een spel is, gaat mee in wat bewaard wordt.
   Het getal van de overval en zijn dagen staan nu in het level, niet meer in de werkbank (die houdt `vooraf` en
   `voorDonker`, `T.ROVERS_INSTELLINGEN.aangekondigd`). Nog niet: `bouw` als gevolg (iets open of dicht midden in een
-  level), en `npm run teksten` voor de zinnen van een level (het demojaar heeft er geen).
+  level). **Het tweede level is het rovershol** (`levels/rovershol.js`, 2c, 28 okt): de wacht, het hol (`dorpen[].hol`),
+  de overvallen op het rooster, en vier triggers: het hoofddoel bij het begin, na de eerste overval het doel met het
+  gebied `hol`, gewonnen als het hol verslagen is, en mislukt als de heer komt en het staat er nog. `npm run teksten`
+  leest de zinnen van elk level (`zinnenVanLevel` in `gereedschap/teksten.cjs`: de inleiding, de berichten, de doelen en
+  het eind; het blok `T.LEVELS.<naam>` van `levels/<naam>.js`).
 
 ### js/campagne.js: de campagne
 
 - `js/campagne.js` (vraag 187, stap 2b, 24 okt; het ontwerp in `scenario.md`, 6; Marcel: hoofdstuk 1 "Op het
   campagne-eiland, 5×5", en voor het eiland "Kies jij er voorlopig een"): **de regels van de campagne**, zonder scherm en
   getoetst (`test/campagne.test.cjs`). De campagne zelf staat in `levels/campagne.js` (`T.CAMPAGNE`): één eiland (`eiland:
-  { zaad: 5 }`, waar Millcombe het verst van het kasteel ligt), en per hoofdstuk een `id`, een `titel` (een zin uit
+  { zaad: 5 }`; hoofdstuk 1 in Oakley, 7 bij 7, sinds c3 van vraag 170, want een overval komt uit een kamp binnen de
+  rand; hoofdstuk 2, het rovershol, in Oldland, 7 bij 7), en per hoofdstuk een `id`, een `titel` (een zin uit
   gegevens: `T.tGegevens`, en `npm run teksten` leest hem daar), een `level` (`T.LEVELS`), een `plek` en een `rand`.
   `T.hoofdstukLevel(id)` maakt het level waarmee het hoofdstuk begint: het level met het eiland, de plek en de rand erover,
   en `hoofdstuk: id`, zodat `S.scenario.hoofdstuk` zegt dat het een hoofdstuk is (zoals `T.demoLevel`, `js/einde.js`,
@@ -1177,6 +1213,113 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gewonnen, volgende }`. `T.keurCampagne` keurt de campagne zoals `T.keurScenario` een level. Het scherm: *Campaign* op het
   titelscherm (`campagneScherm` en `speelHoofdstuk` in `js/menu.js`; niet in de demo), dat een hoofdstuk begint zoals Begin
   bij New game, met de naam van zijn plek; en op het eindscherm bij elk eind of het hoofdstuk af is.
+
+### js/veldslag.js: de veldslag
+
+- **De lobby** (3b1, 28 okt; Marcel: "1 ja, 2 b, 3 ja, 4 ja"): *Skirmish* op het titelscherm, ook in de demo
+  (`lobbyScherm`, `legerPapier` en `beginSlag` in `js/menu.js`; alleen scherm, in de module `lobby`). Links de kaart (zijn
+  naam, het nummer van het zaad, *Other map*, en het plaatje: `tekenKaartje`, de minikaart van de kaart beeld voor beeld
+  zoals in het spel, met een stip per strook, goud de jouwe), de punten van elke kant en de tijd (`stapper`: een regel met
+  min en plus; de grenzen en keuzes in `T.VELDSLAG_INSTELLINGEN.punten` en `minuten`); rechts op papier je leger, per soort
+  met zijn prijs (`T.soldaatPrijs`, js/soldaten.js). Min en plus zeggen waarom ze niet kunnen (niet meer punten dan je
+  hebt, niet minder punten dan je leger kost). Begin maakt een level (`T.veldslagLevel` met `punten`, jouw leger met zijn
+  soorten, de AI als `{ veldheer: true }` zonder soorten) en begint het zoals een hoofdstuk. Het plaatje maakt het eiland
+  van de kaart los (`T.veldslagPlaatje`, niet `T.eilandVan`: dat onthoudt er één, en het tekenen vraagt elk beeld het
+  grote eiland achter het titelscherm; 0,4 s per nieuw zaad). Een veldslag slaat niet vanzelf op (dat doet het spel elke
+  ochtend, en de dag staat stil), dus Continue blijft je dorp.
+
+- `js/veldslag.js` (vraag 187 en 188, stap 3; het ontwerp in `scenario.md`, 7; Marcel, 28 okt): **skirmish zonder
+  economie**, zonder scherm en getoetst (`test/veldslag.test.cjs`). Stap 3a1 (28 okt): **de kaart uit een recept**.
+  Een kaart is een recept in `levels/kaarten.js` (`T.KAARTEN`, gegevens die later de editor terugschrijft; de naam is een
+  zin uit gegevens, en `npm run teksten` leest hem): de maat, de heuvels, de rivier met zijn voorden en brug, de pas van
+  rotsen bij een voorde, het bos en de stroken van de spelers, in de maat van het scherm (`a` van links naar rechts, `b`
+  van boven naar onder; het land is de ruit |a| + |b| <= 1). **Een kaart is een klein eiland**: `T.eilandVan(w.eiland)`
+  met `{ zaad, recept }` maakt het met dezelfde stappen als het grote eiland (`maakKaart` in `js/eiland.js`), alleen de
+  vorm (`receptLand`), de hoogte (`receptHoogte`), de rivier (`receptRivier`: een rivier van het recept, glad en
+  slingerend zoals een rivier van het eiland, met zijn voorden en de plek van de brug), de streken (`receptStreek`: het
+  bos, de voorde als strand, en verder gras met heide) en de wegen (`receptWegen`: alleen een stukje weg dwars over de
+  rivier, waar `legBruggen` dan de brug legt) komen uit het recept. Zo werkt alles van het eiland er vanzelf op (de
+  stukken, de grond op de videokaart, de hoogte, de mist, de minikaart, de bruggen), en is er geen tweede soort wereld.
+  Het zaad schuift elk ding een stukje (`variatie` in het recept, `receptVan`): Marcel, 28 okt: "niet altijd dezelfde
+  map". Een voorde is een stuk rivier dat geen water is maar zand net boven het water (`voordeOp` in `T.eilandStuk`).
+  Op het open land staat hier en daar een boom (`bomen` in het recept), niet de bosjes van de kampen van het grote
+  eiland. Een kaart ligt op het eiland vanaf `T.KAART_OORSPRONG`, met zee eromheen. `T.veldslagWereld(recept, zaad)`
+  maakt de wereld: een kaart van dat eiland (`T.eilandKaart` met het recept), het land en een strook zee open
+  (`T.VELDSLAG_INSTELLINGEN.zee`), de rand eromheen (`w.rand`), de rotsen van de pas (het recept geeft hun tegels; ze
+  staan vast, dus ze zijn er altijd), en de hoogte van het eiland (`w.hoogte` met `eiland: { zaad, recept }`), ook als de
+  spelregel Hoogte uit staat. `w.eiland` draagt het recept, dus alles wat het eiland van een kaart opzoekt
+  (`T.eilandVan(w.eiland)`, op 19 plekken), krijgt het juiste. Gemeten (28 okt, Node): *The Ford* maken kost 300 à 550
+  ms.
+- Stap 3a2 (28 okt): **de slag zelf**. Een veldslag is een level (`scenario.md`, 7): `T.veldslagLevel({ kaart, zaad,
+  legers, minuten })` geeft `{ veldslag: { kaart, zaad, legers }, triggers }`, met vaste triggers in de woorden van elk
+  level: het doel *Defeat the enemy army.* (van iedereen; het gaat niet af, want dan was het voor de verliezer fout),
+  `legers` (`{ minder: 2 }`: hooguit één leger heeft nog mannen) en `seconden` voor de tijd, en het gevolg `uitslag`
+  (voor elk leger: wie de meeste mannen heeft, wint; js/scenario.js). Geen trigger vraagt naar één speler: samen speelt
+  elke computer een ander leger (28 okt; tot dan vroegen `gewonnen` en `verloren` het dorp van dit scherm). De keuring kijkt de
+  kaart, het zaad, het aantal legers (2 tot het aantal stroken) en de soorten na. `T.beginOpEiland` (js/begin.js) geeft
+  een level met `veldslag` aan `T.beginVeldslag`: de wereld van de kaart, `S.veldslag = { kaart, zaad }`, en per strook
+  een **leger als dorp** (`T.nieuwDorp` met een lege plek, het vak van de strook en een plein van 5 bij 5 in het midden;
+  `D.veldslag = true`; een leger met een veldheer is `D.ander`, een speler niet): geen kar, gezinnen of voorraad, maar zijn soldaten (`T.zetSoldaatBij`,
+  js/bewoners.js: een bewoner zonder huis met `p.soldaat`, en zijn poppetje) en zijn held (`T.zetHeld`: de aanvoerder
+  als bewoner, zodat je hem met de rest stuurt). De opstelling is de knop Line (`T.stuurMannen`, js/kiezen.js) naar de
+  voorkant van de strook, en ze staan er meteen op hun post; de held staat achter het midden. `T.legerVan(D)` zijn de
+  mannen die nog staan (de militie en de held). Wat een dorp heeft en een leger niet: de dag staat stil en er is geen
+  versneller (`S.veldslag` in `T.tikKalender` en `T.snelheidNu`, js/tijd.js), er zijn geen statussen dan het gevecht
+  (`inVeldslag` in `T.OORZAKEN`, js/statussen.js) en geen raad (`T.raadNu`, js/raad.js), en wie valt, valt in de slag,
+  niet door rovers (js/rovers.js). Getoetst: de linie, een minuut stilstaan, het gevecht tot het eind, en de tijd om.
+  Een leger met `veldheer: true` speelt de AI (`js/veldheer.js`); zonder keus is dat elk leger behalve het eerste. Met
+  `punten` in het level (3b1) koopt een veldheer zonder soorten zijn leger bij het begin (`maakLeger`: `T.veldheerKoopt`
+  met een lot uit het zaad van de slag en zijn strook, zodat elke computer hetzelfde koopt; de mix in `D.veldheer.mix`), en
+  kijkt de keuring na dat een speler niet meer kocht dan zijn punten.
+- Stap 3b2 (30 okt; Marcel: "1. In de ui balk", "2. A", "3. b"): **de voorbereiding**. Speelt er een mens mee, dan staat
+  in `S.veldslag.voorbereiding` `{ over, klaar }` (de seconden die nog over zijn, `VELDSLAG_INSTELLINGEN.voorbereiding`, en
+  de nummers van de legers die *Fight!* gaven), en heeft elk leger `D.strook` (de strook uit het recept, `{ a, b, cx, cy,
+  half }`). Zolang die er is, blijft elke plek van een formatie in de strook (`T.formatiePlekken`, js/kiezen.js, met
+  `T.naarStrook` en `T.inStrook`: wie je erbuiten stuurt, loopt tot de rand; het scherm toont dezelfde plekken), valt
+  niemand aan (`handelingSturen` en `T.volgVijand`), en wacht een veldheer (`T.werkVeldheerBij`). *Fight!* is de opdracht
+  `klaar` (js/tik.js, `T.legerKlaar`); `T.werkVeldslagBij` (in `T.wereldTik`, na de opdrachten) telt af, en zijn alle
+  spelers klaar of is de tijd om, dan gaan de voorbereiding en de stroken weg, zegt elk leger *The battle begins.*, en
+  staat in `S.veldslag.begon` de tijd van de wereld. Spelen alleen veldheren (de proefbank), dan is er geen
+  voorbereiding. De tijd van de slag is de trigger `slag` (js/scenario.js, `T.slagSeconden`): seconden sinds `begon`, niet
+  sinds het begin van het level. Op het scherm (js/balk.js, `T.ui.werkSlagBalkBij`, elk beeld, want de dag staat stil):
+  `body.veldslag` (stijl.css) haalt het dorp, de datum, de snelheid, de bazen, Build, de brief, de bode en de voorraad
+  weg; links in de balk bovenaan je mannen (`T.legerVan`), in het midden *Deploy* met de klok en *Fight!*, daarna
+  *Battle* met de tijd die over is (of zonder tijd hoe lang hij al duurt). De rand van je strook is een gloed op de grond
+  (`tekenStrook`, js/tekenen.js, met `T.strookRand`: hoe ver een tegel binnen de rand ligt, in tegels), dezelfde gloed als
+  het bouwbereik (`tekenGloed`) maar omgekeerd: het sterkst op de rand, en sterker, want hij ligt op het lichte gras. B
+  opent in een slag geen bouwmenu. Getoetst in `test/veldslag.test.cjs`.
+- Stap 3b3 (30 okt; Marcel: "4. A"): **het scherm van een slag**. Het eindscherm (`T.ui.toonEinde`, js/hud.js) heeft na
+  een slag geen jaar van een dorp, maar *Again* (`T.veldslagNogEens`: hetzelfde level uit `S.veldslag`, dat de kaart, het
+  zaad, de punten, de tijd en de legers van het level onthoudt; een veldheer koopt met hetzelfde zaad weer hetzelfde) en
+  *Lobby* (`T.ui.toonLobby`, js/menu.js, met `T.veldslagKeuzes`: de lobby met de keuzes van de slag); de tweede knop is
+  `tweede` in `T.ui.toonOverlay` (js/ui.js). Linksboven staat alleen het doel van de slag, nooit de trede van een dorp
+  (`T.doelLinksboven`), en valt de held, dan neemt niemand het over en zegt niemand het (`T.werkAanvoerderBij` en
+  `T.aanvoerderValt`, js/soldaten.js; zo ook de generaals, `scenario.md`, 7); de veldheer vecht dan door zonder held.
+
+### js/veldheer.js: de veldheer
+
+- `js/veldheer.js` (vraag 187 en 188, stap 3a3; `scenario.md`, 7 en 8; Marcel, 28 okt: "1. A", "2. Oke"): **de AI van een
+  leger**, als een mens in zijn plaats. Hij weet alleen wat zijn dorp nu ziet (`T.zietNu`, js/mist.js) en waar de stroken
+  liggen, en hij stuurt met dezelfde vraag als de muis: `T.handelingSturen(S, doel, mannen, D)` (js/kiezen.js; de vierde
+  is nieuw, zonder is het `S.dorp`), dus een opdracht met `dorp` (`T.geefOpdracht`). Hij denkt in de tik
+  (`T.werkVeldheerBij` in `T.werkDorpBij`, na de mist), om de `denkElke` seconden, en niet alle veldheren in dezelfde tik;
+  wat hij onthoudt, staat in `D.veldheer` (`T.nieuweVeldheer`: wanneer hij weer denkt, de plek van de kaart waar hij heen
+  gaat, waar hij het laatst een vijand zag, en waar hij zijn held heen stuurde). Elke keer: zijn doel is de dichtste
+  vijand die hij ziet, anders waar hij er het laatst een zag, anders de volgende plek die hij kent (de stroken van de
+  anderen, het midden, de voorden, de brug). Wie vecht, laat hij; wie een vijand die hij ziet vlakbij heeft (`aanval`), valt
+  hem aan zoals een klik op die vijand (`volg`): zo vecht ook wie hem zelf niet ziet (een heuvel of boom ertussen,
+  `T.zichtTussen`; zonder dit stonden ze op drie tegels van elkaar tot de tijd om was). De rest stuurt hij in een Line naar
+  het doel, of als dat verder is dan een etappe, een etappe die kant op: met etappes van 24 tegels zakte de hoogste piek
+  van 70 naar 22 ms, en ook met één weg voor de groep (js/kiezen.js) helpen ze nog (mediaan van de hoogste piek per slag
+  3,6 tegen 9,4 ms). Een man wiens post al
+  bij het doel ligt (`ver`), krijgt geen nieuw bevel. Een plek is bereikt als het midden er is, of als iedereen stilstaat
+  op een post erbij (een plek in de rivier haal je nooit). De held loopt `achterDeLinie` tegels achter het doel; is hij
+  de laatste, dan vecht hij zelf. Gemeten met de proefbank (`npm run veldslag`, 28 okt, Node): dertig slagen tussen twee
+  veldheren eindigen allemaal, in gemiddeld 53 seconden; een tik kost gemiddeld 0,13 ms. Getoetst in
+  `test/veldheer.test.cjs`. **Hij koopt** (3b1; Marcel: "2 b"): `T.veldheerKoopt(punten, lot)` kiest een van de mixen in
+  `VELDHEER_INSTELLINGEN.mixen` (gewoon, schutters, zwaar: per soort een deel van de punten) uit het lot (gemengd, want de
+  eerste worp van een dobbelsteen is bij een klein zaad niet verspreid), koopt per soort zoveel als zijn deel betaalt, en
+  met wat overblijft steeds de duurste soort die er nog in past, en anders de militie: alle punten op, en geen toeval.
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -2259,8 +2402,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 - `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat naar het
   dichtste roverskamp (`T.wordtRover` vanuit `js/bewoners.js`; in een level met een rand alleen een kamp dat erbinnen kan
   staan, `stukkenVanKamp`, en anders vertrekt hij gewoon; hieronder; tot c2 kwam hij met de bende van het dorp,
-  `D.rovers.bende`, terug), en er komen wilde rovers van buiten (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
-  (`T.roverIngang`) naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
+  `D.rovers.bende`, terug), en uit dat kamp komt de overval (c3, hieronder; `T.tikRoversDag` zet hem een dag van
+  tevoren). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): langs hun weg naar een akker, op het uur dat het zaad zegt (`aanvalsUur`, in `aanval.uur`; met `nachtKans` 's nachts,
   vraag 170, stap 4), twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
   `js/akkers.js`), en weer weg. Er komt niemand vanzelf (vraag 170, stap 2): het bericht zegt hoe je je soldaten stuurt,
   en het gevecht is in real time (`js/gevecht.js`); wie vecht (`e.doelwit`), laat `T.werkRoversBij` met rust. Wie valt,
@@ -2275,13 +2418,13 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   neemt met `T.neemVanStapel` (`js/kar.js`) `stapelPerRover` per man. Rovers horen bij een dorp dat vanaf niets begon
   (`D.begin`) of akkers heeft (`heeftRovers`), dus ook voor de eerste akker.
 - **De overval van de demo** (vraag 185, 23 okt; Marcel: 4a3, 4b1, 4c1, "overdag, aankondiging ja"; sinds 24 okt een
-  trigger van het demojaar, `levels/demojaar.js`): een dorp met `D.rovers.wilde === false` krijgt van `T.tikRoversDag`
-  geen wilde rovers. De trigger `overval` gaat af op een dag uit het zaad (`S.scenario.lot.overval`) en roept
+  trigger van het demojaar, `levels/demojaar.js`): een dorp met `D.rovers.overvallen === false` krijgt van
+  `T.tikRoversDag` geen overvallen op het rooster. De trigger `overval` gaat af op een dag uit het zaad (`S.scenario.lot.overval`) en roept
   `T.roversKomen(D, { aantal, aangekondigd: true })`: een aanval met `aangekondigd: true` voor morgen, op een uur van
   `overdagUur` (overdag, tot `aangekondigd.voorDonker` uur voor zonsondergang). `aangekondigd.vooraf` uur ervoor kiest
   `meld` het doel en de ingang, zegt het met de plek, en zet de tijd op 1× (`aanval.gemeld`); is er niets te roven, dan
   schuift de aanval een dag op (met het uur van die dag, zoals de nacht erna eerst opnieuw plande). De trigger gaat één
-  keer af. De raad zegt niet dat ze terugkomen waar geen wilde rovers komen of het wachthuis dicht is (`js/raad.js`).
+  keer af. De raad zegt niet dat ze terugkomen waar geen overvallen op het rooster komen of het wachthuis dicht is (`js/raad.js`).
 - **De roverskampen** (vraag 170, stap 6a2, c1, 17 okt; Marcel: "V2 G2 P1 B1", "M1"): waar ze liggen, komt uit het eiland
   (`E.kampen`, `js/eiland.js`, `legKampen`, met de tentplekken en hun deur); wat een kamp in een spel is, staat op de
   kaart (`w.kampen`, bewaard, vanaf de eerste tik alle kampen van het eiland, `kampenVan`; de velden staan bovenaan het
@@ -2311,7 +2454,75 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   voor een vijand in het land van zijn dorp (`vlucht` in js/gevecht.js, `T.dorpVak`), zodat een kamp ver weg niemand
   binnen houdt. Bij de muis zijn naam (`T.handelingVerkennen`, js/verkennen.js). D1: de bende van een dorp
   (`D.rovers.bende`, `bendeOp`, de overval van soort `'bende'`) is weg, en de bode telt haar niet meer (js/bode.js);
-  tot c3 is een overval wild.
+  tot c3 was een overval wild.
+- **De overval komt uit een kamp** (vraag 170, c3, 27 okt; Marcel: "c3 A1 B1 C1, demo mee"; `test/rovers.test.cjs`,
+  `kampen`, `bode`): `T.tikRoversDag` zet de aanval een dag van tevoren (`soort: 'overval'`, `D.rovers.overvalOp`, de
+  getallen `overval…` in de werkbank). Elke tik in de fase `wacht`: `plan` kiest het kamp (`kampVoor`: het dichtst bij
+  het plein met mannen thuis, `thuis`, binnen de rand, `kampenBinnen`, met een grove weg, `T.groveWeg` in `js/lopen.js`)
+  en de reis (`reisUren`, de weg op de pas van een rover tot `ingangAfstand` van het plein); vanaf het uur min de reis
+  kiest `kiesDoel` de akker of stapel en de ingang (`ingangVan`, B1: het eerste vak van de grove weg naar het doel binnen
+  `ingangAfstand` waar een begaanbare tegel ligt vanwaar ze erheen kunnen), en `vertrek` zet wie gaat op pad (`A.leden`,
+  `lid.opPad = { terug: null }`; A1: tot `aantal`, met `aanvullen`, een level of het debugvenster, komen er van buiten
+  bij, `vanBuiten`). Fase `onderweg`: op het uur zet `opDeKaart` ze bij de ingang (`maakRover(D, K, lid, plek)`: `e.dorp`
+  het dorp, `e.kamp` en `e.lid` hun kamp), en haalt wie nog in zijn kamp liep weg. `roof` deelt de buit (`deelBuit`,
+  `e.buit`); valt er een, dan legt `T.roverVerslagen` zijn deel als losse stapel (`T.legLosseStapel`, C1). `eind` (het
+  enige eind van een aanval) geeft wie nog leeft `lid.opPad = { terug, buit }`, en `T.werkKampenBij` maakt hem thuis
+  (`thuisVan`: `K.buit`). In het kamp (`werkKampBij`): wie `opPad` is, loopt naar de rand van de open plek (`gaatOpPad`,
+  `e.naarRand`) en is daar weg, en komt niet terug op de kaart tot hij thuis is; een rover op een overval (`e.dorp`)
+  telt niet als man thuis. De bode (`js/bode.js`): `T.kampVoorDeBode` bij het vertrek (`D.bode.kamp`, en `onderschept`
+  'rovers' alleen als er een is), de hinderlaag uit dat kamp (`beginHinderlaag`), `T.roverValtOnderweg` en
+  `T.buitNaarKamp` (het loon, `D.bode.loon`). `Spel.debug.rovers(n)` is `T.roversKomen(D, { aantal, meteen: true })`.
+  Weg: `T.roverIngang` (de rand van `T.dorpVak`), `wildVel` en de wilde rovers. Het opslaan is versie 26.
+- **Een kamp verslaan** (vraag 170, c4, 27 okt; `test/kampen.test.cjs`): valt de laatste man (`T.roverVerslagen`), dan
+  `kampValt`: `K.verslagen`, de tenten weg (`T.haalVoorwerpWeg`), en een bericht met de plek. Een verslagen kamp telt
+  nergens meer mee (`kampenBinnen`: geen overval, wie wegtrekt gaat naar een ander; `tikKampenDag`: niemand van buiten;
+  `zetTenten`), zijn vuur is `'uit'` (`T.roverskampVuur(dag, K)`, ook in `js/tekenen.js`) zonder licht, en op de
+  minikaart is het niet rood (`js/balk.js`). `werkKampBij` doet voor een verslagen kamp alleen `neemBuit`: wie van
+  `T.mannenVan` binnen `buitAfstand` van het vuur staat, neemt tot `buitPerMan` uit `K.buit` (`e.buit`, op zijn briefje
+  in `js/kiezen.js`), en het dorp onthoudt dat er buit onderweg is (`D.buitOnderweg`); `brengBuit` (in
+  `T.werkRoversBij`, alleen zolang dat zo is) legt hem neer als losse stapel zodra de man in het bouwbereik is
+  (`T.inBouwBereik`). Geen gewone stapel in het kamp: de dragers halen elke stapel van het dorp, hoe ver ook (`js/kar.js`).
+  Wel te zien (Marcel, 27 okt: "B ja", en "b"): `T.roverskampenBuit(w)` geeft per kamp dat er staat de buit op
+  `buitPlek` (twee tegels rechts van het vuur op het scherm; `plekVan` zet daar niemand), met zijn maat (`buitMaten`:
+  klein, middel, groot), en `kampBuitInLijst` in `js/tekenen.js` tekent de hoop (`T.sprites.buit(maat)`, het vel
+  `beelden/buit.png` uit `gereedschap/pixelart/buit.cjs`, dat pas laadt als er buit te zien is), of zolang dat laadt een
+  losse stapel (`stapelInLijst`, dezelfde als de stapels bij de deuren). `neemBuit` meet vanaf de hoop.
+- **Het hol van een level** (werklijst K, 2c, 27 okt; `test/kampen.test.cjs`): `dorpen[].hol: { bende, buit, palissade }`
+  (gekeurd in `T.keurScenario`) laat `T.beginOpEiland` (`js/begin.js`) `T.maakHol(D, o)` doen: het dichtste kamp binnen de
+  rand krijgt zijn bende (`vanBuiten`), zijn buit en `K.palissade`, en `D.hol` is zijn nummer (`T.holStand(D)`: 'staat',
+  'verslagen' of null). Gaat zijn land open, dan maakt `zetPalissade` de open plek (geen natuur binnen `palissade.vrij`,
+  14) en de ring: elke tegel op `palissade.straal` (9) van het vuur een voorwerp `palissade` (`blokkeert` in
+  `T.VOORWERPEN`, js/wereld.js; het voorwerp zelf tekent niets), behalve `palissade.opening` (3) tegels waar het paadje
+  de ring kruist (`kruisingMetPaadje`). Wat je ziet, zijn de palen: `palenVan(w, K)` (onthouden in `PALEN`, een
+  WeakMap, en `T.palissadeVan(w, K)` zolang `K.palissadeStaat`) zet ze op de cirkel, `palissade.tussen` tegel uit
+  elkaar, vanaf de poort rond, elk met een soort uit een vast lot (`palissade.soorten`, `kiesPaal`: twee gaatjes of twee
+  afgebroken naast elkaar komen niet voor) en een van de 16 richtingen (de buitenkant); bij de poort de poortpalen
+  (`paal-lap`, `paal`) en de balk (`boven`). `palissadeInLijst` in `js/tekenen.js` zet elke paal op zijn eigen plek
+  (`d = x + y`, de balk een laag hoger), met `T.sprites.palissade(rij, richting)` uit `beelden/palissade.png`
+  (`gereedschap/pixelart/palissade.cjs`, `vel`: 12 soorten paal en 3 poortstukken, elk in 16 richtingen, gepakt met
+  `rijenVel` in `kern.cjs`; laadt pas als er een te zien is). Zo kan dezelfde tekening later de palissade van je dorp
+  worden (vraag 158).
+- **De tenten van het hol** (werklijst K, 2c, 27 okt; Marcel: "B; mag beetje random"): een gewoon kamp zet zijn tenten
+  op de plekken van het eiland (`k.tenten`, `tentenVan` in `js/eiland.js`), het hol tegen zijn palissade:
+  `tentenTegenDePalissade` (vanuit `zetPalissade`, dus vóór `zetTenten`) verdeelt `tentenMeest` plekken over de ring vanaf
+  de poort, niet bij de poort en niet binnen `palissade.tentNietVoor` graden van de kijker (+x en +y samen: daar verdwijnt
+  een tent achter de voorwand), op `tentAfstand` van het vuur, met een vast lot een stukje verschoven (`tentSchuif`), de
+  opening naar het vuur, en minstens twee tegels tussen twee tenten. Ze staan in `K.tentPlekken` (bewaard), en
+  `tentPlekken(w, K)` (`T.tentPlekkenVan`) geeft wat geldt: wie een tent neerzet, er een slaapt, een man een plek om het
+  vuur zoekt of de aankleding een plek, vraagt het daar. De vorm van een tent (voet en deur) komt voor allebei uit
+  `T.tentOp` en `T.tentTegels` (`js/eiland.js`).
+- **De aankleding van een kamp** (werklijst K, 2c, 27 okt; Marcel: "Alles valt en staat met de aankleding"):
+  `spullenVoor(w, K, k)` geeft een kamp zijn spullen als het opengaat (`K.spullen`, bewaard, dus ze verschuiven niet),
+  uit de tabel `SPUL` (per ding een zone van tegels vanaf het vuur, een voet, of het op de grond ligt, en hoeveel in een
+  gewoon kamp en in het hol), met een vast lot uit het zaad van het kamp: de slaapvellen voor de tentdeuren, de waslijn
+  tussen de twee tenten die het dichtst bij elkaar staan, de fakkels bij de poort, en de rest op volgorde van groot naar
+  klein (`VOLGORDE`), elk tot 80 pogingen in zijn zone. Een spul staat niet op een tent, het paadje, bij het vuur, op de
+  buit, waar je niet kunt lopen, of op een ander spul; in het hol reikt de zone tot een tegel binnen de palissade, in een
+  gewoon kamp tot `KAMP_TOT` (5,6). `plekVan` zet geen man op een spul dat niet op de grond ligt, en heeft het kamp geen
+  plek meer om het vuur, dan zoekt het een tegel verder. `aankledingInLijst` tekent ze (`OP_DE_GROND`, modder, stro en
+  slaapvel, op laag 0), met `T.sprites.aankleding(soort, richting)` uit `beelden/aankleding.png`
+  (`gereedschap/pixelart/aankleding.cjs`, 16 rijen in 4 richtingen); `T.roverskampenLicht` geeft de fakkels licht.
+  Een kamp dat valt, houdt zijn spullen (het is er nog, verlaten).
 - **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
   en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
   mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
@@ -2361,6 +2572,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
   (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
   getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **De klappen van een tik vallen aan het eind** (28 okt; Marcel: "1 tik alle klappen aan einde"): `slaan` zet de klap
+  klaar in `S.klappen` (wie, wat, hoeveel, van wie; de worp en wat harnas afvangt, rekent hij meteen), en
+  `T.laatKlappenVallen(S)` laat ze vallen aan het eind van `T.wereldTik`, na alle dorpen en de wereld, in de volgorde waarin
+  ze geslagen werden; een klap op wie al viel, valt niet meer. `S.klappen` is er alleen binnen een tik, dus het gaat
+  nooit mee in wat bewaard wordt. Waarom: de wereld werkt de dorpen een voor een bij, en wie eerst aan de beurt was,
+  sloeg eerst; wie in die tik viel, sloeg niet meer terug. De proefbank (`npm run veldslag`, zestig gelijke slagen op
+  *The Ford*) mat het effect van de volgorde: leger A won 46 keer, met de volgorde om 29; nu 43 en 34. De rest komt van
+  het lopen en het kiezen van een doel, die ook op volgorde gaan (`opmerkingen.md`). `T.raak` zelf (de toetsen,
+  `Spel.debug`) valt meteen. Een toets die `T.werkGevechtBij` los roept, laat de klappen zelf vallen.
 - **Hoe ver een speer steekt** (22 okt; Marcel: "Steken van verder weg"): `T.kanRaken` laat een speer of piek van twee
   tegels steken als hij dat op het scherm reikt (`steekReik`, 72 pixels op 1×, uit de getekende speerman: 60 tot 66):
   schuin en recht voor of achter is twee tegels 58 tot 72 pixels, opzij 128, dus opzij steekt hij alleen van ernaast. De
@@ -2398,6 +2618,10 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 ### js/soldaten.js: de soldaten en hun wapens
 
+- **De prijs van een soldaat** (3b1, 28 okt; `scenario.md`, 7: "De prijs van een soldaat is de waarde van zijn stukken"):
+  `T.soldaatPrijs(soort)` telt de waarde van zijn stukken (`T.waardeVan`, js/einde.js, de tabel van de punten van 186);
+  de hooivork, die geen waar is, staat er op zijn eigen naam (`waarde.hooivork: 1`, B1). Een speerman kost zo 4, een
+  boogschutter 2, een zwaardvechter 7.
 - `js/soldaten.js` (werklijst vraag 159, 15 okt; Marcel: "A1, B1, C1, D1", de wapens "sword, spear, shield, pike, bow,
   crossbow, armor", in vaste soorten): **in het wachthuis word je soldaat.** Per wachthuis `g.soldaten` (hoeveel je er
   per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zes soorten met vaste
@@ -2467,7 +2691,8 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   rechts is `T.handelingSturen(S, doel, mannen)`: `{ tekst, kan, opdracht, doe }`. Bij de muis staat wat rechts doet,
   behalve boven wat links te kiezen is.
 - **Een bevel is een opdracht** (`T.OPDRACHTEN` in `js/tik.js`), met de nummers van de mannen (`p.id` van hun bewoner,
-  `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, en daar is `e.post`), `formatie`
+  `T.nummersVan`): `stuur` (`T.stuurMannen`: elk naar zijn plek in de formatie, hieronder, langs één weg voor de groep,
+  en daar is `e.post`), `formatie`
   (`T.zetFormatie`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
   geen nummer, dus zijn soort en plek), `terug` (`T.roepTerug`), `dienst` (`T.zetDienst`) en `teWapen` (`T.roepTeWapen`, met
   de plek van het wachthuis). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
@@ -2502,6 +2727,17 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   en dat vraagt samen spelen in lockstep. Tot 16 okt gebruikte `js/gevecht.js` `e.kijkt` ook als klok (wanneer hij weer
   om zich heen kijkt); die heet nu `e.omkijken`, want `js/sprites.js` las het getal als een plek, en wie gevochten had,
   keek dan naar het zuiden.
+- **Eén weg voor de groep** (28 okt; Marcel: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
+  veldslag"): `groepsBanen` zoekt één weg (`T.zoekRoute`, over open land) van de man in het midden van de groep naar de
+  plek in het midden van hun formatie, en `baanVan` geeft elke man die weg verschoven naar zijn plek in de formatie (zijn
+  baan): hij komt erop waar ze het dichtst bij hem is (in de eerste `groep` stappen), volgt haar zolang ze vrij is (en een
+  schuine stap niet om een muurhoek gaat, `stapMag`), en gaat om wat in de weg staat met een korte weg naar waar ze weer
+  vrij is. Zo blijft een Line onderweg een Line, en gaan ze bij een voorde of een brug vanzelf smal door. Wie alleen gaat,
+  binnen is, verder dan `groep` tegels van het midden staat, of als de groep geen weg over open land heeft (een tocht),
+  zoekt zijn eigen weg (`loop`), zoals voor 28 okt iedereen. Waarom: een lange weg zoeken kost zo'n 2 ms per man (70
+  tegels), en twaalf man over *The Ford* was 25 tot 45 ms in één tik; nu 4 à 10 ms (de eerste keer, met de JIT, meer).
+  Gemeten met `npm run veldslag`: de hoogste piek per slag heeft een mediaan van 3,6 ms. Getoetst in
+  `test/kiezen.test.cjs` (één lange weg, stap voor stap te begaan, op zijn post, en naast elkaar op open land).
 - **De diensten** (stap 4; Marcel, 16 okt: "A1, B1, C2, D2"): de dienst hoort bij de soldaat (`p.soldaat.dienst`, alleen
   `'nacht'`; zonder is het de dag), `T.dienstVan(e)`. `T.inDienst(D, e)` is `e.wakker` of zijn eigen dienst nu (de nacht
   is `T.dagdeelVan` 'nacht', van het slapen tot het opstaan; zonder kalender altijd). `T.dagAnker` zet een soldaat in

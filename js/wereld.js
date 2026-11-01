@@ -55,6 +55,8 @@
     // als voet (`voet` op het voorwerp), en het kampvuur in het midden.
     tent: { blokkeert: true, zichtDicht: false, naam: T.t('a tent') },
     kampvuur: { blokkeert: true, zichtDicht: false, naam: T.t('the campfire') },
+    // De palissade om een rovershol (js/rovers.js, zetPalissade): je komt er niet door, maar schutters schieten erover.
+    palissade: { blokkeert: true, zichtDicht: false, naam: T.t('a palisade') },
   };
 
   // De bomen en de struiken, op één plek (vraag 148, a: met een nieuwe soort hier telt hij overal mee). Een boom zonder
@@ -118,7 +120,7 @@
       naam: T.t('wolf'), kant: 'monster', leven: 12, snelheid: 2.6, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('bites {doel}') },
     },
-    // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): wie wegtrok, of wilde rovers van buiten. Ze dwalen niet
+    // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): de mannen van een roverskamp (c2 en c3). Ze dwalen niet
     // maar lopen waar hun aanval ze heen stuurt, en dragen het vel van gewone mensen (e.vel, zie S.houding in
     // js/sprites.js): er hoeft niets voor getekend te worden.
     rover: {
@@ -142,7 +144,7 @@
 
   // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
   T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1)); // geen tekst
-  // Een klein getal in woorden, voor een bericht of een brief: "three wild robbers", "five able-bodied men" (Engels sinds
+  // Een klein getal in woorden, voor een bericht of een brief: "three robbers", "five able-bodied men" (Engels sinds
   // 11 okt, ontwerp/engels.md).
   const TELWOORDEN = [T.t('no'), T.t('one'), T.t('two'), T.t('three'), T.t('four'), T.t('five'), T.t('six'), T.t('seven'),
     T.t('eight'), T.t('nine'), T.t('ten'), T.t('eleven'), T.t('twelve')];
@@ -287,10 +289,11 @@
   const STUKKEN = new WeakMap();
   T.stukNummer = (sx, sy) => sy * 64 + sx;
   T.stukVan = (x, y) => T.stukNummer(Math.floor(x / STUK), Math.floor(y / STUK));
-  // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken.
-  T.eilandKaart = function (zaad, vak) {
+  // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken. Met
+  // `recept` een kaart van de veldslag (T.KAARTEN, levels/kaarten.js; T.eilandVan in js/eiland.js).
+  T.eilandKaart = function (zaad, vak, recept = null) {
     return {
-      eiland: { zaad }, vak: { ...vak },
+      eiland: recept ? { zaad, recept } : { zaad }, vak: { ...vak },
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       voorwerpen: [], wezens: [], akkers: [], meenten: [], naam: null, pleinen: [], plekken: [],
     };
@@ -319,7 +322,7 @@
   // (dwars, 0 tot 2) }, of null.
   T.brugOp = function (w, x, y) {
     if (!opEiland(w)) return null;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     return E.brugOp.get(y * E.maat + x) || null;
   };
   // Het land van het eiland (T.landStuk, of `L` als het vooruit gemaakt is), met wat er anders werd erover.
@@ -327,7 +330,7 @@
   function maakStuk(w, sx, sy, L = null) {
     const x0 = sx * STUK;
     const y0 = sy * STUK;
-    const E = T.eilandVan(w.eiland.zaad);
+    const E = T.eilandVan(w.eiland);
     if (!L) L = T.landStuk(E, x0, y0, STUK, STUK);
     const tegel = new Uint8Array(STUK * STUK);
     const grond = new Uint16Array(STUK * STUK);
@@ -438,7 +441,7 @@
     const per = Math.ceil(STUK / d);
     if (v.delen.length < per * per) {
       const i = v.delen.length;
-      const E = T.eilandVan(w.eiland.zaad);
+      const E = T.eilandVan(w.eiland);
       const [x, y] = [v.sx * STUK + (i % per) * d, v.sy * STUK + Math.floor(i / per) * d];
       // eerst de blokken van het eiland onder het rekenvak van dit deel (zijn rand erbij, de tegels en de hoeken), één per
       // stap, zodat geen stap meer dan een paar ms kost (T.eilandRaster, js/eiland.js; `snelheid.md`, F1)
@@ -630,7 +633,7 @@
         s.op[j] = null;
         // de tegel wordt wat de grond is, zoals een geladen spel hem maakt (maakStuk)
         const nr = T.tegelNummer(v.x, v.y);
-        if (!w.tegelsAnders.has(nr)) s.tegel[j] = tegelVanGrond(T.eilandVan(w.eiland.zaad), v.x, v.y, s.grond[j]);
+        if (!w.tegelsAnders.has(nr)) s.tegel[j] = tegelVanGrond(T.eilandVan(w.eiland), v.x, v.y, s.grond[j]);
       }
       w.gerooid.add(T.tegelNummer(v.x, v.y));
     }

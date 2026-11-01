@@ -47,7 +47,12 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   voor de dragers samen hoeveel van de werktijd ze bezig waren, vol, leeg of ladend, per seizoen, de ritten en wat ze
   vervoerden; en de stapels, hoe lang een waar erop ligt, en wat er op vervoer wachtte; gemeten in `speler.js`, `meetKar`
   en `karDag`, niet in het spel), de twee
-  bazen, het bos en het graanboek. `--jaren 2` speelt twee jaar in plaats van één. Hetzelfde zaad geeft
+  bazen, het bos en het graanboek. `--jaren 2` speelt twee jaar in plaats van één. `--hoofdstuk hol` speelt een
+  hoofdstuk van de campagne in plaats van het lege begin (Marcel, 28 okt): de speler kiest Campaign en het hoofdstuk,
+  de hoofdstukken ervoor tellen als af, en het speelt tot het eind van het hoofdstuk; de samenvatting zegt per zaad het
+  eind, de doelen, de triggers die afgingen (met de dag), de overvallen en het hol. De kolonist valt het hol niet aan,
+  dus het toetst het verliezen en de overvallen, niet het winnen. Een hoofdstuk speelt elke keer hetzelfde lot (Marcel,
+  28 okt: "lot gelijk"), dus zonder `--zaad` speelt het één zaad. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost zo'n twee minuten (12 okt: zaad 1 in 124 s); nodig is Playwright (in
@@ -63,6 +68,14 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
   Tot ronde 2 van het snoeien (stap 5, 12 okt) speelden ook braaf, slim, de bouwer en de sluwe bouwer, op het gehucht dat
   er al was, met `--jaren`, `--maker` en `--eiland`; dat begin is weg.
+- `npm run veldslag` is de proefbank van het vechten (vraag 187 en 188, stap 3a3; `gereedschap/veldslag/proefbank.cjs`):
+  twee veldheren (`js/veldheer.js`) vechten zonder scherm op *The Ford*, met vaste zaden (standaard 1 tot en met 5), elk
+  leger acht speermannen en vier boogschutters, tien minuten. Per slag: wie won (A heeft de eerste strook), na hoeveel
+  seconden, wanneer het eerste gevecht begon, wie er per soort nog staat, en wat een tik kost (gemiddeld en de hoogste).
+  `--zaden 1-30` of `--zaad 7`, `--kaart`, `--a speerman=8,boogschutter=4` en `--b ...` (de legers), `--minuten 5` (0 is
+  geen tijd), `--punten 40` (elke veldheer koopt zelf, een van de drie mixen uit het zaad, tenzij `--a` of `--b` zegt
+  wat; de uitslag zegt welke mix), en `--getal BLOK.naam=waarde` (een getal uit de werkbank, zo vaak als je wilt).
+  Dertig slagen kosten zo'n tien seconden. Het meet de tik in Node; het tekenen en Firefox meet het spel zelf.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
@@ -122,7 +135,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden. Sinds ronde 2 van het snoeien (stap 6) zonder
   huizen of akkers: die bouwt de speler.
 - `npm run teksten` leest elke `T.t('…')` uit `js/`, en de zinnen uit de gegevens die een bewerker terugschrijft (de
-  gesprekken: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
+  gesprekken: `GEGEVENS` in `gereedschap/teksten.cjs`; de titels van de campagne; en de zinnen van elk level in `levels/`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
   in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die
   erbij komt of verandert; `test/taal.test.cjs` faalt anders. **De vertaaltool** is `gereedschap/vertalen.html` (voor de
   community, dus in het Engels, en ook zonder server: wat je vertaalt, bewaart de browser, en het spel in dezelfde browser
@@ -415,17 +428,28 @@ wegtrekken. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
 `Spel.debug.kampen()` zegt waar de drie roverskampen van het eiland liggen, hoe ver van je plein, of ze er al staan (met
-hoeveel tenten), en wie er woont, met het dorp van wie wegtrok (`js/rovers.js`, werklijst vraag 170, stap 6a2, c1 en c2); `('erheen')` maakt het land om het dichtste kamp open, zet het
+hoeveel tenten), wie er woont, met het dorp van wie wegtrok en wie op pad is, en wat er aan buit ligt (`js/rovers.js`,
+werklijst vraag 170, stap 6a2, c1 tot c3); `('erheen')` maakt het land om het dichtste kamp open, zet het
 kamp neer, laat je dorp het kennen (de rode stip op de minikaart) en kijkt erheen. In een verborgen paneel tekent de
 minikaart pas opnieuw met `Spel.ui.werkMinikaartBij(Spel.S)`.
-`Spel.debug.rovers()` zegt wanneer de wilde rovers komen (in de demo `geen`, en bij `overval` de dag van het bericht van
-de overval, uit het scenario), hoe een aanval ervoor staat, wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
+`Spel.debug.rovers()` zegt wanneer de volgende overval komt (`overvalOp`; in de demo `geen`, en bij `overval` de dag van
+het bericht van de overval, uit het scenario), hoe een aanval ervoor staat (uit welk kamp, de reis in uren, waar ze je
+land op komen), wie er soldaat is, hoe je mannen ervoor staan (leven, wapen, en tegen wie ze vechten), of er gevochten wordt
 (`gevecht`, js/gevecht.js), wie er in het town hall schuilt, en hoeveel wapens er in de opslag liggen; `(3)` laat nu
-drie wilde rovers komen. `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
+drie man van het dichtste kamp komen, zonder reis (heeft het er minder thuis, dan komen er van buiten bij). `Spel.debug.aanvoerder()` zegt wie de aanvoerder is, met welk wapen, en
 wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5).
 `Spel.debug.tweedeDorp()` zet een tweede dorp op het eiland, op de dichtste andere dorpsplek, met het lege begin (vraag
 170, stap 6a), en `Spel.debug.wissel()` maakt jou het volgende dorp: de camera gaat erheen, en de balk, de mist, de
 berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in één browser.
+`Spel.debug.veldslag(zaad, legers, minuten)` begint een veldslag op *The Ford* (vraag 187 en 188, stap 3a2; tot de lobby
+er is): standaard zaad 1, elk leger acht speermannen en vier boogschutters (`[{ soorten: { speerman: 8, boogschutter: 4
+} }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger, het andere speelt de veldheer (3a3);
+met `veldheer: true` bij je eigen leger kijk je naar twee veldheren. `Spel.debug.wissel()` maakt jou het andere leger.
+Speel je mee, dan begint de slag met de voorbereiding (3b2): een minuut, of tot je *Fight!* geeft in de balk bovenaan
+(`Spel.geefOpdracht(Spel.S, { soort: 'klaar' })`). **In de cloud** laadt het spel in Playwright alleen met de spellus stil
+(opmerkingen.md, "De tekenmeting met `--tegen`"): `requestAnimationFrame` leeg in een `addInitScript`, `file://` met
+`waitUntil: 'domcontentloaded'`, dan `Spel.debug.stap` en `Spel.tekenBeeld()` voor elke schermafdruk (30 okt: zo
+nagelopen, de voorbereiding tot het eindscherm en terug naar de lobby).
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.

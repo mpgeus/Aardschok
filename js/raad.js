@@ -236,9 +236,9 @@
     },
     {
       id: 'rovers',
-      // Niet waar ze niet terugkomen (geen wilde rovers, zoals in de demo: één overval, js/rovers.js; vraag 185), of waar het
+      // Niet waar ze niet terugkomen (geen overvallen op het rooster, zoals in de demo: één overval, js/rovers.js; vraag 185), of waar het
       // wachthuis op slot is.
-      als: (D) => D.rovers && D.rovers.wilde !== false && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa &&
+      als: (D) => D.rovers && D.rovers.overvallen !== false && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa &&
         !heeft(D, 'wachthuis') && !T.isDicht(D, 'wachthuis'),
       tekst: (D) => {
         const woorden = { gebouw: eenNaam('wachthuis'), getal: T.telwoord(T.SOLDATEN_INSTELLINGEN.plaatsen) };
@@ -371,7 +371,7 @@
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.
   T.raadNu = function (D) {
-    if (!IN().aan || !(D.wereld && D.plek.plein) || !D.kalender || !D.voorraad) return null;
+    if (!IN().aan || D.veldslag || !(D.wereld && D.plek.plein) || !D.kalender || !D.voorraad) return null; // een leger (js/veldslag.js) krijgt geen raad over een dorp
     for (const r of T.RADEN) if (r.als(D)) return { id: r.id, tekst: r.tekst(D) };
     return null;
   };

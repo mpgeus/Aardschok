@@ -1294,7 +1294,56 @@ function losRenderen(model, o = {}) {
   return Plaat.van(kwantiseer(B, o));
 }
 
+// Een vel met een rij per ding en een cel per richting, zo krap als het kan (de palissade en de aankleding van een
+// roverskamp, palissade.cjs en aankleding.cjs): `rijen` is een lijst { naam, model } (of { naam, maak(graden) } als het
+// model per richting anders is), `kanten` de richtingen in graden (zoals tekenModel ze neemt). Elke rij wordt eerst in een
+// ruime cel (`werk`, met het anker op `werkAnker`) getekend; dan krijgt de rij de kleinste cel waar al zijn richtingen in
+// passen. De rijen liggen naast elkaar zolang ze passen in de breedte van de breedste (zoals planken in een kast), zodat er
+// weinig leeg blijft. Geeft { plaat, rijen: [{ naam, x, y, cel: [b, h], anker: [ax, ay] }] }: de cel van rij r, richting
+// k staat op (x + k × cel[0], y).
+function rijenVel(rijen, kanten, werk = [240, 240], werkAnker = [120, 200]) {
+  const uit = [];
+  for (const rij of rijen) {
+    const beelden = kanten.map((graden) => {
+      const B = new Beeld(werk[0], werk[1], werkAnker[0], werkAnker[1]);
+      tekenModel(B, rij.maak ? rij.maak(graden) : rij.model, { richting: graden });
+      belicht(B);
+      omlijn(B);
+      return Plaat.van(kwantiseer(B));
+    });
+    let [x0, y0, x1, y1] = [werk[0], werk[1], -1, -1];
+    for (const p of beelden) {
+      for (let y = 0; y < p.h; y++) {
+        for (let x = 0; x < p.b; x++) {
+          if (!p.lees(x, y)) continue;
+          [x0, y0, x1, y1] = [Math.min(x0, x), Math.min(y0, y), Math.max(x1, x), Math.max(y1, y)];
+        }
+      }
+    }
+    if (x1 < 0) [x0, y0, x1, y1] = [werkAnker[0], werkAnker[1], werkAnker[0], werkAnker[1]];
+    if (x0 === 0 || y0 === 0 || x1 === werk[0] - 1 || y1 === werk[1] - 1) console.log(`LET OP: ${rij.naam} raakt de rand van zijn werkcel`);
+    const cel = [x1 - x0 + 1, y1 - y0 + 1];
+    uit.push({ naam: rij.naam, cel, anker: [werkAnker[0] - x0, werkAnker[1] - y0], beelden: beelden.map((p) => p.uitsnede(x0, y0, cel[0], cel[1])) });
+  }
+  const breed = Math.max(...uit.map((r) => r.cel[0] * kanten.length));
+  let [x, y, plank] = [0, 0, 0];
+  for (const r of uit) {
+    const b = r.cel[0] * kanten.length;
+    if (x + b > breed) [x, y, plank] = [0, y + plank, 0];
+    [r.x, r.y] = [x, y];
+    x += b;
+    plank = Math.max(plank, r.cel[1]);
+  }
+  const plaat = new Plaat(breed, y + plank);
+  for (const r of uit) {
+    r.beelden.forEach((p, k) => plaat.plak(p, r.x + k * r.cel[0], r.y));
+    delete r.beelden;
+  }
+  return { plaat, rijen: uit };
+}
+
 module.exports = {
+  rijenVel,
   RAMPEN,
   RAMP,
   RAMP_NAMEN,

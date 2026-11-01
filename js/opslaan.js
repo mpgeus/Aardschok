@@ -87,7 +87,9 @@
     // 24 (23 okt): vraag 184: de huifkar rijdt niet meer (hij stond in D.karren), en wie geen werk heeft, draagt.
     // 25 (23 okt): ronde 4 van het snoeien: geen gebieden (S.gebieden, S.naarGebied), geen quests en tas (S.quests,
     // S.inventaris), en een kaart zonder deuren en kamers (w.deuren, w.kamers, w.bekend; tegel 3 was 'deur').
-    versie: 25,
+    // 26 (27 okt): c3 van vraag 170: de overval komt uit een kamp (D.rovers.overvalOp in plaats van wildeOp, `overvallen`
+    // in plaats van `wilde`, de aanval van soort 'overval'), en een kamp heeft zijn buit en wie op pad is (K.buit, lid.opPad).
+    versie: 26,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

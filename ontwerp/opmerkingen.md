@@ -59,6 +59,31 @@ niet door Marcel beoordeeld.
 
 ## Het spel
 
+- **Strook A van The Ford wint drie van de vier** (28 okt, vraag 187 en 188; `npm run veldslag -- --zaden 1-60`): twee
+  gelijke veldheren, zestig zaden: wie op de eerste strook staat, wint 43 keer; met de stroken omgedraaid wint de eerste
+  strook nog 47 keer. Het ligt dus aan de kaart (de pas van rotsen, de heuvels, waar de brug ligt) of aan hoe de veldheer
+  haar afloopt, niet aan wie het leger is. Voor 3g (meer kaarten) en 3f (de veldheer): een kaart die eerlijk is, wint
+  ongeveer half om half. Daarnaast telt de volgorde in de tik nog wat (A 43 tegen 34 met de volgorde om): de klappen
+  vallen sinds 28 okt aan het eind van de tik, maar het lopen en het kiezen van een doel gaan nog op volgorde.
+
+- **In de voorbereiding kan alleen jij de heuvel op** (30 okt, bij 3b2): je zet je schutters op de heuvel bij je strook
+  (2 tegels verder), de AI blijft in zijn linie. Tot de standen van 3f is dat een voordeel bovenop de scheve balans; meet
+  de balans (na de generaals) met een AI die zelf opstelt, of zet in 3f als eerste zijn schutters de heuvel op.
+
+- **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
+  de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
+  dezelfde vraag stelt, krijgt hem uit het geheugen; een computer die herlaadt of later instapt, zoekt opnieuw en kan een
+  kortere vinden, en dan lopen de werelden uiteen. Voor de lijn (6c van vraag 170): het geheugen op elke computer op
+  hetzelfde moment legen, of een weg niet bewaren over een opening heen. (2) Het bericht van een gedeeld doel ("New goal")
+  gaat naar het eerste dorp; samen moet elke speler het krijgen (de kaart linksboven zien ze al allemaal). (3)
+  `T.magOpzij` kijkt nog naar `S.spreektMet` (een gesprek, nu geparkeerd). (4) De vensters roepen hun regels nog zelf aan
+  (de bode, de brieven; al bekend, `code.md` bij `js/tik.js`).
+
+- **De voorwand van het hol verbergt wie erachter staat** (27 okt, werklijst K, 2c, in de browser): in isometrisch zie
+  je niet wat vlak achter de voorkant van de palissade staat (de mannen die vooraan bij het vuur staan, een tent vooraan),
+  en de bomen voor de open plek dekken de voorwand weer af. Voor de tenten is er een lapmiddel (`tentNietVoor`: vooraan
+  geen tent), maar in een gevecht in het hol zie je je mannen vooraan niet. Misschien kan de palissade plat met F, zoals
+  de gebouwen (4b), of doorzichtig waar je mannen achter staan (`js/doorkijk.js`). Idee van Claude; nog niet gekozen.
 - **Wie een onbereikbare vijand volgt, blijft zonder melding staan** (26 okt, gezien bij vraag 190, in de browser op
   `main`): de speermannen van de wacht in de demo kregen een aanvalsopdracht (`volg`) op een roedel wolven in het bos; ze
   namen hem aan (`e.volgt`) maar liepen niet, omdat er geen route was (`doeMet` in `js/gevecht.js`: met `volgt` laat hij
@@ -166,6 +191,14 @@ niet door Marcel beoordeeld.
   keuze is aan Marcel. Onderweg: `npm run grootte` werkt niet op het eiland (`gereedschap/grootte/bouw.cjs` zoekt alleen
   kaarten tot 512 tegels, bouwt niets en meldt een lege reden).
 
+- **Zonder videokaart duurt een beeld van de spellus vijf seconden, maar het tekenen niet** (30 okt, in de cloud, op
+  df6e83f; Marcel: "Browser iets met videokaart eis misschien"): met de lus stil kost `Spel.tekenBeeld()` op het
+  titelscherm en in een veldslag 3 tot 9 ms (het eerste beeld 3 s, de grond), maar een beeld van de echte lus (`lus` in
+  js/main.js) duurt 5 à 6 s, elk beeld opnieuw, met 3 tikken erin. Het traagste deel zit dus in de lus buiten het tekenen,
+  of in wat het tekenen alleen in de lus doet; de profiler van Chromium kwam er niet doorheen. Waarom het telt: een
+  speler wiens videokaart Chromium of Electron weigert (een oude driver op de zwarte lijst), tekent ook zonder kaart, en
+  dan staat het titelscherm vast. Na te spelen op Marcels pc: Chrome, Settings, System, *Use graphics acceleration when
+  available* uit, en dan de meter (F2). Een eigen punt, als Marcel het kiest.
 - **De tekenmeting met `--tegen` laadt het spel niet in de cloud** (17 okt; tot 24 okt gold het ook voor de speeltest):
   zonder videokaart houdt de spellus de bladzijde vast, zodat er geen "load" komt en geen `page.evaluate` terug. Het
   recept dat werkt (4b, 24 okt): de spellus stil met een `requestAnimationFrame` die niets doet, `waitUntil:
@@ -185,9 +218,6 @@ niet door Marcel beoordeeld.
     van het dorpsland van 100 bij 100 (`D.plek.uitgang`, `T.roverIngang`), zo'n 80 tegels binnen de rand, terwijl de weg
     doorloopt tot de zwarte rand. Dat was er al (16 tegels binnen het open land), maar met een rand valt het op. Later:
     binnenkomen waar de weg de rand kruist.
-  - **Een hoofdstuk speelt elke keer hetzelfde lot.** Het zaad van het dorp is het zaad van het eiland, dus een level met
-    een vast eiland heeft elke keer hetzelfde weer, dezelfde dag van de overval en dezelfde voorvallen. Voor 2c kiezen:
-    zo laten (zoals Knights and Merchants), of het lot per keer anders.
   - **Aan de rand is het halve scherm zwart**: de camera komt tot de rand, niet verder (zoals in Knights and Merchants).
   - **Een tweede dorp** (`Spel.debug.tweedeDorp`, alleen in het debugvenster) let niet op de rand: zijn land gaat niet
     open als het erbuiten ligt.
