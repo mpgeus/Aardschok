@@ -541,12 +541,12 @@
   "speerman": {
    "naam": "speerman",
    "cel": [
-    155,
-    153
+    183,
+    126
    ],
    "anker": [
-    76,
-    126
+    91.5,
+    109.22
    ],
    "snelheid": 1.5,
    "richtingen": [
@@ -561,89 +561,89 @@
    ],
    "houdingen": {
     "staan": {
-     "bestand": "speerman3d-staan.png",
-     "beelden": 1,
-     "fps": 4,
+     "bestand": "speerman-ts-staan.png",
+     "beelden": 4,
+     "fps": 3,
      "herhaal": true,
      "cel": [
-      44,
-      94
+      61,
+      119
      ],
      "anker": [
-      24,
-      93
+      30.5,
+      104.22
      ]
     },
     "lopen": {
-     "bestand": "speerman3d-lopen.png",
-     "beelden": 8,
-     "fps": 10,
+     "bestand": "speerman-ts-lopen.png",
+     "beelden": 12,
+     "fps": 15,
      "herhaal": true,
-     "snelheid": 1.5,
-     "stap": 0.6,
      "cel": [
-      89,
-      91
+      67,
+      119
      ],
      "anker": [
-      44,
-      89
-     ]
+      33.5,
+      104.22
+     ],
+     "snelheid": 1.5,
+     "stap": 0.6
     },
     "aanval": {
-     "bestand": "speerman3d-aanval.png",
-     "beelden": 8,
-     "fps": 10,
+     "bestand": "speerman-ts-aanval.png",
+     "beelden": 10,
+     "fps": 16,
      "herhaal": false,
      "cel": [
-      145,
-      142
+      183,
+      126
      ],
      "anker": [
-      71,
-      120
-     ]
-    },
-    "sterven": {
-     "bestand": "speerman3d-sterven.png",
-     "beelden": 7,
-     "fps": 8,
-     "herhaal": false,
-     "cel": [
-      150,
-      124
-     ],
-     "anker": [
-      75,
-      84
-     ]
-    },
-    "aanval2": {
-     "bestand": "speerman3d-aanval2.png",
-     "beelden": 8,
-     "fps": 10,
-     "herhaal": false,
-     "cel": [
-      145,
-      142
-     ],
-     "anker": [
-      71,
-      120
+      91.5,
+      109.22
      ]
     },
     "geraakt": {
-     "bestand": "speerman3d-geraakt.png",
+     "bestand": "speerman-ts-geraakt.png",
      "beelden": 3,
      "fps": 12,
      "herhaal": false,
      "cel": [
-      89,
-      110
+      61,
+      117
      ],
      "anker": [
-      44,
-      105
+      30.5,
+      102.22
+     ]
+    },
+    "sterven": {
+     "bestand": "speerman-ts-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      182,
+      153
+     ],
+     "anker": [
+      91,
+      107.72
+     ]
+    },
+    "aanval2": {
+     "bestand": "speerman-ts-aanval.png",
+     "beelden": 10,
+     "fps": 16,
+     "herhaal": false,
+     "cel": [
+      183,
+      126
+     ],
+     "anker": [
+      91.5,
+      109.22
      ]
     }
    }
@@ -46916,6 +46916,390 @@
      "anker": [
       22,
       68
+     ]
+    }
+   }
+  },
+  "boogschutter": {
+   "naam": "boogschutter",
+   "cel": [
+    133,
+    112
+   ],
+   "anker": [
+    66.5,
+    97.22
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boogschutter-ts-staan.png",
+     "beelden": 4,
+     "fps": 3,
+     "herhaal": true,
+     "cel": [
+      61,
+      106
+     ],
+     "anker": [
+      30.5,
+      91.22
+     ]
+    },
+    "lopen": {
+     "bestand": "boogschutter-ts-lopen.png",
+     "beelden": 12,
+     "fps": 15,
+     "herhaal": true,
+     "cel": [
+      61,
+      106
+     ],
+     "anker": [
+      30.5,
+      92.22
+     ],
+     "snelheid": 1.5,
+     "stap": 0.6
+    },
+    "aanval": {
+     "bestand": "boogschutter-ts-aanval.png",
+     "beelden": 10,
+     "fps": 16,
+     "herhaal": false,
+     "cel": [
+      133,
+      112
+     ],
+     "anker": [
+      66.5,
+      97.22
+     ]
+    },
+    "geraakt": {
+     "bestand": "boogschutter-ts-geraakt.png",
+     "beelden": 3,
+     "fps": 12,
+     "herhaal": false,
+     "cel": [
+      61,
+      108
+     ],
+     "anker": [
+      30.5,
+      93.22
+     ]
+    },
+    "sterven": {
+     "bestand": "boogschutter-ts-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      144,
+      129
+     ],
+     "anker": [
+      72,
+      93.72
+     ]
+    }
+   }
+  },
+  "kruisboogschutter": {
+   "naam": "kruisboogschutter",
+   "cel": [
+    119,
+    105
+   ],
+   "anker": [
+    59.5,
+    90.22
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kruisboogschutter-ts-staan.png",
+     "beelden": 4,
+     "fps": 3,
+     "herhaal": true,
+     "cel": [
+      83,
+      97
+     ],
+     "anker": [
+      41.5,
+      82.22
+     ]
+    },
+    "lopen": {
+     "bestand": "kruisboogschutter-ts-lopen.png",
+     "beelden": 12,
+     "fps": 15,
+     "herhaal": true,
+     "cel": [
+      81,
+      111
+     ],
+     "anker": [
+      40.5,
+      98.22
+     ],
+     "snelheid": 1.5,
+     "stap": 0.6
+    },
+    "aanval": {
+     "bestand": "kruisboogschutter-ts-aanval.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": false,
+     "cel": [
+      119,
+      105
+     ],
+     "anker": [
+      59.5,
+      90.22
+     ]
+    },
+    "geraakt": {
+     "bestand": "kruisboogschutter-ts-geraakt.png",
+     "beelden": 3,
+     "fps": 12,
+     "herhaal": false,
+     "cel": [
+      89,
+      100
+     ],
+     "anker": [
+      44.5,
+      85.22
+     ]
+    },
+    "sterven": {
+     "bestand": "kruisboogschutter-ts-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      170,
+      128
+     ],
+     "anker": [
+      85,
+      86.72
+     ]
+    }
+   }
+  },
+  "piekenier": {
+   "naam": "piekenier",
+   "cel": [
+    209,
+    151
+   ],
+   "anker": [
+    104.5,
+    135.22
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "piekenier-ts-staan.png",
+     "beelden": 4,
+     "fps": 3,
+     "herhaal": true,
+     "cel": [
+      69,
+      138
+     ],
+     "anker": [
+      34.5,
+      124.22
+     ]
+    },
+    "lopen": {
+     "bestand": "piekenier-ts-lopen.png",
+     "beelden": 12,
+     "fps": 15,
+     "herhaal": true,
+     "cel": [
+      67,
+      141
+     ],
+     "anker": [
+      33.5,
+      126.22
+     ],
+     "snelheid": 1.5,
+     "stap": 0.6
+    },
+    "aanval": {
+     "bestand": "piekenier-ts-aanval.png",
+     "beelden": 10,
+     "fps": 16,
+     "herhaal": false,
+     "cel": [
+      209,
+      151
+     ],
+     "anker": [
+      104.5,
+      135.22
+     ]
+    },
+    "geraakt": {
+     "bestand": "piekenier-ts-geraakt.png",
+     "beelden": 3,
+     "fps": 12,
+     "herhaal": false,
+     "cel": [
+      69,
+      139
+     ],
+     "anker": [
+      34.5,
+      124.22
+     ]
+    },
+    "sterven": {
+     "bestand": "piekenier-ts-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      260,
+      196
+     ],
+     "anker": [
+      130,
+      139.72
+     ]
+    }
+   }
+  },
+  "ridder": {
+   "naam": "ridder",
+   "cel": [
+    195,
+    221
+   ],
+   "anker": [
+    97.5,
+    197.58
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "ridder-ts-staan.png",
+     "beelden": 4,
+     "fps": 3,
+     "herhaal": true,
+     "cel": [
+      135,
+      201
+     ],
+     "anker": [
+      67.5,
+      177.58
+     ]
+    },
+    "lopen": {
+     "bestand": "ridder-ts-lopen.png",
+     "beelden": 12,
+     "fps": 15,
+     "herhaal": true,
+     "cel": [
+      137,
+      206
+     ],
+     "anker": [
+      68.5,
+      177.58
+     ],
+     "snelheid": 1.5,
+     "stap": 0.88
+    },
+    "aanval": {
+     "bestand": "ridder-ts-aanval.png",
+     "beelden": 8,
+     "fps": 12,
+     "herhaal": false,
+     "cel": [
+      195,
+      221
+     ],
+     "anker": [
+      97.5,
+      197.58
+     ]
+    },
+    "geraakt": {
+     "bestand": "ridder-ts-geraakt.png",
+     "beelden": 3,
+     "fps": 12,
+     "herhaal": false,
+     "cel": [
+      135,
+      205
+     ],
+     "anker": [
+      67.5,
+      181.58
+     ]
+    },
+    "sterven": {
+     "bestand": "ridder-ts-sterven.png",
+     "beelden": 7,
+     "fps": 8,
+     "herhaal": false,
+     "cel": [
+      217,
+      223
+     ],
+     "anker": [
+      108.5,
+      181.58
      ]
     }
    }
