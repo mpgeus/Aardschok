@@ -250,6 +250,39 @@ test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', ()
   assert.equal(T.kanRaken(D, boog, tweede), false, 'ook niet op die rover');
 });
 
+test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leven; zijn paard komt van de marskramer', () => {
+  assert.deepEqual(T.SOLDAAT_SOORTEN.ridder.stukken, ['zwaard', 'schild', 'harnas', 'paard']);
+  assert.ok(T.soldaatPrijs('ridder') >= 2 * T.soldaatPrijs('zwaardvechter'), 'hij is duur');
+  const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } }, leven: 0, maxLeven: 0 });
+  const I = T.SOLDATEN_INSTELLINGEN.ridder;
+  assert.equal(T.snelheidVan(wie('ridder')), T.snelheidVan(wie('zwaardvechter')) * I.snelheid);
+  assert.equal(T.levenAlsMan(wie('ridder')).max, Math.round(T.levenAlsMan(wie('zwaardvechter')).max * I.leven));
+  assert.equal(T.vangtAf(wie('ridder'), null), T.vangtAf(wie('zwaardvechter'), null), 'schild en harnas, zoals een zwaardvechter');
+  assert.equal(T.slagVan(wie('ridder')).wapen, 'zwaard');
+  assert.equal(T.isStuk('paarden'), true);
+  assert.ok(T.HANDEL_INSTELLINGEN.verkoopt.paarden, 'de marskramer verkoopt een paard');
+  assert.equal(T.GEBOUWEN.wapenmaker.maakt.uit.paarden, undefined, 'de wapenmaker maakt er geen');
+  assert.equal(T.waarNaam('paarden'), T.t('horses'));
+});
+
+test('de ridder wacht op zijn paard: de wapenmaker maakt de rest, en wie het paard heeft, wordt ridder', () => {
+  const { D, huis } = gehucht(['wapenmaker']);
+  T.zetSoldaten(D, huis, 'ridder', 1);
+  const vraag = T.wapensGevraagd(D);
+  assert.equal(vraag.zwaarden, 1);
+  assert.equal('paarden' in vraag, false, 'een paard vraagt hij niet aan de smid');
+  for (const wat of ['zwaarden', 'schilden', 'harnassen']) T.zetVoorraad(D, wat, 1);
+  T.werkSoldatenBij(D);
+  assert.equal(T.soldatenVan(D, huis).length, 0, 'nog geen paard');
+  assert.ok(T.GEBOUW_DELEN.wachthuis(D, huis)[0].regels.some((r) => r.tekst && r.tekst.includes(T.t('waiting for a horse from the merchant'))));
+  T.zetVoorraad(D, 'paarden', 1);
+  T.werkSoldatenBij(D);
+  const p = T.soldatenVan(D, huis)[0];
+  assert.ok(p, 'nu wel');
+  assert.equal(p.soldaat.soort, 'ridder');
+  assert.equal(D.voorraad.paarden || 0, 0, 'hij nam het paard mee');
+});
+
 test('schild en harnas vangen een deel van elke klap af, maar niets van een bout uit een kruisboog', () => {
   const B = T.SOLDATEN_INSTELLINGEN.bescherming;
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } } });

@@ -54,7 +54,7 @@ test('de keuring: een goed level is goed, en elke fout heeft een zin', () => {
   heeft(fouten([{ id: 'a', als: [{ doel: 'd' }] }]), 'doel d komt er nergens bij');
   heeft(fouten([], { kapot: { x: 1, y: 1 } }), 'gebied kapot');
   heeft(fouten([{ id: 'a', dan: [{ scene: 'dansen' }] }]), 'de scène dansen bestaat niet');
-  heeft(T.keurScenario({ dorpen: [{ wacht: ['ridder'] }] }), 'de soldaat ridder bestaat niet');
+  heeft(T.keurScenario({ dorpen: [{ wacht: ['olifant'] }] }), 'de soldaat olifant bestaat niet');
   heeft(T.keurScenario({ dorpen: [{ dicht: ['kasteeltje'] }] }), 'het gebouw kasteeltje bestaat niet');
   // De woorden van het hol (2c): alleen in een level met een hol, en het gebied 'hol' is van het spel.
   heeft(fouten([{ id: 'a', als: [{ hol: 'verslagen' }] }]), 'de voorwaarde hol vraagt een dorp met een hol');

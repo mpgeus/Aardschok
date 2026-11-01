@@ -156,6 +156,7 @@
     bogen: T.t('Bows. From the weaponsmith: an archer shoots far, but not with an enemy alongside.'),
     kruisbogen: T.t('Crossbows. From the weaponsmith: a bolt goes through shield and armour.'),
     harnassen: T.t('Leather armour. The weaponsmith makes it from hides: it stops part of every blow, but not a crossbow bolt.'),
+    paarden: T.t('Horses. From the merchant: a knight rides one, and is faster and harder to bring down.'),
     wijn: T.t('Wine. From the vineyard farm, picked in {maand}: the craftsmen want it alongside their ale, and it does not spoil.', { maand: maandToon('wijnmaand') }),
   };
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
@@ -223,19 +224,21 @@
     '<path d="M4.5 9.5L12 12l7.5-2.5" fill="none" stroke="#e6d3ad" stroke-width=".8"/>');
   const HARNAS_ICOON = svg('<path d="M8 4l4 2 4-2 3 3-2 3v9.5H7V10L5 7z" fill="#a0683a" stroke="#c98f55" stroke-width="1.1" stroke-linejoin="round"/>' +
     '<path d="M7.5 13.5h9" stroke="#6e4220" stroke-width="1"/>');
+  const PAARD_ICOON = svg('<path d="M6 20c0-5 1-8 4-10l-1-3 3 1c3-2 6 0 7 3l1 3-3 1-2-2c-1 2-1 5 0 7z" fill="#8a5a2c" stroke="#5e3a1a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M10.5 10c-1.5 2-2 5-2 8" fill="none" stroke="#5e3a1a" stroke-width="1"/>');
   const KLEI_ICOON = svg('<path d="M4 17c0-4 3-7 8-7s8 3 8 7c0 1.5-1 2-3 2H7c-2 0-3-.5-3-2z" fill="#b5653c" stroke="#7a3a1c" stroke-width="1.1"/>');
   Object.assign(GRONDSTOF_ICOON, {
     planken: PLANKEN_ICOON, steen: STEEN_ICOON, groente: GROENTE_ICOON, eieren: EIEREN_ICOON, vis: VIS_ICOON,
     brood: BROOD_ICOON, meel: ZAK_ICOON, kalk: ZAK_ICOON, riet: RIET_ICOON, turf: TURF_ICOON, laken: LAKEN_ICOON,
     vaten: VATEN_ICOON, melk: MELK_ICOON, klei: KLEI_ICOON, leer: GRONDSTOF_ICOON.huiden,
     speren: SPEER_ICOON, pieken: PIEK_ICOON, schilden: SCHILD_ICOON, bogen: BOOG_ICOON, kruisbogen: KRUISBOOG_ICOON,
-    harnassen: HARNAS_ICOON,
+    harnassen: HARNAS_ICOON, paarden: PAARD_ICOON,
   });
   // De volgorde in de voorraad: eerst wat je bouwt, dan het eten, dan de rest; een waar die hier niet staat, komt
   // achteraan, met een zak als pictogram.
   const VOLGORDE = ['hout', 'planken', 'steen', 'graan', 'brood', 'meel', 'vlees', 'vis', 'kaas', 'groente', 'eieren',
     'wijn', 'bier', 'melk', 'hooi', 'wol', 'laken', 'huiden', 'leer', 'ijzer', 'gereedschap', 'speren', 'pieken',
-    'zwaarden', 'schilden', 'bogen', 'kruisbogen', 'harnassen', 'zout', 'klei',
+    'zwaarden', 'schilden', 'bogen', 'kruisbogen', 'harnassen', 'paarden', 'zout', 'klei',
     'riet', 'turf', 'kalk', 'vaten', 'mest'];
 
   // ── De voorraad, linksonder, en het dorp in de balk bovenaan ──

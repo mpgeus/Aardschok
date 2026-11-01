@@ -48,6 +48,7 @@
     // de stukken van de wapenmaker, voor de soldaten (js/soldaten.js)
     speren: () => T.t('spears'), pieken: () => T.t('pikes'), zwaarden: () => T.t('swords'), schilden: () => T.t('shields'),
     bogen: () => T.t('bows'), kruisbogen: () => T.t('crossbows'), harnassen: () => T.t('leather armour'),
+    paarden: () => T.t('horses'),
   };
   // Wat je telt, heeft een enkelvoud; de rest is een hoeveelheid ("3 grain").
   const TELBAAR = {
@@ -59,6 +60,7 @@
     zwaarden: (n) => T.t('{n|# sword|# swords}', { n }), schilden: (n) => T.t('{n|# shield|# shields}', { n }),
     bogen: (n) => T.t('{n|# bow|# bows}', { n }), kruisbogen: (n) => T.t('{n|# crossbow|# crossbows}', { n }),
     harnassen: (n) => T.t('{n|# leather armour|# leather armours}', { n }),
+    paarden: (n) => T.t('{n|# horse|# horses}', { n }),
   };
   T.waarNaam = (wat) => (WAREN[wat] ? WAREN[wat]() : wat);
   T.hoeveel = (n, wat) => (TELBAAR[wat] ? TELBAAR[wat](n) : T.t('{n} {waar}', { n, waar: T.waarNaam(wat) }));

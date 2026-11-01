@@ -2621,13 +2621,14 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 - **De prijs van een soldaat** (3b1, 28 okt; `scenario.md`, 7: "De prijs van een soldaat is de waarde van zijn stukken"):
   `T.soldaatPrijs(soort)` telt de waarde van zijn stukken (`T.waardeVan`, js/einde.js, de tabel van de punten van 186);
   de hooivork, die geen waar is, staat er op zijn eigen naam (`waarde.hooivork: 1`, B1). Een speerman kost zo 4, een
-  boogschutter 2, een zwaardvechter 7.
+  boogschutter 2, een zwaardvechter 7, een ridder 15.
 - `js/soldaten.js` (werklijst vraag 159, 15 okt; Marcel: "A1, B1, C1, D1", de wapens "sword, spear, shield, pike, bow,
   crossbow, armor", in vaste soorten): **in het wachthuis word je soldaat.** Per wachthuis `g.soldaten` (hoeveel je er
-  per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zes soorten met vaste
+  per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zeven soorten met vaste
   stukken (`T.SOLDAAT_SOORTEN`: militie met een hooivork, speerman, piekenier, zwaardvechter, boogschutter,
-  kruisboogschutter), en zeven stukken als waren (`T.STUKKEN`: speren, pieken, zwaarden, schilden, bogen, kruisbogen,
-  harnassen; de hooivork heeft elke boer). `T.werkSoldatenBij` (elke ochtend na `T.verdeelHanden` via `T.tikSoldatenDag`,
+  kruisboogschutter, ridder), en acht stukken als waren (`T.STUKKEN`: speren, pieken, zwaarden, schilden, bogen, kruisbogen,
+  harnassen, en paarden, `gekocht`: van de marskramer en niet van de wapenmaker; de hooivork heeft elke boer). `T.opPaard(e)`:
+  meer leven (`T.levenAlsMan`) en een grotere pas (`T.snelheidVan`). `T.werkSoldatenBij` (elke ochtend na `T.verdeelHanden` via `T.tikSoldatenDag`,
   na het afbreken, en meteen na een knop, `T.zetSoldaten`): wie er te veel is, levert zijn stukken in, en wie er te
   weinig is, komt erbij uit wie geen werk heeft (B1: `T.kanWerken` en geen `p.werk`, volwassen of jong, niet van het
   gezin van de aanvoerder), zodra al zijn stukken in de opslag liggen. Een soldaat werkt en bouwt niet (`p.soldaat` in

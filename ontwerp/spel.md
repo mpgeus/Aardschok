@@ -1083,10 +1083,12 @@ aanvallen, roept om hulp (nog niet gebouwd; werklijst vraag 116, bij stap 3).
 
 **Zo werken de soldaten nu** (15 okt, vraag 159; Marcel: "A1, B1, C1, D1", en de wapens "sword, spear, shield, pike, bow,
 crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`, `test/soldaten.test.cjs`):
-- **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan zes soorten, elk met een − en een +, samen
+- **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan zeven soorten, elk met een − en een +, samen
   hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en harnas (sinds 21 okt; Marcel: "Speer is een 2 handed weapon", dus geen schild), de
-  piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, en de
-  kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
+  piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, de
+  kruisboogschutter kruisboog en harnas, en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Een
+  paard maakt de wapenmaker niet: het komt uit de stal, en de marskramer heeft er soms een (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"). De ridder heeft twee keer het leven van een soldaat
+  en een grotere pas (`ridder` in `T.SOLDATEN_INSTELLINGEN`; die getallen zijn Claudes voorstel). Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
   meer, eet mee zoals iedereen, staat in zijn dienst bij het wachthuis en slaapt daarbuiten thuis (de diensten,
   hieronder bij kijken, kiezen en sturen). Anders zegt het briefje waarop hij

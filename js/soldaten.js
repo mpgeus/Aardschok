@@ -6,7 +6,8 @@
 // `plaatsen`. Elke soort heeft vaste stukken (T.SOLDAAT_SOORTEN, zoals in Knights and Merchants): de militie een
 // hooivork, de speerman speer en harnas (Marcel, 21 okt: "Speer is een 2 handed weapon": geen schild, zoals de lansdrager in
 // Knights and Merchants), de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
-// boogschutter een boog, en de kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan pakt wie
+// boogschutter een boog, de kruisboogschutter kruisboog en harnas, en de ridder zwaard, schild, harnas en paard (Marcel, 1
+// nov: "Ja, hij is duur, schild, zwaard, harnas en paard"). Liggen al zijn stukken in de opslag, dan pakt wie
 // geen werk heeft (B1: geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het
 // gezin van de aanvoerder, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
 // dienst bij het wachthuis en slaapt daarbuiten thuis (de dag- of de nachtdienst, js/kiezen.js; vraag 170, stap 4). Zet
@@ -17,6 +18,7 @@
 // De stukken maakt de wapenmaker (T.GEBOUWEN.wapenmaker, in het gehucht; C1, en Marcel erbij: "iemand kan gewoon
 // wapensmid worden"): elke dag één, het stuk dat het meest gevraagd wordt (T.wapensGevraagd: wat de wachthuizen willen en
 // nog niet hebben), van planken, ijzer of huiden (T.receptVan, js/gebouwen.js). Vraagt niemand iets, dan staat hij stil.
+// Een paard maakt hij niet: dat koop je van de marskramer (js/handel.js).
 //
 // In het gevecht (js/gevecht.js) slaat elk wapen anders (D1; T.slagVan): de hooivork zwak, de speer en de piek reiken twee
 // tegels (de piek slaat harder; opzij alleen van ernaast, steekReik in js/gevecht.js), het zwaard hard, en de boog en de kruisboog schieten ver waar ze zien, maar niet met een
@@ -46,6 +48,9 @@
     },
     // Zoveel schade vangt het van elke klap af.
     bescherming: { schild: 2, harnas: 1 },
+    // Wat zijn paard de ridder geeft: zoveel maal het leven van een soldaat (T.levenAlsMan, js/rovers.js), en zoveel maal zijn
+    // pas (T.snelheidVan, js/wereld.js).
+    ridder: { leven: 2, snelheid: 1.6 },
   };
   const IN = () => T.SOLDATEN_INSTELLINGEN;
 
@@ -60,6 +65,8 @@
     kruisboog: { waar: 'kruisbogen', wapen: true, schiet: true, doorHarnas: true, naam: () => T.t('crossbow') },
     schild: { waar: 'schilden', naam: () => T.t('shield') },
     harnas: { waar: 'harnassen', naam: () => T.t('armour') }, // van leer; een ijzeren harnas komt later
+    // `gekocht`: dat maakt de wapenmaker niet, dat komt van de marskramer (js/handel.js)
+    paard: { waar: 'paarden', gekocht: true, naam: () => T.t('horse') },
   };
   T.STUKKEN = STUKKEN;
   // Is deze waar een stuk (een speer, een schild, ...)? Die bestaan alleen heel: de wapenmaker maakt ze heel (T.receptVan,
@@ -75,6 +82,7 @@
     zwaardvechter: { stukken: ['zwaard', 'schild', 'harnas'], naam: () => T.t('swordsman') },
     boogschutter: { stukken: ['boog'], naam: () => T.t('archer') },
     kruisboogschutter: { stukken: ['kruisboog', 'harnas'], naam: () => T.t('crossbowman') },
+    ridder: { stukken: ['zwaard', 'schild', 'harnas', 'paard'], naam: () => T.t('knight') },
   };
   const SOORTEN = Object.keys(T.SOLDAAT_SOORTEN);
   T.soortNaam = (soort) => T.SOLDAAT_SOORTEN[soort].naam();
@@ -108,11 +116,12 @@
   // Tot zoveel maakt de wapenmaker (T.maaktTot, js/gebouwen.js), min wat er al ligt.
   T.wapensGevraagd = function (D) {
     const uit = {};
-    for (const stuk in STUKKEN) if (STUKKEN[stuk].waar) uit[STUKKEN[stuk].waar] = 0;
+    const vanSmid = (stuk) => STUKKEN[stuk].waar && !STUKKEN[stuk].gekocht;
+    for (const stuk in STUKKEN) if (vanSmid(stuk)) uit[STUKKEN[stuk].waar] = 0;
     for (const g of wachthuizen(D)) {
       for (const soort of SOORTEN) {
         const nog = Math.max(0, (gewild(g)[soort] || 0) - vanSoort(D, g, soort).length);
-        for (const stuk of stukkenVan(soort)) if (STUKKEN[stuk].waar) uit[STUKKEN[stuk].waar] += nog;
+        for (const stuk of stukkenVan(soort)) if (vanSmid(stuk)) uit[STUKKEN[stuk].waar] += nog;
       }
     }
     return uit;
@@ -207,12 +216,14 @@
   // Waarom er bij wachthuis g minder soldaten van deze soort zijn dan je wilt, als een stukje zin.
   function waaromNog(D, soort) {
     const mist = ontbreekt(D, soort);
-    if (mist.length) {
-      const waren = T.opsomming(mist.map((stuk) => T.waarNaam(STUKKEN[stuk].waar)));
+    const bijSmid = mist.filter((stuk) => !STUKKEN[stuk].gekocht);
+    if (bijSmid.length) {
+      const waren = T.opsomming(bijSmid.map((stuk) => T.waarNaam(STUKKEN[stuk].waar)));
       return (D.gebouwen || []).some((x) => x.soort === 'wapenmaker')
         ? T.t('waiting for {waren} from the weaponsmith', { waren })
         : T.t('waiting for {waren}: build a weaponsmith', { waren });
     }
+    if (mist.length) return T.t('waiting for a horse from the merchant');
     return T.t('nobody without work');
   }
 
@@ -292,6 +303,9 @@
     const s = STUKKEN[wapen];
     return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas };
   };
+
+  // Zit hij op een paard (de ridder)? Dan heeft hij meer leven en een grotere pas (`ridder` in de instellingen).
+  T.opPaard = (e) => !!(e && e.bewoner && e.bewoner.soldaat && stukkenVan(e.bewoner.soldaat.soort).includes('paard'));
 
   // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat). Van een bout uit een kruisboog
   // niets.

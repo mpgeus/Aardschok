@@ -106,7 +106,7 @@ test('een veldslag: de keuring, en twee legers zonder dorp, elk in een linie in 
     heeft(T.keurScenario({ veldslag: { kaart: 'nergens', zaad: 1, legers: [{}, {}] } }), 'de kaart nergens is er niet');
     heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{}] } }), 'minstens twee legers');
     heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{}, {}, {}] } }), 'is voor 2 spelers');
-    heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{ soorten: { ridder: 1 } }, {}] } }), 'de soldaat ridder bestaat niet');
+    heeft(T.keurScenario({ veldslag: { kaart: 'ford', zaad: 1, legers: [{ soorten: { olifant: 1 } }, {}] } }), 'de soldaat olifant bestaat niet');
     const S = slag(L.veldslag.legers, 5);
     const [A, B] = S.dorpen;
     assert.equal(S.dorp, A);

@@ -883,6 +883,8 @@
     kruisboog: T.t('crossbow'),
     schild: T.t('shield'),
     harnas: T.t('leather armour'),
+    ridder: T.t('knight'),
+    leven: T.t('life'),
     afgeslagen: T.t('beaten off'),
     dood: T.t('death'),
     gewond: T.t('wounded'),

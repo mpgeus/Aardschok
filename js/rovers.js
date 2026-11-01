@@ -231,8 +231,9 @@
   // briefje (js/kiezen.js), vóór hij ooit vocht.
   T.levenAlsMan = function (e) {
     const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
-    if (e.maxLeven === s.leven) return { leven: e.leven, max: s.leven };
-    return { leven: (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0), max: s.leven };
+    const max = T.opPaard(e) ? Math.round(s.leven * T.SOLDATEN_INSTELLINGEN.ridder.leven) : s.leven;
+    if (e.maxLeven === max) return { leven: e.leven, max };
+    return { leven: (e.maxLeven ? e.leven : 0) + max - (e.maxLeven || 0), max };
   };
 
   // Een man of een dorpeling valt (T.valt, js/gevecht.js): hij is dood, en een mond minder. Het bericht zegt wie het

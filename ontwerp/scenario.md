@@ -416,8 +416,8 @@ skirmish.
   belegeraar wint als hij de burcht inneemt, het hart van het kasteel; de verdediger als de belegeraar niemand meer
   heeft (voorstel). Een kasteel kiezen komt eerst, zelf bouwen erna: dan is het gevecht te proberen zonder bouwfase.
 - **De prijs van een soldaat is de waarde van zijn stukken.** Elke soort heeft vaste stukken (`T.SOLDAAT_SOORTEN`: de
-  militie een hooivork, de speerman een speer en een harnas, en zo de piekenier, de zwaardvechter, de boogschutter en de
-  kruisboogschutter), en elk stuk heeft al een waarde in goud, in de tabel van de punten van 186
+  militie een hooivork, de speerman een speer en een harnas, en zo de piekenier, de zwaardvechter, de boogschutter, de
+  kruisboogschutter en de ridder), en elk stuk heeft al een waarde in goud, in de tabel van de punten van 186
   (`T.EINDE_INSTELLINGEN.waarde`: een speer 2, een harnas 2, een kruisboog 3; alleen de hooivork van de militie staat er
   nog niet in). Een speerman kost zo 4. Zo komt er geen tweede prijslijst.
 - **De kaart komt uit de generator:** een willekeurig zaad, en daaruit een uitsnede van zo'n 120 bij 120 tegels (een

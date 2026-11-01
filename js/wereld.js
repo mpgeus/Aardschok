@@ -155,7 +155,7 @@
   // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat; je soldaten en veteranen even snel als de held
   // (T.KIEZEN_INSTELLINGEN.loopt, js/kiezen.js; vraag 191, S1), want hun poppetje is dat van een boer. (Tot 25 sep liep de
   // tovenaar trager naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
-  T.snelheidVan = (e) => (e.bewoner && (e.bewoner.soldaat || e.bewoner.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt : e.snelheid);
+  T.snelheidVan = (e) => (e.bewoner && (e.bewoner.soldaat || e.bewoner.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt * (T.opPaard(e) ? T.SOLDATEN_INSTELLINGEN.ridder.snelheid : 1) : e.snelheid);
 
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.
