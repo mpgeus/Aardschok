@@ -33,6 +33,24 @@ Nummer 1 tot en met 5 doen het meest. Bij 6 tot en met 10 volstaat "zo goed moge
 
 `referentie/aardschok-boogschutter-draai-koker.png` is de nieuwe plaat, uit dat prompt: de koker zit nu in alle acht richtingen op dezelfde schouder, de boog in ZW staat rechtop, en verder is de man gelijk gebleven. De figuur is 482 pixels hoog. De oude plaat blijft bewaard, en die keten staat in `splat/boog-koker-links`.
 
+## De platen van de kruisboogschutter (1 nov)
+
+Marcel: "Dit wordt de kruisboog schutter. De basisplaats en met wapen", en daarna het wapen zelf.
+
+- `referentie/aardschok-kruisboog-draai-basis.png`: de man zonder wapen, met vrije armen. Hieruit komt het lijf, want de kruisboog moet los kunnen (naar de schouder, naar de grond). De run is schoon.
+- `referentie/aardschok-kruisboog-draai.png`: dezelfde man met de kruisboog in twee handen en de koker op de rechterheup. Z en N kloppen. In ZW en W zit de koker aan de andere kant, en zijn mouwen zijn grijs in plaats van bruin gestikt. Hieruit komt alleen de koker. De kruisboog in deze run ligt plat tegen het lijf, en de armen zijn rommelig.
+- `referentie/aardschok-kruisboog-los-draai.png`: de kruisboog alleen, in acht richtingen van schuin boven. Hieruit komt het wapen.
+
+## De nieuwe platen van 1 nov
+
+**De boogschutter met hoed.** Marcel: "Ik vind dit beter voor de Boogschutter eigenlijk". `referentie/aardschok-boogschutter-draai-hoed.png` (de man zonder wapen, met een hoed met veer) en `aardschok-boog-los-draai.png`. De koker komt uit de eerdere plaat, `aardschok-boogschutter-draai-koker.png`.
+
+**De pikeman.** Marcel: "Dit wordt de pikeman". `referentie/aardschok-pikeman-draai-basis.png` (harnas, zonder wapen) en `aardschok-hellebaard-los-draai.png`. In het spel heet hij `piekenier`, en zijn wapen `piek`; op de plaat is het een hellebaard.
+
+**De ridder.** Marcel: "De knight". `referentie/aardschok-ridder-paard-draai.png`, `aardschok-ridder-draai-basis.png` (zittend, zonder wapen), `aardschok-schild-los-draai.png` en `aardschok-zwaard-los-draai.png`. Het spel heeft nog geen ridder: `T.SOLDAAT_SOORTEN` kent wel de zwaardvechter (zwaard, schild, harnas), en een paard is er nog niet. Het paard vraagt een eigen skelet en looppas.
+
+**Wat de runs hiervan laten zien:** één run op een zijaanzicht van het paard geeft al bijna het hele paard. De ruiter en het schild hebben er twee nodig, voor en achter: hun achterkant verzint de run wit of met de leeuw erop. Het zwaard komt uit één run. Bij een dun of schuin aanzicht kiest het model zelf de stand, dus recht van voren of opzij werkt het best.
+
 ## Wat je aanlevert
 
 - **Plaat A (nodig):** Z, W, N en O op ooghoogte, en liefst ook de vier diagonalen. Hier komen de vorm en het grootste deel van de verf uit.

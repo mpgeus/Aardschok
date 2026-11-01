@@ -1,6 +1,6 @@
-# TripoSplat op de speerman
+# TripoSplat op de figuren
 
-31 okt 2026, avond. Marcel gaf de link ("Kunnen we dit proberen"), daarna de plaat met alle kanten (`referentie/aardschok-speerman-draai-alle.png`: "Dit is denk ik de beste"), en toen dezelfde figuur met de speer in de hand (`referentie/aardschok-speerman-draai-speer.png`: "Dit is voor de speerman"). Platen, film en logs staan in `docs/art/bewijs/triposplat/`; die van de plaat zonder speer in `zonder-speer/`. Begin bij `in-het-spel.png`, `spelmaat-beide.png`, `speerman-staan-lopen-steken.png` en `boogschutter-staan-lopen-schieten.png`; `geraakt-en-sterven.png` en `sterven-in-het-spel.png`; de films heten `speerman-…` en `boogschutter-…`, met `-lopen`, `-aanval`, `-geraakt` en `-sterven`.
+31 okt 2026, avond. Marcel gaf de link ("Kunnen we dit proberen"), daarna de plaat met alle kanten (`referentie/aardschok-speerman-draai-alle.png`: "Dit is denk ik de beste"), en toen dezelfde figuur met de speer in de hand (`referentie/aardschok-speerman-draai-speer.png`: "Dit is voor de speerman"). Platen, film en logs staan in `docs/art/bewijs/triposplat/`; die van de plaat zonder speer in `zonder-speer/`. Per figuur staan er `<figuur>-staan-lopen-…png`, `<figuur>-geraakt-en-sterven.png` en de films `<figuur>-lopen`, `-aanval`, `-geraakt` en `-sterven`; samen in het spel: `drie-in-het-spel.png`. De boogschutter met helm staat in `met-helm/`.
 
 **Hoe een speerman zijn speer houdt** (Marcel, 1 nov):
 
@@ -13,7 +13,48 @@
 - **Staan en lopen:** in de linkerhand, met de arm omlaag, zoals op de plaat.
 - **Schieten:** de linkerschouder naar het doel, de boog omhoog, spannen en loslaten.
 
-## De boogschutter (1 nov)
+## De stand (1 nov, avond)
+
+| Figuur | Lijf | Wapen en wat erbij hoort | Keten | Vellen samen |
+|---|---|---|---|---|
+| Speerman | `aardschok-speerman-draai-speer.png` | De speer uit dezelfde plaat | `keten_splat_vel.sh speer` | 4.6 miljoen pixels, 2.3 MB |
+| Boogschutter | `aardschok-boogschutter-draai-hoed.png` | De boog uit `aardschok-boog-los-draai.png`, de koker uit `-draai-koker.png` | `boog` | 3.2 miljoen pixels, 2.1 MB |
+| Kruisboogschutter | `aardschok-kruisboog-draai-basis.png` | De kruisboog uit `aardschok-kruisboog-los-draai.png`, de koker uit `-draai.png` | `kruis` | 3.4 miljoen pixels, 2.1 MB |
+| Pikeman | `aardschok-pikeman-draai-basis.png` | De hellebaard uit `aardschok-hellebaard-los-draai.png` | `piek` | 6.8 miljoen pixels, 2.4 MB |
+| Ridder | Stilstaande proef, zie onder | Paard, schild en zwaard elk uit een eigen plaat | `hy_ridder.py` | |
+
+Alle vier staan, lopen, vechten, worden geraakt en sterven in acht richtingen, alleen in de browser getest. Marcel heeft ze nog niet beoordeeld, en niets is in productie.
+
+**Wat dit opleverde: een lijf zonder wapen en het wapen op een eigen plaat.** Marcel, bij de kruisboogschutter: "De basisplaats en met wapen", en daarna het wapen alleen. Een wapen op een eigen plaat vult zijn plaat, dus het komt veel scherper en echt in 3D uit de run. De armen van het lijf zijn dan vrij en hoeven niet los te komen van wat ze vasthouden. Een run met het wapen in de hand zet de kruisboog plat tegen het lijf, en de armen werden rommelig.
+
+## De kruisboogschutter (1 nov)
+
+- **De kruisboog is één run op het aanzicht W**, van de vier de netste. Hij wordt recht gezet (de lade langs y, de stijgbeugel voorop, de trekker omlaag), en op 80 cm gezet: op 72 cm werd de boog op spelmaat een dun lijntje.
+- **De regels van 26 okt** (`beeld.md`): staan vanaf de rechterheup schuin naar voren, zoals op de plaat met wapen; lopen op de linkerschouder, de linkerhand onder de kolf en de rechterarm vrij; schieten met de kolf tegen de rechterschouder. Bij het schot springt de pees naar voren en is de bout weg.
+- **Zijn zij:** zijn armen hangen nooit, dus wat de armen bedekten, komt altijd bloot. De run verzint daar een lichte vlek, en die krijgt nu de stof van die kant.
+- **Herladen ontbreekt.** Marcel vroeg het op 26 okt. Het is een nieuwe houding in `js/sprites.js`, dus een regel in het spel: dat is een aparte stap.
+
+## De boogschutter met hoed (1 nov)
+
+Marcel: "Ik vind dit beter voor de Boogschutter eigenlijk". Eén ding erbij: **de hoed met de veer**. Een hoed met veer is links en rechts niet gelijk, dus hij wordt niet gespiegeld, en hij komt helemaal uit de run op Z, want twee runs zetten de veer niet op dezelfde plek. Wat Z van de hoed niet zag, verzint hij bijna zwart: dat krijgt het bruin van de kant die hij wel zag. Op spelmaat is de veer dun, en de achterkant van de hoed is egaal.
+
+## De pikeman (1 nov)
+
+Marcel: "Dit wordt de pikeman". In het spel heet hij `piekenier`; op zijn plaat is het wapen een hellebaard. Hij houdt hem volgens de regel van de speer. Mijn keuze: stekend houdt hij hem achteraan vast en naast zijn lijf (de hand 24 cm van de onderkant), omdat de steel van 1,9 m anders door zijn buik gaat. Wit op staal is geen fout, dus die regel van de verf staat bij hem uit (`wit_tot=0`). Zijn vellen zijn het grootst van allemaal, omdat de steel ver uitsteekt: aanval 2090 × 1208, 690 KB, cel 209 × 151, sterven 1820 × 1568, 478 KB, cel 260 × 196.
+
+## De ridder: een stilstaande proef (1 nov)
+
+Marcel: "De knight", met vier platen: het paard, de ruiter zonder wapen (zittend), het schild en het zwaard. Dit is alleen een proef om te zien of hij op spelmaat leest: `hy_ridder.py`, en `bewijs/triposplat/ridder-proef-spelmaat.png`. Hij beweegt nog niet, en is niet in het spel geweest.
+
+- **Paard:** de linkerkant uit een run op W en de rechterkant uit een run op O. Eén zijaanzicht geeft al bijna het hele paard; dat werkt beter dan ik verwachtte.
+- **Ruiter en schild:** voor uit Z, achter uit N. Hun achterkant verzint een run wit, of met de leeuw erop.
+- **Zwaard:** één run op Z.
+- **De snede** gaat hier per kolom door het eigen midden, en niet per hoogte: een schild is gebogen, en anders valt de rand eraf.
+- **De maat is mijn keuze:** het paard 1,9 m hoog en de ruiter op ware grootte; samen 2,74 m met de pluim, in een cel van 135 × 196 pixels. De platen hebben elk een eigen schaal, en de ruiter is op zijn plaat slanker dan de andere mannen. Zijn voeten komen net onder de stijgbeugels.
+
+Wat nog moet voor hij kan lopen: een eigen skelet voor het paard (vier benen, nek, staart, het kleed), een stap en een draf, en de ruiter die meebeweegt; dan slaan met het zwaard, geraakt worden en vallen. En een regel in het spel: `T.SOLDAAT_SOORTEN` heeft geen ridder en het spel geen paarden. Marcel, 1 nov: "Ja, hij is duur, schild, zwaard, harnas en paard", en voor het skelet en de looppas: "Ja graag".
+
+## De boogschutter met helm (1 nov)
 
 Marcel stuurde de plaat `referentie/aardschok-boogschutter-draai.png`, en later `aardschok-boogschutter-draai-koker.png`, waarop de koker in elke richting op dezelfde schouder zit (uit GPT, met `prompt-boogschutter.txt`). De figuur komt nu uit die tweede plaat; die van de eerste staat in `splat/boog-koker-links`. Dat is de tweede figuur door deze keten: `keten_splat_vel.sh boog`, in zo'n 25 minuten tot en met de vellen. Wat voor de speerman was gebouwd, werkte meteen voor de rig en de verf. Wat hij nieuw vroeg:
 
@@ -30,7 +71,7 @@ Wat de tweede plaat vroeg:
 
 Een run op NO, om de koker op de goede schouder te krijgen, viel eerder al af: bij een schuin aanzicht kiest het model zelf hoe de figuur staat, en achter op zijn hoofd verscheen een gezicht. Een betere plaat was hier de goedkoopste oplossing.
 
-Gemeten bij de boogschutter: staan 260 × 792 (196 KB; cel 65 × 99), lopen 852 × 792 (709 KB; cel 71 × 99), aanval 1350 × 920 (616 KB; cel 135 × 115).
+Deze stand staat in `splat/boog-koker`; de koker van de boogschutter met hoed komt daaruit.
 
 ## Geraakt worden en sterven (1 nov)
 

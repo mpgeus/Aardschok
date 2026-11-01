@@ -1,0 +1,30 @@
+{
+ "schaal": 0.9981,
+ "draai_graden": 1.02,
+ "icp_fout_m": 0.0076,
+ "naad_verschil_cm": 6.9,
+ "voor": 140201,
+ "achter": 130875,
+ "speer_uit_Z": 0,
+ "speer_uit_N_weg": 0,
+ "helm_Z": {
+  "rand_z": 1.151,
+  "gespiegeld": 24503,
+  "straal": 0.21
+ },
+ "helm_N": {
+  "rand_z": 1.166,
+  "gespiegeld": 24138,
+  "straal": 0.21
+ },
+ "naad_streep": 39394,
+ "helm_band": 14128,
+ "boog_punten": [
+  0,
+  0
+ ],
+ "boog_dun": [
+  0,
+  0
+ ]
+}

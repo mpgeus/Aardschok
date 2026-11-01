@@ -21,8 +21,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 
 **Loopt**
 - **Bezig in sessie `lokaal-510618ba`** (1 nov, op Marcels pc): **192, de figuren in de stijl van Settlers II** (`docs/art/hunyuan/TRIPOSPLAT.md`):
-  de speerman en de boogschutter uit TripoSplat staan, lopen, vechten, worden geraakt en sterven, alleen in de browser. Wacht op
-  Marcels oordeel; wat nog open staat: `opmerkingen.md`. Niets in productie.
+  de speerman, de boogschutter (met hoed), de kruisboogschutter en de pikeman uit TripoSplat staan, lopen, vechten, worden geraakt en sterven,
+  alleen in de browser. **Nu: de ridder**, een nieuwe soldaat (Marcel: "Ja, hij is duur, schild, zwaard, harnas en paard"): het skelet en de looppas van het paard, en daarna de regel in het spel.
+  De andere figuren wachten op Marcels oordeel; wat open staat: `opmerkingen.md`. Niets in productie.
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).

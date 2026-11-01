@@ -28,6 +28,7 @@ ZWAAI_VAST = 0.06
 REIK = 0.97
 HOOFD_ACHTEROVER = np.radians(8.0)
 HANG_ARM = (0.1, 0.06, -1.0)
+BOOG_ELLEBOOG = (0.2, 0.9, -0.2)
 HANG_ELLEBOOG = (0.6, 0.8, 0.0)
 ROK_MEE = 1.7
 ELLEBOOG_TWEE = [0.3, -0.05, -0.2]
@@ -519,6 +520,9 @@ def boog_armen(D, P, J, m, ix, zwaai, greep, B):
         D[Rl[0]], D[Rl[1]], D[Rl[2]] = Ra, Ra, Ra
         P[Rl[1]] = P[Rl[0]] + Ra @ (J['onderarm.L'] - J['bovenarm.L'])
         P[Rl[2]] = P[Rl[1]] + Ra @ (J['hand.L'] - J['onderarm.L'])
+        if 'boog_hoog' in m:
+            # een lijf zonder wapen: de hand hangt te laag om de boog te dragen, dus de elleboog buigt een beetje
+            hand_naar(D, P, J, m, ix, 'L', P[ix['borst']] + B @ (np.array(m['boog_hoog']) + np.array([0.0, -0.03 * zwaai, 0.0]) - J['borst']), BOOG_ELLEBOOG, B)
         boven = B @ om_x(ZWAAI_L * zwaai)
         onder = B @ om_x(ZWAAI_L * zwaai - ZWAAI_ELLEBOOG * max(-zwaai, 0.0))
         D[Rr[0]], D[Rr[1]], D[Rr[2]] = boven, onder, onder
@@ -554,6 +558,49 @@ def boog_armen(D, P, J, m, ix, zwaai, greep, B):
     P[Rr[1]], P[Rr[2]] = e, pols
 
 
+def hand_naar(D, P, J, m, ix, k, doel, pool, B):
+    """Eén arm met twee botten: het midden van de hand op `doel`; de hand volgt de onderarm."""
+    ib, io, ih = ix['bovenarm.' + k], ix['onderarm.' + k], ix['hand.' + k]
+    a = P[ib]
+    l1 = np.linalg.norm(J['onderarm.' + k] - J['bovenarm.' + k])
+    l2 = np.linalg.norm(J['hand.' + k] - J['onderarm.' + k])
+    off = np.array(m['hand.' + k]) - J['hand.' + k]
+    Do = B
+    for _ in range(4):
+        pols = doel - Do @ off
+        v = pols - a
+        if np.linalg.norm(v) > REIK * (l1 + l2):
+            pols = a + v / np.linalg.norm(v) * REIK * (l1 + l2)
+        e = twee_botten(a, pols, l1, l2, B @ np.array(pool))
+        Db = draai_van_naar(J['onderarm.' + k] - J['bovenarm.' + k], e - a)
+        Do = draai_van_naar(J['hand.' + k] - J['onderarm.' + k], pols - e)
+    D[ib], D[io], D[ih] = Db, Do, Do
+    P[io], P[ih] = e, pols
+
+
+def kruis_armen(D, P, J, m, ix, zwaai, greep, B, wereld):
+    """De kruisboogschutter. Zonder greep hangen de armen zoals op de plaat. Met greep ligt een hand op de lade (`links`, `rechts`: lokaal op de kruisboog), en een arm zonder plek zwaait met de pas; `los`: hoe ver de handen al losgelaten hebben en hangen."""
+    for k in 'RL':
+        ib, io, ih = ix['bovenarm.' + k], ix['onderarm.' + k], ix['hand.' + k]
+        hoek = ZWAAI_L * zwaai if k == 'R' else -ZWAAI_L * zwaai
+        boven = B @ om_x(hoek)
+        onder = B @ om_x(hoek - ZWAAI_ELLEBOOG * max(-hoek, 0.0))
+        D[ib], D[io], D[ih] = boven, onder, onder
+        P[io] = P[ib] + boven @ (J['onderarm.' + k] - J['bovenarm.' + k])
+        P[ih] = P[io] + onder @ (J['hand.' + k] - J['onderarm.' + k])
+    if greep is None:
+        return
+    G = np.array(greep['plek']) if greep.get('wereld') else wereld(greep['plek'])
+    R_ = np.array(greep['R']) if greep.get('wereld') else B @ greep['R']
+    for k, naam in (('R', 'rechts'), ('L', 'links')):
+        if greep.get(naam) is None:
+            continue
+        v = greep.get('los_' + k, greep.get('los', 0.0))
+        doel = G + R_ @ np.array(greep[naam])
+        hang = P[ix['hand.' + k]] + D[ix['hand.' + k]] @ (np.array(m['hand.' + k]) - J['hand.' + k])
+        hand_naar(D, P, J, m, ix, k, (1 - v) * doel + v * hang, greep['pool_' + k], B)
+
+
 def armen(D, P, J, m, ix, zwaai, greep=None):
     """De armen op de borst: links hangend met een zwaai tegen het rechterbeen in (zwaai: -1 tot 1, positief is rechterbeen voor), rechts een elleboog die de hand op de speer zet."""
     B, pB = D[ix['borst']], P[ix['borst']]
@@ -565,6 +612,9 @@ def armen(D, P, J, m, ix, zwaai, greep=None):
         D[ix['sleutel.' + k]] = B
         P[ix['sleutel.' + k]] = wereld(J['sleutel.' + k])
         P[ix['bovenarm.' + k]] = wereld(J['bovenarm.' + k])
+    if m.get('kruis'):
+        kruis_armen(D, P, J, m, ix, zwaai, greep, B, wereld)
+        return
     if greep is not None and 'hang' in greep:
         # sterven: beide armen hangen aan de borst, en de hand die het wapen hield, zakt langs het lijf
         for k in 'RL':

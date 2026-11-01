@@ -3,7 +3,7 @@
 #
 #   python hy_splat.py maak <plaat.png> <uit.npz> [zaad=42 stappen=20 cfg=3.0 aantal=262144]
 #   python hy_splat.py verf <samen.npz> <verf.npz> plaat=<Z-invoer.png>   wat er nog fout staat, recht gezet: blauw op leer, groen op de naad, en de kleuren van de plaat op de wapenrok
-#   python hy_splat.py rig <verf.npz> <beweging.npz> <v_spel.npz> <map> [draai=0 elevatie=30 ortho=3.0 doel=0.74 pixels=768 richtingen=.. houdingen=staan,lopen,aanval,geraakt,sterven stap=1 sterven_vak=1.25]   hy_rig op de Gaussians, met de speer van de mesh als Gaussians erbij
+#   python hy_splat.py rig <verf.npz> <beweging.npz> <v_spel.npz> <map> [wapen=boog|kruis|piek koker=<verf.npz> kruisboog=<run.npz> piek_run=<run.npz> boog_run=<run.npz> hoed=1 lengte=1.354 draai=0 elevatie=30 ortho=3.0 doel=0.74 pixels=768 richtingen=.. houdingen=staan,lopen,aanval,geraakt,sterven stap=1 sterven_vak=1.25]   hy_rig op de Gaussians, met de speer van de mesh als Gaussians erbij
 #   python hy_splat.py samen <uit.npz> Z=<z.npz> N=<n.npz> [boog=1]   een run op de voorkant en een op de achterkant van de plaat; de voorste helft uit de ene, de achterste uit de andere, met de naad langs de zij. Dan is niets meer geraden en ligt er nergens iets dubbel
 #   python hy_splat.py kijk <uit.npz> <map> [elevatie=20 pixels=640 ortho=auto richtingen=Z,ZW,W,N,O draai=0 lengte=1.354]
 #
@@ -71,6 +71,13 @@ def in_onze_assen(d, draai, lengte):
     f = lengte / lijf_top(P[zicht])
     P *= f
     return P, R, d['schaal'].astype(np.float64) * f
+
+
+def zonder_waas(P, a, marge=0.01):
+    """Het model zet boven wat echt staat vaak een grijs vierkant van grote, bijna doorzichtige punten. Op alfa alleen gaat niet, want de rand van een dun ding is ook half doorzichtig: wat buiten het kader van de rest valt, gaat weg."""
+    g = a > 0.3
+    lo, hi = np.percentile(P[g], 0.01, axis=0) - marge, np.percentile(P[g], 99.99, axis=0) + marge
+    return ((P >= lo) & (P <= hi)).all(1)
 
 
 def lijf_top(P):
@@ -222,6 +229,7 @@ ARM_BUIS = 0.09
 DONKER = 0.33
 ROMP_BOVEN = 0.1
 ZIJ_VANAF = 0.12
+ZIJ_FLETS = 0.6
 STOF_BUREN = 32
 STOF_GLAD = 0.55
 WIT_TOT = 0.98
@@ -235,16 +243,17 @@ def verf(pad, uit, arg):
     import hy_kleur as K
     import hy_rig as H
     d = np.load(pad)
-    P, _, _ = in_onze_assen(d, float(arg.get('draai', 0)), 1.354)
+    P, _, _ = in_onze_assen(d, float(arg.get('draai', 0)), float(arg.get('lengte', 1.354)))
     alfa = d['alfa'].astype(np.float64)
     rgb = d['rgb'].astype(np.float64)
     zicht = alfa > 0.05
     deel = np.zeros(len(P), dtype=np.int8)
-    speer = speer_op_de_plaat(P, alfa)[0]
+    speer = None if 'hoed' in arg else speer_op_de_plaat(P, alfa)[0]
     if speer is not None:
         deel[speer] = 3
     lin = K.srgb_lin(rgb)
-    m = H.maten_figuur(P[zicht], lin[zicht], deel[zicht])
+    z_man = zicht & (P[:, 2] < 1.354 + WAAS_M)
+    m = H.maten_figuur(P[z_man], lin[z_man], deel[z_man])
     if speer is not None:
         m['schouder.R'] = [-m['schouder.L'][0], m['schouder.L'][1], m['schouder.L'][2]]
     arm, _, z_boven, _ = H.arm_los(P, buur_vlakken(P), lin, deel, m)
@@ -265,11 +274,13 @@ def verf(pad, uit, arg):
     # blauw op de helm is verzonnen: staal
     H_ = P[zicht, 2].max()
     op_helm = (z > 0.84 * H_) & (np.hypot(P[:, 0] - np.median(P[z > 0.9 * H_, 0]), P[:, 1] - np.median(P[z > 0.9 * H_, 1])) < HELM_STRAAL) & (deel == 0)
-    blauw_h = op_helm & (K.klasse(K.srgb_lin(rgb)) == 1)
-    rgb[blauw_h] = np.clip(np.median(rgb[op_helm & ~blauw_h], axis=0) * (rgb[blauw_h].mean(1, keepdims=True) / np.median(rgb[op_helm & ~blauw_h])), 0, 1)
+    # (de veer op een hoed mag blauw zijn)
+    blauw_h = op_helm & (K.klasse(K.srgb_lin(rgb)) == 1) & ('hoed' not in arg)
+    if blauw_h.any():
+        rgb[blauw_h] = np.clip(np.median(rgb[op_helm & ~blauw_h], axis=0) * (rgb[blauw_h].mean(1, keepdims=True) / np.median(rgb[op_helm & ~blauw_h])), 0, 1)
     # wat de arm bedekte en wit werd verzonnen, komt bloot zodra hij opgaat
     verz = (rgb.max(1) - rgb.min(1)) / np.maximum(rgb.max(1), 1e-4)
-    wit = (deel == 0) & (np.abs(z - m['riem']) > H.RIEM_HALF) & (z < WIT_TOT) & (verz < WIT_VERZ) & (rgb.mean(1) > WIT_LICHT)
+    wit = (deel == 0) & (np.abs(z - m['riem']) > H.RIEM_HALF) & (z < float(arg.get('wit_tot', WIT_TOT))) & (verz < WIT_VERZ) & (rgb.mean(1) > WIT_LICHT)
     from scipy.spatial import cKDTree
     goed_ = (deel == 0) & ~wit & zicht
     _, i_ = cKDTree(P[goed_]).query(P[wit], k=8, workers=-1)
@@ -277,10 +288,12 @@ def verf(pad, uit, arg):
     # op de zij onder de arm staat de verf van de arm: die komt bloot zodra hij opgaat
     kl = K.klasse(K.srgb_lin(rgb))
     # alleen onder de oksel: daarboven is het de mouw. Rechts is de stof blauw, links geel
-    oksel_k = np.where(x < 0, z_boven['R'], z_boven['L']) - 0.02
+    oksel_k = np.minimum(np.where(x < 0, z_boven['R'], z_boven['L']) - 0.02, float(arg.get('zij_tot', 9.0)))
     for s_k, c in ((-1.0, 1), (1.0, 2)):
-        zij = (deel == 0) & ~arm & (x * s_k > ZIJ_VANAF) & (z > m['riem'] + H.RIEM_HALF) & (z < oksel_k) & (P[:, 1] < KOKER_Y) & (kl == 0)
-        stof = (deel == 0) & ~arm & (kl == c) & (z > m['riem'] + H.RIEM_HALF) & (x * s_k > 0)
+        verz = (rgb.max(1) - rgb.min(1)) / np.maximum(rgb.max(1), 1e-4)
+        # met `zij_tot` (een lijf waarvan de arm altijd opgaat) ook wat flets is: de run verzint daar een lichte vlek in de kleur van de stof
+        zij = (deel == 0) & ~arm & (x * s_k > ZIJ_VANAF) & (z > m['riem'] + H.RIEM_HALF) & (z < oksel_k) & (P[:, 1] < KOKER_Y) & (((kl != c) | (verz < ZIJ_FLETS)) if 'zij_tot' in arg else (kl == 0))
+        stof = (deel == 0) & ~arm & (kl == c) & (z > m['riem'] + H.RIEM_HALF) & (x * s_k > 0) & ((verz > ZIJ_FLETS) if 'zij_tot' in arg else True)
         if zij.any() and stof.any():
             _, i_ = cKDTree(P[stof]).query(P[zij], k=8, workers=-1)
             rgb[zij] = np.median(rgb[stof][i_], axis=1)
@@ -402,6 +415,9 @@ def helm_spiegel(P, rgb, alfa, sp, goede_kant, vrij=0.0):
 HELM_RAND = 0.015
 HELM_STRAAL = 0.21
 HELM_SPEELRUIMTE = 0.012
+HOED_ONDER = 0.06
+HOED_FEL = 0.45
+HOED_DONKER = 0.17
 STREEP_BAND = 0.05
 STREEP_DONKER = 0.72
 STREEP_BUREN = 40
@@ -512,12 +528,13 @@ def boog_weg(P, alfa, rgb):
 def samen(uit, arg):
     """Twee proeven die niet werkten: vier vormen door elkaar gaf vlekken (ze liggen een centimeter uit elkaar, en de geraden kanten komen erdoorheen), en alleen de kleur overnemen werd wazig. Dus snijden: elke run houdt de helft die hij echt zag."""
     dz, dn = np.load(arg['Z']), np.load(arg['N'])
-    Pz, Rz, Sz = in_onze_assen(dz, RUN_DRAAI['Z'], 1.354)
-    Pn, Rn, Sn = in_onze_assen(dn, RUN_DRAAI['N'], 1.354)
+    lengte = float(arg.get('lengte', 1.354))
+    Pz, Rz, Sz = in_onze_assen(dz, RUN_DRAAI['Z'], lengte)
+    Pn, Rn, Sn = in_onze_assen(dn, RUN_DRAAI['N'], lengte)
     # passen op de band langs de naad: daar moeten ze op elkaar aansluiten, en de geraden kant telt dan niet mee
     # de speer komt uit Z alleen: hij is daar het best te zien, en twee runs zetten hem niet op dezelfde plek
-    sz = speer_op_de_plaat(Pz, dz['alfa'])[0]
-    sn = speer_op_de_plaat(Pn, dn['alfa'])[0]
+    sz = None if 'hoed' in arg else speer_op_de_plaat(Pz, dz['alfa'])[0]
+    sn = None if 'hoed' in arg else speer_op_de_plaat(Pn, dn['alfa'])[0]
     sz = np.zeros(len(Pz), dtype=bool) if sz is None else sz
     sn = np.zeros(len(Pn), dtype=bool) if sn is None else sn
     # de boog gaat uit allebei: hij komt uit code
@@ -545,6 +562,19 @@ def samen(uit, arg):
     vrij = -KOKER_KANT if 'boog' in arg else 0.0
     rgb_z, helm_z = helm_spiegel(Pz, rgb_z0, dz['alfa'], sz | bz, -1.0, vrij)
     rgb_n, helm_n = helm_spiegel(Pn, rgb_n0, dn['alfa'], sn | bn, 1.0, vrij)
+    if 'hoed' in arg:
+        # een hoed met een veer is niet links en rechts gelijk, en twee runs zetten de veer niet op dezelfde plek: niet spiegelen, en de hele hoed uit Z
+        rgb_z, rgb_n = rgb_z0.copy(), rgb_n0
+        hoed_z = Pz[:, 2] > helm_z['rand_z'] - HOED_ONDER
+        hoed_n = Pn[:, 2] > helm_n['rand_z'] - HOED_ONDER
+        hz |= hoed_z
+        hn &= ~hoed_n
+        # wat Z niet zag, verzint hij bijna zwart. De kleur van de run op N gaf vlekken (daar zit ook zijn eigen veer in), dus het bruin van de kant die Z wel zag, en het donker dat er zat als schaduw. Geen veer: die is blauw of felgeel
+        k_h = rgb_z0[hoed_z & (dz['alfa'] > 0.3)]
+        fel = (k_h[:, 2] > k_h[:, 0]) | ((k_h.mean(1) > HOED_FEL) & ((k_h.max(1) - k_h.min(1)) / np.maximum(k_h.max(1), 1e-4) > 0.5))
+        bruin = np.median(k_h[~fel & (k_h.mean(1) > HOED_DONKER)], axis=0)
+        donker = hoed_z & (rgb_z0.mean(1) < HOED_DONKER) & (rgb_z0[:, 2] <= rgb_z0[:, 0])
+        rgb_z[donker] = bruin * (0.62 + 0.38 * rgb_z0[donker].mean(1, keepdims=True) / HOED_DONKER)
     if 'boog' in arg:
         # de pijlen steken achter het lijf uit, in de helft van N, en die verzint hun voorkant donker: de voorste helft van de bos komt uit Z
         def pijlen(Q):
@@ -558,7 +588,9 @@ def samen(uit, arg):
     alfa_a = np.concatenate([dz['alfa'][hz], dn['alfa'][hn]])
     sp_a = np.concatenate([sz[hz], np.zeros(int(hn.sum()), dtype=bool)])
     rgb_a, streep = naad_streep(Pa, np.vstack([rgb_z[hz], rgb_n[hn]]), alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'] - HELM_RAND)
-    rgb_a, helm_band = helm_naad(Pa, rgb_a, alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'], helm_z['straal'])
+    helm_band = 0
+    if 'hoed' not in arg:
+        rgb_a, helm_band = helm_naad(Pa, rgb_a, alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'], helm_z['straal'])
     np.savez_compressed(uit, xyz=Pa.astype(np.float32), matrix=np.concatenate([Rz[hz], Rn[hn]]).astype(np.float32), schaal=np.vstack([Sz[hz], Sn[hn]]).astype(np.float32),
                         rgb=rgb_a.astype(np.float32), alfa=alfa_a.astype(np.float32))
     info = {'schaal': round(s, 4), 'draai_graden': round(float(np.degrees(np.arccos(np.clip((np.trace(Ro) - 1) / 2, -1, 1)))), 2), 'icp_fout_m': round(fout, 4), 'naad_verschil_cm': round(float(np.abs(mz - mn).max() * 100), 1), 'voor': int(hz.sum()), 'achter': int(hn.sum()), 'speer_uit_Z': int(sz.sum()), 'speer_uit_N_weg': int(sn.sum()), 'helm_Z': helm_z, 'helm_N': helm_n, 'naad_streep': streep, 'helm_band': helm_band, 'boog_punten': [int(bz.sum()), int(bn.sum())], 'boog_dun': boog_seeds}
@@ -699,6 +731,51 @@ def boog_lokaal():
     return {'P': P_, 'rgb': np.clip(k, 0, 1), 's': np.full(BOOG_N, 0.0045), 'u': u, 'w': w_, 'hoek': r.uniform(0, 2 * np.pi, PIJL_N)}
 
 
+BOOG_RUN_LANG = 1.0
+BOOG_HAND_HOOG = (0.24, -0.14, 0.6)
+BOOG_RUN_N = 40000
+BOOG_RUN_DIK = 1.25
+PEES_WEG = 0.02
+
+
+def boog_uit_run(pad):
+    """De boog uit de run op zijn eigen plaat (`aardschok-boog-los-draai.png`), recht gezet: z langs de boog, y van de pees naar de greep, de greep op (0, 0, 0), en op lengte. De pees van de run gaat eruit: die komt per beeld uit code, zodat hij met de hand mee kan."""
+    d = np.load(pad)
+    P, R_, S_ = in_onze_assen(d, 0.0, 1.0)
+    a, rgb = d['alfa'].astype(np.float64), d['rgb'].astype(np.float64)
+    g = a > 0.3
+    c = np.median(P[g], axis=0)
+    e_z = np.linalg.svd(P[g] - c, full_matrices=False)[2][0]
+    t_ = (P - c) @ e_z
+    a_, b_ = np.percentile(t_[g], [0.2, 99.8])
+    top = P[g & (t_ > b_ - 0.03 * (b_ - a_))].mean(0)
+    bod = P[g & (t_ < a_ + 0.03 * (b_ - a_))].mean(0)
+    mid = (top + bod) / 2
+    e_z = (top - bod) / np.linalg.norm(top - bod)
+    t_ = (P - mid) @ e_z
+    r_ = (P - mid) - np.outer(t_, e_z)
+    d_ = np.linalg.norm(r_, axis=1)
+    midden = g & (np.abs(t_) < 0.05 * np.linalg.norm(top - bod))
+    greep = P[midden & (d_ > np.percentile(d_[midden], 50))].mean(0)
+    e_y = greep - mid
+    e_y -= (e_y @ e_z) * e_z
+    e_y /= np.linalg.norm(e_y)
+    M = np.stack([np.cross(e_y, e_z), e_y, e_z])
+    s = BOOG_RUN_LANG / np.linalg.norm(top - bod)
+    L = (P - greep) @ M.T * s
+    Q = np.einsum('ij,njk->nik', M, R_ * S_[:, None, :]) * s
+    boven, onder = (top - greep) @ M.T * s, (bod - greep) @ M.T * s
+    # de pees: dicht bij de lijn tussen de tippen, tussen de tippen in
+    y_l = (boven[1] + onder[1]) / 2
+    pees = (np.abs(L[:, 1] - y_l) < PEES_WEG) & (np.abs(L[:, 0]) < PEES_WEG) & (np.abs(L[:, 2]) < 0.47 * BOOG_RUN_LANG)
+    z_ = np.nonzero((a > 0.05) & ~pees & zonder_waas(P, a))[0]
+    kies = np.random.default_rng(7).choice(z_, min(BOOG_RUN_N, len(z_)), replace=False, p=a[z_] / a[z_].sum())
+    print('boog uit de run', len(kies), 'tippen', np.round(boven, 3).tolist(), np.round(onder, 3).tolist(), 'pees weg', int(pees.sum()))
+    r = np.random.default_rng(1)
+    return {'P': L[kies], 'Q': Q[kies] * BOOG_RUN_DIK, 'rgb': rgb[kies], 'alfa': a[kies], 'boven': boven, 'onder': onder,
+            'u': r.uniform(0, 1, PEES_N), 'w': r.uniform(0, 1, PIJL_N), 'hoek': r.uniform(0, 2 * np.pi, PIJL_N)}
+
+
 def assen_boog(as_, rol=0.0):
     """De assen van de boog. rol: hoe ver zijn rug naar buiten gedraaid is, in graden. Recht naar voren is hij van voren en achteren een streep, en op de plaat is hij daar juist een boog."""
     e_z = np.array(as_, dtype=np.float64)
@@ -711,7 +788,7 @@ def assen_boog(as_, rol=0.0):
 
 def pees_en_pijl(L, nok, pijl):
     """De pees (van de tippen naar de nok) en de pijl (van de nok door de greep), lokaal. Kleur van de pijl per punt: veren, hout en een stalen punt."""
-    top, bodem = boog_lijn(np.array([1.0]))[0], boog_lijn(np.array([-1.0]))[0]
+    top, bodem = (L['boven'], L['onder']) if 'boven' in L else (boog_lijn(np.array([1.0]))[0], boog_lijn(np.array([-1.0]))[0])
     u = L['u']
     Ps = np.where((u < 0.5)[:, None], top + (nok - top) * (u / 0.5)[:, None], bodem + (nok - bodem) * ((u - 0.5) / 0.5)[:, None])
     v = np.array([0.012, 0.0, 0.0]) - nok
@@ -747,10 +824,169 @@ ZOOL_KLEUR = (0.2, 0.12, 0.07)
 ZOOL_Z = 0.03
 VUIST_BAND = 0.09
 HOUDING_BOTTEN = {'geraakt': 'geraakt2', 'sterven': 'sterven2'}
+# De kruisboog (Marcel, 1 nov: `aardschok-kruisboog-draai-basis.png`, `-draai.png` en `-los-draai.png`). Het lijf komt van de plaat zonder wapen, want de armen moeten los; de koker van de run met wapen, die de kruisboog zelf plat tegen het lijf zet; en het wapen van zijn eigen plaat, een run op het aanzicht W (van de vier de netste). Lokaal: x opzij, y langs de lade naar voren, z omhoog; (0, 0, 0) is de greep bij de trekker.
+KRUIS_LANG = 0.8
+KRUIS_GREEP = 0.3
+LADE_ACHTER = -KRUIS_LANG * KRUIS_GREEP
+KRUIS_N = 70000
+KRUIS_DIK = 1.3
+KRUIS_BOUT_N = 800
+BOUT_LANG = 0.4
+NOK_Y = 0.09
+PEES_BAND = 0.022
+# De standen: waar de kolf is, en de richting van de lade. Staan is de plaat, vanaf de rechterheup schuin naar voren. Lopen op de linkerschouder, de boog achter het hoofd, de linkerhand onder de kolf en de rechterarm vrij (Marcel, 26 okt). Schieten: de kolf tegen de rechterschouder (`beeld.md`).
+KRUIS_WACHT = ((-0.22, -0.05, 0.87), (0.49, -0.33, -0.32))
+KRUIS_SCHOUDER = ((0.22, -0.24, 0.93), (0.0, 0.85, 0.53))
+KRUIS_AANLEG = ((-0.15, -0.03, 0.99), (0.02, -1.0, 0.015))
+HAND_R_OP, HAND_L_OP, HAND_L_KOLF = (0.0, 0.0, -0.012), (0.0, 0.26, -0.018), (0.0, -0.19, -0.03)
+POOL_R, POOL_L, POOL_L_KOLF = (-0.6, 0.3, -0.7), (0.6, 0.2, -0.7), (0.4, -0.1, -1.0)
+KRUIS_J = [0, 3, 6, 9, 12, 15, 18, 21]
+KRUIS_GROND_AS = (0.37, -0.93, 0.0)
+KRUIS_GROND = (0.62, -0.32, 0.09)
+# De koker uit de run met wapen, en zijn eigen tas op die heup gaat weg
+KOKER_RUN_X = -0.185
+KOKER_RUN_Z = (0.36, 0.7)
+TAS_X = -0.17
+TAS_Z = (0.42, 0.72)
 WAAS_M = 0.01
 GREEP_STRAAL = 0.07
 SPEER_SIGMA = 0.0035
 SPEER_ALFA = 0.85
+
+
+def kruisboog_uit_run(pad):
+    """De kruisboog uit de run op zijn eigen plaat, recht gezet: de lade langs y met de stijgbeugel voorop, omhoog langs z, de greep op (0, 0, 0), en op lengte. De pees wordt een schuif per punt: bij het schot springt hij naar de lijn tussen de tippen."""
+    z = np.load(pad)
+    P, R, S = in_onze_assen(z, 0.0, 1.0)
+    a, rgb = z['alfa'].astype(np.float64), z['rgb'].astype(np.float64)
+    g = a > 0.3
+    sat = (rgb.max(1) - rgb.min(1)) / np.maximum(rgb.max(1), 1e-4)
+    hout = g & (sat > 0.55) & (rgb[:, 0] > rgb[:, 2] * 1.5) & (rgb.mean(1) > 0.2)
+    c = np.median(P[hout], axis=0)
+    e_y = np.linalg.svd(P[hout] - c, full_matrices=False)[2][0]
+    t_ = (P - c) @ e_y
+    a_, b_ = np.percentile(t_[g], [0.5, 99.5])
+    # de stijgbeugel is staal, de kolf hout: de kant met het meeste hout is achter
+    if (hout & (t_ > b_ - 0.15 * (b_ - a_))).sum() > (hout & (t_ < a_ + 0.15 * (b_ - a_))).sum():
+        e_y, t_, a_, b_ = -e_y, -t_, -b_, -a_
+    # het vlak van de boog: wat voorop ver van de lade af ligt
+    voor = g & (t_ > a_ + 0.55 * (b_ - a_))
+    e_x = np.linalg.svd((P[voor] - c) - np.outer(t_[voor], e_y), full_matrices=False)[2][0]
+    e_x -= (e_x @ e_y) * e_y
+    e_x /= np.linalg.norm(e_x)
+    e_z = np.cross(e_x, e_y)
+    # omhoog: de trekker hangt onder de lade
+    w_ = (P - c) @ e_z
+    achter = g & (t_ < a_ + 0.45 * (b_ - a_))
+    if abs(np.percentile(w_[achter], 0.5)) < abs(np.percentile(w_[achter], 99.5)):
+        e_z, e_x = -e_z, -e_x
+    M = np.stack([e_x, e_y, e_z])
+    s = KRUIS_LANG / (b_ - a_)
+    L = (P - c) @ M.T * s
+    L[:, 1] -= a_ * s + KRUIS_GREEP * KRUIS_LANG
+    h = np.nonzero(hout)[0]
+    d_ = np.abs(L[h, 1]) < 0.12
+    L[:, 0] -= np.median(L[h[d_], 0])
+    L[:, 2] -= np.median(L[h[d_], 2])
+    Q = np.einsum('ij,njk->nik', M, R * S[:, None, :]) * s
+    # minder punten: hij wordt op spelmaat dertig pixels lang, en elk punt kost tekentijd
+    z_ = np.nonzero((a > 0.05) & zonder_waas(L, a))[0]
+    kies = np.random.default_rng(5).choice(z_, min(KRUIS_N, len(z_)), replace=False, p=a[z_] / a[z_].sum())
+    L, Q, rgb, a = L[kies], Q[kies] * KRUIS_DIK, rgb[kies], a[kies]
+    # de tip van de boog, en de pees: de lijn van de nok naar de tip
+    x_a = np.abs(L[:, 0])
+    x_t = float(np.percentile(x_a[a > 0.3], 99.5))
+    y_t = float(np.median(L[(x_a > x_t - 0.02) & (a > 0.3), 1]))
+    lijn = NOK_Y + x_a / x_t * (y_t - NOK_Y)
+    pees = (np.abs(L[:, 1] - lijn) < PEES_BAND) & (x_a > 0.035) & (x_a < x_t - 0.015)
+    dy = np.where(pees, (1 - x_a / x_t) * (y_t - NOK_Y), 0.0)
+    rail = (x_a < 0.015) & (L[:, 1] > 0.1) & (L[:, 1] < 0.3)
+    print('kruisboog', len(L), 'tip', round(x_t, 3), round(y_t, 3), 'pees', int(pees.sum()), 'kader', L[a > 0.3].min(0).round(3).tolist(), L[a > 0.3].max(0).round(3).tolist())
+    r = np.random.default_rng(6)
+    return {'P': L, 'Q': Q, 'rgb': rgb, 'alfa': a, 'dy': dy, 'rail_z': float(np.percentile(L[rail, 2], 95)), 'w': r.uniform(0, 1, KRUIS_BOUT_N), 'hoek': r.uniform(0, 2 * np.pi, KRUIS_BOUT_N)}
+
+
+def kruis_bout(K_):
+    """De bout op de lade, vanaf de nok."""
+    w_ = K_['w'] * BOUT_LANG
+    Pb = np.stack([0 * w_, NOK_Y + w_, np.full(len(w_), K_['rail_z'] + 0.006)], axis=1)
+    veer = w_ < 0.07
+    Pb[veer, 0] += np.cos(K_['hoek'][veer]) * 0.009
+    Pb[veer, 2] += np.sin(K_['hoek'][veer]) * 0.009
+    return Pb
+
+
+# De piek van de pikeman (Marcel, 1 nov: "Dit wordt de pikeman"; `aardschok-pikeman-draai-basis.png` en `aardschok-hellebaard-los-draai.png`). Lokaal: y langs de steel vanaf de onderkant, x naar het blad; (0, 0, 0) is de onderkant. Hoe hij hem houdt, is de regel van de speer (Marcel, 1 nov): staand één hand met de onderkant op de grond, lopend twee handen schuin van de rechtervoet naar de linkerschouder, stekend twee handen en doorgebogen.
+PIEK_LANG = 1.9
+PIEK_N = 60000
+PIEK_DIK = 1.3
+PIEK_R_Y, PIEK_L_Y = 0.62, 0.92
+PIEK_STAAN = (-0.3, -0.1, 0.0)
+PIEK_STAAN_BLAD = (-0.7, -0.7, 0.0)
+PIEK_DRAAG_HAND = (-0.05, -0.17, 0.68)
+PIEK_STEEK_BLAD = (0.0, 0.0, 1.0)
+# stekend houdt hij hem achteraan vast en naast het lijf: de steel is lang, en zijn armen zijn kort. Anders gaat de onderkant door zijn buik
+PIEK_STEEK_TERUG = (-0.14, -0.02, 0.72)
+PIEK_STEEK_VOOR = (-0.14, -0.16, 0.72)
+PIEK_STEEK_R_Y, PIEK_STEEK_L_Y = 0.24, 0.54
+
+
+def piek_uit_run(pad):
+    """De piek uit de run op zijn eigen plaat, recht gezet: y langs de steel van de onderkant naar de punt, x naar het blad, op lengte."""
+    d = np.load(pad)
+    P, R_, S_ = in_onze_assen(d, 0.0, 1.0)
+    a, rgb = d['alfa'].astype(np.float64), d['rgb'].astype(np.float64)
+    g = a > 0.3
+    c = np.median(P[g], axis=0)
+    Vt = np.linalg.svd(P[g] - c, full_matrices=False)[2]
+    e_y = Vt[0]
+    t_ = (P - c) @ e_y
+    a_, b_ = np.percentile(t_[g], [0.1, 99.9])
+    r_ = (P - c) - np.outer(t_, e_y)
+    d_ = np.linalg.norm(r_, axis=1)
+    # de kop is de brede kant
+    h_ = t_ > a_ + 0.5 * (b_ - a_)
+    if np.percentile(d_[g & h_], 99) < np.percentile(d_[g & ~h_], 99):
+        e_y, t_, a_, b_ = -e_y, -t_, -b_, -a_
+        h_ = t_ > a_ + 0.5 * (b_ - a_)
+    # het blad: de verste punten bij de kop
+    q = (P[g & h_] - c)
+    q -= np.outer(q @ e_y, e_y)
+    e_x = np.linalg.svd(q, full_matrices=False)[2][0]
+    e_x -= (e_x @ e_y) * e_y
+    e_x /= np.linalg.norm(e_x)
+    if np.percentile(q @ e_x, 99.5) < -np.percentile(q @ e_x, 0.5):
+        e_x = -e_x
+    e_z = np.cross(e_x, e_y)
+    M = np.stack([e_x, e_y, e_z])
+    s = PIEK_LANG / (b_ - a_)
+    L = (P - c) @ M.T * s
+    L[:, 1] = (t_ - a_) * s
+    # midden op de steel
+    st = g & (t_ > a_ + 0.1 * (b_ - a_)) & (t_ < a_ + 0.5 * (b_ - a_))
+    L[:, 0] -= np.median(L[st, 0])
+    L[:, 2] -= np.median(L[st, 2])
+    Q = np.einsum('ij,njk->nik', M, R_ * S_[:, None, :]) * s
+    z_ = np.nonzero((a > 0.05) & zonder_waas(L, a))[0]
+    kies = np.random.default_rng(8).choice(z_, min(PIEK_N, len(z_)), replace=False, p=a[z_] / a[z_].sum())
+    print('piek', len(kies), 'kader', L[kies][a[kies] > 0.3].min(0).round(3).tolist(), L[kies][a[kies] > 0.3].max(0).round(3).tolist())
+    return {'P': L[kies], 'Q': Q[kies] * PIEK_DIK, 'rgb': rgb[kies], 'alfa': a[kies]}
+
+
+def piek_assen(as_, blad):
+    e_y = np.array(as_, dtype=np.float64)
+    e_y /= np.linalg.norm(e_y)
+    e_x = np.array(blad, dtype=np.float64) - (np.array(blad, dtype=np.float64) @ e_y) * e_y
+    e_x /= np.linalg.norm(e_x)
+    return np.stack([e_x, e_y, np.cross(e_x, e_y)], axis=1)
+
+
+def kruis_assen(as_):
+    e_y = np.array(as_, dtype=np.float64)
+    e_y /= np.linalg.norm(e_y)
+    e_z = np.array([0.0, 0.0, 1.0]) - e_y[2] * e_y
+    e_z /= np.linalg.norm(e_z)
+    return np.stack([np.cross(e_y, e_z), e_y, e_z], axis=1)
 
 
 def rig(pad, beweging, mesh, map_, arg):
@@ -761,7 +997,8 @@ def rig(pad, beweging, mesh, map_, arg):
     d = np.load(pad)
     bw = np.load(beweging)
     os.makedirs(map_, exist_ok=True)
-    P, R, S = in_onze_assen(d, float(arg.get('draai', 0)), 1.354)
+    P, R, S = in_onze_assen(d, float(arg.get('draai', 0)), float(arg.get('lengte', 1.354)))
+    hoed = 'hoed' in arg
     alfa = d['alfa'].astype(np.float64)
     zicht = alfa > 0.05
     kleur = K.srgb_lin(d['rgb'].astype(np.float64))
@@ -772,15 +1009,18 @@ def rig(pad, beweging, mesh, map_, arg):
     rust = bw['rust']
     ix = {b: i for i, b in enumerate(namen)}
     boog = arg.get('wapen') == 'boog'
-    speer, as_, top_z = (None, None, None) if boog else speer_op_de_plaat(P, alfa)
+    kruis = arg.get('wapen') == 'kruis'
+    piek = arg.get('wapen') == 'piek'
+    los_w = kruis or piek
+    speer, as_, top_z = (None, None, None) if boog or los_w else speer_op_de_plaat(P, alfa)
     eigen_speer = speer is not None
-    if boog:
+    if boog or los_w:
         voet, top = np.zeros(3), np.array([0.0, 0.0, 1.0])
     elif eigen_speer:
         deel[speer] = 3
         voet = np.array([np.polyval(as_[0], 0.0), np.polyval(as_[1], 0.0), 0.0])
         top = np.array([np.polyval(as_[0], top_z), np.polyval(as_[1], top_z), top_z])
-    if not boog and not eigen_speer:
+    if not boog and not los_w and not eigen_speer:
         # een plaat zonder speer: die van de mesh, als Gaussians erbij
         sp_P, sp_rgb, voet, top = speer_uit_mesh(mesh)
         P = np.vstack([P, sp_P])
@@ -798,7 +1038,8 @@ def rig(pad, beweging, mesh, map_, arg):
         S[speer] *= SPEER_DIK
     kleur = K.srgb_lin(rgb)
     F = buur_vlakken(P)
-    m = H.maten_figuur(P[zicht], kleur[zicht], deel[zicht])
+    z_man = zicht & (P[:, 2] < 1.354 + WAAS_M)
+    m = H.maten_figuur(P[z_man], kleur[z_man], deel[z_man])
     if eigen_speer:
         # de rechterarm staat al goed; zijn schouder is het spiegelbeeld van links
         m['speerarm_vast'] = True
@@ -806,8 +1047,12 @@ def rig(pad, beweging, mesh, map_, arg):
     if boog:
         # de boogarm staat al goed: hij hoeft niet te buigen om te lopen. De boog zelf komt hierna, in de hand
         m['boogarm_vast'] = True
+        if 'boog_run' in arg:
+            m['boog_hoog'] = BOOG_HAND_HOOG
+    if los_w:
+        m['kruis'] = True
     arm, Fa, z_boven, snede = H.arm_los(P, F, kleur, deel, m)
-    if boog:
+    if boog or los_w:
         # de hand is het eind van de arm, en de elleboog de plek die het verst van de lijn schouder-hand ligt: hij hangt niet recht, en de maten uit het buitenprofiel kijken alleen van voren
         for k_, s_k in (('R', -1.0), ('L', 1.0)):
             ar = arm & (P[:, 0] * s_k > 0) & zicht & (P[:, 1] < KOKER_Y)
@@ -842,7 +1087,7 @@ def rig(pad, beweging, mesh, map_, arg):
     J = H.gewrichten(m)
     rok, been, Fk, gesneden = H.rok_en_been(P, Fa, kleur, deel, m, J, arm)
     W = H.gewichten(P, Fk, deel, J, m, rok, been, arm, z_boven, namen)
-    if eigen_speer or boog:
+    if eigen_speer or boog or los_w:
         # de armen in drie: bovenarm, onderarm en de hand, zacht over de elleboog. Ze buigen nu flink, en de gewichten uit de afstand scheuren dan
         for k_, s_k, G_k in (('R', -1.0, G_rust if eigen_speer else np.array(m['hand.R'])), ('L', 1.0, np.array(m['hand.L']))):
             s = arm & (P[:, 0] * s_k > 0)
@@ -861,7 +1106,26 @@ def rig(pad, beweging, mesh, map_, arg):
         rest_ = (deel == 0) & ~arm
         W[np.ix_(rest_, [ix['hand.R'], ix['hand.L']])] = 0
         W[rest_] /= np.maximum(W[rest_].sum(1, keepdims=True), 1e-9)
-    if boog:
+    if boog and 'koker' in arg:
+        # zijn lijf is van de plaat zonder koker: die komt uit de run op de plaat met koker, vast aan de borst
+        e_ = np.load(arg['koker'])
+        Pe, Re, Se = in_onze_assen(e_, 0.0, 1.354)
+        k_e = K.klasse(K.srgb_lin(e_['rgb'].astype(np.float64)))
+        r_e = np.hypot(Pe[:, 0] - np.median(Pe[Pe[:, 2] > 1.2, 0]), Pe[:, 1] - np.median(Pe[Pe[:, 2] > 1.2, 1]))
+        s_ = (e_['alfa'] > 0.05) & (((Pe[:, 1] > KOKER_Y) & (Pe[:, 2] > 0.5) & (Pe[:, 2] < HELM_Z) & (k_e != 1) & (k_e != 2)) | ((Pe[:, 0] * KOKER_KANT > 0.1) & (Pe[:, 1] > 0.02) & (Pe[:, 2] > 0.93) & (Pe[:, 2] < 1.22) & (r_e > KOKER_HELM)))
+        n_k, n0 = int(s_.sum()), len(P)
+        P, R, S = np.vstack([P, Pe[s_]]), np.concatenate([R, Re[s_]]), np.vstack([S, Se[s_]])
+        rgb = np.vstack([rgb, e_['rgb'][s_].astype(np.float64)])
+        alfa = np.concatenate([alfa, e_['alfa'][s_].astype(np.float64)])
+        deel = np.concatenate([deel, np.zeros(n_k, dtype=np.int8)])
+        kleur = K.srgb_lin(rgb)
+        W = np.vstack([W, np.zeros((n_k, W.shape[1]), dtype=W.dtype)])
+        W[n0:, ix['borst']] = 1.0
+        rok, been, arm = (np.concatenate([q_, np.zeros(n_k, dtype=bool)]) for q_ in (rok, been, arm))
+        speer = deel == 3
+        zicht = alfa > 0.05
+        print('koker', n_k)
+    elif boog:
         # de koker en de veren zitten vast op de rug: niet aan de rok, niet aan het hoofd, niet aan de arm
         z_, r_h = P[:, 2], np.hypot(P[:, 0] - np.median(P[zicht & (P[:, 2] > 1.2), 0]), P[:, 1] - np.median(P[zicht & (P[:, 2] > 1.2), 1]))
         koker = (deel == 0) & (((P[:, 1] > KOKER_Y) & (z_ > 0.5) & (z_ < HELM_Z)) | ((P[:, 0] * KOKER_KANT > 0.1) & (P[:, 1] > 0.02) & (z_ > 0.93) & (z_ < 1.22) & (r_h > KOKER_HELM)))
@@ -877,23 +1141,27 @@ def rig(pad, beweging, mesh, map_, arg):
     if boog:
         G_boog = np.array(m['hand.L'])
         R_rust = assen_boog(BOOG_AS_RUST, BOOG_ROL)
-        L_boog = boog_lokaal()
-        nok_rust = boog_lijn(np.array([1.0]))[0] * np.array([1.0, 1.0, 0.0])
+        L_boog = boog_uit_run(arg['boog_run']) if 'boog_run' in arg else boog_lokaal()
+        n_v = len(L_boog['P'])
+        nok_rust = (L_boog['boven'] + L_boog['onder']) / 2 if 'boven' in L_boog else boog_lijn(np.array([1.0]))[0] * np.array([1.0, 1.0, 0.0])
         pols_rust = J['hand.R'].copy()
         # de boog als Gaussians erbij; de pees en de pijl staan achteraan, en krijgen hun plek per beeld
-        n_b = BOOG_N + PEES_N + PIJL_N
+        n_b = n_v + PEES_N + PIJL_N
         n0 = len(P)
         lok = np.vstack([L_boog['P'], np.zeros((PEES_N + PIJL_N, 3))])
         rood = np.vstack([L_boog['rgb'], np.tile(np.array(PEES_KLEUR), (PEES_N, 1)), np.tile(np.array(PIJL_HOUT), (PIJL_N, 1))])
         w_p = L_boog['w'] * PIJL_LANG
-        rood[BOOG_N + PEES_N:][w_p < 0.09] = (0.93, 0.92, 0.88)
-        rood[BOOG_N + PEES_N:][w_p > PIJL_LANG - 0.05] = (0.62, 0.64, 0.68)
-        sig = np.concatenate([L_boog['s'], np.full(PEES_N, 0.0022), np.full(PIJL_N, 0.0042)])
+        rood[n_v + PEES_N:][w_p < 0.09] = (0.93, 0.92, 0.88)
+        rood[n_v + PEES_N:][w_p > PIJL_LANG - 0.05] = (0.62, 0.64, 0.68)
+        sig = np.concatenate([L_boog.get('s', np.full(n_v, 0.004)), np.full(PEES_N, 0.0022), np.full(PIJL_N, 0.0042)])
+        Q_b = sig[:, None, None] * np.eye(3)[None]
+        if 'Q' in L_boog:
+            Q_b[:n_v] = L_boog['Q']
         P = np.vstack([P, G_boog + lok @ R_rust.T])
         R = np.concatenate([R, np.tile(np.eye(3), (n_b, 1, 1))])
         S = np.vstack([S, sig[:, None] * np.ones((n_b, 3))])
         rgb = np.vstack([rgb, rood])
-        alfa = np.concatenate([alfa, np.full(BOOG_N, BOOG_ALFA), np.full(PEES_N, PEES_ALFA), np.full(PIJL_N, BOOG_ALFA)])
+        alfa = np.concatenate([alfa, L_boog.get('alfa', np.full(n_v, BOOG_ALFA)), np.full(PEES_N, PEES_ALFA), np.full(PIJL_N, BOOG_ALFA)])
         deel = np.concatenate([deel, np.full(n_b, 3, dtype=np.int8)])
         speer = deel == 3
         zicht = alfa > 0.05
@@ -902,7 +1170,112 @@ def rig(pad, beweging, mesh, map_, arg):
         W[n0:, ix['hand.L']] = 1.0
         rok, been, arm = (np.concatenate([q_, np.zeros(n_b, dtype=bool)]) for q_ in (rok, been, arm))
 
+    if kruis:
+        # zijn eigen tas op de rechterheup weg, en de koker uit de run met wapen erop, vast aan het bekken
+        alfa = alfa.copy()
+        alfa[(deel == 0) & ~arm & (P[:, 0] < TAS_X) & (P[:, 2] > TAS_Z[0]) & (P[:, 2] < TAS_Z[1])] = 0
+        e_ = np.load(arg['koker'])
+        Pe, Re, Se = in_onze_assen(e_, 0.0, 1.354)
+        s_ = (Pe[:, 0] < KOKER_RUN_X) & (Pe[:, 2] > KOKER_RUN_Z[0]) & (Pe[:, 2] < KOKER_RUN_Z[1]) & (e_['alfa'] > 0.05)
+        n_k = int(s_.sum())
+        K_ = kruisboog_uit_run(arg['kruisboog'])
+        n_l = len(K_['P'])
+        n_b = n_l + KRUIS_BOUT_N
+        n0 = len(P)
+        P = np.vstack([P, Pe[s_], np.zeros((n_b, 3))])
+        R = np.concatenate([R, Re[s_], np.tile(np.eye(3), (n_b, 1, 1))])
+        S = np.vstack([S, Se[s_], np.full((n_b, 3), 0.004)])
+        w_b = K_['w'] * BOUT_LANG
+        k_b = np.tile(np.array((0.58, 0.42, 0.24)), (KRUIS_BOUT_N, 1))
+        k_b[w_b < 0.07] = (0.93, 0.92, 0.88)
+        k_b[w_b > BOUT_LANG - 0.04] = (0.62, 0.64, 0.68)
+        rgb = np.vstack([rgb, e_['rgb'][s_].astype(np.float64), K_['rgb'], k_b])
+        alfa = np.concatenate([alfa, e_['alfa'][s_].astype(np.float64), K_['alfa'], np.full(KRUIS_BOUT_N, BOOG_ALFA)])
+        Q_k = np.concatenate([K_['Q'], np.tile(np.eye(3) * 0.0025, (KRUIS_BOUT_N, 1, 1))])
+        deel = np.concatenate([deel, np.zeros(n_k, dtype=np.int8), np.full(n_b, 3, dtype=np.int8)])
+        speer = deel == 3
+        zicht = alfa > 0.05
+        kleur = K.srgb_lin(rgb)
+        W = np.vstack([W, np.zeros((n_k + n_b, W.shape[1]), dtype=W.dtype)])
+        W[n0:n0 + n_k, ix['bekken']] = 1.0
+        W[n0 + n_k:, ix['hand.R']] = 1.0
+        rok, been, arm = (np.concatenate([q_, np.zeros(n_k + n_b, dtype=bool)]) for q_ in (rok, been, arm))
+        print('koker', n_k)
+        # de standen in de rust van de borst, zodat ze meegaan met het lijf. Bij het aanleggen moet hij recht vooruit wijzen, ook al is het lijf gedraaid
+        def stand_van(s_):
+            v_ = np.array(s_[1]) / np.linalg.norm(s_[1])
+            return np.array(s_[0]) - LADE_ACHTER * v_, kruis_assen(v_)
+        wacht_G, wacht_R = stand_van(KRUIS_WACHT)
+        schouder_G, schouder_R = stand_van(KRUIS_SCHOUDER)
+        Dv, Pv = H.beeld_van(bw['schiet'][12], rust, namen, ouders, J, m, 0.0)
+        Bv, pv = Dv[ix['borst']], Pv[ix['borst']]
+        aan_w_G, aan_w_R = stand_van(KRUIS_AANLEG)
+        aan_G = J['borst'] + (aan_w_G - pv) @ Bv
+        aan_R = Bv.T @ aan_w_R
+        P[speer] = wacht_G + np.vstack([K_['P'], kruis_bout(K_)]) @ wacht_R.T
+
+    if piek:
+        K_ = piek_uit_run(arg['piek_run'])
+        n_b, n0 = len(K_['P']), len(P)
+        Q_k = K_['Q']
+        P = np.vstack([P, np.zeros((n_b, 3))])
+        R = np.concatenate([R, np.tile(np.eye(3), (n_b, 1, 1))])
+        S = np.vstack([S, np.full((n_b, 3), 0.004)])
+        rgb = np.vstack([rgb, K_['rgb']])
+        alfa = np.concatenate([alfa, K_['alfa']])
+        deel = np.concatenate([deel, np.full(n_b, 3, dtype=np.int8)])
+        speer = deel == 3
+        zicht = alfa > 0.05
+        kleur = K.srgb_lin(rgb)
+        W = np.vstack([W, np.zeros((n_b, W.shape[1]), dtype=W.dtype)])
+        W[n0:, ix['hand.R']] = 1.0
+        rok, been, arm = (np.concatenate([q_, np.zeros(n_b, dtype=bool)]) for q_ in (rok, been, arm))
+        staan_R = piek_assen((0.02, -0.02, 1.0), PIEK_STAAN_BLAD)
+        hand_rust = np.array(PIEK_STAAN) + staan_R @ np.array([0.0, PIEK_R_Y, 0.0])
+        draag_as = (J['bovenarm.L'] - J['voet.R']) * np.array([1.0, 0.0, 1.0])
+        draag_as /= np.linalg.norm(draag_as)
+        draag_R = piek_assen(draag_as, (0.0, -0.3, 1.0))
+        P[speer] = np.array(PIEK_STAAN) + K_['P'] @ staan_R.T
+
+        def piek_greep(houding, t_):
+            if houding == 'lopen':
+                return {'plek': np.array(PIEK_DRAAG_HAND) - PIEK_R_Y * draag_as, 'R': draag_R, 'rechts': (0.0, PIEK_R_Y, 0.0), 'links': (0.0, PIEK_L_Y, 0.0), 'pool_R': POOL_R, 'pool_L': POOL_L}
+            g_ = {'wereld': True, 'plek': np.array(PIEK_STAAN), 'R': staan_R, 'rechts': (0.0, PIEK_R_Y, 0.0), 'links': None, 'pool_R': POOL_R, 'pool_L': POOL_L}
+            if houding == 'aanval':
+                kp, st, ln = steek_stand(t_)
+                v_ = (1 - kp) * np.array([0.02, -0.02, 1.0]) + kp * np.array(STEEK_RICHTING)
+                v_ /= np.linalg.norm(v_)
+                hand_ = (1 - st) * np.array(PIEK_STEEK_TERUG) + st * np.array(PIEK_STEEK_VOOR)
+                r_y = (1 - kp) * PIEK_R_Y + kp * PIEK_STEEK_R_Y
+                g_['plek'] = (1 - kp) * hand_rust + kp * hand_ - r_y * v_
+                g_['R'] = piek_assen(v_, (1 - kp) * np.array(PIEK_STAAN_BLAD) + kp * np.array(PIEK_STEEK_BLAD))
+                g_['rechts'] = (0.0, r_y, 0.0)
+                g_['links'] = (0.0, r_y + PIEK_STEEK_L_Y - PIEK_STEEK_R_Y, 0.0)
+                g_['los_L'] = 1 - ln
+            if houding == 'sterven':
+                g_['los_R'] = STERVEN_ARM[int(round(t_))]
+            return g_
+
     def greep_voor(houding, t_):
+        if piek:
+            return piek_greep(houding, t_)
+        if kruis:
+            if houding == 'lopen':
+                return {'plek': schouder_G, 'R': schouder_R, 'links': HAND_L_KOLF, 'rechts': None, 'pool_L': POOL_L_KOLF}
+            g_ = {'plek': wacht_G, 'R': wacht_R, 'links': HAND_L_OP, 'rechts': HAND_R_OP, 'pool_L': POOL_L, 'pool_R': POOL_R}
+            if houding == 'aanval':
+                op, _, _, _ = schiet_stand(t_)
+                schot = t_ >= 0.5
+                g_['plek'] = (1 - op) * wacht_G + op * aan_G
+                g_['R'] = Rotation.from_rotvec(Rotation.from_matrix(aan_R @ wacht_R.T).as_rotvec() * op).as_matrix() @ wacht_R
+                if schot and t_ < 0.75:
+                    # de terugslag
+                    g_['plek'] = g_['plek'] + np.array([0.0, 0.025, 0.01])
+                g_['schot'] = schot
+                g_['bout'] = op > 0.05 and not schot
+            if houding == 'sterven':
+                g_['los'] = STERVEN_ARM[int(round(t_))]
+            return g_
         if houding == 'geraakt':
             return None
         if houding == 'sterven':
@@ -912,7 +1285,7 @@ def rig(pad, beweging, mesh, map_, arg):
                 return None
             op, hd_, trek, los = schiet_stand(t_)
             as_ = (1 - op) * np.array(BOOG_AS_RUST) + op * np.array(BOOG_AS_SCHIET)
-            links = (1 - op) * G_boog + op * np.array(SCHIET_LINKS)
+            links = (1 - op) * np.array(m.get('boog_hoog', G_boog)) + op * np.array(SCHIET_LINKS)
             doel_r = (1 - trek) * np.array(SCHIET_BEGIN) + trek * np.array(SCHIET_ANKER)
             if los:
                 doel_r = np.array(SCHIET_LOS)
@@ -939,7 +1312,7 @@ def rig(pad, beweging, mesh, map_, arg):
         rgb[fout] = np.clip(m_broek * (rgb[fout].mean(1, keepdims=True) / m_broek.mean()), 0, 1)
     info['been_kleur'] = int(fout.sum())
     # het waas boven de helm: bijna doorzichtig, maar groot genoeg om te zien
-    alfa = np.where(zicht & ((P[:, 2] < 1.354 + WAAS_M) | speer), alfa, 0.0)
+    alfa = np.where(zicht & ((P[:, 2] < 1.354 + WAAS_M) | speer | (hoed & (alfa > 0.3))), alfa, 0.0)
     zicht = alfa > 0.05
     alfa = alfa.copy()
     if eigen_speer:
@@ -952,17 +1325,20 @@ def rig(pad, beweging, mesh, map_, arg):
         zicht = alfa > 0.05
     # zwevers: gemeten in elke houding, op het verste punt: wat dan los in de lucht hangt, hoort nergens bij
     weg = np.zeros(len(P), dtype=bool)
-    for h_, b_ in (('staan', 0), ('lopen', 0), ('lopen', 6)) + ((('steek2', 6), ('steek2', 12)) if eigen_speer else ()) + ((('schiet', 12),) if boog else ()):
+    for h_, b_ in (('staan', 0), ('lopen', 0), ('lopen', 6)) + ((('steek2', 6), ('steek2', 12)) if eigen_speer or piek else ()) + ((('schiet', 12),) if boog or kruis else ()):
         steek_ = h_ in ('steek2', 'schiet')
         zw_ = 0.0 if steek_ else float(H.zwaai_van(bw[h_], rust, ix, h_ == 'lopen')[b_])
         Dz, Pz = H.beeld_van(bw[h_][b_], rust, namen, ouders, J, m, zw_, greep_voor('aanval' if steek_ else h_, b_ / STEEK_N))
         weg |= zwevers(H.vervorm(P, W, Dz, Pz, J, namen), zicht)
+    if los_w or 'boog_run' in arg:
+        weg[speer] = False
     alfa[weg] = 0
     zicht = alfa > 0.05
     info['zwevers'] = int(weg.sum())
     print('zwevers', int(weg.sum()))
     D0, P0 = H.beeld_van(bw['staan'][0], rust, namen, ouders, J, m, 0.0)
-    if boog:
+    if boog or los_w:
+        G_boog = G_boog if boog else np.array(m['hand.R'])
         grip, grip_z, hand_punt = G_boog, float(G_boog[2]), G_boog
     elif eigen_speer:
         # de speer hangt aan de vuist, op de greep
@@ -1004,12 +1380,13 @@ def rig(pad, beweging, mesh, map_, arg):
     tel = 0
     for houding in arg.get('houdingen', 'staan,lopen').split(','):
         steek, sterf = houding == 'aanval', houding == 'sterven'
-        lijst = bw['schiet' if boog else 'steek2'][STEEK_J] if steek else bw[HOUDING_BOTTEN.get(houding, houding)]
+        aan_j = KRUIS_J if kruis else STEEK_J
+        lijst = bw['schiet' if boog or kruis else 'steek2'][aan_j] if steek else bw[HOUDING_BOTTEN.get(houding, houding)]
         vak = float(arg.get('sterven_vak', STERVEN_VAK)) if sterf else 1.0
         pix_h, ort_h = round(pixels * vak), ortho * vak
         zw = None if steek else H.zwaai_van(lijst, rust, ix, houding == 'lopen')
         for i in range(0, len(lijst), int(arg.get('stap', 1))):
-            greep_nu = greep_voor(houding, STEEK_J[i] / STEEK_N if steek else (float(i) if sterf else 0.0))
+            greep_nu = greep_voor(houding, aan_j[i] / STEEK_N if steek else (float(i) if sterf else 0.0))
             zw_i = 0.0 if steek else float(zw[i])
             Dm, Pm = H.beeld_van(lijst[i], rust, namen, ouders, J, m, zw_i, greep_nu)
             # bij het sterven gaat de greep alleen over de arm: het wapen komt zo van de hand of van de grond
@@ -1024,11 +1401,59 @@ def rig(pad, beweging, mesh, map_, arg):
             z0 = U[zicht & ~speer, 2].min()
             U[:, 2] -= z0
             Q = np.einsum('nij,njk->nik', B, Q0)
+            if piek:
+                B_ = Dm[ix['borst']]
+                G_k = np.array(greep_nu['plek']) if greep_nu.get('wereld') else Pm[ix['borst']] + B_ @ (greep_nu['plek'] - J['borst'])
+                G_k[2] -= z0
+                R_k = np.array(greep_nu['R']) if greep_nu.get('wereld') else B_ @ greep_nu['R']
+                if sterf:
+                    val_ = STERVEN_VAL[i] ** 2
+                    if val_ == 0:
+                        los_ = (G_k.copy(), R_k.copy())
+                    else:
+                        R_g = piek_assen(SPEER_GROND_AS, (0.97, 0.25, 0.0))
+                        R_k = Rotation.from_rotvec(Rotation.from_matrix(R_g @ los_[1].T).as_rotvec() * val_).as_matrix() @ los_[1]
+                        G_k = los_[0] + (np.array(SPEER_GROND_VOET) - los_[0]) * val_
+                Ur = U.copy()
+                Ur[speer] = G_k + K_['P'] @ R_k.T
+                Qr = Q.copy()
+                Qr[speer] = np.einsum('ij,njk->nik', R_k, Q_k)
+                for r in richtingen:
+                    render(Ur, Qr, rgb_sterf if sterf else rgb, alfa, r, e, pix_h, ort_h, doel).save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
+                    tel += 1
+                continue
+            if kruis:
+                B_ = Dm[ix['borst']]
+                G_k = Pm[ix['borst']] + B_ @ (greep_nu['plek'] - J['borst'])
+                G_k[2] -= z0
+                R_k = B_ @ greep_nu['R']
+                if sterf:
+                    val_ = STERVEN_VAL[i] ** 2
+                    if val_ == 0:
+                        los_ = (G_k.copy(), R_k.copy())
+                    else:
+                        R_g = kruis_assen(KRUIS_GROND_AS)
+                        R_k = Rotation.from_rotvec(Rotation.from_matrix(R_g @ los_[1].T).as_rotvec() * val_).as_matrix() @ los_[1]
+                        G_k = los_[0] + (np.array(KRUIS_GROND) - los_[0]) * val_
+                lok_k = K_['P'].copy()
+                if greep_nu.get('schot'):
+                    lok_k[:, 1] += K_['dy']
+                Ur = U.copy()
+                Ur[speer] = G_k + np.vstack([lok_k, kruis_bout(K_)]) @ R_k.T
+                alfa_f = alfa.copy()
+                if not greep_nu.get('bout'):
+                    alfa_f[len(alfa) - KRUIS_BOUT_N:] = 0
+                Qr = Q.copy()
+                Qr[speer] = np.einsum('ij,njk->nik', R_k, Q_k)
+                for r in richtingen:
+                    render(Ur, Qr, rgb_sterf if sterf else rgb, alfa_f, r, e, pix_h, ort_h, doel).save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
+                    tel += 1
+                continue
             if boog:
                 # de boog: rigide met de hand, of in de stand van het schieten; de pees naar de hand, en de pijl op de pees zolang hij gespannen is
                 hL = Pm[ix['hand.L']] + Dm[ix['hand.L']] @ (G_boog - J['hand.L'])
                 hL[2] -= z0
-                R_b = w_g['R_boog'] if w_g else Dm[ix['hand.L']] @ R_rust
+                R_b = w_g['R_boog'] if w_g else (Dm[ix['borst']] if 'boog_hoog' in m else Dm[ix['hand.L']]) @ R_rust
                 if sterf:
                     val_ = STERVEN_VAL[i] ** 2
                     if val_ == 0:
@@ -1052,7 +1477,7 @@ def rig(pad, beweging, mesh, map_, arg):
                 if not pijl_aan:
                     alfa_f[len(alfa) - PIJL_N:] = 0
                 Qr = Q.copy()
-                Qr[speer] = Q0[speer]
+                Qr[speer] = np.einsum('ij,njk->nik', R_b, Q_b)
                 for r in richtingen:
                     render(Ur, Qr, rgb_sterf if sterf else rgb, alfa_f, r, e, pix_h, ort_h, doel).save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
                     tel += 1

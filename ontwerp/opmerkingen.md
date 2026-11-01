@@ -9,10 +9,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## De figuren uit TripoSplat: restpunten
 
-Marcel, 1 nov: "Noteer restpunten, Boogschutter toevoegen en dan verbeter ronde". De stand van de speerman
-(`referentie/aardschok-speerman-draai-speer.png`) en de boogschutter (`referentie/aardschok-boogschutter-draai-koker.png`) na die
-ronde; het hoe staat in `docs/art/hunyuan/TRIPOSPLAT.md`. Alleen in de browser bekeken, niet opgenomen in het spel, en nog
-niet door Marcel beoordeeld.
+Marcel, 1 nov: "Noteer restpunten, Boogschutter toevoegen en dan verbeter ronde". De stand van de speerman, de boogschutter,
+de kruisboogschutter en de pikeman; het hoe en de platen staan in `docs/art/hunyuan/TRIPOSPLAT.md`. Alleen in de browser
+bekeken, niet opgenomen in het spel, en nog niet door Marcel beoordeeld.
 
 **Allebei: uiterlijk**
 - **Verticale strepen in het geel**, minder dan voor de ronde, maar op spelmaat nog te zien, op de rug het duidelijkst.
@@ -38,8 +37,8 @@ niet door Marcel beoordeeld.
   linkerschouder niet haalt.
 
 **De boogschutter**
-- **De koker** zit op de nieuwe plaat in elke richting op dezelfde schouder, en de figuur dus ook. Op de helm blijven kleine
-  witte en blauwe vlekjes, vooral in O en op de kam. Op de linkermouw in Z zit wat blauw van de tabberd.
+- **De hoed** (Marcel: "Ik vind dit beter"): de veer is op spelmaat dun, en de achterkant van de hoed is egaal bruin. De koker komt uit
+  een andere plaat (`splat/boog-koker`), en sluit dus niet naadloos op zijn lijf aan.
 - **Het spel speelt voor een schutter geen aanval af:** `slaan` in `js/gevecht.js` zet alleen voor wie steekt een uitval.
   In de proef stond dat aan in de browser. Daarna vliegt de pijl op het begin van het spannen, en niet bij het loslaten: de
   regel en het moment zijn een keuze voor Marcel.
@@ -47,11 +46,27 @@ niet door Marcel beoordeeld.
 - **Zijn linkerkant is het zwakst**, de kant van de boog: in W en NW staan gele vlekken op de mouw en bruine op de rug.
   Bij het schieten komt op de borst een gespikkeld stuk bloot, geel met blauw. Groot goed te zien, op spelmaat minder.
 - **De linkerhand sluit niet om de boog**, en de rechterhand neemt de pijl niet uit de koker.
-- **De kruisboogschutter** staat er ook, en heeft nog geen plaat.
+
+**De kruisboogschutter**
+- **Herladen ontbreekt** (Marcel, 26 okt): een eigen houding, en die vraagt een regel in `js/sprites.js`.
+- **De pees schiet per punt naar voren**, en dat is bij het schot niet overal even schoon. Op spelmaat valt het niet op.
+- **De handen** liggen op de lade, en de vingers sluiten er niet omheen.
+
+**De pikeman**
+- **Zijn vellen zijn groot**, omdat de steel uitsteekt: cellen tot 260 bij 196 bij sterven.
+- **Steken recht naar de camera of ervan af** (Z, N) leest het zwakst, net als bij de speerman: de piek is dan kort.
+- **De zij van het harnas** is plaatselijk wit en vlekkerig: de regel die dat bij stof oplost, zou hier ook echt staal raken.
+- **De hellebaard** heeft een blad, maar hij steekt nog alleen. Een slag van boven is een idee voor later: Marcel kiest.
+
+**De ridder**
+- **Nu een stilstaande proef** (`hy_ridder.py`). Marcel, 1 nov: het paard krijgt een eigen skelet en looppas ("Ja graag"), en hij wordt een soldaat: "Ja, hij is duur, schild, zwaard, harnas en paard".
+- **Waar een paard vandaan komt, is nog niet gekozen:** het spel heeft geen paarden, en de wapenmaker maakt geen paard.
+
+**Nog geen plaat:** de zwaardvechter (zwaard, schild en harnas; zijn zwaard en schild kunnen van de ridder komen) en de militie (hooivork).
 
 **Getest en te doen**
-- **Niet getest:** Firefox, beeldtijd, nacht. De vellen van de aanval en van sterven zijn groot (de speerman sterft in cellen
-  van zo'n 180 bij 150), en performance heeft hoge prioriteit: meten voor het erin gaat.
+- **Niet getest:** Firefox, beeldtijd, nacht. De vellen van de aanval en van sterven zijn groot, en performance heeft hoge
+  prioriteit: meten voor het erin gaat.
 - **Het licht zit in de kleur:** er kan geen ander licht op, en er is geen mesh (geen GLB, geen realtime 3D).
 - **De plaat zonder speer** (`keten_splat_vel.sh alle`) is na de laatste aanpassingen niet opnieuw gedraaid.
 - **De platen:** de figuur is zo'n 500 pixels hoog, en de eis is 900 (`PLAAT-EISEN.md`). Scherper kan alleen met een grotere plaat.

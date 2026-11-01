@@ -1,30 +1,30 @@
 {
- "schaal": 0.9896,
- "draai_graden": 1.62,
- "icp_fout_m": 0.0087,
- "naad_verschil_cm": 5.1,
- "voor": 147110,
- "achter": 133524,
+ "schaal": 0.9872,
+ "draai_graden": 0.72,
+ "icp_fout_m": 0.0084,
+ "naad_verschil_cm": 4.7,
+ "voor": 158886,
+ "achter": 125207,
  "speer_uit_Z": 0,
  "speer_uit_N_weg": 0,
  "helm_Z": {
-  "rand_z": 1.127,
-  "gespiegeld": 22488,
-  "straal": 0.166
+  "rand_z": 1.186,
+  "gespiegeld": 20634,
+  "straal": 0.21
  },
  "helm_N": {
-  "rand_z": 1.141,
-  "gespiegeld": 19010,
-  "straal": 0.166
+  "rand_z": 1.223,
+  "gespiegeld": 11120,
+  "straal": 0.21
  },
- "naad_streep": 33162,
- "helm_band": 14805,
+ "naad_streep": 48840,
+ "helm_band": 0,
  "boog_punten": [
-  8903,
-  7751
+  0,
+  0
  ],
  "boog_dun": [
-  55,
-  49
+  0,
+  0
  ]
 }
