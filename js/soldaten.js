@@ -18,7 +18,7 @@
 // De stukken maakt de wapenmaker (T.GEBOUWEN.wapenmaker, in het gehucht; C1, en Marcel erbij: "iemand kan gewoon
 // wapensmid worden"): elke dag één, het stuk dat het meest gevraagd wordt (T.wapensGevraagd: wat de wachthuizen willen en
 // nog niet hebben), van planken, ijzer of huiden (T.receptVan, js/gebouwen.js). Vraagt niemand iets, dan staat hij stil.
-// Een paard maakt hij niet: dat koop je van de marskramer (js/handel.js).
+// Een paard maakt hij niet: dat komt uit de stal (T.GEBOUWEN.stal), en de marskramer heeft er soms een (js/handel.js).
 //
 // In het gevecht (js/gevecht.js) slaat elk wapen anders (D1; T.slagVan): de hooivork zwak, de speer en de piek reiken twee
 // tegels (de piek slaat harder; opzij alleen van ernaast, steekReik in js/gevecht.js), het zwaard hard, en de boog en de kruisboog schieten ver waar ze zien, maar niet met een
@@ -65,8 +65,7 @@
     kruisboog: { waar: 'kruisbogen', wapen: true, schiet: true, doorHarnas: true, naam: () => T.t('crossbow') },
     schild: { waar: 'schilden', naam: () => T.t('shield') },
     harnas: { waar: 'harnassen', naam: () => T.t('armour') }, // van leer; een ijzeren harnas komt later
-    // `gekocht`: dat maakt de wapenmaker niet, dat komt van de marskramer (js/handel.js)
-    paard: { waar: 'paarden', gekocht: true, naam: () => T.t('horse') },
+    paard: { waar: 'paarden', naam: () => T.t('horse') },
   };
   T.STUKKEN = STUKKEN;
   // Is deze waar een stuk (een speer, een schild, ...)? Die bestaan alleen heel: de wapenmaker maakt ze heel (T.receptVan,
@@ -116,12 +115,11 @@
   // Tot zoveel maakt de wapenmaker (T.maaktTot, js/gebouwen.js), min wat er al ligt.
   T.wapensGevraagd = function (D) {
     const uit = {};
-    const vanSmid = (stuk) => STUKKEN[stuk].waar && !STUKKEN[stuk].gekocht;
-    for (const stuk in STUKKEN) if (vanSmid(stuk)) uit[STUKKEN[stuk].waar] = 0;
+    for (const stuk in STUKKEN) if (STUKKEN[stuk].waar) uit[STUKKEN[stuk].waar] = 0;
     for (const g of wachthuizen(D)) {
       for (const soort of SOORTEN) {
         const nog = Math.max(0, (gewild(g)[soort] || 0) - vanSoort(D, g, soort).length);
-        for (const stuk of stukkenVan(soort)) if (vanSmid(stuk)) uit[STUKKEN[stuk].waar] += nog;
+        for (const stuk of stukkenVan(soort)) if (STUKKEN[stuk].waar) uit[STUKKEN[stuk].waar] += nog;
       }
     }
     return uit;
@@ -216,14 +214,18 @@
   // Waarom er bij wachthuis g minder soldaten van deze soort zijn dan je wilt, als een stukje zin.
   function waaromNog(D, soort) {
     const mist = ontbreekt(D, soort);
-    const bijSmid = mist.filter((stuk) => !STUKKEN[stuk].gekocht);
+    const bijSmid = mist.filter((stuk) => stuk !== 'paard');
     if (bijSmid.length) {
       const waren = T.opsomming(bijSmid.map((stuk) => T.waarNaam(STUKKEN[stuk].waar)));
       return (D.gebouwen || []).some((x) => x.soort === 'wapenmaker')
         ? T.t('waiting for {waren} from the weaponsmith', { waren })
         : T.t('waiting for {waren}: build a weaponsmith', { waren });
     }
-    if (mist.length) return T.t('waiting for a horse from the merchant');
+    if (mist.length) {
+      return (D.gebouwen || []).some((x) => x.soort === 'stal')
+        ? T.t('waiting for a horse from the stable')
+        : T.t('waiting for a horse: build a stable, or buy one from the merchant');
+    }
     return T.t('nobody without work');
   }
 
@@ -271,10 +273,16 @@
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
   T.GEBOUW_ERBIJ.wapenmaker = function (D) {
     const vraag = T.wapensGevraagd(D);
-    const wat = Object.keys(vraag).filter((x) => vraag[x] > 0);
+    const wat = Object.keys(vraag).filter((x) => vraag[x] > 0 && T.GEBOUWEN.wapenmaker.maakt.uit[x]);
     return wat.length
       ? T.t('Asked for at the watch house: {waren}.', { waren: T.opsomming(wat.map((x) => T.hoeveel(vraag[x], x))) })
       : T.t('Nobody has asked for weapons: set soldiers at a watch house.');
+  };
+  T.GEBOUW_ERBIJ.stal = function (D) {
+    const n = T.wapensGevraagd(D).paarden;
+    return n > 0
+      ? T.t('Asked for at the watch house: {n|# horse|# horses}.', { n })
+      : T.t('Nobody has asked for horses: set knights at a watch house.');
   };
   T.GEBOUW_ERBIJ.wachthuis = (D, g) => T.t('{n|# soldier|# soldiers} of {m}.', { n: T.soldatenVan(D, g).length, m: IN().plaatsen });
 

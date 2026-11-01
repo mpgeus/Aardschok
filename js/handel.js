@@ -60,9 +60,9 @@
       // tot er een weide met plaats is (`vee`; T.veeErbij en T.losVeeNaarDeWeide, js/vee.js).
       koe: { naam: T.t('cows'), heeft: 1, prijs: [6, 6, 6], vee: true },
       schaap: { naam: T.t('sheep'), heeft: 2, prijs: [2, 2, 2], vee: true },
-      // Een paard voor een ridder (js/soldaten.js; Marcel, 1 nov: "Ja, hij is duur, schild, zwaard, harnas en paard"): een per
-      // bezoek, en het gaat de opslag in tot er een ridder is die het neemt.
-      paarden: { heeft: 1, prijs: [12, 12, 12] },
+      // Een paard voor een ridder (js/soldaten.js; Marcel, 1 nov: "de merchant verkoopt ze ook soms"): alleen in de zomer,
+      // alleen in een dorp, en duurder dan de waarde. Het gaat de opslag in tot er een ridder is die het neemt; de gewone weg is de stal.
+      paarden: { heeft: [0, 1, 0], prijs: [16, 16, 16], trede: 'dorp' },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
     // herfst). Graan is in de lente schaars en na de oogst goedkoop: wie het door Sint-Maarten

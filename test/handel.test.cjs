@@ -107,14 +107,16 @@ test('graan brengt in de lente het dubbele op van na de oogst', () => {
   assert.equal(T.prijsVanHetJaar(herfst, 'graan', 'koopt'), 'goedkoop');
 });
 
-test('een paard voor een ridder: hij heeft er een per bezoek, en het gaat de opslag in', () => {
-  const S = metMarskramer(0);
+test('een paard voor een ridder: soms, alleen in de zomer en in een dorp, en het gaat de opslag in', () => {
+  assert.deepEqual(T.HANDEL_INSTELLINGEN.verkoopt.paarden.heeft, [0, 1, 0]);
+  assert.equal(T.HANDEL_INSTELLINGEN.verkoopt.paarden.trede, 'dorp');
+  const S = metMarskramer(1);
+  S.marskramer.heeft.paarden = 1;
   S.voorraad.goud = 30;
-  const prijs = T.HANDEL_INSTELLINGEN.verkoopt.paarden.prijs[0];
+  const prijs = T.HANDEL_INSTELLINGEN.verkoopt.paarden.prijs[1];
   assert.ok(T.koop(S, 'paarden', 1).kan);
   assert.equal(S.voorraad.goud, 30 - prijs);
   assert.equal(S.voorraad.paarden, 1);
-  assert.equal(S.marskramer.heeft.paarden, 0);
   assert.equal(T.kanKopen(S, 'paarden', 1).kan, false, 'het was de enige');
 });
 

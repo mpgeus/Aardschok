@@ -499,6 +499,15 @@
       menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('weapons, shields and armour for the soldiers of the watch house, one piece a day'), // geen tekst
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse; een eigen gebouw komt met de werkplaatsen in de bouwstijl (vraag 167).', // geen tekst
     },
+    // De stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): paarden voor de ridders (js/soldaten.js),
+    // alleen als een wachthuis erom vraagt: zo'n drie weken graan per paard. Een paard is duur.
+    stal: {
+      naam: T.t('stable'), trede: 'gehucht', voet: { b: 7, h: 5 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 4 }, bouwtijd: 5,
+      handen: 2, woonruimte: 0,
+      maakt: { in: { graan: 1 }, uit: { paarden: 0.05 }, keuze: { paarden: { graan: 1 } } },
+      menu: true, tekening: 'gebouwen/schuur', beschrijving: T.t('horses for the knights of the watch house, one in about three weeks'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de schuur; een eigen plaat komt van Marcel.', // geen tekst
+    },
     palissade: {
       naam: T.t('palisade'), trede: 'dorp', voet: null, kosten: { hout: 40 }, heer: { goud: 5 }, bouwtijd: 10,
       handen: 0, woonruimte: 0, maakt: null, menu: false,

@@ -1087,7 +1087,7 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en harnas (sinds 21 okt; Marcel: "Speer is een 2 handed weapon", dus geen schild), de
   piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, de
   kruisboogschutter kruisboog en harnas, en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Een
-  paard maakt de wapenmaker niet: het komt uit de stal, en de marskramer heeft er soms een (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"). De ridder heeft twee keer het leven van een soldaat
+  paard maakt de wapenmaker niet: het komt uit de stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): die maakt er alleen een als een wachthuis erom vraagt, zo'n drie weken op graan; en in een dorp heeft de marskramer er 's zomers een, voor 16 goud. De ridder heeft twee keer het leven van een soldaat
   en een grotere pas (`ridder` in `T.SOLDATEN_INSTELLINGEN`; die getallen zijn Claudes voorstel). Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
   meer, eet mee zoals iedereen, staat in zijn dienst bij het wachthuis en slaapt daarbuiten thuis (de diensten,

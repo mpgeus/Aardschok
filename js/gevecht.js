@@ -47,6 +47,8 @@
     // De kosten van een slag (in de punten van T.slagVan: een zwaard 3, een boog 4) maal dit is de tijd tot de volgende
     // slag, in seconden op 1×: een zwaard slaat zo elke 1,2 seconde, een boog schiet elke 1,6.
     secondenPerPunt: 0.4,
+    // Zoveel seconden legt een schutter aan voor de pijl weggaat: zijn vel spant de boog, en laat los op dit moment.
+    aanleggen: 0.4,
     // Zo ver (tegels) ziet een man van jou een vijand; een rover of een wolf ziet zo ver als T.WEZENS zegt.
     zicht: 8,
     // Zo ver van zijn post (of van waar hij hoort, of van waar hij begon) zit iemand een vijand na; dan laat hij hem gaan.
@@ -266,7 +268,9 @@
     if (!(d.maxLeven > 0)) zorgLeven(D, d);
     if (T.kanRaken(D, e, d)) {
       if (e.pad.length) e.pad = e.onderweg ? [e.pad[0]] : [];
-      if (!e.onderweg && nu >= (e.slagKlaar || 0)) slaan(S, D, e, d, nu);
+      if (e.onderweg) return;
+      if (T.slagVan(e).schiet) schieten(S, D, e, d, nu);
+      else if (nu >= (e.slagKlaar || 0)) slaan(S, D, e, d, nu);
       return;
     }
     const slag = T.slagVan(e);
@@ -298,6 +302,25 @@
       break;
     }
     if (beste) T.geefRoute(e, [beste], beste);
+  }
+
+  // Wie schiet, legt eerst aan (`e.aanleg`: wanneer de pijl weggaat), zo op tijd dat hij schiet als zijn vorige schot lang
+  // genoeg geleden is. Het aanleggen speelt het vel van de aanval af (e.uitval), en de pijl en de klap komen als hij loslaat.
+  // Stond hij een tijd niet te schieten (`e.aanleg` ver achter hem), dan begint hij opnieuw.
+  function schieten(S, D, e, d, nu) {
+    const voor = IN().aanleggen;
+    if (e.aanleg != null && nu > e.aanleg + voor) e.aanleg = null;
+    if (e.aanleg == null) {
+      if (nu < (e.slagKlaar || 0) - voor) return;
+      e.aanleg = nu + voor;
+      const doel = plek(d);
+      if (S.wereld === D.wereld) e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
+      return;
+    }
+    if (nu >= e.aanleg) {
+      e.aanleg = null;
+      slaan(S, D, e, d, nu);
+    }
   }
 
   // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende.

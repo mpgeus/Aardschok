@@ -2627,7 +2627,7 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zeven soorten met vaste
   stukken (`T.SOLDAAT_SOORTEN`: militie met een hooivork, speerman, piekenier, zwaardvechter, boogschutter,
   kruisboogschutter, ridder), en acht stukken als waren (`T.STUKKEN`: speren, pieken, zwaarden, schilden, bogen, kruisbogen,
-  harnassen, en paarden, `gekocht`: van de marskramer en niet van de wapenmaker; de hooivork heeft elke boer). `T.opPaard(e)`:
+  harnassen, en paarden, uit de stal (`T.GEBOUWEN.stal`, `maakt.keuze` zoals de wapenmaker) of soms van de marskramer; de hooivork heeft elke boer). `T.opPaard(e)`:
   meer leven (`T.levenAlsMan`) en een grotere pas (`T.snelheidVan`). `T.werkSoldatenBij` (elke ochtend na `T.verdeelHanden` via `T.tikSoldatenDag`,
   na het afbreken, en meteen na een knop, `T.zetSoldaten`): wie er te veel is, levert zijn stukken in, en wie er te
   weinig is, komt erbij uit wie geen werk heeft (B1: `T.kanWerken` en geen `p.werk`, volwassen of jong, niet van het

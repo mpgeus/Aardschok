@@ -103,9 +103,12 @@
         const uit = waren(soort.maakt.keuze[wat]);
         van.set(uit, [...(van.get(uit) || []), T.waarNaam(wat)]);
       }
-      maakt.push(T.t('At full strength: one piece a day, of what is asked for. {stukken}.', {
-        stukken: T.hoofdletter([...van].map(([uit, wat]) => T.t('{wat} from {uit}', { wat: T.opsomming(wat), uit })).join('; ')),
-      }));
+      const stukken = T.hoofdletter([...van].map(([uit, wat]) => T.t('{wat} from {uit}', { wat: T.opsomming(wat), uit })).join('; '));
+      // (de stal doet er weken over)
+      const perDag = Math.max(...Object.keys(soort.maakt.keuze).map((wat) => soort.maakt.uit[wat]));
+      maakt.push(perDag < 1
+        ? T.t('At full strength: one in {n} days, when one is asked for. {stukken}.', { n: Math.round(1 / perDag), stukken })
+        : T.t('At full strength: one piece a day, of what is asked for. {stukken}.', { stukken }));
       maakt.push(g.werkte > 0 && g.maaktNu
         ? T.t('Today: {uit} ({p}% of full strength).', { uit: waren({ [g.maaktNu]: soort.maakt.uit[g.maaktNu] * g.werkte }), p: procent(g.werkte) })
         : T.t('Today: nothing.'));

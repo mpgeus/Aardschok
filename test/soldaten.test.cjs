@@ -250,7 +250,7 @@ test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', ()
   assert.equal(T.kanRaken(D, boog, tweede), false, 'ook niet op die rover');
 });
 
-test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leven; zijn paard komt van de marskramer', () => {
+test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leven; zijn paard komt uit de stal', () => {
   assert.deepEqual(T.SOLDAAT_SOORTEN.ridder.stukken, ['zwaard', 'schild', 'harnas', 'paard']);
   assert.ok(T.soldaatPrijs('ridder') >= 2 * T.soldaatPrijs('zwaardvechter'), 'hij is duur');
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } }, leven: 0, maxLeven: 0 });
@@ -260,26 +260,44 @@ test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leve
   assert.equal(T.vangtAf(wie('ridder'), null), T.vangtAf(wie('zwaardvechter'), null), 'schild en harnas, zoals een zwaardvechter');
   assert.equal(T.slagVan(wie('ridder')).wapen, 'zwaard');
   assert.equal(T.isStuk('paarden'), true);
-  assert.ok(T.HANDEL_INSTELLINGEN.verkoopt.paarden, 'de marskramer verkoopt een paard');
-  assert.equal(T.GEBOUWEN.wapenmaker.maakt.uit.paarden, undefined, 'de wapenmaker maakt er geen');
+  assert.ok(T.GEBOUWEN.stal.maakt.uit.paarden > 0, 'de stal fokt ze');
+  assert.equal(T.GEBOUWEN.wapenmaker.maakt.uit.paarden, undefined, 'de wapenmaker niet');
   assert.equal(T.waarNaam('paarden'), T.t('horses'));
 });
 
-test('de ridder wacht op zijn paard: de wapenmaker maakt de rest, en wie het paard heeft, wordt ridder', () => {
-  const { D, huis } = gehucht(['wapenmaker']);
+test('de ridder wacht op zijn paard: de stal maakt het als hij erom vraagt, in een week of drie, en dan wordt hij ridder', () => {
+  const { S, D, huis } = gehucht(['stal']);
+  const stal = D.gebouwen.find((g) => g.soort === 'stal');
+  assert.equal(T.wapensGevraagd(D).paarden, 0);
+  assert.equal(T.receptVan(D, stal), null, 'niemand vraagt er een, dus hij staat stil');
   T.zetSoldaten(D, huis, 'ridder', 1);
-  const vraag = T.wapensGevraagd(D);
-  assert.equal(vraag.zwaarden, 1);
-  assert.equal('paarden' in vraag, false, 'een paard vraagt hij niet aan de smid');
+  assert.equal(T.wapensGevraagd(D).paarden, 1);
+  assert.match(T.GEBOUW_ERBIJ.stal(D), /1 horse/);
   for (const wat of ['zwaarden', 'schilden', 'harnassen']) T.zetVoorraad(D, wat, 1);
   T.werkSoldatenBij(D);
   assert.equal(T.soldatenVan(D, huis).length, 0, 'nog geen paard');
-  assert.ok(T.GEBOUW_DELEN.wachthuis(D, huis)[0].regels.some((r) => r.tekst && r.tekst.includes(T.t('waiting for a horse from the merchant'))));
-  T.zetVoorraad(D, 'paarden', 1);
-  T.werkSoldatenBij(D);
+  assert.ok(T.GEBOUW_DELEN.wachthuis(D, huis)[0].regels.some((r) => r.tekst && r.tekst.includes(T.t('waiting for a horse from the stable'))));
+  // (uit het briefje van de wapenmaker blijft het paard)
+  assert.equal(T.GEBOUW_ERBIJ.wapenmaker(D).includes('horse'), false);
+  const begin = Math.floor(S.kalender.dag) + 1;
+  let dagen = 0;
+  for (let dag = begin; dag < begin + 60 && !T.soldatenVan(D, huis).length; dag++) {
+    stal.in = { graan: 5 }; // wat de kar hem bracht (js/kar.js)
+    S.kalender.dag = dag + 0.3;
+    S.kalender.stil = [];
+    T.tikGebouwenDag(D, dag);
+    // wat op zijn stapel ligt, brengt de kar naar de opslag
+    if (stal.stapel && stal.stapel.paarden >= 1) {
+      T.zetVoorraad(D, 'paarden', stal.stapel.paarden);
+      stal.stapel.paarden = 0;
+      T.werkSoldatenBij(D);
+    }
+    dagen++;
+  }
   const p = T.soldatenVan(D, huis)[0];
-  assert.ok(p, 'nu wel');
+  assert.ok(p, `geen ridder na ${dagen} dagen`);
   assert.equal(p.soldaat.soort, 'ridder');
+  assert.ok(dagen >= 15, `na ${dagen} dagen: een paard duurt weken`);
   assert.equal(D.voorraad.paarden || 0, 0, 'hij nam het paard mee');
 });
 

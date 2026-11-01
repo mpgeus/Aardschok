@@ -156,7 +156,7 @@
     bogen: T.t('Bows. From the weaponsmith: an archer shoots far, but not with an enemy alongside.'),
     kruisbogen: T.t('Crossbows. From the weaponsmith: a bolt goes through shield and armour.'),
     harnassen: T.t('Leather armour. The weaponsmith makes it from hides: it stops part of every blow, but not a crossbow bolt.'),
-    paarden: T.t('Horses. From the merchant: a knight rides one, and is faster and harder to bring down.'),
+    paarden: T.t('Horses. From the stable, and sometimes from the merchant: a knight rides one, and is faster and harder to bring down.'),
     wijn: T.t('Wine. From the vineyard farm, picked in {maand}: the craftsmen want it alongside their ale, and it does not spoil.', { maand: maandToon('wijnmaand') }),
   };
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een

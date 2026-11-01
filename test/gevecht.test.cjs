@@ -140,6 +140,25 @@ test('aanvallen, dan terug: een man valt aan wat hij ziet, maar niet verder dan 
   assert.equal(een.doelwit, T.afstand(T.tegelVan(r), post) <= L ? r : undefined);
 });
 
+test('een schutter legt eerst aan: zijn vel spant, en de pijl en de klap komen als hij loslaat', () => {
+  const { S, D, w, een } = dorp();
+  een.bewoner.soldaat.soort = 'boogschutter';
+  const hier = ruimePlek(w, T.tegelVan(een));
+  zet(een, hier);
+  const r = rover(D, plekOp(w, hier, 6));
+  T.geefOpdracht(S, { soort: 'volg', wie: T.nummersVan(D, [een]), doel: { x: r.tx, y: r.ty, soort: 'rover' } });
+  const pijlen = () => S.effecten.filter((fx) => fx.soort === 'pijl').length;
+  for (let i = 0; i < 5 && een.aanleg == null; i++) T.wereldTik(S);
+  assert.ok(een.aanleg != null, 'hij legt aan');
+  assert.ok(een.uitval, 'zijn vel speelt de aanval');
+  assert.equal(pijlen(), 0, 'nog geen pijl');
+  assert.equal(r.leven, r.maxLeven, 'nog geen klap');
+  for (let i = 0; i < Math.ceil(T.GEVECHT_INSTELLINGEN.aanleggen / T.TIK) + 2 && een.aanleg != null; i++) T.wereldTik(S);
+  assert.equal(een.aanleg, null);
+  assert.equal(pijlen(), 1, 'nu gaat de pijl weg');
+  assert.ok(r.leven < r.maxLeven, 'en valt de klap');
+});
+
 test('een vijand die je aanwijst, valt hij aan zonder leiband; de boog schiet van ver, zonder ernaast te lopen', () => {
   const { S, D, w, een } = dorp();
   // Een boogschutter (vraag 159): het wachthuis geeft hem een boog.
@@ -154,6 +173,8 @@ test('een vijand die je aanwijst, valt hij aan zonder leiband; de boog schiet va
   assert.equal(T.kanRaken(D, een, r), true, 'zes tegels: de boog reikt tot acht');
   T.werkGevechtBij(S, D);
   assert.equal(een.pad.length, 0, 'hij blijft staan en schiet');
+  // hij legt eerst aan, en raakt als hij loslaat
+  for (let i = 0; i < Math.ceil(T.GEVECHT_INSTELLINGEN.aanleggen / T.TIK) + 2; i++) T.wereldTik(S);
   assert.ok(r.leven < r.maxLeven, 'en raakt');
 });
 

@@ -884,6 +884,7 @@
     schild: T.t('shield'),
     harnas: T.t('leather armour'),
     ridder: T.t('knight'),
+    aanleggen: T.t('seconds taking aim'),
     leven: T.t('life'),
     afgeslagen: T.t('beaten off'),
     dood: T.t('death'),

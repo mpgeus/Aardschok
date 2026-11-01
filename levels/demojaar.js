@@ -22,7 +22,7 @@
   T.LEVELS.demojaar = {
     dorpen: [{
       wacht: ['speerman', 'speerman', 'kruisboogschutter'],
-      dicht: ['wachthuis', 'wapenmaker'],
+      dicht: ['wachthuis', 'wapenmaker', 'stal'],
       overvallen: false,
     }],
     triggers: [
