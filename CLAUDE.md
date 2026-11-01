@@ -91,22 +91,20 @@ In detail in `ontwerp/gereedschap.md`.
 ## Zuinig werken met agents
 
 Gemeten op 20 sep: de agents waren zo'n negentig procent van het verbruik. Een agent stuurt bij elke stap zijn hele eigen
-gesprek opnieuw mee, dus hij kost kwadratisch met hoe lang hij leeft. Het knelpunt is de vijfuursgrens, en let op de week.
+gesprek opnieuw mee, dus hij kost kwadratisch met hoe lang hij leeft.
 De volledige tekst, met de metingen, staat onderaan `ontwerp/spel.md`.
 
 - **Laat een agent kort leven:** een verse agent met een korte opdracht is goedkoper dan dezelfde agent voor de vijfde
   keer terugsturen. Alleen doorgaan als hij iets weet dat nergens staat.
 - **Een opdracht aan een agent verwijst naar deze paragraaf**, naar één punt uit `ontwerp/werklijst.md`, en naar het ene
   ontwerpbestand (of het ene stuk van `ontwerp/code.md`) dat erbij hoort.
-- **Lees niet het hele bestand:** zoek de twintig regels die je nodig hebt. Beoordeel een beeld op een uitsnede: voor
-  "is die steen nu grijs" is 600×400 genoeg.
+- **Lees niet het hele bestand:** zoek de twintig regels die je nodig hebt, en beoordeel een beeld op een uitsnede.
 - **Sonnet voor uitvoerend werk, Opus voor oordeel.** Een kleine precieze klus doe je zelf. Niet meer dan twee agents
   tegelijk die renderen.
-- **Kijk eerst of het er al is**, met een goedkope zoekopdracht vooraf.
 - **Nooit `git stash` of `git checkout` op de werkmap** als er meer agents tegelijk werken; wie wil meten hoe het vóór
   een wijziging was, maakt een losse kopie met `git worktree add`.
 - **Kijk naar de meter:** vraag het verbruik op (`get_usage`) voor je een zware agent start, en begin na een groot stuk
-  werk een nieuwe sessie; de werklijst draagt alles over.
+  werk een nieuwe sessie.
 
 ## Opbouw
 
