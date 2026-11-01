@@ -51,6 +51,19 @@ Marcel: "Dit wordt de kruisboog schutter. De basisplaats en met wapen", en daarn
 
 **Wat de runs hiervan laten zien:** één run op een zijaanzicht van het paard geeft al bijna het hele paard. De ruiter en het schild hebben er twee nodig, voor en achter: hun achterkant verzint de run wit of met de leeuw erop. Het zwaard komt uit één run. Bij een dun of schuin aanzicht kiest het model zelf de stand, dus recht van voren of opzij werkt het best.
 
+## De gebouwen (1 nov)
+
+Marcel stuurde vijf platen: `referentie/aardschok-gebouw-burcht-draai.png`, `-bakkerij-`, `-molen-`, `-stal-` en `-huis-riet-`. Hij noemde ze "wat gebouwen". De burcht wordt het town hall (Marcel, 1 nov).
+
+**Een gebouw hoeft niet door TripoSplat.** Een gebouw draait in het spel niet: het staat op een vaste voet, in vier standen van de deur (zuid, oost, noord, west; `js/bouwstijl.js`). De schuine aanzichten op deze platen hebben al de camera van het spel: de grasvoet is twee keer zo breed als hoog, dus 30 graden. Het aanzicht kan er dus zo uit, los van het grijs en op de maat van de voet: `gereedschap/blender/stijl/proef/gebouw_proef.py`, en `bewijs/gebouwen/proef-in-het-spel.png`.
+
+Gemeten aan de platen, voor de volgende:
+
+- **Nodig: twee aanzichten.** Eén schuin van voren (ZW) en één schuin van achteren (NW). Gespiegeld geven die de vier standen van de deur. Op deze platen staat de deur in ZW en ZO aan dezelfde kant (bij de stal rechts, bij de andere vier links), dus ZO is geen echte draaiing.
+- **Groter:** een aanzicht is nu zo'n 240 pixels breed, en moet in het spel 350 tot 450 zijn, op zoom 1. Het wordt dus 1,4 tot 2 keer vergroot en is wat zacht. Twee aanzichten op een plaat, in plaats van acht, geven genoeg pixels.
+- **Geen rook** op de plaat: die haal ik er nu weg boven de schoorsteen, en het spel maakt zijn eigen rook.
+- **De deur:** een nieuw gebouw heeft zijn deur standaard naar het zuiden, op het scherm linksonder. De stal staat in ZW andersom.
+
 ## Wat je aanlevert
 
 - **Plaat A (nodig):** Z, W, N en O op ooghoogte, en liefst ook de vier diagonalen. Hier komen de vorm en het grootste deel van de verf uit.

@@ -22,7 +22,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 **Loopt**
 - **Bezig in sessie `lokaal-510618ba`** (1 nov, op Marcels pc): **192, de figuren in de stijl van Settlers II** (`docs/art/hunyuan/TRIPOSPLAT.md`):
   de speerman, de boogschutter (met hoed), de kruisboogschutter, de pikeman en de ridder uit TripoSplat staan, lopen, vechten, worden geraakt en sterven,
-  en de ridder is ook een soldaat in de regels (Marcel: "Ja, hij is duur, schild, zwaard, harnas en paard"). **Nu** (Marcel, 1 nov: "Ze mogen voor nu erin", en "Ja er komt een stal, de merchant verkoopt ze ook soms"): de vijf figuren in het spel, de stal, en de marskramer die soms een paard heeft. Wat open staat: `opmerkingen.md`.
+  en de ridder is ook een soldaat in de regels (Marcel: "Ja, hij is duur, schild, zwaard, harnas en paard"). **Nu** (Marcel, 1 nov: "Ze mogen voor nu erin", en "Ja er komt een stal, de merchant verkoopt ze ook soms"): de vijf figuren staan in het spel, en de stal en de marskramer met zijn paard als regel. **Nu:** de vijf gebouwen uit zijn platen echt in het spel (Marcel, 1 nov: "Ja", en de burcht "wordt town hall"). Wat open staat: `opmerkingen.md`.
 - **Bezig in sessie `lokaal-dac05521`** (op Marcels pc; de art ligt op 23 okt even stil): de beelden van de generator
   (`beelden-van-de-generator.md`). De speerman staat, loopt en valt aan in acht richtingen; als eerste vallen NO, O en ZO
   (vel 23 tot 25, de prompts staan klaar), en eventueel vel 3 en 4 opnieuw (de punt naar achteren).

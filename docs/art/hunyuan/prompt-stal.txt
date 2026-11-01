@@ -1,0 +1,7 @@
+Use the attached images as the style reference: the same stylized medieval village game art, the same soft even light, the same warm materials and the same painted detail as the attached figures.
+
+Make a turnaround sheet of one single building: a small horse stable for a medieval village. Eight views in one row, in the same order and with the same labels as the attached sheet (Z, ZW, W, NW, N, NO, O, ZO), on a plain grey background, with the camera slightly above, no perspective, no cast shadow, and the same scale in every view. Think of one single 3D model on a turntable: only the camera moves.
+
+The stable: low and long, about one and a half times as wide as it is deep. A timber frame with rough plank walls on a low stone footing, and a steep thatched roof with a slight sag. On the long front side, three stall openings with half-doors in dark wood, the upper part open. Above the middle door, a small hayloft opening with a wooden beam. A water trough and a small stack of hay stand against one short side, a wooden hitching rail along the front. Blue and yellow on one small painted shield over the middle door, the colours of the village. No horses, no people.
+
+Very high resolution, crisp details. Make the building as large as fits in each view.

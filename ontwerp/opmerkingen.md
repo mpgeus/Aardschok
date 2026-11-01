@@ -60,7 +60,7 @@ bekeken, niet opgenomen in het spel, en nog niet door Marcel beoordeeld.
 
 **De ridder**
 - **De regel is er:** zwaard, schild, harnas en paard (Marcel, 1 nov), 15 punten. Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms". Mijn voorstel, nog niet gekozen: de ridder heeft 2 keer het leven en 1,6 keer de pas van een soldaat (`ridder` in `T.SOLDATEN_INSTELLINGEN`).
-- **De vijf figuren gaan het spel in:** Marcel, 1 nov: "Ze mogen voor nu erin". Voor nu: het is geen definitieve goedkeuring.
+- **De vijf figuren staan in het spel:** Marcel, 1 nov: "Ze mogen voor nu erin". Voor nu: het is geen definitieve goedkeuring. Op de echte videokaart, met 30 soldaten in beeld, 2,4 ms per beeld tegen 2,7 ms met de oude vellen (`gereedschap/schermen/figurenmeting.cjs`), en 236 MB aan geladen vellen tegen 143 MB. Firefox is niet gemeten. De speerman speelt als tweede aanval dezelfde steek.
 - **Hij is groot:** bijna 2 keer zo hoog als een speerman, op één tegel. Een pad, een deur of een troep houdt daar geen rekening mee. Een boom ervoor laat zijn onderkant doorschijnen, maar zijn bovenlijf niet altijd (`js/doorkijk.js`).
 - **Zijn vellen zijn de grootste** (samen zo'n 10 miljoen pixels). Niet gemeten in beeldtijd.
 - **De linkerarm en het schild** zijn star aan zijn lijf, en de benen van de ruiter aan het zadel. Hij slaat maar op één manier (de tweede aanval speelt dezelfde slag).
@@ -76,6 +76,12 @@ bekeken, niet opgenomen in het spel, en nog niet door Marcel beoordeeld.
 - **De platen:** de figuur is zo'n 500 pixels hoog, en de eis is 900 (`PLAAT-EISEN.md`). Scherper kan alleen met een grotere plaat.
 - **Voor Steam:** DINOv3 heeft een eigen licentie (de modelkaart noemt alleen MIT); dat hoort bij de AI-opgave.
 - **Opname in het spel, D8 en de goedkeuring** liggen bij Marcel.
+
+## De gebouwen uit Marcels platen
+
+Marcel, 1 nov: vijf platen, "Wat gebouwen". Een proef, alleen in de browser: `docs/art/hunyuan/PLAAT-EISEN.md`, en `docs/art/bewijs/gebouwen/proef-in-het-spel.png`.
+Wat er nog moet voor ze echt in het spel staan: de bouwfasen (zonder bouwfase staat een bouwplaats half doorzichtig), de vier standen van de deur, en de bladen van de bouwstijl (die heeft nu per soort meer vormen en daken).
+De vellen zijn tien keer zo groot als de oude gebouwen (240 tot 440 KB tegen zo'n 30 KB): niet gemeten in beeldtijd. De wieken van de molen staan stil, en de grasvoet is rond terwijl de voet op het raster een ruit is.
 
 ## Het spel
 
