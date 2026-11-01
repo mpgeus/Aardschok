@@ -29,7 +29,7 @@ Nummer 1 tot en met 5 doen het meest. Bij 6 tot en met 10 volstaat "zo goed moge
 
 ## De plaat van de boogschutter (1 nov)
 
-`referentie/aardschok-boogschutter-draai.png` werkt, met één ding om na te kijken: **de koker wisselt van schouder** (rechts in Z, ZO en NO, links in ZW, NW en N), en de boog staat in ZW anders dan in de rest. Elk gedragen ding moet in elke richting aan dezelfde kant zitten. Alleen Z en N tellen voor de vorm, en die twee moeten dus zeker kloppen.
+`referentie/aardschok-boogschutter-draai.png` werkt, met één ding om na te kijken: **de koker wisselt van schouder** (rechts in Z, ZO en NO, links in ZW, NW en N), en de boog staat in ZW anders dan in de rest. Elk gedragen ding moet in elke richting aan dezelfde kant zitten. Alleen Z en N tellen voor de vorm, en die twee moeten dus zeker kloppen. Het prompt om dat in GPT te herstellen: `prompt-boogschutter.txt`.
 
 ## Wat je aanlevert
 
