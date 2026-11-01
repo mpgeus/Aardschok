@@ -1,0 +1,8 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt: \"Los regressies op die door ronde 12 zijn ontstaan\"), T5 (verworpen: geen effect op de doorsteek; de oorzaak was de speling van T2, zie r12-T2b): het armsgat van de tabberd 1 cm ruimer ('armsgat' 1,5 naar 2,5 cm), voor de dikkere mouwen van C2: langs de rand van de open zijkant drukte de gambeson door (de doorsteektoets in W en O: 25 en 31 pixels tegen 12 en 13)",
+ "soldaat": {
+  "tabberd": {
+   "armsgat": 0.025
+  }
+ }
+}

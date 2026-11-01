@@ -1,0 +1,8 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment A2, de helm hoger op het hoofd: de rand 7,5 cm boven de ogen in plaats van 5 ('boven_oog'); de kap gaat mee",
+ "soldaat": {
+  "helm": {
+   "boven_oog": 0.075
+  }
+ }
+}

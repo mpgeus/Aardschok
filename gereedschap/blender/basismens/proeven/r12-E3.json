@@ -1,0 +1,18 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment E3, meer vormdefinitie: een kleinere zon (scherpere schaduwen), minder vullicht, diepere holtes en een hardere kijk",
+ "soldaat": {
+  "stijlen": {
+   "C": {
+    "hoek": 6,
+    "vul": 0.35,
+    "holte": [
+     0.06,
+     0.55
+    ]
+   }
+  },
+  "licht": {
+   "look": "High Contrast"
+  }
+ }
+}

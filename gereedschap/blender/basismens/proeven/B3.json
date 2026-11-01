@@ -1,0 +1,38 @@
+{
+ "_uitleg": "ronde 7, experiment B: als B2 (BASISMENS_PROEF=B2,B3), met een fijnere anatomie (de kaak, de kin, de neusbrug en de punt, de oogkassen, de wenkbrauwbogen, de jukbeenderen, de mondhoeken; MPFB), de huid minder oranje ('verzadiging', 'tint'), matter ('ruw'), wat blos op de neus en de wangen, en de ogen dieper met een zachter wit",
+ "lijf": {
+  "doelen": {
+   "chin/chin-jaw-drop-incr": 0.3,
+   "chin/chin-prominent-incr": 0.5,
+   "chin/chin-height-incr": 0.2,
+   "nose/nose-point-width-incr": 0.0,
+   "nose/nose-scale-horiz-incr": 0.15,
+   "nose/nose-volume-incr": 0.2,
+   "nose/nose-greek-decr": 0.3,
+   "nose/nose-scale-vert-incr": 0.25,
+   "eyebrows/eyebrows-trans-forward": 0.5,
+   "forehead/forehead-nubian-incr": 0.3,
+   
+   "cheek/l-cheek-volume-decr": 0.3,
+   "cheek/r-cheek-volume-decr": 0.3,
+   "cheek/l-cheek-bones-incr": 0.6,
+   "cheek/r-cheek-bones-incr": 0.6,
+   "mouth/mouth-angles-down": 0.25,
+   "mouth/mouth-laugh-lines-in": 0.3
+  }
+ },
+ "soldaat": {
+  "huid": {
+   "verzadiging": 0.78,
+   "tint": "#e2cfc4",
+   "ruw": 0.72,
+   "stoppels": {
+    "blos": 0.25
+   }
+  },
+  "ogen": {
+   "voor": 0.0012,
+   "wit": "#9a9088"
+  }
+ }
+}

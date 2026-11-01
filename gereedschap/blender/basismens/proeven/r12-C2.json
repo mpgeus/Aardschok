@@ -1,0 +1,11 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment C2, de gambeson voller: de mouwen dikker ('mouw' 1,2 naar 2,4 cm), diepere kussens ('kussen' 1,4 naar 2 cm) en grotere ruiten ('ruit' 4,5 naar 7,5 cm; op 74 pixels is een pixel zo'n 2,4 cm, dus een ruit van 4,5 cm verdween), minder rondom de mouw ('rondom' 8 naar 6)",
+ "soldaat": {
+  "gambeson": {
+   "mouw": 0.024,
+   "kussen": 0.02,
+   "ruit": 0.075,
+   "rondom": 6
+  }
+ }
+}

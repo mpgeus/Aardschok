@@ -1,0 +1,9 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt: \"D3 — Artistiek palet dat zo dicht mogelijk bij de oorspronkelijke referentie ligt\"), experiment D3: de albedo die op 74 pixels het blauw en geel van de speerman uit het spel geeft (ronde12.py, de mediaan in Lab van wat blauw en geel is; per kanaal de verhouding tussen render en albedo uit D1, D2 en D3a): blauw #275399 (de speerman L 28,6 a 11,4 b -37,7; ronde 11 was paarser en verzadigder), geel #f5b117 (een tikje lichter en warmer dan #f0a812)",
+ "soldaat": {
+  "kleuren": {
+   "blauw": "#275399",
+   "geel": "#f5b117"
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "_uitleg": "ronde 7, experiment C: als C2 (BASISMENS_PROEF=C2,C3), en de maliën vallen opzij verder over de schouders en achter over de rug, zonder uitwaaieren, zodat de onderrand de schouders volgt; onder de hals beweegt de kap met de gewichten van de gambeson en de tabberd waar hij op ligt ('volgt'), zodat er in de idle langs de rand geen tabberd vrijkomt die eronder hoort",
+ "soldaat": {
+  "malienkraag": {
+   "zij": 0.085,
+   "achter": 0.09,
+   "wijd": 0.0,
+   "volgt": true
+  }
+ }
+}

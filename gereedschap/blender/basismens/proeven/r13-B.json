@@ -1,0 +1,17 @@
+{
+ "_uitleg": "ronde 13 (Marcel, 29 okt: \"EXPERIMENT B — PROFESSIONELE TABBERD\"), experiment B2: de tabberd uit het hemd van de piratenoutfit van Human Generator (Extra Outfits Pack, 33.036 driehoeken, texturen van 4K met een normal map), zonder mouwen, riemen en kraagjes (humgen_basis.kleding van humgen13), de rok tot de zoom van de soldaat uitgerekt, over de gambeson gelegd en gevierendeeld (soldaat.tabberd_van_buiten); het blauw en geel teruggerekend naar de speerman op 74 pixels voor dit materiaal (blauw #2659a8 na een tweede meting op de gambeson van ronde 12, geel #f59114; met de kleuren van ronde 12 werd het geel citroen, Delta E 22,6)",
+ "soldaat": {
+  "tabberd": {
+   "extern": {
+    "object": "buiten-tabberd",
+    "uit": 0.008,
+    "rondes": 2,
+    "top": 1.1,
+    "kleuren": {
+     "blauw": "#2659a8",
+     "geel": "#f59114"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,8 @@
+{
+ "_uitleg": "ronde 7, experiment A: als A2 (BASISMENS_PROEF=A2,A3), de koepel 15% hoger",
+ "soldaat": {
+  "helm": {
+   "hoger": 1.15
+  }
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt: \"1. Het silhouet\"; de analyse: de speerman heeft veel grotere handschoenen en laarzen), experiment S1a (verworpen in de combinatie: de kap van de handschoen werd op de speerhand een zak met een plooi, en de handschoen volgde de huid niet meer: 3,95 cm tegen een grens van 1,1): de kap van de handschoenen langer en wijder (7,5 naar 11 cm, 1,4 naar 2,8 cm wijder), dikker leer om de hand, de laarzen breder, langer en dikker om het been, met een bredere omslag",
+ "soldaat": {
+  "handschoenen": {
+   "kap": 0.11,
+   "kap_wijd": 0.028,
+   "afstand": 0.006
+  },
+  "laarzen": {
+   "breder": 0.02,
+   "langer": 0.055,
+   "afstand": 0.012,
+   "omslag": 0.06,
+   "omslag_uit": 0.01
+  }
+ }
+}

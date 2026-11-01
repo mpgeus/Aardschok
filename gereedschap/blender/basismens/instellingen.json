@@ -1,0 +1,320 @@
+{
+  "_uitleg": "De basismens (Marcel, 28 okt: de 3D-pijplijn voor figuren). Alle maten in meters, Z omhoog, -Y voor, -X zijn rechterkant. Wat hier staat, lezen bouw.py, render.py, export.py, blad.py en controle.py; maak.cjs draait ze na elkaar.",
+  "uit": "gereedschap/pixelart/uit/basismens",
+  "blender": "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe",
+  "python": "C:/ComfyUI/ComfyUI_windows_portable/python_embeded/python.exe",
+  "lijf": {
+    "lengte": 1.75,
+    "macro": {"gender": 1.0, "age": 0.5, "muscle": 0.6, "weight": 0.6, "proportions": 0.6, "height": 0.6},
+    "doelen": {
+      "hands/l-hand-scale-incr": 0.3, "hands/r-hand-scale-incr": 0.3,
+      "feet/l-foot-scale-incr": 0.25, "feet/r-foot-scale-incr": 0.25,
+      "torso/measure-shoulder-dist-incr": 0.3,
+      "head/head-scale-horiz-incr": 0.1
+    },
+    "budget_driehoeken": 12000,
+    "textuur": 1024,
+    "kleuren": {"huid": "#c08a68", "lippen": "#a8645a", "nagels": "#d8b4a0", "haar": "#3a2a20", "oogwit": "#e6e0d8", "iris": "#3a2c22", "onderbroek": "#8a8478", "onderbroek_band": "#6e6a60"}
+  },
+  "onderbroek": {
+    "_uitleg": "een boxershort uit het spelmodel, recht afgesneden met vlakken (taille en dijen) in plaats van langs de driehoeken; 4 mm van de huid, 2,5 mm dik met een gesloten rand, en een band om de taille en de pijpen",
+    "taille_boven_heup": 0.13,
+    "pijp_onder_heup": 0.12,
+    "afstand": 0.004,
+    "dikte": 0.0025,
+    "band": 0.028,
+    "band_pijp": 0.016,
+    "band_uit": 0.0015,
+    "glad": 6,
+    "_glad": "zoveel rondes spant de stof over holtes voor hij naar buiten gaat: een punt dieper dan zijn buren gaat naar buiten (de navel, de bilspleet); bolle plekken en de randen blijven"
+  },
+  "skinning": {
+    "_uitleg": "de gewichten glad maken rond kruis, heupen en oksels (in het volle mesh, voor het versimpelen): per ronde schuift elk punt een deel naar het gemiddelde van zijn buren, het meest in het midden van een gebied en niets aan de rand; daarna weer genormaliseerd. Lineaire skinning rekt daar het meest (de buigtest).",
+    "rondes": 20,
+    "kracht": 0.7,
+    "gebieden": [
+      {"naam": "kruis", "straal": 0.16},
+      {"naam": "heup.L", "straal": 0.11}, {"naam": "heup.R", "straal": 0.11},
+      {"naam": "oksel.L", "straal": 0.10}, {"naam": "oksel.R", "straal": 0.10}
+    ]
+  },
+  "houdingen": {
+    "_uitleg": "standen bovenop de rust (de A-houding blijft de technische rust, ook in de GLB). Per regel, na elkaar: bot, as, waarde. De as is een richting van het skelet in rust ([x, y, z], de man naar -Y) of 'x', 'y', 'z' van het bot zelf, met graden; 'richt' laat het bot naar een richting wijzen; 'rust' houdt de stand uit de rust (de voeten plat). Daarna komt hij met zijn laagste punt op de grond.",
+    "idle": [
+      ["clavicle.L", [0, 1, 0], 5], ["clavicle.R", [0, 1, 0], -5],
+      ["upperarm01.L", "richt", [0.13, 0.03, -1]], ["upperarm01.R", "richt", [-0.13, 0.03, -1]],
+      ["lowerarm01.L", "richt", [0.09, -0.12, -1]], ["lowerarm01.R", "richt", [-0.09, -0.12, -1]],
+      ["wrist.L", "richt", [0.1, -0.1, -1]], ["wrist.R", "richt", [-0.1, -0.1, -1]],
+      ["upperleg01.L", [0, 1, 0], 5], ["upperleg01.R", [0, 1, 0], -5],
+      ["foot.L", "rust"], ["foot.R", "rust"]
+    ]
+  },
+  "skelet": {
+    "basis": "default",
+    "weg": {
+      "_uitleg": "botten die weggaan, met waar hun gewicht heen gaat (voorvoegsels)",
+      "head": ["special", "oris", "levator", "eye", "orbicularis", "temporalis", "jaw", "tongue", "risorius", "platysma", "oculi"],
+      "spine03": ["breast"]
+    },
+    "gezicht": ["oris01", "special04", "jaw", "eye.L", "eye.R"],
+    "_gezicht": "waar deze botten van het gezicht in rust stonden, bewaart bouw.py op het skelet (gezicht, als JSON) voor ze weggaan: de mond (oris01), de kin (special04), de kaak en de ogen, voor de baard en de maliënkraag",
+    "nodig": ["root", "spine05", "spine04", "spine03", "spine02", "spine01", "neck01", "neck02", "neck03", "head",
+              "clavicle.L", "shoulder01.L", "upperarm01.L", "upperarm02.L", "lowerarm01.L", "lowerarm02.L", "wrist.L",
+              "finger1-1.L", "finger1-2.L", "finger1-3.L", "finger2-1.L", "finger2-2.L", "finger2-3.L",
+              "finger3-1.L", "finger3-2.L", "finger3-3.L", "finger4-1.L", "finger4-2.L", "finger4-3.L",
+              "finger5-1.L", "finger5-2.L", "finger5-3.L",
+              "pelvis.L", "upperleg01.L", "upperleg02.L", "lowerleg01.L", "lowerleg02.L", "foot.L", "toe1-1.L"],
+    "rollen": {
+      "_uitleg": "welk bot welke rol heeft (de namen van MakeHuman, zodat bakken.py en de bewegingen van de speerman blijven passen)",
+      "wortel en bekken": "root", "rug": ["spine05", "spine04", "spine03"], "borst": ["spine02", "spine01"],
+      "nek": ["neck01", "neck02", "neck03"], "hoofd": "head", "sleutelbeen": "clavicle", "schouder": "shoulder01",
+      "bovenarm en twist": ["upperarm01", "upperarm02"], "onderarm en twist": ["lowerarm01", "lowerarm02"], "hand": "wrist",
+      "vingers": "finger1..5-1..3 (duim is 1), metacarpal1..4", "heup": "pelvis", "bovenbeen en twist": ["upperleg01", "upperleg02"],
+      "onderbeen en twist": ["lowerleg01", "lowerleg02"], "voet": "foot", "tenen": "toe1..5"
+    }
+  },
+  "camera": {
+    "elevatie": 30,
+    "_elevatie": "vast op 30 (Marcel, 28 okt, ronde 3): de tegels van het spel zijn 2:1 (64 bij 32), en dat hoort bij 30; 35,264 (echte isometrie) maakt een tegel 1,73:1 (vergelijking)",
+    "afstand": 20,
+    "breed": 512, "hoog": 512,
+    "pixels_per_meter": 256,
+    "anker": [256, 448],
+    "anker_aanzicht": [256, 496],
+    "_anker": "waar de oorsprong (tussen de voeten, op de grond) in beeld valt; in de aanzichten met de camera horizontaal lager, zodat 1,75 m in beeld past",
+    "samples": 64
+  },
+  "vergelijking": {
+    "_uitleg": "de elevaties naast elkaar, met dezelfde schaal en hetzelfde licht (vast aan de camera); de grond is een raster van vierkante tegels om 45 graden gedraaid, zoals de wereld van het spel. Op 2:1-tegels (64 bij 32) is een tegel half zo hoog als breed, en dat is sin(elevatie): 0,5 bij 30 graden, 0,577 bij 35,264.",
+    "elevaties": [30.0, 35.264],
+    "tegel_zijde": 0.95,
+    "_tegel_zijde": "zo groot dat de man op spelmaat (74 pixels) op een tegel van 64 pixels breed staat, zoals de speerman in het spel"
+  },
+  "spelmaat": {
+    "_uitleg": "de idle verkleind tot de man in Z zo hoog is als de speerman in het spel; de tegel is tegels/grond.png (64 bij 32), de eerste",
+    "hoogte": 74,
+    "tegels": "tegels/grond.png",
+    "tegel": [0, 0, 64, 32],
+    "speerman": "beelden/figuren/speerman3d-staan.png"
+  },
+  "soldaat": {
+    "_uitleg": "de basismens als soldaat (Marcel, 28 okt, ronde 3): de kleren en de uitrusting als losse meshes op hetzelfde lijf en skelet, gebouwd in de rust (de A-houding), met gewichten van de huid eronder; soldaat.py. Maten in meters, van de huid af. Naar de speerman van het spel (beelden/figuren/speerman3d-staan.png), met zijn materialen (speerman_hd.py). Lagen van binnen naar buiten: lijf, broek, gambeson en laarzen, tabberd en handschoenen, riem, buidel; de helm en de speer apart.",
+    "kleuren": {"blauw": "#1c3f9c", "geel": "#f0a812", "broek": "#2c3466", "handschoen": "#5a3a26", "riem": "#965038",
+                "buidel": "#5a3418", "omslag": "#7e4422", "helm": "#9a968e", "staal": "#a3a8b0"},
+    "broek": {"_uitleg": "niet gevraagd, wel nodig: zonder broek staan blote knieen tussen de tabberd en de laarzen, en de speerman draagt een blauwe broek. Van de taille tot in de laarzen.",
+              "boven_heup": 0.12, "afstand": 0.003, "dikte": 0.0015},
+    "gambeson": {"_uitleg": "van de hals tot onder de heup en tot de polsen, gewatteerd: afstand plus kussen (de ruiten), op de mouwen nog 'mouw' erbij; de ruiten 'ruit' meter, 'rondom' rond de arm",
+                 "onder_heup": 0.04, "pols": 0.02, "hals": 0.02, "afstand": 0.010, "kussen": 0.010, "mouw": 0.012, "ruit": 0.045,
+                 "rondom": 8, "dikte": 0.003, "glad": 12, "oksel": 0.3, "oksel_straal": 0.12, "naad": 0.16, "sub": 2,
+                 "_naad": "ronde 4 (Marcel, 29 okt: \"strakkere diamantstiksels\"): de ruiten kleiner (was 0,06) en de naden smaller: het profiel van een ruit is (sin u sin w) tot de macht 'naad' (was 0,3; kleiner is een vlakker kussen met een smallere, diepere naad); daarvoor 'sub' keer fijner",
+                 "_oksel": "onder de arm dun: de vulling (kussen en mouw) gaat in de oksel tot 'oksel' keer, binnen 'oksel_straal' meter"},
+    "kraag": {"_uitleg": "een staande gewatteerde kraag om de hals, van voren lager dan achter (de kin)", "voor": 0.035, "achter": 0.065, "uit": 0.004, "wijd": 0.008},
+    "tabberd": {"_uitleg": "over de gambeson, zonder mouwen, tot boven de knie; gevierendeeld met vaste vlakken op het lijf: boven zijn rechterkant (-X) geel en zijn linker blauw, onder de riem andersom. Het lijfje volgt de huid (met de gewichten van de huid), de rok hangt recht van de heupen (de wortel, naar de zoom wat van de benen)",
+                "riem_boven_heup": 0.065, "zoom_boven_knie": 0.07, "speling": 0.008, "rok_marge": 0.015, "rok_wijd": 0.02,
+                "hals": 0.035, "armsgat": 0.015, "dikte": 0.003, "ringen": 128, "rok_benen": 0.35,
+                "plooien": {"riem": 0.006, "diep": 0.028, "breed": 0.2, "zoom": 0.008, "zaad": 5,
+                            "plekken": [[0, 0.7], [0.55, 0.5], [-0.55, 0.5], [1.2, 0.8], [1.5, 1.0], [1.8, 0.8], [-1.2, 0.8], [-1.5, 1.0], [-1.8, 0.8], [2.5, 0.7], [3.14, 0.8], [-2.5, 0.7]],
+                            "_uitleg": "boven de riem bolt de stof 'riem' meter op (de riem trekt hem samen). Ronde 6 (Marcel, 29 okt: \"Plooien moeten logisch voortkomen uit zwaartekracht, spanning en bevestigingspunten\"): plooien vanaf de riem op 'plekken' (de hoek rondom, 0 voor, en de diepte): de meeste opzij en achter waar de riem de stof samentrekt, voor één tussen de benen en een langs elk bovenbeen; tot 'diep' meter naar buiten bij de zoom, 'breed' radialen breed, breedte, begin en scheefstand wat anders per plooi (het zaad 'zaad'); de zoom gaat 'zoom' meter mee omhoog. De stofsimulatie van de speerman (speerman_hd.hangen) scheurde de rok hier tussen de benen"}},
+    "riem": {"hoogte": 0.042, "dikte": 0.005, "gesp": [0.052, 0.048, 0.006], "eind": 0.09, "lus": 0.014, "gaten": 3,
+             "_lus": "ronde 4: een lus van leer om de riem naast de gesp, 'lus' breed, en 'gaten' gaten in het eind"},
+    "buidel": {"_uitleg": "aan de riem, aan zijn rechterkant wat naar voren (hoek in graden van voren, naar zijn rechterkant negatief)", "maat": [0.10, 0.045, 0.12], "hoek": -42},
+    "laarzen": {"_uitleg": "de schacht 'afstand' om het been; de voet (ronde 5, Marcel, 29 okt: \"anatomischer, met een duidelijkere neus, hiel en zool\") 'breder' aan elke kant dan de huid (en nergens minder dan 'afstand' plus 'voet_marge' om de huid), 'langer' voor de tenen en 'achter' achter de hiel, 'wreef' hoog op de wreef en 'neus' hoog bij de bal, de punt 'krul' omhoog; de zool 'welt' breder dan het leer en 'zool' dik, bij de hiel 'hak' hoger, onder de wreef 'boog' omhoog",
+                "onder_knie": 0.12, "afstand": 0.006, "breder": 0.012, "langer": 0.04, "achter": 0.03, "wreef": 0.085, "neus": 0.042,
+                "krul": 0.008, "voet_marge": 0.006, "zool": 0.012, "kleur": ["#9a5430", "#4e2410"], "welt": 0.004, "hak": 0.008, "boog": 0.008, "zool_kleur": "#3a2416",
+                "omslag": 0.05, "omslag_uit": 0.004, "band": [0.11, 0.016, 0.003], "kreukels": 0.0018,
+                "_band": "ronde 4 (Marcel, 29 okt: \"meer vorm en details in de leren laarzen\"): een riempje om de enkel (hoogte boven de grond, breedte, afstand) met een gespje opzij, en kreukels 'kreukels' meter diep voor de enkel"},
+    "budget": {"_uitleg": "driehoeken per onderdeel, met de dikte (de gambeson, de broek en de handschoenen worden voor de dikte tot de helft versimpeld, de laarzen na het samensmelten)",
+               "gambeson": 28000, "broek": 3000, "handschoenen": 6000, "laarzen": 6000, "baard": 12000},
+    "handschoenen": {"afstand": 0.0035, "kap": 0.075, "kap_wijd": 0.014, "dikte": 0.0025},
+    "malienkraag": {"_uitleg": "ronde 4 (Marcel, 29 okt: \"donkere maliënkraag rond hoofd en nek\", zoals de speerman): een kap van maliën onder de helm, over de wangen, de oren en het achterhoofd, die als een korte cape over de kraag en de schouders valt; het gezicht open tot 'open' graden opzij, tot 'kin' meter onder de kin. Van 'onder_rand' meter onder de rand van de helm tot 'voor', 'zij' en 'achter' meter onder de nek, 'uit' meter van wat eronder ligt, aan de onderkant 'wijd' meter wijder",
+                    "onder_rand": 0.006, "voor": 0.13, "zij": 0.09, "achter": 0.13, "uit": 0.005, "wijd": 0.03, "open": 72, "kin": 0.012,
+                    "dikte": 0.004, "ringen": 96, "kleur": "#3a3430", "ringen_kleur": "#6a6058"},
+    "baard": {"_uitleg": "ronde 4 (Marcel, 29 okt: \"een karaktervoller gezicht met baard of stoppels\"): de baard en de snor als vorm over het gezicht, op de plekken die de botten van het gezicht aanwezen; 'vol' 1 is de volle baard van de speerman die over de kraag valt. Ronde 5 (\"corrigeer de onnatuurlijke baard\"): de snor 'snor' meter dik over de bovenlip, 'snor_hang' meter omlaag (in de mondhoeken verder), donkerbruin ('kleur', plukken 'licht', tussen de strengen 'donker')",
+              "dik": 0.0006, "dik_kin": 0.0025, "snor": 0.002, "snor_hang": 0.001, "brauw": 0.0018, "rand": 0.012, "dikte": 0.0012,
+              "kleur": "#1e140e", "licht": "#3a2a1e", "donker": "#100a07", "dicht": [0.6, 0.25, 0.85, 1.0],
+              "_ronde6": "Marcel, 29 okt: \"Verwijder deze aanpak. Gebruik bij voorkeur korte stoppels\": een dunne laag over de huid ('dik' meter, bij de kin 'dik_kin' meer, de snor 'snor', de wenkbrauwen 'brauw'), de dichtheid van het haar loopt over 'rand' meter uit in de huid; mat_baard maakt er stoppels van, 'dicht' het haar: de baard (plus bij de kin), de snor, de wenkbrauwen"},
+    "huid": {"tint": "#e4ccba", "_uitleg": "ronde 6: de textuur van het lijf in de soldaat maal 'tint', donkerder en bruiner (soldaat.huid); de basismens houdt zijn huid"},
+    "ogen": {"_uitleg": "ronde 5 (Marcel, 29 okt: \"corrigeer de ogen\"): oogbollen van 'straal' meter op de plek van de oogbotten, 'voor' meter naar voren (net door de oogleden), de iris 'omlaag' graden naar beneden",
+             "straal": 0.0115, "voor": 0.002, "omlaag": 6, "wit": "#a89e92", "iris": "#3a2a1e", "iris_rand": 0.8, "lijn": 0.77, "lijn_kleur": "#2a1c16",
+             "_ronde6": "Marcel, 29 okt: \"een donkere ooglijn, subtiele oogwitwaarden\": waar 'oog' onder 'lijn' komt (de bol onder de oogleden) donker, het oogwit gedempt"},
+    "helm": {"_uitleg": "een ketelhoed naar die van de speerman (ronde 6, Marcel, 29 okt: \"een duidelijk bolvormige koepel, een brede, licht afhangende rand, een herkenbare verhoogde kam\"; speerman_hd.helm): de rand 'boven_oog' meter boven de ogen; een halve bol 'speling' wijder dan het hoofd, minstens 'koepel' keer zo hoog als breed en 'boven_kruin' boven de kruin, 'achter' meter naar achteren; een rand van 'rand' keer de koepel die 'rand_val' meter zakt, achteraan 'zak' keer verder, 'golf' golvend; een kam ('kam', 'kam_breed') en twee naden op 'naden' graden ('naad', 'naad_breed'), een punt ('punt': straal, hoogte), deuken van 'deuk' meter, 'nagels' klinknagels; dof staal ('ruw'), een donkere patina en blank waar het slijt. Ronde 5 had een platte koepel en een rand van 7,5 cm (de gedrongen 11,2)",
+             "boven_oog": 0.05, "speling": 0.02, "achter": 0.01, "koepel": 0.95, "boven_kruin": 0.012, "rand": 1.45, "rand_val": 0.03,
+             "zak": 0.5, "golf": 0.15, "dikte": 0.002, "punt": [0.013, 0.028], "kam": 0.008, "kam_breed": 0.007, "naden": 32,
+             "naad": 0.003, "naad_breed": 0.004, "deuk": 0.0006, "nagels": 12,
+             "ruw": 0.45, "patina": "#4a463f", "patina_deel": 0.35, "blank": "#c4c0b6"},
+    "textuur": {"_uitleg": "ronde 4 (Marcel, 29 okt: \"maak een reproduceerbare textuurpijplijn\"): per onderdeel een UV-kaart (smart project) en drie beelden, gebakken uit de knopen van de bronversie (Cycles, van de bron naar de kopie, 'kooi' meter erbuiten begonnen): de kleur, de normalen (het reliëf van de bron en de bobbels van de stof, het leer en het staal) en ruwheid en metaal (glTF: groen en blauw). Het lijf houdt zijn eigen huid. 'maat' pixels per onderdeel, anders 'standaard'; in de GLB als JPEG van kwaliteit 'jpeg'",
+                "maat": {"gambeson": 1024, "tabberd": 1024, "malienkraag": 1024}, "standaard": 512, "marge": 4, "kooi": 0.012,
+                "monsters": 4, "jpeg": 90},
+    "realtime": {"_uitleg": "ronde 4 (Marcel, 29 okt: \"een geoptimaliseerde realtime variant, met als eerste richtbudget maximaal 15.000 driehoeken\"): elk onderdeel versimpeld tot zijn budget (collapse), met de texturen gebakken van de bronversie, zodat het reliëf in de normalen terugkomt",
+                 "budget": 15000,
+                 "delen": {"lijf": 1800, "broek": 600, "gambeson": 2600, "laarzen": 1500, "handschoenen": 1300, "tabberd": 2400,
+                           "riem": 600, "buidel": 300, "malienkraag": 1100, "baard": 600, "ogen": 300, "helm": 900, "speer": 600}},
+    "speer": {"_uitleg": "rechtop in zijn rechtervuist, de voet op de grond; aan een greep (een leeg object) aan het bot wrist.R. blad: lengte, halve breedte, halve dikte",
+              "lengte": 2.3, "straal": 0.0165, "blad": [0.25, 0.028, 0.0075], "tule": 0.1, "koord": 0.07, "voet": 0.04,
+              "tapse": 0.9, "hout": ["#98582e", "#62301a"], "_tapse": "ronde 5: de schacht naar boven 'tapse' keer zo dun; 'hout' de lichte en donkere nerf"},
+    "stijlen": {"_uitleg": "ronde 5 (Marcel, 29 okt: \"Maak drie artistieke renderstijlen\"; stijlen.py en stijlblad.py): A mat 3D, B painterly, C Aardschok HD-pixel, alleen in ZW met de camera van de grote render. 'zon' de sterkte, 'hoek' hoe groot de zon is (graden: groter is een zachtere schaduw), 'vul' het vullicht van de camera, 'lucht' de sterkte van de lucht met 'hemel' boven en 'grond' onder; 'holte' (afstand, diepte) de holtes van de materialen; bij A 'ruw' de minste ruwheid per soort; bij B over elke kleur vlekken van 'vlek' per meter in 'tint', 'verzadiging' en 'toon'. De nabewerking (stijlblad.py): B 'penseel' pixels Kuwahara; C het licht in stappen van 1/'stappen' stop, 'lijn' (breedte, donker) langs de randen van de materialen, en op spelmaat 'kleuren' kleuren in het palet",
+                "monsters": 128,
+                "A8": {"_uitleg": "ronde 8, experiment A (stijlen.py -- A8): de render van C met rijkere materialen per groep (stijlen.verfijn): 'ao' hoe diep de omgevingsschaduw over 'ao_afstand' meter, 'rand' hoeveel lichter de randen (slijtage), 'vlek' de vlekken op 'vlek_schaal' per meter, 'vuil' hoe donker kleine plekken vuil en slijtage op 'vuil_schaal' per meter, 'bobbel' het reliëf op 'bobbel_schaal' per meter, gerekt met 'rek', 'ruw' de minste ruwheid; 'monsters' per pixel; 'diepte' meter voor de dieptekaart",
+                       "monsters": 256, "diepte": 0.9,
+                       "staal": {"ao": 0.45, "ao_afstand": 0.03, "rand": 0.45, "vlek": 0.18, "vlek_schaal": 40, "bobbel": 0.15, "bobbel_schaal": 220, "rek": [1, 6, 1], "ruw": 0.45, "vuil": 0.25, "vuil_schaal": 70},
+                       "malien": {"ao": 0.55, "ao_afstand": 0.02, "rand": 0.25, "vlek": 0.1, "vlek_schaal": 30, "bobbel": 0, "bobbel_schaal": 1, "rek": [1, 1, 1], "ruw": 0.55},
+                       "stof": {"ao": 0.6, "ao_afstand": 0.05, "rand": 0.2, "vuil": 0.3, "vuil_schaal": 45, "vlek": 0.4, "vlek_schaal": 9, "bobbel": 0.45, "bobbel_schaal": 300, "rek": [1, 1, 3], "ruw": 0.95},
+                       "leer": {"ao": 0.5, "ao_afstand": 0.03, "rand": 0.35, "vuil": 0.25, "vuil_schaal": 60, "vlek": 0.25, "vlek_schaal": 25, "bobbel": 0.3, "bobbel_schaal": 350, "rek": [1, 1, 1], "ruw": 0.6},
+                       "huid": {"ao": 0.4, "ao_afstand": 0.025, "rand": 0.08, "vlek": 0.08, "vlek_schaal": 60, "bobbel": 0.08, "bobbel_schaal": 900, "rek": [1, 1, 1], "ruw": 0.65},
+                       "hout": {"ao": 0.3, "ao_afstand": 0.02, "rand": 0.1, "vlek": 0.2, "vlek_schaal": 12, "bobbel": 0.2, "bobbel_schaal": 150, "rek": [8, 8, 0.5], "ruw": 0.75}},
+                "kop": [0.62, 0.07],"_kop": "ronde 7: het hoofd van dichtbij met de camera van C (stijlen.py -- kop): meter hoog, en hoeveel meter het midden onder het midden van de helm ligt",
+                "A": {"zon": 3.6, "hoek": 22, "zon_kleur": [1.0, 0.96, 0.9], "vul": 0.45, "lucht": 0.7, "hemel": [0.62, 0.66, 0.72], "grond": [0.16, 0.14, 0.12],
+                      "ruw": {"stof": 1.0, "leer": 0.72, "laars": 0.82, "staal": 0.5, "blad": 0.45, "anders": 0.7}, "spiegel": 0.3, "sheen": 0.3,
+                      "holte": [0.06, 0.5], "look": "AgX - Medium High Contrast", "belichting": 0.35},
+                "B": {"zon": 4.6, "hoek": 12, "zon_kleur": [1.0, 0.8, 0.56], "vul": 0.45, "vul_kleur": [0.7, 0.8, 1.0], "lucht": 0.55,
+                      "hemel": [0.42, 0.52, 0.8], "grond": [0.32, 0.18, 0.09], "vlek": 6, "tint": 0.025, "verzadiging": 0.18,
+                      "meer_verzadigd": -0.05, "toon": 0.22, "holte": [0.06, 0.5], "look": "AgX - Medium High Contrast", "belichting": 0.4,
+                      "penseel": 4},
+                "C": {"zon_kleur": [1.0, 0.92, 0.8], "hoek": 14, "vul": 0.5, "vul_kleur": [0.86, 0.91, 1.0], "holte": [0.05, 0.4], "stappen": 2, "kleuren": 64, "lijn": [2, 0.6]}},
+    "stand": [],
+    "_stand": "de stand van de benen en de rug, voor 'houding' (ronde 6; de gedrongen soldaat heeft er een)",
+    "houding": [
+      ["upperarm01.L", "richt", [0.3, 0.02, -1]], ["lowerarm01.L", "richt", [0.2, -0.18, -1]], ["wrist.L", "richt", [0.18, -0.2, -1]],
+      ["finger2-1.L", "x", 45], ["finger2-2.L", "x", 55], ["finger2-3.L", "x", 40], ["finger3-1.L", "x", 45], ["finger3-2.L", "x", 55], ["finger3-3.L", "x", 40],
+      ["finger4-1.L", "x", 45], ["finger4-2.L", "x", 55], ["finger4-3.L", "x", 40], ["finger5-1.L", "x", 45], ["finger5-2.L", "x", 55], ["finger5-3.L", "x", 40],
+      ["finger1-2.L", "x", 20], ["finger1-3.L", "x", 20],
+      ["upperarm01.R", "richt", [-0.06, 0.0, -1]], ["lowerarm01.R", "richt", [-0.35, -0.9, -0.15]], ["wrist.R", "richt", [-0.3, -0.95, -0.05]]
+    ],
+    "camera": {"_uitleg": "dezelfde camera als de basismens (elevatie, pixels per meter), een hoger beeld voor de speer; de band om de mouw (de controle van links en rechts) wijder",
+               "breed": 512, "hoog": 704, "anker": [256, 640], "band": 0.095,
+               "detail": {"breed": 1024, "hoog": 1280, "pixels_per_meter": 640, "anker": [512, 1200], "draai": -45, "monsters": 128},
+               "uitgelegd": {"breed": 3072, "tussen": 0.72}},
+    "licht": {"_uitleg": "het licht van de vellen van het spel (eigen.py, LICHT): de zon van linksboven, weinig vullicht, de lucht licht boven en donker onder, een stop lichter en meer contrast",
+              "zon": {"richting_scherm": [-0.82, 0.26, 0.52], "sterkte": 5.0, "hoek": 8}, "vul": 0.65, "lucht": 0.35,
+              "belichting": 0.6, "look": "Medium High Contrast"},
+    "_houding": "de idle (houdingen.idle) en dan dit: de armen wat verder van het lijf (de gambeson is dik), links een losse vuist, rechts de onderarm naar voren voor de speer; de vingers van de rechterhand sluiten zich om de schacht (soldaat.py, greep)"
+  },
+  "licht": {
+    "zon": {"richting_scherm": [-0.6, 0.7, 0.55], "sterkte": 3.5, "hoek": 8, "kleur": [1.0, 0.96, 0.9]},
+    "vul": {"sterkte": 0.8},
+    "lucht": {"kleur": [0.72, 0.76, 0.82], "sterkte": 0.6}
+  },
+  "richtingen": {
+    "_uitleg": "de draaiing van de man om Z (graden, tegen de klok in van boven gezien); 0: hij kijkt naar -Y, naar de camera en op het scherm omlaag. 'scherm' is waar hij op het scherm heen kijkt (graden, 0 rechts, 90 omhoog).",
+    "lijst": [
+      {"naam": "Z", "draai": 0, "scherm": -90},
+      {"naam": "ZW", "draai": -45, "scherm": -135},
+      {"naam": "W", "draai": -90, "scherm": 180},
+      {"naam": "NW", "draai": -135, "scherm": 135},
+      {"naam": "N", "draai": 180, "scherm": 90},
+      {"naam": "NO", "draai": 135, "scherm": 45},
+      {"naam": "O", "draai": 90, "scherm": 0},
+      {"naam": "ZO", "draai": 45, "scherm": -45}
+    ]
+  },
+  "buigtest": {
+    "_uitleg": "de belangrijkste gewrichten gebogen (graden); de vorm mag niet inzakken of scheuren",
+    "standen": {
+      "_uitleg": "per bot een as in de wereld (de man staat in rust, naar -Y) en graden; rechtsom om de as gezien vanaf de punt",
+      "ellebogen": {"lowerarm01.L": [[1, 0, 0], -100], "lowerarm01.R": [[1, 0, 0], -100]},
+      "knieen": {"upperleg01.L": [[1, 0, 0], -70], "upperleg01.R": [[1, 0, 0], -70], "lowerleg01.L": [[1, 0, 0], 100], "lowerleg01.R": [[1, 0, 0], 100]},
+      "schouders": {"upperarm01.L": [[0, 1, 0], -60], "upperarm01.R": [[0, 1, 0], 60]},
+      "romp": {"spine03": [[0, 0, 1], 30], "spine01": [[1, 0, 0], 20]},
+      "hoofd": {"neck02": [[0, 0, 1], 40], "head": [[1, 0, 0], 15]},
+      "vuisten": {"wrist.L": [[0, 1, 0], 30], "finger2-1.L": [[0, 1, 0], 70], "finger3-1.L": [[0, 1, 0], 70], "finger4-1.L": [[0, 1, 0], 70], "finger5-1.L": [[0, 1, 0], 70], "finger2-2.L": [[0, 1, 0], 80], "finger3-2.L": [[0, 1, 0], 80], "finger4-2.L": [[0, 1, 0], 80], "finger5-2.L": [[0, 1, 0], 80]},
+      "spreidstand": {"upperleg01.L": [[0, 1, 0], -40], "upperleg01.R": [[0, 1, 0], 40]},
+      "uitval": {"upperleg01.L": [[1, 0, 0], -60], "lowerleg01.L": [[1, 0, 0], 70], "upperleg01.R": [[1, 0, 0], 25]},
+      "armen_omhoog": {"upperarm01.L": [[0, 1, 0], -100], "upperarm01.R": [[0, 1, 0], 100]},
+      "armen_voor": {"upperarm01.L": [[1, 0, 0], -80], "upperarm01.R": [[1, 0, 0], -80]}
+    },
+    "dichtbij": {
+      "_uitleg": "close-ups van de standen waar de huid het meest rekt: het gebied, en van welke kant (graden om Z; 0 van voren, 90 van links, -90 van rechts)",
+      "knieen": ["kruis", 0], "spreidstand": ["kruis", 0], "uitval": ["heup.L", 90],
+      "schouders": ["oksel.L", 0], "armen_omhoog": ["oksel.L", 0], "armen_voor": ["oksel.L", 90]
+    },
+    "meetgebieden": {"kruis": 0.13, "heup.L": 0.11, "heup.R": 0.11, "oksel.L": 0.10, "oksel.R": 0.10},
+    "_meetgebieden": "de straal waarbinnen de rek per gebied gemeten wordt, vast (los van de straal van het gladmaken), zodat voor en na te vergelijken zijn",
+    "gebieden_rek": 2.0,
+    "_gebieden_rek": "per gebied ook het aandeel randen dat meer dan 2 keer zo lang wordt, en het 99e percentiel",
+    "volume_marge": 0.12,
+    "rek_grens": 3.0,
+    "rek_aandeel_max": 0.001,
+    "_rek": "een rand mag in een stand hooguit rek_grens keer zo lang worden, behalve een aandeel rek_aandeel_max van de randen: in het kruis en de oksels rekt lineaire skinning altijd (gemeten: kruis 6,9 bij een diepe knieval, oksels 3,0 met de armen 60 graden omhoog, zes en vier randen van de 17.727)"
+  },
+  "varianten": {
+    "_uitleg": "Een variant gaat over de instellingen hierboven heen (een woordenboek per sleutel, de rest vervangen) en schrijft in <uit>/<naam>; variant.py, en npm run basismens -- <naam>. De basismens zelf blijft zoals hij is.",
+    "humgen14": {
+      "basis": "humgen12",
+      "proeven": ["A2", "A3", "C2", "r12-A1", "r12-A2", "r12-A3", "r12-A5", "r12-B2b", "r12-B3", "r12-C2", "r12-T2b", "r12-D3", "r12-T4", "r12-S1", "r12-E4"],
+      "soldaat": {"tabberd": {"rok_benen": 0.9}},
+      "_uitleg": "ronde 14 (Marcel, 29 okt: \"HYBRIDE 3D + AI SPRITE PIPELINE\"; \"Werk in een nieuwe experimentmap\"): de soldaat van ronde 12 (en 13), een kopie van zijn soldaat.blend, in de twee contactstanden van een loop (humgen/loop14.json) en met de passes voor de AI (humgen/loop14.py, gereedschap/ai/loop14.cjs); de rok volgt de benen bij de zoom voor 90 procent in plaats van 35, anders stak in een pas de voorste dij erdoor (met 65 nog)"
+    },
+    "humgen13": {
+      "basis": "humgen12",
+      "_uitleg": "ronde 13 (Marcel, 29 okt: \"PROFESSIONAL ASSET ACQUISITION & CHARACTER DETAIL RECONSTRUCTION\"): de soldaat van ronde 12 met kleding uit bestaande professionele assets: de gambeson uit de gewatteerde parka van Human Generator (Base Clothes, outfit Frosty_Evening), de tabberd uit het hemd van de piratenoutfit (Extra Outfits Pack), allebei door de API van HumGen op de maat van de man gezet (humgen/naar_basis.kleding) en in soldaat.py in de kleuren van de soldaat over hun eigen detail (soldaat.van_buiten)",
+      "humgen_basis": {"kleding": [
+        {"soort": "outfit", "zoek": "Frosty_Evening", "object": "HG_Parka", "naam": "buiten-gambeson", "onderverdeling": 1, "opblazen": [0.01, 0.018],
+         "weg": [[["Head", "head", "neck"], 0.3]]},
+        {"soort": "outfit", "zoek": "Pirate", "object": "HG_Pirate_Shirt", "naam": "buiten-tabberd", "grootste": true,
+         "weg": [[["upper_arm.L", "upper_arm.R", "forearm.L", "forearm.R", "hand.L", "hand.R"], 0.4]]}]},
+      "proeven": ["A2", "A3", "C2", "r12-A1", "r12-A2", "r12-A3", "r12-A5", "r12-B2b", "r12-B3", "r12-C2", "r12-T2b", "r12-D3", "r12-T4", "r12-S1", "r12-E4"]
+    },
+    "humgen12": {
+      "basis": "humgen11",
+      "proeven": ["A2", "A3", "C2", "r12-A1", "r12-A2", "r12-A3", "r12-A5", "r12-B2b", "r12-B3", "r12-C2", "r12-T2b", "r12-D3", "r12-T4", "r12-S1", "r12-E4"],
+      "_uitleg": "ronde 12 (Marcel, 29 okt: \"ART-DIRECTED CHARACTER RECONSTRUCTION\"; \"De belangrijkste beoordelingsmaatstaf is de uiteindelijke sprite op 74 pixels\"): de soldaat van ronde 11 met de gekozen proeven r12-* (helm, kap, gambeson, tabberd, kleuren, licht), elk eerst los vergeleken (humgen/ronde12.py)"
+    },
+    "humgen11": {
+      "basis": "humgen",
+      "proeven": ["A2", "A3", "C2"],
+      "_uitleg": "ronde 11 (Marcel, 29 okt: \"Van procedurele kleding naar hoogwaardige, reproduceerbare 3D-game-art\"): de soldaat op HumGen met een tabberd als stof (soldaat.doek: opzij open, korter, in de stofsimulatie van Blender gehangen), een gambeson met manchetten en voller gewatteerd, en een gezicht met wenkbrauwen, stoppels (de baardschaduw van HumGen) en een warmere huid ('humgen_basis', humgen/naar_basis.py)",
+      "humgen_basis": {"wenkbrauwen": true, "wenkbrauwen_straal": 0.00008, "wenkbrauwen_melanine": 0.65, "huid": {"Tone": 0.75, "Redness": 0.15, "Saturation": 1.0, "Beard Opacity": 1.0, "Mustache Opacity": 0.9}},
+      "soldaat": {"tabberd": {"zoom_boven_knie": 0.15,
+                              "doek": {"open_onder_oksel": 0.04, "open_graden": 20, "riem_band": 0.04, "afstand": 0.006, "kwaliteit": 10,
+                                       "massa": 0.4, "stijf": 40, "buig": 2.0, "beelden": 50}},
+                  "gambeson": {"kussen": 0.014, "manchet": [0.05, 0.012]},
+                  "malienkraag": {"volgt": true, "_ronde11": "compact (C2, zonder de cape van C3), wel met de gewichten van de stof eronder"}}
+    },
+    "humgen": {
+      "_uitleg":"ronde 10 (Marcel, 29 okt: \"een volledig geklede Aardschok-spearman op basis van HumGen3D\"): de soldaat op de HumGen-man van ronde 9. De bouw is gereedschap/blender/humgen/naar_basis.py op het .blend van humgen/maak.py (de man in de vorm van basismens.blend: dezelfde namen voor de botten die de bouw van de soldaat kent, de livekeys in de vorm gebakken, de herkenningspunten van het gezicht); daarna dezelfde stappen als elke variant. De helm en de maliënkraag van ronde 7 (A2, A3, C2, C3); geen baard als laag en geen eigen oogbollen (HumGen heeft ogen en een huid met stoppels), de huid van HumGen blijft; het gezicht hangt ook aan de botten van zijn mimiek ('hoofd_groepen'); de rechterborst blauw (Marcel: \"Anatomische rechterborst: blauw\")",
+      "bouw": {"blend": "gereedschap/pixelart/uit/humgen/bron/humgen.blend", "script": "gereedschap/blender/humgen/naar_basis.py"},
+      "proeven": ["A2", "A3", "C2", "C3"],
+      "soldaat": {"baard": {"vorm": false}, "ogen": {"vorm": false}, "huid": {"behouden": true},
+                  "hoofd_groepen": ["head", "neck", "jaw", "eye", "brow", "mouth", "cheek", "nose", "pucker", "tongue", "facs", "lip"],
+                  "tabberd": {"rechterborst": "blauw"}}
+    },
+    "gedrongen": {
+      "proeven": ["A2", "A3", "B2", "B3", "C2", "C3"],
+      "_proeven": "ronde 7 (Marcel, 29 okt: helm, gezicht en maliënkraag in drie experimenten; \"Alle wijzigingen moeten afzonderlijk terug te draaien zijn\"): de proeven uit proeven/ die deze variant houdt, in die volgorde over de rest heen (variant.py); een proef terugdraaien is hem hier weghalen. A3 (de koepel 15% hoger) boven A2 (10%), B3 (de anatomie, de huid) op B2 (de stoppels in de huid), C3 (over de schouders) op C2 (lichter, compacter)",
+      "_uitleg":"de gestileerde soldaat (Marcel, 29 okt, ronde 4): zo dicht mogelijk bij de speerman uit het spel; een groter hoofd, bredere schouders, kortere benen, een stevigere romp, grotere handen en laarzen, een bredere ketelhoed en een dikkere speer met een groter blad. Op hetzelfde skelet (dezelfde botten, op de maat van dit lijf gezet door MPFB); gemeten tegen de speerman met meten.py",
+      "lijf": {
+        "macro": {"muscle": 0.85, "weight": 0.85, "proportions": 0.1, "age": 0.7},
+        "doelen": {"head/head-scale-vert-incr": 1.0, "head/head-scale-horiz-incr": 1.0, "head/head-scale-depth-incr": 0.8,
+                   "head/head-square": 0.5, "head/head-fat-incr": 0.3, "head/head-age-incr": 0.4,
+                   "torso/torso-scale-horiz-incr": 0.4, "torso/torso-scale-depth-incr": 0.8, "torso/measure-shoulder-dist-incr": 1.0,
+                   "torso/measure-frontchest-dist-incr": 0.6,
+                   "legs/upperlegs-height-decr": 1.0, "legs/lowerlegs-height-decr": 0.9,
+                   "arms/measure-upperarm-length-decr": 0.45, "arms/measure-lowerarm-length-decr": 0.35,
+                   "arms/l-upperarm-fat-incr": 0.8, "arms/r-upperarm-fat-incr": 0.8, "arms/l-lowerarm-fat-incr": 0.8, "arms/r-lowerarm-fat-incr": 0.8,
+                   "hands/l-hand-scale-incr": 1.0, "hands/r-hand-scale-incr": 1.0,
+                   "feet/l-foot-scale-incr": 0.7, "feet/r-foot-scale-incr": 0.7,
+                   "neck/neck-scale-horiz-incr": 0.35, "neck/measure-neck-height-decr": 0.4,
+                   "eyebrows/eyebrows-angle-down": 0.6, "eyebrows/eyebrows-trans-down": 0.4,
+                   "cheek/l-cheek-bones-incr": 0.5, "cheek/r-cheek-bones-incr": 0.5,
+                   "nose/nose-scale-horiz-incr": 0.4, "nose/nose-hump-incr": 0.4, "nose/nose-volume-incr": 0.4, "nose/nose-point-width-incr": 0.3,
+                   "chin/chin-prominent-incr": 0.4, "chin/chin-width-incr": 0.6, "chin/chin-bones-incr": 0.4},
+        "_doelen": "met de doelen van de basismens erbij. Ronde 6 (Marcel, 29 okt: \"compact, robuust\", het hoofd beter leesbaar, de kaak breder, de jukbeenderen duidelijker): naar de speerman (speerman_hd.INSTELLINGEN): ouder, zwaarder, de benen korter, het hoofd groter, de armen dikker, grotere handen, zwaardere wenkbrauwen, jukbeenderen, een bredere kin en kaak"
+      },
+      "soldaat": {
+        "broek": {"afstand": 0.005},
+        "gambeson": {"afstand": 0.014, "kussen": 0.013, "mouw": 0.018},
+        "tabberd": {"zoom_boven_knie": 0.12, "rok_wijd": 0.035, "_ronde6": "de zoom 10 cm hoger, net boven de knie, en de laarzen tot 10 cm onder de knie (tot 6 cm rekte de schacht in de kniebuiging 3,6 cm van de huid, de grens is 2,6), zoals de speerman (referentie.py)"},
+        "laarzen": {"onder_knie": 0.1, "breder": 0.015, "langer": 0.05, "neus": 0.034, "omslag": 0.07, "omslag_uit": 0.022},
+        "malienkraag": {"voor": 0.075, "zij": 0.05, "achter": 0.085, "wijd": 0.018, "kin": 0.02, "open": 78, "_ronde5": "Marcel, 29 okt: \"verklein de visuele dominantie van de maliënkraag\" (was 0,13, 0,09, 0,13 en 0,03); ronde 6: de kin vrij ('kin', 'open')"},
+        "handschoenen": {"kap_wijd": 0.02},
+        "helm": {"boven_oog": 0.045, "speling": 0.032, "koepel": 1.05, "boven_kruin": 0.025, "_ronde6": "laag over het voorhoofd en wijder dan het hoofd: de speerman heeft een 1,25 keer zo groot hoofd (speerman_hd 'hoofd'), zijn helm is op spelmaat 0,25 van de lijfhoogte breed"},
+        "stand": [["upperleg01.L", [0, 1, 0], -4], ["upperleg01.R", [0, 1, 0], 4],
+                  ["upperleg01.L", [1, 0, 0], -7], ["upperleg01.R", [1, 0, 0], -7], ["lowerleg01.L", [1, 0, 0], 12], ["lowerleg01.R", [1, 0, 0], 12],
+                  ["foot.L", "rust"], ["foot.R", "rust"], ["spine03", [1, 0, 0], -3], ["neck01", [1, 0, 0], -8], ["head", [1, 0, 0], -3]],
+        "_stand": "ronde 6 (Marcel, 29 okt: \"voeten ongeveer op schouderbreedte, knieën licht ontspannen, borstkas iets opgericht, hoofd recht\"): de benen 4 graden verder uit elkaar (links negatief om Y: positief ging naar binnen), de dij 7 graden naar voren en de knie 12 graden door (de voeten plat), de borst 3 graden op, de nek 8 en het hoofd 3 graden terug",
+        "speer": {"lengte": 2.17, "straal": 0.022, "blad": [0.3, 0.045, 0.011], "hout": ["#a0623a", "#62351c"],
+                  "_ronde6": "de speer 1,11 keer de lijfhoogte, zoals de speerman (referentie.py; de opdracht noemde 1,3 'tenzij de referentieanalyse overtuigend een andere verhouding laat zien')"}
+      }
+    }
+  }
+}

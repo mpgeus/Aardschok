@@ -1,0 +1,31 @@
+{
+ "_uitleg": "de basismens uit HumGen3D (Marcel, 29 okt, ronde 9: \"We gaan onderzoeken hoe we HumGen3D kunnen inzetten om een aanzienlijk beter menselijk basismodel te produceren\"); een eigen bronvariant naast de procedurele basismens (gereedschap/blender/basismens), die blijft als terugval. 'voorinstelling' een man uit Human.get_preset_options, 'lengte' meter (gemeten zoals HumGen: van de staart van het bot head tot die van heel.02.L, en de mesh van kruin tot zool), 'leeftijd' jaar, 'lichaam' en 'gezicht' de livekeys van HumGen (naam: waarde), 'huid' de textuur ('high' 4K, 'medium' 1K, 'low' 512 px) en of het ondergoed blijft",
+ "uit": "gereedschap/pixelart/uit/humgen",
+ "voorinstelling": "Jude",
+ "lengte": 1.75,
+ "leeftijd": 42,
+ "lichaam": {
+  "_uitleg": "een stevige, functionele bouw, natuurlijk gespierd (Marcel: 'Stevige, functionele lichaamsbouw. Natuurlijk gespierd, zonder bodybuilderproporties'); het gedrongene komt later van de kleren. Ronde 10: steviger en breder, zodat hij geklede soldaat op de speerman lijkt (de eerste HumGen-soldaat was slank en jong): bredere schouders, een dikkere nek en armen, wat zwaarder",
+  "muscular": 0.55,
+  "overweight": 0.3,
+  "skinny": 0.0,
+  "Shoulder Width": 0.5,
+  "Chest Width": 0.35,
+  "Neck Thickness": 0.5,
+  "Upper Arm Thickness": 0.3,
+  "Forearm Thickness": 0.35,
+  "Waist Thickness": 0.25
+ },
+ "gezicht": {
+  "_uitleg": "ronde 10: een robuuster gezicht (Marcel: 'Kaaklijn. Kin. Wenkbrauwbogen')",
+  "jaw_width": 0.35,
+  "browridge_center_size": 0.35,
+  "chin_size": 0.2
+ },
+ "huid": {
+  "resolutie": "high",
+  "ondergoed": true,
+  "sss": true
+ },
+ "_voorinstelling": "ronde 9: uit de 42 mannen van HumGen (kies.py, <uit>/kies.png) Jude: een robuust, neutraal gezicht, een vierkante kaak, kort haar, alleen stoppels"
+}

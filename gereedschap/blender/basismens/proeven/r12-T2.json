@@ -1,0 +1,10 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment D, de vorm van de tabberd: losser over de borst ('speling' 0,8 naar 1,4 cm), de rok wijder ('rok_wijd' 2 naar 4,5 cm) en langer (de zoom 15 naar 9 cm boven de knie)",
+ "soldaat": {
+  "tabberd": {
+   "speling": 0.014,
+   "rok_wijd": 0.045,
+   "zoom_boven_knie": 0.09
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment B2a (verworpen: op 74 pixels bijna geen verschil, nog steeds een cape), een compactere maliënkap: korter van voren (6 naar 2,5 cm voorbij de hals), opzij (9 naar 3,5) en van achteren (7 naar 4,5), minder wijd onderaan, en het gezicht verder open ('open' 72 naar 80 graden): een kraag om de hals in plaats van een cape over de schouders",
+ "soldaat": {
+  "malienkraag": {
+   "voor": 0.025,
+   "zij": 0.035,
+   "achter": 0.045,
+   "wijd": 0.003,
+   "open": 80
+  }
+ }
+}

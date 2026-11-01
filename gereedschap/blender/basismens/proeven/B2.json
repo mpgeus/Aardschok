@@ -1,0 +1,31 @@
+{
+ "_uitleg": "ronde 7, experiment B (Marcel, 29 okt: \"Verwijder de huidige massieve baardconstructie\", \"korte, subtiele stoppels\"): geen baard als vorm; de stoppels, de snor en de wenkbrauwen gebakken in de huid (soldaat.stoppels), op een textuur van 2048",
+ "soldaat": {
+  "baard": {
+   "vorm": false
+  },
+  "huid": {
+   "maat": 2048,
+   "stoppels": {
+    "_uitleg": "'dicht': de stoppels, extra bij de kin, de snor, de wenkbrauwen; 'rand' meter onregelmatig; 'schaduw' hoeveel de huid onder de stoppels donkerder en koeler wordt ('schaduw_kleur'); 'fijn' de schaal van de haartjes, 'haar' hoe dekkend; 'blos' op de neus en de wangen",
+    "dicht": [
+     0.68,
+     0.3,
+     0.7,
+     1.0
+    ],
+    "rand": 0.006,
+    "schaduw": 0.45,
+    "schaduw_kleur": "#b6a69c",
+    "blos": 0.0,
+    "blos_kleur": "#e8b0a0",
+    "fijn": 900,
+    "haar": 1.0,
+    "kleur": "#2a1c14",
+    "licht": "#4a3628",
+    "brauw_kleur": "#2a1c14",
+    "brauw_hoog": 0.019
+   }
+  }
+ }
+}

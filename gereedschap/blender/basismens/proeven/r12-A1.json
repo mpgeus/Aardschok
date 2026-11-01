@@ -1,0 +1,10 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment A1, compacte helm: de koepel minder wijd om het hoofd ('speling' 5 naar 3,5 cm), lager ('hoger' 1,15 naar 1,05) en de rand smaller ('rand' 1,58 naar 1,45 keer de koepel); de vorm blijft die van ronde 7",
+ "soldaat": {
+  "helm": {
+   "speling": 0.035,
+   "hoger": 1.05,
+   "rand": 1.45
+  }
+ }
+}

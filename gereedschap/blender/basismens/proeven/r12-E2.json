@@ -1,0 +1,23 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment E2, het licht warmer, zachter en matter: een warmere zon, een grotere zon (zachtere schaduwen), wat meer vullicht en minder diepe holtes; een zachtere kijk",
+ "soldaat": {
+  "stijlen": {
+   "C": {
+    "zon_kleur": [
+     1.0,
+     0.88,
+     0.72
+    ],
+    "hoek": 24,
+    "vul": 0.6,
+    "holte": [
+     0.05,
+     0.35
+    ]
+   }
+  },
+  "licht": {
+   "look": "Medium Contrast"
+  }
+ }
+}

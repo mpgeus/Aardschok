@@ -1,0 +1,11 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment B3, als B2 (r12-B2,r12-B3) met een rustiger materiaal: de ringen donkerder (#8e8b85 naar #76726b), de tussenruimte bijna zwart, minder metaal en matter",
+ "soldaat": {
+  "malienkraag": {
+   "ringen_kleur": "#76726b",
+   "tussen_kleur": "#22201e",
+   "metaal": 0.5,
+   "ruw": 0.7
+  }
+ }
+}

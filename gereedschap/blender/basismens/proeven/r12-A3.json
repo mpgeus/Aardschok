@@ -1,0 +1,10 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment A3, de voorrand: van voren smaller ('rand_voor' 1,47 naar 1,22), 2 cm op ('voor_op') en wat meer achterover ('kantel' 4 naar 7 graden), zodat de ogen er van de camera onder uit komen",
+ "soldaat": {
+  "helm": {
+   "rand_voor": 1.22,
+   "voor_op": 0.02,
+   "kantel": 7
+  }
+ }
+}

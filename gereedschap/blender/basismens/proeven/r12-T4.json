@@ -1,0 +1,14 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment D, de afwerking van de tabberd: vuil aan de zoom (7 cm, in vlekken, zoals de wapenrok van de speerman) en een donkere contactschaduw rond de riem ('vuil', soldaat.tabberd en mat_tabberd)",
+ "soldaat": {
+  "tabberd": {
+   "vuil": {
+    "kleur": "#3a2a1c",
+    "vlek": 0.35,
+    "zoom": 0.07,
+    "riem": 0.03,
+    "riem_deel": 0.5
+   }
+  }
+ }
+}

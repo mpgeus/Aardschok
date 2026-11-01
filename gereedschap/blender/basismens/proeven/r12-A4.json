@@ -1,0 +1,30 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment A4, het staal van de helm (Marcel: \"Donkerder. Matter. Minder reflecterend. Iets warmer grijs. Subtiel verweerd\"): de kleur #a9a6a0 naar #7e7a72, ruwheid 0,56 naar 0,72, metaal 0,6 naar 0,45, een donkerder patina over meer van de helm, minder blank waar hij slijt; in A8 minder lichte randen en matter; en in de render voor het spel metaal 0,55 in plaats van 0,9 (soldaat_render.SOORTEN, nu instelbaar met stijlen.C.soorten)",
+ "soldaat": {
+  "helm": {
+   "metaal": 0.45,
+   "ruw": 0.72,
+   "patina": "#4a4640",
+   "patina_deel": 0.3,
+   "blank": "#a39e95"
+  },
+  "kleuren": {
+   "helm": "#7e7a72"
+  },
+  "stijlen": {
+   "A8": {
+    "staal": {
+     "rand": 0.25,
+     "ruw": 0.62
+    }
+   },
+   "C": {
+    "soorten": {
+     "staal": {
+      "Metallic": 0.55
+     }
+    }
+   }
+  }
+ }
+}

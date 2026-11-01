@@ -1,0 +1,12 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt: \"1. Het silhouet\"; de analyse: de speerman heeft veel grotere handschoenen en laarzen), experiment S1: de laarzen breder (1,2 naar 2 cm), langer (4 naar 5,5 cm), dikker om het been (6 naar 12 mm) en met een bredere omslag. De handschoenen blijven die van ronde 11: groter ging twee keer mis in de combinatie (S1a: de kap 11 cm en 2,8 cm wijder werd een zak met een plooi, de handschoen volgde de huid 3,95 cm tegen 1,1; S1b: 9 cm en 1,8 cm wijder, nog 1,68 tegen 0,95), en op 74 pixels gaven ze weinig",
+ "soldaat": {
+  "laarzen": {
+   "breder": 0.02,
+   "langer": 0.055,
+   "afstand": 0.012,
+   "omslag": 0.06,
+   "omslag_uit": 0.01
+  }
+ }
+}

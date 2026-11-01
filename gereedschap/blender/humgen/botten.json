@@ -1,0 +1,27 @@
+{
+ "_uitleg": "ronde 9: welk bot van de HumGen-man (Rigify-metarig, 102 botten) hoort bij welk bot van de procedurele basismens (MakeHuman 'default', 102 botten), om de standen van basismens/stand.py (bot, as, graden in de assen van het oude bot) later over te zetten: de as van het oude bot naar de wereld, en daaromheen het HumGen-bot draaien (zoals beelden.richt). Een oud paar draaibotten (01/02) wordt één HumGen-bot; HumGen heeft geen eigen botten voor het bekken en de tenen, wel 37 voor het gezicht, de ogen en de kaak",
+ "kaart": {
+  "root": "spine", "spine05": "spine", "spine04": "spine.001", "spine03": "spine.002", "spine02": "spine.002", "spine01": "spine.003",
+  "neck01": "neck", "neck02": "neck", "neck03": "neck", "head": "head",
+  "clavicle.L": "shoulder.L", "shoulder01.L": "shoulder.L", "upperarm01.L": "upper_arm.L", "upperarm02.L": "upper_arm.L",
+  "lowerarm01.L": "forearm.L", "lowerarm02.L": "forearm.L", "wrist.L": "hand.L",
+  "metacarpal1.L": "palm.01.L", "metacarpal2.L": "palm.02.L", "metacarpal3.L": "palm.03.L", "metacarpal4.L": "palm.04.L",
+  "finger1-1.L": "thumb.01.L", "finger1-2.L": "thumb.02.L", "finger1-3.L": "thumb.03.L",
+  "finger2-1.L": "f_index.01.L", "finger2-2.L": "f_index.02.L", "finger2-3.L": "f_index.03.L",
+  "finger3-1.L": "f_middle.01.L", "finger3-2.L": "f_middle.02.L", "finger3-3.L": "f_middle.03.L",
+  "finger4-1.L": "f_ring.01.L", "finger4-2.L": "f_ring.02.L", "finger4-3.L": "f_ring.03.L",
+  "finger5-1.L": "f_pinky.01.L", "finger5-2.L": "f_pinky.02.L", "finger5-3.L": "f_pinky.03.L",
+  "pelvis.L": null, "upperleg01.L": "thigh.L", "upperleg02.L": "thigh.L", "lowerleg01.L": "shin.L", "lowerleg02.L": "shin.L",
+  "foot.L": "foot.L", "toe1-1.L": "toe.L", "toe2-1.L": "toe.L", "toe3-1.L": "toe.L", "toe4-1.L": "toe.L", "toe5-1.L": "toe.L",
+  "clavicle.R": "shoulder.R", "shoulder01.R": "shoulder.R", "upperarm01.R": "upper_arm.R", "upperarm02.R": "upper_arm.R",
+  "lowerarm01.R": "forearm.R", "lowerarm02.R": "forearm.R", "wrist.R": "hand.R",
+  "metacarpal1.R": "palm.01.R", "metacarpal2.R": "palm.02.R", "metacarpal3.R": "palm.03.R", "metacarpal4.R": "palm.04.R",
+  "finger1-1.R": "thumb.01.R", "finger1-2.R": "thumb.02.R", "finger1-3.R": "thumb.03.R",
+  "finger2-1.R": "f_index.01.R", "finger2-2.R": "f_index.02.R", "finger2-3.R": "f_index.03.R",
+  "finger3-1.R": "f_middle.01.R", "finger3-2.R": "f_middle.02.R", "finger3-3.R": "f_middle.03.R",
+  "finger4-1.R": "f_ring.01.R", "finger4-2.R": "f_ring.02.R", "finger4-3.R": "f_ring.03.R",
+  "finger5-1.R": "f_pinky.01.R", "finger5-2.R": "f_pinky.02.R", "finger5-3.R": "f_pinky.03.R",
+  "pelvis.R": null, "upperleg01.R": "thigh.R", "upperleg02.R": "thigh.R", "lowerleg01.R": "shin.R", "lowerleg02.R": "shin.R",
+  "foot.R": "foot.R", "toe1-1.R": "toe.R", "toe2-1.R": "toe.R", "toe3-1.R": "toe.R", "toe4-1.R": "toe.R", "toe5-1.R": "toe.R"
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "_uitleg": "ronde 7, experiment A (Marcel, 29 okt: \"De huidige helm is nog te plat en te donker\"): de koepel 10% hoger ('hoger'), de kam hoger en breder, de hele helm groter en de rand breder ('speling', 'rand': op spelmaat is de helm van de speerman veel groter en lichter dan de onze, en op 30 graden 0,25 van de lijfhoogte breed), wat verder zakkend, een dikkere opgerolde zoom ('zoom'), wat scheef gesmeed ('scheef'), kleinere nagels; zodat de ogen er wat onder uit komen: de rand van voren wat smaller ('rand_voor'), wat op ('voor_op'), de helm 'kantel' graden achterover en 5 mm hoger ('boven_oog'). Een eerste A2 kantelde 9 graden met een rand van voren 1,36: 8% van de ogen zichtbaar, maar op spelmaat een pet die achterover staat, en de overlap van de helm met de speerman van 0,60 naar 0,52; de speerman zelf heeft de ogen op 30 graden ook onder de rand. Het staal lichter en matter (minder metaal, minder patina). Het staal eerst #b2afa8 met ruwheid 0,5: op spelmaat L 56 met een witte glimvlek, de speerman 48; nu #a9a6a0, 0,56",
+ "soldaat": {
+  "helm": {
+   "hoger": 1.1,
+   "kam": 0.012,
+   "kam_breed": 0.01,
+   "rand": 1.58,
+   "speling": 0.05,
+   "rand_val": 0.034,
+   "zoom": 0.007,
+   "dikte": 0.0025,
+   "scheef": 0.004,
+   "voor_op": 0.006,
+   "nagel": 0.0026,
+   "nagels": 14,
+   "metaal": 0.6,
+   "ruw": 0.56,
+   "patina": "#66625a",
+   "patina_deel": 0.18,
+   "blank": "#d6d3cc",
+   "kantel": 4,
+   "rand_voor": 1.47,
+   "boven_oog": 0.05
+  },
+  "kleuren": {
+   "helm": "#a9a6a0"
+  }
+ }
+}

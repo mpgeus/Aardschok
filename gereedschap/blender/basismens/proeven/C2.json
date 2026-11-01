@@ -1,0 +1,27 @@
+{
+ "_uitleg": "ronde 7, experiment C (Marcel, 29 okt: \"te donker, te zwaar en lijkt te veel op een dikke sjaal\"): de maliën middengrijs met lichtere ringen en donkere tussenruimten, matter; compacter (dichter op wat eronder ligt, korter van voren, niet wijder naar onderen, dunner); de gewatteerde kraag eronder lager en dunner (die duwde de maliën van voren naar buiten en stak achter het hoofd uit); elk punt van de maliën minstens 'uit' buiten de gambeson en de tabberd ('bovenop': tot hoe ver gezocht, hoe vaak gladgemaakt), zodat niets erdoor steekt",
+ "soldaat": {
+  "malienkraag": {
+   "ringen_kleur": "#8e8b85",
+   "tussen_kleur": "#34312e",
+   "metaal": 0.6,
+   "ruw": 0.62,
+   "uit": 0.003,
+   "wijd": 0.006,
+   "voor": 0.06,
+   "achter": 0.07,
+   "dikte": 0.003,
+   "bovenop": [
+    0.05,
+    3
+   ]
+  },
+  "kraag": {
+   "voor": 0.02,
+   "achter": 0.035,
+   "uit": 0.001,
+   "wijd": 0.004,
+   "vulling": 0.45
+  }
+ }
+}

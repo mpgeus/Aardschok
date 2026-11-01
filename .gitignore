@@ -15,3 +15,5 @@ gereedschap/schermen/uit/
 *.bak
 # losse werkkopieën van agents (git worktree), niet van het spel zelf
 .claude/worktrees/
+# wat Python zelf aanmaakt
+__pycache__/

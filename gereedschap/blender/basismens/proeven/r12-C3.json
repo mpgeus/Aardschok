@@ -1,0 +1,25 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment C3, als C2 (r12-C2,r12-C3) met een gedempter bruin, warmere toppen op de kussens en donkerder naden (de vaste kleuren van speerman_hd.mat_wambuis vervangen)",
+ "soldaat": {
+  "gambeson": {
+   "kleuren": [
+    [
+     "#965238",
+     "#8a4e36"
+    ],
+    [
+     "#4c2410",
+     "#3e1e0e"
+    ],
+    [
+     "#b0684a",
+     "#b87a52"
+    ],
+    [
+     "#2e1206",
+     "#1a0a04"
+    ]
+   ]
+  }
+ }
+}

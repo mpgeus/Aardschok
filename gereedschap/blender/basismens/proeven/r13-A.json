@@ -1,0 +1,11 @@
+{
+ "_uitleg": "ronde 13 (Marcel, 29 okt: \"EXPERIMENT A — PROFESSIONELE GAMBESON\"), experiment A2: de gambeson uit de gewatteerde parka van Human Generator (Base Clothes, Frosty_Evening; 9.130 driehoeken, eenmaal onderverdeeld, texturen van 4K met een normal map), zonder capuchon, 1 cm voller en 1,8 cm op de mouwen (humgen_basis.kleding van humgen13), in het bruin van het wambuis over zijn eigen detail (soldaat.van_buiten)",
+ "soldaat": {
+  "gambeson": {
+   "extern": {
+    "object": "buiten-gambeson",
+    "kleur": "#965238"
+   }
+  }
+ }
+}

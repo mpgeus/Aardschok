@@ -1,0 +1,12 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment B2 (verworpen: te kort, de hals en de bovenkant van de schouders bloot: de gambeson laat weg wat aan de nek hangt, en de kap dekte dat), de maliënkap als kraag, zoals bij de speerman: van voren een slab tot 5 cm voorbij de hals, opzij 3 cm korter dan de hals (de schouders vrij), van achteren kort (1 cm), bijna niet wijder onderaan, en het gezicht verder open ('open' 72 naar 80 graden). B2a (opzij 3,5 cm voorbij de hals) bleef een cape",
+ "soldaat": {
+  "malienkraag": {
+   "voor": 0.05,
+   "zij": -0.03,
+   "achter": 0.01,
+   "wijd": 0.002,
+   "open": 80
+  }
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment A5: het staal van A4 bijgesteld. A4 (#7e7a72, metaal 0,55 in de render) maakte de helm op 74 pixels dof olijfgrijs (L 40 tegen 53 bij de speerman): staal moet staal blijven. Nu donkerder en matter dan ronde 11 (#a9a6a0, metaal 0,9 in de render), maar met wat glans: #8c887f, ruwheid 0,66, metaal 0,72 in de render, een donkere patina, minder blank waar hij slijt, en in A8 minder lichte randen",
+ "soldaat": {
+  "helm": {
+   "metaal": 0.6,
+   "ruw": 0.66,
+   "patina": "#524e47",
+   "patina_deel": 0.25,
+   "blank": "#b4afa6"
+  },
+  "kleuren": {
+   "helm": "#8c887f"
+  },
+  "stijlen": {
+   "A8": {
+    "staal": {
+     "rand": 0.3,
+     "ruw": 0.55
+    }
+   },
+   "C": {
+    "soorten": {
+     "staal": {
+      "Metallic": 0.72
+     }
+    }
+   }
+  }
+ }
+}

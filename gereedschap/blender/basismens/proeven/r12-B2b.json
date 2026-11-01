@@ -1,0 +1,15 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment B2b, de maliënkap compact, tussen B2a (een cape) en B2 (te kort): opzij 1 cm voorbij de hals (9 in ronde 11), van voren een slab tot 4 cm (6), van achteren 3 cm (7), bijna niet wijder onderaan, het gezicht verder open (80 graden); lang genoeg om de hals en het begin van de schouders te dekken, waar de gambeson open is; en de gambeson met een opstaande kraag (de halslijn 'hals' 2 cm boven de nek in plaats van 2 cm eronder): de halssnede is 16 cm breed, en daarboven lag de trapezius bloot, wat alleen een lange kap dekte",
+ "soldaat": {
+  "malienkraag": {
+   "voor": 0.04,
+   "zij": 0.01,
+   "achter": 0.03,
+   "wijd": 0.002,
+   "open": 80
+  },
+  "gambeson": {
+   "hals": -0.02
+  }
+ }
+}

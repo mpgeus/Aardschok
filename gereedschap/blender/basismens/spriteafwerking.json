@@ -1,0 +1,16 @@
+{
+ "_uitleg": "ronde 8, experiment B (spriteafwerking.py): de afwerking per materiaalgroep. 'lijf_px' de lichaamshoogte zonder speer (de speerman op zijn vel); per groep 'contrast' (het licht rond zijn gemiddelde: 1 blijft gelijk, hoger harder) en 'kleuren' (het eigen palet); 'rand' de buitenste rij van het silhouet maal zoveel, 'naad' de donkerste kant van een grens tussen twee groepen maal zoveel",
+ "versie": "8.1",
+ "lijf_px": 72,
+ "rand": 0.62,
+ "naad": 0.8,
+ "groepen": {
+  "staal": {"contrast": 1.45, "kleuren": 6},
+  "malien": {"contrast": 1.25, "kleuren": 4},
+  "stof": {"contrast": 1.15, "kleuren": 5},
+  "leer": {"contrast": 1.3, "kleuren": 5},
+  "huid": {"contrast": 1.1, "kleuren": 4},
+  "hout": {"contrast": 1.15, "kleuren": 3},
+  "anders": {"contrast": 1.0, "kleuren": 3}
+ }
+}

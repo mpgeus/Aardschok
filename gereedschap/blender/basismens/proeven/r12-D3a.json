@@ -1,0 +1,9 @@
+{
+ "_uitleg": "ronde 12 (Marcel, 29 okt), experiment D3a (verworpen: op 74 pixels verder van de speerman, het blauw Delta E 21,9 tegen 14,1 nu, want zijn vel heeft een eigen afwerking), de albedo van de speerman (speerman_hd.mat_wapenrok): het blauw #2258c8, het geel #f0a812",
+ "soldaat": {
+  "kleuren": {
+   "blauw": "#2258c8",
+   "geel": "#f0a812"
+  }
+ }
+}

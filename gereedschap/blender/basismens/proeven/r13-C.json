@@ -1,0 +1,57 @@
+{
+ "_uitleg": "ronde 13 (Marcel, 29 okt: \"EXPERIMENT C — PROFESSIONELE MATERIALEN\"), experiment C: de texturen van Poly Haven vervangen door CC0-sets van ambientCG (assets/extern/ronde13, met manifest): het leer (laarzen, handschoenen, riem, buidel, omslag, koord: brown_leather) door Leather037, het staal (helm, gespen, blad: rusty_metal_sheet) door Metal054A, en in het wambuis het linnen door het ruitstiksel van Leather036A (alleen zijn licht en donker en zijn normal map: het rood doet niet mee). Zelfde tegel, zelfde kleuren",
+ "soldaat": {
+  "texturen": [
+   {
+    "materiaal": "laars",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "handschoen",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "riem",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "leer",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "omslag",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "koord",
+    "van": "brown_leather",
+    "naar": "assets/extern/ronde13/leer/Leather037"
+   },
+   {
+    "materiaal": "helm",
+    "van": "rusty_metal_sheet",
+    "naar": "assets/extern/ronde13/metaal/Metal054A"
+   },
+   {
+    "materiaal": "staal",
+    "van": "rusty_metal_sheet",
+    "naar": "assets/extern/ronde13/metaal/Metal054A"
+   },
+   {
+    "materiaal": "blad",
+    "van": "rusty_metal_sheet",
+    "naar": "assets/extern/ronde13/metaal/Metal054A"
+   },
+   {
+    "materiaal": "wambuis",
+    "van": "rough_linen",
+    "naar": "assets/extern/ronde13/leer/Leather036A"
+   }
+  ]
+ }
+}
