@@ -1,0 +1,38 @@
+{
+ "rechtstreeks 128": {
+  "scherpte": 37.86,
+  "randpixels": 0.336
+ },
+ "rechtstreeks 256": {
+  "scherpte": 32.27,
+  "randpixels": 0.166
+ },
+ "rechtstreeks 512": {
+  "scherpte": 24.77,
+  "randpixels": 0.086
+ },
+ "uit 1536 128": {
+  "scherpte": 55.95,
+  "randpixels": 0.224
+ },
+ "uit 1536 256": {
+  "scherpte": 42.5,
+  "randpixels": 0.112
+ },
+ "uit 1536 512": {
+  "scherpte": 31.24,
+  "randpixels": 0.06
+ },
+ "80 px uit 256": {
+  "scherpte": 38.81
+ },
+ "80 px uit 512": {
+  "scherpte": 44.6
+ },
+ "80 px uit 768": {
+  "scherpte": 45.79
+ },
+ "80 px uit 1536": {
+  "scherpte": 46.75
+ }
+}

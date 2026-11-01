@@ -1,0 +1,19 @@
+{
+ "zaad": 1,
+ "wissel": false,
+ "seconden": 277,
+ "piek": {
+  "vram_mib": 6753,
+  "ram_gb": 13.5
+ },
+ "glb_bytes": 4155568,
+ "stappen": 20,
+ "cfg": 7.5,
+ "sampler": "euler",
+ "planner": "normal",
+ "resolutie": 3072,
+ "octree": 256,
+ "drempel": 0.6,
+ "algoritme": "surface net",
+ "model": "hunyuan3d-dit-v2-mv_fp16.safetensors"
+}

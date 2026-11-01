@@ -46,6 +46,7 @@ gesprek komt.
 - `ontwerp/gameloop.md`: de richting van 11 okt, en wat andere spellen als gameloop hebben.
 - `ontwerp/commercieel.md`: geld verdienen: de markt, Steam Next Fest, de haak, het tijdpad. `engels.md`: de woorden.
   `scenario.md`: de campagne, de editor, de triggers, skirmish en AI-spelers (vraag 187 en 188).
+- `docs/art/`: **de art-stijl sinds 30 okt** (vraag 192; `npm run stijl`).
 - `ontwerp/beeld.md` (de beeldstijl, maten, palet), `kaarten.md` (het eiland en de hoogte; Tiled is weg), `verpakken.md`
   (van map naar programma op Steam), `speelbaar.md` (wat de speeltests vonden), `concept.md` (het concept van 30 sep),
   `wereld.md` (het dorp en zijn mensen).

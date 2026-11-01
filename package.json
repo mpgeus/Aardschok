@@ -20,6 +20,8 @@
     "pixelart:effecten": "node gereedschap/pixelart/effecten-export.cjs",
     "tiled": "node gereedschap/pixelart/naar-tiled.cjs",
     "randtegels": "node gereedschap/pixelart/randtegels.cjs",
-    "teksten": "node gereedschap/teksten.cjs"
+    "teksten": "node gereedschap/teksten.cjs",
+    "basismens": "node gereedschap/blender/basismens/maak.cjs",
+    "stijl": "node gereedschap/blender/stijl/maak.cjs"
   }
 }

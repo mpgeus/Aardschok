@@ -1,0 +1,12 @@
+{
+ "zon_richting": [
+  -0.28,
+  -0.85,
+  0.45
+ ],
+ "zon_sterkte": 2.6,
+ "zon_hoek": 22.0,
+ "hemel_sterkte": 0.72,
+ "glans_sterkte": 2.2,
+ "rand_sterkte": 0.4
+}

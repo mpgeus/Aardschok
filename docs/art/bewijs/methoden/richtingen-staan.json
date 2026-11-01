@@ -1,0 +1,144 @@
+{
+ "spreiding_nu": {
+  "hoofd": {
+   "L_sd": 8.7,
+   "kleur_sd": 4.52,
+   "richtingen": 5
+  },
+  "helm": {
+   "L_sd": 0.98,
+   "kleur_sd": 0.17,
+   "richtingen": 8
+  },
+  "kap": {
+   "L_sd": 1.7,
+   "kleur_sd": 1.57,
+   "richtingen": 8
+  },
+  "gambeson": {
+   "L_sd": 3.54,
+   "kleur_sd": 2.68,
+   "richtingen": 8
+  },
+  "tabberd": {
+   "L_sd": 10.57,
+   "kleur_sd": 36.81,
+   "richtingen": 8
+  },
+  "riem": {
+   "L_sd": 3.98,
+   "kleur_sd": 6.55,
+   "richtingen": 8
+  },
+  "buidel": {
+   "L_sd": 6.26,
+   "kleur_sd": 5.24,
+   "richtingen": 6
+  },
+  "hozen": {
+   "L_sd": 6.22,
+   "kleur_sd": 1.89,
+   "richtingen": 5
+  },
+  "laarzen": {
+   "L_sd": 3.28,
+   "kleur_sd": 4.38,
+   "richtingen": 8
+  },
+  "handschoenen": {
+   "L_sd": 3.03,
+   "kleur_sd": 4.24,
+   "richtingen": 8
+  },
+  "speer": {
+   "L_sd": 3.82,
+   "kleur_sd": 10.36,
+   "richtingen": 8
+  }
+ },
+ "spreiding_nieuw": {
+  "hoofd": {
+   "L_sd": 5.94,
+   "kleur_sd": 2.65,
+   "richtingen": 5
+  },
+  "helm": {
+   "L_sd": 2.25,
+   "kleur_sd": 0.16,
+   "richtingen": 8
+  },
+  "kap": {
+   "L_sd": 3.23,
+   "kleur_sd": 1.91,
+   "richtingen": 8
+  },
+  "gambeson": {
+   "L_sd": 3.69,
+   "kleur_sd": 2.0,
+   "richtingen": 8
+  },
+  "tabberd": {
+   "L_sd": 7.37,
+   "kleur_sd": 38.7,
+   "richtingen": 8
+  },
+  "riem": {
+   "L_sd": 3.92,
+   "kleur_sd": 8.35,
+   "richtingen": 8
+  },
+  "buidel": {
+   "L_sd": 6.23,
+   "kleur_sd": 8.99,
+   "richtingen": 6
+  },
+  "hozen": {
+   "L_sd": 3.4,
+   "kleur_sd": 1.18,
+   "richtingen": 5
+  },
+  "laarzen": {
+   "L_sd": 2.46,
+   "kleur_sd": 3.6,
+   "richtingen": 8
+  },
+  "handschoenen": {
+   "L_sd": 4.01,
+   "kleur_sd": 4.59,
+   "richtingen": 8
+  },
+  "speer": {
+   "L_sd": 4.28,
+   "kleur_sd": 11.95,
+   "richtingen": 8
+  }
+ },
+ "silhouet_overlap_gemiddeld": 0.9996,
+ "silhouet_overlap_laagst": 0.9988,
+ "vel_nu": {
+  "cel": [
+   78,
+   138
+  ],
+  "anker": [
+   39.0,
+   123.36
+  ],
+  "stap": 0.3399,
+  "fps": 3.0,
+  "beelden": 4
+ },
+ "vel_nieuw": {
+  "cel": [
+   78,
+   138
+  ],
+  "anker": [
+   39.0,
+   123.36
+  ],
+  "stap": 0.3399,
+  "fps": 3.0,
+  "beelden": 4
+ }
+}

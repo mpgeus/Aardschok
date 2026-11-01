@@ -1,0 +1,126 @@
+{
+ "variant": "ruw",
+ "bron": "speerman.glb",
+ "maten_ruw": {
+  "hoogte": 1.9659982919692993,
+  "speer_xy": [
+   -0.3300129473209381,
+   -0.25159984827041626
+  ],
+  "as_xy": [
+   0.02214856199532693,
+   0.03490435671305367
+  ],
+  "helm_top_z": 1.5991953015327454,
+  "rand_helling": -2.1590483421080746,
+  "rand_punten": 2876,
+  "zool_helling": -0.47355771885779613,
+  "zool_punten": 3364,
+  "rho_rand": 0.4289859077501099
+ },
+ "punten_ruw": 113355,
+ "vlakken_ruw": 232658,
+ "open_randen_ruw": 8614,
+ "registratie": {
+  "Z": {
+   "iou": 0.848,
+   "schaal": 212.6,
+   "zichtbaar": 36435,
+   "vervorming_p95_px": 10.4
+  },
+  "W": {
+   "iou": 0.717,
+   "schaal": 212.6,
+   "zichtbaar": 27453,
+   "vervorming_p95_px": 10.2
+  },
+  "N": {
+   "iou": 0.741,
+   "schaal": 212.6,
+   "zichtbaar": 31712,
+   "vervorming_p95_px": 18.2
+  },
+  "O": {
+   "iou": 0.784,
+   "schaal": 212.6,
+   "zichtbaar": 26908,
+   "vervorming_p95_px": 10.5
+  }
+ },
+ "kleur_bekend": 0.694,
+ "licht_plaat_Z": {
+  "blauw": {
+   "richting": [
+    -0.282,
+    0.823,
+    0.493
+   ],
+   "sterkte": 0.136,
+   "basis": 0.024,
+   "punten": 5907,
+   "R2": 0.223
+  },
+  "geel": {
+   "richting": [
+    -0.383,
+    0.755,
+    -0.532
+   ],
+   "sterkte": 0.09,
+   "basis": 0.391,
+   "punten": 2823,
+   "R2": 0.116
+  }
+ },
+ "pasmaat": {
+  "Z-W": {
+   "punten": 9534,
+   "zelfde_vlak": 0.644,
+   "verschil": 61.1
+  },
+  "W-N": {
+   "punten": 7660,
+   "zelfde_vlak": 0.564,
+   "verschil": 65.0
+  },
+  "N-O": {
+   "punten": 10003,
+   "zelfde_vlak": 0.558,
+   "verschil": 64.9
+  },
+  "O-Z": {
+   "punten": 5914,
+   "zelfde_vlak": 0.7,
+   "verschil": 56.4
+  },
+  "gemiddeld": {
+   "zelfde_vlak": 0.617,
+   "verschil": 61.9
+  }
+ },
+ "schaal": 0.8467,
+ "gaten_dicht": 0,
+ "soorten": {
+  "staal": 10847,
+  "gesp": 31,
+  "blauw": 28581,
+  "geel": 5842,
+  "leer": 51396
+ },
+ "punten": 113355,
+ "vlakken": 232658,
+ "open_randen": 8614,
+ "stukken": 1,
+ "figuur_m": 1.354,
+ "seconden": 10.6,
+ "config": {
+  "bron": "speerman.glb",
+  "figuur_m": 1.354,
+  "kleur_richtingen": [
+   "Z",
+   "W",
+   "N",
+   "O"
+  ]
+ }
+}

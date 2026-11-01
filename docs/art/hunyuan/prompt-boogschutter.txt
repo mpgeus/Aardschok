@@ -1,0 +1,28 @@
+Use the attached image as the exact reference. Make this same character turnaround sheet again: the same eight views in the same order (Z, ZW, W, NW, N, NO, O, ZO), the same labels, the same size, the same grey background and the same ground line.
+
+Keep everything exactly the same: the face, the beard, the helmet, the blue and yellow tabard, the quilted brown sleeves, the crossed chest straps, the belt, the pouches, the boots, the proportions and the standing pose.
+
+Fix only the quiver and the bow. Think of one single 3D model on a turntable: every object stays in the same place on his body, and only the camera moves. In the current image the quiver changes shoulder between views. That is the mistake.
+
+THE QUIVER is worn on his back, diagonally. Its top, with the white-feathered arrows, sticks out above his own RIGHT shoulder. Its bottom points to his own LEFT hip. In "left" and "right" below, I mean left and right as the viewer sees the image:
+
+- Z (front): the arrows stick out above the shoulder on the viewer's LEFT. Correct now, keep it.
+- ZO: the arrows are on the viewer's LEFT, behind his shoulder. Correct now, keep it.
+- O: the quiver is on the viewer's LEFT, behind his back. Correct now, keep it.
+- NO: the top of the quiver is toward the viewer's RIGHT and the bottom toward the viewer's LEFT. Correct now, keep it.
+- N (back): WRONG NOW. The quiver must run across his back from the viewer's upper RIGHT (the arrows, above his right shoulder) down to the viewer's lower LEFT. This is the mirror image of what is drawn now.
+- NW: WRONG NOW. Same as N: the arrows at the viewer's upper RIGHT, the bottom toward the viewer's lower LEFT.
+- W: the quiver is on the viewer's RIGHT, behind his back, partly hidden by his body, because it hangs from his far shoulder.
+- ZW: WRONG NOW. His right shoulder is the far one here, so only the arrow tips peek out just behind his neck and helmet.
+
+THE BOW is always in his own LEFT hand, held upright, with the string toward his body:
+
+- Z and ZO: the bow is on the viewer's RIGHT.
+- W: the bow is in front of him, on the viewer's LEFT.
+- O: the bow is in front of him, on the viewer's RIGHT.
+- N, NW and NO: the bow is on the viewer's LEFT. In NW this is WRONG NOW.
+- ZW: WRONG NOW. The bow lies diagonally. Hold it upright in his left hand, like in the other views.
+
+Before you finish, check Z and N against each other: the arrows must be on the viewer's LEFT in Z and on the viewer's RIGHT in N. The bow must be on the viewer's RIGHT in Z and on the viewer's LEFT in N.
+
+Same soft even light, orthographic view, no perspective. Very high resolution, crisp details.

@@ -220,6 +220,138 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (`kruisboog_hd.py`: het model van de speerman met een jak en een smalle tabbaard, een kalot, een snor, de koker en de
   kruisboog in beide handen; zonder `staan` het lopen, met de kruisboog over de schouder; `draag=` kiest een andere
   draagwijze uit `DRAAGWIJZEN`).
+  Een kopie van een plaat van GPT (`beeld.md`, "Een kopie van de plaat van GPT"): `blender.exe -b -P
+  gereedschap/blender/kopie_hd.py -- <map> [Z ZW W N] [ZW=<graden>] [blend]` (de vier aanzichten zoals de plaat, de man
+  even hoog, in een minuut), dan `python gereedschap/blender/kopie_vergelijk.py <plaat> <map>` (per aanzicht hoe de
+  omtrek samenvalt, per strook hoeveel pixels te breed of te smal, de kleur per onderdeel, en `naast-<r>.png`). Een GLB
+  net zo gerenderd: `blender.exe -b --factory-startup -P gereedschap/blender/glb_kijk.py -- <model.glb> <map>
+  [draai=<graden>] [profiel]` (rechtop gezet; `profiel` meet de helm in plakjes).
+- **De stijlpijplijn** (vraag 192; `docs/art/aardschok-art-bible.md`), in `gereedschap/blender/stijl/`: één vaste camera en één licht
+  (`instellingen.json`, `licht.py`), gedeelde materialen (`materialen.json`, `materialen.py`), vormen uit afstandsvelden (`vorm.py`). Uitvoer in
+  `gereedschap/pixelart/uit/stijl/`. Alles in één keer, in elf minuten: `npm run stijl` (of `npm run stijl -- <stap>`: `bouw controle render vel detail
+  glb`). `controle_model.py` en `controle_vel.py` eindigen met code 1 bij een fout; `rigtest.py` buigt de gewrichten door, `materiaalplaat.py` is het
+  materiaaloverzicht, `detail.py` de close-ups, `export.py` de GLB op 39.000 driehoeken, `glb_controle.py` leest die opnieuw in, `film.py` zet 8, 12
+  en 24 beelden naast elkaar als MP4. In het spel, alleen in die browser: `inspel.js` (de uitleg staat bovenin). Kwaliteit meten en vergelijken: `oorzaak.py` (kleur, licht en
+  klein contrast tegen de plaat), `licht_proef.py` (hetzelfde model in andere lichtopstellingen), `resolutie.py` (128, 256 en 512, rechtstreeks en verkleind), `overzicht.py` (plaat, voor, na en
+  sprites onder elkaar), `textuur.py` (de verf in texturen per onderdeel, in 4 minuten). De stand: `docs/art/kwaliteitsronde.md`. De proef met geschilderd licht en een AI-laag per richting staat los in `proef/` (`docs/art/methodeproef.md`, kop 10; `keten_licht.sh` doet in 5 minuten het licht en alle bewijzen opnieuw). De vormproef: `proef/keten_vorm.sh`, 15 minuten (`docs/art/vormproef.md`); V4: `proef/keten_v4.sh`, 18 minuten (`docs/art/v4/OVERDRACHT.md`). Los bouwen, in een halve minuut: `blender.exe -b --factory-startup -P gereedschap/blender/stijl/figuur.py --
+- **Hunyuan3D-2mv** (`docs/art/hunyuan/`), in `gereedschap/blender/stijl/proef/`, met ComfyUI op 8188: `hy_invoer.py <uit> plaat=vrij` (de plaat op wit), `hy_comfy.py <uit> naam=.. invoer=.. resolutie=8192` (de mesh), `hy_bouw.py hy_config.json <variant> <uit>` (verf en bewerkingen), `hy_kijk.py` (renderen), `keten_hy_vel.sh` (spelvellen), `keten_hy_proeven.sh` en `keten_hy_eind.sh` (de proeven, platen en metingen), `hy_kwaliteit.py` en `hy_helmen.py` (de camera van een plaat aflezen). De rig: `hy_v4_pose.py` (de beweging van V4 uitlezen), `hy_rig.py <variant.npz> <beweging.npz> <uit> [verf=<kleur.npz>]` (rok en armen los, `rig_staan`, `rig_lopen` en `rig_open.npz`). Het textuurmodel: `hy_paint.py rig_open.npz <uit> <plaat.png>` (Tencent paint en delight, zonder ComfyUI; code en pakketten in `C:/ComfyUI/hunyuan_tex`, het model in `ComfyUI/models/hunyuan3d-2`). In het spel: `globalThis.STIJL_VELLEN = '<map>/'` vóór `inspel.js`.
+- **TripoSplat** (`docs/art/hunyuan/TRIPOSPLAT.md`), zelfde map, zonder ComfyUI; code en gewichten in `C:/ComfyUI/triposplat`: `keten_splat_vel.sh [speer|boog|alle] [opnieuw]` doet alles, van de plaat tot spelvellen en film. Los: `hy_splat.py maak|samen|verf|rig|kijk`. `hy_model_ophalen.py` haalt de gewichten op, met de hash nagekeken.
+  <uit.blend> [kop=1.26] [benen=0] [tabberd=vier|twee]`. Renderen: `blender.exe -b <uit.blend> -P gereedschap/blender/stijl/render.py -- <map>
+  <staan|lopen> [beelden=8] [richtingen=Z,ZW] [pixels=768] [monsters=64] [elevatie=30] [ortho=3] [doelz=0.74] [klei] [speerkijkt]`, 3,5 s per beeld op
+  768 pixels en 32 monsters. Dan met de Python van ComfyUI: `vel.py <map> <uit> speerman <houding> <beelden>` (vel en JSON, met de afwerking op
+  spelmaat), `naast.py` (naast de plaat), `plaat.py` (groot en op spelmaat), `elevatie.py` (de camerahoeken), `blockout.py` (de verhoudingen).
+- **De basismens** (`npm run basismens`, in een minuut; `beeld.md`, "De basismens"): de 3D-pijplijn voor figuren, met één
+  man zonder kleren als begin, in `gereedschap/blender/basismens/`. Alle getallen in `instellingen.json` (lengte, budget,
+  camera, licht, de draai per richting, de buigtest); vijf stappen, elk een eigen script: `bouw.py` (MPFB: een man van
+  1,75 m, het skelet `default` zonder gezicht en borst, het spelmodel onder 12.000 driehoeken, een onderbroek, de huid
+  gebakken; naar `bron/basismens.blend`), `render.py` (acht richtingen met één vaste camera, de man draait; de controle
+  met een rode band om zijn rechterarm; de aanzichten; de buigtest), `export.py` (`export/basismens.glb`, en weer
+  ingelezen), `blad.py` (de atlas in de vorm van het spel en het contactblad; de Python van ComfyUI) en `controle.py`
+  (`rapport.json`; zakt er een, dan eindigt hij met code 1). `npm run basismens -- render` begint bij een latere stap. De
+  uitvoer staat in `gereedschap/pixelart/uit/basismens/` (niet in git: hij komt er met de opdracht weer).
+  Sinds de tweede ronde ook: de idle (`houdingen.idle`, de rust blijft de A-houding) in acht richtingen met dezelfde
+  controles (`renders-idle/`, `contactblad-idle.png`); de vergelijking van de elevaties op tegels om 45 graden, met de
+  gemeten verhouding van een tegel (`vergelijking/`, `vergelijking-elevatie.png`); de idle op spelmaat op de tegels van
+  het spel naast de speerman (`spelmaat/`, `spelmaat.png`); en de skinning per gebied met close-ups
+  (`buigtest/dichtbij-*.png`, en `skinning-voor-na.png` als er een map `voor/` is). Standen en gebieden staan in
+  `stand.py`. De close-ups van een ander model: `blender.exe -b <ander.blend> -P gereedschap/blender/basismens/render.py --
+  dichtbij <map>`.
+  Sinds de derde ronde (de camera vast op 30 graden) ook de soldaat, op hetzelfde lijf en skelet (`instellingen.json`,
+  `soldaat`): `soldaat.py` (de kleren en de uitrusting als losse meshes, de houding met de speer, het lijf onder de kleren
+  weg; naar `bron/soldaat.blend` en `soldaat.json`), `soldaat_render.py` (acht richtingen met de rode band, de
+  doorsteektoets, welke vlakken van het lijf je ziet, de onderdelen uitgelegd, een grote render en close-ups; naar
+  `soldaat/` en `soldaat-renders.json`), `export.py -- soldaat` (`export/soldaat.glb`; sinds ronde 4 met texturen),
+  `soldaat_blad.py` (`contactblad-soldaat.png`, `vergelijking-speerman.png`, `spelmaat-soldaat.png`,
+  `groot-soldaat.png`, `uitgelegd-soldaat.png`) en `soldaat_controle.py` (`soldaat-controle.json`, dat `controle.py` in
+  `rapport.json` opneemt). `npm run basismens -- soldaat` begint bij de soldaat.
+  Sinds de vierde ronde (29 okt): `textuur.py` bakt per onderdeel een UV-kaart en drie beelden (kleur, normalen,
+  ruwheid en metaal) uit de knopen van de bron, voor de bron en voor een realtime versie onder 15.000 driehoeken
+  (`bron/soldaat-hoog.blend`, `bron/soldaat-realtime.blend`, `export/texturen/`, `textuur.json`); `export.py -- soldaat
+  realtime` maakt `export/soldaat-realtime.glb`; `realtime_render.py` leest beide GLB's terug in de scène van de bron en
+  rendert ze zoals de bron (`soldaat/glb/`, `soldaat/realtime/`); `soldaat_blad.py` maakt er
+  `vergelijking-realtime.png` en `realtime-silhouet.json` van; `meten.py` meet het silhouet op spelmaat tegen de
+  speerman (`maten.json`). En een variant: `npm run basismens` doet de basismens en daarna elke variant uit
+  `instellingen.json`/`varianten` (nu `gedrongen`, de gestileerde soldaat), elk in `<uit>/<variant>` met een eigen
+  `rapport.json`; `npm run basismens -- gedrongen [stap]` alleen die variant (`variant.py`, `BASISMENS_VARIANT`).
+  De renderstijlen (ronde 5, buiten `npm run basismens`, alleen ZW): `blender -b <uit>/bron/soldaat.blend -P
+  gereedschap/blender/basismens/stijlen.py -- A|B|C|klei|albedo` (met `BASISMENS_VARIANT=gedrongen` voor de variant)
+  rendert één stijl naar `<uit>/stijlen/<stijl>.png`; daarna maakt `python stijlblad.py` (de Python van ComfyUI) er
+  `contactblad.png` (de speerman, A, B en C, groot, in grijs en op spelmaat), `ontleding.png` (vorm, materialen, licht,
+  nabewerking) en `stijlen.json` van. De getallen staan in `instellingen.json` bij `soldaat.stijlen`.
+  Ronde 6: `stijlen.py -- C 15|30 -40` (een elevatie en een draai: 40 is de ZW van de speerman) en `-- details | helm`
+  (de close-ups zonder nabewerking, de helm alleen van vier kanten en in klei); `python referentie.py C-30 C-15` meet de
+  speerman en de soldaat op dezelfde manier (delen uit kleur en plek, IoU per deel, maten, ΔE) naar
+  `reference_analysis.json`, `vergelijking.json` en `silhouet.png`; `python stijlblad.py ronde6` maakt `oplevering.png`
+  en `details.png`.
+  Ronde 7: een proef is een stel instellingen in `gereedschap/blender/basismens/proeven/<naam>.json` (A2 en A3 de helm,
+  B2 en B3 het gezicht, C2 en C3 de maliënkraag). De gedrongen variant houdt er een paar in zijn lijst `proeven`
+  (`variant.py`; een proef terugdraaien is hem uit die lijst halen). `BASISMENS_PROEF=A2,A3` legt er nog proeven
+  overheen en schrijft dan in `<uit>/gedrongen/proeven/A2-A3`, zodat de variant blijft zoals hij was: daar `soldaat.py`
+  (met `-b` op `<uit>/gedrongen/bron/basismens.blend`, of eerst `bouw.py` als de proef het lijf verandert) en
+  `stijlen.py -- C 30 -40`, `albedo 30 -40` en `kop 30 -40` (het hoofd van dichtbij met de camera van C, en in
+  `kop-30.json` hoeveel van de ogen de camera ziet). `python stijlblad.py ronde7` maakt `contactblad-A` tot `-D.png`
+  (origineel, de proeven en de rondes; groot met de HD-pixelafwerking, het hoofd zonder nabewerking, op spelmaat en het
+  hoofd op spelmaat 8x) en `ronde7.json` (per versie de metingen tegen de speerman op 30 graden). Ronde 6 staat ernaast
+  in `<uit>/overdracht-7/ronde6`.
+  Ronde 8 (onderbroken): `stijlen.py -- A8|soort|diepte 30 <draai of Z/ZW/W>` (rijkere materialen, het masker per
+  materiaalgroep, de diepte; `MOTOR=EEVEE` voor Eevee), `python spriteafwerking.py <render> <soort> <uit.png>
+  [lijfhoogte]` (de afwerking per materiaal, instellingen in `spriteafwerking.json`), `python ronde8.py voor|na
+  [richting]` en `node gereedschap/ai/soldaat-ai.cjs <map> [denoise ...]` (de AI-afwerking; ComfyUI op 127.0.0.1:8188).
+- De HumGen-basismens (ronde 9, `gereedschap/blender/humgen/`, uitvoer in `gereedschap/pixelart/uit/humgen/`):
+  `blender -b -P .../humgen/maak.py` maakt hem (de instellingen in `humgen/instellingen.json`; HumGen3D moet in Blender
+  aan staan met de map van zijn inhoud), `kies.py` rendert de 42 gezichten om te kiezen, `beelden.py -- humgen|oud
+  <map>` de acht richtingen, aanzichten, close-ups en de buigtest in klei met de camera van de basismens (ook voor de
+  oude basismens), `exporteer.py` de GLB en terug, `rig.py -- <uit.json>` het skelet, en `python bladen.py` de bladen.
+- De soldaat op HumGen (ronde 10): de variant `humgen` in `basismens/instellingen.json` heeft een eigen bouw
+  (`"bouw": {"blend", "script"}`, `maak.cjs`): `humgen/naar_basis.py` maakt van het .blend van `humgen/maak.py` een
+  `basismens.blend` (de botnamen die de soldaat kent, hulpbotten, de livekeys gebakken, de herkenningspunten van het
+  gezicht); daarna `npm run basismens -- humgen` zoals elke variant. `humgen/bewegingen.py -- <map>` rendert de
+  bewegingstests van de geklede soldaat, `python humgen/vergelijk10.py <map>` de vergelijking met de speerman en ronde 7.
+- De kleding op HumGen (ronde 11): de variant `humgen11` (op `humgen`, met `basis`) laat de tabberd als stof vallen
+  (`soldaat.tabberd.doek`), geeft de gambeson een manchet, en zet wenkbrauwen, stoppels en een warmere huid
+  (`humgen_basis`, gelezen door `naar_basis.py`). `npm run basismens -- humgen11`, en dan
+  `python humgen/vergelijk11.py <map>` voor de A/B/C-bladen: ronde 10, de nieuwe kleding met eenvoudige materialen, en
+  de nieuwe kleding met de PBR-materialen van A8. Groot, op 220 en op 74 pixels.
+- De artistieke reconstructie (ronde 12): de variant `humgen12` (op `humgen11`) met de gekozen proeven
+  `basismens/proeven/r12-*.json`. `bash gereedschap/blender/humgen/proef12.sh <proeven> [bouw | <map>] [richting ...]`
+  bouwt en rendert één proef in een eigen map, op de proeven van de variant (met een map alleen de stijlen: het
+  licht). `python gereedschap/blender/humgen/ronde12.py` maakt de bladen met de metingen op 74 pixels tegen de speerman:
+  - `analyse` de referentie;
+  - `blad` en `74` de experimenten (een kolom met `pm:` gebruikt de afwerking per materiaal);
+  - `ds` de verkleiningen naast elkaar;
+  - `richtingen` de acht richtingen;
+  - `instellingen` wat een render bepaalt.
+
+  Nieuw instelbaar: de glans per soort in de render voor het spel (`soldaat.stijlen.C.soorten`), vuil aan de zoom en
+  bij de riem van de tabberd (`soldaat.tabberd.vuil`), en andere kleuren voor de gambeson (`soldaat.gambeson.kleuren`).
+- Kleding uit bestaande assets (ronde 13): de variant `humgen13` hangt kleding van Human Generator aan de man.
+  - **Aantrekken:** `humgen_basis.kleding` (`humgen/naar_basis.kleding`, met `outfit.set` van HumGen). Een kledingstuk
+    neemt `soldaat.<stuk>.extern` over (`soldaat.van_buiten`, `kleur_over`, `tabberd_van_buiten`); de proeven `r13-A`
+    en `r13-B` doen dat.
+  - **Materialen:** een textuur van Poly Haven per materiaal vervangen door een CC0-set uit `assets/extern`, met
+    `soldaat.texturen` (`r13-C`).
+  - **Een proef op humgen13:** `VARIANT=humgen13 bash gereedschap/blender/humgen/proef12.sh <proef>`.
+  - **Een bron zoals hij is:** `humgen/kleding13.py -- <map> outfit:<naam> ...`, de man met zijn eigen materialen.
+  - **Bakken:** `humgen/bakken13.py` vergelijkt de bron, de gebakken realtime-GLB, en die zonder normal map en zonder
+    gebakken texturen.
+  - **Supersampling:** `SCHAAL=<deel>` voor `stijlen.py` rendert op een deel van de resolutie, en
+    `python humgen/ronde12.py ss <map> <uit.png> <delen>` zet ze op 74 pixels naast elkaar.
+  - **De externe assets:** in `assets/extern/ronde13/`, met per set een manifest, en `asset-manifest.json`
+    (`humgen/manifest13.py`) en `asset-onderzoek.md`.
+- Hybride 3D + AI (ronde 14): twee loopstanden en een AI-afwerking in ComfyUI.
+  - **De standen:** in `humgen/loop14.json` (A: links voor, B: rechts voor). `STAND=<json>#A` laat `stijlen.py` ze op
+    de soldaat zetten (`stijlen.loopstand`, met `stand.reik` voor de linkerhand). De variant `humgen14` heeft een rok
+    die de benen volgt.
+  - **Nieuwe passes in `stijlen.py`:**
+    - `normaal` (in de ruimte van de camera) en `id` (een kleur per soort materiaal);
+    - `diepte` meet zijn bereik nu aan de figuur; `DIEPTE=lo,hi` geeft meer standen één bereik.
+  - **De invoer en de uitkomst:**
+    - `python humgen/loop14.py voor`: de invoer op een vast doek;
+    - `samen`: beide standen in één beeld;
+    - `splits`, `na` (het silhouet, de metingen, het verschil en de overlay) en `blad` (het contactblad, 74 pixels, de
+      A/B-GIF).
+  - **De proeven:** `node gereedschap/ai/loop14.cjs <proef>` (T1 tot T4, met de werkstroom van `afwerking.cjs`; ComfyUI
+    moet draaien).
   Het patroon van de wapenrok: `eigen.py -- <hoekmap> Z ZW W NW N NO O ZO staan hoek` (de plek op de wapenrok als kleur,
   in een eigen map) en dan `python gereedschap/blender/patroon.py <map> <hoekmap>`: per 10 graden rond het lijf, boven en
   onder de riem, hoe vaak het vel daar geel of blauw is, per richting.

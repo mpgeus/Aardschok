@@ -1,0 +1,406 @@
+{
+ "staan": {
+  "handschoenen/speer": {
+   "beelden": [
+    744
+   ],
+   "hoogste": 744,
+   "gemiddeld": 744.0
+  },
+  "speer/tabberd": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "speer/laarzen": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "speer/helm": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/tabberd": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/buidel": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/riem": {
+   "beelden": [
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "gambeson/tabberd": {
+   "beelden": [
+    2031
+   ],
+   "hoogste": 2031,
+   "gemiddeld": 2031.0
+  },
+  "tabberd/hozen": {
+   "beelden": [
+    1162
+   ],
+   "hoogste": 1162,
+   "gemiddeld": 1162.0
+  },
+  "tabberd/laarzen": {
+   "beelden": [
+    1011
+   ],
+   "hoogste": 1011,
+   "gemiddeld": 1011.0
+  },
+  "tabberd/buidel": {
+   "beelden": [
+    670
+   ],
+   "hoogste": 670,
+   "gemiddeld": 670.0
+  },
+  "hozen/laarzen": {
+   "beelden": [
+    1216
+   ],
+   "hoogste": 1216,
+   "gemiddeld": 1216.0
+  },
+  "kap/tabberd": {
+   "beelden": [
+    1088
+   ],
+   "hoogste": 1088,
+   "gemiddeld": 1088.0
+  },
+  "kap/helm": {
+   "beelden": [
+    2626
+   ],
+   "hoogste": 2626,
+   "gemiddeld": 2626.0
+  },
+  "hoofd/kap": {
+   "beelden": [
+    1260
+   ],
+   "hoogste": 1260,
+   "gemiddeld": 1260.0
+  },
+  "baard/kap": {
+   "beelden": [
+    951
+   ],
+   "hoogste": 951,
+   "gemiddeld": 951.0
+  }
+ },
+ "lopen": {
+  "handschoenen/speer": {
+   "beelden": [
+    741,
+    741,
+    742,
+    749,
+    703,
+    696,
+    727,
+    703,
+    715,
+    739,
+    736,
+    740
+   ],
+   "hoogste": 749,
+   "gemiddeld": 727.7
+  },
+  "speer/tabberd": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "speer/laarzen": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "speer/helm": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/tabberd": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/buidel": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "handschoenen/riem": {
+   "beelden": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "hoogste": 0,
+   "gemiddeld": 0.0
+  },
+  "gambeson/tabberd": {
+   "beelden": [
+    2356,
+    2400,
+    2254,
+    2143,
+    2361,
+    2384,
+    2472,
+    2531,
+    2282,
+    2141,
+    2300,
+    2348
+   ],
+   "hoogste": 2531,
+   "gemiddeld": 2331.0
+  },
+  "tabberd/hozen": {
+   "beelden": [
+    1458,
+    1421,
+    1248,
+    1313,
+    1400,
+    1380,
+    1423,
+    1352,
+    1225,
+    1300,
+    1437,
+    1347
+   ],
+   "hoogste": 1458,
+   "gemiddeld": 1358.7
+  },
+  "tabberd/laarzen": {
+   "beelden": [
+    1345,
+    1306,
+    1126,
+    1233,
+    1366,
+    1236,
+    1366,
+    1301,
+    1125,
+    1234,
+    1338,
+    1247
+   ],
+   "hoogste": 1366,
+   "gemiddeld": 1268.6
+  },
+  "tabberd/buidel": {
+   "beelden": [
+    977,
+    753,
+    699,
+    671,
+    664,
+    659,
+    695,
+    726,
+    644,
+    711,
+    982,
+    1052
+   ],
+   "hoogste": 1052,
+   "gemiddeld": 769.4
+  },
+  "hozen/laarzen": {
+   "beelden": [
+    1524,
+    1151,
+    1134,
+    1239,
+    1347,
+    1350,
+    1533,
+    1120,
+    1104,
+    1236,
+    1345,
+    1382
+   ],
+   "hoogste": 1533,
+   "gemiddeld": 1288.8
+  },
+  "kap/tabberd": {
+   "beelden": [
+    1082,
+    1083,
+    1084,
+    1096,
+    1100,
+    1088,
+    1088,
+    1084,
+    1085,
+    1084,
+    1080,
+    1079
+   ],
+   "hoogste": 1100,
+   "gemiddeld": 1086.1
+  },
+  "kap/helm": {
+   "beelden": [
+    2638,
+    2629,
+    2622,
+    2613,
+    2613,
+    2622,
+    2626,
+    2636,
+    2623,
+    2614,
+    2622,
+    2642
+   ],
+   "hoogste": 2642,
+   "gemiddeld": 2625.0
+  },
+  "hoofd/kap": {
+   "beelden": [
+    1264,
+    1262,
+    1268,
+    1265,
+    1266,
+    1269,
+    1268,
+    1260,
+    1253,
+    1261,
+    1263,
+    1267
+   ],
+   "hoogste": 1269,
+   "gemiddeld": 1263.8
+  },
+  "baard/kap": {
+   "beelden": [
+    961,
+    951,
+    956,
+    952,
+    948,
+    951,
+    960,
+    962,
+    961,
+    953,
+    953,
+    957
+   ],
+   "hoogste": 962,
+   "gemiddeld": 955.4
+  }
+ }
+}

@@ -1,0 +1,702 @@
+{
+ "plaat": "vrij",
+ "richtingen": {
+  "Z": {
+   "plaat": {
+    "hoogte_px": 535,
+    "breedte_romp": 0.492,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.234,
+    "helm_hoogte": 0.221,
+    "rok_boven": 0.211,
+    "rok_onder": 0.948,
+    "kleur_aandeel": {
+     "blauw": 0.146,
+     "geel": 0.145,
+     "bruin": 0.563,
+     "staal": 0.147
+    },
+    "kleur_lab": {
+     "blauw": [
+      37.0,
+      26.7,
+      -64.9
+     ],
+     "geel": [
+      73.9,
+      20.3,
+      75.3
+     ],
+     "bruin": [
+      31.1,
+      24.4,
+      30.9
+     ],
+     "staal": [
+      29.4,
+      3.7,
+      1.3
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 13,
+     "geel_stukken": 75,
+     "verhouding_blauw_geel": 1.19
+    },
+    "detail_groot": 14.09,
+    "detail_spel": 21.5
+   },
+   "V4": {
+    "hoogte_px": 702,
+    "breedte_romp": 0.605,
+    "speer_boven_figuur": 0.285,
+    "helm_breedte": 0.514,
+    "helm_hoogte": 0.396,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      57.7,
+      0.6,
+      5.2
+     ]
+    },
+    "detail_groot": 7.16,
+    "detail_spel": 15.62,
+    "overlap": 0.772
+   },
+   "ruw": {
+    "hoogte_px": 695,
+    "breedte_romp": 0.481,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.437,
+    "helm_hoogte": 0.388,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "bruin": [
+      31.1,
+      1.2,
+      11.6
+     ],
+     "staal": [
+      62.0,
+      0.7,
+      6.0
+     ]
+    },
+    "detail_groot": 7.16,
+    "detail_spel": 14.68,
+    "overlap": 0.926
+   },
+   "klei": {
+    "hoogte_px": 696,
+    "breedte_romp": 0.483,
+    "speer_boven_figuur": 0.29,
+    "helm_breedte": 0.44,
+    "helm_hoogte": 0.391,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      60.8,
+      0.7,
+      5.9
+     ]
+    },
+    "detail_groot": 8.68,
+    "detail_spel": 15.42,
+    "overlap": 0.912
+   },
+   "eind": {
+    "hoogte_px": 696,
+    "breedte_romp": 0.483,
+    "speer_boven_figuur": 0.29,
+    "helm_breedte": 0.244,
+    "helm_hoogte": 0.247,
+    "rok_boven": 0.24,
+    "rok_onder": 0.96,
+    "kleur_aandeel": {
+     "blauw": 0.128,
+     "geel": 0.196,
+     "bruin": 0.499,
+     "staal": 0.177
+    },
+    "kleur_lab": {
+     "blauw": [
+      38.3,
+      23.7,
+      -60.3
+     ],
+     "geel": [
+      68.0,
+      18.4,
+      64.8
+     ],
+     "bruin": [
+      32.5,
+      21.7,
+      26.9
+     ],
+     "staal": [
+      29.7,
+      3.5,
+      1.6
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 25,
+     "geel_stukken": 178,
+     "verhouding_blauw_geel": 0.68
+    },
+    "detail_groot": 13.27,
+    "detail_spel": 20.64,
+    "overlap": 0.912
+   }
+  },
+  "W": {
+   "plaat": {
+    "hoogte_px": 545,
+    "breedte_romp": 0.314,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.253,
+    "helm_hoogte": 0.2,
+    "rok_boven": 0.253,
+    "rok_onder": 0.982,
+    "kleur_aandeel": {
+     "blauw": 0.088,
+     "geel": 0.113,
+     "bruin": 0.594,
+     "staal": 0.207
+    },
+    "kleur_lab": {
+     "blauw": [
+      34.0,
+      24.8,
+      -60.5
+     ],
+     "geel": [
+      70.0,
+      20.8,
+      62.2
+     ],
+     "bruin": [
+      32.9,
+      25.2,
+      32.5
+     ],
+     "staal": [
+      35.5,
+      3.6,
+      1.4
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 11,
+     "geel_stukken": 67,
+     "verhouding_blauw_geel": 1.0
+    },
+    "detail_groot": 15.13,
+    "detail_spel": 22.29
+   },
+   "V4": {
+    "hoogte_px": 691,
+    "breedte_romp": 0.452,
+    "speer_boven_figuur": 0.382,
+    "helm_breedte": 0.388,
+    "helm_hoogte": 0.412,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      63.1,
+      0.7,
+      5.9
+     ]
+    },
+    "detail_groot": 5.42,
+    "detail_spel": 12.45,
+    "overlap": 0.656
+   },
+   "ruw": {
+    "hoogte_px": 704,
+    "breedte_romp": 0.293,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.253,
+    "helm_hoogte": 0.405,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      62.8,
+      0.6,
+      5.5
+     ]
+    },
+    "detail_groot": 6.07,
+    "detail_spel": 12.57,
+    "overlap": 0.795
+   },
+   "klei": {
+    "hoogte_px": 739,
+    "breedte_romp": 0.283,
+    "speer_boven_figuur": 0.261,
+    "helm_breedte": 0.242,
+    "helm_hoogte": 0.375,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      61.9,
+      0.7,
+      5.6
+     ]
+    },
+    "detail_groot": 7.91,
+    "detail_spel": 12.84,
+    "overlap": 0.772
+   },
+   "eind": {
+    "hoogte_px": 739,
+    "breedte_romp": 0.283,
+    "speer_boven_figuur": 0.261,
+    "helm_breedte": 0.242,
+    "helm_hoogte": 0.221,
+    "rok_boven": 0.296,
+    "rok_onder": 0.988,
+    "kleur_aandeel": {
+     "blauw": 0.041,
+     "geel": 0.194,
+     "bruin": 0.518,
+     "staal": 0.247
+    },
+    "kleur_lab": {
+     "blauw": [
+      30.7,
+      23.1,
+      -54.7
+     ],
+     "geel": [
+      68.3,
+      18.5,
+      65.0
+     ],
+     "bruin": [
+      35.6,
+      23.2,
+      28.7
+     ],
+     "staal": [
+      39.4,
+      3.3,
+      1.1
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 12,
+     "geel_stukken": 167,
+     "verhouding_blauw_geel": 0.22
+    },
+    "detail_groot": 15.73,
+    "detail_spel": 21.53,
+    "overlap": 0.772
+   }
+  },
+  "N": {
+   "plaat": {
+    "hoogte_px": 540,
+    "breedte_romp": 0.493,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.265,
+    "helm_hoogte": 0.191,
+    "rok_boven": 0.256,
+    "rok_onder": 0.972,
+    "kleur_aandeel": {
+     "blauw": 0.167,
+     "geel": 0.168,
+     "bruin": 0.516,
+     "staal": 0.15
+    },
+    "kleur_lab": {
+     "blauw": [
+      35.2,
+      27.7,
+      -65.3
+     ],
+     "geel": [
+      75.4,
+      18.5,
+      76.4
+     ],
+     "bruin": [
+      29.4,
+      23.7,
+      30.3
+     ],
+     "staal": [
+      31.5,
+      3.6,
+      1.2
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 7,
+     "geel_stukken": 52,
+     "verhouding_blauw_geel": 1.13
+    },
+    "detail_groot": 12.18,
+    "detail_spel": 19.09
+   },
+   "V4": {
+    "hoogte_px": 676,
+    "breedte_romp": 0.629,
+    "speer_boven_figuur": 0.391,
+    "helm_breedte": 0.568,
+    "helm_hoogte": 0.402,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "bruin": [
+      75.3,
+      1.3,
+      9.1
+     ],
+     "staal": [
+      61.5,
+      0.7,
+      5.7
+     ]
+    },
+    "detail_groot": 4.4,
+    "detail_spel": 10.53,
+    "overlap": 0.731
+   },
+   "ruw": {
+    "hoogte_px": 694,
+    "breedte_romp": 0.481,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.435,
+    "helm_hoogte": 0.39,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      61.2,
+      0.7,
+      6.1
+     ]
+    },
+    "detail_groot": 5.94,
+    "detail_spel": 14.03,
+    "overlap": 0.918
+   },
+   "klei": {
+    "hoogte_px": 695,
+    "breedte_romp": 0.483,
+    "speer_boven_figuur": 0.296,
+    "helm_breedte": 0.436,
+    "helm_hoogte": 0.39,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      59.7,
+      0.7,
+      6.0
+     ]
+    },
+    "detail_groot": 7.48,
+    "detail_spel": 14.07,
+    "overlap": 0.905
+   },
+   "eind": {
+    "hoogte_px": 695,
+    "breedte_romp": 0.483,
+    "speer_boven_figuur": 0.296,
+    "helm_breedte": 0.243,
+    "helm_hoogte": 0.22,
+    "rok_boven": 0.281,
+    "rok_onder": 0.983,
+    "kleur_aandeel": {
+     "blauw": 0.15,
+     "geel": 0.181,
+     "bruin": 0.486,
+     "staal": 0.184
+    },
+    "kleur_lab": {
+     "blauw": [
+      35.2,
+      24.9,
+      -60.5
+     ],
+     "geel": [
+      73.3,
+      17.4,
+      71.0
+     ],
+     "bruin": [
+      32.7,
+      21.4,
+      27.3
+     ],
+     "staal": [
+      35.7,
+      3.6,
+      1.6
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 17,
+     "geel_stukken": 161,
+     "verhouding_blauw_geel": 0.87
+    },
+    "detail_groot": 12.48,
+    "detail_spel": 19.83,
+    "overlap": 0.905
+   }
+  },
+  "O": {
+   "plaat": {
+    "hoogte_px": 544,
+    "breedte_romp": 0.314,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.246,
+    "helm_hoogte": 0.204,
+    "rok_boven": 0.257,
+    "rok_onder": 0.983,
+    "kleur_aandeel": {
+     "blauw": 0.088,
+     "geel": 0.113,
+     "bruin": 0.591,
+     "staal": 0.209
+    },
+    "kleur_lab": {
+     "blauw": [
+      34.4,
+      25.1,
+      -60.8
+     ],
+     "geel": [
+      69.5,
+      21.1,
+      61.0
+     ],
+     "bruin": [
+      33.0,
+      25.2,
+      32.5
+     ],
+     "staal": [
+      34.5,
+      3.7,
+      1.2
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 18,
+     "geel_stukken": 56,
+     "verhouding_blauw_geel": 0.98
+    },
+    "detail_groot": 14.79,
+    "detail_spel": 21.87
+   },
+   "V4": {
+    "hoogte_px": 707,
+    "breedte_romp": 0.441,
+    "speer_boven_figuur": 0.286,
+    "helm_breedte": 0.291,
+    "helm_hoogte": 0.414,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.001,
+     "staal": 0.999
+    },
+    "kleur_lab": {
+     "bruin": [
+      74.9,
+      1.3,
+      9.1
+     ],
+     "staal": [
+      66.2,
+      0.7,
+      6.2
+     ]
+    },
+    "detail_groot": 5.09,
+    "detail_spel": 11.79,
+    "overlap": 0.708
+   },
+   "ruw": {
+    "hoogte_px": 704,
+    "breedte_romp": 0.294,
+    "speer_boven_figuur": 0.0,
+    "helm_breedte": 0.253,
+    "helm_hoogte": 0.405,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      65.0,
+      0.7,
+      6.0
+     ]
+    },
+    "detail_groot": 6.11,
+    "detail_spel": 13.52,
+    "overlap": 0.89
+   },
+   "klei": {
+    "hoogte_px": 729,
+    "breedte_romp": 0.287,
+    "speer_boven_figuur": 0.218,
+    "helm_breedte": 0.247,
+    "helm_hoogte": 0.374,
+    "kleur_aandeel": {
+     "blauw": 0.0,
+     "geel": 0.0,
+     "bruin": 0.0,
+     "staal": 1.0
+    },
+    "kleur_lab": {
+     "staal": [
+      63.5,
+      0.7,
+      6.3
+     ]
+    },
+    "detail_groot": 7.75,
+    "detail_spel": 14.37,
+    "overlap": 0.834
+   },
+   "eind": {
+    "hoogte_px": 729,
+    "breedte_romp": 0.287,
+    "speer_boven_figuur": 0.218,
+    "helm_breedte": 0.211,
+    "helm_hoogte": 0.219,
+    "rok_boven": 0.191,
+    "rok_onder": 0.973,
+    "kleur_aandeel": {
+     "blauw": 0.135,
+     "geel": 0.165,
+     "bruin": 0.477,
+     "staal": 0.223
+    },
+    "kleur_lab": {
+     "blauw": [
+      36.2,
+      23.9,
+      -58.7
+     ],
+     "geel": [
+      47.8,
+      17.4,
+      32.0
+     ],
+     "bruin": [
+      37.2,
+      22.8,
+      28.2
+     ],
+     "staal": [
+      42.6,
+      3.2,
+      0.8
+     ]
+    },
+    "tabberd_vlakken": {
+     "blauw_stukken": 14,
+     "geel_stukken": 146,
+     "verhouding_blauw_geel": 0.92
+    },
+    "detail_groot": 13.44,
+    "detail_spel": 18.43,
+    "overlap": 0.834
+   }
+  }
+ },
+ "kort": {
+  "plaat": {
+   "overlap": null,
+   "detail_groot": 14.05,
+   "detail_spel": 21.19,
+   "hoogte_spreiding_pct": 0.7,
+   "helm_breedte": 0.249,
+   "breedte_romp": 0.403
+  },
+  "V4": {
+   "overlap": 0.717,
+   "detail_groot": 5.52,
+   "detail_spel": 12.6,
+   "hoogte_spreiding_pct": 1.7,
+   "helm_breedte": 0.44,
+   "breedte_romp": 0.532
+  },
+  "ruw": {
+   "overlap": 0.882,
+   "detail_groot": 6.32,
+   "detail_spel": 13.7,
+   "hoogte_spreiding_pct": 0.7,
+   "helm_breedte": 0.345,
+   "breedte_romp": 0.387
+  },
+  "klei": {
+   "overlap": 0.856,
+   "detail_groot": 7.96,
+   "detail_spel": 14.17,
+   "hoogte_spreiding_pct": 2.7,
+   "helm_breedte": 0.341,
+   "breedte_romp": 0.384
+  },
+  "eind": {
+   "overlap": 0.856,
+   "detail_groot": 13.73,
+   "detail_spel": 20.11,
+   "hoogte_spreiding_pct": 2.7,
+   "helm_breedte": 0.235,
+   "breedte_romp": 0.384
+  }
+ }
+}

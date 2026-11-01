@@ -1,0 +1,591 @@
+{
+ "toetsen": 117,
+ "fout": 0,
+ "details": [
+  {
+   "naam": "onderdeel lijf bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lijf: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lijf: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "lijf: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lijf: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lijf: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "lijf: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0002
+  },
+  {
+   "naam": "lijf: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 4
+  },
+  {
+   "naam": "onderdeel hoofd bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hoofd: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hoofd: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "hoofd: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hoofd: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hoofd: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "hoofd: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0001
+  },
+  {
+   "naam": "hoofd: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 2
+  },
+  {
+   "naam": "onderdeel baard bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "baard: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "baard: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "baard: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "baard: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "baard: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "baard: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "baard: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 1
+  },
+  {
+   "naam": "onderdeel helm bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "helm: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "helm: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "helm: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "helm: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "helm: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "helm: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "helm: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 1
+  },
+  {
+   "naam": "onderdeel kap bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "kap: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "kap: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "kap: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "kap: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "kap: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "kap: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0002
+  },
+  {
+   "naam": "kap: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 3
+  },
+  {
+   "naam": "onderdeel gambeson bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "gambeson: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "gambeson: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "gambeson: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "gambeson: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "gambeson: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "gambeson: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0002
+  },
+  {
+   "naam": "gambeson: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 4
+  },
+  {
+   "naam": "onderdeel tabberd bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "tabberd: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "tabberd: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "tabberd: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "tabberd: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "tabberd: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "tabberd: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0002
+  },
+  {
+   "naam": "tabberd: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 4
+  },
+  {
+   "naam": "onderdeel riem bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "riem: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "riem: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "riem: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "riem: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "riem: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "riem: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "riem: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 1
+  },
+  {
+   "naam": "onderdeel buidel bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "buidel: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "buidel: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "buidel: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "buidel: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "buidel: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "buidel: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "buidel: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 1
+  },
+  {
+   "naam": "onderdeel hozen bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hozen: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hozen: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "hozen: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hozen: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "hozen: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "hozen: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0001
+  },
+  {
+   "naam": "hozen: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 3
+  },
+  {
+   "naam": "onderdeel laarzen bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "laarzen: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "laarzen: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "laarzen: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "laarzen: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "laarzen: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "laarzen: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0001
+  },
+  {
+   "naam": "laarzen: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 3
+  },
+  {
+   "naam": "onderdeel handschoenen bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "handschoenen: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "handschoenen: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "handschoenen: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "handschoenen: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "handschoenen: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "handschoenen: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0001
+  },
+  {
+   "naam": "handschoenen: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 2
+  },
+  {
+   "naam": "onderdeel speer bestaat",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "speer: \u00e9\u00e9n shader",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "speer: alle verf aanwezig",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "speer: geen kapotte punten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "speer: verf zonder fouten",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "speer: groepen horen bij het skelet",
+   "ok": true,
+   "waarde": []
+  },
+  {
+   "naam": "speer: gewichten tellen op tot 1",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "speer: hooguit 4 botten per punt",
+   "ok": true,
+   "waarde": 1
+  },
+  {
+   "naam": "lengte tussen 1,2 en 1,8 m",
+   "ok": true,
+   "waarde": 1.398
+  },
+  {
+   "naam": "speer 1,3 keer de lengte (1,25 tot 1,35)",
+   "ok": true,
+   "waarde": 1.308
+  },
+  {
+   "naam": "staan: de rechterhand zit op de speer (< 2 mm)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "staan: de speer blijft recht en even lang",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "staan: voet.L staat stil (< 1 mm)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "staan: voet.R staat stil (< 1 mm)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "lopen: de rechterhand zit op de speer (< 2 mm)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "lopen: de speer blijft recht en even lang",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lopen: voet.L glijdt niet (afwijking < 2 cm/cyclus)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "lopen: voet.R glijdt niet (afwijking < 2 cm/cyclus)",
+   "ok": true,
+   "waarde": 0.0
+  },
+  {
+   "naam": "lopen: de benen wisselen af",
+   "ok": true,
+   "waarde": -0.886
+  },
+  {
+   "naam": "actie staan in het bestand",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "actie lopen in het bestand",
+   "ok": true,
+   "waarde": null
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "helmrand": {
+  "plaat": 0.35,
+  "huidig": 0.384,
+  "nieuw": 0.33
+ },
+ "koepel": {
+  "plaat": 0.26,
+  "huidig": 0.264,
+  "nieuw": 0.244
+ },
+ "gezicht met haar": {
+  "plaat": 0.23,
+  "huidig": 0.191,
+  "nieuw": 0.201
+ },
+ "helm tot baard": {
+  "plaat": 0.338,
+  "huidig": 0.372,
+  "nieuw": 0.357
+ },
+ "schouders (tabberd)": {
+  "plaat": 0.381,
+  "huidig": 0.404,
+  "nieuw": 0.414
+ },
+ "riem": {
+  "plaat": 0.263,
+  "huidig": 0.359,
+  "nieuw": 0.342
+ },
+ "zoom": {
+  "plaat": 0.41,
+  "huidig": 0.361,
+  "nieuw": 0.385
+ },
+ "riem tot zoom": {
+  "plaat": 0.227,
+  "huidig": 0.183,
+  "nieuw": 0.222
+ },
+ "bovenarm": {
+  "plaat": 0.094,
+  "huidig": 0.11,
+  "nieuw": 0.09
+ },
+ "laars": {
+  "plaat": 0.209,
+  "huidig": 0.233,
+  "nieuw": 0.219
+ },
+ "hele breedte": {
+  "plaat": 0.604,
+  "huidig": 0.677,
+  "nieuw": 0.685
+ }
+}

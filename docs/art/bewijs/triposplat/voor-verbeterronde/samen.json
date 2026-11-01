@@ -1,0 +1,19 @@
+{
+ "schaal": 0.9773,
+ "draai_graden": 2.05,
+ "icp_fout_m": 0.009,
+ "naad_verschil_cm": 11.1,
+ "voor": 161110,
+ "achter": 136427,
+ "speer_uit_Z": 20778,
+ "speer_uit_N_weg": 17130,
+ "helm_Z": {
+  "rand_z": 1.116,
+  "gespiegeld": 23742
+ },
+ "helm_N": {
+  "rand_z": 1.124,
+  "gespiegeld": 23380
+ },
+ "naad_streep": 32522
+}

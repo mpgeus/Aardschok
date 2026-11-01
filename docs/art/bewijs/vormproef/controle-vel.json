@@ -1,0 +1,324 @@
+{
+ "toetsen": 42,
+ "fout": 0,
+ "details": [
+  {
+   "naam": "staan: maat van het vel past op cel, beelden en richtingen",
+   "ok": true,
+   "waarde": [
+    312,
+    1104
+   ]
+  },
+  {
+   "naam": "staan: alle acht richtingen",
+   "ok": true,
+   "waarde": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ]
+  },
+  {
+   "naam": "staan: de doorzichtigheid is scherp (alleen 0 en 255)",
+   "ok": true,
+   "waarde": [
+    0,
+    255
+   ]
+  },
+  {
+   "naam": "staan: de hoeken van het vel zijn doorzichtig",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "staan: het anker ligt in de cel",
+   "ok": true,
+   "waarde": [
+    39.0,
+    123.36
+   ]
+  },
+  {
+   "naam": "staan: geen leeg beeld",
+   "ok": true,
+   "waarde": 0
+  },
+  {
+   "naam": "staan: niets raakt de rand van de cel",
+   "ok": true,
+   "waarde": 0
+  },
+  {
+   "naam": "staan: de voeten blijven rond het anker (binnen 16 px)",
+   "ok": true,
+   "waarde": 11.6
+  },
+  {
+   "naam": "staan: acht verschillende beelden",
+   "ok": true,
+   "waarde": 19.88
+  },
+  {
+   "naam": "staan Z: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.133,
+    0.109
+   ]
+  },
+  {
+   "naam": "staan ZW: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.116,
+    0.123
+   ]
+  },
+  {
+   "naam": "staan W: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.101,
+    0.093
+   ]
+  },
+  {
+   "naam": "staan NW: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.166,
+    0.081
+   ]
+  },
+  {
+   "naam": "staan N: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.173,
+    0.133
+   ]
+  },
+  {
+   "naam": "staan NO: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.117,
+    0.171
+   ]
+  },
+  {
+   "naam": "staan O: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.059,
+    0.137
+   ]
+  },
+  {
+   "naam": "staan ZO: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.093,
+    0.069
+   ]
+  },
+  {
+   "naam": "lopen: maat van het vel past op cel, beelden en richtingen",
+   "ok": true,
+   "waarde": [
+    1008,
+    1128
+   ]
+  },
+  {
+   "naam": "lopen: alle acht richtingen",
+   "ok": true,
+   "waarde": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ]
+  },
+  {
+   "naam": "lopen: de doorzichtigheid is scherp (alleen 0 en 255)",
+   "ok": true,
+   "waarde": [
+    0,
+    255
+   ]
+  },
+  {
+   "naam": "lopen: de hoeken van het vel zijn doorzichtig",
+   "ok": true,
+   "waarde": null
+  },
+  {
+   "naam": "lopen: het anker ligt in de cel",
+   "ok": true,
+   "waarde": [
+    42.0,
+    127.36
+   ]
+  },
+  {
+   "naam": "lopen: geen leeg beeld",
+   "ok": true,
+   "waarde": 0
+  },
+  {
+   "naam": "lopen: niets raakt de rand van de cel",
+   "ok": true,
+   "waarde": 0
+  },
+  {
+   "naam": "lopen: de voeten blijven rond het anker (binnen 16 px)",
+   "ok": true,
+   "waarde": 10.6
+  },
+  {
+   "naam": "lopen: acht verschillende beelden",
+   "ok": true,
+   "waarde": 17.96
+  },
+  {
+   "naam": "lopen Z: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    4.12,
+    6.48
+   ]
+  },
+  {
+   "naam": "lopen ZW: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    5.12,
+    7.49
+   ]
+  },
+  {
+   "naam": "lopen W: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    3.06,
+    6.75
+   ]
+  },
+  {
+   "naam": "lopen NW: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    2.99,
+    6.11
+   ]
+  },
+  {
+   "naam": "lopen N: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    3.58,
+    5.28
+   ]
+  },
+  {
+   "naam": "lopen NO: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    3.54,
+    6.26
+   ]
+  },
+  {
+   "naam": "lopen O: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    2.88,
+    5.54
+   ]
+  },
+  {
+   "naam": "lopen ZO: het beweegt, zonder sprong",
+   "ok": true,
+   "waarde": [
+    3.12,
+    5.59
+   ]
+  },
+  {
+   "naam": "lopen Z: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.122,
+    0.097
+   ]
+  },
+  {
+   "naam": "lopen ZW: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.083,
+    0.108
+   ]
+  },
+  {
+   "naam": "lopen W: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.104,
+    0.095
+   ]
+  },
+  {
+   "naam": "lopen NW: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.195,
+    0.101
+   ]
+  },
+  {
+   "naam": "lopen N: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.187,
+    0.129
+   ]
+  },
+  {
+   "naam": "lopen NO: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.126,
+    0.162
+   ]
+  },
+  {
+   "naam": "lopen O: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.057,
+    0.137
+   ]
+  },
+  {
+   "naam": "lopen ZO: blauw en geel leesbaar (elk minstens 2 procent)",
+   "ok": true,
+   "waarde": [
+    0.079,
+    0.056
+   ]
+  }
+ ]
+}

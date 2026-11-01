@@ -1,0 +1,442 @@
+{
+ "plaat": {
+  "330px": {
+   "blauw": {
+    "aandeel": 0.135,
+    "L5": 13.6,
+    "L50": 29.3,
+    "L95": 44.9,
+    "bereik": 31.3,
+    "chroma": 60.4,
+    "klein_contrast": 3.84
+   },
+   "geel": {
+    "aandeel": 0.107,
+    "L5": 58.4,
+    "L50": 72.9,
+    "L95": 80.0,
+    "bereik": 21.6,
+    "chroma": 78.2,
+    "klein_contrast": 5.44
+   },
+   "bruin": {
+    "aandeel": 0.37,
+    "L5": 16.0,
+    "L50": 35.5,
+    "L95": 56.2,
+    "bereik": 40.2,
+    "chroma": 39.4,
+    "klein_contrast": 5.52
+   },
+   "staal": {
+    "aandeel": 0.191,
+    "L5": 23.9,
+    "L50": 37.8,
+    "L95": 82.7,
+    "bereik": 58.8,
+    "chroma": 3.3,
+    "klein_contrast": 8.64
+   },
+   "_geheel": {
+    "L5": 13.1,
+    "L95": 75.5,
+    "klein_contrast": 6.54
+   }
+  },
+  "80px": {
+   "blauw": {
+    "aandeel": 0.132,
+    "L5": 14.6,
+    "L50": 29.1,
+    "L95": 42.9,
+    "bereik": 28.3,
+    "chroma": 58.7,
+    "klein_contrast": 6.35
+   },
+   "geel": {
+    "aandeel": 0.105,
+    "L5": 57.4,
+    "L50": 71.8,
+    "L95": 78.2,
+    "bereik": 20.9,
+    "chroma": 77.3,
+    "klein_contrast": 8.83
+   },
+   "bruin": {
+    "aandeel": 0.39,
+    "L5": 16.8,
+    "L50": 36.5,
+    "L95": 56.0,
+    "bereik": 39.2,
+    "chroma": 39.0,
+    "klein_contrast": 8.93
+   },
+   "staal": {
+    "aandeel": 0.204,
+    "L5": 23.6,
+    "L50": 37.4,
+    "L95": 76.2,
+    "bereik": 52.6,
+    "chroma": 4.3,
+    "klein_contrast": 9.22
+   },
+   "_geheel": {
+    "L5": 14.6,
+    "L95": 74.0,
+    "klein_contrast": 9.74
+   }
+  }
+ },
+ "v1": {
+  "330px": {
+   "blauw": {
+    "aandeel": 0.145,
+    "L5": 15.2,
+    "L50": 34.1,
+    "L95": 39.7,
+    "bereik": 24.5,
+    "chroma": 40.2,
+    "klein_contrast": 2.51
+   },
+   "geel": {
+    "aandeel": 0.085,
+    "L5": 57.2,
+    "L50": 68.6,
+    "L95": 78.8,
+    "bereik": 21.6,
+    "chroma": 63.8,
+    "klein_contrast": 4.56
+   },
+   "bruin": {
+    "aandeel": 0.452,
+    "L5": 16.8,
+    "L50": 36.9,
+    "L95": 55.5,
+    "bereik": 38.6,
+    "chroma": 31.6,
+    "klein_contrast": 4.31
+   },
+   "staal": {
+    "aandeel": 0.165,
+    "L5": 23.9,
+    "L50": 41.1,
+    "L95": 87.8,
+    "bereik": 64.0,
+    "chroma": 5.1,
+    "klein_contrast": 7.69
+   },
+   "_geheel": {
+    "L5": 11.0,
+    "L95": 71.9,
+    "klein_contrast": 5.11
+   }
+  },
+  "80px": {
+   "blauw": {
+    "aandeel": 0.134,
+    "L5": 16.0,
+    "L50": 34.1,
+    "L95": 39.7,
+    "bereik": 23.6,
+    "chroma": 39.1,
+    "klein_contrast": 5.49
+   },
+   "geel": {
+    "aandeel": 0.077,
+    "L5": 57.7,
+    "L50": 68.0,
+    "L95": 78.1,
+    "bereik": 20.3,
+    "chroma": 63.7,
+    "klein_contrast": 9.68
+   },
+   "bruin": {
+    "aandeel": 0.468,
+    "L5": 18.1,
+    "L50": 36.9,
+    "L95": 55.2,
+    "bereik": 37.1,
+    "chroma": 31.3,
+    "klein_contrast": 7.91
+   },
+   "staal": {
+    "aandeel": 0.176,
+    "L5": 23.6,
+    "L50": 42.1,
+    "L95": 78.9,
+    "bereik": 55.3,
+    "chroma": 5.2,
+    "klein_contrast": 11.55
+   },
+   "_geheel": {
+    "L5": 12.2,
+    "L95": 70.0,
+    "klein_contrast": 9.56
+   }
+  }
+ },
+ "A": {
+  "330px": {
+   "blauw": {
+    "aandeel": 0.155,
+    "L5": 11.6,
+    "L50": 28.7,
+    "L95": 38.9,
+    "bereik": 27.4,
+    "chroma": 57.3,
+    "klein_contrast": 2.84
+   },
+   "geel": {
+    "aandeel": 0.09,
+    "L5": 57.0,
+    "L50": 68.9,
+    "L95": 78.7,
+    "bereik": 21.8,
+    "chroma": 72.7,
+    "klein_contrast": 4.62
+   },
+   "bruin": {
+    "aandeel": 0.474,
+    "L5": 15.7,
+    "L50": 35.0,
+    "L95": 54.5,
+    "bereik": 38.8,
+    "chroma": 32.8,
+    "klein_contrast": 4.85
+   },
+   "staal": {
+    "aandeel": 0.144,
+    "L5": 25.3,
+    "L50": 44.2,
+    "L95": 80.1,
+    "bereik": 54.8,
+    "chroma": 4.7,
+    "klein_contrast": 7.42
+   },
+   "_geheel": {
+    "L5": 10.3,
+    "L95": 71.9,
+    "klein_contrast": 5.24
+   }
+  },
+  "80px": {
+   "blauw": {
+    "aandeel": 0.151,
+    "L5": 12.8,
+    "L50": 28.6,
+    "L95": 39.3,
+    "bereik": 26.5,
+    "chroma": 55.2,
+    "klein_contrast": 5.72
+   },
+   "geel": {
+    "aandeel": 0.082,
+    "L5": 57.8,
+    "L50": 68.4,
+    "L95": 78.1,
+    "bereik": 20.3,
+    "chroma": 72.3,
+    "klein_contrast": 9.7
+   },
+   "bruin": {
+    "aandeel": 0.496,
+    "L5": 16.8,
+    "L50": 36.4,
+    "L95": 53.2,
+    "bereik": 36.4,
+    "chroma": 33.2,
+    "klein_contrast": 9.5
+   },
+   "staal": {
+    "aandeel": 0.148,
+    "L5": 25.0,
+    "L50": 44.6,
+    "L95": 79.1,
+    "bereik": 54.1,
+    "chroma": 5.1,
+    "klein_contrast": 12.14
+   },
+   "_geheel": {
+    "L5": 11.8,
+    "L95": 69.9,
+    "klein_contrast": 10.43
+   }
+  }
+ },
+ "B": {
+  "330px": {
+   "blauw": {
+    "aandeel": 0.155,
+    "L5": 11.3,
+    "L50": 28.7,
+    "L95": 38.8,
+    "bereik": 27.5,
+    "chroma": 57.4,
+    "klein_contrast": 2.88
+   },
+   "geel": {
+    "aandeel": 0.09,
+    "L5": 57.1,
+    "L50": 69.0,
+    "L95": 78.7,
+    "bereik": 21.6,
+    "chroma": 72.9,
+    "klein_contrast": 4.64
+   },
+   "bruin": {
+    "aandeel": 0.473,
+    "L5": 15.6,
+    "L50": 35.1,
+    "L95": 54.4,
+    "bereik": 38.9,
+    "chroma": 32.9,
+    "klein_contrast": 4.85
+   },
+   "staal": {
+    "aandeel": 0.144,
+    "L5": 25.3,
+    "L50": 44.2,
+    "L95": 80.6,
+    "bereik": 55.3,
+    "chroma": 4.7,
+    "klein_contrast": 7.47
+   },
+   "_geheel": {
+    "L5": 10.2,
+    "L95": 72.1,
+    "klein_contrast": 5.27
+   }
+  },
+  "80px": {
+   "blauw": {
+    "aandeel": 0.15,
+    "L5": 12.3,
+    "L50": 28.6,
+    "L95": 38.6,
+    "bereik": 26.3,
+    "chroma": 55.5,
+    "klein_contrast": 5.71
+   },
+   "geel": {
+    "aandeel": 0.083,
+    "L5": 57.7,
+    "L50": 68.4,
+    "L95": 78.1,
+    "bereik": 20.4,
+    "chroma": 72.4,
+    "klein_contrast": 9.69
+   },
+   "bruin": {
+    "aandeel": 0.499,
+    "L5": 16.9,
+    "L50": 36.2,
+    "L95": 53.3,
+    "bereik": 36.4,
+    "chroma": 33.0,
+    "klein_contrast": 9.58
+   },
+   "staal": {
+    "aandeel": 0.147,
+    "L5": 24.8,
+    "L50": 44.7,
+    "L95": 78.7,
+    "bereik": 53.9,
+    "chroma": 5.2,
+    "klein_contrast": 12.23
+   },
+   "_geheel": {
+    "L5": 11.8,
+    "L95": 69.9,
+    "klein_contrast": 10.45
+   }
+  }
+ },
+ "C": {
+  "330px": {
+   "blauw": {
+    "aandeel": 0.152,
+    "L5": 10.4,
+    "L50": 28.0,
+    "L95": 37.4,
+    "bereik": 27.1,
+    "chroma": 55.4,
+    "klein_contrast": 2.97
+   },
+   "geel": {
+    "aandeel": 0.091,
+    "L5": 58.3,
+    "L50": 67.7,
+    "L95": 79.0,
+    "bereik": 20.7,
+    "chroma": 72.3,
+    "klein_contrast": 4.79
+   },
+   "bruin": {
+    "aandeel": 0.453,
+    "L5": 16.0,
+    "L50": 34.7,
+    "L95": 54.5,
+    "bereik": 38.5,
+    "chroma": 33.0,
+    "klein_contrast": 4.91
+   },
+   "staal": {
+    "aandeel": 0.153,
+    "L5": 26.2,
+    "L50": 44.6,
+    "L95": 80.5,
+    "bereik": 54.3,
+    "chroma": 4.8,
+    "klein_contrast": 7.1
+   },
+   "_geheel": {
+    "L5": 9.1,
+    "L95": 70.9,
+    "klein_contrast": 5.29
+   }
+  },
+  "80px": {
+   "blauw": {
+    "aandeel": 0.148,
+    "L5": 11.5,
+    "L50": 27.6,
+    "L95": 36.7,
+    "bereik": 25.1,
+    "chroma": 54.5,
+    "klein_contrast": 6.14
+   },
+   "geel": {
+    "aandeel": 0.085,
+    "L5": 57.9,
+    "L50": 66.2,
+    "L95": 77.3,
+    "bereik": 19.4,
+    "chroma": 71.2,
+    "klein_contrast": 9.44
+   },
+   "bruin": {
+    "aandeel": 0.474,
+    "L5": 17.1,
+    "L50": 34.9,
+    "L95": 52.3,
+    "bereik": 35.2,
+    "chroma": 32.7,
+    "klein_contrast": 9.36
+   },
+   "staal": {
+    "aandeel": 0.163,
+    "L5": 26.4,
+    "L50": 44.0,
+    "L95": 78.8,
+    "bereik": 52.4,
+    "chroma": 5.1,
+    "klein_contrast": 11.42
+   },
+   "_geheel": {
+    "L5": 10.2,
+    "L95": 68.3,
+    "klein_contrast": 10.38
+   }
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "zon_richting": [
+  -0.4,
+  -0.3,
+  0.9
+ ],
+ "zon_sterkte": 3.4,
+ "zon_hoek": 10.0,
+ "hemel_sterkte": 0.4,
+ "rand_sterkte": 1.2
+}

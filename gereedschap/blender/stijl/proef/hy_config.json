@@ -1,0 +1,334 @@
+{
+ "_uitleg": "Hunyuan3D-2mv, de bewerkingen per variant (hy_bouw.py). Elke variant verandert iets ten opzichte van basis; de ruwe GLB's blijven staan. ruw en a_ruw zijn de oude platen, ter vergelijking. v_eind is de eindkeuze voor groot, v_spel voor de vellen.",
+ "basis": {
+  "bron": "speerman.glb",
+  "figuur_m": 1.354,
+  "kleur_richtingen": [
+   "Z",
+   "W",
+   "N",
+   "O"
+  ]
+ },
+ "varianten": {
+  "ruw": {},
+  "a_ruw": {
+   "bron": "acht.glb",
+   "plaat": "acht"
+  },
+  "v_ruw": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij"
+  },
+  "v_speer": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   }
+  },
+  "v_eind": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   },
+   "detail": {
+    "glad": 3,
+    "put_max": 0.004,
+    "hoogdoorlaat": 8,
+    "knip": 0.6,
+    "sterkte": 0.0035
+   },
+   "scherp": {
+    "stappen": 5,
+    "knip": 0.7,
+    "sterkte": 0.6
+   },
+   "echt_licht": 0.3
+  },
+  "v_spel": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   },
+   "echt_licht": 0.3,
+   "rust": {
+    "verf": 2,
+    "vorm": 8
+   }
+  },
+  "v_geen": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   }
+  },
+  "v_det": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   },
+   "detail": {
+    "glad": 3,
+    "put_max": 0.004,
+    "hoogdoorlaat": 8,
+    "knip": 0.6,
+    "sterkte": 0.0035
+   }
+  },
+  "v_sch": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   },
+   "detail": {
+    "glad": 3,
+    "put_max": 0.004,
+    "hoogdoorlaat": 8,
+    "knip": 0.6,
+    "sterkte": 0.0035
+   },
+   "scherp": {
+    "stappen": 5,
+    "knip": 0.7,
+    "sterkte": 0.6
+   }
+  },
+  "v_on": {
+   "bron": "vrij_r8192_o512.glb",
+   "plaat": "vrij",
+   "kraters": {
+    "glad": 30,
+    "drempel": 0.009,
+    "rand": 4,
+    "groei": 3.0
+   },
+   "speer": {
+    "lengte_x_figuur": 1.3,
+    "voet_z": 0.0,
+    "max_scheef": 0.1,
+    "straal_m": 0.026,
+    "blad": 0.22,
+    "blad_breed": 0.072,
+    "blad_dik": 0.03,
+    "koker": 1.25,
+    "koker_lang": 0.05,
+    "staal": [
+     0.34,
+     0.35,
+     0.38
+    ],
+    "staal_ruw": 0.34,
+    "echt": 0.4,
+    "hout_maal": 0.95,
+    "hout": [
+     0.3,
+     0.11,
+     0.03
+    ],
+    "schuin": [
+     0.0,
+     0.0
+    ],
+    "hand_xy": [
+     -0.01,
+     -0.012
+    ]
+   },
+   "detail": {
+    "glad": 3,
+    "put_max": 0.004,
+    "hoogdoorlaat": 8,
+    "knip": 0.6,
+    "sterkte": 0.0035
+   },
+   "ontlicht": {
+    "schaal": 160,
+    "sterkte": 0.85
+   }
+  }
+ }
+}

@@ -1,0 +1,97 @@
+{
+ "_uitleg": "Hoe sterk elke laag van schilder.py telt, per materiaal. L in Lab-punten, h in graden, chroma als factor. E\u00e9n plek voor de hele stijl: een nieuw figuur met dezelfde materialen krijgt dezelfde behandeling.",
+ "tabberd": {
+  "drift_L": 2.0,
+  "drift_h": 2.2,
+  "streek_L": 1.8,
+  "streek_h": 1.8,
+  "weef_L": 0.9,
+  "plooi_L": 2.4,
+  "plooi_C": 0.93,
+  "vuil": 0.2
+ },
+ "gewat": {
+  "ruit_L": 5.0,
+  "ruit_h": 6.0,
+  "drift_L": 3.0,
+  "drift_h": 3.5,
+  "slijt_L": 7.0,
+  "nerf_L": 1.6
+ },
+ "kap": {
+  "ruit_L": 0.0,
+  "ruit_h": 0.0,
+  "drift_L": 4.0,
+  "drift_h": 5.0,
+  "slijt_L": 6.0,
+  "nerf_L": 1.4
+ },
+ "hozen": {
+  "drift_L": 3.0,
+  "drift_h": 4.0,
+  "nerf_L": 1.0,
+  "kras_L": 0.0,
+  "slijt_L": 3.0,
+  "slijt_C": 0.95
+ },
+ "leer": {
+  "drift_L": 4.0,
+  "drift_h": 4.5,
+  "nerf_L": 1.5,
+  "kras_L": 0.0,
+  "slijt_L": 11.0,
+  "slijt_C": 0.86
+ },
+ "laars": {
+  "drift_L": 4.5,
+  "drift_h": 4.5,
+  "nerf_L": 1.5,
+  "kras_L": 0.0,
+  "slijt_L": 12.0,
+  "slijt_C": 0.86,
+  "stof": 0.34,
+  "neus_L": 6.0
+ },
+ "staal": {
+  "vlek": 0.13,
+  "kras": 8.0,
+  "rand": 12.0,
+  "roest": 0.38
+ },
+ "hout": {
+  "nerf_grof": 7.0,
+  "nerf_h": 5.0,
+  "nerf_fijn": 3.5,
+  "greep": 4.0
+ },
+ "huid": {
+  "blos": 0.14,
+  "huid_L": 1.0
+ },
+ "baard": {
+  "streng_L": 3.5,
+  "streng_h": 5.0
+ },
+ "ao": {
+  "_": {
+   "ao": 0.62,
+   "ao_chroma": 0.18,
+   "ao_tint": -8
+  },
+  "tabberd": {
+   "ao": 0.55,
+   "ao_chroma": 0.1,
+   "ao_tint": 0
+  },
+  "huid": {
+   "ao": 0.3,
+   "ao_chroma": 0.15,
+   "ao_tint": -6
+  },
+  "staal": {
+   "ao": 0.65,
+   "ao_chroma": 0.0,
+   "ao_tint": 0
+  }
+ }
+}

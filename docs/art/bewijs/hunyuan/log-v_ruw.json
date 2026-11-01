@@ -1,0 +1,127 @@
+{
+ "variant": "v_ruw",
+ "bron": "vrij_r8192_o512.glb",
+ "maten_ruw": {
+  "hoogte": 1.9627863764762878,
+  "speer_xy": [
+   0.001418918662238866,
+   -0.003898635506629944
+  ],
+  "as_xy": [
+   0.0015163901861385619,
+   0.007218140789827796
+  ],
+  "helm_top_z": 1.9627863764762878,
+  "rand_helling": -1.6843081246654985,
+  "rand_punten": 18916,
+  "zool_helling": -0.05738412460526209,
+  "zool_punten": 16600,
+  "rho_rand": 0.32336296447839513
+ },
+ "punten_ruw": 486380,
+ "vlakken_ruw": 994968,
+ "open_randen_ruw": 29528,
+ "registratie": {
+  "Z": {
+   "iou": 0.936,
+   "schaal": 278.8,
+   "zichtbaar": 166902,
+   "vervorming_p95_px": 5.8
+  },
+  "W": {
+   "iou": 0.789,
+   "schaal": 278.8,
+   "zichtbaar": 106937,
+   "vervorming_p95_px": 10.3
+  },
+  "N": {
+   "iou": 0.93,
+   "schaal": 278.8,
+   "zichtbaar": 162004,
+   "vervorming_p95_px": 5.4
+  },
+  "O": {
+   "iou": 0.885,
+   "schaal": 278.8,
+   "zichtbaar": 114619,
+   "vervorming_p95_px": 6.3
+  }
+ },
+ "kleur_bekend": 0.749,
+ "licht_plaat_Z": {
+  "blauw": {
+   "richting": [
+    -0.178,
+    0.895,
+    0.409
+   ],
+   "sterkte": 0.221,
+   "basis": 0.011,
+   "punten": 21830,
+   "R2": 0.279
+  },
+  "geel": {
+   "richting": [
+    -0.04,
+    0.931,
+    0.363
+   ],
+   "sterkte": 0.052,
+   "basis": 0.406,
+   "punten": 15044,
+   "R2": 0.026
+  }
+ },
+ "pasmaat": {
+  "Z-W": {
+   "punten": 34693,
+   "zelfde_vlak": 0.708,
+   "verschil": 50.9
+  },
+  "W-N": {
+   "punten": 42981,
+   "zelfde_vlak": 0.798,
+   "verschil": 56.9
+  },
+  "N-O": {
+   "punten": 45859,
+   "zelfde_vlak": 0.743,
+   "verschil": 55.4
+  },
+  "O-Z": {
+   "punten": 39934,
+   "zelfde_vlak": 0.72,
+   "verschil": 55.7
+  },
+  "gemiddeld": {
+   "zelfde_vlak": 0.742,
+   "verschil": 54.7
+  }
+ },
+ "schaal": 0.6898,
+ "gaten_dicht": 0,
+ "soorten": {
+  "staal": 56984,
+  "gesp": 275,
+  "blauw": 71318,
+  "geel": 27780,
+  "leer": 229772
+ },
+ "punten": 486380,
+ "vlakken": 994968,
+ "open_randen": 29528,
+ "stukken": 19,
+ "figuur_m": 1.354,
+ "seconden": 24.5,
+ "config": {
+  "bron": "vrij_r8192_o512.glb",
+  "figuur_m": 1.354,
+  "kleur_richtingen": [
+   "Z",
+   "W",
+   "N",
+   "O"
+  ],
+  "plaat": "vrij"
+ }
+}

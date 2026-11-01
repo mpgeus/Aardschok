@@ -2802,6 +2802,382 @@ voren (`DRAGEN['generator']['as']` (0,4, -0,9, 0,6)).
   mogelijk**; de modellen gaan dan gewoon mee. **Marcel (24 okt): "ik wil a wel proberen, maar kunnen we daar een proef
   van maken?"**
 
+**Een kopie van de plaat van GPT (27 okt).** Marcel: "probeer maar een kopie hiervan in blender te maken, gebruik alles
+wat tot je beschikking is, ik wil een perfecte kopie als het ware." De bron: drie platen van ChatGPT, gemaakt met een
+prompt voor een model sheet (`bron/soldaten/gpt/`: vier aanzichten in rusthouding, een vel met de onderdelen, de man met
+de speer). `kopie_hd.py` bouwt het lijf van `speerman_hd.py` met de maten, de houding en de kleren van de plaat;
+`kopie_vergelijk.py` legt hem op de plaat. Na acht rondes valt de omtrek van voren voor 0,83 samen (achter 0,84, opzij
+0,82, schuin 0,74), en de kleuren liggen op broek en laarzen na binnen 7 punten L. Wat het leerde:
+- *De plaat als bron*: goed voor wat hij draagt, waar het zit en welke kleur het heeft (vlak licht, van alle kanten).
+  Niet voor de maten: GPT tekende een gewone man (het hoofd met helm een zesde) in plaats van het gedrongen poppetje
+  dat de prompt vroeg. Het schuine aanzicht staat op zo'n 25 graden, met de benen anders, en valt dus nooit helemaal
+  samen. De rug van de wapenrok tekende GPT niet gespiegeld; de kopie volgt de prompt (de kleuren vast aan het lijf).
+- *Het hoofd en de helm bepalen de rest*: met de lengte tot de top van de helm vast, zakt alles mee als de koepel te
+  hoog is (de ogen op 80 procent in plaats van 91). Meet eerst de ogen, de kin en de voet van de koepel als deel van de
+  lengte (plaat 1: 0,908, 0,846 en 0,943; de rand op 0,90 en 1,5 maal de koepel breed).
+- *Wat na de stofsimulatie komt, prikt erdoor*: de wijde broek stak door de gevallen rok; nu alleen eronder.
+- *Wat de kopie na acht rondes miste*: een gezicht met karakter, de opbouw van de laarzen, de plooien en slijtage van de
+  stof. Daarvoor waren nieuwe onderdelen nodig, geen getallen (hieronder).
+- *Gezicht, laarzen en stof* (Marcel: "Ja, ga door met het gezicht, de laarzen en de stof"; rondes 9 tot 16). Het gezicht
+  met vormdoelen van MakeHuman (een brede kin, jukbeenderen, ingevallen wangen, een neus met een bult, de wenkbrauwen
+  naar voren), en de helm 1,3 cm hoger, zodat het voorhoofd onder de rand komt zoals op de plaat (die van iets onder het
+  hoofd kijkt). De stoppels zijn een vlak in de verf van de huid, gemeten vanaf de ogen, zacht naar de rand en de lippen
+  vrij; het eigen vlak van `baardvorm` had een harde rand en las als een geverfde snor. De huid dempt de verf sterk: met
+  de helft naar donkerbruin werd de kaak maar 10 procent donkerder (een proef met fel groen liet zien dat het vlak goed
+  lag). De wenkbrauwen als twee bogen: de vakken van `speerman_hd.baard` lopen op deze maat samen over het hele
+  voorhoofd, een pony. Het haar alleen achter de slaap, boven en achter het oor (vooraan een pony, voor het oor een blok).
+  De kraag staand met ruiten op de uv van de koker (liggende banen lazen als een zwemband). De laarzen: een lagere voet,
+  een kleinere kap, kreukels en slijtage in het leer, en een tweede riem met gesp over de wreef, staand en met de
+  bovenkant iets naar voren (achterover liep hij binnen de schacht naar de hak). De broek met brede plooien (fijne ruis in
+  de bobbel werd haar) en kreukels waar hij in de laars valt; de wapenrok met een donkerder zoom langs de randen, het
+  weefsel groter en verschoten plekken. Wat nog mist: de fijne vorm van het gezicht (rimpels, plooien, een echte huid),
+  een laars met een neus, een hak en een zool, en handschoenen met vingers.
+- *De GLB van plaat 3* (`ComfyUI_00003.glb`, Marcel: "mag ik je deze ook even geven"): één mesh van 220.000 punten met
+  texturen van 4096, de man met de speer, van alle kanten goed. Hij helt 23,5 graden naar de camera van de plaat
+  (rechtop gezet met de eerste hoofdas, `glb_kijk.py`), en er hangt een losse stok aan. Bruikbaar als maat in 3D (de
+  helm: koepel 10 procent van de lengte, de rand 1,4 maal de koepel), maar GPT tekent de helm per plaat anders.
+
+**De basismens (28 okt).** Marcel gaf een opdracht voor "een volledig reproduceerbare 3D-characterpipeline", te beginnen
+met één man zonder kleren: 1,75 m, stevig, licht gestileerd (grotere handen en voeten), een A-houding, een mesh van
+rond de 12.000 driehoeken met lussen bij de gewrichten en uv, een skelet met `.L` en `.R`, acht richtingen uit één model
+met één orthografische camera op 35,264 graden, een GLB, een atlas, automatische controles met een JSON-rapport en een
+contactblad. Gebouwd in `gereedschap/blender/basismens/` (`npm run basismens`; de opdrachten in `gereedschap.md`). De
+keuzes:
+- *Het lijf uit MPFB*: het basismesh van MakeHuman (hm08) met zijn doelen, skeletten en gewichten is CC0 (september 2020),
+  dus bruikbaar in een spel op Steam; MPFB zelf (GPL-3) is alleen gereedschap. Het lijf is gesloten (geen open randen),
+  13.380 quads met de lussen van MakeHuman, en heeft uv.
+- *Twee meshes*: `lijf-bron` met de volle lussen (26.756 driehoeken, om verder te verfijnen) en `lijf` voor het spel,
+  symmetrisch versimpeld tot 11.818 driehoeken; de gewichten en de uv gaan mee, de lussen worden driehoeken.
+- *Het skelet* is `default` van MPFB, dat van de speerman (`bakken.py` blijft passen), zonder de 61 botten van het
+  gezicht, de ogen en de borst (hun gewicht naar het hoofd en de borstkas): 102 botten. Twist zit in de tweede delen van
+  arm en been (`upperarm02`, `lowerarm02`, `upperleg02`, `lowerleg02`); de rollen per bot staan in `instellingen.json`.
+- *Renderen*: de camera staat vast en de man draait, zodat elke richting hetzelfde model, licht, anker en dezelfde schaal
+  heeft en er niets gespiegeld wordt (de oude vellen spiegelen de oostkanten). Een rode band om zijn rechterarm bewijst
+  links en rechts; zijn neus bewijst de richting (de schuine richtingen schelen 15 graden op het scherm: de verkorting).
+  Met W en O expres verwisseld zakt de controle.
+- *De elevatie*: 35,264 graden is echte isometrie, zoals de opdracht vraagt; de tegels van het spel zijn 2:1 (64 bij 32),
+  en daar hoort 30 bij. Voor het spel moet dat nog gekozen worden (`camera.elevatie`).
+- *De buigtest*: het volume blijft binnen 5 procent; de huid rekt alleen in het kruis bij een diepe knieval (tot 6,9 keer,
+  zes randen) en in de oksels met de armen omhoog (3,0 keer, vier randen), zoals altijd bij lineaire skinning.
+- *Nog niet*: de bewegingen (idle, lopen, rennen, aanvallen, dragen, werken, geraakt, sterven; het skelet is er klaar voor,
+  `bakken.py` heeft er al vier voor de speerman), een atlas op spelmaat, een spelmesh met echte quads (een proxy van
+  MakeHuman, of met de hand), en een gezicht met eigen ogen.
+
+**De basismens, tweede ronde (28 okt).** Marcel: verder op de bestaande pijplijn (skelet, maten, export en controles
+blijven), met een vergelijking van de elevaties, een idle, een nette onderbroek, betere skinning rond heupen, kruis en
+oksels, een contactblad van de idle en een versie op spelmaat; "Commit wijzigingen pas nadat de resultaten zijn
+beoordeeld", en niets aan de kleding, de wapens of de bewegingen. Wat eruit kwam:
+- *De elevatie*: een vierkante tegel op de grond is sin(elevatie) zo hoog als breed. Gemeten in de render: 0,503 bij 30
+  graden en 0,579 bij 35,264. Alleen 30 past op de tegels van het spel (2:1, 64 bij 32); bij 35,264 worden de tegels
+  hoger. De man is bij 30 graden 4 procent hoger in beeld (414 tegen 397 pixels). De keuze is aan Marcel
+  (`camera.elevatie`); de vergelijking draait altijd mee.
+- *De idle*: de armen hangen langs het lijf, de handen naast de dijen (de polsen 27 cm uit het midden), de voeten 23 cm
+  uit elkaar en plat, op de grond. Opgegeven als richtingen per bot ('richt'), want vaste hoeken telden op bij de stand
+  van MakeHuman (de armen staken 26 cm naar voren, de voeten 48 cm uit elkaar); de benen alleen in het vlak van voren
+  gezien, anders kwamen de voeten achter hem. De rust (en de GLB) blijft de A-houding.
+- *De onderbroek*: recht afgesneden met vlakken in plaats van langs de driehoeken (de rand ligt op 0,002 mm van zijn
+  snijvlak), met een band om taille en pijpen, 2,5 mm dik met een gesloten rand. De stof spant over holtes (navel,
+  bilspleet): naar buiten gezet liepen de wanden van de navel naar elkaar toe, en glad strijken trok de broek de huid in.
+  Hij heeft nu 2.792 driehoeken (was 548).
+- *De skinning*: de gewichten glad rond kruis, heupen en oksels (in het volle mesh, voor het versimpelen). Het 99e
+  percentiel van de rek per gebied, voor en na: knieval (kruis) 3,47 → 2,20, spreidstand (kruis) 5,69 → 4,34, uitval
+  (heup) 1,50 → 1,39, schouders (oksel) 2,63 → 1,96, armen omhoog 3,42 → 2,38, armen voor 2,99 → 2,15. Het grootste
+  blijft het kruis in de spreidstand (de benen elk 40 graden opzij): tot 6,4 keer, onder de broek. Op het oog
+  verschilt de huid weinig; de getallen wel.
+- *Op spelmaat* (74 pixels, op de tegels van het spel naast de speerman): het silhouet leest, ook de richting en de
+  armen; het gezicht niet, zoals verwacht. Hij is slanker en langer dan de gedrongen speerman.
+- *Nog open*: in de uitval vouwt de band van de broek achter bij de bilplooi over zichzelf; de keuze van de elevatie.
+
+**De soldaat uit de basismens, derde ronde (28 okt).** Marcel: "bewijs dat de basismens geschikt is om een volledig
+uitgeruste Aardschok-soldaat te maken, zonder het basismodel opnieuw te bouwen"; de camera vast op 30 graden, de kleren
+en de uitrusting als losse meshes (een gewatteerde gambeson met stiknaden, een blauw-geel gevierendeelde tabberd met vaste
+vlakken, een ketelhoed, leren handschoenen en laarzen, een riem met gesp en buidel, een speer met een bladvormige punt),
+de speerman uit het spel als voorbeeld, en eerlijk zeggen wat procedureel genoeg is en wat handwerk vraagt ("Een
+technisch correcte soldaat die er visueel generiek uitziet, is nog geen geslaagd eindresultaat"). Gebouwd in
+`soldaat.py` en de stappen erna (`gereedschap.md`); de materialen van de speerman (`speerman_hd.py`) en het licht van de
+vellen van het spel (`eigen.py`). Wat eruit kwam:
+- *De opbouw*: in de rust (de A-houding), elk onderdeel een eigen mesh aan het skelet. De broek, de gambeson en de
+  handschoenen uit de huid (de vlakken van dat deel, recht afgesneden, met de gewichten van de huid eronder en dan naar
+  buiten), zodat ze buigen zoals de huid; de laarzen samengesmolten uit een schacht, een enkel en een bol (zoals de
+  speerman; uit de huid zaten de tenen erin); de tabberd een lijfje uit de huid met ronde armsgaten en een rok die van
+  de heupen valt; de riem, de buidel en de helm vast aan één bot; de speer aan een greep (een leeg object) aan het bot
+  `wrist.R`, de vingers om de schacht gekruld. De broek was niet gevraagd: zonder broek staan blote knieën tussen de
+  tabberd en de laarzen. Samen 57.862 driehoeken (de gambeson 17.884, het lijf dat over is 3.714).
+- *De tabberd*: vaste vlakken op het lijf (per vlak een materiaal): boven zijn rechterkant geel en zijn linker blauw,
+  onder de riem andersom, in elke richting hetzelfde. Het vel van de generator wisselt dat per richting.
+- *Het lijf onder de kleren* is weg: 8.104 van de 11.818 vlakken, alles wat onder een laag ligt en je in geen van 48
+  renders ziet (de idle en de rust, acht richtingen, op 0, 30 en 60 graden). Over is het hoofd en de hals.
+- *Geen doorsteek in de idle*: wat onder een laag erboven hoort, gloeit in een aparte render (kleren magenta, huid
+  cyaan). Per richting 0 tot 3 pixels van de kleren en 0 tot 4 van de huid (bovenin de kraag zie je de hals), van zo'n
+  45.000; zonder de tabberd ziet dezelfde toets 7.450 pixels gambeson.
+- *De kleren volgen de huid*: in de idle en in drie standen van de buigtest blijft de stof op zijn afstand van de huid;
+  de zwakke plekken van lineaire skinning zijn de oksel (de dikke gambeson, daarom daar dun) en de knieholte.
+- *Op spelmaat* (de man zonder speer 74 pixels in Z, verkleind zoals de vellen van het spel): de kleuren, de stoffen en
+  de uitrusting lezen als de speerman. Het silhouet niet: de speerman is gedrongen, met een groot hoofd, een baard en een
+  donkere maliënkraag, en een overdreven speerblad; de basismens is een gewone man, smaller, met een klein hoofd, en zijn
+  blad valt op spelmaat bijna weg. Dat is een keuze voor Marcel (de uitrusting overdrijven, zoals de speerman doet, of
+  een gedrongen lijf), geen fout in de pijplijn.
+- *Procedureel genoeg*: de tabberd (kleur en vlakken), de helm, de speer, de handschoenen, de broek, en op spelmaat de
+  laarzen, de riem en de buidel. *Nog handwerk*: de plooien van de tabberd (stofsimulatie of sculpting), de ruiten van de
+  gambeson van dichtbij (na het versimpelen bobbelig: een normal map uit het fijne mesh), de omslag van de laarzen, de
+  gesp en de buidel van dichtbij, een baard en een maliënkraag (de speerman), en texturen voor de GLB (die heeft nu per
+  materiaal één kleur).
+- 37 van de 37 controles slagen (23 van de basismens, 14 van de soldaat).
+
+**De soldaat, vierde ronde: visuele kwaliteit (29 okt).** Marcel: "Breng de nieuwe 3D-soldaat visueel zo dicht mogelijk
+bij de bestaande Aardschok-speerman, met behoud van het modulaire systeem, de rig en de acht consistente richtingen."
+Besluiten: basismens en skelet behouden, camera en acht richtingen behouden, de uitrusting modulair verfijnen, de huidige
+soldaat nog niet als definitieve art, materialen en texturen sterk verbeteren, een gedrongen variant ontwikkelen, de
+animaties uitstellen. Wat er kwam (`gereedschap.md`, de stappen; `overdracht-4/` in `<uit>`):
+- *De gedrongen variant* (`variant.py`, `instellingen.json`/`varianten/gedrongen`, in `<uit>/gedrongen`): hetzelfde lijf
+  uit MPFB met andere macro's en doelen (groter hoofd, kortere benen en armen, bredere schouders en romp, grotere handen
+  en voeten, een grotere neus en kin), hetzelfde skelet (dezelfde 102 botten, door MPFB op dit lijf gezet), en daarop
+  dezelfde soldaat met een bredere helm, bredere laarzen, een dikkere speer met een groter blad. De basismens en zijn
+  soldaat blijven zoals ze waren (met de nieuwe uitrusting).
+- *Gemeten tegen de speerman op spelmaat* (`meten.py`, `maten.json`; als deel van de hoogte, van voren): de gedrongen
+  soldaat zit op de schouders (-1%), de zoom (0%) en de helm (+8%) goed, de romp is 8% en de laarzen 13% smaller, de
+  laarzen 11% hoger. Van opzij is hij 21% smaller over de schouders: de speerman houdt zijn armen naar voren, de idle
+  niet (de houding is animatie, uitgesteld). De gewone soldaat zat op -10% schouders, -15% romp, -33% laarzen.
+- *De uitrusting* (`soldaat.py`): een maliënkraag (onder de helm, over wangen, oren en achterhoofd, als een cape over
+  de schouders; de maliën van de speerman op een UV-kaart in meters), een baard en snor als vorm
+  (`speerman_hd.baardvorm`; de plekken van mond en kin bewaart `bouw.py` voor de botten van het gezicht weggaan), plooien
+  in de rok en boven de riem (`speerman_hd.plooien`), kleinere ruiten met smallere naden in de gambeson, aan de laarzen
+  een rand, kreukels en een riempje met gesp, aan de riem een lus en gaten, aan de buidel een knoop.
+- *Texturen* (`textuur.py`): per onderdeel een UV-kaart en drie gebakken beelden (kleur, normalen, ruwheid en metaal)
+  uit de knopen zoals de sprites ze hebben; beide GLB's houden ze na opnieuw inlezen (34 beelden, JPEG).
+- *Realtime* (`soldaat-realtime.glb`): 13.827 driehoeken (budget 15.000, de bron 101.017), met de normalen van de bron
+  gebakken; het silhouet op spelmaat overlapt per richting voor 98,8 tot 99,8% met de bron.
+- *Nog handwerk*: de ogen en het gezicht (de huid uit `bouw.py` is glad, de ogen lezen dicht), de snor (zit op de
+  lip), de neus van de laarzen (bol, als een klomp), echte plooien met stofsimulatie (nu golven), en het blad van de
+  speer, dat op spelmaat kleiner en donkerder blijft dan bij de speerman (die draaide het per richting naar de camera).
+  De speerman is op 15 graden gerenderd, de soldaat op 30: daardoor valt het gezicht meer onder de rand.
+- 39 van de 39 controles slagen, voor de basismens en voor de gedrongen variant (nieuw: texturen in de GLB, realtime
+  onder het budget met hetzelfde silhouet).
+
+**De soldaat, vijfde ronde: art-direction (29 okt).** Marcel: "De nadruk ligt nu op artistieke kwaliteit, niet op extra
+automatisering." Afspraken: eerst één richting (ZW) en geen acht voordat die is beoordeeld; drie renderstijlen op
+hetzelfde model, dezelfde houding, camera en kadering; een contactblad met de speerman op dezelfde lichaamsgrootte en
+voetlijn; "een hogere renderresolutie is op zichzelf geen kwaliteitsverbetering"; de beelden beslissen, niet de
+toetsen; de basismens niet veranderen en niet committen voor de beoordeling. Wat er kwam (`<uit>/gedrongen/stijlen/`,
+`overdracht-5/`):
+- *De vormen* (`soldaat.py`, voor beide soldaten): de maliënkraag kleiner (bij de gedrongen 7,5, 5 en 8,5 cm onder de
+  nek in plaats van 13, 9 en 13) met donkerdere ringen; de helm gesmeed (licht spits, een kam van voor naar achter,
+  deuken, een rand die wat golft, twaalf klinknagels; de punt bovenop is weg) en dof, met een donkere patina en blank
+  waar de rand en de kam slijten; oogbollen met een iris voor de dichte oogkassen van het lijf; een eigen baard met de
+  snor over de lippen, donkerbruin, met een onregelmatige rand op de wang; laarzen uit ringen langs de voet (een ronde
+  hiel, de bal het breedst, een smallere neus die opkrult) met een losse zool, een hak en een holte onder de wreef; de
+  rok met elf losse plooien uit een vast zaad (de stofsimulatie van de speerman scheurde hem, eerst omdat de rok binnen
+  de botsafstand begon, daarna tussen de benen); de speerpunt met een holle slijpkant naast de middenrib, een kraag en
+  een nagel aan de tule, de schacht naar boven dunner en minder rood.
+- *Drie stijlen* (`stijlen.py`, `stijlblad.py`, de getallen in `soldaat.stijlen`): A, mat 3D (alles matter, een grote
+  zachte zon, meer licht uit de lucht, AgX); B, painterly (een oranje zon en een koele lucht, vlekken in tint en toon over
+  elke kleur, een Kuwahara-filter als penseel); C, Aardschok HD-pixel (het licht van de vellen van het spel, een warmere
+  zon en diepere holtes, het licht in stappen van een halve stop met de kleur van het materiaal erin, donkere lijnen waar
+  de materialen wisselen, op spelmaat 40 kleuren en harde randen). Een palet over het hele beeld gaf in C vlekken op de
+  helm en een geel speerblad: kleine vlakken krijgen dan de kleur van grote.
+- *Gemeten* (`stijlen.json`; L de helderheid van het lijf, 0 tot 100, met de spreiding; op spelmaat, het lijf 72 pixels
+  zoals de speerman in ZW op zijn vel): de speerman L 34,6, spreiding 20,5, verzadiging 0,56; A 30,5, 17,5, 0,71; B 31,0,
+  18,5, 0,66; C 35,7, 20,3, 0,63. C ligt in licht en contrast het dichtst bij het vel; alle drie zijn verzadigder.
+- *Waar de verschillen vandaan komen* (`ontleding.png`): de vorm geeft het grootste verschil (het silhouet overlapt voor
+  63% met de speerman op 30 graden): de speerman heeft een diepe koepel met een smalle rand, de benen uit elkaar en de
+  borst vooruit; onze ketelhoed is plat met een brede rand (ronde 4), hij staat smal en het hoofd zit naar voren (de
+  idle), en de rok is langer. De materialen geven de verzadiging: het geel en blauw feller, de mouwen roder, de laarzen
+  oranjer dan het donkerbruin van de speerman, en de helm donkergrijs en mat waar die van de speerman blank donker staal
+  is. Het licht geeft het contrast (A het vlakst). De nabewerking haalt de computerperfectie eraf (B) of maakt
+  kleurvlakken (C), maar op spelmaat beslist het verkleinen (BOX) het meeste.
+- *Open voor Marcel*: welke stijl; of de helm mat blijft (op spelmaat is de blanke helm het herkenningspunt van de
+  speerman, de onze leest als een donkere schijf); en de houding (benen uit elkaar, borst vooruit), die bij de animaties
+  hoort.
+
+**De soldaat, zesde ronde: reconstructie naar de speerman (29 okt).** Marcel: "Het doel is niet om een interpretatie
+van de referentie te maken. Het doel is om de bestaande speerman zo nauwkeurig mogelijk te reconstrueren"; alleen ZW,
+eerst meten, de productiecamera niet veranderen zonder vergelijking, niets verbergen met nabewerking. Wat er kwam
+(`overdracht-6/overdracht.md`, met alle maten):
+- *Gemeten* (`referentie.py`, `reference_analysis.json`): speerman en soldaat op dezelfde manier (delen uit kleur en
+  plek, dezelfde lichaamshoogte en voetlijn). De speer is 1,11 keer de lijfhoogte; het vel van de speerman is op 15
+  graden gerenderd, de wereld (`kern.cjs`) op 30; in ZW is zijn rechterborst geel (de opdracht noemde blauw: de
+  referentie is gehouden, Marcel beslist).
+- *De vormen* (`soldaat.py`): de helm naar die van de speerman (een halve bol, de rand 1,45 keer de koepel, kam, naden,
+  punt, geen schaduw op het gezicht); stoppels en wenkbrauwen in plaats van de baard als vorm; een donkere ooglijn; een
+  eigen, donkerdere huid voor de soldaat; plooien vanaf de riem; de zoom net boven de knie; een donkere broek; hogere,
+  donkere laarzen; de speer 2,17 m. De gedrongen variant naar de maten van de speerman (ouder, zwaarder, kortere benen,
+  groter hoofd, zwaardere armen, jukbeenderen, kaak) en een eigen stand (`stand`: de voeten uit elkaar, de knieën door,
+  de borst op, het hoofd recht).
+- *Gemeten tegen de speerman op 30 graden*: het silhouet overlapt voor 0,70 (ronde 5: 0,63), het lijf 0,82 (0,75), de
+  laarzen 0,63 (0,44), de tabberd 0,50 (0,45), de helm 0,60; de kleurverschillen van helm, gezicht, geel, blauw,
+  handschoenen en laarzen ΔE 3 tot 7.
+- *Camera*: 30 graden houden; 15 laat meer gezicht zien maar staat te rechtop in de wereld van het spel.
+- *Open voor Marcel*: de tabberdkleuren (referentie of opdracht), een hogere en blankere helm, de huid en de slijtage
+  van de gambeson; daarna pas de acht richtingen.
+
+**De soldaat, zevende ronde: helm, gezicht en maliënkraag (29 okt).** Marcel: "zorg dat het bestaande 3D-model visueel
+zo dicht mogelijk bij de oorspronkelijke Aardschok-speerman komt"; drie experimenten, elk naast het origineel en ronde
+6, groot en op 74 pixels; alleen ZW, de productiecamera (30 graden), de tabberd, het lijf en de rest onveranderd. Elk
+experiment is een proef (`gereedschap/blender/basismens/proeven/`), los te bekijken en terug te draaien; de gedrongen
+variant houdt A3, B3 en C3 (`overdracht-7/overdracht.md`, met alle maten):
+- *Helm (A3)*: groter en de koepel 15% hoger, een hogere kam, een dikkere opgerolde zoom, wat scheef gesmeed, lichter
+  en matter staal; de overlap van de helm met de speerman 0,60 naar 0,71. Een eerste A2 kantelde de helm 9 graden zodat
+  de ogen er van de camera onder uit kwamen (8%), maar op spelmaat werd dat een pet: vanaf 30 graden verbergt een brede
+  rand de ogen, ook bij de speerman.
+- *Gezicht (B3)*: geen baard als laag meer: de stoppels, de snor en de wenkbrauwen gebakken in de huid; de kaak, de kin,
+  de neus en de wenkbrauwbogen met vormdoelen; de huid minder oranje en matter.
+- *Maliënkraag (C3)*: middengrijs met lichtere ringen, als een korte kap over de schouders; niets steekt er meer door
+  (elk punt buiten de stof eronder, de onderrand op de schouders, onder de hals de gewichten van de stof), en de bruine
+  kraag achter het hoofd is weg.
+- *Gemeten*: het silhouet overlapt 0,70 naar 0,72, het lijf 0,82 naar 0,84; de helm op spelmaat L 41 naar 56 (de
+  speerman 48), 12 naar 14 pixels breed (19). De controles 39 en 39, `npm test` groen.
+- *Open*: het gezicht ligt op 30 graden in de schaduw van de rand en leest op spelmaat donker; de helm is op spelmaat nog
+  smaller dan bij de speerman; de kap is van voren nog open en puntig.
+
+**Ronde 8: drie afwerkingen (29 okt, onderbroken).** A rijkere materialen in Blender (`stijlen.py -- A8`: vormschaduw,
+slijtage, vlekken, vuil, reliëf per materiaalgroep; Cycles 15 s, Eevee 1,7 s per beeld), B een vaste afwerking per
+materiaal (`spriteafwerking.py`: per spritepixel de kleur van één materiaal, een eigen palet per groep, donkere randen;
+0,6 s, dezelfde hash bij twee keer draaien, het silhouet exact dat van de bron), C SDXL img2img met ControlNet en
+IP-Adapter (de ChatGPT-speerman, `gereedschap/pixelart/bron/soldaten/gpt/met-speer.webp`, als stijl;
+`gereedschap/ai/soldaat-ai.cjs`, 68 s per beeld). Gezien: C op 0,15 tot 0,35 maakt vooral zachter en verliest
+nagels; B leest op 74 pixels het schoonst; de ChatGPT-speerman is veel gedempter van kleur (oker en grijsblauw). Marcel
+onderbrak de ronde voor ronde 9; de bladen en het rapport zijn er niet.
+
+**Ronde 9: een basismens uit HumGen3D (29 okt).** Marcel: "We gaan onderzoeken hoe we HumGen3D kunnen inzetten om een
+aanzienlijk beter menselijk basismodel te produceren"; alleen de ongeklede man, de procedurele basismens blijft als
+terugval. Een eigen bronvariant in `gereedschap/blender/humgen/` (`overdracht-9/overdracht.md`, met alle maten):
+- *Gemaakt* met alleen de Python-API van HumGen3D 4.0.38: Jude uit de 42 mannen, 35 jaar, wat gespierder, precies 1,75
+  m (HumGen's `height.set` rekent met 184 cm; `maak.py` stelt bij), de huid in 4K. Niets met de hand; 3,4 s; een tweede
+  bouw geeft dezelfde vorm.
+- *Gezien*: de anatomie is veel beter (spieren, borstkas, rug, benen; een gezicht met oogbollen, oogleden, lippen,
+  neusbrug en oren, waar de oude geschilderde ogen in gaten had). Op 74 pixels is het verschil kleiner.
+- *Het skelet*: een Rigify-metarig van 102 botten, met correctieve shape keys; bij de schouders vervormt het rustiger
+  dan het oude. Keuze: het skelet van HumGen houden en de standen overzetten (`botten.json`).
+- *Open*: zonder het pakket HG_Export bakt HumGen de huid niet (de GLB heeft dan geen huidtextuur); de armen 42 graden
+  van de romp; welke licentie van HumGen Marcel heeft (commercieel nodig voor een verkocht spel); de soldaat op HumGen
+  vraagt eerst de vertaling van de botten en de herkenningspunten.
+
+**Ronde 10: de soldaat op HumGen (29 okt).** Marcel: "Deze ronde moet aantonen of de nieuwe anatomische basis ook
+daadwerkelijk een betere soldaat oplevert". De bestaande bouw van de soldaat draait op de HumGen-man via een adapter
+(`humgen/naar_basis.py`, variant `humgen`), met de helm en de kap van ronde 7 en de rechterborst blauw
+(`overdracht-10/overdracht.md`). Gezien: niet duidelijk beter dan ronde 7. De drie oorzaken: dezelfde procedurele
+kleren bepalen het beeld en verbergen de anatomie; de verhoudingen en het gezicht (slanker, bleek en glad onder de rand);
+en de rok van de tabberd volgt de benen niet. Opgelost onderweg: de 2,75 m van ronde 9 was de Icosphere van de importer
+(de man is 1,75 m); de huid van HumGen gaat gebakken mee in de GLB; het hoornvlies van HumGen liet de export vastlopen.
+
+**Ronde 11: kleding en materialen (29 okt).** Marcel: echte kleding (een gambeson en een tabberd die open is, korter, met
+plooien), PBR-materialen met herkomst, en het gezicht (rode ogen, wenkbrauwen, stoppels, minder bleek). De variant
+`humgen11` op die van ronde 10 (`overdracht-11/overdracht.md`), vergeleken als A (ronde 10), B (nieuwe kleding,
+eenvoudige materialen) en C (nieuwe kleding met de materialen van A8, Poly Haven CC0).
+- *Methode*: hybride. De vorm komt uit de bestaande bouw. De tabberd valt daarna als stof (`soldaat.doek`: opzij open,
+  korter, vast aan de schouders en de riem, botst met het lijf) en wordt zo de rustvorm, vóór de skinning.
+- *Gezien*: beter dan ronde 10, maar te weinig.
+  - Groot: het gezicht is goed (de rode ogen waren een UV-naam), de rok valt, en de kap is compacter.
+  - Op 74 pixels zijn A, B en C bijna gelijk: wat daar leest, zijn grote vlakken, en de PBR-korrel middelt weg.
+- *Wat ontbreekt*:
+  - het gezicht onder een kleinere, hogere helm;
+  - contrast in grote vormen (zomen, een ruitpatroon dat groot genoeg is);
+  - gestikte ruiten in de vorm van de gambeson;
+  - vuilere, doffere kleuren.
+- *Controles*: 30 van 39 (ronde 10: 28). Drie toetsen zijn verouderd voor HumGen (driehoeken, botnamen,
+  exportbestanden), de rest is echt: vooral de oksel, die lineaire skinning niet goed doet.
+
+**Ronde 12: artistieke reconstructie (29 okt).** Marcel: "De belangrijkste beoordelingsmaatstaf is de uiteindelijke
+sprite op 74 pixels karakterhoogte". Elke correctie als losse proef op ronde 11 (`proeven/r12-*.json`), naast de speerman
+gelegd en op 74 pixels gemeten (`humgen/ronde12.py`); de gekozen samen in de variant `humgen12`
+(`overdracht-12/overdracht.md`).
+- *Gezien bij de start*: op 74 pixels was ronde 11 voor 25 procent grijs (de speerman 8,5): de kap bedekte de
+  schouders en het gezicht, en de lichte helm smolt ermee samen. De helm was niet breder dan die van de speerman.
+- *Gekozen*:
+  - de helm hoger, met de voorrand op en wat kleiner, en het staal donkerder en matter met wat glans (A1, A2, A3, A5);
+  - de kap compact, met donkerder ringen, en de gambeson met een opstaande kraag (B2b, B3);
+  - vollere mouwen met grotere ruiten (C2) en grotere laarzen (S1);
+  - de tabberd langer, met een wijdere rok en vuil aan de zoom (T2b, T4), het blauw en geel teruggerekend naar de
+    sprite van de speerman (D3);
+  - een warmere zon (E4), en verkleind per materiaal.
+- *Verworpen*: een donker, dof staal; een te korte kraag (hals bloot); een gedempter bruin en een historisch palet (op
+  74 pixels niet te zien of dof); zachter en harder licht; grotere handschoenen (een zak met een plooi).
+- *Resultaat op 74 pixels*: het gezicht is te zien, de kap is kleiner en donkerder (grijs 25 naar 10 procent), en het
+  blauw ligt op ΔE 1,2 van de speerman (was 14). Het silhouet is breder (breedte tegen hoogte 0,417 naar 0,437), maar de
+  overlap met de speerman bleef gelijk.
+- *Wat het meest verschilt*:
+  - de verhoudingen: een realistisch lijf tegenover een gedrongen held met een groot hoofd, grote handen en voeten en
+    korte benen;
+  - het gezicht zonder baard;
+  - de helm, die volgens de opdracht donker en mat werd, terwijl die van de speerman blank blauwig staal is.
+- *Controles*: 30 van 39, dezelfde negen als in ronde 11. De doorsteek en de handschoenen zijn slechter geworden door
+  de kraag, de dikkere mouwen en de wijdere rok: spikkels in de kap, op 74 pixels niet te zien.
+
+**Ronde 13: kleding uit bestaande professionele assets (29 okt).** Marcel: "We stoppen met het volledig opnieuw
+construeren van ieder kledingstuk wanneer een kwalitatief betere bestaande bron beschikbaar is". Onderzocht: Sketchfab,
+CGTrader, Fab, BlenderKit, Poly Haven, ambientCG en de MakeHuman-community (`assets/extern/ronde13/asset-onderzoek.md`).
+- *Te halen*: zonder account alleen CC0-materialen (vier sets van ambientCG gedownload). De beste kledingkandidaat, de
+  gambeson van Leon Steiner op Sketchfab (Marvelous Designer, CC BY 4.0), vraagt een account. Lokaal had Marcel al de
+  kleding van Human Generator, voor dit lijf gemaakt.
+- *Geprobeerd*:
+  - de gambeson uit de parka van HumGen;
+  - de tabberd uit het piratenhemd, met de API van HumGen op de man gezet;
+  - de materialen van ambientCG.
+- *Gezien*: groot meer echt detail (de borst van het hemd: weefsel, naden, knoopsluiting), maar op 74 pixels geen winst.
+  - De parka is slanker en verliest zijn watten.
+  - Het hemd scheurt aan de onderkant, die dubbel gelegd is voor in de broek.
+  - Het ruitstiksel van ambientCG loopt niet met de vorm mee.
+  - Niets aangenomen: de soldaat van ronde 13 is die van ronde 12 (`overdracht-13/overdracht.md`).
+- *Ook gevonden*:
+  - de realtime-GLB heeft sinds ronde 10 een rood gezicht, omdat de huid van HumGen niet gebakken wordt;
+  - de gebakken normal map voegt weinig toe;
+  - vanaf zo'n 4,5x de spritemaat is renderen niet meer zichtbaar beter.
+
+**Ronde 14: hybride 3D + AI, twee loopframes (29 okt).** Marcel: "Blender bepaalt de geometrie, houding, beweging en
+camera. Een lokaal AI-model bepaalt de uiteindelijke artistieke afwerking". Twee contactstanden in ZW (A links voor, B
+rechts voor) uit Blender, met passes (diepte, normaal, materiaal-ID, lijnen). Daarna SDXL in ComfyUI, alleen binnen ons
+silhouet (`overdracht-14/overdracht.md`).
+- *Gezien*:
+  - De benen, de speer en het silhouet blijven altijd behouden (de opzet).
+  - Een frame tegelijk afwerken geeft per frame een ander kledingstuk, met dezelfde seed en dezelfde instellingen
+    (schubben tegen watten, een schouderstuk dat er in het andere frame niet is).
+  - Beide standen in één beeld (een modelblad) maakt ze consistent. Maar op 74 pixels is de winst dan klein (zonder
+    stijlbeeld), of het ontwerp verandert (met de ChatGPT-speerman als stijl: de speerpunt een knop, grijze hozen,
+    leren schubben).
+  - De AI maakt een kwart tot een derde van het geel okerder.
+- *Besluit*: NO-GO voor een animatieset. De volgende stap is aan Marcel: het modelblad met de stijl bijsturen, of de AI
+  laten.
+- *Ook*: het loopvel van ChatGPT heeft in alle acht frames dezelfde benen. Een LoRA op die vellen zou die houding
+  leren, niet de stijl.
+
+## De stijl van Settlers II: de art-pijplijn van vraag 192 (30 okt 2026)
+
+Marcel kwam met een opdracht voor een professionele art-pijplijn en een rij platen, en koos een nieuwe richting: "Onze nieuwe visuele
+referentie is The Settlers II: 10th Anniversary", "Je mag de oude speerman helemaal loslaten", "Het mag meer 'cartoony'". Daarna een
+specificatie van de speerman, met als volgorde: eerst het model goed, dan pas animaties.
+
+**De stijl en de afspraken staan in `docs/art/aardschok-art-bible.md`**, wat er was en de licenties in `docs/art/inventarisatie.md`, de
+platen in `docs/art/referentie/`. De code staat in `gereedschap/blender/stijl/` (`ontwerp/gereedschap.md`).
+
+**Waarom geen HumGen en geen MakeHuman meer:** de rondes hiervoor lieten steeds zien dat een betere mens op spelmaat bijna niets
+oplevert. De platen vragen het omgekeerde: een gedrongen figuur met grote vormen. Dus is het lijf nu zelf gesculpt uit afstandsvelden,
+met vloeiende overgangen, en elk kledingstuk een eigen mesh aan één skelet. Dit is niet het soldaatje uit code dat Marcel op 27 okt
+afwees (worsten als armen, de verf uit een plaat): de vorm en de verf komen hier uit het model zelf.
+
+**De keuze (30 okt):** de specificatie zegt hoofd 24 procent, de nieuwste plaat zo'n 33. Op de blockout in drie verhoudingen
+(`docs/art/bewijs/blockout-verhoudingen.png`) koos Marcel de plaat: "Laten we A proberen".
+
+**De stand (30 okt):** de eerste mijlpaal is af en wacht op Marcels oordeel (`docs/art/kwaliteitsrapport.md`): de speerman in A, staan en lopen in acht
+richtingen, vellen, GLB en controles, en in WebGL2 in het spel getest. Dat laatste alleen in de browser (`gereedschap/blender/stijl/inspel.js`): de oude
+speerman blijft in het spel staan tot Marcel de nieuwe goedkeurt. Nog niet: aanvallen, geraakt worden en sterven, de schilderronde en de meting in Firefox.
+
+**De kwaliteitsronde (30 okt):** Marcel: "aanzienlijk dichter bij rij 1". Zie `docs/art/kwaliteitsronde.md`. Gemeten: niet te weinig schaduw, maar te weinig verzadiging
+(blauw 40 tegen 60) en te weinig klein contrast. Getest op hetzelfde model: A betere materialen, B texturen tot 4096, C betere vorm. A gaf de grootste sprong in kleur, B gaf op deze schaal
+niets, C kwam het dichtst bij de plaat; gekozen C met de verf op de punten. De oude vorm zit nog als `vorm=1` in `figuur.py`, voor de vergelijking; die gaat eruit na Marcels oordeel.
+
+**De methodeproef (31 okt):** zie `docs/art/methodeproef.md`. Vier methoden op dezelfde speerman. De rijkdom van de plaat zit vooral in het licht, niet in het oppervlak: textuur alleen en een AI-beeld terugleggen op de verf gaven bijna niets. Het beste is D8: geschilderde verf,
+geschilderd licht per pixel en een AI-laag per richting op de UV, dus geen AI per animatiebeeld. Het grootste verschil dat overblijft, is de vorm. Dit wacht op Marcels oordeel, en de productie is niet veranderd.
+
+**Hunyuan3D (31 okt):** zie `docs/art/hunyuan/`. Een mesh uit vier aanzichten van een plaat, in ComfyUI op de 1080 Ti, met de verf uit de plaat op de mesh. De bronplaat is de grootste hefboom: op de plaat met één pose rondom (`referentie/aardschok-speerman-draai-vrij.png`) klopt de figuur in alle acht richtingen, en vervallen de correcties. Geen productie-asset: de rok rekt in de loop, op 30 graden valt het gezicht onder de helm, en op 80 pixels zijn de mouwen korrelig. Productie, V4 en D8 zijn niet veranderd. Marcel heeft een akkoord van Tencent per mail; de publieke licentie sluit de EU uit.
+
+**TripoSplat en hoe een speerman zijn speer houdt (31 okt en 1 nov):** zie `docs/art/hunyuan/TRIPOSPLAT.md`. Twee runs op één plaat, de voorste helft uit Z en de achterste uit N, en de rig op de 3D Gaussians: op eigen oordeel de beste figuur tot nu toe, nog niet goedgekeurd en geen productie-asset. De speer (Marcel, 1 nov): staand in één hand met de onderkant op de grond; lopend met twee handen, schuin voor zich, van zijn rechtervoet naar zijn linkerschouder; stekend met twee handen, iets doorgebogen en doorzettend, "je kunt met 1 hand geen kracht zetten". Productie, V4 en D8 zijn niet veranderd.
+
+**De boogschutter (1 nov):** dezelfde keten op `referentie/aardschok-boogschutter-draai.png`, met de boog uit code. De boog (Marcel, 1 nov: "Ja dat klopt"): staand en lopend in de linkerhand met de arm omlaag; schietend de linkerschouder naar het doel, de boog omhoog, spannen en loslaten. De restpunten van beide figuren staan in `opmerkingen.md`.
+
+**De vormproef (31 okt):** zie `docs/art/vormproef.md`. Eén geometrische variant (`stijl/proef/vorm3.py`) met hetzelfde skelet en dezelfde animaties: kleiner hoofd, vlak gezicht, slanke mouwen, tabberd over de schouder, gestikte kraag met V, langere rok, blokkige laarzen. 8 van de 11 maten staan dichter bij de plaat; schouders, koepel en hele breedte niet, en de stand is niet veranderd. Marcel beoordeelt dit eerst; daarna pas D8.
+
+**Vormproef V4 (31 okt):** zie `docs/art/v4/OVERDRACHT.md` en `V4-KWALITEITSRAPPORT.md`. Marcels opdracht en zijn opmerkingen tijdens het werk. Variant (`stijl/proef/vorm4.py`, `pose4.py`) met een nieuwe rustpose: gewicht op één been, de vrije arm gebogen met de vuist voor het lijf, de arm breed bij de schouder en ovaal, taps naar de elleboog, aflopende schouders, een holle rok met betere gewichten (variant A; hulpbotten per pand, B, waren slechter), buidel op de heup. Niet alles gehaald: de overgang van staan naar lopen springt meer, de zolen in de loop staan niet op de grond, aanval en sterven bestaan niet op dit skelet. Wacht op Marcels oordeel; D8 pas na zijn akkoord.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

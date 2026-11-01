@@ -7,6 +7,56 @@ Claude erbij bedacht zonder dat Marcel het al koos. Niets hiervan houdt het werk
 Wie iets ziet, zet het erbij, met een datum; wie iets oplost, haalt het weg (`git log` bewaart
 het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Marcel".
 
+## De figuren uit TripoSplat: restpunten
+
+Marcel, 1 nov: "Noteer restpunten, Boogschutter toevoegen en dan verbeter ronde". De stand van de speerman
+(`referentie/aardschok-speerman-draai-speer.png`) en de boogschutter (`referentie/aardschok-boogschutter-draai.png`) na die
+ronde; het hoe staat in `docs/art/hunyuan/TRIPOSPLAT.md`. Alleen in de browser bekeken, niet opgenomen in het spel, en nog
+niet door Marcel beoordeeld.
+
+**Allebei: uiterlijk**
+- **Verticale strepen in het geel**, minder dan voor de ronde, maar op spelmaat nog te zien, op de rug het duidelijkst.
+- **Mouwen en laarzen zijn langs de naad zachter**, vooral in W en O: de donkere streep is daar vervangen door de kleur
+  ernaast, en het stikwerk is weg. Groot te zien, op spelmaat nauwelijks.
+- **De armen zijn in beweging rommelig**, vooral waar de runs op Z en N de zijkant niet zagen (bij de speerman de
+  rechteronderarm in O en NO). De runs op W en O zagen hem wel, maar passen niet in de snede.
+- **De rok** beweegt als geheel. De knie prikt er minder doorheen dan voor de ronde; er blijven inkepingen in de zoom.
+- **Het gezicht** is beter te zien (het hoofd staat 8 graden achterover), maar valt op de spelcamera nog deels onder de rand.
+
+**Allebei: beweging**
+- **Nog niet gemaakt:** geraakt worden en sterven, en bij de speerman de tweede aanval. In de proef speelde de tweede
+  aanval dezelfde steek af.
+- **Geen overgang** tussen staan en lopen: het spel wisselt van vel, en de speer springt van rechtop in één hand naar
+  schuin in twee.
+- **Of de voet glijdt in de loop**, is niet beoordeeld: dat vraagt kijken in beweging in het spel.
+
+**De speerman**
+- **Het speerblad is groter dan op de plaat** (1,35 keer, zodat hij op spelmaat leest). Oordeel van Marcel.
+- **Steken recht naar de camera of ervan af** (Z, N) leest het zwakst: de speer is dan kort.
+- **Lopen:** de onderkant van de speer staat zo'n 15 cm buiten de rechtervoet, omdat zijn rechterarm de lijn naar de
+  linkerschouder niet haalt.
+
+**De boogschutter**
+- **De koker wisselt op de plaat van schouder:** rechts in Z, ZO en NO, links in ZW, NW en N. De figuur heeft hem links,
+  want de run op N geeft de hele achterkant. Rechts is logischer (de trekhand), en dat vraagt een plaat waarop N dat ook laat zien.
+- **Het spel speelt voor een schutter geen aanval af:** `slaan` in `js/gevecht.js` zet alleen voor wie steekt een uitval.
+  In de proef stond dat aan in de browser. Daarna vliegt de pijl op het begin van het spannen, en niet bij het loslaten: de
+  regel en het moment zijn een keuze voor Marcel.
+- **Het spel heeft nog geen vel `boogschutter`:** in de proef is het er alleen in de browser bij gezet.
+- **Zijn linkerkant is het zwakst**, de kant van de boog: in W en NW staan gele vlekken op de mouw en bruine op de rug.
+  Bij het schieten komt op de borst een gespikkeld stuk bloot, geel met blauw. Groot goed te zien, op spelmaat minder.
+- **De linkerhand sluit niet om de boog**, en de rechterhand neemt de pijl niet uit de koker.
+- **De kruisboogschutter** staat er ook, en heeft nog geen plaat.
+
+**Getest en te doen**
+- **Niet getest:** Firefox, beeldtijd, nacht. De vellen van de aanval zijn groot (speerman cel 183 bij 126, boogschutter
+  137 bij 115), en performance heeft hoge prioriteit: meten voor het erin gaat.
+- **Het licht zit in de kleur:** er kan geen ander licht op, en er is geen mesh (geen GLB, geen realtime 3D).
+- **De plaat zonder speer** (`keten_splat_vel.sh alle`) is na de laatste aanpassingen niet opnieuw gedraaid.
+- **De platen:** de figuur is zo'n 500 pixels hoog, en de eis is 900 (`PLAAT-EISEN.md`). Scherper kan alleen met een grotere plaat.
+- **Voor Steam:** DINOv3 heeft een eigen licentie (de modelkaart noemt alleen MIT); dat hoort bij de AI-opgave.
+- **Opname in het spel, D8 en de goedkeuring** liggen bij Marcel.
+
 ## Het spel
 
 - **Wie een onbereikbare vijand volgt, blijft zonder melding staan** (26 okt, gezien bij vraag 190, in de browser op

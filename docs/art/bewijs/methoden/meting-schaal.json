@@ -1,0 +1,786 @@
+{
+ "plaat": {
+  "blauw": {
+   "banden": [
+    0.89,
+    1.31,
+    1.86,
+    2.14
+   ],
+   "tint_donker": -68.7,
+   "tint_licht": -70.7,
+   "tintverschil": -2.0,
+   "chroma_donker": 41.4,
+   "chroma_licht": 67.7,
+   "tint_sd": 4.4,
+   "L_sd": 9.5,
+   "L99_boven_mediaan": 23.4,
+   "L1_onder_mediaan": 19.4
+  },
+  "geel": {
+   "banden": [
+    0.7,
+    1.08,
+    1.29,
+    1.11
+   ],
+   "tint_donker": 65.8,
+   "tint_licht": 77.5,
+   "tintverschil": 11.7,
+   "chroma_donker": 67.9,
+   "chroma_licht": 78.7,
+   "tint_sd": 5.6,
+   "L_sd": 6.4,
+   "L99_boven_mediaan": 9.6,
+   "L1_onder_mediaan": 17.2
+  },
+  "bruin": {
+   "banden": [
+    1.83,
+    2.22,
+    2.5,
+    2.47
+   ],
+   "tint_donker": 54.2,
+   "tint_licht": 58.6,
+   "tintverschil": 4.4,
+   "chroma_donker": 23.7,
+   "chroma_licht": 55.3,
+   "tint_sd": 8.0,
+   "L_sd": 12.6,
+   "L99_boven_mediaan": 24.8,
+   "L1_onder_mediaan": 22.9
+  },
+  "staal": {
+   "banden": [
+    0.93,
+    1.5,
+    2.55,
+    4.0
+   ],
+   "tint_donker": -46.1,
+   "tint_licht": -27.8,
+   "tintverschil": 18.2,
+   "chroma_donker": 5.1,
+   "chroma_licht": 6.6,
+   "tint_sd": 48.0,
+   "L_sd": 17.1,
+   "L99_boven_mediaan": 61.2,
+   "L1_onder_mediaan": 15.4
+  },
+  "_rand": {
+   "gradient_mediaan": 2.04,
+   "gradient_p90": 9.41,
+   "gradient_p99": 22.28,
+   "donker_aandeel_L25": 0.302,
+   "donker_aandeel_L15": 0.094
+  },
+  "_silhouet": [
+   0.373,
+   0.406,
+   0.406,
+   0.439,
+   0.394,
+   0.427,
+   0.479,
+   0.5,
+   0.555,
+   0.579,
+   0.561,
+   0.524,
+   0.512,
+   0.458,
+   0.448,
+   0.555,
+   0.555,
+   0.555,
+   0.182
+  ]
+ },
+ "nu": {
+  "blauw": {
+   "banden": [
+    0.46,
+    0.92,
+    1.32,
+    1.62
+   ],
+   "tint_donker": -65.1,
+   "tint_licht": -68.4,
+   "tintverschil": -3.2,
+   "chroma_donker": 41.2,
+   "chroma_licht": 63.0,
+   "tint_sd": 2.4,
+   "L_sd": 8.9,
+   "L99_boven_mediaan": 15.7,
+   "L1_onder_mediaan": 19.9
+  },
+  "geel": {
+   "banden": [
+    0.53,
+    0.9,
+    1.14,
+    1.17
+   ],
+   "tint_donker": 73.1,
+   "tint_licht": 73.7,
+   "tintverschil": 0.6,
+   "chroma_donker": 66.2,
+   "chroma_licht": 76.7,
+   "tint_sd": 2.6,
+   "L_sd": 5.3,
+   "L99_boven_mediaan": 10.5,
+   "L1_onder_mediaan": 11.5
+  },
+  "bruin": {
+   "banden": [
+    1.44,
+    1.99,
+    2.25,
+    2.62
+   ],
+   "tint_donker": 52.6,
+   "tint_licht": 59.8,
+   "tintverschil": 7.2,
+   "chroma_donker": 26.1,
+   "chroma_licht": 46.3,
+   "tint_sd": 6.7,
+   "L_sd": 11.4,
+   "L99_boven_mediaan": 23.0,
+   "L1_onder_mediaan": 23.0
+  },
+  "staal": {
+   "banden": [
+    2.52,
+    2.9,
+    3.97,
+    5.43
+   ],
+   "tint_donker": -82.5,
+   "tint_licht": -94.1,
+   "tintverschil": -11.6,
+   "chroma_donker": 2.2,
+   "chroma_licht": 5.1,
+   "tint_sd": 55.3,
+   "L_sd": 16.3,
+   "L99_boven_mediaan": 56.7,
+   "L1_onder_mediaan": 20.8
+  },
+  "_rand": {
+   "gradient_mediaan": 2.36,
+   "gradient_p90": 8.96,
+   "gradient_p99": 20.3,
+   "donker_aandeel_L25": 0.222,
+   "donker_aandeel_L15": 0.09
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "A": {
+  "blauw": {
+   "banden": [
+    1.02,
+    1.78,
+    2.3,
+    2.45
+   ],
+   "tint_donker": -68.1,
+   "tint_licht": -69.3,
+   "tintverschil": -1.2,
+   "chroma_donker": 43.3,
+   "chroma_licht": 72.1,
+   "tint_sd": 3.1,
+   "L_sd": 10.6,
+   "L99_boven_mediaan": 28.2,
+   "L1_onder_mediaan": 18.9
+  },
+  "geel": {
+   "banden": [
+    0.83,
+    1.36,
+    1.66,
+    1.47
+   ],
+   "tint_donker": 62.9,
+   "tint_licht": 77.6,
+   "tintverschil": 14.7,
+   "chroma_donker": 61.5,
+   "chroma_licht": 79.9,
+   "tint_sd": 7.0,
+   "L_sd": 7.1,
+   "L99_boven_mediaan": 19.3,
+   "L1_onder_mediaan": 10.5
+  },
+  "bruin": {
+   "banden": [
+    1.9,
+    2.54,
+    2.91,
+    3.19
+   ],
+   "tint_donker": 51.1,
+   "tint_licht": 58.8,
+   "tintverschil": 7.6,
+   "chroma_donker": 24.6,
+   "chroma_licht": 58.7,
+   "tint_sd": 4.6,
+   "L_sd": 13.7,
+   "L99_boven_mediaan": 27.2,
+   "L1_onder_mediaan": 22.1
+  },
+  "staal": {
+   "banden": [
+    3.09,
+    3.17,
+    4.1,
+    4.77
+   ],
+   "tint_donker": -47.3,
+   "tint_licht": -33.6,
+   "tintverschil": 13.8,
+   "chroma_donker": 5.0,
+   "chroma_licht": 5.8,
+   "tint_sd": 12.2,
+   "L_sd": 16.8,
+   "L99_boven_mediaan": 59.1,
+   "L1_onder_mediaan": 18.1
+  },
+  "_rand": {
+   "gradient_mediaan": 2.93,
+   "gradient_p90": 11.31,
+   "gradient_p99": 22.48,
+   "donker_aandeel_L25": 0.284,
+   "donker_aandeel_L15": 0.069
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "B": {
+  "blauw": {
+   "banden": [
+    0.43,
+    0.87,
+    1.33,
+    1.55
+   ],
+   "tint_donker": -64.5,
+   "tint_licht": -68.3,
+   "tintverschil": -3.8,
+   "chroma_donker": 41.4,
+   "chroma_licht": 63.6,
+   "tint_sd": 2.6,
+   "L_sd": 9.4,
+   "L99_boven_mediaan": 15.2,
+   "L1_onder_mediaan": 20.8
+  },
+  "geel": {
+   "banden": [
+    0.45,
+    0.86,
+    1.1,
+    0.98
+   ],
+   "tint_donker": 71.5,
+   "tint_licht": 74.5,
+   "tintverschil": 3.0,
+   "chroma_donker": 65.3,
+   "chroma_licht": 74.7,
+   "tint_sd": 2.7,
+   "L_sd": 4.9,
+   "L99_boven_mediaan": 11.3,
+   "L1_onder_mediaan": 9.3
+  },
+  "bruin": {
+   "banden": [
+    1.5,
+    2.05,
+    2.31,
+    2.7
+   ],
+   "tint_donker": 50.9,
+   "tint_licht": 60.2,
+   "tintverschil": 9.3,
+   "chroma_donker": 25.9,
+   "chroma_licht": 45.9,
+   "tint_sd": 7.6,
+   "L_sd": 11.7,
+   "L99_boven_mediaan": 24.0,
+   "L1_onder_mediaan": 22.6
+  },
+  "staal": {
+   "banden": [
+    2.69,
+    3.02,
+    4.01,
+    5.45
+   ],
+   "tint_donker": -83.2,
+   "tint_licht": -89.3,
+   "tintverschil": -6.2,
+   "chroma_donker": 2.7,
+   "chroma_licht": 4.7,
+   "tint_sd": 55.3,
+   "L_sd": 16.6,
+   "L99_boven_mediaan": 56.6,
+   "L1_onder_mediaan": 20.5
+  },
+  "_rand": {
+   "gradient_mediaan": 2.48,
+   "gradient_p90": 9.11,
+   "gradient_p99": 20.38,
+   "donker_aandeel_L25": 0.261,
+   "donker_aandeel_L15": 0.111
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "C": {
+  "blauw": {
+   "banden": [
+    0.54,
+    0.91,
+    1.27,
+    1.62
+   ],
+   "tint_donker": -65.4,
+   "tint_licht": -70.7,
+   "tintverschil": -5.2,
+   "chroma_donker": 41.3,
+   "chroma_licht": 61.5,
+   "tint_sd": 2.7,
+   "L_sd": 9.0,
+   "L99_boven_mediaan": 12.8,
+   "L1_onder_mediaan": 19.1
+  },
+  "geel": {
+   "banden": [
+    0.58,
+    0.92,
+    1.15,
+    1.44
+   ],
+   "tint_donker": 72.9,
+   "tint_licht": 77.2,
+   "tintverschil": 4.2,
+   "chroma_donker": 64.8,
+   "chroma_licht": 76.6,
+   "tint_sd": 4.2,
+   "L_sd": 6.1,
+   "L99_boven_mediaan": 11.4,
+   "L1_onder_mediaan": 11.9
+  },
+  "bruin": {
+   "banden": [
+    1.37,
+    1.88,
+    2.25,
+    2.64
+   ],
+   "tint_donker": 51.5,
+   "tint_licht": 60.4,
+   "tintverschil": 8.9,
+   "chroma_donker": 25.8,
+   "chroma_licht": 46.1,
+   "tint_sd": 7.2,
+   "L_sd": 11.4,
+   "L99_boven_mediaan": 23.6,
+   "L1_onder_mediaan": 22.7
+  },
+  "staal": {
+   "banden": [
+    2.79,
+    3.13,
+    3.81,
+    5.07
+   ],
+   "tint_donker": -83.1,
+   "tint_licht": -119.6,
+   "tintverschil": -36.5,
+   "chroma_donker": 2.2,
+   "chroma_licht": 2.8,
+   "tint_sd": 62.8,
+   "L_sd": 16.3,
+   "L99_boven_mediaan": 57.2,
+   "L1_onder_mediaan": 19.6
+  },
+  "_rand": {
+   "gradient_mediaan": 2.46,
+   "gradient_p90": 8.91,
+   "gradient_p99": 20.64,
+   "donker_aandeel_L25": 0.22,
+   "donker_aandeel_L15": 0.084
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "D1": {
+  "blauw": {
+   "banden": [
+    0.78,
+    1.24,
+    1.64,
+    2.18
+   ],
+   "tint_donker": -66.8,
+   "tint_licht": -71.6,
+   "tintverschil": -4.8,
+   "chroma_donker": 44.7,
+   "chroma_licht": 68.0,
+   "tint_sd": 3.4,
+   "L_sd": 10.6,
+   "L99_boven_mediaan": 18.9,
+   "L1_onder_mediaan": 20.7
+  },
+  "geel": {
+   "banden": [
+    0.65,
+    0.97,
+    1.09,
+    1.22
+   ],
+   "tint_donker": 64.5,
+   "tint_licht": 77.0,
+   "tintverschil": 12.5,
+   "chroma_donker": 61.3,
+   "chroma_licht": 78.4,
+   "tint_sd": 6.3,
+   "L_sd": 6.8,
+   "L99_boven_mediaan": 15.7,
+   "L1_onder_mediaan": 11.4
+  },
+  "bruin": {
+   "banden": [
+    1.84,
+    2.53,
+    3.02,
+    3.01
+   ],
+   "tint_donker": 47.1,
+   "tint_licht": 59.3,
+   "tintverschil": 12.2,
+   "chroma_donker": 26.9,
+   "chroma_licht": 56.1,
+   "tint_sd": 6.8,
+   "L_sd": 13.8,
+   "L99_boven_mediaan": 26.1,
+   "L1_onder_mediaan": 25.0
+  },
+  "staal": {
+   "banden": [
+    3.45,
+    3.34,
+    3.79,
+    4.65
+   ],
+   "tint_donker": -42.9,
+   "tint_licht": -17.1,
+   "tintverschil": 25.9,
+   "chroma_donker": 5.1,
+   "chroma_licht": 6.2,
+   "tint_sd": 27.8,
+   "L_sd": 16.5,
+   "L99_boven_mediaan": 56.4,
+   "L1_onder_mediaan": 19.1
+  },
+  "_rand": {
+   "gradient_mediaan": 2.92,
+   "gradient_p90": 10.94,
+   "gradient_p99": 22.22,
+   "donker_aandeel_L25": 0.262,
+   "donker_aandeel_L15": 0.078
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "D8": {
+  "blauw": {
+   "banden": [
+    0.73,
+    1.16,
+    1.61,
+    2.11
+   ],
+   "tint_donker": -66.6,
+   "tint_licht": -71.6,
+   "tintverschil": -5.1,
+   "chroma_donker": 44.2,
+   "chroma_licht": 66.8,
+   "tint_sd": 3.3,
+   "L_sd": 10.2,
+   "L99_boven_mediaan": 15.7,
+   "L1_onder_mediaan": 20.7
+  },
+  "geel": {
+   "banden": [
+    0.59,
+    0.91,
+    1.12,
+    1.21
+   ],
+   "tint_donker": 63.2,
+   "tint_licht": 76.6,
+   "tintverschil": 13.4,
+   "chroma_donker": 60.5,
+   "chroma_licht": 78.4,
+   "tint_sd": 5.8,
+   "L_sd": 6.5,
+   "L99_boven_mediaan": 13.6,
+   "L1_onder_mediaan": 11.9
+  },
+  "bruin": {
+   "banden": [
+    1.93,
+    2.69,
+    3.16,
+    3.04
+   ],
+   "tint_donker": 47.6,
+   "tint_licht": 59.0,
+   "tintverschil": 11.4,
+   "chroma_donker": 27.0,
+   "chroma_licht": 56.3,
+   "tint_sd": 5.9,
+   "L_sd": 13.7,
+   "L99_boven_mediaan": 26.0,
+   "L1_onder_mediaan": 25.4
+  },
+  "staal": {
+   "banden": [
+    3.24,
+    3.22,
+    3.73,
+    4.67
+   ],
+   "tint_donker": -50.1,
+   "tint_licht": -15.6,
+   "tintverschil": 34.6,
+   "chroma_donker": 5.7,
+   "chroma_licht": 5.9,
+   "tint_sd": 29.1,
+   "L_sd": 16.5,
+   "L99_boven_mediaan": 55.4,
+   "L1_onder_mediaan": 18.9
+  },
+  "_rand": {
+   "gradient_mediaan": 2.85,
+   "gradient_p90": 11.06,
+   "gradient_p99": 22.48,
+   "donker_aandeel_L25": 0.265,
+   "donker_aandeel_L15": 0.08
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ },
+ "D65": {
+  "blauw": {
+   "banden": [
+    0.77,
+    1.22,
+    1.63,
+    2.27
+   ],
+   "tint_donker": -64.8,
+   "tint_licht": -76.2,
+   "tintverschil": -11.4,
+   "chroma_donker": 43.8,
+   "chroma_licht": 55.3,
+   "tint_sd": 5.8,
+   "L_sd": 11.5,
+   "L99_boven_mediaan": 20.1,
+   "L1_onder_mediaan": 21.2
+  },
+  "geel": {
+   "banden": [
+    0.64,
+    0.95,
+    0.99,
+    1.44
+   ],
+   "tint_donker": 63.2,
+   "tint_licht": 76.3,
+   "tintverschil": 13.1,
+   "chroma_donker": 58.8,
+   "chroma_licht": 74.0,
+   "tint_sd": 5.5,
+   "L_sd": 7.1,
+   "L99_boven_mediaan": 13.7,
+   "L1_onder_mediaan": 12.3
+  },
+  "bruin": {
+   "banden": [
+    2.06,
+    2.73,
+    3.19,
+    3.07
+   ],
+   "tint_donker": 46.9,
+   "tint_licht": 59.1,
+   "tintverschil": 12.2,
+   "chroma_donker": 27.2,
+   "chroma_licht": 53.8,
+   "tint_sd": 6.4,
+   "L_sd": 13.8,
+   "L99_boven_mediaan": 26.3,
+   "L1_onder_mediaan": 24.9
+  },
+  "staal": {
+   "banden": [
+    3.06,
+    3.02,
+    3.56,
+    4.71
+   ],
+   "tint_donker": -50.9,
+   "tint_licht": -1.0,
+   "tintverschil": 49.9,
+   "chroma_donker": 5.8,
+   "chroma_licht": 6.0,
+   "tint_sd": 35.5,
+   "L_sd": 16.4,
+   "L99_boven_mediaan": 53.2,
+   "L1_onder_mediaan": 19.5
+  },
+  "_rand": {
+   "gradient_mediaan": 2.86,
+   "gradient_p90": 11.4,
+   "gradient_p99": 23.08,
+   "donker_aandeel_L25": 0.269,
+   "donker_aandeel_L15": 0.095
+  },
+  "_silhouet": [
+   0.03,
+   0.064,
+   0.067,
+   0.37,
+   0.394,
+   0.436,
+   0.406,
+   0.382,
+   0.479,
+   0.506,
+   0.552,
+   0.552,
+   0.555,
+   0.527,
+   0.494,
+   0.4,
+   0.394,
+   0.394,
+   0.403
+  ]
+ }
+}

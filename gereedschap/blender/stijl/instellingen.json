@@ -1,0 +1,38 @@
+{
+  "_uitleg": "De vaste afspraken van de stijlpijplijn (vraag 192, docs/art/aardschok-art-bible.md): camera, licht en renderen. Alles wat een figuur, gebouw of tegel rendert, leest dit.",
+  "camera": {
+    "elevatie": 30.0,
+    "ortho_meter": 3.0,
+    "doel_z": 0.74
+  },
+  "licht": {
+    "zon_richting": [-0.62, -0.60, 0.78],
+    "zon_kleur": [1.0, 0.92, 0.78],
+    "zon_sterkte": 3.1,
+    "zon_hoek": 12.0,
+    "hemel_boven": [0.60, 0.72, 0.98],
+    "hemel_midden": [0.62, 0.60, 0.56],
+    "hemel_onder": [0.34, 0.27, 0.14],
+    "glans_richting": [-0.5, -0.75, 0.55],
+    "glans_sterkte": 3.2,
+    "glans_hoek": 42.0,
+    "rand_richting": [0.75, 0.55, 0.45],
+    "rand_kleur": [0.75, 0.85, 1.0],
+    "rand_sterkte": 1.1,
+    "hemel_sterkte": 0.46
+  },
+  "render": {
+    "pixels": 768,
+    "monsters": 64,
+    "ruisfilter": true,
+    "belichting": 0.0
+  },
+  "richtingen": {
+    "Z": 0, "ZW": -45, "W": -90, "NW": -135, "N": 180, "NO": 135, "O": 90, "ZO": 45
+  },
+  "spel": {
+    "lengte_px": 80,
+    "tegel": [64, 32],
+    "lengte_meter": 1.39
+  }
+}

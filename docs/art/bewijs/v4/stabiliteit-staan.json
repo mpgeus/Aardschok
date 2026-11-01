@@ -1,0 +1,162 @@
+{
+ "V3": {
+  "Z": {
+   "verschil_per_beeld": 2.468,
+   "trilling": 3.919,
+   "trilling_p99": 53.48,
+   "randpixels_wisselen": 24.5,
+   "voetlijn_min": 148,
+   "voetlijn_max": 148,
+   "vaste_pixels": 3139
+  },
+  "ZW": {
+   "verschil_per_beeld": 2.61,
+   "trilling": 3.965,
+   "trilling_p99": 52.16,
+   "randpixels_wisselen": 19.5,
+   "voetlijn_min": 150,
+   "voetlijn_max": 150,
+   "vaste_pixels": 3087
+  },
+  "W": {
+   "verschil_per_beeld": 3.464,
+   "trilling": 5.491,
+   "trilling_p99": 75.73,
+   "randpixels_wisselen": 12.0,
+   "voetlijn_min": 148,
+   "voetlijn_max": 148,
+   "vaste_pixels": 2391
+  },
+  "NW": {
+   "verschil_per_beeld": 2.975,
+   "trilling": 4.543,
+   "trilling_p99": 55.23,
+   "randpixels_wisselen": 14.0,
+   "voetlijn_min": 145,
+   "voetlijn_max": 145,
+   "vaste_pixels": 2606
+  },
+  "N": {
+   "verschil_per_beeld": 2.719,
+   "trilling": 4.213,
+   "trilling_p99": 61.77,
+   "randpixels_wisselen": 20.5,
+   "voetlijn_min": 142,
+   "voetlijn_max": 142,
+   "vaste_pixels": 3160
+  },
+  "NO": {
+   "verschil_per_beeld": 3.117,
+   "trilling": 4.87,
+   "trilling_p99": 74.94,
+   "randpixels_wisselen": 15.5,
+   "voetlijn_min": 145,
+   "voetlijn_max": 145,
+   "vaste_pixels": 3032
+  },
+  "O": {
+   "verschil_per_beeld": 3.01,
+   "trilling": 4.624,
+   "trilling_p99": 60.67,
+   "randpixels_wisselen": 11.0,
+   "voetlijn_min": 151,
+   "voetlijn_max": 151,
+   "vaste_pixels": 2273
+  },
+  "ZO": {
+   "verschil_per_beeld": 2.384,
+   "trilling": 3.798,
+   "trilling_p99": 53.81,
+   "randpixels_wisselen": 16.5,
+   "voetlijn_min": 153,
+   "voetlijn_max": 153,
+   "vaste_pixels": 2577
+  },
+  "_gemiddeld": {
+   "verschil_per_beeld": 2.843,
+   "trilling": 4.428,
+   "trilling_p99": 60.974,
+   "randpixels_wisselen": 16.688
+  }
+ },
+ "V4": {
+  "Z": {
+   "verschil_per_beeld": 2.239,
+   "trilling": 3.455,
+   "trilling_p99": 42.51,
+   "randpixels_wisselen": 18.0,
+   "voetlijn_min": 156,
+   "voetlijn_max": 156,
+   "vaste_pixels": 3310
+  },
+  "ZW": {
+   "verschil_per_beeld": 2.606,
+   "trilling": 3.964,
+   "trilling_p99": 54.6,
+   "randpixels_wisselen": 19.0,
+   "voetlijn_min": 156,
+   "voetlijn_max": 156,
+   "vaste_pixels": 3207
+  },
+  "W": {
+   "verschil_per_beeld": 2.763,
+   "trilling": 4.213,
+   "trilling_p99": 58.7,
+   "randpixels_wisselen": 13.0,
+   "voetlijn_min": 154,
+   "voetlijn_max": 154,
+   "vaste_pixels": 2722
+  },
+  "NW": {
+   "verschil_per_beeld": 3.068,
+   "trilling": 4.754,
+   "trilling_p99": 57.66,
+   "randpixels_wisselen": 23.0,
+   "voetlijn_min": 152,
+   "voetlijn_max": 152,
+   "vaste_pixels": 2675
+  },
+  "N": {
+   "verschil_per_beeld": 2.919,
+   "trilling": 4.618,
+   "trilling_p99": 65.01,
+   "randpixels_wisselen": 24.0,
+   "voetlijn_min": 149,
+   "voetlijn_max": 149,
+   "vaste_pixels": 3196
+  },
+  "NO": {
+   "verschil_per_beeld": 2.906,
+   "trilling": 4.49,
+   "trilling_p99": 66.54,
+   "randpixels_wisselen": 25.0,
+   "voetlijn_min": 151,
+   "voetlijn_max": 151,
+   "vaste_pixels": 3193
+  },
+  "O": {
+   "verschil_per_beeld": 2.99,
+   "trilling": 4.619,
+   "trilling_p99": 68.42,
+   "randpixels_wisselen": 15.5,
+   "voetlijn_min": 158,
+   "voetlijn_max": 158,
+   "vaste_pixels": 2733
+  },
+  "ZO": {
+   "verschil_per_beeld": 2.205,
+   "trilling": 3.476,
+   "trilling_p99": 51.8,
+   "randpixels_wisselen": 19.0,
+   "voetlijn_min": 162,
+   "voetlijn_max": 162,
+   "vaste_pixels": 2711
+  },
+  "_gemiddeld": {
+   "verschil_per_beeld": 2.712,
+   "trilling": 4.199,
+   "trilling_p99": 58.155,
+   "randpixels_wisselen": 19.562
+  }
+ }
+}

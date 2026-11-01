@@ -1,0 +1,126 @@
+{
+ "maten": {
+  "helmrand": {
+   "plaat": 0.349,
+   "V3": 0.33,
+   "V4": 0.341,
+   "afwijking_V3_pct": -5.5,
+   "afwijking_V4_pct": -2.1,
+   "oordeel": "beter"
+  },
+  "koepel": {
+   "plaat": 0.261,
+   "V3": 0.244,
+   "V4": 0.246,
+   "afwijking_V3_pct": -6.5,
+   "afwijking_V4_pct": -5.6,
+   "oordeel": "gelijk"
+  },
+  "gezicht met haar": {
+   "plaat": 0.197,
+   "V3": 0.201,
+   "V4": 0.189,
+   "afwijking_V3_pct": 2.1,
+   "afwijking_V4_pct": -4.2,
+   "oordeel": "slechter"
+  },
+  "helm tot baard": {
+   "plaat": 0.334,
+   "V3": 0.357,
+   "V4": 0.354,
+   "afwijking_V3_pct": 6.7,
+   "afwijking_V4_pct": 6.1,
+   "oordeel": "gelijk"
+  },
+  "helm tot riem": {
+   "plaat": 0.575,
+   "V3": 0.587,
+   "V4": 0.569,
+   "afwijking_V3_pct": 2.1,
+   "afwijking_V4_pct": -1.0,
+   "oordeel": "beter"
+  },
+  "schouders (tabberd)": {
+   "plaat": 0.388,
+   "V3": 0.414,
+   "V4": 0.346,
+   "afwijking_V3_pct": 6.8,
+   "afwijking_V4_pct": -10.9,
+   "oordeel": "slechter"
+  },
+  "riem": {
+   "plaat": 0.268,
+   "V3": 0.342,
+   "V4": 0.297,
+   "afwijking_V3_pct": 27.5,
+   "afwijking_V4_pct": 10.8,
+   "oordeel": "beter"
+  },
+  "zoom": {
+   "plaat": 0.41,
+   "V3": 0.385,
+   "V4": 0.399,
+   "afwijking_V3_pct": -6.2,
+   "afwijking_V4_pct": -2.6,
+   "oordeel": "beter"
+  },
+  "riem tot zoom": {
+   "plaat": 0.235,
+   "V3": 0.222,
+   "V4": 0.233,
+   "afwijking_V3_pct": -5.6,
+   "afwijking_V4_pct": -0.7,
+   "oordeel": "beter"
+  },
+  "bovenarm": {
+   "plaat": 0.103,
+   "V3": 0.09,
+   "V4": 0.084,
+   "afwijking_V3_pct": -12.4,
+   "afwijking_V4_pct": -18.9,
+   "oordeel": "slechter"
+  },
+  "laars": {
+   "plaat": 0.22,
+   "V3": 0.217,
+   "V4": 0.223,
+   "afwijking_V3_pct": -1.2,
+   "afwijking_V4_pct": 1.5,
+   "oordeel": "gelijk"
+  },
+  "hele breedte": {
+   "plaat": 0.601,
+   "V3": 0.685,
+   "V4": 0.612,
+   "afwijking_V3_pct": 14.0,
+   "afwijking_V4_pct": 1.9,
+   "oordeel": "beter"
+  },
+  "voetafstand": {
+   "plaat": 0.293,
+   "V3": 0.243,
+   "V4": 0.241,
+   "afwijking_V3_pct": -16.9,
+   "afwijking_V4_pct": -17.9,
+   "oordeel": "gelijk"
+  },
+  "speer": {
+   "plaat": 1.167,
+   "V3": 1.244,
+   "V4": 1.195,
+   "afwijking_V3_pct": 6.6,
+   "afwijking_V4_pct": 2.4,
+   "oordeel": "beter"
+  }
+ },
+ "silhouet_overlap_zonder_speer": {
+  "Z": {
+   "V3": 0.742,
+   "V4": 0.786
+  },
+  "N": {
+   "V3": 0.685,
+   "V4": 0.731
+  }
+ }
+}

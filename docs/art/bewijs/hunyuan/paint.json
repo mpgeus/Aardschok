@@ -1,0 +1,14 @@
+{
+ "verf": {
+  "licht_eraf_s": 11.5,
+  "verf_s": 122.1,
+  "vram_piek_gb": 9.33,
+  "stappen": 30,
+  "zaad": 0,
+  "licht_eraf": true
+ },
+ "terug": {
+  "punten": 486380,
+  "niet_gezien": 63800
+ }
+}

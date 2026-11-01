@@ -1,0 +1,40 @@
+{
+ "Z": {
+  "oud masker": {
+   "V4": 0.786,
+   "Hunyuan 25 graden": 0.819,
+   "Hunyuan vlak": 0.822
+  },
+  "beter masker": {
+   "V4": 0.799,
+   "Hunyuan 25 graden": 0.849,
+   "Hunyuan vlak": 0.841
+  }
+ },
+ "N": {
+  "oud masker": {
+   "V4": 0.731,
+   "Hunyuan 25 graden": 0.712,
+   "Hunyuan vlak": 0.756
+  },
+  "beter masker": {
+   "V4": 0.772,
+   "Hunyuan 25 graden": 0.755,
+   "Hunyuan vlak": 0.796
+  }
+ },
+ "W": {
+  "beter masker": {
+   "V4": 0.698,
+   "Hunyuan 25 graden": 0.781,
+   "Hunyuan vlak": 0.8
+  }
+ },
+ "O": {
+  "beter masker": {
+   "V4": 0.75,
+   "Hunyuan 25 graden": 0.793,
+   "Hunyuan vlak": 0.842
+  }
+ }
+}

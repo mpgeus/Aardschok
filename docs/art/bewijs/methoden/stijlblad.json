@@ -1,0 +1,298 @@
+{
+ "blauw": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#011b48",
+   "L": 11.03,
+   "C": 32.72,
+   "tint": -70.18
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#002a71",
+   "L": 19.55,
+   "C": 47.78,
+   "tint": -67.79
+  },
+  {
+   "stap": "midden",
+   "hex": "#003ea8",
+   "L": 29.84,
+   "C": 67.2,
+   "tint": -66.45
+  },
+  {
+   "stap": "licht",
+   "hex": "#0457d4",
+   "L": 40.52,
+   "C": 75.5,
+   "tint": -67.75
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#5285e9",
+   "L": 56.53,
+   "C": 57.51,
+   "tint": -75.63
+  }
+ ],
+ "geel": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#b36618",
+   "L": 50.8,
+   "C": 58.62,
+   "tint": 63.79
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#c36f20",
+   "L": 55.17,
+   "C": 61.04,
+   "tint": 63.38
+  },
+  {
+   "stap": "midden",
+   "hex": "#f19209",
+   "L": 68.94,
+   "C": 78.42,
+   "tint": 68.81
+  },
+  {
+   "stap": "licht",
+   "hex": "#ffb60f",
+   "L": 78.78,
+   "C": 81.33,
+   "tint": 79.05
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#ffd030",
+   "L": 85.55,
+   "C": 78.34,
+   "tint": 87.79
+  }
+ ],
+ "gewat": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#411f10",
+   "L": 16.2,
+   "C": 22.69,
+   "tint": 49.6
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#5c2e18",
+   "L": 24.69,
+   "C": 30.0,
+   "tint": 50.86
+  },
+  {
+   "stap": "midden",
+   "hex": "#7d4022",
+   "L": 34.35,
+   "C": 37.91,
+   "tint": 51.41
+  },
+  {
+   "stap": "licht",
+   "hex": "#9e5a30",
+   "L": 45.18,
+   "C": 43.01,
+   "tint": 55.61
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#c8784b",
+   "L": 58.27,
+   "C": 46.27,
+   "tint": 54.52
+  }
+ ],
+ "leer": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#331808",
+   "L": 11.67,
+   "C": 18.7,
+   "tint": 51.05
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#432211",
+   "L": 17.35,
+   "C": 23.03,
+   "tint": 52.28
+  },
+  {
+   "stap": "midden",
+   "hex": "#713716",
+   "L": 29.97,
+   "C": 38.76,
+   "tint": 53.37
+  },
+  {
+   "stap": "licht",
+   "hex": "#af5318",
+   "L": 46.0,
+   "C": 59.33,
+   "tint": 54.93
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#d0763a",
+   "L": 58.7,
+   "C": 55.9,
+   "tint": 57.41
+  }
+ ],
+ "hout": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#56270e",
+   "L": 21.93,
+   "C": 32.29,
+   "tint": 52.49
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#69361a",
+   "L": 28.65,
+   "C": 33.81,
+   "tint": 52.77
+  },
+  {
+   "stap": "midden",
+   "hex": "#ad5215",
+   "L": 45.65,
+   "C": 59.84,
+   "tint": 55.52
+  },
+  {
+   "stap": "licht",
+   "hex": "#d87a36",
+   "L": 60.58,
+   "C": 60.3,
+   "tint": 58.31
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#f8a85f",
+   "L": 75.21,
+   "C": 54.01,
+   "tint": 65.33
+  }
+ ],
+ "staal": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#2c2c36",
+   "L": 18.38,
+   "C": 6.97,
+   "tint": -68.4
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#56525d",
+   "L": 35.48,
+   "C": 7.54,
+   "tint": -54.62
+  },
+  {
+   "stap": "midden",
+   "hex": "#686767",
+   "L": 43.69,
+   "C": 0.6,
+   "tint": 43.46
+  },
+  {
+   "stap": "licht",
+   "hex": "#a99fab",
+   "L": 66.67,
+   "C": 7.8,
+   "tint": -39.35
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#fdfbfc",
+   "L": 98.84,
+   "C": 0.51,
+   "tint": 7.17
+  }
+ ],
+ "huid": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#874029",
+   "L": 36,
+   "C": 40,
+   "tint": 44
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#aa5d3a",
+   "L": 48,
+   "C": 44,
+   "tint": 50
+  },
+  {
+   "stap": "midden",
+   "hex": "#d08454",
+   "L": 62,
+   "C": 45,
+   "tint": 57
+  },
+  {
+   "stap": "licht",
+   "hex": "#e5a672",
+   "L": 73,
+   "C": 40,
+   "tint": 64
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#f1c498",
+   "L": 82,
+   "C": 30,
+   "tint": 70
+  }
+ ],
+ "haar": [
+  {
+   "stap": "diepe schaduw",
+   "hex": "#1c1410",
+   "L": 7,
+   "C": 5,
+   "tint": 42
+  },
+  {
+   "stap": "schaduw",
+   "hex": "#271b16",
+   "L": 11,
+   "C": 8,
+   "tint": 46
+  },
+  {
+   "stap": "midden",
+   "hex": "#39261d",
+   "L": 17,
+   "C": 12,
+   "tint": 50
+  },
+  {
+   "stap": "licht",
+   "hex": "#4e3629",
+   "L": 25,
+   "C": 15,
+   "tint": 54
+  },
+  {
+   "stap": "hoogste licht",
+   "hex": "#654a3a",
+   "L": 34,
+   "C": 17,
+   "tint": 58
+  }
+ ]
+}

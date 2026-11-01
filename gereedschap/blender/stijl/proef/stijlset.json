@@ -1,0 +1,34 @@
+{
+  "_uitleg": "De reproduceerbare stijl van de methodeproef (vraag 192). Globaal geldt voor elke eenheid, elk dier en elk gebouw; asset is wat per ding verschilt. Getallen die al ergens staan, verwijzen hierheen.",
+  "versie": 1,
+  "globaal": {
+    "camera": {"bron": "../instellingen.json:camera", "spel": {"elevatie": 30, "ortho_meter": 3.0}, "ai_aanzicht": {"elevatie": 25, "ortho_meter": 1.62, "beeld": [832, 1216]}},
+    "richtingen": {"bron": "../instellingen.json:richtingen", "aantal": 8},
+    "licht": {"zon_richting": [-0.72, -0.5, 0.72], "zon_hoek": 12, "uitleg": "De zon maakt alleen de schaduwpass; het licht zelf komt uit verlicht.py. Daarom kost meer zon van opzij geen kleur meer."},
+    "render": {"pixels": 768, "monsters": 64, "passes": ["Diffuse Direct", "Diffuse Indirect", "Normal", "Depth", "Position"], "aov": ["verf", "ao", "aow", "bol", "metaal", "ruwheid", "stof", "spiegel", "contact", "deel", "laag"], "ao_afstand": [0.055, 0.32]},
+    "verkleinen": {"methode": "BOX", "afwerking": "../vel.py:AF", "doel_px": 80, "uitleg": "De afwerking is dezelfde als in de productie: scherpte, kleur, ID-lijnen, rand, harde alfa."},
+    "vorm_en_licht": {"bron": "stijl.json", "bevat": ["overdreven normaal (fijn, grof)", "zachte banden", "contactlijn", "randlicht", "staalomgeving"]},
+    "soorten": {"bron": "stijl.json:soorten", "lijst": ["blauw", "geel", "gewat", "leer", "hout", "huid", "haar", "staal"], "verloop": "ramps-d.json", "stijlblad": "../../../../docs/art/bewijs/methoden/stijlblad.png"},
+    "verf": {"bron": "schilder.json", "uitleg": "Per materiaal: drift, streek, slijtage, vuil, roest. De laag zit in texels in rust."},
+    "ai": {
+      "doel": "Eén laag per richting op de UV, nooit per animatiebeeld.",
+      "checkpoint": "civitai-faetastic/SDXLFaetastic_v24.safetensors",
+      "controlnet": "controlnet-union-sdxl-promax.safetensors",
+      "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+      "clip_vision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "sampler": {"stappen": 28, "cfg": 5.0, "sampler": "dpmpp_2m", "planner": "karras", "denoise": 0.5, "zaad": 192},
+      "controle": {"diepte": 0.65, "lijnen": 0.5, "tot": 0.9, "ip": 0.5, "ip_soort": "style transfer"},
+      "laag": {"hoogdoorlaat_samen": 60, "scherp": 8, "tolerantie_m": 0.008, "midden_eruit_L": 1.0, "midden_eruit_ab": 1.0, "diep": [8, 34], "per_deel": {"helm": 0.5}}
+    }
+  },
+  "asset": {
+    "speerman": {
+      "model": "gereedschap/pixelart/uit/stijl/bron/speerman.blend",
+      "textuur_maten": {"hoofd": 2048, "baard": 1024, "helm": 2048, "kap": 2048, "gambeson": 2048, "tabberd": 2048, "riem": 2048, "buidel": 1024, "hozen": 1024, "laarzen": 2048, "handschoenen": 2048, "speer": 2048},
+      "soort_per_onderdeel": {"tabberd": "blauw of geel, op kleur", "gambeson": "gewat", "kap": "gewat", "hozen": "gewat", "riem": "leer", "buidel": "leer", "handschoenen": "leer", "laarzen": "leer", "speer": "hout, metaal = staal", "helm": "staal", "hoofd": "huid, donker = haar", "baard": "haar"},
+      "ai_stijlbron": "docs/art/referentie/aardschok-speerman-acht.png",
+      "ai_zin": "gereedschap/ai/textuur-proef.cjs:POSITIEF",
+      "apart": {"speer": "eigen zin, eigen stijlbron, 4 aanzichten, één laag; hij zou anders het lijf bedekken"}
+    }
+  }
+}

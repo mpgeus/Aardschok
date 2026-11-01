@@ -1,0 +1,119 @@
+{
+ "rust": {
+  "voetafstand_m": 0.295,
+  "voet_voor_m": 0.08,
+  "heupbreedte_m": 0.23,
+  "voet_per_heup": 1.28,
+  "bekken_x": 0.026,
+  "steunvlak_x": [
+   -0.17,
+   0.125
+  ],
+  "zwaartepunt_binnen_steunvlak": true
+ },
+ "pols_hoek_graden": {
+  "hand.R": 16.5,
+  "hand.L": 11.4
+ },
+ "elleboog_hoek_graden": {
+  ".R": 86.3,
+  ".L": 95.3
+ },
+ "rust_oud": {
+  "voetafstand_m": 0.29,
+  "voet_voor_m": 0.015
+ },
+ "overgang_oud": {
+  "beeld": 10,
+  "grootste": 0.074,
+  "per_punt": {
+   "bekken": 0.02,
+   "voet.L": 0.011,
+   "voet.R": 0.068,
+   "hand.R": 0.042,
+   "hand.L": 0.064,
+   "speerpunt": 0.074,
+   "hoofd": 0.025
+  }
+ },
+ "overgang_nieuw": {
+  "beeld": 10,
+  "grootste": 0.137,
+  "per_punt": {
+   "bekken": 0.013,
+   "voet.L": 0.022,
+   "voet.R": 0.082,
+   "hand.R": 0.11,
+   "hand.L": 0.135,
+   "speerpunt": 0.137,
+   "hoofd": 0.027
+  }
+ },
+ "hand_op_speer_mm": {
+  "staan": 0.0,
+  "lopen": 0.0,
+  "proef_steek": 0.0,
+  "proef_val": 0.0,
+  "proef_kop": 0.0
+ },
+ "speer_recht": {
+  "staan": true,
+  "lopen": true,
+  "proef_steek": true,
+  "proef_val": true,
+  "proef_kop": true
+ },
+ "lopen": {
+  "grootste_draai_per_beeld_graden": {
+   "dij.L": 21.2,
+   "dij.R": 21.2,
+   "voet.R": 13.7,
+   "teen.R": 13.7,
+   "voet.L": 13.7,
+   "teen.L": 13.7
+  },
+  "sluit_op_beeld_1": true,
+  "fasen": {
+   "contact_links_voor_beeld": 11,
+   "contact_rechts_voor_beeld": 23,
+   "laagste_bekken_beelden": [
+    0,
+    12
+   ],
+   "hoogste_bekken_beelden": [
+    6,
+    18
+   ],
+   "bekken_z_bereik_m": 0.022,
+   "benen_wisselen": -0.886
+  },
+  "wortel_schuift_m": {
+   "x": 0.032,
+   "y": 0.0
+  }
+ },
+ "voeten_rust": {
+  ".L": {
+   "laagste": -0.0035,
+   "plat": 0.556
+  },
+  ".R": {
+   "laagste": -0.0031,
+   "plat": 0.635
+  }
+ },
+ "voeten_lopen_laagste": [
+  0.0099,
+  -0.0062,
+  -0.0175,
+  0.0165,
+  0.0162,
+  0.0186,
+  0.0098,
+  -0.0063,
+  -0.0175,
+  0.0165,
+  0.0162,
+  0.0186
+ ]
+}
