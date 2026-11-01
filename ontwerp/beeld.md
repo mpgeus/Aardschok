@@ -3174,7 +3174,7 @@ geschilderd licht per pixel en een AI-laag per richting op de UV, dus geen AI pe
 
 **De boogschutter (1 nov):** dezelfde keten, en sinds Marcels keuze ("Ik vind dit beter voor de Boogschutter eigenlijk") de man met de hoed en de veer, `referentie/aardschok-boogschutter-draai-hoed.png`, met de boog van een eigen plaat. De boog (Marcel, 1 nov: "Ja dat klopt"): staand en lopend in de linkerhand; schietend de linkerschouder naar het doel, de boog omhoog, spannen en loslaten.
 
-**De kruisboogschutter en de pikeman (1 nov):** ook uit TripoSplat, elk met een lijf zonder wapen en het wapen op een eigen plaat; hun houdingen volgen de regels van 26 okt (de kruisboog) en die van de speer (de piek). **De ridder** is nog een stilstaande proef. De stand en de restpunten: `docs/art/hunyuan/TRIPOSPLAT.md` en `opmerkingen.md`.
+**De kruisboogschutter en de pikeman (1 nov):** ook uit TripoSplat, elk met een lijf zonder wapen en het wapen op een eigen plaat; hun houdingen volgen de regels van 26 okt (de kruisboog) en die van de speer (de piek). **De ridder** ook, met een eigen skelet voor het paard. De stand en de restpunten: `docs/art/hunyuan/TRIPOSPLAT.md` en `opmerkingen.md`.
 
 **De vormproef (31 okt):** zie `docs/art/vormproef.md`. Eén geometrische variant (`stijl/proef/vorm3.py`) met hetzelfde skelet en dezelfde animaties: kleiner hoofd, vlak gezicht, slanke mouwen, tabberd over de schouder, gestikte kraag met V, langere rok, blokkige laarzen. 8 van de 11 maten staan dichter bij de plaat; schouders, koepel en hele breedte niet, en de stand is niet veranderd. Marcel beoordeelt dit eerst; daarna pas D8.
 

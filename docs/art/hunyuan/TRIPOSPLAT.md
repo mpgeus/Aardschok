@@ -21,9 +21,9 @@
 | Boogschutter | `aardschok-boogschutter-draai-hoed.png` | De boog uit `aardschok-boog-los-draai.png`, de koker uit `-draai-koker.png` | `boog` | 3.2 miljoen pixels, 2.1 MB |
 | Kruisboogschutter | `aardschok-kruisboog-draai-basis.png` | De kruisboog uit `aardschok-kruisboog-los-draai.png`, de koker uit `-draai.png` | `kruis` | 3.4 miljoen pixels, 2.1 MB |
 | Pikeman | `aardschok-pikeman-draai-basis.png` | De hellebaard uit `aardschok-hellebaard-los-draai.png` | `piek` | 6.8 miljoen pixels, 2.4 MB |
-| Ridder | Stilstaande proef, zie onder | Paard, schild en zwaard elk uit een eigen plaat | `hy_ridder.py` | |
+| Ridder | `aardschok-ridder-draai-basis.png` (zittend) | Paard, schild en zwaard elk uit een eigen plaat | `keten_ridder.sh` | 9.7 miljoen pixels, 6.7 MB |
 
-Alle vier staan, lopen, vechten, worden geraakt en sterven in acht richtingen, alleen in de browser getest. Marcel heeft ze nog niet beoordeeld, en niets is in productie.
+Alle vijf staan, lopen, vechten, worden geraakt en sterven in acht richtingen, alleen in de browser getest. Marcel, 1 nov: "Ze mogen voor nu erin"; dat is geen definitieve goedkeuring.
 
 **Wat dit opleverde: een lijf zonder wapen en het wapen op een eigen plaat.** Marcel, bij de kruisboogschutter: "De basisplaats en met wapen", en daarna het wapen alleen. Een wapen op een eigen plaat vult zijn plaat, dus het komt veel scherper en echt in 3D uit de run. De armen van het lijf zijn dan vrij en hoeven niet los te komen van wat ze vasthouden. Een run met het wapen in de hand zet de kruisboog plat tegen het lijf, en de armen werden rommelig.
 
@@ -42,17 +42,29 @@ Marcel: "Ik vind dit beter voor de Boogschutter eigenlijk". Eén ding erbij: **d
 
 Marcel: "Dit wordt de pikeman". In het spel heet hij `piekenier`; op zijn plaat is het wapen een hellebaard. Hij houdt hem volgens de regel van de speer. Mijn keuze: stekend houdt hij hem achteraan vast en naast zijn lijf (de hand 24 cm van de onderkant), omdat de steel van 1,9 m anders door zijn buik gaat. Wit op staal is geen fout, dus die regel van de verf staat bij hem uit (`wit_tot=0`). Zijn vellen zijn het grootst van allemaal, omdat de steel ver uitsteekt: aanval 2090 × 1208, 690 KB, cel 209 × 151, sterven 1820 × 1568, 478 KB, cel 260 × 196.
 
-## De ridder: een stilstaande proef (1 nov)
+## De ridder (1 nov)
 
-Marcel: "De knight", met vier platen: het paard, de ruiter zonder wapen (zittend), het schild en het zwaard. Dit is alleen een proef om te zien of hij op spelmaat leest: `hy_ridder.py`, en `bewijs/triposplat/ridder-proef-spelmaat.png`. Hij beweegt nog niet, en is niet in het spel geweest.
+Marcel: "De knight", met vier platen: het paard, de ruiter zonder wapen (zittend), het schild en het zwaard. Daarna, op de stilstaande proef: "Ja graag" voor een skelet en een looppas, en "Ja, hij is duur, schild, zwaard, harnas en paard" voor de regel in het spel. `keten_ridder.sh`, `hy_ridder.py`, en `bewijs/triposplat/ridder-…`.
+
+**De vorm.**
 
 - **Paard:** de linkerkant uit een run op W en de rechterkant uit een run op O. Eén zijaanzicht geeft al bijna het hele paard; dat werkt beter dan ik verwachtte.
-- **Ruiter en schild:** voor uit Z, achter uit N. Hun achterkant verzint een run wit, of met de leeuw erop.
-- **Zwaard:** één run op Z.
+- **Ruiter en schild:** voor uit Z, achter uit N. Hun achterkant verzint een run wit, of met de leeuw erop. **Zwaard:** één run op Z.
 - **De snede** gaat hier per kolom door het eigen midden, en niet per hoogte: een schild is gebogen, en anders valt de rand eraf.
-- **De maat is mijn keuze:** het paard 1,9 m hoog en de ruiter op ware grootte; samen 2,74 m met de pluim, in een cel van 135 × 196 pixels. De platen hebben elk een eigen schaal, en de ruiter is op zijn plaat slanker dan de andere mannen. Zijn voeten komen net onder de stijgbeugels.
+- **De maat is mijn keuze:** het paard 1,9 m hoog en de ruiter op ware grootte; samen 2,74 m met de pluim. De platen hebben elk een eigen schaal. Zijn voeten komen net onder de stijgbeugels.
 
-Wat nog moet voor hij kan lopen: een eigen skelet voor het paard (vier benen, nek, staart, het kleed), een stap en een draf, en de ruiter die meebeweegt; dan slaan met het zwaard, geraakt worden en vallen. En een regel in het spel: `T.SOLDAAT_SOORTEN` heeft geen ridder en het spel geen paarden. Marcel, 1 nov: "Ja, hij is duur, schild, zwaard, harnas en paard", en voor het skelet en de looppas: "Ja graag".
+**De beweging.** Een eigen skelet op de wolk: de romp, nek, hoofd, staart, per been drie botten, en de ruiter met zijn lijf en zwaardarm. Schild en linkerarm blijven star aan zijn lijf. Alles hieronder zijn mijn keuzes; Marcel heeft het nog niet beoordeeld.
+
+- **Lopen:** een stap in vier tellen, 12 beelden: achter, voor, achter, voor. De hoef staat stil op de grond, de hiel komt op voor hij loslaat, de voorknie buigt naar voren en de hak naar achteren. Het lijf gaat twee keer per cyclus op en neer, de nek knikt mee en de staart zwaait.
+- **Slaan:** 8 beelden: de hand omhoog, het zwaard naar achteren, en dan schuin omlaag langs de rechterkant van het paard, met het lijf erachteraan.
+- **Geraakt:** de tabel van de mannen. De ruiter gaat achterover, en het paard gooit zijn hoofd op.
+- **Sterven:** 7 beelden: de klap, het paard zakt door zijn voorbenen, en valt op zijn rechterzij met de benen gestrekt. De ruiter valt ernaast op zijn gezicht, en het zwaard valt los. Eerst bleven de benen gevouwen, en dat werd een propje.
+
+**Wat misging.** Witte sokken tellen in de kleurklassen als het geel van het kleed: die punten bleven staan terwijl het been wegging, dus onder de zoom is nu alles been. En ik had de schouder 16 cm verkeerd gezet: de bovenarm hoorde bij geen bot, en de hand vloog los door de lucht. Een plaat met de armpunten in kleur liet het zien.
+
+Gemeten: staan 540 × 1608, 667 KB, cel 135 × 201; lopen 1644 × 1648, 2064 KB, cel 137 × 206; slaan 1560 × 1768, 1788 KB, cel 195 × 221; geraakt 405 × 1640, 669 KB, cel 135 × 205; sterven 1519 × 1784, 1384 KB, cel 217 × 223. Samen 9.7 miljoen pixels en 6.7 MB: twee keer de speerman. 272 beelden in 2324 s, met 405.000 punten (paard 200.000, ruiter 130.000, schild 60.000, zwaard 15.000).
+
+Getest in de browser, in een gevecht tegen een rover, zonder consolefouten: hij loopt erheen, slaat, wordt geraakt en valt. Marcel daarna, voor alle vijf: "Ze mogen voor nu erin".
 
 ## De boogschutter met helm (1 nov)
 

@@ -59,8 +59,12 @@ bekeken, niet opgenomen in het spel, en nog niet door Marcel beoordeeld.
 - **De hellebaard** heeft een blad, maar hij steekt nog alleen. Een slag van boven is een idee voor later: Marcel kiest.
 
 **De ridder**
-- **Nu een stilstaande proef** (`hy_ridder.py`). Marcel, 1 nov: het paard krijgt een eigen skelet en looppas ("Ja graag"), en hij wordt een soldaat: "Ja, hij is duur, schild, zwaard, harnas en paard".
-- **Waar een paard vandaan komt, is nog niet gekozen:** het spel heeft geen paarden, en de wapenmaker maakt geen paard.
+- **De regel is er:** zwaard, schild, harnas en paard (Marcel, 1 nov), 15 punten. Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms". Mijn voorstel, nog niet gekozen: de ridder heeft 2 keer het leven en 1,6 keer de pas van een soldaat (`ridder` in `T.SOLDATEN_INSTELLINGEN`).
+- **De vijf figuren gaan het spel in:** Marcel, 1 nov: "Ze mogen voor nu erin". Voor nu: het is geen definitieve goedkeuring.
+- **Hij is groot:** bijna 2 keer zo hoog als een speerman, op één tegel. Een pad, een deur of een troep houdt daar geen rekening mee. Een boom ervoor laat zijn onderkant doorschijnen, maar zijn bovenlijf niet altijd (`js/doorkijk.js`).
+- **Zijn vellen zijn de grootste** (samen zo'n 10 miljoen pixels). Niet gemeten in beeldtijd.
+- **De linkerarm en het schild** zijn star aan zijn lijf, en de benen van de ruiter aan het zadel. Hij slaat maar op één manier (de tweede aanval speelt dezelfde slag).
+- **Het kleed is star:** liggend steekt het stijf uit in plaats van te hangen.
 
 **Nog geen plaat:** de zwaardvechter (zwaard, schild en harnas; zijn zwaard en schild kunnen van de ridder komen) en de militie (hooivork).
 
