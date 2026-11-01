@@ -10,7 +10,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 ## De figuren uit TripoSplat: restpunten
 
 Marcel, 1 nov: "Noteer restpunten, Boogschutter toevoegen en dan verbeter ronde". De stand van de speerman
-(`referentie/aardschok-speerman-draai-speer.png`) en de boogschutter (`referentie/aardschok-boogschutter-draai.png`) na die
+(`referentie/aardschok-speerman-draai-speer.png`) en de boogschutter (`referentie/aardschok-boogschutter-draai-koker.png`) na die
 ronde; het hoe staat in `docs/art/hunyuan/TRIPOSPLAT.md`. Alleen in de browser bekeken, niet opgenomen in het spel, en nog
 niet door Marcel beoordeeld.
 
@@ -24,8 +24,9 @@ niet door Marcel beoordeeld.
 - **Het gezicht** is beter te zien (het hoofd staat 8 graden achterover), maar valt op de spelcamera nog deels onder de rand.
 
 **Allebei: beweging**
-- **Nog niet gemaakt:** geraakt worden en sterven, en bij de speerman de tweede aanval. In de proef speelde de tweede
-  aanval dezelfde steek af.
+- **Nog niet gemaakt:** bij de speerman de tweede aanval. In de proef speelde de tweede aanval dezelfde steek af.
+- **Geraakt worden en sterven** staan er (1 nov), nog zonder oordeel van Marcel. Dat hij 22 graden schuin valt, is mijn toevoeging.
+  De hand die het wapen losliet, is hol: de run zag hem alleen om de schacht. Op spelmaat valt dat nauwelijks op.
 - **Geen overgang** tussen staan en lopen: het spel wisselt van vel, en de speer springt van rechtop in één hand naar
   schuin in twee.
 - **Of de voet glijdt in de loop**, is niet beoordeeld: dat vraagt kijken in beweging in het spel.
@@ -37,8 +38,8 @@ niet door Marcel beoordeeld.
   linkerschouder niet haalt.
 
 **De boogschutter**
-- **De koker wisselt op de plaat van schouder:** rechts in Z, ZO en NO, links in ZW, NW en N. De figuur heeft hem links,
-  want de run op N geeft de hele achterkant. Rechts is logischer (de trekhand), en dat vraagt een plaat waarop N dat ook laat zien.
+- **De koker** zit op de nieuwe plaat in elke richting op dezelfde schouder, en de figuur dus ook. Op de helm blijven kleine
+  witte en blauwe vlekjes, vooral in O en op de kam. Op de linkermouw in Z zit wat blauw van de tabberd.
 - **Het spel speelt voor een schutter geen aanval af:** `slaan` in `js/gevecht.js` zet alleen voor wie steekt een uitval.
   In de proef stond dat aan in de browser. Daarna vliegt de pijl op het begin van het spannen, en niet bij het loslaten: de
   regel en het moment zijn een keuze voor Marcel.
@@ -49,8 +50,8 @@ niet door Marcel beoordeeld.
 - **De kruisboogschutter** staat er ook, en heeft nog geen plaat.
 
 **Getest en te doen**
-- **Niet getest:** Firefox, beeldtijd, nacht. De vellen van de aanval zijn groot (speerman cel 183 bij 126, boogschutter
-  137 bij 115), en performance heeft hoge prioriteit: meten voor het erin gaat.
+- **Niet getest:** Firefox, beeldtijd, nacht. De vellen van de aanval en van sterven zijn groot (de speerman sterft in cellen
+  van zo'n 180 bij 150), en performance heeft hoge prioriteit: meten voor het erin gaat.
 - **Het licht zit in de kleur:** er kan geen ander licht op, en er is geen mesh (geen GLB, geen realtime 3D).
 - **De plaat zonder speer** (`keten_splat_vel.sh alle`) is na de laatste aanpassingen niet opnieuw gedraaid.
 - **De platen:** de figuur is zo'n 500 pixels hoog, en de eis is 900 (`PLAAT-EISEN.md`). Scherper kan alleen met een grotere plaat.

@@ -1,6 +1,6 @@
 # TripoSplat op de speerman
 
-31 okt 2026, avond. Marcel gaf de link ("Kunnen we dit proberen"), daarna de plaat met alle kanten (`referentie/aardschok-speerman-draai-alle.png`: "Dit is denk ik de beste"), en toen dezelfde figuur met de speer in de hand (`referentie/aardschok-speerman-draai-speer.png`: "Dit is voor de speerman"). Platen, film en logs staan in `docs/art/bewijs/triposplat/`; die van de plaat zonder speer in `zonder-speer/`. Begin bij `in-het-spel.png`, `spelmaat-beide.png`, `speerman-staan-lopen-steken.png` en `boogschutter-staan-lopen-schieten.png`; de films heten `speerman-aanval.mp4`, `speerman-lopen.mp4`, `boogschutter-aanval.mp4` en `boogschutter-lopen.mp4`.
+31 okt 2026, avond. Marcel gaf de link ("Kunnen we dit proberen"), daarna de plaat met alle kanten (`referentie/aardschok-speerman-draai-alle.png`: "Dit is denk ik de beste"), en toen dezelfde figuur met de speer in de hand (`referentie/aardschok-speerman-draai-speer.png`: "Dit is voor de speerman"). Platen, film en logs staan in `docs/art/bewijs/triposplat/`; die van de plaat zonder speer in `zonder-speer/`. Begin bij `in-het-spel.png`, `spelmaat-beide.png`, `speerman-staan-lopen-steken.png` en `boogschutter-staan-lopen-schieten.png`; `geraakt-en-sterven.png` en `sterven-in-het-spel.png`; de films heten `speerman-…` en `boogschutter-…`, met `-lopen`, `-aanval`, `-geraakt` en `-sterven`.
 
 **Hoe een speerman zijn speer houdt** (Marcel, 1 nov):
 
@@ -15,14 +15,37 @@
 
 ## De boogschutter (1 nov)
 
-Marcel stuurde de plaat `referentie/aardschok-boogschutter-draai.png`. Dat is de tweede figuur door deze keten: `keten_splat_vel.sh boog`, in zo'n 25 minuten tot en met de vellen. Wat voor de speerman was gebouwd, werkte meteen voor de rig en de verf. Wat hij nieuw vroeg:
+Marcel stuurde de plaat `referentie/aardschok-boogschutter-draai.png`, en later `aardschok-boogschutter-draai-koker.png`, waarop de koker in elke richting op dezelfde schouder zit (uit GPT, met `prompt-boogschutter.txt`). De figuur komt nu uit die tweede plaat; die van de eerste staat in `splat/boog-koker-links`. Dat is de tweede figuur door deze keten: `keten_splat_vel.sh boog`, in zo'n 25 minuten tot en met de vellen. Wat voor de speerman was gebouwd, werkte meteen voor de rig en de verf. Wat hij nieuw vroeg:
 
 - **De boog komt uit code.** De run zet hem op een verkeerde diepte, achter de arm en niet door de hand, en twee runs zetten hem niet op dezelfde plek. In elke plak is hij een los stukje naast het lijf: door die stukjes past één gladde lijn, en daaromheen gaat hij uit de wolk. Daarna komt hij als Gaussians in de hand, zodat de pees mee kan met de rechterhand.
 - **De koker zit vast op de rug.** Hij hangt aan de borst, en niet aan de rok, het hoofd of de arm.
 - **Schieten:** de linkerschouder naar het doel, de boog omhoog, de rechterhand naar de pees, spannen, loslaten en terug. Marcel, 1 nov: "Ja dat klopt".
 - **Getest in een echt gevecht tegen rovers**, in vier richtingen, zonder consolefouten. De aanval is voor de proef alleen in de browser aangezet: het spel zet voor een schutter nog geen uitval.
 
-Gemeten: staan 260 × 792 (202 KB), lopen 780 × 792 (708 KB), aanval 1370 × 920 (559 KB; cel 137 × 115). 208 beelden in 741 s. Een run op NO, om de koker op de goede schouder te krijgen, viel af: bij een schuin aanzicht kiest het model zelf hoe de figuur staat, en achter op zijn hoofd verscheen een gezicht.
+Wat de tweede plaat vroeg:
+
+- **De pijlen zijn geen helm.** De koker zit nu aan dezelfde kant als de goede kant van de helm in de run op Z. De vaste straal om de helm pakte de pijlen mee: de helmrand werd verkeerd gemeten, bij het spiegelen kwamen er witte vlekken op het staal, en de veren werden staal. Bij de boogschutter wordt de straal nu gemeten aan de kant zonder koker (16,6 cm).
+- **De voorste helft van de pijlen komt uit Z.** Ze steken achter het lijf uit en vallen dus in de helft van N, en die verzint hun voorkant donker. Van voren waren de veren grijs.
+- **De boog staat rechtop, en 35 graden naar buiten gedraaid.** Eerst stond hij 19 graden schuin en liep hij in ZW en W voor het been langs. Recht naar voren is hij van voren en achteren een streep, en op de plaat is hij daar juist een boog. Schietend draait hij terug naar recht vooruit.
+
+Een run op NO, om de koker op de goede schouder te krijgen, viel eerder al af: bij een schuin aanzicht kiest het model zelf hoe de figuur staat, en achter op zijn hoofd verscheen een gezicht. Een betere plaat was hier de goedkoopste oplossing.
+
+Gemeten bij de boogschutter: staan 260 × 792 (196 KB; cel 65 × 99), lopen 852 × 792 (709 KB; cel 71 × 99), aanval 1350 × 920 (616 KB; cel 135 × 115).
+
+## Geraakt worden en sterven (1 nov)
+
+De regels komen uit de ronde van 26 okt (`gereedschap/blender/bakken.py`). Marcel toen: "Geraakt worden is akkoord", en voor sterven "op zn knieën valt en dan zijn hoofd naar de grond laat vallen op zn gezicht", en "Hij moet een beetje plat komen te liggen nu is het meer een propje". De tabellen staan nu in `hy_v4_pose.py`, op deze korte benen.
+
+- **Geraakt:** drie beelden, 12 per seconde, naar achteren ten opzichte van waar hij kijkt: het bovenlijf gaat 12, 18 en 6 graden achterover, de linkervoet schuift terug, en de speer zwiept mee met zijn onderkant op de grond.
+- **Sterven:** zeven beelden, 8 per seconde: de klap, op de knieën, en dan voorover tot plat op de buik met de benen gestrekt. Het spel houdt het laatste beeld vast.
+- **Hij valt 22 graden schuin.** Recht naar de camera of ervan af was hij een propje. Met 22 graden blijft in alle acht richtingen zijn lengte in beeld. Dit is mijn toevoeging aan de regel van Marcel.
+- **Het wapen valt plat naast hem**, steeds sneller, en komt tegelijk met hem op de grond. Speer rechts, boog links. Eerst lag de speer dwars, en dan leek hij in één richting rechtop te staan of uit de helm te steken; nu ligt hij langs het lijf.
+- **De hand die het wapen hield, zakt langs het lijf.** Anders stak de lege vuist naast de rug uit.
+- **Wat je alleen ziet als hij ligt:** de vuist zat deels in het masker van de speer en werd een bal op de schacht (daar komt nu een stuk schacht van erboven), de zolen waren zwart met spikkels (nu effen donkerbruin), en onder de achterkant van de rok was een donker gat (die valt nu op de dijen).
+
+Gemeten: speerman geraakt 183 × 936 (193 KB; cel 61 × 117), sterven 1274 × 1224 (438 KB; cel 182 × 153); boogschutter geraakt 195 × 800 (182 KB; cel 65 × 100), sterven 1022 × 976 (400 KB; cel 146 × 122).
+
+Getest in de browser, zonder consolefouten: de speerman is in een echt gevecht door een rover gedood, de boogschutter op een open plek met de regel van het spel (`T.raak`), omdat zijn rover wegliep. De klap speelt `geraakt` en de dood `sterven`, via de gewone regels (`e.flits` en `e.dood`). Marcel heeft dit nog niet beoordeeld.
 
 ## De verbeterronde (1 nov)
 
@@ -70,7 +93,7 @@ Hoort met de AI-opgave bij de stukken voor Steam. In de vellen van de speerman z
 | 2 | Samen (`samen`): de voorste helft uit Z, de achterste uit N, de naad langs de zij, per hoogte op het midden van wat daar staat. Gepast op een band langs de naad: schaal 0,98, draaiing 2,2°, afstand 9 mm. De speer komt alleen uit Z: de speer van N gaat eruit, want twee runs zetten hem niet op dezelfde plek. Omdat de run hem in de diepte scheef raadt, staat hij in de rig weer recht, zoals op de plaat | Onder de minuut |
 | 3 | Rechtzetten, in `samen` en `verf`: de donkere kant van de helm krijgt in elke run het spiegelbeeld van zijn goede kant (zo'n 24.000 Gaussians per run), de donkere streep langs de naad de kleur van de stof ernaast (32.274), blauw op leer wordt leer (4.298), groen op de naad weg (564), en de wapenrok krijgt de kleuren van de plaat | Onder de minuut |
 | 4 | Rig (`rig`): `hy_rig.py` op de Gaussians, met buren in plaats van vlakken. Beide armen in drie stukken (bovenarm, onderarm, hand). Staan: de arm zoals op de plaat, de speer op de grond. Lopen: benen en lijf van V4, de speer vast aan de borst. Steken: lijf en benen uit `steek2` in `hy_v4_pose.py`: de linkerschouder naar voren, de linkervoet uit, door de knieën en doorzetten. De linkerhand gaat op de schacht, en de speer schuift een stuk door de hand. De speer (20.777 Gaussians, 1,35 keer dikker: anders is de schacht op spelmaat te dun) hangt aan de vuist, en draait de kant die de run zag naar de camera. 1.509 losse stukjes weg | Een minuut rekenen |
-| 5 | Sprites op de spelcamera, `vel.py`: 208 beelden (staan 4, lopen 12, aanval 10, in 8 richtingen) | 814 s, 3,9 s per beeld |
+| 5 | Sprites op de spelcamera, `vel.py`: 288 beelden (staan 4, lopen 12, aanval 10, geraakt 3, sterven 7, in 8 richtingen) | 1208 s bij de boogschutter, met een tweede keten ernaast |
 
 De vellen van de speerman: staan 244 × 952, lopen 804 × 952, aanval 1830 × 1008 (cel 183 × 126, want de speer ligt). De aanval duurt 0,62 s, tegen 0,8 s bij het oude vel. De lengte is 1,35 m van zool tot helm, de speertop 1,56 m. De gewichten zijn 3,78 GB, in `C:/ComfyUI/triposplat`, met de hash nagekeken.
 
@@ -116,4 +139,4 @@ De restpunten staan in `ontwerp/opmerkingen.md`, bij "De figuren uit TripoSplat"
 
 ## Advies
 
-**Maak TripoSplat de route voor de figuren, als Marcel deze stand goedkeurt.** Hij is beter op spelmaat, heeft minder stappen en een eenvoudiger licentie. De Hunyuan-keten blijft staan als terugval. De steek en het schieten zijn nu bewezen, en de tweede figuur ging in zo'n 25 minuten rekenen, met één nieuw stuk code (de boog). Geraakt worden en sterven ontbreken nog. Een nieuwe plaat is goedkoop (zo'n 25 minuten tot en met de vellen): neem de vaste houding op de plaat mee, want de rig maakt die dan niet na.
+**Maak TripoSplat de route voor de figuren, als Marcel deze stand goedkeurt.** Hij is beter op spelmaat, heeft minder stappen en een eenvoudiger licentie. De Hunyuan-keten blijft staan als terugval. De steek en het schieten zijn nu bewezen, en de tweede figuur ging in zo'n 25 minuten rekenen, met één nieuw stuk code (de boog). Geraakt worden en sterven staan er nu ook. Een nieuwe plaat is goedkoop (zo'n 25 minuten tot en met de vellen): neem de vaste houding op de plaat mee, want de rig maakt die dan niet na.

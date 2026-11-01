@@ -27,6 +27,8 @@ ZWAAI_SPEERHAND = 0.02
 ZWAAI_VAST = 0.06
 REIK = 0.97
 HOOFD_ACHTEROVER = np.radians(8.0)
+HANG_ARM = (0.1, 0.06, -1.0)
+HANG_ELLEBOOG = (0.6, 0.8, 0.0)
 ROK_MEE = 1.7
 ELLEBOOG_TWEE = [0.3, -0.05, -0.2]
 ELLEBOOG_TREK = [-0.35, 0.25, 0.02]
@@ -563,6 +565,27 @@ def armen(D, P, J, m, ix, zwaai, greep=None):
         D[ix['sleutel.' + k]] = B
         P[ix['sleutel.' + k]] = wereld(J['sleutel.' + k])
         P[ix['bovenarm.' + k]] = wereld(J['bovenarm.' + k])
+    if greep is not None and 'hang' in greep:
+        # sterven: beide armen hangen aan de borst, en de hand die het wapen hield, zakt langs het lijf
+        for k in 'RL':
+            ib, io, ih = ix['bovenarm.' + k], ix['onderarm.' + k], ix['hand.' + k]
+            D[ib], D[io], D[ih] = B, B, B
+            P[io] = P[ib] + B @ (J['onderarm.' + k] - J['bovenarm.' + k])
+            P[ih] = P[io] + B @ (J['hand.' + k] - J['onderarm.' + k])
+        k, v = greep['hang']
+        if v > 0:
+            s_k = 1.0 if k == 'L' else -1.0
+            ib, io, ih = ix['bovenarm.' + k], ix['onderarm.' + k], ix['hand.' + k]
+            a = P[ib]
+            l1 = np.linalg.norm(J['onderarm.' + k] - J['bovenarm.' + k])
+            l2 = np.linalg.norm(J['hand.' + k] - J['onderarm.' + k])
+            recht = np.array(HANG_ARM) * [s_k, 1.0, 1.0]
+            pols = (1 - v) * P[ih] + v * (a + B @ (recht / np.linalg.norm(recht)) * REIK * (l1 + l2))
+            e = twee_botten(a, pols, l1, l2, B @ (np.array(HANG_ELLEBOOG) * [s_k, 1.0, 1.0]))
+            D[ib], D[io] = draai_van_naar(J['onderarm.' + k] - J['bovenarm.' + k], e - a), draai_van_naar(J['hand.' + k] - J['onderarm.' + k], pols - e)
+            D[ih] = D[io]
+            P[io], P[ih] = e, pols
+        return
     if m.get('boogarm_vast'):
         boog_armen(D, P, J, m, ix, zwaai, greep, B)
         return

@@ -31,6 +31,8 @@ Nummer 1 tot en met 5 doen het meest. Bij 6 tot en met 10 volstaat "zo goed moge
 
 `referentie/aardschok-boogschutter-draai.png` werkt, met één ding om na te kijken: **de koker wisselt van schouder** (rechts in Z, ZO en NO, links in ZW, NW en N), en de boog staat in ZW anders dan in de rest. Elk gedragen ding moet in elke richting aan dezelfde kant zitten. Alleen Z en N tellen voor de vorm, en die twee moeten dus zeker kloppen. Het prompt om dat in GPT te herstellen: `prompt-boogschutter.txt`.
 
+`referentie/aardschok-boogschutter-draai-koker.png` is de nieuwe plaat, uit dat prompt: de koker zit nu in alle acht richtingen op dezelfde schouder, de boog in ZW staat rechtop, en verder is de man gelijk gebleven. De figuur is 482 pixels hoog. De oude plaat blijft bewaard, en die keten staat in `splat/boog-koker-links`.
+
 ## Wat je aanlevert
 
 - **Plaat A (nodig):** Z, W, N en O op ooghoogte, en liefst ook de vier diagonalen. Hier komen de vorm en het grootste deel van de verf uit.

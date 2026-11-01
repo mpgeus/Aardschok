@@ -16,9 +16,9 @@ WAPEN=""
 SAMEN=""
 # per plaat de vakken van Z en N, en de hoogte zonder de letters
 if [ "$N" = "speer" ]; then VAK="(0,264)|(975,1240)|30|625"; else VAK="(0,270)|(972,1258)|95|635"; fi
-if [ "$N" = "boog" ]; then VAK="(0,255)|(985,1245)|100|628"; PLAAT="$R/docs/art/referentie/aardschok-boogschutter-draai.png"; FIG=boogschutter; WAPEN="wapen=boog"; SAMEN="boog=1"; fi
+if [ "$N" = "boog" ]; then VAK="(0,264)|(982,1254)|100|625"; PLAAT="$R/docs/art/referentie/aardschok-boogschutter-draai-koker.png"; FIG=boogschutter; WAPEN="wapen=boog"; SAMEN="boog=1"; fi
 B="$H/rig2/beweging-v4.npz"
-if [ "$N" = "alle" ]; then HOUDINGEN="staan,lopen"; else HOUDINGEN="staan,lopen,aanval"; fi
+if [ "$N" = "alle" ]; then HOUDINGEN="staan,lopen"; else HOUDINGEN="staan,lopen,aanval,geraakt,sterven"; fi
 M="$H/v_spel.npz"
 mkdir -p "$U"
 if [ "$2" = "opnieuw" ] || [ ! -f "$U/Z.npz" ] || [ ! -f "$U/N.npz" ]; then
@@ -40,12 +40,17 @@ rm -rf "$U/spel/renders" "$U/spel/vellen" "$U/film"
 "$PY" - "$U/spel/renders" <<'PYEOF'
 import json, sys
 m = sys.argv[1]
-for h in ('staan', 'lopen', 'aanval'):
-    json.dump({'pas_meter': 0.2327, 'lengte': 1.354, 'doel_z': 0.74, 'houding': h, 'richtingen': 'Z,ZW,W,NW,N,NO,O,ZO'.split(','), 'pixels': 768, 'monsters': 1, 'elevatie': 30, 'ortho': 3.0}, open(f'{m}/{h}-render.json', 'w'))
+for h in ('staan', 'lopen', 'aanval', 'geraakt', 'sterven'):
+    v = 1.25 if h == 'sterven' else 1.0  # STERVEN_VAK in hy_splat
+    json.dump({'pas_meter': 0.2327, 'lengte': 1.354, 'doel_z': 0.74, 'houding': h, 'richtingen': 'Z,ZW,W,NW,N,NO,O,ZO'.split(','), 'pixels': round(768 * v), 'monsters': 1, 'elevatie': 30, 'ortho': 3.0 * v}, open(f'{m}/{h}-render.json', 'w'))
 PYEOF
 "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG staan 4 fps=3 kleur=1.0 scherpte=0.2 | tail -1
 "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG lopen 12 fps=15 kleur=1.0 scherpte=0.2 | tail -1
-if [ "$N" != "alle" ]; then "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG aanval 10 fps=16 kleur=1.0 scherpte=0.2 | tail -1; fi
+if [ "$N" != "alle" ]; then
+    "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG aanval 10 fps=16 kleur=1.0 scherpte=0.2 | tail -1
+    "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG geraakt 3 fps=12 kleur=1.0 scherpte=0.2 | tail -1
+    "$PY" "$G/vel.py" "$U/spel/renders" "$U/spel/vellen" $FIG sterven 7 fps=8 kleur=1.0 scherpte=0.2 | tail -1
+fi
 echo VEL KLAAR
 "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/verf" elevatie=20 ortho=2.2 doel=0.9 pixels=640 richtingen=ZW,W,Z,N houdingen=lopen $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
 "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/staan" elevatie=20 ortho=2.2 doel=0.9 pixels=640 richtingen=Z,ZW,W,NW,N,NO,O,ZO houdingen=staan stap=4 $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
@@ -53,5 +58,11 @@ echo VEL KLAAR
 if [ "$N" != "alle" ]; then
     "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/verf" elevatie=20 ortho=2.2 doel=0.9 pixels=640 richtingen=ZW,W,Z,N houdingen=aanval $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
     "$PY" "$P/hy_film.py" "$U/aanval.mp4" "$U/film" 10 16 groot=verf:Z,verf:ZW,verf:W houding=aanval herhaal=6 2>&1 | tail -1 | cut -c1-200
+    # geraakt worden met een pauze ertussen, en sterven met een wijder beeld: daar ligt hij breed uit
+    "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/verf" elevatie=20 ortho=2.2 doel=0.9 pixels=640 richtingen=ZW,W,Z,N houdingen=geraakt $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
+    "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/verf" elevatie=20 ortho=2.2 doel=0.9 pixels=640 richtingen=ZW,W,Z,N houdingen=staan stap=4 $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
+    "$PY" "$P/hy_film.py" "$U/geraakt.mp4" "$U/film" 3 12 groot=verf:Z,verf:ZW,verf:W houding=geraakt herhaal=6 rust=staan:10 2>&1 | tail -1 | cut -c1-200
+    "$PY" "$P/hy_splat.py" rig "$U/verf.npz" "$B" "$M" "$U/film/verf" elevatie=20 ortho=3.6 doel=0.5 pixels=640 sterven_vak=1 richtingen=ZW,W,Z,N houdingen=sterven $WAPEN 2>&1 | grep -E 'Traceback|rror|renders' | cut -c1-200
+    "$PY" "$P/hy_film.py" "$U/sterven.mp4" "$U/film" 7 8 groot=verf:Z,verf:ZW,verf:W houding=sterven herhaal=4 cel=640 klein=0 2>&1 | tail -1 | cut -c1-200
 fi
 echo FILM KLAAR

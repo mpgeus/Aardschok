@@ -3,7 +3,7 @@
 #
 #   python hy_splat.py maak <plaat.png> <uit.npz> [zaad=42 stappen=20 cfg=3.0 aantal=262144]
 #   python hy_splat.py verf <samen.npz> <verf.npz> plaat=<Z-invoer.png>   wat er nog fout staat, recht gezet: blauw op leer, groen op de naad, en de kleuren van de plaat op de wapenrok
-#   python hy_splat.py rig <verf.npz> <beweging.npz> <v_spel.npz> <map> [draai=0 elevatie=30 ortho=3.0 doel=0.74 pixels=768 richtingen=.. houdingen=staan,lopen,aanval stap=1]   hy_rig op de Gaussians, met de speer van de mesh als Gaussians erbij
+#   python hy_splat.py rig <verf.npz> <beweging.npz> <v_spel.npz> <map> [draai=0 elevatie=30 ortho=3.0 doel=0.74 pixels=768 richtingen=.. houdingen=staan,lopen,aanval,geraakt,sterven stap=1 sterven_vak=1.25]   hy_rig op de Gaussians, met de speer van de mesh als Gaussians erbij
 #   python hy_splat.py samen <uit.npz> Z=<z.npz> N=<n.npz> [boog=1]   een run op de voorkant en een op de achterkant van de plaat; de voorste helft uit de ene, de achterste uit de andere, met de naad langs de zij. Dan is niets meer geraden en ligt er nergens iets dubbel
 #   python hy_splat.py kijk <uit.npz> <map> [elevatie=20 pixels=640 ortho=auto richtingen=Z,ZW,W,N,O draai=0 lengte=1.354]
 #
@@ -369,8 +369,8 @@ def midden_per_hoogte(P, s):
     return z, m
 
 
-def helm_spiegel(P, rgb, alfa, sp, goede_kant):
-    """Elke run heeft één goede kant van de helm en verzint de andere donker: Z ziet zijn rechterkant goed, N zijn linkerkant. Een helm is links en rechts gelijk, dus de donkere kant krijgt het spiegelbeeld van de goede. Alleen de helm: de rest van de figuur is niet symmetrisch."""
+def helm_spiegel(P, rgb, alfa, sp, goede_kant, vrij=0.0):
+    """Elke run heeft één goede kant van de helm en verzint de andere donker: Z ziet zijn rechterkant goed, N zijn linkerkant. Een helm is links en rechts gelijk, dus de donkere kant krijgt het spiegelbeeld van de goede. Alleen de helm: de rest van de figuur is niet symmetrisch. vrij: de kant zonder koker. De pijlen steken dan naast de helm en binnen de vaste straal; ze tellen niet mee voor de maat, en ze krijgen geen staal."""
     from scipy.spatial import cKDTree
     s = (alfa > 0.3) & ~sp
     z, H_ = P[:, 2], P[s, 2].max()
@@ -382,12 +382,13 @@ def helm_spiegel(P, rgb, alfa, sp, goede_kant):
     for q in np.arange(0.77 * H_, 0.98 * H_, 0.006):
         v = binnen & (np.abs(z - q) < 0.006)
         if v.sum() > 50:
-            b = float(np.ptp(np.percentile(P[v, 0], [1, 99])))
+            b = 2 * float(np.percentile((P[v, 0] - m_[0]) * vrij, 99)) if vrij else float(np.ptp(np.percentile(P[v, 0], [1, 99])))
             if b > beste:
                 beste, rand = b, float(q)
     v = binnen & (np.abs(z - rand) < 0.006)
-    c = float(np.mean(np.percentile(P[v, 0], [1, 99])))
-    helm = (z > rand - HELM_RAND) & (np.hypot(P[:, 0] - m_[0], P[:, 1] - m_[1]) < HELM_STRAAL) & ~sp
+    c = float(np.mean(np.percentile(P[(s & (z > 0.9 * H_) & (z < 0.96 * H_)) if vrij else v, 0], [1, 99])))
+    straal = beste / 2 + HELM_SPEELRUIMTE if vrij else HELM_STRAAL
+    helm = (z > rand - HELM_RAND) & (np.hypot(P[:, 0] - m_[0], P[:, 1] - m_[1]) < straal) & ~sp
     doel = helm & ((P[:, 0] - c) * goede_kant < 0)
     bron = helm & ((P[:, 0] - c) * goede_kant > 0) & (alfa > 0.3)
     Q = P[bron].copy()
@@ -395,11 +396,12 @@ def helm_spiegel(P, rgb, alfa, sp, goede_kant):
     _, i = cKDTree(Q).query(P[doel], workers=-1)
     uit_ = rgb.copy()
     uit_[doel] = rgb[bron][i]
-    return uit_, {'rand_z': round(rand, 3), 'gespiegeld': int(doel.sum())}
+    return uit_, {'rand_z': round(rand, 3), 'gespiegeld': int(doel.sum()), 'straal': round(straal, 3)}
 
 
 HELM_RAND = 0.015
 HELM_STRAAL = 0.21
+HELM_SPEELRUIMTE = 0.012
 STREEP_BAND = 0.05
 STREEP_DONKER = 0.72
 STREEP_BUREN = 40
@@ -408,11 +410,11 @@ STREEP_BUREN = 40
 HELM_NAAD = 0.035
 
 
-def helm_naad(P, rgb, alfa, sp, naad, rand_z):
+def helm_naad(P, rgb, alfa, sp, naad, rand_z, straal=HELM_STRAAL):
     """Op de helm komen de twee runs samen met elk een eigen glans: een lichte streep van voor naar achter over de koepel. De band krijgt de kleur van wat ernaast ligt."""
     from scipy.spatial import cKDTree
     z = P[:, 2]
-    koepel = (alfa > 0.05) & ~sp & (z > rand_z) & (np.hypot(P[:, 0] - np.median(P[z > rand_z + 0.1, 0]), P[:, 1] - np.median(P[z > rand_z + 0.1, 1])) < HELM_STRAAL)
+    koepel = (alfa > 0.05) & ~sp & (z > rand_z) & (np.hypot(P[:, 0] - np.median(P[z > rand_z + 0.1, 0]), P[:, 1] - np.median(P[z > rand_z + 0.1, 1])) < straal)
     band = koepel & (np.abs(P[:, 1] - naad) < HELM_NAAD)
     bron = koepel & ~band
     uit_ = rgb.copy()
@@ -540,13 +542,23 @@ def samen(uit, arg):
     naad_z, naad_n = np.interp(Pz[:, 2], zb, mz), np.interp(Pn[:, 2], zb, mz)
     hz = ((Pz[:, 1] < naad_z + NAAD_OVERLAP) | sz) & ~bz
     hn = (Pn[:, 1] >= naad_n - NAAD_OVERLAP) & ~sn & ~bn
-    rgb_z, helm_z = helm_spiegel(Pz, rgb_z0, dz['alfa'], sz, -1.0)
-    rgb_n, helm_n = helm_spiegel(Pn, rgb_n0, dn['alfa'], sn, 1.0)
+    vrij = -KOKER_KANT if 'boog' in arg else 0.0
+    rgb_z, helm_z = helm_spiegel(Pz, rgb_z0, dz['alfa'], sz | bz, -1.0, vrij)
+    rgb_n, helm_n = helm_spiegel(Pn, rgb_n0, dn['alfa'], sn | bn, 1.0, vrij)
+    if 'boog' in arg:
+        # de pijlen steken achter het lijf uit, in de helft van N, en die verzint hun voorkant donker: de voorste helft van de bos komt uit Z
+        def pijlen(Q):
+            k_ = Q[Q[:, 2] > HELM_Z + 0.1]
+            return (Q[:, 0] * KOKER_KANT > 0.1) & (Q[:, 2] > PIJL_VAN) & (np.hypot(Q[:, 0] - np.median(k_[:, 0]), Q[:, 1] - np.median(k_[:, 1])) > helm_z['straal'])
+        pz, pn = pijlen(Pz), pijlen(Pn)
+        y_p = float(np.median(Pn[pn & (dn['alfa'] > 0.3), 1]))
+        hz |= pz & (Pz[:, 1] < y_p)
+        hn &= ~(pn & (Pn[:, 1] < y_p))
     Pa = np.vstack([Pz[hz], Pn[hn]])
     alfa_a = np.concatenate([dz['alfa'][hz], dn['alfa'][hn]])
     sp_a = np.concatenate([sz[hz], np.zeros(int(hn.sum()), dtype=bool)])
     rgb_a, streep = naad_streep(Pa, np.vstack([rgb_z[hz], rgb_n[hn]]), alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'] - HELM_RAND)
-    rgb_a, helm_band = helm_naad(Pa, rgb_a, alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'])
+    rgb_a, helm_band = helm_naad(Pa, rgb_a, alfa_a, sp_a, np.interp(Pa[:, 2], zb, mz), helm_z['rand_z'], helm_z['straal'])
     np.savez_compressed(uit, xyz=Pa.astype(np.float32), matrix=np.concatenate([Rz[hz], Rn[hn]]).astype(np.float32), schaal=np.vstack([Sz[hz], Sn[hn]]).astype(np.float32),
                         rgb=rgb_a.astype(np.float32), alfa=alfa_a.astype(np.float32))
     info = {'schaal': round(s, 4), 'draai_graden': round(float(np.degrees(np.arccos(np.clip((np.trace(Ro) - 1) / 2, -1, 1)))), 2), 'icp_fout_m': round(fout, 4), 'naad_verschil_cm': round(float(np.abs(mz - mn).max() * 100), 1), 'voor': int(hz.sum()), 'achter': int(hn.sum()), 'speer_uit_Z': int(sz.sum()), 'speer_uit_N_weg': int(sn.sum()), 'helm_Z': helm_z, 'helm_N': helm_n, 'naad_streep': streep, 'helm_band': helm_band, 'boog_punten': [int(bz.sum()), int(bn.sum())], 'boog_dun': boog_seeds}
@@ -633,7 +645,7 @@ def steek_stand(t):
 
 
 # De boog (Marcel, 1 nov: de boogschutter; de plaat `aardschok-boogschutter-draai.png`). De run zet hem op de verkeerde diepte en niet door de hand, dus hij komt uit code, als Gaussians, zodat de pees mee kan met de hand. Lokaal: x opzij, y naar voren (de rug van de boog), z langs de boog; (0, 0, 0) is de greep.
-BOOG_HALF = 0.47
+BOOG_HALF = 0.5
 BOOG_BOL = 0.13
 BOOG_KRUL = 0.06
 BOOG_N, PEES_N, PIJL_N = 12000, 1200, 2000
@@ -643,7 +655,7 @@ PEES_KLEUR = (0.66, 0.60, 0.50)
 PEES_ALFA = 0.5
 PIJL_HOUT = (0.74, 0.56, 0.32)
 PIJL_LANG = 0.68
-BOOG_AS_RUST = (0.06, -0.32, 0.945)
+BOOG_AS_RUST = (0.0, -0.06, 1.0)
 BOOG_AS_SCHIET = (-0.08, 0.0, 1.0)
 SCHIET_LINKS = (0.05, -0.42, 0.94)
 SCHIET_BEGIN = (0.0, -0.24, 0.95)
@@ -651,7 +663,11 @@ SCHIET_ANKER = (-0.02, -0.13, 0.97)
 SCHIET_LOS = (-0.06, -0.08, 0.99)
 BOOG_ALFA = 0.95
 KOKER_Y = 0.12
+KOKER_KANT = -1.0  # de pijlen steken boven zijn rechterschouder uit (`aardschok-boogschutter-draai-koker.png`)
 HELM_Z = 1.08
+PIJL_VAN = 1.04
+KOKER_HELM = 0.17
+BOOG_ROL = 35.0
 
 
 def boog_lijn(s):
@@ -683,10 +699,12 @@ def boog_lokaal():
     return {'P': P_, 'rgb': np.clip(k, 0, 1), 's': np.full(BOOG_N, 0.0045), 'u': u, 'w': w_, 'hoek': r.uniform(0, 2 * np.pi, PIJL_N)}
 
 
-def assen_boog(as_):
+def assen_boog(as_, rol=0.0):
+    """De assen van de boog. rol: hoe ver zijn rug naar buiten gedraaid is, in graden. Recht naar voren is hij van voren en achteren een streep, en op de plaat is hij daar juist een boog."""
     e_z = np.array(as_, dtype=np.float64)
     e_z /= np.linalg.norm(e_z)
-    e_y = np.array([0.0, -1.0, 0.0]) - (np.array([0.0, -1.0, 0.0]) @ e_z) * e_z
+    voor = np.array([np.sin(np.radians(rol)), -np.cos(np.radians(rol)), 0.0])
+    e_y = voor - (voor @ e_z) * e_z
     e_y /= np.linalg.norm(e_y)
     return np.stack([np.cross(e_y, e_z), e_y, e_z], axis=1)
 
@@ -717,6 +735,18 @@ def schiet_stand(t):
     return op, hand, trek, los
 
 
+# Geraakt worden en sterven: lijf en benen uit `geraakt2` en `sterven2` in hy_v4_pose, de armen hangen aan de schouder. Bij het sterven glijdt het wapen uit zijn hand en valt plat naast hem: per beeld hoe ver, en de hoek is het kwadraat, want vallen gaat steeds sneller. Hij ligt dan met zijn wapen breed uit, dus dat beeld is groter.
+STERVEN_VAL = (0.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.0)
+STERVEN_ARM = (0.0, 0.3, 0.6, 0.85, 1.0, 1.0, 1.0)
+STERVEN_VAK = 1.25
+SPEER_GROND_AS = (0.25, -0.97, 0.0)
+SPEER_GROND_VOET = (-0.67, 0.22, 0.04)
+BOOG_GROND_AS = (0.37, -0.93, 0.0)
+BOOG_GROND = (0.6, -0.25, 0.03)
+ZOOL_KLEUR = (0.2, 0.12, 0.07)
+ZOOL_Z = 0.03
+VUIST_BAND = 0.09
+HOUDING_BOTTEN = {'geraakt': 'geraakt2', 'sterven': 'sterven2'}
 WAAS_M = 0.01
 GREEP_STRAAL = 0.07
 SPEER_SIGMA = 0.0035
@@ -727,6 +757,7 @@ def rig(pad, beweging, mesh, map_, arg):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import hy_kleur as K
     import hy_rig as H
+    from scipy.spatial.transform import Rotation
     d = np.load(pad)
     bw = np.load(beweging)
     os.makedirs(map_, exist_ok=True)
@@ -833,7 +864,7 @@ def rig(pad, beweging, mesh, map_, arg):
     if boog:
         # de koker en de veren zitten vast op de rug: niet aan de rok, niet aan het hoofd, niet aan de arm
         z_, r_h = P[:, 2], np.hypot(P[:, 0] - np.median(P[zicht & (P[:, 2] > 1.2), 0]), P[:, 1] - np.median(P[zicht & (P[:, 2] > 1.2), 1]))
-        koker = (deel == 0) & (((P[:, 1] > KOKER_Y) & (z_ > 0.5) & (z_ < HELM_Z)) | ((P[:, 0] > 0.1) & (P[:, 1] > 0.02) & (z_ > 0.93) & (z_ < 1.22) & (r_h > HELM_STRAAL)))
+        koker = (deel == 0) & (((P[:, 1] > KOKER_Y) & (z_ > 0.5) & (z_ < HELM_Z)) | ((P[:, 0] * KOKER_KANT > 0.1) & (P[:, 1] > 0.02) & (z_ > 0.93) & (z_ < 1.22) & (r_h > KOKER_HELM)))
         W[koker] = 0
         W[koker, ix['borst']] = 1.0
     if eigen_speer:
@@ -845,7 +876,7 @@ def rig(pad, beweging, mesh, map_, arg):
 
     if boog:
         G_boog = np.array(m['hand.L'])
-        R_rust, R_schiet = assen_boog(BOOG_AS_RUST), assen_boog(BOOG_AS_SCHIET)
+        R_rust = assen_boog(BOOG_AS_RUST, BOOG_ROL)
         L_boog = boog_lokaal()
         nok_rust = boog_lijn(np.array([1.0]))[0] * np.array([1.0, 1.0, 0.0])
         pols_rust = J['hand.R'].copy()
@@ -872,6 +903,10 @@ def rig(pad, beweging, mesh, map_, arg):
         rok, been, arm = (np.concatenate([q_, np.zeros(n_b, dtype=bool)]) for q_ in (rok, been, arm))
 
     def greep_voor(houding, t_):
+        if houding == 'geraakt':
+            return None
+        if houding == 'sterven':
+            return {'hang': ('L' if boog else 'R', STERVEN_ARM[int(round(t_))])}
         if boog:
             if houding != 'aanval':
                 return None
@@ -881,7 +916,7 @@ def rig(pad, beweging, mesh, map_, arg):
             doel_r = (1 - trek) * np.array(SCHIET_BEGIN) + trek * np.array(SCHIET_ANKER)
             if los:
                 doel_r = np.array(SCHIET_LOS)
-            return {'links': links, 'rechts': (1 - hd_) * pols_rust + hd_ * doel_r, 'R_boog': assen_boog(as_), 'pees': 0.3 <= t_ < 0.6}
+            return {'links': links, 'rechts': (1 - hd_) * pols_rust + hd_ * doel_r, 'R_boog': assen_boog(as_, (1 - op) * BOOG_ROL), 'pees': 0.3 <= t_ < 0.6}
         if not eigen_speer or houding == 'staan':
             return None
         if houding == 'lopen':
@@ -943,18 +978,42 @@ def rig(pad, beweging, mesh, map_, arg):
     D_sp0 = np.linalg.inv(D0[ix['speer']])
     # op de plaat staat hij recht; de run raadt hem in de diepte scheef
     D_recht = H.draai_van_naar(top - voet, np.array([0, 0, 1.0])) if eigen_speer else np.eye(3)
+    # bij het sterven zie je zijn zolen, en die verzinnen de runs zwart met spikkels
+    rgb_sterf = rgb.copy()
+    rgb_sterf[(deel == 0) & (P[:, 2] < ZOOL_Z)] = ZOOL_KLEUR
+    sp_los, Q_los, alfa_los = sp_P, Q0[speer], alfa
+    if eigen_speer:
+        # de vuist zit deels in het masker van de speer: los van de hand wordt dat een bal op de schacht. Daar komt een stuk schacht van erboven
+        band = np.abs(sp_P[:, 2] - greep_z) < VUIST_BAND
+        schacht = np.nonzero((sp_P[:, 2] - greep_z > VUIST_BAND) & (sp_P[:, 2] - greep_z < 3 * VUIST_BAND))[0]
+        kies = np.random.default_rng(2).choice(schacht, int(band.sum()))
+        z_n = np.random.default_rng(3).uniform(greep_z - VUIST_BAND, greep_z + VUIST_BAND, int(band.sum()))
+        As_ = lambda z_: np.stack([np.polyval(as_[0], z_), np.polyval(as_[1], z_)], axis=1)
+        sp_los = sp_P.copy()
+        sp_los[band, :2] = As_(z_n) + sp_P[kies, :2] - As_(sp_P[kies, 2])
+        sp_los[band, 2] = z_n
+        Q_los = Q0[speer].copy()
+        Q_los[band] = Q_los[kies]
+        s_i = np.nonzero(speer)[0]
+        rgb_sterf[s_i[band]] = rgb[s_i[kies]]
+        alfa_los = alfa.copy()
+        alfa_los[s_i[band]] = alfa[s_i[kies]]
     richtingen = arg.get('richtingen', 'Z,ZW,W,NW,N,NO,O,ZO').split(',')
     e, pixels, ortho, doel = float(arg.get('elevatie', 30)), int(arg.get('pixels', 768)), float(arg.get('ortho', 3.0)), float(arg.get('doel', 0.74))
     t0 = time.time()
     tel = 0
     for houding in arg.get('houdingen', 'staan,lopen').split(','):
-        steek = houding == 'aanval'
-        lijst = bw['schiet' if boog else 'steek2'][STEEK_J] if steek else bw[houding]
+        steek, sterf = houding == 'aanval', houding == 'sterven'
+        lijst = bw['schiet' if boog else 'steek2'][STEEK_J] if steek else bw[HOUDING_BOTTEN.get(houding, houding)]
+        vak = float(arg.get('sterven_vak', STERVEN_VAK)) if sterf else 1.0
+        pix_h, ort_h = round(pixels * vak), ortho * vak
         zw = None if steek else H.zwaai_van(lijst, rust, ix, houding == 'lopen')
         for i in range(0, len(lijst), int(arg.get('stap', 1))):
-            greep_nu = greep_voor(houding, STEEK_J[i] / STEEK_N if steek else 0.0)
+            greep_nu = greep_voor(houding, STEEK_J[i] / STEEK_N if steek else (float(i) if sterf else 0.0))
             zw_i = 0.0 if steek else float(zw[i])
             Dm, Pm = H.beeld_van(lijst[i], rust, namen, ouders, J, m, zw_i, greep_nu)
+            # bij het sterven gaat de greep alleen over de arm: het wapen komt zo van de hand of van de grond
+            w_g = None if sterf else greep_nu
             U = H.vervorm(P, W, Dm, Pm, J, namen)
             # de vervorming per Gaussian: de gewogen draaiing van zijn botten
             B = np.zeros((len(P), 3, 3))
@@ -969,9 +1028,19 @@ def rig(pad, beweging, mesh, map_, arg):
                 # de boog: rigide met de hand, of in de stand van het schieten; de pees naar de hand, en de pijl op de pees zolang hij gespannen is
                 hL = Pm[ix['hand.L']] + Dm[ix['hand.L']] @ (G_boog - J['hand.L'])
                 hL[2] -= z0
-                R_b = greep_nu['R_boog'] if greep_nu else Dm[ix['hand.L']] @ R_rust
+                R_b = w_g['R_boog'] if w_g else Dm[ix['hand.L']] @ R_rust
+                if sterf:
+                    val_ = STERVEN_VAL[i] ** 2
+                    if val_ == 0:
+                        los_ = (hL.copy(), R_b.copy())
+                    else:
+                        e_z = np.array(BOOG_GROND_AS) / np.linalg.norm(BOOG_GROND_AS)
+                        e_y = np.array([-e_z[1], e_z[0], 0.0])
+                        R_g = np.stack([np.cross(e_y, e_z), e_y, e_z], axis=1)
+                        R_b = Rotation.from_rotvec(Rotation.from_matrix(R_g @ los_[1].T).as_rotvec() * val_).as_matrix() @ los_[1]
+                        hL = los_[0] + (np.array(BOOG_GROND) - los_[0]) * val_
                 nok, pijl_aan = nok_rust, False
-                if greep_nu and greep_nu['pees']:
+                if w_g and w_g['pees']:
                     hr = Pm[ix['hand.R']] + Dm[ix['hand.R']] @ (np.array(m['hand.R']) - J['hand.R'])
                     hr[2] -= z0
                     nok, pijl_aan = (hr - hL) @ R_b, True
@@ -985,28 +1054,38 @@ def rig(pad, beweging, mesh, map_, arg):
                 Qr = Q.copy()
                 Qr[speer] = Q0[speer]
                 for r in richtingen:
-                    render(Ur, Qr, rgb, alfa_f, r, e, pixels, ortho, doel).save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
+                    render(Ur, Qr, rgb_sterf if sterf else rgb, alfa_f, r, e, pix_h, ort_h, doel).save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
                     tel += 1
                 continue
             bot = ix['hand.R']
             h = Pm[bot] + Dm[bot] @ (hand_punt - J[namen[bot]])
             h[2] -= z0
             # de speer staat in de eerste stand zoals in rust, en beweegt daarna zoals die van V4; met twee handen zoals de greep zegt
-            D_sp = Dm[ix['speer']] @ D_recht if greep_nu else Dm[ix['speer']] @ D_sp0 @ D_recht
-            sp = (sp_P - grip) @ D_sp.T + h
+            D_sp = Dm[ix['speer']] @ D_recht if w_g else Dm[ix['speer']] @ D_sp0 @ D_recht
+            if sterf and STERVEN_VAL[i] > 0:
+                # los van de hand: hij valt om zijn onderkant, en die schuift mee naar waar hij blijft liggen
+                val_ = STERVEN_VAL[i] ** 2
+                hk_ = np.pi / 2 * val_
+                as_g = np.array(SPEER_GROND_AS) / np.linalg.norm(SPEER_GROND_AS)
+                D_sp = H.draai_van_naar(np.array([0, 0, 1.0]), np.cos(hk_) * np.array([0, 0, 1.0]) + np.sin(hk_) * as_g) @ D_recht
+                h = los_ + (np.array(SPEER_GROND_VOET) - los_) * val_ - (voet - grip) @ D_sp.T
+            valt = sterf and STERVEN_VAL[i] > 0
+            sp = ((sp_los if valt else sp_P) - grip) @ D_sp.T + h
             a_ = (voet - grip) @ D_sp.T + h
             b_ = (top - grip) @ D_sp.T + h
             as_v = (b_ - a_) / np.linalg.norm(b_ - a_)
             # de speer schuift door de hand: staand rust hij op de grond, en verder raakt hij hem niet
-            schuif = greep_nu['schuif'] if greep_nu else 0.0
+            schuif = w_g['schuif'] if w_g else 0.0
             if eigen_speer and as_v[2] > 0.3:
-                if greep_nu is None:
+                if w_g is None:
                     schuif = -a_[2] / as_v[2]
                 elif a_[2] + schuif * as_v[2] < BOVEN_GROND:
                     schuif = (BOVEN_GROND - a_[2]) / as_v[2]
             sp, a_, b_ = sp + as_v * schuif, a_ + as_v * schuif, b_ + as_v * schuif
+            if sterf and STERVEN_VAL[i] == 0:
+                los_ = a_.copy()
             Kx = np.array([[0, -as_v[2], as_v[1]], [as_v[2], 0, -as_v[0]], [-as_v[1], as_v[0], 0]])
-            Q_sp = np.einsum('ij,njk->nik', D_sp, Q0[speer])
+            Q_sp = np.einsum('ij,njk->nik', D_sp, Q_los if valt else Q0[speer])
             for r in richtingen:
                 # het brede blad naar de camera, zoals `speerkijkt` in hy_kijk: anders is hij in W en O een streep
                 # de kant die de run zag, naar de camera, om de as van de speer: anders wordt hij donker als hij ligt, en een streep van opzij
@@ -1019,7 +1098,7 @@ def rig(pad, beweging, mesh, map_, arg):
                 Ur, Qr = U.copy(), Q.copy()
                 Ur[speer] = (sp - a_) @ Rk.T + a_
                 Qr[speer] = np.einsum('ij,njk->nik', Rk, Q_sp)
-                beeld = render(Ur, Qr, rgb, alfa, r, e, pixels, ortho, doel)
+                beeld = render(Ur, Qr, rgb_sterf if sterf else rgb, alfa_los if valt else alfa, r, e, pix_h, ort_h, doel)
                 beeld.save(os.path.join(map_, f'{houding}-{r}-{i:02d}.png'))
                 tel += 1
     print('renders', tel, round(time.time() - t0, 1), 's')
