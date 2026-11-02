@@ -51,6 +51,9 @@
     // Wat zijn paard de ridder geeft: zoveel maal het leven van een soldaat (T.levenAlsMan, js/rovers.js), en zoveel maal zijn
     // pas (T.snelheidVan, js/wereld.js).
     ridder: { leven: 2, snelheid: 1.6 },
+    // En de lichte ruiter (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A":
+    // een gewoon paard): sneller dan de ridder, en met minder leven, want hij heeft geen harnas en geen schild.
+    ruiter: { leven: 1.5, snelheid: 2 },
   };
   const IN = () => T.SOLDATEN_INSTELLINGEN;
 
@@ -81,6 +84,8 @@
     zwaardvechter: { stukken: ['zwaard', 'schild', 'harnas'], naam: () => T.t('swordsman') },
     boogschutter: { stukken: ['boog'], naam: () => T.t('archer') },
     kruisboogschutter: { stukken: ['kruisboog', 'harnas'], naam: () => T.t('crossbowman') },
+    // De lichte ruiter (2 nov): tot hij een eigen figuur heeft, leent hij dat van de ridder (`leent`, js/sprites.js).
+    ruiter: { stukken: ['speer', 'paard'], naam: () => T.t('horseman'), leent: 'ridder' },
     ridder: { stukken: ['zwaard', 'schild', 'harnas', 'paard'], naam: () => T.t('knight') },
   };
   const SOORTEN = Object.keys(T.SOLDAAT_SOORTEN);
@@ -314,15 +319,22 @@
     return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas };
   };
 
-  // Zit hij op een paard (de ridder)? Dan heeft hij meer leven en een grotere pas (`ridder` in de instellingen).
+  // Zit hij op een paard (de ridder, de ruiter)? Dan heeft hij meer leven en een grotere pas: wat T.paardVan zegt.
   T.opPaard = (e) => !!(e && e.bewoner && e.bewoner.soldaat && stukkenVan(e.bewoner.soldaat.soort).includes('paard'));
+  // Wat zijn paard hem geeft ({ leven, snelheid }, de getallen van zijn soort in de instellingen), of null te voet.
+  T.paardVan = (e) => (T.opPaard(e) ? IN()[e.bewoner.soldaat.soort] || IN().ridder : null);
+  // Heeft hij een schild in de hand: niet te paard (de ridder houdt het bij zich), voor de schildpad (js/kiezen.js).
+  T.heeftSchild = (e) => !T.opPaard(e) && T.stukkenVan(e).includes('schild');
 
   // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat). Van een bout uit een kruisboog
   // niets.
   T.vangtAf = function (doel, van) {
-    if (van && T.slagVan(van).doorHarnas) return 0;
+    const slag = van ? T.slagVan(van) : null;
+    if (slag && slag.doorHarnas) return 0;
     let n = 0;
     for (const stuk of T.stukkenVan(doel)) n += IN().bescherming[stuk] || 0;
+    // gedekt in de schildpad (js/kiezen.js) meer van een pijl
+    if (slag && slag.schiet && T.gedektInSchildpad(doel)) n += T.KIEZEN_INSTELLINGEN.schildpad.pijl;
     // in de kring van zijn generaal (3d, js/veldslag.js) een harnas extra
     if (T.inKring(doel)) n += T.VELDSLAG_INSTELLINGEN.generaal.harnas;
     return n;

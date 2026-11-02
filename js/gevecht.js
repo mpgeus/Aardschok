@@ -176,10 +176,11 @@
     if (!w || !w.wezens) return;
     const nu = S.wereldTijd || 0;
     const vijanden = w.wezens.filter((x) => T.isVijandVan(D, x));
+    T.werkSchildpadBij(S, D, vijanden, nu); // de schildpad gaat open als de vijand er is (js/kiezen.js)
     const budget = { zoek: IN().zoekPerTik };
     let vecht = null;
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || !T.hoortBij(D, e) || !vechtNu(D, e)) continue;
+      if (e.dood || e.binnen || !T.hoortBij(D, e) || !vechtNu(D, e) || e.formatie === 'schildpad') continue; // in een schildpad slaat niemand
       const d = doelVan(S, w, D, e, nu, vijanden);
       if (!d) continue;
       vecht = vecht || plek(e);

@@ -1083,10 +1083,10 @@ aanvallen, roept om hulp (nog niet gebouwd; werklijst vraag 116, bij stap 3).
 
 **Zo werken de soldaten nu** (15 okt, vraag 159; Marcel: "A1, B1, C1, D1", en de wapens "sword, spear, shield, pike, bow,
 crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`, `test/soldaten.test.cjs`):
-- **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan zeven soorten, elk met een − en een +, samen
+- **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan acht soorten (sinds 2 nov de lichte ruiter), elk met een − en een +, samen
   hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en harnas (sinds 21 okt; Marcel: "Speer is een 2 handed weapon", dus geen schild), de
   piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, de
-  kruisboogschutter kruisboog en harnas, en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Een
+  kruisboogschutter kruisboog en harnas, de lichte ruiter een speer en een paard (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight", sneller dan de ridder en met minder leven: `ruiter` in `T.SOLDATEN_INSTELLINGEN`; tot hij een eigen figuur heeft, lijkt hij op de ridder), en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Een
   paard maakt de wapenmaker niet: het komt uit de stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): die maakt er alleen een als een wachthuis erom vraagt, zo'n drie weken op graan; en in een dorp heeft de marskramer er 's zomers een, voor 16 goud. De ridder heeft twee keer het leven van een soldaat
   en een grotere pas (`ridder` in `T.SOLDATEN_INSTELLINGEN`; die getallen zijn Claudes voorstel). Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
@@ -1230,6 +1230,13 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   hun plekken een halve seconde in groen op de grond. In een gevecht gaat wie een vijand ziet erop af, zoals voor stap
   3, en komt daarna terug naar zijn plek (een formatie die houdt, D2, staat in `opmerkingen.md`). Te kiezen in de
   werkbank ("Choosing and sending"): hoeveel naast elkaar (8) en hoe lang het groen blijft (0,5 seconde).
+  **De schildpad** (*Turtle*, sinds 2 nov; Marcel: "misschien kunnen de swordsmen hun schilden gebruiken als turtle
+  tegen een regen van pijlen", en "Ja gaat open wanneer vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit
+  de schildpad"): alleen met een man met een schild erbij (een zwaardvechter; de ridder houdt het zijne te paard bij
+  zich). Ze staan in een blok, de schilden voor en aan de randen; wie naast een schild staat, vangt van een pijl 2 meer
+  af (niet van een bout). Ze lopen half zo snel en slaan niet. Komt een vijand binnen 3 tegels, of stuur je ze op een
+  vijand af, dan gaat de schildpad open: een *Line*, en twee seconden stormen ze anderhalf maal zo snel op de dichtste
+  vijand af. Te kiezen in de werkbank ("Choosing and sending", *the turtle*).
 - **De diensten** (16 okt, stap 4; Marcel: "A1, B1, C2, D2"). Een soldaat heeft de dagdienst of de nachtdienst: de dag
   van het opstaan tot het slapen, de nacht van het slapen tot het opstaan, zodat er altijd iemand kan waken. In zijn
   dienst staat hij op zijn post of bij het wachthuis (ook 's ochtends en 's avonds: naar de put of de herberg gaat een

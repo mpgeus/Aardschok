@@ -231,7 +231,8 @@
   // briefje (js/kiezen.js), vóór hij ooit vocht.
   T.levenAlsMan = function (e) {
     const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
-    const max = T.opPaard(e) ? Math.round(s.leven * T.SOLDATEN_INSTELLINGEN.ridder.leven) : s.leven;
+    const paard = T.paardVan(e);
+    const max = paard ? Math.round(s.leven * paard.leven) : s.leven;
     if (e.maxLeven === max) return { leven: e.leven, max };
     return { leven: (e.maxLeven ? e.leven : 0) + max - (e.maxLeven || 0), max };
   };

@@ -170,7 +170,7 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   assert.equal(meer.delen[0].regels.length, 4, 'twee namen, hun formatie en hun dienst; nog geen post: geen knop terug');
   const formatie = meer.delen[0].regels[2];
   assert.equal(formatie.tekst, 'Formation');
-  assert.deepEqual(formatie.knoppen.map((k) => [k.tekst, k.kan]), [['Line', false], ['Ring', true]], 'een Line hebben ze al');
+  assert.deepEqual(formatie.knoppen.map((k) => [k.tekst, k.kan]), [['Line', false], ['Ring', true], ['Turtle', false]], 'een Line hebben ze al, en zonder schild geen schildpad');
   const dienst = meer.delen[0].regels[3];
   assert.equal(dienst.tekst, 'Watch');
   assert.deepEqual(dienst.knoppen.map((k) => [k.tekst, k.kan]), [['Day', false], ['Night', true]], 'de dagdienst hebben ze al');
@@ -347,7 +347,7 @@ test('de formatie hoort bij de mannen: de knop zet wie een post heeft meteen zo,
   assert.deepEqual([a.formatie, b.formatie], ['ring', 'ring']);
   assert.notDeepEqual([a, b].map((e) => [e.post.x, e.post.y]), lijn, 'ze gaan meteen anders staan');
   assert.deepEqual(a.post.richting, { x: 1, y: 0 }, 'de richting van de troep blijft');
-  assert.deepEqual(T.gekozenBriefje(S).briefje.delen[0].regels.find((r) => r.tekst === 'Formation').knoppen.map((k) => k.kan), [true, false]);
+  assert.deepEqual(T.gekozenBriefje(S).briefje.delen[0].regels.find((r) => r.tekst === 'Formation').knoppen.map((k) => k.kan), [true, false, false]);
   // De volgende rechtsklik houdt de Ring: twee man staan tegenover elkaar om de plek.
   const verder = vrijVeld(D, naar, 0, 8);
   T.geefOpdracht(S, T.handelingSturen(S, verder, [a, b]).opdracht);

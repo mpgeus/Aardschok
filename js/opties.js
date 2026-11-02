@@ -884,6 +884,7 @@
     schild: T.t('shield'),
     harnas: T.t('leather armour'),
     ridder: T.t('knight'),
+    ruiter: T.t('horseman'),
     aanleggen: T.t('seconds taking aim'),
     leven: T.t('life'),
     afgeslagen: T.t('beaten off'),
@@ -1464,6 +1465,12 @@
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad': T.t('the turtle: shields up against arrows'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad.pijl': T.t('a man covered by a shield stops this much more of an arrow'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad.traag': T.t('in the turtle they walk this many times as fast'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad.open': T.t('it opens when an enemy comes within this many tiles'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad.stormloop': T.t('then they charge out for this many seconds'), // geen tekst
+    'KIEZEN_INSTELLINGEN.schildpad.storm': T.t('charging, this many times as fast'), // geen tekst
     'KIEZEN_INSTELLINGEN.groep': T.t('a man further than this many tiles from his group finds his own way'), // geen tekst
     'VELDSLAG_INSTELLINGEN.zee': T.t('this many tiles of sea around the map are open and visible'), // geen tekst
     'VELDSLAG_INSTELLINGEN.dag': T.t('the day and hour a battle is fought on, and stays on'), // geen tekst
@@ -1498,6 +1505,10 @@
     'VELDHEER_INSTELLINGEN.mixen.zwaar.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar.piekenier': T.t('pikemen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.ruiters': T.t('the mix of horsemen'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.ruiters.ruiter': T.t('horsemen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.ruiters.speerman': T.t('spearmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.ruiters.boogschutter': T.t('archers, share of the points'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
     'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst

@@ -57,7 +57,10 @@ lijst van het demojaar (hieronder) gaat dieper; deze ronde neemt alleen wat sind
    staat "Old Wat · general", en zijn briefje zegt wat hij draagt en doet. Dame Agnes draagt het vel van een piekenier,
    Old Wat dat van een kruisboogschutter, Sir Godfrey loopt nog als dorpeling. **Vraag:** het briefje *Fighting, since
    today* linksboven: weg in een slag? Herken je je generaal tussen zijn mannen (`opmerkingen.md`, "De generaals")?
-   Speel er ook één met veel boogschutters: voel je dat de mix *schutters* te sterk is?
+   Speel er ook één met veel boogschutters: voel je dat de mix *schutters* te sterk is? **Sinds 2 nov de schildpad en
+   de ruiter**: koop zwaardvechters en een paar ruiters (*Horseman*, 10 punten; hij lijkt nog op de ridder). Kies je
+   mannen en druk op hun briefje *Turtle*: een blok, half zo snel; loop ermee op de schutters af, en kijk of het op
+   drie tegels opengaat en ze eruit stormen. Stuur je ruiters op hun boogschutters. Voelt het als een tactiek?
 
 ### C. Hoofdstuk 2, het rovershol (2c, bij K)
 

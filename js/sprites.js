@@ -1064,6 +1064,9 @@
     const p = e.bewoner || (e.soort === 'aanvoerder' && e.dorp && e.dorp.veldslag ? T.bewonerVan(e.dorp, e) : null);
     const soldaat = p && (p.soldaat ? p.soldaat.soort : p.generaal ? p.wapen : null);
     if (soldaat && S.figuurGegevens(soldaat)) return soldaat;
+    // een soort zonder eigen vel leent er een (de lichte ruiter dat van de ridder, js/soldaten.js)
+    const leent = soldaat && T.SOLDAAT_SOORTEN[soldaat].leent;
+    if (leent && S.figuurGegevens(leent)) return leent;
     const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'aanvoerder';
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     if (S.figuurGegevens(naam) || !e.vel) return naam;

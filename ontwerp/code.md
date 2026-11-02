@@ -1345,6 +1345,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `VELDHEER_INSTELLINGEN.mixen` (gewoon, schutters, zwaar: per soort een deel van de punten) uit het lot (gemengd, want de
   eerste worp van een dobbelsteen is bij een klein zaad niet verspreid), koopt per soort zoveel als zijn deel betaalt, en
   met wat overblijft steeds de duurste soort die er nog in past, en anders de militie: alle punten op, en geen toeval.
+  Sinds 2 nov ook de mix *ruiters* (de lichte ruiter, js/soldaten.js). **De schildpad** (2 nov, js/kiezen.js): ziet hij
+  schutters van de vijand en heeft hij schilden, dan rukt hij op als schildpad (de opdracht `formatie`, zoals de knop), en
+  valt dan niemand zelf aan: de schildpad gaat vanzelf open als de vijand er is; anders een Line.
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -2643,6 +2646,14 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 ### js/soldaten.js: de soldaten en hun wapens
 
+- **De lichte ruiter** (2 nov; Marcel: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A",
+  "3. Ja beiden"): `ruiter` (*horseman*), een speer en een paard, dus 10 punten; in skirmish en in het dorp (het wachthuis
+  loopt alle soorten langs, de stal brengt het paard). Wat een paard geeft, is per soort: `T.paardVan(e)` geeft de
+  getallen van zijn soort (`SOLDATEN_INSTELLINGEN.ruiter`: anderhalf maal het leven en twee maal de pas; de ridder twee
+  maal en 1,6), voor `T.levenAlsMan` (js/rovers.js) en `T.snelheidVan` (js/wereld.js). Tot hij een eigen figuur heeft,
+  leent hij dat van de ridder (`leent` in `T.SOLDAAT_SOORTEN`, js/sprites.js). `T.heeftSchild(e)`: een schild in de hand,
+  niet te paard (voor de schildpad, js/kiezen.js).
+
 - **De prijs van een soldaat** (3b1, 28 okt; `scenario.md`, 7: "De prijs van een soldaat is de waarde van zijn stukken"):
   `T.soldaatPrijs(soort)` telt de waarde van zijn stukken (`T.waardeVan`, js/einde.js, de tabel van de punten van 186);
   de hooivork, die geen waar is, staat er op zijn eigen naam (`waarde.hooivork: 1`, B1). Een speerman kost zo 4, een
@@ -2753,6 +2764,22 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   en dat vraagt samen spelen in lockstep. Tot 16 okt gebruikte `js/gevecht.js` `e.kijkt` ook als klok (wanneer hij weer
   om zich heen kijkt); die heet nu `e.omkijken`, want `js/sprites.js` las het getal als een plek, en wie gevochten had,
   keek dan naar het zuiden.
+- **De schildpad** (2 nov; Marcel: "misschien kunnen de swordsmen hun schilden gebruiken als turtle tegen een regen van
+  pijlen", en "1. Ja gaat open wanneer vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit de schildpad"): de
+  derde formatie, `'schildpad'` (*Turtle* op het briefje van meer mannen; zonder schild staat de knop uit, met *Needs a
+  man with a shield*). Alleen met een schild erbij (`T.heeftSchild`, js/soldaten.js: niet te paard); anders maakt
+  `T.formatieVan` er een Line van. `schildpadPlekken` zet een blok zo breed als diep, recht op het raster (de richting
+  afgerond op een as: schuin liggen de plekken om en om, met gaten tussen de schilden), de schilden eerst op de voorste
+  rij, dan de zijkanten, dan achter, en de rest erbinnen, wie schiet het diepst. Wie samen een schildpad werd, heeft
+  `e.troep` (het kleinste nummer van de troep; `zetVorm`). `T.gedektInSchildpad(e)`: hij heeft een schild, of een man van
+  zijn troep met een schild staat naast hem (een tegel); dan vangt hij `schildpad.pijl` meer af van een pijl, niet van een
+  bout (`T.vangtAf`, js/soldaten.js). De prijs: `T.formatieTempo(e)` geeft `traag` (`T.snelheidVan`, js/wereld.js), en
+  `T.werkGevechtBij` (js/gevecht.js) laat wie in een schildpad staat over: hij kiest geen doel en slaat niet. Elke tik
+  (`T.werkSchildpadBij`, in `T.werkGevechtBij`, met de vijanden van de kaart) gaat een troep open als een vijand binnen
+  `open` tegels van een van hen komt: een Line, `e.storm` (tot wanneer, in de tijd van de wereld: `stormloop` seconden,
+  `storm` maal zo snel), en elk krijgt de vijand die het dichtst bij hem is als doel. Ook een bevel om aan te vallen
+  (`T.volgVijand`, met de tijd van de wereld uit de opdracht, js/tik.js) opent hem met de stormloop; een troep zonder
+  schild meer gaat open zonder. Een ander bevel stopt de stormloop. De getallen in `KIEZEN_INSTELLINGEN.schildpad`.
 - **Eén weg voor de groep** (28 okt; Marcel: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
   veldslag"): `groepsBanen` zoekt één weg (`T.zoekRoute`, over open land) van de man in het midden van de groep naar de
   plek in het midden van hun formatie, en `baanVan` geeft elke man die weg verschoven naar zijn plek in de formatie (zijn

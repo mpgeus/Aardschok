@@ -14,7 +14,8 @@
 //   - een vijand aanvallen (`volg`): hij zit hem na tot hij hem raakt, en slaat (e.volgt; het gevecht, js/gevecht.js,
 //     zonder leiband). Is de vijand gevallen of weg, dan is waar hij staat zijn post.
 //   - terug (`terug`): de post is weg, en hij gaat weer naar zijn wachthuis (of aan het werk).
-//   - een formatie (`formatie`, stap 3): *Line* of *Ring*; wie een post heeft, gaat er meteen zo staan ("De formatie").
+//   - een formatie (`formatie`, stap 3): *Line*, *Ring* of *Turtle* (de schildpad, 2 nov); wie een post heeft, gaat er
+//     meteen zo staan ("De formatie", en "De schildpad").
 //   - een dienst (`dienst`, stap 4): *Day* of *Night* ("De diensten"); en *To arms* op het wachthuis (`teWapen`).
 // De held heeft geen dag om naar terug te gaan: hij blijft waar je hem neerzet.
 (function (T) {
@@ -39,6 +40,10 @@
     // Wie verder dan zoveel tegels van het midden van de groep staat, loopt niet mee op de weg van de groep, maar zoekt
     // zijn eigen weg (T.stuurMannen, "Eén weg voor de groep").
     groep: 12,
+    // De schildpad ("De schildpad", hieronder): wie gedekt is, vangt `pijl` meer af van een pijl; de troep loopt `traag`
+    // maal zo snel; komt een vijand binnen `open` tegels, dan gaat hij open, en `stormloop` seconden stormen ze eruit,
+    // `storm` maal zo snel.
+    schildpad: { pijl: 2, traag: 0.5, open: 3, stormloop: 2, storm: 1.5 },
   };
   const IN = () => T.KIEZEN_INSTELLINGEN;
 
@@ -123,7 +128,7 @@
   // Alleen gewone rekensommen, geen atan2, sin of cos: die kunnen op een andere computer een haar anders uitkomen, en
   // samen spelen (lockstep, js/tik.js) vraagt werelden die letter voor letter gelijk blijven.
 
-  T.FORMATIES = ['lijn', 'ring'];
+  T.FORMATIES = ['lijn', 'ring', 'schildpad'];
   const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
   const TAN_22_5 = 0.41421356; // de grens tussen twee van de acht kanten
   const NAAR_DE_CAMERA = { x: 1, y: 1 }; // de richting van wie nog geen richting had (Z in js/sprites.js)
@@ -134,7 +139,8 @@
     return s.schiet ? 2 : s.bereik > 1 ? 1 : 0;
   };
 
-  // De formatie van wie je samen stuurt: die van de meesten; bij gelijk de eerste van T.FORMATIES.
+  // De formatie van wie je samen stuurt: die van de meesten; bij gelijk de eerste van T.FORMATIES. Een schildpad alleen
+  // als er een schild bij is, anders een Line.
   T.formatieVan = function (mannen) {
     let beste = T.FORMATIES[0];
     let meest = 0;
@@ -142,7 +148,7 @@
       const n = mannen.filter((e) => (e.formatie || 'lijn') === v).length;
       if (n > meest) [beste, meest] = [v, n];
     }
-    return beste;
+    return beste === 'schildpad' && !mannen.some((e) => T.heeftSchild(e)) ? 'lijn' : beste;
   };
 
   // Een richting afgerond op de acht stappen van het raster ({ x, y }, elk -1, 0 of 1), of null zonder richting.
@@ -252,6 +258,34 @@
     return uit;
   }
 
+  // Een schildpad om `naar` ("De schildpad"): een blok zo breed als diep, dicht op elkaar, met de schilden vooraan en aan
+  // de randen (eerst de voorste rij, dan de zijkanten, dan de achterste), en de rest erbinnen, wie schiet het diepst. Het
+  // blok ligt recht op het raster (de looprichting afgerond op een as): schuin zouden de plekken om en om liggen, met een
+  // gat tussen elk schild en zijn buur.
+  function schildpadPlekken(mannen, naar, f) {
+    const as = Math.abs(f.x) >= Math.abs(f.y) ? { x: Math.sign(f.x), y: 0 } : { x: 0, y: Math.sign(f.y) };
+    const z = { x: -as.y, y: as.x }; // opzij
+    const b = Math.max(2, Math.ceil(Math.sqrt(mannen.length)));
+    const rijen = Math.ceil(mannen.length / b);
+    const plekken = [];
+    for (let r = 0; r < rijen; r++) {
+      for (let k = 0; k < b; k++) {
+        const rand = r === 0 ? 0 : k === 0 || k === b - 1 ? 1 : r === rijen - 1 ? 2 : 3; // hoe ver binnen
+        const o = k - (b - 1) / 2;
+        const terug = r - Math.floor((rijen - 1) / 2);
+        plekken.push({ rand, o, x: Math.round(naar.x - terug * as.x + o * z.x), y: Math.round(naar.y - terug * as.y + o * z.y) });
+      }
+    }
+    // van buiten naar binnen, en in een ring van buiten het midden eerst
+    plekken.sort((a, c) => a.rand - c.rand || Math.abs(a.o) - Math.abs(c.o) || a.o - c.o);
+    const schilden = mannen.filter((e) => T.heeftSchild(e));
+    const rest = mannen.filter((e) => !T.heeftSchild(e)).sort((a, c) => T.rijVan(a) - T.rijVan(c));
+    const binnen = plekken.slice(schilden.length).reverse(); // de rest van binnen naar buiten: wie schiet het diepst
+    const uit = schilden.map((e, i) => ({ e, x: plekken[i].x, y: plekken[i].y, kijk: { x: f.x, y: f.y } }));
+    rest.reverse().forEach((e, i) => uit.push({ e, x: binnen[i].x, y: binnen[i].y, kijk: { x: f.x, y: f.y } }));
+    return uit;
+  }
+
   // Waar elk van `mannen` komt te staan in hun formatie bij `naar`: { plekken: [{ e, x, y, kijk }], richting }. Zonder
   // `richting` die van hun midden naar `naar`; staan ze er al, dan die ze hadden. Ook voor het scherm (de plekken in groen
   // na een rechtsklik, js/main.js): het verandert niets. Stelt D op (de voorbereiding van een veldslag, D.strook in
@@ -263,7 +297,8 @@
     const dx = naar.x - m.x;
     const dy = naar.y - m.y;
     const f = richting || (Math.abs(dx) + Math.abs(dy) >= 1 && achtVan(dx, dy)) || vorigeRichting(mannen);
-    const plekken = T.formatieVan(mannen) === 'ring' ? ringPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
+    const vorm = T.formatieVan(mannen);
+    const plekken = vorm === 'ring' ? ringPlekken(mannen, naar, f) : vorm === 'schildpad' ? schildpadPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
     const bezet = new Set();
     const mag = D.strook ? (q) => T.inStrook(D, q.x, q.y) : null;
     for (const p of plekken) {
@@ -400,6 +435,7 @@
     const mannen = mannenMet(D, wie);
     if (!mannen.length) return;
     const formatie = T.formatieVan(mannen);
+    const troep = Math.min(...T.nummersVan(D, mannen));
     const uit = T.formatiePlekken(D, mannen, naar, richting);
     const banen = groepsBanen(D, uit.plekken);
     for (const { e, x, y, kijk } of uit.plekken) {
@@ -407,8 +443,7 @@
       wek(D, e);
       delete e.doelwit;
       delete e.vanaf;
-      if (formatie === 'lijn') delete e.formatie;
-      else e.formatie = formatie;
+      zetVorm(e, formatie, troep);
       if (e === D.aanvoerder) {
         e.kijkt = { x: x + kijk.x * 4, y: y + kijk.y * 4 };
         // Over open land komt hij er in één weg; anders onthoudt hij het, en zoekt hij onderweg verder (T.werkSturenBij).
@@ -431,19 +466,95 @@
   T.zetFormatie = function (D, wie, formatie) {
     if (!T.FORMATIES.includes(formatie)) return;
     const mannen = mannenMet(D, wie);
-    for (const e of mannen) {
-      if (formatie === 'lijn') delete e.formatie;
-      else e.formatie = formatie;
-    }
+    if (formatie === 'schildpad' && !mannen.some((e) => T.heeftSchild(e))) return; // zonder schild geen schildpad
+    const troep = Math.min(...T.nummersVan(D, mannen));
+    for (const e of mannen) zetVorm(e, formatie, troep);
     if (!mannen.some((e) => e.post)) return;
     const staan = mannen.filter((e) => e.post || e === D.aanvoerder);
     const m = midden(staan.map((e) => e.post || T.tegelVan(e)));
     T.stuurMannen(D, T.nummersVan(D, staan), { x: Math.round(m.x), y: Math.round(m.y) }, vorigeRichting(staan));
   };
 
+  // ── De schildpad (Marcel, 2 nov: "misschien kunnen de swordsmen hun schilden gebruiken als turtle tegen een regen van
+  // pijlen", en op het plan: "1. Ja gaat open wanneer vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit de
+  // schildpad") ──
+  //
+  // Een troep met een schild erin (T.heeftSchild, js/soldaten.js: niet te paard) kan als schildpad staan en lopen: dicht
+  // op elkaar, de schilden aan de buitenkant (schildpadPlekken). Wie een schild heeft, of naast of achter een schild van
+  // zijn schildpad staat (een tegel), is gedekt: hij vangt `schildpad.pijl` meer af van een pijl, niet van een bout
+  // (T.vangtAf). De prijs: ze lopen `traag` maal zo snel, en niemand slaat (js/gevecht.js laat wie in een schildpad staat
+  // over). Komt een vijand binnen `open` tegels van een van hen, of stuur je ze op een vijand af, dan gaat de schildpad
+  // open: ze staan weer in een Line, en `stormloop` seconden stormen ze `storm` maal zo snel op de dichtste vijand af
+  // (e.storm: tot wanneer, in de tijd van de wereld). Een schildpad zonder schild meer gaat open zonder stormloop. Elke
+  // man weet zijn troep (e.troep: het kleinste nummer van wie samen een schildpad werd), zodat een troep samen opengaat.
+
+  // Zet de formatie van e (zonder is het een Line), en in een schildpad zijn troep. Een nieuw bevel stopt een stormloop.
+  function zetVorm(e, formatie, troep) {
+    delete e.storm;
+    if (formatie === 'lijn') delete e.formatie;
+    else e.formatie = formatie;
+    if (formatie === 'schildpad') e.troep = troep;
+    else delete e.troep;
+  }
+  // De schildpad gaat open: een Line, en met `nu` (de tijd van de wereld) de stormloop.
+  function openSchildpad(mannen, nu) {
+    for (const e of mannen) {
+      delete e.formatie;
+      delete e.troep;
+      if (nu != null) e.storm = nu + IN().schildpad.stormloop;
+    }
+  }
+  // Is e gedekt in zijn schildpad: hij heeft een schild, of een man van zijn schildpad met een schild staat naast hem?
+  T.gedektInSchildpad = function (e) {
+    if (!e || e.formatie !== 'schildpad') return false;
+    if (T.heeftSchild(e)) return true;
+    const D = e.dorp;
+    return !!D && T.mannenVan(D).some((m) => m !== e && m.formatie === 'schildpad' && m.troep === e.troep && T.afstand(T.tegelVan(m), T.tegelVan(e)) <= 1 && T.heeftSchild(m));
+  };
+  // Zoveel maal zijn gewone pas loopt e (T.snelheidVan, js/wereld.js): in de stormloop sneller, in de schildpad trager.
+  T.formatieTempo = (e) => (e.storm ? IN().schildpad.storm : e.formatie === 'schildpad' ? IN().schildpad.traag : 1);
+
+  // Elke tik, in elk dorp (T.werkGevechtBij, js/gevecht.js, met de vijanden op de kaart): een stormloop die om is, houdt
+  // op; een schildpad zonder schild gaat open; en een schildpad met een vijand binnen `open` tegels gaat open, en elk
+  // stormt op de vijand die het dichtst bij hem is.
+  T.werkSchildpadBij = function (S, D, vijanden, nu) {
+    const troepen = new Map();
+    for (const e of T.mannenVan(D)) {
+      if (e.storm && nu >= e.storm) delete e.storm;
+      if (e.formatie !== 'schildpad') continue;
+      if (!troepen.has(e.troep)) troepen.set(e.troep, []);
+      troepen.get(e.troep).push(e);
+    }
+    if (!troepen.size) return;
+    const levend = vijanden.filter((v) => !v.dood && !v.binnen);
+    const dichtste = (e) => {
+      let beste = null;
+      let bij = Infinity;
+      for (const v of levend) {
+        const a = T.afstand(T.tegelVan(v), T.tegelVan(e));
+        if (a < bij) [beste, bij] = [v, a];
+      }
+      return { v: beste, a: bij };
+    };
+    for (const troep of troepen.values()) {
+      if (!troep.some((e) => T.heeftSchild(e))) {
+        openSchildpad(troep, null);
+        continue;
+      }
+      const naast = troep.map(dichtste);
+      if (!naast.some((d) => d.a <= IN().schildpad.open)) continue;
+      openSchildpad(troep, nu);
+      troep.forEach((e, i) => {
+        if (!naast[i].v) return;
+        e.doelwit = naast[i].v;
+        e.vanaf = T.tegelVan(e);
+      });
+    }
+  };
+
   // Een vijand aanvallen (`volg`): de vijand van die soort het dichtst bij waar je klikte. Het gevecht (js/gevecht.js)
-  // brengt hem erheen en laat hem slaan.
-  T.volgVijand = function (D, wie, doel) {
+  // brengt hem erheen en laat hem slaan. Wie in de schildpad stond, stormt eruit (`nu`: de tijd van de wereld).
+  T.volgVijand = function (D, wie, doel, nu = 0) {
     if (D.strook) return; // in de voorbereiding van een veldslag valt niemand aan (js/veldslag.js)
     const mannen = mannenMet(D, wie);
     let vijand = null;
@@ -457,6 +568,7 @@
       }
     }
     if (!vijand) return;
+    openSchildpad(mannen.filter((e) => e.formatie === 'schildpad'), nu);
     for (const e of mannen) {
       neemBevel(e);
       wek(D, e);
@@ -657,7 +769,10 @@
     return [
       { tekst: T.t('Line'), uitleg: T.t('In rows: who strikes in front, spears behind them, bows at the back'), formatie: 'lijn' },
       { tekst: T.t('Ring'), uitleg: T.t('In a ring around the spot, facing out, bows in the middle'), formatie: 'ring' },
-    ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: k.formatie !== nu, opdracht: { soort: 'formatie', wie, formatie: k.formatie } }));
+      mannen.some((e) => T.heeftSchild(e))
+        ? { tekst: T.t('Turtle'), uitleg: T.t('Shields up, close together: arrows do less, but they walk slowly and do not strike. When the enemy comes near, they charge out.'), formatie: 'schildpad' }
+        : { tekst: T.t('Turtle'), uitleg: T.t('Needs a man with a shield'), formatie: 'schildpad', niet: true },
+    ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: !k.niet && k.formatie !== nu, opdracht: { soort: 'formatie', wie, formatie: k.formatie } }));
   };
 
   // Het briefje van meer mannen: hoeveel, wie (bij naam, de eerste briefjeRegels), hun formatie, hun dienst, en

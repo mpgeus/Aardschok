@@ -271,3 +271,6 @@ van hun naam: Klaas → **Nicholas**, Aaltje → **Alice**, Gerrit → **Gerard*
   (en later **Brother Anselm**). Een generaal is *the general* (*General* in de lobby, "Dame Agnes · general" bij de
   muis); zijn kring in een zin: *Within 5 tiles of her, your men strike harder and are better protected.* Nog te lezen
   door Marcel (de speellijst van 2 nov).
+- De lichte ruiter is *the horseman* (2 nov); de schildpad is *Turtle* op het briefje, met *Shields up, close together:
+  arrows do less, but they walk slowly and do not strike. When the enemy comes near, they charge out.* en zonder schild
+  *Needs a man with a shield*.

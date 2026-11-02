@@ -144,7 +144,7 @@
     // hun post ({ wie, naar: { x, y } }); een vijand achterna ({ wie, doel: { x, y, soort } }); terug ({ wie }); hun
     // formatie (stap 3: { wie, formatie: 'lijn' of 'ring' }); en hun dienst (stap 4: { wie, dienst: 'dag' of 'nacht' }).
     stuur: (S, D, o) => T.stuurMannen(D, o.wie, o.naar),
-    volg: (S, D, o) => T.volgVijand(D, o.wie, o.doel),
+    volg: (S, D, o) => T.volgVijand(D, o.wie, o.doel, S.wereldTijd || 0),
     terug: (S, D, o) => T.roepTerug(D, o.wie),
     formatie: (S, D, o) => T.zetFormatie(D, o.wie, o.formatie),
     dienst: (S, D, o) => T.zetDienst(D, o.wie, o.dienst),

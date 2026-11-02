@@ -154,8 +154,14 @@
   T.afstand = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
   // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat; je soldaten en veteranen even snel als de held
   // (T.KIEZEN_INSTELLINGEN.loopt, js/kiezen.js; vraag 191, S1), want hun poppetje is dat van een boer. (Tot 25 sep liep de
-  // tovenaar trager naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.)
-  T.snelheidVan = (e) => (e.bewoner && (e.bewoner.soldaat || e.bewoner.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt * (T.opPaard(e) ? T.SOLDATEN_INSTELLINGEN.ridder.snelheid : 1) : e.snelheid);
+  // tovenaar trager naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.) Te paard sneller (T.paardVan,
+  // js/soldaten.js), en in de schildpad trager en in de stormloop eruit sneller (T.formatieTempo, js/kiezen.js).
+  T.snelheidVan = function (e) {
+    const p = e.bewoner;
+    const paard = p && p.soldaat ? T.paardVan(e) : null;
+    const basis = p && (p.soldaat || p.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt * (paard ? paard.snelheid : 1) : e.snelheid;
+    return e.formatie || e.storm ? basis * T.formatieTempo(e) : basis;
+  };
 
   // x en y lopen vloeiend mee tijdens het lopen; tx en ty zijn de tegel waar het wezen
   // staat of naartoe stapt. Wie iets over bezetting vraagt, vraagt tx en ty.

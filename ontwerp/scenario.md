@@ -414,6 +414,17 @@ skirmish.
   %, *gewoon* 60 % en *zwaar* 5 %; met de generaals maar zonder kring (`--getal VELDSLAG_INSTELLINGEN.generaal.kring=0`)
   91, 44 en 21 %; met de kring 82, 42 en 29 %. De generaals helpen *zwaar*, maar *schutters* wint nog te vaak: de balans
   blijft een vraag aan Marcel (`opmerkingen.md`).
+- **Een tactiek tegen de pijlen, besloten en gebouwd** (Marcel, 2 nov: "we zullen toch een tactiek moeten hebben om de
+  pijlen te overbruggen", op het voorstel "1 allebei, 2 eerst afwachten", en op het plan "1. Ja gaat open wanneer vijand
+  in de buurt komt. Eerste 2 seconden een stormloop vanuit de schildpad. 2. A 3. Ja beiden"): de schildpad (*Turtle*)
+  en de lichte ruiter (*horseman*), in skirmish en in het dorp (`spel.md`, bij de formatie en het wachthuis; `code.md`
+  bij `js/kiezen.js` en `js/soldaten.js`). De AI rukt als schildpad op als hij schutters ziet en schilden heeft, en koopt
+  soms de mix *ruiters*. De boogschutter blijft 2 punten tot we zien wat de tactiek doet. **Wat de metingen zeggen** (2
+  nov): de proefbank (twee AI's die op elkaar af lopen) wint *schutters* nog alles, en de ruiters niets; de twee legers
+  zien elkaar pas op een tegel of zes, dus er valt weinig te schieten, en de schildpad komt zelden. Tegen een linie
+  schutters die blijft staan (20 slagen): een leger met 3 zwaardvechters, 3 speermannen en 2 boogschutters wint zonder
+  schildpad 0 keer en met 1 keer; 5 zwaardvechters tegen 18 boogschutters 0 tegen 1 keer. De schildpad helpt dus een
+  beetje. **De oorzaak ligt ergens anders** (`opmerkingen.md`, "Waarom de schutters winnen").
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

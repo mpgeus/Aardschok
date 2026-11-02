@@ -398,3 +398,81 @@ test('de generaals: de held van een leger vecht met zijn wapen, en zijn kring ma
     T.ui = ui;
   }
 });
+
+// De schildpad (Marcel, 2 nov: "misschien kunnen de swordsmen hun schilden gebruiken als turtle tegen een regen van
+// pijlen", en "1. Ja gaat open wanneer vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit de schildpad").
+test('de schildpad: gedekt tegen pijlen maar niet tegen bouten, traag, slaat niet, en gaat open met een stormloop', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
+  try {
+    const Z = T.KIEZEN_INSTELLINGEN.schildpad;
+    const S = slag([{ soorten: { zwaardvechter: 2, speerman: 2, boogschutter: 2 } }, { soorten: { boogschutter: 2 } }]);
+    vechten(S);
+    seconden(S, 1);
+    const [A, B] = S.dorpen;
+    const mannen = T.militieVan(A);
+    const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [] });
+    const [v1, v2] = T.militieVan(B);
+    for (const v of [v1, v2]) zet(v, v.tx + 40, v.ty); // de vijand ver weg
+    // zonder schild geen schildpad: wie alleen bogen heeft, blijft een Line
+    const bogen = mannen.filter((e) => e.bewoner.soldaat.soort === 'boogschutter');
+    T.geefOpdracht(S, { soort: 'formatie', dorp: 0, wie: T.nummersVan(A, bogen), formatie: 'schildpad' });
+    seconden(S, 1);
+    assert.ok(bogen.every((e) => !e.formatie), 'zonder schild geen schildpad');
+    // met de zwaardvechters erbij: één troep, de schilden aan de buitenkant, en iedereen gedekt
+    T.geefOpdracht(S, { soort: 'formatie', dorp: 0, wie: T.nummersVan(A, mannen), formatie: 'schildpad' });
+    seconden(S, 4);
+    assert.ok(mannen.every((e) => e.formatie === 'schildpad'), mannen.map((e) => e.formatie).join(' '));
+    assert.equal(new Set(mannen.map((e) => e.troep)).size, 1, 'één troep');
+    assert.ok(mannen.every((e) => T.gedektInSchildpad(e)), 'iedereen staat naast een schild');
+    // tegen een pijl een schild extra, tegen een bout niets, tegen een klap zoals altijd; en half zo snel
+    const speer = mannen.find((e) => e.bewoner.soldaat.soort === 'speerman');
+    const bout = { bewoner: { soldaat: { soort: 'kruisboogschutter' } } };
+    const harnas = T.SOLDATEN_INSTELLINGEN.bescherming.harnas + (T.inKring(speer) ? T.VELDSLAG_INSTELLINGEN.generaal.harnas : 0); // en de kring van zijn generaal
+    assert.equal(T.vangtAf(speer, v1), harnas + Z.pijl);
+    assert.equal(T.vangtAf(speer, bout), 0);
+    assert.equal(T.vangtAf(speer), harnas);
+    assert.equal(T.snelheidVan(speer), T.KIEZEN_INSTELLINGEN.loopt * Z.traag);
+    // een vijand op vijf tegels: ze slaan niet, en blijven een schildpad
+    const voor = mannen.reduce((a, b) => (a.tx > b.tx ? a : b));
+    zet(v1, voor.tx + Z.open + 2, voor.ty);
+    seconden(S, 1);
+    assert.ok(mannen.every((e) => e.formatie === 'schildpad' && !e.doelwit), 'in de schildpad slaat niemand');
+    // dichterbij dan `open`: de schildpad gaat open, en ze stormen op hem af
+    zet(v1, voor.tx + Z.open, voor.ty);
+    T.wereldTik(S);
+    assert.ok(mannen.every((e) => !e.formatie && !e.troep), 'een Line');
+    assert.ok(mannen.every((e) => e.storm), 'de stormloop');
+    assert.equal(T.formatieTempo(speer), Z.storm);
+    assert.ok(mannen.some((e) => e.doelwit === v1), 'op de vijand af');
+    seconden(S, Z.stormloop + 1);
+    assert.ok(mannen.every((e) => !e.storm), 'na de stormloop gewoon');
+  } finally {
+    T.ui = ui;
+  }
+});
+
+// De lichte ruiter (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A").
+test('de lichte ruiter: een speer en een paard, 10 punten, sneller dan de ridder en met minder leven', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  try {
+    const IN = T.SOLDATEN_INSTELLINGEN;
+    assert.deepEqual(T.SOLDAAT_SOORTEN.ruiter.stukken, ['speer', 'paard']);
+    assert.equal(T.soldaatPrijs('ruiter'), 10);
+    assert.equal(T.soortNaam('ruiter'), 'horseman');
+    assert.equal(T.SOLDAAT_SOORTEN.ruiter.leent, 'ridder', 'tot hij een eigen figuur heeft');
+    const S = slag([{ soorten: { ruiter: 1, ridder: 1, zwaardvechter: 1 } }, { soorten: { speerman: 1 } }]);
+    const van = (soort) => T.militieVan(S.dorpen[0]).find((e) => e.bewoner.soldaat.soort === soort);
+    const [r, k, z] = [van('ruiter'), van('ridder'), van('zwaardvechter')];
+    assert.equal(T.snelheidVan(r), T.KIEZEN_INSTELLINGEN.loopt * IN.ruiter.snelheid);
+    assert.equal(T.snelheidVan(k), T.KIEZEN_INSTELLINGEN.loopt * IN.ridder.snelheid);
+    assert.ok(T.snelheidVan(r) > T.snelheidVan(k), 'vlotter dan de ridder');
+    const leven = T.WEZENS.soldaat.leven;
+    assert.equal(T.levenAlsMan(r).max, Math.round(leven * IN.ruiter.leven));
+    assert.ok(T.levenAlsMan(r).max < T.levenAlsMan(k).max, 'minder leven dan de ridder');
+    assert.ok(!T.heeftSchild(k) && T.heeftSchild(z), 'te paard houdt de ridder zijn schild bij zich: geen schildpad');
+  } finally {
+    T.ui = ui;
+  }
+});

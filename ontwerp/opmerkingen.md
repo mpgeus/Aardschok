@@ -150,6 +150,21 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   maal zijn pas). Een *vlotte* ruiter vraagt dus een getal per soort te paard (sneller dan de ridder, minder leven), en
   misschien een lichter paard (een pony, goedkoper) als nieuw stuk. Op het eiland komt hij met de stal (192), zoals de
   ridder; zijn figuur met de art (het paard is er al voor de ridder).
+  **Gebouwd** (2 nov): de schildpad en de ruiter, en de AI gebruikt allebei (`scenario.md`, 7). Wat open is: de houding met
+  het schild omhoog (de art, eerst in woorden), en een eigen figuur voor de ruiter (hij leent dat van de ridder, en lijkt
+  er dus helemaal op). In een blok van 3 bij 3 met drie schilden vooraan is de achterste rij niet gedekt: wie gedekt wil
+  zijn, zet schilden ook aan de zijkanten.
+
+- **Waarom de schutters winnen** (2 nov, gemeten bij de schildpad; `scenario.md`, 7): niet door de pijlen. (1) **Een
+  boogschutter stapt opzij** als iemand naast hem staat (`stapOpzij`, js/gevecht.js), en wie van dichtbij slaat, slaat
+  alleen als hij stilstaat: één zwaardvechter deed 44 seconden over één boogschutter (zaad 1 tot 3; de boogschutter stapte
+  69 keer opzij), zonder zelf geraakt te worden. Een ruiter, sneller dan de boogschutter, deed het in 4 seconden. (2) **Elke
+  man heeft hetzelfde leven** (16), dus een boogschutter is 16 leven voor 2 punten en een zwaardvechter 16 voor 7: met
+  40 punten heeft de mix *schutters* 13 man, *zwaar* 8. (3) **De ruiters van de AI stormen alleen vooruit** (ze zijn
+  sneller) en vallen, voor de rest er is; dat is voor de standen van de veldheer (3f). Wat helpt, is aan Marcel: (A) een
+  boogschutter stapt pas weer opzij na een paar seconden (een getal), (B) de boogschutter duurder (de waarde van een boog
+  telt ook voor de punten van het dorp), of (C) het leven per soort. Voorstel van Claude: eerst A, want dat is wat het
+  duel liet zien.
 
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
