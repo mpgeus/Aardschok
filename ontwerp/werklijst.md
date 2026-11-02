@@ -96,7 +96,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **3d is af** (2 nov; Marcel: "1 ja, 2 ja, 3 alleen
    skirmish"; `scenario.md`, 7): de generaals *Sir Godfrey*, *Dame Agnes* en *Old Wat*, met hun kring; *Brother Anselm*
    komt met 3e. Te bekijken in de speellijst van 2 nov (B3). **Wacht op Marcel**: de balans (de mix *schutters* wint met
-   de generaals nog 82 %, was 94; `opmerkingen.md`, "De generaals"). Daarna 3e (de knotsdrager, met Anselm) en 3f.
+   de generaals nog 82 %, was 94; `opmerkingen.md`, "De generaals"), en een tactiek tegen de pijlen (Marcel, 2 nov: "we
+   zullen toch een tactiek moeten hebben om de pijlen te overbruggen": de schildpad, het voorstel in `opmerkingen.md`,
+   "Een tactiek tegen de pijlen"). Daarna 3e (de knotsdrager, met Anselm) en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

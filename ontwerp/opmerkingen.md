@@ -121,6 +121,23 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   slaat in de kring 3 tot 5 (gemiddeld een derde harder), een zwaard van 5 tot 7 slaat 6 tot 9. (5) **Een groot leger**
   (meer dan twee rijen) staat bij het begin niet helemaal in de kring: bij 40 punten staat er hooguit één man buiten.
 
+- **Een tactiek tegen de pijlen: de schildpad** (Marcel, 2 nov: "misschien kunnen de swordsmen hun schilden gebruiken als
+  turtle tegen een regen van pijlen", en "we zullen toch een tactiek moeten hebben om de pijlen te overbruggen"). Nog
+  niet gekozen; iets nieuws, dus eerst Marcel. **Wat de regels nu zeggen** (`T.vangtAf`, js/soldaten.js): een pijl doet 2
+  tot 4, en een zwaardvechter vangt er 3 af (schild 2, harnas 1), dus een pijl doet hem 0, 0 of 1: hij is al bijna
+  onkwetsbaar voor bogen (de ridder ook). Een speerman en een piekenier vangen 1 af (een pijl doet 1 tot 3), een
+  boogschutter niets; een bout gaat door alles heen. De mix *schutters* wint dus niet omdat pijlen door schilden gaan,
+  maar omdat (a) een boogschutter 2 punten kost en een zwaardvechter 7, (b) de AI recht het vuur in loopt, en (c) de
+  pijlen de lichte mannen van de andere mixen doden. Een schildpad die alleen de zwaardvechter zelf dekt, verandert
+  daarom weinig; wat wel helpt, is dat zijn schild **de mannen achter hem** dekt. **Voorstel van Claude:** een derde
+  formatie naast *Line* en *Ring*, *Turtle*, voor een troep met schilden erin: de zwaardvechters vooraan en aan de
+  randen, de rest erachter; wie direct achter of naast een schild staat, vangt van een pijl ook 2 af (niet van een bout);
+  de troep loopt half zo snel, en zolang hij in de schildpad staat, slaat niemand. Uit de schildpad met een andere formatie.
+  Wat het vraagt: een regel en een knop (js/kiezen.js, js/soldaten.js), de AI die hem gebruikt (3f), en een houding met
+  het schild omhoog (de art; eerst in woorden). Andere wegen over het open veld, die er al zijn of alleen een getal zijn:
+  door het bos (achter een boom raakt een pijl niet), de ridder (1,6 maal zo snel), je eigen schutters op hun schutters,
+  en de boogschutter duurder.
+
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
   dezelfde vraag stelt, krijgt hem uit het geheugen; een computer die herlaadt of later instapt, zoekt opnieuw en kan een
