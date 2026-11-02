@@ -51,8 +51,9 @@
       // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
       mes: { kosten: 3, schade: [1, 3], bereik: 1 },
     },
-    // Zoveel schade vangt het van elke klap af.
-    bescherming: { schild: 2, harnas: 1 },
+    // Zoveel schade vangt het van elke klap af. Het schild 1 sinds Marcel, 2 nov: "Ja, schild 1" (was 2: een zwaardvechter
+    // ving zo 3 af, een speer deed hem 0 tot 2, en de zware mix won 85 % van zijn slagen).
+    bescherming: { schild: 1, harnas: 1 },
     // Het leven van een soldaat, per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"; T.levenAlsMan, js/rovers.js). Tot
     // dan had iedereen 16 (T.WEZENS.soldaat), en was een boogschutter 16 leven voor 2 punten. De ruiter en de ridder houden
     // wat hun paard ze gaf (anderhalf en twee maal 16).

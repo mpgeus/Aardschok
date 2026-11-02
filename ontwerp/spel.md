@@ -1105,7 +1105,7 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), maar opzij alleen van ernaast (zover reikt de
   getekende speer; Marcel, 22 okt: "Steken van verder weg"; `steekReik` in "Fighting"), het zwaard hard (5 tot 7); de boog en de
   kruisboog schieten tot 8 tegels waar ze zien (2 tot 4, 4 punten), maar niet met een vijand naast zich. Een speer
-  steekt langs wie ertussen staat. Het schild vangt 2 af van elke klap, het harnas 1, maar van een bout uit een
+  steekt langs wie ertussen staat. Het schild vangt 1 af van elke klap (sinds 2 nov; was 2), het harnas 1, maar van een bout uit een
   kruisboog niets. Wie zonder soort meevecht (een veteraan, wie meegaat op de jacht), vecht met een hooivork; de schout
   slaat zoals altijd (3 tot 5). Hoe vaak, zegt het gevecht in real time (hieronder).
 - **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden) en de muren (stap 3). De soldaten

@@ -110,8 +110,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    Boogschutters raken niet altijd"): de stormloop als troep, de formatie *Loose* (de ruiters van de AI als gespreide
    groep), en een pijl die 30 % mist (een bout 25 %) en dan de buurman kan raken. Daarop (Marcel: "1. C; 2. Prima"): de
    zwaardvechter 18 leven, en flankeren met de ruiters gaat naar 3f. **Wacht op Marcel** (`opmerkingen.md`, "Na de
-   missers"): de zware mix wint nog 85 %, door het schild; met een schild dat 1 afvangt in plaats van 2 staan de drie
-   gewone mixen bijna gelijk. Daarna 3e (de knotsdrager, met Anselm) en 3f, met het flankeren van de ruiters.
+   missers"): de zware mix won nog 85 %, door het schild; Marcel: "Ja, schild 1": een schild vangt 1 af in plaats van 2,
+   en de drie gewone mixen staan onderling bijna gelijk. Daarna 3e (de knotsdrager, met Anselm) en 3f, met het flankeren
+   van de ruiters.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
