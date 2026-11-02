@@ -99,7 +99,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    nov: "we zullen toch een tactiek moeten hebben om de pijlen te overbruggen"; op het voorstel: "1 allebei, 2 eerst
    afwachten"): de schildpad en de lichte ruiter, allebei (`opmerkingen.md`, "Een tactiek tegen de pijlen"); de
    boogschutter wordt niet duurder tot we zien wat de tactiek doet (de mix *schutters* wint met de generaals nog 82 %,
-   was 94). Eerst het plan aan Marcel. Daarna 3e (de knotsdrager, met Anselm) en 3f.
+   was 94). **Bezig in sessie `claude/determined-curie-ircu5p`** (2 nov), op het plan (Marcel: "1. Ja gaat open wanneer
+   vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit de schildpad. 2. A 3. Ja beiden"): de schildpad
+   (*Turtle*, naast *Line* en *Ring*), die opengaat als een vijand in de buurt komt, met twee seconden stormloop; de
+   lichte ruiter (speer en paard, 10 punten, sneller dan de ridder en met minder leven), in skirmish en in het dorp; de
+   AI gebruikt allebei, en de proefbank meet het. Daarna 3e (de knotsdrager, met Anselm) en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

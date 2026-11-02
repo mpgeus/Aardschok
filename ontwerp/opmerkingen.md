@@ -124,7 +124,11 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
 - **Een tactiek tegen de pijlen: de schildpad** (Marcel, 2 nov: "misschien kunnen de swordsmen hun schilden gebruiken als
   turtle tegen een regen van pijlen", en "we zullen toch een tactiek moeten hebben om de pijlen te overbruggen").
   **Gekozen** (Marcel, 2 nov: "1 allebei, 2 eerst afwachten"): de schildpad en de lichte ruiter allebei, en de
-  boogschutter niet duurder tot we zien wat ze doen; het plan volgt (werklijst, bij 1). **Wat de regels nu zeggen** (`T.vangtAf`, js/soldaten.js): een pijl doet 2
+  boogschutter niet duurder tot we zien wat ze doen. **Het plan, besloten** (Marcel, 2 nov: "1. Ja gaat open wanneer
+  vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit de schildpad. 2. A 3. Ja beiden"): de schildpad gaat
+  vanzelf open als een vijand in de buurt komt, en de eerste twee seconden stormen ze eruit (sneller, op de dichtste
+  vijand af); de ruiter heeft een gewoon paard (10 punten, eigen getallen voor zijn pas en zijn leven), en komt in
+  skirmish en in het dorp. **Wat de regels nu zeggen** (`T.vangtAf`, js/soldaten.js): een pijl doet 2
   tot 4, en een zwaardvechter vangt er 3 af (schild 2, harnas 1), dus een pijl doet hem 0, 0 of 1: hij is al bijna
   onkwetsbaar voor bogen (de ridder ook). Een speerman en een piekenier vangen 1 af (een pijl doet 1 tot 3), een
   boogschutter niets; een bout gaat door alles heen. De mix *schutters* wint dus niet omdat pijlen door schilden gaan,
