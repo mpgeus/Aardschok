@@ -164,7 +164,9 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   sneller) en vallen, voor de rest er is; dat is voor de standen van de veldheer (3f). Wat helpt, is aan Marcel: (A) een
   boogschutter stapt pas weer opzij na een paar seconden (een getal), (B) de boogschutter duurder (de waarde van een boog
   telt ook voor de punten van het dorp), of (C) het leven per soort. Voorstel van Claude: eerst A, want dat is wat het
-  duel liet zien.
+  duel liet zien. **Gekozen** (Marcel, 2 nov): alle drie. "A. Boogschutter kan niet wegkomen uit melee combat; tenzij ze
+  sneller zijn; dan kun je 'kiten'; maar er zit wel een attack delay op, nadat ze verplaatsen. B. Boog wordt ook duurder;
+  in het dorp hebben we geen punten. C. Eigen hoeveelheid leven". Het plan met de getallen volgt (werklijst, bij 1).
 
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
