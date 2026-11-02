@@ -123,7 +123,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    van de lichte soorten; in de proefbank *zwaar* 76 %, *schutters* 68 %, *gewoon* 56 %. Daarop (Marcel, 2 nov): "Ook
    pikeman draagt ijzer", en "Als alle troepen er zijn kunnen we een balans sessie doen": **de balans wacht tot alle
    troepen er zijn** (een eigen sessie, met de proefbank en Marcels spel; wat er tot nu toe gemeten is, staat in
-   `scenario.md`, 7, en `opmerkingen.md`). Tot dan geen getallen meer bijstellen. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
+   `scenario.md`, 7, en `opmerkingen.md`). Tot dan geen getallen meer bijstellen. Mee in die sessie: speer en piek als
+   counter tegen ruiters en ridders (Marcel: "van oudsher wel counters voor Knights en mannen te paard"; `opmerkingen.md`,
+   "Voor de balanssessie"). Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
    aan een lokale sessie gegeven"); het spel zoekt het vel op de naam van de soort, dus het vel heet `knotsdrager`, met de
    houdingen van de anderen (staan, lopen, aanval, geraakt, sterven), zoals `piekenier`.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.

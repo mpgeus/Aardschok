@@ -223,7 +223,16 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   stond al als voornemen in de code ("een ijzeren harnas komt later"; Marcel: "dat ijzeren harnas hadden we al. Alleen we
   hebben daar niks mee gedaan"). De ridder kost nu 18, niet meer twee keer een zwaardvechter (10); hij blijft de duurste.
   Wat open is: met vaste mixen van de AI wint altijd een mix (bij ijzer 3 *zwaar*, bij ijzer 2 *schutters*); een AI die
-  kiest wat hij koopt en hoe hij opstelt (3f), en Marcels eigen spel, zeggen meer dan nog een getal. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  kiest wat hij koopt en hoe hij opstelt (3f), en Marcels eigen spel, zeggen meer dan nog een getal.
+
+- **Voor de balanssessie: speer en piek tegen ruiters** (Marcel, 2 nov: "Speerman en piekenier zijn van oudsher wel
+  counters voor Knights en mannen te paard i.v.m. lange afstand. Speerman en pikes hebben 'reach' wapens. En slaan vanaf 2
+  hokjes ver al"). **Wat er nu is:** speer en piek raken van 2 tegels (schuin en recht voor of achter; opzij pas van
+  ernaast, `steekReik`), een ruiter en een ridder van 1, dus een speerman slaat vaak eerst; en in de metingen hielden de
+  speermannen voor de schutters de ruiters van de AI tegen. **Wat er niet is:** een voordeel tegen wie te paard zit: een
+  speer doet een ridder evenveel als een man te voet. Voorstel van Claude (nog niet gekozen): tegen wie te paard zit slaan
+  speer en piek anderhalf keer zo hard (een regel en een getal), of een ruiter die op een speer of piek af stormt, krijgt
+  eerst een klap (de speer "staat schrap"). Voor de balanssessie, als alle troepen er zijn (Marcel, 2 nov). Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,
