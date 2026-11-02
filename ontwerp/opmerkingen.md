@@ -210,7 +210,10 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   dan 55 %. Wegen: (A) de zware mix van de AI weer zonder knotsdragers (toen stond hij gelijk), en de knotsdrager blijft
   voor de speler, tegen zware troepen; (B) een zwaarder harnas voor zware soorten (Marcel noemde het: "heavy leather
   armour"), zodat er iets is om doorheen te slaan; (C) de knots anders (sneller, of meer schade tegen wie harnas draagt).
-  Voorstel van Claude: A nu, en B of C met de standen van de veldheer (3f), als de AI kan kiezen wat hij koopt. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  Voorstel van Claude: A nu, en B of C met de standen van de veldheer (3f), als de AI kan kiezen wat hij koopt.
+  **Gekozen** (Marcel, 2 nov): "B, ik zei ook al heavy leather armour. Jij ging van ons bestaande leather uit. Dit zijn 2
+  verschillende klassen". Het zware leren harnas is dus een eigen stuk naast het leren harnas, en de knotsdrager draagt
+  het (Claude las "Mace en heavy leather armour" eerst als het leren harnas dat er al was). Het plan volgt. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

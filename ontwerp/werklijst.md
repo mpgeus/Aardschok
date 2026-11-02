@@ -115,8 +115,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    van de ruiters. **3e is af** (2 nov; Marcel: "1. Mace en heavy leather armour. 2. A, maar ze vallen wel langzaam aan,
    het is een zwaar wapen 3. Ja prima"; `scenario.md`, 7): knots en harnas (5 punten), de knots slaat door het harnas (het
    schild vangt wel af), 4 tot 6 schade, elke 1,6 seconde; in skirmish en in het dorp (de wapenmaker maakt knotsen);
-   Brother Anselm als vierde generaal. **Wacht op Marcel** (`opmerkingen.md`, "De knotsdrager"): de knotsdrager is zwak,
-   want er is weinig harnas om doorheen te slaan, en de zware mix met knotsdragers wint nu het minst. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
+   Brother Anselm als vierde generaal. De knotsdrager bleek zwak (er is weinig harnas om doorheen te slaan); Marcel: "B,
+   ik zei ook al heavy leather armour ... Dit zijn 2 verschillende klassen": **het volgende** is het zware leren harnas,
+   een eigen stuk naast het leren harnas, voor de knotsdrager en de zware soorten (`opmerkingen.md`, "De knotsdrager");
+   eerst het plan aan Marcel. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
    aan een lokale sessie gegeven"); het spel zoekt het vel op de naam van de soort, dus het vel heet `knotsdrager`, met de
    houdingen van de anderen (staan, lopen, aanval, geraakt, sterven), zoals `piekenier`.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
