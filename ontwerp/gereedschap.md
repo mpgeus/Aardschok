@@ -445,7 +445,7 @@ wie het overneemt als hij valt; `('val')` laat hem nu vallen (vraag 170, stap 5)
 berichten en wie je stuurt, zijn dan van dat dorp. Zo speel je twee dorpen in één browser.
 `Spel.debug.veldslag(zaad, legers, minuten)` begint een veldslag op *The Ford* (vraag 187 en 188, stap 3a2; tot de lobby
 er is): standaard zaad 1, elk leger acht speermannen en vier boogschutters (`[{ soorten: { speerman: 8, boogschutter: 4
-} }, ...]`), en tien minuten (`null` is geen tijd). Jij bent het eerste leger, het andere speelt de veldheer (3a3);
+}, generaal: 'agnes' }, ...]`; zonder `generaal` een uit het zaad, 3d), en tien minuten (`null` is geen tijd). Jij bent het eerste leger, het andere speelt de veldheer (3a3);
 met `veldheer: true` bij je eigen leger kijk je naar twee veldheren. `Spel.debug.wissel()` maakt jou het andere leger.
 Speel je mee, dan begint de slag met de voorbereiding (3b2): een minuut, of tot je *Fight!* geeft in de balk bovenaan
 (`Spel.geefOpdracht(Spel.S, { soort: 'klaar' })`). **In de cloud** laadt het spel in Playwright alleen met de spellus stil

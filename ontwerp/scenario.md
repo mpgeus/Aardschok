@@ -402,6 +402,18 @@ skirmish.
   **Gebouwd** (3b2 en 3b3, 30 okt; `code.md` bij `js/veldslag.js`): ook valt de held in een slag, dan neemt niemand het
   over (zoals de generaals), en staat linksboven alleen het doel van de slag. In de cloud in de browser nagelopen, van de
   voorbereiding tot het eindscherm en terug naar de lobby.
+- **De generaals, besloten** (Marcel, 2 nov, op het voorstel: "1 ja, 2 ja, 3 alleen skirmish"): wie binnen 5 tegels van
+  zijn generaal staat, slaat 25 % harder en heeft een harnas extra; valt hij, dan vecht de rest door; kies je hem, dan ligt
+  zijn kring even op de grond. Alleen in skirmish: in het dorp blijft de aanvoerder zoals hij is. Eerst drie: *Sir
+  Godfrey* met zwaard en schild (als dorpeling tot er een figuur van een zwaardvechter is), *Dame Agnes* met piek en *Old
+  Wat* met kruisboog; *Brother Anselm* met knots komt met de knotsdrager (3e). Je kiest hem in de lobby; de AI krijgt er
+  een uit het zaad. **Gebouwd** (3d, 2 nov; `code.md` bij `js/veldslag.js`), en in de cloud in de browser nagelopen (de
+  lobby, de slag, het briefje en de kring). De generaal begint nu net achter de achterste rij (was zes tegels achter de
+  voorkant, met de voorste rij buiten zijn kring). **De proefbank** (`npm run veldslag -- --punten 40 --zaden 1-90`, hoe
+  vaak een mix wint tegen een andere, zo'n 35 slagen per mix, dus een paar procent ruis): vóór de generaals *schutters* 94
+  %, *gewoon* 60 % en *zwaar* 5 %; met de generaals maar zonder kring (`--getal VELDSLAG_INSTELLINGEN.generaal.kring=0`)
+  91, 44 en 21 %; met de kring 82, 42 en 29 %. De generaals helpen *zwaar*, maar *schutters* wint nog te vaak: de balans
+  blijft een vraag aan Marcel (`opmerkingen.md`).
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

@@ -332,3 +332,69 @@ test('een veldslag met punten: de veldheer koopt bij het begin, en een speler ko
     T.ui = ui;
   }
 });
+
+// De generaals (3d; scenario.md, 7; Marcel, 2 nov: "1 ja, 2 ja, 3 alleen skirmish"): de held van een leger is een
+// generaal met het wapen van zijn soort, en wie in zijn kring staat, slaat harder en vangt meer af.
+test('de generaals: de held van een leger vecht met zijn wapen, en zijn kring maakt zijn mannen sterker', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  try {
+    const G = T.VELDSLAG_INSTELLINGEN.generaal;
+    const heeft = (lijst, stuk) => assert.ok(lijst.some((z) => z.includes(stuk)), `${stuk} in ${JSON.stringify(lijst)}`);
+    const L = T.veldslagLevel({ kaart: 'ford', zaad: 4, legers: [{ soorten: { speerman: 8, boogschutter: 4 }, generaal: 'agnes' }, { soorten: { speerman: 8 } }] });
+    assert.deepEqual(T.keurScenario(L), []);
+    heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, legers: [{ soorten: { speerman: 1 }, generaal: 'arthur' }, { soorten: { speerman: 1 } }] })), 'de generaal arthur bestaat niet');
+    const S = T.proefdorp.begin(T.proefdorp.zaad, L);
+    const [A, B] = S.dorpen;
+    const generaals = S.dorpen.map((D) => T.bewonerVan(D, T.generaalVan(D)).generaal);
+    // Dame Agnes, met de piek van een piekenier; de ander krijgt er een uit het zaad
+    const agnes = T.generaalVan(A);
+    assert.equal(agnes, A.aanvoerder);
+    const p = T.bewonerVan(A, agnes);
+    assert.deepEqual([p.generaal, p.wapen, p.geslacht], ['agnes', 'piekenier', 'vrouw']);
+    assert.deepEqual(T.stukkenVan(agnes), ['piek', 'harnas']);
+    assert.equal(T.slagVan(agnes).wapen, 'piek');
+    assert.equal(T.manTekst(A, agnes), 'Dame Agnes · general');
+    assert.ok(T.kringTekst('agnes').includes('of her'), T.kringTekst('agnes'));
+    assert.equal(T.bewonerVan(B, T.generaalVan(B)).generaal, T.generaalUitZaad(4, 1), 'zonder keus een uit het zaad');
+    assert.equal(T.generaalUitZaad(4, 1), T.generaalUitZaad(4, 1), 'op elke computer dezelfde');
+    // bij het begin staat ze achter haar mannen, op geen van hun plekken, en de linie in haar kring
+    const mannen = T.militieVan(A);
+    assert.ok(mannen.every((e) => e.tx !== agnes.tx || e.ty !== agnes.ty), 'niet op de plek van een man');
+    assert.ok(mannen.filter((e) => T.inKring(e)).length >= mannen.length - 1, `${mannen.filter((e) => T.inKring(e)).length} van ${mannen.length} in de kring`);
+    // in de kring: harder slaan en een harnas extra (maar niet tegen een bout), zij zelf niet; erbuiten niet
+    const man = mannen.find((e) => e.bewoner.soldaat.soort === 'speerman');
+    const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [] });
+    const kruisboog = { bewoner: { soldaat: { soort: 'kruisboogschutter' } } };
+    zet(man, agnes.x + G.kring, agnes.y);
+    assert.ok(T.inKring(man) && !T.inKring(agnes));
+    assert.equal(T.kracht(man), G.schade);
+    assert.equal(T.vangtAf(man), T.SOLDATEN_INSTELLINGEN.bescherming.harnas + G.harnas, 'zijn harnas en een extra');
+    assert.equal(T.vangtAf(man, kruisboog), 0, 'een bout gaat erdoorheen');
+    zet(man, agnes.x + G.kring + 1, agnes.y);
+    assert.ok(!T.inKring(man));
+    assert.equal(T.kracht(man), 1);
+    assert.equal(T.vangtAf(man), T.SOLDATEN_INSTELLINGEN.bescherming.harnas);
+    // de man van de ander staat niet in haar kring, ook niet naast haar
+    const vijand = T.militieVan(B)[0];
+    zet(vijand, agnes.x + 1, agnes.y);
+    assert.ok(T.afstand(vijand, T.generaalVan(B)) > G.kring && !T.inKring(vijand), 'alleen de kring van zijn eigen generaal');
+    // valt ze, dan is de kring weg, en vecht de rest door
+    zet(man, agnes.x + 1, agnes.y);
+    assert.ok(T.inKring(man));
+    T.valt(S, B, agnes, vijand);
+    assert.equal(T.generaalVan(A), null);
+    assert.ok(!T.inKring(man) && T.kracht(man) === 1);
+    assert.ok(T.legerVan(A).length > 0, 'de rest staat nog');
+    // Again speelt met dezelfde generaals, en Lobby houdt de jouwe
+    assert.equal(T.veldslagKeuzes(S).generaal, 'agnes');
+    const S2 = T.proefdorp.begin(T.proefdorp.zaad, T.veldslagNogEens(S));
+    assert.deepEqual(S2.dorpen.map((D) => T.bewonerVan(D, T.generaalVan(D)).generaal), generaals);
+    // in een dorp is de held geen generaal: geen kring
+    const dorp = T.proefdorp.begin(T.proefdorp.zaad);
+    assert.equal(T.generaalVan(dorp.dorp), null);
+    assert.ok(T.militieVan(dorp.dorp).every((e) => !T.inKring(e)));
+  } finally {
+    T.ui = ui;
+  }
+});

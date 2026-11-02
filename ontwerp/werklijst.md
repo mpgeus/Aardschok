@@ -57,7 +57,7 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
 - **De speellijst van 2 nov spelen** (`speelbaar.md`, bovenaan; Marcel, 2 nov: "Ja, maak die speellijst"): alles wat
   gebouwd klaarstond om te bekijken, naast de beelden, in één ronde in Firefox. A, het demojaar met de wacht: de dragers
   (184), minder stroef (191, S1 tot S4), de overval en de punten (185 en 186); B, het egaliseren (182) met d van de
-  heuvels (vraag 174), meten in Firefox (178 en de grond, `snelheid.md`), en een slag in skirmish (3b2 en 3b3); C,
+  heuvels (vraag 174), meten in Firefox (178 en de grond, `snelheid.md`), en een slag in skirmish (3b2 en 3b3, en de generaals van 3d); C,
   hoofdstuk 2, het rovershol (2c); het Engels (`engels.md`); en daarna zes keuzes. Daarna, als er tijd is, de lange
   lijst van het demojaar. Nog open bij 185: de korte scène van de rovers (met de cinematic), en de waarden van de waren
   (de werkbank, "The ending").
@@ -93,13 +93,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    spelen (`code.md` bij `js/tik.js`, "Samen"; wat open is in `opmerkingen.md`). 3b1 is af: de lobby (*Skirmish* op het
    titelscherm, ook in de demo), kopen met punten, en de AI koopt een van drie mixen (`scenario.md`, 7). 3b2 en 3b3 zijn
    af (30 okt; Marcel: "1. In de ui balk", "2. A 3. b 4. A"): de voorbereiding met de klok en *Fight!* in de balk, de
-   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **Bezig in sessie `claude/determined-curie-ircu5p`**
-   (2 nov): **3d, de generaals** (Marcel, 2 nov: "1 ja, 2 ja, 3 alleen skirmish"): het voorstel is goedgekeurd (inspiratie
-   binnen 5 tegels: 25 % meer schade en 1 harnas; valt hij, dan vecht de rest door; zijn kring even op de grond als je
-   hem kiest), alleen in skirmish, en eerst drie: *Sir Godfrey* met zwaard en schild (als dorpeling tot zijn figuur er
-   is), *Dame Agnes* met piek en *Old Wat* met kruisboog; *Brother Anselm* met knots komt met 3e. **Wacht op Marcel**:
-   de balans (de mix *schutters* wint 97 %; een ronde met de proefbank na de generaals en de knotsdrager, met een AI die
-   zelf opstelt: `opmerkingen.md`). Daarna 3e en 3f.
+   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **3d is af** (2 nov; Marcel: "1 ja, 2 ja, 3 alleen
+   skirmish"; `scenario.md`, 7): de generaals *Sir Godfrey*, *Dame Agnes* en *Old Wat*, met hun kring; *Brother Anselm*
+   komt met 3e. Te bekijken in de speellijst van 2 nov (B3). **Wacht op Marcel**: de balans (de mix *schutters* wint met
+   de generaals nog 82 %, was 94; `opmerkingen.md`, "De generaals"). Daarna 3e (de knotsdrager, met Anselm) en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
@@ -1527,6 +1524,8 @@ is S6).
 
 ## Af (sinds 11 okt)
 
+- 3d van vraag 187 en 188: de generaals in skirmish (2 nov; `scenario.md`, 7): drie generaals met hun wapen, te kiezen in
+  de lobby, en hun kring (25 % harder, een harnas extra).
 - 2b van vraag 187: *Campaign* op het titelscherm (24 okt; `scenario.md`, 6): de hoofdstukken op een rij, het demojaar als
   hoofdstuk 1 op eiland 5, en op het eindscherm of het af is.
 - 2a van vraag 187: de kaart van een level (24 okt; `scenario.md`, 1): een vast eiland, een plek op naam, en een rand op

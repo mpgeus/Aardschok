@@ -188,13 +188,14 @@
   const kostVan = (koop) => Object.entries(koop).reduce((som, [soort, n]) => som + T.soldaatPrijs(soort) * n, 0);
   const nieuwKaartZaad = () => 1 + Math.floor(Math.random() * 99999); // een nieuw spel kiest zijn zaad zo (code.md bij js/tik.js)
   function nieuweLobby() {
-    return { kaart: Object.keys(T.KAARTEN)[0], zaad: nieuwKaartZaad(), punten: VS().punten.standaard, minuten: VS().minutenStandaard, koop: { speerman: 8, boogschutter: 4 }, plaatje: null };
+    return { kaart: Object.keys(T.KAARTEN)[0], zaad: nieuwKaartZaad(), punten: VS().punten.standaard, minuten: VS().minutenStandaard, koop: { speerman: 8, boogschutter: 4 }, generaal: Object.keys(T.GENERAALS)[0], plaatje: null };
   }
-  // Een regel met min en plus: wat het is, wat het nu is, en waarom min of plus niet kan (of niets).
-  function stapper(plek, tekst, waarde, { min = null, plus = null } = {}) {
+  // Een regel met min en plus: wat het is, wat het nu is, en waarom min of plus niet kan (of niets). Met `tekens` andere
+  // knoppen (de generaal: vorige en volgende).
+  function stapper(plek, tekst, waarde, { min = null, plus = null, tekens = ['−', '+'] } = {}) {
     const k = (actie, teken, uit) =>
       `<button class="menu-keuze klein lobby-knop" data-actie="${actie}" data-plek="${plek}"${uit ? ` disabled title="${veilig(uit)}"` : ''}><span>${teken}</span></button>`;
-    return `<div class="lobby-rij"><span class="lobby-naam">${tekst}</span>${k('min', '−', min)}<span class="lobby-waarde">${waarde}</span>${k('plus', '+', plus)}</div>`;
+    return `<div class="lobby-rij"><span class="lobby-naam">${tekst}</span>${k('min', tekens[0], min)}<span class="lobby-waarde">${waarde}</span>${k('plus', tekens[1], plus)}</div>`;
   }
   const minutenTekst = (m) => (m ? T.t('{n|# minute|# minutes}', { n: m }) : T.t('No time limit'));
   function lobbyScherm() {
@@ -218,10 +219,15 @@
       knop('terug', T.t('Back'))
     );
   }
-  // Je leger, op papier naast de lobby.
+  // Je leger, op papier naast de lobby: je generaal (3d, js/veldslag.js; hij kost niets), met zijn wapen en wat hij doet,
+  // en wat je koopt.
   function legerPapier() {
     const L = lobby;
     const kost = kostVan(L.koop);
+    const G = T.GENERAALS[L.generaal];
+    const generaal =
+      stapper('generaal', T.t('General'), veilig(G.naam()), { tekens: ['‹', '›'] }) +
+      `<p class="lobby-tegen">${T.t('With {wapen}.', { wapen: G.wapen() })} ${T.kringTekst(L.generaal)}</p>`;
     const rijen = Object.keys(T.SOLDAAT_SOORTEN).map((soort) => {
       const prijs = T.soldaatPrijs(soort);
       const n = L.koop[soort] || 0;
@@ -234,11 +240,12 @@
       `<div class="paneel menu-venster naast lobby-leger">` +
       `<div class="venster-kop"><span class="venster-titel">${T.t('Your army')}</span>` +
       `<span class="venster-wanneer">${T.t('{kost} of {punten} points', { kost, punten: L.punten })}</span></div>` +
-      `<div class="menu-regels">${rijen.join('')}` +
+      `<div class="menu-regels">${generaal}${rijen.join('')}` +
       `<p class="lobby-tegen">${T.t('Against you: the AI. It buys its own army with the same points.')}</p></div></div>`
     );
   }
-  // Een stap min of plus: de punten (niet onder wat je leger kost), de tijd, of een soldaat (niet boven je punten).
+  // Een stap min of plus: de punten (niet onder wat je leger kost), de tijd, je generaal (de vorige of de volgende), of een
+  // soldaat (niet boven je punten).
   function lobbyStap(plek, richting) {
     const L = lobby;
     const P = VS().punten;
@@ -246,6 +253,9 @@
     else if (plek === 'tijd') {
       const tijden = VS().minuten;
       L.minuten = tijden[Math.max(0, Math.min(tijden.length - 1, tijden.indexOf(L.minuten) + richting))];
+    } else if (plek === 'generaal') {
+      const namen = Object.keys(T.GENERAALS);
+      L.generaal = namen[(namen.indexOf(L.generaal) + richting + namen.length) % namen.length];
     } else if (T.SOLDAAT_SOORTEN[plek]) {
       const n = Math.max(0, (L.koop[plek] || 0) + richting);
       if (richting > 0 && kostVan(L.koop) + T.soldaatPrijs(plek) > L.punten) return;
@@ -294,7 +304,7 @@
   function beginSlag(S) {
     leesKaartZaad();
     const L = lobby;
-    const level = T.veldslagLevel({ kaart: L.kaart, zaad: L.zaad, punten: L.punten, minuten: L.minuten || null, legers: [{ soorten: { ...L.koop } }, { veldheer: true }] });
+    const level = T.veldslagLevel({ kaart: L.kaart, zaad: L.zaad, punten: L.punten, minuten: L.minuten || null, legers: [{ soorten: { ...L.koop }, generaal: L.generaal }, { veldheer: true }] });
     T.nieuwSpel(null, level);
     T.houdTijdStil(S, 'titel'); // zoals het spel achter het titelscherm; sluit laat hem gaan
     sluit(S);

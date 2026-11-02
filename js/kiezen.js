@@ -64,11 +64,12 @@
   T.soortVanMan = (D, e) => (e === D.aanvoerder ? 'held' : e.bewoner.soldaat ? e.bewoner.soldaat.soort : 'veteraan');
   const soortTekst = (D, e) => {
     const s = T.soortVanMan(D, e);
-    return s === 'held' ? T.t('the commander') : s === 'veteraan' ? T.t('veteran') : T.soortNaam(s);
+    if (s === 'held') return T.generaalVan(D) ? T.t('general') : T.t('the commander');
+    return s === 'veteraan' ? T.t('veteran') : T.soortNaam(s);
   };
   const naamVan = (D, e) => T.hoofdletter(T.naamVanBewoner(T.bewonerVan(D, e)));
-  // Wat er bij de muis staat: "Walter · spearman", of "The commander".
-  T.manTekst = (D, e) => (e === D.aanvoerder ? naamVan(D, e) : `${naamVan(D, e)} · ${soortTekst(D, e)}`);
+  // Wat er bij de muis staat: "Walter · spearman", "The commander", of in een veldslag "Dame Agnes · general" (3d).
+  T.manTekst = (D, e) => (e === D.aanvoerder && !T.generaalVan(D) ? naamVan(D, e) : `${naamVan(D, e)} · ${soortTekst(D, e)}`);
 
   // De nummers van de mannen, voor een opdracht (p.id van hun bewoner), en terug.
   T.nummersVan = (D, mannen) => mannen.map((e) => T.bewonerVan(D, e)).filter(Boolean).map((p) => p.id);
@@ -623,12 +624,15 @@
     ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: !soldaten.every((e) => T.dienstVan(e) === k.dienst), opdracht: { soort: 'dienst', wie, dienst: k.dienst } }));
   };
 
-  // Het briefje van één man: wie hij is, wat hij draagt, zijn leven, zijn dienst, en wat hij doet.
+  // Het briefje van één man: wie hij is, wat hij draagt, zijn leven, zijn dienst, en wat hij doet. Een generaal in een
+  // veldslag (3d, js/veldslag.js) draagt de stukken van zijn soort, en zegt wat zijn kring doet.
   T.manBriefje = function (D, e) {
     const p = T.bewonerVan(D, e);
+    const generaal = T.generaalVan(D) === e ? p.generaal : null;
     const regels = [T.t('Life: {leven}', { leven: leven(e, D) })];
-    const soort = p && p.soldaat ? T.SOLDAAT_SOORTEN[p.soldaat.soort] : null;
+    const soort = p && p.soldaat ? T.SOLDAAT_SOORTEN[p.soldaat.soort] : generaal ? T.SOLDAAT_SOORTEN[T.GENERAALS[generaal].soort] : null;
     if (soort) regels.push(T.t('Carries: {wat}', { wat: T.opsomming(soort.stukken.map(T.stukNaam)) }));
+    if (generaal) regels.push(T.kringTekst(generaal));
     // De buit uit een verslagen roverskamp, tot hij thuis is (js/rovers.js, c4).
     if (e.buit) regels.push(T.t('Loot: {wat}', { wat: T.opsomming(Object.keys(e.buit).map((wat) => T.hoeveel(Math.round(e.buit[wat]), wat))) }));
     const dienst = dienstKnoppen(D, [e]);
@@ -637,9 +641,12 @@
     const doet = doetNu(D, e);
     return {
       kop: naamVan(D, e),
-      // De held heet al zo; van een ander zegt het zijn soort.
-      doet: T.hoofdletter(e === D.aanvoerder ? doet : doet ? `${soortTekst(D, e)} · ${doet}` : soortTekst(D, e)),
-      delen: [{ titel: T.t('The man'), regels: knop ? [...regels, { tekst: T.t('His post'), knoppen: [knop] }] : regels }],
+      // De held heet al zo; van een ander (en van een generaal) zegt het zijn soort.
+      doet: T.hoofdletter(e === D.aanvoerder && !generaal ? doet : doet ? `${soortTekst(D, e)} · ${doet}` : soortTekst(D, e)),
+      delen: [{
+        titel: generaal ? T.t('The general') : T.t('The man'),
+        regels: knop ? [...regels, { tekst: p && p.geslacht === 'vrouw' ? T.t('Her post') : T.t('His post'), knoppen: [knop] }] : regels,
+      }],
     };
   };
 

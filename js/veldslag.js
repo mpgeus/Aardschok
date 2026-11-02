@@ -24,8 +24,47 @@
     // Zoveel seconden van de wereld stellen de spelers op voor de slag begint (3b2; scenario.md, 7: "standaard 60
     // seconden"); met Fight! eerder.
     voorbereiding: 60,
+    // De generaal (3d; Marcel, 2 nov: "1 ja"): wie binnen `kring` tegels (T.afstand) van de generaal van zijn leger staat,
+    // slaat `schade` maal zo hard en vangt `harnas` meer af, als een harnas extra (een bout gaat erdoorheen). Kies je hem,
+    // dan ligt zijn kring `toon` seconden op de grond (alleen scherm, js/tekenen.js).
+    generaal: { kring: 5, schade: 1.25, harnas: 1, toon: 1.5 },
   };
   const IN = () => T.VELDSLAG_INSTELLINGEN;
+
+  // De generaals (3d; scenario.md, 7; Marcel, 28 okt: "helden zijn generaals", geen kracht per generaal, en 2 nov: "2 ja, 3
+  // alleen skirmish"): de held van een leger in een veldslag. Elk geeft hetzelfde (zijn kring, hierboven) en verschilt in
+  // zijn wapen: hij vecht met de stukken van zijn soort (T.SOLDAAT_SOORTEN, js/soldaten.js), en draagt het vel van die
+  // soort als dat er is (js/sprites.js; Sir Godfrey loopt als dorpeling tot er een zwaardvechter is). Brother Anselm, met
+  // de knots, komt met de knotsdrager (3e).
+  T.GENERAALS = {
+    godfrey: { naam: () => T.t('Sir Godfrey'), geslacht: 'man', soort: 'zwaardvechter', wapen: () => T.t('a sword and shield') },
+    agnes: { naam: () => T.t('Dame Agnes'), geslacht: 'vrouw', soort: 'piekenier', wapen: () => T.t('a pike') },
+    wat: { naam: () => T.t('Old Wat'), geslacht: 'man', soort: 'kruisboogschutter', wapen: () => T.t('a crossbow') },
+  };
+  // Wat de kring van generaal `id` doet, in een zin (de lobby, js/menu.js, en zijn briefje, js/kiezen.js).
+  T.kringTekst = (id) =>
+    T.t('Within {n} tiles of {g|vrouw:her|*:him}, your men strike harder and are better protected.', { n: IN().generaal.kring, g: T.GENERAALS[id].geslacht });
+  // Welke generaal een leger zonder keus krijgt (de AI, de proefbank): een uit het zaad van de slag en zijn strook, zodat
+  // het op elke computer dezelfde is, en bij een ander zaad misschien een ander.
+  T.generaalUitZaad = function (zaad, i) {
+    const namen = Object.keys(T.GENERAALS);
+    const lot = (Math.imul((zaad >>> 0) + 104729 * (i + 1), 2654435761) ^ 0x5bd1e995) >>> 0;
+    return namen[Math.floor(T.dobbelsteen(lot)() * namen.length)];
+  };
+  // De generaal van leger D als hij nog staat (zijn wezen), of null: in een dorp is de held geen generaal.
+  T.generaalVan = function (D) {
+    const h = D && D.veldslag ? D.aanvoerder : null;
+    const p = h && !h.dood ? T.bewonerVan(D, h) : null;
+    return p && p.generaal ? h : null;
+  };
+  // Staat man e in de kring van de generaal van zijn eigen leger? De generaal zelf niet: hij inspireert, de rest vecht.
+  T.inKring = function (e) {
+    const D = e && e.dorp;
+    const g = T.generaalVan(D);
+    return !!g && e !== g && T.isMan(D, e) && T.afstand(e, g) <= IN().generaal.kring;
+  };
+  // Zoveel maal zo hard slaat man e (T.slaan, js/gevecht.js): in de kring van zijn generaal `schade`, anders 1.
+  T.kracht = (e) => (T.inKring(e) ? IN().generaal.schade : 1);
 
   // De wereld van een veldslag op kaart `recept` met zaad `zaad`: een kaart van het eiland van dat recept (T.eilandKaart,
   // js/wereld.js), met het land en een strook zee eromheen open (`zee`), de rand eromheen (w.rand: de camera en de
@@ -76,8 +115,8 @@
     return { E, veld: T.minikaartVeld({ eiland: { zaad, recept }, rand }), stroken: R.stroken.map((st) => { const [x, y] = midden(st); return { x, y }; }) };
   };
 
-  // Een veldslag als level (scenario.md, 7), uit de keuzes: de kaart, het zaad, de legers ({ soorten: { speerman: 6 } } per
-  // speler, in de volgorde van de stroken) en de tijd (`minuten`, of geen; Marcel, 28 okt: E2, "instelbaar in de skirmish
+  // Een veldslag als level (scenario.md, 7), uit de keuzes: de kaart, het zaad, de legers ({ soorten: { speerman: 6 },
+  // generaal: 'agnes' } per speler, in de volgorde van de stroken; zonder generaal een uit het zaad) en de tijd (`minuten`, of geen; Marcel, 28 okt: E2, "instelbaar in de skirmish
   // lobby"). Met de vaste triggers: heeft nog maar één leger mannen (of geen), of is de tijd om, dan is het uit, en wint
   // wie de meeste heeft (T.GEVOLGEN.uitslag, js/scenario.js). Geen trigger vraagt naar één speler, want samen speelt
   // elke computer een ander leger: het doel is van iedereen, en de uitslag is er voor elk leger.
@@ -91,7 +130,7 @@
     // de tijd van de slag loopt vanaf Fight! (3b2), niet vanaf de voorbereiding
     if (minuten) triggers.push({ id: 'tijd', als: [{ slag: minuten * 60 }], dan: [{ uitslag: true }] });
     const metVeldheer = (l, i) => (l.veldheer != null ? !!l.veldheer : i > 0); // zonder keus: jij het eerste, een veldheer de rest
-    const leger = (l, i) => ({ ...(l.soorten ? { soorten: { ...l.soorten } } : {}), veldheer: metVeldheer(l, i) });
+    const leger = (l, i) => ({ ...(l.soorten ? { soorten: { ...l.soorten } } : {}), ...(l.generaal ? { generaal: l.generaal } : {}), veldheer: metVeldheer(l, i) });
     return { veldslag: { kaart, zaad, ...(punten ? { punten } : {}), ...(minuten ? { minuten } : {}), legers: legers.map(leger) }, triggers };
   };
 
@@ -132,7 +171,8 @@
 
   // Na de slag (het eindscherm, js/hud.js; 3b3, Marcel, 30 okt: "4. A"): Again is het level van dezelfde slag (dezelfde
   // kaart, hetzelfde zaad, dezelfde punten, tijd en legers: een veldheer koopt met hetzelfde zaad weer hetzelfde), en
-  // Lobby gaat terug naar de lobby met deze keuzes (js/menu.js: { kaart, zaad, punten, minuten, koop }, je eigen leger).
+  // Lobby gaat terug naar de lobby met deze keuzes (js/menu.js: { kaart, zaad, punten, minuten, koop, generaal }, je eigen
+  // leger).
   T.veldslagNogEens = (S) => {
     const V = S.veldslag;
     return T.veldslagLevel({ kaart: V.kaart, zaad: V.zaad, punten: V.punten, minuten: V.minuten, legers: V.legers });
@@ -140,7 +180,7 @@
   T.veldslagKeuzes = (S) => {
     const V = S.veldslag;
     const jij = V.legers[S.dorpen.indexOf(S.dorp)] || V.legers[0];
-    return { kaart: V.kaart, zaad: V.zaad, punten: V.punten || T.VELDSLAG_INSTELLINGEN.punten.standaard, minuten: V.minuten || 0, koop: { ...(jij.soorten || {}) } };
+    return { kaart: V.kaart, zaad: V.zaad, punten: V.punten || T.VELDSLAG_INSTELLINGEN.punten.standaard, minuten: V.minuten || 0, koop: { ...(jij.soorten || {}) }, ...(jij.generaal ? { generaal: jij.generaal } : {}) };
   };
 
   // ── De voorbereiding (3b2; scenario.md, 7; Marcel, 30 okt: "2. A 3. b") ──
@@ -240,12 +280,19 @@
       }
     }
     stelOp(D, R, st, soorten || {});
+    // de held is een generaal (3d): die van het leger, of een uit het zaad (Again kiest dan weer dezelfde)
+    const p = T.bewonerVan(D, D.aanvoerder);
+    p.generaal = leger.generaal || T.generaalUitZaad(zaad, i);
+    p.wapen = T.GENERAALS[p.generaal].soort;
+    p.geslacht = T.GENERAALS[p.generaal].geslacht;
     return D;
   }
 
   // De opstelling (D1): de mannen in een linie aan de voorkant van de strook, met hun gezicht naar het midden van de kaart,
   // zoals de knop Line ze zet (T.stuurMannen en T.formatiePlekken, js/kiezen.js: wie van dichtbij vecht vooraan, de
-  // schutters erachter, en elk zijn post); ze staan er meteen. De held staat achter het midden.
+  // schutters erachter, en elk zijn post); ze staan er meteen. De held staat achter het midden, net achter de achterste rij:
+  // zo raakt de kring van een generaal de linie (3d), en staat hij niet op de plek van een man. Tot 2 nov stond hij altijd
+  // zes tegels achter de voorkant, en dan stond de voorste rij buiten zijn kring.
   function stelOp(D, R, st, soorten) {
     const tegel = 1 / (R.half * Math.SQRT2); // zoveel is een tegel in de maat van het scherm, dwars en langs
     const voor = Math.abs(st.a[0]) < Math.abs(st.a[1]) ? st.a[0] : st.a[1];
@@ -262,7 +309,12 @@
     const ids = D.bewoners.mensen.filter((p) => p.soldaat).map((p) => p.id);
     T.stuurMannen(D, ids, op(voor + naarAchter * 2 * tegel, bMidden));
     for (const e of T.militieVan(D)) if (e.post) Object.assign(e, { x: e.post.x, y: e.post.y, tx: e.post.x, ty: e.post.y, pad: [], onderweg: false, padDoel: null });
-    const held = op(voor + naarAchter * (T.VELDHEER_INSTELLINGEN.achterDeLinie + 2) * tegel, bMidden);
+    const posten = T.militieVan(D).map((e) => e.post).filter(Boolean);
+    const r = posten.length ? posten[0].richting : { x: 0, y: 0 }; // naar de vijand (T.formatiePlekken, js/kiezen.js)
+    const naarVoren = (p) => p.x * r.x + p.y * r.y;
+    const achterste = Math.min(...posten.map(naarVoren));
+    let held = op(voor + naarAchter * 2 * tegel, bMidden);
+    for (let k = 3; posten.length && naarVoren(held) > achterste - 0.5 && k < 4 * T.VELDHEER_INSTELLINGEN.achterDeLinie; k++) held = op(voor + naarAchter * k * tegel, bMidden);
     Object.assign(D.aanvoerder, { x: held.x, y: held.y, tx: held.x, ty: held.y, pad: [], onderweg: false });
   }
 })(globalThis.Spel = globalThis.Spel || {});

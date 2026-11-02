@@ -295,7 +295,9 @@
   // zoals T.SLAAN, een vijand zoals zijn aanval in T.WEZENS, js/wereld.js). Tot 15 okt telde het alleen voor wie
   // opgeroepen was (kant 'speler'); sinds het gevecht in real time (vraag 170, stap 2) vecht een soldaat ook zonder.
   T.stukkenVan = function (e) {
-    const p = e && e.bewoner;
+    // de held heeft geen e.bewoner (js/bewoners.js, T.zetHeld): zijn bewoner zoeken we alleen in een veldslag, voor het
+    // wapen van een generaal (js/veldslag.js); in een dorp heeft de eerste held geen wapen
+    const p = e && (e.bewoner || (e.dorp && e.dorp.veldslag && e === e.dorp.aanvoerder ? T.bewonerVan(e.dorp, e) : null));
     if (!p) return [];
     if (p.aanvoerder) return p.wapen ? stukkenVan(p.wapen) : [];
     if (p.soldaat) return stukkenVan(p.soldaat.soort);
@@ -321,6 +323,8 @@
     if (van && T.slagVan(van).doorHarnas) return 0;
     let n = 0;
     for (const stuk of T.stukkenVan(doel)) n += IN().bescherming[stuk] || 0;
+    // in de kring van zijn generaal (3d, js/veldslag.js) een harnas extra
+    if (T.inKring(doel)) n += T.VELDSLAG_INSTELLINGEN.generaal.harnas;
     return n;
   };
 

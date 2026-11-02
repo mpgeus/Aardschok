@@ -111,6 +111,16 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   (2 tegels verder), de AI blijft in zijn linie. Tot de standen van 3f is dat een voordeel bovenop de scheve balans; meet
   de balans (na de generaals) met een AI die zelf opstelt, of zet in 3f als eerste zijn schutters de heuvel op.
 
+- **De generaals: wat nog open is** (2 nov, bij 3d; `scenario.md`, 7): (1) **de balans**: met de generaals wint de mix
+  *schutters* nog 82 % (was 94), *zwaar* 29 % (was 5); de vraag aan Marcel blijft of de boogschutter duurder wordt (nu 2
+  punten), of dat het wacht op een AI die zelf opstelt (3f). (2) **Een generaal lijkt op zijn mannen**: Dame Agnes draagt
+  het vel van een piekenier, Old Wat dat van een kruisboogschutter; je herkent hem aan zijn plek achter de linie, het
+  briefje en zijn kring als je hem kiest. Een eigen teken (een vaandel op zijn rug, een mantel) is iets nieuws, dus alleen
+  als Marcel het kiest (bij de kleur per speler, 3c, of de art). (3) **Sir Godfrey loopt als dorpeling** tot er een figuur
+  van een zwaardvechter is (de art). (4) **Afronden**: 25 % harder is afgerond op hele punten, dus een boog van 2 tot 4
+  slaat in de kring 3 tot 5 (gemiddeld een derde harder), een zwaard van 5 tot 7 slaat 6 tot 9. (5) **Een groot leger**
+  (meer dan twee rijen) staat bij het begin niet helemaal in de kring: bij 40 punten staat er hooguit één man buiten.
+
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
   dezelfde vraag stelt, krijgt hem uit het geheugen; een computer die herlaadt of later instapt, zoekt opnieuw en kan een

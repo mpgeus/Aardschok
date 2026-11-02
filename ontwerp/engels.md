@@ -267,3 +267,7 @@ van hun naam: Klaas → **Nicholas**, Aaltje → **Alice**, Gerrit → **Gerard*
   Juliana, Lettice, Mabel, Margery, Matilda, Maud, Petronilla, Rose, Sybil, Thomasina.
 - Dorpen (`T.DORPSNAMEN`, `js/treden.js`): Heathside, Brookfield, Wolfden, Oldland, Millcombe, Oakley, Fieldhurst,
   Crowthorpe, Lindley, Brakeham.
+- De generaals in skirmish (`T.GENERAALS`, `js/veldslag.js`; 3d, 2 nov): **Sir Godfrey**, **Dame Agnes** en **Old Wat**
+  (en later **Brother Anselm**). Een generaal is *the general* (*General* in de lobby, "Dame Agnes · general" bij de
+  muis); zijn kring in een zin: *Within 5 tiles of her, your men strike harder and are better protected.* Nog te lezen
+  door Marcel (de speellijst van 2 nov).

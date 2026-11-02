@@ -52,8 +52,12 @@ lijst van het demojaar (hieronder) gaat dieper; deze ronde neemt alleen wat sind
 3. **Een slag** (3b2 en 3b3; `scenario.md`, 7): op het titelscherm **Skirmish**: de lobby, kopen met punten, *Begin*. In de
    balk onderaan *Deploy* met de klok en *Fight!*; een lichte rand om je strook, en wie je erbuiten stuurt, loopt tot de
    rand. Na *Fight!* (of de minuut) *Battle* met de tijd die over is; na de slag *Victory* of *Defeat*, met *Again*
-   (dezelfde slag) en *Lobby* (je keuzes staan er nog). **Vraag:** het briefje *Fighting, since today* linksboven: weg in
-   een slag? Speel er ook één met veel boogschutters: voel je dat de mix *schutters* te sterk is?
+   (dezelfde slag) en *Lobby* (je keuzes staan er nog). **Sinds 2 nov de generaals** (3d): kies er een in de lobby (‹ en
+   › bij *General*, met zijn wapen en zijn kring), en in de slag kiest Tab hem: zijn kring gloeit even in goud, bij de muis
+   staat "Old Wat · general", en zijn briefje zegt wat hij draagt en doet. Dame Agnes draagt het vel van een piekenier,
+   Old Wat dat van een kruisboogschutter, Sir Godfrey loopt nog als dorpeling. **Vraag:** het briefje *Fighting, since
+   today* linksboven: weg in een slag? Herken je je generaal tussen zijn mannen (`opmerkingen.md`, "De generaals")?
+   Speel er ook één met veel boogschutters: voel je dat de mix *schutters* te sterk is?
 
 ### C. Hoofdstuk 2, het rovershol (2c, bij K)
 
@@ -74,16 +78,14 @@ Het langste deel. *Campaign*; hoofdstuk 2 zit op slot tot hoofdstuk 1 af is: zet
 Lees onderweg de zinnen die je ziet (hierboven schuin), en daarna wat je niet tegenkwam: *the innkeeper*, *the
 moneylender*, *the tradesmen*, *rent*, *the ledger*, *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, *carriers*,
 en van de campagne *Campaign*, *Chapter 1: The first year*, *Complete*, *Finish chapter 1 first.* en *The next chapter is
-open: …*. De zinnen van hoofdstuk 2 staan in `levels/rovershol.js`.
+open: …*. De zinnen van hoofdstuk 2 staan in `levels/rovershol.js`. Sinds 2 nov de generaals (B3): *Sir Godfrey*, *Dame
+Agnes*, *Old Wat*, *General*, *The general* en *Within 5 tiles of her, your men strike harder and are better protected.*
 
 ### Na het spelen: de keuzes
 
-Elk antwoord maakt werk los:
-- **De generaals** (3d, in skirmish): vier, *Sir Godfrey* met zwaard en schild, *Dame Agnes* met piek, *Brother Anselm*
-  met knots, *Old Wat* met kruisboog; binnen 5 tegels 25 % meer schade en 1 harnas; valt hij, dan vecht de rest door.
-  Akkoord, of anders?
-- **De balans van de slag** (B3): de mix *schutters* wint 97 % in de proefbank. Na de generaals een nieuwe ronde, of
-  eerst de boogschutter duurder?
+Elk antwoord maakt werk los (de generaals zijn op 2 nov gekozen en gebouwd):
+- **De balans van de slag** (B3): de mix *schutters* wint in de proefbank 82 % (met de generaals; ervoor 94). De
+  boogschutter duurder, of wachten op een AI die zelf opstelt (3f)?
 - **Het briefje *Fighting, since today*** in een slag (B3): weg of blijven?
 - **d van de heuvels** (B1): altijd aan, en *Height* eruit?
 - **Eén stuk per keer** voor een drager (A1): genoeg, of meer in de oogst?

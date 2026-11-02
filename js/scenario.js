@@ -327,6 +327,7 @@
       if (!Array.isArray(V.legers) || V.legers.length < 2) fout.push('een veldslag heeft minstens twee legers'); // geen tekst
       else if (K && V.legers.length > K.spelers) fout.push(`de kaart ${V.kaart} is voor ${K.spelers} spelers`); // geen tekst
       for (const l of V.legers || []) for (const soort of Object.keys(l.soorten || {})) if (!T.SOLDAAT_SOORTEN[soort]) fout.push(`de soldaat ${soort} bestaat niet`); // geen tekst
+      for (const l of V.legers || []) if (l.generaal && !T.GENERAALS[l.generaal]) fout.push(`de generaal ${l.generaal} bestaat niet`); // geen tekst
       if (V.punten != null && !(Number.isInteger(V.punten) && V.punten > 0)) fout.push('de punten van een veldslag zijn een heel getal boven 0'); // geen tekst
       (V.legers || []).forEach((l, i) => {
         if (!l.soorten && !(l.veldheer && V.punten)) fout.push(`leger ${i + 1} heeft geen soldaten, en geen veldheer met punten om te kopen`); // geen tekst

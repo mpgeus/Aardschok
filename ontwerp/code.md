@@ -1301,6 +1301,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `tweede` in `T.ui.toonOverlay` (js/ui.js). Linksboven staat alleen het doel van de slag, nooit de trede van een dorp
   (`T.doelLinksboven`), en valt de held, dan neemt niemand het over en zegt niemand het (`T.werkAanvoerderBij` en
   `T.aanvoerderValt`, js/soldaten.js; zo ook de generaals, `scenario.md`, 7); de veldheer vecht dan door zonder held.
+- Stap 3d (2 nov; Marcel: "1 ja, 2 ja, 3 alleen skirmish"): **de generaals**. De held van een leger is een generaal uit
+  `T.GENERAALS` (gegevens: zijn naam, zijn geslacht, de soort van zijn wapen en dat wapen in woorden): *Sir Godfrey*
+  (zwaardvechter), *Dame Agnes* (piekenier) en *Old Wat* (kruisboogschutter); *Brother Anselm* komt met de knots in 3e.
+  Een leger in het level heeft `generaal` (de keuring kent hem), en zonder keus kiest `T.generaalUitZaad(zaad, i)` er
+  een, zodat elke computer en *Again* dezelfde krijgen. `maakLeger` zet op de bewoner van de held `p.generaal`,
+  `p.wapen` (de soort, zoals bij een aanvoerder die het overnam) en `p.geslacht`. De held draagt zijn bewoner niet mee
+  (`e.bewoner`, js/bewoners.js), dus zoeken `T.stukkenVan` (js/soldaten.js) en `eigenFiguur` (js/sprites.js) hem op, alleen
+  in een veldslag: zo vecht hij met de stukken van zijn soort en draagt hij het vel ervan (Sir Godfrey als dorpeling tot
+  er een zwaardvechter is). `T.generaalVan(D)` is de generaal die nog staat; `T.inKring(e)`: e is een man van zijn leger
+  binnen `generaal.kring` tegels (`T.afstand`) van hem, en niet hijzelf. In de kring slaat hij `T.kracht(e)` maal zo hard
+  (`slaan` in js/gevecht.js, afgerond op hele punten: een boog van 2 tot 4 wordt 3 tot 5) en vangt hij `generaal.harnas`
+  meer af (`T.vangtAf`, na de bout, dus niet tegen een kruisboog). De getallen in `T.VELDSLAG_INSTELLINGEN.generaal`. De
+  opstelling zet de held net achter de achterste rij (`stelOp`; tot 2 nov stond hij zes tegels achter de voorkant, buiten
+  zijn kring, en bij twee rijen kwam de achterste op zijn plek). Op het scherm: in de lobby kies je hem met vorige en
+  volgende op het papier van je leger (`stapper` met `tekens`; `lobby.generaal`, ook terug na *Lobby*), met zijn wapen en
+  wat zijn kring doet (`T.kringTekst`); bij de muis "Dame Agnes · general" (`T.manTekst`, js/kiezen.js; zijn naam uit
+  `T.naamVanBewoner`), en zijn briefje zegt *The general*, wat hij draagt en zijn kring; kies je hem, dan gloeit zijn kring
+  `generaal.toon` seconden in goud op de grond (`tekenGeneraalKring`, js/tekenen.js, met `tekenGloed` in een kleur;
+  `S.generaalKring` is alleen scherm, zolang hij gekozen is). Getoetst in `test/veldslag.test.cjs`.
 
 ### js/veldheer.js: de veldheer
 

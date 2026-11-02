@@ -1587,6 +1587,7 @@
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
       tekenStrook(ctx, S, vak);
+      tekenGeneraalKring(ctx, S, vak);
       tekenMarktPlek(ctx, S);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
@@ -3063,9 +3064,35 @@
     tekenGloed(ctx, vak, D.plek.vak, sterkte, STROOK_GLOED);
   }
 
-  // Een gloed op de grond over een gebied (het bouwbereik, de strook): elke tegel van `gebied` ({ x, y, b, h }) binnen het
-  // beeld (`vak`) in de sterkte die sterkteVan(x, y) zegt (een plek in `gloed`, of -1: niet).
-  function tekenGloed(ctx, vak, gebied, sterkteVan, gloed = BEREIK_GLOED) {
+  // De kring van je generaal (3d, js/veldslag.js; Marcel, 2 nov: "zijn kring even op de grond als je hem kiest"): kies je
+  // hem, dan gloeien de tegels binnen zijn kring (T.afstand: een vierkant van tegels, op het scherm een ruit), de rand het
+  // sterkst, en in `toon` seconden vervaagt het. In goud, want de strook bij het opstellen gloeit licht. Wie erin staat,
+  // slaat harder en is beter beschermd. S.generaalKring ({ tot }, alleen scherm) is er zolang hij gekozen is: wie hem
+  // opnieuw kiest, ziet de kring opnieuw.
+  function tekenGeneraalKring(ctx, S, vak) {
+    const g = T.generaalVan(S.dorp);
+    if (!g || !T.gekozenMannen(S).includes(g)) {
+      S.generaalKring = null;
+      return;
+    }
+    const { kring, toon } = T.VELDSLAG_INSTELLINGEN.generaal;
+    if (!S.generaalKring) S.generaalKring = { tot: S.tijd + toon };
+    const over = Math.min(1, (S.generaalKring.tot - S.tijd) / toon);
+    if (!(over > 0)) return;
+    const m = { x: Math.round(g.x), y: Math.round(g.y) };
+    const sterkte = (x, y) => {
+      const d = T.afstand(m, { x, y });
+      return d > kring ? -1 : d === kring ? 1 : 0;
+    };
+    tekenGloed(ctx, vak, { x: m.x - kring, y: m.y - kring, b: 2 * kring + 1, h: 2 * kring + 1 }, sterkte, [0.16 * over, 0.45 * over], GOUD);
+  }
+
+  const GOUD = '226, 182, 74'; // de kleur van een gloed (r, g, b): het goud van de marktplek
+
+  // Een gloed op de grond over een gebied (het bouwbereik, de strook, de kring van een generaal): elke tegel van `gebied`
+  // ({ x, y, b, h }) binnen het beeld (`vak`) in de sterkte die sterkteVan(x, y) zegt (een plek in `gloed`, of -1: niet),
+  // in `kleur`.
+  function tekenGloed(ctx, vak, gebied, sterkteVan, gloed = BEREIK_GLOED, kleur = '240, 225, 170') {
     const paden = gloed.map(() => new Path2D());
     const x0 = Math.max(gebied.x, vak.x0);
     const y0 = Math.max(gebied.y, vak.y0);
@@ -3085,7 +3112,7 @@
       }
     }
     gloed.forEach((a, i) => {
-      ctx.fillStyle = `rgba(240, 225, 170, ${a})`;
+      ctx.fillStyle = `rgba(${kleur}, ${a})`;
       ctx.fill(paden[i]);
     });
   }

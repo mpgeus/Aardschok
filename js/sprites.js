@@ -1058,9 +1058,11 @@
   // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
   // Een bewoner met een uiterlijk (vraag 145; T.kiesUiterlijk in js/bewoners.js) draagt het vel van dat uiterlijk
   // (boer-u7, meisje-u3), als het er is; anders het vel van zijn leeftijd. Een soldaat draagt het vel van zijn soort
-  // (speerman; van de generator, ontwerp/beelden-van-de-generator.md), als dat er is.
+  // (speerman; van de generator, ontwerp/beelden-van-de-generator.md), als dat er is, en een generaal in een veldslag
+  // (3d, js/veldslag.js) dat van de soort van zijn wapen (Dame Agnes de piekenier).
   function eigenFiguur(e) {
-    const soldaat = e.bewoner && e.bewoner.soldaat && e.bewoner.soldaat.soort;
+    const p = e.bewoner || (e.soort === 'aanvoerder' && e.dorp && e.dorp.veldslag ? T.bewonerVan(e.dorp, e) : null);
+    const soldaat = p && (p.soldaat ? p.soldaat.soort : p.generaal ? p.wapen : null);
     if (soldaat && S.figuurGegevens(soldaat)) return soldaat;
     const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'aanvoerder';
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);

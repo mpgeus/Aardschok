@@ -323,7 +323,8 @@
     }
   }
 
-  // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende.
+  // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende. In de kring
+  // van zijn generaal (3d, T.inKring in js/veldslag.js) slaat hij harder, afgerond op hele punten.
   function slaan(S, D, e, d, nu) {
     const slag = T.slagVan(e);
     e.slagKlaar = nu + slag.kosten * IN().secondenPerPunt;
@@ -333,7 +334,8 @@
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
     // de klap valt aan het eind van de tik (T.laatKlappenVallen)
-    (S.klappen || (S.klappen = [])).push({ D, doel: d, n: Math.max(0, worp(D, e, slag.schade) - T.vangtAf(d, e)), van: e });
+    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(d, e));
+    (S.klappen || (S.klappen = [])).push({ D, doel: d, n, van: e });
   }
 
   // Aan het eind van een tik (T.wereldTik, js/tik.js, na alle dorpen en de wereld): de klappen van die tik vallen, in de

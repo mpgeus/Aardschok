@@ -104,9 +104,9 @@
   // Wie wegtrekt, staat niet meer in S.bewoners.mensen; zijn poppetje loopt nog tot de uitgang
   // (e.vertrekt, S.bewoners.vertrekken).
 
-  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de aanvoerder "the commander". Ook
-  // voor de herberg (js/herberg.js).
-  const naamVan = (p) => (p.aanvoerder ? T.t('the commander') : p.naam);
+  // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de aanvoerder "the commander", en de held van
+  // een leger in een veldslag de naam van zijn generaal (T.GENERAALS, js/veldslag.js). Ook voor de herberg (js/herberg.js).
+  const naamVan = (p) => (p.generaal ? T.GENERAALS[p.generaal].naam() : p.aanvoerder ? T.t('the commander') : p.naam);
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de aanvoerder?
   const vanAanvoerder = (p) => !!(p.aanvoerder || (p.hoofd && p.hoofd.aanvoerder));

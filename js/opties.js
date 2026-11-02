@@ -1475,6 +1475,11 @@
     'VELDSLAG_INSTELLINGEN.minuten': T.t('the time limits to choose from, in minutes (0: none)'), // geen tekst
     'VELDSLAG_INSTELLINGEN.voorbereiding': T.t('seconds to deploy before the battle begins (Fight! starts it sooner)'), // geen tekst
     'VELDSLAG_INSTELLINGEN.minutenStandaard': T.t('the time limit at first, in minutes'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.generaal': T.t('the general: his ring makes his men stronger'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.generaal.kring': T.t('his ring reaches this many tiles'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.generaal.schade': T.t('in his ring a man strikes this many times as hard'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.generaal.harnas': T.t('in his ring a man stops this much more damage, like armour'), // geen tekst
+    'VELDSLAG_INSTELLINGEN.generaal.toon': T.t('seconds his ring shows on the ground when you choose him'), // geen tekst
     'VELDHEER_INSTELLINGEN.denkElke': T.t('the AI general thinks every this many seconds'), // geen tekst
     'VELDHEER_INSTELLINGEN.ver': T.t('a man whose post is this many tiles from the goal gets a new order'), // geen tekst
     'VELDHEER_INSTELLINGEN.aanval': T.t('a man who is not fighting attacks an enemy his army sees this close (tiles)'), // geen tekst
