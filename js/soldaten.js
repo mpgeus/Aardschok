@@ -47,6 +47,9 @@
       // raken niet altijd ... 30%?", en voor de kruisboog "Minder: 15 %", en daarna 25 %: "1. C", toen de zware mix 88 % won)
       boog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.3 },
       kruisboog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.25 },
+      // De knots (3e; Marcel, 2 nov: "ze vallen wel langzaam aan, het is een zwaar wapen", en "3. Ja prima"): langzamer dan een
+      // zwaard (elke 1,6 seconde), maar door het harnas heen (`breektHarnas` bij het stuk, T.vangtAf).
+      knots: { kosten: 4, schade: [4, 6], bereik: 1 },
       // Geen stuk: het mes van een schutter die een vijand naast zich heeft en niet weg kan (js/gevecht.js; Marcel, 2 nov:
       // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
       mes: { kosten: 3, schade: [1, 3], bereik: 1 },
@@ -58,7 +61,7 @@
     // dan had iedereen 16 (T.WEZENS.soldaat), en was een boogschutter 16 leven voor 2 punten. De ruiter en de ridder houden
     // wat hun paard ze gaf (anderhalf en twee maal 16).
     // De zwaardvechter 18 sinds Marcel, 2 nov: "1. C" (was 20; de zware mix won toen 88 %).
-    leven: { militie: 12, speerman: 16, piekenier: 16, zwaardvechter: 18, boogschutter: 12, kruisboogschutter: 14, ruiter: 24, ridder: 32 },
+    leven: { militie: 12, speerman: 16, piekenier: 16, zwaardvechter: 18, knotsdrager: 16, boogschutter: 12, kruisboogschutter: 14, ruiter: 24, ridder: 32 },
     // Wat zijn paard de ridder geeft: zoveel maal zijn pas (T.snelheidVan, js/wereld.js).
     ridder: { snelheid: 1.6 },
     // En de lichte ruiter (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A":
@@ -74,6 +77,8 @@
     speer: { waar: 'speren', wapen: true, naam: () => T.t('spear') },
     piek: { waar: 'pieken', wapen: true, naam: () => T.t('pike') },
     zwaard: { waar: 'zwaarden', wapen: true, naam: () => T.t('sword') },
+    // de knots slaat door het harnas heen (Marcel, 28 okt: K2; 2 nov: "2. A": het schild vangt wel af)
+    knots: { waar: 'knotsen', wapen: true, breektHarnas: true, naam: () => T.t('mace') },
     boog: { waar: 'bogen', wapen: true, schiet: true, naam: () => T.t('bow') },
     kruisboog: { waar: 'kruisbogen', wapen: true, schiet: true, doorHarnas: true, naam: () => T.t('crossbow') },
     schild: { waar: 'schilden', naam: () => T.t('shield') },
@@ -92,6 +97,9 @@
     speerman: { stukken: ['speer', 'harnas'], naam: () => T.t('spearman') },
     piekenier: { stukken: ['piek', 'harnas'], naam: () => T.t('pikeman') },
     zwaardvechter: { stukken: ['zwaard', 'schild', 'harnas'], naam: () => T.t('swordsman') },
+    // De knotsdrager (3e; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "Mace en heavy leather armour"): zijn figuur
+    // maakt een lokale sessie, het vel `knotsdrager` (js/sprites.js); tot dan loopt hij als dorpeling.
+    knotsdrager: { stukken: ['knots', 'harnas'], naam: () => T.t('maceman') },
     boogschutter: { stukken: ['boog'], naam: () => T.t('archer') },
     kruisboogschutter: { stukken: ['kruisboog', 'harnas'], naam: () => T.t('crossbowman') },
     // De lichte ruiter (2 nov): tot hij een eigen figuur heeft, leent hij dat van de ridder (`leent`, js/sprites.js).
@@ -326,7 +334,7 @@
     const wapen = T.stukkenVan(e).find((stuk) => STUKKEN[stuk].wapen);
     if (!wapen) return { wapen: null, kosten: T.SLAAN.kosten, schade: T.SLAAN.schade, bereik: 1, schiet: false, doorHarnas: false };
     const s = STUKKEN[wapen];
-    return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas };
+    return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas, breektHarnas: !!s.breektHarnas };
   };
 
   // Hoe een schutter slaat die niet weg kan: met zijn mes, ernaast (js/gevecht.js).
@@ -340,15 +348,16 @@
   T.heeftSchild = (e) => !T.opPaard(e) && T.stukkenVan(e).includes('schild');
 
   // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat, met `slag`: zijn wapen, of een
-  // ander, zoals het mes van een schutter). Van een bout uit een kruisboog niets.
+  // ander, zoals het mes van een schutter). Van een bout uit een kruisboog niets; van een knots alleen het schild.
   T.vangtAf = function (doel, van, slag = van ? T.slagVan(van) : null) {
     if (slag && slag.doorHarnas) return 0;
+    const breekt = !!(slag && slag.breektHarnas);
     let n = 0;
-    for (const stuk of T.stukkenVan(doel)) n += IN().bescherming[stuk] || 0;
+    for (const stuk of T.stukkenVan(doel)) if (!(breekt && stuk === 'harnas')) n += IN().bescherming[stuk] || 0;
     // gedekt in de schildpad (js/kiezen.js) meer van een pijl
     if (slag && slag.schiet && T.gedektInSchildpad(doel)) n += T.KIEZEN_INSTELLINGEN.schildpad.pijl;
-    // in de kring van zijn generaal (3d, js/veldslag.js) een harnas extra
-    if (T.inKring(doel)) n += T.VELDSLAG_INSTELLINGEN.generaal.harnas;
+    // in de kring van zijn generaal (3d, js/veldslag.js) een harnas extra (niet tegen een knots)
+    if (!breekt && T.inKring(doel)) n += T.VELDSLAG_INSTELLINGEN.generaal.harnas;
     return n;
   };
 

@@ -152,10 +152,11 @@
     speren: T.t('Spears. From the weaponsmith: a spearman reaches two tiles.'),
     pieken: T.t('Pikes. From the weaponsmith: a pikeman reaches two tiles, and hits harder than a spear.'),
     zwaarden: T.t('Swords. From the weaponsmith: a swordsman hits hardest.'),
+    knotsen: T.t('Maces. From the weaponsmith: a mace is slow, but goes through armour, not through a shield.'),
     schilden: T.t('Shields. From the weaponsmith: a shield stops part of every blow, but not a crossbow bolt.'),
     bogen: T.t('Bows. From the weaponsmith: an archer shoots far, but not with an enemy alongside.'),
     kruisbogen: T.t('Crossbows. From the weaponsmith: a bolt goes through shield and armour.'),
-    harnassen: T.t('Leather armour. The weaponsmith makes it from hides: it stops part of every blow, but not a crossbow bolt.'),
+    harnassen: T.t('Leather armour. The weaponsmith makes it from hides: it stops part of every blow, but not a crossbow bolt or a mace.'),
     paarden: T.t('Horses. From the stable, and sometimes from the merchant: a knight rides one, and is faster and harder to bring down.'),
     wijn: T.t('Wine. From the vineyard farm, picked in {maand}: the craftsmen want it alongside their ale, and it does not spoil.', { maand: maandToon('wijnmaand') }),
   };
@@ -219,6 +220,10 @@
     '<path d="M12 4v16.5M5.5 10.5h13" stroke="#c9972f" stroke-width="1"/>');
   const BOOG_ICOON = svg('<path d="M7 3.5c7 3 7 14 0 17" fill="none" stroke="#8a5a2c" stroke-width="2" stroke-linecap="round"/>' +
     '<path d="M7 3.5v17" stroke="#e6d3ad" stroke-width=".9"/>');
+  // de knots (3e): een steel met een kop vol punten
+  const KNOTS_ICOON = svg('<path d="M5 19.5l8-8" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<circle cx="15" cy="9" r="3.6" fill="#8f949a" stroke="#5f646a" stroke-width="1"/>' +
+    '<path d="M15 3.6v1.8M15 12.6v1.8M9.6 9h1.8M18.6 9h1.8M11.2 5.2l1.3 1.3M17.5 11.5l1.3 1.3M18.8 5.2l-1.3 1.3" stroke="#5f646a" stroke-width="1.2" stroke-linecap="round"/>');
   const KRUISBOOG_ICOON = svg('<path d="M12 20V6" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M4.5 9.5c2.5-2.5 12.5-2.5 15 0" fill="none" stroke="#8f949a" stroke-width="1.8" stroke-linecap="round"/>' +
     '<path d="M4.5 9.5L12 12l7.5-2.5" fill="none" stroke="#e6d3ad" stroke-width=".8"/>');
@@ -231,14 +236,14 @@
     planken: PLANKEN_ICOON, steen: STEEN_ICOON, groente: GROENTE_ICOON, eieren: EIEREN_ICOON, vis: VIS_ICOON,
     brood: BROOD_ICOON, meel: ZAK_ICOON, kalk: ZAK_ICOON, riet: RIET_ICOON, turf: TURF_ICOON, laken: LAKEN_ICOON,
     vaten: VATEN_ICOON, melk: MELK_ICOON, klei: KLEI_ICOON, leer: GRONDSTOF_ICOON.huiden,
-    speren: SPEER_ICOON, pieken: PIEK_ICOON, schilden: SCHILD_ICOON, bogen: BOOG_ICOON, kruisbogen: KRUISBOOG_ICOON,
+    speren: SPEER_ICOON, pieken: PIEK_ICOON, knotsen: KNOTS_ICOON, schilden: SCHILD_ICOON, bogen: BOOG_ICOON, kruisbogen: KRUISBOOG_ICOON,
     harnassen: HARNAS_ICOON, paarden: PAARD_ICOON,
   });
   // De volgorde in de voorraad: eerst wat je bouwt, dan het eten, dan de rest; een waar die hier niet staat, komt
   // achteraan, met een zak als pictogram.
   const VOLGORDE = ['hout', 'planken', 'steen', 'graan', 'brood', 'meel', 'vlees', 'vis', 'kaas', 'groente', 'eieren',
     'wijn', 'bier', 'melk', 'hooi', 'wol', 'laken', 'huiden', 'leer', 'ijzer', 'gereedschap', 'speren', 'pieken',
-    'zwaarden', 'schilden', 'bogen', 'kruisbogen', 'harnassen', 'paarden', 'zout', 'klei',
+    'zwaarden', 'knotsen', 'schilden', 'bogen', 'kruisbogen', 'harnassen', 'paarden', 'zout', 'klei',
     'riet', 'turf', 'kalk', 'vaten', 'mest'];
 
   // ── De voorraad, linksonder, en het dorp in de balk bovenaan ──

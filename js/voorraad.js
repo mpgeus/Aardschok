@@ -46,7 +46,7 @@
     vis: () => T.t('fish'), vlees: () => T.t('meat'), wijn: () => T.t('wine'),
     wol: () => T.t('wool'), zaaigraan: () => T.t('seed grain'), zout: () => T.t('salt'),
     // de stukken van de wapenmaker, voor de soldaten (js/soldaten.js)
-    speren: () => T.t('spears'), pieken: () => T.t('pikes'), zwaarden: () => T.t('swords'), schilden: () => T.t('shields'),
+    speren: () => T.t('spears'), pieken: () => T.t('pikes'), zwaarden: () => T.t('swords'), knotsen: () => T.t('maces'), schilden: () => T.t('shields'),
     bogen: () => T.t('bows'), kruisbogen: () => T.t('crossbows'), harnassen: () => T.t('leather armour'),
     paarden: () => T.t('horses'),
   };
@@ -57,7 +57,7 @@
     hout: (n) => T.t('{n|# log|# logs}', { n }),
     planken: (n) => T.t('{n|# plank|# planks}', { n }), vaten: (n) => T.t('{n|# barrel|# barrels}', { n }),
     speren: (n) => T.t('{n|# spear|# spears}', { n }), pieken: (n) => T.t('{n|# pike|# pikes}', { n }),
-    zwaarden: (n) => T.t('{n|# sword|# swords}', { n }), schilden: (n) => T.t('{n|# shield|# shields}', { n }),
+    zwaarden: (n) => T.t('{n|# sword|# swords}', { n }), knotsen: (n) => T.t('{n|# mace|# maces}', { n }), schilden: (n) => T.t('{n|# shield|# shields}', { n }),
     bogen: (n) => T.t('{n|# bow|# bows}', { n }), kruisbogen: (n) => T.t('{n|# crossbow|# crossbows}', { n }),
     harnassen: (n) => T.t('{n|# leather armour|# leather armours}', { n }),
     paarden: (n) => T.t('{n|# horse|# horses}', { n }),

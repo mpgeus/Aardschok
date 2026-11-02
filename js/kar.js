@@ -463,7 +463,7 @@
     ijzer: 'ossenkar-stenen', gereedschap: 'ossenkar-spullen', vaten: 'ossenkar-spullen',
     laken: 'ossenkar-spullen', huiden: 'ossenkar-spullen', leer: 'ossenkar-spullen', riet: 'ossenkar-spullen',
     // de stukken van de wapenmaker (js/soldaten.js)
-    speren: 'ossenkar-spullen', pieken: 'ossenkar-spullen', zwaarden: 'ossenkar-spullen', schilden: 'ossenkar-spullen',
+    speren: 'ossenkar-spullen', pieken: 'ossenkar-spullen', zwaarden: 'ossenkar-spullen', knotsen: 'ossenkar-spullen', schilden: 'ossenkar-spullen',
     bogen: 'ossenkar-spullen', kruisbogen: 'ossenkar-spullen', harnassen: 'ossenkar-spullen', paarden: 'ossenkar-spullen',
   };
   // Een drager draagt wat hij heeft zoals de figuren het kunnen (`e.draagt`, js/sprites.js): tot er dragers met een plank,

@@ -356,6 +356,9 @@ test('de generaals: de held van een leger vecht met zijn wapen, en zijn kring ma
     assert.equal(T.slagVan(agnes).wapen, 'piek');
     assert.equal(T.manTekst(A, agnes), 'Dame Agnes · general');
     assert.ok(T.kringTekst('agnes').includes('of her'), T.kringTekst('agnes'));
+    assert.deepEqual(Object.keys(T.GENERAALS), ['godfrey', 'agnes', 'wat', 'anselm'], 'Brother Anselm met de knots sinds 3e');
+    assert.equal(T.GENERAALS.anselm.soort, 'knotsdrager');
+    const knots = { bewoner: { soldaat: { soort: 'knotsdrager' } } };
     assert.equal(T.bewonerVan(B, T.generaalVan(B)).generaal, T.generaalUitZaad(4, 1), 'zonder keus een uit het zaad');
     assert.equal(T.generaalUitZaad(4, 1), T.generaalUitZaad(4, 1), 'op elke computer dezelfde');
     // bij het begin staat ze achter haar mannen, op geen van hun plekken, en de linie in haar kring
@@ -371,6 +374,7 @@ test('de generaals: de held van een leger vecht met zijn wapen, en zijn kring ma
     assert.equal(T.kracht(man), G.schade);
     assert.equal(T.vangtAf(man), T.SOLDATEN_INSTELLINGEN.bescherming.harnas + G.harnas, 'zijn harnas en een extra');
     assert.equal(T.vangtAf(man, kruisboog), 0, 'een bout gaat erdoorheen');
+    assert.equal(T.vangtAf(man, knots), 0, 'een knots gaat door zijn harnas en door het harnas van de kring');
     zet(man, agnes.x + G.kring + 1, agnes.y);
     assert.ok(!T.inKring(man));
     assert.equal(T.kracht(man), 1);

@@ -30,7 +30,7 @@
     mixen: {
       gewoon: { speerman: 0.5, boogschutter: 0.25, zwaardvechter: 0.25 },
       schutters: { speerman: 0.4, boogschutter: 0.4, kruisboogschutter: 0.2 },
-      zwaar: { zwaardvechter: 0.4, piekenier: 0.3, kruisboogschutter: 0.3 },
+      zwaar: { zwaardvechter: 0.3, knotsdrager: 0.2, piekenier: 0.2, kruisboogschutter: 0.3 }, // de knotsdrager sinds 3e
       ruiters: { ruiter: 0.75, boogschutter: 0.25 }, // genoeg ruiters voor een groep (Marcel: "ze rijden niet alleen meestal")
     },
   };

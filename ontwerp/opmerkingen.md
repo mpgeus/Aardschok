@@ -201,7 +201,16 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   schild dat 1 afvangt (`--getal SOLDATEN_INSTELLINGEN.bescherming.schild=1`) staan de drie gewone mixen onderling bijna
   gelijk (*gewoon* tegen *schutters* 15 tegen 13, *gewoon* tegen *zwaar* 15 tegen 10, *schutters* tegen *zwaar* 13 tegen
   14); de vraag aan Marcel is of het schild 1 wordt. (Het schild telt ook in het dorp, en voor de ridder.) **Gekozen**
-  (Marcel, 2 nov: "Ja, schild 1"): het schild vangt 1 af. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  (Marcel, 2 nov: "Ja, schild 1"): het schild vangt 1 af.
+
+- **De knotsdrager** (2 nov, bij 3e; `scenario.md`, 7): door het harnas heen slaan levert weinig op, want sinds het schild
+  1 afvangt draagt niemand veel: een harnas vangt 1 af, dus de knots wint 1 punt per klap, en slaat trager. In een duel
+  verliest hij van de zwaardvechter, de piekenier (even duur) en de ridder, en wint hij net van de speerman; met een knots
+  van 5 tot 7 (`--getal SOLDATEN_INSTELLINGEN.wapens.knots.schade.0=5 ... .1=7`) bijna hetzelfde, en de zware mix blijft
+  dan 55 %. Wegen: (A) de zware mix van de AI weer zonder knotsdragers (toen stond hij gelijk), en de knotsdrager blijft
+  voor de speler, tegen zware troepen; (B) een zwaarder harnas voor zware soorten (Marcel noemde het: "heavy leather
+  armour"), zodat er iets is om doorheen te slaan; (C) de knots anders (sneller, of meer schade tegen wie harnas draagt).
+  Voorstel van Claude: A nu, en B of C met de standen van de veldheer (3f), als de AI kan kiezen wat hij koopt. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

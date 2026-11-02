@@ -879,6 +879,7 @@
     speer: T.t('spear'),
     piek: T.t('pike'),
     zwaard: T.t('sword'),
+    knots: T.t('mace'),
     boog: T.t('bow'),
     kruisboog: T.t('crossbow'),
     schild: T.t('shield'),
@@ -1475,6 +1476,7 @@
     'SOLDATEN_INSTELLINGEN.leven.speerman': T.t('spearman'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.piekenier': T.t('pikeman'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.zwaardvechter': T.t('swordsman'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.knotsdrager': T.t('maceman'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.boogschutter': T.t('archer'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.kruisboogschutter': T.t('crossbowman'), // geen tekst
     'KIEZEN_INSTELLINGEN.schildpad': T.t('the turtle: shields up against arrows'), // geen tekst
@@ -1515,6 +1517,7 @@
     'VELDHEER_INSTELLINGEN.mixen.schutters.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar': T.t('the heavy mix'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar.zwaardvechter': T.t('swordsmen, share of the points'), // geen tekst
+    'VELDHEER_INSTELLINGEN.mixen.zwaar.knotsdrager': T.t('macemen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar.piekenier': T.t('pikemen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.zwaar.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.ruiters': T.t('the mix of horsemen'), // geen tekst

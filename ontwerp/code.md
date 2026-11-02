@@ -2672,6 +2672,16 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   leent hij dat van de ridder (`leent` in `T.SOLDAAT_SOORTEN`, js/sprites.js). `T.heeftSchild(e)`: een schild in de hand,
   niet te paard (voor de schildpad, js/kiezen.js).
 
+- **De knotsdrager** (3e, 2 nov; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "1. Mace en heavy leather armour. 2.
+  A, maar ze vallen wel langzaam aan, het is een zwaar wapen 3. Ja prima"): de soort `knotsdrager` (*maceman*) met de
+  knots en het harnas (5 punten, 16 leven). De knots (`STUKKEN.knots`, de waar `knotsen`, 3 waard) heeft `breektHarnas`:
+  `T.vangtAf` telt van een knotsklap het harnas niet, ook niet dat van de kring van een generaal, maar het schild wel (een
+  bout, `doorHarnas`, gaat door alles). `wapens.knots`: 4 tot 6, kosten 4 (elke 1,6 seconde, een zwaard elke 1,2). De
+  wapenmaker maakt knotsen van planken en ijzer (js/gebouwen.js), en de voorraad, de balk (een icoon in code, `KNOTS_ICOON`)
+  en de kar kennen de waar. Zijn figuur maakt een lokale sessie (Marcel, 2 nov): het vel heet `knotsdrager`, en tot dan
+  loopt hij als dorpeling (js/sprites.js zoekt het vel op de naam van de soort). In skirmish de generaal *Brother
+  Anselm* (`T.GENERAALS.anselm`, js/veldslag.js), en de zware mix van de AI koopt knotsdragers (js/veldheer.js).
+
 - **Het leven per soort** (2 nov; Marcel: "C. Eigen hoeveelheid leven"): `SOLDATEN_INSTELLINGEN.leven`, per soort (de
   militie 12, de speerman en de piekenier 16, de zwaardvechter 18 (eerst 20, tot "1. C"), de boogschutter 12, de kruisboogschutter 14, de ruiter
   24, de ridder 32), voor `T.levenAlsMan` (js/rovers.js); een veteraan houdt het zijne (`T.WEZENS.veteraan`). Tot dan had

@@ -482,16 +482,16 @@
     // verdedigen. Alleen weerstand tegen de heer is inacceptabel"; werklijst vraag 131) ──
     // In het gehucht (vraag 159, C1; Marcel, 15 okt: "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor
     // komen"): hij maakt wat de wachthuizen vragen (T.wapensGevraagd, js/soldaten.js), één stuk per dag: speer, schild en
-    // boog van planken, piek en kruisboog van planken en ijzer, het zwaard van ijzer, en het harnas van huiden (een ijzeren
+    // boog van planken, piek, knots en kruisboog van planken en ijzer, het zwaard van ijzer, en het harnas van huiden (een ijzeren
     // harnas komt later). Het tuighuis en het schuttershof deden niets, en zijn weg (vraag 159, F).
     wapenmaker: {
       naam: T.t('weaponsmith'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0,
       maakt: {
         in: { planken: 1, ijzer: 1, huiden: 2 },
-        uit: { speren: 1, pieken: 1, zwaarden: 1, schilden: 1, bogen: 1, kruisbogen: 1, harnassen: 1 },
+        uit: { speren: 1, pieken: 1, zwaarden: 1, knotsen: 1, schilden: 1, bogen: 1, kruisbogen: 1, harnassen: 1 },
         keuze: {
-          speren: { planken: 1 }, pieken: { planken: 1, ijzer: 1 }, zwaarden: { ijzer: 1 }, schilden: { planken: 1 },
+          speren: { planken: 1 }, pieken: { planken: 1, ijzer: 1 }, zwaarden: { ijzer: 1 }, knotsen: { planken: 1, ijzer: 1 }, schilden: { planken: 1 },
           bogen: { planken: 1 }, kruisbogen: { planken: 1, ijzer: 1 }, harnassen: { huiden: 2 },
         },
       },

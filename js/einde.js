@@ -43,6 +43,7 @@
       // een boog 3 en een kruisboog 4 (Marcel, 2 nov: "Boog wordt ook duurder"; tot dan 2 en 3: een boogschutter kostte in
       // een veldslag 2 punten, en de mix met de meeste schutters won bijna alles)
       speren: 2, pieken: 3, zwaarden: 3, schilden: 2, bogen: 3, kruisbogen: 4, harnassen: 2,
+      knotsen: 3, // de knots (3e, 2 nov): zoals een piek of een zwaard
       // een paard: een ridder is duur (Marcel, 1 nov), en kost zo 15, twee keer een zwaardvechter
       paarden: 8,
       // geen waar, maar de hooivork van de militie: in een veldslag kost een man militie zoveel (T.soldaatPrijs,

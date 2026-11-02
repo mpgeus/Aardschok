@@ -314,6 +314,34 @@ test('schild en harnas vangen een deel van elke klap af, maar niets van een bout
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('boogschutter')), B.schild + B.harnas, 'een pijl niet');
 });
 
+// De knotsdrager (3e; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "1. Mace en heavy leather armour. 2. A, maar ze
+// vallen wel langzaam aan, het is een zwaar wapen 3. Ja prima").
+test('de knotsdrager: knots en harnas, slaat langzaam maar door het harnas heen (niet door het schild), en de wapenmaker maakt knotsen', () => {
+  const B = T.SOLDATEN_INSTELLINGEN.bescherming;
+  const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } } });
+  assert.deepEqual(T.SOLDAAT_SOORTEN.knotsdrager.stukken, ['knots', 'harnas']);
+  assert.equal(T.soortNaam('knotsdrager'), 'maceman');
+  assert.equal(T.soldaatPrijs('knotsdrager'), 5);
+  assert.equal(T.levenAlsMan(wie('knotsdrager')).max, T.SOLDATEN_INSTELLINGEN.leven.knotsdrager);
+  const knots = T.slagVan(wie('knotsdrager'));
+  assert.equal(knots.wapen, 'knots');
+  assert.ok(knots.kosten > T.slagVan(wie('zwaardvechter')).kosten, 'langzamer dan een zwaard');
+  assert.equal(T.vangtAf(wie('zwaardvechter'), wie('knotsdrager')), B.schild, 'het schild vangt af, het harnas niet');
+  assert.equal(T.vangtAf(wie('speerman'), wie('knotsdrager')), 0, 'door het harnas heen');
+  assert.equal(T.vangtAf(wie('knotsdrager'), null), B.harnas, 'zelf draagt hij een harnas');
+  // in het dorp: het wachthuis vraagt een knots, en de wapenmaker maakt hem van planken en ijzer
+  assert.ok(T.isStuk('knotsen'));
+  assert.deepEqual(T.GEBOUWEN.wapenmaker.maakt.keuze.knotsen, { planken: 1, ijzer: 1 });
+  const { D, huis } = gehucht();
+  T.zetVoorraad(D, 'knotsen', 0);
+  T.zetVoorraad(D, 'harnassen', 1);
+  T.zetSoldaten(D, huis, 'knotsdrager', 1);
+  assert.equal(T.wapensGevraagd(D).knotsen, 1, 'de knots is gevraagd');
+  T.zetVoorraad(D, 'knotsen', 1);
+  T.tikSoldatenDag(D);
+  assert.equal(T.soldatenVan(D)[0].soldaat.soort, 'knotsdrager');
+});
+
 // Vraag 171 (Marcel, 16 okt: "elke groep soldaten heeft een groepsleider die een lantaarn draagt", en "A1, B1, C1, D2").
 test('elk wachthuis heeft een groepsleider: van wie dienst heeft, wie het langst dient; hij draagt een lantaarn, die in het donker brandt', () => {
   const { S, D, huis } = gehucht();

@@ -112,10 +112,11 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    zwaardvechter 18 leven, en flankeren met de ruiters gaat naar 3f. **Wacht op Marcel** (`opmerkingen.md`, "Na de
    missers"): de zware mix won nog 85 %, door het schild; Marcel: "Ja, schild 1": een schild vangt 1 af in plaats van 2,
    en de drie gewone mixen staan onderling bijna gelijk. Daarna 3e (de knotsdrager, met Anselm) en 3f, met het flankeren
-   van de ruiters. **Bezig in sessie `claude/determined-curie-ircu5p`** (2 nov): **3e, de knotsdrager** (Marcel: "1. Mace
-   en heavy leather armour. 2. A, maar ze vallen wel langzaam aan, het is een zwaar wapen 3. Ja prima"): knots en harnas
-   (5 punten), de knots slaat door het harnas (het schild vangt wel af), 4 tot 6 schade, elke 1,6 seconde; in skirmish en
-   in het dorp (de wapenmaker maakt knotsen); Brother Anselm als vierde generaal. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
+   van de ruiters. **3e is af** (2 nov; Marcel: "1. Mace en heavy leather armour. 2. A, maar ze vallen wel langzaam aan,
+   het is een zwaar wapen 3. Ja prima"; `scenario.md`, 7): knots en harnas (5 punten), de knots slaat door het harnas (het
+   schild vangt wel af), 4 tot 6 schade, elke 1,6 seconde; in skirmish en in het dorp (de wapenmaker maakt knotsen);
+   Brother Anselm als vierde generaal. **Wacht op Marcel** (`opmerkingen.md`, "De knotsdrager"): de knotsdrager is zwak,
+   want er is weinig harnas om doorheen te slaan, en de zware mix met knotsdragers wint nu het minst. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
    aan een lokale sessie gegeven"); het spel zoekt het vel op de naam van de soort, dus het vel heet `knotsdrager`, met de
    houdingen van de anderen (staan, lopen, aanval, geraakt, sterven), zoals `piekenier`.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.

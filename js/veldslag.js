@@ -35,11 +35,12 @@
   // alleen skirmish"): de held van een leger in een veldslag. Elk geeft hetzelfde (zijn kring, hierboven) en verschilt in
   // zijn wapen: hij vecht met de stukken van zijn soort (T.SOLDAAT_SOORTEN, js/soldaten.js), en draagt het vel van die
   // soort als dat er is (js/sprites.js; Sir Godfrey loopt als dorpeling tot er een zwaardvechter is). Brother Anselm, met
-  // de knots, komt met de knotsdrager (3e).
+  // de knots, sinds de knotsdrager (3e, 2 nov).
   T.GENERAALS = {
     godfrey: { naam: () => T.t('Sir Godfrey'), geslacht: 'man', soort: 'zwaardvechter', wapen: () => T.t('a sword and shield') },
     agnes: { naam: () => T.t('Dame Agnes'), geslacht: 'vrouw', soort: 'piekenier', wapen: () => T.t('a pike') },
     wat: { naam: () => T.t('Old Wat'), geslacht: 'man', soort: 'kruisboogschutter', wapen: () => T.t('a crossbow') },
+    anselm: { naam: () => T.t('Brother Anselm'), geslacht: 'man', soort: 'knotsdrager', wapen: () => T.t('a mace') },
   };
   // Wat de kring van generaal `id` doet, in een zin (de lobby, js/menu.js, en zijn briefje, js/kiezen.js).
   T.kringTekst = (id) =>

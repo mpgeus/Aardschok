@@ -61,7 +61,9 @@ lijst van het demojaar (hieronder) gaat dieper; deze ronde neemt alleen wat sind
    de ruiter**: koop zwaardvechters en een paar ruiters (*Horseman*, 10 punten; hij lijkt nog op de ridder). Kies je
    mannen en druk op hun briefje *Turtle*: een blok, op driekwart van hun pas; loop ermee op de schutters af, en kijk of het op
    drie tegels opengaat en ze samen in een Line eruit stormen. Zet je ruiters in *Loose* (gespreid) en stuur ze op hun
-   boogschutters: een pijl die mist, raakt dan niemand. Voelt het als een tactiek?
+   boogschutters: een pijl die mist, raakt dan niemand. Voelt het als een tactiek? **Sinds 3e de knotsdrager**
+   (*Maceman*, 5 punten, en de generaal *Brother Anselm*): hij slaat langzaam, maar door het harnas heen; zet hem tegen
+   zwaardvechters of een ridder. Tot de lokale sessie zijn figuur levert, loopt hij als dorpeling.
 
 ### C. Hoofdstuk 2, het rovershol (2c, bij K)
 

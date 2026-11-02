@@ -456,6 +456,14 @@ skirmish.
   is zo doorgeslagen naar de zware mix (`opmerkingen.md`, "Na de missers"). Daarop (Marcel: "1. C; 2. Prima"): de
   zwaardvechter 18 leven, de kruisboog mist 25 %; *zwaar* wint dan nog 85 %. Met een schild dat 1 afvangt staan *gewoon*,
   *schutters* en *zwaar* onderling bijna gelijk; Marcel: "Ja, schild 1". Flankeren met de ruiters: 3f.
+- **3e, de knotsdrager, besloten en gebouwd** (Marcel, 2 nov: "1. Mace en heavy leather armour. 2. A, maar ze vallen wel
+  langzaam aan, het is een zwaar wapen 3. Ja prima"; `code.md` bij `js/soldaten.js`): knots en harnas, 5 punten; de knots
+  slaat 4 tot 6, elke 1,6 seconde, door het harnas heen maar niet door het schild; in skirmish en in het dorp; Brother
+  Anselm als vierde generaal; de zware mix van de AI koopt er een deel van zijn punten in. Zijn figuur maakt een lokale
+  sessie (het vel `knotsdrager`). **Gemeten** (300 slagen, onderling): *gewoon* tegen *schutters* 17 tegen 11, *gewoon*
+  tegen *zwaar* 15 tegen 7, *schutters* tegen *zwaar* 17 tegen 7: de zware mix met knotsdragers is nu de zwakste (zonder
+  knotsdragers stond hij gelijk). In een duel verliest de knotsdrager van de zwaardvechter, de piekenier en de ridder, en
+  wint hij net van de speerman; met een knots van 5 tot 7 bijna hetzelfde (`opmerkingen.md`, "De knotsdrager").
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en
