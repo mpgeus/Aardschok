@@ -137,6 +137,14 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   het schild omhoog (de art; eerst in woorden). Andere wegen over het open veld, die er al zijn of alleen een getal zijn:
   door het bos (achter een boom raakt een pijl niet), de ridder (1,6 maal zo snel), je eigen schutters op hun schutters,
   en de boogschutter duurder.
+  **Een lichte ruiter** (Marcel, 2 nov: "eventueel een vlotte soldaat te paard naast de knight. een lichtere variant
+  dus"): de klassieke tegenzet tegen schutters, snel over het open veld en hen in de flank. Nog niet gekozen. **Wat de
+  regels nu zeggen:** de prijs is de waarde van de stukken, en een paard is 8 waard (een speer 2, een zwaard 3, een
+  schild 2, een harnas 2, een boog 2): de ridder kost 15, een ruiter met alleen een speer en een paard zou 10 kosten, vijf
+  boogschutters. En wie een paard heeft, krijgt nu altijd wat de ridder krijgt (`T.opPaard`: twee keer zijn leven en 1,6
+  maal zijn pas). Een *vlotte* ruiter vraagt dus een getal per soort te paard (sneller dan de ridder, minder leven), en
+  misschien een lichter paard (een pony, goedkoper) als nieuw stuk. Op het eiland komt hij met de stal (192), zoals de
+  ridder; zijn figuur met de art (het paard is er al voor de ridder).
 
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later
