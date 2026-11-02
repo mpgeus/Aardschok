@@ -162,7 +162,8 @@ test('het briefje: van één man, van meer, en van een dorpeling met Talk als hi
   const een = T.manBriefje(D, a);
   assert.equal(een.kop, a.bewoner.naam);
   assert.match(een.doet, /^Militia/);
-  assert.ok(een.delen[0].regels.includes('Life: 16 of 16'), JSON.stringify(een.delen));
+  const leven = T.SOLDATEN_INSTELLINGEN.leven.militie; // het leven van zijn soort (sinds 2 nov)
+  assert.ok(een.delen[0].regels.includes(`Life: ${leven} of ${leven}`), JSON.stringify(een.delen));
   assert.ok(een.delen[0].regels.includes('Carries: pitchfork'));
   S.gekozen = [a, b];
   const meer = T.gekozenBriefje(S).briefje;

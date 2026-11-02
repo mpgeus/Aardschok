@@ -188,7 +188,7 @@
   const kostVan = (koop) => Object.entries(koop).reduce((som, [soort, n]) => som + T.soldaatPrijs(soort) * n, 0);
   const nieuwKaartZaad = () => 1 + Math.floor(Math.random() * 99999); // een nieuw spel kiest zijn zaad zo (code.md bij js/tik.js)
   function nieuweLobby() {
-    return { kaart: Object.keys(T.KAARTEN)[0], zaad: nieuwKaartZaad(), punten: VS().punten.standaard, minuten: VS().minutenStandaard, koop: { speerman: 8, boogschutter: 4 }, generaal: Object.keys(T.GENERAALS)[0], plaatje: null };
+    return { kaart: Object.keys(T.KAARTEN)[0], zaad: nieuwKaartZaad(), punten: VS().punten.standaard, minuten: VS().minutenStandaard, koop: { speerman: 7, boogschutter: 4 }, generaal: Object.keys(T.GENERAALS)[0], plaatje: null };
   }
   // Een regel met min en plus: wat het is, wat het nu is, en waarom min of plus niet kan (of niets). Met `tekens` andere
   // knoppen (de generaal: vorige en volgende).

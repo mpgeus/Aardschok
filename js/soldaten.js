@@ -45,15 +45,21 @@
       zwaard: { kosten: 3, schade: [5, 7], bereik: 1 },
       boog: { kosten: 4, schade: [2, 4], bereik: 8 },
       kruisboog: { kosten: 4, schade: [2, 4], bereik: 8 },
+      // Geen stuk: het mes van een schutter die een vijand naast zich heeft en niet weg kan (js/gevecht.js; Marcel, 2 nov:
+      // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
+      mes: { kosten: 3, schade: [1, 3], bereik: 1 },
     },
     // Zoveel schade vangt het van elke klap af.
     bescherming: { schild: 2, harnas: 1 },
-    // Wat zijn paard de ridder geeft: zoveel maal het leven van een soldaat (T.levenAlsMan, js/rovers.js), en zoveel maal zijn
-    // pas (T.snelheidVan, js/wereld.js).
-    ridder: { leven: 2, snelheid: 1.6 },
+    // Het leven van een soldaat, per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"; T.levenAlsMan, js/rovers.js). Tot
+    // dan had iedereen 16 (T.WEZENS.soldaat), en was een boogschutter 16 leven voor 2 punten. De ruiter en de ridder houden
+    // wat hun paard ze gaf (anderhalf en twee maal 16).
+    leven: { militie: 12, speerman: 16, piekenier: 16, zwaardvechter: 20, boogschutter: 12, kruisboogschutter: 14, ruiter: 24, ridder: 32 },
+    // Wat zijn paard de ridder geeft: zoveel maal zijn pas (T.snelheidVan, js/wereld.js).
+    ridder: { snelheid: 1.6 },
     // En de lichte ruiter (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A":
-    // een gewoon paard): sneller dan de ridder, en met minder leven, want hij heeft geen harnas en geen schild.
-    ruiter: { leven: 1.5, snelheid: 2 },
+    // een gewoon paard): sneller dan de ridder (en met minder leven, hierboven: hij heeft geen harnas en geen schild).
+    ruiter: { snelheid: 2 },
   };
   const IN = () => T.SOLDATEN_INSTELLINGEN;
 
@@ -319,17 +325,19 @@
     return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas };
   };
 
+  // Hoe een schutter slaat die niet weg kan: met zijn mes, ernaast (js/gevecht.js).
+  T.mesSlag = () => ({ wapen: 'mes', ...IN().wapens.mes, schiet: false, doorHarnas: false });
+
   // Zit hij op een paard (de ridder, de ruiter)? Dan heeft hij meer leven en een grotere pas: wat T.paardVan zegt.
   T.opPaard = (e) => !!(e && e.bewoner && e.bewoner.soldaat && stukkenVan(e.bewoner.soldaat.soort).includes('paard'));
-  // Wat zijn paard hem geeft ({ leven, snelheid }, de getallen van zijn soort in de instellingen), of null te voet.
+  // Wat zijn paard hem geeft ({ snelheid }, de getallen van zijn soort in de instellingen), of null te voet.
   T.paardVan = (e) => (T.opPaard(e) ? IN()[e.bewoner.soldaat.soort] || IN().ridder : null);
   // Heeft hij een schild in de hand: niet te paard (de ridder houdt het bij zich), voor de schildpad (js/kiezen.js).
   T.heeftSchild = (e) => !T.opPaard(e) && T.stukkenVan(e).includes('schild');
 
-  // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat). Van een bout uit een kruisboog
-  // niets.
-  T.vangtAf = function (doel, van) {
-    const slag = van ? T.slagVan(van) : null;
+  // Hoeveel schade schild en harnas van doel afvangen, van een klap van `van` (wie slaat, met `slag`: zijn wapen, of een
+  // ander, zoals het mes van een schutter). Van een bout uit een kruisboog niets.
+  T.vangtAf = function (doel, van, slag = van ? T.slagVan(van) : null) {
     if (slag && slag.doorHarnas) return 0;
     let n = 0;
     for (const stuk of T.stukkenVan(doel)) n += IN().bescherming[stuk] || 0;

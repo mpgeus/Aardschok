@@ -2600,6 +2600,15 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `T.werkDorpBij`, na `T.werkSturenBij`), met het toeval van het dorp en zonder `await`, dus in lockstep gelijk
   (getoetst: twee werelden met dezelfde opdrachten blijven letter voor letter gelijk, `test/gevecht.test.cjs`). De
   getallen in `T.GEVECHT_INSTELLINGEN` (de werkbank: "Fighting").
+- **Een schutter in een gevecht van dichtbij** (2 nov; Marcel: "Boogschutter kan niet wegkomen uit melee combat; tenzij
+  ze sneller zijn; dan kun je 'kiten'; maar er zit wel een attack delay op, nadat ze verplaatsen", en "1. A"): in
+  `doeMet` stapt een schutter met een vijand naast zich alleen opzij (`stapOpzij`) als hij sneller is (`T.snelheidVan`)
+  dan elke vijand naast hem (`vijandenNaast`); anders blijft hij staan en slaat met zijn mes (`T.mesSlag`, js/soldaten.js:
+  `wapens.mes`, zwak), tegen zijn doel als dat naast hem staat, anders tegen een buur. `slaan` neemt daarvoor een ander
+  wapen mee, en `T.vangtAf` krijgt dat wapen (een mes is geen pijl: de schildpad dekt er niet tegen). Elke tik onthoudt
+  een man wanneer hij het laatst liep (`e.bewoog`, in `T.werkGevechtBij`), en `schieten` legt pas aan als dat `naLopen`
+  seconden geleden is. Tot 2 nov stapte een schutter altijd opzij: één zwaardvechter deed 23 seconden over één
+  boogschutter, die 40 keer opzij stapte; nu 6 seconden.
 - **De klappen van een tik vallen aan het eind** (28 okt; Marcel: "1 tik alle klappen aan einde"): `slaan` zet de klap
   klaar in `S.klappen` (wie, wat, hoeveel, van wie; de worp en wat harnas afvangt, rekent hij meteen), en
   `T.laatKlappenVallen(S)` laat ze vallen aan het eind van `T.wereldTik`, na alle dorpen en de wereld, in de volgorde waarin
@@ -2649,15 +2658,20 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 - **De lichte ruiter** (2 nov; Marcel: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A",
   "3. Ja beiden"): `ruiter` (*horseman*), een speer en een paard, dus 10 punten; in skirmish en in het dorp (het wachthuis
   loopt alle soorten langs, de stal brengt het paard). Wat een paard geeft, is per soort: `T.paardVan(e)` geeft de
-  getallen van zijn soort (`SOLDATEN_INSTELLINGEN.ruiter`: anderhalf maal het leven en twee maal de pas; de ridder twee
-  maal en 1,6), voor `T.levenAlsMan` (js/rovers.js) en `T.snelheidVan` (js/wereld.js). Tot hij een eigen figuur heeft,
+  getallen van zijn soort (`SOLDATEN_INSTELLINGEN.ruiter`: twee maal de pas; de ridder 1,6), voor `T.snelheidVan`
+  (js/wereld.js). Tot hij een eigen figuur heeft,
   leent hij dat van de ridder (`leent` in `T.SOLDAAT_SOORTEN`, js/sprites.js). `T.heeftSchild(e)`: een schild in de hand,
   niet te paard (voor de schildpad, js/kiezen.js).
+
+- **Het leven per soort** (2 nov; Marcel: "C. Eigen hoeveelheid leven"): `SOLDATEN_INSTELLINGEN.leven`, per soort (de
+  militie 12, de speerman en de piekenier 16, de zwaardvechter 20, de boogschutter 12, de kruisboogschutter 14, de ruiter
+  24, de ridder 32), voor `T.levenAlsMan` (js/rovers.js); een veteraan houdt het zijne (`T.WEZENS.veteraan`). Tot dan had
+  elke soldaat 16 (`T.WEZENS.soldaat`, nu alleen nog wat een soort zonder getal krijgt), en gaf een paard een veelvoud.
 
 - **De prijs van een soldaat** (3b1, 28 okt; `scenario.md`, 7: "De prijs van een soldaat is de waarde van zijn stukken"):
   `T.soldaatPrijs(soort)` telt de waarde van zijn stukken (`T.waardeVan`, js/einde.js, de tabel van de punten van 186);
   de hooivork, die geen waar is, staat er op zijn eigen naam (`waarde.hooivork: 1`, B1). Een speerman kost zo 4, een
-  boogschutter 2, een zwaardvechter 7, een ridder 15.
+  boogschutter 3 (sinds 2 nov; was 2), een kruisboogschutter 6, een zwaardvechter 7, een ruiter 10, een ridder 15.
 - `js/soldaten.js` (werklijst vraag 159, 15 okt; Marcel: "A1, B1, C1, D1", de wapens "sword, spear, shield, pike, bow,
   crossbow, armor", in vaste soorten): **in het wachthuis word je soldaat.** Per wachthuis `g.soldaten` (hoeveel je er
   per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zeven soorten met vaste

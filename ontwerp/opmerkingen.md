@@ -157,8 +157,10 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
 
 - **Waarom de schutters winnen** (2 nov, gemeten bij de schildpad; `scenario.md`, 7): niet door de pijlen. (1) **Een
   boogschutter stapt opzij** als iemand naast hem staat (`stapOpzij`, js/gevecht.js), en wie van dichtbij slaat, slaat
-  alleen als hij stilstaat: één zwaardvechter deed 44 seconden over één boogschutter (zaad 1 tot 3; de boogschutter stapte
-  69 keer opzij), zonder zelf geraakt te worden. Een ruiter, sneller dan de boogschutter, deed het in 4 seconden. (2) **Elke
+  alleen als hij stilstaat: één zwaardvechter deed 23 seconden over één boogschutter (de boogschutter stapte 40 keer opzij),
+  een speerman 12 (hij steekt van twee tegels), de militie 35. Een ruiter, sneller dan de boogschutter, deed het in 4
+  seconden. (Eerst stond hier 44 seconden: in dat duel stond de boogschutter niet op zijn post, en liep hij er steeds
+  heen; het goede duel zet de aanvaller bij de schutter.) (2) **Elke
   man heeft hetzelfde leven** (16), dus een boogschutter is 16 leven voor 2 punten en een zwaardvechter 16 voor 7: met
   40 punten heeft de mix *schutters* 13 man, *zwaar* 8. (3) **De ruiters van de AI stormen alleen vooruit** (ze zijn
   sneller) en vallen, voor de rest er is; dat is voor de standen van de veldheer (3f). Wat helpt, is aan Marcel: (A) een
@@ -166,7 +168,17 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   telt ook voor de punten van het dorp), of (C) het leven per soort. Voorstel van Claude: eerst A, want dat is wat het
   duel liet zien. **Gekozen** (Marcel, 2 nov): alle drie. "A. Boogschutter kan niet wegkomen uit melee combat; tenzij ze
   sneller zijn; dan kun je 'kiten'; maar er zit wel een attack delay op, nadat ze verplaatsen. B. Boog wordt ook duurder;
-  in het dorp hebben we geen punten. C. Eigen hoeveelheid leven". Het plan met de getallen volgt (werklijst, bij 1).
+  in het dorp hebben we geen punten. C. Eigen hoeveelheid leven". **Gebouwd** (2 nov; `scenario.md`, 7, met de metingen).
+
+- **Na A, B en C** (2 nov; `scenario.md`, 7): de schutters zijn niet meer te sterk (de proefbank: *schutters* 55 %). Twee
+  dingen voor Marcel: (1) **De schildpad kost nu meer dan hij geeft**, zoals de AI hem gebruikt: een gemengd leger wint
+  16 van 20 aanvallen op een linie schutters zonder schildpad en 11 met; 4 zwaardvechters en 4 speermannen 20 tegen 17; 5
+  zwaardvechters tegen 18 boogschutters 13 en 13. Een pijl doet nu weinig meer, en de schildpad loopt half zo snel en
+  slaat niet (ook de eigen schutters erin niet). Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
+  (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
+  seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,
+  het open punt bij S in de werklijst), of ze om de linie heen op de schutters sturen.
 
 - **Samen spelen: wat nog open is** (28 okt, na het nalopen van de veldslag; `code.md` bij `js/tik.js`, "Samen"): (1)
   de wegen die `js/lopen.js` onthoudt (`WEGEN`): als er land opengaat, blijft een weg die er was goed, en wie later

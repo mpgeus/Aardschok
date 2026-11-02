@@ -103,11 +103,13 @@ test('is de held de laatste, dan vecht hij zelf: twee helden wachten niet tot de
 test('de prijs van een soldaat is de waarde van zijn stukken, en de militie kost 1', () => {
   assert.equal(T.soldaatPrijs('militie'), 1);
   assert.equal(T.soldaatPrijs('speerman'), 4);
-  assert.equal(T.soldaatPrijs('boogschutter'), 2);
+  assert.equal(T.soldaatPrijs('boogschutter'), 3, 'sinds 2 nov een boog 3 (Marcel: "Boog wordt ook duurder")');
+  assert.equal(T.soldaatPrijs('kruisboogschutter'), 6);
   assert.equal(T.soldaatPrijs('zwaardvechter'), 7);
+  assert.equal(T.soldaatPrijs('ruiter'), 10);
 });
 
-test('de veldheer koopt een van drie mixen uit het zaad, voor al zijn punten en niet meer, en hetzelfde lot is hetzelfde leger', () => {
+test('de veldheer koopt een van zijn mixen uit het zaad, voor al zijn punten en niet meer, en hetzelfde lot is hetzelfde leger', () => {
   const kost = (soorten) => Object.entries(soorten).reduce((s, [soort, n]) => s + T.soldaatPrijs(soort) * n, 0);
   const mixen = new Set();
   for (const punten of [20, 40, 100, 200]) {

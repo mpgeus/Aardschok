@@ -103,10 +103,12 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    vanuit de schildpad. 2. A 3. Ja beiden"; `scenario.md`, 7): de schildpad (*Turtle*) en de lichte ruiter (*horseman*), in
    skirmish en in het dorp, en de AI gebruikt allebei. **Wacht op Marcel**: wat de metingen lieten zien (`opmerkingen.md`,
    "Waarom de schutters winnen"): de schutters winnen niet door de pijlen, maar doordat een boogschutter opzij stapt (één
-   zwaardvechter doet 44 seconden over één boogschutter) en een boogschutter 16 leven is voor 2 punten. **Gekozen**
-   (Marcel, 2 nov): alle drie: een boogschutter komt niet weg uit een gevecht van dichtbij, tenzij hij sneller is, en na
-   het lopen schiet hij pas na een tijd; de boog wordt duurder; en elke soort krijgt zijn eigen leven
-   (`opmerkingen.md`). Eerst het plan met de getallen aan Marcel. Daarna 3e (de knotsdrager, met Anselm) en 3f.
+   zwaardvechter deed 23 seconden over één boogschutter) en een boogschutter 16 leven is voor 2 punten. **A, B en C zijn
+   af** (2 nov; Marcel: "1. A 2. Ja"; `scenario.md`, 7, met de metingen): een schutter komt niet weg van wie even snel is
+   en vecht dan met een mes, schiet na het lopen pas na een seconde; een boog 3, een kruisboog 4; het leven per soort. De
+   mix *schutters* wint nog 55 %. **Wacht op Marcel** (`opmerkingen.md`, "Na A, B en C"): de schildpad kost nu meer dan
+   hij geeft, zoals de AI hem gebruikt, en de ruiters van de AI winnen nooit. Daarna 3e (de knotsdrager, met Anselm) en
+   3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

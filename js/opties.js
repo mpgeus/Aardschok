@@ -886,6 +886,8 @@
     ridder: T.t('knight'),
     ruiter: T.t('horseman'),
     aanleggen: T.t('seconds taking aim'),
+    naLopen: T.t('after walking, an archer stands this many seconds before he takes aim'),
+    mes: T.t('the knife of an archer who cannot get away'),
     leven: T.t('life'),
     afgeslagen: T.t('beaten off'),
     dood: T.t('death'),
@@ -1465,6 +1467,13 @@
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven': T.t('the life of a soldier, by kind'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.militie': T.t('militia'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.speerman': T.t('spearman'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.piekenier': T.t('pikeman'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.zwaardvechter': T.t('swordsman'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.boogschutter': T.t('archer'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.leven.kruisboogschutter': T.t('crossbowman'), // geen tekst
     'KIEZEN_INSTELLINGEN.schildpad': T.t('the turtle: shields up against arrows'), // geen tekst
     'KIEZEN_INSTELLINGEN.schildpad.pijl': T.t('a man covered by a shield stops this much more of an arrow'), // geen tekst
     'KIEZEN_INSTELLINGEN.schildpad.traag': T.t('in the turtle they walk this many times as fast'), // geen tekst

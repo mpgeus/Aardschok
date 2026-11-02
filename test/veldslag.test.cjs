@@ -316,13 +316,13 @@ test('een veldslag met punten: de veldheer koopt bij het begin, en een speler ko
   T.ui = new Proxy({}, { get: () => () => undefined });
   try {
     const heeft = (lijst, stuk) => assert.ok(lijst.some((z) => z.includes(stuk)), `${stuk} in ${JSON.stringify(lijst)}`);
-    const L = T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { speerman: 8, boogschutter: 4 } }, { veldheer: true }] });
+    const L = T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { speerman: 7, boogschutter: 4 } }, { veldheer: true }] });
     assert.deepEqual(T.keurScenario(L), []);
     heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { zwaardvechter: 6 } }, { veldheer: true }] })), 'kost 42 punten, meer dan 40');
     heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, legers: [{ soorten: { speerman: 1 } }, { veldheer: true }] })), 'geen veldheer met punten');
     const S = T.proefdorp.begin(T.proefdorp.zaad, L);
     const [A, B] = S.dorpen;
-    assert.equal(T.legerVan(A).length, 13, 'twaalf soldaten en de held');
+    assert.equal(T.legerVan(A).length, 12, 'elf soldaten en de held');
     assert.ok(B.veldheer.mix, `hij koos een mix: ${B.veldheer.mix}`);
     const kost = B.bewoners.mensen.filter((p) => p.soldaat).reduce((s, p) => s + T.soldaatPrijs(p.soldaat.soort), 0);
     assert.equal(kost, 40, 'voor al zijn punten');
@@ -468,11 +468,65 @@ test('de lichte ruiter: een speer en een paard, 10 punten, sneller dan de ridder
     assert.equal(T.snelheidVan(r), T.KIEZEN_INSTELLINGEN.loopt * IN.ruiter.snelheid);
     assert.equal(T.snelheidVan(k), T.KIEZEN_INSTELLINGEN.loopt * IN.ridder.snelheid);
     assert.ok(T.snelheidVan(r) > T.snelheidVan(k), 'vlotter dan de ridder');
-    const leven = T.WEZENS.soldaat.leven;
-    assert.equal(T.levenAlsMan(r).max, Math.round(leven * IN.ruiter.leven));
+    assert.equal(T.levenAlsMan(r).max, IN.leven.ruiter);
     assert.ok(T.levenAlsMan(r).max < T.levenAlsMan(k).max, 'minder leven dan de ridder');
     assert.ok(!T.heeftSchild(k) && T.heeftSchild(z), 'te paard houdt de ridder zijn schild bij zich: geen schildpad');
   } finally {
+    T.ui = ui;
+  }
+});
+
+// Een schutter in een gevecht van dichtbij (Marcel, 2 nov: "Boogschutter kan niet wegkomen uit melee combat; tenzij ze
+// sneller zijn; dan kun je 'kiten'; maar er zit wel een attack delay op, nadat ze verplaatsen", en "1. A": een mes).
+test('een schutter komt niet weg van wie even snel is en vecht met zijn mes, ontloopt wie trager is, en schiet pas na stilstaan', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  const snelheidVan = T.snelheidVan;
+  // een slag met een militieman van A bij een boogschutter van B, die op zijn post staat (anders loopt hij erheen)
+  const naastElkaar = (afstand = 1) => {
+    const S = slag([{ soorten: { militie: 1 } }, { soorten: { boogschutter: 1 } }]);
+    vechten(S);
+    seconden(S, 1);
+    const [A, B] = S.dorpen;
+    const [m] = T.militieVan(A);
+    const [b] = T.militieVan(B);
+    Object.assign(m, { x: b.tx - afstand, y: b.ty, tx: b.tx - afstand, ty: b.ty, pad: [], onderweg: false });
+    for (const e of [m, b]) Object.assign(e, { leven: T.levenAlsMan(e).max, maxLeven: T.levenAlsMan(e).max });
+    return { S, m, b };
+  };
+  try {
+    // even snel: hij blijft staan en steekt met zijn mes
+    {
+      const { S, m, b } = naastElkaar();
+      const plek = `${b.tx},${b.ty}`;
+      const leven = T.levenAlsMan(m).max;
+      assert.equal(m.leven, leven);
+      seconden(S, 3);
+      assert.equal(`${b.tx},${b.ty}`, plek, 'hij komt niet weg');
+      assert.ok(m.leven > 0 && m.leven < leven, `het mes raakt: ${m.leven} van ${leven}`);
+    }
+    // is hij sneller dan wie naast hem staat, dan stapt hij opzij (kiten)
+    {
+      const { S, m, b } = naastElkaar();
+      T.snelheidVan = (e) => (e === m ? 1 : snelheidVan(e));
+      const plek = `${b.tx},${b.ty}`;
+      seconden(S, 1);
+      assert.notEqual(`${b.tx},${b.ty}`, plek, 'hij stapt opzij');
+      T.snelheidVan = snelheidVan;
+    }
+    // na het lopen legt hij pas aan als hij naLopen seconden stilstaat
+    {
+      const { S, b } = naastElkaar(5);
+      const t0 = S.wereldTijd;
+      Object.assign(b, { bewoog: t0, aanleg: null, slagKlaar: 0 });
+      for (let i = 0; i < Math.floor((T.GEVECHT_INSTELLINGEN.naLopen * 0.5) / T.TIK); i++) T.wereldTik(S);
+      assert.equal(b.aanleg, null, 'net gelopen: nog niet');
+      seconden(S, T.GEVECHT_INSTELLINGEN.naLopen + 1);
+      assert.ok(b.aanleg != null || b.slagKlaar > t0 + T.GEVECHT_INSTELLINGEN.naLopen, 'daarna wel');
+    }
+    assert.deepEqual(T.mesSlag().schade, T.SOLDATEN_INSTELLINGEN.wapens.mes.schade);
+  } finally {
+    T.snelheidVan = snelheidVan;
     T.ui = ui;
   }
 });

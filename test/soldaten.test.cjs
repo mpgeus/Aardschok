@@ -256,7 +256,9 @@ test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leve
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } }, leven: 0, maxLeven: 0 });
   const I = T.SOLDATEN_INSTELLINGEN.ridder;
   assert.equal(T.snelheidVan(wie('ridder')), T.snelheidVan(wie('zwaardvechter')) * I.snelheid);
-  assert.equal(T.levenAlsMan(wie('ridder')).max, Math.round(T.levenAlsMan(wie('zwaardvechter')).max * I.leven));
+  // het leven per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"): de ridder het meest
+  assert.equal(T.levenAlsMan(wie('ridder')).max, T.SOLDATEN_INSTELLINGEN.leven.ridder);
+  assert.ok(T.levenAlsMan(wie('ridder')).max > T.levenAlsMan(wie('zwaardvechter')).max, 'meer leven dan een zwaardvechter');
   assert.equal(T.vangtAf(wie('ridder'), null), T.vangtAf(wie('zwaardvechter'), null), 'schild en harnas, zoals een zwaardvechter');
   assert.equal(T.slagVan(wie('ridder')).wapen, 'zwaard');
   assert.equal(T.isStuk('paarden'), true);

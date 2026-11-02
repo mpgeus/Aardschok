@@ -40,7 +40,9 @@
       planken: 0.3, steen: 0.3, klei: 0.15, riet: 0.15, turf: 0.2, kalk: 0.3, hooi: 0.05,
       ijzer: 1.5, gereedschap: 3, zout: 0.5, laken: 1, leer: 0.6, vaten: 0.3,
       meel: 0.4, brood: 0.5, bier: 0.2, wijn: 1, melk: 0.1, kaas: 0.4,
-      speren: 2, pieken: 3, zwaarden: 3, schilden: 2, bogen: 2, kruisbogen: 3, harnassen: 2,
+      // een boog 3 en een kruisboog 4 (Marcel, 2 nov: "Boog wordt ook duurder"; tot dan 2 en 3: een boogschutter kostte in
+      // een veldslag 2 punten, en de mix met de meeste schutters won bijna alles)
+      speren: 2, pieken: 3, zwaarden: 3, schilden: 2, bogen: 3, kruisbogen: 4, harnassen: 2,
       // een paard: een ridder is duur (Marcel, 1 nov), en kost zo 15, twee keer een zwaardvechter
       paarden: 8,
       // geen waar, maar de hooivork van de militie: in een veldslag kost een man militie zoveel (T.soldaatPrijs,

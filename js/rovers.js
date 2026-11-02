@@ -226,13 +226,13 @@
       .filter((p) => (p.soldaat || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
       .map((p) => p.wezen);
 
-  // Zijn leven als man van de militie (het leven van een soldaat, T.WEZENS.soldaat, of een veteraan, T.WEZENS.veteraan):
-  // { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt, krijgt hij ook. Ook voor zijn
-  // briefje (js/kiezen.js), vóór hij ooit vocht.
+  // Zijn leven als man van de militie (het leven van zijn soort, T.SOLDATEN_INSTELLINGEN.leven in js/soldaten.js, of van
+  // een veteraan, T.WEZENS.veteraan): { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt,
+  // krijgt hij ook. Ook voor zijn briefje (js/kiezen.js), vóór hij ooit vocht.
   T.levenAlsMan = function (e) {
-    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
-    const paard = T.paardVan(e);
-    const max = paard ? Math.round(s.leven * paard.leven) : s.leven;
+    const p = e.bewoner;
+    const soort = p && p.soldaat && !p.veteraan ? p.soldaat.soort : null;
+    const max = p && p.veteraan ? T.WEZENS.veteraan.leven : T.SOLDATEN_INSTELLINGEN.leven[soort] || T.WEZENS.soldaat.leven;
     if (e.maxLeven === max) return { leven: e.leven, max };
     return { leven: (e.maxLeven ? e.leven : 0) + max - (e.maxLeven || 0), max };
   };

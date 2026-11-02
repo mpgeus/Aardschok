@@ -49,6 +49,9 @@
     secondenPerPunt: 0.4,
     // Zoveel seconden legt een schutter aan voor de pijl weggaat: zijn vel spant de boog, en laat los op dit moment.
     aanleggen: 0.4,
+    // Na het lopen legt een schutter pas aan als hij zoveel seconden stilstaat (Marcel, 2 nov: "er zit wel een attack delay
+    // op, nadat ze verplaatsen"; e.bewoog: wanneer hij het laatst liep).
+    naLopen: 1,
     // Zo ver (tegels) ziet een man van jou een vijand; een rover of een wolf ziet zo ver als T.WEZENS zegt.
     zicht: 8,
     // Zo ver van zijn post (of van waar hij hoort, of van waar hij begon) zit iemand een vijand na; dan laat hij hem gaan.
@@ -145,10 +148,15 @@
     return beste ? { doel: beste, anker } : null;
   }
 
-  // Staat er een vijand van e naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1).
+  // Staat er een vijand van e naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1). En welke.
+  const isVijandVanE = (D, e, man, x) => (man ? T.isVijandVan(D, x) : doelVoorVijand(D, e, x));
   function vijandNaast(D, e, t) {
     const man = T.vechtVoor(D, e);
-    return D.wereld.wezens.some((x) => (man ? T.isVijandVan(D, x) : doelVoorVijand(D, e, x)) && T.afstand(plek(x), t) === 1);
+    return D.wereld.wezens.some((x) => isVijandVanE(D, e, man, x) && T.afstand(plek(x), t) === 1);
+  }
+  function vijandenNaast(D, e, t) {
+    const man = T.vechtVoor(D, e);
+    return D.wereld.wezens.filter((x) => isVijandVanE(D, e, man, x) && T.afstand(plek(x), t) === 1);
   }
 
   // Kan e doel d raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast zoals altijd
@@ -180,7 +188,9 @@
     const budget = { zoek: IN().zoekPerTik };
     let vecht = null;
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || !T.hoortBij(D, e) || !vechtNu(D, e) || e.formatie === 'schildpad') continue; // in een schildpad slaat niemand
+      if (e.dood || e.binnen || !T.hoortBij(D, e) || !vechtNu(D, e)) continue;
+      if (e.onderweg) e.bewoog = nu; // wie schiet, legt pas aan als hij even stilstaat (schieten)
+      if (e.formatie === 'schildpad') continue; // in een schildpad slaat niemand
       const d = doelVan(S, w, D, e, nu, vijanden);
       if (!d) continue;
       vecht = vecht || plek(e);
@@ -262,7 +272,9 @@
   }
 
   // Wat e doet met doel d: raakt hij het, dan blijft hij staan en slaat als zijn vorige slag lang genoeg geleden is; wie
-  // schiet en een vijand naast zich heeft, stapt opzij; anders loopt hij erheen.
+  // schiet en een vijand naast zich heeft, stapt opzij als hij sneller is dan elke vijand naast hem, en vecht anders met
+  // zijn mes (Marcel, 2 nov: "Boogschutter kan niet wegkomen uit melee combat; tenzij ze sneller zijn; dan kun je
+  // 'kiten'"); anders loopt hij erheen.
   function doeMet(S, D, e, d, nu, budget) {
     // Wie vecht, heeft zijn leven (een man die je stuurde, kreeg het nog niet bij het kiezen): voor de levensbalk.
     if (!(e.maxLeven > 0)) zorgLeven(D, e);
@@ -276,7 +288,15 @@
     }
     const slag = T.slagVan(e);
     if (slag.schiet && vijandNaast(D, e, plek(e))) {
-      if (!e.onderweg) stapOpzij(D, e);
+      const naast = vijandenNaast(D, e, plek(e));
+      const snel = T.snelheidVan(e);
+      if (naast.every((x) => T.snelheidVan(x) < snel)) {
+        if (!e.onderweg) stapOpzij(D, e);
+        return;
+      }
+      if (e.onderweg) return;
+      if (e.pad.length) e.pad = [];
+      if (nu >= (e.slagKlaar || 0)) slaan(S, D, e, naast.includes(d) ? d : naast[0], nu, T.mesSlag());
       return;
     }
     const doel = plek(d);
@@ -311,6 +331,7 @@
   function schieten(S, D, e, d, nu) {
     const voor = IN().aanleggen;
     if (e.aanleg != null && nu > e.aanleg + voor) e.aanleg = null;
+    if (e.aanleg == null && e.bewoog != null && nu < e.bewoog + IN().naLopen) return; // net gelopen: eerst stilstaan
     if (e.aanleg == null) {
       if (nu < (e.slagKlaar || 0) - voor) return;
       e.aanleg = nu + voor;
@@ -325,9 +346,9 @@
   }
 
   // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende. In de kring
-  // van zijn generaal (3d, T.inKring in js/veldslag.js) slaat hij harder, afgerond op hele punten.
-  function slaan(S, D, e, d, nu) {
-    const slag = T.slagVan(e);
+  // van zijn generaal (3d, T.inKring in js/veldslag.js) slaat hij harder, afgerond op hele punten. Met `slag` een ander
+  // wapen dan het zijne (het mes van een schutter die niet weg kan).
+  function slaan(S, D, e, d, nu, slag = T.slagVan(e)) {
     e.slagKlaar = nu + slag.kosten * IN().secondenPerPunt;
     const doel = plek(d);
     if (S.wereld === D.wereld) {
@@ -335,7 +356,7 @@
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
     // de klap valt aan het eind van de tik (T.laatKlappenVallen)
-    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(d, e));
+    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(d, e, slag));
     (S.klappen || (S.klappen = [])).push({ D, doel: d, n, van: e });
   }
 

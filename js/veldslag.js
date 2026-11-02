@@ -16,7 +16,7 @@
     zee: 8, // zoveel tegels zee om het land zijn open en te zien
     dag: 120 + 11 / 24, // de dag en het uur waarop een veldslag speelt, en blijft spelen (1 hooimaand, elf uur)
     // De punten van elke kant in de lobby (js/menu.js; Marcel, 28 okt: "1 ja"): zoveel standaard, van min tot max in
-    // stappen van stap. 40 is acht speermannen en vier boogschutters.
+    // stappen van stap. 40 is zeven speermannen en vier boogschutters.
     punten: { standaard: 40, min: 20, max: 200, stap: 10 },
     // De tijd van een slag in minuten, de keuzes in de lobby (0 is geen tijd; E2), en welke er eerst staat.
     minuten: [0, 5, 10, 15, 20],

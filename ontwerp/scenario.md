@@ -383,8 +383,8 @@ skirmish.
   `Spel.debug.veldslag()`) en 3a3 (de veldheer, `js/veldheer.js`, en de proefbank `npm run veldslag`) zijn gebouwd; de
   militie voor 1 komt met het kopen in 3b.
 - **De lobby, besloten** (Marcel, 28 okt, op het plan van 3b: "1 ja, 2 b, 3 ja, 4 ja, 5, Nee helden zijn generaals"):
-  **Skirmish** op het titelscherm, ook in de demo voor Next Fest. Elke kant krijgt evenveel punten, standaard 40 (nu acht
-  speermannen en vier boogschutters), van 20 tot 200 in stappen van 10; de prijs is de waarde van de stukken, de militie
+  **Skirmish** op het titelscherm, ook in de demo voor Next Fest. Elke kant krijgt evenveel punten, standaard 40 (nu zeven
+  speermannen en vier boogschutters; tot de boog op 2 nov duurder werd, acht), van 20 tot 200 in stappen van 10; de prijs is de waarde van de stukken, de militie
   1. De AI koopt tot de standen van 3f een van drie mixen, gekozen uit het zaad, zodat geen slag hetzelfde is. Na Begin
   stellen de mannen zich op, en is er een voorbereiding (standaard 60 seconden, een getal in de werkbank) waarin je ze
   binnen je strook verschuift; met *Fight!* begin je eerder. En de held van een leger is in een skirmish een **generaal**
@@ -425,6 +425,27 @@ skirmish.
   schutters die blijft staan (20 slagen): een leger met 3 zwaardvechters, 3 speermannen en 2 boogschutters wint zonder
   schildpad 0 keer en met 1 keer; 5 zwaardvechters tegen 18 boogschutters 0 tegen 1 keer. De schildpad helpt dus een
   beetje. **De oorzaak ligt ergens anders** (`opmerkingen.md`, "Waarom de schutters winnen").
+- **Tegen de schutters: A, B en C, besloten en gebouwd** (Marcel, 2 nov: "A. Boogschutter kan niet wegkomen uit melee
+  combat; tenzij ze sneller zijn; dan kun je 'kiten'; maar er zit wel een attack delay op, nadat ze verplaatsen. B. Boog
+  wordt ook duurder; in het dorp hebben we geen punten. C. Eigen hoeveelheid leven", en op het plan "1. A 2. Ja"): A, een
+  schutter stapt alleen opzij als hij sneller is dan wie naast hem staat, vecht anders met een mes (1 tot 3), en schiet
+  na het lopen pas na een seconde stilstaan; B, een boog 3 en een kruisboog 4 (een boogschutter kost 3, een
+  kruisboogschutter 6); C, het leven per soort (`spel.md`, het wachthuis). **Gemeten na elk** (de proefbank, 40 punten,
+  zaad 1 tot 90, hoe vaak een mix wint tegen een andere; en een aanval op een linie schutters die blijft staan, 20
+  slagen):
+
+  | | vóór | na A | na B | na C |
+  |---|---|---|---|---|
+  | *schutters* (proefbank) | 100 % | 90 % | 67 % | 55 % |
+  | *gewoon* | 65 % | 76 % | 62 % | 69 % |
+  | *zwaar* | 44 % | 35 % | 71 % | 74 % |
+  | *ruiters* | 0 % | 0 % | 0 % | 0 % |
+  | gemengd leger op een linie schutters | 0 | 5 | 5 | 16 |
+  | zwaardvechter tegen boogschutter, alleen | 23 s | 6 s | 6 s | 4 s |
+
+  (De aanval op een linie gebruikt vaste legers, dus B verandert daar niets.) De schutters zijn zo niet meer te sterk.
+  Twee dingen kwamen boven (`opmerkingen.md`, "Na A, B en C"): de schildpad, zoals de AI hem gebruikt, kost nu meer dan
+  hij geeft, en de ruiters van de AI winnen nooit.
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en
