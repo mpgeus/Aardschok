@@ -1467,6 +1467,9 @@
     'KIEZEN_INSTELLINGEN.formatie': T.t('formations'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.breedte': T.t('men side by side in a line'), // geen tekst
     'KIEZEN_INSTELLINGEN.formatie.groen': T.t('their spots stay green, seconds'), // geen tekst
+    'KIEZEN_INSTELLINGEN.formatie.ruimte': T.t('Loose: tiles from one man to the next (2: an empty tile between)'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.wapens.boog.mis': T.t('how often an arrow misses and falls next to its target'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.wapens.kruisboog.mis': T.t('how often a bolt misses and falls next to its target'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven': T.t('the life of a soldier, by kind'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.militie': T.t('militia'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.speerman': T.t('spearman'), // geen tekst
@@ -1516,7 +1519,6 @@
     'VELDHEER_INSTELLINGEN.mixen.zwaar.kruisboogschutter': T.t('crossbowmen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.ruiters': T.t('the mix of horsemen'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.ruiters.ruiter': T.t('horsemen, share of the points'), // geen tekst
-    'VELDHEER_INSTELLINGEN.mixen.ruiters.speerman': T.t('spearmen, share of the points'), // geen tekst
     'VELDHEER_INSTELLINGEN.mixen.ruiters.boogschutter': T.t('archers, share of the points'), // geen tekst
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst

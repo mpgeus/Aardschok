@@ -184,7 +184,16 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   spreidingstactiek" (de ruiters van de AI rijden samen als eigen groep, gespreid), "3. Boogschutters raken niet altijd,
   pijlen vallen naast vijanden. 30%?", en daarop: een misser valt naast zijn doel en raakt wie daar staat ("Missers raken
   de buurman"), en de kruisboog mist 15 % ("Minder: 15 %"). Claude koos erbij: een misser raakt alleen een vijand van de
-  schutter, en het spreiden is een formatie (*Loose*) voor elke troep. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  schutter, en het spreiden is een formatie (*Loose*) voor elke troep. **Gebouwd** (2 nov; `scenario.md`, 7).
+
+- **Na de missers** (2 nov; `scenario.md`, 7, met de metingen): (1) **De zware mix is nu te sterk** (88 % in 300
+  slagen): de zwaardvechter heeft 20 leven en vangt 3 af, een bout gaat door harnas en mist maar 15 %, en de boog werd
+  duurder. Wegen, met een getal uit de werkbank: het leven van de zwaardvechter (20), de prijs of de misser van de
+  kruisboog, of de zware mix van de AI anders. (2) **De ruiters van de AI winnen nog nooit**, ook in een gespreide groep:
+  ze rijden recht op de schutters af, en de speermannen die ervoor staan, houden ze tegen (een ruiter heeft geen harnas, en
+  een speer doet 3 tot 5). Dat klopt eigenlijk: speren tegen paarden. Een ruiter moet om de linie heen (flankeren), en dat
+  is de veldheer van 3f. (3) **De AI gebruikt de schildpad bijna niet** (0,3 seconde per slag): hij ziet de schutters pas
+  als de vijand al dichtbij is. Voor jou als speler werkt het anders: jij ziet ze eerder, en vormt hem op tijd. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

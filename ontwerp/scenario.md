@@ -446,6 +446,14 @@ skirmish.
   (De aanval op een linie gebruikt vaste legers, dus B verandert daar niets.) De schutters zijn zo niet meer te sterk.
   Twee dingen kwamen boven (`opmerkingen.md`, "Na A, B en C"): de schildpad, zoals de AI hem gebruikt, kost nu meer dan
   hij geeft, en de ruiters van de AI winnen nooit.
+- **De stormloop als troep, gespreide ruiters en pijlen die missen, besloten en gebouwd** (Marcel, 2 nov: "1. B 2. A, ze
+  krijgen een spreidingstactiek 3. Boogschutters raken niet altijd, pijlen vallen naast vijanden. 30%?", en "Missers raken
+  de buurman", "Minder: 15 %"; `code.md` bij `js/gevecht.js`, `js/kiezen.js` en `js/veldheer.js`). **Gemeten** (2 nov): de
+  proefbank met 300 slagen (zaad 1 tot 300, 40 punten): *zwaar* wint 88 % van zijn slagen tegen een andere mix (tegen
+  *gewoon* 18 tegen 4, tegen *schutters* 13 tegen 3), *gewoon* 65 %, *schutters* 46 %, *ruiters* 0 %. Met 90 slagen
+  zonder missen: *schutters* 62 %, *zwaar* 79 %; met: 53 en 94 %. Op een linie schutters wint een gemengd leger 18 van
+  20 zonder schildpad en 15 met (de AI zet hem 0,3 seconde per slag aan); 3 ruiters en 2 speermannen 0 van 20. De balans
+  is zo doorgeslagen naar de zware mix (`opmerkingen.md`, "Na de missers").
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

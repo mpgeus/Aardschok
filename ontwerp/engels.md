@@ -273,4 +273,5 @@ van hun naam: Klaas → **Nicholas**, Aaltje → **Alice**, Gerrit → **Gerard*
   door Marcel (de speellijst van 2 nov).
 - De lichte ruiter is *the horseman* (2 nov); de schildpad is *Turtle* op het briefje, met *Shields up, close together:
   arrows do less, but they walk slowly and do not strike. When the enemy comes near, they charge out.* en zonder schild
-  *Needs a man with a shield*.
+  *Needs a man with a shield*. Gespreid is *Loose*, met *In a line with room between them: an arrow that misses hits
+  nobody*.

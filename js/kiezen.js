@@ -14,8 +14,8 @@
 //   - een vijand aanvallen (`volg`): hij zit hem na tot hij hem raakt, en slaat (e.volgt; het gevecht, js/gevecht.js,
 //     zonder leiband). Is de vijand gevallen of weg, dan is waar hij staat zijn post.
 //   - terug (`terug`): de post is weg, en hij gaat weer naar zijn wachthuis (of aan het werk).
-//   - een formatie (`formatie`, stap 3): *Line*, *Ring* of *Turtle* (de schildpad, 2 nov); wie een post heeft, gaat er
-//     meteen zo staan ("De formatie", en "De schildpad").
+//   - een formatie (`formatie`, stap 3): *Line*, *Ring*, *Turtle* (de schildpad, 2 nov) of *Loose* (gespreid, 2 nov); wie
+//     een post heeft, gaat er meteen zo staan ("De formatie", en "De schildpad").
 //   - een dienst (`dienst`, stap 4): *Day* of *Night* ("De diensten"); en *To arms* op het wachthuis (`teWapen`).
 // De held heeft geen dag om naar terug te gaan: hij blijft waar je hem neerzet.
 (function (T) {
@@ -36,6 +36,9 @@
     formatie: {
       breedte: 8, // zoveel mannen staan er hooguit naast elkaar in een Line; wie er meer is, staat een rij erachter
       groen: 0.5, // zoveel seconden liggen hun plekken in groen op de grond na een rechtsklik (alleen scherm)
+      // Loose: zoveel tegels tussen twee mannen in de linie en tussen de rijen (2: een lege tegel ertussen), zodat een pijl
+      // die mist niemand raakt (js/gevecht.js; Marcel, 2 nov: "ze krijgen een spreidingstactiek")
+      ruimte: 2,
     },
     // Wie verder dan zoveel tegels van het midden van de groep staat, loopt niet mee op de weg van de groep, maar zoekt
     // zijn eigen weg (T.stuurMannen, "Eén weg voor de groep").
@@ -128,7 +131,7 @@
   // Alleen gewone rekensommen, geen atan2, sin of cos: die kunnen op een andere computer een haar anders uitkomen, en
   // samen spelen (lockstep, js/tik.js) vraagt werelden die letter voor letter gelijk blijven.
 
-  T.FORMATIES = ['lijn', 'ring', 'schildpad'];
+  T.FORMATIES = ['lijn', 'ring', 'schildpad', 'los'];
   const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
   const TAN_22_5 = 0.41421356; // de grens tussen twee van de acht kanten
   const NAAR_DE_CAMERA = { x: 1, y: 1 }; // de richting van wie nog geen richting had (Z in js/sprites.js)
@@ -196,8 +199,9 @@
   }
 
   // Een Line: per soort (wie slaat, wie steekt, wie schiet) zoveel rijen als nodig, met de middelste rij op `naar`. In
-  // een rij staat wie links liep links, zodat niemand kruist.
-  function lijnPlekken(mannen, naar, f) {
+  // een rij staat wie links liep links, zodat niemand kruist. Met `ruimte` zoveel tegels tussen twee mannen en twee rijen
+  // (Loose: gespreid).
+  function lijnPlekken(mannen, naar, f, ruimte = 1) {
     const z = { x: -f.y, y: f.x }; // opzij
     const opzij = (e) => (T.tegelVan(e).x - naar.x) * z.x + (T.tegelVan(e).y - naar.y) * z.y;
     const vooruit = (e) => (T.tegelVan(e).x - naar.x) * f.x + (T.tegelVan(e).y - naar.y) * f.y;
@@ -213,7 +217,7 @@
       rij.sort((a, b) => opzij(a) - opzij(b)).forEach((e, j) => {
         const k = j - Math.floor((rij.length - 1) / 2);
         const terug = r - voor;
-        uit.push({ e, x: naar.x - terug * f.x + k * z.x, y: naar.y - terug * f.y + k * z.y, kijk: { x: f.x, y: f.y } });
+        uit.push({ e, x: naar.x - terug * ruimte * f.x + k * ruimte * z.x, y: naar.y - terug * ruimte * f.y + k * ruimte * z.y, kijk: { x: f.x, y: f.y } });
       });
     });
     return uit;
@@ -298,7 +302,9 @@
     const dy = naar.y - m.y;
     const f = richting || (Math.abs(dx) + Math.abs(dy) >= 1 && achtVan(dx, dy)) || vorigeRichting(mannen);
     const vorm = T.formatieVan(mannen);
-    const plekken = vorm === 'ring' ? ringPlekken(mannen, naar, f) : vorm === 'schildpad' ? schildpadPlekken(mannen, naar, f) : lijnPlekken(mannen, naar, f);
+    const plekken = vorm === 'ring' ? ringPlekken(mannen, naar, f)
+      : vorm === 'schildpad' ? schildpadPlekken(mannen, naar, f)
+        : lijnPlekken(mannen, naar, f, vorm === 'los' ? Math.max(1, Math.round(IN().formatie.ruimte)) : 1);
     const bezet = new Set();
     const mag = D.strook ? (q) => T.inStrook(D, q.x, q.y) : null;
     for (const p of plekken) {
@@ -484,8 +490,9 @@
   // zijn schildpad staat (een tegel), is gedekt: hij vangt `schildpad.pijl` meer af van een pijl, niet van een bout
   // (T.vangtAf). De prijs: ze lopen `traag` maal zo snel, en niemand slaat (js/gevecht.js laat wie in een schildpad staat
   // over). Komt een vijand binnen `open` tegels van een van hen, of stuur je ze op een vijand af, dan gaat de schildpad
-  // open: ze staan weer in een Line, en `stormloop` seconden stormen ze `storm` maal zo snel op de dichtste vijand af
-  // (e.storm: tot wanneer, in de tijd van de wereld). Een schildpad zonder schild meer gaat open zonder stormloop. Elke
+  // open: ze staan weer in een Line, en `stormloop` seconden stormen ze `storm` maal zo snel (e.storm: tot wanneer, in de
+  // tijd van de wereld), samen in die Line op de vijand die in de buurt kwam (Marcel, 2 nov: "1. B"; tot dan rende elk
+  // naar zijn eigen dichtste vijand, en kwamen ze man voor man aan). Een schildpad zonder schild meer gaat open zonder stormloop. Elke
   // man weet zijn troep (e.troep: het kleinste nummer van wie samen een schildpad werd), zodat een troep samen opengaat.
 
   // Zet de formatie van e (zonder is het een Line), en in een schildpad zijn troep. Een nieuw bevel stopt een stormloop.
@@ -515,8 +522,8 @@
   T.formatieTempo = (e) => (e.storm ? IN().schildpad.storm : e.formatie === 'schildpad' ? IN().schildpad.traag : 1);
 
   // Elke tik, in elk dorp (T.werkGevechtBij, js/gevecht.js, met de vijanden op de kaart): een stormloop die om is, houdt
-  // op; een schildpad zonder schild gaat open; en een schildpad met een vijand binnen `open` tegels gaat open, en elk
-  // stormt op de vijand die het dichtst bij hem is.
+  // op; een schildpad zonder schild gaat open; en een schildpad met een vijand binnen `open` tegels gaat open, en stormt
+  // als troep, in een Line, op de vijand die het dichtst bij hen is.
   T.werkSchildpadBij = function (S, D, vijanden, nu) {
     const troepen = new Map();
     for (const e of T.mannenVan(D)) {
@@ -541,14 +548,11 @@
         openSchildpad(troep, null);
         continue;
       }
-      const naast = troep.map(dichtste);
-      if (!naast.some((d) => d.a <= IN().schildpad.open)) continue;
-      openSchildpad(troep, nu);
-      troep.forEach((e, i) => {
-        if (!naast[i].v) return;
-        e.doelwit = naast[i].v;
-        e.vanaf = T.tegelVan(e);
-      });
+      const naast = troep.map(dichtste).reduce((a, b) => (b.a < a.a ? b : a));
+      if (!naast.v || naast.a > IN().schildpad.open) continue;
+      openSchildpad(troep, null);
+      T.stuurMannen(D, T.nummersVan(D, troep), T.tegelVan(naast.v));
+      for (const e of troep) e.storm = nu + IN().schildpad.stormloop; // na het bevel, dat een stormloop stopt
     }
   };
 
@@ -772,6 +776,7 @@
       mannen.some((e) => T.heeftSchild(e))
         ? { tekst: T.t('Turtle'), uitleg: T.t('Shields up, close together: arrows do less, but they walk slowly and do not strike. When the enemy comes near, they charge out.'), formatie: 'schildpad' }
         : { tekst: T.t('Turtle'), uitleg: T.t('Needs a man with a shield'), formatie: 'schildpad', niet: true },
+      { tekst: T.t('Loose'), uitleg: T.t('In a line with room between them: an arrow that misses hits nobody'), formatie: 'los' },
     ].map((k) => ({ tekst: k.tekst, uitleg: k.uitleg, kan: !k.niet && k.formatie !== nu, opdracht: { soort: 'formatie', wie, formatie: k.formatie } }));
   };
 

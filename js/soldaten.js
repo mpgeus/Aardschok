@@ -43,8 +43,10 @@
       speer: { kosten: 3, schade: [3, 5], bereik: 2 },
       piek: { kosten: 3, schade: [4, 6], bereik: 2 },
       zwaard: { kosten: 3, schade: [5, 7], bereik: 1 },
-      boog: { kosten: 4, schade: [2, 4], bereik: 8 },
-      kruisboog: { kosten: 4, schade: [2, 4], bereik: 8 },
+      // `mis`: zo vaak mist een pijl of een bout, en valt hij naast zijn doel (js/gevecht.js; Marcel, 2 nov: "Boogschutters
+      // raken niet altijd ... 30%?", en voor de kruisboog "Minder: 15 %")
+      boog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.3 },
+      kruisboog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.15 },
       // Geen stuk: het mes van een schutter die een vijand naast zich heeft en niet weg kan (js/gevecht.js; Marcel, 2 nov:
       // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
       mes: { kosten: 3, schade: [1, 3], bereik: 1 },

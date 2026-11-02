@@ -444,7 +444,7 @@ test('de schildpad: gedekt tegen pijlen maar niet tegen bouten, traag, slaat nie
     assert.ok(mannen.every((e) => !e.formatie && !e.troep), 'een Line');
     assert.ok(mannen.every((e) => e.storm), 'de stormloop');
     assert.equal(T.formatieTempo(speer), Z.storm);
-    assert.ok(mannen.some((e) => e.doelwit === v1), 'op de vijand af');
+    assert.ok(mannen.every((e) => e.post && T.afstand(e.post, T.tegelVan(v1)) <= 3), 'samen in een Line op de vijand af (Marcel: "1. B")');
     seconden(S, Z.stormloop + 1);
     assert.ok(mannen.every((e) => !e.storm), 'na de stormloop gewoon');
   } finally {
@@ -527,6 +527,50 @@ test('een schutter komt niet weg van wie even snel is en vecht met zijn mes, ont
     assert.deepEqual(T.mesSlag().schade, T.SOLDATEN_INSTELLINGEN.wapens.mes.schade);
   } finally {
     T.snelheidVan = snelheidVan;
+    T.ui = ui;
+  }
+});
+
+// Pijlen die missen, en de formatie Loose (Marcel, 2 nov: "Boogschutters raken niet altijd, pijlen vallen naast
+// vijanden. 30%?", "Missers raken de buurman", "Minder: 15 %" voor de kruisboog, en "ze krijgen een spreidingstactiek").
+test('een pijl mist soms en valt naast zijn doel: dan raakt hij een vijand die daar staat, nooit een eigen man; Loose staat gespreid', () => {
+  const ui = T.ui;
+  T.ui = new Proxy({}, { get: () => () => undefined });
+  try {
+    const W = T.SOLDATEN_INSTELLINGEN.wapens;
+    assert.equal(W.boog.mis, 0.3);
+    assert.equal(W.kruisboog.mis, 0.15);
+    const S = slag([{ soorten: { boogschutter: 1, militie: 1 } }, { soorten: { militie: 2 } }]);
+    const [A, B] = S.dorpen;
+    const b = T.militieVan(A).find((e) => e.bewoner.soldaat.soort === 'boogschutter');
+    const eigen = T.militieVan(A).find((e) => e !== b);
+    const [doel, buur] = T.militieVan(B);
+    const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [] });
+    const p = { x: b.tx + 5, y: b.ty };
+    zet(doel, p.x, p.y);
+    zet(buur, p.x + 1, p.y);
+    zet(eigen, p.x - 1, p.y);
+    const altijd = { ...T.slagVan(b), mis: 1 };
+    const geraakt = new Map();
+    for (let i = 0; i < 200; i++) {
+      const { doel: t, raakt } = T.waarRaaktHij(A, b, doel, altijd);
+      assert.equal(T.afstand(t, p), 1, 'naast zijn doel');
+      geraakt.set(raakt, (geraakt.get(raakt) || 0) + 1);
+    }
+    assert.ok(!geraakt.has(doel), 'een misser raakt zijn doel niet');
+    assert.ok(!geraakt.has(eigen), 'en nooit een eigen man');
+    assert.ok(geraakt.get(buur) > 10 && geraakt.get(null) > 100, `de buurman soms, meestal het gras: ${geraakt.get(buur)} en ${geraakt.get(null)}`);
+    assert.equal(T.waarRaaktHij(A, b, doel, { ...altijd, mis: 0 }).raakt, doel, 'zonder missen raakt hij');
+    // Loose: een Line met een lege tegel tussen elk twee mannen
+    const S2 = slag([{ soorten: { speerman: 6 } }, { soorten: { speerman: 1 } }]);
+    vechten(S2);
+    const [A2] = S2.dorpen;
+    const mannen = T.militieVan(A2);
+    T.geefOpdracht(S2, { soort: 'formatie', dorp: 0, wie: T.nummersVan(A2, mannen), formatie: 'los' });
+    seconden(S2, 6);
+    assert.ok(mannen.every((e) => e.formatie === 'los'));
+    for (const e of mannen) for (const f of mannen) if (e !== f) assert.ok(T.afstand(e.post, f.post) >= 2, 'een tegel ertussen');
+  } finally {
     T.ui = ui;
   }
 });

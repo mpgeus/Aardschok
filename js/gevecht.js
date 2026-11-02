@@ -82,7 +82,9 @@
   const plek = (e) => T.tegelVan(e);
   // Een worp van wie slaat: met de dobbelsteen van zijn dorp, of (van geen dorp) die van zijn roedel of zijn roverskamp
   // (js/rovers.js), of van de kaart (A1: zo verandert wat bij het ene dorp gebeurt niet door een gevecht bij het andere).
-  const worp = (D, e, b) => b[0] + Math.floor(T.toeval(e.dorp || e.groep || T.kampVan(D.wereld, e) || D.wereld) * (b[1] - b[0] + 1));
+  const lot = (D, e) => T.toeval(e.dorp || e.groep || T.kampVan(D.wereld, e) || D.wereld);
+  const worp = (D, e, b) => b[0] + Math.floor(lot(D, e) * (b[1] - b[0] + 1));
+  const RONDOM = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
 
   // ── Wie vecht, en tegen wie ──
 
@@ -348,17 +350,34 @@
   // Een slag: de uitval (of de pijl), de schade min wat schild en harnas afvangen, en de tijd tot de volgende. In de kring
   // van zijn generaal (3d, T.inKring in js/veldslag.js) slaat hij harder, afgerond op hele punten. Met `slag` een ander
   // wapen dan het zijne (het mes van een schutter die niet weg kan).
+  // Een pijl of een bout kan missen (`mis` bij zijn wapen, js/soldaten.js; Marcel, 2 nov: "Boogschutters raken niet altijd,
+  // pijlen vallen naast vijanden", en "Missers raken de buurman"): hij valt dan op een tegel naast zijn doel, en staat daar
+  // een vijand van de schutter, dan raakt die hem. Zo treft een misser in een dichte troep vaak een ander (ook in een
+  // schildpad, die hem dan wel afvangt), en in een gespreide groep (Loose, js/kiezen.js) niemand. Nooit een eigen man.
   function slaan(S, D, e, d, nu, slag = T.slagVan(e)) {
     e.slagKlaar = nu + slag.kosten * IN().secondenPerPunt;
-    const doel = plek(d);
+    const { doel, raakt } = T.waarRaaktHij(D, e, d, slag);
     if (S.wereld === D.wereld) {
       if (slag.schiet) T.anim.pijl(S, plek(e), doel);
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
+    if (!raakt) return; // de pijl valt in het gras
     // de klap valt aan het eind van de tik (T.laatKlappenVallen)
-    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(d, e, slag));
-    (S.klappen || (S.klappen = [])).push({ D, doel: d, n, van: e });
+    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(raakt, e, slag));
+    (S.klappen || (S.klappen = [])).push({ D, doel: raakt, n, van: e });
   }
+
+  // Waar een slag van e op d terechtkomt (slaan, hierboven): { doel, raakt }, de tegel en wie hij raakt (of null). Ook
+  // getoetst.
+  T.waarRaaktHij = function (D, e, d, slag = T.slagVan(e)) {
+    const doel = plek(d);
+    if (!slag.schiet || !slag.mis || !(lot(D, e) < slag.mis)) return { doel, raakt: d };
+    const [dx, dy] = RONDOM[Math.floor(lot(D, e) * RONDOM.length)];
+    const t = { x: doel.x + dx, y: doel.y + dy };
+    const man = T.vechtVoor(D, e);
+    const raakt = D.wereld.wezens.find((x) => !x.dood && !x.binnen && x.tx === t.x && x.ty === t.y && isVijandVanE(D, e, man, x)) || null;
+    return { doel: t, raakt };
+  };
 
   // Aan het eind van een tik (T.wereldTik, js/tik.js, na alle dorpen en de wereld): de klappen van die tik vallen, in de
   // volgorde waarin ze geslagen werden. Een klap op wie al viel, valt niet meer. S.klappen is er alleen binnen een tik, dus

@@ -31,7 +31,7 @@
       gewoon: { speerman: 0.5, boogschutter: 0.25, zwaardvechter: 0.25 },
       schutters: { speerman: 0.4, boogschutter: 0.4, kruisboogschutter: 0.2 },
       zwaar: { zwaardvechter: 0.4, piekenier: 0.3, kruisboogschutter: 0.3 },
-      ruiters: { ruiter: 0.5, speerman: 0.25, boogschutter: 0.25 },
+      ruiters: { ruiter: 0.75, boogschutter: 0.25 }, // genoeg ruiters voor een groep (Marcel: "ze rijden niet alleen meestal")
     },
   };
   const IN = () => T.VELDHEER_INSTELLINGEN;
@@ -78,28 +78,46 @@
     const verDoel = kiesDoel(S, D, V, mannen, midden, gezien);
     if (!verDoel) return;
     const doel = etappe(midden, verDoel);
-    // Ziet hij schutters van de vijand en heeft hij schilden, dan rukt hij op als schildpad (js/kiezen.js; Marcel, 2 nov):
-    // die gaat vanzelf open als de vijand er is, dus wie in de schildpad staat, valt niet zelf aan. Anders een Line.
-    const vorm = gezien.some((x) => T.slagVan(x).schiet) && mannen.some((e) => T.heeftSchild(e)) ? 'schildpad' : 'lijn';
-    const aanval = new Map(); // vijand → wie hem aanvalt
-    const verder = [];
-    for (const e of mannen) {
-      if (e.doelwit || e.volgt) continue; // wie vecht, laat hij vechten
-      const v = dichtste(gezien, T.tegelVan(e));
-      if (v && vorm !== 'schildpad' && T.afstand(T.tegelVan(v), T.tegelVan(e)) <= IN().aanval) aanval.set(v, [...(aanval.get(v) || []), e]);
-      else if (!e.post || T.afstand(e.post, doel) > IN().ver || (e.formatie || 'lijn') !== vorm) verder.push(e);
+    const schutters = gezien.filter((x) => T.slagVan(x).schiet);
+    const ruiters = mannen.filter((e) => T.opPaard(e));
+    const voetvolk = mannen.filter((e) => !T.opPaard(e));
+    // Ziet hij schutters van de vijand en heeft hij schilden, dan rukt zijn voetvolk op als schildpad (js/kiezen.js; Marcel,
+    // 2 nov): die gaat vanzelf open als de vijand er is, dus wie in de schildpad staat, valt niet zelf aan. Anders een Line.
+    stuurTroep(S, D, voetvolk, doel, schutters.length && voetvolk.some((e) => T.heeftSchild(e)) ? 'schildpad' : 'lijn', gezien);
+    // De ruiters rijden als eigen groep, gespreid (Loose, js/kiezen.js; Marcel, 2 nov: "2. A, ze krijgen een
+    // spreidingstactiek"): zolang hij geen schutters ziet, blijven ze bij het voetvolk; ziet hij ze, dan rijden ze erop af,
+    // en vallen ze alleen schutters aan.
+    if (ruiters.length) {
+      const bij = middenVan(ruiters);
+      const schutter = dichtste(schutters, bij);
+      const naar = schutter ? T.tegelVan(schutter) : voetvolk.length ? middenVan(voetvolk) : doel;
+      stuurTroep(S, D, ruiters, etappe(bij, naar), 'los', schutters.length ? schutters : gezien);
     }
-    for (const [v, wie] of aanval) stuur(S, D, wie, { wezen: v, x: v.tx, y: v.ty });
-    if (verder.length && verder.some((e) => (e.formatie || 'lijn') !== vorm)) {
-      T.geefOpdracht(S, { soort: 'formatie', wie: T.nummersVan(D, verder), formatie: vorm, dorp: S.dorpen.indexOf(D) }); // zoals de knop
-    }
-    if (verder.length) stuur(S, D, verder, doel);
     if (!soldaten.length || !T.isMan(D, held) || held.doelwit) return; // ook als hij viel: in een slag neemt niemand het over
     const plek = achter(midden, doel);
     if (V.held && T.afstand(V.held, plek) <= IN().ver) return;
     V.held = plek;
     stuur(S, D, [held], plek);
   };
+
+  // Een troep (het voetvolk, of de ruiters) naar `doel` in formatie `vorm`: wie een vijand uit `doelen` binnen `aanval`
+  // tegels heeft, valt hem aan (in een schildpad niet: die gaat vanzelf open); wie vecht, laat hij vechten; de rest gaat
+  // erheen, en krijgt eerst de formatie als die anders is (de opdracht `formatie`, zoals de knop).
+  function stuurTroep(S, D, troep, doel, vorm, doelen) {
+    const aanval = new Map(); // vijand → wie hem aanvalt
+    const verder = [];
+    for (const e of troep) {
+      if (e.doelwit || e.volgt) continue;
+      const v = dichtste(doelen, T.tegelVan(e));
+      if (v && vorm !== 'schildpad' && T.afstand(T.tegelVan(v), T.tegelVan(e)) <= IN().aanval) aanval.set(v, [...(aanval.get(v) || []), e]);
+      else if (!e.post || T.afstand(e.post, doel) > IN().ver || (e.formatie || 'lijn') !== vorm) verder.push(e);
+    }
+    for (const [v, wie] of aanval) stuur(S, D, wie, { wezen: v, x: v.tx, y: v.ty });
+    if (verder.some((e) => (e.formatie || 'lijn') !== vorm)) {
+      T.geefOpdracht(S, { soort: 'formatie', wie: T.nummersVan(D, verder), formatie: vorm, dorp: S.dorpen.indexOf(D) });
+    }
+    if (verder.length) stuur(S, D, verder, doel);
+  }
 
   // Zoals een klik: dezelfde vraag als de muis, en de opdracht die erbij hoort.
   function stuur(S, D, mannen, naar) {

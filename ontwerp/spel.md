@@ -1236,7 +1236,10 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   zich). Ze staan in een blok, de schilden voor en aan de randen; wie naast een schild staat, vangt van een pijl 2 meer
   af (niet van een bout). Ze lopen op driekwart van hun pas (Marcel, 2 nov: "Snelheid mag 0.75") en slaan niet. Komt een vijand binnen 3 tegels, of stuur je ze op een
   vijand af, dan gaat de schildpad open: een *Line*, en twee seconden stormen ze anderhalf maal zo snel op de dichtste
-  vijand af. Te kiezen in de werkbank ("Choosing and sending", *the turtle*).
+  vijand af (sinds 2 nov samen, in een *Line* op de vijand die in de buurt kwam; Marcel: "1. B"). Te kiezen in de
+  werkbank ("Choosing and sending", *the turtle*). **Loose** (sinds 2 nov; Marcel: "ze krijgen een spreidingstactiek"):
+  een *Line* met een lege tegel tussen elk twee mannen, zodat een pijl die mist niemand raakt. De AI laat zijn ruiters zo
+  rijden, als eigen groep: bij het voetvolk tot hij schutters ziet, en dan op de schutters af.
 - **De diensten** (16 okt, stap 4; Marcel: "A1, B1, C2, D2"). Een soldaat heeft de dagdienst of de nachtdienst: de dag
   van het opstaan tot het slapen, de nacht van het slapen tot het opstaan, zodat er altijd iemand kan waken. In zijn
   dienst staat hij op zijn post of bij het wachthuis (ook 's ochtends en 's avonds: naar de put of de herberg gaat een
@@ -1278,7 +1281,9 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   een seconde stilstaat. Staat er een vijand naast hem, dan stapt hij opzij als hij sneller is dan elke vijand naast hem
   (een ruiter haalt hem altijd in, een schildpad niet), en anders vecht hij met zijn mes, zwak (1 tot 3; Marcel, 2 nov:
   "Boogschutter kan niet wegkomen uit melee combat; tenzij ze sneller zijn; dan kun je 'kiten'; maar er zit wel een
-  attack delay op, nadat ze verplaatsen"). Tot 2 nov stapte hij altijd opzij, en deed één zwaardvechter 23 seconden over
+  attack delay op, nadat ze verplaatsen"). Een pijl mist 3 op de 10 keer (een bout 3 op de 20) en valt dan naast zijn
+  doel; staat daar een vijand, dan raakt hij die (Marcel, 2 nov: "Boogschutters raken niet altijd, pijlen vallen naast
+  vijanden", "Missers raken de buurman"): een dichte troep krijgt zo meer, een gespreide minder. Tot 2 nov stapte hij altijd opzij, en deed één zwaardvechter 23 seconden over
   één boogschutter. Boven wie vecht staat zijn levensbalk, de schade zweeft boven het hoofd, een pijl vliegt als een streep.
 - **Aanvallen, dan terug.** Een soldaat of een veteraan valt uit zichzelf de dichtste vijand aan die hij ziet (8 tegels),
   maar alleen binnen 10 tegels van zijn post (of van het wachthuis); loopt die verder weg, dan laat hij hem gaan en gaat

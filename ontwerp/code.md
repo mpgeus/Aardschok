@@ -1347,7 +1347,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   met wat overblijft steeds de duurste soort die er nog in past, en anders de militie: alle punten op, en geen toeval.
   Sinds 2 nov ook de mix *ruiters* (de lichte ruiter, js/soldaten.js). **De schildpad** (2 nov, js/kiezen.js): ziet hij
   schutters van de vijand en heeft hij schilden, dan rukt hij op als schildpad (de opdracht `formatie`, zoals de knop), en
-  valt dan niemand zelf aan: de schildpad gaat vanzelf open als de vijand er is; anders een Line.
+  valt dan niemand zelf aan: de schildpad gaat vanzelf open als de vijand er is; anders een Line. **De ruiters** (2 nov;
+  Marcel: "2. A, ze krijgen een spreidingstactiek"): `stuurTroep` stuurt het voetvolk en de ruiters elk als eigen troep.
+  De ruiters rijden in Loose; zolang hij geen schutters ziet, blijven ze bij het midden van het voetvolk, en ziet hij er,
+  dan rijden ze op de dichtste af en vallen ze alleen schutters aan. De mix *ruiters* koopt er genoeg voor een groep (drie
+  vierde van de punten).
 
 ### gereedschap/pixelart/: de beelden uit code
 
@@ -2609,6 +2613,11 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   een man wanneer hij het laatst liep (`e.bewoog`, in `T.werkGevechtBij`), en `schieten` legt pas aan als dat `naLopen`
   seconden geleden is. Tot 2 nov stapte een schutter altijd opzij: één zwaardvechter deed 23 seconden over één
   boogschutter, die 40 keer opzij stapte; nu 6 seconden.
+- **Een pijl die mist** (2 nov; Marcel: "Boogschutters raken niet altijd, pijlen vallen naast vijanden. 30%?", "Missers
+  raken de buurman", "Minder: 15 %"): `T.waarRaaktHij(D, e, d, slag)` (in `slaan`, en getoetst) geeft `{ doel, raakt }`:
+  met de kans `mis` van zijn wapen (`SOLDATEN_INSTELLINGEN.wapens.boog.mis` 0,3, `kruisboog.mis` 0,15) valt de pijl op een
+  tegel naast zijn doel (een van de acht, met het toeval van het dorp), en raakt hij een vijand van de schutter die daar
+  staat (`isVijandVanE`; nooit een eigen man), of niemand. De pijl vliegt naar die tegel.
 - **De klappen van een tik vallen aan het eind** (28 okt; Marcel: "1 tik alle klappen aan einde"): `slaan` zet de klap
   klaar in `S.klappen` (wie, wat, hoeveel, van wie; de worp en wat harnas afvangt, rekent hij meteen), en
   `T.laatKlappenVallen(S)` laat ze vallen aan het eind van `T.wereldTik`, na alle dorpen en de wereld, in de volgorde waarin
@@ -2793,7 +2802,13 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   `open` tegels van een van hen komt: een Line, `e.storm` (tot wanneer, in de tijd van de wereld: `stormloop` seconden,
   `storm` maal zo snel), en elk krijgt de vijand die het dichtst bij hem is als doel. Ook een bevel om aan te vallen
   (`T.volgVijand`, met de tijd van de wereld uit de opdracht, js/tik.js) opent hem met de stormloop; een troep zonder
-  schild meer gaat open zonder. Een ander bevel stopt de stormloop. De getallen in `KIEZEN_INSTELLINGEN.schildpad`.
+  schild meer gaat open zonder. Een ander bevel stopt de stormloop. De getallen in `KIEZEN_INSTELLINGEN.schildpad`. Sinds
+  2 nov (Marcel: "1. B") stormt de troep samen: `T.werkSchildpadBij` stuurt hem in een Line (`T.stuurMannen`) op de vijand
+  die het dichtst bij was, en zet daarna de stormloop (een bevel stopt hem); tot dan kreeg elk zijn eigen dichtste vijand
+  als doel, en kwamen ze man voor man aan. `traag` is 0,75 (Marcel: "Snelheid mag 0.75").
+- **Loose** (2 nov; Marcel: "ze krijgen een spreidingstactiek"): de vierde formatie, `'los'`: een Line met
+  `formatie.ruimte` tegels tussen twee mannen en twee rijen (`lijnPlekken` met `ruimte`; 2 is een lege tegel ertussen),
+  zodat een pijl die mist niemand raakt. Voor elke troep op het briefje; de AI gebruikt hem voor zijn ruiters.
 - **Eén weg voor de groep** (28 okt; Marcel: "per geselecteerde groep 1 pad. Je gaat niet elk mannetje los sturen in een
   veldslag"): `groepsBanen` zoekt één weg (`T.zoekRoute`, over open land) van de man in het midden van de groep naar de
   plek in het midden van hun formatie, en `baanVan` geeft elke man die weg verschoven naar zijn plek in de formatie (zijn
