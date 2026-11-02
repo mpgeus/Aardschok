@@ -48,15 +48,22 @@
       boog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.3 },
       kruisboog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.25 },
       // De knots (3e; Marcel, 2 nov: "ze vallen wel langzaam aan, het is een zwaar wapen", en "3. Ja prima"): langzamer dan een
-      // zwaard (elke 1,6 seconde), maar door het harnas heen (`breektHarnas` bij het stuk, T.vangtAf).
-      knots: { kosten: 4, schade: [4, 6], bereik: 1 },
+      // zwaard (elke 1,6 seconde), maar door elk harnas heen (`breektHarnas` bij het stuk, T.vangtAf). En hij verplettert
+      // (Marcel: "Een Maceman krijgt crushing damage en kan iemand soms extra damage dealen", en "3. Prima"): zo vaak als
+      // `verpletter` slaat hij `verpletterMaal` maal zo hard (js/gevecht.js).
+      knots: { kosten: 4, schade: [4, 6], bereik: 1, verpletter: 0.25, verpletterMaal: 1.5 },
       // Geen stuk: het mes van een schutter die een vijand naast zich heeft en niet weg kan (js/gevecht.js; Marcel, 2 nov:
       // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
       mes: { kosten: 3, schade: [1, 3], bereik: 1 },
     },
     // Zoveel schade vangt het van elke klap af. Het schild 1 sinds Marcel, 2 nov: "Ja, schild 1" (was 2: een zwaardvechter
     // ving zo 3 af, een speer deed hem 0 tot 2, en de zware mix won 85 % van zijn slagen).
-    bescherming: { schild: 1, harnas: 1 },
+    // Drie klassen harnas (Marcel, 2 nov: "heavy leather armour ... Dit zijn 2 verschillende klassen", en "een ijzeren harnas
+    // is zwaarder dan leather of heavy leather", "1. Ja"): het leren harnas 1, het zware leren 2, het ijzeren 3.
+    bescherming: { schild: 1, harnas: 1, zwaarharnas: 2, ijzerharnas: 3 },
+    // Zoveel trager loopt wie dit harnas draagt (deel van zijn pas; Marcel: "een swordsman is trager in lopen", "2. Oke");
+    // te paard niet ("Een knight heeft een paard"). T.harnasTempo, voor T.snelheidVan (js/wereld.js).
+    trager: { zwaarharnas: 0.1, ijzerharnas: 0.2 },
     // Het leven van een soldaat, per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"; T.levenAlsMan, js/rovers.js). Tot
     // dan had iedereen 16 (T.WEZENS.soldaat), en was een boogschutter 16 leven voor 2 punten. De ruiter en de ridder houden
     // wat hun paard ze gaf (anderhalf en twee maal 16).
@@ -82,7 +89,10 @@
     boog: { waar: 'bogen', wapen: true, schiet: true, naam: () => T.t('bow') },
     kruisboog: { waar: 'kruisbogen', wapen: true, schiet: true, doorHarnas: true, naam: () => T.t('crossbow') },
     schild: { waar: 'schilden', naam: () => T.t('shield') },
-    harnas: { waar: 'harnassen', naam: () => T.t('armour') }, // van leer; een ijzeren harnas komt later
+    // de drie harnassen (`harnas`: de knots slaat erdoorheen): van leer, van zwaar leer, en van ijzer (2 nov)
+    harnas: { waar: 'harnassen', harnas: true, naam: () => T.t('leather armour') },
+    zwaarharnas: { waar: 'zwareharnassen', harnas: true, naam: () => T.t('heavy leather armour') },
+    ijzerharnas: { waar: 'ijzerharnassen', harnas: true, naam: () => T.t('iron armour') },
     paard: { waar: 'paarden', naam: () => T.t('horse') },
   };
   T.STUKKEN = STUKKEN;
@@ -96,15 +106,15 @@
     militie: { stukken: ['hooivork'], naam: () => T.t('militia') },
     speerman: { stukken: ['speer', 'harnas'], naam: () => T.t('spearman') },
     piekenier: { stukken: ['piek', 'harnas'], naam: () => T.t('pikeman') },
-    zwaardvechter: { stukken: ['zwaard', 'schild', 'harnas'], naam: () => T.t('swordsman') },
+    zwaardvechter: { stukken: ['zwaard', 'schild', 'ijzerharnas'], naam: () => T.t('swordsman') },
     // De knotsdrager (3e; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "Mace en heavy leather armour"): zijn figuur
     // maakt een lokale sessie, het vel `knotsdrager` (js/sprites.js); tot dan loopt hij als dorpeling.
-    knotsdrager: { stukken: ['knots', 'harnas'], naam: () => T.t('maceman') },
+    knotsdrager: { stukken: ['knots', 'zwaarharnas'], naam: () => T.t('maceman') },
     boogschutter: { stukken: ['boog'], naam: () => T.t('archer') },
-    kruisboogschutter: { stukken: ['kruisboog', 'harnas'], naam: () => T.t('crossbowman') },
+    kruisboogschutter: { stukken: ['kruisboog', 'zwaarharnas'], naam: () => T.t('crossbowman') },
     // De lichte ruiter (2 nov): tot hij een eigen figuur heeft, leent hij dat van de ridder (`leent`, js/sprites.js).
     ruiter: { stukken: ['speer', 'paard'], naam: () => T.t('horseman'), leent: 'ridder' },
-    ridder: { stukken: ['zwaard', 'schild', 'harnas', 'paard'], naam: () => T.t('knight') },
+    ridder: { stukken: ['zwaard', 'schild', 'ijzerharnas', 'paard'], naam: () => T.t('knight') },
   };
   const SOORTEN = Object.keys(T.SOLDAAT_SOORTEN);
   T.soortNaam = (soort) => T.SOLDAAT_SOORTEN[soort].naam();
@@ -336,6 +346,13 @@
     const s = STUKKEN[wapen];
     return { wapen, ...IN().wapens[wapen], schiet: !!s.schiet, doorHarnas: !!s.doorHarnas, breektHarnas: !!s.breektHarnas };
   };
+  // Zoveel maal zijn pas loopt e met zijn harnas (T.snelheidVan, js/wereld.js): het zwaarste telt; te paard niets.
+  T.harnasTempo = function (e) {
+    if (T.opPaard(e)) return 1;
+    let minder = 0;
+    for (const stuk of T.stukkenVan(e)) minder = Math.max(minder, IN().trager[stuk] || 0);
+    return 1 - minder;
+  };
 
   // Hoe een schutter slaat die niet weg kan: met zijn mes, ernaast (js/gevecht.js).
   T.mesSlag = () => ({ wapen: 'mes', ...IN().wapens.mes, schiet: false, doorHarnas: false });
@@ -353,7 +370,7 @@
     if (slag && slag.doorHarnas) return 0;
     const breekt = !!(slag && slag.breektHarnas);
     let n = 0;
-    for (const stuk of T.stukkenVan(doel)) if (!(breekt && stuk === 'harnas')) n += IN().bescherming[stuk] || 0;
+    for (const stuk of T.stukkenVan(doel)) if (!(breekt && STUKKEN[stuk].harnas)) n += IN().bescherming[stuk] || 0;
     // gedekt in de schildpad (js/kiezen.js) meer van een pijl
     if (slag && slag.schiet && T.gedektInSchildpad(doel)) n += T.KIEZEN_INSTELLINGEN.schildpad.pijl;
     // in de kring van zijn generaal (3d, js/veldslag.js) een harnas extra (niet tegen een knots)

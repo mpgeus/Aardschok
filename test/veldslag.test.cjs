@@ -318,7 +318,7 @@ test('een veldslag met punten: de veldheer koopt bij het begin, en een speler ko
     const heeft = (lijst, stuk) => assert.ok(lijst.some((z) => z.includes(stuk)), `${stuk} in ${JSON.stringify(lijst)}`);
     const L = T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { speerman: 7, boogschutter: 4 } }, { veldheer: true }] });
     assert.deepEqual(T.keurScenario(L), []);
-    heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { zwaardvechter: 6 } }, { veldheer: true }] })), 'kost 42 punten, meer dan 40');
+    heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, punten: 40, legers: [{ soorten: { zwaardvechter: 6 } }, { veldheer: true }] })), 'kost 60 punten, meer dan 40');
     heeft(T.keurScenario(T.veldslagLevel({ kaart: 'ford', zaad: 4, legers: [{ soorten: { speerman: 1 } }, { veldheer: true }] })), 'geen veldheer met punten');
     const S = T.proefdorp.begin(T.proefdorp.zaad, L);
     const [A, B] = S.dorpen;

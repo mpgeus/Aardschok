@@ -464,6 +464,17 @@ skirmish.
   tegen *zwaar* 15 tegen 7, *schutters* tegen *zwaar* 17 tegen 7: de zware mix met knotsdragers is nu de zwakste (zonder
   knotsdragers stond hij gelijk). In een duel verliest de knotsdrager van de zwaardvechter, de piekenier en de ridder, en
   wint hij net van de speerman; met een knots van 5 tot 7 bijna hetzelfde (`opmerkingen.md`, "De knotsdrager").
+- **Drie klassen harnas, trager lopen en de verpletterende knots, besloten en gebouwd** (Marcel, 2 nov: "B, ik zei ook al
+  heavy leather armour ... Dit zijn 2 verschillende klassen", "1. Maceman en crossbowman", "een ijzeren harnas is zwaarder
+  dan leather of heavy leather. Een knight heeft een paard, een swordsman is trager in lopen. Een Maceman krijgt crushing
+  damage en kan iemand soms extra damage dealen", en "1. Ja 2. Oke. 3. Prima"; `code.md` bij `js/soldaten.js`): leer 1,
+  zwaar leer 2 (10 % trager), ijzer 3 (20 % trager, te paard niet); de knots door elk harnas, een op de vier klappen
+  anderhalf keer zo hard. **Gemeten** (2 nov): in een duel wint de knotsdrager (7 punten) nu van de speerman, de
+  piekenier en de kruisboogschutter, en verliest hij van de zwaardvechter (10) en de ridder (18). De proefbank, 300 slagen:
+  *zwaar* 76 % (tegen *gewoon* 18 tegen 8, tegen *schutters* 12 tegen 12), *schutters* 68 %, *gewoon* 56 %, *ruiters* 1 %.
+  Met een ijzeren harnas van 2 (`--getal SOLDATEN_INSTELLINGEN.bescherming.ijzerharnas=2`) slaat het om: *schutters* 83 %
+  (tegen *zwaar* 16 tegen 3). Met vaste mixen wint zo altijd een mix; bij ijzer 3 werkt de driehoek zoals bedoeld (zwaar
+  wint van licht, schutters met kruisbogen houden zwaar in evenwicht).
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

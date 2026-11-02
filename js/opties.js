@@ -1471,6 +1471,13 @@
     'KIEZEN_INSTELLINGEN.formatie.ruimte': T.t('Loose: tiles from one man to the next (2: an empty tile between)'), // geen tekst
     'SOLDATEN_INSTELLINGEN.wapens.boog.mis': T.t('how often an arrow misses and falls next to its target'), // geen tekst
     'SOLDATEN_INSTELLINGEN.wapens.kruisboog.mis': T.t('how often a bolt misses and falls next to its target'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.wapens.knots.verpletter': T.t('how often a mace crushes: a blow harder than usual'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.wapens.knots.verpletterMaal': T.t('a crushing blow is this many times as hard'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.bescherming.zwaarharnas': T.t('heavy leather armour'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.bescherming.ijzerharnas': T.t('iron armour'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.trager': T.t('whoever wears this armour walks this much slower (a share of his pace); on a horse not'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.trager.zwaarharnas': T.t('heavy leather armour'), // geen tekst
+    'SOLDATEN_INSTELLINGEN.trager.ijzerharnas': T.t('iron armour'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven': T.t('the life of a soldier, by kind'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.militie': T.t('militia'), // geen tekst
     'SOLDATEN_INSTELLINGEN.leven.speerman': T.t('spearman'), // geen tekst

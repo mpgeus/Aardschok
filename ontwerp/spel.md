@@ -1085,8 +1085,8 @@ aanvallen, roept om hulp (nog niet gebouwd; werklijst vraag 116, bij stap 3).
 crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`, `test/soldaten.test.cjs`):
 - **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan negen soorten (sinds 2 nov de lichte ruiter en de knotsdrager), elk met een − en een +, samen
   hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en harnas (sinds 21 okt; Marcel: "Speer is een 2 handed weapon", dus geen schild), de
-  piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, de
-  kruisboogschutter kruisboog en harnas, de knotsdrager een knots en een harnas (3e, 2 nov; Marcel: "Mace en heavy leather armour": de knots slaat langzaam, elke 1,6 seconde, maar door het harnas heen, niet door het schild; de wapenmaker maakt hem van planken en ijzer), de lichte ruiter een speer en een paard (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight", sneller dan de ridder en met minder leven; tot hij een eigen figuur heeft, lijkt hij op de ridder), en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Elke soort heeft sinds 2 nov zijn eigen leven (Marcel: "Eigen hoeveelheid leven"): de militie 12, de speerman en de piekenier 16, de zwaardvechter 18, de knotsdrager 16, de boogschutter 12, de kruisboogschutter 14, de ruiter 24 en de ridder 32 (`leven` in `T.SOLDATEN_INSTELLINGEN`); tot dan had iedereen 16. Een
+  piekenier piek en harnas, de zwaardvechter zwaard, schild en ijzeren harnas, de boogschutter een boog, de
+  kruisboogschutter kruisboog en zwaar leren harnas, de knotsdrager een knots en een zwaar leren harnas (3e, 2 nov; Marcel: "Mace en heavy leather armour": de knots slaat langzaam, elke 1,6 seconde, maar door elk harnas heen, niet door het schild, en een op de vier klappen verplettert, anderhalf keer zo hard; de wapenmaker maakt hem van planken en ijzer), de lichte ruiter een speer en een paard (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight", sneller dan de ridder en met minder leven; tot hij een eigen figuur heeft, lijkt hij op de ridder), en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Elke soort heeft sinds 2 nov zijn eigen leven (Marcel: "Eigen hoeveelheid leven"): de militie 12, de speerman en de piekenier 16, de zwaardvechter 18, de knotsdrager 16, de boogschutter 12, de kruisboogschutter 14, de ruiter 24 en de ridder 32 (`leven` in `T.SOLDATEN_INSTELLINGEN`); tot dan had iedereen 16. Een
   paard maakt de wapenmaker niet: het komt uit de stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): die maakt er alleen een als een wachthuis erom vraagt, zo'n drie weken op graan; en in een dorp heeft de marskramer er 's zomers een, voor 16 goud. De ridder heeft het meeste leven (32)
   en een grotere pas (`ridder` in `T.SOLDATEN_INSTELLINGEN`; die getallen zijn Claudes voorstel). Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
@@ -1105,8 +1105,10 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), maar opzij alleen van ernaast (zover reikt de
   getekende speer; Marcel, 22 okt: "Steken van verder weg"; `steekReik` in "Fighting"), het zwaard hard (5 tot 7); de boog en de
   kruisboog schieten tot 8 tegels waar ze zien (2 tot 4, 4 punten), maar niet met een vijand naast zich. Een speer
-  steekt langs wie ertussen staat. Het schild vangt 1 af van elke klap (sinds 2 nov; was 2), het harnas 1, maar van een bout uit een
-  kruisboog niets. Wie zonder soort meevecht (een veteraan, wie meegaat op de jacht), vecht met een hooivork; de schout
+  steekt langs wie ertussen staat. Het schild vangt 1 af van elke klap (sinds 2 nov; was 2), en er zijn drie klassen harnas (2 nov):
+  het leren 1 (van twee huiden), het zware leren 2 (van vier huiden; wie het draagt, loopt 10 % trager) en het ijzeren 3
+  (van twee ijzer; 20 % trager, maar te paard niet); van een bout uit een kruisboog vangen ze niets af, en van een knots
+  alleen het schild. Wie zonder soort meevecht (een veteraan, wie meegaat op de jacht), vecht met een hooivork; de schout
   slaat zoals altijd (3 tot 5). Hoe vaak, zegt het gevecht in real time (hieronder).
 - **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden) en de muren (stap 3). De soldaten
   aanklikken en sturen kwam met vraag 170 (hieronder).

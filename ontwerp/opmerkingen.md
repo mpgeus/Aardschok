@@ -218,8 +218,12 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   heeft een paard, een swordsman is trager in lopen. Een Maceman krijgt crushing damage en kan iemand soms extra damage
   dealen." Dus: het zware leren harnas (2 afvangen, 4 huiden, waarde 4) voor de knotsdrager en de kruisboogschutter; een
   harnas maakt trager, een ijzeren het meest (een derde klasse, voor de zwaardvechter en de ridder; de ridder niet trager,
-  want zijn paard draagt het); en de knots verplettert: door het harnas heen, en soms een klap extra hard. De getallen
-  van het ijzeren harnas, het trager lopen en de extra klap: het plan aan Marcel. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  want zijn paard draagt het); en de knots verplettert: door het harnas heen, en soms een klap extra hard. **Gebouwd** (2
+  nov, met de getallen van het plan: "1. Ja 2. Oke. 3. Prima"; `scenario.md`, 7, met de metingen). Het ijzeren harnas
+  stond al als voornemen in de code ("een ijzeren harnas komt later"; Marcel: "dat ijzeren harnas hadden we al. Alleen we
+  hebben daar niks mee gedaan"). De ridder kost nu 18, niet meer twee keer een zwaardvechter (10); hij blijft de duurste.
+  Wat open is: met vaste mixen van de AI wint altijd een mix (bij ijzer 3 *zwaar*, bij ijzer 2 *schutters*); een AI die
+  kiest wat hij koopt en hoe hij opstelt (3f), en Marcels eigen spel, zeggen meer dan nog een getal. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

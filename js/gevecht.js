@@ -362,8 +362,10 @@
       else e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3 };
     }
     if (!raakt) return; // de pijl valt in het gras
+    // een knots verplettert soms: een klap extra hard (`verpletter`, js/soldaten.js)
+    const hard = slag.verpletter && lot(D, e) < slag.verpletter ? slag.verpletterMaal : 1;
     // de klap valt aan het eind van de tik (T.laatKlappenVallen)
-    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e)) - T.vangtAf(raakt, e, slag));
+    const n = Math.max(0, Math.round(worp(D, e, slag.schade) * T.kracht(e) * hard) - T.vangtAf(raakt, e, slag));
     (S.klappen || (S.klappen = [])).push({ D, doel: raakt, n, van: e });
   }
 

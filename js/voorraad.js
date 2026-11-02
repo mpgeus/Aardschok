@@ -48,6 +48,7 @@
     // de stukken van de wapenmaker, voor de soldaten (js/soldaten.js)
     speren: () => T.t('spears'), pieken: () => T.t('pikes'), zwaarden: () => T.t('swords'), knotsen: () => T.t('maces'), schilden: () => T.t('shields'),
     bogen: () => T.t('bows'), kruisbogen: () => T.t('crossbows'), harnassen: () => T.t('leather armour'),
+    zwareharnassen: () => T.t('heavy leather armour'), ijzerharnassen: () => T.t('iron armour'),
     paarden: () => T.t('horses'),
   };
   // Wat je telt, heeft een enkelvoud; de rest is een hoeveelheid ("3 grain").
@@ -60,6 +61,8 @@
     zwaarden: (n) => T.t('{n|# sword|# swords}', { n }), knotsen: (n) => T.t('{n|# mace|# maces}', { n }), schilden: (n) => T.t('{n|# shield|# shields}', { n }),
     bogen: (n) => T.t('{n|# bow|# bows}', { n }), kruisbogen: (n) => T.t('{n|# crossbow|# crossbows}', { n }),
     harnassen: (n) => T.t('{n|# leather armour|# leather armours}', { n }),
+    zwareharnassen: (n) => T.t('{n|# heavy leather armour|# heavy leather armours}', { n }),
+    ijzerharnassen: (n) => T.t('{n|# iron armour|# iron armours}', { n }),
     paarden: (n) => T.t('{n|# horse|# horses}', { n }),
   };
   T.waarNaam = (wat) => (WAREN[wat] ? WAREN[wat]() : wat);

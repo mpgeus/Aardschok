@@ -86,7 +86,7 @@ test('de wapenmaker maakt wat het wachthuis vraagt, één stuk per dag, het lief
   assert.equal(T.receptVan(D, smid), null, 'niemand vraagt iets');
   assert.deepEqual(T.watErIngaat(D, smid), {}, 'dus brengt de kar hem niets');
   T.zetSoldaten(D, huis, 'zwaardvechter', 1);
-  assert.deepEqual(T.watErIngaat(D, smid), { planken: 1, ijzer: 1, huiden: 2 });
+  assert.deepEqual(T.watErIngaat(D, smid), { planken: 1, ijzer: 2 }, 'zwaard, schild en ijzeren harnas (2 nov)');
   // Alleen planken: dan het schild.
   for (const wat of ['planken', 'ijzer', 'huiden']) T.zetVoorraad(D, wat, wat === 'planken' ? 10 : 0);
   smid.in = { planken: 8 };
@@ -250,16 +250,19 @@ test('de boog schiet ver waar hij ziet, maar niet met een vijand naast zich', ()
   assert.equal(T.kanRaken(D, boog, tweede), false, 'ook niet op die rover');
 });
 
-test('de ridder: zwaard, schild, harnas en paard, duur, sneller en met meer leven; zijn paard komt uit de stal', () => {
-  assert.deepEqual(T.SOLDAAT_SOORTEN.ridder.stukken, ['zwaard', 'schild', 'harnas', 'paard']);
-  assert.ok(T.soldaatPrijs('ridder') >= 2 * T.soldaatPrijs('zwaardvechter'), 'hij is duur');
+test('de ridder: zwaard, schild, ijzeren harnas en paard, duur, sneller en met meer leven; zijn paard komt uit de stal', () => {
+  assert.deepEqual(T.SOLDAAT_SOORTEN.ridder.stukken, ['zwaard', 'schild', 'ijzerharnas', 'paard']);
+  // hij is duur (Marcel, 1 nov): de duurste soort (tot het ijzeren harnas van 2 nov ook twee keer een zwaardvechter)
+  assert.equal(T.soldaatPrijs('ridder'), Math.max(...Object.keys(T.SOLDAAT_SOORTEN).map(T.soldaatPrijs)), 'hij is duur');
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } }, leven: 0, maxLeven: 0 });
   const I = T.SOLDATEN_INSTELLINGEN.ridder;
-  assert.equal(T.snelheidVan(wie('ridder')), T.snelheidVan(wie('zwaardvechter')) * I.snelheid);
+  // het ijzeren harnas maakt een zwaardvechter trager, de ridder niet: zijn paard draagt het (Marcel, 2 nov)
+  assert.equal(T.snelheidVan(wie('ridder')), T.KIEZEN_INSTELLINGEN.loopt * I.snelheid);
+  assert.equal(T.snelheidVan(wie('zwaardvechter')), T.KIEZEN_INSTELLINGEN.loopt * (1 - T.SOLDATEN_INSTELLINGEN.trager.ijzerharnas));
   // het leven per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"): de ridder het meest
   assert.equal(T.levenAlsMan(wie('ridder')).max, T.SOLDATEN_INSTELLINGEN.leven.ridder);
   assert.ok(T.levenAlsMan(wie('ridder')).max > T.levenAlsMan(wie('zwaardvechter')).max, 'meer leven dan een zwaardvechter');
-  assert.equal(T.vangtAf(wie('ridder'), null), T.vangtAf(wie('zwaardvechter'), null), 'schild en harnas, zoals een zwaardvechter');
+  assert.equal(T.vangtAf(wie('ridder'), null), T.vangtAf(wie('zwaardvechter'), null), 'schild en ijzeren harnas, zoals een zwaardvechter');
   assert.equal(T.slagVan(wie('ridder')).wapen, 'zwaard');
   assert.equal(T.isStuk('paarden'), true);
   assert.ok(T.GEBOUWEN.stal.maakt.uit.paarden > 0, 'de stal fokt ze');
@@ -275,7 +278,7 @@ test('de ridder wacht op zijn paard: de stal maakt het als hij erom vraagt, in e
   T.zetSoldaten(D, huis, 'ridder', 1);
   assert.equal(T.wapensGevraagd(D).paarden, 1);
   assert.match(T.GEBOUW_ERBIJ.stal(D), /1 horse/);
-  for (const wat of ['zwaarden', 'schilden', 'harnassen']) T.zetVoorraad(D, wat, 1);
+  for (const wat of ['zwaarden', 'schilden', 'ijzerharnassen']) T.zetVoorraad(D, wat, 1);
   T.werkSoldatenBij(D);
   assert.equal(T.soldatenVan(D, huis).length, 0, 'nog geen paard');
   assert.ok(T.GEBOUW_DELEN.wachthuis(D, huis)[0].regels.some((r) => r.tekst && r.tekst.includes(T.t('waiting for a horse from the stable'))));
@@ -303,38 +306,54 @@ test('de ridder wacht op zijn paard: de stal maakt het als hij erom vraagt, in e
   assert.equal(D.voorraad.paarden || 0, 0, 'hij nam het paard mee');
 });
 
-test('schild en harnas vangen een deel van elke klap af, maar niets van een bout uit een kruisboog', () => {
+// Drie klassen harnas (Marcel, 2 nov: "heavy leather armour ... Dit zijn 2 verschillende klassen", "een ijzeren harnas is
+// zwaarder dan leather of heavy leather", "1. Maceman en crossbowman", "1. Ja", "2. Oke").
+test('schild en harnas vangen een deel van elke klap af, maar niets van een bout; drie klassen harnas, en zwaar maakt trager', () => {
   const B = T.SOLDATEN_INSTELLINGEN.bescherming;
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } } });
-  assert.equal(T.vangtAf(wie('zwaardvechter'), null), B.schild + B.harnas);
+  assert.ok(B.harnas < B.zwaarharnas && B.zwaarharnas < B.ijzerharnas, 'leer, zwaar leer, ijzer');
+  assert.equal(T.vangtAf(wie('zwaardvechter'), null), B.schild + B.ijzerharnas);
   assert.equal(T.vangtAf(wie('speerman'), null), B.harnas);
   assert.equal(T.vangtAf(wie('piekenier'), null), B.harnas);
+  assert.equal(T.vangtAf(wie('kruisboogschutter'), null), B.zwaarharnas);
+  assert.equal(T.vangtAf(wie('knotsdrager'), null), B.zwaarharnas);
   assert.equal(T.vangtAf(wie('boogschutter'), null), 0);
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('kruisboogschutter')), 0, 'een bout gaat erdoor');
-  assert.equal(T.vangtAf(wie('zwaardvechter'), wie('boogschutter')), B.schild + B.harnas, 'een pijl niet');
+  assert.equal(T.vangtAf(wie('zwaardvechter'), wie('boogschutter')), B.schild + B.ijzerharnas, 'een pijl niet');
+  // trager: zwaar leer een beetje, ijzer meer, leer niet
+  const loopt = T.KIEZEN_INSTELLINGEN.loopt;
+  const tr = T.SOLDATEN_INSTELLINGEN.trager;
+  assert.equal(T.snelheidVan(wie('speerman')), loopt);
+  assert.equal(T.snelheidVan(wie('kruisboogschutter')), loopt * (1 - tr.zwaarharnas));
+  assert.equal(T.snelheidVan(wie('zwaardvechter')), loopt * (1 - tr.ijzerharnas));
+  assert.ok(tr.zwaarharnas < tr.ijzerharnas);
+  // in het dorp: de wapenmaker maakt ze, van huiden en van ijzer
+  assert.deepEqual(T.GEBOUWEN.wapenmaker.maakt.keuze.zwareharnassen, { huiden: 4 });
+  assert.deepEqual(T.GEBOUWEN.wapenmaker.maakt.keuze.ijzerharnassen, { ijzer: 2 });
+  assert.ok(T.isStuk('zwareharnassen') && T.isStuk('ijzerharnassen'));
 });
 
 // De knotsdrager (3e; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "1. Mace en heavy leather armour. 2. A, maar ze
 // vallen wel langzaam aan, het is een zwaar wapen 3. Ja prima").
-test('de knotsdrager: knots en harnas, slaat langzaam maar door het harnas heen (niet door het schild), en de wapenmaker maakt knotsen', () => {
+test('de knotsdrager: knots en zwaar leren harnas, slaat langzaam maar door elk harnas heen (niet door het schild), en de wapenmaker maakt knotsen', () => {
   const B = T.SOLDATEN_INSTELLINGEN.bescherming;
   const wie = (soort) => ({ kant: 'speler', bewoner: { soldaat: { soort } } });
-  assert.deepEqual(T.SOLDAAT_SOORTEN.knotsdrager.stukken, ['knots', 'harnas']);
+  assert.deepEqual(T.SOLDAAT_SOORTEN.knotsdrager.stukken, ['knots', 'zwaarharnas']);
   assert.equal(T.soortNaam('knotsdrager'), 'maceman');
-  assert.equal(T.soldaatPrijs('knotsdrager'), 5);
+  assert.equal(T.soldaatPrijs('knotsdrager'), 7);
   assert.equal(T.levenAlsMan(wie('knotsdrager')).max, T.SOLDATEN_INSTELLINGEN.leven.knotsdrager);
   const knots = T.slagVan(wie('knotsdrager'));
   assert.equal(knots.wapen, 'knots');
   assert.ok(knots.kosten > T.slagVan(wie('zwaardvechter')).kosten, 'langzamer dan een zwaard');
   assert.equal(T.vangtAf(wie('zwaardvechter'), wie('knotsdrager')), B.schild, 'het schild vangt af, het harnas niet');
   assert.equal(T.vangtAf(wie('speerman'), wie('knotsdrager')), 0, 'door het harnas heen');
-  assert.equal(T.vangtAf(wie('knotsdrager'), null), B.harnas, 'zelf draagt hij een harnas');
+  assert.equal(T.vangtAf(wie('knotsdrager'), null), B.zwaarharnas, 'zelf draagt hij een zwaar leren harnas');
   // in het dorp: het wachthuis vraagt een knots, en de wapenmaker maakt hem van planken en ijzer
   assert.ok(T.isStuk('knotsen'));
   assert.deepEqual(T.GEBOUWEN.wapenmaker.maakt.keuze.knotsen, { planken: 1, ijzer: 1 });
   const { D, huis } = gehucht();
   T.zetVoorraad(D, 'knotsen', 0);
-  T.zetVoorraad(D, 'harnassen', 1);
+  T.zetVoorraad(D, 'zwareharnassen', 1);
   T.zetSoldaten(D, huis, 'knotsdrager', 1);
   assert.equal(T.wapensGevraagd(D).knotsen, 1, 'de knots is gevraagd');
   T.zetVoorraad(D, 'knotsen', 1);

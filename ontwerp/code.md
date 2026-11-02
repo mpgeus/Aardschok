@@ -2674,13 +2674,23 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
 
 - **De knotsdrager** (3e, 2 nov; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "1. Mace en heavy leather armour. 2.
   A, maar ze vallen wel langzaam aan, het is een zwaar wapen 3. Ja prima"): de soort `knotsdrager` (*maceman*) met de
-  knots en het harnas (5 punten, 16 leven). De knots (`STUKKEN.knots`, de waar `knotsen`, 3 waard) heeft `breektHarnas`:
-  `T.vangtAf` telt van een knotsklap het harnas niet, ook niet dat van de kring van een generaal, maar het schild wel (een
-  bout, `doorHarnas`, gaat door alles). `wapens.knots`: 4 tot 6, kosten 4 (elke 1,6 seconde, een zwaard elke 1,2). De
+  knots en het zware leren harnas (7 punten, 16 leven). De knots (`STUKKEN.knots`, de waar `knotsen`, 3 waard) heeft
+  `breektHarnas`: `T.vangtAf` telt van een knotsklap geen harnas (elk stuk met `harnas`), ook niet dat van de kring van een
+  generaal, maar het schild wel (een bout, `doorHarnas`, gaat door alles). `wapens.knots`: 4 tot 6, kosten 4 (elke 1,6
+  seconde, een zwaard elke 1,2), en hij verplettert (Marcel: "crushing damage en kan iemand soms extra damage dealen"): met
+  de kans `verpletter` (0,25) is een klap `verpletterMaal` (1,5) maal zo hard (`slaan`, js/gevecht.js). De
   wapenmaker maakt knotsen van planken en ijzer (js/gebouwen.js), en de voorraad, de balk (een icoon in code, `KNOTS_ICOON`)
   en de kar kennen de waar. Zijn figuur maakt een lokale sessie (Marcel, 2 nov): het vel heet `knotsdrager`, en tot dan
   loopt hij als dorpeling (js/sprites.js zoekt het vel op de naam van de soort). In skirmish de generaal *Brother
   Anselm* (`T.GENERAALS.anselm`, js/veldslag.js), en de zware mix van de AI koopt knotsdragers (js/veldheer.js).
+- **Drie klassen harnas** (2 nov; Marcel: "heavy leather armour ... Dit zijn 2 verschillende klassen", "een ijzeren harnas
+  is zwaarder dan leather of heavy leather. Een knight heeft een paard, een swordsman is trager in lopen", "1. Maceman en
+  crossbowman", "1. Ja", "2. Oke"): `harnas` (leer, 1, 2 huiden, waarde 2: de speerman en de piekenier), `zwaarharnas` (zwaar
+  leer, 2, 4 huiden, waarde 4, de waar `zwareharnassen`: de knotsdrager en de kruisboogschutter) en `ijzerharnas` (ijzer, 3,
+  2 ijzer, waarde 5, de waar `ijzerharnassen`: de zwaardvechter en de ridder), in `bescherming`. Wie een zwaar of ijzeren
+  harnas draagt, loopt trager (`trager`: 0,1 en 0,2; `T.harnasTempo`, in `T.snelheidVan`, js/wereld.js, ook voor een
+  generaal), te paard niet. De wapenmaker maakt ze (js/gebouwen.js), en de voorraad, de balk (een icoon per harnas) en de
+  kar kennen ze. Zo kost de kruisboogschutter 8, de knotsdrager 7, de zwaardvechter 10 en de ridder 18.
 
 - **Het leven per soort** (2 nov; Marcel: "C. Eigen hoeveelheid leven"): `SOLDATEN_INSTELLINGEN.leven`, per soort (de
   militie 12, de speerman en de piekenier 16, de zwaardvechter 18 (eerst 20, tot "1. C"), de boogschutter 12, de kruisboogschutter 14, de ruiter

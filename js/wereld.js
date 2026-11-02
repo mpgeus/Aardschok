@@ -155,11 +155,14 @@
   // Hoe snel loopt dit wezen? Ieder op zijn eigen vaste maat; je soldaten en veteranen even snel als de held
   // (T.KIEZEN_INSTELLINGEN.loopt, js/kiezen.js; vraag 191, S1), want hun poppetje is dat van een boer. (Tot 25 sep liep de
   // tovenaar trager naarmate hij ouder werd; de leeftijd ging eruit met het oude spel.) Te paard sneller (T.paardVan,
-  // js/soldaten.js), en in de schildpad trager en in de stormloop eruit sneller (T.formatieTempo, js/kiezen.js).
+  // js/soldaten.js), te voet in een zwaar of ijzeren harnas trager (T.harnasTempo; een generaal ook), en in de schildpad
+  // trager en in de stormloop eruit sneller (T.formatieTempo, js/kiezen.js).
   T.snelheidVan = function (e) {
     const p = e.bewoner;
+    const man = !!(p && (p.soldaat || p.veteraan));
     const paard = p && p.soldaat ? T.paardVan(e) : null;
-    const basis = p && (p.soldaat || p.veteraan) ? T.KIEZEN_INSTELLINGEN.loopt * (paard ? paard.snelheid : 1) : e.snelheid;
+    let basis = man ? T.KIEZEN_INSTELLINGEN.loopt * (paard ? paard.snelheid : T.harnasTempo(e)) : e.snelheid;
+    if (!man && e.dorp && e.dorp.veldslag && e === e.dorp.aanvoerder) basis *= T.harnasTempo(e);
     return e.formatie || e.storm ? basis * T.formatieTempo(e) : basis;
   };
 
