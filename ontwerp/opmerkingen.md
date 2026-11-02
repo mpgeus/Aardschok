@@ -193,7 +193,14 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   ze rijden recht op de schutters af, en de speermannen die ervoor staan, houden ze tegen (een ruiter heeft geen harnas, en
   een speer doet 3 tot 5). Dat klopt eigenlijk: speren tegen paarden. Een ruiter moet om de linie heen (flankeren), en dat
   is de veldheer van 3f. (3) **De AI gebruikt de schildpad bijna niet** (0,3 seconde per slag): hij ziet de schutters pas
-  als de vijand al dichtbij is. Voor jou als speler werkt het anders: jij ziet ze eerder, en vormt hem op tijd. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  als de vijand al dichtbij is. Voor jou als speler werkt het anders: jij ziet ze eerder, en vormt hem op tijd.
+  **Gekozen** (Marcel, 2 nov: "1. C; 2. Prima"): de zwaardvechter 18 leven en de kruisboog mist 25 %; flankeren met de
+  ruiters is voor 3f. **Gemeten** (300 slagen): *zwaar* wint nog 85 % (was 88). **Waarom zwaar zo sterk is:** niet door
+  leven (de mixen hebben samen 144 tot 150), maar door het schild: een zwaardvechter vangt 3 af (schild 2, harnas 1; in de
+  kring van zijn generaal 4), en een speer doet 3 tot 5 en een pijl 2 tot 4, dus tegen hem doen ze bijna niets. Met een
+  schild dat 1 afvangt (`--getal SOLDATEN_INSTELLINGEN.bescherming.schild=1`) staan de drie gewone mixen onderling bijna
+  gelijk (*gewoon* tegen *schutters* 15 tegen 13, *gewoon* tegen *zwaar* 15 tegen 10, *schutters* tegen *zwaar* 13 tegen
+  14); de vraag aan Marcel is of het schild 1 wordt. (Het schild telt ook in het dorp, en voor de ridder.) Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

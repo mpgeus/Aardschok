@@ -2615,7 +2615,7 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   boogschutter, die 40 keer opzij stapte; nu 6 seconden.
 - **Een pijl die mist** (2 nov; Marcel: "Boogschutters raken niet altijd, pijlen vallen naast vijanden. 30%?", "Missers
   raken de buurman", "Minder: 15 %"): `T.waarRaaktHij(D, e, d, slag)` (in `slaan`, en getoetst) geeft `{ doel, raakt }`:
-  met de kans `mis` van zijn wapen (`SOLDATEN_INSTELLINGEN.wapens.boog.mis` 0,3, `kruisboog.mis` 0,15) valt de pijl op een
+  met de kans `mis` van zijn wapen (`SOLDATEN_INSTELLINGEN.wapens.boog.mis` 0,3, `kruisboog.mis` 0,25, sinds Marcel "1. C"; eerst 0,15) valt de pijl op een
   tegel naast zijn doel (een van de acht, met het toeval van het dorp), en raakt hij een vijand van de schutter die daar
   staat (`isVijandVanE`; nooit een eigen man), of niemand. De pijl vliegt naar die tegel.
 - **De klappen van een tik vallen aan het eind** (28 okt; Marcel: "1 tik alle klappen aan einde"): `slaan` zet de klap
@@ -2673,7 +2673,7 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   niet te paard (voor de schildpad, js/kiezen.js).
 
 - **Het leven per soort** (2 nov; Marcel: "C. Eigen hoeveelheid leven"): `SOLDATEN_INSTELLINGEN.leven`, per soort (de
-  militie 12, de speerman en de piekenier 16, de zwaardvechter 20, de boogschutter 12, de kruisboogschutter 14, de ruiter
+  militie 12, de speerman en de piekenier 16, de zwaardvechter 18 (eerst 20, tot "1. C"), de boogschutter 12, de kruisboogschutter 14, de ruiter
   24, de ridder 32), voor `T.levenAlsMan` (js/rovers.js); een veteraan houdt het zijne (`T.WEZENS.veteraan`). Tot dan had
   elke soldaat 16 (`T.WEZENS.soldaat`, nu alleen nog wat een soort zonder getal krijgt), en gaf een paard een veelvoud.
 

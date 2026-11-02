@@ -44,9 +44,9 @@
       piek: { kosten: 3, schade: [4, 6], bereik: 2 },
       zwaard: { kosten: 3, schade: [5, 7], bereik: 1 },
       // `mis`: zo vaak mist een pijl of een bout, en valt hij naast zijn doel (js/gevecht.js; Marcel, 2 nov: "Boogschutters
-      // raken niet altijd ... 30%?", en voor de kruisboog "Minder: 15 %")
+      // raken niet altijd ... 30%?", en voor de kruisboog "Minder: 15 %", en daarna 25 %: "1. C", toen de zware mix 88 % won)
       boog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.3 },
-      kruisboog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.15 },
+      kruisboog: { kosten: 4, schade: [2, 4], bereik: 8, mis: 0.25 },
       // Geen stuk: het mes van een schutter die een vijand naast zich heeft en niet weg kan (js/gevecht.js; Marcel, 2 nov:
       // "1. A": zwak, zodat hij geen schietschijf is maar kansloos tegen een zwaardvechter).
       mes: { kosten: 3, schade: [1, 3], bereik: 1 },
@@ -56,7 +56,8 @@
     // Het leven van een soldaat, per soort (Marcel, 2 nov: "C. Eigen hoeveelheid leven"; T.levenAlsMan, js/rovers.js). Tot
     // dan had iedereen 16 (T.WEZENS.soldaat), en was een boogschutter 16 leven voor 2 punten. De ruiter en de ridder houden
     // wat hun paard ze gaf (anderhalf en twee maal 16).
-    leven: { militie: 12, speerman: 16, piekenier: 16, zwaardvechter: 20, boogschutter: 12, kruisboogschutter: 14, ruiter: 24, ridder: 32 },
+    // De zwaardvechter 18 sinds Marcel, 2 nov: "1. C" (was 20; de zware mix won toen 88 %).
+    leven: { militie: 12, speerman: 16, piekenier: 16, zwaardvechter: 18, boogschutter: 12, kruisboogschutter: 14, ruiter: 24, ridder: 32 },
     // Wat zijn paard de ridder geeft: zoveel maal zijn pas (T.snelheidVan, js/wereld.js).
     ridder: { snelheid: 1.6 },
     // En de lichte ruiter (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight. een lichtere variant dus", en "2. A":

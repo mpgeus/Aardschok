@@ -1086,7 +1086,7 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
 - **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan acht soorten (sinds 2 nov de lichte ruiter), elk met een − en een +, samen
   hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en harnas (sinds 21 okt; Marcel: "Speer is een 2 handed weapon", dus geen schild), de
   piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, de
-  kruisboogschutter kruisboog en harnas, de lichte ruiter een speer en een paard (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight", sneller dan de ridder en met minder leven; tot hij een eigen figuur heeft, lijkt hij op de ridder), en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Elke soort heeft sinds 2 nov zijn eigen leven (Marcel: "Eigen hoeveelheid leven"): de militie 12, de speerman en de piekenier 16, de zwaardvechter 20, de boogschutter 12, de kruisboogschutter 14, de ruiter 24 en de ridder 32 (`leven` in `T.SOLDATEN_INSTELLINGEN`); tot dan had iedereen 16. Een
+  kruisboogschutter kruisboog en harnas, de lichte ruiter een speer en een paard (Marcel, 2 nov: "een vlotte soldaat te paard naast de knight", sneller dan de ridder en met minder leven; tot hij een eigen figuur heeft, lijkt hij op de ridder), en de ridder zwaard, schild, harnas en paard (Marcel, 1 nov: "Ja, hij is duur"). Elke soort heeft sinds 2 nov zijn eigen leven (Marcel: "Eigen hoeveelheid leven"): de militie 12, de speerman en de piekenier 16, de zwaardvechter 18, de boogschutter 12, de kruisboogschutter 14, de ruiter 24 en de ridder 32 (`leven` in `T.SOLDATEN_INSTELLINGEN`); tot dan had iedereen 16. Een
   paard maakt de wapenmaker niet: het komt uit de stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): die maakt er alleen een als een wachthuis erom vraagt, zo'n drie weken op graan; en in een dorp heeft de marskramer er 's zomers een, voor 16 goud. De ridder heeft het meeste leven (32)
   en een grotere pas (`ridder` in `T.SOLDATEN_INSTELLINGEN`; die getallen zijn Claudes voorstel). Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
   werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
@@ -1281,7 +1281,7 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   een seconde stilstaat. Staat er een vijand naast hem, dan stapt hij opzij als hij sneller is dan elke vijand naast hem
   (een ruiter haalt hem altijd in, een schildpad niet), en anders vecht hij met zijn mes, zwak (1 tot 3; Marcel, 2 nov:
   "Boogschutter kan niet wegkomen uit melee combat; tenzij ze sneller zijn; dan kun je 'kiten'; maar er zit wel een
-  attack delay op, nadat ze verplaatsen"). Een pijl mist 3 op de 10 keer (een bout 3 op de 20) en valt dan naast zijn
+  attack delay op, nadat ze verplaatsen"). Een pijl mist 3 op de 10 keer (een bout 1 op de 4) en valt dan naast zijn
   doel; staat daar een vijand, dan raakt hij die (Marcel, 2 nov: "Boogschutters raken niet altijd, pijlen vallen naast
   vijanden", "Missers raken de buurman"): een dichte troep krijgt zo meer, een gespreide minder. Tot 2 nov stapte hij altijd opzij, en deed één zwaardvechter 23 seconden over
   één boogschutter. Boven wie vecht staat zijn levensbalk, de schade zweeft boven het hoofd, een pijl vliegt als een streep.

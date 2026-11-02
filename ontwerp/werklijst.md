@@ -108,9 +108,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    en vecht dan met een mes, schiet na het lopen pas na een seconde; een boog 3, een kruisboog 4; het leven per soort. De
    mix *schutters* wint nog 55 %. **Ook af** (2 nov; Marcel: "1. B 2. A, ze krijgen een spreidingstactiek 3.
    Boogschutters raken niet altijd"): de stormloop als troep, de formatie *Loose* (de ruiters van de AI als gespreide
-   groep), en een pijl die 30 % mist (een bout 15 %) en dan de buurman kan raken. **Wacht op Marcel** (`opmerkingen.md`,
-   "Na de missers"): de zware mix wint nu 88 %, en de ruiters van de AI nog nooit (ze moeten flankeren: 3f). Daarna 3e
-   (de knotsdrager, met Anselm) en 3f.
+   groep), en een pijl die 30 % mist (een bout 25 %) en dan de buurman kan raken. Daarop (Marcel: "1. C; 2. Prima"): de
+   zwaardvechter 18 leven, en flankeren met de ruiters gaat naar 3f. **Wacht op Marcel** (`opmerkingen.md`, "Na de
+   missers"): de zware mix wint nog 85 %, door het schild; met een schild dat 1 afvangt in plaats van 2 staan de drie
+   gewone mixen bijna gelijk. Daarna 3e (de knotsdrager, met Anselm) en 3f, met het flankeren van de ruiters.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4

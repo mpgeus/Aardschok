@@ -453,7 +453,9 @@ skirmish.
   *gewoon* 18 tegen 4, tegen *schutters* 13 tegen 3), *gewoon* 65 %, *schutters* 46 %, *ruiters* 0 %. Met 90 slagen
   zonder missen: *schutters* 62 %, *zwaar* 79 %; met: 53 en 94 %. Op een linie schutters wint een gemengd leger 18 van
   20 zonder schildpad en 15 met (de AI zet hem 0,3 seconde per slag aan); 3 ruiters en 2 speermannen 0 van 20. De balans
-  is zo doorgeslagen naar de zware mix (`opmerkingen.md`, "Na de missers").
+  is zo doorgeslagen naar de zware mix (`opmerkingen.md`, "Na de missers"). Daarop (Marcel: "1. C; 2. Prima"): de
+  zwaardvechter 18 leven, de kruisboog mist 25 %; *zwaar* wint dan nog 85 %. Met een schild dat 1 afvangt staan *gewoon*,
+  *schutters* en *zwaar* onderling bijna gelijk (vraag aan Marcel). Flankeren met de ruiters: 3f.
 - **De eerste veldheer** (3a3; Marcel, 28 okt: "1. A", "2. Oke"): hij weet alleen wat zijn mannen nu zien (zijn eigen
   mist, `T.zietNu`) en waar de stroken van de anderen liggen, zoals een speler dat uit de lobby weet; geen valsspelen, zodat
   de drie standen van 3f verschillen in hoe slim hij is, niet in wat hij weet. Hij rukt meteen op; afwachten, flanken en

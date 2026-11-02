@@ -539,7 +539,7 @@ test('een pijl mist soms en valt naast zijn doel: dan raakt hij een vijand die d
   try {
     const W = T.SOLDATEN_INSTELLINGEN.wapens;
     assert.equal(W.boog.mis, 0.3);
-    assert.equal(W.kruisboog.mis, 0.15);
+    assert.equal(W.kruisboog.mis, 0.25);
     const S = slag([{ soorten: { boogschutter: 1, militie: 1 } }, { soorten: { militie: 2 } }]);
     const [A, B] = S.dorpen;
     const b = T.militieVan(A).find((e) => e.bewoner.soldaat.soort === 'boogschutter');
