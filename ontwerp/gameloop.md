@@ -32,6 +32,30 @@ Marcel, 2 nov: "We missen nog wat gameplay heb ik het idee. Er ligt nog te weini
 - **D. Een doel per seizoen:** met de motor van de scenario's (er al: doelen, triggers) een paar doelen die richting
   geven ("Hold the ford before summer", "Twenty soldiers by Martinmas"), met een beloning of een straf.
 
+**Marcel, daarop (2 nov):** "Er is nog te weinig te doen. Wat kun je naast bouwen doen? Quests passen niet echt in dit
+type spel. Behalve in de campaign dan." En: "wat biedt elk seizoen als uitdaging? Ik denk voor de winter zorgen dat er
+voldoende eten is en brandhout i.v.m. de kou. De zomer brengt droogte, weinig water, hitte. **Een speler moet altijd
+bezig kunnen zijn zonder dat het spel zonder hem of haar speelt als het ware.**" Dus: geen quests (D alleen in de
+campagne), en de seizoenen als de uitdaging.
+
+**De seizoenen als uitdaging** (Claude, 2 nov; nog niet gekozen). Wat er al is: de statussen kou, honger, droogte,
+brandgevaar, koorts en wolven (`T.OORZAKEN`), brandhout in de winter (js/behoeften.js), de droogte die de oogst kost
+(js/weer.js), het slachten, het zout, het rantsoen (een wet), en de heer op Sint-Maarten. Wat ontbreekt, is wat **jij**
+eraan doet: nu bouw je het goede gebouw, en lost het dorp de rest zelf op (de raad zegt welk). Per seizoen:
+- **Lente:** zaaien op tijd, en het zaaigraan (eten of zaaien); de eerste rovers. Jij: wat je zaait en waar.
+- **Zomer:** droogte, weinig water, hitte, brand. Jij: water naar de akkers laten dragen (handen van ander werk af); bij
+  hitte het werk 's middags stilleggen (minder werk, geen zieken); een brandwacht.
+- **Herfst:** de oogst binnen voor de regen en de vorst, de voorraad voor de winter, en de tiende. Jij: alle handen
+  naar de oogst (de werkplaatsen stil), wat je slacht en zout, hoeveel brandhout er gehakt wordt, en wat je de heer
+  geeft. **Twee dingen die allebei moeten:** het graan voor de heer, of voor de winter.
+- **Winter:** kou en honger, wolven, ziekte. Jij: het rantsoen, wie het brandhout krijgt, het vee beschermen, de zieken.
+  (Het demojaar eindigt op Sint-Maarten: de winter zit er niet in, maar de zorg ervoor wel, in de herfst.)
+
+**Het werkwoord naast bouwen: opdrachten aan het dorp** (Claude): wat het dorp nu vanzelf doet (welk werk, hoeveel
+hout, wanneer oogsten), wordt wat jij vraagt, met een prijs: wie op het land staat, staat niet in de werkplaats. Zo ben
+je altijd bezig, en speelt het spel niet zonder jou (Frostpunk heeft de noodploeg, Banished de verdeling van het werk,
+Stronghold het rantsoen).
+
 ## Bijgesteld op 15 okt: van bovenaf als een god, en vechten in real time (Marcel; werklijst vraag 170)
 
 **Marcel, 15 okt: "de schout verdwijnt. Hij of zij is de embodiment van de speler, en kan meevechten en leeft in het
