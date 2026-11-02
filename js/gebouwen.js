@@ -143,14 +143,15 @@
     // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), en is het
     // de eerste opslag: daar lossen de dragers, en daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
     // van de aanvoerder in het gehucht dat er al was (een `huis` met `huis: 'aanvoerder'`, met plaats voor zijn gezin), en zijn
-    // tekening in de stijl van het land (`aanvoerder` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
+    // tekening in de stijl van het land (`aanvoerder` in js/bouwstijl.js). Sinds 1 nov de burcht van Marcels plaat, in elke
+    // stijl (Marcel: "wordt town hall"; tegels/platen.js).
     // Sinds 15 okt is het het town hall (werklijst vraag 170, stap 2; Marcel: "We hebben dan een 'town hall' nodig. Daar
     // kunnen mensen schuilen", en "Huis schout wordt town hall", "Iedereen"): wie rovers ziet, vlucht erheen en schuilt
     // er tot het rustig is (T.schuil, js/gevecht.js), en iedereen past erin. In de code heet het nog `aanvoerder`.
     raadhuis: {
-      naam: T.t('town hall'), trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
+      naam: T.t('town hall'), trede: 'gehucht', voet: { b: 7, h: 7 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, maakt: null, menu: true, leeg: true, eenmalig: true, opslag: true,
-      tekening: 'huizen/raadhuis', beschrijving: T.t('the heart of your village and the first store, where everyone shelters from robbers: you can build around it'), opmerking: '', // geen tekst
+      tekening: 'platen/burcht-z', beschrijving: T.t('the heart of your village and the first store, where everyone shelters from robbers: you can build around it'), opmerking: '', // geen tekst
     },
     boerderij: {
       naam: T.t('farm'), meervoud: T.t('farms'), trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
@@ -323,13 +324,13 @@
     molen: {
       naam: T.t('mill'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { planken: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 5,
       handen: 1, woonruimte: 0, maakt: { in: { graan: 3 }, uit: { meel: 3 } },
-      menu: true, tekening: 'gebouwen/watermolen', beschrijving: T.t('grain into flour. The lord wants you to grind at his mill and pay for it (his banal right); a mill of your own is defiance'), // geen tekst
+      menu: true, tekening: 'platen/molen-z', beschrijving: T.t('grain into flour. The lord wants you to grind at his mill and pay for it (his banal right); a mill of your own is defiance'), // geen tekst
       opmerking: 'Het banrecht zelf (de heer die erop heft) is nog geen regel.', // geen tekst
     },
     bakkerij: {
-      naam: T.t('bakery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { planken: 12, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
+      naam: T.t('bakery'), trede: 'dorp', voet: { b: 7, h: 7 }, kosten: { planken: 12, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
-      menu: true, tekening: 'gebouwen/bakkerij', beschrijving: T.t('flour into bread'), opmerking: '', // geen tekst
+      menu: true, tekening: 'platen/bakkerij-z', beschrijving: T.t('flour into bread'), opmerking: '', // geen tekst
     },
     brouwerij: {
       naam: T.t('brewery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { planken: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
@@ -502,11 +503,10 @@
     // De stal (Marcel, 1 nov: "Ja er komt een stal, de merchant verkoopt ze ook soms"): paarden voor de ridders (js/soldaten.js),
     // alleen als een wachthuis erom vraagt: zo'n drie weken graan per paard. Een paard is duur.
     stal: {
-      naam: T.t('stable'), trede: 'gehucht', voet: { b: 7, h: 5 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 4 }, bouwtijd: 5,
+      naam: T.t('stable'), trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 4 }, bouwtijd: 5,
       handen: 2, woonruimte: 0,
       maakt: { in: { graan: 1 }, uit: { paarden: 0.05 }, keuze: { paarden: { graan: 1 } } },
-      menu: true, tekening: 'gebouwen/schuur', beschrijving: T.t('horses for the knights of the watch house, one in about three weeks'), // geen tekst
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de schuur; een eigen plaat komt van Marcel.', // geen tekst
+      menu: true, tekening: 'platen/stal-z', beschrijving: T.t('horses for the knights of the watch house, one in about three weeks'), opmerking: '', // geen tekst
     },
     palissade: {
       naam: T.t('palisade'), trede: 'dorp', voet: null, kosten: { hout: 40 }, heer: { goud: 5 }, bouwtijd: 10,

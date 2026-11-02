@@ -41,7 +41,7 @@ function nieuwSpel(zaad = 5, opties = {}) {
 }
 // Een bewoner draagt zijn eigen uiterlijk (vraag 145): `zaaier-u1` is de zaaier in het uiterlijk van bewoner 1.
 const basis = (naam) => naam.replace(/-u\d+$/, '');
-const perTekening = (pad) => /^tegels\/(huizen|gebouwen)\//.test(pad);
+const perTekening = (pad) => /^tegels\/(huizen|gebouwen|platen)\//.test(pad);
 const figuur = (pad) => pad.startsWith('beelden/figuren/');
 const tekeningenOp = (w) => new Set(w.voorwerpen
   .filter((v) => v.vel && T.TEGELS[v.vel].perTekening)

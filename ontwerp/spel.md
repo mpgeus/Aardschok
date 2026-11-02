@@ -1284,7 +1284,8 @@ kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen",
   komt bij wie om hulp roept; daarna gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
 - **Het town hall** (in de code `raadhuis`, sinds stap 5) is het huis van de aanvoerder: het eerste gebouw, de eerste
   opslag, het midden van je bereik, en sinds 15 okt de plek waar iedereen schuilt (iedereen past erin). Het oude raadhuis
-  (de stad, de schepenen) ging op 15 okt weg.
+  (de stad, de schepenen) ging op 15 okt weg. Sinds 1 nov is het de burcht van Marcels plaat ("wordt town hall"), in elke
+  stijl dezelfde, op een voet van 7 bij 7. Ook de bakkerij (7 bij 7), de molen en de stal (6 bij 6) komen van zijn platen.
 - **Het gevecht is een status.** Zodra iemand vecht, zegt een bericht met de plek het (*Fighting breaks out.*; een klik of
   Spatie brengt je erheen), staat *Fighting* in de balk, kleuren de randen van het beeld rood, en loopt de tijd hooguit op
   1× (pauze kan); zes seconden nadat niemand meer vecht, is het voorbij (*The fighting is over.*) en loopt de tijd weer

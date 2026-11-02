@@ -55,7 +55,7 @@ Marcel: "Dit wordt de kruisboog schutter. De basisplaats en met wapen", en daarn
 
 Marcel stuurde vijf platen: `referentie/aardschok-gebouw-burcht-draai.png`, `-bakkerij-`, `-molen-`, `-stal-` en `-huis-riet-`. Hij noemde ze "wat gebouwen". De burcht wordt het town hall (Marcel, 1 nov).
 
-**Een gebouw hoeft niet door TripoSplat.** Een gebouw draait in het spel niet: het staat op een vaste voet, in vier standen van de deur (zuid, oost, noord, west; `js/bouwstijl.js`). De schuine aanzichten op deze platen hebben al de camera van het spel: de grasvoet is twee keer zo breed als hoog, dus 30 graden. Het aanzicht kan er dus zo uit, los van het grijs en op de maat van de voet: `gereedschap/blender/stijl/proef/gebouw_proef.py`, en `bewijs/gebouwen/proef-in-het-spel.png`.
+**Een gebouw hoeft niet door TripoSplat.** Een gebouw draait in het spel niet: het staat op een vaste voet, in vier standen van de deur (zuid, oost, noord, west; `js/bouwstijl.js`). De schuine aanzichten op deze platen hebben al de camera van het spel: de grasvoet is twee keer zo breed als hoog, dus 30 graden. Het aanzicht kan er dus zo uit, los van het grijs en op de maat van de voet: `gereedschap/blender/stijl/proef/gebouw_vel.py`, en `bewijs/gebouwen/in-het-spel.png`.
 
 Gemeten aan de platen, voor de volgende:
 
@@ -63,6 +63,8 @@ Gemeten aan de platen, voor de volgende:
 - **Groter:** een aanzicht is nu zo'n 240 pixels breed, en moet in het spel 350 tot 450 zijn, op zoom 1. Het wordt dus 1,4 tot 2 keer vergroot en is wat zacht. Twee aanzichten op een plaat, in plaats van acht, geven genoeg pixels.
 - **Geen rook** op de plaat: die haal ik er nu weg boven de schoorsteen, en het spel maakt zijn eigen rook.
 - **De deur:** een nieuw gebouw heeft zijn deur standaard naar het zuiden, op het scherm linksonder. De stal staat in ZW andersom.
+- **Het anker** van een tekening is het midden van zijn achterste tegel (`T.naarScherm`), een halve tegel onder de bovenste hoek van de voet. De eerste proef stond daardoor 16 pixels te laag; `test/tegelanker.test.cjs` zag het.
+- **De bouwfasen** zijn een eigen plaat: `prompt-bouwfasen.txt` (nog niet geprobeerd). Elk aanzicht is een plaat: het prompt vraagt ZW, en een tweede keer met NW erin geeft de andere twee standen van de deur.
 
 ## Wat je aanlevert
 

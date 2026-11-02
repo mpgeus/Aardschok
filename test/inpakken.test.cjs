@@ -121,7 +121,7 @@ test('elk ingepakt vel in tegels/: elke tegel met een naam op zijn vel, geen twe
 
 test('een vel per tekening: de huizen en de gebouwen elk in een eigen bestand, strak, en niets anders in de map', () => {
   const perTekening = Object.entries(T.TEGELS).filter(([, v]) => v.perTekening);
-  assert.deepEqual(perTekening.map(([n]) => n).sort(), ['gebouwen', 'huizen']);
+  assert.deepEqual(perTekening.map(([n]) => n).sort(), ['gebouwen', 'huizen', 'platen']);
   for (const [naam, vel] of perTekening) {
     assert.ok(vel.ingepakt && !vel.bestand, `${naam}: elke tegel een eigen cel en anker, en geen vel van zichzelf`);
     assert.ok(!fs.existsSync(path.join(WORTEL, 'tegels', `${naam}.png`)), `${naam}: het ene vel van vóór 4 okt is weg`);

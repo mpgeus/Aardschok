@@ -101,6 +101,7 @@ test('van elke deur loopt een paadje naar de weg', () => {
 test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan', () => {
   const S = proef();
   const D = S.dorp;
+  ruimBegroeiingOp(D); // een rij struiken kan een deur afsnijden: een paadje gaat er niet doorheen
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
   const raadhuis = D.gebouwen.find((g) => g.soort === 'raadhuis');

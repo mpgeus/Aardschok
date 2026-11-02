@@ -100,7 +100,7 @@ test('T.deurVan neemt de deur van de tekening, en anders het midden van de zuidk
 // bouwmenu naar de weg, T.keerNaarDeWeg in js/bouwen.js.)
 test('de huizen van het proefdorp komen van de huizenbouwer, en voor elke deur kun je staan', () => {
   const { S, w, hutten } = proefDorp(T, { gebouwen: ['herberg', 'huis'] });
-  const huizen = S.dorp.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
+  const huizen = S.dorp.gebouwen.filter((g) => g.tekening && /^(huizen|platen)\//.test(g.tekening));
   assert.equal(huizen.length, 1 + 2 + hutten.length + 2, 'de aanvoerder, twee boerderijen, de hutten, de herberg en een huis');
   for (const g of huizen) {
     const eig = T.opzoekTegelNaam(g.tekening).eig;

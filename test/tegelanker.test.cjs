@@ -17,54 +17,19 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
+const { leesPng } = require('../gereedschap/pixelart/kern.cjs');
 
 const TEGELS = path.join(__dirname, '..', 'tegels');
 // Het spel zoals het draait: waar een tegel op zijn vel staat, vraagt deze toets aan T.sprites.celVan (js/sprites.js),
 // net als het tekenen. Een ingepakt vel zegt het per tegel, een raster (de grond) uit zijn kolommen.
 const T = require('./laad.cjs').spel();
 
-// Een klein, eigen PNG-lezertje: kern.cjs se png() (gereedschap/pixelart/kern.cjs) schrijft altijd
-// 8-bit RGBA zonder interlace en met filtertype 0 (geen) op elke rij — dat is alles wat we hier
-// terug hoeven te lezen, dus geen algemene PNG-decoder nodig. Geeft alleen het alfakanaal terug,
-// dat is genoeg om te zien waar het plaatje niet-doorzichtig is.
-const PNG_SIGNATUUR = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+// Alleen het alfakanaal: dat is genoeg om te zien waar het plaatje niet-doorzichtig is.
 function leesAlfa(pad) {
-  const buf = fs.readFileSync(pad);
-  assert.ok(buf.subarray(0, 8).equals(PNG_SIGNATUUR), `${pad}: geen PNG`);
-  let o = 8;
-  let breedte = 0;
-  let hoogte = 0;
-  let bitdiepte = 0;
-  let kleurtype = 0;
-  const idat = [];
-  while (o + 8 <= buf.length) {
-    const len = buf.readUInt32BE(o);
-    const type = buf.toString('ascii', o + 4, o + 8);
-    const data = buf.subarray(o + 8, o + 8 + len);
-    if (type === 'IHDR') {
-      breedte = data.readUInt32BE(0);
-      hoogte = data.readUInt32BE(4);
-      bitdiepte = data[8];
-      kleurtype = data[9];
-    } else if (type === 'IDAT') {
-      idat.push(data);
-    } else if (type === 'IEND') {
-      break;
-    }
-    o += 8 + len + 4; // lengte + type + data + crc
-  }
-  assert.equal(bitdiepte, 8, `${pad}: verwacht 8-bit RGBA zoals kern.cjs se png() dat schrijft`);
-  assert.equal(kleurtype, 6, `${pad}: verwacht kleurtype 6 (RGBA)`);
-  const raw = zlib.inflateSync(Buffer.concat(idat));
-  const stride = breedte * 4;
-  const alfa = new Uint8Array(breedte * hoogte);
-  for (let y = 0; y < hoogte; y++) {
-    const rij = y * (stride + 1);
-    assert.equal(raw[rij], 0, `${pad}: rij ${y} gebruikt een filter, kern.cjs se png() doet dat nooit`);
-    for (let x = 0; x < breedte; x++) alfa[y * breedte + x] = raw[rij + 1 + x * 4 + 3];
-  }
-  return { breedte, hoogte, alfa };
+  const { b, h, rgba } = leesPng(pad);
+  const alfa = new Uint8Array(b * h);
+  for (let i = 0; i < alfa.length; i++) alfa[i] = rgba[i * 4 + 3];
+  return { breedte: b, hoogte: h, alfa };
 }
 
 // De onderste rij niet-doorzichtige pixels binnen één cel (x0, y0, cb, ch) van het vel, en het
@@ -149,6 +114,10 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
       // De twee uiteinden van de onderste rij, t.o.v. het anker, terug naar tegel-eenheden.
       const links = naarTegelDelta(rij.links - anker[0], rij.y - anker[1]);
       const rechts = naarTegelDelta(rij.rechts - anker[0], rij.y - anker[1]);
+      // De platen van Marcel staan op een ronde grasvoet: die is onderaan plat en raakt de ruit alleen in de hoek, dus daar
+      // telt het midden van de rij.
+      const midden = naarTegelDelta((rij.links + rij.rechts) / 2 - anker[0], rij.y - anker[1]);
+      const punten = velNaam === 'platen' ? [['midden', midden]] : [['links', links], ['rechts', rechts]];
       // De voorste hoek van de voet (de tegel is de achterste hoek, "beslaat" telt vanaf daar naar
       // rechtsonder, zie js/kaart.js): in tegel-eenheden t.o.v. de aangeklikte tegel zelf.
       const voorTx = bw - 1;
@@ -157,7 +126,7 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
       // voorTy + 0,5); "binnen de ruit vallen" is dus: geen van beide assen voorbij die voorste
       // hoek. (Een ondergrens richting de achterste hoek toetsen we niet: een rond ding als de
       // toren haalt zijn eigen hoeken toch nooit, dat zegt niets over het anker.)
-      for (const [naam, p] of [['links', links], ['rechts', rechts]]) {
+      for (const [naam, p] of punten) {
         assert.ok(
           p.tx <= voorTx + SPELING && p.ty <= voorTy + SPELING,
           `${velNaam}/${t.naam}: de onderste rij (${naam}) staat bij tegel (${p.tx.toFixed(2)}, ${p.ty.toFixed(2)}) — `

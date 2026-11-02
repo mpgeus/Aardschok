@@ -79,9 +79,14 @@ bekeken, niet opgenomen in het spel, en nog niet door Marcel beoordeeld.
 
 ## De gebouwen uit Marcels platen
 
-Marcel, 1 nov: vijf platen, "Wat gebouwen". Een proef, alleen in de browser: `docs/art/hunyuan/PLAAT-EISEN.md`, en `docs/art/bewijs/gebouwen/proef-in-het-spel.png`.
-Wat er nog moet voor ze echt in het spel staan: de bouwfasen (zonder bouwfase staat een bouwplaats half doorzichtig), de vier standen van de deur, en de bladen van de bouwstijl (die heeft nu per soort meer vormen en daken).
-De vellen zijn tien keer zo groot als de oude gebouwen (240 tot 440 KB tegen zo'n 30 KB): niet gemeten in beeldtijd. De wieken van de molen staan stil, en de grasvoet is rond terwijl de voet op het raster een ruit is.
+Marcel, 1 nov: vijf platen, "Wat gebouwen"; "Ja", en de burcht "wordt town hall". De burcht, de bakkerij, de molen en de stal staan in het spel: `docs/art/hunyuan/PLAAT-EISEN.md`, `docs/art/bewijs/gebouwen/in-het-spel.png`.
+**De bouwfasen moeten beter** (Marcel, 1 nov: "Deze bouwfase moeten beter natuurlijk", "Stenen, planken, balken, skelet etc"): de fasen die er nu staan, zijn uit de plaat geknipt, en zijn een noodoplossing. Het moet een bouwplaats zijn met stapels stenen, planken en balken, een fundering, een houten skelet, en dan de muren en het dak. Daarvoor is een plaat per gebouw nodig: het prompt staat in `docs/art/hunyuan/prompt-bouwfasen.txt`.
+Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels videokaart, 1920 bij 1080, de mediaan van 60 beelden): de vier in beeld kosten 0,3 ms per beeld op zoom 1 (1,5 naar 1,8) en 0,4 op zoom 0,5 (2,6 naar 3,0), en 3,6 MB aan vellen. Firefox niet gemeten: Playwright heeft hem hier niet.
+
+- **Het rieten huis** wacht op Marcels keuze waarvoor het is (`wacht` in `gebouw_vel.py`). Als vorm van `huis` werden `test/rooien.test.cjs` (`T.groeiRooiPlan` gaf null bij een hut die groeit) en `test/bouwstijl.test.cjs` rood: dat eerst nakijken.
+- **Naast elkaar:** de grasvoet is rond en de voet een ruit. Met de voeten tegen elkaar, zoals `T.plekVoor` ze zet, schuift het gras van de een over dat van de ander, en de stal en de molen lezen als één gebouw.
+- **De doorkijk:** de burcht is zo hoog dat iedereen op het plein erachter een gat in hem maakt (`plein: true`, `js/doorkijk.js`); bij een vol plein zijn dat er veel.
+- **Nog niet:** de wieken staan stil. De bakkerij heeft een `schoorsteen`, maar rook is er alleen voor een huis waar iemand thuis is (`T.rookUitHuizen`). Geen sneeuw op het dak, geen plat beeld en geen jong en oud: dat is er alleen voor het vel `huizen`. De vier stijlen delen één plaat.
 
 ## Het spel
 

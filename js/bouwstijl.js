@@ -5,8 +5,9 @@
 // marktrecht), en een stenen huis in baksteen pas als het dorp een steenbakkerij heeft. Wat er al staat, houdt zijn dak:
 // aan de daken zie je de geschiedenis van het dorp.
 //
-// De tekeningen komen van de huizenbouwer (gereedschap/pixelart/huizen.cjs, STIJLEN), en elk zegt in tegels.js zelf wat
-// het is (`stijl`: { stijl, vorm, soort, dak, steen, stand }); dit bestand zoekt ze op. Wat de huizenbouwer een stand
+// De tekeningen komen van de huizenbouwer (gereedschap/pixelart/huizen.cjs, STIJLEN) en uit de platen van Marcel (tegels/platen.js,
+// gereedschap/blender/stijl/proef/gebouw_vel.py), en elk zegt zelf wat het is (`stijl`: { stijl, vorm, soort, dak, steen,
+// stand }); dit bestand zoekt ze op. Wat `vervangt` zegt, komt in de plaats van wat die soort had. Wat de huizenbouwer een stand
 // noemt, heet hier de kant van de deur (`kant`), want in het spel is een stand die van de mensen (T.STANDEN,
 // js/treden.js). Een land zonder stijl (het ontworpen gehucht, een kaart uit Tiled, een spel dat eerder bewaard is) bouwt met de tekeningen in
 // T.GEBOUWEN, zoals het altijd deed (T.tekeningenVan, js/gebouwen.js).
@@ -26,24 +27,34 @@
   // afstand tot de weg gaat een deur die je ziet voor.
   T.DEURKANTEN = ['z', 'o', 'n', 'w'];
 
-  // De tekeningen per stijl, uit tegels.js: stijl → soort → [{ naam, stijl, vorm, soort, dak, steen, kant }], en per
-  // naam. Eén keer opgebouwd: tegels.js verandert niet terwijl het spel draait.
+  // De tekeningen per stijl, uit tegels.js en platen.js: stijl → soort → [{ naam, stijl, vorm, soort, dak, steen, kant }],
+  // en per naam. Eén keer opgebouwd: ze veranderen niet terwijl het spel draait. Wat vervangen is, heeft nog zijn naam: een
+  // huis dat er al stond, houdt zijn tekening.
   let INDEX = null;
   function index() {
     if (INDEX) return INDEX;
     INDEX = { stijlen: {}, naam: new Map() };
-    const vel = T.TEGELS && T.TEGELS.huizen;
-    for (const t of (vel && vel.tiles) || []) {
-      const s = t && t.stijl;
-      if (!s) continue;
-      const ding = { naam: `huizen/${t.naam}`, stijl: s.stijl, vorm: s.vorm, soort: s.soort, dak: s.dak, steen: s.steen, kant: s.stand };
-      // een tekening kan ook bij andere stijlen horen (`ook`: oker en roze nemen de hutten van wit, vraag 114, 2b)
-      for (const stijl of [s.stijl, ...(s.ook || [])]) {
-        const per = INDEX.stijlen[stijl] || (INDEX.stijlen[stijl] = {});
-        // een werkplaats kan voor meer soorten zijn (`voor`: de houtschuur is ook de steengroeve; huizen.cjs, WERKPLAATSEN)
-        for (const soort of s.voor || [s.soort]) (per[soort] || (per[soort] = [])).push(ding);
+    const vervangen = new Set();
+    for (const velNaam of ['huizen', 'platen']) {
+      const vel = T.TEGELS && T.TEGELS[velNaam];
+      for (const t of (vel && vel.tiles) || []) {
+        const s = t && t.stijl;
+        if (!s) continue;
+        const ding = { naam: `${velNaam}/${t.naam}`, stijl: s.stijl, vorm: s.vorm, soort: s.soort, dak: s.dak, steen: s.steen, kant: s.stand };
+        // een tekening kan ook bij andere stijlen horen (`ook`: oker en roze nemen de hutten van wit, vraag 114, 2b)
+        for (const stijl of [s.stijl, ...(s.ook || [])]) {
+          const per = INDEX.stijlen[stijl] || (INDEX.stijlen[stijl] = {});
+          // een werkplaats kan voor meer soorten zijn (`voor`: de houtschuur is ook de steengroeve; huizen.cjs, WERKPLAATSEN)
+          for (const soort of s.voor || [s.soort]) {
+            if (s.vervangt && !vervangen.has(`${stijl}/${soort}`)) {
+              vervangen.add(`${stijl}/${soort}`);
+              per[soort] = [];
+            }
+            (per[soort] || (per[soort] = [])).push(ding);
+          }
+        }
+        INDEX.naam.set(ding.naam, ding);
       }
-      INDEX.naam.set(ding.naam, ding);
     }
     return INDEX;
   }
