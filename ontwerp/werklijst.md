@@ -93,12 +93,13 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    spelen (`code.md` bij `js/tik.js`, "Samen"; wat open is in `opmerkingen.md`). 3b1 is af: de lobby (*Skirmish* op het
    titelscherm, ook in de demo), kopen met punten, en de AI koopt een van drie mixen (`scenario.md`, 7). 3b2 en 3b3 zijn
    af (30 okt; Marcel: "1. In de ui balk", "2. A 3. b 4. A"): de voorbereiding met de klok en *Fight!* in de balk, de
-   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **Wacht op Marcel**: het voorstel voor de
-   generaals (3d komt mee in skirmish: Marcel, "helden zijn generaals"; vier, *Sir Godfrey* met zwaard en schild, *Dame
-   Agnes* met piek, *Brother Anselm* met knots, *Old Wat* met kruisboog; inspiratie binnen 5 tegels: 25 % meer schade en
-   1 harnas; valt hij, dan vecht de rest door; zijn kring even op de grond als je hem kiest), en de balans (de mix
-   *schutters* wint 97 %; een ronde met de proefbank na de generaals en de knotsdrager, met een AI die zelf opstelt:
-   `opmerkingen.md`). Daarna 3d, 3e en 3f.
+   rand om je strook, en het scherm van een slag met *Again* en *Lobby*. **Bezig in sessie `claude/determined-curie-ircu5p`**
+   (2 nov): **3d, de generaals** (Marcel, 2 nov: "1 ja, 2 ja, 3 alleen skirmish"): het voorstel is goedgekeurd (inspiratie
+   binnen 5 tegels: 25 % meer schade en 1 harnas; valt hij, dan vecht de rest door; zijn kring even op de grond als je
+   hem kiest), alleen in skirmish, en eerst drie: *Sir Godfrey* met zwaard en schild (als dorpeling tot zijn figuur er
+   is), *Dame Agnes* met piek en *Old Wat* met kruisboog; *Brother Anselm* met knots komt met 3e. **Wacht op Marcel**:
+   de balans (de mix *schutters* wint 97 %; een ronde met de proefbank na de generaals en de knotsdrager, met een AI die
+   zelf opstelt: `opmerkingen.md`). Daarna 3e en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
