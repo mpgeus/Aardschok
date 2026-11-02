@@ -213,7 +213,13 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   Voorstel van Claude: A nu, en B of C met de standen van de veldheer (3f), als de AI kan kiezen wat hij koopt.
   **Gekozen** (Marcel, 2 nov): "B, ik zei ook al heavy leather armour. Jij ging van ons bestaande leather uit. Dit zijn 2
   verschillende klassen". Het zware leren harnas is dus een eigen stuk naast het leren harnas, en de knotsdrager draagt
-  het (Claude las "Mace en heavy leather armour" eerst als het leren harnas dat er al was). Het plan volgt. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  het (Claude las "Mace en heavy leather armour" eerst als het leren harnas dat er al was). Op het plan (Marcel, 2 nov):
+  "1. Maceman en crossbowman. 2. Prima 3. Ja, maar een ijzeren harnas is zwaarder dan leather of heavy leather. Een knight
+  heeft een paard, een swordsman is trager in lopen. Een Maceman krijgt crushing damage en kan iemand soms extra damage
+  dealen." Dus: het zware leren harnas (2 afvangen, 4 huiden, waarde 4) voor de knotsdrager en de kruisboogschutter; een
+  harnas maakt trager, een ijzeren het meest (een derde klasse, voor de zwaardvechter en de ridder; de ridder niet trager,
+  want zijn paard draagt het); en de knots verplettert: door het harnas heen, en soms een klap extra hard. De getallen
+  van het ijzeren harnas, het trager lopen en de extra klap: het plan aan Marcel. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,
