@@ -4,6 +4,91 @@ Marcel, 26 sep: "We moeten oppassen voor functie creep. Anders blijven we toevoe
 speelbaar product komen." Dit bestand zegt wat daarvoor nog nodig is, en wat kan wachten. Bovenaan
 staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het onderbouwt.
 
+## De speellijst van 2 nov: wat op Marcel wacht, naast de beelden
+
+Marcel, 2 nov: "Ja, maak die speellijst": alles wat onder "Wacht op Marcel" in de werklijst gebouwd klaarstond om te
+bekijken, behalve de beelden (de figuren, de huizen, de proefplaten), in één ronde, in de volgorde waarin je het tegenkomt.
+Drie delen (A, B, C), elk los te spelen, en daarna de keuzes. Speel alles in **Firefox**: dan is het meten onderweg
+gedaan, en wat alleen daar scheef zit, komt meteen boven.
+
+**Zo begin je:** haal `main` op, `npm start`, en open `http://localhost:8123` in Firefox. **F2** zet de meter aan (beelden
+per seconde, en *drawing*: wat het tekenen kost). Zeg bij wat je vindt de stap (A2, B3, ...) en de commit (`git log -1
+--oneline`); Claude schrijft het hieronder als "De speeltest van …". Wat scheef zit, los ik eerst op met een getal uit de
+werkbank.
+
+### A. Het demojaar, met de wacht (184, 191, 185 en 186)
+
+Druk D, en kies in *Demo* **New game as the demo**: de wacht komt mee, en het spel eindigt op Sint-Maarten. De lange
+lijst van het demojaar (hieronder) gaat dieper; deze ronde neemt alleen wat sinds 23 okt nieuw is.
+
+1. **De dragers** (184; `spel.md`, "Zo werken de dragers nu"): geen kar meer; de huifkar blijft in het kamp, en wie geen
+   werk heeft, draagt één stuk per keer. Zet de muis op een drager: zegt hij wat hij draagt of bouwt? Bouw het raadhuis
+   (of D, *Village*, *Finish all building sites*): de huifkar gaat erin op, en wat erin zat, ligt als stapel op de grond
+   tot de dragers het binnen hebben (met vier gezinnen zo'n vijf dagen). Blijft een volle stapel bij de houthakker niet
+   liggen (*wie stilligt, draagt*)? **Vraag:** is één stuk per keer genoeg, ook in de oogst?
+2. **Je mannen sturen** (191, S1 tot S4; `spel.md`, "Minder stroef"): kies de wacht en stuur met rechts. Ze lopen zo snel
+   als de held, het bevel gaat in bij het indrukken (een ring op de grond die krimpt, rood op een vijand), wie je midden
+   in een stap terugstuurt, keert meteen om, en wie in dienst is, praat niet. **Vraag:** voelt het nog stroef? Dan S5
+   (rechte lijnen in plaats van zigzag) of S6 (minder wachten in een troep).
+3. **De overval** (185): D, *Demo* zegt de dag; niet wachten: D, *Danger*, **The demo raid tomorrow**. Eerst een bericht
+   (*Robbers were seen in the woods near the village. They will come soon.*), de dag erna drie rovers, overdag, uit het
+   dichtste kamp: voor een akker, of zonder akker voor de grootste stapel. Verdedig met de wacht: stap 2 komt hier terug.
+4. **Sint-Maarten en de punten** (186): D, *Time*, **To the day before Martinmas**. Betaal of weiger de heer (de scène),
+   en kijk op het eindscherm naar de punten onder het jaarverslag (*Score*; de tweede keer misschien *A new best!*).
+5. **Het debugvenster:** deed elke knop die je onderweg gebruikte wat hij zegt?
+
+### B. Drie losse proeven (182, 178, 3b2 en 3b3)
+
+1. **Het egaliseren** (182; `spel.md`, "Zo werkt het egaliseren nu"): *New game*, *Game rules*, *Height* op *Hills*,
+   *Begin*. Bouw een hut op een helling: de bouwers maken de grond in vier stappen vlak voor het gebouw komt, en het
+   briefje zegt hoe ver (*2 builders level the ground first (50% done)*). **Vraag** (d van de heuvels, vraag 174): de
+   heuvels altijd aan, en de spelregel *Height* eruit?
+2. **Meten in Firefox** (178, bij P; `snelheid.md`): in de console `Spel.debug.proefdorp(5)`. Zoom helemaal uit en schrijf
+   de meter op (beelden per seconde, *drawing*, het traagste beeld), dan dichtbij. Staat het bos goed: de wind, de mist,
+   de doorkijk, de regen (D, *Danger*, *Rain today*) en de sneeuw (D, *Time*, dagen verder tot de winter)? Dan
+   `Spel.debug.meetGrond()`, voor de grond op de videokaart. **Een minuut erbij** (4b, hoort bij de beelden, maar je staat
+   er toch): druk F in het dichtste stuk dorp, ook 's avonds; staat het teken onder de bovenbalk goed, en wat zegt de
+   meter plat tegen gewoon?
+3. **Een slag** (3b2 en 3b3; `scenario.md`, 7): op het titelscherm **Skirmish**: de lobby, kopen met punten, *Begin*. In de
+   balk onderaan *Deploy* met de klok en *Fight!*; een lichte rand om je strook, en wie je erbuiten stuurt, loopt tot de
+   rand. Na *Fight!* (of de minuut) *Battle* met de tijd die over is; na de slag *Victory* of *Defeat*, met *Again*
+   (dezelfde slag) en *Lobby* (je keuzes staan er nog). **Vraag:** het briefje *Fighting, since today* linksboven: weg in
+   een slag? Speel er ook één met veel boogschutters: voel je dat de mix *schutters* te sterk is?
+
+### C. Hoofdstuk 2, het rovershol (2c, bij K)
+
+Het langste deel. *Campaign*; hoofdstuk 2 zit op slot tot hoofdstuk 1 af is: zet het open met
+`localStorage.setItem('aardschok.campagne', '{"aankomst":true}')` in de console, en laad de bladzijde opnieuw.
+
+1. **Het begin:** de brief met de rovers, en het doel linksboven (*Goal*).
+2. **De eerste overval**, rond dag 100 (D, *Time*, dagen verder): het spoor gaat af, en het doel krijgt zijn plek (*New
+   goal: …*), met het vaandel en een ring op de minikaart.
+3. **Het hol:** de palissade, de aankleding, de tenten tegen de palissade. Meet het hol in beeld (*drawing*; in de cloud
+   viel het binnen de ruis).
+4. **Het hol aanvallen tot de laatste rover valt:** dat deed nog niemand, ook de speeltest van 28 okt niet. Dan *Goal
+   reached: …* en *Chapter complete: …*; lukt het niet voor Sint-Maarten, dan *Goal failed: …* en *Chapter failed: … You
+   can play it again from the campaign.*
+
+### Het Engels (`engels.md`)
+
+Lees onderweg de zinnen die je ziet (hierboven schuin), en daarna wat je niet tegenkwam: *the innkeeper*, *the
+moneylender*, *the tradesmen*, *rent*, *the ledger*, *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, *carriers*,
+en van de campagne *Campaign*, *Chapter 1: The first year*, *Complete*, *Finish chapter 1 first.* en *The next chapter is
+open: …*. De zinnen van hoofdstuk 2 staan in `levels/rovershol.js`.
+
+### Na het spelen: de keuzes
+
+Elk antwoord maakt werk los:
+- **De generaals** (3d, in skirmish): vier, *Sir Godfrey* met zwaard en schild, *Dame Agnes* met piek, *Brother Anselm*
+  met knots, *Old Wat* met kruisboog; binnen 5 tegels 25 % meer schade en 1 harnas; valt hij, dan vecht de rest door.
+  Akkoord, of anders?
+- **De balans van de slag** (B3): de mix *schutters* wint 97 % in de proefbank. Na de generaals een nieuwe ronde, of
+  eerst de boogschutter duurder?
+- **Het briefje *Fighting, since today*** in een slag (B3): weg of blijven?
+- **d van de heuvels** (B1): altijd aan, en *Height* eruit?
+- **Eén stuk per keer** voor een drager (A1): genoeg, of meer in de oogst?
+- **S5 of S6** (A2): nodig, of loopt het nu goed genoeg?
+
 ## De speellijst van het demojaar (werklijst Q, vraag 181, a; 20 okt)
 
 Marcel, 20 okt: "A1": één lijst voor het demojaar, van de huifkar tot Sint-Maarten, in de volgorde waarin je het

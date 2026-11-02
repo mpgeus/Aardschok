@@ -54,58 +54,22 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
-- **3b2 en 3b3 bekijken: de voorbereiding en het scherm van een slag** (30 okt; bij 1 hieronder, en `scenario.md`, 7).
-  *Skirmish*, Begin: in de balk bovenaan je mannen, *Deploy* met een minuut en *Fight!*; een lichte rand om je strook,
-  en wie je erbuiten stuurt, loopt tot de rand; de veldheer wacht. Na *Fight!* (of de minuut) *Battle* met de tijd die
-  over is, en na de slag *Again* en *Lobby*. Vraag: het briefje *Fighting, since today* linksboven staat er in een slag
-  nog; weg?
-- **2c spelen: hoofdstuk 2, het rovershol** (af op 28 okt, in `main`; bij K, "2c"). *Campaign*, hoofdstuk 2 (zit op
-  slot tot hoofdstuk 1 af is; meteen open met `localStorage.setItem('aardschok.campagne', '{"aankomst":true}')` in de
-  console). Kijk: de brief met de rovers, het doel linksboven, de eerste overval (rond dag 100) met het spoor, het
-  vaandel en de ring op de minikaart, het hol (de palissade, de aankleding, de tenten tegen de palissade), het hol
-  aanvallen tot de laatste rover valt (dat deed nog niemand), en anders Sint-Maarten. Meet in Firefox het hol in beeld
-  (de palissade en de aankleding; in de cloud binnen de ruis), en lees het Engels (`levels/rovershol.js`).
-- **191 bekijken: S1 tot S4 zijn gebouwd** (27 okt; Marcel: "S1 tot S3", en S4 erbij; bij S hieronder, en `spel.md`,
-  "Minder stroef"). In het demojaar met de wacht: ze lopen zo snel als de held, praten niet in dienst, rechts gaat in bij
-  het indrukken (met een ring op de grond), en wie je terugstuurt, keert meteen om. In de cloud in de browser nagelopen.
-  Voelt het nog stroef, dan S5 (rechte lijnen) en S6 (minder wachten in een troep).
+- **De speellijst van 2 nov spelen** (`speelbaar.md`, bovenaan; Marcel, 2 nov: "Ja, maak die speellijst"): alles wat
+  gebouwd klaarstond om te bekijken, naast de beelden, in één ronde in Firefox. A, het demojaar met de wacht: de dragers
+  (184), minder stroef (191, S1 tot S4), de overval en de punten (185 en 186); B, het egaliseren (182) met d van de
+  heuvels (vraag 174), meten in Firefox (178 en de grond, `snelheid.md`), en een slag in skirmish (3b2 en 3b3); C,
+  hoofdstuk 2, het rovershol (2c); het Engels (`engels.md`); en daarna zes keuzes. Daarna, als er tijd is, de lange
+  lijst van het demojaar. Nog open bij 185: de korte scène van de rovers (met de cinematic), en de waarden van de waren
+  (de werkbank, "The ending").
 - **4b bekijken: de gebouwen plat met F** (24 okt; `beeld.md`, "Zo werkt het nu" bij Zicht in een dicht dorp). Druk F
   in een dicht stuk dorp, ook 's avonds en in de winter; kijk of het teken onder de bovenbalk goed staat, en meet in
-  Firefox (de meter, *drawing*) plat tegen gewoon. Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
-- **185 en 186 bekijken, met het nieuwe debugvenster** (23 okt; `spel.md`, bij Rovers en de militie "In de demo één
-  overval", en bij het eind "De punten"; het debugvenster: `gereedschap.md`, "Testen in de browser"). Druk D: in *Demo*
-  begin je een nieuw spel als demo, en zie je de dag van de overval en je punten; in *Danger* komt de overval morgen; in
-  *Time* spring je naar de dag vóór Sint-Maarten. Kijk ook of elke knop doet wat hij zegt. Een dag voor de overval een
-  bericht, dan drie rovers overdag, zonder akker naar een stapel; op het eindscherm de punten onder het jaarverslag.
-  Sinds 24 okt (1b) is de demo een level (`levels/demojaar.js`): het speelt hetzelfde, maar hoeveel rovers en tussen
-  welke dagen staat nu daar, niet meer in de werkbank, en *Demo* geldt voor dat ene spel (niet meer tot je de bladzijde
-  opnieuw laadt). In de cloud nagelopen in de browser (Demo, het slot, de overval morgen, Sint-Maarten tot het
-  eindscherm, zonder fouten). Open: de korte scène van de rovers (met de cinematic), en de waarden van de waren (de
-  werkbank, "The ending").
-- **De dragers en het egaliseren bekijken** (184 met 182, in `main` sinds 23 okt; `spel.md`, "Zo werken de dragers nu" en
-  "Zo werkt het egaliseren nu"). In het spel: het begin zonder kar (de mensen dragen één stuk per keer), de muis op een
-  drager, de huifkar die opgaat in het raadhuis, en met *Height* op *Hills* de grond die in vier stappen vlak wordt.
-  Sinds 24 okt: **wie stilligt, draagt** (Marcel: "A"; `spel.md`, bij de dragers): had iedereen werk, dan droeg niemand
-  meer, en bleef een volle stapel liggen. Open: is één stuk per keer genoeg in de oogst (`opmerkingen.md`)? De figuren met een plank, een stam, een steen en de
-  schop, en de kleinere kar bij de schuur, komen met de art.
-- **Het demojaar spelen** met de speellijst (`speelbaar.md`, "De speellijst van het demojaar"); wat scheef zit, eerst
-  met een getal uit de werkbank.
+  Firefox (de meter, *drawing*) plat tegen gewoon (kan mee in de speellijst, B2). Daarna 4c, de werkplaatsen plat (eerst een proefplaat).
 - **183, de huizen op 65 procent**, in één keer bij Marcel thuis, door de pijplijn: de negen stappen bij R, 183 (de
   schakelaar `NIEUW` in `huizen.cjs`).
-- **Meten in Firefox**: ver uitgezoomd (vraag 178, bij P) en de grond op de videokaart (`snelheid.md`); kijk ook of het
-  bos er goed staat (de wind, de mist, de doorkijk, de regen en de sneeuw).
-- **d van de heuvels** (vraag 174, bij L): de heuvels altijd aan en de spelregel *Height* eruit. Daarna geldt ook het
-  egaliseren overal.
 - **De beeldpijplijn** (vraag 180): sinds 21 okt de nieuwe weg (de generator maakt de bron, wij maken het passend). Wat
   van de weg ervoor openstond (D als stijl, de vorm van de HD-kar, ERNIE als schilder): `gereedschap/ai/ai-afwerking.md`.
 - **De proefplaten**: de andere materialen (vraag 177; `beeld.md`, "De andere materialen") en het woordmerk (`beeld.md`,
   "Het woordmerk").
-- **Het Engels lezen** (`engels.md`): *the innkeeper*, *the moneylender*, *the tradesmen*, *rent*, *the ledger*,
-  *Martinmas*, *Good day*, Crookwick en Eastwold, de namen, en sinds 23 okt *carriers*, de zinnen van de overval
-  (*Robbers were seen in the woods near the village. They will come soon.*) en van de punten (*Score*, *A new best!*);
-  sinds 24 okt die van de scenario's (*Goal*, *New goal: …*, *Goal reached: …*, *Goal failed: …*, *Victory*, *Defeat*)
-  en van de campagne (*Campaign*, *Chapter 1: The first year*, *Complete*, *Finish chapter 1 first.*, *Chapter complete:
-  …*, *The next chapter is open: …*, *Chapter failed: … You can play it again from the campaign.*).
 - De spullen bij de huizen (vraag 148, d), de ronde van alle huizen (vraag 144), en het geluid (vraag 145, 2: de sleutel
   `FREESOUND_KEY` en de domeinen van Freesound erbij).
 
