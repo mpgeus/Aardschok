@@ -314,7 +314,7 @@ test('schild en harnas vangen een deel van elke klap af, maar niets van een bout
   assert.ok(B.harnas < B.zwaarharnas && B.zwaarharnas < B.ijzerharnas, 'leer, zwaar leer, ijzer');
   assert.equal(T.vangtAf(wie('zwaardvechter'), null), B.schild + B.ijzerharnas);
   assert.equal(T.vangtAf(wie('speerman'), null), B.harnas);
-  assert.equal(T.vangtAf(wie('piekenier'), null), B.harnas);
+  assert.equal(T.vangtAf(wie('piekenier'), null), B.ijzerharnas, 'ook de piekenier draagt ijzer');
   assert.equal(T.vangtAf(wie('kruisboogschutter'), null), B.zwaarharnas);
   assert.equal(T.vangtAf(wie('knotsdrager'), null), B.zwaarharnas);
   assert.equal(T.vangtAf(wie('boogschutter'), null), 0);

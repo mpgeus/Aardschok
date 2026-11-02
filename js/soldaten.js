@@ -5,9 +5,10 @@
 // Soldaat word je in het wachthuis (A1): op zijn briefje zet je per soort hoeveel soldaten je wilt, samen hooguit
 // `plaatsen`. Elke soort heeft vaste stukken (T.SOLDAAT_SOORTEN, zoals in Knights and Merchants): de militie een
 // hooivork, de speerman speer en harnas (Marcel, 21 okt: "Speer is een 2 handed weapon": geen schild, zoals de lansdrager in
-// Knights and Merchants), de piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de
-// boogschutter een boog, de kruisboogschutter kruisboog en harnas, en de ridder zwaard, schild, harnas en paard (Marcel, 1
-// nov: "Ja, hij is duur, schild, zwaard, harnas en paard"). Liggen al zijn stukken in de opslag, dan pakt wie
+// Knights and Merchants), de piekenier piek en ijzeren harnas, de zwaardvechter zwaard, schild en ijzeren harnas, de
+// knotsdrager knots en zwaar leren harnas, de boogschutter een boog, de kruisboogschutter kruisboog en zwaar leren harnas,
+// de ruiter speer en paard, en de ridder zwaard, schild, ijzeren harnas en paard (Marcel, 1 nov: "Ja, hij is duur, schild,
+// zwaard, harnas en paard"; de drie klassen harnas sinds 2 nov). Liggen al zijn stukken in de opslag, dan pakt wie
 // geen werk heeft (B1: geen werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, en niet van het
 // gezin van de aanvoerder, ze op, en is hij soldaat: hij werkt en bouwt niet meer, eet mee zoals iedereen, staat in zijn
 // dienst bij het wachthuis en slaapt daarbuiten thuis (de dag- of de nachtdienst, js/kiezen.js; vraag 170, stap 4). Zet
@@ -105,7 +106,7 @@
   T.SOLDAAT_SOORTEN = {
     militie: { stukken: ['hooivork'], naam: () => T.t('militia') },
     speerman: { stukken: ['speer', 'harnas'], naam: () => T.t('spearman') },
-    piekenier: { stukken: ['piek', 'harnas'], naam: () => T.t('pikeman') },
+    piekenier: { stukken: ['piek', 'ijzerharnas'], naam: () => T.t('pikeman') }, // ijzer sinds Marcel, 2 nov: "Ook pikeman draagt ijzer"
     zwaardvechter: { stukken: ['zwaard', 'schild', 'ijzerharnas'], naam: () => T.t('swordsman') },
     // De knotsdrager (3e; Marcel, 28 okt: "Maceman", ook in het dorp; 2 nov: "Mace en heavy leather armour"): zijn figuur
     // maakt een lokale sessie, het vel `knotsdrager` (js/sprites.js); tot dan loopt hij als dorpeling.

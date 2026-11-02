@@ -2685,12 +2685,12 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   Anselm* (`T.GENERAALS.anselm`, js/veldslag.js), en de zware mix van de AI koopt knotsdragers (js/veldheer.js).
 - **Drie klassen harnas** (2 nov; Marcel: "heavy leather armour ... Dit zijn 2 verschillende klassen", "een ijzeren harnas
   is zwaarder dan leather of heavy leather. Een knight heeft een paard, een swordsman is trager in lopen", "1. Maceman en
-  crossbowman", "1. Ja", "2. Oke"): `harnas` (leer, 1, 2 huiden, waarde 2: de speerman en de piekenier), `zwaarharnas` (zwaar
+  crossbowman", "1. Ja", "2. Oke"): `harnas` (leer, 1, 2 huiden, waarde 2: de speerman), `zwaarharnas` (zwaar
   leer, 2, 4 huiden, waarde 4, de waar `zwareharnassen`: de knotsdrager en de kruisboogschutter) en `ijzerharnas` (ijzer, 3,
-  2 ijzer, waarde 5, de waar `ijzerharnassen`: de zwaardvechter en de ridder), in `bescherming`. Wie een zwaar of ijzeren
+  2 ijzer, waarde 5, de waar `ijzerharnassen`: de zwaardvechter, de ridder en de piekenier: "Ook pikeman draagt ijzer"), in `bescherming`. Wie een zwaar of ijzeren
   harnas draagt, loopt trager (`trager`: 0,1 en 0,2; `T.harnasTempo`, in `T.snelheidVan`, js/wereld.js, ook voor een
   generaal), te paard niet. De wapenmaker maakt ze (js/gebouwen.js), en de voorraad, de balk (een icoon per harnas) en de
-  kar kennen ze. Zo kost de kruisboogschutter 8, de knotsdrager 7, de zwaardvechter 10 en de ridder 18.
+  kar kennen ze. Zo kost de kruisboogschutter 8, de knotsdrager 7, de piekenier 8, de zwaardvechter 10 en de ridder 18.
 
 - **Het leven per soort** (2 nov; Marcel: "C. Eigen hoeveelheid leven"): `SOLDATEN_INSTELLINGEN.leven`, per soort (de
   militie 12, de speerman en de piekenier 16, de zwaardvechter 18 (eerst 20, tot "1. C"), de boogschutter 12, de kruisboogschutter 14, de ruiter

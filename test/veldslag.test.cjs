@@ -352,7 +352,7 @@ test('de generaals: de held van een leger vecht met zijn wapen, en zijn kring ma
     assert.equal(agnes, A.aanvoerder);
     const p = T.bewonerVan(A, agnes);
     assert.deepEqual([p.generaal, p.wapen, p.geslacht], ['agnes', 'piekenier', 'vrouw']);
-    assert.deepEqual(T.stukkenVan(agnes), ['piek', 'harnas']);
+    assert.deepEqual(T.stukkenVan(agnes), ['piek', 'ijzerharnas']);
     assert.equal(T.slagVan(agnes).wapen, 'piek');
     assert.equal(T.manTekst(A, agnes), 'Dame Agnes · general');
     assert.ok(T.kringTekst('agnes').includes('of her'), T.kringTekst('agnes'));
