@@ -5,6 +5,33 @@ en: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een g
 die spellen doen, wat een goede loop gemeen heeft, en wat dat voor ons betekent. Bovenaan staat wat besloten is, onderaan
 wat open is.
 
+## 2 nov: te weinig speelbasis (Marcel)
+
+Marcel, 2 nov: "We missen nog wat gameplay heb ik het idee. Er ligt nog te weinig speel basis als het ware."
+
+**Waar het gat nu zit** (Claude, 2 nov), langs de drie lagen van 11 okt (hieronder, "Wat het voor ons betekent"):
+- **De handeling** (minuten): je bouwt (het bouwmenu, wegen) en stuurt je mannen. Daarna loopt de economie zelf: de
+  dragers, de kar, de boeren, de afwisseling. Na de eerste dagen zijn er weinig keuzes per minuut.
+- **De afrekening**: eens per jaar, op Sint-Maarten, met de klok vanaf 11 oogstmaand.
+- **De boog** (dreiging die groeit): in het demojaar een overval van drie rovers, en de wolven. Het vechten, waar we nu
+  het meest in staken (generaals, formaties, de schildpad, harnassen, de knots), heeft in het demojaar bijna niets te
+  doen.
+- **De kern van het gat:** de twee grote systemen raken elkaar nauwelijks. De economie heeft het leger niet nodig (een
+  overval per jaar), en het leger levert de economie niets op. Een keuze met een prijs (iets wat allebei moet, en je kunt
+  er één) is er bijna niet.
+
+**Voorstellen** (Claude, 2 nov; nog niet gekozen), elk met wat er al is:
+- **A. Een dreiging met een ritme:** de roverskampen rond het dorp (er al: c3 en c4, het hol van hoofdstuk 2) vallen aan
+  in golven die per seizoen groter worden, en een kamp dat je laat staan, groeit. Zo moet je kiezen: handen op het land
+  of in het wachthuis.
+- **B. De heer vaker:** een afrekening per seizoen in plaats van per jaar (een kleiner deel, en zijn eisen lopen op), en
+  zijn grillen met een termijn. Een klok die je elk kwartier voelt.
+- **C. Vechten levert de economie iets op:** een kamp uitroken geeft buit (er al: de buit van een kamp, c4), en wat
+  buiten je bereik ligt (ijzer, steen, goede grond) win je met je mannen, of je koopt het duur van de marskramer. Dat is
+  de loop van 11 okt ("wat je wint, land, erts, een dorp, maakt de economie groter"), die nog niet gebouwd is.
+- **D. Een doel per seizoen:** met de motor van de scenario's (er al: doelen, triggers) een paar doelen die richting
+  geven ("Hold the ford before summer", "Twenty soldiers by Martinmas"), met een beloning of een straf.
+
 ## Bijgesteld op 15 okt: van bovenaf als een god, en vechten in real time (Marcel; werklijst vraag 170)
 
 **Marcel, 15 okt: "de schout verdwijnt. Hij of zij is de embodiment van de speler, en kan meevechten en leeft in het
