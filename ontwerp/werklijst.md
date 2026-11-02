@@ -112,7 +112,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    zwaardvechter 18 leven, en flankeren met de ruiters gaat naar 3f. **Wacht op Marcel** (`opmerkingen.md`, "Na de
    missers"): de zware mix won nog 85 %, door het schild; Marcel: "Ja, schild 1": een schild vangt 1 af in plaats van 2,
    en de drie gewone mixen staan onderling bijna gelijk. Daarna 3e (de knotsdrager, met Anselm) en 3f, met het flankeren
-   van de ruiters.
+   van de ruiters. Het figuur van de knotsdrager maakt een lokale sessie (Marcel, 2 nov: "Ik heb de gfx voor de Maceman
+   aan een lokale sessie gegeven"); het spel zoekt het vel op de naam van de soort, dus het vel heet `knotsdrager`, met de
+   houdingen van de anderen (staan, lopen, aanval, geraakt, sterven), zoals `piekenier`.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
