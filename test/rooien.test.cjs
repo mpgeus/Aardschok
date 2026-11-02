@@ -182,9 +182,9 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
       const hut2 = hutMetAlles(S2);
       const plan = T.groeiRooiPlan(D2, hut2);
       const oud = hut2.voet || T.gebouwVoet(hut2.soort, hut2.tekening);
-      const x = hut2.x + 1;
-      const y = hut2.y + oud.h; // net onder de hut, in elke grotere vorm
-      assert.ok(y < plan.y + plan.h);
+      const x = hut2.x + oud.b; // net rechts van de hut, in elke grotere vorm
+      const y = hut2.y + 2;
+      assert.ok(x < plan.x + plan.b && y < plan.y + plan.h);
       zetNatuur(D2.wereld, 'rots', x, y);
       assert.equal(T.groeiRooiPlan(D2, hut2), null, 'een rots rooit niemand');
       let dag2 = morgen(S2);
@@ -284,12 +284,11 @@ test('a2: de eigen appelboom gaat alleen om als geen vorm zonder hem kan (Marcel
     const D = S.dorp;
     const w = S.wereld;
     // De vormen van het huis liggen in de stijl van het proefdorp in elkaar (7 bij 5, 8 bij 6, 9 bij 8): dan is er nooit een
-    // vorm zonder de appelboom naast een met. Daarom krijgt deze hut een losse tekening van een hut zonder stijl (zes bij
-    // vier, zoals de zijne), met als huis vormen die elkaar niet bevatten: 7 bij 5 (rechts), 5 bij 7 (onder) en groter.
+    // vorm zonder de appelboom naast een met. Daarom krijgt deze hut (6 bij 6) een losse tekening van een hut zonder stijl,
+    // met als huis vormen die elkaar niet bevatten: 7 bij 5 (rechts), 5 bij 7 (onder) en groter.
     const hut = D.gebouwen.find((g) => g.soort === 'hut' && D.bewoners.mensen.some((p) => p.huis === g));
     assert.ok(hut, 'een bewoonde hut');
     hut.tekening = 'huizen/hut3';
-    assert.deepEqual(hut.voet, T.gebouwVoet('hut', 'huizen/hut3'), 'dezelfde voet');
     const zet = (soort, dx, dy) => zetNatuur(w, soort, hut.x + dx, hut.y + dy);
     zet('appelboom', 6, 2); // rechts: één appelboom
     zet('struik', 1, 6); // onder: twee struiken

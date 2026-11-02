@@ -122,13 +122,11 @@
   T.GEBOUWEN = {
     // ── Gehucht ──
     hut: {
-      naam: T.t('hut'), meervoud: T.t('huts'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
+      naam: T.t('hut'), meervoud: T.t('huts'), trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, menu: true, woning: true,
-      tekening: 'huizen/hut1', beschrijving: T.t('room for a family; cheap, and poor to look at'), // geen tekst
-      // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
-      // huizenbouwer, gereedschap/pixelart/huizen.cjs), zodat een rij hutten niet uit één stempel komt
-      // (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten").
-      tekeningen: ['huizen/hut1', 'huizen/hut2', 'huizen/hut3', 'huizen/hut4'], // geen tekst
+      // Sinds 2 nov het rieten huis van Marcels plaat (Marcel: "Een hut"; tegels/platen.js), behalve in de plankenstijl: die
+      // bouwt haar hele gehucht onder spanen, en houdt haar eigen hutten (js/bouwstijl.js).
+      tekening: 'platen/huis-riet-z', beschrijving: T.t('room for a family; cheap, and poor to look at'), // geen tekst
       opmerking: '',
     },
     huis: {

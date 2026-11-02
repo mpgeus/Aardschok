@@ -263,7 +263,12 @@ test('een huis groeit niet over iemand heen die ervoor staat: dan morgen weer', 
   const D = dorp().dorp;
   const hut = eenHut(D);
   at(D, 3);
-  // Wie in de hut woont, staat bij het begin voor zijn deur, buiten, en het huis zou over die tegels heen groeien.
+  // Wie in de hut woont, staat buiten, rechts en onder de hut: elke vorm van het huis groeit over een van die twee heen
+  // (tot 2 nov stond hij voor zijn deur, maar een hut van 6 bij 6 is dieper dan een huis van 7 bij 5).
+  mensenIn(D, hut).filter((p) => p.wezen).forEach((p, i) => {
+    const [x, y] = i % 2 ? [hut.x + 1, hut.y + hut.voet.h] : [hut.x + hut.voet.b, hut.y + 1];
+    Object.assign(p.wezen, { binnen: false, x, y, tx: x, ty: y, pad: [], onderweg: false });
+  });
   const dag = dagen(D, ZOMERDAG, T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 3);
   assert.equal(hut.soort, 'hut', 'niet over iemand heen (vraag 88)');
   binnen(D, hut);

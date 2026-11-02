@@ -1,4 +1,4 @@
-# Marcels gebouwplaten naar het spel (Marcel, 1 nov: "Wat gebouwen"; docs/art/hunyuan/PLAAT-EISEN.md). Een gebouw staat vast, en het schuine aanzicht heeft al de camera van het spel, dus het hoeft niet door TripoSplat: los van het grijs, op de maat van de voet, met de deur naar vier kanten (schuin van voren en van achteren, en die gespiegeld) en vijf bouwfasen. Schrijft tegels/platen/, tegels/platen-fasen/ en tegels/platen.js.
+# Marcels gebouwplaten naar het spel (Marcel, 1 nov: "Wat gebouwen"; docs/art/hunyuan/PLAAT-EISEN.md). Een gebouw staat vast, en het schuine aanzicht heeft al de camera van het spel, dus het hoeft niet door TripoSplat: los van het grijs, op de maat van de voet, met de deur naar vier kanten (schuin van voren en van achteren, en die gespiegeld) en vijf bouwfasen, uit een eigen plaat zodra die er is. Schrijft tegels/platen/, tegels/platen-fasen/ en tegels/platen.js.
 #
 #   python gebouw_vel.py [plaat=<map voor de controleplaat>]
 import json
@@ -17,17 +17,23 @@ UIT_FASEN = R + 'tegels/platen-fasen/'
 TEGEL_B, TEGEL_H = 64, 32
 ANKER_ONDER = TEGEL_H // 2  # het anker van een tekening is het midden van zijn achterste tegel (T.naarScherm), een halve tegel onder de bovenste hoek van de voet
 ALLE_STIJLEN = ['wit', 'oker', 'planken', 'roze']
-# Per gebouw: de soort, de voet in tegels, of de deur in ZW links staat (anders spiegelen we), de bovenkant van de schoorsteen waar de rook van de plaat begint (in de plaat, per aanzicht), en waar het spel zijn eigen rook laat beginnen. `vervangt`: dit wordt de tekening van die soort; zonder is het een vorm erbij, alleen onder dat dak. `wacht`: nog niet in het spel (het rieten huis: Marcel kiest nog waarvoor het is; als vorm van `huis` veranderde het rooien, test/rooien.test.cjs).
+# Per gebouw: de soort, de voet in tegels, of de deur in ZW links staat (anders spiegelen we), de bovenkant van de schoorsteen waar de rook van de plaat begint (in de plaat, per aanzicht), en waar het spel zijn eigen rook laat beginnen. `vervangt`: dit wordt de tekening van die soort; zonder is het een vorm erbij, alleen onder dat dak. Het rieten huis is de hut (Marcel, 2 nov: "Een hut"); de plankenstijl houdt haar eigen hutten, want die bouwt haar hele gehucht onder spanen (T.bouwstijlen, js/bouwstijl.js).
 GEBOUWEN = {
     'burcht': {'soort': 'raadhuis', 'n': 7, 'links': True, 'vervangt': True},
     'bakkerij': {'soort': 'bakkerij', 'n': 7, 'links': True, 'vervangt': True, 'top': {'ZW': 237, 'NW': 243}, 'rook': {'ZW': (445, 240), 'NW': (925, 246)}},
     'molen': {'soort': 'molen', 'n': 6, 'links': True, 'vervangt': True},
     'stal': {'soort': 'stal', 'n': 6, 'links': False, 'vervangt': True},
-    'huis-riet': {'wacht': True, 'soort': 'huis', 'vorm': 'huisriet', 'dak': 'riet', 'stijlen': ['wit', 'oker', 'roze'], 'n': 6, 'links': True, 'top': {'ZW': 247, 'NW': 246}, 'rook': {'ZW': (435, 250), 'NW': (925, 249)}},
+    'huis-riet': {'soort': 'hut', 'vorm': 'hutriet', 'dak': 'riet', 'stijlen': ['wit', 'oker', 'roze'], 'n': 6, 'links': True, 'vervangt': True, 'top':{'ZW': 247, 'NW': 246}, 'rook': {'ZW': (435, 250), 'NW': (925, 249)}, 'zonder-voet': {'top': {'ZW': 232, 'NW': 239}, 'rook': {'ZW': (424, 243), 'NW': (920, 248)}}},
 }
+# Marcel, 2 nov: "Ik laat de ronde voeten om de gebouwen verwijderen". De plaat met gras blijft de maat (daaraan meten we de voet), de plaat <naam>-zonder-voet.png geeft het beeld; dus dezelfde plaat met het gebouw op dezelfde plek.
+ZONDER_VOET = '-zonder-voet'
+SCHADUW_KLEUR, SCHADUW_STERK = 10, 1.5  # de schaduw op zo'n plaat: hoe weinig kleur (steen is warmer), en hoeveel sterker dan op het grijs
 # het zoekvak van een aanzicht op de plaat: de echte rand is de kolom met de minste figuur daar vlakbij
 VAK = {'ZW': (262, 526), 'NW': (748, 998)}
-# De bouwfasen: hoe hoog de muren al staan, als deel van de hoogte van het gebouw. De eerste is de fundering.
+# De bouwfasen van een eigen plaat, docs/art/referentie/aardschok-gebouw-<naam>-fasen-zw.png en -nw.png (prompt-bouwfasen.txt): vijf stadia op een rij.
+FASE_NAMEN = ('terrein', 'fundering', 'skelet', 'muren', 'dak')
+GAT_VERSCHIL, GAT_KLEUR, GAT_MIN = 24, 8, 12  # het grijs tussen de balken: hoe ver van de achtergrond, hoe weinig kleur, en hoeveel pixels bij elkaar
+# De noodoplossing zolang een gebouw die plaat niet heeft: hoe hoog de muren al staan, als deel van de hoogte van het gebouw. De eerste is de fundering.
 FASEN = (('fundering', 0.0), ('muren', 0.2), ('muren', 0.42), ('steigers', 0.64), ('half-gedekt', 0.86))
 WANDEN_BINNEN = 0.74  # de muren staan zoveel van de rand van de voet, gerekend vanuit het midden
 HOUT = (112, 78, 46)
@@ -73,25 +79,44 @@ def groter(rgba, s):
     return uit
 
 
-def aanzicht(naam, g, zicht):
-    """Eén aanzicht van de plaat, op de maat van de voet: het beeld, de plek van de bovenste hoek van de voet, en de schoorsteen ten opzichte van die hoek."""
-    im = np.asarray(Image.open(f'{PLAAT}{naam}-draai.png').convert('RGB'))
-    bg = np.median(im[:20].reshape(-1, 3), axis=0)
-    f_ = (np.abs(im.astype(float) - bg).sum(2) > 60) & ((im.max(2).astype(int) - im.min(2)) > 22)
-    v0, v1 = VAK[zicht]
-    prof = ni.uniform_filter1d(f_.sum(0).astype(float), 3)
-    vak = (v0 - 12 + int(np.argmin(prof[v0 - 12:v0 + 20])), v1 - 20 + int(np.argmin(prof[v1 - 20:v1 + 12])))
-    y_onder = int(np.nonzero(f_[:, vak[0]:vak[1]].sum(1) > 2)[0].max())
-    a, alfa = los(im, vak, y_onder + 12)
-    if zicht in g.get('top', {}):
-        alfa[:g['top'][zicht]] = 0
-    # de schijf: de breedste rij op de onderste helft
+def grasvoet(alfa, y_onder):
+    """De schijf onder het gebouw: de breedste rij op de onderste helft. Geeft zijn breedte en zijn midden."""
     hg = alfa > 0.5
     hg[: int(y_onder * 0.5)] = False
     br = [np.ptp(np.nonzero(r)[0]) if r.any() else 0 for r in hg]
     xr = np.nonzero(hg[int(np.argmax(br))])[0]
     breed = int(np.ptp(xr))
-    cx, cy = float(xr.min() + xr.max()) / 2, float(y_onder - breed / 4)
+    return breed, float(xr.min() + xr.max()) / 2, float(y_onder - breed / 4)
+
+
+def vak_op(im, zicht):
+    """Het vak van een aanzicht op de plaat, en de onderste rij van de figuur daarin."""
+    bg = np.median(im[:20].reshape(-1, 3), axis=0)
+    f_ = (np.abs(im.astype(float) - bg).sum(2) > 60) & ((im.max(2).astype(int) - im.min(2)) > 22)
+    v0, v1 = VAK[zicht]
+    prof = ni.uniform_filter1d(f_.sum(0).astype(float), 3)
+    vak = (v0 - 12 + int(np.argmin(prof[v0 - 12:v0 + 20])), v1 - 20 + int(np.argmin(prof[v1 - 20:v1 + 12])))
+    return vak, int(np.nonzero(f_[:, vak[0]:vak[1]].sum(1) > 2)[0].max())
+
+
+def aanzicht(naam, g, zicht):
+    """Eén aanzicht van de plaat, op de maat van de voet: het beeld, de plek van de bovenste hoek van de voet, en de schoorsteen ten opzichte van die hoek."""
+    im = np.asarray(Image.open(f'{PLAAT}{naam}-draai.png').convert('RGB'))
+    vak, y_onder = vak_op(im, zicht)
+    a, alfa = los(im, vak, y_onder + 12)
+    breed, cx, cy = grasvoet(alfa, y_onder)
+    zonder = f'{PLAAT}{naam}-draai{ZONDER_VOET}.png'
+    if os.path.exists(zonder):
+        im = np.asarray(Image.open(zonder).convert('RGB'))
+        vak_oud = vak
+        vak, y_onder = vak_op(im, zicht)
+        a, alfa = los(im, vak, y_onder + 12)
+        bg_z = np.median(im[:20].reshape(-1, 3), axis=0)
+        a, alfa = echte_schaduw(a, zonder_gaten(a, alfa, bg_z), bg_z)
+        cx += vak_oud[0] - vak[0]
+        g = {**g, **g.get('zonder-voet', {})}
+    if zicht in g.get('top', {}):
+        alfa[:g['top'][zicht]] = 0
     n = g['n']
     s = 2 * n * TEGEL_B / 2 / breed
     rgba = Image.fromarray(np.dstack([a, alfa * 255]).clip(0, 255).astype(np.uint8), 'RGBA')
@@ -120,8 +145,8 @@ def grond_onder(x, ax, ay, n, deel):
     return midy + (n * TEGEL_H / 2 - np.abs(x - ax) / 2) * deel
 
 
-def fasen(im, ax, ay, n):
-    """De vijf bouwfasen: de fundering op de grasvoet, en dan de muren die van onderaf oprijzen, langs de lijnen van de voet en niet recht over het beeld. Met steigers tot het dak erop ligt."""
+def fasen(im, ax, ay, n, gras=True):
+    """De vijf bouwfasen: de fundering op de grasvoet (`gras`: een gebouw zonder voet krijgt die ook hier niet), en dan de muren die van onderaf oprijzen, langs de lijnen van de voet en niet recht over het beeld. Met steigers tot het dak erop ligt."""
     w, h = im.size
     a = np.asarray(im, dtype=np.float32)
     alfa = a[:, :, 3] / 255
@@ -138,7 +163,8 @@ def fasen(im, ax, ay, n):
     bodem = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     t = ImageDraw.Draw(bodem)
     rx, ry = n * TEGEL_B / 2, n * TEGEL_H / 2
-    t.ellipse((midx - rx, midy - ry, midx + rx, midy + ry), fill=tuple(int(c) for c in grond) + (255,))
+    if gras:
+        t.ellipse((midx - rx, midy - ry, midx + rx, midy + ry), fill=tuple(int(c) for c in grond) + (255,))
     # de kuil en de stenen van de fundering
     d = WANDEN_BINNEN + 0.04
     ruit = [(midx, midy - ry * d), (midx + rx * d, midy), (midx, midy + ry * d), (midx - rx * d, midy)]
@@ -184,6 +210,74 @@ def fasen(im, ax, ay, n):
     return uit
 
 
+def zonder_gaten(a, alfa, bg):
+    """Het grijs tussen de balken hangt niet aan de rand, dus los() ziet het niet. Steen heeft ook weinig kleur, maar is lichter of donkerder."""
+    grijs = (np.abs(a - bg).sum(2) < GAT_VERSCHIL) & (a.max(2) - a.min(2) < GAT_KLEUR)
+    lab, k = ni.label(grijs)
+    tel = ni.sum(np.ones_like(lab), lab, range(1, k + 1))
+    gaten = np.isin(lab, 1 + np.nonzero(tel >= GAT_MIN)[0]) & (alfa > 0.5)
+    return alfa * (1 - np.clip(ni.gaussian_filter(ni.binary_dilation(gaten, iterations=1).astype(np.float32), 0.6) * 1.6, 0, 1))
+
+
+def echte_schaduw(a, alfa, bg):
+    """Een plaat zonder voet heeft zijn schaduw op het grijs, en die zou een grijze plaat om het gebouw worden: wat vanaf de rand kleurloos is en niet lichter dan het grijs, wordt zwart en doorzichtig, zo sterk als het op het grijs was."""
+    licht = a.mean(2)
+    b = float(bg.mean())
+    stil = ((a.max(2) - a.min(2)) < SCHADUW_KLEUR) & (licht < b + 6)
+    lab, _ = ni.label(stil)
+    rand = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+    weg = np.isin(lab, rand[rand > 0])
+    dekking = np.clip((b - licht - 3) / b * SCHADUW_STERK, 0, 0.7)
+    a = a.copy()
+    a[weg] = 0
+    return a, np.where(weg, np.where(dekking < 0.04, 0, dekking), alfa)
+
+
+def fasen_van_plaat(naam, zicht, n):
+    """De vijf stadia van een eigen plaat, op één maat, elk op zijn eigen grasvoet uitgelijnd. Geeft de fasen en de plek van de bovenste hoek van de voet, of None zonder plaat."""
+    pad = f'{PLAAT}{naam}-fasen-{zicht.lower()}.png'
+    if not os.path.exists(pad):
+        return None
+    im = np.asarray(Image.open(pad).convert('RGB'))
+    bg = np.median(im[:20].reshape(-1, 3), axis=0)
+    f_ = np.abs(im.astype(float) - bg).sum(2) > 60
+    # de cijfers staan eronder, los van de figuren
+    rijen = np.nonzero(f_.sum(1))[0]
+    y_onder = int(max(np.split(rijen, np.nonzero(np.diff(rijen) > 1)[0] + 1), key=len)[-1])
+    kol = np.nonzero(f_[:y_onder + 1].sum(0))[0]
+    stukken = [k for k in np.split(kol, np.nonzero(np.diff(kol) > 1)[0] + 1) if len(k) > 50]
+    assert len(stukken) == len(FASE_NAMEN), f'{pad}: {len(stukken)} stadia'
+    zonder = pad[:-4] + ZONDER_VOET + '.png'
+    beeld = np.asarray(Image.open(zonder).convert('RGB')) if os.path.exists(zonder) else None
+    stadia = []
+    for k in stukken:
+        vak = (int(k[0]) - 3, int(k[-1]) + 4)
+        a, alfa = los(im, vak, y_onder + 12)
+        alfa = zonder_gaten(a, alfa, bg)
+        breed, cx, cy = grasvoet(alfa, int(np.nonzero((alfa > 0.5).any(1))[0].max()))
+        if beeld is not None:
+            a, alfa = los(beeld, vak, y_onder + 12)
+            bg_z = np.median(beeld[:20].reshape(-1, 3), axis=0)
+            a, alfa = echte_schaduw(a, zonder_gaten(a, alfa, bg_z), bg_z)
+        s = n * TEGEL_B / breed
+        rgba = Image.fromarray(np.dstack([a, alfa * 255]).clip(0, 255).astype(np.uint8), 'RGBA')
+        bb = rgba.getbbox()
+        stadia.append((groter(rgba.crop(bb), s), (cx - bb[0]) * s, (cy - bb[1]) * s))
+    links, boven = max(x[1] for x in stadia), max(x[2] for x in stadia)
+    b = round(links + max(f.width - cx for f, cx, _ in stadia)) + 1
+    h = round(boven + max(f.height - cy for f, _, cy in stadia)) + 1
+    lijst = []
+    for nm, (f, cx, cy) in zip(FASE_NAMEN, stadia):
+        vel = Image.new('RGBA', (b, h), (0, 0, 0, 0))
+        vel.paste(f, (round(links - cx), round(boven - cy)))
+        lijst.append((nm, vel))
+    return lijst, round(links), round(boven - n * TEGEL_H / 2)
+
+
+def spiegel_fasen(lijst, ax, ay):
+    return [(nm, f.transpose(Image.FLIP_LEFT_RIGHT)) for nm, f in lijst], lijst[0][1].width - ax, ay
+
+
 def vel_fasen(naam_t, lijst, ax, ay, n):
     """De fasen onder elkaar op één vel, in 256 kleuren: ze duren kort, en het zijn er veel."""
     bb = [f.getbbox() for _, f in lijst]
@@ -207,8 +301,6 @@ def main():
     tegels, bouwfasen = [], {}
     controle = []
     for naam, g in GEBOUWEN.items():
-        if g.get('wacht'):
-            continue
         n = g['n']
         vz = aanzicht(naam, g, 'ZW')
         z = vz[:4] if g['links'] else spiegel(*vz[:4])
@@ -216,6 +308,11 @@ def main():
         w_ = aanzicht(naam, g, 'NW')[:4]
         nn = spiegel(*w_)
         print(naam, 'schaal', round(vz[4], 2), 'cel', z[0].size)
+        fz = fasen_van_plaat(naam, 'ZW', n)
+        if fz and not g['links']:
+            fz = spiegel_fasen(*fz)
+        fw = fasen_van_plaat(naam, 'NW', n)
+        van_plaat = {'z': fz, 'o': fz and spiegel_fasen(*fz), 'w': fw, 'n': fw and spiegel_fasen(*fw)}
         for kant, (im, ax, ay, rook), deur in (('z', z, [n // 2, n]), ('o', o, [n, n // 2]), ('n', nn, [n // 2, -1]), ('w', w_, [-1, n // 2])):
             naam_t = f'{naam}-{kant}'
             im.save(f'{UIT}{naam_t}.png', optimize=True)
@@ -229,12 +326,12 @@ def main():
             if rook:
                 t['schoorsteen'] = [round(rook[0]), round(rook[1]) - ANKER_ONDER]
             tegels.append(t)
-            fs = fasen(im, ax_, ay_, n)
-            bf = vel_fasen(naam_t, fs, ax_, ay_, n)
+            fs, fx, fy = van_plaat[kant] or (fasen(im, ax_, ay_, n, gras=not os.path.exists(f'{PLAAT}{naam}-draai{ZONDER_VOET}.png')), ax_, ay_)
+            bf = vel_fasen(naam_t, fs, fx, fy, n)
             bf['gebouw'] = g['soort']
             bouwfasen[naam_t] = bf
             if kant == 'z':
-                controle.append((naam, fs, im, ax_, ay_))
+                controle.append((n, fs, fx, fy, im, ax_, ay_))
     kop = '// Gemaakt door gereedschap/blender/stijl/proef/gebouw_vel.py, uit de platen van Marcel — niet met de hand bijwerken.\n// Een vel naast tegels.js (npm run tiled schrijft dat opnieuw): per gebouw de deur naar vier kanten, met de stijl die js/bouwstijl.js leest, en hun bouwfasen.\n'
     with open(R + 'tegels/platen.js', 'w', encoding='utf8', newline='\n') as f:
         f.write(kop + '(function (T) {\n  T.TEGELS.platen = ' + json.dumps({'tsx': None, 'ingepakt': True, 'perTekening': True, 'tiles': tegels}, ensure_ascii=False) + ';\n  Object.assign(T.BOUWFASEN.fasen, ' + json.dumps(bouwfasen, ensure_ascii=False) + ');\n})(globalThis.Spel = globalThis.Spel || {});\n')
@@ -243,9 +340,9 @@ def main():
     if 'plaat' in arg:
         vak_b, vak_h = 440, 640
         d = Image.new('RGB', (vak_b * 6, vak_h * len(controle)), (92, 130, 62))
-        for j, (nm, fs, im, ax, ay) in enumerate(controle):
-            for i, (_, f) in enumerate(fs + [('af', im)]):
-                d.paste(f, (i * vak_b + 220 - ax, j * vak_h + 520 - ay - g['n'] * TEGEL_H // 2), f)
+        for j, (n, fs, fx, fy, im, ax, ay) in enumerate(controle):
+            for i, (f, x, y) in enumerate([(f, fx, fy) for _, f in fs] + [(im, ax, ay)]):
+                d.paste(f, (i * vak_b + 220 - x, j * vak_h + 520 - y - n * TEGEL_H // 2), f)
         d.save(arg['plaat'])
 
 

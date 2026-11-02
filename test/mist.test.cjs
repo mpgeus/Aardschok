@@ -94,7 +94,7 @@ test('je bouwt alleen op land dat je kent: een gebouw en een veld', () => {
   const { D, w } = proefDorp(T);
   const { x: px, y: py } = D.plek.kamp.vuur; // het hart van het plein
   let plek = null;
-  for (let r = 3; r < 16 && !plek; r++) {
+  for (let r = 3; r < 40 && !plek; r++) {
     for (let dy = -r; dy <= r && !plek; dy++) {
       for (let dx = -r; dx <= r && !plek; dx++) if (!T.waaromPastHetNiet(D, 'hut', px + dx, py + dy)) plek = { x: px + dx, y: py + dy };
     }

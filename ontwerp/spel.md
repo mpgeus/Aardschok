@@ -2356,6 +2356,8 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
   hutten"): een gebouw krijgt een van zijn tekeningen, en nooit twee keer achter elkaar dezelfde
   (`tekeningen` in `T.GEBOUWEN`, `T.volgendeTekening`). Het spookbeeld van het bouwmenu toont het huis
   dat er echt komt, met zijn voet (sinds vraag 179 het huis zelf, en niet alleen de voet). Een hut die doorgroeit, krijgt een van de huizen.
+- **De hut is sinds 2 nov Marcels plaat van het rieten huis** (Marcel: "Een hut"; voet 6 bij 6, met een schoorsteen,
+  `tegels/platen.js`), behalve in de plankenstijl. Tot dan:
 - **De huizen komen van de huizenbouwer** (26 sep, achtste sessie; ronde 4b, `beeld.md`): vier echte
   hutten van vlechtwerk en leem onder riet (laag, zonder schoorsteen: de rook trekt door het riet),
   zes huizen van vakwerk onder riet (met een schoorsteen van leem), en vijf boerderijen (een L, een T,

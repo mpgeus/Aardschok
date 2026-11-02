@@ -11,7 +11,7 @@
     aan: true,
     // De rook: uit een huis waar iemand thuis is (T.huizenMetIemandThuis, js/zien.js), zo dik als het vuur brandt: in
     // de winter de hele dag, anders 's ochtends en 's avonds het meest, overdag weinig, 's nachts een smeulend vuurtje. Een
-    // hut heeft geen schoorsteen: daar trekt de rook dun door het riet (hut).
+    // hut stookt weinig: dunne rook (hut), uit zijn schoorsteen of, in de plankenstijl, door het dak.
     rook: { winter: 1, ochtend: 1, avond: 0.9, werk: 0.25, schaft: 0.5, nacht: 0.2, hut: 0.6 },
     // Het beeld van de rook (pixels op zoom 1): hoeveel pluimpjes, hoe hoog ze stijgen, hoe groot ze worden, hoe ver de
     // wind ze meeneemt, en hoe dicht ze zijn (0 tot 1).

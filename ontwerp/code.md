@@ -1082,7 +1082,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de huizen: het schip en de toren gepleisterd in de kalk van de stijl (wand `kalk` en `gepleisterd` in `huis-sdf.cjs`),
   de woontoren een hoog huis; de proefplaat is `huis-sdf-export.cjs groot3`. De bouwfasen kennen een gebouw uit delen
   (`fasenVanDelen` in `huizen.cjs`), maar een kapel kost zo'n kwartier per stand: render ze in delen van acht à zestien.
-- **De platen van Marcel** (1 nov): `tegels/platen.js`, uit `gereedschap/blender/stijl/proef/gebouw_vel.py`, zet een vel naast
+- **De platen van Marcel** (1 nov; sinds 2 nov ook de hut, in wit, oker en roze: `stijlen` in de tabel): `tegels/platen.js`, uit `gereedschap/blender/stijl/proef/gebouw_vel.py`, zet een vel naast
   `tegels.js` (`T.TEGELS.platen`, `perTekening`), met de tekeningen in `tegels/platen/` en hun bouwfasen in
   `tegels/platen-fasen/` (een eigen map, want `bouwfasen.cjs` maakt `tegels/bouwfasen/` eerst leeg). `index()` leest beide
   vellen. Wat `stijl.vervangt` heeft, komt in elke stijl in de plaats van wat die soort had; wat vervangen is, houdt zijn

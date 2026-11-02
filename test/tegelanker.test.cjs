@@ -115,9 +115,11 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
       const links = naarTegelDelta(rij.links - anker[0], rij.y - anker[1]);
       const rechts = naarTegelDelta(rij.rechts - anker[0], rij.y - anker[1]);
       // De platen van Marcel staan op een ronde grasvoet: die is onderaan plat en raakt de ruit alleen in de hoek, dus daar
-      // telt het midden van de rij.
+      // telt het midden van de rij. Zonder voet (de hut) is de onderste rij de stoep met zijn schaduw, die niet recht onder
+      // het midden ligt en een paar pixels buiten de ruit valt; een anker op het midden van de voet scheelt 3 tegels.
       const midden = naarTegelDelta((rij.links + rij.rechts) / 2 - anker[0], rij.y - anker[1]);
       const punten = velNaam === 'platen' ? [['midden', midden]] : [['links', links], ['rechts', rechts]];
+      const speling = velNaam === 'platen' ? 1.5 : SPELING;
       // De voorste hoek van de voet (de tegel is de achterste hoek, "beslaat" telt vanaf daar naar
       // rechtsonder, zie js/kaart.js): in tegel-eenheden t.o.v. de aangeklikte tegel zelf.
       const voorTx = bw - 1;
@@ -128,7 +130,7 @@ for (const [velNaam, vel] of Object.entries(T.TEGELS)) {
       // toren haalt zijn eigen hoeken toch nooit, dat zegt niets over het anker.)
       for (const [naam, p] of punten) {
         assert.ok(
-          p.tx <= voorTx + SPELING && p.ty <= voorTy + SPELING,
+          p.tx <= voorTx + speling && p.ty <= voorTy + speling,
           `${velNaam}/${t.naam}: de onderste rij (${naam}) staat bij tegel (${p.tx.toFixed(2)}, ${p.ty.toFixed(2)}) — `
             + `dat is voorbij de voet van ${bw}×${bd} (tot (${voorTx}, ${voorTy})), het plaatje steekt over de rand van zijn voet heen — `
             + 'alsof het anker dichter naar het midden van de voet is verschoven dan naar de achterste hoek',

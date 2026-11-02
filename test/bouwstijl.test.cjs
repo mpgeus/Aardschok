@@ -91,7 +91,9 @@ test('elke stijl heeft zijn eigen huizen en boerderijen; oker en roze nemen de h
 test('wie doorgroeit, krijgt de stijl van zijn dorp, ook vanuit een gedeelde hut van wit', () => {
   const D = { ...leeg(), wereld: { ...leeg().wereld, stijl: 'oker' }, trede: 'dorp' };
   // een hut van wit in een dorp van oker wordt geen wit huis: de vorm zoekt het dorp in zijn eigen stijl
-  assert.equal(T.zoalsNu(D, 'huizen/wit-hut1-riet-z', 'hut'), 'huizen/wit-hut1-riet-z');
+  assert.equal(T.zoalsNu(D, 'platen/huis-riet-z', 'hut'), 'platen/huis-riet-z');
+  assert.ok(T.andereVormen(D, 'platen/huis-riet-o', 'huis').every((n) => n.startsWith('huizen/oker-huis') && n.endsWith('-o')));
+  // ook een hut die er al stond, van voor de plaat
   assert.ok(T.andereVormen(D, 'huizen/wit-hut1-riet-o', 'huis').every((n) => n.startsWith('huizen/oker-huis') && n.endsWith('-o')));
   assert.equal(T.zoalsNu(D, 'huizen/oker-huis2-riet-n', 'stenenHuis'), 'huizen/oker-steen2-leien-n');
 });
@@ -112,12 +114,13 @@ test('een huis kan ook vóór het plein staan, met zijn deur ernaartoe (vraag 11
 test('het dak van de trede: riet in het gehucht, leien in een dorp, pannen met marktrecht; een hut houdt riet', () => {
   const D = leeg();
   const daken = (soort) => T.stijlTekeningen(D, soort).map(dakVan);
-  assert.deepEqual([...new Set(daken('hut'))], ['riet']);
+  // de hut is de plaat van het rieten huis (tegels/platen.js), in elke trede
+  assert.deepEqual(T.stijlTekeningen(D, 'hut'), ['platen/huis-riet-z']);
   assert.deepEqual([...new Set(daken('huis'))], ['riet']);
   assert.deepEqual([...new Set(daken('boerderij'))], ['riet']);
   assert.deepEqual([...new Set(daken('stenenHuis'))], ['leien'], 'een stenen huis ligt nooit onder riet');
   D.trede = 'dorp';
-  assert.deepEqual([...new Set(daken('hut'))], ['riet']);
+  assert.deepEqual(T.stijlTekeningen(D, 'hut'), ['platen/huis-riet-z']);
   assert.deepEqual([...new Set(daken('huis'))], ['leien']);
   assert.deepEqual([...new Set(daken('stenenHuis'))], ['leien']);
   assert.equal(dakVan(T.volgendeTekening(D, 'huis')), 'leien', 'de volgende tekening volgt de trede');

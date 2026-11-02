@@ -716,6 +716,9 @@ test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee p
   // Elk groepje drie herten: na een hert per groepje is er geen meer dat hij mag nemen. Vanaf hooimaand, na de jongen
   // van dit jaar (bloeimaand): in een jaar groeit het bos aan met meer herten dan één jager schiet.
   for (const { G, leden } of T.beestenOp(D.wereld)) if (G.soort === 'hert') leden.slice(J.laatStaan + 1).forEach((e) => (D.wereld.wezens = D.wereld.wezens.filter((x) => x !== e)));
+  // Twee groepjes in zijn bereik: hoeveel het er zijn, hangt aan waar zijn huis uitkomt (met de hutten van 6 bij 6 waren het
+  // er drie), en meer dan twee haalt hij niet voor de jongen van volgend jaar.
+  for (const { leden } of binnenBereik(D, g).filter(({ G }) => G.soort === 'hert').slice(2)) D.wereld.wezens = D.wereld.wezens.filter((x) => !leden.includes(x));
   const herten = binnenBereik(D, g).filter(({ G, leden }) => G.soort === 'hert' && leden.length > J.laatStaan);
   assert.ok(herten.length, 'er zijn herten in zijn bereik');
   const voor = new Map(herten.map(({ G, leden }) => [G, leden.length]));
@@ -892,7 +895,8 @@ test('komt er een buur, dan vluchten de wolven; komt de aanvoerder, dan vecht de
   {
     const { S, D, G, e } = aanval();
     S.dorp.aanvoerder.binnen = false;
-    zetBij(D.wereld, S.dorp.aanvoerder, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.man, y: e.ty });
+    // Vlak bij hem: op hulp.man tegels afstand kan een huis staan, en dan kwam hij verderop terecht.
+    zetBij(D.wereld, S.dorp.aanvoerder, T.tegelVan(e));
     uren(S, 0.05);
     assert.equal(G.vecht, true, 'de roedel vecht (js/gevecht.js)');
     assert.equal(G.aanval, null);

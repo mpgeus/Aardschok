@@ -72,13 +72,14 @@ test('wat je bouwt, is jong en na twee jaar oud', () => {
   const S = gehucht(dag);
   const D = S.dorp;
   const huizen = D.gebouwen.filter((g) => g.voorwerp && g.voorwerp.vel === 'huizen');
-  assert.ok(huizen.length >= 3, 'het raadhuis, twee boerderijen en hutten');
+  assert.ok(huizen.length >= 2, 'twee boerderijen (het town hall en de hut zijn platen, en die verweren nog niet)');
   for (const g of huizen) assert.ok(!T.isOudHuis(g.voorwerp), `${g.tekening} is al oud`);
   // de tekening van het gebouw blijft de jonge: de stijl, de deur en het doorgroeien merken niets
   for (const g of huizen) assert.ok(!g.tekening.endsWith(HZ.OUD));
 
   T.zetVoorraad(D, 'hout', 200);
-  // de eerste plek waar een hut past (een bouwplaats: de mensen bouwen zelf, dus hier maken we hem meteen af)
+  T.zetVoorraad(D, 'goud', 200);
+  // de eerste plek waar een huis past (een bouwplaats: de mensen bouwen zelf, dus hier maken we hem meteen af)
   let r = null;
   const w = D.wereld;
   const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
@@ -86,19 +87,19 @@ test('wat je bouwt, is jong en na twee jaar oud', () => {
   try {
     const K = T.kaartVak(w);
     for (let y = K.y + 4; y < K.y + K.h - 4 && !(r && r.gelukt); y += 2) {
-      for (let x = K.x + 4; x < K.x + K.b - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
+      for (let x = K.x + 4; x < K.x + K.b - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'huis', x, y);
     }
   } finally {
     T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
   }
   assert.ok(r.gelukt, r.reden);
-  const hut = D.gebouwen[D.gebouwen.length - 1];
+  const huis = D.gebouwen[D.gebouwen.length - 1];
   const d = dag;
-  bouwAf(T, D, hut, d);
+  bouwAf(T, D, huis, d);
   dagen(T, S, d);
-  assert.ok(hut.klaar, 'vannacht komt hij klaar');
-  const v = hut.voorwerp;
-  assert.ok(!T.isOudHuis(v), 'een nieuwe hut is jong');
+  assert.ok(huis.klaar, 'vannacht komt hij klaar');
+  const v = huis.voorwerp;
+  assert.ok(!T.isOudHuis(v), 'een nieuw huis is jong');
   assert.equal(v.gebouwdOp, d);
   T.tikGebouwenDag(D, d + T.GEBOUWEN_INSTELLINGEN.oudNaDagen - 1);
   assert.ok(!T.isOudHuis(v), 'nog geen twee jaar');

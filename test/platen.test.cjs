@@ -12,7 +12,7 @@ const tegels = T.TEGELS.platen.tiles;
 const land = (stijl, trede = 'gehucht') => ({ trede, gebouwen: [], wereld: { stijl } });
 
 test('elke tekening heeft zijn bestand, vijf bouwfasen, en een deur vlak buiten zijn voet aan de goede kant', () => {
-  assert.equal(tegels.length, 16);
+  assert.equal(tegels.length, 20);
   for (const t of tegels) {
     assert.ok(fs.existsSync(path.join(WORTEL, t.bestand)), t.bestand);
     const f = T.BOUWFASEN.fasen[t.naam];
@@ -42,9 +42,32 @@ test('de burcht is het town hall, en de bakkerij, de molen en de stal hun eigen 
   }
 });
 
-test('een town hall dat al stond, houdt zijn tekening', () => {
+test('het rieten huis is de hut (Marcel, 2 nov: "Een hut"), behalve in de plankenstijl, die haar gehucht onder spanen bouwt', () => {
+  for (const stijl of ['wit', 'oker', 'roze']) {
+    for (const trede of ['gehucht', 'dorp']) assert.deepEqual(T.stijlTekeningen(land(stijl, trede), 'hut'), ['platen/huis-riet-z'], `${stijl} ${trede}`);
+  }
+  for (const kant of T.DEURKANTEN) assert.equal(T.metDeurNaar('platen/huis-riet-z', kant), `platen/huis-riet-${kant}`);
+  assert.equal(T.GEBOUWEN.hut.tekening, 'platen/huis-riet-z', 'ook in een land zonder stijl');
+  assert.deepEqual(T.gebouwVoet('hut', 'platen/huis-riet-z'), T.GEBOUWEN.hut.voet);
+  // de plankenstijl: haar hutten zeggen welk dak haar huizen in een gehucht krijgen (js/bouwstijl.js, gehuchtDak)
+  assert.ok(T.stijlTekeningen(land('planken'), 'hut').every((n) => n.startsWith('huizen/planken-') && n.includes('-spanen-')));
+  assert.ok(T.stijlTekeningen(land('planken'), 'huis').every((n) => n.includes('-spanen-')));
+});
+
+test('een hut van de plaat groeit door tot een huis van zijn stijl', () => {
+  const D = land('wit');
+  assert.equal(T.zoalsNu(D, 'platen/huis-riet-z', 'huis'), null, 'hij heeft geen broertje');
+  const vormen = T.andereVormen(D, 'platen/huis-riet-o', 'huis');
+  assert.ok(vormen.length, 'wel andere vormen');
+  assert.ok(vormen.every((n) => n.startsWith('huizen/wit-huis') && T.deurKantVan(n) === 'o'), vormen.join(', '));
+});
+
+test('een town hall en een hut die al stonden, houden hun tekening', () => {
   const oud = 'huizen/wit-raadhuis-riet-z';
   assert.equal(T.vormVan(oud), 'raadhuis');
   assert.equal(T.deurKantVan(oud), 'z');
   assert.equal(T.metDeurNaar(oud, 'o'), oud, 'hij draait niet meer: die soort heeft nu de plaat');
+  const hut = 'huizen/wit-hut1-riet-z';
+  assert.equal(T.deurKantVan(hut), 'z');
+  assert.equal(T.metDeurNaar(hut, 'o'), hut);
 });
