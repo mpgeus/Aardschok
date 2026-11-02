@@ -122,8 +122,9 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   (meer dan twee rijen) staat bij het begin niet helemaal in de kring: bij 40 punten staat er hooguit één man buiten.
 
 - **Een tactiek tegen de pijlen: de schildpad** (Marcel, 2 nov: "misschien kunnen de swordsmen hun schilden gebruiken als
-  turtle tegen een regen van pijlen", en "we zullen toch een tactiek moeten hebben om de pijlen te overbruggen"). Nog
-  niet gekozen; iets nieuws, dus eerst Marcel. **Wat de regels nu zeggen** (`T.vangtAf`, js/soldaten.js): een pijl doet 2
+  turtle tegen een regen van pijlen", en "we zullen toch een tactiek moeten hebben om de pijlen te overbruggen").
+  **Gekozen** (Marcel, 2 nov: "1 allebei, 2 eerst afwachten"): de schildpad en de lichte ruiter allebei, en de
+  boogschutter niet duurder tot we zien wat ze doen; het plan volgt (werklijst, bij 1). **Wat de regels nu zeggen** (`T.vangtAf`, js/soldaten.js): een pijl doet 2
   tot 4, en een zwaardvechter vangt er 3 af (schild 2, harnas 1), dus een pijl doet hem 0, 0 of 1: hij is al bijna
   onkwetsbaar voor bogen (de ridder ook). Een speerman en een piekenier vangen 1 af (een pijl doet 1 tot 3), een
   boogschutter niets; een bout gaat door alles heen. De mix *schutters* wint dus niet omdat pijlen door schilden gaan,
@@ -138,7 +139,7 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   door het bos (achter een boom raakt een pijl niet), de ridder (1,6 maal zo snel), je eigen schutters op hun schutters,
   en de boogschutter duurder.
   **Een lichte ruiter** (Marcel, 2 nov: "eventueel een vlotte soldaat te paard naast de knight. een lichtere variant
-  dus"): de klassieke tegenzet tegen schutters, snel over het open veld en hen in de flank. Nog niet gekozen. **Wat de
+  dus"): de klassieke tegenzet tegen schutters, snel over het open veld en hen in de flank. Gekozen, met de schildpad. **Wat de
   regels nu zeggen:** de prijs is de waarde van de stukken, en een paard is 8 waard (een speer 2, een zwaard 3, een
   schild 2, een harnas 2, een boog 2): de ridder kost 15, een ruiter met alleen een speer en een paard zou 10 kosten, vijf
   boogschutters. En wie een paard heeft, krijgt nu altijd wat de ridder krijgt (`T.opPaard`: twee keer zijn leven en 1,6
