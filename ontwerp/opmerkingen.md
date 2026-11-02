@@ -173,8 +173,13 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
 - **Na A, B en C** (2 nov; `scenario.md`, 7): de schutters zijn niet meer te sterk (de proefbank: *schutters* 55 %). Twee
   dingen voor Marcel: (1) **De schildpad kost nu meer dan hij geeft**, zoals de AI hem gebruikt: een gemengd leger wint
   16 van 20 aanvallen op een linie schutters zonder schildpad en 11 met; 4 zwaardvechters en 4 speermannen 20 tegen 17; 5
-  zwaardvechters tegen 18 boogschutters 13 en 13. Een pijl doet nu weinig meer, en de schildpad loopt half zo snel en
-  slaat niet (ook de eigen schutters erin niet). Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  zwaardvechters tegen 18 boogschutters 13 en 13. **Waarom** (Marcel: "Waarom kost die meer dan het oplevert? Pijlen
+  doen minder schade in schildpad formatie"; gemeten met het gemengde leger, 20 slagen): de bescherming werkt, maar de AI
+  vormt de schildpad pas als hij schutters ziet (zo'n 8 tegels), als de speermannen van de vijand al op hem af komen; hij
+  staat zo'n 1 seconde per slag. Van de pijlschade aan de aanvaller (zo'n 100 per slag) valt maar 6 vóór het eerste
+  gevecht van dichtbij: de rest schieten de schutters in het gevecht, als de schildpad al open is. En bij het opengaan rent
+  elk naar zijn eigen dichtste vijand: de troep komt man voor man aan (van dichtbij 26 schade in plaats van 19). Met
+  `traag` 0,75 (Marcel: "Snelheid mag 0.75") hetzelfde: 11 van 20. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

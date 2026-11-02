@@ -42,8 +42,8 @@
     groep: 12,
     // De schildpad ("De schildpad", hieronder): wie gedekt is, vangt `pijl` meer af van een pijl; de troep loopt `traag`
     // maal zo snel; komt een vijand binnen `open` tegels, dan gaat hij open, en `stormloop` seconden stormen ze eruit,
-    // `storm` maal zo snel.
-    schildpad: { pijl: 2, traag: 0.5, open: 3, stormloop: 2, storm: 1.5 },
+    // `storm` maal zo snel. `traag` was 0,5 tot Marcel (2 nov): "Snelheid mag 0.75".
+    schildpad: { pijl: 2, traag: 0.75, open: 3, stormloop: 2, storm: 1.5 },
   };
   const IN = () => T.KIEZEN_INSTELLINGEN;
 

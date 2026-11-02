@@ -1234,7 +1234,7 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   tegen een regen van pijlen", en "Ja gaat open wanneer vijand in de buurt komt. Eerste 2 seconden een stormloop vanuit
   de schildpad"): alleen met een man met een schild erbij (een zwaardvechter; de ridder houdt het zijne te paard bij
   zich). Ze staan in een blok, de schilden voor en aan de randen; wie naast een schild staat, vangt van een pijl 2 meer
-  af (niet van een bout). Ze lopen half zo snel en slaan niet. Komt een vijand binnen 3 tegels, of stuur je ze op een
+  af (niet van een bout). Ze lopen op driekwart van hun pas (Marcel, 2 nov: "Snelheid mag 0.75") en slaan niet. Komt een vijand binnen 3 tegels, of stuur je ze op een
   vijand af, dan gaat de schildpad open: een *Line*, en twee seconden stormen ze anderhalf maal zo snel op de dichtste
   vijand af. Te kiezen in de werkbank ("Choosing and sending", *the turtle*).
 - **De diensten** (16 okt, stap 4; Marcel: "A1, B1, C2, D2"). Een soldaat heeft de dagdienst of de nachtdienst: de dag
