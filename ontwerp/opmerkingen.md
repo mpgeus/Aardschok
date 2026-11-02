@@ -179,7 +179,12 @@ Gemeten (1 nov, `gereedschap/schermen/gebouwenmeting.cjs`, Chromium op Marcels v
   staat zo'n 1 seconde per slag. Van de pijlschade aan de aanvaller (zo'n 100 per slag) valt maar 6 vóór het eerste
   gevecht van dichtbij: de rest schieten de schutters in het gevecht, als de schildpad al open is. En bij het opengaan rent
   elk naar zijn eigen dichtste vijand: de troep komt man voor man aan (van dichtbij 26 schade in plaats van 19). Met
-  `traag` 0,75 (Marcel: "Snelheid mag 0.75") hetzelfde: 11 van 20. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
+  `traag` 0,75 (Marcel: "Snelheid mag 0.75") hetzelfde: 11 van 20. **Gekozen** (Marcel, 2 nov): "1. B" (de stormloop als
+  troep: in een Line op de vijand die in de buurt kwam, niet elk naar zijn eigen vijand), "2. A, ze krijgen een
+  spreidingstactiek" (de ruiters van de AI rijden samen als eigen groep, gespreid), "3. Boogschutters raken niet altijd,
+  pijlen vallen naast vijanden. 30%?", en daarop: een misser valt naast zijn doel en raakt wie daar staat ("Missers raken
+  de buurman"), en de kruisboog mist 15 % ("Minder: 15 %"). Claude koos erbij: een misser raakt alleen een vijand van de
+  schutter, en het spreiden is een formatie (*Loose*) voor elke troep. Wegen: de AI gebruikt hem alleen tegen veel schutters, de schildpad
   loopt sneller (`traag` 0,75), of hij blijft alleen een tactiek voor de speler. (2) **De ruiters van de AI winnen nooit**
   (0 %): ze zijn sneller dan de rest en komen alleen aan. In een duel wint een ruiter van een boogschutter in 4
   seconden, dus het ligt aan hoe de AI ze stuurt (3f): bij de troep houden (een troep loopt op het tempo van de traagste,

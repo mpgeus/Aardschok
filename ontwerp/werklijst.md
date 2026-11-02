@@ -106,9 +106,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
    zwaardvechter deed 23 seconden over één boogschutter) en een boogschutter 16 leven is voor 2 punten. **A, B en C zijn
    af** (2 nov; Marcel: "1. A 2. Ja"; `scenario.md`, 7, met de metingen): een schutter komt niet weg van wie even snel is
    en vecht dan met een mes, schiet na het lopen pas na een seconde; een boog 3, een kruisboog 4; het leven per soort. De
-   mix *schutters* wint nog 55 %. **Wacht op Marcel** (`opmerkingen.md`, "Na A, B en C"): de schildpad kost nu meer dan
-   hij geeft, zoals de AI hem gebruikt, en de ruiters van de AI winnen nooit. Daarna 3e (de knotsdrager, met Anselm) en
-   3f.
+   mix *schutters* wint nog 55 %. **Bezig** (2 nov; Marcel: "1. B 2. A, ze krijgen een spreidingstactiek 3.
+   Boogschutters raken niet altijd", `opmerkingen.md`, "Na A, B en C"): de stormloop als troep, de ruiters van de AI als
+   gespreide groep (de formatie *Loose*), en een pijl die 30 % mist (een bout 15 %) en dan de buurman kan raken. Daarna 3e
+   (de knotsdrager, met Anselm) en 3f.
 2. **189** achteraan: paarden, bijen, het kerkhof, en belegeren met 188.
 
 Ernaast, als het past: na H4 F3, F4 en F6 (`snelheid.md`, "De tik"), en D1 of E3 en E4
