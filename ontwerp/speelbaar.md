@@ -4,6 +4,21 @@ Marcel, 26 sep: "We moeten oppassen voor functie creep. Anders blijven we toevoe
 speelbaar product komen." Dit bestand zegt wat daarvoor nog nodig is, en wat kan wachten. Bovenaan
 staat wat besloten is, daaronder het voorstel, en onderaan de speeltest die het onderbouwt.
 
+## De speeltest van 4 nov: het werk verdelen
+
+Op `claude/determined-curie-ircu5p`, dbe808c9 (het werk verdelen), tegen 53b9dd68 ervoor; de kolonist, zaad 1 tot 3, het
+jaar uit, zonder fouten in de console. De kolonist gebruikt het werkpaneel niet: elk nieuw gebouw krijgt 1 man (een
+zagerij, een smidse en een wapenmaker dus de helft van vroeger).
+
+| zaad | mensen ervoor → nu | doden ervoor → nu | wat er anders ging |
+| --- | --- | --- | --- |
+| 1 | 17 → 32 → 33 | 0 → 0 | bijna hetzelfde jaar |
+| 2 | 17 → 10 → 12 | 13 → 13 (honger), 90 dagen kou | al zo vóór het werk verdelen: het hout is in de winter op |
+| 3 | 17 → 48 → 33 | 0 → 0 | ervoor op dag 223 een wijnboerderij (de vijfde soort eten, 95 dagen); nu kwam het goud eerder en bouwde hij op dag 218 de wapenmaker |
+
+Het dorp loopt dus niet vast als niemand het werk verdeelt. Zaad 2 (honger en kou in de eerste winter) is een oud punt
+voor de balans.
+
 ## De speellijst van 2 nov: wat op Marcel wacht, naast de beelden
 
 Marcel, 2 nov: "Ja, maak die speellijst": alles wat onder "Wacht op Marcel" in de werklijst gebouwd klaarstond om te
