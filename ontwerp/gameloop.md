@@ -56,6 +56,15 @@ hout, wanneer oogsten), wordt wat jij vraagt, met een prijs: wie op het land sta
 je altijd bezig, en speelt het spel niet zonder jou (Frostpunk heeft de noodploeg, Banished de verdeling van het werk,
 Stronghold het rantsoen).
 
+**Het werk verdelen, met een indicator per grondstof** (Marcel, 4 nov): "misschien hebben we een indicator nodig van
+hoeveel er op een specifiek moment wordt geoogst. Stel je zet 10 dorpelingen op farming; dan is de opbrengst X, anders
+lager of hoger. met een maximum, maar zonder ondergrens. Dit per resource. Dus hoe meer mensen op houthakken, hoe meer je
+binnenhaalt. en andersom. Een boerderij heeft wel een max aantal mensen wat er kan werken, eigenlijk ieder gebouw."
+**Wat er nu is** (Claude, 4 nov): elk gebouw heeft een maximum aan handen (`handen` in `T.GEBOUWEN`, meestal 1 of 2: een
+houthakker 1, een boerderij 2), en de opbrengst loopt al mee met de bezetting (`g.handen / soort.handen`, js/gebouwen.js).
+Maar het dorp verdeelt de handen zelf, op de volgorde waarin je bouwde (`T.verdeelHanden`), en wie geen werk heeft, bouwt
+mee of draagt. Er is geen getal "zoveel per dag nu" per grondstof. Het plan volgt (vragen aan Marcel).
+
 ## Bijgesteld op 15 okt: van bovenaf als een god, en vechten in real time (Marcel; werklijst vraag 170)
 
 **Marcel, 15 okt: "de schout verdwijnt. Hij of zij is de embodiment van de speler, en kan meevechten en leeft in het
