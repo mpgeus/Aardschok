@@ -155,6 +155,8 @@
     },
     // Een speler is klaar met opstellen (Fight!, de voorbereiding van een veldslag, js/veldslag.js): {}.
     klaar: (S, D) => T.legerKlaar(S, D),
+    // Zoveel mensen op een soort werkplaats (het werkpaneel, js/werkpaneel.js; js/werk.js): { soort, n }.
+    inzet: (S, D, o) => T.zetInzet(D, o.gebouw, o.n), // { gebouw: soort werkplaats, n } (js/werk.js; 4 nov)
   };
 
   // Een speler geeft een opdracht (een klik, een knop). `opdracht.dorp`: het nummer van het dorp in S.dorpen (zonder: je

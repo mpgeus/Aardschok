@@ -36,6 +36,11 @@ lijst van het demojaar (hieronder) gaat dieper; deze ronde neemt alleen wat sind
 4. **Sint-Maarten en de punten** (186): D, *Time*, **To the day before Martinmas**. Betaal of weiger de heer (de scène),
    en kijk op het eindscherm naar de punten onder het jaarverslag (*Score*; de tweede keer misschien *A new best!*).
 5. **Het debugvenster:** deed elke knop die je onderweg gebruikte wat hij zegt?
+6. **Het werk verdelen** (4 nov; `gameloop.md`, "Het werk verdelen"): druk **W** of de knop *Work* naast *Build*. Een
+   rij per soort werkplaats die er staat, met − en +, *2 of 4* (wie er werkt van wie er kan) en *Makes … a day; with all
+   hands …*; bovenaan hoeveel er vrij zijn om te dragen en te bouwen. Zet een man op de houthakkers en kijk of de stapels
+   bij de deur langer blijven liggen. De wetten staan nu onder **L**. **Vraag:** voelt het als iets wat je steeds
+   bijstuurt (de herfst op de oogst, de winter op het hout), of is het een knop die je één keer zet?
 
 ### B. Drie losse proeven (182, 178, 3b2 en 3b3)
 
@@ -98,6 +103,9 @@ Elk antwoord maakt werk los (de generaals zijn op 2 nov gekozen en gebouwd):
 - **d van de heuvels** (B1): altijd aan, en *Height* eruit?
 - **Eén stuk per keer** voor een drager (A1): genoeg, of meer in de oogst?
 - **S5 of S6** (A2): nodig, of loopt het nu goed genoeg?
+- **De boerderij in het werkpaneel** (A6; `gameloop.md`, "De boerderij, nog open"): worden haar handen landarbeiders
+  (dan tot 8, en het graan hangt af van hoeveel er werken), of blijft ze zoals ze is (de boer en zijn gezin, en de
+  dagloners in de oogst)?
 
 ## De speellijst van het demojaar (werklijst Q, vraag 181, a; 20 okt)
 

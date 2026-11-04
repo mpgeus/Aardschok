@@ -763,6 +763,7 @@
     S.camera.y += (doel.y - S.camera.y) * k;
     werkHoverBij();
     T.ui.werkGebouwbriefjeBij(S); // het briefje van het gekozen gebouw (js/huisbriefje.js)
+    T.ui.werkWerkpaneelBij(S); // het werkpaneel, als het open is (js/werkpaneel.js)
     T.ui.werkMinikaartBij(S); // de minikaart in de hoek (js/balk.js)
     T.ui.werkSlagBalkBij(S); // de balk in een veldslag: je mannen, de klok en Fight! (js/balk.js)
   }
@@ -1050,7 +1051,7 @@
       ev.preventDefault();
       return;
     }
-    // O, V en W: de spelregels, de velden en de wetten (de toets staat bij het venster, js/ui.js),
+    // O, V, L en W: de spelregels, de velden, de wetten en het werk (de toets staat bij het venster, js/ui.js),
     // alleen in het nieuwe spel.
     const venster = T.NIEUWE_HUD && T.ui.vensterMetToets(ev.key);
     if (venster) {
@@ -1629,7 +1630,7 @@
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
-    // zet er eerst een, zoals het menu (W) dat doet; wat de belasting nog meeneemt, staat erbij.
+    // zet er eerst een, zoals het menu (L) dat doet; wat de belasting nog meeneemt, staat erbij.
     wetten(id, stand) {
       if (id) {
         const r = T.zetWet(S.dorp, id, stand);

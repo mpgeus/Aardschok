@@ -153,6 +153,8 @@
     },
     boerderij: {
       naam: T.t('farm'), meervoud: T.t('farms'), trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
+      // Zijn handen zijn zijn boer en diens gezin, die zijn akkers werken; in de oogst helpen de dagloners (js/veldwerk.js).
+      // Wie hier alleen werkt en er niet woont, doet op het land nog niets: daarom nog geen 8 (4 nov, de vraag aan Marcel).
       handen: 2, woonruimte: 4, maakt: null, menu: true,
       tekening: 'huizen/boerderij1', beschrijving: T.t('farmers for the fields, and a barn for the harvest'), // geen tekst
       // De vijf boerderijen van het gehucht (ronde 4b): een L, een T, twee met hun deur achter, en een
@@ -196,7 +198,7 @@
     houthakker: {
       naam: T.t('woodcutter'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt bomen in het bos (js/bos.js).
-      handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { hout: 4 } }, bos: true, menu: true, // 2 man (4 nov; was 1, met 2 hout)
       // Bij genoeg bos voor een tijd werk (werklijst vraag 129, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
       // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
       // hij na een paar maanden stil.
@@ -263,7 +265,7 @@
     //    spel.md, "Grondstoffen halen"). De houthakker staat hierboven al. ──
     steengroeve: {
       naam: T.t('quarry'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 4 }, heer: { steen: 10 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, menu: true,
+      handen: 4, woonruimte: 0, maakt: { uit: { steen: 2 } }, menu: true, // 4 man (4 nov; was 2, met 1 steen)
       bij: { natuur: 'rotsen', straal: 6, minstens: 2 },
       tekening: 'gebouwen/houtschuur', beschrijving: T.t('stone for foundations and stone houses'), // geen tekst
       opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.', // geen tekst
@@ -283,7 +285,7 @@
     },
     jager: {
       naam: T.t('hunter'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, heer: { vlees: 5 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { vlees: 2, huiden: 2 } }, menu: true, // 2 man (4 nov; was 1)
       // Geen `bij`: hij loopt het bos in. Met de eis van het bos (4 okt) vond de jager aan de bosrand al in de eerste
       // herfst geen plek meer, en at het dorp in de speeltest zijn zaaigraan op.
       tekening: 'gebouwen/jagershut', beschrijving: T.t('game from the forest, and hides for the tanner'), // geen tekst
@@ -291,7 +293,7 @@
     },
     visser: {
       naam: T.t('fisherman'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { vis: 10 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { vis: 4 } }, menu: true, // 2 man (4 nov; was 1, met 2 vis)
       bij: { natuur: 'water', straal: 5, minstens: 3 },
       // Marcel, 24 sep: 's winters ligt de beek dicht, dus wie dan vis wil eten, heeft hem in de
       // herfst gezouten (spel.md, "Handel").
@@ -842,6 +844,7 @@
   // erin trekt, de kar van een schuur, het veld dat land wordt), doet de nacht daarna voor allebei.
   T.komtKlaar = function (D, g, dag) {
     g.klaar = true;
+    T.werkBijNieuwGebouw(D, g); // er komt 1 man bij, meer kies jij (js/werk.js; Marcel, 4 nov: "2. A")
     if (g.voorwerp) g.voorwerp.inAanbouw = false;
     if (g.voorwerp) T.maakJong(g.voorwerp, dag);
     for (const k of g.kramen || []) k.inAanbouw = false; // de markt op het plein (js/markt.js)
@@ -1325,21 +1328,37 @@
   // De handen verdelen over de werkplaatsen, op volgorde van S.gebouwen: eerst de gebouwen die er al
   // stonden, dan wie het eerst gebouwd is ("op volgorde", ontwerp/werklijst.md punt 2). Hoeveel
   // handen er zijn: wie kan werken (T.werkendeHanden, js/bewoners.js: geen kleuter, en de aanvoerder
-  // niet). Wíé er werkt, zegt daarna T.wijsWerkToe.
+  // niet). Per soort werkplaats zoveel als jij wilt (D.inzet, js/werk.js; Marcel, 4 nov), de eerst gebouwde eerst; tot 4 nov
+  // liep elk gebouw vanzelf vol. Wíé er werkt, zegt daarna T.wijsWerkToe.
   T.verdeelHanden = function (D) {
     let vrij = T.werkendeHanden(D);
+    const perSoort = new Map(); // soort → zijn gebouwen die handen kunnen hebben, in de volgorde van D.gebouwen
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
+      g.handen = 0;
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
       // (js/bos.js; werklijst vraag 129, e).
       // En een boerderij van het lege begin zonder akker (js/boerderij.js): haar boer werkt elders of bouwt mee. (Een
       // wijnboerderij vraagt geen handen: haar gezin werkt elders of bouwt mee, en plukt in wijnmaand.)
-      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g) || T.boerderijZonderAkker(D, g)) {
-        g.handen = 0;
-        continue;
+      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g) || T.boerderijZonderAkker(D, g)) continue;
+      if (!perSoort.has(g.soort)) perSoort.set(g.soort, []);
+      perSoort.get(g.soort).push(g);
+    }
+    // Per soort zoveel als jij wilt, om en om over zijn gebouwen, zodat elk zijn deel krijgt (een boerderij werkt haar eigen
+    // akkers); de soort die het eerst gebouwd is, eerst.
+    for (const [soort, lijst] of perSoort) {
+      const max = T.GEBOUWEN[soort].handen;
+      let over = Math.min(T.werkInzet(D, soort), vrij);
+      vrij -= over;
+      while (over > 0 && lijst.some((g) => g.handen < max)) {
+        for (const g of lijst) {
+          if (over > 0 && g.handen < max) {
+            g.handen++;
+            over--;
+          }
+        }
       }
-      g.handen = Math.min(soort.handen, vrij);
-      vrij -= g.handen;
+      vrij += over; // wat er niet paste
     }
     T.wijsWerkToe(D);
   };

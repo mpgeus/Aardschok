@@ -1,5 +1,5 @@
 // Het menu Wetten (werklijst vraag 54; Marcel, 29 sep: "Het wordt gewoon een menu zoals in diplomacy 3, waar je
-// weten kunt aannemen etc."), onder W en met een knop in de balk. Elke wet is een kaart: zijn naam, één zin, wat
+// weten kunt aannemen etc."), onder L (tot 4 nov W, dat nu het werk is: js/werkpaneel.js). Elke wet is een kaart: zijn naam, één zin, wat
 // hij doet in groen en rood, en een knop om hem aan te nemen of af te schaffen; het rantsoen heeft een knop per
 // stand. De regels staan in js/wetten.js, en wat een kaart zegt, komt uit dezelfde getallen (T.watDeWetDoet).
 // Zolang het menu open is, staat de tijd stil. Een eigen bestand, want js/hud.js is al groot genoeg (vraag 25, C).
@@ -57,7 +57,7 @@
       `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<p class="venster-staat">${T.t('A law applies from today. The village is now <b>{pct}%</b> content; at {drempel}% or more, new families come.', { pct, drempel })}</p>` +
       T.wettenVanNu(S.dorp).map((id) => kaart(S, id)).join('') +
-      `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>W</kbd> closes it.')}</p>`
+      `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>L</kbd> closes it.')}</p>`
     );
   }
 
@@ -79,7 +79,7 @@
   };
 
   T.ui.meldVenster('wetten', {
-    el: 'wetten', toets: 'w', open: (S) => T.ui.openWetten(S), sluit: (S) => T.ui.sluitWetten(S),
+    el: 'wetten', toets: 'l', open: (S) => T.ui.openWetten(S), sluit: (S) => T.ui.sluitWetten(S),
   });
 
   $('wetten').addEventListener('click', (ev) => {

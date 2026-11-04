@@ -778,7 +778,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de inwoners, de tevredenheid), in het midden de datum en het uur (`T.ui.toonKalender`, `js/hud.js`; het seizoen en het
   weer op het briefje bij de muis), rechts de lat van de snelheden, de twee bazen en Menu; wat eronder begint, rekent
   met `--boven`. De velden (V) en het wetboek
-  (W) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
+  (L, tot 4 nov W) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
   vraag 146, c, met haar kunst uit `gereedschap/pixelart/tafel.cjs`, en git bewaart haar. Wat een ding of een getal is
   en zijn toets, staan op het briefje bij de muis, `#wenk`, niet op het ding: onderaan erboven, bovenaan eronder. Alles op
   ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één, 4K twee, `pasSchaal`, in `--ui-zoom`; hoe hoog
@@ -1603,7 +1603,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de waarheid; de bewoners (`D.bewoners.mensen`) volgen het, één per mond, elk met een naam, een
   leeftijd (`T.LEEFTIJDEN`, die ook zijn vel kiest), een huis, een gezin en een poppetje
   (`e.bewoner`). De aanvoerder en de boeren zijn ook bewoners, met het wezen dat de kaart al neerzette.
-  Hoeveel handen een gebouw krijgt, zegt `T.verdeelHanden` (`js/gebouwen.js`); wíé dat zijn,
+  Hoeveel handen een gebouw krijgt, zegt `T.verdeelHanden` (`js/gebouwen.js`, naar wat jij koos: js/werk.js); wíé dat zijn,
   `T.wijsWerkToe`, en wie werk heeft, houdt het (en dan de plekken van iedereen, met de vrije tegels van het plein één
   keer voor allemaal: `T.pleinVrij`). Waar iemand op welk uur hoort, zegt `T.dagAnker`
   (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
@@ -1738,6 +1738,28 @@ hun bewerker: ze gingen weg met Tiled, in ronde 4 van het snoeien (`snoeien.md`)
   kavel; `T.plaatsGebouw` neemt in het lege begin zelf de kavel, `T.bouwKavel`). (Tot 16 okt kwam een put of een kapel
   waar hij de meeste huizen bereikte die er een wilden: de kringen van de wensen per huis.) De kolonist van de speeltest
   zoekt zo zijn plek.
+
+### js/werk.js en js/werkpaneel.js: het werk verdelen
+
+- `js/werk.js`: **het werk verdelen** (Marcel, 4 nov: "1. A 2. A 3. Prima, 1 houthakker is bijvoorbeeld max 2 man, en
+  een 2e houthakkerij is +2 max"; `ontwerp/gameloop.md`, "Het werk verdelen"). Jij kiest per soort werkplaats hoeveel
+  mensen er werken (`D.inzet`, `{ soort: zoveel }`), van 0 tot het maximum van zijn klare gebouwen samen (`T.werkMax`:
+  `handen` in `T.GEBOUWEN` keer hoeveel er klaar staan). `T.werkInzet` zegt wat er geldt: wat je koos, nooit boven het
+  maximum; koos je voor een soort nog niets, dan 1 per gebouw. Een gebouw dat af komt (`T.komtKlaar`), geeft er 1 bij
+  (`T.werkBijNieuwGebouw`; "2. A"), meer kies jij. De opdracht `inzet` (`{ gebouw, n }`, js/tik.js) zet het met
+  `T.zetInzet`, en de handen gaan meteen (`T.verdeelHanden`). Een spel van vóór 4 nov (geen `D.inzet`, ook een dorp uit
+  een toets) krijgt alles vol (`T.zorgInzet`), zoals het toen was; `T.werkVol` doet dat ook. Wie niet werkt, draagt
+  en bouwt mee (js/kar.js, js/bouwen.js): dat is de afweging. `T.werkTelling` zegt hoeveel er werken en hoeveel er vrij
+  zijn, `T.werkRijen` per soort wat er nu werkt, wat het per dag oplevert en wat het vol zou opleveren (met de afwisseling,
+  het gereedschap en het water van vandaag; een werkplaats die stilstaat, zegt waarom), en bij een boerderij de oogst van
+  dit jaar en haar akkers, want die maakt niets per dag. Getoetst in `test/werk.test.cjs`.
+- **De verdeling** (`T.verdeelHanden`, js/gebouwen.js, elke ochtend en na elke opdracht): per soort gaat de inzet, zover
+  er handen zijn, om de beurt naar de gebouwen van die soort (het eerst gebouwde eerst), zodat twee boerderijen elk hun
+  boer krijgen voor een van de twee vol is. Een houthakker zonder boom of een boerderij zonder akker krijgt niemand.
+- `js/werkpaneel.js`: **het werkpaneel** (de knop Work onderaan, naast Build, en W; de wetten gingen naar L, Marcel, 4
+  nov). Een rij per soort werkplaats (`T.werkRijen`) met − en +, wat er werkt van het maximum, en wat het per dag maakt
+  (en vol); bovenaan hoeveel er vrij zijn om te dragen en te bouwen. Een klik geeft de opdracht `inzet`. Alleen scherm
+  (`test/laad.cjs`).
 
 ### js/hud.js, js/main.js en js/tekenen.js: het bouwmenu, de ghost en draaien
 

@@ -256,7 +256,7 @@ test('een akker: de bouwers maken hem, dan is hij van de boerderij, de boer werk
   assert.equal(T.boerVanVeld(D, akker), boer.wezen);
   assert.equal(T.boerderijZonderAkker(D, g), false);
   dagen(S, dag + 1, dag + 1);
-  assert.equal(g.handen, T.GEBOUWEN.boerderij.handen, 'met een akker wil de boerderij haar handen');
+  assert.equal(g.handen, 1, 'met een akker krijgt de boerderij haar man; meer kies jij (Marcel, 4 nov: "2. A")');
   // En in de herfst is de oogst binnen.
   dagen(S, dag + 2, 6 * T.DAGEN_PER_MAAND);
   assert.ok((D.jaarboek && D.jaarboek.geoogst) > 0, 'de oogst is binnen');

@@ -63,7 +63,22 @@ binnenhaalt. en andersom. Een boerderij heeft wel een max aantal mensen wat er k
 **Wat er nu is** (Claude, 4 nov): elk gebouw heeft een maximum aan handen (`handen` in `T.GEBOUWEN`, meestal 1 of 2: een
 houthakker 1, een boerderij 2), en de opbrengst loopt al mee met de bezetting (`g.handen / soort.handen`, js/gebouwen.js).
 Maar het dorp verdeelt de handen zelf, op de volgorde waarin je bouwde (`T.verdeelHanden`), en wie geen werk heeft, bouwt
-mee of draagt. Er is geen getal "zoveel per dag nu" per grondstof. Het plan volgt (vragen aan Marcel).
+mee of draagt. Er is geen getal "zoveel per dag nu" per grondstof. Daarom het plan hieronder.
+**Het plan, en wat Marcel koos** (4 nov): "1. A 2. A 3. Prima, 1 houthakker is bijvoorbeeld max 2 man, en een 2e
+houthakkerij is +2 max", en "w mag shortcut zijn, maar er moet ook een knop in de UI komen" (W voor het werk, de wetten
+naar L). Dus: (1A) één werkpaneel voor het werk, met per soort werkplaats − en +, en op het briefje van een gebouw zijn
+deel; (2A) een nieuw gebouw krijgt 1 man, meer kies jij; (3) grotere maxima, met dezelfde opbrengst per man: een
+houthakker 2 (4 stammen vol), een steengroeve 4, een visser en een jager 2, elk gebouw erbij telt op. Geen ondergrens:
+0 man is 0. Wie je niet inzet, draagt en bouwt mee: dat is de afweging.
+**Gebouwd** (4 nov; `js/werk.js`, `js/werkpaneel.js`, `ontwerp/code.md`): het paneel onder W en de knop Work naast Build,
+met per rij wat er nu werkt, wat het per dag maakt en wat het met alle handen zou maken, en bovenaan hoeveel er vrij zijn.
+Een klik is een opdracht (`inzet`), dus het werkt ook samen.
+**De boerderij, nog open** (Claude, 4 nov): de handen van een boerderij doen niets voor de oogst. Het land wordt gewerkt
+door de boer die er woont en zijn gezin, en in de oogsttijd door de dagloners (wie vrij is, `js/veldwerk.js`); wie er
+alleen werkt, staat bij de boerderij. En wat er na de oogsttijd nog op het veld staat, halen de boeren in één keer
+binnen (het vangnet), dus meer mensen geven niet meer graan, alleen eerder. Het voorstel van 8 man op een boerderij
+staat daarom nog op 2, zoals het was, tot Marcel kiest: de handen van een boerderij worden landarbeiders (zaaien,
+maaien, binden, met minder vangnet), of de boerderij blijft zoals ze is en het graan groeit met de akkers.
 
 ## Bijgesteld op 15 okt: van bovenaf als een god, en vechten in real time (Marcel; werklijst vraag 170)
 

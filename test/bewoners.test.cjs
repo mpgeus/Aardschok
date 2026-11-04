@@ -167,7 +167,7 @@ test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder
   const S = proef({ gebouwen: ['schaapskooi'] });
   const D = S.dorp;
   const handen = D.gebouwen.reduce((n, g) => n + (g.handen || 0), 0);
-  assert.equal(handen, 5, 'twee per boerderij, en een herder');
+  assert.equal(handen, 3, 'een per boerderij, en een herder: een nieuw gebouw begint met 1 man (Marcel, 4 nov: "2. A")');
   const werkers = mensen(S).filter((p) => p.werk);
   assert.equal(werkers.length, handen, 'elke hand is iemand');
   for (const g of D.gebouwen) assert.equal(werkers.filter((p) => p.werk === g).length, g.handen || 0, `${g.soort} ${g.huis}`);

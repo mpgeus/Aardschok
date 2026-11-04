@@ -73,6 +73,7 @@
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       einde: null, // de heer ontsloeg de aanvoerder (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
       dicht: [...(o.dicht || [])], // wat in dit dorp op slot is (een level, T.isDicht in js/gebouwen.js)
+      inzet: {}, // hoeveel er per soort werkplaats werken, wat jij kiest (js/werk.js; 4 nov)
     };
     if (o.overvallen === false) D.rovers = { ...T.nieuweRovers(), overvallen: false };
     if (aanvoerder) aanvoerder.dorp = D; // hij is van dit dorp (T.isVanDorp, js/wereld.js)

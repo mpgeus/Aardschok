@@ -67,6 +67,7 @@
   </div>
   <div id="middenonder" class="hoek-onder">
     <button id="bouwmenu-knop" class="briefje knop" data-ding="bouwen"></button>
+    <button id="werk-knop" class="briefje knop" data-ding="werk"></button>
     <button id="brief-knop" class="briefje knop wacht verborgen" data-ding="brief"></button>
     <button id="bode-knop" class="briefje knop verborgen" data-ding="bode"></button>
   </div>
@@ -102,6 +103,9 @@
   <!-- De wetten (js/wettenmenu.js, T.ui.openWetten; de regels in js/wetten.js): een menu zoals in
        Democracy 3, elke wet een kaart met wat hij doet, en een knop om hem aan te nemen of af te schaffen. -->
   <div id="wetten" class="paneel verborgen"></div>
+  <!-- Het werk (js/werkpaneel.js, onder W en de knop Work; de regels in js/werk.js): hoeveel er per soort werkplaats
+       werken, en wat dat per dag oplevert. -->
+  <div id="werk" class="paneel verborgen"></div>
   <!-- Het debugvenster (js/debugvenster.js, onder D; werklijst 169): +50 bouwmateriaal, een gezin, de bouwplaatsen af,
        de marskramer. Aan tot de Steam-versie (T.DEBUG_INSTELLINGEN.aan). -->
   <div id="debug" class="paneel verborgen"></div>
@@ -169,6 +173,7 @@
   <script src="js/mensen.js"></script>
   <script src="js/vee.js"></script>
   <script src="js/gebouwen.js"></script>
+  <script src="js/werk.js"></script>
   <script src="js/bouwstijl.js"></script>
   <script src="js/behoeften.js"></script>
   <script src="js/wijngaard.js"></script>
@@ -225,6 +230,7 @@
   <script src="js/gebouwbriefje.js"></script>
   <script src="js/brieven.js"></script>
   <script src="js/wettenmenu.js"></script>
+  <script src="js/werkpaneel.js"></script>
   <script src="js/debugvenster.js"></script>
   <script src="js/instellingen.js"></script>
   <script src="js/gesprekken.js"></script>

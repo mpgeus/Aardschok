@@ -46,12 +46,12 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Dorpsfeesten | weg (15 okt, ronde 3 van het snoeien): het oogstfeest, een vrije dag en het dorp op het plein; de meiboom en de kerstboom bleven als versiering op het plein, zonder feest; meer feesten en een grote bruiloft later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
-| De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen en belasting (vreemden welkom en houtkap weg sinds 15 okt, ronde 3 van het snoeien) | vraag 54 |
+| De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder L (tot 4 nov W), met rantsoen en belasting (vreemden welkom en houtkap weg sinds 15 okt, ronde 3 van het snoeien) | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | eruit (11 okt, optie 1) | 4, 6, vraag 151 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt) | 3, vraag 74, 79, 81, 132 |
-| Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
+| Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht; sinds 4 nov verdeel jij het werk (W) | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
@@ -2359,6 +2359,12 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
 ## Gebouwen (Marcel, 23 sep 2026)
 
 **Zo werkt het nu** (25 sep; `js/gebouwen.js`, `T.GEBOUWEN`):
+- **Jij verdeelt het werk** (4 nov; Marcel: "1. A 2. A 3. Prima, 1 houthakker is bijvoorbeeld max 2 man, en een 2e
+  houthakkerij is +2 max"; `js/werk.js`, `js/werkpaneel.js`, `ontwerp/gameloop.md`, "Het werk verdelen"): onder W en met de
+  knop Work kies je per soort werkplaats hoeveel er werken, van 0 tot het maximum van zijn gebouwen samen (een houthakker
+  2, een steengroeve 4, een visser en een jager 2; elk gebouw erbij telt op), en je ziet wat dat per dag oplevert, nu en
+  met alle handen. Een nieuw gebouw begint met 1 man. Wie niet werkt, draagt en bouwt mee. De wetten staan sinds dan onder
+  L. Een boerderij staat nog op 2: haar handen doen nog niets voor de oogst (de vraag aan Marcel, `gameloop.md`).
 - 45 soorten op één plek, in vier treden: 18 voor het gehucht, 14 voor het dorp, 9 bij marktrecht en
   4 voor de stad. Alleen het gehucht is speelbaar; de treden komen bij punt 14.
 - In het bouwmenu (`B`) van het gehucht staan er 16: hut, huis, boerderij, houthakker, schaapskooi,

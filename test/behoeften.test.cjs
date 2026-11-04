@@ -724,13 +724,13 @@ test('T.etenVoorDeWinter: de soldaten van de heer eten mee zolang ze er zijn', (
 test('op 1 herfstmaand en 1 slachtmaand zegt het dorp of het hout en het eten de winter halen, en wat helpt', () => {
   const S = gehucht();
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 1))), [{
-    tekst: 'In three months it will be winter. The logs last 52 of the 90 days, even with what the people gather: a woodcutter cuts 2 logs a day. The food lasts the winter. Until there is enough, no new family will come.',
+    tekst: 'In three months it will be winter. The logs last 52 of the 90 days, even with what the people gather: a woodcutter cuts 4 logs a day. The food lasts the winter. Until there is enough, no new family will come.',
     soort: 'gevaar',
   }]);
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('herfstmaand', 2))), [], 'alleen op die dagen');
   // Staat er al een houthakker, dan helpt er nog een.
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
-  assert.match(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1)))[0].tekst, /The logs last \d+ of the 90 days, even with what the people gather: another woodcutter cuts 2 logs more a day\./);
+  assert.match(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1)))[0].tekst, /The logs last \d+ of the 90 days, even with what the people gather: another woodcutter cuts 4 logs more a day\./);
   T.zetVoorraad(S, 'hout', 200);
   assert.deepEqual(berichtenVan(() => T.tikBehoeftenDag(S, dagVan('slachtmaand', 1))), [
     { tekst: 'In a month it will be winter. The logs and the food last the winter.', soort: 'goed' },

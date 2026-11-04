@@ -8,7 +8,7 @@
 // rechtsonder de minikaart (js/minikaart.js; vraag 165, "zoals bij age of Empires"). Bovenaan een dunne balk (vraag 166;
 // Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder
 // info te missen"): het dorp (de kas, de inwoners, de tevredenheid), de datum en het uur, de snelheid, de twee bazen
-// (js/bazen.js) en Menu. De velden (V) en het wetboek (W) hebben alleen nog hun
+// (js/bazen.js) en Menu. De velden (V) en het wetboek (L) hebben alleen nog hun
 // toets. Wat een ding of getal is, wat het nu zegt en zijn toets, staat op het briefje bij de muis (#wenk), niet op het
 // ding; zo ook het seizoen en het weer, bij de datum.
 //
@@ -471,6 +471,15 @@
       uitleg: () => `${T.t('Build: choose what, and point to where.')} ${T.t('A right click puts back what you are holding.')}`,
       toets: 'B',
     },
+    // Het werk (js/werkpaneel.js; Marcel, 4 nov): hoeveel er waar werken; wie vrij is, draagt en bouwt mee.
+    werk: {
+      naam: T.t('Work'),
+      uitleg: (S) => {
+        const t = T.werkTelling(S.dorp);
+        return T.t('Choose how many people work at each workshop. Now {werken} work, and {vrij} are free to carry and build.', t);
+      },
+      toets: 'W',
+    },
     brief: { naam: T.t('A letter from the lord'), uitleg: () => T.t('It is waiting for your answer.') },
     bode: {
       naam: T.t('A messenger'),
@@ -514,7 +523,7 @@
 
   // Wat in index.html geen tekst heeft (vraag 147): de knoppen in het midden, de bazen en de lat van de snelheden. De
   // tekst staat hier, zodat een vertaling erbij kan.
-  const KNOPPEN = { bouwen: T.t('Build'), brief: T.t('Letter'), bode: T.t('Messenger') };
+  const KNOPPEN = { bouwen: T.t('Build'), werk: T.t('Work'), brief: T.t('Letter'), bode: T.t('Messenger') };
   for (const b of document.querySelectorAll('#middenonder [data-ding]')) b.textContent = KNOPPEN[b.dataset.ding];
   $('bazen').querySelector('[data-ding="gunst"] .naam').textContent = T.t('Lord'); // geen tekst
   $('bazen').querySelector('[data-ding="vertrouwen"] .naam').textContent = T.t('Village'); // geen tekst

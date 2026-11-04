@@ -136,7 +136,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `gebouwbriefje` (een gebouw aanklikken), `debugvenster` (D), `regie` (de scènes).
 - **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`.
 - **Bouwen en groeien:** `begin` (een nieuw spel, het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
-  `treden` (en de standen), `behoeften` (en de groei), `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`.
+  `treden` (en de standen), `behoeften` (en de groei), `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`, `werk` en
+  `werkpaneel` (het werk verdelen).
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de dragers, de ossenkar, de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,

@@ -221,8 +221,8 @@ test('T.tikGebouwenDag: handen gaan op volgorde van S.gebouwen naar de werkplaat
 
 test('T.tikGebouwenDag: een werkplaats zonder genoeg handen maakt naar rato minder', () => {
   const S = maakS();
-  const houthakker = T.GEBOUWEN.houthakker; // handen: 1, maakt: { uit: { hout: 2 } }
-  assert.equal(houthakker.handen, 1); // deze toets gaat uit van precies 1 hand
+  const houthakker = T.GEBOUWEN.houthakker; // handen: 2, maakt: { uit: { hout: 4 } } (Marcel, 4 nov)
+  assert.ok(houthakker.handen >= 1); // deze toets gaat uit van een werkplaats die handen vraagt
   S.bevolking = 0; // geen handen beschikbaar
   S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
   T.zetVoorraad(S, 'hout', 0);

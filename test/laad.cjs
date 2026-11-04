@@ -17,7 +17,7 @@ const WORTEL = path.join(__dirname, '..');
 
 // Wat het scherm opbouwt. Deze bestanden raken `document` aan zodra ze laden, of zetten een echte
 // T.ui neer, terwijl een toets zijn eigen stille T.ui wil (de berichten naar niemand).
-const ALLEEN_SCHERM = ['js/ui.js', 'js/hud.js', 'js/balk.js', 'js/huisbriefje.js', 'js/brieven.js', 'js/wettenmenu.js', 'js/debugvenster.js', 'js/instellingen.js', 'js/dialoog.js', 'js/menu.js', 'js/main.js'];
+const ALLEEN_SCHERM = ['js/ui.js', 'js/hud.js', 'js/balk.js', 'js/huisbriefje.js', 'js/brieven.js', 'js/wettenmenu.js', 'js/werkpaneel.js', 'js/debugvenster.js', 'js/instellingen.js', 'js/dialoog.js', 'js/menu.js', 'js/main.js'];
 
 // De scripts van een bladzijde, in volgorde, als pad vanaf de wortel. Commentaar telt niet mee.
 function scriptsVan(pagina) {

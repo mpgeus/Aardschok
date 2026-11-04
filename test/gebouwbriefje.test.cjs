@@ -35,9 +35,9 @@ test('de houthakker: wat hij doet, wie er werkt, wat hij maakt op vol, vandaag e
   const b = T.gebouwBriefje(D, g);
   assert.equal(b.kop, 'Woodcutter');
   assert.match(b.doet, /^Logs from the lord's forest\.$/);
-  assert.match(regels(b, 'At work'), /^1 of 1 hands: \w+/, 'wie er werkt, bij naam');
+  assert.match(regels(b, 'At work'), /^1 of 2 hands: \w+/, 'wie er werkt, bij naam (een nieuw gebouw begint met 1 man; Marcel, 4 nov: "2. A")');
   const maakt = regels(b, 'Makes');
-  assert.match(maakt, /At full strength: 2 logs a day\./);
+  assert.match(maakt, /At full strength: 4 logs a day\./);
   assert.match(maakt, /Today: [\d.]+ logs \(\d+% of full strength\)/);
   assert.match(maakt, /Last 7 days: [\d.]+ logs?\./);
   assert.match(maakt, /This year: [\d.]+ logs?\./);
@@ -75,7 +75,13 @@ test('wat hem tegenhoudt: geen handen, te weinig om te bewerken, weinig afwissel
   const { S, D, dag } = dorp();
   const g = metHouthakker(S, D, dag, 1);
   Object.assign(g, { stilWant: null, handen: 0, werkte: 0, tekort: null, vol: null, uren: null });
-  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands: nobody is free to work here\./);
+  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands: nobody is free to work here\./, 'je wilde er 1, maar niemand was vrij');
+  T.zetInzet(D, 'houthakker', 0);
+  g.handen = 0;
+  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands: you put nobody to work here \(Work, W\)\./, 'zo gekozen (4 nov)');
+  T.zetInzet(D, 'houthakker', 1);
+  g.handen = 1;
+  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /1 of 2 hands: you can put more to work here \(Work, W\)\./);
   Object.assign(g, { handen: 1, werkte: 0.5, tekort: 'ijzer' });
   assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /Too little iron to work with: it works part of the day\./);
   Object.assign(g, { tekort: null, werkte: 1 });

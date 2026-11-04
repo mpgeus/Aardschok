@@ -2,7 +2,7 @@
 // menu zoals in diplomacy 3, waar je weten kunt aannemen etc. Maak het niet te ingewikkeld", en op het plan: "A ja
 // B ja"). Eerst heetten ze keuren (ontwerp/spel.md, "Keuren en politiek").
 //
-// Een menu zoals in Democracy 3 (js/wettenmenu.js, onder W): elke wet heeft een voordeel en een nadeel, je neemt
+// Een menu zoals in Democracy 3 (js/wettenmenu.js, onder L): elke wet heeft een voordeel en een nadeel, je neemt
 // hem aan of schaft hem af, en hij geldt meteen. Aannemen kost niets: zijn nadeel is de prijs.
 //
 // Wat een wet doet, staat als getallen in één blok (T.WETTEN_INSTELLINGEN, in de werkbank), per stand van de wet:
