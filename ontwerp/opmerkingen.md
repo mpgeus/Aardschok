@@ -9,9 +9,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het werk verdelen: wat opviel (4 nov)
 
-- **De raad zegt nog "een houthakker erbij"** als het hout de winter niet haalt (`js/behoeften.js`, het bericht op 1
-  herfstmaand), ook als de houthakkers die er staan niet vol zijn. Sinds je het werk verdeelt, helpt "zet meer man op de
-  houthakkers (W)" eerst, en kost het geen hout en goud.
 - **De kolonist van de speeltest** laat de inzet zoals hij is (1 man per nieuw gebouw); een speler zet meer mensen op wat
   krap is. Het dorp loopt zo niet vast (`speelbaar.md`, "De speeltest van 4 nov"), maar meet niet wat een speler haalt
   die het werk verdeelt. Moet de kolonist dat ook? Dan een regel in `gereedschap/speeltest/kolonist.js`.
