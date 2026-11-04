@@ -29,8 +29,9 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   **Gebouwd op de branch** (4 nov), de wetten onder L. **Wacht op Marcel:** de boerderij (haar handen doen nog niets voor
   de oogst, dus nog 2 en niet 8; de keuze in `gameloop.md`).
   **Daarna, in deze sessie: de raad eruit** (Marcel, 4 nov: "De raad gaat eruit. De speler moet dit zelf in de gaten
-  houden. We maken later een volledige demo tutorial"): het spel geeft geen raad meer over wat helpt; de speler houdt
-  het zelf in de gaten. Hoe ver dat gaat, is het plan aan Marcel.
+  houden. We maken later een volledige demo tutorial", en "Ook raadsheren, etc eruit"): het spel geeft geen raad meer
+  over wat helpt; de speler houdt het zelf in de gaten. Het plan aan Marcel: de regel onder het doel (`js/raad.js`), "What
+  helps" bij de statussen, en wat helpt in berichten en briefjes; de feiten blijven.
 - **Bezig in sessie `lokaal-510618ba`** (1 nov, op Marcels pc): **192, de figuren in de stijl van Settlers II** (`docs/art/hunyuan/TRIPOSPLAT.md`):
   de speerman, de boogschutter (met hoed), de kruisboogschutter, de pikeman en de ridder uit TripoSplat staan, lopen, vechten, worden geraakt en sterven,
   en de ridder is ook een soldaat in de regels (Marcel: "Ja, hij is duur, schild, zwaard, harnas en paard"). **Nu** (Marcel, 1 nov: "Ze mogen voor nu erin", en "Ja er komt een stal, de merchant verkoopt ze ook soms"): de vijf figuren staan in het spel, en de stal en de marskramer met zijn paard als regel. **Nu:** de burcht (town hall), de bakkerij, de molen en de stal uit zijn platen staan in het spel (Marcel, 1 nov: "Ja", en de burcht "wordt town hall"). Het rieten huis is de hut (Marcel, 2 nov: "Een hut"), in het spel met de fasen uit het prompt en zonder ronde voet (`docs/art/bewijs/gebouwen/hut-in-het-spel.png`). Op Marcel wachten: de platen van de bouwfasen en zonder ronde voet voor de andere vier, en de NW-faseplaat van de hut ("Ik laat de ronde voeten om de gebouwen verwijderen"; wat er per gebouw nodig is, staat in `docs/art/hunyuan/PLAAT-EISEN.md`). Wat verder open staat: `opmerkingen.md`.
