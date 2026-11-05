@@ -8,7 +8,7 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (2 nov)
+## Nu en daarna (5 nov)
 
 Kort, in volgorde (Marcel, 8 okt: "snel, duidelijk en low cost"): wat loopt, wat op Marcel wacht, en wat erna komt. Wat
 af is, gaat eruit; het hoe staat in het ontwerpbestand van het onderwerp. Het blok zoals het tot 23 okt was, met de hele
@@ -20,19 +20,6 @@ weiger je, dan komt zijn leger). E, de heer als klok, en Q, het eerste jaar spee
 van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performance heeft hoge prioriteit** (CLAUDE.md).
 
 **Loopt**
-- **Bezig in sessie `claude/determined-curie-ircu5p`** (4 nov): **het werk verdelen** (`gameloop.md`, "Het werk verdelen";
-  Marcel, 2 nov: "Er is nog te weinig te doen ... Een speler moet altijd bezig kunnen zijn zonder dat het spel zonder hem
-  of haar speelt", en 4 nov: "1. A 2. A 3. Prima, 1 houthakker is bijvoorbeeld max 2 man, en een 2e houthakkerij is +2
-  max", "w mag shortcut zijn, maar er moet ook een knop in de UI komen"): jij zet per grondstof hoeveel mensen er werken
-  (een werkpaneel, de knop *Work* en W), met de opbrengst per dag nu; een gebouw heeft een maximum (de houthakker 2, de
-  steengroeve 4, de visser en de jager 2), en een nieuw gebouw begint met 1 man. Wie niet werkt, draagt en bouwt mee.
-  **Gebouwd op de branch** (4 nov), de wetten onder L. **Wacht op Marcel:** de boerderij (haar handen doen nog niets voor
-  de oogst, dus nog 2 en niet 8; de keuze in `gameloop.md`).
-  **Daarna, in dezelfde sessie** (5 nov): **de raad eruit** (Marcel, 4 nov: "De raad gaat eruit. De speler moet dit zelf
-  in de gaten houden. We maken later een volledige demo tutorial", "Ook raadsheren, etc eruit", en op het plan "B"):
-  `js/raad.js`, "What helps" bij de statussen, en wat helpt in berichten en briefjes; ook wat de raad over de groei zei
-  (wanneer het volgende gezin komt, of waarom niet). **Gebouwd op de branch** (5 nov; `spel.md`, "De raad onder het
-  doel": weg sinds 5 nov).
 - **Bezig in sessie `lokaal-510618ba`** (1 nov, op Marcels pc): **192, de figuren in de stijl van Settlers II** (`docs/art/hunyuan/TRIPOSPLAT.md`):
   de speerman, de boogschutter (met hoed), de kruisboogschutter, de pikeman en de ridder uit TripoSplat staan, lopen, vechten, worden geraakt en sterven,
   en de ridder is ook een soldaat in de regels (Marcel: "Ja, hij is duur, schild, zwaard, harnas en paard"). **Nu** (Marcel, 1 nov: "Ze mogen voor nu erin", en "Ja er komt een stal, de merchant verkoopt ze ook soms"): de vijf figuren staan in het spel, en de stal en de marskramer met zijn paard als regel. **Nu:** de burcht (town hall), de bakkerij, de molen en de stal uit zijn platen staan in het spel (Marcel, 1 nov: "Ja", en de burcht "wordt town hall"). Het rieten huis is de hut (Marcel, 2 nov: "Een hut"), in het spel met de fasen uit het prompt en zonder ronde voet (`docs/art/bewijs/gebouwen/hut-in-het-spel.png`). Op Marcel wachten: de platen van de bouwfasen en zonder ronde voet voor de andere vier, en de NW-faseplaat van de hut ("Ik laat de ronde voeten om de gebouwen verwijderen"; wat er per gebouw nodig is, staat in `docs/art/hunyuan/PLAAT-EISEN.md`). Wat verder open staat: `opmerkingen.md`.
@@ -67,6 +54,10 @@ van I (c3, c4, d, samen spelen in 6b en 6c), de muren en het kasteel. **Performa
   Daarna: schieten, herladen, geraakt en sterven met de kruisboog, en de vellen voor het spel.
 
 **Wacht op Marcel**
+- **De boerderij in het werkpaneel** (5 nov; `gameloop.md`, "De boerderij, nog open"): haar handen doen nog niets voor
+  de oogst (de boer, zijn gezin en de dagloners werken het land), dus staat ze op 2 en niet op 8. A: wie je op de
+  boerderij zet, wordt landarbeider (zaaien, maaien, binden), tot 8 man; B: ze blijft zoals ze is. Ook op de speellijst
+  (A6, het werkpaneel).
 - **De speellijst van 2 nov spelen** (`speelbaar.md`, bovenaan; Marcel, 2 nov: "Ja, maak die speellijst"): alles wat
   gebouwd klaarstond om te bekijken, naast de beelden, in één ronde in Firefox. A, het demojaar met de wacht: de dragers
   (184), minder stroef (191, S1 tot S4), de overval en de punten (185 en 186); B, het egaliseren (182) met d van de
@@ -1571,6 +1562,10 @@ is S6).
 
 ## Af (sinds 11 okt)
 
+- De raad eruit (5 nov; `spel.md`, "De raad onder het doel"): geen regel onder het doel, geen "What helps" bij de
+  statussen, geen raad in berichten en briefjes; de tutorial voor de demo komt later (Daarna, 3).
+- Het werk verdelen (4 nov; `gameloop.md`, "Het werk verdelen"): het werkpaneel onder W en de knop *Work*, per soort
+  werkplaats hoeveel er werken en wat dat per dag oplevert; de wetten onder L.
 - Een tactiek tegen de pijlen (2 nov; `scenario.md`, 7): de schildpad, die opengaat met een stormloop, en de lichte
   ruiter, in skirmish en in het dorp.
 - 3d van vraag 187 en 188: de generaals in skirmish (2 nov; `scenario.md`, 7): drie generaals met hun wapen, te kiezen in

@@ -19,6 +19,8 @@ zagerij, een smidse en een wapenmaker dus de helft van vroeger).
 Het dorp loopt dus niet vast als niemand het werk verdeelt. Zaad 2 (honger en kou in de eerste winter) is een oud punt
 voor de balans.
 
+Na de raad (5 nov, 84397e8a; de kolonist kiest zijn eten nu zelf): zaad 1 tot 3 precies dezelfde uitslag, zonder fouten.
+
 ## De speellijst van 2 nov: wat op Marcel wacht, naast de beelden
 
 Marcel, 2 nov: "Ja, maak die speellijst": alles wat onder "Wacht op Marcel" in de werklijst gebouwd klaarstond om te
