@@ -109,7 +109,7 @@ kbd {
    .nieuwe-hud op body). Het paneel van het oude spel (het goud linksboven) gaat dan weg. De actiebalk onderaan blijft: die schuift in beeld als er gevochten wordt, ook in
    het gehucht.
    Bovenaan een dunne balk over de hele breedte (vraag 166), en daaronder alleen briefjes (vraag 146, d): linksboven het
-   doel met de raad (#opdracht, js/ui.js) en de statussen eronder, rechts het briefje van een gebouw. Ze schalen mee
+   doel (#opdracht, js/ui.js) en de statussen eronder, rechts het briefje van een gebouw. Ze schalen mee
    (--ui-zoom, js/balk.js), dus alle maten zijn pixels van de kunst: een pixel van het papier is een hele pixel van het
    scherm. Wat onder de balk begint, rekent met --boven. */
 #hud-gehucht { display: none; }
@@ -173,14 +173,12 @@ kbd {
   image-rendering: pixelated;
 }
 
-/* Het doel, linksboven: de kop, hoe ver het is (met een streep), en de raad (js/raad.js) eronder. */
+/* Het doel, linksboven: de kop, en hoe ver het is (met een streep). */
 #opdracht { width: var(--kaart); padding: 10px 18px 14px; display: flex; flex-direction: column; gap: 3px; }
 #opdracht .doel-kop { font: 27px/1.1 var(--kop); }
 #opdracht .doel-stand { font-style: italic; color: var(--papier-grijs); }
 #opdracht .doel-streep { height: 7px; border: 1px solid var(--papier-grijs); margin: 3px 0 4px; }
 #opdracht .doel-streep i { display: block; height: 100%; background: var(--papier-rood); }
-#opdracht .doel-raad { border-top: 1px dotted var(--papier-lijn); padding-top: 5px; font-size: 18px; }
-#opdracht .doel-stand + .doel-raad { margin-top: 4px; }
 
 /* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): onder het doel, een briefje per status
    zolang hij duurt, met de naam in rood en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis. */
@@ -1324,7 +1322,6 @@ body.regie > :not(canvas, #regie, #overlay) { display: none !important; }
 #velden,
 #wetten,
 #werk,
-#raadsman,
 #spelregels,
 #instellingen,
 #dialoog,

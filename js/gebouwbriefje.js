@@ -43,10 +43,10 @@
       // minder dan je wilde, dan was er niemand vrij.
       const bezet = D.gebouwen.reduce((t, h) => t + (h.soort === g.soort && h.klaar ? h.handen || 0 : 0), 0);
       const gekozen = bezet >= T.werkInzet(D, g.soort);
-      if (n === 0) uit.push(gekozen ? T.t('No hands: you put nobody to work here (Work, W).') : T.t('No hands: nobody is free to work here.'));
+      if (n === 0) uit.push(gekozen ? T.t('No hands, as you chose.') : T.t('No hands: nobody is free to work here.'));
       else if (n < soort.handen) {
         uit.push(gekozen
-          ? T.t('{n} of {m} hands: you can put more to work here (Work, W).', { n, m: soort.handen })
+          ? T.t('{n} of {m} hands, as you chose.', { n, m: soort.handen })
           : T.t('{n} of {m} hands: nobody else is free to work here.', { n, m: soort.handen }));
       }
       const u = g.uren;

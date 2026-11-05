@@ -209,9 +209,6 @@ test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de 
   assert.match(g.stilWant, /no trees are left within 10 tiles/);
   assert.equal(g.werkte, 0, 'geen hout uit het niets');
   assert.match(T.gebouwToestand(D, g), /idle, no trees are left/);
-  const raad = T.RADEN.find((x) => x.id === 'geenBoom');
-  assert.ok(raad.als(D), 'de raad zegt het');
-  assert.match(raad.tekst(D), /The woodcutter stands idle.*His hand works elsewhere meanwhile/);
   // Vraag 129, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat.
   nacht(S, dag++);
   assert.equal(g.handen, 0);

@@ -20,8 +20,8 @@
   const kostenTekst = (k) => Object.entries(k).map(([wat, n]) => T.hoeveel(n, wat)).join(', ');
 
   // De statussen (js/statussen.js, T.statussenVan; werklijst vraag 77, stap 2): een kaartje per status zolang hij
-  // duurt, naast het doel linksboven, rood als het erger is (hongersnood, strenge kou, ...). Op hover: wat er is, sinds
-  // wanneer, en wat helpt.
+  // duurt, naast het doel linksboven, rood als het erger is (hongersnood, strenge kou, ...). Op hover: wat er is, en sinds
+  // wanneer (tot 5 nov ook wat helpt: Marcel, 4 nov, "De raad gaat eruit").
   T.ui.toonStatussen = function (D) {
     const S = T.S;
     if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
@@ -34,7 +34,7 @@
     if (box.dataset.sleutel === sleutel) return;
     box.dataset.sleutel = sleutel;
     box.innerHTML = '';
-    // Een briefje per status: de naam en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis (js/balk.js).
+    // Een briefje per status: de naam en hoe lang al; wat het is, zegt het briefje bij de muis (js/balk.js).
     for (const s of lijst) {
       const el = document.createElement('div');
       el.className = `briefje status${s.niveau === 2 ? ' erger' : ''}`; // geen tekst
@@ -45,7 +45,7 @@
         : T.t('for {n} days, since {datum}', { n: T.telwoord(duur), datum: T.datumVanDag(s.sinds).tekst });
       el.innerHTML = `<b>${s.naam}</b>${kort}`;
       el.dataset.naam = s.naam;
-      el.dataset.uitleg = `${s.zin} (${sinds}.)${s.helpt ? ` ${T.t('What helps: {helpt}.', { helpt: s.helpt })}` : ''}`;
+      el.dataset.uitleg = `${s.zin} (${sinds}.)`;
       box.appendChild(el);
     }
   };

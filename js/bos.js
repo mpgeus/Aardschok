@@ -21,8 +21,8 @@
 // maakt zijn hout zoals elke werkplaats (T.tikGebouwenDag, js/gebouwen.js), maar het komt uit een boom: hij hakt aan de
 // dichtste boom binnen `hakStraal` van zijn schuur (g.boom), en elke `houtPerBoom` hout is die om (T.houthakkerHakte): een
 // stronk, die na een jaar vergaan is, en stond hij in het bos, twee boompjes ernaast (een stuk dat hij kapt en inplant,
-// blijft bos: T.isBos met het jonge bos erbij). Dat wordt in een jaar of twee een jonge boom en dan een boom (T.tikBosDag). Staat er binnen zijn bereik geen boom meer, dan staat hij stil, en zegt de raad het
-// (js/raad.js). Het poppetje erbij hakt aan zijn boom en brengt het hout in bundels naar de schuur (js/veldwerk.js).
+// blijft bos: T.isBos met het jonge bos erbij). Dat wordt in een jaar of twee een jonge boom en dan een boom (T.tikBosDag). Staat er binnen zijn bereik geen boom meer, dan staat hij stil, en zegt
+// zijn briefje het. Het poppetje erbij hakt aan zijn boom en brengt het hout in bundels naar de schuur (js/veldwerk.js).
 //
 //   g.wachtOpRooien  het gebouw wacht nog op het rooien
 //   g.kavel          { x, y, b, h }: het stuk dat eerst vrij moet (de voet met het looppad eromheen, T.kavelVan)

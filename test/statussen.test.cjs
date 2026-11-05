@@ -1,5 +1,5 @@
 // De statussen van het dorp (js/statussen.js; werklijst vraag 77, stap 2; Marcel, 1 okt: "Iets wat begint en eindigt.
-// Mogelijk in verschillende niveaus"): honger, eentonig eten, kou, een vol dorp en de rest, met waarom en wat helpt. Tot
+// Mogelijk in verschillende niveaus"): honger, eentonig eten, kou, een vol dorp en de rest, met waarom. Tot
 // 15 okt stonden ze bij de voorvallen (ronde 3 van het snoeien, ontwerp/snoeien.md).
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -33,8 +33,7 @@ test('eentonig eten is een status: minder dan vier soorten, en erger met één (
   let s = status();
   assert.equal(s.niveau, 1);
   assert.equal(s.zin, 'The food is plain, for the village eats only grain and wine, and works at 75%.');
-  assert.match(s.helpt, /a hunter \[B\] \(meat\)/, 'wat een soort erbij brengt');
-  assert.doesNotMatch(s.helpt, /wine/, 'niet wat er al op tafel staat');
+  assert.equal(s.helpt, undefined, 'wat helpt, ziet de speler zelf (Marcel, 4 nov: "De raad gaat eruit")');
   D.behoeften.afwisseling = ['graan'];
   s = status();
   assert.equal(s.niveau, 2);
@@ -74,14 +73,13 @@ test('een status speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(nu('onvrede').zin, 'The village is discontented, for it is troubled by the tax.');
 });
 
-test('een status houdt bij sinds wanneer hij speelt, met wat helpt', () => {
+test('een status houdt bij sinds wanneer hij speelt', () => {
   const D = zonderOorzaak().dorp;
   D.behoeften.mist = ['food'];
   T.tikStatussenDag(D, ZOMER);
   T.tikStatussenDag(D, ZOMER + 3);
   const s = T.statussenVan(D, ZOMER + 3).find((x) => x.id === 'honger');
   assert.equal(s.sinds, ZOMER, 'sinds de eerste dag');
-  assert.ok(s.helpt, 'en wat helpt');
   D.behoeften.mist = [];
   T.tikStatussenDag(D, ZOMER + 4);
   assert.equal(D.statussen.honger, undefined, 'over is over');

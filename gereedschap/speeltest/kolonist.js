@@ -10,15 +10,14 @@
 //   4. hutten, tot elk gezin in het kamp een woning heeft, af of in aanbouw (een boerderij en een wijnboerderij zijn ook
 //      een woning); en dan, als er een houthakker is, een zagerij (vraag 157: een dorp bouw je van planken), zodat de
 //      speeltest de keten van stammen tot planken meet (C, stap 6);
-//   5. een jager, als het spel zegt dat het eten niet haalt: het haalt de winter niet (het bericht dat het spel dan geeft,
-//      raadt zelf een jager aan), of er is honger (de status in de balk); hooguit één per `jagerNa` dagen (Marcel, 12 okt:
-//      "a ja");
+//   5. een jager, als het spel zegt dat het eten niet haalt: het haalt de winter niet (het bericht dat het spel dan
+//      geeft), of er is honger (de status in de balk); hooguit één per `jagerNa` dagen (Marcel, 12 okt: "a ja");
 //   6. na de oogst (van `naDeOogst` tot `naDePluk`): haalt het eten de winter niet, dan een tweede veld. Een akker wordt
 //      pas in de lente gezaaid, dus een wijngaard, die het gezin nog in wijnmaand plukt; en die hoort bij een
 //      wijnboerderij (vraag 155): eerst die, en als ze er staat, de wijngaard erbij;
-//   7. eet het dorp eentonig (de status in de balk, vraag 154), dan wat het spel zegt dat een soort erbij brengt
-//      (T.watHelptAanAfwisseling, js/raad.js), het eerste dat één gebouw is (een jager, een moestuin, een kippenhok, een
-//      visser); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
+//   7. eet het dorp eentonig (de status in de balk, vraag 154), dan een gebouw dat een soort eten brengt die het dorp nu
+//      niet eet (een jager, een moestuin, een kippenhok, een visser aan het water; tot 5 nov vroeg hij dat de raad,
+//      js/raad.js); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
 //   7b. als er een zagerij is en iedereen een woning heeft, een schuur richting de rotsen (werklijst C, stap 6; Marcel, 15
 //      okt: "Ja, bij de rotsen"): zo meet de speeltest een kar naast de dragers (het begin heeft er geen, vraag 184), en
 //      komen de rotsen binnen bereik; is de schuur af, dan een steengroeve erbij, zodat die kar een eigen stapel heeft;
@@ -58,6 +57,19 @@
   const isWoning = (g) => !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woning) || T.isBoerderij(g);
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
   const boerderijen = (D) => D.gebouwen.filter((g) => g.soort === 'boerderij');
+  // Regel 7: wat een soort eten op tafel brengt die het dorp nu niet eet, zoals een speler het afleest aan wat er gegeten
+  // wordt (D.behoeften.afwisseling): het eerste gebouw dat hij nu mag bouwen, de visser alleen met water bij het dorp.
+  const MAAKT_SOORT = { vlees: 'jager', groente: 'moestuin', eieren: 'kippenhok', vis: 'visser' };
+  const waterBij = (D) => (T.heeftTegels(D.wereld) ? T.natuurBij(D.wereld, 'water', T.dorpVak(D), 0) : 0);
+  function nieuweSoortEten(D) {
+    const op = (D.behoeften && D.behoeften.afwisseling) || [];
+    for (const [soort, bouw] of Object.entries(MAAKT_SOORT)) {
+      if (op.includes(soort) || T.voedtAlsGraan(soort) <= 0 || !T.magGebouwd(D, bouw)) continue;
+      if (bouw === 'visser' && !waterBij(D)) continue;
+      return { soort, bouw };
+    }
+    return null;
+  }
   // Het hart van zijn dorp: het kampvuur op het plein (het blijft een plek, ook als het uit is).
   const hart = (D) => D.plek.kamp.vuur;
 
@@ -293,7 +305,7 @@
 
     // 7. De afwisseling: eet het dorp eentonig, dan wat een soort erbij brengt.
     if (T.OORZAKEN.eentonig.speelt(D, dag)) {
-      const h = T.watHelptAanAfwisseling(D).find((x) => ['jager', 'moestuin', 'kippenhok', 'visser'].includes(x.bouw));
+      const h = nieuweSoortEten(D);
       const al = h ? D.gebouwen.filter((g) => g.soort === h.bouw) : [];
       if (h && al.every((g) => g.klaar && g.klaarOp <= dag - IN.afwisselingNa)) doe(bouw(D, h.bouw, hart(D), `voor ${h.soort}: het dorp eet eentonig`));
     }

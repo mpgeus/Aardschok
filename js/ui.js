@@ -40,10 +40,10 @@
 
     // Wat er nu van je gevraagd wordt; null laat het briefje verdwijnen. `tekst` mag <kbd> bevatten.
     // De kop zegt wie het vraagt: je dorp en de trede. `deel` (0 tot 1) is hoe ver het is, als
-    // een streep. Daaronder de raad (js/raad.js), met een toets tussen haken ([B]) als toets.
-    opdracht(tekst, kop, raad, deel) {
+    // een streep. (Tot 5 nov stond daaronder de raad, js/raad.js; Marcel, 4 nov: "De raad gaat eruit".)
+    opdracht(tekst, kop, deel) {
       const streep = deel == null ? null : Math.round(Math.max(0, Math.min(1, deel)) * 100);
-      const nu = tekst || raad ? `${kop || T.t('To do')}|${tekst || ''}|${raad || ''}|${streep}` : null;
+      const nu = tekst ? `${kop || T.t('To do')}|${tekst}|${streep}` : null;
       if (nu === vorigeOpdracht) return;
       vorigeOpdracht = nu;
       const el = $('opdracht');
@@ -52,8 +52,7 @@
         el.innerHTML =
           `<div class="doel-kop">${kop || T.t('To do')}</div>` +
           (tekst ? `<div class="doel-stand">${tekst}</div>` : '') +
-          (streep != null ? `<div class="doel-streep"><i style="width: ${streep}%"></i></div>` : '') +
-          (raad ? `<div class="doel-raad">${raad.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>')}</div>` : '');
+          (streep != null ? `<div class="doel-streep"><i style="width: ${streep}%"></i></div>` : '');
       }
     },
 

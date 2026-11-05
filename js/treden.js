@@ -111,15 +111,6 @@
     ? { n: T.mensenVanStand(D, eis.stand), wie: T.STANDEN[eis.stand].naam }
     : { n: D.bevolking || 0, wie: T.t('people') });
 
-  // Hoeveel mensen de volgende trede nog vraagt, of 0 (ook als er geen trede meer te halen is): voor de raad
-  // (js/raad.js), die zegt wat de groei doet zolang het doel mensen vraagt.
-  T.tredeMensenNodig = function (D) {
-    const trede = T.volgendeTrede(D);
-    if (!trede) return 0;
-    const eis = IN()[trede];
-    return Math.max(0, eis.mensen - geteld(D, eis).n);
-  };
-
   // Hoe het ervoor staat met de volgende trede: { kop, tekst, deel, klaar, trede }, of null als er niets te halen is.
   // `tekst` is voor het briefje linksboven: "12 of 20 villagers", of met de oude eis "43 of 50 people · a chapel ✓ ·
   // no smithy yet"; `deel` is hoe ver de mensen zijn (0 tot 1), voor de streep eronder (js/ui.js).
@@ -146,14 +137,6 @@
     const doel = NAMEN[trede].doel;
     const deel = Math.min(1, n / eis.mensen);
     return { kop: naam ? T.t('{naam} · towards {doel}', { naam, doel }) : T.t('Towards {doel}', { doel }), tekst: delen.join(' · '), deel, klaar, trede };
-  };
-
-  // Welke gebouwen het doel nog vraagt en die er nog niet staan, ook niet in aanbouw: voor de raad (js/raad.js), die
-  // zegt wat je ervoor mist. Leeg als er geen trede meer te halen is.
-  T.doelGebouwen = function (D) {
-    const trede = T.volgendeTrede(D);
-    if (!trede || !heeftTreden(D)) return [];
-    return (IN()[trede].gebouwen || []).filter((soort) => !(D.gebouwen || []).some((g) => g.soort === soort));
   };
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de groei): is het doel gehaald, dan gaat de trede omhoog.

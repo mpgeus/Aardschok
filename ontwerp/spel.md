@@ -37,7 +37,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De voorvallen | weg (15 okt, ronde 3 van het snoeien): niemand zoekt de schout meer met een vraag, een ruzie of een ramp, en de tijd staat niet meer stil voor een antwoord; de statussen (honger, kou, vol, onvrede, ...) bleven en zeggen zelf met een bericht wat er speelt, en de brand, de koorts en de wolven beginnen zelf | vraag 65, 74 |
 | De raadsman | weg (15 okt, ronde 3 van het snoeien): hij beslist niets meer als je weg bent, en het venster onder R en de knop zijn weg | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | weg (15 okt, ronde 3 van het snoeien): de brief elke ochtend en de knop Rapport; de statussen zeggen zelf met een bericht wanneer ze beginnen, erger of minder worden of ophouden | vraag 75 |
-| De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
+| De raad onder het doel | **weg sinds 5 nov** (Marcel, 4 nov: "De raad gaat eruit. De speler moet dit zelf in de gaten houden", "Ook raadsheren, etc eruit", en "B"): geen regel onder het doel, geen "What helps" bij de statussen, en geen raad in berichten en briefjes; later een tutorial voor de demo (werklijst) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager schiet klein wild en herten, laat twee per groepje staan en houdt de roedels klein (3a); de jacht te voet naar de roedel (3b); om hulp roepen en het hek komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
@@ -583,7 +583,7 @@ het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
   en in de winter brandhout) en at het elke dag genoeg soorten eten voor wat het huis wordt, dan groeit het door: een hut
   tot een huis bij **3 soorten**, een huis tot een stenen huis bij **4** (het volle werk), een stenen huis tot een
   woontoren bij **5**, en die pas met marktrecht. Het kost bouwstof: een huis 8 stammen, een stenen huis 12 steen, een
-  woontoren 20 steen (zonder wacht het, en zegt het dorp het één keer, en de raad met wie het maakt). Zo heeft elke keten
+  woontoren 20 steen (zonder wacht het, en zegt het dorp het één keer). Zo heeft elke keten
   die een soort eten maakt (de moestuin, het kippenhok, de visser, de jager, de koeien, de bakkerij, de wijnboer) een
   doel. Wat er in de weg staat, rooit het gezin eerst, zoals hieronder.
 - **De tevredenheid is één getal voor het dorp:** eten de helft, brandhout 0,3 (in de winter) en een kapel 0,2, met de
@@ -753,7 +753,7 @@ veranderde. Ze beginnen op 50.
   een paar maanden weg; een ellendig dorp vertrouwt je weinig, en een klap erbij jaagt je weg (vraag 106, stap 3; Marcel,
   3 okt: "vertrouwen ook ja"; tot dan telde het vooral de klappen op, en zakte het bij iedereen, `speelbaar.md`).
 - **Onder 20 een waarschuwing:** de heer schrijft een brief ("Nog één keer, schout. Wij hebben een neef die ook schout
-  wil worden."), het dorp mort, en de raad onder het doel zegt het, vóór alles. **Op 0 ben je weg:** de heer ontslaat je,
+  wil worden."), en het dorp mort (een bericht). **Op 0 ben je weg:** de heer ontslaat je,
   of het dorp staat met fakkels voor je deur. Maar altijd eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder
   dan 5, dus één tegenvaller jaagt je nooit in één keer weg.
 - **Betrapt** (vraag 106, c): vinden zijn soldaten wat je verstopte, dan zakt zijn gunst naar 5, met de laatste
@@ -1618,8 +1618,13 @@ zelf (vraag 162). Git bewaart het. Wat hieronder staat, is hoe het werkte.
 
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 
-**Zo werkt het nu** (29 sep, zestiende sessie; `js/raad.js`, toetsen in `test/raad.test.cjs`; Marcel: "B onder het
-doel"; de raad blijft, ronde 3 van het snoeien, 15 okt, maar de raden over de raadsman en het rapport zijn weg):
+**Weg sinds 5 nov** (Marcel, 4 nov: "De raad gaat eruit. De speler moet dit zelf in de gaten houden. We maken later een
+volledige demo tutorial", en "Ook raadsheren, etc eruit"; op de vraag of wat hij over de groei zei mocht blijven: "B",
+ook weg): `js/raad.js`, de spelregel *Advice* en `test/raad.test.cjs` zijn weg, en git bewaart ze (`git log
+--diff-filter=D -- js/raad.js`). Onder het doel staat alleen het doel. Ook weg: "What helps" op het briefje van een
+status (de droogte zegt sindsdien in haar zin wat ze de oogst kost, een feit), en wat helpt in een bericht of briefje
+("a woodcutter cuts 4 logs a day" in de herfst, "Build a hut or a house (B)", "build a weaponsmith", hoe je je soldaten
+stuurt als de rovers komen); het feit blijft. Wat hieronder staat, is hoe de raad was (vanaf 29 sep, zestiende sessie):
 - **Onder het doel** linksboven ("2 van 20 dorpelingen", `js/treden.js`; tot 2 okt "26 van 50 mensen · nog geen kapel ·
   nog geen smidse") staat in goud
   één regel die zegt wat nu tussen jou en een dorp staat, met de toets erbij. Het is de eerste die nu geldt, in deze

@@ -60,7 +60,7 @@
       `<p class="venster-staat">${T.t('<b>{werken}</b> of {handen} people work in a workshop or on a farm; <b>{vrij}</b> are free, and carry and build.', tel)}</p>` +
       (rijen.length
         ? rijen.map((r) => rij(r, klaar(r.soort))).join('')
-        : `<p class="werk-leeg">${T.t('No workshop stands yet. Build a woodcutter, a quarry or a farm, and choose here how many work there.')}</p>`) +
+        : `<p class="werk-leeg">${T.t('No workshop stands yet.')}</p>`) +
       `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>W</kbd> closes it.')}</p>`
     );
   }

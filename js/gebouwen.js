@@ -23,7 +23,7 @@
 //     liefst:      'jong',           // wie hij het liefst neemt (T.LEEFTIJDEN, js/bewoners.js): de
 //                                    // schaapskooi een knaap. Ontbreekt hij, dan eerst volwassenen.
 //     woonruimte:  5,                // hoeveel mensen erbij kunnen als hij klaar is
-//     meervoud:    'huizen',         // alleen bij een woning: "twee hutten" (de raad, de brief van de heer)
+//     meervoud:    'huizen',         // alleen bij een woning: "twee hutten" (de brief van de heer)
 //     wordt:       'huis',           // waar hij in doorgroeit als zijn bewoners lang genoeg
 //                                    // tevreden zijn (js/behoeften.js, T.tikBehoeftenDag); alleen
 //                                    // bij een huis dat de speler zelf neerzette. Ontbreekt hij,
@@ -655,16 +655,9 @@
     return dag != null ? T.datumVanDag(dag).seizoen : null;
   }
 
-  // Of een soort dit goed maakt: elke dag (maakt.uit), of wat hij binnenhaalt (`oogst`: de wijnboerderij plukt wijn).
-  // Voor de raad, die zegt wie iets maakt (js/raad.js).
-  T.maaktGoed = function (soort, wat) {
-    const g = T.GEBOUWEN[soort];
-    return !!g && !!((g.maakt && g.maakt.uit && g.maakt.uit[wat]) || g.oogst === wat);
-  };
-
   // Of een soort op deze dag stilligt, en waarom (of null): in een seizoen (`stilIn`: de visser als de beek dichtligt), of
-  // buiten zijn maanden (`alleenIn`: de wijnboerderij plukt alleen in wijnmaand). Eén vraag voor het werk, het gereedschap,
-  // de raad. `seizoen` mag apart, voor wie zonder dag wil weten of het in een seizoen stilligt.
+  // buiten zijn maanden (`alleenIn`: de wijnboerderij plukt alleen in wijnmaand). Eén vraag voor het werk, het gereedschap
+  // en het werkpaneel. `seizoen` mag apart, voor wie zonder dag wil weten of het in een seizoen stilligt.
   T.stilOp = function (soort, dag, seizoen = seizoenVan(dag)) {
     if (!soort) return null;
     if (soort.stilIn && seizoen && soort.stilIn[seizoen]) return soort.stilIn[seizoen];
@@ -1060,7 +1053,7 @@
 
   // Mag deze soort hier al gebouwd worden, door wie dan ook? Die van de trede van nu en de treden ervoor (in een dorp
   // ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van neerzetten heeft (menu:
-  // false). Ook voor de raad (js/raad.js): wat mag, zegt de raad.
+  // false).
   T.magGebouwd = (D, soort) => vanDeTrede(D, soort) && !T.isDicht(D, soort);
   function vanDeTrede(D, soort) {
     const g = T.GEBOUWEN[soort];
@@ -1080,7 +1073,7 @@
   };
   // Wat in dorp D op slot is (D.dicht: wat een level zegt, zoals het demojaar, levels/demojaar.js; werklijst Q, vraag 181,
   // e: het wachthuis en de wapenmaker): het staat in het bouwmenu, op slot, met "In the full game", maar je zet het niet
-  // neer (T.waaromPastHetNiet), en de raad noemt het niet (T.magGebouwd). Het debugvenster zet het aan of uit, om te
+  // neer (T.waaromPastHetNiet). Het debugvenster zet het aan of uit, om te
   // proberen (Marcel, 20 okt).
   T.isDicht = (D, soort) => !!D.dicht && D.dicht.includes(soort);
   // Het raadhuis (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
@@ -1369,7 +1362,7 @@
   T.gezinKomt = function (D) {
     const woonruimte = T.telWoonruimte(D);
     if (D.bevolking < woonruimte) T.wijzigBevolking(D, Math.min(woonruimte, D.bevolking + T.GEBOUWEN_INSTELLINGEN.gezinGrootte) - D.bevolking, 'groei');
-    else T.zeg(D, T.t('A family wants to come, but there is no room. Build a hut or a house (B).'));
+    else T.zeg(D, T.t('A family wants to come, but there is no room.'));
   };
   // Is er plaats voor een gezin: een huis met plaats?
   T.plaatsVoorEenGezin = (D) => (D.bevolking || 0) < T.telWoonruimte(D);
@@ -1378,17 +1371,9 @@
   // snoeien).
   T.gezinDagen = () => T.GEBOUWEN_INSTELLINGEN.gezinDagen;
 
-  // De eerstvolgende dag waarop er een gezin kan komen (T.tikGebouwenDag, stap 4): na vandaag, want die dag is al
-  // geteld.
-  T.volgendeGezinDag = function (D) {
-    const n = T.gezinDagen(D);
-    return (Math.floor(Math.floor((D.kalender && D.kalender.dag) || 0) / n) + 1) * n;
-  };
-
   // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
   // de drempel, js/behoeften.js), 'winter' (het hout of het eten haalt de winter niet, nu die in zicht is:
-  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js), 'plaats' (geen huis met plaats) en 'kamp' (er woont nog een gezin in het kamp, js/begin.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
-  // en de raad linksboven ook (js/raad.js), zodat die zegt wat de groei doet en niet wat hij zelf denkt.
+  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js), 'plaats' (geen huis met plaats) en 'kamp' (er woont nog een gezin in het kamp, js/begin.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt).
   T.waaromGeenGezin = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const waarom = [];
     if ((D.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');

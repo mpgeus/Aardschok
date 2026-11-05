@@ -431,17 +431,6 @@
           uitleg: T.t('The village eats the seed grain like any other grain. Whoever eats everything in winter has nothing to sow in spring.') },
       ],
     },
-    // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).
-    {
-      id: 'raad', naam: T.t('Advice'), standaard: 'aan', instelling: 'spel',
-      uitleg: T.t('A line under the goal at the top left.'),
-      keuzes: [
-        { id: 'aan', naam: T.t('On'), zet: { 'RAAD_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('Under the goal is what now stands between you and a village: why no family is coming, or when the next one will, the logs for winter, what you lack for the chapel and the smithy and where it comes from, the robbers. With the key to press beside it.') },
-        { id: 'uit', naam: T.t('Off'), zet: { 'RAAD_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('Only the goal. What the village tells you, you see in the messages.') },
-      ],
-    },
     // De heervaart (Marcel, 29 sep, werklijst vraag 60: "A ja B ja"; js/heervaart.js).
     {
       id: 'heervaart', naam: T.t('The levy'), standaard: 'aan',
@@ -570,7 +559,6 @@
     { naam: T.t('Choosing and sending'), blok: 'KIEZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The battle'), blok: 'VELDSLAG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The AI general'), blok: 'VELDHEER_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Statuses'), blok: 'STATUSSEN_INSTELLINGEN' }, // geen tekst
@@ -1067,7 +1055,7 @@
     belasting: T.t('tax'),
     goud: T.t('gold'),
     belastingNaarStand: T.t('tax by standing'),
-    // De rovers, de raad, de herberg
+    // De rovers, de herberg
     overvalPerJaar: T.t('attacks per year'),
     eersteOvervalNa: T.t('first attack after'),
     overvalEerst: T.t('robbers in an attack, the first year'),

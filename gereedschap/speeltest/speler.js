@@ -436,8 +436,8 @@
       // op de afwisseling, ronde 3 van het snoeien, stap 6).
       afwisseling: (s.dorp.behoeften.afwisseling || []).slice(),
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis', 'woontoren'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'aanvoerder').length])),
-      // Welke huizen op bouwstof wachten, zoals de raad het zegt (T.bouwstofRaad, js/raad.js).
-      bouwstof: T.bouwstofRaad(s.dorp),
+      // Welke huizen op bouwstof wachten om door te groeien (g.wachtOpBouwstof, js/behoeften.js).
+      bouwstof: s.dorp.gebouwen.filter((g) => g.wachtOpBouwstof).map((g) => g.soort),
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
       bazen: T.bazenNu(s.dorp),

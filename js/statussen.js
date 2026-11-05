@@ -1,7 +1,8 @@
 // De statussen van het dorp (werklijst vraag 77, stap 2; Marcel, 1 okt: "Iets wat begint en eindigt. Mogelijk in
 // verschillende niveaus"): wat er in het dorp speelt en een probleem is, zoals honger, kou, droogte of de koorts, met
 // sinds wanneer en op welk niveau. Een status is iets wat je kunt zien en zelf kunt veranderen; de kaartjes in de balk
-// (js/hud.js) tonen hem, met wat helpt. Tot 15 okt stonden ze bij de voorvallen (js/voorvallen.js), die er hun oorzaak
+// (js/hud.js) tonen hem; wat helpt, ziet de speler zelf (tot 5 nov zei het kaartje het; Marcel, 4 nov: "De speler moet dit
+// zelf in de gaten houden"). Tot 15 okt stonden ze bij de voorvallen (js/voorvallen.js), die er hun oorzaak
 // uit haalden; ze verhuisden in ronde 3 van het snoeien (ontwerp/snoeien.md), omdat de voorvallen weggaan en de
 // statussen blijven. Regels zonder scherm; toetsen in test/statussen.test.cjs.
 (function (T) {
@@ -24,7 +25,7 @@
   const mist = (D, wat) => !!(D.behoeften && D.behoeften.mist && D.behoeften.mist.includes(wat));
   const brandhout = (D) => ((D.voorraad && D.voorraad.hout) || 0) + ((D.voorraad && D.voorraad.turf) || 0);
 
-  // Wat in het dorp speelt en een probleem uitlokt: iets wat je kunt zien (de balk zegt het, of de raad) en zelf kunt
+  // Wat in het dorp speelt en een probleem uitlokt: iets wat je kunt zien (de balk zegt het) en zelf kunt
   // veranderen. Zo komt een ramp niet uit de lucht, maar uit iets wat je had kunnen zien (het concept,
   // ontwerp/concept.md: "problemen hebben oorzaken"). Per oorzaak: wat er dan is (kop), en of hij nu speelt (speelt:
   // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt). Voor het rapport van
@@ -33,8 +34,7 @@
   //
   // Sinds 9 okt (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt. Mogelijk in
   // verschillende niveaus") is een oorzaak een status: `naam` voor de balk, en `erger` het tweede niveau, met zijn eigen
-  // naam, kop en `speelt` (dat alleen gevraagd wordt als het eerste niveau speelt). `helpt` zegt wat helpt, voor het
-  // kaartje in de balk (js/hud.js).
+  // naam, kop en `speelt` (dat alleen gevraagd wordt als het eerste niveau speelt).
   T.OORZAKEN = {
     // Een gevecht (js/gevecht.js; werklijst vraag 170, stap 2): zolang er gevochten wordt, loopt de tijd hooguit op 1×.
     gevecht: {
@@ -45,7 +45,6 @@
       nog: T.t('There is still fighting'),
       voorbij: T.t('The fighting is over'),
       speelt: (D) => (D.gevecht ? '' : null),
-      helpt: () => T.t('your soldiers: choose them, and right-click an enemy'),
     },
     honger: {
       naam: T.t('Hunger'),
@@ -59,13 +58,9 @@
         minder: T.t('The famine is over, but there is still hunger'),
         speelt: (D) => (D.behoeften && D.behoeften.voedselDekking < IN().hongersnood ? T.t('there is not even half a ration to eat') : null),
       },
-      helpt: (D) => {
-        const h = T.watHelptAanEten(D);
-        return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('more food: more fields, livestock, a fisherman or a hunter');
-      },
     },
     // De afwisseling (vraag 154; Marcel, 13 okt: "A1, B1"): eet het dorp minder dan vier soorten, dan werkt het trager
-    // (T.werkVanAfwisseling, js/behoeften.js); met één soort het traagst. Wat helpt: T.watHelptAanAfwisseling (js/raad.js).
+    // (T.werkVanAfwisseling, js/behoeften.js); met één soort het traagst.
     eentonig: {
       naam: T.t('Plain fare'),
       kop: T.t('The food is plain'),
@@ -79,10 +74,6 @@
         minder: T.t('The village eats more than one dish again, but the food is still plain'),
         speelt: (D) => (D.behoeften.afwisseling.length === 1 ? T.t('there is only {soorten}, and it works at {werk}%', afwisselingWoorden(D)) : null),
       },
-      helpt: (D) => {
-        const h = T.watHelptAanAfwisseling(D);
-        return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('another kind of food');
-      },
     },
     // Wie geen huis heeft (js/afbreken.js; werklijst C, stap 5; Marcel, 14 okt: "ze lopen los, met een melding dat er
     // huizen nodig zijn"): het gezin slaapt op het plein tot er een woning met plaats is (T.verhuisUitHetKamp, js/begin.js).
@@ -95,7 +86,6 @@
         const n = T.daklozeGezinnen(D).length;
         return n ? T.t('{n|one family sleeps|# families sleep} on the square', { n }) : null;
       },
-      helpt: () => T.t('a hut or a house with room for them'),
     },
     kou: {
       naam: T.t('Cold'),
@@ -109,7 +99,6 @@
         minder: T.t('It is no longer freezing in the houses, but it is still cold'),
         speelt: (D) => (brandhout(D) < 1 ? T.t('the firewood has run out') : null),
       },
-      helpt: () => T.t('firewood: a woodcutter, peat, or logs from the merchant'),
     },
     vol: {
       naam: T.t('Full'),
@@ -123,7 +112,6 @@
         minder: T.t('The houses are no longer overcrowded, but they are full'),
         speelt: (D) => ((D.bevolking || 0) > T.telWoonruimte(D) ? T.t('more people live here than there is room for') : null),
       },
-      helpt: () => T.t('room to live: mark out a plot, or let a house grow'),
     },
     // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): de laatste dagen kwamen ze bij het dorp (wie werkte, zag
     // ze; ze namen een schaap; ze vielen iemand aan).
@@ -133,7 +121,6 @@
       nog: T.t('There are still wolves near the village'),
       voorbij: T.t('The wolves keep to the forest again'),
       speelt: (D, dag) => T.wolvenBijHetDorp(D, dag),
-      helpt: () => T.t('your soldiers: choose them, and right-click a wolf; and light in the dark'),
     },
     // De droogte (js/weer.js; Marcel, 9 okt): lang geen regen in het groeiseizoen.
     droogte: {
@@ -148,7 +135,6 @@
         minder: T.t('The drought is no longer severe, but it is still dry'),
         speelt: (D) => (T.droogteNiveau(D) >= 2 ? droogteWaarom(D) : null),
       },
-      helpt: (D) => T.t('rain; until then it costs the harvest ({n}% less now), and the brooks are dry. Keep grain aside for the winter, or buy it from the merchant', { n: Math.round((1 - T.droogteFactor(D)) * 100) }),
     },
     // De koorts (js/koorts.js; vraag 144, 3): zolang er iemand ziek is.
     koorts: {
@@ -164,7 +150,6 @@
         minder: T.t('It is no longer an epidemic, but there is still fever'),
         speelt: (D) => (T.koortsNiveau(D) >= 2 ? T.koortsWaarom(D) : null),
       },
-      helpt: () => T.t('a clean well, ale instead of water, and fewer people crowded together (a full village and the cold make it worse)'),
     },
     // Brandgevaar (js/brand.js; vraag 144, 3): in de droogte vat een dak makkelijk vlam.
     brandgevaar: {
@@ -179,7 +164,6 @@
         minder: T.t('The risk of fire is no longer high, but it is still there'),
         speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 2 ? (T.droogteNiveau(D) >= 2 ? T.t('the drought is severe') : T.t('it is dry, and the houses are full')) : null),
       },
-      helpt: () => T.t('rain; until then logs in store, to put out fires and rebuild, and a village that is not too full'),
     },
     onvrede: {
       naam: T.t('Discontent'),
@@ -198,10 +182,6 @@
         minder: T.t('The unrest is over, but the village is still discontented'),
         speelt: (D) => (D.behoeften && D.behoeften.tevredenheid < IN().onrust ? T.t('it is deeply discontented') : null),
       },
-      helpt: (D) => {
-        const b = D.behoeften;
-        return b && b.mist && b.mist.length ? T.t('what it lacks: {mist}', { mist: T.opsomming(b.mist) }) : T.t('what the village lacks (the advice says what)');
-      },
     },
   };
   // Wat het dorp eet en hoe hard het werkt, voor de status eentonig.
@@ -209,9 +189,12 @@
     soorten: T.opsomming(D.behoeften.afwisseling.map((wat) => T.waarNaam(wat))),
     werk: Math.round(T.werkVanAfwisseling(D) * 100),
   });
+  // Met wat het de oogst nu kost: een feit, geen raad (tot 5 nov stond het bij "What helps").
   function droogteWaarom(D) {
     const W = T.weerVan(D);
-    return W && W.droog >= 3 ? T.t('it has not rained for {getal} days', { getal: T.telwoord(W.droog) }) : T.t('too little rain is falling');
+    const waarom = W && W.droog >= 3 ? T.t('it has not rained for {getal} days', { getal: T.telwoord(W.droog) }) : T.t('too little rain is falling');
+    const minder = Math.round((1 - T.droogteFactor(D)) * 100);
+    return minder > 0 ? T.t('{waarom}, and the harvest is {n}% less', { waarom, n: minder }) : waarom;
   }
 
   // Speelt oorzaak `o` nu? Dan { id, zin, waarom }, met de zin die het bericht erbij zegt: "There is hunger, for the
@@ -256,12 +239,9 @@
     D.statussen = nieuw;
     if (T.ui && T.ui.toonStatussen) T.ui.toonStatussen(D);
   };
-  // Wat er nu speelt, als [{ id, niveau, naam, zin, sinds, helpt }]: de oorzaken van vandaag, met sinds wanneer.
+  // Wat er nu speelt, als [{ id, niveau, naam, zin, sinds }]: de oorzaken van vandaag, met sinds wanneer.
   T.statussenVan = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const st = D.statussen || {};
-    return T.oorzakenNu(D, dag).map((o) => {
-      const O = T.OORZAKEN[o.id];
-      return Object.assign(o, { sinds: st[o.id] ? st[o.id].sinds : dag, helpt: O.helpt ? O.helpt(D) : '' });
-    });
+    return T.oorzakenNu(D, dag).map((o) => Object.assign(o, { sinds: st[o.id] ? st[o.id].sinds : dag }));
   };
 })(globalThis.Spel = globalThis.Spel || {});

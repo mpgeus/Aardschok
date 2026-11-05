@@ -72,7 +72,7 @@
     winterVooraf: [{ maand: 'herfstmaand', dag: 1 }, { maand: 'slachtmaand', dag: 1 }],
     opraakWaarschuwing: 15,
     // Vanaf zoveel dagen vóór de winter kijkt het dorp of het hout en het eten hem halen (90: vanaf 1 herfstmaand, de
-    // eerste dag hierboven). Dan zegt de raad (js/raad.js) het, en haalt het hem
+    // eerste dag hierboven). Haalt het hem
     // niet, dan komt er geen gezin (T.waaromGeenGezin in js/gebouwen.js; werklijst vraag 59, B). Eén getal voor alle
     // drie, zodat ze niet uit elkaar lopen.
     winterVoorafDagen: 90,
@@ -870,7 +870,7 @@
   // (T.winterDagen, js/vee.js).
   const isWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
   // Hoeveel dagen het vanaf `dag` nog duurt tot die winter (0 als hij al loopt). Voor wie niet meer wil weten
-  // (de raad, js/raad.js), want het eten van de hele winter uitrekenen kost meer.
+  // (T.winterInZicht), want het eten van de hele winter uitrekenen kost meer.
   T.dagenTotDeWinter = (dag) => T.periodeVanaf(dag, isWinter).tot;
   // Is de winter in zicht: binnen winterVoorafDagen, of al begonnen? Dan kijkt het dorp of het hout en het eten hem halen.
   T.winterInZicht = (dag) => T.dagenTotDeWinter(dag) <= T.BEHOEFTEN_INSTELLINGEN.winterVoorafDagen;
@@ -960,24 +960,9 @@
     return niet;
   };
 
-  // Wat helpt als het hout de winter niet haalt: een houthakker, of nog een.
-  function houtHelpt(D) {
-    const woorden = { hakker: T.GEBOUWEN.houthakker.naam, per: T.hoeveel(T.maaktUit(D, T.GEBOUWEN.houthakker).hout, 'hout') };
-    return (D.gebouwen || []).some((g) => g.soort === 'houthakker')
-      ? T.t('another {hakker} cuts {per} more a day', woorden)
-      : T.t('{hakker} cuts {per} a day', { ...woorden, hakker: T.eenNaam(woorden.hakker) });
-  }
-
-  // En als het eten de winter niet haalt: de oogst is binnen, maar een jager schiet vlees, als dat een
-  // maag vult.
-  function etenHelpt(D, eten) {
-    const woorden = { dagen: eten.dagen, winter: eten.winter, jager: T.eenNaam(T.GEBOUWEN.jager.naam), vlees: T.hoeveel(T.GEBOUWEN.jager.maakt.uit.vlees, 'vlees') };
-    if (!T.BEHOEFTEN_INSTELLINGEN.vleesIsEten) return T.t('The food lasts {dagen} of the {winter} days.', woorden);
-    return T.t('The food lasts {dagen} of the {winter} days: {jager} shoots {vlees} a day, and meat fills the belly.', woorden);
-  }
-
-  // Het bericht vooraf: "In a month it will be winter. The wood lasts 52 of the 90 days, even with what the people
-  // gather: a woodcutter cuts 2 wood a day. The food lasts the winter."
+  // Het bericht vooraf: "In a month it will be winter. The logs last 52 of the 90 days, even with what the people
+  // gather. The food lasts the winter." Wat helpt, zegt het niet: dat houdt de speler zelf in de gaten (Marcel, 4 nov:
+  // "De raad gaat eruit"; tot dan "a woodcutter cuts 4 logs a day" en de jager bij het eten).
   function zegDeWinterVooraf(D, dag) {
     const hout = T.houtVoorDeWinter(D, dag);
     const eten = T.etenVoorDeWinter(D, dag);
@@ -988,11 +973,11 @@
       // Sprokkelen de mensen (vraag 74, stap 2), dan zegt het dat dat niet genoeg is.
       if (hout.haalt) zinnen.push(T.t('The logs last the winter.'));
       else {
-        const woorden = { dagen: hout.dagen, winter: hout.winter, hulp: houtHelpt(D) };
-        zinnen.push(T.sprokkelHout(D) > 0 ? T.t('The logs last {dagen} of the {winter} days, even with what the people gather: {hulp}.', woorden)
-          : T.t('The logs last {dagen} of the {winter} days: {hulp}.', woorden));
+        const woorden = { dagen: hout.dagen, winter: hout.winter };
+        zinnen.push(T.sprokkelHout(D) > 0 ? T.t('The logs last {dagen} of the {winter} days, even with what the people gather.', woorden)
+          : T.t('The logs last {dagen} of the {winter} days.', woorden));
       }
-      zinnen.push(eten.haalt ? T.t('The food lasts the winter.') : etenHelpt(D, eten));
+      zinnen.push(eten.haalt ? T.t('The food lasts the winter.') : T.t('The food lasts {dagen} of the {winter} days.', { dagen: eten.dagen, winter: eten.winter }));
       // Een gezin wacht op de winter (js/gebouwen.js, T.waaromGeenGezin): dat zegt het dorp erbij.
       if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.winterInZicht(dag)) zinnen.push(T.t('Until there is enough, no new family will come.'));
     }

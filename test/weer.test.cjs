@@ -143,7 +143,7 @@ test('een beek valt in de droogte droog, een meer niet; een visser aan een beek 
   assert.equal(T.hoekenDroog(D, 18, 5, ['water', 'water', 'water', 'water']), null, 'het meer blijft water');
 });
 
-test('de statussen hebben niveaus: droogte en ernstige droogte, met wat helpt', () => {
+test('de statussen hebben niveaus: droogte en ernstige droogte, met wat het de oogst kost', () => {
   const { S } = proefDorp(T);
   const D = S.dorp;
   const dag = dagVan('zomermaand', 10);
@@ -152,8 +152,7 @@ test('de statussen hebben niveaus: droogte en ernstige droogte, met wat helpt', 
   let st = T.statussenVan(D, dag).find((s) => s.id === 'droogte');
   assert.equal(st.niveau, 1);
   assert.equal(st.naam, 'Drought');
-  assert.match(st.zin, /^It is dry, for it has not rained for .* days\.$/);
-  assert.match(st.helpt, /5% less/);
+  assert.match(st.zin, /^It is dry, for it has not rained for .* days, and the harvest is 5% less\.$/);
   T.tikStatussenDag(D, dag);
   D.weer.tekort = IN.ernstigVanaf;
   T.tikStatussenDag(D, dag + 3);

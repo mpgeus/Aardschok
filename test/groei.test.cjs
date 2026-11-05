@@ -211,10 +211,7 @@ test('zonder hout wacht de hut, en zegt het dorp het één keer; met hout groeit
   const gezegd = berichten(() => { dag = dagen(D, dag, T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 5); });
   assert.equal(hut.soort, 'hut');
   assert.deepEqual(gezegd.filter((t) => t.includes('can become a house')), ['A hut can become a house, but that takes 8 logs.']);
-  // De raad zegt het ook, met wie het hout maakt (js/raad.js), en wat je mist om die te bouwen.
-  assert.equal(T.bouwstofRaad(D), `A hut can become a house, but the stores do not hold 8 logs: build a woodcutter [B]. For that you are short of ${T.GEBOUWEN.houthakker.kosten.hout} logs.`);
   T.zetVoorraad(D, 'hout', 10);
-  assert.equal(T.bouwstofRaad(D), null, 'is het hout er, dan groeit hij vannacht');
   T.tikBehoeftenDag(D, ++dag);
   assert.equal(hut.soort, 'huis');
   assert.equal(D.voorraad.hout, 2);

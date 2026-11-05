@@ -251,14 +251,15 @@
     const bijSmid = mist.filter((stuk) => stuk !== 'paard');
     if (bijSmid.length) {
       const waren = T.opsomming(bijSmid.map((stuk) => T.waarNaam(STUKKEN[stuk].waar)));
+      // (Tot 5 nov zei het zonder wapenmaker "build a weaponsmith": de raad ging eruit, Marcel, 4 nov.)
       return (D.gebouwen || []).some((x) => x.soort === 'wapenmaker')
         ? T.t('waiting for {waren} from the weaponsmith', { waren })
-        : T.t('waiting for {waren}: build a weaponsmith', { waren });
+        : T.t('waiting for {waren}', { waren });
     }
     if (mist.length) {
       return (D.gebouwen || []).some((x) => x.soort === 'stal')
         ? T.t('waiting for a horse from the stable')
-        : T.t('waiting for a horse: build a stable, or buy one from the merchant');
+        : T.t('waiting for a horse');
     }
     return T.t('nobody without work');
   }

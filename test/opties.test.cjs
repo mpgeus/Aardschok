@@ -256,7 +256,7 @@ test('een instelling is van de browser, een spelregel van het spel (vraag 172)',
   T.spelregelsTerug(S);
   assert.equal(T.spelregelsAnders(S), 0);
   assert.equal(T.LICHT_INSTELLINGEN.zonneschaduw, false, 'de spelregels terug laat de instellingen staan');
-  for (const id of ['tekenen', 'schaduwen', 'doorkijk', 'raad']) assert.ok(T.isInstelling(id), id);
+  for (const id of ['tekenen', 'schaduwen', 'doorkijk']) assert.ok(T.isInstelling(id), id);
   for (const id of ['graan', 'hoogte', 'weer', 'beesten']) assert.ok(!T.isInstelling(id), id);
   T.optiesTerug();
 });

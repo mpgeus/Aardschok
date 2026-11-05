@@ -154,7 +154,6 @@ test('op 0 jaagt het dorp je weg, na een waarschuwing', () => {
   T.wijzigVertrouwen(D, -60, 'een slechte maand');
   assert.equal(T.bazenNu(D).vertrouwen, IN().laatsteWaarschuwing, 'eerst de waarschuwing');
   assert.ok(berichten.some((t) => /The village grumbles/.test(t)));
-  assert.ok(T.RADEN.find((r) => r.id === 'dorpMort').als(D), 'de raad zegt het');
   T.wijzigVertrouwen(D, -10, 'nog een');
   assert.equal(D.einde && D.einde.reden, 'verjaagd');
   assert.deepEqual(eindes, ['verjaagd']);

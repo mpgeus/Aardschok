@@ -134,7 +134,6 @@ test('een veldslag: de keuring, en twee legers zonder dorp, elk in een linie in 
     assert.equal(S.kalender.dag, dag, 'de dag staat stil');
     assert.equal(mannen.map((e) => `${e.tx},${e.ty}`).join(' '), plekken, 'iedereen staat op zijn post');
     assert.deepEqual(T.oorzakenNu(A, Math.floor(dag)), [], 'geen statussen van een dorp');
-    assert.equal(T.raadNu(A), null, 'geen raad');
     assert.equal(T.doelLinksboven(S, A).tekst, 'Defeat the enemy army.');
     // Fight!: de een is klaar, en de slag wacht op de ander
     assert.ok(T.inVoorbereiding(S), 'twee spelers: eerst de voorbereiding');

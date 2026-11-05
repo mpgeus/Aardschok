@@ -1,7 +1,7 @@
 // Settings (vraag 172; Marcel, 16 okt: "We hebben een volledig menu nodig geen a.i slop", en daarna, 172b: "Zaken als
 // resolutie etc hebben we nodig"): wat van jou is en niet van het spel. Vier tabbladen: Display (het venster en zijn
 // formaat, hoeveel beelden per seconde, de meter, de helderheid), Graphics (hoe de wereld getekend wordt), Game (pauze als
-// je wegklikt, vanzelf opslaan, de raad, de taal) en Controls (welke toets wat doet). Wat er te kiezen is, zijn de opties
+// je wegklikt, vanzelf opslaan, de taal) en Controls (welke toets wat doet). Wat er te kiezen is, zijn de opties
 // met `instelling` in js/opties.js (die noemt het tabblad): ze raken de wereld niet, dus mag ieder ze anders hebben, ook
 // samen, en de browser onthoudt ze (T.zetOptie). Een venster zoals elk ander (js/ui.js), dat opent vanuit het titelscherm
 // en het menu onder Esc (js/menu.js); dicht is weer het menu. Een rij ziet eruit als in de spelregels (T.ui.optieRij,

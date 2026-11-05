@@ -78,10 +78,10 @@ test('wat hem tegenhoudt: geen handen, te weinig om te bewerken, weinig afwissel
   assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands: nobody is free to work here\./, 'je wilde er 1, maar niemand was vrij');
   T.zetInzet(D, 'houthakker', 0);
   g.handen = 0;
-  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands: you put nobody to work here \(Work, W\)\./, 'zo gekozen (4 nov)');
+  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /No hands, as you chose\./, 'zo gekozen (4 nov)');
   T.zetInzet(D, 'houthakker', 1);
   g.handen = 1;
-  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /1 of 2 hands: you can put more to work here \(Work, W\)\./);
+  assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /1 of 2 hands, as you chose\./);
   Object.assign(g, { handen: 1, werkte: 0.5, tekort: 'ijzer' });
   assert.match(regels(T.gebouwBriefje(D, g), 'Held back by'), /Too little iron to work with: it works part of the day\./);
   Object.assign(g, { tekort: null, werkte: 1 });

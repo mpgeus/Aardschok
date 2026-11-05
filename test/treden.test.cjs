@@ -61,7 +61,6 @@ test('het doel bij het begin: hoeveel dorpelingen er zijn, van de twintig', () =
   // Het proefdorp heeft alleen hutten en boerderijen (en het raadhuis): niemand woont in een huis, dus nog geen dorpeling.
   assert.equal(n, 0, 'het dorp begint met niemand in een huis');
   assert.equal(doel.tekst, `${n} of 20 villagers`);
-  assert.equal(T.tredeMensenNodig(S.dorp), 20 - n);
 });
 
 test('wie telt als dorpeling: wie in een huis woont, of in een stenen huis; een hut, een boerderij en de aanvoerder niet', () => {
@@ -119,7 +118,6 @@ test('bij 20 ambachtslieden krijgt het dorp marktrecht; daarna is er (voorlopig)
   assert.equal(S.dorp.trede, 'marktrecht');
   assert.ok(berichten.some((t) => /has become a market town/.test(t)), berichten.join(' | '));
   assert.equal(T.tredeDoel(S.dorp), null);
-  assert.equal(T.tredeMensenNodig(S.dorp), 0);
   assert.equal(T.volgendeTrede(S.dorp), null, 'de stad heeft nog geen eis');
 });
 

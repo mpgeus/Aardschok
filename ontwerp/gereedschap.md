@@ -454,7 +454,6 @@ Speel je mee, dan begint de slag met de voorbereiding (3b2): een minuut, of tot 
 nagelopen, de voorbereiding tot het eindscherm en terug naar de lobby).
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
-`Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
 `Spel.debug.versiering()` zegt welke boom er op het plein staat (de meiboom of de kerstboom) en waar.
 `Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei, en de punten (vraag 186: nu,
 op Sint-Maarten in de demo, en de beste op deze computer); `('jaarverslag')` toont het jaar

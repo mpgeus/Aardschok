@@ -114,8 +114,7 @@
     if (b[welk] < IN().waarschuwing && !b.gewaarschuwd[welk]) waarschuw(D, welk, tekst);
   }
 
-  // De waarschuwing: de heer schrijft je een brief (js/brieven.js, soort 'waarschuwing'); het dorp mort, en de raad
-  // onder het doel zegt het (js/raad.js).
+  // De waarschuwing: de heer schrijft je een brief (js/brieven.js, soort 'waarschuwing'); het dorp mort (een bericht).
   function waarschuw(D, welk, tekst) {
     const b = bazenVan(D);
     b.gewaarschuwd[welk] = true;
@@ -186,7 +185,7 @@
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Voor het scherm (js/hud.js) en de raad (js/raad.js)
+  // Voor het scherm (js/hud.js)
   // ---------------------------------------------------------------------------------------------
 
   // Hoe hij erbij staat, in een woord: blij, tevreden, ontevreden, boos (onder de waarschuwing). Een naam waar de regels op

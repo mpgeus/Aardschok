@@ -517,7 +517,7 @@
   // in een plaatje dat Enter bewaart, staat het niet.
   function fotoWenk(tekst) {
     const el = document.getElementById('foto-wenk');
-    el.innerHTML = tekst.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>'); // [H] wordt een toets, zoals in de raad (js/ui.js)
+    el.innerHTML = tekst.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>'); // [H] wordt een toets
     el.classList.remove('flits');
     void el.offsetWidth; // zo begint het vagen opnieuw
     el.classList.add('flits');
@@ -720,11 +720,6 @@
     glijNaar(h.x, h.y);
   }
 
-  // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
-  // seconde is genoeg. Hij verandert niets, en is alleen scherm, dus hij staat niet in S.
-  const RAAD_ELKE = 0.5;
-  let raadNu = null;
-  let raadOp = -Infinity;
   // Wat er nog niet getikt is (js/tik.js, T.tikBij): alleen scherm, want elke computer heeft zijn eigen beelden.
   const klok = { rest: 0 };
 
@@ -743,14 +738,10 @@
     if (bewaard) T.ui.opgeslagen(bewaard);
     T.werkEffectenBij(S, dt); // de zwevende teksten, en wie in een beurt op een animatie wacht (js/anim.js)
     // In het vak linksboven staat het doel van het gehucht: een dorp worden (js/treden.js), of in een scenario zijn
-    // hoofddoel (T.doelLinksboven, js/scenario.js). Daaronder de raad: wat nu tussen jou en een dorp staat (js/raad.js).
-    // (Tot 23 okt ging de quest die je het eerst aannam voor: ronde 4 van het snoeien.)
+    // hoofddoel (T.doelLinksboven, js/scenario.js). (Tot 23 okt ging de quest die je het eerst aannam voor: ronde 4 van het
+    // snoeien; tot 5 nov stond daaronder de raad, js/raad.js: Marcel, 4 nov, "De speler moet dit zelf in de gaten houden".)
     const doelNu = T.doelLinksboven(S, S.dorp);
-    if (!(S.tijd - raadOp < RAAD_ELKE) || S.tijd < raadOp) {
-      raadNu = T.raadNu(S.dorp);
-      raadOp = S.tijd;
-    }
-    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst, doelNu && doelNu.deel);
+    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, doelNu && doelNu.deel);
     // In een gevecht (js/gevecht.js) kleuren de randen van het beeld een fractie rood (js/tekenen.js).
     const hier = T.dorpHier(S);
     S.gevechtGloed += ((hier && hier.gevecht ? 1 : 0) - S.gevechtGloed) * Math.min(1, dt * 5);
@@ -1522,12 +1513,6 @@
         helling: Object.keys(w.hoogte.hellingen),
         aanvoerder: Math.round(T.hoogteOp(w, S.dorp.aanvoerder.x, S.dorp.aanvoerder.y)),
       };
-    },
-    // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
-    raad() {
-      if (!(S.dorp && S.dorp.plek.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
-      const nu = T.raadNu(S.dorp);
-      return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },
     // De aanvoerder (js/soldaten.js; vraag 170, stap 5): wie het is, en wie het overneemt als hij valt. ('val') laat
     // hem nu vallen, zoals in een gevecht (T.valt): dan neemt een veteraan of de soldaat die het langst dient het over.

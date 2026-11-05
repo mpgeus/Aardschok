@@ -135,11 +135,11 @@ test('elk getal in elk bestand kan zichzelf terugschrijven zonder dat er iets an
 // Er is nu geen spelregel meer die een heel object zet (de spelregel "Treden" was de laatste, weg op 11 okt, snoeironde vraag
 // 153), maar de bladzijde met getallen kan het nog: dus voegt deze toets er tijdelijk een toe, in de tekst van js/opties.js.
 const metObjectSpelregel = (bronnen) => {
-  const raad = '    // De raad onder het doel (Marcel, 29 sep';
-  assert.ok(bronnen['js/opties.js'].includes(raad), 'het anker in js/opties.js');
+  const anker = '    // De heervaart (Marcel, 29 sep';
+  assert.ok(bronnen['js/opties.js'].includes(anker), 'het anker in js/opties.js');
   return {
     ...bronnen,
-    'js/opties.js': bronnen['js/opties.js'].replace(raad, `    {
+    'js/opties.js': bronnen['js/opties.js'].replace(anker, `    {
       id: 'objectProef', naam: 'Object proef', standaard: 'standen',
       uitleg: 'Een spelregel die een heel object zet.',
       keuzes: [
@@ -147,7 +147,7 @@ const metObjectSpelregel = (bronnen) => {
         { id: 'vijftig', naam: 'Vijftig', zet: { 'TREDEN_INSTELLINGEN.dorp': { mensen: 50, gebouwen: ['kapel', 'smidse'] } }, uitleg: 'Vijftig.' },
       ],
     },
-${raad}`),
+${anker}`),
   };
 };
 

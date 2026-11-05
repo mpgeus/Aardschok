@@ -162,7 +162,7 @@
   T.stapelVan = (g) => som(g && g.stapel);
   // Hoeveel er nog op de stapel van g kan (Infinity zonder kar): de nachtlus van de gebouwen maakt niet meer dan dat.
   T.ruimteOpStapel = (D, g) => (T.metVervoer(D) ? Math.max(0, IN().stapelVol - T.stapelVan(g)) : Infinity);
-  // Hoeveel er van `wat` op alle stapels van het dorp ligt (de raad, de balk, de toetsen).
+  // Hoeveel er van `wat` op alle stapels van het dorp ligt (de balk, de toetsen).
   T.opDeStapels = function (D, wat) {
     let n = 0;
     for (const g of (D && D.gebouwen) || []) if (g.stapel) n += g.stapel[wat] || 0;

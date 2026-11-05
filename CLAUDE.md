@@ -140,7 +140,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `werkpaneel` (het werk verdelen).
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de dragers, de ossenkar, de stapels), `handel` (de marskramer), `bode`.
-- **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
+- **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`,
   `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
   en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen; `veldslag` (skirmish, de kaarten

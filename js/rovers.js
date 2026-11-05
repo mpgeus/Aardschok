@@ -490,8 +490,8 @@
   function meld(D, A) {
     if (!A.ingang && !kiesDoel(D, A)) return eenDagLater(D, A);
     A.gemeld = true;
-    const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click where they should stand.')}` : '';
-    T.zeg(D, `${T.t('Robbers were seen in the woods near the village. They will come soon.')}${hulp}`, 'gevaar', A.ingang);
+    // (Tot 5 nov zei het erbij hoe je je soldaten stuurt; dat leert de tutorial, Marcel, 4 nov.)
+    T.zeg(D, T.t('Robbers were seen in the woods near the village. They will come soon.'), 'gevaar', A.ingang);
     T.naarGewoneSnelheid(D);
   }
 
@@ -513,7 +513,6 @@
     const aantal = A.rovers.length;
     A.fase = 'komen';
     A.sinds = uurNu(D);
-    R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
     const wie = T.t('{n|A robber turns up|{aantal} robbers turn up}', { n: aantal, aantal: T.hoofdletter(T.telwoord(aantal)) });
     // Er komt niemand vanzelf (vraag 170, stap 2): wie soldaten heeft, hoort hoe hij ze stuurt (js/kiezen.js).
     const hulp = T.militieVan(D).length ? ` ${T.t('Choose your soldiers, and right-click a robber.')}` : '';
@@ -574,7 +573,6 @@
     A.fase = 'roven';
     A.sinds = uurNu(D);
     A.roofTot = uurNu(D) + T.BODE_INSTELLINGEN.hinderlaag.uren;
-    R.laatsteAanval = A.dag;
     for (const e of wezens) {
       e.aangehouden = { x: e.tx, y: e.ty };
       if (!e.onderweg) e.pad = [];

@@ -270,7 +270,7 @@
     // een leger met een veldheer is een ander dorp (D.ander: wat het zegt, staat niet op een scherm); een speler niet, ook
     // niet de tweede als jullie samen spelen
     const D = T.nieuwDorp(S, w, held, { plek, zaad: (Math.imul(zaad >>> 0, 31) + i + 1) >>> 0, overvallen: false, ander: !!leger.veldheer });
-    D.veldslag = true; // een leger, geen dorp: geen statussen van een dorp (js/statussen.js) en geen raad (js/raad.js)
+    D.veldslag = true; // een leger, geen dorp: geen statussen van een dorp (js/statussen.js)
     let soorten = leger.soorten;
     if (leger.veldheer) {
       D.veldheer = T.nieuweVeldheer(S, i); // de AI van dit leger (js/veldheer.js)

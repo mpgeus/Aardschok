@@ -49,10 +49,8 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
 const nu = () => Number(process.hrtime.bigint()) / 1e6; // ms
 
 // Eén beeld, zoals werkBij in js/main.js, zonder wat alleen scherm is (formaat, camera, muis): een tik van de wereld
-// (T.wereldTik, js/tik.js; dezelfde als het spel), het vanzelf opslaan en de raad. `delen`, als het er is, krijgt per
-// deel de tijd in ms.
-const RAAD_ELKE = 0.5;
-const toestand = { raadNu: null, raadOp: -Infinity };
+// (T.wereldTik, js/tik.js; dezelfde als het spel) en het vanzelf opslaan. `delen`, als het er is, krijgt per deel de tijd
+// in ms. (Tot 5 nov ook de raad onder het doel, js/raad.js.)
 function beeld(S, dt, delen) {
   const tm = delen ? (naam, f) => { const t0 = nu(); f(); delen[naam] = (delen[naam] || 0) + nu() - t0; } : (naam, f) => f();
   T.wereldTik(S, dt, tm);
@@ -60,12 +58,6 @@ function beeld(S, dt, delen) {
   tm('opslaan', () => {
     const bewaard = T.werkOpslaanBij(S);
     if (bewaard) T.ui.opgeslagen(bewaard);
-  });
-  tm('raad', () => {
-    if (!(S.tijd - toestand.raadOp < RAAD_ELKE) || S.tijd < toestand.raadOp) {
-      toestand.raadNu = T.raadNu(S.dorp);
-      toestand.raadOp = S.tijd;
-    }
   });
 }
 

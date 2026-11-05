@@ -60,7 +60,7 @@ test('een speerman wacht tot speer en harnas in de opslag liggen; dan pakt hij z
   T.zetSoldaten(D, huis, 'speerman', 1);
   assert.equal(T.soldatenVan(D).length, 0, 'zonder harnas nog niet');
   assert.deepEqual(T.wapensGevraagd(D).harnassen, 1, 'het harnas is gevraagd');
-  assert.match(regelVan(D, huis, 'Spearman').tekst, /0 of 1, waiting for leather armour: build a weaponsmith/);
+  assert.match(regelVan(D, huis, 'Spearman').tekst, /0 of 1, waiting for leather armour\./);
   T.zetVoorraad(D, 'harnassen', 1);
   T.tikSoldatenDag(D);
   const [p] = T.soldatenVan(D);
